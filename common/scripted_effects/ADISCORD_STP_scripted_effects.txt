@@ -165,11 +165,7 @@ STP_change_party_suspicion = {
 		value = 0
 	}
 	if = {
-		limit = {
-			has_country_flag = STP_battle_for_stelander_active
-			has_country_flag = STP_cw_inspection_chain_open
-			STP_cw_second_inspection_unlocked = yes
-		}
+		limit = { STP_cw_can_schedule_party_inspections = yes }
 		STP_schedule_next_party_inspection = yes
 	}
 }
@@ -1119,10 +1115,236 @@ STP_mark_region_player_action = {
 	set_state_flag = { flag = STP_region_recent_player_action value = 1 days = 80 }
 }
 
+STP_cw_count_live_party_inspections = {
+	set_temp_variable = { var = STP_cw_live_inspection_count value = 0 }
+	if = {
+		limit = { OR = { 2 = { has_state_flag = STP_party_inspection_active } has_active_mission = STP_party_inspection_state_2 } }
+		add_to_temp_variable = { var = STP_cw_live_inspection_count value = 1 }
+	}
+	if = {
+		limit = { OR = { 3 = { has_state_flag = STP_party_inspection_active } has_active_mission = STP_party_inspection_state_3 } }
+		add_to_temp_variable = { var = STP_cw_live_inspection_count value = 1 }
+	}
+	if = {
+		limit = { OR = { 29 = { has_state_flag = STP_party_inspection_active } has_active_mission = STP_party_inspection_state_29 } }
+		add_to_temp_variable = { var = STP_cw_live_inspection_count value = 1 }
+	}
+	if = {
+		limit = { OR = { 45 = { has_state_flag = STP_party_inspection_active } has_active_mission = STP_party_inspection_state_45 } }
+		add_to_temp_variable = { var = STP_cw_live_inspection_count value = 1 }
+	}
+	if = {
+		limit = { OR = { 46 = { has_state_flag = STP_party_inspection_active } has_active_mission = STP_party_inspection_state_46 } }
+		add_to_temp_variable = { var = STP_cw_live_inspection_count value = 1 }
+	}
+	if = {
+		limit = { OR = { 53 = { has_state_flag = STP_party_inspection_active } has_active_mission = STP_party_inspection_state_53 } }
+		add_to_temp_variable = { var = STP_cw_live_inspection_count value = 1 }
+	}
+}
+
+STP_cw_repair_party_inspection_markers = {
+	if = {
+		limit = { has_active_mission = STP_party_inspection_state_2 NOT = { 2 = { has_state_flag = STP_party_inspection_active } } }
+		2 = { set_state_flag = STP_party_inspection_active }
+	}
+	else_if = {
+		limit = { 2 = { has_state_flag = STP_party_inspection_active } NOT = { has_active_mission = STP_party_inspection_state_2 } }
+		2 = { clr_state_flag = STP_party_inspection_active }
+	}
+	if = {
+		limit = { has_active_mission = STP_party_inspection_state_3 NOT = { 3 = { has_state_flag = STP_party_inspection_active } } }
+		3 = { set_state_flag = STP_party_inspection_active }
+	}
+	else_if = {
+		limit = { 3 = { has_state_flag = STP_party_inspection_active } NOT = { has_active_mission = STP_party_inspection_state_3 } }
+		3 = { clr_state_flag = STP_party_inspection_active }
+	}
+	if = {
+		limit = { has_active_mission = STP_party_inspection_state_29 NOT = { 29 = { has_state_flag = STP_party_inspection_active } } }
+		29 = { set_state_flag = STP_party_inspection_active }
+	}
+	else_if = {
+		limit = { 29 = { has_state_flag = STP_party_inspection_active } NOT = { has_active_mission = STP_party_inspection_state_29 } }
+		29 = { clr_state_flag = STP_party_inspection_active }
+	}
+	if = {
+		limit = { has_active_mission = STP_party_inspection_state_45 NOT = { 45 = { has_state_flag = STP_party_inspection_active } } }
+		45 = { set_state_flag = STP_party_inspection_active }
+	}
+	else_if = {
+		limit = { 45 = { has_state_flag = STP_party_inspection_active } NOT = { has_active_mission = STP_party_inspection_state_45 } }
+		45 = { clr_state_flag = STP_party_inspection_active }
+	}
+	if = {
+		limit = { has_active_mission = STP_party_inspection_state_46 NOT = { 46 = { has_state_flag = STP_party_inspection_active } } }
+		46 = { set_state_flag = STP_party_inspection_active }
+	}
+	else_if = {
+		limit = { 46 = { has_state_flag = STP_party_inspection_active } NOT = { has_active_mission = STP_party_inspection_state_46 } }
+		46 = { clr_state_flag = STP_party_inspection_active }
+	}
+	if = {
+		limit = { has_active_mission = STP_party_inspection_state_53 NOT = { 53 = { has_state_flag = STP_party_inspection_active } } }
+		53 = { set_state_flag = STP_party_inspection_active }
+	}
+	else_if = {
+		limit = { 53 = { has_state_flag = STP_party_inspection_active } NOT = { has_active_mission = STP_party_inspection_state_53 } }
+		53 = { clr_state_flag = STP_party_inspection_active }
+	}
+}
+
+# STATE: drop a surplus commission without applying a completed inspection.
+STP_cw_abort_party_inspection = {
+	clr_state_flag = STP_party_inspection_active
+	if = { limit = { state = 2 } ROOT = { remove_mission = STP_party_inspection_state_2 } }
+	else_if = { limit = { state = 3 } ROOT = { remove_mission = STP_party_inspection_state_3 } }
+	else_if = { limit = { state = 29 } ROOT = { remove_mission = STP_party_inspection_state_29 } }
+	else_if = { limit = { state = 45 } ROOT = { remove_mission = STP_party_inspection_state_45 } }
+	else_if = { limit = { state = 46 } ROOT = { remove_mission = STP_party_inspection_state_46 } }
+	else_if = { limit = { state = 53 } ROOT = { remove_mission = STP_party_inspection_state_53 } }
+}
+
+# Caller sets STP_cw_inspection_candidate_state and STP_cw_inspection_candidate_days.
+STP_cw_consider_inspection_keeper = {
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = STP_cw_keep_inspection_a value = 0 compare = equals }
+				check_variable = { var = STP_cw_inspection_candidate_days value = STP_cw_keep_inspection_days_a compare = less_than }
+			}
+		}
+		set_temp_variable = { var = STP_cw_keep_inspection_b value = STP_cw_keep_inspection_a }
+		set_temp_variable = { var = STP_cw_keep_inspection_days_b value = STP_cw_keep_inspection_days_a }
+		set_temp_variable = { var = STP_cw_keep_inspection_a value = STP_cw_inspection_candidate_state }
+		set_temp_variable = { var = STP_cw_keep_inspection_days_a value = STP_cw_inspection_candidate_days }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				check_variable = { var = STP_cw_keep_inspection_b value = 0 compare = equals }
+				check_variable = { var = STP_cw_inspection_candidate_days value = STP_cw_keep_inspection_days_b compare = less_than }
+			}
+		}
+		set_temp_variable = { var = STP_cw_keep_inspection_b value = STP_cw_inspection_candidate_state }
+		set_temp_variable = { var = STP_cw_keep_inspection_days_b value = STP_cw_inspection_candidate_days }
+	}
+}
+
+STP_cw_trim_excess_party_inspections = {
+	STP_cw_count_live_party_inspections = yes
+	set_temp_variable = { var = STP_cw_inspection_target value = 0 }
+	if = {
+		limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } }
+		set_temp_variable = { var = STP_cw_inspection_target value = 2 }
+	}
+	else = { set_temp_variable = { var = STP_cw_inspection_target value = 1 } }
+	if = {
+		limit = { check_variable = { var = STP_cw_live_inspection_count value = STP_cw_inspection_target compare = greater_than } }
+		set_temp_variable = { var = STP_cw_keep_inspection_a value = 0 }
+		set_temp_variable = { var = STP_cw_keep_inspection_days_a value = 999 }
+		set_temp_variable = { var = STP_cw_keep_inspection_b value = 0 }
+		set_temp_variable = { var = STP_cw_keep_inspection_days_b value = 999 }
+		if = {
+			limit = { has_active_mission = STP_party_inspection_state_2 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_state value = 2 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_days value = days_mission_timeout@STP_party_inspection_state_2 }
+			STP_cw_consider_inspection_keeper = yes
+		}
+		if = {
+			limit = { has_active_mission = STP_party_inspection_state_3 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_state value = 3 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_days value = days_mission_timeout@STP_party_inspection_state_3 }
+			STP_cw_consider_inspection_keeper = yes
+		}
+		if = {
+			limit = { has_active_mission = STP_party_inspection_state_29 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_state value = 29 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_days value = days_mission_timeout@STP_party_inspection_state_29 }
+			STP_cw_consider_inspection_keeper = yes
+		}
+		if = {
+			limit = { has_active_mission = STP_party_inspection_state_45 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_state value = 45 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_days value = days_mission_timeout@STP_party_inspection_state_45 }
+			STP_cw_consider_inspection_keeper = yes
+		}
+		if = {
+			limit = { has_active_mission = STP_party_inspection_state_46 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_state value = 46 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_days value = days_mission_timeout@STP_party_inspection_state_46 }
+			STP_cw_consider_inspection_keeper = yes
+		}
+		if = {
+			limit = { has_active_mission = STP_party_inspection_state_53 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_state value = 53 }
+			set_temp_variable = { var = STP_cw_inspection_candidate_days value = days_mission_timeout@STP_party_inspection_state_53 }
+			STP_cw_consider_inspection_keeper = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_cw_inspection_target value = 1 compare = less_than_or_equals } }
+			set_temp_variable = { var = STP_cw_keep_inspection_b value = 0 }
+		}
+		if = {
+			limit = {
+				has_active_mission = STP_party_inspection_state_2
+				NOT = { check_variable = { var = STP_cw_keep_inspection_a value = 2 compare = equals } }
+				NOT = { check_variable = { var = STP_cw_keep_inspection_b value = 2 compare = equals } }
+			}
+			2 = { STP_cw_abort_party_inspection = yes }
+		}
+		if = {
+			limit = {
+				has_active_mission = STP_party_inspection_state_3
+				NOT = { check_variable = { var = STP_cw_keep_inspection_a value = 3 compare = equals } }
+				NOT = { check_variable = { var = STP_cw_keep_inspection_b value = 3 compare = equals } }
+			}
+			3 = { STP_cw_abort_party_inspection = yes }
+		}
+		if = {
+			limit = {
+				has_active_mission = STP_party_inspection_state_29
+				NOT = { check_variable = { var = STP_cw_keep_inspection_a value = 29 compare = equals } }
+				NOT = { check_variable = { var = STP_cw_keep_inspection_b value = 29 compare = equals } }
+			}
+			29 = { STP_cw_abort_party_inspection = yes }
+		}
+		if = {
+			limit = {
+				has_active_mission = STP_party_inspection_state_45
+				NOT = { check_variable = { var = STP_cw_keep_inspection_a value = 45 compare = equals } }
+				NOT = { check_variable = { var = STP_cw_keep_inspection_b value = 45 compare = equals } }
+			}
+			45 = { STP_cw_abort_party_inspection = yes }
+		}
+		if = {
+			limit = {
+				has_active_mission = STP_party_inspection_state_46
+				NOT = { check_variable = { var = STP_cw_keep_inspection_a value = 46 compare = equals } }
+				NOT = { check_variable = { var = STP_cw_keep_inspection_b value = 46 compare = equals } }
+			}
+			46 = { STP_cw_abort_party_inspection = yes }
+		}
+		if = {
+			limit = {
+				has_active_mission = STP_party_inspection_state_53
+				NOT = { check_variable = { var = STP_cw_keep_inspection_a value = 53 compare = equals } }
+				NOT = { check_variable = { var = STP_cw_keep_inspection_b value = 53 compare = equals } }
+			}
+			53 = { STP_cw_abort_party_inspection = yes }
+		}
+	}
+}
+
 STP_schedule_next_party_inspection = {
 	if = {
-		limit = { has_country_flag = STP_battle_for_stelander_active }
-		STP_cw_open_one_party_inspection = yes
+		limit = { STP_cw_can_schedule_party_inspections = yes }
+		STP_cw_repair_party_inspection_markers = yes
+		STP_cw_trim_excess_party_inspections = yes
+		if = {
+			limit = { NOT = { STP_cw_any_inspection_active = yes } }
+			STP_cw_open_one_party_inspection = yes
+		}
 		if = {
 			limit = { STP_cw_second_inspection_unlocked = yes }
 			STP_cw_open_one_party_inspection = yes
@@ -1132,96 +1354,118 @@ STP_schedule_next_party_inspection = {
 
 # Pace applies only to the mission opened here. A running second commission keeps its own deadline.
 STP_cw_open_one_party_inspection = {
-	random_list = {
-		1 = { }
-		10 = {
-			modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 2 compare = equals } }
-			modifier = { factor = 0 2 = { has_state_flag = STP_party_inspection_active } }
-			modifier = { factor = 0 has_active_mission = STP_party_inspection_state_2 }
-			modifier = { factor = 3 2 = { STP_region_resistance_strongest = yes } }
-			modifier = { factor = 2 2 = { has_state_flag = STP_region_recent_player_action } }
-			modifier = { factor = 2 2 = { STP_region_has_detectable_assets = yes } }
-			2 = { set_state_flag = STP_party_inspection_active }
-			activate_mission = STP_party_inspection_state_2
-			if = {
-				limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
-				if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_2 days = -16 } }
-				else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_2 days = -8 } }
+	STP_cw_count_live_party_inspections = yes
+	if = {
+		limit = {
+			STP_cw_can_schedule_party_inspections = yes
+			STP_cw_has_openable_inspection_region = yes
+			OR = {
+				AND = {
+					check_variable = { var = STP_party_suspicion value = 50 compare = less_than }
+					check_variable = { var = STP_cw_live_inspection_count value = 1 compare = less_than }
+				}
+				AND = {
+					check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals }
+					check_variable = { var = STP_cw_live_inspection_count value = 2 compare = less_than }
+				}
 			}
 		}
-		10 = {
-			modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 3 compare = equals } }
-			modifier = { factor = 0 3 = { has_state_flag = STP_party_inspection_active } }
-			modifier = { factor = 0 has_active_mission = STP_party_inspection_state_3 }
-			modifier = { factor = 3 3 = { STP_region_resistance_strongest = yes } }
-			modifier = { factor = 2 3 = { has_state_flag = STP_region_recent_player_action } }
-			modifier = { factor = 2 3 = { STP_region_has_detectable_assets = yes } }
-			3 = { set_state_flag = STP_party_inspection_active }
-			activate_mission = STP_party_inspection_state_3
-			if = {
-				limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
-				if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_3 days = -16 } }
-				else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_3 days = -8 } }
+		random_list = {
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 2 compare = equals } STP_cw_has_other_openable_inspection = yes }
+				modifier = { factor = 0 2 = { NOT = { STP_cw_inspection_region_openable = yes } } }
+				modifier = { factor = 0 2 = { has_state_flag = STP_party_inspection_active } }
+				modifier = { factor = 0 has_active_mission = STP_party_inspection_state_2 }
+				modifier = { factor = 3 2 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 2 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 2 = { STP_region_has_detectable_assets = yes } }
+				2 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_2
+				if = {
+					limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
+					if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_2 days = -16 } }
+					else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_2 days = -8 } }
+				}
 			}
-		}
-		10 = {
-			modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 29 compare = equals } }
-			modifier = { factor = 0 29 = { has_state_flag = STP_party_inspection_active } }
-			modifier = { factor = 0 has_active_mission = STP_party_inspection_state_29 }
-			modifier = { factor = 3 29 = { STP_region_resistance_strongest = yes } }
-			modifier = { factor = 2 29 = { has_state_flag = STP_region_recent_player_action } }
-			modifier = { factor = 2 29 = { STP_region_has_detectable_assets = yes } }
-			29 = { set_state_flag = STP_party_inspection_active }
-			activate_mission = STP_party_inspection_state_29
-			if = {
-				limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
-				if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_29 days = -16 } }
-				else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_29 days = -8 } }
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 3 compare = equals } STP_cw_has_other_openable_inspection = yes }
+				modifier = { factor = 0 3 = { NOT = { STP_cw_inspection_region_openable = yes } } }
+				modifier = { factor = 0 3 = { has_state_flag = STP_party_inspection_active } }
+				modifier = { factor = 0 has_active_mission = STP_party_inspection_state_3 }
+				modifier = { factor = 3 3 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 3 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 3 = { STP_region_has_detectable_assets = yes } }
+				3 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_3
+				if = {
+					limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
+					if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_3 days = -16 } }
+					else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_3 days = -8 } }
+				}
 			}
-		}
-		10 = {
-			modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 45 compare = equals } }
-			modifier = { factor = 0 45 = { has_state_flag = STP_party_inspection_active } }
-			modifier = { factor = 0 has_active_mission = STP_party_inspection_state_45 }
-			modifier = { factor = 4 45 = { STP_region_resistance_strongest = yes } }
-			modifier = { factor = 2 45 = { has_state_flag = STP_region_recent_player_action } }
-			modifier = { factor = 2 45 = { STP_region_has_detectable_assets = yes } }
-			45 = { set_state_flag = STP_party_inspection_active }
-			activate_mission = STP_party_inspection_state_45
-			if = {
-				limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
-				if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_45 days = -16 } }
-				else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_45 days = -8 } }
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 29 compare = equals } STP_cw_has_other_openable_inspection = yes }
+				modifier = { factor = 0 29 = { NOT = { STP_cw_inspection_region_openable = yes } } }
+				modifier = { factor = 0 29 = { has_state_flag = STP_party_inspection_active } }
+				modifier = { factor = 0 has_active_mission = STP_party_inspection_state_29 }
+				modifier = { factor = 3 29 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 29 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 29 = { STP_region_has_detectable_assets = yes } }
+				29 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_29
+				if = {
+					limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
+					if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_29 days = -16 } }
+					else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_29 days = -8 } }
+				}
 			}
-		}
-		10 = {
-			modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 46 compare = equals } }
-			modifier = { factor = 0 46 = { has_state_flag = STP_party_inspection_active } }
-			modifier = { factor = 0 has_active_mission = STP_party_inspection_state_46 }
-			modifier = { factor = 3 46 = { STP_region_resistance_strongest = yes } }
-			modifier = { factor = 2 46 = { has_state_flag = STP_region_recent_player_action } }
-			modifier = { factor = 2 46 = { STP_region_has_detectable_assets = yes } }
-			46 = { set_state_flag = STP_party_inspection_active }
-			activate_mission = STP_party_inspection_state_46
-			if = {
-				limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
-				if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_46 days = -16 } }
-				else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_46 days = -8 } }
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 45 compare = equals } STP_cw_has_other_openable_inspection = yes }
+				modifier = { factor = 0 45 = { NOT = { STP_cw_inspection_region_openable = yes } } }
+				modifier = { factor = 0 45 = { has_state_flag = STP_party_inspection_active } }
+				modifier = { factor = 0 has_active_mission = STP_party_inspection_state_45 }
+				modifier = { factor = 4 45 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 45 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 45 = { STP_region_has_detectable_assets = yes } }
+				45 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_45
+				if = {
+					limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
+					if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_45 days = -16 } }
+					else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_45 days = -8 } }
+				}
 			}
-		}
-		10 = {
-			modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 53 compare = equals } }
-			modifier = { factor = 0 53 = { has_state_flag = STP_party_inspection_active } }
-			modifier = { factor = 0 has_active_mission = STP_party_inspection_state_53 }
-			modifier = { factor = 3 53 = { STP_region_resistance_strongest = yes } }
-			modifier = { factor = 2 53 = { has_state_flag = STP_region_recent_player_action } }
-			modifier = { factor = 2 53 = { STP_region_has_detectable_assets = yes } }
-			53 = { set_state_flag = STP_party_inspection_active }
-			activate_mission = STP_party_inspection_state_53
-			if = {
-				limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
-				if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_53 days = -16 } }
-				else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_53 days = -8 } }
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 46 compare = equals } STP_cw_has_other_openable_inspection = yes }
+				modifier = { factor = 0 46 = { NOT = { STP_cw_inspection_region_openable = yes } } }
+				modifier = { factor = 0 46 = { has_state_flag = STP_party_inspection_active } }
+				modifier = { factor = 0 has_active_mission = STP_party_inspection_state_46 }
+				modifier = { factor = 3 46 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 46 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 46 = { STP_region_has_detectable_assets = yes } }
+				46 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_46
+				if = {
+					limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
+					if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_46 days = -16 } }
+					else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_46 days = -8 } }
+				}
+			}
+			10 = {
+				modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 53 compare = equals } STP_cw_has_other_openable_inspection = yes }
+				modifier = { factor = 0 53 = { NOT = { STP_cw_inspection_region_openable = yes } } }
+				modifier = { factor = 0 53 = { has_state_flag = STP_party_inspection_active } }
+				modifier = { factor = 0 has_active_mission = STP_party_inspection_state_53 }
+				modifier = { factor = 3 53 = { STP_region_resistance_strongest = yes } }
+				modifier = { factor = 2 53 = { has_state_flag = STP_region_recent_player_action } }
+				modifier = { factor = 2 53 = { STP_region_has_detectable_assets = yes } }
+				53 = { set_state_flag = STP_party_inspection_active }
+				activate_mission = STP_party_inspection_state_53
+				if = {
+					limit = { check_variable = { var = STP_last_inspection_state value = 0 compare = greater_than } }
+					if = { limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_53 days = -16 } }
+					else_if = { limit = { check_variable = { var = STP_party_suspicion value = 25 compare = greater_than_or_equals } } add_days_mission_timeout = { mission = STP_party_inspection_state_53 days = -8 } }
+				}
 			}
 		}
 	}
@@ -1320,6 +1564,7 @@ STP_resolve_false_trail = {
 }
 
 STP_resolve_party_inspection = {
+	ROOT = { set_country_flag = STP_cw_inspection_resolving }
 	set_temp_variable = { var = STP_cw_inspection_found_assets value = 0 }
 	clr_state_flag = STP_cw_garrison_evacuation_in_progress
 	if = {
@@ -1397,6 +1642,7 @@ STP_resolve_party_inspection = {
 	clr_state_flag = STP_false_trail_prepared
 	clr_state_flag = STP_inspection_concession_prepared
 	clr_state_flag = STP_party_inspection_active
+	ROOT = { clr_country_flag = STP_cw_inspection_resolving }
 	STP = { if = { limit = { STP_cw_preparation_open = yes has_country_flag = STP_battle_for_stelander_active } STP_cw_refresh_army_report = yes } }
 }
 
@@ -1507,6 +1753,7 @@ STP_clear_region_runtime = {
 	clr_state_flag = STP_region_player_operations_allowed
 	clr_state_flag = STP_region_recent_player_action
 	clr_state_flag = STP_party_inspection_active
+	clr_state_flag = STP_cw_inspection_delay_escrow
 	clr_state_flag = STP_false_trail_prepared
 	clr_state_flag = STP_resistance_administration_asset
 	clr_state_flag = STP_resistance_garrison_asset
@@ -1529,6 +1776,7 @@ STP_clear_region_runtime = {
 STP_end_battle_for_stelander = {
 	clr_country_flag = STP_battle_for_stelander_active
 	clr_country_flag = STP_cw_inspection_chain_open
+	clr_country_flag = STP_cw_inspection_resolving
 	# Keep the side briefing and BOP while elections and preparation are still active.
 	if = {
 		limit = { OR = { has_global_flag = STP_cw_started has_country_flag = STP_cw_elections_finished } }
@@ -2740,6 +2988,7 @@ STP_cw_start = {
 		# Keep the state assets until begin_hostilities reads the timed bonuses.
 		clr_country_flag = STP_battle_for_stelander_active
 		clr_country_flag = STP_cw_inspection_chain_open
+		clr_country_flag = STP_cw_inspection_resolving
 		log = "[STP_CW] territorial and army split complete; awaiting side selection"
 		# Predetermined Shabrat control switches immediately. An unset side still waits on .30.
 		if = {
@@ -2875,6 +3124,82 @@ STP_cw_finish_nod_warning = {
 			clr_country_flag = STP_cw_nod_warning_active
 			log = "[STP_CW] NOD war join failed its final engine check"
 		}
+	}
+}
+
+# COUNTRY: caller sets signed temp STP_cw_nod_prep_delta.
+# Remaining days belong to NOD; observers copy the same delta or the leftover clock.
+STP_cw_adjust_nod_intervention_days = {
+	if = {
+		limit = { NOD = { has_active_mission = NOD_cw_intervention_preparation } }
+		NOD = {
+			set_temp_variable = { var = STP_cw_nod_remaining value = days_mission_timeout@NOD_cw_intervention_preparation }
+			set_temp_variable = { var = STP_cw_nod_after value = STP_cw_nod_remaining }
+			add_to_temp_variable = { var = STP_cw_nod_after value = STP_cw_nod_prep_delta }
+			if = {
+				limit = { check_variable = { var = STP_cw_nod_after value = 1 compare = less_than } }
+				set_country_flag = NOD_cw_intervention_ready
+				remove_mission = NOD_cw_intervention_preparation
+			}
+			else = {
+				add_days_mission_timeout = { mission = NOD_cw_intervention_preparation days = STP_cw_nod_prep_delta }
+			}
+		}
+		if = {
+			limit = { NOD = { has_active_mission = NOD_cw_intervention_preparation } }
+			STP = {
+				if = {
+					limit = { has_active_mission = STP_cw_nod_warning }
+					add_days_mission_timeout = { mission = STP_cw_nod_warning days = STP_cw_nod_prep_delta }
+				}
+			}
+			STS = {
+				if = {
+					limit = { has_active_mission = STP_cw_nod_warning }
+					add_days_mission_timeout = { mission = STP_cw_nod_warning days = STP_cw_nod_prep_delta }
+				}
+			}
+		}
+		STP_cw_poll_nod_intervention = yes
+	}
+}
+
+# COUNTRY (STS): one result path for the Last Banquet deadline.
+STP_cw_resolve_last_banquet_success = {
+	if = {
+		limit = { NOT = { has_country_flag = STP_cw_last_banquet_resolved } }
+		set_country_flag = STP_cw_last_banquet_resolved
+		clr_country_flag = STP_cw_last_banquet_started
+		remove_mission = STP_cw_last_banquet_deadline
+	}
+}
+
+STP_cw_close_last_banquet_technical = {
+	if = {
+		limit = { NOT = { has_country_flag = STP_cw_last_banquet_resolved } }
+		set_country_flag = STP_cw_last_banquet_resolved
+		clr_country_flag = STP_cw_last_banquet_started
+		remove_mission = STP_cw_last_banquet_deadline
+	}
+}
+
+STP_cw_resolve_last_banquet_fail = {
+	if = {
+		limit = { has_country_flag = STP_cw_last_banquet_resolved }
+	}
+	else_if = {
+		limit = { 28 = { is_controlled_by = ROOT } }
+		STP_cw_resolve_last_banquet_success = yes
+	}
+	else_if = {
+		limit = { has_country_flag = STP_cw_won_union_battle }
+		STP_cw_close_last_banquet_technical = yes
+	}
+	else = {
+		set_country_flag = STP_cw_last_banquet_resolved
+		clr_country_flag = STP_cw_last_banquet_started
+		remove_mission = STP_cw_last_banquet_deadline
+		add_war_support = -0.10
 	}
 }
 
@@ -3038,6 +3363,7 @@ STP_cw_settle_union_victory = {
 	}
 	if = { limit = { has_dynamic_modifier = { modifier = STP_cw_election_mandate_dynamic } } remove_dynamic_modifier = { modifier = STP_cw_election_mandate_dynamic } }
 	set_country_flag = STP_cw_won_union_battle
+	if = { limit = { tag = STS } STP_cw_close_last_banquet_technical = yes }
 	STP_cw_finish_mobilization = yes
 	if = { limit = { tag = STP } news_event = { id = ADISCORD_STP_cw.71 hours = 1 } }
 	else_if = { limit = { tag = STS } news_event = { id = ADISCORD_STP_cw.72 hours = 1 } }

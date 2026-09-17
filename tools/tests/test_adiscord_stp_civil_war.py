@@ -2922,8 +2922,12 @@ class WartimeProgramContracts(unittest.TestCase):
         for name, (tag, idea, duration) in operations.items():
             decision = ast_block(self.decisions, name)
             self.assertEqual(scalar(decision, "cost"), "0")
-            self.assertEqual(scalar(decision, "fire_only_once"), "no")
-            self.assertGreaterEqual(int(scalar(decision, "days_re_enable")), duration + 21)
+            if name == "STP_cw_launch_last_banquet":
+                self.assertEqual(scalar(decision, "fire_only_once"), "yes")
+                self.assertFalse(any(e.key == "days_re_enable" for e in decision))
+            else:
+                self.assertEqual(scalar(decision, "fire_only_once"), "no")
+                self.assertGreaterEqual(int(scalar(decision, "days_re_enable")), duration + 21)
             price = ast_block(decision, "custom_cost_trigger")
             self.assertTrue(matches_conditions(price, {(tag, "numeric", "command_power"): 25}, tag))
             self.assertFalse(matches_conditions(price, {(tag, "numeric", "command_power"): 24.5}, tag))

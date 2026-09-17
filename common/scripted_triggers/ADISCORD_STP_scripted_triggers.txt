@@ -376,6 +376,17 @@ STP_region_map_shows_contested = {
 
 # COUNTRY: state flags are authoritative while inspection missions are alive.
 # The second scheduler pass must not create a third parallel commission.
+STP_cw_any_inspection_active = {
+	OR = {
+		2 = { has_state_flag = STP_party_inspection_active }
+		3 = { has_state_flag = STP_party_inspection_active }
+		29 = { has_state_flag = STP_party_inspection_active }
+		45 = { has_state_flag = STP_party_inspection_active }
+		46 = { has_state_flag = STP_party_inspection_active }
+		53 = { has_state_flag = STP_party_inspection_active }
+	}
+}
+
 STP_cw_two_inspections_active = {
 	OR = {
 		AND = { 2 = { has_state_flag = STP_party_inspection_active } 3 = { has_state_flag = STP_party_inspection_active } }
@@ -401,6 +412,57 @@ STP_cw_two_inspections_active = {
 STP_cw_second_inspection_unlocked = {
 	check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals }
 	NOT = { STP_cw_two_inspections_active = yes }
+}
+
+# STATE: party-owned district without a live commission. Counter-intel
+# blocks player work, not the party's own next assignment.
+STP_cw_inspection_region_openable = {
+	has_state_flag = STP_region_participates
+	is_owned_by = ROOT
+	NOT = { has_state_flag = STP_party_inspection_active }
+}
+
+STP_cw_has_openable_inspection_region = {
+	OR = {
+		2 = { STP_cw_inspection_region_openable = yes }
+		3 = { STP_cw_inspection_region_openable = yes }
+		29 = { STP_cw_inspection_region_openable = yes }
+		45 = { STP_cw_inspection_region_openable = yes }
+		46 = { STP_cw_inspection_region_openable = yes }
+		53 = { STP_cw_inspection_region_openable = yes }
+	}
+}
+
+# COUNTRY: previous-district exclusion must not hide the only legal target.
+STP_cw_has_other_openable_inspection = {
+	OR = {
+		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 2 compare = equals } } 2 = { STP_cw_inspection_region_openable = yes } }
+		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 3 compare = equals } } 3 = { STP_cw_inspection_region_openable = yes } }
+		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 29 compare = equals } } 29 = { STP_cw_inspection_region_openable = yes } }
+		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 45 compare = equals } } 45 = { STP_cw_inspection_region_openable = yes } }
+		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 46 compare = equals } } 46 = { STP_cw_inspection_region_openable = yes } }
+		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 53 compare = equals } } 53 = { STP_cw_inspection_region_openable = yes } }
+	}
+}
+
+# COUNTRY with FROM state: the targeted delay reads the live mission, not a cached target list.
+STP_cw_from_inspection_mission_active = {
+	OR = {
+		AND = { FROM = { state = 2 } has_active_mission = STP_party_inspection_state_2 }
+		AND = { FROM = { state = 3 } has_active_mission = STP_party_inspection_state_3 }
+		AND = { FROM = { state = 29 } has_active_mission = STP_party_inspection_state_29 }
+		AND = { FROM = { state = 45 } has_active_mission = STP_party_inspection_state_45 }
+		AND = { FROM = { state = 46 } has_active_mission = STP_party_inspection_state_46 }
+		AND = { FROM = { state = 53 } has_active_mission = STP_party_inspection_state_53 }
+	}
+}
+
+STP_cw_can_schedule_party_inspections = {
+	has_country_flag = STP_battle_for_stelander_active
+	has_country_flag = STP_cw_inspection_chain_open
+	has_country_flag = STP_sided_with_Maksim_flag
+	STP_cw_preparation_open = yes
+	NOT = { has_country_flag = STP_cw_inspection_resolving }
 }
 
 # COUNTRY: foreign intervention in the Stelander civil war.
