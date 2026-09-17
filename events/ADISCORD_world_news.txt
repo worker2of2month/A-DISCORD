@@ -2,7 +2,7 @@ add_namespace = ADISCORD_world_news
 
 # World news is presentation-only. One-shot behavior belongs at the call site via
 # global publication flags: major news itself must remain repeatable so HOI4 can
-# fan the same event out to every existing country.
+# fan the same event out to every existing country, including the belligerents.
 
 news_event = {
 	id = ADISCORD_world_news.1
@@ -12,9 +12,6 @@ news_event = {
 	major = yes
 	fire_only_once = no
 	is_triggered_only = yes
-	# The Vorkerland story layer already reports the verified claimant showdown to
-	# the country that owns that call. This proxy repairs the world broadcast.
-	fire_for_sender = no
 	option = { name = ADISCORD_world_news.1.a }
 }
 
@@ -37,9 +34,6 @@ news_event = {
 	major = yes
 	fire_only_once = no
 	is_triggered_only = yes
-	# ADISCORD_STP_cw.70 remains the local sender-side report. Do not double-pop
-	# the country whose war declaration generated this global broadcast.
-	fire_for_sender = no
 	option = { name = ADISCORD_world_news.3.a }
 }
 
@@ -51,9 +45,6 @@ news_event = {
 	major = yes
 	fire_only_once = no
 	is_triggered_only = yes
-	# ADISCORD_STP_cw.73 is the existing Kefreyt-side headline. Broadcast the
-	# intervention to everybody else without showing VAL two near-identical popups.
-	fire_for_sender = no
 	option = { name = ADISCORD_world_news.4.a }
 }
 
