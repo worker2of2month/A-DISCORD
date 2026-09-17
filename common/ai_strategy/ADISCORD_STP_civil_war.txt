@@ -11,6 +11,27 @@ STP_cw_defend_fada = {
 	}
 }
 
+# The Last Banquet is a short decisive window, so the party concentrates reserves
+# around Fada while the operation is active instead of treating it as a normal front.
+STP_cw_defend_bronze_congress = {
+	allowed = { original_tag = STP }
+	enable = {
+		has_global_flag = STP_cw_started
+		has_war_with = STS
+		STS = { has_active_mission = STP_cw_last_banquet_window }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.25
+		states = { 28 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = yes
+	}
+	ai_strategy = { type = front_unit_request tag = STS value = 140 }
+	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1800 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+
 STS_cw_defend_abilia = {
 	allowed = { original_tag = STS }
 	enable = { has_global_flag = STP_cw_started has_war = yes }
