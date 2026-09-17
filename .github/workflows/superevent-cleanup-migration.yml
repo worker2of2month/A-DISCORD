@@ -1,0 +1,125 @@
+name: Superevent cleanup migration
+
+on:
+  push:
+    branches:
+      - refactor/superevents-cleanup
+
+permissions:
+  contents: write
+
+jobs:
+  migrate-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Migrate stale owner references
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          old = b"events/ADISCORD_news.txt"
+          new = b"events/ADISCORD_superevents.txt"
+          changed = []
+
+          for path in Path(".").rglob("*"):
+              if not path.is_file() or ".git" in path.parts:
+                  continue
+              if path.parts and path.parts[0] == "docs":
+                  continue
+              if path.suffix.lower() not in {".py", ".json", ".txt", ".yml", ".md"}:
+                  continue
+              data = path.read_bytes()
+              if old not in data:
+                  continue
+              path.write_bytes(data.replace(old, new))
+              changed.append(path.as_posix())
+
+          tc = Path("tools/validators/validate_tc.py")
+          source = tc.read_text(encoding="utf-8")
+          import_anchor = (
+              "from tools.validators.validate_adiscord_event_ids import "
+              "validate as validate_adiscord_event_ids\n"
+          )
+          import_line = (
+              "from tools.validators.validate_adiscord_superevents import "
+              "collect_issues as validate_adiscord_superevents\n"
+          )
+          if import_line not in source:
+              if import_anchor not in source:
+                  raise SystemExit("validate_tc.py import anchor not found")
+              source = source.replace(import_anchor, import_anchor + import_line, 1)
+
+          section_anchor = '''    event_id_issues = validate_adiscord_event_ids()
+              print_section(
+                  "Event ID registry",
+                  event_id_issues[: args.limit],
+                  len(event_id_issues),
+              )
+          '''.replace("              ", "")
+          section = section_anchor + '''
+              superevent_issues = validate_adiscord_superevents()
+              print_section(
+                  "Superevent presentation contract",
+                  superevent_issues[: args.limit],
+                  len(superevent_issues),
+              )
+          '''.replace("              ", "")
+          if "superevent_issues = validate_adiscord_superevents()" not in source:
+              if section_anchor not in source:
+                  raise SystemExit("validate_tc.py event registry section anchor not found")
+              source = source.replace(section_anchor, section, 1)
+          tc.write_text(source, encoding="utf-8")
+
+          workflow = Path(".github/workflows/superevent-cleanup-migration.yml")
+          workflow.unlink()
+
+          print("Replaced legacy path in:")
+          for item in changed:
+              print(f"- {item}")
+          PY
+
+      - name: Verify no live legacy path references remain
+        shell: bash
+        run: |
+          if git grep -n "events/ADISCORD_news.txt" -- ':!docs/superpowers/**'; then
+            echo "Legacy live-code path references remain" >&2
+            exit 1
+          fi
+
+      - name: Run superevent and event-ID validators
+        shell: bash
+        run: |
+          python tools/validators/validate_adiscord_superevents.py
+          python tools/validators/validate_adiscord_event_ids.py
+
+      - name: Run focused regression tests
+        shell: bash
+        run: |
+          python -m unittest \
+            tools.tests.test_validate_adiscord_superevents \
+            tools.tests.test_adiscord_superevents_stp_empire \
+            tools.tests.test_validate_adiscord_vorkerland_collapse \
+            tools.tests.test_validate_adiscord_vorkerland_story \
+            tools.tests.test_validate_adiscord_event_ids -v
+
+      - name: Syntax-check total conversion validator
+        shell: bash
+        run: |
+          python -m py_compile tools/validators/validate_tc.py
+
+      - name: Commit verified migration
+        shell: bash
+        run: |
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "refactor: migrate superevent owner references"
+          git push origin HEAD:refactor/superevents-cleanup
