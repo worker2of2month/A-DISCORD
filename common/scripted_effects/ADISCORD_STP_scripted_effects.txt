@@ -1118,11 +1118,29 @@ STP_calculate_region_alignment = {
 STP_mark_region_player_action = {
 	set_state_flag = { flag = STP_region_recent_player_action value = 1 days = 80 }
 }
-
 STP_schedule_next_party_inspection = {
 	if = {
-		limit = { has_country_flag = STP_battle_for_stelander_active }
-		STP_cw_open_one_party_inspection = yes
+		limit = {
+			has_country_flag = STP_battle_for_stelander_active
+			has_country_flag = STP_cw_inspection_chain_open
+			NOT = { STP_cw_two_inspections_active = yes }
+		}
+		# Maintain one commission below 50 suspicion and two at or above 50.
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						2 = { has_state_flag = STP_party_inspection_active }
+						3 = { has_state_flag = STP_party_inspection_active }
+						29 = { has_state_flag = STP_party_inspection_active }
+						45 = { has_state_flag = STP_party_inspection_active }
+						46 = { has_state_flag = STP_party_inspection_active }
+						53 = { has_state_flag = STP_party_inspection_active }
+					}
+				}
+			}
+			STP_cw_open_one_party_inspection = yes
+		}
 		if = {
 			limit = { STP_cw_second_inspection_unlocked = yes }
 			STP_cw_open_one_party_inspection = yes
@@ -1133,7 +1151,6 @@ STP_schedule_next_party_inspection = {
 # Pace applies only to the mission opened here. A running second commission keeps its own deadline.
 STP_cw_open_one_party_inspection = {
 	random_list = {
-		1 = { }
 		10 = {
 			modifier = { factor = 0 check_variable = { var = STP_last_inspection_state value = 2 compare = equals } }
 			modifier = { factor = 0 2 = { has_state_flag = STP_party_inspection_active } }
