@@ -39,6 +39,116 @@ on_actions = {
 					}
 				}
 			}
+
+			# Vorkerland's central router deliberately reserves a defeated claimant
+			# from the generic fallback while it updates the reunification phase. Once
+			# that bookkeeping has run, consume the defeated claimant in the same
+			# capitulation tick instead of leaving a permanent diagnostic shell.
+			if = {
+				limit = {
+					ROOT = {
+						has_country_flag = ADISCORD_vorkerland_claimant_cleanup_reserved
+						ADISCORD_vorkerland_is_main_claimant = yes
+						has_capitulated = yes
+					}
+				}
+
+				# Ostfort and Tehlar are authored Worx protectorates. If TVA loses,
+				# fold them into the defeated directorate before its victor annexes it;
+				# otherwise an overlord annex can free them as one-state postwar shells.
+				if = {
+					limit = {
+						ROOT = { tag = TVA }
+						WTD = {
+							exists = yes
+							has_country_flag = ADISCORD_vorkerland_worx_aligned_technocrats
+						}
+					}
+					TVA = {
+						if = { limit = { has_war_with = WTD } white_peace = WTD }
+						annex_country = { target = WTD transfer_troops = no }
+					}
+				}
+				if = {
+					limit = {
+						ROOT = { tag = TVA }
+						TGD = {
+							exists = yes
+							has_country_flag = ADISCORD_vorkerland_joined_worx_directorate
+						}
+					}
+					TVA = {
+						if = { limit = { has_war_with = TGD } white_peace = TGD }
+						annex_country = { target = TGD transfer_troops = no }
+					}
+				}
+
+				# The feature router may credit the capitulation to the claimant itself,
+				# one of its subjects, or the three fixed auxiliary tags below. Mirror
+				# that normalization here so the land always reaches the living claimant.
+				FROM = {
+					if = {
+						limit = {
+							ADISCORD_vorkerland_is_main_claimant = yes
+							exists = yes
+							is_subject = no
+							NOT = { has_capitulated = yes }
+						}
+						if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+						annex_country = { target = ROOT transfer_troops = yes }
+					}
+					else_if = {
+						limit = {
+							is_subject = yes
+							NOT = { has_capitulated = yes }
+							OVERLORD = {
+								exists = yes
+								ADISCORD_vorkerland_is_main_claimant = yes
+								is_subject = no
+								NOT = { has_capitulated = yes }
+							}
+						}
+						OVERLORD = {
+							if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+							annex_country = { target = ROOT transfer_troops = yes }
+						}
+					}
+					else_if = {
+						limit = { tag = WTD TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+						TVA = {
+							if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+							annex_country = { target = ROOT transfer_troops = yes }
+						}
+					}
+					else_if = {
+						limit = { tag = VLA WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+						WKR = {
+							if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+							annex_country = { target = ROOT transfer_troops = yes }
+						}
+					}
+					else_if = {
+						limit = { tag = SOL VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+						VAD = {
+							if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+							annex_country = { target = ROOT transfer_troops = yes }
+						}
+					}
+					else_if = {
+						limit = {
+							tag = WRK
+							exists = yes
+							is_subject = no
+							NOT = { has_capitulated = yes }
+							has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+							has_global_flag = ADISCORD_vorkerland_reunification_verified
+						}
+						if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+						annex_country = { target = ROOT transfer_troops = yes }
+					}
+				}
+			}
+
 			# The reservation is per capitulation and must never leak into the next one.
 			clr_global_flag = skip_default_capitulation
 		}
