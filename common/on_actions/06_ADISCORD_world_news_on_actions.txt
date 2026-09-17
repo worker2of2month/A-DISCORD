@@ -53,21 +53,16 @@ on_actions = {
 				ROOT = { news_event = { id = ADISCORD_world_news.3 } }
 			}
 
-			# Kefreyt enters the Stelander conflict by attacking either the local
-			# republic front or Shabrat's successor state, depending on the branch.
+			# The military-course intervention currently becomes a real VAL-SRP war.
+			# Tie the headline to that exact relation so diplomatic preparation cannot
+			# announce an intervention that has not happened yet.
 			if = {
 				limit = {
 					has_global_flag = STP_cw_started
 					NOT = { has_global_flag = ADISCORD_news_kefreyt_intervention_published }
 					OR = {
-						AND = {
-							ROOT = { tag = VAL }
-							FROM = { OR = { tag = SRP tag = STS } }
-						}
-						AND = {
-							FROM = { tag = VAL }
-							ROOT = { OR = { tag = SRP tag = STS } }
-						}
+						AND = { ROOT = { tag = VAL } FROM = { tag = SRP } }
+						AND = { FROM = { tag = VAL } ROOT = { tag = SRP } }
 					}
 				}
 				set_global_flag = ADISCORD_news_kefreyt_intervention_published
