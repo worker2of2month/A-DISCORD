@@ -1,21 +1,16 @@
 ADISCORD_scenario_debug_category = {
 	allowed = {
 		OR = {
-			# Vorkerland collapse and claimants.
+			# Vorkerland collapse and claimant tools.
 			tag = WRK
 			tag = WKR
 			tag = VAD
 			tag = TVA
 
-			# Itora intervention and northern Vorkerland defenders.
+			# Itora intervention tools.
 			tag = IVN
-			tag = ZAO
-			tag = WPA
-			tag = WPS
-			tag = PWR
-			tag = PSD
 
-			# Existing resource-war debug users.
+			# Resource-war tools.
 			tag = NAM
 			tag = EFL
 			tag = AZH
