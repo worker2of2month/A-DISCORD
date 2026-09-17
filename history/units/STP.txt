@@ -1,5 +1,6 @@
 division_template = {
 	name = "Police division"
+	template_counter = 80
 	division_names_group = STP_INF_01
 	is_locked = yes
 	force_allow_recruiting = no
@@ -12,6 +13,7 @@ division_template = {
 
 division_template = {
 	name = "Regular army"
+	template_counter = 3
 	division_names_group = STP_INF_01
 	is_locked = yes
 	force_allow_recruiting = no
@@ -30,6 +32,7 @@ division_template = {
 
 division_template = {
 	name = "Capital Guard"
+	template_counter = 78
 	division_names_group = STP_INF_01
 	is_locked = yes
 	force_allow_recruiting = no

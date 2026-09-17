@@ -5,6 +5,7 @@ from pathlib import Path
 
 
 from tools.lib.paths import source_section
+from tools.validators.validate_adiscord_division_templates import starting_template_counter
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -47,6 +48,7 @@ class EmergencyTemplateTests(unittest.TestCase):
                 self.assertIn(f'has_template = "{name}"', block.group(0))
                 self.assertIn("NOT = {", block.group(0))
                 self.assertIn(f'name = "{name}"', block.group(0))
+                self.assertIn(f"template_counter = {starting_template_counter(name)}", block.group(0))
 
     def test_lock_and_recruitment_metadata_matches_live_spawn_contracts(self):
         source = source_section((

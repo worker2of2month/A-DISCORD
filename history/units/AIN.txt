@@ -1,5 +1,6 @@
 division_template = {
 	name = "Licensed Security Battalion"
+	template_counter = 80
 	regiments = {
 		infantry = { x = 0 y = 0 }
 		infantry = { x = 0 y = 1 }

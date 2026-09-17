@@ -1,5 +1,6 @@
 division_template = {
 	name = "Island Garrison"
+	template_counter = 80
 	division_names_group = ADISCORD_INF_01
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }

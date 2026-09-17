@@ -142,6 +142,7 @@ def render_oob() -> str:
     template = DIVISION_TEMPLATE_NAMES[0]
     return """division_template = {
 \tname = "%s"
+\ttemplate_counter = 80
 \tregiments = {
 \t\tinfantry = { x = 0 y = 0 }
 \t\tinfantry = { x = 0 y = 1 }

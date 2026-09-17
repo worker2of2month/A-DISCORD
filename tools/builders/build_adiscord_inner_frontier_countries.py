@@ -420,6 +420,7 @@ def render_oob(tag: str, country: dict[str, object], principal_provinces: dict[i
     lines = [
         "division_template = {",
         f'\tname = "{template}"',
+        f"\ttemplate_counter = {80 if template == FILTRATION_TEMPLATE else 7 if template == SETTLER_MILITIA_TEMPLATE else 3}",
         "\tregiments = {",
         *regiment_block(unit_type, regiment_count),
     ]

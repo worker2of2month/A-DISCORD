@@ -371,58 +371,73 @@ STP_set_leader_health_stage = {
 # Starting army template restrictions (COUNTRY)
 
 ADISCORD_STP_lock_regular_army_templates = {
-	set_division_template_lock = {
-		division_template = "Police division"
-		is_locked = yes
-	}
-	set_division_force_allow_recruiting = {
-		division_template = "Police division"
-		force_allow_recruiting = no
+	if = {
+		limit = { has_template = "Police division" }
+		set_division_template_lock = {
+			division_template = "Police division"
+			is_locked = yes
+		}
+		set_division_force_allow_recruiting = {
+			division_template = "Police division"
+			force_allow_recruiting = no
+		}
 	}
 
-	set_division_template_lock = {
-		division_template = "Regular army"
-		is_locked = yes
-	}
-	set_division_force_allow_recruiting = {
-		division_template = "Regular army"
-		force_allow_recruiting = no
+	if = {
+		limit = { has_template = "Regular army" }
+		set_division_template_lock = {
+			division_template = "Regular army"
+			is_locked = yes
+		}
+		set_division_force_allow_recruiting = {
+			division_template = "Regular army"
+			force_allow_recruiting = no
+		}
 	}
 
 	# Capital Guard remains unique.
-	set_division_template_lock = {
-		division_template = "Capital Guard"
-		is_locked = yes
-	}
-	set_division_force_allow_recruiting = {
-		division_template = "Capital Guard"
-		force_allow_recruiting = no
+	if = {
+		limit = { has_template = "Capital Guard" }
+		set_division_template_lock = {
+			division_template = "Capital Guard"
+			is_locked = yes
+		}
+		set_division_force_allow_recruiting = {
+			division_template = "Capital Guard"
+			force_allow_recruiting = no
+		}
 	}
 }
 
 ADISCORD_STP_unlock_regular_army_templates = {
-	set_division_template_lock = {
-		division_template = "Police division"
-		is_locked = no
-	}
-	set_division_force_allow_recruiting = {
-		division_template = "Police division"
-		force_allow_recruiting = yes
+	if = {
+		limit = { has_template = "Police division" }
+		set_division_template_lock = {
+			division_template = "Police division"
+			is_locked = no
+		}
+		set_division_force_allow_recruiting = {
+			division_template = "Police division"
+			force_allow_recruiting = yes
+		}
 	}
 
-	set_division_template_lock = {
-		division_template = "Regular army"
-		is_locked = no
-	}
-	set_division_force_allow_recruiting = {
-		division_template = "Regular army"
-		force_allow_recruiting = yes
+	if = {
+		limit = { has_template = "Regular army" }
+		set_division_template_lock = {
+			division_template = "Regular army"
+			is_locked = no
+		}
+		set_division_force_allow_recruiting = {
+			division_template = "Regular army"
+			force_allow_recruiting = yes
+		}
 	}
 }
 
 # After load_oob. Only Kefreyt-sent templates stay locked until postwar delete.
 STP_cw_apply_wartime_template_locks = {
-	ADISCORD_STP_unlock_regular_army_templates = yes
+	if = { limit = { tag = STP } ADISCORD_STP_unlock_regular_army_templates = yes }
 	if = {
 		limit = { has_template = "Capital Guard" }
 		set_division_template_lock = { division_template = "Capital Guard" is_locked = no }
@@ -431,8 +446,11 @@ STP_cw_apply_wartime_template_locks = {
 	set_division_force_allow_recruiting = { division_template = "Stelander Territorial Brigade" force_allow_recruiting = yes }
 	set_division_template_lock = { division_template = "Stelander Assault Division" is_locked = no }
 	set_division_force_allow_recruiting = { division_template = "Stelander Assault Division" force_allow_recruiting = yes }
-	set_division_template_lock = { division_template = "Kefreyt Volunteer Division" is_locked = yes }
-	set_division_force_allow_recruiting = { division_template = "Kefreyt Volunteer Division" force_allow_recruiting = no }
+	if = {
+		limit = { has_template = "Kefreyt Volunteer Division" }
+		set_division_template_lock = { division_template = "Kefreyt Volunteer Division" is_locked = yes }
+		set_division_force_allow_recruiting = { division_template = "Kefreyt Volunteer Division" force_allow_recruiting = no }
+	}
 	if = {
 		limit = { has_template = "Kefreyt Contract Infantry" }
 		set_division_template_lock = { division_template = "Kefreyt Contract Infantry" is_locked = yes }
@@ -2110,15 +2128,63 @@ STP_cw_deploy_kefreyt_volunteers = {
 	}
 }
 
-# COUNTRY: return orders remove the contingent without crediting host reserves.
-STP_cw_remove_kefreyt_volunteers = {
+# COUNTRY: unlock first. A locked Kefreyt template can ignore template deletion.
+STP_cw_purge_kefreyt_host_templates = {
 	if = {
 		limit = { has_template = "Kefreyt Volunteer Division" }
+		set_division_template_lock = { division_template = "Kefreyt Volunteer Division" is_locked = no }
+		delete_unit = { division_template = "Kefreyt Volunteer Division" disband = no }
 		delete_unit_template_and_units = { division_template = "Kefreyt Volunteer Division" disband = no }
 	}
 	if = {
 		limit = { has_template = "Kefreyt Contract Infantry" }
+		set_division_template_lock = { division_template = "Kefreyt Contract Infantry" is_locked = no }
+		delete_unit = { division_template = "Kefreyt Contract Infantry" disband = no }
 		delete_unit_template_and_units = { division_template = "Kefreyt Contract Infantry" disband = no }
+	}
+}
+
+# COUNTRY: drop the union peacetime roster. Field templates stay with the owner.
+STP_cw_strip_peacetime_union_templates = {
+	if = {
+		limit = { has_template = "Police division" }
+		set_division_template_lock = { division_template = "Police division" is_locked = no }
+		delete_unit = { division_template = "Police division" disband = no }
+		delete_unit_template_and_units = { division_template = "Police division" disband = no }
+	}
+	if = {
+		limit = { has_template = "Regular army" }
+		set_division_template_lock = { division_template = "Regular army" is_locked = no }
+		delete_unit = { division_template = "Regular army" disband = no }
+		delete_unit_template_and_units = { division_template = "Regular army" disband = no }
+	}
+	if = {
+		limit = { has_template = "Capital Guard" }
+		set_division_template_lock = { division_template = "Capital Guard" is_locked = no }
+		delete_unit = { division_template = "Capital Guard" disband = no }
+		delete_unit_template_and_units = { division_template = "Capital Guard" disband = no }
+	}
+}
+
+# COUNTRY: the shared wartime OOB also carries the STS-only volunteer template.
+STP_cw_strip_kefreyt_volunteer_template = {
+	if = {
+		limit = { has_template = "Kefreyt Volunteer Division" }
+		set_division_template_lock = { division_template = "Kefreyt Volunteer Division" is_locked = no }
+		delete_unit_template_and_units = { division_template = "Kefreyt Volunteer Division" disband = no }
+	}
+}
+
+# Volunteers belong to STS. Strip leftover peacetime union templates there too.
+STP_cw_remove_kefreyt_volunteers = {
+	STP = { STP_cw_purge_kefreyt_host_templates = yes }
+	STS = {
+		STP_cw_purge_kefreyt_host_templates = yes
+		STP_cw_strip_peacetime_union_templates = yes
+	}
+	SRP = {
+		STP_cw_purge_kefreyt_host_templates = yes
+		STP_cw_strip_peacetime_union_templates = yes
 	}
 }
 
@@ -2311,7 +2377,19 @@ STP_cw_materialize_region_assets = {
 STP_cw_prepare_successor = {
 	set_country_flag = STP_cw_participant
 	set_rule = { can_join_factions = no can_create_factions = no }
+	# inherit_technology copies later union research when the engine applies it.
+	# A newly activated tag can keep an empty tree; the same starting modules
+	# unlock the union's equipment even if that copy does nothing.
 	inherit_technology = STP
+	ADISCORD_grant_technology_profile_common = yes
+	ADISCORD_grant_technology_profile_industrial = yes
+	ADISCORD_grant_technology_profile_energy = yes
+	ADISCORD_grant_technology_profile_institutional = yes
+	ADISCORD_grant_technology_profile_land = yes
+	ADISCORD_grant_technology_profile_air = yes
+	ADISCORD_grant_technology_profile_naval = yes
+	ADISCORD_grant_technology_profile_recon_platform = yes
+	ADISCORD_grant_technology_profile_field_air_defense = yes
 	if = {
 		limit = { NOT = { check_variable = { var = STP_cw_emergency_research_slots value = 0 compare = greater_than } } }
 		set_research_slots = 1
@@ -2325,6 +2403,8 @@ STP_cw_prepare_successor = {
 	else_if = { limit = { STP = { has_idea = all_adults_serve } } add_ideas = all_adults_serve }
 	else_if = { limit = { STP = { has_idea = scraping_the_barrel } } add_ideas = scraping_the_barrel }
 	load_oob = ADISCORD_STP_civil_war_templates
+	STP_cw_strip_peacetime_union_templates = yes
+	if = { limit = { NOT = { tag = STS } } STP_cw_strip_kefreyt_volunteer_template = yes }
 	set_country_flag = STP_cw_templates_loaded
 	STP_cw_apply_wartime_template_locks = yes
 	set_country_flag = ADISCORD_economy_important_country
@@ -2466,8 +2546,8 @@ STP_cw_release_resistance_officeholders = {
 	}
 }
 
-# COUNTRY: Korsh is not a starting STP officer. Recruit the commander role on
-# STS only after a human takes Shabrat's side and Shabrat is still free.
+# COUNTRY: Korsh is recruited on STP without a command role. Move him, then
+# add the commander role on STS after a human takes Shabrat and he is free.
 STP_cw_commission_korsh = {
 	if = {
 		limit = {
@@ -2482,11 +2562,19 @@ STP_cw_commission_korsh = {
 				STS = { STP_cw_shabrat_available = yes }
 			}
 		}
-		STS = {
-			if = {
-				limit = { NOT = { has_character = STP_Gleb_Korsh } }
-				recruit_character = STP_Gleb_Korsh
+		if = {
+			limit = { STP = { has_character = STP_Gleb_Korsh } }
+			STP = { set_nationality = { character = STP_Gleb_Korsh target_country = STS } }
+		}
+		else = {
+			STS = {
+				if = {
+					limit = { NOT = { has_character = STP_Gleb_Korsh } }
+					recruit_character = STP_Gleb_Korsh
+				}
 			}
+		}
+		STS = {
 			STP_Gleb_Korsh = {
 				if = {
 					limit = { NOT = { is_unit_leader = yes } }
@@ -2851,14 +2939,24 @@ STP_cw_start = {
 		every_owned_state = { set_state_controller_to = PREV }
 		STS = { every_owned_state = { set_state_controller_to = PREV } }
 		SRP = { every_owned_state = { set_state_controller_to = PREV } }
+		# transfer_state creates the successor, but every_owned_state on that
+		# newborn tag is still empty in this same effect. Walk states by core
+		# or owner instead: STS claims the original Stelander cores, including
+		# districts that remain with the party.
+		every_state = {
+			limit = { is_core_of = STP }
+			add_core_of = STS
+		}
+		every_state = {
+			limit = { is_owned_by = SRP }
+			add_core_of = SRP
+		}
 		STS = {
-			every_owned_state = { add_core_of = STS }
 			STP_cw_prepare_successor = yes
 			STP_pc_copy_split_flags = yes
 			add_manpower = var:STP.STP_cw_resistance_manpower
 		}
 		SRP = {
-			every_owned_state = { add_core_of = SRP }
 			STP_cw_prepare_successor = yes
 			add_ideas = SRP_council_authority
 			add_manpower = var:STP.STP_cw_republics_manpower
@@ -2936,6 +3034,7 @@ STP_cw_start = {
 		53 = { STP_cw_materialize_region_assets = yes }
 		88 = { STP_cw_materialize_region_assets = yes }
 		load_oob = ADISCORD_STP_civil_war_templates
+		STP_cw_strip_kefreyt_volunteer_template = yes
 		set_country_flag = STP_cw_templates_loaded
 		STP_cw_apply_wartime_template_locks = yes
 		if = {

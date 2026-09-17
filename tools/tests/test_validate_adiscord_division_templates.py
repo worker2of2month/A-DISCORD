@@ -7,9 +7,31 @@ import unittest
 from pathlib import Path
 
 from tools.validators.validate_adiscord_division_templates import (
+    STARTING_TEMPLATE_COUNTERS,
     collect_templates_and_references,
+    parse_clausewitz,
+    starting_template_counter,
     validate,
 )
+
+
+class StartingTemplateCounterTests(unittest.TestCase):
+    def test_role_pictures_stay_distinct(self) -> None:
+        self.assertEqual(starting_template_counter("Police division"), 80)
+        self.assertEqual(starting_template_counter("Regular army"), 3)
+        self.assertEqual(starting_template_counter("Capital Guard"), 78)
+        self.assertEqual(starting_template_counter("Kefreyt Line Brigade"), 78)
+        self.assertEqual(starting_template_counter("Line Infantry Brigade"), 3)
+        self.assertEqual(starting_template_counter("Stelander Territorial Brigade"), 12)
+        self.assertEqual(starting_template_counter("Stelander Assault Division"), 4)
+        self.assertEqual(starting_template_counter("Kefreyt Volunteer Division"), 68)
+        self.assertEqual(starting_template_counter("Nodral Armored Group"), 86)
+        self.assertEqual(starting_template_counter("Nodral Mountain Infantry"), 110)
+        self.assertEqual(starting_template_counter("Armi Mobile Group"), 5)
+        self.assertEqual(
+            len(set(STARTING_TEMPLATE_COUNTERS.values())),
+            len(STARTING_TEMPLATE_COUNTERS),
+        )
 
 
 class RepositoryDivisionTemplateAsciiTests(unittest.TestCase):
@@ -33,6 +55,31 @@ class RepositoryDivisionTemplateAsciiTests(unittest.TestCase):
             ],
             [],
         )
+
+    def test_starting_templates_use_role_template_counters(self) -> None:
+        root = Path(__file__).resolve().parents[2]
+        observed: dict[str, set[str]] = {}
+        for path in sorted((root / "history" / "units").glob("*.txt")):
+            for entry in parse_clausewitz(path.read_text(encoding="utf-8")):
+                if entry.key != "division_template" or not isinstance(entry.value, list):
+                    continue
+                name = next(
+                    (child.value for child in entry.value if child.key == "name"),
+                    None,
+                )
+                counter = next(
+                    (child.value for child in entry.value if child.key == "template_counter"),
+                    None,
+                )
+                self.assertIsInstance(name, str, path)
+                self.assertEqual(counter, str(starting_template_counter(name)), f"{path}: {name}")
+                observed.setdefault(name, set()).add(counter)
+        self.assertGreaterEqual(len(observed), 40)
+        self.assertTrue(all(len(values) == 1 for values in observed.values()))
+        self.assertEqual(observed["Police division"], {"80"})
+        self.assertEqual(observed["Regular army"], {"3"})
+        self.assertEqual(observed["Capital Guard"], {"78"})
+        self.assertEqual(observed["Kefreyt Volunteer Division"], {"68"})
 
 
 class DivisionTemplateAuditTests(unittest.TestCase):

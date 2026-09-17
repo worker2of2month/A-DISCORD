@@ -1,5 +1,6 @@
 division_template = {
 	name = "TVA Collapse Militia"
+	template_counter = 7
 	division_names_group = TVA_COLLAPSE_INF_01
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }
@@ -10,6 +11,7 @@ division_template = {
 
 division_template = {
 	name = "TVA Infiltration Cell"
+	template_counter = 17
 	division_names_group = TVA_COLLAPSE_INF_01
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }
@@ -19,6 +21,7 @@ division_template = {
 
 division_template = {
 	name = "TVA Mobile Test Group"
+	template_counter = 5
 	division_names_group = TVA_COLLAPSE_INF_01
 	regiments = {
 		ADISCORD_combat_platform = { x = 0 y = 0 }

@@ -18,6 +18,64 @@ from typing import Iterator
 ROOT = Path(__file__).resolve().parents[2]
 AUDIT_PATH = ROOT / "tools" / "data" / "division_template_audit.json"
 
+# Starting OOB pictures: vanilla GFX_div_templ_* frames, one per role.
+STARTING_TEMPLATE_COUNTERS = {
+    "security": 80,
+    "militia": 7,
+    "line": 3,
+    "guard": 78,
+    "territorial": 12,
+    "assault": 4,
+    "volunteer": 68,
+    "armor": 86,
+    "mountain": 110,
+    "mobile": 5,
+    "infiltration": 17,
+}
+
+
+def starting_template_role(name: str) -> str:
+    lowered = name.lower()
+    if "volunteer" in lowered:
+        return "volunteer"
+    if "assault" in lowered:
+        return "assault"
+    if "territorial" in lowered:
+        return "territorial"
+    if "mountain" in lowered:
+        return "mountain"
+    if "armored" in lowered or "armoured" in lowered:
+        return "armor"
+    if "mechanized" in lowered or "mobile" in lowered:
+        return "mobile"
+    if "infiltration" in lowered:
+        return "infiltration"
+    if (
+        "police" in lowered
+        or "security" in lowered
+        or "filtration" in lowered
+        or "garrison" in lowered
+        or "patrol" in lowered
+        or lowered.endswith("watch")
+        or " watch" in lowered
+        or "warden" in lowered
+    ):
+        return "security"
+    if lowered.endswith("line brigade") and "infantry" not in lowered:
+        return "guard"
+    if "guard" in lowered or "chosen" in lowered:
+        return "guard"
+    if any(
+        token in lowered
+        for token in ("militia", "levy", "warband", "boneband", "raiders", "insurgent")
+    ):
+        return "militia"
+    return "line"
+
+
+def starting_template_counter(name: str) -> int:
+    return STARTING_TEMPLATE_COUNTERS[starting_template_role(name)]
+
 SCRIPT_GLOBS = (
     "common/on_actions/*.txt",
     "common/scripted_effects/*.txt",

@@ -1,5 +1,6 @@
 division_template = {
 	name = "Settler Militia"
+	template_counter = 7
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }
 		ADISCORD_militia = { x = 1 y = 0 }

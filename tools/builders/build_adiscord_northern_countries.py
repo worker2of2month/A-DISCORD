@@ -498,6 +498,7 @@ def render_oob(tag: str, country: dict[str, object], principal_provinces: dict[i
         lines = [
             "division_template = {",
             f'\tname = "{IMPERIAL_LINE_TEMPLATE}"',
+            "\ttemplate_counter = 3",
             "\tregiments = {",
             *regiment_block("infantry", 6),
             "\t\tADISCORD_line_artillery = { x = 2 y = 2 }",
@@ -505,6 +506,7 @@ def render_oob(tag: str, country: dict[str, object], principal_provinces: dict[i
             "}",
             "division_template = {",
             f'\tname = "{IMPERIAL_FRONTIER_TEMPLATE}"',
+            "\ttemplate_counter = 3",
             "\tregiments = {",
             *regiment_block("infantry", 4),
             "\t}",
@@ -526,6 +528,7 @@ def render_oob(tag: str, country: dict[str, object], principal_provinces: dict[i
     lines = [
         "division_template = {",
         f'\tname = "{template}"',
+        f"\ttemplate_counter = {3 if unit_type == 'infantry' else 7}",
         "\tregiments = {",
         *regiment_block(unit_type, regiment_count),
         "\t}",

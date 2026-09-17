@@ -11078,7 +11078,7 @@
       "kind": "technical_reference",
       "technical_name": "Regular army",
       "legacy_names": [],
-      "count": 5
+      "count": 8
     },
     {
       "key": "adiscord_stp_scripted_effects_technical_reference_police_division",
@@ -11086,7 +11086,7 @@
       "kind": "technical_reference",
       "technical_name": "Police division",
       "legacy_names": [],
-      "count": 5
+      "count": 8
     },
     {
       "key": "adiscord_vorkerland_collapse_decisions_create_unit_tgd_urban_guard_xp_0_1_eq_0_7",
@@ -11154,7 +11154,7 @@
       "kind": "technical_reference",
       "technical_name": "Capital Guard",
       "legacy_names": [],
-      "count": 3
+      "count": 6
     },
     {
       "key": "adiscord_nam_resource_war_effects_create_unit_nam_resource_guard_xp_0_2_eq_1_0",
@@ -13202,7 +13202,7 @@
       "kind": "technical_reference",
       "technical_name": "Kefreyt Volunteer Division",
       "legacy_names": [],
-      "count": 3
+      "count": 7
     },
     {
       "key": "stp_cw_kefreyt_contract_infantry_cleanup",
@@ -13210,7 +13210,7 @@
       "kind": "technical_reference",
       "technical_name": "Kefreyt Contract Infantry",
       "legacy_names": [],
-      "count": 3
+      "count": 5
     }
   ]
 }

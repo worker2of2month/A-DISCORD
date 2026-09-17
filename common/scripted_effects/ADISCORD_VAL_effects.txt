@@ -1429,6 +1429,7 @@ VAL_cw_complete_arms_contract = {
 					limit = { VAL = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } } }
 					division_template = {
 						name = "Kefreyt Contract Infantry"
+						template_counter = 3
 						is_locked = yes
 						force_allow_recruiting = no
 						override_model = ADISCORD_VAL_regular_entity

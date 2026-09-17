@@ -1,5 +1,6 @@
 division_template = {
 	name = "Blood Kin Warband"
+	template_counter = 7
 	division_names_group = ADISCORD_INF_01
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }
@@ -9,6 +10,7 @@ division_template = {
 
 division_template = {
 	name = "Anthropophagic Raiders"
+	template_counter = 7
 	division_names_group = ADISCORD_INF_01
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }
@@ -19,6 +21,7 @@ division_template = {
 
 division_template = {
 	name = "Red Maw Guard"
+	template_counter = 78
 	division_names_group = ADISCORD_INF_01
 	regiments = {
 		infantry = { x = 0 y = 0 }
@@ -30,6 +33,7 @@ division_template = {
 
 division_template = {
 	name = "Devourer Chosen"
+	template_counter = 78
 	division_names_group = ADISCORD_INF_01
 	regiments = {
 		mountaineers = { x = 0 y = 0 }

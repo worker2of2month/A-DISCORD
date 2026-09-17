@@ -1,5 +1,6 @@
 division_template = {
 	name = "NAM Resource Guard"
+	template_counter = 78
 	division_names_group = ADISCORD_INF_01
 	regiments = {
 		infantry = { x = 0 y = 0 }
@@ -20,6 +21,7 @@ division_template = {
 
 division_template = {
 	name = "NAM Resource Infantry"
+	template_counter = 3
 	division_names_group = ADISCORD_INF_01
 	regiments = {
 		infantry = { x = 0 y = 0 }

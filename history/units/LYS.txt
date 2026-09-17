@@ -1,5 +1,6 @@
 division_template = {
 	name = "Northern Line Brigade"
+	template_counter = 78
 	regiments = {
 		infantry = { x = 0 y = 0 }
 		infantry = { x = 1 y = 0 }

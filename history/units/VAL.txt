@@ -1,5 +1,6 @@
 division_template = {
 	name = "Kefreyt Security Detachment"
+	template_counter = 80
 	division_names_group = VAL_INF_01
 	regiments = {
 		ADISCORD_militia = { x = 0 y = 0 }
@@ -10,6 +11,7 @@ division_template = {
 
 division_template = {
 	name = "Kefreyt Contract Infantry"
+	template_counter = 3
 	division_names_group = VAL_INF_01
 	regiments = {
 		infantry = { x = 0 y = 0 }
@@ -26,6 +28,7 @@ division_template = {
 
 division_template = {
 	name = "Kefreyt Line Brigade"
+	template_counter = 78
 	division_names_group = VAL_INF_01
 	regiments = {
 		infantry = { x = 0 y = 0 }

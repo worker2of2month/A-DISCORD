@@ -357,11 +357,33 @@ class CivilWarContracts(unittest.TestCase):
         self.assertIn('division_template = "Kefreyt Volunteer Division" is_locked = yes', apply)
         self.assertIn('division_template = "Kefreyt Contract Infantry" is_locked = yes', apply)
         self.assertIn("ADISCORD_STP_unlock_regular_army_templates = yes", apply)
+        self.assertIn("limit = { tag = STP }", apply)
+        self.assertIn('has_template = "Kefreyt Volunteer Division"', apply)
+        lock = block(self.effects, "ADISCORD_STP_lock_regular_army_templates")
+        unlock = block(self.effects, "ADISCORD_STP_unlock_regular_army_templates")
+        for name in ("Police division", "Regular army", "Capital Guard"):
+            self.assertIn('has_template = "' + name + '"', lock)
+        for name in ("Police division", "Regular army"):
+            self.assertIn('has_template = "' + name + '"', unlock)
+        apply_parsed = ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+                                 "STP_cw_apply_wartime_template_locks")
+        for tag, expect_unlock in (("STP", True), ("STS", False), ("SRP", False)):
+            keys = [e.key for _, e in selected_effects(apply_parsed, {}, tag)]
+            self.assertEqual("ADISCORD_STP_unlock_regular_army_templates" in keys, expect_unlock, tag)
         for name in ("STP_cw_prepare_successor", "STP_cw_start"):
             body = block(self.effects, name)
             self.assertLess(body.index("load_oob = ADISCORD_STP_civil_war_templates"),
                             body.index("STP_cw_apply_wartime_template_locks = yes"), name)
             self.assertNotIn("ADISCORD_STP_unlock_regular_army_templates = yes", body)
+            self.assertLess(body.index("load_oob = ADISCORD_STP_civil_war_templates"),
+                            body.index("STP_cw_strip_kefreyt_volunteer_template = yes"), name)
+            self.assertLess(body.index("STP_cw_strip_kefreyt_volunteer_template = yes"),
+                            body.index("STP_cw_apply_wartime_template_locks = yes"), name)
+        successor = block(self.effects, "STP_cw_prepare_successor")
+        self.assertIn("STP_cw_strip_peacetime_union_templates = yes", successor)
+        self.assertIn("NOT = { tag = STS }", successor)
+        start = block(self.effects, "STP_cw_start")
+        self.assertNotIn("STP_cw_strip_peacetime_union_templates = yes", start)
 
     def test_shabrat_wartime_templates_use_three_map_models(self):
         templates = {scalar(e.value, "name"): e.value
@@ -373,6 +395,9 @@ class CivilWarContracts(unittest.TestCase):
         self.assertFalse(any(e.key == "override_model" for e in territorial))
         self.assertFalse(any(e.key == "override_model" for e in assault))
         self.assertEqual(scalar(volunteer, "override_model"), "ADISCORD_VAL_regular_entity")
+        self.assertEqual(scalar(territorial, "template_counter"), "12")
+        self.assertEqual(scalar(assault, "template_counter"), "4")
+        self.assertEqual(scalar(volunteer, "template_counter"), "68")
         self.assertTrue(any(e.key == "ADISCORD_territorial" for e in ast_block(territorial, "regiments")))
         self.assertTrue(any(e.key == "infantry" for e in ast_block(assault, "regiments")))
         entities = read("gfx/entities/zz_ADISCORD_country_infantry.asset")
@@ -821,6 +846,22 @@ class CivilWarContracts(unittest.TestCase):
         self.assertNotIn("promote_character = STP_grigory_sotnikov", start)
         self.assertNotIn("ruling_party = etatism", start)
 
+    def test_split_gives_sts_cores_on_original_stelander_land(self):
+        start = ast_block(ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start"), "if")
+        sts_cores = [e for e in walk(start) if e.key == "every_state"
+                     and any(child.key == "add_core_of" and child.value == "STS" for child in walk(e.value))]
+        srp_cores = [e for e in walk(start) if e.key == "every_state"
+                     and any(child.key == "add_core_of" and child.value == "SRP" for child in walk(e.value))]
+        self.assertEqual(len(sts_cores), 1)
+        self.assertEqual(len(srp_cores), 1)
+        self.assertTrue(any(child.key == "is_core_of" and child.value == "STP"
+                            for child in walk(ast_block(sts_cores[0].value, "limit"))))
+        self.assertTrue(any(child.key == "is_owned_by" and child.value == "SRP"
+                            for child in walk(ast_block(srp_cores[0].value, "limit"))))
+        self.assertFalse(any(e.key == "every_owned_state" and any(child.key == "add_core_of" for child in walk(e.value))
+                             for e in walk(start)),
+                         "a newborn successor still has an empty owned-state list")
+
     def test_union_settlement_reintegrates_only_stelander_cores_for_shabrat(self):
         settlement = block(self.effects, "STP_cw_settle_union_victory")
         reintegration = block(settlement, "every_owned_state")
@@ -920,8 +961,20 @@ class CivilWarContracts(unittest.TestCase):
         self.assertIn("STS = { change_tag_from = STP }", block(self.effects, "STP_cw_start"))
         self.assertNotIn("SRP = { change_tag_from = STP }", events)
         self.assertNotRegex(events, r"change_tag_from\s*=\s*(STS|SRP)")
-        self.assertIn("inherit_technology = STP", block(self.effects, "STP_cw_prepare_successor"))
-        self.assertIn("set_research_slots = 1", block(self.effects, "STP_cw_prepare_successor"))
+        setup = block(self.effects, "STP_cw_prepare_successor")
+        self.assertIn("inherit_technology = STP", setup)
+        self.assertIn("set_research_slots = 1", setup)
+        self.assertNotIn("ADISCORD_grant_2150_technology_baseline", setup)
+        self.assertNotIn("ADISCORD_grant_starting_technology_profile", setup)
+        self.assertNotIn("add_equipment_production", setup)
+        starting = read("common/scripted_effects/ADISCORD_technology_baseline_effects.txt")
+        union = re.search(r"limit = \{ tag = STP \}(.*?)(?=\n\t\})", starting, re.S)
+        self.assertIsNotNone(union)
+        modules = ["common"] + re.findall(r"ADISCORD_grant_technology_profile_(\w+) = yes", union.group(1))
+        for module in modules:
+            self.assertIn("ADISCORD_grant_technology_profile_" + module + " = yes", setup)
+        self.assertLess(setup.index("inherit_technology = STP"),
+                        setup.index("ADISCORD_grant_technology_profile_common = yes"))
         start = block(self.effects, "STP_cw_start")
         self.assertEqual(start.count("load_focus_tree = { tree = STP_cw_focus"), 3)
         self.assertNotIn("declare_war_on", start)
@@ -1690,10 +1743,12 @@ class CommanderLoyaltyContracts(unittest.TestCase):
         self.assertIn("STP_cw_commission_korsh = yes", start)
         commission = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_commission_korsh")
         self.assertIn("is_ai = no", commission)
+        self.assertIn("set_nationality = { character = STP_Gleb_Korsh target_country = STS }", commission)
         self.assertIn("recruit_character = STP_Gleb_Korsh", commission)
         self.assertIn("add_corps_commander_role", commission)
         self.assertIn("STP_cw_shabrat_available = yes", commission)
-        self.assertNotIn("recruit_character = STP_Gleb_Korsh", read("history/countries/STP - StepanLand.txt"))
+        self.assertIn("recruit_character = STP_Gleb_Korsh", read("history/countries/STP - StepanLand.txt"))
+        self.assertLess(commission.index("set_nationality"), commission.index("add_corps_commander_role"))
         self.assertLess(start.index("set_country_flag = STP_cw_participant"), start.index("STP_cw_refresh_officer_loyalties = yes"))
         self.assertLess(start.index("STP_cw_refresh_officer_loyalties = yes"), start.index("set_nationality"))
         self.assertIn("STP_cw_release_resistance_officeholders = yes", start)
@@ -3270,13 +3325,44 @@ class KefreytVolunteerContracts(unittest.TestCase):
     def test_settlements_remove_temporary_units_without_refunding_sts(self):
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         cleanup = block(effects, "STP_cw_remove_kefreyt_volunteers")
-        self.assertIn('division_template = "Kefreyt Volunteer Division"', cleanup)
-        self.assertIn('division_template = "Kefreyt Contract Infantry"', cleanup)
-        self.assertEqual(cleanup.count("disband = no"), 2)
-        self.assertNotIn("disband = yes", cleanup)
-        self.assertNotIn("add_manpower", cleanup)
+        self.assertIn("STP = { STP_cw_purge_kefreyt_host_templates = yes }", cleanup)
+        parsed_cleanup = ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+                                   "STP_cw_remove_kefreyt_volunteers")
+        self.assertEqual(scalar(ast_block(parsed_cleanup, "STP"), "STP_cw_purge_kefreyt_host_templates"), "yes")
+        for tag in ("STS", "SRP"):
+            body = ast_block(parsed_cleanup, tag)
+            self.assertEqual(scalar(body, "STP_cw_purge_kefreyt_host_templates"), "yes")
+            self.assertEqual(scalar(body, "STP_cw_strip_peacetime_union_templates"), "yes")
+        peacetime = block(effects, "STP_cw_strip_peacetime_union_templates")
+        for name in ("Police division", "Regular army", "Capital Guard"):
+            self.assertIn('division_template = "' + name + '"', peacetime)
+        self.assertEqual(peacetime.count("delete_unit_template_and_units"), 3)
+        parsed_peacetime = ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+                                     "STP_cw_strip_peacetime_union_templates")
+        union = ("Police division", "Regular army", "Capital Guard")
+        for present in (False, True):
+            facts = {("STS", "has_template", name): present for name in union}
+            removed = [e for _, e in selected_effects(parsed_peacetime, facts, "STS")
+                       if e.key == "delete_unit_template_and_units"]
+            self.assertEqual(len(removed), 3 if present else 0)
+        volunteer_strip = ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+                                    "STP_cw_strip_kefreyt_volunteer_template")
+        for present in (False, True):
+            facts = {("SRP", "has_template", "Kefreyt Volunteer Division"): present}
+            removed = [e for _, e in selected_effects(volunteer_strip, facts, "SRP")
+                       if e.key == "delete_unit_template_and_units"]
+            self.assertEqual(len(removed), 1 if present else 0)
+        purge = block(effects, "STP_cw_purge_kefreyt_host_templates")
+        self.assertIn('division_template = "Kefreyt Volunteer Division"', purge)
+        self.assertIn('division_template = "Kefreyt Contract Infantry"', purge)
+        self.assertIn("is_locked = no", purge)
+        self.assertGreaterEqual(purge.count("delete_unit ="), 2)
+        self.assertEqual(purge.count("delete_unit_template_and_units"), 2)
+        self.assertEqual(purge.count("disband = no"), 4)
+        self.assertNotIn("disband = yes", purge)
+        self.assertNotIn("add_manpower", purge)
         parsed = ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
-                           "STP_cw_remove_kefreyt_volunteers")
+                           "STP_cw_purge_kefreyt_host_templates")
         for present in (False, True):
             facts = {("STS", "has_template", name): present
                      for name in ("Kefreyt Volunteer Division", "Kefreyt Contract Infantry")}

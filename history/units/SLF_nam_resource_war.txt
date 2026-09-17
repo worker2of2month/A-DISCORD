@@ -1,5 +1,6 @@
 division_template = {
 	name = "Svetlogorsk Insurgent Corps"
+	template_counter = 7
 	division_names_group = ADISCORD_INF_01
 	regiments = {
 		infantry = { x = 0 y = 0 }
