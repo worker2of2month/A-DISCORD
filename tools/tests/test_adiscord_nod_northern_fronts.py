@@ -41,6 +41,15 @@ class NodrulNorthernFrontTests(unittest.TestCase):
         # `ignore` is a diplomacy strategy; it must not be used as a fake troop-allocation fix.
         self.assertNotIn("type = ignore id = BJK", block)
 
+    def test_northern_offensive_does_not_use_diplomatic_ignore_for_fronts(self) -> None:
+        source = AI_PATH.read_text(encoding="utf-8-sig")
+        block = named_block(source, "NOD_cw_northern_offensive_army")
+
+        self.assertTrue(block)
+        self.assertIn("type = dont_defend_ally_borders value = 1", block)
+        for tag in ("STP", "STS", "SRP", "VAL"):
+            self.assertNotIn(f"type = ignore id = {tag}", block)
+
 
 if __name__ == "__main__":
     unittest.main()
