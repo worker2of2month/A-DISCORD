@@ -2,6 +2,11 @@
   "schema_version": 1,
   "external_namespaces": ["lar_fake_intel_units"],
   "events": [
+    {"id": "ADISCORD_world_news.1", "namespace": "ADISCORD_world_news", "number": 1, "owner": "events/ADISCORD_world_news.txt", "subsystem": "world_news", "status": "active"},
+    {"id": "ADISCORD_world_news.2", "namespace": "ADISCORD_world_news", "number": 2, "owner": "events/ADISCORD_world_news.txt", "subsystem": "world_news", "status": "active"},
+    {"id": "ADISCORD_world_news.3", "namespace": "ADISCORD_world_news", "number": 3, "owner": "events/ADISCORD_world_news.txt", "subsystem": "world_news", "status": "active"},
+    {"id": "ADISCORD_world_news.4", "namespace": "ADISCORD_world_news", "number": 4, "owner": "events/ADISCORD_world_news.txt", "subsystem": "world_news", "status": "active"},
+    {"id": "ADISCORD_world_news.5", "namespace": "ADISCORD_world_news", "number": 5, "owner": "events/ADISCORD_world_news.txt", "subsystem": "world_news", "status": "active"},
     {"id": "ADISCORD_STP_cw.90", "namespace": "ADISCORD_STP_cw", "number": 90, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_cw.91", "namespace": "ADISCORD_STP_cw", "number": 91, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_preparation.17", "namespace": "ADISCORD_STP_preparation", "number": 17, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
