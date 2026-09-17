@@ -1,0 +1,22 @@
+name: STP stale Nodrul intervention
+
+on:
+  push:
+    branches:
+      - fix/stp-nod-stale-intervention-20260917
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Run focused regression
+        run: python -B -m unittest -v tools.tests.test_adiscord_stp_nod_stale_intervention
