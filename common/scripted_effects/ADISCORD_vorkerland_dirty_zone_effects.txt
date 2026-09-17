@@ -1,0 +1,60 @@
+# Dirty Zone opening presentation helpers.
+# The reveal lifecycle itself remains owned by ADISCORD_vorkerland_collapse.85.
+
+ADISCORD_vorkerland_clear_dirty_zone_smoke = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_dirty_opened
+			NOT = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
+		}
+		40 = {
+			# Actor 610040 is shared with the existing Vorkerland landmark sync.
+			# Recreating it with the particle-free clone removes the reveal smoke
+			# without deleting the underlying landmark mesh.
+			create_entity = {
+				entity = ADISCORD_vorkerland_pyramid_clear_entity
+				id = 610040
+				x = 3159.92992
+				y = 725.68
+				z = 2.83464
+				rotation = 5.410520681
+				scale = 0.15
+				min_zoom = 2000
+			}
+		}
+		set_global_flag = ADISCORD_vorkerland_dirty_zone_smoke_cleared
+	}
+}
+
+ADISCORD_vorkerland_finalize_dirty_zone_opening_presentation = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_dirty_opened
+			NOT = { has_global_flag = ADISCORD_vorkerland_dirty_zone_presentation_finalized }
+		}
+		set_global_flag = ADISCORD_vorkerland_dirty_zone_presentation_finalized
+		ADISCORD_vorkerland_clear_dirty_zone_smoke = yes
+
+		if = {
+			limit = {
+				NOT = { has_global_flag = ADISCORD_vorkerland_dirty_zone_news_published }
+				RUS = { exists = yes }
+			}
+			set_global_flag = ADISCORD_vorkerland_dirty_zone_news_published
+			RUS = { news_event = { id = ADISCORD_vorkerland_dirty_zone.1 } }
+		}
+	}
+}
+
+# Save-load repair: the base Vorkerland startup synchronizer reconstructs the
+# landmark first. If the Dirty Zone was already opened, overwrite that actor
+# with the durable smoke-free visual unless the Unity Tower ruins own the slot.
+ADISCORD_vorkerland_restore_dirty_zone_opening_visual = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_dirty_opened
+			NOT = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
+		}
+		ADISCORD_vorkerland_clear_dirty_zone_smoke = yes
+	}
+}
