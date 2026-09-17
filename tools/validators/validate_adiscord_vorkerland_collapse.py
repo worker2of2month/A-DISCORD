@@ -4247,6 +4247,23 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             issues.append(f"ADISCORD_superevent.3: player-scoped presentation is missing {token}")
     if "ADISCORD_vorkerland_central_victory_announced" in utilitarian_event:
         issues.append("ADISCORD_superevent.3 must not lock the campaign ending")
+    dirty_event = event_block(news, "ADISCORD_superevent.4")
+    for token in (
+        "hidden = yes",
+        "is_triggered_only = yes",
+        "superevent_vorkerland_dirty_opening",
+        "limit = { is_ai = no }",
+        "scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e",
+    ):
+        if token not in dirty_event:
+            issues.append(f"ADISCORD_superevent.4: player-scoped presentation is missing {token}")
+    for forbidden in (
+        "ADISCORD_vorkerland_dirty_opened",
+        "ADISCORD_vorkerland_collapse.11",
+        "ADISCORD_vorkerland_central_victory_announced",
+    ):
+        if forbidden in dirty_event:
+            issues.append(f"ADISCORD_superevent.4 must stay a presentation replay: {forbidden}")
     for news_id, title_id, audio_id, sound_effect in (
         (
             "ADISCORD_superevent_news.1",

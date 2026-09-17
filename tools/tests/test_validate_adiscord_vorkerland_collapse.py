@@ -429,13 +429,16 @@ country_event = {
 
     def test_every_vorkerland_superevent_route_plays_audible_sound(self) -> None:
         map_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
-        for name in ("dirty_opening", "vlad_victory", "dorian_victory"):
+        for name in ("vlad_victory", "dorian_victory"):
             show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
             self.assertIn(
                 "ADISCORD_vorkerland_play_local_superevent_audio = yes",
                 show_effect,
                 name,
             )
+        dirty_show = named_block(map_effects, "ADISCORD_vorkerland_show_dirty_opening_superevent")
+        self.assertIn("country_event = { id = ADISCORD_superevent.4 }", dirty_show)
+        self.assertNotIn("ADISCORD_vorkerland_dirty_opened", dirty_show)
         worker_show = named_block(map_effects, "ADISCORD_vorkerland_show_worker_victory_superevent")
         self.assertIn("country_event = { id = ADISCORD_superevent.2 }", worker_show)
         self.assertIn("set_global_flag = ADISCORD_vorkerland_central_victory_announced", worker_show)
@@ -457,6 +460,12 @@ country_event = {
         self.assertIn("superevent_vorkerland_utilitarian_victory", utilitarian_event)
         self.assertIn("scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e", utilitarian_event)
         self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", utilitarian_event)
+        dirty_event = event_block(news, "ADISCORD_superevent.4")
+        self.assertIn("hidden = yes", dirty_event)
+        self.assertIn("superevent_vorkerland_dirty_opening", dirty_event)
+        self.assertIn("scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e", dirty_event)
+        self.assertNotIn("ADISCORD_vorkerland_dirty_opened", dirty_event)
+        self.assertNotIn("ADISCORD_vorkerland_collapse.11", dirty_event)
 
         for news_id, title_id, audio_id, sound_effect in (
             (
