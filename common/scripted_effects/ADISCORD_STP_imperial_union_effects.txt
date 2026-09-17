@@ -1,0 +1,30 @@
+# Mechanical formation of the Stelander Imperial Union. The matching news event
+# is presentation-only; it must never annex or transfer territory on its own.
+
+STP_proclaim_imperial_union = {
+	set_country_flag = STP_imperial_union_proclaimed
+	set_cosmetic_tag = STP_empire
+
+	set_politics = {
+		ruling_party = chauvinism
+		elections_allowed = no
+		long_name = STP_empire_faction_party_long
+		name = STP_empire_faction_party
+	}
+
+	add_country_leader_role = {
+		character = STP_maksim_shabrat
+		promote_leader = yes
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2190.1.1.1"
+			traits = { }
+		}
+	}
+	set_country_leader_portrait = {
+		ideology = chauvinism
+		portrait = GFX_portrait_STP_Maksim_Shabrat_dictator
+	}
+
+	news_event = { id = ADISCORD_superevent_news.2 }
+}
