@@ -44,7 +44,7 @@ class STPTooltipClarityTests(unittest.TestCase):
         )
         self.assertIsNotNone(niansas_tooltip)
         body = niansas_tooltip.group("body")
-        self.assertIn("§RПочему округ пока не Шабрата:§!", body)
+        self.assertIn("§YПередача Шабрату:§!", body)
         self.assertIn("[3.STPGetCivilWarForecast]", body)
         self.assertIn("[3.STPGetAdministrationAsset]", body)
 
