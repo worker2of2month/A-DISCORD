@@ -6,6 +6,7 @@ ADISCORD_scenario_debug_category = {
 			tag = WKR
 			tag = VAD
 			tag = TVA
+			tag = RUS
 
 			# Itora intervention tools.
 			tag = IVN

@@ -14,6 +14,15 @@ entity = {
 	}
 }
 
+# Particle-free replacement for the two startup pollution actors covering the
+# Dirty Zone. Reusing actor ids 1 and 2 removes their persistent particles.
+entity = {
+	name = "ADISCORD_global_clear_entity"
+	pdxmesh = "ADISCORD_global_mesh"
+	default_state = "idle"
+	state = { name = "idle" }
+}
+
 entity = {
 	name = "ADISCORD_global_entity_2"
 	pdxmesh = "ADISCORD_global_mesh"
@@ -88,6 +97,15 @@ entity = {
 		event = { time = 0 node = "ADISCORD_city_smoke_6" particle = "city_smoke_s_particle" keep_particle = yes }
 		event = { time = 0 node = "ADISCORD_city_smoke_7" particle = "city_smoke_particle" keep_particle = yes }
 	}
+}
+
+# Same Vorkerland landmark mesh without the pre-reveal smog/city-smoke emitters.
+# Reusing actor id 610040 swaps only the visual state and keeps the landmark in place.
+entity = {
+	name = "ADISCORD_vorkerland_pyramid_clear_entity"
+	pdxmesh = "ADISCORD_vorkerland_pyramid_mesh"
+	default_state = "idle"
+	state = { name = "idle" }
 }
 
 entity = {
