@@ -5,9 +5,38 @@ ADISCORD_vorkerland_clear_dirty_zone_smoke = {
 	if = {
 		limit = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
 
-		# Recreate the landmark actor instead of trying to stop individual particle
-		# systems. That clears both the pyramid's idle smog and any keep_particle
-		# smoke left behind by the Unity Tower collapse animation.
+		# The main Dirty Zone haze is created globally at startup as actors 1 and 2.
+		# Recreate both ids with the same inert mesh but no particle emitter. Using
+		# the existing ids replaces the live particle actors and also makes the
+		# cleanup deterministic after save-load.
+		create_entity = {
+			entity = ADISCORD_global_clear_entity
+			id = 1
+			x = 42
+			y = 21
+			z = -100.000
+			province = 16531
+			state = 42
+			rotation = 1.2
+			scale = 0.03
+			min_zoom = 5555.0
+		}
+		create_entity = {
+			entity = ADISCORD_global_clear_entity
+			id = 2
+			x = 42
+			y = 21
+			z = -100.000
+			province = 12863
+			state = 42
+			rotation = 1.2
+			scale = 0.02
+			min_zoom = 5555.0
+		}
+
+		# The Unity Tower landmark carries its own independent smog/fire particles.
+		# Recreate that actor too so opening the Zone cannot leave a local smoke
+		# source behind. Preserve the correct intact/ruined visual state.
 		if = {
 			limit = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
 			40 = {
@@ -62,9 +91,9 @@ ADISCORD_vorkerland_finalize_dirty_zone_opening_presentation = {
 	}
 }
 
-# Save-load repair: the base Vorkerland startup synchronizer reconstructs the
-# landmark first. If the Dirty Zone was already opened, overwrite that actor
-# with the correct durable smoke-free variant (intact landmark or ruins).
+# Save-load repair: startup recreates the two global pollution actors and the
+# Vorkerland landmark. If the Zone was already opened, this later on_startup
+# hook overwrites all three with their durable particle-free variants.
 ADISCORD_vorkerland_restore_dirty_zone_opening_visual = {
 	if = {
 		limit = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
