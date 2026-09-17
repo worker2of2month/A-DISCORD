@@ -8,6 +8,89 @@ on_actions = {
 			}
 		}
 	}
+	# The split creates STS before the actual STP-STS war relation. Reconcile the
+	# newborn country at that late edge, when its territory, templates and army
+	# already exist but the original STP technology state is still authoritative.
+	on_war_relation_added = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = STP_cw_started
+					NOT = { has_global_flag = STP_cw_union_wars_finished }
+					OR = {
+						AND = { ROOT = { tag = STP } FROM = { tag = STS } }
+						AND = { ROOT = { tag = STS } FROM = { tag = STP } }
+					}
+					STS = {
+						exists = yes
+						has_country_flag = STP_cw_participant
+						NOT = { has_country_flag = STP_cw_sts_runtime_bootstrap_applied }
+					}
+				}
+				STS = {
+					inherit_technology = STP
+					mark_technology_tree_layout_dirty = yes
+					# Production lines are country state and do not follow inherit_technology.
+					# Keep the newborn two-factory queue bounded and immediately useful.
+					add_equipment_production = {
+						equipment = { type = infantry_equipment_0 creator = "STS" }
+						requested_factories = 1
+						progress = 0.30
+						efficiency = 50
+					}
+					add_equipment_production = {
+						equipment = { type = ADISCORD_squad_weapons_equipment_0 creator = "STS" }
+						requested_factories = 1
+						progress = 0.30
+						efficiency = 50
+					}
+					set_country_flag = STP_cw_sts_runtime_bootstrap_applied
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = STP_cw_started
+					NOT = { has_global_flag = STP_cw_union_wars_finished }
+					OR = {
+						AND = { ROOT = { tag = STP } FROM = { tag = STS } }
+						AND = { ROOT = { tag = STS } FROM = { tag = STP } }
+					}
+					STS = {
+						exists = yes
+						has_country_flag = STP_cw_participant
+						NOT = { has_country_flag = STP_cw_old_fada_guard_positioned }
+						53 = { is_owned_by = STS }
+						any_country_division = {
+							division_has_battalion_in_template = ADISCORD_territorial
+							unit_strength > 0.99
+						}
+					}
+				}
+				# Old Fada's prewar police unit was dissolved into the shared reserve.
+				# Move one already-paid newborn brigade back there one-for-one instead
+				# of creating additional manpower or equipment for the resistance.
+				STS = {
+					random_country_division = {
+						limit = {
+							division_has_battalion_in_template = ADISCORD_territorial
+							unit_strength > 0.99
+						}
+						destroy_unit = yes
+					}
+					53 = {
+						create_unit = {
+							division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+							owner = STS
+							# The war relation can temporarily flip control before the existing
+							# hostilities effect restores every owner-controlled province.
+							allow_spawning_on_enemy_provs = yes
+						}
+					}
+					set_country_flag = STP_cw_old_fada_guard_positioned
+				}
+			}
+		}
+	}
 	on_peaceconference_ended = {
 		effect = {
 			if = {
