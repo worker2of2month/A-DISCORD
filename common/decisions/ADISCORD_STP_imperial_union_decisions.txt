@@ -1,0 +1,53 @@
+STP_imperial_union_category = {
+	STP_proclaim_imperial_union = {
+		icon = generic_political_pressure
+		allowed = { tag = STS }
+		visible = {
+			tag = STS
+			has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+			has_completed_focus = STP_pc_hegemony_open
+			NOT = { has_country_flag = STP_imperial_union_proclaimed }
+		}
+		available = {
+			STP_imperial_union_requirements_met = yes
+		}
+		highlight_states = {
+			highlight_state_targets = { state = 4 }
+			highlight_state_targets = { state = 5 }
+			highlight_state_targets = { state = 6 }
+			highlight_state_targets = { state = 7 }
+			highlight_state_targets = { state = 8 }
+			highlight_state_targets = { state = 9 }
+			highlight_state_targets = { state = 10 }
+			highlight_state_targets = { state = 11 }
+			highlight_state_targets = { state = 12 }
+			highlight_state_targets = { state = 13 }
+			highlight_state_targets = { state = 14 }
+			highlight_state_targets = { state = 15 }
+			highlight_state_targets = { state = 16 }
+			highlight_state_targets = { state = 17 }
+			highlight_state_targets = { state = 18 }
+			highlight_state_targets = { state = 19 }
+			highlight_state_targets = { state = 20 }
+			highlight_state_targets = { state = 21 }
+			highlight_state_targets = { state = 22 }
+			highlight_state_targets = { state = 24 }
+			highlight_state_targets = { state = 30 }
+			highlight_state_targets = { state = 31 }
+			highlight_state_targets = { state = 41 }
+			highlight_state_targets = { state = 42 }
+			highlight_state_targets = { state = 48 }
+			highlight_state_targets = { state = 54 }
+			highlight_state_targets = { state = 55 }
+			highlight_state_targets = { state = 56 }
+			highlight_state_targets = { state = 57 }
+		}
+		on_map_mode = map_and_decisions_view
+		cost = 100
+		fire_only_once = yes
+		complete_effect = {
+			STP_proclaim_imperial_union = yes
+		}
+		ai_will_do = { factor = 10 }
+	}
+}
