@@ -2,8 +2,8 @@
 """Build the custom diplomacy portrait, party and flag overlays.
 
 The source PNGs are the approved ImageGen masters with their chroma-key
-backgrounds removed. This builder owns the three exact-size DDS overlays and
-the native empty-focus texture. Use ``--check`` before ``--apply``.
+backgrounds removed. This builder owns the three exact-size DDS overlays.
+Use ``--check`` before ``--apply``.
 """
 
 from __future__ import annotations
@@ -25,10 +25,6 @@ FLAG_SOURCE = SOURCE_DIR / "ADISCORD_diplomacy_flag_overlay_master.png"
 LEADER_OVERLAY = OUTPUT_DIR / "ADISCORD_diplomacy_leader_overlay.dds"
 PARTIES_OVERLAY = OUTPUT_DIR / "ADISCORD_diplomacy_parties_overlay.dds"
 FLAG_OVERLAY = OUTPUT_DIR / "ADISCORD_diplomacy_flag_overlay.dds"
-EMPTY_FOCUS = ROOT / "gfx/interface/goals/goal_unknown.dds"
-EMPTY_FOCUS_SOURCE = Path(
-    r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV\gfx\interface\goals\goal_unknown.dds"
-)
 
 
 def _resample_source(
@@ -86,9 +82,6 @@ def expected_outputs() -> dict[Path, bytes]:
         LEADER_OVERLAY: _dds_bytes(_leader_overlay()),
         PARTIES_OVERLAY: _dds_bytes(_parties_overlay()),
         FLAG_OVERLAY: _dds_bytes(_flag_overlay()),
-        # The engine selects this texture when a country has no active focus,
-        # overriding the initial goal_icon sprite in both politics and diplomacy.
-        EMPTY_FOCUS: EMPTY_FOCUS_SOURCE.read_bytes(),
     }
 
 

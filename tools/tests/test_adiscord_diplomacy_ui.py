@@ -7,8 +7,6 @@ from pathlib import Path
 from PIL import Image
 
 from tools.builders.build_adiscord_diplomacy_ui_assets import (
-    EMPTY_FOCUS,
-    EMPTY_FOCUS_SOURCE,
     FLAG_OVERLAY,
     LEADER_OVERLAY,
     PARTIES_OVERLAY,
@@ -147,8 +145,12 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
         )
         self.assertNotIn("GFX_goal_unknown", block)
 
-    def test_engine_selected_empty_focus_texture_uses_native_placeholder(self) -> None:
-        self.assertTrue(EMPTY_FOCUS.read_bytes() == EMPTY_FOCUS_SOURCE.read_bytes())
+    def test_diplomacy_builder_does_not_own_empty_focus_texture(self) -> None:
+        empty_focus = ROOT / "gfx/interface/goals/goal_unknown.dds"
+        self.assertTrue(empty_focus.is_file())
+        self.assertNotIn(empty_focus, expected_outputs())
+        with Image.open(empty_focus) as image:
+            self.assertEqual(image.size, (150, 150))
 
     def test_engine_bound_widgets_keep_their_required_direct_parents(self) -> None:
         for parent_name, child_names in (

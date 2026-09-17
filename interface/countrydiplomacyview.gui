@@ -429,7 +429,7 @@ guiTypes = {
 					# Engine-bound: must be an immediate child of active_national_focus_info.
 					iconType = {
 						name = "goal_icon"
-						position = { x = 66 y = 80 }
+						position = { x = 66 y = 60 }
 						# Neutral no-focus fallback; active focuses replace it at runtime.
 						spriteType = "GFX_goal_generic_political_pressure"
 						centerposition = yes

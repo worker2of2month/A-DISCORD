@@ -568,10 +568,10 @@ guiTypes = {
 			
 			iconType = {
 				name = "goal_icon"
-				position = { x = 48 y = 49 }
+				position = { x = 48 y = 50 }
 				centerposition = yes			
 				spriteType = "GFX_goal_unknown"
-				scale = 0.6
+				scale = 0.7
 			}
 			
 			buttonType = {

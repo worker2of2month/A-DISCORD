@@ -227,7 +227,7 @@ ideas = {
 		}
 
 		COF_national_spirit = {
-			picture = GFX_idea_WIT_national_spirit
+			picture = GFX_idea_COF_national_spirit
 
 			allowed = {
 				always = no
@@ -240,14 +240,14 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				political_power_gain = 0.12
-				stability_factor = 0.15
+				political_power_gain = -0.35
+				stability_factor = -0.15
 				war_support_factor = 0.10
-				research_speed_factor = 0.05
-				production_speed_industrial_complex_factor = 0.10
+				research_speed_factor = -0.85
+				production_speed_industrial_complex_factor = -0.50
 				industrial_capacity_factory = 0.08
 				recruitable_population = 0.03
-				recruitable_population_factor = 0.25
+				recruitable_population_factor = 0.75
 				training_time_army_factor = -0.10
 				army_org_factor = 0.10
 				army_morale_factor = 0.10

@@ -153,6 +153,10 @@ spriteTypes = {
 		name = "GFX_idea_WIT_national_spirit"
 		texturefile = "gfx/interface/ideas/joining_rule_all_the_world.dds"
 	}
+	spriteType = {
+		name = "GFX_idea_COF_national_spirit"
+		texturefile = "gfx/interface/ideas/COF/idea_COF_national_spirit.png"
+	}
 ###Laws
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_civic_loose_communes"

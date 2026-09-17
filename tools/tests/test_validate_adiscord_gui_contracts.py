@@ -566,7 +566,7 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         self.assertGreater(len(icons), 1)
         for path in icons:
             with self.subTest(icon=path.name), Image.open(path) as icon:
-                # Selected STP art is 150px; the empty-state icon is only 94px.
+                # Politics empty-state and selected STP focus art are both 150px.
                 self.assertGreaterEqual(icon_x - icon.width * scale / 2, 0)
                 self.assertLessEqual(icon_x + icon.width * scale / 2, 100)
                 self.assertGreaterEqual(icon_y - icon.height * scale / 2, 0)

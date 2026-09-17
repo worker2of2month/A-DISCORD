@@ -897,8 +897,7 @@
       "output_globs": [
         "gfx/interface/diplomacy/ADISCORD_diplomacy_leader_overlay.dds",
         "gfx/interface/diplomacy/ADISCORD_diplomacy_parties_overlay.dds",
-        "gfx/interface/diplomacy/ADISCORD_diplomacy_flag_overlay.dds",
-        "gfx/interface/goals/goal_unknown.dds"
+        "gfx/interface/diplomacy/ADISCORD_diplomacy_flag_overlay.dds"
       ],
       "source_inputs": [
         "gfx/interface/diplomacy/source/ADISCORD_diplomacy_leader_overlay_master.png",
