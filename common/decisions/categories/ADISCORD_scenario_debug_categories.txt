@@ -15,18 +15,6 @@ ADISCORD_scenario_debug_category = {
 			tag = PWR
 			tag = PSD
 
-			# Nodrul northern war.
-			tag = NOD
-			tag = YPR
-			tag = COF
-			tag = TFF
-
-			# Stelander civil war and Kefreyt intervention.
-			tag = STP
-			tag = STS
-			tag = SRP
-			tag = VAL
-
 			# Existing resource-war debug users.
 			tag = NAM
 			tag = EFL
