@@ -22,7 +22,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_superevent_vorkerland_dirty_opening"
-		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar.png"
+		textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"
 	}
 	spriteType = {
 		name = "GFX_superevent_vorkerland_worker_victory"
