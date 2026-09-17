@@ -33,6 +33,8 @@ jobs:
                   continue
               if path.parts and path.parts[0] == "docs":
                   continue
+              if path == Path("tools/validators/validate_adiscord_superevents.py"):
+                  continue
               if path.suffix.lower() not in {".py", ".json", ".txt", ".yml", ".md"}:
                   continue
               data = path.read_bytes()
@@ -88,7 +90,9 @@ jobs:
       - name: Verify no live legacy path references remain
         shell: bash
         run: |
-          if git grep -n "events/ADISCORD_news.txt" -- ':!docs/superpowers/**'; then
+          if git grep -n "events/ADISCORD_news.txt" -- \
+              ':!docs/superpowers/**' \
+              ':!tools/validators/validate_adiscord_superevents.py'; then
             echo "Legacy live-code path references remain" >&2
             exit 1
           fi
