@@ -75,7 +75,6 @@ class WorldNewsContracts(unittest.TestCase):
         self.events = read("events/ADISCORD_world_news.txt")
         self.stp_events = read("events/ADISCORD_STP_events.txt")
         self.on_actions = read("common/on_actions/06_ADISCORD_world_news_on_actions.txt")
-        self.debug = read("common/decisions/ADISCORD_world_news_debug_decisions.txt")
         self.debug_categories = read("common/decisions/categories/ADISCORD_scenario_debug_categories.txt")
         self.ru_path = ROOT / "localisation/russian/ADISCORD_world_news_l_russian.yml"
         self.en_path = ROOT / "localisation/english/ADISCORD_world_news_l_english.yml"
@@ -138,31 +137,18 @@ class WorldNewsContracts(unittest.TestCase):
         self.assertTrue(self.ru_path.read_bytes().startswith(b"\xef\xbb\xbf"))
         self.assertTrue(self.en_path.read_bytes().startswith(b"\xef\xbb\xbf"))
 
-    def test_debug_smoke_decisions_can_fire_every_world_news(self):
-        category = named_block(self.debug, "ADISCORD_scenario_debug_category")
-        decisions = (
-            "ADISCORD_debug_world_news_vorkerland",
-            "ADISCORD_debug_world_news_nodrul",
-            "ADISCORD_debug_world_news_stelander",
-            "ADISCORD_debug_world_news_kefreyt",
-            "ADISCORD_debug_world_news_itora",
+    def test_world_news_debug_smoke_decisions_are_not_shipped(self):
+        self.assertFalse(
+            (ROOT / "common/decisions/ADISCORD_world_news_debug_decisions.txt").exists()
         )
-        for number, decision in enumerate(decisions, start=1):
-            block = named_block(category, decision)
-            self.assertTrue(block, decision)
-            self.assertIn("visible = { is_debug = yes }", block)
-            self.assertIn("cost = 0", block)
-            self.assertIn(f"news_event = {{ id = ADISCORD_world_news.{number} }}", block)
-            self.assertIn(f"{decision}:", self.ru)
-            self.assertIn(f"{decision}:", self.en)
+        self.assertNotIn("ADISCORD_debug_world_news_", self.ru)
+        self.assertNotIn("ADISCORD_debug_world_news_", self.en)
 
-    def test_debug_category_is_available_to_major_story_countries(self):
+    def test_world_news_does_not_expand_shared_debug_category(self):
         category = named_block(self.debug_categories, "ADISCORD_scenario_debug_category")
-        for tag in (
-            "WRK", "WKR", "VAD", "TVA", "IVN",
-            "NOD", "YPR", "COF", "TFF",
-            "STP", "STS", "SRP", "VAL",
-        ):
+        for tag in ("NOD", "YPR", "COF", "TFF", "STP", "STS", "SRP", "VAL"):
+            self.assertNotIn(f"tag = {tag}", category, tag)
+        for tag in ("WRK", "WKR", "VAD", "TVA", "IVN", "NAM", "EFL", "AZH", "SLF"):
             self.assertIn(f"tag = {tag}", category, tag)
 
 
