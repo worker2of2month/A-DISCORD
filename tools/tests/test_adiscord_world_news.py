@@ -73,6 +73,7 @@ def event_block(text: str, event_id: str) -> str:
 class WorldNewsContracts(unittest.TestCase):
     def setUp(self):
         self.events = read("events/ADISCORD_world_news.txt")
+        self.stp_events = read("events/ADISCORD_STP_events.txt")
         self.on_actions = read("common/on_actions/06_ADISCORD_world_news_on_actions.txt")
         self.debug = read("common/decisions/ADISCORD_world_news_debug_decisions.txt")
         self.debug_categories = read("common/decisions/categories/ADISCORD_scenario_debug_categories.txt")
@@ -102,8 +103,20 @@ class WorldNewsContracts(unittest.TestCase):
         ):
             self.assertIn(f"NOT = {{ has_global_flag = {flag} }}", war)
             self.assertIn(f"set_global_flag = {flag}", war)
-        for event_id in range(1, 6):
+
+        for event_id in (1, 2, 4, 5):
             self.assertIn(f"news_event = {{ id = ADISCORD_world_news.{event_id} }}", war)
+
+        # STP already owns a richer public outbreak report. Publish that report
+        # from the reliable war-relation hook instead of showing a second generic
+        # headline; fire_only_once suppresses the legacy +1h fallback call.
+        self.assertIn("news_event = { id = ADISCORD_STP_cw.70 }", war)
+        self.assertNotIn("news_event = { id = ADISCORD_world_news.3 }", war)
+        stp_outbreak = event_block(self.stp_events, "ADISCORD_STP_cw.70")
+        self.assertTrue(stp_outbreak)
+        self.assertIn("major = yes", stp_outbreak)
+        self.assertIn("is_triggered_only = yes", stp_outbreak)
+        self.assertIn("fire_only_once = yes", stp_outbreak)
 
         for tag in ("WKR", "VAD", "TVA"):
             self.assertIn(f"tag = {tag}", war)
