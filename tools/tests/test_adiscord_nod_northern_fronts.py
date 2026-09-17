@@ -26,17 +26,20 @@ def named_block(source: str, name: str) -> str:
 
 
 class NodrulNorthernFrontTests(unittest.TestCase):
-    def test_northern_war_ignores_peacetime_besjaysk_border(self) -> None:
+    def test_northern_war_drops_neutral_besjaysk_front_demand(self) -> None:
         source = AI_PATH.read_text(encoding="utf-8-sig")
-        block = named_block(source, "NOD_cw_northern_ignore_besjaysk")
+        block = named_block(source, "NOD_cw_northern_deprioritize_besjaysk")
 
-        self.assertTrue(block, "missing northern-war Besjaysk border suppression")
+        self.assertTrue(block, "missing northern-war Besjaysk front suppression")
         self.assertIn("allowed = { original_tag = NOD }", block)
         for enemy in ("YPR", "COF", "TFF"):
             self.assertIn(f"has_war_with = {enemy}", block)
         self.assertRegex(block, r"NOT\s*=\s*\{\s*has_war_with\s*=\s*BJK\s*\}")
         self.assertIn("abort_when_not_enabled = yes", block)
-        self.assertIn("type = ignore id = BJK value = 1000", block)
+        self.assertIn("type = front_unit_request tag = BJK value = -100", block)
+
+        # `ignore` is a diplomacy strategy; it must not be used as a fake troop-allocation fix.
+        self.assertNotIn("type = ignore id = BJK", block)
 
 
 if __name__ == "__main__":
