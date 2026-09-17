@@ -90,6 +90,15 @@ entity = {
 	}
 }
 
+# Same Vorkerland landmark mesh without the pre-reveal smog/city-smoke emitters.
+# Reusing actor id 610040 swaps only the visual state and keeps the landmark in place.
+entity = {
+	name = "ADISCORD_vorkerland_pyramid_clear_entity"
+	pdxmesh = "ADISCORD_vorkerland_pyramid_mesh"
+	default_state = "idle"
+	state = { name = "idle" }
+}
+
 entity = {
 	name = "ADISCORD_unity_tower_collapse_entity"
 	pdxmesh = "ADISCORD_unity_tower_destruction_mesh"
