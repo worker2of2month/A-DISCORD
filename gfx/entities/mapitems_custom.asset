@@ -14,6 +14,15 @@ entity = {
 	}
 }
 
+# Particle-free replacement for the two startup pollution actors covering the
+# Dirty Zone. Reusing actor ids 1 and 2 removes their persistent particles.
+entity = {
+	name = "ADISCORD_global_clear_entity"
+	pdxmesh = "ADISCORD_global_mesh"
+	default_state = "idle"
+	state = { name = "idle" }
+}
+
 entity = {
 	name = "ADISCORD_global_entity_2"
 	pdxmesh = "ADISCORD_global_mesh"
