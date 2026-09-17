@@ -74,6 +74,7 @@ class WorldNewsContracts(unittest.TestCase):
     def setUp(self):
         self.events = read("events/ADISCORD_world_news.txt")
         self.on_actions = read("common/on_actions/06_ADISCORD_world_news_on_actions.txt")
+        self.debug = read("common/decisions/ADISCORD_world_news_debug_decisions.txt")
         self.ru = read("localisation/russian/ADISCORD_world_news_l_russian.yml")
         self.en = read("localisation/english/ADISCORD_world_news_l_english.yml")
 
@@ -100,16 +101,12 @@ class WorldNewsContracts(unittest.TestCase):
         for event_id in range(1, 6):
             self.assertIn(f"news_event = {{ id = ADISCORD_world_news.{event_id} }}", war)
 
-        # Vorkerland's central claimants.
         for tag in ("WKR", "VAD", "TVA"):
             self.assertIn(f"tag = {tag}", war)
-        # Northern war: Nodrul against the northern coalition.
         for tag in ("NOD", "YPR", "COF", "TFF"):
             self.assertIn(f"tag = {tag}", war)
-        # Stelander civil war and Kefreyt's direct intervention.
         for tag in ("STP", "STS", "SRP", "VAL"):
             self.assertIn(f"tag = {tag}", war)
-        # Itora's Vorkerland intervention front.
         for tag in ("IVN", "ZAO", "WPA", "WPS", "PWR", "PSD"):
             self.assertIn(f"tag = {tag}", war)
 
@@ -119,6 +116,24 @@ class WorldNewsContracts(unittest.TestCase):
                 key = f"ADISCORD_world_news.{number}.{suffix}:"
                 self.assertIn(key, self.ru)
                 self.assertIn(key, self.en)
+
+    def test_debug_smoke_decisions_can_fire_every_world_news(self):
+        category = named_block(self.debug, "ADISCORD_scenario_debug_category")
+        decisions = (
+            "ADISCORD_debug_world_news_vorkerland",
+            "ADISCORD_debug_world_news_nodrul",
+            "ADISCORD_debug_world_news_stelander",
+            "ADISCORD_debug_world_news_kefreyt",
+            "ADISCORD_debug_world_news_itora",
+        )
+        for number, decision in enumerate(decisions, start=1):
+            block = named_block(category, decision)
+            self.assertTrue(block, decision)
+            self.assertIn("visible = { is_debug = yes }", block)
+            self.assertIn("cost = 0", block)
+            self.assertIn(f"news_event = {{ id = ADISCORD_world_news.{number} }}", block)
+            self.assertIn(f"{decision}:", self.ru)
+            self.assertIn(f"{decision}:", self.en)
 
 
 if __name__ == "__main__":
