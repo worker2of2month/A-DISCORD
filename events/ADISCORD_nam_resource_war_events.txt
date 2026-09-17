@@ -70,7 +70,7 @@ news_event = {
 	desc = ADISCORD_nam_resource_news.1.d
 	picture = GFX_news_event_adiscord_vorkerland_explosion
 	major = yes
-	fire_only_once = no
+	fire_only_once = yes
 	is_triggered_only = yes
 	option = { name = ADISCORD_nam_resource_news.1.a }
 }
@@ -81,7 +81,7 @@ news_event = {
 	desc = ADISCORD_nam_resource_news.2.d
 	picture = GFX_news_event_adiscord_vorkerland_explosion
 	major = yes
-	fire_only_once = no
+	fire_only_once = yes
 	is_triggered_only = yes
 	option = { name = ADISCORD_nam_resource_news.2.a }
 }
@@ -92,7 +92,7 @@ news_event = {
 	desc = ADISCORD_nam_resource_news.3.d
 	picture = GFX_news_event_adiscord_vorkerland_explosion
 	major = yes
-	fire_only_once = no
+	fire_only_once = yes
 	is_triggered_only = yes
 	option = { name = ADISCORD_nam_resource_news.3.a }
 }
