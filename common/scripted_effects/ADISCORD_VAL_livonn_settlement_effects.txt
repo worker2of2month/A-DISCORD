@@ -1,0 +1,68 @@
+# Kefreyt's postwar handling of Livonn.
+# VAL first occupies the district as part of the military settlement. If the
+# prewar Shabrat agreement survives, the player then chooses whether to honor it.
+
+VAL_cw_stage_livonn_settlement = {
+	if = {
+		limit = {
+			tag = VAL
+			has_country_flag = VAL_cw_postwar
+			NOT = { has_country_flag = VAL_cw_livonn_settlement_staged }
+			NOT = { has_country_flag = VAL_cw_livonn_settlement_resolved }
+		}
+
+		if = {
+			limit = { NOT = { 45 = { is_owned_by = VAL } } }
+			transfer_state = 45
+		}
+		45 = { set_state_controller_to = VAL }
+		set_country_flag = VAL_cw_livonn_settlement_staged
+
+		if = {
+			limit = {
+				45 = { has_state_flag = STP_local_deal_asset }
+				STS = { exists = yes has_capitulated = no }
+			}
+			set_country_flag = VAL_cw_livonn_settlement_pending
+		}
+		else = {
+			set_country_flag = VAL_cw_livonn_settlement_resolved
+			set_country_flag = VAL_cw_livonn_retained
+		}
+	}
+}
+
+VAL_cw_honor_livonn_agreement = {
+	if = {
+		limit = {
+			tag = VAL
+			has_country_flag = VAL_cw_livonn_settlement_pending
+			45 = {
+				is_owned_by = VAL
+				has_state_flag = STP_local_deal_asset
+			}
+			STS = { exists = yes has_capitulated = no }
+		}
+		STS = { transfer_state = 45 }
+		45 = { set_state_controller_to = STS }
+		clr_country_flag = VAL_cw_livonn_settlement_pending
+		set_country_flag = VAL_cw_livonn_settlement_resolved
+		set_country_flag = VAL_cw_livonn_agreement_honored
+		clr_country_flag = VAL_cw_livonn_retained
+	}
+}
+
+VAL_cw_retain_livonn = {
+	if = {
+		limit = {
+			tag = VAL
+			has_country_flag = VAL_cw_livonn_settlement_pending
+			45 = { is_owned_by = VAL }
+		}
+		45 = { set_state_controller_to = VAL }
+		clr_country_flag = VAL_cw_livonn_settlement_pending
+		set_country_flag = VAL_cw_livonn_settlement_resolved
+		set_country_flag = VAL_cw_livonn_retained
+		clr_country_flag = VAL_cw_livonn_agreement_honored
+	}
+}

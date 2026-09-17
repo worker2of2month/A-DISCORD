@@ -1,0 +1,7 @@
+﻿l_english:
+ VAL_livonn_settlement_category: "The Fate of Livonn"
+ VAL_livonn_settlement_category_desc: "After the mountain republics were defeated, Kefreyt extended its military administration into §Y[45.GetName]§!. The prewar agreement with Shabrat promised the district to the resistance. Kefreyt must now decide whether that signature still binds the victor."
+ VAL_honor_livonn_agreement: "Honor the Agreement with Shabrat"
+ VAL_honor_livonn_agreement_desc: "Transfer §Y[45.GetName]§! to Shabrat's side as promised before the intervention. The rest of Kefreyt's wartime gains remain under our control."
+ VAL_keep_livonn: "Keep Livonn under Kefreyt"
+ VAL_keep_livonn_desc: "Declare the prewar arrangement void. §Y[45.GetName]§! will remain under Kefreyt administration."
