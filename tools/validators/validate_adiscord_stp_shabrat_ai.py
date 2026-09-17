@@ -70,10 +70,10 @@ WAR_FOCUSES = (
     "STP_cw_wartime_arsenals",
     "STP_cw_supply_routes",
     "STP_cw_line_formations",
-    "STP_cw_first_postwar_budget",
-    "STP_cw_restore_civil_authority",
 )
 RECONSTRUCTION_FOCUSES = (
+    "STP_cw_first_postwar_budget",
+    "STP_cw_restore_civil_authority",
     "STP_pw_republic_new_republic",
     "STP_pw_republic_district_authority",
     "STP_pw_republic_civil_records",
@@ -334,7 +334,7 @@ def run_checks() -> list[tuple[str, bool, str]]:
     add("core sequence reachable", sequence_reachable(CORE_FOCUSES, focuses, {"STP_Show_Him_The_Truth"}))
     add("depth sequence reachable", sequence_reachable(DEPTH_FOCUSES, focuses, {"STP_Show_Him_The_Truth", *CORE_FOCUSES}))
     add("war sequence reachable", sequence_reachable(WAR_FOCUSES, focuses, set()))
-    add("reconstruction sequence reachable", sequence_reachable(RECONSTRUCTION_FOCUSES, focuses, {"STP_cw_restore_civil_authority"}))
+    add("reconstruction sequence reachable", sequence_reachable(RECONSTRUCTION_FOCUSES, focuses, set()))
     add("hegemony sequence reachable", sequence_reachable(HEGEMONY_FOCUSES, focuses, {"STP_cw_restore_civil_authority"}))
 
     for focus_id, expected in FOCUS_WEIGHTS.items():

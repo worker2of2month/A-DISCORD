@@ -149,8 +149,6 @@ STS_shabrat_civil_war_plan = {
 		STP_cw_wartime_arsenals
 		STP_cw_supply_routes
 		STP_cw_line_formations
-		STP_cw_first_postwar_budget
-		STP_cw_restore_civil_authority
 	}
 
 	weight = { factor = 20 }
@@ -177,6 +175,8 @@ STS_shabrat_reconstruction_plan = {
 	}
 
 	ai_national_focuses = {
+		STP_cw_first_postwar_budget
+		STP_cw_restore_civil_authority
 		STP_pw_republic_new_republic
 		STP_pw_republic_district_authority
 		STP_pw_republic_civil_records

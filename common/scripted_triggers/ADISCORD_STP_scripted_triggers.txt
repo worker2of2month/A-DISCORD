@@ -374,9 +374,33 @@ STP_region_map_shows_contested = {
 	NOT = { STP_region_local_forces_leaning = yes }
 }
 
-# COUNTRY: a second commission opens once suspicion reaches the watched band.
+# COUNTRY: state flags are authoritative while inspection missions are alive.
+# The second scheduler pass must not create a third parallel commission.
+STP_cw_two_inspections_active = {
+	OR = {
+		AND = { 2 = { has_state_flag = STP_party_inspection_active } 3 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 2 = { has_state_flag = STP_party_inspection_active } 29 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 2 = { has_state_flag = STP_party_inspection_active } 45 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 2 = { has_state_flag = STP_party_inspection_active } 46 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 2 = { has_state_flag = STP_party_inspection_active } 53 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 3 = { has_state_flag = STP_party_inspection_active } 29 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 3 = { has_state_flag = STP_party_inspection_active } 45 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 3 = { has_state_flag = STP_party_inspection_active } 46 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 3 = { has_state_flag = STP_party_inspection_active } 53 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 29 = { has_state_flag = STP_party_inspection_active } 45 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 29 = { has_state_flag = STP_party_inspection_active } 46 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 29 = { has_state_flag = STP_party_inspection_active } 53 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 45 = { has_state_flag = STP_party_inspection_active } 46 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 45 = { has_state_flag = STP_party_inspection_active } 53 = { has_state_flag = STP_party_inspection_active } }
+		AND = { 46 = { has_state_flag = STP_party_inspection_active } 53 = { has_state_flag = STP_party_inspection_active } }
+	}
+}
+
+# COUNTRY: one additional commission is available in the watched suspicion band,
+# but only while fewer than two inspection districts are already active.
 STP_cw_second_inspection_unlocked = {
 	check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals }
+	NOT = { STP_cw_two_inspections_active = yes }
 }
 
 # COUNTRY: foreign intervention in the Stelander civil war.
