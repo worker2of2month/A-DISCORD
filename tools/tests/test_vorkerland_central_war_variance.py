@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-ON_ACTION = ROOT / "common/on_actions/03_ADISCORD_vorkerland_balance_on_actions.txt"
+ON_ACTION = ROOT / "common/on_actions/05_ADISCORD_vorkerland_stalemate_on_actions.txt"
 
 
 class VorkerlandCentralWarVarianceTests(unittest.TestCase):
