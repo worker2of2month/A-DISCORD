@@ -65,6 +65,14 @@ spriteTypes = {
 		name = "GFX_focus_STP_cw_arm_the_north"
 		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_arm_the_north.png"
 	}
+	spriteType = {
+		name = "GFX_focus_STP_cw_northern_desk"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_northern_desk.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_Turn_The_Young_Officers"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Turn_The_Young_Officers.png"
+	}
 
 ###STP BOOKMARK
 

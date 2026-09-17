@@ -455,7 +455,7 @@ focus_tree = {
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_STP_cw_northern_desk
 		x = 10
 		y = 3
 		cost = 2
@@ -682,7 +682,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_Turn_The_Young_Officers
-		icon = GFX_focus_generic_military_academy
+		icon = GFX_focus_STP_Turn_The_Young_Officers
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -3
 		y = 2
