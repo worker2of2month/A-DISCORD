@@ -130,7 +130,7 @@ focus_tree = {
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
-		icon = GFX_focus_generic_reinforcing_the_supply_network
+		icon = GFX_focus_STP_cw_port_budget
 		x = 0
 		y = 2
 		cost = 2

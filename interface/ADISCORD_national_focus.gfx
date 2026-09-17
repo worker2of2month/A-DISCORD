@@ -73,6 +73,10 @@ spriteTypes = {
 		name = "GFX_focus_STP_Turn_The_Young_Officers"
 		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Turn_The_Young_Officers.png"
 	}
+	spriteType = {
+		name = "GFX_focus_STP_cw_port_budget"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_port_budget.png"
+	}
 
 ###STP BOOKMARK
 
