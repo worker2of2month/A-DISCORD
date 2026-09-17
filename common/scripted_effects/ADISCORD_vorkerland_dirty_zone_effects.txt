@@ -3,25 +3,45 @@
 
 ADISCORD_vorkerland_clear_dirty_zone_smoke = {
 	if = {
-		limit = {
-			has_global_flag = ADISCORD_vorkerland_dirty_opened
-			NOT = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
-		}
-		40 = {
-			# Actor 610040 is shared with the existing Vorkerland landmark sync.
-			# Recreating it with the particle-free clone removes the reveal smoke
-			# without deleting the underlying landmark mesh.
-			create_entity = {
-				entity = ADISCORD_vorkerland_pyramid_clear_entity
-				id = 610040
-				x = 3159.92992
-				y = 725.68
-				z = 2.83464
-				rotation = 5.410520681
-				scale = 0.15
-				min_zoom = 2000
+		limit = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
+
+		# Recreate the landmark actor instead of trying to stop individual particle
+		# systems. That clears both the pyramid's idle smog and any keep_particle
+		# smoke left behind by the Unity Tower collapse animation.
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
+			40 = {
+				create_entity = {
+					entity = ADISCORD_unity_tower_ruins_entity
+					id = 610040
+					x = 3159.92992
+					y = 725.68
+					z = 2.83464
+					rotation = 5.410520681
+					scale = 0.15
+					min_zoom = 2000
+				}
+				set_entity_animation = {
+					id = 610040
+					animation = "ruins"
+				}
 			}
 		}
+		else = {
+			40 = {
+				create_entity = {
+					entity = ADISCORD_vorkerland_pyramid_clear_entity
+					id = 610040
+					x = 3159.92992
+					y = 725.68
+					z = 2.83464
+					rotation = 5.410520681
+					scale = 0.15
+					min_zoom = 2000
+				}
+			}
+		}
+
 		set_global_flag = ADISCORD_vorkerland_dirty_zone_smoke_cleared
 	}
 }
@@ -48,13 +68,10 @@ ADISCORD_vorkerland_finalize_dirty_zone_opening_presentation = {
 
 # Save-load repair: the base Vorkerland startup synchronizer reconstructs the
 # landmark first. If the Dirty Zone was already opened, overwrite that actor
-# with the durable smoke-free visual unless the Unity Tower ruins own the slot.
+# with the correct durable smoke-free variant (intact landmark or ruins).
 ADISCORD_vorkerland_restore_dirty_zone_opening_visual = {
 	if = {
-		limit = {
-			has_global_flag = ADISCORD_vorkerland_dirty_opened
-			NOT = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
-		}
+		limit = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
 		ADISCORD_vorkerland_clear_dirty_zone_smoke = yes
 	}
 }
