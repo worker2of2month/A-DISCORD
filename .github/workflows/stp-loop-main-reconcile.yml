@@ -1,0 +1,20 @@
+name: STP main loop reconcile
+
+on:
+  push:
+    branches:
+      - fix/stp-loop-main-reconcile-20260917
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install validator dependencies
+        run: python -m pip install --disable-pip-version-check pillow numpy
+      - name: Focused regression
+        run: python -B -m unittest -v tools.tests.test_adiscord_stp_gameplay_loop_regressions
