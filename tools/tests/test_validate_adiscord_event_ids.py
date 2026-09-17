@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -86,7 +87,20 @@ class EventIdInventoryTests(unittest.TestCase):
 
         for event_id, owner in PLANNED_RECOVERY_IDS.items():
             with self.subTest(event_id=event_id):
-                expected_status = "active" if (ROOT / owner).is_file() else "reserved"
+                owner_path = ROOT / owner
+                owner_source = (
+                    owner_path.read_text(encoding="utf-8-sig")
+                    if owner_path.is_file()
+                    else ""
+                )
+                expected_status = (
+                    "active"
+                    if re.search(
+                        rf"\bid\s*=\s*{re.escape(event_id)}\b",
+                        owner_source,
+                    )
+                    else "reserved"
+                )
                 self.assertEqual(entries[event_id]["status"], expected_status)
                 self.assertEqual(entries[event_id]["owner"], owner)
 

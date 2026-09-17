@@ -440,7 +440,7 @@ country_event = {
         self.assertIn("country_event = { id = ADISCORD_superevent.2 }", worker_show)
         self.assertIn("set_global_flag = ADISCORD_vorkerland_central_victory_announced", worker_show)
 
-        news = read("events/ADISCORD_news.txt")
+        news = read("events/ADISCORD_superevents.txt")
         civilwar_event = event_block(news, "ADISCORD_superevent.1")
         self.assertIn("superevent_vorkerland_civilwar", civilwar_event)
         self.assertNotIn("superevent_vorkerland_worker_victory", civilwar_event)
@@ -1286,7 +1286,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
 
     def test_collapse_opening_news_is_immediate_and_single_shot(self) -> None:
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        news = read("events/ADISCORD_news.txt")
+        news = read("events/ADISCORD_superevents.txt")
         outbreak = named_block(events, "country_event")
         self.assertEqual(events.count("id = ADISCORD_superevent_news.1"), 1)
         self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_collapse_news_shown }", outbreak)
