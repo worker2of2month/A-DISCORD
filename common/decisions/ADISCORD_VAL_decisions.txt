@@ -8,7 +8,7 @@ VAL_military_operations = {
 	VAL_cw_begin_mobilization = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
-		visible = { OR = { has_country_flag = VAL_cw_military_course has_country_flag = VAL_cw_trade_course } NOT = { has_country_flag = VAL_cw_entered } NOT = { has_country_flag = VAL_cw_settled } }
+		visible = { OR = { has_country_flag = VAL_cw_military_course has_country_flag = VAL_cw_trade_course } NOT = { has_country_flag = VAL_cw_entered } NOT = { has_country_flag = VAL_cw_settled } NOT = { has_country_flag = VAL_stelander_defeated } }
 		available = { VAL_cw_can_intervene = yes }
 		cost = 0
 		days_re_enable = 21
@@ -756,14 +756,14 @@ VAL_frontier = {
   icon = generic_prepare_civil_war allowed = { tag = VAL }
   targets = { NOD }
   target_trigger = { FROM = { exists = yes } }
-  visible = { has_completed_focus = VAL_Northern_Settlement }
+  visible = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated } }
   available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing }  }
   cost = 50 days_remove = 30 days_re_enable = 90
   complete_effect = {
    custom_effect_tooltip = VAL_campaign_preparation_tt
    hidden_effect = { set_country_flag = VAL_campaign_mobilizing FROM = { set_country_flag = VAL_campaign_target } }
   }
-  cancel_trigger = { hidden_trigger = { OR = { has_war = yes has_capitulated = yes is_subject = yes FROM = { OR = { exists = no has_capitulated = yes is_subject = yes is_in_faction_with = VAL has_country_flag = VAL_stelander_truce } } } } }
+  cancel_trigger = { hidden_trigger = { OR = { has_war = yes has_capitulated = yes is_subject = yes has_country_flag = VAL_stelander_defeated FROM = { OR = { exists = no has_capitulated = yes is_subject = yes is_in_faction_with = VAL has_country_flag = VAL_stelander_truce } } } } }
   cancel_effect = { custom_effect_tooltip = VAL_campaign_cancelled_tt hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } } }
   remove_effect = {
    if = {
@@ -782,14 +782,14 @@ VAL_frontier = {
   icon = generic_prepare_civil_war allowed = { tag = VAL }
   targets = { STP STS }
   target_trigger = { FROM = { exists = yes } }
-  visible = { has_completed_focus = VAL_Stelander_Ultimatum }
+  visible = { has_completed_focus = VAL_Stelander_Ultimatum NOT = { has_country_flag = VAL_stelander_defeated } }
   available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } FROM = { has_country_flag = VAL_stelander_refused } }
   cost = 50 days_remove = 30 days_re_enable = 90
   complete_effect = {
    custom_effect_tooltip = VAL_campaign_preparation_tt
    hidden_effect = { set_country_flag = VAL_campaign_mobilizing FROM = { set_country_flag = VAL_campaign_target } }
   }
-  cancel_trigger = { hidden_trigger = { OR = { has_war = yes has_capitulated = yes is_subject = yes FROM = { OR = { exists = no has_capitulated = yes is_subject = yes is_in_faction_with = VAL has_country_flag = VAL_stelander_truce } } } } }
+  cancel_trigger = { hidden_trigger = { OR = { has_war = yes has_capitulated = yes is_subject = yes has_country_flag = VAL_stelander_defeated FROM = { OR = { exists = no has_capitulated = yes is_subject = yes is_in_faction_with = VAL has_country_flag = VAL_stelander_truce } } } } }
   cancel_effect = { custom_effect_tooltip = VAL_campaign_cancelled_tt hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } } }
   remove_effect = {
    if = {
@@ -808,7 +808,7 @@ VAL_frontier = {
   icon = generic_political_pressure allowed = { tag = VAL }
   targets = { STP STS }
   target_trigger = { FROM = { exists = yes } }
-  visible = { has_completed_focus = VAL_Stelander_Ultimatum }
+  visible = { has_completed_focus = VAL_Stelander_Ultimatum NOT = { has_country_flag = VAL_stelander_defeated } }
   available = {
    has_war = no NOT = { has_country_flag = VAL_stelander_offer_pending }
    NOT = { has_country_flag = VAL_campaign_mobilizing }

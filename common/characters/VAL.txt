@@ -24,6 +24,20 @@ characters = {
 		}
 	}
 
+	VAL_Commanders_Council = {
+		name = VAL_Commanders_Council
+		portraits = {
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_3
+			}
+		}
+		country_leader = {
+			ideology = contractual_etatism
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
+
 	VAL_Kirill_Voron = {
 		name = VAL_Kirill_Voron
 		portraits = {

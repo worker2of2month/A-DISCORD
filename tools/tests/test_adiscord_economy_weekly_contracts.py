@@ -4161,7 +4161,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 {"ADISCORD_economy_army_expenses"},
                 {
                     level: (("multiply_variable", "ADISCORD_economy_army_expenses", factor),)
-                    for level, factor in enumerate((0.50, 0.75, 1.00, 1.50, 2.50), 1)
+                    for level, factor in enumerate((0.25, 0.60, 1.00, 1.50, 2.50), 1)
                 },
             ),
             "research": (
@@ -4170,7 +4170,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 {"ADISCORD_economy_research_expenses"},
                 {
                     level: (("multiply_variable", "ADISCORD_economy_research_expenses", factor),)
-                    for level, factor in enumerate((0.60, 0.80, 1.00, 1.30, 1.60), 1)
+                    for level, factor in enumerate((0.30, 0.65, 1.00, 1.30, 1.60), 1)
                 },
             ),
             "social": (
@@ -4179,7 +4179,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 {"ADISCORD_economy_social_expenses"},
                 {
                     level: (("multiply_variable", "ADISCORD_economy_social_expenses", factor),)
-                    for level, factor in enumerate((0.45, 0.75, 1.00, 1.35, 1.80), 1)
+                    for level, factor in enumerate((0.25, 0.60, 1.00, 1.35, 1.80), 1)
                 },
             ),
         }
@@ -4206,6 +4206,41 @@ class WeeklyEconomyContracts(unittest.TestCase):
                     ),
                     tables["research"][3],
                 )
+
+
+    def test_player_budget_policy_bases_have_material_fiscal_weight(self):
+        for effect_name, expense, policy_base in (
+            (
+                "ADISCORD_economy_calculate_army_expenses",
+                "ADISCORD_economy_army_expenses",
+                "ADISCORD_economy_army_expense_policy_base",
+            ),
+            (
+                "ADISCORD_economy_calculate_research_expenses",
+                "ADISCORD_economy_research_expenses",
+                "ADISCORD_economy_research_expense_policy_base",
+            ),
+            (
+                "ADISCORD_economy_calculate_social_expenses",
+                "ADISCORD_economy_social_expenses",
+                "ADISCORD_economy_social_expense_policy_base",
+            ),
+        ):
+            with self.subTest(effect=effect_name):
+                effect = unique_block(EFFECTS, effect_name)
+                scale = re.search(
+                    rf"multiply_variable\s*=\s*\{{\s*var\s*=\s*{re.escape(expense)}"
+                    rf"\s+value\s*=\s*2\.00\s*\}}",
+                    effect,
+                )
+                cache = re.search(
+                    rf"set_variable\s*=\s*\{{\s*var\s*=\s*{re.escape(policy_base)}"
+                    rf"\s+value\s*=\s*{re.escape(expense)}\s*\}}",
+                    effect,
+                )
+                self.assertIsNotNone(scale)
+                self.assertIsNotNone(cache)
+                self.assertLess(scale.start(), cache.start())
 
     def test_policy_previews_cache_clamped_targets_and_exact_weekly_balance_deltas(self):
         refresh = unique_block(EFFECTS, "ADISCORD_economy_refresh_policy_previews")
