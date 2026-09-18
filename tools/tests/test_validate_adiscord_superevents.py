@@ -9,6 +9,7 @@ from tools.validators.validate_adiscord_superevents import (
     GFX,
     PRESENTATIONS,
     REQUIRED_FILES,
+    SUPEREVENT_IDS,
     RU_LOC,
     SCRIPTED_GUI,
     collect_issues,
@@ -43,6 +44,24 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_stelander_empire",
             ),
         )
+
+    def test_event_inventory_tracks_all_live_superevent_ids(self) -> None:
+        self.assertEqual(
+            SUPEREVENT_IDS,
+            (
+                "ADISCORD_superevent.1",
+                "ADISCORD_superevent.2",
+                "ADISCORD_superevent.3",
+                "ADISCORD_superevent.4",
+                "ADISCORD_superevent_audio.1",
+                "ADISCORD_superevent_audio.2",
+                "ADISCORD_superevent_news.1",
+                "ADISCORD_superevent_news.2",
+            ),
+        )
+
+    def test_legacy_soundeffect_shim_is_gone(self) -> None:
+        self.assertFalse((ROOT / "sound/superevents_soundeffects.asset").exists())
 
     def test_missing_gfx_binding_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
