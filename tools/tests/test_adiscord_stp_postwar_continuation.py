@@ -628,12 +628,15 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertTrue(any(e.key == "country_event" for _, e in chosen))
         self.assertTrue(any(e.key == "set_country_flag" and e.value == "STP_pc_settlement_pending" for _, e in chosen))
 
+        # Once the reserved VAL capitulation router has selected cap_side=1,
+        # the military result is final. A stale capital-controller snapshot must
+        # not downgrade Shabrat's victory to an empty settlement.
         stale_val = {**val_win, ("VAL", "variable", "STP_cw_capitulation_occupier"): 5}
         stale = list(selected_effects(begin, stale_val, "STS"))
         self.assertEqual([e.value for _, e in stale if e.key == "white_peace"], ["VAL"])
         stale_vars = [(s, prep_scalar(e.value, "var"), prep_scalar(e.value, "value")) for s, e in stale if e.key == "set_variable"]
         self.assertIn(("STS", "STP_pc_this_opponent", "1"), stale_vars)
-        self.assertIn(("STS", "STP_pc_this_result", "0"), stale_vars)
+        self.assertIn(("STS", "STP_pc_this_result", "1"), stale_vars)
 
         sts_loss = {
             ("STS", "tag", "STS"): True,
@@ -673,6 +676,25 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertFalse(any(e.key == "country_event" for _, e in blocked))
         self.assertNotIn(("STS", "STP_pc_settle_opponent", "STP_pc_this_opponent"),
                          [(s, prep_scalar(e.value, "var"), prep_scalar(e.value, "value")) for s, e in blocked if e.key == "set_variable"])
+
+    def test_kefreyt_defeat_returns_all_stelander_cores_before_white_peace(self) -> None:
+        effects = relative_entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        recovery = ast_block(effects, "STP_pc_recover_stelander_cores_from_val")
+        self.assertTrue(any(e.key == "every_state" for e in recovery))
+        recovery_text = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        recovery_text = recovery_text[recovery_text.index("STP_pc_recover_stelander_cores_from_val = {"):]
+        recovery_text = recovery_text[:recovery_text.index("\nSTP_pc_begin_settlement = {")]
+        for token in ("is_core_of = STS", "is_core_of = STP", "state = 52", "state = 55",
+                      "is_owned_by = VAL", "is_subject_of = VAL", "transfer_state_to = STS",
+                      "add_core_of = STS", "set_state_controller_to = STS"):
+            self.assertIn(token, recovery_text)
+
+        begin_text = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        begin_text = begin_text[begin_text.index("STP_pc_begin_settlement = {"):]
+        begin_text = begin_text[:begin_text.index("\nSTP_pc_clear_settlement = {")]
+        win = begin_text[begin_text.index("STP_pc_this_opponent value = 1"):]
+        self.assertLess(win.index("STP_pc_recover_stelander_cores_from_val = yes"),
+                        win.index("white_peace = VAL"))
 
     def test_pc16_uses_the_frozen_result_not_capitulation_after_peace(self) -> None:
         event = event_block(read(EVENTS), "ADISCORD_STP_pc.16")
