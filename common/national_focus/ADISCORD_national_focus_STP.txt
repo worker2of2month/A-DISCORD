@@ -1,7 +1,7 @@
 focus_tree = {
 	id = STP_focus
 	country = { factor = 0 modifier = { add = 20 original_tag = STP NOT = { has_global_flag = STP_cw_started } } }
-	continuous_focus_position = { x = 100 y = 1600 }
+	continuous_focus_position = { x = 100 y = 555555 }
 	inlay_window = { id = STP_state_face_inlay_window position = { x = 25 y = 1 } }
 
 
@@ -1483,7 +1483,7 @@ focus_tree = {
 focus_tree = {
 	id = STP_cw_focus
 	country = { factor = 0 modifier = { add = 100 has_country_flag = STP_cw_participant } }
-	continuous_focus_position = { x = 100 y = 1800 }
+	continuous_focus_position = { x = 100 y = 555555 }
 
 	focus = {
 		id = STP_cw_unified_headquarters
