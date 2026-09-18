@@ -61,13 +61,13 @@ STP_shabrat_preparation_core_plan = {
 		STP_cw_officer_contacts
 		STP_Garrisons_Hesitate
 		STP_cw_port_budget
-		STP_cw_pay_officials
+		STP_cw_repair_niansas
 		STP_cw_northern_dossier
 		STP_cw_arm_the_north
 		STP_cw_district_printing
 		STP_The_Silent_Mountain_March
 		STP_cw_cabinet_archives
-		STP_cw_expose_the_cabinet
+		STP_cw_buy_silence
 		STP_cw_national_mandate
 	}
 
