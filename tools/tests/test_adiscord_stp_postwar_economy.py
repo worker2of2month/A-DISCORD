@@ -105,6 +105,10 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
         self.assertIn("prerequisite = { focus = STP_pc_economy_recovery_budget }", second_block)
         self.assertIn("prerequisite = { focus = STP_pc_development_reopen_universities }", second_block)
 
+        ai = read("common/ai_strategy_plans/ADISCORD_STP_plans.txt")
+        self.assertIn(first_id, ai)
+        self.assertIn(second_id, ai)
+
     def test_new_focuses_have_russian_localisation(self):
         focus = read("common/national_focus/ADISCORD_national_focus_STP.txt")
         loc = read("localisation/russian/ADISCORD_STP_l_russian.yml")
@@ -119,6 +123,8 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
             "STP_pc_development_rebuild_as_duty",
             "STP_pc_development_engineers_on_radio",
             "STP_pc_development_generation_reconstruction",
+            "STP_pc_development_reopen_universities",
+            "STP_pc_development_national_research_institutes",
         ):
             self.assertIn(f"id = {focus_id}", focus)
             self.assertIn(f"{focus_id}:", loc)
