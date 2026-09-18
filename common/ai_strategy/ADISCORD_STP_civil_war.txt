@@ -131,33 +131,67 @@ NOD_cw_northern_offensive_army = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = role_ratio id = infantry value = 80 }
 	ai_strategy = { type = role_ratio id = mobile value = 20 }
-	ai_strategy = { type = role_ratio id = militias value = -80 }
-	ai_strategy = { type = role_ratio id = garrison value = -80 }
-	# STP and AIN are NOD subjects. Do not spend the northern field army on
-	# allied southern borders while the northern coalition is still fighting.
+	ai_strategy = { type = role_ratio id = militias value = -100 }
+	ai_strategy = { type = role_ratio id = garrison value = -100 }
+	# Do not spend the field army on allied borders or rear-area templates.
 	ai_strategy = { type = dont_defend_ally_borders value = 1 }
+	ai_strategy = { type = role_ratio id = armor value = 15 }
+	ai_strategy = { type = role_ratio id = mountaineers value = 12 }
+	ai_strategy = { type = force_concentration_factor value = 80 }
+}
+
+# One bounded reserve for every NOD land war in this theatre. Keeping it in a
+# separate block prevents northern + Stelander profiles from stacking buffers.
+NOD_cw_wartime_home_buffer = {
+	allowed = { original_tag = NOD }
+	enable = {
+		OR = {
+			has_war_with = YPR
+			has_war_with = COF
+			has_war_with = TFF
+			has_war_with = STS
+		}
+	}
+	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = put_unit_buffers
-		ratio = 0.12
+		ratio = 0.05
 		states = { 30 }
 		subtract_invasions_from_need = yes
 		subtract_fronts_from_need = yes
 	}
-	ai_strategy = { type = role_ratio id = armor value = 15 }
-	ai_strategy = { type = role_ratio id = mountaineers value = 12 }
-	ai_strategy = { type = force_concentration_factor value = 40 }
+}
+
+# Front demand is scoped to the enemy that is actually at war. This avoids
+# phantom requests after one coalition member capitulates or leaves the war.
+NOD_cw_northern_front_ypr = {
+	allowed = { original_tag = NOD }
+	enable = { has_war_with = YPR }
+	abort_when_not_enabled = yes
 	ai_strategy = { type = consider_weak id = YPR value = 120 }
+	ai_strategy = { type = front_unit_request tag = YPR value = 220 }
+	ai_strategy = { type = front_control tag = YPR ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = { type = conquer id = YPR value = 250 }
+}
+
+NOD_cw_northern_front_cof = {
+	allowed = { original_tag = NOD }
+	enable = { has_war_with = COF }
+	abort_when_not_enabled = yes
 	ai_strategy = { type = consider_weak id = COF value = 120 }
+	ai_strategy = { type = front_unit_request tag = COF value = 220 }
+	ai_strategy = { type = front_control tag = COF ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = { type = conquer id = COF value = 250 }
+}
+
+NOD_cw_northern_front_tff = {
+	allowed = { original_tag = NOD }
+	enable = { has_war_with = TFF }
+	abort_when_not_enabled = yes
 	ai_strategy = { type = consider_weak id = TFF value = 120 }
-	ai_strategy = { type = front_unit_request tag = YPR value = 100 }
-	ai_strategy = { type = front_unit_request tag = COF value = 80 }
-	ai_strategy = { type = front_unit_request tag = TFF value = 80 }
-	ai_strategy = { type = front_control tag = YPR ratio = 0.01 priority = 1400 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = front_control tag = COF ratio = 0.01 priority = 1400 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = front_control tag = TFF ratio = 0.01 priority = 1400 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = YPR value = 200 }
-	ai_strategy = { type = conquer id = COF value = 180 }
-	ai_strategy = { type = conquer id = TFF value = 180 }
+	ai_strategy = { type = front_unit_request tag = TFF value = 220 }
+	ai_strategy = { type = front_control tag = TFF ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = { type = conquer id = TFF value = 250 }
 }
 
 NOD_cw_stelander_intervention_army = {
@@ -166,21 +200,16 @@ NOD_cw_stelander_intervention_army = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = role_ratio id = infantry value = 80 }
 	ai_strategy = { type = role_ratio id = mobile value = 20 }
-	ai_strategy = { type = role_ratio id = militias value = -80 }
-	ai_strategy = { type = role_ratio id = garrison value = -80 }
+	ai_strategy = { type = role_ratio id = militias value = -100 }
+	ai_strategy = { type = role_ratio id = garrison value = -100 }
 	ai_strategy = { type = dont_defend_ally_borders value = 1 }
 	ai_strategy = { type = ignore id = VAL value = 1000 }
 	ai_strategy = { type = ignore id = SRP value = 1000 }
-	ai_strategy = {
-		type = put_unit_buffers
-		ratio = 0.12
-		states = { 30 }
-		subtract_invasions_from_need = yes
-		subtract_fronts_from_need = yes
-	}
-	ai_strategy = { type = front_unit_request tag = STS value = 100 }
-	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1400 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = STS value = 200 }
+	ai_strategy = { type = force_concentration_factor value = 80 }
+	ai_strategy = { type = consider_weak id = STS value = 120 }
+	ai_strategy = { type = front_unit_request tag = STS value = 220 }
+	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = { type = conquer id = STS value = 250 }
 }
 
 NOD_cw_northern_deprioritize_besjaysk = {
