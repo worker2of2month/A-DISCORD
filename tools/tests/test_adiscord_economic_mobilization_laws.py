@@ -16,6 +16,7 @@ MODIFIER_EFFECTS_PATH = (
 )
 GENERAL_EFFECTS_PATH = ROOT / "common" / "scripted_effects" / "00_scripted_effects.txt"
 GFX_PATH = ROOT / "interface" / "ADISCORD_ideas.gfx"
+LAW_ID_GFX_PATH = ROOT / "interface" / "zz_ADISCORD_ideas.gfx"
 RU_LOC_PATH = ROOT / "localisation" / "russian" / "ADISCORD_economy_l_russian.yml"
 EN_LOC_PATH = ROOT / "localisation" / "english" / "ADISCORD_economy_l_english.yml"
 
@@ -218,22 +219,21 @@ class EconomicMobilizationLawContracts(unittest.TestCase):
             )
         }
 
-        parsed = parse_clausewitz(GFX_PATH.read_text(encoding="utf-8-sig"))
-        sprite_types = unique_child(parsed, "spriteTypes")
-        matching = {}
-        for entry in sprite_types:
-            if entry.key != "spriteType" or not isinstance(entry.value, list):
-                continue
-            name = scalar(entry.value, "name")
-            if name in EXPECTED_TEXTURES or name in expected_picture_sprites:
-                matching[name] = scalar(entry.value, "texturefile")
+        def sprites_from(path):
+            parsed = parse_clausewitz(path.read_text(encoding="utf-8-sig"))
+            found = {}
+            for entry in unique_child(parsed, "spriteTypes"):
+                if entry.key != "spriteType" or not isinstance(entry.value, list):
+                    continue
+                name = scalar(entry.value, "name")
+                if name in EXPECTED_TEXTURES or name in expected_picture_sprites:
+                    found[name] = scalar(entry.value, "texturefile")
+            return found
 
-        self.assertEqual(EXPECTED_TEXTURES.keys() | expected_picture_sprites.keys(), matching.keys())
-        self.assertEqual(EXPECTED_TEXTURES, {name: matching[name] for name in EXPECTED_TEXTURES})
-        self.assertEqual(
-            expected_picture_sprites,
-            {name: matching[name] for name in expected_picture_sprites},
-        )
+        law_id_sprites = sprites_from(LAW_ID_GFX_PATH)
+        picture_sprites = sprites_from(GFX_PATH)
+        self.assertEqual(EXPECTED_TEXTURES, law_id_sprites)
+        self.assertEqual(expected_picture_sprites, picture_sprites)
         for sprite_name, relative_path in EXPECTED_TEXTURES.items():
             path = ROOT / relative_path
             self.assertEqual(
