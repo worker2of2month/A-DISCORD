@@ -89,7 +89,7 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
 
     def test_new_focuses_have_russian_localisation(self):
         focus = read("common/national_focus/ADISCORD_national_focus_STP.txt")
-        loc = read("localisation/russian/ADISCORD_STP_civil_war_l_russian.yml")
+        loc = read("localisation/russian/ADISCORD_STP_l_russian.yml")
         for focus_id in (
             "STP_pc_economy_count_the_cost",
             "STP_pc_economy_reopen_tax_offices",
