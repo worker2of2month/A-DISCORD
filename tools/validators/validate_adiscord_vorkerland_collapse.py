@@ -1208,37 +1208,49 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         issues.append("collapse teardown must run after all regional tags are spawned")
 
-    opening_news = named_block(outbreak, "news_event")
-    if events.count("id = ADISCORD_superevent_news.1") != 1:
-        issues.append("collapse opening news must have exactly one trigger path")
+    if events.count("id = ADISCORD_superevent_news.1") != 0:
+        issues.append("collapse opening news must not fire from the legal partition")
+    if "ADISCORD_superevent_news.1" in outbreak:
+        issues.append("collapse opening news still fires during the legal partition")
+    if "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes" in outbreak:
+        issues.append("Unity Tower camera still starts during the legal partition")
+    announce = named_block(effects, "ADISCORD_vorkerland_announce_first_central_war")
+    if not announce:
+        issues.append("first-war announcement effect is missing")
+    opening_news = named_block(announce, "news_event")
     for token in (
         "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_news_shown }",
         "set_global_flag = ADISCORD_vorkerland_collapse_news_shown",
         "news_event = { id = ADISCORD_superevent_news.1 }",
     ):
-        if token not in outbreak:
-            issues.append(f"collapse opening news is missing {token}")
+        if token not in announce:
+            issues.append(f"first-war announcement is missing {token}")
     if any(token in opening_news for token in ("hours =", "days =", "random_hours", "random_days")):
         issues.append("collapse opening news is still delayed or randomized")
-    if outbreak.find("ADISCORD_vorkerland_apply_claimant_cosmetics = yes") > outbreak.find(
-        "news_event = { id = ADISCORD_superevent_news.1 }"
+    if effects.count("ADISCORD_vorkerland_announce_first_central_war = yes") != 1:
+        issues.append("first-war announcement must have exactly one trigger path")
+    central_launch = named_block(effects, "ADISCORD_vorkerland_launch_central_local_brackets")
+    if "ADISCORD_vorkerland_announce_first_central_war = yes" not in central_launch:
+        issues.append("first-war announcement is not tied to the first central declarations")
+    if central_launch.find("ADISCORD_vorkerland_open_local_bracket_wars = yes") > central_launch.find(
+        "ADISCORD_vorkerland_announce_first_central_war = yes"
     ):
-        issues.append("collapse opening news fires before successor setup is complete")
+        issues.append("first-war announcement fires before the first central declarations")
     if "ADISCORD_superevent_news.1" in on_actions:
         issues.append("collapse opening news still has an on-action duplicate path")
     tower_guard = "ADISCORD_vorkerland_unity_tower_destruction_resolved"
     outbreak_trigger = named_block(outbreak, "trigger")
     if tower_guard in outbreak_trigger:
         issues.append("Unity Tower guard must not reject the wider collapse event")
-    if outbreak.count(f"set_global_flag = {tower_guard}") != 1:
-        issues.append("collapse outbreak must record the Unity Tower destruction exactly once")
+    if outbreak.count(f"set_global_flag = {tower_guard}") != 0:
+        issues.append("collapse outbreak must not record the Unity Tower destruction")
     if outbreak.count("launch_nuke = {") != 0:
         issues.append("Unity Tower explosion must wait for the camera approach events")
     if outbreak.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes") != 0:
         issues.append("Unity Tower clip must wait for the camera approach events")
     tower_destruction_blocks = [
         block
-        for block in named_blocks(outbreak, "if")
+        for block in named_blocks(announce, "if")
         if "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes" in block
     ]
     if len(tower_destruction_blocks) != 1:
@@ -1255,12 +1267,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"Unity Tower executing one-shot block is missing {token}")
     if tower_destruction.find("change_tag_from") != -1:
         issues.append("Unity Tower camera must not run before the player handoff finishes")
-    last_handoff = outbreak.rfind("change_tag_from")
-    schedule_position = outbreak.find(
-        "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes"
-    )
-    if last_handoff < 0 or schedule_position < 0 or not last_handoff < schedule_position:
-        issues.append("Unity Tower camera must run after the player handoff")
+    if outbreak.rfind("change_tag_from") < 0:
+        issues.append("collapse outbreak no longer hands the player off before later wars")
     camera_schedule = named_block(
         effects, "ADISCORD_vorkerland_schedule_unity_tower_camera_approach"
     )
@@ -1367,8 +1375,10 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in delayed_dirty_reveal:
             issues.append(f"three-year dirty-zone reveal lacks {token}")
-    if 'news.0.t: "Конец единого Воркерланда"' not in news_loc:
-        issues.append("collapse opening world-news title is not 'Конец единого Воркерланда'")
+    if 'news.0.t: "Начало боёв в Воркерланде"' not in news_loc:
+        issues.append("collapse opening world-news title is not 'Начало боёв в Воркерланде'")
+    if 'news.0.a: "Приблизиться к Башне Единства."' not in news_loc:
+        issues.append("collapse opening news option A no longer names the Tower approach")
     teardown = named_block(effects, "ADISCORD_vorkerland_teardown_confederation")
     if "is_subject_of = WRK" in teardown:
         issues.append("collapse teardown still assumes WRK is every country's overlord")

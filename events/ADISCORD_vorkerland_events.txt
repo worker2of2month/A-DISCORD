@@ -666,17 +666,6 @@ country_event = {
 		clr_global_flag = ADISCORD_vorkerland_preference_worker
 		clr_global_flag = ADISCORD_vorkerland_preference_joint
 		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
-		# Recheck the permanent guard inside the executing immediate block. Two
-		# already-admitted event instances can otherwise both pass the outer event
-		# trigger before the first one records the destruction. Camera after
-		# change_tag so goto follows the human, not the WRK tag about to vanish.
-		if = {
-			limit = {
-				NOT = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
-			}
-			set_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved
-			ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes
-		}
 		random_list = {
 			7 = { ADISCORD_vorkerland_form_joint_government = yes }
 			93 = { }
@@ -699,16 +688,8 @@ country_event = {
 			mark_focus_tree_layout_dirty = yes
 			country_event = { id = ADISCORD_vorkerland_collapse.41 days = 1 }
 			country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 }
-			# The end of the unified state is the opening news of the collapse, not
-			# a verdict delivered years into its wars.
-			if = {
-				limit = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_news_shown } }
-				set_global_flag = ADISCORD_vorkerland_collapse_news_shown
-				news_event = { id = ADISCORD_superevent_news.1 }
-			}
-			# What became of Worker is the second headline, after the fall of the
-			# union itself. The dispatcher reads the fate roll made above and holds
-			# its own guard, so calling it here cannot silence a later report.
+			# The dispatcher reads the fate roll made above and holds its own
+			# guard, so calling it here cannot silence a later report.
 			ADISCORD_vorkerland_story_report_worker_fate = yes
 			if = {
 				limit = {
