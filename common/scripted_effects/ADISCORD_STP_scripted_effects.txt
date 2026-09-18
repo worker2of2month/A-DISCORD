@@ -3551,6 +3551,7 @@ STP_cw_settle_union_victory = {
 	set_country_flag = STP_cw_won_union_battle
 	if = { limit = { tag = STS } STP_cw_close_last_banquet_technical = yes }
 	STP_cw_finish_mobilization = yes
+	if = { limit = { tag = STS } STP_pw_rebuild_economy_after_unification = yes }
 	if = { limit = { tag = STP } news_event = { id = ADISCORD_STP_cw.71 hours = 1 } }
 	else_if = { limit = { tag = STS } news_event = { id = ADISCORD_STP_cw.72 hours = 1 } }
 	STP_cw_check_union_wars_finished = yes
@@ -3711,6 +3712,30 @@ STP_pw_begin_recovery = {
 	}
 }
 
+# STS: rebase the economy after the civil-war winner annexes the old union.
+# STS was initialized while it owned only the resistance rump, so its cached
+# factory/resource sources must be rebuilt after unification or the dashboard
+# can keep showing the wartime fragment's near-zero economy.
+STP_pw_rebuild_economy_after_unification = {
+	if = {
+		limit = {
+			tag = STS
+			has_country_flag = STP_cw_won_union_battle
+		}
+		set_country_flag = ADISCORD_economy_important_country
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_economy_mark_dirty = yes
+		ADISCORD_economy_full_refresh = yes
+		ADISCORD_economy_light_update = yes
+		if = {
+			limit = { check_variable = { var = ADISCORD_economy_treasury value = 50 compare = less_than } }
+			ADISCORD_economy_receive_50 = yes
+		}
+		ADISCORD_economy_update_postwar_demobilization = yes
+		ADISCORD_economy_update_gui = yes
+	}
+}
+
 # Three funded programs remove the reconstruction burden in equal steps.
 STP_pw_update_recovery = {
 	set_variable = { var = STP_pw_recovery_burden value = 3 }
@@ -3786,6 +3811,13 @@ STP_pw_refresh_modifier = {
 	if = {
 		limit = { STP_pw_can_reconstruct = yes }
 		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_economy_admin_expense_factor } } set_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_economy_overall_income_factor } } set_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_economy_treasury_capacity_factor } } set_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_economy_creditworthiness_factor } } set_variable = { var = STP_pw_ADISCORD_economy_creditworthiness_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_country_development_global_growth_factor } } set_variable = { var = STP_pw_ADISCORD_country_development_global_growth_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_country_development_economic_growth_factor } } set_variable = { var = STP_pw_ADISCORD_country_development_economic_growth_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_country_development_state_growth_factor } } set_variable = { var = STP_pw_ADISCORD_country_development_state_growth_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_country_development_society_growth_factor } } set_variable = { var = STP_pw_ADISCORD_country_development_society_growth_factor value = 0 } }
 		if = { limit = { NOT = { has_variable = STP_pw_army_org_factor } } set_variable = { var = STP_pw_army_org_factor value = 0 } }
 		if = { limit = { NOT = { has_variable = STP_pw_army_org_regain } } set_variable = { var = STP_pw_army_org_regain value = 0 } }
 		if = { limit = { NOT = { has_variable = STP_pw_industrial_capacity_factory } } set_variable = { var = STP_pw_industrial_capacity_factory value = 0 } }
