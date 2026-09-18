@@ -23,7 +23,14 @@ STARTING_SUPPLY_RAILS = {
     "STP": (1, (119, 1, 16440), (16547, 16440)),
     "YPR": (1, (33, 73, 11), (16372, 11)),
 }
+# The western line must join the bunker without crossing a third country.
+# Hubs become available to RUS only after it captures the border objectives.
+KHAN_SUPPLY_RAIL = (1, (16531, 4870, 2298, 16544, 16546))
+KHAN_SUPPLY_STATES = frozenset({66, 49, 176})
+KHAN_SUPPLY_HUBS = (16531, 16639, 7445)
 VORKERLAND_SUPPLY_HUB_STATES = {
+    16639: 49,
+    7445: 176,
     2539: 107,
     16643: 306,
     4148: 316,
@@ -46,6 +53,11 @@ def render_supply_connection(tag: str) -> str:
     return f"{level} {len(provinces)} {' '.join(map(str, provinces))}"
 
 
+def render_khan_connection() -> str:
+    level, provinces = KHAN_SUPPLY_RAIL
+    return f"{level} {len(provinces)} {' '.join(map(str, provinces))}"
+
+
 def update_source(source: str) -> str:
     """Append exact owned rail records while preserving all other lines."""
     lines = [
@@ -53,7 +65,7 @@ def update_source(source: str) -> str:
         for line in source.replace("\r\n", "\n").splitlines()
         if line not in RETIRED_MARKERS
     ]
-    managed = [render_managed_line(), *(render_supply_connection(tag) for tag in STARTING_SUPPLY_RAILS)]
+    managed = [render_managed_line(), *(render_supply_connection(tag) for tag in STARTING_SUPPLY_RAILS), render_khan_connection()]
     lines = [line for line in lines if line not in managed]
     lines.extend(managed)
     return "\n".join(lines) + "\n"
@@ -194,6 +206,27 @@ def validate() -> list[str]:
                         pending.append(neighbour)
             if hubs[1] not in reached:
                 issues.append(f"{tag} supply hubs {hubs[0]} and {hubs[1]} are disconnected inside its starting territory")
+        if source.splitlines().count(render_khan_connection()) != 1:
+            issues.append("RUS border supply connection must occur exactly once")
+        for province in KHAN_SUPPLY_RAIL[1]:
+            if province_types.get(province) != "land" or state_by_province.get(province) not in KHAN_SUPPLY_STATES:
+                issues.append(f"RUS border supply connection leaves its campaign territory at {province}")
+        for first, second in zip(KHAN_SUPPLY_RAIL[1], KHAN_SUPPLY_RAIL[1][1:]):
+            if second not in physical.get(first, set()):
+                issues.append(f"RUS rail segment {first}-{second} is not physically adjacent")
+        pending = [KHAN_SUPPLY_HUBS[0]]
+        reached = set(pending)
+        while pending:
+            province = pending.pop()
+            for neighbour in rail_graph[province]:
+                if neighbour not in reached and state_by_province.get(neighbour) in KHAN_SUPPLY_STATES:
+                    reached.add(neighbour)
+                    pending.append(neighbour)
+        for hub in KHAN_SUPPLY_HUBS:
+            if hub not in reached:
+                issues.append(f"RUS border supply hub {hub} is disconnected from the capital within states 66/49/176")
+            if supply_lines.count(render_supply_node(hub)) != 1:
+                issues.append(f"RUS border supply hub {hub} must occur exactly once")
     except (OSError, RuntimeError, ValueError, KeyError) as error:
         issues.append(f"cannot validate campaign rail geography: {error}")
     return issues
@@ -234,7 +267,7 @@ def main() -> int:
             print(f"- {issue}")
         return 1
     print(
-        "Campaign rail validation passed: OSV spur, STP/YPR supply connections and four rail supply hubs."
+        "Campaign rail validation passed: OSV spur, STP/YPR connections, RUS border network and managed supply hubs."
     )
     return 0
 

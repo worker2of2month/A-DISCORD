@@ -1576,12 +1576,7 @@ focus_tree = {
 		y = 7
 		cost = 3
 		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
-		completion_reward = {
-			unlock_decision_tooltip = VAL_ops_sell_rifles_to_cin
-			unlock_decision_tooltip = VAL_ops_sell_rifles_to_osf
-			custom_effect_tooltip = VAL_bulk_exports_tt
-			hidden_effect = { set_country_flag = VAL_operations_map_unlocked }
-		}
+		completion_reward = { unlock_decision_tooltip = VAL_export_arms }
 		ai_will_do = { base = 3 }
 	}
 
@@ -1589,16 +1584,11 @@ focus_tree = {
 		id = VAL_Northern_Clearing_House
 		icon = GFX_focus_generic_arms_trade
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		x = 29
-		y = 7
+		x = 27
+		y = 8
 		cost = 3
-		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
-		completion_reward = {
-			unlock_decision_tooltip = VAL_ops_sell_rifles_to_cin
-			unlock_decision_tooltip = VAL_ops_sell_rifles_to_osf
-			custom_effect_tooltip = VAL_export_clearing_margin_tt
-			hidden_effect = { set_country_flag = VAL_operations_map_unlocked }
-		}
+		prerequisite = { focus = VAL_Foreign_Broker_Licences }
+		completion_reward = { custom_effect_tooltip = VAL_export_second_slot_tt }
 		ai_will_do = { base = 3 }
 	}
 
@@ -1606,16 +1596,11 @@ focus_tree = {
 		id = VAL_Contingency_Ledgers
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
-		x = 28
-		y = 8
+		x = 27
+		y = 9
 		cost = 5
-		prerequisite = { focus = VAL_Different_Views_On_Freedom }
-		completion_reward = {
-			unlock_decision_tooltip = VAL_ops_sell_rifles_to_cin
-			unlock_decision_tooltip = VAL_ops_sell_rifles_to_osf
-			custom_effect_tooltip = VAL_export_rerouting_tt
-			hidden_effect = { set_country_flag = VAL_operations_map_unlocked }
-		}
+		prerequisite = { focus = VAL_Northern_Clearing_House }
+		completion_reward = { unlock_decision_tooltip = VAL_export_advisors }
 		ai_will_do = { base = 4 }
 	}
 
@@ -1884,6 +1869,34 @@ focus_tree = {
 		ai_will_do = { base = 3 }
 	}
 
+    focus = {
+        id = VAL_Occidian_Registries
+        icon = GFX_focus_generic_improve_the_administration
+        x = 20
+        y = 24
+        cost = 5
+        prerequisite = { focus = VAL_The_Steel_Contract }
+        available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
+        cancel_if_invalid = yes
+        completion_reward = { OCA = { add_stability = 0.05 add_political_power = 50 } }
+        ai_will_do = { base = 10 }
+    }
+    focus = {
+        id = VAL_Integrate_Occidia
+        icon = GFX_focus_generic_diplomatic_treaty
+        x = 20
+        y = 26
+        cost = 5
+        prerequisite = { focus = VAL_Occidian_Registries }
+        available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
+        cancel_if_invalid = yes
+        completion_reward = {
+            custom_effect_tooltip = VAL_integrate_occidia_tt
+            hidden_effect = { VAL_integrate_occidia = yes }
+        }
+        ai_will_do = { base = 12 }
+    }
+
     # Postwar border policy. The three columns separate logistics, government and claims.
     focus = {
         id = VAL_frontier_conference
@@ -1906,7 +1919,7 @@ focus_tree = {
         prerequisite = { focus = VAL_frontier_conference }
 
 
-        completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_supply_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_supply_bonus value = -0.08 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } army_experience = 20 }
+        completion_reward = { unlock_decision_tooltip = VAL_frontier_transport_contract effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_supply_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_supply_bonus value = -0.08 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } army_experience = 20 }
         ai_will_do = { base = 5 }
     }
     focus = {
@@ -1995,8 +2008,55 @@ focus_tree = {
             custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
         }
 
-        completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_trade_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_trade_bonus value = 0.1 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } add_stability = 0.05 }
+        completion_reward = { unlock_decision_tooltip = VAL_frontier_workshops effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_trade_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_trade_bonus value = 0.1 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } add_stability = 0.05 }
         ai_will_do = { base = 5 }
     }
 
+
+ focus = {
+  id = VAL_New_Supply_Base
+  icon = GFX_focus_generic_reinforcing_the_supply_network
+  x = 28
+  y = 32
+  cost = 5
+  prerequisite = { focus = VAL_frontier_treaty_offices }
+  available = { custom_trigger_tooltip = { tooltip = VAL_supply_base_secured_tt VAL_supply_base_secured = yes } }
+  completion_reward = {
+   remove_ideas = { VAL_vorkerland_contract_disruptions VAL_vorkerland_metal_shortage }
+   hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+  }
+  ai_will_do = { base = 12 }
+ }
+ focus = {
+  id = VAL_Northern_Settlement
+  icon = GFX_focus_generic_mountain_fortification
+  x = 26
+  y = 33
+  cost = 5
+  prerequisite = { focus = VAL_New_Supply_Base }
+  completion_reward = { unlock_decision_tooltip = VAL_campaign_against_nod }
+  ai_will_do = { base = 8 }
+ }
+ focus = {
+  id = VAL_Stelander_Ultimatum
+  icon = GFX_focus_generic_diplomatic_treaty
+  x = 32
+  y = 31
+  cost = 5
+  prerequisite = { focus = VAL_frontier_treaty_offices }
+  completion_reward = { unlock_decision_tooltip = VAL_stelander_ultimatum unlock_decision_tooltip = VAL_campaign_against_stelander }
+  ai_will_do = { base = 8 }
+ }
+ focus = {
+  id = VAL_Campaign_Secured
+  icon = GFX_focus_generic_treaty
+  x = 28
+  y = 35
+  cost = 5
+  prerequisite = { focus = VAL_Northern_Settlement }
+  prerequisite = { focus = VAL_Stelander_Ultimatum }
+  available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
+  completion_reward = { add_ideas = VAL_regional_settlement hidden_effect = { country_event = { id = val_contract.345 } } }
+  ai_will_do = { base = 20 }
+ }
 }

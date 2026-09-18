@@ -1555,3 +1555,546 @@ ADISCORD_vorkerland_territorial_army = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = role_ratio id = militias value = 100 }
 }
+
+# --- Focus-driven prewar deployment ---
+# Running focuses are the authority; completion or cancellation releases preparation.
+
+ADISCORD_vorkerland_prepare_remaining_EYR = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = EYR }
+		NOT = { has_war_with = EYR }
+		NOT = { is_in_faction_with = EYR }
+		EYR = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = EYR value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_remaining_EGC = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = EGC }
+		NOT = { has_war_with = EGC }
+		NOT = { is_in_faction_with = EGC }
+		EGC = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = EGC value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_remaining_RIV = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = RIV }
+		NOT = { has_war_with = RIV }
+		NOT = { is_in_faction_with = RIV }
+		RIV = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RIV value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_remaining_REV = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = REV }
+		NOT = { has_war_with = REV }
+		NOT = { is_in_faction_with = REV }
+		REV = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = REV value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_remaining_YOR = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = YOR }
+		NOT = { has_war_with = YOR }
+		NOT = { is_in_faction_with = YOR }
+		YOR = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = YOR value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_remaining_NDN = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = NDN }
+		NOT = { has_war_with = NDN }
+		NOT = { is_in_faction_with = NDN }
+		NDN = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NDN value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_remaining_SWB = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = SWB }
+		NOT = { has_war_with = SWB }
+		NOT = { is_in_faction_with = SWB }
+		SWB = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = SWB value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_remaining_VHV = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = VHV }
+		NOT = { has_war_with = VHV }
+		NOT = { is_in_faction_with = VHV }
+		VHV = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VHV value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_remaining_OSV = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = OSV }
+		NOT = { has_war_with = OSV }
+		NOT = { is_in_faction_with = OSV }
+		OSV = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = OSV value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_remaining_WKR = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = WKR }
+		NOT = { has_war_with = WKR }
+		NOT = { is_in_faction_with = WKR }
+		WKR = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = WKR value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_remaining_VAD = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = VAD }
+		NOT = { has_war_with = VAD }
+		NOT = { is_in_faction_with = VAD }
+		VAD = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VAD value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_remaining_TVA = {
+	allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { tag = TVA }
+		NOT = { has_war_with = TVA }
+		NOT = { is_in_faction_with = TVA }
+		TVA = { exists = yes is_subject = no has_capitulated = no }
+		OR = { AND = { tag = WKR focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } } AND = { tag = VAD focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } } AND = { tag = TVA focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = TVA value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_defence_WKR = {
+	allowed = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV tag = VAD tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = WKR }
+		NOT = { is_in_faction_with = WKR }
+		WKR = { exists = yes is_subject = no has_capitulated = no focus_progress = { focus = WKR_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = WKR_open_the_remaining_fronts } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = WKR value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_defence_VAD = {
+	allowed = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV tag = WKR tag = TVA } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = VAD }
+		NOT = { is_in_faction_with = VAD }
+		VAD = { exists = yes is_subject = no has_capitulated = no focus_progress = { focus = VAD_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = VAD_open_the_remaining_fronts } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VAD value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_defence_TVA = {
+	allowed = { OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV tag = WKR tag = VAD } }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = TVA }
+		NOT = { is_in_faction_with = TVA }
+		TVA = { exists = yes is_subject = no has_capitulated = no focus_progress = { focus = TVA_open_the_remaining_fronts progress > 0 } NOT = { has_completed_focus = TVA_open_the_remaining_fronts } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = TVA value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_WKR_SOL = {
+	allowed = { tag = WKR }
+	enable = { is_ai = yes has_capitulated = no WKR = {
+			exists = yes is_subject = no has_capitulated = no
+			focus_progress = { focus = WKR_intervene_in_solyarino progress > 0 } NOT = { has_completed_focus = WKR_intervene_in_solyarino }
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
+			ADISCORD_vorkerland_wkr_valid_sol_target = yes
+		} }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = SOL value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_SOL_WKR = {
+	allowed = { tag = SOL }
+	enable = { is_ai = yes has_capitulated = no WKR = {
+			exists = yes is_subject = no has_capitulated = no
+			focus_progress = { focus = WKR_intervene_in_solyarino progress > 0 } NOT = { has_completed_focus = WKR_intervene_in_solyarino }
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
+			ADISCORD_vorkerland_wkr_valid_sol_target = yes
+		} }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = WKR value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_WKR_SRA = {
+	allowed = { tag = WKR }
+	enable = { is_ai = yes has_capitulated = no WKR = {
+			exists = yes is_subject = no has_capitulated = no
+			focus_progress = { focus = WKR_intervene_in_solyarino progress > 0 } NOT = { has_completed_focus = WKR_intervene_in_solyarino }
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
+			ADISCORD_vorkerland_wkr_valid_sra_target = yes
+		} }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = SRA value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_SRA_WKR = {
+	allowed = { tag = SRA }
+	enable = { is_ai = yes has_capitulated = no WKR = {
+			exists = yes is_subject = no has_capitulated = no
+			focus_progress = { focus = WKR_intervene_in_solyarino progress > 0 } NOT = { has_completed_focus = WKR_intervene_in_solyarino }
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
+			ADISCORD_vorkerland_wkr_valid_sra_target = yes
+		} }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = WKR value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_WKR_CSL = {
+	allowed = { tag = WKR }
+	enable = { is_ai = yes has_capitulated = no WKR = {
+			exists = yes is_subject = no has_capitulated = no
+			focus_progress = { focus = WKR_intervene_in_solyarino progress > 0 } NOT = { has_completed_focus = WKR_intervene_in_solyarino }
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
+			ADISCORD_vorkerland_wkr_valid_csl_target = yes
+		} }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = CSL value = 100 }
+}
+
+ADISCORD_vorkerland_prepare_CSL_WKR = {
+	allowed = { tag = CSL }
+	enable = { is_ai = yes has_capitulated = no WKR = {
+			exists = yes is_subject = no has_capitulated = no
+			focus_progress = { focus = WKR_intervene_in_solyarino progress > 0 } NOT = { has_completed_focus = WKR_intervene_in_solyarino }
+			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
+			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
+			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
+			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
+			ADISCORD_vorkerland_wkr_valid_csl_target = yes
+		} }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = WKR value = 100 }
+}
+
+ADISCORD_prepare_IVN_PWR = {
+	allowed = { tag = IVN }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = PWR }
+		NOT = { is_in_faction_with = PWR }
+		PWR = { exists = yes has_capitulated = no is_subject = no }
+		IVN = { ADISCORD_ivanland_ai_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = PWR value = 100 }
+}
+
+ADISCORD_prepare_PWR_IVN = {
+	allowed = { tag = PWR }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = IVN }
+		NOT = { is_in_faction_with = IVN }
+		IVN = { exists = yes has_capitulated = no is_subject = no }
+		IVN = { ADISCORD_ivanland_ai_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = IVN value = 100 }
+}
+
+ADISCORD_prepare_IVN_ZAO = {
+	allowed = { tag = IVN }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = ZAO }
+		NOT = { is_in_faction_with = ZAO }
+		ZAO = { exists = yes has_capitulated = no is_subject = no }
+		IVN = { ADISCORD_ivanland_ai_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = ZAO value = 100 }
+}
+
+ADISCORD_prepare_ZAO_IVN = {
+	allowed = { tag = ZAO }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = IVN }
+		NOT = { is_in_faction_with = IVN }
+		IVN = { exists = yes has_capitulated = no is_subject = no }
+		IVN = { ADISCORD_ivanland_ai_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = IVN value = 100 }
+}
+
+ADISCORD_prepare_IVN_WPA = {
+	allowed = { tag = IVN }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = WPA }
+		NOT = { is_in_faction_with = WPA }
+		WPA = { exists = yes has_capitulated = no is_subject = no }
+		IVN = { ADISCORD_ivanland_ai_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = WPA value = 100 }
+}
+
+ADISCORD_prepare_WPA_IVN = {
+	allowed = { tag = WPA }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = IVN }
+		NOT = { is_in_faction_with = IVN }
+		IVN = { exists = yes has_capitulated = no is_subject = no }
+		IVN = { ADISCORD_ivanland_ai_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = IVN value = 100 }
+}
+
+ADISCORD_prepare_IVN_WPS = {
+	allowed = { tag = IVN }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = WPS }
+		NOT = { is_in_faction_with = WPS }
+		WPS = { exists = yes has_capitulated = no is_subject = no }
+		IVN = { ADISCORD_ivanland_ai_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = WPS value = 100 }
+}
+
+ADISCORD_prepare_WPS_IVN = {
+	allowed = { tag = WPS }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = IVN }
+		NOT = { is_in_faction_with = IVN }
+		IVN = { exists = yes has_capitulated = no is_subject = no }
+		IVN = { ADISCORD_ivanland_ai_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = IVN value = 100 }
+}
+
+ADISCORD_prepare_IVN_PSD = {
+	allowed = { tag = IVN }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = PSD }
+		NOT = { is_in_faction_with = PSD }
+		PSD = { exists = yes has_capitulated = no is_subject = no }
+		IVN = { ADISCORD_ivanland_ai_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = PSD value = 100 }
+}
+
+ADISCORD_prepare_PSD_IVN = {
+	allowed = { tag = PSD }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = IVN }
+		NOT = { is_in_faction_with = IVN }
+		IVN = { exists = yes has_capitulated = no is_subject = no }
+		IVN = { ADISCORD_ivanland_ai_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = IVN value = 100 }
+}
+
+ADISCORD_prepare_VAD_SRA = {
+	allowed = { tag = VAD }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = SRA }
+		NOT = { is_in_faction_with = SRA }
+		SRA = { exists = yes has_capitulated = no is_subject = no }
+		VAD = { ADISCORD_vorkerland_vad_ai_solar_preparation = yes has_global_flag = ADISCORD_vorkerland_solar_winner_sra }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = SRA value = 100 }
+}
+
+ADISCORD_prepare_SRA_VAD = {
+	allowed = { tag = SRA }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = VAD }
+		NOT = { is_in_faction_with = VAD }
+		VAD = { exists = yes has_capitulated = no is_subject = no }
+		VAD = { ADISCORD_vorkerland_vad_ai_solar_preparation = yes has_global_flag = ADISCORD_vorkerland_solar_winner_sra }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VAD value = 100 }
+}
+
+ADISCORD_prepare_VAD_CSL = {
+	allowed = { tag = VAD }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = CSL }
+		NOT = { is_in_faction_with = CSL }
+		CSL = { exists = yes has_capitulated = no is_subject = no }
+		VAD = { ADISCORD_vorkerland_vad_ai_solar_preparation = yes has_global_flag = ADISCORD_vorkerland_solar_winner_csl }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = CSL value = 100 }
+}
+
+ADISCORD_prepare_CSL_VAD = {
+	allowed = { tag = CSL }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = VAD }
+		NOT = { is_in_faction_with = VAD }
+		VAD = { exists = yes has_capitulated = no is_subject = no }
+		VAD = { ADISCORD_vorkerland_vad_ai_solar_preparation = yes has_global_flag = ADISCORD_vorkerland_solar_winner_csl }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VAD value = 100 }
+}

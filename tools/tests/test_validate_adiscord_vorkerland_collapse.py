@@ -94,7 +94,7 @@ class VorkerlandCollapseValidatorTests(unittest.TestCase):
         self.assertEqual(len(rewards), 2)
         required = {
             "ADISCORD_vorkerland_wrk_compact_committed",
-            "ADISCORD_vorkerland_vad_compact_committed",
+            "ADISCORD_vorkerland_district_compact_committed",
         }
         resolver = named_block(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
@@ -666,7 +666,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             )
             viability_clause = (
                 f"AND = {{ any_neighbor_country = {{ tag = {target} }} "
-                f"{target} = {{ exists = yes is_subject = no "
+                f"{target} = {{ exists = yes is_subject = no is_in_faction = no "
                 "NOT = { has_capitulated = yes } "
                 "NOT = { OR = { has_war_with = WKR has_war_with = VAD "
                 "has_war_with = TVA } } } }"
@@ -3516,22 +3516,20 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
                 self.assertNotIn("ADISCORD_vorkerland_coalition_host", body)
                 self.assertNotIn("save_global_event_target_as", body)
         branches = named_blocks(membership, "else_if")
-        retry, failure = branches
+        self.assertEqual(len(branches), 1)
+        retry = branches[0]
         self.assertIn("faction_leader = {", named_block(retry, "limit"))
         self.assertIn("has_war = yes", named_block(retry, "limit"))
-        self.assertIn(
-            "has_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used",
-            named_block(failure, "limit"),
-        )
-        self.assertEqual(
-            membership.count("country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }"), 1
-        )
+        self.assertIn("NOT = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used }", retry)
+        self.assertEqual(membership.count("country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }"), 1)
         terminal = named_block(membership, "else")
+        refund = named_block(terminal, "if")
+        self.assertIn("has_country_flag = ADISCORD_vorkerland_coalition_join_paid", refund)
+        self.assertLess(refund.index("clr_country_flag"), refund.index("add_political_power = 25"))
+        self.assertIn("ADISCORD_vorkerland_reconcile_coalition_obligation = yes", terminal)
+        cleanup = named_block(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), "ADISCORD_vorkerland_reconcile_coalition_obligation")
         for marker in ("retry_used", "failed"):
-            self.assertIn(
-                "clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_" + marker,
-                terminal,
-            )
+            self.assertIn("clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_" + marker, cleanup)
 
     def test_validator_rejects_cross_country_coalition_hosts_and_reversed_war_scopes(self) -> None:
         variants = (

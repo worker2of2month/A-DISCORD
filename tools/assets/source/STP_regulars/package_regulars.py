@@ -110,6 +110,12 @@ def bindings():
                 if tag=='SRP':
                     for role in ('ADISCORD_militia','mountaineers'):
                         rows.append(f'entity = {{ clone = "{family}" name = "SRP_{role}{suffix}_entity" }}')
+    # Confederate uniforms cover regular and militia display entities at every weapon tier.
+    for tag in ('WRK', 'NAM', 'DAN', 'ZAO', 'PWR', 'VLA', 'ROM', 'SOL', 'TRU', 'WCG', 'EYR', 'EGC', 'RIV', 'YOR'):
+        for level in range(8):
+            suffix='_'+str(level+1) if level else ''
+            for role in ('infantry', 'ADISCORD_militia', 'mountaineers'):
+                rows.append(f'entity = {{ clone = "ADISCORD_WRK_line_infantry{suffix}_entity" name = "{tag}_confederation_{role}{suffix}_entity" }}')
     source+='\n'+START+'\n'.join(rows)+'\n'+END
     return {gfx_path:gfx.encode(),path:source.encode()}
 

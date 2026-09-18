@@ -597,6 +597,7 @@ NOD_cw_intervention_possible = {
 	STP = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = NOD } }
 	OR = {
 		STP = { STP_cw_preparation_open = yes }
+		AND = { STP = { has_country_flag = STP_cw_elections_finished NOT = { has_country_flag = STP_cw_participant } } NOT = { has_global_flag = STP_cw_started } }
 		AND = { STP = { has_country_flag = STP_cw_participant } NOT = { has_global_flag = STP_cw_started } }
 		STP = { has_war_with = STS }
 	}
@@ -806,11 +807,19 @@ STP_pc_focus_available = {
 }
 
 STP_pw_kefreyt_terms_current = {
-	tag = VAL
-	STS = { STP_pc_can_offer_kefreyt_terms = yes }
+	STP_pc_val_offer_current = yes
+	STS = { check_variable = { var = STP_pc_val_offer_kind value = 2 compare = equals } }
 }
 
 # COUNTRY: a controlled port is required before coastal work.
+STP_pw_party_has_port_capacity = {
+	any_owned_state = {
+		is_controlled_by = ROOT
+		naval_base > 0
+		free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+	}
+}
+
 STP_pc_has_naval_base = {
 	any_owned_state = {
 		is_controlled_by = ROOT
@@ -933,6 +942,40 @@ STP_pc_liberation_reply_matches_receipt = {
 	}
 }
 
+# COUNTRY NOD: the existing mobilisation owns this preparation window.
+NOD_ai_northern_preparation = {
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	has_country_flag = STP_cw_northern_crisis_pending
+	STP_cw_northern_targets_available = yes
+	check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = less_than }
+}
+
+# Redeployment starts as soon as the northern front is closed, including the
+# seven-day grace mission. Political readiness alone cannot drain the north.
+NOD_ai_stelander_preparation = {
+	NOD_cw_intervention_possible = yes
+	has_country_flag = NOD_cw_intervention_approved
+	NOT = { STP_cw_nod_busy_in_north = yes }
+	NOT = { has_war_with = STS }
+	NOT = { is_in_faction_with = STS }
+	STS = { exists = yes has_capitulated = no is_subject = no has_war_with = STP }
+}
+
+# COUNTRY VAL: a live ultimatum, not a historical choice of foreign policy.
+VAL_ai_republics_preparation = {
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	has_country_flag = VAL_cw_mobilizing
+	NOT = { has_country_flag = VAL_cw_settled }
+	NOT = { has_country_flag = VAL_cw_refused }
+	NOT = { has_war_with = SRP }
+	NOT = { is_in_faction_with = SRP }
+	SRP = { exists = yes has_capitulated = no is_subject = no }
+}
+
 # Imperial union
 
 # Postwar settlement clears STP_pc_war_val/nod. Victory checks also accept
@@ -1038,18 +1081,69 @@ STP_imperial_union_requirements_met = {
 	OR = { STP_imperial_union_required_states_controlled = yes STP_imperial_union_client_settlement = yes }
 }
 
+# COUNTRY STS: the running focus, paid programme and unexpired deployment
+# window keep the same front prepared until the declaration.
+STP_pc_ai_preparing_val_war = {
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	STP_pc_focus_available = yes
+	NOT = { has_war_with = VAL }
+	NOT = { is_in_faction_with = VAL }
+	OR = {
+		has_variable = STP_pc_val_campaign_deposit
+		has_idea = STP_pc_val_campaign_ready
+		AND = {
+			focus_progress = { focus = STP_pc_heg_val_force progress > 0 }
+			NOT = { has_completed_focus = STP_pc_heg_val_force }
+		}
+		AND = {
+			focus_progress = { focus = STP_pc_lib_war progress > 0 }
+			NOT = { has_completed_focus = STP_pc_lib_war }
+			has_country_flag = STP_pc_val_crisis
+			NOT = { has_country_flag = STP_pc_war_val }
+		}
+	}
+}
+
+# COUNTRY STS: retain deployment through the paid preparation window.
+STP_pc_ai_preparing_nod_war = {
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	STP_pc_focus_available = yes
+	NOT = { has_war_with = NOD }
+	NOT = { is_in_faction_with = NOD }
+	OR = {
+		has_variable = STP_pc_nod_campaign_deposit
+		has_idea = STP_pc_nod_campaign_ready
+		AND = {
+			focus_progress = { focus = STP_pc_heg_nod_force progress > 0 }
+			NOT = { has_completed_focus = STP_pc_heg_nod_force }
+		}
+		AND = {
+			focus_progress = { focus = STP_pc_lib_war progress > 0 }
+			NOT = { has_completed_focus = STP_pc_lib_war }
+			has_country_flag = STP_pc_nod_crisis
+			NOT = { has_country_flag = STP_pc_war_nod }
+		}
+	}
+}
+
 STP_pc_can_confront_val = {
 	tag = STS
+	NOT = { has_country_flag = STP_pc_val_terms_accepted }
 	has_capitulated = no
 	VAL = { exists = yes has_capitulated = no }
 	OR = {
 		has_war_with = VAL
-		AND = { is_subject = no NOT = { is_in_faction_with = VAL } VAL = { is_subject = no } }
+		AND = { NOT = { has_country_flag = VAL_stelander_truce } is_subject = no NOT = { is_in_faction_with = VAL } VAL = { is_subject = no } }
 	}
 }
 
 STP_pc_can_confront_nod = {
 	tag = STS
+	NOT = { has_country_flag = STP_pc_nod_terms_accepted }
 	has_capitulated = no
 	NOD = { exists = yes has_capitulated = no }
 	OR = {
@@ -1102,6 +1196,7 @@ STP_pc_liberation_reply_is_current = {
 
 STP_pc_can_offer_kefreyt_terms = {
 	tag = STS
+	NOT = { has_variable = STP_pc_val_offer_kind }
 	STP_pw_can_reconstruct = yes
 	is_subject = no
 	check_variable = { var = STP_pc_course value = 1 compare = equals }
@@ -1112,4 +1207,103 @@ STP_pc_can_offer_kefreyt_terms = {
 		is_subject = no
 		NOT = { has_war_with = STS is_in_faction_with = STS }
 	}
+}
+
+STP_pc_can_offer_nod_terms = {
+	tag = STS
+	STP_pw_can_reconstruct = yes
+	is_subject = no
+	check_variable = { var = STP_pc_course value = 1 compare = equals }
+	NOT = { has_country_flag = STP_pc_nod_terms_accepted has_country_flag = STP_pc_nod_terms_refused has_variable = STP_pc_nod_offer_kind }
+	NOD = { exists = yes is_subject = no has_capitulated = no NOT = { has_war_with = STS is_in_faction_with = STS } }
+}
+
+# Recipient scope. The outstanding package is the receipt, independent of the focus UI.
+STP_pc_val_offer_current = {
+	tag = VAL
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_war_with = STS is_in_faction_with = STS }
+	STS = {
+		exists = yes
+		STP_pw_can_reconstruct = yes
+		is_subject = no
+		check_variable = { var = STP_pc_course value = 1 compare = equals }
+		has_variable = STP_pc_val_offer_kind
+		NOT = { has_country_flag = STP_pc_val_terms_accepted has_country_flag = STP_pc_val_terms_refused }
+	}
+}
+
+# Recipient scope. The outstanding package is the receipt, independent of the focus UI.
+STP_pc_nod_offer_current = {
+	tag = NOD
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_war_with = STS is_in_faction_with = STS }
+	STS = {
+		exists = yes
+		STP_pw_can_reconstruct = yes
+		is_subject = no
+		check_variable = { var = STP_pc_course value = 1 compare = equals }
+		has_variable = STP_pc_nod_offer_kind
+		NOT = { has_country_flag = STP_pc_nod_terms_accepted has_country_flag = STP_pc_nod_terms_refused }
+	}
+}
+
+STP_pc_can_pay_val_compact = {
+	OR = {
+		AND = { has_country_flag = STP_pw_kefreyt_accounts_settled check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
+		AND = { NOT = { has_country_flag = STP_pw_kefreyt_accounts_settled } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } }
+	}
+}
+STP_pc_can_pay_nod_compact = { check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals } }
+
+# COUNTRY NOD: the reply authorises a later STP choice, never a forced handoff.
+STP_pw_party_nod_offer_current = {
+	tag = NOD
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	STP = {
+		STP_pw_can_reconstruct = yes
+		is_subject = no
+		has_country_flag = STP_pw_party_nod_offer_pending
+		NOT = { has_war_with = NOD has_completed_focus = STP_pw_party_sovereignty }
+	}
+}
+
+STP_pw_party_nod_arms_current = {
+	tag = NOD
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_equipment = { infantry_equipment < 1000 } }
+	NOT = { has_equipment = { support_equipment < 100 } }
+	STP = {
+		exists = yes
+		STP_pw_can_reconstruct = yes
+		is_subject_of = NOD
+		NOT = { has_war_with = NOD has_country_flag = STP_pw_party_nod_arms_delivered }
+		has_country_flag = STP_pw_party_nod_arms_pending
+		ADISCORD_economy_can_spend_50 = yes
+	}
+}
+
+# COUNTRY STS: only the ongoing union war permits prepared clandestine attacks.
+STP_cw_disruption_available = {
+	tag = STS
+	has_country_flag = STP_cw_disruption_unlocked
+	has_war_with = STP
+	has_capitulated = no
+	STP = { exists = yes has_capitulated = no }
+	NOT = { has_country_flag = STP_cw_postwar has_global_flag = STP_cw_union_wars_finished }
+	check_variable = { var = STP_cw_disruption_completed value = 2 compare = less_than }
+}
+
+# STATE: the same owner/template filter is used by the eventual destruction.
+STP_cw_disruption_target = {
+	is_controlled_by = STP
+	any_state_division = { OWNER = { tag = STP } division_has_battalion_in_template = ADISCORD_territorial }
 }

@@ -535,6 +535,19 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
 
     referenced, checked = set(), set()
 
+    # Native swap previews need country ideas on both sides. These mirrors carry
+    # full tier vectors; the engine computes the difference between them.
+    mirrors = {
+        key for key in candidates
+        if re.fullmatch(r"VAL_(administration|army)_[123]_preview", key)
+    }
+    country_ids = {e.key for e in script_children(ideas_root, "country")}
+    for idea in mirrors:
+        native = "VAL_contract_" + idea.removeprefix("VAL_").removesuffix("_preview")
+        if idea not in country_ids or names[idea] != native or vectors[idea] != vectors.get(native):
+            issues.append(f"preview {idea} must mirror the full native country tier {native}")
+        checked.add(idea)
+
     def compare(idea, expected, context):
         keys = vectors[idea].keys() | expected.keys()
         if any(abs(vectors[idea].get(k, 0) - expected.get(k, 0)) > 1e-8 for k in keys):
@@ -587,7 +600,10 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
                 pair = script_fields(entry.value)
                 before, after = pair.get("remove_idea"), pair.get("add_idea")
                 if after in candidates:
-                    if before not in candidates or names.get(before) != names[after] or vectors.get(before):
+                    if after in mirrors:
+                        if before not in mirrors or before.rsplit("_", 2)[0] != after.rsplit("_", 2)[0]:
+                            issues.append(f"preview {after} needs a mirror of the same tier family")
+                    elif before not in candidates or names.get(before) != names[after] or vectors.get(before):
                         issues.append(f"preview {after} needs an empty baseline with the same native name")
                     else:
                         checked.add(before)
@@ -606,7 +622,7 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
                         if not expected or not any(e.key == "VAL_refresh_contract_modifier" and e.value == "yes" for e in executable):
                             issues.append(f"preview {after} has no matching executed flag/numeric-input refresh reward")
                         compare(after, expected, native)
-                    elif not native.startswith("VAL_contract_industry_"):
+                    elif after not in mirrors and not native.startswith("VAL_contract_industry_"):
                         issues.append(f"preview {after} has no proven native reward consumer")
             if isinstance(entry.value, list):
                 inspect(entry.value, path, inside or entry.key == "effect_tooltip", reward,
@@ -968,9 +984,7 @@ def main() -> int:
                 issues.append(f"operations-map category is missing {token}")
     for decision_id in (
         "VAL_ops_finance_cin_contacts",
-        "VAL_ops_sell_rifles_to_cin",
         "VAL_ops_finance_osf_contacts",
-        "VAL_ops_sell_rifles_to_osf",
     ):
         block = named_blocks(decisions, decision_id)
         if not block or "has_country_flag = VAL_northern_operations_unlocked" not in block[0]:
@@ -1452,10 +1466,7 @@ def main() -> int:
             "VAL_contract_army_1",
             "VAL_contract_army_2",
             "VAL_contract_army_3",
-            "VAL_contract_propaganda_office",
-            "VAL_factory_cathedrals_drive",
             "VAL_hot_production_lines",
-            "VAL_northern_roads_drive",
         ):
             declarations = named_blocks(hidden_ideas[0], idea_id)
             if len(declarations) != 1:
@@ -1509,14 +1520,14 @@ def main() -> int:
         ):
             if token not in " ".join(panel[0].split()):
                 issues.append(f"operations scripted-GUI panel is missing {token}")
-    for state in (59, 61):
+    for state in (43, 44, 45, 88, 58, 59, 60, 61, 62, 63, 64, 65, 168):
         path = ROOT / f"gfx/interface/VAL_operations/VAL_ops_state_{state}.png"
         if not path.exists():
             issues.append(f"missing operations overlay for state {state}")
             continue
         with Image.open(path) as image:
-            if image.size != (2100, 260):
-                issues.append(f"state {state} overlay has size {image.size}, expected 2100x260")
+            if image.size != (2100, 340):
+                issues.append(f"state {state} overlay has size {image.size}, expected 2100x340")
         for text, label in ((gfx, "GFX"), (gui, "GUI"), (scripted_gui, "scripted GUI")):
             if f"{state}" not in text:
                 issues.append(f"state {state} is missing from operations {label}")
@@ -1525,8 +1536,8 @@ def main() -> int:
         issues.append("missing operations-map background")
     else:
         with Image.open(background) as image:
-            if image.size != (420, 260):
-                issues.append(f"operations background has size {image.size}, expected 420x260")
+            if image.size != (420, 340):
+                issues.append(f"operations background has size {image.size}, expected 420x340")
 
     localization_path = ROOT / "localisation/russian/ADISCORD_VAL_decisions_l_russian.yml"
     if not localization_path.read_bytes().startswith(b"\xef\xbb\xbf"):
@@ -1569,7 +1580,7 @@ def main() -> int:
         for issue in issues:
             print(f"- {issue}")
         return 1
-    print(f"Kefreyt rework validation passed ({len(focuses)} focuses, 2 active map regions).")
+    print(f"Kefreyt rework validation passed ({len(focuses)} focuses, 13 active map regions).")
     return 0
 
 

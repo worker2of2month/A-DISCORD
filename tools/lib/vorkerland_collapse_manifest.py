@@ -26,12 +26,11 @@ DIRTY_GROUPS = {
     "SCA": (165, 166, 172, 173, 204, 205, 209, 210, 211, 212),
 }
 
-# Zero-population corridors and wastelands owned by EXZ are not playable dirty
-# states, but still have to follow an adjacent successor or EXZ survives the
-# cascade. Keep this separate from DIRTY_GROUPS so the playable-state checks do
-# not require manpower, supplies, or a state category here.
+# Peripheral EXZ states follow an adjacent successor without becoming required
+# campaign objectives. Their population and terrain profiles remain independent
+# of the playable dirty-state checks.
 EXZ_REMAINDER_GROUPS = {
-    "SLA": (50, 233, 329),
+    "SLA": (50, 233, 329, 461),
     "RZA": (186,),
     "ERT": (170,),
     "IRT": (330,),

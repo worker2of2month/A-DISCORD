@@ -204,4 +204,15 @@ characters = {
     APH_VAL_commission = { name = APH_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
     VAL_party_administration = { name = VAL_party_administration portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
 
+
+    NKA_Contract_Council = {
+        name = NKA_Contract_Council
+        portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+    }
+    OCA_Contract_Council = {
+        name = OCA_Contract_Council
+        portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+    }
 }

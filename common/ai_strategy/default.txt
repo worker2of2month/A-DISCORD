@@ -204,15 +204,13 @@ ADISCORD_convoy_buffer = {
 	ai_strategy = { type = equipment_production_min_factories id = convoy value = 1 }
 }
 
-# Safety net for authored wars that do not have a campaign-specific front profile.
-# A one-enemy war is unambiguous, so strongly increase demand for the live enemy
-# front without overriding execution stance, garrisons, or allied-border policy.
-# Multi-front wars keep their explicit target priorities from country modules.
-ADISCORD_single_enemy_front_concentration = {
+# Allocation is independent of the number of war participants. Country profiles
+# add their relative priorities; execution and supply checks remain native.
+ADISCORD_active_enemy_front_concentration = {
 	enable = {
 		is_ai = yes
 		has_war = yes
-		check_variable = { enemies^num = 1 }
+		has_capitulated = no
 	}
 	abort_when_not_enabled = yes
 
@@ -220,8 +218,45 @@ ADISCORD_single_enemy_front_concentration = {
 		type = front_unit_request
 		country_trigger = {
 			has_war_with = FROM
-			has_capitulated = no
 		}
-		value = 300
+		value = 50
+	}
+}
+
+# FROM is the allocating country in a front's country_trigger. Keep a border
+# when either side has a concrete war preparation, even during another war.
+ADISCORD_wartime_neutral_borders = {
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		OR = {
+			has_war = yes
+			ADISCORD_ai_has_adjacent_war_preparation = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		country_trigger = {
+			NOT = { has_war_with = FROM }
+			ADISCORD_ai_front_has_prewar_threat = no
+		}
+		value = -100
+	}
+}
+
+ADISCORD_prewar_front_concentration = {
+	enable = { is_ai = yes has_capitulated = no }
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		country_trigger = {
+			exists = yes
+			has_capitulated = no
+			NOT = { has_war_with = FROM }
+			NOT = { is_in_faction_with = FROM }
+			ADISCORD_ai_front_has_prewar_threat = yes
+		}
+		value = 50
 	}
 }

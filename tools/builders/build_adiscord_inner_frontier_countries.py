@@ -408,6 +408,8 @@ def render_country_history(tag: str) -> str:
         f"set_research_slots = {history['research_slots']}",
     ))
     lines.extend(f"add_ideas = {idea}" for idea in history["ideas"])
+    if tag == PROTECTORATE_TAG:
+        lines.extend(("", "set_cosmetic_tag = WCG_confederation"))
     lines.append("")
     return "\n".join(lines)
 

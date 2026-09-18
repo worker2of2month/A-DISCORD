@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 OVERRIDE = ROOT / "interface/countryproductionlineview.gui"
 VANILLA_1_19_NORMALIZED_SHA256 = (
-    "f1b8d40d28522c2768612888f4168e1f9f49a3632fa0ac80607da4369b31f585"
+    "747ec66d17f1d24cff73392243a73953879617a4b5c26d4f65412688884360e2"
 )
 
 
@@ -75,11 +75,27 @@ class CountryProductionLineResourceUiTests(unittest.TestCase):
             ("buttonType", "rare_alloys_checkbox"),
         ):
             vanilla_shape = remove_named_gui_block(vanilla_shape, widget_type, name)
+        # Resource positions are deliberately compacted for nine filters.
+        # The remaining production window must retain the native structure.
+        vanilla_shape = remove_named_gui_block(vanilla_shape, "containerWindowType", "resources")
         normalized = re.sub(r"\s+", "", vanilla_shape).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(normalized).hexdigest(),
             VANILLA_1_19_NORMALIZED_SHA256,
         )
+
+    def test_resource_background_does_not_cover_equipment_and_filters_fit(self) -> None:
+        military = named_gui_block(self.source, "containerWindowType", "production_equipment_window_military")
+        resources = named_gui_block(military, "containerWindowType", "resources")
+        equipment = named_gui_block(military, "containerWindowType", "equipments")
+        def position(widget):
+            return tuple(map(int, re.search(r'position\s*=\s*\{\s*x\s*=\s*(-?\d+)\s+y\s*=\s*(-?\d+)', widget).groups()))
+        width, height = map(int, re.search(r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)\s*\}', resources).groups())
+        self.assertLessEqual(position(resources)[1] + height, position(equipment)[1])
+        self.assertLessEqual(position(resources)[0] + width, 495)
+        for name in ("oil", "rubber", "steel", "aluminium", "tungsten", "chromium", "coal", "rare_components", "rare_alloys"):
+            checkbox = named_gui_block(resources, "buttonType", name + "_checkbox")
+            self.assertLessEqual(position(checkbox)[0] + 27, width, name)
 
     def test_resources_container_exposes_all_nine_engine_resources(self) -> None:
         resources = named_gui_block(self.source, "containerWindowType", "resources")
@@ -113,15 +129,15 @@ class CountryProductionLineResourceUiTests(unittest.TestCase):
         self.assertIn('name = "production_MIOs"', military)
         resources = named_gui_block(military, "containerWindowType", "resources")
         for name, x in (
-            ("rare_components_icon", 395),
-            ("rare_components_checkbox", 418),
-            ("rare_alloys_icon", 444),
-            ("rare_alloys_checkbox", 467),
+            ("rare_components_icon", 378),
+            ("rare_components_checkbox", 400),
+            ("rare_alloys_icon", 432),
+            ("rare_alloys_checkbox", 454),
         ):
             widget_type = "buttonType" if name.endswith("checkbox") else "iconType"
             widget = named_gui_block(resources, widget_type, name)
             self.assertRegex(widget, rf"\bposition\s*=\s*\{{\s*x\s*=\s*{x}\b")
-        self.assertLess(467, 495)
+        self.assertLessEqual(10 + 454 + 27, 495)
 
 
 if __name__ == "__main__":

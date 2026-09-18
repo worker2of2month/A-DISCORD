@@ -1,20 +1,20 @@
 ideas = {
 	country = {
 # --- collapse_ideas ---
-		ADISCORD_vorkerland_erased_nations = {
+ADISCORD_vorkerland_erased_nations = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				stability_factor = -0.25
-				war_support_factor = -0.15
-				recruitable_population_factor = -0.20
-				compliance_growth = -0.05
-				industrial_capacity_factory = -0.15
-				consumer_goods_factor = 0.15
-				political_power_gain = -0.20
-				army_org_factor = -0.10
+				stability_factor = -0.10
+				war_support_factor = -0.05
+				recruitable_population_factor = -0.08
+				compliance_growth = -0.03
+				industrial_capacity_factory = -0.05
+				consumer_goods_factor = 0.05
+				political_power_gain = -0.10
+				army_org_factor = -0.03
 			}
 			ai_will_do = { factor = 0 }
 		}
@@ -37,12 +37,8 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-		# Deadlock valve, AI only. Once the war has run long enough that the
-		# map is effectively decided, a handful of surviving district governments
-		# can otherwise keep it technically alive forever. This gives the AI a
-		# scalpel against exactly those holdouts rather than a blanket buff, and
-		# the available block re-checks is_ai continuously, so a human who takes
-		# over a claimant loses it immediately and is never handed a free win.
+		# AI-only bonuses target surviving district governments late in the war.
+		# available rechecks is_ai so player takeover disables the bonus.
 		ADISCORD_vorkerland_theatre_priority = {
 			picture = generic_morale_bonus
 			allowed = { always = no }
@@ -64,14 +60,9 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-		# Anti-runaway, also AI only, and deliberately aimed at the legitimacy
-		# leader rather than at whoever the human happens to be playing. The
-		# reference mod points its equivalent solely at human-controlled majors,
-		# which leaves a pure AI campaign with no brake on a snowball at all -
-		# and a snowballing AI claimant is exactly what the author reported.
-		#
-		# One idea per possible leader, because targeted_modifier takes no
-		# per-target condition: the whole idea is gated by available instead.
+		# AI-only coalition bonuses target the current legitimacy leader.
+		# targeted_modifier has no per-target condition, so each leader has a separate
+		# idea gated by available.
 		ADISCORD_vorkerland_coalition_against_wkr = {
 			picture = generic_morale_bonus
 			allowed = { always = no }
@@ -130,39 +121,37 @@ ideas = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-
-		ADISCORD_vorkerland_erased_nations_relief_1 = {
+ADISCORD_vorkerland_erased_nations_relief_1 = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				stability_factor = -0.15
-				war_support_factor = -0.08
-				recruitable_population_factor = -0.10
-				compliance_growth = -0.03
-				industrial_capacity_factory = -0.08
-				consumer_goods_factor = 0.08
-				political_power_gain = -0.10
-				army_org_factor = -0.05
+				stability_factor = -0.06
+				war_support_factor = -0.03
+				recruitable_population_factor = -0.04
+				compliance_growth = -0.02
+				industrial_capacity_factory = -0.03
+				consumer_goods_factor = 0.03
+				political_power_gain = -0.06
+				army_org_factor = -0.02
 			}
 			ai_will_do = { factor = 0 }
 		}
-
-		ADISCORD_vorkerland_erased_nations_relief_2 = {
+ADISCORD_vorkerland_erased_nations_relief_2 = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				stability_factor = -0.07
-				war_support_factor = -0.03
-				recruitable_population_factor = -0.04
+				stability_factor = -0.03
+				war_support_factor = -0.01
+				recruitable_population_factor = -0.02
 				compliance_growth = -0.01
-				industrial_capacity_factory = -0.03
-				consumer_goods_factor = 0.03
-				political_power_gain = -0.05
-				army_org_factor = -0.02
+				industrial_capacity_factory = -0.01
+				consumer_goods_factor = 0.01
+				political_power_gain = -0.03
+				army_org_factor = -0.01
 			}
 			ai_will_do = { factor = 0 }
 		}
@@ -2465,6 +2454,223 @@ ideas = {
 				consumer_goods_factor = 0.06
 			}
 		}
+
+# --- starting_ideas ---
+		WRK_ashes_of_the_crown = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_ashes_of_the_crown
+
+			modifier = {
+				send_volunteer_factor = -0.50
+				army_defence_factor = -0.15
+				army_attack_factor = -0.15
+				army_org_factor = -0.20
+				recon_factor = -0.15
+				planning_speed = -0.25
+				equipment_capture_factor = -0.4
+				war_support_factor = -0.30
+				war_stability_factor = -0.40
+				command_power_gain_mult = -0.25
+				non_core_manpower = -0.75
+				conscription_factor = -0.40
+				cannot_use_abilities = 1
+				no_compliance_gain = 1
+				ADISCORD_economy_tax_collection_factor = -0.10
+				ADISCORD_economy_population_tax_income_factor = -0.10
+				ADISCORD_economy_civilian_factory_income_factor = -0.05
+				ADISCORD_economy_admin_expense_factor = 0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.10
+				ADISCORD_country_development_state_growth_factor = -0.10
+				ADISCORD_country_development_army_growth_factor = -0.10
+			}
+		}
+
+		WRK_hourglass_of_discord = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_hourglass_of_discord
+
+			modifier = {
+				political_power_gain = -0.25
+				stability_factor = -0.10
+				drift_defence_factor = -0.50
+				ADISCORD_economy_overall_expense_factor = 0.10
+				ADISCORD_economy_social_expense_factor = 0.10
+				ADISCORD_economy_inflation_pressure_factor = 0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.10
+				ADISCORD_economy_demographic_fatigue_gain_factor = 0.10
+				ADISCORD_country_development_economic_growth_factor = -0.15
+			}
+		}
+
+		WRK_constitution_of_the_republic = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_constitution_of_the_republic
+
+			modifier = {
+				stability_factor = -0.10
+				political_power_gain = -0.15
+				consumer_goods_factor = 0.10
+				ADISCORD_economy_tax_collection_factor = -0.05
+				ADISCORD_country_development_state_growth_factor = -0.10
+			}
+		}
+
+		WRK_birthplace_of_the_first_revolution = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_birthplace_of_the_first_revolution
+
+			# The loyalist civil-war regime is an explicit continuation of the first
+			# revolutionary settlement. The spirit disappears only when WRK leaves
+			# both the old and the neo-vorkerist projects.
+			cancel = {
+				NOT = {
+					OR = {
+						has_country_leader_ideology = vorkerism
+						has_country_leader_ideology = neo_vorkerism
+					}
+				}
+			}
+
+			modifier = {
+				stability_factor = -0.05
+				war_support_factor = -0.10
+				political_power_gain = -0.10
+				research_speed_factor = -0.05
+				consumer_goods_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.10
+				ADISCORD_country_development_cultural_growth_factor = -0.10
+			}
+		}
+
+		WRK_birthplace_of_the_first_revolution_front_republic = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_birthplace_of_the_first_revolution_front_republic
+
+			cancel = {
+				NOT = {
+					OR = {
+						has_country_leader_ideology = vorkerism
+						has_country_leader_ideology = neo_vorkerism
+					}
+				}
+			}
+
+			modifier = {
+				stability_factor = -0.02
+				war_support_factor = -0.03
+				political_power_gain = -0.03
+				research_speed_factor = -0.02
+				consumer_goods_factor = 0.02
+				army_org_regain = 0.03
+				ADISCORD_economy_admin_expense_factor = 0.05
+				ADISCORD_country_development_cultural_growth_factor = -0.03
+			}
+		}
+
+		WRK_birthplace_of_the_first_revolution_renewed_mandate = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_birthplace_of_the_first_revolution_renewed_mandate
+
+			cancel = {
+				NOT = {
+					OR = {
+						has_country_leader_ideology = vorkerism
+						has_country_leader_ideology = neo_vorkerism
+					}
+				}
+			}
+
+			modifier = {
+				stability_factor = 0.05
+				war_support_factor = 0.10
+				political_power_gain = 0.05
+				research_speed_factor = 0.03
+				consumer_goods_factor = -0.02
+				army_org_regain = 0.05
+				ADISCORD_country_development_cultural_growth_factor = 0.08
+			}
+		}
+
+		WRK_separatism = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_WRK_constitution_of_the_republic
+
+			modifier = {
+				stability_factor = -0.25
+				political_power_gain = -0.15
+			}
+		}
+
 
 # --- end ---
 	}

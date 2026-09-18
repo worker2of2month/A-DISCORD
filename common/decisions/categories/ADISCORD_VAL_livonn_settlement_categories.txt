@@ -1,4 +1,0 @@
-VAL_livonn_settlement_category = {
-	allowed = { tag = VAL }
-	visible = { has_country_flag = VAL_cw_livonn_settlement_pending }
-}

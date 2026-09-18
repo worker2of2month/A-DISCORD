@@ -193,7 +193,40 @@ def csl() -> Image.Image:
     return image
 
 
+def confederal_district(kind: str) -> Image.Image:
+    """District banners retain the federal colours and the existing fist seal."""
+    orange, gold, red, blue = "#ff9100", "#efc75d", "#b8261c", "#086abb"
+    image = Image.new("RGB", CANVAS, orange)
+    draw = ImageDraw.Draw(image)
+    if kind == "garrison":
+        draw.rectangle((0, 0, 655, 415), fill=red)
+        draw.rectangle((0, 164, 655, 252), fill=gold)
+        draw.polygon(((70, 0), (210, 0), (330, 208), (210, 416), (70, 416), (190, 208)), fill=orange)
+        centre = (328, 208)
+    elif kind == "river":
+        draw.rectangle((0, 0, 655, 415), fill=blue)
+        draw.rectangle((0, 136, 655, 280), fill=gold)
+        draw.rectangle((0, 161, 655, 255), fill=orange)
+        centre = (196, 208)
+    else:
+        draw.rectangle((0, 0, 655, 137), fill=red)
+        draw.rectangle((0, 138, 655, 277), fill="#ffffff")
+        draw.rectangle((0, 278, 655, 415), fill=orange)
+        centre = (328, 208)
+    cx, cy = centre
+    draw.ellipse((cx - 100, cy - 100, cx + 100, cy + 100), fill=gold)
+    draw.ellipse((cx - 82, cy - 82, cx + 82, cy + 82), fill="#101010")
+    # Use the canonical federation seal; it is a supplied asset, not a new logo.
+    with Image.open(FLAG_ROOT / "WRK.tga") as source:
+        seal = source.convert("RGB").crop((18, 17, 35, 37)).resize((100, 118), Image.Resampling.LANCZOS)
+    image.paste(seal, (cx - 50, cy - 59))
+    return image
+
+
 BUILDERS = {
+    "EGC": lambda: confederal_district("garrison"),
+    "RIV": lambda: confederal_district("river"),
+    "YOR": lambda: confederal_district("republic"),
     "EBA": eba,
     "TGD": tgd,
     "IBL": ibl,
@@ -220,6 +253,7 @@ SUPPLIED_RUNTIME_FLAGS = {
 }
 
 COPIED_FLAG_TRIPLETS = {
+    "EYR": "VAD",
     "WRK_vorkerland_joint_government": "WRK",
 }
 
@@ -236,7 +270,15 @@ def add_runtime_triplet(outputs: dict[Path, Image.Image], flag_id: str, image: I
     if prepared.size != (82, 52):
         raise ValueError(f"{flag_id} runtime master must be 82x52, got {prepared.size}")
     for directory, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
-        rendered = prepared.copy() if prepared.size == size else prepared.resize(size, Image.Resampling.LANCZOS)
+        supplied_size = SOURCE_ROOT / f"{flag_id}_{directory}.png"
+        if directory and supplied_size.is_file():
+            # Authored small masters retain details lost by resampling the main flag.
+            with Image.open(supplied_size) as source:
+                rendered = source.convert("RGBA")
+            if rendered.size != size:
+                raise ValueError(f"{supplied_size.name} must be {size}, got {rendered.size}")
+        else:
+            rendered = prepared.copy() if prepared.size == size else prepared.resize(size, Image.Resampling.LANCZOS)
         outputs[FLAG_ROOT / directory / f"{flag_id}.tga"] = rendered
 
 
@@ -276,13 +318,15 @@ def validate_outputs(outputs: dict[Path, Image.Image]) -> list[str]:
         expected_rgba = expected.convert("RGBA")
         if actual.size != expected_rgba.size:
             issues.append(f"{path.relative_to(ROOT)} has size {actual.size}, expected {expected_rgba.size}")
-        elif ImageChops.difference(actual, expected_rgba).getbbox() is not None:
+        elif any(channel.getbbox() is not None for channel in ImageChops.difference(actual, expected_rgba).split()):
             issues.append(f"{path.relative_to(ROOT)} pixels differ from deterministic render")
     return issues
 
 
 def apply_outputs(outputs: dict[Path, Image.Image]) -> None:
     for path, image in outputs.items():
+        if path.is_file() and not validate_outputs({path: image}):
+            continue
         path.parent.mkdir(parents=True, exist_ok=True)
         image.save(path)
     # Cosmetic aliases intentionally reuse the canonical flag byte-for-byte.
@@ -290,6 +334,8 @@ def apply_outputs(outputs: dict[Path, Image.Image]) -> None:
     # these triplets with a real file copy after rendering the authored flags.
     for target_flag_id, source_flag_id in COPIED_FLAG_TRIPLETS.items():
         for directory in (FLAG_ROOT, FLAG_ROOT / "medium", FLAG_ROOT / "small"):
+            if directory / f"{target_flag_id}.tga" not in outputs:
+                continue
             shutil.copyfile(
                 directory / f"{source_flag_id}.tga",
                 directory / f"{target_flag_id}.tga",
@@ -301,12 +347,15 @@ def main() -> int:
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true", help="compare current flags with deterministic renders (default)")
     actions.add_argument("--apply", action="store_true", help="write source PNGs and TGA triplets")
+    parser.add_argument("--tags", nargs="+", help="limit checks and writes to these flag IDs")
     args = parser.parse_args()
     outputs = expected_outputs()
+    if args.tags:
+        outputs = {path: image for path, image in outputs.items() if path.stem in args.tags}
     if args.apply:
         apply_outputs(outputs)
         print(
-            f"Built {len(BUILDERS) + len(SUPPLIED_FLAGS) + len(SUPPLIED_RUNTIME_FLAGS) + len(COPIED_FLAG_TRIPLETS)} "
+            f"Built {len({path.stem for path in outputs})} "
             "original flag triplets."
         )
     issues = validate_outputs(outputs)

@@ -256,6 +256,18 @@ per role and check a cold-load log, not only the script parser. Production
 minimums from all enabled strategies add together; count them against the
 country's actual military factories and leave capacity for its basic weapons.
 
+Registered tags, countries present on the map and scripted participants are
+different sets. Before deleting or suppressing a country, run the minor validator
+with `--inventory`, then inspect ownership/cores, OOB, subjects, future creation,
+dynamic scopes and player handoff. A literal-reference inventory cannot prove
+that a tag is unused. Keep dynamic civil-war tags and authored successor countries.
+Minor suppression is not a native AI-off switch. Wake a suppressed country before
+story participation or research-slot rewards; retain restoration for retired
+allowlist entries. Its monthly player-takeover fallback is delayed until the next
+pulse. Preserve the optimized guard, exact restoration slots and cleanup of stale
+assistance ideas; never replace these with recurring world scans. See the country
+lifecycle and verification contract in the performance guide.
+
 ## Verification
 
 For focus rewards, see [the focus-effects guide](docs/development/focus-effects.md):

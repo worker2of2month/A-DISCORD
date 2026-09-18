@@ -69,6 +69,17 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
                 theatre.apply()
             self.assertEqual(hubs.read_bytes(), source)
 
+    def test_missing_khan_link_disconnects_the_border_hub(self) -> None:
+        source = theatre.RAILWAYS_PATH.read_text(encoding="utf-8")
+        broken = source.replace(theatre.render_khan_connection() + "\n", "")
+        self.assertNotEqual(broken, source)
+        with tempfile.TemporaryDirectory() as directory:
+            rails = Path(directory) / "railways.txt"
+            rails.write_text(broken, encoding="utf-8")
+            with patch.object(theatre, "RAILWAYS_PATH", rails):
+                issues = theatre.validate()
+        self.assertTrue(any("RUS" in issue and "7445 is disconnected" in issue for issue in issues), issues)
+
 
 if __name__ == "__main__":
     unittest.main()

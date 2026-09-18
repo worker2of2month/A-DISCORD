@@ -112,25 +112,29 @@ STARTING_OWNERS = {
     **{state_id: "SHL" for state_id in SHL_STATES},
     **{state_id: "GLP" for state_id in GLP_STATES},
     303: "TFF",
-    306: "WRK", 307: "VAD", 308: "WRK", 309: "WRK",
-    310: "SOL", 311: "WRK", 312: "VLA", 313: "VLA",
+    306: "RIV", 307: "SOL", 308: "RIV", 309: "RIV",
+    310: "SOL", 311: "VLA", 312: "VLA", 313: "VLA",
     314: "VLA", 315: "TRU", 316: "TRU", 317: "TRU",
     318: "TRU", 319: "ROM", 320: "WRK", 321: "ROM",
-    322: "ZAO", 323: "WRK", 324: "VAD", 325: "VAD",
-    326: "PIV", 327: "WRK", 328: "PWR",
+    322: "ZAO", 323: "WRK", 324: "WRK", 325: "WRK",
+    326: "PIV", 327: "RIV", 328: "PWR",
     329: "EXZ", 330: "EXZ",
 }
 
 LEGACY_OWNER_GAPS = {
     27: "WRK",
-    79: "WRK",
+    79: "RIV",
     82: "WRK",
     194: "PWR",
     197: "VLA",
 }
 
 LEGACY_OWNER_OVERRIDES = {
-    198: "VAD",
+    75: "EYR", 79: "RIV", 81: "EGC",
+    102: "EYR", 104: "SOL", 105: "VLA", 106: "EYR", 107: "YOR",
+    108: "YOR", 109: "EYR", 110: "EGC", 111: "EYR",
+    121: "YOR", 122: "YOR", 123: "YOR", 124: "EGC",
+    198: "SOL", 202: "PWR",
 }
 
 CAPITALS = {
@@ -982,9 +986,9 @@ def fill_legacy_owner_gaps() -> None:
         path.write_text(updated, encoding="utf-8", newline="\n")
 
 
-def apply_legacy_owner_overrides() -> None:
+def apply_legacy_owner_overrides(owner_overrides: dict[int, str] | None = None) -> None:
     """Keep explicit ownership corrections without rebuilding legacy states."""
-    for state_id, owner in LEGACY_OWNER_OVERRIDES.items():
+    for state_id, owner in (LEGACY_OWNER_OVERRIDES if owner_overrides is None else owner_overrides).items():
         path = state_path(state_id)
         source = path.read_text(encoding="utf-8-sig", errors="strict")
         updated, owner_count = re.subn(
@@ -1660,7 +1664,15 @@ def main() -> int:
         metavar="STATE_ID",
         help="patch only the selected legacy state profile; may be repeated",
     )
+    actions.add_argument("--apply-vorkerland-owners", action="store_true",
+                         help="apply only the prewar confederation owners and cores")
     args = parser.parse_args()
+    if args.apply_vorkerland_owners:
+        apply_legacy_owner_overrides({
+            **LEGACY_OWNER_OVERRIDES,
+            **{sid: STARTING_OWNERS[sid] for sid in (306, 307, 308, 309, 311, 324, 325, 327)},
+        })
+        return 0
     if args.apply:
         apply()
         return 0

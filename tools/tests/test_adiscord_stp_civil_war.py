@@ -834,8 +834,8 @@ class CivilWarContracts(unittest.TestCase):
         self.assertFalse(any(e.key == "damage_building" for _, e in selected_effects(payout, captured, "29")))
         aftermath = [e for _, e in selected_effects(payout, capital, "28") if e.key == "add_timed_idea"]
         self.assertEqual([(scalar(e.value, "idea"), scalar(e.value, "days")) for e in aftermath],
-                         [("STP_cw_party_sabotage_aftermath", "42")])
-        already = {**capital, ("STP", "has_idea", "STP_cw_party_sabotage_aftermath"): True}
+                         [("STP_cw_party_command_sabotage", "70")])
+        already = {**capital, ("STP", "has_idea", "STP_cw_party_command_sabotage"): True}
         self.assertFalse(any(e.key == "add_timed_idea" for _, e in selected_effects(payout, already, "28")))
         self.assertFalse(any(e.key == "add_timed_idea" for _, e in selected_effects(payout, {
             ("53", "is_owned_by", "STP"): True, ("53", "is_controlled_by", "STP"): True,
@@ -906,10 +906,10 @@ class CivilWarContracts(unittest.TestCase):
             visible = [f for f in focuses if scalar(f, "id") not in {"STP_cw_first_postwar_budget", "STP_cw_restore_civil_authority"}
                        and not scalar(f, "id").startswith(("STP_pw_", "STP_pc_"))
                        and (not any(e.key == "allow_branch" for e in f)
-                            or scalar(ast_block(f, "allow_branch"), "tag") == tag)]
+                            or matches_conditions(ast_block(f, "allow_branch"), {(tag, "tag", tag): True}, tag))]
             points = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in visible]
             self.assertEqual(len(points), len(set(points)), tag)
-            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 5, tag)
+            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 10 if tag == "STS" else 5, tag)
             for x in {x for x, _ in points}:
                 rows = sorted(y for px, y in points if px == x)
                 self.assertTrue(all(b - a >= 1 for a, b in zip(rows, rows[1:])), tag)
@@ -988,7 +988,10 @@ class CivilWarContracts(unittest.TestCase):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
                     if e.key == "focus_tree" and scalar(e.value, "id") == "STP_cw_focus")
         focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_wartime_laboratories")
-        self.assertFalse(any(e.key == "allow_branch" for e in focus))
+        for tag in ("STP", "STS", "SRP"):
+            gate = ast_block(focus, "allow_branch")
+            self.assertTrue(matches_conditions(gate, {}, tag))
+            self.assertFalse(matches_conditions(gate, {(tag, "has_country_flag", "STP_cw_postwar"): True}, tag))
         self.assertEqual((scalar(focus, "x"), scalar(focus, "y"), scalar(focus, "cost")), ("7", "1", "3"))
         self.assertEqual(scalar(focus, "icon"), "GFX_goal_generic_scientific_exchange")
         self.assertNotEqual(scalar(focus, "icon"), "GFX_focus_TVA_divert_the_research_budget")
@@ -1024,8 +1027,11 @@ class CivilWarContracts(unittest.TestCase):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         revoke = ast_block(effects, "STP_cw_revoke_emergency_research_slot")
         finish = ast_block(effects, "STP_cw_finish_mobilization")
-        self.assertEqual([e.key for e in finish[:3]],
-                         ["set_country_flag", "if", "STP_cw_revoke_emergency_research_slot"])
+        revoke_index = next(i for i, e in enumerate(finish) if e.key == "STP_cw_revoke_emergency_research_slot")
+        remove_index = next(i for i, e in enumerate(finish)
+                            if e.key == "if" and any(v.key == "remove_ideas" and v.value == "STP_cw_emergency_laboratories"
+                                                     for v in walk(e.value)))
+        self.assertLess(remove_index, revoke_index)
         self.assertEqual(finish[0].value, "STP_cw_postwar")
         self.assertIn(("has_idea", "STP_cw_emergency_laboratories"),
                       [(e.key, e.value) for e in walk(finish)])
@@ -1060,9 +1066,12 @@ class CivilWarContracts(unittest.TestCase):
         on_action = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
         self.assertIn("set_global_flag = skip_default_capitulation", on_action)
         settlement = block(self.effects, "VAL_cw_settle_republics")
+        self.assertIn("VAL_form_occidian_administration = yes", settlement)
+        administration = block(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), "VAL_form_occidian_administration")
         for state in (43, 44, 88):
-            self.assertIn(f"transfer_state = {state}", settlement)
-        self.assertNotIn("transfer_state = 45", settlement)
+            self.assertIn(f"transfer_state = {state}", administration)
+        self.assertNotIn("transfer_state = 45", administration)
+        self.assertIn("VAL_only_occidian_states = yes", administration)
         self.assertNotIn("annex_country", settlement)
         intervention = block(self.effects, "VAL_cw_start_intervention")
         self.assertIn("VAL_cw_can_intervene = yes", block(block(intervention, "if"), "limit"))
@@ -1362,7 +1371,13 @@ class CivilWarContracts(unittest.TestCase):
         val_facts = {("VAL", "has_country_flag", "VAL_cw_entered"): True,
                      **{(str(state), "is_owned_by", "SRP"): True for state in (43, 44, 45, 88)}}
         selected = list(selected_effects(val_win, val_facts, "VAL"))
-        self.assertEqual([e.value for _, e in selected if e.key == "transfer_state"], ["43", "44", "88"])
+        self.assertFalse([e for _, e in selected if e.key == "transfer_state"])
+        keys = [e.key for _, e in selected]
+        self.assertIn("VAL_form_occidian_administration", keys)
+        self.assertLess(keys.index("STP_cw_finish_mobilization"), keys.index("VAL_form_occidian_administration"))
+        dispatched = next(i for i, (_, e) in enumerate(selected) if e.key == "VAL_form_occidian_administration")
+        closed = next(i for i, (_, e) in enumerate(selected) if e.key == "clr_country_flag" and e.value == "VAL_cw_entered")
+        self.assertLess(dispatched, closed)
         self.assertIn(("VAL", "clr_country_flag", "VAL_cw_entered"), [(s, e.key, e.value) for s, e in selected])
         self.assertIn(("VAL", "ADISCORD_STP_cw.23"), [(s, scalar(e.value, "id")) for s, e in selected if e.key == "country_event"])
         self.assertNotIn("VAL_foreign_operation_active", [e.value for _, e in selected if e.key == "clr_country_flag"],
@@ -3544,7 +3559,36 @@ class PostwarFocusContracts(unittest.TestCase):
         self.tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
                          if e.key == "focus_tree" and scalar(e.value, "id") == "STP_cw_focus")
         self.focuses = {scalar(e.value, "id"): e.value for e in self.tree if e.key == "focus"}
-        self.new = {k: v for k, v in self.focuses.items() if k.startswith("STP_pw_")}
+        # These contracts cover the accumulated reconstruction modifier.
+        # Diplomatic choices use transactions and have separate lifecycle checks.
+        self.new = {k: v for k, v in self.focuses.items() if k.startswith("STP_pw_")
+                    and any(e.key == "STP_pw_refresh_modifier" for e in walk(ast_block(v, "completion_reward")))}
+
+    def test_wartime_and_reconstruction_do_not_share_the_visible_layout(self):
+        for tag in ("STP", "STS", "SRP"):
+            for postwar in (False, True):
+                facts = {(tag, "has_country_flag", "STP_cw_postwar"): postwar,
+                         (tag, "ruling_leader"): "STP_maksim_shabrat" if tag == "STS" else "STP_Edmund_Ravel",
+                         (tag, "STP_pc_founder_rules", "yes"): tag == "STS",
+                         (tag, "STP_pc_course_continues", "yes"): tag == "STS",
+                         (tag, "STP_pc_hegemony_continues", "yes"): tag == "STS",
+                         (tag, "STP_pc_freedom_continues", "yes"): tag == "STS"}
+                visible = {name: focus for name, focus in self.focuses.items()
+                           if matches_conditions(ast_block(focus, "allow_branch"), facts, tag)}
+                reconstruction = {name for name in visible if name.startswith(("STP_pw_", "STP_pc_"))}
+                if not postwar:
+                    self.assertFalse(reconstruction, (tag, reconstruction))
+                elif tag != "SRP":
+                    self.assertTrue(reconstruction, tag)
+                    self.assertFalse({name for name in visible if name.startswith("STP_cw_")}
+                                     - {"STP_cw_first_postwar_budget", "STP_cw_restore_civil_authority"})
+                positions = {}
+                for name, focus in visible.items():
+                    x = int(scalar(focus, "x")) + sum(int(scalar(e.value, "x")) for e in focus
+                        if e.key == "offset" and matches_conditions(ast_block(e.value, "trigger"), facts, tag))
+                    point = (x, int(scalar(focus, "y")))
+                    self.assertNotIn(point, positions, (tag, postwar, name, positions.get(point)))
+                    positions[point] = name
 
     def test_each_side_has_a_reachable_three_pillar_postwar_program(self):
         for tag, prefix in (("STS", "STP_pw_republic_"), ("STP", "STP_pw_party_")):
@@ -3552,23 +3596,31 @@ class PostwarFocusContracts(unittest.TestCase):
             self.assertEqual(len(focuses), 16, tag)
             self.assertEqual(scalar(focuses[prefix + "settled_state"], "cost"), "4")
             for choice in ("open_settlement", "firm_settlement"):
-                completed = {"STP_cw_restore_civil_authority", "STP_pc_after_victory"}
-                excluded = prefix + ("firm_settlement" if choice == "open_settlement" else "open_settlement")
-                for _ in range(len(focuses)):
-                    for name, focus in focuses.items():
-                        if name == excluded:
-                            continue
-                        prerequisites = [e.value for e in focus if e.key == "prerequisite"]
-                        if all(any(e.value in completed for e in group) for group in prerequisites):
-                            completed.add(name)
-                self.assertEqual(len(completed & focuses.keys()), 15)
-                self.assertIn(prefix + "settled_state", completed)
+                for economy in ("civil_workshops", "accountable_arsenals") if tag == "STP" else (None,):
+                    completed = {"STP_cw_restore_civil_authority", "STP_pc_after_victory"}
+                    excluded = {prefix + ("firm_settlement" if choice == "open_settlement" else "open_settlement")}
+                    route = dict(focuses)
+                    if economy:
+                        excluded.add(prefix + ("accountable_arsenals" if economy == "civil_workshops" else "civil_workshops"))
+                        route.update({prefix + name: self.focuses[prefix + name] for name in ("border_staff", "southern_defence")})
+                    for _ in range(len(route)):
+                        for name, focus in route.items():
+                            if name in excluded:
+                                continue
+                            prerequisites = [e.value for e in focus if e.key == "prerequisite"]
+                            if all(any(e.value in completed for e in group) for group in prerequisites):
+                                completed.add(name)
+                    self.assertEqual(len(completed & focuses.keys()), 14 if economy else 15)
+                    self.assertIn(prefix + "settled_state", completed)
+            facts = {(tag, "tag", tag): True, (tag, "has_country_flag", "STP_cw_postwar"): True}
             visible = [f for f in self.focuses.values() if not scalar(f, "id").startswith("STP_pc_")
                        and (not any(e.key == "allow_branch" for e in f)
-                            or scalar(ast_block(f, "allow_branch"), "tag") == tag)]
-            points = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in visible]
+                            or matches_conditions(ast_block(f, "allow_branch"), facts, tag))]
+            points = [(int(scalar(f, "x")) + sum(int(scalar(e.value, "x")) for e in f
+                       if e.key == "offset" and matches_conditions(ast_block(e.value, "trigger"), facts, tag)),
+                       int(scalar(f, "y"))) for f in visible]
             self.assertEqual(len(points), len(set(points)))
-            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 32 if tag == "STS" else 12)
+            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 32 if tag == "STS" else 15)
             self.assertLessEqual(max(y for _, y in points), 15 if tag == "STS" else 12)
             for focus in focuses.values():
                 self.assertEqual(scalar(ast_block(focus, "allow_branch"), "tag"), tag)
@@ -3630,8 +3682,11 @@ class PostwarFocusContracts(unittest.TestCase):
             self.assertEqual(len(writes), len(actual))
             self.assertTrue(actual)
             self.assertEqual(scalar(ast_block(reward, "hidden_effect"), "STP_pw_refresh_modifier"), "yes")
-            self.assertFalse(any(e.key in {"add_ideas", "swap_ideas", "add_timed_idea"}
-                                 for e in executable_entries(reward)))
+            # Delta preview spirits must never become installed ideas.
+            for entry in executable_entries(reward):
+                if entry.key in {"add_ideas", "swap_ideas", "add_timed_idea"}:
+                    installed = [entry.value] if isinstance(entry.value, str) else [e.value for e in walk(entry.value) if isinstance(e.value, str)]
+                    self.assertFalse(any(value.endswith(("_delta", "_dummy")) for value in installed), name)
 
     def test_refresh_preserves_accumulation_and_never_resets_an_external_war(self):
         helper = ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_pw_refresh_modifier")
@@ -3752,6 +3807,157 @@ class PostwarFocusContracts(unittest.TestCase):
                 self.assertEqual(matches_conditions(garrison, facts, tag), not own_war)
                 self.assertEqual(matches_conditions(frontline, facts, tag), own_war)
                 self.assertEqual(matches_conditions(policy, facts, tag), own_war)
+
+
+class AutomaticFrontOperationContracts(unittest.TestCase):
+    def setUp(self):
+        self.effects = {e.key: e.value for e in entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")}
+        council = ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council")
+        self.mission = ast_block(council, "STP_cw_front_operation")
+        self.facts = {("STS", "has_war_with", "STP"): True,
+                      ("STS", "has_capitulated", "no"): True,
+                      ("STS", "has_country_flag", "STP_cw_participant"): True}
+        for state in (2, 29, 53, 3, 46, 45, 28):
+            self.control(state, "STP")
+        self.rewards, self.events = [], []
+
+    def control(self, state, country):
+        for tag in ("STP", "STS", "VAL"):
+            self.facts[(str(state), "is_controlled_by", tag)] = tag == country
+
+    def variable(self, name):
+        return self.facts.get(("STS", "variable", "STP_cw_operation_" + name), 0)
+
+    def run_effect(self, name):
+        self.execute(self.effects[name])
+
+    def execute(self, body, scope="STS"):
+        for country, entry in selected_effects(body, self.facts, scope):
+            key, value = entry.key, entry.value
+            if key in self.effects:
+                self.execute(self.effects[key], country)
+            elif key in ("set_variable", "add_to_variable"):
+                name, amount = scalar(value, "var"), float(scalar(value, "value"))
+                address = (country, "variable", name)
+                self.facts[address] = amount + (self.facts.get(address, 0) if key == "add_to_variable" else 0)
+                self.facts[(country, "has_variable", name)] = True
+            elif key == "clear_variable":
+                self.facts.pop((country, "variable", value), None)
+                self.facts.pop((country, "has_variable", value), None)
+            elif key == "add_timed_idea":
+                idea = scalar(value, "idea")
+                self.facts[(country, "has_idea", idea)] = True
+                self.rewards.append((country, idea, int(scalar(value, "days"))))
+            elif key == "remove_ideas":
+                for idea in ([value] if isinstance(value, str) else [e.value for e in value]):
+                    self.facts.pop((country, "has_idea", idea), None)
+            elif key in ("activate_mission", "remove_mission"):
+                self.facts[(country, "has_active_mission", value)] = key == "activate_mission"
+            elif key == "country_event":
+                self.events.append((country, scalar(value, "id"), scalar(value, "hours")))
+            else:
+                raise AssertionError(f"Unhandled operation effect: {key}")
+
+    def start_round(self):
+        self.run_effect("STP_cw_begin_operations")
+        self.run_effect("STP_cw_dispatch_operation")
+
+    def settle(self, callback):
+        self.facts[("STS", "has_active_mission", "STP_cw_front_operation")] = False
+        self.execute(ast_block(self.mission, callback))
+
+    def test_selects_only_party_controlled_targets_and_cannot_complete_empty(self):
+        self.control(2, "STS")
+        self.control(29, "VAL")
+        self.start_round()
+        self.assertEqual(self.variable("target"), 53)
+        self.assertFalse(matches_conditions(ast_block(self.mission, "available"), self.facts, "STS"))
+        self.control(53, "STS")
+        self.assertTrue(matches_conditions(ast_block(self.mission, "available"), self.facts, "STS"))
+        self.facts[("STS", "variable", "STP_cw_operation_target")] = 0
+        self.assertFalse(matches_conditions(ast_block(self.mission, "available"), self.facts, "STS"))
+
+    def test_three_rounds_pay_once_and_do_not_erase_the_final_bonus(self):
+        self.start_round()
+        self.run_effect("STP_cw_begin_operations")
+        self.assertEqual(self.rewards, [("STP", "STP_cw_party_command_disruption", 35)])
+        for number in range(1, 4):
+            self.assertEqual(self.variable("round"), number)
+            target = int(self.variable("target"))
+            self.control(target, "STS")
+            self.settle("complete_effect")
+            snapshot = list(self.rewards), list(self.events)
+            self.settle("complete_effect")
+            self.settle("timeout_effect")
+            self.assertEqual((self.rewards, self.events), snapshot)
+            self.assertEqual(self.variable("target"), 0)
+            self.run_effect("STP_cw_dispatch_operation")
+        self.assertEqual(sum(idea == "STP_cw_operation_tempo" for _, idea, _ in self.rewards), 3)
+        self.assertTrue(self.facts[("STS", "has_idea", "STP_cw_operation_tempo")])
+        self.assertFalse(self.facts[("STS", "has_active_mission", "STP_cw_front_operation")])
+        self.assertEqual(self.events, [("STS", "ADISCORD_STP_cw.92", "1")] * 3)
+        self.run_effect("STP_cw_begin_operations")
+        self.assertEqual(len(self.events), 3)
+
+    def test_failed_deadline_penalizes_once_and_schedules_only_one_successor(self):
+        self.start_round()
+        self.settle("timeout_effect")
+        self.assertEqual(self.rewards[-1], ("STS", "STP_cw_operation_disorganization", 28))
+        snapshot = list(self.rewards), list(self.events)
+        self.settle("timeout_effect")
+        self.assertEqual((self.rewards, self.events), snapshot)
+        self.run_effect("STP_cw_dispatch_operation")
+        self.assertEqual(self.variable("round"), 2)
+
+    def test_capture_on_the_timeout_hour_is_success(self):
+        self.start_round()
+        self.control(int(self.variable("target")), "STS")
+        self.settle("timeout_effect")
+        self.assertEqual(self.rewards[-1], ("STS", "STP_cw_operation_tempo", 21))
+        self.assertFalse(any(idea == "STP_cw_operation_disorganization" for _, idea, _ in self.rewards))
+
+    def test_peace_closes_pending_and_active_rounds_without_penalty(self):
+        for pending in (False, True):
+            with self.subTest(pending=pending):
+                self.setUp()
+                self.start_round()
+                if pending:
+                    self.control(int(self.variable("target")), "STS")
+                    self.settle("complete_effect")
+                self.facts[("STS", "has_war_with", "STP")] = False
+                before = list(self.rewards)
+                self.settle("timeout_effect")
+                self.run_effect("STP_cw_stop_operations")
+                self.execute(ast_block(self.mission, "cancel_effect"))
+                self.run_effect("STP_cw_dispatch_operation")
+                self.assertEqual(self.rewards, before)
+                self.assertEqual(self.variable("round"), 3)
+                self.assertEqual(self.variable("target"), 0)
+                self.assertEqual(self.variable("pending"), 0)
+                self.assertFalse(any(key[1] == "has_idea" and present for key, present in self.facts.items()))
+
+    def test_no_remaining_target_finishes_without_empty_mission_or_reward(self):
+        for state in (2, 29, 53, 3, 46, 45, 28):
+            self.control(state, "STS")
+        self.start_round()
+        self.assertEqual(self.variable("round"), 3)
+        self.assertEqual(self.variable("target"), 0)
+        self.assertFalse(self.facts.get(("STS", "has_active_mission", "STP_cw_front_operation"), False))
+        self.assertFalse(any(country == "STS" for country, _, _ in self.rewards))
+
+    def test_mission_callbacks_never_remove_the_executing_mission(self):
+        def expanded(items, seen=()):
+            for entry in items:
+                if entry.key in self.effects and entry.value == "yes":
+                    self.assertNotIn(entry.key, seen)
+                    yield from expanded(self.effects[entry.key], (*seen, entry.key))
+                elif isinstance(entry.value, list):
+                    yield from expanded(entry.value, seen)
+                else:
+                    yield entry.key
+        for callback in ("complete_effect", "timeout_effect", "cancel_effect"):
+            self.assertNotIn("remove_mission", set(expanded(ast_block(self.mission, callback))))
+        self.assertEqual(scalar(self.mission, "days_mission_timeout"), "49")
 
 
 if __name__ == "__main__":

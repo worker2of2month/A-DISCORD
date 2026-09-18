@@ -26,26 +26,14 @@ def named_block(source: str, name: str) -> str:
 
 
 class NodrulNorthernFrontTests(unittest.TestCase):
-    def test_northern_war_drops_neutral_besjaysk_front_demand(self) -> None:
+    def test_northern_war_uses_shared_neutral_border_policy(self) -> None:
         source = AI_PATH.read_text(encoding="utf-8-sig")
-        block = named_block(source, "NOD_cw_northern_deprioritize_besjaysk")
-
-        self.assertTrue(block, "missing northern-war Besjaysk front suppression")
-        self.assertIn("allowed = { original_tag = NOD }", block)
-        for enemy in ("YPR", "COF", "TFF"):
-            self.assertIn(f"has_war_with = {enemy}", block)
-        self.assertIn("abort_when_not_enabled = yes", block)
-        self.assertIn("type = front_unit_request", block)
-        self.assertIn("country_trigger", block)
-        for neighbor in ("BJK", "BBV", "BHG", "BLD", "BGT", "BCM"):
-            self.assertIn(f"original_tag = {neighbor}", block)
+        self.assertFalse(named_block(source, "NOD_cw_northern_deprioritize_besjaysk"))
+        shared = (ROOT / "common/ai_strategy/default.txt").read_text(encoding="utf-8")
+        block = named_block(shared, "ADISCORD_wartime_neutral_borders")
         self.assertIn("NOT = { has_war_with = FROM }", block)
+        self.assertIn("ADISCORD_ai_front_has_prewar_threat = no", block)
         self.assertIn("value = -100", block)
-
-        # `ignore` is a diplomacy strategy; it must not be used as a fake troop-allocation fix.
-        self.assertNotIn("type = ignore id = BJK", block)
-        self.assertNotIn("type = ignore id = BBV", block)
-        self.assertNotIn("type = ignore id = BHG", block)
 
     def test_northern_offensive_does_not_use_diplomatic_ignore_for_fronts(self) -> None:
         source = AI_PATH.read_text(encoding="utf-8-sig")

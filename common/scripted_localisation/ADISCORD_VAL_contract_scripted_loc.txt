@@ -25,3 +25,42 @@ defined_text = {
 	text = { trigger = { has_completed_focus = VAL_Northern_Clearing_House } localization_key = VAL_EXPORT_INCOME_20 }
 	text = { localization_key = VAL_EXPORT_INCOME_15 }
 }
+
+
+defined_text = {
+    name = VALGetFrontierPhase
+    text = { trigger = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } localization_key = VAL_FRONTIER_AWAITING }
+    text = { trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } } localization_key = VAL_FRONTIER_PREPARING }
+    text = { trigger = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } } localization_key = VAL_FRONTIER_FIGHTING }
+    text = { localization_key = VAL_FRONTIER_IDLE }
+}
+defined_text = {
+    name = VALGetFrontierTarget
+    text = { trigger = { VAL_frontier_idle = yes } localization_key = VAL_FRONTIER_NO_TARGET }
+    text = { trigger = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } localization_key = VAL_FRONTIER_CIN }
+    text = { trigger = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } localization_key = VAL_FRONTIER_OSF }
+    text = { trigger = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } localization_key = VAL_FRONTIER_APH }
+    text = { trigger = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } } localization_key = VAL_FRONTIER_ERT }
+    text = { localization_key = VAL_FRONTIER_NO_TARGET }
+}
+defined_text = {
+    name = VALGetFrontierCINStatus
+    text = { trigger = { CIN = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
+    text = { trigger = { OR = { CIN = { exists = no } CIN = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } } AND = { 58 = { is_controlled_by = VAL } 59 = { is_controlled_by = VAL } 60 = { is_controlled_by = VAL } } } } localization_key = VAL_FRONTIER_DEFEATED }
+    text = { trigger = { CIN = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
+    text = { localization_key = VAL_FRONTIER_MOBILIZING }
+}
+defined_text = {
+    name = VALGetFrontierOSFStatus
+    text = { trigger = { OSF = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
+    text = { trigger = { OR = { OSF = { exists = no } OSF = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } } AND = { 61 = { is_controlled_by = VAL } 62 = { is_controlled_by = VAL } 63 = { is_controlled_by = VAL } } } } localization_key = VAL_FRONTIER_DEFEATED }
+    text = { trigger = { OSF = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
+    text = { localization_key = VAL_FRONTIER_MOBILIZING }
+}
+defined_text = {
+    name = VALGetFrontierAPHStatus
+    text = { trigger = { APH = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
+    text = { trigger = { OR = { APH = { exists = no } APH = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } } AND = { 64 = { is_controlled_by = VAL } 65 = { is_controlled_by = VAL } } } } localization_key = VAL_FRONTIER_DEFEATED }
+    text = { trigger = { APH = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
+    text = { localization_key = VAL_FRONTIER_MOBILIZING }
+}

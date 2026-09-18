@@ -104,6 +104,9 @@ def validate() -> list[str]:
     planned_exz = {state_id for state_id, owner in final_owners.items() if owner == "EXZ"}
     if len(planned_exz) != 57 or 461 not in planned_exz:
         issues.append("EXZ must contain its 56 terrain-aligned core states plus state 461")
+    unassigned = planned_exz - dirty_successors - dirty_remainders
+    if unassigned:
+        issues.append(f"EXZ states have no opening successor: {sorted(unassigned)}")
     if set(planned) & set(range(474, 551)):
         issues.append("western-continent states entered the Exclusion Zone boundary plan")
 

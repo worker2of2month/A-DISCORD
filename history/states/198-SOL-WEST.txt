@@ -9,12 +9,12 @@ state={
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.5
 	history={
-		owner=VAD
+		owner=SOL
 		buildings={
 			arms_factory = 1
 			infrastructure = 3
 			industrial_complex = 2
 		}
-		add_core_of=VAD
+		add_core_of=SOL
 	}
 }

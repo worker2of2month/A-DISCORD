@@ -64,7 +64,7 @@ PLANNED_RECOVERY_IDS = {
     },
     **{
         f"ADISCORD_vorkerland_dirty_zone.{number}":
-        "events/ADISCORD_vorkerland_dirty_zone_events.txt"
+        "events/ADISCORD_vorkerland_events.txt"
         for number in range(1, 4)
     },
 }

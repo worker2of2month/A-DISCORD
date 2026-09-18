@@ -1,4 +1,13 @@
+capital = 81
+ADISCORD_grant_2150_technology_baseline = yes
+ADISCORD_grant_technology_profile_fragment_low_tech = yes
+oob = "EGC_vorkerland_collapse"
+set_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
+set_stability = 0.35
+
 set_politics = { ruling_party = etatism elections_allowed = no }
 set_popularities = { etatism = 80 chauvinism = 10 humanism = 0 pragmatism = 10 technocracy = 0 }
 recruit_character = EGC_Ruslan_Pike
 set_research_slots = 2
+
+set_cosmetic_tag = EGC_confederation

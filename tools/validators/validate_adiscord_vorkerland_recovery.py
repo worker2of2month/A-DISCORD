@@ -472,10 +472,9 @@ def validate_new_save_materialization() -> list[str]:
             ("ADISCORD_vorkerland_phase.1.a", PLAYER_PREFERENCE_FLAGS[0]),
             ("ADISCORD_vorkerland_phase.1.b", PLAYER_PREFERENCE_FLAGS[1]),
             ("ADISCORD_vorkerland_phase.1.c", PLAYER_PREFERENCE_FLAGS[2]),
-            ("ADISCORD_vorkerland_phase.1.e", PLAYER_PREFERENCE_FLAGS[1]),
         )
         if len(options) != len(expected_options):
-            issues.append("phase event .1 must expose three ordinary claimant options and one compact option")
+            issues.append("phase event .1 must expose three freely selectable claimant options")
         else:
             collapse_dispatch = "country_event = { id = ADISCORD_vorkerland_collapse.1 }"
             for option, (name, selected_flag) in zip(options, expected_options):
@@ -494,15 +493,11 @@ def validate_new_save_materialization() -> list[str]:
                     issues.append(f"{name} must set only {selected_flag}, found {selected}")
                 if option.count(collapse_dispatch) != 1:
                     issues.append(f"{name} must invoke hidden collapse.1 immediately and exactly once")
-        if choice.count("country_event = { id = ADISCORD_vorkerland_collapse.1 }") != 4:
-            issues.append("all four phase event .1 options must invoke collapse.1 exactly once")
-        for option in options[:3]:
-            if "NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }" not in option:
-                issues.append("ordinary phase.1 claimant options must be hidden after compact ratification")
-        if len(options) == 4:
-            compact_option = options[3]
-            if "trigger = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }" not in compact_option:
-                issues.append("phase.1 compact option must require the ratified Worker-Vadl compact")
+        if choice.count("country_event = { id = ADISCORD_vorkerland_collapse.1 }") != 3:
+            issues.append("three choices must each invoke collapse.1 once; timeout follows the first native option")
+        for option in options:
+            if "ADISCORD_vorkerland_prewar_compact_ratified" in option:
+                issues.append("the confederal compact must not restrict claimant selection")
         if any(
             fate_token in choice
             for fate_token in (
@@ -552,7 +547,10 @@ def validate_new_save_materialization() -> list[str]:
     for token in (
         "NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }",
         "WRK = { has_country_flag = ADISCORD_vorkerland_wrk_compact_committed }",
-        "VAD = { has_country_flag = ADISCORD_vorkerland_vad_compact_committed }",
+        "EYR = {",
+        "EGC = {",
+        "RIV = {",
+        "YOR = {",
         "set_global_flag = ADISCORD_vorkerland_prewar_compact_ratified",
     ):
         if compact_resolver.count(token) != 1:
@@ -657,12 +655,12 @@ def validate_new_save_materialization() -> list[str]:
         issues.append("collapse event .1 must retain exactly one independent Worker-fate roll")
     elif any(preference_flag in fate_lists[0] for preference_flag in PLAYER_PREFERENCE_FLAGS):
         issues.append("Worker's random fate must not read the player's claimant preference")
-    if immediate.count("has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified") != 2:
-        issues.append("collapse event .1 must consume compact ratification once for fate and once for government")
-    if immediate.count("set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad") != 2:
-        issues.append("compact fate and the ordinary fate roll must each retain one Worker rescue path")
-    if immediate.count("ADISCORD_vorkerland_form_joint_government = yes") != 2:
-        issues.append("compact must form the joint government directly while preserving the ordinary bounded roll")
+    if "has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified" in immediate:
+        issues.append("regional guarantees must not force a claimant or Worker's fate")
+    if immediate.count("set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad") != 1:
+        issues.append("the independent fate roll must retain one Worker rescue path")
+    if immediate.count("ADISCORD_vorkerland_form_joint_government = yes") != 1:
+        issues.append("joint government must retain exactly one bounded wartime roll")
 
     materialization_scopes = [
         block
@@ -1104,10 +1102,10 @@ def validate_phase_controller() -> list[str]:
             issues.append(f"active-war trigger {name} still scopes the dormant WRK tag")
 
     central_preparation = named_block(effects, "ADISCORD_vorkerland_begin_central_preparation")
-    if "ADISCORD_vorkerland_phase.4" in central_preparation:
-        issues.append(
-            "central preparation must wait for the visible consolidation/showdown decision"
-        )
+    if central_preparation.count("ADISCORD_vorkerland_phase.4 days = 180") != 3:
+        issues.append("the bounded consolidation deadline must survive loss of any one claimant")
+    if "NOT = { has_global_flag = ADISCORD_vorkerland_consolidation_clock_started }" not in central_preparation:
+        issues.append("repeated regional verification must not reset the consolidation clock")
 
     if events.count("add_namespace = ADISCORD_vorkerland_phase") != 1:
         issues.append("phase events must declare add_namespace = ADISCORD_vorkerland_phase exactly once")
@@ -1167,7 +1165,11 @@ def validate_phase_controller() -> list[str]:
     if "ADISCORD_vorkerland_collapse_materialization_failed" in identity_event:
         issues.append("leader-cache degradation must never fail structural materialization")
 
-    for label, source in (("effects", effects), ("triggers", triggers), ("events", events)):
+    # Terminal cleanup is one-shot; keep the recurring phase controller scan-free.
+    phase_runtime = effects
+    for terminal_name in ("ADISCORD_vorkerland_retire_civil_war_modifiers", "ADISCORD_vorkerland_restore_reunification_allies"):
+        phase_runtime = phase_runtime.replace(named_block(phase_runtime, terminal_name), "")
+    for label, source in (("effects", phase_runtime), ("triggers", triggers), ("events", events)):
         for forbidden in ("on_monthly", "every_country", "any_country", "random_country", "every_state"):
             if re.search(rf"\b{forbidden}\b", source):
                 issues.append(f"phase {label} contains forbidden recurring/world scan {forbidden}")
@@ -1538,7 +1540,7 @@ def validate_bounded_retry() -> list[str]:
         cooldown_guard = (
             "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }"
         )
-        if cooldown_guard not in available:
+        if "ADISCORD_vorkerland_can_commit_to_showdown = yes" not in available:
             issues.append("central-showdown commit must remain unavailable during its retry cooldown")
 
         scheduler = named_block(
@@ -1551,7 +1553,7 @@ def validate_bounded_retry() -> list[str]:
         ]
         if len(scheduler_limits) != 1:
             issues.append("central-showdown scheduler must expose one guarded request mutation")
-        elif cooldown_guard not in scheduler_limits[0]:
+        elif "ADISCORD_vorkerland_can_commit_to_showdown = yes" not in scheduler_limits[0]:
             issues.append("central-showdown scheduler must reject requests during retry cooldown")
 
     startup = named_block(on_actions, "on_startup")
@@ -1634,32 +1636,25 @@ def validate_bounded_retry() -> list[str]:
         issues.append("phase event .4 must initialize the required showdown edge queue")
 
     phase_six = event_block(events, "ADISCORD_vorkerland_phase.6")
+    if "ADISCORD_vorkerland_coalition_victory_ready = yes" not in phase_six:
+        issues.append("formation must recheck the shared coalition victory gate after its one-day delay")
+    victory = named_block(triggers, "ADISCORD_vorkerland_coalition_victory_ready")
     for guard in (
-        "ADISCORD_vorkerland_phase_reunification",
         "ADISCORD_vorkerland_central_showdown_started",
         "ADISCORD_vorkerland_central_showdown_edges_verified = yes",
         "ADISCORD_vorkerland_central_showdown_launch_failed",
         "ADISCORD_vorkerland_has_single_surviving_claimant = yes",
     ):
-        if guard not in phase_six:
-            issues.append(f"phase event .6 is missing guarded formation prerequisite {guard}")
-    for target in ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"):
-        guard = f"NOT = {{ country_exists = {target} }}"
-        if guard not in phase_six:
-            issues.append(f"phase event .6 can revive WRK before terminal district {target}")
-    for flag in (
-        "ADISCORD_vorkerland_focus_central_minor_launch_pending",
-        "ADISCORD_vorkerland_focus_central_minor_deadline_active",
-    ):
-        if phase_six.count(flag) != 3:
-            issues.append(f"phase event .6 must recheck {flag} for all three claimants")
-    for state in (
-        102, 109, 111, 325, 81, 110, 124, 79, 306, 308, 309, 327,
-        82, 323, 108, 122, 123, 27, 35, 315, 316, 317, 318, 320,
-    ):
-        guard = f"{state} = {{ OR = {{ is_core_of = WKR is_core_of = VAD is_core_of = TVA }} }}"
-        if guard not in phase_six:
-            issues.append(f"phase event .6 can bypass civil integration of state {state}")
+        if guard not in victory:
+            issues.append(f"coalition victory is missing guarded prerequisite {guard}")
+    if victory.count("ADISCORD_vorkerland_central_districts_owned_and_controlled = yes") != 3:
+        issues.append("all three winners must respect the capital and surviving enemies")
+    if "is_core_of" in victory or "NOT = { country_exists = EYR }" in victory:
+        issues.append("peace must preserve independent districts and separate integration")
+    capital = named_block(triggers, "ADISCORD_vorkerland_central_districts_owned_and_controlled")
+    for token in ("32 = {", "owner = { is_in_faction_with = PREV.PREV }", "controller = { is_in_faction_with = PREV.PREV }", "any_enemy_country", "has_capitulated = yes"):
+        if token not in capital:
+            issues.append(f"coalition victory omits capital/enemy guard {token}")
 
     verify_reunified = named_block(effects, "ADISCORD_vorkerland_verify_reunified_wrk")
     reunited_gate = "ADISCORD_vorkerland_reunification_verified = yes"
@@ -1792,7 +1787,7 @@ def validate_reunification_formation() -> list[str]:
             issues.append(f"reunification postcondition is missing {token}")
 
     phase_six = event_block(events, "ADISCORD_vorkerland_phase.6")
-    if "ADISCORD_vorkerland_has_single_surviving_claimant = yes" not in phase_six:
+    if "ADISCORD_vorkerland_coalition_victory_ready = yes" not in phase_six:
         issues.append("formation event must require one surviving claimant")
     formation_branches = named_blocks(phase_six, "if") + named_blocks(phase_six, "else_if")
     for winner in ("WKR", "VAD", "TVA"):
@@ -2147,7 +2142,7 @@ def validate_campaign_state() -> list[str]:
     for token in (
         "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
         "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
-        "ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than",
+        "ADISCORD_vorkerland_central_control_score value = 18 compare = greater_than",
     ):
         if token not in coalition:
             issues.append(f"coalition refresh lacks territorial/showdown gate {token}")
@@ -2194,10 +2189,8 @@ def validate_campaign_state() -> list[str]:
             issues.append(f"{label} must reconcile campaign state exactly once")
 
     state_hook = named_block(on_actions, "on_state_control_changed")
-    central_states = (32, 33, 35, 36, 37, 38, 39, 40, 75, 81, 102, 104, 106, 121, 122, 123, 124)
-    for state_id in central_states:
-        if f"state = {state_id}" not in state_hook:
-            issues.append(f"state-control reconciliation omits central state {state_id}")
+    if "FROM.FROM = { has_state_flag = ADISCORD_vorkerland_central_theatre }" not in state_hook:
+        issues.append("state-control reconciliation must use the same theatre as attrition and scoring")
     if state_hook.count("ADISCORD_vorkerland_refresh_claimant_coalition = yes") != 3:
         issues.append("central state-control edge must refresh all three claimant coalitions")
 

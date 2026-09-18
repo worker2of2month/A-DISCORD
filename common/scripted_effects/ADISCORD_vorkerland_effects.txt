@@ -1,3 +1,128 @@
+# --- dirty_zone_effects ---
+# Dirty Zone opening presentation helpers.
+# The reveal lifecycle itself remains owned by ADISCORD_vorkerland_collapse.85.
+
+ADISCORD_vorkerland_clear_dirty_zone_smoke = {
+	if = {
+		limit = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
+
+		# The main Dirty Zone haze is created globally at startup as actors 1 and 2.
+		# Recreate both ids with the same inert mesh but no particle emitter. Using
+		# the existing ids replaces the live particle actors and also makes the
+		# cleanup deterministic after save-load.
+		create_entity = {
+			entity = ADISCORD_global_clear_entity
+			id = 1
+			x = 42
+			y = 21
+			z = -100.000
+			province = 16531
+			state = 42
+			rotation = 1.2
+			scale = 0.03
+			min_zoom = 5555.0
+		}
+		create_entity = {
+			entity = ADISCORD_global_clear_entity
+			id = 2
+			x = 42
+			y = 21
+			z = -100.000
+			province = 12863
+			state = 42
+			rotation = 1.2
+			scale = 0.02
+			min_zoom = 5555.0
+		}
+
+		# The Unity Tower landmark carries its own independent smog/fire particles.
+		# Recreate that actor too so opening the Zone cannot leave a local smoke
+		# source behind. Preserve the correct intact/ruined visual state.
+		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
+			40 = {
+				create_entity = {
+					entity = ADISCORD_unity_tower_ruins_entity
+					id = 610040
+					x = 3159.92992
+					y = 725.68
+					z = 2.83464
+					rotation = 5.410520681
+					scale = 0.15
+					min_zoom = 2000
+				}
+			}
+		}
+		else = {
+			40 = {
+				create_entity = {
+					entity = ADISCORD_vorkerland_pyramid_clear_entity
+					id = 610040
+					x = 3159.92992
+					y = 725.68
+					z = 2.83464
+					rotation = 5.410520681
+					scale = 0.15
+					min_zoom = 2000
+				}
+			}
+		}
+
+		set_global_flag = ADISCORD_vorkerland_dirty_zone_smoke_cleared
+	}
+}
+
+ADISCORD_vorkerland_finalize_dirty_zone_opening_presentation = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_dirty_opened
+			NOT = { has_global_flag = ADISCORD_vorkerland_dirty_zone_presentation_finalized }
+		}
+		set_global_flag = ADISCORD_vorkerland_dirty_zone_presentation_finalized
+		ADISCORD_vorkerland_clear_dirty_zone_smoke = yes
+
+		if = {
+			limit = {
+				NOT = { has_global_flag = ADISCORD_vorkerland_dirty_zone_news_published }
+				RUS = { exists = yes }
+			}
+			set_global_flag = ADISCORD_vorkerland_dirty_zone_news_published
+			RUS = { news_event = { id = ADISCORD_vorkerland_dirty_zone.1 } }
+		}
+	}
+}
+
+# Save-load repair: startup recreates the two global pollution actors and the
+# Vorkerland landmark. If the Zone was already opened, this later on_startup
+# hook overwrites all three with their durable particle-free variants.
+ADISCORD_vorkerland_restore_dirty_zone_opening_visual = {
+	if = {
+		limit = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
+		ADISCORD_vorkerland_clear_dirty_zone_smoke = yes
+	}
+}
+
+ADISCORD_vorkerland_reconcile_dirty_zone_remainder = {
+	# Follow the current owner of the adjacent Starolesye state on save-load;
+	# never resurrect an annexed republic or take land from another country.
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_dirty_opened
+			461 = { is_owned_by = EXZ }
+			51 = { NOT = { is_owned_by = EXZ } }
+		}
+		51 = {
+			owner = {
+				461 = {
+					add_core_of = SLA
+					set_state_owner_to = PREV
+					set_state_controller_to = PREV
+				}
+			}
+		}
+	}
+}
+
 # --- campaign_state_effects ---
 # Applied once, to the seventeen central states, when the wars open. The states
 # are listed rather than scanned because this sits in the phase layer, where a
@@ -7,23 +132,43 @@ ADISCORD_vorkerland_apply_central_attrition = {
 	if = {
 		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_central_attrition_applied } }
 		set_global_flag = ADISCORD_vorkerland_central_attrition_applied
-		32 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		33 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		35 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		36 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		37 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		38 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		39 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		40 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		75 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		81 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		102 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		104 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		106 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		121 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		122 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		123 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
-		124 = { add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		32 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		33 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		200 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		201 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		75 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		106 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		107 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		121 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		36 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		37 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		38 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		39 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		324 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		102 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		109 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		111 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		325 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		81 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		110 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		124 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		79 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		306 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		308 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		309 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		327 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		82 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		323 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		108 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		122 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		123 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		27 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		35 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		315 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		316 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		317 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		318 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		320 = { set_state_flag = ADISCORD_vorkerland_central_theatre add_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
 	}
 }
 # Comeback valve. A claimant pushed to the brink digs in harder, which stops the
@@ -254,23 +399,10 @@ ADISCORD_vorkerland_refresh_legitimacy_leader = {
 # Seventeen explicit checks keep campaign reconciliation bounded.
 ADISCORD_vorkerland_recount_central_control = {
 	set_variable = { var = ADISCORD_vorkerland_central_control_score value = 0 }
-	if = { limit = { controls_state = 32 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 33 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 35 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 36 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 37 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 38 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 39 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 40 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 75 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 81 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 102 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 104 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 106 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 121 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 122 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 123 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
-	if = { limit = { controls_state = 124 } add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	every_controlled_state = {
+		limit = { has_state_flag = ADISCORD_vorkerland_central_theatre }
+		PREV = { add_to_variable = { var = ADISCORD_vorkerland_central_control_score value = 1 } }
+	}
 }
 
 # Clear all coalition overlays first, then add at most one against a living
@@ -291,7 +423,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			WKR = {
 				ADISCORD_vorkerland_is_live_claimant = yes
 				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
-				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 18 compare = greater_than }
 			}
 		}
 		add_ideas = ADISCORD_vorkerland_coalition_against_wkr
@@ -307,7 +439,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			VAD = {
 				ADISCORD_vorkerland_is_live_claimant = yes
 				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
-				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 18 compare = greater_than }
 			}
 		}
 		add_ideas = ADISCORD_vorkerland_coalition_against_vad
@@ -323,7 +455,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			TVA = {
 				ADISCORD_vorkerland_is_live_claimant = yes
 				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
-				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 18 compare = greater_than }
 			}
 		}
 		add_ideas = ADISCORD_vorkerland_coalition_against_tva
@@ -440,6 +572,7 @@ ADISCORD_vorkerland_setup_sla = {
 	191 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	233 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	329 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
+	461 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	log = "[ADISCORD Vorkerland] SLA state ownership assigned"
 	SLA = {
 		set_capital = { state = 49 }
@@ -638,10 +771,10 @@ ADISCORD_vorkerland_check_khan_border_war = {
 					controls_state = 176
 				}
 				AND = {
-					had_global_flag = { flag = ADISCORD_vorkerland_khan_border_war_started days > 180 }
+					has_global_flag = { flag = ADISCORD_vorkerland_khan_border_war_started days > 180 }
 					OR = { controls_state = 49 controls_state = 176 }
 				}
-				had_global_flag = { flag = ADISCORD_vorkerland_khan_border_war_started days > 270 }
+				has_global_flag = { flag = ADISCORD_vorkerland_khan_border_war_started days > 270 }
 			}
 		}
 		ADISCORD_vorkerland_resolve_khan_border_war = yes
@@ -1178,8 +1311,12 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 	}
 	VAD = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_land = yes
+		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_ensure_armi_mobile_group_template = yes
 		ADISCORD_grant_technology_profile_armored_core = yes
+		load_oob = "VAD"
 		add_ideas = ADISCORD_vorkerland_vad_imperial_chancery
 		add_ideas = ADISCORD_vorkerland_last_stand
 		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
@@ -1824,6 +1961,8 @@ ADISCORD_vorkerland_join_coalition_of_FROM = {
 			add_to_faction = ROOT
 		}
 	}
+	set_major = yes
+	set_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 	ADISCORD_vorkerland_splice_into_coalition_host_war = yes
 	set_country_flag = ADISCORD_vorkerland_regional_auxiliary
 	clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used
@@ -1866,7 +2005,6 @@ ADISCORD_vorkerland_verify_coalition_membership = {
 				ADISCORD_vorkerland_is_main_claimant = yes
 				exists = yes
 				is_in_faction_with = ROOT
-				has_war = yes
 				NOT = {
 					any_enemy_country = {
 						NOT = { has_war_with = ROOT }
@@ -1874,6 +2012,7 @@ ADISCORD_vorkerland_verify_coalition_membership = {
 				}
 			}
 		}
+		clr_country_flag = ADISCORD_vorkerland_coalition_join_paid
 		clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used
 		clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed
 	}
@@ -1893,19 +2032,16 @@ ADISCORD_vorkerland_verify_coalition_membership = {
 		ADISCORD_vorkerland_splice_into_coalition_host_war = yes
 		country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }
 	}
-	else_if = {
-		limit = {
-			has_country_flag = ADISCORD_vorkerland_regional_auxiliary
-			has_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used
-			is_in_faction = yes
-			faction_leader = { ADISCORD_vorkerland_is_main_claimant = yes exists = yes has_war = yes }
+	else = {
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_coalition_join_paid }
+			clr_country_flag = ADISCORD_vorkerland_coalition_join_paid
+			add_political_power = 25
 		}
 		set_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed
-		log = "[ADISCORD][VORKERLAND][RECOVERY] A regional winner joined a claimant coalition but not its war after one retry."
-	}
-	else = {
-		clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used
-		clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed
+		ADISCORD_vorkerland_reconcile_coalition_obligation = yes
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+		log = "[ADISCORD][VORKERLAND][RECOVERY] A regional coalition entry failed its membership or war postcondition."
 	}
 }
 
@@ -2125,7 +2261,11 @@ ADISCORD_vorkerland_setup_eyr = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
-		load_oob = "EYR_vorkerland_collapse"
+		if = {
+			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized } }
+			load_oob = "EYR_vorkerland_collapse"
+		}
+		clr_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
 		add_manpower = 6500
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = EYR }
 	}
@@ -2147,7 +2287,11 @@ ADISCORD_vorkerland_setup_egc = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
-		load_oob = "EGC_vorkerland_collapse"
+		if = {
+			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized } }
+			load_oob = "EGC_vorkerland_collapse"
+		}
+		clr_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
 		add_manpower = 5500
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 650 producer = EGC }
 	}
@@ -2173,7 +2317,11 @@ ADISCORD_vorkerland_setup_riv = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
-		load_oob = "RIV_vorkerland_collapse"
+		if = {
+			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized } }
+			load_oob = "RIV_vorkerland_collapse"
+		}
+		clr_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
 		add_manpower = 7000
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 850 producer = RIV }
 	}
@@ -2215,7 +2363,11 @@ ADISCORD_vorkerland_setup_yor = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_vorkerland_prepare_conflict_country = yes
-		load_oob = "YOR_vorkerland_collapse"
+		if = {
+			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized } }
+			load_oob = "YOR_vorkerland_collapse"
+		}
+		clr_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
 		add_manpower = 5500
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 650 producer = YOR }
 	}
@@ -3068,7 +3220,7 @@ ADISCORD_vorkerland_resolve_unguaranteed_free_republics = {
 			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_free_republics_guaranteed_by_ivn } }
 			WRK = {
 				if = {
-					limit = { ROM = { exists = yes is_subject = no } }
+					limit = { ROM = { exists = yes is_subject = no is_ai = yes NOT = { is_in_faction_with = WRK } } }
 					random_list = {
 						50 = {
 							puppet = ROM
@@ -3084,7 +3236,7 @@ ADISCORD_vorkerland_resolve_unguaranteed_free_republics = {
 					}
 				}
 				if = {
-					limit = { TRU = { exists = yes is_subject = no } }
+					limit = { TRU = { exists = yes is_subject = no is_ai = yes NOT = { is_in_faction_with = WRK } } }
 					random_list = {
 						50 = {
 							puppet = TRU
@@ -4001,6 +4153,11 @@ ADISCORD_vorkerland_reserve_vad_solar_intervention = {
 }
 
 ADISCORD_vorkerland_cancel_vad_solar_intervention_reservation = {
+	if = {
+		limit = { has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_paid NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active } }
+		clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_paid
+		add_political_power = 50
+	}
 	clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved
 }
 
@@ -4024,7 +4181,7 @@ ADISCORD_vorkerland_attempt_vad_solar_intervention = {
 		if = {
 			limit = {
 				has_global_flag = ADISCORD_vorkerland_solar_winner_sra
-				SRA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+				SRA = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } }
 				NOT = { is_in_faction_with = SRA }
 			}
 			set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
@@ -4037,7 +4194,7 @@ ADISCORD_vorkerland_attempt_vad_solar_intervention = {
 		else_if = {
 			limit = {
 				has_global_flag = ADISCORD_vorkerland_solar_winner_csl
-				CSL = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+				CSL = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } }
 				NOT = { is_in_faction_with = CSL }
 			}
 			set_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
@@ -4063,6 +4220,7 @@ ADISCORD_vorkerland_verify_vad_solar_intervention = {
 				AND = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl has_war_with = CSL }
 			}
 		}
+		clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_paid
 		clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
 		clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry
 	}
@@ -4078,7 +4236,7 @@ ADISCORD_vorkerland_verify_vad_solar_intervention = {
 		if = {
 			limit = {
 				has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra
-				SRA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+				SRA = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } }
 				NOT = { is_in_faction_with = SRA }
 			}
 			SRA = { ADISCORD_vorkerland_leave_inherited_faction = yes }
@@ -4087,7 +4245,7 @@ ADISCORD_vorkerland_verify_vad_solar_intervention = {
 		else_if = {
 			limit = {
 				has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl
-				CSL = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+				CSL = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } }
 				NOT = { is_in_faction_with = CSL }
 			}
 			CSL = { ADISCORD_vorkerland_leave_inherited_faction = yes }
@@ -4151,6 +4309,9 @@ ADISCORD_vorkerland_clear_failed_vad_solar_intervention = {
 					}
 				}
 			}
+		}
+		VAD = {
+			if = { limit = { has_country_flag = ADISCORD_vorkerland_vad_solar_intervention_paid } clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_paid add_political_power = 50 }
 		}
 		clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
 		clr_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra
@@ -4341,7 +4502,6 @@ ADISCORD_vorkerland_arm_wkr_solar_counter_intervention = {
 		country_event = { id = ADISCORD_vorkerland_phase.4 days = 21 }
 	}
 }
-
 ADISCORD_vorkerland_join_regional_allies_to_showdown = {
 	if = {
 		limit = {
@@ -4370,6 +4530,19 @@ ADISCORD_vorkerland_join_regional_allies_to_showdown = {
 		VLA = {
 			if = { limit = { WKR = { has_war_with = VAD } NOT = { has_war_with = VAD } } add_to_war = { targeted_alliance = WKR enemy = VAD hostility_reason = asked_to_join } }
 			if = { limit = { WKR = { has_war_with = TVA } NOT = { has_war_with = TVA } } add_to_war = { targeted_alliance = WKR enemy = TVA hostility_reason = asked_to_join } }
+		}
+	}
+	# Mandatory majors preserve coalition fronts after their leader capitulates.
+	every_country = {
+		limit = {
+			NOT = { ADISCORD_vorkerland_is_main_claimant = yes }
+			OR = { is_in_faction_with = WKR is_in_faction_with = VAD is_in_faction_with = TVA }
+		}
+		set_major = yes
+		set_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary }
+			country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }
 		}
 	}
 }
@@ -4629,16 +4802,15 @@ ADISCORD_vorkerland_verify_wkr_solyarino_intervention = {
 	}
 }
 
-# Separate from the WKR attempt so that block keeps exactly three Solarino
-# declarations. VAD opens the same live targets plus WKR itself; this is a
-# counter, not VAD's authored solar restoration.
+# Once the shared claimant war is live, VAD may contest the same unaligned
+# southern governments. This response never creates a separate claimant edge.
 ADISCORD_vorkerland_attempt_vad_solyarino_counter = {
 	if = {
 		limit = {
 			has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
 			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active }
 			country_exists = VAD
-			VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+			VAD = { exists = yes is_subject = no has_war_with = WKR NOT = { has_capitulated = yes } }
 		}
 		VAD = {
 			if = {
@@ -4647,18 +4819,9 @@ ADISCORD_vorkerland_attempt_vad_solyarino_counter = {
 			}
 			if = {
 				limit = {
-					WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-					NOT = { has_war_with = WKR }
-					NOT = { is_in_faction_with = WKR }
-				}
-				WKR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
-				declare_war_on = { target = WKR type = annex_everything }
-			}
-			if = {
-				limit = {
 					WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol }
 					country_exists = SOL
-					SOL = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+					SOL = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } }
 					NOT = { has_war_with = SOL }
 					NOT = { is_in_faction_with = SOL }
 				}
@@ -4669,7 +4832,7 @@ ADISCORD_vorkerland_attempt_vad_solyarino_counter = {
 				limit = {
 					WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra }
 					country_exists = SRA
-					SRA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+					SRA = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } }
 					NOT = { has_war_with = SRA }
 					NOT = { is_in_faction_with = SRA }
 				}
@@ -4680,7 +4843,7 @@ ADISCORD_vorkerland_attempt_vad_solyarino_counter = {
 				limit = {
 					WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl }
 					country_exists = CSL
-					CSL = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+					CSL = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } }
 					NOT = { has_war_with = CSL }
 					NOT = { is_in_faction_with = CSL }
 				}
@@ -4982,19 +5145,21 @@ ADISCORD_vorkerland_verify_sol_worker_protectorate = {
 	}
 }
 
-# Declare on every still-valid central minor and every still-valid rival
-# central major. Minors leave an inherited faction first; rival majors
-# do not. No adjacency check. Self is never a target.
+# During the central war, neutral pockets may be attacked without adjacency.
+# Coalition members are reached through their existing war; self and allies
+# are never separate targets.
 ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 	if = {
 		limit = {
 			tag = WKR
 			is_subject = no
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			NOT = { has_capitulated = yes }
 		}
 		if = {
 			limit = {
 				EYR = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5008,6 +5173,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				EGC = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5021,6 +5187,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				RIV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5034,6 +5201,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				REV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5047,6 +5215,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				YOR = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5060,6 +5229,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				NDN = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5073,6 +5243,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				SWB = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5086,6 +5257,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				VHV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5099,6 +5271,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				OSV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5138,11 +5311,13 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		limit = {
 			tag = VAD
 			is_subject = no
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			NOT = { has_capitulated = yes }
 		}
 		if = {
 			limit = {
 				EYR = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5156,6 +5331,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				EGC = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5169,6 +5345,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				RIV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5182,6 +5359,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				REV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5195,6 +5373,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				YOR = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5208,6 +5387,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				NDN = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5221,6 +5401,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				SWB = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5234,6 +5415,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				VHV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5247,6 +5429,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				OSV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5286,11 +5469,13 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		limit = {
 			tag = TVA
 			is_subject = no
+			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
 			NOT = { has_capitulated = yes }
 		}
 		if = {
 			limit = {
 				EYR = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5304,6 +5489,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				EGC = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5317,6 +5503,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				RIV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5330,6 +5517,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				REV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5343,6 +5531,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				YOR = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5356,6 +5545,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				NDN = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5369,6 +5559,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				SWB = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5382,6 +5573,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				VHV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5395,6 +5587,7 @@ ADISCORD_vorkerland_attempt_remaining_central_fronts = {
 		if = {
 			limit = {
 				OSV = {
+					is_in_faction = no
 					exists = yes
 					is_subject = no
 					NOT = { has_capitulated = yes }
@@ -5622,15 +5815,15 @@ ADISCORD_vorkerland_focus_launch_central_minor_wave = {
 			is_subject = no
 			NOT = { has_capitulated = yes }
 		}
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr any_neighbor_country = { tag = EYR } EYR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = EYR type = annex_everything } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc any_neighbor_country = { tag = EGC } EGC = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = EGC type = annex_everything } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv any_neighbor_country = { tag = RIV } RIV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = RIV type = annex_everything } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev any_neighbor_country = { tag = REV } REV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = REV type = annex_everything } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor any_neighbor_country = { tag = YOR } YOR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = YOR type = annex_everything } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn any_neighbor_country = { tag = NDN } NDN = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = NDN type = annex_everything } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = SWB type = annex_everything } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = VHV type = annex_everything } }
-		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = OSV type = annex_everything } }
+		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr any_neighbor_country = { tag = EYR } EYR = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = EYR type = annex_everything } }
+		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc any_neighbor_country = { tag = EGC } EGC = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = EGC type = annex_everything } }
+		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv any_neighbor_country = { tag = RIV } RIV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = RIV type = annex_everything } }
+		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev any_neighbor_country = { tag = REV } REV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = REV type = annex_everything } }
+		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor any_neighbor_country = { tag = YOR } YOR = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = YOR type = annex_everything } }
+		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn any_neighbor_country = { tag = NDN } NDN = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = NDN type = annex_everything } }
+		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = SWB type = annex_everything } }
+		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = VHV type = annex_everything } }
+		if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { is_in_faction_with = ROOT } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = OSV type = annex_everything } }
 		country_event = { id = ADISCORD_vorkerland_phase.8 days = 1 }
 	}
 	else = { ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes }
@@ -5684,15 +5877,15 @@ ADISCORD_vorkerland_focus_prune_failed_central_minor_wave_targets = {
 }
 
 ADISCORD_vorkerland_focus_retry_central_minor_wave_declarations = {
-	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr NOT = { has_war_with = EYR } any_neighbor_country = { tag = EYR } EYR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = EYR type = annex_everything } }
-	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc NOT = { has_war_with = EGC } any_neighbor_country = { tag = EGC } EGC = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = EGC type = annex_everything } }
-	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv NOT = { has_war_with = RIV } any_neighbor_country = { tag = RIV } RIV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = RIV type = annex_everything } }
-	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev NOT = { has_war_with = REV } any_neighbor_country = { tag = REV } REV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = REV type = annex_everything } }
-	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor NOT = { has_war_with = YOR } any_neighbor_country = { tag = YOR } YOR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = YOR type = annex_everything } }
-	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn NOT = { has_war_with = NDN } any_neighbor_country = { tag = NDN } NDN = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = NDN type = annex_everything } }
-	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb NOT = { has_war_with = SWB } any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = SWB type = annex_everything } }
-	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv NOT = { has_war_with = VHV } any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = VHV type = annex_everything } }
-	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv NOT = { has_war_with = OSV } any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = OSV type = annex_everything } }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr NOT = { has_war_with = EYR } any_neighbor_country = { tag = EYR } EYR = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = EYR type = annex_everything } }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc NOT = { has_war_with = EGC } any_neighbor_country = { tag = EGC } EGC = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = EGC type = annex_everything } }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv NOT = { has_war_with = RIV } any_neighbor_country = { tag = RIV } RIV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = RIV type = annex_everything } }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev NOT = { has_war_with = REV } any_neighbor_country = { tag = REV } REV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = REV type = annex_everything } }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor NOT = { has_war_with = YOR } any_neighbor_country = { tag = YOR } YOR = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = YOR type = annex_everything } }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn NOT = { has_war_with = NDN } any_neighbor_country = { tag = NDN } NDN = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = NDN type = annex_everything } }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb NOT = { has_war_with = SWB } any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = SWB type = annex_everything } }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv NOT = { has_war_with = VHV } any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = VHV type = annex_everything } }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv NOT = { has_war_with = OSV } any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } declare_war_on = { target = OSV type = annex_everything } }
 }
 
 ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch = {
@@ -5787,58 +5980,7 @@ ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline = {
 # simultaneous WKR-VAD-TVA edge queue. No central minor may remain live.
 ADISCORD_vorkerland_focus_schedule_final_showdown = {
 	if = {
-		limit = {
-			OR = {
-				AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
-				AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
-				AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
-			}
-			has_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
-			has_global_flag = ADISCORD_vorkerland_phase_central_preparation
-			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-			NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active }
-			NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-			NOT = { country_exists = EYR }
-			NOT = { country_exists = EGC }
-			NOT = { country_exists = RIV }
-			NOT = { country_exists = REV }
-			NOT = { country_exists = YOR }
-			NOT = { country_exists = NDN }
-			NOT = { country_exists = SWB }
-			NOT = { country_exists = VHV }
-			NOT = { country_exists = OSV }
-			ADISCORD_vorkerland_central_districts_inside_claimant_graph = yes
-			102 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			109 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			111 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			325 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			81 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			110 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			124 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			79 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			306 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			308 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			309 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			327 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			82 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			323 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			108 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			122 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			123 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			27 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			35 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			315 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			316 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			317 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			318 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			320 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
-			NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
-			NOT = { has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested }
-			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
-		}
+		limit = { ADISCORD_vorkerland_can_commit_to_showdown = yes }
 		set_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
 		country_event = { id = ADISCORD_vorkerland_phase.4 days = 1 }
 	}
@@ -6455,23 +6597,11 @@ ADISCORD_vorkerland_clear_phase_flags = {
 # Attacker attrition has no remove_trigger. Country overlays survive annexation
 # and tag changes unless they are taken off here.
 ADISCORD_vorkerland_retire_civil_war_modifiers = {
-	32 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	33 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	35 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	36 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	37 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	38 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	39 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	40 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	75 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	81 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	102 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	104 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	106 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	121 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	122 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	123 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
-	124 = { if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } }
+	every_state = {
+		limit = { has_state_flag = ADISCORD_vorkerland_central_theatre }
+		if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
+		clr_state_flag = ADISCORD_vorkerland_central_theatre
+	}
 	if = { limit = { country_exists = WKR } WKR = { ADISCORD_vorkerland_clear_claimant_war_modifiers = yes } }
 	if = { limit = { country_exists = VAD } VAD = { ADISCORD_vorkerland_clear_claimant_war_modifiers = yes } }
 	if = { limit = { country_exists = TVA } TVA = { ADISCORD_vorkerland_clear_claimant_war_modifiers = yes } }
@@ -6495,6 +6625,10 @@ ADISCORD_vorkerland_clear_claimant_war_modifiers = {
 
 
 ADISCORD_vorkerland_refresh_focus_lifecycle = {
+	EYR = { focus_unlock = yes mark_focus_tree_layout_dirty = yes }
+	EGC = { focus_unlock = yes mark_focus_tree_layout_dirty = yes }
+	RIV = { focus_unlock = yes mark_focus_tree_layout_dirty = yes }
+	YOR = { focus_unlock = yes mark_focus_tree_layout_dirty = yes }
 	if = {
 		limit = { country_exists = WRK }
 		WRK = { focus_unlock = yes mark_focus_tree_layout_dirty = yes }
@@ -6521,6 +6655,11 @@ ADISCORD_vorkerland_set_phase_prewar = {
 	ADISCORD_vorkerland_clear_phase_flags = yes
 	set_global_flag = ADISCORD_vorkerland_phase_prewar
 	ADISCORD_vorkerland_refresh_focus_lifecycle = yes
+	WRK = { load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes } }
+	EYR = { load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes } }
+	EGC = { load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes } }
+	RIV = { load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes } }
+	YOR = { load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus keep_completed = yes } }
 }
 
 ADISCORD_vorkerland_set_phase_collapse = {
@@ -6602,7 +6741,7 @@ ADISCORD_vorkerland_reset_temporary_claimant_cores = {
 	320 = { remove_core_of = WRK remove_core_of = WKR }
 	323 = { remove_core_of = WRK remove_core_of = WKR }
 	324 = { remove_core_of = VAD add_core_of = TVA }
-	325 = { remove_core_of = VAD }
+	325 = { remove_core_of = WRK remove_core_of = WKR remove_core_of = VAD }
 	327 = { remove_core_of = WRK remove_core_of = WKR }
 }
 
@@ -6626,6 +6765,24 @@ ADISCORD_vorkerland_ensure_claimant_home_cores = {
 }
 
 ADISCORD_vorkerland_begin_collapse = {
+	EYR = { load_focus_tree = { tree = generic_focus keep_completed = yes } }
+	EGC = { load_focus_tree = { tree = generic_focus keep_completed = yes } }
+	RIV = { load_focus_tree = { tree = generic_focus keep_completed = yes } }
+	YOR = { load_focus_tree = { tree = generic_focus keep_completed = yes } }
+	if = { limit = { has_cosmetic_tag = WRK_confederation } drop_cosmetic_tag = yes }
+	NAM = { if = { limit = { has_cosmetic_tag = NAM_confederation } drop_cosmetic_tag = yes } }
+	DAN = { if = { limit = { has_cosmetic_tag = DAN_confederation } drop_cosmetic_tag = yes } }
+	ZAO = { if = { limit = { has_cosmetic_tag = ZAO_confederation } drop_cosmetic_tag = yes } }
+	PWR = { if = { limit = { has_cosmetic_tag = PWR_confederation } drop_cosmetic_tag = yes } }
+	VLA = { if = { limit = { has_cosmetic_tag = VLA_confederation } drop_cosmetic_tag = yes } }
+	ROM = { if = { limit = { has_cosmetic_tag = ROM_confederation } drop_cosmetic_tag = yes } }
+	SOL = { if = { limit = { has_cosmetic_tag = SOL_confederation } drop_cosmetic_tag = yes } }
+	TRU = { if = { limit = { has_cosmetic_tag = TRU_confederation } drop_cosmetic_tag = yes } }
+	WCG = { if = { limit = { has_cosmetic_tag = WCG_confederation } drop_cosmetic_tag = yes } }
+	EYR = { if = { limit = { has_cosmetic_tag = EYR_confederation } drop_cosmetic_tag = yes } }
+	EGC = { if = { limit = { has_cosmetic_tag = EGC_confederation } drop_cosmetic_tag = yes } }
+	RIV = { if = { limit = { has_cosmetic_tag = RIV_confederation } drop_cosmetic_tag = yes } }
+	YOR = { if = { limit = { has_cosmetic_tag = YOR_confederation } drop_cosmetic_tag = yes } }
 	ADISCORD_vorkerland_set_phase_collapse = yes
 	clr_global_flag = ADISCORD_vorkerland_collapse_materialization_failed
 	clr_global_flag = ADISCORD_vorkerland_collapse_materialization_retry
@@ -6640,17 +6797,72 @@ ADISCORD_vorkerland_begin_collapse = {
 	ADISCORD_vorkerland_reset_temporary_claimant_cores = yes
 }
 
-# Called directly by either final compact focus. The treaty becomes binding
-# only after both sovereign prewar governments have ratified it; there is no
-# background poll and no save-load repair path.
+# Ratification belongs to the centre and each autonomous administration.
+# The regional guarantees do not decide who the player controls after the split.
 ADISCORD_vorkerland_resolve_prewar_compact = {
 	if = {
 		limit = {
-			NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }
 			WRK = { has_country_flag = ADISCORD_vorkerland_wrk_compact_committed }
-			VAD = { has_country_flag = ADISCORD_vorkerland_vad_compact_committed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }
 		}
 		set_global_flag = ADISCORD_vorkerland_prewar_compact_ratified
+		WRK = {
+			add_stability = 0.03
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 500 producer = WRK }
+		}
+	}
+	# Each district ratifies independently; a refusal cannot erase another pact.
+	EYR = {
+		if = {
+			limit = {
+				exists = yes
+				has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified
+				has_country_flag = ADISCORD_vorkerland_district_compact_committed
+				NOT = { has_country_flag = ADISCORD_vorkerland_compact_supply_received }
+			}
+			set_country_flag = ADISCORD_vorkerland_compact_supply_received
+			add_stability = 0.03
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = EYR }
+		}
+	}
+	EGC = {
+		if = {
+			limit = {
+				exists = yes
+				has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified
+				has_country_flag = ADISCORD_vorkerland_district_compact_committed
+				NOT = { has_country_flag = ADISCORD_vorkerland_compact_supply_received }
+			}
+			set_country_flag = ADISCORD_vorkerland_compact_supply_received
+			add_stability = 0.03
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = EGC }
+		}
+	}
+	RIV = {
+		if = {
+			limit = {
+				exists = yes
+				has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified
+				has_country_flag = ADISCORD_vorkerland_district_compact_committed
+				NOT = { has_country_flag = ADISCORD_vorkerland_compact_supply_received }
+			}
+			set_country_flag = ADISCORD_vorkerland_compact_supply_received
+			add_stability = 0.03
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = RIV }
+		}
+	}
+	YOR = {
+		if = {
+			limit = {
+				exists = yes
+				has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified
+				has_country_flag = ADISCORD_vorkerland_district_compact_committed
+				NOT = { has_country_flag = ADISCORD_vorkerland_compact_supply_received }
+			}
+			set_country_flag = ADISCORD_vorkerland_compact_supply_received
+			add_stability = 0.03
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = YOR }
+		}
 	}
 }
 
@@ -7116,16 +7328,20 @@ ADISCORD_vorkerland_verify_regional_consolidation = {
 		ADISCORD_vorkerland_degrade_regional_launch = yes
 	}
 }
-
 ADISCORD_vorkerland_begin_central_preparation = {
-	ADISCORD_vorkerland_set_phase_central_preparation = yes
-	clr_global_flag = ADISCORD_vorkerland_central_preparation_expired
-	clr_global_flag = ADISCORD_vorkerland_central_border_launch_failed
-	clr_global_flag = ADISCORD_vorkerland_showdown_queue_initialized
-	clr_global_flag = ADISCORD_vorkerland_showdown_launch_round_started
-	# Central preparation is now a visible focus/decision stage. Claimants first
-	# consume their reachable central minors; only the guarded final-showdown
-	# decision may queue phase.4 after that consolidation is terminal.
+	if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_consolidation_clock_started }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
+		}
+		ADISCORD_vorkerland_set_phase_central_preparation = yes
+		set_global_flag = ADISCORD_vorkerland_consolidation_clock_started
+		clr_global_flag = ADISCORD_vorkerland_central_border_launch_failed
+		# Each surviving claimant carries the same fallback; phase.4 is idempotent.
+		WKR = { if = { limit = { exists = yes } activate_mission = ADISCORD_vorkerland_consolidation_deadline country_event = { id = ADISCORD_vorkerland_phase.4 days = 180 } } }
+		VAD = { if = { limit = { exists = yes } activate_mission = ADISCORD_vorkerland_consolidation_deadline country_event = { id = ADISCORD_vorkerland_phase.4 days = 180 } } }
+		TVA = { if = { limit = { exists = yes } activate_mission = ADISCORD_vorkerland_consolidation_deadline country_event = { id = ADISCORD_vorkerland_phase.4 days = 180 } } }
+	}
 }
 
 ADISCORD_vorkerland_initialize_showdown_edge_queue = {
@@ -7441,6 +7657,7 @@ ADISCORD_vorkerland_verify_central_showdown = {
 		set_global_flag = ADISCORD_vorkerland_central_showdown_started
 		ADISCORD_vorkerland_set_phase_central_showdown = yes
 		ADISCORD_vorkerland_join_regional_allies_to_showdown = yes
+		WKR = { ADISCORD_vorkerland_attempt_vad_solyarino_counter = yes }
 		ADISCORD_vorkerland_story_announce_verified_showdown = yes
 		if = {
 			# Recovery/single-survivor path: with no live pair to fight, advance
@@ -7450,64 +7667,9 @@ ADISCORD_vorkerland_verify_central_showdown = {
 		}
 	}
 }
-
 ADISCORD_vorkerland_begin_reunification = {
 	if = {
-		limit = {
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-				has_global_flag = ADISCORD_vorkerland_phase_reunification
-			}
-			has_global_flag = ADISCORD_vorkerland_central_showdown_started
-			ADISCORD_vorkerland_central_showdown_edges_verified = yes
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
-			NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
-			ADISCORD_vorkerland_has_single_surviving_claimant = yes
-			OR = {
-				WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
-				VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
-				TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
-			}
-			# A queued claimant victory cannot skip unfinished district campaigns.
-			# All nine governments must be gone, no district controller may still be
-			# active, and every conquered package must have completed civil integration.
-			NOT = { country_exists = EYR }
-			NOT = { country_exists = EGC }
-			NOT = { country_exists = RIV }
-			NOT = { country_exists = REV }
-			NOT = { country_exists = YOR }
-			NOT = { country_exists = NDN }
-			NOT = { country_exists = SWB }
-			NOT = { country_exists = VHV }
-			NOT = { country_exists = OSV }
-			NOT = { WKR = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
-			NOT = { VAD = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
-			NOT = { TVA = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
-			102 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			109 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			111 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			325 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			81 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			110 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			124 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			79 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			306 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			308 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			309 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			327 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			82 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			323 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			108 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			122 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			123 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			27 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			35 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			315 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			316 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			317 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			318 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			320 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		}
+		limit = { ADISCORD_vorkerland_coalition_victory_ready = yes }
 		ADISCORD_vorkerland_set_phase_reunification = yes
 		country_event = { id = ADISCORD_vorkerland_phase.6 days = 1 }
 	}
@@ -7690,10 +7852,15 @@ ADISCORD_vorkerland_inherit_worker_reform_spirits = {
 		add_ideas = ADISCORD_vorkerland_erased_nations
 	}
 }
-
 ADISCORD_vorkerland_form_wrk_from_wkr = {
 	if = { limit = { country_exists = VAD } VAD = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes } }
 	if = { limit = { country_exists = TVA } TVA = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes } }
+	WKR = {
+		every_other_country = {
+			limit = { is_in_faction_with = PREV has_country_flag = ADISCORD_vorkerland_regional_auxiliary }
+			set_country_flag = ADISCORD_vorkerland_reunification_ally
+		}
+	}
 	ADISCORD_vorkerland_prepare_claimants_for_formation = yes
 	# These are claimant-war command structures, not postwar institutions.
 	WKR = {
@@ -7760,6 +7927,7 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 		change_tag_from = WKR
 	}
 	ADISCORD_vorkerland_inherit_worker_reform_spirits = yes
+	WKR = { ADISCORD_vorkerland_refund_integrations_to_successor = yes }
 	annex_country = { target = WKR transfer_troops = yes }
 	if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }
 	if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
@@ -7804,11 +7972,17 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 	}
 	focus_unlock = yes
 	mark_focus_tree_layout_dirty = yes
+	ADISCORD_vorkerland_restore_reunification_allies = yes
 }
-
 ADISCORD_vorkerland_form_wrk_from_vad = {
 	if = { limit = { country_exists = WKR } WKR = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes } }
 	if = { limit = { country_exists = TVA } TVA = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes } }
+	VAD = {
+		every_other_country = {
+			limit = { is_in_faction_with = PREV has_country_flag = ADISCORD_vorkerland_regional_auxiliary }
+			set_country_flag = ADISCORD_vorkerland_reunification_ally
+		}
+	}
 	ADISCORD_vorkerland_prepare_claimants_for_formation = yes
 	# The restoration cabinet and its dual-authority rival both end with the war.
 	VAD = {
@@ -7855,6 +8029,7 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 		change_tag_from = VAD
 	}
 	ADISCORD_vorkerland_scrub_dormant_wrk_crisis = yes
+	VAD = { ADISCORD_vorkerland_refund_integrations_to_successor = yes }
 	annex_country = { target = VAD transfer_troops = yes }
 	if = { limit = { country_exists = WKR } annex_country = { target = WKR transfer_troops = yes } }
 	if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
@@ -7918,11 +8093,17 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 	}
 	focus_unlock = yes
 	mark_focus_tree_layout_dirty = yes
+	ADISCORD_vorkerland_restore_reunification_allies = yes
 }
-
 ADISCORD_vorkerland_form_wrk_from_tva = {
 	if = { limit = { country_exists = WKR } WKR = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes } }
 	if = { limit = { country_exists = VAD } VAD = { ADISCORD_vorkerland_release_losing_claimant_subjects = yes } }
+	TVA = {
+		every_other_country = {
+			limit = { is_in_faction_with = PREV has_country_flag = ADISCORD_vorkerland_regional_auxiliary }
+			set_country_flag = ADISCORD_vorkerland_reunification_ally
+		}
+	}
 	ADISCORD_vorkerland_prepare_claimants_for_formation = yes
 	transfer_state = 32
 	32 = { set_state_controller_to = WRK }
@@ -7944,6 +8125,7 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 		change_tag_from = TVA
 	}
 	ADISCORD_vorkerland_scrub_dormant_wrk_crisis = yes
+	TVA = { ADISCORD_vorkerland_refund_integrations_to_successor = yes }
 	annex_country = { target = TVA transfer_troops = yes }
 	if = { limit = { country_exists = WKR } annex_country = { target = WKR transfer_troops = yes } }
 	if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }
@@ -7996,6 +8178,7 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 	}
 	focus_unlock = yes
 	mark_focus_tree_layout_dirty = yes
+	ADISCORD_vorkerland_restore_reunification_allies = yes
 }
 
 # Nikita's verified central victory is the only route that may reopen the
@@ -8190,6 +8373,60 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 				clr_country_flag = ADISCORD_vorkerland_wtd_fighting_for_worx
 			}
 		}
+	}
+}
+
+ADISCORD_vorkerland_restore_reunification_allies = {
+	if = {
+		limit = { any_other_country = { has_country_flag = ADISCORD_vorkerland_reunification_ally } }
+		if = { limit = { is_in_faction = no } create_faction_from_template = { template = faction_template_ADISCORD_standard name = ADISCORD_vorkerland_free_republics_alliance } }
+		every_other_country = {
+			limit = { has_country_flag = ADISCORD_vorkerland_reunification_ally }
+			if = { limit = { is_in_faction = yes NOT = { is_in_faction_with = PREV } } leave_faction = yes }
+			WRK = { add_to_faction = PREV }
+			clr_country_flag = ADISCORD_vorkerland_reunification_ally
+		}
+	}
+	every_country = {
+		limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major }
+		set_major = no
+		clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+		clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+		clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used
+		clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed
+	}
+}
+
+
+
+ADISCORD_vorkerland_refund_integrations_to_successor = {
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_integrate_eyr_district_paid } clr_country_flag = ADISCORD_vorkerland_integrate_eyr_district_paid WRK = { add_political_power = 15 } remove_decision = ADISCORD_vorkerland_integrate_eyr_district }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_integrate_egc_district_paid } clr_country_flag = ADISCORD_vorkerland_integrate_egc_district_paid WRK = { add_political_power = 15 } remove_decision = ADISCORD_vorkerland_integrate_egc_district }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_integrate_riv_district_paid } clr_country_flag = ADISCORD_vorkerland_integrate_riv_district_paid WRK = { add_political_power = 15 } remove_decision = ADISCORD_vorkerland_integrate_riv_district }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_integrate_rev_district_paid } clr_country_flag = ADISCORD_vorkerland_integrate_rev_district_paid WRK = { add_political_power = 15 } remove_decision = ADISCORD_vorkerland_integrate_rev_district }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_integrate_yor_district_paid } clr_country_flag = ADISCORD_vorkerland_integrate_yor_district_paid WRK = { add_political_power = 15 } remove_decision = ADISCORD_vorkerland_integrate_yor_district }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_integrate_ndn_district_paid } clr_country_flag = ADISCORD_vorkerland_integrate_ndn_district_paid WRK = { add_political_power = 10 } remove_decision = ADISCORD_vorkerland_integrate_ndn_district }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_integrate_swb_district_paid } clr_country_flag = ADISCORD_vorkerland_integrate_swb_district_paid WRK = { add_political_power = 10 } remove_decision = ADISCORD_vorkerland_integrate_swb_district }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_integrate_vhv_district_paid } clr_country_flag = ADISCORD_vorkerland_integrate_vhv_district_paid WRK = { add_political_power = 15 } remove_decision = ADISCORD_vorkerland_integrate_vhv_district }
+	if = { limit = { has_country_flag = ADISCORD_vorkerland_integrate_osv_district_paid } clr_country_flag = ADISCORD_vorkerland_integrate_osv_district_paid WRK = { add_political_power = 15 } remove_decision = ADISCORD_vorkerland_integrate_osv_district }
+}
+
+ADISCORD_vorkerland_reconcile_coalition_obligation = {
+	if = {
+		limit = {
+			has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_central_war_finished
+				is_in_faction = no
+				AND = { has_global_flag = ADISCORD_vorkerland_central_showdown_started has_war = no }
+				has_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed
+			}
+		}
+		set_major = no
+		clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+		clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+		clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used
+		clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed
 	}
 }
 
@@ -9117,6 +9354,7 @@ ADISCORD_vorkerland_refresh_war_economy_dynamic_state = {
 		value = ADISCORD_vorkerland_war_economy_scale
 	}
 	multiply_variable = { ADISCORD_vorkerland_war_economy_scale_display = 100 }
+	ADISCORD_economy_mark_dirty = yes
 }
 
 # --- rus_last_empire_effects ---
@@ -9130,6 +9368,7 @@ ADISCORD_vorkerland_rus_core_dirty_sla = {
 	191 = { add_core_of = RUS add_claim_by = RUS }
 	233 = { add_core_of = RUS }
 	329 = { add_core_of = RUS }
+	461 = { add_core_of = RUS }
 }
 
 ADISCORD_vorkerland_rus_core_dirty_rza = {
@@ -9472,3 +9711,8 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
+
+# Coalition membership survives the replacement of the claimant country object.
+
+
+# Country-scoped reconciliation; no world scan on diplomacy hooks.

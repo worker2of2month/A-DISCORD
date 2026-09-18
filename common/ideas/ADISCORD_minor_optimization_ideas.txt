@@ -5,9 +5,8 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				# Deliberately mirrors TFR's ai_disabled_production idea. Large
-				# negative values guarantee that unrelated positive modifiers cannot
-				# restart queues for a country outside the playable conflict graph.
+				# Large negative values keep other positive modifiers from restarting
+				# production queues in countries outside the playable conflicts.
 				production_speed_buildings_factor = -9999
 				industrial_capacity_factory = -9999
 				industrial_capacity_dockyard = -9999

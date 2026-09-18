@@ -359,6 +359,10 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_naval = yes
 	}
 	if = {
+		limit = { tag = EGC }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+	}
+	if = {
 		limit = { tag = ELN }
 		ADISCORD_grant_technology_profile_institutional = yes
 	}
@@ -366,6 +370,10 @@ ADISCORD_grant_starting_technology_profile = {
 		limit = { tag = EXZ }
 		# Intentional common-only assignment.
 		ADISCORD_grant_technology_profile_common = yes
+	}
+	if = {
+		limit = { tag = EYR }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}
 	if = {
 		limit = { tag = FRS }
@@ -480,6 +488,10 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_land = yes
 	}
 	if = {
+		limit = { tag = RIV }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+	}
+	if = {
 		limit = { tag = RLY }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}
@@ -545,16 +557,6 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_land = yes
 	}
 	if = {
-		limit = { tag = VAD }
-		ADISCORD_grant_technology_profile_industrial = yes
-		ADISCORD_grant_technology_profile_energy = yes
-		ADISCORD_grant_technology_profile_institutional = yes
-		ADISCORD_grant_technology_profile_land = yes
-		ADISCORD_grant_technology_profile_air = yes
-		ADISCORD_grant_technology_profile_naval = yes
-		ADISCORD_grant_technology_profile_armored_core = yes
-	}
-	if = {
 		limit = { tag = VAL }
 		ADISCORD_grant_technology_profile_industrial = yes
 		ADISCORD_grant_technology_profile_energy = yes
@@ -609,6 +611,10 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_air = yes
 		ADISCORD_grant_technology_profile_naval = yes
 		ADISCORD_grant_technology_profile_armored_core = yes
+	}
+	if = {
+		limit = { tag = YOR }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}
 	if = {
 		limit = { tag = YPR }

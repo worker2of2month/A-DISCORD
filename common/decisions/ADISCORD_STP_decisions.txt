@@ -567,7 +567,7 @@ STP_battle_for_stelander = {
 		cost = 0
 		custom_cost_text = STP_cw_defensive_line_cost
 		custom_cost_trigger = { NOT = { has_political_power < 50 } ADISCORD_economy_can_spend_100 = yes }
-		days_remove = 35
+		days_remove = 21
 		fire_only_once = no
 		cancel_trigger = { OR = { NOT = { STP_cw_preparation_open = yes } FROM = { OR = { NOT = { is_owned_by = ROOT } NOT = { is_controlled_by = ROOT } } } } }
 		complete_effect = { add_political_power = -50 ADISCORD_economy_spend_100 = yes hidden_effect = { STP_political_action_slot_consume = yes } }
@@ -593,7 +593,7 @@ STP_battle_for_stelander = {
 		cost = 0
 		custom_cost_text = STP_cw_assault_group_cost
 		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
-		days_remove = 35
+		days_remove = 28
 		fire_only_once = no
 		cancel_trigger = { NOT = { STP_cw_preparation_open = yes } }
 		complete_effect = {
@@ -1345,7 +1345,7 @@ STP_battle_for_stelander = {
 		custom_cost_trigger = { NOT = { has_political_power < 20 } NOT = { has_equipment = { infantry_equipment < 360 } } }
 		custom_cost_text = STP_cost_pp20_r360
 		cost = 0
-		days_remove = 35
+		days_remove = 14
 		fire_only_once = no
 		cancel_trigger = { hidden_trigger = { OR = { NOT = { has_country_flag = STP_battle_for_stelander_active } FROM = { NOT = { is_owned_by = ROOT } } } } }
 		complete_effect = {
@@ -1404,7 +1404,7 @@ STP_battle_for_stelander = {
 		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 240 } } }
 		custom_cost_text = STP_cost_pp10_r240
 		cost = 0
-		days_remove = 35
+		days_remove = 14
 		fire_only_once = no
 		cancel_trigger = { hidden_trigger = { OR = { NOT = { has_country_flag = STP_battle_for_stelander_active } FROM = { NOT = { STP_region_is_operable = yes } } FROM = { NOT = { is_owned_by = ROOT } } } } }
 		complete_effect = {
@@ -1888,6 +1888,186 @@ STP_battle_for_stelander = {
 }
 
 STP_cw_war_council = {
+
+	STP_cw_disrupt_brigade = {
+		icon = GFX_decision_ADISCORD_covert_operation
+		allowed = { tag = STS }
+		visible = { has_country_flag = STP_cw_disruption_unlocked has_war_with = STP NOT = { has_country_flag = STP_cw_postwar } }
+		state_target = yes
+		targets = { 1 2 3 28 29 45 46 53 }
+		target_trigger = { FROM = { is_controlled_by = STP } }
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		available = {
+			custom_trigger_tooltip = { tooltip = STP_cw_disruption_available_tt STP_cw_disruption_available = yes }
+			custom_trigger_tooltip = { tooltip = STP_cw_disruption_idle_tt NOT = { has_variable = STP_cw_disruption_deposit has_country_flag = STP_cw_disruption_cooldown } }
+			FROM = { custom_trigger_tooltip = { tooltip = STP_cw_disruption_target_tt STP_cw_disruption_target = yes } }
+		}
+		cost = 0
+		custom_cost_text = STP_cw_disruption_price
+		custom_cost_trigger = { NOT = { has_political_power < 50 } ADISCORD_economy_can_spend_100 = yes }
+		days_remove = 28
+		fire_only_once = no
+		cancel_trigger = { OR = { STP_cw_disruption_available = no FROM = { STP_cw_disruption_target = no } } }
+		complete_effect = {
+			custom_effect_tooltip = STP_cw_disruption_paid_tt
+			hidden_effect = {
+				if = {
+					limit = { STP_cw_disruption_available = yes FROM = { STP_cw_disruption_target = yes } NOT = { has_variable = STP_cw_disruption_deposit has_country_flag = STP_cw_disruption_cooldown has_political_power < 50 } ADISCORD_economy_can_spend_100 = yes }
+					ADISCORD_economy_spend_100 = yes
+					add_political_power = -50
+					set_variable = { var = STP_cw_disruption_deposit value = 100 }
+					set_country_flag = { flag = STP_cw_disruption_cooldown days = 60 }
+				}
+			}
+		}
+		remove_effect = { custom_effect_tooltip = STP_cw_disruption_result_tt hidden_effect = { STP_cw_finish_disruption = yes } }
+		cancel_effect = { custom_effect_tooltip = STP_cw_disruption_refund_tt hidden_effect = { STP_cw_refund_disruption = yes } }
+		ai_will_do = { base = 3 }
+	}
+
+
+	STP_pw_prepare_val_campaign = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pc_heg_val_force NOT = { has_country_flag = STP_pc_val_terms_accepted } VAL = { exists = yes } }
+		available = { STP_pc_can_confront_val = yes NOT = { has_war_with = VAL has_idea = STP_pc_val_campaign_ready has_variable = STP_pc_val_campaign_deposit } }
+		cost = 0
+		custom_cost_text = STP_pw_price_100
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
+		days_remove = 35
+		days_re_enable = 90
+		fire_only_once = no
+		cancel_trigger = { OR = { STP_pc_can_confront_val = no has_war_with = VAL } }
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_campaign_paid_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_can_confront_val = yes
+						NOT = { has_war_with = VAL has_idea = STP_pc_val_campaign_ready has_variable = STP_pc_val_campaign_deposit }
+						check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					set_variable = { var = STP_pc_val_campaign_deposit value = 100 }
+					ADISCORD_economy_mark_dirty = yes
+					VAL = { country_event = { id = ADISCORD_STP_pc.20 hours = 1 } }
+				}
+			}
+		}
+		remove_effect = {
+			if = { limit = { check_variable = { var = STP_pc_val_campaign_deposit value = 100 compare = equals } STP_pc_can_confront_val = yes NOT = { has_war_with = VAL } }
+				hidden_effect = { clear_variable = STP_pc_val_campaign_deposit }
+				add_timed_idea = { idea = STP_pc_val_campaign_ready days = 90 }
+			}
+			else = { hidden_effect = { clear_variable = STP_pc_val_campaign_deposit } }
+		}
+		cancel_effect = { hidden_effect = { clear_variable = STP_pc_val_campaign_deposit } }
+		ai_will_do = { base = 3 modifier = { factor = 0 OR = { has_war = yes NOT = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } } }
+	}
+	STP_pw_begin_val_campaign = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pc_heg_val_force has_idea = STP_pc_val_campaign_ready }
+		available = { STP_pc_can_confront_val = yes NOT = { has_war_with = VAL } }
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = { limit = { STP_pc_can_confront_val = yes has_idea = STP_pc_val_campaign_ready }
+				STP_pc_declare_war_val = yes
+				if = { limit = { has_war_with = VAL } remove_ideas = STP_pc_val_campaign_ready add_timed_idea = { idea = STP_cw_deliberate_offensive days = 35 } }
+			}
+		}
+		ai_will_do = { base = 4 modifier = { factor = 0 OR = { has_war = yes strength_ratio = { tag = VAL ratio < 0.8 } } } }
+	}
+
+	STP_pw_prepare_nod_campaign = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pc_heg_nod_force NOT = { has_country_flag = STP_pc_nod_terms_accepted } NOD = { exists = yes } }
+		available = { STP_pc_can_confront_nod = yes NOT = { has_war_with = NOD has_idea = STP_pc_nod_campaign_ready has_variable = STP_pc_nod_campaign_deposit } }
+		cost = 0
+		custom_cost_text = STP_pw_price_100
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
+		days_remove = 35
+		days_re_enable = 90
+		fire_only_once = no
+		cancel_trigger = { OR = { STP_pc_can_confront_nod = no has_war_with = NOD } }
+		complete_effect = {
+			custom_effect_tooltip = STP_pc_campaign_paid_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pc_can_confront_nod = yes
+						NOT = { has_war_with = NOD has_idea = STP_pc_nod_campaign_ready has_variable = STP_pc_nod_campaign_deposit }
+						check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					set_variable = { var = STP_pc_nod_campaign_deposit value = 100 }
+					ADISCORD_economy_mark_dirty = yes
+					NOD = { country_event = { id = ADISCORD_STP_pc.20 hours = 1 } }
+				}
+			}
+		}
+		remove_effect = {
+			if = { limit = { check_variable = { var = STP_pc_nod_campaign_deposit value = 100 compare = equals } STP_pc_can_confront_nod = yes NOT = { has_war_with = NOD } }
+				hidden_effect = { clear_variable = STP_pc_nod_campaign_deposit }
+				add_timed_idea = { idea = STP_pc_nod_campaign_ready days = 90 }
+			}
+			else = { hidden_effect = { clear_variable = STP_pc_nod_campaign_deposit } }
+		}
+		cancel_effect = { hidden_effect = { clear_variable = STP_pc_nod_campaign_deposit } }
+		ai_will_do = { base = 3 modifier = { factor = 0 OR = { has_war = yes NOT = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } } }
+	}
+	STP_pw_begin_nod_campaign = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pc_heg_nod_force has_idea = STP_pc_nod_campaign_ready }
+		available = { STP_pc_can_confront_nod = yes NOT = { has_war_with = NOD } }
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			if = { limit = { STP_pc_can_confront_nod = yes has_idea = STP_pc_nod_campaign_ready }
+				STP_pc_declare_war_nod = yes
+				if = { limit = { has_war_with = NOD } remove_ideas = STP_pc_nod_campaign_ready add_timed_idea = { idea = STP_cw_deliberate_offensive days = 35 } }
+			}
+		}
+		ai_will_do = { base = 4 modifier = { factor = 0 OR = { has_war = yes strength_ratio = { tag = NOD ratio < 0.8 } } } }
+	}
+
+
+	STP_cw_front_operation = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		activation = { always = no }
+		visible = { has_active_mission = STP_cw_front_operation }
+		available = {
+			has_war_with = STP
+			custom_trigger_tooltip = {
+				tooltip = STP_cw_operation_capture_tt
+				OR = {
+				AND = { check_variable = { var = STP_cw_operation_target value = 2 compare = equals } 2 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 29 compare = equals } 29 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 53 compare = equals } 53 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 3 compare = equals } 3 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 46 compare = equals } 46 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 45 compare = equals } 45 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 28 compare = equals } 28 = { is_controlled_by = STS } }
+				}
+			}
+		}
+		cancel_trigger = { OR = { NOT = { has_war_with = STP } has_capitulated = yes has_country_flag = STP_cw_postwar } }
+		days_mission_timeout = 49
+		fire_only_once = no
+		selectable_mission = no
+		is_good = no
+		complete_effect = { effect_tooltip = { add_timed_idea = { idea = STP_cw_operation_tempo days = 21 } } hidden_effect = { STP_cw_win_operation = yes } }
+		timeout_effect = { effect_tooltip = { add_timed_idea = { idea = STP_cw_operation_disorganization days = 28 } } hidden_effect = { STP_cw_fail_operation = yes } }
+		cancel_effect = { hidden_effect = { STP_cw_close_operation_cycle = yes } }
+	}
+
 	STP_cw_negotiate_republican_charter = {
 		icon = GFX_decision_ADISCORD_state_directive
 		allowed = { tag = STS }
@@ -2236,6 +2416,187 @@ STP_cw_war_council = {
 		ai_will_do = { base = 5 }
 	}
 
+	STP_pw_party_restore_ministries = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_new_republic NOT = { check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
+		available = {
+			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = { tooltip = STP_pw_project_idle_tt NOT = { has_variable = STP_pw_project_deposit } }
+			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
+		}
+		cost = 0
+		custom_cost_text = STP_pw_price_60
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } }
+		days_remove = 28
+		fire_only_once = no
+		cancel_trigger = { OR = { STP_pw_can_reconstruct = no capital_scope = { NOT = { is_controlled_by = ROOT is_owned_by = ROOT } } } }
+		complete_effect = {
+			custom_effect_tooltip = STP_pw_party_restore_ministries_result_tt
+			hidden_effect = {
+				if = {
+					limit = { has_completed_focus = STP_pw_party_new_republic NOT = { has_variable = STP_pw_project_deposit } check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } STP_pw_can_reconstruct = yes capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT } NOT = { check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 }
+					set_variable = { var = STP_pw_project_deposit value = 60 }
+					set_variable = { var = STP_pw_project_kind value = 4 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { if = { limit = { check_variable = { var = STP_pw_project_kind value = 4 compare = equals } } STP_pw_party_finish_project = yes } } }
+		cancel_effect = { custom_effect_tooltip = STP_pw_project_refund_tt hidden_effect = { if = { limit = { check_variable = { var = STP_pw_project_kind value = 4 compare = equals } } STP_pw_cancel_project = yes } } }
+		ai_will_do = { base = 20 }
+	}
+
+	STP_pw_party_reopen_port = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_homes_for_returnees NOT = { check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } }
+		available = {
+			STP_pw_can_reconstruct = yes STP_pw_party_has_port_capacity = yes
+			custom_trigger_tooltip = { tooltip = STP_pw_project_idle_tt NOT = { has_variable = STP_pw_project_deposit } }
+			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
+		}
+		cost = 0
+		custom_cost_text = STP_pw_price_120
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals } }
+		days_remove = 42
+		fire_only_once = no
+		cancel_trigger = { OR = { STP_pw_can_reconstruct = no STP_pw_party_has_port_capacity = no capital_scope = { NOT = { is_controlled_by = ROOT is_owned_by = ROOT } } } }
+		complete_effect = {
+			custom_effect_tooltip = STP_pw_party_reopen_port_result_tt
+			hidden_effect = {
+				if = {
+					limit = { has_completed_focus = STP_pw_party_homes_for_returnees NOT = { has_variable = STP_pw_project_deposit } check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals } STP_pw_can_reconstruct = yes STP_pw_party_has_port_capacity = yes capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT } NOT = { check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 120 }
+					set_variable = { var = STP_pw_project_deposit value = 120 }
+					set_variable = { var = STP_pw_project_kind value = 5 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { if = { limit = { check_variable = { var = STP_pw_project_kind value = 5 compare = equals } } STP_pw_party_finish_project = yes } } }
+		cancel_effect = { custom_effect_tooltip = STP_pw_project_refund_tt hidden_effect = { if = { limit = { check_variable = { var = STP_pw_project_kind value = 5 compare = equals } } STP_pw_cancel_project = yes } } }
+		ai_will_do = { base = 20 }
+	}
+
+	STP_pw_party_refit_guard = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_army_register NOT = { check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals } } }
+		available = {
+			STP_pw_can_reconstruct = yes
+			custom_trigger_tooltip = { tooltip = STP_pw_project_idle_tt NOT = { has_variable = STP_pw_project_deposit } }
+			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
+		}
+		cost = 0
+		custom_cost_text = STP_pw_price_100
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
+		days_remove = 49
+		fire_only_once = no
+		cancel_trigger = { OR = { STP_pw_can_reconstruct = no capital_scope = { NOT = { is_controlled_by = ROOT is_owned_by = ROOT } } } }
+		complete_effect = {
+			custom_effect_tooltip = STP_pw_party_refit_guard_result_tt
+			hidden_effect = {
+				if = {
+					limit = { has_completed_focus = STP_pw_party_army_register NOT = { has_variable = STP_pw_project_deposit } check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } STP_pw_can_reconstruct = yes capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT } NOT = { check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals } } }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					set_variable = { var = STP_pw_project_deposit value = 100 }
+					set_variable = { var = STP_pw_project_kind value = 6 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { if = { limit = { check_variable = { var = STP_pw_project_kind value = 6 compare = equals } } STP_pw_party_finish_project = yes } } }
+		cancel_effect = { custom_effect_tooltip = STP_pw_project_refund_tt hidden_effect = { if = { limit = { check_variable = { var = STP_pw_project_kind value = 6 compare = equals } } STP_pw_cancel_project = yes } } }
+		ai_will_do = { base = 20 }
+	}
+
+	STP_pw_party_return_specialists = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_open_settlement }
+		available = { STP_pw_can_reconstruct = yes  }
+		cost = 0
+		custom_cost_text = STP_pw_price_60
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } }
+		fire_only_once = yes
+
+		complete_effect = {
+			if = {
+				limit = { hidden_trigger = { STP_pw_can_reconstruct = yes has_completed_focus = STP_pw_party_open_settlement  check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } } }
+				hidden_effect = { subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 } add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 } ADISCORD_economy_mark_dirty = yes }
+				add_tech_bonus = { name = STP_pw_party_return_specialists bonus = 0.5 uses = 2 category = industry }
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	STP_pw_party_security_reserve = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_firm_settlement }
+		available = { STP_pw_can_reconstruct = yes  }
+		cost = 0
+		custom_cost_text = STP_pw_price_60
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } }
+		fire_only_once = yes
+
+		complete_effect = {
+			if = {
+				limit = { hidden_trigger = { STP_pw_can_reconstruct = yes has_completed_focus = STP_pw_party_firm_settlement  check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } } }
+				hidden_effect = { subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 } add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 } ADISCORD_economy_mark_dirty = yes }
+				add_timed_idea = { idea = STP_pw_party_security_cordon days = 180 }
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	STP_pw_party_standard_order = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_domestic_pattern }
+		available = { STP_pw_can_reconstruct = yes is_subject = no }
+		cost = 0
+		custom_cost_text = STP_pw_price_100
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			if = {
+				limit = { hidden_trigger = { STP_pw_can_reconstruct = yes has_completed_focus = STP_pw_party_domestic_pattern is_subject = no check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } } }
+				hidden_effect = { ADISCORD_economy_spend_100 = yes }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 1600 producer = ROOT }
+				add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
+				add_equipment_to_stockpile = { type = artillery_equipment amount = 100 producer = ROOT }
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	STP_pw_party_frontier_exercise = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_southern_defence }
+		available = { STP_pw_can_reconstruct = yes NOT = { has_idea = STP_pw_party_frontier_drill } }
+		cost = 0
+		custom_cost_text = STP_pw_price_60
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } }
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			if = {
+				limit = { hidden_trigger = { STP_pw_can_reconstruct = yes has_completed_focus = STP_pw_party_southern_defence NOT = { has_idea = STP_pw_party_frontier_drill } check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } } }
+				hidden_effect = { subtract_from_variable = { var = ADISCORD_economy_treasury value = 60 } add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 60 } ADISCORD_economy_mark_dirty = yes }
+				add_timed_idea = { idea = STP_pw_party_frontier_drill days = 180 }
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
 	STP_pw_restore_services = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
@@ -2552,7 +2913,7 @@ STP_cw_external_intervention = {
 		complete_effect = {
 			custom_effect_tooltip = STP_cw_northern_incident_result_tt
 			hidden_effect = {
-				set_temp_variable = { var = STP_cw_nod_prep_delta value = -21 }
+				set_temp_variable = { var = STP_cw_nod_prep_delta value = 35 }
 				STP_cw_adjust_nod_intervention_days = yes
 				clr_country_flag = STP_cw_northern_strategy_evidence
 			}

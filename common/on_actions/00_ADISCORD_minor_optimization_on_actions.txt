@@ -11,7 +11,10 @@ on_actions = {
 				set_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1
 				every_country = {
 					ADISCORD_apply_non_participating_minor_optimization = yes
-					ADISCORD_economy_refresh_ai_assistance = yes
+					if = {
+						limit = { ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes }
+						ADISCORD_economy_refresh_ai_assistance = yes
+					}
 				}
 			}
 		}
@@ -22,14 +25,20 @@ on_actions = {
 			# Country-scoped emergency release: an organically involved minor must
 			# become fully functional before it has to replace wartime losses.
 			ADISCORD_release_non_participating_minor_optimization = yes
-			ADISCORD_economy_refresh_ai_assistance = yes
+			if = {
+				limit = { ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes }
+				ADISCORD_economy_refresh_ai_assistance = yes
+			}
 		}
 	}
 
 	on_peace = {
 		effect = {
 			# War-state changes remove civil-war and retreat help immediately.
-			ADISCORD_economy_refresh_ai_assistance = yes
+			if = {
+				limit = { ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes }
+				ADISCORD_economy_refresh_ai_assistance = yes
+			}
 		}
 	}
 

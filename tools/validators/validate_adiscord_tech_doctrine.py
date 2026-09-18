@@ -2442,7 +2442,11 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
                 r"\bset_grand_doctrine\s*=\s*([A-Za-z0-9_]+)",
                 country_text,
             )
-        oob_path = ROOT / "history" / "units" / f"{tag}.txt"
+        history_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
+        history_text = history_paths[0].read_text(encoding="utf-8-sig") if history_paths else ""
+        oob_match = re.search(r'(?m)^\s*oob\s*=\s*"([^"\n]+)"', history_text)
+        oob_name = oob_match.group(1) if oob_match else tag
+        oob_path = ROOT / "history" / "units" / f"{oob_name}.txt"
         if oob_path.exists():
             row["oob_divisions"] = len(
                 re.findall(r"(?m)^\s*division\s*=\s*\{", read_text(oob_path))
@@ -2547,7 +2551,11 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
         granted = set(GENERATED_STARTING_TECH_PROFILES["common"])
         for profile in profiles:
             granted.update(GENERATED_STARTING_TECH_PROFILES[profile])
-        oob_path = ROOT / "history" / "units" / f"{tag}.txt"
+        history_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
+        history_text = history_paths[0].read_text(encoding="utf-8-sig") if history_paths else ""
+        oob_match = re.search(r'(?m)^\s*oob\s*=\s*"([^"\n]+)"', history_text)
+        oob_name = oob_match.group(1) if oob_match else tag
+        oob_path = ROOT / "history" / "units" / f"{oob_name}.txt"
         if not oob_path.exists():
             continue
         equipment_types = set(

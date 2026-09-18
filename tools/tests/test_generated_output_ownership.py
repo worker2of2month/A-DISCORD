@@ -39,6 +39,7 @@ REQUIRED_FAMILIES = {
     "deployment_ui_assets",
     "diplomacy_ui_assets",
     "event_ui_assets",
+    "focus_ui_assets",
     "event_pictures",
     "production_ui_assets",
     "doctrine_system",

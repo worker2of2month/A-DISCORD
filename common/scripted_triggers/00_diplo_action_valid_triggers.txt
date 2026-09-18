@@ -43,3 +43,9 @@ is_diplomatic_action_valid_offer_join_faction = { ADISCORD_diplomacy_not_dirty_z
 is_diplomatic_action_valid_request_access_to_licence_production = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
 is_diplomatic_action_valid_request_foreign_manpower = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
 is_diplomatic_action_valid_international_market_access_rights = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
+# The VAL mandate covers only the named war against NOD.
+is_diplomatic_action_valid_send_volunteers = {
+ ADISCORD_diplomacy_not_dirty_zone_pair = yes
+ OR = { FROM = { NOT = { tag = VAL } } AND = { FROM = { has_idea = VAL_northern_volunteer_mandate } OR = { tag = VAL VAL_northern_volunteer_host = yes } } }
+}

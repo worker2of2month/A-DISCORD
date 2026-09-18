@@ -3,8 +3,8 @@ state={
 	name="STATE_79"
 
 	history = {
-		owner = WRK
-		add_core_of = WRK
+		owner=RIV
+		add_core_of=RIV
 		victory_points = { 16592 5 }
 		buildings = {
 			ADISCORD_rare_alloy_foundry = 1

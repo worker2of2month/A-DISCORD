@@ -14,9 +14,8 @@ state={
     }
 
 	history={
-		owner = VAD
-		add_core_of = VAD
-
+		owner=EYR
+		add_core_of=EYR
 		victory_points = { 16593 10 }
 		victory_points = { 6192 15 }
 		victory_points = { 8243 10 }

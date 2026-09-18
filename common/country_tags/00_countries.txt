@@ -29,3 +29,6 @@ BTL = "countries/Beinsch.txt"
 APH = "countries/Anthropophagorum.txt"
 OSF = "countries/FoedusOssifractorum.txt"
 CIN = "countries/AshTribe.txt"
+
+NKA = "countries/NorthernContractAdministration.txt"
+OCA = "countries/OccidianContractAdministration.txt"

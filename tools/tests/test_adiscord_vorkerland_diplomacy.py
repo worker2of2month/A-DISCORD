@@ -163,7 +163,7 @@ class PeacefulAllianceTests(unittest.TestCase):
                      if "declare_war_on = { target = VHV type = annex_everything }" in compact(branch)
                      and branch.count("declare_war_on") == 1)
         front_limit = parse_clausewitz(named_block(front, "limit"))[0].value
-        self.assertTrue(evaluate(front_limit, "TVA"))
+        self.assertFalse(evaluate(front_limit, "TVA"), "an auxiliary is reached through its existing coalition war")
         self.assertFalse(detaches("VHV"), "a new attacker must not remove the auxiliary")
         self.assertFalse(detaches("WKR"), "a new offensive must not dismantle its own coalition")
         root = "WKR"

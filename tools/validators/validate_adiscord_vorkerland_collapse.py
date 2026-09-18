@@ -624,7 +624,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         ),
     ):
         formation = named_block(phase_effects, formation_name)
-        source_scope = named_block(formation, source_tag)
+        source_scope = "\n".join(named_blocks(formation, source_tag))
         for idea in wartime_ideas:
             token = f"remove_ideas = {idea}"
             if token not in source_scope:
@@ -1462,7 +1462,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
             )
         viability_clause = (
             f"AND = {{ any_neighbor_country = {{ tag = {target} }} "
-            f"{target} = {{ exists = yes is_subject = no "
+            f"{target} = {{ exists = yes is_subject = no is_in_faction = no "
             "NOT = { has_capitulated = yes } "
             "NOT = { OR = { has_war_with = WKR has_war_with = VAD "
             "has_war_with = TVA } } } }"
@@ -2314,13 +2314,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if "picture = generic_oppression" not in erased_nations:
         issues.append("cultural-erasure spirit must use the registered generic_oppression picture")
     for token in (
-        "stability_factor = -0.25", "war_support_factor = -0.15",
-        "recruitable_population_factor = -0.20", "industrial_capacity_factory = -0.15",
-        "consumer_goods_factor = 0.15", "political_power_gain = -0.20",
-        "army_org_factor = -0.10",
+        "stability_factor = -0.10", "war_support_factor = -0.05",
+        "recruitable_population_factor = -0.08", "industrial_capacity_factory = -0.05",
+        "consumer_goods_factor = 0.05", "political_power_gain = -0.10",
+        "army_org_factor = -0.03",
     ):
         if token not in erased_nations:
-            issues.append(f"severe cultural-erasure spirit is missing {token}")
+            issues.append(f"cultural-erasure legacy is missing its bounded wartime penalty {token}")
     macri_mission = named_block(
         ideas, "ADISCORD_vorkerland_piv_macri_volunteer_mission"
     )
@@ -3944,7 +3944,7 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
             "timeout_days = 21",
             "ADISCORD_vorkerland_wrk_schedule_elections = yes",
             "ADISCORD_vorkerland_wrk_usurp_mandate = yes",
-            "timeout_effect",
+            "timeout_days = 21",
         ):
             if token not in choice:
                 issues.append(f"mandate choice event is missing {token}")
@@ -4463,7 +4463,7 @@ def validate_bracket_graph(triggers: str, issues: list[str]) -> None:
     for token in (
         "ADISCORD_vorkerland_is_main_claimant = yes",
         "NOT = { has_war_with = ROOT }",
-        "has_war = yes",
+        "has_global_flag = ADISCORD_vorkerland_phase_central_preparation",
         "is_faction_leader = yes",
     ):
         if token not in host:
@@ -4585,11 +4585,16 @@ def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[
         issues.append("coalition-membership verifier cannot repair a rejected splice")
     if "NOT = { any_enemy_country = { NOT = { has_war_with = ROOT } } }" not in " ".join(named_block(named_block(membership, "if"), "limit").split()):
         issues.append("coalition verification must cover every current war of the actual faction leader")
-    failure = next((block for block in named_blocks(membership, "else_if")
-                    if "set_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed" in block), "")
-    failure_limit = named_block(failure, "limit")
-    if f"has_country_flag = {retry_flag}" not in failure_limit or "has_war = yes" not in failure_limit:
-        issues.append("coalition failure must follow an actual retry while the host is still at war")
+    failure = named_block(membership, "else")
+    paid = "ADISCORD_vorkerland_coalition_join_paid"
+    refund = named_block(failure, "if")
+    for token in (f"has_country_flag = {paid}", f"clr_country_flag = {paid}", "add_political_power = 25"):
+        if token not in refund:
+            issues.append("failed coalition entry must settle its paid receipt exactly once")
+    if f"clr_country_flag = {paid}" not in named_block(membership, "if"):
+        issues.append("successful coalition entry must consume its paid receipt")
+    if "ADISCORD_vorkerland_reconcile_coalition_obligation = yes" not in failure:
+        issues.append("failed coalition entry must clear its temporary major status")
 
     grant = named_block(effects, "ADISCORD_vorkerland_grant_local_bracket_autonomy")
     for token in (
@@ -4647,7 +4652,7 @@ def validate_bracket_decision(decisions: str, categories: str, issues: list[str]
         if token not in available:
             issues.append(f"the coalition-join decision is missing {token}")
     target = named_block(decision, "target_trigger")
-    if "ADISCORD_vorkerland_is_coalition_host_for_ROOT = yes" not in target:
+    if "ADISCORD_vorkerland_is_main_claimant = yes" not in target or "ADISCORD_vorkerland_is_coalition_host_for_ROOT = yes" not in available:
         issues.append("the coalition-join decision does not restrict itself to valid hosts")
     declared_targets = re.search(r"targets\s*=\s*\{([^}]*)\}", decision)
     if declared_targets is None or set(declared_targets.group(1).split()) != MAIN_CLAIMANTS:

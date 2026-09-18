@@ -142,6 +142,7 @@ SUPPORT_DECISIONS = {
 }
 
 LOCALISED_IDS = (
+    "ADISCORD_vorkerland_consolidation_deadline",
     "ADISCORD_vorkerland_focus_operations_category",
     "ADISCORD_vorkerland_allied_support_category",
     "ADISCORD_vorkerland_focus_central_minor_front_deadline",
@@ -288,26 +289,9 @@ def collect_issues() -> list[str]:
     claimant_graph_trigger = named_block(
         phase_triggers, "ADISCORD_vorkerland_central_districts_inside_claimant_graph"
     )
-    for state in sorted(
-        state
-        for _, states, _ in CENTRAL_INTEGRATION_PACKAGES.values()
-        for state in states
-    ):
-        if district_control_trigger.count(f"controls_state = {state}") != 1:
-            issues.append(f"terminal district controller does not require control of state {state}")
-        owner_gate = (
-            f"{state} = {{ OR = {{ is_owned_by = WKR is_owned_by = VAD "
-            "is_owned_by = TVA } }"
-        )
-        if owner_gate not in district_control_trigger:
-            issues.append(f"terminal district controller accepts an external owner in state {state}")
-        graph_state = named_block(claimant_graph_trigger, str(state))
-        for token in (
-            "OR = { is_owned_by = WKR is_owned_by = VAD is_owned_by = TVA }",
-            "OR = { is_controlled_by = WKR is_controlled_by = VAD is_controlled_by = TVA }",
-        ):
-            if token not in graph_state:
-                issues.append(f"pre-showdown claimant graph state {state} lacks {token}")
+    for token in ("32 = {", "owner = { is_in_faction_with = PREV.PREV }", "controller = { is_in_faction_with = PREV.PREV }", "any_enemy_country", "has_capitulated = yes"):
+        if token not in district_control_trigger:
+            issues.append(f"coalition victory lacks capital/enemy condition {token}")
 
     for category in (
         "ADISCORD_vorkerland_focus_operations_category",
@@ -345,7 +329,7 @@ def collect_issues() -> list[str]:
     for target in target_tags:
         viable_branch = (
             f"AND = {{ any_neighbor_country = {{ tag = {target} }} "
-            f"{target} = {{ exists = yes is_subject = no "
+            f"{target} = {{ exists = yes is_subject = no is_in_faction = no "
             "NOT = { has_capitulated = yes } "
             "NOT = { OR = { has_war_with = WKR has_war_with = VAD "
             "has_war_with = TVA } } } }"
@@ -563,7 +547,7 @@ def collect_issues() -> list[str]:
             f"ADISCORD_vorkerland_focus_central_minor_target_{target.lower()} "
             f"NOT = {{ has_war_with = {target} }} "
             f"any_neighbor_country = {{ tag = {target} }} "
-            f"{target} = {{ exists = yes is_subject = no "
+            f"{target} = {{ exists = yes is_subject = no is_in_faction = no "
             "NOT = { has_capitulated = yes } "
             "NOT = { OR = { has_war_with = WKR has_war_with = VAD "
             "has_war_with = TVA } } } }"
@@ -610,7 +594,7 @@ def collect_issues() -> list[str]:
         integrated_states.extend(states)
         for token in (
             "allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }",
-            "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
+            "ADISCORD_vorkerland_district_integration_available = yes",
             f"NOT = {{ country_exists = {target} }}",
             f"days_remove = {duration}",
             "days_re_enable = 7",
@@ -621,9 +605,17 @@ def collect_issues() -> list[str]:
         ):
             if token not in block:
                 issues.append(f"{decision_id} lacks bounded civil-integration token {token}")
-        if "complete_effect =" in block or "remove_effect =" not in block:
+        if "add_core_of" in named_block(block, "complete_effect") or "remove_effect =" not in block:
             issues.append(f"{decision_id} must award cores only after its timed work finishes")
+        receipt = decision_id + "_paid"
+        if f"set_country_flag = {receipt}" not in named_block(block, "complete_effect"):
+            issues.append(f"{decision_id} must record its payment")
+        settlement = named_block(block, "remove_effect")
+        if f"has_country_flag = {receipt}" not in settlement or f"clr_country_flag = {receipt}" not in settlement:
+            issues.append(f"{decision_id} must settle its receipt exactly once")
         expected_cost = 10 if len(states) == 1 else 15
+        if f"add_political_power = {expected_cost}" not in settlement:
+            issues.append(f"{decision_id} must refund its actual price when conditions fail")
         if f"cost = {expected_cost}" not in block:
             issues.append(f"{decision_id} has wrong proportional cost")
         for state in states:
@@ -658,109 +650,44 @@ def collect_issues() -> list[str]:
         or "central_war_unlocked" in central_visible
     ):
         issues.append("final showdown hides its command-readiness blocker")
-    if (
-        command_ready_tooltip not in central_available
-        or "ADISCORD_vorkerland_focus_central_front_prepared" not in central_available
-    ):
-        issues.append("final showdown must explain command readiness in available")
+    ready = named_block(phase_triggers, "ADISCORD_vorkerland_can_commit_to_showdown")
+    if command_ready_tooltip not in central_available or "ADISCORD_vorkerland_can_commit_to_showdown = yes" not in central_available:
+        issues.append("final showdown must explain its shared command-readiness condition")
+    if "ADISCORD_vorkerland_can_commit_to_showdown = yes" not in central_effect:
+        issues.append("showdown scheduler must recheck the same eligibility as the decision")
     for tag in ("WKR", "VAD", "TVA"):
-        hook = f"ADISCORD_vorkerland_focus_{tag.lower()}_central_war_unlocked"
-        if hook not in central_available or hook not in central_effect:
-            issues.append(f"central controller request lacks exact {tag} hook {hook}")
-    for token in (
-        "ADISCORD_vorkerland_focus_central_showdown_requested",
-        "ADISCORD_vorkerland_showdown_queue_initialized",
-        "ADISCORD_vorkerland_central_showdown_started",
-    ):
-        if token not in central or token not in central_effect:
-            issues.append(f"central controller request lacks global guard {token}")
+        if f"ADISCORD_vorkerland_focus_{tag.lower()}_central_war_unlocked" not in ready:
+            issues.append(f"showdown readiness omits {tag}'s command route")
+    for token in ("ADISCORD_vorkerland_focus_central_front_prepared", "ADISCORD_vorkerland_phase_central_preparation", "ADISCORD_vorkerland_showdown_retry_cooldown", "ADISCORD_vorkerland_showdown_queue_initialized", "ADISCORD_vorkerland_central_showdown_started"):
+        if token not in ready:
+            issues.append(f"showdown readiness omits {token}")
     if "country_event = { id = ADISCORD_vorkerland_phase.4 days = 1 }" not in central_effect:
-        issues.append("final showdown must explicitly schedule the shared phase.4 controller hook")
-    for target in target_tags:
-        terminal = f"NOT = {{ country_exists = {target} }}"
-        if terminal not in central or terminal not in central_effect:
-            issues.append(f"final showdown lacks terminal gate for {target}")
-        if f"{target} = {{ is_subject = yes }}" in central or f"{target} = {{ is_subject = yes }}" in central_effect:
-            issues.append(f"final showdown incorrectly accepts a live {target} puppet as terminal")
-        if f"has_war_with = {target}" not in central or f"has_war_with = {target}" not in central_effect:
-            issues.append(f"final showdown ignores live consolidation front {target}")
-    for state in integrated_states:
-        core_gate = f"{state} = {{ OR = {{ is_core_of = WKR is_core_of = VAD is_core_of = TVA }} }}"
-        if core_gate not in central or core_gate not in central_effect:
-            issues.append(f"final showdown can bypass civil integration of state {state}")
-    for tooltip in (
-        "ADISCORD_vorkerland_central_showdown_command_ready_tt",
-        "ADISCORD_vorkerland_central_showdown_campaigns_closed_tt",
-        "ADISCORD_vorkerland_central_districts_integrated_tt",
-        "ADISCORD_vorkerland_central_showdown_no_live_intervention_tt",
-    ):
-        if f"tooltip = {tooltip}" not in central:
-            issues.append(f"final showdown lacks the readable blocker tooltip {tooltip}")
-    for token in (
-        "ADISCORD_vorkerland_phase_central_preparation",
-        "ADISCORD_vorkerland_focus_central_minor_launch_pending",
-        "ADISCORD_vorkerland_focus_central_minor_deadline_active",
-    ):
-        if token not in central or token not in central_effect:
-            issues.append(f"final showdown lacks consolidation-stage guard {token}")
-    for token in (
-        "fire_only_once = no",
-        "days_re_enable = 7",
-        "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }",
-        "ai_will_do = { factor = 1000 }",
-    ):
+        issues.append("showdown must use the existing verified war-edge queue")
+    for token in ("fire_only_once = no", "days_re_enable = 7", "ai_will_do = { factor = 1000 }"):
         if token not in central:
-            issues.append(f"repeatable central decision lacks retry contract {token}")
-    if "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }" not in central_effect:
-        issues.append("central showdown scheduler lacks retry cooldown guard")
-    live_intervention = (
-        "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }"
-    )
-    if live_intervention not in central or live_intervention not in central_effect:
-        issues.append("final showdown must wait only for an actually active Solar restoration war")
-    for optional_blocker in (
-        "ADISCORD_vorkerland_vad_solar_intervention_reserved",
-        "ADISCORD_vorkerland_vad_sol_invitation_pending",
-        "ADISCORD_vorkerland_wkr_vla_invitation_pending",
-        "ADISCORD_vorkerland_wkr_solar_counter_intervention_ready",
-        "ADISCORD_vorkerland_wkr_has_solar_counter_border",
-        "ADISCORD_vorkerland_sol_restoration_verified",
-    ):
-        if optional_blocker in central or optional_blocker in central_effect:
-            issues.append(f"optional diplomacy still blocks the final showdown: {optional_blocker}")
-    for forbidden in ("declare_war_on", "start_civil_war", "create_wargoal"):
-        if forbidden in central or forbidden in central_effect:
-            issues.append(f"central focus decision contains forbidden private-war effect {forbidden}")
+            issues.append(f"showdown decision omits its bounded retry contract {token}")
+    for forbidden in ("country_exists = EYR", "is_core_of", "declare_war_on", "start_civil_war", "create_wargoal", "intervention_active"):
+        if forbidden in central or forbidden in central_effect or forbidden in ready:
+            issues.append(f"shared showdown wrongly depends on {forbidden}")
+    mission = named_block(decisions, "ADISCORD_vorkerland_consolidation_deadline")
+    for token in ("days_mission_timeout = 180", "available = { hidden_trigger = { always = no } }", "cancel_trigger", "ADISCORD_vorkerland_phase.4"):
+        if token not in mission:
+            issues.append(f"consolidation mission lacks {token}")
 
     reunification = named_block(phase_effects, "ADISCORD_vorkerland_begin_reunification")
+    victory = named_block(phase_triggers, "ADISCORD_vorkerland_coalition_victory_ready")
+    if "ADISCORD_vorkerland_coalition_victory_ready = yes" not in reunification:
+        issues.append("reunification must share its delayed event victory guard")
+    if victory.count("ADISCORD_vorkerland_central_districts_owned_and_controlled = yes") != 3:
+        issues.append("all three claimants need the same coalition victory conditions")
+    for forbidden in ("country_exists = EYR", "is_core_of", "focus_central_minor_deadline_active"):
+        if forbidden in reunification or forbidden in victory:
+            issues.append(f"reunification must not require district extinction or paid integration: {forbidden}")
     inherit_cores = named_block(
         phase_effects, "ADISCORD_vorkerland_inherit_integrated_claimant_cores"
     )
     formation = named_block(phase_effects, "ADISCORD_vorkerland_finalize_wrk_formation")
-    for target in target_tags:
-        if f"NOT = {{ country_exists = {target} }}" not in reunification:
-            issues.append(f"reunification lacks terminal government gate for {target}")
-    for phase in (
-        "ADISCORD_vorkerland_phase_central_showdown",
-        "ADISCORD_vorkerland_phase_reunification",
-    ):
-        if phase not in reunification:
-            issues.append(f"reunification entry gate lacks phase {phase}")
-    if reunification.count(
-        "ADISCORD_vorkerland_central_districts_owned_and_controlled = yes"
-    ) != 3:
-        issues.append("reunification must evaluate district ownership/control in each live claimant")
-    for flag in (
-        "ADISCORD_vorkerland_focus_central_minor_launch_pending",
-        "ADISCORD_vorkerland_focus_central_minor_deadline_active",
-    ):
-        if reunification.count(flag) != 3:
-            issues.append(f"reunification must check {flag} for all three claimants")
     inherited_states = sorted(set(integrated_states).union(CLAIMANT_HOME_STATES))
-    for state in integrated_states:
-        gate = f"{state} = {{ OR = {{ is_core_of = WKR is_core_of = VAD is_core_of = TVA }} }}"
-        if gate not in reunification:
-            issues.append(f"reunification can skip integration of state {state}")
     for state in inherited_states:
         state_block = named_block(inherit_cores, str(state))
         for token in (

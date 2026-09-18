@@ -13,19 +13,13 @@ from tools.lib.paths import repository_root
 
 ROOT = repository_root()
 OUT = ROOT / "gfx" / "interface" / "VAL_operations"
-WIDTH, HEIGHT = 420, 260
-STATE_IDS = (43, 44, 45, 88, 59, 61)
-VAL_STATES = (24, 42, 48, 54, 55, 56, 57, 168)
+WIDTH, HEIGHT = 420, 340
+STATE_IDS = (43, 44, 45, 88, 58, 59, 60, 61, 62, 63, 64, 65, 168)
+VAL_STATES = (24, 42, 48, 54, 55, 56, 57)
 EXZ_STATES = (167, 169, 171, 180, 182, 185)
 
-FRAME_COLORS = {
-    43: ((15, 118, 124), (55, 105, 175), (185, 105, 40), (127, 15, 2), (100, 100, 105)),
-    44: ((15, 118, 124), (55, 105, 175), (185, 105, 40), (127, 15, 2), (100, 100, 105)),
-    45: ((15, 118, 124), (55, 105, 175), (185, 105, 40), (127, 15, 2), (100, 100, 105)),
-    88: ((15, 118, 124), (55, 105, 175), (185, 105, 40), (127, 15, 2), (100, 100, 105)),
-    59: ((74, 74, 66), (74, 74, 66), (74, 74, 66), (127, 15, 2), (100, 100, 105)),
-    61: ((88, 78, 68), (88, 78, 68), (88, 78, 68), (127, 15, 2), (100, 100, 105)),
-}
+# Home administration, VAL subject, enemy, VAL, third-party controller.
+FRAME_COLORS = {state: ((69, 105, 116), (151, 43, 29), (185, 78, 39), (127, 15, 2), (103, 103, 107)) for state in STATE_IDS}
 
 
 def state_provinces(state_id: int) -> set[int]:
@@ -118,8 +112,10 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int],
     terrain = Image.new("RGBA", (WIDTH, HEIGHT), (48, 49, 48, 255))
     background.alpha_composite(Image.composite(terrain, Image.new("RGBA", background.size), land_mask))
     draw = ImageDraw.Draw(background)
-    for y in range(0, HEIGHT, 8):
-        draw.line((0, y, WIDTH, y), fill=(52, 53, 51, 255), width=1)
+    for y in range(0, HEIGHT, 32):
+        draw.line((0, y, WIDTH, y), fill=(34, 37, 38, 255), width=1)
+    for x in range(0, WIDTH, 32):
+        draw.line((x, 0, x, HEIGHT), fill=(34, 37, 38, 255), width=1)
 
     for state in VAL_STATES:
         fill = Image.new("RGBA", background.size, (82, 18, 17, 255))
@@ -136,6 +132,18 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int],
     border = Image.frombytes("L", border.size, bytes(max(a - b, 0) for a, b in zip(border.getdata(), all_mask.getdata())))
     background.alpha_composite(Image.composite(Image.new("RGBA", background.size, (190, 178, 145, 150)), Image.new("RGBA", background.size), border))
 
+    # Margin labels live in the GUI; leaders keep their geographic anchors clear.
+    draw = ImageDraw.Draw(background)
+    for points in (
+        ((98, 57), (160, 57), (206, 57)),
+        ((98, 127), (157, 127), (206, 132)),
+        ((316, 79), (280, 79), (237, 91)),
+        ((316, 142), (291, 142), (269, 138)),
+        ((316, 172), (293, 172), (280, 173)),
+        ((316, 245), (297, 245), (268, 239)),
+    ):
+        draw.line(points, fill=(143, 136, 114, 255), width=1)
+
     vignette = Image.new("RGBA", background.size, (0, 0, 0, 0))
     vd = ImageDraw.Draw(vignette)
     for i in range(18):
@@ -146,7 +154,7 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int],
     for state in STATE_IDS:
         frames = Image.new("RGBA", (WIDTH * 5, HEIGHT), (0, 0, 0, 0))
         mask = state_masks[state]
-        expanded = mask.filter(ImageFilter.MaxFilter(7))
+        expanded = mask.filter(ImageFilter.MaxFilter(3))
         rim = Image.frombytes("L", mask.size, bytes(max(a - b, 0) for a, b in zip(expanded.getdata(), mask.getdata())))
         for index, color in enumerate(FRAME_COLORS[state]):
             frame = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
@@ -180,7 +188,7 @@ def validate_outputs(outputs: dict[str, Image.Image]) -> list[str]:
                 f"{path.relative_to(ROOT)} has size {actual.size}, expected {expected.size}"
             )
             continue
-        if ImageChops.difference(actual, expected.convert("RGBA")).getbbox() is not None:
+        if any(channel.getbbox() is not None for channel in ImageChops.difference(actual, expected.convert("RGBA")).split()):
             issues.append(f"{path.relative_to(ROOT)} pixels differ from deterministic render")
     return issues
 

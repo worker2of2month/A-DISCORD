@@ -9,14 +9,14 @@ state={
 	buildings_max_level_factor = 1.000
 	local_supplies = 6.0
 	history={
-		owner = VAD
+		owner=SOL
 		buildings = {
 			air_base = 2
 			arms_factory = 2
 			industrial_complex = 4
 			infrastructure = 4
 		}
-		add_core_of = VAD
+		add_core_of=SOL
 		victory_points = { 7778 8 }
 		victory_points = { 16564 3 }
 		victory_points = { 16583 2 }

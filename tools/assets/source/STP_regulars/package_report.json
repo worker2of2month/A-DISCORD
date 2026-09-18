@@ -1,11 +1,11 @@
 {
   "gfx\\entities\\ADISCORD_country_infantry.gfx": {
-    "bytes": 66022,
-    "sha256": "ba3b0cf3ce313f3e72d299463682f6993ed45108199d5bcec759bcd39491c8f6"
+    "bytes": 61884,
+    "sha256": "cd769134a3a8d6e7ae301d27d6485b8877cd53bd470c53973da84ad9b6703223"
   },
   "gfx\\entities\\zz_ADISCORD_country_infantry.asset": {
-    "bytes": 90090,
-    "sha256": "26e270720f6e4929f446b12fc650faf7d6c8407a6497ad41f9ee388176a622d0"
+    "bytes": 126210,
+    "sha256": "1f00fcae702230f55f54174e88638179a59cefaeb560b0abadfb73ee05067c95"
   },
   "gfx\\models\\units\\ADISCORD_regulars\\STP_party.mesh": {
     "bytes": 1085198,

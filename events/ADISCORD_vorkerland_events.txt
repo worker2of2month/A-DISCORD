@@ -1,3 +1,20 @@
+# --- dirty_zone_events ---
+add_namespace = ADISCORD_vorkerland_dirty_zone
+
+# Published when the first post-reveal state transfer proves that the sealed
+# territory is no longer only a map overlay: administrations and borders are
+# now materialising in the Dirty Zone itself.
+news_event = {
+	id = ADISCORD_vorkerland_dirty_zone.1
+	title = ADISCORD_vorkerland_dirty_zone.1.t
+	desc = ADISCORD_vorkerland_dirty_zone.1.d
+	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_dirty_zone.1.a }
+}
+
 # --- claimant_events ---
 add_namespace = ADISCORD_vorkerland_claimant
 
@@ -617,17 +634,11 @@ country_event = {
 				}
 			}
 		}
-		if = {
-			limit = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }
-			set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
-		}
-		else = {
-			random_list = {
-				60 = { set_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
-				25 = { set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
-				10 = { set_global_flag = ADISCORD_vorkerland_worker_missing }
-				5 = { set_global_flag = ADISCORD_vorkerland_worker_killed }
-			}
+		random_list = {
+			60 = { set_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+			25 = { set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad }
+			10 = { set_global_flag = ADISCORD_vorkerland_worker_missing }
+			5 = { set_global_flag = ADISCORD_vorkerland_worker_killed }
 		}
 		ADISCORD_vorkerland_apply_initial_map = yes
 		ADISCORD_vorkerland_prepare_claimant_characters = yes
@@ -674,15 +685,9 @@ country_event = {
 		clr_global_flag = ADISCORD_vorkerland_preference_worker
 		clr_global_flag = ADISCORD_vorkerland_preference_joint
 		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
-		if = {
-			limit = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }
-			ADISCORD_vorkerland_form_joint_government = yes
-		}
-		else = {
-			random_list = {
-				7 = { ADISCORD_vorkerland_form_joint_government = yes }
-				93 = { }
-			}
+		random_list = {
+			7 = { ADISCORD_vorkerland_form_joint_government = yes }
+			93 = { }
 		}
 		WKR = {
 			inherit_technology = WRK
@@ -891,9 +896,13 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		ADISCORD_vorkerland_is_local_bracket_member = yes
-		has_country_flag = ADISCORD_vorkerland_regional_auxiliary
+		OR = {
+			has_country_flag = ADISCORD_vorkerland_regional_auxiliary
+			has_country_flag = ADISCORD_vorkerland_coalition_join_paid
+		}
 	}
-	immediate = { ADISCORD_vorkerland_verify_coalition_membership = yes }
+	immediate = { ADISCORD_vorkerland_splice_into_coalition_host_war = yes
+		ADISCORD_vorkerland_verify_coalition_membership = yes }
 }
 
 country_event = {
@@ -1785,10 +1794,6 @@ country_event = {
 		ai_chance = { factor = 50 }
 	}
 
-	timeout_effect = {
-		custom_effect_tooltip = ADISCORD_vorkerland_wrk_hold_elections_tt
-		hidden_effect = { ADISCORD_vorkerland_wrk_schedule_elections = yes }
-	}
 }
 
 country_event = {
@@ -2197,6 +2202,8 @@ country_event = {
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
+	timeout_days = 14
+
 
 	trigger = {
 		tag = WRK
@@ -2205,7 +2212,6 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_phase.1.a
-		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified } }
 		clr_global_flag = ADISCORD_vorkerland_preference_worker
 		clr_global_flag = ADISCORD_vorkerland_preference_joint
 		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
@@ -2215,7 +2221,6 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_vorkerland_phase.1.b
-		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified } }
 		clr_global_flag = ADISCORD_vorkerland_preference_worker
 		clr_global_flag = ADISCORD_vorkerland_preference_joint
 		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
@@ -2225,23 +2230,12 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_vorkerland_phase.1.c
-		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified } }
 		clr_global_flag = ADISCORD_vorkerland_preference_worker
 		clr_global_flag = ADISCORD_vorkerland_preference_joint
 		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
 		set_global_flag = ADISCORD_vorkerland_preference_utilitarian
 		country_event = { id = ADISCORD_vorkerland_collapse.1 }
 		ai_chance = { factor = 25 }
-	}
-	option = {
-		name = ADISCORD_vorkerland_phase.1.e
-		trigger = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }
-		clr_global_flag = ADISCORD_vorkerland_preference_worker
-		clr_global_flag = ADISCORD_vorkerland_preference_joint
-		clr_global_flag = ADISCORD_vorkerland_preference_utilitarian
-		set_global_flag = ADISCORD_vorkerland_preference_joint
-		country_event = { id = ADISCORD_vorkerland_collapse.1 }
-		ai_chance = { factor = 100 }
 	}
 }
 
@@ -2338,60 +2332,7 @@ country_event = {
 	id = ADISCORD_vorkerland_phase.6
 	hidden = yes
 	is_triggered_only = yes
-
-	trigger = {
-		has_global_flag = ADISCORD_vorkerland_phase_reunification
-		has_global_flag = ADISCORD_vorkerland_central_showdown_started
-		ADISCORD_vorkerland_central_showdown_edges_verified = yes
-		NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
-		NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
-		ADISCORD_vorkerland_has_single_surviving_claimant = yes
-		OR = {
-			WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
-			VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
-			TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } ADISCORD_vorkerland_central_districts_owned_and_controlled = yes }
-		}
-		# Re-evaluate the district terminal contract at execution time. This is
-		# deliberately repeated after the one-day queue so an old serialized .6,
-		# a changed controller, or a newly restored minor cannot materialize WRK
-		# over an unfinished central map.
-		NOT = { country_exists = EYR }
-		NOT = { country_exists = EGC }
-		NOT = { country_exists = RIV }
-		NOT = { country_exists = REV }
-		NOT = { country_exists = YOR }
-		NOT = { country_exists = NDN }
-		NOT = { country_exists = SWB }
-		NOT = { country_exists = VHV }
-		NOT = { country_exists = OSV }
-		NOT = { WKR = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
-		NOT = { VAD = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
-		NOT = { TVA = { exists = yes OR = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active } } }
-		102 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		109 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		111 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		325 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		81 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		110 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		124 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		79 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		306 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		308 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		309 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		327 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		82 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		323 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		108 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		122 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		123 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		27 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		35 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		315 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		316 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		317 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		318 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-		320 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-	}
+trigger = { has_global_flag = ADISCORD_vorkerland_phase_reunification ADISCORD_vorkerland_coalition_victory_ready = yes }
 
 	immediate = {
 		if = {

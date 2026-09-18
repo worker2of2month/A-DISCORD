@@ -2,91 +2,14 @@
 focus_tree = {
 	id = ADISCORD_vorkerland_civil_war_focus
 
-	# One lifecycle tree follows the country object through prewar WRK/VAD,
-	# the temporary WKR/VAD/TVA claimants, and the reunified WRK route. Keeping
-	# all stages in one tree avoids relying on a same-tick focus-tree swap.
-	#
-	# ---------------------------------------------------------------------
-	# LAYOUT CONTRACT
-	# ---------------------------------------------------------------------
-	# Exactly nine focuses carry absolute x/y - one anchor per lifecycle
-	# block. Every other focus is placed with relative_position_id pointing
-	# at a focus that is genuinely one of its prerequisites, so a whole
-	# branch moves as a unit when its head moves and no arrow is ever drawn
-	# upwards.
-	#
-	# The vertical pitch is one. A straight chain is x = 0, y = 1 and a fork
-	# is x = -1 / x = +1 (or -2 / +2 where a side carries a wider subtree)
-	# on the same row, so a mutually exclusive pair reads as a symmetric V
-	# under its parent. This matches the reference mod, where a drop of one
-	# row accounts for 87% of all prerequisite links and a drop of two for
-	# 12%; here the figures are 91% and 5%.
-	#
-	# A drop of more than one row is not decoration and is never applied
-	# uniformly. Clausewitz draws a prerequisite link as a step: down out of
-	# the parent, horizontally at the vertical midpoint between the two
-	# rows, then down into the child. An odd drop puts that horizontal run
-	# in the gap between two rows, where it crosses nothing. An even drop
-	# puts it through the centre of row py + dy/2, so that row has to be
-	# clear across the columns the run spans.
-	#
-	# Every drop of 2 or 3 in this file therefore exists to keep one
-	# specific horizontal run off an occupied row, and the validator pins
-	# each one. The convergence node TVA_print_interchangeable_repair_modules
-	# is the single exception: it takes six prerequisites split across two
-	# adjacent rows, so no drop can be odd for both halves, and its link
-	# from TVA_network_observation_posts passes over TVA_seal_the_approaches.
-	#
-	# Bands are disjoint in y between lifecycle phases and disjoint in x
-	# within a phase. Only one band is ever visible at a time, but keeping
-	# them disjoint means no two focuses in this file resolve to the same
-	# grid cell, which makes an accidental overlap a validator failure
-	# rather than something a player discovers.
-	#
-	#   band                  x range   y range   anchor
-	#   prewar WRK              0..4      0..5    WRK_measure_confederation_fault_lines (1,0)
-	#   prewar VAD             10..14     0..5    VAD_review_district_obligations (11,0)
-	#   retired stubs          20..22     0..1    ADISCORD_vorkerland_stabilize_claimant_regime (21,0)
-	#   wartime WKR             0..23     7..17   WKR_affirm_worker_mandate (8,7)
-	#   wartime VAD            26..54     7..19   VAD_proclaim_joint_charter (33,7)
-	#   wartime TVA            56..83     7..19   TVA_codify_utilitarian_directorate (68,7)
-	#   postwar Worker          0..4     21..27   WRK_worker_convene_reunification_congress (2,21)
-	#   postwar Joint          12..16    21..28   WRK_joint_convene_restoration_council (14,21)
-	#   postwar Worx           24..28    21..28   WRK_utilitarian_form_reconstruction_directorate (25,21)
-	#
-	# ---------------------------------------------------------------------
-	# CLAIMANT DEPTH BRANCHES
-	# ---------------------------------------------------------------------
-	# Each claimant carries seven depth modules in the columns its wartime
-	# band reserved for them. They attach to trunk focuses that already
-	# exist, so none of them reflows the spine.
-	#
-	#   module        WKR x / y      VAD x / y       TVA x / y
-	#   war economy   19..21 / 10..11  52..54 / 11..12  81..83 / 10..11
-	#   doctrine       0..4  / 14..15  30..44 / 14..15  56..58 / 11..12
-	#   late war      21..23 / 13..14  33..35 / 13..14  73..75 / 14..15
-	#   legitimacy    11..13 / 12..13  47..49 /  8..9   69..71 / 12..13
-	#   diplomacy      5..7  / 10      51..53 /  8      76..78 / 11
-	#   air           16..18 /  8..9   41..43 /  8..9   62..64 /  8..9
-	#   foreign       21..23 /  8..9   27..29 /  8..9   69..71 /  8..9
-	#
-	# War economy, late war, legitimacy and diplomacy are shared by both of
-	# a claimant's variants; doctrine is not. The doctrine module hangs off
-	# each variant's settlement focus and is the reason an Anton AI and a
-	# Nikita AI field different armies rather than the same army with a
-	# different name.
-	#
-	# The late-war module becomes available only in the central showdown.
-	# That phase gate lives in available, never in allow_branch, so the
-	# branch stays visible and legible before it opens. The legitimacy module goes through
-	# ADISCORD_vorkerland_add_legitimacy and never writes the ledger.
-	# Diplomacy is the module a competent player may reasonably skip.
-	#
-	# Every focus also carries search_filters so the in-game focus search
-	# box can group the tree by what a focus actually pays out. The bands,
-	# the anchors and the one-focus-per-cell rule are all enforced by
-	# tools/validators/validate_adiscord_vorkerland_civil_war_focus.py.
-	# ---------------------------------------------------------------------
+	# The same tree follows prewar countries, civil-war claimants and reunified WRK.
+	# Each phase has a separate coordinate band and one absolute anchor; other
+	# focuses use a prerequisite as relative_position_id. Keep cells unique.
+	# Clausewitz routes links through their vertical midpoint: even row gaps
+	# need a clear horizontal corridor. TVA_print_interchangeable_repair_modules
+	# joins prerequisites on two rows and requires a separate overlap check.
+	# Doctrine branches attach to variant settlements. Late-war availability
+	# belongs in available so the branch stays visible before the showdown.
 	country = {
 		factor = 0
 		modifier = {
@@ -96,6 +19,7 @@ focus_tree = {
 				tag = WKR
 				tag = VAD
 				tag = TVA
+				AND = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started } }
 			}
 		}
 	}
@@ -114,7 +38,7 @@ focus_tree = {
 		}
 		x = 1
 		y = 0
-		cost = 5
+		cost = 2
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
@@ -138,7 +62,7 @@ focus_tree = {
 		x = -1
 		y = 1
 		relative_position_id = WRK_measure_confederation_fault_lines
-		cost = 5
+		cost = 3
 		prerequisite = { focus = WRK_measure_confederation_fault_lines }
 		mutually_exclusive = { focus = WRK_inventory_emergency_stores }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
@@ -163,7 +87,7 @@ focus_tree = {
 		x = 2
 		y = 1
 		relative_position_id = WRK_measure_confederation_fault_lines
-		cost = 5
+		cost = 3
 		prerequisite = { focus = WRK_measure_confederation_fault_lines }
 		mutually_exclusive = { focus = WRK_convene_council_of_republics }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
@@ -189,7 +113,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WRK_convene_council_of_republics
-		cost = 5
+		cost = 3
 		prerequisite = { focus = WRK_convene_council_of_republics }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
@@ -214,7 +138,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WRK_inventory_emergency_stores
-		cost = 5
+		cost = 3
 		prerequisite = { focus = WRK_inventory_emergency_stores }
 		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
@@ -239,7 +163,7 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = WRK_disperse_railway_reserves
-		cost = 5
+		cost = 2
 		prerequisite = {
 			focus = WRK_bind_districts_to_charter
 			focus = WRK_disperse_railway_reserves
@@ -258,7 +182,7 @@ focus_tree = {
 		ai_will_do = { base = 12 }
 	}
 
-	# Worker and Vadl can still attempt a narrow emergency compact before the
+	# The centre and autonomous administrations can ratify common emergency rules before the
 	# collapse. The alternative preserves the same time window but spends it on
 	# reserves and district authority. Course flags are written on selection so
 	# the two countries can react to one another without a polling event.
@@ -386,7 +310,7 @@ focus_tree = {
 	}
 
 	# ---------------------------------------------------------------------
-	# Prewar VAD: the autonomous district prepares its own continuity chain.
+	# Autonomous districts prepare their administrations before the federal split.
 	# ---------------------------------------------------------------------
 
 	focus = {
@@ -399,7 +323,7 @@ focus_tree = {
 		x = 11
 		y = 0
 		cost = 1
-		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -425,7 +349,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = VAD_review_district_obligations }
 		mutually_exclusive = { focus = VAD_drill_district_guard }
-		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -451,7 +375,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = VAD_review_district_obligations }
 		mutually_exclusive = { focus = VAD_open_continuity_registers }
-		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -476,7 +400,7 @@ focus_tree = {
 		relative_position_id = VAD_open_continuity_registers
 		cost = 2
 		prerequisite = { focus = VAD_open_continuity_registers }
-		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -500,11 +424,11 @@ focus_tree = {
 		relative_position_id = VAD_drill_district_guard
 		cost = 2
 		prerequisite = { focus = VAD_drill_district_guard }
-		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = VAD }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = ROOT }
 			add_command_power = 5
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_depots_distributed
@@ -529,7 +453,7 @@ focus_tree = {
 			focus = VAD_secure_administrative_archives
 			focus = VAD_disperse_eastern_depots
 		}
-		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -557,24 +481,12 @@ focus_tree = {
 		cost = 1
 		prerequisite = { focus = VAD_form_emergency_chancery }
 		mutually_exclusive = { focus = VAD_activate_eastern_mandate }
-		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
-		available = {
-			has_global_flag = ADISCORD_vorkerland_phase_prewar
-			OR = {
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_vorkerland_prewar_wrk_compact_course_tt
-					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
-				}
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_vorkerland_prewar_wrk_hardline_course_tt
-					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
-				}
-			}
-		}
+		allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		select_effect = {
-			clr_country_flag = ADISCORD_vorkerland_prewar_vad_hardline_course
-			set_country_flag = ADISCORD_vorkerland_prewar_vad_compact_course
+			clr_country_flag = ADISCORD_vorkerland_prewar_district_hardline_course
+			set_country_flag = ADISCORD_vorkerland_prewar_district_compact_course
 		}
 		completion_reward = {
 			add_political_power = 5
@@ -583,23 +495,7 @@ focus_tree = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_worker_terms_prepared
 			}
 		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 100
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_vorkerland_prewar_wrk_compact_course_tt
-					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
-				}
-			}
-			modifier = {
-				factor = 0
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_vorkerland_prewar_wrk_hardline_course_tt
-					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
-				}
-			}
-		}
+		ai_will_do = { base = 35 }
 	}
 
 	focus = {
@@ -613,19 +509,19 @@ focus_tree = {
 		relative_position_id = VAD_prepare_vadl_worker_terms
 		cost = 2
 		prerequisite = { focus = VAD_prepare_vadl_worker_terms }
-		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = {
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
 			custom_trigger_tooltip = {
-				tooltip = ADISCORD_vorkerland_prewar_vad_compact_course_tt
-				has_country_flag = ADISCORD_vorkerland_prewar_vad_compact_course
+				tooltip = ADISCORD_vorkerland_prewar_district_compact_course_tt
+				has_country_flag = ADISCORD_vorkerland_prewar_district_compact_course
 			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = ADISCORD_vorkerland_prewar_compact_requires_both_tt
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_vad_compact_committed
+				set_country_flag = ADISCORD_vorkerland_district_compact_committed
 				set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_compact_ratified
 				ADISCORD_vorkerland_resolve_prewar_compact = yes
 			}
@@ -645,24 +541,12 @@ focus_tree = {
 		cost = 1
 		prerequisite = { focus = VAD_form_emergency_chancery }
 		mutually_exclusive = { focus = VAD_prepare_vadl_worker_terms }
-		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
-		available = {
-			has_global_flag = ADISCORD_vorkerland_phase_prewar
-			OR = {
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_vorkerland_prewar_wrk_compact_course_tt
-					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
-				}
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_vorkerland_prewar_wrk_hardline_course_tt
-					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
-				}
-			}
-		}
+		allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		select_effect = {
-			clr_country_flag = ADISCORD_vorkerland_prewar_vad_compact_course
-			set_country_flag = ADISCORD_vorkerland_prewar_vad_hardline_course
+			clr_country_flag = ADISCORD_vorkerland_prewar_district_compact_course
+			set_country_flag = ADISCORD_vorkerland_prewar_district_hardline_course
 		}
 		completion_reward = {
 			add_command_power = 5
@@ -671,23 +555,7 @@ focus_tree = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_eastern_mandate_activated
 			}
 		}
-		ai_will_do = {
-			base = 1
-			modifier = {
-				factor = 100
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_vorkerland_prewar_wrk_hardline_course_tt
-					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_hardline_course }
-				}
-			}
-			modifier = {
-				factor = 0
-				custom_trigger_tooltip = {
-					tooltip = ADISCORD_vorkerland_prewar_wrk_compact_course_tt
-					WRK = { has_country_flag = ADISCORD_vorkerland_prewar_wrk_compact_course }
-				}
-			}
-		}
+		ai_will_do = { base = 65 }
 	}
 
 	focus = {
@@ -701,21 +569,21 @@ focus_tree = {
 		relative_position_id = VAD_activate_eastern_mandate
 		cost = 2
 		prerequisite = { focus = VAD_activate_eastern_mandate }
-		allow_branch = { tag = VAD has_global_flag = ADISCORD_vorkerland_phase_prewar }
+		allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		available = {
 			has_global_flag = ADISCORD_vorkerland_phase_prewar
 			custom_trigger_tooltip = {
-				tooltip = ADISCORD_vorkerland_prewar_vad_hardline_course_tt
-				has_country_flag = ADISCORD_vorkerland_prewar_vad_hardline_course
+				tooltip = ADISCORD_vorkerland_prewar_district_hardline_course_tt
+				has_country_flag = ADISCORD_vorkerland_prewar_district_hardline_course
 			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_manpower = 250
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = VAD }
-			add_timed_idea = { idea = ADISCORD_vorkerland_vad_eastern_mandate days = 70 }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = ROOT }
+			add_timed_idea = { idea = ADISCORD_vorkerland_vad_eastern_mandate days = 140 }
 			hidden_effect = {
-				set_country_flag = ADISCORD_vorkerland_vad_hardline_committed
+				set_country_flag = ADISCORD_vorkerland_district_hardline_committed
 				set_country_flag = ADISCORD_vorkerland_focus_vad_district_arsenals_sealed
 			}
 		}

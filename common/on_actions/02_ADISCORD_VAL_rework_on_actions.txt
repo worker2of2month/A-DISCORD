@@ -49,20 +49,23 @@ on_actions = {
 	}
 
     on_weekly_VAL = {
-        effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } } VAL_frontier_weekly = yes } }
+        effect = {
+            VAL_reconcile_supply_crisis = yes
+            if = { limit = { has_idea = VAL_northern_volunteer_mandate } VAL_reconcile_northern_volunteers = yes } if = { limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } } VAL_frontier_weekly = yes } }
     }
     on_capitulation_immediate = {
         effect = {
+            if = { limit = { tag = VAL } clr_country_flag = VAL_occidian_settlement_pending }
             clr_country_flag = VAL_frontier_capitulation_pending
             if = {
                 limit = {
                     VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
-                    OR = { AND = { tag = CIN VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } has_war_with = CIN } capital_scope = { is_controlled_by = VAL } }
-                        AND = { tag = OSF VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } has_war_with = OSF } capital_scope = { is_controlled_by = VAL } }
-                        AND = { tag = APH VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } has_war_with = APH } capital_scope = { is_controlled_by = VAL } }
+                    OR = { AND = { tag = CIN OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } } has_war_with = VAL capital_scope = { is_controlled_by = VAL } }
+                        AND = { tag = OSF OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } } has_war_with = VAL capital_scope = { is_controlled_by = VAL } }
+                        AND = { tag = APH OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } } has_war_with = VAL capital_scope = { is_controlled_by = VAL } }
                         AND = { tag = ERT VAL = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } has_war_with = ERT } capital_scope = { is_controlled_by = VAL } }
                         AND = { OR = { tag = NOD tag = STP } has_country_flag = VAL_frontier_guarantor has_war_with = VAL capital_scope = { is_controlled_by = VAL } }
-                        AND = { tag = VAL capital_scope = { OR = { controller = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL } controller = { has_war_with = VAL OR = { AND = { tag = CIN VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } } AND = { tag = OSF VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } } AND = { tag = APH VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } } AND = { tag = ERT VAL = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } } } } } } } } }
+                        AND = { tag = VAL capital_scope = { OR = { controller = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL } controller = { has_war_with = VAL OR = { has_country_flag = VAL_frontier_member AND = { tag = CIN VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } } AND = { tag = OSF VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } } AND = { tag = APH VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } } AND = { tag = ERT VAL = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } } } } } } } } }
                 }
                 if = { limit = { OR = { tag = CIN tag = OSF tag = APH tag = ERT } } set_country_flag = VAL_frontier_defeated }
                 set_country_flag = VAL_frontier_capitulation_pending
@@ -75,6 +78,13 @@ on_actions = {
                 limit = { tag = VAL check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
                 # An unrelated winner keeps its own capitulation route.
                 VAL_frontier_close = yes
+            }
+            else_if = {
+                limit = { OR = { tag = CIN tag = OSF tag = APH } has_country_flag = VAL_frontier_member }
+                # A third-party victory is outside VAL's territorial settlement.
+                clr_country_flag = VAL_frontier_member
+                clr_country_flag = VAL_frontier_defeated
+                if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
             }
             else_if = {
                 limit = { OR = { tag = NOD tag = STP } has_country_flag = VAL_frontier_guarantor }

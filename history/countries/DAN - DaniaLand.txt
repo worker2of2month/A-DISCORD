@@ -29,3 +29,5 @@ add_ideas = {
 }
 
 set_research_slots = 2
+
+set_cosmetic_tag = DAN_confederation

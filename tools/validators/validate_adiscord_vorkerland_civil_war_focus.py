@@ -36,7 +36,7 @@ RUSSIAN_POSTWAR_IDEA_LOCALISATION = Path(
 CHARACTER_FILE = Path("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
 SHINE_FILE = Path("interface/ADISCORD_focus_shines.gfx")
 VANILLA_SHINE_SHADOW_FILE = Path("interface/goals_shine.gfx")
-VANILLA_FOCUS_GUI_SHADOW_FILE = Path("interface/nationalfocusview.gui")
+VANILLA_FOCUS_GFX_SHADOW_FILE = Path("interface/nationalfocusview.gfx")
 FOCUS_GFX_FILE = Path("interface/ADISCORD_national_focus.gfx")
 FOCUS_FALLBACK_TEXTURE = "gfx/interface/goals/focus_PLACEHOLDER.dds"
 FOCUS_DECISION_FILES = (
@@ -318,12 +318,12 @@ PREWAR_COURSE_SELECTIONS = {
         "ADISCORD_vorkerland_prewar_wrk_compact_course",
     ),
     "VAD_prepare_vadl_worker_terms": (
-        "ADISCORD_vorkerland_prewar_vad_compact_course",
-        "ADISCORD_vorkerland_prewar_vad_hardline_course",
+        "ADISCORD_vorkerland_prewar_district_compact_course",
+        "ADISCORD_vorkerland_prewar_district_hardline_course",
     ),
     "VAD_activate_eastern_mandate": (
-        "ADISCORD_vorkerland_prewar_vad_hardline_course",
-        "ADISCORD_vorkerland_prewar_vad_compact_course",
+        "ADISCORD_vorkerland_prewar_district_hardline_course",
+        "ADISCORD_vorkerland_prewar_district_compact_course",
     ),
 }
 
@@ -2570,8 +2570,8 @@ def expected_localisation_keys() -> set[str]:
         "ADISCORD_vorkerland_prewar_compact_requires_both_tt",
         "ADISCORD_vorkerland_prewar_wrk_compact_course_tt",
         "ADISCORD_vorkerland_prewar_wrk_hardline_course_tt",
-        "ADISCORD_vorkerland_prewar_vad_compact_course_tt",
-        "ADISCORD_vorkerland_prewar_vad_hardline_course_tt",
+        "ADISCORD_vorkerland_prewar_district_compact_course_tt",
+        "ADISCORD_vorkerland_prewar_district_hardline_course_tt",
         "ADISCORD_vorkerland_tva_iteration_prerequisite_tt",
         "ADISCORD_vorkerland_showdown_focus_live_war_tt",
         *FOCUS_EXPANSION_IDEAS,
@@ -2887,11 +2887,11 @@ def collect_issues() -> list[str]:
     issues: list[str] = []
     for shadow_path in (
         VANILLA_SHINE_SHADOW_FILE,
-        VANILLA_FOCUS_GUI_SHADOW_FILE,
+        VANILLA_FOCUS_GFX_SHADOW_FILE,
     ):
         if (ROOT / shadow_path).exists():
             issues.append(
-                f"vanilla focus interface must be inherited; remove {shadow_path.as_posix()}"
+                f"native focus sprite library must be inherited; remove {shadow_path.as_posix()}"
             )
     required_paths = (
         FOCUS_FILE,
@@ -2981,8 +2981,8 @@ def collect_issues() -> list[str]:
     else:
         country = country_blocks[0]
         tags = set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", country))
-        if tags != {"WRK", "WKR", "VAD", "TVA"}:
-            issues.append(f"country selector must cover WRK/WKR/VAD/TVA, found {sorted(tags)}")
+        if tags != {"WRK", "WKR", "VAD", "TVA", "EYR", "EGC", "RIV", "YOR"}:
+            issues.append(f"country selector must cover the claimants and four prewar autonomies, found {sorted(tags)}")
         if "original_tag" in country:
             issues.append("country selector must use current lifecycle tags, not original_tag")
         if not re.search(r"\bfactor\s*=\s*0\b", country):
@@ -3125,7 +3125,7 @@ def collect_issues() -> list[str]:
     for focus_id in PREWAR_WRK_FOCUSES:
         category_by_focus[focus_id] = ("prewar", "WRK")
     for focus_id in PREWAR_VAD_FOCUSES:
-        category_by_focus[focus_id] = ("prewar", "VAD")
+        category_by_focus[focus_id] = ("prewar", "districts")
     for focus_id in RETIRED_WARTIME_FOCUSES:
         category_by_focus[focus_id] = ("retired", None)
     for tag, focus_ids in WARTIME_ROUTE_FOCUSES.items():
@@ -3168,7 +3168,8 @@ def collect_issues() -> list[str]:
                 issues.append(f"{focus_id} must be prewar-only, found phases {sorted(flags)}")
             if _phase_flags(allow) != {PREWAR_PHASE}:
                 issues.append(f"{focus_id} allow_branch must hide outside the prewar phase")
-            if set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow)) != {gate}:
+            expected_tags = {"EYR", "EGC", "RIV", "YOR"} if gate == "districts" else {gate}
+            if set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow)) != expected_tags:
                 issues.append(f"{focus_id} must expose only the prewar {gate} block")
             cost_expected = {1, 2, 3, 4, 5}
         elif category == "retired":
@@ -3369,7 +3370,7 @@ def collect_issues() -> list[str]:
 
     compact_finals = {
         "WRK_offer_emergency_compact": "ADISCORD_vorkerland_wrk_compact_committed",
-        "VAD_ratify_emergency_compact": "ADISCORD_vorkerland_vad_compact_committed",
+        "VAD_ratify_emergency_compact": "ADISCORD_vorkerland_district_compact_committed",
     }
     for focus_id, final_flag in compact_finals.items():
         reward_blocks = _blocks(blocks.get(focus_id, ""), "completion_reward")
@@ -3388,9 +3389,9 @@ def collect_issues() -> list[str]:
         ),
         "VAD_seal_district_arsenals": (
             "add_manpower = 250",
-            "type = infantry_equipment_0 amount = 150 producer = VAD",
-            "idea = ADISCORD_vorkerland_vad_eastern_mandate days = 70",
-            "set_country_flag = ADISCORD_vorkerland_vad_hardline_committed",
+            "type = infantry_equipment_0 amount = 150 producer = ROOT",
+            "idea = ADISCORD_vorkerland_vad_eastern_mandate days = 140",
+            "set_country_flag = ADISCORD_vorkerland_district_hardline_committed",
         ),
     }
     for focus_id, tokens in hardline_rewards.items():
@@ -5308,6 +5309,7 @@ def collect_issues() -> list[str]:
             if float(raw) > 150:
                 issues.append(f"{reward_source_name} equipment reward {raw} exceeds maximum 150")
     timed_idea_limits = {
+        "ADISCORD_vorkerland_vad_eastern_mandate": 140,
         WORX_ADAPTIVE_LOGISTICS_IDEA: 90,
         RETIRED_WORX_SECOND_PROTOCOL_IDEA: 180,
         "ADISCORD_vorkerland_vad_solar_corridor_intelligence": 84,

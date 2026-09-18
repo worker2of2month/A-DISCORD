@@ -21,6 +21,43 @@ can_lose_unity = {
 	}
 }
 
+# COUNTRY allocator: one adjacent-country scan per profile enable evaluation.
+# PREV is the allocator inside this iterator; FROM belongs
+# to the external caller and must not be used as the neighbour's counterpart.
+ADISCORD_ai_has_adjacent_war_preparation = {
+	any_neighbor_country = {
+		exists = yes
+		has_capitulated = no
+		NOT = { is_in_faction_with = PREV }
+		OR = {
+			has_wargoal_against = PREV
+			is_justifying_wargoal_against = PREV
+			PREV = { has_wargoal_against = PREV }
+			PREV = { is_justifying_wargoal_against = PREV }
+			check_variable = { var = ai_strategy_prepare_for_war@PREV value = 0 compare = greater_than }
+			check_variable = { var = PREV.ai_strategy_prepare_for_war@THIS value = 0 compare = greater_than }
+		}
+	}
+}
+
+# COUNTRY target; FROM is the country allocating its front. Native preparation
+# scores are read only: profiles producing them must use the underlying mission
+# or route condition, otherwise preparation would keep itself alive after peace.
+ADISCORD_ai_front_has_prewar_threat = {
+	OR = {
+		has_wargoal_against = FROM
+		is_justifying_wargoal_against = FROM
+		FROM = {
+			has_wargoal_against = PREV
+		}
+		FROM = {
+			is_justifying_wargoal_against = PREV
+		}
+		check_variable = { var = ai_strategy_prepare_for_war@FROM value = 0 compare = greater_than }
+		check_variable = { var = FROM.ai_strategy_prepare_for_war@THIS value = 0 compare = greater_than }
+	}
+}
+
 can_lose_democracy_support = {
 	humanism > 0.65
 	utilitarism < 0.18

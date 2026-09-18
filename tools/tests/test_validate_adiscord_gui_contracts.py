@@ -838,25 +838,61 @@ class DiplomacyGuiContractTests(unittest.TestCase):
 
 
 class NationalFocusGuiContractTests(unittest.TestCase):
-    def test_hoi4_119_focus_item_has_overlay_icon(self):
+    def test_native_controls_keep_their_types_and_parent_paths(self):
         local_gui = ROOT / 'interface' / 'nationalfocusview.gui'
         vanilla_gui = Path(
             r'Z:\SteamLibrary\steamapps\common\Hearts of Iron IV\interface\nationalfocusview.gui'
         )
 
-        self.assertFalse(
-            local_gui.exists(),
-            'the mod must inherit nationalfocusview.gui instead of shadowing vanilla',
-        )
-        text = vanilla_gui.read_text(
-            encoding='utf-8-sig'
-        )
+        text = local_gui.read_text(encoding='utf-8-sig')
         nodes = set(named_gui_nodes(text))
-
+        self.assertEqual(nodes, set(named_gui_nodes(vanilla_gui.read_text(encoding='utf-8-sig'))))
         self.assertIn(
             ('iconType', 'overlay', ('national_focus_item',)),
             nodes,
         )
+
+    def test_focus_description_and_reward_have_disjoint_scroll_viewports(self):
+        text = (ROOT / 'interface/nationalfocusview.gui').read_text(encoding='utf-8-sig')
+        for window in ('national_focus_detail_view', 'coninuous_focus_detail_view'):
+            body = gui_node_body(text, window)
+            desc = gui_node_body(body, 'desc')
+            reward = gui_node_body(body, 'reward')
+            label = gui_node_body(body, 'reward_label')
+            background = gui_node_body(body, 'reward_bg')
+            def rectangle(node):
+                position = re.search(r'position\s*=\s*\{\s*x\s*=\s*(\d+)\s+y\s*=\s*(\d+)', node)
+                width = re.search(r'maxWidth\s*=\s*(\d+)', node)
+                height = re.search(r'maxHeight\s*=\s*(\d+)', node)
+                return (*map(int, position.groups()), int(width[1]), int(height[1]))
+            dx, dy, dw, dh = rectangle(desc)
+            rx, ry, rw, rh = rectangle(reward)
+            _, ly, _, lh = rectangle(label)
+            by = int(re.search(r'position\s*=\s*\{\s*x\s*=\s*\d+\s+y\s*=\s*(\d+)', background)[1])
+            self.assertLessEqual(dy + dh + 10, by)
+            self.assertLessEqual(ly + lh + 10, ry)
+            size = re.search(r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)', body)
+            width, height = map(int, size.groups())
+            self.assertLessEqual(ry + rh + 20, height)
+            for node, x, w in ((desc, dx, dw), (reward, rx, rw)):
+                self.assertIn('scrollbarType = standardtext_slider', node)
+                self.assertLessEqual(x + w + 20, width)
+
+    def test_focus_symbols_and_tree_geometry_are_unchanged(self):
+        local = (ROOT / 'interface/nationalfocusview.gui').read_text(encoding='utf-8-sig')
+        native = Path('Z:/SteamLibrary/steamapps/common/Hearts of Iron IV/interface/nationalfocusview.gui').read_text(encoding='utf-8-sig')
+        for name in ('national_focus_item', 'continuous_national_focus_item',
+                     'national_focus_link', 'national_focus_exclusive_item',
+                     'focus_spacing', 'national_focus_center', 'link_spacing',
+                     'link_offsets', 'link_begin', 'link_end', 'exclusive_offset',
+                     'exclusive_offset_left', 'exclusive_positioning',
+                     'zoom_slider_container', 'find_view'):
+            self.assertEqual(re.sub(r'\s+', '', gui_node_body(local, name)),
+                             re.sub(r'\s+', '', gui_node_body(native, name)), name)
+        tree = gui_node_body(local, 'tree')
+        self.assertIn('drag_scroll = { left middle }', tree)
+        for axis in ('vertical', 'horizontal'):
+            self.assertRegex(tree, axis + r'Scrollbar\s*=')
 
 
 class EconomyDefinedTextFixtureTests(unittest.TestCase):

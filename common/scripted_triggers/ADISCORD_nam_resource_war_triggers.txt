@@ -37,3 +37,9 @@ ADISCORD_nam_victory_record_complete = {
 	has_global_flag = ADISCORD_nam_resource_war_EFL_defeated
 	has_global_flag = ADISCORD_nam_resource_war_AZH_defeated
 }
+
+# A scheduled and still viable resource conflict supplies the warning window.
+ADISCORD_nam_resource_war_preparation = {
+	has_global_flag = ADISCORD_nam_resource_war_scheduled
+	ADISCORD_nam_resource_war_ready = yes
+}

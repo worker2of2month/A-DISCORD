@@ -129,6 +129,10 @@ on_actions = {
 	on_peace = {
 		effect = {
 			if = {
+				limit = { ADISCORD_economy_has_current_schema = yes }
+				ADISCORD_economy_refresh_war_participation_tier = yes
+			}
+			if = {
 				limit = {
 					ADISCORD_economy_has_current_schema = yes
 					has_war = no
@@ -139,7 +143,29 @@ on_actions = {
 				# refresh instead of waiting up to a month for the menu to catch up.
 				ADISCORD_economy_recalculate_policy_modifiers = yes
 				ADISCORD_economy_refresh_after_budget_control_change = yes
-				ADISCORD_economy_refresh_war_participation_tier = yes
+			}
+		}
+	}
+	on_war_relation_added = {
+		effect = {
+			# A new enemy relation also covers allies entering an existing war.
+			if = {
+				limit = { OR = { has_global_flag = ADISCORD_fresh_campaign_contract_v1 ADISCORD_economy_has_current_schema = yes } }
+				ADISCORD_economy_initialize_country = yes
+				if = {
+					limit = { ADISCORD_economy_has_current_schema = yes }
+					ADISCORD_economy_refresh_war_participation_tier = yes
+				}
+			}
+			FROM = {
+				if = {
+					limit = { OR = { has_global_flag = ADISCORD_fresh_campaign_contract_v1 ADISCORD_economy_has_current_schema = yes } }
+					ADISCORD_economy_initialize_country = yes
+					if = {
+						limit = { ADISCORD_economy_has_current_schema = yes }
+						ADISCORD_economy_refresh_war_participation_tier = yes
+					}
+				}
 			}
 		}
 	}
@@ -150,6 +176,7 @@ on_actions = {
 			if = {
 				limit = { ADISCORD_economy_should_weekly_update = yes }
 				ADISCORD_economy_weekly_update = yes
+				ADISCORD_economy_refresh_open_window = yes
 			}
 		}
 	}
@@ -173,7 +200,21 @@ on_actions = {
 	}
 	on_monthly = {
 		effect = {
+			# Reconcile human handoffs, partial peace and changes of major status
+			# before selecting cadence. Only current enemies are inspected.
+			if = {
+				limit = { ADISCORD_economy_has_current_schema = yes }
+				if = {
+					limit = { OR = { has_war = yes has_country_flag = ADISCORD_economy_fighting_human } }
+					ADISCORD_economy_refresh_war_participation_tier = yes
+				}
+				else = { ADISCORD_economy_set_simulation_tier = yes }
+			}
 			# HOI4 monthly pulse is already country-scoped. Do not every_country here.
+			if = {
+				limit = { has_country_flag = ADISCORD_non_participating_minor_optimized }
+				ADISCORD_reconcile_non_participating_minor_optimization = yes
+			}
 			if = {
 				limit = { ADISCORD_economy_should_monthly_update = yes }
 				ADISCORD_economy_monthly_update = yes

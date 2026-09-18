@@ -1360,7 +1360,7 @@ focus = {
                 with self.subTest(focus_id=focus_id):
                     block = self.blocks[focus_id]
                     self.assertEqual(_phase_flags(block), {PREWAR_PHASE})
-                    self.assertIn(f"allow_branch = {{ tag = {tag}", block)
+                    self.assertIn(f"allow_branch = {{ tag = {tag}" if tag == "WRK" else "allow_branch = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR }", block)
 
     def test_vad_prewar_continuity_paths_are_short_and_reward_dense(self) -> None:
         terminal = "VAD_form_emergency_chancery"
@@ -1379,7 +1379,7 @@ focus = {
         self.assertEqual(set().union(*paths), set(PREWAR_VAD_BASE_FOCUSES))
         self.assertTrue(
             all(
-                _focus_cost(self.blocks[focus_id]) == 5
+                _focus_cost(self.blocks[focus_id]) in {2, 3}
                 for focus_id in PREWAR_WRK_BASE_FOCUSES
             )
         )
@@ -1438,7 +1438,7 @@ focus = {
 
         for focus_id, final_flag in {
             "WRK_offer_emergency_compact": "ADISCORD_vorkerland_wrk_compact_committed",
-            "VAD_ratify_emergency_compact": "ADISCORD_vorkerland_vad_compact_committed",
+            "VAD_ratify_emergency_compact": "ADISCORD_vorkerland_district_compact_committed",
         }.items():
             reward = _blocks(self.blocks[focus_id], "completion_reward")[0]
             self.assertEqual(

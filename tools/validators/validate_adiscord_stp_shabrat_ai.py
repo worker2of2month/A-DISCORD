@@ -62,14 +62,18 @@ DEPTH_FOCUSES = (
 )
 WAR_FOCUSES = (
     "STP_cw_unified_headquarters",
+    "STP_cw_mobilization_register",
+    "STP_cw_wartime_arsenals",
     "STP_cw_road_to_fada",
+    "STP_cw_supply_routes",
+    "STP_cw_front_scouts",
+    "STP_cw_mobile_workshops",
+    "STP_cw_frontline_relief",
     "STP_cw_last_banquet",
     "STP_cw_cut_capital_roads",
     "STP_cw_government_quarter_assault",
-    "STP_cw_mobilization_register",
-    "STP_cw_wartime_arsenals",
-    "STP_cw_supply_routes",
     "STP_cw_line_formations",
+    "STP_cw_route_columns",
 )
 RECONSTRUCTION_FOCUSES = (
     "STP_cw_first_postwar_budget",

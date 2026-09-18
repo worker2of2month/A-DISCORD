@@ -1,5 +1,63 @@
 ideas = {
 	country = {
+
+		STP_pc_val_compact = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { OR = { STS = { exists = no } STS = { is_subject = yes } VAL = { exists = no } VAL = { is_subject = yes } STS = { has_war_with = VAL } } }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = { industrial_capacity_factory = 0.03 supply_consumption_factor = -0.03 }
+		}
+		STP_pc_val_campaign_ready = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { OR = { STP_pc_can_confront_val = no has_war_with = VAL } }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = { planning_speed = 0.10 supply_consumption_factor = -0.05 }
+		}
+
+		STP_pc_nod_compact = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { OR = { STS = { exists = no } STS = { is_subject = yes } NOD = { exists = no } NOD = { is_subject = yes } STS = { has_war_with = NOD } } }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = { ADISCORD_economy_army_expense_factor = -0.08 }
+		}
+		STP_pc_nod_campaign_ready = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { OR = { STP_pc_can_confront_nod = no has_war_with = NOD } }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = { planning_speed = 0.10 supply_consumption_factor = -0.05 }
+		}
+
+
+		STP_cw_party_command_disruption = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = STS } }
+			modifier = { army_org_regain = -0.10 planning_speed = -0.15 }
+		}
+		STP_cw_operation_tempo = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = STP } }
+			modifier = { breakthrough_factor = 0.08 planning_speed = 0.10 }
+		}
+		STP_cw_operation_disorganization = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = STP } }
+			modifier = { army_org_regain = -0.10 planning_speed = -0.10 }
+		}
+
 # --- civil_war_ideas ---
 		SRP_council_authority = {
 			picture = ADISCORD_law_civic_local_councils
@@ -110,10 +168,12 @@ ideas = {
 			allowed = { always = no }
 			modifier = { army_org_regain = 0.15 }
 		}
+		STP_cw_reserve_commanders_idea = { name = STP_cw_military_staff_dynamic allowed = { always = no } modifier = { army_org_factor = 0.05 planning_speed = 0.10 } }
+		STP_cw_casualty_routes_idea = { name = STP_cw_military_staff_dynamic allowed = { always = no } modifier = { army_org_regain = 0.10 } }
 		STP_cw_supply_officers_idea = {
 			name = STP_cw_military_staff_dynamic
 			allowed = { always = no }
-			modifier = { planning_speed = 0.10 supply_consumption_factor = -0.08 }
+			modifier = { planning_speed = 0.20 supply_consumption_factor = -0.15 }
 		}
 		STP_cw_unified_staff_idea = {
 			name = STP_cw_military_staff_dynamic
@@ -303,12 +363,20 @@ ideas = {
 			cancel = { has_capitulated = yes }
 			modifier = { supply_consumption_factor = 0.10 army_speed_factor = -0.08 }
 		}
+		STP_cw_party_command_sabotage = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { has_capitulated = yes }
+			modifier = { army_org_factor = -0.15 planning_speed = -0.25 }
+		}
+
 		STP_cw_party_sabotage_aftermath = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
 			cancel = { has_capitulated = yes }
-			modifier = { industrial_capacity_factory = -0.10 production_factory_max_efficiency_factor = -0.08 }
+			modifier = { industrial_capacity_factory = -0.20 production_factory_max_efficiency_factor = -0.15 }
 		}
 
 		STP_pw_republic_dummy = {
@@ -616,6 +684,30 @@ ideas = {
 			}
 		}
 
+
+		STP_pw_party_last_purge = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_legalize
+			modifier = { research_speed_factor = -0.10 army_org_factor = -0.05 }
+		}
+
+		STP_pw_party_security_cordon = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_legalize
+			modifier = { mobilization_speed = 0.20 conscription_factor = 0.10 }
+		}
+
+		STP_pw_party_frontier_drill = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_legalize
+			modifier = { army_core_defence_factor = 0.10 dig_in_speed_factor = 0.20 }
+		}
 
 # --- end ---
 	}

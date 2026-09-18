@@ -39,3 +39,5 @@ set_popularities = {
 set_stability = -0.25
 
 set_research_slots = 4
+
+set_cosmetic_tag = ZAO_confederation

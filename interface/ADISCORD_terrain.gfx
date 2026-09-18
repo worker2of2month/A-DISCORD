@@ -1,6 +1,5 @@
 spriteTypes = {
-	# A-Discord terrain cards. Custom city terrain follows the TFR convention:
-	# the category name maps directly to GFX_terrain_<category>.
+	# Terrain categories map directly to GFX_terrain_<category>.
 	spriteType = {
 		name = "GFX_terrain_contaminated"
 		textureFile = "gfx/interface/terrains/terrain_contaminated.dds"

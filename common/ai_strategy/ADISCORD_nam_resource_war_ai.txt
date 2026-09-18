@@ -61,3 +61,59 @@ ADISCORD_nam_resource_war_mazar_volunteers = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = send_volunteers_desire id = AZH value = 1000 }
 }
+
+ADISCORD_NAM_prepare_against_EFL = {
+	allowed = { tag = NAM }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = EFL }
+		NOT = { is_in_faction_with = EFL }
+		EFL = { exists = yes has_capitulated = no }
+		ADISCORD_nam_resource_war_preparation = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = EFL value = 100 }
+}
+
+ADISCORD_EFL_prepare_against_NAM = {
+	allowed = { tag = EFL }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = NAM }
+		NOT = { is_in_faction_with = NAM }
+		NAM = { exists = yes has_capitulated = no }
+		ADISCORD_nam_resource_war_preparation = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NAM value = 100 }
+}
+
+ADISCORD_NAM_prepare_against_AZH = {
+	allowed = { tag = NAM }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = AZH }
+		NOT = { is_in_faction_with = AZH }
+		AZH = { exists = yes has_capitulated = no }
+		ADISCORD_nam_resource_war_preparation = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = AZH value = 100 }
+}
+
+ADISCORD_AZH_prepare_against_NAM = {
+	allowed = { tag = AZH }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = NAM }
+		NOT = { is_in_faction_with = NAM }
+		NAM = { exists = yes has_capitulated = no }
+		ADISCORD_nam_resource_war_preparation = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NAM value = 100 }
+}

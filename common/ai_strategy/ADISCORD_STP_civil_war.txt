@@ -39,28 +39,7 @@ STS_cw_defend_abilia = {
 	}
 }
 
-# External wars may outlast the party war and its cleanup flags.
-# Keep neutral-border demand suppressed until STS leaves every regional war.
-STS_cw_deprioritize_neutral_borders = {
-	allowed = { original_tag = STS }
-	enable = {
-		is_ai = yes
-		has_capitulated = no
-		OR = {
-			has_war_with = STP
-			has_war_with = NOD
-			has_war_with = VAL
-		}
-	}
-	abort_when_not_enabled = yes
-	ai_strategy = {
-		type = front_unit_request
-		# The target country is in scope; FROM is the allocating country.
-		# Actual belligerents must never receive the neutral-border reduction.
-		country_trigger = { NOT = { has_war_with = FROM } }
-		value = -100
-	}
-}
+
 
 STP_cw_front_against_sts = {
 	allowed = { original_tag = STP }
@@ -254,8 +233,6 @@ NOD_cw_stelander_intervention_army = {
 	ai_strategy = { type = role_ratio id = militias value = -100 }
 	ai_strategy = { type = role_ratio id = garrison value = -100 }
 	ai_strategy = { type = dont_defend_ally_borders value = 1 }
-	ai_strategy = { type = ignore id = VAL value = 1000 }
-	ai_strategy = { type = ignore id = SRP value = 1000 }
 	ai_strategy = { type = force_concentration_factor value = 80 }
 	ai_strategy = { type = consider_weak id = STS value = 120 }
 	ai_strategy = { type = front_unit_request tag = STS value = 220 }
@@ -263,25 +240,204 @@ NOD_cw_stelander_intervention_army = {
 	ai_strategy = { type = conquer id = STS value = 250 }
 }
 
-NOD_cw_northern_deprioritize_besjaysk = {
-	allowed = { original_tag = NOD }
-	enable = { OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } }
-	abort_when_not_enabled = yes
-	# The planner opens one front per bordering country. A BJK-only request
-	# leaves BBV and BHG as live neighbor demand during the northern war.
-	ai_strategy = {
-		type = front_unit_request
-		country_trigger = {
-			OR = {
-				original_tag = BJK
-				original_tag = BBV
-				original_tag = BHG
-				original_tag = BLD
-				original_tag = BGT
-				original_tag = BCM
-			}
-			NOT = { has_war_with = FROM }
-		}
-		value = -100
+# --- Prewar deployment ---
+
+NOD_prepare_against_YPR = {
+	allowed = { tag = NOD }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = YPR }
+		NOT = { is_in_faction_with = YPR }
+		YPR = { exists = yes has_capitulated = no }
+		NOD = { NOD_ai_northern_preparation = yes }
 	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = YPR value = 100 }
+}
+
+YPR_prepare_against_NOD = {
+	allowed = { tag = YPR }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = NOD }
+		NOT = { is_in_faction_with = NOD }
+		NOD = { exists = yes has_capitulated = no }
+		NOD = { NOD_ai_northern_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NOD value = 100 }
+}
+
+NOD_prepare_against_COF = {
+	allowed = { tag = NOD }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = COF }
+		NOT = { is_in_faction_with = COF }
+		COF = { exists = yes has_capitulated = no }
+		NOD = { NOD_ai_northern_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = COF value = 100 }
+}
+
+COF_prepare_against_NOD = {
+	allowed = { tag = COF }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = NOD }
+		NOT = { is_in_faction_with = NOD }
+		NOD = { exists = yes has_capitulated = no }
+		NOD = { NOD_ai_northern_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NOD value = 100 }
+}
+
+NOD_prepare_against_TFF = {
+	allowed = { tag = NOD }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = TFF }
+		NOT = { is_in_faction_with = TFF }
+		TFF = { exists = yes has_capitulated = no }
+		NOD = { NOD_ai_northern_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = TFF value = 100 }
+}
+
+TFF_prepare_against_NOD = {
+	allowed = { tag = TFF }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = NOD }
+		NOT = { is_in_faction_with = NOD }
+		NOD = { exists = yes has_capitulated = no }
+		NOD = { NOD_ai_northern_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NOD value = 100 }
+}
+
+NOD_prepare_against_STS = {
+	allowed = { tag = NOD }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = STS }
+		NOT = { is_in_faction_with = STS }
+		STS = { exists = yes has_capitulated = no }
+		NOD = { NOD_ai_stelander_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = STS value = 100 }
+}
+
+STS_prepare_against_NOD = {
+	allowed = { tag = STS }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = NOD }
+		NOT = { is_in_faction_with = NOD }
+		NOD = { exists = yes has_capitulated = no }
+		NOD = { NOD_ai_stelander_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NOD value = 100 }
+}
+
+VAL_prepare_against_SRP = {
+	allowed = { tag = VAL }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = SRP }
+		NOT = { is_in_faction_with = SRP }
+		SRP = { exists = yes has_capitulated = no }
+		VAL = { VAL_ai_republics_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = SRP value = 100 }
+}
+
+SRP_prepare_against_VAL = {
+	allowed = { tag = SRP }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = VAL }
+		NOT = { is_in_faction_with = VAL }
+		VAL = { exists = yes has_capitulated = no }
+		VAL = { VAL_ai_republics_preparation = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VAL value = 100 }
+}
+
+STP_pc_prepare_STS_VAL = {
+	allowed = { tag = STS }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = VAL }
+		NOT = { is_in_faction_with = VAL }
+		VAL = { exists = yes has_capitulated = no is_subject = no }
+		STS = { STP_pc_ai_preparing_val_war = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VAL value = 100 }
+}
+
+STP_pc_prepare_VAL_STS = {
+	allowed = { tag = VAL }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = STS }
+		NOT = { is_in_faction_with = STS }
+		STS = { exists = yes has_capitulated = no is_subject = no }
+		STS = { STP_pc_ai_preparing_val_war = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = STS value = 100 }
+}
+
+STP_pc_prepare_STS_NOD = {
+	allowed = { tag = STS }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = NOD }
+		NOT = { is_in_faction_with = NOD }
+		NOD = { exists = yes has_capitulated = no is_subject = no }
+		STS = { STP_pc_ai_preparing_nod_war = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NOD value = 100 }
+}
+
+STP_pc_prepare_NOD_STS = {
+	allowed = { tag = NOD }
+	enable = {
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = STS }
+		NOT = { is_in_faction_with = STS }
+		STS = { exists = yes has_capitulated = no is_subject = no }
+		STS = { STP_pc_ai_preparing_nod_war = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = STS value = 100 }
 }

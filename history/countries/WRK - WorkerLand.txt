@@ -23,7 +23,10 @@ create_faction_from_template = {
 }
 add_to_faction = NAM
 add_to_faction = DAN
-add_to_faction = VAD
+add_to_faction = EYR
+add_to_faction = EGC
+add_to_faction = RIV
+add_to_faction = YOR
 add_to_faction = ZAO
 add_to_faction = PWR
 add_to_faction = VLA
@@ -77,7 +80,19 @@ set_autonomy = {
 	autonomous_state = autonomy_colony
 }
 set_autonomy = {
-	target = VAD
+	target = EYR
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = EGC
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = RIV
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = YOR
 	autonomous_state = autonomy_district_in_Vorkerland
 }
 set_autonomy = {
@@ -113,3 +128,5 @@ set_autonomy = {
 ADISCORD_vorkerland_sync_all_party_identities = yes
 
 set_convoys = 533
+
+set_cosmetic_tag = WRK_confederation

@@ -97,7 +97,7 @@ class NewSaveMaterializationTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_collapse_not_started = yes", choice_trigger)
 
         options = named_blocks(choice, "option")
-        self.assertEqual(len(options), 4)
+        self.assertEqual(len(options), 3)
         collapse_dispatch = "country_event = { id = ADISCORD_vorkerland_collapse.1 }"
         expected_flags = (*PLAYER_PREFERENCE_FLAGS, PLAYER_PREFERENCE_FLAGS[1])
         for option, selected_flag in zip(options, expected_flags):
@@ -109,15 +109,8 @@ class NewSaveMaterializationTests(unittest.TestCase):
                 )
             self.assertEqual(option.count(f"set_global_flag = {selected_flag}"), 1)
             self.assertEqual(option.count(collapse_dispatch), 1)
-        for option in options[:3]:
-            self.assertIn(
-                "NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }",
-                option,
-            )
-        self.assertIn(
-            "trigger = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }",
-            options[3],
-        )
+        for option in options:
+            self.assertNotIn("ADISCORD_vorkerland_prewar_compact_ratified", option)
 
         startup = named_block(
             read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
@@ -138,14 +131,17 @@ class NewSaveMaterializationTests(unittest.TestCase):
         ]
         self.assertEqual(direct_collapses, [])
 
-    def test_prewar_compact_resolves_immediately_and_binds_the_joint_route(self) -> None:
+    def test_prewar_compact_preserves_local_preparation_and_free_claimant_choice(self) -> None:
         phase_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
         resolver = named_block(
             phase_effects, "ADISCORD_vorkerland_resolve_prewar_compact"
         )
         for token in (
             "WRK = { has_country_flag = ADISCORD_vorkerland_wrk_compact_committed }",
-            "VAD = { has_country_flag = ADISCORD_vorkerland_vad_compact_committed }",
+            "EYR = {",
+            "EGC = {",
+            "RIV = {",
+            "YOR = {",
             "set_global_flag = ADISCORD_vorkerland_prewar_compact_ratified",
         ):
             self.assertEqual(resolver.count(token), 1)
@@ -158,15 +154,15 @@ class NewSaveMaterializationTests(unittest.TestCase):
         immediate = named_block(collapse, "immediate")
         self.assertEqual(
             immediate.count("has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified"),
-            2,
+            0,
         )
         self.assertEqual(
             immediate.count("set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad"),
-            2,
+            1,
         )
         self.assertEqual(
             immediate.count("ADISCORD_vorkerland_form_joint_government = yes"),
-            2,
+            1,
         )
 
     def test_human_handoff_is_exact_ai_safe_and_clears_preferences_before_annex(self) -> None:

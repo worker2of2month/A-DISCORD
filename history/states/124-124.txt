@@ -9,9 +9,8 @@ state={
 	local_supplies = 2.5
 	state_category = rural
 	history={
-		owner = VAD
-		add_core_of = VAD
-
+		owner=EGC
+		add_core_of=EGC
 		victory_points = { 16579 3 }
 
 		buildings = {

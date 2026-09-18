@@ -238,7 +238,7 @@ ADISCORD_vorkerland_collapse_category = {
 	# the winner into the host's existing war through faction membership plus
 	# add_to_war rather than opening a second war object. One targeted decision
 	# covers all three claimants instead of a copied decision per host.
-	ADISCORD_vorkerland_join_claimant_coalition = {
+ADISCORD_vorkerland_join_claimant_coalition = {
 		icon = generic_diplomatic_treaty
 		allowed = {
 			OR = {
@@ -254,14 +254,14 @@ ADISCORD_vorkerland_collapse_category = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 			NOT = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary }
+			NOT = { has_country_flag = ADISCORD_vorkerland_coalition_join_paid }
 		}
-		target_trigger = {
-			FROM = { ADISCORD_vorkerland_is_coalition_host_for_ROOT = yes }
-		}
+target_trigger = { FROM = { ADISCORD_vorkerland_is_main_claimant = yes } }
 		visible = {
 			is_subject = no
 			is_in_faction = no
 			NOT = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary }
+			NOT = { has_country_flag = ADISCORD_vorkerland_coalition_join_paid }
 		}
 		available = {
 			has_war = no
@@ -271,13 +271,19 @@ ADISCORD_vorkerland_collapse_category = {
 			FROM = { ADISCORD_vorkerland_is_coalition_host_for_ROOT = yes }
 		}
 		cost = 25
-		fire_only_once = yes
+
+		fire_only_once = no
+		days_re_enable = 7
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_vorkerland_join_claimant_coalition_tt
-			hidden_effect = { ADISCORD_vorkerland_join_coalition_of_FROM = yes }
+			hidden_effect = {
+				set_country_flag = ADISCORD_vorkerland_coalition_join_paid
+				ADISCORD_vorkerland_join_coalition_of_FROM = yes
+			}
 		}
 		ai_will_do = {
 			base = 200
+			modifier = { factor = 3 has_country_flag = ADISCORD_vorkerland_compact_supply_received FROM = { tag = WKR } }
 			modifier = { factor = 0 ADISCORD_vorkerland_has_live_local_rival = yes }
 			modifier = { factor = 2 num_divisions > 8 }
 		}
@@ -1303,6 +1309,7 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
 		}
 		available = {
+			custom_trigger_tooltip = { tooltip = ADISCORD_vorkerland_unaligned_solar_target_tt ADISCORD_vorkerland_vad_has_unaligned_solar_target = yes }
 			is_subject = no
 			NOT = { has_capitulated = yes }
 			ADISCORD_vorkerland_vad_has_solar_intervention_border = yes
@@ -1311,9 +1318,13 @@ ADISCORD_vorkerland_regional_diplomacy_category = {
 		cost = 50
 		days_remove = 7
 		fire_only_once = no
-		complete_effect = { ADISCORD_vorkerland_reserve_vad_solar_intervention = yes }
+		complete_effect = {
+			hidden_effect = { set_country_flag = ADISCORD_vorkerland_vad_solar_intervention_paid }
+			ADISCORD_vorkerland_reserve_vad_solar_intervention = yes
+		}
 		cancel_trigger = {
 			OR = {
+				ADISCORD_vorkerland_vad_has_unaligned_solar_target = no
 				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_reserved }
 				NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_preparation }
 				has_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested
@@ -1462,11 +1473,11 @@ ADISCORD_vorkerland_focus_operations_category = {
 	# disappeared and the claimant owns and controls the entire historical
 	# package. These short civil-administration decisions are identical for all
 	# three claimants and cannot grant claims on land they have not secured.
-	ADISCORD_vorkerland_integrate_eyr_district = {
+ADISCORD_vorkerland_integrate_eyr_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			ADISCORD_vorkerland_district_integration_available = yes
 			NOT = { country_exists = EYR }
 			owns_state = 102 owns_state = 109 owns_state = 111 owns_state = 325
 			OR = { 102 = { NOT = { is_core_of = ROOT } } 109 = { NOT = { is_core_of = ROOT } } 111 = { NOT = { is_core_of = ROOT } } 325 = { NOT = { is_core_of = ROOT } } }
@@ -1478,26 +1489,35 @@ ADISCORD_vorkerland_focus_operations_category = {
 			owns_state = 111 controls_state = 111
 			owns_state = 325 controls_state = 325
 		}
+		complete_effect = { hidden_effect = { set_country_flag = ADISCORD_vorkerland_integrate_eyr_district_paid } }
 		cost = 15
 		days_remove = 21
 		days_re_enable = 7
 		fire_only_once = no
 		remove_effect = {
-			custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
 			if = {
-				limit = { NOT = { country_exists = EYR } owns_state = 102 controls_state = 102 owns_state = 109 controls_state = 109 owns_state = 111 controls_state = 111 owns_state = 325 controls_state = 325 }
-				hidden_effect = { 102 = { add_core_of = ROOT } 109 = { add_core_of = ROOT } 111 = { add_core_of = ROOT } 325 = { add_core_of = ROOT } }
-				ADISCORD_vorkerland_begin_reunification = yes
+				limit = { has_country_flag = ADISCORD_vorkerland_integrate_eyr_district_paid }
+				clr_country_flag = ADISCORD_vorkerland_integrate_eyr_district_paid
+				custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
+				if = {
+					limit = { NOT = { country_exists = EYR } owns_state = 102 controls_state = 102 owns_state = 109 controls_state = 109 owns_state = 111 controls_state = 111 owns_state = 325 controls_state = 325 }
+					hidden_effect = { 102 = { add_core_of = ROOT } 109 = { add_core_of = ROOT } 111 = { add_core_of = ROOT } 325 = { add_core_of = ROOT } }
+					ADISCORD_vorkerland_begin_reunification = yes
+				}
+				if = { limit = { NOT = { NOT = { country_exists = EYR }
+							owns_state = 102 controls_state = 102
+							owns_state = 109 controls_state = 109
+							owns_state = 111 controls_state = 111
+							owns_state = 325 controls_state = 325 } } add_political_power = 15 }
 			}
 		}
 		ai_will_do = { factor = 600 }
 	}
-
-	ADISCORD_vorkerland_integrate_egc_district = {
+ADISCORD_vorkerland_integrate_egc_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			ADISCORD_vorkerland_district_integration_available = yes
 			NOT = { country_exists = EGC }
 			owns_state = 81 owns_state = 110 owns_state = 124
 			OR = { 81 = { NOT = { is_core_of = ROOT } } 110 = { NOT = { is_core_of = ROOT } } 124 = { NOT = { is_core_of = ROOT } } }
@@ -1508,26 +1528,34 @@ ADISCORD_vorkerland_focus_operations_category = {
 			owns_state = 110 controls_state = 110
 			owns_state = 124 controls_state = 124
 		}
+		complete_effect = { hidden_effect = { set_country_flag = ADISCORD_vorkerland_integrate_egc_district_paid } }
 		cost = 15
 		days_remove = 21
 		days_re_enable = 7
 		fire_only_once = no
 		remove_effect = {
-			custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
 			if = {
-				limit = { NOT = { country_exists = EGC } owns_state = 81 controls_state = 81 owns_state = 110 controls_state = 110 owns_state = 124 controls_state = 124 }
-				hidden_effect = { 81 = { add_core_of = ROOT } 110 = { add_core_of = ROOT } 124 = { add_core_of = ROOT } }
-				ADISCORD_vorkerland_begin_reunification = yes
+				limit = { has_country_flag = ADISCORD_vorkerland_integrate_egc_district_paid }
+				clr_country_flag = ADISCORD_vorkerland_integrate_egc_district_paid
+				custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
+				if = {
+					limit = { NOT = { country_exists = EGC } owns_state = 81 controls_state = 81 owns_state = 110 controls_state = 110 owns_state = 124 controls_state = 124 }
+					hidden_effect = { 81 = { add_core_of = ROOT } 110 = { add_core_of = ROOT } 124 = { add_core_of = ROOT } }
+					ADISCORD_vorkerland_begin_reunification = yes
+				}
+				if = { limit = { NOT = { NOT = { country_exists = EGC }
+							owns_state = 81 controls_state = 81
+							owns_state = 110 controls_state = 110
+							owns_state = 124 controls_state = 124 } } add_political_power = 15 }
 			}
 		}
 		ai_will_do = { factor = 600 }
 	}
-
-	ADISCORD_vorkerland_integrate_riv_district = {
+ADISCORD_vorkerland_integrate_riv_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			ADISCORD_vorkerland_district_integration_available = yes
 			NOT = { country_exists = RIV }
 			owns_state = 79 owns_state = 306 owns_state = 308 owns_state = 309 owns_state = 327
 			OR = { 79 = { NOT = { is_core_of = ROOT } } 306 = { NOT = { is_core_of = ROOT } } 308 = { NOT = { is_core_of = ROOT } } 309 = { NOT = { is_core_of = ROOT } } 327 = { NOT = { is_core_of = ROOT } } }
@@ -1540,26 +1568,36 @@ ADISCORD_vorkerland_focus_operations_category = {
 			owns_state = 309 controls_state = 309
 			owns_state = 327 controls_state = 327
 		}
+		complete_effect = { hidden_effect = { set_country_flag = ADISCORD_vorkerland_integrate_riv_district_paid } }
 		cost = 15
 		days_remove = 21
 		days_re_enable = 7
 		fire_only_once = no
 		remove_effect = {
-			custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
 			if = {
-				limit = { NOT = { country_exists = RIV } owns_state = 79 controls_state = 79 owns_state = 306 controls_state = 306 owns_state = 308 controls_state = 308 owns_state = 309 controls_state = 309 owns_state = 327 controls_state = 327 }
-				hidden_effect = { 79 = { add_core_of = ROOT } 306 = { add_core_of = ROOT } 308 = { add_core_of = ROOT } 309 = { add_core_of = ROOT } 327 = { add_core_of = ROOT } }
-				ADISCORD_vorkerland_begin_reunification = yes
+				limit = { has_country_flag = ADISCORD_vorkerland_integrate_riv_district_paid }
+				clr_country_flag = ADISCORD_vorkerland_integrate_riv_district_paid
+				custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
+				if = {
+					limit = { NOT = { country_exists = RIV } owns_state = 79 controls_state = 79 owns_state = 306 controls_state = 306 owns_state = 308 controls_state = 308 owns_state = 309 controls_state = 309 owns_state = 327 controls_state = 327 }
+					hidden_effect = { 79 = { add_core_of = ROOT } 306 = { add_core_of = ROOT } 308 = { add_core_of = ROOT } 309 = { add_core_of = ROOT } 327 = { add_core_of = ROOT } }
+					ADISCORD_vorkerland_begin_reunification = yes
+				}
+				if = { limit = { NOT = { NOT = { country_exists = RIV }
+							owns_state = 79 controls_state = 79
+							owns_state = 306 controls_state = 306
+							owns_state = 308 controls_state = 308
+							owns_state = 309 controls_state = 309
+							owns_state = 327 controls_state = 327 } } add_political_power = 15 }
 			}
 		}
 		ai_will_do = { factor = 600 }
 	}
-
-	ADISCORD_vorkerland_integrate_rev_district = {
+ADISCORD_vorkerland_integrate_rev_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			ADISCORD_vorkerland_district_integration_available = yes
 			NOT = { country_exists = REV }
 			owns_state = 82 owns_state = 323
 			OR = { 82 = { NOT = { is_core_of = ROOT } } 323 = { NOT = { is_core_of = ROOT } } }
@@ -1569,26 +1607,33 @@ ADISCORD_vorkerland_focus_operations_category = {
 			owns_state = 82 controls_state = 82
 			owns_state = 323 controls_state = 323
 		}
+		complete_effect = { hidden_effect = { set_country_flag = ADISCORD_vorkerland_integrate_rev_district_paid } }
 		cost = 15
 		days_remove = 21
 		days_re_enable = 7
 		fire_only_once = no
 		remove_effect = {
-			custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
 			if = {
-				limit = { NOT = { country_exists = REV } owns_state = 82 controls_state = 82 owns_state = 323 controls_state = 323 }
-				hidden_effect = { 82 = { add_core_of = ROOT } 323 = { add_core_of = ROOT } }
-				ADISCORD_vorkerland_begin_reunification = yes
+				limit = { has_country_flag = ADISCORD_vorkerland_integrate_rev_district_paid }
+				clr_country_flag = ADISCORD_vorkerland_integrate_rev_district_paid
+				custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
+				if = {
+					limit = { NOT = { country_exists = REV } owns_state = 82 controls_state = 82 owns_state = 323 controls_state = 323 }
+					hidden_effect = { 82 = { add_core_of = ROOT } 323 = { add_core_of = ROOT } }
+					ADISCORD_vorkerland_begin_reunification = yes
+				}
+				if = { limit = { NOT = { NOT = { country_exists = REV }
+							owns_state = 82 controls_state = 82
+							owns_state = 323 controls_state = 323 } } add_political_power = 15 }
 			}
 		}
 		ai_will_do = { factor = 600 }
 	}
-
-	ADISCORD_vorkerland_integrate_yor_district = {
+ADISCORD_vorkerland_integrate_yor_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			ADISCORD_vorkerland_district_integration_available = yes
 			NOT = { country_exists = YOR }
 			owns_state = 108 owns_state = 122 owns_state = 123
 			OR = { 108 = { NOT = { is_core_of = ROOT } } 122 = { NOT = { is_core_of = ROOT } } 123 = { NOT = { is_core_of = ROOT } } }
@@ -1599,76 +1644,94 @@ ADISCORD_vorkerland_focus_operations_category = {
 			owns_state = 122 controls_state = 122
 			owns_state = 123 controls_state = 123
 		}
+		complete_effect = { hidden_effect = { set_country_flag = ADISCORD_vorkerland_integrate_yor_district_paid } }
 		cost = 15
 		days_remove = 21
 		days_re_enable = 7
 		fire_only_once = no
 		remove_effect = {
-			custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
 			if = {
-				limit = { NOT = { country_exists = YOR } owns_state = 108 controls_state = 108 owns_state = 122 controls_state = 122 owns_state = 123 controls_state = 123 }
-				hidden_effect = { 108 = { add_core_of = ROOT } 122 = { add_core_of = ROOT } 123 = { add_core_of = ROOT } }
-				ADISCORD_vorkerland_begin_reunification = yes
+				limit = { has_country_flag = ADISCORD_vorkerland_integrate_yor_district_paid }
+				clr_country_flag = ADISCORD_vorkerland_integrate_yor_district_paid
+				custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
+				if = {
+					limit = { NOT = { country_exists = YOR } owns_state = 108 controls_state = 108 owns_state = 122 controls_state = 122 owns_state = 123 controls_state = 123 }
+					hidden_effect = { 108 = { add_core_of = ROOT } 122 = { add_core_of = ROOT } 123 = { add_core_of = ROOT } }
+					ADISCORD_vorkerland_begin_reunification = yes
+				}
+				if = { limit = { NOT = { NOT = { country_exists = YOR }
+							owns_state = 108 controls_state = 108
+							owns_state = 122 controls_state = 122
+							owns_state = 123 controls_state = 123 } } add_political_power = 15 }
 			}
 		}
 		ai_will_do = { factor = 600 }
 	}
-
-	ADISCORD_vorkerland_integrate_ndn_district = {
+ADISCORD_vorkerland_integrate_ndn_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			ADISCORD_vorkerland_district_integration_available = yes
 			NOT = { country_exists = NDN }
 			owns_state = 27
 			27 = { NOT = { is_core_of = ROOT } }
 		}
 		available = { NOT = { country_exists = NDN } owns_state = 27 controls_state = 27 }
+		complete_effect = { hidden_effect = { set_country_flag = ADISCORD_vorkerland_integrate_ndn_district_paid } }
 		cost = 10
 		days_remove = 14
 		days_re_enable = 7
 		fire_only_once = no
 		remove_effect = {
-			custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
 			if = {
-				limit = { NOT = { country_exists = NDN } owns_state = 27 controls_state = 27 }
-				hidden_effect = { 27 = { add_core_of = ROOT } }
-				ADISCORD_vorkerland_begin_reunification = yes
+				limit = { has_country_flag = ADISCORD_vorkerland_integrate_ndn_district_paid }
+				clr_country_flag = ADISCORD_vorkerland_integrate_ndn_district_paid
+				custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
+				if = {
+					limit = { NOT = { country_exists = NDN } owns_state = 27 controls_state = 27 }
+					hidden_effect = { 27 = { add_core_of = ROOT } }
+					ADISCORD_vorkerland_begin_reunification = yes
+				}
+				if = { limit = { NOT = { NOT = { country_exists = NDN } owns_state = 27 controls_state = 27 } } add_political_power = 10 }
 			}
 		}
 		ai_will_do = { factor = 600 }
 	}
-
-	ADISCORD_vorkerland_integrate_swb_district = {
+ADISCORD_vorkerland_integrate_swb_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			ADISCORD_vorkerland_district_integration_available = yes
 			NOT = { country_exists = SWB }
 			owns_state = 35
 			35 = { NOT = { is_core_of = ROOT } }
 		}
 		available = { NOT = { country_exists = SWB } owns_state = 35 controls_state = 35 }
+		complete_effect = { hidden_effect = { set_country_flag = ADISCORD_vorkerland_integrate_swb_district_paid } }
 		cost = 10
 		days_remove = 14
 		days_re_enable = 7
 		fire_only_once = no
 		remove_effect = {
-			custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
 			if = {
-				limit = { NOT = { country_exists = SWB } owns_state = 35 controls_state = 35 }
-				hidden_effect = { 35 = { add_core_of = ROOT } }
-				ADISCORD_vorkerland_begin_reunification = yes
+				limit = { has_country_flag = ADISCORD_vorkerland_integrate_swb_district_paid }
+				clr_country_flag = ADISCORD_vorkerland_integrate_swb_district_paid
+				custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
+				if = {
+					limit = { NOT = { country_exists = SWB } owns_state = 35 controls_state = 35 }
+					hidden_effect = { 35 = { add_core_of = ROOT } }
+					ADISCORD_vorkerland_begin_reunification = yes
+				}
+				if = { limit = { NOT = { NOT = { country_exists = SWB } owns_state = 35 controls_state = 35 } } add_political_power = 10 }
 			}
 		}
 		ai_will_do = { factor = 600 }
 	}
-
-	ADISCORD_vorkerland_integrate_vhv_district = {
+ADISCORD_vorkerland_integrate_vhv_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			ADISCORD_vorkerland_district_integration_available = yes
 			NOT = { country_exists = VHV }
 			owns_state = 315 owns_state = 316 owns_state = 317
 			OR = { 315 = { NOT = { is_core_of = ROOT } } 316 = { NOT = { is_core_of = ROOT } } 317 = { NOT = { is_core_of = ROOT } } }
@@ -1679,26 +1742,34 @@ ADISCORD_vorkerland_focus_operations_category = {
 			owns_state = 316 controls_state = 316
 			owns_state = 317 controls_state = 317
 		}
+		complete_effect = { hidden_effect = { set_country_flag = ADISCORD_vorkerland_integrate_vhv_district_paid } }
 		cost = 15
 		days_remove = 21
 		days_re_enable = 7
 		fire_only_once = no
 		remove_effect = {
-			custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
 			if = {
-				limit = { NOT = { country_exists = VHV } owns_state = 315 controls_state = 315 owns_state = 316 controls_state = 316 owns_state = 317 controls_state = 317 }
-				hidden_effect = { 315 = { add_core_of = ROOT } 316 = { add_core_of = ROOT } 317 = { add_core_of = ROOT } }
-				ADISCORD_vorkerland_begin_reunification = yes
+				limit = { has_country_flag = ADISCORD_vorkerland_integrate_vhv_district_paid }
+				clr_country_flag = ADISCORD_vorkerland_integrate_vhv_district_paid
+				custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
+				if = {
+					limit = { NOT = { country_exists = VHV } owns_state = 315 controls_state = 315 owns_state = 316 controls_state = 316 owns_state = 317 controls_state = 317 }
+					hidden_effect = { 315 = { add_core_of = ROOT } 316 = { add_core_of = ROOT } 317 = { add_core_of = ROOT } }
+					ADISCORD_vorkerland_begin_reunification = yes
+				}
+				if = { limit = { NOT = { NOT = { country_exists = VHV }
+							owns_state = 315 controls_state = 315
+							owns_state = 316 controls_state = 316
+							owns_state = 317 controls_state = 317 } } add_political_power = 15 }
 			}
 		}
 		ai_will_do = { factor = 600 }
 	}
-
-	ADISCORD_vorkerland_integrate_osv_district = {
+ADISCORD_vorkerland_integrate_osv_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
-			ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
+			ADISCORD_vorkerland_district_integration_available = yes
 			NOT = { country_exists = OSV }
 			owns_state = 318 owns_state = 320
 			OR = { 318 = { NOT = { is_core_of = ROOT } } 320 = { NOT = { is_core_of = ROOT } } }
@@ -1708,19 +1779,39 @@ ADISCORD_vorkerland_focus_operations_category = {
 			owns_state = 318 controls_state = 318
 			owns_state = 320 controls_state = 320
 		}
+		complete_effect = { hidden_effect = { set_country_flag = ADISCORD_vorkerland_integrate_osv_district_paid } }
 		cost = 15
 		days_remove = 21
 		days_re_enable = 7
 		fire_only_once = no
 		remove_effect = {
-			custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
 			if = {
-				limit = { NOT = { country_exists = OSV } owns_state = 318 controls_state = 318 owns_state = 320 controls_state = 320 }
-				hidden_effect = { 318 = { add_core_of = ROOT } 320 = { add_core_of = ROOT } }
-				ADISCORD_vorkerland_begin_reunification = yes
+				limit = { has_country_flag = ADISCORD_vorkerland_integrate_osv_district_paid }
+				clr_country_flag = ADISCORD_vorkerland_integrate_osv_district_paid
+				custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
+				if = {
+					limit = { NOT = { country_exists = OSV } owns_state = 318 controls_state = 318 owns_state = 320 controls_state = 320 }
+					hidden_effect = { 318 = { add_core_of = ROOT } 320 = { add_core_of = ROOT } }
+					ADISCORD_vorkerland_begin_reunification = yes
+				}
+				if = { limit = { NOT = { NOT = { country_exists = OSV }
+							owns_state = 318 controls_state = 318
+							owns_state = 320 controls_state = 320 } } add_political_power = 15 }
 			}
 		}
 		ai_will_do = { factor = 600 }
+	}
+ADISCORD_vorkerland_consolidation_deadline = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
+		activation = { always = no }
+		visible = { has_global_flag = ADISCORD_vorkerland_phase_central_preparation }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		is_good = no
+		days_mission_timeout = 180
+		cancel_trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_preparation } }
+		timeout_effect = { hidden_effect = { country_event = { id = ADISCORD_vorkerland_phase.4 hours = 1 } } }
 	}
 
 	ADISCORD_vorkerland_commit_to_central_showdown = {
@@ -1732,66 +1823,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = ADISCORD_vorkerland_central_showdown_command_ready_tt
-				OR = {
-					AND = { tag = WKR has_country_flag = ADISCORD_vorkerland_focus_wkr_central_war_unlocked }
-					AND = { tag = VAD has_country_flag = ADISCORD_vorkerland_focus_vad_central_war_unlocked }
-					AND = { tag = TVA has_country_flag = ADISCORD_vorkerland_focus_tva_central_war_unlocked }
-				}
-				has_country_flag = ADISCORD_vorkerland_focus_central_front_prepared
-			}
-			custom_trigger_tooltip = {
-				tooltip = ADISCORD_vorkerland_central_showdown_campaigns_closed_tt
-				NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }
-				NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_launch_pending }
-				NOT = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_deadline_active }
-				NOT = { OR = { has_war_with = EYR has_war_with = EGC has_war_with = RIV has_war_with = REV has_war_with = YOR has_war_with = NDN has_war_with = SWB has_war_with = VHV has_war_with = OSV } }
-				NOT = { country_exists = EYR }
-				NOT = { country_exists = EGC }
-				NOT = { country_exists = RIV }
-				NOT = { country_exists = REV }
-				NOT = { country_exists = YOR }
-				NOT = { country_exists = NDN }
-				NOT = { country_exists = SWB }
-				NOT = { country_exists = VHV }
-				NOT = { country_exists = OSV }
-			}
-			custom_trigger_tooltip = {
-				tooltip = ADISCORD_vorkerland_central_districts_integrated_tt
-				ADISCORD_vorkerland_central_districts_inside_claimant_graph = yes
-				102 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				109 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				111 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				325 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				81 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				110 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				124 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				79 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				306 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				308 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				309 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				327 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				82 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				323 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				108 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				122 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				123 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				27 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				35 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				315 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				316 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				317 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				318 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-				320 = { OR = { is_core_of = WKR is_core_of = VAD is_core_of = TVA } }
-			}
-			custom_trigger_tooltip = {
-				tooltip = ADISCORD_vorkerland_central_showdown_no_live_intervention_tt
-				NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }
-				NOT = { has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active }
-			}
-		}
+available = { custom_trigger_tooltip = { tooltip = ADISCORD_vorkerland_central_showdown_command_ready_tt ADISCORD_vorkerland_can_commit_to_showdown = yes } }
 		cost = 0
 		days_re_enable = 7
 		fire_only_once = no

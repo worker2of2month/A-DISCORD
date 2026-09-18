@@ -786,7 +786,8 @@ def validate_vad_intervention_and_restoration() -> list[str]:
         f"{VAD_INTERVENTION_BORDER} = yes",
         "NOT = { has_war = yes }",
         "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_failed }",
-        f"complete_effect = {{ {RESERVE_VAD_INTERVENTION} = yes }}",
+        f"{RESERVE_VAD_INTERVENTION} = yes",
+        "set_country_flag = ADISCORD_vorkerland_vad_solar_intervention_paid",
         f"cancel_effect = {{ {CANCEL_VAD_INTERVENTION_RESERVATION} = yes }}",
         f"remove_effect = {{ {VAD_INTERVENTION} = yes }}",
         "fire_only_once = no",
@@ -838,8 +839,8 @@ def validate_vad_intervention_and_restoration() -> list[str]:
     if reservation in commit or reservation in scheduler:
         issues.append("an inactive VAD intervention reservation still blocks central showdown")
     active_gate = "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active }"
-    if active_gate not in compact(commit) or active_gate not in compact(scheduler):
-        issues.append("central showdown must wait for the actually active VAD intervention only")
+    if active_gate in compact(commit) or active_gate in compact(scheduler):
+        issues.append("bounded central showdown must not wait indefinitely for an independent intervention")
     settlement = next(
         (
             block
@@ -1344,7 +1345,7 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     for token in (
         "has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active",
         "NOT = { has_global_flag = ADISCORD_vorkerland_vad_solyarino_counter_active }",
-        "declare_war_on = { target = WKR type = annex_everything }",
+        "has_war_with = WKR",
         "declare_war_on = { target = SOL type = annex_everything }",
         "declare_war_on = { target = SRA type = annex_everything }",
         "declare_war_on = { target = CSL type = annex_everything }",
@@ -1352,8 +1353,8 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     ):
         if token not in counter:
             issues.append(f"{VAD_SOLYARINO_COUNTER} lacks counter token {token}")
-    if counter.count("declare_war_on =") != 4:
-        issues.append(f"{VAD_SOLYARINO_COUNTER} must declare on WKR and the three Solarino targets")
+    if counter.count("declare_war_on =") != 3:
+        issues.append(f"{VAD_SOLYARINO_COUNTER} must preserve the central war queue and declare only on the three Solarino targets")
     for tag in ("sol", "sra", "csl"):
         if f"has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_{tag}" not in counter:
             issues.append(f"{VAD_SOLYARINO_COUNTER} must follow WKR's recorded {tag.upper()} target")
@@ -1597,7 +1598,9 @@ def validate_wkr_solyarino_intervention() -> list[str]:
         "NOT = { has_global_flag = "
         "ADISCORD_vorkerland_wkr_solyarino_intervention_active }"
     )
-    if phase_active_gate not in begin_reunification or phase_active_gate not in phase_six:
+    victory = named_block(read(Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")), "ADISCORD_vorkerland_coalition_victory_ready")
+    shared_gate = "ADISCORD_vorkerland_coalition_victory_ready = yes"
+    if shared_gate not in begin_reunification or shared_gate not in phase_six or phase_active_gate not in victory:
         issues.append("reunification queue and phase.6 must both wait for WKR Solarino resolution")
     formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr")
     for token in (
@@ -1651,8 +1654,8 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     )
     commit = named_block(focus_decisions, "ADISCORD_vorkerland_commit_to_central_showdown")
     scheduler = named_block(focus_effects, "ADISCORD_vorkerland_focus_schedule_final_showdown")
-    if active_gate not in commit or active_gate not in scheduler:
-        issues.append("central showdown must wait for the live WKR Solarino intervention")
+    if active_gate in commit or active_gate in scheduler:
+        issues.append("independent intervention must not reset or block the consolidation deadline")
     vad_decision = named_block(decisions, "ADISCORD_vorkerland_vad_restore_sol_by_force")
     vad_offer = named_block(effects, VAD_SOL_OFFER)
     if active_gate not in vad_decision or active_gate not in vad_offer:

@@ -9,9 +9,8 @@ state={
 	local_supplies = 5.0
 	state_category = large_city
 	history={
-		owner = VAD
-		add_core_of = VAD
-
+		owner=YOR
+		add_core_of=YOR
 		victory_points = { 16576 5 }
 
 		buildings = {

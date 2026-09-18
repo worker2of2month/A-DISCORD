@@ -1,9 +1,7 @@
-# Explicitly dormant tags use the same structural approach as The Fire Rises:
-# only countries without scripted wars, decisions, focuses, or military AI are
-# suppressed. Keep this list audited instead of deriving relevance every pulse.
+# Only suppress listed countries without scripted wars, decisions, focuses
+# or military AI. Update the list when adding country content.
 ADISCORD_is_non_participating_minor = {
 	OR = {
-		tag = AIN
 		tag = AUR
 		tag = BBV
 		tag = BCM
@@ -44,6 +42,17 @@ ADISCORD_can_optimize_non_participating_minor = {
 	has_war = no
 	ADISCORD_is_non_participating_minor = yes
 	NOT = { has_country_flag = ADISCORD_non_participating_minor_released }
+	NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }
+}
+
+# Recover player takeovers and retired allowlist entries without scanning countries.
+ADISCORD_minor_optimization_needs_release = {
+	has_country_flag = ADISCORD_non_participating_minor_optimized
+	OR = {
+		is_ai = no
+		has_war = yes
+		NOT = { ADISCORD_is_non_participating_minor = yes }
+	}
 }
 
 # Base help is limited to simulated AI countries that receive monthly or yearly

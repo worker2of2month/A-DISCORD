@@ -27,46 +27,14 @@ class ShabratFrontTests(unittest.TestCase):
         self.assertTrue(result, f"missing AI profile: {name}")
         return result
 
-    def test_neutral_policy_is_ai_sts_only(self) -> None:
-        profile = self.profile(NEUTRAL)
-        self.assertEqual(compact(named_block(profile, "allowed")),
-                         "allowed = { original_tag = STS }")
-        enable = named_block(profile, "enable")
-        wars = named_block(enable, "OR")
-        self.assertEqual(compact(enable.replace(wars, "")),
-                         "enable = { is_ai = yes has_capitulated = no }")
-
-    def test_neutral_policy_tracks_each_regional_war_independently(self) -> None:
-        enable = named_block(self.profile(NEUTRAL), "enable")
-        # Each war can remain after the party capitulates or end separately.
-        # An AND, a single-enemy gate, or an STP-only gate breaks that lifecycle.
-        self.assertEqual(compact(named_block(enable, "OR")),
-                         "OR = { has_war_with = STP has_war_with = NOD "
-                         "has_war_with = VAL }")
-
-    def test_neutral_policy_survives_civil_war_cleanup(self) -> None:
-        enable = named_block(self.profile(NEUTRAL), "enable")
-        self.assertNotIn("has_global_flag", enable)
-        self.assertNotIn("has_country_flag", enable)
-        self.assertNotIn("has_war =", enable)
-
-    def test_neutral_filter_excludes_every_actual_enemy(self) -> None:
-        profile = self.profile(NEUTRAL)
-        requests = named_blocks(profile, "ai_strategy")
-        self.assertEqual(len(requests), 1)
-        # FROM must remain the allocating country. A fixed tag, a peace flag,
-        # or an enemy-count gate would fail when NOD/VAL enters the same war.
-        self.assertEqual(compact(named_block(requests[0], "country_trigger")),
-                         "country_trigger = { NOT = { has_war_with = FROM } }")
-        self.assertNotRegex(requests[0], r"\b(?:tag|id|state|area|strategic_region)\s*=")
-
-    def test_neutral_policy_changes_demand_not_orders_or_diplomacy(self) -> None:
-        profile = self.profile(NEUTRAL)
-        self.assertEqual(re.findall(r"\btype\s*=\s*(\w+)", profile),
-                         ["front_unit_request"])
-        self.assertEqual(re.findall(r"\bvalue\s*=\s*(-?\d+)", profile), ["-100"])
+    def test_neutral_demand_has_one_shared_owner(self) -> None:
+        self.assertFalse(named_block(self.source, NEUTRAL))
+        shared = (ROOT / "common/ai_strategy/default.txt").read_text(encoding="utf-8")
+        profile = named_block(shared, "ADISCORD_wartime_neutral_borders")
+        self.assertTrue(profile)
+        self.assertIn("ADISCORD_ai_front_has_prewar_threat = no", profile)
+        self.assertNotIn("original_tag", profile)
         self.assertNotIn("enemies^num", profile)
-        self.assertNotIn("add_ai_strategy", profile)
 
     def test_reserve_requires_a_live_civil_war_and_control_of_abilia(self) -> None:
         profile = self.profile(RESERVE)
@@ -108,7 +76,7 @@ class ShabratFrontTests(unittest.TestCase):
         self.assertEqual(buffers, [RESERVE])
 
     def test_temporary_profiles_abort_after_peace_or_threat_cancellation(self) -> None:
-        for name in (NEUTRAL, RESERVE):
+        for name in (RESERVE, "STS_prepare_against_NOD"):
             with self.subTest(profile=name):
                 self.assertIn("abort_when_not_enabled = yes", self.profile(name))
 
@@ -137,6 +105,77 @@ class ShabratFrontTests(unittest.TestCase):
         self.assertEqual(len(names), len(set(names)))
         for name in names:
             self.profile(name)
+
+
+class CivilWarVictorFallbackTests(unittest.TestCase):
+    def setUp(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, block, walk
+        hooks = block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions")
+        immediate = block(block(hooks, "on_capitulation_immediate"), "effect")
+        self.block = block
+        candidates = [e.value for e in walk(immediate) if e.key == "if"
+                      and any(x.key == "else_if" for x in e.value)
+                      and "STP_cw_capitulation_occupier" in str(block(e.value, "limit"))]
+        self.assertEqual(len(candidates), 1)
+        self.fallback = candidates[0]
+
+    def outcome(self, loser, victor, enemies, flags=(), snapshot=0, exists=True):
+        from tools.tests.test_adiscord_stp_preparation import scalar
+        def matches(items, scope):
+            def one(e):
+                if e.key == "OR":
+                    return any(one(x) for x in e.value)
+                if e.key == "AND":
+                    return matches(e.value, scope)
+                if e.key == "NOT":
+                    return not matches(e.value, scope)
+                if e.key in ("ROOT", "FROM"):
+                    return matches(e.value, loser if e.key == "ROOT" else victor)
+                if e.key == "any_enemy_country":
+                    return any(matches(e.value, enemy) for enemy in enemies)
+                if e.key == "tag":
+                    return scope == e.value
+                if e.key == "exists":
+                    return exists
+                if e.key == "has_capitulated":
+                    return e.value == "no"
+                if e.key == "has_war_with":
+                    return victor in enemies
+                if e.key == "has_country_flag":
+                    return (scope, e.value) in flags
+                if e.key == "check_variable":
+                    self.assertEqual(scalar(e.value, "var"), "STP_cw_capitulation_occupier")
+                    return snapshot == float(scalar(e.value, "value"))
+                raise AssertionError(f"Unsupported test predicate: {e.key}")
+            return all(one(e) for e in items)
+        if not matches(self.block(self.fallback, "limit"), loser):
+            return snapshot
+        for branch in self.fallback:
+            if branch.key in ("if", "else_if") and matches(self.block(branch.value, "limit"), loser):
+                return int(scalar(self.block(self.block(branch.value, "ROOT"), "set_variable"), "value"))
+        return snapshot
+
+    def test_isolated_fronts_settle_without_original_capital_capture(self):
+        cases = (("STS", "STP", 1), ("STP", "STS", 2),
+                 ("SRP", "VAL", 5), ("VAL", "SRP", 3))
+        for loser, victor, code in cases:
+            with self.subTest(loser=loser):
+                self.assertEqual(self.outcome(loser, victor, [victor],
+                    flags={("VAL", "VAL_cw_entered")}), code)
+
+    def test_nod_participation_is_required_and_has_distinct_credit(self):
+        flags = {("NOD", "NOD_cw_entered")}
+        self.assertEqual(self.outcome("STS", "STP", ["STP", "NOD"], flags), 1)
+        self.assertEqual(self.outcome("STS", "NOD", ["STP", "NOD"], flags), 4)
+        self.assertEqual(self.outcome("STS", "NOD", ["STP", "NOD"]), 0)
+
+    def test_conflicting_war_or_snapshot_never_gets_overwritten(self):
+        self.assertEqual(self.outcome("STS", "STP", ["STP", "VAL"]), 0)
+        self.assertEqual(self.outcome("SRP", "VAL", ["VAL", "STS"],
+                                    {("VAL", "VAL_cw_entered")}), 0)
+        self.assertEqual(self.outcome("STS", "STP", ["STP"], snapshot=5), 5)
+        self.assertEqual(self.outcome("STS", "STP", [], exists=True), 0)
+        self.assertEqual(self.outcome("STS", "STP", ["STP"], exists=False), 0)
 
 
 if __name__ == "__main__":

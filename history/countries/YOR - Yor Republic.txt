@@ -1,4 +1,13 @@
+capital = 123
+ADISCORD_grant_2150_technology_baseline = yes
+ADISCORD_grant_technology_profile_fragment_low_tech = yes
+oob = "YOR_vorkerland_collapse"
+set_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
+set_stability = 0.35
+
 set_politics = { ruling_party = humanism elections_allowed = yes }
 set_popularities = { etatism = 5 chauvinism = 0 humanism = 75 pragmatism = 15 technocracy = 5 }
 recruit_character = YOR_Pavel_Korin
 set_research_slots = 2
+
+set_cosmetic_tag = YOR_confederation

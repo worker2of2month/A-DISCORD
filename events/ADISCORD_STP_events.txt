@@ -1210,6 +1210,20 @@ country_event = {
 				transfer_state_to = STS
 			}
 		}
+		OCA = {
+			if = {
+				limit = { is_subject_of = VAL }
+				every_owned_state = {
+					limit = {
+						OR = { state = 43 state = 44 state = 88 }
+						OR = { is_core_of = STP is_core_of = STS }
+						OR = { is_controlled_by = OCA is_controlled_by = STS }
+					}
+					transfer_state_to = STS
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
 		hidden_effect = { STP_pc_clear_settlement = yes }
 	}
 	option = {
@@ -1399,4 +1413,208 @@ country_event = {
 		trigger = { NOT = { STP_pc_settlement_has_terms = yes } }
 		hidden_effect = { STP_pc_clear_settlement = yes }
 	}
+}
+
+# Continue timed operations after the previous mission callback has returned.
+country_event = {
+	id = ADISCORD_STP_cw.92
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = STS has_variable = STP_cw_operation_pending }
+	immediate = { STP_cw_dispatch_operation = yes }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.17
+	title = ADISCORD_STP_pc.17.t
+	desc = { trigger = { STS = { check_variable = { var = STP_pc_val_offer_kind value = 1 compare = equals } } } text = ADISCORD_STP_pc.17.compact }
+	desc = { trigger = { STS = { check_variable = { var = STP_pc_val_offer_kind value = 2 compare = equals } } } text = ADISCORD_STP_pc.17.demand }
+	desc = { trigger = { NOT = { STS = { has_variable = STP_pc_val_offer_kind } } } text = STP_pc_offer_expired_desc }
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 30
+	trigger = { tag = VAL }
+	option = {
+		name = STP_pc_reject_terms
+		trigger = { STP_pc_val_offer_current = yes }
+		ai_chance = { base = 20 modifier = { factor = 4 STS = { check_variable = { var = STP_pc_val_offer_kind value = 2 compare = equals } } } }
+		hidden_effect = { if = { limit = { STP_pc_val_offer_current = yes } STS = { set_country_flag = STP_pc_val_terms_refused clear_variable = STP_pc_val_offer_kind country_event = { id = ADISCORD_STP_pc.21 hours = 1 } } } }
+	}
+	option = {
+		name = STP_pc_accept_compact
+		trigger = { STP_pc_val_offer_current = yes STS = { check_variable = { var = STP_pc_val_offer_kind value = 1 compare = equals } STP_pc_can_pay_val_compact = yes } }
+		ai_chance = { base = 80 modifier = { factor = 2 STS = { STP_pc_founder_rules = yes } } }
+		custom_effect_tooltip = STP_pc_val_compact_settlement_tt
+		hidden_effect = { STP_pc_settle_val_compact = yes }
+	}
+	option = {
+		name = STP_pc_accept_client_terms
+		trigger = { STP_pc_val_offer_current = yes STS = { check_variable = { var = STP_pc_val_offer_kind value = 2 compare = equals } } }
+		ai_chance = { base = 5 modifier = { factor = 5 has_war = yes } modifier = { factor = 4 strength_ratio = { tag = STS ratio < 0.6 } } }
+		if = { limit = { STP_pc_val_offer_current = yes }
+			add_ideas = STP_pc_val_client
+			hidden_effect = { STS = { set_country_flag = STP_pc_val_terms_accepted clear_variable = STP_pc_val_offer_kind if = { limit = { has_country_flag = STP_pc_hegemony_league } STP_pc_form_hegemony_league = yes } country_event = { id = ADISCORD_STP_pc.21 hours = 1 } } }
+		}
+	}
+	option = {
+		name = STP_pc_offer_closed
+		trigger = { STP_pc_val_offer_current = no }
+		hidden_effect = { STS = { if = { limit = { has_variable = STP_pc_val_offer_kind } clear_variable = STP_pc_val_offer_kind set_country_flag = STP_pc_val_terms_refused } } }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.18
+	title = ADISCORD_STP_pc.18.t
+	desc = { trigger = { STS = { check_variable = { var = STP_pc_nod_offer_kind value = 1 compare = equals } } } text = ADISCORD_STP_pc.18.compact }
+	desc = { trigger = { STS = { check_variable = { var = STP_pc_nod_offer_kind value = 2 compare = equals } } } text = ADISCORD_STP_pc.18.demand }
+	desc = { trigger = { NOT = { STS = { has_variable = STP_pc_nod_offer_kind } } } text = STP_pc_offer_expired_desc }
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 30
+	trigger = { tag = NOD }
+	option = {
+		name = STP_pc_reject_terms
+		trigger = { STP_pc_nod_offer_current = yes }
+		ai_chance = { base = 20 modifier = { factor = 4 STS = { check_variable = { var = STP_pc_nod_offer_kind value = 2 compare = equals } } } }
+		hidden_effect = { if = { limit = { STP_pc_nod_offer_current = yes } STS = { set_country_flag = STP_pc_nod_terms_refused clear_variable = STP_pc_nod_offer_kind country_event = { id = ADISCORD_STP_pc.21 hours = 1 } } } }
+	}
+	option = {
+		name = STP_pc_accept_compact
+		trigger = { STP_pc_nod_offer_current = yes STS = { check_variable = { var = STP_pc_nod_offer_kind value = 1 compare = equals } STP_pc_can_pay_nod_compact = yes } }
+		ai_chance = { base = 80 modifier = { factor = 2 STS = { STP_pc_founder_rules = yes } } }
+		custom_effect_tooltip = STP_pc_nod_compact_settlement_tt
+		hidden_effect = { STP_pc_settle_nod_compact = yes }
+	}
+	option = {
+		name = STP_pc_accept_client_terms
+		trigger = { STP_pc_nod_offer_current = yes STS = { check_variable = { var = STP_pc_nod_offer_kind value = 2 compare = equals } } }
+		ai_chance = { base = 5 modifier = { factor = 5 has_war = yes } modifier = { factor = 4 strength_ratio = { tag = STS ratio < 0.6 } } }
+		if = { limit = { STP_pc_nod_offer_current = yes }
+			add_ideas = STP_pc_nod_client
+			hidden_effect = { STS = { set_country_flag = STP_pc_nod_terms_accepted clear_variable = STP_pc_nod_offer_kind if = { limit = { has_country_flag = STP_pc_hegemony_league } STP_pc_form_hegemony_league = yes } country_event = { id = ADISCORD_STP_pc.21 hours = 1 } } }
+		}
+	}
+	option = {
+		name = STP_pc_offer_closed
+		trigger = { STP_pc_nod_offer_current = no }
+		hidden_effect = { STS = { if = { limit = { has_variable = STP_pc_nod_offer_kind } clear_variable = STP_pc_nod_offer_kind set_country_flag = STP_pc_nod_terms_refused } } }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.19
+	title = ADISCORD_STP_pc.19.t
+	desc = ADISCORD_STP_pc.19.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 21
+	trigger = { tag = NOD }
+	option = {
+		name = ADISCORD_STP_pc.19.refuse
+		ai_chance = { base = 5 }
+		hidden_effect = { STP = { clr_country_flag = STP_pw_party_nod_offer_pending } }
+	}
+	option = {
+		name = ADISCORD_STP_pc.19.accept
+		trigger = { STP_pw_party_nod_offer_current = yes }
+		ai_chance = { base = 95 }
+		hidden_effect = {
+			if = {
+				limit = { STP_pw_party_nod_offer_current = yes }
+				STP = {
+					clr_country_flag = STP_pw_party_nod_offer_pending
+					set_country_flag = STP_pw_party_nod_offer_accepted
+					mark_focus_tree_layout_dirty = yes
+				}
+			}
+		}
+		custom_effect_tooltip = STP_pw_party_nod_offer_accepted_tt
+	}
+}
+country_event = {
+	id = ADISCORD_STP_pc.20
+	title = ADISCORD_STP_pc.20.t
+	desc = ADISCORD_STP_pc.20.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { OR = { tag = VAL tag = NOD } STS = { exists = yes } }
+	immediate = { add_timed_idea = { idea = STP_cw_defensive_preparation days = 70 } }
+	option = { name = ADISCORD_STP_pc.20.a }
+}
+country_event = {
+	id = ADISCORD_STP_pc.21
+	title = ADISCORD_STP_pc.21.t
+	desc = {
+		trigger = { FROM = { tag = VAL } has_country_flag = STP_pc_val_terms_accepted has_idea = STP_pc_val_compact }
+		text = ADISCORD_STP_pc.21.val_compact
+	}
+	desc = {
+		trigger = { FROM = { tag = VAL } has_country_flag = STP_pc_val_terms_accepted NOT = { has_idea = STP_pc_val_compact } }
+		text = ADISCORD_STP_pc.21.val_client
+	}
+	desc = {
+		trigger = { FROM = { tag = VAL } has_country_flag = STP_pc_val_terms_refused }
+		text = ADISCORD_STP_pc.21.val_refused
+	}
+	desc = {
+		trigger = { FROM = { tag = NOD } has_country_flag = STP_pc_nod_terms_accepted has_idea = STP_pc_nod_compact }
+		text = ADISCORD_STP_pc.21.nod_compact
+	}
+	desc = {
+		trigger = { FROM = { tag = NOD } has_country_flag = STP_pc_nod_terms_accepted NOT = { has_idea = STP_pc_nod_compact } }
+		text = ADISCORD_STP_pc.21.nod_client
+	}
+	desc = {
+		trigger = { FROM = { tag = NOD } has_country_flag = STP_pc_nod_terms_refused }
+		text = ADISCORD_STP_pc.21.nod_refused
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STS }
+	immediate = { mark_focus_tree_layout_dirty = yes }
+	option = { name = ADISCORD_STP_pc.21.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.22
+	title = ADISCORD_STP_pc.22.t
+	desc = ADISCORD_STP_pc.22.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 21
+	trigger = { tag = NOD }
+	option = {
+		name = ADISCORD_STP_pc.22.refuse
+		ai_chance = { base = 10 }
+		hidden_effect = { STP = { if = { limit = { has_country_flag = STP_pw_party_nod_arms_pending } clr_country_flag = STP_pw_party_nod_arms_pending country_event = { id = ADISCORD_STP_pc.24 hours = 1 } } } }
+	}
+	option = {
+		name = ADISCORD_STP_pc.22.accept
+		trigger = { STP_pw_party_nod_arms_current = yes }
+		ai_chance = { base = 90 }
+		custom_effect_tooltip = STP_pw_party_nod_contract_settlement_tt
+		hidden_effect = { STP_pw_party_settle_nod_arms = yes }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.23
+	title = ADISCORD_STP_pc.23.t
+	desc = ADISCORD_STP_pc.23.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STP }
+	option = { name = ADISCORD_STP_pc.23.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.24
+	title = ADISCORD_STP_pc.24.t
+	desc = { trigger = { has_country_flag = STP_pw_party_nod_arms_delivered } text = ADISCORD_STP_pc.24.accepted }
+	desc = { trigger = { NOT = { has_country_flag = STP_pw_party_nod_arms_delivered } } text = ADISCORD_STP_pc.24.refused }
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STP }
+	option = { name = ADISCORD_STP_pc.24.a }
 }

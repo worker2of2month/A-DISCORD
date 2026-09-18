@@ -483,6 +483,7 @@ defined_text = {
 
 defined_text = {
  name = STPGetRecoveryReport
+ text = { trigger = { tag = STP has_variable = STP_pw_recovery_progress } localization_key = STP_pw_party_recovery_report }
  text = { trigger = { tag = STS has_variable = STP_pw_recovery_progress } localization_key = STP_pw_recovery_report }
  text = { localization_key = STP_REGION_EMPTY_LINE }
 }
@@ -496,4 +497,16 @@ defined_text = {
 	name = STPGetHandoffOption
 	text = { trigger = { has_country_flag = STP_sided_with_Maksim_flag STS = { exists = yes } } localization_key = STP_HANDOFF_RESISTANCE }
 	text = { localization_key = STP_HANDOFF_PARTY }
+}
+
+defined_text = {
+	name = STPGetFrontOperationTarget
+	text = { trigger = { check_variable = { var = STP_cw_operation_target value = 2 compare = equals } } localization_key = STP_cw_operation_target_2 }
+	text = { trigger = { check_variable = { var = STP_cw_operation_target value = 29 compare = equals } } localization_key = STP_cw_operation_target_29 }
+	text = { trigger = { check_variable = { var = STP_cw_operation_target value = 53 compare = equals } } localization_key = STP_cw_operation_target_53 }
+	text = { trigger = { check_variable = { var = STP_cw_operation_target value = 3 compare = equals } } localization_key = STP_cw_operation_target_3 }
+	text = { trigger = { check_variable = { var = STP_cw_operation_target value = 46 compare = equals } } localization_key = STP_cw_operation_target_46 }
+	text = { trigger = { check_variable = { var = STP_cw_operation_target value = 45 compare = equals } } localization_key = STP_cw_operation_target_45 }
+	text = { trigger = { check_variable = { var = STP_cw_operation_target value = 28 compare = equals } } localization_key = STP_cw_operation_target_28 }
+	text = { localization_key = STP_cw_operation_target_none }
 }

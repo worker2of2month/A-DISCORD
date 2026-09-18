@@ -2284,7 +2284,13 @@ STP_cw_revoke_emergency_research_slot = {
 
 # Close fixed-price orders. Field templates were already editable in wartime.
 STP_cw_finish_mobilization = {
+	STP_cw_refund_disruption = yes
+	clr_country_flag = STP_cw_disruption_unlocked
+	clr_country_flag = STP_cw_disruption_cooldown
+	clear_variable = STP_cw_disruption_completed
 	set_country_flag = STP_cw_postwar
+	mark_focus_tree_layout_dirty = yes
+	if = { limit = { OR = { tag = STP tag = STS } } STS = { STP_cw_stop_operations = yes } }
 	if = { limit = { has_idea = STP_cw_emergency_laboratories } remove_ideas = STP_cw_emergency_laboratories }
 	STP_cw_revoke_emergency_research_slot = yes
 	if = { limit = { tag = SRP NOT = { has_war_with = VAL } } remove_ideas = { SRP_emergency_command SRP_council_supply } }
@@ -2342,7 +2348,7 @@ STP_cw_materialize_region_assets = {
 		}
 		if = {
 			limit = { state = 28 is_owned_by = STP is_controlled_by = STP has_state_flag = STP_resistance_sabotage_asset infrastructure > 0 }
-			damage_building = { type = infrastructure damage = 1 }
+			damage_building = { type = infrastructure damage = 2 }
 		}
 		if = {
 			limit = { state = 28 is_owned_by = STP is_controlled_by = STP has_state_flag = STP_resistance_sabotage_asset arms_factory > 0 }
@@ -2350,11 +2356,11 @@ STP_cw_materialize_region_assets = {
 		}
 		if = {
 			limit = { state = 29 is_owned_by = STP is_controlled_by = STP has_state_flag = STP_resistance_sabotage_asset industrial_complex > 0 }
-			damage_building = { type = industrial_complex damage = 1 }
+			damage_building = { type = industrial_complex damage = 2 }
 		}
 		if = {
 			limit = {
-				OR = { state = 28 state = 29 }
+				state = 29
 				is_owned_by = STP
 				is_controlled_by = STP
 				has_state_flag = STP_resistance_sabotage_asset
@@ -2362,10 +2368,15 @@ STP_cw_materialize_region_assets = {
 			STP = {
 				if = {
 					limit = { NOT = { has_idea = STP_cw_party_sabotage_aftermath } }
-					add_timed_idea = { idea = STP_cw_party_sabotage_aftermath days = 42 }
+					add_timed_idea = { idea = STP_cw_party_sabotage_aftermath days = 70 }
 				}
 			}
 		}
+		if = {
+			limit = { state = 28 is_owned_by = STP is_controlled_by = STP has_state_flag = STP_resistance_sabotage_asset }
+			STP = { if = { limit = { NOT = { has_idea = STP_cw_party_command_sabotage } } add_timed_idea = { idea = STP_cw_party_command_sabotage days = 70 } } }
+		}
+
 		if = {
 			limit = { has_state_flag = STP_cw_defensive_line_prepared }
 			add_building_construction = { type = bunker level = 2 instant_build = yes province = { all_provinces = yes limit_to_border = yes } }
@@ -2432,6 +2443,11 @@ STP_cw_prepare_successor = {
 
 # STP: transfer accumulated values after successors initialize their modifier variables.
 STP_cw_transfer_preparation_modifiers = {
+	if = {
+		limit = { has_country_flag = STP_cw_disruption_unlocked }
+		STS = { set_country_flag = STP_cw_disruption_unlocked }
+		clr_country_flag = STP_cw_disruption_unlocked
+	}
 	if = {
 		limit = { has_dynamic_modifier = { modifier = STP_cw_resistance_network_dynamic } }
 		STS = {
@@ -2712,7 +2728,6 @@ STP_cw_begin_hostilities = {
 				}
 				STS = { add_timed_idea = { idea = STP_cw_prepared_supply_lines days = 21 } }
 			}
-			STP_cw_poll_nod_intervention = yes
 			STP_end_battle_for_stelander = yes
 		}
 		declare_war_on = { target = STS type = annex_everything }
@@ -2722,6 +2737,8 @@ STP_cw_begin_hostilities = {
 		SRP = { every_owned_state = { set_state_controller_to = PREV } }
 		if = {
 			limit = { has_war_with = STS NOT = { has_idea = STP_cw_party_battle_spirit } }
+			STP_cw_poll_nod_intervention = yes
+			STS = { STP_cw_begin_operations = yes }
 			add_ideas = STP_cw_party_battle_spirit
 			STS = { add_ideas = STP_cw_resistance_battle_spirit }
 			news_event = { id = ADISCORD_STP_cw.70 hours = 1 }
@@ -3130,7 +3147,6 @@ VAL_cw_settle_republics = {
 	if = {
 		limit = { has_country_flag = VAL_cw_entered NOT = { has_country_flag = VAL_cw_settled } }
 		set_country_flag = VAL_cw_settled
-		clr_country_flag = VAL_cw_entered
 		clr_country_flag = VAL_cw_offer_pending
 		if = {
 			limit = { has_country_flag = VAL_cw_mobilizing }
@@ -3139,16 +3155,16 @@ VAL_cw_settle_republics = {
 		}
 		if = { limit = { has_war_with = SRP } white_peace = SRP }
 		SRP = { remove_ideas = STP_cw_republics_battle_spirit }
-		# Explicit agreed borders; disputed 45 and unrelated occupied land are excluded.
-		if = { limit = { 43 = { is_owned_by = SRP } } transfer_state = 43 }
-		if = { limit = { 44 = { is_owned_by = SRP } } transfer_state = 44 }
-		if = { limit = { 88 = { is_owned_by = SRP } } transfer_state = 88 }
-		set_country_flag = VAL_cw_postwar
 		SRP = { STP_cw_finish_mobilization = yes }
+		# Settle paid formations before the bounded administration can absorb SRP.
+		set_country_flag = VAL_occidian_settlement_pending
+		VAL_form_occidian_administration = yes
+		clr_country_flag = VAL_cw_entered
+		set_country_flag = VAL_cw_postwar
 		set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
 		VAL_change_contract_authority = yes
 		country_event = { id = ADISCORD_STP_cw.23 }
-		log = "[STP_CW] VAL military settlement: 43/44/88 only; 45 preserved"
+		log = "[STP_CW] VAL military settlement: temporary administration of 43/44/88"
 		STP_cw_check_union_wars_finished = yes
 	}
 }
@@ -3377,6 +3393,14 @@ STP_cw_cache_state_occupier = {
 			controller = { is_in_faction_with = NOD has_war_with = ROOT }
 		}
 		ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 4 } }
+	}
+	else_if = {
+		limit = {
+			ROOT = { tag = STS has_war_with = VAL }
+			VAL = { has_war_with = ROOT }
+			controller = { is_subject_of = VAL has_war_with = ROOT }
+		}
+		ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 5 } }
 	}
 	else_if = { limit = { controller = { tag = STP } NOT = { ROOT = { tag = STP } } } ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 1 } } }
 	else_if = { limit = { controller = { tag = STS } NOT = { ROOT = { tag = STS } } } ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } } }
@@ -3649,7 +3673,7 @@ STP_cw_end_northern_colonial_war = {
 # COUNTRY: keep accumulated values when a later focus refreshes the institution.
 STP_pw_begin_recovery = {
 	if = {
-		limit = { tag = STS NOT = { has_variable = STP_pw_recovery_progress } }
+		limit = { OR = { tag = STP tag = STS } NOT = { has_variable = STP_pw_recovery_progress } }
 		set_variable = { var = STP_pw_recovery_progress value = 0 }
 		set_variable = { var = STP_pw_recovery_services value = 0 }
 		set_variable = { var = STP_pw_recovery_industry value = 0 }
@@ -3857,6 +3881,7 @@ STP_pc_align_resistance_ruling_party = {
 
 # COUNTRY: arrest can land on STP or STS; the successor is always installed on STS.
 STP_pc_install_resistance_successor = {
+	STS = { mark_focus_tree_layout_dirty = yes }
 	if = {
 		limit = { STS = { exists = yes } }
 		STS = {
@@ -4141,6 +4166,7 @@ STP_pc_begin_settlement = {
 				if = { limit = { has_war_with = NOD } white_peace = NOD }
 			}
 		}
+		VAL_enforce_stelander_defeat = yes
 		if = {
 			limit = { NOT = { has_country_flag = STP_pc_settlement_pending } }
 			set_variable = { var = STP_pc_settle_opponent value = STP_pc_this_opponent }
@@ -4243,4 +4269,275 @@ STP_proclaim_imperial_union = {
 	}
 
 	news_event = { id = ADISCORD_superevent_news.2 }
+}
+
+# STS: one civil-war operation cycle. The pending receipt separates mission
+# settlement from the next activation in the native decision update.
+STP_cw_begin_operations = {
+	if = {
+		limit = {
+			tag = STS
+			has_war_with = STP
+			has_country_flag = STP_cw_participant
+			NOT = { has_country_flag = STP_cw_postwar }
+			NOT = { has_variable = STP_cw_operation_round }
+		}
+		set_variable = { var = STP_cw_operation_round value = 0 }
+		set_variable = { var = STP_cw_operation_pending value = 1 }
+		STP = { add_timed_idea = { idea = STP_cw_party_command_disruption days = 35 } }
+		country_event = { id = ADISCORD_STP_cw.92 hours = 1 }
+	}
+}
+
+STP_cw_dispatch_operation = {
+	if = {
+		limit = { tag = STS has_variable = STP_cw_operation_pending NOT = { has_active_mission = STP_cw_front_operation } }
+		clear_variable = STP_cw_operation_pending
+		if = {
+			limit = { has_war_with = STP has_capitulated = no NOT = { has_country_flag = STP_cw_postwar } check_variable = { var = STP_cw_operation_round value = 3 compare = less_than } }
+			set_variable = { var = STP_cw_operation_target value = 0 }
+			if = { limit = { 2 = { is_controlled_by = STP } } set_variable = { var = STP_cw_operation_target value = 2 } }
+			else_if = { limit = { 29 = { is_controlled_by = STP } } set_variable = { var = STP_cw_operation_target value = 29 } }
+			else_if = { limit = { 53 = { is_controlled_by = STP } } set_variable = { var = STP_cw_operation_target value = 53 } }
+			else_if = { limit = { 3 = { is_controlled_by = STP } } set_variable = { var = STP_cw_operation_target value = 3 } }
+			else_if = { limit = { 46 = { is_controlled_by = STP } } set_variable = { var = STP_cw_operation_target value = 46 } }
+			else_if = { limit = { 45 = { is_controlled_by = STP } } set_variable = { var = STP_cw_operation_target value = 45 } }
+			else_if = { limit = { 28 = { is_controlled_by = STP } } set_variable = { var = STP_cw_operation_target value = 28 } }
+			if = {
+				limit = { check_variable = { var = STP_cw_operation_target value = 0 compare = greater_than } }
+				add_to_variable = { var = STP_cw_operation_round value = 1 }
+				activate_mission = STP_cw_front_operation
+			}
+			else = { set_variable = { var = STP_cw_operation_round value = 3 } clear_variable = STP_cw_operation_target }
+		}
+		else = { STP_cw_close_operation_cycle = yes }
+	}
+}
+
+STP_cw_win_operation = {
+	if = {
+		limit = {
+			tag = STS
+			has_war_with = STP
+			has_capitulated = no
+			NOT = { has_country_flag = STP_cw_postwar }
+			NOT = { has_variable = STP_cw_operation_pending }
+			OR = {
+				AND = { check_variable = { var = STP_cw_operation_target value = 2 compare = equals } 2 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 29 compare = equals } 29 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 53 compare = equals } 53 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 3 compare = equals } 3 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 46 compare = equals } 46 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 45 compare = equals } 45 = { is_controlled_by = STS } }
+				AND = { check_variable = { var = STP_cw_operation_target value = 28 compare = equals } 28 = { is_controlled_by = STS } }
+			}
+		}
+		# Consume the objective before rewards so replayed callbacks cannot pay again.
+		clear_variable = STP_cw_operation_target
+		remove_ideas = STP_cw_operation_disorganization
+		add_timed_idea = { idea = STP_cw_operation_tempo days = 21 }
+		if = {
+			limit = { check_variable = { var = STP_cw_operation_round value = 3 compare = less_than } }
+			set_variable = { var = STP_cw_operation_pending value = 1 }
+			country_event = { id = ADISCORD_STP_cw.92 hours = 1 }
+		}
+	}
+}
+
+STP_cw_fail_operation = {
+	if = {
+		limit = {
+			tag = STS
+			has_war_with = STP
+			has_capitulated = no
+			NOT = { has_country_flag = STP_cw_postwar }
+			NOT = { has_variable = STP_cw_operation_pending }
+			check_variable = { var = STP_cw_operation_target value = 0 compare = greater_than }
+		}
+		# Control can change on the expiry hour; a completed objective takes priority.
+		if = {
+			limit = {
+				OR = {
+					AND = { check_variable = { var = STP_cw_operation_target value = 2 compare = equals } 2 = { is_controlled_by = STS } }
+					AND = { check_variable = { var = STP_cw_operation_target value = 29 compare = equals } 29 = { is_controlled_by = STS } }
+					AND = { check_variable = { var = STP_cw_operation_target value = 53 compare = equals } 53 = { is_controlled_by = STS } }
+					AND = { check_variable = { var = STP_cw_operation_target value = 3 compare = equals } 3 = { is_controlled_by = STS } }
+					AND = { check_variable = { var = STP_cw_operation_target value = 46 compare = equals } 46 = { is_controlled_by = STS } }
+					AND = { check_variable = { var = STP_cw_operation_target value = 45 compare = equals } 45 = { is_controlled_by = STS } }
+					AND = { check_variable = { var = STP_cw_operation_target value = 28 compare = equals } 28 = { is_controlled_by = STS } }
+				}
+			}
+			STP_cw_win_operation = yes
+		}
+		else = {
+			clear_variable = STP_cw_operation_target
+			remove_ideas = STP_cw_operation_tempo
+			add_timed_idea = { idea = STP_cw_operation_disorganization days = 28 }
+			if = {
+				limit = { check_variable = { var = STP_cw_operation_round value = 3 compare = less_than } }
+				set_variable = { var = STP_cw_operation_pending value = 1 }
+				country_event = { id = ADISCORD_STP_cw.92 hours = 1 }
+			}
+		}
+	}
+}
+
+# Safe inside cancel_effect: never remove the mission executing this callback.
+STP_cw_close_operation_cycle = {
+	set_variable = { var = STP_cw_operation_round value = 3 }
+	clear_variable = STP_cw_operation_target
+	clear_variable = STP_cw_operation_pending
+	remove_ideas = { STP_cw_operation_tempo STP_cw_operation_disorganization }
+	STP = { remove_ideas = STP_cw_party_command_disruption }
+}
+
+# Settlement hook: close the receipt before removing a still-active mission.
+STP_cw_stop_operations = {
+	if = {
+		limit = { tag = STS has_variable = STP_cw_operation_round }
+		STP_cw_close_operation_cycle = yes
+		if = { limit = { has_active_mission = STP_cw_front_operation } remove_mission = STP_cw_front_operation }
+	}
+}
+
+# Recipient accepts before either treasury changes; clear the receipt before delivery.
+STP_pc_settle_val_compact = {
+	if = {
+		limit = { STP_pc_val_offer_current = yes STS = { check_variable = { var = STP_pc_val_offer_kind value = 1 compare = equals } STP_pc_can_pay_val_compact = yes } }
+		STS = {
+			clear_variable = STP_pc_val_offer_kind
+			set_country_flag = STP_pc_val_terms_accepted
+			STP_pc_credit_val_compact = yes
+			add_ideas = STP_pc_val_compact
+			diplomatic_relation = { country = VAL relation = non_aggression_pact active = yes }
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = ADISCORD_STP_pc.21 hours = 1 }
+		}
+		add_ideas = STP_pc_val_compact
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pc_credit_val_compact = {
+	if = { limit = { has_country_flag = STP_pw_kefreyt_accounts_settled }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		VAL = { add_to_variable = { var = ADISCORD_economy_treasury value = 100 } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 } }
+	}
+	else = {
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+		VAL = { add_to_variable = { var = ADISCORD_economy_treasury value = 200 } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 } }
+	}
+	set_country_flag = STP_pw_kefreyt_accounts_settled
+}
+
+# Recipient accepts before either treasury changes; clear the receipt before delivery.
+STP_pc_settle_nod_compact = {
+	if = {
+		limit = { STP_pc_nod_offer_current = yes STS = { check_variable = { var = STP_pc_nod_offer_kind value = 1 compare = equals } STP_pc_can_pay_nod_compact = yes } }
+		STS = {
+			clear_variable = STP_pc_nod_offer_kind
+			set_country_flag = STP_pc_nod_terms_accepted
+			STP_pc_credit_nod_compact = yes
+			add_ideas = STP_pc_nod_compact
+			diplomatic_relation = { country = NOD relation = non_aggression_pact active = yes }
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = ADISCORD_STP_pc.21 hours = 1 }
+		}
+		add_ideas = STP_pc_nod_compact
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pc_credit_nod_compact = {
+	subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+	NOD = { add_to_variable = { var = ADISCORD_economy_treasury value = 150 } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 } }
+}
+
+# COUNTRY STP: the programme kind owns the receipt until delivery or refund.
+STP_pw_party_finish_project = {
+	if = {
+		limit = {
+			tag = STP
+			STP_pw_can_reconstruct = yes
+			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
+			OR = {
+				AND = { check_variable = { var = STP_pw_project_kind value = 4 compare = equals } check_variable = { var = STP_pw_project_deposit value = 60 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
+				AND = { check_variable = { var = STP_pw_project_kind value = 5 compare = equals } check_variable = { var = STP_pw_project_deposit value = 120 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } STP_pw_party_has_port_capacity = yes }
+				AND = { check_variable = { var = STP_pw_project_kind value = 6 compare = equals } check_variable = { var = STP_pw_project_deposit value = 100 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals } } }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = STP_pw_project_kind value = 4 compare = equals } }
+			set_variable = { var = STP_pw_recovery_services value = 1 }
+			add_stability = 0.05
+			add_political_power = 75
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_pw_project_kind value = 5 compare = equals } }
+			set_variable = { var = STP_pw_recovery_industry value = 1 }
+			random_owned_controlled_state = {
+				limit = { naval_base > 0 free_building_slots = { building = industrial_complex size > 0 include_locked = yes } }
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				if = { limit = { infrastructure < 5 } add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_pw_project_kind value = 6 compare = equals } }
+			set_variable = { var = STP_pw_recovery_army value = 1 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1600 }
+			add_equipment_to_stockpile = { type = support_equipment amount = 120 }
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 100 }
+			army_experience = 25
+		}
+		clear_variable = STP_pw_project_deposit
+		clear_variable = STP_pw_project_kind
+		add_to_variable = { var = STP_pw_recovery_progress value = 1 }
+		STP_pw_update_recovery = yes
+	}
+	else = { STP_pw_cancel_project = yes }
+}
+
+# COUNTRY NOD: payment and stock transfer are one accepted, rechecked settlement.
+STP_pw_party_settle_nod_arms = {
+	if = {
+		limit = { STP_pw_party_nod_arms_current = yes }
+		STP = {
+			clr_country_flag = STP_pw_party_nod_arms_pending
+			set_country_flag = STP_pw_party_nod_arms_delivered
+			ADISCORD_economy_spend_50 = yes
+		}
+		ADISCORD_economy_receive_50 = yes
+		send_equipment = { equipment = infantry_equipment amount = 1000 target = STP }
+		send_equipment = { equipment = support_equipment amount = 100 target = STP }
+		STP = { country_event = { id = ADISCORD_STP_pc.24 hours = 1 } }
+	}
+}
+
+# COUNTRY STS: the single receipt blocks other targets until delivery or refund.
+STP_cw_refund_disruption = {
+	if = {
+		limit = { check_variable = { var = STP_cw_disruption_deposit value = 100 compare = equals } }
+		clear_variable = STP_cw_disruption_deposit
+		clr_country_flag = STP_cw_disruption_cooldown
+		ADISCORD_economy_receive_100 = yes
+		add_political_power = 50
+	}
+}
+
+# COUNTRY STS, FROM state: choose a currently present enemy brigade at settlement.
+STP_cw_finish_disruption = {
+	if = {
+		limit = { check_variable = { var = STP_cw_disruption_deposit value = 100 compare = equals } }
+		if = {
+			limit = { STP_cw_disruption_available = yes FROM = { STP_cw_disruption_target = yes } }
+			clear_variable = STP_cw_disruption_deposit
+			add_to_variable = { var = STP_cw_disruption_completed value = 1 }
+			FROM = { random_state_division = { limit = { OWNER = { tag = STP } division_has_battalion_in_template = ADISCORD_territorial } destroy_unit = yes } }
+		}
+		else = { STP_cw_refund_disruption = yes }
+	}
 }

@@ -921,6 +921,8 @@ def validate_vorkerland_expansion() -> None:
             check(forbidden not in winner, f"{map_name}: central victory must not use {forbidden}")
 
     begin_reunification = block(phase_effects, "ADISCORD_vorkerland_begin_reunification")
+    check("ADISCORD_vorkerland_coalition_victory_ready = yes" in begin_reunification, "formation must use shared coalition victory guard")
+    begin_reunification += block((ROOT / "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt").read_text(encoding="utf-8-sig"), "ADISCORD_vorkerland_coalition_victory_ready")
     for required in (
         "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
         "has_global_flag = ADISCORD_vorkerland_central_showdown_started",

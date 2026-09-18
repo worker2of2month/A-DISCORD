@@ -698,7 +698,7 @@ def fresh_economy_initialization_issues(
 
     for hook_name, expected in (
         ("on_war", 1),
-        ("on_peace", 1),
+        ("on_peace", 2),
         ("on_state_control_changed", 2),
     ):
         hook = block(shared_on_actions, hook_name)
@@ -2942,21 +2942,16 @@ def validate(root: Path = ROOT) -> list[str]:
     weekly_gate = block(triggers, "ADISCORD_economy_should_weekly_update")
     weekly_prepare = block(effects, "ADISCORD_economy_prepare_weekly_country")
     require("ADISCORD_economy_update_ai_state" in monthly, "monthly update does not refresh AI state")
-    require("ADISCORD_economy_apply_yearly_balance" in yearly, "secondary yearly economy lacks aggregate fiscal semantics")
+    require("ADISCORD_economy_update_monthly_budget_trend = yes" in yearly,
+            "secondary yearly economy lacks macro pressure updates")
     require("ADISCORD_economy_tick_scale value = 6" in yearly,
             "secondary AI does not use the explicit half-pressure annual stabilizer")
     require("ADISCORD_economy_update_workforce_drain" in yearly,
             "secondary yearly economy omits workforce pressure")
-    require("ADISCORD_economy_apply_yearly_debt_streaks = yes" in block(effects, "ADISCORD_economy_apply_yearly_balance"),
-            "secondary yearly economy does not advance emergency/default streaks")
-    require("ADISCORD_economy_last_monthly_balance_applied" in block(effects, "ADISCORD_economy_apply_yearly_debt_streaks"),
-            "yearly debt streaks do not read the persistent yearly applied balance")
-    require("ADISCORD_economy_weekly_balance value = ADISCORD_economy_monthly_balance" in block(effects, "ADISCORD_economy_apply_yearly_balance"),
-            "yearly settlement does not align weekly_balance before streak updates")
-    require("monthly_income value = 12" not in block(effects, "ADISCORD_economy_apply_yearly_balance"),
-            "yearly settlement reprices interest share against a twelve-month income")
-    require("monthly_balance value = 12" in block(effects, "ADISCORD_economy_apply_yearly_balance"),
-            "yearly settlement does not apply twelve months of cash")
+    for retired in ("ADISCORD_economy_apply_yearly_balance", "ADISCORD_economy_apply_yearly_debt_streaks"):
+        require(retired not in effects, f"retired annual cash/streak path remains: {retired}")
+    require("ADISCORD_economy_simulation_tier value = 2 compare = less_than_or_equals" in weekly_gate,
+            "weekly settlement excludes secondary countries")
     yearly_policy = block(effects, "ADISCORD_economy_ai_yearly_policy")
     require(yearly_policy.count("ADISCORD_economy_ai_monthly_policy = yes") == 2,
             "yearly AI policy does not take two exclusive actions before settlement")
@@ -2994,8 +2989,8 @@ def validate(root: Path = ROOT) -> list[str]:
             "postwar army mode 3 does not refresh the army policy idea")
     require("ADISCORD_economy_weekly_source_cache_ready" not in block(effects, "ADISCORD_economy_mark_dirty"),
             "dirty invalidation still clears the weekly readiness watermark")
-    require(yearly.rfind("ADISCORD_economy_update_ai_state") > yearly.find("ADISCORD_economy_apply_yearly_balance"),
-            "secondary AI state is not refreshed after its annual transaction")
+    require(yearly.rfind("ADISCORD_economy_update_ai_state") > yearly.find("ADISCORD_economy_update_monthly_budget_trend"),
+            "secondary AI state is not refreshed after annual macro pressure")
     require("ADISCORD_economy_full_refresh = yes" not in monthly.split("ADISCORD_economy_building_recount_months", 1)[0],
             "monthly update performs an unconditional building scan")
     require("ADISCORD_economy_full_refresh_if_needed" in monthly,
@@ -3015,8 +3010,9 @@ def validate(root: Path = ROOT) -> list[str]:
     light_update = block(effects, "ADISCORD_economy_light_update")
     require("ADISCORD_economy_calculate_weekly_budget = yes" in light_update,
             "light economy refresh leaves the player-facing weekly forecast stale")
-    require("ADISCORD_economy_calculate_weekly_budget = yes" not in weekly,
-            "weekly settlement duplicates the forecast already refreshed by the light update")
+    require(weekly.find("ADISCORD_economy_calculate_weekly_budget = yes") >
+            weekly.find("ADISCORD_economy_apply_weekly_balance = yes"),
+            "weekly settlement leaves the forecast stale after borrowing or spending treasury")
     require("ADISCORD_economy_prepare_weekly_country" in weekly
             and "ADISCORD_economy_initialize_country" not in weekly,
             "weekly economy does not use the lightweight preparation path")
@@ -3278,14 +3274,14 @@ def validate(root: Path = ROOT) -> list[str]:
             "industrial cluster lacks its location-weighted military-factory output modifier")
     require("building_level@arms_factory" in recount
             and "damaged_building_level@arms_factory" in recount
-            and "is_controlled_by = ROOT" in recount
+            and "is_controlled_by = PREV" in recount
             and "ADISCORD_economy_state_cluster_level_temp" in recount,
             "industrial cluster output is not tied to operational military factories in its state")
     require("ADISCORD_economy_cluster_supported_factory_points_temp" in recount
             and "ADISCORD_economy_operational_military_factories_temp" in recount
             and "force_update_dynamic_modifier = yes" in recount,
             "industrial cluster weighted output is not refreshed by the cached state recount")
-    require(recount.count("is_controlled_by = ROOT") >= 2,
+    require(recount.count("is_controlled_by = PREV") >= 2 and "ROOT = {" not in recount,
             "occupied economic buildings still contribute income or national network bonuses")
     require("ADISCORD_economy_cluster_factory_output_percent value = 5" in recount
             and "ADISCORD_economy_cluster_factory_output_factor value = 100" in recount

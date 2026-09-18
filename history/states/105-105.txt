@@ -12,7 +12,7 @@ state={
 		steel = 16
 	}
 	history={
-		owner = WRK
+		owner=VLA
 		buildings = {
 			ADISCORD_industrial_cluster = 1
 			ADISCORD_techlar_metallurgical_combine = 1
@@ -21,7 +21,7 @@ state={
 			industrial_complex = 6
 			infrastructure = 5
 		}
-		add_core_of = WRK
+		add_core_of=VLA
 		victory_points = { 16589 12 }
 		victory_points = { 16565 5 }
 		victory_points = { 16577 3 }

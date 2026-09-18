@@ -12,9 +12,8 @@ state={
 		steel = 12
 	}
 	history={
-		owner = VAD
-		add_core_of = VAD
-
+		owner=YOR
+		add_core_of=YOR
 		victory_points = { 16560 10 }
 
 		buildings = {

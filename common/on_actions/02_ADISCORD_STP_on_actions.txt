@@ -216,6 +216,46 @@ on_actions = {
 					}
 				}
 				ROOT = { STP_cw_snapshot_capitulation_occupier = yes }
+				# Capitulation can precede the fall of the original capital. Accept
+				# the reported victor only inside the same isolated scripted front.
+				if = {
+					limit = {
+						ROOT = { check_variable = { var = STP_cw_capitulation_occupier value = 0 compare = equals } }
+						FROM = { exists = yes has_capitulated = no has_war_with = ROOT }
+					}
+					if = {
+						limit = {
+							ROOT = {
+								tag = STS
+								NOT = { any_enemy_country = { NOT = { OR = { tag = STP AND = { tag = NOD has_country_flag = NOD_cw_entered } } } } }
+							}
+							FROM = { tag = STP }
+						}
+						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 1 } }
+					}
+					else_if = {
+						limit = {
+							ROOT = {
+								tag = STS
+								NOT = { any_enemy_country = { NOT = { OR = { tag = STP AND = { tag = NOD has_country_flag = NOD_cw_entered } } } } }
+							}
+							FROM = { tag = NOD has_country_flag = NOD_cw_entered }
+						}
+						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 4 } }
+					}
+					else_if = {
+						limit = { ROOT = { tag = STP NOT = { any_enemy_country = { NOT = { tag = STS } } } } FROM = { tag = STS } }
+						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
+					}
+					else_if = {
+						limit = { ROOT = { tag = SRP NOT = { any_enemy_country = { NOT = { tag = VAL } } } } FROM = { tag = VAL has_country_flag = VAL_cw_entered } }
+						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 5 } }
+					}
+					else_if = {
+						limit = { ROOT = { tag = VAL has_country_flag = VAL_cw_entered NOT = { any_enemy_country = { NOT = { tag = SRP } } } } FROM = { tag = SRP } }
+						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 3 } }
+					}
+				}
 			}
 		}
 	}

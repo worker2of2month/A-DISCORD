@@ -21,6 +21,7 @@
     "diplomacy_ui_assets",
     "production_ui_assets",
     "logistics_ui_assets",
+    "focus_ui_assets",
     "market_ui_assets",
     "deployment_ui_assets",
     "intelligence_ui_assets",
@@ -214,7 +215,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_vorkerland_theatre", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "The theatre builder owns only its exact OSV capital-spur, STP/YPR supply-connection and four supply-hub records; existing Nudge railway and supply records remain hand-authored map data."
+      "overlap_explanation": "The theatre builder owns only its exact OSV capital-spur, STP/YPR supply connections, RUS border connection and six supply-hub records; existing Nudge railway and supply records remain hand-authored map data."
     },
     {
       "id": "state_history",
@@ -593,6 +594,31 @@
         "tools.builders.build_adiscord_market_ui_assets",
         "--apply"
       ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "focus_ui_assets",
+      "owner_module": "tools.builders.build_adiscord_focus_ui_assets",
+      "output_globs": [
+        "interface/nationalfocusview.gui",
+        "interface/ADISCORD_focus_ui.gfx",
+        "gfx/interface/focusview/ADISCORD_focus_window.dds",
+        "gfx/interface/focusview/ADISCORD_focus_panel.dds",
+        "gfx/interface/focusview/ADISCORD_focus_tree.dds",
+        "gfx/interface/focusview/ADISCORD_focus_detail_header.dds",
+        "gfx/interface/focusview/ADISCORD_focus_requirements.dds",
+        "gfx/interface/focusview/ADISCORD_focus_reward_header.dds",
+        "gfx/interface/focusview/ADISCORD_focus_button.dds"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_focus_ui_assets.py",
+        "tools/lib/adiscord_ui_contracts.py",
+        "tools/lib/adiscord_ui_surfaces.py",
+        "gfx/interface/production/source/production_surface_source.png"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_focus_ui_assets"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_focus_ui_assets", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },
@@ -1187,6 +1213,13 @@
       "id": "vorkerland_flags",
       "owner_module": "tools.builders.build_adiscord_vorkerland_original_flags",
       "output_globs": [
+        "gfx/flags/**/EYR.tga",
+        "gfx/flags/**/EGC.tga",
+        "gfx/flags/**/RIV.tga",
+        "gfx/flags/**/YOR.tga",
+        "gfx/flags/source/EGC.png",
+        "gfx/flags/source/RIV.png",
+        "gfx/flags/source/YOR.png",
         "gfx/flags/source/CSL.png",
         "gfx/flags/source/EBA.png",
         "gfx/flags/source/IBA.png",
@@ -1223,6 +1256,9 @@
         "gfx/flags/**/ZAO_zaozersk_republic.tga"
       ],
       "source_inputs": [
+        "gfx/flags/VAD.tga",
+        "gfx/flags/medium/VAD.tga",
+        "gfx/flags/small/VAD.tga",
         "tools/builders/build_adiscord_vorkerland_original_flags.py",
         "gfx/flags/source/ROM.png",
         "gfx/flags/source/TRU.png",
@@ -1230,6 +1266,8 @@
         "gfx/flags/source/TRU_zolotorevsk_republic.png",
         "gfx/flags/source/WRK_vorkerland_utilitarian_republic.png",
         "gfx/flags/source/SOL_vorkerland_worker_protectorate.png",
+        "gfx/flags/source/SOL_vorkerland_worker_protectorate_medium.png",
+        "gfx/flags/source/SOL_vorkerland_worker_protectorate_small.png",
         "gfx/flags/WRK.tga",
         "gfx/flags/medium/WRK.tga",
         "gfx/flags/small/WRK.tga"

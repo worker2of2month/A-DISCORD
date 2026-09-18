@@ -1,6 +1,5 @@
-# TFR-style suppression for AI countries which have no scripted participation.
-# Existing formations remain on the map; only future research, production, and
-# division training are stopped.
+# Stops AI research, production and training for countries without scripted
+# participation. Existing formations remain on the map.
 ADISCORD_apply_non_participating_minor_optimization = {
 	if = {
 		limit = { ADISCORD_can_optimize_non_participating_minor = yes }
@@ -11,8 +10,8 @@ ADISCORD_apply_non_participating_minor_optimization = {
 	}
 }
 
-# If an otherwise dormant country is pulled into an unscripted war, restore its
-# historical research capacity once and let it participate normally thereafter.
+# Restore the authored starting capacity. AIN remains here for campaigns in
+# which it was suppressed before becoming an active northern participant.
 ADISCORD_restore_non_participating_minor_research_slots = {
 	if = {
 		limit = { tag = AIN }
@@ -76,6 +75,19 @@ ADISCORD_release_non_participating_minor_optimization = {
 		ADISCORD_restore_non_participating_minor_research_slots = yes
 		clr_country_flag = ADISCORD_non_participating_minor_optimized
 		set_country_flag = ADISCORD_non_participating_minor_released
+	}
+}
+
+# Called by the existing monthly pulse before its economy-schema gate.
+# Scripted participation and war entry release countries immediately.
+ADISCORD_reconcile_non_participating_minor_optimization = {
+	if = {
+		limit = { ADISCORD_minor_optimization_needs_release = yes }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		if = {
+			limit = { is_ai = no }
+			ADISCORD_economy_initialize_country = yes
+		}
 	}
 }
 

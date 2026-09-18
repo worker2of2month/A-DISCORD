@@ -45,7 +45,7 @@ class WrkStartingIdeaTests(unittest.TestCase):
             self.assertIn(spirit, start_ideas)
 
     def test_each_starting_spirit_is_strictly_negative(self) -> None:
-        ideas = read("common/ideas/vorkerland.txt")
+        ideas = read("common/ideas/ADISCORD_vorkerland_ideas.txt")
         expected_penalties = {
             "WRK_ashes_of_the_crown": (
                 "send_volunteer_factor = -0.50",
@@ -80,7 +80,7 @@ class WrkStartingIdeaTests(unittest.TestCase):
         self.assertNotIn("stability_factor = 0.25", constitution)
 
     def test_revolutionary_spirit_cancels_outside_vorkerist_family(self) -> None:
-        ideas = read("common/ideas/vorkerland.txt")
+        ideas = read("common/ideas/ADISCORD_vorkerland_ideas.txt")
         spirit = named_block(ideas, "WRK_birthplace_of_the_first_revolution")
         cancel = named_block(spirit, "cancel")
         self.assertIn("NOT =", cancel)

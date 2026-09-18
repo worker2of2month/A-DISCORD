@@ -1930,20 +1930,20 @@ ADISCORD_vorkerland_wrk_prewar_hardline_plan = {
 }
 
 ADISCORD_vorkerland_vad_prewar_compact_plan = {
-	name = "VAD prewar compact"
+	name = "District prewar compact"
 	desc = ""
-	allowed = { original_tag = VAD }
+	allowed = { OR = { original_tag = EYR original_tag = EGC original_tag = RIV original_tag = YOR } }
 	enable = {
-		tag = VAD
+		OR = { tag = EYR tag = EGC tag = RIV tag = YOR }
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
-		NOT = { has_country_flag = ADISCORD_vorkerland_prewar_vad_hardline_course }
+		NOT = { has_country_flag = ADISCORD_vorkerland_prewar_district_hardline_course }
 	}
 	abort = {
 		OR = {
-			NOT = { tag = VAD }
+			NOT = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } }
 			NOT = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
-			has_country_flag = ADISCORD_vorkerland_prewar_vad_hardline_course
+			has_country_flag = ADISCORD_vorkerland_prewar_district_hardline_course
 		}
 	}
 	ai_national_focuses = {
@@ -1954,22 +1954,22 @@ ADISCORD_vorkerland_vad_prewar_compact_plan = {
 		VAD_prepare_vadl_worker_terms
 		VAD_ratify_emergency_compact
 	}
-	weight = { factor = 4 }
+	weight = { factor = 1 }
 }
 
 ADISCORD_vorkerland_vad_prewar_hardline_plan = {
-	name = "VAD prewar hardline"
+	name = "District prewar hardline"
 	desc = ""
-	allowed = { original_tag = VAD }
+	allowed = { OR = { original_tag = EYR original_tag = EGC original_tag = RIV original_tag = YOR } }
 	enable = {
-		tag = VAD
+		OR = { tag = EYR tag = EGC tag = RIV tag = YOR }
 		is_ai = yes
 		has_global_flag = ADISCORD_vorkerland_phase_prewar
-		has_country_flag = ADISCORD_vorkerland_prewar_vad_hardline_course
+		NOT = { has_country_flag = ADISCORD_vorkerland_prewar_district_compact_course }
 	}
 	abort = {
 		OR = {
-			NOT = { tag = VAD }
+			NOT = { OR = { tag = EYR tag = EGC tag = RIV tag = YOR } }
 			NOT = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		}
 	}
@@ -1981,7 +1981,7 @@ ADISCORD_vorkerland_vad_prewar_hardline_plan = {
 		VAD_activate_eastern_mandate
 		VAD_seal_district_arsenals
 	}
-	weight = { factor = 4 }
+	weight = { factor = 1 }
 }
 
 ADISCORD_vorkerland_wrk_postwar_worker_plan = {

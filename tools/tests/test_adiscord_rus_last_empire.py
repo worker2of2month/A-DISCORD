@@ -86,6 +86,46 @@ def localisation_entries(text: str) -> dict[str, str]:
 
 
 class RusLastEmpireTests(unittest.TestCase):
+    def test_every_closed_zone_state_has_exactly_one_opening_successor(self) -> None:
+        from tools.lib.vorkerland_collapse_manifest import DIRTY_GROUPS, EXZ_REMAINDER_GROUPS
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+
+        effects = read(EFFECT_FILE)
+        assigned = []
+        for tag, states in DIRTY_GROUPS.items():
+            expected = set(states) | set(EXZ_REMAINDER_GROUPS.get(tag, ()))
+            setup = named_block(effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")
+            actual = set(map(int, re.findall(
+                rf"(\d+)\s*=\s*\{{\s*add_core_of = {tag} set_state_owner_to = {tag} set_state_controller_to = {tag}",
+                setup,
+            )))
+            self.assertEqual(actual, expected, tag)
+            assigned.extend(actual)
+            cores = named_block(effects, f"ADISCORD_vorkerland_rus_core_dirty_{tag.lower()}")
+            rus_cores = set(map(int, re.findall(r"(\d+)\s*=\s*\{\s*add_core_of = RUS", cores)))
+            self.assertEqual(rus_cores, expected - {168}, tag)
+        self.assertEqual(len(assigned), len(set(assigned)))
+        for path in (ROOT / "history/states").glob("*.txt"):
+            source = read(path)
+            if re.search(r"\bowner\s*=\s*EXZ\b", source):
+                state = int(re.search(r"\bid\s*=\s*(\d+)", source).group(1))
+                self.assertIn(state, assigned, path.name)
+
+    def test_opened_zone_load_repair_preserves_conquests_and_follows_current_owner(self) -> None:
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+
+        effects = read(EFFECT_FILE)
+        repair = named_block(effects, "ADISCORD_vorkerland_reconcile_dirty_zone_remainder")
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_dirty_opened", repair)
+        self.assertIn("461 = { is_owned_by = EXZ }", repair)
+        self.assertIn("51 = { NOT = { is_owned_by = EXZ } }", repair)
+        destination = named_block(repair, "owner")
+        transfer = named_block(destination, "461")
+        self.assertIn("set_state_owner_to = PREV", transfer)
+        self.assertIn("set_state_controller_to = PREV", transfer)
+        startup = named_block(read(ON_ACTIONS), "on_startup")
+        self.assertIn("ADISCORD_vorkerland_reconcile_dirty_zone_remainder = yes", startup)
+
     def test_focus_tree_is_assigned_to_rus_and_lists_the_ai_branch(self) -> None:
         source = read(FOCUS_FILE)
         self.assertIn("id = RUS_focus", source)

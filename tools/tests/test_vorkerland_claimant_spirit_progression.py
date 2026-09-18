@@ -87,7 +87,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
             self.assertIn(f"has_idea = {spirit}", repair)
 
     def test_revolutionary_spirit_chain_accepts_neo_vorkerism(self) -> None:
-        ideas = read("common/ideas/vorkerland.txt")
+        ideas = read("common/ideas/ADISCORD_vorkerland_ideas.txt")
         for spirit in self.WRK_CHAIN:
             with self.subTest(spirit=spirit):
                 block = named_block(ideas, spirit)

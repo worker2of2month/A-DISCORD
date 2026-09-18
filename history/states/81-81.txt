@@ -9,9 +9,8 @@ state={
 	state_category = large_city
 	local_supplies = 5.0
 	history={
-		owner = VAD
-		add_core_of = VAD
-
+		owner=EGC
+		add_core_of=EGC
 		victory_points = { 16587 10 }
 		victory_points = { 16616 2 }
 		victory_points = { 16620 2 }

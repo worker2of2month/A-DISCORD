@@ -560,7 +560,7 @@ country_event = {
     id = val_rework.101
     hidden = yes
     is_triggered_only = yes
-    immediate = { ADISCORD_economy_mark_dirty = yes }
+    immediate = { VAL_reconcile_supply_crisis = yes ADISCORD_economy_mark_dirty = yes }
 }
 country_event = {
     id = val_rework.110
@@ -571,7 +571,7 @@ country_event = {
     picture = GFX_event_adiscord_negotiation_table
     is_triggered_only = yes
     option = { name = val_rework.110.no trigger = { VAL_frontier_offer_is_current = yes } ai_chance = { base = 75 } VAL_frontier_refuse = yes }
-    option = { name = val_rework.110.yes trigger = { VAL_frontier_offer_is_current = yes } ai_chance = { base = 25 modifier = { factor = 2 has_war = yes } } custom_effect_tooltip = VAL_frontier_accept_tt hidden_effect = { VAL_frontier_accept = yes } }
+    option = { name = val_rework.110.yes trigger = { VAL_frontier_offer_is_current = yes } ai_chance = { base = 25 modifier = { factor = 2 has_war = yes } modifier = { factor = 0 NOT = { tag = ERT } } } custom_effect_tooltip = VAL_frontier_accept_tt hidden_effect = { VAL_frontier_accept = yes } }
     option = { name = val_rework.closed trigger = { NOT = { VAL_frontier_offer_is_current = yes } } }
 }
 country_event = {
@@ -580,6 +580,12 @@ country_event = {
     desc = val_rework.111.d
     picture = GFX_event_adiscord_negotiation_table
     is_triggered_only = yes
+    option = {
+        name = val_rework.111.prepare
+        trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes }
+        ai_chance = { base = 0 }
+        custom_effect_tooltip = VAL_frontier_prepare_tt
+    }
     option = { name = val_rework.111.withdraw trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes } ai_chance = { base = 30 } hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } } VAL_frontier_close = yes } } }
     option = {
         name = val_rework.111.war
@@ -627,4 +633,133 @@ country_event = {
     picture = GFX_event_adiscord_negotiation_table
     is_triggered_only = yes
     option = { name = val_rework.116.a }
+}
+
+country_event = {
+ id = val_contract.340
+ title = val_contract.340.t
+ desc = val_contract.340.d
+ picture = GFX_event_adiscord_negotiation_table
+ is_triggered_only = yes
+ timeout_days = 14
+ option = {
+  name = VAL_export_decline
+  ai_chance = { base = 10 }
+  hidden_effect = { if = { limit = { has_country_flag = VAL_export_offer_arms } clr_country_flag = VAL_export_offer_arms VAL = { clr_country_flag = VAL_export_offer_pending } } }
+ }
+ option = {
+  name = VAL_export_accept
+  trigger = { VAL_export_arms_can_accept = yes }
+  ai_chance = { base = 90 }
+  custom_effect_tooltip = VAL_export_arms_accepted_tt
+  hidden_effect = {
+   if = {
+    limit = { VAL_export_arms_can_accept = yes }
+    ADISCORD_economy_spend_100 = yes
+    VAL = {
+     send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
+     if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
+     else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+    }
+    clr_country_flag = VAL_export_offer_arms
+    set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+    VAL = { clr_country_flag = VAL_export_offer_pending }
+   }
+  }
+ }
+}
+
+country_event = {
+ id = val_contract.341
+ title = val_contract.341.t
+ desc = val_contract.341.d
+ picture = GFX_event_adiscord_negotiation_table
+ is_triggered_only = yes
+ timeout_days = 14
+ option = {
+  name = VAL_export_decline
+  ai_chance = { base = 10 }
+  hidden_effect = { if = { limit = { has_country_flag = VAL_export_offer_advisors } clr_country_flag = VAL_export_offer_advisors VAL = { clr_country_flag = VAL_export_offer_pending } } }
+ }
+ option = {
+  name = VAL_export_accept
+  trigger = { VAL_export_advisors_can_accept = yes }
+  ai_chance = { base = 90 }
+  custom_effect_tooltip = VAL_export_advisors_accepted_tt
+  hidden_effect = {
+   if = {
+    limit = { VAL_export_advisors_can_accept = yes }
+    ADISCORD_economy_spend_100 = yes
+    add_timed_idea = { idea = VAL_paid_military_advisors days = 70 }
+    VAL = { add_command_power = -25 add_timed_idea = { idea = VAL_advisors_income days = 70 } }
+    clr_country_flag = VAL_export_offer_advisors
+    set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+    VAL = { clr_country_flag = VAL_export_offer_pending }
+   }
+  }
+ }
+}
+
+country_event = {
+ id = val_contract.343
+ title = val_contract.343.t
+ desc = { text = val_contract.343.shabrat trigger = { has_country_leader = { character = STP_maksim_shabrat } } }
+ desc = { text = val_contract.343.friendly trigger = { NOT = { has_country_leader = { character = STP_maksim_shabrat } } has_opinion = { target = VAL value > 49 } } }
+ desc = { text = val_contract.343.d trigger = { NOT = { has_country_leader = { character = STP_maksim_shabrat } } NOT = { has_opinion = { target = VAL value > 49 } } } }
+ picture = GFX_event_adiscord_negotiation_table
+ is_triggered_only = yes timeout_days = 21
+ option = {
+  name = val_contract.343.refuse
+  ai_chance = { base = 80 modifier = { factor = 5 has_country_leader = { character = STP_maksim_shabrat } } modifier = { factor = 0.25 has_opinion = { target = VAL value > 49 } } }
+  hidden_effect = {
+   if = { limit = { VAL_stelander_offer_current = yes }
+    set_country_flag = VAL_stelander_refused
+    VAL = { clr_country_flag = VAL_stelander_offer_pending }
+    clr_country_flag = VAL_stelander_offer
+   }
+  }
+ }
+ option = {
+  name = val_contract.343.accept
+  trigger = { VAL_stelander_offer_current = yes }
+  ai_chance = { base = 20 modifier = { factor = 0 has_country_leader = { character = STP_maksim_shabrat } } modifier = { factor = 4 has_opinion = { target = VAL value > 49 } } modifier = { factor = 2 VAL = { has_country_flag = VAL_cw_arms_contract_fulfilled } } }
+  custom_effect_tooltip = VAL_stelander_terms_tt
+  hidden_effect = {
+   if = {
+    limit = { VAL_stelander_offer_current = yes }
+    43 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 43 } } }
+    44 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 44 } } }
+    88 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 88 } } }
+    VAL = { VAL_form_occidian_administration = yes }
+    set_country_flag = { flag = VAL_stelander_truce days = 180 }
+    add_timed_idea = { idea = VAL_stelander_trade_terms days = 180 }
+    VAL = { clr_country_flag = VAL_stelander_offer_pending add_timed_idea = { idea = VAL_stelander_trade_terms days = 180 } }
+    clr_country_flag = VAL_stelander_offer
+   }
+  }
+ }
+}
+country_event = {
+ id = val_contract.345 title = val_contract.345.t desc = val_contract.345.d
+ picture = GFX_event_adiscord_negotiation_table is_triggered_only = yes
+ option = { name = val_contract.345.a }
+}
+
+country_event = {
+ id = val_contract.344 hidden = yes is_triggered_only = yes
+ immediate = {
+  if = {
+   limit = { VAL_stelander_ultimatum_target = yes NOT = { has_country_flag = VAL_stelander_truce } NOT = { has_country_flag = VAL_stelander_refused } }
+   set_country_flag = VAL_stelander_refused
+  }
+ }
+}
+
+country_event = {
+    id = val_contract.346
+    title = val_contract.346.t
+    desc = val_contract.346.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_contract.346.a }
 }

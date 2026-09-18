@@ -3,8 +3,7 @@ scripted_gui = {
 		context_type = player_context
 		window_name = "ADISCORD_economy_treasury_topbar_window"
 		parent_window_token = top_bar
-		# Weekly settlements change treasury without a dashboard invalidation.
-		# Keep this small readout live, including when observing another country.
+		# Read treasury live for payments between settlements and observer changes.
 		visible = { always = yes }
 		effects = {
 			ADISCORD_economy_treasury_topbar_open_click = { ADISCORD_economy_open_window = yes }

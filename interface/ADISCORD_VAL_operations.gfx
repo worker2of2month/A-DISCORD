@@ -1,43 +1,16 @@
 spriteTypes = {
-	spriteType = {
-		name = "GFX_VAL_ops_map_background"
-		texturefile = "gfx/interface/VAL_operations/VAL_ops_map_background.png"
-		transparencecheck = yes
-	}
-	spriteType = {
-		name = "GFX_VAL_ops_state_43"
-		texturefile = "gfx/interface/VAL_operations/VAL_ops_state_43.png"
-		noOfFrames = 5
-		transparencecheck = yes
-	}
-	spriteType = {
-		name = "GFX_VAL_ops_state_44"
-		texturefile = "gfx/interface/VAL_operations/VAL_ops_state_44.png"
-		noOfFrames = 5
-		transparencecheck = yes
-	}
-	spriteType = {
-		name = "GFX_VAL_ops_state_45"
-		texturefile = "gfx/interface/VAL_operations/VAL_ops_state_45.png"
-		noOfFrames = 5
-		transparencecheck = yes
-	}
-	spriteType = {
-		name = "GFX_VAL_ops_state_88"
-		texturefile = "gfx/interface/VAL_operations/VAL_ops_state_88.png"
-		noOfFrames = 5
-		transparencecheck = yes
-	}
-	spriteType = {
-		name = "GFX_VAL_ops_state_59"
-		texturefile = "gfx/interface/VAL_operations/VAL_ops_state_59.png"
-		noOfFrames = 5
-		transparencecheck = yes
-	}
-	spriteType = {
-		name = "GFX_VAL_ops_state_61"
-		texturefile = "gfx/interface/VAL_operations/VAL_ops_state_61.png"
-		noOfFrames = 5
-		transparencecheck = yes
-	}
+ spriteType = { name = "GFX_VAL_ops_map_background" texturefile = "gfx/interface/VAL_operations/VAL_ops_map_background.png" }
+ spriteType = { name = "GFX_VAL_ops_state_43" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_43.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_44" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_44.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_45" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_45.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_88" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_88.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_58" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_58.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_59" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_59.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_60" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_60.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_61" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_61.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_62" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_62.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_63" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_63.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_64" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_64.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_65" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_65.png" noOfFrames = 5 }
+ spriteType = { name = "GFX_VAL_ops_state_168" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_168.png" noOfFrames = 5 }
 }

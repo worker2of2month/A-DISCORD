@@ -2084,6 +2084,10 @@ STARTING_TECH_PROFILES = {
 # Manual, lore-aware mapping for every tag owning at least one state on
 # 2160.1.1.  Empty tuples are intentional common-only assignments.
 STARTING_COUNTRY_TECH_PROFILES = {
+    "YOR": ("fragment_low_tech",),
+    "RIV": ("fragment_low_tech",),
+    "EYR": ("fragment_low_tech",),
+    "EGC": ("fragment_low_tech",),
     "AIN": ("fragment_low_tech", "institutional"),
     "APH": ("fragment_low_tech",),
     "ARS": ("fragment_low_tech",),
@@ -2150,7 +2154,6 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "TFF": ("fragment_low_tech", "land", "field_air_defense"),
     "TMR": ("industrial",),
     "TRU": ("industrial", "institutional", "land"),
-    "VAD": ("industrial", "energy", "institutional", "land", "air", "naval", "armored_core"),
     "VAL": ("industrial", "energy", "institutional", "land", "air", "naval", "field_air_defense"),
     "VES": ("fragment_low_tech", "land"),
     "VLD": ("fragment_low_tech",),
@@ -2165,6 +2168,10 @@ STARTING_COUNTRY_TECH_PROFILES = {
 }
 
 STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
+    "YOR": "Autonomous republic maintains territorial militia and basic workshop production.",
+    "RIV": "River administration supplies local garrisons from modest inherited workshops.",
+    "EYR": "Autonomous district administration maintains basic workshops and territorial infantry.",
+    "EGC": "Confederal garrison retains local workshops and inherited infantry equipment.",
     "AIN": "Nodrul's licensed frontier mandate preserves imported legal and administrative institutions over a small local workshop base.",
     "APH": "Traditional extraction polity with a small arms base and no advanced infrastructure.",
     "ARS": "Small eastern republic retains militia practice and basic workshops without advanced institutions.",
@@ -2222,7 +2229,6 @@ STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
     "TFF": "Frontier districts retain defensive land practice and a small standing army over a fragmentary workshop economy.",
     "TMR": "Utility chamber retains a modest industrial grid while limiting military specialization.",
     "TRU": "Organized Vorkerland successor with enough factories, infrastructure, and army continuity for core profiles.",
-    "VAD": "Major Vorkerland successor with dense industry, a live power site, dockyards, and ten air bases.",
     "VAL": "Weapons superpower with twelve military factories, three research slots, and a large convoy reserve.",
     "VES": "Border league maintains defensive land practice over a small regional workshop base.",
     "VLD": "Small southern coastal union protects an inherited oil field with militia and a fragmentary workshop base.",
@@ -5471,7 +5477,11 @@ def collect_starting_country_profile_evidence() -> dict[str, dict[str, object]]:
                 r"\bset_grand_doctrine\s*=\s*([A-Za-z0-9_]+)",
                 country_text,
             )
-        oob_path = ROOT / "history" / "units" / f"{tag}.txt"
+        history_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
+        history_text = history_paths[0].read_text(encoding="utf-8-sig") if history_paths else ""
+        oob_match = re.search(r'(?m)^\s*oob\s*=\s*"([^"\n]+)"', history_text)
+        oob_name = oob_match.group(1) if oob_match else tag
+        oob_path = ROOT / "history" / "units" / f"{oob_name}.txt"
         if oob_path.exists():
             oob_text = oob_path.read_text(encoding="utf-8-sig")
             row["oob_divisions"] = len(
@@ -6060,7 +6070,12 @@ def main() -> int:
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
     actions.add_argument("--apply", action="store_true", help="write technology files, manifests, GUI and localisation")
+    actions.add_argument("--apply-starting-profiles", action="store_true", help="write only starting technology effects and the country profile manifest")
     args = parser.parse_args()
+    if args.apply_starting_profiles:
+        write_starting_technology_effect()
+        write_starting_technology_profile_manifest()
+        return 0
     if args.apply:
         apply()
         return 0

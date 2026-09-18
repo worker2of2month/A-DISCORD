@@ -1,4 +1,13 @@
+capital = 306
+ADISCORD_grant_2150_technology_baseline = yes
+ADISCORD_grant_technology_profile_fragment_low_tech = yes
+oob = "RIV_vorkerland_collapse"
+set_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
+set_stability = 0.35
+
 set_politics = { ruling_party = pragmatism elections_allowed = no }
 set_popularities = { etatism = 10 chauvinism = 0 humanism = 15 pragmatism = 70 technocracy = 5 }
 recruit_character = RIV_Mikhail_Arsenyev
 set_research_slots = 2
+
+set_cosmetic_tag = RIV_confederation
