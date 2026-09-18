@@ -524,6 +524,7 @@ VAL_cw_external_course_available = {
 	NOT = { has_country_flag = VAL_cw_entered }
 	NOT = { has_country_flag = VAL_cw_settled }
 	NOT = { has_country_flag = VAL_cw_refused }
+	NOT = { has_country_flag = VAL_stelander_defeated }
 }
 
 # The course is chosen at the split; a military order needs 60 days of preparation.
