@@ -4662,7 +4662,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_development_country_must_live
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_goal_generic_propaganda
 		x = 36
 		y = 4
 		cost = 3
