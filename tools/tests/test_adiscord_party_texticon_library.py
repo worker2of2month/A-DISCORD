@@ -82,8 +82,8 @@ class PartyTexticonLibraryContractTests(unittest.TestCase):
                 for corner in ((0, 0), (width - 1, 0), (0, height - 1), (width - 1, height - 1)):
                     self.assertEqual(image.getpixel(corner)[3], 0)
 
-    def test_all_fifty_one_generated_runtime_pngs_are_exact_32px_rgba(self) -> None:
-        self.assertEqual(len(builder.ASSETS), 51)
+    def test_all_fifty_two_generated_runtime_pngs_are_exact_32px_rgba(self) -> None:
+        self.assertEqual(len(builder.ASSETS), 52)
         for asset in builder.ASSETS:
             path = ROOT / asset.output
             with self.subTest(asset=asset.key), Image.open(path) as image:
@@ -103,10 +103,10 @@ class PartyTexticonLibraryContractTests(unittest.TestCase):
                 self.assertEqual(image.mode, "RGBA")
             self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), protected.sha256)
 
-    def test_all_fifty_four_gfx_sprites_resolve_once_to_catalog_paths(self) -> None:
+    def test_all_fifty_five_gfx_sprites_resolve_once_to_catalog_paths(self) -> None:
         text = (ROOT / builder.REGISTRY_PATH).read_text(encoding="utf-8")
         blocks = re.findall(r"(?s)spriteType\s*=\s*\{(.*?)\}", text)
-        self.assertEqual(len(blocks), 54)
+        self.assertEqual(len(blocks), 55)
         actual: dict[str, str] = {}
         for block in blocks:
             name_match = re.search(r'\bname\s*=\s*"([^"]+)"', block)

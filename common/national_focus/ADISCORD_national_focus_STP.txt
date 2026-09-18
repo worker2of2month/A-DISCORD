@@ -468,7 +468,8 @@ focus_tree = {
 		prerequisite = { focus = STP_Show_Him_The_Truth }
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			add_intel = { target = NOD army_intel = 15 }
+			add_intel = { target = NOD army_intel = 15 civilian_intel = 10 }
+			add_political_power = 25
 			custom_effect_tooltip = STP_cw_northern_observers_tt
 		}
 	}
@@ -489,7 +490,8 @@ focus_tree = {
 			unlock_decision_tooltip = STP_cw_send_northern_engineers
 			unlock_decision_tooltip = STP_cw_sabotage_nodrul
 			add_intel = { target = NOD army_intel = 10 }
-			add_political_power = 25
+			add_political_power = 50
+			add_command_power = 15
 			custom_effect_tooltip = STP_cw_northern_desk_tt
 			hidden_effect = { set_country_flag = STP_cw_northern_aid_open }
 		}
@@ -561,6 +563,8 @@ focus_tree = {
 		completion_reward = {
 			hidden_effect = { set_country_flag = STP_cw_northern_strategy_evidence }
 			unlock_decision_tooltip = STP_cw_trigger_northern_incident
+			add_intel = { target = NOD army_intel = 10 civilian_intel = 10 }
+			add_political_power = 50
 			custom_effect_tooltip = STP_cw_border_evidence_tt
 		}
 	}
@@ -579,8 +583,8 @@ focus_tree = {
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_supply_the_north
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 4800 }
-			add_political_power = 40
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 7200 }
+			add_political_power = 60
 			hidden_effect = { set_country_flag = STP_cw_northern_strategy_supply }
 		}
 	}

@@ -1367,7 +1367,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         for field in ("id", "x", "y", "z", "rotation", "scale", "min_zoom"):
             values = [re.search(rf"\b{field}\s*=\s*([^\s}}]+)", actor).group(1) for actor in actors]
             self.assertEqual(len(set(values)), 1, (field, values))
-        self.assertEqual({re.search(r"min_zoom\s*=\s*([^\s}]+)", actor).group(1) for actor in actors}, {"50"})
+        self.assertEqual({re.search(r"min_zoom\s*=\s*([^\s}]+)", actor).group(1) for actor in actors}, {"2000"})
         for block in (sync, animate):
             self.assertIn("destroy_entity = 610040", named_block(block, "40"))
         self.assertIn(f"{sync_name} = yes", smoke)

@@ -26,6 +26,7 @@ EXPECTED_EXISTING = {
     "rom_independent_party",
     "sol_independent_party",
     "tru_independent_party",
+    "sts_steland_union",
 }
 EXPECTED_COUNTRIES = {f"{tag.lower()}_primary_party" for tag in {
     "BBV", "BCM", "BGT", "BHG", "BJK", "BLD", "BTL", "COF",
@@ -62,7 +63,7 @@ class PartyTexticonBuilderTests(unittest.TestCase):
         catalog_path = builder.ROOT / "tools/data/adiscord_party_texticons.json"
         self.assertTrue(catalog_path.is_file(), catalog_path)
         self.assertEqual({asset.key for asset in builder.ASSETS}, expected_asset_keys())
-        self.assertEqual(len(builder.ASSETS), 51)
+        self.assertEqual(len(builder.ASSETS), 52)
         self.assertEqual({asset.runtime_size for asset in builder.ASSETS}, {(32, 32)})
         self.assertEqual(
             {protected.output.as_posix(): protected.sha256 for protected in builder.PROTECTED},
@@ -156,7 +157,7 @@ class PartyTexticonBuilderTests(unittest.TestCase):
                 ]
                 self.assertEqual(set(border), {0})
 
-    def test_registry_has_exact_54_sprite_order_and_eager_entries(self) -> None:
+    def test_registry_has_exact_55_sprite_order_and_eager_entries(self) -> None:
         registry = builder.render_registry().decode("utf-8")
         names = re.findall(r'\bname\s*=\s*"([^"]+)"', registry)
         existing = [asset.sprite for asset in builder.ASSETS if asset.asset_class == "existing"]
@@ -172,9 +173,9 @@ class PartyTexticonBuilderTests(unittest.TestCase):
             *generic,
         ]
         self.assertEqual(names, expected)
-        self.assertEqual(len(names), 54)
-        self.assertEqual(len(set(names)), 54)
-        self.assertEqual(registry.count("legacy_lazy_load = no"), 54)
+        self.assertEqual(len(names), 55)
+        self.assertEqual(len(set(names)), 55)
+        self.assertEqual(registry.count("legacy_lazy_load = no"), 55)
         self.assertNotIn("\r", registry)
 
     def test_contact_sheets_have_exact_paths_and_dimensions(self) -> None:
@@ -196,8 +197,8 @@ class PartyTexticonBuilderTests(unittest.TestCase):
             builder.ROOT / "docs/superpowers/reports/2026-08-16-adiscord-party-generic-emblems-contact-sheet.png",
         }
         self.assertEqual(set(outputs), expected_runtime | {expected_registry} | expected_reports)
-        self.assertEqual(len(expected_runtime), 51)
-        self.assertEqual(len(outputs), 54)
+        self.assertEqual(len(expected_runtime), 52)
+        self.assertEqual(len(outputs), 55)
         self.assertTrue({builder.ROOT / item.output for item in builder.PROTECTED}.isdisjoint(outputs))
 
     def test_catalog_loader_rejects_every_invalid_record_class(self) -> None:

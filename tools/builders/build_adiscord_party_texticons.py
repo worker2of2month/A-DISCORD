@@ -439,7 +439,7 @@ def main() -> int:
         except RuntimeError as error:
             print(f"Party texticon build refused: {error}")
             return 1
-        print("Built 51 party texticons, one GFX registry, and two contact sheets.")
+        print("Built 52 party texticons, one GFX registry, and two contact sheets.")
         return 0
     problems = drift()
     if problems:

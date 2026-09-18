@@ -92,6 +92,15 @@
       "runtime_size": [32, 32]
     },
     {
+      "key": "sts_steland_union",
+      "class": "existing",
+      "source_kind": "master",
+      "source": "tools/assets/source/party_texticons/STS_steland_union_source.png",
+      "output": "gfx/texticons/adiscord/parties/STS/STS_steland_union_party.png",
+      "sprite": "GFX_STS_steland_union_party_texticon",
+      "runtime_size": [32, 32]
+    },
+    {
       "key": "bbv_primary_party",
       "class": "country",
       "source_kind": "master",
