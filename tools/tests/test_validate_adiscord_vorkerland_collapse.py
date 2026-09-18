@@ -1315,7 +1315,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             outbreak.find("ADISCORD_vorkerland_apply_claimant_cosmetics = yes"),
             outbreak.find("news_event = { id = ADISCORD_superevent_news.1 }"),
         )
-        opening_definition = event_block(news, "ADISCORD_superevent_news.1")
+        opening_definition = event_block(news, "ADISCORD_superevent_news.1", "news_event")
         self.assertIn("major = yes", opening_definition)
         self.assertNotIn("hidden = yes", opening_definition)
         self.assertIn("id = ADISCORD_superevent_news.1", opening_definition)
