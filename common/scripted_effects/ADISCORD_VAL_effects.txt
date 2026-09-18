@@ -2089,24 +2089,108 @@ VAL_cw_stage_livonn_settlement = {
 			NOT = { has_country_flag = VAL_cw_livonn_settlement_resolved }
 		}
 
+		# Formation is the authoritative territorial step. The weekly/on-action
+		# callers only stage the political choice after Livonn is actually in OCA.
 		if = {
-			limit = { NOT = { 45 = { is_owned_by = VAL } } }
-			transfer_state = 45
-		}
-		45 = { set_state_controller_to = VAL }
-		set_country_flag = VAL_cw_livonn_settlement_staged
+			limit = { NOT = { 45 = { is_owned_by = OCA is_controlled_by = OCA } } }
+			VAL_form_occidian_administration = {
+	if = {
+		limit = { VAL_can_form_occidian_administration = yes }
 
+		# Seed OCA with a state whose donor survives the first transfer. During the
+		# military settlement Livonn is first moved to VAL, so 45 is a deterministic
+		# fallback even when the three republican districts are one-state remnants.
 		if = {
 			limit = {
-				45 = { has_state_flag = STP_local_deal_asset }
-				STS = { exists = yes has_capitulated = no }
+				OCA = { exists = no }
+				43 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
 			}
-			set_country_flag = VAL_cw_livonn_settlement_pending
+			OCA = { transfer_state = 43 }
 		}
-		else = {
-			set_country_flag = VAL_cw_livonn_settlement_resolved
-			set_country_flag = VAL_cw_livonn_retained
+		if = {
+			limit = {
+				OCA = { exists = no }
+				44 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+			}
+			OCA = { transfer_state = 44 }
 		}
+		if = {
+			limit = {
+				OCA = { exists = no }
+				45 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+			}
+			OCA = { transfer_state = 45 }
+		}
+		if = {
+			limit = {
+				OCA = { exists = no }
+				88 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+			}
+			OCA = { transfer_state = 88 }
+		}
+
+		if = {
+			limit = { OCA = { exists = yes } }
+
+			# Preserve the defeated republican army/player only when annexation is
+			# territorially bounded to the four administration districts.
+			if = {
+				limit = {
+					SRP = { exists = yes has_war = no VAL_only_occidian_states = yes }
+					OR = {
+						SRP = { is_subject_of = VAL }
+						AND = {
+							has_country_flag = VAL_occidian_settlement_pending
+							SRP = { is_subject = no }
+						}
+					}
+				}
+				if = {
+					limit = { SRP = { is_ai = no } }
+					OCA = { change_tag_from = SRP }
+				}
+				OCA = { annex_country = { target = SRP transfer_troops = yes } }
+			}
+
+			OCA = {
+				transfer_state = 43
+				transfer_state = 44
+				transfer_state = 45
+				transfer_state = 88
+				set_capital = { state = 43 remember_old_capital = no }
+				if = {
+					limit = { NOT = { is_subject_of = VAL } }
+					inherit_technology = VAL
+					set_politics = { ruling_party = etatism elections_allowed = no }
+					promote_character = { character = OCA_Contract_Council ideology = contractual_etatism }
+				}
+				set_rule = { can_join_factions = no can_create_factions = no }
+				ADISCORD_economy_initialize_country = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+
+			43 = { add_core_of = OCA set_state_controller_to = OCA }
+			44 = { add_core_of = OCA set_state_controller_to = OCA }
+			45 = { add_core_of = OCA set_state_controller_to = OCA }
+			88 = { add_core_of = OCA set_state_controller_to = OCA }
+
+			# Do not reset accumulated autonomy every time a retry/reconciliation call
+			# reaches an already existing administration.
+			if = {
+				limit = { OCA = { NOT = { is_subject_of = VAL } } }
+				set_autonomy = {
+					target = OCA
+					autonomy_state = autonomy_VAL_contract_administration
+					freedom_level = 0.10
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+			clr_country_flag = VAL_occidian_settlement_pending
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
 	}
 }
 
@@ -2116,17 +2200,21 @@ VAL_cw_honor_livonn_agreement = {
 			tag = VAL
 			has_country_flag = VAL_cw_livonn_settlement_pending
 			45 = {
-				is_owned_by = VAL
+				is_owned_by = OCA
+				is_controlled_by = OCA
 				has_state_flag = STP_local_deal_asset
 			}
+			OCA = { exists = yes is_subject_of = VAL }
 			STS = { exists = yes has_capitulated = no }
 		}
 		STS = { transfer_state = 45 }
-		45 = { set_state_controller_to = STS }
+		45 = { remove_core_of = OCA set_state_controller_to = STS }
 		clr_country_flag = VAL_cw_livonn_settlement_pending
 		set_country_flag = VAL_cw_livonn_settlement_resolved
 		set_country_flag = VAL_cw_livonn_agreement_honored
 		clr_country_flag = VAL_cw_livonn_retained
+		OCA = { ADISCORD_economy_mark_dirty = yes }
+		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
@@ -2135,9 +2223,10 @@ VAL_cw_retain_livonn = {
 		limit = {
 			tag = VAL
 			has_country_flag = VAL_cw_livonn_settlement_pending
-			45 = { is_owned_by = VAL }
+			OCA = { exists = yes is_subject_of = VAL }
+			45 = { is_owned_by = OCA }
 		}
-		45 = { set_state_controller_to = VAL }
+		45 = { set_state_controller_to = OCA }
 		clr_country_flag = VAL_cw_livonn_settlement_pending
 		set_country_flag = VAL_cw_livonn_settlement_resolved
 		set_country_flag = VAL_cw_livonn_retained
@@ -2405,24 +2494,35 @@ VAL_form_occidian_administration = {
 }
 
 VAL_integrate_occidia = {
-    if = {
-        limit = { VAL_occidian_administration_secured = yes }
-        if = {
-            limit = { OCA = { VAL_only_occidian_states = yes } }
-            if = { limit = { is_ai = yes OCA = { is_ai = no } } change_tag_from = OCA }
-            annex_country = { target = OCA transfer_troops = yes }
-        }
-        else = {
-            transfer_state = 43
-            transfer_state = 44
-            transfer_state = 88
-            OCA = { ADISCORD_economy_mark_dirty = yes }
-        }
-        43 = { remove_core_of = OCA set_state_controller_to = VAL }
-        44 = { remove_core_of = OCA set_state_controller_to = VAL }
-        88 = { remove_core_of = OCA set_state_controller_to = VAL }
-        ADISCORD_economy_mark_dirty = yes
-    }
+	if = {
+		limit = { VAL_occidian_administration_secured = yes }
+		if = {
+			limit = { OCA = { VAL_only_occidian_states = yes } }
+			if = {
+				limit = { is_ai = yes OCA = { is_ai = no } }
+				change_tag_from = OCA
+			}
+			annex_country = { target = OCA transfer_troops = yes }
+		}
+		else = {
+			transfer_state = 43
+			transfer_state = 44
+			if = {
+				limit = { 45 = { is_owned_by = OCA } }
+				transfer_state = 45
+			}
+			transfer_state = 88
+			OCA = { ADISCORD_economy_mark_dirty = yes }
+		}
+		43 = { remove_core_of = OCA set_state_controller_to = VAL }
+		44 = { remove_core_of = OCA set_state_controller_to = VAL }
+		if = {
+			limit = { 45 = { is_owned_by = VAL } }
+			45 = { remove_core_of = OCA set_state_controller_to = VAL }
+		}
+		88 = { remove_core_of = OCA set_state_controller_to = VAL }
+		ADISCORD_economy_mark_dirty = yes
+	}
 }
 
 
