@@ -3077,7 +3077,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
             self.assertFalse(matches_conditions(exceptions[0], facts, str(state)))
 
     def test_occidian_sources_require_an_unsettled_award_or_our_territory(self):
-        for state in (43, 44, 88):
+        for state in (43, 44, 45, 88):
             facts = {(str(state), "is_owned_by", "SRP"): True,
                      (str(state), "is_controlled_by", "SRP"): True,
                      ("SRP", "has_war", "no"): True, ("SRP", "is_subject", "no"): True}
@@ -3101,7 +3101,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         facts = {("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True,
                  ("OCA", "exists", "yes"): True, ("OCA", "is_subject_of", "VAL"): True,
                  ("OCA", "has_capitulated", "no"): True, ("OCA", "has_war", "no"): True}
-        for state in (43, 44, 88):
+        for state in (43, 44, 45, 88):
             for key in ("is_owned_by", "is_controlled_by"):
                 facts[str(state), key, "OCA"] = True
         self.assertTrue(self.match("VAL_occidian_administration_secured", facts))
@@ -3116,8 +3116,8 @@ class ValExpandedCampaignTests(unittest.TestCase):
                  ("VAL", "has_country_flag", "VAL_occidian_settlement_pending"): True,
                  ("VAL", "has_completed_focus", "VAL_The_Steel_Contract"): True,
                  ("OCA", "exists", "no"): True, ("SRP", "is_subject", "no"): True,
-                 ("SRP", "variable", "num_owned_states"): 3}
-        for state in (43, 44, 88):
+                 ("SRP", "variable", "num_owned_states"): 4}
+        for state in (43, 44, 45, 88):
             facts[str(state), "owner"] = "SRP"
             facts[str(state), "is_owned_by", "SRP"] = True
             facts[str(state), "is_controlled_by", "SRP"] = True
@@ -3145,7 +3145,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         for name, target in (("VAL_form_occidian_administration", "SRP"), ("VAL_integrate_occidia", "OCA")):
             body = self.getblock(effects, name)
             transfers = {e.value for e in walk(body) if e.key == "transfer_state"}
-            self.assertEqual(transfers, {"43", "44", "88"})
+            self.assertEqual(transfers, {"43", "44", "45", "88"})
             annex = next(e.value for e in walk(body) if e.key == "annex_country")
             self.assertEqual(self.scalar(annex, "target"), target)
             self.assertEqual(self.scalar(annex, "transfer_troops"), "yes")
