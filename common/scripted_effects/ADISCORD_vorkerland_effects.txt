@@ -3782,32 +3782,13 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_vorkerland_dorian_victory
 }
 
-ADISCORD_vorkerland_play_collapse_superevent_audio = {
+ADISCORD_vorkerland_play_local_superevent_audio = {
 	every_country = {
 		limit = { is_ai = no }
 		scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
 		scoped_play_song = "one_minute_of_silence"
 	}
 }
-
-ADISCORD_vorkerland_play_local_superevent_audio = {
-	every_country = {
-		limit = { is_ai = no }
-		if = {
-			limit = { has_global_flag = superevent_vorkerland_dirty_opening }
-			scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e
-		}
-		else_if = {
-			limit = { has_global_flag = superevent_vorkerland_utilitarian_victory }
-			scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e
-		}
-		else = {
-			scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
-		}
-		scoped_play_song = "one_minute_of_silence"
-	}
-}
-
 ADISCORD_vorkerland_show_dirty_opening_superevent = {
 	every_country = {
 		limit = { is_ai = no }
