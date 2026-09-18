@@ -404,7 +404,7 @@ STP_battle_for_stelander = {
 				STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 5 modifier = { factor = 3 FROM = { state = 3 } } modifier = { factor = 3 FROM = { state = 2 } } }
+		ai_will_do = { base = 5 modifier = { factor = 3 FROM = { state = 3 } } modifier = { factor = 3 FROM = { state = 2 } } modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_cw_prepare_rifle_cache = {
