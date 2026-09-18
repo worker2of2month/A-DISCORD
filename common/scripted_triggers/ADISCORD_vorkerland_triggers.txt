@@ -1415,6 +1415,7 @@ ADISCORD_vorkerland_reunification_verified = {
 	NOT = { country_exists = WKR }
 	NOT = { country_exists = VAD }
 	NOT = { country_exists = TVA }
+	NOT = { country_exists = WTD }
 }
 
 
