@@ -2,13 +2,8 @@ add_namespace = ADISCORD_superevent
 add_namespace = ADISCORD_superevent_news
 add_namespace = ADISCORD_superevent_audio
 
-# Console compatibility gateways: event ADISCORD_superevent.1 / .2 / .3 / .4
-# .1 starts the real Vorkerland collapse when possible, including the Unity
-# Tower destruction. Once the collapse has already started it becomes a safe
-# presentation replay. .2 is the Worker-victory presentation gateway used by
-# the existing reunification effect. .3 is Anton's utilitarian victory
-# presentation: picture and sound without locking the campaign ending. .4 is
-# the Dirty Zone opening presentation and does not start the country cascade.
+# .1 starts the Vorkerland collapse when needed; .1-.4 otherwise only
+# dispatch their presentation state.
 country_event = {
 	id = ADISCORD_superevent.1
 	hidden = yes
@@ -95,9 +90,7 @@ country_event = {
 	}
 }
 
-# Audio proxies for superevents raised from global scripted effects. The
-# dispatching effect selects the human country; playback then happens inside
-# that player's own country-event scope, matching the original working route.
+# Global presentation events dispatch audio through a human country scope.
 country_event = {
 	id = ADISCORD_superevent_audio.1
 	hidden = yes
@@ -125,23 +118,21 @@ country_event = {
 	}
 }
 
-news_event = { #vorkerland civilwar
+# Vorkerland civil war
+news_event = {
 	id = ADISCORD_superevent_news.1
 	title = news.0.t
 	desc = news.0.d
 
 	major = yes
 
-	# The collapse caller owns the save-safe one-shot guard. Keeping the event
-	# reusable also permits a deterministic console/runtime audio check.
+	# The collapse subsystem owns the one-shot guard; this presentation is reusable.
 	fire_only_once = no
 
 	is_triggered_only = yes
 
 	picture = GFX_news_event_adiscord_vorkerland_explosion
 
-	# Presentation must begin when the news is raised. Keeping this in the
-	# option made the superevent flag and audio wait for a player click.
 	immediate = {
 		hidden_effect = {
 			set_global_flag = {
@@ -149,8 +140,7 @@ news_event = { #vorkerland civilwar
 				value = 1
 				days = 20
 			}
-			# A major news event keeps the country that fired it as ROOT. Dispatch
-			# to the actual human country before using the scoped audio effects.
+			# Major news keeps the firing country as ROOT; audio must run in human scopes.
 			every_country = {
 				limit = { is_ai = no }
 				country_event = { id = ADISCORD_superevent_audio.1 }
@@ -161,7 +151,8 @@ news_event = { #vorkerland civilwar
 	option = { name = news.0.a }
 }
 
-news_event = { #stelander empire
+# Stelander Imperial Union
+news_event = {
 	id = ADISCORD_superevent_news.2
 	title = news.1.t
 	desc = news.1.d
@@ -172,8 +163,7 @@ news_event = { #stelander empire
 
 	picture = GFX_news_event_adiscord_treaty_signing
 
-	# Presentation only. State ownership, politics and Shabrat's leader role
-	# belong to STP_proclaim_imperial_union, which is reached through gameplay.
+	# Gameplay mutations belong to STP_proclaim_imperial_union.
 	immediate = {
 		hidden_effect = {
 			ADISCORD_vorkerland_clear_superevent_flags = yes
