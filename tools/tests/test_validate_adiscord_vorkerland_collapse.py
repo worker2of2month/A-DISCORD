@@ -503,10 +503,10 @@ country_event = {
         ):
             self.assertIn(f"name = {effect_name}", sound_effects)
         local_audio = named_block(map_effects, "ADISCORD_vorkerland_play_local_superevent_audio")
-        self.assertIn("has_global_flag = superevent_vorkerland_dirty_opening", local_audio)
-        self.assertIn("scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e", local_audio)
-        self.assertIn("has_global_flag = superevent_vorkerland_utilitarian_victory", local_audio)
-        self.assertIn("scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e", local_audio)
+        self.assertIn("scoped_sound_effect = superevent_vorkerland_civilwar_sound_e", local_audio)
+        self.assertNotIn("superevent_vorkerland_dirty_opening", local_audio)
+        self.assertNotIn("superevent_vorkerland_utilitarian_victory", local_audio)
+        self.assertNotIn("ADISCORD_vorkerland_play_collapse_superevent_audio", map_effects)
         gfx = read("interface/superevents.gfx")
         self.assertIn(
             'textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"',
