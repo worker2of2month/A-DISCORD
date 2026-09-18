@@ -39,14 +39,18 @@ STS_cw_defend_abilia = {
 	}
 }
 
+# External wars may outlast the party war and its cleanup flags.
+# Keep neutral-border demand suppressed until STS leaves every regional war.
 STS_cw_deprioritize_neutral_borders = {
 	allowed = { original_tag = STS }
 	enable = {
 		is_ai = yes
 		has_capitulated = no
-		has_global_flag = STP_cw_started
-		NOT = { has_global_flag = STP_cw_union_wars_finished }
-		has_war_with = STP
+		OR = {
+			has_war_with = STP
+			has_war_with = NOD
+			has_war_with = VAL
+		}
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = {

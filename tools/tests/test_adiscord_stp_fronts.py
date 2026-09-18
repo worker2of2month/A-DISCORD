@@ -31,11 +31,24 @@ class ShabratFrontTests(unittest.TestCase):
         profile = self.profile(NEUTRAL)
         self.assertEqual(compact(named_block(profile, "allowed")),
                          "allowed = { original_tag = STS }")
-        self.assertEqual(compact(named_block(profile, "enable")),
-                         "enable = { is_ai = yes has_capitulated = no "
-                         "has_global_flag = STP_cw_started "
-                         "NOT = { has_global_flag = STP_cw_union_wars_finished } "
-                         "has_war_with = STP }")
+        enable = named_block(profile, "enable")
+        wars = named_block(enable, "OR")
+        self.assertEqual(compact(enable.replace(wars, "")),
+                         "enable = { is_ai = yes has_capitulated = no }")
+
+    def test_neutral_policy_tracks_each_regional_war_independently(self) -> None:
+        enable = named_block(self.profile(NEUTRAL), "enable")
+        # Each war can remain after the party capitulates or end separately.
+        # An AND, a single-enemy gate, or an STP-only gate breaks that lifecycle.
+        self.assertEqual(compact(named_block(enable, "OR")),
+                         "OR = { has_war_with = STP has_war_with = NOD "
+                         "has_war_with = VAL }")
+
+    def test_neutral_policy_survives_civil_war_cleanup(self) -> None:
+        enable = named_block(self.profile(NEUTRAL), "enable")
+        self.assertNotIn("has_global_flag", enable)
+        self.assertNotIn("has_country_flag", enable)
+        self.assertNotIn("has_war =", enable)
 
     def test_neutral_filter_excludes_every_actual_enemy(self) -> None:
         profile = self.profile(NEUTRAL)
