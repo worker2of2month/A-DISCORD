@@ -97,10 +97,11 @@ VORKERLAND_THEATRE_PACKAGES: dict[str, tuple[int, ...]] = {
     "WKR": (32, 33, 40, 200, 201),
     "VAD": (75, 106, 107, 121),
     "TVA": (36, 37, 38, 39, 324),
+    "EYR": (102, 109, 111, 325),
     "EGC": (81, 110, 124),
     "RIV": (79, 306, 308, 309, 327),
     "REV": (82, 323),
-    "YOR": (108, 122, 123, 102, 109, 111, 325),
+    "YOR": (108, 122, 123),
     "NDN": (27,),
     "SWB": (35,),
     "VHV": (315, 316, 317),
@@ -112,14 +113,18 @@ VORKERLAND_THEATRE_PACKAGES: dict[str, tuple[int, ...]] = {
 
 
 # Package totals feed the civil-war capitulation balance, so they are exact.
+# The three +1 markers added by the settlement-cluster rule (state 107 Западный
+# Орвин, state 111 Подгорск, state 316 Верхнеречье) leave every package's share
+# of the theatre within a percentage point of its previous value.
 VORKERLAND_THEATRE_PACKAGE_TOTALS: dict[str, int] = {
     "WKR": 62,
     "VAD": 66,
     "TVA": 77,
+    "EYR": 40,
     "EGC": 22,
     "RIV": 23,
     "REV": 8,
-    "YOR": 53,
+    "YOR": 13,
     "NDN": 6,
     "SWB": 10,
     "VHV": 12,

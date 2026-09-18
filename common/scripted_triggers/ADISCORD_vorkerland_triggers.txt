@@ -185,11 +185,11 @@ ADISCORD_vorkerland_can_open_local_war = {
 	NOT = { has_capitulated = yes }
 }
 
-# The eight central district governments. They are the first bracket stage and
+# The nine central district governments. They are the first bracket stage and
 # fight one another before any of them can be folded into a claimant coalition.
 ADISCORD_vorkerland_is_central_bracket_member = {
 	OR = {
-		tag = EGC tag = YOR
+		tag = EYR tag = EGC tag = YOR
 		tag = SWB tag = NDN tag = OSV tag = REV
 		tag = RIV tag = VHV
 	}
@@ -239,9 +239,10 @@ ADISCORD_vorkerland_is_local_attacker_of_PREV = {
 		# Frealor mountain roads and the Golden River order.
 		AND = { tag = ROM PREV = { tag = DVA } }
 		AND = { tag = TRU PREV = { tag = ZTA } }
-		# Eyrmi knot: the garrison staff strikes the Yor assembly that now
-		# holds both the Yorsen belt and the Eirmi congress cities.
-		AND = { tag = EGC PREV = { tag = YOR } }
+		# Eyrmi knot: the garrison staff strikes Koval's congress, and the
+		# congress refuses a second city assembly in the Yorsen belt.
+		AND = { tag = EGC PREV = { tag = EYR } }
+		AND = { tag = EYR PREV = { tag = YOR } }
 		# Vorkensberg ring: the old-city board claims the suburban councils,
 		# and the Revel okrug council reclaims Ostvin as its own district.
 		AND = { tag = SWB PREV = { tag = NDN } }
@@ -301,8 +302,10 @@ ADISCORD_vorkerland_is_local_rival_of_PREV = {
 		AND = { tag = DVA PREV = { tag = ROM } }
 		AND = { tag = TRU PREV = { tag = ZTA } }
 		AND = { tag = ZTA PREV = { tag = TRU } }
-		AND = { tag = EGC PREV = { tag = YOR } }
-		AND = { tag = YOR PREV = { tag = EGC } }
+		AND = { tag = EGC PREV = { tag = EYR } }
+		AND = { tag = EYR PREV = { tag = EGC } }
+		AND = { tag = EYR PREV = { tag = YOR } }
+		AND = { tag = YOR PREV = { tag = EYR } }
 		AND = { tag = SWB PREV = { tag = NDN } }
 		AND = { tag = NDN PREV = { tag = SWB } }
 		AND = { tag = SWB PREV = { tag = OSV } }

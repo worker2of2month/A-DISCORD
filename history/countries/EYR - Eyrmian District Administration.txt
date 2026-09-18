@@ -1,4 +1,4 @@
-capital = 102
+capital = 75
 ADISCORD_grant_2150_technology_baseline = yes
 ADISCORD_grant_technology_profile_fragment_low_tech = yes
 oob = "EYR_vorkerland_collapse"

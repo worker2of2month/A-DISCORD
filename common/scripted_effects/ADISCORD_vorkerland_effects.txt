@@ -2243,10 +2243,32 @@ ADISCORD_vorkerland_align_wtd_with_worx = {
 	}
 }
 
-# EYR keeps its prewar coastal holdings until VAD takes them. The interior
-# Eirmi theatre states are assigned in setup_yor, so this effect must not
-# recreate an EYR partition.
 ADISCORD_vorkerland_setup_eyr = {
+	EYR = {
+		transfer_state = 102
+		transfer_state = 109
+		transfer_state = 111
+		transfer_state = 325
+	}
+	102 = { add_core_of = EYR remove_core_of = YOR set_state_controller_to = EYR }
+	109 = { add_core_of = EYR remove_core_of = YOR set_state_controller_to = EYR }
+	111 = { add_core_of = EYR remove_core_of = YOR set_state_controller_to = EYR }
+	325 = { add_core_of = EYR set_state_controller_to = EYR }
+	EYR = {
+		promote_character = { character = EYR_Irina_Koval ideology = humanism_ideology }
+		set_capital = { state = 102 }
+		ADISCORD_grant_2150_technology_baseline = yes
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_economy_initialize_country = yes
+		ADISCORD_vorkerland_prepare_conflict_country = yes
+		if = {
+			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized } }
+			load_oob = "EYR_vorkerland_collapse"
+		}
+		clr_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
+		add_manpower = 6500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = EYR }
+	}
 }
 
 ADISCORD_vorkerland_setup_egc = {
@@ -2330,18 +2352,10 @@ ADISCORD_vorkerland_setup_yor = {
 		transfer_state = 108
 		transfer_state = 122
 		transfer_state = 123
-		transfer_state = 102
-		transfer_state = 109
-		transfer_state = 111
-		transfer_state = 325
 	}
 	108 = { add_core_of = YOR set_state_controller_to = YOR }
 	122 = { add_core_of = YOR set_state_controller_to = YOR }
 	123 = { add_core_of = YOR set_state_controller_to = YOR }
-	102 = { add_core_of = YOR remove_core_of = EYR set_state_controller_to = YOR }
-	109 = { add_core_of = YOR remove_core_of = EYR set_state_controller_to = YOR }
-	111 = { add_core_of = YOR remove_core_of = EYR set_state_controller_to = YOR }
-	325 = { add_core_of = YOR remove_core_of = EYR set_state_controller_to = YOR }
 	YOR = {
 		promote_character = { character = YOR_Pavel_Korin ideology = humanism_ideology }
 		set_capital = { state = 123 }
@@ -2354,15 +2368,8 @@ ADISCORD_vorkerland_setup_yor = {
 			load_oob = "YOR_vorkerland_collapse"
 		}
 		clr_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
-		add_manpower = 12000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1450 producer = YOR }
-		102 = {
-			create_unit = {
-				division = "division_template = \"Yor Militia\" start_experience_factor = 0.10 start_equipment_factor = 0.70"
-				owner = YOR
-				count = 6
-			}
-		}
+		add_manpower = 5500
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 650 producer = YOR }
 	}
 }
 
@@ -3558,6 +3565,7 @@ ADISCORD_vorkerland_relocate_legacy_armies = {
 		# border deployment authored by ensure_wkr_home_guard.
 		teleport_armies = { limit = { tag = WRK } to_state = 32 }
 		teleport_armies = { limit = { tag = VAD } to_state = 75 }
+		teleport_armies = { limit = { tag = EYR } to_state = 102 }
 		teleport_armies = { limit = { tag = ZAO } to_state = 72 }
 		teleport_armies = { limit = { tag = PWR } to_state = 71 }
 		teleport_armies = { limit = { tag = VLA } to_state = 74 }

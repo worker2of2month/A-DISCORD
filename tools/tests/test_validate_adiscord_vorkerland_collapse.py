@@ -899,11 +899,11 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "VAD": {75, 106, 107, 121},
             "PWR": {71, 90, 91, 202},
             "TVA": {36, 37, 38, 39, 324},
-            "EYR": set(),
+            "EYR": {102, 109, 111, 325},
             "EGC": {81, 110, 124},
             "RIV": {79, 306, 308, 309, 327},
             "REV": {82, 323},
-            "YOR": {108, 122, 123, 102, 109, 111, 325},
+            "YOR": {108, 122, 123},
             "NDN": {27},
             "SWB": {35},
             "VHV": {315, 316, 317},
@@ -1074,10 +1074,11 @@ class BorderWarArchitectureTests(unittest.TestCase):
 
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         reserves = {
+            "EYR": (6500, 800),
             "EGC": (5500, 650),
             "RIV": (7000, 850),
             "REV": (5500, 650),
-            "YOR": (12000, 1450),
+            "YOR": (5500, 650),
             "NDN": (4500, 550),
             "SWB": (4500, 550),
             "VHV": (5500, 650),
@@ -1921,7 +1922,7 @@ class FrontAndSupplyTests(unittest.TestCase):
 
     def test_selected_armies_receive_finite_starting_reserves(self) -> None:
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        for tag in ("TVA", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "TGD", "EBA", "PSD", "DVA", "ZTA", "WPA", "WPS"):
+        for tag in ("TVA", "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "TGD", "EBA", "PSD", "DVA", "ZTA", "WPA", "WPS"):
             block = named_block(effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")
             manpower = re.search(r"add_manpower\s*=\s*(\d+)", block)
             rifles = re.search(r"add_equipment_to_stockpile\s*=\s*\{[^{}]*amount\s*=\s*(\d+)", block)

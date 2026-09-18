@@ -12,7 +12,7 @@ state={
 		steel = 10
 	}
 	history={
-		owner=EYR
+		owner=YOR
 		buildings = {
 			infrastructure = 5
 			industrial_complex = 7
@@ -21,7 +21,7 @@ state={
 			commercial_nuclear_reactor = 1
 			air_base = 10
 		}
-		add_core_of=EYR
+		add_core_of=YOR
 		victory_points = { 16594 10 }
 		victory_points = { 16580 5 }
 		victory_points = { 16575 5 }

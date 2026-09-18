@@ -1022,19 +1022,33 @@ ADISCORD_vorkerland_local_focus_no_new_wars = {
 # Central district rivalries use mirrored, target-specific profiles like the
 # peripheral theatres. Their priority stays below the 1250 claimant fronts, so a
 # district that is attacked by a main claimant still defends its capital first.
-ADISCORD_vorkerland_front_egc_yor = {
+ADISCORD_vorkerland_front_egc_eyr = {
 	allowed = { tag = EGC }
-	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = YOR has_war_with = YOR }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = EYR has_war_with = EYR }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = YOR value = 60 }
-	ai_strategy = { type = front_control tag = YOR ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = { type = front_unit_request tag = EYR value = 60 }
+	ai_strategy = { type = front_control tag = EYR ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
 }
-ADISCORD_vorkerland_front_yor_egc = {
-	allowed = { tag = YOR }
+ADISCORD_vorkerland_front_eyr_egc = {
+	allowed = { tag = EYR }
 	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = EGC has_war_with = EGC }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = EGC value = 100 }
+	ai_strategy = { type = front_unit_request tag = EGC value = 60 }
 	ai_strategy = { type = front_control tag = EGC ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+}
+ADISCORD_vorkerland_front_eyr_yor = {
+	allowed = { tag = EYR }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = YOR has_war_with = YOR }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = YOR value = 40 }
+	ai_strategy = { type = front_control tag = YOR ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+}
+ADISCORD_vorkerland_front_yor_eyr = {
+	allowed = { tag = YOR }
+	enable = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started country_exists = EYR has_war_with = EYR }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = EYR value = 100 }
+	ai_strategy = { type = front_control tag = EYR ratio = 0.01 priority = 1150 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
 }
 ADISCORD_vorkerland_front_swb_ndn = {
 	allowed = { tag = SWB }

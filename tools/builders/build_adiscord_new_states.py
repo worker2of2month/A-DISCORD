@@ -131,8 +131,8 @@ LEGACY_OWNER_GAPS = {
 
 LEGACY_OWNER_OVERRIDES = {
     75: "EYR", 79: "RIV", 81: "EGC",
-    102: "EYR", 104: "SOL", 105: "VLA", 106: "EYR", 107: "YOR",
-    108: "YOR", 109: "EYR", 110: "EGC", 111: "EYR",
+    102: "YOR", 104: "SOL", 105: "VLA", 106: "EYR", 107: "YOR",
+    108: "YOR", 109: "YOR", 110: "EGC", 111: "YOR",
     121: "YOR", 122: "YOR", 123: "YOR", 124: "EGC",
     198: "SOL", 202: "PWR",
 }
