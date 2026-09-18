@@ -182,6 +182,16 @@ STS_shabrat_reconstruction_plan = {
 		STP_cw_first_postwar_budget
 		STP_cw_restore_civil_authority
 		STP_pc_after_victory
+		STP_pc_economy_count_the_cost
+		STP_pc_economy_reopen_tax_offices
+		STP_pc_economy_repair_workshops
+		STP_pc_economy_stabilize_currency
+		STP_pc_economy_recovery_budget
+		STP_pc_development_country_must_live
+		STP_pc_development_posters_on_ruins
+		STP_pc_development_rebuild_as_duty
+		STP_pc_development_engineers_on_radio
+		STP_pc_development_generation_reconstruction
 		STP_pc_shabrat_cabinet
 		STP_pw_republic_new_republic
 		STP_pw_republic_district_authority
