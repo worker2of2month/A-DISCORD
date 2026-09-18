@@ -57,7 +57,7 @@ class NodrulNorthernFrontTests(unittest.TestCase):
         self.assertIn("type = role_ratio id = garrison value = -100", block)
         self.assertIn("type = role_ratio id = militias value = -100", block)
         self.assertIn("type = force_concentration_factor value = 80", block)
-        self.assertRegex(block, r"type\s*=\s*put_unit_buffers.*?ratio\s*=\s*0\.05", re.DOTALL)
+        self.assertRegex(block, r"(?s)type\s*=\s*put_unit_buffers.*?ratio\s*=\s*0\.05")
 
         # Real front allocation belongs to enemy-specific blocks so a dead/peaceful
         # coalition member cannot keep phantom demand in the planner.
@@ -103,7 +103,7 @@ class NodrulNorthernFrontTests(unittest.TestCase):
         self.assertIn("type = role_ratio id = garrison value = -100", block)
         self.assertIn("type = role_ratio id = militias value = -100", block)
         self.assertIn("type = force_concentration_factor value = 80", block)
-        self.assertRegex(block, r"type\s*=\s*put_unit_buffers.*?ratio\s*=\s*0\.05", re.DOTALL)
+        self.assertRegex(block, r"(?s)type\s*=\s*put_unit_buffers.*?ratio\s*=\s*0\.05")
         self.assertIn("type = front_unit_request tag = STS value = 220", block)
         self.assertIn(
             "type = front_control tag = STS ratio = 0.01 priority = 1800 "
