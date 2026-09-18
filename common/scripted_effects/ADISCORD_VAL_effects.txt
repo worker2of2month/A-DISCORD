@@ -2075,6 +2075,90 @@ VAL_frontier_call_members = {
     }
 }
 
+# Промышленный цикл. Ступень кризиса независима от довоенных вложений;
+# выпуск, строительство и бюджет пересчитываются только при изменении входов.
+VAL_refresh_industrial_economy = {
+	set_variable = { var = VAL_industrial_output value = 0 }
+	set_variable = { var = VAL_industrial_construction value = 0 }
+	set_variable = { var = VAL_industrial_efficiency value = 0 }
+	set_variable = { var = VAL_industrial_trade value = 0 }
+	set_variable = { var = VAL_industrial_income value = 0 }
+	set_variable = { var = VAL_industrial_consumer value = 0 }
+	if = {
+		limit = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+		clamp_variable = { var = VAL_economic_recovery_steps min = 0 max = 6 }
+		set_variable = { var = VAL_industrial_output value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_output value = 0.13 }
+		add_to_variable = { var = VAL_industrial_output value = -0.75 }
+		set_variable = { var = VAL_industrial_construction value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_construction value = 0.10 }
+		add_to_variable = { var = VAL_industrial_construction value = -0.57 }
+		set_variable = { var = VAL_industrial_efficiency value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_efficiency value = 0.10 }
+		add_to_variable = { var = VAL_industrial_efficiency value = -0.57 }
+		set_variable = { var = VAL_industrial_trade value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_trade value = 0.15 }
+		add_to_variable = { var = VAL_industrial_trade value = -0.85 }
+		set_variable = { var = VAL_industrial_income value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_income value = 0.10 }
+		add_to_variable = { var = VAL_industrial_income value = -0.57 }
+		set_variable = { var = VAL_industrial_consumer value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_consumer value = -0.03 }
+		add_to_variable = { var = VAL_industrial_consumer value = 0.18 }
+	}
+	if = { limit = { has_variable = VAL_arsenal_investment } add_to_variable = { var = VAL_industrial_output value = VAL_arsenal_investment } }
+	if = { limit = { has_variable = VAL_civilian_investment } add_to_variable = { var = VAL_industrial_construction value = VAL_civilian_investment } }
+	remove_ideas = VAL_vorkerland_contract_disruptions
+	if = {
+		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }
+		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = VAL_economic_collapse }
+		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = VAL_economic_miracle }
+		if = { limit = { NOT = { has_dynamic_modifier = VAL_contract_industry } } add_dynamic_modifier = { modifier = VAL_contract_industry } }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_economic_recovery_steps value = 6 compare = less_than } }
+		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = VAL_contract_industry }
+		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = VAL_economic_miracle }
+		if = { limit = { NOT = { has_dynamic_modifier = VAL_economic_collapse } } add_dynamic_modifier = { modifier = VAL_economic_collapse } }
+	}
+	else = {
+		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = VAL_contract_industry }
+		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = VAL_economic_collapse }
+		if = { limit = { NOT = { has_dynamic_modifier = VAL_economic_miracle } } add_dynamic_modifier = { modifier = VAL_economic_miracle } }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+VAL_advance_economic_recovery = {
+	if = {
+		limit = { hidden_trigger = { has_country_flag = VAL_vorkerland_contracts_disrupted check_variable = { var = VAL_economic_recovery_steps value = 6 compare = less_than } } }
+		effect_tooltip = { add_ideas = VAL_economic_recovery_delta }
+		if = {
+			limit = { hidden_trigger = { check_variable = { var = VAL_economic_recovery_steps value = 5 compare = equals } } }
+			custom_effect_tooltip = VAL_economic_miracle_unlock_tt
+		}
+		hidden_effect = {
+			add_to_variable = { var = VAL_economic_recovery_steps value = 1 }
+			VAL_refresh_industrial_economy = yes
+		}
+	}
+}
+VAL_invest_arsenal_industry = {
+	effect_tooltip = { add_ideas = VAL_arsenal_investment_delta }
+	hidden_effect = {
+		add_to_variable = { var = VAL_arsenal_investment value = 0.02 }
+		VAL_refresh_industrial_economy = yes
+	}
+}
+VAL_invest_civilian_industry = {
+	effect_tooltip = { add_ideas = VAL_civilian_investment_delta }
+	hidden_effect = {
+		add_to_variable = { var = VAL_civilian_investment value = 0.03 }
+		VAL_refresh_industrial_economy = yes
+	}
+}
+
 # --- livonn_settlement_effects ---
 # Kefreyt's postwar handling of Livonn.
 # VAL first occupies the district as part of the military settlement. If the
@@ -2522,90 +2606,5 @@ VAL_integrate_occidia = {
 		}
 		88 = { remove_core_of = OCA set_state_controller_to = VAL }
 		ADISCORD_economy_mark_dirty = yes
-	}
-}
-
-
-# Промышленный цикл. Ступень кризиса независима от довоенных вложений;
-# выпуск, строительство и бюджет пересчитываются только при изменении входов.
-VAL_refresh_industrial_economy = {
-	set_variable = { var = VAL_industrial_output value = 0 }
-	set_variable = { var = VAL_industrial_construction value = 0 }
-	set_variable = { var = VAL_industrial_efficiency value = 0 }
-	set_variable = { var = VAL_industrial_trade value = 0 }
-	set_variable = { var = VAL_industrial_income value = 0 }
-	set_variable = { var = VAL_industrial_consumer value = 0 }
-	if = {
-		limit = { has_country_flag = VAL_vorkerland_contracts_disrupted }
-		clamp_variable = { var = VAL_economic_recovery_steps min = 0 max = 6 }
-		set_variable = { var = VAL_industrial_output value = VAL_economic_recovery_steps }
-		multiply_variable = { var = VAL_industrial_output value = 0.13 }
-		add_to_variable = { var = VAL_industrial_output value = -0.75 }
-		set_variable = { var = VAL_industrial_construction value = VAL_economic_recovery_steps }
-		multiply_variable = { var = VAL_industrial_construction value = 0.10 }
-		add_to_variable = { var = VAL_industrial_construction value = -0.57 }
-		set_variable = { var = VAL_industrial_efficiency value = VAL_economic_recovery_steps }
-		multiply_variable = { var = VAL_industrial_efficiency value = 0.10 }
-		add_to_variable = { var = VAL_industrial_efficiency value = -0.57 }
-		set_variable = { var = VAL_industrial_trade value = VAL_economic_recovery_steps }
-		multiply_variable = { var = VAL_industrial_trade value = 0.15 }
-		add_to_variable = { var = VAL_industrial_trade value = -0.85 }
-		set_variable = { var = VAL_industrial_income value = VAL_economic_recovery_steps }
-		multiply_variable = { var = VAL_industrial_income value = 0.10 }
-		add_to_variable = { var = VAL_industrial_income value = -0.57 }
-		set_variable = { var = VAL_industrial_consumer value = VAL_economic_recovery_steps }
-		multiply_variable = { var = VAL_industrial_consumer value = -0.03 }
-		add_to_variable = { var = VAL_industrial_consumer value = 0.18 }
-	}
-	if = { limit = { has_variable = VAL_arsenal_investment } add_to_variable = { var = VAL_industrial_output value = VAL_arsenal_investment } }
-	if = { limit = { has_variable = VAL_civilian_investment } add_to_variable = { var = VAL_industrial_construction value = VAL_civilian_investment } }
-	remove_ideas = VAL_vorkerland_contract_disruptions
-	if = {
-		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }
-		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = VAL_economic_collapse }
-		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = VAL_economic_miracle }
-		if = { limit = { NOT = { has_dynamic_modifier = VAL_contract_industry } } add_dynamic_modifier = { modifier = VAL_contract_industry } }
-	}
-	else_if = {
-		limit = { check_variable = { var = VAL_economic_recovery_steps value = 6 compare = less_than } }
-		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = VAL_contract_industry }
-		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = VAL_economic_miracle }
-		if = { limit = { NOT = { has_dynamic_modifier = VAL_economic_collapse } } add_dynamic_modifier = { modifier = VAL_economic_collapse } }
-	}
-	else = {
-		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = VAL_contract_industry }
-		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = VAL_economic_collapse }
-		if = { limit = { NOT = { has_dynamic_modifier = VAL_economic_miracle } } add_dynamic_modifier = { modifier = VAL_economic_miracle } }
-	}
-	force_update_dynamic_modifier = yes
-	ADISCORD_economy_mark_dirty = yes
-}
-
-VAL_advance_economic_recovery = {
-	if = {
-		limit = { hidden_trigger = { has_country_flag = VAL_vorkerland_contracts_disrupted check_variable = { var = VAL_economic_recovery_steps value = 6 compare = less_than } } }
-		effect_tooltip = { add_ideas = VAL_economic_recovery_delta }
-		if = {
-			limit = { hidden_trigger = { check_variable = { var = VAL_economic_recovery_steps value = 5 compare = equals } } }
-			custom_effect_tooltip = VAL_economic_miracle_unlock_tt
-		}
-		hidden_effect = {
-			add_to_variable = { var = VAL_economic_recovery_steps value = 1 }
-			VAL_refresh_industrial_economy = yes
-		}
-	}
-}
-VAL_invest_arsenal_industry = {
-	effect_tooltip = { add_ideas = VAL_arsenal_investment_delta }
-	hidden_effect = {
-		add_to_variable = { var = VAL_arsenal_investment value = 0.02 }
-		VAL_refresh_industrial_economy = yes
-	}
-}
-VAL_invest_civilian_industry = {
-	effect_tooltip = { add_ideas = VAL_civilian_investment_delta }
-	hidden_effect = {
-		add_to_variable = { var = VAL_civilian_investment value = 0.03 }
-		VAL_refresh_industrial_economy = yes
 	}
 }

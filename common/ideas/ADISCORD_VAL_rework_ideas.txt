@@ -2,6 +2,7 @@ ideas = {
 	country = {
 		# Только нативный показ изменения; эти идеи не устанавливаются.
 		VAL_economic_recovery_delta = {
+			picture = GFX_idea_VAL_worldwide_famous_weponry
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.13
@@ -13,12 +14,14 @@ ideas = {
 			}
 		}
 		VAL_arsenal_investment_delta = {
+			picture = GFX_idea_VAL_worldwide_famous_weponry
 			allowed = { always = no }
 			modifier = {
 				industrial_capacity_factory = 0.02
 			}
 		}
 		VAL_civilian_investment_delta = {
+			picture = GFX_idea_VAL_worldwide_famous_weponry
 			allowed = { always = no }
 			modifier = {
 				production_speed_buildings_factor = 0.03
