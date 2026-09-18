@@ -145,17 +145,15 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
                 self.assertIn(f"WRK = {{\n\t\t\t\t{effect}", phase_six)
                 self.assertNotIn(f"{old_scope} = {{\n\t\t\t\t{effect}", phase_six)
 
-    def test_tva_formation_rebinds_both_authored_protectorates(self) -> None:
+    def test_tva_formation_rebinds_tgd_but_absorbs_oitfort(self) -> None:
         tva = named_block(self.effects, "ADISCORD_vorkerland_form_wrk_from_tva")
-        for tag, flag, freedom in (
-            ("TGD", "ADISCORD_vorkerland_joined_worx_directorate", "0.10"),
-            ("WTD", "ADISCORD_vorkerland_worx_aligned_technocrats", "0.15"),
-        ):
-            with self.subTest(tag=tag):
-                self.assertIn(f"country_exists = {tag}", tva)
-                self.assertIn(flag, tva)
-                self.assertIn(f"puppet = {tag}", tva)
-                self.assertIn(f"freedom_level = {freedom}", tva)
+        self.assertIn("country_exists = TGD", tva)
+        self.assertIn("ADISCORD_vorkerland_joined_worx_directorate", tva)
+        self.assertIn("puppet = TGD", tva)
+        self.assertIn("freedom_level = 0.10", tva)
+        self.assertIn("ADISCORD_vorkerland_absorb_wtd_after_reunification = yes", tva)
+        self.assertNotIn("puppet = WTD", tva)
+        self.assertNotIn("freedom_level = 0.15", tva)
 
     def test_no_random_lucas_contract_leaks_into_formation(self) -> None:
         self.assertNotIn("Lucas", self.effects)
