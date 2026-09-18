@@ -4131,6 +4131,37 @@ STP_pc_offer_liberation_package = {
 	}
 }
 
+# STS: return territorial receipts from Kefreyt before the technical peace.
+# All current STS/STP cores held by VAL or a VAL subject return automatically.
+# 52 and 55 are explicit contractual exceptions and become STS cores on recovery.
+STP_pc_recover_stelander_cores_from_val = {
+	if = {
+		limit = { tag = STS }
+		every_state = {
+			limit = {
+				OR = {
+					is_core_of = STS
+					is_core_of = STP
+					state = 52
+					state = 55
+				}
+				OR = {
+					is_owned_by = VAL
+					owner = { is_subject_of = VAL }
+				}
+			}
+			if = {
+				limit = { NOT = { is_core_of = STS } }
+				add_core_of = STS
+			}
+			transfer_state_to = STS
+			set_state_controller_to = STS
+		}
+		ADISCORD_economy_mark_dirty = yes
+		VAL = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
 # STS: freeze the occupier snapshot, close only that pair, then ask for terms.
 # A second finished war is queued; it must not overwrite the open card.
 STP_pc_begin_settlement = {
@@ -4140,20 +4171,17 @@ STP_pc_begin_settlement = {
 		set_variable = { var = STP_pc_this_result value = 0 }
 		if = {
 			limit = { check_variable = { var = STP_pc_cap_side value = 1 compare = equals } }
+			# Reaching this branch already means VAL capitulated in the reserved STS war.
+			# Do not re-derive the result from a controller snapshot that may have flipped.
 			set_variable = { var = STP_pc_this_opponent value = 1 }
-			if = {
-				limit = { VAL = { check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
-				set_variable = { var = STP_pc_this_result value = 1 }
-			}
+			set_variable = { var = STP_pc_this_result value = 1 }
+			STP_pc_recover_stelander_cores_from_val = yes
 			if = { limit = { has_war_with = VAL } white_peace = VAL }
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_pc_cap_side value = 2 compare = equals } }
 			set_variable = { var = STP_pc_this_opponent value = 2 }
-			if = {
-				limit = { NOD = { check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
-				set_variable = { var = STP_pc_this_result value = 1 }
-			}
+			set_variable = { var = STP_pc_this_result value = 1 }
 			if = { limit = { has_war_with = NOD } white_peace = NOD }
 		}
 		else_if = {
