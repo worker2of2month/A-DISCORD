@@ -167,7 +167,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Contract_State }
 		ai_will_do = { base = 1 }
 		completion_reward = {
-			add_offsite_building = { type = arms_factory level = 1 }
+			VAL_invest_arsenal_industry = yes
 			add_timed_idea = {
 				idea = VAL_factory_cathedrals_drive
 				days = 365
@@ -504,7 +504,7 @@ focus_tree = {
 			modifier = { factor = 2 has_equipment = { infantry_equipment > 1999 } }
 		}
 		completion_reward = {
-			add_offsite_building = { type = civilian_factory level = 1 }
+			VAL_invest_civilian_industry = yes
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_ash_rear_delta } }
 			hidden_effect = {
 				set_country_flag = VAL_ash_rear_mobilization
@@ -909,8 +909,9 @@ focus_tree = {
 		y = 6
 		cost = 5
 		prerequisite = { focus = VAL_Export_Rifles_Not_Promises }
+		prerequisite = { focus = VAL_Inventory_The_Empty_Yards }
 		completion_reward = {
-			add_offsite_building = { type = arms_factory level = 1 }
+			VAL_advance_economic_recovery = yes
 			capital_scope = {
 				add_building_construction = { type = infrastructure level = 1 instant_build = yes }
 			}
@@ -1098,7 +1099,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		x = 10
 		y = 5
-		cost = 1
+		cost = 5
 		prerequisite = { focus = VAL_Operational_Directorate }
 		allow_branch = {
 			OR = {
@@ -1108,14 +1109,9 @@ focus_tree = {
 		}
 		available = { has_country_flag = VAL_vorkerland_contracts_disrupted }
 		completion_reward = {
+			VAL_advance_economic_recovery = yes
 			add_political_power = 75
-			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_trade_delta } }
 			country_event = { id = val_rework.10 }
-			hidden_effect = {
-				add_to_variable = { var = VAL_frontier_trade_bonus value = 0.1 }
-				VAL_refresh_contract_modifier = yes
-				ADISCORD_economy_mark_dirty = yes
-			}
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -1126,16 +1122,11 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 10
 		y = 6
-		cost = 2
+		cost = 5
 		prerequisite = { focus = VAL_Vorkerland_Contracts_Burn }
 		completion_reward = {
-			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_output_delta } }
+			VAL_advance_economic_recovery = yes
 			add_tech_bonus = { name = VAL_frontier_industry_bonus bonus = 0.5 uses = 1 category = industry }
-			hidden_effect = {
-				add_to_variable = { var = VAL_frontier_output_bonus value = 0.05 }
-				VAL_refresh_contract_modifier = yes
-				ADISCORD_economy_mark_dirty = yes
-			}
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -1391,7 +1382,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Mobilize_Machine_Shops }
 		completion_reward = {
-			add_offsite_building = { type = arms_factory level = 1 }
+			VAL_advance_economic_recovery = yes
 			effect_tooltip = {
 				if = {
 					limit = {
@@ -1420,7 +1411,9 @@ focus_tree = {
 		y = 7
 		cost = 5
 		prerequisite = { focus = VAL_Arsenal_Reserve }
+		prerequisite = { focus = VAL_Inventory_The_Empty_Yards }
 		completion_reward = {
+			VAL_advance_economic_recovery = yes
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 2000 producer = VAL }
 			add_political_power = 25
 		}
@@ -1442,7 +1435,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Three_Shift_Arsenals }
 		prerequisite = { focus = VAL_Reserve_Accounting }
 		completion_reward = {
-			add_offsite_building = { type = arms_factory level = 1 }
+			VAL_advance_economic_recovery = yes
 			VAL_industrial_finale_path_extra = yes
 			effect_tooltip = {
 				if = {
@@ -1627,7 +1620,7 @@ focus_tree = {
 			add_stability = 0.1
 			add_war_support = 0.1
 			add_political_power = 150
-			add_offsite_building = { type = arms_factory level = 2 }
+			VAL_invest_arsenal_industry = yes
 			country_event = { id = val_rework.4 }
 			hidden_effect = {
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
@@ -1766,12 +1759,12 @@ focus_tree = {
 		completion_reward = {
 			if = {
 				limit = { has_country_flag = VAL_cw_arms_contract_fulfilled }
-				add_offsite_building = { type = arms_factory level = 1 }
+				VAL_invest_arsenal_industry = yes
 				ADISCORD_economy_receive_15 = yes
 			}
 			else_if = {
 				limit = { has_country_flag = VAL_cw_military_course }
-				add_offsite_building = { type = arms_factory level = 1 }
+				VAL_invest_arsenal_industry = yes
 				army_experience = 15
 			}
 			else = {
@@ -2022,7 +2015,7 @@ focus_tree = {
   prerequisite = { focus = VAL_frontier_treaty_offices }
   available = { custom_trigger_tooltip = { tooltip = VAL_supply_base_secured_tt VAL_supply_base_secured = yes } }
   completion_reward = {
-   remove_ideas = { VAL_vorkerland_contract_disruptions VAL_vorkerland_metal_shortage }
+   remove_ideas = VAL_vorkerland_metal_shortage
    hidden_effect = { ADISCORD_economy_mark_dirty = yes }
   }
   ai_will_do = { base = 12 }
