@@ -10,5 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run superevent hygiene tests
-        run: python -m unittest tools.tests.test_validate_adiscord_superevents -v
+      - name: Install focused dependency
+        run: python -m pip install --disable-pip-version-check pillow
+      - name: Run hygiene contract
+        run: |
+          python -m unittest \
+            tools.tests.test_validate_adiscord_superevents \
+            tools.tests.test_validate_adiscord_vorkerland_collapse.VorkerlandCollapseValidatorTests.test_every_vorkerland_superevent_route_plays_audible_sound \
+            -v
