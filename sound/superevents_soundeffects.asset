@@ -1,3 +1,0 @@
-# Compatibility filename retained intentionally. The canonical soundeffect
-# definitions live in superevents_effects.asset; defining them here as well
-# registers each ID twice at startup.
