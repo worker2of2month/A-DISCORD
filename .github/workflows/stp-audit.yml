@@ -23,13 +23,23 @@ jobs:
             /map/*.txt
             /map/*.csv
             /map/strategicregions/
+            /map/provinces.bmp
+            /gfx/entities/
+            /gfx/flags/
+            /gfx/leaders/STP/portrait_STP_Petr_Ivanov*
+            /gfx/interface/state_face/
+            /gfx/interface/STP_regions/
+            /gfx/interface/superevents/WRK/
+            /gfx/texticons/
+      - name: Install image test dependency
+        run: python -m pip install pillow==11.3.0
       - name: Run Stelander tests and preserve diagnostics
         run: |
           mkdir -p /tmp/stp-audit
           python - <<'PY'
-          import importlib, json, pathlib, subprocess, sys, unittest, zipfile
+          import json, pathlib, subprocess, unittest, zipfile
           root = pathlib.Path.cwd()
-          modules = sorted(p for p in (root / 'tools/tests').glob('test_*stp*.py'))
+          modules = sorted((root / 'tools/tests').glob('test_*stp*.py'))
           suite = unittest.TestSuite()
           loader = unittest.TestLoader()
           for path in modules:
@@ -41,11 +51,11 @@ jobs:
           print(json.dumps(report, indent=2))
           paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', 'HEAD'], text=True).splitlines()
           pathlib.Path('/tmp/stp-audit/tracked-paths.txt').write_text('\n'.join(paths), encoding='utf-8')
-          suffixes = {'.py', '.txt', '.yml', '.yaml', '.gui', '.gfx', '.md', '.json', '.csv', '.lua', '.mod', '.asset', '.fxh', '.shader'}
+          suffixes = {'.py', '.txt', '.yml', '.yaml', '.gui', '.gfx', '.md', '.json', '.csv', '.lua', '.mod', '.asset', '.fxh', '.shader', '.png', '.tga', '.dds', '.bmp'}
           with zipfile.ZipFile('/tmp/stp-audit/source.zip', 'w', compression=zipfile.ZIP_DEFLATED) as archive:
               for name in paths:
                   path = root / name
-                  if path.is_file() and path.suffix.lower() in suffixes and path.stat().st_size < 10000000:
+                  if path.is_file() and path.suffix.lower() in suffixes and path.stat().st_size < 150000000:
                       archive.write(path, name)
           PY
       - uses: actions/upload-artifact@v4
