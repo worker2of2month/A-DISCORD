@@ -9,6 +9,22 @@ def read(path: str) -> str:
     return (ROOT / path).read_text(encoding="utf-8-sig")
 
 
+def focus_block(text: str, focus_id: str) -> str:
+    marker = f"id = {focus_id}"
+    pos = text.index(marker)
+    start = text.rfind("\n\tfocus = {", 0, pos) + 1
+    brace = text.index("{", start)
+    depth = 0
+    for index in range(brace, len(text)):
+        if text[index] == "{":
+            depth += 1
+        elif text[index] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start:index + 1]
+    raise AssertionError(f"unclosed focus {focus_id}")
+
+
 class ShabratPostwarEconomyTests(unittest.TestCase):
     def test_unification_rebuilds_economy_after_annexation(self):
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
@@ -94,10 +110,8 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
         for focus_id in (first_id, second_id):
             self.assertIn(f"id = {focus_id}", focus)
 
-        first_start = focus.index(f"id = {first_id}")
-        first_block = focus[first_start:focus.index("\n\tfocus = {", first_start)]
-        second_start = focus.index(f"id = {second_id}")
-        second_block = focus[second_start:focus.index("\n\tfocus = {", second_start)]
+        first_block = focus_block(focus, first_id)
+        second_block = focus_block(focus, second_id)
         self.assertEqual(first_block.count("add_research_slot = 1"), 1)
         self.assertEqual(second_block.count("add_research_slot = 1"), 1)
         self.assertIn("prerequisite = { focus = STP_pc_development_engineers_on_radio }", first_block)
