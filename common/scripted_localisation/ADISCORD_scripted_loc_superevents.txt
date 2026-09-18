@@ -1,4 +1,4 @@
-## quote
+# Quote
 defined_text = {
 	name = GetSupereventQuote
 	text = {
@@ -38,7 +38,7 @@ defined_text = {
 	}
 }
 
-## title
+# Title
 defined_text = {
 	name = GetSupereventTitle
 	text = {
@@ -78,7 +78,7 @@ defined_text = {
 	}
 }
 
-## comment
+# Comment
 defined_text = {
 	name = GetSupereventComment
 	text = {
