@@ -142,6 +142,39 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
         ):
             self.assertIn(key + ":", loc)
 
+    def test_postwar_pacing_keeps_routine_focuses_at_28_days_or_less(self):
+        focus = read("common/national_focus/ADISCORD_national_focus_STP.txt")
+        expected_costs = {
+            "STP_pc_shabrat_cabinet": 4,
+            "STP_pc_shabrat_politics": 4,
+            "STP_pc_two_borders": 4,
+            "STP_pc_war_ledgers": 4,
+            "STP_pc_shared_archive_policy": 4,
+            "STP_pc_heg_unity": 4,
+            "STP_pc_heg_emergency": 4,
+            "STP_pc_heg_subordinate": 4,
+            "STP_pc_heg_limit_parties": 4,
+            "STP_pc_heg_val_audit": 4,
+            "STP_pc_heg_val_terms": 4,
+            "STP_pc_heg_val_force": 4,
+            "STP_pc_heg_nod_break": 4,
+            "STP_pc_heg_nod_force": 4,
+            "STP_pc_lib_assembly": 4,
+            "STP_pc_lib_institutions": 4,
+            "STP_pc_lib_prepare_neighbors": 4,
+            "STP_pc_lib_local_contacts": 4,
+            "STP_pc_lib_crisis": 4,
+            "STP_pc_lib_war": 4,
+            "STP_pc_development_reopen_universities": 4,
+            "STP_pc_development_national_research_institutes": 5,
+        }
+        for focus_id, expected in expected_costs.items():
+            pos = focus.index(f"id = {focus_id}")
+            start = focus.rfind("\n\tfocus = {", 0, pos) + 1
+            end = focus.index("\n\t}", pos) + 3
+            block = focus[start:end]
+            self.assertIn(f"cost = {expected}", block, focus_id)
+
     def test_existing_saves_reconcile_postwar_gameplay_weekly(self):
         on_actions = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
         weekly = named_block(on_actions, "on_weekly_STS")
