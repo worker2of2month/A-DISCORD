@@ -1315,20 +1315,16 @@ class BorderWarArchitectureTests(unittest.TestCase):
             outbreak.find("ADISCORD_vorkerland_apply_claimant_cosmetics = yes"),
             outbreak.find("news_event = { id = ADISCORD_superevent_news.1 }"),
         )
-        opening_definition = re.search(
-            r"(?ms)^news_event\s*=\s*\{\s*#vorkerland civilwar\b(.*?)(?=^news_event\s*=|\Z)",
-            news,
-        )
-        self.assertIsNotNone(opening_definition)
-        self.assertIn("major = yes", opening_definition.group(1))
-        self.assertNotIn("hidden = yes", opening_definition.group(1))
-        self.assertIn("id = ADISCORD_superevent_news.1", opening_definition.group(0))
+        opening_definition = event_block(news, "ADISCORD_superevent_news.1")
+        self.assertIn("major = yes", opening_definition)
+        self.assertNotIn("hidden = yes", opening_definition)
+        self.assertIn("id = ADISCORD_superevent_news.1", opening_definition)
         self.assertIn(
             "country_event = { id = ADISCORD_superevent_audio.1 }",
-            opening_definition.group(1),
+            opening_definition,
         )
-        self.assertIn("every_country", opening_definition.group(1))
-        self.assertNotIn("scoped_sound_effect", opening_definition.group(1))
+        self.assertIn("every_country", opening_definition)
+        self.assertNotIn("scoped_sound_effect", opening_definition)
         news_loc = read("localisation/russian/events_l_russian.yml")
         self.assertIn('news.0.t: "Конец единого Воркерланда"', news_loc)
         superevent_loc = read("localisation/russian/ADISCORD_superevents_l_russian.yml")
