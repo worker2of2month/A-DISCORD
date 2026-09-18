@@ -121,6 +121,11 @@ STP_cw_high_shabrat_legitimacy = {
 	power_balance_value = { id = STP_shabrat_election_legitimacy value > 0.55 }
 }
 
+# COUNTRY: any positive Shabrat edge is enough to attempt the authored Niansas takeover.
+STP_cw_shabrat_positive_legitimacy = {
+	power_balance_value = { id = STP_shabrat_election_legitimacy value > 0 }
+}
+
 # COUNTRY: the republics can use their promised preparation period before VAL's attack.
 STP_cw_can_rearm = {
 	has_capitulated = no
@@ -224,6 +229,12 @@ STP_region_resistance_entrenched = {
 	check_variable = { var = STP_region_status value = 2 compare = equals }
 }
 
+# STATE: overwhelming local control is itself enough to survive the split.
+STP_region_resistance_overwhelming = {
+	STP_region_resistance_entrenched = yes
+	check_variable = { var = STP_resistance_influence value = 90 compare = greater_than_or_equals }
+}
+
 STP_region_party_entrenched = {
 	STP_region_party_strongest = yes
 	check_variable = { var = STP_region_lead value = 55 compare = greater_than_or_equals }
@@ -324,6 +335,12 @@ STP_cw_region_goes_to_resistance = {
 			OR = {
 				STP = { has_country_flag = STP_cw_limited_party_revolt }
 				STP = { STP_cw_high_shabrat_legitimacy = yes }
+				STP_region_resistance_overwhelming = yes
+				AND = {
+					state = 3
+					has_state_flag = STP_niansas_transfer_secured
+					STP_region_resistance_entrenched = yes
+				}
 				AND = {
 					STP_region_resistance_entrenched = yes
 					has_state_flag = { flag = STP_resistance_administration_asset days > 20 }
@@ -385,6 +402,13 @@ STP_cw_any_inspection_active = {
 		46 = { has_state_flag = STP_party_inspection_active }
 		53 = { has_state_flag = STP_party_inspection_active }
 	}
+}
+
+# COUNTRY: the Shabrat AI may start new exposed work only while risk is contained.
+# Human players keep full agency; this trigger is referenced only from ai_will_do.
+STP_cw_shabrat_ai_risk_allowed = {
+	check_variable = { var = STP_party_suspicion value = 65 compare = less_than }
+	NOT = { STP_cw_any_inspection_active = yes }
 }
 
 STP_cw_two_inspections_active = {
