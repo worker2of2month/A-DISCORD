@@ -729,6 +729,7 @@ country_event = {
     limit = { VAL_stelander_offer_current = yes }
     43 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 43 } } }
     44 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 44 } } }
+    45 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 45 } } }
     88 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 88 } } }
     VAL = { VAL_form_occidian_administration = yes }
     set_country_flag = { flag = VAL_stelander_truce days = 180 }

@@ -1142,6 +1142,119 @@ class ValNativePreviewTests(unittest.TestCase):
 
 
 
+class ValIndustrialRecoveryTests(unittest.TestCase):
+    """Execute the country-scoped economic lifecycle without inventing engine syntax."""
+
+    recovery_focuses = (
+        "VAL_Vorkerland_Contracts_Burn", "VAL_Inventory_The_Empty_Yards",
+        "VAL_Mobilize_Machine_Shops", "VAL_Three_Shift_Arsenals",
+        "VAL_Reserve_Accounting", "VAL_Industrial_Mobilization_Plan",
+    )
+
+    def setUp(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        self.effects = {e.key: e.value for e in parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8-sig"))}
+        self.facts = {}
+        self.variables = {}
+        self.modifiers = set()
+        self.dirty = 0
+
+    def run_effect(self, name):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions, scalar
+
+        def number(value):
+            try:
+                return float(value)
+            except ValueError:
+                return self.variables.get(value, 0)
+
+        def execute(items):
+            matched = False
+            for e in items:
+                key, value = e.key, e.value
+                if key in ("if", "else_if", "else"):
+                    if key == "if":
+                        matched = False
+                    guard = next((c.value for c in value if c.key == "limit"), [])
+                    facts = dict(self.facts)
+                    for var, amount in self.variables.items():
+                        facts[("VAL", "variable", var)] = amount
+                        facts[("VAL", "has_variable", var)] = True
+                    for modifier in self.modifiers:
+                        facts[("VAL", "has_dynamic_modifier", modifier)] = True
+                    if not matched and matches_conditions(guard, facts, "VAL"):
+                        execute([c for c in value if c.key != "limit"])
+                        matched = True
+                elif key == "hidden_effect":
+                    execute(value)
+                elif key in ("set_variable", "add_to_variable", "multiply_variable"):
+                    var, amount = scalar(value, "var"), number(scalar(value, "value"))
+                    old = self.variables.get(var, 0)
+                    self.variables[var] = amount if key == "set_variable" else old + amount if key == "add_to_variable" else old * amount
+                elif key == "clamp_variable":
+                    var = scalar(value, "var")
+                    self.variables[var] = min(number(scalar(value, "max")), max(number(scalar(value, "min")), self.variables.get(var, 0)))
+                elif key in ("set_country_flag", "clr_country_flag"):
+                    self.facts[("VAL", "has_country_flag", value)] = key == "set_country_flag"
+                elif key == "add_dynamic_modifier":
+                    self.modifiers.add(scalar(value, "modifier"))
+                elif key == "remove_dynamic_modifier":
+                    self.assertIn(value, self.modifiers, "removal must be guarded")
+                    self.modifiers.remove(value)
+                elif key == "ADISCORD_economy_mark_dirty":
+                    self.dirty += 1
+                elif key in self.effects and value == "yes":
+                    execute(self.effects[key])
+                elif key not in {"effect_tooltip", "custom_effect_tooltip", "remove_ideas", "country_event", "force_update_dynamic_modifier"}:
+                    self.fail(f"Unsupported economic effect: {key}")
+        execute(self.effects[name])
+
+    def test_outbreak_recovery_and_late_callbacks_preserve_final_state(self):
+        self.run_effect("VAL_invest_arsenal_industry")
+        self.assertEqual(self.modifiers, {"VAL_contract_industry"})
+        self.run_effect("VAL_handle_vorkerland_war_outbreak")
+        self.assertEqual(self.modifiers, {"VAL_economic_collapse"})
+        self.assertAlmostEqual(self.variables["VAL_industrial_output"], -.73)
+        expected = {"output": (-.75, .13), "construction": (-.57, .1),
+                    "efficiency": (-.57, .1), "trade": (-.85, .15),
+                    "income": (-.57, .1), "consumer": (.18, -.03)}
+        for stage in range(1, 7):
+            self.run_effect("VAL_advance_economic_recovery")
+            for field, (base, increment) in expected.items():
+                self.assertAlmostEqual(self.variables[f"VAL_industrial_{field}"], base + stage * increment + (.02 if field == "output" else 0))
+            self.assertEqual(self.modifiers, {"VAL_economic_miracle" if stage == 6 else "VAL_economic_collapse"})
+            snapshot = dict(self.variables)
+            self.run_effect("VAL_handle_vorkerland_war_outbreak")
+            self.run_effect("VAL_reconcile_supply_crisis")
+            self.assertEqual(self.variables, snapshot)
+        self.run_effect("VAL_advance_economic_recovery")
+        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 6)
+        self.assertGreaterEqual(self.dirty, 8)
+
+    def test_existing_campaign_reconciliation_is_once_only(self):
+        self.facts[("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")] = True
+        for focus in self.recovery_focuses[:3]:
+            self.facts[("VAL", "has_completed_focus", focus)] = True
+        self.run_effect("VAL_reconcile_supply_crisis")
+        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 3)
+        snapshot = (dict(self.variables), self.dirty)
+        self.run_effect("VAL_reconcile_supply_crisis")
+        self.assertEqual((self.variables, self.dirty), snapshot)
+
+    def test_recovery_cannot_start_early_and_factory_grants_are_removed(self):
+        self.run_effect("VAL_advance_economic_recovery")
+        self.assertFalse(self.variables)
+        focuses = FOCUSES_PATH.read_text(encoding="utf-8-sig")
+        self.assertNotIn("add_offsite_building", focuses)
+        self.assertEqual(focuses.count("VAL_advance_economic_recovery = yes"), 6)
+        for focus_id in ("VAL_Mobilize_Machine_Shops", "VAL_Reserve_Accounting"):
+            focus = next(f for f in named_blocks(focuses, "focus") if f"id = {focus_id}" in f)
+            self.assertIn("prerequisite = { focus = VAL_Inventory_The_Empty_Yards }", focus)
+        final = next(f for f in named_blocks(focuses, "focus") if "id = VAL_Industrial_Mobilization_Plan" in f)
+        for prerequisite in ("VAL_Three_Shift_Arsenals", "VAL_Reserve_Accounting"):
+            self.assertIn(f"prerequisite = {{ focus = {prerequisite} }}", final)
+
+
 class ValNorthernExportTests(unittest.TestCase):
     def test_finance_answers_revalidate_and_consume_the_receipt_once(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -2964,7 +3077,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
             self.assertFalse(matches_conditions(exceptions[0], facts, str(state)))
 
     def test_occidian_sources_require_an_unsettled_award_or_our_territory(self):
-        for state in (43, 44, 88):
+        for state in (43, 44, 45, 88):
             facts = {(str(state), "is_owned_by", "SRP"): True,
                      (str(state), "is_controlled_by", "SRP"): True,
                      ("SRP", "has_war", "no"): True, ("SRP", "is_subject", "no"): True}
@@ -2988,7 +3101,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         facts = {("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True,
                  ("OCA", "exists", "yes"): True, ("OCA", "is_subject_of", "VAL"): True,
                  ("OCA", "has_capitulated", "no"): True, ("OCA", "has_war", "no"): True}
-        for state in (43, 44, 88):
+        for state in (43, 44, 45, 88):
             for key in ("is_owned_by", "is_controlled_by"):
                 facts[str(state), key, "OCA"] = True
         self.assertTrue(self.match("VAL_occidian_administration_secured", facts))
@@ -3003,8 +3116,8 @@ class ValExpandedCampaignTests(unittest.TestCase):
                  ("VAL", "has_country_flag", "VAL_occidian_settlement_pending"): True,
                  ("VAL", "has_completed_focus", "VAL_The_Steel_Contract"): True,
                  ("OCA", "exists", "no"): True, ("SRP", "is_subject", "no"): True,
-                 ("SRP", "variable", "num_owned_states"): 3}
-        for state in (43, 44, 88):
+                 ("SRP", "variable", "num_owned_states"): 4}
+        for state in (43, 44, 45, 88):
             facts[str(state), "owner"] = "SRP"
             facts[str(state), "is_owned_by", "SRP"] = True
             facts[str(state), "is_controlled_by", "SRP"] = True
@@ -3032,7 +3145,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         for name, target in (("VAL_form_occidian_administration", "SRP"), ("VAL_integrate_occidia", "OCA")):
             body = self.getblock(effects, name)
             transfers = {e.value for e in walk(body) if e.key == "transfer_state"}
-            self.assertEqual(transfers, {"43", "44", "88"})
+            self.assertEqual(transfers, {"43", "44", "45", "88"})
             annex = next(e.value for e in walk(body) if e.key == "annex_country")
             self.assertEqual(self.scalar(annex, "target"), target)
             self.assertEqual(self.scalar(annex, "transfer_troops"), "yes")

@@ -833,7 +833,7 @@ VAL_frontier = {
             has_completed_focus = VAL_The_Steel_Contract
             NOT = { has_completed_focus = VAL_Integrate_Occidia }
             OCA = { exists = no }
-            OR = { has_country_flag = VAL_occidian_settlement_pending owns_state = 43 owns_state = 44 owns_state = 88 }
+            OR = { has_country_flag = VAL_occidian_settlement_pending owns_state = 43 owns_state = 44 owns_state = 45 owns_state = 88 }
         }
         available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_ready_tt VAL_can_form_occidian_administration = yes } }
         cost = 0
@@ -875,7 +875,7 @@ VAL_livonn_settlement_category = {
 		allowed = { tag = VAL }
 		visible = {
 			has_country_flag = VAL_cw_livonn_settlement_pending
-			45 = { is_owned_by = VAL has_state_flag = STP_local_deal_asset }
+			45 = { is_owned_by = OCA has_state_flag = STP_local_deal_asset }
 		}
 		available = {
 			STS = { exists = yes has_capitulated = no }
@@ -891,7 +891,7 @@ VAL_livonn_settlement_category = {
 		allowed = { tag = VAL }
 		visible = {
 			has_country_flag = VAL_cw_livonn_settlement_pending
-			45 = { is_owned_by = VAL }
+			45 = { is_owned_by = OCA }
 		}
 		available = { always = yes }
 		cost = 0

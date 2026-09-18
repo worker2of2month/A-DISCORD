@@ -3160,15 +3160,27 @@ VAL_cw_settle_republics = {
 		if = { limit = { has_war_with = SRP } white_peace = SRP }
 		SRP = { remove_ideas = STP_cw_republics_battle_spirit }
 		SRP = { STP_cw_finish_mobilization = yes }
-		# Settle paid formations before the bounded administration can absorb SRP.
+
+		# Territorial settlement is atomic: Livonn joins the same administration as
+		# 43/44/88 before any late capitulation or weekly callbacks can observe it.
 		set_country_flag = VAL_occidian_settlement_pending
+		if = {
+			limit = { NOT = { 45 = { is_owned_by = OCA } } }
+			if = {
+				limit = { NOT = { 45 = { is_owned_by = VAL } } }
+				transfer_state = 45
+			}
+			45 = { set_state_controller_to = VAL }
+		}
 		VAL_form_occidian_administration = yes
+
 		clr_country_flag = VAL_cw_entered
 		set_country_flag = VAL_cw_postwar
+		VAL_cw_stage_livonn_settlement = yes
 		set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
 		VAL_change_contract_authority = yes
 		country_event = { id = ADISCORD_STP_cw.23 }
-		log = "[STP_CW] VAL military settlement: temporary administration of 43/44/88"
+		log = "[STP_CW] VAL military settlement: temporary administration of 43/44/45/88"
 		STP_cw_check_union_wars_finished = yes
 	}
 }
@@ -3405,6 +3417,19 @@ STP_cw_cache_state_occupier = {
 			controller = { is_subject_of = VAL has_war_with = ROOT }
 		}
 		ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 5 } }
+	}
+	# A Shabrat subject or coalition partner holding the enemy capital is still
+	# military credit for the scripted STS campaign, not an unrelated conquest.
+	else_if = {
+		limit = {
+			ROOT = { OR = { tag = VAL tag = NOD } }
+			STS = { has_war_with = ROOT }
+			controller = {
+				has_war_with = ROOT
+				OR = { is_subject_of = STS is_in_faction_with = STS }
+			}
+		}
+		ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
 	}
 	else_if = { limit = { controller = { tag = STP } NOT = { ROOT = { tag = STP } } } ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 1 } } }
 	else_if = { limit = { controller = { tag = STS } NOT = { ROOT = { tag = STS } } } ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } } }

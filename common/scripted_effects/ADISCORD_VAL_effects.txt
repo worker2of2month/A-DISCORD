@@ -1152,7 +1152,8 @@ VAL_handle_vorkerland_war_outbreak = {
 		set_country_flag = VAL_vorkerland_contracts_disrupted
 		clr_country_flag = VAL_westerholm_offer_pending
 		remove_ideas = { VAL_big_buyers VAL_westerholm_concession_income }
-		add_ideas = VAL_vorkerland_contract_disruptions
+		set_variable = { var = VAL_economic_recovery_steps value = 0 }
+		VAL_refresh_industrial_economy = yes
 		country_event = { id = val_rework.100 hours = 1 }
 		ADISCORD_economy_mark_dirty = yes
 	}
@@ -2074,6 +2075,90 @@ VAL_frontier_call_members = {
     }
 }
 
+# Промышленный цикл. Ступень кризиса независима от довоенных вложений;
+# выпуск, строительство и бюджет пересчитываются только при изменении входов.
+VAL_refresh_industrial_economy = {
+	set_variable = { var = VAL_industrial_output value = 0 }
+	set_variable = { var = VAL_industrial_construction value = 0 }
+	set_variable = { var = VAL_industrial_efficiency value = 0 }
+	set_variable = { var = VAL_industrial_trade value = 0 }
+	set_variable = { var = VAL_industrial_income value = 0 }
+	set_variable = { var = VAL_industrial_consumer value = 0 }
+	if = {
+		limit = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+		clamp_variable = { var = VAL_economic_recovery_steps min = 0 max = 6 }
+		set_variable = { var = VAL_industrial_output value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_output value = 0.13 }
+		add_to_variable = { var = VAL_industrial_output value = -0.75 }
+		set_variable = { var = VAL_industrial_construction value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_construction value = 0.10 }
+		add_to_variable = { var = VAL_industrial_construction value = -0.57 }
+		set_variable = { var = VAL_industrial_efficiency value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_efficiency value = 0.10 }
+		add_to_variable = { var = VAL_industrial_efficiency value = -0.57 }
+		set_variable = { var = VAL_industrial_trade value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_trade value = 0.15 }
+		add_to_variable = { var = VAL_industrial_trade value = -0.85 }
+		set_variable = { var = VAL_industrial_income value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_income value = 0.10 }
+		add_to_variable = { var = VAL_industrial_income value = -0.57 }
+		set_variable = { var = VAL_industrial_consumer value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_consumer value = -0.03 }
+		add_to_variable = { var = VAL_industrial_consumer value = 0.18 }
+	}
+	if = { limit = { has_variable = VAL_arsenal_investment } add_to_variable = { var = VAL_industrial_output value = VAL_arsenal_investment } }
+	if = { limit = { has_variable = VAL_civilian_investment } add_to_variable = { var = VAL_industrial_construction value = VAL_civilian_investment } }
+	remove_ideas = VAL_vorkerland_contract_disruptions
+	if = {
+		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }
+		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = VAL_economic_collapse }
+		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = VAL_economic_miracle }
+		if = { limit = { NOT = { has_dynamic_modifier = VAL_contract_industry } } add_dynamic_modifier = { modifier = VAL_contract_industry } }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_economic_recovery_steps value = 6 compare = less_than } }
+		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = VAL_contract_industry }
+		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = VAL_economic_miracle }
+		if = { limit = { NOT = { has_dynamic_modifier = VAL_economic_collapse } } add_dynamic_modifier = { modifier = VAL_economic_collapse } }
+	}
+	else = {
+		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = VAL_contract_industry }
+		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = VAL_economic_collapse }
+		if = { limit = { NOT = { has_dynamic_modifier = VAL_economic_miracle } } add_dynamic_modifier = { modifier = VAL_economic_miracle } }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+VAL_advance_economic_recovery = {
+	if = {
+		limit = { hidden_trigger = { has_country_flag = VAL_vorkerland_contracts_disrupted check_variable = { var = VAL_economic_recovery_steps value = 6 compare = less_than } } }
+		effect_tooltip = { add_ideas = VAL_economic_recovery_delta }
+		if = {
+			limit = { hidden_trigger = { check_variable = { var = VAL_economic_recovery_steps value = 5 compare = equals } } }
+			custom_effect_tooltip = VAL_economic_miracle_unlock_tt
+		}
+		hidden_effect = {
+			add_to_variable = { var = VAL_economic_recovery_steps value = 1 }
+			VAL_refresh_industrial_economy = yes
+		}
+	}
+}
+VAL_invest_arsenal_industry = {
+	effect_tooltip = { add_ideas = VAL_arsenal_investment_delta }
+	hidden_effect = {
+		add_to_variable = { var = VAL_arsenal_investment value = 0.02 }
+		VAL_refresh_industrial_economy = yes
+	}
+}
+VAL_invest_civilian_industry = {
+	effect_tooltip = { add_ideas = VAL_civilian_investment_delta }
+	hidden_effect = {
+		add_to_variable = { var = VAL_civilian_investment value = 0.03 }
+		VAL_refresh_industrial_economy = yes
+	}
+}
+
 # --- livonn_settlement_effects ---
 # Kefreyt's postwar handling of Livonn.
 # VAL first occupies the district as part of the military settlement. If the
@@ -2088,23 +2173,26 @@ VAL_cw_stage_livonn_settlement = {
 			NOT = { has_country_flag = VAL_cw_livonn_settlement_resolved }
 		}
 
+		# Formation is the authoritative territorial step. The weekly/on-action
+		# callers only stage the political choice after Livonn is actually in OCA.
 		if = {
-			limit = { NOT = { 45 = { is_owned_by = VAL } } }
-			transfer_state = 45
+			limit = { NOT = { 45 = { is_owned_by = OCA is_controlled_by = OCA } } }
+			VAL_form_occidian_administration = yes
 		}
-		45 = { set_state_controller_to = VAL }
-		set_country_flag = VAL_cw_livonn_settlement_staged
-
 		if = {
-			limit = {
-				45 = { has_state_flag = STP_local_deal_asset }
-				STS = { exists = yes has_capitulated = no }
+			limit = { 45 = { is_owned_by = OCA is_controlled_by = OCA } }
+			set_country_flag = VAL_cw_livonn_settlement_staged
+			if = {
+				limit = {
+					45 = { has_state_flag = STP_local_deal_asset }
+					STS = { exists = yes has_capitulated = no }
+				}
+				set_country_flag = VAL_cw_livonn_settlement_pending
 			}
-			set_country_flag = VAL_cw_livonn_settlement_pending
-		}
-		else = {
-			set_country_flag = VAL_cw_livonn_settlement_resolved
-			set_country_flag = VAL_cw_livonn_retained
+			else = {
+				set_country_flag = VAL_cw_livonn_settlement_resolved
+				set_country_flag = VAL_cw_livonn_retained
+			}
 		}
 	}
 }
@@ -2115,17 +2203,21 @@ VAL_cw_honor_livonn_agreement = {
 			tag = VAL
 			has_country_flag = VAL_cw_livonn_settlement_pending
 			45 = {
-				is_owned_by = VAL
+				is_owned_by = OCA
+				is_controlled_by = OCA
 				has_state_flag = STP_local_deal_asset
 			}
+			OCA = { exists = yes is_subject_of = VAL }
 			STS = { exists = yes has_capitulated = no }
 		}
 		STS = { transfer_state = 45 }
-		45 = { set_state_controller_to = STS }
+		45 = { remove_core_of = OCA set_state_controller_to = STS }
 		clr_country_flag = VAL_cw_livonn_settlement_pending
 		set_country_flag = VAL_cw_livonn_settlement_resolved
 		set_country_flag = VAL_cw_livonn_agreement_honored
 		clr_country_flag = VAL_cw_livonn_retained
+		OCA = { ADISCORD_economy_mark_dirty = yes }
+		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
@@ -2134,9 +2226,10 @@ VAL_cw_retain_livonn = {
 		limit = {
 			tag = VAL
 			has_country_flag = VAL_cw_livonn_settlement_pending
-			45 = { is_owned_by = VAL }
+			OCA = { exists = yes is_subject_of = VAL }
+			45 = { is_owned_by = OCA }
 		}
-		45 = { set_state_controller_to = VAL }
+		45 = { set_state_controller_to = OCA }
 		clr_country_flag = VAL_cw_livonn_settlement_pending
 		set_country_flag = VAL_cw_livonn_settlement_resolved
 		set_country_flag = VAL_cw_livonn_retained
@@ -2195,13 +2288,21 @@ VAL_reconcile_northern_volunteers = {
  if = { limit = { STP = { has_volunteers_amount_from = { tag = VAL count > 0 } NOT = { VAL_northern_volunteer_host = yes } } } recall_volunteers_from = STP }
 }
 
-# Restore old-save expiry only while the permanent crisis has not been resolved.
+# Совместимость уже начавшегося экономического кризиса.
 VAL_reconcile_supply_crisis = {
- if = {
-  limit = { has_country_flag = VAL_vorkerland_contracts_disrupted NOT = { has_completed_focus = VAL_New_Supply_Base } NOT = { has_idea = VAL_vorkerland_contract_disruptions } }
-  add_ideas = VAL_vorkerland_contract_disruptions
-  ADISCORD_economy_mark_dirty = yes
- }
+	# Однократное восстановление состояния старой кампании; недельный вызов
+	# не пересчитывает действующий модификатор и не снимает штраф по времени.
+	if = {
+		limit = { has_country_flag = VAL_vorkerland_contracts_disrupted NOT = { has_variable = VAL_economic_recovery_steps } }
+		set_variable = { var = VAL_economic_recovery_steps value = 0 }
+		if = { limit = { has_completed_focus = VAL_Vorkerland_Contracts_Burn } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
+		if = { limit = { has_completed_focus = VAL_Inventory_The_Empty_Yards } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
+		if = { limit = { has_completed_focus = VAL_Mobilize_Machine_Shops } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
+		if = { limit = { has_completed_focus = VAL_Three_Shift_Arsenals } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
+		if = { limit = { has_completed_focus = VAL_Reserve_Accounting } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
+		if = { limit = { has_completed_focus = VAL_Industrial_Mobilization_Plan } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
+		VAL_refresh_industrial_economy = yes
+	}
 }
 # COUNTRY STS after its military defeat by VAL; the existing peace dispatcher
 # has already ended their pair and keeps unrelated wars separate.
@@ -2343,75 +2444,128 @@ VAL_form_northern_administration = {
 # COUNTRY VAL. Create the administration before absorbing a defeated country,
 # so its army and a player can follow the bounded military settlement.
 VAL_form_occidian_administration = {
-    if = {
-        limit = { VAL_can_form_occidian_administration = yes }
-        if = {
-            limit = { OCA = { exists = no } 43 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } }
-            OCA = { transfer_state = 43 }
-        }
-        if = {
-            limit = { OCA = { exists = no } 44 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } }
-            OCA = { transfer_state = 44 }
-        }
-        if = {
-            limit = { OCA = { exists = no } 88 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } }
-            OCA = { transfer_state = 88 }
-        }
-        if = {
-            limit = { OCA = { exists = yes } }
-            if = {
-                limit = {
-                    SRP = { exists = yes has_war = no VAL_only_occidian_states = yes }
-                    OR = {
-                        SRP = { is_subject_of = VAL }
-                        AND = { has_country_flag = VAL_occidian_settlement_pending SRP = { is_subject = no } }
-                    }
-                }
-                if = { limit = { SRP = { is_ai = no } } OCA = { change_tag_from = SRP } }
-                OCA = { annex_country = { target = SRP transfer_troops = yes } }
-            }
-            OCA = {
-                transfer_state = 43
-                transfer_state = 44
-                transfer_state = 88
-                set_capital = { state = 43 remember_old_capital = no }
-                if = {
-                    limit = { NOT = { is_subject_of = VAL } }
-                    inherit_technology = VAL
-                    set_politics = { ruling_party = etatism elections_allowed = no }
-                    promote_character = { character = OCA_Contract_Council ideology = contractual_etatism }
-                }
-                set_rule = { can_join_factions = no can_create_factions = no }
-                ADISCORD_economy_initialize_country = yes
-                ADISCORD_economy_mark_dirty = yes
-            }
-            43 = { add_core_of = OCA set_state_controller_to = OCA }
-            44 = { add_core_of = OCA set_state_controller_to = OCA }
-            88 = { add_core_of = OCA set_state_controller_to = OCA }
-            set_autonomy = { target = OCA autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
-            clr_country_flag = VAL_occidian_settlement_pending
-            ADISCORD_economy_mark_dirty = yes
-        }
-    }
+	if = {
+		limit = { VAL_can_form_occidian_administration = yes }
+
+		# Seed OCA with a state whose donor survives the first transfer. During the
+		# military settlement Livonn is first moved to VAL, so 45 is a deterministic
+		# fallback even when the three republican districts are one-state remnants.
+		if = {
+			limit = {
+				OCA = { exists = no }
+				43 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+			}
+			OCA = { transfer_state = 43 }
+		}
+		if = {
+			limit = {
+				OCA = { exists = no }
+				44 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+			}
+			OCA = { transfer_state = 44 }
+		}
+		if = {
+			limit = {
+				OCA = { exists = no }
+				45 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+			}
+			OCA = { transfer_state = 45 }
+		}
+		if = {
+			limit = {
+				OCA = { exists = no }
+				88 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+			}
+			OCA = { transfer_state = 88 }
+		}
+
+		if = {
+			limit = { OCA = { exists = yes } }
+
+			if = {
+				limit = {
+					SRP = { exists = yes has_war = no VAL_only_occidian_states = yes }
+					OR = {
+						SRP = { is_subject_of = VAL }
+						AND = {
+							has_country_flag = VAL_occidian_settlement_pending
+							SRP = { is_subject = no }
+						}
+					}
+				}
+				if = {
+					limit = { SRP = { is_ai = no } }
+					OCA = { change_tag_from = SRP }
+				}
+				OCA = { annex_country = { target = SRP transfer_troops = yes } }
+			}
+
+			OCA = {
+				transfer_state = 43
+				transfer_state = 44
+				transfer_state = 45
+				transfer_state = 88
+				set_capital = { state = 43 remember_old_capital = no }
+				if = {
+					limit = { NOT = { is_subject_of = VAL } }
+					inherit_technology = VAL
+					set_politics = { ruling_party = etatism elections_allowed = no }
+					promote_character = { character = OCA_Contract_Council ideology = contractual_etatism }
+				}
+				set_rule = { can_join_factions = no can_create_factions = no }
+				ADISCORD_economy_initialize_country = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+
+			43 = { add_core_of = OCA set_state_controller_to = OCA }
+			44 = { add_core_of = OCA set_state_controller_to = OCA }
+			45 = { add_core_of = OCA set_state_controller_to = OCA }
+			88 = { add_core_of = OCA set_state_controller_to = OCA }
+
+			if = {
+				limit = { OCA = { NOT = { is_subject_of = VAL } } }
+				set_autonomy = {
+					target = OCA
+					autonomy_state = autonomy_VAL_contract_administration
+					freedom_level = 0.10
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+			clr_country_flag = VAL_occidian_settlement_pending
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
 }
 
 VAL_integrate_occidia = {
-    if = {
-        limit = { VAL_occidian_administration_secured = yes }
-        if = {
-            limit = { OCA = { VAL_only_occidian_states = yes } }
-            if = { limit = { is_ai = yes OCA = { is_ai = no } } change_tag_from = OCA }
-            annex_country = { target = OCA transfer_troops = yes }
-        }
-        else = {
-            transfer_state = 43
-            transfer_state = 44
-            transfer_state = 88
-            OCA = { ADISCORD_economy_mark_dirty = yes }
-        }
-        43 = { remove_core_of = OCA set_state_controller_to = VAL }
-        44 = { remove_core_of = OCA set_state_controller_to = VAL }
-        88 = { remove_core_of = OCA set_state_controller_to = VAL }
-        ADISCORD_economy_mark_dirty = yes
-    }
+	if = {
+		limit = { VAL_occidian_administration_secured = yes }
+		if = {
+			limit = { OCA = { VAL_only_occidian_states = yes } }
+			if = {
+				limit = { is_ai = yes OCA = { is_ai = no } }
+				change_tag_from = OCA
+			}
+			annex_country = { target = OCA transfer_troops = yes }
+		}
+		else = {
+			transfer_state = 43
+			transfer_state = 44
+			if = {
+				limit = { 45 = { is_owned_by = OCA } }
+				transfer_state = 45
+			}
+			transfer_state = 88
+			OCA = { ADISCORD_economy_mark_dirty = yes }
+		}
+		43 = { remove_core_of = OCA set_state_controller_to = VAL }
+		44 = { remove_core_of = OCA set_state_controller_to = VAL }
+		if = {
+			limit = { 45 = { is_owned_by = VAL } }
+			45 = { remove_core_of = OCA set_state_controller_to = VAL }
+		}
+		88 = { remove_core_of = OCA set_state_controller_to = VAL }
+		ADISCORD_economy_mark_dirty = yes
+	}
 }

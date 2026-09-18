@@ -37,7 +37,7 @@ VAL_frontier = {
                 has_completed_focus = VAL_The_Steel_Contract
                 NOT = { has_completed_focus = VAL_Integrate_Occidia }
                 OCA = { exists = no }
-                OR = { has_country_flag = VAL_occidian_settlement_pending owns_state = 43 owns_state = 44 owns_state = 88 }
+                OR = { has_country_flag = VAL_occidian_settlement_pending owns_state = 43 owns_state = 44 owns_state = 45 owns_state = 88 }
             }
         }
     }

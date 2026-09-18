@@ -598,6 +598,14 @@ class PostwarContinuationContracts(unittest.TestCase):
         nod_root = next(e.value for e in ast_block(root, "OR") if e.key == "AND" and any(c.key == "tag" and c.value == "NOD" for c in e.value))
         self.assertTrue(any(c.key == "has_country_flag" and c.value == "STP_pc_war_with_sts" for c in prep_walk(val)))
         self.assertTrue(any(c.key == "has_country_flag" and c.value == "STP_pc_war_with_sts" for c in prep_walk(nod_root)))
+        immediate_text = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        for opponent, war_flag in (("VAL", "STP_pc_war_val"), ("NOD", "STP_pc_war_nod")):
+            marker = f"ROOT = {{ tag = {opponent} has_country_flag = STP_pc_war_with_sts }}"
+            start = immediate_text.index(marker)
+            fallback = immediate_text[start:start + 700]
+            self.assertIn("FROM = { tag = STS }", fallback, opponent)
+            self.assertIn(f"STS = {{ has_country_flag = {war_flag} }}", fallback, opponent)
+            self.assertIn("var = STP_cw_capitulation_occupier value = 2", fallback, opponent)
 
     def test_settlement_freezes_the_snapshot_and_closes_only_that_war(self) -> None:
         begin = ast_block(relative_entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_pc_begin_settlement")

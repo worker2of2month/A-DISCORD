@@ -30,3 +30,36 @@ VAL_reclamation_recovered_land = {
 	state_production_speed_buildings_factor = VAL_reclamation_construction
 	local_supply_impact_factor = VAL_reclamation_supply
 }
+
+VAL_contract_industry = {
+	enable = { original_tag = VAL }
+	icon = GFX_idea_VAL_worldwide_famous_weponry
+	industrial_capacity_factory = VAL_industrial_output
+	production_speed_buildings_factor = VAL_industrial_construction
+	production_factory_efficiency_gain_factor = VAL_industrial_efficiency
+	ADISCORD_economy_trade_income_factor = VAL_industrial_trade
+	ADISCORD_economy_military_industry_income_factor = VAL_industrial_income
+	consumer_goods_factor = VAL_industrial_consumer
+}
+
+VAL_economic_collapse = {
+	enable = { original_tag = VAL }
+	icon = GFX_idea_VAL_worldwide_famous_weponry
+	industrial_capacity_factory = VAL_industrial_output
+	production_speed_buildings_factor = VAL_industrial_construction
+	production_factory_efficiency_gain_factor = VAL_industrial_efficiency
+	ADISCORD_economy_trade_income_factor = VAL_industrial_trade
+	ADISCORD_economy_military_industry_income_factor = VAL_industrial_income
+	consumer_goods_factor = VAL_industrial_consumer
+}
+
+VAL_economic_miracle = {
+	enable = { original_tag = VAL }
+	icon = GFX_idea_VAL_worldwide_famous_weponry
+	industrial_capacity_factory = VAL_industrial_output
+	production_speed_buildings_factor = VAL_industrial_construction
+	production_factory_efficiency_gain_factor = VAL_industrial_efficiency
+	ADISCORD_economy_trade_income_factor = VAL_industrial_trade
+	ADISCORD_economy_military_industry_income_factor = VAL_industrial_income
+	consumer_goods_factor = VAL_industrial_consumer
+}

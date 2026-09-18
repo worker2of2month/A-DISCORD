@@ -1,5 +1,33 @@
 ideas = {
 	country = {
+		# Только нативный показ изменения; эти идеи не устанавливаются.
+		VAL_economic_recovery_delta = {
+			picture = GFX_idea_VAL_worldwide_famous_weponry
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.13
+				production_speed_buildings_factor = 0.10
+				production_factory_efficiency_gain_factor = 0.10
+				ADISCORD_economy_trade_income_factor = 0.15
+				ADISCORD_economy_military_industry_income_factor = 0.10
+				consumer_goods_factor = -0.03
+			}
+		}
+		VAL_arsenal_investment_delta = {
+			picture = GFX_idea_VAL_worldwide_famous_weponry
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.02
+			}
+		}
+		VAL_civilian_investment_delta = {
+			picture = GFX_idea_VAL_worldwide_famous_weponry
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
   VAL_regional_settlement = {
    picture = VAL_contract_state allowed = { original_tag = VAL } removal_cost = -1
    on_add = { ADISCORD_economy_mark_dirty = yes }

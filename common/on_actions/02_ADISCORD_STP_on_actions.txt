@@ -255,6 +255,27 @@ on_actions = {
 						limit = { ROOT = { tag = VAL has_country_flag = VAL_cw_entered NOT = { any_enemy_country = { NOT = { tag = SRP } } } } FROM = { tag = SRP } }
 						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 3 } }
 					}
+					# Scripted postwar fronts may capitulate before the original capital flips.
+					# FROM is accepted only when it is the recorded STS opponent, so a third
+					# party cannot receive Shabrat's settlement credit.
+					else_if = {
+						limit = {
+							has_global_flag = STP_cw_union_wars_finished
+							ROOT = { tag = VAL has_country_flag = STP_pc_war_with_sts }
+							FROM = { tag = STS }
+							STS = { has_country_flag = STP_pc_war_val }
+						}
+						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
+					}
+					else_if = {
+						limit = {
+							has_global_flag = STP_cw_union_wars_finished
+							ROOT = { tag = NOD has_country_flag = STP_pc_war_with_sts }
+							FROM = { tag = STS }
+							STS = { has_country_flag = STP_pc_war_nod }
+						}
+						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
+					}
 				}
 			}
 		}
