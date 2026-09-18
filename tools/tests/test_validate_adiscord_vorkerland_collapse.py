@@ -1921,7 +1921,7 @@ class FrontAndSupplyTests(unittest.TestCase):
 
     def test_selected_armies_receive_finite_starting_reserves(self) -> None:
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        for tag in ("TVA", "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "TGD", "EBA", "PSD", "DVA", "ZTA", "WPA", "WPS"):
+        for tag in ("TVA", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "TGD", "EBA", "PSD", "DVA", "ZTA", "WPA", "WPS"):
             block = named_block(effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")
             manpower = re.search(r"add_manpower\s*=\s*(\d+)", block)
             rifles = re.search(r"add_equipment_to_stockpile\s*=\s*\{[^{}]*amount\s*=\s*(\d+)", block)

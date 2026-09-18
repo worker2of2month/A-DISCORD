@@ -93,15 +93,15 @@ STALE_SYSTEM_TOKENS = (
     "ADISCORD_vorkerland_ai_regional_window",
 )
 CENTRAL_MINOR_TARGETS = (
-    "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV",
+    "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV",
 )
 INITIAL_CENTRAL_BORDER_PAIRS = {
     frozenset(pair) for pair in (
         ("WKR", "TVA"), ("WKR", "RIV"), ("WKR", "NDN"), ("WKR", "SWB"),
-        ("VAD", "EYR"), ("VAD", "EGC"), ("VAD", "YOR"),
-        ("TVA", "EYR"), ("TVA", "EGC"), ("TVA", "RIV"),
+        ("VAD", "EGC"), ("VAD", "YOR"),
+        ("TVA", "EGC"), ("TVA", "RIV"), ("TVA", "YOR"),
         ("TVA", "REV"), ("TVA", "SWB"), ("TVA", "OSV"),
-        ("EYR", "EGC"), ("EYR", "YOR"), ("EYR", "REV"),
+        ("EGC", "YOR"), ("REV", "YOR"),
         ("EGC", "RIV"), ("RIV", "NDN"), ("RIV", "VHV"),
         ("REV", "OSV"), ("NDN", "SWB"), ("NDN", "VHV"),
         ("NDN", "OSV"), ("SWB", "OSV"),
@@ -126,7 +126,7 @@ LOCAL_RIVALRY_EDGES = (
     ("VLA", "EBA"), ("VLA", "TGD"), ("TGD", "EBA"),
     ("SOL", "SRA"), ("SOL", "CSL"), ("SRA", "CSL"),
     ("ROM", "DVA"), ("TRU", "ZTA"),
-    ("EGC", "EYR"), ("EYR", "YOR"),
+    ("EGC", "YOR"),
     ("SWB", "NDN"), ("SWB", "OSV"), ("REV", "OSV"),
     ("RIV", "VHV"),
     ("RZA", "MLR"), ("RZA", "IRT"), ("IRT", "ERT"), ("ERT", "SCA"),
@@ -159,10 +159,10 @@ EMERGENCY_TEMPLATE_REQUIRED_METADATA = {
     ),
 }
 # Bracket edges that were added on top of the seventeen peripheral rivalries.
-# The six central pairs are already asserted to share a physical state border by
+# The five central pairs are already asserted to share a physical state border by
 # the countries section through INITIAL_CENTRAL_BORDER_PAIRS.
 NEW_CENTRAL_BRACKET_EDGES = (
-    ("EGC", "EYR"), ("EYR", "YOR"),
+    ("EGC", "YOR"),
     ("SWB", "NDN"), ("SWB", "OSV"), ("REV", "OSV"),
     ("RIV", "VHV"),
 )
@@ -4442,7 +4442,7 @@ def validate_bracket_graph(triggers: str, issues: list[str]) -> None:
         )
     )
     if central_members != CENTRAL_BRACKET_TAGS:
-        issues.append("central bracket membership no longer matches the nine districts")
+        issues.append("central bracket membership no longer matches the eight districts")
     closed_members = set(
         re.findall(
             r"tag\s*=\s*([A-Z]{3})",
