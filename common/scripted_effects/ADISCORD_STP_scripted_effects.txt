@@ -4216,6 +4216,7 @@ STP_pc_begin_settlement = {
 			limit = { check_variable = { var = STP_pc_cap_side value = 2 compare = equals } }
 			set_variable = { var = STP_pc_this_opponent value = 2 }
 			set_variable = { var = STP_pc_this_result value = 1 }
+			NOD = { set_country_flag = STP_pc_defeated_by_sts }
 			if = { limit = { has_war_with = NOD } white_peace = NOD }
 		}
 		else_if = {
