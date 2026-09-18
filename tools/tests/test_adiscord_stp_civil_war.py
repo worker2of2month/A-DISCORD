@@ -206,7 +206,10 @@ class CivilWarContracts(unittest.TestCase):
         handoff = next(e.value for e in events if e.key == "country_event"
                        and scalar(e.value, "id") == "ADISCORD_STP_cw.30")
         for option in (e.value for e in handoff if e.key == "option"):
-            self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for e in walk(option)), 1)
+            for resistance in (False, True):
+                facts = {("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): resistance,
+                         ("STS", "exists", "yes"): True}
+                self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for _, e in selected_effects(option, facts)), 1)
         war = block(self.effects, "STP_cw_begin_hostilities")
         self.assertEqual(war.count("declare_war_on"), 2)
         self.assertIn("declare_war_on = { target = STS", war)
@@ -1749,7 +1752,7 @@ class CommanderLoyaltyContracts(unittest.TestCase):
         commission = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_commission_korsh")
         self.assertIn("is_ai = no", commission)
         self.assertIn("set_nationality = { character = STP_Gleb_Korsh target_country = STS }", commission)
-        self.assertIn("recruit_character = STP_Gleb_Korsh", commission)
+        self.assertNotIn("recruit_character = STP_Gleb_Korsh", commission)
         self.assertIn("add_corps_commander_role", commission)
         self.assertIn("STP_cw_shabrat_available = yes", commission)
         self.assertIn("recruit_character = STP_Gleb_Korsh", read("history/countries/STP - StepanLand.txt"))
@@ -1882,19 +1885,18 @@ class CommanderLoyaltyContracts(unittest.TestCase):
         handoff = next(e.value for e in entries("events/ADISCORD_STP_events.txt")
                        if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.30")
         self.assertEqual(scalar(handoff, "timeout_days"), "7")
-        timeout = ast_block(handoff, "timeout_effect")
-        self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for e in walk(timeout)), 1)
-        self.assertIn("set_country_flag = STP_sided_with_the_party_flag",
-                      " ".join(f"{e.key} = {e.value}" for e in walk(timeout)))
-        self.assertFalse(any(e.key == "change_tag_from" for e in walk(timeout)))
+        self.assertFalse(any(e.key == "timeout_effect" for e in handoff))
         options = [e.value for e in handoff if e.key == "option"]
-        resistance = next(option for option in options if any(child.key == "change_tag_from" for child in walk(option)))
-        self.assertIn(("set_country_flag", "STP_sided_with_Maksim_flag"),
-                      [(e.key, e.value) for e in walk(resistance)])
-        self.assertEqual(sum(e.key == "STP_cw_commission_korsh" for e in walk(resistance)), 1)
-        party_option = next(option for option in options if option is not resistance)
-        self.assertEqual(sum(e.key == "STP_cw_commission_korsh" for e in walk(party_option)), 0)
-        self.assertEqual(sum(e.key == "STP_cw_commission_korsh" for e in walk(timeout)), 0)
+        first = options[0]
+        self.assertFalse(any(e.key == "trigger" for e in first), "the native timeout must always have a first option")
+        for resistance in (False, True):
+            facts = {("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): resistance,
+                     ("STS", "exists", "yes"): True}
+            selected = list(selected_effects(ast_block(first, "hidden_effect"), facts))
+            self.assertEqual(sum(e.key == "STP_cw_begin_hostilities" for _, e in selected), 1)
+            self.assertEqual(sum(e.key == "STP_cw_commission_korsh" for _, e in selected), int(resistance))
+            self.assertEqual(sum(e.key == "change_tag_from" for _, e in selected), int(resistance))
+            self.assertEqual(any(e.key == "set_country_flag" and e.value == "STP_sided_with_the_party_flag" for _, e in selected), not resistance)
         war = block(effects, "STP_cw_begin_hostilities")
         self.assertIn("NOT = { has_global_flag = STP_cw_started }", war)
         self.assertLess(war.index("set_global_flag = STP_cw_started"), war.index("declare_war_on"))
@@ -3550,7 +3552,7 @@ class PostwarFocusContracts(unittest.TestCase):
             self.assertEqual(len(focuses), 16, tag)
             self.assertEqual(scalar(focuses[prefix + "settled_state"], "cost"), "4")
             for choice in ("open_settlement", "firm_settlement"):
-                completed = {"STP_cw_restore_civil_authority"}
+                completed = {"STP_cw_restore_civil_authority", "STP_pc_after_victory"}
                 excluded = prefix + ("firm_settlement" if choice == "open_settlement" else "open_settlement")
                 for _ in range(len(focuses)):
                     for name, focus in focuses.items():
@@ -3566,8 +3568,8 @@ class PostwarFocusContracts(unittest.TestCase):
                             or scalar(ast_block(f, "allow_branch"), "tag") == tag)]
             points = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in visible]
             self.assertEqual(len(points), len(set(points)))
-            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 12)
-            self.assertLessEqual(max(y for _, y in points), 12)
+            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 32 if tag == "STS" else 12)
+            self.assertLessEqual(max(y for _, y in points), 15 if tag == "STS" else 12)
             for focus in focuses.values():
                 self.assertEqual(scalar(ast_block(focus, "allow_branch"), "tag"), tag)
                 self.assertIn("STP_pw_can_reconstruct", {e.key for e in walk(ast_block(focus, "available"))})

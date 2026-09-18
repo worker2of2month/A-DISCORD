@@ -288,6 +288,7 @@ STP_region_has_party_counter_assets = {
 
 STP_region_has_detectable_assets = {
 	OR = {
+		has_state_flag = STP_niansas_transfer_secured
 		has_state_flag = STP_resistance_administration_asset
 		has_state_flag = STP_resistance_garrison_asset
 		has_state_flag = STP_resistance_supply_asset
@@ -408,7 +409,7 @@ STP_cw_any_inspection_active = {
 # Human players keep full agency; this trigger is referenced only from ai_will_do.
 STP_cw_shabrat_ai_risk_allowed = {
 	check_variable = { var = STP_party_suspicion value = 65 compare = less_than }
-	NOT = { STP_cw_any_inspection_active = yes }
+	# A commission in another district does not close every operation.
 }
 
 STP_cw_two_inspections_active = {
@@ -804,6 +805,11 @@ STP_pc_focus_available = {
 	STP_pw_can_reconstruct = yes
 }
 
+STP_pw_kefreyt_terms_current = {
+	tag = VAL
+	STS = { STP_pc_can_offer_kefreyt_terms = yes }
+}
+
 # COUNTRY: a controlled port is required before coastal work.
 STP_pc_has_naval_base = {
 	any_owned_state = {
@@ -910,7 +916,7 @@ STP_pc_settlement_has_terms = {
 }
 
 # Recipient country: only its still-open package may advance the STS queue.
-STP_pc_liberation_reply_is_current = {
+STP_pc_liberation_reply_matches_receipt = {
 	STS = {
 		exists = yes
 		has_country_flag = STP_pc_lib_package_pending
@@ -924,5 +930,186 @@ STP_pc_liberation_reply_is_current = {
 			tag = NOD
 			STS = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } }
 		}
+	}
+}
+
+# Imperial union
+
+# Postwar settlement clears STP_pc_war_val/nod. Victory checks also accept
+# persistent client outcomes or full territorial control after peace.
+
+STP_imperial_union_kefreyt_defeated = {
+	OR = {
+		NOT = { VAL = { exists = yes } }
+		VAL = { has_country_flag = VAL_cw_defeated }
+		VAL = { has_capitulated = yes }
+		VAL = { is_subject_of = ROOT }
+		VAL = { has_idea = STP_pc_val_client }
+		AND = {
+			STP_imperial_union_required_states_controlled = yes
+			NOT = { has_war_with = VAL }
+		}
+	}
+}
+
+STP_imperial_union_nodrul_defeated = {
+	OR = {
+		NOT = { NOD = { exists = yes } }
+		NOD = { has_country_flag = NOD_cw_defeated }
+		NOD = { has_capitulated = yes }
+		NOD = { is_subject_of = ROOT }
+		NOD = { has_idea = STP_pc_nod_client }
+		AND = {
+			STP_imperial_union_required_states_controlled = yes
+			NOT = { has_war_with = NOD }
+		}
+	}
+}
+
+STP_imperial_union_required_states_controlled = {
+	owns_state = 4
+	controls_state = 4
+	owns_state = 5
+	controls_state = 5
+	owns_state = 6
+	controls_state = 6
+	owns_state = 7
+	controls_state = 7
+	owns_state = 8
+	controls_state = 8
+	owns_state = 9
+	controls_state = 9
+	owns_state = 10
+	controls_state = 10
+	owns_state = 11
+	controls_state = 11
+	owns_state = 12
+	controls_state = 12
+	owns_state = 13
+	controls_state = 13
+	owns_state = 14
+	controls_state = 14
+	owns_state = 15
+	controls_state = 15
+	owns_state = 16
+	controls_state = 16
+	owns_state = 17
+	controls_state = 17
+	owns_state = 18
+	controls_state = 18
+	owns_state = 19
+	controls_state = 19
+	owns_state = 20
+	controls_state = 20
+	owns_state = 21
+	controls_state = 21
+	owns_state = 22
+	controls_state = 22
+	owns_state = 24
+	controls_state = 24
+	owns_state = 30
+	controls_state = 30
+	owns_state = 31
+	controls_state = 31
+	owns_state = 41
+	controls_state = 41
+	owns_state = 42
+	controls_state = 42
+	owns_state = 48
+	controls_state = 48
+	owns_state = 54
+	controls_state = 54
+	owns_state = 55
+	controls_state = 55
+	owns_state = 56
+	controls_state = 56
+	owns_state = 57
+	controls_state = 57
+}
+
+STP_imperial_union_requirements_met = {
+	tag = STS
+	STP_pc_founder_rules = yes
+	has_completed_focus = STP_pc_hegemony_open
+	has_war = no
+	NOT = { has_country_flag = STP_imperial_union_proclaimed }
+	STP_imperial_union_kefreyt_defeated = yes
+	STP_imperial_union_nodrul_defeated = yes
+	OR = { STP_imperial_union_required_states_controlled = yes STP_imperial_union_client_settlement = yes }
+}
+
+STP_pc_can_confront_val = {
+	tag = STS
+	has_capitulated = no
+	VAL = { exists = yes has_capitulated = no }
+	OR = {
+		has_war_with = VAL
+		AND = { is_subject = no NOT = { is_in_faction_with = VAL } VAL = { is_subject = no } }
+	}
+}
+
+STP_pc_can_confront_nod = {
+	tag = STS
+	has_capitulated = no
+	NOD = { exists = yes has_capitulated = no }
+	OR = {
+		has_war_with = NOD
+		AND = { is_subject = no NOT = { is_in_faction_with = NOD } NOD = { is_subject = no } }
+	}
+}
+
+# COUNTRY STS: a political union preserves the clients' territory and administrations.
+STP_imperial_union_client_settlement = {
+	has_completed_focus = STP_pc_heg_clients
+	has_completed_focus = STP_pc_heg_burden
+	is_subject = no
+	capital_scope = { is_owned_by = STS is_controlled_by = STS }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		has_war = no
+		is_in_faction_with = STS
+		OR = { is_subject_of = STS has_idea = STP_pc_val_client }
+		capital_scope = { is_owned_by = VAL is_controlled_by = VAL }
+	}
+	NOD = {
+		exists = yes
+		has_capitulated = no
+		has_war = no
+		is_in_faction_with = STS
+		OR = { is_subject_of = STS has_idea = STP_pc_nod_client }
+		capital_scope = { is_owned_by = NOD is_controlled_by = NOD }
+	}
+}
+
+STP_pc_liberation_recipient_available = {
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_war_with = STS }
+	STS = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		check_variable = { var = STP_pc_course value = 2 compare = equals }
+	}
+}
+
+STP_pc_liberation_reply_is_current = {
+	STP_pc_liberation_reply_matches_receipt = yes
+	STP_pc_liberation_recipient_available = yes
+}
+
+STP_pc_can_offer_kefreyt_terms = {
+	tag = STS
+	STP_pw_can_reconstruct = yes
+	is_subject = no
+	check_variable = { var = STP_pc_course value = 1 compare = equals }
+	NOT = { has_country_flag = STP_pc_val_terms_accepted has_country_flag = STP_pc_val_terms_refused }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		NOT = { has_war_with = STS is_in_faction_with = STS }
 	}
 }

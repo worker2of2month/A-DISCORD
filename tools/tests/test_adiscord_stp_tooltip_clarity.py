@@ -6,12 +6,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-TOOLTIPS = ROOT / "localisation/replace/ADISCORD_STP_tooltips_l_russian.yml"
+TOOLTIPS = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
 
 
 class STPTooltipClarityTests(unittest.TestCase):
     def test_niansas_transfer_requirements_are_explicit_at_every_decision_point(self) -> None:
-        self.assertTrue(TOOLTIPS.is_file(), "missing dedicated STP tooltip override localisation")
+        self.assertTrue(TOOLTIPS.is_file(), "missing canonical STP localisation")
         self.assertTrue(TOOLTIPS.read_bytes().startswith(b"\xef\xbb\xbf"), "tooltip override must keep UTF-8 BOM")
         localisation = TOOLTIPS.read_text(encoding="utf-8-sig")
 

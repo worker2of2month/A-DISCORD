@@ -11,7 +11,7 @@ DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 FOCUS = ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
 SCRIPTED_LOC = ROOT / "common/scripted_localisation/ADISCORD_STP_scripted_loc.txt"
 LOC = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
-REPLACE_LOC = ROOT / "localisation/replace/ADISCORD_STP_tooltips_l_russian.yml"
+REPLACE_LOC = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
 
 
 def read(path: Path) -> str:
@@ -109,7 +109,7 @@ class ShabratRiskAndRegionalTransferTests(unittest.TestCase):
             r"factor\s*=\s*0[\s\S]*?STP_party_suspicion\s+value\s*=\s*80",
         )
 
-    def test_shabrat_ai_stops_risky_work_during_inspections_or_high_suspicion(self) -> None:
+    def test_shabrat_ai_limits_suspicion_without_worldwide_inspection_lock(self) -> None:
         triggers = read(TRIGGERS)
         decisions = read(DECISIONS)
         gate = named_block(triggers, "STP_cw_shabrat_ai_risk_allowed")
@@ -118,7 +118,7 @@ class ShabratRiskAndRegionalTransferTests(unittest.TestCase):
             "var = STP_party_suspicion value = 65 compare = less_than",
             gate,
         )
-        self.assertIn("NOT = { STP_cw_any_inspection_active = yes }", gate)
+        self.assertNotIn("STP_cw_any_inspection_active", gate)
 
         risky = (
             "STP_cw_raise_district_network",

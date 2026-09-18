@@ -74,6 +74,7 @@ WAR_FOCUSES = (
 RECONSTRUCTION_FOCUSES = (
     "STP_cw_first_postwar_budget",
     "STP_cw_restore_civil_authority",
+    "STP_pc_after_victory",
     "STP_pw_republic_new_republic",
     "STP_pw_republic_district_authority",
     "STP_pw_republic_civil_records",
@@ -92,9 +93,7 @@ RECONSTRUCTION_FOCUSES = (
 )
 HEGEMONY_FOCUSES = (
     "STP_pc_after_victory",
-    "STP_pc_count_ruins",
     "STP_pc_war_ledgers",
-    "STP_pc_name_steland",
     "STP_pc_two_borders",
     "STP_pc_shabrat_politics",
     "STP_pc_hegemony_open",
@@ -335,7 +334,7 @@ def run_checks() -> list[tuple[str, bool, str]]:
     add("depth sequence reachable", sequence_reachable(DEPTH_FOCUSES, focuses, {"STP_Show_Him_The_Truth", *CORE_FOCUSES}))
     add("war sequence reachable", sequence_reachable(WAR_FOCUSES, focuses, set()))
     add("reconstruction sequence reachable", sequence_reachable(RECONSTRUCTION_FOCUSES, focuses, set()))
-    add("hegemony sequence reachable", sequence_reachable(HEGEMONY_FOCUSES, focuses, {"STP_cw_restore_civil_authority"}))
+    add("hegemony sequence reachable", sequence_reachable(HEGEMONY_FOCUSES, focuses, set(RECONSTRUCTION_FOCUSES)))
 
     for focus_id, expected in FOCUS_WEIGHTS.items():
         actual = focuses.get(focus_id, {}).get("base")

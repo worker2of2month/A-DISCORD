@@ -11027,6 +11027,16 @@
   ],
   "references": [
     {
+      "key": "adiscord_stp_old_fada_guard_reposition",
+      "path": "events/ADISCORD_STP_events.txt",
+      "kind": "create_unit",
+      "technical_name": "Stelander Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
       "key": "adiscord_stp_postwar_territorial_template_unlock",
       "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
       "kind": "technical_reference",

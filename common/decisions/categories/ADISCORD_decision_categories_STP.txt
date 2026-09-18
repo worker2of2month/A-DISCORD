@@ -56,3 +56,16 @@ STP_cw_northern_aid = {
 	visible_when_empty = yes
 	priority = 34
 }
+
+# Imperial union
+
+STP_imperial_union_category = {
+	icon = generic_political_pressure
+	allowed = { tag = STS }
+	visible = {
+		tag = STS
+		STP_pc_founder_rules = yes
+		has_completed_focus = STP_pc_hegemony_open
+		NOT = { has_country_flag = STP_imperial_union_proclaimed }
+	}
+}

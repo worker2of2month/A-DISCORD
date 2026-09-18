@@ -6,8 +6,8 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
-RECOVERY = ROOT / "common/on_actions/03_ADISCORD_STP_postwar_recovery.txt"
-RU_LOC = ROOT / "localisation/replace/ADISCORD_STP_postwar_focus_l_russian.yml"
+RECOVERY = ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt"
+RU_LOC = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
 EN_LOC = ROOT / "localisation/replace/ADISCORD_STP_postwar_focus_l_english.yml"
 
 

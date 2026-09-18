@@ -627,17 +627,28 @@ country_event = {
 	is_triggered_only = yes
 	timeout_days = 7
 	trigger = { tag = STP is_ai = no has_country_flag = STP_cw_participant STS = { exists = yes } }
+	# The first option is always valid so the native timeout follows the chosen side.
 	option = {
 		name = ADISCORD_STP_cw.30.a
-		trigger = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_cw_side_republics } }
 		ai_chance = { base = 100 }
-		set_country_flag = STP_sided_with_the_party_flag
-		STP_cw_init_apparatus_loyalty = yes
-		hidden_effect = { STP_cw_begin_hostilities = yes }
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = STP_sided_with_Maksim_flag STS = { exists = yes } }
+				STS = { set_country_flag = STP_sided_with_Maksim_flag }
+				STP_cw_commission_korsh = yes
+				STP_cw_begin_hostilities = yes
+				STS = { change_tag_from = STP }
+			}
+			else = {
+				set_country_flag = STP_sided_with_the_party_flag
+				STP_cw_init_apparatus_loyalty = yes
+				STP_cw_begin_hostilities = yes
+			}
+		}
 	}
 	option = {
 		name = ADISCORD_STP_cw.30.b
-		trigger = { STS = { exists = yes } NOT = { has_country_flag = STP_sided_with_the_party_flag } NOT = { has_country_flag = STP_cw_side_republics } }
+		trigger = { STS = { exists = yes } NOT = { has_country_flag = STP_sided_with_the_party_flag } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_cw_side_republics } }
 		ai_chance = { base = 0 }
 		set_country_flag = STP_sided_with_Maksim_flag
 		hidden_effect = {
@@ -646,16 +657,6 @@ country_event = {
 			STP_cw_begin_hostilities = yes
 		}
 		STS = { change_tag_from = STP }
-	}
-	# Hidden options leave an unattended window with no first choice. Timeout
-	# must still pick a side and open the scripted war.
-	timeout_effect = {
-		if = {
-			limit = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
-			set_country_flag = STP_sided_with_the_party_flag
-			STP_cw_init_apparatus_loyalty = yes
-		}
-		hidden_effect = { STP_cw_begin_hostilities = yes }
 	}
 }
 
@@ -1030,7 +1031,8 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	fire_only_once = yes
-	immediate = { hidden_effect = { set_country_flag = STP_pc_val_crisis } }
+	trigger = { OR = { tag = STS tag = VAL } STS = { exists = yes STP_pw_can_reconstruct = yes } }
+	immediate = { if = { limit = { tag = STS } set_country_flag = STP_pc_val_crisis } }
 	option = {
 		name = ADISCORD_STP_pc.9.a
 		trigger = { tag = STS }
@@ -1038,25 +1040,29 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_STP_pc.9.b
-		trigger = { tag = VAL }
+		trigger = { tag = VAL STP_pw_kefreyt_terms_current = yes }
 		ai_chance = { base = 55 }
-		STS = { set_country_flag = STP_pc_val_terms_accepted }
-		add_ideas = STP_pc_val_client
-		hidden_effect = {
-			STS = {
-				if = {
-					limit = { has_country_flag = STP_pc_hegemony_league }
-					STP_pc_form_hegemony_league = yes
+		if = {
+			limit = { STP_pw_kefreyt_terms_current = yes }
+			add_ideas = STP_pc_val_client
+			hidden_effect = {
+				STS = {
+					set_country_flag = STP_pc_val_terms_accepted
+					if = {
+						limit = { has_country_flag = STP_pc_hegemony_league }
+						STP_pc_form_hegemony_league = yes
+					}
 				}
 			}
 		}
 	}
 	option = {
 		name = ADISCORD_STP_pc.9.c
-		trigger = { tag = VAL }
+		trigger = { tag = VAL STP_pw_kefreyt_terms_current = yes }
 		ai_chance = { base = 45 }
-		STS = { clr_country_flag = STP_pc_val_terms_accepted STP_pc_declare_war_val = yes }
+		hidden_effect = { if = { limit = { STP_pw_kefreyt_terms_current = yes } STS = { set_country_flag = STP_pc_val_terms_refused } } }
 	}
+	option = { name = STP_pc_offer_closed trigger = { tag = VAL STP_pw_kefreyt_terms_current = no } }
 }
 
 country_event = {

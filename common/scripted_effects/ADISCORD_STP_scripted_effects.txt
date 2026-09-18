@@ -1,5 +1,5 @@
 # Stelander scripted effects.
-# Sections: core; army restrictions; preparation; regions; civil war and settlements.
+# Sections: core; army restrictions; preparation; regions; civil war; settlements; imperial union.
 
 # Core initialization, suspicion and leader health (COUNTRY)
 
@@ -781,6 +781,7 @@ STP_cw_secure_party_district = {
 	STP_cw_assess_search_evidence = yes
 	clr_state_flag = STP_cw_opposition_target
 	STP_cw_return_preparation_reserves = yes
+	clr_state_flag = STP_niansas_transfer_secured
 	clr_state_flag = STP_resistance_administration_asset
 	clr_state_flag = STP_resistance_garrison_asset
 	clr_state_flag = STP_resistance_supply_asset
@@ -1515,6 +1516,7 @@ STP_false_trail_courier_seized = {
 	if = { limit = { STP = { STP_cw_preparation_open = yes } } STP = { add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.03 } } }
 	set_temp_variable = { var = STP_region_influence_change value = 6 }
 	STP_add_party_influence = yes
+	clr_state_flag = STP_niansas_transfer_secured
 	clr_state_flag = STP_resistance_administration_asset
 	ROOT = {
 		set_variable = { var = STP_last_party_response value = 3 }
@@ -1535,6 +1537,7 @@ STP_false_trail_counterintelligence_breakthrough = {
 	set_temp_variable = { var = STP_region_influence_change value = 10 }
 	STP_add_party_influence = yes
 	set_state_flag = { flag = STP_party_counterintelligence_asset value = 1 days = 56 }
+	clr_state_flag = STP_niansas_transfer_secured
 	clr_state_flag = STP_resistance_administration_asset
 	clr_state_flag = STP_resistance_garrison_asset
 	ROOT = {
@@ -1602,7 +1605,7 @@ STP_resolve_party_inspection = {
 		limit = { has_state_flag = STP_inspection_concession_prepared }
 		# The chosen concession has already surrendered either civil or military assets.
 		if = {
-			limit = { has_state_flag = STP_resistance_administration_asset }
+			limit = { OR = { has_state_flag = STP_resistance_administration_asset has_state_flag = STP_niansas_transfer_secured } }
 			ROOT = { set_variable = { var = STP_last_party_response value = 12 } }
 		}
 		else = { ROOT = { set_variable = { var = STP_last_party_response value = 9 } } }
@@ -1612,7 +1615,8 @@ STP_resolve_party_inspection = {
 		STP_resolve_false_trail = yes
 	}
 	else_if = {
-		limit = { has_state_flag = STP_resistance_administration_asset }
+		limit = { OR = { has_state_flag = STP_resistance_administration_asset has_state_flag = STP_niansas_transfer_secured } }
+		clr_state_flag = STP_niansas_transfer_secured
 		clr_state_flag = STP_resistance_administration_asset
 		set_temp_variable = { var = STP_region_influence_change value = 8 }
 		STP_add_party_influence = yes
@@ -1760,7 +1764,6 @@ STP_initialize_battle_for_stelander = {
 }
 
 STP_clear_region_runtime = {
-	clr_state_flag = STP_niansas_transfer_secured
 	clr_state_flag = STP_cw_district_operation_in_progress
 	clr_state_flag = STP_cw_opposition_target
 	clr_state_flag = STP_cw_garrison_evacuated
@@ -1774,6 +1777,7 @@ STP_clear_region_runtime = {
 	clr_state_flag = STP_party_inspection_active
 	clr_state_flag = STP_cw_inspection_delay_escrow
 	clr_state_flag = STP_false_trail_prepared
+	clr_state_flag = STP_niansas_transfer_secured
 	clr_state_flag = STP_resistance_administration_asset
 	clr_state_flag = STP_resistance_garrison_asset
 	clr_state_flag = STP_resistance_supply_asset
@@ -2220,7 +2224,7 @@ STP_cw_mobilize_assault_division = {
 	}
 }
 
-# COUNTRY: оплаченные когорты находятся вне доступного запаса до расчёта.
+# COUNTRY: paid cohorts are kept outside the available reserve until settlement.
 STP_cw_refund_reserve_training = {
 	if = {
 		limit = { hidden_trigger = { check_variable = { var = STP_cw_training_cohorts value = 2 compare = equals } } }
@@ -2368,6 +2372,7 @@ STP_cw_materialize_region_assets = {
 		clear_variable = STP_cw_cached_rifles
 		clear_variable = STP_cw_sabotage_rifles
 		clr_state_flag = STP_resistance_sabotage_asset
+		clr_state_flag = STP_niansas_transfer_secured
 		clr_state_flag = STP_resistance_administration_asset
 		clr_state_flag = STP_local_deal_asset
 		clr_state_flag = STP_party_inspection_active
@@ -2552,6 +2557,7 @@ STP_cw_release_resistance_officeholders = {
 STP_cw_commission_korsh = {
 	if = {
 		limit = {
+			OR = { STP = { has_character = STP_Gleb_Korsh } STS = { has_character = STP_Gleb_Korsh } }
 			is_ai = no
 			STS = { exists = yes }
 			OR = {
@@ -2566,14 +2572,6 @@ STP_cw_commission_korsh = {
 		if = {
 			limit = { STP = { has_character = STP_Gleb_Korsh } }
 			STP = { set_nationality = { character = STP_Gleb_Korsh target_country = STS } }
-		}
-		else = {
-			STS = {
-				if = {
-					limit = { NOT = { has_character = STP_Gleb_Korsh } }
-					recruit_character = STP_Gleb_Korsh
-				}
-			}
 		}
 		STS = {
 			STP_Gleb_Korsh = {
@@ -3647,6 +3645,88 @@ STP_cw_end_northern_colonial_war = {
 }
 
 # COUNTRY: keep accumulated values when a later focus refreshes the institution.
+STP_pw_begin_recovery = {
+	if = {
+		limit = { tag = STS NOT = { has_variable = STP_pw_recovery_progress } }
+		set_variable = { var = STP_pw_recovery_progress value = 0 }
+		set_variable = { var = STP_pw_recovery_services value = 0 }
+		set_variable = { var = STP_pw_recovery_industry value = 0 }
+		set_variable = { var = STP_pw_recovery_army value = 0 }
+		STP_pw_update_recovery = yes
+	}
+}
+
+# Three funded programs remove the reconstruction burden in equal steps.
+STP_pw_update_recovery = {
+	set_variable = { var = STP_pw_recovery_burden value = 3 }
+	subtract_from_variable = { var = STP_pw_recovery_burden value = STP_pw_recovery_progress }
+	clamp_variable = { var = STP_pw_recovery_burden min = 0 max = 3 }
+	set_variable = { var = STP_pw_recovery_output value = STP_pw_recovery_burden }
+	multiply_variable = { var = STP_pw_recovery_output value = -0.04 }
+	set_variable = { var = STP_pw_recovery_construction value = STP_pw_recovery_burden }
+	multiply_variable = { var = STP_pw_recovery_construction value = -0.05 }
+	set_variable = { var = STP_pw_recovery_expense value = STP_pw_recovery_burden }
+	multiply_variable = { var = STP_pw_recovery_expense value = 0.04 }
+	if = {
+		limit = { check_variable = { var = STP_pw_recovery_burden value = 0 compare = greater_than } }
+		if = { limit = { NOT = { has_dynamic_modifier = { modifier = STP_pw_reconstruction_dynamic } } } add_dynamic_modifier = { modifier = STP_pw_reconstruction_dynamic } }
+	}
+	else_if = { limit = { has_dynamic_modifier = { modifier = STP_pw_reconstruction_dynamic } } remove_dynamic_modifier = { modifier = STP_pw_reconstruction_dynamic } }
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# The deposit is the shared slot and the receipt; clear it before returning money.
+STP_pw_cancel_project = {
+	if = {
+		limit = { has_variable = STP_pw_project_deposit }
+		set_temp_variable = { var = STP_pw_project_refund value = STP_pw_project_deposit }
+		clear_variable = STP_pw_project_deposit
+		clear_variable = STP_pw_project_kind
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_pw_project_refund }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_pw_project_refund }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pw_finish_project = {
+	if = {
+		limit = {
+			has_variable = STP_pw_project_deposit
+			STP_pw_can_reconstruct = yes
+			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
+			OR = {
+				AND = { check_variable = { var = STP_pw_project_kind value = 1 compare = equals } check_variable = { var = STP_pw_project_deposit value = 80 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
+				AND = { check_variable = { var = STP_pw_project_kind value = 2 compare = equals } check_variable = { var = STP_pw_project_deposit value = 120 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } }
+				AND = { check_variable = { var = STP_pw_project_kind value = 3 compare = equals } check_variable = { var = STP_pw_project_deposit value = 60 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals } } }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = STP_pw_project_kind value = 1 compare = equals } }
+			set_variable = { var = STP_pw_recovery_services value = 1 }
+			add_stability = 0.05
+			add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.05 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_pw_project_kind value = 2 compare = equals } }
+			set_variable = { var = STP_pw_recovery_industry value = 1 }
+			add_offsite_building = { type = industrial_complex level = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_pw_project_kind value = 3 compare = equals } }
+			set_variable = { var = STP_pw_recovery_army value = 1 }
+			add_to_variable = { var = STP_pw_army_org_regain value = 0.10 }
+			army_experience = 25
+		}
+		add_to_variable = { var = STP_pw_recovery_progress value = 1 }
+		clear_variable = STP_pw_project_deposit
+		clear_variable = STP_pw_project_kind
+		STP_pw_update_recovery = yes
+		STP_pw_refresh_modifier = yes
+	}
+	else = { STP_pw_cancel_project = yes }
+}
+
 STP_pw_refresh_modifier = {
 	if = {
 		limit = { STP_pw_can_reconstruct = yes }
@@ -3841,19 +3921,25 @@ STP_pc_lock_directory = {
 # STS: scripted war. Diplomatic UI stays closed.
 STP_pc_declare_war_val = {
 	if = {
-		limit = { tag = STS VAL = { exists = yes NOT = { has_war_with = ROOT } } }
-		set_country_flag = STP_pc_war_val
-		VAL = { set_country_flag = STP_pc_war_with_sts }
-		declare_war_on = { target = VAL type = annex_everything }
+		limit = { tag = STS STP_pc_can_confront_val = yes }
+		if = { limit = { NOT = { has_war_with = VAL } } declare_war_on = { target = VAL type = annex_everything } }
+		if = {
+			limit = { has_war_with = VAL }
+			set_country_flag = STP_pc_war_val
+			VAL = { set_country_flag = STP_pc_war_with_sts }
+		}
 	}
 }
 
 STP_pc_declare_war_nod = {
 	if = {
-		limit = { tag = STS NOD = { exists = yes NOT = { has_war_with = ROOT } } }
-		set_country_flag = STP_pc_war_nod
-		NOD = { set_country_flag = STP_pc_war_with_sts }
-		declare_war_on = { target = NOD type = annex_everything }
+		limit = { tag = STS STP_pc_can_confront_nod = yes }
+		if = { limit = { NOT = { has_war_with = NOD } } declare_war_on = { target = NOD type = annex_everything } }
+		if = {
+			limit = { has_war_with = NOD }
+			set_country_flag = STP_pc_war_nod
+			NOD = { set_country_flag = STP_pc_war_with_sts }
+		}
 	}
 }
 
@@ -3947,8 +4033,8 @@ STP_pc_offer_liberation_package = {
 			has_country_flag = STP_pc_lib_package_pending
 			NOT = {
 				OR = {
-					AND = { check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals } VAL = { exists = yes } }
-					AND = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } NOD = { exists = yes } }
+					AND = { check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals } VAL = { STP_pc_liberation_recipient_available = yes } }
+					AND = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } NOD = { STP_pc_liberation_recipient_available = yes } }
 				}
 			}
 		}
@@ -3962,7 +4048,7 @@ STP_pc_offer_liberation_package = {
 		limit = {
 			has_country_flag = STP_pc_lib_val_won
 			VAL = {
-				exists = yes
+				STP_pc_liberation_recipient_available = yes
 				NOT = { has_idea = VAL_liberated_settlement }
 				NOT = { has_country_flag = STP_pc_val_refused_package }
 			}
@@ -3975,7 +4061,7 @@ STP_pc_offer_liberation_package = {
 		limit = {
 			has_country_flag = STP_pc_lib_nod_won
 			NOD = {
-				exists = yes
+				STP_pc_liberation_recipient_available = yes
 				NOT = { has_idea = NOD_mandate_broken }
 				NOT = { has_country_flag = STP_pc_nod_refused_package }
 			}
@@ -4111,7 +4197,7 @@ STP_pc_clear_settlement = {
 # Recipient country: authenticate before touching the shared STS receipt.
 STP_pc_finish_liberation_package = {
 	if = {
-		limit = { STP_pc_liberation_reply_is_current = yes }
+		limit = { STP_pc_liberation_reply_matches_receipt = yes }
 		STS = {
 			clr_country_flag = STP_pc_lib_package_pending
 			clear_variable = STP_pc_lib_package_tag
@@ -4122,4 +4208,37 @@ STP_pc_finish_liberation_package = {
 			STP_pc_offer_liberation_package = yes
 		}
 	}
+}
+
+# Imperial union
+
+# Mechanical formation of the Stelander Imperial Union. The matching news event
+# is presentation-only; it must never annex or transfer territory on its own.
+
+STP_proclaim_imperial_union = {
+	set_country_flag = STP_imperial_union_proclaimed
+	set_cosmetic_tag = STP_empire
+
+	set_politics = {
+		ruling_party = chauvinism
+		elections_allowed = no
+		long_name = STP_empire_faction_party_long
+		name = STP_empire_faction_party
+	}
+
+	add_country_leader_role = {
+		character = STP_maksim_shabrat
+		promote_leader = yes
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2190.1.1.1"
+			traits = { }
+		}
+	}
+	set_country_leader_portrait = {
+		ideology = chauvinism
+		portrait = GFX_portrait_STP_Maksim_Shabrat_dictator
+	}
+
+	news_event = { id = ADISCORD_superevent_news.2 }
 }

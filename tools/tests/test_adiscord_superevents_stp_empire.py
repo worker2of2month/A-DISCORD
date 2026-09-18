@@ -7,9 +7,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 NEWS = ROOT / "events/ADISCORD_superevents.txt"
 SUPEREVENTS = ROOT / "interface/superevents.gfx"
-IMPERIAL_DECISIONS = ROOT / "common/decisions/ADISCORD_STP_imperial_union_decisions.txt"
-IMPERIAL_TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_STP_imperial_union_triggers.txt"
-IMPERIAL_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_imperial_union_effects.txt"
+IMPERIAL_DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
+IMPERIAL_TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
+IMPERIAL_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
 WORKER_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png"
 DIRTY_OPENING_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"
 UTILITARIAN_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png"
@@ -102,7 +102,7 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
         self.assertNotIn("limit = { is_ai = no }", empire)
 
     def test_shabrat_imperial_union_requires_the_full_map(self) -> None:
-        decisions = read(IMPERIAL_DECISIONS)
+        decisions = named_block(read(IMPERIAL_DECISIONS), "STP_imperial_union_category")
         triggers = read(IMPERIAL_TRIGGERS)
         self.assertIn("STP_proclaim_imperial_union", decisions)
         self.assertIn("tag = STS", decisions)
@@ -110,9 +110,10 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
         self.assertIn("STP_imperial_union_requirements_met = yes", decisions)
         self.assertIn("VAL", triggers)
         self.assertIn("NOD", triggers)
+        required_states = named_block(triggers, "STP_imperial_union_required_states_controlled")
         for state in REQUIRED_IMPERIAL_STATES:
-            self.assertIn(f"owns_state = {state}", triggers)
-            self.assertIn(f"controls_state = {state}", triggers)
+            self.assertIn(f"owns_state = {state}", required_states)
+            self.assertIn(f"controls_state = {state}", required_states)
             self.assertIn(f"highlight_state_targets = {{ state = {state} }}", decisions)
 
     def test_postwar_victory_survives_settlement_cleanup(self) -> None:
@@ -127,7 +128,7 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
         self.assertIn("NOT = { has_war_with = NOD }", nod)
 
     def test_imperial_union_effect_owns_state_change_not_news(self) -> None:
-        effects = read(IMPERIAL_EFFECTS)
+        effects = named_block(read(IMPERIAL_EFFECTS), "STP_proclaim_imperial_union")
         self.assertIn("STP_proclaim_imperial_union = {", effects)
         self.assertIn("set_cosmetic_tag = STP_empire", effects)
         self.assertIn("ruling_party = chauvinism", effects)

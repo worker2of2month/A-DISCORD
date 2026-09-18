@@ -1,5 +1,6 @@
 ideas = {
 	country = {
+# --- civil_war_ideas ---
 		SRP_council_authority = {
 			picture = ADISCORD_law_civic_local_councils
 			allowed = { tag = SRP }
@@ -315,11 +316,7 @@ ideas = {
 			allowed = { always = no }
 			modifier = { }
 		}
-		STP_pw_republic_new_republic_delta = {
-			name = STP_pw_republic_dynamic
-			allowed = { always = no }
-			modifier = { stability_factor = 0.02 }
-		}
+		STP_pw_republic_new_republic_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { stability_factor = 0.03 } }
 		STP_pw_republic_district_authority_delta = {
 			name = STP_pw_republic_dynamic
 			allowed = { always = no }
@@ -350,11 +347,7 @@ ideas = {
 			allowed = { always = no }
 			modifier = { production_speed_buildings_factor = 0.05 }
 		}
-		STP_pw_republic_homes_for_returnees_delta = {
-			name = STP_pw_republic_dynamic
-			allowed = { always = no }
-			modifier = { production_speed_buildings_factor = 0.05 }
-		}
+		STP_pw_republic_homes_for_returnees_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { production_speed_buildings_factor = 0.05 } }
 		STP_pw_republic_civil_workshops_delta = {
 			name = STP_pw_republic_dynamic
 			allowed = { always = no }
@@ -370,11 +363,7 @@ ideas = {
 			allowed = { always = no }
 			modifier = { production_factory_max_efficiency_factor = 0.05 ADISCORD_economy_admin_expense_factor = -0.03 }
 		}
-		STP_pw_republic_army_register_delta = {
-			name = STP_pw_republic_dynamic
-			allowed = { always = no }
-			modifier = { supply_consumption_factor = -0.03 }
-		}
+		STP_pw_republic_army_register_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { army_org_factor = 0.04 } }
 		STP_pw_republic_officer_school_delta = {
 			name = STP_pw_republic_dynamic
 			allowed = { always = no }
@@ -385,16 +374,8 @@ ideas = {
 			allowed = { always = no }
 			modifier = { supply_consumption_factor = -0.05 army_org_regain = 0.05 }
 		}
-		STP_pw_republic_professional_service_delta = {
-			name = STP_pw_republic_dynamic
-			allowed = { always = no }
-			modifier = { army_org_factor = 0.03 training_time_factor = -0.08 }
-		}
-		STP_pw_republic_settled_state_delta = {
-			name = STP_pw_republic_dynamic
-			allowed = { always = no }
-			modifier = { research_speed_factor = 0.02 stability_factor = 0.02 }
-		}
+		STP_pw_republic_professional_service_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { army_org_factor = 0.05 training_time_factor = -0.1 } }
+		STP_pw_republic_settled_state_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { stability_factor = 0.03 industrial_capacity_factory = 0.05 } }
 		STP_pw_party_dummy = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
@@ -489,8 +470,8 @@ ideas = {
 		STP_pc_army_staff_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { army_org_factor = 0.08 planning_speed = 0.10 political_power_gain = -0.05 } }
 		STP_pc_heg_unity_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { stability_factor = 0.05 political_power_gain = 0.10 } }
 		STP_pc_heg_subordinate_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { ADISCORD_economy_admin_expense_factor = -0.05 } }
-		STP_pc_heg_limit_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { research_speed_factor = -0.05 } }
-		STP_pc_heg_regional_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { industrial_capacity_factory = -0.08 } }
+		STP_pc_heg_limit_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { research_speed_factor = -0.03 political_power_gain = 0.15 } }
+		STP_pc_heg_regional_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { industrial_capacity_factory = 0.08 ADISCORD_economy_admin_expense_factor = 0.05 } }
 		STP_pc_heg_burden_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { army_org_factor = 0.10 ADISCORD_economy_admin_expense_factor = 0.06 } }
 		STP_pc_lib_assembly_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { stability_factor = 0.05 political_power_gain = -0.10 } }
 		STP_pc_sot_field_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { planning_speed = 0.05 } }
@@ -515,5 +496,147 @@ ideas = {
 		STP_pc_nod_client = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { political_power_gain = -0.05 } }
 		VAL_liberated_settlement = { picture = ADISCORD_law_civic_local_councils allowed = { always = no } removal_cost = -1 modifier = { stability_factor = 0.03 } }
 		NOD_mandate_broken = { picture = ADISCORD_law_civic_local_councils allowed = { always = no } removal_cost = -1 modifier = { conscription_factor = -0.05 } }
+		STP_pc_hegemony_open_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { political_power_gain = 0.15 stability_factor = -0.02 } }
+		STP_pc_freedom_open_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { stability_factor = 0.05 political_power_gain = -0.05 } }
+		STP_pc_archive_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { research_speed_factor = 0.03 } }
+		STP_pc_institutions_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { ADISCORD_economy_admin_expense_factor = -0.08 research_speed_factor = 0.03 } }
+		STP_pc_heg_val_audit_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { ADISCORD_economy_admin_expense_factor = -0.04 } }
+		STP_pc_heg_nod_break_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { supply_consumption_factor = -0.05 } }
+		STP_pc_lib_civil_army_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { army_org_factor = 0.04 political_power_gain = 0.10 } }
+		STP_pc_lib_competition_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { stability_factor = 0.04 research_speed_factor = 0.03 } }
+		STP_pc_lib_independent_gov_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { ADISCORD_economy_admin_expense_factor = -0.05 production_speed_buildings_factor = 0.05 } }
+
+
+# --- starting_ideas ---
+		STP_hedonism_with_no_bondaries = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_STP_hedonism_with_no_bondaries
+
+			modifier = {
+				monthly_population = -0.25
+				research_speed_factor = -0.08
+				stability_factor = -0.15
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_civilian_factory_income_factor = 0.05
+				ADISCORD_economy_social_expense_factor = 0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.05
+				ADISCORD_country_development_society_growth_factor = -0.05
+				custom_modifier_tooltip = STP_hedonism_army_restriction_tt
+			}
+
+			on_remove = {
+				ADISCORD_STP_unlock_regular_army_templates = yes
+			}
+		}
+
+
+		STP_hidden_slaves_trade = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_STP_hidden_slaves_trade
+
+			modifier = {
+				political_power_gain = -0.20
+				monthly_population = -0.08
+				ADISCORD_economy_trade_income_factor = 0.10
+				ADISCORD_economy_tax_collection_factor = -0.10
+				ADISCORD_economy_state_overload_gain_factor = 0.10
+				ADISCORD_economy_demographic_fatigue_gain_factor = 0.10
+				ADISCORD_country_development_society_growth_factor = -0.05
+			}
+		}
+
+
+		STP_legalize = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_STP_legalize
+
+			modifier = {
+				monthly_population = -0.06
+				stability_factor = 0.02
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_population_tax_income_factor = 0.05
+				ADISCORD_economy_social_expense_factor = 0.05
+				ADISCORD_country_development_society_growth_factor = -0.05
+			}
+		}
+
+
+		STP_worldwide_famous_tourist_destination = {
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = GFX_idea_STP_worldwide_famous_tourist_destination
+
+			modifier = {
+				monthly_population = 0.08
+				stability_factor = 0.03
+				production_speed_industrial_complex_factor = 0.03
+				ADISCORD_economy_trade_income_factor = 0.15
+				ADISCORD_economy_civilian_factory_income_factor = 0.10
+				ADISCORD_economy_building_income_factor = 0.05
+				ADISCORD_country_development_economic_growth_factor = 0.05
+			}
+		}
+
+
+# --- end ---
+	}
+
+	political_advisor_head_of_state = {
+		minister_STP_Ernest_Derlich = {
+			name = minister_STP_Ernest_Derlich
+			default = no
+			cost = 75
+			picture = minister_STP_Ernest_Derlich
+			allowed = {
+				tag = STP
+			}
+			visible = {
+				tag = STP
+			}
+			allowed_to_remove = {
+			}
+			traits = {
+				minister_trait_STP_hos_master_of_destinies
+			}
+		}
 	}
 }

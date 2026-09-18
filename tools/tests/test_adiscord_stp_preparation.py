@@ -1752,7 +1752,8 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertIn(f"{name}_desc", keys)
             picture = next((e.value for e in idea.value if e.key == "picture"), None)
             if picture:
-                self.assertIn(f'"GFX_idea_{picture}"', gfx)
+                sprite = picture if picture.startswith("GFX_idea_") else f"GFX_idea_{picture}"
+                self.assertIn(f'"{sprite}"', gfx)
         for dynamic in entries("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"):
             if dynamic.key.startswith("STP_cw_"):
                 self.assertIn(dynamic.key, keys)

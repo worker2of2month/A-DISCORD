@@ -208,7 +208,7 @@ def execute_package_effects(items, facts, dispatched, scope="STS"):
 
 
 def package_facts():
-    facts = {}
+    facts = {("STS", "variable", "STP_pc_course"): 2}
     for tag in ("STS", "VAL", "NOD"):
         facts[(tag, "exists", "yes")] = True
         facts[(tag, "has_capitulated", "no")] = True
@@ -368,7 +368,7 @@ class PostwarContinuationContracts(unittest.TestCase):
         focuses = war_focuses()
         for focus_id in ("STP_pc_lib_crisis", "STP_pc_lib_war", "STP_pc_army_limited_offense"):
             gate = block(focuses[focus_id], "available")
-            facts = {("STS", "STP_pc_focus_available", "yes"): True}
+            facts = {("STS", "STP_pc_focus_available", "yes"): True, ("STS", "STP_pc_can_confront_nod", "yes"): True}
             self.assertFalse(matches_conditions(gate, facts, "STS"), focus_id)
             facts[("STS", "has_country_flag", "STP_pc_nod_crisis")] = True
             self.assertTrue(matches_conditions(gate, facts, "STS"), focus_id)
@@ -420,15 +420,18 @@ class PostwarContinuationContracts(unittest.TestCase):
                 self.assertEqual(facts, before)
                 self.assertEqual(dispatched, [])
 
-    def test_eighty_focuses_sit_on_the_resistance_war_tree(self) -> None:
+    def test_postwar_focuses_are_unique_and_linked_on_the_resistance_war_tree(self) -> None:
         trees = [entry.value for entry in entries(FOCUS) if entry.key == "focus_tree"]
         war = next(tree for tree in trees if scalar(tree, "id") == "STP_cw_focus")
         prep = next(tree for tree in trees if scalar(tree, "id") == "STP_focus")
         war_ids = [scalar(entry.value, "id") for entry in war if entry.key == "focus"]
         prep_ids = [scalar(entry.value, "id") for entry in prep if entry.key == "focus"]
         pc_ids = [focus_id for focus_id in war_ids if focus_id.startswith("STP_pc_")]
-        self.assertEqual(len(pc_ids), 80)
-        self.assertEqual(len(set(pc_ids)), 80)
+        self.assertEqual(len(set(pc_ids)), len(pc_ids))
+        self.assertTrue(set(PERSONAL_FOCUS_IDS + HEGEMONY_COURSE_IDS + FREEDOM_COURSE_IDS).issubset(pc_ids))
+        for focus in (e.value for e in war if e.key == "focus"):
+            for prerequisite in (e.value for e in focus if e.key == "prerequisite"):
+                self.assertTrue(all(e.value in war_ids for e in prerequisite), scalar(focus, "id"))
         self.assertFalse(any(focus_id.startswith("STP_pc_") for focus_id in prep_ids))
         self.assertEqual(scalar(next(entry.value for entry in war if entry.key == "focus" and scalar(entry.value, "id") == "STP_pc_after_victory"), "x"), "16")
 
@@ -681,33 +684,35 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertTrue(any(e.key == "STP_pc_offer_liberation_package" for e in walk(reward)))
         self.assertFalse(any(e.key == "id" and e.value == "ADISCORD_STP_pc.16" for e in walk(reward)))
         independent = ast_block(focuses["STP_pc_lib_independent_gov"], "completion_reward")
-        self.assertTrue(any(e.key == "STP_pc_offer_liberation_package" for e in walk(independent)))
+        self.assertFalse(any(e.key == "STP_pc_offer_liberation_package" for e in walk(independent)))
+        self.assertTrue(any(e.key == "add_to_variable" for e in walk(independent)))
 
     def test_package_queue_handles_both_neighbors_refuse_and_reentry(self) -> None:
         offer = ast_block(relative_entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_pc_offer_liberation_package")
         both = {
+            **package_facts(),
             ("STS", "has_country_flag", "STP_pc_lib_package_pending"): False,
             ("STS", "has_country_flag", "STP_pc_lib_val_won"): True,
             ("STS", "has_country_flag", "STP_pc_lib_nod_won"): True,
             ("VAL", "exists", "yes"): True,
             ("NOD", "exists", "yes"): True,
         }
-        first = list(selected_effects(offer, both, "STS"))
+        first = list(selected_effects(expand(offer), both, "STS"))
         self.assertEqual([(s, prep_scalar(e.value, "var"), prep_scalar(e.value, "value")) for s, e in first if e.key == "set_variable"],
                          [("STS", "STP_pc_lib_package_tag", "1")])
         self.assertTrue(any(scope == "VAL" and e.key == "country_event" for scope, e in first))
         self.assertFalse(any(scope == "STS" and e.key == "country_event" for scope, e in first))
         after_val = {**both, ("VAL", "has_idea", "VAL_liberated_settlement"): True}
-        second = list(selected_effects(offer, after_val, "STS"))
+        second = list(selected_effects(expand(offer), after_val, "STS"))
         self.assertEqual([(s, prep_scalar(e.value, "var"), prep_scalar(e.value, "value")) for s, e in second if e.key == "set_variable"],
                          [("STS", "STP_pc_lib_package_tag", "2")])
         refused_val = {**both, ("VAL", "has_country_flag", "STP_pc_val_refused_package"): True}
-        after_refuse = list(selected_effects(offer, refused_val, "STS"))
+        after_refuse = list(selected_effects(expand(offer), refused_val, "STS"))
         self.assertEqual([(s, prep_scalar(e.value, "var"), prep_scalar(e.value, "value")) for s, e in after_refuse if e.key == "set_variable"],
                          [("STS", "STP_pc_lib_package_tag", "2")])
-        pending = list(selected_effects(offer, {**both, ("STS", "has_country_flag", "STP_pc_lib_package_pending"): True}, "STS"))
+        pending = list(selected_effects(expand(offer), {**both, ("STS", "has_country_flag", "STP_pc_lib_package_pending"): True}, "STS"))
         self.assertFalse(any(e.key in {"country_event", "set_variable"} for _, e in pending))
-        done = list(selected_effects(offer, {
+        done = list(selected_effects(expand(offer), {
             **after_val,
             ("NOD", "has_idea", "NOD_mandate_broken"): True,
         }, "STS"))
@@ -763,6 +768,13 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertTrue(any(e.key == "template" and e.value == "faction_template_ADISCORD_standard" for e in walk(form)))
         self.assertFalse(any(e.key == "create_faction" for e in walk(form)))
 
+    def test_scripted_advisor_role_contains_no_database_triggers(self) -> None:
+        reward = block(war_focuses()["STP_pc_lib_civil_army"], "completion_reward")
+        role = next(e.value for e in walk(reward) if e.key == "add_advisor_role")
+        advisor = block(role, "advisor")
+        self.assertFalse({"allowed", "visible", "available", "ai_will_do", "on_add", "on_remove"} & {e.key for e in advisor})
+        self.assertEqual(scalar(advisor, "slot"), "high_command")
+
     def test_false_promises_are_removed_or_tied_to_existing_actions(self) -> None:
         focuses = war_focuses()
         competition = ast_block(focuses["STP_pc_lib_competition"], "completion_reward")
@@ -779,13 +791,192 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertFalse(any(e.key in {"add_equipment_to_stockpile", "create_unit", "declare_war_on"} for e in walk(crisis)))
         civil = ast_block(focuses["STP_pc_lib_civil_army"], "completion_reward")
         self.assertTrue(any(e.key == "add_advisor_role" for e in walk(civil)))
-        self.assertTrue(any(e.key == "add_political_power" for e in walk(civil)))
+        self.assertFalse(any(e.key == "add_political_power" for e in walk(civil)))
+        self.assertTrue(any(e.key == "add_to_variable" for e in walk(civil)))
         regional = [entry.value for entry in focuses["STP_pc_heg_regional_system"] if entry.key == "prerequisite"]
         self.assertTrue(any(any(child.value == "STP_pc_heg_lock" for child in group) for group in regional))
         self.assertFalse(any(any(child.value == "STP_pc_heg_person" for child in group) for group in regional))
         declare = ast_block(relative_entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_pc_declare_liberation_war")
         self.assertFalse(any(e.key == "else_if" for e in declare))
         self.assertEqual(sum(1 for e in declare if e.key == "if"), 2)
+
+
+
+def recovery_conditions(items, facts):
+    # Capital ownership is an explicit fixture input; the remaining conditions
+    # are read from the scripts, including receipt and completion boundaries.
+    def translate(values):
+        result = []
+        for entry in values:
+            if entry.key == "capital_scope":
+                result.append(Entry("capital_secure", "yes", entry.line))
+            else:
+                result.append(Entry(entry.key, translate(entry.value) if isinstance(entry.value, list) else entry.value, entry.line))
+        return result
+    return matches_conditions(translate(items), facts, "STS")
+
+
+def execute_recovery(items, facts, rewards):
+    definitions = {entry.key: entry.value for entry in entries(EFFECTS)}
+    taken = False
+    for entry in items:
+        key, value = entry.key, entry.value
+        if key in {"if", "else_if", "else"}:
+            if key == "if":
+                taken = False
+            condition = next((e.value for e in value if e.key == "limit"), [])
+            if not taken and (key == "else" or recovery_conditions(condition, facts)):
+                taken = True
+                execute_recovery([e for e in value if e.key != "limit"], facts, rewards)
+        elif key == "hidden_effect":
+            execute_recovery(value, facts, rewards)
+        elif key in {"set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable"}:
+            name, amount = scalar(value, "var"), scalar(value, "value")
+            try:
+                amount = float(amount)
+            except ValueError:
+                amount = facts.get(("STS", "variable", amount), 0)
+            address = ("STS", "variable", name)
+            if key == "add_to_variable":
+                amount += facts.get(address, 0)
+            elif key == "subtract_from_variable":
+                amount = facts.get(address, 0) - amount
+            facts[address] = amount
+            facts[("STS", "has_variable", name)] = True
+        elif key == "clear_variable":
+            facts.pop(("STS", "variable", value), None)
+            facts.pop(("STS", "has_variable", value), None)
+        elif key in {"STP_pw_update_recovery", "STP_pw_refresh_modifier", "ADISCORD_economy_mark_dirty"}:
+            rewards.append(key)
+        elif key in {"add_stability", "army_experience", "add_offsite_building"}:
+            rewards.append((key, value))
+        elif key in {"custom_effect_tooltip", "effect_tooltip"}:
+            continue
+        elif key in {"STP_pw_finish_project", "STP_pw_cancel_project"}:
+            execute_recovery(definitions[key], facts, rewards)
+        else:
+            raise AssertionError(f"Unhandled recovery effect: {key}")
+
+
+class PostwarRecoveryTransactions(unittest.TestCase):
+    def setUp(self):
+        self.effects = {e.key: e.value for e in entries(EFFECTS)}
+        decisions = relative_entries("common/decisions/ADISCORD_STP_decisions.txt")
+        self.decisions = block(decisions, "STP_cw_war_council")
+        self.projects = (("STP_pw_restore_services", "services", 80),
+                         ("STP_pw_restart_workshops", "industry", 120),
+                         ("STP_pw_integrate_veterans", "army", 60))
+
+    def facts(self, treasury=300):
+        return {("STS", "STP_pw_can_reconstruct", "yes"): True,
+                ("STS", "capital_secure", "yes"): True,
+                ("STS", "variable", "ADISCORD_economy_treasury"): treasury}
+
+    def test_fractional_affordability_and_shared_slot(self):
+        for name, _, price in self.projects:
+            decision = block(self.decisions, name)
+            for balance, expected in ((price - .01, False), (price, True)):
+                facts = self.facts(balance)
+                self.assertEqual(recovery_conditions(block(decision, "custom_cost_trigger"), facts), expected)
+            facts, rewards = self.facts(), []
+            execute_recovery(block(decision, "complete_effect"), facts, rewards)
+            self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 300 - price)
+            for other, _, _ in self.projects:
+                self.assertFalse(recovery_conditions(block(block(self.decisions, other), "available"), facts))
+                execute_recovery(block(block(self.decisions, other), "complete_effect"), facts, rewards)
+            self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 300 - price)
+            self.assertEqual(facts[("STS", "variable", "STP_pw_project_deposit")], price)
+
+    def test_cancel_refunds_once_across_month_end(self):
+        for name, _, price in self.projects:
+            facts, rewards = self.facts(), []
+            decision = block(self.decisions, name)
+            execute_recovery(block(decision, "complete_effect"), facts, rewards)
+            facts[("STS", "variable", "ADISCORD_economy_current_month_action_costs")] = 0
+            facts[("STS", "capital_secure", "yes")] = False
+            execute_recovery(block(decision, "remove_effect"), facts, rewards)
+            execute_recovery(block(decision, "cancel_effect"), facts, rewards)
+            self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 300)
+            self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_current_month_action_costs")], 0)
+            self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_current_month_action_income")], price)
+            self.assertNotIn(("STS", "has_variable", "STP_pw_project_deposit"), facts)
+            self.assertEqual(facts.get(("STS", "variable", "STP_pw_recovery_progress"), 0), 0)
+
+    def test_completion_replay_and_wrong_project_callback(self):
+        facts, rewards = self.facts(1000), []
+        for index, (name, field, _) in enumerate(self.projects, 1):
+            decision = block(self.decisions, name)
+            execute_recovery(block(decision, "complete_effect"), facts, rewards)
+            other = self.projects[index % 3][0]
+            execute_recovery(block(block(self.decisions, other), "remove_effect"), facts, rewards)
+            self.assertIn(("STS", "has_variable", "STP_pw_project_deposit"), facts)
+            execute_recovery(block(decision, "remove_effect"), facts, rewards)
+            snapshot = dict(facts), list(rewards)
+            execute_recovery(block(decision, "remove_effect"), facts, rewards)
+            execute_recovery(block(decision, "cancel_effect"), facts, rewards)
+            self.assertEqual((facts, rewards), snapshot)
+            self.assertEqual(facts[("STS", "variable", "STP_pw_recovery_" + field)], 1)
+            self.assertEqual(facts[("STS", "variable", "STP_pw_recovery_progress")], index)
+        self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 740)
+
+    def test_illegal_targets_cannot_create_campaign_flags(self):
+        for tag in ("VAL", "NOD"):
+            gate = expand(parse_clausewitz(f"STP_pc_can_confront_{tag.lower()} = yes"))
+            facts = package_facts()
+            self.assertTrue(matches_conditions(gate, facts, "STS"))
+            for key in ((tag, "exists", "yes"), (tag, "has_capitulated", "no"), ("STS", "is_subject", "no")):
+                invalid = dict(facts); invalid[key] = False
+                self.assertFalse(matches_conditions(gate, invalid, "STS"), (tag, key))
+            allied = {**facts, ("STS", "is_in_faction_with", tag): True}
+            self.assertFalse(matches_conditions(gate, allied, "STS"))
+            existing = {**facts, ("STS", "has_war_with", tag): True}
+            self.assertTrue(matches_conditions(gate, existing, "STS"))
+            helper = block(self.effects[f"STP_pc_declare_war_{tag.lower()}"], "if")
+            mark = [e.value for e in helper if e.key == "if"][-1]
+            self.assertEqual(scalar(block(mark, "limit"), "has_war_with"), tag)
+
+    def test_invalid_recipient_releases_only_its_receipt_and_advances_queue(self):
+        offer = block(entries(EFFECTS), "STP_pc_offer_liberation_package")
+        accept = option_by_name("ADISCORD_STP_pc.11", "ADISCORD_STP_pc.11.a")
+        close = option_by_name("ADISCORD_STP_pc.11", "ADISCORD_STP_pc.11.c")
+        for invalid in ("war", "subject", "capitulated", "course"):
+            facts, dispatched = package_facts(), []
+            facts.update({("STS", "has_country_flag", "STP_pc_lib_package_pending"): True,
+                          ("STS", "variable", "STP_pc_lib_package_tag"): 1,
+                          ("STS", "has_country_flag", "STP_pc_lib_val_won"): True,
+                          ("STS", "has_country_flag", "STP_pc_lib_nod_won"): True})
+            if invalid == "war":
+                facts[("STS", "has_war_with", "VAL")] = True
+            elif invalid == "subject":
+                facts[("VAL", "is_subject", "no")] = False
+            elif invalid == "capitulated":
+                facts[("VAL", "has_capitulated", "no")] = False
+            else:
+                facts[("STS", "variable", "STP_pc_course")] = 1
+            before = dict(facts)
+            execute_package_effects(accept, facts, dispatched, "VAL")
+            self.assertEqual(facts, before, invalid)
+            execute_package_effects(close, facts, dispatched, "VAL")
+            self.assertNotIn(("VAL", "has_idea", "VAL_liberated_settlement"), facts)
+            self.assertEqual(dispatched, [] if invalid == "course" else [("NOD", "ADISCORD_STP_pc.11")])
+            execute_package_effects(offer, facts, dispatched)
+            self.assertLessEqual(len(dispatched), 1, "the periodic recovery must not repeat an open offer")
+
+    def test_withdrawn_kefreyt_terms_only_allow_closing(self):
+        facts = package_facts()
+        facts.update({("STS", "STP_pw_can_reconstruct", "yes"): True,
+                      ("STS", "variable", "STP_pc_course"): 1})
+        # Use the unexpanded predicate's explicit scenario facts for the event;
+        # its diplomatic guard is separately covered by the target tests.
+        options = [e.value for e in parsed_event("ADISCORD_STP_pc.9") if e.key == "option"]
+        for valid in (False, True):
+            available = []
+            snapshot = {**facts, ("VAL", "STP_pw_kefreyt_terms_current", "yes"): valid,
+                        ("VAL", "STP_pw_kefreyt_terms_current", "no"): not valid}
+            for option in options:
+                if matches_conditions(block(option, "trigger"), snapshot, "VAL"):
+                    available.append(scalar(option, "name"))
+            self.assertEqual(available, ["ADISCORD_STP_pc.9.b", "ADISCORD_STP_pc.9.c"] if valid else ["STP_pc_offer_closed"])
 
 
 if __name__ == "__main__":

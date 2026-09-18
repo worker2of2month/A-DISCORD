@@ -479,3 +479,21 @@ defined_text = {
 	}
 	text = { localization_key = STP_cw_command_timing_ready }
 }
+
+
+defined_text = {
+ name = STPGetRecoveryReport
+ text = { trigger = { tag = STS has_variable = STP_pw_recovery_progress } localization_key = STP_pw_recovery_report }
+ text = { localization_key = STP_REGION_EMPTY_LINE }
+}
+defined_text = {
+ name = STPGetRecoverySlot
+ text = { trigger = { has_variable = STP_pw_project_deposit } localization_key = STP_pw_recovery_slot_busy }
+ text = { localization_key = STP_pw_recovery_slot_free }
+}
+
+defined_text = {
+	name = STPGetHandoffOption
+	text = { trigger = { has_country_flag = STP_sided_with_Maksim_flag STS = { exists = yes } } localization_key = STP_HANDOFF_RESISTANCE }
+	text = { localization_key = STP_HANDOFF_PARTY }
+}

@@ -210,7 +210,7 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
         self.assertNotIn('division_template = "Capital Guard"', unlock)
         self.assertNotIn("ADISCORD_STP_migrate_army_template_lock", effects)
 
-        idea = named_block(read("common/ideas/steland.txt"), "STP_hedonism_with_no_bondaries")
+        idea = named_block(read("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "STP_hedonism_with_no_bondaries")
         self.assertIn("STP_hedonism_army_restriction_tt", idea)
         self.assertIn("ADISCORD_STP_unlock_regular_army_templates = yes", idea)
 

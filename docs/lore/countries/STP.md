@@ -180,7 +180,7 @@
 
 - `history/countries/STP - StepanLand.txt`
 - `common/characters/STP.txt`
-- `common/ideas/steland.txt`
+- `common/ideas/ADISCORD_STP_civil_war_ideas.txt`
 - `common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt`
 - `events/STP_lore_events.txt`
 - `events/ADISCORD_STP_crisis_events.txt`

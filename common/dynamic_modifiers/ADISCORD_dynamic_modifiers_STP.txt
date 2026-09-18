@@ -55,6 +55,14 @@ STP_cw_election_mandate_dynamic = {
 	mobilization_speed = STP_cw_mandate_mobilization
 }
 
+STP_pw_reconstruction_dynamic = {
+	icon = GFX_idea_ADISCORD_law_civic_local_councils
+	enable = { tag = STS }
+	industrial_capacity_factory = STP_pw_recovery_output
+	production_speed_buildings_factor = STP_pw_recovery_construction
+	ADISCORD_economy_admin_expense_factor = STP_pw_recovery_expense
+}
+
 STP_pw_republic_dynamic = {
 	icon = GFX_idea_ADISCORD_law_civic_local_councils
 	enable = { tag = STS }
