@@ -1447,6 +1447,22 @@ country_event = {
 	immediate = { STP_cw_dispatch_operation = yes }
 }
 
+# Debug settlement. ROOT is the defeated union participant.
+country_event = {
+	id = ADISCORD_STP_cw.93
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		has_global_flag = STP_cw_started
+		NOT = { has_global_flag = STP_cw_union_wars_finished }
+		OR = { tag = STP tag = STS }
+	}
+	immediate = {
+		if = { limit = { tag = STS } STP = { STP_cw_settle_union_victory = yes } }
+		else_if = { limit = { tag = STP } STS = { STP_cw_settle_union_victory = yes } }
+	}
+}
+
 country_event = {
 	id = ADISCORD_STP_pc.17
 	title = ADISCORD_STP_pc.17.t

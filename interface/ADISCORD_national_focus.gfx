@@ -79,6 +79,11 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_STP_Steland_Hegemony"
+		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_Steland_Hegemony.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_Show_Him_The_Truth"
 		texturefile = "gfx/interface/goals/focus_generic_self_management.dds"
 	}

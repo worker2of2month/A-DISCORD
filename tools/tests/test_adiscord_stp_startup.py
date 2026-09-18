@@ -212,6 +212,62 @@ class STPCoreContractTests(unittest.TestCase):
         ):
             self.assertRegex(localisation, rf"(?m)^\s*{decision}:\s+\"§RDEBUG:§!")
 
+    def test_scenario_debug_skips_the_civil_war_through_production_effects(self) -> None:
+        categories = named_block(read(DECISION_CATEGORIES), "STP_scenario_debug")
+        self.assertIn("visible = { is_debug = yes }", categories)
+        self.assertIn("tag = STP", categories)
+        self.assertIn("tag = STS", categories)
+        self.assertIn("visible_when_empty = yes", categories)
+
+        debug = named_block(read(DECISIONS), "STP_scenario_debug")
+        start = named_block(debug, "STP_debug_start_civil_war")
+        party = named_block(debug, "STP_debug_resolve_party_victory")
+        shabrat = named_block(debug, "STP_debug_resolve_shabrat_victory")
+        self.assertIn("STP_debug_start_civil_war = yes", start)
+        self.assertIn("STP_debug_resolve_party_victory = yes", party)
+        self.assertIn("STP_debug_resolve_shabrat_victory = yes", shabrat)
+        for block in (start, party, shabrat):
+            self.assertIn("is_debug = yes", named_block(block, "visible"))
+            self.assertIn("ai_will_do = { factor = 0 }", block)
+            self.assertIn("hidden_effect", block)
+
+        effects = read(EFFECTS)
+        ensure = named_block(effects, "STP_debug_ensure_union_war")
+        self.assertIn("STP_cw_open_preparation = yes", ensure)
+        self.assertIn("set_country_flag = STP_cw_elections_finished", ensure)
+        self.assertIn("STP_cw_start = yes", ensure)
+        self.assertIn("STP_cw_begin_hostilities = yes", ensure)
+        self.assertNotIn("STP_cw_can_start = yes", ensure)
+
+        party_effect = named_block(effects, "STP_debug_resolve_party_victory")
+        shabrat_effect = named_block(effects, "STP_debug_resolve_shabrat_victory")
+        self.assertIn("set_country_flag = STP_cw_party_election_victory", party_effect)
+        self.assertIn("STS = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }", party_effect)
+        self.assertIn("set_country_flag = STP_cw_shabrat_election_victory", shabrat_effect)
+        self.assertIn("STP = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }", shabrat_effect)
+        self.assertIn("change_tag_from = STS", party_effect)
+        self.assertIn("change_tag_from = STP", shabrat_effect)
+
+        events = read(ROOT / "events/ADISCORD_STP_events.txt")
+        dispatcher = next(
+            candidate
+            for match in re.finditer(r"(?m)^country_event\s*=", events)
+            if "id = ADISCORD_STP_cw.93" in (candidate := named_block(events[match.start():], "country_event"))
+        )
+        self.assertIn("hidden = yes", dispatcher)
+        self.assertIn("STP_cw_settle_union_victory = yes", dispatcher)
+        self.assertIn("if = { limit = { tag = STS } STP = { STP_cw_settle_union_victory = yes } }", dispatcher)
+        self.assertIn("else_if = { limit = { tag = STP } STS = { STP_cw_settle_union_victory = yes } }", dispatcher)
+
+        localisation = read(LOCALISATION)
+        for key in (
+            "STP_scenario_debug",
+            "STP_debug_start_civil_war",
+            "STP_debug_resolve_party_victory",
+            "STP_debug_resolve_shabrat_victory",
+        ):
+            self.assertRegex(localisation, rf"(?m)^\s*{key}:\s+\"§RDEBUG:§!")
+
     def test_debug_controls_cannot_bypass_the_normal_election_campaign(self) -> None:
         decisions = read(DECISIONS)
         names = re.findall(r"^\s*(STP_debug_\w+)\s*=\s*\{", decisions, re.MULTILINE)

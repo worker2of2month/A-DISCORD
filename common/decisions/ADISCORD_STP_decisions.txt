@@ -3410,3 +3410,47 @@ STP_imperial_union_category = {
 		ai_will_do = { factor = 10 }
 	}
 }
+
+STP_scenario_debug = {
+	STP_debug_start_civil_war = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { is_debug = yes NOT = { has_global_flag = STP_cw_started } }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_debug_start_civil_war_desc
+			hidden_effect = { STP_debug_start_civil_war = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	STP_debug_resolve_party_victory = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = STP tag = STS } }
+		visible = { is_debug = yes NOT = { has_global_flag = STP_cw_union_wars_finished } }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_debug_resolve_party_victory_desc
+			hidden_effect = { STP_debug_resolve_party_victory = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	STP_debug_resolve_shabrat_victory = {
+		icon = generic_prepare_civil_war
+		allowed = { OR = { tag = STP tag = STS } }
+		visible = { is_debug = yes NOT = { has_global_flag = STP_cw_union_wars_finished } }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_debug_resolve_shabrat_victory_desc
+			hidden_effect = { STP_debug_resolve_shabrat_victory = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+}

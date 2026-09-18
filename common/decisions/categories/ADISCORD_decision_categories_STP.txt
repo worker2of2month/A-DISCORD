@@ -9,6 +9,13 @@ STP_elections_in_the_party = {
 	priority = 1
 }
 
+STP_scenario_debug = {
+	allowed = { OR = { tag = STP tag = STS } }
+	visible = { is_debug = yes }
+	visible_when_empty = yes
+	priority = 100
+}
+
 STP_shabrat_election_bop_category = {
 	allowed = { tag = STP }
 }

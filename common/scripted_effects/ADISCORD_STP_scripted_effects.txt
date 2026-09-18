@@ -4570,3 +4570,62 @@ STP_cw_finish_disruption = {
 		else = { STP_cw_refund_disruption = yes }
 	}
 }
+
+# Debug skips keep STP_cw_can_start intact: they write the election result, then
+# call the production split. Settlement goes through .93 so ROOT is the loser.
+STP_debug_ensure_union_war = {
+	if = {
+		limit = { NOT = { has_global_flag = STP_cw_started } STP = { exists = yes } }
+		STP = {
+			if = {
+				limit = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+				set_country_flag = STP_sided_with_the_party_flag
+			}
+			STP_cw_open_preparation = yes
+			set_country_flag = STP_cw_elections_finished
+			STP_cw_start = yes
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_global_flag = STP_cw_union_wars_finished } }
+		STP = { STP_cw_begin_hostilities = yes }
+	}
+}
+
+STP_debug_start_civil_war = {
+	STP_debug_ensure_union_war = yes
+}
+
+STP_debug_resolve_party_victory = {
+	if = {
+		limit = { NOT = { has_global_flag = STP_cw_started } }
+		STP = {
+			clr_country_flag = STP_sided_with_Maksim_flag
+			set_country_flag = STP_sided_with_the_party_flag
+			set_country_flag = STP_cw_party_election_victory
+		}
+	}
+	STP_debug_ensure_union_war = yes
+	if = {
+		limit = { has_global_flag = STP_cw_started NOT = { has_global_flag = STP_cw_union_wars_finished } STP = { exists = yes } STS = { exists = yes } }
+		if = { limit = { is_ai = no tag = STS } STP = { change_tag_from = STS } }
+		STS = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }
+	}
+}
+
+STP_debug_resolve_shabrat_victory = {
+	if = {
+		limit = { NOT = { has_global_flag = STP_cw_started } }
+		STP = {
+			clr_country_flag = STP_sided_with_the_party_flag
+			set_country_flag = STP_sided_with_Maksim_flag
+			set_country_flag = STP_cw_shabrat_election_victory
+		}
+	}
+	STP_debug_ensure_union_war = yes
+	if = {
+		limit = { has_global_flag = STP_cw_started NOT = { has_global_flag = STP_cw_union_wars_finished } STP = { exists = yes } STS = { exists = yes } }
+		if = { limit = { is_ai = no tag = STP } STS = { change_tag_from = STP } }
+		STP = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }
+	}
+}

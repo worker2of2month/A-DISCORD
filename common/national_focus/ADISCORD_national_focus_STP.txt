@@ -3248,7 +3248,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_hegemony_open
-		icon = GFX_focus_STP_Govern_In_His_Name
+		icon = GFX_focus_STP_Steland_Hegemony
 		x = 12
 		y = 5
 		cost = 3
@@ -3296,7 +3296,7 @@ focus_tree = {
 		id = STP_pc_shared_archive_policy
 		icon = GFX_focus_STP_cw_expose_the_cabinet
 		x = 16
-		y = 5
+		y = 6
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_course_continues = yes }
 		available = {

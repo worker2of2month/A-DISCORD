@@ -1360,12 +1360,18 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("entity = ADISCORD_vorkerland_pyramid_entity", intact)
         self.assertNotIn("ADISCORD_unity_tower_collapse_entity", sync)
         animate = named_block(effects, "ADISCORD_vorkerland_animate_unity_tower_destruction")
+        smoke = named_block(effects, "ADISCORD_vorkerland_clear_dirty_zone_smoke")
         actors = named_blocks(sync, "create_entity") + named_blocks(animate, "create_entity")
         self.assertEqual(len(actors), 3)
         # All forms must replace one actor at the same transform, including on load.
         for field in ("id", "x", "y", "z", "rotation", "scale", "min_zoom"):
             values = [re.search(rf"\b{field}\s*=\s*([^\s}}]+)", actor).group(1) for actor in actors]
             self.assertEqual(len(set(values)), 1, (field, values))
+        self.assertEqual({re.search(r"min_zoom\s*=\s*([^\s}]+)", actor).group(1) for actor in actors}, {"50"})
+        for block in (sync, animate):
+            self.assertIn("destroy_entity = 610040", named_block(block, "40"))
+        self.assertIn(f"{sync_name} = yes", smoke)
+        self.assertIn("destroy_entity = 610040", named_block(smoke, "else"))
         startup = named_block(read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_startup")
         # Startup has no scope. Use the permanent landmark state even if WRK
         # no longer exists after the civil war.
@@ -1386,6 +1392,14 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertFalse(named_blocks(ruins, "event"))
         restored = next(block for block in entities if 'name = "ADISCORD_unity_tower_ruins_entity"' in block)
         self.assertIn('default_state = "ruins"', restored)
+        destruction_meshes = [
+            block
+            for block in named_blocks(read("gfx/entities/mapitems_custom.gfx"), "pdxmesh")
+            if 'name = "ADISCORD_unity_tower_destruction_mesh"' in block
+        ]
+        self.assertEqual(len(destruction_meshes), 1)
+        self.assertIn('shader = "PdxMeshStandard"', destruction_meshes[0])
+        self.assertNotIn('shader = "PdxMeshAdvanced"', destruction_meshes[0])
 
     def test_tower_is_one_shot_and_dirty_zone_waits_three_years(self) -> None:
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
@@ -1398,9 +1412,12 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertNotIn(tower_guard, outbreak_trigger)
         self.assertEqual(outbreak.count(f"set_global_flag = {tower_guard}"), 1)
         self.assertEqual(events.count("launch_nuke = {"), 1)
-        self.assertEqual(outbreak.count("launch_nuke = {"), 1)
+        self.assertEqual(outbreak.count("launch_nuke = {"), 0)
+        self.assertNotIn("ADISCORD_vorkerland_animate_unity_tower_destruction = yes", outbreak)
         tower_destruction_blocks = [
-            block for block in named_blocks(outbreak, "if") if "launch_nuke = {" in block
+            block
+            for block in named_blocks(outbreak, "if")
+            if "ADISCORD_vorkerland_collapse.3 hours = 1" in block
         ]
         self.assertEqual(len(tower_destruction_blocks), 1)
         tower_destruction = tower_destruction_blocks[0]
@@ -1408,25 +1425,45 @@ class BorderWarArchitectureTests(unittest.TestCase):
             f"NOT = {{ has_global_flag = {tower_guard} }}",
             tower_destruction,
         )
-        self.assertIn(f"goto_province = {UNITY_TOWER_PROVINCE}", tower_destruction)
-        tower_launch = named_block(tower_destruction, "launch_nuke")
+        self.assertIn("ADISCORD_vorkerland_focus_human_cameras_on_vorkensberg = yes", tower_destruction)
+        self.assertIn(
+            "WKR = { country_event = { id = ADISCORD_vorkerland_collapse.3 hours = 1 } }",
+            tower_destruction,
+        )
+        self.assertLess(
+            outbreak.rfind("change_tag_from"),
+            outbreak.find("ADISCORD_vorkerland_collapse.3 hours = 1"),
+        )
+        approach = event_block(events, "ADISCORD_vorkerland_collapse.3")
+        detonation = event_block(events, "ADISCORD_vorkerland_collapse.4")
+        self.assertIn("ADISCORD_vorkerland_focus_human_cameras_on_unity_tower = yes", approach)
+        self.assertIn(
+            "country_event = { id = ADISCORD_vorkerland_collapse.4 hours = 1 }",
+            approach,
+        )
+        self.assertNotIn("launch_nuke = {", approach)
+        tower_launch = named_block(detonation, "launch_nuke")
         self.assertIn(f"province = {UNITY_TOWER_PROVINCE}", tower_launch)
-        tower_state_damage = named_block(tower_destruction, str(UNITY_TOWER_STATE))
+        tower_state_damage = named_block(detonation, str(UNITY_TOWER_STATE))
         self.assertEqual(tower_state_damage.count("damage_building = {"), 1)
         self.assertIn("type = infrastructure", tower_state_damage)
         self.assertNotIn("type = rail_way", tower_state_damage)
         self.assertNotIn("type = anti_air_building", tower_state_damage)
         self.assertLess(
             tower_destruction.find(f"set_global_flag = {tower_guard}"),
-            tower_destruction.find(f"goto_province = {UNITY_TOWER_PROVINCE}"),
-        )
-        self.assertLess(
-            tower_destruction.find(f"goto_province = {UNITY_TOWER_PROVINCE}"),
-            tower_destruction.find("launch_nuke = {"),
+            tower_destruction.find("ADISCORD_vorkerland_focus_human_cameras_on_vorkensberg = yes"),
         )
         self.assertEqual(
-            tower_destruction.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes"), 1,
+            detonation.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes"), 1,
         )
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        city_focus = named_block(effects, "ADISCORD_vorkerland_focus_human_cameras_on_vorkensberg")
+        tower_focus = named_block(effects, "ADISCORD_vorkerland_focus_human_cameras_on_unity_tower")
+        for tag in ("WRK", "WKR", "VAD", "TVA"):
+            self.assertIn(f"{tag} = {{ exists = yes is_ai = no }}", city_focus)
+            self.assertIn(f"{tag} = {{ goto_state = 32 }}", city_focus)
+            self.assertIn(f"{tag} = {{ exists = yes is_ai = no }}", tower_focus)
+            self.assertIn(f"{tag} = {{ goto_province = {UNITY_TOWER_PROVINCE} }}", tower_focus)
 
         launch_producers: list[tuple[str, str]] = []
         for gameplay_directory in ("common", "events", "history"):
@@ -1831,10 +1868,11 @@ class FrontAndSupplyTests(unittest.TestCase):
         expire_call = outbreak.find(
             "ADISCORD_vorkerland_expire_precollapse_itoran_armistice = yes"
         )
+        apply_map = outbreak.find("ADISCORD_vorkerland_apply_initial_map = yes")
         tower_guard = outbreak.find(
             "set_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved"
         )
-        self.assertTrue(collapse_started < expire_call < tower_guard)
+        self.assertTrue(collapse_started < expire_call < apply_map < tower_guard)
 
         gameplay_sources: list[tuple[str, str]] = []
         for gameplay_directory in ("common", "events", "history"):
