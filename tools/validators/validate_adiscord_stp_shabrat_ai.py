@@ -376,6 +376,7 @@ def run_checks() -> list[tuple[str, bool, str]]:
     )
 
     army = named_block(strategy_text, "STS_shabrat_civil_war_army")
+    abilia = named_block(strategy_text, "STS_cw_defend_abilia")
     val_front = named_block(strategy_text, "STS_shabrat_val_front")
     sts_front = named_block(strategy_text, "STS_cw_front_against_stp")
     add("Shabrat army strategy exists", bool(army))
@@ -385,7 +386,10 @@ def run_checks() -> list[tuple[str, bool, str]]:
     add("Shabrat army consider_weak STP", "consider_weak id = STP" in army)
     add("Shabrat army concentrates", "force_concentration_factor" in army)
     add("Shabrat army produces infantry", "equipment_production_factor id = infantry" in army)
-    add("Shabrat army holds Abilia", "states = { 1 }" in army)
+    add(
+        "Shabrat reserve holds Abilia without stacking",
+        "states = { 1 }" in abilia and "ratio = 0.05" in abilia and "put_unit_buffers" not in army,
+    )
     add("STS front rush_weak", "execution_type = rush_weak" in sts_front)
     add("VAL front exists", bool(val_front) and "tag = VAL" in val_front)
     add("strategy file has no add_ai_strategy", "add_ai_strategy" not in strategy_text)

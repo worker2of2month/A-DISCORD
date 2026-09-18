@@ -11,16 +11,50 @@ STP_cw_defend_fada = {
 	}
 }
 
+# Keep one small reserve while NOD prepares to intervene. Once it joins,
+# the live NOD front takes over instead of competing with a rear-area buffer.
 STS_cw_defend_abilia = {
 	allowed = { original_tag = STS }
-	enable = { has_global_flag = STP_cw_started has_war = yes }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_global_flag = STP_cw_started
+		NOT = { has_global_flag = STP_cw_union_wars_finished }
+		has_war_with = STP
+		controls_state = 1
+		NOD = {
+			NOD_cw_intervention_possible = yes
+			has_country_flag = NOD_cw_intervention_approved
+			NOT = { has_war_with = STS }
+		}
+	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = put_unit_buffers
-		ratio = 0.08
+		ratio = 0.05
 		states = { 1 }
 		subtract_invasions_from_need = yes
-		subtract_fronts_from_need = yes
+		# The party front must not subtract the pending-intervention reserve.
+		subtract_fronts_from_need = no
+	}
+}
+
+STS_cw_deprioritize_neutral_borders = {
+	allowed = { original_tag = STS }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_global_flag = STP_cw_started
+		NOT = { has_global_flag = STP_cw_union_wars_finished }
+		has_war_with = STP
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		# The target country is in scope; FROM is the allocating country.
+		# Actual belligerents must never receive the neutral-border reduction.
+		country_trigger = { NOT = { has_war_with = FROM } }
+		value = -100
 	}
 }
 
@@ -62,13 +96,6 @@ STS_shabrat_civil_war_army = {
 	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1500 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
 	ai_strategy = { type = conquer id = STP value = 250 }
 	ai_strategy = { type = dont_defend_ally_borders value = 1 }
-	ai_strategy = {
-		type = put_unit_buffers
-		ratio = 0.10
-		states = { 1 }
-		subtract_invasions_from_need = yes
-		subtract_fronts_from_need = yes
-	}
 }
 
 STS_shabrat_val_front = {
