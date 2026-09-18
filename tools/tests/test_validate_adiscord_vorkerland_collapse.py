@@ -1312,17 +1312,23 @@ class BorderWarArchitectureTests(unittest.TestCase):
 
     def test_collapse_opening_news_is_immediate_and_single_shot(self) -> None:
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         news = read("events/ADISCORD_superevents.txt")
         outbreak = named_block(events, "country_event")
-        self.assertEqual(events.count("id = ADISCORD_superevent_news.1"), 1)
-        self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_collapse_news_shown }", outbreak)
-        self.assertIn("set_global_flag = ADISCORD_vorkerland_collapse_news_shown", outbreak)
-        opening = named_block(outbreak, "news_event")
+        announce = named_block(effects, "ADISCORD_vorkerland_announce_first_central_war")
+        central_launch = named_block(effects, "ADISCORD_vorkerland_launch_central_local_brackets")
+        self.assertEqual(events.count("id = ADISCORD_superevent_news.1"), 0)
+        self.assertNotIn("ADISCORD_superevent_news.1", outbreak)
+        self.assertEqual(effects.count("ADISCORD_vorkerland_announce_first_central_war = yes"), 1)
+        self.assertIn("ADISCORD_vorkerland_announce_first_central_war = yes", central_launch)
+        self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_collapse_news_shown }", announce)
+        self.assertIn("set_global_flag = ADISCORD_vorkerland_collapse_news_shown", announce)
+        opening = named_block(announce, "news_event")
         for delayed in ("hours =", "days =", "random_hours", "random_days"):
             self.assertNotIn(delayed, opening)
         self.assertLess(
-            outbreak.find("ADISCORD_vorkerland_apply_claimant_cosmetics = yes"),
-            outbreak.find("news_event = { id = ADISCORD_superevent_news.1 }"),
+            central_launch.find("ADISCORD_vorkerland_open_local_bracket_wars = yes"),
+            central_launch.find("ADISCORD_vorkerland_announce_first_central_war = yes"),
         )
         opening_definition = re.search(
             r"(?ms)^news_event\s*=\s*\{\s*#vorkerland civilwar\b(.*?)(?=^news_event\s*=|\Z)",
@@ -1339,7 +1345,8 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertNotIn("every_country", opening_definition.group(1))
         self.assertNotIn("scoped_sound_effect", opening_definition.group(1))
         news_loc = read("localisation/russian/events_l_russian.yml")
-        self.assertIn('news.0.t: "Конец единого Воркерланда"', news_loc)
+        self.assertIn('news.0.t: "Начало боёв в Воркерланде"', news_loc)
+        self.assertIn('news.0.a: "Приблизиться к Башне Единства."', news_loc)
         superevent_loc = read("localisation/russian/ADISCORD_superevents_l_russian.yml")
         self.assertNotIn(
             'superevent_vorkerland_fragmented_title: "Конец единого Воркерланда"',
@@ -1419,17 +1426,14 @@ class BorderWarArchitectureTests(unittest.TestCase):
         tower_guard = "ADISCORD_vorkerland_unity_tower_destruction_resolved"
         outbreak_trigger = named_block(outbreak, "trigger")
         self.assertNotIn(tower_guard, outbreak_trigger)
-        self.assertEqual(outbreak.count(f"set_global_flag = {tower_guard}"), 1)
+        self.assertEqual(outbreak.count(f"set_global_flag = {tower_guard}"), 0)
+        self.assertNotIn("ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes", outbreak)
         self.assertEqual(events.count("launch_nuke = {"), 1)
         self.assertEqual(outbreak.count("launch_nuke = {"), 0)
         self.assertNotIn("ADISCORD_vorkerland_animate_unity_tower_destruction = yes", outbreak)
-        tower_destruction_blocks = [
-            block
-            for block in named_blocks(outbreak, "if")
-            if "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes" in block
-        ]
-        self.assertEqual(len(tower_destruction_blocks), 1)
-        tower_destruction = tower_destruction_blocks[0]
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        announce = named_block(effects, "ADISCORD_vorkerland_announce_first_central_war")
+        tower_destruction = announce
         self.assertIn(
             f"NOT = {{ has_global_flag = {tower_guard} }}",
             tower_destruction,
@@ -1438,10 +1442,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes",
             tower_destruction,
         )
-        self.assertLess(
-            outbreak.rfind("change_tag_from"),
-            outbreak.find("ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes"),
-        )
+        self.assertGreater(outbreak.rfind("change_tag_from"), -1)
         approach = event_block(events, "ADISCORD_vorkerland_collapse.3")
         detonation = event_block(events, "ADISCORD_vorkerland_collapse.4")
         settle = event_block(events, "ADISCORD_vorkerland_collapse.5")
@@ -1889,10 +1890,11 @@ class FrontAndSupplyTests(unittest.TestCase):
             "ADISCORD_vorkerland_expire_precollapse_itoran_armistice = yes"
         )
         apply_map = outbreak.find("ADISCORD_vorkerland_apply_initial_map = yes")
-        tower_guard = outbreak.find(
-            "set_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved"
+        self.assertTrue(0 <= collapse_started < expire_call < apply_map)
+        self.assertEqual(
+            outbreak.find("set_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved"),
+            -1,
         )
-        self.assertTrue(collapse_started < expire_call < apply_map < tower_guard)
 
         gameplay_sources: list[tuple[str, str]] = []
         for gameplay_directory in ("common", "events", "history"):

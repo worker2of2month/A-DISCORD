@@ -110,8 +110,8 @@ news_event = { #vorkerland civilwar
 
 	major = yes
 
-	# The collapse caller owns the save-safe one-shot guard. Keeping the event
-	# reusable also permits a deterministic console/runtime audio check.
+	# The first-war announcer owns the save-safe one-shot guard. Keeping the
+	# event reusable also permits a deterministic console/runtime audio check.
 	fire_only_once = no
 
 	is_triggered_only = yes

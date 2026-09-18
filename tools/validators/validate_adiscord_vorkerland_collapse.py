@@ -1157,12 +1157,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     apply_map_position = collapse_outbreak.find(
         "ADISCORD_vorkerland_apply_initial_map = yes"
     )
-    tower_position = collapse_outbreak.find(
-        "set_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved"
-    )
-    if not 0 <= collapse_started_position < expiration_position < apply_map_position < tower_position:
+    if not 0 <= collapse_started_position < expiration_position < apply_map_position:
         issues.append(
-            "collapse.1 must record collapse, expire the Itoran DMZ, transfer the landmark state, then execute the Tower block"
+            "collapse.1 must record collapse, expire the Itoran DMZ, then transfer the landmark state"
         )
 
     expected_writer = "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
@@ -1248,16 +1245,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append("Unity Tower explosion must wait for the camera approach events")
     if outbreak.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes") != 0:
         issues.append("Unity Tower clip must wait for the camera approach events")
-    tower_destruction_blocks = [
-        block
-        for block in named_blocks(announce, "if")
-        if "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes" in block
-    ]
-    if len(tower_destruction_blocks) != 1:
-        issues.append("Unity Tower camera approach must have one executing one-shot guard block")
-        tower_destruction = ""
-    else:
-        tower_destruction = tower_destruction_blocks[0]
+    tower_destruction = announce
     for token in (
         f"NOT = {{ has_global_flag = {tower_guard} }}",
         f"set_global_flag = {tower_guard}",
