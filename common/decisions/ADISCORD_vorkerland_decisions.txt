@@ -2074,9 +2074,8 @@ available = { custom_trigger_tooltip = { tooltip = ADISCORD_vorkerland_central_s
 		ai_will_do = { factor = 400 }
 	}
 
-	# Oitfort remains outside WRK after the central war: Worx preserves it as a
-	# protectorate, while the other winners leave it sovereign. Any later direct
-	# integration is optional and never blocks the other historical centres.
+	# Oitfort is absorbed automatically when terminal WRK forms. This decision
+	# grants the national core only after state 34 is fully owned and controlled.
 	ADISCORD_vorkerland_restore_core_oitfort = {
 		icon = generic_territory_or_war
 		allowed = { tag = WRK }
