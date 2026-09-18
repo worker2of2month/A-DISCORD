@@ -3418,6 +3418,19 @@ STP_cw_cache_state_occupier = {
 		}
 		ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 5 } }
 	}
+	# A Shabrat subject or coalition partner holding the enemy capital is still
+	# military credit for the scripted STS campaign, not an unrelated conquest.
+	else_if = {
+		limit = {
+			ROOT = { OR = { tag = VAL tag = NOD } }
+			STS = { has_war_with = ROOT }
+			controller = {
+				has_war_with = ROOT
+				OR = { is_subject_of = STS is_in_faction_with = STS }
+			}
+		}
+		ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
+	}
 	else_if = { limit = { controller = { tag = STP } NOT = { ROOT = { tag = STP } } } ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 1 } } }
 	else_if = { limit = { controller = { tag = STS } NOT = { ROOT = { tag = STS } } } ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } } }
 	else_if = { limit = { controller = { tag = SRP } NOT = { ROOT = { tag = SRP } } } ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 3 } } }
