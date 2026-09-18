@@ -4142,6 +4142,7 @@ STP_pc_recover_stelander_cores_from_val = {
 				OR = {
 					is_core_of = STS
 					is_core_of = STP
+					state = 42
 					state = 52
 					state = 55
 				}
