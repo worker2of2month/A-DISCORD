@@ -491,7 +491,7 @@ STP_battle_for_stelander = {
 				}
 			}
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 3  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_cw_disperse_network = {
@@ -690,6 +690,7 @@ STP_battle_for_stelander = {
 			base = 5
 			modifier = { factor = 2 FROM = { STP_region_party_strongest = yes } }
 			modifier = { factor = 3 FROM = { OR = { state = 2 state = 3 } } }
+			modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } }
 		}
 	}
 
@@ -741,6 +742,7 @@ STP_battle_for_stelander = {
 		ai_will_do = {
 			base = 4
 			modifier = { factor = 2 FROM = { STP_region_party_strongest = yes } }
+			modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } }
 		}
 	}
 
@@ -974,8 +976,10 @@ STP_battle_for_stelander = {
 			}
 		}
 		ai_will_do = {
-			base = 8
-			modifier = { factor = 0 check_variable = { var = STP_party_suspicion value = 80 compare = greater_than_or_equals } }
+			base = 40
+			modifier = { factor = 2 check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } }
+			modifier = { factor = 2 check_variable = { var = STP_party_suspicion value = 70 compare = greater_than_or_equals } }
+			modifier = { factor = 2 check_variable = { var = STP_party_suspicion value = 90 compare = greater_than_or_equals } }
 		}
 	}
 
@@ -1013,7 +1017,7 @@ STP_battle_for_stelander = {
 				FROM = { clr_state_flag = STP_cw_district_operation_in_progress } STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = { base = 5  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_region_unique_operation_3 = {
@@ -1054,7 +1058,96 @@ STP_battle_for_stelander = {
 				FROM = { clr_state_flag = STP_cw_district_operation_in_progress } STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 6 }
+		ai_will_do = { base = 6  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
+	}
+
+	STP_cw_secure_niansas_administration = {
+		icon = GFX_decision_ADISCORD_state_directive
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_cw_repair_niansas
+			has_country_flag = STP_sided_with_Maksim_flag
+			has_country_flag = STP_battle_for_stelander_active
+			FROM = {
+				state = 3
+				STP_region_resistance_entrenched = yes
+				NOT = { STP_region_resistance_overwhelming = yes }
+				NOT = { has_state_flag = STP_niansas_transfer_secured }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = { tooltip = STP_cw_niansas_positive_legitimacy_tt STP_cw_shabrat_positive_legitimacy = yes }
+			FROM = {
+				state = 3
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+				custom_trigger_tooltip = { tooltip = STP_preparation_district_open_tt STP_region_is_operable = yes }
+				STP_region_resistance_entrenched = yes
+			}
+			custom_trigger_tooltip = { tooltip = STP_preparation_slot_available_tt STP_has_political_action_slot = yes }
+		}
+		state_target = yes
+		targets = { 3 }
+		target_trigger = { FROM = { state = 3 is_owned_by = ROOT } }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		cost = 25
+		days_remove = 14
+		fire_only_once = no
+		cancel_trigger = {
+			hidden_trigger = {
+				OR = {
+					NOT = { has_country_flag = STP_battle_for_stelander_active }
+					NOT = { STP_cw_shabrat_positive_legitimacy = yes }
+					FROM = { NOT = { STP_region_is_operable = yes } }
+					FROM = { NOT = { is_owned_by = ROOT } }
+					FROM = { NOT = { STP_region_resistance_entrenched = yes } }
+				}
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				FROM = { set_state_flag = STP_cw_district_operation_in_progress }
+				STP_political_action_slot_consume = yes
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				FROM = { clr_state_flag = STP_cw_district_operation_in_progress }
+				STP_political_action_slot_release = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_cw_secure_niansas_result_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_cw_shabrat_positive_legitimacy = yes
+						FROM = {
+							state = 3
+							STP_region_is_operable = yes
+							STP_region_resistance_entrenched = yes
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+						}
+					}
+					FROM = {
+						set_state_flag = STP_niansas_transfer_secured
+						set_temp_variable = { var = STP_region_influence_change value = 4 }
+						STP_add_resistance_influence = yes
+						STP_mark_region_player_action = yes
+					}
+					set_temp_variable = { var = STP_party_suspicion_change value = 4 }
+					STP_change_party_suspicion = yes
+				}
+				FROM = { clr_state_flag = STP_cw_district_operation_in_progress }
+				STP_political_action_slot_release = yes
+			}
+		}
+		ai_will_do = {
+			base = 18
+			modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } }
+		}
 	}
 
 	STP_region_unique_operation_29 = {
@@ -1091,7 +1184,7 @@ STP_battle_for_stelander = {
 				FROM = { clr_state_flag = STP_cw_district_operation_in_progress } STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 7 }
+		ai_will_do = { base = 7  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_region_unique_operation_45 = {
@@ -1135,7 +1228,7 @@ STP_battle_for_stelander = {
 				FROM = { clr_state_flag = STP_cw_district_operation_in_progress } STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 8  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_region_unique_operation_46 = {
@@ -1176,7 +1269,7 @@ STP_battle_for_stelander = {
 				FROM = { clr_state_flag = STP_cw_district_operation_in_progress } STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 6 }
+		ai_will_do = { base = 6  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_region_unique_operation_53 = {
@@ -1235,7 +1328,7 @@ STP_battle_for_stelander = {
 				STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = { base = 5  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_cw_sabotage_capital = {
@@ -1294,7 +1387,7 @@ STP_battle_for_stelander = {
 				STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 4 }
+		ai_will_do = { base = 4  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_cw_sabotage_party_industry = {
@@ -1353,7 +1446,7 @@ STP_battle_for_stelander = {
 				STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 4 }
+		ai_will_do = { base = 4  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_party_inspection_state_2 = {
