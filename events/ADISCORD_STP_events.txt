@@ -1238,7 +1238,7 @@ country_event = {
 				limit = { is_subject_of = VAL }
 				every_owned_state = {
 					limit = {
-						OR = { state = 43 state = 44 state = 88 }
+						OR = { state = 43 state = 44 state = 45 state = 88 }
 						OR = { is_core_of = STP is_core_of = STS }
 						OR = { is_controlled_by = OCA is_controlled_by = STS }
 					}
