@@ -181,8 +181,8 @@ class ShabratRiskAndRegionalTransferTests(unittest.TestCase):
         for token in (
             "90%",
             "Дорога через Ниансас",
-            "минимальный перевес легитимности",
-            "STP_cw_secure_niansas_administration",
+            "положительного перевеса легитимности",
+            "Перехватить областное управление",
         ):
             with self.subTest(token=token):
                 self.assertIn(token, loc)
