@@ -76,3 +76,29 @@ STP_imperial_union_category = {
 		NOT = { has_country_flag = STP_imperial_union_proclaimed }
 	}
 }
+
+STP_postwar_reconstruction_drive = {
+	icon = generic_construction
+	allowed = { tag = STS }
+	visible = {
+		tag = STS
+		has_country_flag = STP_cw_postwar
+		has_completed_focus = STP_pc_after_victory
+		NOT = { has_country_flag = STP_pw_reconstruction_drive_completed }
+	}
+	visible_when_empty = yes
+	priority = 18
+}
+
+STP_postwar_propaganda_campaigns = {
+	icon = generic_propaganda_campaigns
+	allowed = { tag = STS }
+	visible = {
+		tag = STS
+		has_country_flag = STP_cw_postwar
+		has_completed_focus = STP_pc_development_country_must_live
+	}
+	visible_when_empty = yes
+	priority = 17
+}
+
