@@ -684,7 +684,7 @@ class PostwarContinuationContracts(unittest.TestCase):
         recovery_text = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         recovery_text = recovery_text[recovery_text.index("STP_pc_recover_stelander_cores_from_val = {"):]
         recovery_text = recovery_text[:recovery_text.index("\nSTP_pc_begin_settlement = {")]
-        for token in ("is_core_of = STS", "is_core_of = STP", "state = 52", "state = 55",
+        for token in ("is_core_of = STS", "is_core_of = STP", "state = 42", "state = 52", "state = 55",
                       "is_owned_by = VAL", "is_subject_of = VAL", "transfer_state_to = STS",
                       "add_core_of = STS", "set_state_controller_to = STS"):
             self.assertIn(token, recovery_text)
