@@ -1,0 +1,56 @@
+name: Stelander audit
+on:
+  push:
+    branches: [fix/stp-audit-local-control]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/gfx/
+            !/music/
+            !/sound/
+            !/map/
+            !/tools/assets/
+            /map/*.txt
+            /map/*.csv
+            /map/strategicregions/
+      - name: Run Stelander tests and preserve diagnostics
+        run: |
+          mkdir -p /tmp/stp-audit
+          python - <<'PY'
+          import importlib, json, pathlib, subprocess, sys, unittest, zipfile
+          root = pathlib.Path.cwd()
+          modules = sorted(p for p in (root / 'tools/tests').glob('test_*stp*.py'))
+          suite = unittest.TestSuite()
+          loader = unittest.TestLoader()
+          for path in modules:
+              suite.addTests(loader.loadTestsFromName('tools.tests.' + path.stem))
+          with open('/tmp/stp-audit/tests.log', 'w', encoding='utf-8') as stream:
+              result = unittest.TextTestRunner(stream=stream, verbosity=2).run(suite)
+          report = {'commit': subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip(), 'modules': [p.name for p in modules], 'tests': result.testsRun, 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped)}
+          pathlib.Path('/tmp/stp-audit/summary.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+          print(json.dumps(report, indent=2))
+          paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', 'HEAD'], text=True).splitlines()
+          pathlib.Path('/tmp/stp-audit/tracked-paths.txt').write_text('\n'.join(paths), encoding='utf-8')
+          suffixes = {'.py', '.txt', '.yml', '.yaml', '.gui', '.gfx', '.md', '.json', '.csv', '.lua', '.mod', '.asset', '.fxh', '.shader'}
+          with zipfile.ZipFile('/tmp/stp-audit/source.zip', 'w', compression=zipfile.ZIP_DEFLATED) as archive:
+              for name in paths:
+                  path = root / name
+                  if path.is_file() and path.suffix.lower() in suffixes and path.stat().st_size < 10000000:
+                      archive.write(path, name)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-audit
+          path: /tmp/stp-audit/
+          retention-days: 7
