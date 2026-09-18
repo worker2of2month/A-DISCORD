@@ -4177,6 +4177,7 @@ STP_pc_begin_settlement = {
 			set_variable = { var = STP_pc_this_opponent value = 1 }
 			set_variable = { var = STP_pc_this_result value = 1 }
 			STP_pc_recover_stelander_cores_from_val = yes
+			VAL = { VAL_enter_stelander_defeat = yes }
 			if = { limit = { has_war_with = VAL } white_peace = VAL }
 		}
 		else_if = {
