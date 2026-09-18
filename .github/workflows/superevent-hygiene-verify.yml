@@ -1,0 +1,14 @@
+name: Superevent hygiene verification
+
+on:
+  push:
+    branches:
+      - cleanup/superevents-hygiene-20260918
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run superevent hygiene tests
+        run: python -m unittest tools.tests.test_validate_adiscord_superevents -v
