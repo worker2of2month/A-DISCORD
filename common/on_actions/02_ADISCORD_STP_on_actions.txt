@@ -69,25 +69,9 @@ on_actions = {
 				# Old Fada's prewar police unit was dissolved into the shared reserve.
 				# Move one already-paid newborn brigade back there one-for-one instead
 				# of creating additional manpower or equipment for the resistance.
-				STS = {
-					random_country_division = {
-						limit = {
-							division_has_battalion_in_template = ADISCORD_territorial
-							unit_strength > 0.99
-						}
-						destroy_unit = yes
-					}
-					53 = {
-						create_unit = {
-							division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
-							owner = STS
-							# The war relation can temporarily flip control before the existing
-							# hostilities effect restores every owner-controlled province.
-							allow_spawning_on_enemy_provs = yes
-						}
-					}
-					set_country_flag = STP_cw_old_fada_guard_positioned
-				}
+				# destroy_unit/create_unit during declare_war_on corrupts the heap
+				# on the observer client; wait until the war relation exists.
+				STS = { country_event = { id = ADISCORD_STP_cw.31 hours = 1 } }
 			}
 		}
 	}

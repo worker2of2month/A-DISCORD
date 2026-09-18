@@ -3782,53 +3782,51 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_vorkerland_dorian_victory
 }
 
-ADISCORD_vorkerland_play_collapse_superevent_audio = {
-	every_country = {
-		limit = { is_ai = no }
-		scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
-		scoped_play_song = "one_minute_of_silence"
+# Unscoped playback. Observer/spectator has no human country, so a
+# human-only dispatch never reaches the local client.
+ADISCORD_vorkerland_play_superevent_sound = {
+	if = {
+		limit = { has_global_flag = superevent_vorkerland_dirty_opening }
+		sound_effect = superevent_vorkerland_dirty_opening_sound_e
 	}
+	else_if = {
+		limit = { has_global_flag = superevent_vorkerland_utilitarian_victory }
+		sound_effect = superevent_vorkerland_utilitarian_victory_sound_e
+	}
+	else_if = {
+		limit = { has_global_flag = superevent_vorkerland_worker_victory }
+		sound_effect = superevent_vorkerland_worker_victory_sound_e
+	}
+	else_if = {
+		limit = { has_global_flag = superevent_stelander_empire }
+		sound_effect = superevent_stelander_empire_sound_e
+	}
+	else = {
+		sound_effect = superevent_vorkerland_civilwar_sound_e
+	}
+	play_song = "one_minute_of_silence"
+}
+
+ADISCORD_vorkerland_play_collapse_superevent_audio = {
+	ADISCORD_vorkerland_play_superevent_sound = yes
 }
 
 ADISCORD_vorkerland_play_local_superevent_audio = {
-	every_country = {
-		limit = { is_ai = no }
-		if = {
-			limit = { has_global_flag = superevent_vorkerland_dirty_opening }
-			scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e
-		}
-		else_if = {
-			limit = { has_global_flag = superevent_vorkerland_utilitarian_victory }
-			scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e
-		}
-		else = {
-			scoped_sound_effect = superevent_vorkerland_civilwar_sound_e
-		}
-		scoped_play_song = "one_minute_of_silence"
-	}
+	ADISCORD_vorkerland_play_superevent_sound = yes
 }
 
 ADISCORD_vorkerland_show_dirty_opening_superevent = {
-	every_country = {
-		limit = { is_ai = no }
-		country_event = { id = ADISCORD_superevent.4 }
-	}
+	country_event = { id = ADISCORD_superevent.4 }
 }
 
 ADISCORD_vorkerland_show_worker_victory_superevent = {
 	set_global_flag = ADISCORD_vorkerland_central_victory_announced
-	every_country = {
-		limit = { is_ai = no }
-		country_event = { id = ADISCORD_superevent.2 }
-	}
+	country_event = { id = ADISCORD_superevent.2 }
 }
 
 ADISCORD_vorkerland_show_utilitarian_victory_superevent = {
 	set_global_flag = ADISCORD_vorkerland_central_victory_announced
-	every_country = {
-		limit = { is_ai = no }
-		country_event = { id = ADISCORD_superevent.3 }
-	}
+	country_event = { id = ADISCORD_superevent.3 }
 }
 
 ADISCORD_vorkerland_show_vlad_victory_superevent = {

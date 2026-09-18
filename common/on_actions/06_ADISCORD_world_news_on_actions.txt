@@ -38,8 +38,10 @@ on_actions = {
 			}
 
 			# Stelander already has a richer public outbreak report (.70) with
-			# election-dependent text. Fire it from the actual STP/STS war relation;
-			# its fire_only_once guard suppresses the legacy +1h fallback call.
+			# election-dependent text. Schedule it from the actual STP/STS war
+			# relation after the split stack unwinds; opening the news window
+			# inside declare_war_on corrupts the observer client. fire_only_once
+			# still suppresses a second same-hour fallback call.
 			if = {
 				limit = {
 					has_global_flag = STP_cw_started
@@ -50,7 +52,7 @@ on_actions = {
 					}
 				}
 				set_global_flag = ADISCORD_news_stelander_civil_war_published
-				ROOT = { news_event = { id = ADISCORD_STP_cw.70 } }
+				ROOT = { news_event = { id = ADISCORD_STP_cw.70 hours = 1 } }
 			}
 
 			# The military-course intervention currently becomes a real VAL-SRP war.

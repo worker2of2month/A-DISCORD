@@ -44,6 +44,19 @@ def named_block(source: str, name: str) -> str:
     raise AssertionError(f"unclosed block: {name}")
 
 
+def event_block(source: str, event_id: str) -> str:
+    match = re.search(
+        rf"(?m)^\s*id\s*=\s*{re.escape(event_id)}\s*$",
+        source,
+    )
+    if not match:
+        return ""
+    start = source.rfind("country_event", 0, match.start())
+    if start < 0:
+        return ""
+    return named_block(source[start:], "country_event")
+
+
 class StsSuccessorBootstrapTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -93,21 +106,31 @@ class StsSuccessorBootstrapTests(unittest.TestCase):
             r"53\s*=\s*\{\s*is_owned_by\s*=\s*STS\s*\}",
         )
         self.assertIn("any_country_division", self.hook)
-        self.assertIn("random_country_division", self.hook)
-        self.assertIn("division_has_battalion_in_template = ADISCORD_territorial", self.hook)
-        self.assertIn("unit_strength > 0.99", self.hook)
-        self.assertEqual(self.hook.count("destroy_unit = yes"), 1)
-        self.assertEqual(self.hook.count("create_unit ="), 1)
+        self.assertIn("country_event = { id = ADISCORD_STP_cw.31 hours = 1 }", self.hook)
+        self.assertNotIn("destroy_unit = yes", self.hook)
+        self.assertNotIn("create_unit =", self.hook)
+
+        event = event_block(read(ROOT / "events/ADISCORD_STP_events.txt"), "ADISCORD_STP_cw.31")
+        self.assertTrue(event, "missing delayed Old Fada reposition event")
+        self.assertIn("hidden = yes", event)
+        self.assertIn("is_triggered_only = yes", event)
+        self.assertIn("any_country_division", event)
+        self.assertIn("random_country_division", event)
+        self.assertIn("division_has_battalion_in_template = ADISCORD_territorial", event)
+        self.assertIn("unit_strength > 0.99", event)
+        self.assertEqual(event.count("destroy_unit = yes"), 1)
+        self.assertEqual(event.count("create_unit ="), 1)
         self.assertIn(
             'division = "division_template = \\"Stelander Territorial Brigade\\" '
             'start_experience_factor = 0.1 start_equipment_factor = 1.0 '
             'start_manpower_factor = 1.0"',
-            self.hook,
+            event,
         )
-        self.assertIn("owner = STS", self.hook)
-        self.assertIn("allow_spawning_on_enemy_provs = yes", self.hook)
-        self.assertNotIn("add_manpower =", self.hook)
-        self.assertNotIn("add_equipment_to_stockpile =", self.hook)
+        self.assertIn("owner = STS", event)
+        self.assertIn("allow_spawning_on_enemy_provs = yes", event)
+        self.assertIn("set_country_flag = STP_cw_old_fada_guard_positioned", event)
+        self.assertNotIn("add_manpower =", event)
+        self.assertNotIn("add_equipment_to_stockpile =", event)
 
 
 if __name__ == "__main__":

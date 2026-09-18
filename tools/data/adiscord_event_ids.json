@@ -34,6 +34,7 @@
     {"id": "ADISCORD_STP_cw.50", "namespace": "ADISCORD_STP_cw", "number": 50, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_cw.51", "namespace": "ADISCORD_STP_cw", "number": 51, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_cw.30", "namespace": "ADISCORD_STP_cw", "number": 30, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
+    {"id": "ADISCORD_STP_cw.31", "namespace": "ADISCORD_STP_cw", "number": 31, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_preparation.1", "namespace": "ADISCORD_STP_preparation", "number": 1, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_preparation.2", "namespace": "ADISCORD_STP_preparation", "number": 2, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_preparation.3", "namespace": "ADISCORD_STP_preparation", "number": 3, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},

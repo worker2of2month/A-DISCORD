@@ -11,6 +11,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
+		show_sound = superevent_vorkerland_civilwar_sound
+		hide_sound = click_close
 
 		iconType = { name = "superevent_vorkerland_civilwar" quadTextureSprite = "GFX_superevent_vorkerland_civilwar" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -33,6 +35,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
+		show_sound = superevent_vorkerland_dirty_opening_sound
+		hide_sound = click_close
 
 		iconType = { name = "superevent_vorkerland_dirty_opening" quadTextureSprite = "GFX_superevent_vorkerland_dirty_opening" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -55,6 +59,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
+		show_sound = superevent_vorkerland_worker_victory_sound
+		hide_sound = click_close
 
 		iconType = { name = "superevent_vorkerland_worker_victory" quadTextureSprite = "GFX_superevent_vorkerland_worker_victory" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -77,6 +83,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
+		show_sound = superevent_vorkerland_utilitarian_victory_sound
+		hide_sound = click_close
 
 		iconType = { name = "superevent_vorkerland_utilitarian_victory" quadTextureSprite = "GFX_superevent_vorkerland_utilitarian_victory" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -99,6 +107,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
+		show_sound = superevent_vorkerland_civilwar_sound
+		hide_sound = click_close
 
 		iconType = { name = "superevent_vorkerland_vlad_victory" quadTextureSprite = "GFX_superevent_vorkerland_vlad_victory" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -121,6 +131,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
+		show_sound = superevent_vorkerland_civilwar_sound
+		hide_sound = click_close
 
 		iconType = { name = "superevent_vorkerland_dorian_victory" quadTextureSprite = "GFX_superevent_vorkerland_dorian_victory" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -143,6 +155,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
+		show_sound = superevent_stelander_empire_sound
+		hide_sound = click_close
 
 		iconType = { name = "superevent_stelander_empire" quadTextureSprite = "GFX_superevent_stelander_empire" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }

@@ -2794,19 +2794,27 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "ADISCORD_vorkerland_play_local_superevent_audio",
     ):
         audio = named_block(map_effects, audio_effect)
-        if "every_country" not in audio or "limit = { is_ai = no }" not in audio:
-            issues.append(f"{audio_effect}: global audio routing guard drifted")
+        if "ADISCORD_vorkerland_play_superevent_sound = yes" not in audio:
+            issues.append(f"{audio_effect}: must use the shared unscoped audio helper")
+        if "limit = { is_ai = no }" in audio:
+            issues.append(f"{audio_effect}: human-only audio gate silences observer/spectator")
         if re.search(r"remove_ideas|swap_ideas|remove_dynamic_modifier", audio):
             issues.append(f"{audio_effect}: audio routing mutates country ideas")
-    local_audio = named_block(map_effects, "ADISCORD_vorkerland_play_local_superevent_audio")
-    if "scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e" not in local_audio:
+    shared_audio = named_block(map_effects, "ADISCORD_vorkerland_play_superevent_sound")
+    if "limit = { is_ai = no }" in shared_audio or "every_country" in shared_audio:
+        issues.append("shared superevent audio must stay unscoped for observer/spectator")
+    if "scoped_sound_effect" in shared_audio:
+        issues.append("shared superevent audio must not use scoped_sound_effect")
+    if "sound_effect = superevent_vorkerland_dirty_opening_sound_e" not in shared_audio:
         issues.append("local superevent audio lost the dirty-opening sound")
-    if "has_global_flag = superevent_vorkerland_dirty_opening" not in local_audio:
+    if "has_global_flag = superevent_vorkerland_dirty_opening" not in shared_audio:
         issues.append("local superevent audio no longer selects the dirty-opening sound")
-    if "scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e" not in local_audio:
+    if "sound_effect = superevent_vorkerland_utilitarian_victory_sound_e" not in shared_audio:
         issues.append("local superevent audio lost the utilitarian-victory sound")
-    if "has_global_flag = superevent_vorkerland_utilitarian_victory" not in local_audio:
+    if "has_global_flag = superevent_vorkerland_utilitarian_victory" not in shared_audio:
         issues.append("local superevent audio no longer selects the utilitarian-victory sound")
+    if 'play_song = "one_minute_of_silence"' not in shared_audio:
+        issues.append("shared superevent audio lost the silence bed")
     if "add_ideas = ADISCORD_vorkerland_erased_nations" in prepare:
         issues.append("cultural-erasure spirit still leaks to every successor")
     finalizer = named_block(effects, "ADISCORD_vorkerland_finalize_conflict_spirits")
@@ -4216,11 +4224,12 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "hidden = yes",
         "is_triggered_only = yes",
         "superevent_vorkerland_civilwar",
-        "limit = { is_ai = no }",
-        "scoped_sound_effect = superevent_vorkerland_civilwar_sound_e",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
     ):
         if token not in civilwar_event:
             issues.append(f"ADISCORD_superevent.1: civil-war presentation is missing {token}")
+    if "limit = { is_ai = no }" in civilwar_event:
+        issues.append("ADISCORD_superevent.1: human-only audio gate silences observer/spectator")
     if "superevent_vorkerland_worker_victory" in civilwar_event:
         issues.append("ADISCORD_superevent.1 must stay the civil-war outbreak")
     worker_event = event_block(news, "ADISCORD_superevent.2")
@@ -4228,11 +4237,12 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "hidden = yes",
         "is_triggered_only = yes",
         "superevent_vorkerland_worker_victory",
-        "limit = { is_ai = no }",
-        "scoped_sound_effect = superevent_vorkerland_worker_victory_sound_e",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
     ):
         if token not in worker_event:
-            issues.append(f"ADISCORD_superevent.2: player-scoped presentation is missing {token}")
+            issues.append(f"ADISCORD_superevent.2: unscoped presentation is missing {token}")
+    if "limit = { is_ai = no }" in worker_event:
+        issues.append("ADISCORD_superevent.2: human-only audio gate silences observer/spectator")
     if "ADISCORD_vorkerland_central_victory_announced" in worker_event:
         issues.append("ADISCORD_superevent.2 must not lock the campaign ending")
     utilitarian_event = event_block(news, "ADISCORD_superevent.3")
@@ -4240,11 +4250,12 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "hidden = yes",
         "is_triggered_only = yes",
         "superevent_vorkerland_utilitarian_victory",
-        "limit = { is_ai = no }",
-        "scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
     ):
         if token not in utilitarian_event:
-            issues.append(f"ADISCORD_superevent.3: player-scoped presentation is missing {token}")
+            issues.append(f"ADISCORD_superevent.3: unscoped presentation is missing {token}")
+    if "limit = { is_ai = no }" in utilitarian_event:
+        issues.append("ADISCORD_superevent.3: human-only audio gate silences observer/spectator")
     if "ADISCORD_vorkerland_central_victory_announced" in utilitarian_event:
         issues.append("ADISCORD_superevent.3 must not lock the campaign ending")
     dirty_event = event_block(news, "ADISCORD_superevent.4")
@@ -4252,11 +4263,12 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "hidden = yes",
         "is_triggered_only = yes",
         "superevent_vorkerland_dirty_opening",
-        "limit = { is_ai = no }",
-        "scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
     ):
         if token not in dirty_event:
-            issues.append(f"ADISCORD_superevent.4: player-scoped presentation is missing {token}")
+            issues.append(f"ADISCORD_superevent.4: unscoped presentation is missing {token}")
+    if "limit = { is_ai = no }" in dirty_event:
+        issues.append("ADISCORD_superevent.4: human-only audio gate silences observer/spectator")
     for forbidden in (
         "ADISCORD_vorkerland_dirty_opened",
         "ADISCORD_vorkerland_collapse.11",
@@ -4287,22 +4299,28 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             f"desc = {title_id}.d",
             "major = yes",
             "is_triggered_only = yes",
-            f"country_event = {{ id = {audio_id} }}",
+            "ADISCORD_vorkerland_play_superevent_sound = yes",
         ):
             if token not in definition:
                 issues.append(f"{news_id}: superevent news route is missing {token}")
         if "hidden = yes" in definition:
             issues.append(f"{news_id}: superevent news must remain visible")
+        if "limit = { is_ai = no }" in definition:
+            issues.append(f"{news_id}: human-only audio gate silences observer/spectator")
 
         audio_proxy = event_block(news, audio_id)
         for token in (
             "hidden = yes",
             "is_triggered_only = yes",
-            "limit = { is_ai = no }",
-            f"scoped_sound_effect = {sound_effect}",
+            f"sound_effect = {sound_effect}",
+            'play_song = "one_minute_of_silence"',
         ):
             if token not in audio_proxy:
-                issues.append(f"{audio_id}: player-scoped audio proxy is missing {token}")
+                issues.append(f"{audio_id}: unscoped audio proxy is missing {token}")
+        if "limit = { is_ai = no }" in audio_proxy:
+            issues.append(f"{audio_id}: human-only audio gate silences observer/spectator")
+        if "scoped_sound_effect" in audio_proxy:
+            issues.append(f"{audio_id}: observer/spectator cannot hear scoped_sound_effect")
 
     sound_effects = read(root, "sound/superevents_effects.asset", issues)
     sound_defs = read(root, "sound/superevents_sound.asset", issues)

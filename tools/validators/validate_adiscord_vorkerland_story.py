@@ -409,15 +409,16 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
     opening_options = named_blocks(opening, "option")
     for token in (
         "superevent_vorkerland_civilwar",
-        "ADISCORD_superevent_audio.1",
-        "every_country =",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
     ):
         if token not in opening_immediate:
             issues.append(f"opening collapse superevent immediate is missing {token}")
+    if "every_country" in opening_immediate or "limit = { is_ai = no }" in opening_immediate:
+        issues.append("opening collapse audio must stay unscoped for observer/spectator")
     if any(
         token in option
         for option in opening_options
-        for token in ("superevent_vorkerland_civilwar", "ADISCORD_superevent_audio.1")
+        for token in ("superevent_vorkerland_civilwar", "ADISCORD_vorkerland_play_superevent_sound")
     ):
         issues.append("opening collapse presentation still depends on clicking its option")
 

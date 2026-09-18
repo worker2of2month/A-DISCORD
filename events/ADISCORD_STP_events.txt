@@ -659,6 +659,44 @@ country_event = {
 	}
 }
 
+# Delayed one-for-one reposition. Must not run inside declare_war_on.
+country_event = {
+	id = ADISCORD_STP_cw.31
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				tag = STS
+				has_country_flag = STP_cw_participant
+				NOT = { has_country_flag = STP_cw_old_fada_guard_positioned }
+				53 = { is_owned_by = STS }
+				any_country_division = {
+					division_has_battalion_in_template = ADISCORD_territorial
+					unit_strength > 0.99
+				}
+			}
+			random_country_division = {
+				limit = {
+					division_has_battalion_in_template = ADISCORD_territorial
+					unit_strength > 0.99
+				}
+				destroy_unit = yes
+			}
+			53 = {
+				create_unit = {
+					division = "division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = STS
+					allow_spawning_on_enemy_provs = yes
+				}
+			}
+			set_country_flag = STP_cw_old_fada_guard_positioned
+			log = "[STP_CW] Old Fada guard repositioned after hostilities"
+		}
+	}
+}
+
 
 # A bilateral offer: the buyer chooses, then current stock and both treasuries settle together.
 country_event = {

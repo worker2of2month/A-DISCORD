@@ -108,8 +108,9 @@ class WorldNewsContracts(unittest.TestCase):
 
         # STP already owns a richer public outbreak report. Publish that report
         # from the reliable war-relation hook instead of showing a second generic
-        # headline; fire_only_once suppresses the legacy +1h fallback call.
-        self.assertIn("news_event = { id = ADISCORD_STP_cw.70 }", war)
+        # headline. Delay the window past declare_war_on; fire_only_once still
+        # suppresses a second same-hour fallback call.
+        self.assertIn("news_event = { id = ADISCORD_STP_cw.70 hours = 1 }", war)
         self.assertNotIn("news_event = { id = ADISCORD_world_news.3 }", war)
         stp_outbreak = event_block(self.stp_events, "ADISCORD_STP_cw.70")
         self.assertTrue(stp_outbreak)

@@ -370,6 +370,23 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                 f"found {entry.get('owner')!r}"
             )
 
+    if "ADISCORD_vorkerland_play_superevent_sound = yes" not in events:
+        issues.append("events: presentation audio must use the shared unscoped helper")
+    if "scoped_sound_effect" in events:
+        issues.append("events: scoped_sound_effect silences observer/spectator")
+    if re.search(r"every_country\s*=\s*\{[^{}]*limit\s*=\s*\{\s*is_ai\s*=\s*no", events, re.S):
+        issues.append("events: human-only country dispatch silences observer/spectator")
+    for getter in ("GetSupereventTitle", "GetSupereventQuote", "GetSupereventComment"):
+        if f"superevent_inactive_{getter.removeprefix('GetSuperevent').lower()}" not in scripted_loc:
+            issues.append(f"{getter}: missing inactive fallback")
+    for language, loc in (("English", english), ("Russian", russian)):
+        for suffix in ("title", "quote", "comment"):
+            if _localisation_count(loc, f"superevent_inactive_{suffix}") != 1:
+                issues.append(
+                    f"missing or duplicate {language} localisation key "
+                    f"superevent_inactive_{suffix}"
+                )
+
     return issues
 
 

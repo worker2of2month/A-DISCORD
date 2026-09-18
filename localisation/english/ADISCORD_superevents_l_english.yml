@@ -30,3 +30,7 @@ l_english:
   superevent_stelander_empire_title: "Proclamation of the Stelander Imperial Union!"
   superevent_stelander_empire_quote: "When a man has nothing left to be proud of, he begins to take pride in his ethnicity.\n\n- Arthur Schopenhauer"
   superevent_stelander_empire_comment: "Stelander raises its head again"
+
+  superevent_inactive_title: ""
+  superevent_inactive_quote: ""
+  superevent_inactive_comment: ""
