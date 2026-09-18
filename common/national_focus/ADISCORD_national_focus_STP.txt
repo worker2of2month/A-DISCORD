@@ -2014,6 +2014,9 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_postwar_budget_available_tt OR = { STP_pw_can_reconstruct = yes AND = { tag = SRP has_country_flag = STP_cw_postwar has_war = no } } } }
 		ai_will_do = { base = 8 }
 		completion_reward = {
+			custom_effect_tooltip = STP_cw_treasury_100_tt
+			ADISCORD_economy_receive_100 = yes
+			add_stability = 0.05
 			add_stability = 0.05
 			add_political_power = 75
 			hidden_effect = {
