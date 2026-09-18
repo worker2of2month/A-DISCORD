@@ -32,6 +32,7 @@ VAL_frontier_postwar = {
     has_global_flag = STP_cw_union_wars_finished
     has_capitulated = no
     is_subject = no
+    NOT = { has_country_flag = VAL_stelander_defeated }
 }
 VAL_frontier_shabrat_buffer = {
     STS = { exists = yes has_country_flag = STP_cw_won_union_battle is_subject = no has_capitulated = no }
@@ -343,7 +344,7 @@ VAL_stelander_ultimatum_target = {
  exists = yes has_capitulated = no is_subject = no
  has_global_flag = STP_cw_union_wars_finished
  NOT = { has_war_with = VAL } NOT = { is_in_faction_with = VAL }
- VAL = { exists = yes has_capitulated = no is_subject = no }
+ VAL = { exists = yes has_capitulated = no is_subject = no NOT = { has_country_flag = VAL_stelander_defeated } }
 }
 VAL_stelander_offer_current = {
  has_country_flag = VAL_stelander_offer
@@ -351,6 +352,7 @@ VAL_stelander_offer_current = {
  VAL = { has_country_flag = VAL_stelander_offer_pending }
 }
 VAL_can_launch_final_campaign = {
+ NOT = { has_country_flag = VAL_stelander_defeated }
  has_war = no has_capitulated = no is_subject = no VAL_frontier_idle = yes
  FROM = { exists = yes has_capitulated = no is_subject = no NOT = { is_in_faction_with = VAL } NOT = { has_country_flag = VAL_stelander_truce } }
 }
