@@ -42,7 +42,7 @@ jobs:
             tools/validators/validate_adiscord_vorkerland_collapse.py \
             tools/validators/validate_tc.py
           test ! -e sound/superevents_soundeffects.asset
-          if git grep -n "ADISCORD_vorkerland_play_collapse_superevent_audio" -- ':!docs/**'; then
+          if git grep -n "ADISCORD_vorkerland_play_collapse_superevent_audio" -- common/scripted_effects/ADISCORD_vorkerland_effects.txt; then
             echo "dead collapse superevent audio helper remains" >&2
             exit 1
           fi
