@@ -2789,24 +2789,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if unrelated in collapse_removals:
             issues.append(f"collapse runtime can remove unrelated national spirit {unrelated}")
-    for audio_effect in (
-        "ADISCORD_vorkerland_play_collapse_superevent_audio",
-        "ADISCORD_vorkerland_play_local_superevent_audio",
-    ):
-        audio = named_block(map_effects, audio_effect)
-        if "every_country" not in audio or "limit = { is_ai = no }" not in audio:
-            issues.append(f"{audio_effect}: global audio routing guard drifted")
-        if re.search(r"remove_ideas|swap_ideas|remove_dynamic_modifier", audio):
-            issues.append(f"{audio_effect}: audio routing mutates country ideas")
     local_audio = named_block(map_effects, "ADISCORD_vorkerland_play_local_superevent_audio")
-    if "scoped_sound_effect = superevent_vorkerland_dirty_opening_sound_e" not in local_audio:
-        issues.append("local superevent audio lost the dirty-opening sound")
-    if "has_global_flag = superevent_vorkerland_dirty_opening" not in local_audio:
-        issues.append("local superevent audio no longer selects the dirty-opening sound")
-    if "scoped_sound_effect = superevent_vorkerland_utilitarian_victory_sound_e" not in local_audio:
-        issues.append("local superevent audio lost the utilitarian-victory sound")
-    if "has_global_flag = superevent_vorkerland_utilitarian_victory" not in local_audio:
-        issues.append("local superevent audio no longer selects the utilitarian-victory sound")
+    if "every_country" not in local_audio or "limit = { is_ai = no }" not in local_audio:
+        issues.append("local superevent audio routing guard drifted")
+    if re.search(r"remove_ideas|swap_ideas|remove_dynamic_modifier", local_audio):
+        issues.append("local superevent audio routing mutates country ideas")
+    if "scoped_sound_effect = superevent_vorkerland_civilwar_sound_e" not in local_audio:
+        issues.append("local superevent audio lost the shared Vorkerland victory sound")
     if "add_ideas = ADISCORD_vorkerland_erased_nations" in prepare:
         issues.append("cultural-erasure spirit still leaks to every successor")
     finalizer = named_block(effects, "ADISCORD_vorkerland_finalize_conflict_spirits")
