@@ -3352,6 +3352,207 @@ STP_cw_northern_aid = {
 	}
 }
 
+
+# ============================================================
+# Shabrat postwar reconstruction drive
+# ============================================================
+
+STP_postwar_reconstruction_drive = {
+	STP_pw_reconstruction_emergency_repairs = {
+		icon = generic_construction
+		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pc_after_victory NOT = { has_country_flag = STP_pw_reconstruction_drive_completed } }
+		available = { STP_pw_can_reconstruct = yes ADISCORD_economy_can_spend_50 = yes }
+		cost = 0
+		custom_cost_text = STP_pw_price_50
+		days_remove = 28
+		days_re_enable = 21
+		complete_effect = { ADISCORD_economy_spend_50 = yes }
+		remove_effect = {
+			add_to_variable = { var = STP_pw_reconstruction_momentum value = 15 }
+			add_to_variable = { var = STP_pw_regional_cohesion value = 5 }
+			add_to_variable = { var = STP_pw_public_confidence value = 3 }
+			STP_pw_reconcile_postwar_interactivity = yes
+		}
+		ai_will_do = {
+			base = 5
+			modifier = { factor = 3 check_variable = { var = STP_pw_reconstruction_momentum value = 60 compare = less_than } }
+		}
+	}
+
+	STP_pw_reconstruction_district_congresses = {
+		icon = generic_political_pressure
+		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pc_after_victory NOT = { has_country_flag = STP_pw_reconstruction_drive_completed } }
+		available = { STP_pw_can_reconstruct = yes }
+		cost = 35
+		days_remove = 28
+		days_re_enable = 21
+		remove_effect = {
+			add_to_variable = { var = STP_pw_regional_cohesion value = 15 }
+			add_to_variable = { var = STP_pw_public_confidence value = 8 }
+			add_to_variable = { var = STP_pw_reconstruction_momentum value = 2 }
+			STP_pw_reconcile_postwar_interactivity = yes
+		}
+		ai_will_do = {
+			base = 5
+			modifier = { factor = 3 check_variable = { var = STP_pw_regional_cohesion value = 60 compare = less_than } }
+		}
+	}
+
+	STP_pw_reconstruction_publish_war_accounts = {
+		icon = generic_political_pressure
+		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pc_after_victory NOT = { has_country_flag = STP_pw_reconstruction_drive_completed } }
+		available = { STP_pw_can_reconstruct = yes }
+		cost = 25
+		days_remove = 21
+		days_re_enable = 21
+		remove_effect = {
+			add_to_variable = { var = STP_pw_public_confidence value = 12 }
+			add_to_variable = { var = STP_pw_regional_cohesion value = 4 }
+			STP_pw_reconcile_postwar_interactivity = yes
+		}
+		ai_will_do = {
+			base = 5
+			modifier = { factor = 3 check_variable = { var = STP_pw_public_confidence value = 60 compare = less_than } }
+		}
+	}
+
+	STP_pw_reconstruction_veteran_housing = {
+		icon = generic_construction
+		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pc_after_victory NOT = { has_country_flag = STP_pw_reconstruction_drive_completed } }
+		available = { STP_pw_can_reconstruct = yes ADISCORD_economy_can_spend_100 = yes }
+		cost = 0
+		custom_cost_text = STP_pw_price_100
+		days_remove = 42
+		days_re_enable = 35
+		complete_effect = { ADISCORD_economy_spend_100 = yes }
+		remove_effect = {
+			add_to_variable = { var = STP_pw_public_confidence value = 15 }
+			add_to_variable = { var = STP_pw_reconstruction_momentum value = 8 }
+			add_to_variable = { var = STP_pw_regional_cohesion value = 5 }
+			STP_pw_reconcile_postwar_interactivity = yes
+		}
+		ai_will_do = { base = 4 }
+	}
+
+	STP_pw_complete_first_reconstruction_plan = {
+		icon = generic_national_unity
+		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pc_after_victory NOT = { has_country_flag = STP_pw_reconstruction_drive_completed } }
+		available = {
+			STP_pw_can_reconstruct = yes
+			check_variable = { var = STP_pw_reconstruction_momentum value = 70 compare = greater_than_or_equals }
+			check_variable = { var = STP_pw_public_confidence value = 70 compare = greater_than_or_equals }
+			check_variable = { var = STP_pw_regional_cohesion value = 70 compare = greater_than_or_equals }
+		}
+		cost = 50
+		fire_only_once = yes
+		complete_effect = {
+			set_country_flag = STP_pw_reconstruction_drive_completed
+			add_stability = 0.05
+			ADISCORD_economy_receive_100 = yes
+			ADISCORD_increase_society_development_monthly_growth = yes
+			ADISCORD_increase_state_development_monthly_growth = yes
+			ADISCORD_increase_economic_development_monthly_growth = yes
+			add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.05 }
+			add_to_variable = { var = STP_pw_production_speed_buildings_factor value = 0.05 }
+			add_to_variable = { var = STP_pw_ADISCORD_country_development_global_growth_factor value = 0.05 }
+			STP_pw_refresh_modifier = yes
+		}
+		ai_will_do = { base = 25 }
+	}
+}
+
+# ============================================================
+# Shabrat postwar propaganda campaigns
+# ============================================================
+
+STP_postwar_propaganda_campaigns = {
+	STP_pw_campaign_country_is_being_built = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = STS }
+		available = { ADISCORD_has_campaign_slot = yes }
+		cost = 25
+		days_remove = 55
+		days_re_enable = 35
+		modifier = {
+			production_speed_buildings_factor = 0.10
+			ADISCORD_country_development_economic_growth_factor = 0.08
+		}
+		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		remove_effect = {
+			ADISCORD_campaign_slot_release = yes
+			add_to_variable = { var = STP_pw_reconstruction_momentum value = 8 }
+			STP_pw_reconcile_postwar_interactivity = yes
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	STP_pw_campaign_one_steland = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = STS }
+		available = { ADISCORD_has_campaign_slot = yes }
+		cost = 20
+		days_remove = 50
+		days_re_enable = 35
+		modifier = {
+			stability_weekly = 0.001
+			political_power_gain = 0.05
+		}
+		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		remove_effect = {
+			ADISCORD_campaign_slot_release = yes
+			add_to_variable = { var = STP_pw_regional_cohesion value = 8 }
+			STP_pw_reconcile_postwar_interactivity = yes
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	STP_pw_campaign_engineers_of_peace = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = STS }
+		available = { ADISCORD_has_campaign_slot = yes }
+		cost = 25
+		days_remove = 60
+		days_re_enable = 40
+		modifier = {
+			research_speed_factor = 0.03
+			production_speed_industrial_complex_factor = 0.05
+		}
+		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		remove_effect = {
+			ADISCORD_campaign_slot_release = yes
+			add_to_variable = { var = STP_pw_reconstruction_momentum value = 5 }
+			add_to_variable = { var = STP_pw_public_confidence value = 5 }
+			STP_pw_reconcile_postwar_interactivity = yes
+		}
+		ai_will_do = { base = 4 }
+	}
+
+	STP_pw_campaign_victory_means_normal_life = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = STS }
+		available = { ADISCORD_has_campaign_slot = yes }
+		cost = 20
+		days_remove = 45
+		days_re_enable = 35
+		modifier = {
+			consumer_goods_factor = -0.03
+			stability_weekly = 0.001
+		}
+		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		remove_effect = {
+			ADISCORD_campaign_slot_release = yes
+			add_to_variable = { var = STP_pw_public_confidence value = 8 }
+			STP_pw_reconcile_postwar_interactivity = yes
+		}
+		ai_will_do = { base = 5 }
+	}
+}
+
 # Imperial union
 
 STP_imperial_union_category = {
