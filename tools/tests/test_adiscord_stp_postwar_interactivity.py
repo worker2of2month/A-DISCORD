@@ -126,6 +126,9 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
         self.assertIn("STP_postwar_propaganda_campaigns = {", categories)
 
         loc = read("localisation/russian/ADISCORD_STP_l_russian.yml")
+        self.assertIn("STP_pw_price_50:", loc)
+        self.assertIn("STP_pw_price_50_blocked:", loc)
+        self.assertIn("STP_pw_price_50_tooltip:", loc)
         for key in (
             "STP_postwar_reconstruction_drive",
             "STP_postwar_propaganda_campaigns",
