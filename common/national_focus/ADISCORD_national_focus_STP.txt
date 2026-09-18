@@ -3042,7 +3042,7 @@ focus_tree = {
 		id = STP_pc_navy_coast
 		icon = GFX_focus_generic_coastal_fort
 		x = 3
-		y = 12
+		y = 6
 		prerequisite = { focus = STP_pw_republic_restore_roads }
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -3061,7 +3061,7 @@ focus_tree = {
 		id = STP_pc_navy_ports
 		icon = GFX_goal_generic_construct_naval_dockyard
 		x = 3
-		y = 13
+		y = 7
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
@@ -3080,7 +3080,7 @@ focus_tree = {
 		id = STP_pc_navy_yards
 		icon = GFX_goal_generic_construct_naval_dockyard
 		x = 3
-		y = 14
+		y = 8
 		prerequisite = { focus = STP_pc_navy_ports }
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
@@ -3100,8 +3100,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_navy_escorts
 		icon = GFX_goal_generic_navy_cruiser
-		x = 3
-		y = 15
+		x = 2
+		y = 9
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
@@ -3121,8 +3121,8 @@ focus_tree = {
 	focus = {
 		id = STP_pc_navy_deny
 		icon = GFX_goal_generic_occupy_start_coast
-		x = 3
-		y = 16
+		x = 2
+		y = 10
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
