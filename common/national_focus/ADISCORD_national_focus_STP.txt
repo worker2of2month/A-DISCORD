@@ -4725,7 +4725,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_development_engineers_on_radio
-		icon = GFX_focus_generic_scientific_exchange
+		icon = GFX_focus_generic_industry_3
 		x = 37
 		y = 6
 		cost = 4
