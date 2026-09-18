@@ -39,6 +39,8 @@ class ShabratPostwarStoryTests(unittest.TestCase):
             "ADISCORD_STP_pw.1": "STP_pw_republic_new_republic",
             "ADISCORD_STP_pw.2": "STP_pw_republic_civil_records",
             "ADISCORD_STP_pw.3": "STP_pw_republic_civil_charter",
+            "ADISCORD_STP_pw.4": "STP_pw_republic_homes_for_returnees",
+            "ADISCORD_STP_pw.5": "STP_pw_republic_army_register",
         }
 
         self.assertIn("add_namespace = ADISCORD_STP_pw", events)
@@ -65,6 +67,12 @@ class ShabratPostwarStoryTests(unittest.TestCase):
             "ADISCORD_STP_pw.3.d",
             "ADISCORD_STP_pw.3.a",
             "ADISCORD_STP_pw.3.b",
+            "ADISCORD_STP_pw.4.t",
+            "ADISCORD_STP_pw.4.d",
+            "ADISCORD_STP_pw.4.a",
+            "ADISCORD_STP_pw.5.t",
+            "ADISCORD_STP_pw.5.d",
+            "ADISCORD_STP_pw.5.a",
         )
         for key in expected_keys:
             self.assertEqual(loc.count(f"\n {key}:"), 1, key)

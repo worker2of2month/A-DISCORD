@@ -52,6 +52,8 @@
     {"id": "ADISCORD_STP_pw.1", "namespace": "ADISCORD_STP_pw", "number": 1, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_STP_pw.2", "namespace": "ADISCORD_STP_pw", "number": 2, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_STP_pw.3", "namespace": "ADISCORD_STP_pw", "number": 3, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
+    {"id": "ADISCORD_STP_pw.4", "namespace": "ADISCORD_STP_pw", "number": 4, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
+    {"id": "ADISCORD_STP_pw.5", "namespace": "ADISCORD_STP_pw", "number": 5, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_economy.2", "namespace": "ADISCORD_economy", "number": 2, "owner": "events/ADISCORD_economy_events.txt", "subsystem": "economy", "status": "active"},
     {"id": "ADISCORD_economy.3", "namespace": "ADISCORD_economy", "number": 3, "owner": "events/ADISCORD_economy_events.txt", "subsystem": "economy", "status": "active"},
     {"id": "ADISCORD_STP_regions.1", "namespace": "ADISCORD_STP_regions", "number": 1, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_regions", "status": "active"},
