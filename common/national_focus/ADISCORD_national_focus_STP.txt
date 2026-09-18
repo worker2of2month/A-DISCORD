@@ -4771,4 +4771,48 @@ focus_tree = {
 		}
 	}
 
+	focus = {
+		id = STP_pc_development_reopen_universities
+		icon = GFX_goal_generic_scientific_exchange
+		x = 38
+		y = 7
+		cost = 5
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pc_focus_available = yes } }
+		prerequisite = { focus = STP_pc_development_engineers_on_radio }
+		ai_will_do = { base = 12 }
+		completion_reward = {
+			add_research_slot = 1
+			custom_effect_tooltip = STP_pc_development_reopen_universities_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_research_speed_factor value = 0.02 }
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pc_development_national_research_institutes
+		icon = GFX_focus_generic_industry_3
+		x = 36
+		y = 9
+		cost = 6
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pc_focus_available = yes } }
+		prerequisite = { focus = STP_pc_development_generation_reconstruction }
+		prerequisite = { focus = STP_pc_economy_recovery_budget }
+		prerequisite = { focus = STP_pc_development_reopen_universities }
+		ai_will_do = { base = 14 }
+		completion_reward = {
+			add_research_slot = 1
+			custom_effect_tooltip = STP_pc_development_national_research_institutes_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_research_speed_factor value = 0.03 }
+				add_to_variable = { var = STP_pw_ADISCORD_country_development_economic_growth_factor value = 0.03 }
+				add_to_variable = { var = STP_pw_ADISCORD_country_development_state_growth_factor value = 0.03 }
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
 }
