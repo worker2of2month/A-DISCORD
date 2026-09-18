@@ -4683,7 +4683,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_development_posters_on_ruins
-		icon = GFX_focus_generic_propaganda
+		icon = GFX_goal_generic_propaganda
 		x = 36
 		y = 5
 		cost = 4
