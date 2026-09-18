@@ -3,6 +3,7 @@ capital = 48
 ####### Characters
 
 recruit_character = VAL_Valera_Solgalov
+recruit_character = VAL_Commanders_Council
 recruit_character = VAL_Kirill_Voron
 recruit_character = VAL_Erika_Stahl
 recruit_character = VAL_Boris_Gromov
