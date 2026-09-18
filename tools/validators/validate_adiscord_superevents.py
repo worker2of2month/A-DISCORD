@@ -42,6 +42,8 @@ REQUIRED_FILES = (
 SUPEREVENT_IDS = (
     "ADISCORD_superevent.1",
     "ADISCORD_superevent.2",
+    "ADISCORD_superevent.3",
+    "ADISCORD_superevent.4",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
