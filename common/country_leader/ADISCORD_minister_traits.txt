@@ -1,5 +1,6 @@
 leader_traits = {
 	minister_trait_STP_hos_master_of_destinies = { random = no stability_factor = 0.03 political_power_gain = 0.05 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_STS_hos_district_chancery = { random = no political_power_gain = 0.05 stability_factor = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 
 	minister_trait_VAL_hos_contract_throne = { random = no political_power_gain = 0.04 war_support_factor = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 	minister_trait_IVN_hos_locked_cabinet = { random = no stability_factor = 0.04 drift_defence_factor = 0.10 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
@@ -30,6 +31,7 @@ leader_traits = {
 	minister_trait_BTL_hos_orderly_notary = { random = no political_power_gain = 0.04 production_speed_industrial_complex_factor = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 
 	minister_trait_STP_def_banquet_guard = { random = no army_org_factor = 0.04 planning_speed = 0.08 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_STS_def_mountain_staff = { random = no army_core_defence_factor = 0.05 army_org_factor = 0.03 planning_speed = 0.05 ai_will_do = { factor = 1 } }
 	minister_trait_VAL_def_contract_captain = { random = no army_attack_factor = 0.05 training_time_army_factor = -0.04 stability_factor = -0.02 ai_will_do = { factor = 1 } }
 	minister_trait_IVN_def_bunker_doctrine = { random = no army_defence_factor = 0.05 land_reinforce_rate = 0.01 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 	minister_trait_WIT_def_lean_columns = { random = no supply_consumption_factor = -0.04 army_org_regain = 0.04 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
@@ -59,6 +61,7 @@ leader_traits = {
 	minister_trait_BTL_def_ordered_barracks = { random = no army_defence_factor = 0.04 army_attack_factor = 0.02 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 
 	minister_trait_STP_eco_silk_ledgers = { random = no consumer_goods_factor = -0.02 production_speed_industrial_complex_factor = 0.05 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+	minister_trait_STS_eco_workshop_ledgers = { random = no consumer_goods_factor = -0.02 production_speed_industrial_complex_factor = 0.05 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
 	minister_trait_VAL_eco_weapon_broker = { random = no industrial_capacity_factory = 0.05 production_lack_of_resource_penalty_factor = -0.10 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
 	minister_trait_IVN_eco_forge_accountant = { random = no production_speed_arms_factory_factor = 0.05 industrial_capacity_factory = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 	minister_trait_WIT_eco_thrifty_foundries = { random = no production_speed_industrial_complex_factor = 0.06 local_resources_factor = 0.03 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
@@ -88,6 +91,7 @@ leader_traits = {
 	minister_trait_BTL_eco_clean_ledgers = { random = no industrial_capacity_factory = 0.03 production_speed_arms_factory_factor = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 
 	minister_trait_STP_hea_private_clinics = { random = no monthly_population = 0.05 stability_factor = 0.02 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_STS_hea_field_wards = { random = no monthly_population = 0.06 stability_factor = 0.02 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 	minister_trait_VAL_hea_field_surgeons = { random = no conscription_factor = 0.04 monthly_population = 0.03 industrial_capacity_factory = -0.02 ai_will_do = { factor = 1 } }
 	minister_trait_IVN_hea_quiet_hospitals = { random = no stability_factor = 0.03 attrition = -0.02 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
 	minister_trait_WIT_hea_fast_aid = { random = no monthly_population = 0.04 training_time_army_factor = -0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
@@ -117,6 +121,7 @@ leader_traits = {
 	minister_trait_BTL_hea_orderly_care = { random = no conscription_factor = 0.03 monthly_population = 0.02 political_power_gain = -0.02 ai_will_do = { factor = 1 } }
 
 	minister_trait_STP_edu_salon_academies = { random = no research_speed_factor = 0.03 political_power_gain = 0.02 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
+	minister_trait_STS_edu_local_schools = { random = no research_speed_factor = 0.04 political_power_gain = 0.02 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 	minister_trait_VAL_edu_ballistics_schools = { random = no research_speed_factor = 0.02 production_factory_efficiency_gain_factor = 0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
 	minister_trait_IVN_edu_closed_lyceums = { random = no research_speed_factor = 0.04 drift_defence_factor = 0.08 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 	minister_trait_WIT_edu_practical_lessons = { random = no research_speed_factor = 0.03 political_power_gain = 0.03 war_support_factor = -0.02 ai_will_do = { factor = 1 } }
@@ -146,6 +151,7 @@ leader_traits = {
 	minister_trait_BTL_edu_exact_syllabi = { random = no research_speed_factor = 0.02 production_factory_efficiency_gain_factor = 0.03 stability_factor = -0.02 ai_will_do = { factor = 1 } }
 
 	minister_trait_STP_int_court_whispers = { random = no intel_network_gain_factor = 0.20 operative_slot = 1 stability_factor = -0.03 ai_will_do = { factor = 1 } }
+	minister_trait_STS_int_mountain_net = { random = no intel_network_gain_factor = 0.15 operative_slot = 1 stability_factor = -0.02 ai_will_do = { factor = 1 } }
 	minister_trait_VAL_int_contract_spies = { random = no intel_network_gain_factor = 0.15 resistance_growth = -0.03 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
 	minister_trait_IVN_int_locked_files = { random = no intel_network_gain_factor = 0.18 compliance_growth = 0.03 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 	minister_trait_WIT_int_border_runners = { random = no operative_slot = 1 intel_network_gain_factor = 0.10 war_support_factor = -0.02 ai_will_do = { factor = 1 } }

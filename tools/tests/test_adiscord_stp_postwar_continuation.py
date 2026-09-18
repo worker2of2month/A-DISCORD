@@ -27,6 +27,7 @@ LOC = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
 LEDGER = ROOT / "tools/data/adiscord_event_ids.json"
 
 PERSONAL_FOCUS_IDS = (
+    "STP_pc_shabrat_cabinet",
     "STP_pc_shabrat_politics",
     "STP_pc_hegemony_open",
     "STP_pc_freedom_open",
@@ -459,6 +460,43 @@ class PostwarContinuationContracts(unittest.TestCase):
                 self.assertTrue(all(e.value in war_ids for e in prerequisite), scalar(focus, "id"))
         self.assertFalse(any(focus_id.startswith("STP_pc_") for focus_id in prep_ids))
         self.assertEqual(scalar(next(entry.value for entry in war if entry.key == "focus" and scalar(entry.value, "id") == "STP_pc_after_victory"), "x"), "16")
+
+    def test_shabrat_cabinet_names_the_union_and_installs_ministers(self) -> None:
+        focus = war_focuses()["STP_pc_shabrat_cabinet"]
+        self.assertEqual(scalar(focus, "x"), "14")
+        self.assertEqual(scalar(focus, "y"), "4")
+        self.assertEqual(
+            [e.value for e in block(focus, "prerequisite") if e.key == "focus"],
+            ["STP_pc_after_victory"],
+        )
+        reward = block(focus, "completion_reward")
+        party = block(reward, "set_party_name")
+        self.assertEqual(scalar(party, "ideology"), "chauvinism")
+        self.assertEqual(scalar(party, "name"), "STS_chauvinism_party")
+        self.assertEqual(scalar(party, "long_name"), "STS_chauvinism_party_long")
+        ministers = {e.value or e.key for e in block(reward, "add_ideas")} - {""}
+        self.assertEqual(
+            ministers,
+            {
+                "minister_STS_Marta_Eirich",
+                "minister_STS_Leonid_Barchel",
+                "minister_STS_Ignat_Forel",
+                "minister_STS_Nika_Volgina",
+                "minister_STS_Tomas_Krey",
+                "minister_STS_Lia_Verst",
+            },
+        )
+        loc = read(LOC)
+        self.assertIn('STP_pc_shabrat_cabinet: "Кабинет основателя"', loc)
+        parties = (ROOT / "localisation/russian/parties_l_russian.yml").read_text(encoding="utf-8-sig")
+        self.assertIn(
+            'STS_chauvinism_party: "£GFX_STS_steland_union_party_texticon Стеландский союз"',
+            parties,
+        )
+        self.assertIn(
+            'STS_chauvinism_party_long: "£GFX_STS_steland_union_party_texticon Стеландский союз восстановления"',
+            parties,
+        )
 
     def test_personal_fork_stays_with_the_founder(self) -> None:
         focuses = war_focuses()

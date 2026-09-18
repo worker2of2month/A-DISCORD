@@ -70,6 +70,11 @@ spriteTypes = {
         legacy_lazy_load = no
     }
     spriteType = {
+        name = "GFX_STS_steland_union_party_texticon"
+        texturefile = "gfx/texticons/adiscord/parties/STS/STS_steland_union_party.png"
+        legacy_lazy_load = no
+    }
+    spriteType = {
         name = "GFX_BBV_primary_party_texticon"
         texturefile = "gfx/texticons/adiscord/parties/BBV/BBV_primary_party.png"
         legacy_lazy_load = no

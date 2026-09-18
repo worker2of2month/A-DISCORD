@@ -81,6 +81,23 @@
 
   STP_empire_faction_party: "ИНФ"
   STP_empire_faction_party_long: "Имперский национальный фронт"
+  #STS
+  STS_humanism_party: "Гражданские собрания"
+  STS_humanism_party_long: "Гражданские собрания Стеланда"
+  STS_utilitarism_party: "Партия рационального развития"
+  STS_utilitarism_party_long: "Партия рационального развития и общественной эффективности"
+  STS_chauvinism_party: "£GFX_STS_steland_union_party_texticon Стеландский союз"
+  STS_chauvinism_party_long: "£GFX_STS_steland_union_party_texticon Стеландский союз восстановления"
+  STS_pragmatism_party: "Партия порядка и реформ"
+  STS_pragmatism_party_long: "Партия порядка и реформ"
+  STS_anarchism_party: "Конфедерация общин"
+  STS_anarchism_party_long: "Конфедерация общин и рабочих советов Стеланда"
+  STS_technocracy_party: "Партия науки и управления"
+  STS_technocracy_party_long: "Партия науки и управления"
+  STS_etatism_party: "Партия возрождения"
+  STS_etatism_party_long: "Партия возрождения"
+  STS_hedonism_party: "Палата Высших Домов"
+  STS_hedonism_party_long: "Палата Высших Домов и Привилегированных Гильдий"
   #NOD
   NOD_hedonism_party: "£GFX_STP_hedonist_party_texticon Палата Высших Домов"
   NOD_hedonism_party_long: "£GFX_STP_hedonist_party_texticon Палата Высших Домов и Привилегированных Гильдий"

@@ -8,7 +8,7 @@ focus_tree = {
 			has_country_flag = VAL_stelander_defeated
 		}
 	}
-	continuous_focus_position = { x = 50 y = 2800 }
+	continuous_focus_position = { x = 100 y = 555555 }
 
 	focus = {
 		id = VAL_defeat_Returning_Columns

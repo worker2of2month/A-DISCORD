@@ -24,6 +24,7 @@ focus_tree = {
 		}
 	}
 	default = no
+	continuous_focus_position = { x = 100 y = 555555 }
 
 	# ---------------------------------------------------------------------
 	# Prewar WRK: a short preparation block before the automatic collapse.
@@ -10865,6 +10866,7 @@ focus_tree = {
 		modifier = { add = 100 tag = IBA }
 	}
 	default = no
+	continuous_focus_position = { x = 100 y = 555555 }
 
 	focus = {
 		id = IBA_organize_transitional_council
@@ -10893,6 +10895,7 @@ focus_tree = {
 		}
 	}
 	default = no
+	continuous_focus_position = { x = 100 y = 555555 }
 
 	focus = {
 		id = ZAO_keep_the_western_registers_running

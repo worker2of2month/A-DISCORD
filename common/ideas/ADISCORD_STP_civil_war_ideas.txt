@@ -730,5 +730,26 @@ ideas = {
 				minister_trait_STP_hos_master_of_destinies
 			}
 		}
+		minister_STS_Marta_Eirich = { name = minister_STS_Marta_Eirich default = no cost = 75 picture = generic_political_advisor_europe_1 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_hos_district_chancery } }
+	}
+
+	political_advisor_minister_of_defense = {
+		minister_STS_Leonid_Barchel = { name = minister_STS_Leonid_Barchel default = no cost = 75 picture = generic_political_advisor_europe_2 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_def_mountain_staff } }
+	}
+
+	political_advisor_minister_of_economy = {
+		minister_STS_Ignat_Forel = { name = minister_STS_Ignat_Forel default = no cost = 75 picture = generic_political_advisor_europe_3 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_eco_workshop_ledgers } }
+	}
+
+	political_advisor_minister_of_health = {
+		minister_STS_Nika_Volgina = { name = minister_STS_Nika_Volgina default = no cost = 75 picture = generic_political_advisor_europe_4 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_hea_field_wards } }
+	}
+
+	political_advisor_minister_of_education = {
+		minister_STS_Tomas_Krey = { name = minister_STS_Tomas_Krey default = no cost = 75 picture = generic_political_advisor_europe_5 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_edu_local_schools } }
+	}
+
+	political_advisor_chief_of_intelligence = {
+		minister_STS_Lia_Verst = { name = minister_STS_Lia_Verst default = no cost = 75 picture = generic_political_advisor_europe_6 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_int_mountain_net } }
 	}
 }

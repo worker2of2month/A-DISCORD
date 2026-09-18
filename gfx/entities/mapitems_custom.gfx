@@ -122,11 +122,6 @@ objectTypes = {
 		cull_distance = 8000.0
 		animation = { id = "collapse" type = "ADISCORD_unity_tower_collapse_animation" }
 		animation = { id = "ruins" type = "ADISCORD_unity_tower_ruins_animation" }
-
-		# Standalone skinned actor: ordinary UV and RGB normals, no unit atlas.
-		meshsettings = {
-			shader = "PdxMeshStandard"
-		}
 	}
 }
 

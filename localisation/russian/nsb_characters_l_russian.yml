@@ -214,6 +214,13 @@
  minister_STP_Lorian_Vell: "Лориан Велл"
  minister_STP_Vesper_Monray: "Веспер Монрей"
  minister_STP_Cyan_Crowe: "Сайан Кроу"
+ # STS
+ minister_STS_Marta_Eirich: "Марта Эйрих"
+ minister_STS_Leonid_Barchel: "Леонид Барчел"
+ minister_STS_Ignat_Forel: "Игнат Форель"
+ minister_STS_Nika_Volgina: "Ника Волгина"
+ minister_STS_Tomas_Krey: "Томас Крей"
+ minister_STS_Lia_Verst: "Лия Верст"
  # VAL
  minister_VAL_Valerian_Kraith: "Валериан Крайт"
  minister_VAL_Arseny_Bragin: "Арсений Брагин"

@@ -7,6 +7,7 @@ focus_tree = {
 			original_tag = RUS
 		}
 	}
+	continuous_focus_position = { x = 100 y = 555555 }
 
 	# Compact AI-facing campaign: arm the aimaqs, wait for the dirty zone,
 	# then open priced neighbour wars and the last-empire proclamation.

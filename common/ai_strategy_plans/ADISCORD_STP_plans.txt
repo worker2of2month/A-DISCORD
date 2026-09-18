@@ -182,6 +182,7 @@ STS_shabrat_reconstruction_plan = {
 		STP_cw_first_postwar_budget
 		STP_cw_restore_civil_authority
 		STP_pc_after_victory
+		STP_pc_shabrat_cabinet
 		STP_pw_republic_new_republic
 		STP_pw_republic_district_authority
 		STP_pw_republic_civil_records
@@ -228,6 +229,7 @@ STS_shabrat_hegemony_plan = {
 
 	ai_national_focuses = {
 		STP_pc_after_victory
+		STP_pc_shabrat_cabinet
 		STP_pc_war_ledgers
 		STP_pc_two_borders
 		STP_pc_shabrat_politics

@@ -67,6 +67,7 @@
 # BEGIN CONSOLIDATED: ADISORD_minister_traits_l_russian.yml
  # Minister traits - Head of State
  minister_trait_STP_hos_master_of_destinies: "Господин судеб"
+ minister_trait_STS_hos_district_chancery: "Окружная канцелярия"
  minister_trait_VAL_hos_contract_throne: "Канцлер договорной власти"
  minister_trait_IVN_hos_locked_cabinet: "Режим закрытого кабинета"
  minister_trait_WIT_hos_quick_compromises: "Тактик быстрых компромиссов"
@@ -96,6 +97,7 @@
  minister_trait_BTL_hos_orderly_notary: "Нотарий государственного порядка"
  # Minister traits - Defence
  minister_trait_STP_def_banquet_guard: "Начальник дворцовой гвардии"
+ minister_trait_STS_def_mountain_staff: "Горный штаб"
  minister_trait_VAL_def_contract_captain: "Контрактный командир"
  minister_trait_IVN_def_bunker_doctrine: "Инженер укрепленной обороны"
  minister_trait_WIT_def_lean_columns: "Логист легких колонн"
@@ -125,6 +127,7 @@
  minister_trait_BTL_def_ordered_barracks: "Инспектор упорядоченных казарм"
  # Minister traits - Economy
  minister_trait_STP_eco_silk_ledgers: "Казначей торговых книг"
+ minister_trait_STS_eco_workshop_ledgers: "Счета мастерских"
  minister_trait_VAL_eco_weapon_broker: "Посредник военных поставок"
  minister_trait_IVN_eco_forge_accountant: "Бухгалтер оружейных кузниц"
  minister_trait_WIT_eco_thrifty_foundries: "Рационализатор литейных заводов"
@@ -154,6 +157,7 @@
  minister_trait_BTL_eco_clean_ledgers: "Главный ревизор"
  # Minister traits - Healthcare
  minister_trait_STP_hea_private_clinics: "Куратор частных клиник"
+ minister_trait_STS_hea_field_wards: "Полевые лазареты"
  minister_trait_VAL_hea_field_surgeons: "Главный полевой хирург"
  minister_trait_IVN_hea_quiet_hospitals: "Смотритель тихих госпиталей"
  minister_trait_WIT_hea_fast_aid: "Организатор скорой помощи"
@@ -183,6 +187,7 @@
  minister_trait_BTL_hea_orderly_care: "Инспектор упорядоченной медицины"
  # Minister traits - Education
  minister_trait_STP_edu_salon_academies: "Покровитель академических салонов"
+ minister_trait_STS_edu_local_schools: "Местные училища"
  minister_trait_VAL_edu_ballistics_schools: "Куратор баллистических школ"
  minister_trait_IVN_edu_closed_lyceums: "Ректор закрытых лицеев"
  minister_trait_WIT_edu_practical_lessons: "Педагог прикладной школы"
@@ -212,6 +217,7 @@
  minister_trait_BTL_edu_exact_syllabi: "Составитель точных программ"
  # Minister traits - Intelligence
  minister_trait_STP_int_court_whispers: "Начальник придворной разведки"
+ minister_trait_STS_int_mountain_net: "Горная сеть"
  minister_trait_VAL_int_contract_spies: "Куратор контрактной агентуры"
  minister_trait_IVN_int_locked_files: "Хранитель закрытых досье"
  minister_trait_WIT_int_border_runners: "Оператор пограничных курьеров"

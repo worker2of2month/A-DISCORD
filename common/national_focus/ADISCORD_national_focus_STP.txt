@@ -2822,6 +2822,40 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_pc_shabrat_cabinet
+		icon = GFX_focus_generic_self_management
+		x = 14
+		y = 4
+		cost = 5
+		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_founder_rules = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			hidden_trigger = { STP_pc_founder_rules = yes }
+		}
+		prerequisite = { focus = STP_pc_after_victory }
+		ai_will_do = { base = 12 }
+		completion_reward = {
+			set_party_name = {
+				ideology = chauvinism
+				long_name = STS_chauvinism_party_long
+				name = STS_chauvinism_party
+			}
+			add_ideas = {
+				minister_STS_Marta_Eirich
+				minister_STS_Leonid_Barchel
+				minister_STS_Ignat_Forel
+				minister_STS_Nika_Volgina
+				minister_STS_Tomas_Krey
+				minister_STS_Lia_Verst
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+
+	focus = {
 		id = STP_pc_war_ledgers
 		icon = GFX_focus_generic_treaty
 		x = 8

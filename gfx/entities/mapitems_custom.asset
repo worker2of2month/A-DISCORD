@@ -117,9 +117,7 @@ entity = {
 	locator = { name = "front_impact" position = { 8 7 -13 } }
 	locator = { name = "rear_impact" position = { 10 8 0 } }
 	locator = { name = "ruin_smoke" position = { 8 8 -5 } }
-	# If this actor is culled and shown again, default_state collapse would
-	# replay the clip. Keep ruins as the rest pose; the event starts collapse.
-	default_state = "ruins"
+	default_state = "collapse"
 	state = {
 		name = "collapse"
 		animation = "collapse"

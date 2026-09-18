@@ -1392,8 +1392,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertFalse(named_blocks(ruins, "event"))
         restored = next(block for block in entities if 'name = "ADISCORD_unity_tower_ruins_entity"' in block)
         self.assertIn('default_state = "ruins"', restored)
-        self.assertIn('default_state = "ruins"', collapse)
-        self.assertNotIn('default_state = "collapse"', collapse)
+        self.assertIn('default_state = "collapse"', collapse)
         gfx = read("gfx/entities/mapitems_custom.gfx")
         destruction_meshes = [
             block
@@ -1407,8 +1406,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         ]
         self.assertEqual(len(destruction_meshes), 1)
         self.assertEqual(len(pyramid_meshes), 1)
-        self.assertIn('shader = "PdxMeshStandard"', destruction_meshes[0])
-        self.assertNotIn('shader = "PdxMeshAdvanced"', destruction_meshes[0])
+        self.assertNotIn("meshsettings", destruction_meshes[0])
         self.assertIn("cull_distance = 8000.0", destruction_meshes[0])
         self.assertIn("cull_distance = 8000.0", pyramid_meshes[0])
 
