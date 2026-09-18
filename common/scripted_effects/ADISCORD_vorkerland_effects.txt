@@ -736,15 +736,23 @@ ADISCORD_vorkerland_start_khan_border_war = {
 	}
 }
 
+ADISCORD_vorkerland_close_khan_border_war_flags = {
+	if = {
+		limit = { has_global_flag = ADISCORD_vorkerland_khan_border_war_started }
+		clr_global_flag = ADISCORD_vorkerland_khan_border_war_started
+		set_global_flag = ADISCORD_vorkerland_khan_border_war_resolved
+	}
+}
+
 ADISCORD_vorkerland_resolve_khan_border_war = {
-	clr_global_flag = ADISCORD_vorkerland_khan_border_war_started
-	set_global_flag = ADISCORD_vorkerland_khan_border_war_resolved
+	ADISCORD_vorkerland_close_khan_border_war_flags = yes
+	# Ownership must move before white_peace returns occupation.
+	if = { limit = { controls_state = 49 } 49 = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+	if = { limit = { controls_state = 176 } 176 = { set_state_owner_to = RUS set_state_controller_to = RUS } }
 	if = {
 		limit = { has_war_with = SLA }
 		white_peace = SLA
 	}
-	if = { limit = { controls_state = 49 } 49 = { set_state_owner_to = RUS set_state_controller_to = RUS } }
-	if = { limit = { controls_state = 176 } 176 = { set_state_owner_to = RUS set_state_controller_to = RUS } }
 	if = { limit = { country_exists = SLA } SLA = { set_capital = { state = 51 } } }
 }
 
@@ -755,19 +763,28 @@ ADISCORD_vorkerland_check_khan_border_war = {
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
 			country_exists = SLA
 			has_war_with = SLA
-			OR = {
-				AND = {
-					controls_state = 49
-					controls_state = 176
-				}
-				AND = {
-					has_global_flag = { flag = ADISCORD_vorkerland_khan_border_war_started days > 180 }
-					OR = { controls_state = 49 controls_state = 176 }
-				}
-				has_global_flag = { flag = ADISCORD_vorkerland_khan_border_war_started days > 270 }
-			}
 		}
-		ADISCORD_vorkerland_resolve_khan_border_war = yes
+		if = {
+			limit = { ADISCORD_vorkerland_rus_holds_sla_playable = yes }
+			set_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 }
+			ADISCORD_vorkerland_rus_settle_dirty_target = yes
+		}
+		else_if = {
+			limit = {
+				OR = {
+					AND = {
+						controls_state = 49
+						controls_state = 176
+					}
+					AND = {
+						has_global_flag = { flag = ADISCORD_vorkerland_khan_border_war_started days > 180 }
+						OR = { controls_state = 49 controls_state = 176 }
+					}
+					has_global_flag = { flag = ADISCORD_vorkerland_khan_border_war_started days > 270 }
+				}
+			}
+			ADISCORD_vorkerland_resolve_khan_border_war = yes
+		}
 	}
 }
 
@@ -9496,6 +9513,57 @@ ADISCORD_vorkerland_rus_core_dirty_sca = {
 	210 = { add_core_of = RUS add_claim_by = RUS }
 	211 = { add_core_of = RUS add_claim_by = RUS }
 	212 = { add_core_of = RUS add_claim_by = RUS }
+}
+
+ADISCORD_vorkerland_rus_annex_dirty_target = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals } country_exists = SLA }
+		annex_country = { target = SLA transfer_troops = no }
+		if = {
+			limit = { country_exists = SLA }
+			SLA = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals } country_exists = RZA }
+		annex_country = { target = RZA transfer_troops = no }
+		if = {
+			limit = { country_exists = RZA }
+			RZA = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals } country_exists = MLR }
+		annex_country = { target = MLR transfer_troops = no }
+		if = {
+			limit = { country_exists = MLR }
+			MLR = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals } country_exists = ERT }
+		annex_country = { target = ERT transfer_troops = no }
+		if = {
+			limit = { country_exists = ERT }
+			ERT = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals } country_exists = IRT }
+		annex_country = { target = IRT transfer_troops = no }
+		if = {
+			limit = { country_exists = IRT }
+			IRT = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals } country_exists = SCA }
+		annex_country = { target = SCA transfer_troops = no }
+		if = {
+			limit = { country_exists = SCA }
+			SCA = { every_owned_state = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+		}
+	}
 }
 
 ADISCORD_vorkerland_rus_abort_dirty_campaign = {

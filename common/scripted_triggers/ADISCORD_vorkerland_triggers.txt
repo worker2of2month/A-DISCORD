@@ -1584,6 +1584,56 @@ ADISCORD_vorkerland_rus_holds_current_target = {
 	}
 }
 
+# Capitulation can fire before every playable state is occupied. The campaign
+# still absorbs that neighbour instead of waiting on leftover pockets.
+ADISCORD_vorkerland_rus_current_target_capitulated = {
+	OR = {
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
+			country_exists = SLA
+			has_war_with = SLA
+			SLA = { has_capitulated = yes }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
+			country_exists = RZA
+			has_war_with = RZA
+			RZA = { has_capitulated = yes }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
+			country_exists = MLR
+			has_war_with = MLR
+			MLR = { has_capitulated = yes }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
+			country_exists = ERT
+			has_war_with = ERT
+			ERT = { has_capitulated = yes }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
+			country_exists = IRT
+			has_war_with = IRT
+			IRT = { has_capitulated = yes }
+		}
+		AND = {
+			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
+			country_exists = SCA
+			has_war_with = SCA
+			SCA = { has_capitulated = yes }
+		}
+	}
+}
+
+ADISCORD_vorkerland_rus_current_target_ready = {
+	OR = {
+		ADISCORD_vorkerland_rus_holds_current_target = yes
+		ADISCORD_vorkerland_rus_current_target_capitulated = yes
+	}
+}
+
 # No territory and no live war: abort. An invalid target also cannot wait.
 ADISCORD_vorkerland_rus_campaign_target_still_open = {
 	OR = {
@@ -1678,7 +1728,8 @@ ADISCORD_vorkerland_rus_holds_sla_playable = {
 }
 
 ADISCORD_vorkerland_rus_holds_rza_playable = {
-	controls_state = 125
+	# State 125 is the impassable reactor waste. Occupation cannot take it,
+	# so absorption transfers it after the walkable RZA belt is held.
 	controls_state = 177
 	controls_state = 188
 	controls_state = 192
