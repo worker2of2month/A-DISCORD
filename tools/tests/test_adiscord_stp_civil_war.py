@@ -1084,15 +1084,16 @@ class CivilWarContracts(unittest.TestCase):
                                      ["-1"] if granted else [])
                     self.assertEqual(facts[(tag, "variable", "STP_cw_emergency_research_slots")], 0)
 
-    def test_val_path_reserves_capitulation_and_never_annexes_45(self):
+    def test_val_path_reserves_capitulation_and_administers_livonn(self):
         on_action = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
         self.assertIn("set_global_flag = skip_default_capitulation", on_action)
         settlement = block(self.effects, "VAL_cw_settle_republics")
         self.assertIn("VAL_form_occidian_administration = yes", settlement)
         administration = block(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), "VAL_form_occidian_administration")
-        for state in (43, 44, 88):
+        for state in (43, 44, 45, 88):
             self.assertIn(f"transfer_state = {state}", administration)
-        self.assertNotIn("transfer_state = 45", administration)
+        self.assertIn("transfer_state = 45", settlement)
+        self.assertIn("VAL_cw_stage_livonn_settlement = yes", settlement)
         self.assertIn("VAL_only_occidian_states = yes", administration)
         self.assertNotIn("annex_country", settlement)
         intervention = block(self.effects, "VAL_cw_start_intervention")
