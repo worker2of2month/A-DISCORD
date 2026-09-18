@@ -1142,11 +1142,25 @@ STP_pc_can_confront_val = {
 	}
 }
 
+# COUNTRY NOD: a scripted military defeat must not make the surviving
+# government unusable for postwar diplomacy. HOI4 can keep has_capitulated
+# true after our white-peace settlement, so durable defeat flags are valid too.
+STP_pc_nod_government_exists = {
+	tag = NOD
+	exists = yes
+	is_subject = no
+	OR = {
+		has_capitulated = no
+		has_country_flag = NOD_cw_defeated
+		has_country_flag = STP_pc_defeated_by_sts
+	}
+}
+
 STP_pc_can_confront_nod = {
 	tag = STS
 	NOT = { has_country_flag = STP_pc_nod_terms_accepted }
 	has_capitulated = no
-	NOD = { exists = yes has_capitulated = no }
+	NOD = { STP_pc_nod_government_exists = yes }
 	OR = {
 		has_war_with = NOD
 		AND = { is_subject = no NOT = { is_in_faction_with = NOD } NOD = { is_subject = no } }
@@ -1216,7 +1230,7 @@ STP_pc_can_offer_nod_terms = {
 	is_subject = no
 	check_variable = { var = STP_pc_course value = 1 compare = equals }
 	NOT = { has_country_flag = STP_pc_nod_terms_accepted has_country_flag = STP_pc_nod_terms_refused has_variable = STP_pc_nod_offer_kind }
-	NOD = { exists = yes is_subject = no has_capitulated = no NOT = { has_war_with = STS is_in_faction_with = STS } }
+	NOD = { STP_pc_nod_government_exists = yes NOT = { has_war_with = STS is_in_faction_with = STS } }
 }
 
 # Recipient scope. The outstanding package is the receipt, independent of the focus UI.
@@ -1238,10 +1252,7 @@ STP_pc_val_offer_current = {
 
 # Recipient scope. The outstanding package is the receipt, independent of the focus UI.
 STP_pc_nod_offer_current = {
-	tag = NOD
-	exists = yes
-	is_subject = no
-	has_capitulated = no
+	STP_pc_nod_government_exists = yes
 	NOT = { has_war_with = STS is_in_faction_with = STS }
 	STS = {
 		exists = yes
