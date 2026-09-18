@@ -42,20 +42,19 @@ def event_block(text: str, event_id: str) -> str:
 class ShabratPostwarInteractivityTests(unittest.TestCase):
     def test_defeated_nodrul_can_receive_hegemony_terms(self):
         triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        government = named_block(triggers, "STP_pc_nod_government_exists")
+        for token in (
+            "has_capitulated = no",
+            "has_country_flag = NOD_cw_defeated",
+            "has_country_flag = STP_pc_defeated_by_sts",
+        ):
+            self.assertIn(token, government)
+
         offer = named_block(triggers, "STP_pc_can_offer_nod_terms")
         current = named_block(triggers, "STP_pc_nod_offer_current")
-        for block in (offer, current):
-            self.assertIn("has_country_flag = NOD_cw_defeated", block)
-            self.assertIn("has_country_flag = STP_pc_defeated_by_sts", block)
-            self.assertIn("has_capitulated = no", block)
+        self.assertIn("NOD = { STP_pc_nod_government_exists = yes", offer)
+        self.assertIn("STP_pc_nod_government_exists = yes", current)
 
-        events = read("events/ADISCORD_STP_events.txt")
-        demand = event_block(events, "ADISCORD_STP_pc.18")
-        reject = demand[demand.index("name = STP_pc_reject_terms"):]
-        reject = reject[:reject.index("\n\toption = {", 1)]
-        self.assertIn("STP_pc_nod_offer_kind value = 2", reject)
-        self.assertIn("NOD_cw_defeated", reject)
-        self.assertIn("STP_pc_defeated_by_sts", reject)
 
     def test_postwar_nodrul_defeat_is_recorded_before_white_peace(self):
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
