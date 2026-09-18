@@ -2347,6 +2347,10 @@ VAL_enter_stelander_defeat = {
 			retire_character = VAL_Valera_Solgalov
 		}
 		if = {
+			limit = { NOT = { has_character = VAL_Commanders_Council } }
+			recruit_character = VAL_Commanders_Council
+		}
+		if = {
 			limit = { has_character = VAL_Commanders_Council }
 			promote_character = { character = VAL_Commanders_Council ideology = contractual_etatism }
 		}
