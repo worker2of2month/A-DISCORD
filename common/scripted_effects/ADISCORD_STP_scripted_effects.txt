@@ -2703,6 +2703,10 @@ STP_cw_begin_hostilities = {
 		if = {
 			limit = { NOT = { has_global_flag = STP_cw_started } }
 			set_global_flag = STP_cw_started
+			hidden_effect = {
+				scoped_play_song = "ADISCORD_stp_civil_war"
+				STS = { scoped_play_song = "ADISCORD_stp_civil_war" }
+			}
 			remove_mission = STP_cw_nod_warning
 			clr_country_flag = STP_cw_nod_warning_active
 			if = {

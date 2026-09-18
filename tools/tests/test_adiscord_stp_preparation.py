@@ -2689,8 +2689,9 @@ class StelanderPreparationTests(unittest.TestCase):
         playlist = next(e.value for e in station if e.key == "music" and scalar(e.value, "song") == "ADISCORD_stp_shabrat")
         chance = block(playlist, "chance")
         self.assertEqual(scalar(chance, "base"), "10")
-        blocked = block(next(e.value for e in chance if e.key == "modifier"), "NOT")
-        self.assertEqual(scalar(blocked, "has_country_flag"), "STP_sided_with_Maksim_flag")
+        modifiers = [e.value for e in chance if e.key == "modifier"]
+        self.assertEqual(scalar(block(modifiers[0], "NOT"), "has_country_flag"), "STP_sided_with_Maksim_flag")
+        self.assertEqual(scalar(modifiers[1], "has_global_flag"), "STP_cw_started")
         self.assertIn('ADISCORD_stp_shabrat: "3TEETH - Pumped Up Kicks"',
                       (ROOT / "localisation" / "russian" / "ADISCORD_music_l_russian.yml").read_text(encoding="utf-8-sig"))
         self.assertIn('ADISCORD_stp_shabrat: "3TEETH - Pumped Up Kicks"',

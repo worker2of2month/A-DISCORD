@@ -18,6 +18,34 @@ music = {
 			factor = 0
 			NOT = { has_country_flag = STP_sided_with_Maksim_flag }
 		}
+		modifier = {
+			factor = 0
+			has_global_flag = STP_cw_started
+		}
+	}
+}
+
+music = {
+	song = "ADISCORD_stp_civil_war"
+	chance = {
+		base = 10
+		modifier = {
+			factor = 0
+			NOT = { has_global_flag = STP_cw_started }
+		}
+		modifier = {
+			factor = 0
+			has_global_flag = STP_cw_union_wars_finished
+		}
+		modifier = {
+			factor = 0
+			NOT = {
+				OR = {
+					AND = { tag = STP has_war_with = STS }
+					AND = { tag = STS has_war_with = STP }
+				}
+			}
+		}
 	}
 }
 

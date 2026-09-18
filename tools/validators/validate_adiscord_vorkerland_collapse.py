@@ -769,11 +769,10 @@ def validate_premature_wrk_release_contract(
             )
 
     packages = {
-        "EYR": (102, 109, 111, 325),
         "EGC": (81, 110, 124),
         "RIV": (79, 306, 308, 309, 327),
         "REV": (82, 323),
-        "YOR": (108, 122, 123),
+        "YOR": (108, 122, 123, 102, 109, 111, 325),
         "NDN": (27,),
         "SWB": (35,),
         "VHV": (315, 316, 317),
@@ -1374,11 +1373,11 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "VAD": {75, 106, 107, 121},
         "PWR": {71, 90, 91, 202},
         "TVA": {36, 37, 38, 39, 324},
-        "EYR": {102, 109, 111, 325},
+        "EYR": set(),
         "EGC": {81, 110, 124},
         "RIV": {79, 306, 308, 309, 327},
         "REV": {82, 323},
-        "YOR": {108, 122, 123},
+        "YOR": {108, 122, 123, 102, 109, 111, 325},
         "NDN": {27},
         "SWB": {35},
         "VHV": {315, 316, 317},
@@ -2923,7 +2922,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if f"clr_country_flag = {tgd_aid_flag}" in effects + decisions + on_actions:
         issues.append("TGD: technical battalion aid one-shot flag must never be cleared")
 
-    for tag in ("TVA", "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "TGD", "EBA", "PSD", "DVA", "ZTA", "WPA", "WPS"):
+    for tag in ("TVA", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "TGD", "EBA", "PSD", "DVA", "ZTA", "WPA", "WPS"):
         setup = named_block(effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")
         manpower = re.search(r"add_manpower\s*=\s*(\d+)", setup)
         reserve = re.search(r"add_equipment_to_stockpile\s*=\s*\{[^{}]*amount\s*=\s*(\d+)", setup)
@@ -3105,8 +3104,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"{tag} must start with exactly {divisions} militia divisions")
 
     central_minor_reserves = {
-        "EYR": (6500, 800), "EGC": (5500, 650), "RIV": (7000, 850),
-        "REV": (5500, 650), "YOR": (5500, 650), "NDN": (4500, 550),
+        "EGC": (5500, 650), "RIV": (7000, 850),
+        "REV": (5500, 650), "YOR": (12000, 1450), "NDN": (4500, 550),
         "SWB": (4500, 550), "VHV": (5500, 650), "OSV": (4500, 550),
     }
     for tag, (manpower, rifles) in central_minor_reserves.items():

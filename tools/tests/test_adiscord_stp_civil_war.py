@@ -323,6 +323,28 @@ class CivilWarContracts(unittest.TestCase):
                          "independent republics are outside the party-resistance war")
         self.assertNotIn("start_civil_war", start)
 
+    def test_stelander_civil_war_starts_the_registered_theme(self):
+        start = ast_block(ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+                                    "STP_cw_begin_hostilities"), "if")
+        first_time = next(e for e in start if e.key == "if"
+                         and any(v.key == "set_global_flag" and v.value == "STP_cw_started" for v in walk(e.value)))
+        audio = ast_block(first_time.value, "hidden_effect")
+        self.assertEqual(scalar(audio, "scoped_play_song"), "ADISCORD_stp_civil_war")
+        self.assertEqual(scalar(ast_block(audio, "STS"), "scoped_play_song"), "ADISCORD_stp_civil_war")
+        self.assertLess(first_time.value.index(next(e for e in first_time.value if e.key == "set_global_flag")),
+                        first_time.value.index(next(e for e in first_time.value if e.key == "hidden_effect")))
+        assets = entries("music/music.asset")
+        song = next(e.value for e in assets if e.key == "music" and scalar(e.value, "name") == "ADISCORD_stp_civil_war")
+        self.assertEqual(scalar(song, "file"), "ADISCORD_stp_civil_war.ogg")
+        self.assertTrue((ROOT / "music" / "ADISCORD_stp_civil_war.ogg").is_file())
+        playlist = next(e.value for e in entries("music/_songs.txt")
+                        if e.key == "music" and scalar(e.value, "song") == "ADISCORD_stp_civil_war")
+        flags = [e.value for e in walk(ast_block(playlist, "chance")) if e.key == "has_global_flag"]
+        self.assertIn("STP_cw_started", flags)
+        self.assertIn("STP_cw_union_wars_finished", flags)
+        self.assertIn('ADISCORD_stp_civil_war: "Арктида - Всё на кон"',
+                      (ROOT / "localisation" / "russian" / "ADISCORD_music_l_russian.yml").read_text(encoding="utf-8-sig"))
+
     def test_mobilization_pays_real_six_battalion_cost_before_creation(self):
         effect = block(self.effects, "STP_cw_mobilize_brigade")
         spawn = block(self.effects, "STP_cw_create_territorial_brigade")

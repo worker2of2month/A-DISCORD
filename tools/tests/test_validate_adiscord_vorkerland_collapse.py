@@ -899,11 +899,11 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "VAD": {75, 106, 107, 121},
             "PWR": {71, 90, 91, 202},
             "TVA": {36, 37, 38, 39, 324},
-            "EYR": {102, 109, 111, 325},
+            "EYR": set(),
             "EGC": {81, 110, 124},
             "RIV": {79, 306, 308, 309, 327},
             "REV": {82, 323},
-            "YOR": {108, 122, 123},
+            "YOR": {108, 122, 123, 102, 109, 111, 325},
             "NDN": {27},
             "SWB": {35},
             "VHV": {315, 316, 317},
@@ -1074,11 +1074,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
 
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         reserves = {
-            "EYR": (6500, 800),
             "EGC": (5500, 650),
             "RIV": (7000, 850),
             "REV": (5500, 650),
-            "YOR": (5500, 650),
+            "YOR": (12000, 1450),
             "NDN": (4500, 550),
             "SWB": (4500, 550),
             "VHV": (5500, 650),
