@@ -87,6 +87,24 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
         ):
             self.assertIn(token, focus)
 
+    def test_postwar_research_slots_are_unlocked_by_two_distinct_focuses(self):
+        focus = read("common/national_focus/ADISCORD_national_focus_STP.txt")
+        first_id = "STP_pc_development_reopen_universities"
+        second_id = "STP_pc_development_national_research_institutes"
+        for focus_id in (first_id, second_id):
+            self.assertIn(f"id = {focus_id}", focus)
+
+        first_start = focus.index(f"id = {first_id}")
+        first_block = focus[first_start:focus.index("\n\tfocus = {", first_start)]
+        second_start = focus.index(f"id = {second_id}")
+        second_block = focus[second_start:focus.index("\n\tfocus = {", second_start)]
+        self.assertEqual(first_block.count("add_research_slot = 1"), 1)
+        self.assertEqual(second_block.count("add_research_slot = 1"), 1)
+        self.assertIn("prerequisite = { focus = STP_pc_development_engineers_on_radio }", first_block)
+        self.assertIn("prerequisite = { focus = STP_pc_development_generation_reconstruction }", second_block)
+        self.assertIn("prerequisite = { focus = STP_pc_economy_recovery_budget }", second_block)
+        self.assertIn("prerequisite = { focus = STP_pc_development_reopen_universities }", second_block)
+
     def test_new_focuses_have_russian_localisation(self):
         focus = read("common/national_focus/ADISCORD_national_focus_STP.txt")
         loc = read("localisation/russian/ADISCORD_STP_l_russian.yml")
