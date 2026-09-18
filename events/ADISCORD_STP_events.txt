@@ -1514,18 +1514,7 @@ country_event = {
 	trigger = { tag = NOD }
 	option = {
 		name = STP_pc_reject_terms
-		trigger = {
-			STP_pc_nod_offer_current = yes
-			NOT = {
-				AND = {
-					STS = { check_variable = { var = STP_pc_nod_offer_kind value = 2 compare = equals } }
-					OR = {
-						has_country_flag = NOD_cw_defeated
-						has_country_flag = STP_pc_defeated_by_sts
-					}
-				}
-			}
-		}
+		trigger = { STP_pc_nod_offer_current = yes }
 		ai_chance = { base = 20 modifier = { factor = 4 STS = { check_variable = { var = STP_pc_nod_offer_kind value = 2 compare = equals } } } }
 		hidden_effect = { if = { limit = { STP_pc_nod_offer_current = yes } STS = { set_country_flag = STP_pc_nod_terms_refused clear_variable = STP_pc_nod_offer_kind country_event = { id = ADISCORD_STP_pc.21 hours = 1 } } } }
 	}

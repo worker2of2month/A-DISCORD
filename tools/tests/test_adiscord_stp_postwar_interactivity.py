@@ -42,20 +42,19 @@ def event_block(text: str, event_id: str) -> str:
 class ShabratPostwarInteractivityTests(unittest.TestCase):
     def test_defeated_nodrul_can_receive_hegemony_terms(self):
         triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        government = named_block(triggers, "STP_pc_nod_government_exists")
+        for token in (
+            "has_capitulated = no",
+            "has_country_flag = NOD_cw_defeated",
+            "has_country_flag = STP_pc_defeated_by_sts",
+        ):
+            self.assertIn(token, government)
+
         offer = named_block(triggers, "STP_pc_can_offer_nod_terms")
         current = named_block(triggers, "STP_pc_nod_offer_current")
-        for block in (offer, current):
-            self.assertIn("has_country_flag = NOD_cw_defeated", block)
-            self.assertIn("has_country_flag = STP_pc_defeated_by_sts", block)
-            self.assertIn("has_capitulated = no", block)
+        self.assertIn("NOD = { STP_pc_nod_government_exists = yes", offer)
+        self.assertIn("STP_pc_nod_government_exists = yes", current)
 
-        events = read("events/ADISCORD_STP_events.txt")
-        demand = event_block(events, "ADISCORD_STP_pc.18")
-        reject = demand[demand.index("name = STP_pc_reject_terms"):]
-        reject = reject[:reject.index("\n\toption = {", 1)]
-        self.assertIn("STP_pc_nod_offer_kind value = 2", reject)
-        self.assertIn("NOD_cw_defeated", reject)
-        self.assertIn("STP_pc_defeated_by_sts", reject)
 
     def test_postwar_nodrul_defeat_is_recorded_before_white_peace(self):
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
@@ -141,6 +140,39 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
             "STP_pw_campaign_victory_means_normal_life",
         ):
             self.assertIn(key + ":", loc)
+
+    def test_postwar_pacing_keeps_routine_focuses_at_28_days_or_less(self):
+        focus = read("common/national_focus/ADISCORD_national_focus_STP.txt")
+        expected_costs = {
+            "STP_pc_shabrat_cabinet": 4,
+            "STP_pc_shabrat_politics": 4,
+            "STP_pc_two_borders": 4,
+            "STP_pc_war_ledgers": 4,
+            "STP_pc_shared_archive_policy": 4,
+            "STP_pc_heg_unity": 4,
+            "STP_pc_heg_emergency": 4,
+            "STP_pc_heg_subordinate": 4,
+            "STP_pc_heg_limit_parties": 4,
+            "STP_pc_heg_val_audit": 4,
+            "STP_pc_heg_val_terms": 4,
+            "STP_pc_heg_val_force": 4,
+            "STP_pc_heg_nod_break": 4,
+            "STP_pc_heg_nod_force": 4,
+            "STP_pc_lib_assembly": 4,
+            "STP_pc_lib_institutions": 4,
+            "STP_pc_lib_prepare_neighbors": 4,
+            "STP_pc_lib_local_contacts": 4,
+            "STP_pc_lib_crisis": 4,
+            "STP_pc_lib_war": 4,
+            "STP_pc_development_reopen_universities": 4,
+            "STP_pc_development_national_research_institutes": 5,
+        }
+        for focus_id, expected in expected_costs.items():
+            pos = focus.index(f"id = {focus_id}")
+            start = focus.rfind("\n\tfocus = {", 0, pos) + 1
+            end = focus.index("\n\t}", pos) + 3
+            block = focus[start:end]
+            self.assertIn(f"cost = {expected}", block, focus_id)
 
     def test_existing_saves_reconcile_postwar_gameplay_weekly(self):
         on_actions = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
