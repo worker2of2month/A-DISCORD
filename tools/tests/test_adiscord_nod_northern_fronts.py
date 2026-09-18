@@ -34,19 +34,27 @@ class NodrulNorthernFrontTests(unittest.TestCase):
         self.assertIn("allowed = { original_tag = NOD }", block)
         for enemy in ("YPR", "COF", "TFF"):
             self.assertIn(f"has_war_with = {enemy}", block)
-        self.assertRegex(block, r"NOT\s*=\s*\{\s*has_war_with\s*=\s*BJK\s*\}")
         self.assertIn("abort_when_not_enabled = yes", block)
-        self.assertIn("type = front_unit_request tag = BJK value = -100", block)
+        self.assertIn("type = front_unit_request", block)
+        self.assertIn("country_trigger", block)
+        for neighbor in ("BJK", "BBV", "BHG", "BLD", "BGT", "BCM"):
+            self.assertIn(f"original_tag = {neighbor}", block)
+        self.assertIn("NOT = { has_war_with = FROM }", block)
+        self.assertIn("value = -100", block)
 
         # `ignore` is a diplomacy strategy; it must not be used as a fake troop-allocation fix.
         self.assertNotIn("type = ignore id = BJK", block)
+        self.assertNotIn("type = ignore id = BBV", block)
+        self.assertNotIn("type = ignore id = BHG", block)
 
     def test_northern_offensive_does_not_use_diplomatic_ignore_for_fronts(self) -> None:
         source = AI_PATH.read_text(encoding="utf-8-sig")
         block = named_block(source, "NOD_cw_northern_offensive_army")
 
         self.assertTrue(block)
-        self.assertIn("type = dont_defend_ally_borders value = 1", block)
+        self.assertIn("type = dont_defend_ally_borders id = STP value = 100", block)
+        self.assertIn("type = dont_defend_ally_borders id = AIN value = 100", block)
+        self.assertNotIn("type = dont_defend_ally_borders value = 1", block)
         for tag in ("STP", "STS", "SRP", "VAL"):
             self.assertNotIn(f"type = ignore id = {tag}", block)
 
@@ -80,6 +88,21 @@ class NodrulNorthernFrontTests(unittest.TestCase):
         self.assertIn("abort_when_not_enabled = yes", block)
         self.assertRegex(block, r"(?s)type\s*=\s*put_unit_buffers.*?ratio\s*=\s*0\.05")
         self.assertIn("states = { 30 }", block)
+
+    def test_northern_war_sends_a_small_ain_colonial_reserve(self) -> None:
+        source = AI_PATH.read_text(encoding="utf-8-sig")
+        block = named_block(source, "NOD_cw_northern_ain_detachment")
+
+        self.assertTrue(block, "missing northern-war AIN colonial reserve")
+        self.assertIn("allowed = { original_tag = NOD }", block)
+        for enemy in ("YPR", "COF", "TFF"):
+            self.assertIn(f"has_war_with = {enemy}", block)
+        self.assertIn("is_puppet_of = NOD", block)
+        self.assertIn("abort_when_not_enabled = yes", block)
+        self.assertRegex(block, r"(?s)type\s*=\s*put_unit_buffers.*?ratio\s*=\s*0\.10")
+        self.assertIn("states = { 118 119 }", block)
+        self.assertIn("subtract_fronts_from_need = yes", block)
+        self.assertNotIn("type = force_defend_ally_borders", block)
 
     def test_each_active_northern_enemy_has_its_own_high_priority_front(self) -> None:
         source = AI_PATH.read_text(encoding="utf-8-sig")

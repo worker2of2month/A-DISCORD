@@ -133,8 +133,10 @@ NOD_cw_northern_offensive_army = {
 	ai_strategy = { type = role_ratio id = mobile value = 20 }
 	ai_strategy = { type = role_ratio id = militias value = -100 }
 	ai_strategy = { type = role_ratio id = garrison value = -100 }
-	# Do not spend the field army on allied borders or rear-area templates.
-	ai_strategy = { type = dont_defend_ally_borders value = 1 }
+	# Scope by ally tag. A global block also stops the AIN colonial reserve;
+	# STP is the ally whose southern border otherwise holds the field army.
+	ai_strategy = { type = dont_defend_ally_borders id = STP value = 100 }
+	ai_strategy = { type = dont_defend_ally_borders id = AIN value = 100 }
 	ai_strategy = { type = role_ratio id = armor value = 15 }
 	ai_strategy = { type = role_ratio id = mountaineers value = 12 }
 	ai_strategy = { type = force_concentration_factor value = 80 }
@@ -157,6 +159,24 @@ NOD_cw_wartime_home_buffer = {
 		type = put_unit_buffers
 		ratio = 0.05
 		states = { 30 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = yes
+	}
+}
+
+# TFF claims the mandate. Station a small colonial reserve there without
+# opening AIN as a second field-army front.
+NOD_cw_northern_ain_detachment = {
+	allowed = { original_tag = NOD }
+	enable = {
+		OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
+		AIN = { exists = yes is_puppet_of = NOD has_capitulated = no }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.10
+		states = { 118 119 }
 		subtract_invasions_from_need = yes
 		subtract_fronts_from_need = yes
 	}
@@ -214,12 +234,23 @@ NOD_cw_stelander_intervention_army = {
 
 NOD_cw_northern_deprioritize_besjaysk = {
 	allowed = { original_tag = NOD }
-	enable = {
-		OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
-		NOT = { has_war_with = BJK }
-	}
+	enable = { OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } }
 	abort_when_not_enabled = yes
-	# BJK is not part of the northern campaign. Reduce any border/front demand to
-	# zero while it stays neutral so those divisions can be reassigned north.
-	ai_strategy = { type = front_unit_request tag = BJK value = -100 }
+	# The planner opens one front per bordering country. A BJK-only request
+	# leaves BBV and BHG as live neighbor demand during the northern war.
+	ai_strategy = {
+		type = front_unit_request
+		country_trigger = {
+			OR = {
+				original_tag = BJK
+				original_tag = BBV
+				original_tag = BHG
+				original_tag = BLD
+				original_tag = BGT
+				original_tag = BCM
+			}
+			NOT = { has_war_with = FROM }
+		}
+		value = -100
+	}
 }

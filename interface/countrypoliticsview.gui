@@ -31,6 +31,12 @@ guiTypes = {
 			pdx_tooltip = "utilitarism_ideology_desc"
 		}
 		iconType = {
+			name = "ideology_icon_utilitarian_accelerationism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_utilitarian_accelerationism_countryview"
+			pdx_tooltip = "utilitarian_accelerationism_desc"
+		}
+		iconType = {
 			name = "ideology_icon_technocracy"
 			position = { x = 5 y = -3 }
 			spriteType = "GFX_ideology_technocracy_countryview_group"
@@ -65,6 +71,12 @@ guiTypes = {
 			position = { x = 0 y = 0 }
 			spriteType = "GFX_ideology_neo_vorkerism_countryview"
 			pdx_tooltip = "neo_vorkerism_desc"
+		}
+		iconType = {
+			name = "ideology_icon_imperial_restorationism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_imperial_restorationism_countryview"
+			pdx_tooltip = "imperial_restorationism_desc"
 		}
 		iconType = {
 			name = "ideology_icon_pragmatism"

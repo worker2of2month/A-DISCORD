@@ -203,5 +203,141 @@ class WrkIdeologyContractTests(unittest.TestCase):
         self.assertNotIn("GFX_portrait_WRK_Nikita_Worcker_victory", elect_worker)
 
 
+class VadlAndBagleyIdeologyContractTests(unittest.TestCase):
+    IMPERIAL_ICON = ROOT / "gfx/interface/ideologies/imperial_restorationism_group.png"
+    ACCELERATION_ICON = ROOT / "gfx/interface/ideologies/utilitarian_accelerationism_group.png"
+
+    def test_subtypes_are_non_random_under_their_groups(self) -> None:
+        ideologies = read("common/ideologies/00_ideologies.txt")
+        utilitarism = re.search(
+            r"(?s)\butilitarism\s*=\s*\{.*?\btypes\s*=\s*\{(.*?)\n\s*\}\s*\n\s*dynamic_faction_names",
+            ideologies,
+        )
+        pragmatism = re.search(
+            r"(?s)\bpragmatism\s*=\s*\{.*?\btypes\s*=\s*\{(.*?)\n\s*\}\s*\n\s*dynamic_faction_names",
+            ideologies,
+        )
+        self.assertIsNotNone(utilitarism)
+        self.assertIsNotNone(pragmatism)
+        self.assertRegex(
+            utilitarism.group(1),
+            r"(?s)\butilitarian_accelerationism\s*=\s*\{.*?can_be_randomly_selected\s*=\s*no.*?\}",
+        )
+        self.assertRegex(
+            pragmatism.group(1),
+            r"(?s)\bimperial_restorationism\s*=\s*\{.*?can_be_randomly_selected\s*=\s*no.*?\}",
+        )
+
+    def test_vlad_and_bagley_use_the_new_subtypes(self) -> None:
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+
+        vlad = re.search(
+            r"(?s)\bWRK_Vlad_Petrichev\s*=\s*\{(.*?)\n\s*\}\s*\n\s*WRK_Richard_Gordon",
+            read("common/characters/WRK.txt"),
+        )
+        self.assertIsNotNone(vlad)
+        self.assertIn("ideology = imperial_restorationism", vlad.group(1))
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "collapse_effects",
+        )
+        phase_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "phase_effects",
+        )
+        self.assertIn(
+            "ideology = utilitarian_accelerationism",
+            named_block(effects, "ADISCORD_vorkerland_promote_anton_bagley"),
+        )
+        self.assertIn(
+            "ideology = utilitarian_accelerationism",
+            named_block(phase_effects, "ADISCORD_vorkerland_repair_claimant_identities"),
+        )
+        self.assertIn(
+            "ideology = imperial_restorationism",
+            named_block(phase_effects, "ADISCORD_vorkerland_repair_claimant_identities"),
+        )
+        self.assertIn(
+            "ideology = imperial_restorationism",
+            named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_vad"),
+        )
+
+    def test_icons_have_semantic_names_and_keep_source_quality(self) -> None:
+        for icon in (self.IMPERIAL_ICON, self.ACCELERATION_ICON):
+            with self.subTest(icon=icon.name):
+                self.assertTrue(icon.is_file(), icon)
+                with Image.open(icon) as image:
+                    self.assertEqual(image.size, (183, 189))
+                    self.assertEqual(image.mode, "RGBA")
+        leftovers = (
+            "Имперская идеология Вадла.png",
+            "аксилирационизм утилитарный.png",
+        )
+        for leftover in leftovers:
+            self.assertFalse((self.IMPERIAL_ICON.parent / leftover).exists(), leftover)
+
+    def test_both_versions_have_small_and_country_view_sprites(self) -> None:
+        gfx = read("interface/ADISCORD_ideology.gfx")
+        expected_sizes = {
+            "GFX_ideology_imperial_restorationism": 70,
+            "GFX_ideology_utilitarian_accelerationism": 70,
+            "GFX_ideology_imperial_restorationism_countryview": 125,
+            "GFX_ideology_utilitarian_accelerationism_countryview": 125,
+        }
+        for sprite, size in expected_sizes.items():
+            with self.subTest(sprite=sprite):
+                block = re.search(
+                    rf'(?s)(corneredTileSpriteType|spriteType)\s*=\s*\{{'
+                    rf'(?:(?!(?:corneredTileSpriteType|spriteType)\s*=).)*'
+                    rf'name\s*=\s*"{sprite}"'
+                    rf'(?:(?!(?:corneredTileSpriteType|spriteType)\s*=).)*?\n\s*\}}',
+                    gfx,
+                )
+                self.assertIsNotNone(block)
+                self.assertEqual(block.group(1), "corneredTileSpriteType")
+                self.assertRegex(block.group(0), rf"(?s)size\s*=\s*\{{\s*x\s*=\s*{size}\s+y\s*=\s*{size}\s*\}}")
+        self.assertEqual(
+            gfx.count('texturefile = "gfx/interface/ideologies/imperial_restorationism_group.png"'),
+            2,
+        )
+        self.assertEqual(
+            gfx.count('texturefile = "gfx/interface/ideologies/utilitarian_accelerationism_group.png"'),
+            2,
+        )
+
+    def test_country_view_routes_name_icon_and_description(self) -> None:
+        scripted_loc = read("common/scripted_localisation/ADISCORD_ideologies.txt")
+        scripted_gui = read("common/scripted_guis/CountryView_ScriptedGui.txt")
+        gui = read("interface/countrypoliticsview.gui")
+        for subtype in ("imperial_restorationism", "utilitarian_accelerationism"):
+            with self.subTest(subtype=subtype):
+                self.assertIn(f"has_country_leader_ideology = {subtype}", scripted_loc)
+                self.assertIn(f"localization_key = {subtype}", scripted_loc)
+                self.assertIn(f"ideology_icon_{subtype}_visible", scripted_gui)
+                self.assertIn(f"NOT = {{ has_country_leader_ideology = {subtype} }}", scripted_gui)
+                self.assertIn(f'name = "ideology_icon_{subtype}"', gui)
+                self.assertIn(f'spriteType = "GFX_ideology_{subtype}_countryview"', gui)
+                self.assertIn(f'pdx_tooltip = "{subtype}_desc"', gui)
+                icon = re.search(
+                    rf'(?s)iconType\s*=\s*\{{\s*name\s*=\s*"ideology_icon_{subtype}"(.*?)\n\s*\}}',
+                    gui,
+                )
+                self.assertIsNotNone(icon)
+                self.assertNotIn("scale =", icon.group(1))
+
+    def test_russian_localisation_names_the_new_courses(self) -> None:
+        localisation = read("localisation/russian/parties_l_russian.yml")
+        self.assertIn('imperial_restorationism: "Имперский реставрационизм"', localisation)
+        self.assertIn('utilitarian_accelerationism: "Утилитарный акселерационизм"', localisation)
+        imperial = re.search(r'^\s*imperial_restorationism_desc:\s*"(.+)"$', localisation, re.MULTILINE)
+        acceleration = re.search(r'^\s*utilitarian_accelerationism_desc:\s*"(.+)"$', localisation, re.MULTILINE)
+        self.assertIsNotNone(imperial)
+        self.assertIsNotNone(acceleration)
+        self.assertIn("иерархия", imperial.group(1).lower())
+        self.assertIn("поставк", acceleration.group(1).lower())
+        path = ROOT / "localisation/russian/parties_l_russian.yml"
+        self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+
+
 if __name__ == "__main__":
     unittest.main()

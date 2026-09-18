@@ -104,7 +104,10 @@ class WorldNewsContracts(unittest.TestCase):
             self.assertIn(f"set_global_flag = {flag}", war)
 
         for event_id in (1, 2, 4, 5):
-            self.assertIn(f"news_event = {{ id = ADISCORD_world_news.{event_id} }}", war)
+            self.assertIn(
+                f"news_event = {{ id = ADISCORD_world_news.{event_id} hours = 1 }}",
+                war,
+            )
 
         # STP already owns a richer public outbreak report. Publish that report
         # from the reliable war-relation hook instead of showing a second generic

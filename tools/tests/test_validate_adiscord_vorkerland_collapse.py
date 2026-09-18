@@ -2368,7 +2368,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("elections_allowed = no", anton_path)
         self.assertIn("set_cosmetic_tag = WRK_vorkerland_utilitarian_republic", anton_path)
         self.assertIn("portrait = GFX_portrait_WRK_Anton_Bagley", anton_path)
-        self.assertIn("ideology = utilitarism_ideology", successor)
+        self.assertIn("ideology = utilitarian_accelerationism", successor)
         for token in (
             "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic",
             "ruling_party = utilitarism",

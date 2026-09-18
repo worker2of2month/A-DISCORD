@@ -75,6 +75,10 @@ ideologies = {
 
 			utilitarism_ideology = {
 			}
+			utilitarian_accelerationism = {
+				can_be_randomly_selected = no
+				color = { 172 28 24 }
+			}
 
 		}
 
@@ -200,6 +204,10 @@ ideologies = {
 			neo_vorkerism = {
 				can_be_randomly_selected = no
 				color = { 181 73 26 }
+			}
+			imperial_restorationism = {
+				can_be_randomly_selected = no
+				color = { 124 52 56 }
 			}
 		}
 

@@ -223,6 +223,16 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             issues.append(
                 f"missing or duplicate GFX sprite GFX_{name}: found {gfx_names.count(name)}"
             )
+        expected_show_sound = (
+            item.dedicated_sound_effect or "superevent_vorkerland_civilwar_sound_e"
+        )
+        window = ""
+        for block in blocks(gui, r"^\s*containerWindowType\s*=\s*\{"):
+            if re.search(rf'(?m)^\s*name\s*=\s*"{re.escape(name)}"\s*$', block):
+                window = block
+                break
+        if f"show_sound = {expected_show_sound}" not in window:
+            issues.append(f"GUI {name}: show_sound must be {expected_show_sound}")
 
         for suffix, getter in (
             ("title", "GetSupereventTitle"),

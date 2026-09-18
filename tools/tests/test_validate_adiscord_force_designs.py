@@ -714,11 +714,13 @@ class EquipmentPictureTests(unittest.TestCase):
             re.findall(r"(?m)^\s*(ADISCORD_[A-Za-z0-9_]+)\s*=\s*\{", units)
         )
         sprites = read("interface/ADISCORD_subuniticons.gfx")
+        texticons = read("interface/modifiericons_texticons.gfx")
         sprite_blocks = {
             name: block
+            for source in (sprites, texticons)
             for block, name in re.findall(
                 r'spriteType\s*=\s*\{([^{}]*?name\s*=\s*"([^"]+)"[^{}]*?)\}',
-                sprites,
+                source,
                 flags=re.DOTALL,
             )
         }
@@ -726,7 +728,7 @@ class EquipmentPictureTests(unittest.TestCase):
         missing: list[str] = []
         missing_textures: list[str] = []
         for key in sorted(subunit_keys):
-            for suffix in ("medium", "medium_white"):
+            for suffix in ("medium", "medium_white", "small"):
                 sprite_name = f"GFX_unit_{key}_icon_{suffix}"
                 block = sprite_blocks.get(sprite_name)
                 if block is None:

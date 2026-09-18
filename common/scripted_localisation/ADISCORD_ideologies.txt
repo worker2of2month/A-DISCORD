@@ -55,6 +55,10 @@ defined_text = {
 
 defined_text = {
 	name = GetSubIdeologyUtilitarism
+	text = {
+		trigger = { has_country_leader_ideology = utilitarian_accelerationism }
+		localization_key = utilitarian_accelerationism
+	}
 	text = { localization_key = utilitarism_ideology }
 }
 
@@ -76,6 +80,10 @@ defined_text = {
 	text = {
 		trigger = { has_country_leader_ideology = vorkerism }
 		localization_key = vorkerism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = imperial_restorationism }
+		localization_key = imperial_restorationism
 	}
 	text = { localization_key = pragmatism_ideology }
 }

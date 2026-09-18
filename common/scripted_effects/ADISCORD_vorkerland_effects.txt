@@ -3216,7 +3216,7 @@ ADISCORD_vorkerland_promote_anton_bagley = {
 		character = WRK_Anton_Bagley
 		promote_leader = yes
 		country_leader = {
-			ideology = utilitarism_ideology
+			ideology = utilitarian_accelerationism
 			expire = "2200.1.1.1"
 			traits = { Emergency_Powers }
 		}
@@ -6738,7 +6738,7 @@ ADISCORD_vorkerland_repair_claimant_identities = {
 				else = {
 					promote_character = {
 						character = WRK_Anton_Bagley
-						ideology = utilitarism_ideology
+						ideology = utilitarian_accelerationism
 					}
 				}
 				set_country_leader_portrait = {
@@ -6761,7 +6761,7 @@ ADISCORD_vorkerland_repair_claimant_identities = {
 				set_politics = { ruling_party = pragmatism elections_allowed = no }
 				promote_character = {
 					character = WRK_Vlad_Petrichev
-					ideology = pragmatism_ideology
+					ideology = imperial_restorationism
 				}
 				set_country_leader_portrait = {
 					ideology = pragmatism
@@ -7872,7 +7872,7 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 		set_politics = { ruling_party = pragmatism elections_allowed = no }
 		promote_character = {
 			character = WRK_Vlad_Petrichev
-			ideology = pragmatism_ideology
+			ideology = imperial_restorationism
 		}
 		set_country_leader_portrait = {
 			ideology = pragmatism

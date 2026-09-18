@@ -26,7 +26,13 @@ scripted_gui = {
                 has_country_leader_ideology = hedonism_ideology
             }
             ideology_icon_utilitarism_visible = {
-                has_government = utilitarism
+                AND = {
+                    has_government = utilitarism
+                    NOT = { has_country_leader_ideology = utilitarian_accelerationism }
+                }
+            }
+            ideology_icon_utilitarian_accelerationism_visible = {
+                has_country_leader_ideology = utilitarian_accelerationism
             }
             ideology_icon_technocracy_visible = {
                 has_government = technocracy
@@ -49,11 +55,15 @@ scripted_gui = {
             ideology_icon_neo_vorkerism_visible = {
                 has_country_leader_ideology = neo_vorkerism
             }
+            ideology_icon_imperial_restorationism_visible = {
+                has_country_leader_ideology = imperial_restorationism
+            }
             ideology_icon_pragmatism_visible = {
                 AND = {
                     has_government = pragmatism
                     NOT = { has_country_leader_ideology = vorkerism }
                     NOT = { has_country_leader_ideology = neo_vorkerism }
+                    NOT = { has_country_leader_ideology = imperial_restorationism }
                 }
             }
             ideology_icon_anarchism_visible = {

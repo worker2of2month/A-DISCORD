@@ -3275,6 +3275,8 @@ def check_ai_force_progression() -> list[str]:
 
     if "GFX_unit_ADISCORD_line_artillery_icon_small" not in icons:
         issues.append("line artillery small text icon is missing")
+    if "GFX_unit_ADISCORD_territorial_icon_small" not in icons:
+        issues.append("territorial small text icon is missing")
     texture = ROOT / "gfx" / "texticons" / "unit_artillery_icon_small.dds"
     base_texture = BASE_GAME / "gfx" / "texticons" / "unit_artillery_icon_small.dds"
     if not texture.exists() and not base_texture.exists():

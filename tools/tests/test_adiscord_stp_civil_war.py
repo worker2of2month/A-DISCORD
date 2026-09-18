@@ -1289,8 +1289,13 @@ class CivilWarContracts(unittest.TestCase):
                              ("VAL", "has_country_flag", "VAL_cw_military_course"): True,
                              ("VAL", "has_war_with", "SRP"): actual_war}
                     chosen = list(selected_effects(ast_block(events["ADISCORD_STP_cw.21"], "immediate"), facts, "VAL"))
-                    self.assertEqual([scalar(e.value, "id") for _, e in chosen if e.key == "news_event"],
-                                     ["ADISCORD_STP_cw.73"] if owner and eligible and actual_war else [])
+                    news_calls = [e.value for _, e in chosen if e.key == "news_event"]
+                    self.assertEqual(
+                        [scalar(call, "id") for call in news_calls],
+                        ["ADISCORD_STP_cw.73"] if owner and eligible and actual_war else [],
+                    )
+                    if owner and eligible and actual_war:
+                        self.assertEqual([scalar(call, "hours") for call in news_calls], ["1"])
                     self.assertEqual([(scope, e.value) for scope, e in chosen if e.key == "add_ideas"],
                                      [("SRP", "STP_cw_republics_battle_spirit")] if owner and eligible and actual_war else [])
                     self.assertEqual([scalar(e.value, "target") for _, e in chosen if e.key == "declare_war_on"],

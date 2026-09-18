@@ -14,7 +14,7 @@ on_actions = {
 					FROM = { OR = { tag = WKR tag = VAD tag = TVA } }
 				}
 				set_global_flag = ADISCORD_news_vorkerland_fighting_published
-				ROOT = { news_event = { id = ADISCORD_world_news.1 } }
+				ROOT = { news_event = { id = ADISCORD_world_news.1 hours = 1 } }
 			}
 
 			# Nodrul's northern campaign starts with the first real NOD relation
@@ -34,7 +34,7 @@ on_actions = {
 					}
 				}
 				set_global_flag = ADISCORD_news_nodrul_northern_war_published
-				ROOT = { news_event = { id = ADISCORD_world_news.2 } }
+				ROOT = { news_event = { id = ADISCORD_world_news.2 hours = 1 } }
 			}
 
 			# Stelander already has a richer public outbreak report (.70) with
@@ -57,7 +57,8 @@ on_actions = {
 
 			# The military-course intervention currently becomes a real VAL-SRP war.
 			# Tie the headline to that exact relation so diplomatic preparation cannot
-			# announce an intervention that has not happened yet.
+			# announce an intervention that has not happened yet. Same-hour windows
+			# from this hook still run inside declare_war_on.
 			if = {
 				limit = {
 					has_global_flag = STP_cw_started
@@ -68,7 +69,7 @@ on_actions = {
 					}
 				}
 				set_global_flag = ADISCORD_news_kefreyt_intervention_published
-				ROOT = { news_event = { id = ADISCORD_world_news.4 } }
+				ROOT = { news_event = { id = ADISCORD_world_news.4 hours = 1 } }
 			}
 
 			# Itora's intervention is only news once troops actually enter a war
@@ -89,7 +90,7 @@ on_actions = {
 					}
 				}
 				set_global_flag = ADISCORD_news_itora_intervention_published
-				ROOT = { news_event = { id = ADISCORD_world_news.5 } }
+				ROOT = { news_event = { id = ADISCORD_world_news.5 hours = 1 } }
 			}
 		}
 	}

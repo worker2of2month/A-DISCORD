@@ -493,7 +493,7 @@ country_event = {
 					limit = { has_war_with = SRP }
 					set_country_flag = VAL_cw_entered
 					SRP = { add_ideas = STP_cw_republics_battle_spirit STP_cw_republics_war_command = yes }
-					news_event = { id = ADISCORD_STP_cw.73 }
+					news_event = { id = ADISCORD_STP_cw.73 hours = 1 }
 					log = "[STP_CW] VAL ultimatum expired: real war against SRP"
 				}
 				else = {
