@@ -57,7 +57,7 @@ class NodrulNorthernFrontTests(unittest.TestCase):
         self.assertIn("type = role_ratio id = garrison value = -100", block)
         self.assertIn("type = role_ratio id = militias value = -100", block)
         self.assertIn("type = force_concentration_factor value = 80", block)
-        self.assertRegex(block, r"(?s)type\s*=\s*put_unit_buffers.*?ratio\s*=\s*0\.05")
+        self.assertNotIn("type = put_unit_buffers", block)
 
         # Real front allocation belongs to enemy-specific blocks so a dead/peaceful
         # coalition member cannot keep phantom demand in the planner.
@@ -67,6 +67,19 @@ class NodrulNorthernFrontTests(unittest.TestCase):
         self.assertNotIn("type = front_control tag = YPR", block)
         self.assertNotIn("type = front_control tag = COF", block)
         self.assertNotIn("type = front_control tag = TFF", block)
+
+
+    def test_nodrul_wartime_home_buffer_is_one_five_percent_reserve(self) -> None:
+        source = AI_PATH.read_text(encoding="utf-8-sig")
+        block = named_block(source, "NOD_cw_wartime_home_buffer")
+
+        self.assertTrue(block, "missing shared NOD wartime reserve")
+        self.assertIn("allowed = { original_tag = NOD }", block)
+        for enemy in ("YPR", "COF", "TFF", "STS"):
+            self.assertIn(f"has_war_with = {enemy}", block)
+        self.assertIn("abort_when_not_enabled = yes", block)
+        self.assertRegex(block, r"(?s)type\s*=\s*put_unit_buffers.*?ratio\s*=\s*0\.05")
+        self.assertIn("states = { 30 }", block)
 
     def test_each_active_northern_enemy_has_its_own_high_priority_front(self) -> None:
         source = AI_PATH.read_text(encoding="utf-8-sig")
@@ -103,7 +116,7 @@ class NodrulNorthernFrontTests(unittest.TestCase):
         self.assertIn("type = role_ratio id = garrison value = -100", block)
         self.assertIn("type = role_ratio id = militias value = -100", block)
         self.assertIn("type = force_concentration_factor value = 80", block)
-        self.assertRegex(block, r"(?s)type\s*=\s*put_unit_buffers.*?ratio\s*=\s*0\.05")
+        self.assertNotIn("type = put_unit_buffers", block)
         self.assertIn("type = front_unit_request tag = STS value = 220", block)
         self.assertIn(
             "type = front_control tag = STS ratio = 0.01 priority = 1800 "
