@@ -7728,8 +7728,8 @@ ADISCORD_vorkerland_release_losing_claimant_subjects = {
 ADISCORD_vorkerland_prepare_claimants_for_formation = {
 	ADISCORD_vorkerland_disengage_regional_allies_before_formation = yes
 	# Detach Oitfort from every temporary civil-war relation before a claimant is
-	# consumed. The TVA winner path explicitly restores its authored protectorate
-	# after WRK is formed; the other winners leave Oitfort sovereign.
+	# consumed. WTD remains a real wartime participant, but every terminal WRK
+	# route absorbs state 34 after the winner has materialized.
 	if = {
 		limit = { country_exists = WTD }
 		WTD = {
@@ -7749,7 +7749,6 @@ ADISCORD_vorkerland_prepare_claimants_for_formation = {
 			clr_country_flag = ADISCORD_vorkerland_wtd_join_retry
 			clr_country_flag = ADISCORD_vorkerland_wtd_join_failed
 			clr_country_flag = ADISCORD_vorkerland_wtd_fighting_for_worx
-			set_country_flag = ADISCORD_vorkerland_wtd_cleanup_preserved
 		}
 	}
 	# Formation consumes the claimant governments and ends their coalitions.
@@ -7777,6 +7776,46 @@ ADISCORD_vorkerland_prepare_claimants_for_formation = {
 		}
 	}
 }
+
+# COUNTRY WRK: Oitfort is a wartime technical administration, not a postwar state.
+# Preserve a human WTD player by handing control to WRK when possible, consume
+# the committee and its units, and leave coring to the existing integration decision.
+ADISCORD_vorkerland_absorb_wtd_after_reunification = {
+	if = {
+		limit = { country_exists = WTD }
+		WTD = {
+			if = {
+				limit = { is_subject = yes }
+				overlord = {
+					set_autonomy = {
+						target = WTD
+						autonomy_state = autonomy_free
+					}
+				}
+			}
+			if = { limit = { is_in_faction = yes } leave_faction = yes }
+			if = { limit = { has_war_with = WRK } white_peace = WRK }
+			clr_country_flag = ADISCORD_vorkerland_wtd_cleanup_preserved
+			clr_country_flag = ADISCORD_vorkerland_wtd_join_retry
+			clr_country_flag = ADISCORD_vorkerland_wtd_join_failed
+			clr_country_flag = ADISCORD_vorkerland_wtd_fighting_for_worx
+		}
+		if = {
+			limit = { is_ai = yes WTD = { is_ai = no } }
+			change_tag_from = WTD
+		}
+		34 = { remove_core_of = WTD }
+		annex_country = { target = WTD transfer_troops = yes }
+		34 = {
+			if = {
+				limit = { is_owned_by = WRK }
+				set_state_controller_to = WRK
+			}
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
 
 # Carry only earned claimant cores into the restored country. Every state is
 # explicit and must belong to WRK after the losing claimant shells are annexed;
@@ -7966,6 +8005,7 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 	annex_country = { target = WKR transfer_troops = yes }
 	if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }
 	if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
+	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
 	set_country_flag = ADISCORD_vorkerland_route_worker
 	set_cosmetic_tag = WRK_vorkerland_emergency
@@ -8068,6 +8108,7 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 	annex_country = { target = VAD transfer_troops = yes }
 	if = { limit = { country_exists = WKR } annex_country = { target = WKR transfer_troops = yes } }
 	if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
+	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
 	# route_joint is the postwar focus route for the VAD claimant. It does not
 	# by itself mean that the rare Worker-Vlad joint council was formed.
@@ -8164,6 +8205,7 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 	annex_country = { target = TVA transfer_troops = yes }
 	if = { limit = { country_exists = WKR } annex_country = { target = WKR transfer_troops = yes } }
 	if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }
+	ADISCORD_vorkerland_absorb_wtd_after_reunification = yes
 	ADISCORD_vorkerland_finalize_wrk_formation = yes
 	# route_utilitarian is retained as the established focus/save contract for
 	# the TVA claimant. Dorian's visible state and politics remain technocratic.
@@ -8197,20 +8239,8 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 		puppet = TGD
 		set_autonomy = { target = TGD autonomy_state = autonomy_puppet freedom_level = 0.10 }
 	}
-	# Oitfort followed Worx as TVA's technical protectorate. Formation consumes
-	# TVA, so rebind that authored relationship explicitly to the new WRK object.
-	if = {
-		limit = {
-			country_exists = WTD
-			WTD = { has_country_flag = ADISCORD_vorkerland_worx_aligned_technocrats }
-		}
-		WTD = {
-			if = { limit = { is_subject = yes } overlord = { set_autonomy = { target = WTD autonomy_state = autonomy_free } } }
-			if = { limit = { is_in_faction = yes } leave_faction = yes }
-		}
-		puppet = WTD
-		set_autonomy = { target = WTD autonomy_state = autonomy_puppet freedom_level = 0.15 }
-	}
+	# Oitfort's wartime protectorate ends with reunification. State 34 was
+	# already consumed by ADISCORD_vorkerland_absorb_wtd_after_reunification.
 	focus_unlock = yes
 	mark_focus_tree_layout_dirty = yes
 	ADISCORD_vorkerland_restore_reunification_allies = yes
