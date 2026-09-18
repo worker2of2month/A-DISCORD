@@ -191,7 +191,9 @@ STS_shabrat_reconstruction_plan = {
 		STP_pc_development_posters_on_ruins
 		STP_pc_development_rebuild_as_duty
 		STP_pc_development_engineers_on_radio
+		STP_pc_development_reopen_universities
 		STP_pc_development_generation_reconstruction
+		STP_pc_development_national_research_institutes
 		STP_pc_shabrat_cabinet
 		STP_pw_republic_new_republic
 		STP_pw_republic_district_authority
