@@ -342,6 +342,58 @@ defined_text = {
     text = { trigger = { STP_cw_region_goes_to_resistance = yes } localization_key = STP_CW_FORECAST_RESISTANCE }
     text = { localization_key = STP_CW_FORECAST_PARTY }
 }
+
+defined_text = {
+	name = STPGetCivilWarForecastReason
+	text = {
+		trigger = { STP_cw_region_goes_to_republics = yes }
+		localization_key = STP_REGION_EMPTY_LINE
+	}
+	text = {
+		trigger = {
+			STP_cw_region_goes_to_resistance = yes
+			STP_region_resistance_overwhelming = yes
+		}
+		localization_key = STP_CW_FORECAST_REASON_OVERWHELMING
+	}
+	text = {
+		trigger = {
+			STP_cw_region_goes_to_resistance = yes
+			state = 3
+			has_state_flag = STP_niansas_transfer_secured
+		}
+		localization_key = STP_CW_FORECAST_REASON_NIANSAS_SECURED
+	}
+	text = {
+		trigger = { STP_cw_region_goes_to_resistance = yes }
+		localization_key = STP_CW_FORECAST_REASON_SECURED
+	}
+	text = {
+		trigger = { has_state_flag = STP_party_counterintelligence_asset }
+		localization_key = STP_CW_FORECAST_REASON_COUNTERINTELLIGENCE
+	}
+	text = {
+		trigger = {
+			state = 3
+			STP_region_resistance_entrenched = yes
+			NOT = { has_state_flag = STP_niansas_transfer_secured }
+		}
+		localization_key = STP_CW_FORECAST_REASON_NIANSAS_ROUTE
+	}
+	text = {
+		trigger = {
+			STP_region_resistance_entrenched = yes
+			has_state_flag = STP_resistance_administration_asset
+			NOT = { has_state_flag = { flag = STP_resistance_administration_asset days > 20 } }
+		}
+		localization_key = STP_CW_FORECAST_REASON_ADMINISTRATION_RECENT
+	}
+	text = {
+		trigger = { STP_region_resistance_entrenched = yes }
+		localization_key = STP_CW_FORECAST_REASON_ADMINISTRATION
+	}
+	text = { localization_key = STP_CW_FORECAST_REASON_INFLUENCE }
+}
 defined_text = {
     name = STPGetRifleCache
     text = { trigger = { has_variable = STP_cw_cached_rifles } localization_key = STP_CW_CACHE_READY }

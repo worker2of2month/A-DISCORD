@@ -117,11 +117,12 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = STP_cw_port_budget }
 		mutually_exclusive = { focus = STP_cw_pay_officials }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 12 }
 		completion_reward = {
 			3 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
 			add_stability = 0.02
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.05 }
+			unlock_decision_tooltip = STP_cw_secure_niansas_administration
 		}
 	}
 
@@ -598,7 +599,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = STP_cw_cabinet_archives }
 		mutually_exclusive = { focus = STP_cw_buy_silence }
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 1 }
 		completion_reward = {
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.15 }
 			add_political_power = 75
@@ -622,7 +623,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = STP_cw_cabinet_archives }
 		mutually_exclusive = { focus = STP_cw_expose_the_cabinet }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 16 }
 		completion_reward = {
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.05 }
 			add_political_power = 125

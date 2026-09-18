@@ -25,16 +25,13 @@ class STPTooltipClarityTests(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertEqual(len(re.findall(rf"(?m)^\s*{re.escape(key)}:\s*", localisation)), 1)
 
-        explicit_warning = (
-            "дорога и подготовленное снабжение сами по себе НЕ передают округ Шабрату"
-        )
-        self.assertGreaterEqual(localisation.count(explicit_warning), 3)
-
         for phrase in (
-            "закреплённое влияние сопротивления",
-            "администрация сопротивления",
+            "90%",
             "21 день",
             "выше §Y55%§!",
+            "Дорога через Ниансас",
+            "Перехватить областное управление",
+            "положительного перевеса легитимности",
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, localisation)
@@ -44,8 +41,9 @@ class STPTooltipClarityTests(unittest.TestCase):
         )
         self.assertIsNotNone(niansas_tooltip)
         body = niansas_tooltip.group("body")
-        self.assertIn("§YПередача Шабрату:§!", body)
+        self.assertIn("§YТекущий прогноз при восстании:§!", body)
         self.assertIn("[3.STPGetCivilWarForecast]", body)
+        self.assertIn("[3.STPGetCivilWarForecastReason]", body)
         self.assertIn("[3.STPGetAdministrationAsset]", body)
 
 

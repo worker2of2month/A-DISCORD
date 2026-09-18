@@ -1760,6 +1760,7 @@ STP_initialize_battle_for_stelander = {
 }
 
 STP_clear_region_runtime = {
+	clr_state_flag = STP_niansas_transfer_secured
 	clr_state_flag = STP_cw_district_operation_in_progress
 	clr_state_flag = STP_cw_opposition_target
 	clr_state_flag = STP_cw_garrison_evacuated
