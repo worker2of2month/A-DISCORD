@@ -10,3 +10,14 @@ music = {
 	}
 }
 
+music = {
+	song = "ADISCORD_stp_shabrat"
+	chance = {
+		base = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_flag = STP_sided_with_Maksim_flag }
+		}
+	}
+}
+

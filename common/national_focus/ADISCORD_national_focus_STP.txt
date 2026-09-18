@@ -64,7 +64,10 @@ focus_tree = {
 		offset = { x = -12 y = 0 trigger = { has_country_flag = STP_sided_with_Maksim_flag } }
 		available = { STP_cw_preparation_open = yes is_completed_by_event = yes }
 		ai_will_do = { base = 0 }
-		completion_reward = { custom_effect_tooltip = STP_cw_branch_choice_tt }
+		completion_reward = {
+			custom_effect_tooltip = STP_cw_branch_choice_tt
+			hidden_effect = { scoped_play_song = "ADISCORD_stp_shabrat" }
+		}
 	}
 
 	focus = {

@@ -11,3 +11,9 @@ music = {
 	file = "one_minute_of_silence.ogg"
 	volume = 0.0
 }
+
+music = {
+	name = "ADISCORD_stp_shabrat"
+	file = "ADISCORD_stp_shabrat.ogg"
+	volume = 0.65
+}

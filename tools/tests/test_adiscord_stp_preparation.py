@@ -2664,6 +2664,38 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertIn("STP_sided_with_Maksim_flag", selected)
         self.assertIn("STP_sided_with_the_party_flag", selected)
 
+    def test_shabrat_choice_plays_the_registered_theme(self):
+        tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+                    if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
+        focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_Show_Him_The_Truth")
+        reward = block(focus, "completion_reward")
+        self.assertEqual(scalar(reward, "custom_effect_tooltip"), "STP_cw_branch_choice_tt")
+        self.assertEqual(scalar(block(reward, "hidden_effect"), "scoped_play_song"), "ADISCORD_stp_shabrat")
+        events = entries("events/ADISCORD_STP_events.txt")
+        choice = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_preparation.1")
+        shabrat = next(option for option in choice if option.key == "option"
+                       and any(e.key == "set_country_flag" and e.value == "STP_sided_with_Maksim_flag"
+                               for e in walk(option.value)))
+        self.assertEqual(scalar(shabrat.value, "complete_national_focus"), "STP_Show_Him_The_Truth")
+        party = next(option for option in choice if option.key == "option"
+                     and any(e.key == "set_country_flag" and e.value == "STP_sided_with_the_party_flag"
+                             for e in walk(option.value)))
+        self.assertNotIn("scoped_play_song", {e.key for e in walk(party.value)})
+        assets = entries("music/music.asset")
+        song = next(e.value for e in assets if e.key == "music" and scalar(e.value, "name") == "ADISCORD_stp_shabrat")
+        self.assertEqual(scalar(song, "file"), "ADISCORD_stp_shabrat.ogg")
+        self.assertTrue((ROOT / "music" / "ADISCORD_stp_shabrat.ogg").is_file())
+        station = entries("music/_songs.txt")
+        playlist = next(e.value for e in station if e.key == "music" and scalar(e.value, "song") == "ADISCORD_stp_shabrat")
+        chance = block(playlist, "chance")
+        self.assertEqual(scalar(chance, "base"), "10")
+        blocked = block(next(e.value for e in chance if e.key == "modifier"), "NOT")
+        self.assertEqual(scalar(blocked, "has_country_flag"), "STP_sided_with_Maksim_flag")
+        self.assertIn('ADISCORD_stp_shabrat: "3TEETH - Pumped Up Kicks"',
+                      (ROOT / "localisation" / "russian" / "ADISCORD_music_l_russian.yml").read_text(encoding="utf-8-sig"))
+        self.assertIn('ADISCORD_stp_shabrat: "3TEETH - Pumped Up Kicks"',
+                      (ROOT / "localisation" / "english" / "ADISCORD_music_l_english.yml").read_text(encoding="utf-8-sig"))
+
     def test_focus_flags_have_gameplay_consumers(self):
         trees = entries("common/national_focus/ADISCORD_national_focus_STP.txt")
         written = {e.value for e in walk(trees) if e.key == "set_country_flag" and isinstance(e.value, str) and e.value.startswith("STP_cw_")}
