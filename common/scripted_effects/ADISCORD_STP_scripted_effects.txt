@@ -659,8 +659,10 @@ STP_cw_finish_elections = {
 		}
 		else = { set_country_flag = STP_cw_party_election_victory }
 		clr_country_flag = STP_cw_public_command_agreement
-		STP_cw_start = yes
-		if = { limit = { NOT = { has_country_flag = STP_cw_participant } } country_event = { id = ADISCORD_STP_preparation.4 } }
+		# The split removes missions and replaces trees; run it after the expiring
+		# election mission has left the native timed-decision update.
+		country_event = { id = ADISCORD_STP_cw.10 hours = 1 }
+		if = { limit = { STP_cw_can_start = no } country_event = { id = ADISCORD_STP_preparation.4 } }
 		log = "[STP CW] Election mandate recorded; civil-war split requested"
 	}
 }

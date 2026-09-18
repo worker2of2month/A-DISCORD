@@ -1577,6 +1577,25 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertIn("STP_cw_open_preparation", {e.key for e in walk(begin)})
         self.assertNotIn("set_power_balance", {e.key for e in walk(begin)})
 
+    def test_election_timeout_cannot_remove_its_own_active_mission(self):
+        effects = {e.key: e.value for e in entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")}
+        mission = block(block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander"), "STP_cw_election_window")
+        def expand_calls(items, chain=()):
+            for e in items:
+                if e.key in effects and e.value == "yes":
+                    self.assertNotIn(e.key, chain)
+                    yield from expand_calls(effects[e.key], (*chain, e.key))
+                elif isinstance(e.value, list):
+                    yield from expand_calls(e.value, chain)
+                else:
+                    yield e
+        immediate = list(expand_calls(block(mission, "timeout_effect")))
+        self.assertNotIn("remove_mission", {e.key for e in immediate})
+        self.assertNotIn("load_focus_tree", {e.key for e in immediate})
+        deferred = next(e.value for e in entries("events/ADISCORD_STP_events.txt") if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.10")
+        self.assertEqual(scalar(block(deferred, "trigger"), "STP_cw_can_start"), "yes")
+        self.assertEqual(scalar(block(deferred, "immediate"), "STP_cw_start"), "yes")
+
     def test_election_deadline_freezes_native_result_before_starting_war(self):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         finish = block(block(effects, "STP_cw_finish_elections"), "if")
@@ -1597,10 +1616,12 @@ class StelanderPreparationTests(unittest.TestCase):
                 self.assertIn("STP_cw_elections_finished", flags)
                 self.assertNotIn("STP_cw_postwar", flags)
                 calls = [e.key for _, e in result]
-                self.assertEqual(calls.count("STP_cw_start"), 1)
+                self.assertNotIn("STP_cw_start", calls)
+                split = next(e.value for _, e in result if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.10")
+                self.assertEqual(scalar(split, "hours"), "1")
                 last_result = max(i for i, (_, e) in enumerate(result) if e.key == "set_country_flag"
                                   and e.value in {"STP_cw_elections_finished", f"STP_cw_{winner}_election_victory"})
-                self.assertLess(last_result, calls.index("STP_cw_start"))
+                self.assertLess(last_result, calls.index("country_event"))
         self.assertFalse({"STP_end_battle_for_stelander", "STP_cw_return_preparation_reserves",
                           "STP_cw_clear_resistance_modifiers", "load_focus_tree", "load_oob"}
                          & {e.key for e in walk(finish)}, "the split owns payouts, assets and the wartime tree")
@@ -2125,7 +2146,8 @@ class StelanderPreparationTests(unittest.TestCase):
                 self.assertEqual(vector, {} if expected is None else dict(zip(vector_names, expected)))
                 flags = [e.value for _, e in result if e.key == "set_country_flag"]
                 self.assertEqual("STP_cw_limited_party_revolt" in flags, limited_ready and expected is not None)
-                self.assertEqual(sum(e.key == "STP_cw_start" for _, e in result), 1, "an electoral mandate never bypasses the armed revolt")
+                self.assertFalse(any(e.key == "STP_cw_start" for _, e in result))
+                self.assertEqual(sum(e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.10" for _, e in result), 1, "the revolt must be queued outside the expiring mission")
         dynamic = block(entries("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"), "STP_cw_election_mandate_dynamic")
         self.assertEqual(scalar(block(dynamic, "enable"), "tag"), "STS")
         self.assertEqual(scalar(block(dynamic, "enable"), "has_war"), "yes")
