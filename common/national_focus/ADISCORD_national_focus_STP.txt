@@ -2826,7 +2826,7 @@ focus_tree = {
 		icon = GFX_focus_generic_self_management
 		x = 14
 		y = 4
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_founder_rules = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -2861,7 +2861,7 @@ focus_tree = {
 		x = 8
 		y = 5
 		prerequisite = { focus = STP_pw_republic_new_republic }
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
 			custom_trigger_tooltip = {
@@ -2882,7 +2882,7 @@ focus_tree = {
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 24
 		y = 4
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
 			custom_trigger_tooltip = {
@@ -3269,7 +3269,7 @@ focus_tree = {
 		icon = GFX_focus_STP_Triumph_Of_Common_Sense
 		x = 16
 		y = 4
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_founder_rules = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3338,7 +3338,7 @@ focus_tree = {
 		icon = GFX_focus_STP_cw_expose_the_cabinet
 		x = 16
 		y = 6
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_course_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3361,7 +3361,7 @@ focus_tree = {
 		icon = GFX_goal_generic_national_unity
 		x = 12
 		y = 6
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3388,7 +3388,7 @@ focus_tree = {
 		icon = GFX_focus_STP_Emergency_Presidium
 		x = 12
 		y = 7
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3410,7 +3410,7 @@ focus_tree = {
 		icon = GFX_goal_generic_political_pressure
 		x = 12
 		y = 8
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3436,7 +3436,7 @@ focus_tree = {
 		icon = GFX_focus_generic_treaty
 		x = 12
 		y = 9
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3524,7 +3524,7 @@ focus_tree = {
 		icon = GFX_focus_STP_Kefreite_Security_Offer
 		x = 8
 		y = 12
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3551,7 +3551,7 @@ focus_tree = {
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 10
 		y = 13
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		bypass = { VAL = { exists = yes OR = { is_subject_of = STS has_idea = STP_pc_val_client } } }
 		available = {
@@ -3575,7 +3575,7 @@ focus_tree = {
 		icon = GFX_goal_generic_major_war
 		x = 10
 		y = 14
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
 			STP_pc_can_confront_val = yes
@@ -3597,7 +3597,7 @@ focus_tree = {
 		icon = GFX_focus_generic_strike_at_democracy1
 		x = 16
 		y = 12
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = { STP_pc_can_offer_nod_terms = yes
 			custom_trigger_tooltip = {
@@ -3619,7 +3619,7 @@ focus_tree = {
 		icon = GFX_goal_generic_major_war
 		x = 16
 		y = 13
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
 			STP_pc_can_confront_nod = yes custom_trigger_tooltip = { tooltip = STP_pc_nod_refused_tt has_country_flag = STP_pc_nod_terms_refused }
@@ -3689,7 +3689,7 @@ focus_tree = {
 		icon = GFX_focus_generic_self_management
 		x = 20
 		y = 6
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3715,7 +3715,7 @@ focus_tree = {
 		icon = GFX_focus_generic_treaty
 		x = 20
 		y = 7
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3873,7 +3873,7 @@ focus_tree = {
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 24
 		y = 10
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3896,7 +3896,7 @@ focus_tree = {
 		icon = GFX_goal_generic_intelligence_exchange
 		x = 24
 		y = 11
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3918,7 +3918,7 @@ focus_tree = {
 		icon = GFX_goal_generic_major_war
 		x = 24
 		y = 12
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -3940,7 +3940,7 @@ focus_tree = {
 		icon = GFX_goal_generic_occupy_states_ongoing_war
 		x = 24
 		y = 13
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
 		available = {
 			OR = { AND = { OR = { has_country_flag = STP_pc_val_crisis has_war_with = VAL } STP_pc_can_confront_val = yes } AND = { OR = { has_country_flag = STP_pc_nod_crisis has_war_with = NOD } STP_pc_can_confront_nod = yes } }
@@ -4778,7 +4778,7 @@ focus_tree = {
 		icon = GFX_goal_generic_scientific_exchange
 		x = 38
 		y = 7
-		cost = 5
+		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pc_focus_available = yes } }
 		prerequisite = { focus = STP_pc_development_engineers_on_radio }
@@ -4798,7 +4798,7 @@ focus_tree = {
 		icon = GFX_focus_generic_industry_3
 		x = 36
 		y = 9
-		cost = 6
+		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pc_focus_available = yes } }
 		prerequisite = { focus = STP_pc_development_generation_reconstruction }
