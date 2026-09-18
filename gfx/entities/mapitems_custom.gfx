@@ -57,7 +57,7 @@ objectTypes = {
 		name = "ADISCORD_vorkerland_pyramid_mesh"
 		file = "gfx/models/buildings/vorkerland_special/ADISCORD_vorkerland_pyramid.mesh"
 		scale = 1
-		cull_distance = 2000.0
+		cull_distance = 8000.0
 
 		meshsettings = {
             shader = "PdxMeshAdvanced"
@@ -119,7 +119,7 @@ objectTypes = {
 		name = "ADISCORD_unity_tower_destruction_mesh"
 		file = "gfx/models/buildings/ADISCORD_unity_tower/ADISCORD_unity_tower_destruction.mesh"
 		scale = 1
-		cull_distance = 2000.0
+		cull_distance = 8000.0
 		animation = { id = "collapse" type = "ADISCORD_unity_tower_collapse_animation" }
 		animation = { id = "ruins" type = "ADISCORD_unity_tower_ruins_animation" }
 

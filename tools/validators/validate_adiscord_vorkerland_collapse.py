@@ -1239,7 +1239,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
     tower_destruction_blocks = [
         block
         for block in named_blocks(outbreak, "if")
-        if "ADISCORD_vorkerland_collapse.3 hours = 1" in block
+        if "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes" in block
     ]
     if len(tower_destruction_blocks) != 1:
         issues.append("Unity Tower camera approach must have one executing one-shot guard block")
@@ -1249,38 +1249,46 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for token in (
         f"NOT = {{ has_global_flag = {tower_guard} }}",
         f"set_global_flag = {tower_guard}",
-        "ADISCORD_vorkerland_focus_human_cameras_on_vorkensberg = yes",
-        "WKR = { country_event = { id = ADISCORD_vorkerland_collapse.3 hours = 1 } }",
+        "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes",
     ):
         if token not in tower_destruction:
             issues.append(f"Unity Tower executing one-shot block is missing {token}")
     if tower_destruction.find("change_tag_from") != -1:
         issues.append("Unity Tower camera must not run before the player handoff finishes")
     last_handoff = outbreak.rfind("change_tag_from")
-    schedule_position = outbreak.find("ADISCORD_vorkerland_collapse.3 hours = 1")
+    schedule_position = outbreak.find(
+        "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes"
+    )
     if last_handoff < 0 or schedule_position < 0 or not last_handoff < schedule_position:
         issues.append("Unity Tower camera must run after the player handoff")
-    city_focus = named_block(effects, "ADISCORD_vorkerland_focus_human_cameras_on_vorkensberg")
-    tower_focus = named_block(effects, "ADISCORD_vorkerland_focus_human_cameras_on_unity_tower")
-    for tag in ("WRK", "WKR", "VAD", "TVA"):
-        if f"{tag} = {{ goto_state = 32 }}" not in city_focus:
-            issues.append(f"city camera approach no longer follows a human {tag}")
-        if f"{tag} = {{ goto_province = {UNITY_TOWER_PROVINCE} }}" not in tower_focus:
-            issues.append(f"Tower camera approach no longer follows a human {tag}")
-        if f"{tag} = {{ exists = yes is_ai = no }}" not in city_focus:
-            issues.append(f"city camera approach must require a human {tag}")
-        if f"{tag} = {{ exists = yes is_ai = no }}" not in tower_focus:
+    camera_schedule = named_block(
+        effects, "ADISCORD_vorkerland_schedule_unity_tower_camera_approach"
+    )
+    for tag in ("WKR", "VAD", "TVA"):
+        if f"{tag} = {{ exists = yes is_ai = no }}" not in camera_schedule:
             issues.append(f"Tower camera approach must require a human {tag}")
+        if (
+            f"{tag} = {{ country_event = {{ id = ADISCORD_vorkerland_collapse.3 hours = 1 }} }}"
+            not in camera_schedule
+        ):
+            issues.append(f"Tower camera approach must fire collapse.3 as ROOT {tag}")
+    if "id = ADISCORD_vorkerland_collapse.4 hours = 1" not in camera_schedule:
+        issues.append("AI-only campaigns must still detonate the Tower without a human camera")
     approach = event_block(events, "ADISCORD_vorkerland_collapse.3")
     detonation = event_block(events, "ADISCORD_vorkerland_collapse.4")
-    if "ADISCORD_vorkerland_focus_human_cameras_on_unity_tower = yes" not in approach:
-        issues.append("collapse.3 must close the human camera on the Tower")
+    settle = event_block(events, "ADISCORD_vorkerland_collapse.5")
+    if f"goto_province = {UNITY_TOWER_PROVINCE}" not in approach:
+        issues.append("collapse.3 must goto the Tower as the human ROOT")
     if "country_event = { id = ADISCORD_vorkerland_collapse.4 hours = 1 }" not in approach:
         issues.append("collapse.3 must wait one hour after the Tower close-up before the clip")
     if "launch_nuke = {" in approach or "ADISCORD_vorkerland_animate_unity_tower_destruction = yes" in approach:
         issues.append("collapse.3 still detonates before the Tower close-up finishes")
     if detonation.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes") != 1:
         issues.append("collapse.4 must play the Tower clip exactly once")
+    if "country_event = { id = ADISCORD_vorkerland_collapse.5 hours = 1 }" not in detonation:
+        issues.append("collapse.4 must settle the ruins actor after the clip")
+    if "ADISCORD_vorkerland_sync_unity_tower_visual = yes" not in settle:
+        issues.append("collapse.5 must restore the durable ruins actor")
     tower_launch = named_block(detonation, "launch_nuke")
     if f"province = {UNITY_TOWER_PROVINCE}" not in tower_launch:
         issues.append("Unity Tower explosion no longer targets its protected VP province")
@@ -1298,11 +1306,10 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if tower_destruction:
         guard_position = tower_destruction.find(f"set_global_flag = {tower_guard}")
         camera_position = tower_destruction.find(
-            "ADISCORD_vorkerland_focus_human_cameras_on_vorkensberg = yes"
+            "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes"
         )
-        schedule_in_block = tower_destruction.find("ADISCORD_vorkerland_collapse.3 hours = 1")
-        if guard_position < 0 or not guard_position < camera_position < schedule_in_block:
-            issues.append("Unity Tower guard must be recorded before the city camera and close-up")
+        if guard_position < 0 or not guard_position < camera_position:
+            issues.append("Unity Tower guard must be recorded before the camera approach")
 
     launch_producers: list[tuple[str, str]] = []
     cleared_tower_guards: list[str] = []

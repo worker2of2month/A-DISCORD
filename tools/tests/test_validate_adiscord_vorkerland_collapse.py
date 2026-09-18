@@ -1392,14 +1392,25 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertFalse(named_blocks(ruins, "event"))
         restored = next(block for block in entities if 'name = "ADISCORD_unity_tower_ruins_entity"' in block)
         self.assertIn('default_state = "ruins"', restored)
+        self.assertIn('default_state = "ruins"', collapse)
+        self.assertNotIn('default_state = "collapse"', collapse)
+        gfx = read("gfx/entities/mapitems_custom.gfx")
         destruction_meshes = [
             block
-            for block in named_blocks(read("gfx/entities/mapitems_custom.gfx"), "pdxmesh")
+            for block in named_blocks(gfx, "pdxmesh")
             if 'name = "ADISCORD_unity_tower_destruction_mesh"' in block
         ]
+        pyramid_meshes = [
+            block
+            for block in named_blocks(gfx, "pdxmesh")
+            if 'name = "ADISCORD_vorkerland_pyramid_mesh"' in block
+        ]
         self.assertEqual(len(destruction_meshes), 1)
+        self.assertEqual(len(pyramid_meshes), 1)
         self.assertIn('shader = "PdxMeshStandard"', destruction_meshes[0])
         self.assertNotIn('shader = "PdxMeshAdvanced"', destruction_meshes[0])
+        self.assertIn("cull_distance = 8000.0", destruction_meshes[0])
+        self.assertIn("cull_distance = 8000.0", pyramid_meshes[0])
 
     def test_tower_is_one_shot_and_dirty_zone_waits_three_years(self) -> None:
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
@@ -1417,7 +1428,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         tower_destruction_blocks = [
             block
             for block in named_blocks(outbreak, "if")
-            if "ADISCORD_vorkerland_collapse.3 hours = 1" in block
+            if "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes" in block
         ]
         self.assertEqual(len(tower_destruction_blocks), 1)
         tower_destruction = tower_destruction_blocks[0]
@@ -1425,18 +1436,18 @@ class BorderWarArchitectureTests(unittest.TestCase):
             f"NOT = {{ has_global_flag = {tower_guard} }}",
             tower_destruction,
         )
-        self.assertIn("ADISCORD_vorkerland_focus_human_cameras_on_vorkensberg = yes", tower_destruction)
         self.assertIn(
-            "WKR = { country_event = { id = ADISCORD_vorkerland_collapse.3 hours = 1 } }",
+            "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes",
             tower_destruction,
         )
         self.assertLess(
             outbreak.rfind("change_tag_from"),
-            outbreak.find("ADISCORD_vorkerland_collapse.3 hours = 1"),
+            outbreak.find("ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes"),
         )
         approach = event_block(events, "ADISCORD_vorkerland_collapse.3")
         detonation = event_block(events, "ADISCORD_vorkerland_collapse.4")
-        self.assertIn("ADISCORD_vorkerland_focus_human_cameras_on_unity_tower = yes", approach)
+        settle = event_block(events, "ADISCORD_vorkerland_collapse.5")
+        self.assertIn(f"goto_province = {UNITY_TOWER_PROVINCE}", approach)
         self.assertIn(
             "country_event = { id = ADISCORD_vorkerland_collapse.4 hours = 1 }",
             approach,
@@ -1451,19 +1462,30 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertNotIn("type = anti_air_building", tower_state_damage)
         self.assertLess(
             tower_destruction.find(f"set_global_flag = {tower_guard}"),
-            tower_destruction.find("ADISCORD_vorkerland_focus_human_cameras_on_vorkensberg = yes"),
+            tower_destruction.find("ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes"),
         )
         self.assertEqual(
             detonation.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes"), 1,
         )
+        self.assertIn(
+            "country_event = { id = ADISCORD_vorkerland_collapse.5 hours = 1 }",
+            detonation,
+        )
+        self.assertIn("ADISCORD_vorkerland_sync_unity_tower_visual = yes", settle)
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-        city_focus = named_block(effects, "ADISCORD_vorkerland_focus_human_cameras_on_vorkensberg")
-        tower_focus = named_block(effects, "ADISCORD_vorkerland_focus_human_cameras_on_unity_tower")
-        for tag in ("WRK", "WKR", "VAD", "TVA"):
-            self.assertIn(f"{tag} = {{ exists = yes is_ai = no }}", city_focus)
-            self.assertIn(f"{tag} = {{ goto_state = 32 }}", city_focus)
-            self.assertIn(f"{tag} = {{ exists = yes is_ai = no }}", tower_focus)
-            self.assertIn(f"{tag} = {{ goto_province = {UNITY_TOWER_PROVINCE} }}", tower_focus)
+        camera_schedule = named_block(
+            effects, "ADISCORD_vorkerland_schedule_unity_tower_camera_approach"
+        )
+        for tag in ("WKR", "VAD", "TVA"):
+            self.assertIn(f"{tag} = {{ exists = yes is_ai = no }}", camera_schedule)
+            self.assertIn(
+                f"{tag} = {{ country_event = {{ id = ADISCORD_vorkerland_collapse.3 hours = 1 }} }}",
+                camera_schedule,
+            )
+        self.assertIn("id = ADISCORD_vorkerland_collapse.4 hours = 1", camera_schedule)
+        news = read("events/ADISCORD_superevents.txt")
+        opening = named_block(news, "news_event")
+        self.assertIn(f"goto_province = {UNITY_TOWER_PROVINCE}", named_block(opening, "option"))
 
         launch_producers: list[tuple[str, str]] = []
         for gameplay_directory in ("common", "events", "history"):

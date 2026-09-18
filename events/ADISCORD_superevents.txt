@@ -131,7 +131,20 @@ news_event = { #vorkerland civilwar
 		}
 	}
 
-	option = { name = news.0.a }
+	option = {
+		name = news.0.a
+		# The paper covers the map. When the human closes it, pull their
+		# camera to the Tower so the approach is visible.
+		hidden_effect = {
+			if = {
+				limit = {
+					is_ai = no
+					has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved
+				}
+				goto_province = 16428
+			}
+		}
+	}
 }
 
 news_event = { #stelander empire

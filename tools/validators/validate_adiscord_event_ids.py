@@ -51,6 +51,7 @@ COLLAPSE_OWNER = "events/ADISCORD_vorkerland_events.txt"
 REQUIRED_ACTIVE_COLLAPSE_IDS = {
     "ADISCORD_vorkerland_collapse.3",
     "ADISCORD_vorkerland_collapse.4",
+    "ADISCORD_vorkerland_collapse.5",
     *(f"ADISCORD_vorkerland_collapse.{number}" for number in range(11, 20)),
     "ADISCORD_vorkerland_collapse.63",
     "ADISCORD_vorkerland_collapse.64",

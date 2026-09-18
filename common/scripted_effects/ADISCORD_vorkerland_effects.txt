@@ -852,43 +852,23 @@ ADISCORD_vorkerland_animate_unity_tower_destruction = {
 	}
 }
 
-# goto_* follows the country that executes it. After change_tag the human is
-# no longer WRK, so aim the living claimant the player actually controls.
-ADISCORD_vorkerland_focus_human_cameras_on_vorkensberg = {
-	if = {
-		limit = { WRK = { exists = yes is_ai = no } }
-		WRK = { goto_state = 32 }
-	}
+# goto_province only moves the local camera when ROOT is the human country.
+# Schedule the approach on that tag; an AI-only campaign skips to detonation.
+ADISCORD_vorkerland_schedule_unity_tower_camera_approach = {
 	if = {
 		limit = { WKR = { exists = yes is_ai = no } }
-		WKR = { goto_state = 32 }
+		WKR = { country_event = { id = ADISCORD_vorkerland_collapse.3 hours = 1 } }
 	}
-	if = {
+	else_if = {
 		limit = { VAD = { exists = yes is_ai = no } }
-		VAD = { goto_state = 32 }
+		VAD = { country_event = { id = ADISCORD_vorkerland_collapse.3 hours = 1 } }
 	}
-	if = {
+	else_if = {
 		limit = { TVA = { exists = yes is_ai = no } }
-		TVA = { goto_state = 32 }
+		TVA = { country_event = { id = ADISCORD_vorkerland_collapse.3 hours = 1 } }
 	}
-}
-
-ADISCORD_vorkerland_focus_human_cameras_on_unity_tower = {
-	if = {
-		limit = { WRK = { exists = yes is_ai = no } }
-		WRK = { goto_province = 16428 }
-	}
-	if = {
-		limit = { WKR = { exists = yes is_ai = no } }
-		WKR = { goto_province = 16428 }
-	}
-	if = {
-		limit = { VAD = { exists = yes is_ai = no } }
-		VAD = { goto_province = 16428 }
-	}
-	if = {
-		limit = { TVA = { exists = yes is_ai = no } }
-		TVA = { goto_province = 16428 }
+	else = {
+		WKR = { country_event = { id = ADISCORD_vorkerland_collapse.4 hours = 1 } }
 	}
 }
 
