@@ -118,7 +118,7 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
         self.assertIn("compare = greater_than", coalition)
         self.assertRegex(
             coalition,
-            r"ADISCORD_vorkerland_central_control_score\s+value\s*=\s*8\b",
+            r"ADISCORD_vorkerland_central_control_score\s+value\s*=\s*12\b",
         )
         for tag in ("wkr", "vad", "tva"):
             idea = f"ADISCORD_vorkerland_coalition_against_{tag}"
