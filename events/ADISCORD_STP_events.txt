@@ -1508,3 +1508,20 @@ country_event = {
 	trigger = { tag = STP has_country_flag = STP_pw_party_nod_invasion_defeated }
 	option = { name = ADISCORD_STP_pc.30.a }
 }
+
+country_event = {
+    id = ADISCORD_STP_cw.200
+    title = STP_ps_agreement_title
+    desc = STP_ps_agreement_desc
+    picture = GFX_report_event_generic_political_discussion
+    is_triggered_only = yes
+    fire_only_once = yes
+    timeout_days = 14
+    option = {
+        name = STP_ps_agreement_accept
+        trigger = { STP_ps_nod_can_host_exiles = yes }
+        ai_chance = { factor = 90 }
+        hidden_effect = { set_country_flag = STP_ps_aid_agreement set_country_flag = STP_ps_asylum_agreement }
+    }
+    option = { name = STP_ps_agreement_decline ai_chance = { factor = 10 } }
+}

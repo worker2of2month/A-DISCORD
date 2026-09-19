@@ -1312,3 +1312,40 @@ STP_pf_can_negotiate = {
  has_capitulated = no
  custom_trigger_tooltip = { tooltip = STP_pf_cooldown_tt NOT = { has_country_flag = STP_pf_negotiation_cooldown } }
 }
+
+# Party survival: country scope unless a province is explicitly named.
+STP_ps_holds_congress = { controls_province = 145 }
+STP_ps_government_operational = {
+    OR = { STP_ps_holds_congress = yes has_country_flag = STP_ps_temporary_government }
+}
+STP_ps_war_active = {
+    tag = STP has_war_with = STS has_capitulated = no
+    NOT = { has_global_flag = STP_cw_union_wars_finished }
+}
+STP_ps_can_counterattack = {
+    STP_ps_war_active = yes
+    STP_ps_government_operational = yes
+    check_variable = { var = STP_ps_stage value = 4 compare = equals }
+}
+STP_ps_can_start_stage = {
+    STP_ps_war_active = yes STP_ps_government_operational = yes
+    NOT = { has_variable = STP_ps_reorg_deposit }
+    NOT = { has_variable = STP_ps_paused_days }
+    NOT = { has_active_mission = STP_ps_reorg_1 }
+    NOT = { has_active_mission = STP_ps_reorg_2 }
+    NOT = { has_active_mission = STP_ps_reorg_3 }
+}
+
+STP_ps_nod_can_host_exiles = {
+    tag = NOD exists = yes has_capitulated = no is_subject = no
+    NOT = { has_war_with = STP }
+}
+STP_ps_can_aid_nod = {
+    tag = STP exists = yes has_capitulated = no
+    NOT = { has_global_flag = STP_cw_union_wars_finished }
+    NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement }
+}
+STP_ps_northern_front_active = {
+    tag = NOD exists = yes has_capitulated = no
+    OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
+}

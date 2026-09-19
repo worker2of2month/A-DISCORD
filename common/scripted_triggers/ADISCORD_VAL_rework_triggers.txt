@@ -474,3 +474,23 @@ VAL_only_occidian_states = {
 		}
 	}
 }
+
+# COUNTRY: a defeated member remains reserved until its active allies fall.
+VAL_final_settlement_ready = {
+    has_country_flag = VAL_final_defeat_pending
+    has_capitulated = yes
+    VAL = { exists = yes has_capitulated = no is_subject = no }
+    NOT = {
+        any_other_country = {
+            is_in_faction_with = PREV
+            has_war_with = VAL
+            has_capitulated = no
+        }
+    }
+}
+
+VAL_is_contract_administration = {
+    is_subject_of = VAL
+    has_autonomy_state = autonomy_VAL_contract_administration
+    has_country_leader_ideology = contractual_etatism
+}

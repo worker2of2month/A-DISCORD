@@ -2978,9 +2978,59 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertLess(body.index("VAL_enforce_stelander_defeat = yes"), body.index("STP_pc_clear_settlement = yes"))
         enforcement = named_block_spans(EFFECTS_PATH.read_text(encoding="utf-8"), "VAL_enforce_stelander_defeat")[0].text
         self.assertIn("STP_cw_capitulation_occupier value = 5 compare = equals", enforcement)
-        self.assertIn("end_wars = no end_civil_wars = no", enforcement)
+        self.assertIn("VAL_install_stelander_administration = yes", enforcement)
+        install = named_block_spans(EFFECTS_PATH.read_text(encoding="utf-8"), "VAL_install_stelander_administration")[0].text
+        self.assertIn("end_wars = no end_civil_wars = no", install)
 
 
+
+    def test_final_settlement_waits_for_allies_and_rejects_liberation(self):
+        facts = {
+            ("NOD", "has_country_flag", "VAL_final_defeat_pending"): True,
+            ("NOD", "has_capitulated", "yes"): True,
+            ("VAL", "exists", "yes"): True,
+            ("VAL", "has_capitulated", "no"): True,
+            ("VAL", "is_subject", "no"): True,
+        }
+        self.assertTrue(self.match("VAL_final_settlement_ready", facts, "NOD"))
+        facts.update({("STP", "exists", "yes"): True,
+                      ("STP", "is_in_faction_with", "PREV"): True,
+                      ("STP", "has_war_with", "VAL"): True,
+                      ("STP", "has_capitulated", "no"): True})
+        self.assertFalse(self.match("VAL_final_settlement_ready", facts, "NOD"))
+        facts["STP", "has_capitulated", "no"] = False
+        self.assertTrue(self.match("VAL_final_settlement_ready", facts, "NOD"))
+        facts["NOD", "has_capitulated", "yes"] = False
+        self.assertFalse(self.match("VAL_final_settlement_ready", facts, "NOD"))
+
+    def test_stelander_border_cession_preserves_neutral_and_occupied_land(self):
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, matches_conditions, walk
+        effect = block(parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_cede_stelander_border")
+        regions = {e.key: e.value for e in walk(effect) if e.key.isdigit()}
+        self.assertEqual(set(regions), {"46", "29"})
+        for state, body in regions.items():
+            guard = block(block(body, "if"), "limit")
+            for owner, controller, expected in ((True, "PREV", True), (True, "VAL", True), (True, "THIRD", False), (False, "VAL", False)):
+                facts = {(state, "is_owned_by", "PREV"): owner,
+                         (state, "is_controlled_by", "PREV"): controller == "PREV",
+                         (state, "is_controlled_by", "VAL"): controller == "VAL"}
+                self.assertEqual(matches_conditions(guard, facts, state), expected)
+        install = block(parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_install_stelander_administration")
+        self.assertFalse(any(e.key in {"annex_country", "change_tag_from"} for e in walk(install)))
+
+    def test_bop_and_autonomy_images_fit_native_slots(self):
+        from PIL import Image
+        for filename in ("VAL_bop_general_staff.png", "VAL_bop_solgalov.png"):
+            with Image.open(ROOT / "gfx/interface/bop" / filename) as image:
+                self.assertEqual(image.size, (78, 88))
+        with Image.open(ROOT / "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png") as image:
+            self.assertEqual(image.size, (35, 35))
+        gfx = (ROOT / "interface/countrypoliticsview.gfx").read_text(encoding="utf-8")
+        self.assertIn('name = "GFX_autonomy_VAL_contract_administration_icon"', gfx)
+        for name in ("VAL_commonwealth", "STL_VAL_administration", "NOD_VAL_administration"):
+            for folder, size in (("", (82, 52)), ("medium/", (41, 26)), ("small/", (10, 7))):
+                with Image.open(ROOT / f"gfx/flags/{folder}{name}.tga") as image:
+                    self.assertEqual(image.size, size)
 
     def test_northern_administration_keeps_bounded_land_and_native_technology(self):
         from tools.tests.test_adiscord_stp_preparation import block, walk, parse_clausewitz, scalar

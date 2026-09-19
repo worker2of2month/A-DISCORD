@@ -14,3 +14,7 @@ OCA = {
     color = rgb { 166 58 42 }
     color_ui = rgb { 166 58 42 }
 }
+
+VAL_commonwealth = { color = rgb { 127 15 2 } color_ui = rgb { 127 15 2 } }
+STL_VAL_administration = { color = rgb { 15 118 124 } color_ui = rgb { 15 118 124 } }
+NOD_VAL_administration = { color = rgb { 63 56 96 } color_ui = rgb { 63 56 96 } }

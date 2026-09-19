@@ -2383,7 +2383,7 @@ VAL_enter_stelander_defeat = {
 VAL_enforce_stelander_defeat = {
  if = {
   limit = { tag = STS check_variable = { var = STP_cw_capitulation_occupier value = 5 compare = equals } check_variable = { var = STP_pc_this_opponent value = 1 compare = equals } check_variable = { var = STP_pc_this_result value = 2 compare = equals } VAL = { exists = yes has_capitulated = no } }
-  VAL = { set_autonomy = { target = STS autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no } }
+  VAL_install_stelander_administration = yes
  }
 }
 
@@ -2651,4 +2651,138 @@ VAL_initialize_command_balance = {
 		set_power_balance = { id = VAL_command_balance set_value = 0.10 }
 		set_country_flag = VAL_command_balance_initialized
 	}
+}
+
+# --- final_campaign_administrations ---
+# COUNTRY STP/STS. Reuse the surviving country so armies, technology and the
+# player's seat remain intact. Only owned, uncontested border states are ceded.
+VAL_install_stelander_administration = {
+    if = {
+        limit = { OR = { tag = STP tag = STS } VAL = { exists = yes has_capitulated = no is_subject = no } }
+        save_event_target_as = VAL_settlement_country
+        if = { limit = { has_war_with = VAL } white_peace = VAL }
+        if = {
+            limit = { OR = { NOT = { is_subject_of = VAL } NOT = { has_autonomy_state = autonomy_VAL_contract_administration } } }
+            VAL = {
+                set_autonomy = { target = event_target:VAL_settlement_country autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+            }
+        }
+        if = {
+            limit = { NOT = { has_cosmetic_tag = STL_VAL_administration } }
+            set_cosmetic_tag = STL_VAL_administration
+            set_politics = { ruling_party = etatism elections_allowed = no }
+            if = {
+                limit = { tag = STP }
+                if = { limit = { NOT = { has_character = STP_VAL_Andrei_Rudnev } } recruit_character = STP_VAL_Andrei_Rudnev }
+                promote_character = { character = STP_VAL_Andrei_Rudnev ideology = contractual_etatism }
+            }
+            else = {
+                if = { limit = { NOT = { has_character = STS_VAL_Andrei_Rudnev } } recruit_character = STS_VAL_Andrei_Rudnev }
+                promote_character = { character = STS_VAL_Andrei_Rudnev ideology = contractual_etatism }
+            }
+            if = { limit = { has_power_balance = { id = STP_shabrat_election_legitimacy } } remove_power_balance = { id = STP_shabrat_election_legitimacy } }
+            load_focus_tree = { tree = VAL_administration_focus keep_completed = no }
+            mark_focus_tree_layout_dirty = yes
+            VAL = { country_event = { id = val_contract.347 } }
+        }
+        if = { limit = { tag = STS } STP_pc_clear_settlement = yes }
+        VAL_cede_stelander_border = yes
+        set_rule = { can_join_factions = no can_create_factions = no }
+        ADISCORD_economy_mark_dirty = yes
+        VAL = { VAL_adopt_commonwealth = yes ADISCORD_economy_mark_dirty = yes }
+    }
+}
+
+# Retry at peace or through the existing frontier decisions if a third party
+# controlled a border state during the settlement. Never take neutral land.
+VAL_cede_stelander_border = {
+    if = {
+        limit = { is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration }
+        46 = {
+            if = {
+                limit = { is_owned_by = PREV OR = { is_controlled_by = PREV is_controlled_by = VAL } }
+                VAL = { transfer_state = 46 }
+                set_state_controller_to = VAL
+            }
+        }
+        29 = {
+            if = {
+                limit = { is_owned_by = PREV OR = { is_controlled_by = PREV is_controlled_by = VAL } }
+                VAL = { transfer_state = 29 }
+                set_state_controller_to = VAL
+            }
+        }
+        ADISCORD_economy_mark_dirty = yes
+        VAL = { ADISCORD_economy_mark_dirty = yes }
+    }
+}
+
+VAL_install_nodrul_administration = {
+    if = {
+        limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
+        if = { limit = { has_war_with = VAL } white_peace = VAL }
+        VAL = { set_autonomy = { target = NOD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no } }
+        if = {
+            limit = { NOT = { has_cosmetic_tag = NOD_VAL_administration } }
+            set_cosmetic_tag = NOD_VAL_administration
+            set_politics = { ruling_party = etatism elections_allowed = no }
+            if = { limit = { NOT = { has_character = NOD_VAL_Contract_Council } } recruit_character = NOD_VAL_Contract_Council }
+            promote_character = { character = NOD_VAL_Contract_Council ideology = contractual_etatism }
+            load_focus_tree = { tree = VAL_administration_focus keep_completed = no }
+            mark_focus_tree_layout_dirty = yes
+            VAL = { country_event = { id = val_contract.348 } }
+        }
+        clr_country_flag = NOD_cw_entered
+        clr_country_flag = NOD_cw_intervention_ready
+        clr_country_flag = NOD_cw_intervention_approved
+        remove_mission = NOD_cw_intervention_preparation
+        remove_mission = NOD_cw_northern_redeployment
+        set_rule = { can_join_factions = no can_create_factions = no }
+        ADISCORD_economy_mark_dirty = yes
+        VAL = { VAL_adopt_commonwealth = yes ADISCORD_economy_mark_dirty = yes }
+    }
+}
+
+# COUNTRY VAL; event-driven, bounded to the three final-war recipients.
+VAL_finalize_reserved_settlements = {
+    STP = {
+        if = {
+            limit = { VAL_final_settlement_ready = yes }
+            clr_country_flag = VAL_final_defeat_pending
+            VAL_install_stelander_administration = yes
+        }
+        else_if = {
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no }
+            clr_country_flag = VAL_final_defeat_pending
+        }
+    }
+    STS = {
+        if = {
+            limit = { VAL_final_settlement_ready = yes }
+            clr_country_flag = VAL_final_defeat_pending
+            VAL_install_stelander_administration = yes
+        }
+        else_if = {
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no }
+            clr_country_flag = VAL_final_defeat_pending
+        }
+    }
+    NOD = {
+        if = {
+            limit = { VAL_final_settlement_ready = yes }
+            clr_country_flag = VAL_final_defeat_pending
+            VAL_install_nodrul_administration = yes
+        }
+        else_if = {
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no }
+            clr_country_flag = VAL_final_defeat_pending
+        }
+    }
+}
+
+VAL_adopt_commonwealth = {
+    if = {
+        limit = { tag = VAL is_subject = no NOT = { has_country_flag = VAL_stelander_defeated } NOT = { has_cosmetic_tag = VAL_commonwealth } }
+        set_cosmetic_tag = VAL_commonwealth
+    }
 }

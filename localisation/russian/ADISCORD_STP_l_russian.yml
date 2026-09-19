@@ -2157,3 +2157,261 @@
  ADISCORD_STP_cw.94.t: "Хедерсетт узурпирует власть"
  ADISCORD_STP_cw.94.d: "Распоряжение поступило в министерства прежде, чем его успели обсудить в президиуме. Ссылаясь на вооружённый раскол страны, Руфус Хедерсетт сосредоточил руководство партийным правительством в своих руках. Приказы войскам, назначения и решения о снабжении отныне должны проходить через его кабинет. Выборы отложены на неопределённый срок.\n\nНа заседании секретарь зачитал документ как уже вступивший в силу. Возражавшим предложили передать замечания письменно; подписи под распоряжением от них не требовались. К вечеру окружные канцелярии получили новые образцы приказов и требование подтвердить подчинение.\n\nОфициальное радио назвало это временной мерой ради сохранения государства. Противники Хедерсетта — узурпацией. Пока за пределами столицы формировались фронты, партийный аппарат получил единственного распорядителя власти."
  ADISCORD_STP_cw.94.a: "Приказы уже разосланы."
+
+STP_ps_reorg_1: "Восстановление правительственной связи"
+
+STP_ps_reorg_1_desc: "Этап приостанавливается при потере работающего правительства. Оплата и оставшийся срок сохраняются до возобновления; прекращение войны возвращает незавершённый депозит."
+
+STP_ps_reorg_1_funded_cost: "£GFX_icone_duckets 900"
+
+STP_ps_reorg_1_funded_cost_blocked: "£GFX_icone_duckets 900"
+
+STP_ps_reorg_1_funded_cost_tooltip: "£GFX_icone_duckets 900"
+
+STP_ps_reorg_1_funded: "Финансировать восстановление: этап 1"
+
+STP_ps_reorg_1_funded_desc: "Длительность: 21 дней (на 7 дней меньше с подготовленной программой). Следующий этап выбирается отдельно. Резервируется 900 казны; ускорение не создаёт дополнительные части."
+
+STP_ps_reorg_1_administrative: "Административное восстановление: этап 1"
+
+STP_ps_reorg_1_administrative_desc: "Длительность: 35 дней (на 7 дней меньше с подготовленной программой). Следующий этап выбирается отдельно. Бесплатный выход при нехватке казны."
+
+STP_ps_reorg_2: "Восстановление снабжения"
+
+STP_ps_reorg_2_desc: "Этап приостанавливается при потере работающего правительства. Оплата и оставшийся срок сохраняются до возобновления; прекращение войны возвращает незавершённый депозит."
+
+STP_ps_reorg_2_funded_cost: "£GFX_icone_duckets 1800"
+
+STP_ps_reorg_2_funded_cost_blocked: "£GFX_icone_duckets 1800"
+
+STP_ps_reorg_2_funded_cost_tooltip: "£GFX_icone_duckets 1800"
+
+STP_ps_reorg_2_funded: "Финансировать восстановление: этап 2"
+
+STP_ps_reorg_2_funded_desc: "Длительность: 21 дней (на 7 дней меньше с подготовленной программой). Следующий этап выбирается отдельно. Резервируется 1800 казны; ускорение не создаёт дополнительные части."
+
+STP_ps_reorg_2_administrative: "Административное восстановление: этап 2"
+
+STP_ps_reorg_2_administrative_desc: "Длительность: 35 дней (на 7 дней меньше с подготовленной программой). Следующий этап выбирается отдельно. Бесплатный выход при нехватке казны."
+
+STP_ps_reorg_3: "Подготовка общего наступления"
+
+STP_ps_reorg_3_desc: "Этап приостанавливается при потере работающего правительства. Оплата и оставшийся срок сохраняются до возобновления; прекращение войны возвращает незавершённый депозит."
+
+STP_ps_reorg_3_funded_cost: "£GFX_icone_duckets 2500"
+
+STP_ps_reorg_3_funded_cost_blocked: "£GFX_icone_duckets 2500"
+
+STP_ps_reorg_3_funded_cost_tooltip: "£GFX_icone_duckets 2500"
+
+STP_ps_reorg_3_funded: "Финансировать восстановление: этап 3"
+
+STP_ps_reorg_3_funded_desc: "Длительность: 28 дней. Следующий этап выбирается отдельно. Резервируется 2500 казны; ускорение не создаёт дополнительные части."
+
+STP_ps_reorg_3_administrative: "Административное восстановление: этап 3"
+
+STP_ps_reorg_3_administrative_desc: "Длительность: 42 дней. Следующий этап выбирается отдельно. Бесплатный выход при нехватке казны."
+
+STP_ps_emergency_cabinet_cost: "£GFX_icone_duckets 1200"
+
+STP_ps_emergency_cabinet_cost_blocked: "£GFX_icone_duckets 1200"
+
+STP_ps_emergency_cabinet_cost_tooltip: "£GFX_icone_duckets 1200"
+
+STP_ps_emergency_cabinet: "Развернуть аварийный кабинет"
+
+STP_ps_emergency_cabinet_desc: "1200 казны, 14 дней. Восстанавливает работу правительства и продолжает прерванный этап. Потеря Конгресса остаётся самостоятельным ограничением. При возврате города или окончании войны неиспользованный депозит возвращается."
+
+STP_ps_emergency_cabinet_administrative: "Собрать кабинет окружными силами"
+
+STP_ps_emergency_cabinet_administrative_desc: "0 казны, 28 дней. Восстанавливает работу правительства и продолжает прерванный этап. Потеря Конгресса остаётся самостоятельным ограничением. При возврате города или окончании войны неиспользованный депозит возвращается."
+
+STP_ps_stage_available_tt: "Правительство работает; текущий этап не занят и не приостановлен."
+
+STP_ps_cabinet_available_tt: "Идёт гражданская война, правительство не работает, другой кабинет ещё не развёртывается."
+
+STP_ps_congress_deadline: "Чрезвычайные полномочия округов"
+
+STP_ps_congress_deadline_desc: "Вернуть Бронзовый конгресс или развернуть кабинет за 21 день. Просрочка закрепит полномочия окружных командований и дополнительные расходы управления. Это не капитуляция."
+
+STP_ps_cabinet_work: "Развёртывание временного правительства"
+
+STP_ps_cabinet_work_desc: "Кабинет возобновит приостановленную реорганизацию с сохранённым сроком и оплатой."
+
+STP_ps_defence_dynamic: "Восстановление военного управления"
+
+STP_ps_nodes_dynamic: "Утрата правительственных узлов"
+
+STP_ps_build_radio_cost: "£GFX_icone_duckets 900"
+
+STP_ps_build_radio_cost_blocked: "£GFX_icone_duckets 900"
+
+STP_ps_build_radio_cost_tooltip: "£GFX_icone_duckets 900"
+
+STP_ps_build_radio: "Развернуть сеть правительственной связи"
+
+STP_ps_build_radio_work: "Развернуть сеть правительственной связи — исполнение"
+
+STP_ps_build_radio_desc: "Цена: 900 казны. Срок: 21 дней. Программа выполняется один раз. При утрате условий незавершённый депозит возвращается."
+
+STP_ps_build_radio_work_desc: "Зарезервировано 900 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
+
+STP_ps_build_hq_cost: "£GFX_icone_duckets 1800"
+
+STP_ps_build_hq_cost_blocked: "£GFX_icone_duckets 1800"
+
+STP_ps_build_hq_cost_tooltip: "£GFX_icone_duckets 1800"
+
+STP_ps_build_hq: "Оборудовать резервный штаб"
+
+STP_ps_build_hq_work: "Оборудовать резервный штаб — исполнение"
+
+STP_ps_build_hq_desc: "Цена: 1800 казны. Срок: 21 дней. Программа выполняется один раз. При утрате условий незавершённый депозит возвращается."
+
+STP_ps_build_hq_work_desc: "Зарезервировано 1800 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
+
+STP_ps_prepare_evacuation_cost: "£GFX_icone_duckets 1500"
+
+STP_ps_prepare_evacuation_cost_blocked: "£GFX_icone_duckets 1500"
+
+STP_ps_prepare_evacuation_cost_tooltip: "£GFX_icone_duckets 1500"
+
+STP_ps_prepare_evacuation: "Подготовить вывоз организации"
+
+STP_ps_prepare_evacuation_work: "Подготовить вывоз организации — исполнение"
+
+STP_ps_prepare_evacuation_desc: "Цена: 1500 казны. Срок: 14 дней. Программа выполняется один раз. При утрате условий незавершённый депозит возвращается."
+
+STP_ps_prepare_evacuation_work_desc: "Зарезервировано 1500 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
+
+STP_ps_transport_cost: "£GFX_icone_duckets 2500"
+
+STP_ps_transport_cost_blocked: "£GFX_icone_duckets 2500"
+
+STP_ps_transport_cost_tooltip: "£GFX_icone_duckets 2500"
+
+STP_ps_transport: "Развернуть военный транспорт"
+
+STP_ps_transport_work: "Развернуть военный транспорт — исполнение"
+
+STP_ps_transport_desc: "Цена: 2500 казны. Срок: 28 дней. Пауза после завершения: 60 дней. При утрате условий незавершённый депозит возвращается."
+
+STP_ps_transport_work_desc: "Зарезервировано 2500 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
+
+STP_ps_ammunition_cost: "£GFX_icone_duckets 2400"
+
+STP_ps_ammunition_cost_blocked: "£GFX_icone_duckets 2400"
+
+STP_ps_ammunition_cost_tooltip: "£GFX_icone_duckets 2400"
+
+STP_ps_ammunition: "Заказать смешанный боекомплект"
+
+STP_ps_ammunition_work: "Заказать смешанный боекомплект — исполнение"
+
+STP_ps_ammunition_desc: "Цена: 2400 казны. Срок: 21 дней. Пауза после завершения: 42 дней. При утрате условий незавершённый депозит возвращается."
+
+STP_ps_ammunition_work_desc: "Зарезервировано 2400 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
+
+STP_ps_ammunition_result_tt: "За 2400 казны и 21 день: 8000 винтовок, 480 артиллерийских орудий, 480 комплектов оружия отделения, 240 поддержки и 160 ПВО. Повторный заказ через 42 дня после доставки."
+
+STP_ps_secure_routes_cost: "£GFX_icone_duckets 1800"
+
+STP_ps_secure_routes_cost_blocked: "£GFX_icone_duckets 1800"
+
+STP_ps_secure_routes_cost_tooltip: "£GFX_icone_duckets 1800"
+
+STP_ps_secure_routes: "Охранять столичное сообщение"
+
+STP_ps_secure_routes_work: "Охранять столичное сообщение — исполнение"
+
+STP_ps_secure_routes_desc: "Цена: 1800 казны. Срок: 42 дней. Пауза после завершения: 42 дней. При утрате условий незавершённый депозит возвращается."
+
+STP_ps_secure_routes_work_desc: "Зарезервировано 1800 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
+
+STP_ps_reserve_training_cost: "£GFX_icone_duckets 1800"
+
+STP_ps_reserve_training_cost_blocked: "£GFX_icone_duckets 1800"
+
+STP_ps_reserve_training_cost_tooltip: "£GFX_icone_duckets 1800"
+
+STP_ps_reserve_training: "Подготовить оперативный резерв"
+
+STP_ps_reserve_training_work: "Подготовить оперативный резерв — исполнение"
+
+STP_ps_reserve_training_desc: "Цена: 1800 казны. Срок: 21 дней. Пауза после завершения: 42 дней. При утрате условий незавершённый депозит возвращается."
+
+STP_ps_reserve_training_work_desc: "Зарезервировано 1800 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
+
+STP_ps_prepared_cabinet_cost: "£GFX_icone_duckets 600"
+
+STP_ps_prepared_cabinet_cost_blocked: "£GFX_icone_duckets 600"
+
+STP_ps_prepared_cabinet_cost_tooltip: "£GFX_icone_duckets 600"
+
+STP_ps_emergency_cabinet_prepared: "Активировать резервный штаб"
+
+STP_ps_emergency_cabinet_prepared_desc: "600 казны и 7 дней. Подготовленный штаб принимает функции правительства; реорганизация продолжится с сохранённого срока."
+
+STP_ps_transport_idea: "Военный транспорт"
+
+STP_ps_route_guard_idea: "Охрана правительственных сообщений"
+
+STP_ps_reserve_idea: "Оперативный резерв"
+
+STP_ps_engineers_idea: "Северная инженерная миссия"
+
+STP_ps_expedition_idea: "Экспедиционное снабжение"
+
+STP_ps_fund_nod_cost: "£GFX_icone_duckets 1500"
+
+STP_ps_fund_nod_cost_blocked: "£GFX_icone_duckets 1500"
+
+STP_ps_fund_nod_cost_tooltip: "£GFX_icone_duckets 1500"
+
+STP_ps_fund_nod: "Кредит Нодрулу"
+
+STP_ps_fund_nod_desc: "Подготовка 14 дней, затем 7 дней доставки. Нодрул получает ровно 1500 казны. Повтор через 42 дня. До отправки отмена возвращает весь резерв; после отправки перевозка не возвращается, груз доставляется пригодному Нодрулу или утрачивается."
+
+STP_ps_arm_nod_cost: "£GFX_icone_duckets 300; £infantry_equipment_text_icon 1200; £artillery_equipment_text_icon 100; £support_equipment_text_icon 60"
+
+STP_ps_arm_nod_cost_blocked: "£GFX_icone_duckets 300; £infantry_equipment_text_icon 1200; £artillery_equipment_text_icon 100; £support_equipment_text_icon 60"
+
+STP_ps_arm_nod_cost_tooltip: "£GFX_icone_duckets 300; £infantry_equipment_text_icon 1200; £artillery_equipment_text_icon 100; £support_equipment_text_icon 60"
+
+STP_ps_arm_nod: "Оружие северному фронту"
+
+STP_ps_arm_nod_desc: "Подготовка 14 дней, затем 7 дней доставки. Отправляются 1200 винтовок, 100 орудий и 60 поддержки из нашего запаса; 300 казны оплачивают перевозку. Повтор через 28 дней. До отправки отмена возвращает весь резерв; после отправки перевозка не возвращается, груз доставляется пригодному Нодрулу или утрачивается."
+
+STP_ps_engineers_nod_cost: "£GFX_icone_duckets 3000"
+
+STP_ps_engineers_nod_cost_blocked: "£GFX_icone_duckets 3000"
+
+STP_ps_engineers_nod_cost_tooltip: "£GFX_icone_duckets 3000"
+
+STP_ps_engineers_nod: "Инженерная миссия"
+
+STP_ps_engineers_nod_desc: "Подготовка 21 дней, затем 7 дней доставки. После доставки 60 дней службы: расход снабжения -10%, восстановление организации +5%. Только пока продолжается северная война. До отправки отмена возвращает весь резерв; после отправки перевозка не возвращается, груз доставляется пригодному Нодрулу или утрачивается."
+
+STP_ps_expedition_nod_cost: "£GFX_icone_duckets 1800"
+
+STP_ps_expedition_nod_cost_blocked: "£GFX_icone_duckets 1800"
+
+STP_ps_expedition_nod_cost_tooltip: "£GFX_icone_duckets 1800"
+
+STP_ps_expedition_nod: "Подготовить экспедиционное снабжение"
+
+STP_ps_expedition_nod_desc: "Подготовка 21 дней, затем 7 дней доставки. Один резерв на вмешательство: 42 дня расхода снабжения -10% после реального вступления Нодрула. Готовность и обязательные семь дней переброски не сокращаются. До отправки отмена возвращает весь резерв; после отправки перевозка не возвращается, груз доставляется пригодному Нодрулу или утрачивается."
+
+STP_ps_party_programs: "Программы партийного правительства"
+
+STP_ps_northern_support: "Северное направление"
+
+STP_ps_exile: "Партийное представительство в Нодруле"
+
+STP_ps_cancel_nod: "Отменить подготовку северного пакета"
+
+STP_ps_nod_dispatch: "Подготовка северного пакета"
+
+STP_ps_nod_delivery: "Северный пакет в пути"
+
+STP_ps_agreement_title: "Протокол со Стеландером"

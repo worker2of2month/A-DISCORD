@@ -352,4 +352,9 @@ spriteTypes = {
 		name = "GFX_portrait_IIA_Artem_Severin"
 		texturefile = "gfx/leaders/IIA/portrait_IIA_Artem_Severin.png"
 	}
+
+    spriteType = {
+        name = "GFX_portrait_VAL_Andrei_Rudnev"
+        texturefile = "gfx/leaders/VAL/portrait_VAL_Andrei_Rudnev.png"
+    }
 }

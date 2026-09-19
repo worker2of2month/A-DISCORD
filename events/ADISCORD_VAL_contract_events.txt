@@ -764,3 +764,20 @@ country_event = {
     is_triggered_only = yes
     option = { name = val_contract.346.a }
 }
+
+country_event = {
+    id = val_contract.347
+    title = val_contract.347.t
+    desc = val_contract.347.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_contract.347.a }
+}
+country_event = {
+    id = val_contract.348
+    title = val_contract.348.t
+    desc = val_contract.348.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_contract.348.a }
+}

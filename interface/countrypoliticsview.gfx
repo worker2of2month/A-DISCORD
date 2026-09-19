@@ -673,4 +673,9 @@ spriteTypes = {
 		textureFile = "gfx/interface/pol_header_bg.dds"
 	}	
 	
+
+    spriteType = {
+        name = "GFX_autonomy_VAL_contract_administration_icon"
+        textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
+    }
 }

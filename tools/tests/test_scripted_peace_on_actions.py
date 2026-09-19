@@ -11,7 +11,7 @@ GENERIC = DIRECTORY / 'ZZ_ADISCORD_default_capitulation_on_actions.txt'
 ORDER = {
     'on_capitulation_immediate': ['stelander', 'kefreyt', 'northern_reservation'],
     'on_capitulation': ['vorkerland_collapse', 'stelander', 'kefreyt', 'rin', 'nam', 'vorkerland_diplomacy', 'northern_reservation', 'livonn'],
-    'on_peace': ['vorkerland_collapse', 'rin', 'vorkerland_diplomacy'],
+    'on_peace': ['vorkerland_collapse', 'rin', 'vorkerland_diplomacy', 'kefreyt'],
     'on_peaceconference_ended': ['stelander'],
     'on_weekly_VAL': ['livonn'],
 }

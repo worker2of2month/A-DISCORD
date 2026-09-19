@@ -142,3 +142,58 @@ focus_tree = {
 		ai_will_do = { base = 25 }
 	}
 }
+
+# A shared recovery program for appointed contract administrations.
+focus_tree = {
+    id = VAL_administration_focus
+    country = { factor = 0 modifier = { add = 100 VAL_is_contract_administration = yes } }
+    continuous_focus_position = { x = 100 y = 555555 }
+    focus = {
+        id = VAL_admin_restore_offices
+        icon = GFX_focus_generic_improve_the_administration
+        x = 6 y = 0 cost = 3
+        completion_reward = { add_political_power = 50 add_stability = 0.03 }
+        ai_will_do = { base = 20 }
+    }
+    focus = {
+        id = VAL_admin_reopen_workshops
+        icon = GFX_goal_generic_construct_civ_factory
+        x = 4 y = 1 cost = 5
+        prerequisite = { focus = VAL_admin_restore_offices }
+        completion_reward = { capital_scope = { add_extra_state_shared_building_slots = 1 add_building_construction = { type = industrial_complex level = 1 instant_build = yes } } }
+        ai_will_do = { base = 15 }
+    }
+    focus = {
+        id = VAL_admin_local_guard
+        icon = GFX_goal_generic_allies_build_infantry
+        x = 8 y = 1 cost = 3
+        prerequisite = { focus = VAL_admin_restore_offices }
+        completion_reward = { army_experience = 15 add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = VAL } }
+        ai_will_do = { base = 15 }
+    }
+    focus = {
+        id = VAL_admin_supply_depots
+        icon = GFX_focus_generic_reinforcing_the_supply_network
+        x = 4 y = 2 cost = 3
+        prerequisite = { focus = VAL_admin_reopen_workshops }
+        completion_reward = { capital_scope = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } } }
+        ai_will_do = { base = 10 }
+    }
+    focus = {
+        id = VAL_admin_professional_service
+        icon = GFX_goal_generic_army_doctrines
+        x = 8 y = 2 cost = 3
+        prerequisite = { focus = VAL_admin_local_guard }
+        completion_reward = { add_command_power = 20 army_experience = 15 }
+        ai_will_do = { base = 10 }
+    }
+    focus = {
+        id = VAL_admin_ratify_charter
+        icon = GFX_focus_generic_treaty
+        x = 6 y = 3 cost = 3
+        prerequisite = { focus = VAL_admin_supply_depots }
+        prerequisite = { focus = VAL_admin_professional_service }
+        completion_reward = { add_stability = 0.05 add_political_power = 75 }
+        ai_will_do = { base = 10 }
+    }
+}

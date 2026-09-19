@@ -5108,3 +5108,450 @@ STP_pw_party_settle_nod_invasion_victory = {
 		annex_country = { target = STP transfer_troops = yes }
 	}
 }
+
+# Party defensive recovery. Deposits survive a government relocation.
+STP_ps_begin_defence = {
+    if = {
+        limit = { STP_ps_war_active = yes NOT = { has_variable = STP_ps_stage } }
+        set_variable = { var = STP_ps_stage value = 1 }
+        STP_ps_refresh_defence = yes
+        STP_ps_poll_nodes = yes
+    }
+}
+STP_ps_refresh_defence = {
+    set_variable = { var = STP_ps_breakthrough value = 0 }
+    set_variable = { var = STP_ps_planning value = 0 }
+    if = { limit = { check_variable = { var = STP_ps_stage value = 1 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.45 } set_variable = { var = STP_ps_planning value = -0.5 } }
+    if = { limit = { check_variable = { var = STP_ps_stage value = 2 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.3 } set_variable = { var = STP_ps_planning value = -0.3 } }
+    if = { limit = { check_variable = { var = STP_ps_stage value = 3 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.15 } set_variable = { var = STP_ps_planning value = -0.15 } }
+    if = { limit = { STP_ps_war_active = yes NOT = { has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } } add_dynamic_modifier = { modifier = STP_ps_defence_dynamic } }
+}
+STP_ps_finish_stage = {
+    if = {
+        limit = { STP_ps_war_active = yes has_variable = STP_ps_reorg_deposit }
+        # Read control at the actual deadline; the daily node pulse may run later.
+        if = {
+            limit = { STP_ps_government_operational = yes }
+            clear_variable = STP_ps_reorg_deposit
+            add_to_variable = { var = STP_ps_stage value = 1 }
+            clamp_variable = { var = STP_ps_stage min = 1 max = 4 }
+            STP_ps_refresh_defence = yes
+        }
+        else = {
+            set_variable = { var = STP_ps_paused_days value = 1 }
+            STP_ps_open_congress_crisis = yes
+        }
+    }
+}
+STP_ps_pause_reorganisation = {
+    if = {
+        limit = { has_active_mission = STP_ps_reorg_1 }
+        set_variable = { var = STP_ps_paused_days value = days_mission_timeout@STP_ps_reorg_1 }
+        clamp_variable = { var = STP_ps_paused_days min = 1 max = 112 }
+        remove_mission = STP_ps_reorg_1
+    }
+    if = {
+        limit = { has_active_mission = STP_ps_reorg_2 }
+        set_variable = { var = STP_ps_paused_days value = days_mission_timeout@STP_ps_reorg_2 }
+        clamp_variable = { var = STP_ps_paused_days min = 1 max = 112 }
+        remove_mission = STP_ps_reorg_2
+    }
+    if = {
+        limit = { has_active_mission = STP_ps_reorg_3 }
+        set_variable = { var = STP_ps_paused_days value = days_mission_timeout@STP_ps_reorg_3 }
+        clamp_variable = { var = STP_ps_paused_days min = 1 max = 112 }
+        remove_mission = STP_ps_reorg_3
+    }
+}
+STP_ps_resume_reorganisation = {
+    if = {
+        limit = { STP_ps_war_active = yes STP_ps_government_operational = yes has_variable = STP_ps_paused_days }
+        if = { limit = { check_variable = { var = STP_ps_stage value = 1 compare = equals } }
+            activate_mission = STP_ps_reorg_1
+            set_temp_variable = { var = STP_ps_days_delta value = STP_ps_paused_days }
+            subtract_from_temp_variable = { var = STP_ps_days_delta value = 21 }
+            add_days_mission_timeout = { mission = STP_ps_reorg_1 days = STP_ps_days_delta }
+        }
+        if = { limit = { check_variable = { var = STP_ps_stage value = 2 compare = equals } }
+            activate_mission = STP_ps_reorg_2
+            set_temp_variable = { var = STP_ps_days_delta value = STP_ps_paused_days }
+            subtract_from_temp_variable = { var = STP_ps_days_delta value = 21 }
+            add_days_mission_timeout = { mission = STP_ps_reorg_2 days = STP_ps_days_delta }
+        }
+        if = { limit = { check_variable = { var = STP_ps_stage value = 3 compare = equals } }
+            activate_mission = STP_ps_reorg_3
+            set_temp_variable = { var = STP_ps_days_delta value = STP_ps_paused_days }
+            subtract_from_temp_variable = { var = STP_ps_days_delta value = 28 }
+            add_days_mission_timeout = { mission = STP_ps_reorg_3 days = STP_ps_days_delta }
+        }
+        clear_variable = STP_ps_paused_days
+    }
+}
+STP_ps_close_defence = {
+    # Clear the receipt first: remove_mission can call cancel_effect recursively.
+    if = { limit = { has_variable = STP_ps_reorg_deposit }
+        set_temp_variable = { var = STP_ps_refund value = STP_ps_reorg_deposit }
+        clear_variable = STP_ps_reorg_deposit
+        add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
+        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
+        ADISCORD_economy_mark_dirty = yes
+    }
+    clear_variable = STP_ps_paused_days
+    remove_mission = STP_ps_reorg_1
+    remove_mission = STP_ps_reorg_2
+    remove_mission = STP_ps_reorg_3
+    remove_mission = STP_ps_congress_deadline
+    clr_country_flag = STP_ps_congress_crisis
+    if = { limit = { has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_defence_dynamic } }
+    if = { limit = { has_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } }
+}
+STP_ps_open_congress_crisis = {
+    if = {
+        limit = { STP_ps_war_active = yes STP_ps_holds_congress = no NOT = { has_country_flag = STP_ps_congress_crisis } }
+        set_country_flag = STP_ps_congress_crisis
+        if = { limit = { NOT = { has_country_flag = STP_ps_congress_fell } }
+            set_country_flag = STP_ps_congress_fell
+            add_stability = -0.15
+            add_war_support = -0.10
+            set_temp_variable = { var = STP_apparatus_loyalty_change value = -20 }
+            STP_change_apparatus_loyalty = yes
+        }
+        if = { limit = { STP_ps_government_operational = no }
+            STP_ps_pause_reorganisation = yes
+            if = { limit = { NOT = { has_country_flag = STP_ps_district_concessions } } activate_mission = STP_ps_congress_deadline }
+        }
+    }
+}
+STP_ps_resolve_congress_crisis = {
+    if = { limit = { STP_ps_government_operational = yes }
+        remove_mission = STP_ps_congress_deadline
+        if = { limit = { STP_ps_holds_congress = yes } clr_country_flag = STP_ps_congress_crisis }
+        STP_ps_resume_reorganisation = yes
+    }
+}
+STP_ps_congress_timeout = {
+    if = { limit = { STP_ps_war_active = yes STP_ps_government_operational = no NOT = { has_country_flag = STP_ps_district_concessions } }
+        set_country_flag = STP_ps_district_concessions
+        add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.10 }
+        STP_ps_refresh_nodes = yes
+        ADISCORD_economy_mark_dirty = yes
+    }
+    else = { STP_ps_resolve_congress_crisis = yes }
+}
+STP_ps_poll_nodes = {
+    if = { limit = { STP_ps_war_active = yes }
+        if = { limit = { controls_province = 145 NOT = { has_country_flag = STP_ps_node_seen_145 } } set_country_flag = STP_ps_node_seen_145 }
+        if = { limit = { has_country_flag = STP_ps_node_seen_145 NOT = { controls_province = 145 } NOT = { has_country_flag = STP_ps_node_lost_145 } }
+            set_country_flag = STP_ps_node_lost_145
+            STP_ps_open_congress_crisis = yes
+            STP_ps_refresh_nodes = yes
+        }
+        if = { limit = { controls_province = 145 has_country_flag = STP_ps_node_lost_145 }
+            clr_country_flag = STP_ps_node_lost_145
+            STP_ps_resolve_congress_crisis = yes
+            STP_ps_refresh_nodes = yes
+        }
+        if = { limit = { controls_province = 16366 NOT = { has_country_flag = STP_ps_node_seen_16366 } } set_country_flag = STP_ps_node_seen_16366 }
+        if = { limit = { has_country_flag = STP_ps_node_seen_16366 NOT = { controls_province = 16366 } NOT = { has_country_flag = STP_ps_node_lost_16366 } }
+            set_country_flag = STP_ps_node_lost_16366
+            
+            STP_ps_refresh_nodes = yes
+        }
+        if = { limit = { controls_province = 16366 has_country_flag = STP_ps_node_lost_16366 }
+            clr_country_flag = STP_ps_node_lost_16366
+            
+            STP_ps_refresh_nodes = yes
+        }
+        if = { limit = { controls_province = 45 NOT = { has_country_flag = STP_ps_node_seen_45 } } set_country_flag = STP_ps_node_seen_45 }
+        if = { limit = { has_country_flag = STP_ps_node_seen_45 NOT = { controls_province = 45 } NOT = { has_country_flag = STP_ps_node_lost_45 } }
+            set_country_flag = STP_ps_node_lost_45
+            
+            STP_ps_refresh_nodes = yes
+        }
+        if = { limit = { controls_province = 45 has_country_flag = STP_ps_node_lost_45 }
+            clr_country_flag = STP_ps_node_lost_45
+            
+            STP_ps_refresh_nodes = yes
+        }
+        if = { limit = { controls_province = 16345 NOT = { has_country_flag = STP_ps_node_seen_16345 } } set_country_flag = STP_ps_node_seen_16345 }
+        if = { limit = { has_country_flag = STP_ps_node_seen_16345 NOT = { controls_province = 16345 } NOT = { has_country_flag = STP_ps_node_lost_16345 } }
+            set_country_flag = STP_ps_node_lost_16345
+            
+            STP_ps_refresh_nodes = yes
+        }
+        if = { limit = { controls_province = 16345 has_country_flag = STP_ps_node_lost_16345 }
+            clr_country_flag = STP_ps_node_lost_16345
+            
+            STP_ps_refresh_nodes = yes
+        }
+        if = { limit = { controls_province = 16445 NOT = { has_country_flag = STP_ps_node_seen_16445 } } set_country_flag = STP_ps_node_seen_16445 }
+        if = { limit = { has_country_flag = STP_ps_node_seen_16445 NOT = { controls_province = 16445 } NOT = { has_country_flag = STP_ps_node_lost_16445 } }
+            set_country_flag = STP_ps_node_lost_16445
+            
+            STP_ps_refresh_nodes = yes
+        }
+        if = { limit = { controls_province = 16445 has_country_flag = STP_ps_node_lost_16445 }
+            clr_country_flag = STP_ps_node_lost_16445
+            
+            STP_ps_refresh_nodes = yes
+        }
+    }
+}
+STP_ps_refresh_nodes = {
+    set_variable = { var = STP_ps_node_planning value = 0 }
+    set_variable = { var = STP_ps_node_redeployment value = 0 }
+    if = { limit = { has_country_flag = STP_ps_node_lost_145 } set_variable = { var = STP_ps_node_planning value = -0.15 } }
+    if = { limit = { has_country_flag = STP_ps_node_lost_45 } set_variable = { var = STP_ps_node_redeployment value = -0.20 } }
+    if = { limit = { STP_ps_war_active = yes NOT = { has_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } } } add_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } }
+}
+
+STP_ps_refund_cabinet = {
+    if = { limit = { has_variable = STP_ps_cabinet_deposit }
+        set_temp_variable = { var = STP_ps_refund value = STP_ps_cabinet_deposit }
+        clear_variable = STP_ps_cabinet_deposit
+        add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
+        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+STP_ps_finish_cabinet = {
+    if = { limit = { STP_ps_war_active = yes STP_ps_government_operational = no has_variable = STP_ps_cabinet_deposit }
+        clear_variable = STP_ps_cabinet_deposit
+        set_country_flag = STP_ps_temporary_government
+        STP_ps_resolve_congress_crisis = yes
+    }
+    else = { STP_ps_refund_cabinet = yes }
+}
+
+STP_ps_build_radio_refund = {
+    if = { limit = { has_variable = STP_ps_build_radio_deposit }
+        set_temp_variable = { var = STP_ps_refund value = STP_ps_build_radio_deposit }
+        clear_variable = STP_ps_build_radio_deposit
+        add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
+        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+STP_ps_build_radio_finish = {
+    if = { limit = { has_variable = STP_ps_build_radio_deposit }
+        if = { limit = { tag = STP STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }
+            clear_variable = STP_ps_build_radio_deposit
+            set_country_flag = STP_ps_build_radio_completed
+            
+            set_country_flag = STP_ps_radio_prepared
+            ADISCORD_economy_mark_dirty = yes
+        }
+        else = { STP_ps_build_radio_refund = yes }
+    }
+}
+
+STP_ps_build_hq_refund = {
+    if = { limit = { has_variable = STP_ps_build_hq_deposit }
+        set_temp_variable = { var = STP_ps_refund value = STP_ps_build_hq_deposit }
+        clear_variable = STP_ps_build_hq_deposit
+        add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
+        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+STP_ps_build_hq_finish = {
+    if = { limit = { has_variable = STP_ps_build_hq_deposit }
+        if = { limit = { tag = STP STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }
+            clear_variable = STP_ps_build_hq_deposit
+            set_country_flag = STP_ps_build_hq_completed
+            
+            set_country_flag = STP_ps_hq_prepared
+            ADISCORD_economy_mark_dirty = yes
+        }
+        else = { STP_ps_build_hq_refund = yes }
+    }
+}
+
+STP_ps_prepare_evacuation_refund = {
+    if = { limit = { has_variable = STP_ps_prepare_evacuation_deposit }
+        set_temp_variable = { var = STP_ps_refund value = STP_ps_prepare_evacuation_deposit }
+        clear_variable = STP_ps_prepare_evacuation_deposit
+        add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
+        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+STP_ps_prepare_evacuation_finish = {
+    if = { limit = { has_variable = STP_ps_prepare_evacuation_deposit }
+        if = { limit = { tag = STP STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }
+            clear_variable = STP_ps_prepare_evacuation_deposit
+            set_country_flag = STP_ps_prepare_evacuation_completed
+            
+            set_country_flag = STP_ps_evacuation_prepared
+            ADISCORD_economy_mark_dirty = yes
+        }
+        else = { STP_ps_prepare_evacuation_refund = yes }
+    }
+}
+
+STP_ps_transport_refund = {
+    if = { limit = { has_variable = STP_ps_transport_deposit }
+        set_temp_variable = { var = STP_ps_refund value = STP_ps_transport_deposit }
+        clear_variable = STP_ps_transport_deposit
+        add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
+        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+STP_ps_transport_finish = {
+    if = { limit = { has_variable = STP_ps_transport_deposit }
+        if = { limit = { STP_ps_war_active = yes }
+            clear_variable = STP_ps_transport_deposit
+            
+            set_country_flag = { flag = STP_ps_transport_cooldown days = 60 }
+            add_timed_idea = { idea = STP_ps_transport_idea days = 60 }
+            ADISCORD_economy_mark_dirty = yes
+        }
+        else = { STP_ps_transport_refund = yes }
+    }
+}
+
+STP_ps_ammunition_refund = {
+    if = { limit = { has_variable = STP_ps_ammunition_deposit }
+        set_temp_variable = { var = STP_ps_refund value = STP_ps_ammunition_deposit }
+        clear_variable = STP_ps_ammunition_deposit
+        add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
+        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+STP_ps_ammunition_finish = {
+    if = { limit = { has_variable = STP_ps_ammunition_deposit }
+        if = { limit = { STP_ps_war_active = yes }
+            clear_variable = STP_ps_ammunition_deposit
+            
+            set_country_flag = { flag = STP_ps_ammunition_cooldown days = 42 }
+            add_equipment_to_stockpile = { type = infantry_equipment amount = 8000 }
+            add_equipment_to_stockpile = { type = artillery_equipment amount = 480 }
+            add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 480 }
+            add_equipment_to_stockpile = { type = support_equipment amount = 240 }
+            add_equipment_to_stockpile = { type = anti_air_equipment amount = 160 }
+            ADISCORD_economy_mark_dirty = yes
+        }
+        else = { STP_ps_ammunition_refund = yes }
+    }
+}
+
+STP_ps_secure_routes_refund = {
+    if = { limit = { has_variable = STP_ps_secure_routes_deposit }
+        set_temp_variable = { var = STP_ps_refund value = STP_ps_secure_routes_deposit }
+        clear_variable = STP_ps_secure_routes_deposit
+        add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
+        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+STP_ps_secure_routes_finish = {
+    if = { limit = { has_variable = STP_ps_secure_routes_deposit }
+        if = { limit = { STP_ps_war_active = yes controls_province = 145 controls_province = 45 }
+            clear_variable = STP_ps_secure_routes_deposit
+            
+            set_country_flag = { flag = STP_ps_secure_routes_cooldown days = 42 }
+            add_timed_idea = { idea = STP_ps_route_guard_idea days = 42 }
+            ADISCORD_economy_mark_dirty = yes
+        }
+        else = { STP_ps_secure_routes_refund = yes }
+    }
+}
+
+STP_ps_reserve_training_refund = {
+    if = { limit = { has_variable = STP_ps_reserve_training_deposit }
+        set_temp_variable = { var = STP_ps_refund value = STP_ps_reserve_training_deposit }
+        clear_variable = STP_ps_reserve_training_deposit
+        add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
+        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+STP_ps_reserve_training_finish = {
+    if = { limit = { has_variable = STP_ps_reserve_training_deposit }
+        if = { limit = { STP_ps_war_active = yes }
+            clear_variable = STP_ps_reserve_training_deposit
+            
+            set_country_flag = { flag = STP_ps_reserve_training_cooldown days = 42 }
+            add_timed_idea = { idea = STP_ps_reserve_idea days = 42 }
+            ADISCORD_economy_mark_dirty = yes
+        }
+        else = { STP_ps_reserve_training_refund = yes }
+    }
+}
+
+STP_ps_clear_nod_receipt = {
+    clear_variable = STP_ps_nod_receipt_type
+    clear_variable = STP_ps_nod_receipt_money
+    clear_variable = STP_ps_nod_receipt_stage
+}
+STP_ps_refund_nod = {
+    if = { limit = { check_variable = { var = STP_ps_nod_receipt_stage value = 1 compare = equals } }
+        set_temp_variable = { var = STP_ps_refund value = STP_ps_nod_receipt_money }
+        set_temp_variable = { var = STP_ps_receipt_type value = STP_ps_nod_receipt_type }
+        STP_ps_clear_nod_receipt = yes
+        add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
+        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
+        if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } }
+            add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 }
+            add_equipment_to_stockpile = { type = artillery_equipment amount = 100 }
+            add_equipment_to_stockpile = { type = support_equipment amount = 60 }
+        }
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+STP_ps_dispatch_nod = {
+    if = { limit = { check_variable = { var = STP_ps_nod_receipt_stage value = 1 compare = equals } }
+        if = { limit = { STP_ps_can_aid_nod = yes }
+            set_variable = { var = STP_ps_nod_receipt_stage value = 2 }
+            activate_mission = STP_ps_nod_delivery
+        }
+        else = { STP_ps_refund_nod = yes }
+    }
+}
+STP_ps_deliver_nod = {
+    if = { limit = { check_variable = { var = STP_ps_nod_receipt_stage value = 2 compare = equals } }
+        set_temp_variable = { var = STP_ps_receipt_type value = STP_ps_nod_receipt_type }
+        STP_ps_clear_nod_receipt = yes
+        if = { limit = { check_variable = { var = STP_ps_receipt_type value = 1 compare = equals } } set_country_flag = { flag = STP_ps_fund_nod_cooldown days = 42 } }
+        if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } } set_country_flag = { flag = STP_ps_arm_nod_cooldown days = 28 } }
+        if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes } }
+            if = { limit = { check_variable = { var = STP_ps_receipt_type value = 1 compare = equals } }
+                NOD = {
+                    ADISCORD_economy_initialize_country = yes
+                    add_to_variable = { var = ADISCORD_economy_treasury value = 1500 }
+                    add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1500 }
+                    set_country_flag = STP_ps_nod_procurement_credit
+                    ADISCORD_economy_mark_dirty = yes
+                }
+            }
+            if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } }
+                NOD = {
+                    add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 }
+                    add_equipment_to_stockpile = { type = artillery_equipment amount = 100 }
+                    add_equipment_to_stockpile = { type = support_equipment amount = 60 }
+                }
+            }
+            if = { limit = { check_variable = { var = STP_ps_receipt_type value = 3 compare = equals } NOD = { STP_ps_northern_front_active = yes } }
+                NOD = { add_timed_idea = { idea = STP_ps_engineers_idea days = 60 } }
+            }
+            if = { limit = { check_variable = { var = STP_ps_receipt_type value = 4 compare = equals } }
+                NOD = { set_country_flag = STP_ps_expedition_ready STP_ps_apply_expedition = yes }
+            }
+        }
+    }
+}
+STP_ps_apply_expedition = {
+    if = { limit = { has_country_flag = STP_ps_expedition_ready has_country_flag = NOD_cw_entered has_war_with = STS }
+        clr_country_flag = STP_ps_expedition_ready
+        set_country_flag = STP_ps_expedition_used
+        add_timed_idea = { idea = STP_ps_expedition_idea days = 42 }
+    }
+}
+
+STP_ps_request_northern_agreement = {
+    if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes NOT = { has_country_flag = STP_ps_agreement_requested } } }
+        NOD = { set_country_flag = STP_ps_agreement_requested country_event = { id = ADISCORD_STP_cw.200 } }
+    }
+}

@@ -24,7 +24,8 @@ EXZ_STATES = (167, 169, 171, 180, 182, 185)
 # Countries participating in the northern and Stelander campaigns; the last frame
 # represents a controller from outside this theatre.
 MAP_TAGS = ("VAL", "STP", "STS", "SRP", "NOD", "CIN", "OSF", "APH", "ERT", "NKA", "OCA", "YPR", "COF", "TFF")
-FRAME_COUNT = len(MAP_TAGS) + 1
+MAP_COSMETICS = {"STL_VAL_administration": "STP"}
+FRAME_COUNT = len(MAP_TAGS) + len(MAP_COSMETICS) + 1
 
 
 def country_colors() -> list[tuple[int, int, int]]:
@@ -37,7 +38,7 @@ def country_colors() -> list[tuple[int, int, int]]:
         if color is None:
             raise ValueError(f"No RGB map color for {tag}")
         result.append(tuple(map(int, color.groups())))
-    return [*result, (103, 103, 107)]
+    return [*result, *(result[MAP_TAGS.index(tag)] for tag in MAP_COSMETICS.values()), (103, 103, 107)]
 
 
 def state_provinces(state_id: int) -> set[int]:
@@ -243,10 +244,14 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
     for state in STATE_IDS:
         left, top, _, _ = boxes[state]
         gfx.append(f' spriteType = {{ name = "GFX_VAL_ops_state_{state}" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_{state}.png" noOfFrames = {FRAME_COUNT} }}\n')
-        for frame, tag in enumerate((*MAP_TAGS, "other"), 1):
+        for frame, tag in enumerate((*MAP_TAGS, *MAP_COSMETICS, "other"), 1):
             name = f"VAL_ops_{state}_{tag.lower()}"
             gui.append(f'  iconType = {{ name = "{name}" position = {{ x = {20 + left} y = {38 + top} }} quadTextureSprite = "GFX_VAL_ops_state_{state}" frame = {frame} }}\n')
-            condition = f"tag = {tag}" if tag != "other" else "NOT = { OR = { " + " ".join(f"tag = {t}" for t in MAP_TAGS) + " } }"
+            if tag in MAP_COSMETICS:
+                condition = f"has_cosmetic_tag = {tag}"
+            else:
+                condition = f"tag = {tag}" if tag != "other" else "NOT = { OR = { " + " ".join(f"tag = {t}" for t in MAP_TAGS) + " } }"
+                condition += " NOT = { OR = { " + " ".join(f"has_cosmetic_tag = {t}" for t in MAP_COSMETICS) + " } }"
             script.append(f'   {name}_visible = {{ {state} = {{ controller = {{ {condition} }} }} }}\n')
         gfx.append(f' spriteType = {{ name = "GFX_VAL_ops_contested_{state}" texturefile = "gfx/interface/VAL_operations/VAL_ops_contested_{state}.png" }}\n')
         gui.append(f'  iconType = {{ name = "VAL_ops_{state}_contested" position = {{ x = {20 + left} y = {38 + top} }} quadTextureSprite = "GFX_VAL_ops_contested_{state}" }}\n')

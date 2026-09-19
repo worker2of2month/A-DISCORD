@@ -603,6 +603,38 @@ VAL_reclamation = {
 }
 
 VAL_frontier = {
+    VAL_ratify_postwar_administration = {
+        icon = generic_political_pressure
+        targets = { STP STS NOD }
+        target_trigger = { FROM = { exists = yes } }
+        visible = { FROM = { is_subject_of = VAL NOT = { OR = { has_cosmetic_tag = STL_VAL_administration has_cosmetic_tag = NOD_VAL_administration } } } }
+        available = { has_capitulated = no FROM = { has_capitulated = no } }
+        cost = 0
+        complete_effect = {
+            if = { limit = { FROM = { tag = NOD } } custom_effect_tooltip = VAL_nod_victory_tt hidden_effect = { FROM = { VAL_install_nodrul_administration = yes } } }
+            else = { custom_effect_tooltip = VAL_stelander_victory_tt hidden_effect = { FROM = { VAL_install_stelander_administration = yes } } }
+        }
+        ai_will_do = { base = 100 }
+    }
+
+    VAL_receive_stelander_border = {
+        icon = generic_political_pressure
+        targets = { STP STS }
+        target_trigger = { FROM = { exists = yes } }
+        visible = { FROM = { is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration OR = { owns_state = 46 owns_state = 29 } } }
+        available = {
+            FROM = {
+                OR = {
+                    AND = { owns_state = 46 46 = { OR = { is_controlled_by = PREV is_controlled_by = VAL } } }
+                    AND = { owns_state = 29 29 = { OR = { is_controlled_by = PREV is_controlled_by = VAL } } }
+                }
+            }
+        }
+        cost = 0
+        complete_effect = { custom_effect_tooltip = VAL_receive_stelander_border_tt hidden_effect = { FROM = { VAL_cede_stelander_border = yes } } }
+        ai_will_do = { base = 100 }
+    }
+
     VAL_frontier_workshops = {
         icon = generic_construction
         allowed = { tag = VAL }
@@ -761,6 +793,7 @@ VAL_frontier = {
   cost = 50 days_remove = 30 days_re_enable = 90
   complete_effect = {
    custom_effect_tooltip = VAL_campaign_preparation_tt
+   custom_effect_tooltip = VAL_nod_victory_tt
    hidden_effect = { set_country_flag = VAL_campaign_mobilizing FROM = { set_country_flag = VAL_campaign_target } }
   }
   cancel_trigger = { hidden_trigger = { OR = { has_war = yes has_capitulated = yes is_subject = yes has_country_flag = VAL_stelander_defeated FROM = { OR = { exists = no has_capitulated = yes is_subject = yes is_in_faction_with = VAL has_country_flag = VAL_stelander_truce } } } } }
@@ -784,6 +817,7 @@ VAL_frontier = {
   cost = 50 days_remove = 30 days_re_enable = 90
   complete_effect = {
    custom_effect_tooltip = VAL_campaign_preparation_tt
+   custom_effect_tooltip = VAL_stelander_victory_tt
    hidden_effect = { set_country_flag = VAL_campaign_mobilizing FROM = { set_country_flag = VAL_campaign_target } }
   }
   cancel_trigger = { hidden_trigger = { OR = { has_war = yes has_capitulated = yes is_subject = yes has_country_flag = VAL_stelander_defeated FROM = { OR = { exists = no has_capitulated = yes is_subject = yes is_in_faction_with = VAL has_country_flag = VAL_stelander_truce } } } } }

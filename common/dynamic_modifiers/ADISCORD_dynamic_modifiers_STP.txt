@@ -119,3 +119,16 @@ STP_pf_balance_dynamic = {
 	ADISCORD_economy_trade_income_factor = STP_pf_merchants_effect
 	ADISCORD_economy_war_fatigue_gain_factor = STP_pf_radicals_effect
 }
+
+STP_ps_defence_dynamic = {
+    icon = GFX_idea_STP_cw_unified_staff_idea
+    enable = { STP_ps_war_active = yes }
+    breakthrough_factor = STP_ps_breakthrough
+    planning_speed = STP_ps_planning
+}
+STP_ps_nodes_dynamic = {
+    icon = GFX_idea_STP_cw_unified_staff_idea
+    enable = { STP_ps_war_active = yes }
+    planning_speed = STP_ps_node_planning
+    strategic_redeploy_speed = STP_ps_node_redeployment
+}

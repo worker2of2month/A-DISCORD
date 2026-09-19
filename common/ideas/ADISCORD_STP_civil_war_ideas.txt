@@ -908,7 +908,18 @@ ideas = {
 			modifier = { stability_factor = 0.02 political_power_gain = 0.05 }
 		}
 
-	}
+	
+		STP_ps_transport_idea = { picture = generic_army_doctrines allowed = { always = no } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 army_org_regain = 0.05 } }
+
+		STP_ps_route_guard_idea = { picture = generic_army_doctrines allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.05 } }
+
+		STP_ps_reserve_idea = { picture = generic_army_doctrines allowed = { always = no } removal_cost = -1 modifier = { army_org_regain = 0.08 training_time_factor = -0.10 } }
+
+		STP_ps_engineers_idea = { picture = generic_army_doctrines allowed = { always = no } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 army_org_regain = 0.05 } }
+
+		STP_ps_expedition_idea = { picture = generic_army_doctrines allowed = { always = no } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 } }
+
+}
 
 	political_advisor_head_of_state = {
 		minister_STP_Ernest_Derlich = {

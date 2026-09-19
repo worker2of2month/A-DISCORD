@@ -229,4 +229,20 @@ characters = {
         portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
         country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
     }
+
+    STP_VAL_Andrei_Rudnev = {
+        name = VAL_Andrei_Rudnev
+        portraits = { civilian = { large = GFX_portrait_VAL_Andrei_Rudnev } }
+        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+    }
+    STS_VAL_Andrei_Rudnev = {
+        name = VAL_Andrei_Rudnev
+        portraits = { civilian = { large = GFX_portrait_VAL_Andrei_Rudnev } }
+        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+    }
+    NOD_VAL_Contract_Council = {
+        name = NOD_VAL_Contract_Council
+        portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+    }
 }

@@ -90,5 +90,21 @@ class SuppliedSuccessorFlagTests(unittest.TestCase):
                     image_digest(directory / "WRK.tga", "RGBA"),
                 )
 
+    def test_postwar_claimants_have_all_native_flag_sizes(self) -> None:
+        for flag_id in (
+            "WRK_technocracy",
+            "WRK_vorkerland_utilitarian_republic",
+            "WRK_vorkerland_emergency",
+            "WRK_vorkerland_joint_government",
+            "VAD_vorkerland_restoration",
+        ):
+            for folder, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
+                path = FLAG_ROOT / folder / f"{flag_id}.tga"
+                with self.subTest(flag_id=flag_id, folder=folder):
+                    self.assertTrue(path.is_file(), str(path))
+                    with Image.open(path) as image:
+                        self.assertEqual(image.size, size)
+                        image.load()
+
 if __name__ == "__main__":
     unittest.main()

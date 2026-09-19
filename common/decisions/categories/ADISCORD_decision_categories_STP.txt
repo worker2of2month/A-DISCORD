@@ -124,3 +124,22 @@ STP_postwar_nod_ultimatum = {
 	visible_when_empty = yes
 	priority = 40
 }
+
+STP_ps_party_programs = {
+    allowed = { tag = STP }
+    visible = { has_country_flag = STP_sided_with_the_party_flag NOT = { has_global_flag = STP_cw_union_wars_finished } }
+    visible_when_empty = yes
+    priority = 32
+}
+STP_ps_northern_support = {
+    allowed = { OR = { tag = STP tag = NOD } }
+    visible = { OR = { AND = { tag = STP has_country_flag = STP_sided_with_the_party_flag } AND = { tag = NOD has_country_flag = STP_ps_aid_agreement } } }
+    visible_when_empty = yes
+    priority = 31
+}
+STP_ps_exile = {
+    allowed = { tag = NOD }
+    visible = { has_country_flag = STP_ps_exile_received }
+    visible_when_empty = yes
+    priority = 40
+}
