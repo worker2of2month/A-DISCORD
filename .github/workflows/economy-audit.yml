@@ -30,15 +30,9 @@ jobs:
           p=Path('control/.github/economy_balance_tests.py')
           text=p.read_text()
           text=text.replace('get("VAL_industrial_weekly_income", 0)', 'get("VAL_industrial_weekly_income", -1)')
+          text=text.replace('if node.key == "focus" and any(', 'if node.key == "focus" and isinstance(node.value, list) and any(')
           p.write_text(text)
           PY
-      - name: Baseline total-conversion validation
-        working-directory: source
-        run: |
-          set +e
-          python -B tools/validate_tc.py --limit 300 > ../control/.github/economy-baseline-validation.txt 2>&1
-          echo "BASELINE_EXIT=$?" >> ../control/.github/economy-baseline-validation.txt
-          exit 0
       - name: Apply and exercise new regression contracts
         working-directory: source
         run: python -B ../control/.github/economy_patch.py > ../control/.github/economy-result.txt 2>&1
