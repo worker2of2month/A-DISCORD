@@ -1,0 +1,205 @@
+name: Integrate reviewed STP survival fixes
+on:
+  push:
+    branches: [verify/stp-survival-guards-20260919]
+    paths: ['.github/workflows/stp-survival-integrate.yml']
+permissions:
+  contents: read
+env:
+  BASE_SHA: bfc822519389a25a2039a4dcf35b618984c53419
+  FIX_SHA: d537940fc2cbd24355184b17c28fc53f02d961bb
+  PYTHONHASHSEED: '0'
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [baseline, candidate]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: bfc822519389a25a2039a4dcf35b618984c53419
+          fetch-depth: 30
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - name: Preserve concurrent changes in the reviewed patch
+        if: matrix.variant == 'candidate'
+        run: |
+          git fetch origin "$FIX_SHA"
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git config merge.conflictstyle diff3
+          git merge --no-commit --no-ff "$FIX_SHA" || test -f .git/MERGE_HEAD
+          python - <<'PY'
+          import subprocess,re,collections,os
+          from pathlib import Path
+          paths=subprocess.check_output(['git','diff','--name-only','--diff-filter=U']).decode().splitlines()
+          # The only automatic conflict resolution allowed is two additions to an empty base segment.
+          pattern=re.compile(r'^<<<<<<<[^\n]*\n(.*?)^\|\|\|\|\|\|\|[^\n]*\n(.*?)^=======\n(.*?)^>>>>>>>[^\n]*\n',re.M|re.S)
+          allowed={'common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt','localisation/russian/ADISCORD_STP_l_russian.yml'}
+          for name in paths:
+              assert name in allowed,name
+              data=Path(name).read_text(encoding='utf-8')
+              matches=list(pattern.finditer(data)); assert matches,name
+              def combine(m):
+                  assert not m.group(2).strip(),(name,'non-additive conflict')
+                  return m.group(1)+m.group(3)
+              data=pattern.sub(combine,data)
+              assert not re.search(r'^(<<<<<<<|=======|>>>>>>>)',data,re.M),name
+              Path(name).write_text(data,encoding='utf-8')
+              subprocess.run(['git','add','--',name],check=True)
+          assert not subprocess.check_output(['git','diff','--name-only','--diff-filter=U']).strip()
+          def changes(args):
+              text=subprocess.check_output(['git','diff','--no-ext-diff','--no-renames','--unified=0',*args]).decode()
+              result=collections.Counter(); path=None
+              for line in text.splitlines():
+                  if line.startswith('diff --git a/'): path=line.split(' b/',1)[1]
+                  elif line.startswith(('+++','---')): continue
+                  elif line.startswith(('+','-')): result[(path,line)]+=1
+              return result
+          original=changes([os.environ['FIX_SHA']+'^',os.environ['FIX_SHA']])
+          merged=changes(['--cached',os.environ['BASE_SHA']])
+          assert merged==original,{'missing':dict(original-merged),'extra':dict(merged-original)}
+          subprocess.run(['git','diff','--cached','--check'],check=True)
+          print('Merged change set is exactly the six reviewed file changes; concurrent main content retained.')
+          PY
+      - name: Recheck survival contracts
+        if: matrix.variant == 'candidate'
+        run: |
+          mkdir -p /tmp/integration-result
+          python -B -m unittest tools.tests.test_adiscord_stp_party_survival tools.tests.test_adiscord_stp_party_balance -v > /tmp/integration-result/focused.txt 2>&1
+      - name: Full paired verification
+        env:
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          mkdir -p /tmp/integration-result
+          cat > /tmp/integration-suite.py <<'PY'
+          import sys,os,json,re,unittest
+          from pathlib import Path
+          sys.path.insert(0,str(Path.cwd()))
+          label=os.environ['VARIANT']; out=Path('/tmp/integration-result')
+          suite=unittest.defaultTestLoader.discover('tools/tests',pattern='test_*.py')
+          with (out/(label+'-suite.txt')).open('w') as log:
+              result=unittest.TextTestRunner(stream=log,verbosity=2).run(suite)
+          records=[]
+          for kind,items in [('failure',result.failures),('error',result.errors)]:
+              for test,detail in items:
+                  reason=re.sub(r'0x[0-9a-fA-F]+','0xADDR',detail.strip().splitlines()[-1])
+                  records.append({'kind':kind,'id':test.id(),'reason':reason,'detail':detail})
+          (out/(label+'-suite.json')).write_text(json.dumps({'tests':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skipped':len(result.skipped),'records':records},indent=2))
+          PY
+          python - <<'PY'
+          import subprocess,os,json,time,concurrent.futures,hashlib,zipfile
+          from pathlib import Path
+          label=os.environ['VARIANT']; out=Path('/tmp/integration-result')
+          names=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          if label=='candidate':
+              with zipfile.ZipFile(out/'source.zip','w',zipfile.ZIP_DEFLATED) as z:
+                  for name in names:
+                      p=Path(name)
+                      if not name or not p.is_file() or name.startswith('.github/'): continue
+                      if p.suffix.lower() in {'.txt','.py','.json','.yml','.yaml','.md','.csv','.gfx','.gui','.mod','.lua','.xml','.map','.ini','.cfg','.toml','.asset'} or name in {'AGENTS.md','.gitignore','.gitattributes'}:
+                          data=p.read_bytes()
+                          try: data.decode('utf-8-sig')
+                          except UnicodeDecodeError: continue
+                          z.writestr(name,data)
+          def run(item):
+              name,cmd=item; start=time.monotonic()
+              with (out/(label+'-'+name+'.log')).open('w') as log:
+                  try: code=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,timeout=1800).returncode
+                  except subprocess.TimeoutExpired: code=124
+              return name,{'exit':code,'seconds':time.monotonic()-start,'command':cmd}
+          with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+              results=dict(pool.map(run,[('runner',['python','-B','/tmp/integration-suite.py']),('validator',['python','-B','tools/validate_tc.py','--limit','300'])]))
+          paths=subprocess.check_output(['git','diff','HEAD','--name-only']).decode().splitlines()
+          results.update(head=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),hashes={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths})
+          (out/(label+'-run.json')).write_text(json.dumps(results,indent=2))
+          if label=='candidate': (out/'integration.patch').write_bytes(subprocess.check_output(['git','diff','--binary','HEAD']))
+          assert results['runner']['exit']==0 and results['validator']['exit']==0,results
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-integration-${{ matrix.variant }}
+          path: /tmp/integration-result/
+          retention-days: 3
+  publish:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: bfc822519389a25a2039a4dcf35b618984c53419
+          fetch-depth: 1
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: stp-integration-*
+          merge-multiple: true
+          path: /tmp/integration-result/
+      - name: Require no new regressions in the merged tree
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,ast,re,collections,os
+          out=Path('/tmp/integration-result')
+          a=json.loads((out/'baseline-suite.json').read_text()); b=json.loads((out/'candidate-suite.json').read_text())
+          x={(r['kind'],r['id']):r for r in a['records']}; y={(r['kind'],r['id']):r for r in b['records']}
+          assert len(x)==len(a['records']) and len(y)==len(b['records'])
+          assert not y.keys()-x.keys(),list(y.keys()-x.keys())
+          assert x.keys()-y.keys()=={('failure','test_adiscord_stp_party_balance.StelanderPartyBalanceContracts.test_faction_negotiations_remain_bounded_and_expensive')}
+          reviewed=('failure','test_adiscord_stp_preparation.StelanderPreparationTests.test_preparation_focus_rewards_resolve_public_script_api_and_localisation')
+          differences=[]
+          for key in x.keys()&y.keys():
+              if x[key]['reason']==y[key]['reason']: continue
+              assert key==reviewed,key
+              sets=[]
+              for record in (x[key],y[key]):
+                  prefix,sep,tail=record['reason'].partition(' not found in ')
+                  assert prefix=="AssertionError: 'ADISCORD_economy_projects_open_tt'" and sep
+                  body,suffix=tail.rsplit(' : ',1); assert suffix=='focus tooltip has no localisation'
+                  value=ast.literal_eval(body); assert isinstance(value,set); sets.append(value)
+              assert sets[1]-sets[0]=={'STP_ps_return_available_tt'} and not sets[0]-sets[1]
+              differences.append(list(key))
+          def diagnostics(label):
+              return collections.Counter(re.sub(r'(\.(?:txt|py|yml|gui|gfx)):\d+',r'\1:LINE',line) for line in (out/(label+'-validator.log')).read_text().splitlines() if line.startswith(('== ','- ')))
+          assert diagnostics('baseline')==diagnostics('candidate')
+          assert b['tests']==a['tests']+5 and b['failures']==a['failures']-1 and b['errors']==a['errors']
+          for label in ('baseline','candidate'):
+              r=json.loads((out/(label+'-run.json')).read_text()); assert r['head']==os.environ['BASE_SHA'] and r['runner']['exit']==0 and r['validator']['exit']==0
+          gate={'base':os.environ['BASE_SHA'],'new_failed_tests':[],'fixed_test':list(x.keys()-y.keys())[0],'diagnostic_only_differences':differences,'new_validator_diagnostics':[], 'baseline_tests':a['tests'],'candidate_tests':b['tests'],'baseline_failures':a['failures'],'candidate_failures':b['failures'],'baseline_errors':a['errors'],'candidate_errors':b['errors']}
+          (out/'gate.json').write_text(json.dumps(gate,indent=2)); print(json.dumps(gate,indent=2))
+          PY
+      - name: Commit only verified integration delta
+        run: |
+          git apply --check /tmp/integration-result/integration.patch
+          git apply /tmp/integration-result/integration.patch
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib,subprocess
+          r=json.loads(Path('/tmp/integration-result/candidate-run.json').read_text())
+          paths=subprocess.check_output(['git','diff','--name-only']).decode().splitlines()
+          assert len(paths)==6 and set(paths)==set(r['hashes'])
+          for p,h in r['hashes'].items(): assert not p.startswith('.github/') and hashlib.sha256(Path(p).read_bytes()).hexdigest()==h,p
+          subprocess.run(['git','diff','--check'],check=True)
+          subprocess.run(['git','add','--',*paths],check=True)
+          PY
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git diff --cached --check
+          git commit -m 'Harden party aid and exile guards on current Stelander campaign'
+          git rev-parse HEAD > /tmp/integration-result/candidate-sha.txt
+          git show --stat --oneline HEAD > /tmp/integration-result/change-stat.txt
+          git push origin "HEAD:refs/heads/agent/stp-survival-integrated-${GITHUB_RUN_ID}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-survival-integration-final
+          path: /tmp/integration-result/
+          retention-days: 3
