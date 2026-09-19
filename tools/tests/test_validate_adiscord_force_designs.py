@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import unittest
@@ -633,9 +634,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             self.assertIn(f"amount = {amount}", block)
         self.assertIn("type = ADISCORD_fighter_airframe_2163", block)
         self.assertIn("type = ADISCORD_cas_airframe_2170", block)
-        on_actions = read(
-            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
-        )
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         self.assertNotIn("on_weekly =", on_actions)
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
         outbreak = event_block(events, "ADISCORD_vorkerland_collapse.2")

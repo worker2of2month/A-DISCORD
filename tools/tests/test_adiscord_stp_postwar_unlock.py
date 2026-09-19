@@ -1,4 +1,5 @@
 """Regression coverage for Stelander postwar focus unlocks."""
+from tools.lib.on_actions import read_country_on_actions
 from pathlib import Path
 import re
 import unittest
@@ -40,7 +41,7 @@ class StelanderPostwarUnlockRegressionTests(unittest.TestCase):
         self.assertNotIn("SRP", gate)
 
     def test_deferred_white_peace_gets_a_self_healing_retry(self) -> None:
-        recovery = read(RECOVERY)
+        recovery = read_country_on_actions(RECOVERY, 'stelander')
         daily = named_block(recovery, "on_daily")
         for token in (
             "OR = { tag = STP tag = STS }",

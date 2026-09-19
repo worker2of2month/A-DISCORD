@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import unittest
@@ -23,7 +24,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertEqual(validate(ROOT, "exhaustion"), [])
 
     def test_updates_are_event_driven_without_monthly_polling(self) -> None:
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         monthly = named_block(on_actions, "on_monthly")
         update = "ADISCORD_vorkerland_update_civil_war_exhaustion = yes"
         self.assertNotIn(update, monthly)
@@ -100,7 +101,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_finish_civil_war_exhaustion = yes", terminal)
 
     def test_piv_volunteer_mission_uses_war_edges_not_monthly_polling(self) -> None:
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         monthly = named_block(on_actions, "on_monthly")
         on_war = named_block(on_actions, "on_war")
         on_peace = named_block(on_actions, "on_peace")

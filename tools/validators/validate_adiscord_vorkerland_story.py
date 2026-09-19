@@ -2,6 +2,7 @@
 """Validate the bounded Vorkerland civil-war story and news layer."""
 
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import sys
@@ -253,7 +254,7 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
     russian = source_section(read(root, RUSSIAN_LOC, issues), 'story_l_russian')
     news = read(root, NEWS_EVENTS, issues)
     event_pictures = read(root, EVENT_PICTURES, issues)
-    on_actions = read(root, ON_ACTIONS, issues)
+    on_actions = read_country_on_actions((root) / (ON_ACTIONS), 'vorkerland_collapse')
     phase_effects = source_section(read(root, PHASE_EFFECTS, issues), 'phase_effects')
     campaign_state_effects = source_section(read(root, CAMPAIGN_STATE_EFFECTS, issues), 'campaign_state_effects')
     phase_events = source_section(read(root, PHASE_EVENTS, issues), 'phase_events')

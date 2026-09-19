@@ -1,6 +1,7 @@
 """Targeted structural validation for the Kefreyt rework."""
 
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import math
 import re
@@ -991,7 +992,7 @@ def main() -> int:
             issues.append(f"{decision_id} is not gated by its world-reactive focus")
 
     effects = source_section(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), 'rework_effects')
-    on_actions = read(VAL_ON_ACTIONS_FILE)
+    on_actions = read_country_on_actions(VAL_ON_ACTIONS_FILE, 'kefreyt')
     startup_blocks = named_blocks(on_actions, "on_startup")
     if len(startup_blocks) != 1:
         issues.append(f"VAL rework must define exactly one on_startup, found {len(startup_blocks)}")

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import unittest
@@ -113,7 +114,7 @@ class NewSaveMaterializationTests(unittest.TestCase):
             self.assertNotIn("ADISCORD_vorkerland_prewar_compact_ratified", option)
 
         startup = named_block(
-            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
             "on_startup",
         )
         delayed_choices = [
@@ -421,7 +422,7 @@ class PhaseControllerTests(unittest.TestCase):
 
     def test_startup_has_no_old_materialization_bridges(self) -> None:
         startup = named_block(
-            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
             "on_startup",
         )
         for token in (
@@ -435,7 +436,7 @@ class PhaseControllerTests(unittest.TestCase):
 
     def test_startup_does_not_requeue_failed_or_dropped_materialization(self) -> None:
         startup = named_block(
-            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
             "on_startup",
         )
         for token in (
@@ -623,7 +624,7 @@ class PrematureWrkRecoveryTests(unittest.TestCase):
             for tag in ("WKR", "VAD", "TVA")
         ]
         self.assertEqual(calls, sorted(calls))
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         for hook_name in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
             hook = named_block(on_actions, hook_name)
             self.assertIn("ADISCORD_vorkerland_release_requires_interception = yes", hook)
@@ -661,7 +662,7 @@ class PrematureWrkRecoveryTests(unittest.TestCase):
             release_guard,
         )
 
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         call = "ADISCORD_vorkerland_intercept_premature_wrk_release = yes"
         for hook_name in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
             hook = named_block(on_actions, hook_name)
@@ -710,7 +711,7 @@ class PrematureWrkRecoveryTests(unittest.TestCase):
             (
                 source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers'),
                 read("common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"),
-                read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+                read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
             )
         )
         for token in (

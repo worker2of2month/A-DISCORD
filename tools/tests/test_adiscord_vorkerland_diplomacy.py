@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import unittest
 
@@ -191,7 +192,7 @@ class PeacefulAllianceTests(unittest.TestCase):
             for leader, expected in ((None, True), (host, True), (other, False), ("OLD", True)):
                 factions.update({host: host, other: other, recipient: leader})
                 self.assertEqual(evaluate(option_limit, recipient), expected, (recipient, leader))
-        hooks = read(DIPLOMACY_EFFECTS.parents[2] / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        hooks = read_country_on_actions(DIPLOMACY_EFFECTS.parents[2] / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         war_hook = named_block(hooks, "on_war_relation_added")
         for host, enemy in (("ROOT", "FROM"), ("FROM", "ROOT")):
             host_scope = named_block(war_hook, host)
