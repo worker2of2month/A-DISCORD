@@ -479,6 +479,16 @@ on_actions = {
 			# END vorkerland_collapse:on_capitulation
 
 			# BEGIN stelander:on_capitulation
+
+            if = {
+                limit = { ROOT = { tag = SRP } FROM = { STP_occidia_victory_ready = yes } }
+                set_global_flag = skip_default_capitulation
+                FROM = { STP_occidia_settle_victory = yes }
+            }
+            if = {
+                limit = { ROOT = { has_country_flag = STP_occidia_campaign_active } }
+                ROOT = { clr_country_flag = STP_occidia_campaign_active }
+            }
 			if = {
 				limit = {
 					ROOT = {
@@ -901,6 +911,11 @@ on_actions = {
             if = { limit = { STP = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STP = { VAL_cede_stelander_border = yes } }
             if = { limit = { STS = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STS = { VAL_cede_stelander_border = yes } }
             # END kefreyt:on_peace
+            # BEGIN stelander:on_peace
+            STP = { STP_occidia_reconcile_peace = yes }
+            STS = { STP_occidia_reconcile_peace = yes }
+            # END stelander:on_peace
+
 
 		}
 	}

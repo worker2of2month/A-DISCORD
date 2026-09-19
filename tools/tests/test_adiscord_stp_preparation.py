@@ -3358,5 +3358,59 @@ class StelanderPreparationTests(unittest.TestCase):
 
 
 
+
+class OccidiaLateInterventionTests(unittest.TestCase):
+    def test_window_treaties_and_first_mobilization_have_priority(self):
+        trigger = block(entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"), "STP_occidia_invasion_available")
+        for actor in ("STP", "STS"):
+            facts = {(actor, "has_country_flag", "STP_cw_won_union_battle"): True,
+                     (actor, "has_global_flag", "STP_cw_union_wars_finished"): True,
+                     (actor, "is_neighbor_of", "SRP"): True}
+            for tag in (actor, "SRP"):
+                facts[(tag, "exists", "yes")] = True
+                for condition in ("is_subject", "has_capitulated", "has_war", "is_in_faction"):
+                    facts[(tag, condition, "no")] = True
+            facts[(actor, "flag_days", "STP_cw_union_wars_finished")] = 89
+            self.assertFalse(matches_conditions(trigger, facts, actor))
+            facts[(actor, "flag_days", "STP_cw_union_wars_finished")] = 90
+            self.assertTrue(matches_conditions(trigger, facts, actor))
+            blockers = [("VAL", "has_country_flag", flag) for flag in ("VAL_cw_mobilizing", "VAL_cw_entered")]
+            blockers += [(tag, "has_idea", idea) for tag in (actor, "SRP") for idea in ("STP_cw_council_guarantees", "STP_cw_republican_charter")]
+            for blocker in blockers:
+                self.assertFalse(matches_conditions(trigger, {**facts, blocker: True}, actor), blocker)
+            for tag in (actor, "SRP"):
+                for condition in ("is_subject", "has_capitulated", "has_war", "is_in_faction"):
+                    self.assertFalse(matches_conditions(trigger, {**facts, (tag, condition, "no"): False}, actor))
+
+    def test_timed_preparation_revalidates_and_cleans_up(self):
+        category = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_external_intervention")
+        decision = block(category, "STP_occidia_prepare_invasion")
+        self.assertEqual(scalar(decision, "days_remove"), "21")
+        self.assertIn("STP_occidia_invasion_available", [e.key for e in block(decision, "cancel_trigger")])
+        self.assertIn("STP_occidia_start_campaign", [e.key for e in block(decision, "remove_effect")])
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        start = block(effects, "STP_occidia_start_campaign")
+        guard = block(block(start, "if"), "limit")
+        self.assertIn("STP_occidia_invasion_available", [e.key for e in guard])
+        cancel = block(effects, "STP_occidia_cancel_preparation")
+        self.assertEqual(scalar(cancel, "clr_country_flag"), "STP_occidia_preparing")
+        self.assertEqual(scalar(block(cancel, "SRP"), "remove_mission"), "STP_occidia_invasion_warning")
+        warning = block(category, "STP_occidia_invasion_warning")
+        self.assertFalse(matches_conditions(block(warning, "available"), {}, "SRP"))
+
+    def test_annexation_has_native_war_and_third_party_guards(self):
+        source = (ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt").read_text(encoding="utf-8-sig")
+        trigger = block(entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"), "STP_occidia_victory_ready")
+        self.assertEqual(scalar(trigger, "has_war_with"), "SRP")
+        self.assertEqual(scalar(block(trigger, "SRP"), "has_capitulated"), "yes")
+        self.assertIn("any_enemy_country", source[source.index("STP_occidia_victory_ready ="):])
+        self.assertIn("any_owned_state", source[source.index("STP_occidia_victory_ready ="):])
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        settlement = block(block(effects, "STP_occidia_settle_victory"), "if")
+        self.assertIn("STP_occidia_victory_ready", [e.key for e in block(settlement, "limit")])
+        annex = block(settlement, "annex_country")
+        self.assertEqual(scalar(annex, "target"), "SRP")
+        self.assertEqual(scalar(annex, "transfer_troops"), "no")
+
 if __name__ == "__main__":
     unittest.main()

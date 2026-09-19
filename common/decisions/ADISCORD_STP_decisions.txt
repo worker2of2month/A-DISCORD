@@ -3714,6 +3714,35 @@ STP_cw_war_council = {
 }
 
 STP_cw_external_intervention = {
+    STP_occidia_prepare_invasion = {
+        icon = generic_prepare_civil_war
+        allowed = { OR = { tag = STP tag = STS } }
+        visible = { has_country_flag = STP_cw_won_union_battle has_global_flag = STP_cw_union_wars_finished SRP = { exists = yes is_subject = no } }
+        available = { custom_trigger_tooltip = { tooltip = STP_occidia_invasion_available_tt STP_occidia_invasion_available = yes } }
+        cost = 50
+        days_remove = 21
+        fire_only_once = no
+        complete_effect = {
+            custom_effect_tooltip = STP_occidia_prepare_invasion_tt
+            hidden_effect = { set_country_flag = STP_occidia_preparing SRP = { activate_mission = STP_occidia_invasion_warning } }
+        }
+        cancel_trigger = { STP_occidia_invasion_available = no }
+        cancel_effect = { hidden_effect = { STP_occidia_cancel_preparation = yes } }
+        remove_effect = { STP_occidia_start_campaign = yes }
+        ai_will_do = { base = 20 }
+    }
+    STP_occidia_invasion_warning = {
+        icon = generic_prepare_civil_war
+        allowed = { tag = SRP }
+        activation = { always = no }
+        available = { hidden_trigger = { always = no } }
+        selectable_mission = no
+        days_mission_timeout = 21
+        is_good = no
+        cancel_trigger = { NOT = { STP = { has_country_flag = STP_occidia_preparing } } NOT = { STS = { has_country_flag = STP_occidia_preparing } } }
+        timeout_effect = { }
+    }
+
 	NOD_cw_call_ain = {
 		icon = generic_army_support
 		allowed = { tag = NOD }

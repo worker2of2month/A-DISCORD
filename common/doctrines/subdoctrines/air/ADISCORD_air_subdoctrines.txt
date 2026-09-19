@@ -20,11 +20,11 @@ ADISCORD_air_doctrine_swarm_recon = {
 	air_interception_detect_factor = 0.02
 	rewards = {
 		ADISCORD_air_doctrine_disposable_airframes = {
-			mastery = 50
+			mastery = 30
 			air_accidents_factor = -0.03
 		}
 		ADISCORD_air_doctrine_layered_drone_screen = {
-			mastery = 50
+			mastery = 40
 			air_superiority_efficiency = 0.03
 			category_fighter = { air_defence = 0.03 }
 		}
@@ -34,11 +34,11 @@ ADISCORD_air_doctrine_swarm_recon = {
 			category_cas = { air_ground_attack = 0.03 }
 		}
 		ADISCORD_air_doctrine_swarm_recon_swarm_relay = {
-			mastery = 50
+			mastery = 60
 			air_mission_efficiency = 0.03
 		}
 		ADISCORD_air_doctrine_swarm_recon_persistent_swarm = {
-			mastery = 50
+			mastery = 70
 			air_mission_efficiency = 0.04
 			air_superiority_efficiency = 0.04
 			air_cas_efficiency = 0.04
@@ -68,11 +68,11 @@ ADISCORD_air_doctrine_attritional_drone_swarms = {
 	air_mission_xp_gain_factor = 0.02
 	rewards = {
 		ADISCORD_air_doctrine_attritional_drone_swarms_modular_drones = {
-			mastery = 50
+			mastery = 30
 			air_accidents_factor = -0.03
 		}
 		ADISCORD_air_doctrine_attritional_drone_swarms_replacement_waves = {
-			mastery = 50
+			mastery = 40
 			air_mission_xp_gain_factor = 0.03
 		}
 		ADISCORD_air_doctrine_attritional_drone_swarms_risk_tolerance = {
@@ -80,11 +80,11 @@ ADISCORD_air_doctrine_attritional_drone_swarms = {
 			air_cas_efficiency = 0.03
 		}
 		ADISCORD_air_doctrine_attritional_drone_swarms_mass_sorties = {
-			mastery = 50
+			mastery = 60
 			air_mission_efficiency = 0.04
 		}
 		ADISCORD_air_doctrine_attritional_drone_swarms_attritional_saturation = {
-			mastery = 50
+			mastery = 70
 			air_superiority_efficiency = 0.05
 			category_fighter = { air_attack = 0.04 }
 		}
@@ -112,11 +112,11 @@ ADISCORD_air_doctrine_autonomous_air_screen = {
 	category_fighter = { air_defence = 0.03 air_agility = 0.02 }
 	rewards = {
 		ADISCORD_air_doctrine_autonomous_air_screen_passive_sensors = {
-			mastery = 50
+			mastery = 30
 			air_interception_detect_factor = 0.03
 		}
 		ADISCORD_air_doctrine_autonomous_air_screen_machine_wingmen = {
-			mastery = 50
+			mastery = 40
 			category_fighter = { air_agility = 0.03 }
 		}
 		ADISCORD_air_doctrine_autonomous_air_screen_distributed_control = {
@@ -124,11 +124,11 @@ ADISCORD_air_doctrine_autonomous_air_screen = {
 			air_mission_efficiency = 0.03
 		}
 		ADISCORD_air_doctrine_autonomous_air_screen_adaptive_intercepts = {
-			mastery = 50
+			mastery = 60
 			air_intercept_efficiency = 0.04
 		}
 		ADISCORD_air_doctrine_autonomous_air_screen_autonomous_air_screen = {
-			mastery = 50
+			mastery = 70
 			category_fighter = { air_attack = 0.04 air_defence = 0.04 }
 			air_superiority_efficiency = 0.04
 		}
@@ -157,12 +157,12 @@ ADISCORD_air_doctrine_vtol_assault_groups = {
 	planning_speed = 0.02
 	rewards = {
 		ADISCORD_air_doctrine_precision_cas = {
-			mastery = 50
+			mastery = 30
 			air_cas_efficiency = 0.03
 			category_cas = { air_ground_attack = 0.03 }
 		}
 		ADISCORD_air_doctrine_forward_air_liaisons = {
-			mastery = 50
+			mastery = 40
 			army_bonus_air_superiority_factor = 0.03
 		}
 		ADISCORD_air_doctrine_deep_strike_windows = {
@@ -171,11 +171,11 @@ ADISCORD_air_doctrine_vtol_assault_groups = {
 			air_mission_xp_gain_factor = 0.03
 		}
 		ADISCORD_air_doctrine_vtol_assault_groups_landing_control = {
-			mastery = 50
+			mastery = 60
 			planning_speed = 0.025
 		}
 		ADISCORD_air_doctrine_vtol_assault_groups_vertical_battlegroup = {
-			mastery = 50
+			mastery = 70
 			air_cas_present_factor = 0.04
 			air_cas_efficiency = 0.04
 			land_reinforce_rate = 0.005
@@ -205,11 +205,11 @@ ADISCORD_air_doctrine_persistent_close_support = {
 	air_cas_present_factor = 0.025
 	rewards = {
 		ADISCORD_air_doctrine_persistent_close_support_loiter_patterns = {
-			mastery = 50
+			mastery = 30
 			air_cas_present_factor = 0.03
 		}
 		ADISCORD_air_doctrine_persistent_close_support_rapid_retasking = {
-			mastery = 50
+			mastery = 40
 			air_mission_efficiency = 0.03
 		}
 		ADISCORD_air_doctrine_persistent_close_support_ground_relays = {
@@ -217,11 +217,11 @@ ADISCORD_air_doctrine_persistent_close_support = {
 			army_bonus_air_superiority_factor = 0.025
 		}
 		ADISCORD_air_doctrine_persistent_close_support_armed_overwatch = {
-			mastery = 50
+			mastery = 60
 			category_cas = { air_ground_attack = 0.04 }
 		}
 		ADISCORD_air_doctrine_persistent_close_support_continuous_support = {
-			mastery = 50
+			mastery = 70
 			air_cas_efficiency = 0.05
 			air_cas_present_factor = 0.04
 		}
@@ -250,11 +250,11 @@ ADISCORD_air_doctrine_theater_air_mobility = {
 	supply_consumption_factor = -0.005
 	rewards = {
 		ADISCORD_air_doctrine_theater_air_mobility_airlift_tables = {
-			mastery = 50
+			mastery = 30
 			air_mission_efficiency = 0.02
 		}
 		ADISCORD_air_doctrine_theater_air_mobility_forward_basing = {
-			mastery = 50
+			mastery = 40
 			air_power_projection_factor = 0.03
 		}
 		ADISCORD_air_doctrine_theater_air_mobility_aerial_resupply = {
@@ -262,11 +262,11 @@ ADISCORD_air_doctrine_theater_air_mobility = {
 			supply_consumption_factor = -0.01
 		}
 		ADISCORD_air_doctrine_theater_air_mobility_airbridge = {
-			mastery = 50
+			mastery = 60
 			air_mission_efficiency = 0.04
 		}
 		ADISCORD_air_doctrine_theater_air_mobility_theater_mobility = {
-			mastery = 50
+			mastery = 70
 			air_power_projection_factor = 0.04
 			air_mission_efficiency = 0.04
 			land_reinforce_rate = 0.005
@@ -296,12 +296,12 @@ ADISCORD_air_doctrine_interceptor_grids = {
 	air_home_defence_factor = 0.025
 	rewards = {
 		ADISCORD_air_doctrine_hardened_airfields = {
-			mastery = 50
+			mastery = 30
 			air_accidents_factor = -0.03
 			air_home_defence_factor = 0.03
 		}
 		ADISCORD_air_doctrine_strategic_denial_zones = {
-			mastery = 50
+			mastery = 40
 			air_interception_detect_factor = 0.03
 			category_fighter = { air_attack = 0.03 }
 		}
@@ -311,11 +311,11 @@ ADISCORD_air_doctrine_interceptor_grids = {
 			air_power_projection_factor = 0.03
 		}
 		ADISCORD_air_doctrine_interceptor_grids_interceptor_rotation = {
-			mastery = 50
+			mastery = 60
 			category_fighter = { air_defence = 0.03 }
 		}
 		ADISCORD_air_doctrine_interceptor_grids_closed_airspace = {
-			mastery = 50
+			mastery = 70
 			air_intercept_efficiency = 0.05
 			air_home_defence_factor = 0.04
 		}
@@ -344,11 +344,11 @@ ADISCORD_air_doctrine_layered_missile_defense = {
 	air_home_defence_factor = 0.03
 	rewards = {
 		ADISCORD_air_doctrine_layered_missile_defense_launch_detection = {
-			mastery = 50
+			mastery = 30
 			air_interception_detect_factor = 0.04
 		}
 		ADISCORD_air_doctrine_layered_missile_defense_dispersed_batteries = {
-			mastery = 50
+			mastery = 40
 			air_home_defence_factor = 0.03
 		}
 		ADISCORD_air_doctrine_layered_missile_defense_defense_cues = {
@@ -356,11 +356,11 @@ ADISCORD_air_doctrine_layered_missile_defense = {
 			air_intercept_efficiency = 0.03
 		}
 		ADISCORD_air_doctrine_layered_missile_defense_hardened_nodes = {
-			mastery = 50
+			mastery = 60
 			air_accidents_factor = -0.02
 		}
 		ADISCORD_air_doctrine_layered_missile_defense_layered_defense = {
-			mastery = 50
+			mastery = 70
 			air_home_defence_factor = 0.05
 			air_interception_detect_factor = 0.05
 		}
@@ -389,11 +389,11 @@ ADISCORD_air_doctrine_electronic_suppression = {
 	enemy_army_bonus_air_superiority_factor = -0.01
 	rewards = {
 		ADISCORD_air_doctrine_electronic_suppression_threat_libraries = {
-			mastery = 50
+			mastery = 30
 			decryption_factor = 0.02
 		}
 		ADISCORD_air_doctrine_electronic_suppression_spoofed_corridors = {
-			mastery = 50
+			mastery = 40
 			air_mission_efficiency = 0.025
 		}
 		ADISCORD_air_doctrine_electronic_suppression_hardened_waveforms = {
@@ -401,11 +401,11 @@ ADISCORD_air_doctrine_electronic_suppression = {
 			encryption_factor = 0.03
 		}
 		ADISCORD_air_doctrine_electronic_suppression_jamming_swarms = {
-			mastery = 50
+			mastery = 60
 			enemy_army_bonus_air_superiority_factor = -0.02
 		}
 		ADISCORD_air_doctrine_electronic_suppression_spectrum_control = {
-			mastery = 50
+			mastery = 70
 			encryption_factor = 0.04
 			decryption_factor = 0.04
 			air_intercept_efficiency = 0.03

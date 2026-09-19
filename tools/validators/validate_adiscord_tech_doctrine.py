@@ -41,6 +41,7 @@ try:
     )
     from tools.builders.build_adiscord_doctrine_system import (
         GRANDS as GENERATED_GRANDS,
+        MASTERY_COSTS as GENERATED_MASTERY_COSTS,
         REWARD_PROFILES as GENERATED_REWARD_PROFILES,
         SCHOOLS as GENERATED_SCHOOLS,
         TRACKS as GENERATED_TRACKS,
@@ -79,6 +80,7 @@ except ModuleNotFoundError:
     )
     from builders.build_adiscord_doctrine_system import (
         GRANDS as GENERATED_GRANDS,
+        MASTERY_COSTS as GENERATED_MASTERY_COSTS,
         REWARD_PROFILES as GENERATED_REWARD_PROFILES,
         SCHOOLS as GENERATED_SCHOOLS,
         TRACKS as GENERATED_TRACKS,
@@ -1004,8 +1006,20 @@ def check_generated_doctrine_structure(
         reward_keys = top_level_keys(reward_block)
         if len(reward_keys) != 5:
             issues.append(f"doctrine school {school.key} has {len(reward_keys)} rewards instead of 5")
-        if len(re.findall(r"\bmastery\s*=\s*50\b", reward_block)) != 5:
-            issues.append(f"doctrine school {school.key} does not have five mastery-gated rewards")
+        costs = tuple(int(value) for value in re.findall(r"\bmastery\s*=\s*(\d+)\b", reward_block))
+        if costs != GENERATED_MASTERY_COSTS:
+            issues.append(f"doctrine school {school.key} has incorrect mastery costs: {costs}")
+        for index, (slug, _ru, en, effects) in enumerate(GENERATED_REWARD_PROFILES[school.profile]):
+            rid = generated_reward_id(school, index, slug)
+            if not effects or any(token in en for token in ("=", "{", "}")):
+                issues.append(f"doctrine reward {rid} has missing effects or script in its label")
+            match = re.search(rf"\b{re.escape(rid)}\s*=\s*\{{", reward_block)
+            if not match:
+                continue
+            actual = re.sub(r"\s+", " ", extract_block(reward_block, match.start()))
+            for effect in effects:
+                if re.sub(r"\s+", " ", effect) not in actual:
+                    issues.append(f"doctrine reward {rid} lost effect {effect}")
 
     expected_per_track = {
         "ADISCORD_land_mass_restoration": 4,

@@ -16,27 +16,27 @@ ADISCORD_special_forces_mountain_companies = {
 		base = 1
 		modifier = { factor = 1.5 has_war = yes }
 	}
-	category_special_forces = { defense = 0.04 supply_consumption = -0.01 }
+	mountaineers = { defense = 0.04 supply_consumption = -0.01 }
 	rewards = {
 		ADISCORD_special_forces_mountain_companies_cold_acclimation = {
-			mastery = 50
+			mastery = 30
 			acclimatization_cold_climate_gain_factor = 0.08
 		}
 		ADISCORD_special_forces_mountain_companies_light_columns = {
-			mastery = 50
-			category_special_forces = { supply_consumption = -0.02 }
+			mastery = 40
+			mountaineers = { supply_consumption = -0.02 }
 		}
 		ADISCORD_special_forces_mountain_companies_ridge_positions = {
 			mastery = 50
-			category_special_forces = { defense = 0.04 }
+			mountaineers = { mountain = { defence = 0.08 } hills = { defence = 0.05 } }
 		}
 		ADISCORD_special_forces_mountain_companies_vertical_routes = {
-			mastery = 50
-			category_special_forces = { maximum_speed = 0.03 }
+			mastery = 60
+			mountaineers = { mountain = { movement = 0.10 } hills = { movement = 0.05 } }
 		}
 		ADISCORD_special_forces_mountain_companies_highland_mastery = {
-			mastery = 50
-			category_special_forces = { defense = 0.06 soft_attack = 0.04 max_organisation = 3 }
+			mastery = 70
+			mountaineers = { defense = 0.06 soft_attack = 0.04 max_organisation = 3 }
 		}
 	}
 }
@@ -63,11 +63,11 @@ ADISCORD_special_forces_contaminated_zone_teams = {
 	category_special_forces = { default_morale = 0.02 }
 	rewards = {
 		ADISCORD_special_forces_contaminated_zone_teams_sealed_patrols = {
-			mastery = 50
+			mastery = 30
 			attrition = -0.015
 		}
 		ADISCORD_special_forces_contaminated_zone_teams_dose_rotation = {
-			mastery = 50
+			mastery = 40
 			category_special_forces = { default_morale = 0.03 }
 		}
 		ADISCORD_special_forces_contaminated_zone_teams_ruin_navigation = {
@@ -75,11 +75,11 @@ ADISCORD_special_forces_contaminated_zone_teams = {
 			category_special_forces = { maximum_speed = 0.02 }
 		}
 		ADISCORD_special_forces_contaminated_zone_teams_protected_supply = {
-			mastery = 50
+			mastery = 60
 			category_special_forces = { supply_consumption = -0.02 }
 		}
 		ADISCORD_special_forces_contaminated_zone_teams_dead_zone_raiders = {
-			mastery = 50
+			mastery = 70
 			attrition = -0.025
 			category_special_forces = { breakthrough = 0.05 defense = 0.05 }
 		}
@@ -107,11 +107,11 @@ ADISCORD_special_forces_urban_assault_groups = {
 	category_special_forces = { breakthrough = 0.04 soft_attack = 0.03 }
 	rewards = {
 		ADISCORD_special_forces_urban_assault_groups_building_recon = {
-			mastery = 50
+			mastery = 30
 			category_recon = { recon = 0.5 }
 		}
 		ADISCORD_special_forces_urban_assault_groups_breach_cells = {
-			mastery = 50
+			mastery = 40
 			category_special_forces = { breakthrough = 0.04 }
 		}
 		ADISCORD_special_forces_urban_assault_groups_vertical_clearance = {
@@ -119,11 +119,11 @@ ADISCORD_special_forces_urban_assault_groups = {
 			category_special_forces = { soft_attack = 0.04 }
 		}
 		ADISCORD_special_forces_urban_assault_groups_isolated_strongpoints = {
-			mastery = 50
+			mastery = 60
 			planning_speed = 0.025
 		}
 		ADISCORD_special_forces_urban_assault_groups_urban_assault = {
-			mastery = 50
+			mastery = 70
 			category_special_forces = { breakthrough = 0.06 soft_attack = 0.06 max_organisation = 2 }
 		}
 	}
@@ -151,11 +151,11 @@ ADISCORD_special_forces_deep_recon_cells = {
 	planning_speed = 0.015
 	rewards = {
 		ADISCORD_special_forces_deep_recon_cells_deep_observation = {
-			mastery = 50
+			mastery = 30
 			category_recon = { recon = 0.75 }
 		}
 		ADISCORD_special_forces_deep_recon_cells_hidden_relays = {
-			mastery = 50
+			mastery = 40
 			coordination_bonus = 0.01
 		}
 		ADISCORD_special_forces_deep_recon_cells_target_handover = {
@@ -163,11 +163,11 @@ ADISCORD_special_forces_deep_recon_cells = {
 			category_support_battalions = { soft_attack = 0.025 }
 		}
 		ADISCORD_special_forces_deep_recon_cells_stay_behind = {
-			mastery = 50
+			mastery = 60
 			category_special_forces = { supply_consumption = -0.02 }
 		}
 		ADISCORD_special_forces_deep_recon_cells_theater_recon = {
-			mastery = 50
+			mastery = 70
 			category_recon = { recon = 1 }
 			planning_speed = 0.04
 			coordination_bonus = 0.015
@@ -197,11 +197,11 @@ ADISCORD_special_forces_vertical_insertion = {
 	planning_speed = 0.02
 	rewards = {
 		ADISCORD_special_forces_vertical_insertion_landing_beacons = {
-			mastery = 50
+			mastery = 30
 			planning_speed = 0.02
 		}
 		ADISCORD_special_forces_vertical_insertion_airmobile_supply = {
-			mastery = 50
+			mastery = 40
 			category_special_forces = { supply_consumption = -0.02 }
 		}
 		ADISCORD_special_forces_vertical_insertion_rapid_concentration = {
@@ -209,11 +209,11 @@ ADISCORD_special_forces_vertical_insertion = {
 			land_reinforce_rate = 0.005
 		}
 		ADISCORD_special_forces_vertical_insertion_assault_landing = {
-			mastery = 50
+			mastery = 60
 			category_special_forces = { breakthrough = 0.05 }
 		}
 		ADISCORD_special_forces_vertical_insertion_vertical_envelopment = {
-			mastery = 50
+			mastery = 70
 			category_special_forces = { breakthrough = 0.06 maximum_speed = 0.03 }
 			planning_speed = 0.03
 		}
@@ -241,11 +241,11 @@ ADISCORD_special_forces_autonomous_raiders = {
 	category_special_forces = { supply_consumption = -0.015 soft_attack = 0.03 }
 	rewards = {
 		ADISCORD_special_forces_autonomous_raiders_machine_scouts = {
-			mastery = 50
+			mastery = 30
 			category_recon = { recon = 0.75 }
 		}
 		ADISCORD_special_forces_autonomous_raiders_distributed_cells = {
-			mastery = 50
+			mastery = 40
 			category_special_forces = { defense = 0.03 }
 		}
 		ADISCORD_special_forces_autonomous_raiders_remote_fire = {
@@ -253,11 +253,11 @@ ADISCORD_special_forces_autonomous_raiders = {
 			category_special_forces = { soft_attack = 0.04 }
 		}
 		ADISCORD_special_forces_autonomous_raiders_self_sustaining_teams = {
-			mastery = 50
+			mastery = 60
 			category_special_forces = { supply_consumption = -0.025 }
 		}
 		ADISCORD_special_forces_autonomous_raiders_autonomous_raiders = {
-			mastery = 50
+			mastery = 70
 			category_special_forces = { soft_attack = 0.05 breakthrough = 0.05 max_organisation = 3 }
 			coordination_bonus = 0.015
 		}

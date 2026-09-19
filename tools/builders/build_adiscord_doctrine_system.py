@@ -1,9 +1,7 @@
-"""Generate the A-Discord mastery doctrine system.
+"""Generate doctrine choices, force specializations and mastery rewards.
 
-The structure borrows the useful part of TDA's doctrine redesign: a country
-chooses a bounded operational school, unlocks it through relevant technology,
-and earns five modest rewards by actually using the associated forces.  Legacy
-IDs are retained for the original eleven schools and their existing rewards.
+Stable doctrine and reward IDs preserve country history and scripted consumers.
+Grand doctrines share tracks so specialization remains a separate choice.
 """
 
 from __future__ import annotations
@@ -16,6 +14,9 @@ import re
 from tools.lib.paths import repository_root
 
 ROOT = repository_root()
+
+# Early field lessons arrive sooner; the full five-stage course still costs 250.
+MASTERY_COSTS = (30, 40, 50, 60, 70)
 
 
 @dataclass(frozen=True)
@@ -53,9 +54,9 @@ TRACKS = (
     Track("ADISCORD_land_platform_centric", "Танковые войска", "Armored Forces", "GFX_mob_warfare_bg", "GFX_doctrine_milestone_armored_land", "GFX_doctrine_decor_land", 6.0, "categories", ("category_tanks", "category_all_armor")),
     Track("ADISCORD_land_networked_operations", "Оперативное управление", "Operational Command", "GFX_tac_operation_bg", "GFX_doctrine_milestone_operations_land", "GFX_doctrine_decor_land", 0.8, "categories", ("category_all_infantry", "category_support_battalions", "category_tanks", "category_all_armor")),
     Track("ADISCORD_land_fortress_state", "Огневая поддержка и устойчивость", "Fire Support and Resilience", "GFX_sup_firepower_bg", "GFX_doctrine_milestone_artillery_land", "GFX_doctrine_decor_land", 0.8, "categories", ("category_all_infantry", "category_support_battalions", "category_line_artillery")),
-    Track("ADISCORD_air_drone_swarm", "Беспилотная авиация", "Unmanned Aviation", "GFX_air_superiority_bg", "GFX_doctrine_milestone_fighter_air", "GFX_doctrine_decor_air", 7.0, "equipment", ("fighter", "cas", "naval_bomber")),
-    Track("ADISCORD_air_vtol_deep_strike", "Поддержка наземных войск", "Ground-force Aviation", "GFX_battlefield_destruction_bg", "GFX_doctrine_milestone_striker_air", "GFX_doctrine_decor_air", 7.0, "equipment", ("cas", "tactical_bomber", "heavy_fighter")),
-    Track("ADISCORD_air_strategic_denial", "Контроль воздушного пространства", "Airspace Control", "GFX_strategic_destruction_bg", "GFX_doctrine_milestone_heavy_air", "GFX_doctrine_decor_air", 7.0, "equipment", ("fighter", "interceptor", "strategic_bomber")),
+    Track("ADISCORD_air_drone_swarm", "Беспилотная авиация", "Unmanned Aviation", "GFX_air_superiority_bg", "GFX_doctrine_milestone_fighter_air", "GFX_doctrine_decor_air", 7.0, "equipment", ("fighter", "cas")),
+    Track("ADISCORD_air_vtol_deep_strike", "Поддержка наземных войск", "Ground-force Aviation", "GFX_battlefield_destruction_bg", "GFX_doctrine_milestone_striker_air", "GFX_doctrine_decor_air", 7.0, "equipment", ("cas", "tactical_bomber")),
+    Track("ADISCORD_air_strategic_denial", "Контроль воздушного пространства", "Airspace Control", "GFX_strategic_destruction_bg", "GFX_doctrine_milestone_heavy_air", "GFX_doctrine_decor_air", 7.0, "equipment", ("fighter", "tactical_bomber")),
     Track("ADISCORD_naval_littoral_security", "Прибрежная безопасность", "Littoral Security", "GFX_screens_bg", "GFX_doctrine_milestone_screens_naval", "GFX_doctrine_decor_naval", 2.0, "equipment", ("screen_ship",)),
     Track("ADISCORD_naval_surface_control", "Надводные соединения", "Surface Action Groups", "GFX_fleet_in_being_bg", "GFX_doctrine_milestone_ships_naval", "GFX_doctrine_decor_naval", 2.5, "equipment", ("capital_ship", "carrier", "screen_ship")),
     Track("ADISCORD_naval_subsurface_warfare", "Подводная война", "Subsurface Warfare", "GFX_trade_interdiction_bg", "GFX_doctrine_milestone_submarine_naval", "GFX_doctrine_decor_naval", 3.0, "equipment", ("submarine",)),
@@ -65,6 +66,8 @@ TRACKS = (
 
 
 def reward(slug: str, ru: str, en: str, *effects: str) -> tuple[str, str, str, tuple[str, ...]]:
+    if not effects or any(token in en for token in ("=", "{", "}")):
+        raise ValueError(f"Reward {slug} requires an English label and gameplay effects")
     return slug, ru, en, effects
 
 
@@ -78,24 +81,24 @@ REWARD_PROFILES = {
     ),
     "assault": (
         reward("assault_recon", "Разведка штурмовых маршрутов", "Assault-route Reconnaissance", "category_recon = { recon = 0.5 }"),
-        reward("breach_groups", "Группы развития прорыва", "Breach Exploitation Groups", "category_all_infantry = { breakthrough = 0.04 }"),
+        reward("breach_groups", "Группы развития прорыва", "Breach Exploitation Groups", "ADISCORD_assault_infantry = { breakthrough = 0.04 }"),
         reward("short_fireplans", "Короткие огневые планы", "Short Fireplans", "planning_speed = 0.04"),
-        reward("shock_reserves", "Ударные резервы", "land_reinforce_rate = 0.01", "category_all_infantry = { soft_attack = 0.03 }"),
-        reward("continuous_assault", "Непрерывный штурм", "category_all_infantry = { breakthrough = 0.06 soft_attack = 0.04 }"),
+        reward("shock_reserves", "Ударные резервы", "Assault Reserves", "land_reinforce_rate = 0.01", "ADISCORD_assault_infantry = { soft_attack = 0.05 }"),
+        reward("continuous_assault", "Непрерывный штурм", "Sustained Assault", "ADISCORD_assault_infantry = { breakthrough = 0.10 soft_attack = 0.06 }", "enable_tactic = tactic_overwhelming_fire"),
     ),
     "mobile": (
         reward("march_discipline", "Дисциплина марша", "March Discipline", "org_loss_when_moving = -0.015"),
         reward("mobile_reserves", "Мобильные резервы", "Mobile Reserves", "land_reinforce_rate = 0.01"),
         reward("route_control", "Контроль маршрутов", "Route Control", "supply_consumption_factor = -0.01"),
-        reward("rolling_front", "Подвижный фронт", "Rolling Front", "category_all_infantry = { maximum_speed = 0.03 }"),
-        reward("operational_mobility", "Оперативная мобильность", "Operational Mobility", "category_all_infantry = { maximum_speed = 0.04 max_organisation = 3 }", "org_loss_when_moving = -0.02"),
+        reward("rolling_front", "Подвижный фронт", "Rolling Front", "ADISCORD_mechanized_infantry = { maximum_speed = 0.03 }"),
+        reward("operational_mobility", "Оперативная мобильность", "Operational Mobility", "ADISCORD_mechanized_infantry = { maximum_speed = 0.04 max_organisation = 3 }", "org_loss_when_moving = -0.02"),
     ),
     "militia": (
-        reward("local_guides", "Местные проводники", "Local Guides", "category_all_infantry = { defense = 0.03 }"),
+        reward("local_guides", "Местные проводники", "Local Guides", "ADISCORD_militia = { defense = 0.06 }", "ADISCORD_territorial = { defense = 0.04 }"),
         reward("hidden_stores", "Скрытые склады", "Hidden Stores", "supply_consumption_factor = -0.01"),
         reward("district_reserves", "Окружные резервы", "District Reserves", "land_reinforce_rate = 0.01"),
         reward("ruin_positions", "Позиции в руинах", "Ruins as Positions", "dig_in_speed_factor = 0.04"),
-        reward("defense_in_depth", "Распределённая оборона", "Distributed Defense", "category_all_infantry = { defense = 0.07 max_organisation = 2 }", "dig_in_speed_factor = 0.05"),
+        reward("defense_in_depth", "Распределённая оборона", "Distributed Defense", "ADISCORD_militia = { defense = 0.08 max_organisation = 4 }", "ADISCORD_territorial = { defense = 0.06 max_organisation = 3 }", "enable_tactic = tactic_elastic_defense"),
     ),
     "armor_breakthrough": (
         reward("remote_weapons", "Координация дистанционного оружия", "Remote Weapon Coordination", "category_all_armor = { soft_attack = 0.04 }"),
@@ -111,6 +114,13 @@ REWARD_PROFILES = {
         reward("combined_reserves", "Общевойсковые резервы", "Combined-arms Reserves", "land_reinforce_rate = 0.01"),
         reward("integrated_battlegroup", "Интегрированная боевая группа", "Integrated Battlegroup", "category_all_armor = { max_organisation = 3 breakthrough = 0.05 }", "category_all_infantry = { breakthrough = 0.03 }"),
     ),
+    "heavy_breach": (
+        reward("recon_routes", "Разведка несущих маршрутов", "Load-bearing Route Reconnaissance", "ADISCORD_recon_platform = { recon = 0.75 }"),
+        reward("protected_approach", "Прикрытие тяжёлых машин", "Heavy Vehicle Cover", "ADISCORD_heavy_platform = { defense = 0.08 }"),
+        reward("breach_salvos", "Залпы по узлам обороны", "Strongpoint Salvos", "ADISCORD_heavy_platform = { soft_attack = 0.08 }"),
+        reward("recovery_crews", "Эвакуация под огнём", "Recovery under Fire", "ADISCORD_heavy_platform = { reliability = 0.08 default_morale = 0.05 }"),
+        reward("fortress_breakers", "Пролом укреплённой полосы", "Fortified Line Breach", "ADISCORD_heavy_platform = { breakthrough = 0.12 max_organisation = 4 }", "enable_tactic = tactic_breakthrough"),
+    ),
     "armor_recon": (
         reward("scout_vehicles", "Разведывательные машины", "Scout Vehicles", "category_recon = { recon = 0.75 }"),
         reward("screened_flanks", "Прикрытые фланги", "Screened Flanks", "category_all_armor = { defense = 0.04 }"),
@@ -120,10 +130,10 @@ REWARD_PROFILES = {
     ),
     "armor_autonomy": (
         reward("crewless_scouts", "Безэкипажная разведка", "Crewless Scouts", "category_recon = { recon = 0.75 }"),
-        reward("machine_pickets", "Машинное охранение", "Machine Pickets", "category_all_armor = { defense = 0.04 }"),
-        reward("swarm_fire", "Распределённый огонь роя", "Distributed Swarm Fire", "category_all_armor = { soft_attack = 0.05 }"),
-        reward("self_recovery", "Самоэвакуация машин", "Vehicle Self-recovery", "category_all_armor = { reliability = 0.05 default_morale = 0.03 }"),
-        reward("autonomous_battlefield", "Автономный боевой контур", "Autonomous Battlespace", "category_all_armor = { breakthrough = 0.06 reliability = 0.04 }", "coordination_bonus = 0.02"),
+        reward("machine_pickets", "Машинное охранение", "Machine Pickets", "ADISCORD_combat_platform = { defense = 0.04 }"),
+        reward("swarm_fire", "Распределённый огонь роя", "Distributed Swarm Fire", "ADISCORD_combat_platform = { soft_attack = 0.05 }"),
+        reward("self_recovery", "Самоэвакуация машин", "Vehicle Self-recovery", "ADISCORD_combat_platform = { reliability = 0.05 default_morale = 0.03 }"),
+        reward("autonomous_battlefield", "Автономный боевой контур", "Autonomous Battlespace", "ADISCORD_combat_platform = { breakthrough = 0.06 reliability = 0.04 }", "coordination_bonus = 0.02"),
     ),
     "network": (
         reward("recon_saturation", "Насыщение разведкой", "Reconnaissance Saturation", "category_recon = { recon = 1 }"),
@@ -313,10 +323,10 @@ REWARD_PROFILES.update({
     ),
     "sf_mountain": (
         reward("cold_acclimation", "Холодовая акклиматизация", "Cold Acclimatization", "acclimatization_cold_climate_gain_factor = 0.08"),
-        reward("light_columns", "Облегчённые колонны", "Light Columns", "category_special_forces = { supply_consumption = -0.02 }"),
-        reward("ridge_positions", "Позиции на гребнях", "Ridge Positions", "category_special_forces = { defense = 0.04 }"),
-        reward("vertical_routes", "Вертикальные маршруты", "Vertical Routes", "category_special_forces = { maximum_speed = 0.03 }"),
-        reward("highland_mastery", "Господство в высокогорье", "Highland Mastery", "category_special_forces = { defense = 0.06 soft_attack = 0.04 max_organisation = 3 }"),
+        reward("light_columns", "Облегчённые колонны", "Light Columns", "mountaineers = { supply_consumption = -0.02 }"),
+        reward("ridge_positions", "Позиции на гребнях", "Ridge Positions", "mountaineers = { mountain = { defence = 0.08 } hills = { defence = 0.05 } }"),
+        reward("vertical_routes", "Вертикальные маршруты", "Vertical Routes", "mountaineers = { mountain = { movement = 0.10 } hills = { movement = 0.05 } }"),
+        reward("highland_mastery", "Господство в высокогорье", "Highland Mastery", "mountaineers = { defense = 0.06 soft_attack = 0.04 max_organisation = 3 }"),
     ),
     "sf_contaminated": (
         reward("sealed_patrols", "Герметичные патрули", "Sealed Patrols", "attrition = -0.015"),
@@ -359,14 +369,14 @@ REWARD_PROFILES.update({
 SCHOOLS = (
     # Land: four competing schools for every operational track.
     School("ADISCORD_doctrine_mass_recruitment_bureaus", "land", "ADISCORD_land_mass_restoration", "Бюро массового развёртывания", "Mass Mobilization Bureaus", "Стандартизированные кадры превращают многочисленные пополнения в устойчивые линейные части.", "Standardized cadres turn large replacement pools into durable line formations.", "GFX_doctrine_mass_assault_medium", "ADISCORD_has_military_standardization_tech = yes", ("category_all_infantry = { max_organisation = 2 }", "land_reinforce_rate = 0.005"), "mass", ("modifier = { factor = 1.6 has_manpower > 50000 }",), ("ADISCORD_doctrine_salvage_line_infantry", "ADISCORD_doctrine_distributed_militias", "ADISCORD_doctrine_emergency_replacement_system", "ADISCORD_doctrine_total_restoration_front", "ADISCORD_doctrine_people_and_scrap")),
-    School("ADISCORD_doctrine_assault_detachments", "land", "ADISCORD_land_mass_restoration", "Штурмовые отряды", "Assault Detachments", "Специализированные штурмовые группы вскрывают укреплённый участок и передают прорыв линейным частям.", "Specialized assault groups open fortified sectors for exploitation by line formations.", "GFX_doctrine_assault_infantry_medium", "has_tech = ADISCORD_tech_assault_breaching_packages", ("category_all_infantry = { breakthrough = 0.03 }", "planning_speed = 0.02"), "assault", ("modifier = { factor = 1.8 has_war = yes }",)),
-    School("ADISCORD_doctrine_mobile_line_groups", "land", "ADISCORD_land_mass_restoration", "Мобильные линейные группы", "Mobile Line Groups", "Моторизованные резервы закрывают прорывы и поддерживают темп наступления без перехода к тяжёлой броне.", "Motorized reserves close breaches and sustain operational tempo without relying on heavy armor.", "GFX_doctrine_mobile_infantry_medium", "has_tech = ADISCORD_tech_standardized_transport_columns", ("category_all_infantry = { maximum_speed = 0.02 }", "org_loss_when_moving = -0.01"), "mobile", ("modifier = { factor = 1.5 has_tech = ADISCORD_tech_forward_supply_hubs }",)),
+    School("ADISCORD_doctrine_assault_detachments", "land", "ADISCORD_land_mass_restoration", "Штурмовые отряды", "Assault Detachments", "Специализированные штурмовые группы вскрывают укреплённый участок и передают прорыв линейным частям.", "Specialized assault groups open fortified sectors for exploitation by line formations.", "GFX_doctrine_assault_infantry_medium", "has_tech = ADISCORD_tech_assault_breaching_packages has_tech = ADISCORD_tech_remote_weapon_tripods", ("ADISCORD_assault_infantry = { breakthrough = 0.03 }", "planning_speed = 0.02"), "assault", ("modifier = { factor = 1.8 has_war = yes }",)),
+    School("ADISCORD_doctrine_mobile_line_groups", "land", "ADISCORD_land_mass_restoration", "Механизированные резервы", "Mechanized Reserves", "Моторизованные резервы закрывают прорывы и поддерживают темп наступления без перехода к тяжёлой броне.", "Motorized reserves close breaches and sustain operational tempo without relying on heavy armor.", "GFX_doctrine_mobile_infantry_medium", "has_tech = ADISCORD_tech_armored_carrier_program", ("ADISCORD_mechanized_infantry = { maximum_speed = 0.02 }", "org_loss_when_moving = -0.01"), "mobile", ("modifier = { factor = 1.5 has_tech = ADISCORD_tech_forward_supply_hubs }",)),
     School("ADISCORD_doctrine_dispersed_militia_system", "land", "ADISCORD_land_mass_restoration", "Рассредоточенная система ополчения", "Dispersed Militia System", "Местные кадры, скрытые склады и простые планы обороны позволяют слабой промышленности удерживать пространство.", "Local cadres, hidden stocks, and simple defense plans let a weak industry hold territory.", "GFX_doctrine_defensive_postures_medium", "has_tech = ADISCORD_tech_fieldcraft_manuals", ("category_all_infantry = { defense = 0.04 }", "dig_in_speed_factor = 0.02"), "militia", ("modifier = { factor = 1.5 num_of_military_factories < 8 }",)),
 
     School("ADISCORD_doctrine_platform_battlegroups", "land", "ADISCORD_land_platform_centric", "Танковые боевые группы", "Armored Battlegroups", "Танковые части концентрируются для короткого решающего прорыва под прикрытием разведки и ремонта.", "Armored formations concentrate for a short decisive breakthrough under reconnaissance and recovery cover.", "GFX_doctrine_armored_spearhead_medium", "has_tech = ADISCORD_tech_restored_armored_chassis", ("category_all_armor = { max_organisation = 2 breakthrough = 0.03 }",), "armor_breakthrough", ("modifier = { factor = 2 has_tech = ADISCORD_tech_remote_weapon_stations }",), ("ADISCORD_doctrine_remote_weapon_coordination", "ADISCORD_doctrine_heavy_breakthrough_columns", "ADISCORD_doctrine_drone_screened_advance", "ADISCORD_doctrine_autonomous_repair_cycles", "ADISCORD_doctrine_armored_decision_warfare")),
-    School("ADISCORD_doctrine_armored_spearhead_command", "land", "ADISCORD_land_platform_centric", "Командование танкового клина", "Armored Spearhead Command", "Небольшое число лучших танковых соединений пробивает фронт и удерживает инициативу до ввода резервов.", "A small number of elite armored formations rupture the front and retain initiative until reserves arrive.", "GFX_doctrine_armored_cavalry_medium", "has_tech = ADISCORD_tech_composite_armor_arrays", ("category_tanks = { breakthrough = 0.05 }", "max_planning = 0.01"), "armor_breakthrough", ("modifier = { factor = 1.5 num_of_military_factories > 12 }",)),
+    School("ADISCORD_doctrine_armored_spearhead_command", "land", "ADISCORD_land_platform_centric", "Тяжёлые группы прорыва", "Heavy Breach Groups", "Тяжёлые платформы последовательно вскрывают укрепления, пока разведка выбирает подходы, а ремонтные экипажи возвращают повреждённые машины в строй.", "Heavy platforms break successive defensive positions while recon selects approaches and recovery crews return damaged vehicles to service.", "GFX_doctrine_armored_cavalry_medium", "OR = { has_tech = ADISCORD_tech_heavy_platform_cores has_tech = ADISCORD_tech_active_mass_balancing_suspension }", ("ADISCORD_heavy_platform = { breakthrough = 0.06 }", "max_planning = 0.01"), "heavy_breach", ("modifier = { factor = 1.5 num_of_military_factories > 12 }",), ("ADISCORD_doctrine_armored_spearhead_command_remote_weapons", "ADISCORD_doctrine_armored_spearhead_command_heavy_columns", "ADISCORD_doctrine_armored_spearhead_command_drone_screen", "ADISCORD_doctrine_armored_spearhead_command_repair_cycles", "ADISCORD_doctrine_armored_spearhead_command_armored_decision")),
     School("ADISCORD_doctrine_infantry_tank_integration", "land", "ADISCORD_land_platform_centric", "Интеграция пехоты и танков", "Infantry-tank Integration", "Танки не действуют отдельно: пехота, сапёры и машины образуют устойчивую общевойсковую группу.", "Armor no longer fights alone: infantry, engineers, and vehicles form a durable combined-arms group.", "GFX_doctrine_armored_infantry_support_medium", "has_tech = ADISCORD_tech_multispectral_gunner_sights", ("category_all_armor = { defense = 0.03 }", "category_all_infantry = { breakthrough = 0.02 }"), "armor_integration", ("modifier = { factor = 1.5 has_tech = ADISCORD_tech_combat_engineering_sections }",)),
-    School("ADISCORD_doctrine_autonomous_armored_screen", "land", "ADISCORD_land_platform_centric", "Автономный танковый экран", "Autonomous Armored Screen", "Безэкипажные машины принимают на себя разведку, охранение и часть огневых задач танковой группы.", "Crewless vehicles assume reconnaissance, screening, and part of an armored group's fire mission.", "GFX_mechanised_offensive_medium", "has_tech = ADISCORD_tech_armed_recon_drones", ("category_all_armor = { reliability = 0.03 }", "category_recon = { recon = 0.5 }"), "armor_autonomy", ("modifier = { factor = 2 has_tech = ADISCORD_tech_distributed_ground_swarm_control }",)),
+    School("ADISCORD_doctrine_autonomous_armored_screen", "land", "ADISCORD_land_platform_centric", "Автономный танковый экран", "Autonomous Armored Screen", "Безэкипажные машины принимают на себя разведку, охранение и часть огневых задач танковой группы.", "Crewless vehicles assume reconnaissance, screening, and part of an armored group's fire mission.", "GFX_mechanised_offensive_medium", "has_tech = ADISCORD_tech_armed_recon_drones", ("ADISCORD_combat_platform = { reliability = 0.03 }", "category_recon = { recon = 0.5 }"), "armor_autonomy", ("modifier = { factor = 2 has_tech = ADISCORD_tech_distributed_ground_swarm_control }",)),
 
     School("ADISCORD_doctrine_mesh_battlefield_command", "land", "ADISCORD_land_networked_operations", "Сетевое управление полем боя", "Mesh Battlefield Command", "Датчики, штабы и огневые средства сводятся в один устойчивый контур управления.", "Sensors, staffs, and fire assets share a single resilient command mesh.", "GFX_doctrine_mission_type_tactics_medium", "ADISCORD_has_cyber_command_tech = yes", ("coordination_bonus = 0.015", "planning_speed = 0.02"), "network", ("modifier = { factor = 2 has_tech = ADISCORD_tech_mesh_command_networks }",), ("ADISCORD_doctrine_reconnaissance_saturation", "ADISCORD_doctrine_predictive_operational_planning", "ADISCORD_doctrine_integrated_fire_control", "ADISCORD_doctrine_distributed_command_cells", "ADISCORD_doctrine_algorithmic_campaigning")),
     School("ADISCORD_doctrine_mission_command", "land", "ADISCORD_land_networked_operations", "Командование по замыслу", "Mission Command", "Младшие командиры получают свободу исполнения общего замысла и быстрее реагируют на разрушение связи.", "Junior commanders execute the common intent independently and react faster when communications fail.", "GFX_doctrine_mission_type_tactics_medium", "has_tech = ADISCORD_tech_reconstituted_staff_academies", ("land_reinforce_rate = 0.005", "category_all_infantry = { default_morale = 0.02 }"), "mission", ("modifier = { factor = 1.5 has_war = yes }",)),
@@ -405,7 +415,7 @@ SCHOOLS = (
     School("ADISCORD_naval_doctrine_seabed_hunter_network", "sea", "ADISCORD_naval_subsurface_warfare", "Донная поисковая сеть", "Seabed Hunter Network", "Донные датчики и автономные аппараты превращают подводную среду в наблюдаемое поле боя.", "Seabed sensors and autonomous vehicles turn the subsurface domain into an observed battlespace.", "GFX_doctrine_submarine_operations_medium", "has_tech = ADISCORD_tech_seabed_sensor_webs", ("naval_detection = 0.035", "navy_submarine_attack_factor = 0.025"), "naval_seabed", ("modifier = { factor = 2 has_tech = ADISCORD_tech_autonomous_submarines }",)),
 
     # Special forces: two mastery tracks, three operational schools each.
-    School("ADISCORD_special_forces_mountain_companies", "special_forces", "ADISCORD_special_forces_adaptation", "Горные роты", "Mountain Companies", "Лёгкие автономные роты удерживают высоты и действуют там, где обычные соединения теряют темп.", "Light autonomous companies hold high ground and operate where regular formations lose tempo.", "GFX_special_forces_mountaineers_medium", "has_tech = ADISCORD_tech_fieldcraft_manuals", ("category_special_forces = { defense = 0.04 supply_consumption = -0.01 }",), "sf_mountain", ("modifier = { factor = 1.5 has_war = yes }",)),
+    School("ADISCORD_special_forces_mountain_companies", "special_forces", "ADISCORD_special_forces_adaptation", "Горные роты", "Mountain Companies", "Лёгкие автономные роты удерживают высоты и действуют там, где обычные соединения теряют темп.", "Light autonomous companies hold high ground and operate where regular formations lose tempo.", "GFX_special_forces_mountaineers_medium", "has_tech = ADISCORD_tech_fieldcraft_manuals", ("mountaineers = { defense = 0.04 supply_consumption = -0.01 }",), "sf_mountain", ("modifier = { factor = 1.5 has_war = yes }",)),
     School("ADISCORD_special_forces_contaminated_zone_teams", "special_forces", "ADISCORD_special_forces_adaptation", "Группы заражённых зон", "Contaminated-zone Teams", "Герметичное снаряжение и дозовая ротация позволяют выполнять задачи в химически и радиационно опасной местности.", "Sealed equipment and exposure rotation sustain missions in chemically and radiologically hazardous terrain.", "GFX_doctrine_special_forces_1_medium", "has_tech = ADISCORD_tech_radiation_patrols", ("attrition = -0.015", "category_special_forces = { default_morale = 0.02 }"), "sf_contaminated", ("modifier = { factor = 1.8 has_tech = ADISCORD_tech_adaptive_radiation_shielding }",)),
     School("ADISCORD_special_forces_urban_assault_groups", "special_forces", "ADISCORD_special_forces_adaptation", "Группы городского штурма", "Urban Assault Groups", "Малые штурмовые группы последовательно изолируют и зачищают вертикально организованную застройку.", "Small assault groups isolate and clear vertically organized urban terrain in sequence.", "GFX_marines_commandoes_medium", "has_tech = ADISCORD_tech_urban_breaching", ("category_special_forces = { breakthrough = 0.04 soft_attack = 0.03 }",), "sf_urban", ("modifier = { factor = 1.7 has_war = yes }",)),
 
@@ -427,59 +437,195 @@ GRANDS = (
     {
         "key": "ADISCORD_doctrine_restoration_general_staff",
         "folder": "land",
-        "ru": "Генеральный штаб восстановления",
-        "en": "Restoration General Staff",
-        "desc_ru": "Единый штаб координирует массовую армию, танковые войска, оперативное управление и устойчивый тыл.",
-        "desc_en": "A unified staff coordinates the mass army, armored forces, operational command, and resilient rear areas.",
+        "ru": "Армия арсеналов",
+        "en": "Arsenal Army",
+        "desc_ru": "Войну выдерживает тот, кто возвращает в строй людей и машины. Арсеналы снабжают линейную пехоту, ремонтные части восстанавливают платформы, а обученные резервы сменяют истощённые соединения. Подходит для долгой войны с разнородным вооружением; не даёт преимуществ быстрым рейдам или высокоточным ударам.",
+        "desc_en": "Victory belongs to the army that returns people and machines to service. Arsenals sustain line infantry, recovery units restore platforms, and trained reserves relieve exhausted formations. Built for a long war with mixed equipment, without bonuses to rapid raids or precision strikes.",
         "icon": "GFX_doctrine_grand_battleplan_medium",
         "xp": 75,
         "type": "army",
         "tracks": tuple(track.key for track in TRACKS[:4]),
-        "effects": ("planning_speed = 0.04", "land_reinforce_rate = 0.008"),
-        "ai": ("modifier = { factor = 1.5 has_war = yes }",),
+        "effects": ("category_all_infantry = { max_organisation = 3 }", "land_reinforce_rate = 0.01", "enable_tactic = tactic_delay"),
+        "ai": ("modifier = { factor = 2 has_manpower > 50000 }", "modifier = { factor = 1.5 num_of_military_factories < 10 }"),
         "milestones": (
-            ("category_all_infantry = { max_organisation = 3 }", "land_reinforce_rate = 0.005"),
-            ("category_all_armor = { breakthrough = 0.04 }", "coordination_bonus = 0.008"),
-            ("coordination_bonus = 0.015", "planning_speed = 0.03"),
-            ("category_support_battalions = { defense = 0.04 }", "dig_in_speed_factor = 0.03"),
+            ("infantry = { default_morale = 0.08 }", "ADISCORD_territorial = { max_organisation = 5 }"),
+            ("ADISCORD_combat_platform = { reliability = 0.08 }", "ADISCORD_heavy_platform = { reliability = 0.08 }"),
+            ("land_reinforce_rate = 0.02", "category_all_infantry = { default_morale = 0.05 }"),
+            ("supply_consumption_factor = -0.04", "category_support_battalions = { max_organisation = 3 }"),
         ),
     },
     {
         "key": "ADISCORD_air_doctrine_restored_air_command",
         "folder": "air",
-        "ru": "Восстановленное воздушное командование",
-        "en": "Restored Air Command",
-        "desc_ru": "Командование объединяет беспилотную авиацию, поддержку сухопутных войск и контроль воздушного пространства.",
-        "desc_en": "The command integrates unmanned aviation, ground-force support, and control of the airspace.",
+        "ru": "Авиация переднего края",
+        "en": "Frontline Aviation",
+        "desc_ru": "Вылеты планируются по задачам наземных частей. Истребители обеспечивают прикрытие, штурмовики сменяют друг друга над боем, а наземные группы наводят их на цели. Главный результат — усиление войск на фронте; дальние удары остаются вспомогательной задачей.",
+        "desc_en": "Ground operations determine the sortie plan. Fighters provide cover, attack aircraft rotate over the battle, and ground teams direct them onto targets. The priority is frontline support rather than deep strikes.",
         "icon": "GFX_doctrine_direct_ground_support_medium",
         "xp": 70,
         "type": "air",
         "tracks": tuple(track.key for track in TRACKS[4:7]),
-        "effects": ("air_mission_efficiency = 0.025", "air_accidents_factor = -0.03"),
-        "ai": ("modifier = { factor = 1.5 has_tech = ADISCORD_tech_reclaimed_jet_platforms }",),
+        "effects": ("air_cas_efficiency = 0.06", "air_cas_present_factor = 0.04"),
+        "ai": ("modifier = { factor = 2 has_tech = ADISCORD_tech_vtol_assault_frames }",),
         "milestones": (
-            ("category_fighter = { air_agility = 0.03 }", "air_superiority_efficiency = 0.03"),
-            ("category_cas = { air_ground_attack = 0.03 }", "air_cas_efficiency = 0.03"),
-            ("air_intercept_efficiency = 0.03", "air_interception_detect_factor = 0.03"),
+            ("category_cas = { air_defence = 0.06 }", "air_accidents_factor = -0.05"),
+            ("category_cas = { air_ground_attack = 0.08 }", "air_cas_efficiency = 0.04"),
+            ("category_fighter = { air_agility = 0.04 }", "air_cas_present_factor = 0.06"),
         ),
     },
     {
         "key": "ADISCORD_naval_doctrine_littoral_command",
         "folder": "naval",
-        "ru": "Морское командование восстановления",
-        "en": "Restoration Naval Command",
-        "desc_ru": "Единое морское командование распределяет ограниченный флот между защитой побережья, надводным контролем и подводной войной.",
-        "desc_en": "A unified naval command allocates a limited fleet between coastal defense, surface control, and subsurface warfare.",
-        "icon": "GFX_doctrine_trade_interdiction_medium",
+        "ru": "Охрана морских путей",
+        "en": "Sea Lane Protection",
+        "desc_ru": "Восстановленные порты должны получать грузы даже во время войны. Патрульные суда сопровождают конвои, надводные группы прикрывают переходы, а поиск подлодок важнее погони за крупным сражением. Приоритет — доставка снабжения и сохранение охранения.",
+        "desc_en": "Restored ports must receive cargo even in wartime. Patrol vessels escort convoys, surface groups cover crossings, and submarine detection takes priority over a decisive fleet battle. Supply delivery and escort survival come first.",
+        "icon": "GFX_doctrine_convoy_sailing_medium",
         "xp": 50,
         "type": "navy",
         "tracks": tuple(track.key for track in TRACKS[7:10]),
-        "effects": ("convoy_escort_efficiency = 0.04", "naval_coordination = 0.01"),
-        "ai": ("modifier = { factor = 1.5 has_war = yes }",),
+        "effects": ("convoy_escort_efficiency = 0.10", "screening_efficiency = 0.04"),
+        "ai": ("modifier = { factor = 2 has_tech = ADISCORD_tech_hardened_logistics_nodes }",),
         "milestones": (
-            ("screening_efficiency = 0.03", "naval_detection = 0.02"),
-            ("naval_hit_chance = 0.02", "shore_bombardment_bonus = 0.03"),
-            ("convoy_raiding_efficiency_factor = 0.03", "navy_submarine_attack_factor = 0.03"),
+            ("screening_efficiency = 0.06", "naval_detection = 0.03"),
+            ("convoy_escort_efficiency = 0.06", "naval_coordination = 0.03"),
+            ("naval_detection = 0.05", "navy_submarine_defence_factor = 0.04"),
+        ),
+    },
+    {
+        "key": "ADISCORD_doctrine_raiding_columns",
+        "folder": "land",
+        "ru": "Рейдовые колонны",
+        "en": "Raiding Columns",
+        "desc_ru": "Разведывательные платформы находят проход, механизированная пехота занимает узлы дорог, боевые машины удерживают путь для следующих колонн. Армия выигрывает темпом и сохранением организации на марше. Требует транспорта и ремонтной базы; пешая масса почти не получает её главных преимуществ.",
+        "desc_en": "Recon platforms find a passage, mechanized infantry takes road junctions, and combat vehicles hold the route for following columns. Tempo and cohesion on the march decide the campaign. Transport and recovery capacity are essential; the main bonuses do little for a foot army.",
+        "icon": "GFX_doctrine_armored_spearhead_medium",
+        "xp": 75,
+        "type": "army",
+        "tracks": tuple(track.key for track in TRACKS[:4]),
+        "effects": ("org_loss_when_moving = -0.10", "ADISCORD_mechanized_infantry = { maximum_speed = 0.05 }", "enable_tactic = tactic_unexpected_thrust"),
+        "ai": ("modifier = { factor = 3 has_tech = ADISCORD_tech_armored_carrier_program }", "modifier = { factor = 0.3 num_of_military_factories < 8 }"),
+        "milestones": (
+            ("ADISCORD_mechanized_infantry = { max_organisation = 6 breakthrough = 0.06 }",),
+            ("ADISCORD_combat_platform = { maximum_speed = 0.08 breakthrough = 0.08 }", "enable_tactic = tactic_blitz"),
+            ("ADISCORD_recon_platform = { recon = 1 }", "org_loss_when_moving = -0.05"),
+            ("ADISCORD_mechanized_infantry = { supply_consumption = -0.06 }", "ADISCORD_combat_platform = { reliability = 0.06 }"),
+        ),
+    },
+    {
+        "key": "ADISCORD_doctrine_remote_engagement",
+        "folder": "land",
+        "ru": "Дистанционное поражение",
+        "en": "Remote Engagement",
+        "desc_ru": "Люди удерживают рубеж наблюдения, разведывательные платформы находят цели, артиллерия и тяжёлые машины разбирают оборону до сближения. Школа усиливает разведку, согласование огня и подготовленный прорыв. Без батарей и платформ её преимущества остаются ограниченными.",
+        "desc_en": "Infantry holds the observation line, recon platforms locate targets, and artillery and heavy machines break defenses before contact. Reconnaissance, coordinated fire and prepared breakthroughs are central. Without batteries and platforms, most of its advantages remain out of reach.",
+        "icon": "GFX_doctrine_fire_concentration_medium",
+        "xp": 75,
+        "type": "army",
+        "tracks": tuple(track.key for track in TRACKS[:4]),
+        "effects": ("coordination_bonus = 0.03", "max_planning = 0.05", "enable_tactic = tactic_overwhelming_fire"),
+        "ai": ("modifier = { factor = 3 has_tech = ADISCORD_tech_smart_fire_control }", "modifier = { factor = 0.4 num_of_military_factories < 8 }"),
+        "milestones": (
+            ("infantry = { defense = 0.06 }", "ADISCORD_assault_infantry = { breakthrough = 0.06 }"),
+            ("ADISCORD_heavy_platform = { soft_attack = 0.10 breakthrough = 0.08 }",),
+            ("ADISCORD_recon_platform = { recon = 1.5 }", "coordination_bonus = 0.03"),
+            ("ADISCORD_line_artillery = { soft_attack = 0.10 }", "max_planning = 0.05"),
+        ),
+    },
+    {
+        "key": "ADISCORD_doctrine_autonomous_strongpoints",
+        "folder": "land",
+        "ru": "Автономные опорные районы",
+        "en": "Autonomous Strongpoints",
+        "desc_ru": "Оборона строится вокруг поселений, запасных складов и местных резервов. Потеря связи со штабом не должна останавливать соседние части: каждый район способен держаться самостоятельно, пока подвижный резерв готовит контрудар. Сильная сторона — территориальная пехота и устойчивость снабжения, а не дальнее наступление.",
+        "desc_en": "Settlements, reserve depots and local reserves anchor the defense. Losing contact with headquarters must not paralyze neighboring units: each district holds independently while a mobile reserve prepares a counterattack. Territorial infantry and supply resilience take priority over distant offensives.",
+        "icon": "GFX_doctrine_defensive_postures_medium",
+        "xp": 75,
+        "type": "army",
+        "tracks": tuple(track.key for track in TRACKS[:4]),
+        "effects": ("dig_in_speed_factor = 0.15", "supply_consumption_factor = -0.04", "enable_tactic = tactic_elastic_defense"),
+        "ai": ("modifier = { factor = 3 num_of_military_factories < 8 }", "modifier = { factor = 1.5 has_manpower < 30000 }"),
+        "milestones": (
+            ("ADISCORD_militia = { max_organisation = 6 defense = 0.08 }", "ADISCORD_territorial = { defense = 0.08 }"),
+            ("ADISCORD_combat_platform = { defense = 0.08 default_morale = 0.06 }", "enable_tactic = tactic_backhand_blow"),
+            ("land_reinforce_rate = 0.02", "ADISCORD_territorial = { supply_consumption = -0.08 }"),
+            ("engineer = { defense = 0.10 }", "max_dig_in = 2"),
+        ),
+    },
+    {
+        "key": "ADISCORD_air_doctrine_distributed_interception",
+        "folder": "air",
+        "ru": "Распределённый перехват",
+        "en": "Distributed Interception",
+        "desc_ru": "Сохранять небо над каждым километром слишком дорого. Дежурные звенья и наземное наблюдение сосредоточены вокруг промышленности и путей снабжения. Истребители лучше обнаруживают и перехватывают противника; штурмовая авиация получает лишь прикрытие.",
+        "desc_en": "Permanent control of every kilometer is too expensive. Alert flights and ground observation concentrate around industry and supply routes. Fighters gain detection and interception advantages; attack aviation receives cover rather than additional striking power.",
+        "icon": "GFX_doctrine_forward_interception_medium",
+        "xp": 70,
+        "type": "air",
+        "tracks": tuple(track.key for track in TRACKS[4:7]),
+        "effects": ("air_intercept_efficiency = 0.08", "air_home_defence_factor = 0.06"),
+        "ai": ("modifier = { factor = 3 has_tech = ADISCORD_tech_high_altitude_interceptors }", "modifier = { factor = 1.5 num_of_military_factories < 8 }"),
+        "milestones": (
+            ("category_fighter = { air_defence = 0.08 }",),
+            ("category_cas = { air_defence = 0.05 }", "air_accidents_factor = -0.05"),
+            ("air_interception_detect_factor = 0.08", "category_fighter = { air_attack = 0.06 }"),
+        ),
+    },
+    {
+        "key": "ADISCORD_air_doctrine_strike_windows",
+        "folder": "air",
+        "ru": "Окна для удара",
+        "en": "Strike Windows",
+        "desc_ru": "Авиация не удерживает небо постоянно: она собирает силы для короткого налёта, поражает наземные цели и уходит. Истребительное прикрытие обеспечивает выход ракетных ударных самолётов, а повторные вылеты готовятся под новые данные разведки. Главные получатели — ударная авиация и её сопровождение.",
+        "desc_en": "Air forces concentrate for a short strike instead of holding the sky permanently. Fighter cover lets rocket strike aircraft reach ground targets, then the force withdraws and prepares the next sortie using fresh reconnaissance. Strike aircraft and their escorts receive the main benefits.",
+        "icon": "GFX_doctrine_direct_ground_support_medium",
+        "xp": 70,
+        "type": "air",
+        "tracks": tuple(track.key for track in TRACKS[4:7]),
+        "effects": ("air_mission_efficiency = 0.05", "category_tac_bomber = { air_ground_attack = 0.08 }"),
+        "ai": ("modifier = { factor = 2 has_tech = ADISCORD_tech_smart_fire_control }", "modifier = { factor = 1.5 num_of_military_factories > 12 }"),
+        "milestones": (
+            ("category_fighter = { air_attack = 0.05 }", "air_superiority_efficiency = 0.04"),
+            ("category_tac_bomber = { air_ground_attack = 0.08 air_defence = 0.06 }",),
+            ("air_mission_efficiency = 0.04", "category_tac_bomber = { air_attack = 0.05 }"),
+        ),
+    },
+    {
+        "key": "ADISCORD_naval_doctrine_coastal_watch",
+        "folder": "naval",
+        "ru": "Береговой дозор",
+        "en": "Coastal Watch",
+        "desc_ru": "Малый флот опирается на патрульные суда и наблюдение за подходами к портам. Его задача — раньше обнаружить противника и сохранить силы охранения. Школа усиливает поиск и согласование действий флота; дальние рейды не являются её приоритетом.",
+        "desc_en": "A small fleet relies on patrol vessels and observation of port approaches. Early detection and escort survival come first. The school improves fleet detection and coordination rather than long-range raiding.",
+        "icon": "GFX_doctrine_escort_patrols_medium",
+        "xp": 50,
+        "type": "navy",
+        "tracks": tuple(track.key for track in TRACKS[7:10]),
+        "effects": ("naval_detection = 0.08", "screening_efficiency = 0.06"),
+        "ai": ("modifier = { factor = 3 num_of_military_factories < 8 }",),
+        "milestones": (
+            ("naval_detection = 0.05", "screening_efficiency = 0.04"),
+            ("naval_coordination = 0.06", "naval_hit_chance = 0.03"),
+            ("naval_detection = 0.04", "navy_submarine_defence_factor = 0.06"),
+        ),
+    },
+    {
+        "key": "ADISCORD_naval_doctrine_supply_interdiction",
+        "folder": "naval",
+        "ru": "Разрыв морского снабжения",
+        "en": "Sea Supply Interdiction",
+        "desc_ru": "Уничтожать весь неприятельский флот необязательно. Достаточно заставить его растянуть охранение и лишить промышленность регулярных поставок. Подлодки и надводные рейдеры получают преимущество в атаке на коммуникации, но не заменяют конвойное охранение собственной страны.",
+        "desc_en": "Destroying the enemy fleet is unnecessary if its escorts are stretched and industry loses regular deliveries. Submarines and surface raiders gain offensive advantages against shipping, without improving the country's own convoy protection.",
+        "icon": "GFX_doctrine_wolfpacks_medium",
+        "xp": 50,
+        "type": "navy",
+        "tracks": tuple(track.key for track in TRACKS[7:10]),
+        "effects": ("convoy_raiding_efficiency_factor = 0.10", "navy_submarine_attack_factor = 0.05"),
+        "ai": ("modifier = { factor = 3 has_tech = ADISCORD_tech_homing_torpedoes }",),
+        "milestones": (
+            ("naval_detection = 0.04",),
+            ("naval_hit_chance = 0.04", "convoy_raiding_efficiency_factor = 0.05"),
+            ("navy_submarine_attack_factor = 0.08", "navy_submarine_defence_factor = 0.04"),
         ),
     },
     {
@@ -652,7 +798,7 @@ def render_school(school: School, siblings: tuple[str, ...]) -> str:
     lines.append("\trewards = {")
     for index, (slug, _ru, _en, effects) in enumerate(stages):
         rid = reward_id(school, index, slug)
-        lines.extend((f"\t\t{rid} = {{", "\t\t\tmastery = 50"))
+        lines.extend((f"\t\t{rid} = {{", f"\t\t\tmastery = {MASTERY_COSTS[index]}"))
         lines.extend(f"\t\t\t{effect}" for effect in effects)
         lines.append("\t\t}")
     lines.extend(("\t}", "}"))
@@ -723,6 +869,17 @@ def write_localisation() -> None:
 
 
 def validate_manifest() -> None:
+    grand_ids = [grand["key"] for grand in GRANDS]
+    if len(grand_ids) != len(set(grand_ids)):
+        raise ValueError("Duplicate grand doctrine IDs")
+    for grand in GRANDS:
+        if len(grand["milestones"]) != len(grand["tracks"]):
+            raise ValueError(f"Milestones must match ordered tracks: {grand['key']}")
+    for profile, stages in REWARD_PROFILES.items():
+        if len(stages) != len(MASTERY_COSTS):
+            raise ValueError(f"Expected five stages for {profile}")
+        for slug, ru, en, effects in stages:
+            reward(slug, ru, en, *effects)
     school_ids = [school.key for school in SCHOOLS]
     if len(school_ids) != 40 or len(set(school_ids)) != 40:
         raise ValueError(f"Expected 40 unique schools, got {len(set(school_ids))}")
@@ -760,6 +917,22 @@ def main() -> int:
     if args.apply:
         apply()
         return 0
+    validate_manifest()
+    expected = {
+        ROOT / "common/doctrines/folders/ADISCORD_doctrine_folders.txt": render_folders(),
+        ROOT / "common/doctrines/tracks/ADISCORD_doctrine_tracks.txt": render_tracks(),
+        ROOT / "common/doctrines/grand_doctrines/ADISCORD_grand_doctrines.txt": render_grands(),
+        **{path: render_schools(domain) for domain, path in DOMAIN_PATHS.items()},
+    }
+    for language in ("russian", "english"):
+        lines, _ = localisation(language)
+        path = ROOT / "localisation" / language / f"ADISCORD_mastery_doctrines_l_{language}.yml"
+        expected[path] = f"l_{language}:\n" + "\n".join(lines).rstrip() + "\n"
+    stale = [str(path.relative_to(ROOT)) for path, content in expected.items()
+             if not path.exists() or path.read_text(encoding="utf-8-sig") != content]
+    if stale:
+        print("Doctrine outputs need regeneration:\n" + "\n".join(stale))
+        return 1
     from tools.validators.validate_adiscord_tech_doctrine import main as validate_main
 
     return validate_main()

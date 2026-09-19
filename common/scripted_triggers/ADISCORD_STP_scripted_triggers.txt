@@ -504,6 +504,8 @@ VAL_cw_route_focus_completed = {
 }
 
 VAL_cw_external_course_available = {
+	NOT = { STP = { has_country_flag = STP_occidia_preparing } }
+	NOT = { STS = { has_country_flag = STP_occidia_preparing } }
 	tag = VAL
 	exists = yes
 	has_global_flag = STP_cw_started
@@ -1410,4 +1412,45 @@ STP_ps_exile_formation_context = {
 	STP_ps_nod_can_host_exiles = yes
 	has_country_flag = STP_ps_exile_received
 	any_owned_state = { is_controlled_by = PREV }
+}
+
+# COUNTRY STP/STS. The victor gets a late route only while Kefreyt has not committed.
+STP_occidia_invasion_available = {
+    OR = { tag = STP tag = STS }
+    exists = yes is_subject = no has_capitulated = no has_war = no is_in_faction = no
+    has_country_flag = STP_cw_won_union_battle
+    has_global_flag = { flag = STP_cw_union_wars_finished days > 89 }
+    NOT = { has_idea = STP_cw_council_guarantees }
+    NOT = { has_idea = STP_cw_republican_charter }
+    NOT = { VAL = { OR = { has_country_flag = VAL_cw_mobilizing has_country_flag = VAL_cw_entered } } }
+    SRP = {
+        exists = yes is_subject = no has_capitulated = no has_war = no is_in_faction = no
+        NOT = { has_idea = STP_cw_council_guarantees }
+        NOT = { has_idea = STP_cw_republican_charter }
+    }
+    is_neighbor_of = SRP
+}
+
+# COUNTRY attacker. Never annex land occupied by another participant or close its war.
+STP_occidia_victory_ready = {
+    has_war_with = SRP
+    has_country_flag = STP_occidia_campaign_active
+    has_capitulated = no is_subject = no
+    SRP = { exists = yes has_capitulated = yes is_subject = no }
+    OR = {
+        AND = {
+            tag = STP
+            SRP = {
+                NOT = { any_enemy_country = { NOT = { tag = STP } } }
+                NOT = { any_owned_state = { NOT = { OR = { is_controlled_by = SRP is_controlled_by = STP } } } }
+            }
+        }
+        AND = {
+            tag = STS
+            SRP = {
+                NOT = { any_enemy_country = { NOT = { tag = STS } } }
+                NOT = { any_owned_state = { NOT = { OR = { is_controlled_by = SRP is_controlled_by = STS } } } }
+            }
+        }
+    }
 }

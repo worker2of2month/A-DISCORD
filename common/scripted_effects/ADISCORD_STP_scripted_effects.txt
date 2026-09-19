@@ -6283,3 +6283,38 @@ STP_ps_close_exile = {
 	}
 	mark_focus_tree_layout_dirty = yes
 }
+
+# --- occidia_reintegration ---
+STP_occidia_start_campaign = {
+    if = {
+        limit = { has_country_flag = STP_occidia_preparing STP_occidia_invasion_available = yes }
+        set_country_flag = STP_occidia_campaign_active
+        clr_country_flag = STP_occidia_preparing
+        SRP = { remove_mission = STP_occidia_invasion_warning }
+        declare_war_on = { target = SRP type = annex_everything }
+    }
+    else = { STP_occidia_cancel_preparation = yes }
+}
+
+STP_occidia_cancel_preparation = {
+    clr_country_flag = STP_occidia_preparing
+    SRP = { remove_mission = STP_occidia_invasion_warning }
+}
+
+STP_occidia_settle_victory = {
+    if = {
+        limit = { STP_occidia_victory_ready = yes }
+        clr_country_flag = STP_occidia_campaign_active
+        SRP = { STP_cw_finish_mobilization = yes remove_mission = STP_occidia_invasion_warning }
+        annex_country = { target = SRP transfer_troops = no }
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+
+# A peace imposed elsewhere or the attacker's defeat closes this campaign too.
+STP_occidia_reconcile_peace = {
+    if = {
+        limit = { has_country_flag = STP_occidia_campaign_active NOT = { has_war_with = SRP } }
+        clr_country_flag = STP_occidia_campaign_active
+    }
+}

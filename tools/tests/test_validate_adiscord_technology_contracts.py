@@ -9,6 +9,76 @@ from pathlib import Path
 from unittest.mock import patch
 
 from tools.validators import validate_adiscord_tech_doctrine as validator
+from tools.builders import build_adiscord_doctrine_system as doctrines
+
+
+class DoctrineContractTests(unittest.TestCase):
+    def test_reward_rejects_effect_in_translation_slot(self) -> None:
+        with self.assertRaises(ValueError):
+            doctrines.reward("broken", "Награда", "land_reinforce_rate = 0.01")
+
+    def test_reward_requires_gameplay_payload(self) -> None:
+        with self.assertRaises(ValueError):
+            doctrines.reward("empty", "Награда", "Empty Reward")
+
+    def test_each_branch_offers_distinct_grand_doctrines(self) -> None:
+        for folder, count in (("land", 4), ("air", 3), ("naval", 3), ("special_forces", 2)):
+            choices = [g for g in doctrines.GRANDS if g["folder"] == folder]
+            self.assertEqual(len(choices), count)
+            self.assertEqual(len({g["effects"] for g in choices}), count)
+            self.assertEqual(len({g["tracks"] for g in choices}), 1)
+            for grand in choices:
+                self.assertEqual(len(grand["tracks"]), len(grand["milestones"]))
+
+    def test_assault_final_reward_is_paid_to_assault_infantry(self) -> None:
+        stage = doctrines.REWARD_PROFILES["assault"][-1]
+        self.assertIn("ADISCORD_assault_infantry", " ".join(stage[3]))
+        self.assertIn("enable_tactic = tactic_overwhelming_fire", stage[3])
+        self.assertNotIn("=", stage[2])
+
+    def test_heavy_and_mobile_armor_do_not_share_rewards(self) -> None:
+        schools = {s.key: s for s in doctrines.SCHOOLS}
+        heavy = schools["ADISCORD_doctrine_armored_spearhead_command"]
+        other = schools["ADISCORD_doctrine_platform_battlegroups"]
+        self.assertNotEqual(heavy.profile, other.profile)
+        self.assertIn("ADISCORD_heavy_platform", " ".join(doctrines.REWARD_PROFILES[heavy.profile][-1][3]))
+
+    def test_mountain_school_has_local_terrain_effects(self) -> None:
+        effects = " ".join(e for stage in doctrines.REWARD_PROFILES["sf_mountain"] for e in stage[3])
+        self.assertIn("mountain = { defence", effects)
+        self.assertIn("mountain = { movement", effects)
+        self.assertNotIn("category_special_forces", effects)
+
+    def test_specialized_schools_require_their_actual_battalion_unlock(self) -> None:
+        from tools.builders.build_adiscord_technology_system import ENABLE_SUBUNITS
+
+        schools = {s.key: s for s in doctrines.SCHOOLS}
+        for key, unit in (
+            ("ADISCORD_doctrine_assault_detachments", "ADISCORD_assault_infantry"),
+            ("ADISCORD_doctrine_mobile_line_groups", "ADISCORD_mechanized_infantry"),
+            ("ADISCORD_doctrine_armored_spearhead_command", "ADISCORD_heavy_platform"),
+        ):
+            gates = re.findall(r"has_tech = (\w+)", schools[key].gate)
+            self.assertTrue(any(unit in ENABLE_SUBUNITS.get(tech, ()) for tech in gates), key)
+
+    def test_generated_doctrines_pass_focused_structure_checks(self) -> None:
+        self.assertEqual(validator.check_generated_doctrine_structure(*validator.collect_doctrine_keys()), [])
+
+    def test_validator_rejects_missing_final_reward(self) -> None:
+        grand, tracks, sub, blocks = validator.collect_doctrine_keys()
+        key = "ADISCORD_doctrine_assault_detachments"
+        effect = "ADISCORD_assault_infantry = { breakthrough = 0.10 soft_attack = 0.06 }"
+        self.assertIn(effect, blocks[key])
+        blocks[key] = blocks[key].replace(effect, "", 1)
+        issues = validator.check_generated_doctrine_structure(grand, tracks, sub, blocks)
+        self.assertTrue(any("continuous_assault lost effect" in issue for issue in issues), issues)
+
+    def test_validator_rejects_flat_mastery_schedule(self) -> None:
+        grand, tracks, sub, blocks = validator.collect_doctrine_keys()
+        key = "ADISCORD_doctrine_assault_detachments"
+        blocks[key] = re.sub(r"mastery = \d+", "mastery = 50", blocks[key])
+        issues = validator.check_generated_doctrine_structure(grand, tracks, sub, blocks)
+        self.assertTrue(any("incorrect mastery costs" in issue for issue in issues), issues)
 
 
 class TechnologyValidatorNegativeTests(unittest.TestCase):
