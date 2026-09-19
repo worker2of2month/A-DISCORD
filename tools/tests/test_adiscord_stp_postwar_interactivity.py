@@ -125,12 +125,16 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
         self.assertIn("STP_postwar_reconstruction_drive = {", categories)
         self.assertIn("STP_postwar_propaganda_campaigns = {", categories)
 
-        loc = read("localisation/russian/ADISCORD_STP_l_russian.yml")
-        self.assertIn("STP_pw_price_50:", loc)
-        self.assertIn("STP_pw_price_50_blocked:", loc)
-        self.assertIn("STP_pw_price_50_tooltip:", loc)
-        for key in (
+        loc_path = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
+        raw = loc_path.read_bytes()
+        self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+        lines = raw.decode("utf-8-sig").splitlines()
+        keys = [
+            "STP_pw_price_50",
+            "STP_pw_price_50_blocked",
+            "STP_pw_price_50_tooltip",
             "STP_postwar_reconstruction_drive",
+            "STP_postwar_reconstruction_drive_desc",
             "STP_postwar_propaganda_campaigns",
             "STP_pw_reconstruction_emergency_repairs",
             "STP_pw_reconstruction_district_congresses",
@@ -141,8 +145,12 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
             "STP_pw_campaign_one_steland",
             "STP_pw_campaign_engineers_of_peace",
             "STP_pw_campaign_victory_means_normal_life",
-        ):
-            self.assertIn(key + ":", loc)
+        ]
+        for key in keys:
+            found = [line for line in lines if line.lstrip().startswith(key + ":")]
+            self.assertEqual(len(found), 1, key)
+            self.assertRegex(found[0], r'^\s*' + key + r':\d* "[^\r\n]+"$')
+            self.assertNotIn("\ufffd", found[0])
 
     def test_postwar_pacing_keeps_routine_focuses_at_28_days_or_less(self):
         focus = read("common/national_focus/ADISCORD_national_focus_STP.txt")

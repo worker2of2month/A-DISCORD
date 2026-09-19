@@ -83,6 +83,8 @@
     {"id": "ADISCORD_superevent.2", "namespace": "ADISCORD_superevent", "number": 2, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
     {"id": "ADISCORD_superevent.3", "namespace": "ADISCORD_superevent", "number": 3, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
     {"id": "ADISCORD_superevent.4", "namespace": "ADISCORD_superevent", "number": 4, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
+    {"id": "ADISCORD_superevent.5", "namespace": "ADISCORD_superevent", "number": 5, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
+    {"id": "ADISCORD_superevent.6", "namespace": "ADISCORD_superevent", "number": 6, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
     {"id": "ADISCORD_superevent_audio.1", "namespace": "ADISCORD_superevent_audio", "number": 1, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
     {"id": "ADISCORD_superevent_audio.2", "namespace": "ADISCORD_superevent_audio", "number": 2, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
     {"id": "ADISCORD_superevent_news.1", "namespace": "ADISCORD_superevent_news", "number": 1, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},

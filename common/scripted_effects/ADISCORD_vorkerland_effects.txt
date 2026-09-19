@@ -781,6 +781,7 @@ ADISCORD_vorkerland_check_khan_border_war = {
 						OR = { controls_state = 49 controls_state = 176 }
 					}
 					has_global_flag = { flag = ADISCORD_vorkerland_khan_border_war_started days > 270 }
+					SLA = { has_capitulated = yes }
 				}
 			}
 			ADISCORD_vorkerland_resolve_khan_border_war = yes
@@ -3913,12 +3914,38 @@ ADISCORD_vorkerland_reset_civil_war_exhaustion = {
 ADISCORD_vorkerland_check_central_outcome = {
 	if = {
 		limit = {
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
-			has_global_flag = ADISCORD_vorkerland_central_showdown_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 		}
-		ADISCORD_vorkerland_begin_reunification = yes
+		# collapse.20/.21/.22 are triggered-only. Without this dispatch a
+		# de facto winner never enters apply_*_map or the victory presentation.
+		if = {
+			limit = { WKR = { exists = yes ADISCORD_vorkerland_worker_victory_candidate = yes } }
+			WKR = { country_event = { id = ADISCORD_vorkerland_collapse.20 } }
+		}
+		else_if = {
+			limit = { VAD = { exists = yes ADISCORD_vorkerland_vlad_victory_candidate = yes } }
+			VAD = { country_event = { id = ADISCORD_vorkerland_collapse.21 } }
+		}
+		else_if = {
+			limit = { TVA = { exists = yes ADISCORD_vorkerland_dorian_victory_candidate = yes } }
+			TVA = { country_event = { id = ADISCORD_vorkerland_collapse.22 } }
+		}
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+						has_global_flag = ADISCORD_vorkerland_central_showdown_started
+						NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
+					}
+					WKR = { exists = yes ADISCORD_vorkerland_worker_victory_candidate = yes }
+					VAD = { exists = yes ADISCORD_vorkerland_vlad_victory_candidate = yes }
+					TVA = { exists = yes ADISCORD_vorkerland_dorian_victory_candidate = yes }
+				}
+			}
+			ADISCORD_vorkerland_begin_reunification = yes
+		}
 	}
 }
 
@@ -4002,6 +4029,10 @@ ADISCORD_vorkerland_play_superevent_sound = {
 		sound_effect = superevent_vorkerland_worker_victory_sound_e
 	}
 	else_if = {
+		limit = { has_global_flag = superevent_vorkerland_vlad_victory }
+		sound_effect = superevent_vorkerland_vlad_victory_sound_e
+	}
+	else_if = {
 		limit = { has_global_flag = superevent_stelander_empire }
 		sound_effect = superevent_stelander_empire_sound_e
 	}
@@ -4019,32 +4050,76 @@ ADISCORD_vorkerland_play_local_superevent_audio = {
 	ADISCORD_vorkerland_play_superevent_sound = yes
 }
 
+# player_context scripted GUI refreshes when the hidden presentation event
+# runs on a human country. An AI-only caller still fires it locally so
+# observer mode keeps the unscoped audio path.
 ADISCORD_vorkerland_show_dirty_opening_superevent = {
-	country_event = { id = ADISCORD_superevent.4 }
+	if = {
+		limit = { any_country = { is_ai = no } }
+		random_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_superevent.4 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.4 }
+	}
 }
 
 ADISCORD_vorkerland_show_worker_victory_superevent = {
 	set_global_flag = ADISCORD_vorkerland_central_victory_announced
-	country_event = { id = ADISCORD_superevent.2 }
+	if = {
+		limit = { any_country = { is_ai = no } }
+		random_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_superevent.2 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.2 }
+	}
 }
 
 ADISCORD_vorkerland_show_utilitarian_victory_superevent = {
 	set_global_flag = ADISCORD_vorkerland_central_victory_announced
-	country_event = { id = ADISCORD_superevent.3 }
+	if = {
+		limit = { any_country = { is_ai = no } }
+		random_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_superevent.3 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.3 }
+	}
 }
 
 ADISCORD_vorkerland_show_vlad_victory_superevent = {
-	ADISCORD_vorkerland_clear_superevent_flags = yes
 	set_global_flag = ADISCORD_vorkerland_central_victory_announced
-	set_global_flag = { flag = superevent_vorkerland_vlad_victory value = 1 days = 20 }
-	ADISCORD_vorkerland_play_local_superevent_audio = yes
+	if = {
+		limit = { any_country = { is_ai = no } }
+		random_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_superevent.5 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.5 }
+	}
 }
 
 ADISCORD_vorkerland_show_dorian_victory_superevent = {
-	ADISCORD_vorkerland_clear_superevent_flags = yes
 	set_global_flag = ADISCORD_vorkerland_central_victory_announced
-	set_global_flag = { flag = superevent_vorkerland_dorian_victory value = 1 days = 20 }
-	ADISCORD_vorkerland_play_local_superevent_audio = yes
+	if = {
+		limit = { any_country = { is_ai = no } }
+		random_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_superevent.6 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.6 }
+	}
 }
 
 ADISCORD_vorkerland_finish_civil_war_exhaustion = {
@@ -7823,6 +7898,11 @@ ADISCORD_vorkerland_absorb_wtd_after_reunification = {
 		}
 		34 = { remove_core_of = WTD }
 		annex_country = { target = WTD transfer_troops = yes }
+		# annex_country can leave the tag alive on leftover tiles.
+		if = {
+			limit = { country_exists = WTD }
+			WTD = { every_owned_state = { set_state_owner_to = WRK set_state_controller_to = WRK } }
+		}
 		34 = {
 			if = {
 				limit = { is_owned_by = WRK }
@@ -9516,6 +9596,8 @@ ADISCORD_vorkerland_rus_core_dirty_sca = {
 }
 
 ADISCORD_vorkerland_rus_annex_dirty_target = {
+	# annex_country can leave the tag alive on impassable leftovers.
+	# Sweep remaining owned states so the neighbour does not survive the peace.
 	if = {
 		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals } country_exists = SLA }
 		annex_country = { target = SLA transfer_troops = no }
@@ -9707,9 +9789,12 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 	if = {
 		limit = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
-			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			OR = {
+				ADISCORD_vorkerland_rus_holds_sla_playable = yes
+				AND = { country_exists = SLA has_war_with = SLA SLA = { has_capitulated = yes } }
+			}
 		}
-		if = { limit = { country_exists = SLA } annex_country = { target = SLA transfer_troops = no } }
+		ADISCORD_vorkerland_rus_annex_dirty_target = yes
 		set_country_flag = ADISCORD_vorkerland_rus_sla_absorbed
 		if = {
 			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rus_sla_counted } }
@@ -9717,14 +9802,18 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			add_to_variable = { var = ADISCORD_vorkerland_rus_dirty_neighbors_taken value = 1 }
 		}
 		ADISCORD_vorkerland_rus_core_dirty_sla = yes
+		ADISCORD_vorkerland_close_khan_border_war_flags = yes
 		ADISCORD_vorkerland_rus_abort_dirty_campaign = yes
 	}
 	else_if = {
 		limit = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
-			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			OR = {
+				ADISCORD_vorkerland_rus_holds_rza_playable = yes
+				AND = { country_exists = RZA has_war_with = RZA RZA = { has_capitulated = yes } }
+			}
 		}
-		if = { limit = { country_exists = RZA } annex_country = { target = RZA transfer_troops = no } }
+		ADISCORD_vorkerland_rus_annex_dirty_target = yes
 		set_country_flag = ADISCORD_vorkerland_rus_rza_absorbed
 		if = {
 			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rus_rza_counted } }
@@ -9737,9 +9826,12 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 	else_if = {
 		limit = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
-			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			OR = {
+				ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+				AND = { country_exists = MLR has_war_with = MLR MLR = { has_capitulated = yes } }
+			}
 		}
-		if = { limit = { country_exists = MLR } annex_country = { target = MLR transfer_troops = no } }
+		ADISCORD_vorkerland_rus_annex_dirty_target = yes
 		set_country_flag = ADISCORD_vorkerland_rus_mlr_absorbed
 		if = {
 			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rus_mlr_counted } }
@@ -9752,9 +9844,12 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 	else_if = {
 		limit = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
-			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			OR = {
+				ADISCORD_vorkerland_rus_holds_ert_playable = yes
+				AND = { country_exists = ERT has_war_with = ERT ERT = { has_capitulated = yes } }
+			}
 		}
-		if = { limit = { country_exists = ERT } annex_country = { target = ERT transfer_troops = no } }
+		ADISCORD_vorkerland_rus_annex_dirty_target = yes
 		set_country_flag = ADISCORD_vorkerland_rus_ert_absorbed
 		if = {
 			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rus_ert_counted } }
@@ -9767,9 +9862,12 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 	else_if = {
 		limit = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
-			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+			OR = {
+				ADISCORD_vorkerland_rus_holds_irt_playable = yes
+				AND = { country_exists = IRT has_war_with = IRT IRT = { has_capitulated = yes } }
+			}
 		}
-		if = { limit = { country_exists = IRT } annex_country = { target = IRT transfer_troops = no } }
+		ADISCORD_vorkerland_rus_annex_dirty_target = yes
 		set_country_flag = ADISCORD_vorkerland_rus_irt_absorbed
 		if = {
 			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rus_irt_counted } }
@@ -9782,9 +9880,12 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 	else_if = {
 		limit = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
-			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+			OR = {
+				ADISCORD_vorkerland_rus_holds_sca_playable = yes
+				AND = { country_exists = SCA has_war_with = SCA SCA = { has_capitulated = yes } }
+			}
 		}
-		if = { limit = { country_exists = SCA } annex_country = { target = SCA transfer_troops = no } }
+		ADISCORD_vorkerland_rus_annex_dirty_target = yes
 		set_country_flag = ADISCORD_vorkerland_rus_sca_absorbed
 		if = {
 			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rus_sca_counted } }
@@ -9810,7 +9911,7 @@ ADISCORD_vorkerland_check_rus_dirty_campaign = {
 				ADISCORD_vorkerland_rus_abort_dirty_campaign = yes
 			}
 			else_if = {
-				limit = { ADISCORD_vorkerland_rus_holds_current_target = yes }
+				limit = { ADISCORD_vorkerland_rus_current_target_ready = yes }
 				ADISCORD_vorkerland_rus_settle_dirty_target = yes
 			}
 			else_if = {

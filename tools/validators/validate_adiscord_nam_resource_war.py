@@ -701,6 +701,13 @@ def main() -> int:
           and "type = { screen_ship }" in patrol_subunit
           and "need = { ADISCORD_coastal_patrol_ship = 1 }" in patrol_subunit,
           "custom coastal patrol subunit is missing or does not consume its ship archetype")
+    check("critical_parts = { destroyed_ammo_storage broken_propeller on_fire rudder_jammed }" in patrol_subunit
+          and "critical_part_damage_chance_mult = 1" in patrol_subunit,
+          "coastal patrol subunit must declare exercise critical parts")
+    crit_table = read("common/units/critical_parts/00_critical_parts.txt")
+    for part in ("destroyed_ammo_storage", "broken_propeller", "on_fire", "rudder_jammed"):
+        check(re.search(rf"(?m)^\s*{part}\s*=\s*\{{", crit_table) is not None,
+              f"missing critical part {part}")
     fleet_contracts = (
         ("NAM", "history/units/NAM.txt", 4, 30, 2038, 689, 1, 688),
         ("EFL", "history/units/EFL.txt", 3, 20, 6495, 70, 2, 70),

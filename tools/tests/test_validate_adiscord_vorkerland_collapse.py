@@ -429,21 +429,22 @@ country_event = {
 
     def test_every_vorkerland_superevent_route_plays_audible_sound(self) -> None:
         map_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
-        for name in ("vlad_victory", "dorian_victory"):
+        for name, event_id in (
+            ("dirty_opening", "ADISCORD_superevent.4"),
+            ("worker_victory", "ADISCORD_superevent.2"),
+            ("utilitarian_victory", "ADISCORD_superevent.3"),
+            ("vlad_victory", "ADISCORD_superevent.5"),
+            ("dorian_victory", "ADISCORD_superevent.6"),
+        ):
             show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
-            self.assertIn(
-                "ADISCORD_vorkerland_play_local_superevent_audio = yes",
-                show_effect,
-                name,
-            )
+            self.assertIn(f"country_event = {{ id = {event_id} }}", show_effect, name)
+            self.assertIn("any_country = { is_ai = no }", show_effect, name)
+            self.assertIn("random_country = {", show_effect, name)
         dirty_show = named_block(map_effects, "ADISCORD_vorkerland_show_dirty_opening_superevent")
-        self.assertIn("country_event = { id = ADISCORD_superevent.4 }", dirty_show)
         self.assertNotIn("ADISCORD_vorkerland_dirty_opened", dirty_show)
         worker_show = named_block(map_effects, "ADISCORD_vorkerland_show_worker_victory_superevent")
-        self.assertIn("country_event = { id = ADISCORD_superevent.2 }", worker_show)
         self.assertIn("set_global_flag = ADISCORD_vorkerland_central_victory_announced", worker_show)
         utilitarian_show = named_block(map_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent")
-        self.assertIn("country_event = { id = ADISCORD_superevent.3 }", utilitarian_show)
         self.assertIn("set_global_flag = ADISCORD_vorkerland_central_victory_announced", utilitarian_show)
 
         news = read("events/ADISCORD_superevents.txt")
@@ -469,6 +470,18 @@ country_event = {
         self.assertNotIn("limit = { is_ai = no }", dirty_event)
         self.assertNotIn("ADISCORD_vorkerland_dirty_opened", dirty_event)
         self.assertNotIn("ADISCORD_vorkerland_collapse.11", dirty_event)
+        vlad_event = event_block(news, "ADISCORD_superevent.5")
+        self.assertIn("hidden = yes", vlad_event)
+        self.assertIn("superevent_vorkerland_vlad_victory", vlad_event)
+        self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", vlad_event)
+        self.assertNotIn("limit = { is_ai = no }", vlad_event)
+        self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", vlad_event)
+        dorian_event = event_block(news, "ADISCORD_superevent.6")
+        self.assertIn("hidden = yes", dorian_event)
+        self.assertIn("superevent_vorkerland_dorian_victory", dorian_event)
+        self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", dorian_event)
+        self.assertNotIn("limit = { is_ai = no }", dorian_event)
+        self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", dorian_event)
 
         for news_id, title_id, audio_id, sound_effect in (
             (
@@ -497,13 +510,14 @@ country_event = {
             self.assertIn(f"sound_effect = {sound_effect}", audio_proxy)
 
         sound_effects = read("sound/superevents_effects.asset")
-        self.assertEqual(sound_effects.count("volume = 1.0"), 5)
+        self.assertEqual(sound_effects.count("volume = 1.0"), 6)
         for effect_name in (
             "superevent_vorkerland_civilwar_sound_e",
             "superevent_stelander_empire_sound_e",
             "superevent_vorkerland_worker_victory_sound_e",
             "superevent_vorkerland_dirty_opening_sound_e",
             "superevent_vorkerland_utilitarian_victory_sound_e",
+            "superevent_vorkerland_vlad_victory_sound_e",
         ):
             self.assertIn(f"name = {effect_name}", sound_effects)
         local_audio = named_block(map_effects, "ADISCORD_vorkerland_play_local_superevent_audio")
@@ -514,6 +528,8 @@ country_event = {
         self.assertIn("sound_effect = superevent_vorkerland_dirty_opening_sound_e", shared_audio)
         self.assertIn("has_global_flag = superevent_vorkerland_utilitarian_victory", shared_audio)
         self.assertIn("sound_effect = superevent_vorkerland_utilitarian_victory_sound_e", shared_audio)
+        self.assertIn("has_global_flag = superevent_vorkerland_vlad_victory", shared_audio)
+        self.assertIn("sound_effect = superevent_vorkerland_vlad_victory_sound_e", shared_audio)
         self.assertNotIn("scoped_sound_effect", shared_audio)
         self.assertNotIn("limit = { is_ai = no }", shared_audio)
         gfx = read("interface/superevents.gfx")
@@ -524,6 +540,15 @@ country_event = {
         self.assertTrue(
             (ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png").is_file()
         )
+
+    def test_central_outcome_dispatches_claimant_victory_events(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        outcome = named_block(effects, "ADISCORD_vorkerland_check_central_outcome")
+        self.assertIn("country_event = { id = ADISCORD_vorkerland_collapse.20 }", outcome)
+        self.assertIn("country_event = { id = ADISCORD_vorkerland_collapse.21 }", outcome)
+        self.assertIn("country_event = { id = ADISCORD_vorkerland_collapse.22 }", outcome)
+        self.assertIn("ADISCORD_vorkerland_begin_reunification = yes", outcome)
+        self.assertIn("ADISCORD_vorkerland_vlad_victory_candidate = yes", outcome)
 
     def test_wrk_border_countries_keep_plain_geographic_names(self) -> None:
         loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')

@@ -1649,6 +1649,13 @@ def validate_bounded_retry() -> list[str]:
             issues.append(f"coalition victory is missing guarded prerequisite {guard}")
     if victory.count("ADISCORD_vorkerland_central_districts_owned_and_controlled = yes") != 3:
         issues.append("all three winners must respect the capital and surviving enemies")
+    for candidate in (
+        "ADISCORD_vorkerland_worker_victory_candidate = yes",
+        "ADISCORD_vorkerland_vlad_victory_candidate = yes",
+        "ADISCORD_vorkerland_dorian_victory_candidate = yes",
+    ):
+        if candidate not in victory:
+            issues.append(f"coalition victory no longer accepts a de facto claimant: {candidate}")
     if "is_core_of" in victory or "NOT = { country_exists = EYR }" in victory:
         issues.append("peace must preserve independent districts and separate integration")
     capital = named_block(triggers, "ADISCORD_vorkerland_central_districts_owned_and_controlled")

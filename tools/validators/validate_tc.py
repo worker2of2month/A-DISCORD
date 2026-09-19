@@ -813,6 +813,8 @@ def check_ncns_and_campaign_compatibility(limit):
     for goal_id, unlock_effect in (
         ("ADISCORD_faction_goal_operational_continuity", "set_faction_research_unlocked"),
         ("ADISCORD_faction_goal_strategic_coordination", "set_faction_military_unlocked"),
+        ("faction_goal_unlock_research", "set_faction_research_unlocked"),
+        ("faction_goal_unlock_military", "set_faction_military_unlocked"),
     ):
         if not re.search(
             rf"(?s)\b{goal_id}\s*=\s*\{{.*?\bcomplete_effect\s*=\s*\{{.*?"
@@ -822,6 +824,26 @@ def check_ncns_and_campaign_compatibility(limit):
             issues.append(
                 f"{rel(goals_path)}: {goal_id} must expose {unlock_effect} for locked faction-tab lookup"
             )
+
+    icon_pool_path = ROOT / "common" / "factions" / "icons" / "pool.txt"
+    icon_pool_text = strip_comments(read_text(icon_pool_path)) if icon_pool_path.exists() else ""
+    if "faction_icon_pool" not in icon_pool_text or "GFX_faction_logo_generic" not in icon_pool_text:
+        issues.append(f"{rel(icon_pool_path)}: NCNS faction icon pool is missing")
+
+    member_upgrade_path = ROOT / "common" / "factions" / "member_upgrades" / "member_upgrades.txt"
+    member_group_path = (
+        ROOT / "common" / "factions" / "member_upgrades" / "member_groups" / "member_upgrade_groups.txt"
+    )
+    member_upgrade_text = strip_comments(read_text(member_upgrade_path)) if member_upgrade_path.exists() else ""
+    member_group_text = strip_comments(read_text(member_group_path)) if member_group_path.exists() else ""
+    if "manpower_contribution_full_enable" not in member_upgrade_text:
+        issues.append(f"{rel(member_upgrade_path)}: NCNS manpower contribution upgrades are missing")
+    if "faction_member_upgrade_manpower_group" not in member_group_text:
+        issues.append(f"{rel(member_group_path)}: NCNS manpower contribution group is missing")
+    if "goals_only_faction_leader" not in leadership_rule_text:
+        issues.append(f"{rel(leadership_rule_path)}: missing NCNS goal-picker member rule")
+    if "faction_set_goal_rules" not in rule_group_text:
+        issues.append(f"{rel(rule_group_path)}: NCNS goal-picker rule is not assigned to a rule group")
 
     faction_histories = {
         "WRK - WorkerLand.txt": "faction_vorkerland_confederation",

@@ -13,6 +13,7 @@ IMPERIAL_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects
 WORKER_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png"
 DIRTY_OPENING_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"
 UTILITARIAN_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png"
+VLAD_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_vlad_victory.png"
 
 REQUIRED_IMPERIAL_STATES = (
     4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
@@ -82,6 +83,14 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
         )
         self.assertTrue(DIRTY_OPENING_ART.is_file())
         self.assertTrue(UTILITARIAN_ART.is_file())
+
+    def test_vlad_victory_has_dedicated_art(self) -> None:
+        gfx = read(SUPEREVENTS)
+        self.assertIn(
+            'textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_vlad_victory.png"',
+            gfx,
+        )
+        self.assertTrue(VLAD_ART.is_file())
 
     def test_civilwar_console_gateway_runs_the_real_outbreak(self) -> None:
         gateway = event_block(read(NEWS), "ADISCORD_superevent.1")

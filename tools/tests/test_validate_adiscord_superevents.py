@@ -88,7 +88,7 @@ class SupereventContractTests(unittest.TestCase):
             path = root / RU_LOC
             source = path.read_text(encoding="utf-8-sig")
             source = source.replace(
-                '  superevent_vorkerland_dirty_opening_title: "Открытие Грязной зоны"\n',
+                '  superevent_vorkerland_dirty_opening_title: "Падение Периметра"\n',
                 "",
                 1,
             )

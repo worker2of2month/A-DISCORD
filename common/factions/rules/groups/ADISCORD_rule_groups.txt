@@ -4,3 +4,10 @@ ADISCORD_rule_group_leader_influence = {
 		change_leader_rule_influence
 	}
 }
+
+faction_set_goal_rules = {
+	default_rule = goals_only_faction_leader
+	rules = {
+		goals_only_faction_leader
+	}
+}

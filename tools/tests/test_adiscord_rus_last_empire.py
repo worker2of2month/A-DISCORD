@@ -187,6 +187,9 @@ class RusLastEmpireTests(unittest.TestCase):
         on_actions = read(ON_ACTIONS)
         self.assertIn("on_monthly_RUS", on_actions)
         self.assertIn("ADISCORD_vorkerland_check_rus_dirty_campaign = yes", on_actions)
+        capitulation = on_actions[on_actions.index("on_capitulation = {"):on_actions.index("on_puppet = {")]
+        self.assertIn("set_global_flag = skip_default_capitulation", capitulation)
+        self.assertIn("ADISCORD_vorkerland_check_khan_border_war = yes", capitulation)
         ai = read(AI_FILE)
         for tag in ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA"):
             self.assertIn(f"conquer id = {tag} value = 200", ai)
@@ -223,7 +226,7 @@ class RusLastEmpireTests(unittest.TestCase):
         triggers = read(TRIGGER_FILE)
         expected = {
             "sla": DIRTY_GROUPS["SLA"],
-            "rza": DIRTY_GROUPS["RZA"],
+            "rza": tuple(state for state in DIRTY_GROUPS["RZA"] if state != 125),
             "mlr": DIRTY_GROUPS["MLR"],
             "ert": tuple(state for state in DIRTY_GROUPS["ERT"] if state != 168),
             "irt": DIRTY_GROUPS["IRT"],
@@ -323,7 +326,12 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
             **held,
             ("RUS", "country_exists", "SLA"): True,
         })
-        self.assertTrue(any(e.key == "annex_country" for _, e in settle))
+        self.assertIn("ADISCORD_vorkerland_rus_annex_dirty_target", self._calls(settle))
+        annex = self._run("ADISCORD_vorkerland_rus_annex_dirty_target", {
+            **held,
+            ("RUS", "country_exists", "SLA"): True,
+        })
+        self.assertTrue(any(e.key == "annex_country" for _, e in annex))
         self.assertIn(("RUS", "ADISCORD_vorkerland_rus_sla_absorbed"), [(s, e.value) for s, e in settle if e.key == "set_country_flag"])
         self.assertIn(("RUS", "ADISCORD_vorkerland_rus_sla_counted"), [(s, e.value) for s, e in settle if e.key == "set_country_flag"])
         self.assertTrue(any(e.key == "add_to_variable" for _, e in settle))
@@ -350,11 +358,68 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
         waiting = self._active(extra={("RUS", "has_war_with", "SLA"): True})
         still_open = self.expand(self.block(self.triggers, "ADISCORD_vorkerland_rus_campaign_target_still_open"))
         holds = self.expand(self.block(self.triggers, "ADISCORD_vorkerland_rus_holds_current_target"))
+        ready = self.expand(self.block(self.triggers, "ADISCORD_vorkerland_rus_current_target_ready"))
         self.assertFalse(self.matches(still_open, waiting, "RUS"))
         self.assertFalse(self.matches(holds, waiting, "RUS"))
+        self.assertFalse(self.matches(ready, waiting, "RUS"))
         check = self._run("ADISCORD_vorkerland_check_rus_dirty_campaign", waiting)
         self.assertNotIn("ADISCORD_vorkerland_rus_abort_dirty_campaign", self._calls(check))
         self.assertNotIn("ADISCORD_vorkerland_rus_settle_dirty_target", self._calls(check))
+
+    def test_capitulated_target_settles_without_full_occupation(self) -> None:
+        capitulated = self._active(extra={
+            ("RUS", "has_war_with", "SLA"): True,
+            ("RUS", "country_exists", "SLA"): True,
+            ("SLA", "has_capitulated", "yes"): True,
+        })
+        ready = self.expand(self.block(self.triggers, "ADISCORD_vorkerland_rus_current_target_ready"))
+        self.assertTrue(self.matches(ready, capitulated, "RUS"))
+        check = self._run("ADISCORD_vorkerland_check_rus_dirty_campaign", capitulated)
+        self.assertIn("ADISCORD_vorkerland_rus_settle_dirty_target", self._calls(check))
+        settle = self._run("ADISCORD_vorkerland_rus_settle_dirty_target", capitulated)
+        self.assertIn("ADISCORD_vorkerland_rus_annex_dirty_target", self._calls(settle))
+        annex = self._run("ADISCORD_vorkerland_rus_annex_dirty_target", capitulated)
+        self.assertTrue(any(e.key == "annex_country" for _, e in annex))
+        self.assertTrue(any(e.key == "every_owned_state" for _, e in annex))
+
+    def test_border_war_absorbs_a_fully_occupied_republic(self) -> None:
+        occupied = {
+            ("RUS", "has_global_flag", "ADISCORD_vorkerland_khan_border_war_started"): True,
+            ("RUS", "has_country_flag", "ADISCORD_vorkerland_rus_dirty_campaign_active"): False,
+            ("RUS", "country_exists", "SLA"): True,
+            ("RUS", "has_war_with", "SLA"): True,
+            ("RUS", "variable", "ADISCORD_vorkerland_rus_campaign_target"): 0,
+            **self._hold_sla(True),
+        }
+        check = self._run("ADISCORD_vorkerland_check_khan_border_war", occupied)
+        self.assertIn("ADISCORD_vorkerland_rus_settle_dirty_target", self._calls(check))
+        self.assertNotIn("ADISCORD_vorkerland_resolve_khan_border_war", self._calls(check))
+
+    def test_border_war_belt_still_white_peaces(self) -> None:
+        belt = {
+            ("RUS", "has_global_flag", "ADISCORD_vorkerland_khan_border_war_started"): True,
+            ("RUS", "has_country_flag", "ADISCORD_vorkerland_rus_dirty_campaign_active"): False,
+            ("RUS", "country_exists", "SLA"): True,
+            ("RUS", "has_war_with", "SLA"): True,
+            ("RUS", "controls_state", "49"): True,
+            ("RUS", "controls_state", "176"): True,
+            **self._hold_sla(False),
+        }
+        belt[("RUS", "controls_state", "49")] = True
+        belt[("RUS", "controls_state", "176")] = True
+        check = self._run("ADISCORD_vorkerland_check_khan_border_war", belt)
+        self.assertIn("ADISCORD_vorkerland_resolve_khan_border_war", self._calls(check))
+        self.assertNotIn("ADISCORD_vorkerland_rus_settle_dirty_target", self._calls(check))
+        resolve = self._run("ADISCORD_vorkerland_resolve_khan_border_war", belt)
+        self.assertTrue(any(e.key == "white_peace" for _, e in resolve))
+        self.assertTrue(any(scope == "49" and e.key == "set_state_owner_to" for scope, e in resolve))
+        self.assertTrue(any(scope == "176" and e.key == "set_state_owner_to" for scope, e in resolve))
+        white_peace_pos = next(i for i, (_, e) in enumerate(resolve) if e.key == "white_peace")
+        first_transfer = next(
+            i for i, (scope, e) in enumerate(resolve)
+            if scope in {"49", "176"} and e.key == "set_state_owner_to"
+        )
+        self.assertLess(first_transfer, white_peace_pos)
 
     def test_invalid_target_or_own_capitulation_clears_the_operation(self) -> None:
         invalid = self._active(target=0)

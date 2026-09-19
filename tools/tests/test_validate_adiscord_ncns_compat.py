@@ -54,6 +54,8 @@ class NcnsFactionCompatibilityTests(unittest.TestCase):
         for goal_id, unlock_effect in (
             ("ADISCORD_faction_goal_operational_continuity", "set_faction_research_unlocked"),
             ("ADISCORD_faction_goal_strategic_coordination", "set_faction_military_unlocked"),
+            ("faction_goal_unlock_research", "set_faction_research_unlocked"),
+            ("faction_goal_unlock_military", "set_faction_military_unlocked"),
         ):
             self.assertRegex(
                 goals,
@@ -62,6 +64,15 @@ class NcnsFactionCompatibilityTests(unittest.TestCase):
             )
         self.assertIn("change_leader_rule_influence", leadership_rule)
         self.assertIn("change_leader_rule_influence", rule_group)
+        self.assertIn("goals_only_faction_leader", leadership_rule)
+        self.assertIn("faction_set_goal_rules", rule_group)
+        icon_pool = read("common/factions/icons/pool.txt")
+        member_upgrades = read("common/factions/member_upgrades/member_upgrades.txt")
+        member_groups = read("common/factions/member_upgrades/member_groups/member_upgrade_groups.txt")
+        self.assertIn("faction_icon_pool", icon_pool)
+        self.assertIn("GFX_faction_logo_generic", icon_pool)
+        self.assertIn("manpower_contribution_full_enable", member_upgrades)
+        self.assertIn("faction_member_upgrade_manpower_group", member_groups)
         self.assertNotRegex(template + manifest + leadership_rule + rule_group, r"\b(?:democratic|fascism|communism|neutrality)\b")
 
     def test_campaign_slots_use_scripted_variable(self):

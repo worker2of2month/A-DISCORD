@@ -5,3 +5,9 @@ change_leader_rule_influence = {
 	type = change_leader_rules
 	trigger = { has_enough_influence_for_leadership = yes }
 }
+
+# The goal picker tooltip resolves this member rule when a slot is empty.
+goals_only_faction_leader = {
+	type = member_rules
+	trigger = { is_faction_leader = yes }
+}

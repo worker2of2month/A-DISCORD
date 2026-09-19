@@ -402,6 +402,41 @@ on_actions = {
 					}
 				}
 			}
+			# Dirty-zone neighbours use the generic fallback only when RUS is
+			# not already settling this front. Capitulation must not wait for
+			# the monthly pulse or a leftover impassable pocket.
+			if = {
+				limit = {
+					country_exists = RUS
+					RUS = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+					OR = {
+						AND = {
+							RUS = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
+							OR = {
+								AND = { ROOT = { tag = SLA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals } } }
+								AND = { ROOT = { tag = RZA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals } } }
+								AND = { ROOT = { tag = MLR } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals } } }
+								AND = { ROOT = { tag = ERT } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals } } }
+								AND = { ROOT = { tag = IRT } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals } } }
+								AND = { ROOT = { tag = SCA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals } } }
+							}
+						}
+						AND = {
+							ROOT = { tag = SLA }
+							has_global_flag = ADISCORD_vorkerland_khan_border_war_started
+							RUS = {
+								has_war_with = SLA
+								NOT = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
+							}
+						}
+					}
+				}
+				set_global_flag = skip_default_capitulation
+				RUS = {
+					ADISCORD_vorkerland_check_rus_dirty_campaign = yes
+					ADISCORD_vorkerland_check_khan_border_war = yes
+				}
+			}
 			ADISCORD_vorkerland_check_central_outcome = yes
 		}
 	}

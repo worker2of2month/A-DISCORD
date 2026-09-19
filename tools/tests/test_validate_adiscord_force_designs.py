@@ -665,6 +665,27 @@ class StartingCoastalFleetTests(unittest.TestCase):
             named_block(subunit, "need"), r"\bADISCORD_coastal_patrol_ship\s*=\s*1\b"
         )
         self.assertNotIn("module_slots", equipment)
+        parts = set(named_block(subunit, "critical_parts").split())
+        self.assertEqual(
+            parts,
+            {"destroyed_ammo_storage", "broken_propeller", "on_fire", "rudder_jammed"},
+        )
+        self.assertRegex(subunit, r"\bcritical_part_damage_chance_mult\s*=")
+        table = named_block(
+            read("common/units/critical_parts/00_critical_parts.txt"),
+            "critical_parts",
+        )
+        for part in parts:
+            self.assertRegex(table, rf"(?m)^\s*{re.escape(part)}\s*=\s*\{{")
+        if BASE_GAME.exists():
+            vanilla = named_block(
+                (BASE_GAME / "common/units/critical_parts/00_critical_parts.txt")
+                .read_text(encoding="utf-8-sig"),
+                "critical_parts",
+            )
+            vanilla_ids = set(re.findall(r"(?m)^\s*([A-Za-z0-9_]+)\s*=\s*\{", vanilla))
+            owned_ids = set(re.findall(r"(?m)^\s*([A-Za-z0-9_]+)\s*=\s*\{", table))
+            self.assertTrue(vanilla_ids <= owned_ids)
 
     def test_starting_fleets_use_owned_coastal_ports_and_complete_hulls(self) -> None:
         countries = {

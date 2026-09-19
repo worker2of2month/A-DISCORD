@@ -42,6 +42,10 @@ REQUIRED_FILES = (
 SUPEREVENT_IDS = (
     "ADISCORD_superevent.1",
     "ADISCORD_superevent.2",
+    "ADISCORD_superevent.3",
+    "ADISCORD_superevent.4",
+    "ADISCORD_superevent.5",
+    "ADISCORD_superevent.6",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -72,7 +76,10 @@ PRESENTATIONS = (
         "superevent_vorkerland_utilitarian_victory",
         "superevent_vorkerland_utilitarian_victory_sound_e",
     ),
-    SupereventPresentation("superevent_vorkerland_vlad_victory"),
+    SupereventPresentation(
+        "superevent_vorkerland_vlad_victory",
+        "superevent_vorkerland_vlad_victory_sound_e",
+    ),
     SupereventPresentation("superevent_vorkerland_dorian_victory"),
     SupereventPresentation(
         "superevent_stelander_empire",

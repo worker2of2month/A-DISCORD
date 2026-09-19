@@ -77,6 +77,7 @@ class VorkerlandCentralWarVarianceTests(unittest.TestCase):
         for caller in (named_block(self.effects, "ADISCORD_vorkerland_begin_reunification"), event_block(self.events, "ADISCORD_vorkerland_phase.6")):
             self.assertIn("ADISCORD_vorkerland_coalition_victory_ready = yes", caller)
         self.assertEqual(gate.count("ADISCORD_vorkerland_central_districts_owned_and_controlled = yes"), 3)
+        self.assertIn("ADISCORD_vorkerland_vlad_victory_candidate = yes", gate)
         self.assertNotIn("is_core_of", gate)
         self.assertIn("NOT = { any_enemy_country = { NOT = { has_capitulated = yes } } }", capital)
         self.assertIn("owner = { is_in_faction_with = PREV.PREV }", capital)

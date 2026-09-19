@@ -19,6 +19,11 @@ sound = {
 }
 
 sound = {
+	name = "superevent_vorkerland_vlad_victory_sound"
+	file = "superevents/superevent_vorkerland_vlad_victory_sound.wav"
+}
+
+sound = {
 	name = "superevent_stelander_empire_sound"
 	file = "superevents/superevent_stelander_empire_sound.wav"
 }

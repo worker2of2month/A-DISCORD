@@ -2855,6 +2855,10 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append("local superevent audio lost the utilitarian-victory sound")
     if "has_global_flag = superevent_vorkerland_utilitarian_victory" not in shared_audio:
         issues.append("local superevent audio no longer selects the utilitarian-victory sound")
+    if "sound_effect = superevent_vorkerland_vlad_victory_sound_e" not in shared_audio:
+        issues.append("local superevent audio lost the vlad-victory sound")
+    if "has_global_flag = superevent_vorkerland_vlad_victory" not in shared_audio:
+        issues.append("local superevent audio no longer selects the vlad-victory sound")
     if 'play_song = "one_minute_of_silence"' not in shared_audio:
         issues.append("shared superevent audio lost the silence bed")
     if "add_ideas = ADISCORD_vorkerland_erased_nations" in prepare:
@@ -3884,6 +3888,16 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
             issues.append(f"central outcome fallback is missing {hook}")
     if "ADISCORD_vorkerland_check_central_outcome = yes" in named_block(on_actions, "on_monthly"):
         issues.append("central outcome still performs an unnecessary monthly fallback poll")
+    effects = read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues)
+    central_outcome = named_block(effects, "ADISCORD_vorkerland_check_central_outcome")
+    for token in (
+        "country_event = { id = ADISCORD_vorkerland_collapse.20 }",
+        "country_event = { id = ADISCORD_vorkerland_collapse.21 }",
+        "country_event = { id = ADISCORD_vorkerland_collapse.22 }",
+        "ADISCORD_vorkerland_begin_reunification = yes",
+    ):
+        if token not in central_outcome:
+            issues.append(f"central outcome no longer dispatches a claimant victory: {token}")
     for stale in (
         "ADISCORD_vorkerland_collapse.23",
         "ADISCORD_vorkerland_apply_fragmented_map",
@@ -4226,6 +4240,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         ("dirty_opening", "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"),
         ("worker_victory", "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png"),
         ("utilitarian_victory", "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png"),
+        ("vlad_victory", "gfx/interface/superevents/WRK/superevent_vorkerland_vlad_victory.png"),
         ("dorian_victory", "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar_doctor_won.png"),
     ):
         sprite = re.search(
@@ -4240,25 +4255,35 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             issues.append(f"{filename}: missing dedicated superevent art")
 
     map_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_map_effects')
-    for name in ("vlad_victory", "dorian_victory"):
+    for name, event_id in (
+        ("dirty_opening", "ADISCORD_superevent.4"),
+        ("worker_victory", "ADISCORD_superevent.2"),
+        ("utilitarian_victory", "ADISCORD_superevent.3"),
+        ("vlad_victory", "ADISCORD_superevent.5"),
+        ("dorian_victory", "ADISCORD_superevent.6"),
+    ):
         show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
-        if "ADISCORD_vorkerland_play_local_superevent_audio = yes" not in show_effect:
-            issues.append(f"Vorkerland {name} superevent has no player audio route")
+        if f"country_event = {{ id = {event_id} }}" not in show_effect:
+            issues.append(f"Vorkerland {name} superevent has no console-fireable event route")
+        if "any_country = { is_ai = no }" not in show_effect:
+            issues.append(f"Vorkerland {name} superevent does not dispatch to a human country")
+        if "random_country = {" not in show_effect:
+            issues.append(f"Vorkerland {name} superevent has no local-client country pick")
     dirty_show = named_block(map_effects, "ADISCORD_vorkerland_show_dirty_opening_superevent")
-    if "country_event = { id = ADISCORD_superevent.4 }" not in dirty_show:
-        issues.append("Vorkerland dirty_opening superevent has no console-fireable event route")
     if "ADISCORD_vorkerland_dirty_opened" in dirty_show:
         issues.append("dirty-opening presentation must not start the country cascade")
     worker_show = named_block(map_effects, "ADISCORD_vorkerland_show_worker_victory_superevent")
-    if "country_event = { id = ADISCORD_superevent.2 }" not in worker_show:
-        issues.append("Vorkerland worker_victory superevent has no console-fireable event route")
     if "ADISCORD_vorkerland_central_victory_announced" not in worker_show:
         issues.append("Vorkerland worker_victory campaign show lost the announced lock")
     utilitarian_show = named_block(map_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent")
-    if "country_event = { id = ADISCORD_superevent.3 }" not in utilitarian_show:
-        issues.append("Vorkerland utilitarian_victory superevent has no console-fireable event route")
     if "ADISCORD_vorkerland_central_victory_announced" not in utilitarian_show:
         issues.append("Vorkerland utilitarian_victory campaign show lost the announced lock")
+    vlad_show = named_block(map_effects, "ADISCORD_vorkerland_show_vlad_victory_superevent")
+    if "ADISCORD_vorkerland_central_victory_announced" not in vlad_show:
+        issues.append("Vorkerland vlad_victory campaign show lost the announced lock")
+    dorian_show = named_block(map_effects, "ADISCORD_vorkerland_show_dorian_victory_superevent")
+    if "ADISCORD_vorkerland_central_victory_announced" not in dorian_show:
+        issues.append("Vorkerland dorian_victory campaign show lost the announced lock")
 
     news = read(root, "events/ADISCORD_superevents.txt", issues)
     civilwar_event = event_block(news, "ADISCORD_superevent.1")
@@ -4318,6 +4343,32 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
     ):
         if forbidden in dirty_event:
             issues.append(f"ADISCORD_superevent.4 must stay a presentation replay: {forbidden}")
+    vlad_event = event_block(news, "ADISCORD_superevent.5")
+    for token in (
+        "hidden = yes",
+        "is_triggered_only = yes",
+        "superevent_vorkerland_vlad_victory",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
+    ):
+        if token not in vlad_event:
+            issues.append(f"ADISCORD_superevent.5: unscoped presentation is missing {token}")
+    if "limit = { is_ai = no }" in vlad_event:
+        issues.append("ADISCORD_superevent.5: human-only audio gate silences observer/spectator")
+    if "ADISCORD_vorkerland_central_victory_announced" in vlad_event:
+        issues.append("ADISCORD_superevent.5 must not lock the campaign ending")
+    dorian_event = event_block(news, "ADISCORD_superevent.6")
+    for token in (
+        "hidden = yes",
+        "is_triggered_only = yes",
+        "superevent_vorkerland_dorian_victory",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
+    ):
+        if token not in dorian_event:
+            issues.append(f"ADISCORD_superevent.6: unscoped presentation is missing {token}")
+    if "limit = { is_ai = no }" in dorian_event:
+        issues.append("ADISCORD_superevent.6: human-only audio gate silences observer/spectator")
+    if "ADISCORD_vorkerland_central_victory_announced" in dorian_event:
+        issues.append("ADISCORD_superevent.6 must not lock the campaign ending")
     for news_id, title_id, audio_id, sound_effect in (
         (
             "ADISCORD_superevent_news.1",
@@ -4391,6 +4442,11 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             "superevent_vorkerland_utilitarian_victory_sound_e",
             "superevent_vorkerland_utilitarian_victory_sound",
             "sound/superevents/superevent_vorkerland_utilitarian_victory_sound.wav",
+        ),
+        (
+            "superevent_vorkerland_vlad_victory_sound_e",
+            "superevent_vorkerland_vlad_victory_sound",
+            "sound/superevents/superevent_vorkerland_vlad_victory_sound.wav",
         ),
     ):
         effect = re.search(

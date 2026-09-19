@@ -107,7 +107,7 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
-		show_sound = superevent_vorkerland_civilwar_sound_e
+		show_sound = superevent_vorkerland_vlad_victory_sound_e
 		hide_sound = click_close
 
 		iconType = { name = "superevent_vorkerland_vlad_victory" quadTextureSprite = "GFX_superevent_vorkerland_vlad_victory" position = { x = 0 y = 0 } alwaystransparent = yes }

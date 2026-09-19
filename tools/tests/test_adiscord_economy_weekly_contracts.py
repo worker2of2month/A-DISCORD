@@ -2154,6 +2154,11 @@ def task10_balance_surface_issues(gui_text, russian_text, english_text):
         "ADISCORD_economy_weekly_balance",
         "ADISCORD_economy_safe_reserve",
         "ADISCORD_economy_deficit_runway",
+        "ADISCORD_economy_monthly_income",
+        "ADISCORD_economy_monthly_expenses",
+        "ADISCORD_economy_income_multiplier",
+        "ADISCORD_economy_final_overall_income_factor_bp",
+        "ADISCORD_economy_final_overall_expense_factor_bp",
     )
     values = {}
     for language, text in (("Russian", russian_text), ("English", english_text)):
@@ -6678,6 +6683,9 @@ ADISCORD_bad_assistance_owner = {
                     "ADISCORD_economy_personal_income",
                     "ADISCORD_economy_research_expenses",
                     "ADISCORD_economy_construction_expenses",
+                    "ADISCORD_economy_monthly_income",
+                    "ADISCORD_economy_income_multiplier",
+                    "ADISCORD_economy_final_overall_income_factor_bp",
                     "3/13",
                     "260",
                 ),
@@ -7979,6 +7987,50 @@ ADISCORD_task10_forbidden_cache_consumer = {
         self.assertIn("ADISCORD_economy_weekly_income", tooltip)
         self.assertIn("ADISCORD_economy_weekly_expenses", tooltip)
         self.assertIn("ADISCORD_economy_weekly_balance", tooltip)
+
+    def test_income_and_expense_tooltips_show_post_line_totals(self):
+        for text in (ECONOMY_LOC, ECONOMY_LOC_EN):
+            income = localisation_value(text, "ADISCORD_economy_income_tt")
+            expenses = localisation_value(text, "ADISCORD_economy_expenses_tt")
+            for token in (
+                "ADISCORD_economy_weekly_income",
+                "ADISCORD_economy_monthly_income",
+                "ADISCORD_economy_income_multiplier",
+                "ADISCORD_economy_final_overall_income_factor_bp",
+                "3/13",
+            ):
+                self.assertIn(token, income)
+            for token in (
+                "ADISCORD_economy_weekly_expenses",
+                "ADISCORD_economy_monthly_expenses",
+                "ADISCORD_economy_final_overall_expense_factor_bp",
+                "3/13",
+            ):
+                self.assertIn(token, expenses)
+            self.assertNotIn(
+                "Месячная база переводится в недельную по правилу",
+                income,
+            )
+            self.assertNotIn(
+                "Monthly values convert to weekly values at",
+                income,
+            )
+        self.assertEqual(
+            task10_localisation_references(
+                localisation_value(ECONOMY_LOC, "ADISCORD_economy_income_tt")
+            ),
+            task10_localisation_references(
+                localisation_value(ECONOMY_LOC_EN, "ADISCORD_economy_income_tt")
+            ),
+        )
+        self.assertEqual(
+            task10_localisation_references(
+                localisation_value(ECONOMY_LOC, "ADISCORD_economy_expenses_tt")
+            ),
+            task10_localisation_references(
+                localisation_value(ECONOMY_LOC_EN, "ADISCORD_economy_expenses_tt")
+            ),
+        )
 
     def test_economic_buildings_keep_distinct_bounded_state_roles(self):
         specs = {
