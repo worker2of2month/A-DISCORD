@@ -5,61 +5,49 @@ on:
 permissions:
   contents: read
 jobs:
-  inspect:
+  red:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
           fetch-depth: 1
       - run: python -m pip install Pillow numpy
-      - name: Inspect campaign and economic contracts
+      - name: New regression tests before implementation
+        continue-on-error: true
+        run: python -B -m unittest tools.tests.test_adiscord_economy_rebalance -v
+      - name: Inspect focused implementation dependencies
         run: |
           python - <<'PY'
           from pathlib import Path
           import re
-          def read(path): return Path(path).read_text(encoding='utf-8-sig')
-          def block(text,name):
-              m=re.search(r'(?m)^\s*'+re.escape(name)+r'\s*=\s*\{',text)
-              if not m: return 'MISSING '+name
-              start=text.index('{',m.start()); depth=1;i=start+1
-              while depth:
-                  depth+=(text[i]=='{')-(text[i]=='}');i+=1
-              return text[m.start():i]
-          econ=read('common/scripted_effects/ADISCORD_economy_effects.txt')
-          print('=== EXPENSES ===')
-          for name in ('calculate_army_expenses','calculate_social_expenses','calculate_research_expenses','calculate_admin_expenses','sum_expenses'):
-              print(block(econ,'ADISCORD_economy_'+name))
-          effects=read('common/scripted_effects/ADISCORD_VAL_effects.txt')
-          print('=== VAL EFFECT NAMES ===')
-          for m in re.finditer(r'(?m)^(VAL_\w+)\s*=\s*\{',effects):
-              if any(x in m[1] for x in ('frontier','weekly','industrial','econom','export','clearing','northern')): print(effects[:m.start()].count('\n')+1,m[1])
-          print('=== FRONTIER DECISIONS ===')
-          print(block(read('common/decisions/ADISCORD_VAL_decisions.txt'),'VAL_frontier'))
-          print('=== AI STRATEGY ===')
-          txt=read('common/ai_strategy/VAL.txt')
-          for m in re.finditer(r'(?m)^(\w+)\s*=\s*\{',txt):
-              if 'VAL' in m[1] and any(x in m[1].lower() for x in ('frontier','focus','campaign')): print(block(txt,m[1]))
-          print('=== STP EFFECTS ===')
-          txt=read('common/scripted_effects/ADISCORD_STP_scripted_effects.txt')
-          for name in ('STP_pw_refresh_modifier','STP_pw_rebuild_economy_after_unification','STP_pw_initialize'):
-              print(block(txt,name))
-          print('=== TEST INTERPRETERS ===')
-          txt=read('tools/tests/test_adiscord_economy_weekly_contracts.py')
-          for i,l in enumerate(txt.splitlines(),1):
-              if l.startswith('class ') or l.startswith('def '): print(i,l)
-          print('=== STP ECONOMY TESTS ===')
-          print(read('tools/tests/test_adiscord_stp_postwar_economy.py'))
-          print('=== LOCALISATION ===')
-          for p in Path('localisation/russian').glob('*'):
-              txt=read(p)
-              lines=[l for l in txt.splitlines() if re.search(r'^\s*(STP_pc_economy_|VAL_(Contract_Accounting|Export_Clearing|Northern_Clearing|Contingency_Ledgers|Factories_Like|Vorkerland_Contracts|frontier_security|frontier_conference))',l)]
-              if lines: print(p);print('\n'.join(lines))
+          from tools.tests.test_adiscord_economy_weekly_contracts import block
+          for pattern, identifiers in (
+              ('common/scripted_effects/ADISCORD_VAL_effects.txt', ['VAL_frontier_weekly','VAL_frontier_start_war']),
+              ('common/dynamic_modifiers/*', ['VAL_contract_state']),
+              ('common/decisions/ADISCORD_STP_decisions.txt', ['STP_pw_reconstruction']),
+          ):
+              for p in Path('.').glob(pattern):
+                  text=p.read_text(encoding='utf-8-sig')
+                  for identifier in identifiers:
+                      if re.search(r'(?m)^\s*'+identifier+r'\s*=\s*\{',text):
+                          print('\nSOURCE',p,identifier);print(block(text,identifier))
+          p=Path('tools/validators/validate_adiscord_economy_ai.py')
+          text=p.read_text(encoding='utf-8-sig')
+          for name in ('research_policy_flow_issues','social budget lacks'):
+              pos=text.index(name);print('\nVALIDATOR',name);print(text[max(0,pos-100):pos+3500])
+          text=Path('tools/tests/test_adiscord_economy_weekly_contracts.py').read_text(encoding='utf-8-sig')
+          for name in ('test_live_research_policy_localisation_uses_canonical_ui_ids','test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded','ADISCORD_economy_research_controls_tt exceeds'):
+              if name in text:
+                  pos=text.index(name);print('\nTEST',name);print(text[max(0,pos-80):pos+2500])
+          print('\nSHABRAT DECISION IDS')
+          text=Path('common/decisions/ADISCORD_STP_decisions.txt').read_text(encoding='utf-8-sig')
+          for m in re.finditer(r'(?m)^\s*(STP_pw_\w+)\s*=\s*\{',text):
+              print(m[1])
+          print('\nAI RECONSTRUCTION VALIDATOR')
+          for p in Path('tools/validators').glob('*.py'):
+              text=p.read_text(encoding='utf-8-sig')
+              if 'STS_shabrat_reconstruction_plan' in text:
+                  pos=text.index('STS_shabrat_reconstruction_plan');print(p);print(text[max(0,pos-300):pos+3500])
           PY
-      - name: Baseline focused regression tests
-        continue-on-error: true
-        run: python -B -m unittest tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_validate_adiscord_val_rework tools.tests.test_adiscord_stp_postwar_economy tools.tests.test_adiscord_stp_postwar_unlock tools.tests.test_adiscord_val_stelander_defeat tools.tests.test_adiscord_val_livonn_settlement -q
-      - name: Baseline total conversion validation
-        continue-on-error: true
-        run: python -B tools/validate_tc.py --limit 30
