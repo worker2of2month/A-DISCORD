@@ -1717,14 +1717,14 @@ STP_battle_for_stelander = {
 	STP_cw_check_district_command = {
 		icon = GFX_decision_ADISCORD_state_directive
 		visible = { has_completed_focus = STP_PARTY_DISCIPLINE has_country_flag = STP_sided_with_the_party_flag has_country_flag = STP_battle_for_stelander_active }
-		available = { has_completed_focus = STP_PARTY_DISCIPLINE custom_trigger_tooltip = { tooltip = STP_preparation_slot_available_tt STP_has_political_action_slot = yes } FROM = { custom_trigger_tooltip = { tooltip = STP_preparation_district_open_tt STP_region_is_operable = yes } is_owned_by = ROOT } }
+		available = { has_completed_focus = STP_PARTY_DISCIPLINE custom_trigger_tooltip = { tooltip = STP_preparation_slot_available_tt STP_has_political_action_slot = yes } FROM = { custom_trigger_tooltip = { tooltip = STP_preparation_district_open_tt STP_region_is_operable = yes } is_owned_by = ROOT is_controlled_by = ROOT } }
 		state_target = yes
 		targets = { 2 3 29 45 46 53 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		cost = 35
 		days_remove = 21
 		fire_only_once = no
-		cancel_trigger = { hidden_trigger = { OR = { NOT = { has_country_flag = STP_battle_for_stelander_active } FROM = { NOT = { STP_region_is_operable = yes } } FROM = { NOT = { is_owned_by = ROOT } } } } }
+		cancel_trigger = { hidden_trigger = { OR = { NOT = { has_country_flag = STP_battle_for_stelander_active } FROM = { NOT = { STP_region_is_operable = yes } } FROM = { NOT = { is_owned_by = ROOT } } FROM = { NOT = { is_controlled_by = ROOT } } } } }
 		complete_effect = { hidden_effect = { STP_political_action_slot_consume = yes } }
 		cancel_effect = { hidden_effect = { STP_political_action_slot_release = yes } }
 		remove_effect = {
@@ -1732,7 +1732,7 @@ STP_battle_for_stelander = {
 			custom_effect_tooltip = STP_cw_loyalty_plus_4_tt
 			hidden_effect = {
 				if = {
-					limit = { has_country_flag = STP_battle_for_stelander_active FROM = { STP_region_is_operable = yes is_owned_by = ROOT } }
+					limit = { has_country_flag = STP_battle_for_stelander_active FROM = { STP_region_is_operable = yes is_owned_by = ROOT is_controlled_by = ROOT } }
 					FROM = { STP_cw_secure_party_district = yes }
 					set_temp_variable = { var = STP_apparatus_loyalty_change value = 4 }
 					STP_change_apparatus_loyalty = yes
@@ -1828,12 +1828,13 @@ STP_battle_for_stelander = {
 		cancel_effect = { hidden_effect = { STP_political_action_slot_release = yes } }
 		remove_effect = {
 			custom_effect_tooltip = STP_cw_publish_directive_tt
-			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.04 }
-			add_stability = -0.02
+			effect_tooltip = { add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.04 } add_stability = -0.02 }
 			custom_effect_tooltip = STP_cw_loyalty_plus_6_tt
 			hidden_effect = {
 				if = {
 					limit = { STP_cw_preparation_open = yes has_country_flag = STP_battle_for_stelander_active }
+					add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.04 }
+					add_stability = -0.02
 					set_temp_variable = { var = STP_apparatus_loyalty_change value = 6 }
 					STP_change_apparatus_loyalty = yes
 				}
@@ -1871,11 +1872,12 @@ STP_battle_for_stelander = {
 		cancel_effect = { hidden_effect = { STP_political_action_slot_release = yes } }
 		remove_effect = {
 			custom_effect_tooltip = STP_cw_seal_protocol_tt
-			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.06 }
+			effect_tooltip = { add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.06 } }
 			custom_effect_tooltip = STP_cw_loyalty_plus_8_tt
 			hidden_effect = {
 				if = {
 					limit = { STP_cw_preparation_open = yes has_country_flag = STP_battle_for_stelander_active has_active_mission = STP_cw_election_window }
+					add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.06 }
 					set_temp_variable = { var = STP_apparatus_loyalty_change value = 8 }
 					STP_change_apparatus_loyalty = yes
 				}
@@ -1888,6 +1890,35 @@ STP_battle_for_stelander = {
 }
 
 STP_cw_war_council = {
+
+	# The fixed wartime template and its existing payment helper own the price.
+	STP_party_form_assault_column = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_cw_assault_columns NOT = { has_country_flag = STP_cw_postwar } }
+		available = {
+			custom_trigger_tooltip = { tooltip = STP_party_war_available_tt tag = STP has_war_with = STS STP_cw_can_rearm = yes NOT = { has_country_flag = STP_cw_postwar } }
+			custom_trigger_tooltip = { tooltip = STP_party_assault_ready_tt STP_cw_can_pay_assault_division = yes }
+			has_template = "Stelander Assault Division"
+			any_owned_state = { is_controlled_by = PREV }
+		}
+		cost = 0
+		custom_cost_text = STP_party_assault_price
+		custom_cost_trigger = { STP_cw_can_pay_assault_division = yes }
+		fire_only_once = no
+		days_re_enable = 21
+		complete_effect = {
+			custom_effect_tooltip = STP_party_assault_order_tt
+			hidden_effect = {
+				if = {
+					limit = { tag = STP has_completed_focus = STP_cw_assault_columns has_template = "Stelander Assault Division" has_war_with = STS STP_cw_can_rearm = yes NOT = { has_country_flag = STP_cw_postwar } any_owned_state = { is_controlled_by = PREV } STP_cw_can_pay_assault_division = yes }
+					STP_cw_mobilize_assault_division = yes
+				}
+			}
+		}
+		ai_will_do = { base = 4 }
+	}
+
 
 	STP_cw_disrupt_brigade = {
 		icon = GFX_decision_ADISCORD_covert_operation

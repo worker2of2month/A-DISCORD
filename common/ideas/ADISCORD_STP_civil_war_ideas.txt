@@ -757,6 +757,89 @@ ideas = {
 				ADISCORD_country_development_economic_growth_factor = 0.15
 			}
 		}
+
+		# Display-only deltas for party institutions and wartime programs.
+		STP_party_district_compact_party_delta = {
+			name = STP_cw_party_administration_dynamic
+			allowed = { always = no }
+			modifier = { stability_factor = 0.04 political_power_gain = -0.05 }
+		}
+		STP_party_supply_directorate_army_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.08 army_org_regain = 0.05 }
+		}
+		STP_party_civil_register_party_delta = {
+			name = STP_cw_party_administration_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.1 }
+		}
+		STP_party_succession_protocol_party_delta = {
+			name = STP_cw_party_administration_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.15 command_power_gain_mult = 0.1 }
+		}
+		STP_party_war_transport_army_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.05 army_org_regain = 0.05 }
+		}
+		STP_party_rear_administration_party_delta = {
+			name = STP_cw_party_administration_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.1 stability_factor = 0.03 }
+		}
+		STP_party_war_directorate_army_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.03 planning_speed = 0.15 }
+		}
+		STP_party_district_charters_post_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { stability_factor = 0.04 ADISCORD_economy_overall_income_factor = 0.04 political_power_gain = -0.05 }
+		}
+		STP_party_local_cadres_post_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { research_speed_factor = 0.04 production_speed_buildings_factor = 0.08 ADISCORD_economy_admin_expense_factor = 0.03 }
+		}
+		STP_party_personnel_commissions_post_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.15 ADISCORD_economy_admin_expense_factor = -0.04 production_speed_buildings_factor = -0.03 }
+		}
+		STP_party_chain_of_command_post_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.05 planning_speed = 0.1 ADISCORD_economy_admin_expense_factor = 0.03 }
+		}
+		STP_party_revenue_service_post_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_overall_income_factor = 0.12 ADISCORD_economy_creditworthiness_factor = 0.05 ADISCORD_economy_admin_expense_factor = -0.03 }
+		}
+		STP_party_port_contracts_post_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_overall_income_factor = 0.1 ADISCORD_economy_treasury_capacity_factor = 0.1 production_speed_industrial_complex_factor = 0.1 }
+		}
+		STP_party_industrial_board_post_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { industrial_capacity_factory = 0.1 production_factory_max_efficiency_factor = 0.05 ADISCORD_economy_admin_expense_factor = 0.03 }
+		}
+		STP_party_research_council_post_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { research_speed_factor = 0.03 }
+		}
+		STP_party_technical_institutes_post_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_admin_expense_factor = 0.02 }
+		}
+
 	}
 
 	political_advisor_head_of_state = {
@@ -798,5 +881,6 @@ ideas = {
 
 	political_advisor_chief_of_intelligence = {
 		minister_STS_Lia_Verst = { name = minister_STS_Lia_Verst default = no cost = 75 picture = generic_political_advisor_europe_6 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_int_mountain_net } }
+
 	}
 }

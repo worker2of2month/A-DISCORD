@@ -435,7 +435,7 @@ ADISCORD_STP_unlock_regular_army_templates = {
 	}
 }
 
-# After load_oob. Only Kefreyt-sent templates stay locked until postwar delete.
+# After load_oob. Fixed-price STP assault orders retain their original composition.
 STP_cw_apply_wartime_template_locks = {
 	if = { limit = { tag = STP } ADISCORD_STP_unlock_regular_army_templates = yes }
 	if = {
@@ -444,7 +444,12 @@ STP_cw_apply_wartime_template_locks = {
 	}
 	set_division_template_lock = { division_template = "Stelander Territorial Brigade" is_locked = no }
 	set_division_force_allow_recruiting = { division_template = "Stelander Territorial Brigade" force_allow_recruiting = yes }
-	set_division_template_lock = { division_template = "Stelander Assault Division" is_locked = no }
+	# STP has a repeatable fixed-price order; ordinary recruitment remains available.
+	if = {
+		limit = { tag = STP }
+		set_division_template_lock = { division_template = "Stelander Assault Division" is_locked = yes }
+	}
+	else = { set_division_template_lock = { division_template = "Stelander Assault Division" is_locked = no } }
 	set_division_force_allow_recruiting = { division_template = "Stelander Assault Division" force_allow_recruiting = yes }
 	if = {
 		limit = { has_template = "Kefreyt Volunteer Division" }
@@ -2282,7 +2287,7 @@ STP_cw_revoke_emergency_research_slot = {
 	}
 }
 
-# Close fixed-price orders. Field templates were already editable in wartime.
+# Close fixed-price orders before restoring unrestricted template editing.
 STP_cw_finish_mobilization = {
 	STP_cw_refund_disruption = yes
 	clr_country_flag = STP_cw_disruption_unlocked
