@@ -1907,7 +1907,7 @@ focus_tree = {
         prerequisite = { focus = VAL_The_Steel_Contract focus = VAL_Market_Roads_North }
         available = { custom_trigger_tooltip = { tooltip = VAL_frontier_postwar_ready_tt VAL_frontier_postwar = yes } }
 
-        completion_reward = { add_political_power = 75 add_intel = { target = NOD army_intel = 15 } }
+        completion_reward = { unlock_decision_tooltip = VAL_establish_regional_administration unlock_decision_tooltip = VAL_nationalise_region add_political_power = 75 add_intel = { target = NOD army_intel = 15 } }
         ai_will_do = { base = 40 }
     }
     focus = {

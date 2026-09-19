@@ -65,6 +65,14 @@ spriteTypes = {
         }
 	}
 	corneredTileSpriteType = {
+		name = "GFX_ideology_national_legitimism"
+		texturefile = "gfx/interface/ideologies/national_legitimism_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+	corneredTileSpriteType = {
 		name = "GFX_ideology_aristocratic_hedonism"
 		texturefile = "gfx/interface/ideologies/aristocratic_hedonism_group.png"
 		size = {
@@ -127,6 +135,14 @@ spriteTypes = {
             x = 125
             y = 125
         }
+	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_national_legitimism_countryview"
+		texturefile = "gfx/interface/ideologies/national_legitimism_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
 	}
 	corneredTileSpriteType = {
 		name = "GFX_ideology_aristocratic_hedonism_countryview"

@@ -2921,7 +2921,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         cls.events = {scalar(e.value, "id"): e.value for e in parse_clausewitz(
             (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8")) if e.key == "country_event"}
 
-    def match(self, name, facts, scope="VAL"):
+    def match(self, name, facts, scope="VAL", root="VAL"):
         from dataclasses import replace
         from tools.tests.test_adiscord_stp_preparation import matches_conditions
         def expand(items):
@@ -2931,6 +2931,8 @@ class ValExpandedCampaignTests(unittest.TestCase):
                     self.assertIn(entry.value, ("yes", "no"), "scripted triggers use boolean calls")
                     result.append(replace(entry, key="AND" if entry.value == "yes" else "NOT",
                                           value=expand(self.triggers[entry.key])))
+                elif entry.key == "tag" and entry.value == "ROOT":
+                    result.append(replace(entry, value=root))
                 elif isinstance(entry.value, list):
                     result.append(replace(entry, value=expand(entry.value)))
                 else:
@@ -3123,6 +3125,45 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertTrue(self.match("VAL_final_settlement_ready", facts, "NOD"))
         facts["NOD", "has_capitulated", "yes"] = False
         self.assertFalse(self.match("VAL_final_settlement_ready", facts, "NOD"))
+
+    def test_final_settlement_accepts_only_current_immediate_capitulation(self):
+        for tag in ("STP", "STS", "NOD"):
+            facts = {
+                (tag, "has_country_flag", "VAL_final_defeat_pending"): True,
+                (tag, "has_country_flag", "VAL_final_capitulation_immediate"): True,
+                ("VAL", "exists", "yes"): True,
+                ("VAL", "has_capitulated", "no"): True,
+                ("VAL", "is_subject", "no"): True,
+            }
+            self.assertTrue(self.match("VAL_final_settlement_ready", facts, tag, root=tag))
+            self.assertFalse(self.match("VAL_final_settlement_ready", facts, tag))
+
+    def test_last_ally_immediate_capitulation_unblocks_reserved_country(self):
+        facts = {
+            ("STP", "has_country_flag", "VAL_final_defeat_pending"): True,
+            ("STP", "has_capitulated", "yes"): True,
+            ("VAL", "exists", "yes"): True,
+            ("VAL", "has_capitulated", "no"): True,
+            ("VAL", "is_subject", "no"): True,
+            ("NOD", "exists", "yes"): True,
+            ("NOD", "is_in_faction_with", "PREV"): True,
+            ("NOD", "has_war_with", "VAL"): True,
+            ("NOD", "has_capitulated", "no"): True,
+        }
+        self.assertFalse(self.match("VAL_final_settlement_ready", facts, "STP"))
+        facts["NOD", "has_country_flag", "VAL_final_capitulation_immediate"] = True
+        self.assertTrue(self.match("VAL_final_settlement_ready", facts, "STP", root="NOD"))
+        self.assertFalse(self.match("VAL_final_settlement_ready", facts, "STP"))
+
+    def test_final_settlement_runs_before_native_conference(self):
+        source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text()
+        immediate = source.split("# BEGIN kefreyt:on_capitulation_immediate", 1)[1].split("# END kefreyt:on_capitulation_immediate", 1)[0]
+        self.assertLess(immediate.index("set_country_flag = VAL_final_defeat_pending"),
+                        immediate.index("VAL_finalize_reserved_settlements = yes"))
+        self.assertIn("flag = VAL_final_capitulation_immediate days = 1", immediate)
+        late = source.split("# BEGIN kefreyt:on_capitulation\n", 1)[1].split("# END kefreyt:on_capitulation", 1)[0]
+        self.assertIn("clr_country_flag = VAL_final_capitulation_immediate", late)
+        self.assertIn("set_global_flag = skip_default_capitulation", late)
 
     def test_stelander_border_cession_preserves_neutral_and_occupied_land(self):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, matches_conditions, walk
@@ -3545,6 +3586,62 @@ class ValExpandedCampaignTests(unittest.TestCase):
                      ("NKA", "has_war_with", "STS"): participant, ("VAL", "has_war_with", "STS"): val_war}
             assignments = [(scope, self.scalar(e.value, "value")) for scope, e in selected_effects(snapshot, facts, "1") if e.key == "set_variable"]
             self.assertEqual(assignments, [("STS", "5")] if subject and participant and val_war else [])
+
+
+class ValRegionalIntegrationTests(unittest.TestCase):
+    def test_integration_boundaries_and_terminal_paths(self):
+        from dataclasses import replace
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, matches_conditions, selected_effects
+        definitions = parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8"))
+        decisions = block(definitions, "VAL_regional_integration")
+        triggers = parse_clausewitz((ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8"))
+        valid = block(triggers, "VAL_regional_integration_target_valid")
+        flag = "VAL_regional_administration_in_progress"
+
+        def expand(items):
+            return [replace(e, key="AND" if e.value == "yes" else "NOT", value=valid)
+                    if e.key == "VAL_regional_integration_target_valid" else
+                    replace(e, value=expand(e.value)) if isinstance(e.value, list) else e for e in items]
+
+        def facts(compliance=60, resistance=19.9):
+            return {("VAL", "is_subject", "no"): True, ("VAL", "has_capitulated", "no"): True,
+                    ("FROM", "is_owned_by", "ROOT"): True, ("FROM", "is_controlled_by", "ROOT"): True,
+                    ("FROM", "numeric", "compliance"): compliance, ("FROM", "numeric", "resistance"): resistance}
+
+        core = block(decisions, "VAL_nationalise_region")
+        prepare = block(decisions, "VAL_establish_regional_administration")
+        for compliance, resistance, ready in ((59.9, 0, False), (60, 19.9, True), (60, 20, False), (100, 0, True)):
+            f = facts(compliance, resistance)
+            self.assertEqual(matches_conditions(expand(block(core, "available")), f, "VAL"), ready)
+            self.assertEqual(matches_conditions(expand(block(prepare, "available")), f, "VAL"), not ready)
+        for decision, price in ((core, 75), (prepare, 50)):
+            for broken in (None, "is_owned_by", "is_controlled_by", "is_core_of", "is_subject", "has_capitulated", "resistance"):
+                f = facts(60 if decision is core else 30)
+                f["FROM", "has_state_flag", flag] = True
+                self.assertFalse(matches_conditions(expand(block(decision, "available")), f, "VAL"))
+                if broken in ("is_owned_by", "is_controlled_by"):
+                    f["FROM", broken, "ROOT"] = False
+                elif broken == "is_core_of":
+                    f["FROM", broken, "ROOT"] = True
+                elif broken in ("is_subject", "has_capitulated"):
+                    f["VAL", broken, "no"] = False
+                elif broken == "resistance":
+                    f["FROM", "numeric", "resistance"] = 20
+                effects = list(selected_effects(expand(block(decision, "remove_effect")), f, "VAL"))
+                succeeds = broken is None or broken == "resistance" and decision is prepare
+                rewards = [e.key for scope, e in effects if scope == "FROM"]
+                self.assertEqual("add_core_of" in rewards, succeeds and decision is core)
+                self.assertEqual("add_compliance" in rewards, succeeds and decision is prepare)
+                self.assertEqual(sum(float(e.value) for _, e in effects if e.key == "add_political_power"), 0 if succeeds else price)
+                self.assertIn("clr_state_flag", rewards)
+            f = facts(); f["FROM", "has_state_flag", flag] = True
+            cancellation = expand(block(decision, "cancel_effect"))
+            effects = list(selected_effects(cancellation, f, "VAL"))
+            self.assertEqual(sum(float(e.value) for _, e in effects if e.key == "add_political_power"), price)
+            f["FROM", "has_state_flag", flag] = False
+            self.assertFalse(any(e.key == "add_political_power" for _, e in selected_effects(cancellation, f, "VAL")))
+            self.assertFalse(any(e.key in ("add_core_of", "add_compliance", "add_political_power")
+                                 for _, e in selected_effects(expand(block(decision, "remove_effect")), f, "VAL")))
 
 
 if __name__ == "__main__":

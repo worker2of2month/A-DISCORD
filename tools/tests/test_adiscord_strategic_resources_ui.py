@@ -385,7 +385,7 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         self.assertEqual(assignment_position(topbar, "cp"), (781, 5))
 
         economy = read(ECONOMY_GUI)
-        self.assertEqual(assignment_position(economy, "ADISCORD_economy_topbar_window"), (0, 0))
+        self.assertEqual(assignment_position(economy, "ADISCORD_economy_topbar_window"), (405, 36))
         self.assertEqual(
             assignment_position(economy, "ADISCORD_economy_treasury_topbar_window"),
             (708, 5),
@@ -408,8 +408,8 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         economy_owner = direct(scripted, "ADISCORD_economy_topbar_script")[0].value
         self.assertEqual(direct_scalar(economy_owner, "dirty"), "ADISCORD_economy_gui_update_var")
         self.assertEqual(
-            direct_scalar(economy_owner, "parent_window_name"),
-            "ADISCORD_economy_topbar_anchor_instance",
+            direct_scalar(economy_owner, "parent_window_token"),
+            "top_bar",
         )
         treasury_owner = direct(scripted, "ADISCORD_economy_treasury_topbar_script")[0].value
         self.assertEqual(direct_scalar(treasury_owner, "parent_window_token"), "top_bar")

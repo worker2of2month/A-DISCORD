@@ -252,9 +252,9 @@ def validate(root: Path = ROOT) -> list[str]:
     _require(
         economy_script,
         r'window_name\s*=\s*"ADISCORD_economy_topbar_window"[\s\S]*?'
-		r'parent_window_name\s*=\s*"ADISCORD_economy_topbar_anchor_instance"',
+		r'parent_window_token\s*=\s*top_bar',
         "common/scripted_guis/ADISCORD_economy_scripted_gui.txt",
-		"economy topbar window must follow the DLC-dependent toolbar anchor",
+		"economy topbar window must be attached to the top_bar token",
         issues,
     )
     economy_gfx = _read(root, "interface/ADISCORD_economy.gfx")

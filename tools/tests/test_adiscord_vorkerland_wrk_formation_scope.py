@@ -155,6 +155,16 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
         self.assertNotIn("puppet = WTD", tva)
         self.assertNotIn("freedom_level = 0.15", tva)
 
+    def test_worx_formation_preserves_claimant_colour(self) -> None:
+        tva = named_block(self.effects, "ADISCORD_vorkerland_form_wrk_from_tva")
+        cosmetic = "WRK_vorkerland_technocracy"
+        self.assertGreater(tva.index(f"set_cosmetic_tag = {cosmetic}"),
+                           tva.index("ADISCORD_vorkerland_finalize_wrk_formation = yes"))
+        palette = named_block(read(ROOT / "common/countries/cosmetic.txt"), cosmetic)
+        original = read(ROOT / "common/countries/TVA.txt")
+        colour = re.search(r"color\s*=\s*rgb\s*\{[^}]+\}", original).group()
+        self.assertIn(colour, palette)
+
     def test_no_random_lucas_contract_leaks_into_formation(self) -> None:
         self.assertNotIn("Lucas", self.effects)
         self.assertNotIn("Lucas", self.events)

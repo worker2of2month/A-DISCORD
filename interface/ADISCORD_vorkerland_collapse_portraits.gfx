@@ -1,3 +1,10 @@
 spriteTypes = {
-	# Collapse leaders reuse the established Dorian Worx and placeholder portrait sprites.
+	spriteType = {
+		name = "GFX_portrait_EYR_Irina_Koval"
+		texturefile = "gfx/leaders/EYR/portrait_EYR_Irina_Koval.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_CSL_Miron_Rudakov"
+		texturefile = "gfx/leaders/CSL/portrait_CSL_Miron_Rudakov.png"
+	}
 }

@@ -1281,3 +1281,102 @@ VAL_vorkerland_aid = {
 		ai_will_do = { base = 0 }
 	}
 }
+
+VAL_regional_integration = {
+	VAL_establish_regional_administration = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		state_target = yes
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			has_completed_focus = VAL_frontier_conference
+			FROM = { is_owned_by = ROOT NOT = { is_core_of = ROOT } }
+		}
+		available = {
+			VAL_regional_integration_target_valid = yes
+			FROM = { OR = { compliance < 60 NOT = { resistance < 20 } } }
+			custom_trigger_tooltip = { tooltip = VAL_regional_administration_idle_tt FROM = { NOT = { has_state_flag = VAL_regional_administration_in_progress } } }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		cost = 50
+		days_remove = 60
+		fire_only_once = no
+		cancel_if_not_visible = yes
+		cancel_trigger = { VAL_regional_integration_target_valid = no }
+		complete_effect = { hidden_effect = { FROM = { set_state_flag = VAL_regional_administration_in_progress } } }
+		remove_effect = {
+			if = {
+				limit = { VAL_regional_integration_target_valid = yes hidden_trigger = { FROM = { has_state_flag = VAL_regional_administration_in_progress } } }
+				FROM = {
+					add_compliance = 15
+					add_resistance = -10
+				}
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			else_if = {
+				limit = { hidden_trigger = { FROM = { has_state_flag = VAL_regional_administration_in_progress } } }
+				add_political_power = 50
+			}
+			hidden_effect = { FROM = { clr_state_flag = VAL_regional_administration_in_progress } }
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { FROM = { has_state_flag = VAL_regional_administration_in_progress } } }
+				add_political_power = 50
+				hidden_effect = { FROM = { clr_state_flag = VAL_regional_administration_in_progress } }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_nationalise_region = {
+		icon = generic_nationalism
+		allowed = { tag = VAL }
+		state_target = yes
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			has_completed_focus = VAL_frontier_conference
+			FROM = { is_owned_by = ROOT NOT = { is_core_of = ROOT } }
+		}
+		available = {
+			VAL_regional_integration_target_valid = yes
+			FROM = { NOT = { compliance < 60 } resistance < 20 }
+			custom_trigger_tooltip = { tooltip = VAL_regional_administration_idle_tt FROM = { NOT = { has_state_flag = VAL_regional_administration_in_progress } } }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		cost = 75
+		days_remove = 90
+		fire_only_once = no
+		cancel_if_not_visible = yes
+		cancel_trigger = { VAL_regional_integration_target_valid = no }
+		complete_effect = { hidden_effect = { FROM = { set_state_flag = VAL_regional_administration_in_progress } } }
+		remove_effect = {
+			if = {
+				limit = {
+					VAL_regional_integration_target_valid = yes
+					hidden_trigger = { FROM = { has_state_flag = VAL_regional_administration_in_progress } }
+					FROM = { NOT = { compliance < 60 } resistance < 20 }
+				}
+				FROM = {
+					add_core_of = ROOT
+				}
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			else_if = {
+				limit = { hidden_trigger = { FROM = { has_state_flag = VAL_regional_administration_in_progress } } }
+				add_political_power = 75
+			}
+			hidden_effect = { FROM = { clr_state_flag = VAL_regional_administration_in_progress } }
+		}
+		cancel_effect = {
+			if = {
+				limit = { hidden_trigger = { FROM = { has_state_flag = VAL_regional_administration_in_progress } } }
+				add_political_power = 75
+				hidden_effect = { FROM = { clr_state_flag = VAL_regional_administration_in_progress } }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+}

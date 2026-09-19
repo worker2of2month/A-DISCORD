@@ -13,6 +13,12 @@ guiTypes = {
 			pdx_tooltip = "hedonism_ideology_desc"
 		}
 		iconType = {
+			name = "ideology_icon_national_legitimism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_national_legitimism_countryview"
+			pdx_tooltip = "national_legitimism_desc"
+		}
+		iconType = {
 			name = "ideology_icon_aristocratic_hedonism"
 			position = { x = 0 y = 0 }
 			spriteType = "GFX_ideology_aristocratic_hedonism_countryview"

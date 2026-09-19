@@ -37,8 +37,12 @@ scripted_gui = {
             ideology_icon_technocracy_visible = {
                 has_government = technocracy
             }
+            ideology_icon_national_legitimism_visible = {
+                has_country_leader_ideology = national_legitimism
+            }
             ideology_icon_chauvinism_visible = {
                 has_government = chauvinism
+                NOT = { has_country_leader_ideology = national_legitimism }
             }
             ideology_icon_contractual_etatism_visible = {
                 has_country_leader_ideology = contractual_etatism

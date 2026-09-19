@@ -8390,6 +8390,7 @@ ADISCORD_vorkerland_form_wrk_from_tva = {
 	# the TVA claimant. Dorian's visible state and politics remain technocratic.
 	set_country_flag = ADISCORD_vorkerland_route_utilitarian
 	drop_cosmetic_tag = yes
+	set_cosmetic_tag = WRK_vorkerland_technocracy
 	set_politics = { ruling_party = technocracy elections_allowed = no }
 	promote_character = {
 		character = TVA_Dorian_Worx

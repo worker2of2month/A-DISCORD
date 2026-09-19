@@ -13,11 +13,25 @@ scripted_gui = {
 	ADISCORD_economy_topbar_script = {
 		context_type = player_context
 		window_name = "ADISCORD_economy_topbar_window"
-		parent_window_name = "ADISCORD_economy_topbar_anchor_instance"
+		parent_window_token = top_bar
 		dirty = ADISCORD_economy_gui_update_var
 		# Observer mode may inspect and open the dashboard; mutation buttons are
 		# separately gated to the human-controlled country below.
 		visible = { always = yes }
+		triggers = {
+			ADISCORD_economy_topbar_button_visible = {
+				# The native toolbar removes one 55px slot without the intelligence DLC.
+				set_temp_variable = { var = ADISCORD_economy_topbar_button_x value = 0 }
+				if = {
+					limit = { NOT = { has_dlc = "La Resistance" } }
+					set_temp_variable = { var = ADISCORD_economy_topbar_button_x value = -55 }
+				}
+				always = yes
+			}
+		}
+		properties = {
+			ADISCORD_economy_topbar_button = { x = ADISCORD_economy_topbar_button_x }
+		}
 		effects = {
 			ADISCORD_economy_topbar_button_click = { ADISCORD_economy_open_window = yes }
 		}

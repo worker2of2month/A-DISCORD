@@ -494,13 +494,18 @@ VAL_only_occidian_states = {
 # COUNTRY: a defeated member remains reserved until its active allies fall.
 VAL_final_settlement_ready = {
     has_country_flag = VAL_final_defeat_pending
-    has_capitulated = yes
+    # Only the current callback may stand in for the engine's pending capitulation.
+    OR = {
+        has_capitulated = yes
+        AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate }
+    }
     VAL = { exists = yes has_capitulated = no is_subject = no }
     NOT = {
         any_other_country = {
             is_in_faction_with = PREV
             has_war_with = VAL
             has_capitulated = no
+            NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
         }
     }
 }
@@ -601,4 +606,11 @@ VAL_frontier_nod_will_intervene = {
 			}
 		}
 	}
+}
+
+VAL_regional_integration_target_valid = {
+	tag = VAL
+	is_subject = no
+	has_capitulated = no
+	FROM = { is_owned_by = ROOT is_controlled_by = ROOT NOT = { is_core_of = ROOT } }
 }

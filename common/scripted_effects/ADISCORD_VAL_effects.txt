@@ -2160,19 +2160,19 @@ VAL_refresh_industrial_economy = {
 	remove_ideas = { VAL_vorkerland_contract_disruptions VAL_worldwide_famous_weponry }
 	if = {
 		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }
-		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = VAL_economic_collapse }
-		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = VAL_economic_miracle }
+		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = { modifier = VAL_economic_collapse } }
+		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = { modifier = VAL_economic_miracle } }
 		if = { limit = { NOT = { has_dynamic_modifier = VAL_contract_industry } } add_dynamic_modifier = { modifier = VAL_contract_industry } }
 	}
 	else_if = {
 		limit = { check_variable = { var = VAL_economic_recovery_steps value = 9 compare = less_than } }
-		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = VAL_contract_industry }
-		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = VAL_economic_miracle }
+		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = { modifier = VAL_contract_industry } }
+		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = { modifier = VAL_economic_miracle } }
 		if = { limit = { NOT = { has_dynamic_modifier = VAL_economic_collapse } } add_dynamic_modifier = { modifier = VAL_economic_collapse } }
 	}
 	else = {
-		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = VAL_contract_industry }
-		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = VAL_economic_collapse }
+		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = { modifier = VAL_contract_industry } }
+		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = { modifier = VAL_economic_collapse } }
 		if = { limit = { NOT = { has_dynamic_modifier = VAL_economic_miracle } } add_dynamic_modifier = { modifier = VAL_economic_miracle } }
 	}
 	force_update_dynamic_modifier = yes
@@ -2796,7 +2796,7 @@ VAL_finalize_reserved_settlements = {
             VAL_install_stelander_administration = yes
         }
         else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no }
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
             clr_country_flag = VAL_final_defeat_pending
         }
     }
@@ -2807,7 +2807,7 @@ VAL_finalize_reserved_settlements = {
             VAL_install_stelander_administration = yes
         }
         else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no }
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
             clr_country_flag = VAL_final_defeat_pending
         }
     }
@@ -2818,7 +2818,7 @@ VAL_finalize_reserved_settlements = {
             VAL_install_nodrul_administration = yes
         }
         else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no }
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
             clr_country_flag = VAL_final_defeat_pending
         }
     }

@@ -188,6 +188,9 @@ on_actions = {
                         OR = { FROM = { tag = VAL } capital_scope = { is_controlled_by = VAL } }
                     }
                     set_country_flag = VAL_final_defeat_pending
+                    # The early peace can suppress the late callback; expire its reservation.
+                    set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+                    VAL = { VAL_finalize_reserved_settlements = yes }
                 }
             }
 
@@ -647,7 +650,11 @@ on_actions = {
                 set_global_flag = skip_default_capitulation
             }
 
-            if = { limit = { ROOT = { has_country_flag = VAL_final_defeat_pending } } set_global_flag = skip_default_capitulation }
+            if = {
+                limit = { ROOT = { OR = { has_country_flag = VAL_final_defeat_pending has_country_flag = VAL_final_capitulation_immediate } } }
+                set_global_flag = skip_default_capitulation
+                ROOT = { clr_country_flag = VAL_final_capitulation_immediate }
+            }
             if = { limit = { VAL = { exists = yes } } VAL = { VAL_finalize_reserved_settlements = yes } }
 
 			# END kefreyt:on_capitulation

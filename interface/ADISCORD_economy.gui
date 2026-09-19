@@ -41,8 +41,8 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "ADISCORD_economy_topbar_window"
-		# The parent anchor follows the native DLC-dependent toolbar layout.
-		position = { x = 0 y = 0 }
+		# Scripted button offset accounts for the missing intelligence DLC slot.
+		position = { x = 405 y = 36 }
 		Orientation = UPPER_LEFT
 		size = { width = 55 height = 41 }
 		clipping = no

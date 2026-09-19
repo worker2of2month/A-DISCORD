@@ -80,7 +80,7 @@ PRESENTATIONS = (
         "superevent_vorkerland_vlad_victory",
         "superevent_vorkerland_vlad_victory_sound_e",
     ),
-    SupereventPresentation("superevent_vorkerland_dorian_victory"),
+    SupereventPresentation("superevent_vorkerland_dorian_victory", "superevent_vorkerland_dorian_victory_sound_e"),
     SupereventPresentation(
         "superevent_stelander_empire",
         "superevent_stelander_empire_sound_e",
