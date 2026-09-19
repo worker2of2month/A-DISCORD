@@ -25,14 +25,7 @@ jobs:
       - name: Prepare fixture and dependencies
         run: |
           python -m pip install --quiet pillow
-          python - <<'PY'
-          from pathlib import Path
-          p=Path('control/.github/economy_balance_tests.py')
-          text=p.read_text()
-          text=text.replace('get("VAL_industrial_weekly_income", 0)', 'get("VAL_industrial_weekly_income", -1)')
-          text=text.replace('if node.key == "focus" and any(', 'if node.key == "focus" and isinstance(node.value, list) and any(')
-          p.write_text(text)
-          PY
+          python -B control/.github/economy_preflight.py
       - name: Apply and exercise new regression contracts
         working-directory: source
         run: python -B ../control/.github/economy_patch.py > ../control/.github/economy-result.txt 2>&1
