@@ -7,25 +7,17 @@ permissions:
 jobs:
   integrate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - name: Prepare integration verification
         run: |
-          cp .qa/run_suites.py .qa/verify_native_dispatch.py "$RUNNER_TEMP/"
+          cp .qa/resolve_peace_integration.py .qa/repair_imported_readers.py .qa/verify_native_dispatch.py "$RUNNER_TEMP/"
           python - <<'PY'
           import os
           from pathlib import Path
-          temp = Path(os.environ['RUNNER_TEMP'])
-          p = temp/'verify_native_dispatch.py'
+          p = Path(os.environ['RUNNER_TEMP'])/'verify_native_dispatch.py'
           p.write_text(p.read_text().replace("BASE = 'd6cc3c77078a25f7318fbf7e371fc6779eab3351'", "BASE = '33ff34e1d51906c4dcca5e6328f3239355fe1227'"))
-          p = temp/'run_suites.py'
-          s = p.read_text()
-          start = s.index('words = ')
-          end = s.index('result = ', start)
-          names = ['test_scripted_peace_on_actions', 'test_validate_adiscord_rin_oath_crisis', 'test_adiscord_vorkerland_diplomacy', 'test_adiscord_stp_postwar_continuation', 'test_validate_adiscord_val_rework', 'test_adiscord_economy_rebalance', 'test_adiscord_economy_weekly_contracts']
-          s = s[:start] + f'names = {names!r}\n' + "names = ['tools.tests.' + n for n in names if (Path('tools/tests')/(n + '.py')).exists()]\n" + s[end:]
-          p.write_text(s)
           PY
           git fetch --depth=2 origin 33ff34e1d51906c4dcca5e6328f3239355fe1227 0e70ce7b5314bf8ad28f83fc3175792b0b699630
           git checkout --detach 33ff34e1d51906c4dcca5e6328f3239355fe1227
@@ -33,16 +25,19 @@ jobs:
           git config user.email '81386071+worker2of2month@users.noreply.github.com'
       - name: Test dependencies
         run: python -m pip install pillow numpy pyyaml
-      - name: Characterize current economy main
-        run: python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/before.json"
-      - name: Apply reviewed refactor without overwriting concurrent changes
-        run: git cherry-pick --no-commit 0e70ce7b5314bf8ad28f83fc3175792b0b699630
+      - name: Integrate preserving current economy docs and tests
+        run: |
+          if ! git cherry-pick --no-commit 0e70ce7b5314bf8ad28f83fc3175792b0b699630; then
+            python "$RUNNER_TEMP/resolve_peace_integration.py"
+          fi
+          git diff --cached --check
       - name: Verify native order against updated main
         run: python "$RUNNER_TEMP/verify_native_dispatch.py"
       - name: Verify focused ownership and treaty consumers
         run: python -m unittest tools.tests.test_scripted_peace_on_actions tools.tests.test_validate_adiscord_rin_oath_crisis tools.tests.test_adiscord_vorkerland_diplomacy
-      - name: Gate integrated economy and peace source consumers
-        run: python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/after.json" "$RUNNER_TEMP/before.json"
+      - name: Require green integrated economy and peace suite
+        run: |
+          python -m unittest tools.tests.test_scripted_peace_on_actions tools.tests.test_validate_adiscord_rin_oath_crisis tools.tests.test_adiscord_vorkerland_diplomacy tools.tests.test_adiscord_stp_postwar_continuation tools.tests.test_validate_adiscord_val_rework tools.tests.test_adiscord_economy_rebalance tools.tests.test_adiscord_economy_weekly_contracts
       - name: Publish integrated candidate, never main
         run: |
           git diff --cached --check
