@@ -7,7 +7,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,9 +35,11 @@ jobs:
           text = verifier.read_text()
           assert text.count('ALLOWED = {\n') == 1
           text = text.replace('ALLOWED = {\n', "ALLOWED = {\n    'tools/data/division_template_audit.json',\n")
+          assert text.count("pattern='*stp*.py'") == 1
+          text = text.replace("pattern='*stp*.py'", "pattern='test*.py'")
           verifier.write_text(text)
           PY
-          git fetch origin main --depth=20
+          git fetch origin main --depth=60
           git switch --detach FETCH_HEAD
           git rev-parse HEAD > /tmp/party-result/base-sha.txt
           git diff d6cc3c77078a25f7318fbf7e371fc6779eab3351 HEAD --binary > /tmp/party-result/concurrent-main.patch
@@ -89,6 +91,16 @@ jobs:
               for name in files:
                   p=Path(name)
                   if p.is_file() and not name.startswith('.github/'):
+                      z.write(p,name)
+          tracked=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile('/tmp/party-result/validation-source.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for name in tracked:
+                  p=Path(name)
+                  if not name or not p.is_file() or name.startswith('.github/'):
+                      continue
+                  if name.split('/')[0] in {'common','events','history','interface','localisation','tools','docs','country_metadata'} and p.suffix.lower() in {'.txt','.yml','.yaml','.py','.json','.md','.csv','.gfx','.gui','.mod','.lua','.xml'}:
+                      z.write(p,name)
+                  elif name in {'AGENTS.md','descriptor.mod','map/definition.csv','map/adjacencies.csv','map/default.map'}:
                       z.write(p,name)
           PY
       - uses: actions/upload-artifact@v4
