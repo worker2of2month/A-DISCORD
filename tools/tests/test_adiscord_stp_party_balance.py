@@ -2,6 +2,9 @@ from pathlib import Path
 import re
 import unittest
 
+from tools.tests.test_adiscord_stp_party_route import one
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
 ROOT = Path(__file__).resolve().parents[2]
 
 IDEAS = ROOT / "common/ideas/ADISCORD_STP_civil_war_ideas.txt"
@@ -54,15 +57,21 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
             )
 
         calculate = named_block(self.effects, "STP_pf_calculate")
-        coefficients = [
-            abs(float(value))
-            for value in re.findall(
-                r"multiply_temp_variable\s*=\s*\{[^}]*?value\s*=\s*(-?0\.\d+)",
-                calculate,
-                flags=re.S,
-            )
-        ]
-        self.assertTrue(coefficients)
+        arithmetic = one(parse_clausewitz(calculate), "STP_pf_calculate")
+        coefficients = []
+        for faction in ("conservatives", "borons", "security", "army", "advisers", "merchants", "radicals"):
+            target = f"STP_pf_{faction}_effect"
+            writes = [e for e in arithmetic if isinstance(e.value, list)
+                      and any(c.key == "var" and c.value == target for c in e.value)]
+            self.assertEqual([e.key for e in writes], [
+                "set_variable", "subtract_from_variable", "multiply_variable",
+                "divide_variable", "multiply_variable",
+            ], faction)
+            values = [one(e.value, "value") for e in writes]
+            self.assertEqual(values[:4], [f"STP_pf_{faction}_support", "50",
+                                          f"STP_pf_{faction}_influence", "100"])
+            coefficients.append(abs(float(values[4])))
+        self.assertEqual(len(coefficients), 7)
         self.assertLessEqual(max(coefficients), 0.004)
 
         shift = named_block(self.effects, "STP_pf_shift")

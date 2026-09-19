@@ -1367,6 +1367,30 @@ STP_ps_northern_front_active = {
 	OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
 }
 
+# STP: reserved aid keeps its original purpose until physical departure.
+STP_ps_nod_order_current = {
+	STP_ps_can_aid_nod = yes
+	OR = {
+		check_variable = { var = STP_ps_nod_receipt_type value = 1 compare = equals }
+		AND = {
+			OR = {
+				check_variable = { var = STP_ps_nod_receipt_type value = 2 compare = equals }
+				check_variable = { var = STP_ps_nod_receipt_type value = 3 compare = equals }
+			}
+			NOD = { STP_ps_northern_front_active = yes }
+		}
+		AND = {
+			check_variable = { var = STP_ps_nod_receipt_type value = 4 compare = equals }
+			NOD = {
+				OR = {
+					NOD_cw_intervention_possible = yes
+					AND = { has_country_flag = NOD_cw_entered has_war_with = STS }
+				}
+			}
+		}
+	}
+}
+
 # A land route needs a controlled, capital-connected border on both sides.
 STP_ps_val_land_route = {
 	tag = VAL
@@ -1465,4 +1489,24 @@ STP_occidia_victory_ready = {
             }
         }
     }
+}
+
+# NOD: the paid preparation and the native war must name the same live opponent.
+STP_ps_can_launch_return = {
+	STP_ps_nod_can_host_exiles = yes
+	has_country_flag = STP_ps_exile_received
+	has_completed_focus = STP_ps_return_campaign_focus
+	has_country_flag = STP_ps_return_terms_accepted
+	has_country_flag = STP_ps_exile_training_completed
+	NOT = { has_country_flag = STP_ps_return_closed }
+	NOT = { has_country_flag = STP_ps_return_campaign }
+	NOT = { is_in_faction_with = STS }
+	STP = { exists = no }
+	STS = { exists = yes has_capitulated = no NOT = { is_subject_of = NOD } }
+}
+
+# Country holding the character: an arrested politician cannot join either transfer.
+STP_ps_hedersett_available = {
+	has_character = STP_rufus_hedersett
+	STP_rufus_hedersett = { NOT = { has_character_flag = STP_cw_arrested } }
 }

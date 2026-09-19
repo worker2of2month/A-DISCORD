@@ -371,7 +371,7 @@ STP_elections_in_the_party = {
 		days_mission_timeout = 1
 		selectable_mission = no
 		fire_only_once = no
-		cancel_trigger = { STP_ps_can_aid_nod = no }
+		cancel_trigger = { STP_ps_nod_order_current = no }
 		timeout_effect = { hidden_effect = { STP_ps_dispatch_nod = yes } }
 		cancel_effect = { hidden_effect = { STP_ps_refund_nod = yes } }
 	}
@@ -405,7 +405,7 @@ STP_elections_in_the_party = {
 		days_mission_timeout = 7
 		selectable_mission = no
 		fire_only_once = no
-		cancel_trigger = { STP_ps_can_aid_nod = no }
+		cancel_trigger = { STP_ps_nod_order_current = no }
 		timeout_effect = { hidden_effect = { STP_ps_dispatch_nod = yes } }
 		cancel_effect = { hidden_effect = { STP_ps_refund_nod = yes } }
 	}
@@ -4933,7 +4933,7 @@ STP_ps_exile = {
 	STP_ps_launch_return = {
 		allowed = { tag = NOD }
 		visible = { has_completed_focus = STP_ps_return_campaign_focus NOT = { has_country_flag = STP_ps_return_closed } NOT = { has_country_flag = STP_ps_return_campaign } }
-		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_return_terms_accepted has_country_flag = STP_ps_exile_training_completed STP = { exists = no } STS = { exists = yes }  } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_return_available_tt STP_ps_can_launch_return = yes } }
 		cost = 0
 		complete_effect = { custom_effect_tooltip = STP_ps_return_terms_tt hidden_effect = { STP_ps_begin_return = yes } }
 		ai_will_do = { base = 2 }

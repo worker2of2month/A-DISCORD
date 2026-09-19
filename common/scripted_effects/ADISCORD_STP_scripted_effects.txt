@@ -5542,11 +5542,11 @@ STP_ps_refund_nod = {
 }
 STP_ps_dispatch_nod = {
 	if = { limit = { check_variable = { var = STP_ps_nod_receipt_stage value = 1 compare = equals } }
-		if = { limit = { STP_ps_can_aid_nod = yes STP_ps_nod_supply_route = yes }
+		if = { limit = { STP_ps_nod_order_current = yes STP_ps_nod_supply_route = yes }
 			set_variable = { var = STP_ps_nod_receipt_stage value = 2 }
 			activate_mission = STP_ps_nod_delivery
 		}
-		else_if = { limit = { STP_ps_can_aid_nod = yes } activate_mission = STP_ps_nod_route_wait }
+		else_if = { limit = { STP_ps_nod_order_current = yes } activate_mission = STP_ps_nod_route_wait }
 		else = { STP_ps_refund_nod = yes }
 	}
 }
@@ -5684,7 +5684,7 @@ STP_ps_accept_exile = {
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_credit }
 		ADISCORD_economy_mark_dirty = yes
 		# Only an existing character can move; no recruitment of dead officeholders.
-		STP = { if = { limit = { has_character = STP_rufus_hedersett }
+		STP = { if = { limit = { STP_ps_hedersett_available = yes }
 				STP_rufus_hedersett = { remove_country_leader_role = { ideology = aristocratic_hedonism } }
 				set_nationality = { character = STP_rufus_hedersett target_country = NOD }
 			} }
@@ -5697,10 +5697,12 @@ STP_ps_exile_handoff = {
 		NOD = { change_tag_from = STP }
 	}
 }
+
 STP_ps_begin_return = {
-	if = { limit = { tag = NOD has_country_flag = STP_ps_exile_received has_completed_focus = STP_ps_return_campaign_focus has_country_flag = STP_ps_return_terms_accepted STP_ps_nod_can_host_exiles = yes STP = { exists = no } STS = { exists = yes } NOT = { has_country_flag = STP_ps_return_closed } }
-		set_country_flag = STP_ps_return_campaign
+	if = { limit = { STP_ps_can_launch_return = yes }
 		if = { limit = { NOT = { has_war_with = STS } } declare_war_on = { target = STS type = annex_everything } }
+		# A rejected declaration must leave the decision available for another attempt.
+		if = { limit = { has_war_with = STS } set_country_flag = STP_ps_return_campaign }
 	}
 }
 STP_ps_settle_return = {
@@ -5738,7 +5740,7 @@ STP_ps_settle_return = {
 		}
 		if = { limit = { STP = { exists = yes } }
 			set_autonomy = { target = STP autonomy_state = autonomy_puppet }
-			if = { limit = { has_character = STP_rufus_hedersett }
+			if = { limit = { STP_ps_hedersett_available = yes }
 				set_nationality = { character = STP_rufus_hedersett target_country = STP }
 				STP = { STP_rufus_hedersett = { add_country_leader_role = { country_leader = { ideology = aristocratic_hedonism expire = "2300.1.1" } } } promote_character = STP_rufus_hedersett }
 			}
