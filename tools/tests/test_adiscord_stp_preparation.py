@@ -1328,7 +1328,11 @@ class StelanderPreparationTests(unittest.TestCase):
         for name, budget in (("STP_Count_The_Loyalists", "50"), ("STP_Call_For_Shabrat", "75"),
                              ("STP_Garrisons_Hesitate", "100"), ("STP_PARTY_DISCIPLINE", "25")):
             self.assertEqual(scalar(rewards[name], "add_political_power"), budget)
-        self.assertEqual(scalar(block(rewards["STP_PARTY_DISCIPLINE"], "3"), "STP_cw_secure_party_district"), "yes")
+        district_check = block(rewards["STP_PARTY_DISCIPLINE"], "3")
+        live = {("3", "is_owned_by", "ROOT"): True, ("3", "is_controlled_by", "ROOT"): True,
+                ("3", "STP_region_is_operable", "yes"): True}
+        self.assertEqual(scalar([e for _, e in selected_effects(district_check, live, "3")], "STP_cw_secure_party_district"), "yes")
+        self.assertFalse(list(selected_effects(district_check, {}, "3")), "lost districts are not silently purged")
         administration = block(block(rewards["STP_cw_district_administration"], "hidden_effect"), "3")
         self.assertEqual(scalar([e for _, e in selected_effects(administration, {}, "3")], "set_state_flag"),
                          "STP_resistance_administration_asset")
@@ -1443,7 +1447,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 if shown or actual:
                     self.assertEqual(shown, actual, scalar(focus, "id"))
                     checked.add(scalar(focus, "id"))
-        self.assertEqual(len(checked), 22, "every persistent focus reward needs a checked delta preview")
+        self.assertEqual(len(checked), 29, "every persistent focus reward needs a checked delta preview")
         self.assertTrue({"STP_cw_frontline_relief", "STP_cw_route_columns"} <= checked)
 
     def test_dummy_ideas_are_never_installed_as_gameplay_spirits(self):
@@ -2771,11 +2775,13 @@ class StelanderPreparationTests(unittest.TestCase):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
                     if scalar(e.value, "id") == "STP_focus")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
-        cabinet = {"STP_GUARANTEE_MINISTERS", "STP_DISTRICT_GOVERNMENT", "STP_cw_press_office"}
-        military = {"STP_defense_budget", "STP_cw_capital_reserve", "STP_cw_protect_congress", "STP_cw_capital_oath"}
+        cabinet = {"STP_GUARANTEE_MINISTERS", "STP_party_budget_reserve"}
+        military = {"STP_defense_budget", "STP_party_guard_workshops"}
         shared = {"STP_PARTY_DISCIPLINE", "STP_ROTATE_DISTRICT_COMMAND", "STP_EMERGENCY_PRESIDIUM",
                   "STP_THE_PARTY_CLOSES_RANKS", "STP_cw_security_collegium", "STP_cw_counter_network",
-                  "STP_cw_protocol_office", "STP_cw_party_mandate"}
+                  "STP_cw_protocol_office", "STP_cw_party_mandate", "STP_DISTRICT_GOVERNMENT",
+                  "STP_party_civil_register", "STP_cw_press_office", "STP_cw_capital_reserve",
+                  "STP_cw_protect_congress", "STP_cw_capital_oath"}
         for selected, excluded, own_route, other_route in (
             ("STP_GUARANTEE_MINISTERS", "STP_defense_budget", cabinet, military),
             ("STP_defense_budget", "STP_GUARANTEE_MINISTERS", military, cabinet),
