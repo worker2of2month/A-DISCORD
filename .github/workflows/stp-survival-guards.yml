@@ -1,0 +1,164 @@
+name: STP survival guards
+on:
+  push:
+    branches: [verify/stp-survival-guards-20260919]
+    paths: ['.github/workflows/stp-survival-guards.yml']
+permissions:
+  contents: read
+env:
+  BASE_SHA: 0b899382be7e9bc9caea8f817bbd3bfc42ef17ab
+  PYTHONHASHSEED: '0'
+  PATCH_SHA256: a38972b1eda098087a62ecb2dc789cd74447708bc29c1d9f430d27204be64eb4
+  PATCH_GZIP_BASE64: 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
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [baseline, candidate]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 0b899382be7e9bc9caea8f817bbd3bfc42ef17ab
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - name: Apply exact reviewed candidate
+        if: matrix.variant == 'candidate'
+        run: |
+          python - <<'PY'
+          import base64,gzip,os,hashlib,subprocess
+          from pathlib import Path
+          encoded=os.environ['PATCH_GZIP_BASE64'].replace('Byz4XPo83Byz4XPo83','Byz4XPo83').replace('uicKZYyWf4','uicKkZYyWf4')
+          data=gzip.decompress(base64.b64decode(encoded))
+          assert hashlib.sha256(data).hexdigest()==os.environ['PATCH_SHA256']
+          Path('/tmp/guards.patch').write_bytes(data)
+          subprocess.run(['git','apply','--check','/tmp/guards.patch'],check=True)
+          subprocess.run(['git','apply','/tmp/guards.patch'],check=True)
+          subprocess.run(['git','diff','--check'],check=True)
+          PY
+      - name: Verify focused contracts
+        if: matrix.variant == 'candidate'
+        run: python -B -m unittest tools.tests.test_adiscord_stp_party_survival tools.tests.test_adiscord_stp_party_balance -v
+      - name: Full suite and validator evidence
+        env:
+          VARIANT: ${{ matrix.variant }}
+        run: |
+          mkdir -p /tmp/guards-result
+          cat > /tmp/guards-suite.py <<'PY'
+          import sys,os,json,re,unittest,hashlib
+          from pathlib import Path
+          sys.path.insert(0,str(Path.cwd()))
+          label=os.environ['VARIANT']
+          out=Path('/tmp/guards-result')
+          suite=unittest.defaultTestLoader.discover('tools/tests',pattern='test_*.py')
+          with (out/(label+'-suite.txt')).open('w') as log:
+              result=unittest.TextTestRunner(stream=log,verbosity=2).run(suite)
+          records=[]
+          for kind,items in [('failure',result.failures),('error',result.errors)]:
+              for test,detail in items:
+                  reason=detail.strip().splitlines()[-1]
+                  reason=re.sub(r'0x[0-9a-fA-F]+','0xADDR',reason)
+                  records.append({'kind':kind,'id':test.id(),'reason':reason,'detail':detail})
+          (out/(label+'-suite.json')).write_text(json.dumps({'tests':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skipped':len(result.skipped),'records':records},indent=2))
+          PY
+          python - <<'PY'
+          import subprocess,os,json,time,concurrent.futures,hashlib
+          from pathlib import Path
+          label=os.environ['VARIANT']; out=Path('/tmp/guards-result')
+          def run(item):
+              name,cmd=item; start=time.monotonic()
+              with (out/(label+'-'+name+'.log')).open('w') as log:
+                  try: code=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,timeout=1800).returncode
+                  except subprocess.TimeoutExpired: code=124
+              return name,{'exit':code,'seconds':time.monotonic()-start,'command':cmd}
+          with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+              result=dict(pool.map(run,[('runner',['python','-B','/tmp/guards-suite.py']),('validator',['python','-B','tools/validate_tc.py','--limit','300'])]))
+          paths=subprocess.check_output(['git','diff','--name-only']).decode().splitlines()
+          result.update(head=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),hashes={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths})
+          (out/(label+'-run.json')).write_text(json.dumps(result,indent=2))
+          assert result['runner']['exit']==0 and result['validator']['exit']==0,result
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-guards-${{ matrix.variant }}
+          path: /tmp/guards-result/
+          retention-days: 3
+  candidate:
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 0b899382be7e9bc9caea8f817bbd3bfc42ef17ab
+          fetch-depth: 1
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: stp-guards-*
+          merge-multiple: true
+          path: /tmp/guards-result/
+      - name: Compare every failed test and diagnostic
+        run: |
+          python - <<'PY'
+          import json,re,collections
+          from pathlib import Path
+          out=Path('/tmp/guards-result')
+          base=json.loads((out/'baseline-suite.json').read_text())
+          candidate=json.loads((out/'candidate-suite.json').read_text())
+          def failures(data):
+              return collections.Counter((r['kind'],r['id'],r['reason']) for r in data['records'])
+          added=failures(candidate)-failures(base)
+          def diagnostics(label):
+              lines=(out/(label+'-validator.log')).read_text().splitlines()
+              selected=[re.sub(r'(\.(?:txt|py|yml|gui|gfx)):\d+',r'\1:LINE',line) for line in lines if line.startswith(('== ','- '))]
+              return collections.Counter(selected)
+          new_diagnostics=diagnostics('candidate')-diagnostics('baseline')
+          gate={'new_failed_tests':[list(key)+[count] for key,count in added.items()],'new_diagnostics':dict(new_diagnostics),'baseline_tests':base['tests'],'candidate_tests':candidate['tests'],'baseline_failures':base['failures'],'candidate_failures':candidate['failures'],'baseline_errors':base['errors'],'candidate_errors':candidate['errors']}
+          (out/'gate.json').write_text(json.dumps(gate,indent=2))
+          print(json.dumps(gate,indent=2))
+          assert candidate['tests'] >= base['tests']+5
+          assert not added and not new_diagnostics
+          PY
+      - name: Produce clean candidate without CI files
+        run: |
+          python - <<'PY'
+          import base64,gzip,os,hashlib,subprocess,json
+          from pathlib import Path
+          encoded=os.environ['PATCH_GZIP_BASE64'].replace('Byz4XPo83Byz4XPo83','Byz4XPo83').replace('uicKZYyWf4','uicKkZYyWf4')
+          data=gzip.decompress(base64.b64decode(encoded))
+          assert hashlib.sha256(data).hexdigest()==os.environ['PATCH_SHA256']
+          Path('/tmp/guards.patch').write_bytes(data)
+          subprocess.run(['git','apply','--check','/tmp/guards.patch'],check=True)
+          subprocess.run(['git','apply','/tmp/guards.patch'],check=True)
+          paths=subprocess.check_output(['git','diff','--name-only']).decode().splitlines()
+          report=json.loads(Path('/tmp/guards-result/candidate-run.json').read_text())
+          assert len(paths)==6 and set(paths)==set(report['hashes'])
+          assert report['head']==os.environ['BASE_SHA']
+          for p in paths:
+              assert not p.startswith('.github/')
+              assert hashlib.sha256(Path(p).read_bytes()).hexdigest()==report['hashes'][p],p
+          subprocess.run(['git','diff','--check'],check=True)
+          subprocess.run(['git','add','--',*paths],check=True)
+          PY
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git diff --cached --check
+          git commit -m 'Harden party northern aid, exile and return lifecycle guards'
+          git rev-parse HEAD > /tmp/guards-result/candidate-sha.txt
+          git show --stat --oneline HEAD > /tmp/guards-result/change-stat.txt
+          git show --format=fuller --binary HEAD > /tmp/guards-result/commit.patch
+          git push origin "HEAD:refs/heads/agent/stp-survival-guards-candidate-${GITHUB_RUN_ID}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-guards-final-review
+          path: /tmp/guards-result/
+          retention-days: 3
