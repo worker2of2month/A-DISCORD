@@ -100,7 +100,7 @@ class VadPostwarContractTests(unittest.TestCase):
             reclaim,
         )
         self.assertIn("has_war = no", reclaim)
-        self.assertIn("days_remove = 14", reclaim)
+        self.assertIn("days_re_enable = 14", reclaim)
         self.assertIn("fire_only_once = no", reclaim)
         for tag in ("EYR", "EGC", "VLA", "ROM", "ZTA", "TGD"):
             self.assertIn(f"declare_war_on = {{ target = {tag} type = annex_everything }}", reclaim)
