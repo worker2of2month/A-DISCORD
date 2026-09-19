@@ -2,6 +2,7 @@
 """Validate the populated Itora/Vorkerland inner-frontier contract."""
 
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 from tools.lib.paths import source_section
 
@@ -184,7 +185,7 @@ def validate() -> list[str]:
     collapse_maps = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
     collapse_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
     phase_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
-    collapse_on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+    collapse_on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
 
     for localisation_path in (*country_loc_paths, VP_LOCALISATION, EXZ_LOCALISATION):
         if not localisation_path.exists() or not localisation_path.read_bytes().startswith(b"\xef\xbb\xbf"):

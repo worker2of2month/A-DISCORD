@@ -1,6 +1,7 @@
 """Focused static contract for the scripted NAM resource war."""
 
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import sys
@@ -169,7 +170,7 @@ def main() -> int:
     effects = sources["common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"]
     triggers = sources["common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt"]
     ai = sources["common/ai_strategy/ADISCORD_nam_resource_war_ai.txt"]
-    on_actions = sources["common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt"]
+    on_actions = read_country_on_actions("common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt", 'nam')
     debug_categories = sources["common/decisions/categories/ADISCORD_scenario_debug_categories.txt"]
     debug_decisions = sources["common/decisions/ADISCORD_scenario_debug_decisions.txt"]
     prewar_categories = sources["common/decisions/categories/ADISCORD_nam_resource_war_categories.txt"]

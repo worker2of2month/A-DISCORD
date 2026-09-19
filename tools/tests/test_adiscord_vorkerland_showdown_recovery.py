@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import unittest
 from pathlib import Path
@@ -169,7 +170,7 @@ class CentralShowdownRecoveryTests(unittest.TestCase):
             )
 
     def test_startup_does_not_requeue_old_showdown_controller_events(self) -> None:
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         startup = named_block(on_actions, "on_startup")
         repair_flag = "ADISCORD_vorkerland_showdown_startup_repair_scheduled"
         for token in (

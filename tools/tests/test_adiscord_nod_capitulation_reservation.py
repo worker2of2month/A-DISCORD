@@ -1,10 +1,11 @@
+from tools.lib.on_actions import read_country_on_actions, read_scripted_peace
 from pathlib import Path
 import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 STP_ON_ACTIONS = ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt"
-GUARD_ON_ACTIONS = ROOT / "common/on_actions/04_ADISCORD_STP_northern_capitulation_guard_on_actions.txt"
+GUARD_ON_ACTIONS = ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
 GENERIC_ON_ACTIONS = ROOT / "common/on_actions/ZZ_ADISCORD_default_capitulation_on_actions.txt"
 EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
 
@@ -44,14 +45,14 @@ def named_block(text: str, name: str) -> str:
 
 class NodrulCapitulationReservationTests(unittest.TestCase):
     def test_existing_router_marks_managed_northern_capitulation(self) -> None:
-        immediate = named_block(read(STP_ON_ACTIONS), "on_capitulation_immediate")
+        immediate = named_block(read_country_on_actions(STP_ON_ACTIONS, 'stelander'), "on_capitulation_immediate")
         self.assertIn(
             "ROOT = { set_country_flag = STP_cw_northern_capitulation_pending }",
             immediate,
         )
 
     def test_durable_guard_bridges_immediate_and_generic_callbacks(self) -> None:
-        source = read(GUARD_ON_ACTIONS)
+        source = read_scripted_peace(Path(GUARD_ON_ACTIONS).with_name('09_ADISCORD_scripted_peace_on_actions.txt'), 'northern_reservation')
         immediate = named_block(source, "on_capitulation_immediate")
         late = named_block(source, "on_capitulation")
         pending = "STP_cw_northern_capitulation_pending"
