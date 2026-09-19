@@ -3,67 +3,73 @@ on:
   push:
     branches: [codex/building-income-20260919]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  inspect-and-red:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
-          fetch-depth: 1
+          fetch-depth: 64
           show-progress: false
       - run: python -m pip install Pillow numpy
-      - name: Reproduce requested building income gap
+      - name: Reconcile current main
+        run: |
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git fetch --no-tags --depth=64 origin main:refs/remotes/origin/main
+          git merge --no-edit origin/main
+          git rev-parse origin/main > /tmp/building-main-parent
+      - name: Add regressions and apply bounded balance changes
         run: |
           python -B .github/building_income_tests.py
+          python -B .github/building_income_patch.py
+      - name: Targeted building and accounting regression tests
+        run: |
+          python -B -m unittest tools.tests.test_adiscord_economy_rebalance tools.tests.test_adiscord_economy_weekly_contracts.EconomyAccountingRegressionTests tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_industrial_cluster_output_is_location_weighted_without_a_new_scan tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_ai_building_targets_are_bounded_by_fiscal_state tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_economic_building_reference_documents_roles_and_formulas -v
+      - name: Full economy regression suite
+        run: python -B -m unittest tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_adiscord_economy_rebalance -q
+      - name: Total conversion validation
+        run: |
+          python -B tools/validate_tc.py --limit 300 > /tmp/building-validation.log
+          cat /tmp/building-validation.log
+      - name: Inspect exact patch and verify encoding
+        run: |
+          git diff --check
+          git diff --stat
+          git diff -- common/scripted_effects/ADISCORD_economy_effects.txt common/scripted_effects/ADISCORD_economy_modifier_effects.txt common/ideas/ADISCORD_economy_ideas.txt common/ai_strategy/ADISCORD_economy_ai.txt tools/validators/validate_adiscord_economy_ai.py
           python -B - <<'PY'
-          import unittest
-          from tools.tests.test_adiscord_economy_rebalance import BuildingIncomeTests,building_budget_fixture,P
-          result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(BuildingIncomeTests))
-          f=building_budget_fixture()
-          print('BASELINE_BUDGET',{key:f.scopes['A'][P+key] for key in ('monthly_income','monthly_expenses','weekly_balance')})
-          assert result.failures and not result.errors, 'Expected numeric balance failures, not a broken fixture'
+          from pathlib import Path
+          import json
+          for name in json.loads(Path('/tmp/building-income-paths.json').read_text()):
+              raw=Path(name).read_bytes()
+              if name.startswith('common/'): assert not raw.startswith(b'\xef\xbb\xbf'),name
+              if name.startswith('localisation/'):
+                  assert raw.startswith(b'\xef\xbb\xbf'),name
+                  text=raw.decode('utf-8-sig')
+                  for key in ('ADISCORD_business_center_desc','ADISCORD_science_center_desc','ADISCORD_industrial_cluster_desc'):
+                      lines=[line for line in text.splitlines() if line.lstrip().startswith(key+':')]
+                      assert len(lines)==1 and lines[0].rstrip().endswith('"'),key
+                      print('BUILDING_DESCRIPTION',lines[0])
+          from tools.tests.test_adiscord_economy_rebalance import building_budget_fixture,P
+          for counts in ((0,0,0),(4,2,1),(8,4,2),(12,4,2),(24,12,6)):
+              f=building_budget_fixture(*counts)
+              print('BUILDING_SCENARIO',counts,{key:f.scopes['A'][P+key] for key in ('monthly_income','monthly_expenses','weekly_balance','treasury_cap')})
           PY
-      - name: Inspect remaining bounded upgrade sites
-        if: always()
+      - name: Publish clean tested candidate
         run: |
           python -B - <<'PY'
           from pathlib import Path
-          import ast,re
-          from tools.tests.test_adiscord_economy_weekly_contracts import block
-          def read(path): return Path(path).read_text(encoding='utf-8-sig')
-          print('BUILDINGS')
-          for name in ('ADISCORD_business_center','ADISCORD_science_center','ADISCORD_industrial_cluster'):
-              print(name,block(read('common/buildings/00_buildings.txt'),name))
-          print('BUILDING SCALARS')
-          for p in (Path('common/scripted_effects/ADISCORD_economy_effects.txt'),Path('common/ideas/ADISCORD_economy_ideas.txt')):
-              lines=read(p).splitlines(); seen=set()
-              terms=('science_network','cluster_network','cluster_factory_output_percent','treasury_building_temp','business_center_count','science_center_count','industrial_cluster_count')
-              for i,line in enumerate(lines):
-                  if any(term in line for term in terms):
-                      for j in range(max(0,i-1),min(len(lines),i+4)):
-                          if j not in seen: print(p,j+1,lines[j]);seen.add(j)
-          print('LOCALISATION')
-          for folder in ('localisation/russian','localisation/english'):
-              for p in Path(folder).glob('*.yml'):
-                  for line in read(p).splitlines():
-                      if any(term in line for term in ('ADISCORD_business_center_desc:', 'ADISCORD_science_center_desc:', 'ADISCORD_industrial_cluster_desc:')): print(p,line)
-          print('AI STRATEGY')
-          print(read('common/ai_strategy/ADISCORD_economy_ai.txt'))
-          print('RELATED TESTS')
-          needles=('2.10','2.25','0.45','science_network','cluster_network','cluster_factory_output_percent','building_target','research_network')
-          for p in [Path('tools/tests/test_adiscord_economy_weekly_contracts.py'),Path('tools/validators/validate_adiscord_economy_ai.py')]:
-              text=read(p);module=ast.parse(text);lines=text.splitlines()
-              for node in ast.walk(module):
-                  if isinstance(node,ast.FunctionDef):
-                      part=lines[node.lineno-1:node.end_lineno]
-                      if any(any(term in line for term in needles) for line in part):
-                          print('FUNCTION',p,node.name,node.lineno,node.end_lineno)
-                          seen=set()
-                          for i,line in enumerate(part):
-                              if any(term in line for term in needles):
-                                  for j in range(max(0,i-2),min(len(part),i+4)):
-                                      if j not in seen:print(node.lineno+j,part[j]);seen.add(j)
+          import json,subprocess
+          paths=json.loads(Path('/tmp/building-income-paths.json').read_text())
+          subprocess.run(['git','add','--',*paths],check=True)
           PY
+          git rm -- .github/workflows/building-income-review.yml .github/building_income_tests.py .github/building_income_patch.py
+          git diff --cached --check
+          PARENT=$(cat /tmp/building-main-parent)
+          TREE=$(git write-tree)
+          if git diff --name-only "$PARENT" "$TREE" | grep '^.github/'; then exit 1; fi
+          CANDIDATE=$(git commit-tree "$TREE" -p "$PARENT" -m 'Buff economic buildings and enable building-led weekly surpluses above 100')
+          git push origin "$CANDIDATE":refs/heads/codex/building-income-ready-20260919
+          printf '\nFINAL_PARENT=%s\nFINAL_TREE=%s\nFINAL_COMMIT=%s\n' "$PARENT" "$TREE" "$CANDIDATE"
