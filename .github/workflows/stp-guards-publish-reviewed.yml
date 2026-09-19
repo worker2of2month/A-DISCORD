@@ -1,0 +1,125 @@
+name: Publish reviewed STP guards
+on:
+  push:
+    branches: [verify/stp-survival-guards-20260919]
+    paths: ['.github/workflows/stp-guards-publish-reviewed.yml']
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 8acec3fd10088cc0fc4fc3bf032661e7ab4246a1
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: stp-guards-baseline
+          run-id: 35467516492
+          github-token: ${{ github.token }}
+          path: /tmp/reviewed-guards/
+      - uses: actions/download-artifact@v4
+        with:
+          name: stp-guards-candidate
+          run-id: 35467516492
+          github-token: ${{ github.token }}
+          path: /tmp/reviewed-guards/
+      - name: Verify every result and the exact reviewed diagnostic difference
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,ast,collections,re
+          out=Path('/tmp/reviewed-guards')
+          a=json.loads((out/'baseline-suite.json').read_text())
+          b=json.loads((out/'candidate-suite.json').read_text())
+          x={(r['kind'],r['id']):r for r in a['records']}
+          y={(r['kind'],r['id']):r for r in b['records']}
+          assert len(x)==len(a['records']) and len(y)==len(b['records'])
+          assert not y.keys()-x.keys()
+          fixed={('failure','test_adiscord_stp_party_balance.StelanderPartyBalanceContracts.test_faction_negotiations_remain_bounded_and_expensive')}
+          assert x.keys()-y.keys()==fixed
+          reviewed=('failure','test_adiscord_stp_preparation.StelanderPreparationTests.test_preparation_focus_rewards_resolve_public_script_api_and_localisation')
+          changed=[]
+          for key in x.keys()&y.keys():
+              if x[key]['reason']==y[key]['reason']:
+                  continue
+              assert key==reviewed,key
+              sets=[]
+              for record in (x[key],y[key]):
+                  prefix,separator,tail=record['reason'].partition(' not found in ')
+                  assert prefix=="AssertionError: 'ADISCORD_economy_projects_open_tt'" and separator
+                  body,suffix=tail.rsplit(' : ',1)
+                  assert suffix=='focus tooltip has no localisation'
+                  value=ast.literal_eval(body)
+                  assert isinstance(value,set)
+                  sets.append(value)
+              assert sets[1]-sets[0]=={'STP_ps_return_available_tt'}
+              assert not sets[0]-sets[1]
+              changed.append(list(key))
+          def diagnostics(label):
+              return collections.Counter(re.sub(r'(\.(?:txt|py|yml|gui|gfx)):\d+',r'\1:LINE',line) for line in (out/(label+'-validator.log')).read_text().splitlines() if line.startswith(('== ','- ')))
+          assert diagnostics('baseline')==diagnostics('candidate')
+          assert (a['tests'],b['tests'],a['failures'],b['failures'],a['errors'],b['errors'])==(1915,1920,83,82,40,40)
+          for label in ('baseline','candidate'):
+              run=json.loads((out/(label+'-run.json')).read_text())
+              assert run['head']=='0b899382be7e9bc9caea8f817bbd3bfc42ef17ab'
+              assert run['runner']['exit']==0 and run['validator']['exit']==0
+          gate={'new_failed_tests':[],'fixed_tests':[list(k) for k in fixed],'diagnostic_only_differences':changed,'new_validator_diagnostics':[],'baseline_tests':1915,'candidate_tests':1920,'baseline_failures':83,'candidate_failures':82,'baseline_errors':40,'candidate_errors':40}
+          (out/'reviewed-gate.json').write_text(json.dumps(gate,indent=2))
+          print(json.dumps(gate,indent=2))
+          PY
+      - name: Reproduce tested source
+        run: |
+          python - <<'PY'
+          import base64,gzip,hashlib,re,subprocess,json
+          from pathlib import Path
+          config=Path('.github/workflows/stp-survival-guards.yml').read_text()
+          encoded=re.search(r'^  PATCH_GZIP_BASE64: (.+)$',config,re.M).group(1)
+          encoded=encoded.replace('Byz4XPo83Byz4XPo83','Byz4XPo83').replace('uicKZYyWf4','uicKkZYyWf4')
+          data=gzip.decompress(base64.b64decode(encoded))
+          assert hashlib.sha256(data).hexdigest()=='a38972b1eda098087a62ecb2dc789cd74447708bc29c1d9f430d27204be64eb4'
+          Path('/tmp/reviewed.patch').write_bytes(data)
+          subprocess.run(['git','switch','--detach','0b899382be7e9bc9caea8f817bbd3bfc42ef17ab'],check=True)
+          subprocess.run(['git','apply','--check','/tmp/reviewed.patch'],check=True)
+          subprocess.run(['git','apply','/tmp/reviewed.patch'],check=True)
+          report=json.loads(Path('/tmp/reviewed-guards/candidate-run.json').read_text())
+          paths=subprocess.check_output(['git','diff','--name-only']).decode().splitlines()
+          assert len(paths)==6 and set(paths)==set(report['hashes'])
+          for name,digest in report['hashes'].items():
+              assert not name.startswith('.github/')
+              assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==digest,name
+          subprocess.run(['git','diff','--check'],check=True)
+          PY
+      - name: Recheck focused contracts
+        run: python -B -m unittest tools.tests.test_adiscord_stp_party_survival tools.tests.test_adiscord_stp_party_balance -v > /tmp/reviewed-guards/focused-final.txt 2>&1
+      - name: Create clean candidate
+        run: |
+          python - <<'PY'
+          import subprocess,json,hashlib
+          from pathlib import Path
+          report=json.loads(Path('/tmp/reviewed-guards/candidate-run.json').read_text())
+          for name,digest in report['hashes'].items():
+              assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==digest,name
+          subprocess.run(['git','add','--',*report['hashes']],check=True)
+          PY
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git diff --cached --check
+          git commit -m 'Harden party northern aid, exile and return lifecycle guards'
+          git rev-parse HEAD > /tmp/reviewed-guards/candidate-sha.txt
+          git show --format=fuller --binary HEAD > /tmp/reviewed-guards/commit.patch
+          git diff --stat HEAD^ HEAD > /tmp/reviewed-guards/change-stat.txt
+          git push origin "HEAD:refs/heads/agent/stp-survival-reviewed-${GITHUB_RUN_ID}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-survival-reviewed-publication
+          path: /tmp/reviewed-guards/
+          retention-days: 3
