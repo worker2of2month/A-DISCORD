@@ -1,0 +1,35 @@
+name: Resource project review
+on:
+  push:
+    branches: [codex/resource-projects-20260919]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          show-progress: false
+      - name: Package current text sources
+        run: |
+          python - <<'PY'
+          import subprocess,zipfile
+          from pathlib import Path
+          suffixes={'.txt','.py','.yml','.yaml','.md','.json','.gui','.gfx','.lua','.mod','.csv','.ps1','.bat'}
+          with zipfile.ZipFile('/tmp/resource-project-sources.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for name in subprocess.check_output(['git','ls-files','-z']).decode().split('\0'):
+                  if not name: continue
+                  p=Path(name)
+                  if p.suffix.lower() in suffixes and p.stat().st_size<5000000: z.write(p,name)
+              z.writestr('source-revision.txt',subprocess.check_output(['git','rev-parse','HEAD']).decode())
+              z.writestr('source-tree.txt',subprocess.check_output(['git','ls-tree','-r','HEAD']).decode())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: resource-project-sources
+          path: /tmp/resource-project-sources.zip
+          retention-days: 1
