@@ -3,35 +3,124 @@ on:
   push:
     branches: [codex/resource-investments-20260919]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  sources:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-          persist-credentials: false
+          fetch-depth: 64
           show-progress: false
-      - name: Package source and tracked file inventory
+      - run: python -m pip install Pillow numpy
+      - name: Verify exact reviewed patch and reconcile current main
         run: |
           python - <<'PY'
           from pathlib import Path
-          import subprocess,zipfile
-          allowed={'.txt','.py','.yml','.yaml','.md','.json','.gui','.gfx','.lua','.mod','.csv'}
-          with zipfile.ZipFile('/tmp/resource-investments-source.zip','w',zipfile.ZIP_DEFLATED) as z:
-              for name in subprocess.check_output(['git','ls-files','-z']).decode().split('\0'):
-                  if not name: continue
-                  p=Path(name)
-                  if p.suffix.lower() in allowed and p.stat().st_size<2000000:
-                      z.write(p,name)
-              z.writestr('source-revision.txt',subprocess.check_output(['git','rev-parse','HEAD']).decode())
-              z.writestr('source-tree.txt',subprocess.check_output(['git','ls-tree','-r','--long','HEAD']).decode())
-          print('SNAPSHOT',Path('/tmp/resource-investments-source.zip').stat().st_size)
+          import base64,gzip,hashlib
+          data=gzip.decompress(base64.b64decode(''.join(Path(f'.github/resource_patch_{i}.b64').read_text().strip() for i in range(1,5))))
+          assert hashlib.sha256(data).hexdigest()=='7240d2053559371f98c0b352df6d5d864fb36cfa24eac953aa69c2834d75402c'
+          Path('/tmp/resource-investments.patch').write_bytes(data)
           PY
-      - uses: actions/upload-artifact@v4
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git fetch --no-tags --depth=64 origin main:refs/remotes/origin/main
+          git rev-parse origin/main > /tmp/resource-main-parent
+          git checkout --detach origin/main
+      - name: Record existing baseline test failures
+        run: |
+          cat > /tmp/resource-test-runner.py <<'PY'
+          from pathlib import Path
+          import sys,unittest,json
+          sys.path.insert(0,str(Path.cwd()))
+          phase=sys.argv[1]
+          known=[
+            'tools.tests.test_adiscord_stp_postwar_continuation.PartyRecoveryTransactions.test_nod_contract_requires_consent_resources_and_current_protectorate',
+            'tools.tests.test_adiscord_stp_postwar_continuation.PartyRecoveryTransactions.test_paid_projects_deliver_once_or_refund_exactly_and_release_shared_slot',
+            'tools.tests.test_adiscord_stp_postwar_continuation.PostwarDiplomacyTransactions.test_campaign_completion_consumes_receipt_and_invalid_target_cancels_readiness',
+            'tools.tests.test_adiscord_stp_postwar_continuation.PostwarDiplomacyTransactions.test_paid_campaign_is_idempotent_and_cancelled_preparation_never_delivers',
+            'tools.tests.test_adiscord_stp_postwar_continuation.PostwarDiplomacyTransactions.test_recipient_acceptance_conserves_money_and_replay_cannot_pay_twice',
+            'tools.tests.test_adiscord_stp_postwar_continuation.PostwarRecoveryTransactions.test_completion_replay_and_wrong_project_callback',
+            'tools.tests.test_adiscord_stp_postwar_continuation.PostwarRecoveryTransactions.test_fractional_affordability_and_shared_slot',
+            'tools.tests.test_adiscord_stp_postwar_continuation.PostwarRecoveryTransactions.test_cancel_refunds_once_across_month_end',
+            'tools.tests.test_adiscord_stp_postwar_interactivity.ShabratPostwarInteractivityTests.test_postwar_categories_and_localisation_exist',
+          ]
+          common=['tools.tests.test_validate_adiscord_val_rework','tools.tests.test_adiscord_strategic_resources_ui']
+          names=common+(known if phase=='baseline' else [
+            'tools.tests.test_adiscord_economy_weekly_contracts','tools.tests.test_adiscord_economy_rebalance',
+            'tools.tests.test_adiscord_stp_postwar_economy','tools.tests.test_adiscord_stp_postwar_unlock',
+            'tools.tests.test_adiscord_stp_postwar_continuation','tools.tests.test_adiscord_stp_postwar_interactivity',
+          ])
+          with Path('/tmp/resource-'+phase+'-tests.log').open('w') as stream:
+              result=unittest.TextTestRunner(stream=stream,verbosity=1).run(unittest.defaultTestLoader.loadTestsFromNames(names))
+          failures={t.id():trace.splitlines()[-1] for t,trace in result.failures+result.errors}
+          summary={'run':result.testsRun,'failures':failures,'skipped':len(result.skipped)}
+          Path('/tmp/resource-'+phase+'-tests.json').write_text(json.dumps(summary,ensure_ascii=False))
+          print('TEST_SUMMARY',phase,json.dumps(summary,ensure_ascii=False))
+          if phase!='baseline':
+              before=json.loads(Path('/tmp/resource-baseline-tests.json').read_text())['failures']
+              new={k:v for k,v in failures.items() if k not in before or v!=before[k]}
+              if new:
+                  print(Path('/tmp/resource-'+phase+'-tests.log').read_text())
+              assert not new, new
+              assert not any('ResourceInvestmentTests' in key for key in failures)
+          PY
+          python -B /tmp/resource-test-runner.py baseline
+          python -B tools/validate_tc.py --limit 300 > /tmp/resource-baseline-validation.log
+      - name: Apply reviewed changes without overwriting concurrent work
+        run: |
+          if ! git apply --3way --index /tmp/resource-investments.patch; then
+            git diff --name-only --diff-filter=U
+            git diff --cc | head -450
+            exit 1
+          fi
+          git diff --cached --check
+      - name: Verify all new investment transactions and focus routes
+        run: python -B -m unittest tools.tests.test_adiscord_economy_rebalance.ResourceInvestmentTests -v
+      - name: Verify economy resources and country integration
+        run: python -B /tmp/resource-test-runner.py candidate
+      - name: Check complete total conversion against current-main baseline
+        run: |
+          python -B tools/validate_tc.py --limit 300 > /tmp/resource-candidate-validation.log
+          cat /tmp/resource-candidate-validation.log
+          python - <<'PY'
+          from pathlib import Path
+          before={s for s in Path('/tmp/resource-baseline-validation.log').read_text().splitlines() if s.startswith('- ')}
+          after={s for s in Path('/tmp/resource-candidate-validation.log').read_text().splitlines() if s.startswith('- ')}
+          new=after-before
+          print('VALIDATOR_BASELINE',len(before),'CANDIDATE',len(after),'NEW',sorted(new))
+          assert not new
+          PY
+      - name: Publish clean tested candidate
+        run: |
+          git diff --cached --check
+          git diff --check
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess,hashlib
+          paths=subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines()
+          assert len(paths)==23,paths
+          for name in paths:
+              assert not name.startswith('.github/'),name
+              raw=Path(name).read_bytes()
+              if name.startswith('common/'): assert not raw.startswith(b'\xef\xbb\xbf'),name
+              if name.startswith('localisation/'): assert raw.startswith(b'\xef\xbb\xbf'),name
+              print('SOURCE_SHA256',hashlib.sha256(raw).hexdigest(),name)
+          PY
+          PARENT=$(cat /tmp/resource-main-parent)
+          TREE=$(git write-tree)
+          CANDIDATE=$(git commit-tree "$TREE" -p "$PARENT" -m 'Add advanced resource investments and economic focus continuations')
+          git push origin "$CANDIDATE":refs/heads/codex/resource-investments-ready-20260919
+          printf '\nFINAL_PARENT=%s\nFINAL_TREE=%s\nFINAL_COMMIT=%s\n' "$PARENT" "$TREE" "$CANDIDATE"
+          git diff --stat "$PARENT" "$CANDIDATE"
+      - name: Upload bounded verification records
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: resource-investments-source
-          path: /tmp/resource-investments-source.zip
-          retention-days: 1
+          name: resource-investment-verification
+          path: |
+            /tmp/resource-*-tests.json
+            /tmp/resource-*-tests.log
+            /tmp/resource-*-validation.log
+          retention-days: 2
