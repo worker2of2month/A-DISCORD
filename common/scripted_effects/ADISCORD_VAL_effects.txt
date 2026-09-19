@@ -2842,7 +2842,6 @@ VAL_initialize_arsenal_recovery = {
         set_variable = { var = VAL_arsenal_reputation_stage value = 4 }
         if = { limit = { has_country_flag = VAL_vorkerland_contracts_disrupted } set_variable = { var = VAL_arsenal_reputation_stage value = 0 } }
         VAL_refresh_arsenal_reputation = yes
-        VAL_refresh_industrial_economy = yes
     }
     if = {
         limit = { NOT = { has_country_flag = VAL_vorkerland_resource_access_initialized } }
@@ -2853,6 +2852,10 @@ VAL_initialize_arsenal_recovery = {
             set_country_flag = VAL_vorkerland_resource_access_active
         }
     }
+    # Reconcile loaded campaigns even when their numeric progress already exists.
+    VAL_reconcile_supply_crisis = yes
+    VAL_refresh_industrial_economy = yes
+
 }
 
 VAL_end_vorkerland_resource_access = {

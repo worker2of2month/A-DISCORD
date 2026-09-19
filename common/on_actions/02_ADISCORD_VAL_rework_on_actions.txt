@@ -52,6 +52,23 @@ on_actions = {
 
 	on_state_control_changed = {
 		effect = {
+			# ROOT is the new controller, FROM the previous controller, FROM.FROM the state.
+			if = {
+				limit = {
+					FROM = { tag = VAL has_power_balance = { id = VAL_command_balance } has_war_with = ROOT }
+					FROM.FROM = { is_owned_by = VAL is_core_of = VAL NOT = { has_state_flag = VAL_bop_core_lost } }
+				}
+				FROM = { add_power_balance_value = { id = VAL_command_balance value = -0.10 } }
+				FROM.FROM = { set_state_flag = VAL_bop_core_lost }
+			}
+			else_if = {
+				limit = { ROOT = { tag = VAL } FROM.FROM = { has_state_flag = VAL_bop_core_lost } }
+				ROOT = {
+					if = { limit = { has_power_balance = { id = VAL_command_balance } } add_power_balance_value = { id = VAL_command_balance value = 0.05 } }
+				}
+				FROM.FROM = { clr_state_flag = VAL_bop_core_lost }
+			}
+
 			VAL = { VAL_check_nam_concession = yes }
 			if = { limit = { VAL = { exists = yes has_country_flag = VAL_vorkerland_resource_access_active } 33 = { NOT = { is_controlled_by = WRK } } } VAL = { VAL_end_vorkerland_resource_access = yes } }
 			if = {

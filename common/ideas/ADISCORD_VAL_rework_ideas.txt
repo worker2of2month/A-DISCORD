@@ -3,6 +3,7 @@ ideas = {
 		VAL_staff_war_mandate = {
 			picture = army_training
 			allowed = { original_tag = VAL }
+			cancel = { has_war = no }
 			removal_cost = -1
 			modifier = { planning_speed = 0.15 army_org_regain = 0.05 }
 		}

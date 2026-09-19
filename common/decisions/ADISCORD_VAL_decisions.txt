@@ -1250,7 +1250,7 @@ VAL_command_balance_category = {
 	VAL_staff_operational_mandate = {
 		icon = generic_army_support
 		visible = { has_power_balance = { id = VAL_command_balance } }
-		available = { has_capitulated = no is_subject = no has_war = yes command_power > 24 }
+		available = { has_capitulated = no is_subject = no has_war = yes NOT = { command_power < 25 } NOT = { has_idea = VAL_staff_war_mandate } }
 		cost = 75
 		days_re_enable = 180
 		complete_effect = {

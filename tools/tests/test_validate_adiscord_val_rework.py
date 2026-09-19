@@ -1212,8 +1212,9 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
                 elif key == "add_dynamic_modifier":
                     self.modifiers.add(scalar(value, "modifier"))
                 elif key == "remove_dynamic_modifier":
-                    self.assertIn(value, self.modifiers, "removal must be guarded")
-                    self.modifiers.remove(value)
+                    modifier = scalar(value, "modifier")
+                    self.assertIn(modifier, self.modifiers, "removal must be guarded")
+                    self.modifiers.remove(modifier)
                 elif key == "remove_resource_rights":
                     self.removed_rights.append(str(value))
                 elif key == "add_ideas":
