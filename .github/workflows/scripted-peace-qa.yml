@@ -5,68 +5,42 @@ on:
 permissions:
   contents: write
 jobs:
-  refactor:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - name: Preserve one-shot tools and checkout pinned main
+      - name: Preserve tools and fetch pinned trees
         run: |
-          cp .qa/refactor_scripted_peace.py "$RUNNER_TEMP/refactor_scripted_peace.py"
-          git fetch --depth=1 origin d6cc3c77078a25f7318fbf7e371fc6779eab3351
+          cp .qa/repair_imported_readers.py .qa/repair_source_collections.py .qa/run_suites.py .qa/verify_native_dispatch.py "$RUNNER_TEMP/"
+          git fetch --depth=1 origin d6cc3c77078a25f7318fbf7e371fc6779eab3351 ff34b8d6e4a0cf2e13cc3d293e9086741c5c87f3
           git checkout --detach d6cc3c77078a25f7318fbf7e371fc6779eab3351
       - name: Test dependencies
         run: python -m pip install pillow numpy pyyaml
-      - name: Baseline compact test report
+      - name: Characterize unmodified main
+        run: python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/before.json"
+      - name: Repair remaining explicit tooling readers
         run: |
-          cat > "$RUNNER_TEMP/run_suites.py" <<'PY'
-          import contextlib, io, json, sys, unittest
-          from pathlib import Path
-          sys.path.insert(0, str(Path.cwd()))
-          words = ('stp', 'nod', 'val_', 'val_rework', 'rin_', 'nam_', 'vorkerland', 'scripted_peace', 'sts_successor', 'inner_frontier', 'force_designs', 'wrk_ideology')
-          names = ['tools.tests.' + p.stem for p in sorted(Path('tools/tests').glob('test*.py')) if any(w in p.stem for w in words)]
-          result = unittest.TextTestRunner(stream=io.StringIO(), verbosity=0).run(unittest.defaultTestLoader.loadTestsFromNames(names))
-          problems = {t.id(): error for t, error in result.failures + result.errors}
-          report = {'tests': result.testsRun, 'problems': problems}
-          Path(sys.argv[1]).write_text(json.dumps(report))
-          print('TESTS', result.testsRun, 'PROBLEMS', len(problems), flush=True)
-          for name, error in problems.items(): print(name, '\n', error[-1200:], flush=True)
-          PY
-          python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/before.json"
-      - name: Red test, extract, verify identical native dispatch
-        run: python "$RUNNER_TEMP/refactor_scripted_peace.py"
-      - name: After compact test report
-        if: success()
+          git checkout --detach ff34b8d6e4a0cf2e13cc3d293e9086741c5c87f3
+          python "$RUNNER_TEMP/repair_imported_readers.py"
+          python "$RUNNER_TEMP/repair_source_collections.py"
+      - name: Focused ownership and repaired source consumers
         run: |
-          python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/after.json"
-          python - <<'PY'
-          import json, os
-          from pathlib import Path
-          d = Path(os.environ['RUNNER_TEMP'])
-          before = json.loads((d/'before.json').read_text())
-          after = json.loads((d/'after.json').read_text())
-          new = set(after['problems']) - set(before['problems'])
-          fixed = set(before['problems']) - set(after['problems'])
-          print('NEW_PROBLEMS', sorted(new))
-          print('BASELINE_PROBLEMS_RESOLVED', sorted(fixed))
-          (d/'regressions.json').write_text(json.dumps({'new': sorted(new), 'fixed': sorted(fixed)}))
-          PY
-      - name: Publish isolated candidate for review, never main
-        if: success()
+          python -m unittest tools.tests.test_scripted_peace_on_actions tools.tests.test_validate_adiscord_rin_oath_crisis tools.tests.test_adiscord_vorkerland_diplomacy tools.tests.test_validate_adiscord_vorkerland_collapse.CharactersAndPoliticsTests.test_collapse_runtime_cannot_remove_unrelated_national_spirits
+      - name: Compare actual native dispatch and all eight country source views
+        run: python "$RUNNER_TEMP/verify_native_dispatch.py"
+      - name: Differential test gate
+        run: python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/after.json" "$RUNNER_TEMP/before.json"
+      - name: Publish verified clean candidate, never main
         run: |
-          git diff --check
           git config user.name 'worker2of2month'
           git config user.email '81386071+worker2of2month@users.noreply.github.com'
-          git add AGENTS.md docs/development/focus-effects.md common/on_actions tools
-          git commit -m 'refactor: centralize scripted peace on_actions'
-          git push origin "HEAD:refs/heads/qa/scripted-peace-candidate-${GITHUB_RUN_ID}"
-          echo CANDIDATE_SHA=$(git rev-parse HEAD)
-          echo CANDIDATE_TREE=$(git rev-parse HEAD^{tree})
-      - name: Enforce regression gate
-        if: success()
-        run: |
-          python - <<'PY'
-          import json, os
-          from pathlib import Path
-          assert not json.loads((Path(os.environ['RUNNER_TEMP'])/'regressions.json').read_text())['new'], 'New failures block main publication'
-          PY
+          git add -A -- AGENTS.md docs/development/focus-effects.md common/on_actions tools
+          git diff --cached --check
+          TREE=$(git write-tree)
+          SHA=$(printf 'refactor: centralize scripted peace on_actions\n\nPreserve native ROOT/FROM scopes and callback command order.\nKeep generic capitulation last and retain bounded Livonn completion.\nUpdate explicit source consumers and verify no new suite failures.\nNative HOI4 runtime was not launched.\n' | git commit-tree "$TREE" -p d6cc3c77078a25f7318fbf7e371fc6779eab3351)
+          git diff --check d6cc3c77078a25f7318fbf7e371fc6779eab3351 "$SHA"
+          git diff --stat d6cc3c77078a25f7318fbf7e371fc6779eab3351 "$SHA"
+          git push origin "$SHA:refs/heads/qa/scripted-peace-verified-${GITHUB_RUN_ID}"
+          echo VERIFIED_SHA=$SHA
+          echo VERIFIED_TREE=$TREE
