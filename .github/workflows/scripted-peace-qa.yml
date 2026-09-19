@@ -3,41 +3,70 @@ on:
   push:
     branches: [qa/scripted-peace-refactor]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  inspect:
+  refactor:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: d6cc3c77078a25f7318fbf7e371fc6779eab3351
-          persist-credentials: false
+      - name: Preserve one-shot tools and checkout pinned main
+        run: |
+          cp .qa/refactor_scripted_peace.py "$RUNNER_TEMP/refactor_scripted_peace.py"
+          git fetch --depth=1 origin d6cc3c77078a25f7318fbf7e371fc6779eab3351
+          git checkout --detach d6cc3c77078a25f7318fbf7e371fc6779eab3351
       - name: Test dependencies
         run: python -m pip install pillow numpy pyyaml
-      - name: Inventory hook ownership and source readers
+      - name: Baseline compact test report
         run: |
-          python - <<'PY'
+          cat > "$RUNNER_TEMP/run_suites.py" <<'PY'
+          import contextlib, io, json, sys, unittest
           from pathlib import Path
-          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
-          for p in sorted(Path('common/on_actions').glob('*.txt')):
-              entries = parse_clausewitz(p.read_text(encoding='utf-8-sig'))
-              hooks = [h for e in entries if e.key == 'on_actions' for h in e.value]
-              print(p.name, [(h.key, [c.key for c in h.value] if isinstance(h.value, list) else h.value) for h in hooks])
-          PY
-          grep -RnE '([0-9][0-9]_ADISCORD_(STP|VAL|rin|nam|vorkerland).*on_actions.txt)' tools --include='*.py' || true
-          grep -RnE '([0-9][0-9]_ADISCORD_(STP|VAL|rin|nam|vorkerland).*on_actions.txt)' docs/development AGENTS.md || true
-      - name: Baseline affected suites
-        run: |
-          python - <<'PY'
-          import unittest, sys
-          from pathlib import Path
-          words = ('stp', 'nod', 'val_', 'val_rework', 'rin_', 'nam_', 'vorkerland')
+          sys.path.insert(0, str(Path.cwd()))
+          words = ('stp', 'nod', 'val_', 'val_rework', 'rin_', 'nam_', 'vorkerland', 'scripted_peace', 'sts_successor', 'inner_frontier', 'force_designs', 'wrk_ideology')
           names = ['tools.tests.' + p.stem for p in sorted(Path('tools/tests').glob('test*.py')) if any(w in p.stem for w in words)]
-          print('BASELINE_MODULES', names, flush=True)
-          suite = unittest.defaultTestLoader.loadTestsFromNames(names)
-          result = unittest.TextTestRunner(stream=sys.stdout, verbosity=1).run(suite)
-          print('BASELINE_TESTS', result.testsRun)
-          print('BASELINE_FAILURES', [t.id() for t, _ in result.failures])
-          print('BASELINE_ERRORS', [t.id() for t, _ in result.errors])
+          result = unittest.TextTestRunner(stream=io.StringIO(), verbosity=0).run(unittest.defaultTestLoader.loadTestsFromNames(names))
+          problems = {t.id(): error for t, error in result.failures + result.errors}
+          report = {'tests': result.testsRun, 'problems': problems}
+          Path(sys.argv[1]).write_text(json.dumps(report))
+          print('TESTS', result.testsRun, 'PROBLEMS', len(problems), flush=True)
+          for name, error in problems.items(): print(name, '\n', error[-1200:], flush=True)
+          PY
+          python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/before.json"
+      - name: Red test, extract, verify identical native dispatch
+        run: python "$RUNNER_TEMP/refactor_scripted_peace.py"
+      - name: After compact test report
+        if: success()
+        run: |
+          python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/after.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          d = Path(os.environ['RUNNER_TEMP'])
+          before = json.loads((d/'before.json').read_text())
+          after = json.loads((d/'after.json').read_text())
+          new = set(after['problems']) - set(before['problems'])
+          fixed = set(before['problems']) - set(after['problems'])
+          print('NEW_PROBLEMS', sorted(new))
+          print('BASELINE_PROBLEMS_RESOLVED', sorted(fixed))
+          (d/'regressions.json').write_text(json.dumps({'new': sorted(new), 'fixed': sorted(fixed)}))
+          PY
+      - name: Publish isolated candidate for review, never main
+        if: success()
+        run: |
+          git diff --check
+          git config user.name 'worker2of2month'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git add AGENTS.md docs/development/focus-effects.md common/on_actions tools
+          git commit -m 'refactor: centralize scripted peace on_actions'
+          git push origin "HEAD:refs/heads/qa/scripted-peace-candidate-${GITHUB_RUN_ID}"
+          echo CANDIDATE_SHA=$(git rev-parse HEAD)
+          echo CANDIDATE_TREE=$(git rev-parse HEAD^{tree})
+      - name: Enforce regression gate
+        if: success()
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          assert not json.loads((Path(os.environ['RUNNER_TEMP'])/'regressions.json').read_text())['new'], 'New failures block main publication'
           PY
