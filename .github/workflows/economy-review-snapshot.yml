@@ -16,7 +16,16 @@ jobs:
       - run: python -m pip install Pillow numpy
       - name: Apply bounded patch
         id: patch
-        run: python -B .github/economy_review_patch.py
+        run: |
+          python -B - <<'PY'
+          from pathlib import Path
+          p=Path('.github/economy_review_patch.py')
+          source=p.read_text(encoding='utf-8')
+          old='("0.45", "0.70", "1.00", "1.35", "1.80")'
+          assert source.count(old)==1
+          source=source.replace(old,'("0.45", "0.75", "1.00", "1.35", "1.80")')
+          exec(compile(source,str(p),'exec'))
+          PY
       - name: New regression contracts
         if: steps.patch.outcome == 'success'
         continue-on-error: true
