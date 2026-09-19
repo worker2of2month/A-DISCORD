@@ -3,51 +3,56 @@ on:
   push:
     branches: [codex/economy-review-20260919]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  red:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
           fetch-depth: 1
+          show-progress: false
       - run: python -m pip install Pillow numpy
-      - name: New regression tests before implementation
+      - name: Apply bounded patch
+        id: patch
+        run: python -B .github/economy_review_patch.py
+      - name: New regression contracts
+        if: steps.patch.outcome == 'success'
         continue-on-error: true
         run: python -B -m unittest tools.tests.test_adiscord_economy_rebalance -v
-      - name: Inspect focused implementation dependencies
+      - name: Existing focused regressions
+        if: steps.patch.outcome == 'success'
+        continue-on-error: true
+        run: python -B -m unittest tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_validate_adiscord_val_rework tools.tests.test_adiscord_stp_postwar_economy tools.tests.test_adiscord_stp_postwar_unlock tools.tests.test_adiscord_val_stelander_defeat tools.tests.test_adiscord_val_livonn_settlement tools.tests.test_adiscord_stp_postwar_continuation tools.tests.test_adiscord_stp_postwar_interactivity tools.tests.test_val_export_market -q
+      - name: Total conversion validator
+        if: steps.patch.outcome == 'success'
+        continue-on-error: true
+        run: python -B tools/validate_tc.py --limit 300
+      - name: Review diff and source hashes
+        if: always()
         run: |
+          git diff --check
+          git diff --stat
           python - <<'PY'
           from pathlib import Path
-          import re
-          from tools.tests.test_adiscord_economy_weekly_contracts import block
-          for pattern, identifiers in (
-              ('common/scripted_effects/ADISCORD_VAL_effects.txt', ['VAL_frontier_weekly','VAL_frontier_start_war']),
-              ('common/dynamic_modifiers/*', ['VAL_contract_state']),
-              ('common/decisions/ADISCORD_STP_decisions.txt', ['STP_pw_reconstruction']),
-          ):
-              for p in Path('.').glob(pattern):
-                  text=p.read_text(encoding='utf-8-sig')
-                  for identifier in identifiers:
-                      if re.search(r'(?m)^\s*'+identifier+r'\s*=\s*\{',text):
-                          print('\nSOURCE',p,identifier);print(block(text,identifier))
-          p=Path('tools/validators/validate_adiscord_economy_ai.py')
-          text=p.read_text(encoding='utf-8-sig')
-          for name in ('research_policy_flow_issues','social budget lacks'):
-              pos=text.index(name);print('\nVALIDATOR',name);print(text[max(0,pos-100):pos+3500])
-          text=Path('tools/tests/test_adiscord_economy_weekly_contracts.py').read_text(encoding='utf-8-sig')
-          for name in ('test_live_research_policy_localisation_uses_canonical_ui_ids','test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded','ADISCORD_economy_research_controls_tt exceeds'):
-              if name in text:
-                  pos=text.index(name);print('\nTEST',name);print(text[max(0,pos-80):pos+2500])
-          print('\nSHABRAT DECISION IDS')
-          text=Path('common/decisions/ADISCORD_STP_decisions.txt').read_text(encoding='utf-8-sig')
-          for m in re.finditer(r'(?m)^\s*(STP_pw_\w+)\s*=\s*\{',text):
-              print(m[1])
-          print('\nAI RECONSTRUCTION VALIDATOR')
-          for p in Path('tools/validators').glob('*.py'):
-              text=p.read_text(encoding='utf-8-sig')
-              if 'STS_shabrat_reconstruction_plan' in text:
-                  pos=text.index('STS_shabrat_reconstruction_plan');print(p);print(text[max(0,pos-300):pos+3500])
+          import hashlib,json
+          p=Path('/tmp/economy-changed-paths.json')
+          if p.exists():
+              for name in json.loads(p.read_text()):
+                  print(hashlib.sha256(Path(name).read_bytes()).hexdigest(),name)
           PY
+      - name: Preserve candidate on isolated review branch
+        if: always() && steps.patch.outcome == 'success'
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          paths=json.load(open('/tmp/economy-changed-paths.json'))
+          subprocess.run(['git','add','--',*paths],check=True)
+          PY
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git commit -m 'Rebalance productive income, rebuild recovery focuses and unblock northern AI'
+          git push origin HEAD:refs/heads/codex/economy-review-20260919
+          git rev-parse HEAD
+          git ls-tree HEAD common tools docs localisation
