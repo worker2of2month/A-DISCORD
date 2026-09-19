@@ -18,6 +18,7 @@ EFFECTS = "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
 DYNAMIC = "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"
 IDEAS = "common/ideas/ADISCORD_STP_civil_war_ideas.txt"
 PLANS = "common/ai_strategy_plans/ADISCORD_STP_plans.txt"
+EVENTS = "events/ADISCORD_STP_events.txt"
 
 
 def read(path):
@@ -255,6 +256,25 @@ class PartyRouteContracts(unittest.TestCase):
                 facts[key] = amount + delta
                 with self.subTest(currency=currency, delta=delta):
                     self.assertEqual(matches_conditions(triggers["STP_cw_can_pay_assault_division"], facts), delta >= 0)
+
+    def test_party_narrative_responses_are_context_specific(self):
+        labels = [
+            self.loc["ADISCORD_STP_pc.23.a"],
+            self.loc["ADISCORD_STP_pc.24.accepted_a"],
+            self.loc["ADISCORD_STP_pc.24.refused_a"],
+            self.loc["ADISCORD_STP_pc.25.a"],
+            self.loc["ADISCORD_STP_pc.26.a"],
+            self.loc["ADISCORD_STP_pc.27.a"],
+        ]
+        self.assertEqual(len(labels), len(set(labels)))
+        for generic in ("Продолжать", "Принять доклад.", "Принять к сведению"):
+            self.assertNotIn(generic, labels)
+        events = read(EVENTS)
+        self.assertIn("name = ADISCORD_STP_pc.24.accepted_a", events)
+        self.assertIn("trigger = { has_country_flag = STP_pw_party_nod_arms_delivered }", events)
+        self.assertIn("name = ADISCORD_STP_pc.24.refused_a", events)
+        self.assertIn("trigger = { NOT = { has_country_flag = STP_pw_party_nod_arms_delivered } }", events)
+        self.assertNotIn("name = ADISCORD_STP_pc.24.a", events)
 
     def test_no_internal_party_balance_added(self):
         text = read("common/bop/STP.txt")
