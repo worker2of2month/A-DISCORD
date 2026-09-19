@@ -8,12 +8,33 @@ from pathlib import Path
 import re
 
 from tools.tests.test_adiscord_stp_party_route import read, children, one, walk, signature
-from tools.tests.test_adiscord_stp_preparation import matches_conditions
-from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+from tools.tests.test_adiscord_stp_preparation import matches_conditions, selected_effects
+from tools.validators.validate_adiscord_division_templates import Entry, parse_clausewitz
 
 EFFECTS = 'common/scripted_effects/ADISCORD_STP_scripted_effects.txt'
 DECISIONS = 'common/decisions/ADISCORD_STP_decisions.txt'
 TRIGGERS = 'common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt'
+
+
+def expand_survival_gates(items):
+    """Expand only the new gates; pre-existing predicates are explicit scenario facts."""
+    definitions = {e.key: e.value for e in parse_clausewitz(read(TRIGGERS))}
+    names = {'STP_ps_nod_order_current', 'STP_ps_can_launch_return'}
+
+    def expand(nodes):
+        expanded = []
+        for entry in nodes:
+            if entry.key in names:
+                if entry.value not in ('yes', 'no'):
+                    raise AssertionError('Scripted triggers require boolean calls')
+                body = expand(definitions[entry.key])
+                expanded.append(Entry('AND' if entry.value == 'yes' else 'NOT', body, entry.line))
+            else:
+                value = expand(entry.value) if isinstance(entry.value, list) else entry.value
+                expanded.append(Entry(entry.key, value, entry.line, entry.quoted))
+        return expanded
+
+    return expand(items)
 
 
 class PartySurvivalContracts(unittest.TestCase):
@@ -239,6 +260,97 @@ class PartySurvivalContracts(unittest.TestCase):
         self.assertEqual(len(keys), len(set(keys)))
         for path in (EFFECTS, DECISIONS):
             self.assertFalse((root / path).read_bytes().startswith(b'\xef\xbb\xbf'))
+
+
+    def test_nod_predeparture_refunds_a_stale_purpose_without_shipping(self):
+        # A still-friendly host is not enough once the northern war or intervention ends.
+        dispatcher = expand_survival_gates(self.effects['STP_ps_dispatch_nod'])
+        for kind, north, possible, entered, war, route, host in product(
+                range(1, 5), (False, True), (False, True), (False, True),
+                (False, True), (False, True), (False, True)):
+            facts = {
+                ('STP', 'variable', 'STP_ps_nod_receipt_stage'): 1,
+                ('STP', 'variable', 'STP_ps_nod_receipt_type'): kind,
+                ('STP', 'STP_ps_can_aid_nod', 'yes'): host,
+                ('STP', 'STP_ps_nod_supply_route', 'yes'): route,
+                ('NOD', 'STP_ps_northern_front_active', 'yes'): north,
+                ('NOD', 'NOD_cw_intervention_possible', 'yes'): possible,
+                ('NOD', 'has_country_flag', 'NOD_cw_entered'): entered,
+                ('NOD', 'has_war_with', 'STS'): war,
+            }
+            current = host and (kind == 1 or kind in (2, 3) and north or
+                                kind == 4 and (possible or entered and war))
+            effects = list(selected_effects(dispatcher, facts))
+            calls = [(scope, e.key, e.value) for scope, e in effects if e.key in
+                     {'activate_mission', 'STP_ps_refund_nod'}]
+            expected = ('activate_mission', 'STP_ps_nod_delivery' if route else 'STP_ps_nod_route_wait') if current else ('STP_ps_refund_nod', 'yes')
+            self.assertEqual(calls, [('STP', *expected)],
+                             (kind, north, possible, entered, war, route, host))
+
+    def test_nod_wait_and_dispatch_cancel_on_the_same_current_purpose(self):
+        definitions = {e.key: e.value for e in parse_clausewitz(read(TRIGGERS))}
+        self.assertIn('STP_ps_nod_order_current', set(definitions))
+        for name in ('STP_ps_nod_dispatch', 'STP_ps_nod_route_wait'):
+            gate = one(self.decisions[name], 'cancel_trigger')
+            self.assertEqual(signature(gate), [('STP_ps_nod_order_current', 'no')])
+        # Revocation before departure returns the original deposit, never a fixed new price.
+        refund = list(walk(self.effects['STP_ps_refund_nod']))
+        save = next(e.value for e in refund if e.key == 'set_temp_variable' and one(e.value, 'var') == 'STP_ps_refund')
+        self.assertEqual(one(save, 'value'), 'STP_ps_nod_receipt_money')
+
+    def test_return_requires_training_and_a_live_nonallied_target(self):
+        definitions = {e.key: e.value for e in parse_clausewitz(read(TRIGGERS))}
+        self.assertIn('STP_ps_can_launch_return', set(definitions))
+        gate = definitions['STP_ps_can_launch_return']
+        for training, alive, allied, own_subject, active, closed, war in product((False, True), repeat=7):
+            facts = {
+                ('NOD', 'STP_ps_nod_can_host_exiles', 'yes'): True,
+                ('NOD', 'has_country_flag', 'STP_ps_exile_received'): True,
+                ('NOD', 'has_completed_focus', 'STP_ps_return_campaign_focus'): True,
+                ('NOD', 'has_country_flag', 'STP_ps_return_terms_accepted'): True,
+                ('NOD', 'has_country_flag', 'STP_ps_exile_training_completed'): training,
+                ('NOD', 'has_country_flag', 'STP_ps_return_campaign'): active,
+                ('NOD', 'has_country_flag', 'STP_ps_return_closed'): closed,
+                ('NOD', 'has_war_with', 'STS'): war,
+                ('NOD', 'is_in_faction_with', 'STS'): allied,
+                ('STP', 'exists', 'no'): True,
+                ('STS', 'exists', 'yes'): True,
+                ('STS', 'has_capitulated', 'no'): alive,
+                ('STS', 'is_subject_of', 'NOD'): own_subject,
+            }
+            self.assertEqual(matches_conditions(gate, facts, 'NOD'),
+                             training and alive and not (allied or own_subject or active or closed))
+
+    def test_return_declaration_and_ui_share_the_same_gate(self):
+        gate = one(one(self.effects['STP_ps_begin_return'], 'if'), 'limit')
+        self.assertEqual(signature(gate), [('STP_ps_can_launch_return', 'yes')])
+        ui = one(one(self.decisions['STP_ps_launch_return'], 'available'), 'custom_trigger_tooltip')
+        self.assertIn(('STP_ps_can_launch_return', 'yes'), signature(ui))
+        # A failed native declaration may not leave a campaign marked as running.
+        branches = children(one(self.effects['STP_ps_begin_return'], 'if'), 'if')
+        receipt = next((b for b in branches if any(e.key == 'set_country_flag' and e.value == 'STP_ps_return_campaign' for e in b)), None)
+        self.assertIsNotNone(receipt)
+        self.assertEqual(signature(one(receipt, 'limit')), [('has_war_with', 'STS')])
+        for war in (False, True):
+            facts = {('NOD', 'STP_ps_can_launch_return', 'yes'): True,
+                     ('NOD', 'has_war_with', 'STS'): war}
+            payload = list(selected_effects(self.effects['STP_ps_begin_return'], facts, 'NOD'))
+            self.assertEqual(sum(e.key == 'declare_war_on' for _, e in payload), int(not war))
+
+    def test_arrested_hedersett_cannot_escape_or_be_restored(self):
+        definitions = {e.key: e.value for e in parse_clausewitz(read(TRIGGERS))}
+        self.assertIn('STP_ps_hedersett_available', set(definitions))
+        gate = definitions['STP_ps_hedersett_available']
+        self.assertEqual(one(gate, 'has_character'), 'STP_rufus_hedersett')
+        character_gate = one(gate, 'STP_rufus_hedersett')
+        for arrested in (False, True):
+            facts = {('STP_rufus_hedersett', 'has_character_flag', 'STP_cw_arrested'): arrested}
+            self.assertEqual(matches_conditions(character_gate, facts, 'STP_rufus_hedersett'), not arrested)
+        for name in ('STP_ps_accept_exile', 'STP_ps_settle_return'):
+            guarded = [e.value for e in walk(self.effects[name]) if e.key == 'if'
+                       and any(c.key == 'set_nationality' for c in e.value)]
+            self.assertEqual(len(guarded), 1, name)
+            self.assertIn(('STP_ps_hedersett_available', 'yes'), signature(one(guarded[0], 'limit')))
 
 
 if __name__ == '__main__':
