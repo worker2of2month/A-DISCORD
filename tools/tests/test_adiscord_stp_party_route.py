@@ -237,18 +237,37 @@ class PartyRouteContracts(unittest.TestCase):
 
     def test_nod_crisis_has_three_real_preparation_decisions(self):
         expected = {
-            "STP_pw_party_nod_emergency_mobilization": ("900", "50"),
-            "STP_pw_party_nod_fortify_border": ("1080", "35"),
-            "STP_pw_party_nod_staff_readiness": ("720", "35"),
+            "STP_pw_party_nod_emergency_mobilization": ("900", "50", "3", "STP_pf_security_deal_tt"),
+            "STP_pw_party_nod_fortify_border": ("1080", "35", "2", "STP_pf_borons_deal_tt"),
+            "STP_pw_party_nod_staff_readiness": ("720", "35", "4", "STP_pf_army_deal_tt"),
         }
         raw = read(DECISIONS)
-        for decision_id, (money, pp) in expected.items():
+        selectors = []
+        for decision_id, (money, pp, selector, tooltip) in expected.items():
             decision = self.decisions[decision_id]
             self.assertEqual(one(decision, "cost"), pp)
             self.assertIn("STP_pw_party_nod_threat_active", str(signature(one(decision, "visible"))))
-            snippet = raw[raw.index(decision_id):raw.index(decision_id) + 2400]
+            reward = one(decision, "complete_effect")
+            self.assertIn(("custom_effect_tooltip", tooltip), signature(reward))
+            self.assertTrue(any(e.key == "var" and e.value == "STP_pf_selected" for e in walk(reward)))
+            snippet = raw[raw.index(decision_id):raw.index(decision_id) + 2600]
             self.assertIn(f"value = {money}", snippet)
+            self.assertIn(f"var = STP_pf_selected value = {selector}", snippet)
+            self.assertEqual(snippet.count("STP_pf_shift = yes"), 1)
+            selectors.append(selector)
+        self.assertEqual(selectors, ["3", "2", "4"])
+        self.assertEqual(selectors.count("4"), 1, "automatic crisis preparation must not create an army monopoly")
         self.assertIn("any_neighbor_state", str(signature(self.decisions["STP_pw_party_nod_fortify_border"])))
+
+    def test_protectorate_deepens_adviser_influence_in_paid_and_institutional_steps(self):
+        effects = read(EFFECTS)
+        arms = effects[effects.index("STP_pw_party_settle_nod_arms = {"):]
+        arms = arms[:arms.index("\n# COUNTRY STS:", 1)]
+        self.assertIn("var = STP_pf_selected value = 5", arms)
+        self.assertEqual(arms.count("STP_pf_shift = yes"), 1)
+        board = one(self.focus["STP_pw_party_joint_defence_board"], "completion_reward")
+        self.assertTrue(any(e.key == "var" and e.value == "STP_pf_selected" for e in walk(board)))
+        self.assertTrue(any(e.key == "STP_pf_shift" and e.value == "yes" for e in walk(board)))
 
     def test_independent_foreign_settlement_waits_for_nod_outcome(self):
         available = str(signature(one(self.focus["STP_pw_party_foreign_settlement"], "available")))
