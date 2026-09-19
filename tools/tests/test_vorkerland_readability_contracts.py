@@ -189,5 +189,13 @@ class ImperialReclamationContracts(unittest.TestCase):
         self.assertNotIn("seventeen central states", read(EFFECTS))
 
 
+
+    def test_postwar_dispatch_is_separate_from_wartime_wave_section(self):
+        from tools.lib.paths import source_section
+        effects = read(EFFECTS)
+        self.assertIn(DISPATCH + " = {", source_section(effects, "phase_effects"))
+        self.assertNotIn(DISPATCH + " = {", source_section(effects, "focus_decision_effects"))
+
+
 if __name__ == "__main__":
     unittest.main()
