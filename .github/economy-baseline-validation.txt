@@ -1,0 +1,96 @@
+A-Discord total-conversion validation
+Root: /home/runner/work/A-DISCORD/A-DISCORD/source
+Country tags: 155
+Ideology groups: anarchism, chauvinism, etatism, hedonism, humanism, pragmatism, technocracy, utilitarism
+Ideology types: 18
+Definition provinces: 16707
+
+== Brace balance: 0 ==
+OK
+
+== Countries and ideologies: 0 ==
+OK
+
+== Event ID registry: 0 ==
+OK
+
+== Superevent presentation contract: 0 ==
+OK
+
+== Map and states: 0 ==
+OK
+
+== Map building state assignments: 0 ==
+OK
+
+== Permanent snow terrain: 0 ==
+OK
+
+== Ivanland island administration: 0 ==
+OK
+
+== Localisation headers: 0 ==
+OK
+
+== Special project leftovers: 0 ==
+OK
+
+== Synchronized dynamic tokens: 0 ==
+OK
+
+== Railway gun names: 0 ==
+OK
+
+== Entity unit mesh refs: 0 ==
+OK
+
+== GFX entity ownership: 0 ==
+OK
+
+== Autonomy chain isolation: 0 ==
+OK
+
+== Vanilla filename leftovers: 0 ==
+OK
+
+== Economy guardrails: 0 ==
+OK
+
+== Economy and AI semantics: 2 ==
+- research multipliers are not bound one-to-one to levels: {'1': [0.3], '2': [0.65], '3': [1.0], '4': [1.3], '5': [1.6]}
+- social budget lacks the distinct 0.45 cost multiplier
+
+== Strategic resources and economy UI: 0 ==
+OK
+
+== Lore trade-region geography: 0 ==
+OK
+
+== Vorkerland three-claimant recovery: 0 ==
+OK
+
+== Vorkerland civil-war focus skeleton: 0 ==
+OK
+
+== Vorkerland focus-unlocked operations: 2 ==
+- English localisation key mismatch: missing=[], extra=['ADISCORD_vorkerland_vad_continue_imperial_reunification', 'ADISCORD_vorkerland_vad_continue_imperial_reunification_desc']
+- Russian localisation key mismatch: missing=[], extra=['ADISCORD_vorkerland_vad_continue_imperial_reunification', 'ADISCORD_vorkerland_vad_continue_imperial_reunification_desc']
+
+== Vorkerland regional diplomacy: 0 ==
+OK
+
+== Vorkerland civil-war story and news: 0 ==
+OK
+
+== Shabrat historical AI: 1 ==
+- STS_shabrat_reconstruction_plan focus order: ('STP_cw_first_postwar_budget', 'STP_cw_restore_civil_authority', 'STP_pc_after_victory', 'STP_pc_economy_count_the_cost', 'STP_pc_economy_reopen_tax_offices', 'STP_pc_economy_repair_workshops', 'STP_pc_economy_stabilize_currency', 'STP_pc_economy_recovery_budget', 'STP_pc_development_country_must_live', 'STP_pc_development_posters_on_ruins', 'STP_pc_development_rebuild_as_duty', 'STP_pc_development_engineers_on_radio', 'STP_pc_development_reopen_universities', 'STP_pc_development_generation_reconstruction', 'STP_pc_development_national_research_institutes', 'STP_pc_shabrat_cabinet', 'STP_pw_republic_new_republic', 'STP_pw_republic_district_authority', 'STP_pw_republic_civil_records', 'STP_pw_republic_firm_settlement', 'STP_pw_republic_civil_charter', 'STP_pw_republic_restore_roads', 'STP_pw_republic_homes_for_returnees', 'STP_pw_republic_civil_workshops', 'STP_pw_republic_accountable_arsenals', 'STP_pw_republic_industrial_settlement', 'STP_pw_republic_army_register', 'STP_pw_republic_officer_school', 'STP_pw_republic_supply_service', 'STP_pw_republic_professional_service', 'STP_pw_republic_settled_state')
+
+== Division template audit: 0 ==
+OK
+
+== NCNS factions and campaign slots: 0 ==
+OK
+
+== Vanilla leftovers: 0 hits in 0 tokens ==
+OK
+BASELINE_EXIT=0
