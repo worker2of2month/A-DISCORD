@@ -3641,33 +3641,60 @@ class PostwarFocusContracts(unittest.TestCase):
                     positions[point] = name
 
     def test_each_side_has_a_reachable_three_pillar_postwar_program(self):
-        for tag, prefix in (("STS", "STP_pw_republic_"), ("STP", "STP_pw_party_")):
+        republic = {k: v for k, v in self.new.items() if k.startswith("STP_pw_republic_")}
+        self.assertEqual(len(republic), 16)
+        completed = {"STP_cw_restore_civil_authority", "STP_pc_after_victory"}
+        for _ in range(len(republic)):
+            for name, focus in republic.items():
+                prerequisites = [e.value for e in focus if e.key == "prerequisite"]
+                if all(any(e.value in completed for e in group) for group in prerequisites):
+                    completed.add(name)
+        self.assertIn("STP_pw_republic_settled_state", completed)
+
+        party = {k: v for k, v in self.new.items() if k.startswith("STP_pw_party_")}
+        self.assertEqual(len(party), 25)
+        supporting = {
+            name: self.focuses[name]
+            for name in (
+                "STP_party_district_charters", "STP_party_local_cadres",
+                "STP_party_personnel_commissions", "STP_party_chain_of_command",
+                "STP_party_revenue_service", "STP_party_port_contracts",
+                "STP_party_industrial_board", "STP_party_research_council",
+                "STP_party_technical_institutes",
+                "STP_pw_party_border_staff", "STP_pw_party_southern_defence",
+                "STP_pw_party_northern_protocol", "STP_pw_party_protectorate",
+                "STP_pw_party_sovereignty", "STP_pw_party_nod_military_mission",
+                "STP_pw_party_domestic_pattern",
+            )
+        }
+        choices = (
+            ("STP_pw_party_open_settlement", "STP_pw_party_firm_settlement"),
+            ("STP_pw_party_civil_workshops", "STP_pw_party_accountable_arsenals"),
+            ("STP_pw_party_supply_service", "STP_pw_party_professional_service"),
+            ("STP_pw_party_protectorate", "STP_pw_party_sovereignty"),
+        )
+        for domestic in choices[0]:
+            for economy in choices[1]:
+                for army in choices[2]:
+                    for foreign in choices[3]:
+                        selected = {domestic, economy, army, foreign}
+                        excluded = {item for pair in choices for item in pair if item not in selected}
+                        route = {**party, **supporting}
+                        completed = {"STP_cw_restore_civil_authority"}
+                        for _ in range(len(route) + 2):
+                            for name, focus in route.items():
+                                if name in excluded:
+                                    continue
+                                prerequisites = [e.value for e in focus if e.key == "prerequisite"]
+                                if all(any(e.value in completed for e in group) for group in prerequisites):
+                                    completed.add(name)
+                        self.assertEqual(len(completed & party.keys()), 18, selected)
+                        self.assertIn("STP_pw_party_settled_state", completed, selected)
+
+        for tag, prefix, expected in (("STS", "STP_pw_republic_", 16), ("STP", "STP_pw_party_", 25)):
             focuses = {k: v for k, v in self.new.items() if k.startswith(prefix)}
-            self.assertEqual(len(focuses), 16, tag)
+            self.assertEqual(len(focuses), expected, tag)
             self.assertEqual(scalar(focuses[prefix + "settled_state"], "cost"), "4")
-            for choice in ("open_settlement", "firm_settlement"):
-                for economy in ("civil_workshops", "accountable_arsenals") if tag == "STP" else (None,):
-                    completed = {"STP_cw_restore_civil_authority", "STP_pc_after_victory"}
-                    excluded = {prefix + ("firm_settlement" if choice == "open_settlement" else "open_settlement")}
-                    route = dict(focuses)
-                    if economy:
-                        excluded.add(prefix + ("accountable_arsenals" if economy == "civil_workshops" else "civil_workshops"))
-                        route.update({prefix + name: self.focuses[prefix + name] for name in ("border_staff", "southern_defence")})
-                        # Party settlements and industrial priorities have their own continuations.
-                        party_extensions = {name: focus for name, focus in self.focuses.items()
-                                            if name.startswith("STP_party_")
-                                            and any(e.key == "STP_pw_can_reconstruct" for e in walk(ast_block(focus, "available")))}
-                        self.assertEqual(len(party_extensions), 9)
-                        route.update(party_extensions)
-                    for _ in range(len(route)):
-                        for name, focus in route.items():
-                            if name in excluded:
-                                continue
-                            prerequisites = [e.value for e in focus if e.key == "prerequisite"]
-                            if all(any(e.value in completed for e in group) for group in prerequisites):
-                                completed.add(name)
-                    self.assertEqual(len(completed & focuses.keys()), 14 if economy else 15)
-                    self.assertIn(prefix + "settled_state", completed)
             facts = {(tag, "tag", tag): True, (tag, "has_country_flag", "STP_cw_postwar"): True}
             visible = [f for f in self.focuses.values() if not scalar(f, "id").startswith("STP_pc_")
                        and (not any(e.key == "allow_branch" for e in f)
@@ -3716,7 +3743,7 @@ class PostwarFocusContracts(unittest.TestCase):
                     yield from executable_entries(e.value)
         ideas = ast_block(ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
         dynamic = entries("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt")
-        self.assertEqual(len(self.new), 32)
+        self.assertEqual(len(self.new), 41)
         for name, focus in self.new.items():
             side = "republic" if "_republic_" in name else "party"
             modifier = "STP_pw_" + side + "_dynamic"

@@ -840,6 +840,52 @@ ideas = {
 			modifier = { ADISCORD_economy_admin_expense_factor = 0.02 }
 		}
 
+		STP_pw_party_district_congress_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { stability_factor = 0.03 ADISCORD_economy_overall_income_factor = 0.04 political_power_gain = -0.05 }
+		}
+		STP_pw_party_executive_secretariat_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { political_power_gain = 0.10 ADISCORD_economy_admin_expense_factor = -0.02 stability_factor = -0.01 }
+		}
+		STP_pw_party_commercial_recovery_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_overall_income_factor = 0.08 ADISCORD_economy_treasury_capacity_factor = 0.08 production_speed_buildings_factor = 0.05 }
+		}
+		STP_pw_party_defence_combine_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { industrial_capacity_factory = 0.08 production_factory_max_efficiency_factor = 0.05 ADISCORD_economy_admin_expense_factor = 0.02 }
+		}
+		STP_pw_party_fortress_corps_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.04 army_org_regain = 0.04 }
+		}
+		STP_pw_party_field_staff_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { planning_speed = 0.10 army_org_factor = 0.03 }
+		}
+		STP_pw_party_joint_defence_board_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { supply_consumption_factor = -0.03 army_org_regain = 0.02 stability_factor = 0.02 }
+		}
+		STP_pw_party_armed_neutrality_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.02 production_factory_max_efficiency_factor = 0.03 }
+		}
+		STP_pw_party_foreign_settlement_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = { stability_factor = 0.02 political_power_gain = 0.05 }
+		}
+
 	}
 
 	political_advisor_head_of_state = {

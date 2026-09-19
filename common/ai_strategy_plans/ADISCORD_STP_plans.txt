@@ -328,12 +328,7 @@ STP_party_reconstruction_plan = {
 		STP_cw_first_postwar_budget
 		STP_cw_restore_civil_authority
 		STP_pw_party_new_republic
-		STP_pw_party_restore_roads
-		STP_pw_party_army_register
-		STP_pw_party_homes_for_returnees
-		STP_pw_party_civil_workshops
-		STP_pw_party_accountable_arsenals
-		STP_party_revenue_service
+
 		STP_pw_party_district_authority
 		STP_pw_party_civil_records
 		STP_pw_party_open_settlement
@@ -342,22 +337,41 @@ STP_party_reconstruction_plan = {
 		STP_party_personnel_commissions
 		STP_party_local_cadres
 		STP_party_chain_of_command
+		STP_pw_party_district_congress
+		STP_pw_party_executive_secretariat
 		STP_pw_party_civil_charter
+
+		STP_pw_party_restore_roads
+		STP_pw_party_homes_for_returnees
+		STP_party_revenue_service
+		STP_pw_party_civil_workshops
+		STP_pw_party_accountable_arsenals
 		STP_party_port_contracts
 		STP_party_industrial_board
+		STP_pw_party_commercial_recovery
+		STP_pw_party_defence_combine
 		STP_pw_party_industrial_settlement
-		STP_party_research_council
-		STP_party_technical_institutes
+
+		STP_pw_party_army_register
 		STP_pw_party_officer_school
 		STP_pw_party_supply_service
 		STP_pw_party_professional_service
+		STP_pw_party_fortress_corps
+		STP_pw_party_field_staff
 		STP_pw_party_border_staff
 		STP_pw_party_southern_defence
+
 		STP_pw_party_northern_protocol
 		STP_pw_party_sovereignty
 		STP_pw_party_protectorate
 		STP_pw_party_domestic_pattern
 		STP_pw_party_nod_military_mission
+		STP_pw_party_armed_neutrality
+		STP_pw_party_joint_defence_board
+		STP_pw_party_foreign_settlement
+
+		STP_party_research_council
+		STP_party_technical_institutes
 		STP_pw_party_settled_state
 	}
 	weight = { factor = 20 }

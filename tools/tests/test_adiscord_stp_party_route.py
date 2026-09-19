@@ -145,33 +145,66 @@ class PartyRouteContracts(unittest.TestCase):
                      ("STP", "has_active_mission", "STP_cw_election_window"): True}
             self.assertTrue(any(e.key == "add_power_balance_value" for _, e in selected_effects(payload, facts)), name)
 
-    def test_both_postwar_settlements_have_substantial_successor_branches(self):
+    def test_both_postwar_settlements_keep_distinct_capstones_before_the_charter(self):
         paths = {
-            "STP_pw_party_open_settlement": ("STP_party_district_charters", "STP_party_local_cadres"),
-            "STP_pw_party_firm_settlement": ("STP_party_personnel_commissions", "STP_party_chain_of_command"),
+            "STP_pw_party_open_settlement": (
+                "STP_party_district_charters", "STP_party_local_cadres", "STP_pw_party_district_congress"),
+            "STP_pw_party_firm_settlement": (
+                "STP_party_personnel_commissions", "STP_party_chain_of_command", "STP_pw_party_executive_secretariat"),
         }
         for choice, branch in paths.items():
             done = self.reachable({choice})
             for fid in branch:
                 self.assertIn(fid, done)
             self.assertIn("STP_pw_party_civil_charter", done)
-            self.assertIn("STP_pw_party_settled_state", done)
         charter = children(self.focus["STP_pw_party_civil_charter"], "prerequisite")
         self.assertEqual(len(charter), 1)
         self.assertEqual(set(e.value for e in charter[0]), {v[-1] for v in paths.values()})
 
-    def test_both_economic_models_reach_industrial_settlement(self):
-        for chosen in ("STP_pw_party_civil_workshops", "STP_pw_party_accountable_arsenals"):
+    def test_economic_choice_stays_separate_until_branch_capstone(self):
+        paths = {
+            "STP_pw_party_civil_workshops": ("STP_party_port_contracts", "STP_pw_party_commercial_recovery"),
+            "STP_pw_party_accountable_arsenals": ("STP_party_industrial_board", "STP_pw_party_defence_combine"),
+        }
+        for chosen, branch in paths.items():
             done = self.reachable({chosen})
             self.assertIn("STP_party_revenue_service", done)
+            for fid in branch:
+                self.assertIn(fid, done)
             self.assertIn("STP_pw_party_industrial_settlement", done)
+        settlement = children(self.focus["STP_pw_party_industrial_settlement"], "prerequisite")
+        self.assertEqual(set(e.value for e in settlement[0]), {v[-1] for v in paths.values()})
 
-    def test_foreign_axis_has_no_domestic_prerequisite(self):
-        forbidden = {"STP_pw_party_open_settlement", "STP_pw_party_firm_settlement", "STP_party_local_cadres", "STP_party_chain_of_command"}
+    def test_army_choice_is_logistics_or_field_service_not_a_linear_chain(self):
+        supply = self.focus["STP_pw_party_supply_service"]
+        field = self.focus["STP_pw_party_professional_service"]
+        self.assertIn("STP_pw_party_professional_service",
+                      [e.value for g in children(supply, "mutually_exclusive") for e in g])
+        self.assertIn("STP_pw_party_supply_service",
+                      [e.value for g in children(field, "mutually_exclusive") for e in g])
+        for chosen, capstone in (
+            ("STP_pw_party_supply_service", "STP_pw_party_fortress_corps"),
+            ("STP_pw_party_professional_service", "STP_pw_party_field_staff"),
+        ):
+            done = self.reachable({chosen})
+            self.assertIn(capstone, done)
+            self.assertIn("STP_pw_party_border_staff", done)
+            self.assertIn("STP_pw_party_southern_defence", done)
+
+    def test_foreign_axis_is_independent_and_required_for_final_settlement(self):
+        forbidden = {"STP_pw_party_open_settlement", "STP_pw_party_firm_settlement",
+                     "STP_party_local_cadres", "STP_party_chain_of_command"}
         for fid in ("STP_pw_party_northern_protocol", "STP_pw_party_protectorate", "STP_pw_party_sovereignty"):
             f = self.focus[fid]
             self.assertFalse(any(e.value in forbidden for p in children(f, "prerequisite") for e in p))
         self.assertEqual(one(self.focus["STP_pw_party_protectorate"], "cancel_if_invalid"), "yes")
+        foreign = children(self.focus["STP_pw_party_foreign_settlement"], "prerequisite")
+        self.assertEqual(set(e.value for e in foreign[0]),
+                         {"STP_pw_party_joint_defence_board", "STP_pw_party_armed_neutrality"})
+        final_requirements = {
+            e.value for p in children(self.focus["STP_pw_party_settled_state"], "prerequisite") for e in p
+        }
+        self.assertIn("STP_pw_party_foreign_settlement", final_requirements)
 
     def test_party_income_and_credit_deltas_have_real_consumers(self):
         d = self.dynamic["STP_pw_party_dynamic"]
