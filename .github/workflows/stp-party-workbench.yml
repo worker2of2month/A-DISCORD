@@ -23,6 +23,7 @@ jobs:
           mkdir -p /tmp/party-result
           cp .github/stp-party-verify.py /tmp/stp-party-verify.py
           cp .github/stp-party-resolve.py /tmp/stp-party-resolve.py
+          cp .github/stp-party-audit.py /tmp/stp-party-audit.py
           cat .github/stp-party-patch.1 .github/stp-party-patch.2 > /tmp/party.patch.xz
           python - <<'PY'
           import lzma, hashlib
@@ -30,6 +31,11 @@ jobs:
           patch=lzma.decompress(Path('/tmp/party.patch.xz').read_bytes())
           assert hashlib.sha256(patch).hexdigest() == 'd3c5f6f9e2763ae2bef5d3db01ca2daff1c45f331353a5ad64cf97b51e56aa34'
           Path('/tmp/party.patch').write_bytes(patch)
+          verifier = Path('/tmp/stp-party-verify.py')
+          text = verifier.read_text()
+          assert text.count('ALLOWED = {\n') == 1
+          text = text.replace('ALLOWED = {\n', "ALLOWED = {\n    'tools/data/division_template_audit.json',\n")
+          verifier.write_text(text)
           PY
           git fetch origin main --depth=20
           git switch --detach FETCH_HEAD
@@ -45,6 +51,7 @@ jobs:
             python -B /tmp/stp-party-resolve.py
           fi
           test -z "$(git diff --name-only --diff-filter=U)"
+          python -B /tmp/stp-party-audit.py
           git diff --check HEAD
           git diff --cached --check
       - name: Verify new party contracts
