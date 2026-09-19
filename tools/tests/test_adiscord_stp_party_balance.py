@@ -57,12 +57,12 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
         coefficients = [
             abs(float(value))
             for value in re.findall(
-                r"multiply_temp_variable\s*=\s*\{[^}]*?value\s*=\s*(-?0\.\d+)",
+                r"multiply_(?:temp_)?variable\s*=\s*\{[^}]*?value\s*=\s*(-?0\.\d+)",
                 calculate,
                 flags=re.S,
             )
         ]
-        self.assertTrue(coefficients)
+        self.assertEqual(len(coefficients), 7)
         self.assertLessEqual(max(coefficients), 0.004)
 
         shift = named_block(self.effects, "STP_pf_shift")

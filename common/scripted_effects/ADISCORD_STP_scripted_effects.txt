@@ -3589,6 +3589,7 @@ STP_cw_close_nod_after_party_victory = {
 # Winner country scope, original on_capitulation ROOT remains the defeated rival.
 STP_cw_settle_union_victory = {
 	if = { limit = { tag = STS ROOT = { tag = STP } } ROOT = { STP_ps_prepare_exile = yes } }
+	VAL = { STP_ps_refund_val_supply = yes remove_mission = STP_ps_val_departure remove_mission = STP_ps_val_route_wait }
 	STS = { STP_cw_remove_kefreyt_volunteers = yes }
 	log = "[STP_CW] capital occupation settlement: [THIS.GetTag] defeated [ROOT.GetTag]; reported FROM=[FROM.GetTag]"
 	if = { limit = { ROOT = { tag = STP } } STP_cw_end_nod_intervention = yes }
@@ -3617,6 +3618,7 @@ STP_cw_settle_union_victory = {
 STP_cw_settle_nod_victory = {
 	if = {
 		limit = { STP = { exists = yes } STS = { exists = yes } STS = { has_capitulated = yes } NOD = { has_country_flag = NOD_cw_entered } }
+		VAL = { STP_ps_refund_val_supply = yes remove_mission = STP_ps_val_departure remove_mission = STP_ps_val_route_wait }
 		STP_cw_close_nod_after_party_victory = yes
 		STS = { STP_cw_remove_kefreyt_volunteers = yes }
 		STP = {
@@ -5514,12 +5516,10 @@ STP_ps_reserve_training_finish = {
 }
 
 STP_ps_clear_nod_receipt = {
+	# Timed callbacks consume the receipt; only external cancellation removes their missions.
 	clear_variable = STP_ps_nod_receipt_type
 	clear_variable = STP_ps_nod_receipt_money
 	clear_variable = STP_ps_nod_receipt_stage
-	remove_mission = STP_ps_nod_dispatch
-	remove_mission = STP_ps_nod_route_wait
-	remove_mission = STP_ps_nod_delivery
 }
 STP_ps_refund_nod = {
 	if = { limit = { check_variable = { var = STP_ps_nod_receipt_stage value = 1 compare = equals } }
@@ -5634,6 +5634,9 @@ STP_ps_prepare_exile = {
 		STP_ps_refund_nod = yes
 		# An outgoing convoy is settled once before the donor ceases to exist.
 		STP_ps_deliver_nod = yes
+		remove_mission = STP_ps_nod_dispatch
+		remove_mission = STP_ps_nod_route_wait
+		remove_mission = STP_ps_nod_delivery
 		if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes OR = { has_country_flag = STP_ps_asylum_agreement AND = { is_ai = yes NOT = { has_country_flag = STP_ps_asylum_requested } } } } }
 			STP_ps_settle_exile = yes
 			STP_ps_exile_handoff = yes
@@ -5680,7 +5683,7 @@ STP_ps_accept_exile = {
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_credit }
 		ADISCORD_economy_mark_dirty = yes
 		# Only an existing character can move; no recruitment of dead officeholders.
-		STP = { if = { limit = { has_character = STP_rufus_hedersett }
+		STP = { if = { limit = { has_character = STP_rufus_hedersett STP_rufus_hedersett = { NOT = { has_character_flag = STP_cw_arrested } } }
 				STP_rufus_hedersett = { remove_country_leader_role = { ideology = aristocratic_hedonism } }
 				set_nationality = { character = STP_rufus_hedersett target_country = NOD }
 			} }
@@ -5694,9 +5697,24 @@ STP_ps_exile_handoff = {
 	}
 }
 STP_ps_begin_return = {
-	if = { limit = { tag = NOD has_country_flag = STP_ps_exile_received has_completed_focus = STP_ps_return_campaign_focus has_country_flag = STP_ps_return_terms_accepted STP_ps_nod_can_host_exiles = yes STP = { exists = no } STS = { exists = yes } NOT = { has_country_flag = STP_ps_return_closed } }
-		set_country_flag = STP_ps_return_campaign
+	if = {
+		limit = {
+			tag = NOD
+			has_country_flag = STP_ps_exile_received
+			has_completed_focus = STP_ps_return_campaign_focus
+			has_country_flag = STP_ps_return_terms_accepted
+			has_country_flag = STP_ps_exile_training_completed
+			STP_ps_nod_can_host_exiles = yes
+			STP = { exists = no }
+			STS = { exists = yes has_capitulated = no }
+			NOT = { has_country_flag = STP_ps_return_closed }
+			OR = {
+				has_war_with = STS
+				AND = { STS = { is_subject = no } NOT = { is_in_faction_with = STS } }
+			}
+		}
 		if = { limit = { NOT = { has_war_with = STS } } declare_war_on = { target = STS type = annex_everything } }
+		if = { limit = { has_war_with = STS } set_country_flag = STP_ps_return_campaign }
 	}
 }
 STP_ps_settle_return = {
@@ -5734,7 +5752,7 @@ STP_ps_settle_return = {
 		}
 		if = { limit = { STP = { exists = yes } }
 			set_autonomy = { target = STP autonomy_state = autonomy_puppet }
-			if = { limit = { has_character = STP_rufus_hedersett }
+			if = { limit = { has_character = STP_rufus_hedersett STP_rufus_hedersett = { NOT = { has_character_flag = STP_cw_arrested } } }
 				set_nationality = { character = STP_rufus_hedersett target_country = STP }
 				STP = { STP_rufus_hedersett = { add_country_leader_role = { country_leader = { ideology = aristocratic_hedonism expire = "2300.1.1" } } } promote_character = STP_rufus_hedersett }
 			}
@@ -5831,6 +5849,7 @@ STP_ps_begin_val_supply = {
 	}
 }
 STP_ps_clear_val_receipt = {
+	# Receipt settlement is also called by the expiring departure and route-wait missions.
 	clear_variable = STP_ps_val_receipt_rifles
 	clear_variable = STP_ps_val_receipt_stage
 	clear_variable = STP_ps_val_receipt_contract
@@ -5838,8 +5857,6 @@ STP_ps_clear_val_receipt = {
 	clear_variable = STP_ps_val_known_sequence
 	clear_variable = STP_ps_val_intercepted_sequence
 	set_country_flag = { flag = STP_ps_val_supply_cooldown value = 1 days = 7 }
-	remove_mission = STP_ps_val_departure
-	remove_mission = STP_ps_val_route_wait
 }
 STP_ps_refund_val_supply = {
 	if = { limit = { has_variable = STP_ps_val_receipt_rifles }

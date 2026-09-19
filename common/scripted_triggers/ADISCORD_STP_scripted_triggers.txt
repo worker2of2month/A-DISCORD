@@ -1342,6 +1342,7 @@ STP_ps_can_start_stage = {
 STP_ps_nod_can_host_exiles = {
 	tag = NOD exists = yes has_capitulated = no is_subject = no
 	NOT = { has_war_with = STP }
+	any_owned_state = { is_controlled_by = PREV }
 }
 STP_ps_can_aid_nod = {
 	tag = STP exists = yes has_capitulated = no
