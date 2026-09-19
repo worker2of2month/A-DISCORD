@@ -274,7 +274,7 @@ class PartyRouteContracts(unittest.TestCase):
         self.assertIn("trigger = { has_country_flag = STP_pw_party_nod_arms_delivered }", events)
         self.assertIn("name = ADISCORD_STP_pc.24.refused_a", events)
         self.assertIn("trigger = { NOT = { has_country_flag = STP_pw_party_nod_arms_delivered } }", events)
-        self.assertNotRegex(events, r"(?m)^\\s*name = ADISCORD_STP_pc\\.24\\.a\\s*$")
+        self.assertNotRegex(events, r"(?m)^\s*name = ADISCORD_STP_pc\.24\.a\s*$")
 
     def test_no_internal_party_balance_added(self):
         text = read("common/bop/STP.txt")
