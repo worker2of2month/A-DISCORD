@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 430c0ef326a14f2ae092c9a9b16ec3ed83bb4881
+          ref: 32a3c0ba2b118ade7730028173bdd9e068b808f8
           fetch-depth: 1
           persist-credentials: false
       - uses: actions/setup-python@v5
@@ -33,7 +33,7 @@ jobs:
                   p=Path(name)
                   if not name or not p.is_file() or name.startswith('.github/'):
                       continue
-                  if p.suffix.lower() in {'.txt','.py','.json','.yml','.yaml','.md','.csv','.gfx','.gui','.mod','.lua','.xml','.map','.ini','.cfg','.toml'} or name in {'AGENTS.md','.gitignore','.gitattributes'}:
+                  if p.suffix.lower() in {'.txt','.py','.json','.yml','.yaml','.md','.csv','.gfx','.gui','.mod','.lua','.xml','.map','.ini','.cfg','.toml','.asset'} or name in {'AGENTS.md','.gitignore','.gitattributes'}:
                       data=p.read_bytes()
                       try: data.decode('utf-8-sig')
                       except UnicodeDecodeError: continue
@@ -46,27 +46,30 @@ jobs:
           name: stp-survival-source
           path: /tmp/party-survival-review/source.*
           retention-days: 2
-      - name: Baseline focused and full verification
+      - name: Full pinned verification
         run: |
           python - <<'PY'
-          import subprocess,json,time
+          import subprocess,json,time,concurrent.futures
           from pathlib import Path
           out=Path('/tmp/party-survival-review')
           jobs={
-              'focused':['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_route','tools.tests.test_adiscord_stp_preparation','tools.tests.test_adiscord_stp_civil_war','tools.tests.test_adiscord_stp_postwar_continuation','-v'],
+              'survival':['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_balance','-v'],
               'suite':['python','-B','-m','unittest','discover','-s','tools/tests','-p','test_*.py','-v'],
               'validator':['python','-B','tools/validate_tc.py','--limit','300']}
-          report={}
-          for label,cmd in jobs.items():
+          def run(pair):
+              label,cmd=pair
               start=time.monotonic()
               with (out/(label+'.txt')).open('w') as log:
                   try:
-                      result=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,timeout=1300)
-                      code=result.returncode
+                      code=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,timeout=1500).returncode
                   except subprocess.TimeoutExpired:
                       code=124
-              report[label]={'command':cmd,'exit':code,'seconds':time.monotonic()-start}
-              print(label,report[label],flush=True)
+              result={'command':cmd,'exit':code,'seconds':time.monotonic()-start}
+              (out/(label+'.json')).write_text(json.dumps(result,indent=2))
+              print(label,result,flush=True)
+              return label,result
+          with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+              report=dict(pool.map(run,jobs.items()))
           (out/'baseline.json').write_text(json.dumps(report,indent=2))
           PY
       - uses: actions/upload-artifact@v4
