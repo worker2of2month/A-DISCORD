@@ -4,7 +4,10 @@ on:
     branches:
       - codex/economy-100-audit-20260919
 permissions:
-  contents: read
+  contents: write
+concurrency:
+  group: isolated-economy-audit
+  cancel-in-progress: true
 jobs:
   snapshot:
     runs-on: ubuntu-latest
@@ -12,7 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          path: control
+          sparse-checkout: .github
+      - uses: actions/checkout@v4
+        with:
           ref: 7d828a217b7098a5d1c73cb45049b279e41248a4
+          path: source
           persist-credentials: false
           filter: blob:none
           sparse-checkout: |
@@ -25,41 +33,15 @@ jobs:
             interface
             country_metadata
       - name: Inspect accounting and progression
+        working-directory: source
+        run: python -B ../control/.github/economy_inspect.py > ../control/.github/economy-inspection.txt
+      - name: Save inspection on audit branch
+        working-directory: control
         run: |
-          python - <<'PY'
-          import re
-          from pathlib import Path
-          print('ECONOMY TESTS')
-          for p in Path('tools').rglob('*.py'):
-              if 'economy' in p.name:
-                  print(p)
-          print('STP FOCUS FILES')
-          for p in Path('common/national_focus').glob('*.txt'):
-              if any(s in p.name.lower() for s in ['stp', 'sts', 'shabrat']):
-                  print(p)
-                  for no, line in enumerate(p.read_text(encoding='utf-8-sig').splitlines(), 1):
-                      if re.search(r'\bid\s*=', line): print(no, line.strip())
-          print('ECONOMY MODIFIER SCALING')
-          p=Path('common/scripted_effects/ADISCORD_economy_modifier_effects.txt')
-          t=p.read_text(encoding='utf-8-sig')
-          for name in ['ADISCORD_economy_apply_overall_income_modifier_factor','ADISCORD_economy_apply_overall_expense_modifier_factor','ADISCORD_economy_reset_final_factor_variables']:
-              m=re.search(r'^'+name+r'\s*=\s*\{.*?^\}',t,re.M|re.S)
-              print(m.group() if m else name+' NOT FOUND')
-          print('AI AND FRONTIER')
-          for p in list(Path('common/ai_strategy_plans').glob('*VAL*'))+list(Path('common/decisions').glob('*VAL*')):
-              t=p.read_text(encoding='utf-8-sig')
-              lines=t.splitlines()
-              print('FILE',p)
-              if 'ai_strategy_plans' in str(p): print(t)
-              else:
-                  for no,line in enumerate(lines):
-                      if re.match(r'\s*VAL_frontier_demand_(CIN|OSF|APH)\s*=',line):
-                          print('\n'.join(f'{i+1}: {lines[i]}' for i in range(max(no-3,0),min(no+65,len(lines)))))
-          print('ECONOMY SIMULATION HELPERS')
-          for p in Path('tools').rglob('*.py'):
-              if 'economy' in p.name and ('test' in p.name or 'balance' in p.name):
-                  t=p.read_text(encoding='utf-8-sig')
-                  print(p, '\n'.join(t.splitlines()[:55]))
-          PY
-      - name: Baseline economy tests
-        run: python -B -m unittest discover -s tools/tests -p '*economy*' -q
+          git config user.name 'Economy audit'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git add .github/economy-inspection.txt
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore: record targeted economy source inspection'
+            git push origin HEAD:codex/economy-100-audit-20260919
+          fi
