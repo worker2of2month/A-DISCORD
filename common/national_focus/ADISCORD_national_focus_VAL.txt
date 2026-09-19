@@ -2083,7 +2083,7 @@ completion_reward = {
         cost = 3
         prerequisite = { focus = VAL_Audit_Lost_Contracts }
         prerequisite = { focus = VAL_Export_Rifles_Not_Promises }
-        completion_reward = { VAL_restore_arsenal_reputation = yes }
+        completion_reward = { VAL_restore_arsenal_reputation = yes add_political_power = 25 add_stability = 0.01 }
         ai_will_do = { base = 30 }
     }
 
@@ -2121,7 +2121,7 @@ completion_reward = {
         prerequisite = { focus = VAL_New_Supply_Base }
         available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
         cancel_if_invalid = yes
-        completion_reward = { VAL_advance_economic_recovery = yes }
+        completion_reward = { VAL_advance_economic_recovery = yes ADISCORD_economy_receive_100 = yes add_stability = 0.01 }
         ai_will_do = { base = 30 }
     }
 
@@ -2135,7 +2135,7 @@ completion_reward = {
         prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
         available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
         cancel_if_invalid = yes
-        completion_reward = { VAL_advance_economic_recovery = yes }
+        completion_reward = { VAL_advance_economic_recovery = yes add_political_power = 35 add_stability = 0.02 }
         ai_will_do = { base = 30 }
     }
 
@@ -2164,7 +2164,7 @@ completion_reward = {
         prerequisite = { focus = VAL_Army_Of_The_Ledger }
         available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
         cancel_if_invalid = yes
-        completion_reward = { if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Sergei_Volkov } } } recruit_character = VAL_Sergei_Volkov } }
+        completion_reward = { if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Sergei_Volkov } } } recruit_character = VAL_Sergei_Volkov } army_experience = 25 add_command_power = 25 }
         ai_will_do = { base = 30 }
     }
 

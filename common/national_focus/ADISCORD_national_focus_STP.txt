@@ -1741,7 +1741,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = STP_ps_build_radio }
+		completion_reward = { unlock_decision_tooltip = STP_ps_build_radio add_political_power = 20 add_command_power = 10 }
 	}
 
 
@@ -1757,7 +1757,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = STP_ps_build_hq }
+		completion_reward = { unlock_decision_tooltip = STP_ps_build_hq army_experience = 5 add_command_power = 10 }
 	}
 
 
@@ -1853,7 +1853,7 @@ focus_tree = {
 		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { army_experience = 10 add_command_power = 10 }
+		completion_reward = { army_experience = 10 add_command_power = 10 add_war_support = 0.02 }
 	}
 
 
@@ -5883,7 +5883,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_war_active = yes STP_ps_government_operational = yes  } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { add_command_power = 15 army_experience = 10 }
+		completion_reward = { add_command_power = 15 army_experience = 10 add_political_power = 20 }
 	}
 
 
@@ -5915,7 +5915,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_war_active = yes STP_ps_can_counterattack = yes NOT = { controls_province = 145 }  } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { add_timed_idea = { idea = STP_cw_offensive_preparation days = 28 } }
+		completion_reward = { add_timed_idea = { idea = STP_cw_offensive_preparation days = 28 } army_experience = 10 add_command_power = 15 }
 	}
 
 
