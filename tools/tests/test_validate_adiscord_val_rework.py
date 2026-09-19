@@ -2340,12 +2340,13 @@ class ValFrontierCampaignTests(unittest.TestCase):
         minor_effects = parse_clausewitz((ROOT / "common/scripted_effects/ADISCORD_minor_optimization_effects.txt").read_text(encoding="utf-8"))
         definitions.update({e.key: e.value for e in minor_effects})
 
-        def exercise(initial, *, subject=None, external_join=False):
+        def exercise(initial, *, subject=None, external_join=False, recover=False):
             factions = {name: list(members) for name, members in initial.items()}
             original = {name: list(members) for name, members in initial.items()}
             flags = {tag: set() for tag in ("VAL", "CIN", "OSF", "APH", "NOD", "STP", "OTH")}
             flags["STP"].add("STP_cw_won_union_battle")
             variables, targets = {}, {}
+            local_targets, wars, majors = set(), set(), set()
             subjects = subject or {}
 
             def resolve(name, stack):
@@ -2383,7 +2384,9 @@ class ValFrontierCampaignTests(unittest.TestCase):
                     elif k == "has_capitulated":
                         ok = v == "no"
                     elif k == "has_war_with":
-                        ok = False
+                        ok = frozenset((current, resolve(v, stack))) in wars
+                    elif k == "is_major":
+                        ok = (current in majors) == (v == "yes")
                     elif k == "is_subject":
                         ok = (current in subjects) == (v == "yes")
                     elif k == "is_subject_of":
@@ -2430,6 +2433,20 @@ class ValFrontierCampaignTests(unittest.TestCase):
                             execute(v, stack + [factions[name][0]])
                     elif k == "set_temp_variable":
                         variables[current, scalar(v, "var")] = int(scalar(v, "value"))
+                    elif k == "save_event_target_as":
+                        targets[v] = current
+                        local_targets.add(v)
+                    elif k == "add_to_war":
+                        target = resolve(scalar(v, "targeted_alliance"), stack)
+                        enemy = resolve(scalar(v, "enemy"), stack)
+                        self.assertIn(frozenset((target, enemy)), wars)
+                        self.assertEqual(faction(current), faction(target))
+                        wars.add(frozenset((current, enemy)))
+                    elif k == "set_major":
+                        if v == "yes":
+                            majors.add(current)
+                        else:
+                            majors.discard(current)
                     elif k == "save_global_event_target_as":
                         targets[v] = current
                     elif k == "clear_global_event_target":
@@ -2457,6 +2474,19 @@ class ValFrontierCampaignTests(unittest.TestCase):
             execute(definitions["VAL_frontier_join_coalition"], ["VAL", "CIN"])
             self.assertEqual(factions, original, "Peaceful outcomes without an anchor must leave alliances alone")
             execute(definitions["VAL_frontier_assemble_coalition"], ["VAL", "CIN"])
+            if recover:
+                wars.update((frozenset(("VAL", "CIN")), frozenset(("VAL", "NOD"))))
+                for tag in ("OSF", "APH"):
+                    factions[faction(tag)].remove(tag)
+                    flags[tag].clear()
+                execute(definitions["VAL_frontier_reconcile_members"], ["VAL", "CIN"])
+                for tag in ("CIN", "OSF", "APH"):
+                    self.assertIn(frozenset(("VAL", tag)), wars)
+                    self.assertIn("VAL_frontier_member", flags[tag])
+                    self.assertIn(tag, majors)
+                snapshot = (repr(factions), repr(flags), set(wars), set(majors))
+                execute(definitions["VAL_frontier_reconcile_members"], ["VAL", "CIN"])
+                self.assertEqual(snapshot, (repr(factions), repr(flags), set(wars), set(majors)))
             prepared = {tag: faction(tag) for tag in flags}
             if external_join:
                 factions[faction("NOD")].append("OTH")
@@ -2464,12 +2494,13 @@ class ValFrontierCampaignTests(unittest.TestCase):
             after = {name: list(members) for name, members in factions.items()}
             execute(definitions["VAL_frontier_release_coalition"], ["VAL"])
             self.assertEqual(factions, after, "A repeated close must not remove another alliance")
-            self.assertFalse(targets)
+            self.assertFalse(set(targets) - local_targets)
             self.assertFalse(any(flag in {"VAL_frontier_created_coalition", "VAL_frontier_added_to_coalition"} for values in flags.values() for flag in values))
             if not external_join:
                 self.assertEqual(factions, original)
             return prepared, factions
 
+        exercise({}, recover=True)
         prepared, _ = exercise({})
         self.assertEqual(prepared["CIN"], prepared["NOD"])
         self.assertEqual(prepared["CIN"], prepared["STP"])

@@ -286,6 +286,18 @@ spriteTypes = {
 	  	texturefile = "gfx/leaders/APH/portrait_APH_Gorak_Bonecleaver.png"
 	}
 
+###CIN
+	spriteType = {
+		name = "GFX_portrait_CIN_Aska_Smokevein"
+		texturefile = "gfx/leaders/CIN/portrait_CIN_Aska_Smokevein.png"
+	}
+
+###OSF
+	spriteType = {
+		name = "GFX_portrait_OSF_Tiber_Marrowkeeper"
+		texturefile = "gfx/leaders/OSF/portrait_OSF_Tiber_Marrowkeeper.png"
+	}
+
 ### VORKERLAND COLLAPSE SUCCESSORS
 	spriteType = {
 		name = "GFX_portrait_EGC_Ruslan_Pike"

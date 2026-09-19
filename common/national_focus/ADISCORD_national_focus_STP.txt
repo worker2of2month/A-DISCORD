@@ -56,12 +56,12 @@ focus_tree = {
 	focus = {
 		id = STP_Show_Him_The_Truth
 		icon = GFX_focus_STP_Side_With_Maksim
-		x = 24
+		x = 30
 		y = 3
 		cost = 1
 		prerequisite = { focus = STP_STATE_OF_THE_REPUBLIC }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
-		offset = { x = -12 y = 0 trigger = { has_country_flag = STP_sided_with_Maksim_flag } }
+		offset = { x = -18 y = 0 trigger = { has_country_flag = STP_sided_with_Maksim_flag } }
 		available = { STP_cw_preparation_open = yes is_completed_by_event = yes }
 		ai_will_do = { base = 0 }
 		completion_reward = {
@@ -73,12 +73,12 @@ focus_tree = {
 	focus = {
 		id = STP_Govern_In_His_Name
 		icon = GFX_focus_STP_Side_With_The_Party
-		x = -2
+		x = -8
 		y = 3
 		cost = 1
 		prerequisite = { focus = STP_STATE_OF_THE_REPUBLIC }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
-		offset = { x = 14 y = 0 trigger = { has_country_flag = STP_sided_with_the_party_flag } }
+		offset = { x = 20 y = 0 trigger = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes is_completed_by_event = yes }
 		ai_will_do = { base = 0 }
 		completion_reward = {
@@ -1096,7 +1096,7 @@ focus_tree = {
 		id = STP_GUARANTEE_MINISTERS
 		icon = GFX_focus_STP_Side_With_The_Party
 		relative_position_id = STP_Govern_In_His_Name
-		x = -10
+		x = -8
 		y = 2
 		cost = 3
 		prerequisite = { focus = STP_PRESIDENT_REMAINS_IN_OFFICE }
@@ -1605,7 +1605,7 @@ focus_tree = {
 		id = STP_party_budget_reserve
 		icon = GFX_focus_STP_2160_budget
 		relative_position_id = STP_Govern_In_His_Name
-		x = -10
+		x = -8
 		y = 3
 		cost = 3
 		prerequisite = { focus = STP_GUARANTEE_MINISTERS }
@@ -1732,7 +1732,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_radio_network
 		icon = GFX_goal_generic_scientific_exchange
-		x = 14
+		x = 12
 		y = 1
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 2
@@ -1748,7 +1748,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_reserve_hq
 		icon = GFX_focus_generic_improve_the_administration
-		x = 16
+		x = 14
 		y = 1
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 2
@@ -1764,7 +1764,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_evacuation_plan
 		icon = GFX_focus_generic_truck
-		x = 16
+		x = 14
 		y = 2
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 2
@@ -1780,7 +1780,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_northern_partner
 		icon = GFX_focus_generic_treaty
-		x = 20
+		x = 18
 		y = 1
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 1
@@ -1796,7 +1796,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_northern_credit
 		icon = GFX_focus_generic_treaty
-		x = 18
+		x = 16
 		y = 2
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 2
@@ -1812,7 +1812,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_northern_arms
 		icon = GFX_focus_generic_supply_line
-		x = 22
+		x = 20
 		y = 2
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 2
@@ -1828,7 +1828,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_northern_engineers
 		icon = GFX_goal_generic_production
-		x = 24
+		x = 22
 		y = 3
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 2
@@ -1844,7 +1844,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_joint_staff
 		icon = GFX_goal_generic_army_doctrines
-		x = 20
+		x = 18
 		y = 3
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 2
@@ -1860,7 +1860,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_expedition_logistics
 		icon = GFX_focus_generic_truck
-		x = 18
+		x = 16
 		y = 4
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 2
@@ -1876,7 +1876,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_asylum_protocol
 		icon = GFX_focus_generic_treaty
-		x = 22
+		x = 20
 		y = 4
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 2
@@ -1892,7 +1892,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_foreign_supply_desk
 		icon = GFX_focus_generic_improve_the_administration
-		x = 26
+		x = 22
 		y = 1
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 1

@@ -251,14 +251,6 @@ STP_elections_in_the_party = {
 		cancel_effect = { hidden_effect = { STP_ps_prepare_evacuation_refund = yes } }
 	}
 
-	STP_ps_handoff_decline = {
-		allowed = { tag = STP }
-		visible = { is_ai = no NOT = { has_country_flag = STP_ps_decline_handoff } }
-		cost = 0
-		complete_effect = { hidden_effect = { set_country_flag = STP_ps_decline_handoff } }
-		ai_will_do = { base = 0 }
-	}
-
 	STP_ps_handoff_accept = {
 		allowed = { tag = STP }
 		visible = { is_ai = no has_country_flag = STP_ps_decline_handoff }

@@ -1,7 +1,7 @@
 on_actions = {
 	on_startup = {
 		effect = {
-			if = { limit = { VAL = { exists = yes } } VAL = { VAL_initialize_command_balance = yes VAL_initialize_arsenal_recovery = yes VAL_call_subjects_to_wars = yes } }
+			if = { limit = { VAL = { exists = yes } } VAL = { VAL_initialize_command_balance = yes VAL_initialize_arsenal_recovery = yes VAL_call_subjects_to_wars = yes VAL_check_nam_concession = yes } }
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_fresh_campaign_contract_v1
@@ -16,6 +16,7 @@ on_actions = {
 
 	on_war_relation_added = {
 		effect = {
+			if = { limit = { OR = { ROOT = { tag = VAL } FROM = { tag = VAL } } } VAL = { VAL_check_nam_concession = yes } }
 			if = {
 				limit = { OR = { ROOT = { tag = VAL } FROM = { tag = VAL } } }
 				VAL = { VAL_call_subjects_to_wars = yes }
@@ -51,6 +52,7 @@ on_actions = {
 
 	on_state_control_changed = {
 		effect = {
+			VAL = { VAL_check_nam_concession = yes }
 			if = { limit = { VAL = { exists = yes has_country_flag = VAL_vorkerland_resource_access_active } 33 = { NOT = { is_controlled_by = WRK } } } VAL = { VAL_end_vorkerland_resource_access = yes } }
 			if = {
 				limit = {

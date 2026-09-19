@@ -1623,7 +1623,8 @@ VAL_frontier_join_coalition = {
                 event_target:VAL_frontier_coalition_anchor = { exists = yes is_in_faction = yes }
                 OR = { is_subject = no overlord = { is_in_faction_with = event_target:VAL_frontier_coalition_anchor } }
             }
-            event_target:VAL_frontier_coalition_anchor = { faction_leader = { add_to_faction = PREV.PREV } }
+            save_event_target_as = VAL_frontier_joining_country
+            event_target:VAL_frontier_coalition_anchor = { faction_leader = { add_to_faction = event_target:VAL_frontier_joining_country } }
             if = {
                 limit = { is_in_faction_with = event_target:VAL_frontier_coalition_anchor }
                 set_country_flag = VAL_frontier_added_to_coalition
@@ -1982,6 +1983,13 @@ VAL_frontier_start_war = {
 }
 
 VAL_frontier_weekly = {
+    # Repair missing entries before checking victory, using only the active campaign target.
+    if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+        if = { limit = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } has_war_with = CIN } CIN = { VAL_frontier_reconcile_members = yes } }
+        if = { limit = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } has_war_with = OSF } OSF = { VAL_frontier_reconcile_members = yes } }
+        if = { limit = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } has_war_with = APH } APH = { VAL_frontier_reconcile_members = yes } }
+    }
     CIN = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { is_controlled_by = VAL } } } clr_country_flag = VAL_frontier_defeated } }
     OSF = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { is_controlled_by = VAL } } } clr_country_flag = VAL_frontier_defeated } }
     APH = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { is_controlled_by = VAL } } } clr_country_flag = VAL_frontier_defeated } }
@@ -2038,6 +2046,44 @@ VAL_frontier_enrol_member = {
         }
     }
     else = { clr_country_flag = VAL_frontier_member }
+}
+
+# Target country scope. Reconcile the three tribes without replacing campaign receipts.
+VAL_frontier_reconcile_members = {
+    if = {
+        limit = {
+            has_war_with = VAL
+            is_in_faction = yes
+            OR = {
+                CIN = { VAL_frontier_member_eligible = yes }
+                OSF = { VAL_frontier_member_eligible = yes }
+                APH = { VAL_frontier_member_eligible = yes }
+            }
+        }
+        faction_leader = { save_global_event_target_as = VAL_frontier_coalition_anchor }
+        CIN = {
+            if = {
+                limit = { VAL_frontier_member_eligible = yes }
+                VAL_frontier_enrol_member = yes
+            }
+        }
+        OSF = {
+            if = {
+                limit = { VAL_frontier_member_eligible = yes }
+                VAL_frontier_enrol_member = yes
+            }
+        }
+        APH = {
+            if = {
+                limit = { VAL_frontier_member_eligible = yes }
+                VAL_frontier_enrol_member = yes
+            }
+        }
+        VAL_frontier_call_members = yes
+        CIN = { if = { limit = { has_country_flag = VAL_frontier_member has_war_with = VAL } VAL_frontier_prepare_major = yes } }
+        OSF = { if = { limit = { has_country_flag = VAL_frontier_member has_war_with = VAL } VAL_frontier_prepare_major = yes } }
+        APH = { if = { limit = { has_country_flag = VAL_frontier_member has_war_with = VAL } VAL_frontier_prepare_major = yes } }
+    }
 }
 
 # Target scope: all enrolled tribes enter the target's existing war, never a parallel war.
@@ -2874,5 +2920,46 @@ VAL_call_subjects_to_wars = {
 			}
 		}
 		clr_country_flag = VAL_subject_war_dispatch_active
+	}
+}
+
+# COUNTRY VAL: native extraction rights cover one of the two island deposits.
+VAL_deliver_nam_concession = {
+	if = {
+		limit = { VAL_nam_concession_deliverable = yes }
+		NAM = { give_resource_rights = { receiver = VAL state = 230 } ADISCORD_economy_mark_dirty = yes }
+		set_country_flag = VAL_nam_concession_granted
+		set_country_flag = VAL_nam_concession_active
+		clr_country_flag = VAL_nam_concession_offer_pending
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_cancel_nam_concession = {
+	if = {
+		limit = { has_country_flag = VAL_nam_concession_active }
+		remove_resource_rights = 230
+		clr_country_flag = VAL_nam_concession_active
+		ADISCORD_economy_mark_dirty = yes
+		NAM = { ADISCORD_economy_mark_dirty = yes }
+	}
+	clr_country_flag = VAL_nam_concession_offer_pending
+	clr_country_flag = VAL_nam_concession_agreed
+	clr_country_flag = VAL_nam_aid_delivered
+}
+
+VAL_check_nam_concession = {
+	if = {
+		limit = {
+			OR = { has_country_flag = VAL_nam_concession_agreed has_country_flag = VAL_nam_concession_active }
+			OR = {
+				has_war_with = NAM
+				NAM = { exists = no }
+				has_global_flag = ADISCORD_nam_resource_war_coalition_victory
+				230 = { NOT = { is_owned_by = NAM } }
+				AND = { has_country_flag = VAL_nam_concession_active 230 = { NOT = { is_controlled_by = NAM } } }
+			}
+		}
+		VAL_cancel_nam_concession = yes
 	}
 }

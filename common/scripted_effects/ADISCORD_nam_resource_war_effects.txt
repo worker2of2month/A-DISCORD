@@ -266,6 +266,7 @@ ADISCORD_nam_resource_war_resolve_coalition_victory = {
 		limit = { ADISCORD_nam_resource_war_active = yes }
 		set_global_flag = ADISCORD_nam_resource_war_resolved
 		set_global_flag = ADISCORD_nam_resource_war_coalition_victory
+		VAL = { VAL_cancel_nam_concession = yes }
 		clr_global_flag = ADISCORD_nam_resource_war_started
 		ADISCORD_nam_resource_war_end_all_wars = yes
 
@@ -338,6 +339,7 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 			add_stability = 0.15
 		}
 		ADISCORD_nam_resource_war_clear_temporary_support = yes
+		VAL = { VAL_deliver_nam_concession = yes }
 		NAM = { news_event = { id = ADISCORD_nam_resource_news.3 hours = 1 } }
 	}
 }

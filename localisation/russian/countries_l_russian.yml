@@ -105,9 +105,9 @@
  OSF: "Foedus Ossifractorum"
  OSF_DEF: "Foedus Ossifractorum"
  OSF_ADJ: "Ossifractian"
- CIN: "Племя Пепла"
- CIN_DEF: "Племя Пепла"
- CIN_ADJ: "Пепельн."
+ CIN: "Tribus Cineris"
+ CIN_DEF: "Tribus Cineris"
+ CIN_ADJ: "Cinerarius"
  # BEGIN GENERATED: tools.builders.build_adiscord_ainholm_mandate
  AIN: "Айнхольмский мандат"
  AIN_DEF: "Айнхольмский мандат"

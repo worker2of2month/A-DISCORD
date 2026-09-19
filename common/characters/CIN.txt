@@ -3,7 +3,7 @@ characters = {
 		name = CIN_Aska_Smokevein
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_3
+				large = GFX_portrait_CIN_Aska_Smokevein
 			}
 		}
 		country_leader = {

@@ -930,6 +930,30 @@ VAL_livonn_settlement_category = {
 }
 
 VAL_foreign_sales = {
+	VAL_negotiate_nam_metals = {
+		icon = generic_political_pressure
+		visible = { has_completed_focus = VAL_Resource_War_Contracts NAM = { exists = yes } NOT = { has_country_flag = VAL_nam_concession_agreed } NOT = { has_country_flag = VAL_nam_concession_granted } }
+		available = { custom_trigger_tooltip = { tooltip = VAL_nam_concession_negotiable_tt VAL_nam_concession_negotiable = yes } NOT = { has_country_flag = VAL_nam_concession_offer_pending } }
+		cost = 25
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_nam_concession_terms_tt
+			hidden_effect = {
+				set_country_flag = { flag = VAL_nam_concession_offer_pending days = 14 }
+				NAM = { country_event = { id = val_contract.349 } }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+	VAL_register_nam_concession = {
+		icon = generic_political_pressure
+		visible = { has_country_flag = VAL_nam_concession_agreed has_global_flag = ADISCORD_nam_resource_war_nam_victory NOT = { has_country_flag = VAL_nam_concession_granted } }
+		available = { custom_trigger_tooltip = { tooltip = VAL_nam_concession_ready_tt VAL_nam_concession_deliverable = yes } }
+		cost = 0
+		complete_effect = { custom_effect_tooltip = VAL_nam_concession_reward_tt hidden_effect = { VAL_deliver_nam_concession = yes } }
+		ai_will_do = { base = 100 }
+	}
+
 	VAL_resource_war_arms = {
 		icon = generic_army_support
 		allowed = { tag = VAL }

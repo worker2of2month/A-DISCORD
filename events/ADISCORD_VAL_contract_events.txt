@@ -672,6 +672,7 @@ country_event = {
      else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
 					}
     }
+    if = { limit = { tag = NAM ADISCORD_nam_resource_war_active = yes } VAL = { set_country_flag = VAL_nam_aid_delivered } }
     clr_country_flag = VAL_export_offer_arms
     set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
     VAL = { clr_country_flag = VAL_export_offer_pending }
@@ -710,6 +711,7 @@ country_event = {
      VAL = { add_manpower = -2000 }
      add_manpower = 2000
     }
+    if = { limit = { tag = NAM ADISCORD_nam_resource_war_active = yes } VAL = { set_country_flag = VAL_nam_aid_delivered } }
     clr_country_flag = VAL_export_offer_advisors
     set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
     VAL = { clr_country_flag = VAL_export_offer_pending }
@@ -798,4 +800,30 @@ country_event = {
     picture = GFX_event_adiscord_negotiation_table
     is_triggered_only = yes
     option = { name = val_contract.348.a }
+}
+
+country_event = {
+	id = val_contract.349
+	title = val_contract.349.t
+	desc = val_contract.349.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 14
+	option = {
+		name = val_contract.349.refuse
+		ai_chance = { base = 20 }
+		hidden_effect = { VAL = { clr_country_flag = VAL_nam_concession_offer_pending } }
+	}
+	option = {
+		name = val_contract.349.accept
+		trigger = { tag = NAM VAL = { has_country_flag = VAL_nam_concession_offer_pending VAL_nam_concession_negotiable = yes } }
+		ai_chance = { base = 80 }
+		custom_effect_tooltip = VAL_nam_concession_terms_tt
+		hidden_effect = {
+			if = {
+				limit = { tag = NAM VAL = { has_country_flag = VAL_nam_concession_offer_pending VAL_nam_concession_negotiable = yes } }
+				VAL = { set_country_flag = VAL_nam_concession_agreed clr_country_flag = VAL_nam_concession_offer_pending }
+			}
+		}
+	}
 }

@@ -249,6 +249,7 @@ VAL_frontier_workshop_target_valid = {
 
 # COUNTRY recipient: eligibility is rechecked at acceptance.
 VAL_export_customer = {
+ NOT = { tag = EFL VAL = { has_country_flag = VAL_nam_concession_agreed } }
  exists = yes has_capitulated = no has_war = yes
  NOT = { has_war_with = VAL }
  OR = { tag = CIN tag = OSF tag = APH tag = WRK tag = WKR tag = VAD tag = TVA tag = STP tag = STS tag = SRP tag = NOD tag = YPR tag = COF tag = TFF AND = { OR = { tag = NAM tag = EFL } VAL = { has_completed_focus = VAL_Resource_War_Contracts } } }
@@ -531,4 +532,32 @@ VAL_can_aid_vorkerland = {
 	NOT = { has_war_with = WRK }
 	WRK = { exists = yes has_capitulated = no is_subject = no }
 	NOT = { any_enemy_country = { is_in_faction_with = WRK } }
+}
+
+VAL_nam_concession_negotiable = {
+	tag = VAL
+	has_completed_focus = VAL_Resource_War_Contracts
+	has_capitulated = no
+	is_subject = no
+	ADISCORD_nam_resource_war_active = yes
+	NOT = { has_war_with = NAM }
+	NOT = { has_country_flag = VAL_nam_concession_agreed }
+	NOT = { has_country_flag = VAL_nam_concession_granted }
+	NAM = { exists = yes has_capitulated = no is_subject = no }
+	230 = { is_owned_by = NAM is_controlled_by = NAM }
+	EFL = { NOT = { has_country_flag = VAL_export_customer_cooldown } NOT = { has_idea = VAL_paid_military_advisors } }
+}
+
+VAL_nam_concession_deliverable = {
+	tag = VAL
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	has_country_flag = VAL_nam_concession_agreed
+	has_country_flag = VAL_nam_aid_delivered
+	has_global_flag = ADISCORD_nam_resource_war_nam_victory
+	NOT = { has_country_flag = VAL_nam_concession_granted }
+	NOT = { has_war_with = NAM }
+	NAM = { exists = yes has_capitulated = no is_subject = no }
+	230 = { is_owned_by = NAM is_controlled_by = NAM }
 }

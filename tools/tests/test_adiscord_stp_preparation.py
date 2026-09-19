@@ -2735,6 +2735,21 @@ class StelanderPreparationTests(unittest.TestCase):
         trees = entries("common/national_focus/ADISCORD_national_focus_STP.txt")
         tree = next(e.value for e in trees if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        initial_rows = {}
+        for focus_id, focus in focuses.items():
+            x, y = int(scalar(focus, "x")), int(scalar(focus, "y"))
+            relatives = [e.value for e in focus if e.key == "relative_position_id"]
+            if relatives:
+                parent = focuses[relatives[0]]
+                self.assertFalse(any(e.key == "relative_position_id" for e in parent))
+                x += int(scalar(parent, "x"))
+                y += int(scalar(parent, "y"))
+            initial_rows.setdefault(y, []).append((x, focus_id))
+        for row in initial_rows.values():
+            row.sort()
+            for (left_x, left_id), (right_x, right_id) in zip(row, row[1:]):
+                self.assertGreaterEqual(right_x - left_x, 2,
+                                        f"Initial layout crowds {left_id} / {right_id}")
         for root in ("STP_Show_Him_The_Truth", "STP_Govern_In_His_Name"):
             root_focus = focuses[root]
             offset = block(root_focus, "offset")
