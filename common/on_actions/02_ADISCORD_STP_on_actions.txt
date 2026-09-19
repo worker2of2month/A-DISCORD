@@ -18,6 +18,27 @@ on_actions = {
 		effect = {
 			if = { limit = { STP_pw_can_reconstruct = yes NOT = { has_variable = STP_pw_recovery_progress } } STP_pw_begin_recovery = yes }
 			if = { limit = { has_country_flag = STP_cw_postwar } STP_pw_reconcile_postwar_interactivity = yes }
+			# declare_war_on can expose the war relation after its scripted effect
+			# returns. Heal postwar opponent markers here as a save/load fallback so
+			# an already-running campaign still reaches the scripted settlement.
+			if = {
+				limit = {
+					has_global_flag = STP_cw_union_wars_finished
+					has_war_with = VAL
+					VAL = { exists = yes }
+				}
+				set_country_flag = STP_pc_war_val
+				VAL = { set_country_flag = STP_pc_war_with_sts }
+			}
+			if = {
+				limit = {
+					has_global_flag = STP_cw_union_wars_finished
+					has_war_with = NOD
+					NOD = { exists = yes }
+				}
+				set_country_flag = STP_pc_war_nod
+				NOD = { set_country_flag = STP_pc_war_with_sts }
+			}
 			if = {
 				limit = { exists = yes has_country_flag = STP_pc_lib_package_pending }
 				STP_pc_offer_liberation_package = yes
@@ -88,6 +109,31 @@ on_actions = {
 				# destroy_unit/create_unit during declare_war_on corrupts the heap
 				# on the observer client; wait until the war relation exists.
 				STS = { country_event = { id = ADISCORD_STP_cw.31 hours = 1 } }
+			}
+			# The postwar declaration helper cannot rely on has_war_with becoming
+			# true in the same scripted-effect evaluation as declare_war_on. Freeze
+			# the opponent identity when the engine actually adds the relation.
+			if = {
+				limit = {
+					has_global_flag = STP_cw_union_wars_finished
+					OR = {
+						AND = { ROOT = { tag = STS } FROM = { tag = VAL } }
+						AND = { ROOT = { tag = VAL } FROM = { tag = STS } }
+					}
+				}
+				STS = { set_country_flag = STP_pc_war_val }
+				VAL = { set_country_flag = STP_pc_war_with_sts }
+			}
+			if = {
+				limit = {
+					has_global_flag = STP_cw_union_wars_finished
+					OR = {
+						AND = { ROOT = { tag = STS } FROM = { tag = NOD } }
+						AND = { ROOT = { tag = NOD } FROM = { tag = STS } }
+					}
+				}
+				STS = { set_country_flag = STP_pc_war_nod }
+				NOD = { set_country_flag = STP_pc_war_with_sts }
 			}
 		}
 	}
