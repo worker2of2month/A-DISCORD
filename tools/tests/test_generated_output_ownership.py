@@ -53,6 +53,7 @@ REQUIRED_FAMILIES = {
     "minimap",
     "map_buildings",
     "state_history",
+    "northern_borders",
     "northern_countries",
     "outer_states",
     "party_texticons",
