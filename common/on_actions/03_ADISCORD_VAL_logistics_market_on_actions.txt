@@ -1,0 +1,25 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			if = {
+				limit = { VAL = { exists = yes } }
+				VAL = { VAL_initialize_logistics_market = yes }
+			}
+		}
+	}
+
+	on_weekly_VAL = {
+		effect = {
+			VAL_logistics_market_weekly = yes
+		}
+	}
+
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = { VAL = { exists = yes VAL_trade_corridors_unlocked = yes } }
+				VAL = { VAL_refresh_trade_network = yes }
+			}
+		}
+	}
+}

@@ -1,0 +1,130 @@
+ideas = {
+	country = {
+		VAL_corridor_network_fragmented = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = -0.10
+				supply_consumption_factor = 0.05
+			}
+		}
+
+		VAL_corridor_network_partial = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				supply_consumption_factor = -0.02
+			}
+		}
+
+		VAL_corridor_network_integrated = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.15
+				supply_consumption_factor = -0.07
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		VAL_emergency_bypass = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.03
+				ADISCORD_economy_admin_expense_factor = 0.05
+			}
+		}
+
+		VAL_black_market_low = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				ADISCORD_economy_weekly_income = 5
+				ADISCORD_economy_admin_expense_factor = 0.02
+				stability_factor = -0.01
+			}
+		}
+
+		VAL_black_market_high = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				ADISCORD_economy_weekly_income = 15
+				ADISCORD_economy_trade_income_factor = 0.03
+				ADISCORD_economy_admin_expense_factor = 0.05
+				stability_factor = -0.03
+			}
+		}
+
+		VAL_black_market_crisis = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				ADISCORD_economy_weekly_income = 25
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.10
+				stability_factor = -0.06
+				political_power_gain = -0.05
+			}
+		}
+
+		VAL_refugee_strain = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				ADISCORD_economy_social_expense_factor = 0.10
+				consumer_goods_factor = 0.02
+				stability_factor = -0.04
+			}
+		}
+
+		VAL_closed_border_regime = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				stability_factor = 0.02
+				ADISCORD_economy_trade_income_factor = -0.10
+			}
+		}
+
+		VAL_refugee_contract_labor = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				production_speed_buildings_factor = 0.08
+				ADISCORD_economy_civilian_factory_income_factor = 0.05
+				stability_factor = -0.01
+			}
+		}
+	}
+}

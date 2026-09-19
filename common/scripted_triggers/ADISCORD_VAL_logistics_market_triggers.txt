@@ -1,0 +1,100 @@
+# Kefreyt logistics, displacement and grey-market triggers.
+# The feature stays country-scoped and checks only authored strategic states/tags.
+
+VAL_trade_corridors_unlocked = {
+	OR = {
+		has_completed_focus = VAL_One_Ledger_One_Banner
+		has_completed_focus = VAL_Reopen_Trade_Routes
+	}
+}
+
+# STATE scope. A route node belongs to Kefreyt's contractual sphere only when
+# both sovereignty and effective control remain inside the VAL subject network.
+VAL_trade_state_in_contract_sphere = {
+	OR = {
+		AND = { is_owned_by = VAL is_controlled_by = VAL }
+		AND = {
+			owner = { is_subject_of = VAL }
+			controller = { is_subject_of = VAL }
+		}
+	}
+}
+
+# COUNTRY VAL. The Occidian artery links Balchansk, the Harbour and the inland
+# depot. Livonn (45) is deliberately optional so an authored border settlement
+# cannot permanently kill the route.
+VAL_trade_route_occidia_open = {
+	tag = VAL
+	VAL_trade_corridors_unlocked = yes
+	43 = { VAL_trade_state_in_contract_sphere = yes }
+	44 = { VAL_trade_state_in_contract_sphere = yes }
+	88 = { VAL_trade_state_in_contract_sphere = yes }
+}
+
+# COUNTRY VAL. The northern belt is the compact resource spine through Antolla,
+# Farein and Himber, regardless of whether VAL or NKA administers it directly.
+VAL_trade_route_north_open = {
+	tag = VAL
+	VAL_trade_corridors_unlocked = yes
+	59 = { VAL_trade_state_in_contract_sphere = yes }
+	60 = { VAL_trade_state_in_contract_sphere = yes }
+	61 = { VAL_trade_state_in_contract_sphere = yes }
+}
+
+# COUNTRY VAL. The Stelander road uses the two border districts retained by
+# Kefreyt's final settlement.
+VAL_trade_route_stelander_open = {
+	tag = VAL
+	VAL_trade_corridors_unlocked = yes
+	29 = { VAL_trade_state_in_contract_sphere = yes }
+	46 = { VAL_trade_state_in_contract_sphere = yes }
+}
+
+# COUNTRY VAL. The old Vorkerland corridor can remain a commercial route under
+# a non-hostile Vorkerland successor; it does not require political domination.
+VAL_trade_route_vorkerland_open = {
+	tag = VAL
+	VAL_trade_corridors_unlocked = yes
+	33 = {
+		OR = {
+			VAL_trade_state_in_contract_sphere = yes
+			AND = { is_owned_by = WRK is_controlled_by = WRK WRK = { has_war = no } }
+			AND = { is_owned_by = WKR is_controlled_by = WKR WKR = { has_war = no } }
+			AND = { is_owned_by = VAD is_controlled_by = VAD VAD = { has_war = no } }
+			AND = { is_owned_by = TVA is_controlled_by = TVA TVA = { has_war = no } }
+		}
+	}
+}
+
+# Only a previously commissioned route counts as a disruption. Future expansion
+# targets do not create fictitious shortages before Kefreyt ever opens them.
+VAL_trade_network_disrupted = {
+	tag = VAL
+	VAL_trade_corridors_unlocked = yes
+	OR = {
+		AND = { has_country_flag = VAL_route_occidia_commissioned NOT = { VAL_trade_route_occidia_open = yes } }
+		AND = { has_country_flag = VAL_route_north_commissioned NOT = { VAL_trade_route_north_open = yes } }
+		AND = { has_country_flag = VAL_route_stelander_commissioned NOT = { VAL_trade_route_stelander_open = yes } }
+		AND = { has_country_flag = VAL_route_vorkerland_commissioned NOT = { VAL_trade_route_vorkerland_open = yes } }
+	}
+}
+
+# Fixed regional producer set: no every_country/any_country scan.
+VAL_regional_displacement_crisis = {
+	OR = {
+		has_war = yes
+		STP = { exists = yes has_war = yes }
+		STS = { exists = yes has_war = yes }
+		NOD = { exists = yes has_war = yes }
+		SRP = { exists = yes has_war = yes }
+		OCA = { exists = yes has_war = yes }
+		NKA = { exists = yes has_war = yes }
+		WRK = { exists = yes has_war = yes }
+		WKR = { exists = yes has_war = yes }
+		VAD = { exists = yes has_war = yes }
+		TVA = { exists = yes has_war = yes }
+		CIN = { exists = yes has_war = yes }
+		OSF = { exists = yes has_war = yes }
+		APH = { exists = yes has_war = yes }
+	}
+}
