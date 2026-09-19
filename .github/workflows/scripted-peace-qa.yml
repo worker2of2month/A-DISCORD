@@ -5,28 +5,39 @@ on:
 permissions:
   contents: read
 jobs:
-  snapshot:
+  inspect:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
           ref: d6cc3c77078a25f7318fbf7e371fc6779eab3351
           persist-credentials: false
-      - name: Pack pinned source for local verification
+      - name: Test dependencies
+        run: python -m pip install pillow numpy pyyaml
+      - name: Inventory hook ownership and source readers
         run: |
-          tar --exclude='./.git' -czf "$RUNNER_TEMP/source.tgz" .
-          split -b 400m -d "$RUNNER_TEMP/source.tgz" "$RUNNER_TEMP/source.part-"
-          sha256sum "$RUNNER_TEMP"/source.part-*
-      - uses: actions/upload-artifact@v4
-        with:
-          name: scripted-peace-source-a
-          path: ${{ runner.temp }}/source.part-00
-          retention-days: 1
-          compression-level: 0
-      - uses: actions/upload-artifact@v4
-        with:
-          name: scripted-peace-source-b
-          path: ${{ runner.temp }}/source.part-01
-          retention-days: 1
-          compression-level: 0
+          python - <<'PY'
+          from pathlib import Path
+          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+          for p in sorted(Path('common/on_actions').glob('*.txt')):
+              entries = parse_clausewitz(p.read_text(encoding='utf-8-sig'))
+              hooks = [h for e in entries if e.key == 'on_actions' for h in e.value]
+              print(p.name, [(h.key, [c.key for c in h.value] if isinstance(h.value, list) else h.value) for h in hooks])
+          PY
+          grep -RnE '([0-9][0-9]_ADISCORD_(STP|VAL|rin|nam|vorkerland).*on_actions.txt)' tools --include='*.py' || true
+          grep -RnE '([0-9][0-9]_ADISCORD_(STP|VAL|rin|nam|vorkerland).*on_actions.txt)' docs/development AGENTS.md || true
+      - name: Baseline affected suites
+        run: |
+          python - <<'PY'
+          import unittest, sys
+          from pathlib import Path
+          words = ('stp', 'nod', 'val_', 'val_rework', 'rin_', 'nam_', 'vorkerland')
+          names = ['tools.tests.' + p.stem for p in sorted(Path('tools/tests').glob('test*.py')) if any(w in p.stem for w in words)]
+          print('BASELINE_MODULES', names, flush=True)
+          suite = unittest.defaultTestLoader.loadTestsFromNames(names)
+          result = unittest.TextTestRunner(stream=sys.stdout, verbosity=1).run(suite)
+          print('BASELINE_TESTS', result.testsRun)
+          print('BASELINE_FAILURES', [t.id() for t, _ in result.failures])
+          print('BASELINE_ERRORS', [t.id() for t, _ in result.errors])
+          PY
