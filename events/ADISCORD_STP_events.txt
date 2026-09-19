@@ -1478,3 +1478,33 @@ country_event = {
 	trigger = { OR = { tag = STP tag = STS } }
 	option = { name = ADISCORD_STP_cw.94.a }
 }
+
+country_event = {
+	id = ADISCORD_STP_pc.28
+	title = ADISCORD_STP_pc.28.t
+	desc = ADISCORD_STP_pc.28.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STP has_country_flag = STP_pw_party_nod_threat_active }
+	option = { name = ADISCORD_STP_pc.28.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.29
+	title = ADISCORD_STP_pc.29.t
+	desc = ADISCORD_STP_pc.29.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = STP has_country_flag = STP_pw_party_nod_invasion_active has_war_with = NOD }
+	option = { name = ADISCORD_STP_pc.29.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.30
+	title = ADISCORD_STP_pc.30.t
+	desc = ADISCORD_STP_pc.30.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STP has_country_flag = STP_pw_party_nod_invasion_defeated }
+	option = { name = ADISCORD_STP_pc.30.a }
+}

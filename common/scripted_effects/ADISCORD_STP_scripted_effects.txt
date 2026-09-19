@@ -5012,3 +5012,97 @@ STP_pf_clear = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
+
+# PARTY POSTWAR: refusing NOD's protectorate turns sovereignty into a timed invasion crisis.
+STP_pw_party_start_nod_invasion_threat = {
+	if = {
+		limit = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			has_completed_focus = STP_pw_party_sovereignty
+			is_subject = no
+			NOD = { exists = yes has_capitulated = no is_subject = no }
+			NOT = { has_war_with = NOD }
+		}
+		clr_country_flag = STP_pw_party_nod_invasion_defeated
+		clr_country_flag = STP_pw_party_nod_invasion_active
+		set_country_flag = STP_pw_party_nod_threat_active
+		activate_mission = STP_pw_party_nod_invasion_countdown
+		country_event = { id = ADISCORD_STP_pc.28 hours = 1 }
+	}
+	else = {
+		clr_country_flag = STP_pw_party_nod_threat_active
+		set_country_flag = STP_pw_party_nod_invasion_defeated
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
+STP_pw_party_launch_nod_invasion = {
+	if = {
+		limit = {
+			tag = STP
+			has_country_flag = STP_pw_party_nod_threat_active
+			is_subject = no
+			has_capitulated = no
+			NOD = { exists = yes has_capitulated = no is_subject = no }
+			NOT = { has_war_with = NOD }
+		}
+		clr_country_flag = STP_pw_party_nod_threat_active
+		set_country_flag = STP_pw_party_nod_invasion_active
+		NOD = {
+			add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 }
+			declare_war_on = { target = STP type = annex_everything }
+		}
+		country_event = { id = ADISCORD_STP_pc.29 hours = 1 }
+	}
+	else = {
+		clr_country_flag = STP_pw_party_nod_threat_active
+		clr_country_flag = STP_pw_party_nod_invasion_active
+		set_country_flag = STP_pw_party_nod_invasion_defeated
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
+STP_pw_party_settle_nod_invasion_defeat = {
+	if = {
+		limit = {
+			tag = STP
+			has_country_flag = STP_pw_party_nod_invasion_active
+			NOD = { exists = yes has_war_with = STP }
+		}
+		NOD = {
+			if = { limit = { has_war_with = STP } white_peace = STP }
+			remove_ideas = STP_pw_nod_invasion_mandate
+			add_war_support = -0.10
+		}
+		clr_country_flag = STP_pw_party_nod_threat_active
+		clr_country_flag = STP_pw_party_nod_invasion_active
+		set_country_flag = STP_pw_party_nod_invasion_defeated
+		add_stability = 0.08
+		add_political_power = 100
+		mark_focus_tree_layout_dirty = yes
+		country_event = { id = ADISCORD_STP_pc.30 hours = 1 }
+	}
+}
+
+STP_pw_party_settle_nod_invasion_victory = {
+	if = {
+		limit = {
+			tag = NOD
+			STP = {
+				exists = yes
+				has_country_flag = STP_pw_party_nod_invasion_active
+				has_war_with = NOD
+			}
+		}
+		remove_ideas = STP_pw_nod_invasion_mandate
+		set_country_flag = STP_pw_party_invasion_victorious
+		if = { limit = { has_war_with = STP } white_peace = STP }
+		STP = {
+			clr_country_flag = STP_pw_party_nod_threat_active
+			clr_country_flag = STP_pw_party_nod_invasion_active
+			set_country_flag = STP_pw_party_nod_invasion_lost
+		}
+		annex_country = { target = STP transfer_troops = yes }
+	}
+}

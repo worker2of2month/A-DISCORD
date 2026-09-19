@@ -114,6 +114,21 @@ STP_cw_front_against_nod = {
 	ai_strategy = { type = front_control tag = NOD ratio = 0.01 priority = 1100 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
 }
 
+NOD_pw_party_invasion_front = {
+	allowed = { original_tag = NOD }
+	enable = {
+		is_ai = yes
+		has_war_with = STP
+		STP = { has_country_flag = STP_pw_party_nod_invasion_active }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = STP value = 140 }
+	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = { type = conquer id = STP value = 300 }
+	ai_strategy = { type = consider_weak id = STP value = 100 }
+	ai_strategy = { type = force_concentration_factor value = 80 }
+}
+
 STP_cw_territorial_army = {
 	allowed = { OR = { original_tag = STP original_tag = STS original_tag = SRP } }
 	enable = {
@@ -162,6 +177,7 @@ NOD_cw_wartime_home_buffer = {
 			has_war_with = COF
 			has_war_with = TFF
 			has_war_with = STS
+			has_war_with = STP
 		}
 	}
 	abort_when_not_enabled = yes

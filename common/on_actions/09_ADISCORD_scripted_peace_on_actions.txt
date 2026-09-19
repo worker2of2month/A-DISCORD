@@ -468,6 +468,26 @@ on_actions = {
 
 			# BEGIN stelander:on_capitulation
 			if = {
+				limit = {
+					ROOT = {
+						tag = STP
+						has_country_flag = STP_pw_party_nod_invasion_active
+						has_war_with = NOD
+					}
+					FROM = { tag = NOD }
+				}
+				set_global_flag = skip_default_capitulation
+				NOD = { STP_pw_party_settle_nod_invasion_victory = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = NOD has_war_with = STP }
+					STP = { has_country_flag = STP_pw_party_nod_invasion_active has_war_with = NOD }
+				}
+				set_global_flag = skip_default_capitulation
+				STP = { STP_pw_party_settle_nod_invasion_defeat = yes }
+			}
+			else_if = {
 				limit = { ROOT = { has_country_flag = STP_cw_northern_capitulation_pending } }
 				ROOT = { clr_country_flag = STP_cw_northern_capitulation_pending }
 				# The existing ZZ router consumes this late reservation in the same hook.

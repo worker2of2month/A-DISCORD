@@ -109,3 +109,18 @@ STP_party_factions = {
 	priority = 36
 	scripted_gui = ADISCORD_STP_party_factions_panel
 }
+
+STP_postwar_nod_ultimatum = {
+	icon = generic_prepare_civil_war
+	allowed = { tag = STP }
+	visible = {
+		tag = STP
+		has_country_flag = STP_cw_postwar
+		OR = {
+			has_country_flag = STP_pw_party_nod_threat_active
+			has_country_flag = STP_pw_party_nod_invasion_active
+		}
+	}
+	visible_when_empty = yes
+	priority = 40
+}

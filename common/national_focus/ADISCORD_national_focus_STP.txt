@@ -3578,7 +3578,16 @@ focus_tree = {
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_joint_defence_board focus = STP_pw_party_armed_neutrality }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		available = {
+			custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }
+			OR = {
+				is_subject_of = NOD
+				has_country_flag = STP_pw_party_nod_invasion_defeated
+				NOD = { exists = no }
+				NOD = { has_capitulated = yes }
+				NOD = { is_subject = yes }
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 6 }
 		completion_reward = {
@@ -5249,6 +5258,7 @@ focus_tree = {
 				set_variable = { var = STP_pf_advisers_effect value = 0 }
 				set_variable = { var = STP_pf_nod_connected value = 0 }
 				force_update_dynamic_modifier = yes
+				STP_pw_party_start_nod_invasion_threat = yes
 			}
 			custom_effect_tooltip = STP_pf_army_deal_tt
 		}

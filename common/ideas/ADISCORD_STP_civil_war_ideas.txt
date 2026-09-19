@@ -709,6 +709,28 @@ ideas = {
 			modifier = { army_core_defence_factor = 0.10 dig_in_speed_factor = 0.20 }
 		}
 
+		STP_pw_party_nod_emergency_mobilization_idea = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = ADISCORD_law_military_cadre_army
+			modifier = { mobilization_speed = 0.30 conscription_factor = 0.10 army_org_factor = 0.03 }
+		}
+		STP_pw_party_nod_staff_readiness_idea = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = ADISCORD_law_military_cadre_army
+			modifier = { army_core_defence_factor = 0.08 planning_speed = 0.10 supply_consumption_factor = -0.05 }
+		}
+		STP_pw_nod_invasion_mandate = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = ADISCORD_law_military_cadre_army
+			modifier = { army_attack_factor = 0.10 planning_speed = 0.15 supply_consumption_factor = -0.05 war_support_factor = 0.10 }
+		}
+
 # --- end ---
 
 		STP_pw_economy_count_the_cost_delta = {

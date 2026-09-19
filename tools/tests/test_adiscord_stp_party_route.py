@@ -19,6 +19,8 @@ DYNAMIC = "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"
 IDEAS = "common/ideas/ADISCORD_STP_civil_war_ideas.txt"
 PLANS = "common/ai_strategy_plans/ADISCORD_STP_plans.txt"
 EVENTS = "events/ADISCORD_STP_events.txt"
+SCRIPTED_PEACE = "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
+AI = "common/ai_strategy/ADISCORD_STP_civil_war.txt"
 
 
 def read(path):
@@ -205,6 +207,61 @@ class PartyRouteContracts(unittest.TestCase):
             e.value for p in children(self.focus["STP_pw_party_settled_state"], "prerequisite") for e in p
         }
         self.assertIn("STP_pw_party_foreign_settlement", final_requirements)
+
+    def test_sovereignty_opens_a_terminal_nod_invasion_crisis(self):
+        sovereignty = one(self.focus["STP_pw_party_sovereignty"], "completion_reward")
+        self.assertIn("STP_pw_party_start_nod_invasion_threat", str(signature(sovereignty)))
+        mission = self.decisions["STP_pw_party_nod_invasion_countdown"]
+        self.assertEqual(one(mission, "days_mission_timeout"), "90")
+        self.assertEqual(one(mission, "selectable_mission"), "no")
+        self.assertIn("always", str(signature(one(mission, "available"))))
+        self.assertIn("STP_pw_party_launch_nod_invasion", str(signature(one(mission, "timeout_effect"))))
+        effects = read(EFFECTS)
+        launch = effects[effects.index("STP_pw_party_launch_nod_invasion = {"):]
+        launch = launch[:launch.index("\nSTP_pw_party_settle_nod_invasion_defeat = {")]
+        self.assertIn("declare_war_on = { target = STP type = annex_everything }", launch)
+        self.assertIn("add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 }", launch)
+
+    def test_nod_crisis_has_three_real_preparation_decisions(self):
+        expected = {
+            "STP_pw_party_nod_emergency_mobilization": ("900", "50"),
+            "STP_pw_party_nod_fortify_border": ("1080", "35"),
+            "STP_pw_party_nod_staff_readiness": ("720", "35"),
+        }
+        raw = read(DECISIONS)
+        for decision_id, (money, pp) in expected.items():
+            decision = self.decisions[decision_id]
+            self.assertEqual(one(decision, "cost"), pp)
+            self.assertIn("STP_pw_party_nod_threat_active", str(signature(one(decision, "visible"))))
+            snippet = raw[raw.index(decision_id):raw.index(decision_id) + 2400]
+            self.assertIn(f"value = {money}", snippet)
+        self.assertIn("any_neighbor_state", str(signature(self.decisions["STP_pw_party_nod_fortify_border"])))
+
+    def test_independent_foreign_settlement_waits_for_nod_outcome(self):
+        available = str(signature(one(self.focus["STP_pw_party_foreign_settlement"], "available")))
+        self.assertIn("is_subject_of", available)
+        self.assertIn("STP_pw_party_nod_invasion_defeated", available)
+
+    def test_nod_invasion_loss_is_terminal_for_the_party_country(self):
+        peace = read(SCRIPTED_PEACE)
+        self.assertIn("STP_pw_party_settle_nod_invasion_victory = yes", peace)
+        self.assertIn("STP_pw_party_settle_nod_invasion_defeat = yes", peace)
+        effects = read(EFFECTS)
+        terminal = effects[effects.index("STP_pw_party_settle_nod_invasion_victory = {"):]
+        self.assertIn("annex_country = { target = STP transfer_troops = yes }", terminal)
+        self.assertIn("set_country_flag = STP_pw_party_nod_invasion_lost", terminal)
+
+    def test_nod_invasion_events_and_ai_profile_are_registered(self):
+        events = read(EVENTS)
+        for number in (28, 29, 30):
+            event_id = f"ADISCORD_STP_pc.{number}"
+            self.assertEqual(events.count(f"\tid = {event_id}\n"), 1)
+            for suffix in ("t", "d", "a"):
+                self.assertIn(f"{event_id}.{suffix}", self.loc)
+        ai = read(AI)
+        self.assertIn("NOD_pw_party_invasion_front = {", ai)
+        self.assertIn("front_unit_request tag = STP value = 140", ai)
+        self.assertIn("conquer id = STP value = 300", ai)
 
     def test_party_income_and_credit_deltas_have_real_consumers(self):
         d = self.dynamic["STP_pw_party_dynamic"]

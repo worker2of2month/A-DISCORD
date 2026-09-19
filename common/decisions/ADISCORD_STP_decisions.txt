@@ -3821,3 +3821,112 @@ STP_party_factions = {
 		ai_will_do = { base = 0.4 modifier = { factor = 0 check_variable = { var = STP_pf_radicals_support value = 65 compare = greater_than_or_equals } } }
 	}
 }
+
+STP_postwar_nod_ultimatum = {
+	STP_pw_party_nod_invasion_countdown = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_country_flag = STP_pw_party_nod_threat_active }
+		available = { hidden_trigger = { always = no } }
+		days_mission_timeout = 90
+		selectable_mission = no
+		fire_only_once = yes
+		timeout_effect = { hidden_effect = { STP_pw_party_launch_nod_invasion = yes } }
+	}
+
+	STP_pw_party_nod_emergency_mobilization = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_country_flag = STP_pw_party_nod_threat_active }
+		available = {
+			STP_pw_can_reconstruct = yes
+			NOT = { has_country_flag = STP_pw_party_nod_emergency_mobilized }
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
+		cost = 50
+		custom_cost_text = STP_pw_price_900
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
+		fire_only_once = yes
+		complete_effect = {
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
+				ADISCORD_economy_mark_dirty = yes
+				set_country_flag = STP_pw_party_nod_emergency_mobilized
+			}
+			add_manpower = 10000
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 producer = ROOT }
+			add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = ROOT }
+			add_timed_idea = { idea = STP_pw_party_nod_emergency_mobilization_idea days = 180 }
+			add_war_support = 0.05
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	STP_pw_party_nod_fortify_border = {
+		icon = generic_construct_military
+		allowed = { tag = STP }
+		visible = { has_country_flag = STP_pw_party_nod_threat_active }
+		available = {
+			STP_pw_can_reconstruct = yes
+			NOT = { has_country_flag = STP_pw_party_nod_border_fortified }
+			check_variable = { var = ADISCORD_economy_treasury value = 1080 compare = greater_than_or_equals }
+			any_owned_state = {
+				is_controlled_by = ROOT
+				any_neighbor_state = { is_owned_by = NOD is_controlled_by = NOD }
+			}
+		}
+		cost = 35
+		custom_cost_text = STP_pw_price_1080
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1080 compare = greater_than_or_equals } }
+		fire_only_once = yes
+		complete_effect = {
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 1080 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1080 }
+				ADISCORD_economy_mark_dirty = yes
+				set_country_flag = STP_pw_party_nod_border_fortified
+			}
+			every_owned_state = {
+				limit = {
+					is_controlled_by = ROOT
+					any_neighbor_state = { is_owned_by = NOD is_controlled_by = NOD }
+				}
+				add_building_construction = {
+					type = bunker
+					level = 1
+					instant_build = yes
+					province = { all_provinces = yes limit_to_border = yes }
+				}
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	STP_pw_party_nod_staff_readiness = {
+		icon = generic_army_doctrines
+		allowed = { tag = STP }
+		visible = { has_country_flag = STP_pw_party_nod_threat_active }
+		available = {
+			STP_pw_can_reconstruct = yes
+			NOT = { has_country_flag = STP_pw_party_nod_staff_ready }
+			check_variable = { var = ADISCORD_economy_treasury value = 720 compare = greater_than_or_equals }
+		}
+		cost = 35
+		custom_cost_text = STP_pw_price_720
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 720 compare = greater_than_or_equals } }
+		fire_only_once = yes
+		complete_effect = {
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 720 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 720 }
+				ADISCORD_economy_mark_dirty = yes
+				set_country_flag = STP_pw_party_nod_staff_ready
+			}
+			add_command_power = 20
+			add_timed_idea = { idea = STP_pw_party_nod_staff_readiness_idea days = 180 }
+		}
+		ai_will_do = { base = 20 }
+	}
+}
