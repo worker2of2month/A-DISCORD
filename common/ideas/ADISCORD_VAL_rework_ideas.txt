@@ -101,7 +101,10 @@ ideas = {
 		VAL_gromovs_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_attack_factor = 0.04 equipment_capture_factor = 0.05 army_defence_factor = -0.02 } }
 		VAL_motorized_columns_delta = { name = VAL_contract_state allowed = { always = no } modifier = { supply_consumption_factor = -0.03 } }
 		VAL_trading_partners_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.07 political_power_gain = 0.10 } }
-		VAL_export_clearing_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.05 } }
+		VAL_export_clearing_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_overall_income_factor = 0.10
+				ADISCORD_economy_admin_expense_factor = -0.05
+			} }
 		VAL_contractor_officers_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.03 } }
 		VAL_field_repair_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_regain = 0.03 } }
 		VAL_general_staff_delta = { name = VAL_contract_state allowed = { always = no } modifier = { planning_speed = 0.05 equipment_capture_factor = 0.03 } }

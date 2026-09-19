@@ -3158,10 +3158,10 @@ ADISCORD_economy_ai_monthly_policy = {
 
     def test_core_policy_and_debt_flow_negative_fixtures(self):
         research = "\n".join(
-            ["ADISCORD_economy_calculate_research_expenses = {"]
+            ["ADISCORD_economy_calculate_research_expenses = {", "multiply_variable = { var = ADISCORD_economy_research_expenses value = 2.00 }"]
             + [
                 f"if = {{ limit = {{ check_variable = {{ var = ADISCORD_economy_research_spending_mode value = {level} compare = equals }} }} multiply_variable = {{ var = ADISCORD_economy_research_expenses value = {factor} }} }}"
-                for level, factor in enumerate(("0.60", "0.80", "1.00", "1.30", "1.60"), 1)
+                for level, factor in enumerate(("0.30", "0.65", "1.00", "1.30", "1.60"), 1)
             ]
             + ["}"]
         )
@@ -3182,7 +3182,7 @@ ADISCORD_economy_ai_monthly_policy = {
         level_one_branch = (
             "if = { limit = { check_variable = { var = "
             "ADISCORD_economy_research_spending_mode value = 1 compare = equals } } "
-            "multiply_variable = { var = ADISCORD_economy_research_expenses value = 0.60 } }"
+            "multiply_variable = { var = ADISCORD_economy_research_expenses value = 0.30 } }"
         )
         duplicate_level = research.rsplit("}", 1)[0] + level_one_branch + "\n}"
         self.assertTrue(research_policy_flow_issues(duplicate_level))

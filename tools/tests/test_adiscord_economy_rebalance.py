@@ -162,8 +162,9 @@ class RecoveryRewardTests(unittest.TestCase):
         text = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
         for identifier in ("VAL_Contract_Accounting_Office", "VAL_Export_Clearing_House", "VAL_Industrial_Mobilization_Plan"):
             nodes = focus(text, identifier)
-            self.assertTrue(any(n.key == "VAL_invest_fiscal_administration" and n.value == "yes"
-                                for n in walk(nodes)), identifier)
+            for variable, expected in (("VAL_fiscal_administration_investment", "0.10"), ("VAL_fiscal_admin_savings", "-0.05")):
+                self.assertTrue(any(n.key == "add_to_variable" and {c.key: c.value for c in n.value}.get("var") == variable and {c.key: c.value for c in n.value}.get("value") == expected for n in walk(nodes)), identifier)
+            self.assertTrue(any(n.key == "VAL_refresh_contract_modifier" and n.value == "yes" for n in walk(nodes)), identifier)
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         self.assertIn("VAL_fiscal_administration_investment", block(effects, "VAL_refresh_contract_modifier"))
 
