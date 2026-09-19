@@ -7292,10 +7292,18 @@ focus_tree = {
 			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_techlar show_effect_tooltip = yes }
 			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_ebern show_effect_tooltip = yes }
 			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_solar show_effect_tooltip = yes }
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed } }
+				unlock_decision_tooltip = { decision = ADISCORD_vorkerland_vad_continue_imperial_reunification show_effect_tooltip = yes }
+			}
 			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_joint_integration_warrants
 				set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
+				if = {
+					limit = { NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed } }
+					set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_unlocked
+				}
 			}
 		}
 		ai_will_do = { base = 14 }
@@ -7485,9 +7493,24 @@ focus_tree = {
 			remove_ideas = ADISCORD_vorkerland_tva_doctrine_measured_front
 			remove_ideas = ADISCORD_vorkerland_tva_doctrine_fewer_better_crews
 			add_ideas = ADISCORD_vorkerland_reunification_settlement
-			# The settlement ends both Vlad's military restoration and the rare
-			# emergency council as temporary constitutional arrangements.
-			drop_cosmetic_tag = yes
+			# The rare Worker-Vlad emergency council is temporary. Vlad's ordinary
+			# victory is not: the restored state remains the Vorkerland Empire and
+			# keeps the darker wartime portrait as its permanent visual identity.
+			if = {
+				limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+				drop_cosmetic_tag = yes
+			}
+			else = {
+				set_cosmetic_tag = VAD_vorkerland_restoration
+				set_portraits = {
+					character = WRK_Vlad_Petrichev
+					civilian = { large = GFX_portrait_WRK_Vlad_Petrichev_civilwar }
+				}
+				set_country_leader_portrait = {
+					ideology = pragmatism
+					portrait = GFX_portrait_WRK_Vlad_Petrichev_civilwar
+				}
+			}
 			add_stability = 0.03
 			add_war_support = 0.03
 			add_political_power = 20
