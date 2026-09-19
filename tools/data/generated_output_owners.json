@@ -9,7 +9,6 @@
     "remainder_states",
     "inner_frontier_countries",
     "ainholm_mandate",
-    "northern_borders",
     "ivn_geography",
     "map_buildings",
     "vorkerland_theatre",
@@ -344,36 +343,6 @@
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "Northern metadata populates outer state shells and must be reapplied after exclusion-zone repartitioning; its generated victory-point block and flag directories share engine files with other generators."
-    },
-    {
-      "id": "northern_borders",
-      "owner_module": "tools.builders.build_adiscord_northern_borders",
-      "output_globs": [
-        "map/provinces.bmp",
-        "map/definition.csv",
-        "map/heightmap.bmp",
-        "map/terrain.bmp",
-        "map/rivers.bmp",
-        "map/trees.bmp",
-        "map/world_normal.bmp"
-      ],
-      "source_inputs": [
-        "tools/builders/build_adiscord_northern_borders.py",
-        "history/states/*.txt",
-        "map/provinces.bmp",
-        "map/definition.csv",
-        "map/heightmap.bmp",
-        "map/terrain.bmp",
-        "map/rivers.bmp",
-        "map/trees.bmp",
-        "map/cities.bmp",
-        "map/world_normal.bmp"
-      ],
-      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_northern_borders"],
-      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_northern_borders", "--apply"],
-      "may_delete_outputs": false,
-      "ownership_mode": "layered",
-      "overlap_explanation": "This pass owns only pixel geometry and land/sea layer sync inside the northern right-continent box; pixels outside that box stay untouched. definition.csv is limited to coastal flags, terrain_snow still owns later snow conversion, trade regions still own continent field 7, and ivn_geography still owns the IVN/IIA footprint."
     },
     {
       "id": "outer_states",

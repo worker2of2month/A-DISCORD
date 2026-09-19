@@ -26,6 +26,21 @@ music = {
 }
 
 music = {
+	song = "ADISCORD_stp_party"
+	chance = {
+		base = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_flag = STP_sided_with_the_party_flag }
+		}
+		modifier = {
+			factor = 0
+			has_global_flag = STP_cw_started
+		}
+	}
+}
+
+music = {
 	song = "ADISCORD_stp_civil_war"
 	chance = {
 		base = 10

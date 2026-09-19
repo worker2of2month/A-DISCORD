@@ -18,7 +18,6 @@ BUILDER_NAMES = (
     "build_adiscord_map_buildings",
     "build_adiscord_minimap",
     "build_adiscord_new_states",
-    "build_adiscord_northern_borders",
     "build_adiscord_northern_countries",
     "build_adiscord_outer_states",
     "build_adiscord_remainder_states",
