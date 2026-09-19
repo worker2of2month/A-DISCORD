@@ -3087,7 +3087,7 @@ class StelanderPreparationTests(unittest.TestCase):
                     if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         self.assertEqual((scalar(focuses["STP_cw_prepare_capital_sabotage"], "x"),
-                          scalar(focuses["STP_cw_prepare_capital_sabotage"], "y")), ("6", "4"))
+                          scalar(focuses["STP_cw_prepare_capital_sabotage"], "y")), ("5", "3"))
         self.assertEqual((scalar(focuses["STP_cw_prepare_industry_sabotage"], "x"),
                           scalar(focuses["STP_cw_prepare_industry_sabotage"], "y")), ("4", "4"))
         self.assertEqual(scalar(block(focuses["STP_cw_prepare_industry_sabotage"], "prerequisite"), "focus"),
