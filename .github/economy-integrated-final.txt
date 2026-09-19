@@ -1,0 +1,95 @@
+A-Discord total-conversion validation
+Root: /home/runner/work/A-DISCORD/A-DISCORD/source
+Country tags: 155
+Ideology groups: anarchism, chauvinism, etatism, hedonism, humanism, pragmatism, technocracy, utilitarism
+Ideology types: 18
+Definition provinces: 16707
+
+== Brace balance: 0 ==
+OK
+
+== Countries and ideologies: 0 ==
+OK
+
+== Event ID registry: 0 ==
+OK
+
+== Superevent presentation contract: 0 ==
+OK
+
+== Map and states: 0 ==
+OK
+
+== Map building state assignments: 0 ==
+OK
+
+== Permanent snow terrain: 0 ==
+OK
+
+== Ivanland island administration: 0 ==
+OK
+
+== Localisation headers: 0 ==
+OK
+
+== Special project leftovers: 0 ==
+OK
+
+== Synchronized dynamic tokens: 0 ==
+OK
+
+== Railway gun names: 0 ==
+OK
+
+== Entity unit mesh refs: 0 ==
+OK
+
+== GFX entity ownership: 0 ==
+OK
+
+== Autonomy chain isolation: 0 ==
+OK
+
+== Vanilla filename leftovers: 0 ==
+OK
+
+== Economy guardrails: 0 ==
+OK
+
+== Economy and AI semantics: 0 ==
+OK
+
+== Strategic resources and economy UI: 0 ==
+OK
+
+== Lore trade-region geography: 0 ==
+OK
+
+== Vorkerland three-claimant recovery: 0 ==
+OK
+
+== Vorkerland civil-war focus skeleton: 0 ==
+OK
+
+== Vorkerland focus-unlocked operations: 2 ==
+- English localisation key mismatch: missing=[], extra=['ADISCORD_vorkerland_vad_continue_imperial_reunification', 'ADISCORD_vorkerland_vad_continue_imperial_reunification_desc']
+- Russian localisation key mismatch: missing=[], extra=['ADISCORD_vorkerland_vad_continue_imperial_reunification', 'ADISCORD_vorkerland_vad_continue_imperial_reunification_desc']
+
+== Vorkerland regional diplomacy: 0 ==
+OK
+
+== Vorkerland civil-war story and news: 0 ==
+OK
+
+== Shabrat historical AI: 0 ==
+OK
+
+== Division template audit: 0 ==
+OK
+
+== NCNS factions and campaign slots: 0 ==
+OK
+
+== Vanilla leftovers: 0 hits in 0 tokens ==
+OK
+FINAL_EXIT=0
