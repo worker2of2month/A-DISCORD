@@ -11,4 +11,16 @@ spriteTypes = {
 		texturefile = "gfx/interface/bop/STP_bop_shabrat_good.png"
 		legacy_lazy_load = no
 	}
+
+	spriteType = {
+		name = "GFX_bop_VAL_general_staff"
+		texturefile = "gfx/interface/bop/VAL_bop_general_staff.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_bop_VAL_solgalov"
+		texturefile = "gfx/interface/bop/VAL_bop_solgalov.png"
+		legacy_lazy_load = no
+	}
 }

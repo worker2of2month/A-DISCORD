@@ -11,7 +11,7 @@ VAL_command_balance = {
 	}
 	side = {
 		id = VAL_general_staff_side
-		icon = GFX_portrait_VAL_Kirill_Voron
+		icon = GFX_bop_VAL_general_staff
 		range = {
 			id = VAL_general_staff_control
 			min = -1.0
@@ -21,7 +21,7 @@ VAL_command_balance = {
 	}
 	side = {
 		id = VAL_solgalov_side
-		icon = GFX_portrait_VAL_Valera_Solgalov
+		icon = GFX_bop_VAL_solgalov
 		range = {
 			id = VAL_solgalov_control
 			min = 0.25
