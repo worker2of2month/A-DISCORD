@@ -5,7 +5,7 @@ on:
 permissions:
   contents: read
 jobs:
-  snapshot:
+  inspect:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -13,14 +13,66 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 1
-      - name: Package source for local regression tests
+      - name: Inspect baseline
         run: |
-          mkdir -p /tmp/economy-review
-          git archive --format=tar.gz HEAD AGENTS.md common docs events history interface localisation tools country_metadata descriptor.mod > /tmp/economy-review/source.tar.gz
-          git ls-tree -r --long HEAD > /tmp/economy-review/tree.txt
-          git rev-parse HEAD > /tmp/economy-review/revision.txt
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          for p in Path('.').rglob('AGENTS.md'):
+              print('RULES', p)
+          for p in Path('common/scripted_effects').glob('*econom*'):
+              text = p.read_text(encoding='utf-8-sig')
+              print('\nEFFECT FILE', p, len(text))
+              for i,line in enumerate(text.splitlines(),1):
+                  if re.match(r'^\w+\s*=\s*\{',line): print(i,line)
+          print('\nTESTS')
+          for p in Path('tools/tests').glob('*.py'):
+              if any(s in p.name for s in ('econom','val_', 'postwar','focus')): print(p)
+          print('\nAI PLANS')
+          for p in Path('common/ai_strategy_plans').glob('*'):
+              if p.is_file() and 'VAL_' in p.read_text(encoding='utf-8-sig',errors='replace'):
+                  print(p); print(p.read_text(encoding='utf-8-sig',errors='replace'))
+          print('\nECONOMY DOCS')
+          for p in Path('docs/economy').glob('*'): print(p)
+          print('\nVAL FOCUS OUTLINE')
+          text=Path('common/national_focus/ADISCORD_national_focus_VAL.txt').read_text(encoding='utf-8-sig')
+          for i,line in enumerate(text.splitlines(),1):
+              if any(k in line for k in ('id = VAL_', 'VAL_frontier', 'available =', 'bypass =','prerequisite =','ai_will_do =')): print(i,line)
+          print('\nSHABRAT ECONOMY')
+          for p in Path('common/national_focus').glob('*'):
+              if p.is_file():
+                  text=p.read_text(encoding='utf-8-sig',errors='replace')
+                  if 'STP_pc_' in text:
+                      print(p)
+                      for i,line in enumerate(text.splitlines(),1):
+                          if any(k in line for k in ('id = STP_pc_', 'FOCUS_FILTER_INDUSTRY', 'FOCUS_FILTER_ECONOMY')): print(i,line)
+          PY
+      - name: Baseline VAL regression tests
+        continue-on-error: true
+        run: python -B -m unittest tools.tests.test_validate_adiscord_val_rework -q
+      - name: Baseline total-conversion validation
+        continue-on-error: true
+        run: python -B tools/validate_tc.py --limit 30
+      - name: Package bounded text-only source
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess, zipfile
+          roots={'common','docs','events','history','interface','localisation','tools','country_metadata','map'}
+          suffixes={'.txt','.py','.yml','.yaml','.md','.json','.gui','.gfx','.lua','.mod','.csv','.ps1','.bat'}
+          paths=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile('/tmp/economy-review-text.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for name in paths:
+                  if not name: continue
+                  p=Path(name)
+                  if (p.parts[0] in roots or name=='AGENTS.md' or name=='descriptor.mod') and p.suffix.lower() in suffixes and p.stat().st_size<2000000:
+                      z.write(p,name)
+              z.writestr('source-revision.txt', subprocess.check_output(['git','rev-parse','HEAD']).decode())
+              z.writestr('source-tree.txt', subprocess.check_output(['git','ls-tree','-r','--long','HEAD']).decode())
+          print('Text archive bytes:',Path('/tmp/economy-review-text.zip').stat().st_size)
+          PY
       - uses: actions/upload-artifact@v4
         with:
-          name: economy-review-source
-          path: /tmp/economy-review/
+          name: economy-review-text
+          path: /tmp/economy-review-text.zip
           retention-days: 1
