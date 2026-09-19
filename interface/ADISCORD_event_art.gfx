@@ -26,7 +26,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_city_in_civil_war"
-		texturefile = "gfx/event_pictures/standard/news/city_in_civil_war.png"
+		texturefile = "gfx/event_pictures/standard/news/urban_patrol.png"
 	}
 	spriteType = {
 		name = "GFX_event_adiscord_vorkerland_explosion"
@@ -38,19 +38,19 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_vorkerland_northern_settlement"
-		texturefile = "gfx/event_pictures/standard/news/vorkerland_northern_settlement.png"
+		texturefile = "gfx/event_pictures/standard/news/northern_patrol.png"
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_army_formation"
-		texturefile = "gfx/event_pictures/standard/news/army_formation.png"
+		texturefile = "gfx/event_pictures/standard/news/military_formation.png"
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_treaty_signing"
-		texturefile = "gfx/event_pictures/standard/news/treaty_signing.png"
+		texturefile = "gfx/event_pictures/standard/news/constituent_assembly.png"
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_peace_negotiations"
-		texturefile = "gfx/event_pictures/standard/news/peace_negotiations.png"
+		texturefile = "gfx/event_pictures/standard/news/peace_signing.png"
 	}
 	spriteType = {
 		name = "GFX_event_adiscord_military_planning"
@@ -62,14 +62,22 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_urban_resistance"
-		texturefile = "gfx/event_pictures/standard/news/urban_resistance.png"
-	}
-	spriteType = {
-		name = "GFX_news_event_adiscord_troops_marching"
-		texturefile = "gfx/event_pictures/standard/news/troops_marching.png"
+		texturefile = "gfx/event_pictures/standard/news/resistance_fighters.png"
 	}
 	spriteType = {
 		name = "GFX_news_event_adiscord_armed_uprising"
-		texturefile = "gfx/event_pictures/standard/news/armed_uprising.png"
+		texturefile = "gfx/event_pictures/standard/news/urban_combat.png"
+	}
+	spriteType = {
+		name = "GFX_news_event_adiscord_kefreyt_address"
+		texturefile = "gfx/event_pictures/standard/news/kefreyt_address.png"
+	}
+	spriteType = {
+		name = "GFX_news_event_adiscord_imperial_proclamation"
+		texturefile = "gfx/event_pictures/standard/news/imperial_proclamation.png"
+	}
+	spriteType = {
+		name = "GFX_news_event_adiscord_stelander_empire"
+		texturefile = "gfx/event_pictures/standard/news/stelander_empire.png"
 	}
 }

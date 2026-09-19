@@ -187,7 +187,7 @@ news_event = { #stelander empire
 	fire_only_once = no
 	is_triggered_only = yes
 
-	picture = GFX_news_event_adiscord_treaty_signing
+	picture = GFX_news_event_adiscord_stelander_empire
 
 	# Presentation only. State ownership, politics and Shabrat's leader role
 	# belong to STP_proclaim_imperial_union, which is reached through gameplay.

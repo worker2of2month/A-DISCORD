@@ -35,6 +35,13 @@ country_event = {
 		add_political_power = -50
 		set_country_flag = ADISCORD_rin_oath_crisis_loyal_to_montar
 		set_global_flag = ADISCORD_rin_oath_crisis_loyalty_outcome
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_news_rin_loyalty_published } }
+				set_global_flag = ADISCORD_news_rin_loyalty_published
+				news_event = { id = ADISCORD_rin_crisis.14 hours = 1 }
+			}
+		}
 		set_global_flag = ADISCORD_rin_oath_crisis_resolved
 	}
 }
@@ -70,6 +77,12 @@ country_event = {
 	immediate = {
 		if = {
 			limit = { ADISCORD_rin_partition_armistice_is_valid = yes }
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_news_rin_partition_published } }
+				set_global_flag = ADISCORD_news_rin_partition_published
+				news_event = { id = ADISCORD_rin_crisis.13 hours = 1 }
+			}
+
 			clr_country_flag = ADISCORD_rin_partition_verification_pending
 			clr_country_flag = ADISCORD_rin_partition_verification_retry
 		}
@@ -100,7 +113,71 @@ country_event = {
 			set_global_flag = ADISCORD_rin_oath_crisis_terminal_failure
 			log = "[ADISCORD][RIN] Partition verification failed after the single bounded repair."
 		}
+		if = {
+			limit = { ADISCORD_rin_partition_armistice_is_valid = yes }
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_news_rin_partition_published } }
+				set_global_flag = ADISCORD_news_rin_partition_published
+				news_event = { id = ADISCORD_rin_crisis.13 hours = 1 }
+			}
+		}
+
 		clr_country_flag = ADISCORD_rin_partition_verification_pending
 		clr_country_flag = ADISCORD_rin_partition_verification_retry
 	}
+}
+
+news_event = {
+	id = ADISCORD_rin_crisis.10
+	title = ADISCORD_rin_crisis.10.t
+	desc = ADISCORD_rin_crisis.10.d
+	picture = GFX_news_event_adiscord_armed_uprising
+	major = yes
+	fire_only_once = no
+	is_triggered_only = yes
+	option = { name = ADISCORD_rin_crisis.10.a }
+}
+
+news_event = {
+	id = ADISCORD_rin_crisis.11
+	title = ADISCORD_rin_crisis.11.t
+	desc = ADISCORD_rin_crisis.11.d
+	picture = GFX_news_event_adiscord_treaty_signing
+	major = yes
+	fire_only_once = no
+	is_triggered_only = yes
+	option = { name = ADISCORD_rin_crisis.11.a }
+}
+
+news_event = {
+	id = ADISCORD_rin_crisis.12
+	title = ADISCORD_rin_crisis.12.t
+	desc = ADISCORD_rin_crisis.12.d
+	picture = GFX_news_event_adiscord_army_formation
+	major = yes
+	fire_only_once = no
+	is_triggered_only = yes
+	option = { name = ADISCORD_rin_crisis.12.a }
+}
+
+news_event = {
+	id = ADISCORD_rin_crisis.13
+	title = ADISCORD_rin_crisis.13.t
+	desc = ADISCORD_rin_crisis.13.d
+	picture = GFX_news_event_adiscord_peace_negotiations
+	major = yes
+	fire_only_once = no
+	is_triggered_only = yes
+	option = { name = ADISCORD_rin_crisis.13.a }
+}
+
+news_event = {
+	id = ADISCORD_rin_crisis.14
+	title = ADISCORD_rin_crisis.14.t
+	desc = ADISCORD_rin_crisis.14.d
+	picture = GFX_news_event_adiscord_treaty_signing
+	major = yes
+	fire_only_once = no
+	is_triggered_only = yes
+	option = { name = ADISCORD_rin_crisis.14.a }
 }

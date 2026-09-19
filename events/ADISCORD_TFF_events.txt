@@ -12,6 +12,11 @@ country_event = {
 	immediate = {
 		hidden_effect = {
 			ADISCORD_TFF_form_wartime_confederation = yes
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_news_frontier_command_published } }
+				set_global_flag = ADISCORD_news_frontier_command_published
+				news_event = { id = ADISCORD_TFF.10 hours = 1 }
+			}
 		}
 	}
 
@@ -21,4 +26,15 @@ country_event = {
 		custom_effect_tooltip = ADISCORD_TFF_empty_chair_result_tt
 		effect_tooltip = { add_ideas = TFF_emergency_frontier_command }
 	}
+}
+
+news_event = {
+	id = ADISCORD_TFF.10
+	title = ADISCORD_TFF.10.t
+	desc = ADISCORD_TFF.10.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	fire_only_once = no
+	is_triggered_only = yes
+	option = { name = ADISCORD_TFF.10.a }
 }

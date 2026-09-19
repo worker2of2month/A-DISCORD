@@ -8,12 +8,12 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_event_vorkerland_explosion"
-		texturefile = "gfx/event_pictures/event_vorkerland_explosion.png"
+		texturefile = "gfx/event_pictures/standard/country/vorkerland_explosion.png"
 	}
 
 	spriteType = {
 		name = "GFX_event_vorkerland_northern_settlement"
-		texturefile = "gfx/event_pictures/event_vorkerland_civilwar_is_over.png"
+		texturefile = "gfx/event_pictures/standard/news/northern_patrol.png"
 	}
 
 	spriteType = {

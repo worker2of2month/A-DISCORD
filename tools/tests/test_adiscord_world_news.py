@@ -41,7 +41,7 @@ def named_block(text: str, name: str) -> str:
 
 
 def event_block(text: str, event_id: str) -> str:
-    for match in re.finditer(r"(?m)^\s*news_event\s*=\s*\{", text):
+    for match in re.finditer(r"(?m)^news_event\s*=\s*\{", text):
         start = match.end()
         depth = 1
         in_string = False
@@ -140,6 +140,37 @@ class WorldNewsContracts(unittest.TestCase):
     def test_world_news_localisation_uses_utf8_bom(self):
         self.assertTrue(self.ru_path.read_bytes().startswith(b"\xef\xbb\xbf"))
         self.assertTrue(self.en_path.read_bytes().startswith(b"\xef\xbb\xbf"))
+
+    def test_rin_and_frontier_news_are_localised_delayed_and_guarded(self):
+        rin = read("events/ADISCORD_rin_oath_crisis_events.txt")
+        effects = read("common/scripted_effects/ADISCORD_rin_oath_crisis_effects.txt")
+        frontier = read("events/ADISCORD_TFF_events.txt")
+        loc = read("localisation/russian/events_l_russian.yml") + read(
+            "localisation/russian/ADISCORD_TFF_l_russian.yml"
+        )
+        for event_id, source, flag in [
+            ("ADISCORD_rin_crisis.10", rin, "rin_active"),
+            ("ADISCORD_rin_crisis.11", rin, "rin_southern_victory"),
+            ("ADISCORD_rin_crisis.12", rin, "rin_northern_victory"),
+            ("ADISCORD_rin_crisis.13", rin, "rin_partition"),
+            ("ADISCORD_rin_crisis.14", rin, "rin_loyalty"),
+            ("ADISCORD_TFF.10", frontier, "frontier_command"),
+        ]:
+            event = event_block(source, event_id)
+            for token in ("major = yes", "fire_only_once = no", "is_triggered_only = yes"):
+                self.assertIn(token, event, event_id)
+            callers = source + effects
+            self.assertIn("id = " + event_id + " hours = 1", callers)
+            flag = "ADISCORD_news_" + flag + "_published"
+            self.assertIn("NOT = { has_global_flag = " + flag + " }", callers)
+            self.assertIn("set_global_flag = " + flag, callers)
+            for suffix in ("t", "d", "a"):
+                key = event_id + "." + suffix
+                values = re.findall(r'^ ' + re.escape(key) + r': "([^"\n]+)"$', loc, re.M)
+                self.assertEqual(len(values), 1, key)
+                text = values[0].replace(r"\n", "\n")
+                self.assertLessEqual(len(text), 3000)
+                self.assertLessEqual(len(text.encode("utf-8")), 5500)
 
     def test_world_news_debug_smoke_decisions_are_not_shipped(self):
         self.assertFalse(

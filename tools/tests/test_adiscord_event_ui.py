@@ -411,22 +411,29 @@ class EventWindowUiTests(unittest.TestCase):
                     expected = (507, 184) if kind == "country" else (396, 153)
                     sprite = _named_block(sprite_text, "spriteType", fields["picture"])
                     texture = re.search(r'texturefile\s*=\s*"([^"]+)"', sprite, re.I)[1]
+                    if kind == "news":
+                        self.assertEqual(Path(texture).parent.as_posix(),
+                                         "gfx/event_pictures/standard/news")
+                        self.assertRegex(Path(texture).name, r"^[a-z0-9]+(?:_[a-z0-9]+)*\.png$")
                     with Image.open(ROOT / texture) as artwork:
                         self.assertEqual(artwork.size, expected)
                         self.assertEqual(artwork.convert("RGBA").getchannel("A").getextrema(), (255, 255))
                     checked += 1
         self.assertGreater(checked, 100, "event audit unexpectedly skipped the main story files")
 
-    def test_explosion_art_excludes_legacy_frame(self):
+    def test_news_art_uses_preserved_authored_sources(self):
         from PIL import ImageOps
-        from tools.builders.build_adiscord_event_pictures import formatted_art
+        from tools.builders.build_adiscord_event_pictures import ART, NEWS_SCENES, formatted_art
 
-        with Image.open(ROOT / "gfx/event_pictures/event_vorkerland_explosion.png") as source:
-            unframed = source.convert("RGB").crop((7, 7, 500, 177))
-        for kind, size in (("country", (507, 184)), ("news", (396, 153))):
-            with self.subTest(kind=kind):
-                expected = ImageOps.fit(unframed, size, method=Image.Resampling.LANCZOS)
-                self.assertEqual(formatted_art("vorkerland_explosion", kind).tobytes(), expected.tobytes())
+        for scene, (_, formats) in ART.items():
+            if "news" not in formats:
+                continue
+            with self.subTest(scene=scene):
+                name = NEWS_SCENES.get(scene, scene)
+                with Image.open(ROOT / "gfx/event_pictures/source/news" / (name + ".png")) as source:
+                    expected = ImageOps.fit(source.convert("RGB"), (396, 153),
+                                            method=Image.Resampling.LANCZOS)
+                self.assertEqual(formatted_art(scene, "news").tobytes(), expected.tobytes())
 
     def test_event_artwork_builder_is_current_and_owned(self):
         from tools.builders.build_adiscord_event_pictures import expected_outputs

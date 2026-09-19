@@ -93,8 +93,10 @@ def collect_issues() -> list[str]:
     if event_ids != [
         "ADISCORD_rin_crisis.1", "ADISCORD_rin_crisis.2",
         "ADISCORD_rin_crisis.3", "ADISCORD_rin_crisis.4",
+        "ADISCORD_rin_crisis.10", "ADISCORD_rin_crisis.11",
+        "ADISCORD_rin_crisis.12", "ADISCORD_rin_crisis.13", "ADISCORD_rin_crisis.14",
     ]:
-        issues.append(f"RIN event namespace must contain exactly .1-.4, found {event_ids}")
+        issues.append(f"RIN event namespace must contain exactly .1-.4 and news .10-.14, found {event_ids}")
     if events.count("add_namespace = ADISCORD_rin_crisis") != 1:
         issues.append("RIN event namespace declaration is missing or duplicated")
 

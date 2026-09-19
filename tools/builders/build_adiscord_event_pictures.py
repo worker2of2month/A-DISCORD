@@ -22,26 +22,35 @@ ART_ROOT = ROOT / "gfx/event_pictures"
 GFX = ROOT / "interface/ADISCORD_event_art.gfx"
 PREVIEW = ROOT / "gfx/interface/events/preview/ADISCORD_event_art_contact_sheet.png"
 SIZES = {"country": (507, 184), "news": (396, 153)}
-# The old explosion source includes a beveled perimeter; keep only the artwork.
-SOURCE_CROPS = {"vorkerland_explosion": (7, 7, 500, 177)}
-
-# scene: (source relative to gfx/event_pictures, required window formats).
-# New formats are explicit: a COUNTRY sprite must never be reused in NEWS.
+# Country and news formats can have independently authored sources.
 ART = {
     "parliament_chamber": ("source/parliament_chamber.png", ("country", "news")),
     "negotiation_table": ("source/negotiation_table.png", ("country", "news")),
     "military_headquarters": ("event_adiscord_ui_test.png", ("country",)),
     "nectar_of_the_gods": ("source/nectar_of_the_gods.png", ("country",)),
-    "city_in_civil_war": ("source/news/city_in_civil_war.png", ("news",)),
-    "vorkerland_explosion": ("event_vorkerland_explosion.png", ("country", "news")),
-    "vorkerland_northern_settlement": ("event_vorkerland_civilwar_is_over.png", ("news",)),
-    "army_formation": ("source/news/army_formation.dds", ("news",)),
-    "treaty_signing": ("source/news/treaty_signing.dds", ("news",)),
-    "peace_negotiations": ("source/news/peace_negotiations.dds", ("news",)),
+    "city_in_civil_war": ("source/news/urban_patrol.png", ("news",)),
+    "vorkerland_explosion": ("source/vorkerland_explosion_country.png", ("country", "news")),
+    "vorkerland_northern_settlement": ("source/news/northern_patrol.png", ("news",)),
+    "army_formation": ("source/news/military_formation.png", ("news",)),
+    "treaty_signing": ("source/news/constituent_assembly.png", ("news",)),
+    "peace_negotiations": ("source/news/peace_signing.png", ("news",)),
     "military_planning": ("source/news/military_planning.dds", ("country", "news")),
-    "urban_resistance": ("source/news/urban_resistance.dds", ("news",)),
-    "troops_marching": ("source/news/troops_marching.dds", ("news",)),
-    "armed_uprising": ("source/news/armed_uprising.dds", ("news",)),
+    "urban_resistance": ("source/news/resistance_fighters.png", ("news",)),
+    "armed_uprising": ("source/news/urban_combat.png", ("news",)),
+    "kefreyt_address": ("source/news/kefreyt_address.png", ("news",)),
+    "imperial_proclamation": ("source/news/imperial_proclamation.png", ("news",)),
+    "stelander_empire": ("source/news/stelander_empire.png", ("news",)),
+}
+
+# Preserve public sprite IDs while naming the textures after their visible scene.
+NEWS_SCENES = {
+    "city_in_civil_war": "urban_patrol",
+    "vorkerland_northern_settlement": "northern_patrol",
+    "army_formation": "military_formation",
+    "treaty_signing": "constituent_assembly",
+    "peace_negotiations": "peace_signing",
+    "urban_resistance": "resistance_fighters",
+    "armed_uprising": "urban_combat",
 }
 
 
@@ -51,17 +60,18 @@ def sprite_name(scene: str, kind: str) -> str:
 
 
 def texture_path(scene: str, kind: str) -> Path:
-    return ART_ROOT / "standard" / kind / f"{scene}.png"
+    filename = NEWS_SCENES.get(scene, scene) if kind == "news" else scene
+    return ART_ROOT / "standard" / kind / f"{filename}.png"
 
 
 def formatted_art(scene: str, kind: str) -> Image.Image:
     source, formats = ART[scene]
     if kind not in formats:
         raise ValueError(f"unsupported event artwork format: {scene}/{kind}")
+    if kind == "news":
+        source = "source/news/" + NEWS_SCENES.get(scene, scene) + ".png"
     with Image.open(ART_ROOT / source) as image:
         artwork = image.convert("RGB")
-        if scene in SOURCE_CROPS:
-            artwork = artwork.crop(SOURCE_CROPS[scene])
         # No stretching, added frames, tint, blur bars, or artificial sharpening.
         return ImageOps.fit(artwork, SIZES[kind],
                             method=Image.Resampling.LANCZOS)
