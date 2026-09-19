@@ -41,3 +41,43 @@ a separate balance audit.
 The economy window remains independent from Trade. Its top-bar button occupies
 the new slot immediately to the right of Trade, while the six treasury actions
 are integrated into the main economy dashboard and require no overlay state.
+
+## Paid industrial programmes
+
+Kefreite and postwar Shabrat receive nine-focus investment branches after their
+existing economic-recovery finales. Focuses authorize investment; they do not
+charge treasury or produce unresearched equipment. The final focus requires one
+completed capital programme, not merely all preceding focuses.
+
+| Programme | Treasury | Components / alloys | Days | Delivered result |
+| --- | ---: | ---: | ---: | --- |
+| Precision tooling | 800 | 6 / 3 | 90 | +8% efficiency cap, +10% efficiency growth |
+| Industrial automation | 1200 | 8 / 6 | 120 | +8% factory output, +10% total income |
+| National computing | 1500 | 12 / 4 | 120 | +7% research, -10% administrative costs |
+| Supply service | 600 | 4 / 6 | 60 | 300 researched trucks, 20 researched armoured trains |
+| Reconnaissance order | 1000 | 8 / 4 | 90 | 60 researched drone-carrier vehicles |
+| Combat-platform order | 1800 | 8 / 12 | 120 | 80 researched combat platforms |
+
+One programme occupies the national investment slot. Payment is recorded once
+in the existing treasury action ledger. The `project_id` identifies the active
+operation; `project_deposit` is its receipt. An active country-scoped dynamic
+modifier reserves three civilian factories and the specified continuous resource
+flow with native `country_resource_cost_rare_components` and
+`country_resource_cost_rare_alloys`. Availability reads the current country
+`resource@` surplus, including trade and ordinary production. The resources are
+not an invented stockpile, nor permanently subtracted from a state's deposits.
+
+Resource deficits, insufficient surviving civilian industry, capitulation or
+loss of independence cancel work. The country recovers 75% of its receipt;
+25% is sunk cost. Cancellation and delivery both release the native allocation,
+clear the receipt and invalidate the economy cache. Callbacks check their own
+project ID, so a stale operation cannot settle another country's or another
+project's payment. An explicit cancellation decision uses the same refund path.
+There are no new recurring country/state scans or delayed event dispatchers.
+
+The three capital programmes cannot be bought twice. Equipment contracts have
+a 90-day re-enable delay and require technologies that actually enable their
+specific delivered models. The source-executing transaction tests cover exact
+fractional input boundaries, duplicate/stale callbacks, interruptions and the
+native allocation edges. They do not replace a cold game load and a complete
+in-game decision lifecycle check.

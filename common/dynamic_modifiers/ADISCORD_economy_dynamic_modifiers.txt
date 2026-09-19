@@ -4,3 +4,10 @@ ADISCORD_economy_cluster_local_factory_output = {
 	enable = { always = yes }
 	industrial_capacity_factory = ADISCORD_economy_cluster_factory_output_factor
 }
+
+ADISCORD_economy_project_allocation = {
+	enable = { has_variable = ADISCORD_economy_project_id }
+	civilian_factory_use = 3
+	country_resource_cost_rare_components = ADISCORD_economy_project_components
+	country_resource_cost_rare_alloys = ADISCORD_economy_project_alloys
+}

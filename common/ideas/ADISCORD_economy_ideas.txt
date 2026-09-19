@@ -7,6 +7,82 @@ ideas = {
 			picture = generic_production_bonus
 			modifier = { production_speed_buildings_factor = 0.05 }
 		}
+
+		# Capital investment capabilities and focus programmes.
+		ADISCORD_economy_precision_tooling = {
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				production_factory_max_efficiency_factor = 0.08
+				production_factory_efficiency_gain_factor = 0.10
+			}
+		}
+
+		ADISCORD_economy_automated_industry = {
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				industrial_capacity_factory = 0.08
+				ADISCORD_economy_overall_income_factor = 0.10
+			}
+		}
+
+		ADISCORD_economy_national_computing = {
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			picture = generic_research_bonus
+			modifier = {
+				research_speed_factor = 0.07
+				ADISCORD_economy_admin_expense_factor = -0.10
+			}
+		}
+
+		ADISCORD_economy_investment_fund = {
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				ADISCORD_economy_creditworthiness_factor = 0.10
+			}
+		}
+
+		ADISCORD_economy_materials_program = {
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				local_resources_factor = 0.10
+			}
+		}
+
+		ADISCORD_economy_export_finance = {
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+			}
+		}
+
+		ADISCORD_economy_integrated_economy = {
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = {
+				ADISCORD_economy_overall_income_factor = 0.05
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
 	}
 	hidden_ideas = {
 		ADISCORD_economy_army_spending_1 = {

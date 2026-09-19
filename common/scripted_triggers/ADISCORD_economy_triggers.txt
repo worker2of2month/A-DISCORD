@@ -627,3 +627,117 @@ ADISCORD_economy_has_culture_development_2 = { ADISCORD_cultural_development_exa
 ADISCORD_economy_has_culture_development_3 = { ADISCORD_cultural_development_exact_3 = yes }
 ADISCORD_economy_has_culture_development_4 = { ADISCORD_cultural_development_exact_4 = yes }
 ADISCORD_economy_has_culture_development_5 = { ADISCORD_cultural_development_exact_5 = yes }
+
+# Shared national investment projects. Resource@ reads country surplus,
+# including trade and current production, rather than raw state deposits.
+ADISCORD_economy_projects_unlocked = {
+	OR = {
+		AND = { tag = VAL has_completed_focus = VAL_econ_development_fund }
+		AND = { tag = STS has_country_flag = STP_cw_postwar has_completed_focus = STP_pc_investment_development_fund }
+	}
+}
+ADISCORD_economy_projects_country_ready = {
+	ADISCORD_economy_has_current_schema = yes
+	ADISCORD_economy_projects_unlocked = yes
+	has_capitulated = no
+	is_subject = no
+}
+ADISCORD_economy_project_can_continue = {
+	ADISCORD_economy_projects_country_ready = yes
+	has_variable = ADISCORD_economy_project_id
+	has_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
+	NOT = { num_of_civilian_factories < 3 }
+	check_variable = { var = resource@rare_components value = 0 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 0 compare = greater_than_or_equals }
+}
+ADISCORD_economy_has_completed_capital_project = {
+	OR = { has_idea = ADISCORD_economy_precision_tooling has_idea = ADISCORD_economy_automated_industry has_idea = ADISCORD_economy_national_computing }
+}
+
+ADISCORD_economy_precision_tooling_requirements = {
+	ADISCORD_economy_projects_country_ready = yes
+	OR = { has_completed_focus = VAL_econ_precision_industry has_completed_focus = STP_pc_investment_precision_industry }
+
+	NOT = { has_idea = ADISCORD_economy_precision_tooling }
+}
+ADISCORD_economy_can_start_precision_tooling = {
+	ADISCORD_economy_precision_tooling_requirements = yes
+	NOT = { has_variable = ADISCORD_economy_project_id }
+	NOT = { num_of_available_civilian_factories < 3 }
+	check_variable = { var = ADISCORD_economy_treasury value = 800 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 6 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 3 compare = greater_than_or_equals }
+}
+
+ADISCORD_economy_automated_industry_requirements = {
+	ADISCORD_economy_projects_country_ready = yes
+	OR = { has_completed_focus = VAL_econ_automation has_completed_focus = STP_pc_investment_automation }
+
+	NOT = { has_idea = ADISCORD_economy_automated_industry }
+}
+ADISCORD_economy_can_start_automated_industry = {
+	ADISCORD_economy_automated_industry_requirements = yes
+	NOT = { has_variable = ADISCORD_economy_project_id }
+	NOT = { num_of_available_civilian_factories < 3 }
+	check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 8 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 6 compare = greater_than_or_equals }
+}
+
+ADISCORD_economy_national_computing_requirements = {
+	ADISCORD_economy_projects_country_ready = yes
+	OR = { has_completed_focus = VAL_econ_computing has_completed_focus = STP_pc_investment_computing }
+
+	NOT = { has_idea = ADISCORD_economy_national_computing }
+}
+ADISCORD_economy_can_start_national_computing = {
+	ADISCORD_economy_national_computing_requirements = yes
+	NOT = { has_variable = ADISCORD_economy_project_id }
+	NOT = { num_of_available_civilian_factories < 3 }
+	check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 12 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 4 compare = greater_than_or_equals }
+}
+
+ADISCORD_economy_logistics_contract_requirements = {
+	ADISCORD_economy_projects_country_ready = yes
+	OR = { has_completed_focus = VAL_econ_logistics has_completed_focus = STP_pc_investment_logistics }
+	has_tech = ADISCORD_tech_restored_truck_fleets
+	has_tech = ADISCORD_tech_armored_rail_convoys
+}
+ADISCORD_economy_can_start_logistics_contract = {
+	ADISCORD_economy_logistics_contract_requirements = yes
+	NOT = { has_variable = ADISCORD_economy_project_id }
+	NOT = { num_of_available_civilian_factories < 3 }
+	check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 4 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 6 compare = greater_than_or_equals }
+}
+
+ADISCORD_economy_drone_contract_requirements = {
+	ADISCORD_economy_projects_country_ready = yes
+	OR = { has_completed_focus = VAL_econ_defense_orders has_completed_focus = STP_pc_investment_defense_orders }
+	OR = { has_tech = ADISCORD_tech_signature_management_skins has_tech = ADISCORD_tech_unmanned_recon_vehicles }
+}
+ADISCORD_economy_can_start_drone_contract = {
+	ADISCORD_economy_drone_contract_requirements = yes
+	NOT = { has_variable = ADISCORD_economy_project_id }
+	NOT = { num_of_available_civilian_factories < 3 }
+	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 8 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 4 compare = greater_than_or_equals }
+}
+
+ADISCORD_economy_platform_contract_requirements = {
+	ADISCORD_economy_projects_country_ready = yes
+	OR = { has_completed_focus = VAL_econ_defense_orders has_completed_focus = STP_pc_investment_defense_orders }
+	has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+}
+ADISCORD_economy_can_start_platform_contract = {
+	ADISCORD_economy_platform_contract_requirements = yes
+	NOT = { has_variable = ADISCORD_economy_project_id }
+	NOT = { num_of_available_civilian_factories < 3 }
+	check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 8 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 12 compare = greater_than_or_equals }
+}
