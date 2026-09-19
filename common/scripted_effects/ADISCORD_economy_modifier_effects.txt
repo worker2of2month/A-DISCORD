@@ -530,6 +530,15 @@ ADISCORD_economy_clamp_modifier_factors = {
 	clamp_variable = { var = ADISCORD_country_development_final_economic_growth_factor_bp min = 25 max = 250 }
 }
 
+# Monthly fiscal units for the four tax-sensitive source buckets. Raw policy
+# bases remain unscaled so changing taxes cannot compound a previous forecast.
+ADISCORD_economy_scale_taxable_income = {
+	multiply_variable = { var = ADISCORD_economy_personal_income value = 8 }
+	multiply_variable = { var = ADISCORD_economy_business_income value = 8 }
+	multiply_variable = { var = ADISCORD_economy_consumer_goods_income value = 8 }
+	multiply_variable = { var = ADISCORD_economy_factory_income value = 8 }
+}
+
 ADISCORD_economy_apply_income_modifier_factors = {
 	multiply_variable = { var = ADISCORD_economy_personal_income value = ADISCORD_economy_final_tax_collection_factor_bp }
 	divide_variable = { var = ADISCORD_economy_personal_income value = 100 }
@@ -565,6 +574,9 @@ ADISCORD_economy_apply_income_modifier_factors = {
 	clamp_variable = { var = ADISCORD_economy_factory_income min = 0 max = 500 }
 	clamp_variable = { var = ADISCORD_economy_resource_income min = 0 max = 500 }
 	clamp_variable = { var = ADISCORD_economy_building_income min = 0 max = 500 }
+	ADISCORD_economy_scale_taxable_income = yes
+	multiply_variable = { var = ADISCORD_economy_resource_income value = 8 }
+	multiply_variable = { var = ADISCORD_economy_building_income value = 8 }
 }
 
 ADISCORD_economy_apply_overall_income_modifier_factor = {
@@ -589,6 +601,17 @@ ADISCORD_economy_apply_expense_modifier_factors = {
 	divide_variable = { var = ADISCORD_economy_research_expenses value = 100 }
 	multiply_variable = { var = ADISCORD_economy_admin_expenses value = ADISCORD_economy_final_admin_expense_factor_bp }
 	divide_variable = { var = ADISCORD_economy_admin_expenses value = 100 }
+	# Operating appropriations have real fiscal weight. Interest is already
+	# denominated in treasury units and must retain debt * annual_rate / 1200.
+	multiply_variable = { var = ADISCORD_economy_army_expenses value = 4 }
+	multiply_variable = { var = ADISCORD_economy_airforce_expenses value = 4 }
+	multiply_variable = { var = ADISCORD_economy_navy_expenses value = 4 }
+	multiply_variable = { var = ADISCORD_economy_military_factory_expenses value = 4 }
+	multiply_variable = { var = ADISCORD_economy_construction_expenses value = 4 }
+	multiply_variable = { var = ADISCORD_economy_social_expenses value = 4 }
+	multiply_variable = { var = ADISCORD_economy_research_expenses value = 4 }
+	multiply_variable = { var = ADISCORD_economy_admin_expenses value = 4 }
+	multiply_variable = { var = ADISCORD_economy_repair_expenses value = 4 }
 }
 
 ADISCORD_economy_apply_overall_expense_modifier_factor = {

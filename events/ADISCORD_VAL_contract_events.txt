@@ -590,7 +590,7 @@ country_event = {
     option = {
         name = val_rework.111.war
         trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes VAL_frontier_prewar_eligible = yes has_war = no }
-        ai_chance = { base = 70 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0.3 has_manpower < 20000 } }
+        ai_chance = { base = 70 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } modifier = { factor = 0.3 has_manpower < 20000 } }
         custom_effect_tooltip = VAL_frontier_war_tt
         hidden_effect = { VAL_frontier_start_war = yes }
     }

@@ -76,8 +76,8 @@ class ProductiveIncomeTests(unittest.TestCase):
             f = income_fixture(civilian=count)
             f.run(P + "calculate_income")
             results.append(f.scopes["A"][P + "monthly_income"])
-        self.assertGreaterEqual(results[1] - results[0], 0.9)
-        self.assertLess(results[1] - results[0], 2)
+        self.assertGreaterEqual(results[1] - results[0], 7.2)
+        self.assertLess(results[1] - results[0], 16)
 
     def test_business_center_is_an_income_investment(self):
         results = []
@@ -85,7 +85,7 @@ class ProductiveIncomeTests(unittest.TestCase):
             f = income_fixture(business=count)
             f.run(P + "calculate_income")
             results.append(f.scopes["A"][P + "monthly_income"])
-        self.assertGreater(results[1] - results[0], 2.5)
+        self.assertGreater(results[1] - results[0], 20)
 
     def test_no_resources_still_means_no_resource_rent(self):
         f = income_fixture(resources=0)

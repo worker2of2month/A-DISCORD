@@ -3158,7 +3158,7 @@ ADISCORD_economy_ai_monthly_policy = {
 
     def test_core_policy_and_debt_flow_negative_fixtures(self):
         research = "\n".join(
-            ["ADISCORD_economy_calculate_research_expenses = {", "multiply_variable = { var = ADISCORD_economy_research_expenses value = 2.00 }"]
+            ["ADISCORD_economy_calculate_research_expenses = {"]
             + [
                 f"if = {{ limit = {{ check_variable = {{ var = ADISCORD_economy_research_spending_mode value = {level} compare = equals }} }} multiply_variable = {{ var = ADISCORD_economy_research_expenses value = {factor} }} }}"
                 for level, factor in enumerate(("0.30", "0.65", "1.00", "1.30", "1.60"), 1)
@@ -8203,12 +8203,12 @@ ADISCORD_task10_forbidden_cache_consumer = {
     def test_building_tooltips_lead_with_role_and_budget_impact(self):
         self.assertNotIn("Строятся в обычном меню", ECONOMY_LOC)
         for key, role, budget in (
-            ("ADISCORD_business_center_desc", "Роль: доход", "+1,20"),
-            ("ADISCORD_science_center_desc", "Роль: исследования", "-0,27"),
+            ("ADISCORD_business_center_desc", "Роль: доход", "+18,40"),
+            ("ADISCORD_science_center_desc", "Роль: исследования", "-1,68"),
             (
                 "ADISCORD_industrial_cluster_desc",
                 "Роль: местное военное производство",
-                "+0,31",
+                "Почти нейтрален",
             ),
         ):
             match = re.search(rf'(?m)^\s*{key}:\d*\s+"([^"]*)"', ECONOMY_LOC)
@@ -8223,9 +8223,9 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "Деловой центр",
             "Научный центр",
             "Промышленный кластер",
-            "2.10 + 0.25 - 0.10 = +2.25",
-            "0.20 - 0.35 - 0.12 = -0.27",
-            "0.45 + 0.16 - 0.18 - 0.12 = +0.31",
+            "8 × (2.10 + 0.25) - 4 × 0.10 = +18.40",
+            "8 × 0.20 - 4 × (2 × 0.35 + 0.12) = -1.68",
+            "8 × (0.15 + 0.05) - 4 × (0.18 + 0.12) = +0.40",
             "5% × сумма(исправные военные заводы региона × уровень кластера)",
             "3 / 13",
         ):
