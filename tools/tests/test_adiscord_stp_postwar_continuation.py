@@ -619,6 +619,38 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertNotIn("скрипт", page)
         self.assertNotIn("ванильн", page)
 
+    def test_postwar_war_markers_follow_relation_and_heal_loaded_wars(self) -> None:
+        source = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        relation_start = source.index("\ton_war_relation_added = {")
+        relation_end = source.index("\n\ton_peaceconference_ended = {", relation_start)
+        relation = source[relation_start:relation_end]
+        weekly_start = source.index("\ton_weekly_STS = {")
+        weekly_end = source.index("\n\t# The split creates", weekly_start)
+        weekly = source[weekly_start:weekly_end]
+
+        self.assertIn("has_global_flag = STP_cw_union_wars_finished", relation)
+        for opponent, own_flag in (("VAL", "STP_pc_war_val"), ("NOD", "STP_pc_war_nod")):
+            with self.subTest(opponent=opponent):
+                self.assertIn(
+                    f"AND = {{ ROOT = {{ tag = STS }} FROM = {{ tag = {opponent} }} }}",
+                    relation,
+                )
+                self.assertIn(
+                    f"AND = {{ ROOT = {{ tag = {opponent} }} FROM = {{ tag = STS }} }}",
+                    relation,
+                )
+                self.assertIn(f"STS = {{ set_country_flag = {own_flag} }}", relation)
+                self.assertIn(
+                    f"{opponent} = {{ set_country_flag = STP_pc_war_with_sts }}",
+                    relation,
+                )
+                self.assertIn(f"has_war_with = {opponent}", weekly)
+                self.assertIn(f"set_country_flag = {own_flag}", weekly)
+                self.assertIn(
+                    f"{opponent} = {{ set_country_flag = STP_pc_war_with_sts }}",
+                    weekly,
+                )
+
     def test_postwar_settlement_is_a_sibling_of_the_nod_defeat_router(self) -> None:
         effect = ast_block(ast_block(relative_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions"), "on_capitulation")
         top = ast_block(effect, "effect")
