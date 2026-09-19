@@ -1,0 +1,54 @@
+name: Isolated economy source audit
+on:
+  push:
+    branches:
+      - codex/economy-100-audit-20260919
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 7d828a217b7098a5d1c73cb45049b279e41248a4
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout: |
+            common
+            events
+            history
+            localisation
+            tools
+            docs
+            interface
+            country_metadata
+      - name: Package inspected source
+        env:
+          OUTPUT: ${{ runner.temp }}/adiscord-source.zip
+        run: |
+          python - <<'PY'
+          import os
+          import re
+          import zipfile
+          from pathlib import Path
+          roots = ['AGENTS.md', 'descriptor.mod', 'common', 'events', 'history', 'localisation', 'tools', 'docs', 'interface', 'country_metadata']
+          with zipfile.ZipFile(os.environ['OUTPUT'], 'w', zipfile.ZIP_DEFLATED) as archive:
+              for root in roots:
+                  path = Path(root)
+                  for file in ([path] if path.is_file() else sorted(path.rglob('*'))):
+                      if file.is_file():
+                          archive.write(file, file.as_posix())
+          for name in ['common/scripted_effects/ADISCORD_economy_effects.txt', 'common/scripted_effects/ADISCORD_VAL_effects.txt', 'common/national_focus/ADISCORD_national_focus_VAL.txt']:
+              text = Path(name).read_text(encoding='utf-8-sig')
+              print(name, len(text.splitlines()), 'lines')
+              for number, line in enumerate(text.splitlines(), 1):
+                  if re.match(r'ADISCORD_economy_calculate_(income|expenses|monthly_balance)\s*=', line) or 'id = VAL_frontier' in line:
+                      print(number, line.strip())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: adiscord-source
+          path: ${{ runner.temp }}/adiscord-source.zip
+          retention-days: 1
