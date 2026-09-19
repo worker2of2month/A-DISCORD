@@ -1276,6 +1276,8 @@
  ADISCORD_vorkerland_tva_retreat_levy_1_desc:0 "Через семь дней в удерживаемой столице соберётся один плохо оснащённый технический отряд."
  ADISCORD_vorkerland_tva_retreat_levy_2:0 "Созвать последний технический резерв"
  ADISCORD_vorkerland_tva_retreat_levy_2_desc:0 "Последний и ещё более слабый столичный резерв. После него новые отряды этой линии недоступны."
+ ADISCORD_vorkerland_vad_continue_imperial_reunification:0 "Продолжить имперское воссоединение"
+ ADISCORD_vorkerland_vad_continue_imperial_reunification_desc:0 "Победа над центральными претендентами не вернула страну целиком. Имперская канцелярия будет последовательно предъявлять требования уцелевшим администрациям бывшего Воркерланда и ликвидировать их по одной, не распыляя армию на десяток одновременных войн."
  ADISCORD_vorkerland_restore_core_claimant_homes:0 "Восстановить земли претендентов"
  ADISCORD_vorkerland_restore_core_claimant_homes_desc:0 "Вернуть земли трёх военных правительств после восстановления владения и контроля объединённой страны над всеми указанными регионами."
  ADISCORD_vorkerland_restore_core_central_historical:0 "Восстановить исторический центр"
