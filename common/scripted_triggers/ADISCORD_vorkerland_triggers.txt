@@ -1,3 +1,8 @@
+# Vorkerland predicates. COUNTRY is the default scope unless documented.
+# Navigation: collapse_triggers = participants; diplomacy_triggers = relations;
+# phase_triggers = lifecycle; stalemate_triggers = recovery;
+# rus_last_empire_triggers = the northern campaign.
+
 # --- collapse_triggers ---
 ADISCORD_vorkerland_collapse_not_started = {
 	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }
@@ -1087,6 +1092,48 @@ ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = {
 			controls_state = 110
 			OR = { SOL = { owns_state = 307 controls_state = 307 } SRA = { owns_state = 307 controls_state = 307 } CSL = { owns_state = 307 controls_state = 307 } }
 		}
+	}
+}
+
+# Imperial reclamation: candidate scope and actor scope are separate.
+# COUNTRY candidate: relations are checked against the fixed successor WRK.
+# ROOT/PREV would depend on whether the caller is the decision or dispatcher.
+ADISCORD_vorkerland_is_imperial_reclamation_target = {
+	exists = yes
+	is_subject = no
+	NOT = { has_capitulated = yes }
+	NOT = { has_war_with = WRK }
+	NOT = { is_in_faction_with = WRK }
+}
+
+# COUNTRY WRK: keep this bounded list in the dispatcher's priority order.
+ADISCORD_vorkerland_has_imperial_reclamation_target = {
+	OR = {
+		EYR = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		EGC = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		RIV = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		REV = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		YOR = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		NDN = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		SWB = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		VHV = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		OSV = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		ZAO = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		PWR = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		VLA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		ROM = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		TRU = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		WPA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		WPS = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		PSD = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		EBA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		DVA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		SRA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		ZTA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		CSL = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		IBA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		IBL = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
+		TGD = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes }
 	}
 }
 

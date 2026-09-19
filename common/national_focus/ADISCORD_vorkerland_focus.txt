@@ -1,3 +1,8 @@
+# Vorkerland focus trees. Phase visibility and winner routes remain separate.
+# Navigation: civil_war_focus includes preparation, claimant campaigns and
+# the worker/joint/technocratic postwar branches; collapse_focus and zao_focus
+# hold the regional trees. Keep existing focus IDs and layout anchors stable.
+
 # --- civil_war_focus ---
 focus_tree = {
 	id = ADISCORD_vorkerland_civil_war_focus
