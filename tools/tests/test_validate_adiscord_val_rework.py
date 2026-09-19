@@ -3662,6 +3662,48 @@ class ValRegionalIntegrationTests(unittest.TestCase):
 
 
 class ValFormationAndCommandTests(unittest.TestCase):
+    def test_core_losses_and_returns_do_not_duplicate_rewards(self):
+        from dataclasses import replace
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar, selected_effects
+        actions = block(parse_clausewitz(ON_ACTIONS_PATH.read_text(encoding="utf-8")), "on_actions")
+        handlers = block(block(actions, "on_state_control_changed"), "effect")[:2]
+        facts = {("VAL", "has_country_flag", "fixture_bop_active"): True,
+                 ("VAL", "has_war_with", "NOD"): True,
+                 ("58", "is_owned_by", "VAL"): True, ("58", "is_core_of", "VAL"): True}
+        balance = 0.0
+
+        def callback(new_controller, old_controller):
+            nonlocal balance
+            scopes = {"ROOT": new_controller, "FROM": old_controller, "FROM.FROM": "58"}
+            def expand(items):
+                result = []
+                for e in items:
+                    if e.key == "has_power_balance":
+                        result.append(replace(e, key="has_country_flag", value="fixture_bop_active"))
+                    else:
+                        result.append(replace(e, key=scopes.get(e.key, e.key),
+                            value=expand(e.value) if isinstance(e.value, list) else scopes.get(e.value, e.value)))
+                return result
+            for scope, e in list(selected_effects(expand(handlers), facts, new_controller)):
+                if e.key == "add_power_balance_value":
+                    self.assertEqual(scope, "VAL")
+                    balance += float(scalar(e.value, "value"))
+                elif e.key in ("set_state_flag", "clr_state_flag"):
+                    facts[scope, "has_state_flag", e.value] = e.key == "set_state_flag"
+                else:
+                    self.fail("Unexpected callback effect: " + e.key)
+        callback("NOD", "VAL")
+        self.assertAlmostEqual(balance, -.10)
+        callback("NOD", "VAL")
+        self.assertAlmostEqual(balance, -.10)
+        callback("VAL", "NOD")
+        self.assertAlmostEqual(balance, -.05)
+        callback("VAL", "NOD")
+        self.assertAlmostEqual(balance, -.05)
+        facts["VAL", "has_war_with", "NOD"] = False
+        callback("NOD", "VAL")
+        self.assertAlmostEqual(balance, -.05)
+
     def test_formation_requires_campaign_and_actual_border_ownership(self):
         from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
         source = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
