@@ -5,19 +5,54 @@ on:
 permissions:
   contents: read
 jobs:
-  source:
+  baseline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: d6cc3c77078a25f7318fbf7e371fc6779eab3351
           fetch-depth: 1
-      - name: Package source for isolated editing
+      - name: Baseline contracts and source validation
         shell: bash
         run: |
-          find . -type f \( -name '*.txt' -o -name '*.yml' -o -name '*.yaml' -o -name '*.md' -o -name '*.py' -o -name '*.json' -o -name '*.csv' -o -name '*.mod' -o -name '*.gfx' -o -name '*.gui' -o -name '*.lua' -o -name '.gitattributes' -o -name '.gitignore' \) -not -path './.git/*' -print0 | tar --null -T - -czf /tmp/stp-party-source.tar.gz
+          mkdir -p /tmp/party-check
+          set +e
+          python -B -m unittest discover -s tools/tests -p '*stp*.py' > /tmp/party-check/baseline-tests.txt 2>&1
+          echo "TEST_EXIT=$?" >> /tmp/party-check/baseline-tests.txt
+          python -B tools/validate_tc.py --limit 300 > /tmp/party-check/baseline-validator.txt 2>&1
+          echo "VALIDATOR_EXIT=$?" >> /tmp/party-check/baseline-validator.txt
+          exit 0
+      - name: Collect authored artwork
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, hashlib, zipfile
+          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+          names = set('GFX_focus_generic_improve_the_administration GFX_focus_generic_treaty GFX_focus_STP_2160_budget GFX_goal_generic_production GFX_focus_generic_supply_line GFX_focus_STP_Side_With_The_Party GFX_focus_generic_truck GFX_goal_generic_army_doctrines GFX_focus_generic_self_management GFX_goal_generic_political_pressure GFX_goal_generic_positive_trade_relations GFX_goal_generic_scientific_exchange GFX_event_adiscord_negotiation_table GFX_manpower_texticon GFX_infantry_equipment_texticon GFX_artillery_texticon GFX_anti_air_texticon'.split())
+          sprites = {}
+          def visit(items):
+              for item in items:
+                  if isinstance(item.value, list):
+                      fields = {e.key:e.value for e in item.value if not isinstance(e.value,list)}
+                      if fields.get('name') in names and 'texturefile' in fields:
+                          sprites[fields['name']] = fields['texturefile']
+                      visit(item.value)
+          for path in Path('interface').glob('*.gfx'):
+              try: visit(parse_clausewitz(path.read_text(encoding='utf-8-sig')))
+              except (ValueError, UnicodeError): pass
+          report = {}
+          with zipfile.ZipFile('/tmp/party-check/party-art.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for name in sorted(names):
+                  path = Path(sprites.get(name,'__missing__'))
+                  report[name] = {'path': str(path), 'exists':path.is_file()}
+                  if path.is_file():
+                      report[name]['sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+                      z.write(path,str(path))
+              z.writestr('manifest.json',json.dumps(report,ensure_ascii=False,indent=2))
+          PY
       - uses: actions/upload-artifact@v4
         with:
-          name: stp-party-source
-          path: /tmp/stp-party-source.tar.gz
+          name: stp-party-baseline
+          path: /tmp/party-check/
           retention-days: 1
