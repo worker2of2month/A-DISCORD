@@ -2,6 +2,9 @@
   "schema_version": 1,
   "external_namespaces": ["lar_fake_intel_units"],
   "events": [
+    {"id": "ADISCORD_STP_pc.25", "namespace": "ADISCORD_STP_pc", "number": 25, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
+    {"id": "ADISCORD_STP_pc.26", "namespace": "ADISCORD_STP_pc", "number": 26, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
+    {"id": "ADISCORD_STP_pc.27", "namespace": "ADISCORD_STP_pc", "number": 27, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_STP_pc.22", "namespace": "ADISCORD_STP_pc", "number": 22, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_STP_pc.23", "namespace": "ADISCORD_STP_pc", "number": 23, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_STP_pc.24", "namespace": "ADISCORD_STP_pc", "number": 24, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},

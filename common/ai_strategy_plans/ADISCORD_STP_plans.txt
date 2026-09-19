@@ -259,3 +259,105 @@ STS_shabrat_hegemony_plan = {
 
 	weight = { factor = 16 }
 }
+
+STP_party_preparation_plan = {
+	name = "STP party preparation"
+	desc = ""
+	allowed = { original_tag = STP }
+	enable = { tag = STP is_ai = yes STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }
+	abort = { OR = { NOT = { tag = STP } NOT = { STP_cw_preparation_open = yes } } }
+	ai_national_focuses = {
+		STP_cw_security_collegium
+		STP_PRESIDENT_REMAINS_IN_OFFICE
+		STP_PARTY_DISCIPLINE
+		STP_DISTRICT_GOVERNMENT
+		STP_cw_capital_reserve
+		STP_cw_protect_congress
+		STP_GUARANTEE_MINISTERS
+		STP_defense_budget
+		STP_party_district_compact
+		STP_ROTATE_DISTRICT_COMMAND
+		STP_EMERGENCY_PRESIDIUM
+		STP_cw_capital_oath
+		STP_THE_PARTY_CLOSES_RANKS
+		STP_cw_party_mandate
+		STP_party_supply_directorate
+		STP_party_civil_register
+		STP_cw_press_office
+		STP_party_budget_reserve
+		STP_party_guard_workshops
+		STP_cw_protocol_office
+		STP_cw_quiet_registers
+		STP_party_succession_protocol
+	}
+	weight = { factor = 20 }
+}
+
+STP_party_civil_war_plan = {
+	name = "STP party civil war"
+	desc = ""
+	allowed = { original_tag = STP }
+	enable = { tag = STP is_ai = yes has_war_with = STS NOT = { has_country_flag = STP_cw_postwar } }
+	abort = { OR = { NOT = { tag = STP } NOT = { has_war_with = STS } has_country_flag = STP_cw_postwar } }
+	ai_national_focuses = {
+		STP_cw_unified_headquarters
+		STP_cw_congress_in_session
+		STP_cw_mobilization_register
+		STP_cw_wartime_arsenals
+		STP_cw_supply_routes
+		STP_cw_guard_the_pier
+		STP_cw_inner_ring
+		STP_cw_harbour_batteries
+		STP_party_rear_administration
+		STP_party_war_transport
+		STP_party_war_directorate
+		STP_cw_line_formations
+		STP_cw_wartime_laboratories
+	}
+	weight = { factor = 20 }
+}
+
+STP_party_reconstruction_plan = {
+	name = "STP party reconstruction"
+	desc = ""
+	allowed = { original_tag = STP }
+	enable = { tag = STP is_ai = yes STP_pw_can_reconstruct = yes }
+	abort = { OR = { NOT = { tag = STP } NOT = { STP_pw_can_reconstruct = yes } } }
+	ai_national_focuses = {
+		STP_cw_first_postwar_budget
+		STP_cw_restore_civil_authority
+		STP_pw_party_new_republic
+		STP_pw_party_restore_roads
+		STP_pw_party_army_register
+		STP_pw_party_homes_for_returnees
+		STP_pw_party_civil_workshops
+		STP_pw_party_accountable_arsenals
+		STP_party_revenue_service
+		STP_pw_party_district_authority
+		STP_pw_party_civil_records
+		STP_pw_party_open_settlement
+		STP_pw_party_firm_settlement
+		STP_party_district_charters
+		STP_party_personnel_commissions
+		STP_party_local_cadres
+		STP_party_chain_of_command
+		STP_pw_party_civil_charter
+		STP_party_port_contracts
+		STP_party_industrial_board
+		STP_pw_party_industrial_settlement
+		STP_party_research_council
+		STP_party_technical_institutes
+		STP_pw_party_officer_school
+		STP_pw_party_supply_service
+		STP_pw_party_professional_service
+		STP_pw_party_border_staff
+		STP_pw_party_southern_defence
+		STP_pw_party_northern_protocol
+		STP_pw_party_sovereignty
+		STP_pw_party_protectorate
+		STP_pw_party_domestic_pattern
+		STP_pw_party_nod_military_mission
+		STP_pw_party_settled_state
+	}
+	weight = { factor = 20 }
+}

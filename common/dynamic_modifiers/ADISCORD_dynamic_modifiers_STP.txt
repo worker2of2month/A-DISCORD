@@ -92,6 +92,9 @@ STP_pw_party_dynamic = {
 	icon = GFX_idea_ADISCORD_law_civic_emergency_committees
 	enable = { tag = STP }
 	ADISCORD_economy_admin_expense_factor = STP_pw_ADISCORD_economy_admin_expense_factor
+	ADISCORD_economy_overall_income_factor = STP_pw_ADISCORD_economy_overall_income_factor
+	ADISCORD_economy_creditworthiness_factor = STP_pw_ADISCORD_economy_creditworthiness_factor
+	ADISCORD_economy_treasury_capacity_factor = STP_pw_ADISCORD_economy_treasury_capacity_factor
 	army_org_factor = STP_pw_army_org_factor
 	army_org_regain = STP_pw_army_org_regain
 	industrial_capacity_factory = STP_pw_industrial_capacity_factory

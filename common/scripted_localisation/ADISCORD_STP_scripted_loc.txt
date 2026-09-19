@@ -270,6 +270,7 @@ defined_text = {
 
 defined_text = {
 	name = STPGetInspectionStatus
+	text = { trigger = { STP = { has_country_flag = STP_sided_with_the_party_flag } has_state_flag = STP_party_inspection_active } localization_key = STP_REGION_PARTY_INSPECTION_STATUS }
 	text = { trigger = { has_state_flag = STP_inspection_concession_prepared } localization_key = STP_REGION_INSPECTION_CONCESSION }
 	text = { trigger = { has_state_flag = STP_false_trail_prepared } localization_key = STP_REGION_INSPECTION_FALSE_TRAIL_READY }
 	text = { trigger = { has_state_flag = STP_false_trail_in_progress } localization_key = STP_REGION_INSPECTION_FALSE_TRAIL_PENDING }
@@ -321,6 +322,7 @@ defined_text = {
 
 defined_text = {
 	name = STPGetLastPartyResponse
+	text = { trigger = { has_country_flag = STP_sided_with_the_party_flag } localization_key = STP_PARTY_LAST_RESPONSE }
 	text = { trigger = { check_variable = { var = STP_last_party_response value = 1 compare = equals } } localization_key = STP_PARTY_RESPONSE_CLEAN_REDIRECT }
 	text = { trigger = { check_variable = { var = STP_last_party_response value = 2 compare = equals } } localization_key = STP_PARTY_RESPONSE_NOISY_REDIRECT }
 	text = { trigger = { check_variable = { var = STP_last_party_response value = 3 compare = equals } } localization_key = STP_PARTY_RESPONSE_COURIER_SEIZED }
@@ -333,6 +335,23 @@ defined_text = {
 	text = { trigger = { check_variable = { var = STP_last_party_response value = 10 compare = equals } } localization_key = STP_PARTY_RESPONSE_EVIDENCE_FOUND }
 	text = { trigger = { check_variable = { var = STP_last_party_response value = 11 compare = equals } } localization_key = STP_PARTY_RESPONSE_EMPTY_SEARCH }
 	text = { trigger = { check_variable = { var = STP_last_party_response value = 12 compare = equals } } localization_key = STP_PARTY_RESPONSE_CIVIL_REGISTERS }
+	text = { localization_key = STP_PARTY_RESPONSE_NONE }
+}
+
+defined_text = {
+	name = STPGetPartyResponseOutcome
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 1 compare = equals } } localization_key = STP_PARTY_OUTCOME_1 }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 2 compare = equals } } localization_key = STP_PARTY_OUTCOME_2 }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 3 compare = equals } } localization_key = STP_PARTY_OUTCOME_3 }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 4 compare = equals } } localization_key = STP_PARTY_OUTCOME_4 }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 5 compare = equals } } localization_key = STP_PARTY_OUTCOME_5 }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 6 compare = equals } } localization_key = STP_PARTY_OUTCOME_6 }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 7 compare = equals } } localization_key = STP_PARTY_OUTCOME_7 }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 8 compare = equals } } localization_key = STP_PARTY_OUTCOME_8 }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 9 compare = equals } } localization_key = STP_PARTY_OUTCOME_9 }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 10 compare = equals } } localization_key = STP_PARTY_OUTCOME_10 }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 11 compare = equals } } localization_key = STP_PARTY_OUTCOME_11 }
+	text = { trigger = { check_variable = { var = STP_last_party_response value = 12 compare = equals } } localization_key = STP_PARTY_OUTCOME_12 }
 	text = { localization_key = STP_PARTY_RESPONSE_NONE }
 }
 
@@ -509,4 +528,17 @@ defined_text = {
 	text = { trigger = { check_variable = { var = STP_cw_operation_target value = 45 compare = equals } } localization_key = STP_cw_operation_target_45 }
 	text = { trigger = { check_variable = { var = STP_cw_operation_target value = 28 compare = equals } } localization_key = STP_cw_operation_target_28 }
 	text = { localization_key = STP_cw_operation_target_none }
+}
+
+# Country briefing selects a complete set of instructions, not just the metric.
+defined_text = {
+	name = STPGetElectionBriefing
+	text = { trigger = { has_country_flag = STP_sided_with_the_party_flag } localization_key = STP_PARTY_ELECTION_BRIEFING }
+	text = { localization_key = STP_RESISTANCE_ELECTION_BRIEFING }
+}
+
+defined_text = {
+	name = STPGetPreparationInstructions
+	text = { trigger = { has_country_flag = STP_sided_with_the_party_flag } localization_key = STP_PARTY_MAP_INSTRUCTIONS }
+	text = { localization_key = STP_RESISTANCE_MAP_INSTRUCTIONS }
 }
