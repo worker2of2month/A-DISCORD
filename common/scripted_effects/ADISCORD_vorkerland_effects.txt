@@ -4066,7 +4066,11 @@ ADISCORD_vorkerland_play_superevent_sound = {
 		sound_effect = superevent_vorkerland_dorian_victory_sound_e
 	}
 	else_if = {
-		limit = { OR = { has_global_flag = superevent_stelander_party_victory has_global_flag = superevent_stelander_shabrat_victory } }
+		limit = { has_global_flag = superevent_stelander_party_victory }
+		sound_effect = superevent_stelander_party_victory_sound_e
+	}
+	else_if = {
+		limit = { has_global_flag = superevent_stelander_shabrat_victory }
 		sound_effect = superevent_vorkerland_utilitarian_victory_sound_e
 	}
 	else_if = {

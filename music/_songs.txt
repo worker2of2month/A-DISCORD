@@ -81,3 +81,11 @@ music = {
 	}
 }
 
+
+# Played explicitly after the victory presentation; excluded from random rotation.
+music = {
+	song = "ADISCORD_stp_civil_war_end"
+	chance = {
+		modifier = { factor = 0 }
+	}
+}

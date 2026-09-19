@@ -76,6 +76,8 @@ class SupereventContractTests(unittest.TestCase):
         self.assertEqual(music.read_bytes()[:4], b"OggS")
         assets = (ROOT / "music/music.asset").read_text(encoding="utf-8-sig")
         self.assertIn('file = "ADISCORD_stp_civil_war_end.ogg"', assets)
+        station = (ROOT / "music/_songs.txt").read_text(encoding="utf-8-sig")
+        self.assertIn('song = "ADISCORD_stp_civil_war_end"', station)
 
     def test_missing_gfx_binding_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

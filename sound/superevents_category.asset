@@ -9,6 +9,7 @@ category = {
 		superevent_vorkerland_vlad_victory_sound_e
 		superevent_vorkerland_dorian_victory_sound_e
 		superevent_stelander_empire_sound_e
+		superevent_stelander_party_victory_sound_e
 	}
 	compressor = {
 		enabled = yes
