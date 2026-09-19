@@ -4037,28 +4037,19 @@ STP_pc_lock_directory = {
 	set_politics = { ruling_party = etatism elections_allowed = no }
 }
 
-# STS: scripted war. Diplomatic UI stays closed.
+# STS: scripted war. Diplomatic UI stays closed; the native war relation is
+# the single source of truth for the later capitulation settlement.
 STP_pc_declare_war_val = {
 	if = {
-		limit = { tag = STS STP_pc_can_confront_val = yes }
-		if = { limit = { NOT = { has_war_with = VAL } } declare_war_on = { target = VAL type = annex_everything } }
-		if = {
-			limit = { has_war_with = VAL }
-			set_country_flag = STP_pc_war_val
-			VAL = { set_country_flag = STP_pc_war_with_sts }
-		}
+		limit = { tag = STS STP_pc_can_confront_val = yes NOT = { has_war_with = VAL } }
+		declare_war_on = { target = VAL type = annex_everything }
 	}
 }
 
 STP_pc_declare_war_nod = {
 	if = {
-		limit = { tag = STS STP_pc_can_confront_nod = yes }
-		if = { limit = { NOT = { has_war_with = NOD } } declare_war_on = { target = NOD type = annex_everything } }
-		if = {
-			limit = { has_war_with = NOD }
-			set_country_flag = STP_pc_war_nod
-			NOD = { set_country_flag = STP_pc_war_with_sts }
-		}
+		limit = { tag = STS STP_pc_can_confront_nod = yes NOT = { has_war_with = NOD } }
+		declare_war_on = { target = NOD type = annex_everything }
 	}
 }
 
@@ -4066,18 +4057,18 @@ STP_pc_declare_liberation_war = {
 	if = {
 		limit = {
 			tag = STS
-			OR = { has_country_flag = STP_pc_val_crisis has_war_with = VAL }
+			has_country_flag = STP_pc_val_crisis
 			VAL = { exists = yes }
-			NOT = { has_country_flag = STP_pc_war_val }
+			NOT = { has_war_with = VAL }
 		}
 		STP_pc_declare_war_val = yes
 	}
 	if = {
 		limit = {
 			tag = STS
-			OR = { has_country_flag = STP_pc_nod_crisis has_war_with = NOD }
+			has_country_flag = STP_pc_nod_crisis
 			NOD = { exists = yes }
-			NOT = { has_country_flag = STP_pc_war_nod }
+			NOT = { has_war_with = NOD }
 		}
 		STP_pc_declare_war_nod = yes
 	}
@@ -4264,30 +4255,6 @@ STP_pc_begin_settlement = {
 				set_variable = { var = STP_pc_this_result value = 2 }
 				if = { limit = { has_war_with = NOD } white_peace = NOD }
 			}
-			else_if = {
-				limit = {
-					has_war_with = VAL
-					VAL = { has_country_flag = STP_pc_war_with_sts }
-					NOT = { AND = { has_war_with = NOD NOD = { has_country_flag = STP_pc_war_with_sts } } }
-				}
-				set_variable = { var = STP_pc_this_opponent value = 1 }
-				set_variable = { var = STP_pc_this_result value = 2 }
-				white_peace = VAL
-			}
-			else_if = {
-				limit = {
-					has_war_with = NOD
-					NOD = { has_country_flag = STP_pc_war_with_sts }
-					NOT = { AND = { has_war_with = VAL VAL = { has_country_flag = STP_pc_war_with_sts } } }
-				}
-				set_variable = { var = STP_pc_this_opponent value = 2 }
-				set_variable = { var = STP_pc_this_result value = 2 }
-				white_peace = NOD
-			}
-			else = {
-				if = { limit = { has_war_with = VAL } white_peace = VAL }
-				if = { limit = { has_war_with = NOD } white_peace = NOD }
-			}
 		}
 		VAL_enforce_stelander_defeat = yes
 		if = {
@@ -4309,22 +4276,6 @@ STP_pc_begin_settlement = {
 }
 
 STP_pc_clear_settlement = {
-	if = {
-		limit = { check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals } }
-		clr_country_flag = STP_pc_war_val
-		VAL = { clr_country_flag = STP_pc_war_with_sts }
-	}
-	else_if = {
-		limit = { check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals } }
-		clr_country_flag = STP_pc_war_nod
-		NOD = { clr_country_flag = STP_pc_war_with_sts }
-	}
-	else = {
-		clr_country_flag = STP_pc_war_val
-		clr_country_flag = STP_pc_war_nod
-		VAL = { clr_country_flag = STP_pc_war_with_sts }
-		NOD = { clr_country_flag = STP_pc_war_with_sts }
-	}
 	clear_variable = STP_pc_settle_opponent
 	clear_variable = STP_pc_settle_result
 	if = {

@@ -979,8 +979,8 @@ VAL_ai_republics_preparation = {
 
 # Imperial union
 
-# Postwar settlement clears STP_pc_war_val/nod. Victory checks also accept
-# persistent client outcomes or full territorial control after peace.
+# Postwar victory checks accept persistent client outcomes or full
+# territorial control after the scripted peace.
 
 STP_imperial_union_kefreyt_defeated = {
 	OR = {
@@ -1102,7 +1102,6 @@ STP_pc_ai_preparing_val_war = {
 			focus_progress = { focus = STP_pc_lib_war progress > 0 }
 			NOT = { has_completed_focus = STP_pc_lib_war }
 			has_country_flag = STP_pc_val_crisis
-			NOT = { has_country_flag = STP_pc_war_val }
 		}
 	}
 }
@@ -1126,7 +1125,6 @@ STP_pc_ai_preparing_nod_war = {
 			focus_progress = { focus = STP_pc_lib_war progress > 0 }
 			NOT = { has_completed_focus = STP_pc_lib_war }
 			has_country_flag = STP_pc_nod_crisis
-			NOT = { has_country_flag = STP_pc_war_nod }
 		}
 	}
 }

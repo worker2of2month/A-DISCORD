@@ -619,37 +619,27 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertNotIn("скрипт", page)
         self.assertNotIn("ванильн", page)
 
-    def test_postwar_war_markers_follow_relation_and_heal_loaded_wars(self) -> None:
-        source = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
-        relation_start = source.index("\ton_war_relation_added = {")
-        relation_end = source.index("\n\ton_peaceconference_ended = {", relation_start)
-        relation = source[relation_start:relation_end]
-        weekly_start = source.index("\ton_weekly_STS = {")
-        weekly_end = source.index("\n\t# The split creates", weekly_start)
-        weekly = source[weekly_start:weekly_end]
+    def test_postwar_wars_use_native_relations_without_marker_flags(self) -> None:
+        gameplay = "\n".join((
+            read("common/on_actions/02_ADISCORD_STP_on_actions.txt"),
+            read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+            read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+            read("events/ADISCORD_STP_events.txt"),
+            read("common/decisions/ADISCORD_VAL_decisions.txt"),
+        ))
+        for obsolete in ("STP_pc_war_val", "STP_pc_war_nod", "STP_pc_war_with_sts"):
+            self.assertNotIn(obsolete, gameplay)
 
-        self.assertIn("has_global_flag = STP_cw_union_wars_finished", relation)
-        for opponent, own_flag in (("VAL", "STP_pc_war_val"), ("NOD", "STP_pc_war_nod")):
-            with self.subTest(opponent=opponent):
-                self.assertIn(
-                    f"AND = {{ ROOT = {{ tag = STS }} FROM = {{ tag = {opponent} }} }}",
-                    relation,
-                )
-                self.assertIn(
-                    f"AND = {{ ROOT = {{ tag = {opponent} }} FROM = {{ tag = STS }} }}",
-                    relation,
-                )
-                self.assertIn(f"STS = {{ set_country_flag = {own_flag} }}", relation)
-                self.assertIn(
-                    f"{opponent} = {{ set_country_flag = STP_pc_war_with_sts }}",
-                    relation,
-                )
-                self.assertIn(f"has_war_with = {opponent}", weekly)
-                self.assertIn(f"set_country_flag = {own_flag}", weekly)
-                self.assertIn(
-                    f"{opponent} = {{ set_country_flag = STP_pc_war_with_sts }}",
-                    weekly,
-                )
+        on_actions = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        self.assertNotIn("Heal postwar opponent markers", on_actions)
+        self.assertIn("ROOT = { tag = VAL has_war_with = STS }", on_actions)
+        self.assertIn("ROOT = { tag = NOD has_war_with = STS }", on_actions)
+        self.assertIn("ROOT = { tag = STS has_war_with = VAL }", on_actions)
+        self.assertIn("ROOT = { tag = STS has_war_with = NOD }", on_actions)
+
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        self.assertIn("declare_war_on = { target = VAL type = annex_everything }", effects)
+        self.assertIn("declare_war_on = { target = NOD type = annex_everything }", effects)
 
     def test_postwar_settlement_is_a_sibling_of_the_nod_defeat_router(self) -> None:
         effect = ast_block(ast_block(relative_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions"), "on_capitulation")
@@ -664,17 +654,19 @@ class PostwarContinuationContracts(unittest.TestCase):
         immediate = ast_block(ast_block(relative_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions"), "on_capitulation_immediate")
         snapshot = next(e.value for e in ast_block(immediate, "effect") if e.key == "else_if" and any(c.key == "STP_cw_snapshot_capitulation_occupier" for c in prep_walk(e.value)))
         root = ast_block(ast_block(snapshot, "limit"), "ROOT")
-        val = next(e.value for e in ast_block(root, "OR") if e.key == "AND" and any(c.key == "tag" and c.value == "VAL" for c in e.value))
-        nod_root = next(e.value for e in ast_block(root, "OR") if e.key == "AND" and any(c.key == "tag" and c.value == "NOD" for c in e.value))
-        self.assertTrue(any(c.key == "has_country_flag" and c.value == "STP_pc_war_with_sts" for c in prep_walk(val)))
-        self.assertTrue(any(c.key == "has_country_flag" and c.value == "STP_pc_war_with_sts" for c in prep_walk(nod_root)))
+        val = next(e.value for e in ast_block(root, "OR") if e.key == "AND" and any(c.key == "tag" and c.value == "VAL" for c in prep_walk(e.value)))
+        nod_root = next(e.value for e in ast_block(root, "OR") if e.key == "AND" and any(c.key == "tag" and c.value == "NOD" for c in prep_walk(e.value)))
+        for opponent, branch in (("VAL", val), ("NOD", nod_root)):
+            with self.subTest(opponent=opponent):
+                self.assertTrue(any(c.key == "has_war_with" and c.value == "STS" for c in prep_walk(branch)))
+                self.assertFalse(any(c.key == "has_country_flag" and c.value.startswith("STP_pc_war_") for c in prep_walk(branch)))
+
         immediate_text = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
-        for opponent, war_flag in (("VAL", "STP_pc_war_val"), ("NOD", "STP_pc_war_nod")):
-            marker = f"ROOT = {{ tag = {opponent} has_country_flag = STP_pc_war_with_sts }}"
+        for opponent in ("VAL", "NOD"):
+            marker = f"ROOT = {{ tag = {opponent} has_war_with = STS }}"
             start = immediate_text.index(marker)
-            fallback = immediate_text[start:start + 700]
+            fallback = immediate_text[start:start + 600]
             self.assertIn("FROM = { tag = STS }", fallback, opponent)
-            self.assertIn(f"STS = {{ has_country_flag = {war_flag} }}", fallback, opponent)
             self.assertIn("var = STP_cw_capitulation_occupier value = 2", fallback, opponent)
 
     def test_settlement_freezes_the_snapshot_and_closes_only_that_war(self) -> None:
@@ -723,7 +715,7 @@ class PostwarContinuationContracts(unittest.TestCase):
 
         unknown = {**sts_loss, ("STS", "variable", "STP_cw_capitulation_occupier"): 7}
         leftover = list(selected_effects(begin, unknown, "STS"))
-        self.assertEqual(sorted(e.value for _, e in leftover if e.key == "white_peace"), ["NOD", "VAL"])
+        self.assertFalse(any(e.key == "white_peace" for _, e in leftover))
 
         queued = {
             ("STS", "tag", "STS"): True,

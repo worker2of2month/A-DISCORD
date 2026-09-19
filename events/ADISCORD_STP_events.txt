@@ -1409,7 +1409,7 @@ country_event = {
 			hidden_trigger = {
 				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
 				check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals }
-				NOT = { has_country_flag = STP_pc_war_nod }
+				NOT = { has_war_with = NOD }
 				OR = { has_country_flag = STP_pc_nod_crisis check_variable = { var = STP_pc_course value = 2 compare = equals } }
 				NOD = { exists = yes }
 			}
@@ -1423,7 +1423,7 @@ country_event = {
 			hidden_trigger = {
 				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
 				check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals }
-				NOT = { has_country_flag = STP_pc_war_val }
+				NOT = { has_war_with = VAL }
 				OR = { has_country_flag = STP_pc_val_crisis check_variable = { var = STP_pc_course value = 2 compare = equals } }
 				VAL = { exists = yes }
 			}

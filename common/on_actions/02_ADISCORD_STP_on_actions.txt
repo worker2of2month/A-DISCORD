@@ -18,27 +18,6 @@ on_actions = {
 		effect = {
 			if = { limit = { STP_pw_can_reconstruct = yes NOT = { has_variable = STP_pw_recovery_progress } } STP_pw_begin_recovery = yes }
 			if = { limit = { has_country_flag = STP_cw_postwar } STP_pw_reconcile_postwar_interactivity = yes }
-			# declare_war_on can expose the war relation after its scripted effect
-			# returns. Heal postwar opponent markers here as a save/load fallback so
-			# an already-running campaign still reaches the scripted settlement.
-			if = {
-				limit = {
-					has_global_flag = STP_cw_union_wars_finished
-					has_war_with = VAL
-					VAL = { exists = yes }
-				}
-				set_country_flag = STP_pc_war_val
-				VAL = { set_country_flag = STP_pc_war_with_sts }
-			}
-			if = {
-				limit = {
-					has_global_flag = STP_cw_union_wars_finished
-					has_war_with = NOD
-					NOD = { exists = yes }
-				}
-				set_country_flag = STP_pc_war_nod
-				NOD = { set_country_flag = STP_pc_war_with_sts }
-			}
 			if = {
 				limit = { exists = yes has_country_flag = STP_pc_lib_package_pending }
 				STP_pc_offer_liberation_package = yes
@@ -109,31 +88,6 @@ on_actions = {
 				# destroy_unit/create_unit during declare_war_on corrupts the heap
 				# on the observer client; wait until the war relation exists.
 				STS = { country_event = { id = ADISCORD_STP_cw.31 hours = 1 } }
-			}
-			# The postwar declaration helper cannot rely on has_war_with becoming
-			# true in the same scripted-effect evaluation as declare_war_on. Freeze
-			# the opponent identity when the engine actually adds the relation.
-			if = {
-				limit = {
-					has_global_flag = STP_cw_union_wars_finished
-					OR = {
-						AND = { ROOT = { tag = STS } FROM = { tag = VAL } }
-						AND = { ROOT = { tag = VAL } FROM = { tag = STS } }
-					}
-				}
-				STS = { set_country_flag = STP_pc_war_val }
-				VAL = { set_country_flag = STP_pc_war_with_sts }
-			}
-			if = {
-				limit = {
-					has_global_flag = STP_cw_union_wars_finished
-					OR = {
-						AND = { ROOT = { tag = STS } FROM = { tag = NOD } }
-						AND = { ROOT = { tag = NOD } FROM = { tag = STS } }
-					}
-				}
-				STS = { set_country_flag = STP_pc_war_nod }
-				NOD = { set_country_flag = STP_pc_war_with_sts }
 			}
 		}
 	}
@@ -257,8 +211,20 @@ on_actions = {
 							tag = STP
 							tag = STS
 							tag = SRP
-							AND = { tag = VAL OR = { has_country_flag = VAL_cw_entered has_country_flag = STP_pc_war_with_sts } }
-							AND = { tag = NOD OR = { has_country_flag = NOD_cw_entered has_country_flag = STP_pc_war_with_sts } }
+							AND = {
+								tag = VAL
+								OR = {
+									has_country_flag = VAL_cw_entered
+									AND = { has_global_flag = STP_cw_union_wars_finished has_war_with = STS }
+								}
+							}
+							AND = {
+								tag = NOD
+								OR = {
+									has_country_flag = NOD_cw_entered
+									AND = { has_global_flag = STP_cw_union_wars_finished has_war_with = STS }
+								}
+							}
 						}
 					}
 				}
@@ -302,26 +268,40 @@ on_actions = {
 						limit = { ROOT = { tag = VAL has_country_flag = VAL_cw_entered NOT = { any_enemy_country = { NOT = { tag = SRP } } } } FROM = { tag = SRP } }
 						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 3 } }
 					}
-					# Scripted postwar fronts may capitulate before the original capital flips.
-					# FROM is accepted only when it is the recorded STS opponent, so a third
-					# party cannot receive Shabrat's settlement credit.
+					# Postwar fronts are identified by the native war relation. FROM is
+					# accepted only when it is the actual STS opponent, so unrelated wars
+					# cannot receive Shabrat's settlement credit.
 					else_if = {
 						limit = {
 							has_global_flag = STP_cw_union_wars_finished
-							ROOT = { tag = VAL has_country_flag = STP_pc_war_with_sts }
+							ROOT = { tag = VAL has_war_with = STS }
 							FROM = { tag = STS }
-							STS = { has_country_flag = STP_pc_war_val }
 						}
 						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
 					}
 					else_if = {
 						limit = {
 							has_global_flag = STP_cw_union_wars_finished
-							ROOT = { tag = NOD has_country_flag = STP_pc_war_with_sts }
+							ROOT = { tag = NOD has_war_with = STS }
 							FROM = { tag = STS }
-							STS = { has_country_flag = STP_pc_war_nod }
 						}
 						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
+					}
+					else_if = {
+						limit = {
+							has_global_flag = STP_cw_union_wars_finished
+							ROOT = { tag = STS has_war_with = VAL }
+							FROM = { tag = VAL }
+						}
+						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 5 } }
+					}
+					else_if = {
+						limit = {
+							has_global_flag = STP_cw_union_wars_finished
+							ROOT = { tag = STS has_war_with = NOD }
+							FROM = { tag = NOD }
+						}
+						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 4 } }
 					}
 				}
 			}
@@ -425,9 +405,10 @@ on_actions = {
 				limit = {
 					has_global_flag = STP_cw_union_wars_finished
 					OR = {
-						AND = { ROOT = { tag = VAL has_country_flag = STP_pc_war_with_sts } STS = { has_country_flag = STP_pc_war_val } }
-						AND = { ROOT = { tag = NOD has_country_flag = STP_pc_war_with_sts } STS = { has_country_flag = STP_pc_war_nod } }
-						AND = { ROOT = { tag = STS } OR = { VAL = { has_country_flag = STP_pc_war_with_sts } NOD = { has_country_flag = STP_pc_war_with_sts } } }
+						AND = { ROOT = { tag = VAL has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
+						AND = { ROOT = { tag = NOD has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
+						AND = { ROOT = { tag = STS has_war_with = VAL check_variable = { var = STP_cw_capitulation_occupier value = 5 compare = equals } } }
+						AND = { ROOT = { tag = STS has_war_with = NOD check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals } } }
 					}
 				}
 				set_global_flag = skip_default_capitulation

@@ -769,9 +769,6 @@ VAL_frontier = {
    if = {
     limit = { has_country_flag = VAL_campaign_mobilizing VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
     declare_war_on = { target = FROM type = annex_everything }
-    hidden_effect = {
-     if = { limit = { FROM = { tag = STS } has_war_with = STS } set_country_flag = STP_pc_war_with_sts STS = { set_country_flag = STP_pc_war_val } }
-    }
    }
    hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } }
   }
@@ -795,9 +792,6 @@ VAL_frontier = {
    if = {
     limit = { has_country_flag = VAL_campaign_mobilizing VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
     declare_war_on = { target = FROM type = annex_everything }
-    hidden_effect = {
-     if = { limit = { FROM = { tag = STS } has_war_with = STS } set_country_flag = STP_pc_war_with_sts STS = { set_country_flag = STP_pc_war_val } }
-    }
    }
    hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } }
   }
