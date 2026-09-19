@@ -250,8 +250,27 @@ def validate_global_weather_settings(errors: list[str]) -> None:
             errors.append(f"common/weather.txt: {key}={matches[0]} does not match {expected:g}")
 
 
+def validate_naval_dominance_thresholds(source: str, errors: list[str]) -> None:
+    # A zero threshold can mark an empty sea as controlled; the native caller
+    # then dereferences a missing dominant country.
+    source = re.sub(r"#[^\n]*", "", source)
+    terrain_names = {region.naval_terrain for region in ALL_SEA_REGIONS} | {"ocean", "water_fjords"}
+    for name in sorted(terrain_names):
+        try:
+            body, _ = extract_block(source, name)
+        except ValueError:
+            errors.append(f"missing naval terrain {name}")
+            continue
+        values = re.findall(r"\bminimum_seazone_dominance\s*=\s*([-+]?\d+(?:\.\d+)?)\b", body)
+        if len(values) != 1 or float(values[0]) <= 0:
+            errors.append(f"naval terrain {name}: minimum_seazone_dominance must be positive and defined once")
+
+
 def main() -> int:
     errors: list[str] = []
+    validate_naval_dominance_thresholds(
+        (ROOT / "common" / "terrain" / "00_terrain.txt").read_text(encoding="utf-8-sig"), errors
+    )
     validate_climate_profiles(errors)
     validate_global_weather_settings(errors)
     definitions, color_to_province = load_province_definitions()
