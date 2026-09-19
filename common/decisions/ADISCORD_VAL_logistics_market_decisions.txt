@@ -1,0 +1,255 @@
+VAL_trade_corridors = {
+	VAL_invest_occidian_corridor = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Reopen_Trade_Routes NOT = { has_country_flag = VAL_route_occidia_upgraded } }
+		available = { VAL_trade_route_occidia_open = yes ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = VAL_logistics_cost_250
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			set_country_flag = VAL_route_occidia_upgraded
+			43 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			44 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			88 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			VAL_refresh_trade_network = yes
+		}
+		ai_will_do = { base = 3 }
+	}
+
+	VAL_invest_northern_corridor = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Reopen_Trade_Routes NOT = { has_country_flag = VAL_route_north_upgraded } }
+		available = { VAL_trade_route_north_open = yes ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = VAL_logistics_cost_250
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			set_country_flag = VAL_route_north_upgraded
+			59 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			60 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			61 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			VAL_refresh_trade_network = yes
+		}
+		ai_will_do = { base = 3 }
+	}
+
+	VAL_invest_stelander_corridor = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Reopen_Trade_Routes NOT = { has_country_flag = VAL_route_stelander_upgraded } }
+		available = { VAL_trade_route_stelander_open = yes ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = VAL_logistics_cost_250
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			set_country_flag = VAL_route_stelander_upgraded
+			29 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			46 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			VAL_refresh_trade_network = yes
+		}
+		ai_will_do = { base = 3 }
+	}
+
+	VAL_invest_vorkerland_corridor = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Reopen_Trade_Routes NOT = { has_country_flag = VAL_route_vorkerland_upgraded } }
+		available = { VAL_trade_route_vorkerland_open = yes ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = VAL_logistics_cost_250
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			set_country_flag = VAL_route_vorkerland_upgraded
+			33 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+			VAL_refresh_trade_network = yes
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	VAL_secure_trade_columns = {
+		icon = generic_resources
+		allowed = { tag = VAL }
+		visible = {
+			VAL_trade_corridors_unlocked = yes
+			check_variable = { var = VAL_corridor_security value = 3 compare = less_than }
+		}
+		available = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = VAL_logistics_cost_100
+		cost = 0
+		days_re_enable = 35
+		complete_effect = {
+			ADISCORD_economy_spend_100 = yes
+			add_to_variable = { var = VAL_corridor_security value = 1 }
+			clamp_variable = { var = VAL_corridor_security min = 0 max = 3 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = -5 }
+			VAL_change_black_market_pressure = yes
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_open_emergency_bypass = {
+		icon = generic_resources
+		allowed = { tag = VAL }
+		visible = { VAL_trade_corridors_unlocked = yes }
+		available = {
+			VAL_trade_network_disrupted = yes
+			NOT = { has_idea = VAL_emergency_bypass }
+			ADISCORD_economy_can_spend_100 = yes
+		}
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = VAL_logistics_cost_100
+		cost = 0
+		days_re_enable = 42
+		complete_effect = {
+			ADISCORD_economy_spend_100 = yes
+			add_timed_idea = { idea = VAL_emergency_bypass days = 56 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = 6 }
+			VAL_change_black_market_pressure = yes
+		}
+		ai_will_do = { base = 8 }
+	}
+}
+
+VAL_population_markets = {
+	VAL_close_refugee_border = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { NOT = { has_country_flag = VAL_refugee_border_closed } }
+		available = { always = yes }
+		cost = 35
+		complete_effect = {
+			set_country_flag = VAL_refugee_border_closed
+			add_ideas = VAL_closed_border_regime
+		}
+		ai_will_do = { base = 1 modifier = { factor = 3 check_variable = { var = VAL_displaced_population value = 60 compare = greater_than_or_equals } } }
+	}
+
+	VAL_open_refugee_border = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_refugee_border_closed }
+		available = { always = yes }
+		cost = 20
+		complete_effect = {
+			clr_country_flag = VAL_refugee_border_closed
+			remove_ideas = VAL_closed_border_regime
+		}
+		ai_will_do = { base = 1 modifier = { factor = 3 NOT = { VAL_regional_displacement_crisis = yes } } }
+	}
+
+	VAL_contract_refugee_labor = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		visible = { check_variable = { var = VAL_displaced_population value = 10 compare = greater_than_or_equals } }
+		available = { NOT = { has_idea = VAL_refugee_contract_labor } }
+		cost = 25
+		days_re_enable = 90
+		complete_effect = {
+			add_to_variable = { var = VAL_displaced_population value = -10 }
+			add_manpower = 7500
+			add_timed_idea = { idea = VAL_refugee_contract_labor days = 180 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = -3 }
+			VAL_change_black_market_pressure = yes
+			VAL_refresh_refugee_state = yes
+		}
+		ai_will_do = { base = 4 }
+	}
+
+	VAL_fund_resettlement_depots = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { check_variable = { var = VAL_displaced_population value = 20 compare = greater_than_or_equals } }
+		available = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = VAL_logistics_cost_100
+		cost = 0
+		days_re_enable = 60
+		complete_effect = {
+			ADISCORD_economy_spend_100 = yes
+			add_to_variable = { var = VAL_displaced_population value = -20 }
+			add_stability = 0.02
+			set_temp_variable = { var = VAL_black_market_pressure_change value = -5 }
+			VAL_change_black_market_pressure = yes
+			VAL_refresh_refugee_state = yes
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_organize_refugee_return = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { check_variable = { var = VAL_displaced_population value = 15 compare = greater_than_or_equals } }
+		available = { NOT = { VAL_regional_displacement_crisis = yes } }
+		cost = 15
+		days_re_enable = 45
+		complete_effect = {
+			add_to_variable = { var = VAL_displaced_population value = -15 }
+			add_political_power = 25
+			add_stability = 0.01
+			VAL_refresh_refugee_state = yes
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	VAL_license_grey_brokers = {
+		icon = generic_resources
+		allowed = { tag = VAL }
+		visible = { OR = { has_war = yes VAL_trade_network_disrupted = yes } }
+		available = { check_variable = { var = VAL_black_market_pressure value = 90 compare = less_than } }
+		cost = 10
+		days_re_enable = 45
+		complete_effect = {
+			ADISCORD_economy_receive_50 = yes
+			set_temp_variable = { var = VAL_black_market_pressure_change value = 15 }
+			VAL_change_black_market_pressure = yes
+		}
+		ai_will_do = { base = 3 modifier = { factor = 0 check_variable = { var = VAL_black_market_pressure value = 70 compare = greater_than_or_equals } } }
+	}
+
+	VAL_buy_contraband_arms = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		visible = { OR = { has_war = yes VAL_trade_network_disrupted = yes } }
+		available = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = VAL_logistics_cost_50
+		cost = 0
+		days_re_enable = 30
+		complete_effect = {
+			ADISCORD_economy_spend_50 = yes
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = VAL }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = 10 }
+			VAL_change_black_market_pressure = yes
+		}
+		ai_will_do = { base = 5 modifier = { factor = 2 has_war = yes } }
+	}
+
+	VAL_audit_broker_houses = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { check_variable = { var = VAL_black_market_pressure value = 25 compare = greater_than_or_equals } }
+		available = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = VAL_logistics_cost_100
+		cost = 0
+		days_re_enable = 60
+		complete_effect = {
+			ADISCORD_economy_spend_100 = yes
+			set_temp_variable = { var = VAL_black_market_pressure_change value = -25 }
+			VAL_change_black_market_pressure = yes
+			add_stability = 0.01
+		}
+		ai_will_do = { base = 7 modifier = { factor = 2 check_variable = { var = VAL_black_market_pressure value = 75 compare = greater_than_or_equals } } }
+	}
+}
