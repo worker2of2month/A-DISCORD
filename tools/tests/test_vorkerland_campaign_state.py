@@ -97,7 +97,7 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
             self.assertLess(incumbent, first_clear)
         self.assertGreaterEqual(leader.count("compare = greater_than"), 6)
 
-    def test_coalition_requires_a_territorial_majority(self) -> None:
+    def test_coalition_uses_the_configured_early_lead_threshold(self) -> None:
         campaign = source_section(read(
             "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
         ), 'campaign_state_effects')

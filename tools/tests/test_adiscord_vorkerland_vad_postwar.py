@@ -102,9 +102,13 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertIn("has_war = no", reclaim)
         self.assertIn("days_re_enable = 14", reclaim)
         self.assertIn("fire_only_once = no", reclaim)
-        self.assertIn("ai_will_do = { factor = 0 }", reclaim)
+        self.assertIn("ADISCORD_vorkerland_continue_imperial_reunification = yes", reclaim)
+        dispatch = named_block(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "ADISCORD_vorkerland_continue_imperial_reunification",
+        )
         for tag in ("EYR", "EGC", "VLA", "ROM", "ZTA", "TGD"):
-            self.assertIn(f"declare_war_on = {{ target = {tag} type = annex_everything }}", reclaim)
+            self.assertIn(f"declare_war_on = {{ target = {tag} type = annex_everything }}", dispatch)
 
     def test_reunified_vlad_keeps_empire_unless_the_rare_council_formed(self) -> None:
         source = source_section(

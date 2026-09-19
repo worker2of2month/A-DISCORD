@@ -881,3 +881,26 @@ NKA создаётся только из восьми северных реги�
 `common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt` содержит обработчики капитуляций и завершения договоров. Внутри каждого нативного hook разделы исполняются в порядке: Воркерланд, Стеланд, Кефрейт, Рин, Наместничество, дипломатия Воркерланда, северная защитная проверка и Ливонн. Раздел включён только в те hooks, которые нужны его механике. Общий `ZZ_ADISCORD_default_capitulation_on_actions.txt` остаётся отдельным и последним.
 
 Перенос не меняет ROOT/FROM, военные результаты, территориальные эффекты или очередь выбора условий. Инициализация стран, подготовка войн, экономика и её периодические обновления остаются у своих владельцев. Эффекты, триггеры и события выбора условий также остаются в файлах соответствующих стран. Для проверок одного региона `tools/lib/on_actions.py` явно объединяет его обычный файл с указанным разделом общего обработчика; общий тест проверяет единичное владение hooks и порядок всех разделов.
+
+### Vorkerland postwar campaign boundaries
+
+Keep country content in the existing files by engine data type. Section markers
+are consumed by `source_section`; navigation comments are not new sections.
+
+`ADISCORD_vorkerland_vad_continue_imperial_reunification` owns the decision's
+visibility, 25 political-power cost, peace gate and 14-day re-enable interval.
+The successor is `WRK`, even when the displayed country is the Vorkerland Empire.
+`ADISCORD_vorkerland_is_imperial_reclamation_target` runs in each candidate's
+country scope and checks existence, independence, capitulation, war and faction
+relations with WRK. Use boolean scripted-trigger calls, not macro argument blocks.
+`ADISCORD_vorkerland_has_imperial_reclamation_target` uses a bounded tag list;
+`ADISCORD_vorkerland_continue_imperial_reunification` rechecks those candidates
+in an exclusive chain and declares at most one war. Keep both lists in identical
+priority order. SOL retains its separate settlement path. There is no world scan,
+persistent selected-target cache, or extra campaign-active flag.
+
+The central control score counts 37 explicitly marked states. The current
+coalition threshold is greater than 8, an early-lead setting rather than a
+territorial majority. Keep balance changes separate from structural refactors.
+The contract tests cover the target truth table, order, scope, unlock and prices;
+static expansion checks do not replace a fresh native-load and campaign check.
