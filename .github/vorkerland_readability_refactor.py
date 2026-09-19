@@ -1,10 +1,8 @@
 """Verify postwar section isolation without changing any gameplay nodes."""
 from __future__ import annotations
-
 from collections import Counter
 import os
 from pathlib import Path
-import re
 import subprocess
 import sys
 import tempfile
@@ -29,7 +27,6 @@ FOCUSED = [
     "tools/tests/test_validate_adiscord_modifier_fields.py",
 ]
 
-
 def run(args, cwd=AUTOMATION, check=True):
     result = subprocess.run(args, cwd=cwd, capture_output=True, text=True, timeout=420)
     print("COMMAND", " ".join(args), "EXIT", result.returncode, flush=True)
@@ -38,14 +35,11 @@ def run(args, cwd=AUTOMATION, check=True):
         raise RuntimeError("Command failed")
     return result
 
-
 def read(root, path):
     return (root / path).read_text(encoding="utf-8-sig")
 
-
 def write(root, path, text):
     (root / path).write_bytes(text.encode("utf-8"))
-
 
 def test_run(root, paths, name):
     xml = TMP / (name + ".xml")
@@ -64,19 +58,16 @@ def test_run(root, paths, name):
     print(result.stdout[-2000:], flush=True)
     return failures, errors
 
-
 def validator(root, name):
     result = run([sys.executable, "-B", "tools/validate_tc.py", "--limit", "300"], cwd=root, check=False)
     assert result.returncode == 0, result.stdout + result.stderr
-    # validate_tc reports advisory diagnostics even when its process exits 0.
-    # Compare every diagnostic instead of treating that exit code as a clean bill.
+    # This validator prints advisory diagnostics even when its process exits 0.
     diagnostics = Counter(line.strip() for line in (result.stdout + result.stderr).splitlines() if line.startswith("- "))
     print(name, "VALIDATOR DIAGNOSTICS", sum(diagnostics.values()), flush=True)
     for diagnostic in diagnostics:
         print(diagnostic, flush=True)
     (TMP / (name + "-validator.log")).write_text(result.stdout + result.stderr)
     return diagnostics
-
 
 run(["git", "fetch", "--depth=1", "origin", BASE, HEAD])
 baseline, work = TMP / "baseline", TMP / "work"
@@ -90,7 +81,7 @@ baseline_failures, baseline_errors = test_run(baseline, FOCUSED, "baseline")
 baseline_diagnostics = validator(baseline, "baseline")
 assert len(baseline_diagnostics) == 5, baseline_diagnostics
 
-# RED: enforce that wartime wave validation cannot consume postwar declarations.
+# RED: wartime wave validation must not consume postwar declarations.
 tests = read(work, TEST)
 addition = '''
     def test_postwar_dispatch_is_separate_from_wartime_wave_section(self):
@@ -107,21 +98,21 @@ red_failures, red_errors = test_run(work, [TEST], "red-boundary")
 assert not red_errors
 assert len(red_failures) == 1 and next(iter(red_failures)).endswith("test_postwar_dispatch_is_separate_from_wartime_wave_section")
 
-# GREEN: move one new, self-contained block; keep its content byte-for-byte.
+# GREEN: move one new self-contained block, preserving its content exactly.
 source = read(work, EFFECTS)
 start = source.index("# POSTWAR IMPERIAL RECLAMATION\n")
 end = source.index("# --- force_design_effects ---", start)
 payload = source[start:end]
 assert len(parse_clausewitz(payload)) == 1
 assert parse_clausewitz(payload)[0].key == DISPATCH
-assert payload in source_section(source, "focus_decision_effects")
+assert payload.rstrip() in source_section(source, "focus_decision_effects")
 source = source[:start] + source[end:]
 phase_end = source.index("# --- release_effects ---")
 source = source[:phase_end] + payload + source[phase_end:]
 source = source.replace("# focus_decision_effects = player orders; phase_effects = transitions and handoff.", "# focus_decision_effects = wartime orders; phase_effects = handoff and postwar orders.")
 write(work, EFFECTS, source)
 
-# Prove the original five gameplay files still expand to exactly BASE.
+# All five original files must still expand to exactly the selected main base.
 helpers = {}
 for path, names in ((TRIGGERS, (P + "is_imperial_reclamation_target", P + "has_imperial_reclamation_target")), (EFFECTS, (DISPATCH,))):
     for entry in parse_clausewitz(read(work, path)):
@@ -129,7 +120,6 @@ for path, names in ((TRIGGERS, (P + "is_imperial_reclamation_target", P + "has_i
             assert entry.key not in helpers
             helpers[entry.key] = entry.value
 assert len(helpers) == 3
-
 
 def canonical(entries):
     result = []
@@ -139,7 +129,6 @@ def canonical(entries):
         else:
             result.append((entry.key, canonical(entry.value) if isinstance(entry.value, list) else entry.value, entry.quoted))
     return result
-
 
 runtime = [EFFECTS, TRIGGERS, "common/decisions/ADISCORD_vorkerland_decisions.txt", "common/ideas/ADISCORD_vorkerland_ideas.txt", "common/national_focus/ADISCORD_vorkerland_focus.txt"]
 for path in runtime:
