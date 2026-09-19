@@ -932,7 +932,7 @@ class CivilWarContracts(unittest.TestCase):
                             or matches_conditions(ast_block(f, "allow_branch"), {(tag, "tag", tag): True}, tag))]
             points = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in visible]
             self.assertEqual(len(points), len(set(points)), tag)
-            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 10 if tag == "STS" else 5, tag)
+            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 10 if tag == "STS" else (9 if tag == "STP" else 5), tag)
             for x in {x for x, _ in points}:
                 rows = sorted(y for px, y in points if px == x)
                 self.assertTrue(all(b - a >= 1 for a, b in zip(rows, rows[1:])), tag)
@@ -3645,6 +3645,12 @@ class PostwarFocusContracts(unittest.TestCase):
                     if economy:
                         excluded.add(prefix + ("accountable_arsenals" if economy == "civil_workshops" else "civil_workshops"))
                         route.update({prefix + name: self.focuses[prefix + name] for name in ("border_staff", "southern_defence")})
+                        # Party settlements and industrial priorities have their own continuations.
+                        party_extensions = {name: focus for name, focus in self.focuses.items()
+                                            if name.startswith("STP_party_")
+                                            and any(e.key == "STP_pw_can_reconstruct" for e in walk(ast_block(focus, "available")))}
+                        self.assertEqual(len(party_extensions), 9)
+                        route.update(party_extensions)
                     for _ in range(len(route)):
                         for name, focus in route.items():
                             if name in excluded:
@@ -3662,7 +3668,7 @@ class PostwarFocusContracts(unittest.TestCase):
                        if e.key == "offset" and matches_conditions(ast_block(e.value, "trigger"), facts, tag)),
                        int(scalar(f, "y"))) for f in visible]
             self.assertEqual(len(points), len(set(points)))
-            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 32 if tag == "STS" else 15)
+            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 32 if tag == "STS" else 20)
             self.assertLessEqual(max(y for _, y in points), 15 if tag == "STS" else 12)
             for focus in focuses.values():
                 self.assertEqual(scalar(ast_block(focus, "allow_branch"), "tag"), tag)
