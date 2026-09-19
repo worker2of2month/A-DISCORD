@@ -436,6 +436,12 @@ VAL_occidian_state_available = {
 	}
 }
 
+# STATE: Livonn is optional and cannot be taken from another country or client.
+VAL_livonn_available_for_administration = {
+	OR = { is_owned_by = VAL is_owned_by = SRP is_owned_by = OCA }
+	VAL_occidian_state_available = yes
+}
+
 VAL_can_form_occidian_administration = {
 	tag = VAL
 	has_capitulated = no
@@ -444,13 +450,12 @@ VAL_can_form_occidian_administration = {
 	OR = { OCA = { exists = no } OCA = { is_subject_of = VAL has_war = no } }
 	43 = { VAL_occidian_state_available = yes }
 	44 = { VAL_occidian_state_available = yes }
-	45 = { VAL_occidian_state_available = yes }
 	88 = { VAL_occidian_state_available = yes }
 	OR = {
 		OCA = { exists = yes }
 		43 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
 		44 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
-		45 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+		45 = { VAL_livonn_available_for_administration = yes owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
 		88 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
 	}
 }
@@ -463,12 +468,8 @@ VAL_occidian_administration_secured = {
 	44 = { is_owned_by = OCA is_controlled_by = OCA }
 	88 = { is_owned_by = OCA is_controlled_by = OCA }
 	OR = {
+		45 = { NOT = { is_owned_by = OCA } }
 		45 = { is_owned_by = OCA is_controlled_by = OCA }
-		AND = {
-			has_country_flag = VAL_cw_livonn_agreement_honored
-			45 = { is_owned_by = STS is_controlled_by = STS }
-			STS = { exists = yes has_capitulated = no }
-		}
 	}
 }
 
@@ -499,4 +500,27 @@ VAL_is_contract_administration = {
     is_subject_of = VAL
     has_autonomy_state = autonomy_VAL_contract_administration
     has_country_leader_ideology = contractual_etatism
+}
+
+VAL_can_attack_bezhaysk = {
+	tag = VAL
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	VAL_stelander_dominated = yes
+	BJK = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		NOT = { is_in_faction_with = VAL }
+	}
+}
+
+VAL_can_aid_vorkerland = {
+	tag = VAL
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_war_with = WRK }
+	WRK = { exists = yes has_capitulated = no is_subject = no }
+	NOT = { any_enemy_country = { is_in_faction_with = WRK } }
 }

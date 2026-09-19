@@ -22,6 +22,22 @@ class ValLivonnSettlement(unittest.TestCase):
         self.assertNotIn("transfer_state = 45", stage)
         self.assertIn("set_country_flag = VAL_cw_livonn_settlement_pending", stage)
 
+    def test_livonn_cannot_be_taken_from_stelander_or_another_client(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, block, matches_conditions
+        triggers = entries("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        eligible = block(triggers, "VAL_livonn_available_for_administration")
+        for owner in ("STP", "STS", "NOD", "VAL", "SRP", "OCA"):
+            with self.subTest(owner=owner):
+                facts = {("45", "is_owned_by", owner): True,
+                         ("45", "VAL_occidian_state_available", "yes"): True}
+                self.assertEqual(matches_conditions(eligible, facts, "45"), owner in {"VAL", "SRP", "OCA"})
+        form = block(triggers, "VAL_can_form_occidian_administration")
+        self.assertFalse(any(e.key == "45" for e in form), "Livonn must not block creation without it")
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        self.assertIn("limit = { 45 = { VAL_livonn_available_for_administration = yes } } transfer_state = 45", effects)
+        settlement = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt").split("VAL_cw_settle_republics = {", 1)[1].split("STP_cw_poll_nod_intervention", 1)[0]
+        self.assertIn("45 = { is_owned_by = SRP OR = { is_controlled_by = SRP is_controlled_by = VAL } }", settlement)
+
     def test_honor_choice_returns_only_livonn_to_shabrat_side(self):
         effects = source_section(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), "livonn_settlement_effects")
         honor = effects.split("VAL_cw_honor_livonn_agreement = {", 1)[1].split("VAL_cw_retain_livonn = {", 1)[0]

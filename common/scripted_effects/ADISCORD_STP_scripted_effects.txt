@@ -928,6 +928,7 @@ STP_cw_start_northern_war = {
 		if = {
 			limit = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
 			set_variable = { var = STP_cw_northern_campaign_status value = 1 }
+			set_country_flag = NOD_cw_northern_war_started
 			if = { limit = { NOT = { has_idea = NOD_cw_northern_offensive } } add_ideas = NOD_cw_northern_offensive }
 			# Northern deployment can permit an uprising before the election deadline.
 			country_event = { id = ADISCORD_STP_cw.42 days = 7 }
@@ -3199,11 +3200,10 @@ VAL_cw_settle_republics = {
 		SRP = { remove_ideas = STP_cw_republics_battle_spirit }
 		SRP = { STP_cw_finish_mobilization = yes }
 
-		# Territorial settlement is atomic: Livonn joins the same administration as
-		# 43/44/88 before any late capitulation or weekly callbacks can observe it.
+		# Only republican land belongs to this settlement; Livonn may remain in STP/STS.
 		set_country_flag = VAL_occidian_settlement_pending
 		if = {
-			limit = { NOT = { 45 = { is_owned_by = OCA } } }
+			limit = { 45 = { is_owned_by = SRP OR = { is_controlled_by = SRP is_controlled_by = VAL } } }
 			if = {
 				limit = { NOT = { 45 = { is_owned_by = VAL } } }
 				transfer_state = 45
@@ -3667,6 +3667,7 @@ STP_cw_settle_northern_victory = {
 		if = { limit = { has_war_with = YPR } white_peace = YPR }
 		if = { limit = { has_war_with = COF } white_peace = COF }
 		if = { limit = { has_war_with = TFF } white_peace = TFF }
+		clr_country_flag = NOD_cw_northern_war_started
 		STP_cw_end_northern_colonial_war = yes
 		STP_cw_dismantle_northern_alliance = yes
 		YPR = { set_major = no }
@@ -3692,6 +3693,7 @@ STP_cw_settle_northern_defeat = {
 		limit = {
 			check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
 			OR = {
+				NOD_cw_can_accept_northern_defeat = yes
 				AND = { has_war_with = YPR check_variable = { var = STP_cw_capitulation_occupier value = 6 compare = equals } }
 				AND = { has_war_with = COF check_variable = { var = STP_cw_capitulation_occupier value = 7 compare = equals } }
 				AND = { has_war_with = TFF check_variable = { var = STP_cw_capitulation_occupier value = 8 compare = equals } }
@@ -3701,6 +3703,7 @@ STP_cw_settle_northern_defeat = {
 		if = { limit = { has_war_with = YPR } white_peace = YPR }
 		if = { limit = { has_war_with = COF } white_peace = COF }
 		if = { limit = { has_war_with = TFF } white_peace = TFF }
+		clr_country_flag = NOD_cw_northern_war_started
 		STP_cw_end_northern_colonial_war = yes
 		YPR = { set_major = no }
 		COF = { set_major = no }
@@ -3736,6 +3739,7 @@ STP_cw_poll_northern_campaign = {
 			if = { limit = { has_war_with = YPR } white_peace = YPR }
 			if = { limit = { has_war_with = COF } white_peace = COF }
 			if = { limit = { has_war_with = TFF } white_peace = TFF }
+			clr_country_flag = NOD_cw_northern_war_started
 			STP_cw_end_northern_colonial_war = yes
 			YPR = { set_major = no }
 			COF = { set_major = no }

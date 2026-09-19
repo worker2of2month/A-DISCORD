@@ -585,4 +585,5 @@ scripted_gui = {
    VAL_ops_30_contested_visible = { 30 = { controller = { tag = VAL OR = { NOT = { controls_province = 12434 } NOT = { controls_province = 16346 } NOT = { controls_province = 16363 } NOT = { controls_province = 16369 } NOT = { controls_province = 16441 } NOT = { controls_province = 16442 } NOT = { controls_province = 16444 } } } } }
   }
  }
+ ADISCORD_VAL_vorkerland_aid_panel = { context_type = decision_category window_name = "ADISCORD_VAL_vorkerland_aid_window" visible = { always = yes } }
 }

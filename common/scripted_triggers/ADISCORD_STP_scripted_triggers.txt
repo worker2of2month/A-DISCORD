@@ -664,6 +664,18 @@ STP_cw_northern_opponent_defeated = {
 	}
 }
 
+# NOD scope. The clock begins only after all northern opponents enter the war.
+NOD_cw_can_accept_northern_defeat = {
+ tag = NOD
+ check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
+ has_capitulated = no
+ has_war_with = YPR
+ has_war_with = COF
+ has_war_with = TFF
+ NOT = { surrender_progress < 0.7 }
+ has_country_flag = { flag = NOD_cw_northern_war_started days > 89 }
+}
+
 STP_cw_northern_campaign_won = {
 	check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
 	exists = yes

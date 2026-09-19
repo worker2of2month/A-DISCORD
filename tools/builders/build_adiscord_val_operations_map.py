@@ -257,10 +257,43 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
         gui.append(f'  iconType = {{ name = "VAL_ops_{state}_contested" position = {{ x = {20 + left} y = {38 + top} }} quadTextureSprite = "GFX_VAL_ops_contested_{state}" }}\n')
         provinces = " ".join(f"NOT = {{ controls_province = {p} }}" for p in sorted(state_provinces(state)))
         script.append(f'   VAL_ops_{state}_contested_visible = {{ {state} = {{ controller = {{ tag = VAL OR = {{ {provinces} }} }} }} }}\n')
-    gui.append(" }\n}\n")
+    gui.append(' }\n containerWindowType = {\n  name = "ADISCORD_VAL_vorkerland_aid_window"\n  position = { x = 0 y = 0 }\n  size = { width = 460 height = 258 }\n  iconType = { name = "map" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_vorkerland_aid_map" }\n }\n}\n')
+    gfx.append(' spriteType = { name = "GFX_VAL_vorkerland_aid_map" texturefile = "gfx/interface/VAL_operations/VAL_vorkerland_aid_map.png" }\n')
     gfx.append("}\n")
-    script.append("  }\n }\n}\n")
+    script.append('  }\n }\n ADISCORD_VAL_vorkerland_aid_panel = { context_type = decision_category window_name = "ADISCORD_VAL_vorkerland_aid_window" visible = { always = yes } }\n}\n')
     return {"interface/ADISCORD_VAL_operations.gui": "".join(gui), "interface/ADISCORD_VAL_operations.gfx": "".join(gfx), "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt": "".join(script)}
+
+
+def render_vorkerland_aid_map() -> Image.Image:
+    """Static historical-border illustration; no runtime country/controller inputs."""
+    colors, land = province_colors()
+    # Historical reunification territory, including the central breakaways and
+    # the Oitfort, Rimat, Techlar, Ebern and Solar settlement districts.
+    historical_states = (
+        27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 75, 79, 81, 82,
+        102, 104, 105, 106, 107, 108, 109, 110, 111, 121, 122, 123,
+        124, 198, 200, 201, 202, 306, 307, 308, 309, 311, 320, 323,
+        324, 325, 327,
+    )
+    selected = {colors[province] for state in historical_states for province in state_provinces(state)}
+    provinces = Image.open(ROOT / "map/provinces.bmp").convert("RGB")
+    mask = Image.new("L", provinces.size)
+    mask.putdata([255 if pixel in selected else 0 for pixel in provinces.getdata()])
+    bounds = mask.getbbox()
+    if bounds is None:
+        raise ValueError("WRK start territory is missing")
+    left, top, right, bottom = bounds
+    box = (max(0, left - 40), max(0, top - 40), min(provinces.width, right + 40), min(provinces.height, bottom + 40))
+    crop = provinces.crop(box)
+    image = Image.new("RGB", crop.size)
+    image.putdata([(132, 76, 69) if pixel in selected else (49, 55, 56) if pixel in land else (19, 29, 35) for pixel in crop.getdata()])
+    outline = ImageChops.subtract(mask.crop(box).filter(ImageFilter.MaxFilter(3)), mask.crop(box))
+    image.paste((200, 167, 112), mask=outline)
+    image.thumbnail((416, 236), Image.Resampling.LANCZOS)
+    panel = Image.new("RGB", (420, 240), (19, 29, 35))
+    panel.paste(image, ((420-image.width)//2, (240-image.height)//2))
+    ImageDraw.Draw(panel).rectangle((0, 0, 419, 239), outline=(111, 99, 75), width=2)
+    return panel
 
 
 def main() -> int:
@@ -271,6 +304,7 @@ def main() -> int:
     args = parser.parse_args()
     outputs, box, size, offset = render_outputs()
     outputs, boxes = compact_overlays(outputs)
+    outputs["VAL_vorkerland_aid_map.png"] = render_vorkerland_aid_map()
     interfaces = interface_outputs(boxes)
     if args.apply:
         for name, source in interfaces.items():

@@ -69,4 +69,5 @@ spriteTypes = {
  spriteType = { name = "GFX_VAL_ops_contested_18" texturefile = "gfx/interface/VAL_operations/VAL_ops_contested_18.png" }
  spriteType = { name = "GFX_VAL_ops_state_30" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_30.png" noOfFrames = 16 }
  spriteType = { name = "GFX_VAL_ops_contested_30" texturefile = "gfx/interface/VAL_operations/VAL_ops_contested_30.png" }
+ spriteType = { name = "GFX_VAL_vorkerland_aid_map" texturefile = "gfx/interface/VAL_operations/VAL_vorkerland_aid_map.png" }
 }

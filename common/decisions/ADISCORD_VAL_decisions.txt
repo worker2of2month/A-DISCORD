@@ -1209,3 +1209,40 @@ VAL_command_balance_category = {
 		ai_will_do = { base = 1 modifier = { factor = 3 has_war = no } }
 	}
 }
+
+VAL_vorkerland_aid = {
+	VAL_aid_wrk_rifles = {
+		icon = generic_army_support
+		visible = { has_completed_focus = VAL_Operational_Directorate }
+		available = {
+			custom_trigger_tooltip = { tooltip = VAL_can_aid_vorkerland_tt VAL_can_aid_vorkerland = yes }
+			NOT = { has_equipment = { infantry_equipment < 1000 } }
+		}
+		cost = 25
+		days_re_enable = 30
+		complete_effect = {
+			if = {
+				limit = { VAL_can_aid_vorkerland = yes NOT = { has_equipment = { infantry_equipment < 1000 } } }
+				send_equipment = { equipment = infantry_equipment amount = 1000 target = WRK }
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+	VAL_aid_wrk_support = {
+		icon = generic_army_support
+		visible = { has_completed_focus = VAL_Operational_Directorate }
+		available = {
+			custom_trigger_tooltip = { tooltip = VAL_can_aid_vorkerland_tt VAL_can_aid_vorkerland = yes }
+			NOT = { has_equipment = { support_equipment < 100 } }
+		}
+		cost = 25
+		days_re_enable = 30
+		complete_effect = {
+			if = {
+				limit = { VAL_can_aid_vorkerland = yes NOT = { has_equipment = { support_equipment < 100 } } }
+				send_equipment = { equipment = support_equipment amount = 100 target = WRK }
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+}

@@ -198,6 +198,7 @@ STARTING_OWNER = {
     state_id: PROTECTORATE_TAG if successor in PROTECTORATE_SUCCESSORS else successor
     for state_id, successor in STATE_OWNER.items()
 }
+STARTING_OWNER.update({146: "TRU", 150: "TRU"})
 CLAIMS_BY_STATE = {
     134: ("MON",),
     147: ("MON",),
@@ -542,10 +543,20 @@ def main() -> int:
         action="store_true",
         help="write only the builder-owned deliberately blank EXZ localisation",
     )
+    actions.add_argument(
+        "--apply-states", nargs="+", type=int, choices=sorted(EXPECTED_STATES),
+        help="write only selected builder-owned state histories",
+    )
     args = parser.parse_args()
     if args.apply:
         print_summary()
         apply()
+        return 0
+    elif args.apply_states:
+        profiles, _principal = build_profiles()
+        for state_id in args.apply_states:
+            state_path(state_id).write_text(render_state(state_id, profiles[state_id]), encoding="utf-8")
+        print(f"Applied state histories: {args.apply_states}")
         return 0
     elif args.apply_country_sources:
         write_country_sources()

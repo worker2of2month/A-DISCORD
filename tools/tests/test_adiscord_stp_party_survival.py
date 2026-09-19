@@ -241,5 +241,116 @@ class PartySurvivalContracts(unittest.TestCase):
             self.assertFalse((root / path).read_bytes().startswith(b'\xef\xbb\xbf'))
 
 
+class PartyWartimeFocusContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        tree = parse_clausewitz(read('common/national_focus/ADISCORD_national_focus_STP.txt'))
+        cls.foci = {one(e.value, 'id'): e.value for e in walk(tree)
+                    if e.key == 'focus' and isinstance(e.value, list)}
+        cls.decisions = {e.key: e.value for e in walk(parse_clausewitz(read(DECISIONS)))
+                         if isinstance(e.value, list)}
+
+    def reachable(self, *, congress, port, niansas, stage, government=True, fell=True):
+        facts = {('STP', 'STP_ps_war_active', 'yes'): True,
+                 ('STP', 'STP_ps_government_operational', 'yes'): government,
+                 ('STP', 'STP_ps_can_counterattack', 'yes'): stage == 4 and government,
+                 ('STP', 'has_country_flag', 'STP_ps_congress_fell'): fell,
+                 ('STP', 'variable', 'STP_ps_stage'): stage,
+                 ('STP', 'owns_state', '28'): True,
+                 ('STP', 'controls_province', '145'): congress,
+                 ('STP', 'controls_province', '16366'): port,
+                 ('STP', 'controls_province', '45'): niansas,
+                 ('STP', 'controls_province', '16351'): congress}
+        done = {'STP_cw_unified_headquarters'}
+        changed = True
+        while changed:
+            changed = False
+            for name, focus in self.foci.items():
+                if name in done:
+                    continue
+                # Only the party-only wartime branches are under review here.
+                branch = next((e.value for e in focus if e.key == 'allow_branch'), [])
+                if ('tag', 'STP') not in signature(branch) or ('NOT', [('has_country_flag', 'STP_cw_postwar')]) not in signature(branch):
+                    continue
+                groups = children(focus, 'prerequisite')
+                if not all(any(e.value in done for e in group) for group in groups):
+                    continue
+                if matches_conditions(next((e.value for e in focus if e.key == 'available'), []), facts, 'STP'):
+                    done.add(name)
+                    changed = True
+        return done
+
+    def test_lost_capital_and_niansas_do_not_cut_off_staff_or_intelligence(self):
+        for stage in (1, 2, 3, 4):
+            done = self.reachable(congress=False, port=False, niansas=False, stage=stage)
+            self.assertTrue({'STP_ps_temporary_presidium', 'STP_ps_restore_couriers',
+                             'STP_party_rear_administration', 'STP_ps_counter_supply'} <= done)
+            self.assertNotIn('STP_ps_route_security', done)
+            self.assertEqual('STP_party_war_directorate' in done, stage >= 2)
+            self.assertEqual('STP_cw_capital_counteroffensive' in done, stage == 4)
+            self.assertEqual('STP_cw_assault_columns' in done, stage == 4)
+
+    def test_port_can_be_defended_while_the_government_is_displaced(self):
+        done = self.reachable(congress=False, port=True, niansas=False, stage=1, government=False)
+        self.assertTrue({'STP_cw_guard_the_pier', 'STP_cw_harbour_batteries'} <= done)
+        self.assertNotIn('STP_party_war_directorate', done)
+        gate = one(self.decisions['STP_cw_hold_the_pier'], 'available')
+        self.assertIn(('controls_province', '16366'), signature(gate))
+        self.assertNotIn(('controls_state', '28'), signature(gate))
+
+    def test_supply_is_usable_inside_the_defensive_phase(self):
+        headquarters = float(one(self.foci['STP_cw_unified_headquarters'], 'cost')) * 7
+        transport = float(one(self.foci['STP_party_war_transport'], 'cost')) * 7
+        delivery = int(one(self.decisions['STP_ps_transport_work'], 'days_mission_timeout'))
+        self.assertEqual(headquarters + transport + delivery, 49)
+        self.assertLess(headquarters + transport + delivery, 56)
+        groups = children(self.foci['STP_ps_ammunition_board'], 'prerequisite')
+        self.assertEqual([set(e.value for e in group) for group in groups],
+                         [{'STP_party_war_transport', 'STP_cw_wartime_arsenals'}])
+
+    def test_first_paid_cabinet_response_fits_deadline_and_free_response_stays_open(self):
+        focus_days = float(one(self.foci['STP_ps_temporary_presidium'], 'cost')) * 7
+        mission_days = int(one(self.decisions['STP_ps_cabinet_work'], 'days_mission_timeout'))
+        paid = self.decisions['STP_ps_emergency_cabinet']
+        delta = next(int(one(e.value, 'days')) for e in walk(paid) if e.key == 'add_days_mission_timeout')
+        deadline = int(one(self.decisions['STP_ps_congress_deadline'], 'days_mission_timeout'))
+        reward = one(self.foci['STP_ps_temporary_presidium'], 'completion_reward')
+        extension = next(e.value for e in walk(reward) if e.key == 'add_days_mission_timeout')
+        self.assertEqual(one(extension, 'mission'), 'STP_ps_congress_deadline')
+        self.assertLess(focus_days + mission_days + delta, deadline + int(one(extension, 'days')))
+        for gate in (one(paid, 'visible'), one(paid, 'available'), one(paid, 'complete_effect')):
+            self.assertIn('STP_ps_temporary_presidium', str(signature(gate)))
+        for name in ('STP_ps_emergency_cabinet_administrative', 'STP_ps_emergency_cabinet_prepared'):
+            self.assertNotIn('STP_ps_temporary_presidium', str(signature(self.decisions[name])))
+
+    def test_restored_couriers_unlock_a_real_order_with_its_command_price(self):
+        reward = one(self.foci['STP_ps_restore_couriers'], 'completion_reward')
+        self.assertEqual(one(reward, 'add_command_power'), '25')
+        order = self.decisions['STP_cw_regroup_the_front']
+        visible = one(order, 'visible')
+        self.assertTrue(matches_conditions(visible, {('STP', 'has_completed_focus', 'STP_ps_restore_couriers'): True}))
+        self.assertEqual(one(one(order, 'complete_effect'), 'add_command_power'), '-25')
+
+    def test_returning_government_needs_actual_recapture(self):
+        for held, lost in product((False, True), repeat=2):
+            gate = one(self.foci['STP_ps_retake_congress'], 'available')
+            facts = {('STP', 'STP_ps_war_active', 'yes'): True,
+                     ('STP', 'controls_province', '145'): held,
+                     ('STP', 'has_country_flag', 'STP_ps_congress_fell'): lost}
+            self.assertEqual(matches_conditions(gate, facts), held and lost)
+        reward = one(self.foci['STP_ps_retake_congress'], 'completion_reward')
+        self.assertFalse({'transfer_state', 'set_state_controller_to', 'add_timed_idea'} & {e.key for e in walk(reward)})
+
+    def test_inner_ring_builds_only_in_held_city_nodes(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+        reward = one(self.foci['STP_cw_inner_ring'], 'completion_reward')
+        for left, right in product((False, True), repeat=2):
+            facts = {('STP', 'controls_province', '16351'): left,
+                     ('STP', 'controls_province', '16377'): right}
+            output = list(selected_effects(reward, facts))
+            provinces = {one(e.value, 'province') for _, e in output if e.key == 'add_building_construction'}
+            self.assertEqual(provinces, {p for p, held in [('16351', left), ('16377', right)] if held})
+
+
 if __name__ == '__main__':
     unittest.main()

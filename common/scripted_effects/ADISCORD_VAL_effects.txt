@@ -1800,6 +1800,7 @@ VAL_frontier_settle_victory = {
             if = {
                 limit = { has_completed_focus = VAL_frontier_commissioners CIN = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 58 = { OR = { is_controlled_by = VAL is_controlled_by = CIN } } 59 = { OR = { is_controlled_by = VAL is_controlled_by = CIN } } 60 = { OR = { is_controlled_by = VAL is_controlled_by = CIN } } }
                 set_autonomy = { target = CIN autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+                VAL = { VAL_call_subjects_to_wars = yes }
                 CIN = {
                     set_cosmetic_tag = CIN_VAL_commissariat
                     set_politics = { ruling_party = etatism elections_allowed = no }
@@ -1819,6 +1820,7 @@ VAL_frontier_settle_victory = {
             if = {
                 limit = { has_completed_focus = VAL_frontier_commissioners OSF = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 61 = { OR = { is_controlled_by = VAL is_controlled_by = OSF } } 62 = { OR = { is_controlled_by = VAL is_controlled_by = OSF } } 63 = { OR = { is_controlled_by = VAL is_controlled_by = OSF } } }
                 set_autonomy = { target = OSF autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+                VAL = { VAL_call_subjects_to_wars = yes }
                 OSF = {
                     set_cosmetic_tag = OSF_VAL_commissariat
                     set_politics = { ruling_party = etatism elections_allowed = no }
@@ -1838,6 +1840,7 @@ VAL_frontier_settle_victory = {
             if = {
                 limit = { has_completed_focus = VAL_frontier_commissioners APH = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 64 = { OR = { is_controlled_by = VAL is_controlled_by = APH } } 65 = { OR = { is_controlled_by = VAL is_controlled_by = APH } } }
                 set_autonomy = { target = APH autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+                VAL = { VAL_call_subjects_to_wars = yes }
                 APH = {
                     set_cosmetic_tag = APH_VAL_commissariat
                     set_politics = { ruling_party = etatism elections_allowed = no }
@@ -2500,6 +2503,7 @@ VAL_form_northern_administration = {
                 ADISCORD_economy_mark_dirty = yes
             }
             set_autonomy = { target = NKA autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+                VAL = { VAL_call_subjects_to_wars = yes }
             ADISCORD_economy_mark_dirty = yes
             country_event = { id = val_contract.346 }
         }
@@ -2513,8 +2517,8 @@ VAL_form_occidian_administration = {
 		limit = { VAL_can_form_occidian_administration = yes }
 
 		# Seed OCA with a state whose donor survives the first transfer. During the
-		# military settlement Livonn is first moved to VAL, so 45 is a deterministic
-		# fallback even when the three republican districts are one-state remnants.
+		# military settlement republican Livonn can provide a fallback; districts
+		# belonging to STP/STS or another country are never eligible.
 		if = {
 			limit = {
 				OCA = { exists = no }
@@ -2532,7 +2536,7 @@ VAL_form_occidian_administration = {
 		if = {
 			limit = {
 				OCA = { exists = no }
-				45 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+				45 = { VAL_livonn_available_for_administration = yes owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
 			}
 			OCA = { transfer_state = 45 }
 		}
@@ -2568,7 +2572,7 @@ VAL_form_occidian_administration = {
 			OCA = {
 				transfer_state = 43
 				transfer_state = 44
-				transfer_state = 45
+				if = { limit = { 45 = { VAL_livonn_available_for_administration = yes } } transfer_state = 45 }
 				transfer_state = 88
 				set_capital = { state = 43 remember_old_capital = no }
 				if = {
@@ -2584,7 +2588,7 @@ VAL_form_occidian_administration = {
 
 			43 = { add_core_of = OCA set_state_controller_to = OCA }
 			44 = { add_core_of = OCA set_state_controller_to = OCA }
-			45 = { add_core_of = OCA set_state_controller_to = OCA }
+			45 = { if = { limit = { is_owned_by = OCA } add_core_of = OCA set_state_controller_to = OCA } }
 			88 = { add_core_of = OCA set_state_controller_to = OCA }
 
 			if = {
@@ -2596,6 +2600,7 @@ VAL_form_occidian_administration = {
 					end_wars = no
 					end_civil_wars = no
 				}
+                VAL = { VAL_call_subjects_to_wars = yes }
 			}
 			clr_country_flag = VAL_occidian_settlement_pending
 			ADISCORD_economy_mark_dirty = yes
@@ -2656,6 +2661,7 @@ VAL_install_stelander_administration = {
             limit = { OR = { NOT = { is_subject_of = VAL } NOT = { has_autonomy_state = autonomy_VAL_contract_administration } } }
             VAL = {
                 set_autonomy = { target = event_target:VAL_settlement_country autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+                VAL = { VAL_call_subjects_to_wars = yes }
             }
         }
         if = {
@@ -2712,7 +2718,8 @@ VAL_install_nodrul_administration = {
     if = {
         limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
         if = { limit = { has_war_with = VAL } white_peace = VAL }
-        VAL = { set_autonomy = { target = NOD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no } }
+        VAL = { set_autonomy = { target = NOD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+                VAL = { VAL_call_subjects_to_wars = yes } }
         if = {
             limit = { NOT = { has_cosmetic_tag = NOD_VAL_administration } }
             set_cosmetic_tag = NOD_VAL_administration
@@ -2833,4 +2840,39 @@ VAL_restore_arsenal_reputation = {
         add_to_variable = { var = VAL_arsenal_reputation_stage value = 1 }
         VAL_refresh_arsenal_reputation = yes
     }
+}
+
+# COUNTRY VAL. Native relation callbacks can recurse when a subject joins;
+# one synchronous guard keeps each enemy/subject pair within this dispatch.
+VAL_call_subjects_to_wars = {
+	if = {
+		limit = {
+			tag = VAL
+			exists = yes
+			has_war = yes
+			is_subject = no
+			NOT = { has_country_flag = VAL_subject_war_dispatch_active }
+		}
+		set_country_flag = VAL_subject_war_dispatch_active
+		every_enemy_country = {
+			save_event_target_as = VAL_subject_war_enemy
+			VAL = {
+				every_subject_country = {
+					limit = {
+						has_capitulated = no
+						NOT = { has_war_with = VAL }
+						NOT = { has_war_with = event_target:VAL_subject_war_enemy }
+						NOT = { is_in_faction_with = event_target:VAL_subject_war_enemy }
+					}
+					add_to_war = {
+						targeted_alliance = VAL
+						enemy = event_target:VAL_subject_war_enemy
+						hostility_reason = asked_to_join
+						single_target_only = yes
+					}
+				}
+			}
+		}
+		clr_country_flag = VAL_subject_war_dispatch_active
+	}
 }

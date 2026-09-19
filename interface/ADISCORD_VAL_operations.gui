@@ -585,4 +585,10 @@ guiTypes = {
   iconType = { name = "VAL_ops_30_other" position = { x = 257 y = 103 } quadTextureSprite = "GFX_VAL_ops_state_30" frame = 16 }
   iconType = { name = "VAL_ops_30_contested" position = { x = 257 y = 103 } quadTextureSprite = "GFX_VAL_ops_contested_30" }
  }
+ containerWindowType = {
+  name = "ADISCORD_VAL_vorkerland_aid_window"
+  position = { x = 0 y = 0 }
+  size = { width = 460 height = 258 }
+  iconType = { name = "map" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_vorkerland_aid_map" }
+ }
 }

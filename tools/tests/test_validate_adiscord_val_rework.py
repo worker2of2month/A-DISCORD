@@ -3250,6 +3250,90 @@ class ValExpandedCampaignTests(unittest.TestCase):
             facts["SRP", "has_war_with", "VAL"] = True
             self.assertFalse(matches_conditions(exceptions[0], facts, str(state)))
 
+    def test_subjects_join_existing_val_wars_without_declarations(self):
+        from tools.tests.test_adiscord_stp_preparation import walk, matches_conditions
+        effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
+        call = self.getblock(effects, "VAL_call_subjects_to_wars")
+        dispatch = self.getblock(call, "if")
+        self.assertIn("VAL_subject_war_dispatch_active", [e.value for e in walk(self.getblock(dispatch, "limit"))])
+        self.assertEqual(self.scalar(dispatch, "set_country_flag"), "VAL_subject_war_dispatch_active")
+        self.assertEqual(self.scalar(dispatch, "clr_country_flag"), "VAL_subject_war_dispatch_active")
+        enemies = self.getblock(dispatch, "every_enemy_country")
+        subjects = self.getblock(self.getblock(enemies, "VAL"), "every_subject_country")
+        gate = self.getblock(subjects, "limit")
+        facts = {("OCA", "has_capitulated", "no"): True}
+        self.assertTrue(matches_conditions(gate, facts, "OCA"))
+        for relation, target in (("has_war_with", "VAL"), ("has_war_with", "event_target:VAL_subject_war_enemy"), ("is_in_faction_with", "event_target:VAL_subject_war_enemy")):
+            self.assertFalse(matches_conditions(gate, {**facts, ("OCA", relation, target): True}, "OCA"))
+        self.assertFalse(matches_conditions(gate, {}, "OCA"))
+        join = self.getblock(subjects, "add_to_war")
+        self.assertEqual(self.scalar(join, "targeted_alliance"), "VAL")
+        self.assertEqual(self.scalar(join, "enemy"), "event_target:VAL_subject_war_enemy")
+        self.assertFalse(any(e.key == "declare_war_on" for e in walk(call)))
+        hooks = self.getblock(self.parse(ON_ACTIONS_PATH.read_text(encoding="utf-8")), "on_actions")
+        for name in ("on_startup", "on_war_relation_added", "on_puppet"):
+            self.assertTrue(any(e.key == "VAL_call_subjects_to_wars" for e in walk(self.getblock(hooks, name))), name)
+
+    def test_vorkerland_aid_has_real_stock_costs_and_no_automatic_dispatch(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+        facts = {("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True,
+                 ("WRK", "exists", "yes"): True, ("WRK", "has_capitulated", "no"): True,
+                 ("WRK", "is_subject", "no"): True}
+        gate = self.triggers["VAL_can_aid_vorkerland"]
+        enemy_guard = next(e for e in gate if e.key == "NOT" and any(c.key == "any_enemy_country" for c in e.value))
+        self.assertEqual(self.scalar(self.getblock(enemy_guard.value, "any_enemy_country"), "is_in_faction_with"), "WRK")
+        gate = [e for e in gate if e is not enemy_guard]
+        self.assertTrue(matches_conditions(gate, facts, "VAL"))
+        for key in facts:
+            changed = dict(facts); changed[key] = False
+            self.assertFalse(matches_conditions(gate, changed, "VAL"), key)
+        self.assertFalse(matches_conditions(gate, {**facts, ("VAL", "has_war_with", "WRK"): True}, "VAL"))
+        decisions = self.getblock(self.parse(DECISIONS_PATH.read_text(encoding="utf-8")), "VAL_vorkerland_aid")
+        for name, equipment, amount in (("rifles", "infantry_equipment", "1000"), ("support", "support_equipment", "100")):
+            decision = self.getblock(decisions, "VAL_aid_wrk_" + name)
+            self.assertEqual(self.scalar(decision, "cost"), "25")
+            self.assertEqual(self.scalar(decision, "days_re_enable"), "30")
+            self.assertEqual(self.scalar(self.getblock(decision, "ai_will_do"), "base"), "0")
+            transfer = self.getblock(self.getblock(self.getblock(decision, "complete_effect"), "if"), "send_equipment")
+            self.assertEqual(self.scalar(transfer, "target"), "WRK")
+            self.assertEqual(self.scalar(transfer, "equipment"), equipment)
+            self.assertEqual(self.scalar(transfer, "amount"), amount)
+            source = DECISIONS_PATH.read_text(encoding="utf-8").split("VAL_aid_wrk_" + name + " =", 1)[1].split("ai_will_do", 1)[0]
+            self.assertEqual(source.count(equipment + " < " + amount), 2)
+        gui = self.parse((ROOT / "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt").read_text(encoding="utf-8"))
+        panel = self.getblock(self.getblock(gui, "scripted_gui"), "ADISCORD_VAL_vorkerland_aid_panel")
+        self.assertFalse(any(e.key in {"triggers", "effects", "properties"} for e in panel))
+
+    def test_bezhaysk_operation_requires_stelander_defeat_and_a_valid_target(self):
+        facts = {("VAL", "tag", "VAL"): True,
+                 ("VAL", "has_capitulated", "no"): True,
+                 ("VAL", "is_subject", "no"): True,
+                 ("VAL", "has_war", "no"): True,
+                 ("VAL", "VAL_stelander_dominated", "yes"): True,
+                 ("BJK", "exists", "yes"): True,
+                 ("BJK", "has_capitulated", "no"): True,
+                 ("BJK", "is_subject", "no"): True}
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+        gate = self.triggers["VAL_can_attack_bezhaysk"]
+        self.assertTrue(matches_conditions(gate, facts, "VAL"))
+        for key in facts:
+            if key == ("VAL", "tag", "VAL"):
+                continue
+            changed = dict(facts); changed[key] = False
+            self.assertFalse(matches_conditions(gate, changed, "VAL"), key)
+        self.assertFalse(matches_conditions(gate, {**facts, ("BJK", "is_in_faction_with", "VAL"): True}, "VAL"))
+        tree = self.getblock(self.parse(FOCUSES_PATH.read_text(encoding="utf-8")), "focus_tree")
+        focuses = {self.scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        focus = focuses["VAL_Bezhaysk_Operation"]
+        self.assertEqual(self.scalar(self.getblock(focus, "prerequisite"), "focus"), "VAL_Contracts_Outlive_Kings")
+        self.assertEqual(self.scalar(focus, "cancel_if_invalid"), "yes")
+        reward = self.getblock(self.getblock(focus, "completion_reward"), "if")
+        self.assertEqual(self.scalar(self.getblock(reward, "limit"), "VAL_can_attack_bezhaysk"), "yes")
+        self.assertEqual(self.scalar(self.getblock(reward, "declare_war_on"), "target"), "BJK")
+        positions = [(self.scalar(b, "x"), self.scalar(b, "y")) for b in focuses.values()]
+        self.assertEqual(len(positions), len(set(positions)))
+        self.assertLessEqual(max(int(y) for x, y in positions), 28)
+
     def test_occidian_sources_require_an_unsettled_award_or_our_territory(self):
         for state in (43, 44, 45, 88):
             facts = {(str(state), "is_owned_by", "SRP"): True,
@@ -3282,7 +3366,16 @@ class ValExpandedCampaignTests(unittest.TestCase):
         for key in facts:
             changed = dict(facts)
             changed[key] = False
-            self.assertFalse(self.match("VAL_occidian_administration_secured", changed), key)
+            self.assertEqual(self.match("VAL_occidian_administration_secured", changed),
+                             key == ("45", "is_owned_by", "OCA"), key)
+
+        for owner in ("STP", "STS"):
+            changed = dict(facts)
+            changed["45", "is_owned_by", "OCA"] = False
+            changed["45", "is_controlled_by", "OCA"] = False
+            changed["45", "is_owned_by", owner] = True
+            changed["45", "is_controlled_by", owner] = True
+            self.assertTrue(self.match("VAL_occidian_administration_secured", changed))
 
     def test_pending_occidian_settlement_reopens_after_external_war(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions, walk

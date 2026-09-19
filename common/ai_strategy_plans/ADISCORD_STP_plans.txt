@@ -311,25 +311,27 @@ STP_party_civil_war_plan = {
 	allowed = { original_tag = STP }
 	enable = { tag = STP is_ai = yes has_war_with = STS NOT = { has_country_flag = STP_cw_postwar } }
 	abort = { OR = { NOT = { tag = STP } NOT = { has_war_with = STS } has_country_flag = STP_cw_postwar } }
+
 	ai_national_focuses = {
-		STP_cw_unified_headquarters
-		STP_cw_congress_in_session
-		STP_cw_mobilization_register
 		STP_ps_temporary_presidium
 		STP_ps_restore_couriers
-		STP_ps_route_security
-		STP_ps_operational_reserve
-		STP_cw_wartime_arsenals
-		STP_cw_supply_routes
+		STP_cw_unified_headquarters
 		STP_cw_guard_the_pier
-		STP_cw_inner_ring
-		STP_cw_harbour_batteries
-		STP_party_rear_administration
 		STP_party_war_transport
+		STP_ps_operational_reserve
+		STP_cw_congress_in_session
+		STP_party_rear_administration
 		STP_ps_ammunition_board
 		STP_ps_counter_supply
-		STP_cw_capital_counteroffensive
+		STP_cw_mobilization_register
 		STP_party_war_directorate
+		STP_cw_wartime_arsenals
+		STP_ps_route_security
+		STP_cw_inner_ring
+		STP_cw_harbour_batteries
+		STP_cw_supply_routes
+		STP_cw_capital_counteroffensive
+		STP_cw_assault_columns
 		STP_ps_retake_congress
 		STP_cw_line_formations
 		STP_cw_wartime_laboratories

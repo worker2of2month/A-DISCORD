@@ -1263,7 +1263,7 @@ class StelanderPreparationTests(unittest.TestCase):
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council")
         for focus_id, decision_id, tag, state, idea, days, opponents in (
             ("STP_cw_last_banquet", "STP_cw_launch_last_banquet", "STS", "3", "STP_cw_deliberate_offensive", "21", {"STP"}),
-            ("STP_cw_guard_the_pier", "STP_cw_hold_the_pier", "STP", "28", "STP_cw_static_defence", "35", {"STS"}),
+            ("STP_cw_guard_the_pier", "STP_cw_hold_the_pier", "STP", "16366", "STP_cw_static_defence", "35", {"STS"}),
         ):
             with self.subTest(focus=focus_id):
                 reward = block(focuses[focus_id], "completion_reward")
@@ -1277,7 +1277,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 self.assertEqual(scalar(decision, "fire_only_once"),
                                  "yes" if decision_id == "STP_cw_launch_last_banquet" else "no")
                 available = block(decision, "available")
-                self.assertIn(state, {e.value for e in available if e.key == "controls_state"})
+                self.assertIn(state, {e.value for e in available if e.key == ("controls_province" if tag == "STP" else "controls_state")})
                 self.assertEqual({e.value for e in walk(available) if e.key == "has_war_with"}, opponents)
                 self.assertIn(idea, {e.value for e in block(available, "NOT") if e.key == "has_idea"},
                               "do not overwrite a still-active prewar preparation bonus")

@@ -60,3 +60,10 @@ VAL_command_balance_category = {
 	allowed = { tag = VAL }
 	visible = { has_power_balance = { id = VAL_command_balance } NOT = { has_country_flag = VAL_stelander_defeated } }
 }
+
+VAL_vorkerland_aid = {
+	allowed = { tag = VAL }
+	visible = { has_completed_focus = VAL_Operational_Directorate WRK = { exists = yes } }
+	visible_when_empty = yes
+	scripted_gui = ADISCORD_VAL_vorkerland_aid_panel
+}

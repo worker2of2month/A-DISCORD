@@ -34,6 +34,24 @@ class CivilWarContracts(unittest.TestCase):
         self.effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         self.triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
 
+    def test_northern_early_peace_uses_shared_defeat_and_war_clock(self):
+        trigger = block(self.triggers, "NOD_cw_can_accept_northern_defeat")
+        self.assertIn("NOT = { surrender_progress < 0.7 }", trigger)
+        self.assertIn("flag = NOD_cw_northern_war_started days > 89", trigger)
+        for tag in ("YPR", "COF", "TFF"):
+            self.assertIn("has_war_with = " + tag, trigger)
+        self.assertIn("has_capitulated = no", trigger)
+        start = block(self.effects, "STP_cw_start_northern_war")
+        self.assertEqual(start.count("set_country_flag = NOD_cw_northern_war_started"), 1)
+        self.assertIn("clr_country_flag = NOD_cw_northern_war_started",
+                      block(self.effects, "STP_cw_settle_northern_defeat"))
+        decision = block(read("common/decisions/ADISCORD_STP_decisions.txt"), "NOD_cw_accept_northern_defeat")
+        self.assertIn("NOD_cw_can_accept_northern_defeat = yes", decision)
+        self.assertIn("STP_cw_settle_northern_defeat = yes", decision)
+        self.assertNotIn("transfer_state", decision)
+        self.assertIn("NOD_cw_can_accept_northern_defeat = yes",
+                      block(self.effects, "STP_cw_settle_northern_defeat"))
+
     def test_arsenal_batch_checks_cash_boundary_and_pays_only_once(self):
         council = ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council")
         decision = ast_block(council, "STP_cw_purchase_arsenal_batch")
@@ -3071,6 +3089,7 @@ class WartimeProgramContracts(unittest.TestCase):
             baseline = {(tag, "has_war", "yes"): True, (tag, "has_war_with", "STP"): True,
                         (tag, "has_war_with", "STS"): True, (tag, "has_war_with", "VAL"): True,
                         (tag, "controls_state", "3"): True, (tag, "controls_state", "28"): True,
+                        (tag, "controls_province", "16366"): True,
                         (tag, "controls_state", "43"): True}
             self.assertTrue(matches_conditions(gate, baseline, tag), name)
             for other in active:
