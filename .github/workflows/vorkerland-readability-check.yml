@@ -1,0 +1,37 @@
+name: Vorkerland readability verification
+on:
+  push:
+    branches: [automation/vorkerland-readability-check]
+permissions:
+  contents: write
+concurrency:
+  group: vorkerland-readability-check
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Install validation dependencies
+        run: python -m pip install pytest pillow numpy pyyaml
+      - name: Inspect source contracts
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          paths = ['common/scripted_effects/ADISCORD_vorkerland_effects.txt', 'common/scripted_triggers/ADISCORD_vorkerland_triggers.txt', 'common/decisions/ADISCORD_vorkerland_decisions.txt', 'common/ideas/ADISCORD_vorkerland_ideas.txt', 'common/national_focus/ADISCORD_vorkerland_focus.txt']
+          for name in paths:
+              text = Path(name).read_text(encoding='utf-8-sig')
+              print(name, 'lines:', len(text.splitlines()))
+              print('\n'.join(line for line in text.splitlines() if line.startswith('# --- ')))
+          print(Path('tools/tests/test_adiscord_vorkerland_vad_postwar.py').read_text())
+          print(Path('tools/lib/paths.py').read_text()[:10000])
+          PY
+      - name: Refactor and validate
+        run: |
+          if test -f .github/vorkerland_readability_refactor.py; then
+            python -B .github/vorkerland_readability_refactor.py
+          fi
