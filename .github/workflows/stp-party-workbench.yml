@@ -22,6 +22,7 @@ jobs:
         run: |
           mkdir -p /tmp/party-result
           cp .github/stp-party-verify.py /tmp/stp-party-verify.py
+          cp .github/stp-party-resolve.py /tmp/stp-party-resolve.py
           cat .github/stp-party-patch.1 .github/stp-party-patch.2 > /tmp/party.patch.xz
           python - <<'PY'
           import lzma, hashlib
@@ -39,7 +40,11 @@ jobs:
       - name: Apply party changes without replacing concurrent work
         shell: bash
         run: |
-          git apply --3way /tmp/party.patch
+          if ! git apply --3way /tmp/party.patch; then
+            test "$(git diff --name-only --diff-filter=U)" = 'common/ideas/ADISCORD_STP_civil_war_ideas.txt'
+            python -B /tmp/stp-party-resolve.py
+          fi
+          test -z "$(git diff --name-only --diff-filter=U)"
           git diff --check HEAD
           git diff --cached --check
       - name: Verify new party contracts
