@@ -5,28 +5,52 @@ VAL_command_balance = {
 	decision_category = VAL_command_balance_category
 	range = {
 		id = VAL_command_compromise
-		min = -0.25
-		max = 0.25
-		modifier = { stability_factor = 0.03 }
+		min = -0.10
+		max = 0.10
+		modifier = { stability_factor = 0.05 }
 	}
 	side = {
 		id = VAL_general_staff_side
 		icon = GFX_bop_VAL_general_staff
 		range = {
+			id = VAL_staff_influence
+			min = -0.35
+			max = -0.10
+			modifier = { planning_speed = 0.05 army_org_factor = 0.02 }
+		}
+		range = {
 			id = VAL_general_staff_control
-			min = -1.0
-			max = -0.25
-			modifier = { planning_speed = 0.10 army_org_factor = 0.05 political_power_gain = -0.10 }
+			min = -0.75
+			max = -0.35
+			modifier = { planning_speed = 0.15 army_org_factor = 0.05 political_power_gain = -0.15 }
+		}
+		range = {
+			id = VAL_staff_dominance
+			min = -1.00
+			max = -0.75
+			modifier = { planning_speed = 0.20 army_org_factor = 0.07 political_power_gain = -0.30 stability_factor = -0.10 }
 		}
 	}
 	side = {
 		id = VAL_solgalov_side
 		icon = GFX_bop_VAL_solgalov
 		range = {
+			id = VAL_solgalov_influence
+			min = 0.10
+			max = 0.35
+			modifier = { political_power_gain = 0.10 production_factory_efficiency_gain_factor = 0.03 }
+		}
+		range = {
 			id = VAL_solgalov_control
-			min = 0.25
-			max = 1.0
-			modifier = { political_power_gain = 0.15 production_factory_efficiency_gain_factor = 0.05 planning_speed = -0.10 }
+			min = 0.35
+			max = 0.75
+			modifier = { political_power_gain = 0.20 production_factory_efficiency_gain_factor = 0.07 planning_speed = -0.10 }
+		}
+		range = {
+			id = VAL_solgalov_dominance
+			min = 0.75
+			max = 1.00
+			modifier = { political_power_gain = 0.25 production_factory_efficiency_gain_factor = 0.10 army_org_factor = -0.07 stability_factor = -0.10 }
 		}
 	}
 }

@@ -1623,6 +1623,7 @@ focus_tree = {
 
 		}
 		completion_reward = {
+			unlock_decision_tooltip = VAL_proclaim_commonwealth
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			add_stability = 0.1
 			add_war_support = 0.1

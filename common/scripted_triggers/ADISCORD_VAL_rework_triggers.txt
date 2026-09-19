@@ -614,3 +614,13 @@ VAL_regional_integration_target_valid = {
 	has_capitulated = no
 	FROM = { is_owned_by = ROOT is_controlled_by = ROOT NOT = { is_core_of = ROOT } }
 }
+
+VAL_can_proclaim_commonwealth = {
+	tag = VAL
+	has_completed_focus = VAL_Contracts_Outlive_Kings
+	VAL_campaign_objectives_met = yes
+	NOT = { has_cosmetic_tag = VAL_commonwealth }
+	NOT = { stability < 0.50 }
+	29 = { is_owned_by = VAL is_controlled_by = VAL }
+	46 = { is_owned_by = VAL is_controlled_by = VAL }
+}

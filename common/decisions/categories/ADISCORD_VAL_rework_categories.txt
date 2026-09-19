@@ -73,3 +73,9 @@ VAL_regional_integration = {
 	visible = { has_completed_focus = VAL_frontier_conference }
 	visible_when_empty = yes
 }
+
+VAL_commonwealth_formation = {
+	allowed = { tag = VAL }
+	visible = { has_completed_focus = VAL_frontier_conference NOT = { has_cosmetic_tag = VAL_commonwealth } }
+	visible_when_empty = yes
+}

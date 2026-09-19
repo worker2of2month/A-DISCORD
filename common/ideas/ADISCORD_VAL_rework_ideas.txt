@@ -1,5 +1,12 @@
 ideas = {
 	country = {
+		VAL_staff_war_mandate = {
+			picture = army_training
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = { planning_speed = 0.15 army_org_regain = 0.05 }
+		}
+
 		VAL_arsenal_reputation_delta = { picture = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.05 ADISCORD_economy_creditworthiness_factor = 0.025 } }
 		VAL_arsenal_quality_delta = { picture = VAL_contract_state allowed = { always = no } modifier = { production_factory_max_efficiency_factor = 0.10 } }
 		# Только нативный показ изменения; эти идеи не устанавливаются.

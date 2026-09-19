@@ -2732,7 +2732,7 @@ VAL_install_stelander_administration = {
         VAL_cede_stelander_border = yes
         set_rule = { can_join_factions = no can_create_factions = no }
         ADISCORD_economy_mark_dirty = yes
-        VAL = { VAL_adopt_commonwealth = yes ADISCORD_economy_mark_dirty = yes }
+        VAL = { ADISCORD_economy_mark_dirty = yes }
     }
 }
 
@@ -2783,7 +2783,7 @@ VAL_install_nodrul_administration = {
         remove_mission = NOD_cw_northern_redeployment
         set_rule = { can_join_factions = no can_create_factions = no }
         ADISCORD_economy_mark_dirty = yes
-        VAL = { VAL_adopt_commonwealth = yes ADISCORD_economy_mark_dirty = yes }
+        VAL = { ADISCORD_economy_mark_dirty = yes }
     }
 }
 
@@ -2826,7 +2826,7 @@ VAL_finalize_reserved_settlements = {
 
 VAL_adopt_commonwealth = {
     if = {
-        limit = { tag = VAL is_subject = no NOT = { has_country_flag = VAL_stelander_defeated } NOT = { has_cosmetic_tag = VAL_commonwealth } }
+        limit = { VAL_can_proclaim_commonwealth = yes }
         set_cosmetic_tag = VAL_commonwealth
     }
 }

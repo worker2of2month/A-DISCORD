@@ -1228,20 +1228,73 @@ VAL_command_balance_category = {
 	VAL_staff_authority = {
 		icon = generic_army_support
 		visible = { has_power_balance = { id = VAL_command_balance } }
-		available = { has_capitulated = no NOT = { is_power_balance_in_range = { id = VAL_command_balance range = VAL_general_staff_control } } }
+		available = { has_capitulated = no is_subject = no power_balance_value = { id = VAL_command_balance value > -0.75 } }
 		cost = 50
 		days_re_enable = 90
-		complete_effect = { add_power_balance_value = { id = VAL_command_balance value = -0.15 } }
-		ai_will_do = { base = 1 modifier = { factor = 3 has_war = yes } }
+		complete_effect = {
+			add_power_balance_value = { id = VAL_command_balance value = -0.15 }
+		}
+		ai_will_do = { base = 1 }
 	}
 	VAL_solgalov_authority = {
 		icon = generic_political_pressure
 		visible = { has_power_balance = { id = VAL_command_balance } }
-		available = { has_capitulated = no NOT = { is_power_balance_in_range = { id = VAL_command_balance range = VAL_solgalov_control } } }
+		available = { has_capitulated = no is_subject = no power_balance_value = { id = VAL_command_balance value < 0.75 } }
 		cost = 50
 		days_re_enable = 90
-		complete_effect = { add_power_balance_value = { id = VAL_command_balance value = 0.15 } }
-		ai_will_do = { base = 1 modifier = { factor = 3 has_war = no } }
+		complete_effect = {
+			add_power_balance_value = { id = VAL_command_balance value = 0.15 }
+		}
+		ai_will_do = { base = 1 }
+	}
+	VAL_staff_operational_mandate = {
+		icon = generic_army_support
+		visible = { has_power_balance = { id = VAL_command_balance } }
+		available = { has_capitulated = no is_subject = no has_war = yes command_power > 24 }
+		cost = 75
+		days_re_enable = 180
+		complete_effect = {
+			add_command_power = -25
+			add_power_balance_value = { id = VAL_command_balance value = -0.20 }
+			add_timed_idea = { idea = VAL_staff_war_mandate days = 90 }
+		}
+		ai_will_do = { base = 1 }
+	}
+	VAL_contract_audit = {
+		icon = generic_political_pressure
+		visible = { has_power_balance = { id = VAL_command_balance } }
+		available = { has_capitulated = no is_subject = no has_war = no }
+		cost = 75
+		days_re_enable = 180
+		complete_effect = {
+			add_power_balance_value = { id = VAL_command_balance value = 0.20 }
+			add_stability = 0.03
+		}
+		ai_will_do = { base = 1 }
+	}
+	VAL_reconcile_command = {
+		icon = generic_political_pressure
+		visible = { has_power_balance = { id = VAL_command_balance } }
+		available = { has_capitulated = no is_subject = no OR = { power_balance_value = { id = VAL_command_balance value < -0.10 } power_balance_value = { id = VAL_command_balance value > 0.10 } } }
+		cost = 100
+		days_re_enable = 120
+		complete_effect = {
+			if = { limit = { power_balance_value = { id = VAL_command_balance value < 0 } } add_power_balance_value = { id = VAL_command_balance value = 0.20 } }
+			else = { add_power_balance_value = { id = VAL_command_balance value = -0.20 } }
+		}
+		ai_will_do = { base = 1 }
+	}
+	VAL_settle_command_crisis = {
+		icon = generic_political_pressure
+		visible = { has_power_balance = { id = VAL_command_balance } }
+		available = { has_capitulated = no is_subject = no OR = { is_power_balance_in_range = { id = VAL_command_balance range = VAL_staff_dominance } is_power_balance_in_range = { id = VAL_command_balance range = VAL_solgalov_dominance } } }
+		cost = 150
+		days_re_enable = 180
+		complete_effect = {
+			if = { limit = { power_balance_value = { id = VAL_command_balance value < 0 } } add_power_balance_value = { id = VAL_command_balance value = 0.40 } }
+			else = { add_power_balance_value = { id = VAL_command_balance value = -0.40 } }
+		}
+		ai_will_do = { base = 1 }
 	}
 }
 
@@ -1378,5 +1431,23 @@ VAL_regional_integration = {
 			}
 		}
 		ai_will_do = { base = 5 }
+	}
+}
+
+VAL_commonwealth_formation = {
+	VAL_proclaim_commonwealth = {
+		icon = generic_nationalism
+		allowed = { tag = VAL }
+		visible = { NOT = { has_cosmetic_tag = VAL_commonwealth } }
+		available = {
+			custom_trigger_tooltip = { tooltip = VAL_commonwealth_requirements_tt VAL_can_proclaim_commonwealth = yes }
+		}
+		cost = 100
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = VAL_commonwealth_proclaimed_tt
+			hidden_effect = { VAL_adopt_commonwealth = yes }
+		}
+		ai_will_do = { base = 100 }
 	}
 }
