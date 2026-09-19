@@ -3281,6 +3281,58 @@ class ValExpandedCampaignTests(unittest.TestCase):
             facts["SRP", "has_war_with", "VAL"] = True
             self.assertFalse(matches_conditions(exceptions[0], facts, str(state)))
 
+    def test_nam_concession_requires_agreement_delivery_and_victory(self):
+        facts = {("VAL", "exists", "yes"): True, ("VAL", "has_capitulated", "no"): True,
+                 ("VAL", "is_subject", "no"): True,
+                 ("VAL", "has_country_flag", "VAL_nam_concession_agreed"): True,
+                 ("VAL", "has_country_flag", "VAL_nam_aid_delivered"): True,
+                 ("VAL", "has_global_flag", "ADISCORD_nam_resource_war_nam_victory"): True,
+                 ("NAM", "exists", "yes"): True, ("NAM", "has_capitulated", "no"): True,
+                 ("NAM", "is_subject", "no"): True,
+                 ("230", "is_owned_by", "NAM"): True, ("230", "is_controlled_by", "NAM"): True}
+        self.assertTrue(self.match("VAL_nam_concession_deliverable", facts))
+        for key in facts:
+            self.assertFalse(self.match("VAL_nam_concession_deliverable", {**facts, key: False}), key)
+        for key in (("VAL", "has_war_with", "NAM"), ("VAL", "has_country_flag", "VAL_nam_concession_granted")):
+            self.assertFalse(self.match("VAL_nam_concession_deliverable", {**facts, key: True}))
+        from tools.builders.build_adiscord_new_states import REGIONAL_STATE_RESOURCES
+        self.assertEqual(REGIONAL_STATE_RESOURCES[230], {"steel": 16})
+        self.assertEqual(REGIONAL_STATE_RESOURCES[231], {"steel": 16})
+        effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
+        from tools.tests.test_adiscord_stp_preparation import walk
+        grant = self.getblock(effects, "VAL_deliver_nam_concession")
+        rights = next(e.value for e in walk(grant) if e.key == "give_resource_rights")
+        self.assertEqual(self.scalar(rights, "state"), "230")
+        self.assertEqual(self.scalar(rights, "receiver"), "VAL")
+        self.assertFalse(any(e.key == "transfer_state" for e in walk(grant)))
+        events = self.parse((ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8"))
+        for eid, gate in (("val_contract.340", "VAL_export_arms_can_accept"), ("val_contract.341", "VAL_export_advisors_can_accept")):
+            event = next(e.value for e in events if e.key == "country_event" and self.scalar(e.value, "id") == eid)
+            accept = next(e.value for e in event if e.key == "option" and self.scalar(e.value, "name") == "VAL_export_accept")
+            self.assertTrue(any(e.key == gate for e in walk(accept)))
+            self.assertTrue(any(e.key == "set_country_flag" and e.value == "VAL_nam_aid_delivered" for e in walk(accept)))
+
+    def test_northern_ultimatum_is_single_and_nod_forecast_respects_alliances(self):
+        from dataclasses import replace
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+        decisions = self.parse(DECISIONS_PATH.read_text(encoding="utf-8"))
+        frontier = self.getblock(decisions, "VAL_frontier")
+        names = {e.key for e in frontier}
+        self.assertIn("VAL_frontier_demand_CIN", names)
+        self.assertNotIn("VAL_frontier_demand_OSF", names)
+        self.assertNotIn("VAL_frontier_demand_APH", names)
+        def scope_target(items):
+            return [replace(e, value=scope_target(e.value) if isinstance(e.value, list) else "CIN" if e.value == "PREV" else e.value) for e in items]
+        gate = scope_target(self.triggers["VAL_frontier_nod_support_possible"])
+        facts = {("NOD", "exists", "yes"): True, ("NOD", "has_capitulated", "no"): True,
+                 ("NOD", "is_subject", "no"): True, ("CIN", "is_in_faction", "no"): True}
+        self.assertTrue(matches_conditions(gate, facts, "CIN"))
+        for key in (("NOD", "has_war_with", "CIN"), ("NOD", "is_in_faction_with", "VAL")):
+            self.assertFalse(matches_conditions(gate, {**facts, key: True}, "CIN"))
+        rival = {**facts, ("CIN", "is_in_faction", "no"): False}
+        self.assertFalse(matches_conditions(gate, rival, "CIN"))
+        self.assertTrue(matches_conditions(gate, {**rival, ("CIN", "is_in_faction_with", "NOD"): True}, "CIN"))
+
     def test_resource_war_contracts_require_focus_consent_and_actual_personnel(self):
         for tag in ("NAM", "EFL"):
             facts = {(tag, "exists", "yes"): True, (tag, "has_capitulated", "no"): True,

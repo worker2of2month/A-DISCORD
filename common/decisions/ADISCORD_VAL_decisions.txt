@@ -709,57 +709,25 @@ VAL_frontier = {
     VAL_frontier_demand_CIN = {
         icon = generic_political_pressure
         allowed = { tag = VAL }
-        visible = { has_completed_focus = VAL_frontier_security_plan CIN = { exists = yes is_subject = no } 58 = { is_owned_by = CIN } 59 = { is_owned_by = CIN } 60 = { is_owned_by = CIN } }
+        visible = { has_completed_focus = VAL_frontier_security_plan OR = { CIN = { exists = yes is_subject = no } OSF = { exists = yes is_subject = no } APH = { exists = yes is_subject = no } } }
         available = {
             VAL_frontier_postwar = yes
             has_war = no
             custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
-            CIN = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = VAL } }
-            58 = { is_owned_by = CIN is_controlled_by = CIN } 59 = { is_owned_by = CIN is_controlled_by = CIN } 60 = { is_owned_by = CIN is_controlled_by = CIN }
+            OR = { CIN = { VAL_frontier_bloc_target_eligible = yes } OSF = { VAL_frontier_bloc_target_eligible = yes } APH = { VAL_frontier_bloc_target_eligible = yes } }
         }
         cost = 75
         days_re_enable = 180
         complete_effect = {
             custom_effect_tooltip = VAL_frontier_demand_CIN_tt
-            hidden_effect = { set_variable = { var = VAL_frontier_target value = 1 } VAL_frontier_record_ultimatum = yes CIN = { country_event = { id = val_rework.110 } } }
-        }
-        ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
-    }
-    VAL_frontier_demand_OSF = {
-        icon = generic_political_pressure
-        allowed = { tag = VAL }
-        visible = { has_completed_focus = VAL_frontier_security_plan OSF = { exists = yes is_subject = no } 61 = { is_owned_by = OSF } 62 = { is_owned_by = OSF } 63 = { is_owned_by = OSF } }
-        available = {
-            VAL_frontier_postwar = yes
-            has_war = no
-            custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
-            OSF = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = VAL } }
-            61 = { is_owned_by = OSF is_controlled_by = OSF } 62 = { is_owned_by = OSF is_controlled_by = OSF } 63 = { is_owned_by = OSF is_controlled_by = OSF }
-        }
-        cost = 75
-        days_re_enable = 180
-        complete_effect = {
-            custom_effect_tooltip = VAL_frontier_demand_OSF_tt
-            hidden_effect = { set_variable = { var = VAL_frontier_target value = 2 } VAL_frontier_record_ultimatum = yes OSF = { country_event = { id = val_rework.110 } } }
-        }
-        ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
-    }
-    VAL_frontier_demand_APH = {
-        icon = generic_political_pressure
-        allowed = { tag = VAL }
-        visible = { has_completed_focus = VAL_frontier_security_plan APH = { exists = yes is_subject = no } 64 = { is_owned_by = APH } 65 = { is_owned_by = APH } }
-        available = {
-            VAL_frontier_postwar = yes
-            has_war = no
-            custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
-            APH = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = VAL } }
-            64 = { is_owned_by = APH is_controlled_by = APH } 65 = { is_owned_by = APH is_controlled_by = APH }
-        }
-        cost = 75
-        days_re_enable = 180
-        complete_effect = {
-            custom_effect_tooltip = VAL_frontier_demand_APH_tt
-            hidden_effect = { set_variable = { var = VAL_frontier_target value = 3 } VAL_frontier_record_ultimatum = yes APH = { country_event = { id = val_rework.110 } } }
+            custom_effect_tooltip = VAL_frontier_nod_forecast_tt
+            hidden_effect = {
+                if = { limit = { CIN = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 1 } }
+                else_if = { limit = { OSF = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 2 } }
+                else_if = { limit = { APH = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 3 } }
+                VAL_frontier_record_ultimatum = yes
+                event_target:VAL_frontier_quoted_target = { country_event = { id = val_rework.110 } }
+            }
         }
         ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
     }

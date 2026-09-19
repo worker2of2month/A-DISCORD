@@ -556,8 +556,7 @@ defined_text = {
 }
 defined_text = {
 	name = STPGetPartyHandoff
-	text = { trigger = { has_country_flag = STP_ps_decline_handoff } localization_key = STP_ps_handoff_disabled }
-	text = { localization_key = STP_ps_handoff_enabled }
+	text = { localization_key = STP_ps_handoff_disabled }
 }
 defined_text = {
 	name = STPGetPartyAsylum

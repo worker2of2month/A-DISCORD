@@ -61,9 +61,10 @@ is_diplomatic_action_valid_leave_faction = { ADISCORD_diplomacy_not_dirty_zone_p
 is_diplomatic_action_valid_assume_faction_leadership = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
 is_diplomatic_action_valid_kick_from_faction = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
 is_diplomatic_action_valid_send_attache = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
-is_diplomatic_action_valid_join_faction = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
-is_diplomatic_action_valid_create_faction = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
-is_diplomatic_action_valid_offer_join_faction = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+# Faction membership is scripted; ordinary requests and invitations are disabled for all countries.
+is_diplomatic_action_valid_join_faction = { always = no }
+is_diplomatic_action_valid_create_faction = { always = no }
+is_diplomatic_action_valid_offer_join_faction = { always = no }
 is_diplomatic_action_valid_request_access_to_licence_production = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
 is_diplomatic_action_valid_request_foreign_manpower = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
 is_diplomatic_action_valid_international_market_access_rights = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }

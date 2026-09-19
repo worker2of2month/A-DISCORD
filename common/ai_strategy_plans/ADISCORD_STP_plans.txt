@@ -269,25 +269,25 @@ STP_party_preparation_plan = {
 	abort = { OR = { NOT = { tag = STP } NOT = { STP_cw_preparation_open = yes } } }
 	ai_national_focuses = {
 		STP_cw_security_collegium
+		STP_PRESIDENT_REMAINS_IN_OFFICE
+		STP_PARTY_DISCIPLINE
+		STP_party_district_compact
+		STP_ROTATE_DISTRICT_COMMAND
+		STP_GUARANTEE_MINISTERS
+		STP_defense_budget
+		STP_cw_capital_reserve
+		STP_cw_protect_congress
+		STP_cw_capital_oath
+		STP_DISTRICT_GOVERNMENT
+		STP_party_supply_directorate
+		STP_EMERGENCY_PRESIDIUM
+		STP_THE_PARTY_CLOSES_RANKS
+		STP_cw_party_mandate
 		STP_ps_foreign_supply_desk
 		STP_ps_radio_network
 		STP_ps_reserve_hq
 		STP_ps_northern_partner
 		STP_ps_northern_credit
-		STP_PRESIDENT_REMAINS_IN_OFFICE
-		STP_PARTY_DISCIPLINE
-		STP_DISTRICT_GOVERNMENT
-		STP_cw_capital_reserve
-		STP_cw_protect_congress
-		STP_GUARANTEE_MINISTERS
-		STP_defense_budget
-		STP_party_district_compact
-		STP_ROTATE_DISTRICT_COMMAND
-		STP_EMERGENCY_PRESIDIUM
-		STP_cw_capital_oath
-		STP_THE_PARTY_CLOSES_RANKS
-		STP_cw_party_mandate
-		STP_party_supply_directorate
 		STP_party_civil_register
 		STP_cw_press_office
 		STP_party_budget_reserve

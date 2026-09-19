@@ -249,7 +249,7 @@ VAL_frontier_workshop_target_valid = {
 
 # COUNTRY recipient: eligibility is rechecked at acceptance.
 VAL_export_customer = {
- NOT = { tag = EFL VAL = { has_country_flag = VAL_nam_concession_agreed } }
+ NOT = { AND = { tag = EFL VAL = { has_country_flag = VAL_nam_concession_agreed } } }
  exists = yes has_capitulated = no has_war = yes
  NOT = { has_war_with = VAL }
  OR = { tag = CIN tag = OSF tag = APH tag = WRK tag = WKR tag = VAD tag = TVA tag = STP tag = STS tag = SRP tag = NOD tag = YPR tag = COF tag = TFF AND = { OR = { tag = NAM tag = EFL } VAL = { has_completed_focus = VAL_Resource_War_Contracts } } }
@@ -560,4 +560,45 @@ VAL_nam_concession_deliverable = {
 	NOT = { has_war_with = NAM }
 	NAM = { exists = yes has_capitulated = no is_subject = no }
 	230 = { is_owned_by = NAM is_controlled_by = NAM }
+}
+
+# COUNTRY: select one diplomatic address for the common northern ultimatum.
+VAL_frontier_bloc_target_eligible = {
+	exists = yes is_subject = no has_capitulated = no
+	NOT = { is_in_faction_with = VAL has_war_with = VAL }
+	OR = {
+		AND = { tag = CIN 58 = { is_owned_by = CIN is_controlled_by = CIN } 59 = { is_owned_by = CIN is_controlled_by = CIN } 60 = { is_owned_by = CIN is_controlled_by = CIN } }
+		AND = { tag = OSF 61 = { is_owned_by = OSF is_controlled_by = OSF } 62 = { is_owned_by = OSF is_controlled_by = OSF } 63 = { is_owned_by = OSF is_controlled_by = OSF } }
+		AND = { tag = APH 64 = { is_owned_by = APH is_controlled_by = APH } 65 = { is_owned_by = APH is_controlled_by = APH } }
+	}
+}
+
+# COUNTRY target: predict the same faction compatibility used by assembly.
+VAL_frontier_nod_support_possible = {
+	NOD = {
+		exists = yes has_capitulated = no
+		OR = { is_subject = no is_subject_of = STP }
+		NOT = { has_war_with = PREV is_in_faction_with = VAL }
+	}
+	OR = {
+		is_in_faction = no
+		NOD = { is_in_faction = no }
+		is_in_faction_with = NOD
+	}
+}
+
+VAL_frontier_nod_will_intervene = {
+	OR = {
+		AND = { VAL_frontier_idle = no check_variable = { var = VAL_frontier_target value = 1 compare = equals } CIN = { VAL_frontier_nod_support_possible = yes } }
+		AND = { VAL_frontier_idle = no check_variable = { var = VAL_frontier_target value = 2 compare = equals } OSF = { VAL_frontier_nod_support_possible = yes } }
+		AND = { VAL_frontier_idle = no check_variable = { var = VAL_frontier_target value = 3 compare = equals } APH = { VAL_frontier_nod_support_possible = yes } }
+		AND = {
+			VAL_frontier_idle = yes
+			OR = {
+				CIN = { VAL_frontier_bloc_target_eligible = yes VAL_frontier_nod_support_possible = yes }
+				AND = { CIN = { VAL_frontier_bloc_target_eligible = no } OSF = { VAL_frontier_bloc_target_eligible = yes VAL_frontier_nod_support_possible = yes } }
+				AND = { CIN = { VAL_frontier_bloc_target_eligible = no } OSF = { VAL_frontier_bloc_target_eligible = no } APH = { VAL_frontier_bloc_target_eligible = yes VAL_frontier_nod_support_possible = yes } }
+			}
+		}
+	}
 }

@@ -141,9 +141,9 @@ class PartySurvivalContracts(unittest.TestCase):
                      ('NOD', 'variable', 'STP_cw_northern_campaign_status'): status,
                      ('NOD', 'is_ai', 'yes'): ai}
             self.assertTrue(matches_conditions(host, facts, 'NOD'))
-        handoff = str(signature(self.effects['STP_ps_exile_handoff']))
-        self.assertIn("('NOD', [('is_ai', 'yes')", handoff)
-        self.assertIn('STP_ps_decline_handoff', handoff)
+        self.assertNotIn("STP_ps_exile_handoff", self.effects)
+        self.assertNotIn("STP_ps_handoff_accept", self.decisions)
+        self.assertNotIn("NOD = { change_tag_from = STP }", read(EFFECTS))
 
     def test_no_paid_program_marks_a_military_victory(self):
         for name, effect in self.effects.items():

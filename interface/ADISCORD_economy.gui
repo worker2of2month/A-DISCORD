@@ -41,9 +41,8 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "ADISCORD_economy_topbar_window"
-		# The top_bar token is reliable; these coordinates mirror the reserved
-		# slot immediately to the right of Trade in interface/topbar.gui.
-		position = { x = 405 y = 36 }
+		# The parent anchor follows the native DLC-dependent toolbar layout.
+		position = { x = 0 y = 0 }
 		Orientation = UPPER_LEFT
 		size = { width = 55 height = 41 }
 		clipping = no

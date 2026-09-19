@@ -13,7 +13,7 @@ scripted_gui = {
 	ADISCORD_economy_topbar_script = {
 		context_type = player_context
 		window_name = "ADISCORD_economy_topbar_window"
-		parent_window_token = top_bar
+		parent_window_name = "ADISCORD_economy_topbar_anchor_instance"
 		dirty = ADISCORD_economy_gui_update_var
 		# Observer mode may inspect and open the dashboard; mutation buttons are
 		# separately gated to the human-controlled country below.

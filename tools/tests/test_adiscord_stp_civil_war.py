@@ -158,10 +158,10 @@ class CivilWarContracts(unittest.TestCase):
             for name, value in re.findall(r"NDefines\.NCountry\.(MIN_STABILITY|MIN_WAR_SUPPORT)\s*=\s*(-?[\d.]+)", path.read_text(encoding="utf-8-sig")):
                 self.assertGreaterEqual(float(value), 0, f"{path.name}: {name}")
 
-    def test_northern_war_cannot_recruit_unscripted_faction_members(self):
+    def test_allies_can_be_called_but_unsolicited_war_entry_stays_blocked(self):
         diplomacy = entries("common/scripted_triggers/diplomacy_scripted_triggers.txt")
-        for action in ("DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER", "DIPLOMACY_JOIN_ALLY_ENABLE_TRIGGER"):
-            self.assertFalse(matches_conditions(ast_block(diplomacy, action), {}), action)
+        self.assertTrue(matches_conditions(ast_block(diplomacy, "DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER"), {}))
+        self.assertFalse(matches_conditions(ast_block(diplomacy, "DIPLOMACY_JOIN_ALLY_ENABLE_TRIGGER"), {}))
         north = block(self.effects, "STP_cw_start_northern_war")
         for ally in ("COF", "TFF"):
             self.assertRegex(north, ally + r"\s*=\s*\{\s*add_to_war\s*=\s*\{\s*targeted_alliance = YPR")

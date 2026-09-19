@@ -125,8 +125,7 @@ class NorthernCampaignRouteTests(unittest.TestCase):
 
     def test_demand_and_offensive_share_a_force_quality_gate_not_24_divisions(self):
         text = read("common/decisions/ADISCORD_VAL_decisions.txt")
-        for identifier in ("VAL_frontier_demand_CIN", "VAL_frontier_demand_OSF",
-                           "VAL_frontier_demand_APH", "VAL_frontier_demand_ERT",
+        for identifier in ("VAL_frontier_demand_CIN", "VAL_frontier_demand_ERT",
                            "VAL_frontier_begin_offensive"):
             with self.subTest(identifier=identifier):
                 body = block(text, identifier)

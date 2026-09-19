@@ -220,7 +220,7 @@ characters = {
 
     NKA_Contract_Council = {
         name = NKA_Contract_Council
-        portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+        portraits = { civilian = { large = GFX_portrait_NKA_Viktor_Karst } }
         country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
     }
     OCA_Contract_Council = {

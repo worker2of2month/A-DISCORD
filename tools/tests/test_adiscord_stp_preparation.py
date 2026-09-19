@@ -485,8 +485,8 @@ class StelanderPreparationTests(unittest.TestCase):
             "STP_region_unique_operation_53": ("STP_cw_officer_contacts", None, "STP_resistance_sabotage_asset"),
             "STP_cw_sabotage_capital": ("STP_cw_prepare_capital_sabotage", None, "STP_resistance_sabotage_asset"),
             "STP_cw_sabotage_party_industry": ("STP_cw_prepare_industry_sabotage", None, "STP_resistance_sabotage_asset"),
-            "STP_cw_agree_with_commander": ("STP_PARTY_DISCIPLINE", None, "STP_party_reinforced_garrison_asset"),
-            "STP_cw_check_district_command": ("STP_PARTY_DISCIPLINE", None, None),
+            "STP_cw_agree_with_commander": ("STP_party_district_compact", None, "STP_party_reinforced_garrison_asset"),
+            "STP_cw_check_district_command": ("STP_ROTATE_DISTRICT_COMMAND", None, None),
         }
         facts = {("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True,
                  ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True,
@@ -1038,7 +1038,8 @@ class StelanderPreparationTests(unittest.TestCase):
                     if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")
-        raid = block(decisions, "STP_cw_check_district_command")
+        # Interception is the common first response; district raids require a later exclusive course.
+        raid = block(decisions, "STP_cw_interrupt_opposition")
         unlock = scalar(next(e.value for e in walk(raid)
                              if e.key == "visible"), "has_completed_focus")
         # The side's root is completed by the choice event, not by focus progress.
@@ -1316,7 +1317,7 @@ class StelanderPreparationTests(unittest.TestCase):
                                ("STP_Call_For_Shabrat", "STP_cw_sacrifice_local_contact"),
                                ("STP_cw_national_mandate", "STP_cw_open_civil_registers"),
                                ("STP_cw_supply_officers", "STP_region_unique_operation_46"),
-                               ("STP_PARTY_DISCIPLINE", "STP_cw_check_district_command"),
+                               ("STP_ROTATE_DISTRICT_COMMAND", "STP_cw_check_district_command"),
                                ("STP_cw_security_collegium", "STP_cw_interrupt_opposition"),
                                ("STP_cw_press_office", "STP_cw_publish_directive"),
                                ("STP_cw_protocol_office", "STP_cw_seal_protocol"),
@@ -1332,7 +1333,8 @@ class StelanderPreparationTests(unittest.TestCase):
         district_check = block(rewards["STP_PARTY_DISCIPLINE"], "3")
         live = {("3", "is_owned_by", "ROOT"): True, ("3", "is_controlled_by", "ROOT"): True,
                 ("3", "STP_region_is_operable", "yes"): True}
-        self.assertEqual(scalar([e for _, e in selected_effects(district_check, live, "3")], "STP_cw_secure_party_district"), "yes")
+        self.assertEqual(scalar([e for _, e in selected_effects(district_check, live, "3")], "STP_add_party_influence"), "yes")
+        self.assertNotIn("STP_cw_secure_party_district", {e.key for e in walk(district_check)})
         self.assertFalse(list(selected_effects(district_check, {}, "3")), "lost districts are not silently purged")
         administration = block(block(rewards["STP_cw_district_administration"], "hidden_effect"), "3")
         self.assertEqual(scalar([e for _, e in selected_effects(administration, {}, "3")], "set_state_flag"),
@@ -1386,7 +1388,7 @@ class StelanderPreparationTests(unittest.TestCase):
                             ("STP_cw_sacrifice_local_contact", "STP_Call_For_Shabrat"),
                             ("STP_cw_open_civil_registers", "STP_cw_national_mandate"),
                             ("STP_region_unique_operation_46", "STP_cw_supply_officers"),
-                            ("STP_cw_check_district_command", "STP_PARTY_DISCIPLINE"),
+                            ("STP_cw_check_district_command", "STP_ROTATE_DISTRICT_COMMAND"),
                             ("STP_cw_interrupt_opposition", "STP_cw_security_collegium"),
                             ("STP_cw_publish_directive", "STP_cw_press_office"),
                             ("STP_cw_seal_protocol", "STP_cw_protocol_office"),

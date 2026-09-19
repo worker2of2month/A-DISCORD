@@ -123,6 +123,52 @@ class PartyRouteContracts(unittest.TestCase):
                 self.assertIn("STP_cw_party_mandate", done)
         self.assertNotIn("STP_cw_secure_party_district", str(signature(one(self.focus["STP_party_district_compact"], "completion_reward"))))
 
+    def test_prewar_tactical_combinations_reach_supply_and_mandate(self):
+        from itertools import product
+        axes = (("STP_GUARANTEE_MINISTERS", "STP_defense_budget"),
+                ("STP_party_district_compact", "STP_ROTATE_DISTRICT_COMMAND"),
+                ("STP_cw_protect_congress", "STP_cw_capital_oath"))
+        for choices in product(*axes):
+            with self.subTest(choices=choices):
+                done = self.reachable(set(choices))
+                self.assertTrue(set(choices) <= done)
+                self.assertTrue({"STP_party_supply_directorate", "STP_cw_party_mandate"} <= done)
+                for axis, chosen in zip(axes, choices):
+                    self.assertNotIn(next(fid for fid in axis if fid != chosen), done)
+
+    def test_district_courses_unlock_only_their_own_operation(self):
+        for operation, chosen, other in (
+            ("STP_cw_agree_with_commander", "STP_party_district_compact", "STP_ROTATE_DISTRICT_COMMAND"),
+            ("STP_cw_check_district_command", "STP_ROTATE_DISTRICT_COMMAND", "STP_party_district_compact"),
+        ):
+            for section in ("visible", "available"):
+                gate = one(self.decisions[operation], section)
+                self.assertIn(chosen, [e.value for e in walk(gate) if e.key == "has_completed_focus"])
+                self.assertNotIn(other, [e.value for e in walk(gate) if e.key == "has_completed_focus"])
+        survey = one(self.focus["STP_PARTY_DISCIPLINE"], "completion_reward")
+        self.assertNotIn("STP_cw_secure_party_district", [e.key for e in walk(survey)])
+
+    def test_mobile_reserve_is_paid_before_base_army_and_bonus_waits_for_hostilities(self):
+        marker = "STP_party_mobile_reserve_ready"
+        start = self.effects["STP_cw_start"]
+        mobile = next(e.value for e in walk(start) if e.key == "if"
+                      and marker in str(signature(one(e.value, "limit"))))
+        self.assertEqual([e.key for e in mobile].count("STP_cw_mobilize_brigade"), 2)
+        source = str(signature(start))
+        self.assertLess(source.index(marker), source.index("STP_cw_mobilize_assault_division"))
+        self.assertNotIn("STP_cw_offensive_preparation", source)
+        for ready in (False, True):
+            facts = {("STP", "has_country_flag", marker): ready}
+            issued = [e.key for _, e in selected_effects([next(e for e in walk(start)
+                      if e.key == "if" and e.value == mobile)], facts)]
+            self.assertEqual(issued.count("STP_cw_mobilize_brigade"), 2 if ready else 0)
+        begin = str(signature(self.effects["STP_cw_begin_hostilities"]))
+        self.assertIn("STP_cw_offensive_preparation", begin)
+        self.assertIn("('clr_country_flag', '" + marker + "')", begin)
+        self.assertIn(marker, str(signature(self.effects["STP_cw_finish_mobilization"])))
+        forecast = str(signature(self.effects["STP_cw_refresh_army_report"]))
+        self.assertIn(marker, forecast)
+
     def test_first_intercept_includes_every_prerequisite_day(self):
         root = "STP_Govern_In_His_Name"
         def days(fid):

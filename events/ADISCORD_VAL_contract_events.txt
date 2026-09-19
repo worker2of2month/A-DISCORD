@@ -576,7 +576,7 @@ country_event = {
     picture = GFX_event_adiscord_negotiation_table
     is_triggered_only = yes
     option = { name = val_rework.110.no trigger = { VAL_frontier_offer_is_current = yes } ai_chance = { base = 75 } VAL_frontier_refuse = yes }
-    option = { name = val_rework.110.yes trigger = { VAL_frontier_offer_is_current = yes } ai_chance = { base = 25 modifier = { factor = 2 has_war = yes } modifier = { factor = 0 NOT = { tag = ERT } } } custom_effect_tooltip = VAL_frontier_accept_tt hidden_effect = { VAL_frontier_accept = yes } }
+    option = { name = val_rework.110.yes trigger = { tag = ERT VAL_frontier_offer_is_current = yes } ai_chance = { base = 25 modifier = { factor = 2 has_war = yes } modifier = { factor = 0 NOT = { tag = ERT } } } custom_effect_tooltip = VAL_frontier_accept_tt hidden_effect = { VAL_frontier_accept = yes } }
     option = { name = val_rework.closed trigger = { NOT = { VAL_frontier_offer_is_current = yes } } }
 }
 country_event = {

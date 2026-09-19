@@ -1990,8 +1990,8 @@ completion_reward = {
                 add_political_power = 25
             }
             unlock_decision_tooltip = VAL_frontier_demand_CIN
-            unlock_decision_tooltip = VAL_frontier_demand_OSF
-            unlock_decision_tooltip = VAL_frontier_demand_APH
+
+
 			add_political_power = 75
 		}
         ai_will_do = { base = 45 }

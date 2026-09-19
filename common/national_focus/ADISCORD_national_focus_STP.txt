@@ -1139,11 +1139,15 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			3 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT STP_region_is_operable = yes } STP_cw_secure_party_district = yes } }
-			custom_effect_tooltip = STP_cw_secure_niansas_tt
+			3 = {
+				if = {
+					limit = { is_owned_by = ROOT is_controlled_by = ROOT STP_region_is_operable = yes }
+					set_temp_variable = { var = STP_region_influence_change value = 10 }
+					STP_add_party_influence = yes
+				}
+			}
+			custom_effect_tooltip = STP_party_district_survey_tt
 			add_political_power = 25
-			unlock_decision_tooltip = STP_cw_check_district_command
-			unlock_decision_tooltip = STP_cw_agree_with_commander
 			custom_effect_tooltip = STP_cw_loyalty_plus_8_tt
 			hidden_effect = {
 				set_temp_variable = { var = STP_apparatus_loyalty_change value = 8 }
@@ -1193,6 +1197,8 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_party_district_compact }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			add_stability = -0.05
+			unlock_decision_tooltip = STP_cw_check_district_command
 			2 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT STP_region_is_operable = yes } STP_cw_secure_party_district = yes } }
 			29 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT STP_region_is_operable = yes } STP_cw_secure_party_district = yes } }
 			custom_effect_tooltip = STP_cw_secure_garrisons_tt
@@ -1254,10 +1260,11 @@ focus_tree = {
 		id = STP_cw_protect_congress
 		icon = GFX_goal_generic_fortify_city
 		relative_position_id = STP_Govern_In_His_Name
-		x = 0
-		y = 3
+		x = -1
+		y = 4
 		cost = 3
 		prerequisite = { focus = STP_cw_capital_reserve }
+		mutually_exclusive = { focus = STP_cw_capital_oath }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag 28 = { is_owned_by = ROOT is_controlled_by = ROOT } }
 		cancel_if_invalid = yes
@@ -1507,20 +1514,25 @@ focus_tree = {
 		id = STP_cw_capital_oath
 		icon = GFX_focus_generic_military_academy
 		relative_position_id = STP_Govern_In_His_Name
-		x = 0
+		x = 1
 		y = 4
 		cost = 3
-		prerequisite = { focus = STP_cw_protect_congress }
+		prerequisite = { focus = STP_cw_capital_reserve }
+		mutually_exclusive = { focus = STP_cw_protect_congress }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 3 }
 		completion_reward = {
+			add_stability = -0.03
 			add_command_power = 25
 			army_experience = 15
-			custom_effect_tooltip = STP_cw_capital_oath_tt
+			custom_effect_tooltip = STP_party_mobile_reserve_tt
+			effect_tooltip = { add_timed_idea = { idea = STP_cw_offensive_preparation days = 35 } }
 			custom_effect_tooltip = STP_cw_loyalty_plus_6_tt
 			hidden_effect = {
+				set_country_flag = STP_party_mobile_reserve_ready
+				STP_cw_refresh_army_report = yes
 				set_temp_variable = { var = STP_apparatus_loyalty_change value = 6 }
 				STP_change_apparatus_loyalty = yes
 				set_temp_variable = { var = STP_pf_selected value = 4 }
@@ -1538,7 +1550,7 @@ focus_tree = {
 		y = 6
 		cost = 3
 		prerequisite = { focus = STP_THE_PARTY_CLOSES_RANKS }
-		prerequisite = { focus = STP_cw_press_office focus = STP_cw_capital_oath }
+		prerequisite = { focus = STP_cw_press_office focus = STP_party_supply_directorate }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }
 		cancel_if_invalid = yes
@@ -1567,10 +1579,11 @@ focus_tree = {
 		prerequisite = { focus = STP_PARTY_DISCIPLINE }
 		mutually_exclusive = { focus = STP_ROTATE_DISTRICT_COMMAND }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
-		available = { custom_trigger_tooltip = { tooltip = STP_party_preparation_available_tt STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }  }
+		available = { custom_trigger_tooltip = { tooltip = STP_party_preparation_available_tt STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag } NOT = { has_political_power < 50 } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			add_political_power = -50
 			custom_effect_tooltip = STP_party_compact_districts_tt
 			hidden_effect = {
 				2 = {
@@ -1610,7 +1623,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = STP_GUARANTEE_MINISTERS }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
-		available = { custom_trigger_tooltip = { tooltip = STP_party_preparation_available_tt STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }  }
+		available = { custom_trigger_tooltip = { tooltip = STP_party_preparation_available_tt STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag } NOT = { has_political_power < 50 } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
@@ -1621,7 +1634,8 @@ focus_tree = {
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 3600 }
 				ADISCORD_economy_mark_dirty = yes
 			}
-			add_political_power = 35
+			add_stability = -0.03
+			add_political_power = -50
 		}
 	}
 
@@ -1652,7 +1666,7 @@ focus_tree = {
 		x = 0
 		y = 5
 		cost = 3
-		prerequisite = { focus = STP_cw_capital_oath }
+		prerequisite = { focus = STP_cw_capital_oath focus = STP_cw_protect_congress }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
 		available = { custom_trigger_tooltip = { tooltip = STP_party_preparation_available_tt STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }  }
 		cancel_if_invalid = yes
@@ -1773,7 +1787,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = STP_ps_prepare_evacuation unlock_decision_tooltip = STP_ps_evacuate_funds custom_effect_tooltip = STP_ps_handoff_tt }
+		completion_reward = { unlock_decision_tooltip = STP_ps_prepare_evacuation unlock_decision_tooltip = STP_ps_evacuate_funds custom_effect_tooltip = STP_ps_asylum_scope_tt }
 	}
 
 
@@ -1885,7 +1899,7 @@ focus_tree = {
 		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { custom_effect_tooltip = STP_ps_handoff_tt hidden_effect = { STP_ps_request_asylum = yes } }
+		completion_reward = { custom_effect_tooltip = STP_ps_asylum_scope_tt hidden_effect = { STP_ps_request_asylum = yes } }
 	}
 
 

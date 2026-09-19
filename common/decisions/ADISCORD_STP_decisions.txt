@@ -251,13 +251,7 @@ STP_elections_in_the_party = {
 		cancel_effect = { hidden_effect = { STP_ps_prepare_evacuation_refund = yes } }
 	}
 
-	STP_ps_handoff_accept = {
-		allowed = { tag = STP }
-		visible = { is_ai = no has_country_flag = STP_ps_decline_handoff }
-		cost = 0
-		complete_effect = { hidden_effect = { clr_country_flag = STP_ps_decline_handoff } }
-		ai_will_do = { base = 0 }
-	}
+
 
 	STP_ps_evacuate_funds = {
 		allowed = { tag = STP }
@@ -1940,9 +1934,9 @@ STP_battle_for_stelander = {
 	STP_cw_agree_with_commander = {
 		icon = GFX_decision_ADISCORD_state_directive
 		allowed = { tag = STP }
-		visible = { has_completed_focus = STP_PARTY_DISCIPLINE has_country_flag = STP_sided_with_the_party_flag STP_cw_preparation_open = yes FROM = { NOT = { has_state_flag = STP_party_reinforced_garrison_asset } } }
+		visible = { has_completed_focus = STP_party_district_compact has_country_flag = STP_sided_with_the_party_flag STP_cw_preparation_open = yes FROM = { NOT = { has_state_flag = STP_party_reinforced_garrison_asset } } }
 		available = {
-			has_completed_focus = STP_PARTY_DISCIPLINE
+			has_completed_focus = STP_party_district_compact
 			custom_trigger_tooltip = { tooltip = STP_preparation_slot_available_tt STP_has_political_action_slot = yes }
 			FROM = { custom_trigger_tooltip = { tooltip = STP_preparation_district_open_tt STP_region_is_operable = yes } is_owned_by = ROOT is_controlled_by = ROOT }
 		}
@@ -2059,8 +2053,8 @@ STP_battle_for_stelander = {
 
 	STP_cw_check_district_command = {
 		icon = GFX_decision_ADISCORD_state_directive
-		visible = { has_completed_focus = STP_PARTY_DISCIPLINE has_country_flag = STP_sided_with_the_party_flag has_country_flag = STP_battle_for_stelander_active }
-		available = { has_completed_focus = STP_PARTY_DISCIPLINE custom_trigger_tooltip = { tooltip = STP_preparation_slot_available_tt STP_has_political_action_slot = yes } FROM = { custom_trigger_tooltip = { tooltip = STP_preparation_district_open_tt STP_region_is_operable = yes } is_owned_by = ROOT is_controlled_by = ROOT } }
+		visible = { has_completed_focus = STP_ROTATE_DISTRICT_COMMAND has_country_flag = STP_sided_with_the_party_flag has_country_flag = STP_battle_for_stelander_active }
+		available = { has_completed_focus = STP_ROTATE_DISTRICT_COMMAND custom_trigger_tooltip = { tooltip = STP_preparation_slot_available_tt STP_has_political_action_slot = yes } FROM = { custom_trigger_tooltip = { tooltip = STP_preparation_district_open_tt STP_region_is_operable = yes } is_owned_by = ROOT is_controlled_by = ROOT } }
 		state_target = yes
 		targets = { 2 3 29 45 46 53 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }

@@ -64,3 +64,10 @@ defined_text = {
     text = { trigger = { APH = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
     text = { localization_key = VAL_FRONTIER_MOBILIZING }
 }
+
+defined_text = {
+	name = VALGetNodFrontierIntervention
+	text = { trigger = { NOD = { has_war_with = VAL has_country_flag = VAL_frontier_guarantor } } localization_key = VAL_nod_frontier_joined }
+	text = { trigger = { VAL_frontier_nod_will_intervene = yes } localization_key = VAL_nod_frontier_expected }
+	text = { localization_key = VAL_nod_frontier_unavailable }
+}

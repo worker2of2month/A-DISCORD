@@ -855,6 +855,7 @@ STP_cw_refresh_army_report = {
 	set_variable = { var = STP_cw_report_resistance_brigades value = 14 }
 	# Early-uprising baseline; the election result transfers two brigades and 10% of reserves.
 	if = { limit = { has_country_flag = STP_cw_party_reserve_ready } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
+	if = { limit = { has_country_flag = STP_party_mobile_reserve_ready } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
 	if = { limit = { 2 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset NOT = { STP_cw_region_goes_to_resistance = yes } NOT = { STP_cw_region_goes_to_republics = yes } } } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
 	if = { limit = { 29 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset NOT = { STP_cw_region_goes_to_resistance = yes } NOT = { STP_cw_region_goes_to_republics = yes } } } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
 	if = { limit = { 45 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset NOT = { STP_cw_region_goes_to_resistance = yes } NOT = { STP_cw_region_goes_to_republics = yes } } } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
@@ -2315,6 +2316,7 @@ STP_cw_revoke_emergency_research_slot = {
 
 # Close fixed-price orders before restoring unrestricted template editing.
 STP_cw_finish_mobilization = {
+	clr_country_flag = STP_party_mobile_reserve_ready
 	STP_cw_refund_disruption = yes
 	clr_country_flag = STP_cw_disruption_unlocked
 	clr_country_flag = STP_cw_disruption_cooldown
@@ -2760,6 +2762,11 @@ STP_cw_begin_hostilities = {
 				limit = { has_country_flag = STP_cw_party_defence_ready }
 				add_timed_idea = { idea = STP_cw_defensive_preparation days = 35 }
 			}
+			if = {
+				limit = { has_country_flag = STP_party_mobile_reserve_ready }
+				add_timed_idea = { idea = STP_cw_offensive_preparation days = 35 }
+				clr_country_flag = STP_party_mobile_reserve_ready
+			}
 			# Either captured depot supports infantry during mobilisation. Two depots
 			# transfer their own fuel but never stack or refresh this one army-wide idea.
 			if = {
@@ -3106,6 +3113,11 @@ STP_cw_start = {
 		# Prepared cohorts have first claim on their reserved people and rifles.
 		if = {
 			limit = { has_country_flag = STP_cw_party_reserve_ready }
+			STP_cw_mobilize_brigade = yes
+			STP_cw_mobilize_brigade = yes
+		}
+		if = {
+			limit = { has_country_flag = STP_party_mobile_reserve_ready }
 			STP_cw_mobilize_brigade = yes
 			STP_cw_mobilize_brigade = yes
 		}
@@ -5618,7 +5630,7 @@ STP_ps_nod_rifle_purchase_finish = {
 	}
 }
 
-# Accepted STP defeat only. Snapshot and handoff precede the winner's annexation.
+# Accepted STP defeat only. Settle outgoing resources before annexation.
 STP_ps_prepare_exile = {
 	if = { limit = { tag = STP NOT = { has_country_flag = STP_ps_exile_settled } }
 		set_country_flag = STP_ps_exile_settled
@@ -5640,7 +5652,6 @@ STP_ps_prepare_exile = {
 		STP_ps_deliver_nod = yes
 		if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes OR = { has_country_flag = STP_ps_asylum_agreement AND = { is_ai = yes NOT = { has_country_flag = STP_ps_asylum_requested } } } } }
 			STP_ps_settle_exile = yes
-			STP_ps_exile_handoff = yes
 		}
 		else_if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes is_ai = no NOT = { has_country_flag = STP_ps_asylum_requested } } }
 			STP_ps_snapshot_exile = yes
@@ -5692,11 +5703,7 @@ STP_ps_accept_exile = {
 		country_event = { id = ADISCORD_STP_cw.202 }
 	}
 }
-STP_ps_exile_handoff = {
-	if = { limit = { tag = STP is_ai = no NOT = { has_country_flag = STP_ps_decline_handoff } NOD = { is_ai = yes STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_exile_received } }
-		NOD = { change_tag_from = STP }
-	}
-}
+
 
 STP_ps_begin_return = {
 	if = { limit = { STP_ps_can_launch_return = yes }
