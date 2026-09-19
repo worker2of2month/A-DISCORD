@@ -27,6 +27,7 @@ jobs:
           python -B .github/building_income_patch.py
           python -B - <<'PY'
           from pathlib import Path
+          import ast
           from tools.tests.test_validate_adiscord_val_rework import named_block_spans
           p=Path('common/scripted_effects/ADISCORD_economy_effects.txt')
           text=p.read_text(encoding='utf-8')
@@ -44,11 +45,32 @@ jobs:
           old='# 20 national factories become a +5% country modifier: (10 * 2 * 5) / 20.'
           assert text.count(old)==1
           text=text.replace(old,'# 20 national factories become a +10% country modifier: (10 * 2 * 10) / 20.')
+          old='var = ADISCORD_economy_treasury_cap min = 100 max = 2000 }'
+          assert text.count(old)==1
+          text=text.replace(old,'var = ADISCORD_economy_treasury_cap min = 100 max = 5000 }')
           p.write_text(text,encoding='utf-8')
+          p=Path('tools/tests/test_adiscord_economy_weekly_contracts.py')
+          text=p.read_text(encoding='utf-8');lines=text.splitlines(keepends=True)
+          method=next(n for n in ast.walk(ast.parse(text)) if isinstance(n,ast.FunctionDef) and n.name=='test_building_tooltips_lead_with_role_and_budget_impact')
+          body=''.join(lines[method.lineno-1:method.end_lineno])
+          for old,new in (('+1,20','+30,15'),('-0,27','-0,62'),('+0,31','+9,86'),('Роль: местное военное производство','Роль: доход и местное военное производство')):
+              assert body.count(old)==1,old
+              body=body.replace(old,new)
+          body+='            self.assertIn(chr(92) + "n", match.group(1))\n'
+          body+='            self.assertNotIn(chr(92) * 2 + "n", match.group(1))\n'
+          lines[method.lineno-1:method.end_lineno]=[body]
+          p.write_text(''.join(lines),encoding='utf-8')
+          p=Path('localisation/russian/ADISCORD_economy_l_russian.yml')
+          text=p.read_text(encoding='utf-8-sig');lines=text.splitlines(keepends=True)
+          for i,line in enumerate(lines):
+              if any(line.lstrip().startswith(key+':') for key in ('ADISCORD_business_center_desc','ADISCORD_science_center_desc','ADISCORD_industrial_cluster_desc')):
+                  print('DESCRIPTION_ESCAPE_COUNTS',line.split(':',1)[0],line.count(chr(92)*2+'n'))
+                  lines[i]=line.replace(chr(92)*2+'n',chr(92)+'n')
+          p.write_text(''.join(lines),encoding='utf-8-sig')
           PY
       - name: Targeted building and accounting regression tests
         run: |
-          python -B -m unittest tools.tests.test_adiscord_economy_rebalance tools.tests.test_adiscord_economy_weekly_contracts.EconomyAccountingRegressionTests tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_industrial_cluster_output_is_location_weighted_without_a_new_scan tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_ai_building_targets_are_bounded_by_fiscal_state tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_economic_building_reference_documents_roles_and_formulas -v
+          python -B -m unittest tools.tests.test_adiscord_economy_rebalance tools.tests.test_adiscord_economy_weekly_contracts.EconomyAccountingRegressionTests tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_industrial_cluster_output_is_location_weighted_without_a_new_scan tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_ai_building_targets_are_bounded_by_fiscal_state tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_economic_building_reference_documents_roles_and_formulas tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_building_tooltips_lead_with_role_and_budget_impact -v
       - name: Full economy regression suite
         run: python -B -m unittest tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_adiscord_economy_rebalance -q
       - name: Total conversion validation
