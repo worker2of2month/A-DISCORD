@@ -993,8 +993,8 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "NOT = { has_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1 }",
             "set_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1",
             "ADISCORD_vorkerland_ensure_worker_home_guard_template = yes",
-            "add_manpower = 12000",
-            "amount = 960 producer = WKR",
+            "add_manpower = 24000",
+            "amount = 1920 producer = WKR",
         ):
             self.assertIn(token, home_guard)
         shared_templates = source_section(read(
@@ -1008,7 +1008,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("is_locked = yes", worker_home_guard)
         self.assertEqual(worker_home_guard.count("ADISCORD_militia ="), 3)
         self.assertEqual(home_guard.count("create_unit ="), 2)
-        self.assertEqual(home_guard.count("count = 2"), 2)
+        self.assertEqual(home_guard.count("count = 4"), 2)
         self.assertIn("33 = {", home_guard)
         self.assertIn("32 = {", home_guard)
         self.assertNotIn("annex_country", home_guard)
@@ -2026,7 +2026,7 @@ class FrontAndSupplyTests(unittest.TestCase):
             self.assertIn(f"add_manpower = {manpower}", block, tag)
             self.assertIn(f"amount = {rifles}", block, tag)
         tva_oob = read("history/units/TVA_vorkerland_collapse.txt")
-        self.assertEqual(tva_oob.count("division = {"), 15)
+        self.assertEqual(tva_oob.count("division = {"), 19)
         self.assertEqual(tva_oob.count('division_template = "TVA Mobile Test Group"'), 2)
         self.assertIn("TVA Infiltration Cell", tva_oob)
 
@@ -2624,8 +2624,8 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         for token in (
             "add_ideas = ADISCORD_vorkerland_tva_field_directorate",
             "add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism",
-            "add_manpower = 16000",
-            "type = infantry_equipment_0 amount = 2600 producer = TVA",
+            "add_manpower = 28000",
+            "type = infantry_equipment_0 amount = 3560 producer = TVA",
             "type = support_equipment amount = 180 producer = TVA",
             "type = artillery_equipment amount = 96 producer = TVA",
         ):

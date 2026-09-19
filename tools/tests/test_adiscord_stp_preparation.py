@@ -464,7 +464,7 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(r"\n\n".join(chapters).encode("utf-8")).hexdigest(),
                          "b87894acba07ebab1224274870aef30f77c8c13f2591cce43785dd665a39f8ba")
         self.assertEqual(scalar(block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"), "add_political_power"), "35")
-        self.assertEqual(scalar(block(focuses["STP_2160_budget"], "completion_reward"), "ADISCORD_economy_receive_100"), "yes")
+        self.assertEqual(scalar(block(focuses["STP_2160_budget"], "completion_reward"), "STP_receive_1200"), "yes")
         for path in ("interface/ADISCORD_STP_regions.gui", "common/scripted_guis/ADISCORD_STP_regions_scripted_gui.txt"):
             self.assertNotIn("ADISCORD_STP_nectar_story", (ROOT / path).read_text(encoding="utf-8-sig"))
         self.assertFalse(any(key.startswith("STP_nectar_") for key in values))
@@ -892,11 +892,11 @@ class StelanderPreparationTests(unittest.TestCase):
 
     def test_custom_prices_check_and_charge_political_power_with_the_second_resource(self):
         specs = {
-            "STP_bargain_with_local_councils": (10, "treasury", 100),
-            "STP_prepare_false_trail": (15, "treasury", 50),
-            "STP_region_unique_operation_3": (10, "treasury", 100),
-            "STP_region_unique_operation_45": (15, "treasury", 200),
-            "STP_region_unique_operation_46": (20, "treasury", 100),
+            "STP_bargain_with_local_councils": (10, "treasury", 1200),
+            "STP_prepare_false_trail": (15, "treasury", 600),
+            "STP_region_unique_operation_3": (10, "treasury", 1200),
+            "STP_region_unique_operation_45": (15, "treasury", 2400),
+            "STP_region_unique_operation_46": (20, "treasury", 1200),
             "STP_region_unique_operation_53": (10, "equipment", 240),
             "STP_cw_agree_with_commander": (45, "command_power", 20),
             "VAL_ops_finance_cin_contacts": (10, "treasury", 50),
@@ -905,7 +905,7 @@ class StelanderPreparationTests(unittest.TestCase):
             "VAL_ops_sell_rifles_to_osf": (10, "equipment", 2500),
             "VAL_pay_quarterly_contract_norm": (10, "equipment", 4000),
         }
-        shared = entries("common/scripted_triggers/ADISCORD_shared_action_triggers.txt")
+        shared = entries("common/scripted_triggers/ADISCORD_shared_action_triggers.txt") + entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
         for tag, localisation_name in (
             ("STP", "ADISCORD_STP_l_russian.yml"),
             ("VAL", "ADISCORD_VAL_decisions_l_russian.yml"),
@@ -939,7 +939,7 @@ class StelanderPreparationTests(unittest.TestCase):
                             elif resource == "command_power":
                                 facts[(tag, "numeric", "command_power")] = stock
                             else:
-                                guard = f"ADISCORD_economy_can_spend_{resource_price}"
+                                guard = f"STP_cw_can_spend_{resource_price}" if tag == "STP" else f"ADISCORD_economy_can_spend_{resource_price}"
                                 treasury = {(tag, "variable", "ADISCORD_economy_treasury"): stock}
                                 facts[(tag, guard, "yes")] = matches_conditions(block(shared, guard), treasury, tag)
                             self.assertEqual(matches_conditions(block(action, "custom_cost_trigger"), facts, tag), expected,
@@ -1959,7 +1959,7 @@ class StelanderPreparationTests(unittest.TestCase):
                          task == "STP_cw_raise_district_network" and finish <= start for _, finish, task in intervals) >= 2,
                      ("FROM", "has_state_flag", "STP_party_inspection_active"): name == "STP_prepare_false_trail",
                      ("STP", "numeric", "has_political_power"): initial_reserve + sum(amount for day, amount in transactions if day <= start),
-                     ("STP", "ADISCORD_economy_can_spend_50", "yes"): 100 + 100 * (start >= completed["STP_cw_port_budget"]) - sum(amount for day, amount in treasury_expenses if day <= start) >= 50,
+                     ("STP", "STP_cw_can_spend_600", "yes"): 1200 + 1200 * (start >= completed["STP_cw_port_budget"]) - sum(amount for day, amount in treasury_expenses if day <= start) >= 600,
                      ("STP", "has_character", "STP_Edmund_Ravel"): start >= completed["STP_cw_officer_contacts"],
                      ("2", "is_owned_by", "STP"): True, ("2", "is_controlled_by", "STP"): True,
                      ("2", "has_state_flag", "STP_resistance_garrison_asset"): any(
@@ -2001,8 +2001,8 @@ class StelanderPreparationTests(unittest.TestCase):
             transactions.append((start, -float(scalar(action, "cost"))))
             transactions.extend((start, float(e.value)) for _, e in selected_effects(block(action, "complete_effect"), facts)
                                 if e.key == "add_political_power")
-            treasury_expenses.extend((start, 50) for _, e in selected_effects(block(action, "complete_effect"), facts)
-                                     if e.key == "ADISCORD_economy_spend_50")
+            treasury_expenses.extend((start, 600) for _, e in selected_effects(block(action, "complete_effect"), facts)
+                                     if e.key == "STP_cw_spend_600")
             return end
 
         first_network_done = operation("STP_cw_raise_district_network", completed["STP_Count_The_Loyalists"])
@@ -2032,7 +2032,7 @@ class StelanderPreparationTests(unittest.TestCase):
             balance += sum(amount for when, amount in transactions if when == day)
             self.assertGreaterEqual(balance, 0, f"day {day}: route exceeded the explicit 75 PP opening reserve")
         self.assertEqual(balance, 10)
-        self.assertEqual(sum(amount for _, amount in treasury_expenses), 200)
+        self.assertEqual(sum(amount for _, amount in treasury_expenses), 2400)
         for day in range(deadline):
             occupied = sum(start <= day < end for start, end, _ in intervals)
             slots = 1 + (day >= completed["STP_cw_district_printing"])
@@ -2317,14 +2317,14 @@ class StelanderPreparationTests(unittest.TestCase):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         receipt = "STP_cw_assault_training_reserved"
         self.assertEqual((scalar(decision, "cost"), scalar(decision, "days_remove")), ("0", "28"))
-        self.assertEqual([(e.key, e.value) for e in block(decision, "custom_cost_trigger")], [("ADISCORD_economy_can_spend_500", "yes")])
+        self.assertEqual([(e.key, e.value) for e in block(decision, "custom_cost_trigger")], [("STP_cw_can_spend_6000", "yes")])
         for affordable in (False, True):
             for pending in (False, True):
-                facts = {("STP", "ADISCORD_economy_can_spend_500", "yes"): affordable,
+                facts = {("STP", "STP_cw_can_spend_6000", "yes"): affordable,
                          ("STP", "has_country_flag", receipt): pending}
                 started = [e for _, e in selected_effects(block(decision, "complete_effect"), facts)]
                 accepted = affordable and not pending
-                self.assertEqual(sum(e.key == "ADISCORD_economy_spend_500" for e in started), int(accepted))
+                self.assertEqual(sum(e.key == "STP_cw_spend_6000" for e in started), int(accepted))
                 self.assertEqual(sum(e.key == "STP_political_action_slot_consume" for e in started), int(accepted))
                 self.assertFalse({"STP_cw_pay_assault_division", "add_political_power", "add_manpower"} & {e.key for e in started})
         for open_preparation in (False, True):
@@ -2337,7 +2337,7 @@ class StelanderPreparationTests(unittest.TestCase):
         facts = {("STP", "has_country_flag", receipt): True}
         result = [e for _, e in selected_effects(refund, facts)]
         credits = {(scalar(e.value, "var"), scalar(e.value, "value")) for e in result if e.key == "add_to_variable"}
-        self.assertEqual(credits, {("ADISCORD_economy_treasury", "500"), ("ADISCORD_economy_current_month_action_income", "500")})
+        self.assertEqual(credits, {("ADISCORD_economy_treasury", "STP_cw_cash_refund"), ("ADISCORD_economy_current_month_action_income", "STP_cw_cash_refund")})
         self.assertEqual(sum(e.key == "STP_political_action_slot_release" for e in result), 1)
         facts[("STP", "has_country_flag", receipt)] = False
         self.assertEqual(list(selected_effects(refund, facts)), [])
@@ -2349,7 +2349,7 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertEqual((scalar(decision, "cost"), scalar(decision, "days_remove")), ("0", "21"))
         start = list(selected_effects(block(decision, "complete_effect"), {}))
         self.assertEqual([e.value for _, e in start if e.key == "add_political_power"], ["-50"])
-        self.assertEqual(sum(e.key == "ADISCORD_economy_spend_100" for _, e in start), 1)
+        self.assertEqual(sum(e.key == "STP_cw_spend_1200" for _, e in start), 1)
         for open_preparation, owned, controlled in ((True, True, True), (False, True, True), (True, False, True), (True, True, False)):
             facts = {("STP", "STP_cw_preparation_open", "yes"): open_preparation,
                      ("FROM", "is_owned_by", "ROOT"): owned, ("FROM", "is_controlled_by", "ROOT"): controlled}
@@ -2404,8 +2404,9 @@ class StelanderPreparationTests(unittest.TestCase):
                 reward = list(walk(reward_body))
                 calls = {e.key for e in reward}
                 tooltips = {e.value for e in reward if e.key == "custom_effect_tooltip"}
-                if "ADISCORD_economy_receive_100" in calls:
-                    self.assertTrue({"STP_cw_treasury_100_tt", "STP_pw_industry_reserve_tt"} & tooltips, scalar(focus, "id"))
+                for amount, tooltip in ((1200, "STP_cw_treasury_1200_tt"), (3000, "STP_cw_treasury_3000_tt")):
+                    if "STP_receive_" + str(amount) in calls:
+                        self.assertIn(tooltip, tooltips, scalar(focus, "id"))
                 if "STP_change_party_suspicion" in {e.key for e in visible_effects(reward_body)}:
                     amount = next(scalar(e.value, "value") for e in reward if e.key == "set_temp_variable"
                                   and scalar(e.value, "var") == "STP_party_suspicion_change")
@@ -3058,8 +3059,8 @@ class StelanderPreparationTests(unittest.TestCase):
                     self.assertEqual(scalar(block(reward, "add_equipment_to_stockpile"), "amount"), stock)
                 if treasury:
                     self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "STP_cw_seize_vorkerland_stores")
-                    self.assertEqual(scalar(reward, "ADISCORD_economy_receive_100"), "yes")
-                    self.assertIn("STP_cw_treasury_100_tt",
+                    self.assertEqual(scalar(reward, "STP_receive_3000"), "yes")
+                    self.assertIn("STP_cw_treasury_3000_tt",
                                   [e.value for e in reward if e.key == "custom_effect_tooltip"])
         outbreak = next(e.value for e in entries("events/ADISCORD_vorkerland_events.txt")
                         if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_vorkerland_collapse.1")
@@ -3176,9 +3177,9 @@ class StelanderPreparationTests(unittest.TestCase):
                          "STP_cw_transfer_preparation_modifiers")
         paid = {("STP", "has_variable", "STP_cw_northern_fort_deposit"): True,
                 ("STP", "has_variable", "STP_cw_northern_engineer_deposit"): True}
-        self.assertEqual([(scope, e.key) for scope, e in selected_effects(transfer, paid)
-                          if e.key in ("ADISCORD_economy_receive_100", "ADISCORD_economy_receive_50")],
-                         [("STS", "ADISCORD_economy_receive_100"), ("STS", "ADISCORD_economy_receive_50")])
+        self.assertEqual([(scope, scalar(e.value, "value")) for scope, e in selected_effects(transfer, paid)
+                          if e.key == "add_to_variable" and scalar(e.value, "var") == "ADISCORD_economy_treasury"],
+                         [("STS", "PREV.STP_cw_northern_fort_deposit"), ("STS", "PREV.STP_cw_northern_engineer_deposit")])
         start = block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start")
         self.assertNotIn("ADISCORD_economy_receive_100", {e.key for e in walk(start)
                                                           if e.key.startswith("ADISCORD_economy_receive")})
@@ -3326,7 +3327,7 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertEqual(scalar(focus, "cost"), "4" if focus is fund else "3")
         reward = block(fund, "completion_reward")
         income = {scalar(e.value, "var"): float(scalar(e.value, "value")) for e in walk(reward) if e.key == "add_to_variable"}
-        self.assertEqual(income, {"ADISCORD_economy_treasury": 1500, "ADISCORD_economy_current_month_action_income": 1500})
+        self.assertEqual(income, {"ADISCORD_economy_treasury": 18000, "ADISCORD_economy_current_month_action_income": 18000})
         self.assertEqual(float(scalar(block(reward, "add_power_balance_value"), "value")), -.10)
         self.assertFalse(any(e.key in {"create_unit", "add_manpower", "add_equipment_to_stockpile"} for e in walk(reward)))
         workshop_reward = block(block(workshops, "completion_reward"), "1")

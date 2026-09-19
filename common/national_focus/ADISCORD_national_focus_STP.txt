@@ -29,8 +29,8 @@ focus_tree = {
 		prerequisite = { focus = STP_NECTAR_OF_GODS }
 		ai_will_do = { base = 20 }
 		completion_reward = {
-			custom_effect_tooltip = STP_cw_treasury_100_tt
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = STP_cw_treasury_1200_tt
+			STP_receive_1200 = yes
 			country_event = { id = ADISCORD_STP_preparation.16 }
 		}
 	}
@@ -145,8 +145,8 @@ focus_tree = {
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_region_unique_operation_3
-			custom_effect_tooltip = STP_cw_treasury_100_tt
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = STP_cw_treasury_1200_tt
+			STP_receive_1200 = yes
 			3 = { set_state_flag = STP_resistance_supply_asset }
 			effect_tooltip = {
 				add_timed_idea = { idea = STP_cw_prepared_supply_lines days = 21 }
@@ -545,8 +545,8 @@ focus_tree = {
 		prerequisite = { focus = STP_cw_seize_vorkerland_stores }
 		ai_will_do = { base = 5 }
 		completion_reward = {
-			custom_effect_tooltip = STP_cw_treasury_100_tt
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = STP_cw_treasury_3000_tt
+			STP_receive_3000 = yes
 			add_political_power = 75
 		}
 	}
@@ -854,8 +854,9 @@ focus_tree = {
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.10 }
 			hidden_effect = {
 				ADISCORD_economy_initialize_country = yes
-				add_to_variable = { var = ADISCORD_economy_treasury value = 1500 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1500 }
+				ADISCORD_economy_recalculate_treasury_cap = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 18000 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 18000 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
@@ -1101,8 +1102,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			custom_effect_tooltip = STP_cw_treasury_100_tt
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = STP_cw_treasury_1200_tt
+			STP_receive_1200 = yes
 			add_political_power = 25
 			effect_tooltip = {
 				swap_ideas = { remove_idea = STP_cw_party_dummy_idea add_idea = STP_cw_minister_guarantees_idea }
@@ -1589,11 +1590,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			custom_effect_tooltip = STP_party_treasury_300_tt
+			custom_effect_tooltip = STP_party_treasury_3600_tt
 			hidden_effect = {
 				ADISCORD_economy_initialize_country = yes
-				add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+				add_to_variable = { var = ADISCORD_economy_treasury value = 3600 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 3600 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 			add_political_power = 35
@@ -2257,8 +2258,8 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_postwar_budget_available_tt OR = { STP_pw_can_reconstruct = yes AND = { tag = SRP has_country_flag = STP_cw_postwar has_war = no } } } }
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			custom_effect_tooltip = STP_cw_treasury_100_tt
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = STP_pw_treasury_900_tt
+			STP_receive_900 = yes
 			add_stability = 0.05
 		}
 	}
@@ -2275,8 +2276,8 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_postwar_budget_available_tt OR = { STP_pw_can_reconstruct = yes AND = { tag = SRP has_country_flag = STP_cw_postwar has_war = no } } } }
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			custom_effect_tooltip = STP_cw_treasury_100_tt
-			ADISCORD_economy_receive_100 = yes
+			custom_effect_tooltip = STP_pw_treasury_900_tt
+			STP_receive_900 = yes
 			add_stability = 0.05
 			add_stability = 0.05
 			add_political_power = 75
@@ -2329,11 +2330,11 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			custom_effect_tooltip = STP_party_treasury_200_tt
+			custom_effect_tooltip = STP_party_treasury_2400_tt
 			hidden_effect = {
 				ADISCORD_economy_initialize_country = yes
-				add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+				add_to_variable = { var = ADISCORD_economy_treasury value = 2400 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2400 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 			effect_tooltip = { swap_ideas = { remove_idea = STP_cw_party_dummy_idea add_idea = STP_party_rear_administration_party_delta } }
@@ -2562,8 +2563,8 @@ focus_tree = {
 				custom_effect_tooltip = STP_pw_industry_reserve_tt
 				hidden_effect = {
 					ADISCORD_economy_initialize_country = yes
-					add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
+					add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 }
 				}
 			}
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_civil_workshops_delta } }
@@ -2606,8 +2607,8 @@ focus_tree = {
 				custom_effect_tooltip = STP_pw_industry_reserve_tt
 				hidden_effect = {
 					ADISCORD_economy_initialize_country = yes
-					add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
+					add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 }
 				}
 			}
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_accountable_arsenals_delta } }
@@ -2951,8 +2952,8 @@ focus_tree = {
 				custom_effect_tooltip = STP_pw_industry_reserve_tt
 				hidden_effect = {
 					ADISCORD_economy_initialize_country = yes
-					add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
+					add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 }
 				}
 			}
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_civil_workshops_delta } }
@@ -2997,8 +2998,8 @@ focus_tree = {
 				custom_effect_tooltip = STP_pw_industry_reserve_tt
 				hidden_effect = {
 					ADISCORD_economy_initialize_country = yes
-					add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
+					add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 }
 				}
 			}
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_accountable_arsenals_delta } }
@@ -4989,7 +4990,7 @@ focus_tree = {
 					add_building_construction = { type = arms_factory level = 1 instant_build = yes }
 				}
 			}
-			else = { custom_effect_tooltip = STP_pw_industry_reserve_tt hidden_effect = { ADISCORD_economy_receive_100 = yes } }
+			else = { custom_effect_tooltip = STP_pw_industry_reserve_tt hidden_effect = { STP_receive_900 = yes } }
 			hidden_effect = {
 				clr_country_flag = STP_pw_party_nod_offer_pending
 				clr_country_flag = STP_pw_party_nod_offer_accepted
@@ -5095,7 +5096,7 @@ focus_tree = {
 				STP_pw_refresh_modifier = yes
 			}
 			effect_tooltip = { add_ideas = STP_pw_economy_count_the_cost_delta }
-			ADISCORD_economy_receive_100 = yes
+			STP_receive_900 = yes
 		}
 	}
 
@@ -5148,7 +5149,7 @@ focus_tree = {
 					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
 				}
 			}
-			else = { ADISCORD_economy_receive_100 = yes }
+			else = { STP_receive_900 = yes }
 			custom_effect_tooltip = STP_pc_economy_repair_workshops_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0.15 }
@@ -5196,7 +5197,7 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_economy_stabilize_currency }
 		ai_will_do = { base = 12 }
 		completion_reward = {
-			ADISCORD_economy_receive_100 = yes
+			STP_receive_900 = yes
 			custom_effect_tooltip = STP_pc_economy_recovery_budget_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.12 }

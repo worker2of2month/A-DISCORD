@@ -33,10 +33,10 @@ STP_cw_republics_war_command = {
 # STS pays private suppliers; no equipment or money is taken from the recipient.
 STP_cw_fund_republican_supplies = {
 	if = {
-		limit = { hidden_trigger = { STP_cw_republics_aid_available = yes check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals } } }
+		limit = { hidden_trigger = { STP_cw_republics_aid_available = yes check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } }
 		hidden_effect = {
-			subtract_from_variable = { var = ADISCORD_economy_treasury value = 25 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 25 }
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
 			ADISCORD_economy_mark_dirty = yes
 		}
 		SRP = {
@@ -743,8 +743,8 @@ STP_cw_prepare_opposition = {
 					set_state_flag = STP_resistance_garrison_asset
 				}
 				else_if = {
-					limit = { OR = { state = 3 state = 46 } NOT = { has_state_flag = STP_resistance_supply_asset } STP = { ADISCORD_economy_can_spend_100 = yes } }
-					STP = { ADISCORD_economy_spend_100 = yes }
+					limit = { OR = { state = 3 state = 46 } NOT = { has_state_flag = STP_resistance_supply_asset } STP = { STP_cw_can_spend_1200 = yes } }
+					STP = { STP_cw_spend_1200 = yes }
 					set_state_flag = STP_resistance_supply_asset
 				}
 				else_if = {
@@ -2044,9 +2044,12 @@ STP_cw_pay_assault_division = {
 STP_cw_cancel_assault_training = {
 	if = {
 		limit = { has_country_flag = STP_cw_assault_training_reserved }
+		set_temp_variable = { var = STP_cw_cash_refund value = 500 }
+		if = { limit = { has_variable = STP_cw_assault_training_deposit } set_temp_variable = { var = STP_cw_cash_refund value = STP_cw_assault_training_deposit } }
+		clear_variable = STP_cw_assault_training_deposit
 		clr_country_flag = STP_cw_assault_training_reserved
-		add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_cw_cash_refund }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_cw_cash_refund }
 		ADISCORD_economy_mark_dirty = yes
 		STP_political_action_slot_release = yes
 	}
@@ -2309,9 +2312,11 @@ STP_cw_finish_mobilization = {
 
 STP_cw_refund_arsenal_project = {
 	if = {
-		limit = { hidden_trigger = { check_variable = { var = STP_cw_arsenal_deposit value = 100 compare = equals } } }
-		hidden_effect = { clear_variable = STP_cw_arsenal_deposit }
-		ADISCORD_economy_receive_50 = yes
+		limit = { has_variable = STP_cw_arsenal_deposit }
+		set_temp_variable = { var = STP_cw_cash_refund value = STP_cw_arsenal_deposit }
+		multiply_temp_variable = { var = STP_cw_cash_refund value = 0.5 }
+		clear_variable = STP_cw_arsenal_deposit
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_cw_cash_refund } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_cw_cash_refund } ADISCORD_economy_mark_dirty = yes
 	}
 }
 
@@ -2511,12 +2516,12 @@ STP_cw_transfer_preparation_modifiers = {
 	# Unfinished northern treasury belongs to Shabrat after the successor economy exists.
 	if = {
 		limit = { has_variable = STP_cw_northern_fort_deposit }
-		STS = { ADISCORD_economy_receive_100 = yes }
+		STS = { add_to_variable = { var = ADISCORD_economy_treasury value = PREV.STP_cw_northern_fort_deposit } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.STP_cw_northern_fort_deposit } ADISCORD_economy_mark_dirty = yes }
 		clear_variable = STP_cw_northern_fort_deposit
 	}
 	if = {
 		limit = { has_variable = STP_cw_northern_engineer_deposit }
-		STS = { ADISCORD_economy_receive_50 = yes }
+		STS = { add_to_variable = { var = ADISCORD_economy_treasury value = PREV.STP_cw_northern_engineer_deposit } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.STP_cw_northern_engineer_deposit } ADISCORD_economy_mark_dirty = yes }
 		clear_variable = STP_cw_northern_engineer_deposit
 	}
 	if = {
@@ -3814,9 +3819,9 @@ STP_pw_finish_project = {
 			STP_pw_can_reconstruct = yes
 			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
 			OR = {
-				AND = { check_variable = { var = STP_pw_project_kind value = 1 compare = equals } check_variable = { var = STP_pw_project_deposit value = 80 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
-				AND = { check_variable = { var = STP_pw_project_kind value = 2 compare = equals } check_variable = { var = STP_pw_project_deposit value = 120 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } }
-				AND = { check_variable = { var = STP_pw_project_kind value = 3 compare = equals } check_variable = { var = STP_pw_project_deposit value = 60 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals } } }
+				AND = { check_variable = { var = STP_pw_project_kind value = 1 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 720 compare = equals } check_variable = { var = STP_pw_project_deposit value = 250 compare = equals } check_variable = { var = STP_pw_project_deposit value = 80 compare = equals } check_variable = { var = STP_pw_project_deposit value = 96 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
+				AND = { check_variable = { var = STP_pw_project_kind value = 2 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 1080 compare = equals } check_variable = { var = STP_pw_project_deposit value = 500 compare = equals } check_variable = { var = STP_pw_project_deposit value = 120 compare = equals } check_variable = { var = STP_pw_project_deposit value = 144 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } }
+				AND = { check_variable = { var = STP_pw_project_kind value = 3 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 540 compare = equals } check_variable = { var = STP_pw_project_deposit value = 100 compare = equals } check_variable = { var = STP_pw_project_deposit value = 60 compare = equals } check_variable = { var = STP_pw_project_deposit value = 72 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals } } }
 			}
 		}
 		if = {
@@ -4496,14 +4501,14 @@ STP_pc_settle_val_compact = {
 
 STP_pc_credit_val_compact = {
 	if = { limit = { has_country_flag = STP_pw_kefreyt_accounts_settled }
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
-		VAL = { add_to_variable = { var = ADISCORD_economy_treasury value = 100 } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 } }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
+		VAL = { add_to_variable = { var = ADISCORD_economy_treasury value = 900 } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 } }
 	}
 	else = {
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
-		VAL = { add_to_variable = { var = ADISCORD_economy_treasury value = 200 } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 } }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1800 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1800 }
+		VAL = { add_to_variable = { var = ADISCORD_economy_treasury value = 1800 } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1800 } }
 	}
 	set_country_flag = STP_pw_kefreyt_accounts_settled
 }
@@ -4527,9 +4532,9 @@ STP_pc_settle_nod_compact = {
 }
 
 STP_pc_credit_nod_compact = {
-	subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
-	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
-	NOD = { add_to_variable = { var = ADISCORD_economy_treasury value = 150 } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 } }
+	subtract_from_variable = { var = ADISCORD_economy_treasury value = 1350 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1350 }
+	NOD = { add_to_variable = { var = ADISCORD_economy_treasury value = 1350 } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1350 } }
 }
 
 # COUNTRY STP: the programme kind owns the receipt until delivery or refund.
@@ -4540,9 +4545,9 @@ STP_pw_party_finish_project = {
 			STP_pw_can_reconstruct = yes
 			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
 			OR = {
-				AND = { check_variable = { var = STP_pw_project_kind value = 4 compare = equals } check_variable = { var = STP_pw_project_deposit value = 60 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
-				AND = { check_variable = { var = STP_pw_project_kind value = 5 compare = equals } check_variable = { var = STP_pw_project_deposit value = 120 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } STP_pw_party_has_port_capacity = yes }
-				AND = { check_variable = { var = STP_pw_project_kind value = 6 compare = equals } check_variable = { var = STP_pw_project_deposit value = 100 compare = equals } NOT = { check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals } } }
+				AND = { check_variable = { var = STP_pw_project_kind value = 4 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 540 compare = equals } check_variable = { var = STP_pw_project_deposit value = 250 compare = equals } check_variable = { var = STP_pw_project_deposit value = 60 compare = equals } check_variable = { var = STP_pw_project_deposit value = 72 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
+				AND = { check_variable = { var = STP_pw_project_kind value = 5 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 1080 compare = equals } check_variable = { var = STP_pw_project_deposit value = 1000 compare = equals } check_variable = { var = STP_pw_project_deposit value = 120 compare = equals } check_variable = { var = STP_pw_project_deposit value = 144 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } STP_pw_party_has_port_capacity = yes }
+				AND = { check_variable = { var = STP_pw_project_kind value = 6 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 900 compare = equals } check_variable = { var = STP_pw_project_deposit value = 250 compare = equals } check_variable = { var = STP_pw_project_deposit value = 100 compare = equals } check_variable = { var = STP_pw_project_deposit value = 120 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals } } }
 			}
 		}
 		if = {
@@ -4584,9 +4589,13 @@ STP_pw_party_settle_nod_arms = {
 		STP = {
 			clr_country_flag = STP_pw_party_nod_arms_pending
 			set_country_flag = STP_pw_party_nod_arms_delivered
-			ADISCORD_economy_spend_50 = yes
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 450 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 450 }
+			ADISCORD_economy_mark_dirty = yes
 		}
-		ADISCORD_economy_receive_50 = yes
+		add_to_variable = { var = ADISCORD_economy_treasury value = 450 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 450 }
+		ADISCORD_economy_mark_dirty = yes
 		send_equipment = { equipment = infantry_equipment amount = 1000 target = STP }
 		send_equipment = { equipment = support_equipment amount = 100 target = STP }
 		STP = { country_event = { id = ADISCORD_STP_pc.24 hours = 1 } }
@@ -4596,10 +4605,11 @@ STP_pw_party_settle_nod_arms = {
 # COUNTRY STS: the single receipt blocks other targets until delivery or refund.
 STP_cw_refund_disruption = {
 	if = {
-		limit = { check_variable = { var = STP_cw_disruption_deposit value = 100 compare = equals } }
+		limit = { has_variable = STP_cw_disruption_deposit }
+		set_temp_variable = { var = STP_cw_cash_refund value = STP_cw_disruption_deposit }
 		clear_variable = STP_cw_disruption_deposit
 		clr_country_flag = STP_cw_disruption_cooldown
-		ADISCORD_economy_receive_100 = yes
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_cw_cash_refund } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_cw_cash_refund } ADISCORD_economy_mark_dirty = yes
 		add_political_power = 50
 	}
 }
@@ -4607,7 +4617,7 @@ STP_cw_refund_disruption = {
 # COUNTRY STS, FROM state: choose a currently present enemy brigade at settlement.
 STP_cw_finish_disruption = {
 	if = {
-		limit = { check_variable = { var = STP_cw_disruption_deposit value = 100 compare = equals } }
+		limit = { OR = { check_variable = { var = STP_cw_disruption_deposit value = 100 compare = equals } check_variable = { var = STP_cw_disruption_deposit value = 1200 compare = equals } } }
 		if = {
 			limit = { STP_cw_disruption_available = yes FROM = { STP_cw_disruption_target = yes } }
 			clear_variable = STP_cw_disruption_deposit
@@ -4675,4 +4685,53 @@ STP_debug_resolve_shabrat_victory = {
 		if = { limit = { is_ai = no tag = STP } STS = { change_tag_from = STP } }
 		STP = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }
 	}
+}
+
+STP_cw_spend_600 = {
+	ADISCORD_economy_initialize_country = yes
+	subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 600 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_cw_spend_1200 = {
+	ADISCORD_economy_initialize_country = yes
+	subtract_from_variable = { var = ADISCORD_economy_treasury value = 1200 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1200 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_cw_spend_2400 = {
+	ADISCORD_economy_initialize_country = yes
+	subtract_from_variable = { var = ADISCORD_economy_treasury value = 2400 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 2400 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_receive_900 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_receive_1200 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = 1200 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1200 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_receive_3000 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = 3000 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 3000 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_cw_spend_6000 = {
+	ADISCORD_economy_initialize_country = yes
+	subtract_from_variable = { var = ADISCORD_economy_treasury value = 6000 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 6000 }
+	ADISCORD_economy_mark_dirty = yes
 }

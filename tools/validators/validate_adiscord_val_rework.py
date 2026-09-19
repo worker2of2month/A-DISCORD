@@ -888,7 +888,7 @@ def main() -> int:
     for token in (
         "ADISCORD_economy_spend_50",
         "ADISCORD_economy_spend_100",
-        "ADISCORD_economy_spend_200",
+        "ADISCORD_economy_spend_250",
         "ADISCORD_economy_spend_500",
         "ADISCORD_economy_receive_15",
         "ADISCORD_economy_receive_50",

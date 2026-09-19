@@ -53,6 +53,33 @@ def scalar(relative: str, key: str) -> float:
 
 
 class RomTruContentTests(unittest.TestCase):
+    def test_republics_cannot_buy_entry_into_the_central_war(self) -> None:
+        decision = named_block(read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+                               "ADISCORD_vorkerland_join_claimant_coalition")
+        for gate in ("allowed", "available"):
+            self.assertIn("NOT = { OR = { tag = ROM tag = TRU } }",
+                          named_block(decision, gate))
+        host = named_block(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+                           "ADISCORD_vorkerland_is_coalition_host_for_ROOT")
+        self.assertIn("NOT = { ROOT = { OR = { tag = ROM tag = TRU } } }", host)
+
+    def test_league_waits_for_local_settlement_and_does_not_join_wars(self) -> None:
+        hooks = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
+        self.assertIn("AND = { ROOT = { tag = DVA } FROM = { tag = ROM } }", hooks)
+        self.assertIn("AND = { ROOT = { tag = ZTA } FROM = { tag = TRU } }", hooks)
+        self.assertIn("FROM = { country_event = { id = ADISCORD_vorkerland_rom_tru.3 hours = 1 } }", hooks)
+        effect = named_block(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+                             "ADISCORD_vorkerland_form_free_republics_league")
+        for tag in ("ROM", "TRU"):
+            self.assertIn(f"{tag} = {{ exists = yes is_subject = no is_in_faction = no has_capitulated = no }}", effect)
+        for state in (144, 145, 319, 321, 199):
+            self.assertIn(f"owns_state = {state}", effect)
+        self.assertIn("template = faction_template_ADISCORD_standard", effect)
+        self.assertIn("if = { limit = { tag = ROM } add_to_faction = TRU }", effect)
+        self.assertIn("else = { add_to_faction = ROM }", effect)
+        for forbidden in ("declare_war_on", "add_to_war", "set_major", "set_country_flag"):
+            self.assertNotIn(forbidden, effect)
+
     def test_post_split_population_contract_is_generated_and_applied(self) -> None:
         builder = read("tools/builders/build_adiscord_new_states.py")
         expected = {
@@ -127,7 +154,8 @@ class RomTruContentTests(unittest.TestCase):
     def test_visible_events_are_fired_only_on_pair_war_edges(self) -> None:
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'rom_tru_events')
         self.assertIn("add_namespace = ADISCORD_vorkerland_rom_tru", events)
-        self.assertEqual(events.count("country_event = {"), 2)
+        self.assertEqual(events.count("country_event = {"), 3)
+        self.assertEqual(events.count("hidden = yes"), 1)
         for event_id, tag, target, mission in (
             (1, "ROM", "DVA", "ADISCORD_vorkerland_rom_break_valley_administration"),
             (2, "TRU", "ZTA", "ADISCORD_vorkerland_tru_break_zlatorech_administration"),

@@ -77,7 +77,7 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
             "STP_pw_ADISCORD_economy_overall_income_factor",
             "STP_pw_ADISCORD_economy_treasury_capacity_factor",
             "STP_pw_ADISCORD_economy_creditworthiness_factor",
-            "ADISCORD_economy_receive_100 = yes",
+            "STP_receive_900 = yes",
         ):
             self.assertIn(token, focus)
 

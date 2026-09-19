@@ -261,12 +261,12 @@ def validate(root: Path = ROOT) -> list[str]:
     _require(
         economy_gfx,
         r'name\s*=\s*"GFX_ADISCORD_treasury_icon"[\s\S]*?'
-        r'texturefile\s*=\s*"gfx/interface/ADISCORD_economy_gui/treasury_icon\.dds"',
+        r'texturefile\s*=\s*"gfx/texticons/adiscord/custom/treasury\.png"',
         "interface/ADISCORD_economy.gfx",
         "treasury icon sprite is not registered",
         issues,
     )
-    _require_image_size(root, "gfx/interface/ADISCORD_economy_gui/treasury_icon.dds", (24, 24), issues)
+    _require_image_size(root, "gfx/texticons/adiscord/custom/treasury.png", (22, 22), issues)
     for action in (
         "internal_bonds",
         "external_loan",

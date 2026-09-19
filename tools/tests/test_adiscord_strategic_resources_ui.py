@@ -570,15 +570,15 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         self.assertRegex(
             economy_gfx,
             r'name\s*=\s*"GFX_ADISCORD_treasury_icon"[\s\S]*?'
-            r'texturefile\s*=\s*"gfx/interface/ADISCORD_economy_gui/treasury_icon\.dds"',
+            r'texturefile\s*=\s*"gfx/texticons/adiscord/custom/treasury\.png"',
         )
         economy = read(ECONOMY_GUI)
         treasury = named_gui_body(economy, "ADISCORD_economy_treasury_topbar_window")
         self.assertIn('quadTextureSprite = "GFX_generic_box_smallest"', treasury)
         self.assertIn('spriteType = "GFX_ADISCORD_treasury_icon"', treasury)
         self.assertIn('text = "ADISCORD_economy_topbar_treasury_value"', treasury)
-        with Image.open(ROOT / "gfx/interface/ADISCORD_economy_gui/treasury_icon.dds") as image:
-            self.assertEqual(image.size, (24, 24))
+        with Image.open(ROOT / "gfx/texticons/adiscord/custom/treasury.png") as image:
+            self.assertEqual(image.size, (22, 22))
 
     def test_trade_filter_labels_use_lore_regions(self) -> None:
         for path, language in ((RU_TRADE_REGIONS, "russian"), (EN_TRADE_REGIONS, "english")):

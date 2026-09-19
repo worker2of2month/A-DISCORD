@@ -39,6 +39,25 @@ CALLSITE_FILES = (
 
 
 class EmergencyTemplateTests(unittest.TestCase):
+    def test_central_claims_match_theatre_and_successor_cleanup(self):
+        from tools.lib.adiscord_vorkerland_theatre_manifest import VORKERLAND_THEATRE_PACKAGES
+
+        source = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        grants = re.search(r"(?ms)^ADISCORD_vorkerland_grant_central_claimant_cores = \{.*?^\}", source).group(0)
+        expected = {
+            state for tag in ("WKR", "VAD", "TVA", "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV")
+            for state in VORKERLAND_THEATRE_PACKAGES[tag]
+        }
+        actual = {int(value) for value in re.findall(r"^\t(\d+) =", grants, re.M)}
+        self.assertEqual(actual, expected)
+        self.assertEqual(grants.count("add_core_of = WKR"), len(expected))
+        self.assertEqual(grants.count("add_core_of = TVA"), len(expected))
+        cleanup = re.search(r"(?ms)^ADISCORD_vorkerland_inherit_integrated_claimant_cores = \{.*?^\}", source).group(0)
+        self.assertEqual(actual, {int(value) for value in re.findall(r"^\t(\d+) =", cleanup, re.M)})
+        for name in ("reset_temporary_claimant_cores", "ensure_claimant_home_cores"):
+            block = re.search(rf"(?ms)^ADISCORD_vorkerland_{name} = \{{.*?^\}}", source).group(0)
+            self.assertIn("ADISCORD_vorkerland_grant_central_claimant_cores = yes", block)
+
     def test_every_template_has_idempotent_ensure_effect(self):
         source = source_section((ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8-sig"), 'emergency_template_effects')
         for name, effect in MAPPING.items():

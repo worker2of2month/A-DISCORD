@@ -1,7 +1,7 @@
 spriteTypes = {
 	spriteType = {
 		name = "GFX_ADISCORD_treasury_icon"
-		texturefile = "gfx/interface/ADISCORD_economy_gui/treasury_icon.dds"
+		texturefile = "gfx/texticons/adiscord/custom/treasury.png"
 		legacy_lazy_load = no
 	}
 	spriteType = {

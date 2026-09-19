@@ -80,7 +80,7 @@ ideas = {
 			modifier = {
 				consumer_goods_expected_value = 0.38
 				stability_factor = 0.12
-				production_speed_industrial_complex_factor = 0.18
+				production_speed_industrial_complex_factor = 0.25
 				production_speed_arms_factory_factor = -0.40
 				production_speed_dockyard_factor = -0.35
 				conversion_cost_civ_to_mil_factor = 0.40
@@ -90,18 +90,20 @@ ideas = {
 				max_fuel_factor = -0.35
 				fuel_gain_factor = -0.45
 				factory_energy_consumption = -0.30
-				ADISCORD_economy_civilian_factory_income_factor = 0.15
+				ADISCORD_economy_civilian_factory_income_factor = 0.25
 				ADISCORD_economy_military_industry_income_factor = -0.15
 				ADISCORD_economy_army_expense_factor = -0.15
 				ADISCORD_economy_inflation_pressure_factor = -0.08
 				ADISCORD_economy_price_stability_factor = 0.08
 				ADISCORD_economy_creditworthiness_factor = 0.05
 				ADISCORD_economy_state_overload_gain_factor = -0.08
-				ADISCORD_country_development_economic_growth_factor = 0.05
+				ADISCORD_country_development_economic_growth_factor = 0.08
 			}
 
 			default = yes
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		civilian_economy = {
@@ -113,7 +115,7 @@ ideas = {
 			modifier = {
 				consumer_goods_expected_value = 0.30
 				stability_factor = 0.08
-				production_speed_industrial_complex_factor = 0.10
+				production_speed_industrial_complex_factor = 0.16
 				production_speed_arms_factory_factor = -0.25
 				production_speed_dockyard_factor = -0.20
 				conversion_cost_civ_to_mil_factor = 0.25
@@ -123,17 +125,19 @@ ideas = {
 				max_fuel_factor = -0.25
 				fuel_gain_factor = -0.35
 				factory_energy_consumption = -0.25
-				ADISCORD_economy_civilian_factory_income_factor = 0.10
+				ADISCORD_economy_civilian_factory_income_factor = 0.15
 				ADISCORD_economy_military_industry_income_factor = -0.10
 				ADISCORD_economy_army_expense_factor = -0.10
 				ADISCORD_economy_inflation_pressure_factor = -0.05
 				ADISCORD_economy_price_stability_factor = 0.05
 				ADISCORD_economy_creditworthiness_factor = 0.03
 				ADISCORD_economy_state_overload_gain_factor = -0.05
-				ADISCORD_country_development_economic_growth_factor = 0.03
+				ADISCORD_country_development_economic_growth_factor = 0.05
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		low_economic_mobilisation = {
@@ -152,16 +156,16 @@ ideas = {
 			modifier = {
 				consumer_goods_expected_value = 0.24
 				stability_factor = 0.03
-				production_speed_industrial_complex_factor = 0.04
-				production_speed_arms_factory_factor = -0.08
-				production_speed_dockyard_factor = -0.06
+				production_speed_industrial_complex_factor = 0.08
+				production_speed_arms_factory_factor = 0.00
+				production_speed_dockyard_factor = 0.00
 				conversion_cost_civ_to_mil_factor = 0.10
 				conversion_cost_mil_to_civ_factor = -0.05
 				production_factory_max_efficiency_factor = -0.03
 				fuel_gain_factor = -0.20
 				factory_energy_consumption = -0.10
-				ADISCORD_economy_civilian_factory_income_factor = 0.05
-				ADISCORD_economy_military_industry_income_factor = 0.03
+				ADISCORD_economy_civilian_factory_income_factor = 0.08
+				ADISCORD_economy_military_industry_income_factor = 0.05
 				ADISCORD_economy_inflation_pressure_factor = -0.03
 				ADISCORD_economy_state_overload_gain_factor = -0.02
 			}
@@ -172,6 +176,8 @@ ideas = {
 				factor = 2
 				modifier = { factor = 20 is_major = yes }
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		partial_economic_mobilisation = {
@@ -192,15 +198,15 @@ ideas = {
 				war_support_factor = -0.03
 				line_change_production_efficiency_factor = 0.03
 				production_speed_industrial_complex_factor = -0.08
-				production_speed_arms_factory_factor = 0.10
-				production_speed_dockyard_factor = 0.08
-				industrial_capacity_factory = 0.04
-				industrial_capacity_dockyard = 0.04
+				production_speed_arms_factory_factor = 0.15
+				production_speed_dockyard_factor = 0.12
+				industrial_capacity_factory = 0.07
+				industrial_capacity_dockyard = 0.06
 				conversion_cost_civ_to_mil_factor = -0.10
 				conversion_cost_mil_to_civ_factor = -0.10
 				fuel_gain_factor = -0.08
 				factory_energy_consumption = 0.05
-				ADISCORD_economy_military_industry_income_factor = 0.08
+				ADISCORD_economy_military_industry_income_factor = 0.12
 				ADISCORD_economy_construction_expense_factor = 0.05
 				ADISCORD_economy_inflation_pressure_factor = 0.03
 				ADISCORD_economy_creditworthiness_factor = 0.05
@@ -215,6 +221,8 @@ ideas = {
 				factor = 2
 				modifier = { factor = 20 is_major = yes }
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		war_economy = {
@@ -245,17 +253,17 @@ ideas = {
 				political_power_factor = -0.05
 				war_support_factor = -0.08
 				line_change_production_efficiency_factor = 0.05
-				production_factory_max_efficiency_factor = 0.05
-				industrial_capacity_factory = 0.10
-				industrial_capacity_dockyard = 0.08
+				production_factory_max_efficiency_factor = 0.08
+				industrial_capacity_factory = 0.15
+				industrial_capacity_dockyard = 0.12
 				production_speed_industrial_complex_factor = -0.20
-				production_speed_arms_factory_factor = 0.20
-				production_speed_dockyard_factor = 0.16
+				production_speed_arms_factory_factor = 0.30
+				production_speed_dockyard_factor = 0.24
 				conversion_cost_civ_to_mil_factor = -0.20
 				conversion_cost_mil_to_civ_factor = -0.20
 				factory_energy_consumption = 0.20
 				ADISCORD_economy_civilian_factory_income_factor = -0.05
-				ADISCORD_economy_military_industry_income_factor = 0.15
+				ADISCORD_economy_military_industry_income_factor = 0.20
 				ADISCORD_economy_army_expense_factor = 0.10
 				ADISCORD_economy_construction_expense_factor = 0.10
 				ADISCORD_economy_inflation_pressure_factor = 0.08
@@ -272,6 +280,8 @@ ideas = {
 				factor = 5
 				modifier = { factor = 20 manpower_per_military_factory > 1000 }
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		tot_economic_mobilisation = {
@@ -295,18 +305,18 @@ ideas = {
 				war_support_factor = -0.18
 				conscription = -0.02
 				line_change_production_efficiency_factor = -0.08
-				production_factory_max_efficiency_factor = 0.12
-				industrial_capacity_factory = 0.24
-				industrial_capacity_dockyard = 0.16
+				production_factory_max_efficiency_factor = 0.16
+				industrial_capacity_factory = 0.32
+				industrial_capacity_dockyard = 0.24
 				production_speed_industrial_complex_factor = -0.35
-				production_speed_arms_factory_factor = 0.32
-				production_speed_dockyard_factor = 0.24
+				production_speed_arms_factory_factor = 0.45
+				production_speed_dockyard_factor = 0.35
 				conversion_cost_civ_to_mil_factor = -0.35
 				conversion_cost_mil_to_civ_factor = -0.30
 				fuel_gain_factor = 0.05
 				factory_energy_consumption = 0.40
 				ADISCORD_economy_civilian_factory_income_factor = -0.15
-				ADISCORD_economy_military_industry_income_factor = 0.25
+				ADISCORD_economy_military_industry_income_factor = 0.35
 				ADISCORD_economy_army_expense_factor = 0.20
 				ADISCORD_economy_construction_expense_factor = 0.15
 				ADISCORD_economy_inflation_pressure_factor = 0.15
@@ -334,6 +344,8 @@ ideas = {
 					}
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -347,13 +359,13 @@ ideas = {
 
 			modifier = {
 				min_export = 0.80
-				industrial_capacity_factory = 0.12
-				industrial_capacity_dockyard = 0.12
-				production_speed_buildings_factor = 0.12
-				research_speed_factor = 0.08
+				industrial_capacity_factory = 0.15
+				industrial_capacity_dockyard = 0.15
+				production_speed_buildings_factor = 0.15
+				research_speed_factor = 0.10
 				civilian_intel_to_others = 35.0
 				navy_intel_to_others = 20.0
-				ADISCORD_economy_trade_income_factor = 0.15
+				ADISCORD_economy_trade_income_factor = 0.22
 				ADISCORD_economy_resource_rent_income_factor = -0.05
 				ADISCORD_economy_admin_expense_factor = -0.03
 				ADISCORD_country_development_economic_growth_factor = 0.05
@@ -367,6 +379,8 @@ ideas = {
 				modifier = { factor = 0 has_government = chauvinism }
 				modifier = { factor = 0 has_government = utilitarism }
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		export_focus = {
@@ -375,13 +389,13 @@ ideas = {
 
 			modifier = {
 				min_export = 0.50
-				industrial_capacity_factory = 0.08
-				industrial_capacity_dockyard = 0.08
-				production_speed_buildings_factor = 0.08
-				research_speed_factor = 0.04
+				industrial_capacity_factory = 0.10
+				industrial_capacity_dockyard = 0.10
+				production_speed_buildings_factor = 0.10
+				research_speed_factor = 0.06
 				civilian_intel_to_others = 20.0
 				navy_intel_to_others = 10.0
-				ADISCORD_economy_trade_income_factor = 0.10
+				ADISCORD_economy_trade_income_factor = 0.15
 				ADISCORD_economy_resource_rent_income_factor = 0.05
 			}
 
@@ -389,6 +403,8 @@ ideas = {
 			cancel_if_invalid = no
 
 			ai_will_do = { factor = 1 }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		limited_exports = {
@@ -415,15 +431,15 @@ ideas = {
 
 			modifier = {
 				min_export = 0.25
-				industrial_capacity_factory = 0.04
-				industrial_capacity_dockyard = 0.04
-				production_speed_buildings_factor = 0.04
-				research_speed_factor = 0.01
+				industrial_capacity_factory = 0.06
+				industrial_capacity_dockyard = 0.06
+				production_speed_buildings_factor = 0.06
+				research_speed_factor = 0.02
 				civilian_intel_to_others = 10.0
 				navy_intel_to_others = 5.0
 				lend_lease_tension = 0.20
 				ADISCORD_economy_trade_income_factor = 0.03
-				ADISCORD_economy_resource_rent_income_factor = 0.08
+				ADISCORD_economy_resource_rent_income_factor = 0.12
 				ADISCORD_economy_admin_expense_factor = 0.03
 			}
 
@@ -434,6 +450,8 @@ ideas = {
 				modifier = { factor = 0 is_major = no is_in_faction = yes has_war = yes }
 				modifier = { factor = 0 is_major = no has_war = no }
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		closed_economy = {
@@ -462,12 +480,15 @@ ideas = {
 				min_export = 0
 				lend_lease_tension = 0.35
 				ADISCORD_economy_trade_income_factor = -0.15
-				ADISCORD_economy_resource_rent_income_factor = 0.10
+				ADISCORD_economy_resource_rent_income_factor = 0.15
 				ADISCORD_economy_admin_expense_factor = 0.05
 				ADISCORD_economy_state_overload_gain_factor = 0.05
+				industrial_capacity_factory = 0.06
+				local_resources_factor = 0.10
+				production_factory_efficiency_gain_factor = 0.05
 			}
 
-			on_add = { custom_effect_tooltip = closed_economy_TT }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } custom_effect_tooltip = closed_economy_TT }
 
 			cancel_if_invalid = no
 
@@ -476,6 +497,7 @@ ideas = {
 				modifier = { factor = 0 is_major = no is_in_faction = yes has_war = yes }
 				modifier = { factor = 0 is_major = no has_war = no }
 			}
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -490,7 +512,7 @@ ideas = {
 
 			modifier = {
 				consumer_goods_expected_value = 0.12
-				local_resources_factor = 0.08
+				local_resources_factor = 0.15
 				min_export = -0.05
 				stability_factor = 0.02
 				industrial_capacity_factory = -0.14
@@ -499,10 +521,10 @@ ideas = {
 				production_speed_arms_factory_factor = -0.16
 				production_factory_efficiency_gain_factor = -0.08
 				research_speed_factor = -0.18
-				monthly_population = 0.10
+				monthly_population = 0.15
 				factory_energy_consumption = -0.25
 				ADISCORD_economy_population_tax_income_factor = -0.05
-				ADISCORD_economy_resource_rent_income_factor = 0.10
+				ADISCORD_economy_resource_rent_income_factor = 0.15
 				ADISCORD_economy_civilian_factory_income_factor = -0.05
 				ADISCORD_economy_military_industry_income_factor = -0.10
 				ADISCORD_economy_creditworthiness_factor = -0.10
@@ -510,6 +532,8 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_economic_system_industrializing = {
@@ -524,13 +548,13 @@ ideas = {
 				stability_factor = -0.02
 				industrial_capacity_factory = -0.04
 				industrial_capacity_dockyard = -0.02
-				production_speed_industrial_complex_factor = 0.10
-				production_speed_arms_factory_factor = 0.04
-				production_speed_buildings_factor = 0.06
-				production_factory_efficiency_gain_factor = 0.06
+				production_speed_industrial_complex_factor = 0.16
+				production_speed_arms_factory_factor = 0.06
+				production_speed_buildings_factor = 0.08
+				production_factory_efficiency_gain_factor = 0.10
 				research_speed_factor = -0.06
 				factory_energy_consumption = -0.08
-				ADISCORD_economy_civilian_factory_income_factor = 0.10
+				ADISCORD_economy_civilian_factory_income_factor = 0.15
 				ADISCORD_economy_construction_expense_factor = 0.05
 				ADISCORD_economy_creditworthiness_factor = 0.05
 				ADISCORD_economy_investment_confidence_factor = 0.03
@@ -539,6 +563,8 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_economic_system_free_market = {
@@ -559,18 +585,18 @@ ideas = {
 				consumer_goods_expected_value = 0.08
 				min_export = 0.15
 				local_resources_factor = -0.03
-				industrial_capacity_factory = 0.05
-				industrial_capacity_dockyard = 0.04
+				industrial_capacity_factory = 0.08
+				industrial_capacity_dockyard = 0.06
 				line_change_production_efficiency_factor = 0.10
-				production_factory_max_efficiency_factor = 0.05
-				production_factory_efficiency_gain_factor = 0.06
-				production_speed_buildings_factor = 0.03
-				research_speed_factor = 0.03
+				production_factory_max_efficiency_factor = 0.08
+				production_factory_efficiency_gain_factor = 0.10
+				production_speed_buildings_factor = 0.05
+				research_speed_factor = 0.05
 				stability_factor = -0.02
 				war_support_factor = -0.05
 				ADISCORD_economy_tax_collection_factor = -0.05
-				ADISCORD_economy_trade_income_factor = 0.15
-				ADISCORD_economy_civilian_factory_income_factor = 0.10
+				ADISCORD_economy_trade_income_factor = 0.22
+				ADISCORD_economy_civilian_factory_income_factor = 0.15
 				ADISCORD_economy_admin_expense_factor = -0.05
 				ADISCORD_economy_interest_rate_factor = -0.05
 				ADISCORD_economy_creditworthiness_factor = 0.15
@@ -581,6 +607,8 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_economic_system_mixed = {
@@ -592,18 +620,18 @@ ideas = {
 				consumer_goods_expected_value = 0.05
 				min_export = 0.05
 				local_resources_factor = 0.03
-				industrial_capacity_factory = 0.04
-				industrial_capacity_dockyard = 0.03
+				industrial_capacity_factory = 0.06
+				industrial_capacity_dockyard = 0.05
 				line_change_production_efficiency_factor = 0.04
 				production_factory_max_efficiency_factor = 0.05
 				production_factory_efficiency_gain_factor = 0.03
-				production_speed_buildings_factor = 0.04
-				stability_factor = 0.03
-				ADISCORD_economy_tax_collection_factor = 0.03
-				ADISCORD_economy_trade_income_factor = 0.03
-				ADISCORD_economy_civilian_factory_income_factor = 0.03
-				ADISCORD_economy_resource_rent_income_factor = 0.03
-				ADISCORD_economy_building_income_factor = 0.03
+				production_speed_buildings_factor = 0.07
+				stability_factor = 0.04
+				ADISCORD_economy_tax_collection_factor = 0.05
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_civilian_factory_income_factor = 0.05
+				ADISCORD_economy_resource_rent_income_factor = 0.05
+				ADISCORD_economy_building_income_factor = 0.05
 				ADISCORD_economy_creditworthiness_factor = 0.03
 				ADISCORD_economy_price_stability_factor = 0.03
 				ADISCORD_economy_investment_confidence_factor = 0.03
@@ -612,6 +640,8 @@ ideas = {
 
 			default = yes
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_economic_system_state_coordinated = {
@@ -634,13 +664,13 @@ ideas = {
 				local_resources_factor = 0.05
 				industrial_capacity_factory = 0.05
 				industrial_capacity_dockyard = 0.04
-				production_speed_industrial_complex_factor = 0.08
-				production_speed_arms_factory_factor = 0.06
-				production_speed_buildings_factor = 0.08
+				production_speed_industrial_complex_factor = 0.12
+				production_speed_arms_factory_factor = 0.10
+				production_speed_buildings_factor = 0.12
 				political_power_gain = -0.03
 				stability_factor = 0.02
-				ADISCORD_economy_building_income_factor = 0.10
-				ADISCORD_economy_construction_expense_factor = -0.05
+				ADISCORD_economy_building_income_factor = 0.15
+				ADISCORD_economy_construction_expense_factor = -0.08
 				ADISCORD_economy_admin_expense_factor = 0.10
 				ADISCORD_economy_creditworthiness_factor = 0.10
 				ADISCORD_economy_fiscal_stress_resistance_factor = 0.05
@@ -648,6 +678,8 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_economic_system_planned_bureaucratic = {
@@ -668,18 +700,18 @@ ideas = {
 				consumer_goods_expected_value = 0.08
 				min_export = -0.10
 				local_resources_factor = 0.10
-				industrial_capacity_factory = 0.10
-				industrial_capacity_dockyard = 0.06
+				industrial_capacity_factory = 0.15
+				industrial_capacity_dockyard = 0.10
 				line_change_production_efficiency_factor = -0.15
-				production_factory_max_efficiency_factor = 0.12
+				production_factory_max_efficiency_factor = 0.18
 				production_factory_efficiency_gain_factor = 0.03
 				production_speed_industrial_complex_factor = 0.04
-				production_speed_arms_factory_factor = 0.10
-				production_speed_buildings_factor = 0.06
+				production_speed_arms_factory_factor = 0.15
+				production_speed_buildings_factor = 0.08
 				political_power_gain = -0.05
 				factory_energy_consumption = 0.12
 				ADISCORD_economy_trade_income_factor = -0.10
-				ADISCORD_economy_military_industry_income_factor = 0.10
+				ADISCORD_economy_military_industry_income_factor = 0.15
 				ADISCORD_economy_construction_expense_factor = -0.05
 				ADISCORD_economy_admin_expense_factor = 0.15
 				ADISCORD_economy_creditworthiness_factor = 0.10
@@ -691,6 +723,8 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_economic_system_syndicalist = {
@@ -709,18 +743,18 @@ ideas = {
 			modifier = {
 				consumer_goods_expected_value = 0.05
 				min_export = -0.05
-				industrial_capacity_factory = 0.03
-				production_speed_industrial_complex_factor = 0.10
-				production_speed_infrastructure_factor = 0.05
+				industrial_capacity_factory = 0.05
+				production_speed_industrial_complex_factor = 0.15
+				production_speed_infrastructure_factor = 0.10
 				line_change_production_efficiency_factor = -0.05
-				production_factory_max_efficiency_factor = 0.05
-				production_factory_efficiency_gain_factor = 0.05
+				production_factory_max_efficiency_factor = 0.08
+				production_factory_efficiency_gain_factor = 0.08
 				political_power_gain = -0.03
-				stability_factor = 0.05
-				ADISCORD_economy_tax_collection_factor = 0.05
+				stability_factor = 0.07
+				ADISCORD_economy_tax_collection_factor = 0.08
 				ADISCORD_economy_trade_income_factor = -0.05
-				ADISCORD_economy_civilian_factory_income_factor = 0.10
-				ADISCORD_economy_building_income_factor = 0.08
+				ADISCORD_economy_civilian_factory_income_factor = 0.15
+				ADISCORD_economy_building_income_factor = 0.12
 				ADISCORD_economy_admin_expense_factor = 0.08
 				ADISCORD_economy_creditworthiness_factor = -0.05
 				ADISCORD_economy_price_stability_factor = 0.05
@@ -729,6 +763,8 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_economic_system_oligarchic_clan = {
@@ -749,18 +785,18 @@ ideas = {
 				consumer_goods_expected_value = 0.06
 				min_export = 0.10
 				local_resources_factor = 0.08
-				industrial_capacity_factory = 0.08
-				industrial_capacity_dockyard = 0.05
-				production_factory_max_efficiency_factor = 0.08
+				industrial_capacity_factory = 0.12
+				industrial_capacity_dockyard = 0.08
+				production_factory_max_efficiency_factor = 0.12
 				production_factory_efficiency_gain_factor = 0.04
 				production_speed_buildings_factor = 0.06
 				political_power_gain = 0.03
 				stability_factor = -0.05
 				war_support_factor = 0.03
 				ADISCORD_economy_tax_collection_factor = -0.15
-				ADISCORD_economy_trade_income_factor = 0.10
-				ADISCORD_economy_resource_rent_income_factor = 0.10
-				ADISCORD_economy_building_income_factor = 0.05
+				ADISCORD_economy_trade_income_factor = 0.15
+				ADISCORD_economy_resource_rent_income_factor = 0.15
+				ADISCORD_economy_building_income_factor = 0.08
 				ADISCORD_economy_admin_expense_factor = 0.05
 				ADISCORD_economy_creditworthiness_factor = -0.10
 				ADISCORD_economy_deficit_pressure_factor = 0.05
@@ -770,6 +806,8 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_economic_system_technocratic = {
@@ -791,14 +829,14 @@ ideas = {
 				industrial_capacity_factory = 0.06
 				industrial_capacity_dockyard = 0.04
 				line_change_production_efficiency_factor = 0.08
-				production_factory_max_efficiency_factor = 0.10
-				production_factory_efficiency_gain_factor = 0.08
-				production_speed_buildings_factor = 0.05
-				research_speed_factor = 0.10
+				production_factory_max_efficiency_factor = 0.15
+				production_factory_efficiency_gain_factor = 0.12
+				production_speed_buildings_factor = 0.08
+				research_speed_factor = 0.15
 				political_power_gain = -0.06
 				stability_factor = -0.03
 				factory_energy_consumption = 0.10
-				ADISCORD_economy_overall_income_factor = 0.05
+				ADISCORD_economy_overall_income_factor = 0.08
 				ADISCORD_economy_research_expense_factor = 0.10
 				ADISCORD_economy_admin_expense_factor = 0.05
 				ADISCORD_economy_interest_rate_factor = -0.05
@@ -807,10 +845,12 @@ ideas = {
 				ADISCORD_economy_fiscal_stress_resistance_factor = 0.10
 				ADISCORD_economy_investment_confidence_factor = 0.10
 				ADISCORD_economy_overload_resistance_factor = 0.05
-				ADISCORD_country_development_economic_growth_factor = 0.15
+				ADISCORD_country_development_economic_growth_factor = 0.20
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 }

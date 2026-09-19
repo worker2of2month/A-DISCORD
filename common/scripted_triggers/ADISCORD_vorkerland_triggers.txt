@@ -378,6 +378,7 @@ ADISCORD_vorkerland_has_live_local_rival = {
 # winner. Membership plus add_to_war splices the winner into the war the host is
 # already fighting, so the host must own a faction it can actually lead.
 ADISCORD_vorkerland_is_coalition_host_for_ROOT = {
+	NOT = { ROOT = { OR = { tag = ROM tag = TRU } } }
 	ADISCORD_vorkerland_is_main_claimant = yes
 	exists = yes
 	is_subject = no
@@ -1308,7 +1309,7 @@ ADISCORD_vorkerland_is_live_claimant = {
 }
 
 # The nine district campaigns stay open through the central showdown. They are
-# the only source of the 24 central district cores that reunification requires,
+# the route to the 24 central districts required for reunification,
 # so restricting them to the preparation phase makes the war unwinnable once the
 # showdown clears that flag. Reunification and postwar still never reopen them.
 ADISCORD_vorkerland_central_minor_campaign_phase_available = {

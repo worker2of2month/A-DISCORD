@@ -8,8 +8,8 @@ ADISCORD_economy_can_spend_100 = {
 	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 }
 
-ADISCORD_economy_can_spend_200 = {
-	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+ADISCORD_economy_can_spend_250 = {
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
 }
 
 ADISCORD_economy_can_spend_500 = {

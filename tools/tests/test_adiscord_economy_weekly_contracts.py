@@ -323,11 +323,14 @@ def weekly_reachability_issues(texts, roots=WEEKLY_ACCOUNTING_ROOTS):
             keys.append(entry.key)
             if isinstance(entry.value, str):
                 scalar_values.append(entry.value)
+        # A single spirit lookup at the funded construction transition is bounded;
+        # policy/law queries and factory scans remain outside weekly accounting.
         offenders = sorted(
             {
                 token
                 for token in keys
-                if token in WEEKLY_FORBIDDEN_EXACT_TOKENS
+                if (token in WEEKLY_FORBIDDEN_EXACT_TOKENS
+                    and not (token == "has_idea" and name == "ADISCORD_economy_has_idea_overflow_investments"))
                 or any(token.startswith(prefix) for prefix in WEEKLY_FORBIDDEN_TOKEN_PREFIXES)
             }
             | {
@@ -3995,13 +3998,13 @@ class WeeklyEconomyContracts(unittest.TestCase):
             1: ("§G-70%§!", "§R-8%§!"),
             2: ("§G-35%§!", "§R-3%§!"),
             3: ("§Y0%§!", "§Y0%§!"),
-            4: ("§R+30%§!", "§G+3%§!"),
-            5: ("§R+60%§!", "§G+5%§!"),
+            4: ("§R+30%§!", "§G+8%§!"),
+            5: ("§R+60%§!", "§G+15%§!"),
         }
         for expense, research_speed in expected.values():
             self.assertIn(expense, controls)
             self.assertIn(research_speed, controls)
-        self.assertIn("скорость строительства §G+2%§!", controls)
+        self.assertIn("скорость строительства §G+5%§!", controls)
 
         keys = localisation_key_set(ECONOMY_LOC)
         for level, (expense, research_speed) in expected.items():
@@ -4026,7 +4029,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 ):
                     self.assertNotIn(obsolete_claim, value.lower())
                 if level == 5:
-                    self.assertIn("скорость строительства §G+2%§!", value)
+                    self.assertIn("скорость строительства §G+5%§!", value)
                 else:
                     self.assertNotIn("строительств", value.lower())
 
@@ -4053,7 +4056,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             )
             if level == 5:
                 self.assertIn(
-                    "скорость строительства §G+2%§!", idea_description
+                    "скорость строительства §G+5%§!", idea_description
                 )
             else:
                 self.assertNotIn("строительств", idea_description.lower())
@@ -4090,7 +4093,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             r"\s+min\s*=\s*0\s+max\s*=\s*3\s*\}",
         )
 
-        expected_research = {1: -0.08, 2: -0.03, 3: 0.0, 4: 0.03, 5: 0.05}
+        expected_research = {1: -0.08, 2: -0.03, 3: 0.0, 4: 0.08, 5: 0.15}
         for level, expected in expected_research.items():
             idea = unique_block(
                 ECONOMY_IDEAS, f"ADISCORD_economy_research_spending_{level}"
@@ -4100,7 +4103,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 idea, "production_speed_buildings_factor"
             )
             if level == 5:
-                self.assertEqual(construction_bonuses, [0.02])
+                self.assertEqual(construction_bonuses, [0.05])
             else:
                 self.assertEqual(construction_bonuses, [])
         all_construction_bonuses = numeric_values(
@@ -4112,7 +4115,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             ),
             "production_speed_buildings_factor",
         )
-        self.assertTrue(all(value <= 0.03 for value in all_construction_bonuses))
+        self.assertTrue(all(value <= 0.05 for value in all_construction_bonuses))
 
     def test_policy_accounting_tables_have_five_exact_condition_owned_levels(self):
         tax_outputs = {
@@ -4141,15 +4144,15 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 ("add_to_variable", "ADISCORD_economy_consumer_goods_income", 0.00),
             ),
             4: (
-                ("multiply_variable", "ADISCORD_economy_personal_income", 1.15),
-                ("multiply_variable", "ADISCORD_economy_business_income", 1.08),
-                ("multiply_variable", "ADISCORD_economy_factory_income", 1.05),
+                ("multiply_variable", "ADISCORD_economy_personal_income", 1.25),
+                ("multiply_variable", "ADISCORD_economy_business_income", 1.12),
+                ("multiply_variable", "ADISCORD_economy_factory_income", 1.08),
                 ("add_to_variable", "ADISCORD_economy_consumer_goods_income", -0.10),
             ),
             5: (
-                ("multiply_variable", "ADISCORD_economy_personal_income", 1.35),
-                ("multiply_variable", "ADISCORD_economy_business_income", 1.15),
-                ("multiply_variable", "ADISCORD_economy_factory_income", 1.10),
+                ("multiply_variable", "ADISCORD_economy_personal_income", 1.50),
+                ("multiply_variable", "ADISCORD_economy_business_income", 1.25),
+                ("multiply_variable", "ADISCORD_economy_factory_income", 1.15),
                 ("add_to_variable", "ADISCORD_economy_consumer_goods_income", -0.30),
             ),
         }
@@ -8498,7 +8501,7 @@ class EconomyScriptFixture:
 
     def __init__(self, countries=None, facts=None, stubs=()):
         self.scopes = countries if countries is not None else {"A": {}}
-        self.facts = facts or {}
+        self.facts = {"STP_uses_campaign_currency_scale": False, **(facts or {})}
         self.stubs = set(stubs)
         self.calls = []
         self.definitions = {
@@ -8527,6 +8530,10 @@ class EconomyScriptFixture:
                 return value == "yes"
             if key == "has_variable":
                 return value in self.scopes[scope]
+            if key == "has_idea":
+                return self.scopes[scope].get("idea@" + value, False)
+            if key == "has_country_flag":
+                return bool(self.scopes[scope].get(value, False))
             if key == "is_controlled_by":
                 target = previous if value == "PREV" else root if value == "ROOT" else value
                 return self.scopes[scope]["controller"] == target
@@ -8573,11 +8580,18 @@ class EconomyScriptFixture:
                     branch_taken = True
             elif key in ("ROOT", "PREV"):
                 self.execute(value, root if key == "ROOT" else previous, scope, root)
+            elif key in self.scopes and isinstance(value, list):
+                self.execute(value, key, scope, root)
             elif key == "every_owned_state":
                 for state in self.scopes[scope].get("states", []):
                     self.execute(value, state, scope, root)
             elif key in ("set_country_flag", "clr_country_flag"):
-                self.scopes[scope][value] = key == "set_country_flag"
+                flag = next(child.value for child in value if child.key == "flag") if isinstance(value, list) else value
+                self.scopes[scope][flag] = key == "set_country_flag"
+            elif key in ("add_ideas", "remove_ideas") and isinstance(value, str):
+                self.scopes[scope]["idea@" + value] = key == "add_ideas"
+            elif key == "clear_variable":
+                self.scopes[scope].pop(value, None)
             elif key.endswith("_variable"):
                 fields = {child.key: child.value for child in value}
                 target = fields.get("var", next(iter(fields)))
@@ -8721,13 +8735,13 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
         fixture = EconomyScriptFixture(stubs=tuple(self.PREFIX + key for key in (
             "recalculate_treasury_cap", "update_debt_state_after_settlement", "queue_debt_notification")))
         values = fixture.scopes["A"]
-        for key, value in {"treasury": 800, "treasury_cap": 700,
-                           "accounting_period_treasury_start": 800, "weekly_balance": 0}.items():
+        for key, value in {"treasury": 1800, "treasury_cap": 1700,
+                           "accounting_period_treasury_start": 1800, "weekly_balance": 0}.items():
             values[self.PREFIX + key] = value
         fixture.run(self.PREFIX + "clamp_all_variables")
-        self.assertEqual(values[self.PREFIX + "treasury"], 800)
+        self.assertEqual(values[self.PREFIX + "treasury"], 1800)
         fixture.run(self.PREFIX + "apply_weekly_balance")
-        self.assertEqual(values[self.PREFIX + "treasury"], 700)
+        self.assertEqual(values[self.PREFIX + "treasury"], 1700)
         self.assertEqual(values[self.PREFIX + "last_period_cap_writeoff"], 100)
         self.assertEqual(values[self.PREFIX + "last_period_unexplained_delta"], 0)
 

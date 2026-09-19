@@ -37,6 +37,16 @@ set_popularities = {
 }
 
 add_ideas = {
+	ADISCORD_society_type_industrial
+	ADISCORD_information_state_bulletins
+	ADISCORD_military_organization_contract_brigades
+	ADISCORD_education_apprenticeship
+	ADISCORD_industrial_policy_military_prioritization
+	ADISCORD_officer_corps_field_commissions
+	ADISCORD_logistics_regional_warehouses
+	ADISCORD_training_reserve_cycles
+	ADISCORD_internal_security_investigative_bureaus
+
 	VAL_mercenary_state
 	VAL_worldwide_famous_weponry
 	VAL_harvest_of_ash

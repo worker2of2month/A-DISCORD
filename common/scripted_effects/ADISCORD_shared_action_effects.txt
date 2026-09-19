@@ -14,10 +14,10 @@ ADISCORD_economy_spend_100 = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
-ADISCORD_economy_spend_200 = {
+ADISCORD_economy_spend_250 = {
 	ADISCORD_economy_initialize_country = yes
-	add_to_variable = { var = ADISCORD_economy_treasury value = -200 }
-	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+	add_to_variable = { var = ADISCORD_economy_treasury value = -250 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
 	ADISCORD_economy_mark_dirty = yes
 }
 

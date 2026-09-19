@@ -1,4 +1,13 @@
 ideas = {
+	country = {
+		ADISCORD_economy_overflow_investments = {
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = { production_speed_buildings_factor = 0.05 }
+		}
+	}
 	hidden_ideas = {
 		ADISCORD_economy_army_spending_1 = {
 			allowed = { always = no }
@@ -36,11 +45,14 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			picture = generic_manpower_bonus
+
 			modifier = {
-				army_org_factor = 0.04
-				army_morale_factor = 0.04
-				mobilization_speed = 0.08
-				command_power_gain = 0.03
+				army_org_factor = 0.10
+				army_morale_factor = 0.08
+				mobilization_speed = 0.25
+				command_power_gain = 0.05
+				army_attack_factor = 0.03
+				army_defence_factor = 0.03
 			}
 		}
 		ADISCORD_economy_army_spending_5 = {
@@ -48,13 +60,16 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			picture = generic_manpower_bonus
+
 			modifier = {
-				army_org_factor = 0.07
-				army_morale_factor = 0.07
-				mobilization_speed = 0.15
-				training_time_factor = -0.05
-				command_power_gain = 0.06
+				army_org_factor = 0.18
+				army_morale_factor = 0.15
+				mobilization_speed = 0.50
+				training_time_factor = -0.10
+				command_power_gain = 0.10
 				stability_factor = -0.02
+				army_attack_factor = 0.05
+				army_defence_factor = 0.05
 			}
 		}
 
@@ -90,8 +105,9 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			picture = generic_research_bonus
+
 			modifier = {
-				research_speed_factor = 0.03
+				research_speed_factor = 0.08
 			}
 		}
 		ADISCORD_economy_research_spending_5 = {
@@ -99,9 +115,10 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			picture = generic_research_bonus
+
 			modifier = {
-				research_speed_factor = 0.05
-				production_speed_buildings_factor = 0.02
+				research_speed_factor = 0.15
+				production_speed_buildings_factor = 0.05
 			}
 		}
 
@@ -130,14 +147,24 @@ ideas = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			picture = generic_manpower_bonus
-			modifier = { stability_factor = 0.015 }
+
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.05
+				monthly_population = 0.05
+			}
 		}
 		ADISCORD_economy_social_spending_5 = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			picture = generic_manpower_bonus
-			modifier = { stability_factor = 0.03 political_power_gain = 0.02 }
+
+			modifier = {
+				stability_factor = 0.10
+				political_power_gain = 0.10
+				monthly_population = 0.10
+			}
 		}
 
 		ADISCORD_economy_civilian_investment = {

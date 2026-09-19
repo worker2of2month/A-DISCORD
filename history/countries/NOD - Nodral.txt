@@ -38,6 +38,16 @@ set_popularities = {
 }
 
 add_ideas = {
+	ADISCORD_society_type_post_industrial
+	ADISCORD_information_public_broadcasting
+	ADISCORD_taxation_corporate_assessment
+	ADISCORD_military_organization_general_staff
+	ADISCORD_welfare_employer_insurance
+	ADISCORD_cultural_policy_public_entertainment
+	ADISCORD_industrial_policy_export_contracts
+	ADISCORD_labor_policy_loose_contracts
+	ADISCORD_infrastructure_port_network
+
 	limited_conscription
 	NOD_home_of_hedonist_revolution
 	NOD_hedonism_with_no_bondaries

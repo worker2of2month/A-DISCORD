@@ -264,7 +264,7 @@ def collect_issues() -> list[str]:
     )
     if "has_global_flag = ADISCORD_vorkerland_phase_central_preparation" not in minor_phase_trigger:
         issues.append("central minor campaign phase trigger lacks central preparation")
-    # District integration is the only source of the 24 central district cores that
+    # District integration remains available across the 24 central districts that
     # reunification requires, so it has to survive the showdown transition. Closing
     # it at the end of preparation makes phase.6 unreachable and the war endless.
     if "has_global_flag = ADISCORD_vorkerland_phase_central_showdown" not in minor_phase_trigger:

@@ -1528,19 +1528,20 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         self.assertNotIn('name = "ADISCORD_economy_topbar_icon"', self.gui)
         self.assertNotIn('name = "ADISCORD_economy_topbar_value"', self.gui)
 
-    def test_treasury_sprite_has_a_real_temporary_asset(self):
+    def test_treasury_sprite_uses_the_currency_texticon_asset(self):
         self.assertIn('name = "GFX_ADISCORD_treasury_icon"', self.gfx)
         self.assertIn(
-            'texturefile = "gfx/interface/ADISCORD_economy_gui/treasury_icon.dds"',
+            'texturefile = "gfx/texticons/adiscord/custom/treasury.png"',
             self.gfx,
         )
         self.assertTrue(
             (
                 ROOT
                 / 'gfx'
-                / 'interface'
-                / 'ADISCORD_economy_gui'
-                / 'treasury_icon.dds'
+                / 'texticons'
+                / 'adiscord'
+                / 'custom'
+                / 'treasury.png'
             ).is_file()
         )
 

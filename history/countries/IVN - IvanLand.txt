@@ -42,6 +42,15 @@ set_popularities = {
 set_stability = 0.25
 
 add_ideas = {
+	ADISCORD_society_type_municipal_autonomy
+	ADISCORD_information_public_broadcasting
+	ADISCORD_taxation_progressive_brackets
+	ADISCORD_military_organization_territorial_reserves
+	ADISCORD_welfare_social_insurance
+	ADISCORD_healthcare_mutual_insurance
+	ADISCORD_labor_policy_collective_bargaining
+	ADISCORD_internal_security_civilian_oversight
+
 	IVN_national_spirit
 	minister_IVN_Mikhail_Bron
 	minister_IVN_Darya_Koval

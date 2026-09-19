@@ -39,7 +39,7 @@ EXPECTED_LEVELS = {
 EXPECTED_NEW_LAW_MODIFIERS = {
     "consumer_goods_expected_value": "0.38",
     "stability_factor": "0.12",
-    "production_speed_industrial_complex_factor": "0.18",
+    "production_speed_industrial_complex_factor": "0.25",
     "production_speed_arms_factory_factor": "-0.40",
     "production_speed_dockyard_factor": "-0.35",
     "conversion_cost_civ_to_mil_factor": "0.40",
@@ -49,14 +49,14 @@ EXPECTED_NEW_LAW_MODIFIERS = {
     "max_fuel_factor": "-0.35",
     "fuel_gain_factor": "-0.45",
     "factory_energy_consumption": "-0.30",
-    "ADISCORD_economy_civilian_factory_income_factor": "0.15",
+    "ADISCORD_economy_civilian_factory_income_factor": "0.25",
     "ADISCORD_economy_military_industry_income_factor": "-0.15",
     "ADISCORD_economy_army_expense_factor": "-0.15",
     "ADISCORD_economy_inflation_pressure_factor": "-0.08",
     "ADISCORD_economy_price_stability_factor": "0.08",
     "ADISCORD_economy_creditworthiness_factor": "0.05",
     "ADISCORD_economy_state_overload_gain_factor": "-0.08",
-    "ADISCORD_country_development_economic_growth_factor": "0.05",
+    "ADISCORD_country_development_economic_growth_factor": "0.08",
 }
 EXPECTED_TEXTURES = {
     "GFX_idea_ADISCORD_civilian_oriented_economy": "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_1_civilian_oriented.png",

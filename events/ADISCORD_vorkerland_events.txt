@@ -2478,6 +2478,15 @@ country_event = {
 	option = { name = ADISCORD_vorkerland_rom_tru.2.a }
 }
 
+# Faction creation runs after the native capitulation settlement.
+country_event = {
+	id = ADISCORD_vorkerland_rom_tru.3
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { OR = { tag = ROM tag = TRU } }
+	immediate = { ADISCORD_vorkerland_form_free_republics_league = yes }
+}
+
 # --- stalemate_events ---
 add_namespace = ADISCORD_vorkerland_stalemate
 

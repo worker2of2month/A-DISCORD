@@ -1231,11 +1231,11 @@ STP_pc_nod_offer_current = {
 
 STP_pc_can_pay_val_compact = {
 	OR = {
-		AND = { has_country_flag = STP_pw_kefreyt_accounts_settled check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
-		AND = { NOT = { has_country_flag = STP_pw_kefreyt_accounts_settled } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } }
+		AND = { has_country_flag = STP_pw_kefreyt_accounts_settled check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
+		AND = { NOT = { has_country_flag = STP_pw_kefreyt_accounts_settled } check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } }
 	}
 }
-STP_pc_can_pay_nod_compact = { check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals } }
+STP_pc_can_pay_nod_compact = { check_variable = { var = ADISCORD_economy_treasury value = 1350 compare = greater_than_or_equals } }
 
 # COUNTRY NOD: the reply authorises a later STP choice, never a forced handoff.
 STP_pw_party_nod_offer_current = {
@@ -1264,7 +1264,7 @@ STP_pw_party_nod_arms_current = {
 		is_subject_of = NOD
 		NOT = { has_war_with = NOD has_country_flag = STP_pw_party_nod_arms_delivered }
 		has_country_flag = STP_pw_party_nod_arms_pending
-		ADISCORD_economy_can_spend_50 = yes
+		check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
 	}
 }
 
@@ -1284,3 +1284,13 @@ STP_cw_disruption_target = {
 	is_controlled_by = STP
 	any_state_division = { OWNER = { tag = STP } division_has_battalion_in_template = ADISCORD_territorial }
 }
+
+STP_cw_can_spend_600 = { check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals } }
+
+STP_cw_can_spend_1200 = { check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals } }
+
+STP_cw_can_spend_2400 = { check_variable = { var = ADISCORD_economy_treasury value = 2400 compare = greater_than_or_equals } }
+
+STP_cw_can_spend_6000 = { check_variable = { var = ADISCORD_economy_treasury value = 6000 compare = greater_than_or_equals } }
+
+STP_uses_campaign_currency_scale = { OR = { tag = STP tag = STS tag = SRP } }

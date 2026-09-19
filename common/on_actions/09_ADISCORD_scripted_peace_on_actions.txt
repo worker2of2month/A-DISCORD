@@ -202,6 +202,18 @@ on_actions = {
 	on_capitulation = {
 		effect = {
 			# BEGIN vorkerland_collapse:on_capitulation
+			# Defer faction creation until the final annexation fallback settles
+			# the local war and transfers its states to the actual victor.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+					OR = {
+						AND = { ROOT = { tag = DVA } FROM = { tag = ROM } }
+						AND = { ROOT = { tag = ZTA } FROM = { tag = TRU } }
+					}
+				}
+				FROM = { country_event = { id = ADISCORD_vorkerland_rom_tru.3 hours = 1 } }
+			}
 			# A peace conference can materialise dormant WRK as a free or
 			# puppeted shell. Reserve it from the generic annex fallback and
 			# fold its land back into a living claimant the same tick.

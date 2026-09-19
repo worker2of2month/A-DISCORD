@@ -2487,8 +2487,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for token in (
         "add_ideas = ADISCORD_vorkerland_tva_field_directorate",
         "add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism",
-        "add_manpower = 16000",
-        "type = infantry_equipment_0 amount = 2600 producer = TVA",
+        "add_manpower = 28000",
+        "type = infantry_equipment_0 amount = 3560 producer = TVA",
         "type = support_equipment amount = 180 producer = TVA",
         "type = artillery_equipment amount = 96 producer = TVA",
     ):
@@ -3073,8 +3073,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "NOT = { has_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1 }",
         "set_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1",
         "ADISCORD_vorkerland_ensure_worker_home_guard_template = yes",
-        "add_manpower = 12000",
-        "amount = 960 producer = WKR",
+        "add_manpower = 24000",
+        "amount = 1920 producer = WKR",
         "33 = {",
         "32 = {",
     ):
@@ -3094,8 +3094,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"shared WKR home-guard template is missing {token}")
     if worker_home_guard_template.count("ADISCORD_militia =") != 3:
         issues.append("WKR home-guard template must contain exactly three militia battalions")
-    if wkr_home_guard.count("create_unit =") != 2 or wkr_home_guard.count("count = 2") != 2:
-        issues.append("WKR home guard must deploy exactly two formations in state 33 and two in state 32")
+    if wkr_home_guard.count("create_unit =") != 2 or wkr_home_guard.count("count = 4") != 2:
+        issues.append("WKR home guard must deploy exactly four formations in state 33 and four in state 32")
     for forbidden in ("annex_country", "every_country", "every_state"):
         if forbidden in wkr_home_guard:
             issues.append(f"WKR home-guard effect is not bounded: {forbidden}")
@@ -3147,8 +3147,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if f"add_manpower = {manpower}" not in country or f"amount = {rifles}" not in country:
             issues.append(f"{tag}: finite collapse reserve is missing")
     tva_oob = read(root, "history/units/TVA_vorkerland_collapse.txt", issues)
-    if tva_oob.count("division = {") != 15 or tva_oob.count('division_template = "TVA Mobile Test Group"') != 2 or "TVA Infiltration Cell" not in tva_oob:
-        issues.append("TVA must start with thirteen militia formations, two mobile groups and an infiltration template")
+    if tva_oob.count("division = {") != 19 or tva_oob.count('division_template = "TVA Mobile Test Group"') != 2 or "TVA Infiltration Cell" not in tva_oob:
+        issues.append("TVA must start with seventeen militia formations, two mobile groups and an infiltration template")
     for tag in ("VAD",):
         oob = read(root, f"history/units/{tag}.txt", issues)
         initial_country = named_block(initial, tag)

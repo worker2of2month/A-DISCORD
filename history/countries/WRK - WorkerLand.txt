@@ -38,6 +38,16 @@ add_to_faction = WCG
 ####### Politics
 
 add_ideas = {
+	ADISCORD_society_type_industrial
+	ADISCORD_information_licensed_press
+	ADISCORD_taxation_balanced_register
+	ADISCORD_military_organization_cadre_army
+	ADISCORD_education_technical_institutes
+	ADISCORD_cultural_policy_heritage_protection
+	ADISCORD_industrial_policy_state_planning_boards
+	ADISCORD_officer_corps_general_staff_academy
+	ADISCORD_logistics_centralized_depots
+
 	limited_conscription
 	WRK_ashes_of_the_crown
 	WRK_hourglass_of_discord

@@ -89,4 +89,8 @@ units = {
 	division = { division_name = { is_name_ordered = yes name_order = 13 } location = 16400 division_template = "TVA Collapse Militia" start_experience_factor = 0.18 start_equipment_factor = 0.85 }
 	division = { division_name = { is_name_ordered = yes name_order = 14 } location = 16397 division_template = "TVA Collapse Militia" start_experience_factor = 0.18 start_equipment_factor = 0.85 }
 	division = { division_name = { is_name_ordered = yes name_order = 15 } location = 16397 division_template = "TVA Collapse Militia" start_experience_factor = 0.18 start_equipment_factor = 0.85 }
+	division = { division_name = { is_name_ordered = yes name_order = 16 } location = 12227 division_template = "TVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.85 }
+	division = { division_name = { is_name_ordered = yes name_order = 17 } location = 16400 division_template = "TVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.85 }
+	division = { division_name = { is_name_ordered = yes name_order = 18 } location = 16398 division_template = "TVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.85 }
+	division = { division_name = { is_name_ordered = yes name_order = 19 } location = 16397 division_template = "TVA Collapse Militia" start_experience_factor = 0.10 start_equipment_factor = 0.85 }
 }

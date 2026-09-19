@@ -1028,8 +1028,8 @@ ADISCORD_vorkerland_raise_emergency_levies = {
 # WKR normally inherits WRK's armed forces, but annexation transfers divisions
 # without copying WRK's recruitable template database. Materialize an editable
 # line division and mobile group alongside the locked emergency guard. The
-# one-shot reserve itself remains deliberately small: two border guards in
-# state 33 and two formations in the state 32 capital reserve.
+# one-shot reserve itself remains deliberately small: four border guards in
+# state 33 and four formations in the state 32 capital reserve.
 ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = {
 	if = {
 		limit = {
@@ -1098,20 +1098,20 @@ ADISCORD_vorkerland_ensure_wkr_home_guard = {
 		}
 		set_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1
 		ADISCORD_vorkerland_ensure_worker_home_guard_template = yes
-		add_manpower = 12000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 960 producer = WKR }
+		add_manpower = 24000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1920 producer = WKR }
 		33 = {
 			create_unit = {
 				division = "division_template = \"Worker Home Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.85"
 				owner = WKR
-				count = 2
+				count = 4
 			}
 		}
 		32 = {
 			create_unit = {
 				division = "division_template = \"Worker Home Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.85"
 				owner = WKR
-				count = 2
+				count = 4
 			}
 		}
 	}
@@ -2262,8 +2262,8 @@ ADISCORD_vorkerland_setup_tva = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_tva_field_directorate
 		add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism
-		add_manpower = 16000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2600 producer = TVA }
+		add_manpower = 28000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 3560 producer = TVA }
 		add_equipment_to_stockpile = { type = support_equipment amount = 180 producer = TVA }
 		add_equipment_to_stockpile = { type = artillery_equipment amount = 96 producer = TVA }
 		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 90 producer = TVA }
@@ -6852,6 +6852,49 @@ ADISCORD_vorkerland_set_phase_postwar_integration = {
 	ADISCORD_vorkerland_refresh_focus_lifecycle = yes
 }
 
+# The worker government and technical administration claim the central theatre.
+# Independent peripheral republics retain their own national territory.
+ADISCORD_vorkerland_grant_central_claimant_cores = {
+	27 = { add_core_of = WKR add_core_of = TVA }
+	32 = { add_core_of = WKR add_core_of = TVA }
+	33 = { add_core_of = WKR add_core_of = TVA }
+	35 = { add_core_of = WKR add_core_of = TVA }
+	36 = { add_core_of = WKR add_core_of = TVA }
+	37 = { add_core_of = WKR add_core_of = TVA }
+	38 = { add_core_of = WKR add_core_of = TVA }
+	39 = { add_core_of = WKR add_core_of = TVA }
+	40 = { add_core_of = WKR add_core_of = TVA }
+	75 = { add_core_of = WKR add_core_of = TVA }
+	79 = { add_core_of = WKR add_core_of = TVA }
+	81 = { add_core_of = WKR add_core_of = TVA }
+	82 = { add_core_of = WKR add_core_of = TVA }
+	102 = { add_core_of = WKR add_core_of = TVA }
+	106 = { add_core_of = WKR add_core_of = TVA }
+	107 = { add_core_of = WKR add_core_of = TVA }
+	108 = { add_core_of = WKR add_core_of = TVA }
+	109 = { add_core_of = WKR add_core_of = TVA }
+	110 = { add_core_of = WKR add_core_of = TVA }
+	111 = { add_core_of = WKR add_core_of = TVA }
+	121 = { add_core_of = WKR add_core_of = TVA }
+	122 = { add_core_of = WKR add_core_of = TVA }
+	123 = { add_core_of = WKR add_core_of = TVA }
+	124 = { add_core_of = WKR add_core_of = TVA }
+	200 = { add_core_of = WKR add_core_of = TVA }
+	201 = { add_core_of = WKR add_core_of = TVA }
+	306 = { add_core_of = WKR add_core_of = TVA }
+	308 = { add_core_of = WKR add_core_of = TVA }
+	309 = { add_core_of = WKR add_core_of = TVA }
+	315 = { add_core_of = WKR add_core_of = TVA }
+	316 = { add_core_of = WKR add_core_of = TVA }
+	317 = { add_core_of = WKR add_core_of = TVA }
+	318 = { add_core_of = WKR add_core_of = TVA }
+	320 = { add_core_of = WKR add_core_of = TVA }
+	323 = { add_core_of = WKR add_core_of = TVA }
+	324 = { add_core_of = WKR add_core_of = TVA }
+	325 = { add_core_of = WKR add_core_of = TVA }
+	327 = { add_core_of = WKR add_core_of = TVA }
+}
+
 # Prewar WRK cores remain historical data. At runtime they are stripped before
 # the claimant map is materialized, so dormant WRK cannot be released for free.
 ADISCORD_vorkerland_reset_temporary_claimant_cores = {
@@ -6896,10 +6939,11 @@ ADISCORD_vorkerland_reset_temporary_claimant_cores = {
 	324 = { remove_core_of = VAD add_core_of = TVA }
 	325 = { remove_core_of = WRK remove_core_of = WKR remove_core_of = VAD }
 	327 = { remove_core_of = WRK remove_core_of = WKR }
+	ADISCORD_vorkerland_grant_central_claimant_cores = yes
 }
 
-# A bounded fresh-partition retry only reasserts the fourteen immutable claimant
-# homelands and never strips cores earned later.
+# A bounded fresh-partition retry reasserts the claimant homelands and central
+# claims without stripping cores earned later.
 ADISCORD_vorkerland_ensure_claimant_home_cores = {
 	32 = { add_core_of = WKR }
 	33 = { add_core_of = WKR }
@@ -6915,6 +6959,7 @@ ADISCORD_vorkerland_ensure_claimant_home_cores = {
 	38 = { add_core_of = TVA }
 	39 = { add_core_of = TVA }
 	324 = { add_core_of = TVA }
+	ADISCORD_vorkerland_grant_central_claimant_cores = yes
 }
 
 ADISCORD_vorkerland_begin_collapse = {
@@ -8836,6 +8881,28 @@ ADISCORD_vorkerland_tru_arm_river_battalions = {
 			}
 		}
 		add_timed_idea = { idea = ADISCORD_vorkerland_tru_crossing_columns days = 90 }
+	}
+}
+
+# The first local victor leads the league. Membership does not call the other
+# republic into its wars; both must be independent and outside existing blocs.
+ADISCORD_vorkerland_form_free_republics_league = {
+	if = {
+		limit = {
+			OR = {
+				AND = { tag = ROM owns_state = 144 owns_state = 145 owns_state = 319 owns_state = 321 NOT = { has_war_with = DVA } }
+				AND = { tag = TRU owns_state = 199 NOT = { has_war_with = ZTA } }
+			}
+			ROM = { exists = yes is_subject = no is_in_faction = no has_capitulated = no }
+			TRU = { exists = yes is_subject = no is_in_faction = no has_capitulated = no }
+			NOT = { ROM = { has_war_with = TRU } }
+		}
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = faction_vorkerland_free_republics_league
+		}
+		if = { limit = { tag = ROM } add_to_faction = TRU }
+		else = { add_to_faction = ROM }
 	}
 }
 

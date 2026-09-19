@@ -5,6 +5,7 @@
 # references when common/scripted_effects is hot-reloaded. Economy effects call
 # these precompiled triggers instead, so iterating on calculations cannot turn
 # every scheduled budget update into an error-log storm.
+ADISCORD_economy_has_idea_overflow_investments = { has_idea = ADISCORD_economy_overflow_investments }
 ADISCORD_economy_has_idea_civilian_oriented_economy = { has_idea = ADISCORD_civilian_oriented_economy }
 ADISCORD_economy_has_idea_civilian_economy = { has_idea = civilian_economy }
 ADISCORD_economy_has_idea_low_economic_mobilisation = { has_idea = low_economic_mobilisation }
@@ -274,7 +275,6 @@ ADISCORD_economy_model_allows_oligarchic_deals = {
 
 ADISCORD_economy_has_treasury_25 = { check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals } }
 ADISCORD_economy_has_treasury_50 = { check_variable = { var = ADISCORD_economy_treasury value = 50 compare = greater_than_or_equals } }
-ADISCORD_economy_has_treasury_60 = { check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } }
 ADISCORD_economy_has_treasury_70 = { check_variable = { var = ADISCORD_economy_treasury value = 70 compare = greater_than_or_equals } }
 ADISCORD_economy_has_treasury_80 = { check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals } }
 ADISCORD_economy_has_treasury_90 = { check_variable = { var = ADISCORD_economy_treasury value = 90 compare = greater_than_or_equals } }
@@ -408,7 +408,7 @@ ADISCORD_economy_research_spending_mode_5 = { check_variable = { var = ADISCORD_
 
 ADISCORD_economy_can_invest_reserves = {
 	has_tech = ADISCORD_tech_hardened_computers
-	ADISCORD_economy_has_treasury_50 = yes
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_recent_investment value = 1 compare = less_than }
 	OR = {
 		ADISCORD_economy_model_allows_market_expansion = yes
@@ -524,7 +524,7 @@ ADISCORD_economy_can_use_war_taxes = {
 
 ADISCORD_economy_can_use_military_investment = {
 	has_tech = ADISCORD_tech_postwar_weapon_standardization
-	ADISCORD_economy_has_treasury_50 = yes
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
 	check_variable = { var = ADISCORD_economy_recent_war_financing value = 1 compare = less_than }
 	ADISCORD_economy_model_allows_mobilization_economy = yes
 	NOT = { has_idea = ADISCORD_economy_military_investment }

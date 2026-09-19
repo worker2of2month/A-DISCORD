@@ -16,9 +16,13 @@ ideas = {
 
 			modifier = {
 				conscription = 0.01
+				stability_factor = 0.05
+				political_power_gain = 0.05
 			}
 			
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 		
 		volunteer_only = {
@@ -44,11 +48,16 @@ ideas = {
 
 			modifier = {
 				conscription = 0.015
+				army_org_factor = 0.05
+				experience_gain_army_factor = 0.10
+				training_time_factor = -0.05
 			}
 			
 			default = yes
 			
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 		
 		limited_conscription = {
@@ -66,6 +75,7 @@ ideas = {
 
 			modifier = {
 				conscription = 0.025
+				mobilization_speed = 0.10
 			}
 
 			ai_will_do = {
@@ -91,6 +101,8 @@ ideas = {
 			}
 			
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 		
 		extensive_conscription = {
@@ -139,10 +151,13 @@ ideas = {
 				conscription = 0.05
 				#industrial_capacity_factory = -0.1
 				#production_speed_buildings_factor = -0.1
-				training_time_factor = 0.1
+				training_time_factor = 0.08
+				mobilization_speed = 0.25
 			}
 			
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 		
 		service_by_requirement = {
@@ -192,13 +207,16 @@ ideas = {
 
 			modifier = {
 				conscription = 0.1
-				industrial_capacity_factory = -0.1
-				industrial_capacity_dockyard = -0.1
-				production_speed_buildings_factor = -0.1
-				training_time_factor = 0.2
+				industrial_capacity_factory = -0.08
+				industrial_capacity_dockyard = -0.08
+				production_speed_buildings_factor = -0.08
+				training_time_factor = 0.15
+				mobilization_speed = 0.40
 			}
 			
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 		
 		all_adults_serve = {
@@ -241,14 +259,17 @@ ideas = {
 			
 			modifier = {
 				conscription = 0.2
-				industrial_capacity_factory = -0.3
-				industrial_capacity_dockyard = -0.3
-				production_speed_buildings_factor = -0.3
+				industrial_capacity_factory = -0.25
+				industrial_capacity_dockyard = -0.25
+				production_speed_buildings_factor = -0.25
 				#XP from reinforcement penalty (small)
-				training_time_factor = 0.3
+				training_time_factor = 0.25
+				mobilization_speed = 0.60
 			}
 			
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 		
 		scraping_the_barrel = {
@@ -296,13 +317,16 @@ ideas = {
 
 			modifier = {
 				conscription = 0.25
-				industrial_capacity_factory = -0.4
-				industrial_capacity_dockyard = -0.4
-				production_speed_buildings_factor = -0.4
-				training_time_factor = 0.5
+				industrial_capacity_factory = -0.35
+				industrial_capacity_dockyard = -0.35
+				production_speed_buildings_factor = -0.35
+				training_time_factor = 0.40
+				mobilization_speed = 0.80
 			}
 			
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 }

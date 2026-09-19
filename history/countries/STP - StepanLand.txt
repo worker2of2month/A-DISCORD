@@ -47,6 +47,16 @@ set_research_slots = 1
 ####### Ideas
 
 add_ideas = {
+	ADISCORD_society_type_industrial
+	ADISCORD_information_licensed_press
+	ADISCORD_taxation_light_dues
+	ADISCORD_welfare_employer_insurance
+	ADISCORD_healthcare_private_care
+	ADISCORD_cultural_policy_public_entertainment
+	ADISCORD_industrial_policy_export_contracts
+	ADISCORD_labor_policy_loose_contracts
+	ADISCORD_infrastructure_port_network
+
 	STP_hedonism_with_no_bondaries
 	STP_hidden_slaves_trade
 	STP_legalize

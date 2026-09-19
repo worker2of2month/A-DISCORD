@@ -12705,44 +12705,54 @@
       "count": 1
     },
     {
-      "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_1_eq_0_7",
+      "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_18_eq_0_85",
       "path": "history/units/TVA_vorkerland_collapse.txt",
       "kind": "oob",
       "technical_name": "TVA Collapse Militia",
       "legacy_names": [],
-      "start_experience_factor": 0.1,
-      "start_equipment_factor": 0.7,
-      "count": 5
+      "start_experience_factor": 0.18,
+      "start_equipment_factor": 0.85,
+      "count": 10
     },
     {
-      "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_1_eq_0_75",
+      "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_2_eq_0_88",
       "path": "history/units/TVA_vorkerland_collapse.txt",
       "kind": "oob",
       "technical_name": "TVA Collapse Militia",
       "legacy_names": [],
-      "start_experience_factor": 0.1,
-      "start_equipment_factor": 0.75,
-      "count": 6
-    },
-    {
-      "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_15_eq_0_8",
-      "path": "history/units/TVA_vorkerland_collapse.txt",
-      "kind": "oob",
-      "technical_name": "TVA Collapse Militia",
-      "legacy_names": [],
-      "start_experience_factor": 0.15,
-      "start_equipment_factor": 0.8,
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 0.88,
       "count": 3
     },
     {
-      "key": "tva_vorkerland_collapse_oob_tva_mobile_test_group_xp_0_4_eq_0_95",
+      "key": "tva_vorkerland_collapse_oob_tva_mobile_test_group_xp_0_45_eq_0_95",
+      "path": "history/units/TVA_vorkerland_collapse.txt",
+      "kind": "oob",
+      "technical_name": "TVA Mobile Test Group",
+      "legacy_names": [],
+      "start_experience_factor": 0.45,
+      "start_equipment_factor": 0.95,
+      "count": 1
+    },
+    {
+      "key": "tva_vorkerland_collapse_oob_tva_mobile_test_group_xp_0_4_eq_0_9",
       "path": "history/units/TVA_vorkerland_collapse.txt",
       "kind": "oob",
       "technical_name": "TVA Mobile Test Group",
       "legacy_names": [],
       "start_experience_factor": 0.4,
-      "start_equipment_factor": 0.95,
+      "start_equipment_factor": 0.9,
       "count": 1
+    },
+    {
+      "key": "tva_vorkerland_collapse_oob_tva_collapse_militia_xp_0_1_eq_0_85",
+      "path": "history/units/TVA_vorkerland_collapse.txt",
+      "kind": "oob",
+      "technical_name": "TVA Collapse Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.85,
+      "count": 4
     },
     {
       "key": "vad_oob_armi_guard_xp_0_53_eq_0_75",

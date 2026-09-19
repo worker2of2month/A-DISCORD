@@ -9,17 +9,17 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				stability_factor = 0.03
-				political_power_gain = 0.02
-				monthly_population = 0.01
+				stability_factor = 0.045
+				political_power_gain = 0.03
+				monthly_population = 0.015
 				research_speed_factor = -0.04
 				industrial_capacity_factory = -0.04
 				production_speed_industrial_complex_factor = -0.04
 				mobilization_speed = -0.05
-				factory_energy_consumption = -0.10
-				ADISCORD_economy_admin_expense_factor = -0.10
+				factory_energy_consumption = -0.15
+				ADISCORD_economy_admin_expense_factor = -0.15
 				ADISCORD_economy_creditworthiness_factor = -0.10
-				ADISCORD_economy_overload_resistance_factor = 0.05
+				ADISCORD_economy_overload_resistance_factor = 0.075
 				ADISCORD_country_development_global_growth_factor = -0.05
 				ADISCORD_country_development_economic_growth_factor = -0.05
 			}
@@ -34,6 +34,8 @@ ideas = {
 					has_war = no
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_society_type_agrarian = {
@@ -42,22 +44,24 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				monthly_population = 0.03
-				stability_factor = 0.01
-				local_resources_factor = 0.04
+				monthly_population = 0.045
+				stability_factor = 0.015
+				local_resources_factor = 0.06
 				industrial_capacity_factory = -0.03
 				industrial_capacity_dockyard = -0.02
 				production_speed_industrial_complex_factor = -0.02
 				research_speed_factor = -0.02
-				factory_energy_consumption = -0.05
-				ADISCORD_economy_population_tax_income_factor = 0.05
-				ADISCORD_economy_resource_rent_income_factor = 0.10
+				factory_energy_consumption = -0.075
+				ADISCORD_economy_population_tax_income_factor = 0.075
+				ADISCORD_economy_resource_rent_income_factor = 0.15
 				ADISCORD_economy_military_industry_income_factor = -0.05
 				ADISCORD_economy_creditworthiness_factor = -0.10
 				ADISCORD_country_development_economic_growth_factor = -0.03
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_society_type_industrial = {
@@ -67,15 +71,15 @@ ideas = {
 			default = yes
 
 			modifier = {
-				industrial_capacity_factory = 0.03
-				industrial_capacity_dockyard = 0.02
-				production_speed_industrial_complex_factor = 0.03
-				production_speed_arms_factory_factor = 0.02
-				production_factory_max_efficiency_factor = 0.02
+				industrial_capacity_factory = 0.045
+				industrial_capacity_dockyard = 0.03
+				production_speed_industrial_complex_factor = 0.045
+				production_speed_arms_factory_factor = 0.03
+				production_factory_max_efficiency_factor = 0.03
 				stability_factor = -0.005
 				factory_energy_consumption = 0.05
-				ADISCORD_economy_civilian_factory_income_factor = 0.10
-				ADISCORD_economy_military_industry_income_factor = 0.10
+				ADISCORD_economy_civilian_factory_income_factor = 0.15
+				ADISCORD_economy_military_industry_income_factor = 0.15
 				ADISCORD_economy_state_overload_gain_factor = 0.05
 			}
 
@@ -84,6 +88,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_society_type_post_industrial = {
@@ -101,18 +107,18 @@ ideas = {
 			}
 
 			modifier = {
-				research_speed_factor = 0.035
-				production_factory_efficiency_gain_factor = 0.03
-				line_change_production_efficiency_factor = 0.03
-				production_speed_buildings_factor = 0.02
+				research_speed_factor = 0.0525
+				production_factory_efficiency_gain_factor = 0.045
+				line_change_production_efficiency_factor = 0.045
+				production_speed_buildings_factor = 0.03
 				political_power_gain = -0.02
 				industrial_capacity_factory = -0.01
-				stability_factor = 0.01
-				ADISCORD_economy_trade_income_factor = 0.10
+				stability_factor = 0.015
+				ADISCORD_economy_trade_income_factor = 0.15
 				ADISCORD_economy_social_expense_factor = 0.10
 				ADISCORD_economy_research_expense_factor = 0.05
 				ADISCORD_economy_admin_expense_factor = 0.05
-				ADISCORD_country_development_economic_growth_factor = 0.05
+				ADISCORD_country_development_economic_growth_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -127,6 +133,8 @@ ideas = {
 					}
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_society_type_information = {
@@ -146,23 +154,23 @@ ideas = {
 			}
 
 			modifier = {
-				research_speed_factor = 0.06
-				production_factory_efficiency_gain_factor = 0.05
-				line_change_production_efficiency_factor = 0.05
-				production_factory_max_efficiency_factor = 0.04
-				production_speed_buildings_factor = 0.03
+				research_speed_factor = 0.09
+				production_factory_efficiency_gain_factor = 0.075
+				line_change_production_efficiency_factor = 0.075
+				production_factory_max_efficiency_factor = 0.06
+				production_speed_buildings_factor = 0.045
 				political_power_gain = -0.04
 				industrial_capacity_factory = -0.015
 				stability_factor = -0.01
 				factory_energy_consumption = 0.10
 				ADISCORD_economy_research_expense_factor = 0.15
 				ADISCORD_economy_admin_expense_factor = 0.10
-				ADISCORD_economy_creditworthiness_factor = 0.10
-				ADISCORD_economy_price_stability_factor = 0.05
-				ADISCORD_economy_investment_confidence_factor = 0.10
-				ADISCORD_economy_overload_resistance_factor = 0.05
-				ADISCORD_country_development_global_growth_factor = 0.05
-				ADISCORD_country_development_economic_growth_factor = 0.10
+				ADISCORD_economy_creditworthiness_factor = 0.15
+				ADISCORD_economy_price_stability_factor = 0.075
+				ADISCORD_economy_investment_confidence_factor = 0.15
+				ADISCORD_economy_overload_resistance_factor = 0.075
+				ADISCORD_country_development_global_growth_factor = 0.075
+				ADISCORD_country_development_economic_growth_factor = 0.15
 			}
 
 			cancel_if_invalid = no
@@ -174,6 +182,27 @@ ideas = {
 					has_government = technocracy
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_society_type_municipal_autonomy = {
+			picture = ADISCORD_society_type_industrial
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.04
+				political_power_gain = 0.06
+				mobilization_speed = -0.1
+				ADISCORD_economy_admin_expense_factor = -0.12
+				ADISCORD_economy_population_tax_income_factor = -0.05
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = humanism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -188,7 +217,7 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				research_speed_factor = 0.02
+				research_speed_factor = 0.03
 				stability_factor = -0.03
 				drift_defence_factor = -0.10
 			}
@@ -202,6 +231,8 @@ ideas = {
 					has_government = humanism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_information_licensed_press = {
@@ -211,8 +242,8 @@ ideas = {
 			default = yes
 
 			modifier = {
-				stability_factor = 0.02
-				political_power_gain = 0.02
+				stability_factor = 0.03
+				political_power_gain = 0.03
 			}
 
 			cancel_if_invalid = no
@@ -220,6 +251,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_information_state_bulletins = {
@@ -228,8 +261,8 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				political_power_gain = 0.04
-				war_support_factor = 0.02
+				political_power_gain = 0.06
+				war_support_factor = 0.03
 				research_speed_factor = -0.01
 			}
 
@@ -242,6 +275,8 @@ ideas = {
 					has_government = etatism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_information_wartime_censorship = {
@@ -257,8 +292,8 @@ ideas = {
 			}
 
 			modifier = {
-				stability_factor = 0.02
-				war_support_factor = 0.05
+				stability_factor = 0.03
+				war_support_factor = 0.075
 				political_power_gain = -0.03
 			}
 
@@ -271,6 +306,8 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_information_sealed_networks = {
@@ -289,8 +326,8 @@ ideas = {
 			}
 
 			modifier = {
-				stability_factor = 0.05
-				drift_defence_factor = 0.20
+				stability_factor = 0.075
+				drift_defence_factor = 0.3
 				political_power_gain = -0.05
 				research_speed_factor = -0.03
 			}
@@ -304,6 +341,26 @@ ideas = {
 					has_government = technocracy
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_information_public_broadcasting = {
+			picture = ADISCORD_law_information_licensed_press
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.04
+				research_speed_factor = 0.03
+				drift_defence_factor = -0.05
+				ADISCORD_economy_admin_expense_factor = 0.08
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = humanism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -316,14 +373,16 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				production_speed_industrial_complex_factor = 0.03
+				production_speed_industrial_complex_factor = 0.045
 				political_power_gain = -0.04
 				ADISCORD_economy_tax_collection_factor = -0.10
-				ADISCORD_economy_trade_income_factor = 0.05
-				ADISCORD_economy_civilian_factory_income_factor = 0.05
+				ADISCORD_economy_trade_income_factor = 0.075
+				ADISCORD_economy_civilian_factory_income_factor = 0.075
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_taxation_balanced_register = {
@@ -333,10 +392,10 @@ ideas = {
 			default = yes
 
 			modifier = {
-				stability_factor = 0.01
-				political_power_gain = 0.01
-				ADISCORD_economy_tax_collection_factor = 0.03
-				ADISCORD_economy_creditworthiness_factor = 0.05
+				stability_factor = 0.015
+				political_power_gain = 0.015
+				ADISCORD_economy_tax_collection_factor = 0.045
+				ADISCORD_economy_creditworthiness_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -344,6 +403,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_taxation_progressive_brackets = {
@@ -352,10 +413,10 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				stability_factor = 0.04
-				monthly_population = 0.02
+				stability_factor = 0.06
+				monthly_population = 0.03
 				political_power_gain = -0.02
-				ADISCORD_economy_population_tax_income_factor = 0.10
+				ADISCORD_economy_population_tax_income_factor = 0.15
 				ADISCORD_economy_trade_income_factor = -0.05
 				ADISCORD_economy_social_expense_factor = 0.05
 			}
@@ -369,6 +430,8 @@ ideas = {
 					has_government = humanism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_taxation_industrial_tariffs = {
@@ -377,12 +440,12 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				production_speed_industrial_complex_factor = 0.03
-				production_speed_arms_factory_factor = 0.05
+				production_speed_industrial_complex_factor = 0.045
+				production_speed_arms_factory_factor = 0.075
 				research_speed_factor = -0.01
-				ADISCORD_economy_trade_income_factor = 0.05
-				ADISCORD_economy_resource_rent_income_factor = 0.05
-				ADISCORD_economy_military_industry_income_factor = 0.05
+				ADISCORD_economy_trade_income_factor = 0.075
+				ADISCORD_economy_resource_rent_income_factor = 0.075
+				ADISCORD_economy_military_industry_income_factor = 0.075
 				ADISCORD_economy_inflation_pressure_factor = 0.05
 				ADISCORD_economy_state_overload_gain_factor = 0.05
 			}
@@ -396,6 +459,8 @@ ideas = {
 					has_government = technocracy
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_taxation_extraction_quotas = {
@@ -412,12 +477,12 @@ ideas = {
 			}
 
 			modifier = {
-				industrial_capacity_factory = 0.04
-				political_power_gain = 0.03
+				industrial_capacity_factory = 0.06
+				political_power_gain = 0.045
 				stability_factor = -0.06
-				ADISCORD_economy_tax_collection_factor = 0.20
-				ADISCORD_economy_resource_rent_income_factor = 0.10
-				ADISCORD_economy_military_industry_income_factor = 0.10
+				ADISCORD_economy_tax_collection_factor = 0.3
+				ADISCORD_economy_resource_rent_income_factor = 0.15
+				ADISCORD_economy_military_industry_income_factor = 0.15
 				ADISCORD_economy_creditworthiness_factor = -0.10
 				ADISCORD_economy_deficit_pressure_factor = 0.10
 				ADISCORD_economy_fiscal_stress_gain_factor = 0.10
@@ -435,6 +500,26 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_taxation_corporate_assessment = {
+			picture = ADISCORD_law_taxation_industrial_tariffs
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				ADISCORD_economy_civilian_factory_income_factor = 0.2
+				ADISCORD_economy_military_industry_income_factor = 0.12
+				production_speed_buildings_factor = -0.05
+				ADISCORD_economy_admin_expense_factor = 0.05
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = pragmatism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -449,11 +534,13 @@ ideas = {
 			modifier = {
 				conscription = 0.01
 				army_org_factor = -0.03
-				training_time_factor = -0.05
-				stability_factor = 0.02
+				training_time_factor = -0.075
+				stability_factor = 0.03
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_military_organization_cadre_army = {
@@ -463,7 +550,7 @@ ideas = {
 			default = yes
 
 			modifier = {
-				army_org_factor = 0.02
+				army_org_factor = 0.03
 				training_time_factor = 0.02
 				conscription = -0.002
 			}
@@ -473,6 +560,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_military_organization_contract_brigades = {
@@ -485,13 +574,15 @@ ideas = {
 			}
 
 			modifier = {
-				army_org_factor = 0.04
-				training_time_factor = -0.03
+				army_org_factor = 0.06
+				training_time_factor = -0.045
 				political_power_gain = -0.03
 				ADISCORD_economy_army_expense_factor = 0.05
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_military_organization_general_staff = {
@@ -504,9 +595,9 @@ ideas = {
 			}
 
 			modifier = {
-				army_org_factor = 0.03
-				planning_speed = 0.08
-				mobilization_speed = 0.10
+				army_org_factor = 0.045
+				planning_speed = 0.12
+				mobilization_speed = 0.15
 				training_time_factor = 0.05
 			}
 
@@ -519,6 +610,8 @@ ideas = {
 					is_major = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_military_organization_total_defense_grid = {
@@ -535,12 +628,12 @@ ideas = {
 
 			modifier = {
 				conscription = 0.02
-				mobilization_speed = 0.20
-				army_core_defence_factor = 0.05
+				mobilization_speed = 0.3
+				army_core_defence_factor = 0.075
 				production_speed_buildings_factor = -0.05
 				stability_factor = -0.03
 				ADISCORD_economy_war_fatigue_gain_factor = 0.05
-				ADISCORD_country_development_army_growth_factor = 0.05
+				ADISCORD_country_development_army_growth_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -552,6 +645,26 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_military_organization_territorial_reserves = {
+			picture = ADISCORD_law_military_cadre_army
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				army_core_defence_factor = 0.1
+				mobilization_speed = 0.2
+				army_attack_factor = -0.04
+				ADISCORD_economy_army_expense_factor = 0.08
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = pragmatism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -566,8 +679,8 @@ ideas = {
 			modifier = {
 				stability_factor = -0.01
 				monthly_population = -0.005
-				political_power_gain = 0.02
-				ADISCORD_economy_social_expense_factor = -0.05
+				political_power_gain = 0.03
+				ADISCORD_economy_social_expense_factor = -0.075
 			}
 
 			cancel_if_invalid = no
@@ -579,6 +692,8 @@ ideas = {
 					has_government = utilitarism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_welfare_basic_services = {
@@ -588,8 +703,8 @@ ideas = {
 			default = yes
 
 			modifier = {
-				stability_factor = 0.01
-				monthly_population = 0.01
+				stability_factor = 0.015
+				monthly_population = 0.015
 			}
 
 			cancel_if_invalid = no
@@ -597,6 +712,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_welfare_social_insurance = {
@@ -605,8 +722,8 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				stability_factor = 0.03
-				monthly_population = 0.02
+				stability_factor = 0.045
+				monthly_population = 0.03
 				political_power_gain = -0.02
 				ADISCORD_economy_social_expense_factor = 0.05
 			}
@@ -620,6 +737,8 @@ ideas = {
 					has_government = humanism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_welfare_universal_provision = {
@@ -635,12 +754,12 @@ ideas = {
 			}
 
 			modifier = {
-				stability_factor = 0.05
-				monthly_population = 0.03
-				research_speed_factor = 0.01
+				stability_factor = 0.075
+				monthly_population = 0.045
+				research_speed_factor = 0.015
 				political_power_gain = -0.04
 				ADISCORD_economy_social_expense_factor = 0.15
-				ADISCORD_country_development_social_system_growth_factor = 0.05
+				ADISCORD_country_development_social_system_growth_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -652,6 +771,8 @@ ideas = {
 					has_government = humanism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_welfare_rationed_support = {
@@ -669,9 +790,9 @@ ideas = {
 			modifier = {
 				stability_factor = -0.02
 				monthly_population = -0.01
-				war_support_factor = 0.04
-				political_power_gain = 0.01
-				ADISCORD_economy_social_expense_factor = -0.05
+				war_support_factor = 0.06
+				political_power_gain = 0.015
+				ADISCORD_economy_social_expense_factor = -0.075
 				ADISCORD_economy_war_fatigue_gain_factor = 0.03
 			}
 
@@ -684,6 +805,26 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_welfare_employer_insurance = {
+			picture = ADISCORD_law_welfare_social_insurance
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.04
+				ADISCORD_economy_social_expense_factor = -0.15
+				production_speed_industrial_complex_factor = -0.05
+				industrial_capacity_factory = -0.02
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = hedonism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -696,13 +837,15 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				research_speed_factor = 0.005
+				research_speed_factor = 0.0075
 				stability_factor = -0.01
-				political_power_gain = 0.01
-				ADISCORD_economy_research_expense_factor = -0.03
+				political_power_gain = 0.015
+				ADISCORD_economy_research_expense_factor = -0.045
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_education_basic_schools = {
@@ -712,7 +855,7 @@ ideas = {
 			default = yes
 
 			modifier = {
-				research_speed_factor = 0.01
+				research_speed_factor = 0.015
 			}
 
 			cancel_if_invalid = no
@@ -720,6 +863,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_education_civic_curriculum = {
@@ -728,9 +873,9 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				research_speed_factor = 0.015
-				stability_factor = 0.02
-				drift_defence_factor = 0.05
+				research_speed_factor = 0.0225
+				stability_factor = 0.03
+				drift_defence_factor = 0.075
 				political_power_gain = -0.01
 			}
 
@@ -743,6 +888,8 @@ ideas = {
 					has_government = humanism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_education_technical_institutes = {
@@ -751,13 +898,13 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				research_speed_factor = 0.03
-				industrial_capacity_factory = 0.02
+				research_speed_factor = 0.045
+				industrial_capacity_factory = 0.03
 				stability_factor = -0.01
 				ADISCORD_economy_research_expense_factor = 0.05
-				ADISCORD_economy_creditworthiness_factor = 0.03
-				ADISCORD_economy_investment_confidence_factor = 0.05
-				ADISCORD_country_development_economic_growth_factor = 0.05
+				ADISCORD_economy_creditworthiness_factor = 0.045
+				ADISCORD_economy_investment_confidence_factor = 0.075
+				ADISCORD_country_development_economic_growth_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -769,6 +916,8 @@ ideas = {
 					has_government = technocracy
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_education_elite_academies = {
@@ -785,8 +934,8 @@ ideas = {
 			}
 
 			modifier = {
-				research_speed_factor = 0.04
-				command_power_gain = 0.01
+				research_speed_factor = 0.06
+				command_power_gain = 0.015
 				stability_factor = -0.02
 				ADISCORD_economy_research_expense_factor = 0.08
 				ADISCORD_economy_admin_expense_factor = 0.05
@@ -801,6 +950,26 @@ ideas = {
 					has_government = technocracy
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_education_apprenticeship = {
+			picture = ADISCORD_law_education_technical_institutes
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.12
+				line_change_production_efficiency_factor = 0.05
+				research_speed_factor = -0.03
+				ADISCORD_economy_research_expense_factor = -0.05
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = pragmatism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -813,13 +982,15 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				monthly_population = 0.005
+				monthly_population = 0.0075
 				stability_factor = -0.01
-				political_power_gain = 0.01
-				ADISCORD_economy_social_expense_factor = -0.03
+				political_power_gain = 0.015
+				ADISCORD_economy_social_expense_factor = -0.045
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_healthcare_basic_clinics = {
@@ -829,8 +1000,8 @@ ideas = {
 			default = yes
 
 			modifier = {
-				monthly_population = 0.01
-				stability_factor = 0.005
+				monthly_population = 0.015
+				stability_factor = 0.0075
 			}
 
 			cancel_if_invalid = no
@@ -838,6 +1009,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_healthcare_public_hospitals = {
@@ -846,8 +1019,8 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				monthly_population = 0.02
-				stability_factor = 0.02
+				monthly_population = 0.03
+				stability_factor = 0.03
 				political_power_gain = -0.01
 				ADISCORD_economy_social_expense_factor = 0.05
 			}
@@ -861,6 +1034,8 @@ ideas = {
 					has_government = humanism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_healthcare_preventive_medicine = {
@@ -869,9 +1044,9 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				monthly_population = 0.025
-				research_speed_factor = 0.01
-				stability_factor = 0.01
+				monthly_population = 0.0375
+				research_speed_factor = 0.015
+				stability_factor = 0.015
 				ADISCORD_economy_social_expense_factor = 0.08
 				ADISCORD_economy_research_expense_factor = 0.03
 			}
@@ -885,6 +1060,8 @@ ideas = {
 					has_government = technocracy
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_healthcare_military_medical_service = {
@@ -900,8 +1077,8 @@ ideas = {
 			}
 
 			modifier = {
-				monthly_population = 0.01
-				war_support_factor = 0.03
+				monthly_population = 0.015
+				war_support_factor = 0.045
 				supply_consumption_factor = 0.01
 				ADISCORD_economy_army_expense_factor = 0.03
 				ADISCORD_economy_social_expense_factor = 0.03
@@ -916,6 +1093,26 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_healthcare_mutual_insurance = {
+			picture = ADISCORD_law_healthcare_public_hospitals
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				monthly_population = 0.08
+				stability_factor = 0.03
+				ADISCORD_economy_social_expense_factor = 0.08
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = humanism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -928,10 +1125,10 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				research_speed_factor = 0.01
+				research_speed_factor = 0.015
 				stability_factor = -0.015
 				drift_defence_factor = -0.04
-				political_power_gain = 0.02
+				political_power_gain = 0.03
 			}
 
 			cancel_if_invalid = no
@@ -943,6 +1140,8 @@ ideas = {
 					has_government = humanism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_cultural_policy_public_entertainment = {
@@ -952,7 +1151,7 @@ ideas = {
 			default = yes
 
 			modifier = {
-				stability_factor = 0.01
+				stability_factor = 0.015
 				drift_defence_factor = -0.02
 			}
 
@@ -961,6 +1160,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_cultural_policy_civic_festivals = {
@@ -969,13 +1170,15 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				stability_factor = 0.025
-				war_support_factor = 0.01
+				stability_factor = 0.0375
+				war_support_factor = 0.015
 				political_power_gain = -0.01
 				ADISCORD_economy_social_expense_factor = 0.03
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_cultural_policy_avant_garde_patronage = {
@@ -991,11 +1194,11 @@ ideas = {
 			}
 
 			modifier = {
-				research_speed_factor = 0.02
+				research_speed_factor = 0.03
 				stability_factor = -0.01
 				drift_defence_factor = -0.05
 				ADISCORD_economy_social_expense_factor = 0.03
-				ADISCORD_country_development_cultural_growth_factor = 0.05
+				ADISCORD_country_development_cultural_growth_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -1007,6 +1210,8 @@ ideas = {
 					has_government = humanism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_cultural_policy_national_mythmaking = {
@@ -1022,9 +1227,9 @@ ideas = {
 			}
 
 			modifier = {
-				stability_factor = 0.01
-				war_support_factor = 0.04
-				drift_defence_factor = 0.08
+				stability_factor = 0.015
+				war_support_factor = 0.06
+				drift_defence_factor = 0.12
 				research_speed_factor = -0.01
 			}
 
@@ -1040,6 +1245,26 @@ ideas = {
 					}
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_cultural_policy_heritage_protection = {
+			picture = ADISCORD_law_cultural_policy_civic_festivals
+			cost = 75
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.06
+				drift_defence_factor = 0.08
+				ADISCORD_economy_social_expense_factor = 0.06
+				political_power_gain = -0.02
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = pragmatism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -1052,13 +1277,15 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				stability_factor = 0.01
+				stability_factor = 0.015
 				industrial_capacity_factory = -0.01
-				ADISCORD_economy_civilian_factory_income_factor = 0.03
+				ADISCORD_economy_civilian_factory_income_factor = 0.045
 				ADISCORD_economy_tax_collection_factor = -0.03
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_industrial_policy_balanced_workshops = {
@@ -1068,8 +1295,8 @@ ideas = {
 			default = yes
 
 			modifier = {
-				industrial_capacity_factory = 0.01
-				production_speed_buildings_factor = 0.01
+				industrial_capacity_factory = 0.015
+				production_speed_buildings_factor = 0.015
 			}
 
 			cancel_if_invalid = no
@@ -1077,6 +1304,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_industrial_policy_civilian_expansion = {
@@ -1085,11 +1314,11 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				production_speed_industrial_complex_factor = 0.05
-				production_speed_buildings_factor = 0.02
+				production_speed_industrial_complex_factor = 0.075
+				production_speed_buildings_factor = 0.03
 				production_speed_arms_factory_factor = -0.01
-				ADISCORD_economy_civilian_factory_income_factor = 0.08
-				ADISCORD_country_development_economic_growth_factor = 0.05
+				ADISCORD_economy_civilian_factory_income_factor = 0.12
+				ADISCORD_country_development_economic_growth_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -1101,6 +1330,8 @@ ideas = {
 					has_government = humanism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_industrial_policy_military_prioritization = {
@@ -1117,10 +1348,10 @@ ideas = {
 			}
 
 			modifier = {
-				production_speed_arms_factory_factor = 0.07
-				industrial_capacity_factory = 0.03
+				production_speed_arms_factory_factor = 0.105
+				industrial_capacity_factory = 0.045
 				stability_factor = -0.02
-				ADISCORD_economy_military_industry_income_factor = 0.10
+				ADISCORD_economy_military_industry_income_factor = 0.15
 				ADISCORD_economy_army_expense_factor = 0.05
 				ADISCORD_economy_state_overload_gain_factor = 0.05
 			}
@@ -1134,6 +1365,8 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_industrial_policy_state_planning_boards = {
@@ -1151,12 +1384,12 @@ ideas = {
 			}
 
 			modifier = {
-				production_speed_buildings_factor = 0.03
-				industrial_capacity_factory = 0.03
+				production_speed_buildings_factor = 0.045
+				industrial_capacity_factory = 0.045
 				political_power_gain = -0.03
-				ADISCORD_economy_building_income_factor = 0.05
+				ADISCORD_economy_building_income_factor = 0.075
 				ADISCORD_economy_admin_expense_factor = 0.05
-				ADISCORD_country_development_state_growth_factor = 0.05
+				ADISCORD_country_development_state_growth_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -1171,6 +1404,26 @@ ideas = {
 					}
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_industrial_policy_export_contracts = {
+			picture = ADISCORD_law_industrial_policy_civilian_expansion
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				industrial_capacity_factory = 0.08
+				ADISCORD_economy_trade_income_factor = 0.2
+				production_speed_arms_factory_factor = -0.06
+				line_change_production_efficiency_factor = -0.05
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = hedonism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -1184,7 +1437,7 @@ ideas = {
 			default = yes
 
 			modifier = {
-				industrial_capacity_factory = 0.01
+				industrial_capacity_factory = 0.015
 				stability_factor = -0.005
 			}
 
@@ -1193,6 +1446,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_labor_policy_guild_protections = {
@@ -1201,7 +1456,7 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				stability_factor = 0.03
+				stability_factor = 0.045
 				industrial_capacity_factory = -0.02
 				ADISCORD_economy_civilian_factory_income_factor = -0.03
 				ADISCORD_economy_social_expense_factor = 0.03
@@ -1216,6 +1471,8 @@ ideas = {
 					has_government = humanism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_labor_policy_regulated_shifts = {
@@ -1224,14 +1481,16 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				stability_factor = 0.02
-				monthly_population = 0.01
+				stability_factor = 0.03
+				monthly_population = 0.015
 				industrial_capacity_factory = -0.01
 				ADISCORD_economy_civilian_factory_income_factor = -0.03
 				ADISCORD_economy_social_expense_factor = 0.03
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_labor_policy_technocratic_work_norms = {
@@ -1247,15 +1506,15 @@ ideas = {
 			}
 
 			modifier = {
-				industrial_capacity_factory = 0.03
-				production_speed_buildings_factor = 0.02
+				industrial_capacity_factory = 0.045
+				production_speed_buildings_factor = 0.03
 				stability_factor = -0.01
 				political_power_gain = -0.02
-				ADISCORD_economy_military_industry_income_factor = 0.05
-				ADISCORD_economy_price_stability_factor = 0.05
-				ADISCORD_economy_fiscal_stress_resistance_factor = 0.05
-				ADISCORD_economy_investment_confidence_factor = 0.05
-				ADISCORD_country_development_economic_growth_factor = 0.05
+				ADISCORD_economy_military_industry_income_factor = 0.075
+				ADISCORD_economy_price_stability_factor = 0.075
+				ADISCORD_economy_fiscal_stress_resistance_factor = 0.075
+				ADISCORD_economy_investment_confidence_factor = 0.075
+				ADISCORD_country_development_economic_growth_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -1267,6 +1526,8 @@ ideas = {
 					has_government = technocracy
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_labor_policy_mobilized_labor = {
@@ -1282,10 +1543,10 @@ ideas = {
 			}
 
 			modifier = {
-				production_speed_buildings_factor = 0.06
-				industrial_capacity_factory = 0.03
+				production_speed_buildings_factor = 0.09
+				industrial_capacity_factory = 0.045
 				stability_factor = -0.04
-				ADISCORD_economy_construction_expense_factor = -0.05
+				ADISCORD_economy_construction_expense_factor = -0.075
 				ADISCORD_economy_state_overload_gain_factor = 0.08
 				ADISCORD_economy_war_fatigue_gain_factor = 0.05
 			}
@@ -1299,6 +1560,26 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_labor_policy_collective_bargaining = {
+			picture = ADISCORD_law_labor_policy_guild_protections
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.05
+				production_factory_max_efficiency_factor = 0.06
+				production_factory_efficiency_gain_factor = -0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = humanism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -1312,7 +1593,7 @@ ideas = {
 			default = yes
 
 			modifier = {
-				production_speed_buildings_factor = 0.01
+				production_speed_buildings_factor = 0.015
 			}
 
 			cancel_if_invalid = no
@@ -1320,6 +1601,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_infrastructure_regional_roadworks = {
@@ -1328,13 +1611,15 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				production_speed_infrastructure_factor = 0.05
-				production_speed_buildings_factor = 0.01
+				production_speed_infrastructure_factor = 0.075
+				production_speed_buildings_factor = 0.015
 				ADISCORD_economy_construction_expense_factor = 0.03
-				ADISCORD_economy_building_income_factor = 0.03
+				ADISCORD_economy_building_income_factor = 0.045
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_infrastructure_rail_corridors = {
@@ -1343,11 +1628,11 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				supply_consumption_factor = -0.02
-				mobilization_speed = 0.05
-				production_speed_infrastructure_factor = 0.03
+				supply_consumption_factor = -0.03
+				mobilization_speed = 0.075
+				production_speed_infrastructure_factor = 0.045
 				ADISCORD_economy_construction_expense_factor = 0.05
-				ADISCORD_economy_building_income_factor = 0.05
+				ADISCORD_economy_building_income_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -1359,6 +1644,8 @@ ideas = {
 					is_major = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_infrastructure_strategic_highways = {
@@ -1371,9 +1658,9 @@ ideas = {
 			}
 
 			modifier = {
-				mobilization_speed = 0.10
-				planning_speed = 0.05
-				production_speed_buildings_factor = 0.02
+				mobilization_speed = 0.15
+				planning_speed = 0.075
+				production_speed_buildings_factor = 0.03
 				ADISCORD_economy_construction_expense_factor = 0.05
 				ADISCORD_economy_army_expense_factor = 0.03
 			}
@@ -1387,6 +1674,8 @@ ideas = {
 					has_war_support > 0.35
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_infrastructure_military_depots = {
@@ -1402,8 +1691,8 @@ ideas = {
 			}
 
 			modifier = {
-				supply_consumption_factor = -0.04
-				army_org_factor = 0.01
+				supply_consumption_factor = -0.06
+				army_org_factor = 0.015
 				stability_factor = -0.01
 				ADISCORD_economy_army_expense_factor = 0.05
 				ADISCORD_economy_military_factory_expense_factor = 0.03
@@ -1418,6 +1707,26 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_infrastructure_port_network = {
+			picture = ADISCORD_law_infrastructure_rail_corridors
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				production_speed_naval_base_factor = 0.2
+				production_speed_dockyard_factor = 0.12
+				ADISCORD_economy_trade_income_factor = 0.12
+				production_speed_infrastructure_factor = -0.08
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = hedonism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -1431,7 +1740,7 @@ ideas = {
 			default = yes
 
 			modifier = {
-				command_power_gain = 0.01
+				command_power_gain = 0.015
 			}
 
 			cancel_if_invalid = no
@@ -1439,6 +1748,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_officer_corps_merit_commissions = {
@@ -1447,9 +1758,9 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				army_org_factor = 0.02
+				army_org_factor = 0.03
 				training_time_factor = 0.02
-				command_power_gain = 0.015
+				command_power_gain = 0.0225
 				stability_factor = -0.01
 			}
 
@@ -1462,6 +1773,8 @@ ideas = {
 					has_government = technocracy
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_officer_corps_political_commissars = {
@@ -1478,8 +1791,8 @@ ideas = {
 			}
 
 			modifier = {
-				stability_factor = 0.02
-				war_support_factor = 0.02
+				stability_factor = 0.03
+				war_support_factor = 0.03
 				army_org_factor = -0.01
 				command_power_gain = -0.005
 			}
@@ -1493,6 +1806,8 @@ ideas = {
 					has_government = etatism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_officer_corps_general_staff_academy = {
@@ -1505,11 +1820,11 @@ ideas = {
 			}
 
 			modifier = {
-				planning_speed = 0.10
-				army_org_factor = 0.03
-				command_power_gain = 0.02
+				planning_speed = 0.15
+				army_org_factor = 0.045
+				command_power_gain = 0.03
 				ADISCORD_economy_army_expense_factor = 0.03
-				ADISCORD_country_development_army_growth_factor = 0.03
+				ADISCORD_country_development_army_growth_factor = 0.045
 			}
 
 			cancel_if_invalid = no
@@ -1521,6 +1836,8 @@ ideas = {
 					is_major = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_officer_corps_emergency_promotions = {
@@ -1536,10 +1853,10 @@ ideas = {
 			}
 
 			modifier = {
-				mobilization_speed = 0.15
-				training_time_factor = -0.05
+				mobilization_speed = 0.225
+				training_time_factor = -0.075
 				army_org_factor = -0.03
-				war_support_factor = 0.02
+				war_support_factor = 0.03
 			}
 
 			cancel_if_invalid = no
@@ -1551,6 +1868,26 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_officer_corps_field_commissions = {
+			picture = ADISCORD_law_officer_corps_merit_commissions
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				army_morale_factor = 0.08
+				army_org_factor = 0.04
+				planning_speed = -0.1
+				ADISCORD_economy_army_expense_factor = 0.04
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = pragmatism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -1563,14 +1900,16 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				supply_consumption_factor = -0.03
+				supply_consumption_factor = -0.045
 				stability_factor = -0.015
 				army_org_factor = -0.01
-				ADISCORD_economy_army_expense_factor = -0.03
+				ADISCORD_economy_army_expense_factor = -0.045
 				ADISCORD_economy_state_overload_gain_factor = 0.03
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_logistics_civilian_contracts = {
@@ -1580,7 +1919,7 @@ ideas = {
 			default = yes
 
 			modifier = {
-				supply_consumption_factor = -0.01
+				supply_consumption_factor = -0.015
 			}
 
 			cancel_if_invalid = no
@@ -1588,6 +1927,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_logistics_centralized_depots = {
@@ -1596,8 +1937,8 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				supply_consumption_factor = -0.04
-				mobilization_speed = 0.05
+				supply_consumption_factor = -0.06
+				mobilization_speed = 0.075
 				political_power_gain = -0.01
 				ADISCORD_economy_army_expense_factor = 0.03
 				ADISCORD_economy_admin_expense_factor = 0.03
@@ -1612,6 +1953,8 @@ ideas = {
 					is_major = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_logistics_motorized_supply = {
@@ -1624,8 +1967,8 @@ ideas = {
 			}
 
 			modifier = {
-				supply_consumption_factor = -0.05
-				army_org_factor = 0.02
+				supply_consumption_factor = -0.075
+				army_org_factor = 0.03
 				industrial_capacity_factory = -0.01
 				ADISCORD_economy_army_expense_factor = 0.05
 				ADISCORD_economy_military_factory_expense_factor = 0.03
@@ -1640,6 +1983,8 @@ ideas = {
 					has_war_support > 0.35
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_logistics_emergency_requisitioning = {
@@ -1655,10 +2000,10 @@ ideas = {
 			}
 
 			modifier = {
-				supply_consumption_factor = -0.06
-				war_support_factor = 0.02
+				supply_consumption_factor = -0.09
+				war_support_factor = 0.03
 				stability_factor = -0.04
-				political_power_gain = 0.02
+				political_power_gain = 0.03
 				ADISCORD_economy_state_overload_gain_factor = 0.05
 			}
 
@@ -1671,6 +2016,25 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_logistics_regional_warehouses = {
+			picture = ADISCORD_law_logistics_centralized_depots
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				supply_consumption_factor = -0.1
+				army_core_defence_factor = 0.04
+				ADISCORD_economy_army_expense_factor = 0.1
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = etatism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -1683,13 +2047,15 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				training_time_factor = -0.07
+				training_time_factor = -0.105
 				army_org_factor = -0.02
-				stability_factor = 0.01
+				stability_factor = 0.015
 				conscription = 0.005
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_training_basic_drills = {
@@ -1699,7 +2065,7 @@ ideas = {
 			default = yes
 
 			modifier = {
-				army_org_factor = 0.01
+				army_org_factor = 0.015
 				training_time_factor = 0.01
 			}
 
@@ -1708,6 +2074,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_training_standardized_program = {
@@ -1716,13 +2084,15 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				army_org_factor = 0.025
+				army_org_factor = 0.0375
 				training_time_factor = 0.01
-				command_power_gain = 0.005
+				command_power_gain = 0.0075
 				ADISCORD_economy_army_expense_factor = 0.03
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_training_officer_led_wargames = {
@@ -1735,11 +2105,11 @@ ideas = {
 			}
 
 			modifier = {
-				planning_speed = 0.08
-				army_org_factor = 0.03
+				planning_speed = 0.12
+				army_org_factor = 0.045
 				training_time_factor = 0.04
 				ADISCORD_economy_army_expense_factor = 0.05
-				ADISCORD_country_development_army_growth_factor = 0.03
+				ADISCORD_country_development_army_growth_factor = 0.045
 			}
 
 			cancel_if_invalid = no
@@ -1751,6 +2121,8 @@ ideas = {
 					is_major = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_training_accelerated_bootcamps = {
@@ -1766,12 +2138,12 @@ ideas = {
 			}
 
 			modifier = {
-				training_time_factor = -0.12
-				mobilization_speed = 0.10
+				training_time_factor = -0.18
+				mobilization_speed = 0.15
 				army_org_factor = -0.025
-				war_support_factor = 0.01
+				war_support_factor = 0.015
 				ADISCORD_economy_army_expense_factor = 0.05
-				ADISCORD_country_development_army_growth_factor = 0.05
+				ADISCORD_country_development_army_growth_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -1783,6 +2155,26 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_training_reserve_cycles = {
+			picture = ADISCORD_law_training_standardized_program
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				training_time_factor = -0.08
+				mobilization_speed = 0.15
+				industrial_capacity_factory = -0.03
+				ADISCORD_economy_army_expense_factor = 0.08
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = etatism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 
@@ -1795,13 +2187,15 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				stability_factor = 0.005
-				drift_defence_factor = 0.02
+				stability_factor = 0.0075
+				drift_defence_factor = 0.03
 				army_org_factor = -0.01
-				political_power_gain = 0.01
+				political_power_gain = 0.015
 			}
 
 			cancel_if_invalid = no
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_internal_security_local_garrisons = {
@@ -1811,7 +2205,7 @@ ideas = {
 			default = yes
 
 			modifier = {
-				stability_factor = 0.01
+				stability_factor = 0.015
 				army_org_factor = -0.005
 			}
 
@@ -1820,6 +2214,8 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_internal_security_investigative_bureaus = {
@@ -1828,8 +2224,8 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				stability_factor = 0.02
-				drift_defence_factor = 0.10
+				stability_factor = 0.03
+				drift_defence_factor = 0.15
 				political_power_gain = -0.02
 				ADISCORD_economy_admin_expense_factor = 0.05
 			}
@@ -1843,6 +2239,8 @@ ideas = {
 					has_government = etatism
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_internal_security_emergency_patrols = {
@@ -1858,8 +2256,8 @@ ideas = {
 			}
 
 			modifier = {
-				stability_factor = 0.03
-				war_support_factor = 0.02
+				stability_factor = 0.045
+				war_support_factor = 0.03
 				army_org_factor = -0.02
 				ADISCORD_economy_army_expense_factor = 0.03
 				ADISCORD_economy_admin_expense_factor = 0.05
@@ -1874,6 +2272,8 @@ ideas = {
 					has_war = yes
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
 		ADISCORD_internal_security_internal_directorate = {
@@ -1891,11 +2291,11 @@ ideas = {
 			}
 
 			modifier = {
-				stability_factor = 0.05
-				drift_defence_factor = 0.20
+				stability_factor = 0.075
+				drift_defence_factor = 0.3
 				political_power_gain = -0.04
 				ADISCORD_economy_admin_expense_factor = 0.10
-				ADISCORD_economy_overload_resistance_factor = 0.05
+				ADISCORD_economy_overload_resistance_factor = 0.075
 			}
 
 			cancel_if_invalid = no
@@ -1911,6 +2311,26 @@ ideas = {
 					}
 				}
 			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+
+		ADISCORD_internal_security_civilian_oversight = {
+			picture = ADISCORD_law_internal_security_investigative_bureaus
+			cost = 150
+			removal_cost = -1
+
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.04
+				drift_defence_factor = -0.08
+				ADISCORD_economy_admin_expense_factor = 0.08
+			}
+
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = humanism } }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 }
