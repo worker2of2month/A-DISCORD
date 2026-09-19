@@ -1,0 +1,32 @@
+VAL_command_balance = {
+	initial_value = 0.10
+	left_side = VAL_general_staff_side
+	right_side = VAL_solgalov_side
+	decision_category = VAL_command_balance_category
+	range = {
+		id = VAL_command_compromise
+		min = -0.25
+		max = 0.25
+		modifier = { stability_factor = 0.03 }
+	}
+	side = {
+		id = VAL_general_staff_side
+		icon = GFX_portrait_VAL_Kirill_Voron
+		range = {
+			id = VAL_general_staff_control
+			min = -1.0
+			max = -0.25
+			modifier = { planning_speed = 0.10 army_org_factor = 0.05 political_power_gain = -0.10 }
+		}
+	}
+	side = {
+		id = VAL_solgalov_side
+		icon = GFX_portrait_VAL_Valera_Solgalov
+		range = {
+			id = VAL_solgalov_control
+			min = 0.25
+			max = 1.0
+			modifier = { political_power_gain = 0.15 production_factory_efficiency_gain_factor = 0.05 planning_speed = -0.10 }
+		}
+	}
+}

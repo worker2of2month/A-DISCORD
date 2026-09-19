@@ -2,11 +2,13 @@
 music_station = "base_music"
 
 music = {
-	song = "maintheme"
+	song = "ADISCORD_val_theme"
 	chance = {
+		base = 10
 		modifier = {
-			factor = 0.5
-		}		
+			factor = 0
+			NOT = { tag = VAL }
+		}
 	}
 }
 

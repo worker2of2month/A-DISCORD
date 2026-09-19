@@ -511,7 +511,7 @@ country_event = {
             self.assertIn(f"sound_effect = {sound_effect}", audio_proxy)
 
         sound_effects = read("sound/superevents_effects.asset")
-        self.assertEqual(sound_effects.count("volume = 1.0"), 6)
+        self.assertEqual(sound_effects.count("volume = 1.0"), 7)
         for effect_name in (
             "superevent_vorkerland_civilwar_sound_e",
             "superevent_stelander_empire_sound_e",

@@ -1281,6 +1281,7 @@ VAL_migrate_contract_tier_levels = {
 }
 
 VAL_initialize_rework = {
+	VAL_initialize_command_balance = yes
 	VAL_initialize_contract_authority = yes
 	ADISCORD_economy_initialize_country = yes
 	if = {
@@ -2328,6 +2329,7 @@ VAL_enter_stelander_defeat = {
 			NOT = { has_country_flag = VAL_stelander_defeated }
 		}
 		set_country_flag = VAL_stelander_defeated
+		if = { limit = { has_power_balance = { id = VAL_command_balance } } remove_power_balance = { id = VAL_command_balance } }
 		set_country_flag = VAL_cw_defeated
 		set_country_flag = VAL_cw_settled
 		clr_country_flag = VAL_cw_postwar
@@ -2639,5 +2641,14 @@ VAL_integrate_occidia = {
 		}
 		88 = { remove_core_of = OCA set_state_controller_to = VAL }
 		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# --- command_balance ---
+VAL_initialize_command_balance = {
+	if = {
+		limit = { NOT = { has_country_flag = VAL_command_balance_initialized } NOT = { has_country_flag = VAL_stelander_defeated } }
+		set_power_balance = { id = VAL_command_balance set_value = 0.10 }
+		set_country_flag = VAL_command_balance_initialized
 	}
 }

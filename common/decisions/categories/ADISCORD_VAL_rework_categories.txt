@@ -55,3 +55,8 @@ VAL_foreign_sales = {
  visible = { OR = { has_completed_focus = VAL_Foreign_Broker_Licences has_country_flag = VAL_cw_trade_course has_country_flag = VAL_operation_sell_rifles_to_cin has_country_flag = VAL_operation_sell_rifles_to_osf } }
  visible_when_empty = yes
 }
+
+VAL_command_balance_category = {
+	allowed = { tag = VAL }
+	visible = { has_power_balance = { id = VAL_command_balance } NOT = { has_country_flag = VAL_stelander_defeated } }
+}

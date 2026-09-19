@@ -509,7 +509,7 @@ class ValTierTransitionContractTests(unittest.TestCase):
 
     def test_startup_initialization_is_fresh_only_and_one_shot(self) -> None:
         startup = only_named_block(self, self.on_actions, "on_startup")
-        branch = only_named_block(self, startup, "if")
+        branch = next(span.text for span in named_block_spans(startup, "if") if "VAL_initialize_rework = yes" in span.text)
         limit = only_named_block(self, branch, "limit")
 
         fresh_guard = f"has_global_flag = {FRESH_CAMPAIGN_FLAG}"
@@ -2912,11 +2912,11 @@ class ValExpandedCampaignTests(unittest.TestCase):
 
     def test_map_controller_layers_are_exhaustive_and_exclusive(self):
         from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
-        from tools.builders.build_adiscord_val_operations_map import STATE_IDS, VAL_STATES
+        from tools.builders.build_adiscord_val_operations_map import STATE_IDS, VAL_STATES, MAP_TAGS
         script = parse_clausewitz((ROOT / "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt").read_text(encoding="utf-8"))
         triggers = block(block(block(script, "scripted_gui"), "ADISCORD_VAL_operations_panel"), "triggers")
         layers = {e.key: e.value for e in triggers}
-        self.assertEqual(len(STATE_IDS), 13)
+        self.assertTrue(set(VAL_STATES).issubset(STATE_IDS))
         self.assertNotIn(168, VAL_STATES)
         for state in STATE_IDS:
             for controller in ("VAL", "CIN", "OSF", "APH", "SRP", "STP", "STS", "NOD", "ERT"):
@@ -2926,9 +2926,40 @@ class ValExpandedCampaignTests(unittest.TestCase):
                     facts = {(str(state), "controller"): controller,
                              (controller, "has_war_with", "VAL"): enemy,
                              (controller, "is_subject_of", "VAL"): subject}
-                    active = [name for name in ("home", "subject", "enemy", "val", "other")
+                    active = [name for name in (*[tag.lower() for tag in MAP_TAGS], "other")
                               if matches_conditions(layers[f"VAL_ops_{state}_{name}_visible"], facts, "VAL")]
                     self.assertEqual(len(active), 1, (state, controller, enemy, subject, active))
+
+    def test_map_marks_partial_control_before_state_controller_changes(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
+        from tools.builders.build_adiscord_val_operations_map import STATE_IDS, state_provinces
+        script = parse_clausewitz((ROOT / "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt").read_text(encoding="utf-8"))
+        layers = {e.key: e.value for e in block(block(block(script, "scripted_gui"), "ADISCORD_VAL_operations_panel"), "triggers")}
+        for state in STATE_IDS:
+            provinces = sorted(state_provinces(state))
+            facts = {(str(state), "controller"): "VAL"}
+            facts.update({("VAL", "controls_province", str(p)): True for p in provinces})
+            layer = layers[f"VAL_ops_{state}_contested_visible"]
+            self.assertFalse(matches_conditions(layer, facts, "VAL"), state)
+            facts["VAL", "controls_province", str(provinces[0])] = False
+            self.assertTrue(matches_conditions(layer, facts, "VAL"), state)
+
+    def test_foreign_map_colors_are_solid_and_cropped_layers_preserve_pixels(self):
+        from tools.builders import build_adiscord_val_operations_map as builder
+        outputs, _, _, _ = builder.render_outputs()
+        compact, boxes = builder.compact_overlays(outputs)
+        colors = builder.country_colors()
+        for state in builder.STATE_IDS:
+            source = outputs[f"VAL_ops_state_{state}.png"]
+            strip = compact[f"VAL_ops_state_{state}.png"]
+            left, top, right, bottom = boxes[state]
+            width = right - left
+            for index, color in enumerate(colors):
+                original = source.crop((index * builder.WIDTH + left, top, index * builder.WIDTH + right, bottom))
+                cropped = strip.crop((index * width, 0, (index + 1) * width, bottom - top))
+                self.assertEqual(original.tobytes(), cropped.tobytes())
+                if index != builder.MAP_TAGS.index("VAL"):
+                    self.assertEqual({pixel[:3] for pixel in cropped.getdata() if pixel[3]}, {color})
 
     def test_full_tier_mirror_detects_wrong_modifier_even_if_id_is_valid(self):
         check = ValRewardValidatorTests()

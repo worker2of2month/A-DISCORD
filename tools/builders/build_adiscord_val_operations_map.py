@@ -16,10 +16,28 @@ OUT = ROOT / "gfx" / "interface" / "VAL_operations"
 WIDTH, HEIGHT = 420, 340
 STATE_IDS = (43, 44, 45, 88, 58, 59, 60, 61, 62, 63, 64, 65, 168)
 VAL_STATES = (24, 42, 48, 54, 55, 56, 57)
+STP_STATES = (1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88)
+NOD_STATES = (10, 11, 12, 13, 17, 18, 30)
+STATE_IDS = tuple(dict.fromkeys((*STATE_IDS, *VAL_STATES, *STP_STATES, *NOD_STATES)))
 EXZ_STATES = (167, 169, 171, 180, 182, 185)
 
-# Home administration, VAL subject, enemy, VAL, third-party controller.
-FRAME_COLORS = {state: ((69, 105, 116), (151, 43, 29), (185, 78, 39), (127, 15, 2), (103, 103, 107)) for state in STATE_IDS}
+# Countries participating in the northern and Stelander campaigns; the last frame
+# represents a controller from outside this theatre.
+MAP_TAGS = ("VAL", "STP", "STS", "SRP", "NOD", "CIN", "OSF", "APH", "ERT", "NKA", "OCA", "YPR", "COF", "TFF")
+FRAME_COUNT = len(MAP_TAGS) + 1
+
+
+def country_colors() -> list[tuple[int, int, int]]:
+    registry = "\n".join(p.read_text(encoding="utf-8-sig") for p in sorted((ROOT / "common/country_tags").glob("*.txt")))
+    result = []
+    for tag in MAP_TAGS:
+        relative = re.search(rf'(?m)^\s*{tag}\s*=\s*"([^"]+)"', registry).group(1)
+        source = (ROOT / "common" / relative).read_text(encoding="utf-8-sig")
+        color = re.search(r"\bcolor\s*=\s*(?:rgb\s*)?\{\s*(\d+)\s+(\d+)\s+(\d+)\s*\}", source)
+        if color is None:
+            raise ValueError(f"No RGB map color for {tag}")
+        result.append(tuple(map(int, color.groups())))
+    return [*result, (103, 103, 107)]
 
 
 def state_provinces(state_id: int) -> set[int]:
@@ -117,9 +135,6 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int],
     for x in range(0, WIDTH, 32):
         draw.line((x, 0, x, HEIGHT), fill=(34, 37, 38, 255), width=1)
 
-    for state in VAL_STATES:
-        fill = Image.new("RGBA", background.size, (82, 18, 17, 255))
-        background.alpha_composite(Image.composite(fill, Image.new("RGBA", background.size), state_masks[state]))
     for state in EXZ_STATES:
         fill = Image.new("RGBA", background.size, (35, 37, 40, 255))
         background.alpha_composite(Image.composite(fill, Image.new("RGBA", background.size), state_masks[state]))
@@ -132,18 +147,6 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int],
     border = Image.frombytes("L", border.size, bytes(max(a - b, 0) for a, b in zip(border.getdata(), all_mask.getdata())))
     background.alpha_composite(Image.composite(Image.new("RGBA", background.size, (190, 178, 145, 150)), Image.new("RGBA", background.size), border))
 
-    # Margin labels live in the GUI; leaders keep their geographic anchors clear.
-    draw = ImageDraw.Draw(background)
-    for points in (
-        ((98, 57), (160, 57), (206, 57)),
-        ((98, 127), (157, 127), (206, 132)),
-        ((316, 79), (280, 79), (237, 91)),
-        ((316, 142), (291, 142), (269, 138)),
-        ((316, 172), (293, 172), (280, 173)),
-        ((316, 245), (297, 245), (268, 239)),
-    ):
-        draw.line(points, fill=(143, 136, 114, 255), width=1)
-
     vignette = Image.new("RGBA", background.size, (0, 0, 0, 0))
     vd = ImageDraw.Draw(vignette)
     for i in range(18):
@@ -151,17 +154,26 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int],
     background.alpha_composite(vignette)
     outputs = {"VAL_ops_map_background.png": background}
 
+    palette = country_colors()
     for state in STATE_IDS:
-        frames = Image.new("RGBA", (WIDTH * 5, HEIGHT), (0, 0, 0, 0))
+        frames = Image.new("RGBA", (WIDTH * FRAME_COUNT, HEIGHT), (0, 0, 0, 0))
         mask = state_masks[state]
         expanded = mask.filter(ImageFilter.MaxFilter(3))
         rim = Image.frombytes("L", mask.size, bytes(max(a - b, 0) for a, b in zip(expanded.getdata(), mask.getdata())))
-        for index, color in enumerate(FRAME_COLORS[state]):
+        for index, color in enumerate(palette):
             frame = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
-            frame.alpha_composite(Image.composite(Image.new("RGBA", frame.size, (*color, 210)), Image.new("RGBA", frame.size), mask))
-            frame.alpha_composite(Image.composite(Image.new("RGBA", frame.size, (235, 215, 160, 235)), Image.new("RGBA", frame.size), rim))
+            frame.alpha_composite(Image.composite(Image.new("RGBA", frame.size, (*color, 255)), Image.new("RGBA", frame.size), mask))
+            if index == MAP_TAGS.index("VAL"):
+                frame.alpha_composite(Image.composite(Image.new("RGBA", frame.size, (235, 215, 160, 235)), Image.new("RGBA", frame.size), rim))
             frames.paste(frame, (WIDTH * index, 0))
         outputs[f"VAL_ops_state_{state}.png"] = frames
+        # Mark divided control independently of the state's majority controller.
+        stripes = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
+        stripe_draw = ImageDraw.Draw(stripes)
+        for x in range(-HEIGHT, WIDTH, 8):
+            stripe_draw.line((x, 0, x + HEIGHT, HEIGHT), fill=(255, 205, 90, 210), width=2)
+        outputs[f"VAL_ops_contested_{state}.png"] = Image.composite(stripes, Image.new("RGBA", stripes.size), mask)
+
 
     return outputs, box, size, offset
 
@@ -203,6 +215,49 @@ def apply(outputs: dict[str, Image.Image]) -> None:
         image.save(OUT / filename, optimize=True)
 
 
+def compact_overlays(outputs: dict[str, Image.Image]) -> tuple[dict[str, Image.Image], dict[int, tuple[int, int, int, int]]]:
+    # Store only the region's occupied rectangle, not fifteen full-map canvases.
+    compact = {"VAL_ops_map_background.png": outputs["VAL_ops_map_background.png"]}
+    boxes = {}
+    for state in STATE_IDS:
+        source = outputs[f"VAL_ops_state_{state}.png"]
+        box = source.crop((0, 0, WIDTH, HEIGHT)).getbbox()
+        if box is None:
+            raise ValueError(f"Empty map region {state}")
+        boxes[state] = box
+        left, top, right, bottom = box
+        width, height = right - left, bottom - top
+        strip = Image.new("RGBA", (width * FRAME_COUNT, height))
+        for frame in range(FRAME_COUNT):
+            strip.paste(source.crop((left + frame * WIDTH, top, right + frame * WIDTH, bottom)), (frame * width, 0))
+        compact[f"VAL_ops_state_{state}.png"] = strip
+        compact[f"VAL_ops_contested_{state}.png"] = outputs[f"VAL_ops_contested_{state}.png"].crop(box)
+    return compact, boxes
+
+
+def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, str]:
+    header = "# Generated by tools/builders/build_adiscord_val_operations_map.py; do not edit.\n"
+    gui = [header, 'guiTypes = {\n containerWindowType = {\n  name = "ADISCORD_VAL_operations_panel_window"\n  position = { x = 0 y = 0 }\n  size = { width = 460 height = 398 }\n  clipping = no\n', '  iconType = { name = "VAL_operations_map" position = { x = 20 y = 38 } quadTextureSprite = "GFX_VAL_ops_map_background" pdx_tooltip = "VAL_operations_map_tt" }\n']
+    gfx = [header, 'spriteTypes = {\n spriteType = { name = "GFX_VAL_ops_map_background" texturefile = "gfx/interface/VAL_operations/VAL_ops_map_background.png" }\n']
+    script = [header, 'scripted_gui = {\n ADISCORD_VAL_operations_panel = {\n  context_type = decision_category\n  window_name = "ADISCORD_VAL_operations_panel_window"\n  visible = { always = yes }\n  triggers = {\n']
+    for state in STATE_IDS:
+        left, top, _, _ = boxes[state]
+        gfx.append(f' spriteType = {{ name = "GFX_VAL_ops_state_{state}" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_{state}.png" noOfFrames = {FRAME_COUNT} }}\n')
+        for frame, tag in enumerate((*MAP_TAGS, "other"), 1):
+            name = f"VAL_ops_{state}_{tag.lower()}"
+            gui.append(f'  iconType = {{ name = "{name}" position = {{ x = {20 + left} y = {38 + top} }} quadTextureSprite = "GFX_VAL_ops_state_{state}" frame = {frame} }}\n')
+            condition = f"tag = {tag}" if tag != "other" else "NOT = { OR = { " + " ".join(f"tag = {t}" for t in MAP_TAGS) + " } }"
+            script.append(f'   {name}_visible = {{ {state} = {{ controller = {{ {condition} }} }} }}\n')
+        gfx.append(f' spriteType = {{ name = "GFX_VAL_ops_contested_{state}" texturefile = "gfx/interface/VAL_operations/VAL_ops_contested_{state}.png" }}\n')
+        gui.append(f'  iconType = {{ name = "VAL_ops_{state}_contested" position = {{ x = {20 + left} y = {38 + top} }} quadTextureSprite = "GFX_VAL_ops_contested_{state}" }}\n')
+        provinces = " ".join(f"NOT = {{ controls_province = {p} }}" for p in sorted(state_provinces(state)))
+        script.append(f'   VAL_ops_{state}_contested_visible = {{ {state} = {{ controller = {{ tag = VAL OR = {{ {provinces} }} }} }} }}\n')
+    gui.append(" }\n}\n")
+    gfx.append("}\n")
+    script.append("  }\n }\n}\n")
+    return {"interface/ADISCORD_VAL_operations.gui": "".join(gui), "interface/ADISCORD_VAL_operations.gfx": "".join(gfx), "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt": "".join(script)}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate Kefreyt's local operations map.")
     actions = parser.add_mutually_exclusive_group()
@@ -210,10 +265,17 @@ def main() -> int:
     actions.add_argument("--apply", action="store_true", help="write the deterministic operations-map PNGs")
     args = parser.parse_args()
     outputs, box, size, offset = render_outputs()
+    outputs, boxes = compact_overlays(outputs)
+    interfaces = interface_outputs(boxes)
     if args.apply:
+        for name, source in interfaces.items():
+            (ROOT / name).write_text(source, encoding="utf-8")
         apply(outputs)
         print(f"Wrote operations map to {OUT.relative_to(ROOT)}; source crop={box}, resized={size}, offset={offset}")
     issues = validate_outputs(outputs)
+    for name, source in interfaces.items():
+        if not (ROOT / name).exists() or (ROOT / name).read_text(encoding="utf-8") != source:
+            issues.append(f"generated interface differs: {name}")
     if issues:
         for issue in issues:
             print(f"ERROR: {issue}")

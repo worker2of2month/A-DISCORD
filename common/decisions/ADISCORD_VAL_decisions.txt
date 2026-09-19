@@ -1154,3 +1154,24 @@ VAL_cw_offer_contract_formations = {
  }
 
 }
+
+VAL_command_balance_category = {
+	VAL_staff_authority = {
+		icon = generic_army_support
+		visible = { has_power_balance = { id = VAL_command_balance } }
+		available = { has_capitulated = no NOT = { is_power_balance_in_range = { id = VAL_command_balance range = VAL_general_staff_control } } }
+		cost = 50
+		days_re_enable = 90
+		complete_effect = { add_power_balance_value = { id = VAL_command_balance value = -0.15 } }
+		ai_will_do = { base = 1 modifier = { factor = 3 has_war = yes } }
+	}
+	VAL_solgalov_authority = {
+		icon = generic_political_pressure
+		visible = { has_power_balance = { id = VAL_command_balance } }
+		available = { has_capitulated = no NOT = { is_power_balance_in_range = { id = VAL_command_balance range = VAL_solgalov_control } } }
+		cost = 50
+		days_re_enable = 90
+		complete_effect = { add_power_balance_value = { id = VAL_command_balance value = 0.15 } }
+		ai_will_do = { base = 1 modifier = { factor = 3 has_war = no } }
+	}
+}

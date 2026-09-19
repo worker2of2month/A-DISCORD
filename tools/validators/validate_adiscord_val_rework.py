@@ -1005,7 +1005,7 @@ def main() -> int:
         issues.append(f"VAL rework must define exactly one on_startup, found {len(startup_blocks)}")
     else:
         startup = mask_comments(startup_blocks[0])
-        startup_branches = named_blocks(startup, "if")
+        startup_branches = [branch for branch in named_blocks(startup, "if") if "VAL_initialize_rework = yes" in branch]
         if len(startup_branches) != 1:
             issues.append(
                 "VAL rework startup must contain one fresh-campaign initialization branch"
@@ -1528,14 +1528,17 @@ def main() -> int:
         ):
             if token not in " ".join(panel[0].split()):
                 issues.append(f"operations scripted-GUI panel is missing {token}")
-    for state in (43, 44, 45, 88, 58, 59, 60, 61, 62, 63, 64, 65, 168):
+    from tools.builders.build_adiscord_val_operations_map import STATE_IDS, FRAME_COUNT
+    if "instantTextBoxType" in gui:
+        issues.append("operations map must not contain visible text labels")
+    for state in STATE_IDS:
         path = ROOT / f"gfx/interface/VAL_operations/VAL_ops_state_{state}.png"
         if not path.exists():
             issues.append(f"missing operations overlay for state {state}")
             continue
         with Image.open(path) as image:
-            if image.size != (2100, 340):
-                issues.append(f"state {state} overlay has size {image.size}, expected 2100x340")
+            if image.width % FRAME_COUNT or not 0 < image.width // FRAME_COUNT <= 420 or not 0 < image.height <= 340:
+                issues.append(f"state {state} overlay has size {image.size}, expected {FRAME_COUNT} cropped frames")
         for text, label in ((gfx, "GFX"), (gui, "GUI"), (scripted_gui, "scripted GUI")):
             if f"{state}" not in text:
                 issues.append(f"state {state} is missing from operations {label}")
@@ -1588,7 +1591,7 @@ def main() -> int:
         for issue in issues:
             print(f"- {issue}")
         return 1
-    print(f"Kefreyt rework validation passed ({len(focuses)} focuses, 13 active map regions).")
+    print(f"Kefreyt rework validation passed ({len(focuses)} focuses, {len(STATE_IDS)} active map regions).")
     return 0
 
 
