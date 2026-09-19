@@ -2744,6 +2744,12 @@ STP_cw_begin_hostilities = {
 					add_command_power = 15
 				}
 			}
+			# The human party route opens in a defensive phase. Do not weaken the AI party
+			# when the human is playing Shabrat: that would make the other route easier.
+			if = {
+				limit = { is_ai = no has_country_flag = STP_sided_with_the_party_flag }
+				add_timed_idea = { idea = STP_cw_party_initial_disarray days = 35 }
+			}
 			if = {
 				limit = { has_country_flag = STP_cw_party_defence_ready }
 				add_timed_idea = { idea = STP_cw_defensive_preparation days = 35 }
@@ -3363,6 +3369,27 @@ STP_cw_resolve_last_banquet_success = {
 		clr_country_flag = STP_cw_last_banquet_started
 		remove_mission = STP_cw_last_banquet_deadline
 		STP_cw_cancel_pending_nod_intervention = yes
+		# Losing Fada and the Bronze Congress is a real campaign crisis for the human
+		# party route: it costs war support, fractures the apparatus and suppresses command.
+		# Keep this player-route only so a Shabrat campaign does not receive a free AI debuff.
+		if = {
+			limit = {
+				STP = {
+					exists = yes
+					is_ai = no
+					has_country_flag = STP_sided_with_the_party_flag
+					has_war_with = STS
+					NOT = { has_country_flag = STP_cw_congress_fall_crisis_applied }
+				}
+			}
+			STP = {
+				set_country_flag = STP_cw_congress_fall_crisis_applied
+				add_war_support = -0.10
+				add_timed_idea = { idea = STP_cw_congress_fall_crisis days = 70 }
+				set_temp_variable = { var = STP_apparatus_loyalty_change value = -12 }
+				STP_change_apparatus_loyalty = yes
+			}
+		}
 	}
 }
 
