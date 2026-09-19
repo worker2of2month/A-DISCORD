@@ -118,7 +118,8 @@ class PartySurvivalContracts(unittest.TestCase):
             facts = {('NOD', 'tag', 'NOD'): True, ('NOD', 'exists', 'yes'): True,
                      ('NOD', 'has_capitulated', 'no'): True, ('NOD', 'is_subject', 'no'): True,
                      ('NOD', 'variable', 'STP_cw_northern_campaign_status'): status,
-                     ('NOD', 'is_ai', 'yes'): ai}
+                     ('NOD', 'is_ai', 'yes'): ai,
+                     ('NOD', 'owns_state', '17'): True, ('NOD', 'controls_state', '17'): True}
             self.assertTrue(matches_conditions(host, facts, 'NOD'))
         handoff = str(signature(self.effects['STP_ps_exile_handoff']))
         self.assertIn("('NOD', [('is_ai', 'yes')", handoff)
@@ -243,3 +244,56 @@ class PartySurvivalContracts(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class PartySurvivalFinalIntegration(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {e.key:e.value for e in parse_clausewitz(read(EFFECTS))}
+        cls.triggers = {e.key:e.value for e in parse_clausewitz(read(TRIGGERS))}
+        cls.decisions = {e.key:e.value for c in parse_clausewitz(read(DECISIONS)) for e in c.value if isinstance(e.value,list)}
+
+    def test_host_requires_owned_controlled_land(self):
+        host = self.triggers['STP_ps_nod_can_host_exiles']
+        facts = {('NOD','tag','NOD'):True,('NOD','exists','yes'):True,('NOD','has_capitulated','no'):True,('NOD','is_subject','no'):True}
+        self.assertFalse(matches_conditions(host,facts,'NOD'))
+        facts[('NOD','owns_state','17')] = True
+        self.assertFalse(matches_conditions(host,facts,'NOD'))
+        facts[('NOD','controls_state','17')] = True
+        self.assertTrue(matches_conditions(host,facts,'NOD'))
+
+    def test_arrested_hedersett_is_not_evacuated_or_promoted(self):
+        for name in ('STP_ps_accept_exile','STP_ps_settle_return'):
+            blocks = [e.value for e in walk(self.effects[name]) if e.key == 'if'
+                      and any(x.key == 'set_nationality' for x in e.value)]
+            self.assertEqual(len(blocks),1,name)
+            gate = one(blocks[0],'limit')
+            character = one(gate,'STP_rufus_hedersett')
+            self.assertEqual(one(one(character,'NOT'),'has_character_flag'),'STP_cw_arrested')
+
+    def test_all_internal_war_settlements_refund_goods_before_the_buyer_is_deleted(self):
+        for name in ('STP_cw_settle_union_victory','STP_cw_settle_nod_victory'):
+            keys = [e.key for e in walk(self.effects[name])]
+            self.assertIn('STP_ps_refund_val_supply',keys,name)
+            self.assertLess(keys.index('STP_ps_refund_val_supply'),keys.index('annex_country'),name)
+
+    def test_receipt_consumption_does_not_remove_a_running_mission(self):
+        for name in ('STP_ps_clear_val_receipt','STP_ps_clear_nod_receipt'):
+            self.assertNotIn('remove_mission',{e.key for e in walk(self.effects[name])},name)
+
+    def test_unavailable_routes_retry_outside_the_expiring_mission(self):
+        for mission in ('STP_ps_nod_route_wait','STP_ps_val_route_wait'):
+            payload = one(one(self.decisions[mission],'timeout_effect'),'hidden_effect')
+            queue = one(payload,'country_event')
+            self.assertEqual(one(queue,'hours'),'1')
+            self.assertEqual(one(queue,'id'),'ADISCORD_STP_cw.206')
+        events = parse_clausewitz(read('events/ADISCORD_STP_events.txt'))
+        retry = next(e.value for e in events if e.key == 'country_event' and one(e.value,'id') == 'ADISCORD_STP_cw.206')
+        self.assertIn('has_active_mission',str(signature(one(retry,'immediate'))))
+
+    def test_return_requires_a_real_hostile_war_relation(self):
+        body = one(self.effects['STP_ps_begin_return'],'if')
+        gate = one(body,'limit')
+        self.assertIn('STP_ps_exile_training_completed',str(signature(gate)))
+        self.assertIn('is_in_faction_with',str(signature(gate)))
+        committed = next(e.value for e in body if e.key == 'if' and any(x.key == 'set_country_flag' and x.value == 'STP_ps_return_campaign' for x in e.value))
+        self.assertEqual(one(one(committed,'limit'),'has_war_with'),'STS')

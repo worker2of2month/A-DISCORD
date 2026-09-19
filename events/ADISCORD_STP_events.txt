@@ -1592,3 +1592,32 @@ country_event = {
 	}
 	option = { name = STP_ps_asylum_decline ai_chance = { factor = 10 } }
 }
+
+# Retry only after the timed mission has left the native decision update.
+country_event = {
+	id = ADISCORD_STP_cw.206
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				tag = STP
+				check_variable = { var = STP_ps_nod_receipt_stage value = 1 compare = equals }
+				NOT = { has_active_mission = STP_ps_nod_dispatch }
+				NOT = { has_active_mission = STP_ps_nod_route_wait }
+				NOT = { has_active_mission = STP_ps_nod_delivery }
+			}
+			STP_ps_dispatch_nod = yes
+		}
+		else_if = {
+			limit = {
+				tag = VAL
+				has_variable = STP_ps_val_receipt_rifles
+				check_variable = { var = STP_ps_val_receipt_stage value = 1 compare = equals }
+				NOT = { has_active_mission = STP_ps_val_departure }
+				NOT = { has_active_mission = STP_ps_val_route_wait }
+			}
+			STP_ps_dispatch_val_supply = yes
+		}
+	}
+}

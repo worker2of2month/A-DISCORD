@@ -2,6 +2,7 @@
   "schema_version": 1,
   "external_namespaces": ["lar_fake_intel_units"],
   "events": [
+    {"id": "ADISCORD_STP_cw.206", "namespace": "ADISCORD_STP_cw", "number": 206, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_cw.204", "namespace": "ADISCORD_STP_cw", "number": 204, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_cw.203", "namespace": "ADISCORD_STP_cw", "number": 203, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_cw.202", "namespace": "ADISCORD_STP_cw", "number": 202, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
