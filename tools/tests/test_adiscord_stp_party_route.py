@@ -221,6 +221,19 @@ class PartyRouteContracts(unittest.TestCase):
         launch = launch[:launch.index("\nSTP_pw_party_settle_nod_invasion_defeat = {")]
         self.assertIn("declare_war_on = { target = STP type = annex_everything }", launch)
         self.assertIn("add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 }", launch)
+        ideas = read(IDEAS)
+        mandate = ideas[ideas.index("STP_pw_nod_invasion_mandate = {"):]
+        mandate = mandate[:mandate.index("\n\t\t}") + 4]
+        for token in ("army_attack_factor = 0.20", "army_org_factor = 0.15",
+                      "army_org_regain = 0.10", "planning_speed = 0.25",
+                      "breakthrough_factor = 0.15", "supply_consumption_factor = -0.15"):
+            self.assertIn(token, mandate)
+        events = read(EVENTS)
+        nod_offer = events[events.index("\tid = ADISCORD_STP_pc.19\n"):]
+        nod_offer = nod_offer[:nod_offer.index("\n}\ncountry_event", 1)]
+        self.assertIn("name = ADISCORD_STP_pc.19.refuse\n\t\tai_chance = { base = 0 }", nod_offer)
+        self.assertIn("name = ADISCORD_STP_pc.19.accept", nod_offer)
+        self.assertIn("ai_chance = { base = 100 }", nod_offer)
 
     def test_nod_crisis_has_three_real_preparation_decisions(self):
         expected = {

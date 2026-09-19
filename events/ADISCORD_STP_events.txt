@@ -1325,13 +1325,13 @@ country_event = {
 	trigger = { tag = NOD }
 	option = {
 		name = ADISCORD_STP_pc.19.refuse
-		ai_chance = { base = 5 }
+		ai_chance = { base = 0 }
 		hidden_effect = { STP = { clr_country_flag = STP_pw_party_nod_offer_pending } }
 	}
 	option = {
 		name = ADISCORD_STP_pc.19.accept
 		trigger = { STP_pw_party_nod_offer_current = yes }
-		ai_chance = { base = 95 }
+		ai_chance = { base = 100 }
 		hidden_effect = {
 			if = {
 				limit = { STP_pw_party_nod_offer_current = yes }
