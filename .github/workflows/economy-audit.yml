@@ -27,10 +27,15 @@ jobs:
         run: |
           python -m pip install --quiet pillow
           git fetch --no-tags --depth=1 origin 13725b3d3aae2c484397e1d61597cbfc049f0701 d6cc3c77078a25f7318fbf7e371fc6779eab3351
-          set +e
-          python -B tools/validate_tc.py --limit 300 > ../control/.github/economy-integrated-baseline.txt 2>&1
-          echo "BASELINE_EXIT=$?" >> ../control/.github/economy-integrated-baseline.txt
-          exit 0
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('../control/.github/economy_integrate.py')
+          text=p.read_text(encoding='utf-8')
+          old="for name in ('test_building_tooltips_lead_with_role_and_budget_impact', 'test_economic_building_reference_documents_roles_and_formulas'):"
+          new="for name in ('test_core_policy_and_debt_flow_negative_fixtures', 'test_building_tooltips_lead_with_role_and_budget_impact', 'test_economic_building_reference_documents_roles_and_formulas'):"
+          assert text.count(old)==1
+          p.write_text(text.replace(old,new),encoding='utf-8')
+          PY
       - name: Integrate and exercise regression contracts
         working-directory: source
         run: python -B ../control/.github/economy_integrate.py > ../control/.github/economy-integrated-result.txt 2>&1
