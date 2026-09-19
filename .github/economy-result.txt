@@ -76,7 +76,7 @@ Traceback (most recent call last):
 AssertionError: False is not true
 
 ----------------------------------------------------------------------
-Ran 10 tests in 1.280s
+Ran 10 tests in 1.273s
 
 FAILED (failures=8)
 
@@ -87,6 +87,7 @@ test_building_roles_remain_income_research_and_near_neutral_industry (tools.test
 test_developed_economy_can_clear_one_hundred_with_normal_budgets (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_developed_economy_can_clear_one_hundred_with_normal_budgets) ... ok
 test_each_shabrat_reform_has_an_exact_native_delta_preview (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_each_shabrat_reform_has_an_exact_native_delta_preview) ... ok
 test_frontier_ready_checks_solvency_and_replenishment_independently (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_frontier_ready_checks_solvency_and_replenishment_independently) ... ok
+test_research_validator_rejects_unowned_or_duplicate_base_scaling (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_research_validator_rejects_unowned_or_duplicate_base_scaling) ... ok
 test_shabrat_recovery_has_a_sustainable_hundred_path (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_shabrat_recovery_has_a_sustainable_hundred_path) ... ok
 test_small_economy_is_not_given_a_flat_hundred (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_small_economy_is_not_given_a_flat_hundred) ... ok
 test_tax_preview_and_repeated_refresh_do_not_duplicate_scaled_income (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_tax_preview_and_repeated_refresh_do_not_duplicate_scaled_income) ... ok
@@ -94,52 +95,26 @@ test_val_recovery_returns_four_weekly_per_stage_and_does_not_compound (tools.tes
 test_val_ultimatum_and_war_share_readiness_instead_of_24_divisions (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_val_ultimatum_and_war_share_readiness_instead_of_24_divisions) ... ok
 
 ----------------------------------------------------------------------
-Ran 10 tests in 2.110s
+Ran 11 tests in 2.088s
 
 OK
 
 PATCH_READY
 ======================================================================
-FAIL: test_core_policy_and_debt_flow_negative_fixtures (tools.tests.test_adiscord_economy_weekly_contracts.EconomySemanticFixtureTests.test_core_policy_and_debt_flow_negative_fixtures)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_weekly_contracts.py", line 3168, in test_core_policy_and_debt_flow_negative_fixtures
-    self.assertEqual(research_policy_flow_issues(research), [])
-AssertionError: Lists differ: ["research multipliers are not bound one-t[74 chars]6]}"] != []
-
-First list contains 1 additional elements.
-First extra element 0:
-"research multipliers are not bound one-to-one to levels: {'1': [0.6], '2': [0.8], '3': [1.0], '4': [1.3], '5': [1.6]}"
-
-+ []
-- ["research multipliers are not bound one-to-one to levels: {'1': [0.6], '2': "
--  "[0.8], '3': [1.0], '4': [1.3], '5': [1.6]}"]
-
-======================================================================
-FAIL: test_building_tooltips_lead_with_role_and_budget_impact (tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_building_tooltips_lead_with_role_and_budget_impact)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_weekly_contracts.py", line 8217, in test_building_tooltips_lead_with_role_and_budget_impact
-    self.assertIn(budget, match.group(1))
-AssertionError: '+1,20' not found in '§YРоль: доход§!\\nБазовый чистый бюджет до модификаторов: §G+23,00 в месяц§!. Расширяет предел казны и деловую налоговую базу. Фактический недельный результат зависит от модели хозяйства, налогов и развития.'
-
-======================================================================
-FAIL: test_economic_building_reference_documents_roles_and_formulas (tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_economic_building_reference_documents_roles_and_formulas)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_weekly_contracts.py", line 8232, in test_economic_building_reference_documents_roles_and_formulas
-    self.assertIn(required, documentation)
-AssertionError: '1.05 + 0.25 - 0.10 = +1.20' not found in '# Экономические здания\n\nТри специальных здания решают разные игровые задачи. Это не три варианта одного источника денег: деловой центр окупает содержание казной, научный центр обменивает бюджет на исследования, промышленный кластер почти нейтрален по деньгам и усиливает производство.\n\nСтроительная цена измеряется строймощностями движка HOI4, а не единицами казны. Каждый следующий объект того же типа в подконтрольных регионах дороже предыдущего.\n\nДоход, содержание и национальные сетевые бонусы дают только исправные здания в собственных контролируемых регионах. При оккупации объект временно выпадает из экономики владельца; после возврата контроля снова попадёт в ближайший кэшированный пересчёт.\n\n## Базовый бюджет\n\nФормулы ниже показывают вклад одного полностью действующего здания в месячную базу до модификаторов модели экономики, законов, общего дохода и расходов.\n\n| Здание | Месячная формула | Чистый поток | За 12 месяцев |\n|---|---:|---:|---:|\n| Деловой центр | `18 × (1.05 + 0.25) - 4 × 0.10 = +23.00` | +23,00 | +276,00 |\n| Научный центр | `18 × 0.02 - 4 × (2 × 0.35 + 0.12) = -2.92` | −2,92 | −35,04 |\n| Промышленный кластер | `18 × (0.045 + 0.016) - 4 × (0.18 + 0.12) = -0.102` | −0,102 | −1,224 |\n\nЕсли стране доступен оружейный доход, промышленный кластер дополнительно даёт `18 × 0.012 = +0.216`, и его базовый чистый поток становится `+0.114` в месяц. Мобилизационная экономика отключает оружейный доход. Особенности модели экономики, законы и фокусные модификаторы меняют фактические значения.\n\nКазна исполняет эту месячную базу еженедельно по формуле `месячное значение × 3 / 13`. За 13 недель получается ровно три месячных расчёта, а за 52 недели — 12 месяцев. Числа в интерфейсе следует читать как прогноз после всех действующих коэффициентов, а не как гарантированную фиксированную выплату.\n\n## Деловой центр\n\nРоль — основной экономический объект мирного роста.\n\n- строительство: 5500, удорожание каждого следующего объекта +750;\n- не больше 3 уровней в одном регионе;\n- регион: +5% к скорости строительства зданий, +10% слотов и +5% к ресурсной отдаче;\n- страна: +0,75 п.п. к месячному множителю развития;\n- финансы: +12 к пределу казны за уровень; чистый доход улучшает долг к доходу и кредитоспособность;\n- содержание: `4 × 0.10 = 0.40` к месячным административным расходам до модификаторов.\n\nИИ строит один деловой центр уже в фазе восстановления и до двух — при устойчивом мирном профиците. При кризисе или фискальном стрессе цель равна нулю.\n\n## Научный центр\n\nРоль — долгосрочная инвестиция, а не источник прибыли.\n\n- строительство: 7000, удорожание +1250;\n- не больше 2 уровней в одном регионе;\n- регион: +5% к скорости строительства зданий, +6% слотов, −5% к энергопотреблению местных фабрик и +3% к ресурсной отдаче;\n- страна: +2,5 п.п. к месячному множителю развития, +2 к финансовому контролю;\n- финансы: +8 к пределу казны за уровень; научная сеть отдельно повышает исследования;\n- содержание при штатном бюджете: `4 × 2 × 0.35 = 2.80` на науку и `4 × 0.12 = 0.48` на администрацию до модификаторов.\n\nНациональная сеть даёт +1/+2/+3/+4% к скорости исследований при 1/2/4/6 научных центрах. ИИ не строит их в восстановлении и получает цель 2 только в устойчивой мирной экономике: этого достаточно для ощутимой второй ступени, но не для бесконтрольного спама дорогими объектами.\n\n## Промышленный кластер\n\nРоль — усиление реального производства с небольшим или условным доходом.\n\n- строительство: 8000, удорожание +1500;\n- не больше 3 уровней в одном регионе;\n- регион: +10% к скорости строительства зданий, +8% слотов, +5% к ресурсной отдаче и +10% энергопотребления фабрик;\n- местное производство: каждый действующий уровень кластера даёт +5% к выпуску исправных военных заводов именно в этом регионе, до +15% при трёх уровнях;\n- страна: +1,5 п.п. к месячному множителю развития;\n- содержание: `4 × 0.18 = 0.72` на промышленность и `4 × 0.12 = 0.48` на администрацию до модификаторов.\n\nНациональная сеть даёт +1/+2/+3/+4% к выпуску заводов при 1/2/4/6 кластерах; со второго уровня сети также растёт набор эффективности производства. ИИ держит цель 2 в устойчивом мире и 3 во время войны, но не строит кластеры в восстановлении, стрессе или кризисе.\n\nДвижок HOI4 не поддерживает модификатор выпуска только для заводов одного региона: производственные линии считаются на уровне страны. Поэтому система воспроизводит тот же результат взвешенным общегосударственным коэффициентом. Формула: `5% × сумма(исправные военные заводы региона × уровень кластера) / все исправные военные заводы страны`. Учитываются собственные подконтрольные регионы. Кластер в регионе без военных заводов не увеличивает выпуск, а повреждённые заводы и уровни кластера не участвуют в расчёте.\n\n## Производительность\n\nЧисло зданий и взвешенный выпуск кластеров хранятся в переменных страны. Плановый пересчёт выполняет один проход по собственным регионам раз в три месяца; вне графика он запускается только при пометке данных как изменившихся или при открытии сводки. Еженедельное движение казны использует только этот кэш и не запускает `every_owned_state`, поэтому локальный бонус кластеров не добавляет еженедельного обхода карты.\n'
-
-======================================================================
 FAIL: test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded (tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_weekly_contracts.py", line 4070, in test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded
-    self.assertFalse(research_policy_flow_issues(EFFECTS))
-AssertionError: ["research multipliers are not bound one-to-one to levels: {'1': [0.3], '2': [0.65], '3': [1.0], '4': [1.3], '5': [1.6]}"] is not false
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_weekly_contracts.py", line 4081, in test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded
+    self.assertEqual(multipliers, {0.60, 0.80, 1.00, 1.30, 1.60})
+AssertionError: Items in the first set but not the second:
+0.3
+0.65
+2.0
+Items in the second set but not the first:
+0.6
+0.8
 
 ----------------------------------------------------------------------
-Ran 211 tests in 61.552s
+Ran 211 tests in 62.505s
 
-FAILED (failures=4)
+FAILED (failures=1)
