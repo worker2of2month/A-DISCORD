@@ -2,34 +2,108 @@ name: Resource project review
 on:
   push:
     branches: [codex/resource-projects-20260919]
+    paths: [.github/workflows/resource-project-review.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  snapshot:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
-          fetch-depth: 1
+          fetch-depth: 128
           show-progress: false
-      - name: Package current text sources
+      - run: python -m pip install Pillow numpy
+      - name: Integrate current main without replacing concurrent changes
+        run: |
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git fetch --no-tags --depth=128 origin main:refs/remotes/origin/main
+          git merge --no-edit origin/main
+          git rev-parse origin/main > /tmp/resource-main-parent
+      - name: Record baseline validation
+        run: python -B tools/validate_tc.py --limit 300 > /tmp/resource-baseline.log
+      - name: Apply exact locally tested patch
+        run: |
+          python -B - <<'PY'
+          from pathlib import Path
+          import base64,lzma,hashlib,subprocess,json,re
+          encoded=''.join(Path(f'.github/resource-project-patch.{i}').read_text().strip() for i in (1,2,3))
+          patch=lzma.decompress(base64.b64decode(encoded,validate=True))
+          assert hashlib.sha256(patch).hexdigest()=='8089c8817d63bc10f52f92bf51b1cd1c352522ff651835e08be75e91c7c7baf0'
+          allowed={
+              'common/decisions/ADISCORD_economy_projects.txt',
+              'common/decisions/categories/ADISCORD_economy_projects.txt',
+              'common/dynamic_modifiers/ADISCORD_economy_dynamic_modifiers.txt',
+              'common/ideas/ADISCORD_economy_ideas.txt',
+              'common/national_focus/ADISCORD_national_focus_STP.txt',
+              'common/national_focus/ADISCORD_national_focus_VAL.txt',
+              'common/scripted_effects/ADISCORD_economy_effects.txt',
+              'common/scripted_triggers/ADISCORD_economy_triggers.txt',
+              'docs/economy/strategic-resources.md',
+              'localisation/english/ADISCORD_economy_l_english.yml',
+              'localisation/russian/ADISCORD_STP_l_russian.yml',
+              'localisation/russian/ADISCORD_VAL_decisions_l_russian.yml',
+              'localisation/russian/ADISCORD_economy_l_russian.yml',
+              'tools/tests/test_adiscord_resource_projects.py',
+          }
+          actual=set(re.findall(r'^\+\+\+ b/(.+)$',patch.decode(),re.M))
+          assert actual==allowed,(actual,allowed)
+          dest=Path('/tmp/resource-project.patch');dest.write_bytes(patch)
+          subprocess.run(['git','apply','--check',str(dest)],check=True)
+          subprocess.run(['git','apply',str(dest)],check=True)
+          Path('/tmp/resource-project-paths.json').write_text(json.dumps(sorted(allowed)))
+          print('APPLIED_PATCH_SHA256',hashlib.sha256(patch).hexdigest())
+          PY
+      - name: Execute resource transactions and focus route tests
+        run: python -B -m unittest tools.tests.test_adiscord_resource_projects -v
+      - name: Existing economy and country regressions
+        run: python -B -m unittest tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_adiscord_economy_rebalance tools.tests.test_validate_adiscord_val_rework tools.tests.test_adiscord_stp_postwar_economy tools.tests.test_adiscord_stp_postwar_unlock -q
+      - name: Compare complete validation with baseline
+        run: |
+          python -B tools/validate_tc.py --limit 300 > /tmp/resource-final.log
+          cat /tmp/resource-final.log
+          python -B - <<'PY'
+          from pathlib import Path
+          import re
+          def issues(path):
+              return {re.sub(r':\d+:',':LINE:',line) for line in Path(path).read_text().splitlines() if line.startswith('- ')}
+          before=issues('/tmp/resource-baseline.log');after=issues('/tmp/resource-final.log')
+          print('BASELINE_ISSUES',len(before));print('FINAL_ISSUES',len(after))
+          added=after-before
+          print('NEW_ISSUES',sorted(added))
+          assert not added,'New total-conversion validation issue'
+          PY
+      - name: Verify changes and encoding
+        run: |
+          git diff --check
+          python -B - <<'PY'
+          from pathlib import Path
+          import json,hashlib,re
+          paths=json.loads(Path('/tmp/resource-project-paths.json').read_text())
+          for name in paths:
+              raw=Path(name).read_bytes()
+              if name.startswith('common/'):assert not raw.startswith(b'\xef\xbb\xbf'),name
+              if name.startswith('localisation/'):
+                  assert raw.startswith(b'\xef\xbb\xbf'),name
+                  for line in raw.decode('utf-8-sig').splitlines():
+                      if any(line.lstrip().startswith(k) for k in ('ADISCORD_economy_project','ADISCORD_economy_precision_tooling','ADISCORD_economy_automated_industry','ADISCORD_economy_national_computing','ADISCORD_economy_logistics_contract','ADISCORD_economy_drone_contract','ADISCORD_economy_platform_contract','VAL_econ_','STP_pc_investment_')):
+                          assert re.fullmatch(r'\s*\w+:\d*\s+"[^"\r\n]*"\s*',line),line
+              print('SOURCE_SHA256',hashlib.sha256(raw).hexdigest(),name)
+          PY
+      - name: Publish verified clean candidate
         run: |
           python - <<'PY'
-          import subprocess,zipfile
-          from pathlib import Path
-          suffixes={'.txt','.py','.yml','.yaml','.md','.json','.gui','.gfx','.lua','.mod','.csv','.ps1','.bat'}
-          with zipfile.ZipFile('/tmp/resource-project-sources.zip','w',zipfile.ZIP_DEFLATED) as z:
-              for name in subprocess.check_output(['git','ls-files','-z']).decode().split('\0'):
-                  if not name: continue
-                  p=Path(name)
-                  if p.suffix.lower() in suffixes and p.stat().st_size<5000000: z.write(p,name)
-              z.writestr('source-revision.txt',subprocess.check_output(['git','rev-parse','HEAD']).decode())
-              z.writestr('source-tree.txt',subprocess.check_output(['git','ls-tree','-r','HEAD']).decode())
+          import json,subprocess
+          subprocess.run(['git','add','--',*json.load(open('/tmp/resource-project-paths.json'))],check=True)
           PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: resource-project-sources
-          path: /tmp/resource-project-sources.zip
-          retention-days: 1
+          git rm -- .github/workflows/resource-project-review.yml .github/resource-project-patch.1 .github/resource-project-patch.2 .github/resource-project-patch.3
+          git diff --cached --check
+          PARENT=$(cat /tmp/resource-main-parent)
+          TREE=$(git write-tree)
+          if git diff --name-only "$PARENT" "$TREE" | grep '^.github/'; then exit 1; fi
+          CANDIDATE=$(git commit-tree "$TREE" -p "$PARENT" -m 'Add paid advanced-material projects and Kefreite/Shabrat economic branches')
+          git push origin "$CANDIDATE":refs/heads/codex/resource-projects-ready-20260919
+          printf '\nFINAL_PARENT=%s\nFINAL_TREE=%s\nFINAL_COMMIT=%s\n' "$PARENT" "$TREE" "$CANDIDATE"
+          git diff --stat "$PARENT" "$CANDIDATE"
