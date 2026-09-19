@@ -4031,6 +4031,9 @@ ADISCORD_vorkerland_end_internal_wars = {
 }
 
 ADISCORD_vorkerland_clear_superevent_flags = {
+	clr_global_flag = superevent_stelander_empire
+	clr_global_flag = superevent_stelander_party_victory
+	clr_global_flag = superevent_stelander_shabrat_victory
 	clr_global_flag = superevent_vorkerland_civilwar
 	clr_global_flag = superevent_vorkerland_dirty_opening
 	clr_global_flag = superevent_vorkerland_worker_victory
@@ -4061,6 +4064,10 @@ ADISCORD_vorkerland_play_superevent_sound = {
 	else_if = {
 		limit = { has_global_flag = superevent_vorkerland_dorian_victory }
 		sound_effect = superevent_vorkerland_dorian_victory_sound_e
+	}
+	else_if = {
+		limit = { OR = { has_global_flag = superevent_stelander_party_victory has_global_flag = superevent_stelander_shabrat_victory } }
+		sound_effect = superevent_vorkerland_utilitarian_victory_sound_e
 	}
 	else_if = {
 		limit = { has_global_flag = superevent_stelander_empire }

@@ -104,4 +104,48 @@ scripted_gui = {
 			}
 		}
 	}
+
+
+	superevent_stelander_party_victory = {
+		window_name = "superevent_stelander_party_victory"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_party_victory
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_party_victory
+				STP = {
+					if = {
+						limit = { is_ai = no }
+						scoped_play_song = "ADISCORD_stp_civil_war_end"
+					}
+				}
+			}
+		}
+	}
+
+
+	superevent_stelander_shabrat_victory = {
+		window_name = "superevent_stelander_shabrat_victory"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_shabrat_victory
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_shabrat_victory
+				STS = {
+					if = {
+						limit = { is_ai = no }
+						scoped_play_song = "ADISCORD_stp_civil_war_end"
+					}
+				}
+			}
+		}
+	}
 }

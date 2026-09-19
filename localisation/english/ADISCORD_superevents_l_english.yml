@@ -31,6 +31,14 @@ l_english:
   superevent_stelander_empire_quote: "When a man has nothing left to be proud of, he begins to take pride in his ethnicity.\n\n- Arthur Schopenhauer"
   superevent_stelander_empire_comment: "Stelander raises its head again"
 
+  superevent_stelander_party_victory_title: "Party Victory in Stelander"
+  superevent_stelander_party_victory_quote: "The uprising has been crushed. The war leaves behind ruined cities and empty homes."
+  superevent_stelander_party_victory_comment: "The Party retains power"
+
+  superevent_stelander_shabrat_victory_title: "Shabrat's Victory in Stelander"
+  superevent_stelander_shabrat_victory_quote: "The Party regime has fallen. A struggle for the country's future begins amid the ruins."
+  superevent_stelander_shabrat_victory_comment: "The civil war is over"
+
   superevent_inactive_title: ""
   superevent_inactive_quote: ""
   superevent_inactive_comment: ""

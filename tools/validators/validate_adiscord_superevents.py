@@ -85,6 +85,8 @@ PRESENTATIONS = (
         "superevent_stelander_empire",
         "superevent_stelander_empire_sound_e",
     ),
+    SupereventPresentation("superevent_stelander_party_victory", "superevent_vorkerland_utilitarian_victory_sound_e"),
+    SupereventPresentation("superevent_stelander_shabrat_victory", "superevent_vorkerland_utilitarian_victory_sound_e"),
 )
 
 
@@ -327,7 +329,11 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             issues,
         )
 
-    sound_items = tuple(item for item in PRESENTATIONS if item.dedicated_sound_effect)
+    # Several presentations may reuse the same registered sound.
+    sound_items = tuple({
+        item.dedicated_sound_effect: item
+        for item in PRESENTATIONS if item.dedicated_sound_effect
+    }.values())
     sound_effect_names = tuple(item.dedicated_sound_effect for item in sound_items)
     sound_names = tuple(effect.removesuffix("_e") for effect in sound_effect_names)
 

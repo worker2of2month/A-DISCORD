@@ -37,6 +37,14 @@ defined_text = {
 		localization_key = superevent_stelander_empire_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory }
+		localization_key = superevent_stelander_party_victory_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory }
+		localization_key = superevent_stelander_shabrat_victory_quote
+	}
+	text = {
 		localization_key = superevent_inactive_quote
 	}
 }
@@ -80,6 +88,14 @@ defined_text = {
 		localization_key = superevent_stelander_empire_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory }
+		localization_key = superevent_stelander_party_victory_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory }
+		localization_key = superevent_stelander_shabrat_victory_title
+	}
+	text = {
 		localization_key = superevent_inactive_title
 	}
 }
@@ -121,6 +137,14 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_stelander_empire }
 		localization_key = superevent_stelander_empire_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_party_victory }
+		localization_key = superevent_stelander_party_victory_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_shabrat_victory }
+		localization_key = superevent_stelander_shabrat_victory_comment
 	}
 	text = {
 		localization_key = superevent_inactive_comment

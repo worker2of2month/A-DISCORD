@@ -43,4 +43,12 @@ spriteTypes = {
 		name = "GFX_superevent_stelander_empire"
 		textureFile = "gfx/interface/superevents/STP/superevent_stelander_empire.png"
 	}
+	spriteType = {
+		name = "GFX_superevent_stelander_party_victory"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_party_victory.png"
+	}
+	spriteType = {
+		name = "GFX_superevent_stelander_shabrat_victory"
+		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
+	}
 }

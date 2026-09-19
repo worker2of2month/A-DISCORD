@@ -31,6 +31,14 @@
   superevent_stelander_empire_quote: "Когда у человека не остаётся ничего, чем можно гордиться, он начинает гордиться своей этнической принадлежностью. \n\n- Артур Шопенгауэр "
   superevent_stelander_empire_comment: "Стеландер снова поднимает голову"
 
+  superevent_stelander_party_victory_title: "Победа партии в Стеландере"
+  superevent_stelander_party_victory_quote: "Восстание подавлено. Война оставила стране разрушенные города и опустевшие дома."
+  superevent_stelander_party_victory_comment: "Партийная власть сохранена"
+
+  superevent_stelander_shabrat_victory_title: "Победа Шабрата в Стеландере"
+  superevent_stelander_shabrat_victory_quote: "Партийный режим пал. На руинах прежнего порядка начинается борьба за будущее страны."
+  superevent_stelander_shabrat_victory_comment: "Гражданская война окончена"
+
   superevent_inactive_title: ""
   superevent_inactive_quote: ""
   superevent_inactive_comment: ""

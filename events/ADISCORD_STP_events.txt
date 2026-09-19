@@ -775,6 +775,13 @@ news_event = {
 	major = yes
 	is_triggered_only = yes
 	fire_only_once = yes
+	immediate = {
+		hidden_effect = {
+			ADISCORD_vorkerland_clear_superevent_flags = yes
+			set_global_flag = { flag = superevent_stelander_party_victory value = 1 days = 20 }
+			ADISCORD_vorkerland_play_superevent_sound = yes
+		}
+	}
 	option = { name = ADISCORD_STP_cw.71.a }
 }
 
@@ -786,6 +793,13 @@ news_event = {
 	major = yes
 	is_triggered_only = yes
 	fire_only_once = yes
+	immediate = {
+		hidden_effect = {
+			ADISCORD_vorkerland_clear_superevent_flags = yes
+			set_global_flag = { flag = superevent_stelander_shabrat_victory value = 1 days = 20 }
+			ADISCORD_vorkerland_play_superevent_sound = yes
+		}
+	}
 	option = { name = ADISCORD_STP_cw.72.a }
 }
 

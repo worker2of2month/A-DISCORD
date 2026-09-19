@@ -41,8 +41,41 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_vorkerland_vlad_victory",
                 "superevent_vorkerland_dorian_victory",
                 "superevent_stelander_empire",
+                "superevent_stelander_party_victory",
+                "superevent_stelander_shabrat_victory",
             ),
         )
+
+    def test_stelander_victory_news_starts_presentation_before_choice(self) -> None:
+        from tools.validators.validate_adiscord_superevents import _event_block
+
+        source = (ROOT / "events/ADISCORD_STP_events.txt").read_text(encoding="utf-8-sig")
+        for event_id, side in ((71, "party"), (72, "shabrat")):
+            event = _event_block(source, f"ADISCORD_STP_cw.{event_id}")
+            immediate = event.split("option =", 1)[0]
+            self.assertIn("fire_only_once = yes", event)
+            self.assertIn("immediate =", immediate)
+            self.assertIn(f"flag = superevent_stelander_{side}_victory", immediate)
+            self.assertLess(
+                immediate.index("ADISCORD_vorkerland_clear_superevent_flags = yes"),
+                immediate.index("set_global_flag ="),
+            )
+            self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", immediate)
+
+    def test_stelander_music_starts_on_close_for_the_winning_player(self) -> None:
+        from tools.validators.validate_adiscord_superevents import blocks
+
+        source = (ROOT / SCRIPTED_GUI).read_text(encoding="utf-8-sig")
+        for side, tag in (("party", "STP"), ("shabrat", "STS")):
+            window = blocks(source, rf"^\s*superevent_stelander_{side}_victory\s*=\s*\{{")[0]
+            self.assertIn(f"{tag} = {{", window)
+            self.assertIn("limit = { is_ai = no }", window)
+            self.assertIn('scoped_play_song = "ADISCORD_stp_civil_war_end"', window)
+            self.assertLess(window.index("clr_global_flag"), window.index("scoped_play_song"))
+        music = ROOT / "music/ADISCORD_stp_civil_war_end.ogg"
+        self.assertEqual(music.read_bytes()[:4], b"OggS")
+        assets = (ROOT / "music/music.asset").read_text(encoding="utf-8-sig")
+        self.assertIn('file = "ADISCORD_stp_civil_war_end.ogg"', assets)
 
     def test_missing_gfx_binding_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
