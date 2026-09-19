@@ -1293,7 +1293,7 @@ focus_tree = {
 		x = 0
 		y = 4
 		cost = 3
-		prerequisite = { focus = VAL_Contract_Accounting_Office }
+		prerequisite = { focus = VAL_Salvage_Every_Barrel }
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = VAL }
 			effect_tooltip = {
@@ -1319,7 +1319,7 @@ focus_tree = {
 		x = 0
 		y = 5
 		cost = 3
-		prerequisite = { focus = VAL_Salvage_Every_Barrel }
+		prerequisite = { focus = VAL_Munitions_Board }
 		completion_reward = {
 			ADISCORD_economy_receive_15 = yes
 			add_political_power = 35
