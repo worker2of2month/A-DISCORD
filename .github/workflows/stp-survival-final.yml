@@ -1,0 +1,118 @@
+name: STP survival final verification
+on:
+  push:
+    branches: [verify/stp-survival-20260919]
+    paths: ['.github/workflows/stp-survival-final.yml']
+permissions:
+  contents: write
+  actions: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - name: Prepare exact reviewed source
+        run: |
+          cp .github/apply-stp-survival-final.py /tmp/apply-survival.py
+          git fetch --depth=1 origin 32a3c0ba2b118ade7730028173bdd9e068b808f8
+          git switch --detach 32a3c0ba2b118ade7730028173bdd9e068b808f8
+          mkdir -p /tmp/survival-final/candidate
+          python -B /tmp/apply-survival.py
+          git diff --check
+          git diff --binary HEAD > /tmp/survival-final/candidate/reviewed.patch
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess,hashlib,json
+          paths=subprocess.check_output(['git','diff','--name-only']).decode().splitlines()
+          assert len(paths)==7
+          assert not any(p.startswith('.github/') for p in paths)
+          data={'base':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'hashes':{p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths}}
+          Path('/tmp/survival-final/candidate/source.json').write_text(json.dumps(data,indent=2))
+          PY
+      - name: Focused contracts, full suite and validator
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess,json,time,concurrent.futures
+          out=Path('/tmp/survival-final/candidate')
+          jobs={
+            'survival':['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_balance','-v'],
+            'suite':['python','-B','-m','unittest','discover','-s','tools/tests','-p','test_*.py','-v'],
+            'validator':['python','-B','tools/validate_tc.py','--limit','300']}
+          def run(pair):
+              label,cmd=pair
+              start=time.monotonic()
+              with (out/(label+'.txt')).open('w') as log:
+                  try: code=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,timeout=1500).returncode
+                  except subprocess.TimeoutExpired: code=124
+              data={'command':cmd,'exit':code,'seconds':time.monotonic()-start}
+              (out/(label+'.json')).write_text(json.dumps(data,indent=2))
+              print(label,data,flush=True)
+              return label,data
+          with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool: results=dict(pool.map(run,jobs.items()))
+          (out/'results.json').write_text(json.dumps(results,indent=2))
+          assert results['survival']['exit']==0
+          assert results['suite']['exit'] in (0,1)
+          assert results['validator']['exit']==0
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          name: stp-survival-baseline
+          run-id: 35466808088
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/survival-final/baseline
+      - name: Compare complete regression evidence
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess,json,hashlib,re
+          root=Path('/tmp/survival-final')
+          baseline=json.loads((root/'baseline/source.json').read_text())
+          candidate=json.loads((root/'candidate/source.json').read_text())
+          assert baseline['head']==candidate['base']=='32a3c0ba2b118ade7730028173bdd9e068b808f8'
+          def failures(label):
+              text=(root/label/'suite.txt').read_text()
+              assert re.search(r'Ran \d+ tests? in ',text),label
+              return set(re.findall(r'^(?:FAIL|ERROR): (.+)$',text,re.M))
+          before,after=failures('baseline'),failures('candidate')
+          new=sorted(after-before)
+          def diagnostics(label):
+              return {re.sub(r':\d+(?::\d+)?',':#',s) for s in (root/label/'validator.txt').read_text().splitlines() if s.startswith('- ')}
+          new_diagnostics=sorted(diagnostics('candidate')-diagnostics('baseline'))
+          report={'base':candidate['base'],'baseline_failures':sorted(before),'candidate_failures':sorted(after),'new_failures':new,'resolved_failures':sorted(before-after),'new_diagnostics':new_diagnostics,'paths':list(candidate['hashes'])}
+          (root/'candidate/gate.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps({'new_failures':new,'new_diagnostics':new_diagnostics,'resolved_failures':sorted(before-after)},indent=2))
+          assert not new and not new_diagnostics
+          assert set(subprocess.check_output(['git','diff','--name-only']).decode().splitlines())==set(candidate['hashes'])
+          for name,expected in candidate['hashes'].items():
+              assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==expected,name
+          PY
+          git diff --check
+      - name: Commit only verified gameplay and tests
+        run: |
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          python - <<'PY'
+          import subprocess,json
+          from pathlib import Path
+          data=json.loads(Path('/tmp/survival-final/candidate/source.json').read_text())
+          subprocess.run(['git','add','--',*data['hashes']],check=True)
+          PY
+          git diff --cached --check
+          git commit -m 'Fix party survival settlement and delayed cargo callbacks'
+          git rev-parse HEAD > /tmp/survival-final/candidate/commit-sha.txt
+          git show --format=fuller --stat HEAD > /tmp/survival-final/candidate/commit-stat.txt
+          git push origin "HEAD:refs/heads/fix/stp-survival-final-${GITHUB_RUN_ID}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-survival-final-evidence
+          path: /tmp/survival-final/candidate/
+          retention-days: 3
