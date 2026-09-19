@@ -78,6 +78,7 @@
     {"id": "ADISCORD_nam_resource_news.3", "namespace": "ADISCORD_nam_resource_news", "number": 3, "owner": "events/ADISCORD_nam_resource_war_events.txt", "subsystem": "nam_resource_war", "status": "active"},
     {"id": "ADISCORD_nam_resource_news.5", "namespace": "ADISCORD_nam_resource_news", "number": 5, "owner": "events/ADISCORD_nam_resource_war_events.txt", "subsystem": "nam_resource_war", "status": "active"},
     {"id": "ADISCORD_nam_resource_news.6", "namespace": "ADISCORD_nam_resource_news", "number": 6, "owner": "events/ADISCORD_nam_resource_war_events.txt", "subsystem": "nam_resource_war", "status": "active"},
+    {"id": "ADISCORD_nam_resource_news.7", "namespace": "ADISCORD_nam_resource_news", "number": 7, "owner": "events/ADISCORD_nam_resource_war_events.txt", "subsystem": "nam_resource_war", "status": "active"},
     {"id": "ADISCORD_nam_resource_war.1", "namespace": "ADISCORD_nam_resource_war", "number": 1, "owner": "events/ADISCORD_nam_resource_war_events.txt", "subsystem": "nam_resource_war", "status": "active"},
     {"id": "ADISCORD_nam_resource_war.2", "namespace": "ADISCORD_nam_resource_war", "number": 2, "owner": "events/ADISCORD_nam_resource_war_events.txt", "subsystem": "nam_resource_war", "status": "active"},
     {"id": "ADISCORD_nam_resource_war.50", "namespace": "ADISCORD_nam_resource_war", "number": 50, "owner": "events/ADISCORD_nam_resource_war_events.txt", "subsystem": "nam_resource_war", "status": "active"},
