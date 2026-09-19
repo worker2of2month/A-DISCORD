@@ -370,6 +370,15 @@ ideas = {
 		}
 
 # --- end ---
+
+		VAL_fiscal_administration_delta = {
+			name = VAL_contract_state
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_overall_income_factor = 0.10
+				ADISCORD_economy_admin_expense_factor = -0.05
+			}
+		}
 	}
 
 	hidden_ideas = {

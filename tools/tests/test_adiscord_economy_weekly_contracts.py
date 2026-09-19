@@ -3992,8 +3992,8 @@ class WeeklyEconomyContracts(unittest.TestCase):
         )
 
         expected = {
-            1: ("§G-40%§!", "§R-8%§!"),
-            2: ("§G-20%§!", "§R-3%§!"),
+            1: ("§G-70%§!", "§R-8%§!"),
+            2: ("§G-35%§!", "§R-3%§!"),
             3: ("§Y0%§!", "§Y0%§!"),
             4: ("§R+30%§!", "§G+3%§!"),
             5: ("§R+60%§!", "§G+5%§!"),
@@ -4078,7 +4078,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 research,
             )
         }
-        self.assertEqual(multipliers, {0.60, 0.80, 1.00, 1.30, 1.60})
+        self.assertEqual(multipliers, {0.30, 0.65, 1.00, 1.30, 1.60, 2.00})
         self.assertRegex(
             EFFECTS,
             r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_research_spending_mode"
