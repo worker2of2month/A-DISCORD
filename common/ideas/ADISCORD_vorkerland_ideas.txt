@@ -95,10 +95,28 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				political_power_gain = 0.08
-				planning_speed = 0.10
-				army_org_factor = 0.05
-				stability_factor = -0.03
+				political_power_gain = 0.04
+				planning_speed = 0.05
+				army_org_factor = 0.02
+				stability_factor = -0.04
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		# Emergency industrial-military command for the worker claimant. It is
+		# the ready arsenal, not a second last-stand vow, and it ends with WKR.
+		ADISCORD_vorkerland_wkr_arsenal_command = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.08
+				production_factory_max_efficiency_factor = 0.05
+				production_factory_efficiency_gain_factor = 0.04
+				army_org_factor = 0.04
+				army_attack_factor = 0.04
+				consumer_goods_factor = 0.02
 			}
 			ai_will_do = { factor = 0 }
 		}
@@ -109,11 +127,12 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				research_speed_factor = 0.05
-				industrial_capacity_factory = 0.10
-				planning_speed = 0.12
-				army_org_factor = 0.06
-				supply_consumption_factor = -0.08
+				research_speed_factor = 0.08
+				industrial_capacity_factory = 0.14
+				planning_speed = 0.16
+				army_org_factor = 0.10
+				army_attack_factor = 0.06
+				supply_consumption_factor = -0.12
 				consumer_goods_factor = 0.02
 			}
 			ai_will_do = { factor = 0 }
@@ -125,12 +144,13 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				research_speed_factor = 0.07
-				industrial_capacity_factory = 0.12
-				production_factory_efficiency_gain_factor = 0.05
-				planning_speed = 0.16
-				army_org_factor = 0.08
-				supply_consumption_factor = -0.10
+				research_speed_factor = 0.10
+				industrial_capacity_factory = 0.18
+				production_factory_efficiency_gain_factor = 0.08
+				planning_speed = 0.20
+				army_org_factor = 0.13
+				army_attack_factor = 0.08
+				supply_consumption_factor = -0.14
 				consumer_goods_factor = 0.01
 			}
 			ai_will_do = { factor = 0 }
@@ -142,12 +162,13 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				research_speed_factor = 0.10
-				industrial_capacity_factory = 0.15
-				production_factory_efficiency_gain_factor = 0.10
-				planning_speed = 0.20
-				army_org_factor = 0.10
-				supply_consumption_factor = -0.12
+				research_speed_factor = 0.13
+				industrial_capacity_factory = 0.22
+				production_factory_efficiency_gain_factor = 0.12
+				planning_speed = 0.24
+				army_org_factor = 0.16
+				army_attack_factor = 0.10
+				supply_consumption_factor = -0.16
 				consumer_goods_factor = -0.02
 			}
 			ai_will_do = { factor = 0 }
@@ -159,8 +180,10 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			modifier = {
-				war_support_factor = 0.10
-				army_org_regain = 0.05
+				war_support_factor = 0.12
+				army_org_regain = 0.10
+				army_attack_factor = 0.10
+				breakthrough_factor = 0.08
 			}
 			ai_will_do = { factor = 0 }
 		}
@@ -2610,7 +2633,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 
 	# Mechanical civil-war normalization is deliberately invisible in the UI.
 	# Theatre priority helps all three claimants clear fragmented administrations;
-	# Coalition support is AI-only and uses the configured control-score threshold.
+	# coalition ideas are AI-only brakes against a claimant holding a true majority.
 	hidden_ideas = {
 		ADISCORD_vorkerland_theatre_priority = {
 			allowed = { always = no }
