@@ -14,10 +14,19 @@ jobs:
           ref: d6cc3c77078a25f7318fbf7e371fc6779eab3351
           persist-credentials: false
       - name: Pack pinned source for local verification
-        run: tar --exclude='./.git' -czf "$RUNNER_TEMP/source.tgz" .
+        run: |
+          tar --exclude='./.git' -czf "$RUNNER_TEMP/source.tgz" .
+          split -b 400m -d "$RUNNER_TEMP/source.tgz" "$RUNNER_TEMP/source.part-"
+          sha256sum "$RUNNER_TEMP"/source.part-*
       - uses: actions/upload-artifact@v4
         with:
-          name: scripted-peace-source
-          path: ${{ runner.temp }}/source.tgz
+          name: scripted-peace-source-a
+          path: ${{ runner.temp }}/source.part-00
+          retention-days: 1
+          compression-level: 0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scripted-peace-source-b
+          path: ${{ runner.temp }}/source.part-01
           retention-days: 1
           compression-level: 0
