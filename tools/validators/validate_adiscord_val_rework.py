@@ -580,7 +580,14 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
                     found += tier_previews([e for e in entry.value if e.key != "limit"], level, inside)
                     matched = True
             elif entry.key == "swap_ideas" and inside:
-                found.append(script_fields(entry.value))
+                pair = script_fields(entry.value)
+                after = pair.get("add_idea")
+                native = names.get(after, "")
+                # Aggregate deltas are already checked independently of tier changes.
+                aggregate = (after in checked and native in native_maps
+                             and not native.startswith("VAL_contract_industry_"))
+                if not aggregate:
+                    found.append(pair)
             elif isinstance(entry.value, list) and entry.key not in {"hidden_effect", "limit"}:
                 found += tier_previews(entry.value, level, inside or entry.key == "effect_tooltip")
         return found

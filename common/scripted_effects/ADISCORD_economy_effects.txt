@@ -874,9 +874,9 @@ ADISCORD_economy_calculate_income = {
 ADISCORD_economy_calculate_personal_income = {
 	# Stable taxable-base proxy. Civilian industry represents registered urban
 	# employment while development and state capacity determine collection.
-	set_variable = { var = ADISCORD_economy_personal_income value = 1.2 }
+	set_variable = { var = ADISCORD_economy_personal_income value = 10 }
 	set_temp_variable = { var = ADISCORD_economy_personal_factory_temp value = ADISCORD_economy_cached_civilian_factories }
-	multiply_temp_variable = { var = ADISCORD_economy_personal_factory_temp value = 0.06 }
+	multiply_temp_variable = { var = ADISCORD_economy_personal_factory_temp value = 0.36 }
 	add_to_variable = { var = ADISCORD_economy_personal_income value = ADISCORD_economy_personal_factory_temp }
 	if = { limit = { ADISCORD_society_development_at_least_2 = yes } add_to_variable = { var = ADISCORD_economy_personal_income value = 0.3 } }
 	if = { limit = { ADISCORD_society_development_at_least_3 = yes } add_to_variable = { var = ADISCORD_economy_personal_income value = 0.4 } }
@@ -885,14 +885,14 @@ ADISCORD_economy_calculate_personal_income = {
 	if = { limit = { ADISCORD_economic_development_at_least_4 = yes } add_to_variable = { var = ADISCORD_economy_personal_income value = 0.4 } }
 	if = { limit = { ADISCORD_economy_cached_has_taxation_progressive_brackets = yes } add_to_variable = { var = ADISCORD_economy_personal_income value = 0.8 } }
 	if = { limit = { ADISCORD_economy_cached_has_taxation_light_dues = yes } add_to_variable = { var = ADISCORD_economy_personal_income value = -0.5 } }
-	clamp_variable = { var = ADISCORD_economy_personal_income min = 0 max = 50 }
+	clamp_variable = { var = ADISCORD_economy_personal_income min = 0 max = 100 }
 }
 ADISCORD_economy_calculate_business_income = {
 	# Business/taxable services. Stronger than ordinary taxes, weaker than resource rents.
 	set_variable = { var = ADISCORD_economy_business_income value = ADISCORD_economy_cached_civilian_factories }
-	multiply_variable = { var = ADISCORD_economy_business_income value = 0.075 }
+	multiply_variable = { var = ADISCORD_economy_business_income value = 0.45 }
 	set_temp_variable = { var = ADISCORD_economy_business_building_temp value = ADISCORD_business_center_count }
-	multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 1.05 }
+	multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 2.10 }
 	if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 1.20 } }
 	if = { limit = { ADISCORD_economy_model_is_mixed = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 1.10 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 0.70 } }
@@ -907,12 +907,12 @@ ADISCORD_economy_calculate_business_income = {
 	if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } multiply_variable = { var = ADISCORD_economy_business_income value = 0.95 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } multiply_variable = { var = ADISCORD_economy_business_income value = 0.65 } }
 	if = { limit = { ADISCORD_economy_model_is_oligarchic_clan = yes } multiply_variable = { var = ADISCORD_economy_business_income value = 1.15 } }
-	clamp_variable = { var = ADISCORD_economy_business_income min = 0 max = 100 }
+	clamp_variable = { var = ADISCORD_economy_business_income min = 0 max = 150 }
 }
 ADISCORD_economy_calculate_consumer_goods_income = {
 	# Civilian factories are taxable civilian output. This is deliberately below resources/business and below taxes in most states.
 	set_variable = { var = ADISCORD_economy_consumer_goods_income value = ADISCORD_economy_cached_civilian_factories }
-	multiply_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.035 }
+	multiply_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.21 }
 	# Industrial clusters mainly support civilian taxable output. They are not a default money printer for military factories.
 	set_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = ADISCORD_industrial_cluster_count }
 	multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 0.45 }
@@ -925,7 +925,7 @@ ADISCORD_economy_calculate_consumer_goods_income = {
 	if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.4 } }
 	if = { limit = { ADISCORD_economy_model_is_mixed = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.2 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = -0.4 } }
-	clamp_variable = { var = ADISCORD_economy_consumer_goods_income min = 0 max = 50 }
+	clamp_variable = { var = ADISCORD_economy_consumer_goods_income min = 0 max = 100 }
 }
 ADISCORD_economy_calculate_factory_income = {
 	# Military factories are normally an expense, not state income. Income appears only through arms-export/private-contractor profiles.
@@ -942,7 +942,7 @@ ADISCORD_economy_calculate_factory_income = {
 			}
 		}
 		set_variable = { var = ADISCORD_economy_factory_income value = ADISCORD_economy_cached_military_factories }
-		multiply_variable = { var = ADISCORD_economy_factory_income value = 0.015 }
+		multiply_variable = { var = ADISCORD_economy_factory_income value = 0.06 }
 	}
 	if = { limit = { ADISCORD_economy_cached_has_taxation_industrial_tariffs = yes } add_to_variable = { var = ADISCORD_economy_factory_income value = 0.4 } }
 	if = { limit = { ADISCORD_economy_cached_has_taxation_extraction_quotas = yes } add_to_variable = { var = ADISCORD_economy_factory_income value = 0.3 } }
@@ -973,7 +973,7 @@ ADISCORD_economy_calculate_resource_income = {
 	# flat payment for countries without resources. No owned-state scan occurs
 	# in the monthly calculation.
 	set_variable = { var = ADISCORD_economy_resource_income value = ADISCORD_economy_resource_endowment }
-	multiply_variable = { var = ADISCORD_economy_resource_income value = 0.32 }
+	multiply_variable = { var = ADISCORD_economy_resource_income value = 0.48 }
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_resource_endowment value = 1 compare = greater_than_or_equals } }
 		add_to_variable = { var = ADISCORD_economy_resource_income value = 0.5 }

@@ -1017,7 +1017,7 @@ class ValNativePreviewTests(unittest.TestCase):
             "VAL_Contract_General_Staff": ("VAL_general_staff_delta", {"planning_speed": 0.05, "equipment_capture_factor": 0.03}),
             "VAL_Stahls_Schedules": ("VAL_stahls_delta", {"army_org_regain": 0.03, "supply_consumption_factor": -0.05}),
             "VAL_Trading_Partners": ("VAL_trading_partners_delta", {"ADISCORD_economy_trade_income_factor": 0.07, "political_power_gain": 0.10}),
-            "VAL_Export_Clearing_House": ("VAL_export_clearing_delta", {"ADISCORD_economy_trade_income_factor": 0.05}),
+            "VAL_Export_Clearing_House": ("VAL_export_clearing_delta", {"ADISCORD_economy_trade_income_factor": 0.05, "ADISCORD_economy_overall_income_factor": 0.10, "ADISCORD_economy_admin_expense_factor": -0.05}),
             "VAL_Hire_Out_War": ("VAL_hire_out_war_delta", {"ADISCORD_economy_military_industry_income_factor": 0.05}),
             "VAL_Paid_Loyalty": ("VAL_paid_loyalty_delta", {"ADISCORD_economy_army_expense_factor": -0.03}),
             "VAL_Closed_Ledgers": ("VAL_closed_ledgers_delta", {"political_power_gain": 0.05}),
@@ -1137,6 +1137,8 @@ class ValNativePreviewTests(unittest.TestCase):
                     expected = [("VAL_industry_2_dummy", "VAL_industry_1_to_2_delta" if level == 1 else "VAL_industry_2_delta")]
                 elif focus_id == "VAL_Industrial_Mobilization_Plan" and (level or 0) < 3:
                     expected = [("VAL_industry_3_dummy", "VAL_industry_3_delta" if (level or 0) < 1 else "VAL_industry_1_to_3_delta" if level == 1 else "VAL_industry_2_to_3_delta")]
+                if focus_id in {"VAL_Contract_Accounting_Office", "VAL_Industrial_Mobilization_Plan"}:
+                    expected.append(("VAL_contract_delta_dummy", "VAL_fiscal_administration_delta"))
                 with self.subTest(focus=focus_id, level=level):
                     self.assertEqual(previews(reward, facts), expected)
 

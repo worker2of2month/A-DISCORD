@@ -146,6 +146,22 @@ VAL_aph_contract_family_open = {
 }
 
 # COUNTRY VAL: the ultimatum/response stages end on settlement or war.
+
+# COUNTRY VAL: count fielded soldiers and replacements, not only unit counters.
+VAL_ai_frontier_force_ready = {
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	NOT = { num_divisions < 12 }
+	has_army_manpower = { size > 59999 }
+	NOT = { has_equipment = { infantry_equipment < 1500 } }
+	NOT = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = greater_than_or_equals } }
+	OR = {
+		ADISCORD_economy_can_spend_50 = yes
+		check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = greater_than_or_equals }
+	}
+}
+
 VAL_ai_frontier_preparation = {
 	exists = yes
 	has_capitulated = no
