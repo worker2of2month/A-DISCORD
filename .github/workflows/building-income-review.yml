@@ -5,7 +5,7 @@ on:
 permissions:
   contents: read
 jobs:
-  inspect:
+  inspect-and-red:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -15,49 +15,55 @@ jobs:
           fetch-depth: 1
           show-progress: false
       - run: python -m pip install Pillow numpy
-      - name: Inspect building source and tests
+      - name: Reproduce requested building income gap
+        run: |
+          python -B .github/building_income_tests.py
+          python -B - <<'PY'
+          import unittest
+          from tools.tests.test_adiscord_economy_rebalance import BuildingIncomeTests,building_budget_fixture,P
+          result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(BuildingIncomeTests))
+          f=building_budget_fixture()
+          print('BASELINE_BUDGET',{key:f.scopes['A'][P+key] for key in ('monthly_income','monthly_expenses','weekly_balance')})
+          assert result.failures and not result.errors, 'Expected numeric balance failures, not a broken fixture'
+          PY
+      - name: Inspect remaining bounded upgrade sites
+        if: always()
         run: |
           python -B - <<'PY'
           from pathlib import Path
           import ast,re
           from tools.tests.test_adiscord_economy_weekly_contracts import block
           def read(path): return Path(path).read_text(encoding='utf-8-sig')
-          for p in Path('.').rglob('AGENTS.md'):
-              if p!=Path('AGENTS.md'): print('NESTED RULES',p,read(p))
-          source=read('common/scripted_effects/ADISCORD_economy_effects.txt')
-          for name in ('calculate_building_income','calculate_social_expenses','calculate_research_expenses','calculate_admin_expenses','calculate_military_factory_expenses','calculate_construction_expenses','calculate_treasury_cap','calculate_weekly_budget'):
-              print('\nEFFECT',name); print(block(source,'ADISCORD_economy_'+name))
-          print('\nBUILDING DEFINITIONS')
+          print('BUILDINGS')
           for name in ('ADISCORD_business_center','ADISCORD_science_center','ADISCORD_industrial_cluster'):
               print(name,block(read('common/buildings/00_buildings.txt'),name))
-          print('\nNETWORK AND CACHE OPERATIONS')
-          for p in (Path('common/scripted_effects/ADISCORD_economy_effects.txt'),Path('common/ideas/ADISCORD_economy_ideas.txt'),Path('common/scripted_effects/ADISCORD_economy_modifier_effects.txt')):
-              text=read(p);lines=text.splitlines(); seen=set()
-              terms=('science_network','cluster_network','research_center','science_center_count','business_center_count','industrial_cluster_count','cluster_factory_output_percent','weekly_income min','business_income min','consumer_goods_income min','building_income min','factory_income min')
+          print('BUILDING SCALARS')
+          for p in (Path('common/scripted_effects/ADISCORD_economy_effects.txt'),Path('common/ideas/ADISCORD_economy_ideas.txt')):
+              lines=read(p).splitlines(); seen=set()
+              terms=('science_network','cluster_network','cluster_factory_output_percent','treasury_building_temp','business_center_count','science_center_count','industrial_cluster_count')
               for i,line in enumerate(lines):
                   if any(term in line for term in terms):
-                      indexes=range(max(0,i-2),min(len(lines),i+4))
-                      for j in indexes:
+                      for j in range(max(0,i-1),min(len(lines),i+4)):
                           if j not in seen: print(p,j+1,lines[j]);seen.add(j)
-          print('\nLOCALISATION REFERENCES')
+          print('LOCALISATION')
           for folder in ('localisation/russian','localisation/english'):
               for p in Path(folder).glob('*.yml'):
                   for line in read(p).splitlines():
-                      if any(term in line for term in ('ADISCORD_business_center_desc:', 'ADISCORD_science_center_desc:', 'ADISCORD_industrial_cluster_desc:')):
-                          print(p,line)
-          print('\nAI STRATEGY')
+                      if any(term in line for term in ('ADISCORD_business_center_desc:', 'ADISCORD_science_center_desc:', 'ADISCORD_industrial_cluster_desc:')): print(p,line)
+          print('AI STRATEGY')
           print(read('common/ai_strategy/ADISCORD_economy_ai.txt'))
-          print('\nTEST AND VALIDATOR CONTRACTS')
-          needles=('2.10','2.25','business_building_temp','consumer_goods_cluster_temp','science_center','cluster_factory_output_percent','building_target')
-          for p in [Path('tools/tests/test_adiscord_economy_weekly_contracts.py'),Path('tools/validators/validate_adiscord_economy_ai.py'),Path('tools/tests/test_adiscord_economy_rebalance.py')]:
+          print('RELATED TESTS')
+          needles=('2.10','2.25','0.45','science_network','cluster_network','cluster_factory_output_percent','building_target','research_network')
+          for p in [Path('tools/tests/test_adiscord_economy_weekly_contracts.py'),Path('tools/validators/validate_adiscord_economy_ai.py')]:
               text=read(p);module=ast.parse(text);lines=text.splitlines()
               for node in ast.walk(module):
-                  if isinstance(node,(ast.FunctionDef,ast.AsyncFunctionDef)):
-                      body='\n'.join(lines[node.lineno-1:node.end_lineno])
-                      if any(term in body for term in needles):
-                          print('\nFUNCTION',p,node.name,node.lineno,node.end_lineno)
-                          if len(body)<14000: print(body)
-                          else:
-                              for i,line in enumerate(lines[node.lineno-1:node.end_lineno],node.lineno):
-                                  if any(term in line for term in needles): print(i,line)
+                  if isinstance(node,ast.FunctionDef):
+                      part=lines[node.lineno-1:node.end_lineno]
+                      if any(any(term in line for term in needles) for line in part):
+                          print('FUNCTION',p,node.name,node.lineno,node.end_lineno)
+                          seen=set()
+                          for i,line in enumerate(part):
+                              if any(term in line for term in needles):
+                                  for j in range(max(0,i-2),min(len(part),i+4)):
+                                      if j not in seen:print(node.lineno+j,part[j]);seen.add(j)
           PY
