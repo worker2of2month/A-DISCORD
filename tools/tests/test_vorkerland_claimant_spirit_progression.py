@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import unittest
@@ -152,7 +153,7 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_claimant_spirit_progression_v3", outbreak.group(1))
 
         startup = named_block(
-            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
             "on_startup",
         )
         for token in (

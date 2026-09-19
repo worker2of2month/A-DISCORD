@@ -1,4 +1,5 @@
 """Regression contract for Shabrat's active postwar gameplay."""
+from tools.lib.on_actions import read_country_on_actions
 from pathlib import Path
 import unittest
 
@@ -186,7 +187,7 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
             self.assertIn(f"cost = {expected}", block, focus_id)
 
     def test_existing_saves_reconcile_postwar_gameplay_weekly(self):
-        on_actions = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
         weekly = named_block(on_actions, "on_weekly_STS")
         self.assertIn("STP_pw_reconcile_postwar_interactivity = yes", weekly)
 

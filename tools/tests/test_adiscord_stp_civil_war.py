@@ -1,4 +1,5 @@
 """Focused transaction contracts; Clausewitz execution still needs a fresh campaign."""
+from tools.lib.on_actions import country_on_actions_entries, read_country_on_actions
 from pathlib import Path
 import re
 import unittest
@@ -802,7 +803,7 @@ class CivilWarContracts(unittest.TestCase):
                          "the split consumed this escrow flag before the cancelled decision")
 
     def test_blocked_deadline_retries_only_stp_without_reopening_elections(self):
-        on_actions = ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions")
+        on_actions = ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions")
         weekly = ast_block(ast_block(on_actions, "on_weekly"), "effect")
         retry = next(e.value for e in weekly if e.key == "if" and any(v.key == "STP_cw_start" for v in e.value))
         gate = ast_block(retry, "limit")
@@ -904,7 +905,7 @@ class CivilWarContracts(unittest.TestCase):
                          "a separate peace does not end the party-resistance war")
         for name in ("STP_cw_settle_union_victory", "STP_cw_settle_nod_victory", "VAL_cw_settle_republics"):
             self.assertIn("STP_cw_check_union_wars_finished = yes", block(self.effects, name))
-        router = block(read("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_capitulation")
+        router = block(read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_capitulation")
         self.assertNotIn("STP_cw_republics_victory", router)
         self.assertIn("NOT = { has_country_flag = VAL_cw_settled }", router)
         limit = ast_block(ast_block(ast_block(entries(
@@ -1085,7 +1086,7 @@ class CivilWarContracts(unittest.TestCase):
                     self.assertEqual(facts[(tag, "variable", "STP_cw_emergency_research_slots")], 0)
 
     def test_val_path_reserves_capitulation_and_administers_livonn(self):
-        on_action = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        on_action = read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
         self.assertIn("set_global_flag = skip_default_capitulation", on_action)
         settlement = block(self.effects, "VAL_cw_settle_republics")
         self.assertIn("VAL_form_occidian_administration = yes", settlement)
@@ -1218,7 +1219,7 @@ class CivilWarContracts(unittest.TestCase):
         self.assertLess(cleared.line, min(e.line for e in walk(start) if e.key in ("STP_cw_mobilize_brigade", "STP_cw_mobilize_assault_division")))
 
     def test_val_busy_offer_retries_once_and_dispatcher_rechecks_before_display(self):
-        weekly = ast_block(ast_block(ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions"), "on_weekly"), "effect")
+        weekly = ast_block(ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions"), "on_weekly"), "effect")
         retry = next((e.value for e in weekly if e.key == "if" and any(v.key == "country_event"
                       and scalar(v.value, "id") == "ADISCORD_STP_cw.22" for v in walk(e.value))), None)
         self.assertIsNotNone(retry, "VAL must not lose the only offer while a foreign contract occupies its slot")
@@ -1491,7 +1492,7 @@ class CivilWarContracts(unittest.TestCase):
             self.assertFalse(matches_conditions(gate, {**facts, ("NOD", "has_country_flag", flag): True}, "STS"), flag)
 
     def test_nod_defeat_router_preserves_the_country_and_other_wars(self):
-        router = ast_block(ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions"), "on_capitulation")
+        router = ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions"), "on_capitulation")
         defeat = next((e.value for e in walk(router) if e.key == "else_if"
                        and any(v.key == "set_country_flag" and v.value == "NOD_cw_defeated" for v in walk(e.value))), None)
         self.assertIsNotNone(defeat)
@@ -1513,14 +1514,14 @@ class CivilWarContracts(unittest.TestCase):
         for tag in ("YPR", "COF", "TFF"):
             self.assertIn(f"has_war_with = {tag}", busy)
             self.assertIn(f"{tag} = {{ exists = yes has_capitulated = no }}", busy)
-        on_actions = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
         weekly = block(on_actions, "on_weekly")
         self.assertIn("tag = STS", weekly)
         self.assertIn("STP_cw_poll_nod_intervention = yes", weekly)
         self.assertNotIn("every_country", weekly)
 
     def test_weekly_nod_poll_stops_after_peace_but_keeps_pending_warning_cleanup(self):
-        actions = ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions")
+        actions = ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions")
         weekly = ast_block(ast_block(actions, "on_weekly"), "effect")
         for tag in ("STP", "STS", "NOD", "VAL"):
             for started in (False, True):
@@ -1548,7 +1549,7 @@ class CivilWarContracts(unittest.TestCase):
         self.assertIn("SRP = { activate_mission = STP_cw_val_ultimatum }", block(self.effects, "VAL_cw_start_intervention"))
 
     def test_nod_military_victory_settles_for_party_not_nod(self):
-        on_actions = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
         self.assertIn("var = STP_cw_capitulation_occupier value = 4 compare = equals", on_actions)
         self.assertIn("STP_cw_settle_nod_victory = yes", on_actions)
         settlement = block(self.effects, "STP_cw_settle_nod_victory")
@@ -1595,7 +1596,7 @@ class CivilWarContracts(unittest.TestCase):
         self.assertEqual(pools, {"STP": 0, "VAL": 0, "WRK": 1270, "STS": 0})
 
     def test_capitulation_uses_occupation_before_ambiguous_multiwar_from(self):
-        on_actions = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
         capitulation = block(on_actions, "on_capitulation")
         self.assertIn("STP_cw_settle_union_victory = yes", capitulation)
         self.assertNotIn("STP_cw_republics_victory", capitulation)
@@ -1941,7 +1942,7 @@ class CommanderLoyaltyContracts(unittest.TestCase):
         self.assertLess(war.rindex("STP_cw_prepared_supply_lines"), war.index("declare_war_on"))
         self.assertIn("tag = STS", war)
         self.assertIn("declare_war_on = { target = STP type = annex_everything }", war)
-        weekly = ast_block(ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions"), "on_weekly")
+        weekly = ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions"), "on_weekly")
         retries = [e.value for e in ast_block(weekly, "effect")
                    if e.key == "if" and any(child.key == "STP_cw_begin_hostilities" for child in e.value)]
         self.assertEqual(len(retries), 2)
@@ -2248,7 +2249,7 @@ class NorthernCampaignContracts(unittest.TestCase):
                          ("NOD", "has_war_with", actual_enemy): True}
                 self.assertEqual(matches_conditions(self.expand(managed, {"ROOT": "NOD"}), facts, "NOD"),
                                  actual_enemy == occupier, (code, actual_enemy))
-        hook = ast_block(ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions"), "on_capitulation_immediate")
+        hook = ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions"), "on_capitulation_immediate")
         managed_branches = [e.value for e in walk(hook) if e.key == "if"
                             and "STP_cw_northern_capitulation_managed" in {c.key for c in walk(ast_block(e.value, "limit"))}]
         self.assertEqual(len(managed_branches), 1, "north must settle inside the native immediate callback")
@@ -2348,7 +2349,7 @@ class NorthernCampaignContracts(unittest.TestCase):
         facts.update(conference)
         for target in ("YPR", "COF", "TFF"):
             facts[("NOD", "has_war_with", target)] = False
-        hook = ast_block(ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions"), "on_peaceconference_ended")
+        hook = ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions"), "on_peaceconference_ended")
         run(ast_block(hook, "effect"), "NOD", "NOD")
         transfers = [(scope, value) for scope, key, value in writes if key == "transfer_state"]
         self.assertEqual(transfers, [("YPR", str(n)) for n in (8, 15, 16, 19, 20, 21, 22)]
@@ -2482,7 +2483,7 @@ class NorthernCampaignContracts(unittest.TestCase):
                 facts[(member, "is_in_faction_with", ally)] = True
         writes = []
         definitions = {e.key: e.value for e in self.effects}
-        immediate = ast_block(ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"),
+        immediate = ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'),
                                         "on_actions"), "on_capitulation_immediate")
 
         def run(items, scope, loser):
@@ -2686,7 +2687,7 @@ class NorthernCampaignContracts(unittest.TestCase):
         cap("YPR")
         self.assertTrue(facts.get(("YPR", "has_country_flag", pending), False))
         self.assertFalse(facts.get(("global", "has_global_flag", skip), False))
-        late = ast_block(ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"),
+        late = ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'),
                                   "on_actions"), "on_capitulation")
         run(ast_block(late, "effect"), "YPR", "YPR")
         self.assertFalse(facts.get(("YPR", "has_country_flag", pending), False))
@@ -2715,7 +2716,7 @@ class NorthernCampaignContracts(unittest.TestCase):
         facts[("NOD", "has_war_with", "YPR")] = False
         cap("YPR")
         self.assertFalse(facts.get(("YPR", "has_country_flag", pending), False))
-        late = ast_block(ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"),
+        late = ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'),
                                   "on_actions"), "on_capitulation")
         run(ast_block(late, "effect"), "YPR", "YPR")
         self.assertFalse(facts.get(("global", "has_global_flag", skip), False))
@@ -2980,7 +2981,7 @@ class WartimeProgramContracts(unittest.TestCase):
         finish = ast_block(self.effects, "STP_cw_finish_mobilization")
         for name in ("STP_cw_start", "VAL_cw_settle_republics", "STP_cw_settle_union_victory", "STP_cw_settle_nod_victory"):
             self.assertEqual(sum(e.key == "STP_cw_finish_mobilization" for e in walk(ast_block(self.effects, name))), 1, name)
-        hooks = entries("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        hooks = country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
         self.assertEqual(sum(e.key == "STP_cw_finish_mobilization" for e in walk(hooks)), 1)
         for path in ("common/scripted_effects/ADISCORD_STP_scripted_effects.txt", "events/ADISCORD_STP_events.txt",
                      "common/on_actions/02_ADISCORD_STP_on_actions.txt", "common/national_focus/ADISCORD_national_focus_VAL.txt"):

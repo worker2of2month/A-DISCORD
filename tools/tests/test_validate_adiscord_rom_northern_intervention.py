@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import unittest
@@ -46,7 +47,7 @@ class RomNorthernInterventionRegressionTests(unittest.TestCase):
         decisions = source_section(read(DECISIONS), 'collapse_decisions')
         effects = source_section(read(EFFECTS), 'collapse_effects')
         cls.events = source_section(read(EVENTS), 'collapse_events')
-        cls.on_actions = read(ON_ACTIONS)
+        cls.on_actions = read_country_on_actions(ON_ACTIONS, 'vorkerland_collapse')
         cls.intervention = named_block(
             decisions, "ADISCORD_vorkerland_rom_northern_intervention"
         )

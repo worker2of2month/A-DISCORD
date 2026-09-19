@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import unittest
@@ -38,15 +39,11 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
             for token in retired_tokens:
                 self.assertNotIn(token, source, f"{relative} still uses {token}")
 
-        on_actions = read(
-            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
-        )
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         self.assertEqual(named_block(on_actions, "on_monthly"), "")
 
     def test_only_factory_scaling_remains_monthly(self) -> None:
-        on_actions = read(
-            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
-        )
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         for tag in ("WKR", "VAD", "TVA"):
             hook = named_block(on_actions, f"on_monthly_{tag}")
             self.assertTrue(hook, f"missing on_monthly_{tag}")
@@ -154,9 +151,7 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_reconcile_campaign_state = yes", terminal)
 
     def test_central_state_edges_recount_and_refresh_coalitions(self) -> None:
-        on_actions = read(
-            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
-        )
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         state_hook = named_block(on_actions, "on_state_control_changed")
         for state in (32, 33, 35, 36, 37, 38, 39, 40, 75, 81, 102, 104, 106, 121, 122, 123, 124):
             self.assertIn(f"state = {state}", state_hook)

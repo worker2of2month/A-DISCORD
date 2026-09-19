@@ -7,6 +7,7 @@ controller without owning their gameplay implementation.
 """
 
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import sys
@@ -273,7 +274,7 @@ def event_block(text: str, event_id: str) -> str:
     return ""
 
 
-def _load(relative: Path | tuple[Path, ...], issues: list[str]) -> str:
+def _load(relative: Path | tuple[Path, ...], issues: list[str], *, peace_section: str | None = None) -> str:
     if isinstance(relative, tuple):
         return "\n".join(_load(path, issues) for path in relative)
     path = ROOT / relative
@@ -281,7 +282,8 @@ def _load(relative: Path | tuple[Path, ...], issues: list[str]) -> str:
         issues.append(f"missing required file {relative.as_posix()}")
         return ""
     try:
-        source = path.read_text(encoding="utf-8-sig")
+        source = (read_country_on_actions(path, peace_section) if peace_section
+                  else path.read_text(encoding="utf-8-sig"))
     except UnicodeError as exc:
         issues.append(f"cannot decode {relative.as_posix()} as UTF-8: {exc}")
         return ""
@@ -420,7 +422,7 @@ def validate_terminal_outcomes() -> list[str]:
 def validate_bounded_outcome_hook() -> list[str]:
     issues: list[str] = []
     events = source_section(_load(DIPLOMACY_EVENTS, issues), 'diplomacy_events')
-    on_actions = _load(DIPLOMACY_ON_ACTIONS, issues)
+    on_actions = _load(DIPLOMACY_ON_ACTIONS, issues, peace_section="vorkerland_diplomacy")
 
     outcome_event = event_block(events, "ADISCORD_vorkerland_diplomacy.1")
     if not outcome_event:
@@ -467,7 +469,7 @@ def validate_peaceful_invitations() -> list[str]:
     effects = source_section(_load(DIPLOMACY_EFFECTS, issues), 'diplomacy_effects')
     events = source_section(_load(DIPLOMACY_EVENTS, issues), 'diplomacy_events')
     decisions = source_section(_load(DIPLOMACY_DECISIONS, issues), 'diplomacy_decisions')
-    on_actions = _load(DIPLOMACY_ON_ACTIONS, issues)
+    on_actions = _load(DIPLOMACY_ON_ACTIONS, issues, peace_section="vorkerland_diplomacy")
     focus_decisions = _load(FOCUS_DECISIONS, issues)
     focus_effects = source_section(_load(FOCUS_DECISION_EFFECTS, issues), 'focus_decision_effects')
     collapse_effects = source_section(_load(COLLAPSE_EFFECTS, issues), 'collapse_effects')
@@ -674,7 +676,7 @@ def validate_vad_intervention_and_restoration() -> list[str]:
     effects = source_section(_load(DIPLOMACY_EFFECTS, issues), 'diplomacy_effects')
     events = source_section(_load(DIPLOMACY_EVENTS, issues), 'diplomacy_events')
     decisions = source_section(_load(DIPLOMACY_DECISIONS, issues), 'diplomacy_decisions')
-    on_actions = _load(DIPLOMACY_ON_ACTIONS, issues)
+    on_actions = _load(DIPLOMACY_ON_ACTIONS, issues, peace_section="vorkerland_diplomacy")
     focus_decisions = _load(FOCUS_DECISIONS, issues)
     focus_effects = source_section(_load(FOCUS_DECISION_EFFECTS, issues), 'focus_decision_effects')
 
@@ -1183,7 +1185,7 @@ def validate_wkr_solyarino_intervention() -> list[str]:
     focus_decisions = _load(FOCUS_DECISIONS, issues)
     focus_effects = source_section(_load(FOCUS_DECISION_EFFECTS, issues), 'focus_decision_effects')
     events = source_section(_load(DIPLOMACY_EVENTS, issues), 'diplomacy_events')
-    on_actions = _load(DIPLOMACY_ON_ACTIONS, issues)
+    on_actions = _load(DIPLOMACY_ON_ACTIONS, issues, peace_section="vorkerland_diplomacy")
     focus_source = source_section(_load(FOCUS_FILE, issues), 'civil_war_focus')
     ai = source_section(_load(COLLAPSE_AI, issues), 'collapse_ai')
     plans = source_section(_load(WKR_AI_PLANS, issues), 'wkr_wartime_plan')

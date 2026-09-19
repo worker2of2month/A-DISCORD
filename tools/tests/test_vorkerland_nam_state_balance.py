@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import codecs
 import re
@@ -340,9 +341,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         effects = (
             root / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"
         ).read_text(encoding="utf-8-sig")
-        on_actions = (
-            root / "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt"
-        ).read_text(encoding="utf-8-sig")
+        on_actions = read_country_on_actions(root / "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt", 'nam')
 
         defence = named_block(ideas, "ADISCORD_nam_last_line_administration")
         self.assertIn("army_defence_factor = 0.20", defence)
@@ -378,9 +377,7 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
     def test_nam_resource_war_entry_is_fresh_event_driven_and_bounded(self) -> None:
         root = builder.ROOT
-        on_actions = (root / "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt").read_text(
-            encoding="utf-8-sig"
-        )
+        on_actions = read_country_on_actions(root / "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt", 'nam')
         triggers = (root / "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt").read_text(
             encoding="utf-8-sig"
         )
@@ -592,12 +589,10 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             / "scripted_effects"
             / "ADISCORD_nam_resource_war_effects.txt"
         ).read_text(encoding="utf-8-sig")
-        on_actions = (
-            builder.ROOT
+        on_actions = read_country_on_actions(builder.ROOT
             / "common"
             / "on_actions"
-            / "03_ADISCORD_nam_resource_war_on_actions.txt"
-        ).read_text(encoding="utf-8-sig")
+            / "03_ADISCORD_nam_resource_war_on_actions.txt", 'nam')
         debug_decisions = (
             builder.ROOT
             / "common"

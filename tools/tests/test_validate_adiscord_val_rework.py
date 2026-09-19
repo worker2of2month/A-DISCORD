@@ -1,3 +1,4 @@
+from tools.lib.on_actions import read_country_on_actions
 import re
 from itertools import permutations
 import unittest
@@ -223,7 +224,7 @@ class ValTierTransitionContractTests(unittest.TestCase):
         cls.effects = source_section(EFFECTS_PATH.read_text(encoding="utf-8-sig"), 'rework_effects')
         cls.ideas = IDEAS_PATH.read_text(encoding="utf-8-sig")
         cls.focuses = FOCUSES_PATH.read_text(encoding="utf-8-sig")
-        cls.on_actions = ON_ACTIONS_PATH.read_text(encoding="utf-8-sig")
+        cls.on_actions = read_country_on_actions(ON_ACTIONS_PATH, 'kefreyt')
         cls.foreign_effects = source_section(FOREIGN_EFFECTS_PATH.read_text(encoding="utf-8-sig"), 'foreign_operation_effects')
 
     def effect(self, family: str, tier: int) -> str:
@@ -2173,7 +2174,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
 
     def test_capitulation_handler_reserves_each_member_not_just_the_addressee(self):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, walk
-        actions = block(parse_clausewitz(ON_ACTIONS_PATH.read_text(encoding="utf-8")), "on_actions")
+        actions = block(parse_clausewitz(read_country_on_actions(ON_ACTIONS_PATH, 'kefreyt')), "on_actions")
         immediate = block(block(actions, "on_capitulation_immediate"), "effect")
         handler = next(e.value for e in immediate if e.key == "if" and any(x.key == "set_country_flag" and x.value == "VAL_frontier_capitulation_pending" for x in e.value))
         for target in (1, 2, 3):
@@ -2544,7 +2545,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
 
     def test_unrelated_capitulator_cannot_install_nods_administration(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk, parse_clausewitz
-        actions = block(parse_clausewitz(ON_ACTIONS_PATH.read_text(encoding="utf-8")), "on_actions")
+        actions = block(parse_clausewitz(read_country_on_actions(ON_ACTIONS_PATH, 'kefreyt')), "on_actions")
         immediate = block(block(actions, "on_capitulation_immediate"), "effect")
         handler = next(e.value for e in immediate if e.key == "if" and any(x.key == "set_country_flag" and x.value == "VAL_frontier_capitulation_pending" for x in e.value))
         gate = block(handler, "limit")
@@ -3136,7 +3137,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         formation = self.getblock(self.parse(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_form_occidian_administration")
         clearing = [e.value for e in walk(formation) if e.key == "clr_country_flag"]
         self.assertIn("VAL_occidian_settlement_pending", clearing)
-        on_actions = ON_ACTIONS_PATH.read_text(encoding="utf-8")
+        on_actions = read_country_on_actions(ON_ACTIONS_PATH, 'kefreyt')
         self.assertRegex(on_actions, r"limit\s*=\s*\{\s*tag\s*=\s*VAL\s*\}\s*clr_country_flag\s*=\s*VAL_occidian_settlement_pending")
 
     def test_occidian_lifecycle_bounds_land_preserves_armies_and_takes_time(self):

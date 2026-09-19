@@ -1,4 +1,5 @@
 """Regression contracts for Kefreyt's Livonn postwar settlement."""
+from tools.lib.on_actions import read_scripted_peace
 from pathlib import Path
 import unittest
 
@@ -36,7 +37,7 @@ class ValLivonnSettlement(unittest.TestCase):
         self.assertNotIn("STS = { transfer_state = 45 }", keep)
 
     def test_runtime_hook_stages_after_srp_defeat_with_fallback(self):
-        hook = read("common/on_actions/09_ADISCORD_VAL_livonn_settlement_on_actions.txt")
+        hook = read_scripted_peace(Path("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").with_name('09_ADISCORD_scripted_peace_on_actions.txt'), 'livonn')
         self.assertIn("on_capitulation = {", hook)
         self.assertIn("ROOT = { tag = SRP }", hook)
         self.assertIn("VAL = {", hook)

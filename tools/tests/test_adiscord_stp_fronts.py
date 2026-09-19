@@ -1,5 +1,6 @@
 """Static front-allocation contracts; native AI movement needs an in-game check."""
 from __future__ import annotations
+from tools.lib.on_actions import country_on_actions_entries
 
 import re
 import unittest
@@ -110,7 +111,7 @@ class ShabratFrontTests(unittest.TestCase):
 class CivilWarVictorFallbackTests(unittest.TestCase):
     def setUp(self):
         from tools.tests.test_adiscord_stp_preparation import entries, block, walk
-        hooks = block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions")
+        hooks = block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions")
         immediate = block(block(hooks, "on_capitulation_immediate"), "effect")
         self.block = block
         candidates = [e.value for e in walk(immediate) if e.key == "if"

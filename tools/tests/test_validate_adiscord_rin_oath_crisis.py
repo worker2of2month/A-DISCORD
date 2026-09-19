@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import unittest
@@ -24,7 +25,7 @@ class RinOathCrisisContractTests(unittest.TestCase):
         self.assertEqual(collect_issues(), [])
 
     def test_war_edge_producer_is_one_shot_and_releases_both_minors(self) -> None:
-        on_actions = read(ON_ACTIONS)
+        on_actions = read_country_on_actions(ON_ACTIONS, 'rin')
         war = named_block(on_actions, "on_war")
         self.assertIn("ADISCORD_rin_is_vorkerland_war_actor = yes", war)
         self.assertIn("ADISCORD_rin_oath_crisis_can_schedule = yes", war)
@@ -39,7 +40,7 @@ class RinOathCrisisContractTests(unittest.TestCase):
         )
 
     def test_startup_migration_is_absent(self) -> None:
-        on_actions = read(ON_ACTIONS)
+        on_actions = read_country_on_actions(ON_ACTIONS, 'rin')
         self.assertNotIn("on_startup", on_actions)
         self.assertNotIn(
             "ADISCORD_rin_oath_crisis_legacy_needs_schedule",
@@ -104,7 +105,7 @@ class RinOathCrisisContractTests(unittest.TestCase):
         ):
             self.assertIn(token, split)
         self.assertNotIn("\n\tRIN = {", split)
-        combined = effects + read(EVENTS) + read(ON_ACTIONS)
+        combined = effects + read(EVENTS) + read_country_on_actions(ON_ACTIONS, 'rin')
         for forbidden in ("declare_war_on", "add_to_war", "create_faction", "add_to_faction"):
             self.assertNotIn(forbidden, combined)
 
@@ -119,7 +120,7 @@ class RinOathCrisisContractTests(unittest.TestCase):
         self.assertEqual(split.count("activate_mission = ADISCORD_rin_palatin_breakup_mission"), 1)
 
     def test_capitulation_router_preempts_generic_fallback(self) -> None:
-        capitulation = named_block(read(ON_ACTIONS), "on_capitulation")
+        capitulation = named_block(read_country_on_actions(ON_ACTIONS, 'rin'), "on_capitulation")
         self.assertEqual(capitulation.count("set_global_flag = skip_default_capitulation"), 2)
         self.assertEqual(capitulation.count("annex_country = { target = ROOT transfer_troops = yes }"), 2)
         self.assertIn("ADISCORD_rin_complete_southern_victory = yes", capitulation)
@@ -189,7 +190,7 @@ class RinOathCrisisContractTests(unittest.TestCase):
         self.assertEqual(completion.count("ADISCORD_rin_crisis.3 days = 1"), 1)
 
     def test_external_peace_uses_cached_southern_country_not_original_tag(self) -> None:
-        peace = named_block(read(ON_ACTIONS), "on_peace")
+        peace = named_block(read_country_on_actions(ON_ACTIONS, 'rin'), "on_peace")
         self.assertIn("event_target:ADISCORD_rin_southern_charter", peace)
         self.assertNotIn("RIN = { ADISCORD_rin_complete_partition_armistice = yes }", peace)
 

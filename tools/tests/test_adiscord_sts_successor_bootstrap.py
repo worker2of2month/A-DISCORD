@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import unittest
@@ -60,7 +61,7 @@ def event_block(source: str, event_id: str) -> str:
 class StsSuccessorBootstrapTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.on_action = read(ON_ACTION)
+        cls.on_action = read_country_on_actions(ON_ACTION, 'stelander')
         cls.hook = named_block(cls.on_action, "on_war_relation_added")
 
     def test_sts_reinherits_live_stp_technology_and_starts_bounded_production(self) -> None:

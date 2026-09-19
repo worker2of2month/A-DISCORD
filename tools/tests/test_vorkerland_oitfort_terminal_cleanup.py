@@ -1,4 +1,5 @@
 """Regression contract: Oitfort is wartime-only and is absorbed by terminal WRK."""
+from tools.lib.on_actions import read_country_on_actions
 from pathlib import Path
 import unittest
 
@@ -57,7 +58,7 @@ class OitfortTerminalCleanupTests(unittest.TestCase):
         self.assertIn("NOT = { country_exists = WTD }", reunified)
 
     def test_old_save_reconciles_wtd_on_startup(self):
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         startup = named_block(on_actions, "on_startup")
         for token in (
             "has_global_flag = ADISCORD_vorkerland_reunification_verified",
