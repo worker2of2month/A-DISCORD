@@ -458,3 +458,14 @@ VAL_only_occidian_states = {
 		}
 	}
 }
+
+# COUNTRY VAL: shared readiness for issuing an ultimatum and acting on refusal.
+VAL_ai_frontier_ready = {
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	has_army_manpower = { size > 59999 }
+	NOT = { has_equipment = { infantry_equipment < 1500 } }
+	check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_debt_state value = 3 compare = less_than }
+}

@@ -710,6 +710,46 @@ ideas = {
 		}
 
 # --- end ---
+
+		# Postwar programme deltas are previews, never installed national spirits.
+		STP_pc_economy_count_the_cost_delta = {
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_overall_income_factor = 0.10
+				ADISCORD_economy_treasury_capacity_factor = 0.10
+			}
+		}
+		STP_pc_economy_reopen_tax_offices_delta = {
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_overall_income_factor = 0.20
+				ADISCORD_economy_admin_expense_factor = -0.10
+			}
+		}
+		STP_pc_economy_repair_workshops_delta = {
+			allowed = { always = no }
+			modifier = {
+				production_speed_industrial_complex_factor = 0.15
+				ADISCORD_economy_treasury_capacity_factor = 0.10
+				ADISCORD_economy_overall_income_factor = 0.10
+			}
+		}
+		STP_pc_economy_stabilize_currency_delta = {
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_creditworthiness_factor = 0.15
+				ADISCORD_economy_treasury_capacity_factor = 0.10
+			}
+		}
+		STP_pc_economy_recovery_budget_delta = {
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_overall_income_factor = 0.20
+				ADISCORD_economy_treasury_capacity_factor = 0.20
+				ADISCORD_economy_admin_expense_factor = -0.05
+				ADISCORD_country_development_economic_growth_factor = 0.15
+			}
+		}
 	}
 
 	political_advisor_head_of_state = {

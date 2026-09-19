@@ -3161,7 +3161,7 @@ ADISCORD_economy_ai_monthly_policy = {
             ["ADISCORD_economy_calculate_research_expenses = {"]
             + [
                 f"if = {{ limit = {{ check_variable = {{ var = ADISCORD_economy_research_spending_mode value = {level} compare = equals }} }} multiply_variable = {{ var = ADISCORD_economy_research_expenses value = {factor} }} }}"
-                for level, factor in enumerate(("0.60", "0.80", "1.00", "1.30", "1.60"), 1)
+                for level, factor in enumerate(("0.30", "0.65", "1.00", "1.30", "1.60"), 1)
             ]
             + ["}"]
         )
@@ -3182,7 +3182,7 @@ ADISCORD_economy_ai_monthly_policy = {
         level_one_branch = (
             "if = { limit = { check_variable = { var = "
             "ADISCORD_economy_research_spending_mode value = 1 compare = equals } } "
-            "multiply_variable = { var = ADISCORD_economy_research_expenses value = 0.60 } }"
+            "multiply_variable = { var = ADISCORD_economy_research_expenses value = 0.30 } }"
         )
         duplicate_level = research.rsplit("}", 1)[0] + level_one_branch + "\n}"
         self.assertTrue(research_policy_flow_issues(duplicate_level))
@@ -3992,8 +3992,8 @@ class WeeklyEconomyContracts(unittest.TestCase):
         )
 
         expected = {
-            1: ("§G-40%§!", "§R-8%§!"),
-            2: ("§G-20%§!", "§R-3%§!"),
+            1: ("§G-70%§!", "§R-8%§!"),
+            2: ("§G-35%§!", "§R-3%§!"),
             3: ("§Y0%§!", "§Y0%§!"),
             4: ("§R+30%§!", "§G+3%§!"),
             5: ("§R+60%§!", "§G+5%§!"),
@@ -4078,7 +4078,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 research,
             )
         }
-        self.assertEqual(multipliers, {0.60, 0.80, 1.00, 1.30, 1.60})
+        self.assertEqual(multipliers, {0.30, 0.65, 1.00, 1.30, 1.60, 2.00})
         self.assertRegex(
             EFFECTS,
             r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_research_spending_mode"
@@ -8203,12 +8203,12 @@ ADISCORD_task10_forbidden_cache_consumer = {
     def test_building_tooltips_lead_with_role_and_budget_impact(self):
         self.assertNotIn("Строятся в обычном меню", ECONOMY_LOC)
         for key, role, budget in (
-            ("ADISCORD_business_center_desc", "Роль: доход", "+1,20"),
-            ("ADISCORD_science_center_desc", "Роль: исследования", "-0,27"),
+            ("ADISCORD_business_center_desc", "Роль: доход", "+23,00"),
+            ("ADISCORD_science_center_desc", "Роль: исследования", "-2,92"),
             (
                 "ADISCORD_industrial_cluster_desc",
                 "Роль: местное военное производство",
-                "+0,31",
+                "Почти нейтрален",
             ),
         ):
             match = re.search(rf'(?m)^\s*{key}:\d*\s+"([^"]*)"', ECONOMY_LOC)
@@ -8223,9 +8223,9 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "Деловой центр",
             "Научный центр",
             "Промышленный кластер",
-            "1.05 + 0.25 - 0.10 = +1.20",
-            "0.20 - 0.35 - 0.12 = -0.27",
-            "0.45 + 0.16 - 0.18 - 0.12 = +0.31",
+            "18 × (1.05 + 0.25) - 4 × 0.10 = +23.00",
+            "18 × 0.02 - 4 × (2 × 0.35 + 0.12) = -2.92",
+            "18 × (0.045 + 0.016) - 4 × (0.18 + 0.12) = -0.102",
             "5% × сумма(исправные военные заводы региона × уровень кластера)",
             "3 / 13",
         ):

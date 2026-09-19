@@ -1470,15 +1470,42 @@ def research_policy_flow_issues(text: str) -> list[str]:
     effect = definitions.get("ADISCORD_economy_calculate_research_expenses")
     if effect is None or not isinstance(effect.value, list):
         return ["missing research expense calculation"]
-    expected = {"1": 0.60, "2": 0.80, "3": 1.00, "4": 1.30, "5": 1.60}
+    expected = {"1": 0.30, "2": 0.65, "3": 1.00, "4": 1.30, "5": 1.60}
     found: dict[str, list[float]] = {}
+    # The cached-base branch owns one fixed cost conversion before policy.
+    # Only that exact, adjacent cache write is exempt from the five controls.
+    base_scaling = set()
+    expense = "ADISCORD_economy_research_expenses"
+    cache = "ADISCORD_economy_research_expense_policy_base"
+    for ancestors, entry in _walk_entries(effect.value):
+        if len(ancestors) != 1 or ancestors[0].key != "else":
+            continue
+        owner = ancestors[0]
+        if not _is_exact_variable_write(entry, "multiply_variable", expense, "2.00"):
+            continue
+        owner_position = effect.value.index(owner)
+        if owner_position == 0:
+            continue
+        cached_branch = effect.value[owner_position - 1]
+        cached_limit = _direct_limit(cached_branch)
+        position = owner.value.index(entry)
+        if (
+            cached_branch.key == "if"
+            and cached_limit is not None
+            and _exact_check(cached_limit, "ADISCORD_economy_policy_preview_uses_cached_base_temp", "1", "greater_than_or_equals")
+            and len(_direct_variable_operation(cached_branch.value, "set_variable", expense, cache)) == 1
+            and len(_direct_variable_operation(owner.value, "multiply_variable", expense)) == 1
+            and position + 1 < len(owner.value)
+            and _is_exact_variable_write(owner.value[position + 1], "set_variable", cache, expense)
+        ):
+            base_scaling.add(id(entry))
     all_multipliers = [
         entry
         for _, entry in _walk_entries(effect.value)
         if entry.key == "multiply_variable"
         and isinstance(entry.value, list)
-        and _direct_scalar(entry.value, "var")
-        == "ADISCORD_economy_research_expenses"
+        and _direct_scalar(entry.value, "var") == expense
+        and id(entry) not in base_scaling
     ]
     for entry in effect.value:
         if entry.key not in {"if", "else_if"} or not isinstance(entry.value, list):
@@ -3200,7 +3227,7 @@ def validate(root: Path = ROOT) -> list[str]:
             "obsolete all-in-one budget courses remain wired into the economy")
 
     social_expenses = block(effects, "ADISCORD_economy_calculate_social_expenses")
-    for multiplier in ("0.45", "0.75", "1.00", "1.35", "1.80"):
+    for multiplier in ("0.25", "0.60", "1.00", "1.35", "1.80"):
         require(f"value = {multiplier}" in social_expenses,
                 f"social budget lacks the distinct {multiplier} cost multiplier")
     for level in range(1, 6):

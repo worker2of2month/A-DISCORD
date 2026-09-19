@@ -4541,10 +4541,11 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 50
 			custom_effect_tooltip = STP_pc_economy_count_the_cost_tt
+			effect_tooltip = { add_ideas = STP_pc_economy_count_the_cost_delta }
 			hidden_effect = {
 				STP_pw_rebuild_economy_after_unification = yes
-				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.03 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.03 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.10 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.10 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4561,10 +4562,10 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_economy_count_the_cost }
 		ai_will_do = { base = 10 }
 		completion_reward = {
-			custom_effect_tooltip = STP_pc_economy_reopen_tax_offices_tt
+			effect_tooltip = { add_ideas = STP_pc_economy_reopen_tax_offices_delta }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.05 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.03 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.20 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.10 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4599,10 +4600,11 @@ focus_tree = {
 				}
 			}
 			else = { ADISCORD_economy_receive_100 = yes }
-			custom_effect_tooltip = STP_pc_economy_repair_workshops_tt
+			effect_tooltip = { add_ideas = STP_pc_economy_repair_workshops_delta }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0.05 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.05 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.10 }
+				add_to_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0.15 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.10 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4620,13 +4622,14 @@ focus_tree = {
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			custom_effect_tooltip = STP_pc_economy_stabilize_currency_tt
+			effect_tooltip = { add_ideas = STP_pc_economy_stabilize_currency_delta }
 			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_inflation value = -3 }
+				add_to_variable = { var = ADISCORD_economy_inflation value = -6 }
 				clamp_variable = { var = ADISCORD_economy_inflation min = 0 max = 100 }
-				add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -5 }
+				add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -10 }
 				clamp_variable = { var = ADISCORD_economy_deficit_pressure min = 0 max = 100 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_creditworthiness_factor value = 0.08 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.02 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_creditworthiness_factor value = 0.15 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.10 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4645,12 +4648,12 @@ focus_tree = {
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			ADISCORD_economy_receive_100 = yes
-			custom_effect_tooltip = STP_pc_economy_recovery_budget_tt
+			effect_tooltip = { add_ideas = STP_pc_economy_recovery_budget_delta }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.07 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.05 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.02 }
-				add_to_variable = { var = STP_pw_ADISCORD_country_development_economic_growth_factor value = 0.08 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.20 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.20 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.05 }
+				add_to_variable = { var = STP_pw_ADISCORD_country_development_economic_growth_factor value = 0.15 }
 				STP_pw_refresh_modifier = yes
 			}
 		}

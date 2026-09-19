@@ -586,11 +586,11 @@ country_event = {
         ai_chance = { base = 0 }
         custom_effect_tooltip = VAL_frontier_prepare_tt
     }
-    option = { name = val_rework.111.withdraw trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes } ai_chance = { base = 30 } hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } } VAL_frontier_close = yes } } }
+    option = { name = val_rework.111.withdraw trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes } ai_chance = { base = 10 } hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } } VAL_frontier_close = yes } } }
     option = {
         name = val_rework.111.war
         trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes VAL_frontier_prewar_eligible = yes has_war = no }
-        ai_chance = { base = 70 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0.3 has_manpower < 20000 } }
+        ai_chance = { base = 90 modifier = { factor = 0 NOT = { VAL_ai_frontier_ready = yes } } modifier = { factor = 0.3 has_manpower < 20000 } }
         custom_effect_tooltip = VAL_frontier_war_tt
         hidden_effect = { VAL_frontier_start_war = yes }
     }

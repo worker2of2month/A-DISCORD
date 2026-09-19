@@ -691,7 +691,7 @@ VAL_frontier = {
             custom_effect_tooltip = VAL_frontier_demand_CIN_tt
             hidden_effect = { set_variable = { var = VAL_frontier_target value = 1 } VAL_frontier_record_ultimatum = yes CIN = { country_event = { id = val_rework.110 } } }
         }
-        ai_will_do = { base = 3 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+        ai_will_do = { base = 10 modifier = { factor = 0 NOT = { VAL_ai_frontier_ready = yes } } }
     }
     VAL_frontier_demand_OSF = {
         icon = generic_political_pressure
@@ -710,7 +710,7 @@ VAL_frontier = {
             custom_effect_tooltip = VAL_frontier_demand_OSF_tt
             hidden_effect = { set_variable = { var = VAL_frontier_target value = 2 } VAL_frontier_record_ultimatum = yes OSF = { country_event = { id = val_rework.110 } } }
         }
-        ai_will_do = { base = 3 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+        ai_will_do = { base = 10 modifier = { factor = 0 NOT = { VAL_ai_frontier_ready = yes } } }
     }
     VAL_frontier_demand_APH = {
         icon = generic_political_pressure
@@ -729,7 +729,7 @@ VAL_frontier = {
             custom_effect_tooltip = VAL_frontier_demand_APH_tt
             hidden_effect = { set_variable = { var = VAL_frontier_target value = 3 } VAL_frontier_record_ultimatum = yes APH = { country_event = { id = val_rework.110 } } }
         }
-        ai_will_do = { base = 3 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+        ai_will_do = { base = 10 modifier = { factor = 0 NOT = { VAL_ai_frontier_ready = yes } } }
     }
     VAL_frontier_demand_ERT = {
         icon = generic_political_pressure
@@ -748,7 +748,7 @@ VAL_frontier = {
             custom_effect_tooltip = VAL_frontier_demand_ERT_tt
             hidden_effect = { set_variable = { var = VAL_frontier_target value = 4 } VAL_frontier_record_ultimatum = yes ERT = { country_event = { id = val_rework.110 } } }
         }
-        ai_will_do = { base = 3 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+        ai_will_do = { base = 10 modifier = { factor = 0 NOT = { VAL_ai_frontier_ready = yes } } }
     }
 
 

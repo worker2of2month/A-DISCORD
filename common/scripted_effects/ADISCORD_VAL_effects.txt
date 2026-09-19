@@ -2078,6 +2078,7 @@ VAL_frontier_call_members = {
 # Промышленный цикл. Ступень кризиса независима от довоенных вложений;
 # выпуск, строительство и бюджет пересчитываются только при изменении входов.
 VAL_refresh_industrial_economy = {
+	set_variable = { var = VAL_industrial_weekly_income value = 0 }
 	set_variable = { var = VAL_industrial_output value = 0 }
 	set_variable = { var = VAL_industrial_construction value = 0 }
 	set_variable = { var = VAL_industrial_efficiency value = 0 }
@@ -2108,6 +2109,11 @@ VAL_refresh_industrial_economy = {
 	}
 	if = { limit = { has_variable = VAL_arsenal_investment } add_to_variable = { var = VAL_industrial_output value = VAL_arsenal_investment } }
 	if = { limit = { has_variable = VAL_civilian_investment } add_to_variable = { var = VAL_industrial_construction value = VAL_civilian_investment } }
+	if = {
+		limit = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+		set_variable = { var = VAL_industrial_weekly_income value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_weekly_income value = 4 }
+	}
 	remove_ideas = VAL_vorkerland_contract_disruptions
 	if = {
 		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }

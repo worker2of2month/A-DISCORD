@@ -915,7 +915,7 @@ ADISCORD_economy_calculate_consumer_goods_income = {
 	multiply_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.035 }
 	# Industrial clusters mainly support civilian taxable output. They are not a default money printer for military factories.
 	set_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = ADISCORD_industrial_cluster_count }
-	multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 0.45 }
+	multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 0.045 }
 	if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 1.15 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes ADISCORD_state_development_at_least_4 = yes } multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 1.25 } }
 	add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = ADISCORD_economy_consumer_goods_cluster_temp }
@@ -961,7 +961,7 @@ ADISCORD_economy_calculate_factory_income = {
 			}
 		}
 		set_temp_variable = { var = ADISCORD_economy_factory_income_temp value = ADISCORD_industrial_cluster_count }
-		multiply_temp_variable = { var = ADISCORD_economy_factory_income_temp value = 0.12 }
+		multiply_temp_variable = { var = ADISCORD_economy_factory_income_temp value = 0.012 }
 		add_to_variable = { var = ADISCORD_economy_factory_income value = ADISCORD_economy_factory_income_temp }
 	}
 	clamp_variable = { var = ADISCORD_economy_factory_income min = 0 max = 50 }
@@ -1003,10 +1003,10 @@ ADISCORD_economy_calculate_building_income = {
 	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.60 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
 	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_science_center_count }
-	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.20 }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.02 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
 	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_industrial_cluster_count }
-	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.16 }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.016 }
 	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
 	if = { limit = { ADISCORD_economy_model_is_fragmented = yes } multiply_variable = { var = ADISCORD_economy_building_income value = 0.70 } }
 	clamp_variable = { var = ADISCORD_economy_building_income min = 0 max = 50 }
@@ -1120,6 +1120,7 @@ ADISCORD_economy_recalculate_tax_dependent_income = {
 	clamp_variable = { var = ADISCORD_economy_business_income min = 0 max = 500 }
 	clamp_variable = { var = ADISCORD_economy_consumer_goods_income min = 0 max = 500 }
 	clamp_variable = { var = ADISCORD_economy_factory_income min = 0 max = 500 }
+	ADISCORD_economy_scale_taxable_income = yes
 	set_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_personal_income }
 	add_to_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_business_income }
 	add_to_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_consumer_goods_income }
@@ -1766,6 +1767,7 @@ ADISCORD_economy_preview_army_policy = {
 	ADISCORD_economy_calculate_army_expenses = yes
 	multiply_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_final_army_expense_factor_bp }
 	divide_variable = { var = ADISCORD_economy_army_expenses value = 100 }
+	multiply_variable = { var = ADISCORD_economy_army_expenses value = 4 }
 	set_temp_variable = { var = ADISCORD_economy_policy_preview_new_expense_temp value = ADISCORD_economy_army_expenses }
 	set_variable = { var = ADISCORD_economy_army_spending_mode value = ADISCORD_economy_policy_preview_saved_mode_temp }
 	set_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_policy_preview_current_expense_temp }
@@ -1781,6 +1783,7 @@ ADISCORD_economy_preview_research_policy = {
 	ADISCORD_economy_calculate_research_expenses = yes
 	multiply_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_final_research_expense_factor_bp }
 	divide_variable = { var = ADISCORD_economy_research_expenses value = 100 }
+	multiply_variable = { var = ADISCORD_economy_research_expenses value = 4 }
 	set_temp_variable = { var = ADISCORD_economy_policy_preview_new_expense_temp value = ADISCORD_economy_research_expenses }
 	set_variable = { var = ADISCORD_economy_research_spending_mode value = ADISCORD_economy_policy_preview_saved_mode_temp }
 	set_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_policy_preview_current_expense_temp }
@@ -1796,6 +1799,7 @@ ADISCORD_economy_preview_social_policy = {
 	ADISCORD_economy_calculate_social_expenses = yes
 	multiply_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_final_social_expense_factor_bp }
 	divide_variable = { var = ADISCORD_economy_social_expenses value = 100 }
+	multiply_variable = { var = ADISCORD_economy_social_expenses value = 4 }
 	set_temp_variable = { var = ADISCORD_economy_policy_preview_new_expense_temp value = ADISCORD_economy_social_expenses }
 	set_variable = { var = ADISCORD_economy_social_spending_mode value = ADISCORD_economy_policy_preview_saved_mode_temp }
 	set_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_policy_preview_current_expense_temp }
@@ -3503,6 +3507,7 @@ ADISCORD_economy_refresh_army_policy = {
 	ADISCORD_economy_calculate_army_expenses = yes
 	multiply_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_final_army_expense_factor_bp }
 	divide_variable = { var = ADISCORD_economy_army_expenses value = 100 }
+	multiply_variable = { var = ADISCORD_economy_army_expenses value = 4 }
 	ADISCORD_economy_refresh_army_policy_idea = yes
 	ADISCORD_economy_finish_targeted_policy_refresh = yes
 }
@@ -3513,6 +3518,7 @@ ADISCORD_economy_refresh_research_policy = {
 	ADISCORD_economy_calculate_research_expenses = yes
 	multiply_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_final_research_expense_factor_bp }
 	divide_variable = { var = ADISCORD_economy_research_expenses value = 100 }
+	multiply_variable = { var = ADISCORD_economy_research_expenses value = 4 }
 	ADISCORD_economy_refresh_research_policy_idea = yes
 	ADISCORD_economy_finish_targeted_policy_refresh = yes
 }
@@ -3523,6 +3529,7 @@ ADISCORD_economy_refresh_social_policy = {
 	ADISCORD_economy_calculate_social_expenses = yes
 	multiply_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_final_social_expense_factor_bp }
 	divide_variable = { var = ADISCORD_economy_social_expenses value = 100 }
+	multiply_variable = { var = ADISCORD_economy_social_expenses value = 4 }
 	ADISCORD_economy_refresh_social_policy_idea = yes
 	ADISCORD_economy_finish_targeted_policy_refresh = yes
 }
