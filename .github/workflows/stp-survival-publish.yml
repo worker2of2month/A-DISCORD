@@ -1,0 +1,143 @@
+name: STP survival current-main integration
+on:
+  push:
+    branches: [verify/stp-survival-20260919]
+    paths: ['.github/workflows/stp-survival-publish.yml']
+permissions:
+  contents: read
+env:
+  BASE: 8d02068bad271aa4411535606cc115c549ccf397
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [baseline, candidate]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - name: Reproduce reviewed patch and retain current main changes
+        run: |
+          cp .github/apply-stp-survival-final.py /tmp/apply-survival.py
+          git fetch --depth=1 origin 32a3c0ba2b118ade7730028173bdd9e068b808f8 "$BASE"
+          git switch --detach 32a3c0ba2b118ade7730028173bdd9e068b808f8
+          python -B /tmp/apply-survival.py
+          git diff --binary HEAD > /tmp/survival-corrections.patch
+          git apply -R /tmp/survival-corrections.patch
+          git switch --detach "$BASE"
+          mkdir -p /tmp/review
+          if [ '${{ matrix.variant }}' = candidate ]; then
+            git apply --check /tmp/survival-corrections.patch
+            git apply /tmp/survival-corrections.patch
+            git diff --binary HEAD > /tmp/review/reviewed.patch
+          fi
+          git diff --check
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess,json,hashlib,os
+          paths=subprocess.check_output(['git','diff','--name-only']).decode().splitlines()
+          expected=7 if '${{ matrix.variant }}'=='candidate' else 0
+          assert len(paths)==expected
+          assert not any(p.startswith('.github/') for p in paths)
+          Path('/tmp/review/source.json').write_text(json.dumps({'base':os.environ['BASE'],'hashes':{p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths}},indent=2))
+          PY
+      - name: Run source contracts, complete suite and validator
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess,json,time,concurrent.futures
+          out=Path('/tmp/review')
+          jobs={
+            'survival':['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_balance','-v'],
+            'suite':['python','-B','-m','unittest','discover','-s','tools/tests','-p','test_*.py','-v'],
+            'validator':['python','-B','tools/validate_tc.py','--limit','300']}
+          def run(pair):
+              label,cmd=pair
+              start=time.monotonic()
+              with (out/(label+'.txt')).open('w') as log:
+                  try: code=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,timeout=1500).returncode
+                  except subprocess.TimeoutExpired: code=124
+              result={'command':cmd,'exit':code,'seconds':time.monotonic()-start}
+              print(label,result,flush=True)
+              return label,result
+          with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+              results=dict(pool.map(run,jobs.items()))
+          (out/'results.json').write_text(json.dumps(results,indent=2))
+          assert results['suite']['exit'] in (0,1)
+          assert results['validator']['exit']==0
+          if '${{ matrix.variant }}'=='candidate': assert results['survival']['exit']==0
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: survival-publish-${{ matrix.variant }}
+          path: /tmp/review/
+          retention-days: 3
+  candidate:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 8d02068bad271aa4411535606cc115c549ccf397
+          fetch-depth: 1
+      - uses: actions/download-artifact@v4
+        with:
+          name: survival-publish-baseline
+          path: /tmp/integration/baseline
+      - uses: actions/download-artifact@v4
+        with:
+          name: survival-publish-candidate
+          path: /tmp/integration/candidate
+      - name: Gate the exact merged source against the exact current baseline
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess,json,re,hashlib,os
+          out=Path('/tmp/integration')
+          a=json.loads((out/'baseline/source.json').read_text())
+          b=json.loads((out/'candidate/source.json').read_text())
+          assert a['base']==b['base']==os.environ['BASE']
+          def failures(label):
+              text=(out/label/'suite.txt').read_text()
+              assert re.search(r'Ran \d+ tests? in ',text),label
+              return set(re.findall(r'^(?:FAIL|ERROR): (.+)$',text,re.M))
+          def diagnostics(label):
+              return {re.sub(r':\d+(?::\d+)?',':#',line) for line in (out/label/'validator.txt').read_text().splitlines() if line.startswith('- ')}
+          before,after=failures('baseline'),failures('candidate')
+          report={'base':b['base'],'baseline_failures':sorted(before),'candidate_failures':sorted(after),'new_failures':sorted(after-before),'resolved_failures':sorted(before-after),'new_diagnostics':sorted(diagnostics('candidate')-diagnostics('baseline')),'paths':list(b['hashes'])}
+          (out/'candidate/gate.json').write_text(json.dumps(report,indent=2))
+          assert not report['new_failures'] and not report['new_diagnostics'],report
+          subprocess.run(['git','apply','--check',str(out/'candidate/reviewed.patch')],check=True)
+          subprocess.run(['git','apply',str(out/'candidate/reviewed.patch')],check=True)
+          assert len(b['hashes'])==7
+          assert set(subprocess.check_output(['git','diff','--name-only']).decode().splitlines())==set(b['hashes'])
+          for path,digest in b['hashes'].items(): assert hashlib.sha256(Path(path).read_bytes()).hexdigest()==digest,path
+          subprocess.run(['git','diff','--check'],check=True)
+          subprocess.run(['git','add','--',*b['hashes']],check=True)
+          PY
+      - name: Commit only reviewed gameplay and tests
+        run: |
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git diff --cached --check
+          git commit -m 'Fix party survival settlement and delayed cargo callbacks'
+          git rev-parse HEAD > /tmp/integration/candidate/commit-sha.txt
+          git show --format=fuller --stat HEAD > /tmp/integration/candidate/commit-stat.txt
+          git push origin "HEAD:refs/heads/fix/stp-survival-publish-${GITHUB_RUN_ID}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: survival-publish-evidence
+          path: /tmp/integration/
+          retention-days: 3
