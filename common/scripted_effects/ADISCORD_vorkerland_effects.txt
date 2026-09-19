@@ -416,7 +416,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			WKR = {
 				ADISCORD_vorkerland_is_live_claimant = yes
 				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
-				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 12 compare = greater_than }
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
 			}
 		}
 		add_ideas = ADISCORD_vorkerland_coalition_against_wkr
@@ -432,7 +432,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			VAD = {
 				ADISCORD_vorkerland_is_live_claimant = yes
 				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
-				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 12 compare = greater_than }
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
 			}
 		}
 		add_ideas = ADISCORD_vorkerland_coalition_against_vad
@@ -448,7 +448,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			TVA = {
 				ADISCORD_vorkerland_is_live_claimant = yes
 				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
-				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 12 compare = greater_than }
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
 			}
 		}
 		add_ideas = ADISCORD_vorkerland_coalition_against_tva
