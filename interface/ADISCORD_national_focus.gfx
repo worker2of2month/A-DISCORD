@@ -551,296 +551,296 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_VAD_review_district_obligations"
-		texturefile = "gfx/interface/goals/focus_generic_advisors.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_open_continuity_registers"
-		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_drill_district_guard"
-		texturefile = "gfx/interface/goals/focus_generic_military_academy.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_secure_administrative_archives"
-		texturefile = "gfx/interface/goals/focus_generic_advisors.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_disperse_eastern_depots"
-		texturefile = "gfx/interface/goals/focus_generic_arms_trade.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_form_emergency_chancery"
-		texturefile = "gfx/interface/goals/focus_generic_military_mission.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_prepare_vadl_worker_terms"
-		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_ratify_emergency_compact"
-		texturefile = "gfx/interface/goals/focus_generic_treaty.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_activate_eastern_mandate"
-		texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_seal_district_arsenals"
-		texturefile = "gfx/interface/goals/focus_generic_military_industry.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_proclaim_joint_charter"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_open_imperial_registers"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_form_field_commandantures"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_invite_sol_delegation"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_establish_mobile_headquarters"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_dispatch_solland_liaison_mission"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_standardize_district_logistics"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_reconstitute_district_guard"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_inventory_eastern_works"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_reopen_armament_depots"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_restore_crown_commissions"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_bind_officers_to_chancery"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_guarantee_worker_committees"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_ratify_joint_command"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_settle_restoration_authority"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_balance_council_and_command"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_assemble_joint_general_staff"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_restore_prefectural_courts"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_issue_crown_mobilization_warrants"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_turn_the_chancery_into_a_war_cabinet"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_elect_district_commissars"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_merge_guard_and_worker_rolls"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_sign_the_dual_authority_protocol"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_map_the_solar_corridors"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_preposition_restoration_columns"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_define_the_solar_settlement"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_open_the_remaining_fronts"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_reclaim_the_imperial_mandate"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_recall_the_officer_estates"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_crown_the_restoration"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_seat_the_dual_chamber"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_open_the_district_rolls"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_bind_crown_and_council"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_reconcile_emergency_district_rolls"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_restore_eastern_supply_corridors"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_convert_emergency_workshops"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_publish_interim_restoration_register"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_convene_campaign_directorate"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_issue_prefectural_field_decrees"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_seat_front_commissars"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_standardize_restoration_columns"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_advance_under_one_register"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_convene_the_restoration_treasury"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_levy_the_crown_estates"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_protect_the_district_markets"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_doctrine_of_the_officer_estates"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_restore_the_guards_regiments"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_doctrine_of_the_district_levies"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_train_the_council_militias"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_hold_the_historic_capitals"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_march_on_the_old_capital"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_fortify_the_restoration_line"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_convene_the_court_of_honours"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_stage_the_coronation_rites"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_mortgage_the_regalia"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_court_the_bracket_victors"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_seek_legitimist_recognition"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 
 	spriteType = {
 		name = "GFX_focus_VAD_restore_the_restoration_air_arm"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_task_the_guards_for_close_support"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_cover_the_district_capitals"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_open_the_foreign_chancery"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_issue_restoration_guarantees"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 	spriteType = {
 		name = "GFX_focus_VAD_seat_the_observer_missions"
-		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+		texturefile = "gfx/interface/goals/VAD/GFX_focus_VAD.png"
 	}
 
 ###TVA
