@@ -366,28 +366,36 @@ class VorkerlandForceDesignTests(unittest.TestCase):
     def test_collapse_deliveries_can_equip_the_armored_groups(self) -> None:
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         setup = named_block(effects, "ADISCORD_vorkerland_prepare_initial_combatants")
-        for tag in ("WKR", "VAD"):
-            claimant = named_block(setup, tag)
-            for delivery in (
-                f"type = ADISCORD_combat_platform_2170 amount = 180 producer = {tag}",
-                f"type = ADISCORD_armored_carrier_2163 amount = 260 producer = {tag}",
-                f"type = ADISCORD_squad_weapons_equipment_0 amount = 60 producer = {tag}",
-                f"type = support_equipment_1 amount = 100 producer = {tag}",
-                f"type = artillery_equipment_1 amount = 24 producer = {tag}",
-            ):
-                self.assertIn(delivery, claimant)
+        wkr = named_block(setup, "WKR")
+        for delivery in (
+            "type = ADISCORD_combat_platform_2170 amount = 360 producer = WKR",
+            "type = ADISCORD_armored_carrier_2163 amount = 400 producer = WKR",
+            "type = ADISCORD_squad_weapons_equipment_0 amount = 90 producer = WKR",
+            "type = support_equipment_1 amount = 140 producer = WKR",
+            "type = artillery_equipment_1 amount = 36 producer = WKR",
+        ):
+            self.assertIn(delivery, wkr)
+        vad = named_block(setup, "VAD")
+        for delivery in (
+            "type = ADISCORD_combat_platform_2170 amount = 180 producer = VAD",
+            "type = ADISCORD_armored_carrier_2163 amount = 260 producer = VAD",
+            "type = ADISCORD_squad_weapons_equipment_0 amount = 60 producer = VAD",
+            "type = support_equipment_1 amount = 100 producer = VAD",
+            "type = artillery_equipment_1 amount = 24 producer = VAD",
+        ):
+            self.assertIn(delivery, vad)
 
         tva = named_block(effects, "ADISCORD_vorkerland_setup_tva")
         self.assertIn(
-            "type = ADISCORD_combat_platform_2170 amount = 180 producer = TVA",
+            "type = ADISCORD_combat_platform_2170 amount = 360 producer = TVA",
             tva,
         )
         self.assertIn(
-            "type = ADISCORD_armored_carrier_2163 amount = 260 producer = TVA",
+            "type = ADISCORD_armored_carrier_2163 amount = 400 producer = TVA",
             tva,
         )
         self.assertIn(
-            "type = ADISCORD_squad_weapons_equipment_0 amount = 60 producer = TVA",
+            "type = ADISCORD_squad_weapons_equipment_0 amount = 90 producer = TVA",
             tva,
         )
 
@@ -522,8 +530,8 @@ class VorkerlandForceDesignTests(unittest.TestCase):
                 "history/units/TVA_vorkerland_collapse_air.txt",
                 "TVA_vorkerland_collapse_air",
                 "38",
-                1,
-                1,
+                2,
+                2,
             ),
         }
         for tag, (relative, _, state, fighter_wings, cas_wings) in expected.items():
@@ -581,7 +589,15 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             )
         tva_setup = named_block(collapse, "ADISCORD_vorkerland_setup_tva")
         self.assertIn('load_oob = "TVA_vorkerland_collapse_air"', tva_setup)
-        self.assertIn("add_fuel = 7500", tva_setup)
+        self.assertIn("add_fuel = 12000", tva_setup)
+        self.assertIn(
+            "type = ADISCORD_fighter_airframe_2163 amount = 60 producer = TVA",
+            tva_setup,
+        )
+        self.assertIn(
+            "type = ADISCORD_cas_airframe_2170 amount = 30 producer = TVA",
+            tva_setup,
+        )
         for setup in (wkr, vad, tva_setup):
             self.assertIn(
                 "set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied",

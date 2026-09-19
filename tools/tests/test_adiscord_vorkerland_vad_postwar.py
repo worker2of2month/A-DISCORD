@@ -102,8 +102,34 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertIn("has_war = no", reclaim)
         self.assertIn("days_re_enable = 14", reclaim)
         self.assertIn("fire_only_once = no", reclaim)
+        self.assertIn("ai_will_do = { factor = 0 }", reclaim)
         for tag in ("EYR", "EGC", "VLA", "ROM", "ZTA", "TGD"):
             self.assertIn(f"declare_war_on = {{ target = {tag} type = annex_everything }}", reclaim)
+
+    def test_reunified_vlad_keeps_empire_unless_the_rare_council_formed(self) -> None:
+        source = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "phase_effects",
+        )
+        formation = named_block(source, "ADISCORD_vorkerland_form_wrk_from_vad")
+        identity = re.search(
+            r"(?s)if\s*=\s*\{\s*limit\s*=\s*\{(?P<limit>[^{}]*)\}\s*"
+            r"set_cosmetic_tag\s*=\s*WRK_vorkerland_joint_government\s*"
+            r"ADISCORD_vorkerland_appoint_joint_council\s*=\s*yes\s*\}"
+            r"\s*else\s*=\s*\{(?P<else>.*?portrait\s*=\s*GFX_portrait_WRK_Vlad_Petrichev_civilwar)",
+            formation,
+        )
+        self.assertIsNotNone(identity)
+        self.assertIn("ADISCORD_vorkerland_joint_government_formed", identity.group("limit"))
+        self.assertNotIn("ADISCORD_vorkerland_worker_rescued_by_vlad", identity.group("limit"))
+        self.assertIn("set_cosmetic_tag = VAD_vorkerland_restoration", identity.group("else"))
+        self.assertIn("character = WRK_Vlad_Petrichev", identity.group("else"))
+        self.assertIn(
+            "NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }",
+            formation,
+        )
+        self.assertIn("character = WRK_Vlad_Petrichev", formation)
+        self.assertIn("character = WRK_Nikita_Worcker", formation)
 
     def test_joint_council_gets_specific_victory_text_before_vlad_fallback(self) -> None:
         scripted = read("common/scripted_localisation/ADISCORD_scripted_loc_superevents.txt")

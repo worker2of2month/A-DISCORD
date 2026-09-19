@@ -656,6 +656,24 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         if token in joint_vad:
             issues.append(f"survivor joint government incorrectly borrows Vlad's imperial identity: {token}")
 
+    vad_formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_vad")
+    joint_identity = re.search(
+        r"(?s)if\s*=\s*\{\s*limit\s*=\s*\{(?P<limit>[^{}]*)\}\s*"
+        r"set_cosmetic_tag\s*=\s*WRK_vorkerland_joint_government\s*"
+        r"ADISCORD_vorkerland_appoint_joint_council\s*=\s*yes\s*\}",
+        vad_formation,
+    )
+    if joint_identity is None:
+        issues.append(
+            "VAD reunification does not appoint the joint council behind a dedicated identity gate"
+        )
+    else:
+        limit = joint_identity.group("limit")
+        if "ADISCORD_vorkerland_joint_government_formed" not in limit:
+            issues.append("VAD reunification does not key joint identity on the rare council flag")
+        if "ADISCORD_vorkerland_worker_rescued_by_vlad" in limit:
+            issues.append("VAD reunification still treats Worker rescue as the rare joint council")
+
     if re.search(r"\bdesc\s*=\s*[A-Za-z0-9_]+_desc\b", characters):
         issues.append("new Vorkerland leaders still expose in-game biography desc keys")
     for leader in re.findall(r"(?m)^\s*([A-Z]{3}_[A-Za-z0-9_]+)\s*=", characters):
@@ -2468,27 +2486,27 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for token in (
         "add_ideas = ADISCORD_vorkerland_tva_field_directorate",
         "add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism",
-        "add_manpower = 11000",
-        "type = infantry_equipment_0 amount = 1800 producer = TVA",
-        "type = support_equipment amount = 120 producer = TVA",
-        "type = artillery_equipment amount = 72 producer = TVA",
+        "add_manpower = 16000",
+        "type = infantry_equipment_0 amount = 2600 producer = TVA",
+        "type = support_equipment amount = 180 producer = TVA",
+        "type = artillery_equipment amount = 96 producer = TVA",
     ):
         if token not in tva_setup:
             issues.append(f"Doctor Worx starting package is missing {token}")
     tva_directorate = named_block(ideas, "ADISCORD_vorkerland_tva_field_directorate")
     for modifier in (
-        "research_speed_factor = 0.05",
-        "industrial_capacity_factory = 0.10",
-        "army_org_factor = 0.06",
-        "supply_consumption_factor = -0.08",
+        "research_speed_factor = 0.08",
+        "industrial_capacity_factory = 0.14",
+        "army_org_factor = 0.10",
+        "supply_consumption_factor = -0.12",
     ):
         if modifier not in tva_directorate:
             issues.append(f"Doctor Worx permanent directorate spirit is missing {modifier}")
 
     fanaticism = named_block(ideas, "ADISCORD_vorkerland_tva_ideological_fanaticism")
     for modifier in (
-        "war_support_factor = 0.10",
-        "army_org_regain = 0.05",
+        "war_support_factor = 0.12",
+        "army_org_regain = 0.10",
     ):
         if modifier not in fanaticism:
             issues.append(f"Doctor Worx ideological fanaticism is missing {modifier}")
@@ -2520,9 +2538,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "ADISCORD_grant_technology_profile_institutional = yes",
         "ADISCORD_grant_technology_profile_land = yes",
         "ADISCORD_grant_technology_profile_air = yes",
-        "type = ADISCORD_combat_platform_2170 amount = 180 producer = TVA",
-        "type = ADISCORD_fighter_airframe_2163 amount = 36 producer = TVA",
-        "type = ADISCORD_cas_airframe_2170 amount = 18 producer = TVA",
+        "type = ADISCORD_combat_platform_2170 amount = 360 producer = TVA",
+        "type = ADISCORD_fighter_airframe_2163 amount = 60 producer = TVA",
+        "type = ADISCORD_cas_airframe_2170 amount = 30 producer = TVA",
     ):
         if token not in tva_setup:
             issues.append(f"Doctor Worx advanced starting package is missing {token}")
@@ -3128,8 +3146,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if f"add_manpower = {manpower}" not in country or f"amount = {rifles}" not in country:
             issues.append(f"{tag}: finite collapse reserve is missing")
     tva_oob = read(root, "history/units/TVA_vorkerland_collapse.txt", issues)
-    if tva_oob.count("division = {") != 15 or "TVA Mobile Test Group" not in tva_oob or "TVA Infiltration Cell" not in tva_oob:
-        issues.append("TVA must start with fourteen militia formations, one mobile group and an infiltration template")
+    if tva_oob.count("division = {") != 15 or tva_oob.count('division_template = "TVA Mobile Test Group"') != 2 or "TVA Infiltration Cell" not in tva_oob:
+        issues.append("TVA must start with thirteen militia formations, two mobile groups and an infiltration template")
     for tag in ("VAD",):
         oob = read(root, f"history/units/{tag}.txt", issues)
         initial_country = named_block(initial, tag)
@@ -4774,6 +4792,8 @@ def validate_bracket_decision(decisions: str, categories: str, issues: list[str]
     ai_will_do = named_block(decision, "ai_will_do")
     if "ADISCORD_vorkerland_has_live_local_rival = yes" not in ai_will_do:
         issues.append("the AI may take the coalition-join decision while still fighting locally")
+    if "FROM = { tag = VAD }" not in ai_will_do or "factor = 0" not in ai_will_do:
+        issues.append("the AI must not fold surviving administrations into VAD")
     if "CSL" not in categories:
         issues.append("the collapse decision category does not reach CSL")
 

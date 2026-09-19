@@ -1,6 +1,8 @@
 air_wings = {
 	38 = {
 		ADISCORD_fighter_airframe_2163 = { owner = "TVA" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = { owner = "TVA" amount = 100 }
+		ADISCORD_cas_airframe_2170 = { owner = "TVA" amount = 50 }
 		ADISCORD_cas_airframe_2170 = { owner = "TVA" amount = 50 }
 	}
 }
@@ -8,12 +10,30 @@ air_wings = {
 instant_effect = {
 	add_equipment_to_stockpile = {
 		type = motorized_equipment_1
-		amount = 180
+		amount = 280
 		producer = TVA
 	}
 	add_equipment_to_stockpile = {
 		type = train_equipment_1
-		amount = 30
+		amount = 48
 		producer = TVA
+	}
+	add_equipment_production = {
+		equipment = { type = infantry_equipment_0 creator = "TVA" }
+		requested_factories = 6
+		progress = 0.55
+		efficiency = 65
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_combat_platform_2170 creator = "TVA" }
+		requested_factories = 2
+		progress = 0.40
+		efficiency = 50
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_fighter_airframe_2163 creator = "TVA" }
+		requested_factories = 2
+		progress = 0.35
+		efficiency = 45
 	}
 }

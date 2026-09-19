@@ -285,6 +285,7 @@ target_trigger = { FROM = { ADISCORD_vorkerland_is_main_claimant = yes } }
 			base = 200
 			modifier = { factor = 3 has_country_flag = ADISCORD_vorkerland_compact_supply_received FROM = { tag = WKR } }
 			modifier = { factor = 0 ADISCORD_vorkerland_has_live_local_rival = yes }
+			modifier = { factor = 0 FROM = { tag = VAD } }
 			modifier = { factor = 2 num_divisions > 8 }
 		}
 	}
@@ -926,7 +927,10 @@ target_trigger = { FROM = { ADISCORD_vorkerland_is_main_claimant = yes } }
 				ROOT = { declare_war_on = { target = PREV type = annex_everything } }
 			}
 		}
-		ai_will_do = { factor = 250 }
+		ai_will_do = {
+			factor = 250
+			modifier = { factor = 0 tag = VAD }
+		}
 	}
 
 	ADISCORD_vorkerland_macri_piv_pact = {
@@ -2122,10 +2126,7 @@ available = { custom_trigger_tooltip = { tooltip = ADISCORD_vorkerland_central_s
 				declare_war_on = { target = TGD type = annex_everything }
 			}
 		}
-		ai_will_do = {
-			factor = 600
-			modifier = { factor = 1.5 has_stability > 0.55 }
-		}
+		ai_will_do = { factor = 0 }
 	}
 
 	ADISCORD_vorkerland_restore_core_claimant_homes = {

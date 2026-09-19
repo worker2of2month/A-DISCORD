@@ -2026,7 +2026,7 @@ class FrontAndSupplyTests(unittest.TestCase):
             self.assertIn(f"amount = {rifles}", block, tag)
         tva_oob = read("history/units/TVA_vorkerland_collapse.txt")
         self.assertEqual(tva_oob.count("division = {"), 15)
-        self.assertIn("TVA Mobile Test Group", tva_oob)
+        self.assertEqual(tva_oob.count('division_template = "TVA Mobile Test Group"'), 2)
         self.assertIn("TVA Infiltration Cell", tva_oob)
 
     def test_eba_receives_the_approved_finite_reserve(self) -> None:
@@ -2496,9 +2496,18 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("set_cosmetic_tag = VAD_vorkerland_restoration", imperial)
         self.assertIn("portrait = GFX_portrait_WRK_Vlad_Petrichev_civilwar", imperial)
         self.assertIn("has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad", formation)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_joint_government_formed", formation)
         self.assertIn("set_cosmetic_tag = WRK_vorkerland_joint_government", formation)
         self.assertIn("set_cosmetic_tag = VAD_vorkerland_restoration", formation)
         self.assertIn("character = WRK_Vlad_Petrichev", formation)
+        identity = re.search(
+            r"(?s)if\s*=\s*\{\s*limit\s*=\s*\{(?P<limit>[^{}]*)\}\s*"
+            r"set_cosmetic_tag\s*=\s*WRK_vorkerland_joint_government",
+            formation,
+        )
+        self.assertIsNotNone(identity)
+        self.assertIn("ADISCORD_vorkerland_joint_government_formed", identity.group("limit"))
+        self.assertNotIn("ADISCORD_vorkerland_worker_rescued_by_vlad", identity.group("limit"))
         self.assertIn("GFX_portrait_WRK_Temporary_Government", named_block(characters, "WRK_VAD_Joint_Council"))
         self.assertIn('VAD_vorkerland_restoration: "Воркерландская Империя"', cosmetic_loc)
 
@@ -2616,24 +2625,25 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         for token in (
             "add_ideas = ADISCORD_vorkerland_tva_field_directorate",
             "add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism",
-            "add_manpower = 11000",
-            "type = infantry_equipment_0 amount = 1800 producer = TVA",
-            "type = support_equipment amount = 120 producer = TVA",
-            "type = artillery_equipment amount = 72 producer = TVA",
+            "add_manpower = 16000",
+            "type = infantry_equipment_0 amount = 2600 producer = TVA",
+            "type = support_equipment amount = 180 producer = TVA",
+            "type = artillery_equipment amount = 96 producer = TVA",
         ):
             self.assertIn(token, setup)
         directorate = named_block(ideas, "ADISCORD_vorkerland_tva_field_directorate")
         for modifier in (
-            "research_speed_factor = 0.05",
-            "industrial_capacity_factory = 0.10",
-            "army_org_factor = 0.06",
-            "supply_consumption_factor = -0.08",
+            "research_speed_factor = 0.08",
+            "industrial_capacity_factory = 0.14",
+            "army_org_factor = 0.10",
+            "supply_consumption_factor = -0.12",
         ):
             self.assertIn(modifier, directorate)
         fanaticism = named_block(ideas, "ADISCORD_vorkerland_tva_ideological_fanaticism")
         for modifier in (
-            "war_support_factor = 0.10",
-            "army_org_regain = 0.05",
+            "war_support_factor = 0.12",
+            "army_org_regain = 0.10",
+            "army_attack_factor = 0.10",
         ):
             self.assertIn(modifier, fanaticism)
         self.assertNotIn("surrender_limit", fanaticism)
@@ -2711,6 +2721,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
         spirits = (
             "ADISCORD_vorkerland_vad_imperial_chancery",
+            "ADISCORD_vorkerland_wkr_arsenal_command",
             "ADISCORD_vorkerland_republics_from_the_ruins",
             "ADISCORD_vorkerland_mobilized_periphery",
             "ADISCORD_vorkerland_tgd_living_grid",
@@ -2750,6 +2761,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             self.assertIn(f"tag = {tag}", prepare, tag)
         self.assertIn("add_ideas = ADISCORD_vorkerland_republics_from_the_ruins", prepare)
         self.assertIn("add_ideas = ADISCORD_vorkerland_mobilized_periphery", prepare)
+        self.assertIn("ADISCORD_vorkerland_ensure_limited_conscription = yes", prepare)
 
     def test_collapse_runtime_cannot_remove_unrelated_national_spirits(self) -> None:
         paths = (
@@ -3589,6 +3601,9 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
             "ADISCORD_vorkerland_has_live_local_rival = no",
             named_block(decision, "available"),
         )
+        join_ai = named_block(decision, "ai_will_do")
+        self.assertIn("FROM = { tag = VAD }", join_ai)
+        self.assertIn("factor = 0", join_ai)
 
     def test_coalition_retry_resolves_its_own_faction_and_clears_terminal_markers(self) -> None:
         membership = named_block(
