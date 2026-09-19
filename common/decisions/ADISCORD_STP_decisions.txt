@@ -3865,7 +3865,7 @@ STP_postwar_nod_ultimatum = {
 	}
 
 	STP_pw_party_nod_fortify_border = {
-		icon = generic_construct_military
+		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
 		visible = { has_country_flag = STP_pw_party_nod_threat_active }
 		available = {
@@ -3905,7 +3905,7 @@ STP_postwar_nod_ultimatum = {
 	}
 
 	STP_pw_party_nod_staff_readiness = {
-		icon = generic_army_doctrines
+		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
 		visible = { has_country_flag = STP_pw_party_nod_threat_active }
 		available = {
