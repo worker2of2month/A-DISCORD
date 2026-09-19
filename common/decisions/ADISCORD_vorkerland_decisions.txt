@@ -2024,127 +2024,102 @@ available = { custom_trigger_tooltip = { tooltip = ADISCORD_vorkerland_central_s
 			if = {
 				limit = { EYR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = EYR type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { EGC = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = EGC type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { RIV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = RIV type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { REV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = REV type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { YOR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = YOR type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { NDN = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = NDN type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = SWB type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = VHV type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = OSV type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { ZAO = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = ZAO type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { PWR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = PWR type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { VLA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = VLA type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { ROM = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = ROM type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { TRU = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = TRU type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { WPA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = WPA type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { WPS = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = WPS type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { PSD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = PSD type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { EBA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = EBA type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { DVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = DVA type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { SRA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = SRA type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { ZTA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = ZTA type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { CSL = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = CSL type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { IBA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = IBA type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { IBL = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = IBL type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 			else_if = {
 				limit = { TGD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
 				declare_war_on = { target = TGD type = annex_everything }
-				set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_active
 			}
 		}
 		ai_will_do = {
