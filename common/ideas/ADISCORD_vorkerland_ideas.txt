@@ -37,18 +37,6 @@ ADISCORD_vorkerland_erased_nations = {
 			ai_will_do = { factor = 0 }
 		}
 
-		# AI-only bonuses target surviving district governments late in the war.
-		# available rechecks is_ai so player takeover disables the bonus.
-		
-
-		# AI-only coalition bonuses target the current legitimacy leader.
-		# targeted_modifier has no per-target condition, so each leader has a separate
-		# idea gated by available.
-		
-
-		
-
-		
 
 		# Granted automatically to any claimant close to collapse and removed again
 		# when it recovers. The two thresholds differ on purpose: a single value
@@ -2620,6 +2608,9 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 # --- end ---
 	}
 
+	# Mechanical civil-war normalization is deliberately invisible in the UI.
+	# Theatre priority helps all three claimants clear fragmented administrations;
+	# coalition ideas are AI-only brakes against a claimant holding a true majority.
 	hidden_ideas = {
 		ADISCORD_vorkerland_theatre_priority = {
 					allowed = { always = no }
