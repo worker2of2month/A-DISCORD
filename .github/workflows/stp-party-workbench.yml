@@ -3,56 +3,85 @@ on:
   push:
     branches: [agent/stp-party-rework-20260919]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  baseline:
+  verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: d6cc3c77078a25f7318fbf7e371fc6779eab3351
-          fetch-depth: 1
-      - name: Baseline contracts and source validation
+          fetch-depth: 3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validator dependencies
+        run: python -m pip install pillow numpy
+      - name: Select current main and decode reviewed patch
         shell: bash
         run: |
-          mkdir -p /tmp/party-check
-          set +e
-          python -B -m unittest discover -s tools/tests -p '*stp*.py' > /tmp/party-check/baseline-tests.txt 2>&1
-          echo "TEST_EXIT=$?" >> /tmp/party-check/baseline-tests.txt
-          python -B tools/validate_tc.py --limit 300 > /tmp/party-check/baseline-validator.txt 2>&1
-          echo "VALIDATOR_EXIT=$?" >> /tmp/party-check/baseline-validator.txt
-          exit 0
-      - name: Collect authored artwork
-        shell: bash
-        run: |
+          mkdir -p /tmp/party-result
+          cp .github/stp-party-verify.py /tmp/stp-party-verify.py
+          cat .github/stp-party-patch.1 .github/stp-party-patch.2 > /tmp/party.patch.xz
           python - <<'PY'
+          import lzma, hashlib
           from pathlib import Path
-          import json, hashlib, zipfile
-          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
-          names = set('GFX_focus_generic_improve_the_administration GFX_focus_generic_treaty GFX_focus_STP_2160_budget GFX_goal_generic_production GFX_focus_generic_supply_line GFX_focus_STP_Side_With_The_Party GFX_focus_generic_truck GFX_goal_generic_army_doctrines GFX_focus_generic_self_management GFX_goal_generic_political_pressure GFX_goal_generic_positive_trade_relations GFX_goal_generic_scientific_exchange GFX_event_adiscord_negotiation_table GFX_manpower_texticon GFX_infantry_equipment_texticon GFX_artillery_texticon GFX_anti_air_texticon'.split())
-          sprites = {}
-          def visit(items):
-              for item in items:
-                  if isinstance(item.value, list):
-                      fields = {e.key:e.value for e in item.value if not isinstance(e.value,list)}
-                      if fields.get('name') in names and 'texturefile' in fields:
-                          sprites[fields['name']] = fields['texturefile']
-                      visit(item.value)
-          for path in Path('interface').glob('*.gfx'):
-              try: visit(parse_clausewitz(path.read_text(encoding='utf-8-sig')))
-              except (ValueError, UnicodeError): pass
-          report = {}
-          with zipfile.ZipFile('/tmp/party-check/party-art.zip','w',zipfile.ZIP_DEFLATED) as z:
-              for name in sorted(names):
-                  path = Path(sprites.get(name,'__missing__'))
-                  report[name] = {'path': str(path), 'exists':path.is_file()}
-                  if path.is_file():
-                      report[name]['sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
-                      z.write(path,str(path))
-              z.writestr('manifest.json',json.dumps(report,ensure_ascii=False,indent=2))
+          patch=lzma.decompress(Path('/tmp/party.patch.xz').read_bytes())
+          assert hashlib.sha256(patch).hexdigest() == 'd3c5f6f9e2763ae2bef5d3db01ca2daff1c45f331353a5ad64cf97b51e56aa34'
+          Path('/tmp/party.patch').write_bytes(patch)
+          PY
+          git fetch origin main --depth=20
+          git switch --detach FETCH_HEAD
+          git rev-parse HEAD > /tmp/party-result/base-sha.txt
+          git diff d6cc3c77078a25f7318fbf7e371fc6779eab3351 HEAD --binary > /tmp/party-result/concurrent-main.patch
+      - name: Establish full-checkout baseline
+        run: python -B /tmp/stp-party-verify.py baseline
+      - name: Apply party changes without replacing concurrent work
+        shell: bash
+        run: |
+          git apply --3way /tmp/party.patch
+          git diff --check HEAD
+          git diff --cached --check
+      - name: Verify new party contracts
+        shell: bash
+        run: python -B -m unittest tools.tests.test_adiscord_stp_party_route -v > /tmp/party-result/party-contracts.txt 2>&1
+      - name: Verify candidate against current main
+        shell: bash
+        run: |
+          python -B /tmp/stp-party-verify.py candidate
+          python -B /tmp/stp-party-verify.py gate
+      - name: Publish candidate for final review
+        shell: bash
+        run: |
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git diff --name-only -z HEAD | xargs -0 git add --
+          git diff --cached --check
+          git commit -m 'Rework Stelander party campaign and side-aware tooltips'
+          git rev-parse HEAD > /tmp/party-result/candidate-sha.txt
+          git diff --stat HEAD^ HEAD > /tmp/party-result/change-stat.txt
+          git show --format=fuller --binary HEAD > /tmp/party-result/commit.patch
+          git push origin "HEAD:refs/heads/agent/stp-party-candidate-${GITHUB_RUN_ID}"
+      - name: Collect review evidence
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p /tmp/party-result
+          git status --short > /tmp/party-result/status.txt
+          git diff HEAD --binary > /tmp/party-result/working.patch
+          python - <<'PY'
+          import subprocess,zipfile
+          from pathlib import Path
+          files=subprocess.check_output(['git','diff','--name-only','d6cc3c77078a25f7318fbf7e371fc6779eab3351'],text=True).splitlines()
+          with zipfile.ZipFile('/tmp/party-result/changed-source.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for name in files:
+                  p=Path(name)
+                  if p.is_file() and not name.startswith('.github/'):
+                      z.write(p,name)
           PY
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: stp-party-baseline
-          path: /tmp/party-check/
-          retention-days: 1
+          name: stp-party-candidate-review
+          path: /tmp/party-result/
+          retention-days: 2
