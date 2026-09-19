@@ -2149,7 +2149,7 @@ def validate_campaign_state() -> list[str]:
     for token in (
         "has_global_flag = ADISCORD_vorkerland_phase_central_showdown",
         "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
-        "ADISCORD_vorkerland_central_control_score value = 18 compare = greater_than",
+        "ADISCORD_vorkerland_central_control_score value = 12 compare = greater_than",
     ):
         if token not in coalition:
             issues.append(f"coalition refresh lacks territorial/showdown gate {token}")
