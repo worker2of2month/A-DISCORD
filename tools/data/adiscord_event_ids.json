@@ -10,6 +10,7 @@
     {"id": "ADISCORD_STP_pc.24", "namespace": "ADISCORD_STP_pc", "number": 24, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_STP_cw.92", "namespace": "ADISCORD_STP_cw", "number": 92, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_cw.93", "namespace": "ADISCORD_STP_cw", "number": 93, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
+    {"id": "ADISCORD_STP_cw.94", "namespace": "ADISCORD_STP_cw", "number": 94, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_pc.17", "namespace": "ADISCORD_STP_pc", "number": 17, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_STP_pc.18", "namespace": "ADISCORD_STP_pc", "number": 18, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_STP_pc.19", "namespace": "ADISCORD_STP_pc", "number": 19, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},

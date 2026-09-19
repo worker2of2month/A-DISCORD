@@ -95,4 +95,19 @@ scripted_gui = {
 
 		}
 	}
+	ADISCORD_STP_party_factions_panel = {
+		context_type = decision_category
+		window_name = "ADISCORD_STP_party_factions_window"
+		visible = { STP_pf_active = yes has_country_flag = STP_pf_initialized }
+		properties = {
+			STP_pf_conservatives_card = { frame = STP_pf_conservatives_frame }
+			STP_pf_borons_card = { frame = STP_pf_borons_frame }
+			STP_pf_security_card = { frame = STP_pf_security_frame }
+			STP_pf_army_card = { frame = STP_pf_army_frame }
+			STP_pf_advisers_card = { frame = STP_pf_advisers_frame }
+			STP_pf_merchants_card = { frame = STP_pf_merchants_frame }
+			STP_pf_radicals_card = { frame = STP_pf_radicals_frame }
+		}
+	}
+
 }

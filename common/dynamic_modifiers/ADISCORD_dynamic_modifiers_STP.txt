@@ -108,3 +108,14 @@ STP_pw_party_dynamic = {
 	supply_consumption_factor = STP_pw_supply_consumption_factor
 	training_time_factor = STP_pw_training_time_factor
 }
+
+STP_pf_balance_dynamic = {
+	enable = { STP_pf_active = yes has_country_flag = STP_pf_initialized has_capitulated = no }
+	ADISCORD_economy_admin_expense_factor = STP_pf_conservatives_effect
+	production_speed_buildings_factor = STP_pf_borons_effect
+	stability_factor = STP_pf_security_effect
+	army_org_factor = STP_pf_army_effect
+	planning_speed = STP_pf_advisers_effect
+	ADISCORD_economy_trade_income_factor = STP_pf_merchants_effect
+	ADISCORD_economy_war_fatigue_gain_factor = STP_pf_radicals_effect
+}

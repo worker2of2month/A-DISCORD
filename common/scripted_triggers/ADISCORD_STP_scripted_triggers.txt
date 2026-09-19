@@ -1294,3 +1294,21 @@ STP_cw_can_spend_2400 = { check_variable = { var = ADISCORD_economy_treasury val
 STP_cw_can_spend_6000 = { check_variable = { var = ADISCORD_economy_treasury value = 6000 compare = greater_than_or_equals } }
 
 STP_uses_campaign_currency_scale = { OR = { tag = STP tag = STS tag = SRP } }
+
+# COUNTRY STP: faction politics persist through the party's war and reconstruction.
+STP_pf_active = {
+ tag = STP
+ exists = yes
+ has_country_flag = STP_sided_with_the_party_flag
+ NOT = { has_country_flag = STP_sided_with_Maksim_flag }
+}
+STP_pf_nod_contacts = {
+ NOD = { exists = yes has_capitulated = no }
+ NOT = { has_war_with = NOD }
+ NOT = { has_completed_focus = STP_pw_party_sovereignty }
+}
+STP_pf_can_negotiate = {
+ hidden_trigger = { STP_pf_active = yes has_country_flag = STP_pf_initialized }
+ has_capitulated = no
+ custom_trigger_tooltip = { tooltip = STP_pf_cooldown_tt NOT = { has_country_flag = STP_pf_negotiation_cooldown } }
+}

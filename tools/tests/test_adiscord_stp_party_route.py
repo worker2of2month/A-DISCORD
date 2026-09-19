@@ -274,5 +274,177 @@ class PartyRouteContracts(unittest.TestCase):
             self.assertRegex(line, r'^\s*[^\s:]+:(?:\d+)?\s*".*"\s*(?:#.*)?$')
 
 
+class PartyFactionContracts(unittest.TestCase):
+    """Exercise authored arithmetic; this is not proof of native script loading."""
+
+    KEYS = ("conservatives", "borons", "security", "army", "advisers", "merchants", "radicals")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        cls.triggers = {e.key: e.value for e in parse_clausewitz(read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"))}
+
+    def simulate(self, effect, values=None, flags=None, tag="STP", nod=True, quantize=False):
+        from decimal import Decimal, ROUND_DOWN
+        values = {} if values is None else values
+        flags = {"STP_sided_with_the_party_flag"} if flags is None else flags
+
+        def number(value):
+            try:
+                return Decimal(value)
+            except Exception:
+                return Decimal(str(values.get(value, 0)))
+
+        def condition(items):
+            results = []
+            for e in items:
+                if e.key in ("AND", "hidden_trigger"):
+                    result = condition(e.value)
+                elif e.key == "OR":
+                    result = any(condition([child]) for child in e.value)
+                elif e.key == "NOT":
+                    result = not condition(e.value)
+                elif e.key == "STP_pf_nod_contacts":
+                    result = nod == (e.value == "yes")
+                elif e.key in self.triggers:
+                    result = condition(self.triggers[e.key]) == (e.value == "yes")
+                elif e.key == "tag":
+                    result = tag == e.value
+                elif e.key == "exists":
+                    result = e.value == "yes"
+                elif e.key == "has_country_flag":
+                    result = e.value in flags
+                elif e.key == "has_variable":
+                    result = e.value in values
+                elif e.key == "has_dynamic_modifier":
+                    result = False
+                elif e.key == "check_variable":
+                    left, right = number(one(e.value, "var")), number(one(e.value, "value"))
+                    result = {"equals": left == right, "greater_than": left > right,
+                              "greater_than_or_equals": left >= right, "less_than": left < right,
+                              "less_than_or_equals": left <= right}[one(e.value, "compare")]
+                else:
+                    raise AssertionError(f"Unsupported arithmetic fixture condition: {e.key}")
+                results.append(result)
+            return all(results)
+
+        def execute(items):
+            taken = False
+            for e in items:
+                if e.key in ("if", "else_if", "else"):
+                    if e.key == "if":
+                        taken = False
+                    if not taken and (e.key == "else" or condition(one(e.value, "limit"))):
+                        taken = True
+                        execute([child for child in e.value if child.key != "limit"])
+                elif e.key in self.effects and e.key.startswith(("STP_pf_", "STP_refresh_apparatus", "STP_change_apparatus")):
+                    self.assertEqual(e.value, "yes")
+                    execute(self.effects[e.key])
+                elif e.key in ("set_variable", "add_to_variable", "subtract_from_variable", "multiply_variable", "divide_variable",
+                               "set_temp_variable", "add_to_temp_variable", "subtract_from_temp_variable", "multiply_temp_variable", "divide_temp_variable"):
+                    name, amount = one(e.value, "var"), number(one(e.value, "value"))
+                    old = number(name)
+                    operation = e.key.split("_")[0]
+                    if operation == "set": result = amount
+                    elif operation == "add": result = old + amount
+                    elif operation == "subtract": result = old - amount
+                    elif operation == "multiply": result = old * amount
+                    else: result = old / amount
+                    values[name] = result.quantize(Decimal("0.001"), rounding=ROUND_DOWN) if quantize else result
+                elif e.key == "clamp_variable":
+                    name = one(e.value, "var")
+                    values[name] = max(number(one(e.value, "min")), min(number(one(e.value, "max")), number(name)))
+                elif e.key == "clear_variable":
+                    values.pop(e.value, None)
+                elif e.key == "set_country_flag":
+                    flags.add(e.value)
+                elif e.key == "clr_country_flag":
+                    flags.discard(e.value)
+                elif e.key in ("force_update_dynamic_modifier", "add_dynamic_modifier", "remove_dynamic_modifier", "ADISCORD_economy_mark_dirty"):
+                    pass
+                else:
+                    raise AssertionError(f"Unsupported arithmetic fixture effect: {e.key}")
+        execute(self.effects[effect])
+        return values, flags
+
+    def test_initialization_preserves_old_loyalty_and_does_not_reset_on_reopen(self):
+        for initial in (0, 40, 73, 100):
+            values, flags = self.simulate("STP_pf_initialize", {"STP_apparatus_loyalty": initial})
+            self.assertEqual(values["STP_apparatus_loyalty"], initial)
+            self.assertEqual(sum(values[f"STP_pf_{k}_influence"] for k in self.KEYS), 100)
+            snapshot = dict(values)
+            self.simulate("STP_pf_initialize", values, flags)
+            self.assertEqual(values, snapshot)
+        values, flags = self.simulate("STP_pf_initialize", tag="STS")
+        self.assertNotIn("STP_pf_initialized", flags)
+        self.assertFalse(values)
+
+    def test_long_redistribution_sequences_conserve_influence_and_bound_support(self):
+        import random
+        for quantize in (False, True):
+            values, flags = self.simulate("STP_pf_initialize", quantize=quantize)
+            rng = random.Random(2160)
+            for _ in range(500):
+                values["STP_pf_selected"] = rng.randint(1, 7)
+                self.simulate("STP_pf_shift", values, flags, quantize=quantize)
+                weights = [values[f"STP_pf_{k}_influence"] for k in self.KEYS]
+                self.assertAlmostEqual(float(sum(weights)), 100, places=8)
+                self.assertTrue(all(0 <= weight <= 100 for weight in weights))
+                self.assertTrue(all(0 <= values[f"STP_pf_{k}_support"] <= 100 for k in self.KEYS))
+                expected = sum(values[f"STP_pf_{k}_support"] * values[f"STP_pf_{k}_influence"] for k in self.KEYS) / 100
+                self.assertAlmostEqual(float(values["STP_apparatus_loyalty"]), float(expected), delta=0.008)
+
+    def test_general_rewards_and_opposed_deals_have_no_free_support_cycle(self):
+        values, flags = self.simulate("STP_pf_initialize")
+        values["STP_apparatus_loyalty_change"] = 6
+        self.simulate("STP_change_apparatus_loyalty", values, flags)
+        self.assertEqual(values["STP_apparatus_loyalty"], 46)
+        for selected in (1, 7):
+            values["STP_pf_selected"] = selected
+            self.simulate("STP_pf_shift", values, flags)
+        self.assertTrue(all(values[f"STP_pf_{k}_support"] == 46 for k in self.KEYS))
+        values["STP_apparatus_loyalty_change"] = 100
+        self.simulate("STP_change_apparatus_loyalty", values, flags)
+        self.assertAlmostEqual(float(values["STP_apparatus_loyalty"]), 100)
+
+    def test_invalid_selector_does_not_mutate_factions_and_no_contacts_removes_aid(self):
+        values, flags = self.simulate("STP_pf_initialize")
+        snapshot = {k: v for k, v in values.items() if k.endswith(("_influence", "_support"))}
+        for selected in (0, 8):
+            values["STP_pf_selected"] = selected
+            self.simulate("STP_pf_shift", values, flags)
+            self.assertEqual({k: v for k, v in values.items() if k in snapshot}, snapshot)
+        values["STP_pf_advisers_support"] = 100
+        self.simulate("STP_refresh_apparatus_loyalty", values, flags, nod=False)
+        self.assertEqual(values["STP_pf_advisers_effect"], 0)
+        self.assertEqual(values["STP_pf_advisers_support"], 100)
+
+    def test_terminal_cleanup_and_wartime_persistence(self):
+        values, flags = self.simulate("STP_pf_initialize")
+        self.simulate("STP_pf_clear", values, flags)
+        self.assertNotIn("STP_pf_initialized", flags)
+        self.assertFalse(any(f"STP_pf_{k}_influence" in values for k in self.KEYS))
+        self.assertIn("STP_pf_active", str(signature(self.effects["STP_end_battle_for_stelander"])))
+        self.assertIn("STP_pf_clear", str(signature(self.effects["STP_cw_settle_union_victory"])))
+
+    def test_all_cards_actions_and_cooldowns_use_the_same_seven_factions(self):
+        categories = parse_clausewitz(read(DECISIONS))
+        decisions = one(categories, "STP_party_factions")
+        self.assertEqual(len(decisions), 7)
+        gui = read("interface/ADISCORD_STP_regions.gui")
+        script = read("common/scripted_guis/ADISCORD_STP_regions_scripted_gui.txt")
+        for k in self.KEYS:
+            action = one(decisions, f"STP_pf_negotiate_{k}")
+            self.assertEqual(one(action, "cost"), "35")
+            writes = list(walk(one(action, "complete_effect")))
+            self.assertFalse(any(e.key == "add_political_power" for e in writes))
+            cooldown = next(e.value for e in writes if e.key == "set_country_flag")
+            self.assertEqual(one(cooldown, "flag"), "STP_pf_negotiation_cooldown")
+            self.assertEqual(one(cooldown, "days"), "30")
+            self.assertEqual(one(cooldown, "value"), "1")
+            self.assertIn(f'name = "STP_pf_{k}_card"', gui)
+            self.assertIn(f"frame = STP_pf_{k}_frame", script)
+
+
 if __name__ == "__main__":
     unittest.main()

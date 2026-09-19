@@ -333,7 +333,7 @@ class CivilWarContracts(unittest.TestCase):
         first_time = next(e for e in start if e.key == "if"
                          and any(v.key == "set_global_flag" and v.value == "STP_cw_started" for v in walk(e.value)))
         audio = ast_block(first_time.value, "hidden_effect")
-        self.assertEqual(scalar(audio, "scoped_play_song"), "ADISCORD_stp_civil_war")
+        self.assertEqual(scalar(audio, "scoped_play_song"), "ADISCORD_stp_party")
         self.assertEqual(scalar(ast_block(audio, "STS"), "scoped_play_song"), "ADISCORD_stp_civil_war")
         self.assertLess(first_time.value.index(next(e for e in first_time.value if e.key == "set_global_flag")),
                         first_time.value.index(next(e for e in first_time.value if e.key == "hidden_effect")))

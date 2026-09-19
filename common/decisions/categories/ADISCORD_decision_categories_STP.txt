@@ -102,3 +102,10 @@ STP_postwar_propaganda_campaigns = {
 	priority = 17
 }
 
+STP_party_factions = {
+	allowed = { tag = STP }
+	visible = { STP_pf_active = yes has_country_flag = STP_pf_initialized }
+	visible_when_empty = yes
+	priority = 36
+	scripted_gui = ADISCORD_STP_party_factions_panel
+}

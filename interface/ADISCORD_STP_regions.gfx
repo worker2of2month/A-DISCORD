@@ -18,4 +18,13 @@ spriteTypes = {
 	spriteType = { name = "GFX_trait_STP_local_councils_loyalist" texturefile = "gfx/interface/traits/personal/trait_politically_connected.dds" }
 	spriteType = { name = "GFX_trait_STP_ravel_undecided" texturefile = "gfx/interface/traits/personal/trait_cautious.dds" }
 	spriteType = { name = "GFX_trait_STP_drake_undecided" texturefile = "gfx/interface/traits/personal/trait_cautious.dds" }
+	spriteType = { name = "GFX_STP_pf_card" texturefile = "gfx/interface/STP_regions/STP_regions_faction_card.png" noOfFrames = 2 transparencecheck = yes }
+
+	spriteType = { name = "GFX_STP_pf_conservatives" texturefile = "gfx/interface/STP_regions/STP_regions_faction_conservatives.png" transparencecheck = yes }
+	spriteType = { name = "GFX_STP_pf_borons" texturefile = "gfx/interface/STP_regions/STP_regions_faction_borons.png" transparencecheck = yes }
+	spriteType = { name = "GFX_STP_pf_security" texturefile = "gfx/interface/STP_regions/STP_regions_faction_security.png" transparencecheck = yes }
+	spriteType = { name = "GFX_STP_pf_army" texturefile = "gfx/interface/STP_regions/STP_regions_faction_army.png" transparencecheck = yes }
+	spriteType = { name = "GFX_STP_pf_advisers" texturefile = "gfx/interface/STP_regions/STP_regions_faction_advisers.png" transparencecheck = yes }
+	spriteType = { name = "GFX_STP_pf_merchants" texturefile = "gfx/interface/STP_regions/STP_regions_faction_merchants.png" transparencecheck = yes }
+	spriteType = { name = "GFX_STP_pf_radicals" texturefile = "gfx/interface/STP_regions/STP_regions_faction_radicals.png" transparencecheck = yes }
 }

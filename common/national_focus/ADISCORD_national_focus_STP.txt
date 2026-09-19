@@ -83,7 +83,7 @@ focus_tree = {
 		ai_will_do = { base = 0 }
 		completion_reward = {
 			custom_effect_tooltip = STP_cw_branch_choice_tt
-			hidden_effect = { scoped_play_song = "ADISCORD_stp_party" }
+			hidden_effect = { scoped_play_song = "ADISCORD_stp_party_preparation" }
 		}
 	}
 
@@ -1118,8 +1118,11 @@ focus_tree = {
 				STP_cw_refresh_party_modifier = yes
 				set_temp_variable = { var = STP_apparatus_loyalty_change value = 5 }
 				STP_change_apparatus_loyalty = yes
+				set_temp_variable = { var = STP_pf_selected value = 1 }
+				STP_pf_shift = yes
 			}
 			custom_effect_tooltip = STP_cw_loyalty_plus_5_tt
+			custom_effect_tooltip = STP_pf_conservatives_deal_tt
 		}
 	}
 
@@ -1167,7 +1170,12 @@ focus_tree = {
 				add_extra_state_shared_building_slots = 2
 				add_building_construction = { type = arms_factory level = 2 instant_build = yes }
 			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			hidden_effect = {
+				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = STP_pf_selected value = 4 }
+				STP_pf_shift = yes
+			}
+			custom_effect_tooltip = STP_pf_army_deal_tt
 		}
 	}
 
@@ -1197,8 +1205,11 @@ focus_tree = {
 				STP_cw_refresh_army_modifier = yes
 				set_temp_variable = { var = STP_apparatus_loyalty_change value = 5 }
 				STP_change_apparatus_loyalty = yes
+				set_temp_variable = { var = STP_pf_selected value = 3 }
+				STP_pf_shift = yes
 			}
 			custom_effect_tooltip = STP_cw_loyalty_plus_5_tt
+			custom_effect_tooltip = STP_pf_security_deal_tt
 		}
 	}
 
@@ -1359,7 +1370,10 @@ focus_tree = {
 			hidden_effect = {
 				set_temp_variable = { var = STP_apparatus_loyalty_change value = 8 }
 				STP_change_apparatus_loyalty = yes
+				set_temp_variable = { var = STP_pf_selected value = 3 }
+				STP_pf_shift = yes
 			}
+			custom_effect_tooltip = STP_pf_security_deal_tt
 		}
 	}
 
@@ -1509,7 +1523,10 @@ focus_tree = {
 			hidden_effect = {
 				set_temp_variable = { var = STP_apparatus_loyalty_change value = 6 }
 				STP_change_apparatus_loyalty = yes
+				set_temp_variable = { var = STP_pf_selected value = 4 }
+				STP_pf_shift = yes
 			}
+			custom_effect_tooltip = STP_pf_army_deal_tt
 		}
 	}
 
@@ -1570,6 +1587,8 @@ focus_tree = {
 						STP_add_party_influence = yes
 					}
 				}
+				set_temp_variable = { var = STP_pf_selected value = 2 }
+				STP_pf_shift = yes
 			}
 			unlock_decision_tooltip = STP_cw_agree_with_commander
 			effect_tooltip = { swap_ideas = { remove_idea = STP_cw_party_dummy_idea add_idea = STP_party_district_compact_party_delta } }
@@ -1578,6 +1597,7 @@ focus_tree = {
 				add_to_variable = { var = STP_cw_party_political_power_gain value = -0.05 }
 				STP_cw_refresh_party_modifier = yes
 			}
+			custom_effect_tooltip = STP_pf_borons_deal_tt
 		}
 	}
 
@@ -2781,7 +2801,10 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_political_power_gain value = 0.10 }
 				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
 				STP_pw_refresh_modifier = yes
+				set_temp_variable = { var = STP_pf_selected value = 2 }
+				STP_pf_shift = yes
 			}
+			custom_effect_tooltip = STP_pf_borons_deal_tt
 		}
 	}
 
@@ -2826,7 +2849,10 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_research_speed_factor value = 0.03 }
 				add_to_variable = { var = STP_pw_political_power_gain value = -0.05 }
 				STP_pw_refresh_modifier = yes
+				set_temp_variable = { var = STP_pf_selected value = 7 }
+				STP_pf_shift = yes
 			}
+			custom_effect_tooltip = STP_pf_radicals_deal_tt
 		}
 	}
 
@@ -2851,7 +2877,10 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_political_power_gain value = 0.15 }
 				add_to_variable = { var = STP_pw_research_speed_factor value = -0.01 }
 				STP_pw_refresh_modifier = yes
+				set_temp_variable = { var = STP_pf_selected value = 1 }
+				STP_pf_shift = yes
 			}
+			custom_effect_tooltip = STP_pf_conservatives_deal_tt
 		}
 	}
 
@@ -3032,7 +3061,10 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.05 }
 				add_to_variable = { var = STP_pw_production_speed_buildings_factor value = 0.05 }
 				STP_pw_refresh_modifier = yes
+				set_temp_variable = { var = STP_pf_selected value = 6 }
+				STP_pf_shift = yes
 			}
+			custom_effect_tooltip = STP_pf_merchants_deal_tt
 		}
 	}
 
@@ -4964,9 +4996,12 @@ focus_tree = {
 				clr_country_flag = STP_pw_party_nod_offer_pending
 				clr_country_flag = STP_pw_party_nod_offer_accepted
 				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = STP_pf_selected value = 5 }
+				STP_pf_shift = yes
 			}
 			add_tech_bonus = { name = STP_pw_party_staff_exchange bonus = 0.5 uses = 2 category = infantry_weapons }
 			add_stability = 0.05
+			custom_effect_tooltip = STP_pf_advisers_deal_tt
 		}
 	}
 
@@ -4999,7 +5034,13 @@ focus_tree = {
 				clr_country_flag = STP_pw_party_nod_offer_pending
 				clr_country_flag = STP_pw_party_nod_offer_accepted
 				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = STP_pf_selected value = 4 }
+				STP_pf_shift = yes
+				set_variable = { var = STP_pf_advisers_effect value = 0 }
+				set_variable = { var = STP_pf_nod_connected value = 0 }
+				force_update_dynamic_modifier = yes
 			}
+			custom_effect_tooltip = STP_pf_army_deal_tt
 		}
 	}
 	focus = {

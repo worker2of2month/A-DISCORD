@@ -3691,3 +3691,133 @@ STP_scenario_debug = {
 		ai_will_do = { factor = 0 }
 	}
 }
+
+STP_party_factions = {
+	STP_pf_negotiate_conservatives = {
+		icon = generic_political_pressure
+		visible = { STP_pf_active = yes }
+		available = { STP_pf_can_negotiate = yes
+			custom_trigger_tooltip = { tooltip = STP_pf_conservatives_room_tt check_variable = { var = STP_pf_conservatives_influence value = 60 compare = less_than } }
+		}
+		cost = 35
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pf_conservatives_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 1 }
+				STP_pf_shift = yes
+				set_country_flag = { flag = STP_pf_negotiation_cooldown value = 1 days = 30 }
+			}
+		}
+		ai_will_do = { base = 0.4 modifier = { factor = 0 check_variable = { var = STP_pf_conservatives_support value = 65 compare = greater_than_or_equals } } }
+	}
+	STP_pf_negotiate_borons = {
+		icon = generic_political_pressure
+		visible = { STP_pf_active = yes }
+		available = { STP_pf_can_negotiate = yes
+			custom_trigger_tooltip = { tooltip = STP_pf_borons_room_tt check_variable = { var = STP_pf_borons_influence value = 60 compare = less_than } }
+		}
+		cost = 35
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pf_borons_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 2 }
+				STP_pf_shift = yes
+				set_country_flag = { flag = STP_pf_negotiation_cooldown value = 1 days = 30 }
+			}
+		}
+		ai_will_do = { base = 0.4 modifier = { factor = 0 check_variable = { var = STP_pf_borons_support value = 65 compare = greater_than_or_equals } } }
+	}
+	STP_pf_negotiate_security = {
+		icon = generic_political_pressure
+		visible = { STP_pf_active = yes }
+		available = { STP_pf_can_negotiate = yes
+			custom_trigger_tooltip = { tooltip = STP_pf_security_room_tt check_variable = { var = STP_pf_security_influence value = 60 compare = less_than } }
+		}
+		cost = 35
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pf_security_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 3 }
+				STP_pf_shift = yes
+				set_country_flag = { flag = STP_pf_negotiation_cooldown value = 1 days = 30 }
+			}
+		}
+		ai_will_do = { base = 0.4 modifier = { factor = 0 check_variable = { var = STP_pf_security_support value = 65 compare = greater_than_or_equals } } }
+	}
+	STP_pf_negotiate_army = {
+		icon = generic_political_pressure
+		visible = { STP_pf_active = yes }
+		available = { STP_pf_can_negotiate = yes
+			custom_trigger_tooltip = { tooltip = STP_pf_army_room_tt check_variable = { var = STP_pf_army_influence value = 60 compare = less_than } }
+		}
+		cost = 35
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pf_army_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 4 }
+				STP_pf_shift = yes
+				set_country_flag = { flag = STP_pf_negotiation_cooldown value = 1 days = 30 }
+			}
+		}
+		ai_will_do = { base = 0.4 modifier = { factor = 0 check_variable = { var = STP_pf_army_support value = 65 compare = greater_than_or_equals } } }
+	}
+	STP_pf_negotiate_advisers = {
+		icon = generic_political_pressure
+		visible = { STP_pf_active = yes }
+		available = { STP_pf_can_negotiate = yes
+			custom_trigger_tooltip = { tooltip = STP_pf_advisers_room_tt check_variable = { var = STP_pf_advisers_influence value = 60 compare = less_than } }
+			custom_trigger_tooltip = { tooltip = STP_pf_nod_contacts_tt STP_pf_nod_contacts = yes }
+		}
+		cost = 35
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pf_advisers_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 5 }
+				STP_pf_shift = yes
+				set_country_flag = { flag = STP_pf_negotiation_cooldown value = 1 days = 30 }
+			}
+		}
+		ai_will_do = { base = 0.4 modifier = { factor = 0 check_variable = { var = STP_pf_advisers_support value = 65 compare = greater_than_or_equals } } }
+	}
+	STP_pf_negotiate_merchants = {
+		icon = generic_political_pressure
+		visible = { STP_pf_active = yes }
+		available = { STP_pf_can_negotiate = yes
+			custom_trigger_tooltip = { tooltip = STP_pf_merchants_room_tt check_variable = { var = STP_pf_merchants_influence value = 60 compare = less_than } }
+		}
+		cost = 35
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pf_merchants_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 6 }
+				STP_pf_shift = yes
+				set_country_flag = { flag = STP_pf_negotiation_cooldown value = 1 days = 30 }
+			}
+		}
+		ai_will_do = { base = 0.4 modifier = { factor = 0 check_variable = { var = STP_pf_merchants_support value = 65 compare = greater_than_or_equals } } }
+	}
+	STP_pf_negotiate_radicals = {
+		icon = generic_political_pressure
+		visible = { STP_pf_active = yes }
+		available = { STP_pf_can_negotiate = yes
+			custom_trigger_tooltip = { tooltip = STP_pf_radicals_room_tt check_variable = { var = STP_pf_radicals_influence value = 60 compare = less_than } }
+		}
+		cost = 35
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_pf_radicals_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 7 }
+				STP_pf_shift = yes
+				set_country_flag = { flag = STP_pf_negotiation_cooldown value = 1 days = 30 }
+			}
+		}
+		ai_will_do = { base = 0.4 modifier = { factor = 0 check_variable = { var = STP_pf_radicals_support value = 65 compare = greater_than_or_equals } } }
+	}
+}

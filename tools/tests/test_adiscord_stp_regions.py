@@ -779,5 +779,24 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertEqual(regions_map_builder.INITIAL_STATUS_FRAME[53], 1)
 
 
+class STPRegionAssetValidationTests(unittest.TestCase):
+    def test_color_changes_with_unchanged_alpha_are_detected(self):
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            filename = "STP_regions_faction_card.png"
+            original = Image.new("RGBA", (8, 8), (26, 29, 33, 255))
+            original.save(root / filename)
+            changed = original.copy()
+            changed.putpixel((4, 4), (150, 77, 69, 255))
+            with patch.object(regions_map_builder, "ROOT", root), patch.object(regions_map_builder, "OUT", root):
+                self.assertEqual(regions_map_builder.validate_outputs({filename: original}), [])
+                issues = regions_map_builder.validate_outputs({filename: changed})
+            self.assertEqual(len(issues), 1)
+            self.assertIn("pixels differ", issues[0])
+
+
 if __name__ == "__main__":
     unittest.main()

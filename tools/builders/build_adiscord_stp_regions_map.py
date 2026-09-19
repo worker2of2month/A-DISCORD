@@ -14,6 +14,9 @@ ROOT = repository_root()
 OUT = ROOT / "gfx" / "interface" / "STP_regions"
 WIDTH, HEIGHT = 420, 260
 STATE_IDS = (1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88)
+FACTION_KEYS = ("conservatives", "borons", "security", "army", "advisers", "merchants", "radicals")
+FACTION_SOURCE = ROOT / "tools" / "assets" / "source" / "STP_party_factions"
+FACTION_ICON_SIZE = 56
 
 # Frames match the status order in ADISCORD_STP_regions.gfx/gui:
 # contested, Shabrat leaning/entrenched, Party leaning/entrenched,
@@ -128,6 +131,32 @@ def contact_sheet(background: Image.Image, masks: dict[int, Image.Image]) -> Ima
     return sheet
 
 
+def faction_cards() -> Image.Image:
+    # Two native GUI frames: support below 50 and support at least 50.
+    strip = Image.new("RGBA", (448, 92))
+    for index, accent in enumerate(((150, 77, 69, 255), (92, 145, 111, 255))):
+        x = index * 224
+        draw = ImageDraw.Draw(strip)
+        draw.rectangle((x, 0, x + 223, 91), fill=(26, 29, 33, 255), outline=(83, 83, 77, 255))
+        draw.rectangle((x + 1, 1, x + 3, 90), fill=accent)
+        draw.rectangle((x + 7, 7, x + 64, 64), outline=accent)
+        draw.line((x + 72, 40, x + 214, 40), fill=(67, 67, 63, 255))
+    return strip
+
+
+def faction_icons() -> dict[str, Image.Image]:
+    """Keep the source artwork intact; build only the native card-size textures."""
+    outputs = {}
+    for key in FACTION_KEYS:
+        with Image.open(FACTION_SOURCE / f"{key}.png") as source:
+            if source.width != source.height:
+                raise ValueError(f"Faction emblem must be square: {key}")
+            outputs[f"STP_regions_faction_{key}.png"] = source.convert("RGBA").resize(
+                (FACTION_ICON_SIZE, FACTION_ICON_SIZE), Image.Resampling.LANCZOS
+            )
+    return outputs
+
+
 def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int]]:
     province_to_color, land_colors = province_colors()
     state_sets = {state_id: state_provinces(state_id) for state_id in STATE_IDS}
@@ -216,6 +245,8 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int]]
             strip.paste(state_overlay(masks[state_id], color), (WIDTH * index, 0))
         outputs[f"STP_regions_state_{state_id}.png"] = strip
     outputs["STP_regions_contact_sheet.png"] = contact_sheet(background, masks)
+    outputs["STP_regions_faction_card.png"] = faction_cards()
+    outputs.update(faction_icons())
     return outputs, box
 
 
@@ -239,7 +270,7 @@ def validate_outputs(outputs: dict[str, Image.Image]) -> list[str]:
         if actual.size != expected.size:
             issues.append(f"{path.relative_to(ROOT)} has size {actual.size}, expected {expected.size}")
             continue
-        if ImageChops.difference(actual, expected.convert("RGBA")).getbbox() is not None:
+        if actual.tobytes() != expected.convert("RGBA").tobytes():
             issues.append(f"{path.relative_to(ROOT)} pixels differ from deterministic render")
     return issues
 
