@@ -56,20 +56,54 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertNotIn("puppet = SOL", voluntary)
         self.assertNotIn("autonomy_state = autonomy_puppet", voluntary)
 
-    def test_joint_route_capstone_ends_temporary_cosmetic(self) -> None:
+    def test_vlad_capstone_keeps_empire_while_joint_council_drops_temporary_cosmetic(self) -> None:
         source = source_section(read("common/national_focus/ADISCORD_vorkerland_focus.txt"), 'civil_war_focus')
-        focus = named_block(source, "focus")
-        # Locate the exact focus assignment rather than accepting another focus's reward.
         match = re.search(
             r"(?ms)^\s*focus\s*=\s*\{\s*id\s*=\s*WRK_joint_impose_reunification_settlement\b",
             source,
         )
         self.assertIsNotNone(match)
-        start = match.start()
-        focus = named_block(source[start:], "focus")
+        focus = named_block(source[match.start() :], "focus")
         reward = named_block(focus, "completion_reward")
         self.assertEqual(reward.count("drop_cosmetic_tag = yes"), 1)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_joint_government_formed", reward)
+        self.assertIn("set_cosmetic_tag = VAD_vorkerland_restoration", reward)
+        self.assertIn("character = WRK_Vlad_Petrichev", reward)
+        self.assertIn("GFX_portrait_WRK_Vlad_Petrichev_civilwar", reward)
         self.assertIn("add_ideas = ADISCORD_vorkerland_reunification_settlement", reward)
+
+    def test_vlad_postwar_route_unlocks_sequential_imperial_reclamation(self) -> None:
+        focuses = source_section(read("common/national_focus/ADISCORD_vorkerland_focus.txt"), 'civil_war_focus')
+        match = re.search(
+            r"(?ms)^\s*focus\s*=\s*\{\s*id\s*=\s*WRK_joint_issue_integration_warrants\b",
+            focuses,
+        )
+        self.assertIsNotNone(match)
+        warrants = named_block(focuses[match.start() :], "focus")
+        self.assertIn(
+            "decision = ADISCORD_vorkerland_vad_continue_imperial_reunification",
+            warrants,
+        )
+        self.assertIn(
+            "set_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_unlocked",
+            warrants,
+        )
+
+        decisions = read("common/decisions/ADISCORD_vorkerland_decisions.txt")
+        reclaim = named_block(
+            decisions, "ADISCORD_vorkerland_vad_continue_imperial_reunification"
+        )
+        self.assertTrue(reclaim)
+        self.assertIn("has_country_flag = ADISCORD_vorkerland_route_joint", reclaim)
+        self.assertIn(
+            "NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }",
+            reclaim,
+        )
+        self.assertIn("has_war = no", reclaim)
+        self.assertIn("days_remove = 14", reclaim)
+        self.assertIn("fire_only_once = no", reclaim)
+        for tag in ("EYR", "EGC", "VLA", "ROM", "ZTA", "TGD"):
+            self.assertIn(f"declare_war_on = {{ target = {tag} type = annex_everything }}", reclaim)
 
     def test_joint_council_gets_specific_victory_text_before_vlad_fallback(self) -> None:
         scripted = read("common/scripted_localisation/ADISCORD_scripted_loc_superevents.txt")
