@@ -1,0 +1,23 @@
+name: Scripted peace refactor QA
+on:
+  push:
+    branches: [qa/scripted-peace-refactor]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d6cc3c77078a25f7318fbf7e371fc6779eab3351
+          persist-credentials: false
+      - name: Pack pinned source for local verification
+        run: tar --exclude='./.git' -czf "$RUNNER_TEMP/source.tgz" .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scripted-peace-source
+          path: ${{ runner.temp }}/source.tgz
+          retention-days: 1
+          compression-level: 0
