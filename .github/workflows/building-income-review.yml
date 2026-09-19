@@ -25,6 +25,27 @@ jobs:
         run: |
           python -B .github/building_income_tests.py
           python -B .github/building_income_patch.py
+          python -B - <<'PY'
+          from pathlib import Path
+          from tools.tests.test_validate_adiscord_val_rework import named_block_spans
+          p=Path('common/scripted_effects/ADISCORD_economy_effects.txt')
+          text=p.read_text(encoding='utf-8')
+          for name, values in (
+              ('ADISCORD_economy_apply_tax_burden_to_income', {'business_income':150,'consumer_goods_income':100}),
+              ('ADISCORD_economy_recalculate_tax_dependent_income', {'business_income':500,'consumer_goods_income':500}),
+          ):
+              matches=named_block_spans(text,name);assert len(matches)==1
+              b=matches[0];body=b.text
+              for variable,old in values.items():
+                  original=f'var = ADISCORD_economy_{variable} min = 0 max = {old} }}'
+                  assert body.count(original)==1,(name,variable)
+                  body=body.replace(original,f'var = ADISCORD_economy_{variable} min = 0 max = 5000 }}')
+              text=text[:b.start]+body+text[b.end:]
+          old='# 20 national factories become a +5% country modifier: (10 * 2 * 5) / 20.'
+          assert text.count(old)==1
+          text=text.replace(old,'# 20 national factories become a +10% country modifier: (10 * 2 * 10) / 20.')
+          p.write_text(text,encoding='utf-8')
+          PY
       - name: Targeted building and accounting regression tests
         run: |
           python -B -m unittest tools.tests.test_adiscord_economy_rebalance tools.tests.test_adiscord_economy_weekly_contracts.EconomyAccountingRegressionTests tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_industrial_cluster_output_is_location_weighted_without_a_new_scan tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_ai_building_targets_are_bounded_by_fiscal_state tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_economic_building_reference_documents_roles_and_formulas -v
