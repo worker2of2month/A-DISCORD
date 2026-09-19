@@ -1,0 +1,43 @@
+name: Party source review
+on:
+  push:
+    branches: [agent/stp-party-source-review-20260919]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Package current text sources
+        run: |
+          mkdir -p /tmp/party-source
+          git rev-parse HEAD > /tmp/party-source/base-sha.txt
+          python - <<'PY'
+          import subprocess, zipfile, hashlib, json
+          from pathlib import Path
+          files = subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          hashes = {}
+          with zipfile.ZipFile('/tmp/party-source/main-text-source.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for name in files:
+                  p=Path(name)
+                  if not name or not p.is_file() or name.startswith('.github/'):
+                      continue
+                  if p.suffix.lower() in {'.txt','.yml','.yaml','.py','.json','.md','.csv','.gfx','.gui','.mod','.lua','.xml','.map','.cfg','.toml','.ini'} or name in {'AGENTS.md','.gitignore','.gitattributes'}:
+                      data=p.read_bytes()
+                      try: data.decode('utf-8-sig')
+                      except UnicodeDecodeError: continue
+                      z.writestr(name,data)
+                      hashes[name]=hashlib.sha256(data).hexdigest()
+          Path('/tmp/party-source/hashes.json').write_text(json.dumps(hashes,indent=2))
+          print('Packaged',len(hashes),'text files at current main')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: party-main-text-sources
+          path: /tmp/party-source/
+          retention-days: 2
