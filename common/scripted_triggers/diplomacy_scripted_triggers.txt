@@ -13,7 +13,12 @@
 #			custom_trigger_tooltip trigger within each if trigger.
 #
 # Existing allies may be called to war; unsolicited war entry remains scripted.
-DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER = { always = yes }
+DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER = {
+	custom_trigger_tooltip = {
+		tooltip = STP_cw_northern_call_blocked_tt
+		NOT = { STP_cw_northern_call_blocked = yes }
+	}
+}
 DIPLOMACY_JOIN_ALLY_ENABLE_TRIGGER = { always = no }
 
 # This specifically overrides the rule check as to whether or not you can guarantee other ideologies

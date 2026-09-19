@@ -62,16 +62,20 @@ class SupereventContractTests(unittest.TestCase):
             )
             self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", immediate)
 
-    def test_stelander_music_uses_party_focus_and_shabrat_close(self) -> None:
+    def test_stelander_music_waits_for_audio_instead_of_shabrat_close(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks
 
         source = (ROOT / SCRIPTED_GUI).read_text(encoding="utf-8-sig")
-        for side, tag in (("shabrat", "STS"),):
-            window = blocks(source, rf"^\s*superevent_stelander_{side}_victory\s*=\s*\{{")[0]
-            self.assertIn(f"{tag} = {{", window)
-            self.assertIn("limit = { is_ai = no }", window)
-            self.assertIn('scoped_play_song = "ADISCORD_stp_civil_war_end"', window)
-            self.assertLess(window.index("clr_global_flag"), window.index("scoped_play_song"))
+        window = blocks(source, r"^\s*superevent_stelander_shabrat_victory\s*=\s*\{")[0]
+        self.assertNotIn("scoped_play_song", window)
+        self.assertIn("clr_global_flag = superevent_stelander_shabrat_victory", window)
+        effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8-sig")
+        playback = blocks(effects, r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{")[0]
+        tail = playback.split('play_song = "one_minute_of_silence"', 1)[1]
+        self.assertIn("limit = { has_global_flag = superevent_stelander_shabrat_victory }", tail)
+        self.assertIn("STS = {", tail)
+        self.assertIn("limit = { is_ai = no }", tail)
+        self.assertIn('scoped_play_song = "ADISCORD_stp_civil_war_end_after_superevent"', tail)
         party = blocks(source, r"^\s*superevent_stelander_party_victory\s*=\s*\{")[0]
         self.assertNotIn("scoped_play_song", party)
         focuses = (ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt").read_text(encoding="utf-8-sig")
@@ -85,6 +89,41 @@ class SupereventContractTests(unittest.TestCase):
         self.assertIn('file = "ADISCORD_stp_civil_war_end.ogg"', assets)
         station = (ROOT / "music/_songs.txt").read_text(encoding="utf-8-sig")
         self.assertIn('song = "ADISCORD_stp_civil_war_end"', station)
+        lead_in = next(b for b in blocks(station, r"^\s*music\s*=\s*\{")
+                       if 'song = "ADISCORD_stp_civil_war_end_after_superevent"' in b)
+        self.assertIn("chance = { base = 0 }", lead_in)
+        self.assertIn('file = "ADISCORD_stp_civil_war_end_after_superevent.ogg"', assets)
+        localisation = (ROOT / "localisation/russian/ADISCORD_music_l_russian.yml").read_bytes()
+        self.assertTrue(localisation.startswith(b"\xef\xbb\xbf"))
+        for key in ("ADISCORD_stp_civil_war_end", "ADISCORD_stp_civil_war_end_after_superevent"):
+            self.assertRegex(localisation.decode("utf-8-sig"), rf'(?m)^ {key}: "[^"\r\n]+"\r?$')
+
+    def test_postwar_audio_lead_in_outlasts_the_superevent_sound(self) -> None:
+        import struct
+        import wave
+
+        def ogg_duration(path: Path) -> float:
+            data = path.read_bytes()
+            header = data.index(b"\x01vorbis")
+            rate = struct.unpack_from("<I", data, header + 12)[0]
+            offset = 0
+            samples = 0
+            while offset < len(data):
+                self.assertEqual(data[offset:offset + 4], b"OggS")
+                granule = struct.unpack_from("<Q", data, offset + 6)[0]
+                if granule != 0xffffffffffffffff:
+                    samples = max(samples, granule)
+                segments = data[offset + 26]
+                size = sum(data[offset + 27:offset + 27 + segments])
+                offset += 27 + segments + size
+            return samples / rate
+
+        with wave.open(str(ROOT / "sound/superevents/superevent_stelander_party_victory_sound.wav")) as sound:
+            duration = sound.getnframes() / sound.getframerate()
+        original = ogg_duration(ROOT / "music/ADISCORD_stp_civil_war_end.ogg")
+        delayed = ogg_duration(ROOT / "music/ADISCORD_stp_civil_war_end_after_superevent.ogg")
+        self.assertGreaterEqual(delayed - original, duration + 0.49)
+        self.assertLess(delayed - original, duration + 0.51)
 
     def test_missing_gfx_binding_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -89,3 +89,9 @@ music = {
 		modifier = { factor = 0 }
 	}
 }
+
+# The lead-in is reserved for the victory presentation, never random rotation.
+music = {
+	song = "ADISCORD_stp_civil_war_end_after_superevent"
+	chance = { base = 0 }
+}

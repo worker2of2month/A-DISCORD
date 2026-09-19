@@ -2,6 +2,7 @@
 from tools.lib.on_actions import country_on_actions_entries, read_country_on_actions
 from pathlib import Path
 import re
+from dataclasses import replace
 import unittest
 
 from tools.tests.test_adiscord_stp_preparation import (
@@ -165,6 +166,25 @@ class CivilWarContracts(unittest.TestCase):
         north = block(self.effects, "STP_cw_start_northern_war")
         for ally in ("COF", "TFF"):
             self.assertRegex(north, ally + r"\s*=\s*\{\s*add_to_war\s*=\s*\{\s*targeted_alliance = YPR")
+
+    def test_northern_call_excludes_only_nod_to_stelander_until_peace(self):
+        triggers = entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        blocked = ast_block(triggers, "STP_cw_northern_call_blocked")
+        call = ast_block(entries("common/scripted_triggers/diplomacy_scripted_triggers.txt"),
+                         "DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER")
+        for caller in ("NOD", "VAL", "STP"):
+            for recipient in ("STP", "VAL", "NOD"):
+                for enemy in (None, "YPR", "COF", "TFF", "VAL"):
+                    with self.subTest(caller=caller, recipient=recipient, enemy=enemy):
+                        facts = {}
+                        if enemy:
+                            facts[(caller, "has_war_with", enemy)] = True
+                        denied = matches_conditions([replace(e, key=recipient) if e.key == "FROM" else e
+                                                     for e in blocked], facts, caller)
+                        expected = caller == "NOD" and recipient == "STP" and enemy in ("YPR", "COF", "TFF")
+                        self.assertEqual(denied, expected)
+                        facts[(caller, "STP_cw_northern_call_blocked", "yes")] = denied
+                        self.assertEqual(matches_conditions(call, facts, caller), not expected)
 
     def test_nod_offer_precedes_normal_result_and_earliest_northern_uprising(self):
         begin = block(self.effects, "STP_cw_begin_elections")
@@ -351,8 +371,36 @@ class CivilWarContracts(unittest.TestCase):
         first_time = next(e for e in start if e.key == "if"
                          and any(v.key == "set_global_flag" and v.value == "STP_cw_started" for v in walk(e.value)))
         audio = ast_block(first_time.value, "hidden_effect")
-        self.assertEqual(scalar(audio, "scoped_play_song"), "ADISCORD_stp_party")
-        self.assertEqual(scalar(ast_block(audio, "STS"), "scoped_play_song"), "ADISCORD_stp_civil_war")
+        self.assertFalse(any(e.key == "scoped_play_song" for e in walk(audio)))
+        for scope in (audio, ast_block(audio, "STS")):
+            callbacks = [e.value for e in scope if e.key == "country_event"
+                         and scalar(e.value, "id") == "ADISCORD_STP_cw.95"]
+            self.assertEqual(len(callbacks), 1)
+            self.assertEqual(scalar(callbacks[0], "hours"), "1")
+        party_story = [scope for scope, e in selected_effects(audio, {}, "STP")
+                       if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.94"]
+        self.assertEqual(party_story, ["STP"])
+        events = entries("events/ADISCORD_STP_events.txt")
+        playback = next(e.value for e in events if e.key == "country_event"
+                        and scalar(e.value, "id") == "ADISCORD_STP_cw.95")
+        story = next(e.value for e in events if e.key == "country_event"
+                     and scalar(e.value, "id") == "ADISCORD_STP_cw.94")
+        self.assertEqual(scalar(playback, "hidden"), "yes")
+        for tag, enemy, song in (("STP", "STS", "ADISCORD_stp_party"),
+                                 ("STS", "STP", "ADISCORD_stp_civil_war")):
+            for human, war, finished in ((True, True, False), (False, True, False),
+                                         (True, False, False), (True, True, True)):
+                facts = {(tag, "is_ai", "no"): human,
+                         (tag, "has_war_with", enemy): war,
+                         (tag, "has_global_flag", "STP_cw_started"): True,
+                         (tag, "has_global_flag", "STP_cw_union_wars_finished"): finished}
+                eligible = matches_conditions(ast_block(playback, "trigger"), facts, tag)
+                self.assertEqual(eligible, human and war and not finished)
+                if eligible:
+                    songs = [e.value for _, e in selected_effects(ast_block(playback, "immediate"), facts, tag)
+                             if e.key == "scoped_play_song"]
+                    self.assertEqual(songs, [song])
+            self.assertEqual(matches_conditions(ast_block(story, "trigger"), {}, tag), tag == "STP")
         self.assertLess(first_time.value.index(next(e for e in first_time.value if e.key == "set_global_flag")),
                         first_time.value.index(next(e for e in first_time.value if e.key == "hidden_effect")))
         assets = entries("music/music.asset")

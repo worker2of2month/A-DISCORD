@@ -2741,12 +2741,10 @@ STP_cw_begin_hostilities = {
 			limit = { NOT = { has_global_flag = STP_cw_started } }
 			set_global_flag = STP_cw_started
 			hidden_effect = {
-				scoped_play_song = "ADISCORD_stp_party"
+				# Playback waits until change_tag_from has assigned the human to the chosen side.
+				country_event = { id = ADISCORD_STP_cw.95 hours = 1 }
 				country_event = { id = ADISCORD_STP_cw.94 hours = 1 }
-				STS = {
-					scoped_play_song = "ADISCORD_stp_civil_war"
-					country_event = { id = ADISCORD_STP_cw.94 hours = 1 }
-				}
+				STS = { country_event = { id = ADISCORD_STP_cw.95 hours = 1 } }
 			}
 			remove_mission = STP_cw_nod_warning
 			clr_country_flag = STP_cw_nod_warning_active

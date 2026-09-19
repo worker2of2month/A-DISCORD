@@ -4081,6 +4081,16 @@ ADISCORD_vorkerland_play_superevent_sound = {
 		sound_effect = superevent_vorkerland_civilwar_sound_e
 	}
 	play_song = "one_minute_of_silence"
+	if = {
+		limit = { has_global_flag = superevent_stelander_shabrat_victory }
+		STS = {
+			if = {
+				limit = { is_ai = no }
+				# The audio lead-in outlasts the presentation sound, independently of game speed or closing the window.
+				scoped_play_song = "ADISCORD_stp_civil_war_end_after_superevent"
+			}
+		}
+	}
 }
 
 ADISCORD_vorkerland_play_collapse_superevent_audio = {

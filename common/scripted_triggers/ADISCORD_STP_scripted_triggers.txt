@@ -640,6 +640,13 @@ STP_cw_northern_fort_state = {
 	}
 }
 
+# ROOT is the caller and FROM is the recipient; this hook has no selected-war scope.
+STP_cw_northern_call_blocked = {
+	tag = NOD
+	FROM = { tag = STP }
+	OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
+}
+
 STP_cw_northern_targets_available = {
 	YPR = { is_in_faction = no }
 	COF = { is_in_faction = no }
