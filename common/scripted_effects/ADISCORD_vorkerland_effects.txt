@@ -1,3 +1,9 @@
+# Vorkerland effects: lifecycle, campaign state, diplomacy and postwar actions.
+# Navigation: campaign_state_effects = control/legitimacy/assistance;
+# collapse_effects = materialization; diplomacy_effects = regional relations;
+# focus_decision_effects = player orders; phase_effects = transitions and handoff.
+# Registered section markers below are also consumed by validators.
+
 # --- dirty_zone_effects ---
 # Dirty Zone opening presentation helpers.
 # The reveal lifecycle itself remains owned by ADISCORD_vorkerland_collapse.85.
@@ -114,7 +120,7 @@ ADISCORD_vorkerland_reconcile_dirty_zone_remainder = {
 }
 
 # --- campaign_state_effects ---
-# Applied once, to the seventeen central states, when the wars open. The states
+# Applied once to the 37 listed central-theatre states when wars open. The states
 # are listed rather than scanned because this sits in the phase layer, where a
 # world scan is forbidden. An attacker_modifier cannot carry remove_trigger;
 # ADISCORD_vorkerland_retire_civil_war_modifiers clears it at the end.
@@ -293,10 +299,8 @@ ADISCORD_vorkerland_initialize_legitimacy = {
 
 # Theatre priority follows the active central war, not elapsed calendar time.
 ADISCORD_vorkerland_refresh_theatre_priority = {
-	# TFR-style hidden theatre normalization. The three claimants are supposed
-	# to roll over fragmented district governments; their real contest is with
-	# one another. Keep this active for both AI and player claimants throughout
-	# the live collapse, not only after the central showdown has already begun.
+	# COUNTRY WKR/VAD/TVA: only the listed minor opponents receive the combat
+	# overmatch. Player and AI claimants share its wartime lifecycle.
 	if = {
 		limit = {
 			ADISCORD_vorkerland_is_main_claimant = yes
@@ -6374,6 +6378,113 @@ ADISCORD_vorkerland_send_sol_support_tranche_2 = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_allied_supply_advisers days = 60 }
 		}
 		set_country_flag = ADISCORD_vorkerland_sol_support_tranche_2_sent
+	}
+}
+
+# POSTWAR IMPERIAL RECLAMATION
+# COUNTRY WRK: called after the decision checks its unlock, cost and peace.
+# Recheck every candidate at execution. The exclusive chain starts exactly
+# one war and preserves the authored priority; do not replace it with a loop.
+ADISCORD_vorkerland_continue_imperial_reunification = {
+	if = {
+		limit = { EYR = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = EYR type = annex_everything }
+	}
+	else_if = {
+		limit = { EGC = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = EGC type = annex_everything }
+	}
+	else_if = {
+		limit = { RIV = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = RIV type = annex_everything }
+	}
+	else_if = {
+		limit = { REV = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = REV type = annex_everything }
+	}
+	else_if = {
+		limit = { YOR = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = YOR type = annex_everything }
+	}
+	else_if = {
+		limit = { NDN = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = NDN type = annex_everything }
+	}
+	else_if = {
+		limit = { SWB = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = SWB type = annex_everything }
+	}
+	else_if = {
+		limit = { VHV = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = VHV type = annex_everything }
+	}
+	else_if = {
+		limit = { OSV = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = OSV type = annex_everything }
+	}
+	else_if = {
+		limit = { ZAO = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = ZAO type = annex_everything }
+	}
+	else_if = {
+		limit = { PWR = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = PWR type = annex_everything }
+	}
+	else_if = {
+		limit = { VLA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = VLA type = annex_everything }
+	}
+	else_if = {
+		limit = { ROM = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = ROM type = annex_everything }
+	}
+	else_if = {
+		limit = { TRU = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = TRU type = annex_everything }
+	}
+	else_if = {
+		limit = { WPA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = WPA type = annex_everything }
+	}
+	else_if = {
+		limit = { WPS = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = WPS type = annex_everything }
+	}
+	else_if = {
+		limit = { PSD = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = PSD type = annex_everything }
+	}
+	else_if = {
+		limit = { EBA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = EBA type = annex_everything }
+	}
+	else_if = {
+		limit = { DVA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = DVA type = annex_everything }
+	}
+	else_if = {
+		limit = { SRA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = SRA type = annex_everything }
+	}
+	else_if = {
+		limit = { ZTA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = ZTA type = annex_everything }
+	}
+	else_if = {
+		limit = { CSL = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = CSL type = annex_everything }
+	}
+	else_if = {
+		limit = { IBA = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = IBA type = annex_everything }
+	}
+	else_if = {
+		limit = { IBL = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = IBL type = annex_everything }
+	}
+	else_if = {
+		limit = { TGD = { ADISCORD_vorkerland_is_imperial_reclamation_target = yes } }
+		declare_war_on = { target = TGD type = annex_everything }
 	}
 }
 

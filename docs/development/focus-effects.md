@@ -843,3 +843,26 @@ VAL_New_Supply_Base снимает постоянный кризис после 
 NKA создаётся только из восьми северных регионов через VAL_form_northern_administration. Исходный регион выбирается так, чтобы прежний владелец сохранился до передачи его армии. Поглощаются только собственные подчинённые, не имеющие земли вне заявленных районов. Игрок подчинённой страны переходит в созданную администрацию до поглощения прежнего тега. Тип autonomy_VAL_contract_administration изолирован от общей лестницы автономии и использует цвет самой администрации.
 
 Карта операций содержит 13 областей с взаимоисключающими слоями контролёра. Изображения принадлежат tools.builders.build_adiscord_val_operations_map; его проверка сравнивает все каналы RGBA. Данные геометрии и подписи интерфейса проверяются отдельно от отображения в запущенной игре.
+
+### Vorkerland postwar campaign boundaries
+
+Keep country content in the existing files by engine data type. Section markers
+are consumed by `source_section`; navigation comments are not new sections.
+
+`ADISCORD_vorkerland_vad_continue_imperial_reunification` owns the decision's
+visibility, 25 political-power cost, peace gate and 14-day re-enable interval.
+The successor is `WRK`, even when the displayed country is the Vorkerland Empire.
+`ADISCORD_vorkerland_is_imperial_reclamation_target` runs in each candidate's
+country scope and checks existence, independence, capitulation, war and faction
+relations with WRK. Use boolean scripted-trigger calls, not macro argument blocks.
+`ADISCORD_vorkerland_has_imperial_reclamation_target` uses a bounded tag list;
+`ADISCORD_vorkerland_continue_imperial_reunification` rechecks those candidates
+in an exclusive chain and declares at most one war. Keep both lists in identical
+priority order. SOL retains its separate settlement path. There is no world scan,
+persistent selected-target cache, or extra campaign-active flag.
+
+The central control score counts 37 explicitly marked states. The current
+coalition threshold is greater than 8, an early-lead setting rather than a
+territorial majority. Keep balance changes separate from structural refactors.
+The contract tests cover the target truth table, order, scope, unlock and prices;
+static expansion checks do not replace a fresh native-load and campaign check.

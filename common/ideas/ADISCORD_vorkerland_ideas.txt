@@ -2610,60 +2610,60 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 
 	# Mechanical civil-war normalization is deliberately invisible in the UI.
 	# Theatre priority helps all three claimants clear fragmented administrations;
-	# coalition ideas are AI-only brakes against a claimant holding a true majority.
+	# Coalition support is AI-only and uses the configured control-score threshold.
 	hidden_ideas = {
 		ADISCORD_vorkerland_theatre_priority = {
-					allowed = { always = no }
-					allowed_civil_war = { always = yes }
-					removal_cost = -1
-					available = {
-						NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-					}
-					targeted_modifier = { tag = EYR attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-					targeted_modifier = { tag = EGC attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-					targeted_modifier = { tag = RIV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-					targeted_modifier = { tag = REV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-					targeted_modifier = { tag = YOR attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-					targeted_modifier = { tag = NDN attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-					targeted_modifier = { tag = SWB attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-					targeted_modifier = { tag = VHV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-					targeted_modifier = { tag = OSV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-				}
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+			}
+			targeted_modifier = { tag = EYR attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = EGC attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = RIV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = REV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = YOR attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = NDN attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = SWB attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = VHV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = { tag = OSV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+		}
 
 		ADISCORD_vorkerland_coalition_against_wkr = {
-					allowed = { always = no }
-					allowed_civil_war = { always = yes }
-					removal_cost = -1
-					available = {
-						is_ai = yes
-						NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-						WKR = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
-					}
-					targeted_modifier = { tag = WKR attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
-				}
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				is_ai = yes
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				WKR = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+			}
+			targeted_modifier = { tag = WKR attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
+		}
 
 		ADISCORD_vorkerland_coalition_against_vad = {
-					allowed = { always = no }
-					allowed_civil_war = { always = yes }
-					removal_cost = -1
-					available = {
-						is_ai = yes
-						NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-						VAD = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
-					}
-					targeted_modifier = { tag = VAD attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
-				}
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				is_ai = yes
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				VAD = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+			}
+			targeted_modifier = { tag = VAD attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
+		}
 
 		ADISCORD_vorkerland_coalition_against_tva = {
-					allowed = { always = no }
-					allowed_civil_war = { always = yes }
-					removal_cost = -1
-					available = {
-						is_ai = yes
-						NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-						TVA = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
-					}
-					targeted_modifier = { tag = TVA attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
-				}
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			available = {
+				is_ai = yes
+				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+				TVA = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
+			}
+			targeted_modifier = { tag = TVA attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
+		}
 	}
 }
