@@ -5,7 +5,7 @@ on:
 permissions:
   contents: write
 jobs:
-  integration:
+  final-verification:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -14,131 +14,109 @@ jobs:
           fetch-depth: 64
           show-progress: false
       - run: python -m pip install Pillow numpy
-      - name: Merge current main without discarding concurrent work
+      - name: Reconcile current main
         run: |
           git config user.name 'A-Discord automation'
           git config user.email '81386071+worker2of2month@users.noreply.github.com'
           git fetch --no-tags --depth=64 origin main:refs/remotes/origin/main
           git rev-parse origin/main > /tmp/economy-main-parent
           git merge --no-edit origin/main
-      - name: Refine fiscal contracts and documentation
-        id: refine
+      - name: Regression for mixed tier and aggregate previews
         run: |
           python -B - <<'PY'
           from pathlib import Path
-          import re,subprocess
-          from tools.tests.test_validate_adiscord_val_rework import named_block_spans
-          def load(p): return Path(p).read_bytes().decode('utf-8-sig')
-          def save(p,text):
-              raw=Path(p).read_bytes()
-              Path(p).write_bytes((b'\xef\xbb\xbf' if raw.startswith(b'\xef\xbb\xbf') else b'')+text.encode('utf-8'))
-          def rep(text,old,new):
-              assert text.count(old)==1,(old[:90],text.count(old))
-              return text.replace(old,new)
-          def edit(p,name,fn,focus=False):
-              text=load(p);blocks=named_block_spans(text,'focus' if focus else name)
-              if focus: blocks=[b for b in blocks if re.search(r'\bid\s*=\s*'+re.escape(name)+r'\b',b.text)]
-              assert len(blocks)==1,(name,len(blocks))
-              b=blocks[0];save(p,text[:b.start]+fn(b.text)+text[b.end:])
-          p='tools/tests/test_adiscord_economy_rebalance.py';text=load(p)
-          old='''            self.assertTrue(any(n.key == "VAL_invest_fiscal_administration" and n.value == "yes"
-                                          for n in walk(nodes)), identifier)'''
-          # Preserve indentation from the authored method, independently of wrapper formatting.
-          pattern=r'            self\.assertTrue\(any\(n\.key == "VAL_invest_fiscal_administration" and n\.value == "yes"\s+for n in walk\(nodes\)\), identifier\)'
-          replacement='''            for variable, expected in (("VAL_fiscal_administration_investment", "0.10"), ("VAL_fiscal_admin_savings", "-0.05")):
-                          self.assertTrue(any(n.key == "add_to_variable" and {c.key: c.value for c in n.value}.get("var") == variable and {c.key: c.value for c in n.value}.get("value") == expected for n in walk(nodes)), identifier)
-                      self.assertTrue(any(n.key == "VAL_refresh_contract_modifier" and n.value == "yes" for n in walk(nodes)), identifier)'''
-          replacement=replacement.replace('\n                          ','\n                ').replace('\n                      ','\n            ')
-          text,n=re.subn(pattern,lambda m:replacement,text);assert n==1
-          save(p,text)
-          result=subprocess.run(['python','-B','-m','unittest','tools.tests.test_adiscord_economy_rebalance.RecoveryRewardTests.test_kefreite_fiscal_reforms_are_persistent_not_one_off_money','-v'],capture_output=True,text=True)
-          print('FISCAL SOURCE CONTRACT BEFORE REFINEMENT',result.stdout,result.stderr)
+          import subprocess
+          p=Path('tools/tests/test_adiscord_economy_rebalance.py')
+          text=p.read_text(encoding='utf-8')
+          start=text.index('            for variable, expected in (("VAL_fiscal_administration_investment"')
+          end=text.index('\n        effects = read(',start)
+          body='''            changes = [
+                          {child.key: child.value for child in node.value}
+                          for node in walk(nodes)
+                          if node.key == "add_to_variable"
+                      ]
+                      expected_deltas = {
+                          "VAL_fiscal_administration_investment": "0.10",
+                          "VAL_fiscal_admin_savings": "-0.05",
+                      }
+                      for variable, expected in expected_deltas.items():
+                          self.assertTrue(
+                              any(change.get("var") == variable and change.get("value") == expected
+                                  for change in changes), identifier,
+                          )
+                      self.assertTrue(
+                          any(node.key == "VAL_refresh_contract_modifier" and node.value == "yes"
+                              for node in walk(nodes)), identifier,
+                      )'''
+          text=text[:start]+body+text[end:]
+          method='''
+              def test_mixed_fiscal_and_industry_previews_reject_a_wrong_delta(self):
+                  from tools.validators.validate_adiscord_val_rework import validate_val_preview_ideas
+                  ideas = read("common/ideas/ADISCORD_VAL_rework_ideas.txt")
+                  effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+                  focuses = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
+                  dynamic = read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt")
+                  sources = {"focuses": focuses, "effects": effects}
+                  self.assertEqual(validate_val_preview_ideas(ideas, sources, dynamic, effects)[1], [])
+                  source_delta = "var = VAL_fiscal_admin_savings value = -0.05"
+                  self.assertEqual(focuses.count(source_delta), 3)
+                  sources["focuses"] = focuses.replace(source_delta, "var = VAL_fiscal_admin_savings value = -0.10", 1)
+                  issues = validate_val_preview_ideas(ideas, sources, dynamic, effects)[1]
+                  self.assertTrue(any("VAL_fiscal_administration_delta does not match actual" in issue for issue in issues))
+          '''
+          text=text.replace('\n\nif __name__ == "__main__":',method+'\n\nif __name__ == "__main__":')
+          p.write_text(text,encoding='utf-8')
+          result=subprocess.run(['python','-B','-m','unittest','tools.tests.test_adiscord_economy_rebalance.RecoveryRewardTests.test_mixed_fiscal_and_industry_previews_reject_a_wrong_delta','-v'],capture_output=True,text=True)
+          print('MIXED PREVIEW REGRESSION BEFORE FIX',result.stdout,result.stderr)
           assert result.returncode!=0 and 'AssertionError' in result.stderr
-          ve='common/scripted_effects/ADISCORD_VAL_effects.txt'
-          old='''\tif = {
-          \t\tlimit = { has_variable = VAL_fiscal_administration_investment }
-          \t\tadd_to_variable = { var = VAL_contract_overall_income_factor value = VAL_fiscal_administration_investment }
-          \t\tset_variable = { var = VAL_contract_admin_expense_factor value = VAL_fiscal_administration_investment }
-          \t\tmultiply_variable = { var = VAL_contract_admin_expense_factor value = -0.5 }
-          \t}'''
-          new='''\tif = {
-          \t\tlimit = { has_variable = VAL_fiscal_administration_investment }
-          \t\tadd_to_variable = { var = VAL_contract_overall_income_factor value = VAL_fiscal_administration_investment }
-          \t}
-          \tif = {
-          \t\tlimit = { has_variable = VAL_fiscal_admin_savings }
-          \t\tadd_to_variable = { var = VAL_contract_admin_expense_factor value = VAL_fiscal_admin_savings }
-          \t}'''
-          edit(ve,'VAL_refresh_contract_modifier',lambda text:rep(text,old,new))
-          edit(ve,'VAL_invest_fiscal_administration',lambda text:'')
-          vf='common/national_focus/ADISCORD_national_focus_VAL.txt'
-          payload='''hidden_effect = {
-          \t\t\t\tadd_to_variable = { var = VAL_fiscal_administration_investment value = 0.10 }
-          \t\t\t\tadd_to_variable = { var = VAL_fiscal_admin_savings value = -0.05 }
-          \t\t\t\tVAL_refresh_contract_modifier = yes
-          \t\t\t\tADISCORD_economy_mark_dirty = yes
-          \t\t\t}'''
-          for focus in ('VAL_Contract_Accounting_Office','VAL_Export_Clearing_House','VAL_Industrial_Mobilization_Plan'):
-              preview='' if focus=='VAL_Export_Clearing_House' else 'effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_fiscal_administration_delta } }\n\t\t\t'
-              edit(vf,focus,lambda text,preview=preview:rep(text,'VAL_invest_fiscal_administration = yes',preview+payload),focus=True)
-          def extend_export(text):
-              b=named_block_spans(text,'modifier')[0]
-              new=b.text[:-1].rstrip()+'\n\t\t\t\tADISCORD_economy_overall_income_factor = 0.10\n\t\t\t\tADISCORD_economy_admin_expense_factor = -0.05\n\t\t\t}'
-              return text[:b.start]+new+text[b.end:]
-          edit('common/ideas/ADISCORD_VAL_rework_ideas.txt','VAL_export_clearing_delta',extend_export)
-          p='tools/tests/test_adiscord_economy_weekly_contracts.py';text=load(p)
-          start=text.index('    def test_core_policy_and_debt_flow_negative_fixtures(')
-          end=text.index('\n    def ',start+10)
-          body=text[start:end]
-          body=rep(body,'("0.60", "0.80", "1.00", "1.30", "1.60")','("0.30", "0.65", "1.00", "1.30", "1.60")')
-          body=rep(body,'["ADISCORD_economy_calculate_research_expenses = {"]','["ADISCORD_economy_calculate_research_expenses = {", "multiply_variable = { var = ADISCORD_economy_research_expenses value = 2.00 }"]')
-          body=rep(body,'value = 0.60 } }','value = 0.30 } }')
-          save(p,text[:start]+body+text[end:])
-          p='docs/economy/economic-buildings.md';text=load(p)
-          text=rep(text,'| Деловой центр | `1.05 + 0.25 - 0.10 = +1.20` | +1,20 | +14,40 |','| Деловой центр | `2.10 + 0.25 - 0.10 = +2.25` | +2,25 | +27,00 |')
-          save(p,text)
-          p='docs/development/focus-effects.md';text=load(p)
-          start=text.index('Программы: «Воркерландские контракты горят»')
-          end=text.index('(`VAL_Industrial_Mobilization_Plan`)',start)
-          text=text[:start]+'Программы: «Разрыв воркерландских поставок», «Инвентаризация промышленности»,\n«Программа станкостроения», «Расширение серийного производства»,\n«Система стратегических запасов» и «Новая промышленная политика»\n'+text[end:]
-          text=rep(text,'`VAL_fiscal_administration_investment`. Национальный контрактный агрегат\nприменяет накопление как общий доход и половину его величины со знаком минус\nкак административный расход.', '`VAL_fiscal_administration_investment` и -0,05 к `VAL_fiscal_admin_savings`.\nНациональный контрактный агрегат применяет эти независимые накопления\nк общему доходу и административному расходу.')
-          save(p,text)
+          p=Path('tools/validators/validate_adiscord_val_rework.py')
+          text=p.read_text(encoding='utf-8')
+          old='''            elif entry.key == "swap_ideas" and inside:
+                          found.append(script_fields(entry.value))'''
+          new='''            elif entry.key == "swap_ideas" and inside:
+                          pair = script_fields(entry.value)
+                          after = pair.get("add_idea")
+                          native = names.get(after, "")
+                          # Aggregate deltas are already checked independently of tier changes.
+                          aggregate = (after in checked and native in native_maps
+                                       and not native.startswith("VAL_contract_industry_"))
+                          if not aggregate:
+                              found.append(pair)'''
+          assert text.count(old)==1
+          p.write_text(text.replace(old,new),encoding='utf-8')
           PY
-      - name: Verify fiscal native previews and accounting fixtures
-        id: quick
-        if: steps.refine.outcome == 'success'
-        continue-on-error: true
-        run: python -B -m unittest tools.tests.test_adiscord_economy_rebalance tools.tests.test_validate_adiscord_val_rework.ValRewardValidatorTests.test_production_preview_contracts_are_valid tools.tests.test_adiscord_economy_weekly_contracts.EconomySemanticFixtureTests.test_core_policy_and_debt_flow_negative_fixtures -v
-      - name: Full focused regression suite
-        id: tests
-        if: steps.quick.outcome == 'success'
-        continue-on-error: true
-        run: python -B -m unittest tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_validate_adiscord_val_rework tools.tests.test_adiscord_stp_postwar_economy tools.tests.test_adiscord_stp_postwar_unlock tools.tests.test_adiscord_val_stelander_defeat tools.tests.test_adiscord_val_livonn_settlement tools.tests.test_adiscord_stp_postwar_continuation tools.tests.test_adiscord_stp_postwar_interactivity tools.tests.test_val_export_market -q
-      - name: Total conversion validation
-        id: tc
-        if: steps.quick.outcome == 'success'
-        continue-on-error: true
-        run: python -B tools/validate_tc.py --limit 300
-      - name: Preserve reviewed integration candidate
-        if: always() && steps.refine.outcome == 'success'
+      - name: Remove temporary review tools from the final tree
         run: |
+          git rm -- .github/workflows/economy-review-snapshot.yml .github/economy_review_patch.py
           git diff --check
-          git add -- common/scripted_effects/ADISCORD_VAL_effects.txt common/national_focus/ADISCORD_national_focus_VAL.txt common/ideas/ADISCORD_VAL_rework_ideas.txt tools/tests/test_adiscord_economy_rebalance.py tools/tests/test_adiscord_economy_weekly_contracts.py docs/economy/economic-buildings.md docs/development/focus-effects.md
-          git commit -m 'Reconcile main and verify persistent fiscal reform previews'
-          git push origin HEAD:refs/heads/codex/economy-review-20260919
-          printf '\nVERIFIED_MAIN_PARENT='; cat /tmp/economy-main-parent
-          printf '\nCANDIDATE='; git rev-parse HEAD
-          printf '\nTREE='; git rev-parse 'HEAD^{tree}'
-          git diff --stat origin/main HEAD -- . ':!.github'
-          python -B - <<'PY'
-          from tools.tests.test_adiscord_economy_rebalance import income_fixture,P
-          f=income_fixture();f.run(P+'calculate_income');f.run(P+'calculate_weekly_budget')
-          for key in ('monthly_income','weekly_income','weekly_expenses','weekly_balance'): print('REFERENCE',key,f.scopes['A'][P+key])
-          PY
-      - name: Require every verification to pass
-        if: always()
+      - name: Verify native preview and accounting regressions
+        run: python -B -m unittest tools.tests.test_adiscord_economy_rebalance tools.tests.test_validate_adiscord_val_rework.ValRewardValidatorTests.test_production_preview_contracts_are_valid tools.tests.test_adiscord_economy_weekly_contracts.EconomySemanticFixtureTests.test_core_policy_and_debt_flow_negative_fixtures -v
+      - name: Complete focused test suite
+        run: python -B -m unittest tools.tests.test_adiscord_economy_rebalance tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_validate_adiscord_val_rework tools.tests.test_adiscord_stp_postwar_economy tools.tests.test_adiscord_stp_postwar_unlock tools.tests.test_adiscord_val_stelander_defeat tools.tests.test_adiscord_val_livonn_settlement tools.tests.test_adiscord_stp_postwar_continuation tools.tests.test_adiscord_stp_postwar_interactivity tools.tests.test_val_export_market -q
+      - name: Validate the final total conversion
+        run: python -B tools/validate_tc.py --limit 300
+      - name: Publish clean candidate without advancing main
         run: |
-          test '${{ steps.refine.outcome }}' = success
-          test '${{ steps.quick.outcome }}' = success
-          test '${{ steps.tests.outcome }}' = success
-          test '${{ steps.tc.outcome }}' = success
+          git add -- tools/tests/test_adiscord_economy_rebalance.py tools/validators/validate_adiscord_val_rework.py
+          git diff --cached --check
+          MAIN_PARENT=$(cat /tmp/economy-main-parent)
+          TREE=$(git write-tree)
+          git diff --name-only "$MAIN_PARENT" "$TREE" > /tmp/economy-final-paths
+          if grep '^.github/' /tmp/economy-final-paths; then exit 1; fi
+          CANDIDATE=$(git commit-tree "$TREE" -p "$MAIN_PARENT" -m 'Rebalance income and rework Kefreite and Shabrat economic focuses')
+          git push origin "$CANDIDATE":refs/heads/codex/economy-ready-20260919
+          printf '\nFINAL_PARENT=%s\nFINAL_TREE=%s\nFINAL_COMMIT=%s\n' "$MAIN_PARENT" "$TREE" "$CANDIDATE"
+          git diff --stat "$MAIN_PARENT" "$CANDIDATE"
+          python -B - <<'PY'
+          from pathlib import Path
+          import hashlib
+          for name in Path('/tmp/economy-final-paths').read_text().splitlines():
+              raw=Path(name).read_bytes()
+              if name.startswith('localisation/'): assert raw.startswith(b'\xef\xbb\xbf'),name
+              if name.startswith('common/'): assert not raw.startswith(b'\xef\xbb\xbf'),name
+              print('SOURCE_SHA256',hashlib.sha256(raw).hexdigest(),name)
+          from tools.tests.test_adiscord_economy_rebalance import income_fixture,P
+          for civs in (5,25,60):
+              f=income_fixture(civilian=civs);f.run(P+'calculate_income');f.run(P+'calculate_weekly_budget')
+              print('REFERENCE',civs,{k:f.scopes['A'][P+k] for k in ('monthly_income','weekly_income','weekly_expenses','weekly_balance')})
+          PY
