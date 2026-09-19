@@ -2938,6 +2938,21 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_pw_take_bezhaysk
+		icon = GFX_goal_generic_territory_or_war
+		x = 31
+		y = 8
+		cost = 5
+		prerequisite = { focus = STP_pw_republic_professional_service }
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_bezhaysk_available_tt STP_pw_can_attack_bezhaysk = yes } }
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_ANNEXATION }
+		completion_reward = { unlock_decision_tooltip = STP_pw_launch_bezhaysk_operation }
+		ai_will_do = { base = 2 }
+	}
+
+	focus = {
 		id = STP_pw_republic_settled_state
 		icon = GFX_goal_generic_national_unity
 		x = 4

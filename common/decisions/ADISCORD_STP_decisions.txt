@@ -2304,6 +2304,19 @@ STP_battle_for_stelander = {
 }
 
 STP_cw_war_council = {
+	STP_pw_launch_bezhaysk_operation = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		visible = { has_completed_focus = STP_pw_take_bezhaysk BJK = { exists = yes owns_state = 41 } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_bezhaysk_available_tt STP_pw_can_attack_bezhaysk = yes } }
+		cost = 0
+		complete_effect = {
+			effect_tooltip = { declare_war_on = { target = BJK type = annex_everything } }
+			hidden_effect = { country_event = { id = ADISCORD_STP_pc.31 } }
+		}
+		ai_will_do = { base = 2 }
+	}
+
 
 	# The fixed wartime template and its existing payment helper own the price.
 	STP_party_form_assault_column = {

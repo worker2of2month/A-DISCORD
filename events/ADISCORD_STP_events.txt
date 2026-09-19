@@ -1612,3 +1612,17 @@ country_event = {
 	}
 	option = { name = STP_ps_asylum_decline ai_chance = { factor = 10 } }
 }
+
+# The immediate dispatcher rechecks the target before opening hostilities.
+country_event = {
+	id = ADISCORD_STP_pc.31
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { has_completed_focus = STP_pw_take_bezhaysk STP_pw_can_attack_bezhaysk = yes }
+			BJK = { ADISCORD_release_non_participating_minor_optimization = yes }
+			declare_war_on = { target = BJK type = annex_everything }
+		}
+	}
+}

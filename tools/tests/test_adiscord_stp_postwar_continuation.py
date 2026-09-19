@@ -235,6 +235,44 @@ def package_facts():
 
 
 class PostwarContinuationContracts(unittest.TestCase):
+    def test_bezhaysk_operation_rechecks_postwar_victory_and_current_target(self) -> None:
+        focus = war_focuses()["STP_pw_take_bezhaysk"]
+        self.assertEqual(scalar(block(focus, "prerequisite"), "focus"),
+                         "STP_pw_republic_professional_service")
+        decisions = entries(ROOT / "common/decisions/ADISCORD_STP_decisions.txt")
+        decision = block(block(decisions, "STP_cw_war_council"), "STP_pw_launch_bezhaysk_operation")
+        immediate = expand(block(parsed_event("ADISCORD_STP_pc.31"), "immediate"))
+        facts = {
+            ("STS", "has_completed_focus", "STP_pw_take_bezhaysk"): True,
+            ("STS", "has_country_flag", "STP_cw_won_union_battle"): True,
+            ("STS", "has_country_flag", "STP_cw_postwar"): True,
+            ("STS", "has_global_flag", "STP_cw_union_wars_finished"): True,
+            ("STS", "has_capitulated", "no"): True,
+            ("STS", "is_subject", "no"): True,
+            ("STS", "has_war", "no"): True,
+            ("BJK", "exists", "yes"): True,
+            ("BJK", "has_capitulated", "no"): True,
+            ("BJK", "is_subject", "no"): True,
+            ("BJK", "owns_state", "41"): True,
+            ("BJK", "controls_state", "41"): True,
+        }
+        self.assertTrue(matches_conditions(expand(block(decision, "available")), facts, "STS"))
+        effects = list(selected_effects(immediate, facts, "STS"))
+        self.assertEqual([(scope, effect.key) for scope, effect in effects], [
+            ("BJK", "ADISCORD_release_non_participating_minor_optimization"),
+            ("STS", "declare_war_on"),
+        ])
+        self.assertEqual(scalar(effects[-1][1].value, "target"), "BJK")
+        for key in facts:
+            with self.subTest(invalidated=key):
+                changed = dict(facts)
+                changed[key] = False
+                self.assertEqual(list(selected_effects(immediate, changed, "STS")), [])
+        allied = dict(facts)
+        allied[("STS", "is_in_faction_with", "BJK")] = True
+        self.assertEqual(list(selected_effects(immediate, allied, "STS")), [])
+        self.assertEqual(list(selected_effects(immediate, facts, "STP")), [])
+
     def test_negative_scripted_trigger_negates_the_whole_definition(self) -> None:
         for pending in (False, True):
             facts = package_facts()

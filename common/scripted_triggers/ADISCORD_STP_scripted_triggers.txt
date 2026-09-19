@@ -1517,3 +1517,19 @@ STP_ps_hedersett_available = {
 	has_character = STP_rufus_hedersett
 	STP_rufus_hedersett = { NOT = { has_character_flag = STP_cw_arrested } }
 }
+
+# COUNTRY: the postwar resistance may open a separate campaign against Bezhaysk.
+STP_pw_can_attack_bezhaysk = {
+	tag = STS
+	STP_pw_can_reconstruct = yes
+	is_subject = no
+	has_war = no
+	NOT = { is_in_faction_with = BJK }
+	BJK = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		owns_state = 41
+		controls_state = 41
+	}
+}
