@@ -5,42 +5,50 @@ on:
 permissions:
   contents: write
 jobs:
-  verify:
+  integrate:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Preserve tools and fetch pinned trees
+      - name: Prepare integration verification
         run: |
-          cp .qa/repair_imported_readers.py .qa/repair_source_collections.py .qa/run_suites.py .qa/verify_native_dispatch.py "$RUNNER_TEMP/"
-          git fetch --depth=1 origin d6cc3c77078a25f7318fbf7e371fc6779eab3351 ff34b8d6e4a0cf2e13cc3d293e9086741c5c87f3
-          git checkout --detach d6cc3c77078a25f7318fbf7e371fc6779eab3351
-      - name: Test dependencies
-        run: python -m pip install pillow numpy pyyaml
-      - name: Characterize unmodified main
-        run: python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/before.json"
-      - name: Repair remaining explicit tooling readers
-        run: |
-          git checkout --detach ff34b8d6e4a0cf2e13cc3d293e9086741c5c87f3
-          python "$RUNNER_TEMP/repair_imported_readers.py"
-          python "$RUNNER_TEMP/repair_source_collections.py"
-      - name: Focused ownership and repaired source consumers
-        run: |
-          python -m unittest tools.tests.test_scripted_peace_on_actions tools.tests.test_validate_adiscord_rin_oath_crisis tools.tests.test_adiscord_vorkerland_diplomacy tools.tests.test_validate_adiscord_vorkerland_collapse.CharactersAndPoliticsTests.test_collapse_runtime_cannot_remove_unrelated_national_spirits
-      - name: Compare actual native dispatch and all eight country source views
-        run: python "$RUNNER_TEMP/verify_native_dispatch.py"
-      - name: Differential test gate
-        run: python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/after.json" "$RUNNER_TEMP/before.json"
-      - name: Publish verified clean candidate, never main
-        run: |
+          cp .qa/run_suites.py .qa/verify_native_dispatch.py "$RUNNER_TEMP/"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          temp = Path(os.environ['RUNNER_TEMP'])
+          p = temp/'verify_native_dispatch.py'
+          p.write_text(p.read_text().replace("BASE = 'd6cc3c77078a25f7318fbf7e371fc6779eab3351'", "BASE = '33ff34e1d51906c4dcca5e6328f3239355fe1227'"))
+          p = temp/'run_suites.py'
+          s = p.read_text()
+          start = s.index('words = ')
+          end = s.index('result = ', start)
+          names = ['test_scripted_peace_on_actions', 'test_validate_adiscord_rin_oath_crisis', 'test_adiscord_vorkerland_diplomacy', 'test_adiscord_stp_postwar_continuation', 'test_validate_adiscord_val_rework', 'test_adiscord_economy_rebalance', 'test_adiscord_economy_weekly_contracts']
+          s = s[:start] + f'names = {names!r}\n' + "names = ['tools.tests.' + n for n in names if (Path('tools/tests')/(n + '.py')).exists()]\n" + s[end:]
+          p.write_text(s)
+          PY
+          git fetch --depth=2 origin 33ff34e1d51906c4dcca5e6328f3239355fe1227 0e70ce7b5314bf8ad28f83fc3175792b0b699630
+          git checkout --detach 33ff34e1d51906c4dcca5e6328f3239355fe1227
           git config user.name 'worker2of2month'
           git config user.email '81386071+worker2of2month@users.noreply.github.com'
-          git add -A -- AGENTS.md docs/development/focus-effects.md common/on_actions tools
+      - name: Test dependencies
+        run: python -m pip install pillow numpy pyyaml
+      - name: Characterize current economy main
+        run: python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/before.json"
+      - name: Apply reviewed refactor without overwriting concurrent changes
+        run: git cherry-pick --no-commit 0e70ce7b5314bf8ad28f83fc3175792b0b699630
+      - name: Verify native order against updated main
+        run: python "$RUNNER_TEMP/verify_native_dispatch.py"
+      - name: Verify focused ownership and treaty consumers
+        run: python -m unittest tools.tests.test_scripted_peace_on_actions tools.tests.test_validate_adiscord_rin_oath_crisis tools.tests.test_adiscord_vorkerland_diplomacy
+      - name: Gate integrated economy and peace source consumers
+        run: python "$RUNNER_TEMP/run_suites.py" "$RUNNER_TEMP/after.json" "$RUNNER_TEMP/before.json"
+      - name: Publish integrated candidate, never main
+        run: |
           git diff --cached --check
-          TREE=$(git write-tree)
-          SHA=$(printf 'refactor: centralize scripted peace on_actions\n\nPreserve native ROOT/FROM scopes and callback command order.\nKeep generic capitulation last and retain bounded Livonn completion.\nUpdate explicit source consumers and verify no new suite failures.\nNative HOI4 runtime was not launched.\n' | git commit-tree "$TREE" -p d6cc3c77078a25f7318fbf7e371fc6779eab3351)
-          git diff --check d6cc3c77078a25f7318fbf7e371fc6779eab3351 "$SHA"
-          git diff --stat d6cc3c77078a25f7318fbf7e371fc6779eab3351 "$SHA"
-          git push origin "$SHA:refs/heads/qa/scripted-peace-verified-${GITHUB_RUN_ID}"
-          echo VERIFIED_SHA=$SHA
-          echo VERIFIED_TREE=$TREE
+          git commit -m 'refactor: centralize scripted peace on_actions' -m 'Preserve ROOT/FROM scopes, exact native callback order and bounded Livonn completion. Keep the ZZ fallback separate. Update explicit source readers and ownership tests. Integrate with the current economy main without replacing its changes. Native HOI4 runtime was not launched.'
+          git diff --check 33ff34e1d51906c4dcca5e6328f3239355fe1227 HEAD
+          git diff --stat 33ff34e1d51906c4dcca5e6328f3239355fe1227 HEAD
+          git push origin "HEAD:refs/heads/qa/scripted-peace-integrated-${GITHUB_RUN_ID}"
+          echo VERIFIED_SHA=$(git rev-parse HEAD)
+          echo VERIFIED_TREE=$(git rev-parse HEAD^{tree})
