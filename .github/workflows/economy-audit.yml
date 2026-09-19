@@ -19,40 +19,37 @@ jobs:
           sparse-checkout: .github
       - uses: actions/checkout@v4
         with:
-          ref: d6cc3c77078a25f7318fbf7e371fc6779eab3351
+          ref: 33ff34e1d51906c4dcca5e6328f3239355fe1227
           path: source
           show-progress: false
-      - name: Prepare fixture and dependencies
+      - name: Prepare verified reference
+        working-directory: source
         run: |
           python -m pip install --quiet pillow
-          python -B control/.github/economy_preflight.py
-          python - <<'PY'
-          from pathlib import Path
-          p=Path('control/.github/economy_patch.py')
-          text=p.read_text(encoding='utf-8')
-          marker='print("CHANGED_PATHS", sorted(CHANGED), flush=True)'
-          assert text.count(marker)==1
-          call='exec(compile((CONTROL / "economy_contract_reconcile.py").read_text(encoding="utf-8"), "economy_contract_reconcile.py", "exec"), globals())\n'
-          p.write_text(text.replace(marker,call+marker),encoding='utf-8')
-          PY
-      - name: Apply and exercise new regression contracts
+          git fetch --no-tags --depth=1 origin 13725b3d3aae2c484397e1d61597cbfc049f0701 d6cc3c77078a25f7318fbf7e371fc6779eab3351
+          set +e
+          python -B tools/validate_tc.py --limit 300 > ../control/.github/economy-integrated-baseline.txt 2>&1
+          echo "BASELINE_EXIT=$?" >> ../control/.github/economy-integrated-baseline.txt
+          exit 0
+      - name: Integrate and exercise regression contracts
         working-directory: source
-        run: python -B ../control/.github/economy_patch.py > ../control/.github/economy-result.txt 2>&1
-      - name: Existing affected tests
+        run: python -B ../control/.github/economy_integrate.py > ../control/.github/economy-integrated-result.txt 2>&1
+      - name: Existing affected tests and validators
         working-directory: source
         run: |
-          python -B -m unittest tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_adiscord_stp_postwar_economy tools.tests.test_validate_adiscord_val_rework -q >> ../control/.github/economy-result.txt 2>&1
-          python -B tools/validate_adiscord_val_rework.py >> ../control/.github/economy-result.txt 2>&1
-          python -B tools/validate_adiscord_economy_ai.py >> ../control/.github/economy-result.txt 2>&1
-          git diff --check >> ../control/.github/economy-result.txt 2>&1
+          python -B -m unittest tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_adiscord_stp_postwar_economy tools.tests.test_validate_adiscord_val_rework tools.tests.test_adiscord_economy_rebalance tools.tests.test_adiscord_stp_postwar_continuation -q >> ../control/.github/economy-integrated-result.txt 2>&1
+          python -B tools/validate_adiscord_val_rework.py >> ../control/.github/economy-integrated-result.txt 2>&1
+          python -B tools/validate_adiscord_economy_ai.py >> ../control/.github/economy-integrated-result.txt 2>&1
+          git diff --check >> ../control/.github/economy-integrated-result.txt 2>&1
       - name: Full validation and budget evidence
         working-directory: source
         run: |
           set +e
-          python -B tools/validate_tc.py --limit 300 > ../control/.github/economy-final-validation.txt 2>&1
-          echo "FINAL_EXIT=$?" >> ../control/.github/economy-final-validation.txt
-          python - <<'PY' >> ../control/.github/economy-result.txt 2>&1
+          python -B tools/validate_tc.py --limit 300 > ../control/.github/economy-integrated-final.txt 2>&1
+          echo "FINAL_EXIT=$?" >> ../control/.github/economy-integrated-final.txt
+          python - <<'PY' >> ../control/.github/economy-integrated-result.txt 2>&1
           from tools.tests.test_adiscord_economy_balance import budget_fixture, calculate, P, read, deltas, focus_entries
+          from tools.tests.test_adiscord_economy_weekly_contracts import block
           for title, kwargs in [('Developed economy',dict(civ=35,mil=15,centers=6,resources=20)), ('Shabrat restored',dict()), ('Small fragmented economy',dict(civ=3,mil=2,centers=0,resources=1,level=1,model='fragmented'))]:
               f=budget_fixture(**kwargs)
               if title.startswith('Shabrat'):
@@ -65,28 +62,29 @@ jobs:
                       f.scopes['A'][P+'final_'+key+'_factor_bp'] += bonuses.get('STP_pw_'+P+key+'_factor',0)*100
               v=calculate(f)
               print('BUDGET',title,{k:round(v[P+k],4) for k in ('weekly_income','weekly_expenses','weekly_balance','debt_service')})
+          print('READINESS',block(read('common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt'),'VAL_ai_frontier_force_ready'))
           PY
-          git diff --stat >> ../control/.github/economy-result.txt
-      - name: Commit candidate without audit files
+          git diff --stat >> ../control/.github/economy-integrated-result.txt
+      - name: Commit integrated candidate
         working-directory: source
         run: |
           git config user.name 'worker2of2month'
           git config user.email '81386071+worker2of2month@users.noreply.github.com'
           git add --pathspec-from-file=../changed-paths.txt
           git diff --cached --check
-          git commit -m 'Rebalance weekly economy and recovery focuses; unblock northern VAL AI'
-          git push origin HEAD:codex/economy-focus-20260919
-          echo "CANDIDATE_SHA=$(git rev-parse HEAD)" >> ../control/.github/economy-result.txt
-      - name: Preserve verification evidence on audit branch
+          git commit -m 'Make 100 weekly surplus attainable and unify budget previews and northern war readiness'
+          git push origin HEAD:codex/economy-integrated-20260919
+          echo "CANDIDATE_SHA=$(git rev-parse HEAD)" >> ../control/.github/economy-integrated-result.txt
+      - name: Preserve verification evidence
         if: always()
         working-directory: control
         run: |
           git config user.name 'Economy audit'
           git config user.email '81386071+worker2of2month@users.noreply.github.com'
-          for f in .github/economy-result.txt .github/economy-baseline-validation.txt .github/economy-final-validation.txt; do
+          for f in .github/economy-integrated-result.txt .github/economy-integrated-baseline.txt .github/economy-integrated-final.txt; do
             if test -f "$f"; then git add "$f"; fi
           done
           if ! git diff --cached --quiet; then
-            git commit -m 'chore: record economy regression evidence'
+            git commit -m 'chore: record integrated economy verification'
             git push origin HEAD:codex/economy-100-audit-20260919
           fi
