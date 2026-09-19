@@ -26,6 +26,15 @@ jobs:
         run: |
           python -m pip install --quiet pillow
           python -B control/.github/economy_preflight.py
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('control/.github/economy_patch.py')
+          text=p.read_text(encoding='utf-8')
+          marker='print("CHANGED_PATHS", sorted(CHANGED), flush=True)'
+          assert text.count(marker)==1
+          call='exec(compile((CONTROL / "economy_contract_reconcile.py").read_text(encoding="utf-8"), "economy_contract_reconcile.py", "exec"), globals())\n'
+          p.write_text(text.replace(marker,call+marker),encoding='utf-8')
+          PY
       - name: Apply and exercise new regression contracts
         working-directory: source
         run: python -B ../control/.github/economy_patch.py > ../control/.github/economy-result.txt 2>&1
