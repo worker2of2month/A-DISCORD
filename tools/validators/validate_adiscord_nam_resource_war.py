@@ -465,14 +465,16 @@ def main() -> int:
           "non-beneficiary southern states were incorrectly mobilised")
     check("skip_default_capitulation" in on_actions and on_actions.count("on_capitulation") == 1,
           "bespoke capitulation routing is incomplete")
-    check(news.count("news_event = {") == 3,
-          "world news must contain exactly war start and two mutually exclusive outcomes")
+    check(news.count("news_event = {") == 5,
+          "world news must contain war start, Svetlogorsk uprising/suppression, and two terminal outcomes")
 
     news_blocks = typed_blocks(news, "news_event")
     for event_id in (
         "ADISCORD_nam_resource_news.1",
         "ADISCORD_nam_resource_news.2",
         "ADISCORD_nam_resource_news.3",
+        "ADISCORD_nam_resource_news.5",
+        "ADISCORD_nam_resource_news.6",
     ):
         definitions = [block for block in news_blocks if re.search(
             rf"(?m)^\s*id\s*=\s*{re.escape(event_id)}\s*$", block
@@ -494,6 +496,8 @@ def main() -> int:
         "ADISCORD_nam_resource_news.1": "ADISCORD_nam_resource_war_start",
         "ADISCORD_nam_resource_news.2": "ADISCORD_nam_resource_war_resolve_coalition_victory",
         "ADISCORD_nam_resource_news.3": "ADISCORD_nam_resource_war_resolve_nam_victory",
+        "ADISCORD_nam_resource_news.5": "ADISCORD_nam_resource_war_start_mainland_rebellion",
+        "ADISCORD_nam_resource_news.6": "ADISCORD_nam_resource_war_mark_rebels_defeated",
     }
     for event_id, effect_name in expected_news_calls.items():
         call_pattern = re.compile(

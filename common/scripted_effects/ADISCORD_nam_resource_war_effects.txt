@@ -124,6 +124,7 @@ ADISCORD_nam_resource_war_start_mainland_rebellion = {
 			declare_war_on = { target = NAM type = annex_everything }
 		}
 		688 = { add_core_of = SLF set_state_controller_to = SLF }
+		SLF = { news_event = { id = ADISCORD_nam_resource_news.5 hours = 1 } }
 	}
 	else = {
 		set_global_flag = ADISCORD_nam_resource_war_SLF_defeated
@@ -299,6 +300,7 @@ ADISCORD_nam_resource_war_mark_azhar_defeated = {
 
 ADISCORD_nam_resource_war_mark_rebels_defeated = {
 	set_global_flag = ADISCORD_nam_resource_war_SLF_defeated
+	NAM = { news_event = { id = ADISCORD_nam_resource_news.6 hours = 1 } }
 	if = { limit = { NAM = { has_war_with = SLF } } NAM = { white_peace = SLF } }
 	if = {
 		limit = { 688 = { is_owned_by = SLF } }

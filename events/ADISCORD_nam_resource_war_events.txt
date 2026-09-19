@@ -96,3 +96,25 @@ news_event = {
 	is_triggered_only = yes
 	option = { name = ADISCORD_nam_resource_news.3.a }
 }
+
+news_event = {
+	id = ADISCORD_nam_resource_news.5
+	title = ADISCORD_nam_resource_news.5.t
+	desc = ADISCORD_nam_resource_news.5.d
+	picture = GFX_news_event_adiscord_armed_uprising
+	major = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_resource_news.5.a }
+}
+
+news_event = {
+	id = ADISCORD_nam_resource_news.6
+	title = ADISCORD_nam_resource_news.6.t
+	desc = ADISCORD_nam_resource_news.6.d
+	picture = GFX_news_event_adiscord_city_in_civil_war
+	major = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+	option = { name = ADISCORD_nam_resource_news.6.a }
+}

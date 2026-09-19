@@ -1,6 +1,7 @@
 from __future__ import annotations
 from tools.lib.on_actions import read_country_on_actions
 
+from pathlib import Path
 import unittest
 
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -42,6 +43,18 @@ def issue_report(issues: list[str]) -> str:
 
 
 class DiplomacyValidatorHelperTests(unittest.TestCase):
+    def test_ai_worx_lend_lease_is_limited_to_his_own_bloc(self) -> None:
+        source = read(Path("common/scripted_triggers/00_diplo_action_valid_triggers.txt"))
+        trigger = named_block(source, "is_diplomatic_action_valid_lend_lease")
+        self.assertIn("ADISCORD_diplomacy_not_dirty_zone_pair = yes", trigger)
+        self.assertEqual(trigger.count("character = TVA_Dorian_Worx"), 2)
+        self.assertEqual(trigger.count("tag = TVA"), 2)
+        self.assertEqual(trigger.count("is_ai = yes"), 2)
+        self.assertIn("is_in_faction_with = FROM", trigger)
+        self.assertIn("is_subject_of = FROM", trigger)
+        self.assertNotIn("tag = WKR", trigger)
+        self.assertNotIn("tag = VAD", trigger)
+
     def test_balanced_helpers_do_not_escape_parent_blocks(self) -> None:
         source = """
 outer = {
