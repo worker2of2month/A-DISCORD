@@ -3542,6 +3542,8 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_army_org_regain value = 0.02 }
 				add_to_variable = { var = STP_pw_stability_factor value = 0.02 }
 				STP_pw_refresh_modifier = yes
+				set_temp_variable = { var = STP_pf_selected value = 5 }
+				STP_pf_shift = yes
 			}
 		}
 	}

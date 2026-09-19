@@ -3848,10 +3848,13 @@ STP_postwar_nod_ultimatum = {
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
 		fire_only_once = yes
 		complete_effect = {
+			custom_effect_tooltip = STP_pf_security_deal_tt
 			hidden_effect = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
 				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = STP_pf_selected value = 3 }
+				STP_pf_shift = yes
 				set_country_flag = STP_pw_party_nod_emergency_mobilized
 			}
 			add_manpower = 10000
@@ -3882,10 +3885,13 @@ STP_postwar_nod_ultimatum = {
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1080 compare = greater_than_or_equals } }
 		fire_only_once = yes
 		complete_effect = {
+			custom_effect_tooltip = STP_pf_borons_deal_tt
 			hidden_effect = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 1080 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1080 }
 				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = STP_pf_selected value = 2 }
+				STP_pf_shift = yes
 				set_country_flag = STP_pw_party_nod_border_fortified
 			}
 			every_owned_state = {
@@ -3918,10 +3924,13 @@ STP_postwar_nod_ultimatum = {
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 720 compare = greater_than_or_equals } }
 		fire_only_once = yes
 		complete_effect = {
+			custom_effect_tooltip = STP_pf_army_deal_tt
 			hidden_effect = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 720 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 720 }
 				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = STP_pf_selected value = 4 }
+				STP_pf_shift = yes
 				set_country_flag = STP_pw_party_nod_staff_ready
 			}
 			add_command_power = 20

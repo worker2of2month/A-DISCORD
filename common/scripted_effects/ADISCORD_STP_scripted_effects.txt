@@ -4607,6 +4607,8 @@ STP_pw_party_settle_nod_arms = {
 			subtract_from_variable = { var = ADISCORD_economy_treasury value = 450 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 450 }
 			ADISCORD_economy_mark_dirty = yes
+			set_temp_variable = { var = STP_pf_selected value = 5 }
+			STP_pf_shift = yes
 		}
 		add_to_variable = { var = ADISCORD_economy_treasury value = 450 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 450 }
