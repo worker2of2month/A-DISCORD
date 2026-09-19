@@ -1,0 +1,2494 @@
+RUNTIME_HELPERS
+114 block
+130 assignment_blocks
+151 unique_block
+158 unique_defined_text
+169 top_level_blocks
+190 reachable_script_blocks
+287 persistent_variable_write_targets
+312 weekly_reachability_issues
+345 task7_weekly_on_action_issues
+488 task7_schema_fifteen_cache_migration_issues
+598 task7_cache_invalidation_issues
+757 numeric_values
+767 policy_multiplier_rows
+799 tax_refresh_macro_flow_issues
+853 _parsed_definition
+864 _walk_parsed
+871 _entry_scalar
+882 _exact_direct_check_set
+908 _exact_direct_variable_write
+925 task6_debt_state_sequence_issues
+1068 task6_debt_state_authority_issues
+1115 task6_policy_preview_persistent_state_issues
+1144 task6_schema_fourteen_migration_issues
+1417 task6_notification_queue_issues
+1502 duplicate_direct_key_blocks
+1514 debt_metric_flow_issues
+1714 manual_borrowing_availability_issues
+1856 localisation_key_set
+1860 localisation_value
+1923 localisation_key_counts
+1930 task10_selector_output_keys
+1956 task10_live_localisation_keys
+2038 task10_localisation_references
+2050 task10_numeric_effects
+2064 task10_material_numeric_surface_issues
+2118 task10_balance_surface_issues
+2195 _task10_direct_variable_operation
+2205 _task10_positive_threshold_branch
+2231 task10_display_cache_producer_issues
+2394 task10_gameplay_cache_reference_issues
+2430 task10_doc_schema_contract_issues
+2453 task10_bilingual_semantic_issues
+2517 EconomySemanticFixtureTests
+class EconomySemanticFixtureTests(unittest.TestCase):
+    MIGRATION = """
+ADISCORD_economy_migrate_schema = {
+    set_variable = { var = ADISCORD_economy_research_spending_mode value = ADISCORD_economy_construction_spending_mode }
+    clear_variable = ADISCORD_economy_construction_spending_mode
+    clear_variable = ADISCORD_economy_construction_budget_change_cooldown
+    remove_ideas = {
+        ADISCORD_economy_construction_spending_1
+        ADISCORD_economy_construction_spending_2
+        ADISCORD_economy_construction_spending_3
+        ADISCORD_economy_construction_spending_4
+        ADISCORD_economy_construction_spending_5
+    }
+}
+"""
+    ASSISTANCE_IDEAS = """
+ideas = { hidden_ideas = {
+ ADISCORD_economy_ai_assistance_base = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 modifier = { ADISCORD_economy_overall_income_factor = 0.05 industrial_capacity_factory = 0.05 } }
+ ADISCORD_economy_ai_assistance_civil_war = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 } }
+ ADISCORD_economy_ai_assistance_retreat = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 modifier = { army_defence_factor = 0.05 } }
+} }
+"""
+    ASSISTANCE_EFFECT = """
+ADISCORD_economy_refresh_ai_assistance = {
+ if = {
+  limit = { has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1 }
+ set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 0 }
+ if = { limit = { has_variable = ADISCORD_economy_simulation_tier } set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = ADISCORD_economy_simulation_tier } }
+ if = { limit = { is_ai = yes } add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 10 } }
+ if = { limit = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started } add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 100 } }
+ if = { limit = { has_global_flag = ADISCORD_vorkerland_collapse_finished } add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 150 } }
+ if = { limit = { has_country_flag = ADISCORD_vorkerland_conflict_spirits_finalized } add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 200 } }
+ if = { limit = { has_war = yes } add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 400 } }
+ if = { limit = { surrender_progress > 0.35 } add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 800 } }
+ if = {
+  limit = { OR = { NOT = { has_variable = ADISCORD_economy_ai_assistance_signature } check_variable = { var = ADISCORD_economy_ai_assistance_signature value = ADISCORD_economy_ai_assistance_signature_temp compare = not_equals } } }
+  remove_ideas = ADISCORD_economy_ai_assistance_base
+  remove_ideas = ADISCORD_economy_ai_assistance_civil_war
+  remove_ideas = ADISCORD_economy_ai_assistance_retreat
+  if = { limit = { ADISCORD_economy_ai_assistance_is_eligible = yes } add_ideas = ADISCORD_economy_ai_assistance_base }
+  if = { limit = { ADISCORD_economy_ai_assistance_civil_war_active = yes } add_ideas = ADISCORD_economy_ai_assistance_civil_war }
+  if = { limit = { ADISCORD_economy_ai_assistance_retreat_active = yes } add_ideas = ADISCORD_economy_ai_assistance_retreat }
+  ADISCORD_economy_refresh_ai_assistance_income_cache = yes
+  set_variable = { var = ADISCORD_economy_ai_assistance_signature value = ADISCORD_economy_ai_assistance_signature_temp }
+ }
+}
+}
+"""
+    ASSISTANCE_TRIGGERS = """
+ADISCORD_economy_ai_assistance_is_eligible = {
+ has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1
+ is_ai = yes
+ check_variable = { var = ADISCORD_economy_simulation_tier value = 1 compare = greater_than_or_equals }
+ check_variable = { var = ADISCORD_economy_simulation_tier value = 2 compare = less_than_or_equals }
+}
+ADISCORD_economy_ai_assistance_civil_war_active = {
+ ADISCORD_economy_ai_assistance_is_eligible = yes
+ has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+ NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+ has_country_flag = ADISCORD_vorkerland_conflict_spirits_finalized
+ has_war = yes
+}
+ADISCORD_economy_ai_assistance_retreat_active = {
+ ADISCORD_economy_ai_assistance_civil_war_active = yes
+ surrender_progress > 0.35
+}
+ADISCORD_economy_ai_assistance_needs_edge_evaluation = {
+ has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1
+ OR = {
+  ADISCORD_economy_ai_assistance_is_eligible = yes
+  has_idea = ADISCORD_economy_ai_assistance_base
+  has_idea = ADISCORD_economy_ai_assistance_civil_war
+  has_idea = ADISCORD_economy_ai_assistance_retreat
+ }
+}
+"""
+    DEBT_METRICS = """
+ADISCORD_economy_calculate_debt_metrics = {
+ set_variable = { var = ADISCORD_economy_debt_income_denominator_temp value = ADISCORD_economy_monthly_income }
+ multiply_variable = { var = ADISCORD_economy_debt_income_denominator_temp value = 12 }
+ set_temp_variable = { var = ADISCORD_economy_annual_bonus_temp value = ADISCORD_economy_final_weekly_income_bonus }
+ multiply_temp_variable = { var = ADISCORD_economy_annual_bonus_temp value = 52 }
+ add_to_variable = { var = ADISCORD_economy_debt_income_denominator_temp value = ADISCORD_economy_annual_bonus_temp }
+ if = { limit = { check_variable = { var = ADISCORD_economy_debt_income_denominator_temp value = 1 compare = less_than } }
+  set_variable = { var = ADISCORD_economy_debt_income_denominator_temp value = 1 }
+ }
+ set_variable = { var = ADISCORD_economy_debt_income_ratio value = ADISCORD_economy_debt }
+ multiply_variable = { var = ADISCORD_economy_debt_income_ratio value = 100 }
+ divide_variable = { var = ADISCORD_economy_debt_income_ratio value = ADISCORD_economy_debt_income_denominator_temp }
+ ADISCORD_economy_calculate_creditworthiness = yes
+ ADISCORD_economy_calculate_interest_rate = yes
+ ADISCORD_economy_calculate_debt_service_amount = yes
+ set_variable = { var = ADISCORD_economy_weekly_interest value = ADISCORD_economy_debt_service }
+ multiply_variable = { var = ADISCORD_economy_weekly_interest value = 3 }
+ divide_variable = { var = ADISCORD_economy_weekly_interest value = 13 }
+ set_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = ADISCORD_economy_monthly_income }
+ multiply_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 3 }
+ divide_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 13 }
+ add_to_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = ADISCORD_economy_final_weekly_income_bonus }
+ if = { limit = { check_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 0.1 compare = less_than } }
+  set_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 0.1 }
+ }
+ set_variable = { var = ADISCORD_economy_interest_share_income value = ADISCORD_economy_weekly_interest }
+ multiply_variable = { var = ADISCORD_economy_interest_share_income value = 100 }
+ divide_variable = { var = ADISCORD_economy_interest_share_income value = ADISCORD_economy_interest_income_denominator_temp }
+ set_variable = { var = ADISCORD_economy_interest_pressure_temp value = ADISCORD_economy_interest_share_income }
+ multiply_variable = { var = ADISCORD_economy_interest_pressure_temp value = 1.50 }
+ set_variable = { var = ADISCORD_economy_debt_streak_pressure_temp value = ADISCORD_economy_deficit_streak }
+ multiply_variable = { var = ADISCORD_economy_debt_streak_pressure_temp value = 2 }
+ set_variable = { var = ADISCORD_economy_debt_pressure value = ADISCORD_economy_debt_income_ratio }
+ multiply_variable = { var = ADISCORD_economy_debt_pressure value = 0.20 }
+ add_to_variable = { var = ADISCORD_economy_debt_pressure value = ADISCORD_economy_interest_pressure_temp }
+ add_to_variable = { var = ADISCORD_economy_debt_pressure value = ADISCORD_economy_debt_streak_pressure_temp }
+ clamp_variable = { var = ADISCORD_economy_debt_pressure min = 0 max = 100 }
+ ADISCORD_economy_update_debt_crisis_level = yes
+}
+"""
+
+    def test_schema_migration_exception_is_exact_and_live_legacy_use_is_rejected(self):
+        self.assertEqual(migration_contract_issues(self.MIGRATION), [])
+        injected = self.MIGRATION + "\nADISCORD_live = { ADISCORD_economy_construction_spending_mode = yes }"
+        self.assertTrue(migration_contract_issues(injected))
+
+    def test_capacity_boundary_covers_omitted_common_surfaces_and_mixed_migration_operations(self):
+        for path in (
+            "common/ai_strategy/injected.txt",
+            "common/dynamic_modifiers/injected.txt",
+        ):
+            self.assertTrue(retired_capacity_boundary_issues({path: "replacement_debt_capacity = yes"}), path)
+        mixed = """
+ADISCORD_economy_migrate_schema = {
+ clear_variable = ADISCORD_economy_debt_capacity
+ set_variable = { var = ADISCORD_economy_debt_capacity value = 10 }
+}
+"""
+        self.assertTrue(retired_capacity_boundary_issues({
+            "common/scripted_effects/ADISCORD_economy_effects.txt": mixed
+        }))
+
+    def test_creditworthiness_modifier_migration_has_no_duplicate_block_keys(self):
+        paths = (
+            ROOT / "common" / "ideas" / "_economic.txt",
+            ROOT / "common" / "ideas" / "ADISCORD_laws.txt",
+            ROOT / "common" / "ideas" / "ADISCORD_VAL_rework_ideas.txt",
+        )
+        for path in paths:
+            text = path.read_text(encoding="utf-8-sig")
+            self.assertFalse(
+                duplicate_direct_key_blocks(
+                    text, "ADISCORD_economy_creditworthiness_factor"
+                ),
+                path.name,
+            )
+
+        economic = paths[0].read_text(encoding="utf-8-sig")
+        migrated_line = "ADISCORD_economy_creditworthiness_factor = -0.10"
+        duplicate = economic.replace(
+            migrated_line,
+            migrated_line + "\n\t\t\t" + migrated_line,
+            1,
+        )
+        self.assertNotEqual(duplicate, economic)
+        self.assertTrue(
+            duplicate_direct_key_blocks(
+                duplicate, "ADISCORD_economy_creditworthiness_factor"
+            )
+        )
+
+    def test_validator_accepts_full_deficit_ledger_without_obsolete_unfunded_state(self):
+        self.assertEqual(automatic_borrow_flow_issues(EFFECTS), [])
+        issues = validate_economy_ai()
+        for obsolete in (
+            "unfunded deficit is not recorded in the weekly ledger",
+            "treasury-floor adjustment is missing from the accounting identity",
+            "unfunded-deficit pressure ignores its custom modifier",
+        ):
+            self.assertNotIn(obsolete, issues)
+
+    def test_debt_metric_fixture_rejects_formula_floor_order_and_principal_mutations(self):
+        self.assertEqual(debt_metric_flow_issues(self.DEBT_METRICS), [])
+        mutations = {
+            "reversed annual-income floor": self.DEBT_METRICS.replace(
+                "value = 1 compare = less_than",
+                "value = 1 compare = greater_than",
+                1,
+            ),
+            "missing weekly-income floor": self.DEBT_METRICS.replace(
+                "  set_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 0.1 }\n",
+                "",
+                1,
+            ),
+            "dead weekly-income floor": self.DEBT_METRICS.replace(
+                "limit = { check_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 0.1 compare = less_than } }",
+                "limit = { check_variable = { var = ADISCORD_economy_interest_income_denominator_temp value = 0.1 compare = less_than } always = no }",
+                1,
+            ),
+            "reordered ratio arithmetic": self.DEBT_METRICS.replace(
+                " multiply_variable = { var = ADISCORD_economy_debt_income_ratio value = 100 }\n divide_variable = { var = ADISCORD_economy_debt_income_ratio value = ADISCORD_economy_debt_income_denominator_temp }",
+                " divide_variable = { var = ADISCORD_economy_debt_income_ratio value = ADISCORD_economy_debt_income_denominator_temp }\n multiply_variable = { var = ADISCORD_economy_debt_income_ratio value = 100 }",
+                1,
+            ),
+            "pressure coefficient changed": self.DEBT_METRICS.replace(
+                "ADISCORD_economy_interest_pressure_temp value = 1.50",
+                "ADISCORD_economy_interest_pressure_temp value = 1.25",
+                1,
+            ),
+            "duplicate weekly-interest calculation": self.DEBT_METRICS.replace(
+                " multiply_variable = { var = ADISCORD_economy_weekly_interest value = 3 }",
+                " multiply_variable = { var = ADISCORD_economy_weekly_interest value = 3 }\n multiply_variable = { var = ADISCORD_economy_weekly_interest value = 3 }",
+                1,
+            ),
+            "stored principal clamp": self.DEBT_METRICS.replace(
+                " ADISCORD_economy_update_debt_crisis_level = yes",
+                " clamp_variable = { var = ADISCORD_economy_debt min = 0 max = 5000 }\n ADISCORD_economy_update_debt_crisis_level = yes",
+                1,
+            ),
+        }
+        for name, mutation in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertNotEqual(mutation, self.DEBT_METRICS)
+                self.assertTrue(debt_metric_flow_issues(mutation))
+
+        for variable, threshold in (
+            ("ADISCORD_economy_debt_income_denominator_temp", "1"),
+            ("ADISCORD_economy_interest_income_denominator_temp", "0.1"),
+        ):
+            exact_limit = (
+                "limit = { check_variable = { var = "
+                f"{variable} value = {threshold} compare = less_than }} }}"
+            )
+            for mutation_name, extra_predicate in (
+                ("extra scalar predicate", "has_country_flag = hidden_floor_gate "),
+                (
+                    "extra compound predicate",
+                    "AND = { has_country_flag = hidden_floor_gate } ",
+                ),
+            ):
+                mutation = self.DEBT_METRICS.replace(
+                    exact_limit,
+                    exact_limit.replace(
+                        "limit = { ", f"limit = {{ {extra_predicate}", 1
+                    ),
+                    1,
+                )
+                with self.subTest(
+                    floor=variable,
+                    mutation=mutation_name,
+                ):
+                    self.assertNotEqual(mutation, self.DEBT_METRICS)
+                    self.assertTrue(debt_metric_flow_issues(mutation))
+
+    def test_structural_call_graph_handles_parameter_blocks_decoys_duplicates_and_cycles(self):
+        graph = """
+ADISCORD_root = { ADISCORD_scalar = yes # ADISCORD_comment = yes
+                 ADISCORD_parameter = { ARG = value } decoy = "ADISCORD_quote = yes" }
+ADISCORD_scalar = { ADISCORD_root = yes }
+ADISCORD_parameter = { ADISCORD_heavy = { OTHER = value } }
+ADISCORD_heavy = { has_idea = forbidden }
+"""
+        reachable = reachable_script_entries((graph,), ("ADISCORD_root",))
+        self.assertEqual(set(reachable), {
+            "ADISCORD_root", "ADISCORD_scalar", "ADISCORD_parameter", "ADISCORD_heavy"
+        })
+        self.assertNotIn("ADISCORD_comment", reachable)
+        self.assertNotIn("ADISCORD_quote", reachable)
+        with self.assertRaisesRegex(AssertionError, "duplicate"):
+            reachable_script_entries((graph + "\nADISCORD_heavy = { always = yes }",), ("ADISCORD_root",))
+
+    def test_weekly_heavy_analyzer_rejects_all_edge_shapes_without_decoy_noise(self):
+        clean = """
+ADISCORD_root = {
+  ADISCORD_safe = yes
+  quoted_decoy = "has_idea"
+  quoted_call_decoy = "ADISCORD_heavy = yes"
+  # has_idea = forbidden
+}
+ADISCORD_safe = { check_variable = { var = cached_value value = 1 compare = equals } }
+ADISCORD_heavy = { has_idea = forbidden }
+ADISCORD_cycle = { ADISCORD_root = yes }
+"""
+        self.assertEqual(weekly_reachability_issues((clean,), ("ADISCORD_root",)), [])
+        mutations = {
+            "scalar heavy edge": clean.replace(
+                "ADISCORD_safe = yes", "ADISCORD_safe = yes ADISCORD_heavy = yes", 1
+            ),
+            "parameter heavy edge": clean.replace(
+                "ADISCORD_safe = yes",
+                "ADISCORD_safe = yes ADISCORD_heavy = { ARG = value }",
+                1,
+            ),
+            "cycle-hidden heavy edge": clean.replace(
+                "ADISCORD_safe = {",
+                "ADISCORD_safe = { ADISCORD_cycle = yes ADISCORD_heavy = yes",
+                1,
+            ),
+        }
+        for name, mutation in mutations.items():
+            with self.subTest(mutation=name):
+                self.assertTrue(
+                    weekly_reachability_issues((mutation,), ("ADISCORD_root",)),
+                    name,
+                )
+        with self.assertRaisesRegex(AssertionError, "duplicate"):
+            weekly_reachability_issues(
+                (clean + "\nADISCORD_heavy = { always = yes }",),
+                ("ADISCORD_root",),
+            )
+
+    def test_ai_assistance_requires_complete_signature_remove_first_and_live_gates(self):
+        self.assertEqual(
+            ai_assistance_contract_issues(
+                self.ASSISTANCE_IDEAS,
+                self.ASSISTANCE_EFFECT,
+                self.ASSISTANCE_TRIGGERS,
+            ),
+            [],
+        )
+        effect_mutations = {
+            "player bit omitted": self.ASSISTANCE_EFFECT.replace(
+                " if = { limit = { is_ai = yes } add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 10 } }\n",
+                "",
+                1,
+            ),
+            "tier not owned": self.ASSISTANCE_EFFECT.replace(
+                " if = { limit = { has_variable = ADISCORD_economy_simulation_tier } set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = ADISCORD_economy_simulation_tier } }\n",
+                "",
+                1,
+            ),
+            "unsafe missing tier read": self.ASSISTANCE_EFFECT.replace(
+                " set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 0 }\n if = { limit = { has_variable = ADISCORD_economy_simulation_tier } set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = ADISCORD_economy_simulation_tier } }",
+                " set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = ADISCORD_economy_simulation_tier }",
+                1,
+            ),
+            "war bit trapped": self.ASSISTANCE_EFFECT.replace(
+                "limit = { has_war = yes }",
+                "limit = { has_war = yes always = no }",
+                1,
+            ),
+            "phase-end bit omitted": self.ASSISTANCE_EFFECT.replace(
+                " if = { limit = { has_global_flag = ADISCORD_vorkerland_collapse_finished } add_to_temp_variable = { var = ADISCORD_economy_ai_assistance_
+3840 WeeklyEconomyContracts
+8281 FreshEconomyInitializationTests
+class FreshEconomyInitializationTests(unittest.TestCase):
+    def _issues(
+        self,
+        effects=EFFECTS,
+        triggers=TRIGGERS,
+        general_history=GENERAL_HISTORY,
+        shared_on_actions=ON_ACTIONS,
+        war_on_actions=WAR_ON_ACTIONS,
+        runtime_sources=None,
+    ):
+        return fresh_economy_initialization_issues(
+            effects,
+            triggers,
+            general_history,
+            shared_on_actions,
+            war_on_actions,
+            runtime_sources or {"common/scripted_effects/economy.txt": effects},
+        )
+
+    def test_fresh_only_initializer_and_current_schema_routes_are_valid(self):
+        self.assertEqual(self._issues(), [])
+
+    def test_initializer_rejects_missing_provenance_or_live_migration(self):
+        missing_fresh = EFFECTS.replace(
+            "\t\thas_global_flag = ADISCORD_fresh_campaign_contract_v1\n",
+            "",
+            1,
+        )
+        self.assertTrue(self._issues(effects=missing_fresh))
+
+        live_migration = EFFECTS.replace(
+            "\t\tADISCORD_economy_set_simulation_tier = yes\n\t}\n}\n",
+            "\t\tADISCORD_economy_migrate_schema = yes\n"
+            "\t\tADISCORD_economy_set_simulation_tier = yes\n\t}\n}\n",
+            1,
+        )
+        issues = self._issues(
+            effects=live_migration,
+            runtime_sources={"common/scripted_effects/economy.txt": live_migration},
+        )
+        self.assertTrue(any("migration" in issue for issue in issues), issues)
+
+    def test_scheduled_gate_and_external_migration_caller_are_rejected(self):
+        widened = TRIGGERS.replace(
+            "ADISCORD_economy_should_monthly_update = {\n"
+            "\tADISCORD_economy_has_current_schema = yes\n",
+            "ADISCORD_economy_should_monthly_update = {\n",
+            1,
+        )
+        self.assertTrue(self._issues(triggers=widened))
+        issues = self._issues(
+            runtime_sources={
+                "common/scripted_effects/economy.txt": EFFECTS,
+                "events/legacy.txt": "ADISCORD_economy_migrate_schema = yes\n",
+            }
+        )
+        self.assertTrue(any("runtime-callable" in issue for issue in issues), issues)
+8340 DormantMinorLifecycleTests
+class DormantMinorLifecycleTests(unittest.TestCase):
+    def setUp(self):
+        self.triggers = (ROOT / "common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt").read_text(encoding="utf-8")
+        self.effects = (ROOT / "common/scripted_effects/ADISCORD_minor_optimization_effects.txt").read_text(encoding="utf-8")
+        self.hooks = (ROOT / "common/on_actions/00_ADISCORD_minor_optimization_on_actions.txt").read_text(encoding="utf-8")
+        self.shared = (ROOT / "common/on_actions/00_ADISCORD_on_actions.txt").read_text(encoding="utf-8")
+        self.definitions = {entry.key: entry.value for entry in parse_clausewitz(self.triggers + self.effects)}
+
+    def state(self, tag="AUR", ai=True, war=False, optimized=True):
+        return {"tag": tag, "is_ai": ai, "has_war": war, "flags": {
+            "ADISCORD_non_participating_minor_optimized": optimized,
+            "ADISCORD_minor_optimization_fresh_campaign_v1": True,
+        }, "slots": 0, "locked": optimized, "idea": optimized, "initializations": 0}
+
+    def condition(self, entries, state):
+        def value(entry):
+            if entry.key == "OR":
+                return any(value(child) for child in entry.value)
+            if entry.key == "NOT":
+                return not self.condition(entry.value, state)
+            if entry.key in {"has_country_flag", "has_global_flag"}:
+                return state["flags"].get(entry.value, False)
+            if entry.key == "tag":
+                return state["tag"] == entry.value
+            if entry.key in {"is_ai", "has_war"}:
+                return state[entry.key] == (entry.value == "yes")
+            if entry.key in self.definitions:
+                return self.condition(self.definitions[entry.key], state) == (entry.value == "yes")
+            self.fail(f"unsupported condition in static lifecycle fixture: {entry.key}")
+        return all(value(entry) for entry in entries)
+
+    def execute(self, entries, state):
+        matched = False
+        for entry in entries:
+            if entry.key in {"if", "else_if"}:
+                if entry.key == "if":
+                    matched = False
+                limit = next(child.value for child in entry.value if child.key == "limit")
+                if not matched and self.condition(limit, state):
+                    self.execute([child for child in entry.value if child.key != "limit"], state)
+                    matched = True
+            elif entry.key in {"set_country_flag", "clr_country_flag"}:
+                state["flags"][entry.value] = entry.key == "set_country_flag"
+            elif entry.key == "set_research_slots":
+                state["slots"] = int(entry.value)
+            elif entry.key == "country_lock_all_division_template":
+                state["locked"] = entry.value == "yes"
+            elif entry.key in {"add_ideas", "remove_ideas"}:
+                state["idea"] = entry.key == "add_ideas"
+            elif entry.key == "ADISCORD_economy_initialize_country":
+                state["initializations"] += 1
+            elif entry.key in self.definitions and entry.value == "yes":
+                self.execute(self.definitions[entry.key], state)
+            else:
+                self.fail(f"unsupported effect in static lifecycle fixture: {entry.key}")
+
+    def test_release_paths_preserve_dormant_ai_and_are_idempotent(self):
+        cases = (
+            (self.state(), False, 0),
+            (self.state(ai=False), True, 1),
+            (self.state(war=True), True, 0),
+            (self.state(tag="AIN"), True, 0),
+            (self.state(ai=False, optimized=False), False, 0),
+        )
+        reconcile = self.definitions["ADISCORD_reconcile_non_participating_minor_optimization"]
+        for state, released, initializations in cases:
+            with self.subTest(tag=state["tag"], ai=state["is_ai"], war=state["has_war"], optimized=state["locked"]):
+                was_optimized = state["locked"]
+                self.execute(reconcile, state)
+                self.assertEqual(state["slots"], RESTORE_SLOTS[state["tag"]] if released else 0)
+                self.assertEqual(state["locked"], was_optimized and not released)
+                self.assertEqual(state["idea"], was_optimized and not released)
+                self.assertEqual(state["initializations"], initializations)
+                self.assertEqual(state["flags"].get("ADISCORD_non_participating_minor_released", False), released)
+                snapshot = repr(state)
+                self.execute(reconcile, state)
+                self.assertEqual(repr(state), snapshot)
+
+    def test_apply_is_once_only_and_excludes_players_and_retired_ain(self):
+        apply = self.definitions["ADISCORD_apply_non_participating_minor_optimization"]
+        for state in (self.state(optimized=False), self.state(ai=False, optimized=False), self.state(tag="AIN", optimized=False)):
+            self.execute(apply, state)
+            expected = state["is_ai"] and state["tag"] in EXPECTED_SLOTS
+            self.assertEqual(state["locked"], expected)
+            self.assertEqual(state["idea"], expected)
+            state["slots"] = 5
+            self.execute(apply, state)
+            self.assertEqual(state["slots"], 5)
+        for flag in ("ADISCORD_minor_optimization_fresh_campaign_v1", "ADISCORD_non_participating_minor_released"):
+            state = self.state(optimized=False)
+            state["flags"][flag] = flag.endswith("released")
+            self.execute(apply, state)
+            self.assertFalse(state["locked"])
+
+    def test_each_tag_restores_its_own_capacity(self):
+        self.assertNotIn("AIN", EXPECTED_SLOTS)
+        self.assertEqual(research_restore_slots(self.effects), RESTORE_SLOTS)
+        for tag, slots in RESTORE_SLOTS.items():
+            with self.subTest(tag=tag):
+                state = self.state(tag=tag)
+                self.execute(self.definitions["ADISCORD_restore_non_participating_minor_research_slots"], state)
+                self.assertEqual(state["slots"], slots)
+        wrong = self.effects.replace("set_research_slots = 2", "set_research_slots = 3", 1)
+        self.assertNotEqual(research_restore_slots(wrong), RESTORE_SLOTS)
+        duplicate = self.effects.replace("tag = AUR", "tag = AIN", 1)
+        with self.assertRaises(ValueError):
+            research_restore_slots(duplicate)
+        malformed = self.effects.replace("limit = { tag = AIN }", "limit = 1", 1)
+        with self.assertRaises(ValueError):
+            research_restore_slots(malformed)
+
+    def test_lifecycle_validator_rejects_guard_and_order_regressions(self):
+        self.assertEqual(minor_lifecycle_issues(self.triggers, self.effects, self.hooks, self.shared), [])
+        mutations = (
+            (self.triggers.replace("is_ai = no", "is_ai = yes", 1), self.effects, self.hooks, self.shared),
+            (self.triggers.replace("NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }", "", 1), self.effects, self.hooks, self.shared),
+            (self.triggers, self.effects.replace("clr_country_flag = ADISCORD_non_participating_minor_optimized", "set_country_flag = ADISCORD_non_participating_minor_optimized", 1), self.hooks, self.shared),
+            (self.triggers, self.effects, self.hooks.replace("ADISCORD_economy_ai_assistance_needs_edge_evaluation = yes", "always = yes", 1), self.shared),
+            (self.triggers, self.effects, self.hooks, self.shared.replace("limit = { has_country_flag = ADISCORD_non_participating_minor_optimized }", "limit = { ADISCORD_economy_has_current_schema = yes }", 1)),
+        )
+        for index, args in enumerate(mutations):
+            with self.subTest(mutation=index):
+                self.assertTrue(minor_lifecycle_issues(*args))
+
+    def test_inventory_distinguishes_registration_land_and_passive_dependencies(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            sources = {
+                "common/country_tags/tags.txt": 'AIN = "countries/AIN.txt"\nD01 = "countries/Dynamic.txt"\ndynamic_tags = yes',
+                "history/states/1.txt": 'state = { history = { owner = AIN add_core_of = AIN 2161.1.1 = { owner = D01 } } }',
+                "history/countries/AIN - Test.txt": 'oob = "AIN"\nset_research_slots = 1',
+                "common/ideas/passive.txt": 'idea = { allowed = { tag = AIN } }',
+                "events/test.txt": 'event = { log = "# marker" AIN = { exists = yes } } # D01',
+            }
+            for name, text in sources.items():
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(text, encoding="utf-8")
+            references = participation_index(root)
+            self.assertEqual(references["AIN"], {Path("events/test.txt")})
+            self.assertNotIn("D01", references)
+            rows = {row["tag"]: row for row in country_inventory(root)}
+            self.assertEqual(set(rows), {"AIN", "D01"})
+            self.assertEqual(rows["AIN"]["initial_states"], 1)
+            self.assertEqual(rows["AIN"]["initial_cores"], 1)
+            self.assertEqual(rows["AIN"]["initial_oob"], ["AIN"])
+            self.assertIn("common/ideas/passive.txt", rows["AIN"]["script_references"])
+            self.assertEqual(rows["D01"]["initial_states"], 0)
+8490 EconomyScriptFixture
+class EconomyScriptFixture:
+    """Execute the arithmetic/scope subset; unknown engine operations fail closed.
+
+    Native engine inputs and deliberately isolated callees must be supplied by
+    the test. This fixture proves script data flow, not Clausewitz loading/UI.
+    """
+
+    def __init__(self, countries=None, facts=None, stubs=()):
+        self.scopes = countries if countries is not None else {"A": {}}
+        self.facts = facts or {}
+        self.stubs = set(stubs)
+        self.calls = []
+        self.definitions = {
+            node.key: node.value
+            for text in (EFFECTS, TRIGGERS)
+            for node in parse_clausewitz(text)
+        }
+
+    def number(self, value, scope, previous):
+        try:
+            return float(value)
+        except ValueError:
+            if value.startswith("PREV."):
+                return self.scopes[previous].get(value[5:], 0)
+            return self.scopes[scope].get(value, 0)
+
+    def condition(self, entries, scope="A", previous=None, root="A"):
+        def one(node):
+            key, value = node.key, node.value
+            if key in ("AND", "OR", "NOT"):
+                results = [one(child) for child in value]
+                return any(results) if key == "OR" else (not any(results) if key == "NOT" else all(results))
+            if key in self.facts:
+                return bool(self.facts[key]) if isinstance(value, list) else self.facts[key] == (value == "yes")
+            if key == "always":
+                return value == "yes"
+            if key == "has_variable":
+                return value in self.scopes[scope]
+            if key == "is_controlled_by":
+                target = previous if value == "PREV" else root if value == "ROOT" else value
+                return self.scopes[scope]["controller"] == target
+            if key in ("check_variable", "non_damaged_building_level"):
+                fields = {child.key: child.value for child in value if child.key}
+                if "var" in fields:
+                    left = self.number(fields["var"], scope, previous)
+                    right = self.number(fields["value"], scope, previous)
+                    operator = fields.get("compare", "greater_than_or_equals")
+                else:
+                    left_name, operator, right_value = [child.value for child in value if not child.key]
+                    if key == "non_damaged_building_level":
+                        assert left_name == "level"
+                        left_name = "non_damaged@" + fields["building"]
+                    left = self.number(left_name, scope, previous)
+                    right = self.number(right_value, scope, previous)
+                return {
+                    "equals": left == right, "not_equals": left != right,
+                    "greater_than": left > right, "less_than": left < right,
+                    "greater_than_or_equals": left >= right,
+                    "less_than_or_equals": left <= right,
+                    ">": left > right, "<": left < right,
+                }[operator]
+            if key in self.definitions and value in ("yes", "no"):
+                return self.condition(self.definitions[key], scope, previous, root) == (value == "yes")
+            raise AssertionError(f"unsupported fixture trigger {key} = {value}")
+        return all(one(node) for node in entries)
+
+    def run(self, name, scope="A", previous=None, root="A"):
+        self.calls.append(name)
+        if name not in self.stubs:
+            self.execute(self.definitions[name], scope, previous, root)
+
+    def execute(self, entries, scope, previous, root):
+        branch_taken = False
+        for node in entries:
+            key, value = node.key, node.value
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    branch_taken = False
+                limit = next((child.value for child in value if child.key == "limit"), [])
+                if not branch_taken and self.condition(limit, scope, previous, root):
+                    self.execute([child for child in value if child.key != "limit"], scope, previous, root)
+                    branch_taken = True
+            elif key in ("ROOT", "PREV"):
+                self.execute(value, root if key == "ROOT" else previous, scope, root)
+            elif key == "every_owned_state":
+                for state in self.scopes[scope].get("states", []):
+                    self.execute(value, state, scope, root)
+            elif key in ("set_country_flag", "clr_country_flag"):
+                self.scopes[scope][value] = key == "set_country_flag"
+            elif key.endswith("_variable"):
+                fields = {child.key: child.value for child in value}
+                target = fields.get("var", next(iter(fields)))
+                current = self.scopes[scope].get(target, 0)
+                if key.startswith("clamp_"):
+                    result = min(max(current, float(fields["min"])), float(fields["max"]))
+                else:
+                    amount = self.number(fields.get("value", fields.get(target)), scope, previous)
+                    if key.startswith("set_"):
+                        result = amount
+                    elif key.startswith("add_to_"):
+                        result = current + amount
+                    elif key.startswith("subtract_from_"):
+                        result = current - amount
+                    elif key.startswith("multiply_"):
+                        result = current * amount
+                    elif key.startswith("divide_"):
+                        result = current / amount
+                    else:
+                        raise AssertionError(f"unsupported variable operation {key}")
+                self.scopes[scope][target] = result
+            elif key in self.stubs:
+                self.calls.append(key)
+            elif key in self.definitions and value == "yes":
+                self.run(key, scope, previous, root)
+            else:
+                raise AssertionError(f"unsupported fixture effect {key} = {value}")
+8608 EconomyAccountingRegressionTests
+class EconomyAccountingRegressionTests(unittest.TestCase):
+    PREFIX = "ADISCORD_economy_"
+
+    def test_flat_weekly_income_is_in_cash_ai_balance_and_both_debt_denominators(self):
+        fixture = EconomyScriptFixture(stubs=(
+            self.PREFIX + "calculate_creditworthiness", self.PREFIX + "calculate_interest_rate",
+            self.PREFIX + "calculate_debt_service_amount", self.PREFIX + "update_debt_crisis_level",
+        ))
+        values = fixture.scopes["A"]
+        for key, value in {"monthly_income": 13, "monthly_expenses": 26,
+                           "final_weekly_income_bonus": 20, "debt": 1196,
+                           "debt_service": 1.3, "treasury": 100}.items():
+            values[self.PREFIX + key] = value
+        for effect in ("calculate_debt_metrics", "calculate_monthly_balance", "calculate_weekly_budget"):
+            fixture.run(self.PREFIX + effect)
+        self.assertAlmostEqual(values[self.PREFIX + "debt_income_ratio"], 100)
+        self.assertAlmostEqual(values[self.PREFIX + "interest_share_income"], 0.3 / 23 * 100)
+        self.assertAlmostEqual(values[self.PREFIX + "weekly_balance"], 17)
+        self.assertAlmostEqual(values[self.PREFIX + "monthly_balance"] * 3 / 13, 17)
+        # The annual denominator includes 52 bonuses, never twelve bonuses.
+        self.assertAlmostEqual(values[self.PREFIX + "debt_income_denominator_temp"], 1196)
+
+    def test_tier_changes_preserve_52_weekly_cash_settlements(self):
+        for tiers in ([1] * 48 + [2] * 4, [2] * 48 + [1] * 4, [2] * 52):
+            fixture = EconomyScriptFixture(
+                facts={self.PREFIX + "is_player_tier_country": False},
+                stubs=(self.PREFIX + "update_debt_state_after_settlement", self.PREFIX + "queue_debt_notification"),
+            )
+            values = fixture.scopes["A"]
+            for key, value in {"initialized": 1, "weekly_source_cache_ready": 1, "schema_version": 15,
+                               "treasury": 100, "treasury_cap": 5000, "accounting_period_treasury_start": 100,
+                               "weekly_income": 7, "weekly_expenses": 2, "weekly_balance": 5}.items():
+                values[self.PREFIX + key] = value
+            for tier in tiers:
+                values[self.PREFIX + "simulation_tier"] = tier
+                gate = fixture.definitions[self.PREFIX + "should_weekly_update"]
+                self.assertTrue(fixture.condition(gate))
+                fixture.run(self.PREFIX + "apply_weekly_balance")
+                self.assertAlmostEqual(values[self.PREFIX + "last_period_unexplained_delta"], 0)
+            self.assertEqual(values[self.PREFIX + "treasury"], 360)
+        yearly_graph = reachable_script_blocks((EFFECTS, MODIFIER_EFFECTS, TRIGGERS),
+                                               (self.PREFIX + "yearly_update",))
+        self.assertNotIn(self.PREFIX + "apply_weekly_balance", yearly_graph)
+        self.assertNotIn(self.PREFIX + "apply_monthly_balance", yearly_graph)
+
+    def test_nested_recount_credits_current_owner_not_event_root(self):
+        fixture = EconomyScriptFixture(
+            countries={"A": {self.PREFIX + "resource_endowment": 9}, "B": {"states": ["state"]},
+                       "state": {"controller": "B", "resource@oil": 30, "building_level@arms_factory": 10,
+                                 "non_damaged@ADISCORD_business_center": 2,
+                                 "non_damaged@ADISCORD_science_center": 1,
+                                 "non_damaged@ADISCORD_industrial_cluster": 2}},
+            facts={"has_dynamic_modifier": False},
+            stubs=("add_dynamic_modifier", "remove_dynamic_modifier", "force_update_dynamic_modifier"),
+        )
+        fixture.run(self.PREFIX + "recount_economic_buildings", scope="B", previous="A")
+        owner = fixture.scopes["B"]
+        self.assertEqual(fixture.scopes["A"], {self.PREFIX + "resource_endowment": 9})
+        self.assertEqual(owner[self.PREFIX + "resource_endowment"], 3)
+        self.assertEqual(owner["ADISCORD_business_center_count"], 2)
+        self.assertEqual(owner["ADISCORD_science_center_count"], 1)
+        self.assertEqual(owner[self.PREFIX + "cluster_factory_output_percent"], 10)
+        self.assertIn("add_dynamic_modifier", fixture.calls)
+        fixture.facts["has_dynamic_modifier"] = True
+        fixture.scopes["state"]["controller"] = "A"
+        fixture.run(self.PREFIX + "recount_economic_buildings", scope="B", previous="A")
+        self.assertEqual(owner["ADISCORD_business_center_count"], 0)
+        self.assertEqual(owner[self.PREFIX + "cluster_factory_output_percent"], 0)
+        self.assertIn("remove_dynamic_modifier", fixture.calls)
+
+    def test_cash_ledger_covers_auto_borrowing_cap_and_interweek_payment(self):
+        cases = (
+            # start, cash, balance, paid, borrowing, final cash, writeoff, inflation
+            (3, 3, -10, 0, 7, 0, 0, 0),
+            (3, 3, -10, 0, 7, 0, 0, 100),
+            (490, 490, 20, 0, 0, 500, 10, 0),
+            (100, 50, 5, 50, 0, 55, 0, 0),
+        )
+        for start, cash, balance, payment, borrowing, final, writeoff, inflation in cases:
+            fixture = EconomyScriptFixture(stubs=tuple(self.PREFIX + key for key in (
+                "calculate_debt_metrics", "update_macro_confidence", "update_debt_state_after_settlement",
+                "queue_debt_notification")))
+            values = fixture.scopes["A"]
+            for key, value in {"treasury": cash, "treasury_cap": 500, "debt": 20,
+                               "inflation": inflation,
+                               "weekly_balance": balance, "accounting_period_treasury_start": start,
+                               "current_month_action_costs": payment}.items():
+                values[self.PREFIX + key] = value
+            fixture.run(self.PREFIX + "apply_weekly_balance")
+            self.assertEqual(values[self.PREFIX + "treasury"], final)
+            self.assertEqual(values[self.PREFIX + "debt"], 20 + borrowing)
+            self.assertAlmostEqual(values[self.PREFIX + "inflation"], min(100, inflation + borrowing / 100))
+            self.assertEqual(values[self.PREFIX + "last_period_cap_writeoff"], writeoff)
+            self.assertEqual(values[self.PREFIX + "last_period_unexplained_delta"], 0)
+
+    def test_macro_cadence_changes_pressure_without_advancing_cash_or_debt_streaks(self):
+        for scale in (1, 6):
+            for balance in (-10, 10):
+                fixture = EconomyScriptFixture()
+                values = fixture.scopes["A"]
+                for key, value in {"tick_scale": scale, "monthly_balance": balance,
+                                   "deficit_pressure": 20, "final_deficit_pressure_factor_bp": 150,
+                                   "treasury": 100, "debt_emergency_streak": 2}.items():
+                    values[self.PREFIX + key] = value
+                fixture.run(self.PREFIX + "update_monthly_budget_trend")
+                self.assertEqual(values[self.PREFIX + "deficit_pressure"],
+                                 20 + (1.5 * scale if balance < 0 else -2 * scale))
+                self.assertEqual(values[self.PREFIX + "treasury"], 100)
+                self.assertEqual(values[self.PREFIX + "debt_emergency_streak"], 2)
+
+    def test_lower_reserve_cap_is_written_off_only_in_the_cash_ledger(self):
+        fixture = EconomyScriptFixture(stubs=tuple(self.PREFIX + key for key in (
+            "recalculate_treasury_cap", "update_debt_state_after_settlement", "queue_debt_notification")))
+        values = fixture.scopes["A"]
+        for key, value in {"treasury": 800, "treasury_cap": 700,
+                           "accounting_period_treasury_start": 800, "weekly_balance": 0}.items():
+            values[self.PREFIX + key] = value
+        fixture.run(self.PREFIX + "clamp_all_variables")
+        self.assertEqual(values[self.PREFIX + "treasury"], 800)
+        fixture.run(self.PREFIX + "apply_weekly_balance")
+        self.assertEqual(values[self.PREFIX + "treasury"], 700)
+        self.assertEqual(values[self.PREFIX + "last_period_cap_writeoff"], 100)
+        self.assertEqual(values[self.PREFIX + "last_period_unexplained_delta"], 0)
+
+    def test_financing_relief_never_creates_negative_pressures(self):
+        for effect, gates, treasury in (
+            ("repay_debt", {"has_treasury_50": True, "has_debt": True}, 50),
+            ("stabilization_package", {"can_stabilize_macro": True}, 100),
+            ("stabilization_package", {"can_stabilize_macro": False, "can_stabilize_macro_crisis": True}, 0),
+        ):
+            fixture = EconomyScriptFixture(
+                facts={self.PREFIX + key: value for key, value in gates.items()},
+                stubs=tuple(self.PREFIX + key for key in ("initialize_country", "calculate_debt_metrics",
+                    "calculate_macro_indicators", "reconcile_debt_state_after_action", "update_macro_confidence", "mark_dirty")),
+            )
+            values = fixture.scopes["A"]
+            values.update({self.PREFIX + "treasury": treasury, self.PREFIX + "debt": 50,
+                           self.PREFIX + "inflation": 15})
+            fixture.run(self.PREFIX + effect)
+            self.assertEqual(values[self.PREFIX + "fiscal_stress"], 0)
+            for key in ("deficit_pressure", "price_shock", "action_overload_residue"):
+                self.assertGreaterEqual(values[self.PREFIX + key], 0)
+            self.assertEqual(values[self.PREFIX + "treasury"], 0)
+            self.assertLess(fixture.calls.index(self.PREFIX + "clamp_financing_pressures"),
+                            min(i for i, name in enumerate(fixture.calls) if name in (
+                                self.PREFIX + "calculate_macro_indicators", self.PREFIX + "calculate_debt_metrics")))
+
+    def test_preview_refresh_is_only_for_open_human_dashboard(self):
+        for human, opened in ((False, False), (False, True), (True, False), (True, True)):
+            fixture = EconomyScriptFixture(
+                facts={self.PREFIX + "should_show_player_ui": human, self.PREFIX + "window_is_open": opened},
+                stubs=(self.PREFIX + "refresh_policy_previews",),
+            )
+            fixture.run(self.PREFIX + "refresh_open_window")
+            self.assertEqual(self.PREFIX + "refresh_policy_previews" in fixture.calls, human and opened)
+        weekly_hook = block(ON_ACTIONS, "on_weekly")
+        self.assertLess(weekly_hook.index(self.PREFIX + "weekly_update = yes"),
+                        weekly_hook.index(self.PREFIX + "refresh_open_window = yes"))
+        for name in ("monthly_update", "yearly_update"):
+            pulse = block(EFFECTS, self.PREFIX + name)
+            self.assertLess(pulse.rindex(self.PREFIX + "clamp_all_variables"),
+                            pulse.rindex(self.PREFIX + "light_update"))
+            self.assertLess(pulse.rindex(self.PREFIX + "light_update"),
+                            pulse.rindex(self.PREFIX + "refresh_policy_previews"))
+
+    def test_war_relations_and_monthly_reconciliation_cover_both_participants(self):
+        relation = block(ON_ACTIONS, "on_war_relation_added")
+        self.assertEqual(relation.count(self.PREFIX + "initialize_country = yes"), 2)
+        self.assertEqual(relation.count(self.PREFIX + "refresh_war_participation_tier = yes"), 2)
+        self.assertIn("FROM = {", relation)
+        monthly = block(ON_ACTIONS, "on_monthly")
+        self.assertLess(monthly.index(self.PREFIX + "refresh_war_participation_tier"),
+                        monthly.index(self.PREFIX + "should_monthly_update"))
+        peace = _parsed_definition(ON_ACTIONS, "on_actions")
+        peace = next(node for node in peace.value if node.key == "on_peace")
+        effect = next(node for node in peace.value if node.key == "effect")
+        first_branch = effect.value[0]
+        limit = next(node for node in first_branch.value if node.key == "limit")
+        self.assertEqual([(node.key, node.value) for node in limit.value],
+                         [(self.PREFIX + "has_current_schema", "yes")])
+SOURCE common/scripted_effects/ADISCORD_economy_effects.txt ADISCORD_economy_calculate_building_income LINE 996
+ADISCORD_economy_calculate_building_income = {
+	# Direct building income is small; buildings mostly improve the specific buckets below and development/pressure.
+	set_variable = { var = ADISCORD_economy_building_income value = 0 }
+	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_business_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.25 }
+	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
+	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_economy_public_investment_stock }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.60 }
+	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
+	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_science_center_count }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.20 }
+	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
+	set_temp_variable = { var = ADISCORD_economy_building_income_temp value = ADISCORD_industrial_cluster_count }
+	multiply_temp_variable = { var = ADISCORD_economy_building_income_temp value = 0.16 }
+	add_to_variable = { var = ADISCORD_economy_building_income value = ADISCORD_economy_building_income_temp }
+	if = { limit = { ADISCORD_economy_model_is_fragmented = yes } multiply_variable = { var = ADISCORD_economy_building_income value = 0.70 } }
+	clamp_variable = { var = ADISCORD_economy_building_income min = 0 max = 50 }
+}
+SOURCE common/scripted_effects/ADISCORD_economy_effects.txt ADISCORD_economy_apply_development_income_multipliers LINE 1015
+ADISCORD_economy_apply_development_income_multipliers = {
+	set_variable = { var = ADISCORD_economy_income_multiplier value = 100 }
+	if = { limit = { ADISCORD_economic_development_exact_1 = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = -12 } }
+	if = { limit = { ADISCORD_economic_development_exact_2 = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = -6 } }
+	if = { limit = { ADISCORD_economic_development_exact_4 = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = 8 } }
+	if = { limit = { ADISCORD_economic_development_exact_5 = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = 15 } }
+	if = { limit = { ADISCORD_state_development_exact_1 = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = -15 } }
+	if = { limit = { ADISCORD_state_development_exact_2 = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = -8 } }
+	if = { limit = { ADISCORD_state_development_exact_4 = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = 8 } }
+	if = { limit = { ADISCORD_state_development_exact_5 = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = 15 } }
+	if = { limit = { check_variable = { var = ADISCORD_economy_stretched_level value = 2 compare = greater_than_or_equals } } add_to_variable = { var = ADISCORD_economy_income_multiplier value = -10 } }
+	if = { limit = { check_variable = { var = ADISCORD_economy_bombing_disruption_level value = 1 compare = greater_than_or_equals } } add_to_variable = { var = ADISCORD_economy_income_multiplier value = -5 } }
+	if = { limit = { ADISCORD_economy_model_is_fragmented = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = -10 } }
+	if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = 5 } }
+	if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = 8 } }
+	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = 5 } }
+	if = { limit = { ADISCORD_economy_model_is_oligarchic_clan = yes } add_to_variable = { var = ADISCORD_economy_income_multiplier value = -8 } }
+	clamp_variable = { var = ADISCORD_economy_income_multiplier min = 25 max = 200 }
+	multiply_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_income_multiplier }
+	divide_variable = { var = ADISCORD_economy_monthly_income value = 100 }
+}
+SOURCE common/scripted_effects/ADISCORD_economy_effects.txt ADISCORD_economy_light_update LINE 779
+ADISCORD_economy_light_update = {
+	# Cheap TDA-style forecast/update. Idea-backed economic model and policy
+	# factors are cached by monthly/yearly refreshes and by opening the window;
+	# the weekly cash pulse must not query every law again.
+	ADISCORD_economy_calculate_income = yes
+	ADISCORD_economy_calculate_macro_indicators = yes
+	ADISCORD_economy_calculate_expenses = yes
+	ADISCORD_economy_calculate_monthly_balance = yes
+	# Every caller, including budget buttons and treasury actions, must refresh
+	# the weekly KPI immediately instead of leaving it stale until the next pulse.
+	ADISCORD_economy_calculate_weekly_budget = yes
+	# Kept inline: a newly named scripted effect is not registered reliably by
+	# HOI4's hot reload, while these four cached-variable checks are cheap.
+	set_variable = { var = ADISCORD_economy_cycle_phase value = 1 }
+	if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } } set_variable = { var = ADISCORD_economy_cycle_phase value = 0 } }
+	if = { limit = { check_variable = { var = ADISCORD_economy_monthly_balance value = 5 compare = greater_than_or_equals } check_variable = { var = ADISCORD_economy_stretched_level value = 2 compare = less_than } } set_variable = { var = ADISCORD_economy_cycle_phase value = 2 } }
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = ADISCORD_economy_inflation value = 30 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_stretched_level value = 3 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = greater_than_or_equals }
+			}
+		}
+		set_variable = { var = ADISCORD_economy_cycle_phase value = 3 }
+	}
+}
+MISSING common/scripted_effects/ADISCORD_economy_effects.txt ADISCORD_economy_calculate_treasury_cap
+SOURCE common/scripted_effects/ADISCORD_economy_effects.txt ADISCORD_economy_recount_economic_buildings LINE 2832
+ADISCORD_economy_recount_economic_buildings = {
+	# V24: one owned-state pass counts economic buildings and calculates the
+	# location-sensitive cluster bonus. No weekly state scan is introduced.
+	set_variable = { var = ADISCORD_business_center_count value = 0 }
+	set_variable = { var = ADISCORD_science_center_count value = 0 }
+	set_variable = { var = ADISCORD_industrial_cluster_count value = 0 }
+	set_variable = { var = ADISCORD_economy_cluster_factory_output_percent value = 0 }
+	set_variable = { var = ADISCORD_economy_cluster_factory_output_factor value = 0 }
+	set_temp_variable = { var = ADISCORD_economy_operational_military_factories_temp value = 0 }
+	set_temp_variable = { var = ADISCORD_economy_cluster_supported_factory_points_temp value = 0 }
+	set_variable = { var = ADISCORD_economy_resource_endowment value = 0 }
+	set_variable = { var = ADISCORD_economy_damaged_industry_score value = 0 }
+
+	every_owned_state = {
+		# Actual state resources feed a compact strategic-endowment index. Each
+		# resource type contributes one point, with extra weight for large fields.
+		if = { limit = { check_variable = { resource@oil > 0 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@oil > 9 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@oil > 29 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@aluminium > 0 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@aluminium > 9 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@rubber > 0 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@rubber > 9 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@tungsten > 0 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@tungsten > 9 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@steel > 0 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@steel > 9 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@steel > 29 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@chromium > 0 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@chromium > 9 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@coal > 0 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 0.5 } } }
+		if = { limit = { check_variable = { resource@coal > 19 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 0.5 } } }
+		if = { limit = { check_variable = { resource@rare_components > 0 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@rare_components > 7 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@rare_alloys > 0 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+		if = { limit = { check_variable = { resource@rare_alloys > 7 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
+
+		set_temp_variable = { ADISCORD_economy_state_damage_temp = damaged_building_level@infrastructure }
+		add_to_temp_variable = { ADISCORD_economy_state_damage_temp = damaged_building_level@arms_factory }
+		add_to_temp_variable = { ADISCORD_economy_state_damage_temp = damaged_building_level@industrial_complex }
+		if = { limit = { check_variable = { var = ADISCORD_economy_state_damage_temp value = 0 compare = greater_than } } PREV = { add_to_variable = { var = ADISCORD_economy_damaged_industry_score value = 1 } } }
+		if = { limit = { check_variable = { var = ADISCORD_economy_state_damage_temp value = 2 compare = greater_than } } PREV = { add_to_variable = { var = ADISCORD_economy_damaged_industry_score value = 1 } } }
+		if = { limit = { check_variable = { var = ADISCORD_economy_state_damage_temp value = 5 compare = greater_than } } PREV = { add_to_variable = { var = ADISCORD_economy_damaged_industry_score value = 1 } } }
+
+		# HOI4 has no state-scoped factory-output modifier. Count operational
+		# military factories here so the country modifier can reproduce the exact
+		# weighted effect of +5% per cluster level in this particular state.
+		set_temp_variable = { var = ADISCORD_economy_state_operational_mils_temp value = 0 }
+		if = {
+			limit = { is_controlled_by = PREV }
+			set_temp_variable = { ADISCORD_economy_state_operational_mils_temp = building_level@arms_factory }
+			subtract_from_temp_variable = { ADISCORD_economy_state_operational_mils_temp = damaged_building_level@arms_factory }
+			clamp_temp_variable = { var = ADISCORD_economy_state_operational_mils_temp min = 0 max = 100 }
+			PREV = {
+				add_to_temp_variable = {
+					var = ADISCORD_economy_operational_military_factories_temp
+					value = PREV.ADISCORD_economy_state_operational_mils_temp
+				}
+			}
+		}
+
+		# Occupied owned states must not keep funding the displaced owner or its
+		# national science/industry network. One enclosing control check is cheaper
+		# than repeating it for every building level below.
+		if = {
+			limit = { is_controlled_by = PREV }
+
+		# Threshold checks mirror building state_max caps. Update these checks if the caps change.
+		if = {
+			limit = {
+				non_damaged_building_level = {
+					building = ADISCORD_business_center
+					level > 0
+				}
+			}
+			PREV = { add_to_variable = { var = ADISCORD_business_center_count value = 1 } }
+		}
+		if = {
+			limit = {
+				non_damaged_building_level = {
+					building = ADISCORD_business_center
+					level > 1
+				}
+			}
+			PREV = { add_to_variable = { var = ADISCORD_business_center_count value = 1 } }
+		}
+		if = {
+			limit = {
+				non_damaged_building_level = {
+					building = ADISCORD_business_center
+					level > 2
+				}
+			}
+			PREV = { add_to_variable = { var = ADISCORD_business_center_count value = 1 } }
+		}
+		if = {
+			limit = {
+				non_damaged_building_level = {
+					building = ADISCORD_science_center
+					level > 0
+				}
+			}
+			PREV = { add_to_variable = { var = ADISCORD_science_center_count value = 1 } }
+		}
+		if = {
+			limit = {
+				non_damaged_building_level = {
+					building = ADISCORD_science_center
+					level > 1
+				}
+			}
+			PREV = { add_to_variable = { var = ADISCORD_science_center_count value = 1 } }
+		}
+		set_temp_variable = { var = ADISCORD_economy_state_cluster_level_temp value = 0 }
+		if = {
+			limit = {
+				non_damaged_building_level = {
+					building = ADISCORD_industrial_cluster
+					level > 0
+				}
+			}
+			PREV = { add_to_variable = { var = ADISCORD_industrial_cluster_count value = 1 } }
+			add_to_temp_variable = { var = ADISCORD_economy_state_cluster_level_temp value = 1 }
+		}
+		if = {
+			limit = {
+				non_damaged_building_level = {
+					building = ADISCORD_industrial_cluster
+					level > 1
+				}
+			}
+			PREV = { add_to_variable = { var = ADISCORD_industrial_cluster_count value = 1 } }
+			add_to_temp_variable = { var = ADISCORD_economy_state_cluster_level_temp value = 1 }
+		}
+		if = {
+			limit = {
+				non_damaged_building_level = {
+					building = ADISCORD_industrial_cluster
+					level > 2
+				}
+			}
+			PREV = { add_to_variable = { var = ADISCORD_industrial_cluster_count value = 1 } }
+			add_to_temp_variable = { var = ADISCORD_economy_state_cluster_level_temp value = 1 }
+		}
+		if = {
+			limit = { check_variable = { var = ADISCORD_economy_state_cluster_level_temp value = 0 compare = greater_than } }
+			set_temp_variable = { var = ADISCORD_economy_state_cluster_supported_mils_temp value = ADISCORD_economy_state_operational_mils_temp }
+			multiply_temp_variable = { var = ADISCORD_economy_state_cluster_supported_mils_temp value = ADISCORD_economy_state_cluster_level_temp }
+			PREV = {
+				add_to_temp_variable = {
+					var = ADISCORD_economy_cluster_supported_factory_points_temp
+					value = PREV.ADISCORD_economy_state_cluster_supported_mils_temp
+				}
+			}
+		}
+		}
+	}
+
+	# Example: 10 operational military factories under a level-2 cluster among
+	# 20 national factories become a +5% country modifier: (10 * 2 * 5) / 20.
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_operational_military_factories_temp value = 0 compare = greater_than } }
+		set_variable = { var = ADISCORD_economy_cluster_factory_output_percent value = ADISCORD_economy_cluster_supported_factory_points_temp }
+		multiply_variable = { var = ADISCORD_economy_cluster_factory_output_percent value = 5 }
+		divide_variable = { var = ADISCORD_economy_cluster_factory_output_percent value = ADISCORD_economy_operational_military_factories_temp }
+	}
+	clamp_variable = { var = ADISCORD_economy_cluster_factory_output_percent min = 0 max = 15 }
+	set_variable = { var = ADISCORD_economy_cluster_factory_output_factor value = ADISCORD_economy_cluster_factory_output_percent }
+	divide_variable = { var = ADISCORD_economy_cluster_factory_output_factor value = 100 }
+	clamp_variable = { var = ADISCORD_economy_cluster_factory_output_factor min = 0 max = 0.15 }
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_cluster_factory_output_factor value = 0 compare = greater_than } }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = ADISCORD_economy_cluster_local_factory_output } } }
+			add_dynamic_modifier = { modifier = ADISCORD_economy_cluster_local_factory_output }
+		}
+	}
+	else = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = ADISCORD_economy_cluster_local_factory_output } }
+			remove_dynamic_modifier = { modifier = ADISCORD_economy_cluster_local_factory_output }
+		}
+	}
+	force_update_dynamic_modifier = yes
+
+	clamp_variable = { var = ADISCORD_business_center_count min = 0 max = 999 }
+	clamp_variable = { var = ADISCORD_science_center_count min = 0 max = 999 }
+	clamp_variable = { var = ADISCORD_industrial_cluster_count min = 0 max = 999 }
+	clamp_variable = { var = ADISCORD_economy_resource_endowment min = 0 max = 100 }
+	clamp_variable = { var = ADISCORD_economy_damaged_industry_score min = 0 max = 100 }
+	clamp_variable = { var = ADISCORD_economy_public_investment_stock min = 0 max = 10 }
+}
+SOURCE common/scripted_effects/ADISCORD_economy_effects.txt ADISCORD_economy_update_ai_state LINE 3707
+ADISCORD_economy_update_ai_state = {
+	# Hysteresis: crisis and recovery have stricter exit thresholds than entry
+	# thresholds, preventing budget modes from changing direction every tick.
+	if = {
+		limit = { ADISCORD_economy_ai_is_crisis = yes }
+		if = {
+			limit = {
+				check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_surplus_streak value = 2 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_debt_income_ratio value = 70 compare = less_than }
+				check_variable = { var = ADISCORD_economy_fiscal_stress value = 45 compare = less_than }
+			}
+			set_variable = { var = ADISCORD_economy_ai_state value = 3 }
+		}
+	}
+	else_if = {
+		limit = { ADISCORD_economy_ai_is_recovery = yes }
+		if = {
+			limit = {
+				OR = {
+					check_variable = { var = ADISCORD_economy_debt_income_ratio value = 110 compare = greater_than_or_equals }
+					check_variable = { var = ADISCORD_economy_fiscal_stress value = 75 compare = greater_than_or_equals }
+				}
+			}
+			set_variable = { var = ADISCORD_economy_ai_state value = 2 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than }
+					check_variable = { var = ADISCORD_economy_deficit_streak value = 2 compare = greater_than_or_equals }
+				}
+			}
+			set_variable = { var = ADISCORD_economy_ai_state value = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = ADISCORD_economy_surplus_streak value = 6 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_debt_income_ratio value = 35 compare = less_than }
+				check_variable = { var = ADISCORD_economy_fiscal_stress value = 20 compare = less_than }
+				check_variable = { var = ADISCORD_economy_treasury value = 75 compare = greater_than_or_equals }
+			}
+			set_variable = { var = ADISCORD_economy_ai_state value = 0 }
+		}
+	}
+	else_if = {
+		limit = { ADISCORD_economy_ai_is_stressed = yes }
+		if = {
+			limit = {
+				OR = {
+					check_variable = { var = ADISCORD_economy_debt_income_ratio value = 100 compare = greater_than_or_equals }
+					check_variable = { var = ADISCORD_economy_fiscal_stress value = 70 compare = greater_than_or_equals }
+					check_variable = { var = ADISCORD_economy_deficit_streak value = 6 compare = greater_than_or_equals }
+					AND = {
+						check_variable = { var = ADISCORD_economy_treasury value = 10 compare = less_than }
+						check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than }
+					}
+				}
+			}
+			set_variable = { var = ADISCORD_economy_ai_state value = 2 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = ADISCORD_economy_surplus_streak value = 3 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_debt_income_ratio value = 50 compare = less_than }
+				check_variable = { var = ADISCORD_economy_fiscal_stress value = 30 compare = less_than }
+			}
+			set_variable = { var = ADISCORD_economy_ai_state value = 0 }
+		}
+	}
+	else = {
+		if = {
+			limit = {
+				OR = {
+					check_variable = { var = ADISCORD_economy_debt_income_ratio value = 110 compare = greater_than_or_equals }
+					check_variable = { var = ADISCORD_economy_fiscal_stress value = 75 compare = greater_than_or_equals }
+					check_variable = { var = ADISCORD_economy_deficit_streak value = 6 compare = greater_than_or_equals }
+				}
+			}
+			set_variable = { var = ADISCORD_economy_ai_state value = 2 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					check_variable = { var = ADISCORD_economy_deficit_streak value = 2 compare = greater_than_or_equals }
+					check_variable = { var = ADISCORD_economy_debt_income_ratio value = 65 compare = greater_than_or_equals }
+					check_variable = { var = ADISCORD_economy_fiscal_stress value = 40 compare = greater_than_or_equals }
+					AND = {
+						check_variable = { var = ADISCORD_economy_treasury value = 25 compare = less_than }
+						check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than }
+					}
+				}
+			}
+			set_variable = { var = ADISCORD_economy_ai_state value = 1 }
+		}
+	}
+}
+SOURCE common/scripted_effects/ADISCORD_VAL_effects.txt VAL_refresh_industrial_economy LINE 2080
+VAL_refresh_industrial_economy = {
+	set_variable = { var = VAL_industrial_output value = 0 }
+	set_variable = { var = VAL_industrial_construction value = 0 }
+	set_variable = { var = VAL_industrial_efficiency value = 0 }
+	set_variable = { var = VAL_industrial_trade value = 0 }
+	set_variable = { var = VAL_industrial_income value = 0 }
+	set_variable = { var = VAL_industrial_consumer value = 0 }
+	if = {
+		limit = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+		clamp_variable = { var = VAL_economic_recovery_steps min = 0 max = 6 }
+		set_variable = { var = VAL_industrial_output value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_output value = 0.13 }
+		add_to_variable = { var = VAL_industrial_output value = -0.75 }
+		set_variable = { var = VAL_industrial_construction value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_construction value = 0.10 }
+		add_to_variable = { var = VAL_industrial_construction value = -0.57 }
+		set_variable = { var = VAL_industrial_efficiency value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_efficiency value = 0.10 }
+		add_to_variable = { var = VAL_industrial_efficiency value = -0.57 }
+		set_variable = { var = VAL_industrial_trade value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_trade value = 0.15 }
+		add_to_variable = { var = VAL_industrial_trade value = -0.85 }
+		set_variable = { var = VAL_industrial_income value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_income value = 0.10 }
+		add_to_variable = { var = VAL_industrial_income value = -0.57 }
+		set_variable = { var = VAL_industrial_consumer value = VAL_economic_recovery_steps }
+		multiply_variable = { var = VAL_industrial_consumer value = -0.03 }
+		add_to_variable = { var = VAL_industrial_consumer value = 0.18 }
+	}
+	if = { limit = { has_variable = VAL_arsenal_investment } add_to_variable = { var = VAL_industrial_output value = VAL_arsenal_investment } }
+	if = { limit = { has_variable = VAL_civilian_investment } add_to_variable = { var = VAL_industrial_construction value = VAL_civilian_investment } }
+	remove_ideas = VAL_vorkerland_contract_disruptions
+	if = {
+		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }
+		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = VAL_economic_collapse }
+		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = VAL_economic_miracle }
+		if = { limit = { NOT = { has_dynamic_modifier = VAL_contract_industry } } add_dynamic_modifier = { modifier = VAL_contract_industry } }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_economic_recovery_steps value = 6 compare = less_than } }
+		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = VAL_contract_industry }
+		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = VAL_economic_miracle }
+		if = { limit = { NOT = { has_dynamic_modifier = VAL_economic_collapse } } add_dynamic_modifier = { modifier = VAL_economic_collapse } }
+	}
+	else = {
+		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = VAL_contract_industry }
+		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = VAL_economic_collapse }
+		if = { limit = { NOT = { has_dynamic_modifier = VAL_economic_miracle } } add_dynamic_modifier = { modifier = VAL_economic_miracle } }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+SOURCE common/scripted_effects/ADISCORD_VAL_effects.txt VAL_advance_economic_recovery LINE 2133
+VAL_advance_economic_recovery = {
+	if = {
+		limit = { hidden_trigger = { has_country_flag = VAL_vorkerland_contracts_disrupted check_variable = { var = VAL_economic_recovery_steps value = 6 compare = less_than } } }
+		effect_tooltip = { add_ideas = VAL_economic_recovery_delta }
+		if = {
+			limit = { hidden_trigger = { check_variable = { var = VAL_economic_recovery_steps value = 5 compare = equals } } }
+			custom_effect_tooltip = VAL_economic_miracle_unlock_tt
+		}
+		hidden_effect = {
+			add_to_variable = { var = VAL_economic_recovery_steps value = 1 }
+			VAL_refresh_industrial_economy = yes
+		}
+	}
+}
+SOURCE common/scripted_effects/ADISCORD_VAL_effects.txt VAL_refresh_contract_modifier LINE 20
+VAL_refresh_contract_modifier = {
+	if = {
+		limit = { NOT = { has_variable = VAL_contract_band } }
+		set_variable = { var = VAL_contract_band value = -1 }
+	}
+	set_temp_variable = { var = VAL_contract_new_band value = 5 }
+	if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 25 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 50 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 75 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 90 compare = less_than } }
+		set_temp_variable = { var = VAL_contract_new_band value = 4 }
+	}
+
+	# VAL contract band 0-24
+	if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 25 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.0 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.0 }
+		set_variable = { var = VAL_contract_org_factor value = 0.03 }
+		set_variable = { var = VAL_contract_org_regain value = 0.02 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.0 }
+		set_variable = { var = VAL_contract_supply_factor value = 0.0 }
+		set_variable = { var = VAL_contract_planning_factor value = 0.0 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.1 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.0 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_army_expense_factor value = 0.0 }
+	}
+	# VAL contract band 25-49
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 50 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.03 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.03 }
+		set_variable = { var = VAL_contract_org_factor value = 0.05 }
+		set_variable = { var = VAL_contract_org_regain value = 0.03 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.02 }
+		set_variable = { var = VAL_contract_supply_factor value = 0.0 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.05 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.1 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.0 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.0 }
+		set_variable = { var = VAL_contract_army_expense_factor value = 0.0 }
+	}
+	# VAL contract band 50-74
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 75 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.06 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.05 }
+		set_variable = { var = VAL_contract_org_factor value = 0.08 }
+		set_variable = { var = VAL_contract_org_regain value = 0.05 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.05 }
+		set_variable = { var = VAL_contract_supply_factor value = -0.03 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.05 }
+		set_variable = { var = VAL_contract_pp_gain value = 0.0 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.03 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.03 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.03 }
+		set_variable = { var = VAL_contract_army_expense_factor value = -0.03 }
+	}
+	# VAL contract band 75-89
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_authority value = 90 compare = less_than } }
+		set_variable = { var = VAL_contract_attack_factor value = 0.1 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.08 }
+		set_variable = { var = VAL_contract_org_factor value = 0.1 }
+		set_variable = { var = VAL_contract_org_regain value = 0.08 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.08 }
+		set_variable = { var = VAL_contract_supply_factor value = -0.05 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.1 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.2 }
+		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.05 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.05 }
+		set_variable = { var = VAL_contract_army_expense_factor value = -0.05 }
+	}
+	# VAL contract band 90-100
+	else = {
+		set_variable = { var = VAL_contract_attack_factor value = 0.12 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.1 }
+		set_variable = { var = VAL_contract_org_factor value = 0.12 }
+		set_variable = { var = VAL_contract_org_regain value = 0.1 }
+		set_variable = { var = VAL_contract_capture_factor value = 0.1 }
+		set_variable = { var = VAL_contract_supply_factor value = -0.07 }
+		set_variable = { var = VAL_contract_planning_factor value = -0.15 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.25 }
+		set_variable = { var = VAL_contract_stability_factor value = -0.05 }
+		set_variable = { var = VAL_contract_state_overload_factor value = 0.08 }
+		set_variable = { var = VAL_contract_trade_income_factor value = 0.07 }
+		set_variable = { var = VAL_contract_military_income_factor value = 0.07 }
+		set_variable = { var = VAL_contract_army_expense_factor value = -0.07 }
+	}
+
+	# Recalculate persistent focus bonuses when a focus or authority value changes.
+	set_variable = { var = VAL_contract_factory_output_factor value = 0.0 }
+	set_variable = { var = VAL_contract_conscription_factor value = 0.0 }
+	set_variable = { var = VAL_contract_command_power_factor value = 0.0 }
+	set_variable = { var = VAL_contract_consumer_goods_factor value = 0.0 }
+
+	# Successful northern contracts establish permanent broker networks (0-3 per region).
+	if = {
+		limit = { check_variable = { var = VAL_CIN_influence value = 3 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.06 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_CIN_influence value = 2 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.04 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_CIN_influence value = 1 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.02 }
+	}
+	if = {
+		limit = { check_variable = { var = VAL_OSF_influence value = 3 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.06 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_OSF_influence value = 2 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.04 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_OSF_influence value = 1 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.02 }
+	}
+	if = {
+		limit = { check_variable = { var = VAL_APH_influence value = 3 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.06 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_APH_influence value = 2 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.04 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_APH_influence value = 1 compare = greater_than_or_equals } }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.02 }
+	}
+
+	# Specialised company reforms survive authority changes; reset the base above before adding them.
+	if = {
+		limit = { has_country_flag = VAL_company_rosters }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_border_survey_complete }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_company_service_code }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_contractor_officers }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_motorized_columns }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_field_repair_corps }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_ministry_auditors }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_contract_general_staff }
+		add_to_variable = { var = VAL_contract_planning_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_contract_nco_schools }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_provincial_brokers_network }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.03 }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_export_clearing_house }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+	}
+
+	if = {
+		limit = { has_country_flag = VAL_captain_retainers_unlocked }
+		add_to_variable = { var = VAL_contract_command_power_factor value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_negotiation_posture_visible }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_quality_arsenal }
+		add_to_variable = { var = VAL_contract_factory_output_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_broad_resource_network }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_supply_contracts }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_army_expense_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_covert_intervention }
+		add_to_variable = { var = VAL_contract_planning_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_sustained_supply }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.03 }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_doctrine_resource_raider }
+		add_to_variable = { var = VAL_contract_attack_factor value = 0.04 }
+		add_to_variable = { var = VAL_contract_capture_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_defence_factor value = -0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_ash_manpower_preservation }
+		add_to_variable = { var = VAL_contract_conscription_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_ash_rear_mobilization }
+		add_to_variable = { var = VAL_contract_factory_output_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_consumer_goods_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_north_open_market }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.07 }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_north_coercive }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.07 }
+		add_to_variable = { var = VAL_contract_attack_factor value = 0.02 }
+		add_to_variable = { var = VAL_contract_stability_factor value = -0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_hire_out_war }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_paid_loyalty }
+		add_to_variable = { var = VAL_contract_army_expense_factor value = -0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_closed_ledgers }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_state_above_captains }
+		add_to_variable = { var = VAL_contract_command_power_factor value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_captains_cannot_veto }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_front_stories }
+		add_to_variable = { var = VAL_contract_stability_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_army_of_the_ledger }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.02 }
+		add_to_variable = { var = VAL_contract_planning_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_contract_throne }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.05 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_weaponry_baron }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.03 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_mercenary_state }
+		add_to_variable = { var = VAL_contract_org_regain value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_harvest_of_ash }
+		add_to_variable = { var = VAL_contract_stability_factor value = 0.02 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_provincial_courts }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.03 }
+	}
+
+    if = { limit = { has_variable = VAL_frontier_supply_bonus } add_to_variable = { var = VAL_contract_supply_factor value = VAL_frontier_supply_bonus } }
+    if = { limit = { has_variable = VAL_frontier_output_bonus } add_to_variable = { var = VAL_contract_factory_output_factor value = VAL_frontier_output_bonus } }
+    if = { limit = { has_variable = VAL_frontier_trade_bonus } add_to_variable = { var = VAL_contract_trade_income_factor value = VAL_frontier_trade_bonus } }
+    if = { limit = { has_variable = VAL_frontier_recovery_bonus } add_to_variable = { var = VAL_contract_org_regain value = VAL_frontier_recovery_bonus } }
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					var = VAL_contract_band
+					value = VAL_contract_new_band
+					compare = equals
+				}
+			}
+		}
+		set_variable = { var = VAL_contract_band value = VAL_contract_new_band }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAL_contract_state } }
+		force_update_dynamic_modifier = yes
+	}
+	else = { add_dynamic_modifier = { modifier = VAL_contract_state } }
+	ADISCORD_economy_mark_dirty = yes
+}
+SOURCE common/scripted_effects/ADISCORD_VAL_effects.txt VAL_invest_arsenal_industry LINE 2147
+VAL_invest_arsenal_industry = {
+	effect_tooltip = { add_ideas = VAL_arsenal_investment_delta }
+	hidden_effect = {
+		add_to_variable = { var = VAL_arsenal_investment value = 0.02 }
+		VAL_refresh_industrial_economy = yes
+	}
+}
+SOURCE common/scripted_effects/ADISCORD_VAL_effects.txt VAL_frontier_record_ultimatum LINE 1737
+VAL_frontier_record_ultimatum = {
+    set_variable = { var = VAL_frontier_stage value = 1 }
+    VAL_frontier_save_quoted_target = yes
+    if = {
+        limit = { check_variable = { var = VAL_frontier_target value = 4 compare = less_than } }
+        event_target:VAL_frontier_quoted_target = { VAL_frontier_assemble_coalition = yes }
+    }
+    activate_mission = VAL_frontier_ultimatum_deadline
+}
+SOURCE common/scripted_effects/ADISCORD_STP_scripted_effects.txt STP_pw_refresh_modifier LINE 3841
+STP_pw_refresh_modifier = {
+	if = {
+		limit = { STP_pw_can_reconstruct = yes }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_economy_admin_expense_factor } } set_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_economy_overall_income_factor } } set_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_economy_treasury_capacity_factor } } set_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_economy_creditworthiness_factor } } set_variable = { var = STP_pw_ADISCORD_economy_creditworthiness_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_country_development_global_growth_factor } } set_variable = { var = STP_pw_ADISCORD_country_development_global_growth_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_country_development_economic_growth_factor } } set_variable = { var = STP_pw_ADISCORD_country_development_economic_growth_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_country_development_state_growth_factor } } set_variable = { var = STP_pw_ADISCORD_country_development_state_growth_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_ADISCORD_country_development_society_growth_factor } } set_variable = { var = STP_pw_ADISCORD_country_development_society_growth_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_army_org_factor } } set_variable = { var = STP_pw_army_org_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_army_org_regain } } set_variable = { var = STP_pw_army_org_regain value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_industrial_capacity_factory } } set_variable = { var = STP_pw_industrial_capacity_factory value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_planning_speed } } set_variable = { var = STP_pw_planning_speed value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_political_power_gain } } set_variable = { var = STP_pw_political_power_gain value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_production_factory_max_efficiency_factor } } set_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_production_speed_buildings_factor } } set_variable = { var = STP_pw_production_speed_buildings_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_production_speed_industrial_complex_factor } } set_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_research_speed_factor } } set_variable = { var = STP_pw_research_speed_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_stability_factor } } set_variable = { var = STP_pw_stability_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_supply_consumption_factor } } set_variable = { var = STP_pw_supply_consumption_factor value = 0 } }
+		if = { limit = { NOT = { has_variable = STP_pw_training_time_factor } } set_variable = { var = STP_pw_training_time_factor value = 0 } }
+		if = { limit = { tag = STS NOT = { has_dynamic_modifier = { modifier = STP_pw_republic_dynamic } } } add_dynamic_modifier = { modifier = STP_pw_republic_dynamic } }
+		if = { limit = { tag = STP NOT = { has_dynamic_modifier = { modifier = STP_pw_party_dynamic } } } add_dynamic_modifier = { modifier = STP_pw_party_dynamic } }
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+MISSING common/scripted_effects/ADISCORD_STP_scripted_effects.txt STP_pw_initialize_variables
+STP_ECONOMY_LOCALISATION
+ STP_pc_economy_count_the_cost: "Свести военные счета"
+ STP_pc_economy_count_the_cost_desc: "Гражданская война закончилась быстрее, чем бухгалтерия успела понять, какое государство осталось после неё. Районные кассы, заводские ведомости и налоговые книги должны снова описывать одну страну, а не несколько военных администраций."
+ STP_pc_economy_count_the_cost_tt: "Экономика будет немедленно пересчитана по всей объединённой территории. Общий доход казны: §G+3%§!. Ёмкость казны: §G+3%§!."
+ STP_pc_economy_reopen_tax_offices: "Вернуть налоговые книги"
+ STP_pc_economy_reopen_tax_offices_desc: "Во время войны сборщики исчезали вместе с архивами, а предприятия платили тому, кто контролировал ближайшую дорогу. Новая власть должна вернуть единый реестр плательщиков и отделить налоги от полевых поборов."
+ STP_pc_economy_reopen_tax_offices_tt: "Общий доход казны: §G+5%§!. Административные расходы: §G-3%§!."
+ STP_pc_economy_repair_workshops: "Запустить гражданские мастерские"
+ STP_pc_economy_repair_workshops_desc: "Ремонтные цеха, которые вчера латали грузовики и винтовки, могут снова производить оборудование для шахт, дорог и домов. Государственный заказ должен вернуть им гражданскую работу."
+ STP_pc_economy_repair_workshops_tt: "Будет построена §G1 гражданская фабрика§! в доступном стеландском регионе; если свободного места нет, казна получит §G100§!. Скорость строительства гражданской промышленности: §G+5%§!. Ёмкость казны: §G+5%§!."
+ STP_pc_economy_stabilize_currency: "Удержать расчётную единицу"
+ STP_pc_economy_stabilize_currency_desc: "После месяцев военных расписок, чрезвычайных закупок и раздельных касс цена денег стала политическим вопросом. Совет министров и банки должны договориться, какие обязательства признаёт республика и чем она за них отвечает."
+ STP_pc_economy_stabilize_currency_tt: "Инфляция: §G-3§!. Давление дефицита: §G-5§!. Кредитоспособность: §G+8%§!. Ёмкость казны: §G+2%§!."
+ STP_pc_economy_recovery_budget: "Бюджет восстановления"
+ STP_pc_economy_recovery_budget_desc: "Восстановление перестанет быть набором чрезвычайных платежей. Дороги, гражданская промышленность, местные администрации и долги получат общий бюджет, рассчитанный на несколько лет, а не на следующую неделю."
+ STP_pc_economy_recovery_budget_tt: "Казна получает §G100§!. Общий доход казны: §G+7%§!. Ёмкость казны: §G+5%§!. Административные расходы: §G-2%§!. Рост экономического развития: §G+8%§!."
+STATE_TOTALS
+VAL {'industrial_complex': 11.0, 'arms_factory': 12.0, 'dockyard': 0, 'ADISCORD_business_center': 1.0, 'ADISCORD_science_center': 0, 'ADISCORD_industrial_cluster': 1.0, 'manpower': 11270000.0} ['168-168.txt', '57-Zoilong.txt', '24-Irem.txt', '56-Zeigen.txt', '48-Depoitodron.txt', '42-Prigranichie.txt', '55-Erstantpeo.txt', '54-Spastlant.txt']
+history/countries/VAL - ValeraLand.txt capital = 48
+
+####### Characters
+
+recruit_character = VAL_Valera_Solgalov
+recruit_character = VAL_Commanders_Council
+recruit_character = VAL_Kirill_Voron
+recruit_character = VAL_Erika_Stahl
+recruit_character = VAL_Boris_Gromov
+recruit_character = VAL_Renata_Morn
+recruit_character = VAL_Aleksei_Veyr
+recruit_character = VAL_Maksim_Korvin
+recruit_character = VAL_Artem_Rask
+recruit_character = VAL_Dmitri_Karsov
+recruit_character = VAL_Leonid_Vargan
+recruit_character = VAL_Sergei_Volkov
+
+####### Basic shit
+
+# Air equipment must be unlocked before the OOB creates its wings.
+ADISCORD_grant_technology_profile_air = yes
+ADISCORD_grant_technology_profile_land = yes
+ADISCORD_grant_technology_profile_field_air_defense = yes
+oob = "VAL"
+
+set_politics = {
+	ruling_party = etatism
+	last_election = "2137.12.01"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 56
+	chauvinism = 19
+	humanism = 1
+	utilitarism = 3
+	pragmatism = 21
+}
+
+add_ideas = {
+	VAL_mercenary_state
+	VAL_worldwide_famous_weponry
+	VAL_harvest_of_ash
+	VAL_big_buyers
+	ADISCORD_economic_system_state_coordinated
+
+	#ministers
+	minister_VAL_Valerian_Kraith
+	minister_VAL_Arseny_Bragin
+	minister_VAL_Miron_Sablev
+	minister_VAL_Lada_Khrom
+	minister_VAL_Einar_Toll
+	minister_VAL_Sava_Murat
+}
+
+set_convoys = 300
+
+set_stability = 0.44
+
+set_research_slots = 3
+
+# Starting technologies are granted by the generated VAL profile on_startup.
+
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 1500
+	producer = STP
+}
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 55000
+	producer = VAL
+}
+
+###diplomacy
+
+WRK = {
+		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+}
+NAM = {
+		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+}
+IVN = {
+		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+}
+WIT = {
+		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+}
+TFF = {
+		add_opinion_modifier = { target = VAL modifier = VAL_different_views_on_freedom }
+}
+STP = {
+		add_opinion_modifier = { target = VAL modifier = VAL_october_of_2160 }
+}
+
+# Initial market access was rejected by 1.19 validation when no valid route exists.
+# The VAL AI strategy still asks these countries for market access after setup.
+
+recruit_character = VAL_party_administration
+
+STP {'industrial_complex': 20.0, 'arms_factory': 7.0, 'dockyard': 3.0, 'ADISCORD_business_center': 1.0, 'ADISCORD_science_center': 0, 'ADISCORD_industrial_cluster': 1.0, 'manpower': 19830000.0} ['2-New-Monaii.txt', '3-Neansas.txt', '29-Kreyden.txt', '46-Hosheit.txt', '53-Old-Fada.txt', '88-Shahterskiy-Poselok.txt', '1-Ablia.txt', '28-Fada.txt', '44-Iron-Shield.txt', '45-Livonn.txt', '43-Balchansk.txt']
+history/countries/STP - StepanLand.txt capital = 28 
+
+####### Characters
+
+recruit_character = STP_Petr_Ivanov
+recruit_character = STP_maksim_shabrat
+recruit_character = STP_grigory_sotnikov
+recruit_character = STP_ilya_gornin
+recruit_character = STP_vera_tikh
+recruit_character = STP_rufus_hedersett
+recruit_character = STP_Roland_Keitel
+recruit_character = STP_Maurice_Dallon
+recruit_character = STP_Leonid_Barchel
+recruit_character = STP_Gleb_Korsh
+recruit_character = STP_Edmund_Ravel
+recruit_character = STP_Viktor_Marent
+recruit_character = STP_Severin_Drake
+recruit_character = STP_August_Veil
+
+####### Basic shit
+
+set_politics = {	
+	ruling_party = hedonism
+	last_election = "2154.3.18"
+	election_frequency = 120
+	elections_allowed = yes
+}
+
+set_popularities = {
+	humanism = 2
+	utilitarism = 1
+	etatism = 13
+	chauvinism = 34
+	anarchism = 10
+	hedonism = 40
+}
+
+set_stability = 0.33
+set_war_support = 0.15
+
+# Canonical STP campaign state. Derived modifier values are recalculated on startup.
+set_variable = { var = STP_party_suspicion value = 5 }
+set_variable = { var = STP_leader_health_stage value = 1 }
+
+set_research_slots = 1
+
+####### Ideas
+
+add_ideas = {
+	STP_hedonism_with_no_bondaries
+	STP_hidden_slaves_trade
+	STP_legalize
+	STP_worldwide_famous_tourist_destination
+	ADISCORD_economic_system_oligarchic_clan
+
+	#ministers
+	minister_STP_Ernest_Derlich
+	minister_STP_Tarik_Menebhi
+	minister_STP_Camus_Onyx
+	minister_STP_Lorian_Vell
+	minister_STP_Vesper_Monray
+	minister_STP_Cyan_Crowe
+}
+
+###### Army and production
+set_convoys = 100
+
+# The OOB contains a recon-platform company.  Grant its narrow generated
+# profile before the template is loaded; the full STP profile is reasserted on_startup.
+ADISCORD_grant_technology_profile_recon_platform = yes
+# Air equipment must be unlocked before the OOB creates its wings.
+ADISCORD_grant_technology_profile_air = yes
+ADISCORD_grant_technology_profile_field_air_defense = yes
+ADISCORD_grant_technology_profile_land = yes
+oob = "STP"
+
+# Starting technologies are granted by the generated STP profile on_startup.
+
+set_grand_doctrine = ADISCORD_doctrine_restoration_general_staff
+set_grand_doctrine = ADISCORD_naval_doctrine_littoral_command
+set_grand_doctrine = ADISCORD_air_doctrine_restored_air_command
+
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 4500
+	producer = STP
+}
+
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 500
+	producer = VAL
+}
+
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 1500
+	producer = WRK
+}
+
+STS {} []
+history/countries/STS - Stelander Resistance.txt # Dormant until the prepared uprising. The split transfers Shabrat and all resources.
+capital = 1
+set_politics = {
+	ruling_party = chauvinism
+	elections_allowed = no
+}
+set_popularities = {
+	chauvinism = 60
+	etatism = 20
+	humanism = 20
+}
+set_stability = 0.35
+set_war_support = 0.65
+
+NOD {'industrial_complex': 10.0, 'arms_factory': 12.0, 'dockyard': 1.0, 'ADISCORD_business_center': 1.0, 'ADISCORD_science_center': 0, 'ADISCORD_industrial_cluster': 1.0, 'manpower': 13010000.0} ['10-Ashya.txt', '12-Kaclana.txt', '18-Brioland.txt', '17-Esnos.txt', '30-Cussington.txt', '11-Ostrium.txt', '13-Treya.txt']
+history/countries/NOD - Nodral.txt capital = 30
+
+# Air and armor must be unlocked before the OOB creates wings and tank divisions.
+ADISCORD_grant_technology_profile_air = yes
+ADISCORD_grant_technology_profile_land = yes
+ADISCORD_grant_technology_profile_armored_core = yes
+oob = "NOD"
+####### Characters
+
+recruit_character = NOD_Tobis_Bentlix
+
+####### Faction
+
+create_faction_from_template = {
+	template = faction_template_ADISCORD_standard
+	name = faction_stp_nod
+}
+add_to_faction = STP
+add_to_faction = AIN
+
+####### Basic shit
+
+set_politics = {
+	ruling_party = hedonism
+	last_election = "2154.3.18"
+	election_frequency = 120
+	elections_allowed = yes
+}
+set_popularities = {
+	etatism = 8
+	hedonism = 42
+	technocracy = 10
+	humanism = 7
+	utilitarism = 3
+	pragmatism = 20
+	anarchism = 9
+	chauvinism = 1
+}
+
+add_ideas = {
+	limited_conscription
+	NOD_home_of_hedonist_revolution
+	NOD_hedonism_with_no_bondaries
+	STP_hidden_slaves_trade
+	ADISCORD_economic_system_oligarchic_clan
+
+	#ministers
+	minister_NOD_Avren_Lusk
+	minister_NOD_Reto_Bane
+	minister_NOD_Selma_Korr
+	minister_NOD_Nestor_Vale
+	minister_NOD_Iris_Noll
+	minister_NOD_Kain_Voss
+}
+
+
+set_stability = 0.63
+
+set_research_slots = 2
+
+####### Diplomacy
+
+set_autonomy = {
+	target = STP
+	autonomous_state = autonomy_shadow_state
+}
+set_autonomy = {
+	target = AIN
+	autonomous_state = autonomy_colony
+}
+
+WRK {'industrial_complex': 49.0, 'arms_factory': 24.0, 'dockyard': 0, 'ADISCORD_business_center': 1.0, 'ADISCORD_science_center': 1.0, 'ADISCORD_industrial_cluster': 0, 'manpower': 58400000.0} ['201-201.txt', '320-320.txt', '34-34.txt', '39-39.txt', '36-36.txt', '324-324.txt', '33-33.txt', '38-38.txt', '82-82.txt', '35-35.txt', '325-325.txt', '40-SPECIAL.txt', '27-PLACEHOLDER.txt.txt', '323-323.txt', '200-200.txt', '32-32.txt', '37-37.txt']
+history/countries/WRK - WorkerLand.txt capital = 32
+
+# Consumed by the collapse startup hook. A loaded pre-feature save never has
+# this history-only marker and therefore cannot be migrated into the campaign.
+set_country_flag = ADISCORD_vorkerland_fresh_start_collapse_pending_v1
+
+ADISCORD_grant_technology_profile_land = yes
+oob = "WRK"
+
+####### Characters
+
+recruit_character = WRK_Nikita_Worcker
+recruit_character = WRK_Mark_Yastrebtsev
+recruit_character = WRK_Necro_Filopo
+recruit_character = WRK_Anton_Bagley
+recruit_character = WRK_VAD_Joint_Council
+
+####### Faction
+
+create_faction_from_template = {
+	template = faction_template_ADISCORD_standard
+	name = faction_vorkerland_confederation
+}
+add_to_faction = NAM
+add_to_faction = DAN
+add_to_faction = EYR
+add_to_faction = EGC
+add_to_faction = RIV
+add_to_faction = YOR
+add_to_faction = ZAO
+add_to_faction = PWR
+add_to_faction = VLA
+add_to_faction = ROM
+add_to_faction = SOL
+add_to_faction = TRU
+add_to_faction = WCG
+
+####### Politics
+
+add_ideas = {
+	WRK_ashes_of_the_crown
+	WRK_hourglass_of_discord
+	WRK_constitution_of_the_republic
+	WRK_birthplace_of_the_first_revolution
+
+	#ministers
+	minister_WRK_Dorian_Worx
+	minister_WRK_Anton_Bagley
+	minister_WRK_Ted_Cuttle
+	minister_WRK_Oliver_Larry_Gates
+	minister_WRK_Bassam_Zogby
+	minister_WRK_Reginald_Silver
+}
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "2135.10.27"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 1
+	chauvinism = 26
+	humanism = 3
+	pragmatism = 43
+	technocracy = 27
+}
+
+set_stability = 0.27
+
+set_research_slots = 5
+
+####### Diplomacy
+
+set_autonomy = {
+	target = NAM
+	autonomous_state = autonomy_colony
+}
+set_autonomy = {
+	target = DAN
+	autonomous_state = autonomy_colony
+}
+set_autonomy = {
+	target = EYR
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = EGC
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = RIV
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = YOR
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = ZAO
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = PWR
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = VLA
+	autonomous_state = autonomy_district_in_Vorkerland
+}
+set_autonomy = {
+	target = ROM
+	autonomous_state = autonomy_republic_in_Vorkerland
+}
+set_autonomy = {
+	target = SOL
+	autonomous_state = autonomy_republic_in_Vorkerland
+}
+set_autonomy = {
+	target = TRU
+	autonomous_state = autonomy_republic_in_Vorkerland
+}
+set_autonomy = {
+	target = WCG
+	autonomous_state = autonomy_vorkerland_sanitary_gate
+}
+
+# Party texticons are initialized only while country history creates a fresh campaign.
+ADISCORD_vorkerland_sync_all_party_identities = yes
+
+set_convoys = 533
+
+set_cosmetic_tag = WRK_confederation
+
+VAD {} []
+history/countries/VAD - VadlLand.txt capital = 75
+
+ADISCORD_grant_technology_profile_land = yes
+####### Characters
+
+recruit_character = WRK_Vlad_Petrichev
+
+####### Basic shit
+
+add_ideas = {
+	WRK_ashes_of_the_crown
+	WRK_hourglass_of_discord
+	WRK_constitution_of_the_republic
+
+	#ministers
+	minister_VAD_Pavel_Strazh
+	minister_VAD_Ruslan_Pike
+	minister_VAD_Yulia_Mera
+	minister_VAD_Roman_Zhiv
+	minister_VAD_Lidia_Takt
+	minister_VAD_Orest_Nox
+}
+
+set_politics = {
+	ruling_party = pragmatism
+	last_election = "2110.12.01"
+	elections_allowed = no
+}
+set_popularities = {
+	etatism = 19
+	chauvinism = 6
+	humanism = 3
+	utilitarism = 20
+	pragmatism = 43
+	technocracy = 9
+}
+
+set_stability = 0.31
+
+set_research_slots = 2
+
+FOCUS_AI_PLANS
+FRONTIER_EVENT_RESPONSE
+events/ADISCORD_VAL_contract_events.txt 
+}
+country_event = {
+    id = val_rework.110
+    title = val_rework.110.t
+    desc = { text = val_rework.110.ert trigger = { tag = ERT } }
+    desc = { text = val_rework.110.commission trigger = { NOT = { tag = ERT } VAL = { has_completed_focus = VAL_frontier_commissioners } } }
+    desc = { text = val_rework.110.direct trigger = { NOT = { tag = ERT } VAL = { has_completed_focus = VAL_frontier_provincial_offices } } }
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_rework.110.no trigger = { VAL_frontier_offer_is_current = yes } ai_chance = { base = 75 } VAL_frontier_refuse = yes }
+    option = { name = val_rework.110.yes trigger = { VAL_frontier_offer_is_current = yes } ai_chance = { base = 25 modifier = { factor = 2 has_war = yes } modifier = { factor = 0 NOT = { tag = ERT } } } custom_effect_tooltip = VAL_frontier_accept_tt hidden_effect = { VAL_frontier_accept = yes } }
+    option = { name = val_rework.closed trigger = { NOT = { VAL_frontier_offer_is_current = yes } } }
+}
+country_event = {
+    id = val_rework.111
+    title = val_rework.111.t
+    desc = val_rework.111.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = {
+        name = val_rework.111.prepare
+        trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes }
+        ai_chance = { base = 0 }
+        custom_effect_tooltip = VAL_frontier_prepare_tt
+    }
+    option = { name = val_rework.111.withdraw trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes } ai_chance = { base = 30 } hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } } VAL_frontier_close = yes } } }
+    option = {
+        name = val_rework.111.war
+        trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes VAL_frontier_prewar_eligible = yes has_war = no }
+        ai_chance = { base = 70 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0.3 has_manpower < 20000 } }
+        custom_effect_tooltip = VAL_frontier_war_tt
+        hidden_effect = { VAL_frontier_start_war = yes }
+    }
+    option = { name = val_rework.closed trigger = { NOT = { AND = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes } } } }
+}
+country_event = {
+    id = val_rework.113
+    title = val_rework.113.t
+    desc = val_rework.113.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = {
+        name = val_rework.113.accept
+        trigger = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } has_country_flag = VAL_frontier_armistice_offered VAL_frontier_reply_is_current = yes surrender_progress > 0.65 } }
+        ai_chance = { base = 75 }
+        custom_effect_tooltip = VAL_frontier_armistice_tt
+        hidden_effect = { VAL = { VAL_frontier_settle_armistice = yes } }
+    }
+    option = {
+        name = val_rework.113.refuse
+        trigger = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } has_country_flag = VAL_frontier_armistice_offered VAL_frontier_reply_is_current = yes surrender_progress > 0.65 } }
+        ai_chance = { base = 25 modifier = { factor = 2 VAL = { surrender_progress > 0.85 } } }
+        custom_effect_tooltip = VAL_frontier_refuse_peace_tt
+
+    }
+    option = { name = val_rework.closed trigger = { NOT = { AND = { has_war_with = VAL has_country_flag = VAL_frontier_guarantor VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } has_country_flag = VAL_frontier_armistice_offered VAL_frontier_reply_is_current = yes surrender_progress > 0.65 } } } } }
+}
+country_event = {
+    id = val_rework.115
+    title = val_rework.115.t
+    desc = val_rework.115.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_rework.115.a }
+}
+country_event = {
+    id = val_rework.116
+    title = val_rework.116.t
+    desc = val_rework.116.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_rework.116.a }
+}
+
+country_event = {
+ id = val_contract.340
+ title = val_contract.340.t
+ desc = val_contract.340.d
+ picture = GFX_event_adiscord_negotiation_table
+ is_triggered_only = yes
+ timeout_days = 14
+ option = {
+  name = VAL_export_decline
+  ai_chance = { base = 10 }
+  hidden_effect = { if = { limit = { has_country_flag = VAL_export_offer_arms } clr_country_flag = VAL_export_offer_arms VAL = { clr_country_flag = VAL_export_offer_pending } } }
+ }
+ option = {
+  name = VAL_export_accept
+  trigger = { VAL_export_arms_can_accept = yes }
+  ai_chance = { base = 90 }
+  custom_effect_tooltip = VAL_export_arms_accepted_tt
+  hidden_effect = {
+   if = {
+    limit = { VAL_export_arms_can_accept = yes }
+    ADISCORD_economy_spend_100 = yes
+    VAL = {
+     send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
+     if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
+     else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+    }
+    clr_country_flag = VAL_export_offer_arms
+    set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+    VAL = { clr_country_flag = VAL_export_offer_pending }
+   }
+  }
+ }
+}
+
+country_event = {
+ id = val_contract.341
+ title = val_contract.341.t
+ desc = val_contract.341.d
+ picture = GFX_event_adiscord_negotiation_table
+ is_triggered_only = yes
+ timeout_days = 14
+ option = {
+  name = VAL_export_decline
+  ai_chance = { base = 10 }
+  hidden_effect = { if = { limit = { has_country_flag = VAL_export_offer_advisors } clr_country_flag = VAL_export_offer_advisors VAL = { clr_country_flag = VAL_export_offer_pending } } }
+ }
+ option = {
+  name = VAL_export_accept
+  trigger = { VAL_export_advisors_can_accept = yes }
+  ai_chance = { base = 90 }
+  custom_effect_tooltip = VAL_export_advisors_accepted_tt
+  hidden_effect = {
+   if = {
+    limit = { VAL_export_advisors_can_accept = yes }
+    ADISCORD_economy_spend_100 = yes
+    add_timed_idea = { idea = VAL_paid_military_advisors days = 70 }
+    VAL = { add_command_power = -25 add_timed_idea = { idea = VAL_advisors_income days = 70 } }
+    clr_country_flag = VAL_export_offer_advisors
+    set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+    VAL = { clr_country_flag = VAL_export_offer_pending }
+   }
+  }
+ }
+}
+
+country_event = {
+ id = val_contract.343
+ title = val_contract.343.t
+ desc = { text = val_contract.343.shabrat trigger = { has_country_leader = { character = STP_maksim_shabrat } } }
+ desc = { text = val_contract.343.friendly trigger = { NOT = { has_country_leader = { character = STP_maksim_shabrat } } has_opinion = { target = VAL value > 49 } } }
+ desc = { text = val_contract.343.d trigger = { NOT = { has_country_leader = { character = STP_maksim_shabrat } } NOT = { has_opinion = { target = VAL value > 49 } } } }
+ picture = GFX_event_adiscord_negotiation_table
+ is_triggered_only = yes timeout_days = 21
+ option = {
+  name = val_contract.343.refuse
+  ai_chance = { base = 80 modifier = { factor = 5 has_country_leader = { character = STP_maksim_sha
+events/ADISCORD_VAL_contract_events.txt 
+}
+country_event = {
+    id = val_rework.111
+    title = val_rework.111.t
+    desc = val_rework.111.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = {
+        name = val_rework.111.prepare
+        trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes }
+        ai_chance = { base = 0 }
+        custom_effect_tooltip = VAL_frontier_prepare_tt
+    }
+    option = { name = val_rework.111.withdraw trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes } ai_chance = { base = 30 } hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } } VAL_frontier_close = yes } } }
+    option = {
+        name = val_rework.111.war
+        trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes VAL_frontier_prewar_eligible = yes has_war = no }
+        ai_chance = { base = 70 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0.3 has_manpower < 20000 } }
+        custom_effect_tooltip = VAL_frontier_war_tt
+        hidden_effect = { VAL_frontier_start_war = yes }
+    }
+    option = { name = val_rework.closed trigger = { NOT = { AND = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes } } } }
+}
+country_event = {
+    id = val_rework.113
+    title = val_rework.113.t
+    desc = val_rework.113.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = {
+        name = val_rework.113.accept
+        trigger = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } has_country_flag = VAL_frontier_armistice_offered VAL_frontier_reply_is_current = yes surrender_progress > 0.65 } }
+        ai_chance = { base = 75 }
+        custom_effect_tooltip = VAL_frontier_armistice_tt
+        hidden_effect = { VAL = { VAL_frontier_settle_armistice = yes } }
+    }
+    option = {
+        name = val_rework.113.refuse
+        trigger = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } has_country_flag = VAL_frontier_armistice_offered VAL_frontier_reply_is_current = yes surrender_progress > 0.65 } }
+        ai_chance = { base = 25 modifier = { factor = 2 VAL = { surrender_progress > 0.85 } } }
+        custom_effect_tooltip = VAL_frontier_refuse_peace_tt
+
+    }
+    option = { name = val_rework.closed trigger = { NOT = { AND = { has_war_with = VAL has_country_flag = VAL_frontier_guarantor VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } has_country_flag = VAL_frontier_armistice_offered VAL_frontier_reply_is_current = yes surrender_progress > 0.65 } } } } }
+}
+country_event = {
+    id = val_rework.115
+    title = val_rework.115.t
+    desc = val_rework.115.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_rework.115.a }
+}
+country_event = {
+    id = val_rework.116
+    title = val_rework.116.t
+    desc = val_rework.116.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_rework.116.a }
+}
+
+country_event = {
+ id = val_contract.340
+ title = val_contract.340.t
+ desc = val_contract.340.d
+ picture = GFX_event_adiscord_negotiation_table
+ is_triggered_only = yes
+ timeout_days = 14
+ option = {
+  name = VAL_export_decline
+  ai_chance = { base = 10 }
+  hidden_effect = { if = { limit = { has_country_flag = VAL_export_offer_arms } clr_country_flag = VAL_export_offer_arms VAL = { clr_country_flag = VAL_export_offer_pending } } }
+ }
+ option = {
+  name = VAL_export_accept
+  trigger = { VAL_export_arms_can_accept = yes }
+  ai_chance = { base = 90 }
+  custom_effect_tooltip = VAL_export_arms_accepted_tt
+  hidden_effect = {
+   if = {
+    limit = { VAL_export_arms_can_accept = yes }
+    ADISCORD_economy_spend_100 = yes
+    VAL = {
+     send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
+     if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
+     else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+    }
+    clr_country_flag = VAL_export_offer_arms
+    set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+    VAL = { clr_country_flag = VAL_export_offer_pending }
+   }
+  }
+ }
+}
+
+country_event = {
+ id = val_contract.341
+ title = val_contract.341.t
+ desc = val_contract.341.d
+ picture = GFX_event_adiscord_negotiation_table
+ is_triggered_only = yes
+ timeout_days = 14
+ option = {
+  name = VAL_export_decline
+  ai_chance = { base = 10 }
+  hidden_effect = { if = { limit = { has_country_flag = VAL_export_offer_advisors } clr_country_flag = VAL_export_offer_advisors VAL = { clr_country_flag = VAL_export_offer_pending } } }
+ }
+ option = {
+  name = VAL_export_accept
+  trigger = { VAL_export_advisors_can_accept = yes }
+  ai_chance = { base = 90 }
+  custom_effect_tooltip = VAL_export_advisors_accepted_tt
+  hidden_effect = {
+   if = {
+    limit = { VAL_export_advisors_can_accept = yes }
+    ADISCORD_economy_spend_100 = yes
+    add_timed_idea = { idea = VAL_paid_military_advisors days = 70 }
+    VAL = { add_command_power = -25 add_timed_idea = { idea = VAL_advisors_income days = 70 } }
+    clr_country_flag = VAL_export_offer_advisors
+    set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+    VAL = { clr_country_flag = VAL_export_offer_pending }
+   }
+  }
+ }
+}
+
+country_event = {
+ id = val_contract.343
+ title = val_contract.343.t
+ desc = { text = val_contract.343.shabrat trigger = { has_country_leader = { character = STP_maksim_shabrat } } }
+ desc = { text = val_contract.343.friendly trigger = { NOT = { has_country_leader = { character = STP_maksim_shabrat } } has_opinion = { target = VAL value > 49 } } }
+ desc = { text = val_contract.343.d trigger = { NOT = { has_country_leader = { character = STP_maksim_shabrat } } NOT = { has_opinion = { target = VAL value > 49 } } } }
+ picture = GFX_event_adiscord_negotiation_table
+ is_triggered_only = yes timeout_days = 21
+ option = {
+  name = val_contract.343.refuse
+  ai_chance = { base = 80 modifier = { factor = 5 has_country_leader = { character = STP_maksim_shabrat } } modifier = { factor = 0.25 has_opinion = { target = VAL value > 49 } } }
+  hidden_effect = {
+   if = { limit = { VAL_stelander_offer_current = yes }
+    set_country_flag = VAL_stelander_refused
+    VAL = { clr_country_flag = VAL_stelander_offer_pending }
+    clr_country_flag = VAL_stelander_offer
+   }
+  }
+ }
+ option = {
+  name = val_contract.343.accept
+  trigger = { VAL_stelander_offer_current = yes }
+  ai_chance = { base = 20 modifier = { factor = 0 has_country_leader = { character = STP_maksim_shabrat } } modifier = { factor = 4 has_opinion = { target = VAL value > 49 } } modifier = { factor = 2 VAL = { has_country_flag = VAL_cw_arms_contract_fulfilled } } }
+  custom_effect_tooltip = VAL_stelander_terms_tt
+  hidden_effect = {
+   if = {
+    limit = { VAL_stelander_offer_current = yes }
+    43 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 43 } } }
+    44 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 44 } } }
+    45 = { if = { limit
