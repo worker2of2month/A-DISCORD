@@ -3960,3 +3960,185 @@ ADISCORD_economy_debug_reset = {
 	ADISCORD_economy_refresh_spending_ideas = yes
 	ADISCORD_economy_update_gui = yes
 }
+
+# National-project receipts belong to the paying country. Native decisions
+# own duration/cancellation; no periodic scan or delayed country event is used.
+ADISCORD_economy_release_project = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation } }
+		remove_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
+	}
+	clear_variable = ADISCORD_economy_project_id
+	clear_variable = ADISCORD_economy_project_deposit
+	clear_variable = ADISCORD_economy_project_components
+	clear_variable = ADISCORD_economy_project_alloys
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+ADISCORD_economy_cancel_project = {
+	if = {
+		limit = { has_variable = ADISCORD_economy_project_id has_variable = ADISCORD_economy_project_deposit }
+		set_temp_variable = { var = ADISCORD_economy_project_refund_temp value = ADISCORD_economy_project_deposit }
+		multiply_temp_variable = { var = ADISCORD_economy_project_refund_temp value = 0.75 }
+		add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_project_refund_temp }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = ADISCORD_economy_project_refund_temp }
+		ADISCORD_economy_release_project = yes
+	}
+}
+
+ADISCORD_economy_start_precision_tooling = {
+	if = {
+		limit = { ADISCORD_economy_can_start_precision_tooling = yes }
+		set_variable = { var = ADISCORD_economy_project_id value = 1 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 800 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 800 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 800 }
+		set_variable = { var = ADISCORD_economy_project_components value = 6 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 3 }
+		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+ADISCORD_economy_finish_precision_tooling = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_project_id value = 1 compare = equals } }
+		if = {
+			limit = { ADISCORD_economy_project_can_continue = yes ADISCORD_economy_precision_tooling_requirements = yes }
+			add_ideas = ADISCORD_economy_precision_tooling
+			ADISCORD_economy_release_project = yes
+		}
+		else = { ADISCORD_economy_cancel_project = yes }
+	}
+}
+
+ADISCORD_economy_start_automated_industry = {
+	if = {
+		limit = { ADISCORD_economy_can_start_automated_industry = yes }
+		set_variable = { var = ADISCORD_economy_project_id value = 2 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 1200 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1200 }
+		set_variable = { var = ADISCORD_economy_project_components value = 8 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 6 }
+		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+ADISCORD_economy_finish_automated_industry = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_project_id value = 2 compare = equals } }
+		if = {
+			limit = { ADISCORD_economy_project_can_continue = yes ADISCORD_economy_automated_industry_requirements = yes }
+			add_ideas = ADISCORD_economy_automated_industry
+			ADISCORD_economy_release_project = yes
+		}
+		else = { ADISCORD_economy_cancel_project = yes }
+	}
+}
+
+ADISCORD_economy_start_national_computing = {
+	if = {
+		limit = { ADISCORD_economy_can_start_national_computing = yes }
+		set_variable = { var = ADISCORD_economy_project_id value = 3 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 1500 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1500 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1500 }
+		set_variable = { var = ADISCORD_economy_project_components value = 12 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 4 }
+		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+ADISCORD_economy_finish_national_computing = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_project_id value = 3 compare = equals } }
+		if = {
+			limit = { ADISCORD_economy_project_can_continue = yes ADISCORD_economy_national_computing_requirements = yes }
+			add_ideas = ADISCORD_economy_national_computing
+			ADISCORD_economy_release_project = yes
+		}
+		else = { ADISCORD_economy_cancel_project = yes }
+	}
+}
+
+ADISCORD_economy_start_logistics_contract = {
+	if = {
+		limit = { ADISCORD_economy_can_start_logistics_contract = yes }
+		set_variable = { var = ADISCORD_economy_project_id value = 4 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 600 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 600 }
+		set_variable = { var = ADISCORD_economy_project_components value = 4 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 6 }
+		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+ADISCORD_economy_finish_logistics_contract = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_project_id value = 4 compare = equals } }
+		if = {
+			limit = { ADISCORD_economy_project_can_continue = yes ADISCORD_economy_logistics_contract_requirements = yes }
+			add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 300 producer = ROOT }
+			add_equipment_to_stockpile = { type = armored_train_equipment_1 amount = 20 producer = ROOT }
+			ADISCORD_economy_release_project = yes
+		}
+		else = { ADISCORD_economy_cancel_project = yes }
+	}
+}
+
+ADISCORD_economy_start_drone_contract = {
+	if = {
+		limit = { ADISCORD_economy_can_start_drone_contract = yes }
+		set_variable = { var = ADISCORD_economy_project_id value = 5 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 1000 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
+		set_variable = { var = ADISCORD_economy_project_components value = 8 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 4 }
+		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+ADISCORD_economy_finish_drone_contract = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_project_id value = 5 compare = equals } }
+		if = {
+			limit = { ADISCORD_economy_project_can_continue = yes ADISCORD_economy_drone_contract_requirements = yes }
+			add_equipment_to_stockpile = { type = ADISCORD_recon_drone_carrier_2170 amount = 60 producer = ROOT }
+			ADISCORD_economy_release_project = yes
+		}
+		else = { ADISCORD_economy_cancel_project = yes }
+	}
+}
+
+ADISCORD_economy_start_platform_contract = {
+	if = {
+		limit = { ADISCORD_economy_can_start_platform_contract = yes }
+		set_variable = { var = ADISCORD_economy_project_id value = 6 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 1800 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1800 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1800 }
+		set_variable = { var = ADISCORD_economy_project_components value = 8 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 12 }
+		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+ADISCORD_economy_finish_platform_contract = {
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_project_id value = 6 compare = equals } }
+		if = {
+			limit = { ADISCORD_economy_project_can_continue = yes ADISCORD_economy_platform_contract_requirements = yes }
+			add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 80 producer = ROOT }
+			ADISCORD_economy_release_project = yes
+		}
+		else = { ADISCORD_economy_cancel_project = yes }
+	}
+}

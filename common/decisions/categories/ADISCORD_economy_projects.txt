@@ -1,0 +1,7 @@
+ADISCORD_economy_projects = {
+	icon = generic_construction
+	allowed = { OR = { tag = VAL tag = STS } }
+	visible = { ADISCORD_economy_projects_unlocked = yes }
+	visible_when_empty = yes
+	priority = 15
+}

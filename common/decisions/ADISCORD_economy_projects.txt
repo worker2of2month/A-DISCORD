@@ -1,0 +1,280 @@
+ADISCORD_economy_projects = {
+
+	ADISCORD_economy_precision_tooling = {
+		icon = generic_construction
+		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_precision_industry has_completed_focus = STP_pc_investment_precision_industry } NOT = { has_idea = ADISCORD_economy_precision_tooling } }
+		available = {
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
+			NOT = { num_of_available_civilian_factories < 3 }
+		}
+		cost = 0
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 800 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_components value = 6 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_alloys value = 3 compare = greater_than_or_equals }
+		}
+		custom_cost_text = ADISCORD_economy_precision_tooling_cost
+		days_remove = 90
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_economy_precision_tooling_delivery_tt
+			effect_tooltip = { add_ideas = ADISCORD_economy_precision_tooling }
+			hidden_effect = { ADISCORD_economy_start_precision_tooling = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 1 compare = equals } }
+				ADISCORD_economy_project_can_continue = no
+				ADISCORD_economy_precision_tooling_requirements = no
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { check_variable = { var = ADISCORD_economy_project_id value = 1 compare = equals } }
+				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
+				hidden_effect = { ADISCORD_economy_cancel_project = yes }
+			}
+		}
+		remove_effect = { ADISCORD_economy_finish_precision_tooling = yes }
+		ai_will_do = {
+			base = 4
+			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 1100 compare = greater_than_or_equals } } }
+		}
+	}
+
+	ADISCORD_economy_automated_industry = {
+		icon = generic_construction
+		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_automation has_completed_focus = STP_pc_investment_automation } NOT = { has_idea = ADISCORD_economy_automated_industry } }
+		available = {
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
+			NOT = { num_of_available_civilian_factories < 3 }
+		}
+		cost = 0
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_components value = 8 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_alloys value = 6 compare = greater_than_or_equals }
+		}
+		custom_cost_text = ADISCORD_economy_automated_industry_cost
+		days_remove = 120
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_economy_automated_industry_delivery_tt
+			effect_tooltip = { add_ideas = ADISCORD_economy_automated_industry }
+			hidden_effect = { ADISCORD_economy_start_automated_industry = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 2 compare = equals } }
+				ADISCORD_economy_project_can_continue = no
+				ADISCORD_economy_automated_industry_requirements = no
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { check_variable = { var = ADISCORD_economy_project_id value = 2 compare = equals } }
+				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
+				hidden_effect = { ADISCORD_economy_cancel_project = yes }
+			}
+		}
+		remove_effect = { ADISCORD_economy_finish_automated_industry = yes }
+		ai_will_do = {
+			base = 4
+			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals } } }
+		}
+	}
+
+	ADISCORD_economy_national_computing = {
+		icon = generic_construction
+		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_computing has_completed_focus = STP_pc_investment_computing } NOT = { has_idea = ADISCORD_economy_national_computing } }
+		available = {
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
+			NOT = { num_of_available_civilian_factories < 3 }
+		}
+		cost = 0
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_components value = 12 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_alloys value = 4 compare = greater_than_or_equals }
+		}
+		custom_cost_text = ADISCORD_economy_national_computing_cost
+		days_remove = 120
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_economy_national_computing_delivery_tt
+			effect_tooltip = { add_ideas = ADISCORD_economy_national_computing }
+			hidden_effect = { ADISCORD_economy_start_national_computing = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 3 compare = equals } }
+				ADISCORD_economy_project_can_continue = no
+				ADISCORD_economy_national_computing_requirements = no
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { check_variable = { var = ADISCORD_economy_project_id value = 3 compare = equals } }
+				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
+				hidden_effect = { ADISCORD_economy_cancel_project = yes }
+			}
+		}
+		remove_effect = { ADISCORD_economy_finish_national_computing = yes }
+		ai_will_do = {
+			base = 4
+			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } } }
+		}
+	}
+
+	ADISCORD_economy_logistics_contract = {
+		icon = generic_construction
+		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_logistics has_completed_focus = STP_pc_investment_logistics }  }
+		available = {
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
+			NOT = { num_of_available_civilian_factories < 3 }
+			has_tech = ADISCORD_tech_restored_truck_fleets
+			has_tech = ADISCORD_tech_armored_rail_convoys
+		}
+		cost = 0
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_components value = 4 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_alloys value = 6 compare = greater_than_or_equals }
+		}
+		custom_cost_text = ADISCORD_economy_logistics_contract_cost
+		days_remove = 60
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_economy_logistics_contract_delivery_tt
+			effect_tooltip = { add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 300 producer = ROOT }
+				add_equipment_to_stockpile = { type = armored_train_equipment_1 amount = 20 producer = ROOT } }
+			hidden_effect = { ADISCORD_economy_start_logistics_contract = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 4 compare = equals } }
+				ADISCORD_economy_project_can_continue = no
+				ADISCORD_economy_logistics_contract_requirements = no
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { check_variable = { var = ADISCORD_economy_project_id value = 4 compare = equals } }
+				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
+				hidden_effect = { ADISCORD_economy_cancel_project = yes }
+			}
+		}
+		remove_effect = { ADISCORD_economy_finish_logistics_contract = yes }
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } } }
+		}
+	}
+
+	ADISCORD_economy_drone_contract = {
+		icon = generic_construction
+		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_defense_orders has_completed_focus = STP_pc_investment_defense_orders }  }
+		available = {
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
+			NOT = { num_of_available_civilian_factories < 3 }
+			OR = { has_tech = ADISCORD_tech_signature_management_skins has_tech = ADISCORD_tech_unmanned_recon_vehicles }
+		}
+		cost = 0
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_components value = 8 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_alloys value = 4 compare = greater_than_or_equals }
+		}
+		custom_cost_text = ADISCORD_economy_drone_contract_cost
+		days_remove = 90
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_economy_drone_contract_delivery_tt
+			effect_tooltip = { add_equipment_to_stockpile = { type = ADISCORD_recon_drone_carrier_2170 amount = 60 producer = ROOT } }
+			hidden_effect = { ADISCORD_economy_start_drone_contract = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 5 compare = equals } }
+				ADISCORD_economy_project_can_continue = no
+				ADISCORD_economy_drone_contract_requirements = no
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { check_variable = { var = ADISCORD_economy_project_id value = 5 compare = equals } }
+				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
+				hidden_effect = { ADISCORD_economy_cancel_project = yes }
+			}
+		}
+		remove_effect = { ADISCORD_economy_finish_drone_contract = yes }
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 1300 compare = greater_than_or_equals } } }
+		}
+	}
+
+	ADISCORD_economy_platform_contract = {
+		icon = generic_construction
+		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_defense_orders has_completed_focus = STP_pc_investment_defense_orders }  }
+		available = {
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
+			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
+			NOT = { num_of_available_civilian_factories < 3 }
+			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+		}
+		cost = 0
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_components value = 8 compare = greater_than_or_equals }
+			check_variable = { var = resource@rare_alloys value = 12 compare = greater_than_or_equals }
+		}
+		custom_cost_text = ADISCORD_economy_platform_contract_cost
+		days_remove = 120
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_economy_platform_contract_delivery_tt
+			effect_tooltip = { add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 80 producer = ROOT } }
+			hidden_effect = { ADISCORD_economy_start_platform_contract = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 6 compare = equals } }
+				ADISCORD_economy_project_can_continue = no
+				ADISCORD_economy_platform_contract_requirements = no
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { check_variable = { var = ADISCORD_economy_project_id value = 6 compare = equals } }
+				custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt
+				hidden_effect = { ADISCORD_economy_cancel_project = yes }
+			}
+		}
+		remove_effect = { ADISCORD_economy_finish_platform_contract = yes }
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 ADISCORD_economy_ai_is_healthy = no }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 2100 compare = greater_than_or_equals } } }
+		}
+	}
+
+	ADISCORD_economy_abort_project = {
+		icon = generic_political_pressure
+		visible = { has_variable = ADISCORD_economy_project_id }
+		available = { has_variable = ADISCORD_economy_project_deposit }
+		cost = 0
+		complete_effect = { custom_effect_tooltip = ADISCORD_economy_project_cancelled_tt hidden_effect = { ADISCORD_economy_cancel_project = yes } }
+		ai_will_do = { base = 0 }
+	}
+}
