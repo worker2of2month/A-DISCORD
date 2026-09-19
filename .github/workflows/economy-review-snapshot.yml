@@ -1,0 +1,26 @@
+name: Economy review snapshot
+on:
+  push:
+    branches: [codex/economy-review-20260919]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Package source for local regression tests
+        run: |
+          mkdir -p /tmp/economy-review
+          git archive --format=tar.gz HEAD AGENTS.md common docs events history interface localisation tools country_metadata descriptor.mod > /tmp/economy-review/source.tar.gz
+          git ls-tree -r --long HEAD > /tmp/economy-review/tree.txt
+          git rev-parse HEAD > /tmp/economy-review/revision.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: economy-review-source
+          path: /tmp/economy-review/
+          retention-days: 1
