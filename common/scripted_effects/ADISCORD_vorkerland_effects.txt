@@ -293,12 +293,15 @@ ADISCORD_vorkerland_initialize_legitimacy = {
 
 # Theatre priority follows the active central war, not elapsed calendar time.
 ADISCORD_vorkerland_refresh_theatre_priority = {
+	# TFR-style hidden theatre normalization. The three claimants are supposed
+	# to roll over fragmented district governments; their real contest is with
+	# one another. Keep this active for both AI and player claimants throughout
+	# the live collapse, not only after the central showdown has already begun.
 	if = {
 		limit = {
 			ADISCORD_vorkerland_is_main_claimant = yes
-			is_ai = yes
 			has_war = yes
-			has_global_flag = ADISCORD_vorkerland_phase_central_showdown
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 			NOT = { has_idea = ADISCORD_vorkerland_theatre_priority }
 		}
@@ -309,10 +312,10 @@ ADISCORD_vorkerland_refresh_theatre_priority = {
 			ADISCORD_vorkerland_is_main_claimant = yes
 			has_idea = ADISCORD_vorkerland_theatre_priority
 			OR = {
-				is_ai = no
 				has_war = no
-				NOT = { has_global_flag = ADISCORD_vorkerland_phase_central_showdown }
+				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
 				has_global_flag = ADISCORD_vorkerland_central_war_finished
+				has_global_flag = ADISCORD_vorkerland_collapse_finished
 			}
 		}
 		remove_ideas = ADISCORD_vorkerland_theatre_priority
@@ -413,7 +416,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			WKR = {
 				ADISCORD_vorkerland_is_live_claimant = yes
 				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
-				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 18 compare = greater_than }
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
 			}
 		}
 		add_ideas = ADISCORD_vorkerland_coalition_against_wkr
@@ -429,7 +432,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			VAD = {
 				ADISCORD_vorkerland_is_live_claimant = yes
 				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
-				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 18 compare = greater_than }
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
 			}
 		}
 		add_ideas = ADISCORD_vorkerland_coalition_against_vad
@@ -445,7 +448,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			TVA = {
 				ADISCORD_vorkerland_is_live_claimant = yes
 				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
-				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 18 compare = greater_than }
+				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
 			}
 		}
 		add_ideas = ADISCORD_vorkerland_coalition_against_tva

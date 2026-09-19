@@ -938,6 +938,8 @@
  ADISCORD_vorkerland_tva_retreat_levy_1_desc:0 "After seven days, one under-equipped technical militia detachment will assemble at our still-controlled capital."
  ADISCORD_vorkerland_tva_retreat_levy_2:0 "Call the Last Technical Reserve"
  ADISCORD_vorkerland_tva_retreat_levy_2_desc:0 "A final and weaker capital reserve. No further levies can be raised through this line."
+ ADISCORD_vorkerland_vad_continue_imperial_reunification:0 "Continue the Imperial Reunification"
+ ADISCORD_vorkerland_vad_continue_imperial_reunification_desc:0 "Victory over the central claimants did not restore the whole country. The Imperial Chancery will press the surviving administrations of former Vorkerland one at a time, avoiding a wasteful web of simultaneous wars."
  ADISCORD_vorkerland_restore_core_claimant_homes:0 "Restore the Claimant Homelands"
  ADISCORD_vorkerland_restore_core_claimant_homes_desc:0 "Restore the heartlands of the three wartime governments after every listed state is again owned and controlled by the reunited country."
  ADISCORD_vorkerland_restore_core_central_historical:0 "Restore the Historical Centre"

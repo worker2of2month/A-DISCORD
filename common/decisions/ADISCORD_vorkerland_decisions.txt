@@ -1972,6 +1972,162 @@ available = { custom_trigger_tooltip = { tooltip = ADISCORD_vorkerland_central_s
 		ai_will_do = { factor = 1200 }
 	}
 
+
+	# Ordinary Vlad route: restore the empire one surviving administration at a
+	# time instead of opening a dozen simultaneous AI wars. The decision becomes
+	# available again after each war ends, so the player/AI can roll the former
+	# Vorkerland space back into the imperial state in a controlled sequence.
+	ADISCORD_vorkerland_vad_continue_imperial_reunification = {
+		icon = generic_territory_or_war
+		allowed = { tag = WRK }
+		visible = {
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_global_flag = ADISCORD_vorkerland_reunification_verified
+			has_country_flag = ADISCORD_vorkerland_route_joint
+			has_country_flag = ADISCORD_vorkerland_vad_imperial_reclamation_unlocked
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		}
+		available = {
+			has_war = no
+			OR = {
+				EYR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				EGC = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				RIV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				REV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				YOR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				NDN = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				ZAO = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				PWR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				VLA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				ROM = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				TRU = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				WPA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				WPS = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				PSD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				EBA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				DVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				SRA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				ZTA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				CSL = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				IBA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				IBL = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+				TGD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } }
+			}
+		}
+		cost = 25
+		days_re_enable = 14
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { EYR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = EYR type = annex_everything }
+			}
+			else_if = {
+				limit = { EGC = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = EGC type = annex_everything }
+			}
+			else_if = {
+				limit = { RIV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = RIV type = annex_everything }
+			}
+			else_if = {
+				limit = { REV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = REV type = annex_everything }
+			}
+			else_if = {
+				limit = { YOR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = YOR type = annex_everything }
+			}
+			else_if = {
+				limit = { NDN = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = NDN type = annex_everything }
+			}
+			else_if = {
+				limit = { SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = SWB type = annex_everything }
+			}
+			else_if = {
+				limit = { VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = VHV type = annex_everything }
+			}
+			else_if = {
+				limit = { OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = OSV type = annex_everything }
+			}
+			else_if = {
+				limit = { ZAO = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = ZAO type = annex_everything }
+			}
+			else_if = {
+				limit = { PWR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = PWR type = annex_everything }
+			}
+			else_if = {
+				limit = { VLA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = VLA type = annex_everything }
+			}
+			else_if = {
+				limit = { ROM = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = ROM type = annex_everything }
+			}
+			else_if = {
+				limit = { TRU = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = TRU type = annex_everything }
+			}
+			else_if = {
+				limit = { WPA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = WPA type = annex_everything }
+			}
+			else_if = {
+				limit = { WPS = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = WPS type = annex_everything }
+			}
+			else_if = {
+				limit = { PSD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = PSD type = annex_everything }
+			}
+			else_if = {
+				limit = { EBA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = EBA type = annex_everything }
+			}
+			else_if = {
+				limit = { DVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = DVA type = annex_everything }
+			}
+			else_if = {
+				limit = { SRA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = SRA type = annex_everything }
+			}
+			else_if = {
+				limit = { ZTA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = ZTA type = annex_everything }
+			}
+			else_if = {
+				limit = { CSL = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = CSL type = annex_everything }
+			}
+			else_if = {
+				limit = { IBA = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = IBA type = annex_everything }
+			}
+			else_if = {
+				limit = { IBL = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = IBL type = annex_everything }
+			}
+			else_if = {
+				limit = { TGD = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = WRK } NOT = { is_in_faction_with = WRK } } }
+				declare_war_on = { target = TGD type = annex_everything }
+			}
+		}
+		ai_will_do = {
+			factor = 600
+			modifier = { factor = 1.5 has_stability > 0.55 }
+		}
+	}
+
 	ADISCORD_vorkerland_restore_core_claimant_homes = {
 		icon = generic_territory_or_war
 		allowed = { tag = WRK }
