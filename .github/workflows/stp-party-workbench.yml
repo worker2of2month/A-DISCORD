@@ -1,0 +1,23 @@
+name: STP party workbench
+on:
+  push:
+    branches: [agent/stp-party-rework-20260919]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d6cc3c77078a25f7318fbf7e371fc6779eab3351
+          fetch-depth: 1
+      - name: Package source for isolated editing
+        shell: bash
+        run: |
+          find . -type f \( -name '*.txt' -o -name '*.yml' -o -name '*.yaml' -o -name '*.md' -o -name '*.py' -o -name '*.json' -o -name '*.csv' -o -name '*.mod' -o -name '*.gfx' -o -name '*.gui' -o -name '*.lua' -o -name '.gitattributes' -o -name '.gitignore' \) -not -path './.git/*' -print0 | tar --null -T - -czf /tmp/stp-party-source.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stp-party-source
+          path: /tmp/stp-party-source.tar.gz
+          retention-days: 1
