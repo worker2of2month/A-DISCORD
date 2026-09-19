@@ -17,7 +17,7 @@ def outputs():
         with Image.open(ROOT / "tools/assets/source" / f"{tag}_flag.png") as source:
             for folder, size in SIZES.items():
                 buffer = BytesIO()
-                source.convert("RGB").resize(size, Image.Resampling.LANCZOS).save(buffer, format="TGA")
+                source.convert("RGBA").resize(size, Image.Resampling.LANCZOS).save(buffer, format="TGA")
                 yield ROOT / "gfx/flags" / folder / f"{tag}.tga", buffer.getvalue()
 
 

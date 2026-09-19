@@ -1249,6 +1249,22 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.assertEqual(self.variables["VAL_economic_recovery_steps"], 9)
         self.assertGreaterEqual(self.dirty, 8)
 
+    def test_loaded_recovery_removes_stale_modifiers_without_resetting_progress(self):
+        self.variables.update(VAL_economic_recovery_steps=9, VAL_arsenal_reputation_stage=4,
+                              VAL_arsenal_investment_output=0.06)
+        for flag in ("VAL_vorkerland_contracts_disrupted", "VAL_vorkerland_resource_access_initialized"):
+            self.facts[("VAL", "has_country_flag", flag)] = True
+        self.modifiers.update(("VAL_contract_industry", "VAL_economic_collapse", "VAL_economic_miracle"))
+        self.run_effect("VAL_initialize_arsenal_recovery")
+        self.assertEqual(self.modifiers, {"VAL_economic_miracle"})
+        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 9)
+        self.assertEqual(self.variables["VAL_arsenal_reputation_stage"], 4)
+        self.assertEqual(self.variables["VAL_arsenal_investment_output"], 0.06)
+        snapshot = dict(self.variables)
+        self.run_effect("VAL_initialize_arsenal_recovery")
+        self.assertEqual(self.variables, snapshot)
+        self.assertEqual(self.modifiers, {"VAL_economic_miracle"})
+
     def test_existing_campaign_reconciliation_is_once_only(self):
         self.facts[("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")] = True
         for focus in self.recovery_focuses[:3]:
@@ -3643,6 +3659,46 @@ class ValRegionalIntegrationTests(unittest.TestCase):
             self.assertFalse(any(e.key == "add_political_power" for _, e in selected_effects(cancellation, f, "VAL")))
             self.assertFalse(any(e.key in ("add_core_of", "add_compliance", "add_political_power")
                                  for _, e in selected_effects(expand(block(decision, "remove_effect")), f, "VAL")))
+
+
+class ValFormationAndCommandTests(unittest.TestCase):
+    def test_formation_requires_campaign_and_actual_border_ownership(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
+        source = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
+        gate = block(parse_clausewitz(source), "VAL_can_proclaim_commonwealth")
+        facts = {("VAL", "has_completed_focus", "VAL_Contracts_Outlive_Kings"): True,
+                 ("VAL", "VAL_campaign_objectives_met", "yes"): True,
+                 ("VAL", "numeric", "stability"): 0.50,
+                 **{(state, check, "VAL"): True for state in ("29", "46") for check in ("is_owned_by", "is_controlled_by")}}
+        self.assertTrue(matches_conditions(gate, facts, "VAL"))
+        for key, value in [(key, False) for key in facts if key[1] != "numeric"] + [
+                (("VAL", "numeric", "stability"), 0.499),
+                (("VAL", "has_cosmetic_tag", "VAL_commonwealth"), True)]:
+            self.assertFalse(matches_conditions(gate, {**facts, key: value}, "VAL"), key)
+        effects = EFFECTS_PATH.read_text(encoding="utf-8")
+        self.assertNotIn("VAL_adopt_commonwealth = yes", effects, "Settlement must not form the country automatically")
+        decisions = DECISIONS_PATH.read_text(encoding="utf-8")
+        self.assertEqual(decisions.count("VAL_adopt_commonwealth = yes"), 1)
+
+    def test_command_ranges_cover_scale_and_crises_have_costs(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar, walk
+        bop = parse_clausewitz((ROOT / "common/bop/VAL.txt").read_text(encoding="utf-8"))
+        ranges = [e.value for e in walk(bop) if e.key == "range"]
+        intervals = sorted((float(scalar(r, "min")), float(scalar(r, "max"))) for r in ranges)
+        self.assertEqual(len(intervals), 7)
+        self.assertEqual(intervals[0][0], -1)
+        self.assertEqual(intervals[-1][1], 1)
+        for left, right in zip(intervals, intervals[1:]):
+            self.assertEqual(left[1], right[0])
+        for r in ranges:
+            if scalar(r, "id").endswith("dominance"):
+                self.assertLess(float(scalar(block(r, "modifier"), "stability_factor")), 0)
+        decisions = block(parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8")), "VAL_command_balance_category")
+        for decision in decisions:
+            self.assertGreater(float(scalar(decision.value, "cost")), 0)
+            self.assertGreater(float(scalar(decision.value, "days_re_enable")), 0)
+        init = only_named_block(self, EFFECTS_PATH.read_text(encoding="utf-8"), "VAL_initialize_arsenal_recovery")
+        self.assertIn("VAL_refresh_industrial_economy = yes", init)
 
 
 if __name__ == "__main__":
