@@ -1,0 +1,128 @@
+name: STP party final integration
+on:
+  push:
+    branches: [agent/stp-party-final-20260919]
+    paths: ['.github/stp-party-final-prepare.sh', '.github/workflows/stp-party-final.yml']
+permissions:
+  contents: read
+env:
+  PARTY_BASE_SHA: 395cba234091f615c9042c9b465068f385f71256
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [baseline, candidate]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - name: Prepare pinned variant
+        run: bash .github/stp-party-final-prepare.sh '${{ matrix.variant }}'
+      - name: Run full repository tests and validator
+        run: python -B /tmp/stp-party-verify.py '${{ matrix.variant }}'
+      - name: Check party contracts
+        if: matrix.variant == 'candidate'
+        run: python -B -m unittest tools.tests.test_adiscord_stp_party_route -v > /tmp/party-result/party-contracts.txt 2>&1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-party-final-${{ matrix.variant }}
+          path: /tmp/party-result/
+          retention-days: 2
+  candidate:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - name: Reproduce exact reviewed source
+        run: bash .github/stp-party-final-prepare.sh candidate
+      - uses: actions/download-artifact@v4
+        with:
+          name: stp-party-final-baseline
+          path: /tmp/party-result/
+      - uses: actions/download-artifact@v4
+        with:
+          name: stp-party-final-candidate
+          path: /tmp/party-result/
+      - name: Compare regression evidence and source identity
+        run: |
+          python -B /tmp/stp-party-verify.py gate
+          python - <<'PY'
+          import os, json, hashlib
+          from pathlib import Path
+          out=Path('/tmp/party-result')
+          for label in ('baseline','candidate'):
+              data=json.loads((out/(label+'.json')).read_text())
+              assert data['head']==os.environ['PARTY_BASE_SHA']
+          data=json.loads((out/'candidate.json').read_text())
+          for name, digest in data['hashes'].items():
+              assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==digest, name
+          print('Reproduced source hashes match the complete candidate test run')
+          PY
+          git diff --check HEAD
+          git diff --cached --check
+      - name: Create clean candidate commit
+        run: |
+          git config user.name 'A-Discord automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          gate=json.loads(Path('/tmp/party-result/gate.json').read_text())
+          assert not gate['issues']
+          assert len(gate['changed_paths'])==16
+          assert not any(name.startswith('.github/') for name in gate['changed_paths'])
+          subprocess.run(['git','add','--',*gate['changed_paths']],check=True)
+          PY
+          git diff --cached --check
+          git commit -m 'Rework Stelander party campaign and side-aware tooltips'
+          git rev-parse HEAD > /tmp/party-result/candidate-sha.txt
+          git diff --stat HEAD^ HEAD > /tmp/party-result/change-stat.txt
+          git show --format=fuller --binary HEAD > /tmp/party-result/commit.patch
+          git push origin "HEAD:refs/heads/agent/stp-party-final-candidate-${GITHUB_RUN_ID}"
+      - name: Collect final review source
+        if: always()
+        run: |
+          git status --short > /tmp/party-result/status.txt
+          python - <<'PY'
+          import json, zipfile, subprocess
+          from pathlib import Path
+          out=Path('/tmp/party-result')
+          data=json.loads((out/'candidate.json').read_text())
+          with zipfile.ZipFile(out/'changed-source.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for name in data['hashes']:
+                  z.write(name,name)
+          names=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile(out/'validation-source.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for name in names:
+                  p=Path(name)
+                  if not name or not p.is_file() or name.startswith('.github/'):
+                      continue
+                  if p.suffix.lower() in {'.txt','.py','.json','.yml','.yaml','.md','.csv','.gfx','.gui','.mod','.lua','.xml','.map','.ini','.cfg','.toml'} or name in {'AGENTS.md','.gitignore','.gitattributes'}:
+                      data=p.read_bytes()
+                      try: data.decode('utf-8-sig')
+                      except UnicodeDecodeError: continue
+                      z.writestr(name,data)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-party-final-review
+          path: /tmp/party-result/
+          retention-days: 2
