@@ -10770,7 +10770,7 @@
       "key": "script_val_contract_infantry_for_sts",
       "source": {
         "kind": "script",
-        "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+        "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
         "owner": "script"
       },
       "technical_name": "Kefreyt Contract Infantry",
@@ -11022,6 +11022,66 @@
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
+      }
+    },
+    {
+      "key": "script_party_exile_brigade",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Party Exile Brigade",
+      "display_name": "Party Exile Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_territorial",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_territorial",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_territorial",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_territorial",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_territorial",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_territorial",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 52.75,
+        "manpower": 6000.0,
+        "equipment": {
+          "infantry_equipment": 600.0
+        },
+        "supply": 0.3
+      },
+      "equipment_availability": {
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "script_party_exile_brigade"
       }
     }
   ],
@@ -13188,7 +13248,7 @@
     },
     {
       "key": "val_cw_contract_formations_create_unit",
-      "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
       "kind": "create_unit",
       "technical_name": "Kefreyt Contract Infantry",
       "legacy_names": [],
@@ -13231,6 +13291,24 @@
       "technical_name": "Kefreyt Contract Infantry",
       "legacy_names": [],
       "count": 5
+    },
+    {
+      "key": "party_exile_brigade_create_unit",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Party Exile Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "party_exile_brigade_unlock",
+      "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+      "kind": "technical_reference",
+      "technical_name": "Party Exile Brigade",
+      "legacy_names": [],
+      "count": 1
     }
   ]
 }

@@ -255,11 +255,17 @@ VAL_export_customer = {
 }
 VAL_export_slot_free = {
  OR = { NOT = { has_idea = VAL_export_income_1 } AND = { has_completed_focus = VAL_Northern_Clearing_House NOT = { has_idea = VAL_export_income_2 } } }
+
+	NOT = { check_variable = { var = STP_ps_val_receipt_contract value = 3 compare = equals } }
+
 }
 VAL_export_arms_can_accept = {
  has_country_flag = VAL_export_offer_arms
  VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes
  VAL = { exists = yes has_capitulated = no has_country_flag = VAL_export_offer_pending VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } }
+
+	OR = { NOT = { tag = STS has_war_with = STP } VAL = { NOT = { has_variable = STP_ps_val_receipt_rifles } } }
+
 }
 VAL_export_advisors_can_accept = {
  has_country_flag = VAL_export_offer_advisors

@@ -62,16 +62,23 @@ class SupereventContractTests(unittest.TestCase):
             )
             self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", immediate)
 
-    def test_stelander_music_starts_on_close_for_the_winning_player(self) -> None:
+    def test_stelander_music_uses_party_focus_and_shabrat_close(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks
 
         source = (ROOT / SCRIPTED_GUI).read_text(encoding="utf-8-sig")
-        for side, tag in (("party", "STP"), ("shabrat", "STS")):
+        for side, tag in (("shabrat", "STS"),):
             window = blocks(source, rf"^\s*superevent_stelander_{side}_victory\s*=\s*\{{")[0]
             self.assertIn(f"{tag} = {{", window)
             self.assertIn("limit = { is_ai = no }", window)
             self.assertIn('scoped_play_song = "ADISCORD_stp_civil_war_end"', window)
             self.assertLess(window.index("clr_global_flag"), window.index("scoped_play_song"))
+        party = blocks(source, r"^\s*superevent_stelander_party_victory\s*=\s*\{")[0]
+        self.assertNotIn("scoped_play_song", party)
+        focuses = (ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt").read_text(encoding="utf-8-sig")
+        focus = next(b for b in blocks(focuses, r"^\s*focus\s*=\s*\{") if "id = STP_pw_party_new_republic\n" in b)
+        reward = blocks(focus, r"^\s*completion_reward\s*=\s*\{")[0]
+        self.assertIn('scoped_play_song = "ADISCORD_stp_civil_war_end"', reward)
+        self.assertIn("limit = { is_ai = no }", reward)
         music = ROOT / "music/ADISCORD_stp_civil_war_end.ogg"
         self.assertEqual(music.read_bytes()[:4], b"OggS")
         assets = (ROOT / "music/music.asset").read_text(encoding="utf-8-sig")

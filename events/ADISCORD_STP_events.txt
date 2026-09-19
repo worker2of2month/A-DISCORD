@@ -165,6 +165,7 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { STP_cw_kefreyt_aid_open = yes NOT = { has_country_flag = VAL_cw_volunteers_pending } }
+				STP_ps_authorize_val_supply = yes
 				set_country_flag = VAL_cw_volunteers_pending
 				STP_cw_reserve_kefreyt_volunteers = yes
 				if = {
@@ -1524,18 +1525,70 @@ country_event = {
 }
 
 country_event = {
-    id = ADISCORD_STP_cw.200
-    title = STP_ps_agreement_title
-    desc = STP_ps_agreement_desc
-    picture = GFX_report_event_generic_political_discussion
-    is_triggered_only = yes
-    fire_only_once = yes
-    timeout_days = 14
-    option = {
-        name = STP_ps_agreement_accept
-        trigger = { STP_ps_nod_can_host_exiles = yes }
-        ai_chance = { factor = 90 }
-        hidden_effect = { set_country_flag = STP_ps_aid_agreement set_country_flag = STP_ps_asylum_agreement }
-    }
-    option = { name = STP_ps_agreement_decline ai_chance = { factor = 10 } }
+	id = ADISCORD_STP_cw.200
+	title = STP_ps_agreement_title
+	desc = STP_ps_agreement_desc
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	option = {
+		name = STP_ps_agreement_accept
+		trigger = { STP_ps_nod_can_host_exiles = yes }
+		ai_chance = { factor = 90 }
+		hidden_effect = { set_country_flag = STP_ps_aid_agreement }
+	}
+	option = { name = STP_ps_agreement_decline ai_chance = { factor = 10 } }
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.201
+	title = STP_ps_exile_offer_title
+	desc = STP_ps_exile_offer_desc
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	timeout_days = 14
+	option = { name = STP_ps_exile_refuse
+		hidden_effect = { clr_country_flag = STP_ps_exile_pending clear_variable = STP_ps_exile_money clear_variable = STP_ps_exile_loyalty }
+	}
+	option = { name = STP_ps_exile_accept
+		trigger = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_exile_pending }
+		hidden_effect = { STP_ps_accept_exile = yes }
+	}
+}
+country_event = {
+	id = ADISCORD_STP_cw.202
+	title = STP_ps_exile_arrived_title
+	desc = STP_ps_exile_arrived_desc
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = { name = STP_ps_exile_arrived_ok }
+}
+country_event = {
+	id = ADISCORD_STP_cw.203
+	title = STP_ps_return_title
+	desc = STP_ps_return_desc
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = { name = STP_ps_remain_nod }
+	option = { name = STP_ps_control_stp
+		trigger = { is_ai = no STP = { exists = yes is_ai = yes is_subject_of = NOD } }
+		hidden_effect = { STP = { change_tag_from = NOD } }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_cw.204
+	title = STP_ps_asylum_title
+	desc = STP_ps_asylum_desc
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	option = { name = STP_ps_asylum_accept
+		trigger = { STP_ps_nod_can_host_exiles = yes }
+		ai_chance = { factor = 90 }
+		hidden_effect = { set_country_flag = STP_ps_asylum_agreement }
+	}
+	option = { name = STP_ps_asylum_decline ai_chance = { factor = 10 } }
 }

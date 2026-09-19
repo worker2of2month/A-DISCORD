@@ -590,6 +590,17 @@ on_actions = {
 				log = "[STP_CW] STS defeated the NOD intervention; unrelated wars retained"
 			}
 			else_if = {
+				limit = { ROOT = { tag = STS has_war_with = NOD check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals } } NOD = { has_country_flag = STP_ps_return_campaign } }
+				set_global_flag = skip_default_capitulation
+				NOD = { STP_ps_settle_return = yes }
+			}
+			else_if = {
+				limit = { ROOT = { tag = NOD has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } has_country_flag = STP_ps_return_campaign } }
+				NOD = { STP_ps_close_exile = yes }
+				set_global_flag = skip_default_capitulation
+				STS = { set_variable = { var = STP_pc_cap_side value = 2 } STP_pc_begin_settlement = yes }
+			}
+			else_if = {
 				limit = {
 					has_global_flag = STP_cw_union_wars_finished
 					OR = {

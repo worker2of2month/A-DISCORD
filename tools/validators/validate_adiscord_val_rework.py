@@ -1059,7 +1059,7 @@ def main() -> int:
         "limit = { has_country_flag = STP_cw_rifles_paid }",
         "VAL_contract_reputation_level",
         "VAL_vorkerland_contract_disruptions",
-        "give_resource_rights = { receiver = VAL state = 202 }",
+        "give_resource_rights = { receiver = VAL state = 38 }",
         "remove_resource_rights = 202",
     ):
         if token not in effects:
@@ -1507,9 +1507,9 @@ def main() -> int:
             if idea_blocks and idea_id not in display_only and not re.search(r"\bpicture\s*=", mask_comments(idea_blocks[0])):
                 issues.append(f"idea {idea_id} has no picture")
 
-    state_202 = read("history/states/202-202.txt")
-    if not re.search(r"resources\s*=\s*\{[^}]*steel\s*=\s*16", state_202, re.S):
-        issues.append("state 202 does not contain the baseline Westerholm steel deposit")
+    state_202 = read("history/states/38-38.txt")
+    if not re.search(r"resources\s*=\s*\{[^}]*steel\s*=\s*10", state_202, re.S):
+        issues.append("state 38 does not contain the baseline Vorkerland steel deposit")
     collapse_events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
     if "VAL_handle_vorkerland_war_outbreak = yes" not in collapse_events:
         issues.append("Vorkerland war start does not disrupt Kefreyt contracts")

@@ -121,14 +121,15 @@ STP_pf_balance_dynamic = {
 }
 
 STP_ps_defence_dynamic = {
-    icon = GFX_idea_STP_cw_unified_staff_idea
-    enable = { STP_ps_war_active = yes }
-    breakthrough_factor = STP_ps_breakthrough
-    planning_speed = STP_ps_planning
+	icon = GFX_idea_ADISCORD_law_military_cadre_army
+	enable = { STP_ps_war_active = yes }
+	breakthrough_factor = STP_ps_breakthrough
+	planning_speed = STP_ps_planning
 }
 STP_ps_nodes_dynamic = {
-    icon = GFX_idea_STP_cw_unified_staff_idea
-    enable = { STP_ps_war_active = yes }
-    planning_speed = STP_ps_node_planning
-    strategic_redeploy_speed = STP_ps_node_redeployment
+	icon = GFX_idea_ADISCORD_law_military_cadre_army
+	enable = { STP_ps_war_active = yes }
+	ADISCORD_economy_admin_expense_factor = STP_ps_emergency_expense
+	planning_speed = STP_ps_node_planning
+	army_speed_factor = STP_ps_node_redeployment
 }

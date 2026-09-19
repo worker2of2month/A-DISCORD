@@ -471,6 +471,11 @@ country_event = {
 	is_triggered_only = yes
 	option = {
 		name = val_contract.320.a
+        trigger = {
+            38 = { is_owned_by = WRK is_controlled_by = WRK }
+            NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+            VAL = { exists = yes has_country_flag = VAL_westerholm_offer_pending NOT = { has_country_flag = VAL_westerholm_concession_granted } }
+        }
 		ai_chance = { base = 3 }
 		custom_effect_tooltip = VAL_westerholm_accepted_tt
 		hidden_effect = {
@@ -655,11 +660,17 @@ country_event = {
   hidden_effect = {
    if = {
     limit = { VAL_export_arms_can_accept = yes }
+				if = {
+					limit = { tag = STS has_war_with = STP NOT = { has_global_flag = STP_cw_union_wars_finished } }
+					STP_ps_reserve_export_contract = yes
+				}
+				else = {
     ADISCORD_economy_spend_100 = yes
     VAL = {
      send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
      if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
      else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+					}
     }
     clr_country_flag = VAL_export_offer_arms
     set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }

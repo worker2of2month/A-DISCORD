@@ -855,13 +855,21 @@ class ValStelanderContractTests(unittest.TestCase):
             r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_country_flag\s*=\s*STP_cw_rifles_paid\s*check_variable", item))
         buyer = only_named_block(self, success, "STS")
         self.assertIn("ADISCORD_economy_spend_50 = yes", buyer)
-        self.assertIn("amount = 3200 producer = VAL", buyer)
+        self.assertNotIn("add_equipment_to_stockpile", buyer)
+        survival = (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8-sig")
+        delivery = only_named_block(self, survival, "STP_ps_deliver_val_contract")
+        resolution = only_named_block(self, survival, "STP_ps_resolve_val_supply")
+        self.assertIn("amount = 3200 producer = VAL", delivery)
+        self.assertIn("set_variable = { var = STP_ps_val_receipt_money", buyer)
+        self.assertIn("has_variable = STP_ps_val_receipt_rifles", resolution)
+        self.assertLess(resolution.index("STP_ps_clear_val_receipt = yes"), resolution.index("STP_ps_deliver_val_contract = yes"))
         self.assertNotIn("add_manpower", buyer)
         self.assertIn("add_manpower = var:VAL_cw_contract_manpower_debit", success)
         self.assertEqual(contract.count("add_manpower = var:VAL_cw_contract_manpower_debit"), 1)
         self.assertIn("NOT = { has_manpower < 12600 }", contract)
         self.assertIn("NOT = { has_equipment = { infantry_equipment < 3200 } }", contract)
-        self.assertIn("ADISCORD_economy_receive_50 = yes", success)
+        self.assertIn("ADISCORD_economy_receive_50 = yes", resolution)
+        self.assertNotIn("ADISCORD_economy_receive_50 = yes", success)
         self.assertIn("set_country_flag = VAL_cw_arms_contract_fulfilled", success)
         self.assertIn("NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled }", contract)
         self.assertLess(contract.index("STP_cw_pay_rifles = yes"), contract.index("ADISCORD_economy_spend_50 = yes"))
@@ -1161,6 +1169,8 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.variables = {}
         self.modifiers = set()
         self.dirty = 0
+        self.removed_rights = []
+        self.installed_ideas = set()
 
     def run_effect(self, name):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions, scalar
@@ -1204,6 +1214,10 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
                 elif key == "remove_dynamic_modifier":
                     self.assertIn(value, self.modifiers, "removal must be guarded")
                     self.modifiers.remove(value)
+                elif key == "remove_resource_rights":
+                    self.removed_rights.append(str(value))
+                elif key == "add_ideas":
+                    self.installed_ideas.add(value)
                 elif key == "ADISCORD_economy_mark_dirty":
                     self.dirty += 1
                 elif key in self.effects and value == "yes":
@@ -1216,22 +1230,22 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.run_effect("VAL_invest_arsenal_industry")
         self.assertEqual(self.modifiers, {"VAL_contract_industry"})
         self.run_effect("VAL_handle_vorkerland_war_outbreak")
-        self.assertEqual(self.modifiers, {"VAL_economic_collapse"})
+        self.assertEqual(self.modifiers, {"VAL_economic_collapse", "VAL_arsenal_reputation"})
         self.assertAlmostEqual(self.variables["VAL_industrial_output"], -.73)
-        expected = {"output": (-.75, .13), "construction": (-.57, .1),
-                    "efficiency": (-.57, .1), "trade": (-.85, .15),
-                    "income": (-.57, .1), "consumer": (.18, -.03)}
-        for stage in range(1, 7):
+        expected = {"output": (-.75, .09), "construction": (-.57, .07),
+                    "efficiency": (-.57, .07), "trade": (-.85, .10),
+                    "income": (-.57, .07), "consumer": (.18, -.02)}
+        for stage in range(1, 10):
             self.run_effect("VAL_advance_economic_recovery")
             for field, (base, increment) in expected.items():
                 self.assertAlmostEqual(self.variables[f"VAL_industrial_{field}"], base + stage * increment + (.02 if field == "output" else 0))
-            self.assertEqual(self.modifiers, {"VAL_economic_miracle" if stage == 6 else "VAL_economic_collapse"})
+            self.assertEqual(self.modifiers, {"VAL_economic_miracle" if stage == 9 else "VAL_economic_collapse", "VAL_arsenal_reputation"})
             snapshot = dict(self.variables)
             self.run_effect("VAL_handle_vorkerland_war_outbreak")
             self.run_effect("VAL_reconcile_supply_crisis")
             self.assertEqual(self.variables, snapshot)
         self.run_effect("VAL_advance_economic_recovery")
-        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 6)
+        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 9)
         self.assertGreaterEqual(self.dirty, 8)
 
     def test_existing_campaign_reconciliation_is_once_only(self):
@@ -1249,13 +1263,61 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.assertFalse(self.variables)
         focuses = FOCUSES_PATH.read_text(encoding="utf-8-sig")
         self.assertNotIn("add_offsite_building", focuses)
-        self.assertEqual(focuses.count("VAL_advance_economic_recovery = yes"), 6)
+        self.assertEqual(focuses.count("VAL_advance_economic_recovery = yes"), 9)
         for focus_id in ("VAL_Mobilize_Machine_Shops", "VAL_Reserve_Accounting"):
             focus = next(f for f in named_blocks(focuses, "focus") if f"id = {focus_id}" in f)
             self.assertIn("prerequisite = { focus = VAL_Inventory_The_Empty_Yards }", focus)
         final = next(f for f in named_blocks(focuses, "focus") if "id = VAL_Industrial_Mobilization_Plan" in f)
         for prerequisite in ("VAL_Three_Shift_Arsenals", "VAL_Reserve_Accounting"):
             self.assertIn(f"prerequisite = {{ focus = {prerequisite} }}", final)
+
+    def test_reputation_and_resource_loss_are_once_only(self):
+        for flag in ("VAL_vorkerland_resource_access_active", "VAL_westerholm_resource_rights_active"):
+            self.facts[("VAL", "has_country_flag", flag)] = True
+        self.variables["VAL_arsenal_reputation_stage"] = 4
+        self.run_effect("VAL_handle_vorkerland_war_outbreak")
+        self.assertEqual(set(self.removed_rights), {"33", "38", "202"})
+        self.assertEqual(self.variables["VAL_arsenal_reputation_stage"], 0)
+        self.assertAlmostEqual(self.variables["VAL_arsenal_trade"], -.20)
+        for stage in range(1, 6):
+            self.run_effect("VAL_restore_arsenal_reputation")
+            snapshot = dict(self.variables)
+            self.run_effect("VAL_handle_vorkerland_war_outbreak")
+            self.assertEqual(self.variables, snapshot)
+            self.assertEqual(len(self.removed_rights), 3)
+            self.assertEqual(self.variables["VAL_arsenal_quality"], .10 if stage == 5 else 0)
+        self.assertAlmostEqual(self.variables["VAL_arsenal_trade"], .05)
+        self.assertAlmostEqual(self.variables["VAL_arsenal_credit"], .025)
+
+    def test_final_recovery_and_veterans_require_actual_victory(self):
+        text = FOCUSES_PATH.read_text(encoding="utf-8-sig")
+        for focus_id in ("VAL_Reopen_Trade_Routes", "VAL_Settle_Industrial_Debts", "VAL_Return_To_World_Market", "VAL_Veterans_Of_The_Campaign"):
+            focus = next(f for f in named_blocks(text, "focus") if f"id = {focus_id}" in f)
+            self.assertIn("VAL_campaign_objectives_met = yes", only_named_block(self, focus, "available"))
+            self.assertIn("cancel_if_invalid = yes", focus)
+        final = next(f for f in named_blocks(text, "focus") if "id = VAL_Return_To_World_Market" in f)
+        self.assertIn("prerequisite = { focus = VAL_Returning_Buyers }", final)
+
+    def test_starting_commanders_and_trait_are_earned(self):
+        history = (ROOT / "history/countries/VAL - ValeraLand.txt").read_text(encoding="utf-8-sig")
+        characters = (ROOT / "common/characters/VAL.txt").read_text(encoding="utf-8-sig")
+        focus_text = FOCUSES_PATH.read_text(encoding="utf-8-sig")
+        for name in ("Kirill_Voron", "Erika_Stahl", "Boris_Gromov", "Renata_Morn"):
+            definition = only_named_block(self, characters, "VAL_" + name)
+            self.assertRegex(definition, r"(?m)^\s*skill = 2$")
+            self.assertIn("recruit_character = VAL_" + name, history)
+        unlocks = {"Aleksei_Veyr": "VAL_Contractor_Officers", "Maksim_Korvin": "VAL_Army_Of_The_Ledger",
+                   "Dmitri_Karsov": "VAL_Contract_General_Staff", "Leonid_Vargan": "VAL_New_Supply_Base",
+                   "Sergei_Volkov": "VAL_Veterans_Of_The_Campaign"}
+        for name, focus_id in unlocks.items():
+            self.assertNotIn("recruit_character = VAL_" + name, history)
+            focus = next(f for f in named_blocks(focus_text, "focus") if f"id = {focus_id}" in f)
+            self.assertIn("recruit_character = VAL_" + name, focus)
+        self.assertNotIn("The_Weaponry_Baron", only_named_block(self, characters, "VAL_Valera_Solgalov"))
+        baron = next(f for f in named_blocks(focus_text, "focus") if "id = VAL_The_Weaponry_Baron" in f)
+        self.assertIn("VAL_Valera_Solgalov = { add_country_leader_trait", baron)
+        self.assertIn("trait = The_Weaponry_Baron", baron)
+        self.assertNotIn("VAL_worldwide_famous_weponry", history)
 
 
 class ValNorthernExportTests(unittest.TestCase):
@@ -1639,7 +1701,9 @@ class ValContractFormationTests(unittest.TestCase):
         rifle_effects = parse_clausewitz((ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8-sig"))
         scripts = {name: block(tree, name) for tree, name in (
             (effects, "VAL_cw_complete_arms_contract"), (effects, "VAL_cw_pay_contract_auxiliary"),
-            (rifle_effects, "STP_cw_pay_rifles"))}
+            (rifle_effects, "STP_cw_pay_rifles"),
+            *[(rifle_effects, name) for name in ("STP_ps_dispatch_val_supply", "STP_ps_resolve_val_supply",
+              "STP_ps_clear_val_receipt", "STP_ps_deliver_val_contract", "STP_ps_refund_val_supply")])}
         self.assertTrue(scripts["VAL_cw_pay_contract_auxiliary"])
         subunits = {entry.key: entry.value for entry in block(parse_clausewitz(
             (ROOT / "common/units/ADISCORD_land_units.txt").read_text(encoding="utf-8-sig")), "sub_units")}
@@ -1678,17 +1742,22 @@ class ValContractFormationTests(unittest.TestCase):
                     if scenario != "stale":
                         flags[("VAL", "VAL_cw_arms_offer_pending")] = tier
                     variables, templates = {}, {}
+                    previous_scope = [None]
+                    missions = set()
                     field_equipment = defaultdict(float)
                     field_people = units = experience_rewards = authority_rewards = 0
                     def number(value, scope):
                         value = value.removeprefix("var:")
+                        if value == "ADISCORD_economy_treasury":
+                            return cash[scope]
+                        if value.startswith("PREV."):
+                            return variables[(previous_scope[0], value[5:])]
                         if value.startswith("num_equipment@"):
                             return sum(stock[scope][value.split("@", 1)[1]].values())
                         try:
                             return float(value)
                         except ValueError:
-                            self.assertIn((scope, value), variables, "Unknown contract operand")
-                            return variables[(scope, value)]
+                            return variables.get((scope, value), 0)
                     def compare(left, operator, right):
                         self.assertIn(operator, ("<", ">", "="))
                         return {"<": left < right, ">": left > right, "=": left == right}[operator]
@@ -1703,7 +1772,7 @@ class ValContractFormationTests(unittest.TestCase):
                                 index += 3
                                 continue
                             key = entry.key
-                            if key in ("VAL", "STS", "PREV"):
+                            if key in ("VAL", "STS", "STP", "PREV"):
                                 results.append(conditions(entry.value, previous if key == "PREV" else key, scope))
                             elif key in ("OR", "AND", "NOT"):
                                 if key == "OR":
@@ -1712,6 +1781,11 @@ class ValContractFormationTests(unittest.TestCase):
                                     results.append(not conditions(entry.value, scope, previous))
                                 else:
                                     results.append(conditions(entry.value, scope, previous))
+                            elif key == "has_variable":
+                                results.append((scope, entry.value) in variables)
+                            elif key in ("STP_ps_val_supply_open", "STP_ps_val_land_route"):
+                                # This matrix exercises a live, connected STS front; route loss is tested separately.
+                                results.append(entry.value == "yes")
                             elif key == "has_country_flag":
                                 if isinstance(entry.value, str):
                                     results.append((scope, entry.value) in flags)
@@ -1721,7 +1795,7 @@ class ValContractFormationTests(unittest.TestCase):
                                     self.assertEqual(field, "value")
                                     results.append((scope, name) in flags and compare(flags[(scope, name)], operator, float(amount)))
                             elif key == "check_variable":
-                                operators = {"equals": "=", "greater_than": ">", "greater_than_or_equals": ">="}
+                                operators = {"equals": "=", "greater_than": ">", "greater_than_or_equals": ">=", "less_than": "<"}
                                 operator = operators[scalar(entry.value, "compare")]
                                 left, right = number(scalar(entry.value, "var"), scope), number(scalar(entry.value, "value"), scope)
                                 results.append(left >= right if operator == ">=" else compare(left, operator, right))
@@ -1747,6 +1821,7 @@ class ValContractFormationTests(unittest.TestCase):
                         return all(results)
                     def execute(items, scope="VAL", previous=None):
                         nonlocal field_people, units, experience_rewards, authority_rewards
+                        previous_scope[0] = previous
                         taken = False
                         for entry in items:
                             key = entry.key
@@ -1758,20 +1833,28 @@ class ValContractFormationTests(unittest.TestCase):
                                     execute([e for e in entry.value if e.key != "limit"], scope, previous)
                             elif key in scripts:
                                 execute(scripts[key], scope, previous)
-                            elif key in ("VAL", "STS", "PREV"):
+                            elif key in ("VAL", "STS", "STP", "PREV"):
                                 execute(entry.value, previous if key == "PREV" else key, scope)
                             elif key == "every_possible_country":
                                 for creator in ("VAL", "NOD", "STS"):
                                     if conditions(block(entry.value, "limit"), creator, scope):
                                         execute([e for e in entry.value if e.key != "limit"], creator, scope)
-                            elif key in ("set_temp_variable", "multiply_temp_variable", "subtract_from_temp_variable"):
+                            elif key in ("set_variable", "add_to_variable", "set_temp_variable", "multiply_temp_variable", "subtract_from_temp_variable"):
                                 variable, value = scalar(entry.value, "var"), number(scalar(entry.value, "value"), scope)
-                                if key == "set_temp_variable":
+                                if key in ("set_temp_variable", "set_variable"):
                                     variables[(scope, variable)] = value
+                                elif key == "add_to_variable":
+                                    variables[(scope, variable)] = variables.get((scope, variable), 0) + value
                                 elif key == "multiply_temp_variable":
                                     variables[(scope, variable)] *= value
                                 else:
                                     variables[(scope, variable)] -= value
+                            elif key == "clear_variable":
+                                variables.pop((scope, entry.value), None)
+                            elif key == "activate_mission":
+                                missions.add((scope, entry.value))
+                            elif key == "remove_mission":
+                                missions.discard((scope, entry.value))
                             elif key == "set_country_flag":
                                 if isinstance(entry.value, str):
                                     flags[(scope, entry.value)] = 1
@@ -1818,6 +1901,12 @@ class ValContractFormationTests(unittest.TestCase):
                                 self.fail(f"Unsupported contract operation: {key}")
                     execute(scripts["VAL_cw_complete_arms_contract"])
                     paid = scenario in ("exact", "mixed")
+                    self.assertEqual(units, 0, "No formation before its paid convoy arrives")
+                    self.assertEqual(cash["VAL"], 0, "The donor is paid only at settlement")
+                    self.assertEqual(sum(stock["STS"][rifle].values()), 0)
+                    self.assertEqual(("VAL", "STP_ps_val_departure") in missions, paid)
+                    execute(scripts["STP_ps_dispatch_val_supply"])
+                    self.assertNotIn(("VAL", "STP_ps_val_receipt_rifles"), variables)
                     self.assertEqual(("VAL", "VAL_cw_arms_contract_fulfilled") in flags, paid)
                     self.assertEqual(units, 2 if paid and full else 0)
                     self.assertEqual(field_people, 12600 if paid and full else 0)
@@ -1836,6 +1925,7 @@ class ValContractFormationTests(unittest.TestCase):
                     snapshot = (repr(stock), dict(manpower), dict(cash), units, experience_rewards, authority_rewards)
                     self.assertNotIn(("VAL", "VAL_cw_arms_offer_pending"), flags)
                     execute(scripts["VAL_cw_complete_arms_contract"])
+                    execute(scripts["STP_ps_dispatch_val_supply"])
                     self.assertEqual((repr(stock), manpower, cash, units, experience_rewards, authority_rewards), snapshot,
                                      "A repeated or expired callback cannot pay twice")
 

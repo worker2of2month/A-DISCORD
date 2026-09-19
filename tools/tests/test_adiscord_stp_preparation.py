@@ -1058,7 +1058,8 @@ class StelanderPreparationTests(unittest.TestCase):
                  ("STP", "has_country_flag", "STP_battle_for_stelander_active"): True,
                  ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True}
         self.assertTrue(matches_conditions(block(schedule, "limit"), facts))
-        payload = [e for e in schedule if e.key != "limit"]
+        payload = [e for e in schedule if e.key != "limit"
+                   and not (e.key == "if" and any(v.key == "any_owned_state" for v in walk(block(e.value, "limit"))))]
         first = [e for _, e in selected_effects(payload, facts)]
         extension = sum(int(scalar(e.value, "days")) for e in first
                         if e.key == "add_days_mission_timeout"
@@ -1080,8 +1081,8 @@ class StelanderPreparationTests(unittest.TestCase):
         schedule = block(block(effects, "STP_cw_schedule_opposition"), "if")
         target = block(schedule, "random_owned_state")
         self.assertEqual(scalar(target, "set_state_flag"), "STP_cw_opposition_target")
-        self.assertLess(next(i for i, e in enumerate(schedule) if e.key == "random_owned_state"),
-                        next(i for i, e in enumerate(schedule) if e.key == "activate_mission"))
+        self.assertLess(next(i for i, e in enumerate(walk(schedule)) if e.key == "random_owned_state"),
+                        next(i for i, e in enumerate(walk(schedule)) if e.key == "activate_mission"))
         finish = block(block(effects, "STP_cw_prepare_opposition"), "if")
         self.assertNotIn("random_owned_state", {e.key for e in walk(finish)})
         district = block(finish, "every_owned_state")
@@ -1447,7 +1448,9 @@ class StelanderPreparationTests(unittest.TestCase):
                 if shown or actual:
                     self.assertEqual(shown, actual, scalar(focus, "id"))
                     checked.add(scalar(focus, "id"))
-        self.assertEqual(len(checked), 29, "every persistent focus reward needs a checked delta preview")
+        self.assertEqual(len(checked), 28, "every persistent focus reward needs a checked delta preview")
+        self.assertNotIn("STP_party_war_transport", checked)
+        self.assertIn("STP_ps_transport", (ROOT / "common/decisions/ADISCORD_STP_decisions.txt").read_text(encoding="utf-8"))
         self.assertTrue({"STP_cw_frontline_relief", "STP_cw_route_columns"} <= checked)
 
     def test_dummy_ideas_are_never_installed_as_gameplay_spirits(self):
@@ -1763,10 +1766,16 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertIn("STP_party_suspicion_dynamic_modifier", removed)
         self.assertIn("STP_sus_political_power_factor", {e.value for e in closure if e.key == "clear_variable"})
         category = block(entries("common/decisions/categories/ADISCORD_decision_categories_STP.txt"), "STP_elections_in_the_party")
-        excluded = {(e.key, e.value) for condition in block(category, "visible") if condition.key == "NOT"
-                    for e in condition.value if isinstance(e.value, str)}
-        self.assertEqual(excluded, {("has_global_flag", "STP_cw_started"),
-                                    ("has_country_flag", "STP_cw_elections_finished")})
+        visible = block(category, "visible")
+        for phase in ("STP_cw_started", "STP_cw_elections_finished"):
+            kind = "has_global_flag" if phase == "STP_cw_started" else "has_country_flag"
+            closed = {("STP", kind, phase): True}
+            self.assertFalse(matches_conditions(visible, closed), "The resistance briefing closes with preparation")
+            party = {**closed, ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True}
+            self.assertTrue(matches_conditions(visible, party), "Party government programs share this category")
+            self.assertFalse(matches_conditions(visible, {**party,
+                ("STP", "has_global_flag", "STP_cw_union_wars_finished"): True}))
+
 
     def test_dynamic_and_dummy_display_names_and_icons_resolve(self):
         definitions = block(block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
@@ -2983,7 +2992,7 @@ class StelanderPreparationTests(unittest.TestCase):
         for path in (ROOT / "localisation/russian").glob("*STP*.yml"):
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"), path.name)
             localisation.update(re.findall(r"(?m)^\s*([^\s:#]+):", path.read_text(encoding="utf-8-sig")))
-        focus_ids = {scalar(entry.value, "id") for entry in walk(trees) if entry.key == "focus" and isinstance(entry.value, list)}
+        focus_ids = {scalar(entry.value, "id") for entry in walk(trees) if entry.key in ("focus", "shared_focus") and isinstance(entry.value, list)}
         for focus_id in focus_ids:
             self.assertIn(focus_id, localisation)
             self.assertIn(f"{focus_id}_desc", localisation)

@@ -170,7 +170,7 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
                 ("FROM", "has_state_flag", "STP_cw_inspection_delay_escrow"): True}))
             self.assertEqual(sum(e.key == "STP_political_action_slot_release" for _, e in paid), 1)
 
-    def test_last_banquet_is_a_single_fada_deadline(self) -> None:
+    def test_last_banquet_is_a_single_congress_deadline(self) -> None:
         launch = block(self.council, "STP_cw_launch_last_banquet")
         mission = block(self.council, "STP_cw_last_banquet_deadline")
         fail = block(self.effects, "STP_cw_resolve_last_banquet_fail")
@@ -179,8 +179,8 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
         self.assertEqual(scalar(launch, "fire_only_once"), "yes")
         self.assertFalse(any(e.key == "days_re_enable" for e in launch))
         self.assertIn("3", {e.value for e in walk(block(launch, "available")) if e.key == "controls_state"})
-        self.assertIn("28", {e.key for e in walk(block(launch, "available"))})
-        self.assertIn("28", {e.key for e in walk(block(mission, "available"))})
+        self.assertIn("STP_ps_holds_congress", {e.key for e in walk(block(launch, "available"))})
+        self.assertIn("STP_ps_holds_congress", {e.key for e in walk(block(mission, "available"))})
         self.assertEqual(scalar(mission, "days_mission_timeout"), "21")
         self.assertNotIn("always = no", {f"{e.key} = {e.value}" for e in walk(block(mission, "available"))})
         self.assertEqual(scalar(block(launch, "complete_effect"), "add_command_power"), "-25")
@@ -195,19 +195,19 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
         self.assertNotIn("remove_ideas", {e.key for e in (*walk(fail), *walk(success), *walk(technical))})
         self.assertIn("STP_cw_last_banquet_deadline", self.tokens)
         self.assertIn("STP_cw_last_banquet_fail_tt:", self.loc)
-        self.assertIn("контроль Фады", self.loc)
+        self.assertIn("контроль Бронзового конгресса", self.loc)
 
         already = {("STS", "has_country_flag", "STP_cw_last_banquet_resolved"): True}
         self.assertEqual([e.key for _, e in selected_effects(fail, already, "STS")], [])
         captured = {("STS", "has_country_flag", "STP_cw_last_banquet_resolved"): False,
-                    ("28", "is_controlled_by", "ROOT"): True}
+                    ("STS", "STP_ps_holds_congress", "yes"): True}
         self.assertEqual(sum(e.key == "STP_cw_resolve_last_banquet_success" for _, e in selected_effects(fail, captured, "STS")), 1)
         victory = {("STS", "has_country_flag", "STP_cw_last_banquet_resolved"): False,
-                   ("28", "is_controlled_by", "ROOT"): False,
+                   ("STS", "STP_ps_holds_congress", "yes"): False,
                    ("STS", "has_country_flag", "STP_cw_won_union_battle"): True}
         self.assertEqual(sum(e.key == "STP_cw_close_last_banquet_technical" for _, e in selected_effects(fail, victory, "STS")), 1)
         timeout = {("STS", "has_country_flag", "STP_cw_last_banquet_resolved"): False,
-                   ("28", "is_controlled_by", "ROOT"): False,
+                   ("STS", "STP_ps_holds_congress", "yes"): False,
                    ("STS", "has_country_flag", "STP_cw_won_union_battle"): False}
         timeout_effects = list(selected_effects(fail, timeout, "STS"))
         self.assertEqual([e.value for _, e in timeout_effects if e.key == "add_war_support"], ["-0.10"])
@@ -217,7 +217,7 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
         launch_gate = block(launch, "available")
         ready = {("STS", "has_war_with", "STP"): True, ("STS", "controls_state", "3"): True}
         self.assertTrue(matches_conditions(launch_gate, ready, "STS"))
-        self.assertFalse(matches_conditions(launch_gate, {**ready, ("28", "is_controlled_by", "ROOT"): True}, "STS"))
+        self.assertFalse(matches_conditions(launch_gate, {**ready, ("STS", "STP_ps_holds_congress", "yes"): True}, "STS"))
         for idea in ("STP_cw_deliberate_offensive", "STP_cw_static_defence", "STP_cw_front_reorganization",
                      "STP_cw_offensive_preparation", "STP_cw_defensive_preparation"):
             self.assertFalse(matches_conditions(launch_gate, {**ready, ("STS", "has_idea", idea): True}, "STS"), idea)

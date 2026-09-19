@@ -7,6 +7,9 @@ NDefines.NGame.START_DATE = "2160.1.1.1";
 	NDefines.NGraphics.POLITICAL_GRID_SMALL_BOX_LIMIT = 50
 	NDefines_Graphics.NGraphics.MINIMUM_PROVINCE_SIZE_IN_PIXELS = 3
 
+	-- Shared real-time interval between army voice responses.
+	NDefines_Graphics.NSound.VOICE_OVER_COOL_DOWN = 6.0
+
 	NDefines.NMilitary.COMBAT_MINIMUM_TIME = 8
 	NDefines.NMilitary.RIVER_CROSSING_PENALTY = -0.2
 	NDefines.NMilitary.RIVER_CROSSING_PENALTY_LARGE = -0.4

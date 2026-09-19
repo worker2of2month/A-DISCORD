@@ -542,3 +542,31 @@ defined_text = {
 	text = { trigger = { has_country_flag = STP_sided_with_the_party_flag } localization_key = STP_PARTY_MAP_INSTRUCTIONS }
 	text = { localization_key = STP_RESISTANCE_MAP_INSTRUCTIONS }
 }
+
+defined_text = {
+	name = STPGetPartySurvival
+	text = { trigger = { tag = STP has_variable = STP_ps_stage NOT = { has_global_flag = STP_cw_union_wars_finished } } localization_key = STP_ps_war_report }
+	text = { localization_key = STP_ps_empty }
+}
+defined_text = {
+	name = STPGetPartyGovernment
+	text = { trigger = { STP_ps_holds_congress = yes } localization_key = STP_ps_congress_held }
+	text = { trigger = { has_country_flag = STP_ps_temporary_government } localization_key = STP_ps_cabinet_operating }
+	text = { localization_key = STP_ps_government_lost }
+}
+defined_text = {
+	name = STPGetPartyHandoff
+	text = { trigger = { has_country_flag = STP_ps_decline_handoff } localization_key = STP_ps_handoff_disabled }
+	text = { localization_key = STP_ps_handoff_enabled }
+}
+defined_text = {
+	name = STPGetPartyAsylum
+	text = { trigger = { NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_asylum_agreement } } localization_key = STP_ps_asylum_accepted }
+	text = { localization_key = STP_ps_asylum_unconfirmed }
+}
+
+defined_text = {
+    name = STPGetPartyPreparationReport
+    text = { trigger = { has_country_flag = STP_sided_with_the_party_flag } localization_key = STP_ps_preparation_report }
+    text = { localization_key = STP_ps_empty }
+}

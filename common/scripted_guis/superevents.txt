@@ -117,12 +117,7 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_stelander_party_victory
-				STP = {
-					if = {
-						limit = { is_ai = no }
-						scoped_play_song = "ADISCORD_stp_civil_war_end"
-					}
-				}
+
 			}
 		}
 	}

@@ -269,6 +269,11 @@ STP_party_preparation_plan = {
 	abort = { OR = { NOT = { tag = STP } NOT = { STP_cw_preparation_open = yes } } }
 	ai_national_focuses = {
 		STP_cw_security_collegium
+		STP_ps_foreign_supply_desk
+		STP_ps_radio_network
+		STP_ps_reserve_hq
+		STP_ps_northern_partner
+		STP_ps_northern_credit
 		STP_PRESIDENT_REMAINS_IN_OFFICE
 		STP_PARTY_DISCIPLINE
 		STP_DISTRICT_GOVERNMENT
@@ -290,6 +295,12 @@ STP_party_preparation_plan = {
 		STP_cw_protocol_office
 		STP_cw_quiet_registers
 		STP_party_succession_protocol
+		STP_ps_northern_arms
+		STP_ps_joint_staff
+		STP_ps_asylum_protocol
+		STP_ps_evacuation_plan
+		STP_ps_northern_engineers
+		STP_ps_expedition_logistics
 	}
 	weight = { factor = 20 }
 }
@@ -304,6 +315,10 @@ STP_party_civil_war_plan = {
 		STP_cw_unified_headquarters
 		STP_cw_congress_in_session
 		STP_cw_mobilization_register
+		STP_ps_temporary_presidium
+		STP_ps_restore_couriers
+		STP_ps_route_security
+		STP_ps_operational_reserve
 		STP_cw_wartime_arsenals
 		STP_cw_supply_routes
 		STP_cw_guard_the_pier
@@ -311,7 +326,11 @@ STP_party_civil_war_plan = {
 		STP_cw_harbour_batteries
 		STP_party_rear_administration
 		STP_party_war_transport
+		STP_ps_ammunition_board
+		STP_ps_counter_supply
+		STP_cw_capital_counteroffensive
 		STP_party_war_directorate
+		STP_ps_retake_congress
 		STP_cw_line_formations
 		STP_cw_wartime_laboratories
 	}
@@ -337,6 +356,10 @@ STP_party_reconstruction_plan = {
 		STP_party_personnel_commissions
 		STP_party_local_cadres
 		STP_party_chain_of_command
+		STP_ps_district_fund
+		STP_ps_permanent_security
+		STP_ps_cells_agreement
+		STP_ps_presidium_authority
 		STP_pw_party_district_congress
 		STP_pw_party_executive_secretariat
 		STP_pw_party_civil_charter
@@ -375,4 +398,17 @@ STP_party_reconstruction_plan = {
 		STP_pw_party_settled_state
 	}
 	weight = { factor = 20 }
+}
+
+STP_ps_exile_plan = {
+	name = "Party exile"
+	desc = ""
+	allowed = { original_tag = NOD }
+	enable = { tag = NOD is_ai = yes has_country_flag = STP_ps_exile_received }
+	abort = { OR = { has_capitulated = yes has_country_flag = STP_ps_return_closed } }
+	ai_national_focuses = {
+		STP_ps_exile_office STP_ps_exile_survivors STP_ps_host_agreement
+		STP_ps_exile_formations STP_ps_return_terms STP_ps_return_campaign_focus
+	}
+	weight = { factor = 15 }
 }

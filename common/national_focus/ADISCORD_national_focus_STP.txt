@@ -1728,6 +1728,182 @@ focus_tree = {
 			country_event = { id = ADISCORD_STP_pc.25 }
 		}
 	}
+
+	focus = {
+		id = STP_ps_radio_network
+		icon = GFX_goal_generic_scientific_exchange
+		x = 14
+		y = 1
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 2
+		prerequisite = { focus = STP_Govern_In_His_Name }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_build_radio }
+	}
+
+
+	focus = {
+		id = STP_ps_reserve_hq
+		icon = GFX_focus_generic_improve_the_administration
+		x = 16
+		y = 1
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 2
+		prerequisite = { focus = STP_Govern_In_His_Name }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_build_hq }
+	}
+
+
+	focus = {
+		id = STP_ps_evacuation_plan
+		icon = GFX_focus_generic_truck
+		x = 16
+		y = 2
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 2
+		prerequisite = { focus = STP_ps_reserve_hq }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_prepare_evacuation unlock_decision_tooltip = STP_ps_evacuate_funds custom_effect_tooltip = STP_ps_handoff_tt }
+	}
+
+
+	focus = {
+		id = STP_ps_northern_partner
+		icon = GFX_focus_generic_treaty
+		x = 20
+		y = 1
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 1
+		prerequisite = { focus = STP_Govern_In_His_Name }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { custom_effect_tooltip = STP_ps_northern_agreement_tt hidden_effect = { STP_ps_request_northern_agreement = yes } }
+	}
+
+
+	focus = {
+		id = STP_ps_northern_credit
+		icon = GFX_focus_generic_treaty
+		x = 18
+		y = 2
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 2
+		prerequisite = { focus = STP_ps_northern_partner }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_fund_nod }
+	}
+
+
+	focus = {
+		id = STP_ps_northern_arms
+		icon = GFX_focus_generic_supply_line
+		x = 22
+		y = 2
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 2
+		prerequisite = { focus = STP_ps_northern_partner }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_arm_nod }
+	}
+
+
+	focus = {
+		id = STP_ps_northern_engineers
+		icon = GFX_goal_generic_production
+		x = 24
+		y = 3
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 2
+		prerequisite = { focus = STP_ps_northern_arms }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_engineers_nod }
+	}
+
+
+	focus = {
+		id = STP_ps_joint_staff
+		icon = GFX_goal_generic_army_doctrines
+		x = 20
+		y = 3
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 2
+		prerequisite = { focus = STP_ps_northern_credit focus = STP_ps_northern_arms }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { army_experience = 10 add_command_power = 10 }
+	}
+
+
+	focus = {
+		id = STP_ps_expedition_logistics
+		icon = GFX_focus_generic_truck
+		x = 18
+		y = 4
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 2
+		prerequisite = { focus = STP_ps_joint_staff }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_expedition_nod }
+	}
+
+
+	focus = {
+		id = STP_ps_asylum_protocol
+		icon = GFX_focus_generic_treaty
+		x = 22
+		y = 4
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 2
+		prerequisite = { focus = STP_ps_joint_staff }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { custom_effect_tooltip = STP_ps_handoff_tt hidden_effect = { STP_ps_request_asylum = yes } }
+	}
+
+
+	focus = {
+		id = STP_ps_foreign_supply_desk
+		icon = GFX_focus_generic_improve_the_administration
+		x = 26
+		y = 1
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 1
+		prerequisite = { focus = STP_Govern_In_His_Name }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_val_intelligence }
+	}
+
 }
 
 focus_tree = {
@@ -1899,7 +2075,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = STP_cw_unified_headquarters }
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STP }
-		available = { controls_state = 28 }
+		available = { STP_ps_holds_congress = yes }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -1937,11 +2113,10 @@ focus_tree = {
 		icon = GFX_goal_generic_army_artillery
 		x = 8
 		y = 3
-		cost = 3
-		prerequisite = { focus = STP_cw_guard_the_pier }
-		mutually_exclusive = { focus = STP_cw_inner_ring }
+		cost = 2
+		prerequisite = { focus = STP_cw_congress_in_session focus = STP_ps_restore_couriers }
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STP }
-		available = { has_war_with = STS }
+		available = { STP_ps_can_counterattack = yes }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
@@ -1958,9 +2133,8 @@ focus_tree = {
 		y = 3
 		cost = 3
 		prerequisite = { focus = STP_cw_guard_the_pier }
-		mutually_exclusive = { focus = STP_cw_capital_counteroffensive }
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STP }
-		available = { controls_state = 28 }
+		available = { STP_ps_holds_congress = yes }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -2325,21 +2499,13 @@ focus_tree = {
 		icon = GFX_focus_generic_truck
 		x = 3
 		y = 4
-		cost = 3
+		cost = 2
 		prerequisite = { focus = STP_cw_supply_routes }
 		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt tag = STP has_war_with = STS STP_cw_can_rearm = yes NOT = { has_country_flag = STP_cw_postwar } }  }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = {
-			add_equipment_to_stockpile = { type = motorized_equipment amount = 120 producer = ROOT }
-			effect_tooltip = { swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_party_war_transport_army_delta } }
-			hidden_effect = {
-				add_to_variable = { var = STP_cw_army_supply_consumption_factor value = -0.05 }
-				add_to_variable = { var = STP_cw_army_org_regain value = 0.05 }
-				STP_cw_refresh_army_modifier = yes
-			}
-		}
+		completion_reward = { unlock_decision_tooltip = STP_ps_transport }
 	}
 
 	focus = {
@@ -2375,9 +2541,10 @@ focus_tree = {
 		icon = GFX_goal_generic_army_doctrines
 		x = 12
 		y = 5
-		cost = 3
-		prerequisite = { focus = STP_cw_assault_columns focus = STP_cw_harbour_batteries }
-		prerequisite = { focus = STP_party_rear_administration }
+		cost = 2
+		prerequisite = { focus = STP_cw_capital_counteroffensive }
+
+
 		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt tag = STP has_war_with = STS STP_cw_can_rearm = yes NOT = { has_country_flag = STP_cw_postwar } }  }
 		cancel_if_invalid = yes
@@ -2777,6 +2944,7 @@ focus_tree = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_new_republic_delta } }
 			hidden_effect = {
 				STP_pw_begin_recovery = yes
+				if = { limit = { is_ai = no } scoped_play_song = "ADISCORD_stp_civil_war_end" }
 				country_event = { id = ADISCORD_STP_pc.23 }
 				add_to_variable = { var = STP_pw_stability_factor value = 0.02 }
 				STP_pw_refresh_modifier = yes
@@ -3190,7 +3358,7 @@ focus_tree = {
 		icon = GFX_focus_generic_treaty
 		x = 0
 		y = 6
-		cost = 4
+		cost = 3
 		prerequisite = { focus = STP_pw_party_open_settlement }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  }
@@ -3212,7 +3380,7 @@ focus_tree = {
 		icon = GFX_focus_generic_self_management
 		x = 0
 		y = 7
-		cost = 4
+		cost = 3
 		prerequisite = { focus = STP_party_district_charters }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  }
@@ -3234,7 +3402,7 @@ focus_tree = {
 		icon = GFX_goal_generic_political_pressure
 		x = 4
 		y = 6
-		cost = 4
+		cost = 3
 		prerequisite = { focus = STP_pw_party_firm_settlement }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  }
@@ -3256,7 +3424,7 @@ focus_tree = {
 		icon = GFX_focus_STP_Side_With_The_Party
 		x = 4
 		y = 7
-		cost = 4
+		cost = 3
 		prerequisite = { focus = STP_party_personnel_commissions }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  }
@@ -5638,4 +5806,270 @@ focus_tree = {
 		}
 	}
 
+
+	focus = {
+		id = STP_ps_ammunition_board
+		icon = GFX_goal_generic_production
+		x = 3
+		y = 3
+
+		cost = 2
+		prerequisite = { focus = STP_cw_wartime_arsenals }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_war_active = yes   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_ammunition custom_effect_tooltip = STP_ps_ammunition_result_tt }
+	}
+
+
+	focus = {
+		id = STP_ps_operational_reserve
+		icon = GFX_goal_generic_army_doctrines
+		x = 3
+		y = 2
+
+		cost = 2
+		prerequisite = { focus = STP_cw_mobilization_register }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_war_active = yes   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_reserve_training }
+	}
+
+
+	focus = {
+		id = STP_ps_route_security
+		icon = GFX_focus_generic_supply_line
+		x = 12
+		y = 1
+
+		cost = 2
+		prerequisite = { focus = STP_cw_unified_headquarters }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_war_active = yes   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_secure_routes }
+	}
+
+
+	focus = {
+		id = STP_ps_temporary_presidium
+		icon = GFX_focus_generic_improve_the_administration
+		x = 16
+		y = 0
+
+		cost = 1
+
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_war_active = yes has_country_flag = STP_ps_congress_fell  } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { add_political_power = 35 unlock_decision_tooltip = STP_ps_emergency_cabinet unlock_decision_tooltip = STP_ps_emergency_cabinet_administrative }
+	}
+
+
+	focus = {
+		id = STP_ps_restore_couriers
+		icon = GFX_focus_generic_supply_line
+		x = 16
+		y = 1
+
+		cost = 2
+		prerequisite = { focus = STP_ps_temporary_presidium }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_war_active = yes STP_ps_government_operational = yes  } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { add_command_power = 15 army_experience = 10 }
+	}
+
+
+	focus = {
+		id = STP_ps_counter_supply
+		icon = GFX_focus_generic_supply_line
+		x = 14
+		y = 2
+
+		cost = 2
+		prerequisite = { focus = STP_ps_route_security }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_war_active = yes   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_val_intelligence unlock_decision_tooltip = STP_ps_val_intercept unlock_decision_tooltip = STP_ps_val_pressure }
+	}
+
+
+	focus = {
+		id = STP_ps_retake_congress
+		icon = GFX_goal_generic_army_doctrines
+		x = 16
+		y = 2
+
+		cost = 2
+		prerequisite = { focus = STP_ps_restore_couriers }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_war_active = yes STP_ps_can_counterattack = yes NOT = { controls_province = 145 }  } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { add_timed_idea = { idea = STP_cw_offensive_preparation days = 28 } }
+	}
+
+
+	focus = {
+		id = STP_ps_permanent_security
+		icon = GFX_focus_generic_improve_the_administration
+		x = 20
+		y = 8
+
+		cost = 3
+		prerequisite = { focus = STP_party_chain_of_command }
+		allow_branch = { tag = STP has_country_flag = STP_cw_postwar }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_pw_can_reconstruct = yes   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_institution_payment }
+	}
+
+
+	focus = {
+		id = STP_ps_presidium_authority
+		icon = GFX_focus_generic_improve_the_administration
+		x = 20
+		y = 9
+
+		cost = 3
+		prerequisite = { focus = STP_ps_permanent_security }
+		allow_branch = { tag = STP has_country_flag = STP_cw_postwar }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_pw_can_reconstruct = yes check_variable = { var = STP_ps_institution_stage value = 3 compare = equals }  } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { custom_effect_tooltip = STP_ps_central_result_tt hidden_effect = { STP_ps_finalize_centre = yes } }
+	}
+
+
+	focus = {
+		id = STP_ps_district_fund
+		icon = GFX_goal_generic_production
+		x = -6
+		y = 8
+
+		cost = 3
+		prerequisite = { focus = STP_party_local_cadres }
+		allow_branch = { tag = STP has_country_flag = STP_cw_postwar }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_pw_can_reconstruct = yes   } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { unlock_decision_tooltip = STP_ps_institution_payment unlock_decision_tooltip = STP_ps_district_rebuild }
+	}
+
+
+	focus = {
+		id = STP_ps_cells_agreement
+		icon = GFX_focus_generic_treaty
+		x = -6
+		y = 9
+
+		cost = 3
+		prerequisite = { focus = STP_ps_district_fund }
+		allow_branch = { tag = STP has_country_flag = STP_cw_postwar }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_pw_can_reconstruct = yes check_variable = { var = STP_ps_institution_stage value = 3 compare = equals }  } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = { custom_effect_tooltip = STP_ps_district_result_tt hidden_effect = { STP_ps_finalize_districts = yes } }
+	}
+
+}
+
+shared_focus = {
+	id = STP_ps_exile_office
+	icon = GFX_focus_generic_improve_the_administration
+	x = 0
+	y = 0
+
+	cost = 3
+
+	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
+	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	cancel_if_invalid = yes
+	ai_will_do = { base = 4 }
+	completion_reward = { add_political_power = 35 }
+}
+
+shared_focus = {
+	id = STP_ps_exile_survivors
+	icon = GFX_goal_generic_army_doctrines
+	x = 0
+	y = 1
+
+	cost = 3
+	prerequisite = { focus = STP_ps_exile_office }
+	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
+	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	cancel_if_invalid = yes
+	ai_will_do = { base = 4 }
+	completion_reward = { army_experience = 15 }
+}
+
+shared_focus = {
+	id = STP_ps_host_agreement
+	icon = GFX_focus_generic_treaty
+	x = 0
+	y = 2
+
+	cost = 3
+	prerequisite = { focus = STP_ps_exile_survivors }
+	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
+	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	cancel_if_invalid = yes
+	ai_will_do = { base = 4 }
+	completion_reward = { add_command_power = 15 }
+}
+
+shared_focus = {
+	id = STP_ps_exile_formations
+	icon = GFX_goal_generic_army_doctrines
+	x = 0
+	y = 3
+
+	cost = 3
+	prerequisite = { focus = STP_ps_host_agreement }
+	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
+	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	cancel_if_invalid = yes
+	ai_will_do = { base = 4 }
+	completion_reward = { unlock_decision_tooltip = STP_ps_exile_training unlock_decision_tooltip = STP_ps_exile_formation custom_effect_tooltip = STP_ps_exile_formation_result_tt }
+}
+
+shared_focus = {
+	id = STP_ps_return_terms
+	icon = GFX_focus_generic_treaty
+	x = 0
+	y = 4
+
+	cost = 3
+	prerequisite = { focus = STP_ps_exile_formations }
+	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
+	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	cancel_if_invalid = yes
+	ai_will_do = { base = 4 }
+	completion_reward = { unlock_decision_tooltip = STP_ps_accept_return_terms custom_effect_tooltip = STP_ps_return_terms_tt }
+}
+
+shared_focus = {
+	id = STP_ps_return_campaign_focus
+	icon = GFX_goal_generic_army_doctrines
+	x = 0
+	y = 5
+
+	cost = 3
+	prerequisite = { focus = STP_ps_return_terms }
+	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
+	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	cancel_if_invalid = yes
+	ai_will_do = { base = 4 }
+	completion_reward = { unlock_decision_tooltip = STP_ps_launch_return }
 }

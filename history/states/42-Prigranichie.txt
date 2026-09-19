@@ -21,8 +21,4 @@ state={
 		victory_points = { 125 1 }
 	}
 
-	resources = {
-		tungsten = 12
-		steel = 35
-    }
 }

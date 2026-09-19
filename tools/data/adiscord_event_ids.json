@@ -2,6 +2,11 @@
   "schema_version": 1,
   "external_namespaces": ["lar_fake_intel_units"],
   "events": [
+    {"id": "ADISCORD_STP_cw.204", "namespace": "ADISCORD_STP_cw", "number": 204, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
+    {"id": "ADISCORD_STP_cw.203", "namespace": "ADISCORD_STP_cw", "number": 203, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
+    {"id": "ADISCORD_STP_cw.202", "namespace": "ADISCORD_STP_cw", "number": 202, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
+    {"id": "ADISCORD_STP_cw.201", "namespace": "ADISCORD_STP_cw", "number": 201, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
+    {"id": "ADISCORD_STP_cw.200", "namespace": "ADISCORD_STP_cw", "number": 200, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_STP_pc.25", "namespace": "ADISCORD_STP_pc", "number": 25, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_STP_pc.26", "namespace": "ADISCORD_STP_pc", "number": 26, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_STP_pc.27", "namespace": "ADISCORD_STP_pc", "number": 27, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},

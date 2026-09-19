@@ -43,7 +43,7 @@ STS_cw_defend_abilia = {
 
 STP_cw_front_against_sts = {
 	allowed = { original_tag = STP }
-	enable = { has_global_flag = STP_cw_started has_war_with = STS }
+	enable = { has_global_flag = STP_cw_started has_war_with = STS STP_ps_can_counterattack = yes }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = STS value = 100 }
 	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
@@ -456,4 +456,12 @@ STP_pc_prepare_NOD_STS = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = STS value = 100 }
+}
+
+STP_ps_defensive_front = {
+	allowed = { original_tag = STP }
+	enable = { STP_ps_war_active = yes STP_ps_can_counterattack = no }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = STS value = 100 }
+	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = no manual_attack = no }
 }

@@ -935,7 +935,7 @@ class CivilWarContracts(unittest.TestCase):
                             or matches_conditions(ast_block(f, "allow_branch"), {(tag, "tag", tag): True}, tag))]
             points = [(int(scalar(f, "x")), int(scalar(f, "y"))) for f in visible]
             self.assertEqual(len(points), len(set(points)), tag)
-            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 10 if tag == "STS" else (9 if tag == "STP" else 5), tag)
+            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 10 if tag == "STS" else (13 if tag == "STP" else 5), tag)
             for x in {x for x, _ in points}:
                 rows = sorted(y for px, y in points if px == x)
                 self.assertTrue(all(b - a >= 1 for a, b in zip(rows, rows[1:])), tag)
@@ -2917,7 +2917,7 @@ class NorthernCampaignContracts(unittest.TestCase):
 class WartimeProgramContracts(unittest.TestCase):
     def setUp(self):
         self.triggers = [e for e in entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
-                         if e.key == "STP_cw_can_rearm"]
+                         if e.key in ("STP_cw_can_rearm", "STP_ps_local_program_open")]
         self.decisions = self.expand(ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"))
         self.effects = self.expand(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"))
 
@@ -3378,7 +3378,9 @@ class KefreytVolunteerContracts(unittest.TestCase):
             expected = [(e.key, tuple((c.key, c.value) for c in e.value)) for e in ast_block(templates["Stelander Assault Division"], section)]
             self.assertEqual(actual, expected)
         contract = ast_block(entries("common/scripted_effects/ADISCORD_VAL_effects.txt"), "VAL_cw_complete_arms_contract")
-        temporary = next(e.value for e in walk(contract) if e.key == "division_template")
+        delivery = ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_ps_deliver_val_contract")
+        self.assertIn("STP_ps_val_receipt_contract", str(contract))
+        temporary = next(e.value for e in walk(delivery) if e.key == "division_template")
         self.assertEqual(scalar(temporary, "name"), "Kefreyt Contract Infantry")
         self.assertEqual(scalar(temporary, "is_locked"), "yes")
         self.assertEqual(scalar(temporary, "force_allow_recruiting"), "no")
@@ -3703,7 +3705,7 @@ class PostwarFocusContracts(unittest.TestCase):
                        if e.key == "offset" and matches_conditions(ast_block(e.value, "trigger"), facts, tag)),
                        int(scalar(f, "y"))) for f in visible]
             self.assertEqual(len(points), len(set(points)))
-            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 32 if tag == "STS" else 20)
+            self.assertLessEqual(max(x for x, _ in points) - min(x for x, _ in points), 32 if tag == "STS" else 26)
             self.assertLessEqual(max(y for _, y in points), 15 if tag == "STS" else 12)
             for focus in focuses.values():
                 self.assertEqual(scalar(ast_block(focus, "allow_branch"), "tag"), tag)

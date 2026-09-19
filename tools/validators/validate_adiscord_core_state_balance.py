@@ -203,9 +203,10 @@ def validate() -> None:
 
     for state_id in STP_CLAIMS_ON_VAL:
         check(bool(re.search(r"(?m)^\s*add_claim_by\s*=\s*STP\s*$", histories.get(state_id, ""))), f"state {state_id}: missing STP claim")
-    stolen_val_resources = sum(sum(EXPECTED_RESOURCES[state_id].values()) for state_id in STP_CLAIMS_ON_VAL)
-    total_val_resources = sum(EXPECTED_RESOURCE_TOTALS["VAL"].values())
-    check(stolen_val_resources >= total_val_resources * 0.8, "VAL resource corridor must contain at least 80% of domestic resource units")
+    check(EXPECTED_RESOURCE_TOTALS["VAL"] == {"oil": 19}, "VAL homeland must contain only its 19 oil")
+    for state_id, (_path, tag, *_rest) in TARGET_STATES.items():
+        if tag == "VAL":
+            check(set(EXPECTED_RESOURCES[state_id]) <= {"oil"}, f"state {state_id}: Kefreyt homeland must not contain non-oil deposits")
 
 
 def main() -> int:

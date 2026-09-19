@@ -20,7 +20,6 @@ characters = {
 			ideology = contractual_etatism
 			expire = "2200.1.1.1"
 			id = -1
-			traits = { The_Weaponry_Baron }
 		}
 	}
 
@@ -47,11 +46,11 @@ characters = {
 		}
 		corps_commander = {
 			traits = { commando }
-			skill = 3
-			attack_skill = 4
-			defense_skill = 2
-			planning_skill = 3
-			logistics_skill = 2
+			skill = 2
+			attack_skill = 3
+			defense_skill = 1
+			planning_skill = 2
+			logistics_skill = 1
 			legacy_id = -1
 		}
 	}
@@ -65,11 +64,11 @@ characters = {
 		}
 		corps_commander = {
 			traits = { organizer }
-			skill = 3
-			attack_skill = 2
-			defense_skill = 3
-			planning_skill = 4
-			logistics_skill = 3
+			skill = 2
+			attack_skill = 1
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 2
 			legacy_id = -1
 		}
 	}
@@ -83,11 +82,11 @@ characters = {
 		}
 		corps_commander = {
 			traits = { offensive_doctrine }
-			skill = 3
-			attack_skill = 4
-			defense_skill = 3
-			planning_skill = 2
-			logistics_skill = 2
+			skill = 2
+			attack_skill = 3
+			defense_skill = 2
+			planning_skill = 1
+			logistics_skill = 1
 			legacy_id = -1
 		}
 	}
@@ -101,11 +100,11 @@ characters = {
 		}
 		corps_commander = {
 			traits = { logistics_wizard }
-			skill = 3
-			attack_skill = 2
-			defense_skill = 3
-			planning_skill = 3
-			logistics_skill = 4
+			skill = 2
+			attack_skill = 1
+			defense_skill = 2
+			planning_skill = 2
+			logistics_skill = 3
 			legacy_id = -1
 		}
 	}
@@ -205,11 +204,11 @@ characters = {
 		}
 		field_marshal = {
 			traits = { offensive_doctrine logistics_wizard }
-			skill = 8
-			attack_skill = 8
-			defense_skill = 8
-			planning_skill = 8
-			logistics_skill = 8
+			skill = 6
+			attack_skill = 6
+			defense_skill = 5
+			planning_skill = 6
+			logistics_skill = 5
 			legacy_id = -1
 		}
 	}

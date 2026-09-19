@@ -56,6 +56,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Contract_State }
 		ai_will_do = { base = 15 }
 		completion_reward = {
+			VAL_Valera_Solgalov = { add_country_leader_trait = { ideology = contractual_etatism trait = The_Weaponry_Baron } }
 			add_power_balance_value = { id = VAL_command_balance value = 0.15 }
 			VAL_apply_contract_administration_1 = yes
 			custom_effect_tooltip = VAL_focus_authority_10_tt
@@ -990,6 +991,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Hire_Out_War }
 		completion_reward = {
+            if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Aleksei_Veyr } } } recruit_character = VAL_Aleksei_Veyr }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_contractor_officers_delta } }
 			VAL_apply_contract_army_2 = yes
 			hidden_effect = {
@@ -1060,6 +1062,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Field_Repair_Corps }
 		prerequisite = { focus = VAL_Reserve_Battalions }
 		completion_reward = {
+            if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Dmitri_Karsov } } } recruit_character = VAL_Dmitri_Karsov }
 			add_power_balance_value = { id = VAL_command_balance value = -0.15 }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_general_staff_delta } }
 			VAL_apply_contract_army_3 = yes
@@ -1546,6 +1549,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Logistics_Command }
 		prerequisite = { focus = VAL_Operational_Reserves }
 		completion_reward = {
+            if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Maksim_Korvin } } } recruit_character = VAL_Maksim_Korvin }
 			add_power_balance_value = { id = VAL_command_balance value = -0.1 }
 			VAL_apply_contract_army_3 = yes
 			army_experience = 15
@@ -2016,6 +2020,7 @@ completion_reward = {
   prerequisite = { focus = VAL_frontier_treaty_offices }
   available = { custom_trigger_tooltip = { tooltip = VAL_supply_base_secured_tt VAL_supply_base_secured = yes } }
   completion_reward = {
+            if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Leonid_Vargan } } } recruit_character = VAL_Leonid_Vargan }
    remove_ideas = VAL_vorkerland_metal_shortage
    hidden_effect = { ADISCORD_economy_mark_dirty = yes }
   }
@@ -2053,4 +2058,113 @@ completion_reward = {
   completion_reward = { add_ideas = VAL_regional_settlement hidden_effect = { country_event = { id = val_contract.345 } } }
   ai_will_do = { base = 20 }
  }
+
+    # Reputation is restored by completed contracts and verified production;
+    # the final industrial settlement requires the actual campaign outcome.
+
+    focus = {
+        id = VAL_Audit_Lost_Contracts
+        icon = GFX_focus_generic_diplomatic_treaty
+        x = 10
+        y = 8
+        cost = 3
+        prerequisite = { focus = VAL_Inventory_The_Empty_Yards }
+        available = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+        cancel_if_invalid = yes
+        completion_reward = { VAL_restore_arsenal_reputation = yes add_political_power = 50 }
+        ai_will_do = { base = 30 }
+    }
+
+    focus = {
+        id = VAL_Guarantee_Deliveries
+        icon = GFX_focus_generic_reinforcing_the_supply_network
+        x = 8
+        y = 10
+        cost = 3
+        prerequisite = { focus = VAL_Audit_Lost_Contracts }
+        prerequisite = { focus = VAL_Export_Rifles_Not_Promises }
+        completion_reward = { VAL_restore_arsenal_reputation = yes }
+        ai_will_do = { base = 30 }
+    }
+
+    focus = {
+        id = VAL_Independent_Trials
+        icon = GFX_goal_generic_small_arms
+        x = 12
+        y = 10
+        cost = 3
+        prerequisite = { focus = VAL_Audit_Lost_Contracts }
+        prerequisite = { focus = VAL_Ballistics_Schools }
+        completion_reward = { VAL_restore_arsenal_reputation = yes add_tech_bonus = { name = VAL_quality_trials_bonus bonus = 0.5 uses = 1 category = infantry_weapons } }
+        ai_will_do = { base = 30 }
+    }
+
+    focus = {
+        id = VAL_Returning_Buyers
+        icon = GFX_goal_generic_trade
+        x = 10
+        y = 12
+        cost = 5
+        prerequisite = { focus = VAL_Guarantee_Deliveries }
+        prerequisite = { focus = VAL_Independent_Trials }
+        completion_reward = { VAL_restore_arsenal_reputation = yes ADISCORD_economy_receive_100 = yes }
+        ai_will_do = { base = 30 }
+    }
+
+    focus = {
+        id = VAL_Reopen_Trade_Routes
+        icon = GFX_focus_generic_reinforcing_the_supply_network
+        x = 24
+        y = 37
+        cost = 5
+        prerequisite = { focus = VAL_Campaign_Secured }
+        prerequisite = { focus = VAL_New_Supply_Base }
+        available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
+        cancel_if_invalid = yes
+        completion_reward = { VAL_advance_economic_recovery = yes }
+        ai_will_do = { base = 30 }
+    }
+
+    focus = {
+        id = VAL_Settle_Industrial_Debts
+        icon = GFX_focus_generic_diplomatic_treaty
+        x = 28
+        y = 37
+        cost = 5
+        prerequisite = { focus = VAL_Campaign_Secured }
+        prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
+        available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
+        cancel_if_invalid = yes
+        completion_reward = { VAL_advance_economic_recovery = yes }
+        ai_will_do = { base = 30 }
+    }
+
+    focus = {
+        id = VAL_Return_To_World_Market
+        icon = GFX_goal_generic_trade
+        x = 26
+        y = 39
+        cost = 5
+        prerequisite = { focus = VAL_Reopen_Trade_Routes }
+        prerequisite = { focus = VAL_Settle_Industrial_Debts }
+        prerequisite = { focus = VAL_Returning_Buyers }
+        available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
+        cancel_if_invalid = yes
+        completion_reward = { VAL_advance_economic_recovery = yes VAL_restore_arsenal_reputation = yes effect_tooltip = { add_ideas = VAL_arsenal_quality_delta } }
+        ai_will_do = { base = 30 }
+    }
+
+    focus = {
+        id = VAL_Veterans_Of_The_Campaign
+        icon = GFX_goal_generic_army_doctrines
+        x = 32
+        y = 37
+        cost = 3
+        prerequisite = { focus = VAL_Campaign_Secured }
+        prerequisite = { focus = VAL_Army_Of_The_Ledger }
+        available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
+        cancel_if_invalid = yes
+        completion_reward = { if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Sergei_Volkov } } } recruit_character = VAL_Sergei_Volkov } }
+        ai_will_do = { base = 30 }
+    }
 }

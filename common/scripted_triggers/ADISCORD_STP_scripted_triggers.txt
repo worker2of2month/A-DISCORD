@@ -764,7 +764,10 @@ STP_cw_can_pay_assault_division = {
 STP_pw_can_reconstruct = {
 	OR = { tag = STP tag = STS }
 	has_capitulated = no
-	has_country_flag = STP_cw_won_union_battle
+	OR = {
+		has_country_flag = STP_cw_won_union_battle
+		AND = { tag = STP has_country_flag = STP_ps_restored_dependency is_subject_of = NOD }
+	}
 	has_country_flag = STP_cw_postwar
 	has_global_flag = STP_cw_union_wars_finished
 }
@@ -781,7 +784,7 @@ STP_cw_kefreyt_aid_open = {
 		AND = {
 			NOT = { has_global_flag = STP_cw_started }
 			NOT = { has_war_with = STP }
-			STP = { exists = yes has_capitulated = no has_country_flag = STP_sided_with_Maksim_flag }
+			STP = { exists = yes has_capitulated = no OR = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_sided_with_the_party_flag } }
 		}
 		AND = {
 			has_global_flag = STP_cw_started
@@ -1316,36 +1319,95 @@ STP_pf_can_negotiate = {
 # Party survival: country scope unless a province is explicitly named.
 STP_ps_holds_congress = { controls_province = 145 }
 STP_ps_government_operational = {
-    OR = { STP_ps_holds_congress = yes has_country_flag = STP_ps_temporary_government }
+	OR = { STP_ps_holds_congress = yes has_country_flag = STP_ps_temporary_government }
 }
 STP_ps_war_active = {
-    tag = STP has_war_with = STS has_capitulated = no
-    NOT = { has_global_flag = STP_cw_union_wars_finished }
+	tag = STP has_war_with = STS has_capitulated = no
+	NOT = { has_global_flag = STP_cw_union_wars_finished }
 }
 STP_ps_can_counterattack = {
-    STP_ps_war_active = yes
-    STP_ps_government_operational = yes
-    check_variable = { var = STP_ps_stage value = 4 compare = equals }
+	STP_ps_war_active = yes
+	STP_ps_government_operational = yes
+	check_variable = { var = STP_ps_stage value = 4 compare = equals }
 }
 STP_ps_can_start_stage = {
-    STP_ps_war_active = yes STP_ps_government_operational = yes
-    NOT = { has_variable = STP_ps_reorg_deposit }
-    NOT = { has_variable = STP_ps_paused_days }
-    NOT = { has_active_mission = STP_ps_reorg_1 }
-    NOT = { has_active_mission = STP_ps_reorg_2 }
-    NOT = { has_active_mission = STP_ps_reorg_3 }
+	STP_ps_war_active = yes STP_ps_government_operational = yes
+	NOT = { has_variable = STP_ps_reorg_deposit }
+	NOT = { has_variable = STP_ps_paused_days }
+	NOT = { has_active_mission = STP_ps_reorg_1 }
+	NOT = { has_active_mission = STP_ps_reorg_2 }
+	NOT = { has_active_mission = STP_ps_reorg_3 }
 }
 
 STP_ps_nod_can_host_exiles = {
-    tag = NOD exists = yes has_capitulated = no is_subject = no
-    NOT = { has_war_with = STP }
+	tag = NOD exists = yes has_capitulated = no is_subject = no
+	NOT = { has_war_with = STP }
 }
 STP_ps_can_aid_nod = {
-    tag = STP exists = yes has_capitulated = no
-    NOT = { has_global_flag = STP_cw_union_wars_finished }
-    NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement }
+	tag = STP exists = yes has_capitulated = no
+	NOT = { has_global_flag = STP_cw_union_wars_finished }
+	NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement }
 }
 STP_ps_northern_front_active = {
-    tag = NOD exists = yes has_capitulated = no
-    OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
+	tag = NOD exists = yes has_capitulated = no
+	OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
+}
+
+# A land route needs a controlled, capital-connected border on both sides.
+STP_ps_val_land_route = {
+	tag = VAL
+	any_owned_state = {
+		is_controlled_by = VAL is_in_home_area = yes
+		any_neighbor_state = {
+			is_in_home_area = yes
+			OR = {
+				AND = { STP = { STP_cw_preparation_open = yes } is_owned_by = STP is_controlled_by = STP }
+				AND = { STS = { has_war_with = STP } is_owned_by = STS is_controlled_by = STS }
+			}
+		}
+	}
+}
+STP_ps_val_supply_open = {
+	tag = VAL exists = yes has_capitulated = no
+	NOT = { has_global_flag = STP_cw_union_wars_finished }
+	NOT = { has_war_with = STS }
+	NOT = { has_country_flag = VAL_cw_refused }
+	OR = {
+		AND = { STP = { STP_cw_preparation_open = yes } NOT = { has_war_with = STP } }
+		STS = { exists = yes has_capitulated = no has_war_with = STP }
+	}
+}
+STP_ps_val_intelligence_available = {
+	tag = STP exists = yes has_capitulated = no
+	OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes }
+	VAL = { has_variable = STP_ps_val_receipt_rifles }
+}
+
+STP_ps_local_program_open = {
+	OR = {
+		NOT = { is_owned_by = STP }
+		AND = {
+			OR = { NOT = { state = 2 } STP = { controls_province = 16445 } }
+			OR = { NOT = { state = 29 } STP = { controls_province = 16345 } }
+		}
+	}
+}
+STP_ps_nod_supply_route = {
+	tag = STP
+	OR = {
+		any_owned_state = {
+			is_controlled_by = STP is_in_home_area = yes
+			any_neighbor_state = { is_owned_by = NOD is_controlled_by = NOD is_in_home_area = yes }
+		}
+		AND = {
+			controls_province = 16366
+			NOD = { any_owned_state = { is_controlled_by = NOD is_in_home_area = yes naval_base > 0 } }
+		}
+	}
+}
+
+STP_ps_exile_formation_context = {
+	STP_ps_nod_can_host_exiles = yes
+	has_country_flag = STP_ps_exile_received
+	any_owned_state = { is_controlled_by = PREV }
 }

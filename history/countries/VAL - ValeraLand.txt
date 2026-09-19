@@ -8,12 +8,7 @@ recruit_character = VAL_Kirill_Voron
 recruit_character = VAL_Erika_Stahl
 recruit_character = VAL_Boris_Gromov
 recruit_character = VAL_Renata_Morn
-recruit_character = VAL_Aleksei_Veyr
-recruit_character = VAL_Maksim_Korvin
 recruit_character = VAL_Artem_Rask
-recruit_character = VAL_Dmitri_Karsov
-recruit_character = VAL_Leonid_Vargan
-recruit_character = VAL_Sergei_Volkov
 
 ####### Basic shit
 
@@ -48,7 +43,6 @@ add_ideas = {
 	ADISCORD_internal_security_investigative_bureaus
 
 	VAL_mercenary_state
-	VAL_worldwide_famous_weponry
 	VAL_harvest_of_ash
 	VAL_big_buyers
 	ADISCORD_economic_system_state_coordinated

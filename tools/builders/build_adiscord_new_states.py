@@ -1597,6 +1597,7 @@ def apply() -> None:
     apply_generated_victory_point_localisation()
     apply_generated_state_name_localisation()
     print(f"Built metadata for {len(STARTING_OWNERS)} states; hand-authored flags were left untouched.")
+    update_val_resources(True)
 
 
 def apply_settlement_cluster_victory_points() -> None:
@@ -1620,6 +1621,32 @@ def apply_nam_resource_war_states() -> None:
     apply_legacy_state_profiles({67, 68, 69, 70, 690, 691, 692})
     apply_generated_victory_point_localisation()
     apply_generated_state_name_localisation()
+
+
+def update_val_resources(apply_changes: bool = False) -> int:
+    """Own only resource blocks of the eight original Kefreyt states."""
+    changed = []
+    for state_id, (relative_path, tag, *_rest) in TARGET_STATES.items():
+        if tag != "VAL":
+            continue
+        path = ROOT / relative_path
+        source = path.read_text(encoding="utf-8-sig")
+        updated = source
+        for resource in ("oil", "steel", "aluminium", "tungsten", "chromium", "rubber"):
+            updated = remove_state_resource(updated, resource)
+        expected = EXPECTED_RESOURCES[state_id]
+        if expected:
+            updated = ensure_state_resources(updated, expected)
+        # Compare parsed resources so harmless formatting does not cause drift.
+        def resources(text):
+            match = re.search(r"resources\s*=\s*\{([^}]*)\}", text)
+            return dict(re.findall(r"(\w+)\s*=\s*(\d+)", match.group(1))) if match else {}
+        if resources(source) != resources(updated):
+            changed.append(state_id)
+            if apply_changes:
+                path.write_text(updated, encoding="utf-8", newline="\n")
+    print(f"VAL homeland resource changes: {changed}")
+    return int(bool(changed) and not apply_changes)
 
 
 def main() -> int:
@@ -1666,7 +1693,11 @@ def main() -> int:
     )
     actions.add_argument("--apply-vorkerland-owners", action="store_true",
                          help="apply only the prewar confederation owners and cores")
+    actions.add_argument("--apply-val-resources", action="store_true", help="apply the oil-only Kefreyt homeland resource manifest")
+    actions.add_argument("--check-val-resources", action="store_true", help="check the Kefreyt homeland resource manifest")
     args = parser.parse_args()
+    if args.apply_val_resources or args.check_val_resources:
+        return update_val_resources(args.apply_val_resources)
     if args.apply_vorkerland_owners:
         apply_legacy_owner_overrides({
             **LEGACY_OWNER_OVERRIDES,

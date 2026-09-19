@@ -2,8 +2,11 @@ STP_elections_in_the_party = {
 	picture = GFX_STP_decision_election_in_the_party
 	allowed = { tag = STP }
 	visible = {
-		NOT = { has_global_flag = STP_cw_started }
-		NOT = { has_country_flag = STP_cw_elections_finished }
+		OR = {
+            AND = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } }
+            AND = { has_country_flag = STP_sided_with_the_party_flag NOT = { has_global_flag = STP_cw_union_wars_finished } }
+            has_variable = STP_ps_nod_receipt_type
+        }
 	}
 	visible_when_empty = yes
 	priority = 1
@@ -42,6 +45,8 @@ STP_cw_external_intervention = {
 	visible = {
 		OR = {
 			has_global_flag = STP_cw_started
+            AND = { tag = NOD has_country_flag = STP_ps_aid_agreement }
+            AND = { tag = VAL OR = { has_country_flag = STP_ps_val_authorized has_variable = STP_ps_val_receipt_rifles } }
 			has_active_mission = NOD_cw_northern_mobilization
 			AND = { tag = NOD check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
 			has_active_mission = NOD_cw_northern_redeployment
@@ -125,21 +130,11 @@ STP_postwar_nod_ultimatum = {
 	priority = 40
 }
 
-STP_ps_party_programs = {
-    allowed = { tag = STP }
-    visible = { has_country_flag = STP_sided_with_the_party_flag NOT = { has_global_flag = STP_cw_union_wars_finished } }
-    visible_when_empty = yes
-    priority = 32
-}
-STP_ps_northern_support = {
-    allowed = { OR = { tag = STP tag = NOD } }
-    visible = { OR = { AND = { tag = STP has_country_flag = STP_sided_with_the_party_flag } AND = { tag = NOD has_country_flag = STP_ps_aid_agreement } } }
-    visible_when_empty = yes
-    priority = 31
-}
+
+
 STP_ps_exile = {
-    allowed = { tag = NOD }
-    visible = { has_country_flag = STP_ps_exile_received }
-    visible_when_empty = yes
-    priority = 40
+	allowed = { tag = NOD }
+	visible = { has_country_flag = STP_ps_exile_received }
+	visible_when_empty = yes
+	priority = 40
 }

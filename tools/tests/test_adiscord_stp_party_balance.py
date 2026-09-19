@@ -76,44 +76,36 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
         manual_deal_ceiling = 65
         self.assertLess(max(coefficients) * manual_deal_ceiling * 50 / 100, 0.131)
 
-    def test_human_party_route_opens_with_a_real_defensive_phase(self) -> None:
-        begin = named_block(self.effects, "STP_cw_begin_hostilities")
-        self.assertIn("is_ai = no has_country_flag = STP_sided_with_the_party_flag", begin)
-        self.assertIn(
-            "add_timed_idea = { idea = STP_cw_party_initial_disarray days = 35 }",
-            begin,
-        )
+    def test_party_route_requires_staged_defensive_recovery(self) -> None:
+        actions = read(ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        self.assertIn("STP_ps_begin_defence = yes", actions)
+        begin = named_block(self.effects, "STP_ps_begin_defence")
+        self.assertIn("NOT = { has_variable = STP_ps_stage }", begin)
+        recovery = named_block(self.effects, "STP_ps_refresh_defence")
+        for value in ("-0.45", "-0.3", "-0.15"):
+            self.assertIn("var = STP_ps_breakthrough value = " + value, recovery)
+        self.assertNotIn("army_defence_factor = -", recovery)
+        self.assertNotIn("STP_cw_party_initial_disarray", self.effects)
+        for stage in (1, 2, 3):
+            funded = named_block(self.decisions, f"STP_ps_reorg_{stage}_funded")
+            self.assertIn("STP_ps_reorg_deposit", funded)
+            self.assertIn("activate_mission", funded)
 
-        idea = named_block(self.ideas, "STP_cw_party_initial_disarray")
-        self.assertIn("army_attack_factor = -0.25", idea)
-        self.assertIn("breakthrough_factor = -0.20", idea)
-        self.assertIn("planning_speed = -0.10", idea)
-        self.assertNotIn("army_defence_factor = -", idea)
-
-    def test_bronze_congress_loss_is_a_heavy_player_party_crisis(self) -> None:
-        success = named_block(self.effects, "STP_cw_resolve_last_banquet_success")
-        self.assertIn("STP_cw_congress_fall_crisis_applied", success)
-        self.assertIn("add_war_support = -0.10", success)
-        self.assertIn(
-            "add_timed_idea = { idea = STP_cw_congress_fall_crisis days = 70 }",
-            success,
-        )
-        self.assertIn("var = STP_apparatus_loyalty_change value = -12", success)
-        self.assertIn("STP_change_apparatus_loyalty = yes", success)
-
-        crisis = named_block(self.ideas, "STP_cw_congress_fall_crisis")
-        self.assertIn("stability_factor = -0.10", crisis)
-        self.assertIn("political_power_gain = -0.15", crisis)
-        self.assertIn("army_org_factor = -0.10", crisis)
-        self.assertIn("planning_speed = -0.15", crisis)
+    def test_congress_crisis_depends_on_the_city_and_penalizes_once(self) -> None:
+        crisis = named_block(self.effects, "STP_ps_open_congress_crisis")
+        self.assertIn("STP_ps_holds_congress = no", crisis)
+        self.assertIn("NOT = { has_country_flag = STP_ps_congress_fell }", crisis)
+        self.assertIn("add_war_support = -0.10", crisis)
+        self.assertIn("add_stability = -0.15", crisis)
+        self.assertIn("var = STP_apparatus_loyalty_change value = -20", crisis)
+        self.assertIn("STP_change_apparatus_loyalty = yes", crisis)
+        self.assertIn("STP_ps_pause_reorganisation = yes", crisis)
+        banquet = named_block(self.effects, "STP_cw_resolve_last_banquet_success")
+        self.assertNotIn("STP_cw_congress_fall_crisis_applied", banquet)
 
     def test_balance_mechanics_have_player_facing_localisation(self) -> None:
-        for key in (
-            "STP_cw_party_initial_disarray:",
-            "STP_cw_party_initial_disarray_desc:",
-            "STP_cw_congress_fall_crisis:",
-            "STP_cw_congress_fall_crisis_desc:",
-        ):
+        for key in ("STP_ps_reorg_1:", "STP_ps_reorg_1_desc:",
+                    "STP_ps_congress_deadline:", "STP_ps_congress_deadline_desc:"):
             self.assertIn(key, self.loc)
 
 
