@@ -9,9 +9,9 @@ concurrency:
   group: isolated-economy-audit
   cancel-in-progress: true
 jobs:
-  snapshot:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,29 +19,78 @@ jobs:
           sparse-checkout: .github
       - uses: actions/checkout@v4
         with:
-          ref: 7d828a217b7098a5d1c73cb45049b279e41248a4
+          ref: d6cc3c77078a25f7318fbf7e371fc6779eab3351
           path: source
-          persist-credentials: false
-          filter: blob:none
-          sparse-checkout: |
-            common
-            events
-            history
-            localisation
-            tools
-            docs
-            interface
-            country_metadata
-      - name: Inspect accounting and progression
+          show-progress: false
+      - name: Prepare fixture and dependencies
+        run: |
+          python -m pip install --quiet pillow
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('control/.github/economy_balance_tests.py')
+          text=p.read_text()
+          text=text.replace('get("VAL_industrial_weekly_income", 0)', 'get("VAL_industrial_weekly_income", -1)')
+          p.write_text(text)
+          PY
+      - name: Baseline total-conversion validation
         working-directory: source
-        run: python -B ../control/.github/economy_inspect.py > ../control/.github/economy-inspection.txt
-      - name: Save inspection on audit branch
+        run: |
+          set +e
+          python -B tools/validate_tc.py --limit 300 > ../control/.github/economy-baseline-validation.txt 2>&1
+          echo "BASELINE_EXIT=$?" >> ../control/.github/economy-baseline-validation.txt
+          exit 0
+      - name: Apply and exercise new regression contracts
+        working-directory: source
+        run: python -B ../control/.github/economy_patch.py > ../control/.github/economy-result.txt 2>&1
+      - name: Existing affected tests
+        working-directory: source
+        run: |
+          python -B -m unittest tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_adiscord_stp_postwar_economy tools.tests.test_validate_adiscord_val_rework -q >> ../control/.github/economy-result.txt 2>&1
+          python -B tools/validate_adiscord_val_rework.py >> ../control/.github/economy-result.txt 2>&1
+          python -B tools/validate_adiscord_economy_ai.py >> ../control/.github/economy-result.txt 2>&1
+          git diff --check >> ../control/.github/economy-result.txt 2>&1
+      - name: Full validation and budget evidence
+        working-directory: source
+        run: |
+          set +e
+          python -B tools/validate_tc.py --limit 300 > ../control/.github/economy-final-validation.txt 2>&1
+          echo "FINAL_EXIT=$?" >> ../control/.github/economy-final-validation.txt
+          python - <<'PY' >> ../control/.github/economy-result.txt 2>&1
+          from tools.tests.test_adiscord_economy_balance import budget_fixture, calculate, P, read, deltas, focus_entries
+          for title, kwargs in [('Developed economy',dict(civ=35,mil=15,centers=6,resources=20)), ('Shabrat restored',dict()), ('Small fragmented economy',dict(civ=3,mil=2,centers=0,resources=1,level=1,model='fragmented'))]:
+              f=budget_fixture(**kwargs)
+              if title.startswith('Shabrat'):
+                  bonuses={}
+                  text=read('common/national_focus/ADISCORD_national_focus_STP.txt')
+                  for suffix in ('count_the_cost','reopen_tax_offices','repair_workshops','stabilize_currency','recovery_budget'):
+                      for key,value in deltas(focus_entries(text,'STP_pc_economy_'+suffix)).items():
+                          bonuses[key]=bonuses.get(key,0)+value
+                  for key in ('overall_income','admin_expense'):
+                      f.scopes['A'][P+'final_'+key+'_factor_bp'] += bonuses.get('STP_pw_'+P+key+'_factor',0)*100
+              v=calculate(f)
+              print('BUDGET',title,{k:round(v[P+k],4) for k in ('weekly_income','weekly_expenses','weekly_balance','debt_service')})
+          PY
+          git diff --stat >> ../control/.github/economy-result.txt
+      - name: Commit candidate without audit files
+        working-directory: source
+        run: |
+          git config user.name 'worker2of2month'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          git add --pathspec-from-file=../changed-paths.txt
+          git diff --cached --check
+          git commit -m 'Rebalance weekly economy and recovery focuses; unblock northern VAL AI'
+          git push origin HEAD:codex/economy-focus-20260919
+          echo "CANDIDATE_SHA=$(git rev-parse HEAD)" >> ../control/.github/economy-result.txt
+      - name: Preserve verification evidence on audit branch
+        if: always()
         working-directory: control
         run: |
           git config user.name 'Economy audit'
           git config user.email '81386071+worker2of2month@users.noreply.github.com'
-          git add .github/economy-inspection.txt
+          for f in .github/economy-result.txt .github/economy-baseline-validation.txt .github/economy-final-validation.txt; do
+            if test -f "$f"; then git add "$f"; fi
+          done
           if ! git diff --cached --quiet; then
-            git commit -m 'chore: record targeted economy source inspection'
+            git commit -m 'chore: record economy regression evidence'
             git push origin HEAD:codex/economy-100-audit-20260919
           fi
