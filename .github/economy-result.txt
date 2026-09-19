@@ -1,42 +1,12 @@
 RED: new behavior on the unmodified implementation
  test_austerity_saves_real_money_and_interest_is_not_rescaled (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_austerity_saves_real_money_and_interest_is_not_rescaled) ... FAIL
 test_developed_economy_can_clear_one_hundred_with_normal_budgets (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_developed_economy_can_clear_one_hundred_with_normal_budgets) ... FAIL
-test_each_shabrat_reform_has_an_exact_native_delta_preview (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_each_shabrat_reform_has_an_exact_native_delta_preview) ... ERROR
-test_shabrat_recovery_has_a_sustainable_hundred_path (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_shabrat_recovery_has_a_sustainable_hundred_path) ... ERROR
+test_each_shabrat_reform_has_an_exact_native_delta_preview (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_each_shabrat_reform_has_an_exact_native_delta_preview) ... FAIL
+test_shabrat_recovery_has_a_sustainable_hundred_path (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_shabrat_recovery_has_a_sustainable_hundred_path) ... FAIL
 test_small_economy_is_not_given_a_flat_hundred (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_small_economy_is_not_given_a_flat_hundred) ... ok
 test_tax_preview_and_repeated_refresh_do_not_duplicate_scaled_income (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_tax_preview_and_repeated_refresh_do_not_duplicate_scaled_income) ... ok
 test_val_recovery_returns_four_weekly_per_stage_and_does_not_compound (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_val_recovery_returns_four_weekly_per_stage_and_does_not_compound) ... FAIL
 test_val_ultimatum_and_war_share_readiness_instead_of_24_divisions (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_val_ultimatum_and_war_share_readiness_instead_of_24_divisions) ... FAIL
-
-======================================================================
-ERROR: test_each_shabrat_reform_has_an_exact_native_delta_preview (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_each_shabrat_reform_has_an_exact_native_delta_preview)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 140, in test_each_shabrat_reform_has_an_exact_native_delta_preview
-    entries = focus_entries(focuses, focus_id)
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 27, in focus_entries
-    if node.key == "focus" and any(child.key == "id" and child.value == focus_id for child in node.value):
-                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 27, in <genexpr>
-    if node.key == "focus" and any(child.key == "id" and child.value == focus_id for child in node.value):
-                                   ^^^^^^^^^
-AttributeError: 'str' object has no attribute 'key'
-
-======================================================================
-ERROR: test_shabrat_recovery_has_a_sustainable_hundred_path (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_shabrat_recovery_has_a_sustainable_hundred_path)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 95, in test_shabrat_recovery_has_a_sustainable_hundred_path
-    for key, value in deltas(focus_entries(focus_text, "STP_pc_economy_" + suffix)).items():
-                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 27, in focus_entries
-    if node.key == "focus" and any(child.key == "id" and child.value == focus_id for child in node.value):
-                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 27, in <genexpr>
-    if node.key == "focus" and any(child.key == "id" and child.value == focus_id for child in node.value):
-                                   ^^^^^^^^^
-AttributeError: 'str' object has no attribute 'key'
 
 ======================================================================
 FAIL: test_austerity_saves_real_money_and_interest_is_not_rescaled (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_austerity_saves_real_money_and_interest_is_not_rescaled)
@@ -55,6 +25,22 @@ Traceback (most recent call last):
 AssertionError: -1.4157056769230767 not greater than or equal to 100
 
 ======================================================================
+FAIL: test_each_shabrat_reform_has_an_exact_native_delta_preview (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_each_shabrat_reform_has_an_exact_native_delta_preview)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 142, in test_each_shabrat_reform_has_an_exact_native_delta_preview
+    self.assertTrue(any(node.key == "effect_tooltip" and any(n.key == "add_ideas" and n.value == preview for n in walk(node.value)) for node in walk(entries)))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_shabrat_recovery_has_a_sustainable_hundred_path (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_shabrat_recovery_has_a_sustainable_hundred_path)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 101, in test_shabrat_recovery_has_a_sustainable_hundred_path
+    self.assertGreaterEqual(values[P + "weekly_balance"], 100)
+AssertionError: -1.9380982176923078 not greater than or equal to 100
+
+======================================================================
 FAIL: test_val_recovery_returns_four_weekly_per_stage_and_does_not_compound (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_val_recovery_returns_four_weekly_per_stage_and_does_not_compound)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
@@ -71,12 +57,44 @@ Traceback (most recent call last):
 AssertionError: False is not true
 
 ----------------------------------------------------------------------
-Ran 8 tests in 0.558s
+Ran 8 tests in 0.696s
 
-FAILED (failures=4, errors=2)
+FAILED (failures=6)
+
+CHANGED_PATHS ['common/decisions/ADISCORD_VAL_decisions.txt', 'common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt', 'common/ideas/ADISCORD_STP_civil_war_ideas.txt', 'common/ideas/ADISCORD_VAL_rework_ideas.txt', 'common/national_focus/ADISCORD_national_focus_STP.txt', 'common/national_focus/ADISCORD_national_focus_VAL.txt', 'common/scripted_effects/ADISCORD_VAL_effects.txt', 'common/scripted_effects/ADISCORD_economy_effects.txt', 'common/scripted_effects/ADISCORD_economy_modifier_effects.txt', 'common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt', 'docs/development/focus-effects.md', 'docs/economy/economy-player-and-runtime.md', 'events/ADISCORD_VAL_contract_events.txt', 'localisation/english/ADISCORD_economy_l_english.yml', 'localisation/russian/ADISCORD_STP_l_russian.yml', 'localisation/russian/ADISCORD_VAL_decisions_l_russian.yml', 'tools/tests/test_adiscord_economy_balance.py', 'tools/tests/test_adiscord_economy_weekly_contracts.py', 'tools/validators/validate_adiscord_economy_ai.py']
+GREEN: material budget and focus regressions
+ test_austerity_saves_real_money_and_interest_is_not_rescaled (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_austerity_saves_real_money_and_interest_is_not_rescaled) ... ok
+test_developed_economy_can_clear_one_hundred_with_normal_budgets (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_developed_economy_can_clear_one_hundred_with_normal_budgets) ... FAIL
+test_each_shabrat_reform_has_an_exact_native_delta_preview (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_each_shabrat_reform_has_an_exact_native_delta_preview) ... ok
+test_shabrat_recovery_has_a_sustainable_hundred_path (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_shabrat_recovery_has_a_sustainable_hundred_path) ... ok
+test_small_economy_is_not_given_a_flat_hundred (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_small_economy_is_not_given_a_flat_hundred) ... ok
+test_tax_preview_and_repeated_refresh_do_not_duplicate_scaled_income (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_tax_preview_and_repeated_refresh_do_not_duplicate_scaled_income) ... ok
+test_val_recovery_returns_four_weekly_per_stage_and_does_not_compound (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_val_recovery_returns_four_weekly_per_stage_and_does_not_compound) ... FAIL
+test_val_ultimatum_and_war_share_readiness_instead_of_24_divisions (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_val_ultimatum_and_war_share_readiness_instead_of_24_divisions) ... ok
+
+======================================================================
+FAIL: test_developed_economy_can_clear_one_hundred_with_normal_budgets (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_developed_economy_can_clear_one_hundred_with_normal_budgets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 86, in test_developed_economy_can_clear_one_hundred_with_normal_budgets
+    self.assertGreaterEqual(values[P + "weekly_balance"], 100)
+AssertionError: 95.55332455384615 not greater than or equal to 100
+
+======================================================================
+FAIL: test_val_recovery_returns_four_weekly_per_stage_and_does_not_compound (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_val_recovery_returns_four_weekly_per_stage_and_does_not_compound)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 156, in test_val_recovery_returns_four_weekly_per_stage_and_does_not_compound
+    self.assertEqual(fixture.scopes["A"].get("VAL_industrial_weekly_income", -1), stage * 4)
+AssertionError: 0.0 != 4
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.804s
+
+FAILED (failures=2)
 
 Traceback (most recent call last):
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/../control/.github/economy_patch.py", line 106, in <module>
-    assert "ERROR:" not in red.stderr, "fix fixture errors before editing production"
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError: fix fixture errors before editing production
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/../control/.github/economy_patch.py", line 360, in <module>
+    assert green.returncode == 0, "new behavior failed; do not commit"
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: new behavior failed; do not commit
