@@ -1,0 +1,37 @@
+name: Resource investments review
+on:
+  push:
+    branches: [codex/resource-investments-20260919]
+permissions:
+  contents: read
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+          show-progress: false
+      - name: Package source and tracked file inventory
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess,zipfile
+          allowed={'.txt','.py','.yml','.yaml','.md','.json','.gui','.gfx','.lua','.mod','.csv'}
+          with zipfile.ZipFile('/tmp/resource-investments-source.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for name in subprocess.check_output(['git','ls-files','-z']).decode().split('\0'):
+                  if not name: continue
+                  p=Path(name)
+                  if p.suffix.lower() in allowed and p.stat().st_size<2000000:
+                      z.write(p,name)
+              z.writestr('source-revision.txt',subprocess.check_output(['git','rev-parse','HEAD']).decode())
+              z.writestr('source-tree.txt',subprocess.check_output(['git','ls-tree','-r','--long','HEAD']).decode())
+          print('SNAPSHOT',Path('/tmp/resource-investments-source.zip').stat().st_size)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: resource-investments-source
+          path: /tmp/resource-investments-source.zip
+          retention-days: 1
