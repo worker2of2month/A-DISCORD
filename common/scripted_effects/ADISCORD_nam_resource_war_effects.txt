@@ -126,8 +126,10 @@ ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = {
 	clr_global_flag = ADISCORD_nam_resource_war_AZH_defeated
 	clr_global_flag = ADISCORD_nam_resource_war_SLF_defeated
 
+	EFL = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+	AZH = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+
 	EFL = {
-		if = { limit = { is_in_faction = yes } leave_faction = yes }
 		create_faction_from_template = {
 			template = faction_template_ADISCORD_standard
 			name = faction_eflor_azhar_restitution_alliance
@@ -141,7 +143,6 @@ ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = {
 		transfer_state = 688
 	}
 	AZH = {
-		if = { limit = { is_in_faction = yes } leave_faction = yes }
 		transfer_state = 226
 		transfer_state = 227
 		transfer_state = 229

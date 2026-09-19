@@ -609,6 +609,11 @@ def main() -> int:
           "peaceful NAM withdrawal lacks terminal flags")
     check("declare_war_on" not in peaceful and "add_to_war" not in peaceful and "load_oob" not in peaceful,
           "peaceful NAM withdrawal must not perform military setup")
+    check(peaceful.find("EFL = { if = { limit = { is_in_faction = yes } leave_faction = yes } }")
+          < peaceful.find("create_faction_from_template = {")
+          and peaceful.find("AZH = { if = { limit = { is_in_faction = yes } leave_faction = yes } }")
+          < peaceful.find("create_faction_from_template = {"),
+          "peaceful partition must detach both recipients before creating their new faction")
     peaceful_allocations = {
         "EFL": {"67", "225", "228", "230", "231", "688"},
         "AZH": {"226", "227", "229", "689", "690"},
