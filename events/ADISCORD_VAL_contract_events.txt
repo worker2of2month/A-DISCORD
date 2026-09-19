@@ -683,7 +683,8 @@ country_event = {
 country_event = {
  id = val_contract.341
  title = val_contract.341.t
- desc = val_contract.341.d
+ desc = { text = val_contract.341.personnel trigger = { OR = { tag = NAM tag = EFL } } }
+ desc = { text = val_contract.341.d trigger = { NOT = { OR = { tag = NAM tag = EFL } } } }
  picture = GFX_event_adiscord_negotiation_table
  is_triggered_only = yes
  timeout_days = 14
@@ -696,13 +697,19 @@ country_event = {
   name = VAL_export_accept
   trigger = { VAL_export_advisors_can_accept = yes }
   ai_chance = { base = 90 }
-  custom_effect_tooltip = VAL_export_advisors_accepted_tt
+  if = { limit = { OR = { tag = NAM tag = EFL } } custom_effect_tooltip = VAL_resource_war_personnel_accepted_tt }
+  else = { custom_effect_tooltip = VAL_export_advisors_accepted_tt }
   hidden_effect = {
    if = {
     limit = { VAL_export_advisors_can_accept = yes }
     ADISCORD_economy_spend_100 = yes
     add_timed_idea = { idea = VAL_paid_military_advisors days = 70 }
     VAL = { add_command_power = -25 add_timed_idea = { idea = VAL_advisors_income days = 70 } }
+    if = {
+     limit = { OR = { tag = NAM tag = EFL } }
+     VAL = { add_manpower = -2000 }
+     add_manpower = 2000
+    }
     clr_country_flag = VAL_export_offer_advisors
     set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
     VAL = { clr_country_flag = VAL_export_offer_pending }

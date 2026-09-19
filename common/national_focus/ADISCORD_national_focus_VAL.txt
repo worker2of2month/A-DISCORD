@@ -2354,4 +2354,19 @@ completion_reward = {
 		}
 		ai_will_do = { base = 5 }
 	}
+
+	focus = {
+		id = VAL_Resource_War_Contracts
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = 36
+		y = 11
+		cost = 5
+		prerequisite = { focus = VAL_Foreign_Broker_Licences }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			unlock_decision_tooltip = VAL_resource_war_arms
+			unlock_decision_tooltip = VAL_resource_war_personnel
+		}
+		ai_will_do = { base = 5 }
+	}
 }

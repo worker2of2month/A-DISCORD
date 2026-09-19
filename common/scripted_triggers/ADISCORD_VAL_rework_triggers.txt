@@ -251,7 +251,7 @@ VAL_frontier_workshop_target_valid = {
 VAL_export_customer = {
  exists = yes has_capitulated = no has_war = yes
  NOT = { has_war_with = VAL }
- OR = { tag = CIN tag = OSF tag = APH tag = WRK tag = WKR tag = VAD tag = TVA tag = STP tag = STS tag = SRP tag = NOD tag = YPR tag = COF tag = TFF }
+ OR = { tag = CIN tag = OSF tag = APH tag = WRK tag = WKR tag = VAD tag = TVA tag = STP tag = STS tag = SRP tag = NOD tag = YPR tag = COF tag = TFF AND = { OR = { tag = NAM tag = EFL } VAL = { has_completed_focus = VAL_Resource_War_Contracts } } }
 }
 VAL_export_slot_free = {
  OR = { NOT = { has_idea = VAL_export_income_1 } AND = { has_completed_focus = VAL_Northern_Clearing_House NOT = { has_idea = VAL_export_income_2 } } }
@@ -272,6 +272,14 @@ VAL_export_advisors_can_accept = {
  VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes
  NOT = { has_idea = VAL_paid_military_advisors }
  VAL = { exists = yes has_capitulated = no has_country_flag = VAL_export_offer_pending NOT = { has_idea = VAL_advisors_income } NOT = { command_power < 25 } }
+ OR = {
+  NOT = { OR = { tag = NAM tag = EFL } }
+  AND = {
+   NOT = { has_country_flag = VAL_export_customer_cooldown }
+   VAL = { NOT = { has_manpower < 2000 } }
+  }
+ }
+
 }
 
 VAL_northern_volunteer_host = {

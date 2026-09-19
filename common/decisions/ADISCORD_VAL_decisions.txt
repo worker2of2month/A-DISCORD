@@ -930,6 +930,49 @@ VAL_livonn_settlement_category = {
 }
 
 VAL_foreign_sales = {
+	VAL_resource_war_arms = {
+		icon = generic_army_support
+		allowed = { tag = VAL }
+		targets = { NAM EFL }
+		target_trigger = { FROM = { exists = yes } }
+		visible = { has_completed_focus = VAL_Resource_War_Contracts FROM = { has_war = yes } }
+		available = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } } }
+		cost = 0
+		days_re_enable = 14
+		complete_effect = {
+			custom_effect_tooltip = VAL_resource_war_arms_offer_tt
+			hidden_effect = {
+				if = {
+					limit = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } } }
+					set_country_flag = { flag = VAL_export_offer_pending days = 14 }
+					FROM = { set_country_flag = { flag = VAL_export_offer_arms days = 14 } country_event = { id = val_contract.340 } }
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+	VAL_resource_war_personnel = {
+		icon = generic_army_support
+		allowed = { tag = VAL }
+		targets = { NAM EFL }
+		target_trigger = { FROM = { exists = yes } }
+		visible = { has_completed_focus = VAL_Resource_War_Contracts FROM = { has_war = yes } }
+		available = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } NOT = { has_idea = VAL_advisors_income } NOT = { command_power < 25 } NOT = { has_manpower < 2000 } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } NOT = { has_idea = VAL_paid_military_advisors } } }
+		cost = 0
+		days_re_enable = 14
+		complete_effect = {
+			custom_effect_tooltip = VAL_resource_war_personnel_offer_tt
+			hidden_effect = {
+				if = {
+					limit = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } NOT = { has_idea = VAL_advisors_income } NOT = { command_power < 25 } NOT = { has_manpower < 2000 } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } NOT = { has_idea = VAL_paid_military_advisors } } }
+					set_country_flag = { flag = VAL_export_offer_pending days = 14 }
+					FROM = { set_country_flag = { flag = VAL_export_offer_advisors days = 14 } country_event = { id = val_contract.341 } }
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
 VAL_ops_sell_rifles_to_cin = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }

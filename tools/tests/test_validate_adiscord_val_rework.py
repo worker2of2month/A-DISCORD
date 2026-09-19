@@ -3250,6 +3250,28 @@ class ValExpandedCampaignTests(unittest.TestCase):
             facts["SRP", "has_war_with", "VAL"] = True
             self.assertFalse(matches_conditions(exceptions[0], facts, str(state)))
 
+    def test_resource_war_contracts_require_focus_consent_and_actual_personnel(self):
+        for tag in ("NAM", "EFL"):
+            facts = {(tag, "exists", "yes"): True, (tag, "has_capitulated", "no"): True,
+                     (tag, "has_war", "yes"): True, (tag, "ADISCORD_economy_can_spend_100", "yes"): True,
+                     (tag, "has_country_flag", "VAL_export_offer_advisors"): True,
+                     ("VAL", "exists", "yes"): True, ("VAL", "has_capitulated", "no"): True,
+                     ("VAL", "has_country_flag", "VAL_export_offer_pending"): True,
+                     ("VAL", "numeric", "command_power"): 25,
+                     ("VAL", "numeric", "has_manpower"): 2000,
+                     ("VAL", "has_completed_focus", "VAL_Resource_War_Contracts"): True}
+            self.assertTrue(self.match("VAL_export_advisors_can_accept", facts, tag))
+            for amount in (0, 1999.9, 2000, 2001):
+                self.assertEqual(self.match("VAL_export_advisors_can_accept", {**facts, ("VAL", "numeric", "has_manpower"): amount}, tag), amount >= 2000)
+            for key in (("VAL", "has_completed_focus", "VAL_Resource_War_Contracts"), (tag, "ADISCORD_economy_can_spend_100", "yes"), (tag, "has_country_flag", "VAL_export_offer_advisors")):
+                self.assertFalse(self.match("VAL_export_advisors_can_accept", {**facts, key: False}, tag))
+        from tools.tests.test_adiscord_stp_preparation import walk
+        events = self.parse((ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8"))
+        event = next(e.value for e in events if e.key == "country_event" and self.scalar(e.value, "id") == "val_contract.341")
+        manpower = [e.value for e in walk(event) if e.key == "add_manpower"]
+        self.assertEqual(sorted(manpower), ["-2000", "2000"])
+        self.assertTrue(any(e.key == "VAL_export_advisors_can_accept" for e in walk(event)))
+
     def test_subjects_join_existing_val_wars_without_declarations(self):
         from tools.tests.test_adiscord_stp_preparation import walk, matches_conditions
         effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
