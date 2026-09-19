@@ -1,0 +1,103 @@
+RED: integrated budget and event contracts against current main
+ test_austerity_saves_real_money_and_interest_is_not_rescaled (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_austerity_saves_real_money_and_interest_is_not_rescaled) ... FAIL
+test_building_roles_remain_income_research_and_near_neutral_industry (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_building_roles_remain_income_research_and_near_neutral_industry) ... 
+  test_building_roles_remain_income_research_and_near_neutral_industry (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_building_roles_remain_income_research_and_near_neutral_industry) (role='income') ... FAIL
+test_developed_economy_can_clear_one_hundred_with_normal_budgets (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_developed_economy_can_clear_one_hundred_with_normal_budgets) ... FAIL
+test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) ... ok
+test_refusal_event_uses_the_same_readiness_as_the_offensive (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_refusal_event_uses_the_same_readiness_as_the_offensive) ... FAIL
+test_research_validator_rejects_unowned_or_duplicate_base_scaling (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_research_validator_rejects_unowned_or_duplicate_base_scaling) ... 
+  test_research_validator_rejects_unowned_or_duplicate_base_scaling (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_research_validator_rejects_unowned_or_duplicate_base_scaling) (case='missing cache owner') ... FAIL
+test_shabrat_recovery_has_a_sustainable_hundred_path (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_shabrat_recovery_has_a_sustainable_hundred_path) ... FAIL
+test_small_economy_is_not_given_a_flat_hundred (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_small_economy_is_not_given_a_flat_hundred) ... ok
+test_tax_preview_and_repeated_refresh_do_not_duplicate_scaled_income (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_tax_preview_and_repeated_refresh_do_not_duplicate_scaled_income) ... ok
+
+======================================================================
+FAIL: test_austerity_saves_real_money_and_interest_is_not_rescaled (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_austerity_saves_real_money_and_interest_is_not_rescaled)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 145, in test_austerity_saves_real_money_and_interest_is_not_rescaled
+    self.assertGreater(reduced - normal, 8)
+AssertionError: 2.2576153846153844 not greater than 8
+
+======================================================================
+FAIL: test_building_roles_remain_income_research_and_near_neutral_industry (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_building_roles_remain_income_research_and_near_neutral_industry) (role='income')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 168, in test_building_roles_remain_income_research_and_near_neutral_industry
+    self.assertGreater(change, 4)
+AssertionError: 0.7444584923076949 not greater than 4
+
+======================================================================
+FAIL: test_developed_economy_can_clear_one_hundred_with_normal_budgets (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_developed_economy_can_clear_one_hundred_with_normal_budgets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 104, in test_developed_economy_can_clear_one_hundred_with_normal_budgets
+    self.assertGreaterEqual(values[P + "weekly_balance"], 100)
+AssertionError: 12.759757107692309 not greater than or equal to 100
+
+======================================================================
+FAIL: test_refusal_event_uses_the_same_readiness_as_the_offensive (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_refusal_event_uses_the_same_readiness_as_the_offensive)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 234, in test_refusal_event_uses_the_same_readiness_as_the_offensive
+    self.assertTrue(any(node.key == "VAL_ai_frontier_force_ready" for node in walk(chance.value)))
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_research_validator_rejects_unowned_or_duplicate_base_scaling (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_research_validator_rejects_unowned_or_duplicate_base_scaling) (case='missing cache owner')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 191, in test_research_validator_rejects_unowned_or_duplicate_base_scaling
+    self.assertTrue(research_policy_flow_issues(mutation))
+AssertionError: [] is not true
+
+======================================================================
+FAIL: test_shabrat_recovery_has_a_sustainable_hundred_path (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_shabrat_recovery_has_a_sustainable_hundred_path)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 119, in test_shabrat_recovery_has_a_sustainable_hundred_path
+    self.assertGreaterEqual(values[P + "weekly_balance"], 100)
+AssertionError: 14.036883396923074 not greater than or equal to 100
+
+----------------------------------------------------------------------
+Ran 9 tests in 3.934s
+
+FAILED (failures=6)
+
+GREEN: reconciled source arithmetic and campaign entry
+ test_austerity_saves_real_money_and_interest_is_not_rescaled (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_austerity_saves_real_money_and_interest_is_not_rescaled) ... ok
+test_building_roles_remain_income_research_and_near_neutral_industry (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_building_roles_remain_income_research_and_near_neutral_industry) ... ok
+test_developed_economy_can_clear_one_hundred_with_normal_budgets (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_developed_economy_can_clear_one_hundred_with_normal_budgets) ... ok
+test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) ... ok
+test_refusal_event_uses_the_same_readiness_as_the_offensive (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_refusal_event_uses_the_same_readiness_as_the_offensive) ... ok
+test_research_validator_rejects_unowned_or_duplicate_base_scaling (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_research_validator_rejects_unowned_or_duplicate_base_scaling) ... ok
+test_shabrat_recovery_has_a_sustainable_hundred_path (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_shabrat_recovery_has_a_sustainable_hundred_path) ... ok
+test_small_economy_is_not_given_a_flat_hundred (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_small_economy_is_not_given_a_flat_hundred) ... ok
+test_tax_preview_and_repeated_refresh_do_not_duplicate_scaled_income (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_tax_preview_and_repeated_refresh_do_not_duplicate_scaled_income) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 3.866s
+
+OK
+
+INTEGRATED_PATHS ['common/scripted_effects/ADISCORD_economy_effects.txt', 'common/scripted_effects/ADISCORD_economy_modifier_effects.txt', 'docs/economy/economic-buildings.md', 'docs/economy/economy-player-and-runtime.md', 'events/ADISCORD_VAL_contract_events.txt', 'localisation/russian/ADISCORD_economy_l_russian.yml', 'tools/tests/test_adiscord_economy_balance.py', 'tools/tests/test_adiscord_economy_rebalance.py', 'tools/tests/test_adiscord_economy_weekly_contracts.py', 'tools/validators/validate_adiscord_economy_ai.py']
+======================================================================
+FAIL: test_core_policy_and_debt_flow_negative_fixtures (tools.tests.test_adiscord_economy_weekly_contracts.EconomySemanticFixtureTests.test_core_policy_and_debt_flow_negative_fixtures)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_weekly_contracts.py", line 3168, in test_core_policy_and_debt_flow_negative_fixtures
+    self.assertEqual(research_policy_flow_issues(research), [])
+AssertionError: Lists differ: ["research multipliers are not bound one-t[75 chars]6]}"] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+"research multipliers are not bound one-to-one to levels: {'1': [0.3], '2': [0.65], '3': [1.0], '4': [1.3], '5': [1.6]}"
+
++ []
+- ["research multipliers are not bound one-to-one to levels: {'1': [0.3], '2': "
+-  "[0.65], '3': [1.0], '4': [1.3], '5': [1.6]}"]
+
+----------------------------------------------------------------------
+Ran 269 tests in 110.018s
+
+FAILED (failures=1)
