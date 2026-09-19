@@ -294,6 +294,33 @@ ideas = {
 			on_remove = { STP_cw_revoke_emergency_research_slot = yes }
 			modifier = { }
 		}
+		# Player-party opening phase: the government must stabilize command before it can counterattack.
+		# This is deliberately player-route only at application time so Shabrat's campaign is not made easier.
+		STP_cw_party_initial_disarray = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = STS } }
+			modifier = {
+				army_attack_factor = -0.25
+				breakthrough_factor = -0.20
+				planning_speed = -0.10
+				army_speed_factor = -0.05
+			}
+		}
+		STP_cw_congress_fall_crisis = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { has_war_with = STS } }
+			modifier = {
+				stability_factor = -0.10
+				political_power_gain = -0.15
+				army_org_factor = -0.10
+				planning_speed = -0.15
+			}
+		}
+
 		STP_cw_defensive_preparation = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
