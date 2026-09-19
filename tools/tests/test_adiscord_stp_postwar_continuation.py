@@ -246,7 +246,7 @@ class PostwarContinuationContracts(unittest.TestCase):
             self.assertEqual(negative, not positive)
 
     def test_event_descriptions_and_answers_never_share_a_localisation_key(self) -> None:
-        for number in range(1, 17):
+        for number in range(1, 16):
             event_id = f"ADISCORD_STP_pc.{number}"
             event = parsed_event(event_id)
             description = scalar(event, "desc")
@@ -606,22 +606,17 @@ class PostwarContinuationContracts(unittest.TestCase):
         loc = read(LOC)
         self.assertTrue(LOC.read_bytes().startswith(b"\xef\xbb\xbf"))
         self.assertIn("add_namespace = ADISCORD_STP_pc", events)
-        for number in range(1, 17):
+        for number in range(1, 16):
             event_id = f"ADISCORD_STP_pc.{number}"
             self.assertEqual(events.count(f"\tid = {event_id}\n"), 1, event_id)
             self.assertIn(event_id, ledger)
             self.assertIn(f" {event_id}.t:", loc)
             self.assertIn(f" {event_id}.d:", loc)
             self.assertIn(f"name = {event_id}.", event_block(events, event_id))
-        self.assertEqual(loc.count(" ADISCORD_STP_pc.16.d:"), 1)
-        self.assertIn(" ADISCORD_STP_pc.16.da:", loc)
-        self.assertIn(" ADISCORD_STP_pc.16.o:", loc)
-        names = option_names("ADISCORD_STP_pc.16")
-        self.assertIn("ADISCORD_STP_pc.16.da", names)
-        self.assertNotIn("ADISCORD_STP_pc.16.d", names)
-        page = loc[loc.index("ADISCORD_STP_pc.16.t"):loc.index("ADISCORD_STP_pc.16.o")]
-        self.assertNotIn("скрипт", page)
-        self.assertNotIn("ванильн", page)
+        self.assertNotIn("\tid = ADISCORD_STP_pc.16\n", events)
+        self.assertNotIn(" ADISCORD_STP_pc.16.", loc)
+        reserved = next(entry for entry in json.loads(read(LEDGER))["events"] if entry["id"] == "ADISCORD_STP_pc.16")
+        self.assertEqual(reserved["status"], "reserved")
 
     def test_postwar_wars_use_native_relations_without_marker_flags(self) -> None:
         gameplay = "\n".join((
@@ -689,10 +684,9 @@ class PostwarContinuationContracts(unittest.TestCase):
         results = [(scope, prep_scalar(e.value, "var"), prep_scalar(e.value, "value")) for scope, e in chosen if e.key == "set_variable"]
         self.assertIn(("STS", "STP_pc_this_opponent", "1"), results)
         self.assertIn(("STS", "STP_pc_this_result", "1"), results)
-        self.assertIn(("STS", "STP_pc_settle_opponent", "STP_pc_this_opponent"), results)
-        self.assertIn(("STS", "STP_pc_settle_result", "STP_pc_this_result"), results)
-        self.assertTrue(any(e.key == "country_event" for _, e in chosen))
-        self.assertTrue(any(e.key == "set_country_flag" and e.value == "STP_pc_settlement_pending" for _, e in chosen))
+        self.assertFalse(any(e.key == "country_event" for _, e in chosen))
+        self.assertTrue(any(e.key == "STP_pc_clear_settlement" for _, e in chosen))
+        self.assertFalse(any(e.key == "set_country_flag" and e.value == "STP_pc_settlement_pending" for _, e in chosen))
 
         # Once the reserved VAL capitulation router has selected cap_side=1,
         # the military result is final. A stale capital-controller snapshot must
@@ -721,7 +715,7 @@ class PostwarContinuationContracts(unittest.TestCase):
         leftover = list(selected_effects(begin, unknown, "STS"))
         self.assertFalse(any(e.key == "white_peace" for _, e in leftover))
 
-        queued = {
+        leftover = {
             ("STS", "tag", "STS"): True,
             ("STS", "variable", "STP_pc_cap_side"): 2,
             ("STS", "has_country_flag", "STP_pc_settlement_pending"): True,
@@ -729,19 +723,13 @@ class PostwarContinuationContracts(unittest.TestCase):
             ("STS", "has_war_with", "NOD"): True,
             ("STS", "has_war_with", "VAL"): True,
         }
-        held = list(selected_effects(begin, queued, "STS"))
+        held = list(selected_effects(begin, leftover, "STS"))
         self.assertEqual([e.value for _, e in held if e.key == "white_peace"], ["NOD"])
         self.assertFalse(any(e.key == "country_event" for _, e in held))
-        queued_vars = [(scope, prep_scalar(e.value, "var"), prep_scalar(e.value, "value")) for scope, e in held if e.key == "set_variable"]
-        self.assertIn(("STS", "STP_pc_queued_opponent", "STP_pc_this_opponent"), queued_vars)
-        self.assertNotIn(("STS", "STP_pc_settle_opponent", "STP_pc_this_opponent"), queued_vars)
-        blocked = list(selected_effects(begin, {
-            **queued,
-            ("STS", "has_variable", "STP_pc_queued_opponent"): True,
-        }, "STS"))
-        self.assertFalse(any(e.key == "country_event" for _, e in blocked))
-        self.assertNotIn(("STS", "STP_pc_settle_opponent", "STP_pc_this_opponent"),
-                         [(s, prep_scalar(e.value, "var"), prep_scalar(e.value, "value")) for s, e in blocked if e.key == "set_variable"])
+        self.assertTrue(any(e.key == "STP_pc_clear_settlement" for _, e in held))
+        held_vars = [(scope, prep_scalar(e.value, "var"), prep_scalar(e.value, "value")) for scope, e in held if e.key == "set_variable"]
+        self.assertNotIn(("STS", "STP_pc_queued_opponent", "STP_pc_this_opponent"), held_vars)
+        self.assertNotIn(("STS", "STP_pc_settle_opponent", "STP_pc_this_opponent"), held_vars)
 
     def test_kefreyt_defeat_returns_all_stelander_cores_before_white_peace(self) -> None:
         effects = relative_entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
@@ -762,42 +750,38 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertLess(win.index("STP_pc_recover_stelander_cores_from_val = yes"),
                         win.index("white_peace = VAL"))
 
-    def test_pc16_uses_the_frozen_result_not_capitulation_after_peace(self) -> None:
-        event = event_block(read(EVENTS), "ADISCORD_STP_pc.16")
-        self.assertNotIn("has_capitulated", event)
-        liberation = option_by_name("ADISCORD_STP_pc.16", "ADISCORD_STP_pc.16.i")
-        self.assertFalse(any(e.key == "country_event" for e in walk(liberation)))
-        continue_nod = option_by_name("ADISCORD_STP_pc.16", "ADISCORD_STP_pc.16.m")
-        self.assertTrue(any(e.key == "set_country_flag" and e.value == "STP_pc_lib_val_won" for e in walk(continue_nod)))
-        continue_val = option_by_name("ADISCORD_STP_pc.16", "ADISCORD_STP_pc.16.n")
-        self.assertTrue(any(e.key == "set_country_flag" and e.value == "STP_pc_lib_nod_won" for e in walk(continue_val)))
-        facts_win_val = {
+    def test_settlement_records_liberation_wins_without_a_terms_card(self) -> None:
+        events = read(EVENTS)
+        self.assertNotIn("id = ADISCORD_STP_pc.16", events)
+        begin = ast_block(relative_entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_pc_begin_settlement")
+        self.assertFalse(any(e.key == "country_event" for e in walk(begin)))
+        win_val = {
+            ("STS", "tag", "STS"): True,
+            ("STS", "variable", "STP_pc_cap_side"): 1,
             ("STS", "variable", "STP_pc_course"): 2,
-            ("STS", "variable", "STP_pc_settle_opponent"): 1,
-            ("STS", "variable", "STP_pc_settle_result"): 1,
+            ("STS", "has_war_with", "VAL"): True,
         }
-        visible = visible_option_names("ADISCORD_STP_pc.16", facts_win_val)
-        self.assertIn("ADISCORD_STP_pc.16.i", visible)
-        self.assertNotIn("ADISCORD_STP_pc.16.a", visible)
-        self.assertNotIn("ADISCORD_STP_pc.16.o", visible)
-        defeat = visible_option_names("ADISCORD_STP_pc.16", {
+        chosen = list(selected_effects(begin, win_val, "STS"))
+        self.assertTrue(any(e.key == "set_country_flag" and e.value == "STP_pc_lib_val_won" for _, e in chosen))
+        self.assertFalse(any(e.key == "set_country_flag" and e.value == "STP_pc_lib_nod_won" for _, e in chosen))
+        win_nod = {
+            ("STS", "tag", "STS"): True,
+            ("STS", "variable", "STP_pc_cap_side"): 2,
             ("STS", "variable", "STP_pc_course"): 2,
-            ("STS", "variable", "STP_pc_settle_opponent"): 1,
-            ("STS", "variable", "STP_pc_settle_result"): 2,
-        })
-        self.assertIn("ADISCORD_STP_pc.16.l", defeat)
-        self.assertNotIn("ADISCORD_STP_pc.16.i", defeat)
-        stale = visible_option_names("ADISCORD_STP_pc.16", {
+            ("STS", "has_war_with", "NOD"): True,
+        }
+        nod = list(selected_effects(begin, win_nod, "STS"))
+        self.assertTrue(any(e.key == "set_country_flag" and e.value == "STP_pc_lib_nod_won" for _, e in nod))
+        defeat = list(selected_effects(begin, {
+            ("STS", "tag", "STS"): True,
+            ("STS", "variable", "STP_pc_cap_side"): 3,
+            ("STS", "variable", "STP_cw_capitulation_occupier"): 5,
             ("STS", "variable", "STP_pc_course"): 2,
-            ("STS", "variable", "STP_pc_settle_opponent"): 1,
-            ("STS", "variable", "STP_pc_settle_result"): 0,
-            ("NOD", "exists", "yes"): True,
-        })
-        self.assertEqual(stale, ["ADISCORD_STP_pc.16.o"])
-        self.assertNotIn("ADISCORD_STP_pc.16.m", stale)
-        for name in option_names("ADISCORD_STP_pc.16"):
-            option = option_by_name("ADISCORD_STP_pc.16", name)
-            self.assertTrue(any(e.key == "STP_pc_clear_settlement" for e in walk(option)), name)
+            ("STS", "has_war_with", "VAL"): True,
+        }, "STS"))
+        self.assertFalse(any(e.key == "set_country_flag" and e.value in ("STP_pc_lib_val_won", "STP_pc_lib_nod_won") for _, e in defeat))
+        hegemony = list(selected_effects(begin, {**win_val, ("STS", "variable", "STP_pc_course"): 1}, "STS"))
+        self.assertFalse(any(e.key == "set_country_flag" and e.value == "STP_pc_lib_val_won" for _, e in hegemony))
 
     def test_transition_offers_the_package_instead_of_reopening_settlement(self) -> None:
         focuses = war_focuses()

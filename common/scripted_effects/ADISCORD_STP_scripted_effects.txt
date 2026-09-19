@@ -2413,9 +2413,11 @@ STP_cw_prepare_successor = {
 		limit = { NOT = { check_variable = { var = STP_cw_emergency_research_slots value = 0 compare = greater_than } } }
 		set_research_slots = 1
 	}
-	# Recruits retain the union's current legal mobilisation ceiling.
-	if = { limit = { STP = { has_idea = disarmed_nation } } add_ideas = disarmed_nation }
-	else_if = { limit = { STP = { has_idea = volunteer_only } } add_ideas = volunteer_only }
+	# Recruits keep a higher union ceiling. Volunteer-only and disarmed
+	# mobilisation are raised to limited conscription so a civil-war
+	# successor can recruit immediately.
+	if = { limit = { STP = { has_idea = disarmed_nation } } add_ideas = limited_conscription }
+	else_if = { limit = { STP = { has_idea = volunteer_only } } add_ideas = limited_conscription }
 	else_if = { limit = { STP = { has_idea = limited_conscription } } add_ideas = limited_conscription }
 	else_if = { limit = { STP = { has_idea = extensive_conscription } } add_ideas = extensive_conscription }
 	else_if = { limit = { STP = { has_idea = service_by_requirement } } add_ideas = service_by_requirement }
@@ -4217,8 +4219,8 @@ STP_pc_recover_stelander_cores_from_val = {
 	}
 }
 
-# STS: freeze the occupier snapshot, close only that pair, then ask for terms.
-# A second finished war is queued; it must not overwrite the open card.
+# STS: freeze the occupier snapshot and close only that pair.
+# Liberation victories are recorded here; later focuses keep optional neighbor terms.
 STP_pc_begin_settlement = {
 	if = {
 		limit = { tag = STS }
@@ -4258,37 +4260,32 @@ STP_pc_begin_settlement = {
 		}
 		VAL_enforce_stelander_defeat = yes
 		if = {
-			limit = { NOT = { has_country_flag = STP_pc_settlement_pending } }
-			set_variable = { var = STP_pc_settle_opponent value = STP_pc_this_opponent }
-			set_variable = { var = STP_pc_settle_result value = STP_pc_this_result }
-			set_country_flag = STP_pc_settlement_pending
-			country_event = { id = ADISCORD_STP_pc.16 }
+			limit = {
+				check_variable = { var = STP_pc_course value = 2 compare = equals }
+				check_variable = { var = STP_pc_cap_side value = 1 compare = equals }
+			}
+			set_country_flag = STP_pc_lib_val_won
 		}
 		else_if = {
-			limit = { NOT = { has_variable = STP_pc_queued_opponent } }
-			set_variable = { var = STP_pc_queued_opponent value = STP_pc_this_opponent }
-			set_variable = { var = STP_pc_queued_result value = STP_pc_this_result }
+			limit = {
+				check_variable = { var = STP_pc_course value = 2 compare = equals }
+				check_variable = { var = STP_pc_cap_side value = 2 compare = equals }
+			}
+			set_country_flag = STP_pc_lib_nod_won
 		}
 		clear_variable = STP_pc_this_opponent
 		clear_variable = STP_pc_this_result
 		clear_variable = STP_pc_cap_side
+		STP_pc_clear_settlement = yes
 	}
 }
 
 STP_pc_clear_settlement = {
 	clear_variable = STP_pc_settle_opponent
 	clear_variable = STP_pc_settle_result
-	if = {
-		limit = { has_variable = STP_pc_queued_opponent }
-		set_variable = { var = STP_pc_settle_opponent value = STP_pc_queued_opponent }
-		set_variable = { var = STP_pc_settle_result value = STP_pc_queued_result }
-		clear_variable = STP_pc_queued_opponent
-		clear_variable = STP_pc_queued_result
-		country_event = { id = ADISCORD_STP_pc.16 }
-	}
-	else = {
-		clr_country_flag = STP_pc_settlement_pending
-	}
+	clear_variable = STP_pc_queued_opponent
+	clear_variable = STP_pc_queued_result
+	clr_country_flag = STP_pc_settlement_pending
 	# The second neighbor can fall after both package focuses have finished.
 	if = {
 		limit = { has_completed_focus = STP_pc_lib_transition }

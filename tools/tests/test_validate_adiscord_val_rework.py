@@ -2944,7 +2944,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         source = (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8")
         body = named_block_spans(source, "STP_pc_begin_settlement")[0].text
         self.assertEqual(body.count("VAL_enforce_stelander_defeat = yes"), 1)
-        self.assertLess(body.index("VAL_enforce_stelander_defeat = yes"), body.index("has_country_flag = STP_pc_settlement_pending"))
+        self.assertLess(body.index("VAL_enforce_stelander_defeat = yes"), body.index("STP_pc_clear_settlement = yes"))
         enforcement = named_block_spans(EFFECTS_PATH.read_text(encoding="utf-8"), "VAL_enforce_stelander_defeat")[0].text
         self.assertIn("STP_cw_capitulation_occupier value = 5 compare = equals", enforcement)
         self.assertIn("end_wars = no end_civil_wars = no", enforcement)

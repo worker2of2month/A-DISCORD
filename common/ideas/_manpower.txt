@@ -75,6 +75,19 @@ ideas = {
 					factor = 20
 					manpower_per_military_factory <  1000
 				}
+				modifier = {
+					factor = 40
+					has_idea = volunteer_only
+					OR = {
+						has_war = yes
+						tag = WRK
+						tag = WKR
+						tag = VAD
+						tag = TVA
+						tag = STS
+						tag = SRP
+					}
+				}
 			}
 			
 			cancel_if_invalid = no
@@ -107,6 +120,14 @@ ideas = {
 					#Prio if low on manpower
 					factor = 20
 					manpower_per_military_factory <  800
+				}
+				modifier = {
+					factor = 30
+					has_war = yes
+					OR = {
+						has_idea = volunteer_only
+						has_idea = limited_conscription
+					}
 				}
 			}
 			

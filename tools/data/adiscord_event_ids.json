@@ -305,7 +305,7 @@
     {"id": "ADISCORD_STP_pc.13", "namespace": "ADISCORD_STP_pc", "number": 13, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "active"},
     {"id": "ADISCORD_STP_pc.14", "namespace": "ADISCORD_STP_pc", "number": 14, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "active"},
     {"id": "ADISCORD_STP_pc.15", "namespace": "ADISCORD_STP_pc", "number": 15, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "active"},
-    {"id": "ADISCORD_STP_pc.16", "namespace": "ADISCORD_STP_pc", "number": 16, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "active"},
+    {"id": "ADISCORD_STP_pc.16", "namespace": "ADISCORD_STP_pc", "number": 16, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "reserved"},
     {"id": "ADISCORD_vorkerland_collapse.100", "namespace": "ADISCORD_vorkerland_collapse", "number": 100, "owner": "events/ADISCORD_vorkerland_events.txt", "subsystem": "vorkerland_collapse", "status": "active"},
     {"id": "ADISCORD_vorkerland_collapse.101", "namespace": "ADISCORD_vorkerland_collapse", "number": 101, "owner": "events/ADISCORD_vorkerland_events.txt", "subsystem": "vorkerland_collapse", "status": "active"}
   ]

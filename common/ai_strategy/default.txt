@@ -34,6 +34,38 @@ ADISCORD_default_pp_reserve = {
 	ai_strategy = { type = pp_spend_amount id = decision value = 100 }
 }
 
+# Laws cost 150 PP. The generic reserve is 100, so an AI at war never
+# accumulates enough to leave volunteer-only unless it is told to.
+ADISCORD_ai_raise_conscription = {
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		OR = {
+			AND = {
+				has_idea = volunteer_only
+				has_war_support > 0.1
+				OR = {
+					has_war = yes
+					tag = WRK
+					tag = WKR
+					tag = VAD
+					tag = TVA
+					tag = STS
+					tag = SRP
+				}
+			}
+			AND = {
+				has_war = yes
+				has_idea = limited_conscription
+				has_war_support > 0.2
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = pp_spend_priority id = idea value = 150 }
+	ai_strategy = { type = pp_spend_amount id = idea value = 150 }
+}
+
 # Auxiliary minima start at two, three and four military factories so their
 # simultaneous requests leave at least one factory available for rifles.
 # Wartime rifle shortages release healthy auxiliary reserves; separate restart

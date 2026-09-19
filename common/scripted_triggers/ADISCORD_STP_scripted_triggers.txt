@@ -892,39 +892,6 @@ STP_pc_freedom_continues = {
 	}
 }
 
-# COUNTRY: pc.16 has a real settlement answer; the safe close is the remainder.
-STP_pc_settlement_has_terms = {
-	OR = {
-		AND = {
-			check_variable = { var = STP_pc_course value = 1 compare = equals }
-			check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals }
-				check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals }
-			}
-		}
-		AND = {
-			check_variable = { var = STP_pc_course value = 2 compare = equals }
-			check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
-			OR = {
-				check_variable = { var = STP_pc_settle_opponent value = 1 compare = equals }
-				check_variable = { var = STP_pc_settle_opponent value = 2 compare = equals }
-			}
-		}
-		AND = {
-			OR = {
-				check_variable = { var = STP_pc_course value = 3 compare = equals }
-				check_variable = { var = STP_pc_course value = 4 compare = equals }
-			}
-			OR = {
-				check_variable = { var = STP_pc_settle_result value = 1 compare = equals }
-				check_variable = { var = STP_pc_settle_result value = 2 compare = equals }
-			}
-		}
-		check_variable = { var = STP_pc_settle_result value = 2 compare = equals }
-	}
-}
-
 # Recipient country: only its still-open package may advance the STS queue.
 STP_pc_liberation_reply_matches_receipt = {
 	STS = {

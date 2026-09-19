@@ -31,6 +31,19 @@ def named_block(text: str, name: str) -> str:
 
 
 class WrkStartingIdeaTests(unittest.TestCase):
+    def test_ai_reserves_pp_to_raise_conscription(self) -> None:
+        strategy = named_block(read("common/ai_strategy/default.txt"), "ADISCORD_ai_raise_conscription")
+        self.assertIn("pp_spend_amount id = idea value = 150", strategy)
+        self.assertIn("has_idea = volunteer_only", strategy)
+        self.assertIn("has_idea = limited_conscription", strategy)
+        for tag in ("WRK", "WKR", "VAD", "TVA", "STS", "SRP"):
+            self.assertIn(f"tag = {tag}", strategy)
+        laws = named_block(read("common/ideas/_manpower.txt"), "limited_conscription")
+        self.assertIn("has_idea = volunteer_only", laws)
+        extensive = named_block(read("common/ideas/_manpower.txt"), "extensive_conscription")
+        self.assertIn("has_idea = limited_conscription", extensive)
+        self.assertIn("factor = 30", extensive)
+
     SPIRITS = (
         "WRK_ashes_of_the_crown",
         "WRK_hourglass_of_discord",
@@ -38,11 +51,25 @@ class WrkStartingIdeaTests(unittest.TestCase):
         "WRK_birthplace_of_the_first_revolution",
     )
 
+    def test_claimants_do_not_start_on_volunteer_only(self) -> None:
+        for relative in (
+            "history/countries/WRK - WorkerLand.txt",
+            "history/countries/VAD - VadlLand.txt",
+            "history/countries/TVA - Vorkerland Technical Administration.txt",
+            "history/countries/WKR - Worker Emergency Government.txt",
+        ):
+            with self.subTest(relative=relative):
+                history = read(relative)
+                self.assertRegex(history, r"\blimited_conscription\b")
+                self.assertNotIn("volunteer_only", history)
+
     def test_wrk_starts_with_all_four_spirits(self) -> None:
         history = read("history/countries/WRK - WorkerLand.txt")
         start_ideas = named_block(history, "add_ideas")
         for spirit in self.SPIRITS:
             self.assertIn(spirit, start_ideas)
+        self.assertIn("limited_conscription", start_ideas)
+        self.assertNotIn("volunteer_only", start_ideas)
 
     def test_each_starting_spirit_is_strictly_negative(self) -> None:
         ideas = read("common/ideas/ADISCORD_vorkerland_ideas.txt")

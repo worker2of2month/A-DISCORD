@@ -1512,6 +1512,37 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_cw_open_conscription
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 3
+		y = 0
+		cost = 1
+		allow_branch = { tag = STS NOT = { has_country_flag = STP_cw_postwar } }
+		bypass = {
+			OR = {
+				has_idea = extensive_conscription
+				has_idea = service_by_requirement
+				has_idea = all_adults_serve
+				has_idea = scraping_the_barrel
+			}
+		}
+		ai_will_do = { base = 12 }
+		completion_reward = {
+			if = {
+				limit = {
+					OR = {
+						has_idea = disarmed_nation
+						has_idea = volunteer_only
+						has_idea = limited_conscription
+					}
+				}
+				add_ideas = extensive_conscription
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+		}
+	}
+
+	focus = {
 		id = STP_cw_wartime_laboratories
 		icon = GFX_goal_generic_scientific_exchange
 		x = 7

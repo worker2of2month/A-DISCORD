@@ -17,3 +17,4 @@ set_popularities = {
 }
 
 recruit_character = WKR_Emergency_Coordination_Committee
+add_ideas = { limited_conscription }

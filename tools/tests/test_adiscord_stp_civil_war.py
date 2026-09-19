@@ -978,7 +978,8 @@ class CivilWarContracts(unittest.TestCase):
                 with self.subTest(tag=tag, law=law):
                     chosen = list(selected_effects(setup, {("STP", "has_idea", law): True}, tag))
                     applied = [e for scope, e in chosen if scope == tag and e.key == "add_ideas"]
-                    self.assertEqual([e.value for e in applied], [law])
+                    expected = "limited_conscription" if law in {"disarmed_nation", "volunteer_only"} else law
+                    self.assertEqual([e.value for e in applied], [expected])
                     self.assertLess(applied[0].line, economy.line)
 
     def test_handoff_direction_and_successor_technology(self):
@@ -1006,6 +1007,23 @@ class CivilWarContracts(unittest.TestCase):
         self.assertNotIn("declare_war_on", start)
         self.assertLess(start.rindex("load_focus_tree"), start.index("change_tag_from = STP"))
         self.assertLess(start.rindex("load_focus_tree"), start.index("id = ADISCORD_STP_cw.30"))
+
+    def test_shabrat_opens_conscription_in_seven_days(self):
+        tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+                    if e.key == "focus_tree" and scalar(e.value, "id") == "STP_cw_focus")
+        focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_open_conscription")
+        gate = ast_block(focus, "allow_branch")
+        self.assertTrue(matches_conditions(gate, {}, "STS"))
+        self.assertFalse(matches_conditions(gate, {}, "STP"))
+        self.assertFalse(matches_conditions(gate, {("STS", "has_country_flag", "STP_cw_postwar"): True}, "STS"))
+        self.assertEqual((scalar(focus, "x"), scalar(focus, "y"), scalar(focus, "cost")), ("3", "0", "1"))
+        self.assertFalse(any(e.key == "prerequisite" for e in focus))
+        self.assertEqual(scalar(ast_block(focus, "ai_will_do"), "base"), "12")
+        reward = ast_block(focus, "completion_reward")
+        self.assertEqual(scalar(ast_block(reward, "if"), "add_ideas"), "extensive_conscription")
+        loc = read("localisation/russian/ADISCORD_STP_l_russian.yml")
+        self.assertIn('STP_cw_open_conscription: "Открыть призыв"', loc)
+        self.assertIn("STP_cw_open_conscription_desc:", loc)
 
     def test_wartime_laboratories_grant_a_temporary_shared_slot(self):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
