@@ -76,9 +76,152 @@ Traceback (most recent call last):
 AssertionError: False is not true
 
 ----------------------------------------------------------------------
-Ran 10 tests in 1.273s
+Ran 10 tests in 1.255s
 
 FAILED (failures=8)
+
+RED: expense-preview parity before the targeted-path repair
+ test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) ... 
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='army', target=1) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='army', target=2) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='army', target=3) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='army', target=4) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='army', target=5) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='research', target=1) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='research', target=2) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='research', target=3) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='research', target=4) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='research', target=5) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='social', target=1) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='social', target=2) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='social', target=3) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='social', target=4) ... FAIL
+  test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='social', target=5) ... FAIL
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='army', target=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 12.565384615384618 != 10.052307692307679 within 7 places (2.513076923076939 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='army', target=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 11.392615384615384 != 5.361230769230758 within 7 places (6.031384615384626 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='army', target=3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 10.052307692307693 != 0.0 within 7 places (10.052307692307693 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='army', target=4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 8.376923076923076 != -6.701538461538462 within 7 places (15.078461538461537 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='army', target=5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 5.026153846153846 != -20.104615384615386 within 7 places (25.130769230769232 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='research', target=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 3.842307692307692 != 2.907692307692301 within 7 places (0.9346153846153911 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='research', target=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 3.4788461538461535 != 1.4538461538461434 within 7 places (2.02500000000001 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='research', target=3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 3.1153846153846154 != 0.0 within 7 places (3.1153846153846154 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='research', target=4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 2.803846153846154 != -1.2461538461538453 within 7 places (4.049999999999999 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='research', target=5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 2.492307692307693 != -2.4923076923076906 within 7 places (4.984615384615383 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='social', target=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 5.1923076923076925 != 4.153846153846146 within 7 places (1.0384615384615463 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='social', target=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 4.707692307692307 != 2.2153846153846075 within 7 places (2.4923076923076994 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='social', target=3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 4.153846153846154 != 0.0 within 7 places (4.153846153846154 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='social', target=4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 3.669230769230769 != -1.9384615384615387 within 7 places (5.607692307692307 difference)
+
+======================================================================
+FAIL: test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) (policy='social', target=5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_balance.py", line 278, in test_expense_preview_click_and_full_recalculation_match
+    self.assertAlmostEqual(values[P + "policy_preview_weekly_delta_temp"],
+AssertionError: 3.0461538461538455 != -4.4307692307692434 within 7 places (7.476923076923089 difference)
+
+----------------------------------------------------------------------
+Ran 1 test in 3.439s
+
+FAILED (failures=15)
 
 CHANGED_PATHS ['common/decisions/ADISCORD_VAL_decisions.txt', 'common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt', 'common/ideas/ADISCORD_STP_civil_war_ideas.txt', 'common/ideas/ADISCORD_VAL_rework_ideas.txt', 'common/national_focus/ADISCORD_national_focus_STP.txt', 'common/national_focus/ADISCORD_national_focus_VAL.txt', 'common/scripted_effects/ADISCORD_VAL_effects.txt', 'common/scripted_effects/ADISCORD_economy_effects.txt', 'common/scripted_effects/ADISCORD_economy_modifier_effects.txt', 'common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt', 'docs/development/focus-effects.md', 'docs/economy/economic-buildings.md', 'docs/economy/economy-player-and-runtime.md', 'events/ADISCORD_VAL_contract_events.txt', 'localisation/english/ADISCORD_economy_l_english.yml', 'localisation/russian/ADISCORD_STP_l_russian.yml', 'localisation/russian/ADISCORD_VAL_decisions_l_russian.yml', 'localisation/russian/ADISCORD_economy_l_russian.yml', 'tools/tests/test_adiscord_economy_balance.py', 'tools/tests/test_adiscord_economy_weekly_contracts.py', 'tools/validators/validate_adiscord_economy_ai.py']
 GREEN: material budget and focus regressions
@@ -86,6 +229,7 @@ GREEN: material budget and focus regressions
 test_building_roles_remain_income_research_and_near_neutral_industry (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_building_roles_remain_income_research_and_near_neutral_industry) ... ok
 test_developed_economy_can_clear_one_hundred_with_normal_budgets (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_developed_economy_can_clear_one_hundred_with_normal_budgets) ... ok
 test_each_shabrat_reform_has_an_exact_native_delta_preview (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_each_shabrat_reform_has_an_exact_native_delta_preview) ... ok
+test_expense_preview_click_and_full_recalculation_match (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_expense_preview_click_and_full_recalculation_match) ... ok
 test_frontier_ready_checks_solvency_and_replenishment_independently (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_frontier_ready_checks_solvency_and_replenishment_independently) ... ok
 test_research_validator_rejects_unowned_or_duplicate_base_scaling (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_research_validator_rejects_unowned_or_duplicate_base_scaling) ... ok
 test_shabrat_recovery_has_a_sustainable_hundred_path (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_shabrat_recovery_has_a_sustainable_hundred_path) ... ok
@@ -95,26 +239,39 @@ test_val_recovery_returns_four_weekly_per_stage_and_does_not_compound (tools.tes
 test_val_ultimatum_and_war_share_readiness_instead_of_24_divisions (tools.tests.test_adiscord_economy_balance.MaterialEconomyBalanceTests.test_val_ultimatum_and_war_share_readiness_instead_of_24_divisions) ... ok
 
 ----------------------------------------------------------------------
-Ran 11 tests in 2.088s
+Ran 12 tests in 5.508s
 
 OK
 
 PATCH_READY
-======================================================================
-FAIL: test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded (tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded)
 ----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/runner/work/A-DISCORD/A-DISCORD/source/tools/tests/test_adiscord_economy_weekly_contracts.py", line 4081, in test_research_policy_has_five_levels_and_level_five_construction_bonus_is_bounded
-    self.assertEqual(multipliers, {0.60, 0.80, 1.00, 1.30, 1.60})
-AssertionError: Items in the first set but not the second:
-0.3
-0.65
-2.0
-Items in the second set but not the first:
-0.6
-0.8
+Ran 211 tests in 59.536s
 
-----------------------------------------------------------------------
-Ran 211 tests in 62.505s
-
-FAILED (failures=1)
+OK
+Kefreyt rework validation passed (95 focuses, 13 active map regions).
+A-DISCORD economy/AI validation: OK
+BUDGET Developed economy {'weekly_income': 137.9962, 'weekly_expenses': 37.0938, 'weekly_balance': 100.9024, 'debt_service': 2.5}
+BUDGET Shabrat restored {'weekly_income': 168.535, 'weekly_expenses': 35.46, 'weekly_balance': 133.075, 'debt_service': 2.5}
+BUDGET Small fragmented economy {'weekly_income': 8.7827, 'weekly_expenses': 18.2515, 'weekly_balance': -9.4689, 'debt_service': 2.5}
+ common/decisions/ADISCORD_VAL_decisions.txt        |  8 ++---
+ .../ADISCORD_VAL_contract_dynamic_modifier.txt     |  3 ++
+ common/ideas/ADISCORD_STP_civil_war_ideas.txt      | 40 ++++++++++++++++++++++
+ common/ideas/ADISCORD_VAL_rework_ideas.txt         |  1 +
+ .../national_focus/ADISCORD_national_focus_STP.txt | 37 +++++++++++---------
+ .../national_focus/ADISCORD_national_focus_VAL.txt | 26 +++++++-------
+ common/scripted_effects/ADISCORD_VAL_effects.txt   |  6 ++++
+ .../scripted_effects/ADISCORD_economy_effects.txt  | 15 +++++---
+ .../ADISCORD_economy_modifier_effects.txt          | 23 +++++++++++++
+ .../ADISCORD_VAL_rework_triggers.txt               | 11 ++++++
+ docs/development/focus-effects.md                  | 24 +++++++++++++
+ docs/economy/economic-buildings.md                 | 14 ++++----
+ docs/economy/economy-player-and-runtime.md         | 29 ++++++++++++++++
+ events/ADISCORD_VAL_contract_events.txt            |  4 +--
+ .../english/ADISCORD_economy_l_english.yml         |  2 +-
+ localisation/russian/ADISCORD_STP_l_russian.yml    | 16 +++++----
+ .../russian/ADISCORD_VAL_decisions_l_russian.yml   | 20 +++++------
+ .../russian/ADISCORD_economy_l_russian.yml         |  6 ++--
+ .../test_adiscord_economy_weekly_contracts.py      | 22 ++++++------
+ tools/validators/validate_adiscord_economy_ai.py   | 35 ++++++++++++++++---
+ 20 files changed, 260 insertions(+), 82 deletions(-)
+CANDIDATE_SHA=13725b3d3aae2c484397e1d61597cbfc049f0701
