@@ -1429,7 +1429,14 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = { tag = STP }
-	option = { name = ADISCORD_STP_pc.24.a }
+	option = {
+		name = ADISCORD_STP_pc.24.accepted_a
+		trigger = { has_country_flag = STP_pw_party_nod_arms_delivered }
+	}
+	option = {
+		name = ADISCORD_STP_pc.24.refused_a
+		trigger = { NOT = { has_country_flag = STP_pw_party_nod_arms_delivered } }
+	}
 }
 
 country_event = {

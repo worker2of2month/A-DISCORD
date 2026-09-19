@@ -32,78 +32,144 @@ ADISCORD_nam_resource_war_start = {
 			}
 			if = { limit = { is_in_faction = yes } leave_faction = yes }
 		}
-		set_global_flag = ADISCORD_nam_resource_war_started
 		clr_global_flag = ADISCORD_nam_resource_war_scheduled
-		clr_global_flag = ADISCORD_nam_resource_war_EFL_defeated
-		clr_global_flag = ADISCORD_nam_resource_war_AZH_defeated
-		clr_global_flag = ADISCORD_nam_resource_war_SLF_defeated
-
-		NAM = {
-			add_ideas = ADISCORD_nam_extraction_defence_corps
-			add_war_support = 0.20
-			# Six resource-war formations arrive fully equipped. Without this
-			# reserve the starting 960k core pool is spent on the first two
-			# guards and the rest of the OOB sits empty.
-			add_manpower = 18000
-			load_oob = "NAM_resource_war"
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 6000 producer = NAM }
-			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 80 producer = NAM }
-			add_equipment_to_stockpile = { type = support_equipment amount = 900 producer = NAM }
-			add_equipment_to_stockpile = { type = artillery_equipment amount = 700 producer = NAM }
-		}
-		EFL = {
-			if = { limit = { is_in_faction = yes } leave_faction = yes }
-			add_ideas = ADISCORD_nam_restitution_coalition
-			add_war_support = 0.18
-			load_oob = "EFL_nam_resource_war"
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = EFL }
-			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 100 producer = EFL }
-			add_equipment_to_stockpile = { type = support_equipment amount = 350 producer = EFL }
-		}
-		AZH = {
-			if = { limit = { is_in_faction = yes } leave_faction = yes }
-			add_ideas = ADISCORD_nam_restitution_coalition
-			add_war_support = 0.22
-			load_oob = "AZH_nam_resource_war"
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1800 producer = AZH }
-		}
-
-		# Only states with a direct material interest mobilise expeditionary corps:
-		# Rahma wants capped fuel prices; Mazar wants priority access for water convoys.
-		if = {
-			limit = { RHM = { exists = yes is_subject = no has_war = no } }
-			RHM = { add_ideas = ADISCORD_nam_profitable_volunteer_contracts }
-		}
-		if = {
-			limit = { MZR = { exists = yes is_subject = no has_war = no } }
-			MZR = { add_ideas = ADISCORD_nam_profitable_volunteer_contracts }
-		}
-
-		EFL = {
-			create_faction_from_template = {
-				template = faction_template_ADISCORD_standard
-				name = faction_eflor_azhar_restitution_alliance
-			}
-			add_to_faction = AZH
-		}
-
-		67 = { add_claim_by = EFL add_claim_by = AZH }
-		EFL = { declare_war_on = { target = NAM type = annex_everything } }
-		AZH = {
-			add_to_war = {
-				targeted_alliance = EFL
-				enemy = NAM
-				hostility_reason = asked_to_join
-				single_target_only = yes
-			}
-		}
-
-		NAM = {
-			country_event = { id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30 }
-			country_event = { id = ADISCORD_nam_resource_war.50 days = 420 }
-			news_event = { id = ADISCORD_nam_resource_news.1 hours = 1 }
+		random_list = {
+			30 = { ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = yes }
+			70 = { ADISCORD_nam_resource_war_begin_hostilities = yes }
 		}
 	}
+}
+
+ADISCORD_nam_resource_war_begin_hostilities = {
+	set_global_flag = ADISCORD_nam_resource_war_started
+	clr_global_flag = ADISCORD_nam_resource_war_scheduled
+	clr_global_flag = ADISCORD_nam_resource_war_EFL_defeated
+	clr_global_flag = ADISCORD_nam_resource_war_AZH_defeated
+	clr_global_flag = ADISCORD_nam_resource_war_SLF_defeated
+
+	NAM = {
+		add_ideas = ADISCORD_nam_extraction_defence_corps
+		add_war_support = 0.20
+		# Six resource-war formations arrive fully equipped. Without this
+		# reserve the starting 960k core pool is spent on the first two
+		# guards and the rest of the OOB sits empty.
+		add_manpower = 18000
+		load_oob = "NAM_resource_war"
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 6000 producer = NAM }
+		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 80 producer = NAM }
+		add_equipment_to_stockpile = { type = support_equipment amount = 900 producer = NAM }
+		add_equipment_to_stockpile = { type = artillery_equipment amount = 700 producer = NAM }
+	}
+	EFL = {
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+		add_ideas = ADISCORD_nam_restitution_coalition
+		add_war_support = 0.18
+		load_oob = "EFL_nam_resource_war"
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = EFL }
+		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 100 producer = EFL }
+		add_equipment_to_stockpile = { type = support_equipment amount = 350 producer = EFL }
+	}
+	AZH = {
+		if = { limit = { is_in_faction = yes } leave_faction = yes }
+		add_ideas = ADISCORD_nam_restitution_coalition
+		add_war_support = 0.22
+		load_oob = "AZH_nam_resource_war"
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 1800 producer = AZH }
+	}
+
+	# Only states with a direct material interest mobilise expeditionary corps:
+	# Rahma wants capped fuel prices; Mazar wants priority access for water convoys.
+	if = {
+		limit = { RHM = { exists = yes is_subject = no has_war = no } }
+		RHM = { add_ideas = ADISCORD_nam_profitable_volunteer_contracts }
+	}
+	if = {
+		limit = { MZR = { exists = yes is_subject = no has_war = no } }
+		MZR = { add_ideas = ADISCORD_nam_profitable_volunteer_contracts }
+	}
+
+	EFL = {
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = faction_eflor_azhar_restitution_alliance
+		}
+		add_to_faction = AZH
+	}
+
+	67 = { add_claim_by = EFL add_claim_by = AZH }
+	EFL = { declare_war_on = { target = NAM type = annex_everything } }
+	AZH = {
+		add_to_war = {
+			targeted_alliance = EFL
+			enemy = NAM
+			hostility_reason = asked_to_join
+			single_target_only = yes
+		}
+	}
+
+	NAM = {
+		random_list = {
+			50 = { country_event = { id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30 } }
+			50 = { set_global_flag = ADISCORD_nam_resource_war_SLF_defeated }
+		}
+		country_event = { id = ADISCORD_nam_resource_war.50 days = 420 }
+		news_event = { id = ADISCORD_nam_resource_news.1 hours = 1 }
+	}
+}
+
+ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = {
+	set_global_flag = ADISCORD_nam_resource_war_resolved
+	set_global_flag = ADISCORD_nam_resource_war_peaceful_partition
+	clr_global_flag = ADISCORD_nam_resource_war_started
+	clr_global_flag = ADISCORD_nam_resource_war_scheduled
+	clr_global_flag = ADISCORD_nam_resource_war_EFL_defeated
+	clr_global_flag = ADISCORD_nam_resource_war_AZH_defeated
+	clr_global_flag = ADISCORD_nam_resource_war_SLF_defeated
+
+	EFL = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+	AZH = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+
+	EFL = {
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = faction_eflor_azhar_restitution_alliance
+		}
+		add_to_faction = AZH
+		transfer_state = 67
+		transfer_state = 225
+		transfer_state = 228
+		transfer_state = 230
+		transfer_state = 231
+		transfer_state = 688
+	}
+	AZH = {
+		transfer_state = 226
+		transfer_state = 227
+		transfer_state = 229
+		transfer_state = 689
+		transfer_state = 690
+	}
+
+	67 = { add_core_of = EFL set_state_controller_to = EFL }
+	225 = { add_core_of = EFL set_state_controller_to = EFL }
+	228 = { add_core_of = EFL set_state_controller_to = EFL }
+	230 = { add_core_of = EFL set_state_controller_to = EFL }
+	231 = { add_core_of = EFL set_state_controller_to = EFL }
+	688 = { remove_core_of = SLF remove_core_of = NAM add_core_of = EFL set_state_controller_to = EFL }
+
+	226 = { add_core_of = AZH set_state_controller_to = AZH }
+	227 = { add_core_of = AZH set_state_controller_to = AZH }
+	229 = { add_core_of = AZH set_state_controller_to = AZH }
+	689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
+	690 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
+
+	if = {
+		limit = { NAM = { exists = yes } }
+		EFL = { annex_country = { target = NAM transfer_troops = no } }
+	}
+
+	ADISCORD_nam_resource_war_clear_temporary_support = yes
+	EFL = { news_event = { id = ADISCORD_nam_resource_news.7 hours = 1 } }
 }
 
 ADISCORD_nam_resource_war_start_mainland_rebellion = {
@@ -124,6 +190,7 @@ ADISCORD_nam_resource_war_start_mainland_rebellion = {
 			declare_war_on = { target = NAM type = annex_everything }
 		}
 		688 = { add_core_of = SLF set_state_controller_to = SLF }
+		SLF = { news_event = { id = ADISCORD_nam_resource_news.5 hours = 1 } }
 	}
 	else = {
 		set_global_flag = ADISCORD_nam_resource_war_SLF_defeated
@@ -299,6 +366,7 @@ ADISCORD_nam_resource_war_mark_azhar_defeated = {
 
 ADISCORD_nam_resource_war_mark_rebels_defeated = {
 	set_global_flag = ADISCORD_nam_resource_war_SLF_defeated
+	NAM = { news_event = { id = ADISCORD_nam_resource_news.6 hours = 1 } }
 	if = { limit = { NAM = { has_war_with = SLF } } NAM = { white_peace = SLF } }
 	if = {
 		limit = { 688 = { is_owned_by = SLF } }

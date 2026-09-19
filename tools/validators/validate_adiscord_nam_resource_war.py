@@ -234,13 +234,27 @@ def main() -> int:
     for mutation in (
         "set_autonomy = { target = NAM autonomy_state = autonomy_free }",
         "leave_faction = yes",
+        "clr_global_flag = ADISCORD_nam_resource_war_scheduled",
+        "random_list = {",
+        "30 = { ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = yes }",
+        "70 = { ADISCORD_nam_resource_war_begin_hostilities = yes }",
+    ):
+        check(readiness_position >= 0 and start.find(mutation) > readiness_position,
+              f"resource-war start mutation escapes readiness: {mutation}")
+    check("declare_war_on" not in start and "load_oob" not in start,
+          "resource-war wrapper must roll peace/war before any military mutation")
+
+    hostilities = named_block(effects, "ADISCORD_nam_resource_war_begin_hostilities")
+    for mutation in (
         "set_global_flag = ADISCORD_nam_resource_war_started",
         'load_oob = "NAM_resource_war"',
         "create_faction_from_template = {",
         "declare_war_on = { target = NAM type = annex_everything }",
     ):
-        check(readiness_position >= 0 and start.find(mutation) > readiness_position,
-              f"resource-war start mutation escapes readiness: {mutation}")
+        check(mutation in hostilities, f"hostility path lost required mutation: {mutation}")
+    check(start.count("ADISCORD_nam_resource_war_begin_hostilities = yes") == 1
+          and start.count("ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = yes") == 1,
+          "resource-war entry must have exactly one 70/30 branch pair")
     schedule = named_block(effects, "ADISCORD_nam_resource_war_schedule")
     for token in (
         "has_global_flag = ADISCORD_fresh_campaign_contract_v1",
@@ -318,10 +332,10 @@ def main() -> int:
         r"name\s*=\s*faction_eflor_azhar_restitution_alliance\s*\}",
         re.DOTALL,
     )
-    check(faction_creation.search(start) is not None,
-          "resource-war start does not create the permanent EFL-AZH faction")
-    check(start.count("add_to_faction = AZH") == 1,
-          "EFL must add AZH to the resource-war faction exactly once")
+    check(faction_creation.search(hostilities) is not None,
+          "resource-war hostility path does not create the permanent EFL-AZH faction")
+    check(hostilities.count("add_to_faction = AZH") == 1,
+          "EFL must add AZH to the wartime resource faction exactly once")
     check(start.count("leave_faction = yes") == 3,
           "NAM, EFL, and AZH must clear obsolete faction ties before the new faction is formed")
 
@@ -433,8 +447,10 @@ def main() -> int:
     cleanup = named_block(effects, "ADISCORD_nam_resource_war_clear_temporary_support")
     check("remove_ideas = ADISCORD_nam_last_line_administration" in cleanup,
           "NAM outcome cleanup leaves the last-line idea active")
-    check("country_event = { id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30 }" in effects,
-          "Svetlogorsk uprising does not leave NAM the intended 45-75 day response window")
+    check(hostilities.count("random_list = {") >= 1
+          and "50 = { country_event = { id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30 } }" in hostilities
+          and "50 = { set_global_flag = ADISCORD_nam_resource_war_SLF_defeated }" in hostilities,
+          "Svetlogorsk uprising must be a 50/50 wartime roll with the intended 45-75 day response window")
 
     prewar_category = named_block(prewar_categories, "ADISCORD_nam_prewar_defence_category")
     check("tag = NAM" in prewar_category
@@ -465,14 +481,17 @@ def main() -> int:
           "non-beneficiary southern states were incorrectly mobilised")
     check("skip_default_capitulation" in on_actions and on_actions.count("on_capitulation") == 1,
           "bespoke capitulation routing is incomplete")
-    check(news.count("news_event = {") == 3,
-          "world news must contain exactly war start and two mutually exclusive outcomes")
+    check(news.count("news_event = {") == 6,
+          "world news must contain war start, uprising/suppression, peaceful partition, and two terminal outcomes")
 
     news_blocks = typed_blocks(news, "news_event")
     for event_id in (
         "ADISCORD_nam_resource_news.1",
         "ADISCORD_nam_resource_news.2",
         "ADISCORD_nam_resource_news.3",
+        "ADISCORD_nam_resource_news.5",
+        "ADISCORD_nam_resource_news.6",
+        "ADISCORD_nam_resource_news.7",
     ):
         definitions = [block for block in news_blocks if re.search(
             rf"(?m)^\s*id\s*=\s*{re.escape(event_id)}\s*$", block
@@ -491,9 +510,12 @@ def main() -> int:
         for path in (ROOT / root_name).rglob("*.txt")
     }
     expected_news_calls = {
-        "ADISCORD_nam_resource_news.1": "ADISCORD_nam_resource_war_start",
+        "ADISCORD_nam_resource_news.1": "ADISCORD_nam_resource_war_begin_hostilities",
         "ADISCORD_nam_resource_news.2": "ADISCORD_nam_resource_war_resolve_coalition_victory",
         "ADISCORD_nam_resource_news.3": "ADISCORD_nam_resource_war_resolve_nam_victory",
+        "ADISCORD_nam_resource_news.5": "ADISCORD_nam_resource_war_start_mainland_rebellion",
+        "ADISCORD_nam_resource_news.6": "ADISCORD_nam_resource_war_mark_rebels_defeated",
+        "ADISCORD_nam_resource_news.7": "ADISCORD_nam_resource_war_resolve_peaceful_withdrawal",
     }
     for event_id, effect_name in expected_news_calls.items():
         call_pattern = re.compile(
@@ -580,6 +602,31 @@ def main() -> int:
     check(coalition_route is not None
           and all(f"tag = {tag}" in coalition_route.group(1) for tag in ("EFL", "AZH", "SLF")),
           "NAM defeat by EFL, AZH, or SLF must use the coalition settlement")
+
+    peaceful = named_block(effects, "ADISCORD_nam_resource_war_resolve_peaceful_withdrawal")
+    check("set_global_flag = ADISCORD_nam_resource_war_resolved" in peaceful
+          and "set_global_flag = ADISCORD_nam_resource_war_peaceful_partition" in peaceful,
+          "peaceful NAM withdrawal lacks terminal flags")
+    check("declare_war_on" not in peaceful and "add_to_war" not in peaceful and "load_oob" not in peaceful,
+          "peaceful NAM withdrawal must not perform military setup")
+    check(peaceful.find("EFL = { if = { limit = { is_in_faction = yes } leave_faction = yes } }")
+          < peaceful.find("create_faction_from_template = {")
+          and peaceful.find("AZH = { if = { limit = { is_in_faction = yes } leave_faction = yes } }")
+          < peaceful.find("create_faction_from_template = {"),
+          "peaceful partition must detach both recipients before creating their new faction")
+    peaceful_allocations = {
+        "EFL": {"67", "225", "228", "230", "231", "688"},
+        "AZH": {"226", "227", "229", "689", "690"},
+    }
+    for recipient, expected_states in peaceful_allocations.items():
+        recipient_settlement = named_block(peaceful, recipient)
+        recipient_states = set(re.findall(r"transfer_state\s*=\s*(\d+)", recipient_settlement))
+        check(recipient_states == expected_states,
+              f"{recipient} peaceful allocation is wrong: {sorted(recipient_states)}")
+    check("annex_country = { target = NAM transfer_troops = no }" in peaceful,
+          "peaceful settlement must dissolve residual NAM administration")
+    check("ADISCORD_nam_resource_news.7" in peaceful,
+          "peaceful settlement lacks its world-news call")
 
     coalition_victory = named_block(
         effects, "ADISCORD_nam_resource_war_resolve_coalition_victory"

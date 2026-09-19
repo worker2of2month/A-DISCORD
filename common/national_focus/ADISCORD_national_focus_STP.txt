@@ -2888,10 +2888,10 @@ focus_tree = {
 		id = STP_pw_party_civil_charter
 		icon = GFX_goal_generic_neutrality_focus
 		x = 2
-		y = 8
+		y = 9
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
-		prerequisite = { focus = STP_party_local_cadres focus = STP_party_chain_of_command }
+		prerequisite = { focus = STP_pw_party_district_congress focus = STP_pw_party_executive_secretariat }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
@@ -2955,14 +2955,14 @@ focus_tree = {
 		id = STP_pw_party_civil_workshops
 		icon = GFX_goal_generic_production2
 		x = 6
-		y = 5
+		y = 6
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
-		prerequisite = { focus = STP_pw_party_homes_for_returnees }
+		prerequisite = { focus = STP_party_revenue_service }
 		mutually_exclusive = { focus = STP_pw_party_accountable_arsenals }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		cancel_if_invalid = yes
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 4 }
 		completion_reward = {
 			if = {
 				limit = {
@@ -3001,14 +3001,14 @@ focus_tree = {
 		id = STP_pw_party_accountable_arsenals
 		icon = GFX_goal_generic_construct_mil_factory
 		x = 8
-		y = 5
+		y = 6
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
-		prerequisite = { focus = STP_pw_party_homes_for_returnees }
+		prerequisite = { focus = STP_party_revenue_service }
 		mutually_exclusive = { focus = STP_pw_party_civil_workshops }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		cancel_if_invalid = yes
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 4 }
 		completion_reward = {
 			if = {
 				limit = {
@@ -3048,10 +3048,10 @@ focus_tree = {
 		id = STP_pw_party_industrial_settlement
 		icon = GFX_focus_generic_industry_3
 		x = 7
-		y = 8
+		y = 9
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
-		prerequisite = { focus = STP_party_port_contracts focus = STP_party_industrial_board }
+		prerequisite = { focus = STP_pw_party_commercial_recovery focus = STP_pw_party_defence_combine }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
@@ -3114,14 +3114,15 @@ focus_tree = {
 	focus = {
 		id = STP_pw_party_supply_service
 		icon = GFX_focus_generic_truck
-		x = 12
+		x = 11
 		y = 5
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_officer_school }
+		mutually_exclusive = { focus = STP_pw_party_professional_service }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		cancel_if_invalid = yes
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 5 }
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_supply_service_delta } }
 			hidden_effect = {
@@ -3135,14 +3136,15 @@ focus_tree = {
 	focus = {
 		id = STP_pw_party_professional_service
 		icon = GFX_focus_generic_military_mission
-		x = 12
-		y = 6
+		x = 13
+		y = 5
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
-		prerequisite = { focus = STP_pw_party_supply_service }
+		prerequisite = { focus = STP_pw_party_officer_school }
+		mutually_exclusive = { focus = STP_pw_party_supply_service }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		cancel_if_invalid = yes
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 5 }
 		completion_reward = {
 			army_experience = 15
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_professional_service_delta } }
@@ -3158,12 +3160,13 @@ focus_tree = {
 		id = STP_pw_party_settled_state
 		icon = GFX_goal_generic_national_unity
 		x = 7
-		y = 10
+		y = 11
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_civil_charter }
 		prerequisite = { focus = STP_pw_party_industrial_settlement }
 		prerequisite = { focus = STP_pw_party_southern_defence }
+		prerequisite = { focus = STP_pw_party_foreign_settlement }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_recovery_complete_tt STP_pw_can_reconstruct = yes check_variable = { var = STP_pw_recovery_progress value = 3 compare = greater_than_or_equals } } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
@@ -3223,7 +3226,6 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.03 }
 				STP_pw_refresh_modifier = yes
 			}
-			country_event = { id = ADISCORD_STP_pc.26 }
 		}
 	}
 
@@ -3268,7 +3270,6 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.03 }
 				STP_pw_refresh_modifier = yes
 			}
-			country_event = { id = ADISCORD_STP_pc.27 }
 		}
 	}
 
@@ -3276,9 +3277,9 @@ focus_tree = {
 		id = STP_party_revenue_service
 		icon = GFX_focus_STP_2160_budget
 		x = 7
-		y = 6
+		y = 5
 		cost = 3
-		prerequisite = { focus = STP_pw_party_civil_workshops focus = STP_pw_party_accountable_arsenals }
+		prerequisite = { focus = STP_pw_party_homes_for_returnees }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  }
 		cancel_if_invalid = yes
@@ -3300,7 +3301,6 @@ focus_tree = {
 		x = 6
 		y = 7
 		cost = 4
-		prerequisite = { focus = STP_party_revenue_service }
 		prerequisite = { focus = STP_pw_party_civil_workshops }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  }
@@ -3323,7 +3323,6 @@ focus_tree = {
 		x = 8
 		y = 7
 		cost = 4
-		prerequisite = { focus = STP_party_revenue_service }
 		prerequisite = { focus = STP_pw_party_accountable_arsenals }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  }
@@ -3377,6 +3376,217 @@ focus_tree = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_technical_institutes_post_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.02 }
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	# Party postwar route capstones: four choices stay distinct until final settlement.
+
+	focus = {
+		id = STP_pw_party_district_congress
+		icon = GFX_focus_generic_treaty
+		x = 0
+		y = 8
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		prerequisite = { focus = STP_party_local_cadres }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_stability = 0.02
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_district_congress_delta } }
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_stability_factor value = 0.03 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.04 }
+				add_to_variable = { var = STP_pw_political_power_gain value = -0.05 }
+				STP_pw_refresh_modifier = yes
+			}
+			country_event = { id = ADISCORD_STP_pc.26 }
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_executive_secretariat
+		icon = GFX_focus_generic_improve_the_administration
+		x = 4
+		y = 8
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		prerequisite = { focus = STP_party_chain_of_command }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_political_power = 75
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_executive_secretariat_delta } }
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_political_power_gain value = 0.10 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.02 }
+				add_to_variable = { var = STP_pw_stability_factor value = -0.01 }
+				STP_pw_refresh_modifier = yes
+			}
+			country_event = { id = ADISCORD_STP_pc.27 }
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_commercial_recovery
+		icon = GFX_goal_generic_positive_trade_relations
+		x = 6
+		y = 8
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		prerequisite = { focus = STP_party_port_contracts }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			STP_receive_1200 = yes
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_commercial_recovery_delta } }
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.08 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.08 }
+				add_to_variable = { var = STP_pw_production_speed_buildings_factor value = 0.05 }
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_defence_combine
+		icon = GFX_goal_generic_construct_mil_factory
+		x = 8
+		y = 8
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		prerequisite = { focus = STP_party_industrial_board }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 producer = ROOT }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 120 producer = ROOT }
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_defence_combine_delta } }
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_industrial_capacity_factory value = 0.08 }
+				add_to_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.05 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.02 }
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_fortress_corps
+		icon = GFX_focus_generic_mountain_fortification
+		x = 11
+		y = 6
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		prerequisite = { focus = STP_pw_party_supply_service }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_command_power = 20
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_fortress_corps_delta } }
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_supply_consumption_factor value = -0.04 }
+				add_to_variable = { var = STP_pw_army_org_regain value = 0.04 }
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_field_staff
+		icon = GFX_focus_generic_military_mission
+		x = 13
+		y = 6
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		prerequisite = { focus = STP_pw_party_professional_service }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			army_experience = 20
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_field_staff_delta } }
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_planning_speed value = 0.10 }
+				add_to_variable = { var = STP_pw_army_org_factor value = 0.03 }
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_joint_defence_board
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = -3
+		y = 6
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		prerequisite = { focus = STP_pw_party_nod_military_mission }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_command_power = 15
+			add_tech_bonus = { name = STP_pw_party_joint_staff bonus = 0.5 uses = 1 category = infantry_weapons }
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_joint_defence_board_delta } }
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_supply_consumption_factor value = -0.03 }
+				add_to_variable = { var = STP_pw_army_org_regain value = 0.02 }
+				add_to_variable = { var = STP_pw_stability_factor value = 0.02 }
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_armed_neutrality
+		icon = GFX_goal_generic_production
+		x = -1
+		y = 6
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		prerequisite = { focus = STP_pw_party_domestic_pattern }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 800 producer = ROOT }
+			add_equipment_to_stockpile = { type = support_equipment amount = 80 producer = ROOT }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = ROOT }
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_armed_neutrality_delta } }
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_army_org_factor value = 0.02 }
+				add_to_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.03 }
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_foreign_settlement
+		icon = GFX_goal_generic_neutrality_focus
+		x = -2
+		y = 7
+		cost = 3
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		prerequisite = { focus = STP_pw_party_joint_defence_board focus = STP_pw_party_armed_neutrality }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			add_stability = 0.02
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_foreign_settlement_delta } }
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_stability_factor value = 0.02 }
+				add_to_variable = { var = STP_pw_political_power_gain value = 0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4988,7 +5198,7 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_pw_party_sovereignty }
 		available = { STP_pc_focus_available = yes is_subject = no has_country_flag = STP_pw_party_nod_offer_accepted NOD = { exists = yes is_subject = no has_capitulated = no } NOT = { has_war_with = NOD } }
 		cancel_if_invalid = yes
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 6 }
 		completion_reward = {
 			custom_effect_tooltip = STP_pw_party_protectorate_tt
 			hidden_effect = {
@@ -5019,7 +5229,7 @@ focus_tree = {
 			is_subject = no
 		}
 		cancel_if_invalid = yes
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 6 }
 		completion_reward = {
 			add_timed_idea = { idea = STP_cw_arsenal_shifts days = 180 }
 			if = {
@@ -5047,7 +5257,7 @@ focus_tree = {
 		id = STP_pw_party_nod_military_mission
 		icon = GFX_focus_generic_military_mission
 		x = -3
-		y = 6
+		y = 5
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_protectorate }
@@ -5067,7 +5277,7 @@ focus_tree = {
 		id = STP_pw_party_domestic_pattern
 		icon = GFX_goal_generic_production
 		x = -1
-		y = 6
+		y = 5
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_sovereignty }
@@ -5086,7 +5296,7 @@ focus_tree = {
 		y = 7
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
-		prerequisite = { focus = STP_pw_party_professional_service }
+		prerequisite = { focus = STP_pw_party_fortress_corps focus = STP_pw_party_field_staff }
 		available = { STP_pw_can_reconstruct = yes custom_trigger_tooltip = { tooltip = STP_pw_party_guard_refitted_tt check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals } } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
