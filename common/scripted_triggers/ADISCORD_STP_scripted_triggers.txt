@@ -1276,7 +1276,7 @@ STP_cw_disruption_available = {
 	has_capitulated = no
 	STP = { exists = yes has_capitulated = no }
 	NOT = { has_country_flag = STP_cw_postwar has_global_flag = STP_cw_union_wars_finished }
-	check_variable = { var = STP_cw_disruption_completed value = 2 compare = less_than }
+	check_variable = { var = STP_cw_disruption_completed value = 3 compare = less_than }
 }
 
 # STATE: the same owner/template filter is used by the eventual destruction.

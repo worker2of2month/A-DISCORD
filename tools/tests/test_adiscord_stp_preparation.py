@@ -2841,7 +2841,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 facts[(scope, "has_country_flag", entry.value)] = False
         self.assertEqual([scalar(e.value, "value") for _, e in selected
                           if e.key == "set_temp_variable" and scalar(e.value, "var") == "STP_cw_nod_prep_delta"],
-                         ["35"])
+                         ["56"])
         self.assertEqual(sum(e.key == "STP_cw_adjust_nod_intervention_days" for _, e in selected), 1)
         self.assertFalse(any(e.key == "add_days_mission_timeout" for _, e in selected))
         self.assertFalse(matches_conditions(block(evidence, "visible"), facts, "STS"),
@@ -3092,12 +3092,13 @@ class StelanderPreparationTests(unittest.TestCase):
                           scalar(focuses["STP_cw_prepare_industry_sabotage"], "y")), ("4", "4"))
         self.assertEqual(scalar(block(focuses["STP_cw_prepare_industry_sabotage"], "prerequisite"), "focus"),
                          "STP_cw_officer_contacts")
-        for name, pp, suspicion in (("STP_cw_prepare_capital_sabotage", "50", "STP_cw_suspicion_12_tt"),
-                                    ("STP_cw_prepare_industry_sabotage", "50", "STP_cw_suspicion_10_tt")):
+        for name, pp, suspicion in (("STP_cw_prepare_capital_sabotage", "75", "STP_cw_suspicion_8_tt"),
+                                    ("STP_cw_prepare_industry_sabotage", "75", "STP_cw_suspicion_5_tt")):
             reward = block(focuses[name], "completion_reward")
+            self.assertEqual(scalar(focuses[name], "cost"), "1")
             self.assertEqual(scalar(reward, "add_political_power"), pp)
+            self.assertEqual(scalar(reward, "add_command_power"), "10")
             self.assertIn(suspicion, [e.value for e in reward if e.key == "custom_effect_tooltip"])
-            self.assertNotIn("add_command_power", {e.key for e in reward})
         self.assertNotIn("STP_region_is_operable", {e.key for e in walk(capital)})
         self.assertIn("STP_region_is_operable", {e.key for e in walk(industry)})
         initializer = block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
@@ -3113,7 +3114,8 @@ class StelanderPreparationTests(unittest.TestCase):
                     if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
         focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_northern_desk")
         self.assertEqual((scalar(focus, "x"), scalar(focus, "y"), scalar(focus, "cost")), ("10", "3", "2"))
-        self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "STP_cw_arm_the_north")
+        self.assertEqual({e.value for e in block(focus, "prerequisite") if e.key == "focus"},
+                         {"STP_cw_arm_the_north", "STP_cw_border_evidence"})
         arm = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_arm_the_north")
         arm_reward = block(arm, "completion_reward")
         self.assertEqual(scalar(block(arm_reward, "add_equipment_to_stockpile"), "amount"), "7200")
@@ -3125,8 +3127,10 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertEqual(scalar(block(dossier_reward, "add_intel"), "civilian_intel"), "10")
         evidence = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_border_evidence")
         evidence_reward = block(evidence, "completion_reward")
-        self.assertEqual(scalar(evidence_reward, "add_political_power"), "50")
-        self.assertEqual(scalar(block(evidence_reward, "add_intel"), "army_intel"), "10")
+        self.assertEqual(scalar(evidence_reward, "add_political_power"), "75")
+        self.assertEqual(scalar(evidence_reward, "add_command_power"), "15")
+        self.assertEqual(scalar(block(evidence_reward, "add_intel"), "army_intel"), "20")
+        self.assertEqual(scalar(block(evidence_reward, "add_intel"), "civilian_intel"), "15")
         reward = block(focus, "completion_reward")
         self.assertEqual({e.value for e in reward if e.key == "unlock_decision_tooltip"},
                          {"STP_cw_fund_northern_forts", "STP_cw_send_northern_engineers", "STP_cw_sabotage_nodrul"})

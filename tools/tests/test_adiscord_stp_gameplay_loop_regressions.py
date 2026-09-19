@@ -258,7 +258,7 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
             ("NOD", "has_active_mission", "NOD_cw_intervention_preparation"): True}, "STS"))
         self.assertEqual([scalar(e.value, "value") for _, e in incident_effects
                           if e.key == "set_temp_variable" and scalar(e.value, "var") == "STP_cw_nod_prep_delta"],
-                         ["-21"])
+                         ["56"])
         self.assertEqual(sum(e.key == "STP_cw_adjust_nod_intervention_days" for _, e in incident_effects), 1)
         self.assertFalse(any(e.key == "add_days_mission_timeout" for _, e in incident_effects))
         sabotage_remove = block(sabotage, "remove_effect")

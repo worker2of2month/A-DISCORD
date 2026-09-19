@@ -1344,20 +1344,20 @@ STP_battle_for_stelander = {
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
-		custom_cost_trigger = { NOT = { has_political_power < 20 } NOT = { has_equipment = { infantry_equipment < 360 } } }
-		custom_cost_text = STP_cost_pp20_r360
+		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 240 } } }
+		custom_cost_text = STP_cost_pp10_r240
 		cost = 0
 		days_remove = 14
 		fire_only_once = no
 		cancel_trigger = { hidden_trigger = { OR = { NOT = { has_country_flag = STP_battle_for_stelander_active } FROM = { NOT = { is_owned_by = ROOT } } } } }
 		complete_effect = {
 			hidden_effect = {
-				add_political_power = -20
-				set_temp_variable = { var = STP_cw_rifle_cost value = 360 }
+				add_political_power = -10
+				set_temp_variable = { var = STP_cw_rifle_cost value = 240 }
 				STP_cw_pay_rifles = yes
 				if = {
 					limit = { has_country_flag = STP_cw_rifles_paid }
-					FROM = { set_variable = { var = STP_cw_sabotage_rifles value = 360 } }
+					FROM = { set_variable = { var = STP_cw_sabotage_rifles value = 240 } }
 				}
 				STP_political_action_slot_consume = yes
 			}
@@ -1380,17 +1380,17 @@ STP_battle_for_stelander = {
 					limit = { FROM = { is_owned_by = ROOT } has_country_flag = STP_battle_for_stelander_active FROM = { has_variable = STP_cw_sabotage_rifles } }
 					FROM = {
 						set_state_flag = STP_resistance_sabotage_asset
-						set_temp_variable = { var = STP_region_influence_change value = 8 }
+						set_temp_variable = { var = STP_region_influence_change value = 12 }
 						STP_add_resistance_influence = yes
 						STP_mark_region_player_action = yes
 					}
-					set_temp_variable = { var = STP_party_suspicion_change value = 12 }
+					set_temp_variable = { var = STP_party_suspicion_change value = 8 }
 					STP_change_party_suspicion = yes
 				}
 				STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 4  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
+		ai_will_do = { base = 6  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_cw_sabotage_party_industry = {
@@ -1439,17 +1439,17 @@ STP_battle_for_stelander = {
 					limit = { FROM = { STP_region_is_operable = yes is_owned_by = ROOT } has_country_flag = STP_battle_for_stelander_active FROM = { has_variable = STP_cw_sabotage_rifles } }
 					FROM = {
 						set_state_flag = STP_resistance_sabotage_asset
-						set_temp_variable = { var = STP_region_influence_change value = 6 }
+						set_temp_variable = { var = STP_region_influence_change value = 10 }
 						STP_add_resistance_influence = yes
 						STP_mark_region_player_action = yes
 					}
-					set_temp_variable = { var = STP_party_suspicion_change value = 10 }
+					set_temp_variable = { var = STP_party_suspicion_change value = 5 }
 					STP_change_party_suspicion = yes
 				}
 				STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 4  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
+		ai_will_do = { base = 6  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_party_inspection_state_2 = {
@@ -1938,8 +1938,8 @@ STP_cw_war_council = {
 		}
 		cost = 0
 		custom_cost_text = STP_cw_disruption_price
-		custom_cost_trigger = { NOT = { has_political_power < 50 } STP_cw_can_spend_1200 = yes }
-		days_remove = 28
+		custom_cost_trigger = { NOT = { has_political_power < 35 } STP_cw_can_spend_1200 = yes }
+		days_remove = 21
 		fire_only_once = no
 		cancel_trigger = { OR = { STP_cw_disruption_available = no FROM = { STP_cw_disruption_target = no } } }
 		complete_effect = {
@@ -1948,15 +1948,15 @@ STP_cw_war_council = {
 				if = {
 					limit = { STP_cw_disruption_available = yes FROM = { STP_cw_disruption_target = yes } NOT = { has_variable = STP_cw_disruption_deposit has_country_flag = STP_cw_disruption_cooldown has_political_power < 50 } STP_cw_can_spend_1200 = yes }
 					STP_cw_spend_1200 = yes
-					add_political_power = -50
+					add_political_power = -35
 					set_variable = { var = STP_cw_disruption_deposit value = 1200 }
-					set_country_flag = { flag = STP_cw_disruption_cooldown days = 60 }
+					set_country_flag = { flag = STP_cw_disruption_cooldown days = 45 }
 				}
 			}
 		}
 		remove_effect = { custom_effect_tooltip = STP_cw_disruption_result_tt hidden_effect = { STP_cw_finish_disruption = yes } }
 		cancel_effect = { custom_effect_tooltip = STP_cw_disruption_refund_tt hidden_effect = { STP_cw_refund_disruption = yes } }
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 5 }
 	}
 
 
@@ -2942,12 +2942,12 @@ STP_cw_external_intervention = {
 				NOD = { has_active_mission = NOD_cw_intervention_preparation }
 			}
 		}
-		cost = 35
+		cost = 25
 		fire_only_once = yes
 		complete_effect = {
 			custom_effect_tooltip = STP_cw_northern_incident_result_tt
 			hidden_effect = {
-				set_temp_variable = { var = STP_cw_nod_prep_delta value = 35 }
+				set_temp_variable = { var = STP_cw_nod_prep_delta value = 56 }
 				STP_cw_adjust_nod_intervention_days = yes
 				clr_country_flag = STP_cw_northern_strategy_evidence
 			}

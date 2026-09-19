@@ -284,13 +284,14 @@ focus_tree = {
 		icon = GFX_focus_generic_secret_service_agency
 		x = 5
 		y = 3
-		cost = 2
+		cost = 1
 		prerequisite = { focus = STP_cw_officer_contacts }
-		ai_will_do = { base = 4 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_sabotage_capital
-			add_political_power = 50
-			custom_effect_tooltip = STP_cw_suspicion_12_tt
+			add_political_power = 75
+			add_command_power = 10
+			custom_effect_tooltip = STP_cw_suspicion_8_tt
 		}
 	}
 
@@ -302,13 +303,14 @@ focus_tree = {
 		icon = GFX_focus_generic_industry_3
 		x = 4
 		y = 4
-		cost = 2
+		cost = 1
 		prerequisite = { focus = STP_cw_officer_contacts }
-		ai_will_do = { base = 4 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_sabotage_party_industry
-			add_political_power = 50
-			custom_effect_tooltip = STP_cw_suspicion_10_tt
+			add_political_power = 75
+			add_command_power = 10
+			custom_effect_tooltip = STP_cw_suspicion_5_tt
 		}
 	}
 
@@ -318,13 +320,14 @@ focus_tree = {
 		relative_position_id = STP_Show_Him_The_Truth
 		x = 5
 		y = 6
-		cost = 2
+		cost = 1
 		prerequisite = { focus = STP_cw_prepare_industry_sabotage }
 		prerequisite = { focus = STP_cw_prepare_capital_sabotage }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 6 }
 		completion_reward = {
+			add_political_power = 50
 			custom_effect_tooltip = STP_cw_disruption_cells_tt
 			unlock_decision_tooltip = STP_cw_disrupt_brigade
 			hidden_effect = { set_country_flag = STP_cw_disruption_unlocked }
@@ -486,7 +489,7 @@ focus_tree = {
 		x = 10
 		y = 3
 		cost = 2
-		prerequisite = { focus = STP_cw_arm_the_north }
+		prerequisite = { focus = STP_cw_arm_the_north focus = STP_cw_border_evidence }
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_fund_northern_forts
@@ -562,12 +565,13 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = STP_cw_northern_dossier }
 		mutually_exclusive = { focus = STP_cw_arm_the_north }
-		ai_will_do = { base = 4 }
+		ai_will_do = { base = 10 }
 		completion_reward = {
 			hidden_effect = { set_country_flag = STP_cw_northern_strategy_evidence }
 			unlock_decision_tooltip = STP_cw_trigger_northern_incident
-			add_intel = { target = NOD army_intel = 10 civilian_intel = 10 }
-			add_political_power = 50
+			add_intel = { target = NOD army_intel = 20 civilian_intel = 15 }
+			add_political_power = 75
+			add_command_power = 15
 			custom_effect_tooltip = STP_cw_border_evidence_tt
 		}
 	}
@@ -583,7 +587,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = STP_cw_northern_dossier }
 		mutually_exclusive = { focus = STP_cw_border_evidence }
-		ai_will_do = { base = 12 }
+		ai_will_do = { base = 10 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_supply_the_north
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 7200 }
