@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 from pathlib import Path
 import re
@@ -123,7 +124,7 @@ class RusLastEmpireTests(unittest.TestCase):
         transfer = named_block(destination, "461")
         self.assertIn("set_state_owner_to = PREV", transfer)
         self.assertIn("set_state_controller_to = PREV", transfer)
-        startup = named_block(read(ON_ACTIONS), "on_startup")
+        startup = named_block(read_country_on_actions(ON_ACTIONS, 'vorkerland_collapse'), "on_startup")
         self.assertIn("ADISCORD_vorkerland_reconcile_dirty_zone_remainder = yes", startup)
 
     def test_focus_tree_is_assigned_to_rus_and_lists_the_ai_branch(self) -> None:
@@ -184,7 +185,7 @@ class RusLastEmpireTests(unittest.TestCase):
         self.assertNotIn("ADISCORD_vorkerland_rus_can_proclaim_last_empire = {", read(FOCUS_FILE))
 
     def test_runtime_hooks_and_fronts_exist(self) -> None:
-        on_actions = read(ON_ACTIONS)
+        on_actions = read_country_on_actions(ON_ACTIONS, 'vorkerland_collapse')
         self.assertIn("on_monthly_RUS", on_actions)
         self.assertIn("ADISCORD_vorkerland_check_rus_dirty_campaign = yes", on_actions)
         capitulation = on_actions[on_actions.index("on_capitulation = {"):on_actions.index("on_puppet = {")]

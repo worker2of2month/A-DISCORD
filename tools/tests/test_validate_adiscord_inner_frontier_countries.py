@@ -1,3 +1,4 @@
+from tools.lib.on_actions import read_country_on_actions
 import unittest
 from pathlib import Path
 
@@ -36,9 +37,7 @@ class InnerFrontierCountryContractsTest(unittest.TestCase):
         split_effect = (ROOT / "common/scripted_effects/ADISCORD_inner_frontier_effects.txt").read_text(
             encoding="utf-8-sig"
         )
-        collapse_on_actions = (
-            ROOT / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
-        ).read_text(encoding="utf-8-sig")
+        collapse_on_actions = read_country_on_actions(ROOT / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         self.assertEqual([], validate_external_gate_cleanup(split_effect, collapse_on_actions))
         for forbidden in (
             "ADISCORD_vorkerland_split_external_gate = yes",

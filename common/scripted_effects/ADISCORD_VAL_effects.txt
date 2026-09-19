@@ -18,6 +18,17 @@ VAL_change_contract_authority = {
 }
 
 VAL_refresh_contract_modifier = {
+	set_variable = { var = VAL_contract_overall_income_factor value = 0 }
+	set_variable = { var = VAL_contract_admin_expense_factor value = 0 }
+	if = {
+		limit = { has_variable = VAL_fiscal_administration_investment }
+		add_to_variable = { var = VAL_contract_overall_income_factor value = VAL_fiscal_administration_investment }
+	}
+	if = {
+		limit = { has_variable = VAL_fiscal_admin_savings }
+		add_to_variable = { var = VAL_contract_admin_expense_factor value = VAL_fiscal_admin_savings }
+	}
+
 	if = {
 		limit = { NOT = { has_variable = VAL_contract_band } }
 		set_variable = { var = VAL_contract_band value = -1 }
@@ -2158,6 +2169,9 @@ VAL_invest_civilian_industry = {
 		VAL_refresh_industrial_economy = yes
 	}
 }
+
+
+
 
 # --- livonn_settlement_effects ---
 # Kefreyt's postwar handling of Livonn.

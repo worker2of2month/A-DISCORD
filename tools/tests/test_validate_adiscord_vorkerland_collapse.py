@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import json
 import re
@@ -211,7 +212,7 @@ country_event = {
 
     def test_main_startup_is_fresh_campaign_only(self) -> None:
         startup = named_block(
-            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
             "on_startup",
         )
         marker = "ADISCORD_vorkerland_fresh_start_collapse_pending_v1"
@@ -271,7 +272,7 @@ country_event = {
         issues: list[str] = []
         validate_premature_wrk_release_contract(
             source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers'),
-            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
             read(
                 "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"
             ),
@@ -282,7 +283,7 @@ country_event = {
 
     def test_premature_release_validator_rejects_scope_and_branch_mutations(self) -> None:
         triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         capitulation = read(
             "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"
         )
@@ -614,7 +615,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
 
     def test_border_wars_use_decisions_without_recurring_seed_watchdogs(self) -> None:
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
         focus_decisions = read_focus_decisions()
 
@@ -712,7 +713,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
 
         rival = named_block(
             triggers, "ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT"
@@ -782,7 +783,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         regional = named_block(decisions, "ADISCORD_vorkerland_open_regional_fronts")
         self.assertEqual(
             set(re.findall(r"tag\s*=\s*([A-Z]{3})", named_block(regional, "allowed"))),
@@ -1022,7 +1023,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         wkr = named_block(initial, "WKR")
         self.assertIn("ADISCORD_vorkerland_ensure_wkr_home_guard = yes", wkr)
         startup = named_block(
-            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
             "on_startup",
         )
         self.assertNotIn("ADISCORD_vorkerland_ensure_wkr_home_guard = yes", startup)
@@ -1042,7 +1043,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertNotIn(
             "ADISCORD_vorkerland_ensure_wkr_home_guard = yes",
             named_block(
-                read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+                read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
                 "on_monthly",
             ),
         )
@@ -1135,7 +1136,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "remove_effect = { ADISCORD_vorkerland_raise_emergency_levies = yes }",
         ):
             self.assertIn(token, decision)
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         self.assertNotIn("ADISCORD_vorkerland_raise_emergency_levies", on_actions)
 
     def test_ivanland_starts_as_a_major_with_a_field_army(self) -> None:
@@ -1226,7 +1227,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             self.assertNotIn("has_war = no", named_block(triggers, key), key)
 
     def test_central_winners_receive_a_short_recovery_window(self) -> None:
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         capitulation = named_block(on_actions, "on_capitulation")
         self.assertIn("ADISCORD_vorkerland_is_main_claimant = yes", capitulation)
         self.assertIn("ADISCORD_vorkerland_settle_central_capitulation = yes", capitulation)
@@ -1327,7 +1328,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
 
     def test_central_minors_can_genuinely_defeat_a_main_claimant(self) -> None:
         capitulation = named_block(
-            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
             "on_capitulation",
         )
         self.assertNotIn(
@@ -1404,7 +1405,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             self.assertIn("destroy_entity = 610040", named_block(block, "40"))
         self.assertIn(f"{sync_name} = yes", smoke)
         self.assertIn("destroy_entity = 610040", named_block(smoke, "else"))
-        startup = named_block(read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_startup")
+        startup = named_block(read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'), "on_startup")
         # Startup has no scope. Use the permanent landmark state even if WRK
         # no longer exists after the civil war.
         self.assertIn(f"{sync_name} = yes", named_block(startup, "40"))
@@ -1444,7 +1445,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
 
     def test_tower_is_one_shot_and_dirty_zone_waits_three_years(self) -> None:
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         outbreak = event_block(events, "ADISCORD_vorkerland_collapse.1")
         reveal = event_block(events, "ADISCORD_vorkerland_collapse.85")
 
@@ -1804,7 +1805,7 @@ class FrontAndSupplyTests(unittest.TestCase):
         self.assertEqual(technical_aid.count(f"set_country_flag = {aid_flag}"), 1)
         self.assertNotIn(f"clr_country_flag = {aid_flag}", decisions)
 
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         self.assertNotIn("ADISCORD_vorkerland_tgd_rebuild_grid", on_actions)
 
     def test_border_states_are_not_demilitarized(self) -> None:
@@ -2089,7 +2090,7 @@ class FrontAndSupplyTests(unittest.TestCase):
         self.assertIn("has_global_flag = ADISCORD_vorkerland_reunification_verified", decision)
         self.assertIn("owns_state = 32", decision)
         self.assertIn("controls_state = 32", decision)
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         self.assertNotIn("ADISCORD_vorkerland_northern_loyalist_district_restored", decisions + on_actions)
 
 
@@ -2141,7 +2142,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         vad_cosmetics = named_block(claimant_cosmetics, "VAD")
         preserved_joint = named_block(vad_cosmetics, "if")
         ordinary_vad = named_block(vad_cosmetics, "else")
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         startup = named_block(on_actions, "on_startup")
         monthly = named_block(on_actions, "on_monthly")
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
@@ -2208,7 +2209,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
         startup = named_block(
-            read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
             "on_startup",
         )
         histories = {
@@ -2246,9 +2247,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         zao_cosmetics = named_block(cosmetics, "ZAO")
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
         repair = event_block(events, "ADISCORD_vorkerland_collapse.68")
-        on_actions = read(
-            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
-        )
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         startup = named_block(on_actions, "on_startup")
         monthly = named_block(on_actions, "on_monthly")
         focus_tree = source_section(read("common/national_focus/ADISCORD_vorkerland_focus.txt"), 'zao_focus')
@@ -2767,11 +2766,11 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         paths = (
             ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "collapse_effects"),
             ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "collapse_map_effects"),
-            ("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", None),
             ("events/ADISCORD_vorkerland_events.txt", "collapse_events"),
             ("common/decisions/ADISCORD_vorkerland_decisions.txt", "collapse_decisions"),
         )
         runtime = "\n".join((source_section(read(path), section) if section else read(path)) for path, section in paths)
+        runtime += "\n" + read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", "vorkerland_collapse")
         removals = set(re.findall(r"remove_ideas\s*=\s*([A-Za-z0-9_]+)", runtime))
         self.assertEqual(
             removals,
@@ -2823,7 +2822,7 @@ class InterventionAndVisualTests(unittest.TestCase):
             r"(.*?)(?=^country_event\s*=\s*\{|^add_namespace\s*=|\Z)",
             events,
         )
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         startup = named_block(on_actions, "on_startup")
         monthly = named_block(on_actions, "on_monthly")
 
@@ -2851,7 +2850,7 @@ class InterventionAndVisualTests(unittest.TestCase):
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         mandate = named_block(effects, "ADISCORD_vorkerland_setup_ivanland_mandate")
         appointment = named_block(effects, "ADISCORD_vorkerland_appoint_mateusk")
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         startup = named_block(on_actions, "on_startup")
         monthly = named_block(on_actions, "on_monthly")
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
@@ -2887,7 +2886,7 @@ class InterventionAndVisualTests(unittest.TestCase):
         events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
 
         cache_event = event_block(events, "ADISCORD_vorkerland_collapse.77")
         launch = named_block(effects, "ADISCORD_vorkerland_open_ivanland_intervention_front")
@@ -3100,7 +3099,7 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_vadim_etatist_role_added", failure)
         self.assertIn("Ivanland intervention resolved: FAILURE", failure)
         self.assertIn("clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded", failure)
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         capitulation = named_block(on_actions, "on_capitulation")
         self.assertIn("set_global_flag = skip_default_capitulation", capitulation)
         self.assertIn("tag = PWR", capitulation)
@@ -3113,7 +3112,7 @@ class InterventionAndVisualTests(unittest.TestCase):
         decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
         maps = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
 
         second = named_block(decisions, "ADISCORD_ivanland_second_intervention")
@@ -3408,7 +3407,7 @@ class InterventionAndVisualTests(unittest.TestCase):
             "set_cosmetic_tag = ZAO_zaozersk_republic",
         ):
             self.assertIn(token, sync)
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         for hook in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
             self.assertIn(
                 "ADISCORD_vorkerland_sync_independence_cosmetic = yes",
@@ -3453,7 +3452,7 @@ class InterventionAndVisualTests(unittest.TestCase):
             named_block(cosmetics, "SOL"),
         )
 
-        on_actions = read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         sol_hook_limit = "OR = { tag = ROM tag = TRU tag = ZAO tag = SOL }"
         for hook in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
             self.assertIn(sol_hook_limit, named_block(on_actions, hook), hook)

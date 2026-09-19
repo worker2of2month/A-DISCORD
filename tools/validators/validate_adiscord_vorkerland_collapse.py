@@ -2,6 +2,7 @@
 """Read-only gate for the current border-driven Vorkerland collapse."""
 
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import argparse
 import codecs
@@ -917,7 +918,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt",
         issues,
     ), 'phase_triggers')
-    on_actions = read(root, "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", issues)
+    on_actions = read_country_on_actions((root) / ("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), 'vorkerland_collapse')
     template_migration_on_actions = read(
         root,
         "common/on_actions/03_ADISCORD_vorkerland_force_template_migration_on_actions.txt",
@@ -3783,7 +3784,7 @@ def validate_ai(root: Path, issues: list[str]) -> None:
 def validate_outcomes(root: Path, issues: list[str]) -> None:
     maps = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_map_effects')
     triggers = source_section(read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues), 'collapse_triggers')
-    on_actions = read(root, "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", issues)
+    on_actions = read_country_on_actions((root) / ("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), 'vorkerland_collapse')
     events = source_section(read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'collapse_events')
     category_source = source_section(read(
         root,
@@ -4083,7 +4084,7 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
 
 
 def validate_exhaustion(root: Path, issues: list[str]) -> None:
-    on_actions = read(root, "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", issues)
+    on_actions = read_country_on_actions((root) / ("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), 'vorkerland_collapse')
     effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_effects')
     map_effects = source_section(read(
         root,

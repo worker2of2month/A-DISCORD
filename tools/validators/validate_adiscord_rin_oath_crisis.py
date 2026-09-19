@@ -2,6 +2,7 @@
 """Validate the event-driven Rhine Palatinate oath-crisis contract."""
 
 from __future__ import annotations
+from tools.lib.on_actions import read_country_on_actions
 
 import re
 import sys
@@ -84,6 +85,8 @@ def collect_issues() -> list[str]:
             IDEAS, MON_HISTORY, RIN_HISTORY, RIN_COUNTRY, RIN_OOB,
         )
     }
+
+    texts[ON_ACTIONS] = read_country_on_actions(ROOT / ON_ACTIONS, "rin")
 
     events = texts[EVENTS]
     event_ids = re.findall(r"(?m)^\s*id\s*=\s*(ADISCORD_rin_crisis\.\d+)\b", events)

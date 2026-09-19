@@ -39,8 +39,16 @@ Russian STP localisation belongs in `localisation/russian/ADISCORD_STP_l_russian
 focuses, decisions, BOP, interface and war text are sections of that file.
 STP scripted localisation belongs in `common/scripted_localisation/ADISCORD_STP_scripted_loc.txt`,
 including district status and preparation summaries.
-Country on_actions belong in `common/on_actions/02_ADISCORD_STP_on_actions.txt`.
-Keep the numeric prefix for capitulation-handler order. The shared startup
+Country lifecycle on_actions belong in `common/on_actions/02_ADISCORD_STP_on_actions.txt`.
+Scripted peace and capitulation dispatch is shared in
+`common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt`, with ordered
+country sections inside each native hook. Do not duplicate those hooks in
+country files. Keep effects, triggers and treaty-choice events in their existing
+country files. Northern reservation follows the settlement handlers; Livonn
+completion follows the SRP military result. The separate
+`ZZ_ADISCORD_default_capitulation_on_actions.txt` remains last.
+Update explicit tooling source views and verify the full native callback order
+when moving a handler. The shared startup
 initializer retains its single STP entry call before economy initialization.
 When consolidating, preserve script IDs and scope, update tools and docs that
 read the old paths, and remove the superseded files after verifying all

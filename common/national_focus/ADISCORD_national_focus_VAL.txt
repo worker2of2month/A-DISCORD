@@ -31,10 +31,7 @@ focus_tree = {
 		y = 0
 		cost = 5
 		available_if_capitulated = yes
-		ai_will_do = {
-			base = 1
-			modifier = { factor = 4 check_variable = { var = VAL_contract_authority value = 55 compare = less_than } }
-		}
+		ai_will_do = { base = 30 }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			add_political_power = 25
@@ -57,10 +54,7 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_The_Contract_State }
-		ai_will_do = {
-			base = 1
-			modifier = { factor = 4 check_variable = { var = VAL_contract_authority value = 55 compare = less_than } }
-		}
+		ai_will_do = { base = 15 }
 		completion_reward = {
 			VAL_apply_contract_administration_1 = yes
 			custom_effect_tooltip = VAL_focus_authority_10_tt
@@ -83,10 +77,7 @@ focus_tree = {
 		y = 2
 		cost = 5
 		prerequisite = { focus = VAL_The_Weaponry_Baron }
-		ai_will_do = {
-			base = 1
-			modifier = { factor = 4 check_variable = { var = VAL_contract_authority value = 65 compare = less_than } }
-		}
+		ai_will_do = { base = 10 }
 		completion_reward = {
 			ADISCORD_economy_receive_15 = yes
 			custom_effect_tooltip = VAL_focus_authority_5_tt
@@ -108,11 +99,7 @@ focus_tree = {
 		y = 2
 		cost = 5
 		prerequisite = { focus = VAL_The_Weaponry_Baron }
-		ai_will_do = {
-			base = 1
-			modifier = { factor = 4 check_variable = { var = VAL_contract_authority value = 70 compare = less_than } }
-
-		}
+		ai_will_do = { base = 10 }
 		completion_reward = {
 			VAL_apply_contract_army_1 = yes
 			custom_effect_tooltip = VAL_focus_authority_5_tt
@@ -135,9 +122,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Price_Of_Loyalty }
 		prerequisite = { focus = VAL_Count_The_Captains }
-		ai_will_do = {
-			base = 1
-		}
+		ai_will_do = { base = 10 }
 		completion_reward = {
 			add_war_support = 0.05
 			custom_effect_tooltip = VAL_focus_authority_10_tt
@@ -165,7 +150,7 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_The_Contract_State }
-		ai_will_do = { base = 1 }
+		ai_will_do = { base = 18 }
 		completion_reward = {
 			VAL_invest_arsenal_industry = yes
 			add_timed_idea = {
@@ -184,7 +169,7 @@ focus_tree = {
 		y = 2
 		cost = 5
 		prerequisite = { focus = VAL_Factories_Like_Cathedrals }
-		ai_will_do = { base = 1 }
+		ai_will_do = { base = 12 }
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = VAL }
 			custom_effect_tooltip = VAL_hot_production_lines_tt
@@ -556,7 +541,7 @@ focus_tree = {
 		y = 4
 		cost = 5
 		prerequisite = { focus = VAL_One_Ledger_One_Banner }
-		ai_will_do = { base = 1 }
+		ai_will_do = { base = 20 }
 		completion_reward = {
 			add_timed_idea = {
 				idea = VAL_northern_roads_drive
@@ -834,8 +819,15 @@ focus_tree = {
 			hidden_effect = {
 				VAL_apply_contract_industry_1 = yes
 			}
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_fiscal_administration_delta } }
+			hidden_effect = {
+				add_to_variable = { var = VAL_fiscal_administration_investment value = 0.10 }
+				add_to_variable = { var = VAL_fiscal_admin_savings value = -0.05 }
+				VAL_refresh_contract_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 16 }
 	}
 
 	focus = {
@@ -916,7 +908,7 @@ focus_tree = {
 				add_building_construction = { type = infrastructure level = 1 instant_build = yes }
 			}
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 30 }
 	}
 
 	focus = {
@@ -930,7 +922,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 2000 producer = VAL }
 		}
-		ai_will_do = { base = 4 modifier = { factor = 2 has_completed_focus = VAL_Quarterly_Contract_Norm } }
+		ai_will_do = { base = 20 }
 	}
 
 	focus = {
@@ -1112,8 +1104,9 @@ focus_tree = {
 			VAL_advance_economic_recovery = yes
 			add_political_power = 75
 			country_event = { id = val_rework.10 }
+			ADISCORD_economy_receive_100 = yes
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = { base = 60 }
 	}
 
 	focus = {
@@ -1128,7 +1121,7 @@ focus_tree = {
 			VAL_advance_economic_recovery = yes
 			add_tech_bonus = { name = VAL_frontier_industry_bonus bonus = 0.5 uses = 1 category = industry }
 		}
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 50 }
 	}
 
 
@@ -1339,6 +1332,12 @@ focus_tree = {
 				VAL_refresh_contract_modifier = yes
 				ADISCORD_economy_mark_dirty = yes
 			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_fiscal_administration_investment value = 0.10 }
+				add_to_variable = { var = VAL_fiscal_admin_savings value = -0.05 }
+				VAL_refresh_contract_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1400,7 +1399,7 @@ focus_tree = {
 			}
 			hidden_effect = { VAL_apply_contract_industry_2 = yes }
 		}
-		ai_will_do = { base = 4 }
+		ai_will_do = { base = 30 }
 	}
 
 	focus = {
@@ -1417,7 +1416,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 2000 producer = VAL }
 			add_political_power = 25
 		}
-		ai_will_do = { base = 4 modifier = { factor = 2 has_completed_focus = VAL_Quarterly_Contract_Norm } }
+		ai_will_do = { base = 25 }
 	}
 
 	focus = {
@@ -1457,8 +1456,15 @@ focus_tree = {
 				}
 			}
 			hidden_effect = { VAL_apply_contract_industry_3 = yes }
+			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_fiscal_administration_delta } }
+			hidden_effect = {
+				add_to_variable = { var = VAL_fiscal_administration_investment value = 0.10 }
+				add_to_variable = { var = VAL_fiscal_admin_savings value = -0.05 }
+				VAL_refresh_contract_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = { base = 40 }
 	}
 
 #############################################
@@ -1897,11 +1903,11 @@ focus_tree = {
         x = 28
         y = 24
         cost = 5
-        prerequisite = { focus = VAL_The_Steel_Contract }
-        available = { VAL_frontier_postwar = yes }
+        prerequisite = { focus = VAL_The_Steel_Contract focus = VAL_Market_Roads_North }
+        available = { custom_trigger_tooltip = { tooltip = VAL_frontier_postwar_ready_tt VAL_frontier_postwar = yes } }
 
         completion_reward = { add_political_power = 75 add_intel = { target = NOD army_intel = 15 } }
-        ai_will_do = { base = 5 }
+        ai_will_do = { base = 40 }
     }
     focus = {
         id = VAL_frontier_logistics
@@ -1912,8 +1918,10 @@ focus_tree = {
         prerequisite = { focus = VAL_frontier_conference }
 
 
-        completion_reward = { unlock_decision_tooltip = VAL_frontier_transport_contract effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_supply_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_supply_bonus value = -0.08 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } army_experience = 20 }
-        ai_will_do = { base = 5 }
+        completion_reward = { unlock_decision_tooltip = VAL_frontier_transport_contract effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_supply_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_supply_bonus value = -0.08 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } army_experience = 20
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 100 producer = VAL }
+		}
+        ai_will_do = { base = 35 }
     }
     focus = {
         id = VAL_frontier_commissioners
@@ -1925,7 +1933,7 @@ focus_tree = {
 
         mutually_exclusive = { focus = VAL_frontier_provincial_offices }
         completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_trade_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_trade_bonus value = 0.1 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } custom_effect_tooltip = VAL_frontier_commissioners_tt }
-        ai_will_do = { base = 5 }
+        ai_will_do = { base = 25 }
     }
     focus = {
         id = VAL_frontier_provincial_offices
@@ -1937,7 +1945,7 @@ focus_tree = {
 
         mutually_exclusive = { focus = VAL_frontier_commissioners }
         completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_output_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_output_bonus value = 0.05 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } custom_effect_tooltip = VAL_frontier_provinces_tt }
-        ai_will_do = { base = 5 }
+        ai_will_do = { base = 25 }
     }
     focus = {
         id = VAL_frontier_return_irem
@@ -1986,8 +1994,9 @@ focus_tree = {
             unlock_decision_tooltip = VAL_frontier_demand_CIN
             unlock_decision_tooltip = VAL_frontier_demand_OSF
             unlock_decision_tooltip = VAL_frontier_demand_APH
-        }
-        ai_will_do = { base = 5 }
+			add_political_power = 75
+		}
+        ai_will_do = { base = 45 }
     }
     focus = {
         id = VAL_frontier_treaty_offices

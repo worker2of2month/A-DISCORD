@@ -1,3 +1,4 @@
+from tools.lib.on_actions import read_country_on_actions
 import re
 from itertools import permutations
 import unittest
@@ -223,7 +224,7 @@ class ValTierTransitionContractTests(unittest.TestCase):
         cls.effects = source_section(EFFECTS_PATH.read_text(encoding="utf-8-sig"), 'rework_effects')
         cls.ideas = IDEAS_PATH.read_text(encoding="utf-8-sig")
         cls.focuses = FOCUSES_PATH.read_text(encoding="utf-8-sig")
-        cls.on_actions = ON_ACTIONS_PATH.read_text(encoding="utf-8-sig")
+        cls.on_actions = read_country_on_actions(ON_ACTIONS_PATH, 'kefreyt')
         cls.foreign_effects = source_section(FOREIGN_EFFECTS_PATH.read_text(encoding="utf-8-sig"), 'foreign_operation_effects')
 
     def effect(self, family: str, tier: int) -> str:
@@ -1017,7 +1018,7 @@ class ValNativePreviewTests(unittest.TestCase):
             "VAL_Contract_General_Staff": ("VAL_general_staff_delta", {"planning_speed": 0.05, "equipment_capture_factor": 0.03}),
             "VAL_Stahls_Schedules": ("VAL_stahls_delta", {"army_org_regain": 0.03, "supply_consumption_factor": -0.05}),
             "VAL_Trading_Partners": ("VAL_trading_partners_delta", {"ADISCORD_economy_trade_income_factor": 0.07, "political_power_gain": 0.10}),
-            "VAL_Export_Clearing_House": ("VAL_export_clearing_delta", {"ADISCORD_economy_trade_income_factor": 0.05}),
+            "VAL_Export_Clearing_House": ("VAL_export_clearing_delta", {"ADISCORD_economy_trade_income_factor": 0.05, "ADISCORD_economy_overall_income_factor": 0.10, "ADISCORD_economy_admin_expense_factor": -0.05}),
             "VAL_Hire_Out_War": ("VAL_hire_out_war_delta", {"ADISCORD_economy_military_industry_income_factor": 0.05}),
             "VAL_Paid_Loyalty": ("VAL_paid_loyalty_delta", {"ADISCORD_economy_army_expense_factor": -0.03}),
             "VAL_Closed_Ledgers": ("VAL_closed_ledgers_delta", {"political_power_gain": 0.05}),
@@ -1137,6 +1138,8 @@ class ValNativePreviewTests(unittest.TestCase):
                     expected = [("VAL_industry_2_dummy", "VAL_industry_1_to_2_delta" if level == 1 else "VAL_industry_2_delta")]
                 elif focus_id == "VAL_Industrial_Mobilization_Plan" and (level or 0) < 3:
                     expected = [("VAL_industry_3_dummy", "VAL_industry_3_delta" if (level or 0) < 1 else "VAL_industry_1_to_3_delta" if level == 1 else "VAL_industry_2_to_3_delta")]
+                if focus_id in {"VAL_Contract_Accounting_Office", "VAL_Industrial_Mobilization_Plan"}:
+                    expected.append(("VAL_contract_delta_dummy", "VAL_fiscal_administration_delta"))
                 with self.subTest(focus=focus_id, level=level):
                     self.assertEqual(previews(reward, facts), expected)
 
@@ -2173,7 +2176,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
 
     def test_capitulation_handler_reserves_each_member_not_just_the_addressee(self):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, walk
-        actions = block(parse_clausewitz(ON_ACTIONS_PATH.read_text(encoding="utf-8")), "on_actions")
+        actions = block(parse_clausewitz(read_country_on_actions(ON_ACTIONS_PATH, 'kefreyt')), "on_actions")
         immediate = block(block(actions, "on_capitulation_immediate"), "effect")
         handler = next(e.value for e in immediate if e.key == "if" and any(x.key == "set_country_flag" and x.value == "VAL_frontier_capitulation_pending" for x in e.value))
         for target in (1, 2, 3):
@@ -2544,7 +2547,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
 
     def test_unrelated_capitulator_cannot_install_nods_administration(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk, parse_clausewitz
-        actions = block(parse_clausewitz(ON_ACTIONS_PATH.read_text(encoding="utf-8")), "on_actions")
+        actions = block(parse_clausewitz(read_country_on_actions(ON_ACTIONS_PATH, 'kefreyt')), "on_actions")
         immediate = block(block(actions, "on_capitulation_immediate"), "effect")
         handler = next(e.value for e in immediate if e.key == "if" and any(x.key == "set_country_flag" and x.value == "VAL_frontier_capitulation_pending" for x in e.value))
         gate = block(handler, "limit")
@@ -3136,7 +3139,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         formation = self.getblock(self.parse(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_form_occidian_administration")
         clearing = [e.value for e in walk(formation) if e.key == "clr_country_flag"]
         self.assertIn("VAL_occidian_settlement_pending", clearing)
-        on_actions = ON_ACTIONS_PATH.read_text(encoding="utf-8")
+        on_actions = read_country_on_actions(ON_ACTIONS_PATH, 'kefreyt')
         self.assertRegex(on_actions, r"limit\s*=\s*\{\s*tag\s*=\s*VAL\s*\}\s*clr_country_flag\s*=\s*VAL_occidian_settlement_pending")
 
     def test_occidian_lifecycle_bounds_land_preserves_armies_and_takes_time(self):

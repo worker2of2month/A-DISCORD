@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tools.lib.on_actions import country_on_actions_entries, read_country_on_actions
 
 import json
 import re
@@ -67,7 +68,10 @@ FREEDOM_COURSE_IDS = (
 BARCHEL_CHAIN = ("STP_pc_sot_chain", "STP_pc_sot_two_threats", "STP_pc_sot_keep_command")
 
 
-def read(path: Path) -> str:
+def read(path: str | Path) -> str:
+    path = Path(path)
+    if not path.is_absolute():
+        path = ROOT / path
     return path.read_text(encoding="utf-8-sig" if path.suffix == ".yml" else "utf-8")
 
 
@@ -400,7 +404,7 @@ class PostwarContinuationContracts(unittest.TestCase):
             self.assertTrue(matches_conditions(gate, facts, "STS"), focus_id)
 
     def test_pending_package_recovers_after_all_focus_and_settlement_callers_finished(self) -> None:
-        periodic = block(block(entries(ON_ACTIONS), "on_actions"), "on_weekly_STS")
+        periodic = block(block(country_on_actions_entries(ON_ACTIONS, 'stelander'), "on_actions"), "on_weekly_STS")
         facts = package_facts()
         facts.update({
             ("STS", "has_completed_focus", "STP_pc_lib_transition"): True,
@@ -431,7 +435,7 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertNotIn(("STS", "has_country_flag", "STP_pc_lib_package_pending"), facts)
 
     def test_package_recovery_is_scoped_to_an_existing_sts_with_a_pending_receipt(self) -> None:
-        periodic = block(block(entries(ON_ACTIONS), "on_actions"), "on_weekly_STS")
+        periodic = block(block(country_on_actions_entries(ON_ACTIONS, 'stelander'), "on_actions"), "on_weekly_STS")
         self.assertFalse(any(entry.key in {"every_country", "every_possible_country"} for entry in walk(periodic)))
         for exists, pending in ((True, False), (False, False), (False, True)):
             with self.subTest(exists=exists, pending=pending):
@@ -621,7 +625,7 @@ class PostwarContinuationContracts(unittest.TestCase):
 
     def test_postwar_wars_use_native_relations_without_marker_flags(self) -> None:
         gameplay = "\n".join((
-            read("common/on_actions/02_ADISCORD_STP_on_actions.txt"),
+            read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'),
             read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
             read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
             read("events/ADISCORD_STP_events.txt"),
@@ -630,7 +634,7 @@ class PostwarContinuationContracts(unittest.TestCase):
         for obsolete in ("STP_pc_war_val", "STP_pc_war_nod", "STP_pc_war_with_sts"):
             self.assertNotIn(obsolete, gameplay)
 
-        on_actions = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        on_actions = read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
         self.assertNotIn("Heal postwar opponent markers", on_actions)
         self.assertIn("ROOT = { tag = VAL has_war_with = STS }", on_actions)
         self.assertIn("ROOT = { tag = NOD has_war_with = STS }", on_actions)
@@ -642,7 +646,7 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertIn("declare_war_on = { target = NOD type = annex_everything }", effects)
 
     def test_postwar_settlement_is_a_sibling_of_the_nod_defeat_router(self) -> None:
-        effect = ast_block(ast_block(relative_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions"), "on_capitulation")
+        effect = ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions"), "on_capitulation")
         top = ast_block(effect, "effect")
         branches = [e for e in top if e.key in ("if", "else_if", "else")]
         nod = next(e for e in branches if any(c.key == "set_country_flag" and c.value == "NOD_cw_defeated" for c in prep_walk(e.value)))
@@ -651,7 +655,7 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertFalse(any(c.key == "STP_pc_begin_settlement" for c in prep_walk(nod.value)))
         self.assertFalse(any(c.key == "white_peace" for c in prep_walk(postwar.value)))
         self.assertTrue(any(c.key == "var" and c.value == "STP_pc_cap_side" for c in prep_walk(postwar.value)))
-        immediate = ast_block(ast_block(relative_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions"), "on_capitulation_immediate")
+        immediate = ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions"), "on_capitulation_immediate")
         snapshot = next(e.value for e in ast_block(immediate, "effect") if e.key == "else_if" and any(c.key == "STP_cw_snapshot_capitulation_occupier" for c in prep_walk(e.value)))
         root = ast_block(ast_block(snapshot, "limit"), "ROOT")
         val = next(e.value for e in ast_block(root, "OR") if e.key == "AND" and any(c.key == "tag" and c.value == "VAL" for c in prep_walk(e.value)))
@@ -661,7 +665,7 @@ class PostwarContinuationContracts(unittest.TestCase):
                 self.assertTrue(any(c.key == "has_war_with" and c.value == "STS" for c in prep_walk(branch)))
                 self.assertFalse(any(c.key == "has_country_flag" and c.value.startswith("STP_pc_war_") for c in prep_walk(branch)))
 
-        immediate_text = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        immediate_text = read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
         for opponent in ("VAL", "NOD"):
             marker = f"ROOT = {{ tag = {opponent} has_war_with = STS }}"
             start = immediate_text.index(marker)
@@ -742,7 +746,7 @@ class PostwarContinuationContracts(unittest.TestCase):
     def test_kefreyt_defeat_returns_all_stelander_cores_before_white_peace(self) -> None:
         effects = relative_entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         recovery = ast_block(effects, "STP_pc_recover_stelander_cores_from_val")
-        self.assertTrue(any(e.key == "every_state" for e in recovery))
+        self.assertTrue(any(e.key == "every_state" for e in prep_walk(recovery)))
         recovery_text = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         recovery_text = recovery_text[recovery_text.index("STP_pc_recover_stelander_cores_from_val = {"):]
         recovery_text = recovery_text[:recovery_text.index("\nSTP_pc_begin_settlement = {")]
@@ -1124,21 +1128,33 @@ class PostwarRecoveryTransactions(unittest.TestCase):
             self.assertEqual(facts[("STS", "variable", "STP_pw_recovery_progress")], index)
         self.assertEqual(facts[("STS", "variable", "ADISCORD_economy_treasury")], 740)
 
-    def test_illegal_targets_cannot_create_campaign_flags(self):
+    def test_illegal_targets_cannot_start_native_campaign_wars(self):
         for tag in ("VAL", "NOD"):
+            helper = expand(self.effects[f"STP_pc_declare_war_{tag.lower()}"])
             gate = expand(parse_clausewitz(f"STP_pc_can_confront_{tag.lower()} = yes"))
             facts = package_facts()
             self.assertTrue(matches_conditions(gate, facts, "STS"))
-            for key in ((tag, "exists", "yes"), (tag, "has_capitulated", "no"), ("STS", "is_subject", "no")):
-                invalid = dict(facts); invalid[key] = False
+            scenarios = [("legal", facts, True)]
+            for key in ((tag, "exists", "yes"), (tag, "has_capitulated", "no"),
+                        ("STS", "is_subject", "no")):
+                invalid = {**facts, key: False}
                 self.assertFalse(matches_conditions(gate, invalid, "STS"), (tag, key))
+                scenarios.append((str(key), invalid, False))
             allied = {**facts, ("STS", "is_in_faction_with", tag): True}
             self.assertFalse(matches_conditions(gate, allied, "STS"))
+            scenarios.append(("allied", allied, False))
             existing = {**facts, ("STS", "has_war_with", tag): True}
             self.assertTrue(matches_conditions(gate, existing, "STS"))
-            helper = block(self.effects[f"STP_pc_declare_war_{tag.lower()}"], "if")
-            mark = [e.value for e in helper if e.key == "if"][-1]
-            self.assertEqual(scalar(block(mark, "limit"), "has_war_with"), tag)
+            scenarios.append(("already at war", existing, False))
+            for label, scenario, should_declare in scenarios:
+                with self.subTest(target=tag, scenario=label):
+                    chosen = list(selected_effects(helper, scenario, "STS"))
+                    declarations = [prep_scalar(effect.value, "target")
+                                    for _, effect in chosen if effect.key == "declare_war_on"]
+                    self.assertEqual(declarations, [tag] if should_declare else [])
+                    self.assertFalse(any(effect.key == "set_country_flag"
+                                         and effect.value.startswith("STP_pc_war_")
+                                         for _, effect in chosen))
 
     def test_invalid_recipient_releases_only_its_receipt_and_advances_queue(self):
         offer = block(entries(EFFECTS), "STP_pc_offer_liberation_package")
