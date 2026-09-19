@@ -13,7 +13,7 @@ jobs:
         with:
           fetch-depth: 64
           show-progress: false
-      - run: python -m pip install Pillow numpy
+      - run: python -m pip install Pillow numpy PyYAML
       - name: Reconcile current main
         run: |
           git config user.name 'A-Discord automation'
@@ -21,83 +21,32 @@ jobs:
           git fetch --no-tags --depth=64 origin main:refs/remotes/origin/main
           git rev-parse origin/main > /tmp/economy-main-parent
           git merge --no-edit origin/main
-      - name: Regression for mixed tier and aggregate previews
+      - name: Apply previously verified mixed-preview correction
         run: |
           python -B - <<'PY'
-          from pathlib import Path
-          import subprocess
-          p=Path('tools/tests/test_adiscord_economy_rebalance.py')
-          text=p.read_text(encoding='utf-8')
-          start=text.index('            for variable, expected in (("VAL_fiscal_administration_investment"')
-          end=text.index('\n        effects = read(',start)
-          body='''            changes = [
-                          {child.key: child.value for child in node.value}
-                          for node in walk(nodes)
-                          if node.key == "add_to_variable"
-                      ]
-                      expected_deltas = {
-                          "VAL_fiscal_administration_investment": "0.10",
-                          "VAL_fiscal_admin_savings": "-0.05",
-                      }
-                      for variable, expected in expected_deltas.items():
-                          self.assertTrue(
-                              any(change.get("var") == variable and change.get("value") == expected
-                                  for change in changes), identifier,
-                          )
-                      self.assertTrue(
-                          any(node.key == "VAL_refresh_contract_modifier" and node.value == "yes"
-                              for node in walk(nodes)), identifier,
-                      )'''
-          text=text[:start]+body+text[end:]
-          method='''
-              def test_mixed_fiscal_and_industry_previews_reject_a_wrong_delta(self):
-                  from tools.validators.validate_adiscord_val_rework import validate_val_preview_ideas
-                  ideas = read("common/ideas/ADISCORD_VAL_rework_ideas.txt")
-                  effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
-                  focuses = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
-                  dynamic = read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt")
-                  sources = {"focuses": focuses, "effects": effects}
-                  self.assertEqual(validate_val_preview_ideas(ideas, sources, dynamic, effects)[1], [])
-                  source_delta = "var = VAL_fiscal_admin_savings value = -0.05"
-                  self.assertEqual(focuses.count(source_delta), 3)
-                  sources["focuses"] = focuses.replace(source_delta, "var = VAL_fiscal_admin_savings value = -0.10", 1)
-                  issues = validate_val_preview_ideas(ideas, sources, dynamic, effects)[1]
-                  self.assertTrue(any("VAL_fiscal_administration_delta does not match actual" in issue for issue in issues))
-          '''
-          text=text.replace('\n\nif __name__ == "__main__":',method+'\n\nif __name__ == "__main__":')
-          p.write_text(text,encoding='utf-8')
-          result=subprocess.run(['python','-B','-m','unittest','tools.tests.test_adiscord_economy_rebalance.RecoveryRewardTests.test_mixed_fiscal_and_industry_previews_reject_a_wrong_delta','-v'],capture_output=True,text=True)
-          print('MIXED PREVIEW REGRESSION BEFORE FIX',result.stdout,result.stderr)
-          assert result.returncode!=0 and 'AssertionError' in result.stderr
-          p=Path('tools/validators/validate_adiscord_val_rework.py')
-          text=p.read_text(encoding='utf-8')
-          old='''            elif entry.key == "swap_ideas" and inside:
-                          found.append(script_fields(entry.value))'''
-          new='''            elif entry.key == "swap_ideas" and inside:
-                          pair = script_fields(entry.value)
-                          after = pair.get("add_idea")
-                          native = names.get(after, "")
-                          # Aggregate deltas are already checked independently of tier changes.
-                          aggregate = (after in checked and native in native_maps
-                                       and not native.startswith("VAL_contract_industry_"))
-                          if not aggregate:
-                              found.append(pair)'''
-          assert text.count(old)==1
-          p.write_text(text.replace(old,new),encoding='utf-8')
+          import subprocess,yaml
+          source=subprocess.check_output(['git','show','071efa66e465113b4d06eef8583a75ad064de109:.github/workflows/economy-review-snapshot.yml'],text=True)
+          workflow=yaml.safe_load(source)
+          steps=workflow['jobs']['final-verification']['steps']
+          step=next(s for s in steps if s.get('name')=='Regression for mixed tier and aggregate previews')
+          subprocess.run(['bash','-e','-c',step['run']],check=True)
           PY
-      - name: Remove temporary review tools from the final tree
+      - name: Align explicit existing regression expectations
+        run: python -B .github/economy_test_alignment.py
+      - name: Verify affected native preview and recovery cases
         run: |
-          git rm -- .github/workflows/economy-review-snapshot.yml .github/economy_review_patch.py
+          python -B -m unittest tools.tests.test_adiscord_economy_rebalance tools.tests.test_validate_adiscord_val_rework.ValNativePreviewTests tools.tests.test_validate_adiscord_val_rework.ValRewardValidatorTests.test_production_preview_contracts_are_valid tools.tests.test_adiscord_economy_weekly_contracts.EconomySemanticFixtureTests.test_core_policy_and_debt_flow_negative_fixtures tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_economic_building_reference_documents_roles_and_formulas tools.tests.test_adiscord_stp_postwar_continuation.PostwarContinuationContracts.test_postwar_settlement_is_a_sibling_of_the_nod_defeat_router tools.tests.test_adiscord_stp_postwar_continuation.PostwarContinuationContracts.test_postwar_wars_use_native_relations_without_marker_flags tools.tests.test_adiscord_stp_postwar_continuation.PostwarContinuationContracts.test_kefreyt_defeat_returns_all_stelander_cores_before_white_peace tools.tests.test_adiscord_stp_postwar_continuation.PostwarRecoveryTransactions.test_illegal_targets_cannot_start_native_campaign_wars -v
+      - name: Remove temporary review tools from final tree
+        run: |
+          git rm -- .github/workflows/economy-review-snapshot.yml .github/economy_review_patch.py .github/economy_test_alignment.py
           git diff --check
-      - name: Verify native preview and accounting regressions
-        run: python -B -m unittest tools.tests.test_adiscord_economy_rebalance tools.tests.test_validate_adiscord_val_rework.ValRewardValidatorTests.test_production_preview_contracts_are_valid tools.tests.test_adiscord_economy_weekly_contracts.EconomySemanticFixtureTests.test_core_policy_and_debt_flow_negative_fixtures -v
       - name: Complete focused test suite
         run: python -B -m unittest tools.tests.test_adiscord_economy_rebalance tools.tests.test_adiscord_economy_weekly_contracts tools.tests.test_validate_adiscord_val_rework tools.tests.test_adiscord_stp_postwar_economy tools.tests.test_adiscord_stp_postwar_unlock tools.tests.test_adiscord_val_stelander_defeat tools.tests.test_adiscord_val_livonn_settlement tools.tests.test_adiscord_stp_postwar_continuation tools.tests.test_adiscord_stp_postwar_interactivity tools.tests.test_val_export_market -q
-      - name: Validate the final total conversion
+      - name: Validate final total conversion
         run: python -B tools/validate_tc.py --limit 300
       - name: Publish clean candidate without advancing main
         run: |
-          git add -- tools/tests/test_adiscord_economy_rebalance.py tools/validators/validate_adiscord_val_rework.py
+          git add -- tools/tests/test_adiscord_economy_rebalance.py tools/validators/validate_adiscord_val_rework.py tools/tests/test_adiscord_economy_weekly_contracts.py tools/tests/test_validate_adiscord_val_rework.py tools/tests/test_adiscord_stp_postwar_continuation.py
           git diff --cached --check
           MAIN_PARENT=$(cat /tmp/economy-main-parent)
           TREE=$(git write-tree)
