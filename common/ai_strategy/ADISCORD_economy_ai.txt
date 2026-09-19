@@ -49,7 +49,7 @@ ADISCORD_ai_fiscal_recovery = {
 	ai_strategy = { type = ai_wanted_divisions_factor value = -10 }
 	ai_strategy = { type = added_military_to_civilian_factory_ratio value = -35 }
 	ai_strategy = { type = building_target id = industrial_complex value = 8 }
-	ai_strategy = { type = building_target id = ADISCORD_business_center value = 1 }
+	ai_strategy = { type = building_target id = ADISCORD_business_center value = 2 }
 	ai_strategy = { type = building_target id = ADISCORD_science_center value = 0 }
 	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 0 }
 }
@@ -63,9 +63,9 @@ ADISCORD_ai_healthy_civilian_growth = {
 	abort_when_not_enabled = yes
 
 	ai_strategy = { type = added_military_to_civilian_factory_ratio value = -15 }
-	ai_strategy = { type = building_target id = ADISCORD_business_center value = 2 }
+	ai_strategy = { type = building_target id = ADISCORD_business_center value = 8 }
 	ai_strategy = { type = building_target id = ADISCORD_science_center value = 2 }
-	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 2 }
+	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 4 }
 }
 
 ADISCORD_ai_healthy_war_industry = {
@@ -77,7 +77,7 @@ ADISCORD_ai_healthy_war_industry = {
 
 	ai_strategy = { type = ai_wanted_divisions_factor value = 15 }
 	ai_strategy = { type = added_military_to_civilian_factory_ratio value = 35 }
-	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 3 }
+	ai_strategy = { type = building_target id = ADISCORD_industrial_cluster value = 4 }
 	ai_strategy = { type = equipment_production_factor id = infantry value = 20 }
 	ai_strategy = { type = equipment_production_factor id = artillery value = 10 }
 }

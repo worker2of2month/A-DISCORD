@@ -3284,16 +3284,18 @@ def validate(root: Path = ROOT) -> list[str]:
             "industrial cluster weighted output is not refreshed by the cached state recount")
     require(recount.count("is_controlled_by = PREV") >= 2 and "ROOT = {" not in recount,
             "occupied economic buildings still contribute income or national network bonuses")
-    require("ADISCORD_economy_cluster_factory_output_percent value = 5" in recount
+    require("ADISCORD_economy_cluster_factory_output_percent value = 10" in recount
             and "ADISCORD_economy_cluster_factory_output_factor value = 100" in recount
-            and "max = 15" in recount,
-            "industrial cluster output formula is not bounded to +5% per state level")
-    custom_targets = [int(value) for value in re.findall(
-        r"building_target\s+id\s*=\s*ADISCORD_(?:business_center|science_center|industrial_cluster)\s+value\s*=\s*(\d+)",
+            and "max = 30" in recount,
+            "industrial cluster output formula is not bounded to +10% per state level")
+    custom_targets = re.findall(
+        r"building_target\s+id\s*=\s*ADISCORD_(business_center|science_center|industrial_cluster)\s+value\s*=\s*(\d+)",
         economy_ai,
-    )]
-    require(bool(custom_targets) and max(custom_targets) <= 3,
-            "AI economic-building targets are missing or encourage uncontrolled construction")
+    )
+    target_limits = {"business_center": 8, "science_center": 2, "industrial_cluster": 4}
+    require(bool(custom_targets) and all(int(value) <= target_limits[building]
+                                       for building, value in custom_targets),
+            "AI economic-building targets are missing or exceed their role-specific limits")
 
     factory_source_cache = block(effects, "ADISCORD_economy_cache_weekly_factory_sources")
     construction_expenses = block(effects, "ADISCORD_economy_calculate_construction_expenses")

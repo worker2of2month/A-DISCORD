@@ -888,11 +888,12 @@ ADISCORD_economy_calculate_personal_income = {
 	clamp_variable = { var = ADISCORD_economy_personal_income min = 0 max = 100 }
 }
 ADISCORD_economy_calculate_business_income = {
-	# Business/taxable services. Stronger than ordinary taxes, weaker than resource rents.
+	# Business centers generate taxable services; the economic model and
+	# collection modifiers act on this base before weekly settlement.
 	set_variable = { var = ADISCORD_economy_business_income value = ADISCORD_economy_cached_civilian_factories }
 	multiply_variable = { var = ADISCORD_economy_business_income value = 0.45 }
 	set_temp_variable = { var = ADISCORD_economy_business_building_temp value = ADISCORD_business_center_count }
-	multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 2.10 }
+	multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 30 }
 	if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 1.20 } }
 	if = { limit = { ADISCORD_economy_model_is_mixed = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 1.10 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } multiply_temp_variable = { var = ADISCORD_economy_business_building_temp value = 0.70 } }
@@ -907,15 +908,15 @@ ADISCORD_economy_calculate_business_income = {
 	if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } multiply_variable = { var = ADISCORD_economy_business_income value = 0.95 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } multiply_variable = { var = ADISCORD_economy_business_income value = 0.65 } }
 	if = { limit = { ADISCORD_economy_model_is_oligarchic_clan = yes } multiply_variable = { var = ADISCORD_economy_business_income value = 1.15 } }
-	clamp_variable = { var = ADISCORD_economy_business_income min = 0 max = 150 }
+	clamp_variable = { var = ADISCORD_economy_business_income min = 0 max = 5000 }
 }
 ADISCORD_economy_calculate_consumer_goods_income = {
-	# Civilian factories are taxable civilian output. This is deliberately below resources/business and below taxes in most states.
+	# Civilian factories and industrial clusters contribute taxable output.
 	set_variable = { var = ADISCORD_economy_consumer_goods_income value = ADISCORD_economy_cached_civilian_factories }
 	multiply_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.21 }
 	# Industrial clusters mainly support civilian taxable output. They are not a default money printer for military factories.
 	set_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = ADISCORD_industrial_cluster_count }
-	multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 0.45 }
+	multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 10 }
 	if = { limit = { ADISCORD_economy_model_is_state_coordinated = yes } multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 1.15 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes ADISCORD_state_development_at_least_4 = yes } multiply_temp_variable = { var = ADISCORD_economy_consumer_goods_cluster_temp value = 1.25 } }
 	add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = ADISCORD_economy_consumer_goods_cluster_temp }
@@ -925,7 +926,7 @@ ADISCORD_economy_calculate_consumer_goods_income = {
 	if = { limit = { ADISCORD_economy_model_is_decentralized_market = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.4 } }
 	if = { limit = { ADISCORD_economy_model_is_mixed = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = 0.2 } }
 	if = { limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes } add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = -0.4 } }
-	clamp_variable = { var = ADISCORD_economy_consumer_goods_income min = 0 max = 100 }
+	clamp_variable = { var = ADISCORD_economy_consumer_goods_income min = 0 max = 5000 }
 }
 ADISCORD_economy_calculate_factory_income = {
 	# Military factories are normally an expense, not state income. Income appears only through arms-export/private-contractor profiles.
@@ -1084,8 +1085,8 @@ ADISCORD_economy_apply_tax_burden_to_income = {
 		add_to_variable = { var = ADISCORD_economy_consumer_goods_income value = -0.3 }
 	}
 	clamp_variable = { var = ADISCORD_economy_personal_income min = 0 max = 100 }
-	clamp_variable = { var = ADISCORD_economy_business_income min = 0 max = 150 }
-	clamp_variable = { var = ADISCORD_economy_consumer_goods_income min = 0 max = 100 }
+	clamp_variable = { var = ADISCORD_economy_business_income min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_consumer_goods_income min = 0 max = 5000 }
 	clamp_variable = { var = ADISCORD_economy_factory_income min = 0 max = 150 }
 }
 
@@ -1117,8 +1118,8 @@ ADISCORD_economy_recalculate_tax_dependent_income = {
 	multiply_variable = { var = ADISCORD_economy_factory_income value = ADISCORD_economy_final_tax_collection_factor_bp }
 	divide_variable = { var = ADISCORD_economy_factory_income value = 100 }
 	clamp_variable = { var = ADISCORD_economy_personal_income min = 0 max = 500 }
-	clamp_variable = { var = ADISCORD_economy_business_income min = 0 max = 500 }
-	clamp_variable = { var = ADISCORD_economy_consumer_goods_income min = 0 max = 500 }
+	clamp_variable = { var = ADISCORD_economy_business_income min = 0 max = 5000 }
+	clamp_variable = { var = ADISCORD_economy_consumer_goods_income min = 0 max = 5000 }
 	clamp_variable = { var = ADISCORD_economy_factory_income min = 0 max = 500 }
 	set_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_personal_income }
 	add_to_variable = { var = ADISCORD_economy_monthly_income value = ADISCORD_economy_business_income }
@@ -2988,17 +2989,17 @@ ADISCORD_economy_recount_economic_buildings = {
 	}
 
 	# Example: 10 operational military factories under a level-2 cluster among
-	# 20 national factories become a +5% country modifier: (10 * 2 * 5) / 20.
+	# 20 national factories become a +10% country modifier: (10 * 2 * 10) / 20.
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_operational_military_factories_temp value = 0 compare = greater_than } }
 		set_variable = { var = ADISCORD_economy_cluster_factory_output_percent value = ADISCORD_economy_cluster_supported_factory_points_temp }
-		multiply_variable = { var = ADISCORD_economy_cluster_factory_output_percent value = 5 }
+		multiply_variable = { var = ADISCORD_economy_cluster_factory_output_percent value = 10 }
 		divide_variable = { var = ADISCORD_economy_cluster_factory_output_percent value = ADISCORD_economy_operational_military_factories_temp }
 	}
-	clamp_variable = { var = ADISCORD_economy_cluster_factory_output_percent min = 0 max = 15 }
+	clamp_variable = { var = ADISCORD_economy_cluster_factory_output_percent min = 0 max = 30 }
 	set_variable = { var = ADISCORD_economy_cluster_factory_output_factor value = ADISCORD_economy_cluster_factory_output_percent }
 	divide_variable = { var = ADISCORD_economy_cluster_factory_output_factor value = 100 }
-	clamp_variable = { var = ADISCORD_economy_cluster_factory_output_factor min = 0 max = 0.15 }
+	clamp_variable = { var = ADISCORD_economy_cluster_factory_output_factor min = 0 max = 0.30 }
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_cluster_factory_output_factor value = 0 compare = greater_than } }
 		if = {
@@ -3149,7 +3150,7 @@ ADISCORD_economy_gui_try_war_taxes = {
 ADISCORD_economy_clamp_all_variables = {
 	# Cash is settled only by the weekly ledger. A lower reserve cap must not
 	# silently erase money between settlements; its writeoff is recorded there.
-	clamp_variable = { var = ADISCORD_economy_treasury_cap min = 100 max = 2000 }
+	clamp_variable = { var = ADISCORD_economy_treasury_cap min = 100 max = 5000 }
 	clamp_variable = { var = ADISCORD_economy_debt_pressure min = 0 max = 100 }
 	clamp_variable = { var = ADISCORD_economy_inflation min = 0 max = 100 }
 	clamp_variable = { var = ADISCORD_economy_debt_income_ratio min = 0 max = 5000 }
@@ -3218,8 +3219,8 @@ ADISCORD_economy_clamp_all_variables = {
 	clamp_variable = { var = ADISCORD_economy_stretched_level min = 0 max = 4 }
 	clamp_variable = { var = ADISCORD_economy_resource_endowment min = 0 max = 100 }
 	clamp_variable = { var = ADISCORD_economy_damaged_industry_score min = 0 max = 100 }
-	clamp_variable = { var = ADISCORD_economy_cluster_factory_output_percent min = 0 max = 15 }
-	clamp_variable = { var = ADISCORD_economy_cluster_factory_output_factor min = 0 max = 0.15 }
+	clamp_variable = { var = ADISCORD_economy_cluster_factory_output_percent min = 0 max = 30 }
+	clamp_variable = { var = ADISCORD_economy_cluster_factory_output_factor min = 0 max = 0.30 }
 	clamp_variable = { var = ADISCORD_economy_tax_burden_mode min = 1 max = 5 }
 	clamp_variable = { var = ADISCORD_economy_army_spending_mode min = 1 max = 5 }
 	clamp_variable = { var = ADISCORD_economy_research_spending_mode min = 1 max = 5 }
@@ -3244,17 +3245,17 @@ ADISCORD_economy_recalculate_treasury_cap = {
 	multiply_temp_variable = { var = ADISCORD_economy_cap_temp value = 35 }
 	add_to_variable = { var = ADISCORD_economy_treasury_cap value = ADISCORD_economy_cap_temp }
 	set_temp_variable = { var = ADISCORD_economy_cap_temp value = ADISCORD_business_center_count }
-	multiply_temp_variable = { var = ADISCORD_economy_cap_temp value = 12 }
+	multiply_temp_variable = { var = ADISCORD_economy_cap_temp value = 100 }
 	add_to_variable = { var = ADISCORD_economy_treasury_cap value = ADISCORD_economy_cap_temp }
 	set_temp_variable = { var = ADISCORD_economy_cap_temp value = ADISCORD_science_center_count }
-	multiply_temp_variable = { var = ADISCORD_economy_cap_temp value = 8 }
+	multiply_temp_variable = { var = ADISCORD_economy_cap_temp value = 40 }
 	add_to_variable = { var = ADISCORD_economy_treasury_cap value = ADISCORD_economy_cap_temp }
 	set_temp_variable = { var = ADISCORD_economy_cap_temp value = ADISCORD_economy_public_investment_stock }
 	multiply_temp_variable = { var = ADISCORD_economy_cap_temp value = 5 }
 	add_to_variable = { var = ADISCORD_economy_treasury_cap value = ADISCORD_economy_cap_temp }
 	multiply_variable = { var = ADISCORD_economy_treasury_cap value = ADISCORD_economy_final_treasury_capacity_factor_bp }
 	divide_variable = { var = ADISCORD_economy_treasury_cap value = 100 }
-	clamp_variable = { var = ADISCORD_economy_treasury_cap min = 300 max = 2000 }
+	clamp_variable = { var = ADISCORD_economy_treasury_cap min = 300 max = 5000 }
 }
 
 ADISCORD_economy_refresh_spending_ideas = {

@@ -8092,9 +8092,9 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "ADISCORD_economy_state_cluster_level_temp",
             "ADISCORD_economy_cluster_supported_factory_points_temp",
             "ADISCORD_economy_operational_military_factories_temp",
-            "ADISCORD_economy_cluster_factory_output_percent value = 5",
+            "ADISCORD_economy_cluster_factory_output_percent value = 10",
             "ADISCORD_economy_cluster_factory_output_factor value = 100",
-            "max = 15",
+            "max = 30",
             "remove_dynamic_modifier = { modifier = ADISCORD_economy_cluster_local_factory_output }",
             "force_update_dynamic_modifier = yes",
         ):
@@ -8118,8 +8118,8 @@ ADISCORD_task10_forbidden_cache_consumer = {
         expected = {
             "ADISCORD_ai_fiscal_crisis": (0, 0, 0),
             "ADISCORD_ai_fiscal_stress": (0, 0, 0),
-            "ADISCORD_ai_fiscal_recovery": (1, 0, 0),
-            "ADISCORD_ai_healthy_civilian_growth": (2, 2, 2),
+            "ADISCORD_ai_fiscal_recovery": (2, 0, 0),
+            "ADISCORD_ai_healthy_civilian_growth": (8, 2, 4),
         }
         names = (
             "ADISCORD_business_center",
@@ -8136,7 +8136,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
         wartime = block(ECONOMY_AI, "ADISCORD_ai_healthy_war_industry")
         self.assertRegex(
             wartime,
-            r"building_target\s+id\s*=\s*ADISCORD_industrial_cluster\s+value\s*=\s*3\b",
+            r"building_target\s+id\s*=\s*ADISCORD_industrial_cluster\s+value\s*=\s*4\b",
         )
 
     def test_air_demand_survives_small_industry_and_fiscal_crisis(self):
@@ -8203,18 +8203,20 @@ ADISCORD_task10_forbidden_cache_consumer = {
     def test_building_tooltips_lead_with_role_and_budget_impact(self):
         self.assertNotIn("Строятся в обычном меню", ECONOMY_LOC)
         for key, role, budget in (
-            ("ADISCORD_business_center_desc", "Роль: доход", "+1,20"),
-            ("ADISCORD_science_center_desc", "Роль: исследования", "-0,27"),
+            ("ADISCORD_business_center_desc", "Роль: доход", "+30,15"),
+            ("ADISCORD_science_center_desc", "Роль: исследования", "-0,62"),
             (
                 "ADISCORD_industrial_cluster_desc",
-                "Роль: местное военное производство",
-                "+0,31",
+                "Роль: доход и местное военное производство",
+                "+9,86",
             ),
         ):
             match = re.search(rf'(?m)^\s*{key}:\d*\s+"([^"]*)"', ECONOMY_LOC)
             self.assertIsNotNone(match, key)
             self.assertIn(role, match.group(1))
             self.assertIn(budget, match.group(1))
+            self.assertIn(chr(92) + "n", match.group(1))
+            self.assertNotIn(chr(92) * 2 + "n", match.group(1))
 
     def test_economic_building_reference_documents_roles_and_formulas(self):
         self.assertTrue(BUILDING_DOC.is_file())
@@ -8223,10 +8225,10 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "Деловой центр",
             "Научный центр",
             "Промышленный кластер",
-            "2.10 + 0.25 - 0.10 = +2.25",
-            "0.20 - 0.35 - 0.12 = -0.27",
-            "0.45 + 0.16 - 0.18 - 0.12 = +0.31",
-            "5% × сумма(исправные военные заводы региона × уровень кластера)",
+            "30 + 0.25 - 0.10 = +30.15",
+            "0.20 - 0.35 * 2 - 0.12 = -0.62",
+            "10 + 0.16 - 0.18 - 0.12 = +9.86",
+            "10% × сумма(исправные военные заводы региона × уровень кластера)",
             "3 / 13",
         ):
             self.assertIn(required, documentation)
@@ -8666,7 +8668,7 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
         self.assertEqual(owner[self.PREFIX + "resource_endowment"], 3)
         self.assertEqual(owner["ADISCORD_business_center_count"], 2)
         self.assertEqual(owner["ADISCORD_science_center_count"], 1)
-        self.assertEqual(owner[self.PREFIX + "cluster_factory_output_percent"], 10)
+        self.assertEqual(owner[self.PREFIX + "cluster_factory_output_percent"], 20)
         self.assertIn("add_dynamic_modifier", fixture.calls)
         fixture.facts["has_dynamic_modifier"] = True
         fixture.scopes["state"]["controller"] = "A"
