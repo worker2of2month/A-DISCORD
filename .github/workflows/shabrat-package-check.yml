@@ -19,8 +19,7 @@ jobs:
             tools
             docs/development
             interface
-            map/definition.csv
-          sparse-checkout-cone-mode: false
+            map
           lfs: false
       - name: Export tracked source for regression checks
         run: |
@@ -28,11 +27,19 @@ jobs:
           import pathlib, subprocess, zipfile
           root = pathlib.Path('.')
           paths = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          extensions = {'.txt', '.py', '.yml', '.yaml', '.json', '.csv', '.md', '.mod', '.gfx', '.gui', '.lua', '.asset', '.info', '.toml', '.ini', '.cfg'}
+          folders = {'common', 'events', 'history', 'localisation', 'tools', 'docs', 'interface', 'map'}
+          total = 0
           with zipfile.ZipFile('/tmp/adiscord-source.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
               for name in paths:
                   path = root / name
-                  if name and path.is_file() and not name.startswith('.github/'):
-                      archive.write(path, name)
+                  if not name or not path.is_file() or path.suffix not in extensions:
+                      continue
+                  if len(path.parts) > 1 and path.parts[0] not in folders:
+                      continue
+                  archive.write(path, name)
+                  total += path.stat().st_size
+          print('Text bytes:', total)
           print(subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode())
           PY
       - uses: actions/upload-artifact@v4
