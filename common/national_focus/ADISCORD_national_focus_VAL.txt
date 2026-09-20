@@ -2491,10 +2491,10 @@ completion_reward = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_bezhaysk_operation_available_tt VAL_can_attack_bezhaysk = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			if = {
-				limit = { VAL_can_attack_bezhaysk = yes }
-				declare_war_on = { target = BJK type = annex_everything }
-			}
+			# Availability is continuously checked by cancel_if_invalid. Rechecking the
+			# full gate on the completion tick could silently consume the focus without war.
+			declare_war_on = { target = BJK type = annex_everything }
+			hidden_effect = { VAL_call_subjects_to_wars = yes }
 		}
 		ai_will_do = { base = 5 }
 	}
