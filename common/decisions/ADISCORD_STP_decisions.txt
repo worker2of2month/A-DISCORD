@@ -739,7 +739,7 @@ STP_battle_for_stelander = {
 				STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 5 modifier = { factor = 3 FROM = { state = 3 } } modifier = { factor = 3 FROM = { state = 2 } } modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
+		ai_will_do = { base = 8 modifier = { factor = 4 FROM = { state = 3 } } modifier = { factor = 4 FROM = { state = 2 } } modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_cw_prepare_rifle_cache = {
@@ -1024,7 +1024,7 @@ STP_battle_for_stelander = {
 			}
 		}
 		ai_will_do = {
-			base = 5
+			base = 8
 			modifier = { factor = 2 FROM = { STP_region_party_strongest = yes } }
 			modifier = { factor = 3 FROM = { OR = { state = 2 state = 3 } } }
 			modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } }
@@ -2381,7 +2381,101 @@ STP_cw_war_council = {
 		}
 		remove_effect = { custom_effect_tooltip = STP_cw_disruption_result_tt hidden_effect = { STP_cw_finish_disruption = yes } }
 		cancel_effect = { custom_effect_tooltip = STP_cw_disruption_refund_tt hidden_effect = { STP_cw_refund_disruption = yes } }
-		ai_will_do = { base = 5 }
+		ai_will_do = { base = 12 }
+	}
+
+
+
+	STP_cw_raise_rear_cell = {
+
+
+		icon = GFX_decision_ADISCORD_covert_operation
+
+
+		allowed = { tag = STS }
+
+
+		visible = { has_completed_focus = STP_cw_rear_cells has_war_with = STP NOT = { has_country_flag = STP_cw_postwar } }
+
+
+		state_target = yes
+
+
+		targets = { 2 3 29 45 46 53 }
+
+
+		target_trigger = { FROM = { is_controlled_by = STP NOT = { has_state_flag = STP_cw_rear_cell_raised } } }
+
+
+		on_map_mode = map_and_decisions_view
+
+
+		highlight_states = { highlight_state_targets = { state = FROM } }
+
+
+		available = {
+
+
+			NOT = { command_power < 15 }
+
+
+			custom_trigger_tooltip = { tooltip = STP_cw_rear_cell_capacity_tt check_variable = { var = STP_cw_rear_cells_raised value = 2 compare = less_than } }
+
+
+			FROM = { is_controlled_by = STP NOT = { has_state_flag = STP_cw_rear_cell_raised } }
+
+
+		}
+
+
+		cost = 0
+
+
+		custom_cost_text = STP_cw_command_power_15_cost
+
+
+		fire_only_once = no
+
+
+		complete_effect = {
+
+
+			add_command_power = -15
+
+
+			FROM = {
+
+
+				set_state_flag = STP_cw_rear_cell_raised
+
+
+				create_unit = {
+
+
+					division = "name = \"Rear Resistance Cell\" division_template = \"Stelander Territorial Brigade\" start_experience_factor = 0.20 start_equipment_factor = 0.55 start_manpower_factor = 0.55"
+
+
+					owner = STS
+
+
+					allow_spawning_on_enemy_provs = yes
+
+
+				}
+
+
+			}
+
+
+			add_to_variable = { var = STP_cw_rear_cells_raised value = 1 }
+
+
+		}
+
+
+		ai_will_do = { base = 30 modifier = { factor = 3 FROM = { state = 29 } } modifier = { factor = 2 FROM = { state = 45 } } }
+
+
 	}
 
 

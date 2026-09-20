@@ -706,6 +706,21 @@ VAL_frontier = {
         cancel_trigger = { NOT = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } }
         timeout_effect = { hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } VAL_frontier_show_refusal = yes } } }
     }
+
+    VAL_frontier_nod_ultimatum = {
+    	icon = generic_prepare_civil_war
+    	allowed = { tag = VAL }
+    	activation = { always = no }
+    	available = { hidden_trigger = { always = no } }
+    	visible = { has_country_flag = VAL_frontier_nod_ultimatum_active }
+    	days_mission_timeout = 100
+    	is_good = no
+    	selectable_mission = no
+    	fire_only_once = no
+    	cancel_trigger = { OR = { NOT = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } } NOD = { OR = { exists = no has_capitulated = yes has_war_with = ROOT } } } }
+    	cancel_effect = { hidden_effect = { clr_country_flag = VAL_frontier_nod_ultimatum_active } }
+    	timeout_effect = { custom_effect_tooltip = VAL_frontier_nod_ultimatum_timeout_tt hidden_effect = { VAL_frontier_nod_intervene = yes } }
+    }
     VAL_frontier_demand_CIN = {
         icon = generic_political_pressure
         allowed = { tag = VAL }

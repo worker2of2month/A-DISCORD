@@ -1964,6 +1964,8 @@ focus_tree = {
 		}
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_political_power = 25
+			add_command_power = 10
 			if = {
 				limit = {
 					OR = {
@@ -2425,6 +2427,23 @@ focus_tree = {
 		prerequisite = { focus = STP_cw_unified_headquarters }
 		ai_will_do = { base = 6 }
 		completion_reward = { add_intel = { target = STP army_intel = 25 } army_experience = 15 }
+	}
+
+	focus = {
+		id = STP_cw_rear_cells
+		icon = GFX_focus_generic_secret_service_agency
+		x = 3
+		y = 2
+		cost = 1
+		allow_branch = { tag = STS NOT = { has_country_flag = STP_cw_postwar } }
+		available = { has_war_with = STP }
+		cancel_if_invalid = yes
+		prerequisite = { focus = STP_cw_front_scouts }
+		ai_will_do = { base = 10 }
+		completion_reward = {
+			add_command_power = 10
+			unlock_decision_tooltip = { decision = STP_cw_raise_rear_cell show_effect_tooltip = yes }
+		}
 	}
 
 	focus = {

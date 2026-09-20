@@ -532,6 +532,17 @@ class ValTierTransitionContractTests(unittest.TestCase):
         self.assertEqual(positions, tuple(sorted(positions)))
         self.assertEqual(mask_comments(self.on_actions).count(initialize_call), 1)
 
+        tribal_init = only_named_block(self, self.effects, "VAL_frontier_initialize_tribal_bloc")
+        self.assertIn("create_faction_from_template", tribal_init)
+        self.assertIn("template = faction_template_ADISCORD_standard", tribal_init)
+        self.assertIn("name = VAL_frontier_defence_coalition", tribal_init)
+        self.assertIn("add_to_faction = OSF", tribal_init)
+        self.assertIn("add_to_faction = APH", tribal_init)
+        self.assertNotIn("NOD", tribal_init)
+        self.assertNotIn("STP", tribal_init)
+        initialize = only_named_block(self, self.effects, "VAL_initialize_rework")
+        self.assertEqual(initialize.count("VAL_frontier_initialize_tribal_bloc = yes"), 1)
+
     def test_dead_tier_migration_definition_covers_completed_focus_tiers(self) -> None:
         caller_focuses: dict[tuple[str, int], set[str]] = {
             (family, tier): set()
@@ -2565,56 +2576,73 @@ class ValFrontierCampaignTests(unittest.TestCase):
 
         exercise({}, recover=True)
         prepared, _ = exercise({})
-        self.assertEqual(prepared["CIN"], prepared["NOD"])
-        self.assertEqual(prepared["CIN"], prepared["STP"])
         self.assertEqual(prepared["CIN"], prepared["OSF"])
         self.assertEqual(prepared["CIN"], prepared["APH"])
         self.assertIsNotNone(prepared["CIN"])
-        prepared, _ = exercise({"existing": ["NOD", "STP", "OTH"]})
-        self.assertEqual(prepared["CIN"], "existing")
+        self.assertIsNone(prepared["NOD"])
+        self.assertIsNone(prepared["STP"])
+
         prepared, _ = exercise({"north": ["NOD"], "party": ["STP", "OTH"]})
-        self.assertEqual(prepared["CIN"], "north")
+        self.assertEqual(prepared["NOD"], "north")
         self.assertEqual(prepared["STP"], "party")
+        self.assertEqual(prepared["CIN"], prepared["OSF"])
+        self.assertEqual(prepared["CIN"], prepared["APH"])
+
         prepared, _ = exercise({"local": ["CIN", "OTH"], "north": ["NOD", "STP"]})
         self.assertEqual(prepared["CIN"], "local")
+        self.assertEqual(prepared["OSF"], "local")
+        self.assertEqual(prepared["APH"], "local")
         self.assertEqual(prepared["NOD"], "north")
-        for party_faction in ({}, {"party": ["STP", "OTH"]}):
-            prepared, _ = exercise({"attacker": ["VAL", "NOD"], **party_faction})
-            self.assertEqual(prepared["NOD"], "attacker")
-            self.assertNotEqual(prepared["CIN"], "attacker", "The target must never join the attacker's existing alliance")
-            self.assertEqual(prepared["CIN"], prepared["STP"])
+
         prepared, _ = exercise({"attacker": ["VAL", "NOD", "STP"]})
-        self.assertIsNotNone(prepared["CIN"], "The tribes must form their own bloc without outside guarantors")
         self.assertEqual(prepared["CIN"], prepared["OSF"])
         self.assertEqual(prepared["CIN"], prepared["APH"])
         self.assertNotEqual(prepared["CIN"], prepared["VAL"])
-        for subject in ({"STP": "NOD"}, {"NOD": "STP"}):
-            prepared, _ = exercise({}, subject=subject)
-            self.assertEqual(prepared["CIN"], prepared["NOD"])
-            self.assertEqual(prepared["CIN"], prepared["STP"])
-        _, surviving = exercise({}, external_join=True)
-        self.assertEqual(list(surviving.values()), [["NOD", "OTH"]], "A later unrelated member must not be expelled by campaign cleanup")
+        self.assertEqual(prepared["NOD"], "attacker")
+        self.assertEqual(prepared["STP"], "attacker")
 
-    def test_campaign_coalition_precedes_war_and_majors_outlive_peace(self):
+        prepared, surviving = exercise({"tribal": ["CIN", "OSF", "APH"]})
+        self.assertEqual(prepared["CIN"], "tribal")
+        self.assertEqual(prepared["OSF"], "tribal")
+        self.assertEqual(prepared["APH"], "tribal")
+        self.assertEqual(surviving, {"tribal": ["CIN", "OSF", "APH"]},
+                         "The permanent starting tribal alliance must survive campaign cleanup")
+
+        _, surviving = exercise({"north": ["NOD"]}, external_join=True)
+        self.assertEqual(surviving, {"north": ["NOD", "OTH"]},
+                         "A later unrelated member of Nodrul's own alliance must not be expelled by campaign cleanup")
+
+    def test_campaign_coalition_precedes_war_and_nodrul_waits_100_days(self):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar, walk
         definitions = parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8"))
+        decisions = parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8"))
         start = block(definitions, "VAL_frontier_start_war")
+        invitations = block(definitions, "VAL_frontier_join_existing_war")
+
         for tag in ("CIN", "OSF", "APH"):
             route = next(e.value for e in walk(start) if e.key == "if" and any(c.key == "declare_war_on" and scalar(c.value, "target") == tag for c in e.value))
-            assemblies = [i for i, e in enumerate(route) if any(c.key == "VAL_frontier_assemble_coalition" for c in walk([e]))]
-            self.assertEqual(len(assemblies), 1, "Every defended target must have exactly one coalition assembly")
-            assembly = assemblies[0]
+            assembly = next(i for i, e in enumerate(route) if any(c.key == "VAL_frontier_assemble_coalition" for c in walk([e])))
             declaration = next(i for i, e in enumerate(route) if e.key == "declare_war_on")
             self.assertLess(assembly, declaration)
-            invitations = block(definitions, "VAL_frontier_join_existing_war")
+
             invited = next(e.value for e in invitations if e.key == "if" and scalar(block(e.value, "limit"), "has_war_with") == tag)
-            self.assertTrue(any(e.key == "VAL_frontier_join_existing_war" for e in walk(start)))
-            for guarantor in ("NOD", "STP"):
-                call = next(e.value for e in walk(invited) if e.key == "if" and any(c.key == guarantor and any(n.key == "add_to_war" for n in c.value) for c in e.value))
-                self.assertEqual(scalar(block(block(call, "limit"), guarantor), "is_in_faction_with"), tag)
-                self.assertEqual(scalar(block(block(block(call, "limit"), guarantor), "NOT"), "is_in_faction_with"), "VAL")
-                self.assertEqual(scalar(block(block(call, guarantor), "add_to_war"), "single_target_only"), "yes")
+            self.assertFalse(any(e.key == "NOD" and any(n.key == "add_to_war" for n in e.value) for e in walk(invited)))
+            self.assertTrue(any(e.key == "STP" and any(n.key == "add_to_war" for n in e.value) for e in walk(invited)))
+            self.assertTrue(any(e.key == "VAL_frontier_issue_nod_ultimatum" for e in walk(invited)))
+
+        # .117 remains the relation-verification callback introduced by the peace hardening pass.
+        self.assertIn("country_event = { id = val_rework.117 hours = 1 }", start)
+
+        deadline = block(decisions, "VAL_frontier_nod_ultimatum")
+        self.assertEqual(scalar(deadline, "days_mission_timeout"), "100")
+        self.assertIn("always = no", str(block(deadline, "available")))
+        self.assertIn("VAL_frontier_nod_intervene", str(block(deadline, "timeout_effect")))
+
+        intervention = block(definitions, "VAL_frontier_nod_intervene")
+        self.assertEqual(sum(1 for e in walk(intervention) if e.key == "add_to_war"), 3)
+
         close = list(walk(block(definitions, "VAL_frontier_close")))
+        self.assertTrue(any(e.key == "remove_mission" and e.value == "VAL_frontier_nod_ultimatum" for e in close))
         last_peace = max(i for i, e in enumerate(close) if e.key == "white_peace")
         first_major_cleanup = min(i for i, e in enumerate(close) if e.key == "set_major" and e.value == "no")
         coalition_cleanup = next(i for i, e in enumerate(close) if e.key == "VAL_frontier_release_coalition")

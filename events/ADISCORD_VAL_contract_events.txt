@@ -852,3 +852,13 @@ country_event = {
         }
     }
 }
+
+country_event = {
+    id = val_rework.118
+    title = val_rework.118.t
+    desc = val_rework.118.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    trigger = { tag = VAL has_country_flag = VAL_frontier_nod_ultimatum_active }
+    option = { name = val_rework.118.a }
+}

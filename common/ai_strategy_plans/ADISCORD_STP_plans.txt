@@ -97,6 +97,9 @@ STP_shabrat_preparation_depth_plan = {
 
 	ai_national_focuses = {
 		STP_Turn_The_Young_Officers
+		STP_cw_prepare_capital_sabotage
+		STP_cw_prepare_industry_sabotage
+		STP_cw_disruption_cells
 		STP_cw_defensive_lines
 		STP_cw_heavy_reserve
 		STP_cw_abila_reserve
@@ -108,7 +111,6 @@ STP_shabrat_preparation_depth_plan = {
 		STP_cw_local_council_envoys
 		STP_cw_autonomy_guarantees
 		STP_Kefreite_Security_Offer
-		STP_cw_prepare_capital_sabotage
 	}
 
 	weight = { factor = 16 }
@@ -147,6 +149,7 @@ STS_shabrat_civil_war_plan = {
 		STP_cw_road_to_fada
 		STP_cw_supply_routes
 		STP_cw_front_scouts
+		STP_cw_rear_cells
 		STP_cw_mobile_workshops
 		STP_cw_frontline_relief
 		STP_cw_last_banquet

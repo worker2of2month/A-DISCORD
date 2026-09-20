@@ -22,7 +22,7 @@ FOCUS = ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 
-SCORE_TOTAL = 102
+SCORE_TOTAL = 106
 
 INTRO_FOCUSES = (
     "STP_NECTAR_OF_GODS",
@@ -47,6 +47,9 @@ CORE_FOCUSES = (
 )
 DEPTH_FOCUSES = (
     "STP_Turn_The_Young_Officers",
+    "STP_cw_prepare_capital_sabotage",
+    "STP_cw_prepare_industry_sabotage",
+    "STP_cw_disruption_cells",
     "STP_cw_defensive_lines",
     "STP_cw_heavy_reserve",
     "STP_cw_abila_reserve",
@@ -58,7 +61,6 @@ DEPTH_FOCUSES = (
     "STP_cw_local_council_envoys",
     "STP_cw_autonomy_guarantees",
     "STP_Kefreite_Security_Offer",
-    "STP_cw_prepare_capital_sabotage",
 )
 WAR_FOCUSES = (
     "STP_cw_open_conscription",
@@ -68,6 +70,7 @@ WAR_FOCUSES = (
     "STP_cw_road_to_fada",
     "STP_cw_supply_routes",
     "STP_cw_front_scouts",
+    "STP_cw_rear_cells",
     "STP_cw_mobile_workshops",
     "STP_cw_frontline_relief",
     "STP_cw_last_banquet",
@@ -142,6 +145,7 @@ FOCUS_WEIGHTS = {
     "STP_Kefreite_Security_Offer": 8,
     "STP_No_Mercenaries_In_Our_Mountains": 2,
     "STP_cw_open_conscription": 12,
+    "STP_cw_rear_cells": 10,
     "STP_cw_unified_headquarters": 10,
     "STP_cw_wartime_laboratories": 1,
     "STP_cw_road_to_fada": 8,
@@ -376,6 +380,7 @@ def run_checks() -> list[tuple[str, bool, str]]:
     recruit = decision_block(decisions_text, "STP_recruit_regional_official")
     uprising = decision_block(decisions_text, "STP_cw_start_uprising")
     command = decision_block(decisions_text, "STP_cw_secure_election_result")
+    rear_cell = decision_block(decisions_text, "STP_cw_raise_rear_cell")
 
     add("delegates AI base 8", scalar_int(named_block(delegates, "ai_will_do"), "base") == 8)
     add("campaign AI base 6", scalar_int(named_block(campaign, "ai_will_do"), "base") == 6)
@@ -386,6 +391,9 @@ def run_checks() -> list[tuple[str, bool, str]]:
     add("officials prefer credential districts", "state = 2" in named_block(recruit, "ai_will_do") and "state = 3" in named_block(recruit, "ai_will_do"))
     add("early uprising still vetoes a live mandate", "value > 0.10" in named_block(uprising, "ai_will_do"))
     add("public command stays inside the 40-80 window", "value = 40" in named_block(command, "ai_will_do") and "value = 80" in named_block(command, "ai_will_do"))
+    add("rear-cell operation exists", bool(rear_cell))
+    add("rear cells are capped at two", "STP_cw_rear_cells_raised value = 2 compare = less_than" in rear_cell)
+    add("rear cells spawn only behind party lines", "is_controlled_by = STP" in rear_cell and "allow_spawning_on_enemy_provs = yes" in rear_cell)
     fund_ai = re.search(
         r"id = STP_cw_military_committee_fund[\s\S]*?ai_will_do = \{[\s\S]*?\n\t\t\}",
         read(FOCUS) if FOCUS.exists() else "",
