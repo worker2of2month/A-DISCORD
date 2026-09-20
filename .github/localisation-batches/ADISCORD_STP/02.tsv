@@ -1,0 +1,79 @@
+STP_cw_abila_workshops_desc	We will establish military production in Abilia: four military factories and four building slots. The workshops will not deliver a ready assault formation before the uprising, but they will be able to replace losses after the first battles. The military committee will not receive funding for a separate reinforced formation.
+STP_cw_abila_workshops_tt	When the split occurs, Abilia and its four military factories pass to the resistance. Until the division, their output enters the common state stockpile; production is assigned through the normal interface.
+STP_cw_election_time_21_tt	More than 21 days remain until the election result: the campaign can finish in time
+STP_cw_election_time_14_tt	More than 14 days remain until the election result: negotiations can finish in time
+STP_pw_republic_dynamic	Republic of the Districts
+STP_pw_republic_dynamic_desc	The republic's civilian institutions, restored economy and professional army. Post-war decisions determine their combined capabilities.
+STP_pw_party_dynamic	The Renewed Presidium
+STP_pw_party_dynamic_desc	Permanent Party administration, industrial planning and a regular army. Their capabilities depend on the chosen model of post-war reconstruction.
+STP_pw_reconstruction_available_tt	Our side has won the civil war and its wartime programmes have ended.
+STP_pw_industry_reserve_tt	If no suitable site is available, the treasury will receive a construction reserve instead of a new factory: £ADISCORD_economy_treasury_texticon §Y900§!. The permanent industrial specialisation is retained.
+STP_pw_republic_new_republic	Services Return to the Districts
+STP_pw_republic_new_republic_desc	Residents need doctors, postmen and civil servants as much as they need a new constitution. We will open a paid public-services programme and restore trust in the new administration.
+STP_pw_republic_district_authority	District Administrations
+STP_pw_republic_district_authority_desc	Military commandants will transfer economic affairs to permanent administrations. Common rules will reduce expenditure and spare the cabinet from settling every local dispute.
+STP_pw_republic_civil_records	Restore the Registers
+STP_pw_republic_civil_records_desc	Without records of residents, property and obligations, neither benefits nor taxes can be administered. Archivists and local councils will bring the surviving documents together. Nodrul will be notified that its former mandate is under review.
+STP_pw_republic_open_settlement	Retain Local Personnel
+STP_pw_republic_open_settlement_desc	We will retain specialists who took no part in repression. Swift reconciliation will build trust, but command will have to accommodate the diversity of the new administration.
+STP_pw_republic_firm_settlement	Review Appointments
+STP_pw_republic_firm_settlement_desc	District commissions will review appointments. The cabinet will gain a more dependable administration at the cost of prolonged disputes and weaker local support.
+STP_pw_republic_civil_charter	Civil Service Charter
+STP_pw_republic_civil_charter_desc	We will define officials' responsibilities, the complaints procedure and the limits of district administrations' powers. These rules will apply under any future political settlement.
+STP_pw_republic_restore_roads	Reconnect the Economy
+STP_pw_republic_restore_roads_desc	We will link the capital to district centres and restore road services. The first works will improve one road, while further construction will proceed faster.
+STP_pw_republic_homes_for_returnees	Bring Working Families Home
+STP_pw_republic_homes_for_returnees_desc	Housing and reliable roads will allow evacuated families to return. We can then finance the reopening of workshops where returning specialists will work.
+STP_pw_republic_civil_workshops	Cooperative Workshops
+STP_pw_republic_civil_workshops_desc	We will bring small workshops together in durable production cooperatives. A new civilian factory will serve as the model for the next wave of construction.
+STP_pw_republic_accountable_arsenals	Arsenals under Civilian Oversight
+STP_pw_republic_accountable_arsenals_desc	The army will retain the arms-production capacity it needs, but its operations will be brought into the public state budget. We will restore one factory and organise supplies to the plants already operating.
+STP_pw_republic_industrial_settlement	An Economy without Emergency Orders
+STP_pw_republic_industrial_settlement_desc	We will coordinate orders for civilian workshops and arsenals so that they no longer compete for the same workers and machinery. Production will receive a steady flow of work.
+STP_pw_republic_army_register	Register the Frontline Units
+STP_pw_republic_army_register_desc	We will bring separate detachments into a common army register and open a personnel-training programme. The divisions will remain, but replacements and supplies will be centrally organised.
+STP_pw_republic_officer_school	School for Field Commanders
+STP_pw_republic_officer_school_desc	Resistance commanders will teach new officers the lessons that helped their units survive. A common curriculum will combine junior commanders' initiative with regular training.
+STP_pw_republic_supply_service	District Supply Service
+STP_pw_republic_supply_service_desc	District depots will operate to a common schedule. Units will recover their combat readiness faster and lose fewer supplies in transit.
+STP_pw_republic_professional_service	The Republic's Professional Army
+STP_pw_republic_professional_service_desc	Standing formations will receive common service regulations and replacement training. This is the foundation both for defending the passes and for future campaigns abroad.
+STP_pw_republic_settled_state	Conclude Emergency Reconstruction
+STP_pw_republic_settled_state_desc	Civilian services, workshops and the regular army must be functioning before the emergency budget closes. Completing three paid programmes will consolidate industrial growth and restore the population's confidence.
+STP_pw_party_new_republic	The State after Ivanov
+STP_pw_party_new_republic_desc	Victory preserved the Party, but did not restore the old system of government. Hedersett must rebuild the ministries, industry and the guard, then define relations between the centre and the district organisations. An agreement with local elites and an emergency chain of command are distinct domestic courses. Relations with Nodrul are settled separately.
+STP_pw_party_district_authority	District Secretariats
+STP_pw_party_district_authority_desc	We will restore a single chain of administration from the presidium to the districts. Permanent secretariats will reduce the expense of parallel commissions and speed up the execution of decisions.
+STP_pw_party_civil_records	Wartime Lists
+STP_pw_party_civil_records_desc	Party files list rebels and draft evaders alongside engineers who failed to obtain permission to evacuate. A review of their cases will determine whom we return to work and whom we declare an enemy.
+STP_pw_party_open_settlement	An Agreement with District Elites
+STP_pw_party_open_settlement_desc	We will bring specialists back and recognise the district organisations' role in reconstruction. The course that follows will formalise their powers and retain local personnel. This will accelerate civilian work at the cost of some freedom for the central secretariat.
+STP_pw_party_firm_settlement	An Emergency Party Hierarchy
+STP_pw_party_firm_settlement_desc	Hedersett regards uncertainty over appointments as the continuation of war by other means. We will establish personnel commissions and a single chain of command. A security reserve will become a separate paid measure. Strengthening the centre comes at the price of purges, the costs of oversight and the loss of specialists.
+STP_pw_party_civil_charter	Charter of the Party State
+STP_pw_party_civil_charter_desc	After the congress of district secretariats or the creation of an executive secretariat, we will establish a permanent framework for the Party state. The charter does not erase the chosen model: the negotiated system preserves local initiative, while the hierarchy preserves central control. Military, economic and foreign-policy choices remain independent.
+STP_pw_party_restore_roads	Restore the Routes to the Ports
+STP_pw_party_restore_roads_desc	Military transport disrupted the districts' links to the coast. We will restore a common plan for the road services so that cargo can reach the ports again and workers can reach their factories.
+STP_pw_party_homes_for_returnees	Labour District Reception Offices
+STP_pw_party_homes_for_returnees_desc	District reception offices will match workforce registers with housing and returning families. We can then finance the reconstruction of one controlled port district: a civilian factory and its access routes.
+STP_pw_party_civil_workshops	Restore the Resort Economy
+STP_pw_party_civil_workshops_desc	Before the war, coastal revenue sustained a substantial part of the state apparatus. We will restore civilian enterprises and allow the houses to resume servicing ports and resorts. These funds can no longer be promised to defence plants at the same time.
+STP_pw_party_accountable_arsenals	War Orders instead of the Season
+STP_pw_party_accountable_arsenals_desc	We will postpone the return of the holiday season: materials, workers and new capacity will go to defence enterprises. The army will grow stronger sooner, but the civilian economy will have to wait.
+STP_pw_party_industrial_settlement	The Post-war Production Plan
+STP_pw_party_industrial_settlement_desc	Commercial reconstruction or the defence combine has already determined the economy's priority. We will now bring taxation, capital expenditure and production plans together in a normal post-war budget. The differences between the two models remain; this shared focus merely ends emergency administration.
+STP_pw_party_army_register	Take Stock of the Internal Forces
+STP_pw_party_army_register_desc	The internal troops won the struggle for government, but their departmental rolls are no basis for a regular army. We will count the units and open a paid re-equipment programme: weapons, support equipment and trucks will enter the common army stockpile.
+STP_pw_party_officer_school	A Headquarters, Not a Commandant's Office
+STP_pw_party_officer_school_desc	Commanders were trained to guard buildings and suppress unrest. Now they must prepare operations involving several formations, work with maps and maintain communications with neighbouring units.
+STP_pw_party_supply_service	Supply the Border Units
+STP_pw_party_supply_service_desc	We will make logistics the organising principle of the new army. Permanent depots and unified accounting will replace departmental allocations, while border units receive priority according to actual need. This course leads to district defence corps and rules out reliance on an independent field headquarters.
+STP_pw_party_professional_service	An Army beyond the Capital
+STP_pw_party_professional_service_desc	We will make field service the organising principle of the new army. The internal troops will adopt a common programme of manoeuvres, joint exercises and commander training for multi-formation operations. This course leads to a field general staff and rules out deep specialisation in district logistics.
+STP_pw_party_settled_state	End Emergency Rule
+STP_pw_party_settled_state_desc	Emergency rule can end only after four questions have been settled: how Party authority is organised, how the economy earns its revenue, what kind of army the country maintains, and on what terms it exists alongside Nodrul. Unfinished purges will then cease, and the presidium will take responsibility for the state's ordinary life.
+STP_pw_party_district_congress	Congress of District Secretariats
+STP_pw_party_district_congress_desc	Compromise must become an institution rather than a series of personal promises. The district secretariats will receive a regular congress and the right to coordinate some economic decisions in advance. The centre loses a little operational freedom, but gains predictable execution, a tax base and fewer reasons to govern through emergency commissions again.
+STP_pw_party_executive_secretariat	Executive Secretariat
+STP_pw_party_executive_secretariat_desc	A single chain of orders needs a body that checks compliance every day. The executive secretariat will bring appointments, reporting and departmental oversight into one administration. Decisions will cost the centre less and move faster politically, but constant pressure on the districts will leave its mark on internal stability.
+STP_pw_party_commercial_recovery	Reopen the Coastal Economy

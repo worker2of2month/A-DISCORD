@@ -1,0 +1,81 @@
+landmark_great_wall_section	Great Wall
+landmark_great_wall_section_desc	Built by dozens of governments over hundreds of years, the Great Wall is a masterpiece of logistics. Today, it can be seen as a symbol of the courage and resolve of the Chinese people.
+landmark_nanjing_presidential_palace	Nanjing Presidential Palace
+landmark_nanjing_presidential_palace_desc	Nanjing's Presidential Palace is an ancient and respected complex where Sun Yat-sen himself was inaugurated after the fall of the Qing dynasty.
+landmark_forbidden_city	Forbidden City
+landmark_forbidden_city_desc	An ancient Ming government complex, the Forbidden City symbolises China's long harmony and prosperity. Faced with the threat of another Japanese invasion, its treasures and artefacts have now been secretly evacuated.
+BUILDING_BOMBED	$BUILDING$ has been bombed!
+BUILDING_SABOTAGED	$BUILDING$ has been sabotaged!
+BUILDING_REPAIRED	$BUILDING$ has been repaired!
+BUILDING_DAMAGE_REASON_COLLATERAL	$BUILDING$ has suffered collateral damage!
+BUILDING_SCORCHED	$BUILDING$ has been burned!
+NUKE_DROPPED	An atomic bomb has been dropped!
+BUILDING_DAMAGED	Damaged levels: $DAMAGED|-$/$CURRENT|H$
+AIR_BASE_LEVEL	§HAir Base§! in $NAME|H$, level $VAL|H$
+ROCKET_SITE_LEVEL	§HRocket Site§! in $NAME|H$, level $VAL$
+AIR_BASE_LEVEL_UNKNOWN	§HAir Base§! in $NAME|H$
+ROCKET_SITE_LEVEL_UNKNOWN	§HRocket Site§! in $NAME|H$
+GUN_EMPLACEMENT_LEVEL_UNKNOWN	§H$mega_gun_emplacement$§! in $NAME|H$
+ROCKET_SITE_CAPACITY	Capacity: $VAL$/$MAX$
+NAVAL_BASE_LEVEL_UNKNOWN	§YNaval Base§!
+NAVAL_BASE_LEVEL	§YNaval Base§!: $VAL|Y$
+NAVAL_BASE_SUPPLY_LIMIT	Supply throughput: $VAL|Y$
+NAVAL_BASE_CAPACITY	Capacity: $USED|1G$/$TOTAL|0G$
+NAVAL_BASE_CAPACITY_OVER	Capacity: $USED|1R$/$TOTAL|0R$
+NAVAL_BASE_CAPACITY_PENALTY	Capacity repair-speed penalty: $PENALTY|%0R$
+BUILDING_LEVEL	§TState level: $LEVEL|H$§!
+BUILDING_CURRENT_MAX_LEVEL_CAPPED	Current maximum building level:
+BUILDING_CURRENT_MAX_LEVEL_NONCAPPED	The current maximum building level is uncapped.
+BUILDING_CURRENT_MAX_LEVEL_CAPPED_MANPOWER	State population: $MANPOWER|*Y$
+BUILDING_CURRENT_MAX_LEVEL_CAPPED_POP_PER_LEVEL	Population per building level: $POPLEVEL|*Y$
+BUILDING_CURRENT_MAX_LEVEL_CAPPED_BUILDING_MAX_FACTOR	State maximum factor: $MAXFACTOR|%0Y$
+BUILDING_CURRENT_MAX_LEVEL_CAPPED_MIN_MAXLEVEL	Minimum/maximum level from population: $MAXLEVEL|Y$
+BUILDING_SLOT_REMOVE_BUILDING_LEVEL	Remove the building.
+BUILDING_SLOT_REMOVE_CONSTRUCTION_LEVEL	Remove the building level under construction.
+BUILDING_SLOT_REMOVE_CONVERSION_LEVEL	Cancel the building conversion.
+BUILDING_SLOT_REMOVE_COOLDOWN	During wartime, buildings can be removed only once every $DAYS|Y$ days. The next removal is available on $DATE|Y$.
+CLICK_TO_CONVERT	§GClick§! to convert into: $BUILDING|Y$
+INSERT_CONVERSION	§GCtrl+Click§! to convert and place at the top of the queue.\n§GAlt+Click§! to convert and place at the bottom of the queue.
+INSERT_CONSTRUCTION	§GCtrl+Click§! to build and place at the top of the queue.\n§GAlt+Click§! to build and place at the bottom of the queue.
+BUILDING_CURRENT_MAX_LEVEL	$BUILDING|Y$ - potential maximum level: $MAXLEVEL|Y$
+BUILDING_CURRENT_MAX_LEVEL_SHARED_SLOTS	$BUILDING|Y$: state maximum $MAXLEVEL|Y$
+BUILDING_TERRAIN_MAX_LEVEL	$TERRAIN|H$ - current maximum level: $MAXLEVEL|H$
+BUILDING_TERRAIN_BASE_MAX_LEVEL	Base: $MAXLEVEL|H$
+BUILDING_STATE_CATEGORY_MAX_LEVEL	Maximum building level for a $CATEGORY|H$ state: $MAXLEVEL|H$
+BUILDING_LEVEL_HEALTH	Level health: $VALUE|%2Y$
+AIR_DEFENSE_IN_STATE	\n§HIndustrial bombing damage reduction:§! $TOT_INDUSTRY|%G$\n§HOther bombing damage reduction:§! $TOT|%G$\nAnti-air: $AA|-%$\n
+RADAR_ONMAP_TOOLTIP	§HRadar Station§! level: $LVL|G$/$TOT|H$\nOwner: $WHO|H$
+RADAR_ONMAP_DAMAGED_TOOLTIP	§HRadar Station§! level: $LVL|R$/$TOT|H$\nOwner: $WHO|H$
+RADAR_ONMAP_TOOLTIP_COVERAGE	\n§HRegional coverage: §!
+RADAR_ONMAP_TOOLTIP_COVERAGE_ENTRY	\n  $PERC|%$ in $REGION$
+RADAR_ONMAP_TOOLTIP_SUPPRESS	\nHold §GCtrl§! to §Rsuppress§! this tooltip.
+fuel_silo	Fuel Silo
+fuel_silo_plural	Fuel Silos
+fuel_silo_desc	This building increases your country's §Hfuel§! storage capacity.
+BUILDING_SPEED_FACTOR	§0Conditional construction speed factor:§! $VALUE|Y2$
+BUILDING_SPEED_FACTOR_WITH_TRIGGER	$BUILDING_SPEED_FACTOR$\n§0Only if:§!
+BUILDING_NEED_SUPPLIES	$Building|Y$ has supplies.
+CANNOT_BUILD_FACILITY_WITHOUT_AVAILABLE_PROJECT	At least 1 available special project is required to build this.
+GUN_EMPLACEMENT_BUILDING	§YMulti-charge Large-calibre Gun Emplacement§!
+BUILDING_STATE_MODIFIER_FORMATTER_HEADING	$BUILDING|H$ - state factors:
+STATE_CATEGORY_tiny_island	Tiny Island
+STATE_CATEGORY_small_island	Small Island
+STATE_CATEGORY_large_island	Large Island
+STATE_CATEGORY_city	City
+STATE_CATEGORY_large_city	Large City
+STATE_CATEGORY_town	Town
+STATE_CATEGORY_large_town	Large Town
+STATE_CATEGORY_enclave	Enclave
+STATE_CATEGORY_metropolis	Metropolis
+STATE_CATEGORY_pastoral	Pastoral Land
+STATE_CATEGORY_rural	Rural Area
+STATE_CATEGORY_megalopolis	Megalopolis
+STATE_CATEGORY_wasteland	Wasteland
+STRATEGIC_LOCATION_EXTRA_LEVEL	$BUILDING|Y$ maximum level: $AMOUNT|=+$
+STRATEGIC_LOCATION_DESC	§YStrategic Location§!
+BUILDING_DEPENDENCY_ERROR_DESC	Requires a level $LEVEL|Y$ $BUILDING|Y$ in the province
+BUILDING_GROUP_TOOLTIP	\nMaximum buildings of this type per state: $LEVEL|R$. The limit is also consumed by:
+energy_infrastructure	Reinforced Power Grid
+industrial_infrastructure	High-capacity Power Grid
+energy_infrastructure_desc	Reinforced transmission lines and multiple layers of redundancy guarantee an uninterrupted energy supply to our factories.
+industrial_infrastructure_desc	Modernising the existing civilian grid will provide the greater capacity required by more energy-intensive industries.

@@ -1,0 +1,72 @@
+STP_cw_casualty_routes_desc	Quartermasters will connect aid stations to transport and rest facilities. After the split, Shabrat's units will recover organisation faster between battles. The prepared network will remain with the resistance.
+STP_cw_party_command_sabotage	Disrupted Capital Command
+STP_cw_party_command_sabotage_desc	The attack on the capital's apparatus disrupted the Party headquarters. Commanders are restoring control over their units and coordinating their plans.
+STP_cw_disruption_cells	Underground Combat Cells
+STP_cw_disruption_cells_desc	We will combine the industrial and capital underground's contacts into a network of combat cells. After the split, Shabrat will be able to fund operations against Party territorial brigades. The network's capacity is limited: no more than three formations can be destroyed during the civil war.
+STP_cw_disruption_cells_tt	After the split, Shabrat's army will receive decisions targeting Party territorial brigades in Stelander's districts. An operation costing £political_power_texticon §Y35§! and £ADISCORD_economy_treasury_texticon §Y1200§! takes §Y21 days§! and destroys §Yone§! brigade present in the selected district. Only one operation can run at a time; successful operations must begin at least §Y45 days§! apart, with a maximum of §Ythree§! during the war. Losing the target or ending the war refunds the entire payment.
+STP_cw_disrupt_brigade	Underground Strike against the Garrison: [FROM.GetName]
+STP_cw_disrupt_brigade_desc	Combat cells will eliminate one Party territorial brigade in the selected district. After 21 days, the formation will be destroyed along with its personnel and equipment. Allied, foreign and other division types are not valid targets. If no suitable brigade remains, the district changes controller or the war ends, the operation is cancelled with a full refund. No more than three operations can be completed successfully during the war.
+STP_cw_disruption_available_tt	Shabrat is at war with the Party; neither side has capitulated; fewer than three operations have succeeded
+STP_cw_disruption_idle_tt	No other paid strike is active; 45 days have elapsed since the previous successful operation began
+STP_cw_disruption_target_tt	The Party controls the district and has at least one territorial brigade here
+STP_cw_disruption_price	£political_power_texticon §Y35§! £ADISCORD_economy_treasury_texticon §Y1200§!
+STP_cw_disruption_price_blocked	£political_power_texticon §R35§! £ADISCORD_economy_treasury_texticon §R1200§!
+STP_cw_disruption_price_tooltip	Cost: £political_power_texticon §Y50§! and £ADISCORD_economy_treasury_texticon §Y1200§!. Cancellation refunds both amounts.
+STP_cw_disruption_paid_tt	A §Y28-day§! operation begins against one Party territorial brigade in the selected district. The network is occupied; the next successful order cannot begin until §Y60 days§! after the current operation started.
+STP_cw_disruption_result_tt	If the target remains valid, §Yone§! Party territorial brigade in this district is destroyed. If the conditions no longer hold, £political_power_texticon §Y50§! and £ADISCORD_economy_treasury_texticon §Y1200§! are refunded.
+STP_cw_disruption_refund_tt	Full refund: £political_power_texticon §Y50§! and the previously paid £ADISCORD_economy_treasury_texticon amount. The network becomes available; the successful-operation limit is not consumed.
+STP_pc_economy_count_the_cost	A Unified State Treasury
+STP_pc_economy_count_the_cost_desc	The civil war ended before the accountants could establish what state remained after it. District coffers, factory ledgers and tax books must once again describe one country rather than several military administrations.
+STP_pc_economy_count_the_cost_tt	Revenue and expenditure will be recalculated across the reunified territory. Reforms accumulate in the post-war republic's national spirit.
+STP_pc_economy_reopen_tax_offices	The Republic's Tax Service
+STP_pc_economy_reopen_tax_offices_desc	During the war, collectors disappeared along with the archives, and enterprises paid whoever controlled the nearest road. The new government must restore a unified taxpayer register and separate taxation from field levies.
+STP_pc_economy_reopen_tax_offices_tt	A unified taxpayer register turns wartime levies into steady state revenue.
+STP_pc_economy_repair_workshops	Restart Civilian Workshops
+STP_pc_economy_repair_workshops_desc	Repair shops that were patching up trucks and rifles yesterday can once again manufacture equipment for mines, roads and homes. State orders must return them to civilian work.
+STP_pc_economy_repair_workshops_tt	A civilian factory is built in an owned, controlled Stelandic region with available space. If no suitable region exists, the treasury receives §G900§! instead.
+STP_pc_economy_stabilize_currency	Monetary Stabilisation
+STP_pc_economy_stabilize_currency_desc	After months of military IOUs, emergency purchases and separate coffers, the value of money has become a political question. The Council of Ministers and the banks must agree on which obligations the republic recognises and how it will honour them.
+STP_pc_economy_stabilize_currency_tt	Inflation: §G-8§! percentage points. Deficit pressure: §G-10§! percentage points. Neither can fall below zero.
+STP_pc_economy_recovery_budget	The First Development Budget
+STP_pc_economy_recovery_budget_desc	Reconstruction will no longer be a series of emergency payments. Roads, civilian industry, local administrations and debt will receive a shared budget planned for several years rather than the coming week.
+STP_pc_economy_recovery_budget_tt	Steady revenue, expenditure management and civilian production are brought together in a long-term reconstruction programme.
+STP_pc_development_country_must_live	The Country Must Live
+STP_pc_development_country_must_live_desc	Victory explains who gained power, but not why people should build schools, workshops and roads again. State propaganda must exchange the language of the front for the language of reconstruction: Steland exists not for the next war, but for the life that follows it.
+STP_pc_development_country_must_live_tt	Growth across all national development dimensions: §G+5%§!.
+STP_pc_development_posters_on_ruins	Posters on the Ruins
+STP_pc_development_posters_on_ruins_desc	The walls still bear the marks of shellfire, and that is where the new campaign's first posters will appear. Districts will compete not in numbers of volunteers, but in reopened schools, functioning services and restored streets.
+STP_pc_development_posters_on_ruins_tt	Monthly society growth: §G+1§!. Monthly state development growth: §G+1§!. Society development growth: §G+5%§!.
+STP_pc_development_rebuild_as_duty	Reconstruction as a Duty
+STP_pc_development_rebuild_as_duty_desc	The republic will declare reconstruction a civic duty, just as district defence was until recently. Engineers, workers and local administrations will be recognised as participants in a common state project.
+STP_pc_development_rebuild_as_duty_tt	Monthly economic development growth: §G+1§!. Economic development growth: §G+7%§!. Construction speed: §G+5%§!.
+STP_pc_development_engineers_on_radio	Engineers on the Air
+STP_pc_development_engineers_on_radio_desc	Instead of endless speeches about enemies, radio will feature the people restoring power grids, bridges, hospitals and production. Competence must become part of the new state's public image.
+STP_pc_development_engineers_on_radio_tt	Monthly state development growth: §G+1§!. State development growth: §G+7%§!. Research speed: §G+3%§!.
+STP_pc_development_generation_reconstruction	The Reconstruction Generation
+STP_pc_development_generation_reconstruction_desc	If war shaped a generation of the front, peace must shape a generation of reconstruction. Schools, the press and state programmes will tie personal success to national growth rather than membership in another armed group.
+STP_pc_development_generation_reconstruction_tt	Monthly society, state and economic growth: §G+1§! in each dimension. Growth across all development dimensions: §G+8%§!. Additional society, state and economic growth: §G+5%§!.
+STP_pc_development_reopen_universities	Reopen the Universities
+STP_pc_development_reopen_universities_desc	Military headquarters took the best lecturers, laboratories lost equipment, and some institutes existed only on paper for years. The state will return funding, premises and the ability to plan beyond the next campaigning season to the universities.
+STP_pc_development_reopen_universities_tt	Adds §G1 permanent research slot§!. Research speed: §G+2%§!.
+STP_pc_development_national_research_institutes	National Research Institutes
+STP_pc_development_national_research_institutes_desc	Restored universities alone are not enough. The republic will establish a network of specialised institutes linked to industry, infrastructure and state planning. Science must become a permanent national function rather than a peacetime luxury.
+STP_pc_development_national_research_institutes_tt	Adds another §G1 permanent research slot§!. Research speed: §G+3%§!. Economic and state development growth: §G+3%§!.
+STP_postwar_reconstruction_drive	The First Reconstruction Plan
+STP_postwar_reconstruction_drive_desc	Victory ended the civil war, but did not restore normal life. The government must rebuild the economy, restore trust in the centre and persuade the districts to function once more as parts of a single state.\n\n§YReconstruction momentum:§! [?STP_pw_reconstruction_momentum|0]/100\n§YPublic confidence:§! [?STP_pw_public_confidence|0]/100\n§YRegional cohesion:§! [?STP_pw_regional_cohesion|0]/100\n\nAll three indicators must reach §Y70§! to complete the first plan.
+STP_pw_reconstruction_emergency_repairs	Emergency Reconstruction Teams
+STP_pw_reconstruction_emergency_repairs_desc	Direct treasury funds towards bridges, substations, railway junctions and damaged workshops. Within weeks, these teams must show that the central government knows how to repair as well as mobilise.
+STP_pw_reconstruction_district_congresses	District Administration Congresses
+STP_pw_reconstruction_district_congresses_desc	Bring officials, municipal councils and military commandants together for a series of district meetings. The centre will receive a list of real problems, and the regions a channel of influence that does not run through armed headquarters.
+STP_pw_reconstruction_publish_war_accounts	Publish the Wartime Accounts
+STP_pw_reconstruction_publish_war_accounts_desc	Disclose some of the emergency expenditure, requisition lists and wartime debts. It will be painful for the cabinet, but silence about missing money destroys trust faster than any figures.
+STP_pw_reconstruction_veteran_housing	Housing for Demobilised Soldiers
+STP_pw_reconstruction_veteran_housing_desc	Convert empty barracks, allocate construction materials and subsidise housing for families returning from the front. The war must have a visible end.
+STP_pw_complete_first_reconstruction_plan	Complete the First Reconstruction Plan
+STP_pw_complete_first_reconstruction_plan_desc	Essential services are functioning, the districts have rejoined a common administrative system, and society no longer lives in anticipation of another mobilisation. The first emergency phase can end, allowing a transition to long-term development.
+STP_postwar_propaganda_campaigns	Reconstruction Propaganda
+STP_postwar_propaganda_campaigns_desc	After the civil war, propaganda must compete for attention just as construction and administrative programmes compete for money. The number of simultaneous campaigns is limited by the available propaganda slots.
+STP_pw_campaign_country_is_being_built	'A Country Rebuilt'
+STP_pw_campaign_country_is_being_built_desc	Posters, newsreels and local newspapers show road repairs, workshops opening and public services being restored instead of leaders on platforms.
+STP_pw_campaign_one_steland	'One Steland'
+STP_pw_campaign_one_steland_desc	The campaign stresses that the front lines disappeared along with the military administrations. Districts must once again see one another as parts of a single state.
+STP_pw_campaign_engineers_of_peace	'Engineers of Peace'

@@ -1,0 +1,120 @@
+STP_pc_sot_limits_desc	A directorate for 180 days. Sotnikov only.
+STP_pc_sot_shabrat_question	The Living Founder
+STP_pc_sot_shabrat_question_desc	We will determine the place of the former political leadership in the new order.
+STP_pc_sot_keep_command	The Directorate Remains
+STP_pc_sot_keep_command_desc	We will formalise the military directorate's authority and its responsibility for national defence.
+STP_pc_sot_transfer	Transfer of the Seal
+STP_pc_sot_transfer_desc	We will open the transfer of power to one of the civilian successors already introduced.
+STP_pc_sot_val_defense	No Kefreyt Depots
+STP_pc_sot_val_defense_desc	Defence and withdrawal, not hegemony.
+STP_pc_sot_nod_watch	No Return for Nodrul's Advisers
+STP_pc_sot_nod_watch_desc	A border regime without client status.
+STP_pc_gornin_charter	The Protocol Becomes Law
+STP_pc_gornin_charter_desc	Gornin will formalise the procedures of civilian institutions and reduce administrative expenditure.
+STP_pc_vera_lists	The Register before the Banner
+STP_pc_vera_lists_desc	Tikh will investigate the former regime's connections. Political independence will grow, but inspections of enterprises will temporarily disrupt production.
+STP_pc_after_victory_tt	The victors' coalition holds together until a course is fixed: §G+5%§! stability, §R-3%§! organisation.
+STP_pc_count_ruins_tt	Shows which STP/STS core territories Kefreyt still holds.
+STP_pc_name_steland_tt	The country receives the cosmetic name Steland.
+STP_pc_army_register_tt	A temporary register until the republic's permanent army focus is completed.
+STP_pc_navy_reach_water_tt	There is no port. This focus does not build ships.
+STP_pc_navy_heg_inspection_tt	Inspections maintain the client spirit and increase resistance.
+STP_pc_navy_lib_no_basing_tt	A permanent base in an ally's territory requires its event response first.
+STP_pc_air_import_tt	Procurement without new debt if Kefreyt's shipment has already arrived.
+STP_pc_air_heg_pressure_tt	A strike against a hub as an ultimatum.
+STP_pc_air_lib_rules_tt	Strikes against a partner's hubs are forbidden.
+STP_pc_founder_rules	The founder is in power
+STP_pc_named_successor_rules	The course's designated successor is in power
+STP_pc_course_continues	The founder or a designated successor maintains the course
+STP_pc_hegemony_continues	Hegemony is led by the founder or a successor to the established course
+STP_pc_freedom_continues	The charter is upheld by the founder or a successor to the established course
+STP_pc_shabrat_politics_tt	Consolidating hegemony and adopting the freedom charter are points of no return.
+STP_pc_hegemony_open_tt	Opens Steland Hegemony. Does not change ideology.
+STP_pc_freedom_open_tt	Opens Freedom against Slavery. Does not change ideology.
+STP_pc_shared_archive_policy_tt	Introduces Vera Tikh if the archive has not already named her.
+STP_pc_heg_regional_system_tt	A framework for the neighbours outside the diplomatic interface.
+STP_pc_heg_val_audit_tt	If the issue has not yet been raised, the cabinet will receive information about Kefreyt's claims. Treaty terms will be offered by the next focus; refusal does not, by itself, start a war.
+STP_pc_heg_val_terms_tt	An ultimatum. Acceptance creates a client; refusal opens the route to war.
+STP_pc_lib_institutions_tt	Tikh may become an adviser, not the leader.
+STP_pc_lib_civil_army_tt	If Sotnikov is free and serves the republic, he will also join the high command.
+STP_pc_sotnikov_civil_staff	Sotnikov in the Civilian Staff
+STP_pc_lib_competition_tt	Gornin and Tikh will be introduced as candidates if they have not already entered politics. The next focus unlocks the choice of a successor.
+STP_pc_lib_prepare_neighbors_tt	Political preparation for talks with Kefreyt and Nodrul. This is not yet a crisis or a war.
+STP_pc_lib_crisis_tt	Formalises a crisis that is already open. The next step declares the war of liberation.
+STP_pc_lib_independent_gov_tt	The next neighbour receives its own event if it has not yet been offered the package.
+STP_pc_sot_shabrat_question_tt	Does not free the founder or change the leader.
+STP_pc_gornin_charter_tt	Succession occurs only through a scripted event.
+STP_pc_treasury_20_tt	§G+20§! £.
+STP_pc_treasury_50_tt	§G+50§! £.
+STP_pc_treasury_100_tt	§G+100§! £.
+STP_pc_treasury_minus_20_tt	§R-20§! £.
+STP_pc_treasury_minus_40_tt	§R-40§! £.
+STP_pc_treasury_minus_50_tt	§R-50§! £.
+STP_pc_treasury_minus_60_tt	§R-60§! £.
+STP_pc_treasury_minus_75_tt	§R-75§! £.
+STP_pc_treasury_minus_80_tt	§R-80§! £.
+STP_pc_at_bonus	Against Heavier Forces
+STP_pc_naval_bonus	An Affordable Fleet
+STP_pc_fighter_bonus	Shield the Skies
+STP_pc_cas_bonus	Support the Troops
+STP_pc_air_domestic_bonus	Domestic Assembly
+STP_pc_hegemony_league	Steland League
+STP_pc_liberation_coalition	Coalition of Liberation
+STS_steland	Steland
+STS_steland_DEF	Steland
+STS_steland_ADJ	Stelandic
+NOD_mandate_broken	Nodrul without a Mandate
+NOD_mandate_broken_DEF	Nodrul without a Mandate
+NOD_mandate_broken_ADJ	Nodrulian
+STP_pc_val_client	Kefreyt Client
+STP_pc_val_client_desc	Kefreyt has recognised Steland's political primacy. This opens a route into the regional league while preserving its own government.
+STP_pc_nod_client	Nodrul Client
+STP_pc_nod_client_desc	Nodrul has recognised Steland's political primacy. This opens a route into the regional league while preserving its own government.
+VAL_liberated_settlement	Liberated Kefreyt
+VAL_liberated_settlement_desc	A register of captains without the right to veto the package.
+NOD_mandate_broken_desc	Nodrul no longer has the right to return its advisers to the highlands.
+STP_pc_coalition_hold_delta	The Post-victory Coalition
+STP_pc_limited_offense	A Limited Offensive
+STP_pc_limited_offense_desc	Forty-five days of increased attack and breakthrough, at the cost of stability outside core territories.
+STP_pc_emergency_decree	Emergency Decree
+STP_pc_emergency_decree_desc	Emergency powers increase military output and war support while requiring additional administrative expenditure.
+STP_pc_directory_term	The Directorate's Term
+STP_pc_directory_term_desc	Military administration strengthens army organisation at the cost of the cabinet's political initiative.
+STP_pc_watch_val_tt	Permanent observation of Kefreyt. Not a war.
+STP_pc_watch_nod_tt	Permanent observation of Nodrul. Not a war.
+STP_pc_civil_appointment_tt	Civilian appointment of generals costs political influence.
+STP_pc_client_inspection_tt	Inspection of a client's port increases resistance.
+STP_pc_air_recon_decision_tt	Another reconnaissance sortie over the passes remains a separate operation.
+STP_pc_extend_emergency_tt	Emergency powers can be extended only by a separate decision.
+STP_pc_authorized_recruit	Authorised Recruitment
+STP_pc_authorized_recruit_desc	The districts provide personnel to the centre. Republican troops are not recalled from another front.
+STP_pc_mountain_defence	Mountain Defence
+STP_pc_mountain_defence_desc	Training and control of the passes for one hundred and eighty days.
+STP_pc_heg_cadres	Loyal Cadres
+STP_pc_heg_cadres_desc	Appointments pass through the founder's people.
+STP_pc_port_counterintel	Port Control
+STP_pc_port_counterintel_desc	A closed channel for one hundred and eighty days. This does not revoke Nodrul's mandate.
+STP_pc_navy_staff_idea	Staff-controlled Coastal Shipping
+STP_pc_navy_staff_idea_desc	Military escorts take priority over merchant routes.
+STP_pc_drift_defence	Defend the Political Course
+STP_pc_drift_defence_desc	Registration of organisations restrains foreign agitation.
+STP_pc_founder_arbitration	The Founder's Arbitration
+STP_pc_founder_arbitration_desc	His personal word takes precedence over a district veto.
+STP_pc_limited_emergency	A Time-limited State of Emergency
+STP_pc_limited_emergency_desc	Ninety days of mobilisation with an end date declared in advance.
+STP_pc_occupation_admin	Transitional Administration
+STP_pc_occupation_admin_desc	Ninety days of administrative expenditure until the target's capital is handed over to local authorities.
+STP_pc_border_watch	The Kefreyt Cordon
+STP_pc_border_watch_desc	Defence without the right to establish depots across the border.
+STP_pc_nod_watch	The Nodrul Cordon
+STP_pc_nod_watch_desc	A border regime without client status or the return of advisers.
+ADISCORD_STP_pw.1.t	Steland
+ADISCORD_STP_pw.1.d	Two days before the new cabinet's first meeting, the state printing office sent proofs for approval. One read 'Republic of Stelander'. On the other, in the same typeface, stood a word that had not appeared on official seals for generations: 'Steland'.\n\nThe dispute was not about spelling. In the old highland documents, Steland was the country's name. The form 'Stelander' denoted a person or thing belonging to Steland. For decades, foreign chancelleries had written of the Stelander government, the Stelander administration and Stelander territories. After the Fada Pact, the modifier gradually became a noun. The Party established it as the name of its new order, as though the end of the war had brought a new country into existence.\n\nShabrat studied both sheets for a long time. He had no intention of claiming that the past decades had never happened. But the independence won after the civil war did not need a name that had grown out of a foreign chancellery and been adopted by its own regime. The new cabinet was not restoring a tribal union or a bygone century. It was restoring the country's right to name itself.\n\nThe head of the printing office asked which version should go to press.
+ADISCORD_STP_pw.1.a	Print 'Steland'.
+ADISCORD_STP_pw.2.t	The Archive That Survived the War
+ADISCORD_STP_pw.2.d	Combat engineers had to force open the archive vault's door. The retreating administration had removed the sign and taken part of the card index, but the fire never reached the basement. Decades of Ivanov's state remained on the shelves.\n\nWithin the first few hours, they found things the resistance had previously known only through rumour. Annexes to the Fada Pact omitted from the public version. Lists of Nodrulian advisers with access to the ministries. Transfers of rights to mines and water. The High Houses' secret accounts. Registers of detainees in which some names ended with the terse note 'transferred', although their families had received no news for years.\n\nSeveral of Shabrat's people proposed taking the documents straight to the journalists. After the war, the country wanted one great admission that everything the underground had said was true. Shabrat refused. First, every folder had to be numbered, copied, traced to its source, and every signature identified. Publication would follow only then.\n\nFor decades, the old regime had replaced history with a convenient story. It would be all too easy for the new state to do the same in reverse. If Steland intended to try people and revise treaties, it needed more than the victors' legends. It needed documents that would outlast the next government too.
+ADISCORD_STP_pw.2.a	No document without a number.
+ADISCORD_STP_pw.3.t	Monument to the Father of Peace
+ADISCORD_STP_pw.3.d	The crane arrived in the square early in the morning, although no one had ordered the monument's removal. The municipal service had decided that, after a change of government, it was better to be ready. By noon, resistance veterans, officials, journalists and several dozen residents had gathered around the bronze Ivanov.\n\nSomeone had already written 'capitulation' on the pedestal. Nearby, an elderly woman laid flowers. Her son had survived the final year of bombardment precisely because the Fada Pact was signed. A few metres away, a young soldier in Shabrat's army was showing his comrades his grandfather's name on a list of people who disappeared during the post-war purges.\n\nNeither side was entirely lying. Ivanov had ended a war Steland could barely continue. He had also built an order in which peace gradually became a justification for foreign influence, secret agreements and the Chamber's power. Tearing down the statue was easier than deciding which of these two histories should remain in the square.\n\nThe workers stopped the crane and waited for instructions. For the first time, Ivanov's own apparatus would not decide how he was remembered.
+ADISCORD_STP_pw.3.a	Keep the monument. Replace the plaque.
+ADISCORD_STP_pw.3.b	Move Ivanov to a museum.

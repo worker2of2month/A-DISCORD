@@ -1,0 +1,106 @@
+FACTION_SP_OPEN_FACILITY	Open facility: $COST|H$
+FACTION_BECOME_LEADER_BUTTON	Take Leadership
+FACTION_LEADER_INFLUENCE_RATIO_TOO_LOW	Faction influence ratio is too low
+FACTION_ICON	Icon
+FACTION_COLOR	Colour
+ADD_FACILITY_BUTTON	Add Facility
+INTELLIGENCE_POPUP_DESCRIPTION	Are you sure you wish to appoint $GROUP|H$? This will cost $COST|H$ £faction_initiative_texticon
+ADD_GOAL_TITLE	Add Goal
+ADD_GOAL_CANNOT_AFFORD	§RCannot add this goal: it costs $COST|.0$ £faction_initiative_texticon§!
+REPLACE_GOAL_TT_ALREADY_SELECTED	§RThis goal is already active§!
+ADD_GOAL_TT_ALREADY_COMPLETED	§RThis goal has already been completed§!
+ADD_GOAL_TT_ALREADY_ATTEMPTED	§RThis goal has already been attempted§!
+IN_STOCKPILE	with stockpiled equipment: $EQUIPMENTNAME|H$
+REPLACE_GOAL_LOCKED	§RThe goal '$GOALNAME|H$' cannot be replaced until it has been completed!§!
+ADD_GOAL_TT_LOCK_WARNING	§YOnce added, this goal cannot be replaced until it has been completed!§!
+REPLACE_GOAL_TT	§GClick to replace§! the goal '$GOALNAME|H$'
+REPLACE_GOAL_TT_COST	Replacing it will cost $COST|.0$ £faction_initiative_texticon
+ADD_GOAL_DESCRIPTION	Are you sure you wish to add the goal '$GOALNAME|H$'? Changing it later will cost $COST|.0$ £faction_initiative_texticon
+ADD_GOAL_DESCRIPTION_FREE	Are you sure you wish to add the goal '$GOALNAME|H$'?
+GOAL_CONFIRMATION_DESCRIPTION_LOCKED	§RThis goal cannot be replaced until it has been completed§!
+ADD_GOAL	§GClick to add a goal§!
+GOAL_COMPLETED	completed
+GOAL_CANCELED	cancelled
+FACTION_FACILITY_COUNT	Facility slots: $COUNT|H$/$MAX|H$
+FACTION_RESEARCH_FACILITY_MAX_REACHED	§RResearch facility limit reached§!
+FACTION_SUPREME_COMMANDER_TYPE_SORT_FM	Showing field marshals only
+FACTION_SUPREME_COMMANDER_TYPE_SORT_AD	Showing admirals only
+FACTION_UNIT_IS_SUPREME_COMMANDER	§RCurrently serving as a theatre commander§!
+FACTION_THEATER_MARSHAL_ADMIRAL_FILTER	Filter by §Hfield marshals§! or §Hadmirals§!
+NEW_FACTION_WINDOW_TITLE	Select a §Hfaction template§!
+NEW_FACTION_WINDOW_SHOW_UNAVAILABLE_CHECKBOX	Show unavailable templates
+FACTION_SETUP_WINDOW_TITLE	Create Faction
+FACTION_SETUP_CREATE_FACTION_BUTTON	Create Faction
+FACTION_SETUP_INVITE_COUNTRIES_BUTTON	Invite Countries
+FACTION_CHOOSE_ICON	Choose an insignia
+FACTION_CHOOSE_COLOR	Choose a map colour
+CANNOT_REMOVE_FACTION_RULE	§RCannot remove the rule '$RULE|H$'§!
+NEW_FACTION_WINDOW_GOAL	Goals: $VALUE|H$
+NEW_FACTION_WINDOW_RULES	Rules: $VALUE|H$
+NEW_FACTION_WINDOW_MANIFEST	Manifesto:\n$NAME|H$
+NEW_FACTION_WINDOW_RULES_TOOLTIP	§HStarting rules:§!
+NEW_FACTION_WINDOW_GOALS_TOOLTIP	§HStarting goals:§!
+SETUP_FACTION_WINDOW_MANIFEST	Manifesto: $NAME|H$
+SEE_FACTIONS_BUTTON	View Factions
+FACTION_NO_MANIFEST	No manifesto§R!§!
+RULES_TAB_LABEL	Rules
+RESEARCH_TAB_LABEL	Research
+ARMY_TAB_LABEL	Armed Forces
+INDUSTRY_TAB_LABEL	Industry
+INTELLIGENCE_TAB_LABEL	Intelligence
+FACTION_ADD_GOAL	Add a $CATEGORY|H$ goal
+TOTAL_POWER_PROJECTION	Total power projection: $VAL|0H$
+CONTRIBUTION_INFLUENCE	Contribution influence: $VAL|H$ $MOD$
+WAR_SCORE_INFLUENCE	War score influence: $VAL|H$ $MOD$
+FROM_EFFECTS_INFLUENCE	Event influence: $VAL|H$ $MOD$
+INDUSTRIAL_CAPACITY_INFLUENCE	Industrial capacity influence: $VAL|H$ $MOD$
+FACTION_LEADER_BONUS_INFLUENCE	Base faction leader influence: $VAL|H$ $MOD$
+TOTAL_INFLUENCE	Total influence: $VAL|H$
+CONTRIBUTION_INFLUENCE_EXPECTED_GAIN	§HExpected contribution gain:\n§!
+CONTRIBUTION_SUBJECT_SCALER_EXPECTED_GAIN	§RContribution gain is §!$VAL|H%$ §Rdue to subject status§!
+DR_FACTION_POWER_PROJECTION	Faction power projection: 
+FACTION_THEATER_DEFAULT_NAME	Faction Theatre $NUM$
+FACTION_THEATER_SELECT_ALL	Select Maximum
+FACTION_THEATER_NEW_THEATER_BUTTON	New Theatre
+FACTION_THEATER_EXECUTION_MODE_LABEL	Execution mode:
+FACTION_THEATER_TOOLTIP_COMMANDER	Commander: $TITLE$ $NAME|H$
+FACTION_THEATER_TOOLTIP_NO_COMMANDER	§RNo commander!§!
+FACTION_THEATER_TOOLTIP_NO_REGIONS	§RNo regions selected!§!
+FACTION_THEATER_TOOLTIP_NO_COUNTRIES	§RNo countries assigned!§!
+FACTION_THEATER_TOOLTIP_DELAYED	§GClick§! to select this faction theatre
+FACTION_THEATER_AMOUNT	Faction theatres: §H$UNLOCKED$/$MAX$§!
+FACTION_THEATER_NOT_THE_OWNER	§RYou do not own this faction theatre.§!
+FACTION_THEATER_SETTINGS_NO_OWNER	Only the owner can change the faction theatre's settings.
+FACTION_THEATER_COUNTRY_SELECT_NO_OWNER	Only the owner can change the selected countries.
+FACTION_THEATER_MAP_MODE_NO_OWNER	Only the owner can add strategic regions.
+FACTION_THEATER_MAP_MODE_ADD	§GClick§! to add $NAME|H$ to the theatre
+FACTION_THEATER_MAP_MODE_REMOVE	§GClick§! to remove $NAME|H$ from the theatre
+FACTION_THEATER_MAP_MODE_MAX_REACHED	§RMaximum number of regions reached§!
+FACTION_THEATER_MAP_MODE_ADJACENT	§RRegions must be adjacent§!
+FACTIONS_THEATER_MAP_MODE_IN_OTHER_THEATER	Commander $NAME|H$ §Ris already assigned to another theatre§!
+FACTION_THEATER_MAP_MODE_NO_COMMANDER	§RNo theatre commander assigned§!
+FACTION_THEATER_MAP_MODE_CANNOT_REMOVE_CUTPOINT	§RCannot remove this region: regions must remain connected§!
+FACTION_THEATER_REGION_COUNT_TOOLTIP	The §Hcommander's skill level§! allows a maximum of $MAX|H$ regions to be added to this theatre.\nThe theatre currently contains $ADDED|H$ regions.\n\nEach region can belong to only one theatre.
+FACTION_THEATER_COUNTRY_COUNT_TOOLTIP	The §Hcommander's skill level§! allows a maximum of $MAX|H$ countries to be added to this theatre.\nThe theatre currently contains $ADDED|H$ countries.\n\nEach country can be assigned to only one theatre.
+FACTION_THEATER_SWITCH_TO_FACTION_VIEW_TOOLTIP	Show faction theatres
+FACTION_THEATER_SWITCH_TO_THEATER_VIEW_TOOLTIP	Show national theatres
+ dismissal_rules_filter_tooltip	§GClick§! to toggle the §HDismissal§! filter
+change_leader_rules_filter_tooltip	§GClick§! to toggle the §HLeadership Change§! filter
+member_rules_filter_tooltip	§GClick§! to toggle the §HMembership§! filter
+contribution_rule_filter_tooltip	§GClick§! to toggle the §HManpower Contribution§! filter
+joining_rules_filter_tooltip	§GClick§! to toggle the §HJoining§! filter
+peace_conference_rules_filter_tooltip	§GClick§! to toggle the §HPeace Conference§! filter
+war_declaration_rules_filter_tooltip	§GClick§! to toggle the §HWar Declaration§! filter
+FACTION_INTELLIGENCE_TAB	Faction Intelligence
+FACTION_RANKING	Global rank: $VAL|H$
+THEATER_COMMANDER_MODIFIER	$NAME|H$ (faction '$FACTION|H$', theatre '$THEATER|H$'): $VAL|0%-$
+THEATER_COMMANDER_SUPPLY_SKILL_DESC	This commander's planning and logistics skills reduce supply consumption by $VAL|H$
+FACTION_THEATER_POPUP_DESC	Are you sure you wish to create a new theatre? This will cost $COST|0H$ £faction_initiative_texticon£
+FACTION_THEATER_SHOW_PIN_TOOLTIP	Toggle §Hfaction theatre§! visibility in the §Hdefault§!, §Hnaval strategic§! and §Hair strategic§! map modes.
+FACTION_EXECUTE_CAREFUL_DESC	When executing the plan, troops will attack heavily fortified positions only if they are unoccupied. They will not attack provinces if doing so would stretch and weaken the front line.\n\n§gThis affects AI-controlled faction units within the theatre, but not units controlled by players.§!
+FACTION_EXECUTE_BALANCED_DESC	Standard operation execution rules apply. Troops try to advance while keeping the front line as short as possible and may attack fortified positions.\n\n§gThis affects AI-controlled faction units within the theatre, but not units controlled by players.§!
+FACTION_EXECUTE_RUSH_DESC	Troops will attack provinces included in the plan even if doing so stretches the front line or leaves some units exposed.\n\n§gThis affects AI-controlled faction units within the theatre, but not units controlled by players.§!
+theater_western_europe	Western Europe
+theater_eastern_europe	Eastern Europe
+theater_barbarossa_north	Army Group North
+theater_barbarossa_center	Army Group Centre

@@ -1,0 +1,103 @@
+fortify_manila_bay_goal_desc	Fortifying Manila Bay will allow us to project influence across the western Pacific and secure access to the East Indies and South China Sea.
+fortify_manila_tooltip	The province of §YManila§! receives a level 2 §Ycoastal fort§! and a level 7 §Ynaval base§!, while the state of §YManila§! receives a level 8 §Yair base§!.
+fortify_okinawa_goal_name	Fortify Okinawa
+fortify_okinawa_goal_desc	Fortifying Okinawa will enable operations against the Japanese home islands and establish a strong defensive perimeter in the Pacific.
+fortify_okinawa_tooltip	§YOkinawa§! receives level 1 §Yanti-air§! and a level 5 §Yair base§!, while the province of §YNaha§! receives a level 2 §Ycoastal fort§!.
+fortify_iwo_jima_goal_name	Fortify Iwo Jima
+fortify_iwo_jima_goal_desc	Fortifying Iwo Jima will enable operations against the Japanese home islands and establish a strong defensive perimeter in the Pacific.
+expand_caroline_islands_bases_goal_name	Expand Caroline Islands Bases
+expand_caroline_islands_bases_goal_desc	Expanding bases in the Caroline Islands and Truk archipelago will support sustained naval and air campaigns in the central Pacific.
+expand_guadalcanal_bases_goal_name	Expand Guadalcanal Bases
+expand_guadalcanal_bases_goal_desc	Expanding bases on Guadalcanal will improve our control of naval operations in the South Pacific and routes to and from Australia.
+expand_wake_island_bases_goal_name	Expand Wake Island Bases
+expand_midway_island_bases_goal_name	Expand Midway Island Bases
+expand_midway_island_bases_goal_desc	Expanding bases on Midway will secure the central Pacific and provide a key staging point for transoceanic operations.
+undoing_brest_litowsk_goal_name	Avenge the Treaty of Brest-Litovsk
+undoing_brest_litowsk_goal_desc	The shameful Treaty of Brest-Litovsk has never been fully overturned. It is time to tear this disgraceful page from our history once and for all.
+marine_corps_goal_name	Establish a Marine Corps
+marine_corps_goal_desc	Developing amphibious forces will greatly strengthen our offensive capabilities and allow operations in distant territories.
+marine_corps_tech_bonus	$marine_corps_goal_name$ Goal Bonus
+airborne_corps_goal_name	Establish an Airborne Corps
+airborne_corps_goal_desc	Expanding airborne forces will greatly increase our offensive flexibility and allow deeper strikes into enemy territory.
+airborne_corps_tech_bonus	$airborne_corps_goal_name$ Goal Bonus
+mountaineer_corps_goal_name	Establish a Mountaineer Corps
+mountaineer_corps_goal_desc	Expanding mountaineer forces will greatly improve our army's effectiveness in difficult and rugged terrain.
+mountaineer_corps_tech_bonus	$mountaineer_corps_goal_name$ Goal Bonus
+submarine_force_goal_name	Expand the Submarine Fleet
+submarine_force_goal_desc	A strong submarine fleet is needed to cut enemy supply routes.
+submarine_force_tech_bonus	$submarine_force_goal_name$ Goal Bonus
+convoy_escort_force_goal_name	Escort Ocean Convoys
+convoy_escort_force_goal_desc	We need sufficient escort ships to protect our supply routes.
+convoy_escort_force_tech_bonus	$convoy_escort_force_goal_name$ Goal Bonus
+air_superiority_goal_name	Maintain Air Superiority
+air_superiority_goal_desc	Control of the air determines success on land and at sea. We need sufficient fighters to achieve air superiority.
+air_superiority_tech_bonus	$air_superiority_goal_name$ Goal Bonus
+control_mexican_oil_goal_name	Control Mexican Oil
+control_mexican_oil_goal_desc	Securing Mexico's oil fields will provide fuel reserves for industrial and military needs.
+control_curacao_oil_goal_desc	Curacao's refineries process much of Venezuela's oil. Controlling them will give the faction a reliable source of petroleum products.
+control_venezuelan_oil_goal_name	Control Venezuelan Oil
+control_venezuelan_oil_goal_desc	Venezuela's abundant hydrocarbon reserves could provide our faction with fuel for military operations.
+control_guyanan_bauxite_goal_name	Control Guyanese Bauxite
+control_guyanan_bauxite_goal_desc	Control of Guyana's bauxite deposits will provide the faction with resources for producing the aluminium needed for aircraft construction.
+control_suriname_bauxite_goal_name	Control Surinamese Bauxite Deposits
+control_suriname_bauxite_goal_desc	Control of Suriname's rich bauxite deposits will give our faction the raw material needed to expand its aircraft industry.
+control_lappland_metals_goal_name	Control Lapland Metals
+control_lappland_metals_goal_desc	Lapland's deposits will provide the faction with a reliable source of iron and tungsten ores for arms production.
+control_baku_oil_fields_goal_name	Control Baku Oil Fields
+control_baku_oil_fields_goal_desc	Capturing Baku's oil fields will provide access to extensive hydrocarbon reserves essential to military operations.
+control_iraqi_oil_goal_name	Control Iraqi Oil
+control_iraqi_oil_goal_desc	Iraq's oil extraction capacity will play an important role in meeting our forces' fuel requirements.
+control_persian_oil_goal_name	Control Persian Oil
+control_persian_oil_goal_desc	Control of Persian oil fields and refineries will provide a reliable source of fuel for our military objectives.
+control_chinese_metals_goal_name	Control Chinese Metals
+control_chinese_metals_goal_desc	China's rich deposits of valuable metals can provide essential resources for the faction's military industry.
+control_malayan_riches_goal_name	Control Malaya's Riches
+control_malayan_riches_goal_desc	Control of Malaya's tungsten and rubber reserves will greatly enrich the faction's resource base, supplying manufacturing and military logistics.
+control_indonesian_riches_goal_name	Control Indonesia's Riches
+control_indonesian_riches_goal_desc	Indonesia is rich in rubber, oil and other minerals essential to our industrial base. These will help ensure the faction's resource security.
+control_newfoundland_bases_goal_name	Control Newfoundland Bases
+control_newfoundland_bases_goal_desc	Establishing strongholds in Newfoundland will allow us to control North Atlantic convoys and dominate the region.
+control_bermuda_goal_name	Control Bermuda
+control_bermuda_goal_desc	Bases in Bermuda will enable more effective patrols of the central Atlantic and secure supply routes between continents.
+control_bahamas_bases_goal_name	Control Bahamas Bases
+control_bahamas_bases_goal_desc	Bases in the Bahamas will let us control Caribbean sea lanes and protect the Atlantic approaches to the Americas.
+control_panama_canal_goal_name	Control the Panama Canal
+control_panama_canal_goal_desc	Control of the Panama Canal is essential for rapid fleet movements between the Atlantic and Pacific and for strategic flexibility.
+control_trinidad_goal_name	Control Trinidad
+control_trinidad_goal_desc	Trinidad's key location makes it vital for controlling Caribbean oil supplies and provides a strategic foothold off South America's northern coast.
+control_azores_goal_desc	The Azores' strategic location permits control of the central Atlantic, closing the gap in submarine and anti-submarine coverage and ensuring continuous air cover for convoys.
+control_iceland_goal_name	Control Iceland
+control_iceland_goal_desc	Bases in Iceland will let us control the Denmark Strait and retain the initiative along the North Atlantic transport corridor.
+control_faroe_islands_goal_desc	The Faroe Islands' strategic location enables control of northern sea routes and supports military operations in Britain, Scandinavia and the Arctic.
+control_narvik_goal_name	Control Narvik
+control_narvik_goal_desc	A presence in Narvik will secure access to vital iron ore supplies and allow control of Arctic supply lines.
+control_danish_belts_goal_name	Control the Danish Straits
+control_danish_belts_goal_desc	A garrison in the Kattegat will give us complete control of movement between the Baltic and North Seas.
+control_brittany_bases_goal_desc	Strategic bases along Brittany's coast will extend the range of our aircraft and submarines in the Atlantic while opening a route into Europe.
+control_gibraltar_goal_name	Control Gibraltar
+control_gibraltar_goal_desc	The strategic base at Gibraltar will let us control shipping between the Mediterranean and Atlantic.
+control_malta_goal_name	Control Malta
+control_malta_goal_desc	Control of Malta will enable disruption of enemy supply and provide a military presence throughout the central Mediterranean.
+control_crete_goal_name	Control Crete
+control_crete_goal_desc	Control of Crete will open the way to eastern Mediterranean dominance and provide a convenient base for operations in the Aegean and North Africa.
+control_cyprus_goal_name	Control Cyprus
+control_cyprus_goal_desc	Control of Cyprus will support operations in the eastern Mediterranean and facilitate flights to and from the Middle East.
+control_bosporus_goal_name	Control the Bosporus
+control_bosporus_goal_desc	Capturing the Bosporus will let us control all maritime movement between the Black Sea and Mediterranean.
+control_dardanelles_goal_name	Control the Dardanelles
+control_dardanelles_goal_desc	Holding the Dardanelles will allow us to control warships and merchant vessels leaving the Black Sea.
+control_suez_canal_goal_desc	Holding the Suez Canal will give us complete control of the main shipping route between Europe and Asia, enabling rapid transfers of troops and resources.
+control_gulf_of_aden_bases_goal_desc	Strategic bases along the Gulf of Aden will defend the approaches to the Red Sea and control trade routes between Europe, Africa and Asia.
+control_strait_of_hormuz_goal_desc	Strategic bases at the Strait of Hormuz will control access to vital Persian and Iraqi oil.
+control_ceylon_goal_name	Control Ceylon
+control_ceylon_goal_desc	Capturing Ceylon will enable Indian Ocean dominance and protect key sea routes between the Middle East and Southeast Asia.
+control_singapore_goal_name	Control Singapore
+control_singapore_goal_desc	The powerful fortified naval base at Singapore dominates the Strait of Malacca and regulates movement between the Indian and Pacific Oceans. It must be ours.
+control_manila_goal_name	Control Manila
+control_manila_goal_desc	Fortified Manila Bay will project influence across the western Pacific and secure access to the East Indies and South China Sea.
+control_okinawa_goal_name	Control Okinawa
+control_okinawa_goal_desc	Control of Okinawa will enable operations against the Japanese home islands and establish a strong defensive perimeter in the Pacific.
+control_iwo_jima_goal_name	Control Iwo Jima
+control_iwo_jima_goal_desc	Capturing Iwo Jima will support long-range air operations over Japan and extend our influence in the central Pacific.
+control_caroline_islands_goal_desc	Dominance over the Caroline Islands and Truk archipelago will support sustained naval and air campaigns in the central Pacific.
+control_guadalcanal_goal_name	Control Guadalcanal

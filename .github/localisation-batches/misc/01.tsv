@@ -1,0 +1,148 @@
+isolation	Isolation
+civilian_economy	Civilian Economy
+partial_economic_mobilisation	Partial Mobilisation
+war_economy	War Economy
+free_trade	Free Trade
+limited_exports	Limited Exports
+closed_economy	Closed Economy
+ADISCORD_nam_debug_start_resource_war	§RDEBUG:§! Start the Svetlogorye Resource War
+ADISCORD_nam_debug_start_resource_war_desc	Releases Svetlogorye from its old alliance ties, creates the permanent Eflor-Azhar alliance and launches their joint war against Svetlogorye.
+ADISCORD_nam_debug_resolve_coalition_victory	§RDEBUG:§! Divide Svetlogorye among the Victors
+ADISCORD_nam_debug_resolve_coalition_victory_desc	Divides all of Svetlogorye between Eflor and Azhar, eliminates the Svetlogorye Uprising and preserves the victors' alliance.
+ADISCORD_nam_debug_resolve_nam_victory	§RDEBUG:§! Confirm Svetlogorye's Victory
+ADISCORD_nam_debug_resolve_nam_victory_desc	Ends the war with recognition of Svetlogorye, a limited transfer of a border state and elimination of the surviving rebel army; the neighbouring states' alliance remains.
+BM_HISTORY_TITLE	Brief History
+HITTING_FAN_NAME	And So It Begins
+MINIMIZE_EVENT	§GClick§! to minimise. The event will be placed in the event area's §HEvents and Decisions§! section.
+autonomy_dominion	Dominion
+autonomy_supervised_state	Supervised State
+autonomy_colony	Colony
+autonomy_puppet	Puppet
+autonomy_integrated_puppet	Integrated Puppet
+autonomy_annex	Annexed Territory
+autonomy_free	Free State
+autonomy_reichskommissariat	Commissariat
+autonomy_reichsprotectorate	Protectorate
+autonomy_satellite	Satellite
+autonomy_wtt_imperial_associate	Imperial Associate
+autonomy_wtt_imperial_protectorate	Imperial Protectorate
+autonomy_wtt_imperial_subject	Imperial Subject
+autonomy_collaboration_government	Collaboration Government
+autonomy_personal_union	Personal Union
+AUTONOMY_CAN_TAKE_DESC	$OWNER|UH$ can become a $NEXTLEVEL|H$
+AUTONOMY_CANT_TAKE_DESC	$OWNER|UH$ cannot yet become a $NEXTLEVEL|H$
+AUTONOMY_CAN_LOSE_DESC	$OWNER|UH$ can be reduced to a $PREVLEVEL|H$
+AUTONOMY_CANT_LOSE_DESC	$OWNER|UH$ cannot yet be reduced to a $PREVLEVEL|H$
+AUTONOMY_CHANGE_TO_DESC	$OWNER|UH$ will become a $LEVEL|H$
+AUTONOMY_MOVING_DESC	§GChange autonomy level to $LEVEL|H$§!
+AUTONOMY_CURR_DESC	$COUNTRY|H$ is currently a $LEVEL|H$
+AUTONOMY_PROGRESS_DESC	$OWNER|UH$ can become a $NEXTLEVEL|H$ upon reaching £autonomy_texticon $CURRENT|H0$/$TOTAL|H0$ points
+AUTONOMY_PROGRESS_PREV_DESC	$OWNER|UH$ has $CURRENT|H0$ points too many to be reduced to a $PREVLEVEL|H$
+AUTONOMY_COUNTRY_EFFECT	Country
+AUTONOMY_MASTER_COUNTRY_EFFECT	Overlord
+SHOW_SUBJECTS_DESC	Open subject overview
+SHOW_SUBJECTS_DISABLED_DESC	§RWe have no subjects§!
+MANAGE_SUBJECTS_HEADER	Subjects
+LL_TO_OVERLORD_FREEDOM_EFFECT	Subject lend-lease to overlord
+SUBJECT_OF_NAME	Puppet of:\n$VALUE|H$
+LL_TO_PUPPET_FREEDOM_EFFECT	Overlord lend-lease to subject
+MONTHLY_LL_FREEDOM_VALUE_DESC	Monthly autonomy effect upon full delivery
+MONTHLY_LL_FREEDOM_DESC	After full delivery, $COUNTRY|H$ receives £autonomy_texticon $VALUE|+=2$ each month
+MONTHLY_REQUEST_LL_TO_MASTER	§RRequesting lend-lease from a puppet may increase its autonomy§!
+MONTHLY_REQUEST_LL_TO_PUPPET	§RRequesting lend-lease from an overlord may reduce autonomy§!
+EXPORT_FREEDOM_EFFECT	Subject exports to overlord
+WAR_SCORE_FREEDOM_EFFECT	Subject war contribution
+EFFECT_FREEDOM_EFFECT	Subject received
+ACTIVE_ATTACHES_EFFECT	Active Attaches
+MASTER_SURRENDER_FREEDOM_EFFECT	Overlord capitulated
+MISSING_AUTONOMY_SCORE	Requires another £autonomy_texticon $VAL|2Y$ autonomy
+TOO_MUCH_AUTONOMY_SCORE	Has $VAL|2Y$ too much autonomy
+AUTONOMY_CHANGE_COST	Cost (£pol_power ): $VALUE$
+AUTONOMY_FREEDOM_PROMOTE_COST	Requires £autonomy_texticon $SCORE|H0$ more points to advance to this level
+AUTONOMY_FREEDOM_DEMOTE_COST	Requires £autonomy_texticon $SCORE|H0$ fewer points to fall to this level
+CONTINUOUS_AUTONOMY_EFFECTS	§HContinuous Autonomy Effects§!
+EVENT_AUTONOMY_EFFECTS	§HAutonomy Effects§!
+ADD_AUTONOMY_SCORE_DESC	Adds £autonomy_texticon $VALUE|H2$ points
+ADD_AUTONOMY_SCORE_DETAILED_DESC	Adds £autonomy_texticon $VALUE|H2$ points to $COUNTRY|H$
+COLONIAL_FORCES_GENERAL_DESCRIPTION	§GClick to view templates from subjects and governments in exile§!\n\nDivisions created from colonial templates may use more colonial manpower as the colony's autonomy is reduced.
+COLONIAL_FORCES_NO_SUBJECTS	§RWe have no subjects or governments in exile whose templates we can use§!
+FOREIGN_TEMPLATE_DESC	This is a template from our $COUNTRY_ADJ|H$ subject. We can copy it and use it to create colonial armies. The manpower contributed to these armies depends on the subject's autonomy level.
+COLONIAL_TEMPLATE_DESC	This is a colonial template from $COUNTRY_DEF|H$. The manpower contributed to colonial armies depends on the subject's autonomy level.
+FOREIGN_EXILE_TEMPLATE_DESC	This is a $COUNTRY_ADJ|H$ template whose government in exile has taken refuge with us. We can copy it to create exile forces. Exile forces use the government in exile's manpower.
+EXILE_TEMPLATE_DESC	This is an exile template from $COUNTRY_DEF|H$. Exile forces use the government in exile's manpower.
+CONSTRUCTION_MASTER_BUILDING_LEVELS	$MASTER|UH$ is currently constructing $LVL|H$ levels of $BUILDING|H$ for us.
+CONSTRUCTION_MASTER_BUILDING_REDUCE_LEVELS	We may reduce this building's level by only $LVL|R$.
+CONSTRUCTION_MASTER_BUILDING_CANT_REDUCE	§RWe cannot reduce the level or cancel construction of this building.§!
+CONSTRUCTION_INFO_MASTER	Construction is taking place in $WHO|H$. If we are not using all factories, they can contribute their own.
+CONSTRUCTION_INFO_SUBJECT	$WHO|H$ is constructing this building for us. If they are not using all factories, we can contribute our own.
+autonomy_communist_satellite	Satellite
+autonomy_occupation_zone	Occupation Zone
+autonomy_aat_defense_council_member	Nordic Defence Council Member
+autonomy_austro_hungarian_subject	Austro-Hungarian Vassal
+autonomy_volkskommissariat	Volkskommissariat
+autonomy_eu_member	EU Member State
+AUTONOMY_NOT_ENOUGH_TIME	§RAutonomy level can change only once every §Y$DURATION$ days§! (§Y$REMAINDER$ days remaining§!)§!
+autonomy_sea_warlord_subject	Puppet Warlord
+autonomy_sea_integrated_warlord_subject	Integrated Puppet Warlord
+STATE_UPGRADE_BUILDING	Upgrade $BUILDING|H$.
+STATE_UPGRADE_BUILDING_DESC	Construction time: $COST|H$
+PROVINCE_BUILDING_LEVEL	$BUILDING|H$ (level: $LEVEL|H$/$MAX_LEVEL|H$)
+STATE_BUILDING_LEVEL	$BUILDING|H$ (state level: $LEVEL|H$)
+STATE_BUILDING_INCONSTRUCTION	Under construction: $LEVEL|H$
+STATE_BUILDING_SLOT_TECH	We have no information on civilian infrastructure in this state
+STATE_BUILDING_AIR_UNKNOWN_ANTI_AIR_TECH	We have no information on anti-air technology in this state
+STATE_BUILDING_AIR_UNKNOWN_ANTI_AIR	We have no information on anti-air installations in this state
+STATE_BUILDING_NO_KNOWN_FACTORIES	We have no information on factories in this state
+STATE_BUILDING_SOME_KNOWN_FACTORIES	Intelligence indicates at least $AMOUNT|H$ factories in this state
+STATE_CONVERT_BUILDING	Convert $FACTOR|H$ $BUILDING_FROM$ into §H1§! $BUILDING_TO$.
+STATE_CONTROLLER	Controller: @$TAG$$COUNTRY|H$
+STATE_OWNER	Owner: @$TAG$$COUNTRY|H$
+STATE_OWNER_CORE	§GCore Territory§!
+STATE_OWNER_NON_CORE	§YColony§!
+STATE_OWNER_OCCUPIED	§YOccupied State§!
+STATE_CORE	§T$STATE|H$ is a core state of $COUNTRY|H$.§!
+STATE_CORE_DESC	Core territory is an integral part of your country. If it falls under another country's control, you have a legitimate claim to wage war and reclaim it. If successful, no occupation policy is required: the territory simply becomes part of your homeland again.
+STATE_CLAIM	§T$COUNTRY|H$ claims $STATE|H$.§!
+STATE_CONTESTED_OWNER	§T$COUNTRY|H$ is a contested owner of $STATE|H$.§!
+STATE_POPULATION	§HRecruitable Population§!: $AVAIL|*Y$/$MAXAVAIL|*Y$\n§HCivilian Population§!: $LOCKED|*Y$/$MAXLOCKED|*Y$\n
+MONTHLY_BASE_GROWTH	Base: $VALUE|H%2$
+STATE_POPULATION_GROWTH	§HMonthly Growth§!: $VALUE|%2$ (recruitable: $AVAIL|*+$, civilian: $LOCKED|*+$)
+LOCAL_MANPOWER_ACCESSIBLE_FACTOR	Base eligible for service: §R-$VAL|%$§!
+LOCAL_MANPOWER_ACCESSIBLE_NON_CORE_FACTOR	Base eligible for service (non-core territory): §R-$VAL|%$§!
+LOCAL_MANPOWER_ACCESSIBLE_NON_CORE_TOTAL	Total eligible for service (non-core territory): §R-$VAL|%$§!
+STATE_POPULATION_DESC	The number of citizens living in this state. Your conscription law allows part of this manpower to serve in your divisions, ships and aircraft.
+STATE_SET_POLICY	§GClick to change occupation policy in $STATE|H$§!
+STATE_NOT_OCCUPIED	§RYou must occupy $STATE|H$ to change its occupation policy§!
+STATE_CLAIMS	Claims
+STATE_NO_RESOURCES	§T$STATE|H$ has no resources.§!
+LOCAL_PROVINCE_MODIFIERS	\n§HLocal Province Modifiers:§!
+UNLOCKED_SLOTS	Available slots: $NUM|Y$/$MAX|Y$
+UNLOCKED_SLOTS_DESC	The number of available slots depends on the state's infrastructure and population.
+UNLOCKED_SLOTS_CAP	Limited to $NUM|Y$ by technology
+UNLOCKED_SLOTS_FROM_POPULATION	Limited to $NUM|Y$ by population
+UNLOCKED_SLOTS_FROM_INFRASTRUCTURE	Limited to $NUM|Y$ by infrastructure
+UNLOCKED_SLOTS_ABSOLUTE_MAX	Maximum: $NUM|Y$
+UNLOCKED_SLOTS_CAP_DESC_HEADER	Technology limit:
+UNLOCKED_SLOTS_FROM_POPULATION_DESC_HEADER	Population limit:
+UNLOCKED_SLOTS_FROM_INFRASTRUCTURE_DESC_HEADER	Infrastructure limit:
+UNLOCKED_SLOTS_BASE	Base limit: $NUM|Y$
+UNLOCKED_SLOTS_STATE_EXTRA	Extra slots in this state: $NUM|Y$
+PROVINCE_STATE_CATERGORY_TOOLTIP	Category: $CATEGORY|Y$
+PROVINCE_STATE_IMPASSABLE	Impassable: §Rtroops cannot enter§!
+wasteland	Wasteland
+city	Urban Region
+large_city	Dense Urban Region
+metropolis	Metropolis
+megalopolis	Megalopolis
+town	Developed Rural Region
+large_town	Sparse Urban Region
+rural	Rural Region
+enclave	Enclave
+small_island	Small Island
+tiny_island	Tiny Island
+pastoral	Pastoral Land
+OCCUPATION_BREAKDOWN	Occupation breakdown:
+STATE_OWNER_RESISTANCE_NON_CORE_INFO	$COUNTRY|H$ will have access to only $MANPOWER|-%.0$ of the state's manpower.
+STATE_OWNER_RESISTANCE_NON_CORE_INFO_WITH_MODIFIERS	$COUNTRY|H$ will have access to only $MANPOWER|-%.0$ of the state's manpower. It will also receive the following modifiers due to its occupation status:
+STATE_OWNER_MODIFIER_INFO	The country receives the following modifiers due to its occupation status:
+STATE_FOREIGN_RESOURCE_OWNER	Transferred to $COUNTRY|H$

@@ -1,0 +1,109 @@
+control_guadalcanal_goal_desc	Capturing Guadalcanal will let us control naval operations in the South Pacific and routes to and from Australia.
+control_wake_island_goal_name	Control Wake Island
+control_wake_island_goal_desc	Holding Wake Island will extend reconnaissance and air cover over central Pacific routes.
+control_midway_island_goal_name	Control the Midway Islands
+control_midway_island_goal_desc	Control of Midway will secure the central Pacific and provide a key base for transoceanic operations.
+control_hawaii_goal_name	Control Hawaii
+control_hawaii_goal_desc	Capturing Pearl Harbor will consolidate our Pacific presence, simplify logistics coordination throughout the theatre and provide access to America's Pacific coast.
+control_attu_island_goal_name	Control Attu Island
+control_attu_island_goal_desc	Capturing Attu will establish control of North Pacific shipping routes and enable operations along the Aleutian chain towards Alaska and America's Pacific coast.
+undo_versailles_goal_name	Avenge the Treaty of Versailles
+undo_versailles_goal_desc	It is time to end this shameful diktat. We will reclaim our rightful territories!
+strategic_bombing_campaign_goal_name	Strategic Bombing Campaign
+strategic_bombing_campaign_goal_desc	A large-scale strategic bombing campaign will systematically undermine enemy industrial capacity and exhaust their strength.
+liberate_territory_goal_name	Liberate Our Territories
+liberate_territory_goal_desc	The enemy occupies our lands. Liberating them must be our first priority.
+great_offensive_goal_name	Launch a Major Offensive
+great_offensive_goal_desc	A major offensive seizing enemy territory will be our first step towards final victory.
+ALL_FACTION_MEMBERS	§YAll faction members:§!
+THE_FACTION_LEADER	§YThe faction leader:§!
+THE_SPY_MASTER	§YThe spymaster:§!
+TARGET_STATE_CONTROLLERS	§YOwners of the target states:§!
+INFLUENCE_TOP_THREE	The §Y3 faction members§! with the most influence:
+INFLUENCE_TOP_TWO	The §Y2 faction members§! with the most influence:
+INFLUENCE_ABOVE_30_PERCENT	§YAll faction members§! with at least 30% influence:
+GUERILLA_TOTAL_ABOVE_THRESHOLD	Guerrilla activity is taking place in more than 4 states
+GUERILLA_ABOVE_THRESHOLD	Each faction member that has provoked at least 2 guerrilla attacks:
+OWNS_LISTED_STATE	Each faction member owning one of these states:
+ONE_ADMIRAL	§YOne admiral§!
+ONE_GENERAL	§YOne general§!
+ALL_FACTION_MEMBERS_WITH_AMPHIBIOUS_TECH	§YEach faction member§! that has unlocked §Yamphibious warfare§! technologies
+ALL_FACTION_MEMBERS_WITH_PARATROOPERS_TECH	§YEach faction member§! that has unlocked §Yairborne§! technologies
+FACTION_CORE_STATES_NOT_FULLY_CONTROLLED	§YFaction core territories§! are not fully controlled by §Yfaction members§!
+ENEMY_FACTION_CORE_STATES_CONTROLLED_BY_US	§YEnemy faction core territories§! controlled by §Yfaction members§!
+PEACE_CONFERENCE_WINNERS	All countries on the winning side of the peace conference:
+SHORT_TERM	Short Term
+MEDIUM_TERM	Medium Term
+LONG_TERM	Long Term
+FACTION_UPGRADE_RESEARCH_NAME	Research Sharing $INDEX|H$
+FACTION_UPGRADE_RESEARCH_DESC	A §Hresearch§! bonus if another faction member has already researched the same §Htechnology§!. It can be obtained by assigning §Hadditional scientists§! to the §Hfaction's§! §Hfacilities§!.
+FACTION_UPGRADE_FIRST_DESC	Adds $NAME|H$, granting: $VAL|.00H%$ $DESC$
+FACTION_UPGRADE_INCREASE	Increase
+FACTION_UPGRADE_DECREASE	Decrease
+FACTION_UPGRADE_NOT_ENOUGH_INITIATIVE	£trigger_no£Insufficient initiative. Required: $VALUE|.0H$
+FACTION_UPGRADE_BELOW_MINIMUM	Does not meet the faction's minimum requirements
+FACTION_UPGRADE_NO_UPGRADE	§RLimit reached§!
+FACTION_UPGRADE_INTELLIGENCE	Intelligence Sharing $INDEX|H$
+FACTION_UPGRADE_INTELLIGENCE_DESC	An agency branch upgrade bonus if another faction member has already researched the upgrade.
+FACTION_UPGRADE_INTELLIGENCE_NAME_BONUS	Faction intelligence sharing: $BONUS|.0%$
+FACTION_UPGRADE_INTELLIGENCE_BONUS_DESC	Faction §Hintelligence sharing§! allows you to complete §Hagency upgrades§! $BONUS|H.0%$ faster if another member has already unlocked the §Hupgrade§!.\n\nYour faction can share more §Hintelligence§! when its members serve as §Hagency personnel§!.
+FACTION_UPGRADE_DOCTRINE	Doctrine Sharing
+FACTION_DOCTRINE_SHARING_TITLE	§HMilitary Doctrine Sharing§!
+FACTION_DOCTRINE_SHARING_FOLDER_TITLE	§HMilitary Doctrine Sharing:§! $FOLDER_NAME$
+FACTION_DOCTRINE_SHARING_EXPLANATION	Doctrine sharing grants a bonus to £doctrine_mastery §Hmastery points§! for all subdoctrines in which other faction members have more points.
+FACTION_DOCTRINE_SHARING_ACTIVE_BONUS	$COUNTRY_FLAG$ $SUBDOCTRINE_NAME|H$ (up to £doctrine_mastery $MASTERY|H0$)
+FACTION_UNLOCK_DOCTRINE_SHARING	§GClick§! to unlock $FOLDER_NAME|H$ doctrine sharing
+FACTION_UNLOCK_DOCTRINE_SHARING_CANNOT	§RCannot§! unlock $FOLDER_NAME|H$ doctrine sharing
+FACTION_UNLOCK_DOCTRINE_SHARING_NOT_UNLOCKED	§RDoctrine sharing is not yet unlocked§!
+FACTION_DOCTRINE_SHARING_ACTIVE	§GDoctrine sharing is active§!
+FACTION_DOCTRINE_SHARING_BONUS_FROM_COMMANDERS	- From theatre commanders ($NUM_COMMANDERS|H$): $VALUE|+=0$
+FACTION_DOCTRINE_SHARING_BONUS_INCREASE_PROMPT	Each theatre commander increases this bonus by £doctrine_mastery $BONUS_PER_COMMANDER|0H$.
+FACTION_TOTAL_SUBDOCTRINES	Faction subdoctrines: $AMOUNT|H$
+FACTION_TOTAL_SUBDOCTRINES_EXPLANATION	Faction members are currently earning £doctrine_mastery §Hmastery points§! in the following unique doctrines ($AMOUNT|H$):
+FACTION_VIEW_OPEN_DOCTRINES	§GClick§! to open the doctrines screen
+INTELLIGENCE_ADDITIONAL_UPGRADE_BONUS	Upgrade time reduction from:
+INTELLIGENCE_OPPURTUNITIES	Agency upgrade speed bonuses for the following upgrades:
+FACTION_RECRUIT_SPIES_BUTTON	Recruit Spies
+FACTION_COMMANDER_ALREADY_UNLOCKED_WARNING	§R$COUNTRY|H$ has already unlocked a theatre commander§!
+FACTION_COMMANDER_ALREADY_UNLOCKED_WARNING_PORTRAIT	§ROnly $COUNTRY|H$ may appoint a theatre commander§!
+FACTION_COMMANDER_PORTRAIT	Click to appoint a theatre commander
+FACTION_THEATER_CREATE_BUTTON	Add theatre: £faction_initiative_texticon£ $VALUE$
+FACTION_MANPOWER_CONTRIBUTION	Manpower Contribution
+REQUEST_FACTION_MANPOWER	Request Garrison Support
+REQUEST_FACTION_MANPOWER_BUTTON	Request Garrison
+REQUEST_FACTION_MANPOWER_BUTTON_INSUFFICIENT_CONTRIBUTION	§RMore contribution points are required to request manpower.§!
+REQUEST_FACTION_MANPOWER_BUTTON_DESC	Here we can request manpower to fill vacant garrison positions in territory we currently occupy, avoiding depletion of our own armies' manpower.
+FACTION_MEMBER_UPGRADE_BELOW_MIN	§RDoes not meet the faction's minimum requirements.§!
+FACTION_THEATER_HEADER	Faction Theatre
+FACTION_STRAT_REGION_INSTRUCTION	Assign faction members to regions
+FACTION_STRAT_REGION_ARMY	Total Divisions
+FACTION_STRAT_REGION_NAVY	Total Task Forces
+FACTION_STRAT_REGION_NOT_OWNER	§RFaction theatres can be managed only by their owner§! ($COUNTRY|H$)
+FACTION_STRAT_REGION_DESC	$THEATER_NAME|H$\n\nAssign a §Ytheatre commander§! to oversee joint operations in the selected regions, improving the coordination and effectiveness of both army and navy operations.\n\n
+DELETE_FACTION_THEATER	§RDelete§! faction theatre
+ADD_FACTION_THEATER_TITLE	§HCreate a New Faction Theatre§!
+CREATE_FACTION_THEATER	Create: $VALUE|H0$ £faction_initiative_texticon£
+FACTION_THEATER_CLICK_TO_SELECT	§GClick§! to select a theatre
+FACTION_THEATER_MISSING_COMMANDER	§YAssign a commander§! to select\nthe countries and regions\nthey should focus on.\n\nAvailable faction members: $AVAILABLE|H$
+FACTION_THEATER_ADD_COUNTRY	§GClick§! to add $COUNTRY|H$
+FACTION_THEATER_REMOVE_COUNTRY	§GClick§! to remove $COUNTRY|H$
+FACTION_THEATER_COUNTRY_ITEM_DESC	Total divisions: $ARMY|H*$\nTotal task forces: $NAVY|H*$
+FACTION_THEATER_NOT_SELECTED_COUNTRIES	At least one country must be selected.
+FACTION_THEATER_NOT_SELECTED_REGION	At least one region must be selected on the map.
+FACTION_CANT_ASSIGN_SCIENTIST_MORE	Only one additional scientist may be assigned
+FACTION_UNASSIGN_SCIENTIST	Unassign the additional scientist
+FACTION_ASSIGN_FACILITY	§HShare Facility Access§!
+FACTION_ASSIGN_FACILITY_DESC	Sharing access to a special-project facility allows other faction members to assign §Hadditional scientists§! ($NUMBER|H0$)
+FACTION_UNASSIGN_PROJECT_POPUP_TITLE	Revoke Facility Access
+FACTION_UNASSIGN_PROJECT_POPUP_DESC	Revoke access to the facility in $STATE_NAME|Y$?
+FACTION_NO_AGENCY	No Intelligence Agency
+FACTION_AGENCY_ADD	§GClick to add $GROUP|H$§!
+FACTION_SPY_MASTER	Spymaster
+FACTION_HEAD_OF_CRYPTOLOGY	Head of Cryptology
+FACTION_HEAD_OF_COUNTER_INTELLIGENCE	Head of Counterintelligence
+FACTION_HEAD_OF_OPERATIONS	Head of Operations
+FACTION_UNLOCK_BUTTON	Unlock £faction_initiative_texticon£ $VALUE$
+VIEW_EXISTING_FACTIONS	Factions
+VIEW_FACTION	View Factions
+CREATE_FACTION	Create Faction
+TYPE_FACTION_NAME	Enter a faction name

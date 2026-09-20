@@ -1,0 +1,116 @@
+FACTION_LEADER	Faction leader: §Y$COUNTRY$§!
+FACTION_MEMBER	Faction member: §Y$COUNTRY$§!
+FACTION_CREATED_UNDER_MASTER_TITLE	Joining the Overlord's Faction
+FACTION_CREATED_UNDER_MASTER_MESSAGE	We have joined $FACTION|H$ together with our overlord
+joining_rule_non_fascist	All Except Fascists
+joining_rule_non_democratic	All Except Democrats
+joining_rule_non_communist	All Except Communists
+joining_rule_fascist_only	Fascists Only
+joining_rule_africa_only	African Countries Only
+joining_rule_americas_only	Countries of the Americas Only
+joining_rule_same_ideology	Leader's Ideology Only
+joining_rule_all_the_world	The Whole World
+joining_rule_china_only	Countries within China Only
+joining_rule_east_asia_only	East Asian Countries Only
+joining_rule_puppets_only	Own Subjects Only
+joining_rule_neighbors_only	Neighbouring Countries Only
+joining_rule_has_no_war	Countries at Peace
+joining_rule_no_war_restriction	No War Restrictions
+joining_rule_asia_pacific_ocenania_only	Asian and Oceanian Countries
+joining_rule_asia_only	Asian Countries
+joining_rule_communist_only	Communist Countries Only
+joining_rule_democratic_non_aligned	Democratic or Non-Aligned Countries
+joining_rule_nordics_only	Nordic Countries
+joining_rule_baltics_only	Baltic Countries
+joining_rule_islamic_only	Islamic Countries
+is_islamic_country_tt	Is an Islamic country
+joining_rule_balkans_only	Balkan Countries
+joining_rule_hispanic_only	Spanish-speaking Countries
+is_hispanic_country_tt	Is a Spanish-speaking country
+is_east_asian_country_tt	Is an East Asian country
+war_declaration_rules_applicability	§gWhile this rule is active, war may be declared only on countries meeting the following requirements:§!
+war_declaration_rule_any_country	Any Country
+war_declaration_rule_independent_countries_only	Declarer Is Independent
+war_declaration_rule_major_only	Declarer Is a Major Power
+war_declaration_generated_tension_10	Target Has Generated at Least 10% World Tension
+war_declaration_generated_tension_25	Target Has Generated at Least 25% World Tension
+war_declaration_threat_75	World Tension Is at Least 75%
+war_declaration_threat_50	World Tension Is at Least 50%
+war_declaration_threat_25	World Tension Is at Least 25%
+call_to_war_rule_faction_leader_only	Faction Leader Only
+call_to_war_rule_major_only	Major Powers Only
+call_to_war_rule_independent_only	Independent Countries Only
+faction_peace_rule_puppeting_focus	Establish Puppets
+faction_peace_rule_liberation_focus	Liberate Others
+faction_peace_rule_no_puppeting	Discourage Puppeting
+faction_peace_rule_ideology_focus	Spread Our Ideology
+faction_peace_rule_conquest_focus	Expand Our Territory
+faction_peace_china_focus	Expand China
+faction_rule_modifier_encourage_liberate_tt	§G20%§! cost reduction for the §YLiberate§! peace action\n§R5%§! cost increase for the §YTake States§! peace action
+faction_rule_modifier_encourage_puppet_tt	§G20%§! cost reduction for the §YPuppet§! peace action\n§R5%§! cost increase for the §YTake States§! peace action
+faction_rule_modifier_discourage_puppet_tt	§R100%§! cost increase for the §YPuppet§! peace action
+faction_rule_modifier_encourage_force_government_tt	§G20%§! cost reduction for the §YForce Government§! peace action.
+faction_rule_modifier_encourage_take_states_tt	§G10%§! cost reduction for the §YTake States§! peace action\n§R5%§! cost increase for the §YLiberate§! peace action
+faction_rule_modifier_encourage_chinese_states_tt	§G5%§! cost reduction for the §YTake States§! and §YPuppet§! peace actions on Chinese core territories.
+manpower_contribution_disabled	No Garrison Support Requirement
+manpower_contribution_small	Limited Garrison Requirement
+manpower_contribution_medium	Moderate Garrison Requirement
+manpower_contribution_high	Large Garrison Requirement
+dismissal_rule_ideology_not_democratic	Non-Democratic Countries
+dismissal_rule_ideology_not_communism	Non-Communist Countries
+dismissal_rule_ideology_communist	Communist Countries
+dismissal_rule_ideology_fascist	Fascist Countries
+dismissal_rule_ideology_democratic	Democratic Countries
+dismissal_rule_world_tension	Threatening Countries
+dismissal_rule_offensive_war	Countries Waging Their Own Wars
+change_leader_rules_applicability	§gWhile this rule is active, only countries meeting the following requirements may become faction leader:§!
+change_leader_rule_never	Leader Cannot Change
+change_leader_rule_influence	Candidate Has More Faction Influence than the Leader
+SET_FACTION_MANIFEST_EFFECT	Change $FACTION|H$'s manifesto to $GOAL|H$
+REMOVE_FACTION_GOAL_EFFECT	Remove the $GOAL|H$ manifesto from $FACTION|H$
+FACTION_ADD_EXTRA_GOAL_SLOT	Add $VAL|+0$ $CATEGORY|H$ goal slots to $FACTION|H$
+TRIGGER_HAS_FACTION_TEMPLATE	$COUNTRY|H$ is a member of $FACTION|H$
+TRIGGER_HAS_NOT_FACTION_TEMPLATE	$COUNTRY|H$ is not a member of $FACTION|H$
+TRIGGER_HAS_INFLUENCE_TO_BECOME_LEADER	$COUNTRY|H$ has more faction influence than the faction leader. $MISSING_EXPL$
+TRIGGER_HAS_NOT_INFLUENCE_TO_BECOME_LEADER	$COUNTRY|H$ does not have more faction influence than the faction leader. $MISSING_EXPL$
+TRIGGER_HAS_FACTION_TAB_UNLOCKED	Has access to the faction's $TAB|H$ tab
+TRIGGER_HAS_NOT_FACTION_TAB_UNLOCKED	Does not have access to the faction's $TAB|H$ tab
+TRIGGER_MISSING_EXPL	Current: $CURRENT|H*$. Minimum required: $MIN_NEED|H*$
+TRIGGER_MISSING_EXPL_INVERSE	Current: $CURRENT|H*$. Permitted limit: $MIN_NEED|H*$
+TRIGGER_HAS_FACTION_GOAL	$COUNTRY_OR_FACTION|H$ has the faction goal $GOAL|H$
+TRIGGER_HAS_NOT_FACTION_GOAL	$COUNTRY_OR_FACTION|H$ does not have the faction goal $GOAL|H$
+FACTION_MANIFEST_FULFILLMENT_LESS_THAN	Faction manifesto fulfilment is below $VALUE|%0H$
+FACTION_MANIFEST_FULFILLMENT_MORE_THAN	Faction manifesto fulfilment is above $VALUE|%0H$
+FACTION_UPGRADE_LESS_THAN	Faction upgrade level is below $UPGRADENAME|H$
+FACTION_UPGRADE_MORE_THAN	Faction upgrade level is above $UPGRADENAME|H$
+FACTION_UPGRADE_EQUALS	Has the faction upgrade $UPGRADENAME|H$
+FACTION_MEMBER_UPGRADE_LESS_THAN	$COUNTRYNAME|H$'s faction upgrade $UPGRADENAME|H$ is below $UPGRADENAME|H$
+FACTION_MEMBER_UPGRADE_MORE_THAN	$COUNTRYNAME|H$'s faction upgrade $UPGRADENAME|H$ is above $UPGRADENAME|H$
+FACTION_MEMBER_UPGRADE_EQUALS	$COUNTRYNAME|H$ has the faction upgrade $UPGRADENAME|H$
+FACTION_GOAL_FULFILLMENT_IN_RANGE	Progress towards $GOAL|H$ is between $MIN|%0H$ and $MAX|%0H$
+FACTION_GOAL_FULFILLMENT_NOT_IN_RANGE	Progress towards $GOAL|H$ is below $MIN|%0H$ or above $MAX|%0H$
+FACTION_GOAL_FULFILLMENT_LESS_THAN	Progress towards $GOAL|H$ is below $VALUE|%0H$
+FACTION_GOAL_FULFILLMENT_MORE_THAN	Progress towards $GOAL|H$ is above $VALUE|%0H$
+FACTION_POWER_PROJECTION_LESS_THAN	Faction power projection is below $VALUE|H$
+FACTION_POWER_PROJECTION_MORE_THAN	Faction power projection is above $VALUE|H$
+FACTION_INFLUENCE_LESS_THAN	Faction influence is below $VALUE|H$
+FACTION_INFLUENCE_MORE_THAN	Faction influence is above $VALUE|H$
+FACTION_INFLUENCE_RANK_LESS_THAN	Faction influence rank is below $VALUE|H0$
+FACTION_INFLUENCE_RANK_MORE_THAN	Faction influence rank is above $VALUE|H0$
+rule_group_geographical	Geography
+rule_group_ideology_allies	Allies
+rule_group_ideology	Ideology
+rule_group_war	War and Peace
+rule_group_war_declaration	War Declaration
+rule_group_war_declaration_declarer	Declaring Country
+rule_group_war_declaration_target	Target Country
+rule_group_war_declaration_situation	World Situation
+rule_group_generate_wargoal_threat	Justification
+rule_group_member_rules	Member Rules
+rule_group_manpower	Manpower
+manpower_contribution_rule	Manpower Contribution
+contribution_rule	What contribution limits will we set?
+rule_group_dismissal_ideology	Ideology
+rule_group_dismissal_actions	Actions
+rule_group_call_to_war	Initiator
+rule_group_guarantee	Guarantee Tension

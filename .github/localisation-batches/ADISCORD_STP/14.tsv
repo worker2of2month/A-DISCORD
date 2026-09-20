@@ -1,0 +1,77 @@
+STP_ps_temporary_presidium_desc	Losing the Congress requires a government empowered to authorise military expenditure. In seven days, we will approve a provisional presidium, gain another seven days for the active government crisis and unlock paid establishment of an emergency cabinet. The free administrative procedure remains available immediately; a reserve headquarters prepared in advance retains its accelerated option.
+STP_ps_restore_couriers	Restore District Communications
+STP_ps_restore_couriers_desc	After the Bronze Congress fell, some telephone lines disappeared along with their offices; others became more dangerous than silence. District couriers will receive routes, reserve seals and authority to answer to the functioning provisional government.\n\nRestored communications unlock frontline regrouping and provide 25 command power for one such order. They allow the rear administration and an operations directorate to be established without waiting for the capital to be retaken.
+STP_ps_counter_supply	Block Kefreyt's Supply Channels
+STP_ps_counter_supply_desc	Counterintelligence answers to functioning rear administrations or the provisional government. It need not wait for the army to retake the road to Niansas. Specific paid shipments from Kefreyt can be identified and intercepted; losing the overland route halts delivery.
+STP_ps_retake_congress	The Government Returns
+STP_ps_retake_congress_desc	The army must actually retake the Bronze Congress quarter: a government decision cannot replace victory on the ground. After the building is recovered, we will bring the departments together there, check the archives and confirm the district administrations' authority.\n\nResuming operations increases stability and war support by 5 percentage points. This is a one-time result of the government's return; losing and retaking the quarter again grants no further reward.
+STP_ps_permanent_security	Permanent Security Service
+STP_ps_permanent_security_desc	The centre must maintain a permanent apparatus and pay for its work. Reorganisation proceeds through three payments and establishes a centralised model of government.
+STP_ps_presidium_authority	The Presidium's Authority
+STP_ps_presidium_authority_desc	The presidium's authority consolidates the paid reorganisation. District concessions are reviewed upon completion; the emergency apparatus becomes a permanent expense.
+STP_ps_district_fund	District Reconstruction Fund
+STP_ps_district_fund_desc	The districts receive their own programme of actual construction projects. Distributing funds requires the restoration of administration to be completed.
+STP_ps_cells_agreement	Agreement between the Cells
+STP_ps_cells_agreement_desc	District participation is secured in a permanent agreement. Instead of a single security apparatus, the organisation adopts decentralised administration and local obligations.
+STP_ps_exile_office	Representation in Exile
+STP_ps_exile_office_desc	The organisation retains its independent political work, but operates under Nodrul's laws.
+STP_ps_exile_survivors	Gather the Survivors
+STP_ps_exile_survivors_desc	We will assemble active organisers and restore records of the survivors. The dead and arrested do not return by a chancellery's decision.
+STP_ps_host_agreement	An Agreement with Our Hosts
+STP_ps_host_agreement_desc	Nodrul retains its army, head of state and foreign policy. Exile formations require its resources and separate payment.
+STP_ps_exile_formations	Exile Formations
+STP_ps_exile_formations_desc	We will prepare the cadres of new units. Each formation must be paid for in manpower and weapons; the Party's former army is not copied.
+STP_ps_return_terms	The Price of Return
+STP_ps_return_terms_desc	A Party restored by Nodrul will depend on the military victor. These terms may be accepted through a separate decision, or the organisation may continue its work in exile.
+STP_ps_return_campaign_focus	The Campaign of Return
+STP_ps_return_campaign_focus_desc	Political and military preparation allows a separate campaign to begin. If Nodrul is already fighting Shabrat, the existing war is used.
+STP_ps_northern_agreement_tt	Nodrul will receive an offer to accept paid aid packages. War and asylum are agreed separately.
+STP_ps_central_result_tt	Permanent model: stability +5%, daily political power +0.10, administrative expenditure +8%. Emergency district concessions are revoked.
+STP_ps_district_result_tt	Permanent model: construction speed +8%, administrative expenditure -5%, daily political power -0.05. District concessions become part of the agreement.
+STP_ps_institution_payment	Fund a Stage of Apparatus Reorganisation
+STP_ps_institution_payment_work	Fund a Stage of Apparatus Reorganisation - In Progress
+STP_ps_institution_payment_desc	Cost: 2000 treasury units. Duration: 28 days. Cooldown after completion: 0 days. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_institution_payment_work_desc	2000 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_val_send_supply	Send Weapons to the Stelander Underground
+STP_ps_val_send_supply_desc	1200 rifles from actual stockpiles. Preparation takes 28 days; the first dispatch takes 35 days. Without a connected overland route, the cargo waits and does not appear at its destination. Before the split, the rifles remain in a district cache in Niansas; afterwards, they are delivered to STS. Interception transfers them to the Party.
+STP_ps_val_intelligence	Investigate Kefreyt's Requisition
+STP_ps_val_intelligence_work	Investigate Kefreyt's Requisition - In Progress
+STP_ps_val_intelligence_desc	Cost: 450 treasury units. Duration: 7 days. Cooldown after completion: 0 days. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_val_intelligence_work_desc	450 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_val_intercept	Intercept the Known Overland Route
+STP_ps_val_intercept_work	Intercept the Known Overland Route - In Progress
+STP_ps_val_intercept_desc	Cost: 1200 treasury units. Duration: 14 days. Cooldown after completion: 0 days. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_val_intercept_work_desc	1200 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_val_pressure	Pressure the Intermediaries
+STP_ps_val_pressure_work	Pressure the Intermediaries - In Progress
+STP_ps_val_pressure_desc	Cost: 1500 treasury units. Duration: 21 days. Cooldown after completion: 60 days. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_val_pressure_work_desc	1500 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_val_departure	Preparing Kefreyt's Shipment
+STP_ps_val_route_wait	Waiting for an Open Overland Route
+STP_ps_opposition_preparation_second	Second Underground District Operation
+STP_ps_opposition_preparation_second_desc	A separate target and a separate deadline. The operation first establishes an administration, then consolidates influence and military preparation. Disruption in another district does not cancel this cycle.
+STP_ps_interrupt_opposition_second	Disrupt the Second District Operation
+STP_ps_interrupt_opposition_second_desc	This response targets the marked district of the second operation. The reward is its disruption and local influence; no recurring loyalty increase is granted.
+STP_ps_district_rebuild	District Industrial Reconstruction
+STP_ps_district_rebuild_desc	4000 treasury units, 56 days: one civilian factory in the selected district. Requires control and space for construction. Only one district may be funded at a time; losing eligibility refunds the deposit. An emergency cabinet remains a separate operation.
+STP_ps_exile_formation	Form an Exile Brigade
+STP_ps_exile_formation_work	Form an Exile Brigade - In Progress
+STP_ps_exile_formation_desc	1800 treasury units, 6000 men and 600 rifles are reserved until delivery after 28 days. The result is one brigade of six territorial battalions. Cancellation refunds all three resources.
+STP_ps_exile_formation_work_desc	1800 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_exile_formation_result_tt	A brigade of six territorial battalions: 1800 treasury units, 6000 men and 600 rifles are reserved until delivery after 28 days. Cancellation refunds all three resources.
+STP_ps_transport_idea_desc	A temporary, paid army transport service.
+STP_ps_route_guard_idea_desc	Protection of the active Congress-Niansas transport link.
+STP_ps_reserve_idea_desc	Paid training and recovery for existing units.
+STP_ps_engineers_idea_desc	Foreign specialists operate only during the northern war.
+STP_ps_expedition_idea_desc	A paid supply reserve for troops that have entered the war.
+STP_ps_defence_dynamic_desc	Offensive capabilities return in three stages: communications, supply and offensive preparation. This restriction does not reduce defensive firepower.
+STP_ps_nodes_dynamic_desc	Losing the Congress slows planning; losing Niansas restricts army movement. Retaking a province removes its current penalty.
+STP_ps_war_report	\n\n§YParty defence§!\nStage: [?STP_ps_stage|0]/4. 1 - communications, 2 - supply, 3 - offensive preparation, 4 - command restored.\n[STPGetPartyGovernment]\nCurrent stage reserve: £ADISCORD_economy_treasury_texticon [?STP_ps_reorg_deposit|0]. Preserved while paused: [?STP_ps_paused_days|0] days. The active stage's duration is shown in its mission.
+STP_ps_congress_held	The government is operating in the Congress.
+STP_ps_cabinet_operating	The reserve cabinet is functioning. The Congress is lost; its functions have not been fully restored.
+STP_ps_government_lost	No functioning government: reorganisation is paused. A free emergency cabinet is available.
+STP_ps_handoff_disabled	The Party's defeat does not transfer the player to Nodrul.
+STP_ps_asylum_accepted	Asylum has been agreed.
+STP_ps_asylum_unconfirmed	Asylum is unconfirmed or the host country is unavailable.
+STP_ps_exile_desc	The organisation operates in Nodrul with the host government's consent. Nodrul's army and treasury do not copy the defeated Party's resources. Loyalty of the surviving apparatus upon evacuation: [?STP_ps_exile_loyalty|0]. Returning requires acceptance of dependency and an actual military victory.
+STP_ps_program_available_tt	The programme is available in the current phase; the government and recipient are available, the channel is free and the required preparation is complete. Additional conditions are listed in the description.

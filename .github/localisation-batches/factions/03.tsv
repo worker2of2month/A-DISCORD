@@ -1,0 +1,105 @@
+protector_of_peace_goal_name	Guardian of Peace
+protector_of_peace_goal_desc	We will not intervene in wars in Europe or elsewhere. Instead, we will maintain peace and encourage other countries to resolve conflicts without violence.
+contain_japanese_expansion_asia_goal_name	Contain Japanese Expansion
+pan_americanism_goal_name	Pan-Americanism
+amerindian_liberation_goal_name	Liberate the Indigenous Peoples of the Americas
+amerindian_liberation_goal_desc	The indigenous peoples of the New World must be freed from the yoke of the foreign invaders who now oppress them.
+islamic_brotherhood_goal_name	Islamic Brotherhood
+islamic_brotherhood_goal_desc	Islamic countries worldwide must unite to resist those who seek to conquer and enslave us.
+baltic_security_goal_name	Defend the Baltic
+baltic_security_goal_desc	To secure a peaceful future for our citizens, we must defend the Baltic with all our strength. Keeping it under our control will offer its people hope of prosperity.
+nordic_defence_goal_name	Defend Northern Europe
+nordic_defence_goal_desc	To secure a peaceful future for our citizens, we must defend Northern Europe with all our strength. Only by shielding the region from intrusive empires can we preserve hope of prosperity.
+european_dominance_goal_name	Establish European Dominance
+european_dominance_goal_desc	Uniting most of Europe under one banner will create a lasting alliance capable of withstanding even the most dangerous threats.
+asian_dominance_goal_name	Establish Asian Dominance
+asian_dominance_goal_desc	Once our faction controls most of Asia, the world will have to take us seriously.
+middle_east_dominance_goal_name	Control the Middle East
+middle_east_dominance_goal_desc	The Middle East stretches from the Arabian Peninsula and Lebanon to the mountains of Afghanistan. We must unite these lands and bring them under complete control. Working together, the region can become a major force.
+the_arteries_of_trade_goal_name	Protect Trade Routes
+the_arteries_of_trade_goal_desc	To ensure our countries' survival, we must control the main trade routes.
+the_atomic_race_goal_name	Build the First Atomic Bomb
+the_atomic_race_goal_desc	We must ensure that neither our present nor future enemies acquire nuclear weapons before us. Only by being first can we guarantee protection from the ambitions of other powers.
+the_atomic_race_complete_trigger_fail	The first country to complete $sp_nuclear_bomb$ was not a member of [ROOT.GetFactionName]
+rule_the_waves_goal_name	Rule the Waves
+eliminate_the_twin_threats_goal_name	Eliminate the Twin Threats
+disarm_aggression_central_powers_goal_name	Disarm the Aggressors
+rule_the_waves_tech_bonus	Rule the Waves Goal Bonus
+imperial_glory_goal_name	Protect the Empire's Vital Resources
+imperial_glory_goal_desc	We must hold the key strongholds of our empire and its allies. Retaining control of assets across the world will show that we remain a force to be reckoned with.
+production_quotas_goal_name	Meet Production Quotas
+stall_the_fascist_threat_goal_name	Stall the Fascist Threat
+the_red_tide_goal_name	Expand the Red Army
+military_infrastructure_goal_name	Build Military Infrastructure
+military_infrastructure_goal_desc	Developed infrastructure is essential to keeping the defenders of our borders properly supplied.
+ensure_military_r_d_goal_name	Build Military Research Facilities
+ensure_military_r_d_goal_desc	We must maintain modern military standards by building facilities dedicated to researching and developing advanced prototypes and new concepts.
+spy_master_goal_name	Appoint a Spymaster
+spy_master_goal_desc	One faction member must specialise in espionage and intelligence gathering to oversee and direct the faction's operations.
+convoy_sufficiency_goal_name	Convoy Sufficiency
+convoy_sufficiency_goal_desc	To supply our troops overseas and meet industry's import needs, we must build a sufficiently large merchant fleet.
+develop_mexican_oil_goal_name	Develop Mexican Oil Fields
+develop_mexican_oil_goal_desc	Developing Mexico's oil fields will provide fuel reserves for industrial and military needs.
+develop_curacao_oil_goal_name	Develop Curacao's Oil Industry
+develop_curacao_oil_goal_desc	Curacao's refineries process much of Venezuela's oil. Increasing output will give our faction a reliable source of petroleum products.
+develop_venezuelan_oil_goal_name	Develop Venezuelan Oil Fields
+develop_venezuelan_oil_goal_desc	Venezuela possesses abundant hydrocarbon reserves. Increasing extraction will provide our faction with fuel for military operations.
+develop_guyanan_bauxite_goal_name	Expand Guyanese Bauxite Production
+develop_guyanan_bauxite_goal_desc	Expanding Guyana's bauxite mines will provide the raw material needed for large-scale aircraft production.
+develop_suriname_bauxite_goal_name	Expand Surinamese Bauxite Production
+develop_suriname_bauxite_goal_desc	Developing Suriname's rich bauxite deposits will supply our faction with the raw material needed to expand its aircraft industry.
+develop_lappland_metals_goal_name	Expand Lapland Metal Production
+develop_lappland_metals_goal_desc	Developing Lapland's rich metal deposits will give our faction a reliable source of iron and tungsten ores for arms production.
+develop_ploiesti_oil_fields_goal_desc	To provide the faction with the fuel needed to continue the war, we must develop Europe's only oil fields, at Ploiesti.
+develop_baku_oil_fields_goal_name	Develop Baku Oil Fields
+develop_baku_oil_fields_goal_desc	Developing Baku's oil fields will give us access to extensive hydrocarbon reserves essential to military operations.
+develop_iraqi_oil_goal_name	Develop Iraqi Oil Fields
+develop_iraqi_oil_goal_desc	Expanding Iraq's oil extraction capacity will meet our forces' fuel requirements.
+develop_persian_oil_goal_name	Develop Persian Oil Fields
+develop_persian_oil_goal_desc	Strengthening control of Persian oil fields and refineries will secure a reliable fuel source for our military objectives.
+develop_chinese_metals_goal_name	Develop Chinese Metals
+develop_chinese_metals_goal_desc	China's rich deposits of valuable metals can provide essential resources for the faction's military industry.
+develop_malayan_riches_goal_name	Develop Malaya's Riches
+develop_malayan_riches_goal_desc	Expanding tungsten and rubber production in Malaya will greatly enrich the faction's resource base, supplying manufacturing and military logistics.
+develop_indonesian_riches_goal_name	Develop Indonesia's Riches
+expand_newfoundland_bases_goal_name	Expand Newfoundland Bases
+expand_newfoundland_bases_goal_desc	Expanding our Newfoundland bases will improve control of North Atlantic convoys and establish our dominance in the region.
+expand_bermuda_bases_goal_name	Expand Bermuda Bases
+expand_bermuda_bases_goal_desc	Expanding our Bermuda bases will enable more effective patrols of the central Atlantic and secure supply routes between continents.
+expand_bahamas_bases_goal_name	Expand Bahamas Bases
+expand_bahamas_bases_goal_desc	Expanding bases in the Bahamas will help control Caribbean sea lanes and protect the Atlantic approaches to the Americas.
+fortify_panama_canal_goal_name	Fortify the Panama Canal
+expand_trinidad_bases_goal_name	Expand Trinidad Bases
+expand_azores_bases_goal_name	Expand Azores Bases
+expand_iceland_bases_goal_name	Expand Icelandic Bases
+expand_iceland_bases_goal_desc	Expanding bases in Iceland will improve control of the Denmark Strait and preserve our initiative along the North Atlantic transport corridor.
+expand_faroese_bases_goal_name	Expand Faroe Islands Bases
+expand_narvik_bases_goal_name	Expand Narvik Bases
+expand_narvik_bases_goal_desc	Expanding bases in Narvik will secure access to vital iron ore supplies and improve control of Arctic supply lines.
+fortify_danish_belts_goal_name	Fortify the Danish Straits
+fortify_danish_belts_goal_desc	Strengthening our Kattegat garrison will improve control of movement between the Baltic and North Seas.
+fortify_danish_belts_tooltip	Every province in §YJutland§!, §YFunen§! and §YZealand§! controlling the §YDanish Strait§! receives one level 1 §Ycoastal fort§! and is garrisoned by one division.
+fortify_gibraltar_goal_name	Fortify Gibraltar
+fortify_gibraltar_goal_desc	Fortifying the strategic base at the Strait of Gibraltar will improve control of shipping between the Mediterranean and Atlantic.
+expand_maltese_bases_goal_name	Expand Maltese Bases
+expand_maltese_bases_goal_desc	Developing bases in Malta will improve our ability to disrupt enemy supply and provide a military presence throughout the central Mediterranean.
+expand_cretan_bases_goal_name	Expand Cretan Bases
+expand_cretan_bases_goal_desc	Developing bases in Crete will open the way to eastern Mediterranean dominance and provide a convenient staging point for the Aegean and North Africa.
+expand_cypriot_bases_goal_name	Expand Cypriot Bases
+expand_cypriot_bases_goal_desc	Expanding bases in Cyprus will strengthen our eastern Mediterranean foothold and give us control over air routes to the Middle East.
+fortify_bosporus_goal_name	Fortify the Bosporus
+fortify_bosporus_goal_desc	Fortifying the Bosporus will allow us to control all maritime movement between the Black Sea and the Mediterranean.
+fortify_bosporus_tooltip	Every province in §YIstanbul§! controlling the §YBosporus§! receives a level 1 §Ycoastal fort§! and a level 1 §Yland fort§!, and is garrisoned by one division.
+fortify_dardanelles_goal_name	Fortify the Dardanelles
+fortify_dardanelles_goal_desc	Fortifying the Dardanelles will give us control over warships and merchant vessels leaving the Black Sea.
+fortify_dardanelles_tooltip	Every province in §YEdirne§! and §YBursa§! controlling the §YDardanelles§! receives a level 1 §Ycoastal fort§! and a level 1 §Yland fort§!, and is garrisoned by one division.
+fortify_suez_canal_goal_name	Fortify the Suez Canal
+fortify_suez_canal_goal_desc	Holding the Suez Canal will give us complete control of the main shipping route between Europe and Asia.
+fortify_suez_tooltip	Every province in §YSuez§! controlling the §YSuez§! Canal receives a level 1 §Ycoastal fort§! and a level 1 §Yland fort§!, and is garrisoned by one division.
+fortify_strait_of_hormuz_goal_desc	Fortifying strategic bases at the Strait of Hormuz will improve control over access to vital Persian and Iraqi oil.
+fortify_strait_of_hormuz_tooltip	Every province in §YMusandam§! and §YFars§! controlling the §YStrait of Hormuz§! receives a level 1 §Ycoastal fort§! and a level 1 §Yland fort§!, and is garrisoned by one division.
+expand_ceylonese_bases_goal_name	Expand Ceylonese Bases
+expand_ceylonese_bases_goal_desc	Expanding bases in Ceylon will help us dominate the Indian Ocean and improve protection of key sea routes between the Middle East and Southeast Asia.
+expand_singapore_naval_base_goal_name	Expand Singapore Naval Base
+expand_singapore_naval_base_goal_desc	The powerful fortified naval base at Singapore dominates the Strait of Malacca and regulates movement between the Indian and Pacific Oceans. Our presence there must be strengthened.
+fortify_manila_bay_goal_name	Fortify Manila

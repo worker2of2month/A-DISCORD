@@ -1,0 +1,76 @@
+STP_ps_emergency_cabinet_prepared	Activate the Reserve Headquarters
+STP_ps_emergency_cabinet_prepared_desc	600 treasury units and 7 days. The prepared headquarters assumes the government's functions; reorganisation resumes from its saved duration.
+STP_ps_transport_idea	Military Transport
+STP_ps_route_guard_idea	Government Route Security
+STP_ps_reserve_idea	Operational Reserve
+STP_ps_engineers_idea	Northern Engineering Mission
+STP_ps_expedition_idea	Expeditionary Supply
+STP_ps_fund_nod	A Loan to Nodrul
+STP_ps_fund_nod_desc	14 days of preparation, followed by 7 days of delivery. Nodrul receives exactly 1500 treasury units. Repeatable after 42 days. Cancellation before dispatch refunds the entire reserve; after dispatch, transport costs are not refunded, and the cargo is delivered to an eligible Nodrul or lost.
+STP_ps_arm_nod	Weapons for the Northern Front
+STP_ps_arm_nod_desc	14 days of preparation, followed by 7 days of delivery. Sends 1200 rifles, 100 artillery pieces and 60 support equipment from our stockpile; 300 treasury units pay for transport. Repeatable after 28 days. Cancellation before dispatch refunds the entire reserve; after dispatch, transport costs are not refunded, and the cargo is delivered to an eligible Nodrul or lost. If the northern war ends before dispatch, the money and weapons are automatically returned.
+STP_ps_engineers_nod	Engineering Mission
+STP_ps_engineers_nod_desc	21 days of preparation, followed by 7 days of delivery. Upon arrival, 60 days of service grant -10% supply consumption and +5% organisation recovery. Available only while the northern war continues. Cancellation before dispatch refunds the entire reserve; after dispatch, transport costs are not refunded, and the cargo is delivered to an eligible Nodrul or lost. If the northern war ends before dispatch, the entire reserved amount is automatically returned.
+STP_ps_expedition_nod	Prepare Expeditionary Supply
+STP_ps_expedition_nod_desc	21 days of preparation, followed by 7 days of delivery. One intervention reserve grants -10% supply consumption for 42 days after Nodrul actually enters the war. Readiness requirements and the mandatory seven-day redeployment are not shortened. Cancellation before dispatch refunds the entire reserve; after dispatch, transport costs are not refunded, and the cargo is delivered to an eligible Nodrul or lost. If intervention becomes impossible before dispatch and Nodrul has not yet entered the war against Shabrat, the entire amount is automatically returned.
+STP_ps_exile	Party Representation in Nodrul
+STP_ps_cancel_nod	Cancel Northern Package Preparation
+STP_ps_nod_dispatch	Preparing the Northern Package
+STP_ps_nod_delivery	Northern Package in Transit
+STP_ps_agreement_title	A Protocol with Stelander
+STP_ps_agreement_desc	The Party government proposes sending loans, weapons and specialists at its own expense. Acceptance does not oblige Nodrul to declare war or spend its own treasury funds. Possible asylum for the Party leadership will be discussed in a separate protocol.
+STP_ps_agreement_accept	Accept the agreed aid packages.
+STP_ps_agreement_decline	Decline these commitments.
+STP_ps_nod_rifle_purchase	Purchase Rifles for the Northern Front
+STP_ps_nod_rifle_purchase_work	Purchase Rifles for the Northern Front - In Progress
+STP_ps_nod_rifle_purchase_desc	Cost: 1500 treasury units. Duration: 14 days. Cooldown after completion: 0 days. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_nod_rifle_purchase_work_desc	1500 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_exile_offer_title	A Request from the Surviving Leadership
+STP_ps_exile_offer_desc	The Party's army has been defeated. Its surviving organisers request asylum. Acceptance neither takes control of Nodrul away from you nor changes its leader. You may receive the organisation without promising a war to restore it.
+STP_ps_exile_refuse	Close the representation.
+STP_ps_exile_accept	Grant asylum.
+STP_ps_exile_arrived_title	Representation in Exile
+STP_ps_exile_arrived_desc	The war for Stelander has been lost. Shabrat controls the country, and the surviving Party organisation begins its work in Nodrul. Only funds evacuated in advance have been preserved. The host country's army, treasury and government remain its own. Returning will require a separate political agreement and a real military victory.
+STP_ps_exile_arrived_ok	Begin the representation's work.
+STP_ps_return_title	The Restored Government
+STP_ps_return_desc	Nodrul has won the campaign of return. Stelander has been restored as a subject state on its core territories. Surviving leaders may return; the dead remain dead. Old wartime orders do not resume.
+STP_ps_remain_nod	Continue as Nodrul.
+STP_ps_control_stp	Lead the restored Stelander.
+STP_ps_return_terms_tt	Returning will restore Stelander as a subject state of Nodrul. Military victory is required; paying for preparation is no substitute.
+STP_ps_evacuate_funds	Evacuate the Organisation's Reserve
+STP_ps_evacuate_funds_desc	Deducts 3000 treasury units once and places them in an evacuation reserve. If exile is accepted, Nodrul receives the funds; if the Party wins, the reserve is returned. Refusal of asylum means the evacuated funds are lost.
+STP_ps_accept_return_terms	Accept the Terms of Return
+STP_ps_launch_return	Launch the Campaign of Return
+STP_ps_exile_training	Prepare the Return Headquarters
+STP_ps_exile_training_work	Preparing the Return Headquarters
+STP_ps_exile_training_desc	1800 treasury units and 28 days. Headquarters gains 15 Army Experience and prepares the political and military plan for returning. Formations are ordered separately, with their full personnel and equipment reserved.
+STP_ps_exile_training_work_desc	1800 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_radio_network	Government Communications Network
+STP_ps_radio_network_desc	Under the old system, almost every urgent order passed through a handful of capital hubs. Lose one station or one duty officer, and districts began waiting for confirmation that might never arrive. The Party will distribute transmitters, call-sign tables and copies of ciphers across independent communication posts.\n\nThis is not another radio station for speeches. It is a network in which capturing one office no longer means silence for the entire state.
+STP_ps_reserve_hq	Reserve Headquarters
+STP_ps_reserve_hq_desc	For too long, the Bronze Congress has simultaneously been a symbol of power, an archive and the place from which the army expected its orders. A reserve headquarters will receive copies of maps, mobilisation lists, seals and communication channels in a separate protected building outside the government quarter.\n\nIf the capital comes under attack, the state will need not a monument to continuity, but a second desk whose occupants already know what to do.
+STP_ps_evacuation_plan	Evacuation Plan
+STP_ps_evacuation_plan_desc	We will arrange communications, documents and evacuation of the organisation in advance. Funds are evacuated through a separate decision; the plan does not transfer the army or the remaining state treasury.
+STP_ps_northern_partner	The Northern Ally
+STP_ps_northern_partner_desc	Nodrul is fighting its own war. We will offer assistance and establish permanent links between departments. The agreement does not replace its decision on intervention; asylum guarantees are discussed in a separate protocol.
+STP_ps_northern_credit	A Loan to the War Ministry
+STP_ps_northern_credit_desc	The loan is paid from our treasury and enters Nodrul's budget. Supporting our ally competes with rebuilding our own army.
+STP_ps_northern_arms	Weapons for the Northern Front
+STP_ps_northern_arms_desc	The northern front needs rifles, artillery and logistics equipment. Only supplies actually held in our depots can be transferred.
+STP_ps_northern_engineers	Engineering Mission
+STP_ps_northern_engineers_desc	Engineers serve on the active northern front for a limited term. Their military effect ends when the war does.
+STP_ps_joint_staff	Joint Headquarters
+STP_ps_joint_staff_desc	For the first time, Nodrulian officers and the Party staff will sit at one table not as advisers and wards, but as two armies that may need the same road. Common fuel requests, train routes and communication tables will be agreed in advance.\n\nNodrul will retain its own command. The Party will retain its own. Only what must function on the day good intentions cease to be enough for either side will be shared.
+STP_ps_expedition_logistics	Support the Redeployment
+STP_ps_expedition_logistics_desc	We will prepare a supply reserve that takes effect only after Nodrul actually enters the war. The seven-day army redeployment remains mandatory.
+STP_ps_asylum_protocol	Asylum Guarantees
+STP_ps_asylum_protocol_desc	Even defeat of the northern army does not preclude asylum, as long as Nodrul exists and retains an independent government. The agreement provides asylum for the Party leadership; control of Nodrul is not transferred.
+STP_ps_foreign_supply_desk	Foreign Supply Bureau
+STP_ps_foreign_supply_desk_desc	We will separate political surveillance from investigations into specific shipments. Paid intelligence reveals a route; interception requires separate time and funds.
+STP_ps_ammunition_board	Ammunition Reserve
+STP_ps_ammunition_board_desc	A mixed ordnance package can be ordered through the transport directorate or after expanding the arsenals. The government chooses which route to open first. Each order costs 2400 treasury units and takes 21 days; preparing the paperwork alone does not replenish the depots.
+STP_ps_operational_reserve	Operational Reserve
+STP_ps_operational_reserve_desc	Headquarters will begin preparing replacements for exhausted units while supply deliveries are being organised. The paid reserve programme becomes available as soon as unified command is established. It improves preparation and organisation recovery, but grants no free manpower or divisions.
+STP_ps_route_security	Route Security
+STP_ps_route_security_desc	The links between the Bronze Congress and Niansas need protection. The port headquarters or a restored rear administration can open this programme when we control both cities. Paid security does not substitute for retaking lost hubs.
+STP_ps_temporary_presidium	Provisional Presidium

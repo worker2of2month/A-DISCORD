@@ -1,0 +1,103 @@
+STP_pw_party_commercial_recovery_desc	Port contracts must become a flow of money, not an attractive folder of agreements. We will lift emergency restrictions on civilian commerce, expand warehousing capacity and restore long-term shipping. The treasury will receive an immediate influx and a broader revenue base, while construction becomes less dependent on emergency requisitions.
+STP_pw_party_defence_combine	Defence Production Combine
+STP_pw_party_defence_combine_desc	We will unite state procurement in a single production chain: metal, repairs, artillery and small arms. The combine will give the army an immediate consignment of weapons and sustained output growth, but will require a separate oversight apparatus and continuing administrative expenditure.
+STP_pw_party_fortress_corps	District Defence Corps
+STP_pw_party_fortress_corps_desc	If the new army's first task is to survive the next crisis, well-supplied district corps must form its backbone. Common depots, replacement routes and defensive plans will reduce supply consumption and accelerate unit recovery. This is the path to a durable front, not a rapid offensive.
+STP_pw_party_field_staff	Field General Staff
+STP_pw_party_field_staff_desc	A regular army must be able to operate beyond the capital's guard posts and prepare its operations in advance. The field staff will receive authority to coordinate divisional plans, conduct manoeuvres and judge commanders by their performance in the field. The price is foregoing deeper specialisation in district logistics.
+STP_pw_party_joint_defence_board	Joint Defence Commission
+STP_pw_party_joint_defence_board_desc	The renewed protectorate must be more than a paper arrangement. Stelander will bring its own headquarters and northern advisers into a permanent commission, formalising the exchange of plans and supply standards. Even if a separate arms deal falls through, the system linking us to our patron will remain.
+STP_pw_party_armed_neutrality	Armed Independence
+STP_pw_party_armed_neutrality_desc	Rejecting a patron makes sense only if we can defend that decision. We will build an arms reserve, standardise supply and require industry to maintain mobilisation stockpiles. Independence will become a funded military policy rather than a declaration.
+STP_pw_party_foreign_settlement	Confirm Our International Status
+STP_pw_party_foreign_settlement_desc	Our international status can be considered settled only after the chosen course has been tested in practice. A protectorate settles the question through a treaty with Nodrul. Independence must survive its ultimatum and, if an invasion begins, force the north to recognise a sovereign Stelander through military action.
+STP_pw_infantry_lessons_bonus	Lessons of the Civil War
+ADISCORD_STP_preparation.8.pending	Kefreyt agreed to help, but its quartermasters returned the requisition marked as incomplete. The units are still being assembled. The agreement has not been cancelled, even if Stelander splits before they are ready.\n\nShabrat's headquarters read that wording several times. The assistance exists on paper. Now they must hold the route by which it can arrive.
+ADISCORD_STP_preparation.8.delivered	Abilia heard the columns before it saw them. The vehicles entered the city at dawn, followed by artillery and anti-air weapons. A liaison officer handed Shabrat a packet of orders and briefly reported that three divisions were ready to come under his command.\n\nThere was no ceremony at the station. The war had already begun, and Kefreyt had not come for a photograph.
+STP_ARMY_KEFREYT_PENDING	\nKefreyt has agreed to help: §Y3 volunteer divisions are being assembled§!. They have not yet been paid for or added to our army; we must hold Abilia for them to arrive.
+STP_cw_renew_kefreyt_request	Resume Negotiations with Kefreyt
+STP_cw_renew_kefreyt_request_desc	Request three volunteer divisions again after a refusal. If Kefreyt agrees, it will assign a ready contingent or begin assembling one. Negotiations may be repeated after 30 days.
+ADISCORD_STP_pc.1.t	The List Grows
+ADISCORD_STP_pc.1.d	The service is already recording the addresses of printing houses and safe houses. This is not an arrest yet, but the threshold has been named.
+ADISCORD_STP_pc.1.a	Keep the network quiet
+ADISCORD_STP_pc.2.t	The Night List
+ADISCORD_STP_pc.2.d	From ninety to ninety-nine, the names are already on the list. Suspicion can still be reduced while the scale remains below one hundred. At one hundred, arrest follows immediately; lowering the scale afterwards will not undo an arrest that has already taken place.
+ADISCORD_STP_pc.2.a	Continue
+ADISCORD_STP_pc.3.t	Arrest
+ADISCORD_STP_pc.3.d	They did not need to look for the name on the form twice. It had been entered on the night list alongside printing-house addresses and keys to school basements. By morning, the highlands were still arguing over whether it was true, while in Fada the inner courtyard had already been sealed.\n\nShabrat was taken alive. The Party neither declared him dead nor offered a bargain. For the apparatus, it was enough that the man who called Ivanov a transaction could no longer move freely.\n\nThe network did not disappear with him. What disappeared was the one person who could speak for all of it.
+ADISCORD_STP_pc.3.a	Transfer command to Sotnikov
+ADISCORD_STP_pc.3.a_tt	Sotnikov takes over the resistance. He does not become the leader of the Party's STP.
+ADISCORD_STP_pc.3.b	Maintain the network under Gornin's protocol
+ADISCORD_STP_pc.3.b_tt	Gornin is introduced as a contender. He does not become the leader of the Party's STP.
+ADISCORD_STP_pc.4.t	Steland Hegemony
+ADISCORD_STP_pc.4.d	The councils were still in session when the decree was already on the desk. It contained no mention of an 'empire'. Its terms were simpler: Steland would no longer fit its survival around someone else's calendar, and disputed districts would no longer have the right to halt an order.\n\nSome of the victors recognised the highlands' old fear in it: that the Party would be followed by a new master with a local name. Others recognised what they had awaited since the first day of war: a country that spoke first again.\n\nThere is no way back across this threshold. Whoever follows Shabrat will inherit the system, not the right to choose another one on his behalf.
+ADISCORD_STP_pc.4.a	Confirm the course
+ADISCORD_STP_pc.5.t	Freedom against Slavery
+ADISCORD_STP_pc.5.d	The charter did not promise peace. It promised something else: the army would not appoint district authorities, a district would not decide on war, and war would not abolish the expiry of emergency powers.\n\nNo one placed Shabrat's suitcase by the door. They placed him within a framework in which his word carried the greatest weight - until the assembly decided otherwise.\n\nThis offered no shelter to the neighbours. A regime that treated a person as merchandise or a contract company remained an enemy. What changed was what Steland had the right to become after victory on foreign soil: a master or an ally.
+ADISCORD_STP_pc.5.a	Sign the charter
+ADISCORD_STP_pc.6.t	Headquarters Takes Over the Resistance
+ADISCORD_STP_pc.6.d	Sotnikov does not take the Party's seat. He takes over the resistance's chain of command, and only that.
+ADISCORD_STP_pc.6.a	Accept command
+ADISCORD_STP_pc.6.a_tt	Command passes to Sotnikov on the resistance side.
+ADISCORD_STP_pc.7.t	The Seal Can Be Passed On
+ADISCORD_STP_pc.7.d	The course is already fixed. Only the person who speaks for the country will change.
+ADISCORD_STP_pc.7.a	Keep the successor
+ADISCORD_STP_pc.7.b	Bring Shabrat back
+ADISCORD_STP_pc.7.c	Hand over to Gornin
+ADISCORD_STP_pc.7.da	Hand over to Tikh
+ADISCORD_STP_pc.8.t	Death of the Founder
+ADISCORD_STP_pc.8.d	Shabrat is dead. There is no resurrection. The seal remains with whoever already holds office.
+ADISCORD_STP_pc.8.a	Continue without him
+ADISCORD_STP_pc.9.t	The Reckoning with Kefreyt
+ADISCORD_STP_pc.9.d	This is not a debt for past assistance. It concerns the corridor, depots or core territories Kefreyt currently holds.
+ADISCORD_STP_pc.9.a	Present the claim
+ADISCORD_STP_pc.9.b	Accept the terms
+ADISCORD_STP_pc.9.c	Refuse
+ADISCORD_STP_pc.10.t	The Post-war Mandate
+ADISCORD_STP_pc.10.d	The war in Steland has ended, but Nodrul's capital does not regard its outcome as final. A note has been delivered to the new government: a change of power does not cancel earlier claims and obligations.\n\nThe statement leaves the question of Nodrul's mandate open. It contains neither an order to the troops nor instructions to dispatch weapons; the dispute is becoming a diplomatic crisis to which Steland must respond.
+ADISCORD_STP_pc.10.a	The mandate remains in force.
+STP_pc_nod_crisis_opened_tt	Steland's post-war crisis with Nodrul has begun. The response depends on the chosen political course. This statement does not, by itself, declare war or send weapons.
+ADISCORD_STP_pc.11.t	An Independent Government
+ADISCORD_STP_pc.11.d	The package will be agreed locally. Refusal leaves the same leaders in place, without a cosmetic change or an alliance.
+ADISCORD_STP_pc.11.a	Accept the package
+ADISCORD_STP_pc.11.b	Refuse
+ADISCORD_STP_pc.12.t	Emergency Decree
+ADISCORD_STP_pc.12.d	The decree is already on the desk. The course need not be finalised yet, but the powers have already been defined.
+ADISCORD_STP_pc.12.a	Keep the decree
+ADISCORD_STP_pc.13.t	Gornin's Protocol
+ADISCORD_STP_pc.13.d	Gornin already handled the cabinet's paperwork. Now he is being named as a contender, not merely a minister.
+ADISCORD_STP_pc.13.a	Add him to the list
+ADISCORD_STP_pc.14.t	Tikhoreva's Register
+ADISCORD_STP_pc.14.d	The archive is opening as an institution. Tikh joins as custodian of the records, not as head of state.
+ADISCORD_STP_pc.14.a	Open the register
+ADISCORD_STP_pc.15.t	Nodrul Responds
+ADISCORD_STP_pc.15.d	Nodrul's note arrived after the civil war had ended. Its authors refuse to regard the new government's victory as a final settlement of earlier obligations and maintain their claims to influence in Steland.\n\nFor now, no military order has followed these words. The government must determine its response within the chosen political course; the note itself does not start another war.
+ADISCORD_STP_pc.15.a	Take note
+ADISCORD_STP_pc.11.c	Conclude without a package
+STP_pc_after_victory	The Government of Victory
+STP_pc_after_victory_desc	The capital has been taken, but a united state still has to be assembled. We will approve a common reconstruction plan. Civilian services, industry and the army will require separate investments; a permanent cabinet and the country's political settlement will determine the choices that follow.
+STP_pc_count_ruins	Survey the Destruction
+STP_pc_count_ruins_desc	First, we must establish what survived. A survey of roads and houses will show which core territories remain in Kefreyt's hands and where the economy can still be repaired.
+STP_pc_war_ledgers	Wartime Obligations
+STP_pc_war_ledgers_desc	We will collect the agreements, receipts and promises made during the uprising. If Kefreyt supplied volunteers, a separate settlement can be made with it. Its plans along the border will still demand attention.
+STP_pc_name_steland	Call the Country Steland
+STP_pc_name_steland_desc	The resistance no longer conceals its name. On maps and in correspondence, the country is once again called Steland.
+STP_pc_two_borders	Two Borders
+STP_pc_two_borders_desc	The border service will study the deployment of Kefreyt's and Nodrul's forces. The cabinet must know where garrisons are simply rotating and where a new campaign is being prepared.
+STP_pc_army_from_resistance	From Detachments to an Army
+STP_pc_army_from_resistance_desc	The detachments that took the mountain passes must be organised into permanent formations. A war with a neighbour does not cancel that task.
+STP_pc_army_field_count	Field Accounting
+STP_pc_army_field_count_desc	Headquarters will count the rifles and men on the pass. A weapons shortage damages organisation before it changes the map.
+STP_pc_army_officers	The Officer Corps
+STP_pc_army_officers_desc	Field commanders will learn a common staff language. If the founder has already been arrested, the safe-house network will be repaired separately.
+STP_pc_army_supply	Supply the Passes
+STP_pc_army_supply_desc	Depots in Abilia or Hoskheit must supply the mountain formations, not just the capital's garrison.
+STP_pc_army_mountain	Mountain Defence
+STP_pc_army_mountain_desc	We will incorporate the lessons of mountain warfare into the training of regular units. The defence of our own territory will gain a lasting advantage.
+STP_pc_army_against_heavy	Against Heavier Forces
+STP_pc_army_against_heavy_desc	We will train anti-tank crews and open paid orders for infantry equipment and artillery. Command will be able to replenish stockpiles before the chosen campaign.
+STP_pc_army_limited_offense	A Limited Offensive
+STP_pc_army_limited_offense_desc	Our staffs will practise an offensive with a limited objective and supply prepared in advance. A decision will allow a temporary boost to be activated when the army is ready to attack.
+STP_pc_army_hegemony_cadres	Loyal Cadres
+STP_pc_army_hegemony_cadres_desc	Officer schools will train commanders for an army that supports the foreign policy of a strong centre.
+STP_pc_army_republic_control	An Army under the Law

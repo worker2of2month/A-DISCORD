@@ -1,0 +1,77 @@
+STP_pc_val_border_compact_desc	Kefreyt's volunteers did not assist us, but our factories and border districts need reliable trade. We will offer a paid agreement that preserves both countries' independence.
+STP_pc_val_ratify	Ratify the Treaty with Kefreyt
+STP_pc_val_ratify_desc	We will incorporate the accepted terms into departmental procedures and coordinate industrial standards. Political client status and an equal treaty remain distinct outcomes; only the former allows Kefreyt to join the Imperial Union.
+STP_pc_nod_recognition	Mutual Recognition
+STP_pc_nod_recognition_desc	We will renounce the subordination of our neighbour in exchange for recognition of the current government and a non-aggression pact. Nodrul will receive compensation for ending the dispute; it is entitled to reject the offer.
+STP_pc_nod_ratify	Secure the Northern Border
+STP_pc_nod_ratify_desc	Following Nodrul's acceptance, we will agree on border-service procedures. Peaceful recognition removes the need to prepare an offensive, but does not make Nodrul a dependent government.
+STP_pc_val_demand_offer_tt	Kefreyt will receive a demand for political dependence. Refusal will unlock military preparations, but will not declare war.
+STP_pc_nod_demand_offer_tt	Nodrul will receive a demand for political dependence. Refusal will unlock military preparations, but will not declare war.
+STP_pc_val_trade_offer_tt	Kefreyt will receive an offer of a mutual treaty. Only after it accepts will we pay £ADISCORD_economy_treasury_texticon §Y1800§!, or §Y900§! if the wartime accounts have already been settled. Both countries will receive a non-aggression pact, §G+3%§! military factory output and §G-3%§! supply consumption. Kefreyt will remain independent.
+STP_pc_nod_border_offer_tt	Nodrul will receive an offer of mutual recognition. After it accepts, we will pay £ADISCORD_economy_treasury_texticon §Y1350§!. Both countries will sign a non-aggression pact and reduce army expenditure by §G8%§!. Nodrul will remain independent.
+STP_pc_campaign_preparation_tt	Unlocks paid supply preparation: £ADISCORD_economy_treasury_texticon §Y900§! and §Y35 days§!. The order to go to war will then remain available for §Y90 days§!. The enemy will receive a warning; the focus itself does not declare war.
+STP_pc_campaign_paid_tt	Payment covers transport and the establishment of depots. Cancellation does not refund money already spent. After §Y35 days§!, readiness will allow the campaign to begin within §Y90 days§!.
+STP_pc_nod_refused_tt	Nodrul rejected the offer
+STP_pc_nod_terms_accepted	Nodrul accepted the proposed terms
+STP_pc_joint_workshops	Shared Industrial Standards
+STP_pc_offer_expired_desc	The offer is no longer valid: relations between the countries have changed or a response has already been delivered. This document creates no new obligations.
+STP_pc_reject_terms	Reject the terms.
+STP_pc_accept_compact	Accept the mutual treaty.
+STP_pc_accept_client_terms	Recognise Steland's political primacy.
+STP_pc_val_compact	Kefreyt Supply Agreement
+STP_pc_val_compact_desc	The treaty establishes non-aggression and mutual supplies for industry and the army. Kefreyt remains independent.
+STP_pc_nod_compact	Northern Border Agreement
+STP_pc_nod_compact_desc	Mutual recognition allows emergency expenditure on the northern border to be reduced without surrendering sovereignty.
+STP_pc_val_compact_settlement_tt	Steland will pay for the treaty: 1800 from the treasury, or 900 if wartime accounts were previously settled. The funds will go to Kefreyt. The treaty grants both sides non-aggression, +3% military factory output and -3% supply consumption.
+STP_pc_nod_compact_settlement_tt	Steland will pay Nodrul 1350 from the treasury. The treaty grants both sides non-aggression and -8% army expenditure; it creates no political dependence.
+ADISCORD_STP_pc.17.t	Steland's Proposal
+ADISCORD_STP_pc.17.compact	Steland proposes a permanent supply and non-aggression agreement. Our departments will receive payment, while factories and army depots will gain agreed operating terms. If previous wartime accounts have already been settled, the new payment will be reduced.\n\nKefreyt's sovereignty is not affected. Refusal will leave the border without an agreement and allow Steland to proceed to military preparations.
+ADISCORD_STP_pc.17.demand	A demand has arrived from Steland that we recognise its political primacy. We are offered the retention of our administration, but must coordinate foreign policy with our new neighbour.\n\nThis is not a settlement for earlier supplies. Acceptance means a dependent course; refusal may lead to preparations for an invasion.
+ADISCORD_STP_pc.18.t	The Northern Border
+ADISCORD_STP_pc.18.compact	Steland's government proposes ending the dispute over the old mandate, recognising one another and signing a non-aggression pact. Nodrul will receive compensation of 1350 treasury units. Both sides will be able to reduce emergency army expenditure.\n\nSteland renounces its pursuit of our subordination. If we agree, payment and the treaty will take effect together.
+ADISCORD_STP_pc.18.demand	Steland's government demands that we abandon the former mandate and recognise its own political primacy. Formally, our administration will remain, but the country's course will depend on Steland.\n\nRefusal does not mean immediate war. Nevertheless, an army deployment along the border may follow this note.
+ADISCORD_STP_pc.20.t	Preparations on the Border
+ADISCORD_STP_pc.20.d	After unsuccessful negotiations, Steland has begun funded transport operations towards the border. Headquarters links the movement of these columns to preparations for an offensive.\n\nWe have time to strengthen our defences. Deployment itself does not yet constitute a declaration of war; the neighbouring government has not issued its final order.
+ADISCORD_STP_pc.20.a	Bring headquarters and the reserves to readiness.
+ADISCORD_STP_pc.21.t	An Answer to the Proposal
+ADISCORD_STP_pc.21.val_compact	Kefreyt has accepted the supply and non-aggression agreement. The agreed payment has been transferred, and the industrial departments of both countries have begun their work. Kefreyt remains independent.\n\nThe government can now ratify the treaty through a separate focus and proceed to shared industrial standards.
+ADISCORD_STP_pc.21.val_client	Kefreyt has agreed to recognise Steland's political primacy. Its administration remains in place, but its foreign-policy course is now tied to our government.\n\nRatification of the agreement is available. When the Imperial Union is created, Kefreyt will be able to join on the accepted terms.
+ADISCORD_STP_pc.21.val_refused	Kefreyt rejected the proposed terms. No payments or new obligations have been created.\n\nHeadquarters can draw up a plan for a mountain campaign. Supply funding and 35 days of preparation will then be required; declaring war will remain a separate government decision.
+ADISCORD_STP_pc.21.nod_compact	Nodrul has agreed to mutual recognition and a non-aggression pact. Compensation of 1350 treasury units has been transferred. Both countries remain independent and are reducing army expenditure.\n\nThe northern border can now be secured through a separate focus.
+ADISCORD_STP_pc.21.nod_client	Nodrul has recognised Steland's political primacy. The northern administration remains in place, but the old relationship of dependence gives way to our regional leadership.\n\nSecuring the northern border is available. When the Imperial Union is created, Nodrul will be able to join on the accepted terms.
+ADISCORD_STP_pc.21.nod_refused	Nodrul rejected the proposed terms. No payments or new obligations have been created.\n\nHeadquarters can draw up a plan for a northern campaign. Supply funding and 35 days of preparation will then be required; declaring war will remain a separate government decision.
+ADISCORD_STP_pc.21.a	Forward the documents to the government.
+STP_pw_party_northern_protocol	A Protocol with Nodrul
+STP_pw_party_northern_protocol_desc	Victory over the uprising did not settle the question of our former dependence. We will request Nodrul's terms before choosing between returning to its protection and pursuing an independent course.
+STP_pw_party_protectorate	Renew the Protectorate
+STP_pw_party_protectorate_desc	We will accept Nodrul's offer of protection. Stelander will become its puppet again; the exchange of experience will help restore a regular army.
+STP_pw_party_sovereignty	Rely on Our Own Strength
+STP_pw_party_sovereignty_desc	The government will definitively reject the protectorate and expand domestic military production. Nodrul will view this not as a diplomatic formality, but as an open break with the old order. Completing the focus begins §R90 days of preparation for a northern invasion§!. If we wished to avoid war, we needed to accept the protectorate earlier.
+STP_pw_party_northern_protocol_tt	Nodrul will receive a request to renew the protectorate. Its agreement will unlock the corresponding focus, but the final choice remains with Stelander.
+STP_pw_party_protectorate_tt	Stelander will once again become §YNodrul's puppet§!.
+STP_pw_party_nod_offer_accepted_tt	Stelander will be able to accept the protectorate through a separate focus. The response itself does not change its status.
+STP_pw_party_nod_offer_pending	Awaiting Nodrul's response
+STP_pw_party_nod_offer_accepted	Nodrul agrees to renew the protectorate
+STP_pw_party_staff_exchange	Staff Experience Exchange
+ADISCORD_STP_pc.19.t	The Protectorate Question
+ADISCORD_STP_pc.19.d	The Party has retained power in Stelander. Its representatives request terms for returning to our protection. Accepting the proposal will allow them to ratify the protectorate; until then, Stelander remains independent.\n\nRefusal will leave the presidium to rely solely on its own resources and independent policy.
+ADISCORD_STP_pc.19.refuse	Let them answer for themselves.
+ADISCORD_STP_pc.19.accept	We are ready to renew the protectorate.
+STP_pc_can_offer_nod_terms	Nodrul is independent, is not at war with us and does not belong to our faction; no other unresolved offer exists
+STP_pw_prepare_val_campaign	Deploy Supplies against Kefreyt
+STP_pw_prepare_val_campaign_desc	Transport and forward depots cost £ADISCORD_economy_treasury_texticon §Y900§!. Preparation takes §Y35 days§!, and readiness lasts for §Y90 days§!. The enemy will receive a warning and a temporary defensive-preparation bonus. Cancellation does not refund the money; preparation ends if diplomatic conditions change.
+STP_pw_begin_val_campaign	Begin the Campaign against Kefreyt
+STP_pw_begin_val_campaign_desc	Declare war according to the prepared plan. Depot readiness will be consumed, and the army will receive enhanced offensive preparation for §Y35 days§!.
+STP_pc_val_campaign_ready	Ready for the Kefreyt Campaign
+STP_pc_val_campaign_ready_desc	Forward depots and transport are ready. The order to begin the campaign is available while this spirit remains active.
+STP_pw_prepare_nod_campaign	Deploy Supplies against Nodrul
+STP_pw_prepare_nod_campaign_desc	Transport and forward depots cost £ADISCORD_economy_treasury_texticon §Y900§!. Preparation takes §Y35 days§!, and readiness lasts for §Y90 days§!. The enemy will receive a warning and a temporary defensive-preparation bonus. Cancellation does not refund the money; preparation ends if diplomatic conditions change.
+STP_pw_begin_nod_campaign	Begin the Campaign against Nodrul
+STP_pw_begin_nod_campaign_desc	Declare war according to the prepared plan. Depot readiness will be consumed, and the army will receive enhanced offensive preparation for §Y35 days§!.
+STP_pc_nod_campaign_ready	Ready for the Nodrul Campaign
+STP_pc_nod_campaign_ready_desc	Forward depots and transport are ready. The order to begin the campaign is available while this spirit remains active.
+STP_pw_party_nod_military_mission	Nodrul's Military Mission
+STP_pw_party_nod_military_mission_desc	We will ask our patron for an arms shipment from its actual stockpiles. Nodrul will decide whether to sell us 1000 infantry equipment and 100 support equipment for 450 treasury units. Payment will be deducted only when the agreed transfer takes place.
+STP_pw_party_domestic_pattern	A Domestic Weapons Pattern
+STP_pw_party_domestic_pattern_desc	An independent Stelander must maintain its army without its northern patron's permission. We will support small-arms research and open a repeatable state order for infantry equipment, support equipment and artillery.
+STP_pw_party_border_staff	Border Headquarters

@@ -1,0 +1,89 @@
+STP_party_assault_order_tt	§GOne reinforced division will be formed§! from the Party's paid reserves. Deployment prioritises a controlled district near the front. No partial package is deducted without full delivery.
+ADISCORD_STP_pc.25.t	A Signature without the President
+ADISCORD_STP_pc.25.d	Three identical folders lay on the secretary's desk. Once, all three would have gone to Ivanov, returned with a brief annotation and been sent on to their departments. Now they remained where they were. No one wanted to be the first to decide where carrying out the president's will ended and someone else's authority began.\n\nHedersett read the proposed succession procedure to the end. It contained neither a promise of a new era nor a solemn announcement that the old one was over. Only offices, deadlines and responsibility for an order left unsigned. District leaders were to receive certified copies before the next meeting.\n\nWhen the secretary asked whose seal should go on the covering letter, Hedersett slid the presidium's stamp towards him. Work had to continue.
+ADISCORD_STP_pc.25.a	Let the presidium's seal replace the president's signature.
+ADISCORD_STP_pc.26.t	The Districts' Signatures
+ADISCORD_STP_pc.26.d	The delegations left the capital with mixed feelings. Some regarded the charters as a return to the familiar order; others saw the last convenient opportunity to secure their authority. All received the same text, with their own annexes.\n\nThe ministries were already arguing over how many exceptions the common budget could bear. Local officials were calculating how many specialists could return without fresh inspections. Hedersett retained the presidium's right to demand results, but accepted that the work would not be done by people sent from the capital.\n\nThe Party remained in power. Now its unity would have to rest not only on appointments, but on honouring signed obligations.
+ADISCORD_STP_pc.26.a	A signature binds the capital as well as the districts.
+ADISCORD_STP_pc.27.t	A Single Chain of Orders
+ADISCORD_STP_pc.27.d	The appointments register covered half the long table. Beside it lay garrison reports, lists of commissioners and a summary of institutions that had yet to acknowledge receipt of the new procedure. Every sheet had a space for the name of the person responsible.\n\nHedersett did not demand unanimity from those assembled. He needed an order signed in the capital to remain an order, rather than become a suggestion by the time it reached a district chancellery. Commissions received the right to replace managers; departments, the duty to report on implementation.\n\nBy evening, it was clear that the new system lacked inspectors and that some of the best engineers had once again been drawn into inquiries. These expenses went into the register too. A hierarchy had to be maintained, not merely proclaimed.
+ADISCORD_STP_pc.27.a	An order must be an order again.
+STP_PARTY_LAST_RESPONSE	[STPGetPartyResponseOutcome]
+STP_PARTY_OUTCOME_1	§Rthe inspectors followed a convincing false trail§!
+STP_PARTY_OUTCOME_2	§Ythe inspection stalled, but found inconsistencies§!
+STP_PARTY_OUTCOME_3	§Ga courier was detained; one administrative contact may have been lost§!
+STP_PARTY_OUTCOME_4	§Gcounterintelligence exposed the district network; unprotected connections were lost and operations are blocked for 56 days§!
+STP_PARTY_OUTCOME_5	§Gthe inspection removed a recruited official§!
+STP_PARTY_OUTCOME_6	§Gthe agreement with the local council was terminated and a Party garrison installed§!
+STP_PARTY_OUTCOME_7	§Gsecurity forces struck the network's most prominent centre§!
+STP_PARTY_OUTCOME_8	§Gthe apparatus strengthened routine administrative discipline§!
+STP_PARTY_OUTCOME_9	§Ythe official was sacrificed; military connections and stockpiles were preserved§!
+STP_PARTY_OUTCOME_10	§Gthe inspection found traces of the opposition; legitimacy shifted 4% towards the Party§!
+STP_PARTY_OUTCOME_11	§Rthe inspection found no traces of the opposition; legitimacy shifted 2% towards Shabrat§!
+STP_PARTY_OUTCOME_12	§Ycivilian administration was preserved; the local military network was disbanded§!
+STP_cw_can_spend_600	Treasury: at least 600
+STP_cw_can_spend_1200	Treasury: at least 1200
+STP_cw_can_spend_2400	Treasury: at least 2400
+STP_cw_treasury_3000_tt	The treasury will receive £ADISCORD_economy_treasury_texticon §G3000§! monetary units.
+STP_cw_can_spend_6000	Treasury: at least 6000
+STP_pw_treasury_900_tt	Treasury: §G+900§!. Funds exceeding the treasury limit are not retained.
+STP_party_factions	Party Factions
+STP_party_factions_desc	Faction influence totals 100%. Each group's support determines its contribution to apparatus loyalty. Focuses and agreements change the balance of power; a political agreement can be concluded once every 30 days.
+STP_pf_title	BALANCE WITHIN THE PARTY
+STP_pf_total	Apparatus loyalty: §Y[?STP_apparatus_loyalty|1]/100§!
+STP_pf_help	Influence: share of power.\nSupport: attitude towards the leadership.\nHover: contribution and consequences.
+STP_pf_formula_tt	Apparatus loyalty = sum of (influence × support) / 100.\nStrengthening a satisfied group reinforces the apparatus; strengthening a dissatisfied one weakens it.\nGeneral loyalty rewards change every faction's support by the stated number of points, within 0-100.\nThe threshold of 70 slows underground preparations; below 25, they accelerate. Once the war begins, political and economic consequences remain, but the preparatory underground no longer operates.
+STP_pf_cooldown_tt	30 days have passed since the last faction agreement
+STP_pf_nod_contacts_tt	Nodrul exists, has not capitulated and is not at war with us; the sovereign course has not yet been fixed
+STP_pf_balance_dynamic	Balance of Party Factions
+STP_pf_conservatives_name	Conservatives
+STP_pf_conservatives_badge	C
+STP_pf_conservatives_influence_loc	Influence: §Y[?STP_pf_conservatives_influence|1]%§!
+STP_pf_conservatives_support_loc	Support: §Y[?STP_pf_conservatives_support|1]/100§!
+STP_pf_conservatives_tt	§YConservatives§!\nContinuity of government and control over appointments.\n\nContribution to apparatus loyalty: §Y[?STP_pf_conservatives_contribution|2]§! points.\nAdministrative expenditure: [?STP_pf_conservatives_effect|=-2%].\nEffect = (support - 50) × influence share × 0.2%; the sign is reversed: a satisfied group reduces the indicator.
+STP_pf_negotiate_conservatives	Preserve Personnel Guarantees
+STP_pf_negotiate_conservatives_desc	Continuity of government and control over appointments. The agreement strengthens this faction and displeases the Radical Hedonists. Cost: £political_power_texticon 35. All agreements share a 30-day cooldown.
+STP_pf_conservatives_room_tt	Conservative influence is below 60%
+STP_pf_conservatives_deal_tt	§YConservatives§!: influence §Y+5 percentage points§! (up to 100%, with other shares reduced proportionately), support §G+12§!. §YRadical Hedonists§!: support §R-12§!. Support is bounded by 0-100; apparatus loyalty and faction effects are recalculated.
+STP_pf_borons_name	Borons
+STP_pf_borons_badge	B
+STP_pf_borons_influence_loc	Influence: §Y[?STP_pf_borons_influence|1]%§!
+STP_pf_borons_support_loc	Support: §Y[?STP_pf_borons_support|1]/100§!
+STP_pf_borons_tt	§YBorons§!\nLocal authority and protection of privileges against interference from the capital.\n\nContribution to apparatus loyalty: §Y[?STP_pf_borons_contribution|2]§! points.\nConstruction speed: [?STP_pf_borons_effect|=+2%].\nEffect = (support - 50) × influence share × 0.2%; a satisfied group increases the indicator.
+STP_pf_negotiate_borons	Confirm the Borons' Privileges
+STP_pf_negotiate_borons_desc	Local authority and protection of privileges against interference from the capital. The agreement strengthens this faction and displeases the Merchants. Cost: £political_power_texticon 35. All agreements share a 30-day cooldown.
+STP_pf_borons_room_tt	Boron influence is below 60%
+STP_pf_borons_deal_tt	§YBorons§!: influence §Y+5 percentage points§! (up to 100%, with other shares reduced proportionately), support §G+12§!. §YMerchants§!: support §R-12§!. Support is bounded by 0-100; apparatus loyalty and faction effects are recalculated.
+STP_pf_security_name	Security Service
+STP_pf_security_badge	SS
+STP_pf_security_influence_loc	Influence: §Y[?STP_pf_security_influence|1]%§!
+STP_pf_security_support_loc	Support: §Y[?STP_pf_security_support|1]/100§!
+STP_pf_security_tt	§YSecurity Service§!\nInspections, agents and control of internal security.\n\nContribution to apparatus loyalty: §Y[?STP_pf_security_contribution|2]§! points.\nStability: [?STP_pf_security_effect|=+2%].\nEffect = (support - 50) × influence share × 0.1%; a satisfied group increases the indicator.
+STP_pf_negotiate_security	Expand the Service's Powers
+STP_pf_negotiate_security_desc	Inspections, agents and control of internal security. The agreement strengthens this faction and displeases the Borons. Cost: £political_power_texticon 35. All agreements share a 30-day cooldown.
+STP_pf_security_room_tt	Security Service influence is below 60%
+STP_pf_security_deal_tt	§YSecurity Service§!: influence §Y+5 percentage points§! (up to 100%, with other shares reduced proportionately), support §G+12§!. §YBorons§!: support §R-12§!. Support is bounded by 0-100; apparatus loyalty and faction effects are recalculated.
+STP_pf_army_name	Army Command
+STP_pf_army_badge	AC
+STP_pf_army_influence_loc	Influence: §Y[?STP_pf_army_influence|1]%§!
+STP_pf_army_support_loc	Support: §Y[?STP_pf_army_support|1]/100§!
+STP_pf_army_tt	§YArmy Command§!\nUnified command, professional appointments and frontline supply.\n\nContribution to apparatus loyalty: §Y[?STP_pf_army_contribution|2]§! points.\nArmy organisation: [?STP_pf_army_effect|=+2%].\nEffect = (support - 50) × influence share × 0.2%; a satisfied group increases the indicator.
+STP_pf_negotiate_army	Guarantee Headquarters Autonomy
+STP_pf_negotiate_army_desc	Unified command, professional appointments and frontline supply. The agreement strengthens this faction and displeases the Nodrulian Advisers. Cost: £political_power_texticon 35. All agreements share a 30-day cooldown.
+STP_pf_army_room_tt	Army Command influence is below 60%
+STP_pf_army_deal_tt	§YArmy Command§!: influence §Y+5 percentage points§! (up to 100%, with other shares reduced proportionately), support §G+12§!. §YNodrulian Advisers§!: support §R-12§!. Support is bounded by 0-100; apparatus loyalty and faction effects are recalculated.
+STP_pf_advisers_name	Nodrulian Advisers
+STP_pf_advisers_badge	NA
+STP_pf_advisers_influence_loc	Influence: §Y[?STP_pf_advisers_influence|1]%§!
+STP_pf_advisers_support_loc	Support: §Y[?STP_pf_advisers_support|1]/100§!
+STP_pf_advisers_tt	§YNodrulian Advisers§!\nNodrul's influence over military planning and leadership decisions.\n\nContribution to apparatus loyalty: §Y[?STP_pf_advisers_contribution|2]§! points.\nPlanning speed: [?STP_pf_advisers_effect|=+2%].\nEffect = (support - 50) × influence share × 0.4%; a satisfied group increases the indicator.\nWithout active ties to Nodrul, military assistance is unavailable; the advisers retain their political influence.
+STP_pf_negotiate_advisers	Expand the Advisers' Access
+STP_pf_negotiate_advisers_desc	Nodrul's influence over military planning and leadership decisions. The agreement strengthens this faction and displeases Army Command. Cost: £political_power_texticon 35. All agreements share a 30-day cooldown.
+STP_pf_advisers_room_tt	Nodrulian Adviser influence is below 60%
+STP_pf_advisers_deal_tt	§YNodrulian Advisers§!: influence §Y+5 percentage points§! (up to 100%, with other shares reduced proportionately), support §G+12§!. §YArmy Command§!: support §R-12§!. Support is bounded by 0-100; apparatus loyalty and faction effects are recalculated.
+STP_pf_merchants_name	Merchants
+STP_pf_merchants_badge	M
+STP_pf_merchants_influence_loc	Influence: §Y[?STP_pf_merchants_influence|1]%§!
+STP_pf_merchants_support_loc	Support: §Y[?STP_pf_merchants_support|1]/100§!
+STP_pf_merchants_tt	§YMerchants§!\nSecure trade routes and protection of turnover against arbitrary seizures.\n\nContribution to apparatus loyalty: §Y[?STP_pf_merchants_contribution|2]§! points.\nTrade revenue: [?STP_pf_merchants_effect|=+2%].\nEffect = (support - 50) × influence share × 0.3%; a satisfied group increases the indicator.
+STP_pf_negotiate_merchants	Guarantee Trade Contracts

@@ -1,0 +1,73 @@
+STP_pw_party_border_staff_desc	After completing one of the two army models, we will establish a unified headquarters for the external border. The defence corps will bring dependable logistics; the field staff will bring operational planning. Artillery and anti-air guns will provide the material foundation of the joint border command.
+STP_pw_party_southern_defence	Prepare the Southern Border
+STP_pw_party_southern_defence_desc	We will fortify the southern borders of our controlled districts. Regular frontier exercises will allow us to maintain army readiness for a separate payment.
+STP_postwar_nod_ultimatum	The Northern Ultimatum
+STP_postwar_nod_ultimatum_desc	Rejecting the protectorate turns relations with Nodrul into a military crisis. Until the deadline expires, all we can do is prepare the country for the attack. The choice between submission and independence has already been made.
+STP_pw_party_nod_invasion_countdown	Nodrul Prepares to Invade
+STP_pw_party_nod_invasion_countdown_desc	Northern headquarters is concentrating units and supplies along the border. In §R90 days§!, provided Nodrul remains capable of acting, it will begin a war to eliminate Stelander's independent government.
+STP_pw_party_nod_emergency_mobilization	Emergency Mobilisation
+STP_pw_party_nod_emergency_mobilization_desc	Lift some recruitment restrictions, place an emergency order for army depots and recall men demobilised after the civil war. It is expensive, but we cannot meet Nodrul's first blow with a peacetime army.
+STP_pw_party_nod_fortify_border	Seal the Northern Passes
+STP_pw_party_nod_fortify_border_desc	Engineering units will prepare permanent defensive positions in every controlled area directly bordering Nodrul. This will not stop an invasion on its own, but it will make the north pay for every pass.
+STP_pw_party_nod_staff_readiness	Staff Plan 'North'
+STP_pw_party_nod_staff_readiness_desc	We will conduct a staff exercise for the only scenario that now matters: a full-scale war with Nodrul. Command will receive preassigned reserves, supply routes and withdrawal plans.
+STP_pw_party_nod_emergency_mobilization_idea	Emergency Mobilisation
+STP_pw_party_nod_emergency_mobilization_idea_desc	The civil war has ended, but demobilisation has been cancelled in response to the threat of a northern invasion.
+STP_pw_party_nod_staff_readiness_idea	Defence Plan against Nodrul
+STP_pw_party_nod_staff_readiness_idea_desc	Headquarters has prepared defensive lines, supplies and procedures to follow in the event of a breakthrough.
+STP_pw_nod_invasion_mandate	Eliminate Independent Stelander
+STP_pw_nod_invasion_mandate_desc	Nodrul regards the independent Party regime as a breach of the post-war order and is committing its main forces to eliminating it. This is not a limited border operation: northern command must break through the defences, destroy the Party government and bring Stelander back under control. STP's capitulation in this war ends the independent campaign.
+ADISCORD_STP_pc.28.t	Nodrul's Final Protocol
+ADISCORD_STP_pc.28.d	The reply arrived without the customary courtesies. The northern government does not recognise Stelander's right to withdraw unilaterally from the former system of patronage. The note lists the units Nodrul is already transferring to its southern garrisons and sets a deadline after which diplomatic correspondence will be considered exhausted.\n\nIn Fada, no one pretends this is another round of negotiations. The decision on sovereignty has already been published. The only question now is whether the state can turn a few months into fortifications, stockpiles and a fighting army.
+ADISCORD_STP_pc.28.a	Ninety days. Not one to spare.
+ADISCORD_STP_pc.29.t	Nodrul Crosses the Border
+ADISCORD_STP_pc.29.d	The ultimatum expired during the night. The first reports arrived almost simultaneously: artillery barrages at the northern passes, columns moving towards the border roads, and the severing of the last communication lines between headquarters. Nodrul announced that it was restoring lawful order and eliminating the regime that had rejected its protection.\n\nFor the Party, this is no longer another post-war dispute. Defeat means the end of independent Stelander and of the very government that survived the civil war.
+ADISCORD_STP_pc.29.a	There is nowhere left to retreat.
+ADISCORD_STP_pc.30.t	The North Retreats
+ADISCORD_STP_pc.30.d	Nodrul's army is no longer capable of continuing its campaign against Stelander. The enemy headquarters has requested an end to hostilities, and the northern government has withdrawn its demand to restore the protectorate.\n\nThe independence that existed only in a Party resolution ninety days ago has now been confirmed by war. With this outcome, foreign policy can at last be conducted without the assumption that Nodrul's return is inevitable.
+ADISCORD_STP_pc.30.a	Now this truly is our border.
+STP_pw_party_restore_ministries	Restore the Ministries
+STP_pw_party_restore_ministries_desc	For 540 treasury units and 28 days, we will restore the civilian apparatus. The result is 75 political power, 5% stability and completion of the administrative programme. Losing the capital or eligibility for reconstruction cancels the order and refunds the entire deposit.
+STP_pw_party_reopen_port	Restore a Port District
+STP_pw_party_reopen_port_desc	For 1080 treasury units and 42 days, we will build a civilian factory in one owned, controlled district with a naval base; infrastructure will increase by 1 if it has not reached its limit. Losing all suitable ports, available factory capacity or the capital cancels the order and refunds the deposit.
+STP_pw_party_refit_guard	Re-equip the Internal Troops
+STP_pw_party_refit_guard_desc	For 900 treasury units and 49 days, we will receive 1600 infantry equipment, 120 support equipment, 100 trucks and 25 Army Experience. The materials enter Stelander's stockpile for its existing units. Cancellation refunds the entire deposit.
+STP_pw_party_return_specialists	Fund Engineering Commissions
+STP_pw_party_return_specialists_desc	We will allocate 540 treasury units to return specialists to industrial research. Two research bonuses will accelerate the restoration of our technological base.
+STP_pw_party_security_reserve	Assemble a Vetted Reserve
+STP_pw_party_security_reserve_desc	We will allocate 540 treasury units to assemble reservists who have passed Party vetting. Recruitable manpower and mobilisation speed will increase for 180 days.
+STP_pw_party_standard_order	Order Domestic Weapons
+STP_pw_party_standard_order_desc	For 900 treasury units, we will receive 1600 infantry equipment, 100 support equipment and 100 artillery pieces. Another order becomes available after 120 days, provided Stelander remains independent.
+STP_pw_party_frontier_exercise	Conduct Frontier Exercises
+STP_pw_party_frontier_exercise_desc	For 540 treasury units, we will organise exercises and prepare defensive positions. For 180 days, the army will defend core territory more effectively and entrench faster. Another exercise becomes available once the current programme ends.
+STP_pw_party_last_purge	The Final Personnel Purge
+STP_pw_party_last_purge_desc	Loyalty screening has deprived headquarters and research institutes of experienced staff. Army organisation and research speed have temporarily declined.
+STP_pw_party_security_cordon	Vetted Party Reserve
+STP_pw_party_security_cordon_desc	Funds have been allocated to assemble and train reservists whom Party authorities have cleared for service.
+STP_pw_party_frontier_drill	Frontier Exercises
+STP_pw_party_frontier_drill_desc	Units have practised defending core territory and preparing field positions.
+STP_pw_party_recovery_start_tt	Three paid programmes begin: ministries, port facilities and re-equipment of the internal troops. Only one order can be carried out at a time. Reconstruction progress is shown in the existing war council category.
+STP_pw_party_recovery_complete_tt	All three paid Party reconstruction programmes are complete.
+STP_pw_party_guard_refitted_tt	The paid re-equipment programme for the internal troops is complete.
+STP_pw_party_restore_ministries_result_tt	After §Y28 days§!: §G+75§! political power, §G+5%§! stability and completion of the administrative programme. Cancellation refunds the entire deposit.
+STP_pw_party_reopen_port_result_tt	After §Y42 days§!, in one owned, controlled district with a naval base: §G+1§! civilian factory and §G+1§! infrastructure, up to its limit. Completes the economic programme. Cancellation refunds the entire deposit.
+STP_pw_party_refit_guard_result_tt	After §Y49 days§!, Stelander receives §Y1600§! £infantry_equipment_text_icon infantry equipment, §Y120§! £support_equipment_text_icon support equipment, §Y100§! trucks and §G25§! Army Experience. Completes the army programme. Cancellation refunds the entire deposit.
+STP_pw_party_nod_contract_tt	Nodrul will receive an offer to transfer 1000 infantry equipment and 100 support equipment from its stockpiles to Stelander for 450 treasury units. Payment occurs only with its consent and sufficient resources on both sides.
+STP_pw_party_nod_contract_settlement_tt	Nodrul will transfer 1000 infantry equipment and 100 support equipment from its stockpiles to Stelander. Stelander will pay Nodrul 450 treasury units. Conditions and stockpiles are checked again upon acceptance.
+STP_pw_party_recovery_report	\n\n§YPresidium programme§!: [?STP_pw_recovery_progress|0] of 3 orders completed. Ministries, port facilities and re-equipment of the internal troops share a single budget slot. [STPGetRecoverySlot]
+ADISCORD_STP_pc.22.t	Weapons for Stelander
+ADISCORD_STP_pc.22.d	Hedersett's military mission is asking to purchase weapons for Stelander's regular army: 1000 infantry equipment and 100 support equipment from our stockpiles. Stelander is offering 450 treasury units.\n\nAcceptance means immediate payment and transfer of the equipment. If either side loses the necessary resources or the protectorate relationship ends, the transaction will not take place.
+ADISCORD_STP_pc.22.refuse	Keep the weapons with our own units.
+ADISCORD_STP_pc.22.accept	Accept payment and transfer the weapons.
+ADISCORD_STP_pc.23.t	The Victors in the Old Offices
+ADISCORD_STP_pc.23.d	Queues are forming in the presidium's reception room again. District secretaries have brought statements of losses; commanders, lists of missing weapons; representatives of the houses, bills for accommodation and transport. The offices are unchanged; fewer people remain who can answer for their work.\n\nHedersett sets three tasks before the Chamber of Houses: restore the ministries' daily operations, rebuild the port economy and supply an army capable of leaving the capital's guard posts. First, however, the Party must decide what to do with its own lists. It can close the cases against specialists and return them to their machines. Or it can carry out one final purge - and accept the consequences of losing still more personnel.\n\nVictory gave the presidium time. Money, labour and trust will have to be found anew.
+ADISCORD_STP_pc.23.a	First, make the state work again.
+ADISCORD_STP_pc.24.t	The Military Mission's Reply
+ADISCORD_STP_pc.24.accepted	Nodrul accepted the military mission's proposal. Stelander transferred 450 treasury units and received 1000 infantry equipment and 100 support equipment from northern stockpiles. Quartermasters will distribute them among the regular units.
+ADISCORD_STP_pc.24.refused	The military mission returned without a supply agreement. Nodrul did not release weapons on the proposed terms. Stelander's funds remain in the treasury; the internal troops can continue re-equipping through our own reconstruction programme.
+ADISCORD_STP_pc.24.accepted_a	Send the northern weapons to the regiments.
+ADISCORD_STP_pc.24.refused_a	Then we will rearm on our own.
+STP_pw_party_has_port_capacity	There is a controlled port district with space for a civilian factory
+STP_cw_reserve_commanders	Reserve Company Commanders
+STP_cw_reserve_commanders_desc	We will train commanders and their deputies for reserve units. When the split occurs, Shabrat's army will gain more resilient organisation and prepare operational plans faster. This training does not require a separate division order.
+STP_cw_casualty_routes	Casualty Evacuation Routes

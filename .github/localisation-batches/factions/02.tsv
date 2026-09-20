@@ -1,0 +1,114 @@
+rule_group_war_relation	War Relations
+rule_group_peace_rules	Peace Actions
+rule_group_leader_faction	Faction Requirements
+war_declaration_rules	When Can We Declare War?
+member_rules	What Can Members Do?
+change_leader_rules	When Can the Leader Change?
+low_progress	Low Progress
+medium_progress	Moderate Progress
+high_progress	High Progress
+manifest_fulfilled	Manifesto Fulfilled
+GLOBAL_RESOURCE_EXTRACTED_TOTAL_DESC	Resources extracted worldwide
+FACTION_RESOURCE_EXTRACTED_TOTAL_DESC	Resources extracted by the faction
+defense_of_democracy_goal_name	Defend Democracy
+containment_of_communism_goal_name	Contain Global Communism
+containment_of_communism_goal_desc	The world cannot rest easy while communism threatens it.
+suppress_regional_fascism_goal_name	Suppress Fascism
+suppress_regional_communism_goal_name	Suppress Communism: [ROOT.GetCountryContinent]
+regional_expansionism_goal_name	Expand into [ROOT.GetCountryContinent]
+suppress_regional_democracy_goal_name	Suppress Democracy
+between_the_seas_goal_name	Between the Seas
+china_territorial_integrity_goal_name	Territorial Integrity
+china_chinese_consolidation_goal_name	Chinese Consolidation
+china_wang_front_expansion_name	Defeat Imperialism
+china_wang_front_expansion_desc	It is time to resist the imperialists who seek to continue dominating East Asia. We must establish our own regional alliance so that no one can force us to our knees.
+strength_in_unity_goal_name	Strength in Unity
+conquest_of_territory_goal_name	Conquest and Domination
+spread_of_communism_goal_name	World Revolution
+control_of_the_balkans_goal_name	Secure the Balkans
+control_of_the_balkans_goal_desc	Foreign powers have always sought to extend their influence over the Balkans. We must stand together and resist every attempt to invade our region.
+african_decolonization_goal_name	Decolonise Africa
+habsburg_hegemony_goal_name	Habsburg Hegemony
+indifference_is_a_threat_goal_desc	With a major European conflict almost inevitable, we must avoid surprises. Countries that refuse to choose a side must be excluded.
+security_through_expansion_goal_name	Security through Expansion
+an_iron_curtain_goal_name	An Iron Curtain
+an_iron_curtain_goal_name_desc	To better defend the homeland, we must surround ourselves with a barrier of puppet states, ensuring that no one enters our home uninvited.
+eastern_european_security_goal_name	Eastern European Security
+eastern_european_security_goal_desc	To protect our interests in Eastern Europe, we must establish friendly regimes in the countries to our west.
+building_up_guam_goal_name	Expand Guam's Naval Base
+the_two_seas_goal_name	Expand Influence in the Baltic and Black Seas
+the_two_seas_goal_desc	We must establish a substantial military presence in both the Baltic and Black Seas.
+one_germany_goal_name	Unite the German Regions
+guardians_of_peace_goal_name	Maintain World Peace
+guardians_of_peace_goal_desc	Clouds are gathering on the horizon. We must prevent war from breaking out too early, giving our alliance time to prepare for the inevitable conflict.
+growing_the_faction	Expand the Faction
+a_large_faction_goal_name	Invite More Countries into Our Faction
+a_great_fortress_goal_name	Build Stronger Fortifications
+aggressive_defense_goal_name	Inflict Losses on Aggressors
+war_on_communism_goal_name	Declare War on Communism
+war_on_communism_goal_desc	The spread of communism must be stopped by any means necessary.
+war_on_democracy_goal_name	Declare War on Democracy
+defeat_of_communism_goal_name	Defeat Communism
+defeat_of_fascism_goal_name	Defeat Fascism
+defeat_of_anti_communists_goal_name	Defeat the Counter-revolutionaries
+defeat_of_anti_fascists_goal_name	Spread Fascism across the Continent
+defeat_of_anti_fascists_goal_desc	We must crush every anti-fascist regime on our continent.
+defeating_our_enemies_goal_name	Win the War
+defeating_our_enemies_goal_desc	These are troubled times, and war cannot be avoided. We must ensure that when it comes, we stand among the victors.
+is_victor_in_pc_tt	Is on the winning side in a peace conference
+a_military_base_goal_name	Expand Military Industry
+a_military_base_tech_bonus	$a_military_base_goal_name$ Goal Bonus
+resource_control_goal_name	Control Strategic Resources
+resource_control_goal_desc	The faction must ensure it has the resources needed to confront global threats.
+secure_european_continent_goal_name	Establish Fortress Europe
+secure_european_continent_goal_desc	We must ensure that the European continent supports our goals. [faction.GetName] will become Europe's dominant force.
+secure_north_africa_goal_name	Control North Africa
+secure_north_africa_goal_desc	We must seek not only dominance in Europe, but more than a mere foothold in North Africa.
+an_armored_fist_goal_name	Expand Our Armoured Forces
+an_armored_fist_goal_desc	New times create opportunities for new tactics. The future belongs to tanks. Our alliance must possess enough of them to dominate the battlefield.
+an_infantry_army_goal_name	Expand Our Infantry
+high_seas_fleet_goal_name	Expand the Capital Ship Fleet
+high_seas_fleet_goal_desc	It is vital that our enemies do not gain control of the North Atlantic. If we prevent this, we need not fear a naval blockade, while our own fleets can operate freely.
+high_seas_fleet_tech_bonus	$high_seas_fleet_goal_name$ Goal Bonus
+control_the_chinese_coast_goal_name	Control the Coastline
+control_the_chinese_coast_goal_desc	If attacked, we must retain access to our ports for as long as possible. Our survival depends on receiving goods from overseas.
+guerilla_expansion_goal_name	Organise Resistance
+guerilla_expansion_goal_desc	We may lack the strength to fight the enemy on their terms. We will therefore fight them on ours.
+industrial_expansion_goal_name	Industrial Expansion
+industrial_domination_goal_name	Expand Civilian Industry
+industrial_domination_goal_desc	Modern warfare rests on industrial capacity. Let us ensure that no one in the world can match ours.
+industrial_expansion_tech_bonus	$industrial_expansion_goal_name$ Goal Bonus
+industrial_research_goal_name	Research $construction4$
+industrial_research_goal_desc	To become a major force, we must provide every faction member with modern industrial technology.
+secure_chinese_waters_goal_name	Secure Chinese Waters
+secure_chinese_waters_goal_desc	We dominate on land, but our extensive coastline means we must ensure no one can attack us from the sea. Our security begins far from shore.
+faction_goal_subjugate_the_faction_name	Subjugate the Faction
+faction_goal_subjugate_the_faction_desc	Only a united front under a strong leader can halt foreign invaders. Many voices will become a single harmonious chorus.
+faction_goal_north_subjugated_name	Subjugate the North
+faction_goal_north_subjugated_desc	By concentrating on integrating this part of our faction, we will show the other warlords which way the wind is blowing and bring them into line.
+faction_goal_west_subjugated_name	Subjugate the West
+faction_goal_west_subjugated_desc	By concentrating on integrating this part of our faction, we will show the other warlords which way the wind is blowing and bring them into line.
+faction_goal_south_subjugated_name	Subjugate the South
+faction_goal_south_subjugated_desc	By concentrating on integrating this part of our faction, we will show the other warlords which way the wind is blowing and bring them into line.
+faction_goal_no_japanese_in_china_name	Expel the Invaders
+faction_goal_the_northern_mandate_name	Control Eastern Siberia
+faction_goal_the_northern_mandate_desc	To offer our people hope of prosperity, we need Siberia's abundant territory and resources. Its current owners cannot manage these riches properly, giving us every right to the land.
+faction_goal_the_southern_mandate_name	Control Southeast Asia
+faction_goal_the_southern_mandate_desc	In our former days of glory, our influence extended over the regions to our south, and we will regain control of them. Their wealth will provide us with endless opportunities.
+faction_goal_the_greater_game_name	Control Central Asia
+faction_goal_the_greater_game_desc	Many empires tried to subdue Central Asia and were driven out. It is time for us to ride west across the steppes again.
+suppress_asian_communism_goal_name	Combat Communism in Asia
+suppress_asian_communism_goal_desc	Communism threatens our traditional way of life and the natural order. We must work together to eradicate it wherever it appears.
+strategic_resource_control_goal_name	Strategic Resource Control
+strategic_resource_control_goal_desc	Whoever controls strategic resources controls world politics.
+align_china_goal_name	Bring China into Line
+align_china_goal_desc	China's competing factions threaten the security of the entire region. Replacing them with friendly ones would be the best solution.
+control_the_chinese_capitals_goal_name	Capture China's Capitals
+control_the_chinese_capitals_goal_desc	Taking control of China's historical capitals will significantly weaken resistance to our plans.
+war_on_communism_in_asia_goal_name	Declare War on Communism in Asia
+war_on_communism_in_asia_goal_desc	Communism can be defeated decisively only by force of arms. To protect ourselves from its influence, we must eradicate this contagion throughout Asia.
+coastal_security_goal_name	Control the Coast
+coastal_security_goal_desc	We must achieve complete control of the seas of East and Southeast Asia. Only then can we guarantee that Western imperialists will not invade our shores.
+secure_the_oil_supply_goal_name	Secure the Oil Supply
+secure_the_oil_supply_goal_desc	If we intend to fight a long war, we must secure sufficient oil supplies at any cost.
+secure_the_oil_supply_tech_bonus	Secure the Oil Supply Goal Bonus

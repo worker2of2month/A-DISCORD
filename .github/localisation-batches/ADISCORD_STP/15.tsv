@@ -1,0 +1,51 @@
+STP_ps_asylum_title	Asylum Guarantees
+STP_ps_asylum_desc	Stelander's government requests advance permission to house the surviving Party organisation here in the event of military defeat. The exiles will not replace Nodrul's leader, automatically receive its army or oblige us to wage a war for their return.
+STP_ps_asylum_accept	Guarantee asylum.
+STP_ps_asylum_decline	Decline these commitments.
+STP_ps_nod_route_wait	Waiting for the Northern Route
+STP_ps_nod_route_wait_desc	Requires a connected land border with Nodrul, or the Lower Market and a functioning Nodrulian port. Before dispatch, the entire reserve can be refunded. Losing the port does not block an eligible overland route.
+STP_ps_return_council_name	Provisional Party Council
+STP_ps_return_council_desc	A council of surviving Party representatives, formed after their return with Nodrul's support.
+STP_ps_preparation_report	\n\n§YGovernment preparation§!\nCommunications and reserve headquarters shorten the first stages of reorganisation. [STPGetPartyAsylum] [STPGetPartyHandoff]\nEvacuation reserve: £ADISCORD_economy_treasury_texticon [?STP_ps_evacuated_money|0].\nNorth: [STPGetNodStatus]. Reserved for NOD: £ADISCORD_economy_treasury_texticon [?STP_ps_nod_receipt_money|0].\nKefreyt shipments: intelligence and interception apply to one consignment; without an overland route, it remains with the sender.
+STP_pc_investment_development_fund	The Republic's Investment Budget
+STP_pc_investment_development_fund_desc	We will open long-term funding for major industrial programmes. Orders are paid from the treasury and require active material supplies, not merely a political decision.
+STP_pc_investment_precision_industry	Restore Precision Manufacturing
+STP_pc_investment_precision_industry_desc	Precision machine tools determine the quality of the entire production chain. We will consolidate equipment orders and prepare enterprises for installation.
+STP_pc_investment_special_metallurgy	The Material Basis of Reconstruction
+STP_pc_investment_special_metallurgy_desc	Rare alloys and electronic components require reliable supply. Common procurement standards will connect our own factories and foreign purchases to industry's actual needs.
+STP_pc_investment_automation	Automate the Republic's Factories
+STP_pc_investment_automation_desc	We will agree on an automation programme. It will require a large payment, several months of work and materials that might otherwise go into military equipment.
+STP_pc_investment_logistics	Mechanise State Supply
+STP_pc_investment_logistics_desc	Production needs secure transport. We will open major orders for cargo vehicles and armoured trains using models our industry has already mastered.
+STP_pc_investment_computing	The Republic's Computing Complex
+STP_pc_investment_computing_desc	We will provide research institutions and the state apparatus with a shared computing complex. Funding the project competes with arms purchases and construction of new enterprises.
+STP_pc_investment_defense_orders	Special Orders for the Republican Army
+STP_pc_investment_defense_orders_desc	Serial contracts for reconnaissance vehicles and combat platforms require our own designs. The state pays for manufacturing equipment; it does not obtain future technologies with a single order.
+STP_pc_investment_export_finance	Industrial Export Bank
+STP_pc_investment_export_finance_desc	Moving from one-off deals to export finance will give enterprises predictable payments. Foreign-trade revenue must support the next wave of investment.
+STP_pc_investment_integrated_economy	The Second Reconstruction Economy
+STP_pc_investment_integrated_economy_desc	We will combine precision manufacturing, transport and computing capacity into a single system. Completing the programme requires more than documents: at least one major paid project must already be operational.
+STP_occidia_prepare_invasion	Reclaim Occidia
+STP_occidia_prepare_invasion_desc	Kefreyt left the mountain republic outside its control. Once 90 days have passed since the civil war ended, the victorious Stelander can turn to reclaiming Occidia. Preparation takes 21 days, after which a war to annex the republic will begin. Active guarantees and the republican charter prohibit the attack.
+STP_occidia_invasion_available_tt	At least 90 days have passed since the civil war ended. We are victorious, independent, at peace and outside any faction. Occidia is independent, borders us, is at peace and belongs to no faction. Neither side has active guarantees or a republican charter. Kefreyt has not begun mobilisation or entered the Occidian war.
+STP_occidia_prepare_invasion_tt	In §Y21 days§!, war will begin against §Y[SRP.GetName]§!. Until preparation is complete, Kefreyt cannot begin its own intervention. Victory will annex the republic; its army does not pass to our command. Changed conditions cancel preparation without refunding political costs.
+STP_occidia_invasion_warning	Stelander Prepares to Invade
+STP_occidia_invasion_warning_desc	The victor of the Stelandic civil war is preparing to annex our republic. We have 21 days from the start of preparations to deploy our defences.
+STP_ps_government_operational_tt	The government is functioning in the Congress or a provisional cabinet.
+STP_ps_staff_recovery_tt	The first stage of command reorganisation is complete.
+STP_ps_counterattack_ready_tt	All three reorganisation stages are complete; the government is functioning.
+STP_ps_congress_fell_tt	The Bronze Congress was lost during this civil war.
+NOD_cw_accept_northern_defeat	Accept Defeat in the Northern War
+NOD_cw_accept_northern_defeat_desc	Continuing the northern war threatens complete collapse. We can accept the terms of defeat before the country capitulates.
+NOD_cw_accept_northern_defeat_available_tt	The northern war has lasted at least §Y90 days§!, and our surrender progress is at least §Y70%§!. Nodrul has not yet capitulated and is at war with all three members of the northern coalition.
+NOD_cw_accept_northern_defeat_effect_tt	Applies Nodrul's northern-war defeat settlement: peace with the northern coalition and transfer of the states §Y[17.GetName]§! and §Y[18.GetName]§!, if owned by us, to an independent §Y[YPR.GetName]§! if it exists. Our subject §Y[AIN.GetName]§! also leaves this war. Defeat closes the northern intervention route. Other wars continue.
+STP_ps_return_available_tt	A Party committee operates in Nodrul, the terms of return have been accepted, and military preparation and the campaign focus are complete. Stelander has not yet been restored. Shabrat has not capitulated, shares no faction with Nodrul and is not its subject. The campaign has neither begun nor ended.
+STP_party_district_survey_tt	In an accessible Niansas: §G+10§! Party influence. Resistance preparations are preserved.
+STP_party_mobile_reserve_tt	At the split, the Party will also attempt to pay for §Y2 brigades§! from its share of the stockpiles: £manpower_texticon §Y12000§! and £infantry_equipment_texticon §Y1200§! in total. Unpaid units will not appear. The stated offensive preparation lasts §Y35 days from the start of hostilities§!.
+STP_ps_asylum_scope_tt	The agreement covers asylum for the Party leadership and evacuated funds. Control of Nodrul is not transferred to the player.
+STP_cw_northern_call_blocked_tt	Nodrul cannot call Stelander into the war while the northern war continues.
+STP_pw_take_bezhaysk	Take Bezhaysk
+STP_pw_take_bezhaysk_desc	The civil war has ended, and the army once again has unified command and supply. We can now prepare a campaign against Bezhaysk. Headquarters will determine the lines of advance; the order to cross the border will be issued through a separate decision.
+STP_pw_launch_bezhaysk_operation	Launch the Bezhaysk Offensive
+STP_pw_launch_bezhaysk_operation_desc	The operational plan is ready. Order the troops to cross the border and capture the capital domain of Bezhaysk. This decision starts the war immediately.
+STP_pw_bezhaysk_available_tt	Shabrat has won the civil war, is independent and is at peace. Bezhaysk exists, is independent, has not capitulated, and owns and controls its capital state; our countries do not share a faction.

@@ -1,0 +1,100 @@
+ADISCORD_STP_pw.4.t	A Home with Two Keys
+ADISCORD_STP_pw.4.d	Two people came to the district administration with documents for the same flat. The first, a schoolteacher from a mountain district, had left during the final bombardments and kept his pre-war registration booklet all that time. The second, a railwayman's widow with a child, had received the same flat from the emergency committee after her home burned down during the civil war.\n\nBoth documents were genuine. One bore the seal of Ivanov's administration, the other that of the resistance's military council. The clerk placed them side by side and asked which was now considered lawful. Several soldiers by the door proposed a simple solution: return the flat to its pre-war owner. Then the widow asked where she was supposed to return to.\n\nShabrat refused to turn victory into another eviction. The old right could not simply be declared void, but neither could the new republic begin by ordering a family onto the street. The administration was instructed to register both claims, leave the current occupants in place until alternative housing was provided, and recognise the returning owner's right to a new home or compensation.\n\nThere were more than one or even a hundred such cases. Steland was quickly discovering that rebuilding a country did not mean putting everything back as it had been. Sometimes it meant deciding, for the first time, what to do with two people who each held a genuine key.
+ADISCORD_STP_pw.4.a	Victory grants no right to someone else's door.
+ADISCORD_STP_pw.5.t	Weapons on the Table
+ADISCORD_STP_pw.5.d	The queue outside the old army depot formed before dawn. Former resistance units brought rifles from Party arsenals, Kefreyt assault rifles, hunting carbines and crates of grenades which had spent years listed as flour, tools or nothing at all. Some weapons had their serial numbers filed off. That was how they had reached the mountains in the first place.\n\nThe commander of an old cell refused to surrender his rifle. He pointed out that the Party had also started with registers, then used those same lists to come for people at night. Several people in the queue silently agreed. A new uniform and a new seal did not automatically make the state someone they trusted with their weapons.\n\nShabrat unholstered his own pistol, removed the magazine and placed the weapon on the table before the clerk. His name became the first entry in the new register. He then signed an order: every armed detachment must either join the common army and accept a civilian chain of command, or surrender its heavy weapons and disband. There would be no separate army of the victors.\n\nBy evening, the queue had grown longer. Some left with duty orders, others with demobilisation papers. The resistance was handing the state the force that had once allowed it to survive. For the first time, it was doing so not because it had lost.
+ADISCORD_STP_pw.5.a	No detachment outside the register.
+STP_pw_recovery_start_tt	Opens post-war reconstruction. Three programmes remove the consequences of war: civilian services, workshops and the integration of detachments into the regular army. Only one programme can be funded at a time; progress is shown in the war council.
+STP_pw_reconstruction_dynamic	The Civil War's Aftermath
+STP_pw_reconstruction_dynamic_desc	Disrupted production links and reconstruction expenditure hinder the new government. Each completed programme removes one third of the penalties.
+STP_pw_project_idle_tt	No other funded reconstruction programme is active.
+STP_pw_recovery_complete_tt	Victory in Stelander is secured; all three reconstruction programmes are complete.
+STP_pw_restore_services	Restore Civilian Services
+STP_pw_restore_services_desc	We will return doctors, supply officers and civil servants to the districts. The work takes 42 days and occupies the shared reconstruction slot. Losing control of the capital or capitulating interrupts the programme and refunds the full payment.
+STP_pw_restore_services_result_tt	After §Y42 days§!: §G+5%§! stability, §G-5%§! administrative expenditure and removal of one third of the reconstruction penalties.
+STP_pw_restart_workshops	Restart the Restored Workshops
+STP_pw_restart_workshops_desc	We will pay for machinery, power connections and workers' return. After 56 days, the network of small workshops will provide two off-map civilian factories. The programme occupies the shared slot; losing the capital or capitulating refunds the payment.
+STP_pw_restart_workshops_result_tt	After §Y56 days§!: §Y2 off-map civilian factories§! and removal of one third of the reconstruction penalties.
+STP_pw_integrate_veterans	Integrate the Detachments into the Regular Army
+STP_pw_integrate_veterans_desc	We will fund personnel commissions, sergeant training and a common replacement service. The programme takes 35 days and occupies the shared slot. Existing divisions remain; losing the capital or capitulating refunds the payment.
+STP_pw_integrate_veterans_result_tt	After §Y35 days§!: §G+10%§! organisation recovery, §Y25§! Army Experience and removal of one third of the reconstruction penalties.
+STP_pw_project_refund_tt	The unused payment is returned to the treasury. The programme becomes available again once its conditions are restored.
+STP_pw_army_procurement	Order a Re-equipment Package
+STP_pw_army_procurement_desc	We will place a paid order with private workshops: 4000 infantry equipment, 300 artillery pieces and 200 anti-tank guns. Another order becomes available after 90 days.
+STP_pw_air_procurement	Purchase Combat Trainers
+STP_pw_air_procurement_desc	Private suppliers will deliver 100 basic fighters to equip our air units. The price is fixed; delivery does not depend on earlier assistance from Kefreyt. Another order is available after 120 days.
+STP_pw_border_dossier	Update Intelligence on Neighbouring Armies
+STP_pw_border_dossier_desc	Military attaches and the border service will prepare intelligence on Kefreyt's and Nodrul's forces. The work can be repeated after 120 days.
+STP_pw_settle_kefreyt_accounts	Settle the Account for Kefreyt's Assistance
+STP_pw_settle_kefreyt_accounts_desc	We will transfer 900 treasury units to Kefreyt to settle wartime supply accounts. Stability will rise by 5%. Payment does not create an alliance or guarantee that our neighbour will abandon its territorial claims.
+STP_pw_plan_offensive	Prepare a Limited Offensive
+STP_pw_plan_offensive_desc	We will concentrate staff resources on a 45-day offensive operation. The order is available only during war and requires 50 command power. Another operation can be prepared after 75 days.
+STP_pw_emergency_reserves	Order an Emergency Reserve Call-up
+STP_pw_emergency_reserves_desc	We will accelerate mobilisation for 90 days. The order is available during war, requires 25 command power and can be repeated after 120 days.
+STP_pc_val_refused_tt	Kefreyt rejected the offer
+STP_pc_offer_closed	The offer is no longer valid.
+STP_pw_recovery_report	\n\n§YNational reconstruction§!: [?STP_pw_recovery_progress|0] of 3 programmes completed. Civilian services, workshops and the army share a single budget slot. [STPGetRecoverySlot]
+STP_pw_recovery_slot_free	§GSlot available.§!
+STP_pw_recovery_slot_busy	§YA funded programme is under way.§! Another order cannot be placed until it finishes.
+STP_pw_price_360	£ADISCORD_economy_treasury_texticon §Y360§!
+STP_pw_price_360_blocked	£ADISCORD_economy_treasury_texticon §R360§!
+STP_pw_price_360_tooltip	£ADISCORD_economy_treasury_texticon §Y360§!
+STP_pw_price_450	£ADISCORD_economy_treasury_texticon §Y450§!
+STP_pw_price_450_blocked	£ADISCORD_economy_treasury_texticon §R450§!
+STP_pw_price_450_tooltip	£ADISCORD_economy_treasury_texticon §Y450§!
+STP_pw_price_540	£ADISCORD_economy_treasury_texticon §Y540§!
+STP_pw_price_540_blocked	£ADISCORD_economy_treasury_texticon §R540§!
+STP_pw_price_540_tooltip	£ADISCORD_economy_treasury_texticon §Y540§!
+STP_pw_price_720	£ADISCORD_economy_treasury_texticon §Y720§!
+STP_pw_price_720_blocked	£ADISCORD_economy_treasury_texticon §R720§!
+STP_pw_price_720_tooltip	£ADISCORD_economy_treasury_texticon §Y720§!
+STP_pw_price_900	£ADISCORD_economy_treasury_texticon §Y900§!
+STP_pw_price_900_blocked	£ADISCORD_economy_treasury_texticon §R900§!
+STP_pw_price_900_tooltip	£ADISCORD_economy_treasury_texticon §Y900§!
+STP_pw_price_1080	£ADISCORD_economy_treasury_texticon §Y1080§!
+STP_pw_price_1080_blocked	£ADISCORD_economy_treasury_texticon §R1080§!
+STP_pw_price_1080_tooltip	£ADISCORD_economy_treasury_texticon §Y1080§!
+STP_cw_command_power_50_cost	£command_power_texticon §Y50§!
+STP_cw_command_power_50_cost_blocked	£command_power_texticon §R50§!
+STP_cw_command_power_50_cost_tooltip	Cost: £command_power_texticon §Y50§!
+STP_imperial_union_client_settlement	Both subordinate governments belong to our faction, control their capitals and are at peace; 'Dependent Governments' and 'The Price of Primacy' are complete
+STP_pc_can_offer_kefreyt_terms	Kefreyt is independent, is not at war with us and does not belong to our faction; no other unresolved offer exists
+STP_pc_course_locked	The state's course has been approved
+STP_pc_val_crisis	A border crisis with Kefreyt is open
+STP_pc_nod_crisis	A border crisis with Nodrul is open
+STP_pc_val_terms_accepted	Kefreyt accepted the treaty terms
+STP_pc_val_terms_refused	Kefreyt rejected the treaty terms
+STP_pc_lib_val_won	The war with Kefreyt ended in our favour
+STP_pc_lib_nod_won	The war with Nodrul ended in our favour
+STP_pc_can_confront_val	Kefreyt is independent and is not an ally; no accepted treaty forbids war
+STP_pc_can_confront_nod	Nodrul is independent and is not an ally; no accepted treaty forbids war
+STP_HANDOFF_RESISTANCE	Lead the resistance. Open the front.
+STP_HANDOFF_PARTY	Remain with the Party. Open the front.
+STP_cw_front_operation	Operation: [STPGetFrontOperationTarget]
+STP_cw_front_operation_desc	Headquarters has set the next objective: occupy §Y[STPGetFrontOperationTarget]§! within §Y49 days§!. This is operation §Y[?STP_cw_operation_round|0] of 3§!.\n\nSuccess will increase planning speed by §G10%§! and breakthrough by §G8%§! for §Y21 days§!. If the deadline expires, organisation recovery and planning speed will fall by §R10%§! for §Y28 days§!. The next objective is selected after the current operation ends. The end of the civil war closes these objectives without a penalty.
+STP_cw_operation_capture_tt	The resistance controls §Y[STPGetFrontOperationTarget]§!.
+STP_cw_operation_target_2	$STATE_2$
+STP_cw_operation_target_29	$STATE_29$
+STP_cw_operation_target_53	$STATE_53$
+STP_cw_operation_target_3	$STATE_3$
+STP_cw_operation_target_46	$STATE_46$
+STP_cw_operation_target_45	$STATE_45$
+STP_cw_operation_target_28	$STATE_28$
+STP_cw_operation_target_none	no new objective assigned
+STP_cw_party_command_disruption	Command Disruption
+STP_cw_party_command_disruption_desc	The outbreak of the split disrupted communications between Party headquarters. Commanders need time to restore reporting procedures and coordinate their plans.
+STP_cw_operation_tempo	Exploit the Offensive
+STP_cw_operation_tempo_desc	Capturing the designated position allowed headquarters to coordinate its formations and prepare the next attack.
+STP_cw_operation_disorganization	Conflicting Orders
+STP_cw_operation_disorganization_desc	The operation missed its deadline. Headquarters is revising the plans while formations restore their disrupted coordination.
+STP_cw_front_scouts	Frontline Liaison Teams
+STP_cw_front_scouts_desc	We will link district groups to army headquarters. Intelligence on Party units will allow us to select an offensive sector before reserves arrive there.
+STP_cw_mobile_workshops	Repairs behind the Advance
+STP_cw_mobile_workshops_desc	We will assemble gunsmiths and equipment in mobile workshops. Repaired weapons will return to the units, while arsenals move to longer shifts.
+STP_cw_frontline_relief	Relief on the Front Line
+STP_cw_frontline_relief_desc	We will draw up a battalion rotation schedule and send replacements to active units. Exhausted formations must restore order rather than advance without pause.
+STP_cw_route_columns	Supply Columns
+STP_cw_route_columns_desc	We will assign transport and a common movement schedule to forward depots. Supply must not stop after the first successful attack.
+STP_pc_val_renew_aid	Renew the Wartime Agreements
+STP_pc_val_renew_aid_desc	Kefreyt helped us survive the civil war. We will propose replacing wartime obligations with a permanent supply and non-aggression agreement. Accounts already paid will be credited.
+STP_pc_val_border_compact	Supply Agreement

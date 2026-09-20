@@ -1,0 +1,120 @@
+STP_pc_army_republic_control_desc	The civilian government will control appointments. Trust in the army will grow, although coordinating plans will take longer.
+STP_pc_army_staff_doctrine	General Staff Doctrine
+STP_pc_army_staff_doctrine_desc	The general staff will receive broad powers over planning and unit organisation. The cabinet will have to share political initiative with it.
+STP_pc_navy_reach_water	Reach the Sea
+STP_pc_navy_reach_water_desc	We have no port of our own. Headquarters is preparing a plan for Fada and Hoskheit, but that will not produce ships.
+STP_pc_navy_coast	Coastal Defence
+STP_pc_navy_coast_desc	We will establish a coastal command and begin training specialists to protect ports and coastal routes.
+STP_pc_navy_ports	Bring the Ports under Oversight
+STP_pc_navy_ports_desc	The port service will organise cargo inspections and depot protection. Smuggling channels must no longer offer foreign agents an open door.
+STP_pc_navy_lanes	Protect the Sea Lanes
+STP_pc_navy_lanes_desc	Research into coastal craft and escorts. Battleships are not part of the programme.
+STP_pc_navy_yards	Affordable Shipbuilding
+STP_pc_navy_yards_desc	We will expand ship-repair facilities in one of our controlled ports. Two dockyards will provide the foundation for a permanent naval programme.
+STP_pc_navy_escorts	Escort Duty
+STP_pc_navy_escorts_desc	We will train crews to escort transports and coordinate naval operations with shore services.
+STP_pc_navy_deny	Deny the Enemy Fleet
+STP_pc_navy_deny_desc	We will fortify the coastline and strengthen the ports' anti-air defences. The enemy will have to fight for a landing before it reaches the mountain roads.
+STP_pc_navy_heg_inspection	Inspect the Clients
+STP_pc_navy_heg_inspection_desc	A dependency spirit binds the client's port. Inspections increase resistance, but do not replace the leader.
+STP_pc_navy_lib_no_basing	Their Port Is Not Ours
+STP_pc_navy_lib_no_basing_desc	A permanent base in an ally's territory requires its consent. Violating that rule breaks the coalition.
+STP_pc_navy_staff	Coastal Shipping under Staff Direction
+STP_pc_navy_staff_desc	Military escorts take priority over merchant routes. This does not unlock general-staff focuses for Barchel.
+STP_pc_air_crews	Aircrew Cadres
+STP_pc_air_crews_desc	We will train pilots, mechanics and controllers. New research will allow us to choose an aircraft the country can maintain on its own.
+STP_pc_air_fields	Airfields
+STP_pc_air_fields_desc	We will prepare an airfield for two new air groups and conduct staff exercises. Construction will take place in a controlled region where the base can still be expanded.
+STP_pc_air_shield	Shield the Skies
+STP_pc_air_shield_desc	We will strengthen ground-based air defence and accelerate fighter development to protect our cities and mountain passes.
+STP_pc_air_support	Support the Troops
+STP_pc_air_support_desc	We will coordinate aviation with ground units. New aircraft must help the army where mountain roads cannot carry heavy artillery.
+STP_pc_air_recon	Reconnaissance over the Passes
+STP_pc_air_recon_desc	Fifteen intelligence points on both neighbours and a decision to repeat the sortie.
+STP_pc_air_import	Orders for Private Aircraft Suppliers
+STP_pc_air_import_desc	We will unlock a repeatable purchase of one hundred basic fighters for 120 treasury units. The focus itself prepares the procurement arrangements; money is deducted only when the decision is selected.
+STP_pc_air_domestic	Domestic Assembly
+STP_pc_air_domestic_desc	We will expand military production and prepare our own aviation programme. A new factory and two research bonuses will reduce dependence on foreign supplies.
+STP_pc_air_heg_pressure	Air Power as Pressure
+STP_pc_air_heg_pressure_desc	A strike against a hub as an ultimatum. This is not liberation.
+STP_pc_air_lib_rules	Do Not Strike an Ally
+STP_pc_air_lib_rules_desc	Strikes on a partner's hubs are forbidden. The coalition rests on this rule.
+STP_pc_air_staff	Reconnaissance before Gestures
+STP_pc_air_staff_desc	The directorate strengthens reconnaissance rather than staging a demonstrative raid.
+STP_pc_shabrat_cabinet	The Founder's Cabinet
+STP_pc_shabrat_cabinet_desc	Victory gave the country a name, but its departments are still empty. We will appoint the people who ran the districts, depots and safe houses during the war. The alliance will receive a permanent name, and the ministries will cease to be vacant posts.
+STP_pc_shabrat_politics	The Founder's Politics
+STP_pc_shabrat_politics_desc	Victory brought together people with different visions of the future. Shabrat must decide whether to become the arbiter of a strong centre or the guarantor of independent civilian institutions.
+STP_pc_hegemony_open	Steland Hegemony
+STP_pc_hegemony_open_desc	We will concentrate political initiative in the government. Some supporters of district autonomy will withdraw, but the cabinet will be able to prepare a common course more quickly.
+STP_pc_freedom_open	Freedom against Slavery
+STP_pc_freedom_open_desc	We will recognise the district councils' and assembly's right to influence decisions. Coordination will take time, but the new government will gain broader support.
+STP_pc_shared_archive_policy	An Archive, Not a Sentence upon the Country
+STP_pc_shared_archive_policy_desc	We will open the archives to researchers and the commission investigating the old regime's crimes. Working with these documents must become a permanent service, not an extension of personal vengeance.
+STP_pc_heg_unity	Unity of the Victors
+STP_pc_heg_unity_desc	The council under Shabrat loses its veto over appointments. This decree does not revoke the guarantees to the SRP.
+STP_pc_heg_emergency	Emergency Powers
+STP_pc_heg_emergency_desc	We will grant industry emergency powers for 180 days. Military output and war support will rise, along with administrative expenditure.
+STP_pc_heg_subordinate	Subordinate the Centres of Power
+STP_pc_heg_subordinate_desc	District commissioners will answer to the government. A single chain of decisions will reduce administrative costs and expand recruitment capacity.
+STP_pc_heg_limit_parties	Limit Political Competition
+STP_pc_heg_limit_parties_desc	We will concentrate political activity within registered organisations. This will strengthen the government's initiative, but narrow the scope for independent research.
+STP_pc_heg_lock	The Course Is Set
+STP_pc_heg_lock_desc	We will commit to a strong centre and regional primacy. Shabrat will remain in charge, and the civilian republican path will close.
+STP_pc_heg_person	The Founder's Name in Law
+STP_pc_heg_person_desc	We will make the founder the final authority in disputes between departments and districts. His standing will accelerate the work of the political apparatus.
+STP_pc_heg_regional_system	A Regional System
+STP_pc_heg_regional_system_desc	We will prepare industry for permanent external commitments. Greater utilisation of military factories will require a more expensive administrative apparatus.
+STP_pc_heg_val_audit	The Reckoning with Kefreyt
+STP_pc_heg_val_audit_desc	We will review the terms of Kefreyt's contracts and prepare the government's position for negotiations over a new border settlement.
+STP_pc_heg_val_terms	Political Guarantees from Kefreyt
+STP_pc_heg_val_terms_desc	We will ask Kefreyt to recognise Steland's political primacy. It may accept or refuse. Refusal leaves military preparations available; war will not begin without a separate order.
+STP_pc_heg_val_force	Plan the Mountain Campaign
+STP_pc_heg_val_force_desc	Following Kefreyt's refusal, headquarters will draw up a campaign plan. First, we must fund 35 days of supply preparation, then decide within 90 days whether to launch the offensive. Kefreyt will receive a warning and time to prepare its defence.
+STP_pc_heg_nod_break	Challenge the Northern Mandate
+STP_pc_heg_nod_break_desc	We will ask Nodrul to recognise a reversal of the relationship: henceforth, decisions in the region will require Steland's consent. Refusal does not start a war automatically.
+STP_pc_heg_nod_force	Plan the Northern Campaign
+STP_pc_heg_nod_force_desc	Following Nodrul's refusal, we will prepare supplies and reconnaissance for the northern front. A separate programme will take 35 days and require funding. The order to go to war will remain the government's decision.
+STP_pc_heg_clients	Dependent Governments
+STP_pc_heg_clients_desc	We will bring neighbours that recognise our primacy into a regional league. Only governments which have already accepted the relevant terms will join.
+STP_pc_heg_burden	The Price of Primacy
+STP_pc_heg_burden_desc	We will establish a permanent apparatus to coordinate external forces. The army will gain better organisation at the cost of additional administrative expenditure.
+STP_pc_lib_assembly	Assembly of the Districts
+STP_pc_lib_assembly_desc	Laws will pass through the assembly. Shabrat remains head of state, but loses some of his day-to-day influence.
+STP_pc_lib_institutions	Independent Institutions
+STP_pc_lib_institutions_desc	We will establish an independent judiciary and a permanent representative chamber. Predictable rules will lower administrative expenditure and support research.
+STP_pc_lib_civil_army	The Army Answers to Civilians
+STP_pc_lib_civil_army_desc	The government will receive the right to approve military commanders. If Sotnikov is available, his experience will be retained in a civilian defence council.
+STP_pc_lib_lock	The Charter Is Established
+STP_pc_lib_lock_desc	We will secure civilian rule and the independence of representative institutions. Shabrat remains head of state, but the hegemonic path closes.
+STP_pc_lib_competition	Political Competition
+STP_pc_lib_competition_desc	We will open political competition within the new order. Gornin and Tikh will be able to present their programmes before a possible transfer of power.
+STP_pc_lib_succession	Power That Can Be Passed On
+STP_pc_lib_succession_desc	Shabrat will choose between continuing to lead and transferring power to one of the nominated civilian successors.
+STP_pc_lib_emergency_limit	Emergencies Have an Expiry Date
+STP_pc_lib_emergency_limit_desc	We will define the limits of emergency mobilisation. During war, a temporary reserve call-up may be declared separately at a cost in command power.
+STP_pc_lib_prepare_neighbors	Political Preparation in the Neighbouring States
+STP_pc_lib_prepare_neighbors_desc	We will establish a permanent service to monitor our neighbours. For a separate payment, it will be able to update intelligence on their armed forces.
+STP_pc_lib_local_contacts	Talk to Those beyond the Border
+STP_pc_lib_local_contacts_desc	We will establish links with civilian groups and specialists in neighbouring countries. Economic intelligence will help the government assess the consequences of intervention.
+STP_pc_lib_crisis	The Intervention Crisis
+STP_pc_lib_crisis_desc	A stronger border service and a reserve of command power will allow us to face an open crisis prepared. This step does not yet declare war.
+STP_pc_lib_war	War of Liberation
+STP_pc_lib_war_desc	Open border crises will be settled by war with the neighbour concerned. If crises with Kefreyt and Nodrul are active at the same time, we will have to fight on two fronts. A war already under way will receive the same plan for a post-war settlement.
+STP_pc_lib_transition	Transitional Administration
+STP_pc_lib_transition_desc	We will fund a temporary administration and offer defeated neighbours a transitional agreement. The political outcome depends on their response.
+STP_pc_lib_independent_gov	An Independent Government
+STP_pc_lib_independent_gov_desc	The transitional commissions are concluding their work. Instead of permanently supervising our neighbours, the cabinet will concentrate on civilian construction and reduce administrative expenditure.
+STP_pc_lib_coalition	A Coalition of Equals
+STP_pc_lib_coalition_desc	We will bring governments that accepted the terms of liberation into a defensive coalition. Every participant must confirm its choice.
+STP_pc_sot_chain	The Chain of Command
+STP_pc_sot_chain_desc	Without the political founder, headquarters assumes responsibility for coordinating scattered units. A unified chain of orders will restore control.
+STP_pc_sot_field	Field Commanders
+STP_pc_sot_field_desc	Sotnikov will use the experience of field commanders to accelerate operational preparation.
+STP_pc_sot_regions	District Formations
+STP_pc_sot_regions_desc	The districts provide men to headquarters, not to the council.
+STP_pc_sot_state	The Staff State
+STP_pc_sot_state_desc	The administration answers to the chain of command, not the assembly.
+STP_pc_sot_two_threats	Two Threats, One Headquarters
+STP_pc_sot_two_threats_desc	Intelligence will assess Nodrul's and Kefreyt's forces. A change of commander does not erase the information or the common task of defence.
+STP_pc_sot_limits	The Limits of Military Rule

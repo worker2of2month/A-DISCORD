@@ -1,0 +1,113 @@
+FACTION_SETUP_NAME_AND_ICON	£trigger_no You must choose a §Hfaction name§! and §Hinsignia§!
+FACTION_RULES_TITLE	Faction Rules
+FACTION_GOALS_TITLE	Faction Goals
+FACTION_GOALS_CANCEL_TRIGGER_HEADER	§HThis goal will be cancelled if:§!
+FACTION_GOALS_CANCEL_EFFECT_HEADER	§HCancellation effects:§!
+CREATE_FACTION_NO_DLC_DESC	Lay the foundation for a military alliance. Invite other countries to join. Faction members can support one another in war!
+FOCUS_FILTER_POLITICAL_FACTION_GOAL_FILTER	Faction Politics
+FOCUS_FILTER_INTERNAL_AFFAIRS_FACTION_GOAL_FILTER	Internal Affairs
+FOCUS_FILTER_RESEARCH_FACTION_GOAL_FILTER	Faction Research
+FOCUS_FILTER_INDUSTRY_FACTION_GOAL_FILTER	Industrial Expansion
+FOCUS_FILTER_WAR_SUPPORT_FACTION_GOAL_FILTER	War Preparation
+FOCUS_FILTER_ANNEXATION_FACTION_GOAL_FILTER	Conquest
+FOCUS_FILTER_ARMY_XP_FACTION_GOAL_FILTER	Army Expansion
+FOCUS_FILTER_NAVY_XP_FACTION_GOAL_FILTER	Naval Superiority
+FOCUS_FILTER_AIR_XP_FACTION_GOAL_FILTER	Air Superiority
+FOCUS_FILTER_POLITICAL_CHARACTER_FACTION_GOAL_FILTER	Faction Organisation
+FOCUS_FILTER_CONSOLIDATION_FACTION_GOAL_FILTER	Consolidation
+resources_to_market_icon_FACTION_GOAL_FILTER	Resources
+FACTION_FACILITY_NAME	Joint Research Centre
+FACTION_ACCESS_TO_RESEARCH_TAB	Requires completion of the $CATEGORY|H$ goal: $NAME|H$
+FACTION_ACCESS_TO_MILITARY_TAB	Requires completion of the $CATEGORY|H$ goal: $NAME|H$
+faction_goal_unlock_research_name	Develop Joint Research
+faction_goal_unlock_military_name	Establish a Unified Command
+faction_goal_unlock_military_desc	As our ties grow stronger, we must be ready to respond to the changing global situation. To do so, we will need well-prepared task forces under unified command.
+FACTION_ACCESS_TAB_UNLOCK	Unlock the following for your faction: $NAME|H$
+FACTION_ACCESS_TAB_LOCK	Lock the following for your faction: $NAME|H$
+FACTION_ACCESS_TAB_REASEARCH	Faction Research
+FACTION_ACCESS_TAB_MILITARY	Faction Military Operations
+FACTION_BUTTON_NAME	§HFaction§!
+FACTION_BUTTON_NO_FACTION	§RNot in a faction§!
+FACTION_BUTTON_JOIN_FACTION	To unlock the faction button, create a faction in the politics menu or join an existing one.
+FACTION_BUTTON_DESC	Manage your faction to support allies and earn contribution bonuses
+FACTION_BUTTON_COMPLETED_HEADER	£trigger_yes Completed faction goals:
+FACTION_BUTTON_CANCELED_HEADER	£trigger_no Cancelled faction goals:
+FACTION_BUTTON_GO_TO_GOALS_TAB	Go to the faction goals tab to replace a goal
+FACTION_BUTTON_INITIATIVE	Faction initiative: $VAL|H$
+FACTION_INTEL_NO_ADVISOR	No intelligence advisor assigned
+FACTION_INTEL_ADVISOR_NOT_ENOUGH_INITIATIVE	§RInsufficient initiative§!
+FACTION_INTEL_HEADER_SPYMASTER	Spymaster
+FACTION_INTEL_HEADER_CRYPTOLOGY	Cryptology
+FACTION_INTEL_HEADER_COUNTER	Counterintelligence
+FACTION_INTEL_HEADER_OPERATIONS	Operations
+FACTION_INTEL_OPEN_AGENCY_UPGRADES	Open agency upgrades
+FACTION_INTEL_NO_DEPARTMENT_CREATED	§RNo department has been created§!
+FACTION_INTEL_NO_DEPARTMENT_CREATED_VISIBILITY	Cannot contribute until an §Hintelligence agency§! has been created
+FACTION_INTEL_NOT_OWN_POSTION	§RThis is not your position§!
+FACTION_INTEL_ADVISOR	Intelligence Advisor
+FACTION_INTEL_TAKE_OVER	Take over: $VALUE$ £faction_initiative_texticon£
+FACTION_INTEL_SHARING_BONUS	§HIntelligence sharing bonus:§! $NUM|+=%.0$
+FACTION_INTEL_OWNER	§HFor the country holding this position:§!
+FACTION_INTEL_OTHERS	§HFor other countries while this position is filled:§!
+FACTION_INTEL_HEAD_OF_SPYMASTER	§HSpymaster§!
+FACTION_INTEL_HEAD_OF_CRYPTOLOGY	Head of Cryptology
+FACTION_INTEL_HEAD_OF_COUNTER	Head of Counterintelligence
+FACTION_INTEL_HEAD_OF_OPERATIONS	Head of Operations
+DIPLOMACY_NOT_FACTION_LEADER_KICK	Is the faction leader
+FACTION_INTEL_OPEN_AGENCY_WINDOW	Open the intelligence agency
+FACTION_INTEL_UNLOCK_SPYMASTER	Become spymaster: $VALUE$ £faction_initiative_texticon£
+FACTION_INTEL_CLICK	§GClick to open the faction panel§!
+FACTION_INTEL_HEAD_OF_BONUS	Operative slots: $NUM|+=$
+FACTION_INTEL_FROM_ADIVSOR	§HFrom advisor:§!
+CREATE_FACTION_INVITE_TITLE	Invite Countries
+RECRUITABILITY_SORT	Recruitability
+INFLUENCE_SORT	Influence
+FACTION_INVITE_BUTTON	Send Invitation
+FACTION_GOAL_RULE_TT	§HFaction rules§! governing who can add §Hgoals§!:
+goals_only_faction_leader	Faction Leader Sets Goals
+faction_set_goal_rules	Goal Settings
+FACTION_MEMBER_LIST_TITLE	Faction Members
+FACTION_INVITE_SHOW_UNAVAILABLE	Show unavailable countries
+CREATE_FACTION_INVITE_ALL	Invite all willing countries
+CREATE_FACTION_INVITE_AMOUNT	($VAL|$ countries)
+CREATE_FACTION_FACTION_LEADER	Faction leader: $LEADER|H$
+CREATE_FACTION_FACTION_INFLUENCE	Estimated starting §Hfaction influence§!: $VAL|H$\n
+CREATE_FACTION_IDENTITY_TITLE	Faction Identity
+CREATE_FACTION_TEMPLATE_TITLE	Faction template: $TEMPLATE|H$
+FACTION_GOAL_MODIFIERS	\n§HCurrent modifiers:§!
+NO_MODIFIERS	§HNo active modifiers. Increase your manifesto progress!§!
+CHANGE_RULE_WINDOW_SUBTITLE	Replace the faction rule?
+CHANGE_GOAL_WINDOW_SUBTITLE	§HSelect a new goal§!
+FACTION_GOAL_COMPLETION	§HCompletion conditions:§!
+FACTION_SP_OPEN_RESEARCH_WINDOW	§GClick§! to open §Hfaction research§!
+FACTION_RESEARCH_BUTTON	Available Research
+FACTION_RESEARCH_OPPORTUNITIES	($VAL|H$ opportunities)
+FACTION_MANPOWERPOOL_LABEL	Manpower:
+FACTION_POWER_PROJECTION	Faction power projection: $VAL|0H$
+FACTION_INFLUENCE	Influence: $VAL|H$
+LEAVE_FACTION_BUTTON	Leave Faction
+DISMANTLE_FACTION_BUTTON	Dismantle Faction
+FACTION_PING_CONFIRM_BUTTON	Confirm
+FACTION_INFLUENCE_TITLE	Faction Influence
+FACTION_LEADER_TITLE	§HFaction Leader§!
+FACTION_SUPREME_COMMANDER_TITLE	Theatre Commander
+FACTION_SUPREME_COMMANDER_POPUP_TITLE	Assign a Theatre Commander
+FACTION_THEATER_LEADER_POPUP_DESC_LOWER_SKILL_LEADER	$NAME|H$ can command no more than $REGION_LIMIT|H$ regions and $COUNTRY_LIMIT|H$ countries.
+FACTION_THEATER_CONTINUE	The selected regions and countries will be removed. Continue?
+FACTION_MEMBERS_LIST_BUTTON	Members
+FACTION_INVITE_COUNTRIES_BUTTON	Invite Countries
+FACTION_INITIATIVE_COST_CANT_AFFORD	§RCannot afford: £faction_initiative_texticon£ $VALUE|0$§!
+FACTION_RULE_CONFRIMATION	Change Rule
+FACTION_RULE_CONFRIMATION_REMOVE	Remove Rule
+FACTION_RULE_ALREADY_SET	§RThis rule is already in use§!
+FACTION_RULE_CONFRIMATION_DESC	Are you sure you wish to change the faction rule from '$OLDRULENAME|H$' to '$NEWRULENAME|H$'? This will cost $COST|.0H$ £faction_initiative_texticon£.\n\n$NEWRULEDESC$\n\n$OLDRULEDESC$
+FACTION_RULE_CONFRIMATION_DESC_REMOVE	Are you sure you wish to remove the faction rule '$CURRENTRULENAME|H$'? This will cost $COST|.0H$ £faction_initiative_texticon£.\n\n$CURRENTRULEDESC$
+FACTION_RULE_CONFRIMATION_DESC_ADD	Are you sure you wish to add the faction rule '$NEWRULENAME|H$'? This will cost $COST|.0H$ £faction_initiative_texticon£.\n\n$NEWRULEDESC$
+FACTION_RULE_EDIT_ALL	All Rules
+FACTION_RULE_AVAILABLE	Rule availability:
+FACTION_RULE_CAN_REMOVE	This rule can be removed if:
+FACTION_RULE_CANNOT_REMOVE	§RCannot remove:§!
+FACTION_RULE_SHOW_COMPLETED	Show completed goals
+FACTION_RULE_SHOW_UNAVAILABLE	Show unavailable goals
+FACTION_GOAL_EDIT_ALL	All Goals
+FACTION_SP_FACILITIES	Special Project Facilities

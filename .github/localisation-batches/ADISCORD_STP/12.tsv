@@ -1,0 +1,74 @@
+STP_pf_negotiate_merchants_desc	Secure trade routes and protection of turnover against arbitrary seizures. The agreement strengthens this faction and displeases the Security Service. Cost: £political_power_texticon 35. All agreements share a 30-day cooldown.
+STP_pf_merchants_room_tt	Merchant influence is below 60%
+STP_pf_merchants_deal_tt	§YMerchants§!: influence §Y+5 percentage points§! (up to 100%, with other shares reduced proportionately), support §G+12§!. §YSecurity Service§!: support §R-12§!. Support is bounded by 0-100; apparatus loyalty and faction effects are recalculated.
+STP_pf_radicals_name	Radical Hedonists
+STP_pf_radicals_badge	RH
+STP_pf_radicals_influence_loc	Influence: §Y[?STP_pf_radicals_influence|1]%§!
+STP_pf_radicals_support_loc	Support: §Y[?STP_pf_radicals_support|1]/100§!
+STP_pf_radicals_tt	§YRadical Hedonists§!\nFreedom in public life and an end to conservative Party tutelage.\n\nContribution to apparatus loyalty: §Y[?STP_pf_radicals_contribution|2]§! points.\nWar exhaustion growth: [?STP_pf_radicals_effect|=-2%].\nEffect = (support - 50) × influence share × 0.3%; the sign is reversed: a satisfied group reduces the indicator.
+STP_pf_negotiate_radicals	Lift Restrictions on the Hedonists
+STP_pf_negotiate_radicals_desc	Freedom in public life and an end to conservative Party tutelage. The agreement strengthens this faction and displeases the Conservatives. Cost: £political_power_texticon 35. All agreements share a 30-day cooldown.
+STP_pf_radicals_room_tt	Radical Hedonist influence is below 60%
+STP_pf_radicals_deal_tt	§YRadical Hedonists§!: influence §Y+5 percentage points§! (up to 100%, with other shares reduced proportionately), support §G+12§!. §YConservatives§!: support §R-12§!. Support is bounded by 0-100; apparatus loyalty and faction effects are recalculated.
+ADISCORD_STP_cw.94.t	Hedersett Usurps Power
+ADISCORD_STP_cw.94.d	The order reached the ministries before the presidium had time to discuss it. Citing the country's armed split, Rufus Hedersett concentrated leadership of the Party government in his own hands. Orders to the troops, appointments and supply decisions must now pass through his office. Elections have been postponed indefinitely.\n\nAt the meeting, the secretary read out the document as already in force. Those who objected were invited to submit their comments in writing; their signatures were not required. By evening, district chancelleries had received new order templates and a demand to confirm their obedience.\n\nOfficial radio called it a temporary measure to preserve the state. Hedersett's opponents called it usurpation. As fronts formed beyond the capital, the Party apparatus received a single master.
+ADISCORD_STP_cw.94.a	The orders have already been sent.
+STP_ps_reorg_1	Restore Government Communications
+STP_ps_reorg_1_desc	This stage pauses if a functioning government is lost. Payment and the remaining duration are preserved until it resumes; the end of the war refunds the unfinished deposit.
+STP_ps_reorg_1_funded	Fund Reconstruction: Stage 1
+STP_ps_reorg_1_funded_desc	Duration: 21 days (7 days fewer with the preparation programme). The next stage is selected separately. Reserves 900 treasury units; acceleration does not create additional units.
+STP_ps_reorg_1_administrative	Administrative Reconstruction: Stage 1
+STP_ps_reorg_1_administrative_desc	Duration: 35 days (7 days fewer with the preparation programme). The next stage is selected separately. A free option when treasury funds are insufficient.
+STP_ps_reorg_2	Restore Supply
+STP_ps_reorg_2_desc	This stage pauses if a functioning government is lost. Payment and the remaining duration are preserved until it resumes; the end of the war refunds the unfinished deposit.
+STP_ps_reorg_2_funded	Fund Reconstruction: Stage 2
+STP_ps_reorg_2_funded_desc	Duration: 21 days (7 days fewer with the preparation programme). The next stage is selected separately. Reserves 1800 treasury units; acceleration does not create additional units.
+STP_ps_reorg_2_administrative	Administrative Reconstruction: Stage 2
+STP_ps_reorg_2_administrative_desc	Duration: 35 days (7 days fewer with the preparation programme). The next stage is selected separately. A free option when treasury funds are insufficient.
+STP_ps_reorg_3	Prepare the General Offensive
+STP_ps_reorg_3_desc	This stage pauses if a functioning government is lost. Payment and the remaining duration are preserved until it resumes; the end of the war refunds the unfinished deposit.
+STP_ps_reorg_3_funded	Fund Reconstruction: Stage 3
+STP_ps_reorg_3_funded_desc	Duration: 28 days. The next stage is selected separately. Reserves 2500 treasury units; acceleration does not create additional units.
+STP_ps_reorg_3_administrative	Administrative Reconstruction: Stage 3
+STP_ps_reorg_3_administrative_desc	Duration: 42 days. The next stage is selected separately. A free option when treasury funds are insufficient.
+STP_ps_emergency_cabinet	Establish an Emergency Cabinet
+STP_ps_emergency_cabinet_desc	1200 treasury units, 14 days. Restores government operations and resumes the interrupted stage. Losing the Congress remains a separate restriction. Retaking the city or ending the war refunds the unused deposit.
+STP_ps_emergency_cabinet_administrative	Assemble a Cabinet with District Resources
+STP_ps_emergency_cabinet_administrative_desc	0 treasury units, 28 days. Restores government operations and resumes the interrupted stage. Losing the Congress remains a separate restriction. Retaking the city or ending the war refunds the unused deposit.
+STP_ps_stage_available_tt	The government is functioning; the current stage is neither active nor paused.
+STP_ps_cabinet_available_tt	The civil war is ongoing, the government is not functioning, and no other cabinet is being established.
+STP_ps_congress_deadline	District Emergency Powers
+STP_ps_congress_deadline_desc	Retake the Bronze Congress or establish a cabinet within 21 days. Missing the deadline entrenches district commanders' powers and adds administrative expenditure. This is not capitulation.
+STP_ps_cabinet_work	Establishing the Provisional Government
+STP_ps_cabinet_work_desc	The cabinet will resume the paused reorganisation with its preserved duration and payment.
+STP_ps_defence_dynamic	Restoring Military Administration
+STP_ps_nodes_dynamic	Loss of Government Centres
+STP_ps_build_radio	Establish Government Communications
+STP_ps_build_radio_work	Establish Government Communications - In Progress
+STP_ps_build_radio_desc	Cost: 900 treasury units. Duration: 21 days. This programme can be completed once. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_build_radio_work_desc	900 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_build_hq	Equip a Reserve Headquarters
+STP_ps_build_hq_work	Equip a Reserve Headquarters - In Progress
+STP_ps_build_hq_desc	Cost: 1800 treasury units. Duration: 21 days. This programme can be completed once. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_build_hq_work_desc	1800 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_prepare_evacuation	Prepare the Organisation's Evacuation
+STP_ps_prepare_evacuation_work	Prepare the Organisation's Evacuation - In Progress
+STP_ps_prepare_evacuation_desc	Cost: 1500 treasury units. Duration: 14 days. This programme can be completed once. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_prepare_evacuation_work_desc	1500 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_transport	Deploy Military Transport
+STP_ps_transport_work	Deploy Military Transport - In Progress
+STP_ps_transport_desc	Cost: 2500 treasury units. Duration: 28 days. Cooldown after completion: 60 days. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_transport_work_desc	2500 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_ammunition	Order a Mixed Ordnance Package
+STP_ps_ammunition_work	Order a Mixed Ordnance Package - In Progress
+STP_ps_ammunition_desc	Cost: 2400 treasury units. Duration: 21 days. Cooldown after completion: 42 days. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_ammunition_work_desc	2400 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_ammunition_result_tt	For 2400 treasury units and 21 days: 8000 rifles, 480 artillery pieces, 480 squad weapon sets, 240 support equipment and 160 anti-air weapons. Another order is available 42 days after delivery.
+STP_ps_secure_routes	Secure the Capital's Transport Links
+STP_ps_secure_routes_work	Secure the Capital's Transport Links - In Progress
+STP_ps_secure_routes_desc	Cost: 1800 treasury units. Duration: 42 days. Cooldown after completion: 42 days. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_secure_routes_work_desc	1800 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
+STP_ps_reserve_training	Train an Operational Reserve
+STP_ps_reserve_training_work	Train an Operational Reserve - In Progress
+STP_ps_reserve_training_desc	Cost: 1800 treasury units. Duration: 21 days. Cooldown after completion: 42 days. If its conditions no longer hold, the unfinished deposit is refunded.
+STP_ps_reserve_training_work_desc	1800 treasury units reserved. The result is delivered only if the programme's conditions still hold; cancellation refunds the deposit once.
