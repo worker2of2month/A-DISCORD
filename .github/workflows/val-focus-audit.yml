@@ -1,0 +1,37 @@
+name: Kefreyt isolated focus audit
+on:
+  push:
+    branches: [assistant/val-focus-audit-20260920]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Export tracked source for focused verification
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, zipfile
+          files = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          text = {'.py', '.txt', '.yml', '.yaml', '.json', '.md', '.mod', '.gfx', '.gui', '.asset', '.lua', '.info', '.csv', '.toml', '.ini'}
+          count = 0
+          with zipfile.ZipFile('/tmp/val-source.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for name in files:
+                  p = pathlib.Path(name)
+                  if name and p.is_file() and (p.suffix.lower() in text or name.startswith('gfx/flags/') or (name.startswith('gfx/') and p.stat().st_size < 100000)):
+                      archive.write(p, name)
+                      count += 1
+          print('Exported tracked source files:', count)
+          print('Pinned source:', subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: val-source
+          path: /tmp/val-source.zip
+          retention-days: 1
+          if-no-files-found: error
