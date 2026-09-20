@@ -71,5 +71,234 @@ class ScriptedPeaceOwnershipTests(unittest.TestCase):
         self.assertNotIn('on_daily', names)
         self.assertFalse(SHARED.read_bytes().startswith(b'\xef\xbb\xbf'))
 
+
+
+class GenericPeaceFixture:
+    """Execute the generic branch against explicit diplomacy/ownership facts.
+
+    Native peace is deliberately allowed to remove ALL faction war relations.
+    Annex can leave an impassable state behind. Neither model assumes engine
+    callback timing, which still needs an in-game run.
+    """
+    def __init__(self, root="APH", survivor=None, neutral=True):
+        self.root = root
+        self.winner = "VAL"
+        self.countries = ["CIN", "OSF", "APH", "VAL", "NOD", "ERT"]
+        self.factions = {t: "tribes" for t in ("CIN", "OSF", "APH")}
+        if neutral:
+            self.factions["NOD"] = "tribes"
+        self.wars = {frozenset(("VAL", t)) for t in ("CIN", "OSF", "APH", "ERT")}
+        self.capitulated = {"CIN", "OSF", "APH"} - {survivor}
+        self.owners = {58: "CIN", 61: "OSF", 64: "APH", 999: "APH", 70: "NOD", 168: "ERT"}
+        self.arrays = {}
+        self.flags = {t: set() for t in self.countries}
+        self.global_flags = set()
+        self.annexed = []
+        self.log = []
+
+    def resolve(self, token, stack):
+        return {"THIS": stack[-1], "PREV": stack[-2] if len(stack) > 1 else None,
+                "ROOT": self.root, "FROM": self.winner}.get(token, token)
+
+    def allied(self, a, b):
+        return a in self.factions and self.factions.get(a) == self.factions.get(b)
+
+    def enemies(self, country):
+        return {next(iter(w - {country})) for w in self.wars if country in w}
+
+    def matches(self, rows, stack):
+        from tools.tests.test_adiscord_stp_preparation import scalar
+        current = stack[-1]
+        def one(e):
+            key, value = e.key, e.value
+            if key in ("AND", "hidden_trigger"): return self.matches(value, stack)
+            if key == "OR": return any(one(x) for x in value)
+            if key == "NOT": return not any(one(x) for x in value)
+            if key in ("ROOT", "FROM", "PREV"):
+                return self.matches(value, stack + [self.resolve(key, stack)])
+            if key == "any_other_country":
+                return any(t != current and self.matches(value, stack + [t]) for t in self.countries)
+            if key == "has_global_flag": return value in self.global_flags
+            if key == "has_country_flag": return value in self.flags.get(current, set())
+            if key == "is_in_faction": return (current in self.factions) == (value == "yes")
+            if key == "is_in_faction_with": return self.allied(current, self.resolve(value, stack))
+            if key == "has_capitulated": return (current in self.capitulated) == (value == "yes")
+            if key == "has_war_with": return self.resolve(value, stack) in self.enemies(current)
+            if key == "has_war_together_with": return bool(self.enemies(current) & self.enemies(self.resolve(value, stack)))
+            if key in ("tag", "original_tag"): return current == self.resolve(value, stack)
+            if key == "exists": return (current in self.countries) == (value == "yes")
+            if key == "is_puppet_of": return False
+            if key == "ADISCORD_vorkerland_is_main_claimant": return False
+            raise AssertionError("Unsupported generic condition: " + key)
+        return all(one(e) for e in rows)
+
+    def execute(self, rows, stack=None):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+        stack = stack or [self.root]
+        current = stack[-1]
+        taken = False
+        for e in rows:
+            key, value = e.key, e.value
+            if key in ("if", "else_if", "else"):
+                if key == "if": taken = False
+                gate = next((x.value for x in value if x.key == "limit"), [])
+                if not taken and self.matches(gate, stack):
+                    taken = True
+                    self.execute([x for x in value if x.key != "limit"], stack)
+            elif key in ("ROOT", "FROM", "PREV"):
+                self.execute(value, stack + [self.resolve(key, stack)])
+            elif key == "every_enemy_country":
+                # Recheck live enemy membership after each mutation, not a Python snapshot.
+                for tag in self.countries:
+                    if tag in self.enemies(current) and self.matches(block(value, "limit"), stack + [tag]):
+                        self.execute([x for x in value if x.key != "limit"], stack + [tag])
+            elif key == "every_owned_state":
+                for state in list(self.owners):
+                    if self.owners[state] == current:
+                        self.execute(value, stack + [state])
+            elif key == "add_to_temp_array":
+                self.arrays.setdefault(scalar(value, "array"), []).append(self.resolve(scalar(value, "value"), stack))
+            elif key == "clear_temp_array": self.arrays[value] = []
+            elif key == "for_each_scope_loop":
+                for scope in list(self.arrays[scalar(value, "array")]):
+                    self.execute([x for x in value if x.key != "array"], stack + [scope])
+            elif key == "white_peace":
+                target = self.resolve(value, stack)
+                defeated_side = {target} | {t for t in self.countries if self.allied(t, target)}
+                self.wars = {w for w in self.wars if not (current in w and bool(w & defeated_side))}
+                self.capitulated -= defeated_side
+            elif key == "annex_country":
+                target = self.resolve(scalar(value, "target"), stack)
+                self.annexed.append(target)
+                for state in list(self.owners):
+                    if self.owners[state] == target and state != 999:
+                        self.owners[state] = current
+                # A faction leader may disappear during annexation.
+                self.factions.pop(target, None)
+            elif key == "transfer_state": self.owners[self.resolve(value, stack)] = current
+            elif key == "clr_country_flag": self.flags[current].discard(value)
+            elif key == "set_major": pass
+            elif key == "log": self.log.append(value)
+            else: raise AssertionError("Unsupported generic effect: " + key)
+
+    def run(self):
+        from tools.tests.test_adiscord_stp_preparation import block
+        hook = block(native_hooks(GENERIC.read_text(encoding="utf-8")), "on_capitulation")
+        self.execute([block(hook, "effect")[0]])
+
+
+class GenericPeaceRegressionTests(unittest.TestCase):
+    def test_neutral_faction_member_does_not_block_the_defeated_war(self):
+        model = GenericPeaceFixture(neutral=True)
+        model.run()
+        self.assertEqual(set(model.annexed), {"CIN", "OSF", "APH"})
+        self.assertEqual(model.owners[70], "NOD")
+
+    def test_faction_wide_white_peace_cannot_skip_the_remaining_losers(self):
+        from itertools import permutations
+        for order in permutations(("CIN", "OSF", "APH")):
+            with self.subTest(order=order):
+                model = GenericPeaceFixture(root=order[-1], neutral=False)
+                model.countries[:3] = order
+                model.run()
+                self.assertEqual(set(model.annexed), set(order))
+                self.assertEqual({model.owners[n] for n in (58, 61, 64)}, {"VAL"})
+                self.assertEqual(model.owners[168], "ERT", "Unrelated parallel wars must survive")
+                self.assertIn(frozenset(("VAL", "ERT")), model.wars)
+
+    def test_living_cobelligerent_and_liberation_block_final_peace(self):
+        for tag in ("CIN", "OSF"):
+            model = GenericPeaceFixture(survivor=tag)
+            before = dict(model.owners), set(model.wars)
+            model.run()
+            self.assertFalse(model.annexed)
+            self.assertEqual(before, (model.owners, model.wars))
+
+    def test_full_annexation_includes_an_impassable_owned_remainder(self):
+        model = GenericPeaceFixture(neutral=False)
+        model.run()
+        self.assertEqual(model.owners[999], "VAL")
+
+    def test_scripted_root_reservation_prevents_generic_mutation(self):
+        model = GenericPeaceFixture(neutral=False)
+        model.global_flags.add("skip_default_capitulation")
+        before = dict(model.owners), set(model.wars)
+        model.run()
+        self.assertEqual(before, (model.owners, model.wars))
+        self.assertFalse(model.annexed)
+
+
+class WarDebugContractTests(unittest.TestCase):
+    def test_war_tools_are_debug_only_human_only_and_free(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+        source = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
+        category = block(parse_clausewitz(source.read_text(encoding="utf-8")), "ADISCORD_scenario_debug_category")
+        decisions = [e for e in category if e.key.startswith("ADISCORD_debug_war_")]
+        self.assertGreaterEqual(len(decisions), 8, "Need start, occupation, liberation, peace and diagnostic controls")
+        for e in decisions:
+            with self.subTest(decision=e.key):
+                visible = block(e.value, "visible")
+                self.assertEqual(scalar(visible, "is_debug"), "yes")
+                self.assertEqual(scalar(visible, "is_ai"), "no")
+                self.assertEqual(scalar(e.value, "cost"), "0")
+                self.assertEqual(scalar(block(e.value, "ai_will_do"), "factor"), "0")
+
+    def test_debug_localisation_covers_each_new_control_in_both_languages(self):
+        from tools.tests.test_adiscord_stp_preparation import block
+        source = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
+        category = block(parse_clausewitz(source.read_text(encoding="utf-8")), "ADISCORD_scenario_debug_category")
+        controls = [e.key for e in category if e.key.startswith("ADISCORD_debug_war_")]
+        self.assertTrue(controls)
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_scenario_debug_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            text = path.read_text(encoding="utf-8-sig")
+            for key in controls:
+                for suffix in ("", "_desc"):
+                    self.assertRegex(text, r"(?m)^ " + re.escape(key + suffix) + r":")
+
+
+
+class FrontierWarEntryRegressionTests(unittest.TestCase):
+    def effects(self):
+        return parse_clausewitz((ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text())
+
+    def test_war_entry_is_confirmed_after_the_declaration_effect_returns(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        start = block(self.effects(), "VAL_frontier_start_war")
+        queued = [e for e in walk(start) if e.key == "country_event" and scalar(e.value, "id") == "val_rework.117"]
+        self.assertEqual(len(queued), 1, "Native queued war entry needs a bounded confirmation")
+        self.assertEqual(scalar(queued[0].value, "hours"), "1")
+        for e in walk(start):
+            if e.key == "if" and any(x.key == "VAL_frontier_close" for x in e.value):
+                self.fail("Do not cancel a just-issued declaration using same-tick has_war")
+
+    def test_calling_an_ally_never_clears_its_membership_in_the_same_branch(self):
+        from tools.tests.test_adiscord_stp_preparation import block, walk
+        calls = block(self.effects(), "VAL_frontier_call_members")
+        for tag in ("CIN", "OSF", "APH"):
+            branches = block(calls, tag)
+            addition = next(i for i, e in enumerate(branches) if any(x.key == "add_to_war" for x in walk([e])))
+            self.assertEqual(branches[addition+1].key, "else_if", "War relation may be queued, not yet visible")
+
+    def test_native_relation_callback_records_guarantors_that_join_later(self):
+        source = (ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt").read_text()
+        self.assertIn("VAL_frontier_register_war_participant = yes", source)
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        register = block(self.effects(), "VAL_frontier_register_war_participant")
+        gate = block(block(register, "if"), "limit")
+        self.assertEqual(scalar(gate, "has_war_with"), "VAL")
+        self.assertTrue(any(e.key == "VAL_frontier_guarantor" or (e.key == "set_country_flag" and e.value == "VAL_frontier_guarantor") for e in walk(register)))
+
+    def test_delayed_confirmation_is_bound_to_its_original_target(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+        events = parse_clausewitz((ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text())
+        found = [e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "val_rework.117"]
+        self.assertEqual(len(found), 1)
+        self.assertEqual(scalar(found[0], "hidden"), "yes")
+        self.assertEqual(scalar(found[0], "is_triggered_only"), "yes")
+        gate = block(block(block(found[0], "immediate"), "if"), "limit")
+        self.assertEqual(scalar(gate, "VAL_frontier_reply_is_current"), "yes")
+
 if __name__ == '__main__':
     unittest.main()

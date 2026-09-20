@@ -59,9 +59,9 @@ class NodrulCapitulationReservationTests(unittest.TestCase):
         reserved = "STP_cw_northern_capitulation_reserved"
 
         self.assertIn(f"ROOT = {{ has_country_flag = {pending} }}", immediate)
-        self.assertIn(
-            f"set_country_flag = {{ flag = {reserved} value = 1 days = 2 }}",
+        self.assertRegex(
             immediate,
+            rf"set_country_flag\s*=\s*\{{\s*flag\s*=\s*{reserved}\s+value\s*=\s*1\s+days\s*=\s*2\s*\}}",
         )
         self.assertIn(f"ROOT = {{ has_country_flag = {reserved} }}", late)
         self.assertIn("set_global_flag = skip_default_capitulation", late)

@@ -16,6 +16,14 @@ on_actions = {
 
 	on_war_relation_added = {
 		effect = {
+			if = {
+				limit = { ROOT = { tag = VAL } }
+				FROM = { VAL_frontier_register_war_participant = yes }
+			}
+			else_if = {
+				limit = { FROM = { tag = VAL } }
+				ROOT = { VAL_frontier_register_war_participant = yes }
+			}
 			if = { limit = { OR = { ROOT = { tag = VAL } FROM = { tag = VAL } } } VAL = { VAL_check_nam_concession = yes } }
 			if = {
 				limit = { OR = { ROOT = { tag = VAL } FROM = { tag = VAL } } }

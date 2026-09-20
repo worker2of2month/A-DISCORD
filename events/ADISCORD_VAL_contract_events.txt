@@ -827,3 +827,21 @@ country_event = {
 		}
 	}
 }
+
+# One-shot confirmation of native war entry, not a recurring campaign pulse.
+country_event = {
+    id = val_rework.117
+    hidden = yes
+    is_triggered_only = yes
+    immediate = {
+        if = {
+            limit = {
+                tag = VAL
+                VAL_frontier_reply_is_current = yes
+                check_variable = { var = VAL_frontier_stage value = 3 compare = equals }
+            }
+            VAL_frontier_join_existing_war = yes
+            if = { limit = { VAL_frontier_has_campaign_war = no } VAL_frontier_close = yes }
+        }
+    }
+}
