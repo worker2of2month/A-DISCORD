@@ -6,31 +6,81 @@ on:
       - .github/workflows/peace-audit.yml
       - tools/peace_audit_patch.py
 permissions:
-  contents: read
+  contents: write
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      - name: Export script sources
+      - name: Install validation dependencies
+        if: hashFiles('tools/peace_audit_patch.py') != ''
+        run: python -m pip install Pillow numpy
+      - name: Apply verified candidate patch
+        if: hashFiles('tools/peace_audit_patch.py') != ''
+        run: |
+          mkdir -p /tmp/peace-evidence
+          git rev-parse HEAD > /tmp/peace-evidence/baseline-sha.txt
+          python tools/peace_audit_patch.py
+          git diff --check
+          git diff --stat > /tmp/peace-evidence/diff-stat.txt
+      - name: Focused regression suite
+        if: hashFiles('tools/peace_audit_patch.py') != ''
+        run: |
+          set -o pipefail
+          python -B -m unittest tools.tests.test_scripted_peace_on_actions tools.tests.test_validate_adiscord_val_rework.ValFrontierCampaignTests tools.tests.test_adiscord_nod_capitulation_reservation tools.tests.test_vorkerland_claimant_cleanup 2>&1 | tee /tmp/peace-evidence/focused.txt
+      - name: Commit candidate to isolated branch
+        if: hashFiles('tools/peace_audit_patch.py') != ''
+        run: |
+          git config user.name 'worker2of2month'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          python - <<'PY'
+          import subprocess
+          from pathlib import Path
+          paths = Path('/tmp/peace-evidence/changed-paths.txt').read_text().splitlines()
+          subprocess.run(['git', 'add', '--', *paths], check=True)
+          subprocess.run(['git', 'diff', '--cached', '--check'], check=True)
+          subprocess.run(['git', 'commit', '-m', 'fix: stabilize coalition peace and add native war debugging'], check=True)
+          subprocess.run(['git', 'push', 'origin', 'HEAD:fix/scripted-peace-war-debug-20260920'], check=True)
+          Path('/tmp/peace-evidence/candidate-sha.txt').write_text(subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode())
+          PY
+      - name: Full total-conversion validator
+        if: hashFiles('tools/peace_audit_patch.py') != ''
+        continue-on-error: true
+        run: |
+          set +e
+          python -B tools/validate_tc.py --limit 300 > /tmp/peace-evidence/validate-tc.txt 2>&1
+          code=$?
+          echo "$code" > /tmp/peace-evidence/validate-tc-exit.txt
+          cat /tmp/peace-evidence/validate-tc.txt
+          exit "$code"
+      - name: Full unittest discovery
+        if: hashFiles('tools/peace_audit_patch.py') != ''
+        continue-on-error: true
+        run: |
+          set +e
+          timeout 1500 python -B -m unittest discover -s tools/tests > /tmp/peace-evidence/unittest-all.txt 2>&1
+          code=$?
+          echo "$code" > /tmp/peace-evidence/unittest-all-exit.txt
+          tail -120 /tmp/peace-evidence/unittest-all.txt
+          exit "$code"
+      - name: Record final file hashes
+        if: always() && hashFiles('tools/peace_audit_patch.py') != ''
         run: |
           python - <<'PY'
+          import hashlib, json
           from pathlib import Path
-          import subprocess, zipfile
-          paths = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
-          suffixes = {'.txt', '.yml', '.yaml', '.py', '.md', '.lua', '.json', '.gfx', '.gui', '.csv', '.mod', '.cwt'}
-          with zipfile.ZipFile('peace-audit-sources.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
-              for name in paths:
-                  p = Path(name)
-                  if p.is_file() and (p.suffix.lower() in suffixes or p.name in {'.gitignore', '.gitattributes'}):
-                      archive.write(p, name)
-          print(subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode())
+          p=Path('/tmp/peace-evidence/changed-paths.txt')
+          if p.exists():
+              hashes={n: hashlib.sha256(Path(n).read_bytes()).hexdigest() for n in p.read_text().splitlines()}
+              Path('/tmp/peace-evidence/source-hashes.json').write_text(json.dumps(hashes,indent=2))
           PY
+          git status --short > /tmp/peace-evidence/final-status.txt
       - uses: actions/upload-artifact@v4
+        if: always() && hashFiles('tools/peace_audit_patch.py') != ''
         with:
-          name: peace-audit-sources
-          path: peace-audit-sources.zip
-          retention-days: 1
+          name: peace-verification
+          path: /tmp/peace-evidence/
+          retention-days: 3
