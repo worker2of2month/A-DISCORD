@@ -24,3 +24,5 @@
  ADISCORD_rin_crisis.14.t: "Rina Reaffirms Its Oath to Montera"
  ADISCORD_rin_crisis.14.d: "Rina's court has reaffirmed its loyalty to Montera, refusing to support the southern cities in the dispute over the two oaths. Against the backdrop of Vorkerland's collapse, the palatine has chosen royal authority and continued dependence on his northern patron.\n\nAn armed split has been avoided, but the concession does not resolve the conflict between the court and the city charters. The southern councils have lost their ability to determine the country's foreign policy, while the crown has assumed responsibility for preserving internal order. The old compromise ended with a decision by the court, rather than an agreement between both sides."
  ADISCORD_rin_crisis.14.a: "The palatine has chosen the northern oath."
+
+ MINIMIZE_EVENT: "§GClick§! to minimise. The event will be placed in the event area's §HEvents and Decisions§! section."
