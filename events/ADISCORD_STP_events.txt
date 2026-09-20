@@ -52,7 +52,10 @@ country_event = {
 	is_triggered_only = yes
 	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } }
 	immediate = { clear_variable = STP_nectar_story_page }
-	option = { name = ADISCORD_STP_preparation.15.a }
+	option = {
+		name = ADISCORD_STP_preparation.15.a
+		hidden_effect = { country_event = { id = ADISCORD_STP_preparation.23 hours = 1 } }
+	}
 }
 
 country_event = {
@@ -63,8 +66,72 @@ country_event = {
 	is_triggered_only = yes
 	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } }
 	immediate = { clear_variable = STP_nectar_story_page }
-	option = { name = ADISCORD_STP_preparation.16.a }
+	option = {
+		name = ADISCORD_STP_preparation.16.a
+		hidden_effect = { country_event = { id = ADISCORD_STP_preparation.25 hours = 1 } }
+	}
 }
+
+# Pre-choice lore sequence. Explain the political actors before the player commits to a side.
+country_event = {
+	id = ADISCORD_STP_preparation.23
+	title = ADISCORD_STP_preparation.23.t
+	desc = ADISCORD_STP_preparation.23.d
+	picture = GFX_event_adiscord_nectar_of_the_gods
+	is_triggered_only = yes
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+	option = {
+		name = ADISCORD_STP_preparation.23.a
+		hidden_effect = { country_event = { id = ADISCORD_STP_preparation.24 hours = 1 } }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.24
+	title = ADISCORD_STP_preparation.24.t
+	desc = ADISCORD_STP_preparation.24.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+	option = { name = ADISCORD_STP_preparation.24.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.25
+	title = ADISCORD_STP_preparation.25.t
+	desc = ADISCORD_STP_preparation.25.d
+	picture = GFX_event_adiscord_nectar_of_the_gods
+	is_triggered_only = yes
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+	option = {
+		name = ADISCORD_STP_preparation.25.a
+		hidden_effect = { country_event = { id = ADISCORD_STP_preparation.26 hours = 1 } }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.26
+	title = ADISCORD_STP_preparation.26.t
+	desc = ADISCORD_STP_preparation.26.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+	option = {
+		name = ADISCORD_STP_preparation.26.a
+		hidden_effect = { country_event = { id = ADISCORD_STP_preparation.27 hours = 1 } }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.27
+	title = ADISCORD_STP_preparation.27.t
+	desc = ADISCORD_STP_preparation.27.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+	option = { name = ADISCORD_STP_preparation.27.a }
+}
+
 
 country_event = {
 	id = ADISCORD_STP_preparation.17
