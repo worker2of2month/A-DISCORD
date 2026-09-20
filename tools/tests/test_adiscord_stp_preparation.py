@@ -2700,11 +2700,11 @@ class StelanderPreparationTests(unittest.TestCase):
                      and any(e.key == "set_country_flag" and e.value == "STP_sided_with_the_party_flag"
                              for e in walk(option.value)))
         self.assertNotIn("scoped_play_song", {e.key for e in walk(party.value)})
-        assets = entries("music/music.asset")
+        assets = entries("music/ADISCORD_music.asset")
         song = next(e.value for e in assets if e.key == "music" and scalar(e.value, "name") == "ADISCORD_stp_shabrat")
         self.assertEqual(scalar(song, "file"), "ADISCORD_stp_shabrat.ogg")
         self.assertTrue((ROOT / "music" / "ADISCORD_stp_shabrat.ogg").is_file())
-        station = entries("music/_songs.txt")
+        station = entries("music/ADISCORD_songs.txt")
         playlist = next(e.value for e in station if e.key == "music" and scalar(e.value, "song") == "ADISCORD_stp_shabrat")
         chance = block(playlist, "chance")
         self.assertEqual(scalar(chance, "base"), "10")

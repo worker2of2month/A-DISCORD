@@ -211,6 +211,10 @@ spriteTypes = {
 	  	name = "GFX_portrait_RUS_Mark_Rustan"
 	  	texturefile = "gfx/leaders/RUS/portrait_RUS_Mark_Rustan.png"
 	}
+	spriteType = {
+		name = "GFX_portrait_RUS_Mark_Rustan_dictator"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Mark_Rustan_dictator.png"
+	}
 ###NAM
 	spriteType = {
 	  	name = "GFX_portrait_NAM_Egor_Rom"

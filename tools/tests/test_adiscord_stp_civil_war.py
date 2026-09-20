@@ -403,11 +403,11 @@ class CivilWarContracts(unittest.TestCase):
             self.assertEqual(matches_conditions(ast_block(story, "trigger"), {}, tag), tag == "STP")
         self.assertLess(first_time.value.index(next(e for e in first_time.value if e.key == "set_global_flag")),
                         first_time.value.index(next(e for e in first_time.value if e.key == "hidden_effect")))
-        assets = entries("music/music.asset")
+        assets = entries("music/ADISCORD_music.asset")
         song = next(e.value for e in assets if e.key == "music" and scalar(e.value, "name") == "ADISCORD_stp_civil_war")
         self.assertEqual(scalar(song, "file"), "ADISCORD_stp_civil_war.ogg")
         self.assertTrue((ROOT / "music" / "ADISCORD_stp_civil_war.ogg").is_file())
-        playlist = next(e.value for e in entries("music/_songs.txt")
+        playlist = next(e.value for e in entries("music/ADISCORD_songs.txt")
                         if e.key == "music" and scalar(e.value, "song") == "ADISCORD_stp_civil_war")
         flags = [e.value for e in walk(ast_block(playlist, "chance")) if e.key == "has_global_flag"]
         self.assertIn("STP_cw_started", flags)

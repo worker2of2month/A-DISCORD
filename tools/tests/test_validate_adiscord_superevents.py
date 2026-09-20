@@ -27,6 +27,46 @@ def copy_contract_tree(destination: Path) -> None:
 
 
 class SupereventContractTests(unittest.TestCase):
+    def test_radio_keeps_only_mod_songs_and_preserves_vanilla(self):
+        playlists = list((ROOT / "music").glob("*.txt"))
+        songs = "\n".join(path.read_text(encoding="utf-8-sig") for path in playlists)
+        self.assertNotIn('song = "superevent_', songs)
+        self.assertNotIn('song = "one_minute_of_silence"', songs)
+        self.assertNotIn('_after_superevent', songs)
+        self.assertEqual(songs.count('song = "ADISCORD_stp_civil_war_end"'), 1)
+        self.assertIn('music_station = "adiscord_music"', songs)
+        self.assertNotIn('replace_path="music"', (ROOT / "descriptor.mod").read_text())
+        self.assertFalse((ROOT / "music/_songs.txt").exists())
+        self.assertFalse((ROOT / "music/music.asset").exists())
+        assets = (ROOT / "music/ADISCORD_music.asset").read_text()
+        self.assertNotIn('name = "maintheme"', assets)
+        for item in PRESENTATIONS:
+            self.assertIn(f'name = "{item.name}"', assets)
+
+    def test_nam_war_and_last_empire_are_registered_presentations(self):
+        self.assertIn("superevent_nam_resource_war", {item.name for item in PRESENTATIONS})
+        self.assertIn("superevent_rus_last_empire", {item.name for item in PRESENTATIONS})
+
+    def test_new_presentations_follow_hostilities_and_guarded_proclamation(self):
+        from tools.validators.validate_adiscord_superevents import blocks, _event_block
+
+        nam = (ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(encoding="utf-8")
+        effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        war = blocks(nam, r"^ADISCORD_nam_resource_war_begin_hostilities\s*=\s*\{")[0]
+        peace = blocks(nam, r"^ADISCORD_nam_resource_war_resolve_peaceful_withdrawal\s*=\s*\{")[0]
+        self.assertLess(war.index("declare_war_on"), war.index("ADISCORD_nam_show_resource_war_superevent"))
+        self.assertNotIn("ADISCORD_nam_show_resource_war_superevent", peace)
+        empire = blocks(effects, r"^ADISCORD_vorkerland_rus_proclaim_last_empire\s*=\s*\{")[0]
+        self.assertIn("NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }", empire)
+        self.assertLess(empire.index("set_cosmetic_tag"), empire.index("ADISCORD_vorkerland_show_last_empire_superevent"))
+        events = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        for event_id, request in ((7, 10), (8, 11)):
+            event = _event_block(events, f"ADISCORD_superevent.{event_id}")
+            self.assertIn(f"ADISCORD_superevent_request = {request}", event)
+            self.assertIn("ADISCORD_superevent_enqueue = yes", event)
+            for forbidden in ("declare_war_on", "set_cosmetic_tag", "add_manpower"):
+                self.assertNotIn(forbidden, event)
+
     def test_fifo_duplicates_and_close_execute_the_scripted_effects(self) -> None:
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
@@ -103,19 +143,19 @@ class SupereventContractTests(unittest.TestCase):
 
         gui = parse_clausewitz((ROOT / SCRIPTED_GUI).read_text(encoding="utf-8"))[0].value
         windows = fields(gui)
-        for index in (6, 9, 1, 6, 9, 1):
+        for index in (6, 10, 11, 9, 1, 6, 10, 11, 9, 1):
             request(index)
-        self.assertEqual(queue, [9, 1])
+        self.assertEqual(queue, [10, 11, 9, 1])
         self.assertEqual(played, [PRESENTATIONS[5].name])
-        for index in (6, 9, 1):
+        for index in (6, 10, 11, 9, 1):
             window = fields(windows[PRESENTATIONS[index - 1].name])
             execute(fields(window["effects"])["superevents_button_click"])
-        self.assertEqual(played, [PRESENTATIONS[i - 1].name for i in (6, 9, 1)])
+        self.assertEqual(played, [PRESENTATIONS[i - 1].name for i in (6, 10, 11, 9, 1)])
         self.assertEqual(queue, [])
         self.assertEqual(flags, set())
         # A closed presentation can be replayed; no permanent deduplication lock.
         request(6)
-        self.assertEqual(len(played), 4)
+        self.assertEqual(len(played), 6)
 
     def test_requests_do_not_replace_an_active_presentation(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks
@@ -139,6 +179,8 @@ class SupereventContractTests(unittest.TestCase):
         playback = blocks(effects, r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{")[0]
         self.assertNotIn("sound_effect =", playback)
         self.assertNotIn("one_minute_of_silence", playback)
+        gui = (ROOT / "interface/superevents.gui").read_text(encoding="utf-8-sig")
+        self.assertNotIn("show_sound =", gui, "GUI audio duplicates the dispatched music track")
         for item in PRESENTATIONS:
             song = item.dedicated_sound_effect.removesuffix("_sound_e")
             self.assertIn(f'play_song = "{song}"', playback)
@@ -159,6 +201,8 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_stelander_empire",
                 "superevent_stelander_party_victory",
                 "superevent_stelander_shabrat_victory",
+                "superevent_nam_resource_war",
+                "superevent_rus_last_empire",
             ),
         )
 
@@ -175,68 +219,28 @@ class SupereventContractTests(unittest.TestCase):
             self.assertNotIn("ADISCORD_vorkerland_clear_superevent_flags = yes", immediate)
             self.assertIn("ADISCORD_superevent_enqueue = yes", immediate)
 
-    def test_stelander_music_waits_for_audio_instead_of_shabrat_close(self) -> None:
+    def test_postwar_music_plays_from_each_sides_opening_focus(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks
 
         source = (ROOT / SCRIPTED_GUI).read_text(encoding="utf-8-sig")
-        window = blocks(source, r"^\s*superevent_stelander_shabrat_victory\s*=\s*\{")[0]
-        self.assertNotIn("scoped_play_song", window)
-        self.assertIn("clr_global_flag = superevent_stelander_shabrat_victory", window)
+        for name in ("superevent_stelander_shabrat_victory", "superevent_stelander_party_victory"):
+            window = blocks(source, rf"^\s*{name}\s*=\s*\{{")[0]
+            self.assertNotIn("scoped_play_song", window)
         effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8-sig")
         playback = blocks(effects, r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{")[0]
-        tail = playback
-        self.assertIn("limit = { has_global_flag = superevent_stelander_shabrat_victory }", tail)
-        self.assertIn("STS = {", tail)
-        self.assertIn("limit = { is_ai = no }", tail)
-        self.assertIn('scoped_play_song = "ADISCORD_stp_civil_war_end_after_superevent"', tail)
-        party = blocks(source, r"^\s*superevent_stelander_party_victory\s*=\s*\{")[0]
-        self.assertNotIn("scoped_play_song", party)
+        self.assertNotIn("scoped_play_song", playback)
         focuses = (ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt").read_text(encoding="utf-8-sig")
-        focus = next(b for b in blocks(focuses, r"^\s*focus\s*=\s*\{") if "id = STP_pw_party_new_republic\n" in b)
-        reward = blocks(focus, r"^\s*completion_reward\s*=\s*\{")[0]
-        self.assertIn('scoped_play_song = "ADISCORD_stp_civil_war_end"', reward)
-        self.assertIn("limit = { is_ai = no }", reward)
-        music = ROOT / "music/ADISCORD_stp_civil_war_end.ogg"
-        self.assertEqual(music.read_bytes()[:4], b"OggS")
-        assets = (ROOT / "music/music.asset").read_text(encoding="utf-8-sig")
-        self.assertIn('file = "ADISCORD_stp_civil_war_end.ogg"', assets)
-        station = (ROOT / "music/_songs.txt").read_text(encoding="utf-8-sig")
-        self.assertIn('song = "ADISCORD_stp_civil_war_end"', station)
-        lead_in = next(b for b in blocks(station, r"^\s*music\s*=\s*\{")
-                       if 'song = "ADISCORD_stp_civil_war_end_after_superevent"' in b)
-        self.assertIn("chance = { base = 0 }", lead_in)
-        self.assertIn('file = "ADISCORD_stp_civil_war_end_after_superevent.ogg"', assets)
-        localisation = (ROOT / "localisation/russian/ADISCORD_music_l_russian.yml").read_bytes()
-        self.assertTrue(localisation.startswith(b"\xef\xbb\xbf"))
-        for key in ("ADISCORD_stp_civil_war_end", "ADISCORD_stp_civil_war_end_after_superevent"):
-            self.assertRegex(localisation.decode("utf-8-sig"), rf'(?m)^ {key}: "[^"\r\n]+"\r?$')
-
-    def test_combined_postwar_track_contains_cue_gap_and_theme(self) -> None:
-        import struct
-        import wave
-
-        def ogg_duration(path: Path) -> float:
-            data = path.read_bytes()
-            header = data.index(b"\x01vorbis")
-            rate = struct.unpack_from("<I", data, header + 12)[0]
-            offset = 0
-            samples = 0
-            while offset < len(data):
-                self.assertEqual(data[offset:offset + 4], b"OggS")
-                granule = struct.unpack_from("<Q", data, offset + 6)[0]
-                if granule != 0xffffffffffffffff:
-                    samples = max(samples, granule)
-                segments = data[offset + 26]
-                size = sum(data[offset + 27:offset + 27 + segments])
-                offset += 27 + segments + size
-            return samples / rate
-
-        with wave.open(str(ROOT / "sound/superevents/superevent_stelander_party_victory_sound.wav")) as sound:
-            duration = sound.getnframes() / sound.getframerate()
-        original = ogg_duration(ROOT / "music/ADISCORD_stp_civil_war_end.ogg")
-        delayed = ogg_duration(ROOT / "music/ADISCORD_stp_civil_war_end_after_superevent.ogg")
-        self.assertGreaterEqual(delayed - original, duration + 0.49)
-        self.assertLess(delayed - original, duration + 0.51)
+        assets = (ROOT / "music/ADISCORD_music.asset").read_text(encoding="utf-8-sig")
+        for focus_id, song in (("STP_pc_after_victory", "ADISCORD_stp_civil_war_end"),
+                               ("STP_pw_party_new_republic", "ADISCORD_stp_party_postwar")):
+            focus = next(b for b in blocks(focuses, r"^\s*focus\s*=\s*\{") if f"id = {focus_id}\n" in b)
+            reward = blocks(focus, r"^\s*completion_reward\s*=\s*\{")[0]
+            self.assertIn(f'scoped_play_song = "{song}"', reward)
+            self.assertIn("limit = { is_ai = no }", reward)
+            self.assertEqual((ROOT / "music" / f"{song}.ogg").read_bytes()[:4], b"OggS")
+            self.assertIn(f'file = "{song}.ogg"', assets)
+        self.assertNotIn("_after_superevent", assets)
+        self.assertFalse(list((ROOT / "music").glob("*_after_superevent.ogg")))
 
     def test_missing_gfx_binding_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

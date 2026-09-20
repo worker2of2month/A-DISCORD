@@ -2,7 +2,7 @@ add_namespace = ADISCORD_superevent
 add_namespace = ADISCORD_superevent_news
 add_namespace = ADISCORD_superevent_audio
 
-# Console compatibility gateways: event ADISCORD_superevent.1 / .2 / .3 / .4 / .5 / .6
+# Console compatibility gateways: event ADISCORD_superevent.1 through .8.
 # .1 starts the real Vorkerland collapse when possible, including the Unity
 # Tower destruction. Once the collapse has already started it becomes a safe
 # presentation replay. .2 is the Worker-victory presentation gateway used by
@@ -10,6 +10,7 @@ add_namespace = ADISCORD_superevent_audio
 # presentation: picture and sound without locking the campaign ending. .4 is
 # the Dirty Zone opening presentation and does not start the country cascade.
 # .5 is Vlad's imperial restoration; .6 is Dorian's utilitarian victory.
+# .7 presents the NAM resource war; .8 presents the Khan's Last Empire.
 # Audio is unscoped so observer/spectator hears the same track as a human.
 country_event = {
 	id = ADISCORD_superevent.1
@@ -171,4 +172,26 @@ news_event = { #stelander empire
 	}
 
 	option = { name = news.1.a }
+}
+
+country_event = {
+	id = ADISCORD_superevent.7
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		# superevent_nam_resource_war
+		set_temp_variable = { ADISCORD_superevent_request = 10 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_superevent.8
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		# superevent_rus_last_empire
+		set_temp_variable = { ADISCORD_superevent_request = 11 }
+		ADISCORD_superevent_enqueue = yes
+	}
 }

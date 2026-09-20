@@ -2,6 +2,8 @@
   "schema_version": 1,
   "external_namespaces": ["lar_fake_intel_units"],
   "events": [
+    {"id": "ADISCORD_superevent.7", "namespace": "ADISCORD_superevent", "number": 7, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
+    {"id": "ADISCORD_superevent.8", "namespace": "ADISCORD_superevent", "number": 8, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
     {"id": "val_rework.117", "namespace": "val_rework", "number": 117, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_rework", "status": "active"},
     {"id": "ADISCORD_vorkerland_news.3", "namespace": "ADISCORD_vorkerland_news", "number": 3, "owner": "events/ADISCORD_vorkerland_events.txt", "subsystem": "vorkerland_collapse", "status": "active"},
     {"id": "ADISCORD_STP_pc.31", "namespace": "ADISCORD_STP_pc", "number": 31, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},

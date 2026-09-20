@@ -146,4 +146,36 @@ scripted_gui = {
 			}
 		}
 	}
+
+	superevent_nam_resource_war = {
+		window_name = "superevent_nam_resource_war"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_nam_resource_war
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_nam_resource_war
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_rus_last_empire = {
+		window_name = "superevent_rus_last_empire"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_rus_last_empire
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_rus_last_empire
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
 }

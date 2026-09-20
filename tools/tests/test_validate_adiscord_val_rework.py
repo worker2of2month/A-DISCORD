@@ -3549,6 +3549,25 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertIn("clr_country_flag = VAL_final_capitulation_immediate", late)
         self.assertIn("set_global_flag = skip_default_capitulation", late)
 
+    def test_late_capitulation_keeps_receipt_until_settlement(self):
+        source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text()
+        late = source.split("# BEGIN kefreyt:on_capitulation\n", 1)[1].split("# END kefreyt:on_capitulation", 1)[0]
+        # Both native hooks can run before has_capitulated changes to yes.
+        self.assertLess(late.index("VAL_finalize_reserved_settlements = yes"),
+                        late.index("clr_country_flag = VAL_final_capitulation_immediate"))
+        for tag in ("NOD", "STP", "STS"):
+            facts = {
+                (tag, "has_country_flag", "VAL_final_defeat_pending"): True,
+                (tag, "has_country_flag", "VAL_final_capitulation_immediate"): True,
+                (tag, "has_capitulated", "no"): True,
+                ("VAL", "exists", "yes"): True,
+                ("VAL", "has_capitulated", "no"): True,
+                ("VAL", "is_subject", "no"): True,
+            }
+            self.assertTrue(self.match("VAL_final_settlement_ready", facts, tag, root=tag))
+            facts[tag, "has_country_flag", "VAL_final_capitulation_immediate"] = False
+            self.assertFalse(self.match("VAL_final_settlement_ready", facts, tag, root=tag))
+
     def test_stelander_border_cession_preserves_neutral_and_occupied_land(self):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, matches_conditions, walk
         effect = block(parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_cede_stelander_border")

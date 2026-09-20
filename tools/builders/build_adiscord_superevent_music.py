@@ -29,17 +29,6 @@ def build(root: Path, output: Path) -> list[Path]:
     for name, relative in tracks:
         encode(name, ["-i", str(root / "sound" / relative)], [])
 
-    # Keep the cue and follow-up in one stream: replacing a presentation also
-    # cancels its pending follow-up. The half-second gap uses real audio time.
-    encode(
-        "ADISCORD_stp_civil_war_end_after_superevent",
-        ["-i", str(root / "sound/superevents/superevent_stelander_party_victory_sound.wav"),
-         "-i", str(root / "music/ADISCORD_stp_civil_war_end.ogg")],
-        ["-filter_complex",
-         "[0:a]aresample=44100,apad=pad_dur=0.5[cue];"
-         "[1:a]aresample=44100,volume=0.65[theme];"
-         "[cue][theme]concat=n=2:v=0:a=1[out]", "-map", "[out]"],
-    )
     return results
 
 
@@ -58,6 +47,13 @@ def main() -> int:
                 changed.append(target.name)
                 if args.apply:
                     target.write_bytes(content)
+    # Postwar songs play from focuses; presentation audio must not embed them.
+    obsolete = ROOT / "music/ADISCORD_stp_civil_war_end_after_superevent.ogg"
+    if obsolete.exists():
+        changed.append(f"remove {obsolete.name}")
+        if args.apply:
+            assert obsolete.resolve().parent == (ROOT / "music").resolve()
+            obsolete.unlink()
     print(f"{'Updated' if args.apply else 'Different'}: {len(changed)} tracks")
     for name in changed:
         print(name)

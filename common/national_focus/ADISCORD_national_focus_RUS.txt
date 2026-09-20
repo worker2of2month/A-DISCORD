@@ -39,9 +39,11 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = RUS_summon_the_aimaqs }
 		completion_reward = {
-			add_manpower = 14000
+			add_manpower = 20000
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2400 producer = RUS }
 			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = RUS }
+			add_equipment_to_stockpile = { type = train_equipment_1 amount = 20 producer = RUS }
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 150 producer = RUS }
 			army_experience = 10
 			add_command_power = 15
 			custom_effect_tooltip = RUS_arm_the_border_hosts_tt
@@ -131,7 +133,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_manpower = 4000
+			add_manpower = 8000
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1200 producer = RUS }
 			add_war_support = 0.04
 			unlock_decision_tooltip = { decision = RUS_campaign_sla show_effect_tooltip = yes }

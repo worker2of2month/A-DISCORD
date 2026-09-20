@@ -24,8 +24,8 @@ SOUNDS = Path("sound/superevents_sound.asset")
 SOUND_EFFECTS = Path("sound/superevents_effects.asset")
 SOUND_CATEGORY = Path("sound/superevents_category.asset")
 REGISTRY = Path("tools/data/adiscord_event_ids.json")
-MUSIC = Path("music/music.asset")
-SONGS = Path("music/_songs.txt")
+MUSIC = Path("music/ADISCORD_music.asset")
+SONGS = Path("music/ADISCORD_songs.txt")
 
 REQUIRED_FILES = (
     EVENTS,
@@ -50,6 +50,8 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.4",
     "ADISCORD_superevent.5",
     "ADISCORD_superevent.6",
+    "ADISCORD_superevent.7",
+    "ADISCORD_superevent.8",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -90,7 +92,9 @@ PRESENTATIONS = (
         "superevent_stelander_empire_sound_e",
     ),
     SupereventPresentation("superevent_stelander_party_victory", "superevent_stelander_party_victory_sound_e"),
-    SupereventPresentation("superevent_stelander_shabrat_victory", "superevent_stelander_party_victory_sound_e"),
+    SupereventPresentation("superevent_stelander_shabrat_victory", "superevent_stelander_shabrat_victory_sound_e"),
+    SupereventPresentation("superevent_nam_resource_war", "superevent_nam_resource_war_sound_e"),
+    SupereventPresentation("superevent_rus_last_empire", "superevent_rus_last_empire_sound_e"),
 )
 
 
@@ -236,16 +240,13 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             issues.append(
                 f"missing or duplicate GFX sprite GFX_{name}: found {gfx_names.count(name)}"
             )
-        expected_show_sound = (
-            item.dedicated_sound_effect or "superevent_vorkerland_civilwar_sound_e"
-        )
         window = ""
         for block in blocks(gui, r"^\s*containerWindowType\s*=\s*\{"):
             if re.search(rf'(?m)^\s*name\s*=\s*"{re.escape(name)}"\s*$', block):
                 window = block
                 break
-        if f"show_sound = {expected_show_sound}" not in window:
-            issues.append(f"GUI {name}: show_sound must be {expected_show_sound}")
+        if re.search(r"\bshow_sound\s*=", window):
+            issues.append(f"GUI {name}: show_sound duplicates dispatched music playback")
 
         for suffix, getter in (
             ("title", "GetSupereventTitle"),
@@ -370,8 +371,8 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                     if f'song = "{song}"' in block]
         if len(assets) != 1 or f'file = "{song}.ogg"' not in assets[0]:
             issues.append(f"missing or duplicate single-channel music asset {song}")
-        if len(rotation) != 1 or "chance = { base = 0 }" not in rotation[0]:
-            issues.append(f"presentation music must be excluded from random rotation: {song}")
+        if rotation:
+            issues.append(f"presentation music must not appear in the radio playlist: {song}")
 
     if (root / RU_LOC).is_file() and not (root / RU_LOC).read_bytes().startswith(b"\xef\xbb\xbf"):
         issues.append("Russian superevent localisation must use UTF-8 BOM")

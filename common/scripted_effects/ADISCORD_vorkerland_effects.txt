@@ -756,11 +756,16 @@ ADISCORD_vorkerland_resolve_khan_border_war = {
 	# Ownership must move before white_peace returns occupation.
 	if = { limit = { controls_state = 49 } 49 = { set_state_owner_to = RUS set_state_controller_to = RUS } }
 	if = { limit = { controls_state = 176 } 176 = { set_state_owner_to = RUS set_state_controller_to = RUS } }
+	every_controlled_state = {
+		limit = { is_owned_by = SLA }
+		set_state_owner_to = RUS
+		set_state_controller_to = RUS
+	}
 	if = {
 		limit = { has_war_with = SLA }
 		white_peace = SLA
 	}
-	if = { limit = { country_exists = SLA } SLA = { set_capital = { state = 51 } } }
+	if = { limit = { country_exists = SLA SLA = { owns_state = 51 } } SLA = { set_capital = { state = 51 } } }
 }
 
 ADISCORD_vorkerland_check_khan_border_war = {
@@ -772,7 +777,12 @@ ADISCORD_vorkerland_check_khan_border_war = {
 			has_war_with = SLA
 		}
 		if = {
-			limit = { ADISCORD_vorkerland_rus_holds_sla_playable = yes }
+			limit = {
+				OR = {
+					ADISCORD_vorkerland_rus_holds_sla_playable = yes
+					SLA = { has_capitulated = yes capital_scope = { is_controlled_by = RUS } }
+				}
+			}
 			set_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 }
 			ADISCORD_vorkerland_rus_settle_dirty_target = yes
 		}
@@ -4057,6 +4067,8 @@ ADISCORD_superevent_enqueue = {
 				AND = { check_variable = { ADISCORD_superevent_request = 7 } has_global_flag = superevent_stelander_empire }
 				AND = { check_variable = { ADISCORD_superevent_request = 8 } has_global_flag = superevent_stelander_party_victory }
 				AND = { check_variable = { ADISCORD_superevent_request = 9 } has_global_flag = superevent_stelander_shabrat_victory }
+				AND = { check_variable = { ADISCORD_superevent_request = 10 } has_global_flag = superevent_nam_resource_war }
+				AND = { check_variable = { ADISCORD_superevent_request = 11 } has_global_flag = superevent_rus_last_empire }
 			} }
 		}
 		add_to_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request }
@@ -4078,6 +4090,8 @@ ADISCORD_superevent_dispatch_next = {
 				has_global_flag = superevent_stelander_empire
 				has_global_flag = superevent_stelander_party_victory
 				has_global_flag = superevent_stelander_shabrat_victory
+				has_global_flag = superevent_nam_resource_war
+				has_global_flag = superevent_rus_last_empire
 			} }
 		}
 		set_temp_variable = { ADISCORD_superevent_next = global.ADISCORD_superevent_queue^0 }
@@ -4118,6 +4132,14 @@ ADISCORD_superevent_dispatch_next = {
 			limit = { check_variable = { ADISCORD_superevent_next = 9 } }
 			set_global_flag = superevent_stelander_shabrat_victory
 		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 10 } }
+			set_global_flag = superevent_nam_resource_war
+		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 11 } }
+			set_global_flag = superevent_rus_last_empire
+		}
 		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
@@ -4126,6 +4148,8 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_stelander_empire
 	clr_global_flag = superevent_stelander_party_victory
 	clr_global_flag = superevent_stelander_shabrat_victory
+	clr_global_flag = superevent_nam_resource_war
+	clr_global_flag = superevent_rus_last_empire
 	clr_global_flag = superevent_vorkerland_civilwar
 	clr_global_flag = superevent_vorkerland_dirty_opening
 	clr_global_flag = superevent_vorkerland_worker_victory
@@ -4163,24 +4187,22 @@ ADISCORD_vorkerland_play_superevent_sound = {
 	}
 	else_if = {
 		limit = { has_global_flag = superevent_stelander_shabrat_victory }
-		play_song = "superevent_stelander_party_victory"
+		play_song = "superevent_stelander_shabrat_victory"
 	}
 	else_if = {
 		limit = { has_global_flag = superevent_stelander_empire }
 		play_song = "superevent_stelander_empire"
 	}
+	else_if = {
+		limit = { has_global_flag = superevent_nam_resource_war }
+		play_song = "superevent_nam_resource_war"
+	}
+	else_if = {
+		limit = { has_global_flag = superevent_rus_last_empire }
+		play_song = "superevent_rus_last_empire"
+	}
 	else = {
 		play_song = "superevent_vorkerland_civilwar"
-	}
-	if = {
-		limit = { has_global_flag = superevent_stelander_shabrat_victory }
-		STS = {
-			if = {
-				limit = { is_ai = no }
-				# A single track contains the victory cue and postwar music, so another presentation can replace both.
-				scoped_play_song = "ADISCORD_stp_civil_war_end_after_superevent"
-			}
-		}
 	}
 }
 
@@ -10258,7 +10280,21 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 		}
 		set_cosmetic_tag = RUS_last_empire
 		set_politics = { ruling_party = chauvinism elections_allowed = no }
+		add_country_leader_role = {
+			character = RUS_Mark_Rustan
+			promote_leader = yes
+			country_leader = { ideology = chauvinism_ideology expire = "2200.1.1.1" }
+		}
+		set_portraits = {
+			character = RUS_Mark_Rustan
+			civilian = { large = GFX_portrait_RUS_Mark_Rustan_dictator }
+		}
+		set_country_leader_portrait = {
+			ideology = chauvinism
+			portrait = GFX_portrait_RUS_Mark_Rustan_dictator
+		}
 		ADISCORD_economy_mark_dirty = yes
+		ADISCORD_vorkerland_show_last_empire_superevent = yes
 	}
 }
 
@@ -10266,3 +10302,16 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 
 
 # Country-scoped reconciliation; no world scan on diplomacy hooks.
+
+ADISCORD_vorkerland_show_last_empire_superevent = {
+	if = {
+		limit = { any_country = { is_ai = no } }
+		random_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_superevent.8 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.8 }
+	}
+}
