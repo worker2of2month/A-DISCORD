@@ -4197,11 +4197,12 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertNotIn("has_completed_focus = VAL_Northern_Settlement", visible)
         self.assertNotIn("compare = greater_than", visible)
 
-    def test_final_crisis_close_reconciles_commonwealth_territory(self):
-        close = named_block_spans(EFFECTS_PATH.read_text(encoding="utf-8"), "VAL_final_crisis_close")[0].text
-        self.assertIn("VAL_can_form_northern_administration = yes", close)
-        self.assertIn("VAL_form_northern_administration = yes", close)
-        self.assertGreaterEqual(close.count("VAL_cede_stelander_border = yes"), 2)
+    def test_final_crisis_reconcile_repairs_commonwealth_territory_after_victory(self):
+        reconcile = named_block_spans(EFFECTS_PATH.read_text(encoding="utf-8"), "VAL_final_crisis_reconcile")[0].text
+        self.assertIn("VAL_final_crisis_phase value = 3 compare = greater_than_or_equals", reconcile)
+        self.assertIn("VAL_can_form_northern_administration = yes", reconcile)
+        self.assertIn("VAL_form_northern_administration = yes", reconcile)
+        self.assertGreaterEqual(reconcile.count("VAL_cede_stelander_border = yes"), 2)
 
     def test_bezhaysk_operation_requires_stelander_defeat_and_a_valid_target(self):
         facts = {("VAL", "tag", "VAL"): True,
