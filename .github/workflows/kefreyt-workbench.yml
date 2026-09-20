@@ -1,0 +1,45 @@
+name: Kefreyt verification workspace
+on:
+  push:
+    branches: [codex/kefreyt-settlements-administrations]
+    paths: [.github/workflows/kefreyt-workbench.yml]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/map/**
+            !/music/**
+            !/sound/**
+            !/gfx/**
+            /gfx/flags/**
+            /gfx/interface/goals/**
+            !/tools/assets/**
+      - name: Package script and flag sources
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile
+          root = Path('.')
+          with zipfile.ZipFile('/tmp/kefreyt-workspace.zip', 'w', zipfile.ZIP_DEFLATED) as out:
+              for directory in ('common', 'events', 'history', 'localisation', 'tools', 'docs', 'interface', 'gfx/flags'):
+                  for path in root.joinpath(directory).rglob('*'):
+                      if path.is_file() and 'assets' not in path.parts and '.git' not in path.parts:
+                          out.write(path, path.as_posix())
+              for name in ('AGENTS.md', 'descriptor.mod', 'requirements.txt', 'pyproject.toml'):
+                  path = root / name
+                  if path.is_file():
+                      out.write(path, name)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kefreyt-workspace
+          path: /tmp/kefreyt-workspace.zip
+          retention-days: 1
