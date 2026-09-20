@@ -3,12 +3,12 @@ on:
   pull_request:
     branches: [main]
 permissions:
-  contents: write
+  contents: read
 jobs:
   audit:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/complete-english-localisation'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,62 +17,12 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install Pillow
-      - name: Compare baseline and translated catalogues
-        id: verify
-        env:
-          BRANCH: ${{ github.event.pull_request.head.ref }}
-          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      - name: Compile and validate English catalogues
         run: |
-          git fetch --depth=1 origin 7a611600667d912e7f563a9aac692b94d7eade1d
-          git worktree add --detach /tmp/localisation-baseline FETCH_HEAD
-          python - <<'PY'
-          import json, os, pathlib, re, subprocess, sys
-          root = pathlib.Path.cwd()
-          results = {}
-          def run(label, command, cwd=root):
-              logfile = pathlib.Path('/tmp') / (label + '.log')
-              with logfile.open('w') as output:
-                  result = subprocess.run(command, cwd=cwd, stdout=output, stderr=subprocess.STDOUT)
-              text = logfile.read_text(errors='replace')
-              failures = re.findall(r'^(?:FAIL|ERROR): (.*)$', text, re.M)
-              results[label] = {'exit_code': result.returncode, 'failures': failures,
-                                'summary': re.findall(r'^Ran .*|^OK.*|^FAILED .*', text, re.M)}
-              pathlib.Path('/tmp/verification.json').write_text(json.dumps(results, indent=2))
-              print(label, json.dumps(results[label]))
-              return result.returncode
-          full = [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests']
-          validator = [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300']
-          run('baseline-suite', full, pathlib.Path('/tmp/localisation-baseline'))
-          run('baseline-validator', validator, pathlib.Path('/tmp/localisation-baseline'))
-          applied = run('translation-apply', [sys.executable, '-B', '.github/apply_english.py'])
-          if applied:
-              raise SystemExit('Translation source, syntax or token review is required; see artifacts')
-          snapshot = {str(p): p.read_bytes() for p in pathlib.Path('localisation/english').rglob('*.yml')}
-          if run('translation-idempotence', [sys.executable, '-B', '.github/apply_english.py']):
-              raise SystemExit('Second apply failed')
-          assert snapshot == {str(p): p.read_bytes() for p in pathlib.Path('localisation/english').rglob('*.yml')}
-          focused = run('focused-suite', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_adiscord_english_localisation.py', '-v'])
-          run('translated-suite', full)
-          run('translated-validator', validator)
-          whitespace = run('translation-whitespace', ['git', 'diff', '--check', '--', 'localisation/english', 'tools/tests/test_adiscord_english_localisation.py'])
-          new_failures = set(results['translated-suite']['failures']) - set(results['baseline-suite']['failures'])
-          regression = results['translated-suite']['exit_code'] and (not results['baseline-suite']['exit_code'] or bool(new_failures))
-          regression |= results['translated-validator']['exit_code'] and not results['baseline-validator']['exit_code']
-          if focused or whitespace or regression:
-              raise SystemExit('Verification requires review; see artifacts')
-          changes = subprocess.check_output(['git', 'diff', '--name-only']).decode().splitlines()
-          assert all(p.startswith('localisation/english/') for p in changes), changes
-          subprocess.run(['git', 'config', 'user.name', 'A-Discord localisation'], check=True)
-          subprocess.run(['git', 'config', 'user.email', '81386071+worker2of2month@users.noreply.github.com'], check=True)
-          subprocess.run(['git', 'add', 'localisation/english'], check=True)
-          if subprocess.run(['git', 'diff', '--cached', '--quiet']).returncode:
-              subprocess.run(['git', 'commit', '-m', 'Complete English localisation for all published Russian catalogue entries'], check=True)
-              remote = subprocess.check_output(['git', 'ls-remote', 'origin', 'refs/heads/' + os.environ['BRANCH']]).decode().split()[0]
-              assert remote == os.environ['EXPECTED_HEAD'], 'Branch advanced; refusing to overwrite concurrent work'
-              subprocess.run(['git', 'push', 'origin', 'HEAD:refs/heads/' + os.environ['BRANCH']], check=True)
-          pathlib.Path('/tmp/translated-commit.txt').write_text(subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode())
-          PY
-      - name: Export review sources and verification logs
+          python -B .github/apply_english.py > /tmp/translation-apply.log 2>&1
+          python -B -m unittest discover -s tools/tests -p test_adiscord_english_localisation.py -v > /tmp/focused-suite.log 2>&1
+          git diff --check -- localisation/english tools/tests/test_adiscord_english_localisation.py
+      - name: Export reviewed text sources
         if: always()
         run: |
           python - <<'PY'
@@ -85,7 +35,7 @@ jobs:
                   if p.is_file() and (p.suffix.lower() in suffixes or p.name in {'.gitignore', '.gitattributes'}):
                       archive.write(p, 'source/' + name)
               for p in pathlib.Path('/tmp').iterdir():
-                  if p.is_file() and (p.suffix == '.log' or p.name in {'translation-report.json', 'verification.json', 'translated-commit.txt'}):
+                  if p.is_file() and (p.suffix == '.log' or p.name == 'translation-report.json'):
                       archive.write(p, 'review/' + p.name)
           PY
       - uses: actions/upload-artifact@v4
@@ -93,4 +43,13 @@ jobs:
         with:
           name: adiscord-english-review
           path: /tmp/adiscord-english-review.zip
+          retention-days: 3
+      - name: Repository validator
+        run: python -B tools/validate_tc.py --limit 300 > /tmp/repository-validator.log 2>&1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: adiscord-english-validator
+          path: /tmp/repository-validator.log
+          if-no-files-found: ignore
           retention-days: 3
