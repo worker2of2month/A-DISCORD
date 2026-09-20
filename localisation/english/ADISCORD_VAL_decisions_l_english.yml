@@ -408,7 +408,7 @@
  VAL_frontier_accept_tt: "The ultimatum's territorial terms will be implemented: return of a district, submission to a commissariat or transfer of the listed lands, according to Kefreyt's demand."
  VAL_frontier_war_tt: "Kefreyt will declare war on the recipient. The other tribes in the common coalition will join its side in the same war, together with available guarantors: Nodrul and the victorious party. One tribe's capitulation will not end the campaign. Defeating all tribal participants ends the campaign with a white peace for its guarantors; invading Nodrul or the party is not required. The eastern district remains a separate bilateral dispute."
  VAL_frontier_armistice_tt: "The frontier war will end. Borderlands and Erstantpeo pass to Stelander's party government if it participated in this war; all other territories retain their owners. Kefreyt remains independent."
- VAL_frontier_refuse_peace_tt: "The war continues. Kefreyt's complete defeat will allow a dependent party administration of Dopotroydsk to be created."
+ VAL_frontier_refuse_peace_tt: "The war continues. Kefreyt's complete defeat will allow a dependent party administration of Dopotroydsk to be created. On complete defeat, all core states of the participating Stelander owned by Kefreyt and its subjects return to Stelander."
  VAL_frontier_medical_bonus: "Evacuation Columns"
  VAL_frontier_industry_bonus: "Re-equipping Idle Workshops"
  val_rework.100.t: "The Buyer Has Vanished"

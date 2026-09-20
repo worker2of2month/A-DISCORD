@@ -1874,6 +1874,25 @@ VAL_frontier_settle_armistice = {
 VAL_frontier_settle_defeat = {
     if = {
         limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+        # Peace clears guarantor membership and subordination can change the
+        # subject hierarchy. Preserve only this losing side's Stelander cores.
+        clear_temp_array = VAL_frontier_returned_cores
+        clear_temp_array = VAL_frontier_core_donors
+        if = {
+            limit = { STP = { exists = yes has_country_flag = VAL_frontier_guarantor has_war_with = VAL has_country_flag = STP_cw_won_union_battle } }
+            add_to_temp_array = { array = VAL_frontier_core_donors value = THIS }
+            every_owned_state = {
+                limit = { is_core_of = STP }
+                add_to_temp_array = { array = VAL_frontier_returned_cores value = THIS }
+            }
+            every_subject_country = {
+                add_to_temp_array = { array = VAL_frontier_core_donors value = THIS }
+                every_owned_state = {
+                    limit = { is_core_of = STP }
+                    add_to_temp_array = { array = VAL_frontier_returned_cores value = THIS }
+                }
+            }
+        }
         if = {
             limit = { NOD = { exists = yes has_country_flag = VAL_frontier_guarantor has_capitulated = no } capital_scope = { controller = { has_country_flag = VAL_frontier_guarantor } } }
             VAL_frontier_settle_armistice = yes
@@ -1885,6 +1904,16 @@ VAL_frontier_settle_defeat = {
             ADISCORD_economy_mark_dirty = yes
         }
         else = { VAL_frontier_settle_armistice = yes }
+        for_each_scope_loop = {
+            array = VAL_frontier_returned_cores
+            STP = { transfer_state = PREV ADISCORD_economy_mark_dirty = yes }
+        }
+        for_each_scope_loop = {
+            array = VAL_frontier_core_donors
+            ADISCORD_economy_mark_dirty = yes
+        }
+        clear_temp_array = VAL_frontier_returned_cores
+        clear_temp_array = VAL_frontier_core_donors
     }
 }
 
