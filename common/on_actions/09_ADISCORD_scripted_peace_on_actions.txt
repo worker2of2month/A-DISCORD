@@ -675,9 +675,10 @@ on_actions = {
             if = {
                 limit = { ROOT = { OR = { has_country_flag = VAL_final_defeat_pending has_country_flag = VAL_final_capitulation_immediate } } }
                 set_global_flag = skip_default_capitulation
-                ROOT = { clr_country_flag = VAL_final_capitulation_immediate }
             }
             if = { limit = { VAL = { exists = yes } } VAL = { VAL_finalize_reserved_settlements = yes } }
+            # The late hook can still precede the native capitulated status.
+            ROOT = { clr_country_flag = VAL_final_capitulation_immediate }
 
 			# END kefreyt:on_capitulation
 
