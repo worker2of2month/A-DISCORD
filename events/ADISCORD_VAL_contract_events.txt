@@ -332,9 +332,12 @@ country_event = {
 	}
 	desc = {
 		text = val_rework.5.military
-		trigger = { has_country_flag = VAL_cw_military_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
+		trigger = { VAL_occidia_secured = yes NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
 	}
-	desc = { text = val_rework.5.neutral }
+	desc = {
+		text = val_rework.5.neutral
+		trigger = { NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } NOT = { VAL_occidia_secured = yes } }
+	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_rework.5.a }
@@ -373,7 +376,11 @@ country_event = {
 	desc = val_rework.9.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	option = { name = val_rework.9.a }
+	trigger = { tag = VAL has_focus_tree = VAL_focus has_global_flag = STP_cw_started }
+	option = {
+		name = val_rework.9.a
+		custom_effect_tooltip = VAL_stelander_focus_unlocked_tt
+	}
 }
 
 country_event = {

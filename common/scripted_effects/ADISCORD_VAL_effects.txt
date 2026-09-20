@@ -3034,3 +3034,20 @@ VAL_check_nam_concession = {
 		VAL_cancel_nam_concession = yes
 	}
 }
+
+# COUNTRY VAL. The war edge reveals the branch; startup repairs its visibility
+# in existing campaigns. The briefing marker records delivery, not availability.
+VAL_reveal_stelander_focus_branch = {
+    if = {
+        limit = { tag = VAL exists = yes has_focus_tree = VAL_focus has_global_flag = STP_cw_started }
+        mark_focus_tree_layout_dirty = yes
+        if = {
+            limit = { NOT = { has_country_flag = VAL_stelander_focus_briefed } }
+            set_country_flag = VAL_stelander_focus_briefed
+            if = {
+                limit = { is_ai = no NOT = { has_completed_focus = VAL_Stelander_Crisis_Opens } }
+                country_event = { id = val_rework.9 hours = 1 }
+            }
+        }
+    }
+}

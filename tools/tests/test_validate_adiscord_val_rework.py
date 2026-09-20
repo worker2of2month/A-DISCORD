@@ -895,10 +895,14 @@ class ValStelanderContractTests(unittest.TestCase):
         facts = {("VAL", "VAL_occidian_administration_secured", "yes"): True}
         self.assertTrue(matches_conditions(triggers["VAL_occidia_secured"], facts, "VAL"))
         focus = self.focus("VAL_Keep_The_Arsenals")
-        self.assertEqual(" ".join(named_blocks(focus, "bypass")[0].split()), "bypass = { VAL_occidia_secured = yes }")
+        bypass = named_blocks(focus, "bypass")[0]
+        self.assertIn("VAL_occidia_secured = yes", bypass)
+        self.assertIn("NOT = { has_country_flag = VAL_cw_trade_course }", bypass)
+        self.assertIn("NOT = { has_country_flag = VAL_cw_military_course }", bypass)
         finish = self.focus("VAL_The_Steel_Contract")
         self.assertIn("VAL_occidia_secured = yes", named_blocks(finish, "available")[0])
-        self.assertIn("OR = { has_country_flag = VAL_cw_military_course VAL_occidia_secured = yes }", finish)
+        self.assertIn("limit = { VAL_occidia_secured = yes }", finish)
+        self.assertNotIn("OR = { has_country_flag = VAL_cw_military_course VAL_occidia_secured = yes }", finish)
 
     def test_each_exclusive_course_can_reach_the_contract_finish(self):
         finish = self.focus("VAL_The_Steel_Contract")
@@ -935,6 +939,10 @@ class ValRewardValidatorTests(unittest.TestCase):
         ):
             with self.subTest(reward=reward):
                 self.assertTrue(self.reward_issues(reward))
+
+    def test_recruiting_a_commander_is_material_but_previewing_one_is_not(self):
+        self.assertFalse(self.reward_issues("army_experience = 25 recruit_character = VAL_Sergei_Volkov"))
+        self.assertTrue(self.reward_issues("army_experience = 25 effect_tooltip = { recruit_character = VAL_Sergei_Volkov }"))
 
     def test_native_and_nested_scripted_rewards_allow_supplemental_points(self):
         self.assertFalse(self.reward_issues("army_experience = 5 add_manpower = 500"))
@@ -1708,7 +1716,7 @@ class ValContractFormationTests(unittest.TestCase):
         self.assertEqual(set(decisions), {"VAL_cw_sell_arms_to_resistance", "VAL_cw_offer_contract_formations"})
         focus = next(e.value for e in walk(parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8-sig")))
                      if e.key == "focus" and isinstance(e.value, list) and scalar(e.value, "id") == "VAL_Arms_For_The_Burning")
-        self.assertEqual({e.value for e in block(focus, "completion_reward") if e.key == "unlock_decision_tooltip"},
+        self.assertEqual({e.value for e in walk(block(focus, "completion_reward")) if e.key == "unlock_decision_tooltip"},
                          {"VAL_cw_sell_arms_to_resistance", "VAL_cw_offer_contract_formations", "VAL_cw_begin_mobilization"})
         events = parse_clausewitz((ROOT / "events/ADISCORD_STP_events.txt").read_text(encoding="utf-8-sig"))
         course = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.20")
@@ -4001,6 +4009,311 @@ class ValFormationAndCommandTests(unittest.TestCase):
         init = only_named_block(self, EFFECTS_PATH.read_text(encoding="utf-8"), "VAL_initialize_arsenal_recovery")
         self.assertIn("VAL_refresh_industrial_economy = yes", init)
 
+
+
+class ValFocusFlowTests(unittest.TestCase):
+    """Execute authored route/notification conditions without emulating HOI4."""
+
+    SHORT_FOCUSES = {
+        "VAL_Price_Of_Loyalty": 2,
+        "VAL_Brokered_Steel": 3,
+        "VAL_Hire_Out_War": 3,
+        "VAL_Paid_Loyalty": 2,
+        "VAL_Company_Rosters": 2,
+        "VAL_Border_Survey_Corps": 2,
+        "VAL_Company_Service_Code": 2,
+        "VAL_Wireless_Contract_Bureau": 2,
+        "VAL_Stories_From_The_Front": 2,
+        "VAL_Logistics_Command": 3,
+        "VAL_Foreign_Broker_Licences": 2,
+        "VAL_Northern_Clearing_House": 2,
+        "VAL_Contingency_Ledgers": 3,
+        "VAL_Stelander_Crisis_Opens": 2,
+        "VAL_Arms_For_The_Burning": 3,
+        "VAL_Seize_The_Northern_Passes": 3,
+        "VAL_Keep_The_Arsenals": 3,
+    }
+    DYNAMIC = {
+        "VAL_Stelander_Crisis_Opens": "VALGetStelanderFocusTitle",
+        "VAL_Arms_For_The_Burning": "VALGetArmsFocusTitle",
+        "VAL_Seize_The_Northern_Passes": "VALGetPassesFocusTitle",
+        "VAL_Keep_The_Arsenals": "VALGetReservesFocusTitle",
+        "VAL_The_Steel_Contract": "VALGetSteelContractTitle",
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar
+        cls.block, cls.scalar = staticmethod(block), staticmethod(scalar)
+        cls.parse = staticmethod(parse_clausewitz)
+        rows = parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8"))
+        tree = block(rows, "focus_tree")
+        cls.focus_rows = [entry.value for entry in tree if entry.key == "focus"]
+        cls.focuses = {scalar(row, "id"): row for row in cls.focus_rows}
+        cls.triggers = {entry.key: entry.value for entry in parse_clausewitz(
+            (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8"))}
+        cls.effects = {entry.key: entry.value for entry in parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8"))}
+        cls.events = {scalar(entry.value, "id"): entry.value for entry in parse_clausewitz(
+            (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8")) if entry.key == "country_event"}
+        cls.loc_functions = {scalar(entry.value, "name"): entry.value for entry in parse_clausewitz(
+            (ROOT / "common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt").read_text(encoding="utf-8")) if entry.key == "defined_text"}
+
+    def expand(self, entries, facts, root="VAL", from_tag="STP"):
+        from dataclasses import replace
+        result = []
+        for entry in entries:
+            key, value = entry.key, entry.value
+            if key in self.triggers and isinstance(value, str) and not any(k[1:] == (key, value) for k in facts):
+                self.assertIn(value, ("yes", "no"))
+                result.append(replace(entry, key="AND" if value == "yes" else "NOT", value=self.expand(self.triggers[key], facts, root, from_tag)))
+            elif isinstance(value, list):
+                result.append(replace(entry, key={"ROOT": root, "FROM": from_tag}.get(key, key), value=self.expand(value, facts, root, from_tag)))
+            else:
+                result.append(replace(entry, value={"ROOT": root, "FROM": from_tag}.get(value, value)))
+        return result
+
+    def check(self, entries, facts, scope="VAL", root="VAL", from_tag="STP"):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+        return matches_conditions(self.expand(entries, facts, root, from_tag), facts, scope)
+
+    def selected(self, entries, facts, root="VAL", from_tag="STP"):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+        return list(selected_effects(self.expand(entries, facts, root, from_tag), facts, root))
+
+    def facts(self, **flags):
+        result = {("VAL", "exists", "yes"): True,
+                  ("VAL", "has_focus_tree", "VAL_focus"): True,
+                  ("VAL", "has_global_flag", "STP_cw_started"): True,
+                  ("VAL", "has_capitulated", "no"): True,
+                  ("VAL", "is_subject", "no"): True,
+                  ("VAL", "is_ai", "no"): True}
+        result.update({("VAL", "has_country_flag", key): value for key, value in flags.items()})
+        return result
+
+    def test_graph_identifiers_exclusions_and_cycles(self):
+        self.assertEqual(len(self.focuses), len(self.focus_rows), "duplicate focus IDs")
+        parents = {}
+        for fid, row in self.focuses.items():
+            parents[fid] = {node.value for entry in row if entry.key == "prerequisite" for node in entry.value if node.key == "focus"}
+            self.assertFalse(parents[fid] - self.focuses.keys(), fid)
+            for entry in row:
+                if entry.key != "mutually_exclusive":
+                    continue
+                for node in entry.value:
+                    reverse = {n.value for e in self.focuses[node.value] if e.key == "mutually_exclusive" for n in e.value}
+                    self.assertIn(fid, reverse, (fid, node.value))
+        def visit(fid, stack):
+            self.assertNotIn(fid, stack, f"prerequisite cycle at {fid}")
+            for parent in parents[fid]:
+                visit(parent, stack | {fid})
+        for fid in parents:
+            visit(fid, set())
+
+    def test_all_144_exclusive_combinations_reach_common_capstones(self):
+        from itertools import product
+        parents = {fid: [{n.value for n in entry.value if n.key == "focus"} for entry in row if entry.key == "prerequisite"] for fid, row in self.focuses.items()}
+        exclusive = {fid: {n.value for entry in row if entry.key == "mutually_exclusive" for n in entry.value if n.key == "focus"} for fid, row in self.focuses.items()}
+        groups = sorted({frozenset({fid} | others) for fid, others in exclusive.items() if others}, key=lambda g: sorted(g))
+        targets = {"VAL_Contracts_Outlive_Kings", "VAL_Industrial_Mobilization_Plan", "VAL_Army_Of_The_Ledger", "VAL_Return_To_World_Market", "VAL_Campaign_Secured"}
+        count = 0
+        for choices in product(*(sorted(group) for group in groups)):
+            count += 1
+            excluded = set().union(*(exclusive[choice] for choice in choices))
+            done = set()
+            while True:
+                ready = {fid for fid in self.focuses if fid not in excluded | done and all(group & done for group in parents[fid])}
+                if not ready:
+                    break
+                done.update(ready)
+            with self.subTest(choices=choices):
+                self.assertFalse(targets - done, f"unreachable capstones: {targets - done}")
+        self.assertEqual(count, 144)
+
+    def test_hidden_focus_dependencies_have_real_arrows(self):
+        for child, parent in (("VAL_frontier_security_plan", "VAL_frontier_logistics"),):
+            parents = {n.value for e in self.focuses[child] if e.key == "prerequisite" for n in e.value}
+            self.assertIn(parent, parents, child)
+
+    def test_short_focus_costs_preserve_major_reforms_and_grace_period(self):
+        for fid, cost in self.SHORT_FOCUSES.items():
+            with self.subTest(focus=fid):
+                self.assertEqual(float(self.scalar(self.focuses[fid], "cost")), cost)
+        for fid in ("VAL_Factories_Like_Cathedrals", "VAL_Ballistics_Schools", "VAL_Industrial_Mobilization_Plan", "VAL_Army_Of_The_Ledger", "VAL_Contracts_Outlive_Kings", "VAL_The_Steel_Contract"):
+            self.assertEqual(self.scalar(self.focuses[fid], "cost"), "5", fid)
+        stp = (ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt").read_text(encoding="utf-8")
+        self.assertIn("flag = STP_cw_started days > 59", stp)
+
+    def test_crisis_branch_is_hidden_before_war_and_retained_afterward(self):
+        opener = self.focuses["VAL_Stelander_Crisis_Opens"]
+        self.assertTrue(any(e.key == "allow_branch" for e in opener))
+        gate = self.block(opener, "allow_branch")
+        self.assertFalse(self.check(gate, {}))
+        facts = self.facts()
+        self.assertTrue(self.check(gate, facts))
+        facts["VAL", "has_global_flag", "STP_cw_union_wars_finished"] = True
+        self.assertTrue(self.check(gate, facts))
+        prewar = {("STP", "has_country_flag", "STP_battle_for_stelander_active"): True}
+        self.assertFalse(self.check(self.block(opener, "available"), prewar))
+
+    def test_notification_is_one_shot_not_a_focus_reward(self):
+        self.assertIn("VAL_reveal_stelander_focus_branch", self.effects)
+        effect = self.effects["VAL_reveal_stelander_focus_branch"]
+        facts = self.facts()
+        def fire():
+            chosen = self.selected(effect, facts)
+            for scope, entry in chosen:
+                if entry.key == "set_country_flag" and isinstance(entry.value, str):
+                    facts[scope, "has_country_flag", entry.value] = True
+            return [self.scalar(e.value, "id") for _, e in chosen if e.key == "country_event"]
+        self.assertEqual(fire(), ["val_rework.9"])
+        self.assertEqual(fire(), [])
+        facts = self.facts()
+        facts["VAL", "has_global_flag", "STP_cw_started"] = False
+        self.assertEqual(fire(), [])
+        from tools.tests.test_adiscord_stp_preparation import walk
+        self.assertFalse(any(e.key == "country_event" and self.scalar(e.value, "id") == "val_rework.9" for e in walk(self.focuses["VAL_Stelander_Crisis_Opens"])))
+        option = self.block(self.events["val_rework.9"], "option")
+        self.assertTrue(any(e.key == "custom_effect_tooltip" and e.value == "VAL_stelander_focus_unlocked_tt" for e in option))
+
+    def test_notification_hook_matches_only_stelander_civil_war(self):
+        source = ON_ACTIONS_PATH.read_text(encoding="utf-8")
+        hooks = self.block(self.parse(source), "on_actions")
+        start = self.block(self.block(hooks, "on_war_relation_added"), "effect")
+        for first, second, expected in (("STP", "STS", True), ("STS", "STP", True), ("STP", "NOD", False), ("VAL", "SRP", False), ("NOD", "YPR", False)):
+            chosen = self.selected(start, {}, root=first, from_tag=second)
+            self.assertEqual(any(e.key == "VAL_reveal_stelander_focus_branch" for _, e in chosen), expected, (first, second))
+        self.assertIn("VAL_reveal_stelander_focus_branch = yes", named_blocks(source, "on_startup")[0])
+
+    def test_trade_then_mobilization_keeps_its_focus_route(self):
+        facts = self.facts(VAL_cw_trade_course=True, VAL_cw_military_course=True)
+        self.assertTrue(self.check(self.block(self.focuses["VAL_Arms_For_The_Burning"], "available"), facts))
+        for fid in ("VAL_Seize_The_Northern_Passes", "VAL_Keep_The_Arsenals"):
+            self.assertFalse(self.check(self.block(self.focuses[fid], "available"), facts), fid)
+
+    def test_occidian_victory_cannot_bypass_a_committed_trade_or_military_route(self):
+        gate = self.block(self.focuses["VAL_Keep_The_Arsenals"], "bypass")
+        for flag in ("VAL_cw_trade_course", "VAL_cw_military_course"):
+            facts = self.facts(**{flag: True})
+            facts["VAL", "VAL_occidia_secured", "yes"] = True
+            self.assertFalse(self.check(gate, facts), flag)
+        facts = self.facts()
+        facts["VAL", "VAL_occidia_secured", "yes"] = True
+        self.assertTrue(self.check(gate, facts))
+
+    def test_failed_military_intent_does_not_pay_a_victory_factory(self):
+        reward = self.block(self.focuses["VAL_The_Steel_Contract"], "completion_reward")
+        for fulfilled, secured, expected in ((False, False, False), (True, False, True), (False, True, True)):
+            facts = self.facts(VAL_cw_military_course=True, VAL_cw_defeated=not secured, VAL_cw_arms_contract_fulfilled=fulfilled)
+            facts["VAL", "VAL_occidia_secured", "yes"] = secured
+            chosen = self.selected(reward, facts)
+            self.assertEqual(any(e.key == "VAL_invest_arsenal_industry" for _, e in chosen), expected)
+
+    def test_dynamic_titles_and_localisation_have_real_consumers(self):
+        for fid, function in self.DYNAMIC.items():
+            self.assertIn(function, self.loc_functions)
+            self.assertTrue(any(e.key == "dynamic" and e.value == "yes" for e in self.focuses[fid]), fid)
+            for language in ("russian", "english"):
+                p = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+                data = p.read_bytes()
+                self.assertTrue(data.startswith(b"\xef\xbb\xbf"))
+                text = data.decode("utf-8-sig")
+                self.assertRegex(text, rf'(?m)^\s*{fid}:\d*\s*"\[ROOT\.{function}\]"$')
+                for entry in self.loc_functions[function]:
+                    if entry.key != "text":
+                        continue
+                    key = self.scalar(entry.value, "localization_key")
+                    self.assertRegex(text, rf'(?m)^\s*{re.escape(key)}:\d*\s*".+"$')
+        self.assertIn("VALGetStelanderCrisisStatus", self.loc_functions)
+
+    def test_dynamic_steel_title_tracks_paid_contract_or_actual_victory(self):
+        self.assertIn("VALGetSteelContractTitle", self.loc_functions)
+        entries = self.loc_functions["VALGetSteelContractTitle"]
+        def selected_key(facts):
+            for entry in entries:
+                if entry.key != "text":
+                    continue
+                gates = [e.value for e in entry.value if e.key == "trigger"]
+                if not gates or self.check(gates[0], facts):
+                    return self.scalar(entry.value, "localization_key")
+            self.fail("missing scripted-localisation fallback")
+        facts = self.facts(VAL_cw_military_course=True, VAL_cw_defeated=True)
+        facts["VAL", "VAL_occidia_secured", "yes"] = False
+        self.assertEqual(selected_key(facts), "VAL_steel_title_review")
+        facts["VAL", "VAL_occidia_secured", "yes"] = True
+        self.assertEqual(selected_key(facts), "VAL_steel_title_victory")
+        facts["VAL", "has_country_flag", "VAL_cw_arms_contract_fulfilled"] = True
+        self.assertEqual(selected_key(facts), "VAL_steel_title_trade")
+
+
+    def test_notification_does_not_replay_for_ai_completed_or_replaced_tree(self):
+        effect = self.effects["VAL_reveal_stelander_focus_branch"]
+        cases = (("is_ai", "no", False),
+                 ("has_completed_focus", "VAL_Stelander_Crisis_Opens", True),
+                 ("has_focus_tree", "VAL_focus", False),
+                 ("exists", "yes", False))
+        for key, value, state in cases:
+            facts = self.facts()
+            facts["VAL", key, value] = state
+            with self.subTest(key=key):
+                self.assertFalse(any(e.key == "country_event" for _, e in self.selected(effect, facts)))
+        option = self.block(self.events["val_rework.9"], "option")
+        self.assertEqual({e.key for e in option}, {"name", "custom_effect_tooltip"},
+                         "Dismissing a briefing must not commit policy, pay rewards or declare war")
+
+    def test_military_result_event_agrees_with_actual_reward(self):
+        event = self.events["val_rework.5"]
+        for fulfilled, secured, expected in ((False, False, "val_rework.5.neutral"),
+                                             (True, False, "val_rework.5.trade"),
+                                             (False, True, "val_rework.5.military"),
+                                             (True, True, "val_rework.5.trade")):
+            facts = self.facts(VAL_cw_military_course=True, VAL_cw_arms_contract_fulfilled=fulfilled)
+            facts["VAL", "VAL_occidia_secured", "yes"] = secured
+            descriptions = [self.scalar(e.value, "text") for e in event if e.key == "desc"
+                            and self.check(self.block(e.value, "trigger"), facts)]
+            self.assertEqual(descriptions, [expected])
+
+    def test_closed_windows_do_not_announce_new_deliveries(self):
+        reward = self.block(self.focuses["VAL_Arms_For_The_Burning"], "completion_reward")
+        for active, fulfilled, external in ((False, False, False), (True, False, True), (True, True, False)):
+            facts = self.facts(VAL_cw_arms_contract_fulfilled=fulfilled)
+            facts["VAL", "VAL_stelander_civil_war_active", "yes"] = active
+            facts["VAL", "VAL_cw_external_course_available", "yes"] = external
+            displayed = {e.value for _, e in self.selected(reward, facts) if e.key == "unlock_decision_tooltip"}
+            expected = {"VAL_cw_sell_arms_to_resistance", "VAL_cw_offer_contract_formations"} if active and not fulfilled else set()
+            if external:
+                expected.add("VAL_cw_begin_mobilization")
+            self.assertEqual(displayed, expected)
+        for fid in ("VAL_Arms_For_The_Burning", "VAL_Seize_The_Northern_Passes", "VAL_Keep_The_Arsenals"):
+            self.assertEqual(self.scalar(self.focuses[fid], "cancel_if_invalid"), "yes")
+
+    def test_dynamic_descriptions_have_bilingual_keys_and_ordered_current_status(self):
+        for language in ("russian", "english"):
+            text = (ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml").read_text(encoding="utf-8-sig")
+            keys = re.findall(r"(?m)^\s*([\w.]+):", text)
+            for name in (*self.DYNAMIC.values(), "VALGetStelanderCrisisStatus", "VALGetArmsFocusDescription", "VALGetPassesFocusDescription"):
+                for entry in self.loc_functions[name]:
+                    if entry.key == "text":
+                        self.assertEqual(keys.count(self.scalar(entry.value, "localization_key")), 1, name)
+            for fid in self.DYNAMIC:
+                self.assertRegex(text, rf'(?m)^\s*{fid}_desc:\d*\s*".*\[ROOT\.VALGetStelanderCrisisStatus\].*"$')
+        entries = self.loc_functions["VALGetStelanderCrisisStatus"]
+        cases = (("has_country_flag", "VAL_stelander_defeated", "VAL_stelander_status_defeated"),
+                 ("VAL_occidia_secured", "yes", "VAL_stelander_status_secured"),
+                 ("has_country_flag", "VAL_cw_defeated", "VAL_stelander_status_repelled"),
+                 ("has_war_with", "SRP", "VAL_stelander_status_campaign"),
+                 ("has_country_flag", "VAL_cw_mobilizing", "VAL_stelander_status_mobilizing"),
+                 ("VAL_stelander_civil_war_active", "yes", "VAL_stelander_status_civil_war"))
+        for key, value, expected in cases:
+            facts = self.facts()
+            facts["VAL", key, value] = True
+            chosen = []
+            for entry in entries:
+                if entry.key != "text":
+                    continue
+                gates = [e.value for e in entry.value if e.key == "trigger"]
+                if not gates or self.check(gates[0], facts):
+                    chosen.append(self.scalar(entry.value, "localization_key"))
+            self.assertEqual(chosen[0], expected)
 
 if __name__ == "__main__":
     unittest.main()

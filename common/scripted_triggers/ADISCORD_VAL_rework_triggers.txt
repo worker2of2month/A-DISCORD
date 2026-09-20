@@ -701,3 +701,10 @@ VAL_can_proclaim_commonwealth = {
 	29 = { is_owned_by = VAL is_controlled_by = VAL }
 	46 = { is_owned_by = VAL is_controlled_by = VAL }
 }
+
+# COUNTRY VAL: the actual party-resistance war, not the succession countdown.
+VAL_stelander_civil_war_active = {
+    NOT = { has_global_flag = STP_cw_union_wars_finished }
+    STP = { exists = yes has_war_with = STS }
+    STS = { exists = yes }
+}

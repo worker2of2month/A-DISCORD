@@ -71,3 +71,61 @@ defined_text = {
 	text = { trigger = { VAL_frontier_nod_will_intervene = yes } localization_key = VAL_nod_frontier_expected }
 	text = { localization_key = VAL_nod_frontier_unavailable }
 }
+
+# Dynamic crisis titles and descriptions share the gameplay result predicates.
+defined_text = {
+	name = VALGetStelanderFocusTitle
+	text = { trigger = { VAL_stelander_civil_war_active = yes } localization_key = VAL_stelander_title_war }
+	text = { localization_key = VAL_stelander_title_aftermath }
+}
+defined_text = {
+	name = VALGetArmsFocusTitle
+	text = { trigger = { has_country_flag = VAL_cw_arms_contract_fulfilled } localization_key = VAL_arms_title_delivered }
+	text = { trigger = { VAL_stelander_civil_war_active = yes } localization_key = VAL_arms_title_war }
+	text = { localization_key = VAL_arms_title_aftermath }
+}
+defined_text = {
+	name = VALGetPassesFocusTitle
+	text = { trigger = { VAL_occidia_secured = yes } localization_key = VAL_passes_title_secured }
+	text = { trigger = { has_country_flag = VAL_cw_settled } localization_key = VAL_passes_title_review }
+	text = { trigger = { has_war_with = SRP } localization_key = VAL_passes_title_war }
+	text = { trigger = { has_country_flag = VAL_cw_mobilizing } localization_key = VAL_passes_title_mobilizing }
+	text = { localization_key = VAL_passes_title_prepare }
+}
+defined_text = {
+	name = VALGetReservesFocusTitle
+	text = { trigger = { VAL_stelander_civil_war_active = yes } localization_key = VAL_reserves_title_war }
+	text = { localization_key = VAL_reserves_title_aftermath }
+}
+defined_text = {
+	name = VALGetSteelContractTitle
+	text = { trigger = { has_country_flag = VAL_cw_arms_contract_fulfilled } localization_key = VAL_steel_title_trade }
+	text = { trigger = { VAL_occidia_secured = yes } localization_key = VAL_steel_title_victory }
+	text = { localization_key = VAL_steel_title_review }
+}
+defined_text = {
+	name = VALGetStelanderCrisisStatus
+	text = { trigger = { has_country_flag = VAL_stelander_defeated } localization_key = VAL_stelander_status_defeated }
+	text = { trigger = { VAL_occidia_secured = yes } localization_key = VAL_stelander_status_secured }
+	text = { trigger = { has_country_flag = VAL_cw_defeated } localization_key = VAL_stelander_status_repelled }
+	text = { trigger = { has_war_with = SRP } localization_key = VAL_stelander_status_campaign }
+	text = { trigger = { has_country_flag = VAL_cw_mobilizing } localization_key = VAL_stelander_status_mobilizing }
+	text = { trigger = { has_country_flag = VAL_cw_settled } localization_key = VAL_stelander_status_settled }
+	text = { trigger = { has_country_flag = VAL_cw_refused } localization_key = VAL_stelander_status_neutral }
+	text = { trigger = { VAL_stelander_civil_war_active = yes } localization_key = VAL_stelander_status_civil_war }
+	text = { trigger = { has_global_flag = STP_cw_started } localization_key = VAL_stelander_status_aftermath }
+	text = { localization_key = VAL_stelander_status_prewar }
+}
+defined_text = {
+	name = VALGetArmsFocusDescription
+	text = { trigger = { has_country_flag = VAL_cw_arms_contract_fulfilled } localization_key = VAL_arms_desc_delivered }
+	text = { trigger = { VAL_stelander_civil_war_active = yes } localization_key = VAL_arms_desc_war }
+	text = { localization_key = VAL_arms_desc_aftermath }
+}
+defined_text = {
+	name = VALGetPassesFocusDescription
+	text = { trigger = { VAL_occidia_secured = yes } localization_key = VAL_passes_desc_secured }
+	text = { trigger = { has_country_flag = VAL_cw_settled } localization_key = VAL_passes_desc_review }
+	text = { trigger = { has_war_with = SRP } localization_key = VAL_passes_desc_war }
+	text = { localization_key = VAL_passes_desc_prepare }
+}

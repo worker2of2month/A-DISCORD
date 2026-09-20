@@ -241,7 +241,7 @@ def validate_supplemental_rewards(focus_text: str, effects_text: str, dynamic_te
         "add_stability", "add_war_support", "add_manpower", "add_equipment_to_stockpile",
         "add_offsite_building", "add_building_construction", "build_railway", "add_tech_bonus",
         "add_ideas", "add_timed_idea", "swap_ideas", "add_dynamic_modifier", "add_intel",
-        "add_research_slot", "activate_decision", "activate_mission", "give_resource_rights",
+        "add_research_slot", "activate_decision", "activate_mission", "give_resource_rights", "recruit_character",
     }
     effects = {e.key: e.value for e in parse_clausewitz(effects_text) if isinstance(e.value, list)}
     refresh = effects.get("VAL_refresh_contract_modifier", [])

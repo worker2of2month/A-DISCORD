@@ -59,10 +59,14 @@ class NodrulCapitulationReservationTests(unittest.TestCase):
         reserved = "STP_cw_northern_capitulation_reserved"
 
         self.assertIn(f"ROOT = {{ has_country_flag = {pending} }}", immediate)
-        self.assertIn(
-            f"set_country_flag = {{ flag = {reserved} value = 1 days = 2 }}",
-            immediate,
-        )
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import walk, scalar
+        reservations = [e.value for e in walk(parse_clausewitz(immediate))
+                        if e.key == "set_country_flag" and isinstance(e.value, list)
+                        and scalar(e.value, "flag") == reserved]
+        self.assertEqual(len(reservations), 1)
+        self.assertEqual(scalar(reservations[0], "value"), "1")
+        self.assertEqual(scalar(reservations[0], "days"), "2")
         self.assertIn(f"ROOT = {{ has_country_flag = {reserved} }}", late)
         self.assertIn("set_global_flag = skip_default_capitulation", late)
 
