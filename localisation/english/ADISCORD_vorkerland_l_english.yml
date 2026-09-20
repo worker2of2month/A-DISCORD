@@ -840,7 +840,7 @@
  ADISCORD_vorkerland_collapse.100.d:0 "The worker government holds the centre again, but Nikita Worcker's emergency mandate has not yet become a permanent settlement. The commissions are ready to open the polling stations. Worcker can instead confirm his power by decree and close the question of succession."
  ADISCORD_vorkerland_collapse.100.a:0 "Open the polling stations."
  ADISCORD_vorkerland_collapse.100.b:0 "Confirm power by decree."
- ADISCORD_vorkerland_wrk_hold_elections_tt: "In §Y14 days§! the commissions will announce a winner. §YNikita Worcker§! (§Yneo-vorkerism§!), §YMark Yastrebtsev§! (§Yhumanism§!) and §YNecro Filopo§! (§Ychauvinism§!) each have an equal chance."
+ ADISCORD_vorkerland_wrk_hold_elections_tt:0 "In §Y14 days§! the commissions will announce a winner. §YNikita Worcker§! (§Yneo-vorkerism§!), §YMark Yastrebtsev§! (§Yhumanism§!) and §YNecro Filopo§! (§Ychauvinism§!) each have an equal chance."
  ADISCORD_vorkerland_collapse.101.t:0 "Election Results"
  ADISCORD_vorkerland_collapse.101.worker.d:0 "The commissions have tallied the returns and declared Nikita Worcker the winner. Neo-vorkerism remains the ruling ideology, and the emergency cabinet now holds an electoral mandate rather than a decree."
  ADISCORD_vorkerland_collapse.101.yastrebtsev.d:0 "The commissions have tallied the returns and declared Mark Yastrebtsev the winner. Humanism becomes the ruling ideology, and Worcker yields the cabinet to the published result."
@@ -1658,3 +1658,9 @@
  YOR_confederation_ADJ: "$YOR_ADJ$"
  YOR_confederation_DEF: "Yor Autonomy"
  YOR_confederation_humanism: "Yor Autonomy"
+
+ ADISCORD_vorkerland_news.3.t: "Elections in Vorkerland"
+ ADISCORD_vorkerland_news.3.worker.d: "Vorkerland's electoral commissions have announced Nikita Worcker's victory. After winning the civil war, he submitted his authority to a vote and retained the leadership. Neo-Vorkerism remains the state ideology.\n\nThe emergency government now holds an electoral mandate. For the neighbouring republics, the result means continuity in the leadership of the restored Vorkerland."
+ ADISCORD_vorkerland_news.3.yastrebtsev.d: "Vorkerland's electoral commissions have announced Mark Yastrebtsev's victory. Nikita Worcker relinquishes the leadership following the vote held after the civil war. The humanists receive a mandate to govern.\n\nThe transfer of power ends the emergency cabinet's rule. A new government will now lead the country's reconstruction."
+ ADISCORD_vorkerland_news.3.filopo.d: "Vorkerland's electoral commissions have announced Necro Filopo's victory. The vote called after the civil war has removed Nikita Worcker from the leadership and brought the chauvinists to power.\n\nThe new government inherits a state that has barely survived its collapse. Former members of the confederation and foreign neighbours will be watching its course closely."
+ ADISCORD_vorkerland_news.3.a: "The result is announced."

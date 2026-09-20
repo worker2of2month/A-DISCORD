@@ -3523,7 +3523,7 @@ STP_cw_end_nod_intervention = {
 		remove_ideas = STP_ps_expedition_idea
 		if = {
 			limit = { OR = { has_country_flag = NOD_cw_entered has_country_flag = NOD_cw_intervention_approved } }
-			if = { limit = { has_war_with = STS NOT = { has_country_flag = STP_ps_exile_received } NOT = { has_country_flag = STP_ps_return_campaign } } white_peace = STS }
+			if = { limit = { has_war_with = STS NOT = { has_country_flag = STP_ps_return_campaign } } white_peace = STS }
 			clr_country_flag = NOD_cw_entered
 			clr_country_flag = NOD_cw_intervention_approved
 			ADISCORD_economy_update_postwar_demobilization = yes

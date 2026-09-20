@@ -3331,6 +3331,17 @@ ADISCORD_vorkerland_resolve_unguaranteed_free_republics = {
 				}
 			}
 		}
+		# These breakaway governments are outside the guarantee for ROM and TRU.
+		WRK = {
+			if = {
+				limit = { DVA = { exists = yes is_subject = no has_capitulated = no NOT = { is_in_faction_with = WRK } NOT = { has_war_with = WRK } } }
+				declare_war_on = { target = DVA type = annex_everything }
+			}
+			if = {
+				limit = { ZTA = { exists = yes is_subject = no has_capitulated = no NOT = { is_in_faction_with = WRK } NOT = { has_war_with = WRK } } }
+				declare_war_on = { target = ZTA type = annex_everything }
+			}
+		}
 		set_global_flag = ADISCORD_vorkerland_free_republics_resolution_done
 	}
 }
@@ -8475,6 +8486,7 @@ ADISCORD_vorkerland_wrk_resolve_elections = {
 			1 = { ADISCORD_vorkerland_wrk_elect_yastrebtsev = yes }
 			1 = { ADISCORD_vorkerland_wrk_elect_filopo = yes }
 		}
+		news_event = { id = ADISCORD_vorkerland_news.3 hours = 1 }
 	}
 }
 

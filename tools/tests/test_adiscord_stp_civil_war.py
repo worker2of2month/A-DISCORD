@@ -1578,6 +1578,28 @@ class CivilWarContracts(unittest.TestCase):
         for flag in ("NOD_cw_refused", "NOD_cw_victorious", "NOD_cw_withdrew", "NOD_cw_defeated"):
             self.assertFalse(matches_conditions(gate, {**facts, ("NOD", "has_country_flag", flag): True}, "STS"), flag)
 
+    def test_party_exile_does_not_keep_nod_intervention_at_war(self):
+        cleanup = ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+                            "STP_cw_end_nod_intervention")
+        for exiles in (False, True):
+            for return_campaign in (False, True):
+                with self.subTest(exiles=exiles, return_campaign=return_campaign):
+                    facts = {
+                        ("NOD", "has_country_flag", "NOD_cw_entered"): True,
+                        ("NOD", "has_country_flag", "STP_ps_exile_received"): exiles,
+                        ("NOD", "has_country_flag", "STP_ps_return_campaign"): return_campaign,
+                        ("NOD", "has_war_with", "STS"): True,
+                        ("NOD", "has_war_with", "YPR"): True,
+                    }
+                    selected = list(selected_effects(cleanup, facts, "STS"))
+                    self.assertEqual([e.value for _, e in selected if e.key == "white_peace"],
+                                     [] if return_campaign else ["STS"])
+                    self.assertIn(("NOD", "clr_country_flag", "NOD_cw_entered"),
+                                  [(scope, e.key, e.value) for scope, e in selected])
+                    self.assertFalse(any(e.key == "clr_country_flag" and e.value == "STP_ps_exile_received"
+                                         for _, e in selected))
+                    self.assertFalse(any(e.key == "STP_ps_close_exile" for _, e in selected))
+
     def test_nod_defeat_router_preserves_the_country_and_other_wars(self):
         router = ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions"), "on_capitulation")
         defeat = next((e.value for e in walk(router) if e.key == "else_if"

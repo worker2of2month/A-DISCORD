@@ -238,14 +238,14 @@ guiTypes = {
 
 			buttonType = {
 				name = "relations_tab_button"
-				quadTextureSprite = "GFX_ADISCORD_diplomacy_item_bg"
+				quadTextureSprite = "GFX_ADISCORD_diplomacy_tab_button"
 				position = { x=10 y=94 }
 				size = { x = 330 y = 38 }
 			}
 
 			buttonType = {
 				name = "info_tab_button"
-				quadTextureSprite = "GFX_ADISCORD_diplomacy_item_bg"
+				quadTextureSprite = "GFX_ADISCORD_diplomacy_tab_button"
 				position = { x=340 y=94 }
 				size = { x = 330 y = 38 }
 			}

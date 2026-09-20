@@ -294,11 +294,19 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
             self.assertEqual(image.convert("RGBA").getpixel((63, 40))[3], 0)
 
     def test_focus_button_uses_a_fixed_width_three_state_hover_atlas(self) -> None:
+        for name in ("relations_tab_button", "info_tab_button"):
+            start, end = named_block_span(self.gui, name)
+            self.assertIn(
+                'quadTextureSprite = "GFX_ADISCORD_diplomacy_tab_button"',
+                self.gui[start : end + 1],
+            )
+        with Image.open(ROOT / "gfx/interface/diplomacy/ADISCORD_diplomacy_tab_button.dds") as atlas:
+            self.assertEqual(atlas.size, (3 * 330, 38))
         self.assertEqual(
             self.gui.count(
                 'quadTextureSprite = "GFX_ADISCORD_diplomacy_item_bg"'
             ),
-            3,
+            1,
         )
         self.assertNotIn(
             'quadTextureSprite = "GFX_ADISCORD_decisions_item_bg"', self.gui

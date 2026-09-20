@@ -2,7 +2,8 @@
 """Build the custom diplomacy portrait, party and flag overlays.
 
 The source PNGs are the approved ImageGen masters with their chroma-key
-backgrounds removed. This builder owns the three exact-size DDS overlays.
+backgrounds removed. This builder owns the three exact-size DDS overlays and
+the diplomacy tab atlas derived from the existing focus button.
 Use ``--check`` before ``--apply``.
 """
 
@@ -25,6 +26,17 @@ FLAG_SOURCE = SOURCE_DIR / "ADISCORD_diplomacy_flag_overlay_master.png"
 LEADER_OVERLAY = OUTPUT_DIR / "ADISCORD_diplomacy_leader_overlay.dds"
 PARTIES_OVERLAY = OUTPUT_DIR / "ADISCORD_diplomacy_parties_overlay.dds"
 FLAG_OVERLAY = OUTPUT_DIR / "ADISCORD_diplomacy_flag_overlay.dds"
+TAB_BUTTON = OUTPUT_DIR / "ADISCORD_diplomacy_tab_button.dds"
+
+
+def _tab_button() -> Image.Image:
+    # Resize states separately so filtering cannot bleed across atlas boundaries.
+    with Image.open(OUTPUT_DIR / "ADISCORD_diplomacy_focus_button.dds") as source:
+        atlas = Image.new("RGBA", (990, 38))
+        for state in range(3):
+            frame = source.crop((state * 388, 0, (state + 1) * 388, 40))
+            atlas.paste(frame.resize((330, 38), Image.Resampling.LANCZOS), (state * 330, 0))
+    return atlas
 
 
 def _resample_source(
@@ -82,6 +94,7 @@ def expected_outputs() -> dict[Path, bytes]:
         LEADER_OVERLAY: _dds_bytes(_leader_overlay()),
         PARTIES_OVERLAY: _dds_bytes(_parties_overlay()),
         FLAG_OVERLAY: _dds_bytes(_flag_overlay()),
+        TAB_BUTTON: _dds_bytes(_tab_button()),
     }
 
 

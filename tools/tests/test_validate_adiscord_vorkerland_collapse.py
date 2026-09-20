@@ -2510,6 +2510,23 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("GFX_portrait_WRK_Temporary_Government", named_block(characters, "WRK_VAD_Joint_Council"))
         self.assertIn('VAD_vorkerland_restoration: "Воркерландская Империя"', cosmetic_loc)
 
+    def test_election_news_reports_the_settled_wrk_result_to_other_countries(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        resolve = named_block(effects, "ADISCORD_vorkerland_wrk_resolve_elections")
+        guarded = named_block(resolve, "if")
+        self.assertIn("NOT = { has_country_flag = ADISCORD_vorkerland_worker_election_settled }", guarded)
+        self.assertLess(guarded.index("random_list ="), guarded.index("news_event ="))
+        self.assertIn("id = ADISCORD_vorkerland_news.3 hours = 1", guarded)
+        news = event_block(read("events/ADISCORD_vorkerland_events.txt"), "ADISCORD_vorkerland_news.3", "news_event")
+        self.assertIn("major = yes", news)
+        self.assertIn("fire_only_once = yes", news)
+        for winner in ("worker", "yastrebtsev", "filopo"):
+            self.assertIn(f"WRK = {{ has_country_flag = ADISCORD_vorkerland_{winner}_elected }}", news)
+            for language in ("russian", "english"):
+                loc = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
+                self.assertTrue(loc.read_bytes().startswith(b"\xef\xbb\xbf"))
+                self.assertIn(f' ADISCORD_vorkerland_news.3.{winner}.d: "', loc.read_text(encoding="utf-8-sig"))
+
     def test_nikita_victory_can_elect_or_usurp(self) -> None:
         issues = validate(ROOT, "outcomes")
         self.assertEqual(issues, [])
@@ -3191,6 +3208,17 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn("puppet = TRU", settlement)
         self.assertIn("target = ROM type = annex_everything", settlement)
         self.assertIn("target = TRU type = annex_everything", settlement)
+        for tag in ("DVA", "ZTA"):
+            self.assertIn(f"target = {tag} type = annex_everything", settlement)
+            self.assertIn(
+                f"{tag} = {{ exists = yes is_subject = no has_capitulated = no "
+                "NOT = { is_in_faction_with = WRK } NOT = { has_war_with = WRK } }",
+                settlement,
+            )
+        self.assertLess(
+            settlement.index("target = ZTA type = annex_everything"),
+            settlement.index("set_global_flag = ADISCORD_vorkerland_free_republics_resolution_done"),
+        )
         phase = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
         finalizer = named_block(phase, "ADISCORD_vorkerland_finalize_reunified_wrk")
         self.assertIn("ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes", finalizer)

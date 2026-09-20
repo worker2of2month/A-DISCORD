@@ -1,4 +1,11 @@
 spriteTypes = {
+	# Native tab states use whole frames; cornered tiling can mix adjacent states.
+	spriteType = {
+		name = "GFX_ADISCORD_diplomacy_tab_button"
+		textureFile = "gfx/interface/diplomacy/ADISCORD_diplomacy_tab_button.dds"
+		noOfFrames = 3
+	}
+
 	# The source atlas contains three 512x40 button states. A cornered tile keeps
 	# the A-Discord chrome while allowing diplomacy controls to use their real
 	# interaction widths instead of drawing the native 512-pixel frame.
