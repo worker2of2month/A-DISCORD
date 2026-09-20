@@ -1477,7 +1477,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_public_lists
-		icon = GFX_goal_generic_propaganda
+		icon = GFX_focus_STP_All_In
 		relative_position_id = STP_Govern_In_His_Name
 		x = 8
 		y = 3

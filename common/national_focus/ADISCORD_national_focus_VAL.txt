@@ -25,7 +25,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_The_Contract_State
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_VAL_The_Contract_State
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 20
 		y = 0
@@ -96,7 +96,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Count_The_Captains
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_VAL_Count_The_Captains
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY }
 		x = 22
 		y = 2
@@ -148,7 +148,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Factories_Like_Cathedrals
-		icon = GFX_goal_generic_construct_mil_factory
+		icon = GFX_focus_VAL_Factories_Like_Cathedrals
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 4
 		y = 1
@@ -223,7 +223,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Export_Rifles_Not_Promises
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 4
 		y = 4
