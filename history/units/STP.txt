@@ -59,15 +59,15 @@ division_template = {
 
 units = {
 	fleet = {
-		name = "Фадская флотилия"
+		name = "Fada Flotilla"
 		naval_base = 16366
 		task_force = {
-			name = "Охрана побережья"
+			name = "Coastal Patrol"
 			location = 16366
-			ship = { name = "СК-201" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
-			ship = { name = "СК-202" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
-			ship = { name = "СК-203" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
-			ship = { name = "СК-204" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
+			ship = { name = "SK-201" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
+			ship = { name = "SK-202" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
+			ship = { name = "SK-203" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
+			ship = { name = "SK-204" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
 		}
 	}
 	division = {
