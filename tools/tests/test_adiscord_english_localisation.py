@@ -125,6 +125,20 @@ class EnglishCatalogueCompletenessTests(unittest.TestCase):
                 differences.append(key)
         self.assertEqual(differences, [])
 
+    def test_starting_unit_display_names_use_the_shared_latin_script(self):
+        import re
+        from tools.validators.validate_adiscord_english_localisation import CYRILLIC
+        root = Path(__file__).resolve().parents[2]
+        untranslated = []
+        for path in sorted((root / 'history/units').rglob('*.txt')):
+            for number, line in enumerate(path.read_text(encoding='utf-8-sig').splitlines(), 1):
+                if line.lstrip().startswith('#'):
+                    continue
+                for name in re.findall(r'\bname\s*=\s*"([^"\n]*)"', line):
+                    if CYRILLIC.search(name):
+                        untranslated.append(f'{path.name}:{number}: {name}')
+        self.assertEqual(untranslated, [])
+
 
 if __name__ == '__main__':
     unittest.main()
