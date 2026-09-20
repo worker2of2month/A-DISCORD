@@ -95,17 +95,17 @@ division_template = {
 
 units = {
 	fleet = {
-		name = "Кассингтонская флотилия"
+		name = "Cussington Flotilla"
 		naval_base = 12434
 		task_force = {
-			name = "Охрана торговых путей"
+			name = "Trade Route Patrol"
 			location = 12434
-			ship = { name = "СК-101" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-102" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-103" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-104" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-105" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-106" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
+			ship = { name = "SK-101" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
+			ship = { name = "SK-102" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
+			ship = { name = "SK-103" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
+			ship = { name = "SK-104" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
+			ship = { name = "SK-105" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
+			ship = { name = "SK-106" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
 		}
 	}
 	division = {
