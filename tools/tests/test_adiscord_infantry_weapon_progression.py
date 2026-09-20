@@ -50,6 +50,22 @@ def custom_entity_name(prefix: str, level: int) -> str:
 
 
 class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
+    def test_territorial_models_survive_regular_infantry_regeneration(self) -> None:
+        from tools.assets.source.STP_regulars.package_regulars import bindings
+
+        generated = bindings()[COUNTRY_ASSET].decode("utf-8")
+        installed = COUNTRY_ASSET.read_text(encoding="utf-8")
+        for tag in ("STP", "STS", "SRP"):
+            for level in range(8):
+                suffix = "" if level == 0 else f"_{level + 1}"
+                parent = f"{tag}_ADISCORD_militia{suffix}_entity"
+                child = f"{tag}_ADISCORD_territorial{suffix}_entity"
+                alias = f'entity = {{ clone = "{parent}" name = "{child}" }}'
+                with self.subTest(tag=tag, level=level):
+                    self.assertTrue(alias in generated, f"builder omits {child}")
+                    self.assertEqual(installed.count(alias), 1, child)
+                    self.assertLess(installed.index(f'name = "{parent}"'), installed.index(alias))
+
     def test_nod_field_poses_preserve_weapon_family_without_smoking_or_prone_drills(self) -> None:
         entities = entity_blocks(COUNTRY_ASSET)
         for level in range(8):

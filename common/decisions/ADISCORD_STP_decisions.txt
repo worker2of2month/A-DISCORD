@@ -1798,6 +1798,121 @@ STP_battle_for_stelander = {
 		ai_will_do = { base = 6  modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
+	STP_counterintelligence_state_2 = {
+		icon = GFX_decision_ADISCORD_state_directive
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
+		highlight_states = { highlight_state_targets = { state = 2 } }
+		on_map_mode = map_and_decisions_view
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 56
+		cancel_trigger = {
+			OR = {
+				NOT = { has_country_flag = STP_battle_for_stelander_active }
+				2 = { NOT = { has_state_flag = STP_party_counterintelligence_asset } }
+			}
+		}
+		timeout_effect = { custom_effect_tooltip = STP_counterintelligence_expires_tt }
+	}
+	STP_counterintelligence_state_3 = {
+		icon = GFX_decision_ADISCORD_state_directive
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
+		highlight_states = { highlight_state_targets = { state = 3 } }
+		on_map_mode = map_and_decisions_view
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 56
+		cancel_trigger = {
+			OR = {
+				NOT = { has_country_flag = STP_battle_for_stelander_active }
+				3 = { NOT = { has_state_flag = STP_party_counterintelligence_asset } }
+			}
+		}
+		timeout_effect = { custom_effect_tooltip = STP_counterintelligence_expires_tt }
+	}
+	STP_counterintelligence_state_29 = {
+		icon = GFX_decision_ADISCORD_state_directive
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
+		highlight_states = { highlight_state_targets = { state = 29 } }
+		on_map_mode = map_and_decisions_view
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 56
+		cancel_trigger = {
+			OR = {
+				NOT = { has_country_flag = STP_battle_for_stelander_active }
+				29 = { NOT = { has_state_flag = STP_party_counterintelligence_asset } }
+			}
+		}
+		timeout_effect = { custom_effect_tooltip = STP_counterintelligence_expires_tt }
+	}
+	STP_counterintelligence_state_45 = {
+		icon = GFX_decision_ADISCORD_state_directive
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
+		highlight_states = { highlight_state_targets = { state = 45 } }
+		on_map_mode = map_and_decisions_view
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 56
+		cancel_trigger = {
+			OR = {
+				NOT = { has_country_flag = STP_battle_for_stelander_active }
+				45 = { NOT = { has_state_flag = STP_party_counterintelligence_asset } }
+			}
+		}
+		timeout_effect = { custom_effect_tooltip = STP_counterintelligence_expires_tt }
+	}
+	STP_counterintelligence_state_46 = {
+		icon = GFX_decision_ADISCORD_state_directive
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
+		highlight_states = { highlight_state_targets = { state = 46 } }
+		on_map_mode = map_and_decisions_view
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 56
+		cancel_trigger = {
+			OR = {
+				NOT = { has_country_flag = STP_battle_for_stelander_active }
+				46 = { NOT = { has_state_flag = STP_party_counterintelligence_asset } }
+			}
+		}
+		timeout_effect = { custom_effect_tooltip = STP_counterintelligence_expires_tt }
+	}
+	STP_counterintelligence_state_53 = {
+		icon = GFX_decision_ADISCORD_state_directive
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
+		highlight_states = { highlight_state_targets = { state = 53 } }
+		on_map_mode = map_and_decisions_view
+		is_good = no
+		selectable_mission = no
+		days_mission_timeout = 56
+		cancel_trigger = {
+			OR = {
+				NOT = { has_country_flag = STP_battle_for_stelander_active }
+				53 = { NOT = { has_state_flag = STP_party_counterintelligence_asset } }
+			}
+		}
+		timeout_effect = { custom_effect_tooltip = STP_counterintelligence_expires_tt }
+	}
+
 	STP_party_inspection_state_2 = {
 		icon = GFX_decision_ADISCORD_state_directive
 		allowed = { tag = STP }
@@ -2768,18 +2883,18 @@ STP_cw_war_council = {
 		visible = { has_country_flag = STP_cw_participant NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes }
 		available = {
 			has_completed_focus = STP_cw_mobilization_register
-			NOT = { has_manpower < 6000 }
-			NOT = { has_equipment = { infantry_equipment < 600 } }
+			OR = { tag = STS AND = { NOT = { has_manpower < 6000 } NOT = { has_equipment = { infantry_equipment < 600 } } } }
 			any_owned_state = { is_controlled_by = PREV }
 		}
 		cost = 25
 		days_re_enable = 14
 		fire_only_once = no
 		complete_effect = {
-			custom_effect_tooltip = STP_cw_raise_territorial_brigade_tt
+			if = { limit = { tag = STS } custom_effect_tooltip = STP_cw_volunteer_brigade_tt }
+			else = { custom_effect_tooltip = STP_cw_raise_territorial_brigade_tt }
 			hidden_effect = {
 				if = { limit = { tag = STP } STP_cw_mobilize_brigade = yes }
-				else_if = { limit = { tag = STS } STP_cw_mobilize_brigade = yes }
+				else_if = { limit = { tag = STS } STP_cw_mobilize_volunteer_brigade = yes }
 				else_if = { limit = { tag = SRP } STP_cw_mobilize_brigade = yes }
 			}
 		}
@@ -2787,6 +2902,7 @@ STP_cw_war_council = {
 			base = 10
 			modifier = {
 				factor = 0
+				NOT = { tag = STS }
 				OR = {
 					has_manpower < 18000
 					NOT = { stockpile_ratio = { archetype = infantry_equipment ratio > 0.10 } }
@@ -2845,24 +2961,33 @@ STP_cw_war_council = {
 		custom_cost_text = STP_cw_reserve_training_cost
 		custom_cost_trigger = {
 			NOT = { has_political_power < 40 }
-			NOT = { has_manpower < 12000 }
-			NOT = { has_equipment = { infantry_equipment < 1200 } }
+			OR = { tag = STS AND = { NOT = { has_manpower < 12000 } NOT = { has_equipment = { infantry_equipment < 1200 } } } }
 		}
 		cost = 0
 		days_remove = 21
 		days_re_enable = 7
 		fire_only_once = no
 		cancel_trigger = { OR = { has_country_flag = STP_cw_postwar NOT = { STP_cw_can_rearm = yes } has_capitulated = yes NOT = { any_owned_state = { is_controlled_by = PREV } } } }
+
 		complete_effect = {
-			custom_effect_tooltip = STP_cw_reserve_training_start_tt
+			if = { limit = { tag = STS } custom_effect_tooltip = STP_cw_volunteer_training_start_tt }
+			else = { custom_effect_tooltip = STP_cw_reserve_training_start_tt }
 			hidden_effect = {
-				set_temp_variable = { var = STP_cw_rifle_cost value = 1200 }
-				STP_cw_pay_rifles = yes
 				if = {
-					limit = { has_country_flag = STP_cw_rifles_paid }
+					limit = { tag = STS }
 					add_political_power = -40
-					add_manpower = -12000
 					set_variable = { var = STP_cw_training_cohorts value = 2 }
+					set_country_flag = STP_cw_training_political_payment
+				}
+				else = {
+					set_temp_variable = { var = STP_cw_rifle_cost value = 1200 }
+					STP_cw_pay_rifles = yes
+					if = {
+						limit = { has_country_flag = STP_cw_rifles_paid }
+						add_political_power = -40
+						add_manpower = -12000
+						set_variable = { var = STP_cw_training_cohorts value = 2 }
+					}
 				}
 			}
 		}
@@ -2875,6 +3000,7 @@ STP_cw_war_council = {
 			base = 7
 			modifier = {
 				factor = 0
+				NOT = { tag = STS }
 				OR = {
 					has_manpower < 24000
 					NOT = { stockpile_ratio = { archetype = infantry_equipment ratio > 0.10 } }

@@ -803,6 +803,56 @@ STP_cw_prepare_opposition = {
 
 }
 
+# STATE: the timed state flag owns the restriction; this mission only displays it.
+# A repeated police action restarts both deadlines in the same effect.
+STP_show_counterintelligence_mission = {
+	if = {
+		limit = { STP = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active } }
+		if = {
+			limit = { state = 2 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_2
+				activate_mission = STP_counterintelligence_state_2
+			}
+		}
+		else_if = {
+			limit = { state = 3 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_3
+				activate_mission = STP_counterintelligence_state_3
+			}
+		}
+		else_if = {
+			limit = { state = 29 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_29
+				activate_mission = STP_counterintelligence_state_29
+			}
+		}
+		else_if = {
+			limit = { state = 45 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_45
+				activate_mission = STP_counterintelligence_state_45
+			}
+		}
+		else_if = {
+			limit = { state = 46 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_46
+				activate_mission = STP_counterintelligence_state_46
+			}
+		}
+		else_if = {
+			limit = { state = 53 }
+			STP = {
+				remove_mission = STP_counterintelligence_state_53
+				activate_mission = STP_counterintelligence_state_53
+			}
+		}
+	}
+}
+
 # STATE scope. Focus and decision consumers use the same visible police action.
 STP_cw_secure_party_district = {
 	STP_cw_assess_search_evidence = yes
@@ -816,6 +866,7 @@ STP_cw_secure_party_district = {
 	clr_state_flag = STP_resistance_sabotage_asset
 	clr_state_flag = STP_local_deal_asset
 	set_state_flag = { flag = STP_party_counterintelligence_asset value = 1 days = 56 }
+	STP_show_counterintelligence_mission = yes
 	if = { limit = { OR = { state = 2 state = 29 } } set_state_flag = STP_party_reinforced_garrison_asset }
 	set_temp_variable = { var = STP_region_influence_change value = 15 }
 	STP_add_party_influence = yes
@@ -1578,6 +1629,7 @@ STP_false_trail_counterintelligence_breakthrough = {
 	set_temp_variable = { var = STP_region_influence_change value = 10 }
 	STP_add_party_influence = yes
 	set_state_flag = { flag = STP_party_counterintelligence_asset value = 1 days = 56 }
+	STP_show_counterintelligence_mission = yes
 	clr_state_flag = STP_niansas_transfer_secured
 	clr_state_flag = STP_resistance_administration_asset
 	clr_state_flag = STP_resistance_garrison_asset
@@ -1636,6 +1688,7 @@ STP_resolve_party_inspection = {
 			limit = { STP_region_has_detectable_assets = yes }
 			set_temp_variable = { var = STP_cw_inspection_found_assets value = 1 }
 			set_state_flag = { flag = STP_party_counterintelligence_asset value = 1 days = 56 }
+			STP_show_counterintelligence_mission = yes
 		}
 		STP_cw_return_preparation_reserves = yes
 		clr_state_flag = STP_resistance_sabotage_asset
@@ -1867,6 +1920,12 @@ STP_end_battle_for_stelander = {
 	remove_mission = STP_party_inspection_state_45
 	remove_mission = STP_party_inspection_state_46
 	remove_mission = STP_party_inspection_state_53
+	remove_mission = STP_counterintelligence_state_2
+	remove_mission = STP_counterintelligence_state_3
+	remove_mission = STP_counterintelligence_state_29
+	remove_mission = STP_counterintelligence_state_45
+	remove_mission = STP_counterintelligence_state_46
+	remove_mission = STP_counterintelligence_state_53
 	1 = { STP_clear_region_runtime = yes }
 	2 = { STP_clear_region_runtime = yes }
 	3 = { STP_clear_region_runtime = yes }
@@ -2012,6 +2071,22 @@ STP_cw_mobilize_brigade = {
 			}
 			log = "[STP_CW] [THIS.GetTag] brigade paid: 6000 manpower, 600 rifles; remaining manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
 		}
+	}
+}
+
+# COUNTRY: the wartime Shabrat decision pays for volunteers with political power.
+# Initial army distribution and other countries still use reserve-backed mobilisation.
+STP_cw_mobilize_volunteer_brigade = {
+	if = {
+		limit = { tag = STS NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes any_owned_state = { is_controlled_by = PREV } }
+		if = {
+			limit = { any_owned_state = { is_controlled_by = PREV STP_cw_state_faces_rival = yes } }
+			random_owned_controlled_state = {
+				limit = { STP_cw_state_faces_rival = yes }
+				STP_cw_create_territorial_brigade = yes
+			}
+		}
+		else = { random_owned_controlled_state = { STP_cw_create_territorial_brigade = yes } }
 	}
 }
 
@@ -2322,15 +2397,20 @@ STP_cw_refund_reserve_training = {
 	if = {
 		limit = { hidden_trigger = { check_variable = { var = STP_cw_training_cohorts value = 2 compare = equals } } }
 		hidden_effect = { clear_variable = STP_cw_training_cohorts }
-		add_manpower = 12000
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 }
+		if = {
+			limit = { NOT = { has_country_flag = STP_cw_training_political_payment } }
+			add_manpower = 12000
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 }
+		}
 	}
+	hidden_effect = { clr_country_flag = STP_cw_training_political_payment }
 }
 
 STP_cw_finish_reserve_training = {
 	if = {
 		limit = { check_variable = { var = STP_cw_training_cohorts value = 2 compare = equals } NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes any_owned_state = { is_controlled_by = PREV } }
 		clear_variable = STP_cw_training_cohorts
+		clr_country_flag = STP_cw_training_political_payment
 		for_loop_effect = {
 			end = 2
 			value = STP_cw_formation_index
@@ -4895,6 +4975,13 @@ STP_receive_3000 = {
 	ADISCORD_economy_initialize_country = yes
 	add_to_variable = { var = ADISCORD_economy_treasury value = 3000 }
 	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 3000 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_receive_6000 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = 6000 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 6000 }
 	ADISCORD_economy_mark_dirty = yes
 }
 

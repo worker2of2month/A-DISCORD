@@ -8624,6 +8624,30 @@ class EconomyScriptFixture:
 class EconomyAccountingRegressionTests(unittest.TestCase):
     PREFIX = "ADISCORD_economy_"
 
+    def test_manual_financing_distinguishes_bonds_and_external_loan_premiums(self):
+        p = self.PREFIX
+        for effect, gate, inflation, premium in (("issue_internal_bonds", "can_take_debt", 1, 1.10),
+                                        ("take_external_loan", "can_take_external_loan", 1.5, 1.25)):
+            for room in (2000, 750):
+                with self.subTest(effect=effect, room=room):
+                    fixture = EconomyScriptFixture(
+                        facts={p + gate: True, p + "can_issue_internal_bonds": True,
+                               p + "model_is_decentralized_market": False,
+                               p + "model_is_oligarchic_clan": False,
+                               p + "model_is_state_coordinated": False,
+                               p + "model_is_planned_bureaucratic": False},
+                        stubs=tuple(p + name for name in ("initialize_country", "calculate_debt_metrics",
+                                                        "update_macro_confidence", "mark_dirty")),
+                    )
+                    values = fixture.scopes["A"]
+                    values.update({p + "treasury": 100, p + "treasury_cap": 100 + room, p + "debt": 80})
+                    fixture.run(p + effect)
+                    self.assertEqual(values[p + "treasury"], 100 + room)
+                    self.assertAlmostEqual(values[p + "debt"], 80 + room * premium)
+                    self.assertEqual(values[p + "current_month_debt_added"], room)
+                    self.assertAlmostEqual(values[p + "inflation"], inflation * room / 2000)
+                    self.assertEqual(values[p + "recent_debt"], 1)
+
     def test_flat_weekly_income_is_in_cash_ai_balance_and_both_debt_denominators(self):
         fixture = EconomyScriptFixture(stubs=(
             self.PREFIX + "calculate_creditworthiness", self.PREFIX + "calculate_interest_rate",

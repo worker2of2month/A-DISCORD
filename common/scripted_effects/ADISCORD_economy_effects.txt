@@ -2584,7 +2584,7 @@ ADISCORD_economy_take_debt = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = { ADISCORD_economy_can_take_debt = yes }
-		set_variable = { var = ADISCORD_economy_loan_cash_temp value = 100 }
+		set_variable = { var = ADISCORD_economy_loan_cash_temp value = 2000 }
 		set_variable = { var = ADISCORD_economy_loan_room_temp value = ADISCORD_economy_treasury_cap }
 		subtract_from_variable = { var = ADISCORD_economy_loan_room_temp value = ADISCORD_economy_treasury }
 		clamp_variable = { var = ADISCORD_economy_loan_room_temp min = 0 max = 5000 }
@@ -2592,12 +2592,12 @@ ADISCORD_economy_take_debt = {
 		subtract_from_variable = { var = ADISCORD_economy_loan_overflow_temp value = ADISCORD_economy_loan_room_temp }
 		if = { limit = { check_variable = { var = ADISCORD_economy_loan_overflow_temp value = 0 compare = greater_than } } subtract_from_variable = { var = ADISCORD_economy_loan_cash_temp value = ADISCORD_economy_loan_overflow_temp } }
 		set_variable = { var = ADISCORD_economy_loan_debt_temp value = ADISCORD_economy_loan_cash_temp }
-		multiply_variable = { var = ADISCORD_economy_loan_debt_temp value = 1.15 }
+		multiply_variable = { var = ADISCORD_economy_loan_debt_temp value = 1.10 }
 		add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_loan_cash_temp }
 		add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_loan_debt_temp }
 		add_to_variable = { var = ADISCORD_economy_current_month_debt_added value = ADISCORD_economy_loan_cash_temp }
 		set_temp_variable = { var = ADISCORD_economy_loan_realized_factor_temp value = ADISCORD_economy_loan_cash_temp }
-		divide_temp_variable = { var = ADISCORD_economy_loan_realized_factor_temp value = 100 }
+		divide_temp_variable = { var = ADISCORD_economy_loan_realized_factor_temp value = 2000 }
 		set_temp_variable = { var = ADISCORD_economy_loan_inflation_temp value = 1 }
 		multiply_temp_variable = { var = ADISCORD_economy_loan_inflation_temp value = ADISCORD_economy_loan_realized_factor_temp }
 		add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_loan_inflation_temp }
@@ -2663,7 +2663,7 @@ ADISCORD_economy_take_external_loan = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = { ADISCORD_economy_can_take_external_loan = yes }
-		set_variable = { var = ADISCORD_economy_external_cash_temp value = 150 }
+		set_variable = { var = ADISCORD_economy_external_cash_temp value = 2000 }
 		set_variable = { var = ADISCORD_economy_external_room_temp value = ADISCORD_economy_treasury_cap }
 		subtract_from_variable = { var = ADISCORD_economy_external_room_temp value = ADISCORD_economy_treasury }
 		clamp_variable = { var = ADISCORD_economy_external_room_temp min = 0 max = 5000 }
@@ -2671,12 +2671,12 @@ ADISCORD_economy_take_external_loan = {
 		subtract_from_variable = { var = ADISCORD_economy_external_overflow_temp value = ADISCORD_economy_external_room_temp }
 		if = { limit = { check_variable = { var = ADISCORD_economy_external_overflow_temp value = 0 compare = greater_than } } subtract_from_variable = { var = ADISCORD_economy_external_cash_temp value = ADISCORD_economy_external_overflow_temp } }
 		set_variable = { var = ADISCORD_economy_external_debt_temp value = ADISCORD_economy_external_cash_temp }
-		multiply_variable = { var = ADISCORD_economy_external_debt_temp value = 1.2667 }
+		multiply_variable = { var = ADISCORD_economy_external_debt_temp value = 1.25 }
 		add_to_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_external_cash_temp }
 		add_to_variable = { var = ADISCORD_economy_debt value = ADISCORD_economy_external_debt_temp }
 		add_to_variable = { var = ADISCORD_economy_current_month_debt_added value = ADISCORD_economy_external_cash_temp }
 		set_temp_variable = { var = ADISCORD_economy_external_realized_factor_temp value = ADISCORD_economy_external_cash_temp }
-		divide_temp_variable = { var = ADISCORD_economy_external_realized_factor_temp value = 150 }
+		divide_temp_variable = { var = ADISCORD_economy_external_realized_factor_temp value = 2000 }
 		set_temp_variable = { var = ADISCORD_economy_external_inflation_temp value = 1.5 }
 		multiply_temp_variable = { var = ADISCORD_economy_external_inflation_temp value = ADISCORD_economy_external_realized_factor_temp }
 		add_to_variable = { var = ADISCORD_economy_inflation value = ADISCORD_economy_external_inflation_temp }

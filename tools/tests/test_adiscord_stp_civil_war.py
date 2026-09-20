@@ -3273,33 +3273,33 @@ class WartimeProgramContracts(unittest.TestCase):
         self.assertEqual(scalar(decision, "days_remove"), "21")
         self.assertEqual(scalar(decision, "cost"), "0")
         prices = ast_block(decision, "custom_cost_trigger")
-        facts = {("STS", "numeric", "has_political_power"): 40,
-                 ("STS", "numeric", "has_manpower"): 12000,
-                 ("STS", "equipment", "infantry_equipment"): 1200}
-        self.assertTrue(matches_conditions(prices, facts, "STS"))
+        facts = {("STP", "numeric", "has_political_power"): 40,
+                 ("STP", "numeric", "has_manpower"): 12000,
+                 ("STP", "equipment", "infantry_equipment"): 1200}
+        self.assertTrue(matches_conditions(prices, facts, "STP"))
         for key in facts:
-            self.assertFalse(matches_conditions(prices, {**facts, key: facts[key] - .5}, "STS"), key)
+            self.assertFalse(matches_conditions(prices, {**facts, key: facts[key] - .5}, "STP"), key)
         start = list(selected_effects(ast_block(decision, "complete_effect"),
-                                     {**facts, ("STS", "has_country_flag", "STP_cw_rifles_paid"): True}, "STS"))
+                                     {**facts, ("STP", "has_country_flag", "STP_cw_rifles_paid"): True}, "STP"))
         self.assertEqual([e.value for _, e in start if e.key == "add_manpower"], ["-12000"])
         self.assertEqual([scalar(e.value, "value") for _, e in start if e.key == "set_variable"], ["2"])
         finish = ast_block(self.effects, "STP_cw_finish_reserve_training")
         refund = ast_block(self.effects, "STP_cw_refund_reserve_training")
-        ledger = ("STS", "variable", "STP_cw_training_cohorts")
+        ledger = ("STP", "variable", "STP_cw_training_cohorts")
         for paid in (False, True):
-            status = {ledger: 2 if paid else 0, ("STS", "has_war", "yes"): True,
-                      ("STS", "has_capitulated", "no"): True,
-                      ("STS", "owns_state", "1"): True, ("STS", "controls_state", "1"): True}
-            settled = list(selected_effects(finish, status, "STS"))
+            status = {ledger: 2 if paid else 0, ("STP", "has_war", "yes"): True,
+                      ("STP", "has_capitulated", "no"): True,
+                      ("STP", "owns_state", "1"): True, ("STP", "controls_state", "1"): True}
+            settled = list(selected_effects(finish, status, "STP"))
             spawned = [e for _, e in settled if e.key == "random_owned_controlled_state"]
             self.assertEqual(len(spawned), 2 if paid else 0)
             if paid:
                 clear = next(e for _, e in settled if e.key == "clear_variable")
-                self.assertLess(settled.index(("STS", clear)), settled.index(("STS", spawned[0])))
+                self.assertLess(settled.index(("STP", clear)), settled.index(("STP", spawned[0])))
                 for spawn in spawned:
                     unit = ast_block(spawn.value, "create_unit")
                     self.assertIn("start_experience_factor = 0.3", scalar(unit, "division"))
-            returned = list(selected_effects(refund, status, "STS"))
+            returned = list(selected_effects(refund, status, "STP"))
             self.assertEqual([e.value for _, e in returned if e.key == "add_manpower"], ["12000"] if paid else [])
             self.assertEqual([scalar(e.value, "amount") for _, e in returned if e.key == "add_equipment_to_stockpile"], ["1200"] if paid else [])
         self.assertEqual(scalar(ast_block(decision, "cancel_effect"), "STP_cw_refund_reserve_training"), "yes")

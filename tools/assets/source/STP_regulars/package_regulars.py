@@ -110,6 +110,12 @@ def bindings():
                 if tag=='SRP':
                     for role in ('ADISCORD_militia','mountaineers'):
                         rows.append(f'entity = {{ clone = "{family}" name = "SRP_{role}{suffix}_entity" }}')
+    # Civil-war territorial battalions use the light uniform, not regular infantry.
+    # Emit these after all militia parents, including the western republics.
+    for tag in ('STP', 'STS', 'SRP'):
+        for level in range(8):
+            suffix='_'+str(level+1) if level else ''
+            rows.append(f'entity = {{ clone = "{tag}_ADISCORD_militia{suffix}_entity" name = "{tag}_ADISCORD_territorial{suffix}_entity" }}')
     # Confederate uniforms cover regular and militia display entities at every weapon tier.
     for tag in ('WRK', 'NAM', 'DAN', 'ZAO', 'PWR', 'VLA', 'ROM', 'SOL', 'TRU', 'WCG', 'EYR', 'EGC', 'RIV', 'YOR'):
         for level in range(8):
