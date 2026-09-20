@@ -90,8 +90,48 @@ music = {
 	}
 }
 
-# The lead-in is reserved for the victory presentation, never random rotation.
+# The combined victory cue and theme are never selected at random.
 music = {
 	song = "ADISCORD_stp_civil_war_end_after_superevent"
+	chance = { base = 0 }
+}
+
+music = {
+	song = "superevent_vorkerland_civilwar"
+	chance = { base = 0 }
+}
+
+music = {
+	song = "superevent_vorkerland_dirty_opening"
+	chance = { base = 0 }
+}
+
+music = {
+	song = "superevent_vorkerland_worker_victory"
+	chance = { base = 0 }
+}
+
+music = {
+	song = "superevent_vorkerland_utilitarian_victory"
+	chance = { base = 0 }
+}
+
+music = {
+	song = "superevent_vorkerland_vlad_victory"
+	chance = { base = 0 }
+}
+
+music = {
+	song = "superevent_vorkerland_dorian_victory"
+	chance = { base = 0 }
+}
+
+music = {
+	song = "superevent_stelander_empire"
+	chance = { base = 0 }
+}
+
+music = {
+	song = "superevent_stelander_party_victory"
 	chance = { base = 0 }
 }

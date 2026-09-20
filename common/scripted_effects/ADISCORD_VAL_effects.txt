@@ -1288,6 +1288,7 @@ VAL_migrate_contract_tier_levels = {
 }
 
 VAL_initialize_rework = {
+    VAL_initialize_northern_bloc = yes
 	VAL_initialize_arsenal_recovery = yes
 	VAL_initialize_command_balance = yes
 	VAL_initialize_contract_authority = yes
@@ -1571,6 +1572,9 @@ VAL_reclamation_refresh_state = {
 # Foreign campaign: 1 = ultimatum, 2 = refusal, 3 = war, 0 = closed.
 # Target codes: 1 CIN, 2 OSF, 3 APH, 4 ERT. Only one campaign may be open.
 VAL_frontier_close = {
+    remove_mission = VAL_nod_ultimatum
+    clr_country_flag = VAL_nod_ultimatum_issued
+    clr_country_flag = VAL_nod_ultimatum_expired
     set_variable = { var = VAL_frontier_stage value = 0 }
     CIN = { clr_country_flag = VAL_frontier_defeated }
     OSF = { clr_country_flag = VAL_frontier_defeated }
@@ -1673,59 +1677,16 @@ VAL_frontier_release_coalition = {
     }
 }
 
-# Target scope. Factionless countries may join; incompatible old alliances stay intact.
+# Target scope: the tribes keep their own alliance; guarantors enter only after the deadline.
 VAL_frontier_assemble_coalition = {
-    set_temp_variable = { var = VAL_frontier_nod_candidate value = 0 }
-    set_temp_variable = { var = VAL_frontier_party_candidate value = 0 }
-    if = {
-        limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } NOT = { has_war_with = PREV is_in_faction_with = VAL } } }
-        set_temp_variable = { var = VAL_frontier_nod_candidate value = 1 }
-    }
-    if = {
-        limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } NOT = { has_war_with = PREV is_in_faction_with = VAL } } }
-        set_temp_variable = { var = VAL_frontier_party_candidate value = 1 }
-    }
     if = {
         limit = { is_in_faction = yes }
         faction_leader = { save_global_event_target_as = VAL_frontier_coalition_anchor }
-    }
-    else_if = {
-        limit = { check_variable = { var = VAL_frontier_nod_candidate value = 1 compare = equals } NOD = { is_in_faction = yes } }
-        NOD = { faction_leader = { save_global_event_target_as = VAL_frontier_coalition_anchor } }
-    }
-    else_if = {
-        limit = { check_variable = { var = VAL_frontier_party_candidate value = 1 compare = equals } STP = { is_in_faction = yes } }
-        STP = { faction_leader = { save_global_event_target_as = VAL_frontier_coalition_anchor } }
-    }
-    else_if = {
-        limit = { check_variable = { var = VAL_frontier_nod_candidate value = 1 compare = equals } NOD = { is_subject = no } }
-        NOD = {
-            create_faction_from_template = { template = faction_template_ADISCORD_standard name = VAL_frontier_defence_coalition }
-            set_country_flag = VAL_frontier_created_coalition
-            save_global_event_target_as = VAL_frontier_coalition_anchor
-        }
-    }
-    else_if = {
-        limit = { check_variable = { var = VAL_frontier_party_candidate value = 1 compare = equals } STP = { is_subject = no } }
-        STP = {
-            create_faction_from_template = { template = faction_template_ADISCORD_standard name = VAL_frontier_defence_coalition }
-            set_country_flag = VAL_frontier_created_coalition
-            save_global_event_target_as = VAL_frontier_coalition_anchor
-        }
     }
     else = {
         create_faction_from_template = { template = faction_template_ADISCORD_standard name = VAL_frontier_defence_coalition }
         set_country_flag = VAL_frontier_created_coalition
         save_global_event_target_as = VAL_frontier_coalition_anchor
-    }
-    VAL_frontier_join_coalition = yes
-    if = {
-        limit = { check_variable = { var = VAL_frontier_nod_candidate value = 1 compare = equals } }
-        NOD = { VAL_frontier_join_coalition = yes }
-    }
-    if = {
-        limit = { check_variable = { var = VAL_frontier_party_candidate value = 1 compare = equals } }
-        STP = { VAL_frontier_join_coalition = yes }
     }
     CIN = { VAL_frontier_enrol_member = yes }
     OSF = { VAL_frontier_enrol_member = yes }
@@ -1961,52 +1922,81 @@ VAL_frontier_start_war = {
 
 # COUNTRY VAL: invite participants only into the selected target's live war.
 VAL_frontier_join_existing_war = {
+    VAL_frontier_issue_nod_ultimatum = yes
     if = {
         limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } check_variable = { var = VAL_frontier_target value = 1 compare = equals } has_war_with = CIN }
         CIN = { VAL_frontier_call_members = yes }
         if = {
-            limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = CIN NOT = { has_war_with = CIN is_in_faction_with = VAL } } }
-            NOD = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = CIN enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
-        }
-        if = {
-            limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = CIN NOT = { has_war_with = CIN is_in_faction_with = VAL } } }
-            STP = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = CIN enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
+            limit = { has_country_flag = VAL_nod_ultimatum_expired }
+            NOD = {
+                if = {
+                    limit = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } NOT = { has_war_with = CIN has_war_with = VAL is_in_faction_with = VAL } }
+                    add_to_war = { targeted_alliance = CIN enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
+                    if = { limit = { has_war_with = VAL } set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes }
+                }
+            }
+            STP = {
+                if = {
+                    limit = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle NOD = { has_war_with = VAL } OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = NOD NOT = { has_war_with = CIN has_war_with = VAL is_in_faction_with = VAL } }
+                    add_to_war = { targeted_alliance = CIN enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
+                    if = { limit = { has_war_with = VAL } set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes }
+                }
+            }
         }
     }
     if = {
         limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } check_variable = { var = VAL_frontier_target value = 2 compare = equals } has_war_with = OSF }
         OSF = { VAL_frontier_call_members = yes }
         if = {
-            limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = OSF NOT = { has_war_with = OSF is_in_faction_with = VAL } } }
-            NOD = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = OSF enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
-        }
-        if = {
-            limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = OSF NOT = { has_war_with = OSF is_in_faction_with = VAL } } }
-            STP = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = OSF enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
+            limit = { has_country_flag = VAL_nod_ultimatum_expired }
+            NOD = {
+                if = {
+                    limit = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } NOT = { has_war_with = OSF has_war_with = VAL is_in_faction_with = VAL } }
+                    add_to_war = { targeted_alliance = OSF enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
+                    if = { limit = { has_war_with = VAL } set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes }
+                }
+            }
+            STP = {
+                if = {
+                    limit = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle NOD = { has_war_with = VAL } OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = NOD NOT = { has_war_with = OSF has_war_with = VAL is_in_faction_with = VAL } }
+                    add_to_war = { targeted_alliance = OSF enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
+                    if = { limit = { has_war_with = VAL } set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes }
+                }
+            }
         }
     }
     if = {
         limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } check_variable = { var = VAL_frontier_target value = 3 compare = equals } has_war_with = APH }
         APH = { VAL_frontier_call_members = yes }
         if = {
-            limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = APH NOT = { has_war_with = APH is_in_faction_with = VAL } } }
-            NOD = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = APH enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
-        }
-        if = {
-            limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = APH NOT = { has_war_with = APH is_in_faction_with = VAL } } }
-            STP = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = APH enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
+            limit = { has_country_flag = VAL_nod_ultimatum_expired }
+            NOD = {
+                if = {
+                    limit = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } NOT = { has_war_with = APH has_war_with = VAL is_in_faction_with = VAL } }
+                    add_to_war = { targeted_alliance = APH enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
+                    if = { limit = { has_war_with = VAL } set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes }
+                }
+            }
+            STP = {
+                if = {
+                    limit = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle NOD = { has_war_with = VAL } OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = NOD NOT = { has_war_with = APH has_war_with = VAL is_in_faction_with = VAL } }
+                    add_to_war = { targeted_alliance = APH enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
+                    if = { limit = { has_war_with = VAL } set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes }
+                }
+            }
         }
     }
 }
 
-# COUNTRY joining the war against VAL. Called from the native relation callback
-# as well as the synchronous route; never calls another declaration or invitation.
+# COUNTRY: native war-entry reconciliation.
+
 VAL_frontier_register_war_participant = {
     if = {
         limit = {
             has_war_with = VAL
             VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
             OR = {
+                AND = { VAL = { has_country_flag = VAL_nod_ultimatum_expired } OR = { tag = NOD AND = { tag = STP is_in_faction_with = NOD NOD = { has_war_with = VAL } } } }
                 AND = { VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } OR = { tag = CIN is_in_faction_with = CIN } }
                 AND = { VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } OR = { tag = OSF is_in_faction_with = OSF } }
                 AND = { VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } OR = { tag = APH is_in_faction_with = APH } }
@@ -3114,6 +3104,54 @@ VAL_reveal_stelander_focus_branch = {
                 limit = { is_ai = no NOT = { has_completed_focus = VAL_Stelander_Crisis_Opens } }
                 country_event = { id = val_rework.9 hours = 1 }
             }
+        }
+    }
+}
+
+# Called once by the fresh-campaign initializer. These memberships are permanent,
+# so campaign cleanup never records or removes them as temporary participants.
+VAL_initialize_northern_bloc = {
+    if = {
+        limit = {
+            CIN = { exists = yes is_subject = no is_in_faction = no }
+            OSF = { exists = yes is_subject = no is_in_faction = no }
+            APH = { exists = yes is_subject = no is_in_faction = no }
+        }
+        CIN = {
+            create_faction_from_template = { template = faction_template_ADISCORD_standard name = VAL_frontier_defence_coalition }
+            add_to_faction = OSF
+            add_to_faction = APH
+        }
+    }
+}
+
+# VAL: start the clock when the ultimatum arrives, independent of the event option.
+VAL_frontier_issue_nod_ultimatum = {
+    if = {
+        limit = {
+            check_variable = { var = VAL_frontier_stage value = 3 compare = equals }
+            check_variable = { var = VAL_frontier_target value = 4 compare = less_than }
+            OR = { has_war_with = CIN has_war_with = OSF has_war_with = APH }
+            NOT = { has_country_flag = VAL_nod_ultimatum_issued }
+            NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } NOT = { has_war_with = VAL is_in_faction_with = VAL has_war_with = CIN has_war_with = OSF has_war_with = APH } }
+        }
+        set_country_flag = VAL_nod_ultimatum_issued
+        activate_mission = VAL_nod_ultimatum
+        country_event = { id = val_rework.118 }
+    }
+}
+
+VAL_frontier_expire_nod_ultimatum = {
+    if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } has_country_flag = VAL_nod_ultimatum_issued }
+        # Resolve an already earned victory before testing intervention on the same day.
+        if = {
+            limit = { VAL_frontier_target_occupied = yes VAL_frontier_members_beaten = yes }
+            VAL_frontier_settle_victory = yes
+        }
+        else_if = {
+            limit = { has_country_flag = VAL_nod_ultimatum_expired }
+            VAL_frontier_join_existing_war = yes
         }
     }
 }

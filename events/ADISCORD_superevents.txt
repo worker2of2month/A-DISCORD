@@ -25,13 +25,9 @@ country_event = {
 			WRK = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
 		}
 		else = {
-			ADISCORD_vorkerland_clear_superevent_flags = yes
-			set_global_flag = {
-				flag = superevent_vorkerland_civilwar
-				value = 1
-				days = 20
-			}
-			ADISCORD_vorkerland_play_superevent_sound = yes
+			# superevent_vorkerland_civilwar
+			set_temp_variable = { ADISCORD_superevent_request = 1 }
+			ADISCORD_superevent_enqueue = yes
 		}
 	}
 }
@@ -41,13 +37,9 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		ADISCORD_vorkerland_clear_superevent_flags = yes
-		set_global_flag = {
-			flag = superevent_vorkerland_worker_victory
-			value = 1
-			days = 20
-		}
-		ADISCORD_vorkerland_play_superevent_sound = yes
+		# superevent_vorkerland_worker_victory
+		set_temp_variable = { ADISCORD_superevent_request = 3 }
+		ADISCORD_superevent_enqueue = yes
 	}
 }
 country_event = {
@@ -56,13 +48,9 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		ADISCORD_vorkerland_clear_superevent_flags = yes
-		set_global_flag = {
-			flag = superevent_vorkerland_utilitarian_victory
-			value = 1
-			days = 20
-		}
-		ADISCORD_vorkerland_play_superevent_sound = yes
+		# superevent_vorkerland_utilitarian_victory
+		set_temp_variable = { ADISCORD_superevent_request = 4 }
+		ADISCORD_superevent_enqueue = yes
 	}
 }
 country_event = {
@@ -71,13 +59,9 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		ADISCORD_vorkerland_clear_superevent_flags = yes
-		set_global_flag = {
-			flag = superevent_vorkerland_dirty_opening
-			value = 1
-			days = 20
-		}
-		ADISCORD_vorkerland_play_superevent_sound = yes
+		# superevent_vorkerland_dirty_opening
+		set_temp_variable = { ADISCORD_superevent_request = 2 }
+		ADISCORD_superevent_enqueue = yes
 	}
 }
 country_event = {
@@ -86,13 +70,9 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		ADISCORD_vorkerland_clear_superevent_flags = yes
-		set_global_flag = {
-			flag = superevent_vorkerland_vlad_victory
-			value = 1
-			days = 20
-		}
-		ADISCORD_vorkerland_play_superevent_sound = yes
+		# superevent_vorkerland_vlad_victory
+		set_temp_variable = { ADISCORD_superevent_request = 5 }
+		ADISCORD_superevent_enqueue = yes
 	}
 }
 country_event = {
@@ -101,13 +81,9 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		ADISCORD_vorkerland_clear_superevent_flags = yes
-		set_global_flag = {
-			flag = superevent_vorkerland_dorian_victory
-			value = 1
-			days = 20
-		}
-		ADISCORD_vorkerland_play_superevent_sound = yes
+		# superevent_vorkerland_dorian_victory
+		set_temp_variable = { ADISCORD_superevent_request = 6 }
+		ADISCORD_superevent_enqueue = yes
 	}
 }
 
@@ -119,8 +95,7 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		sound_effect = superevent_vorkerland_civilwar_sound_e
-		play_song = "one_minute_of_silence"
+		play_song = "superevent_vorkerland_civilwar"
 	}
 }
 country_event = {
@@ -129,8 +104,7 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		sound_effect = superevent_stelander_empire_sound_e
-		play_song = "one_minute_of_silence"
+		play_song = "superevent_stelander_empire"
 	}
 }
 
@@ -153,12 +127,9 @@ news_event = { #vorkerland civilwar
 	# option made the superevent flag and audio wait for a player click.
 	immediate = {
 		hidden_effect = {
-			set_global_flag = {
-				flag = superevent_vorkerland_civilwar
-				value = 1
-				days = 20
-			}
-			ADISCORD_vorkerland_play_superevent_sound = yes
+			# superevent_vorkerland_civilwar
+			set_temp_variable = { ADISCORD_superevent_request = 1 }
+			ADISCORD_superevent_enqueue = yes
 		}
 	}
 
@@ -193,13 +164,9 @@ news_event = { #stelander empire
 	# belong to STP_proclaim_imperial_union, which is reached through gameplay.
 	immediate = {
 		hidden_effect = {
-			ADISCORD_vorkerland_clear_superevent_flags = yes
-			set_global_flag = {
-				flag = superevent_stelander_empire
-				value = 1
-				days = 20
-			}
-			ADISCORD_vorkerland_play_superevent_sound = yes
+			# superevent_stelander_empire
+			set_temp_variable = { ADISCORD_superevent_request = 7 }
+			ADISCORD_superevent_enqueue = yes
 		}
 	}
 

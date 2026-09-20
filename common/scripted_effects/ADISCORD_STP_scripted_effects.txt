@@ -898,6 +898,16 @@ STP_cw_launch_northern_crisis = {
 	}
 }
 
+# NOD: the campaign clock belongs to the northern war, not the Stelander succession.
+NOD_cw_exhaust_northern_push = {
+	remove_ideas = NOD_cw_northern_offensive
+	if = {
+		limit = { has_capitulated = no OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } }
+		add_ideas = NOD_cw_stalled_army
+	}
+}
+
+
 # NOD owns the mobilization; a Stelander succession cannot cancel its orders.
 STP_cw_start_northern_war = {
 	if = {
@@ -930,7 +940,8 @@ STP_cw_start_northern_war = {
 			limit = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
 			set_variable = { var = STP_cw_northern_campaign_status value = 1 }
 			set_country_flag = NOD_cw_northern_war_started
-			if = { limit = { NOT = { has_idea = NOD_cw_northern_offensive } } add_ideas = NOD_cw_northern_offensive }
+			add_timed_idea = { idea = NOD_cw_northern_offensive days = 70 }
+			activate_mission = NOD_cw_northern_push
 			# Northern deployment can permit an uprising before the election deadline.
 			country_event = { id = ADISCORD_STP_cw.42 days = 7 }
 			country_event = { id = ADISCORD_STP_preparation.12 days = 1 }
@@ -1919,6 +1930,54 @@ STP_cw_refund_nod_sabotage_rifles = {
 	17 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
 	18 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
 	30 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
+}
+
+# Fixed two-battalion package; ordinary recruitment cannot consume this template.
+STP_cw_ensure_rear_cell_template = {
+	if = {
+		limit = { NOT = { has_template = "Stelander Underground Cell" } }
+		division_template = {
+			name = "Stelander Underground Cell"
+			template_counter = 12
+			is_locked = yes
+			force_allow_recruiting = no
+			regiments = {
+				ADISCORD_territorial = { x = 0 y = 0 }
+				ADISCORD_territorial = { x = 0 y = 1 }
+			}
+		}
+	}
+}
+
+# STS, target state in FROM. Debit every producer before creating the paid formation.
+STP_cw_raise_rear_cell = {
+	if = {
+		limit = {
+			tag = STS has_war_with = STP has_capitulated = no
+			has_completed_focus = STP_cw_organize_underground
+			NOT = { has_country_flag = STP_cw_postwar }
+			NOT = { has_manpower < 2000 }
+			NOT = { has_equipment = { infantry_equipment < 200 } }
+			NOT = { has_political_power < 35 }
+			FROM = { is_owned_by = STP is_controlled_by = STP NOT = { has_state_flag = STP_cw_rear_cell_raised } }
+		}
+		set_temp_variable = { var = STP_cw_rifle_cost value = 200 }
+		STP_cw_pay_rifles = yes
+		if = {
+			limit = { has_country_flag = STP_cw_rifles_paid }
+			add_manpower = -2000
+			add_political_power = -35
+			STP_cw_ensure_rear_cell_template = yes
+			FROM = {
+				set_state_flag = STP_cw_rear_cell_raised
+				create_unit = {
+					division = "division_template = \"Stelander Underground Cell\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = STS
+					allow_spawning_on_enemy_provs = yes
+				}
+			}
+		}
+	}
 }
 
 # COUNTRY scope. Six ADISCORD_territorial: 6 * (1000 manpower + 100 rifles).

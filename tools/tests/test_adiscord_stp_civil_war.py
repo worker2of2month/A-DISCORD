@@ -2958,7 +2958,7 @@ class NorthernCampaignContracts(unittest.TestCase):
 
     def test_nod_northern_offensive_is_inherent_and_does_not_wait_for_stelander_help(self):
         start = ast_block(self.effects, "STP_cw_start_northern_war")
-        self.assertIn("NOD_cw_northern_offensive", {e.value for e in walk(start) if e.key == "add_ideas"})
+        self.assertIn(("NOD_cw_northern_offensive", "70"), {(scalar(e.value, "idea"), scalar(e.value, "days")) for e in walk(start) if e.key == "add_timed_idea"})
         ideas = ast_block(ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
         offensive = ast_block(ideas, "NOD_cw_northern_offensive")
         self.assertEqual(scalar(ast_block(offensive, "allowed"), "always"), "no")
@@ -4049,6 +4049,8 @@ class AutomaticFrontOperationContracts(unittest.TestCase):
                 self.facts[(country, "has_active_mission", value)] = key == "activate_mission"
             elif key == "country_event":
                 self.events.append((country, scalar(value, "id"), scalar(value, "hours")))
+            elif key == "custom_effect_tooltip":
+                pass
             else:
                 raise AssertionError(f"Unhandled operation effect: {key}")
 
@@ -4153,6 +4155,34 @@ class AutomaticFrontOperationContracts(unittest.TestCase):
             self.assertNotIn("remove_mission", set(expanded(ast_block(self.mission, callback))))
         self.assertEqual(scalar(self.mission, "days_mission_timeout"), "49")
 
+
+
+class NorthernOffensiveClockTests(unittest.TestCase):
+    def test_northern_push_has_seventy_days_and_cancels_after_peace(self):
+        council = ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_external_intervention")
+        mission = ast_block(council, "NOD_cw_northern_push")
+        self.assertEqual(scalar(mission, "days_mission_timeout"), "70")
+        self.assertFalse(matches_conditions(ast_block(mission, "available"), {}, "NOD"))
+        for enemies in ((), ("YPR",), ("COF",), ("TFF",), ("YPR", "TFF")):
+            facts = {("NOD", "has_war_with", tag): tag in enemies for tag in ("YPR", "COF", "TFF")}
+            self.assertEqual(matches_conditions(ast_block(mission, "cancel_trigger"), facts, "NOD"), not enemies)
+        expired = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "NOD_cw_exhaust_northern_push")
+        self.assertIn("remove_ideas = NOD_cw_northern_offensive", expired)
+        self.assertIn("add_ideas = NOD_cw_stalled_army", expired)
+        self.assertIn("has_war_with = YPR", expired)
+
+    def test_rear_cell_costs_accept_exact_balances_but_reject_fractions_below(self):
+        council = ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council")
+        action = ast_block(council, "STP_cw_raise_rear_cell")
+        self.assertEqual(scalar(action, "cost"), "0")
+        for people, rifles, pp, expected in ((2000,200,35,True),(1999.9,200,35,False),(2000,199.9,35,False),(2000,200,34.9,False)):
+            facts = {("STS", "numeric", "has_manpower"):people, ("STS", "numeric", "has_political_power"):pp, ("STS", "equipment", "infantry_equipment"):rifles}
+            self.assertEqual(matches_conditions(ast_block(action, "custom_cost_trigger"), facts, "STS"), expected)
+        effect = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_raise_rear_cell")
+        self.assertIn("STP_cw_pay_rifles = yes", effect)
+        self.assertIn("allow_spawning_on_enemy_provs = yes", effect)
+        self.assertIn("is_controlled_by = STP", effect)
+        self.assertIn("set_state_flag = STP_cw_rear_cell_raised", effect)
 
 if __name__ == "__main__":
     unittest.main()

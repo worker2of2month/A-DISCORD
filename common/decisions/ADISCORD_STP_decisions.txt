@@ -2304,6 +2304,40 @@ STP_battle_for_stelander = {
 }
 
 STP_cw_war_council = {
+	STP_cw_raise_rear_cell = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		state_target = yes
+		targets = { 2 3 29 45 46 53 }
+		target_root_trigger = { tag = STS }
+		visible = {
+			has_completed_focus = STP_cw_organize_underground
+			has_war_with = STP
+			NOT = { has_country_flag = STP_cw_postwar }
+			FROM = { is_owned_by = STP NOT = { has_state_flag = STP_cw_rear_cell_raised } }
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = { tooltip = STP_cw_rear_cell_target_tt FROM = { is_controlled_by = STP } }
+		}
+		cost = 0
+		custom_cost_text = STP_cw_rear_cell_cost
+		custom_cost_trigger = {
+			NOT = { has_manpower < 2000 }
+			NOT = { has_equipment = { infantry_equipment < 200 } }
+			NOT = { has_political_power < 35 }
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_cw_rear_cell_result_tt
+			hidden_effect = { STP_cw_raise_rear_cell = yes }
+		}
+		ai_will_do = {
+			base = 20
+			modifier = { factor = 0 NOT = { has_manpower > 8000 } }
+			modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 800 } } }
+		}
+	}
+
 	STP_pw_launch_bezhaysk_operation = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
@@ -2516,13 +2550,13 @@ STP_cw_war_council = {
 				}
 			}
 		}
-		cancel_trigger = { OR = { NOT = { has_war_with = STP } has_capitulated = yes has_country_flag = STP_cw_postwar } }
+		cancel_trigger = { custom_trigger_tooltip = { tooltip = STP_cw_operation_cancel_tt OR = { NOT = { has_war_with = STP } has_capitulated = yes has_country_flag = STP_cw_postwar } } }
 		days_mission_timeout = 49
 		fire_only_once = no
 		selectable_mission = no
 		is_good = no
-		complete_effect = { effect_tooltip = { add_timed_idea = { idea = STP_cw_operation_tempo days = 21 } } hidden_effect = { STP_cw_win_operation = yes } }
-		timeout_effect = { effect_tooltip = { add_timed_idea = { idea = STP_cw_operation_disorganization days = 28 } } hidden_effect = { STP_cw_fail_operation = yes } }
+		complete_effect = { custom_effect_tooltip = STP_cw_operation_success_tt effect_tooltip = { add_timed_idea = { idea = STP_cw_operation_tempo days = 21 } } hidden_effect = { STP_cw_win_operation = yes } }
+		timeout_effect = { custom_effect_tooltip = STP_cw_operation_timeout_tt effect_tooltip = { add_timed_idea = { idea = STP_cw_operation_disorganization days = 28 } } hidden_effect = { STP_cw_fail_operation = yes } }
 		cancel_effect = { hidden_effect = { STP_cw_close_operation_cycle = yes } }
 	}
 
@@ -3713,6 +3747,23 @@ STP_cw_war_council = {
 }
 
 STP_cw_external_intervention = {
+	NOD_cw_northern_push = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = NOD }
+		activation = { always = no }
+		visible = { has_active_mission = NOD_cw_northern_push }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 70
+		is_good = no
+		cancel_trigger = { OR = { has_capitulated = yes NOT = { OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } } } }
+		cancel_effect = { hidden_effect = { remove_ideas = NOD_cw_northern_offensive remove_ideas = NOD_cw_stalled_army } }
+		timeout_effect = {
+			custom_effect_tooltip = NOD_cw_stalled_army_tt
+			hidden_effect = { NOD_cw_exhaust_northern_push = yes }
+		}
+	}
+
     STP_occidia_prepare_invasion = {
         icon = generic_prepare_civil_war
         allowed = { OR = { tag = STP tag = STS } }

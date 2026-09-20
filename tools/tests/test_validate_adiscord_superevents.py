@@ -27,6 +27,122 @@ def copy_contract_tree(destination: Path) -> None:
 
 
 class SupereventContractTests(unittest.TestCase):
+    def test_fifo_duplicates_and_close_execute_the_scripted_effects(self) -> None:
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        source = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        definitions = {entry.key: entry.value for entry in parse_clausewitz(source)}
+        flags, queue, variables, played = set(), [], {}, []
+
+        def fields(body):
+            return {entry.key: entry.value for entry in body}
+
+        def number(value):
+            if value == "global.ADISCORD_superevent_queue^num":
+                return len(queue)
+            if value == "global.ADISCORD_superevent_queue^0":
+                return queue[0]
+            return variables[value] if value in variables else int(value)
+
+        def condition(entry):
+            key, value = entry.key, entry.value
+            if key == "has_global_flag":
+                return value in flags
+            if key in ("OR", "AND", "NOT"):
+                results = [condition(child) for child in value]
+                return any(results) if key == "OR" else (not all(results) if key == "NOT" else all(results))
+            data = fields(value)
+            if key == "is_in_array":
+                self.assertEqual(data["array"], "global.ADISCORD_superevent_queue")
+                return number(data["value"]) in queue
+            if key == "check_variable":
+                if "var" in data:
+                    left, right = number(data["var"]), number(data["value"])
+                    self.assertEqual(data["compare"], "greater_than")
+                    return left > right
+                key, value = next(iter(data.items()))
+                return number(key) == number(value)
+            self.fail(f"Unsupported queue condition: {key}")
+
+        def execute(body):
+            matched = False
+            for entry in body:
+                key, value = entry.key, entry.value
+                if key in ("if", "else_if"):
+                    if key == "if":
+                        matched = False
+                    data = fields(value)
+                    if not matched and all(condition(child) for child in data["limit"]):
+                        execute([child for child in value if child.key != "limit"])
+                        matched = True
+                elif key == "set_global_flag":
+                    flags.add(value)
+                elif key == "clr_global_flag":
+                    flags.discard(value)
+                elif key == "set_temp_variable":
+                    for name, amount in fields(value).items():
+                        variables[name] = number(amount)
+                elif key in ("add_to_array", "remove_from_array"):
+                    data = fields(value)
+                    self.assertEqual(data["array"], "global.ADISCORD_superevent_queue")
+                    if key == "add_to_array":
+                        queue.append(number(data["value"]))
+                    else:
+                        queue.pop(number(data["index"]))
+                elif key == "ADISCORD_vorkerland_play_superevent_sound":
+                    self.assertEqual(len(flags), 1)
+                    played.append(next(iter(flags)))
+                elif key in definitions and value == "yes":
+                    execute(definitions[key])
+                else:
+                    self.fail(f"Unsupported queue effect: {key}")
+
+        def request(index):
+            variables["ADISCORD_superevent_request"] = index
+            execute(definitions["ADISCORD_superevent_enqueue"])
+
+        gui = parse_clausewitz((ROOT / SCRIPTED_GUI).read_text(encoding="utf-8"))[0].value
+        windows = fields(gui)
+        for index in (6, 9, 1, 6, 9, 1):
+            request(index)
+        self.assertEqual(queue, [9, 1])
+        self.assertEqual(played, [PRESENTATIONS[5].name])
+        for index in (6, 9, 1):
+            window = fields(windows[PRESENTATIONS[index - 1].name])
+            execute(fields(window["effects"])["superevents_button_click"])
+        self.assertEqual(played, [PRESENTATIONS[i - 1].name for i in (6, 9, 1)])
+        self.assertEqual(queue, [])
+        self.assertEqual(flags, set())
+        # A closed presentation can be replayed; no permanent deduplication lock.
+        request(6)
+        self.assertEqual(len(played), 4)
+
+    def test_requests_do_not_replace_an_active_presentation(self) -> None:
+        from tools.validators.validate_adiscord_superevents import blocks
+
+        source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8-sig")
+        self.assertNotIn("ADISCORD_vorkerland_clear_superevent_flags = yes", source)
+        effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8-sig")
+        dispatch = blocks(effects, r"^\s*ADISCORD_superevent_dispatch_next\s*=\s*\{")[0]
+        for item in PRESENTATIONS:
+            self.assertIn(f"has_global_flag = {item.name}", dispatch)
+        self.assertIn("global.ADISCORD_superevent_queue^0", dispatch)
+        self.assertIn("index = 0", dispatch)
+        self.assertNotIn("days =", dispatch)
+        gui = (ROOT / SCRIPTED_GUI).read_text(encoding="utf-8-sig")
+        self.assertEqual(gui.count("ADISCORD_superevent_dispatch_next = yes"), len(PRESENTATIONS))
+
+    def test_presentation_playback_uses_only_one_music_channel(self) -> None:
+        from tools.validators.validate_adiscord_superevents import blocks
+
+        effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8-sig")
+        playback = blocks(effects, r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{")[0]
+        self.assertNotIn("sound_effect =", playback)
+        self.assertNotIn("one_minute_of_silence", playback)
+        for item in PRESENTATIONS:
+            song = item.dedicated_sound_effect.removesuffix("_sound_e")
+            self.assertIn(f'play_song = "{song}"', playback)
+
     def test_repository_contract_is_clean(self) -> None:
         self.assertEqual(collect_issues(), [])
 
@@ -55,12 +171,9 @@ class SupereventContractTests(unittest.TestCase):
             immediate = event.split("option =", 1)[0]
             self.assertIn("fire_only_once = yes", event)
             self.assertIn("immediate =", immediate)
-            self.assertIn(f"flag = superevent_stelander_{side}_victory", immediate)
-            self.assertLess(
-                immediate.index("ADISCORD_vorkerland_clear_superevent_flags = yes"),
-                immediate.index("set_global_flag ="),
-            )
-            self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", immediate)
+            self.assertIn(f"ADISCORD_superevent_request = {8 if side == 'party' else 9}", immediate)
+            self.assertNotIn("ADISCORD_vorkerland_clear_superevent_flags = yes", immediate)
+            self.assertIn("ADISCORD_superevent_enqueue = yes", immediate)
 
     def test_stelander_music_waits_for_audio_instead_of_shabrat_close(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks
@@ -71,7 +184,7 @@ class SupereventContractTests(unittest.TestCase):
         self.assertIn("clr_global_flag = superevent_stelander_shabrat_victory", window)
         effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8-sig")
         playback = blocks(effects, r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{")[0]
-        tail = playback.split('play_song = "one_minute_of_silence"', 1)[1]
+        tail = playback
         self.assertIn("limit = { has_global_flag = superevent_stelander_shabrat_victory }", tail)
         self.assertIn("STS = {", tail)
         self.assertIn("limit = { is_ai = no }", tail)
@@ -98,7 +211,7 @@ class SupereventContractTests(unittest.TestCase):
         for key in ("ADISCORD_stp_civil_war_end", "ADISCORD_stp_civil_war_end_after_superevent"):
             self.assertRegex(localisation.decode("utf-8-sig"), rf'(?m)^ {key}: "[^"\r\n]+"\r?$')
 
-    def test_postwar_audio_lead_in_outlasts_the_superevent_sound(self) -> None:
+    def test_combined_postwar_track_contains_cue_gap_and_theme(self) -> None:
         import struct
         import wave
 

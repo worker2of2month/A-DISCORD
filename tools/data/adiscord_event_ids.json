@@ -320,6 +320,8 @@
     {"id": "val_rework.111", "namespace": "val_rework", "number": 111, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_rework", "status": "active"},
     {"id": "val_rework.113", "namespace": "val_rework", "number": 113, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_rework", "status": "active"},
     {"id": "val_rework.115", "namespace": "val_rework", "number": 115, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_rework", "status": "active"},
+    {"id": "val_rework.119", "namespace": "val_rework", "number": 119, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_rework", "status": "active"},
+    {"id": "val_rework.118", "namespace": "val_rework", "number": 118, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_rework", "status": "active"},
     {"id": "val_rework.116", "namespace": "val_rework", "number": 116, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_rework", "status": "active"},
     {"id": "ADISCORD_STP_pc.1", "namespace": "ADISCORD_STP_pc", "number": 1, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "active"},
     {"id": "ADISCORD_STP_pc.2", "namespace": "ADISCORD_STP_pc", "number": 2, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar_continuation", "status": "active"},

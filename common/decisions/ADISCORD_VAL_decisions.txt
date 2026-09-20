@@ -694,6 +694,30 @@ VAL_frontier = {
         }
         ai_will_do = { base = 5 modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
     }
+    VAL_nod_ultimatum = {
+        icon = generic_political_pressure
+        allowed = { tag = VAL }
+        activation = { always = no }
+        visible = { has_active_mission = VAL_nod_ultimatum }
+        available = { custom_trigger_tooltip = { tooltip = VAL_nod_ultimatum_objective_tt VAL_frontier_target_occupied = yes VAL_frontier_members_beaten = yes } }
+        selectable_mission = no
+        is_good = no
+        days_mission_timeout = 100
+        cancel_trigger = {
+            custom_trigger_tooltip = {
+                tooltip = VAL_nod_ultimatum_cancel_tt
+                OR = {
+                    NOT = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+                    has_capitulated = yes
+                    is_subject = yes
+                    NOT = { OR = { has_war_with = CIN has_war_with = OSF has_war_with = APH } }
+                    NOD = { OR = { exists = no has_capitulated = yes is_in_faction_with = VAL has_war_with = VAL AND = { is_subject = yes NOT = { is_subject_of = STP } } } }
+                }
+            }
+        }
+        complete_effect = { custom_effect_tooltip = VAL_nod_ultimatum_success_tt hidden_effect = { country_event = { id = val_rework.119 hours = 1 } } }
+        timeout_effect = { custom_effect_tooltip = VAL_nod_ultimatum_timeout_tt hidden_effect = { set_country_flag = VAL_nod_ultimatum_expired country_event = { id = val_rework.119 hours = 1 } } }
+    }
     VAL_frontier_ultimatum_deadline = {
         icon = generic_political_pressure
         allowed = { tag = VAL }

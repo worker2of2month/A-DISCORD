@@ -107,7 +107,7 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, empire)
         self.assertIn("superevent_stelander_empire", empire)
-        self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", empire)
+        self.assertIn("ADISCORD_superevent_enqueue = yes", empire)
         self.assertNotIn("limit = { is_ai = no }", empire)
 
     def test_shabrat_imperial_union_requires_the_full_map(self) -> None:

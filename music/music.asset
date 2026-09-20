@@ -48,10 +48,60 @@ music = {
 	volume = 0.65
 }
 
-# 43.968 s silent lead-in: superevent_stelander_party_victory_sound.wav + 0.5 s.
-# Rebuild from ADISCORD_stp_civil_war_end.ogg with ffmpeg -af "adelay=43968:all=1" -c:a libvorbis -q:a 6.
+# Victory cue, 0.5 s pause, then postwar theme.
+# Audio owner: tools/builders/build_adiscord_superevent_music.py.
 music = {
 	name = "ADISCORD_stp_civil_war_end_after_superevent"
 	file = "ADISCORD_stp_civil_war_end_after_superevent.ogg"
-	volume = 0.65
+	volume = 1.0
+}
+
+# Presentation tracks use the single music channel and are never random songs.
+# Audio owner: tools/builders/build_adiscord_superevent_music.py.
+music = {
+	name = "superevent_vorkerland_civilwar"
+	file = "superevent_vorkerland_civilwar.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_vorkerland_dirty_opening"
+	file = "superevent_vorkerland_dirty_opening.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_vorkerland_worker_victory"
+	file = "superevent_vorkerland_worker_victory.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_vorkerland_utilitarian_victory"
+	file = "superevent_vorkerland_utilitarian_victory.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_vorkerland_vlad_victory"
+	file = "superevent_vorkerland_vlad_victory.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_vorkerland_dorian_victory"
+	file = "superevent_vorkerland_dorian_victory.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_stelander_empire"
+	file = "superevent_stelander_empire.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_stelander_party_victory"
+	file = "superevent_stelander_party_victory.ogg"
+	volume = 1.0
 }

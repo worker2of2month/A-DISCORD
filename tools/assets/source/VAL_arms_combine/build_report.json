@@ -1,0 +1,14 @@
+{
+  "parts": [
+    {
+      "vertices": 8401,
+      "triangles": 3684
+    }
+  ],
+  "size": [
+    32.0,
+    22.0,
+    16.432498931884766
+  ],
+  "mesh_sha256": "bdf2f73b51ca6b83b808ec3908dcbf93103833e95de86cc4c93d2764d43a7a61"
+}

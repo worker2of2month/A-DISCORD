@@ -340,6 +340,13 @@ ideas = {
 			cancel = { NOT = { has_war_with = NOD } }
 			modifier = { production_speed_bunker_factor = 0.20 max_dig_in = 2 dig_in_speed_factor = 0.15 }
 		}
+		NOD_cw_stalled_army = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { OR = { has_capitulated = yes NOT = { OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } } } }
+			modifier = { army_attack_factor = -0.10 army_speed_factor = -0.10 supply_consumption_factor = 0.10 }
+		}
 		NOD_cw_northern_offensive = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }

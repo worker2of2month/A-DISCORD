@@ -852,3 +852,20 @@ country_event = {
         }
     }
 }
+
+country_event = {
+    id = val_rework.118
+    title = val_rework.118.t
+    desc = val_rework.118.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_rework.118.a custom_effect_tooltip = VAL_nod_ultimatum_timeout_tt }
+}
+
+# Deferred settlement never removes the mission currently executing its callback.
+country_event = {
+    id = val_rework.119
+    hidden = yes
+    is_triggered_only = yes
+    immediate = { VAL_frontier_expire_nod_ultimatum = yes }
+}

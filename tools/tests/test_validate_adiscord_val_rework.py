@@ -2552,7 +2552,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
                 self.assertEqual(snapshot, (repr(factions), repr(flags), set(wars), set(majors)))
             prepared = {tag: faction(tag) for tag in flags}
             if external_join:
-                factions[faction("NOD")].append("OTH")
+                factions[faction("CIN")].append("OTH")
             execute(definitions["VAL_frontier_release_coalition"], ["VAL"])
             after = {name: list(members) for name, members in factions.items()}
             execute(definitions["VAL_frontier_release_coalition"], ["VAL"])
@@ -2565,35 +2565,25 @@ class ValFrontierCampaignTests(unittest.TestCase):
 
         exercise({}, recover=True)
         prepared, _ = exercise({})
-        self.assertEqual(prepared["CIN"], prepared["NOD"])
-        self.assertEqual(prepared["CIN"], prepared["STP"])
+        self.assertIsNone(prepared["NOD"])
+        self.assertIsNone(prepared["STP"])
         self.assertEqual(prepared["CIN"], prepared["OSF"])
         self.assertEqual(prepared["CIN"], prepared["APH"])
         self.assertIsNotNone(prepared["CIN"])
-        prepared, _ = exercise({"existing": ["NOD", "STP", "OTH"]})
-        self.assertEqual(prepared["CIN"], "existing")
-        prepared, _ = exercise({"north": ["NOD"], "party": ["STP", "OTH"]})
-        self.assertEqual(prepared["CIN"], "north")
-        self.assertEqual(prepared["STP"], "party")
-        prepared, _ = exercise({"local": ["CIN", "OTH"], "north": ["NOD", "STP"]})
-        self.assertEqual(prepared["CIN"], "local")
-        self.assertEqual(prepared["NOD"], "north")
-        for party_faction in ({}, {"party": ["STP", "OTH"]}):
-            prepared, _ = exercise({"attacker": ["VAL", "NOD"], **party_faction})
-            self.assertEqual(prepared["NOD"], "attacker")
-            self.assertNotEqual(prepared["CIN"], "attacker", "The target must never join the attacker's existing alliance")
-            self.assertEqual(prepared["CIN"], prepared["STP"])
-        prepared, _ = exercise({"attacker": ["VAL", "NOD", "STP"]})
-        self.assertIsNotNone(prepared["CIN"], "The tribes must form their own bloc without outside guarantors")
-        self.assertEqual(prepared["CIN"], prepared["OSF"])
-        self.assertEqual(prepared["CIN"], prepared["APH"])
-        self.assertNotEqual(prepared["CIN"], prepared["VAL"])
+        for original in ({"existing": ["NOD", "STP", "OTH"]},
+                         {"north": ["NOD"], "party": ["STP", "OTH"]},
+                         {"local": ["CIN", "OSF", "APH"], "north": ["NOD", "STP"]},
+                         {"attacker": ["VAL", "NOD", "STP"]}):
+            prepared, surviving = exercise(original)
+            self.assertNotEqual(prepared["CIN"], prepared["NOD"])
+            self.assertNotEqual(prepared["CIN"], prepared["STP"])
+            self.assertEqual(surviving, original)
         for subject in ({"STP": "NOD"}, {"NOD": "STP"}):
             prepared, _ = exercise({}, subject=subject)
-            self.assertEqual(prepared["CIN"], prepared["NOD"])
-            self.assertEqual(prepared["CIN"], prepared["STP"])
+            self.assertIsNone(prepared["NOD"])
+            self.assertIsNone(prepared["STP"])
         _, surviving = exercise({}, external_join=True)
-        self.assertEqual(list(surviving.values()), [["NOD", "OTH"]], "A later unrelated member must not be expelled by campaign cleanup")
+        self.assertEqual(list(surviving.values()), [["CIN", "OTH"]], "A later unrelated member must not be expelled by campaign cleanup")
 
     def test_campaign_coalition_precedes_war_and_majors_outlive_peace(self):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar, walk
@@ -2609,11 +2599,14 @@ class ValFrontierCampaignTests(unittest.TestCase):
             invitations = block(definitions, "VAL_frontier_join_existing_war")
             invited = next(e.value for e in invitations if e.key == "if" and scalar(block(e.value, "limit"), "has_war_with") == tag)
             self.assertTrue(any(e.key == "VAL_frontier_join_existing_war" for e in walk(start)))
+            gated = next(e.value for e in invited if e.key == "if" and any(c.key == "has_country_flag" and c.value == "VAL_nod_ultimatum_expired" for c in block(e.value, "limit")))
             for guarantor in ("NOD", "STP"):
-                call = next(e.value for e in walk(invited) if e.key == "if" and any(c.key == guarantor and any(n.key == "add_to_war" for n in c.value) for c in e.value))
-                self.assertEqual(scalar(block(block(call, "limit"), guarantor), "is_in_faction_with"), tag)
-                self.assertEqual(scalar(block(block(block(call, "limit"), guarantor), "NOT"), "is_in_faction_with"), "VAL")
-                self.assertEqual(scalar(block(block(call, guarantor), "add_to_war"), "single_target_only"), "yes")
+                call = block(block(gated, guarantor), "if")
+                self.assertEqual(scalar(block(block(call, "limit"), "NOT"), "is_in_faction_with"), "VAL")
+                war = block(call, "add_to_war")
+                self.assertEqual(scalar(war, "targeted_alliance"), tag)
+                self.assertEqual(scalar(war, "enemy"), "VAL")
+                self.assertEqual(scalar(war, "single_target_only"), "yes")
         close = list(walk(block(definitions, "VAL_frontier_close")))
         last_peace = max(i for i, e in enumerate(close) if e.key == "white_peace")
         first_major_cleanup = min(i for i, e in enumerate(close) if e.key == "set_major" and e.value == "no")
@@ -4396,6 +4389,64 @@ class ValFocusFlowTests(unittest.TestCase):
                 if not gates or self.check(gates[0], facts):
                     chosen.append(self.scalar(entry.value, "localization_key"))
             self.assertEqual(chosen[0], expected)
+
+
+
+class NorthernUltimatumClockTests(unittest.TestCase):
+    def test_nod_entry_requires_expiry_and_a_live_war(self):
+        from tools.tests.test_adiscord_stp_civil_war import block as text_block
+        effects = EFFECTS_PATH.read_text(encoding="utf-8-sig")
+        invitations = text_block(effects, "VAL_frontier_join_existing_war")
+        self.assertEqual(invitations.count("has_country_flag = VAL_nod_ultimatum_expired"), 3)
+        for target in ("CIN", "OSF", "APH"):
+            self.assertIn("has_war_with = " + target, invitations)
+        mission = text_block(DECISIONS_PATH.read_text(encoding="utf-8-sig"), "VAL_nod_ultimatum")
+        self.assertIn("days_mission_timeout = 100", mission)
+        self.assertIn("VAL_frontier_members_beaten = yes", mission)
+        self.assertIn("VAL_frontier_target_occupied = yes", mission)
+        close = text_block(effects, "VAL_frontier_close")
+        self.assertIn("remove_mission = VAL_nod_ultimatum", close)
+        self.assertIn("clr_country_flag = VAL_nod_ultimatum_expired", close)
+
+    def test_deadline_callbacks_settle_after_the_current_mission_returns(self):
+        from tools.tests.test_adiscord_stp_civil_war import block as text_block
+        mission = text_block(DECISIONS_PATH.read_text(encoding="utf-8-sig"), "VAL_nod_ultimatum")
+        for callback in ("complete_effect", "timeout_effect"):
+            body = text_block(mission, callback)
+            self.assertIn("id = val_rework.119 hours = 1", body)
+            self.assertNotIn("VAL_frontier_settle_victory", body)
+        expired = text_block(EFFECTS_PATH.read_text(encoding="utf-8-sig"), "VAL_frontier_expire_nod_ultimatum")
+        self.assertLess(expired.index("VAL_frontier_settle_victory"), expired.index("VAL_frontier_join_existing_war"))
+
+    def test_only_expired_active_target_war_can_admit_nod_and_never_twice(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, block, scalar, selected_effects
+        join = block(entries("common/scripted_effects/ADISCORD_VAL_effects.txt"), "VAL_frontier_join_existing_war")
+        for target, code in (("CIN", 1), ("OSF", 2), ("APH", 3)):
+            for expired, war, already in ((False,True,False),(True,False,False),(True,True,False),(True,True,True)):
+                facts = {("VAL", "variable", "VAL_frontier_stage"):3,
+                         ("VAL", "variable", "VAL_frontier_target"):code,
+                         ("VAL", "has_country_flag", "VAL_nod_ultimatum_expired"):expired,
+                         ("VAL", "has_war_with", target):war,
+                         ("NOD", "exists", "yes"):True,
+                         ("NOD", "has_capitulated", "no"):True,
+                         ("NOD", "is_subject", "no"):True,
+                         ("NOD", "has_war_with", "VAL"):already}
+                wars = [(scope, scalar(e.value,"targeted_alliance"), scalar(e.value,"enemy"))
+                        for scope,e in selected_effects(join,facts,"VAL") if e.key=="add_to_war"]
+                self.assertEqual(wars, [("NOD",target,"VAL")] if expired and war and not already else [])
+
+    def test_victory_on_expiry_precedes_intervention_and_closed_campaign_is_inert(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, block, selected_effects
+        effect=block(entries("common/scripted_effects/ADISCORD_VAL_effects.txt"),"VAL_frontier_expire_nod_ultimatum")
+        for stage, expired, occupied, beaten, expected in ((3,True,True,True,"VAL_frontier_settle_victory"),(3,True,True,False,"VAL_frontier_join_existing_war"),(3,False,True,False,None),(0,True,True,False,None)):
+            facts={("VAL","variable","VAL_frontier_stage"):stage,
+                   ("VAL","has_country_flag","VAL_nod_ultimatum_issued"):True,
+                   ("VAL","has_country_flag","VAL_nod_ultimatum_expired"):expired,
+                   ("VAL","VAL_frontier_target_occupied","yes"):occupied,
+                   ("VAL","VAL_frontier_members_beaten","yes"):beaten}
+            calls=[e.key for _,e in selected_effects(effect,facts,"VAL")]
+            self.assertEqual(calls,[expected] if expected else [])
+
 
 if __name__ == "__main__":
     unittest.main()

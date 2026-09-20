@@ -24,6 +24,8 @@ SOUNDS = Path("sound/superevents_sound.asset")
 SOUND_EFFECTS = Path("sound/superevents_effects.asset")
 SOUND_CATEGORY = Path("sound/superevents_category.asset")
 REGISTRY = Path("tools/data/adiscord_event_ids.json")
+MUSIC = Path("music/music.asset")
+SONGS = Path("music/_songs.txt")
 
 REQUIRED_FILES = (
     EVENTS,
@@ -37,6 +39,8 @@ REQUIRED_FILES = (
     SOUND_EFFECTS,
     SOUND_CATEGORY,
     REGISTRY,
+    MUSIC,
+    SONGS,
 )
 
 SUPEREVENT_IDS = (
@@ -358,6 +362,17 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     _check_order("sound effects", sound_effects, sound_effect_names, issues)
     _check_order("sound category", sound_category, sound_effect_names, issues)
 
+    for effect in sound_effect_names:
+        song = effect.removesuffix("_sound_e")
+        assets = [block for block in blocks(source[MUSIC], r"^\s*music\s*=\s*\{")
+                  if f'name = "{song}"' in block]
+        rotation = [block for block in blocks(source[SONGS], r"^\s*music\s*=\s*\{")
+                    if f'song = "{song}"' in block]
+        if len(assets) != 1 or f'file = "{song}.ogg"' not in assets[0]:
+            issues.append(f"missing or duplicate single-channel music asset {song}")
+        if len(rotation) != 1 or "chance = { base = 0 }" not in rotation[0]:
+            issues.append(f"presentation music must be excluded from random rotation: {song}")
+
     if (root / RU_LOC).is_file() and not (root / RU_LOC).read_bytes().startswith(b"\xef\xbb\xbf"):
         issues.append("Russian superevent localisation must use UTF-8 BOM")
 
@@ -393,7 +408,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                 f"found {entry.get('owner')!r}"
             )
 
-    if "ADISCORD_vorkerland_play_superevent_sound = yes" not in events:
+    if "ADISCORD_superevent_enqueue = yes" not in events:
         issues.append("events: presentation audio must use the shared unscoped helper")
     if "scoped_sound_effect" in events:
         issues.append("events: scoped_sound_effect silences observer/spectator")

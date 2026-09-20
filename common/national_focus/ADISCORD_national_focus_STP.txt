@@ -2428,6 +2428,20 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_cw_organize_underground
+		icon = GFX_goal_generic_intelligence_exchange
+		x = 3
+		y = 2
+		cost = 2
+		allow_branch = { tag = STS NOT = { has_country_flag = STP_cw_postwar } }
+		prerequisite = { focus = STP_cw_front_scouts }
+		available = { has_war_with = STP }
+		cancel_if_invalid = yes
+		ai_will_do = { base = 8 }
+		completion_reward = { unlock_decision_tooltip = STP_cw_raise_rear_cell }
+	}
+
+	focus = {
 		id = STP_cw_mobile_workshops
 		icon = GFX_goal_generic_production
 		x = 1
@@ -2438,7 +2452,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		prerequisite = { focus = STP_cw_front_scouts }
 		ai_will_do = { base = 6 }
-		completion_reward = { add_equipment_to_stockpile = { type = infantry_equipment amount = 1800 } add_equipment_to_stockpile = { type = support_equipment amount = 150 } add_timed_idea = { idea = STP_cw_arsenal_shifts days = 70 } }
+		completion_reward = { add_equipment_to_stockpile = { type = infantry_equipment amount = 2400 } add_equipment_to_stockpile = { type = support_equipment amount = 150 } add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 80 } add_equipment_to_stockpile = { type = motorized_equipment amount = 100 } add_timed_idea = { idea = STP_cw_arsenal_shifts days = 100 } }
 	}
 
 	focus = {
