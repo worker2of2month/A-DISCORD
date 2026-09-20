@@ -1,0 +1,36 @@
+name: Scripted peace audit
+on:
+  push:
+    branches: [fix/scripted-peace-war-debug-20260920]
+    paths:
+      - .github/workflows/peace-audit.yml
+      - tools/peace_audit_patch.py
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Export script sources
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess, zipfile
+          paths = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          suffixes = {'.txt', '.yml', '.yaml', '.py', '.md', '.lua', '.json', '.gfx', '.gui', '.csv', '.mod', '.cwt'}
+          with zipfile.ZipFile('peace-audit-sources.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for name in paths:
+                  p = Path(name)
+                  if p.is_file() and (p.suffix.lower() in suffixes or p.name in {'.gitignore', '.gitattributes'}):
+                      archive.write(p, name)
+          print(subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: peace-audit-sources
+          path: peace-audit-sources.zip
+          retention-days: 1
