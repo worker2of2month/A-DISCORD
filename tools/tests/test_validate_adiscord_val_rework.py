@@ -3963,14 +3963,13 @@ class ValFormationAndCommandTests(unittest.TestCase):
         callback("NOD", "VAL")
         self.assertAlmostEqual(balance, -.05)
 
-    def test_formation_requires_campaign_and_actual_border_ownership(self):
+    def test_formation_requires_campaign_and_recognised_borders(self):
         from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
         source = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
         gate = block(parse_clausewitz(source), "VAL_can_proclaim_commonwealth")
         facts = {("VAL", "has_completed_focus", "VAL_Contracts_Outlive_Kings"): True,
                  ("VAL", "VAL_campaign_objectives_met", "yes"): True,
-                 ("VAL", "numeric", "stability"): 0.50,
-                 **{(state, check, "VAL"): True for state in ("29", "46") for check in ("is_owned_by", "is_controlled_by")}}
+                 ("VAL", "numeric", "stability"): 0.50}
         self.assertTrue(matches_conditions(gate, facts, "VAL"))
         for key, value in [(key, False) for key in facts if key[1] != "numeric"] + [
                 (("VAL", "numeric", "stability"), 0.499),
@@ -4000,6 +3999,84 @@ class ValFormationAndCommandTests(unittest.TestCase):
             self.assertGreater(float(scalar(decision.value, "days_re_enable")), 0)
         init = only_named_block(self, EFFECTS_PATH.read_text(encoding="utf-8"), "VAL_initialize_arsenal_recovery")
         self.assertIn("VAL_refresh_industrial_economy = yes", init)
+
+
+
+
+
+class ValBalchanskCommonwealthRegressionTests(unittest.TestCase):
+    def test_balchansk_charter_and_integration_are_real_alternatives(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar, walk
+        tree = parse_clausewitz(FOCUSES_PATH.read_text())
+        focuses = {scalar(e.value, "id"): e.value for e in walk(tree) if e.key == "focus" and isinstance(e.value, list)}
+        self.assertIn("VAL_Balchansk_Charter", focuses)
+        for chosen, other in (("VAL_Balchansk_Charter", "VAL_Integrate_Occidia"), ("VAL_Integrate_Occidia", "VAL_Balchansk_Charter")):
+            self.assertIn(other, [e.value for e in block(focuses[chosen], "mutually_exclusive")])
+        reward = block(focuses["VAL_Balchansk_Charter"], "completion_reward")
+        self.assertFalse(any(e.key in ("annex_country", "transfer_state") for e in walk(reward)))
+        admin = parse_clausewitz((ROOT / "common/national_focus/ADISCORD_national_focus_VAL_defeated.txt").read_text())
+        unique = {scalar(e.value, "id"): e.value for e in walk(admin) if e.key == "focus" and isinstance(e.value, list) and scalar(e.value, "id").startswith("OCA_")}
+        self.assertGreaterEqual(len(unique), 10)
+        for node in unique.values():
+            self.assertEqual(scalar(block(node, "allow_branch"), "tag"), "OCA")
+            self.assertTrue(block(node, "completion_reward"))
+        for chosen, other in (("OCA_civilian_board", "OCA_garrison_directorate"), ("OCA_garrison_directorate", "OCA_civilian_board")):
+            self.assertIn(other, [e.value for e in block(unique[chosen], "mutually_exclusive")])
+
+
+    def test_occidian_creation_installs_the_playable_program(self):
+        body = only_named_block(self, EFFECTS_PATH.read_text(), "VAL_form_occidian_administration")
+        self.assertIn("VAL_initialize_balchansk_administration = yes", body)
+        init = only_named_block(self, EFFECTS_PATH.read_text(), "VAL_initialize_balchansk_administration")
+        self.assertIn("tag = OCA", init)
+        self.assertIn("load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }", init)
+
+
+    def test_supply_base_accepts_an_administration_without_forcing_annexation(self):
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, matches_conditions
+        gate = block(parse_clausewitz((ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text()), "VAL_supply_base_secured")
+        facts = {("VAL", "VAL_cannibal_sphere_secured", "yes"): True,
+                 ("VAL", "VAL_northern_resource_belt_owned", "yes"): True,
+                 ("VAL", "VAL_occidia_secured", "yes"): True}
+        self.assertTrue(matches_conditions(gate, facts, "VAL"))
+        for key in facts:
+            self.assertFalse(matches_conditions(gate, {**facts, key: False}, "VAL"))
+
+
+    def test_warlord_is_a_character_reward_of_proclamation(self):
+        effects = EFFECTS_PATH.read_text()
+        form = only_named_block(self, effects, "VAL_adopt_commonwealth")
+        self.assertIn("VAL_grant_contract_warlord = yes", form)
+        reward = only_named_block(self, effects, "VAL_grant_contract_warlord")
+        self.assertIn("VAL_Valera_Solgalov", reward)
+        self.assertIn("trait = VAL_contract_warlord", reward)
+        self.assertNotIn("promote_character", reward)
+        trait = only_named_block(self, (ROOT / "common/country_leader/ADISCORD_traits_VAL.txt").read_text(), "VAL_contract_warlord")
+        for field in ("army_org_factor", "planning_speed", "supply_consumption_factor", "command_power_gain"):
+            self.assertIn(field, trait)
+
+
+    def test_local_balchansk_income_is_suspended_and_restored_with_its_asset(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, selected_effects
+        source = EFFECTS_PATH.read_text()
+        spans = named_block_spans(source, "VAL_reconcile_balchansk_income")
+        self.assertEqual(len(spans), 1, "A recovered local asset must restore its earned income")
+        body = block(parse_clausewitz(source), "VAL_reconcile_balchansk_income")
+        cases = (("OCA_harbour_customs", "OCA_harbour_customs_service", "44"),
+                 ("OCA_mining_concessions", "OCA_mining_concession_income", "88"))
+        for focus, idea, state in cases:
+            facts = {("OCA", "exists", "yes"): True, ("OCA", "is_subject_of", "VAL"): True,
+                     ("OCA", "has_completed_focus", focus): True,
+                     ("OCA", "owns_state", state): True, ("OCA", "controls_state", state): True}
+            for lost in (None, "owns_state", "controls_state"):
+                current = dict(facts)
+                if lost: current["OCA", lost, state] = False
+                effects = list(selected_effects(body, current, "OCA"))
+                self.assertEqual(any(e.key == "add_ideas" and e.value == idea for _, e in effects), lost is None)
+            facts["OCA", "has_idea", idea] = True
+            self.assertFalse(any(e.key == "add_ideas" and e.value == idea for _, e in selected_effects(body, facts, "OCA")))
+            facts["OCA", "controls_state", state] = False
+            self.assertTrue(any(e.key == "remove_ideas" and e.value == idea for _, e in selected_effects(body, facts, "OCA")))
 
 
 if __name__ == "__main__":

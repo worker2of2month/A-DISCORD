@@ -2653,6 +2653,7 @@ VAL_form_occidian_administration = {
 				}
                 VAL = { VAL_call_subjects_to_wars = yes }
 			}
+			OCA = { VAL_initialize_balchansk_administration = yes }
 			clr_country_flag = VAL_occidian_settlement_pending
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -2895,6 +2896,7 @@ VAL_adopt_commonwealth = {
     if = {
         limit = { VAL_can_proclaim_commonwealth = yes }
         set_cosmetic_tag = VAL_commonwealth
+        VAL_grant_contract_warlord = yes
     }
 }
 
@@ -3033,4 +3035,49 @@ VAL_check_nam_concession = {
 		}
 		VAL_cancel_nam_concession = yes
 	}
+}
+
+
+VAL_grant_contract_warlord = {
+    if = {
+        limit = {
+            tag = VAL
+            has_cosmetic_tag = VAL_commonwealth
+            has_country_leader = { character = VAL_Valera_Solgalov ruling_only = yes }
+        }
+        VAL_Valera_Solgalov = {
+            if = {
+                limit = { NOT = { has_trait = VAL_contract_warlord } }
+                add_country_leader_trait = { ideology = contractual_etatism trait = VAL_contract_warlord }
+            }
+        }
+    }
+}
+
+
+VAL_initialize_balchansk_administration = {
+    if = {
+        limit = { tag = OCA exists = yes is_subject_of = VAL }
+        if = {
+            limit = { NOT = { has_focus_tree = VAL_administration_focus } }
+            load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+            mark_focus_tree_layout_dirty = yes
+        }
+        VAL_reconcile_balchansk_income = yes
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+
+
+VAL_reconcile_balchansk_income = {
+    if = {
+        limit = { exists = yes is_subject_of = VAL has_completed_focus = OCA_harbour_customs owns_state = 44 controls_state = 44 }
+        if = { limit = { NOT = { has_idea = OCA_harbour_customs_service } } add_ideas = OCA_harbour_customs_service }
+    }
+    else_if = { limit = { has_idea = OCA_harbour_customs_service } remove_ideas = OCA_harbour_customs_service }
+    if = {
+        limit = { exists = yes is_subject_of = VAL has_completed_focus = OCA_mining_concessions owns_state = 88 controls_state = 88 }
+        if = { limit = { NOT = { has_idea = OCA_mining_concession_income } } add_ideas = OCA_mining_concession_income }
+    }
+    else_if = { limit = { has_idea = OCA_mining_concession_income } remove_ideas = OCA_mining_concession_income }
 }
