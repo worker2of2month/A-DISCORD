@@ -10,7 +10,9 @@ import re
 
 
 ENTRY = re.compile(r'^\s*([^\s:#]+):\d*\s*"((?:[^"\\]|\\.)*)"\s*(?:#.*)?$')
-TOKENS = re.compile(r'\$[^$\r\n]+\$|\[[^\]\r\n]+\]|£[A-Za-z0-9_]+|@[A-Z0-9]{3}')
+# Consume a texticon's frame and closing marker so adjacent English prose is
+# not mistaken for another icon, and frame changes remain detectable.
+TOKENS = re.compile(r'\$[^$\r\n]+\$|\[[^\]\r\n]+\]|£[A-Za-z0-9_]+(?:\|[0-9]+)?£?|@[A-Z0-9]{3}')
 CYRILLIC = re.compile(r'[А-Яа-яЁё]')
 # AGENTS.md forbids adding localisation for the exclusion zone.
 EXCLUDED_KEYS = {'EXZ_pragmatism_party', 'EXZ_No_Authority', 'EXZ_No_Authority_desc'}
