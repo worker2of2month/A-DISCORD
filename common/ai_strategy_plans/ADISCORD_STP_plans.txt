@@ -25,7 +25,9 @@ STP_shabrat_intro_plan = {
 
 	ai_national_focuses = {
 		STP_NECTAR_OF_GODS
+		STP_REVOLUTION_FROM_THE_NORTH
 		STP_2160_budget
+		STP_BEHIND_THE_LIGHTS
 		STP_STATE_OF_THE_REPUBLIC
 	}
 
