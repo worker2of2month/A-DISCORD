@@ -21,12 +21,25 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_REVOLUTION_FROM_THE_NORTH
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = 12
+		y = 1
+		cost = 1
+		prerequisite = { focus = STP_NECTAR_OF_GODS }
+		ai_will_do = { base = 20 }
+		completion_reward = {
+			country_event = { id = ADISCORD_STP_preparation.23 }
+		}
+	}
+
+	focus = {
 		id = STP_2160_budget
 		icon = GFX_focus_STP_2160_budget
 		x = 12
-		y = 1
-		cost = 2
-		prerequisite = { focus = STP_NECTAR_OF_GODS }
+		y = 2
+		cost = 1
+		prerequisite = { focus = STP_REVOLUTION_FROM_THE_NORTH }
 		ai_will_do = { base = 20 }
 		completion_reward = {
 			custom_effect_tooltip = STP_cw_treasury_1200_tt
@@ -36,12 +49,25 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_BEHIND_THE_LIGHTS
+		icon = GFX_focus_STP_Open_Wounds_Of_The_System
+		x = 12
+		y = 3
+		cost = 1
+		prerequisite = { focus = STP_2160_budget }
+		ai_will_do = { base = 20 }
+		completion_reward = {
+			country_event = { id = ADISCORD_STP_preparation.25 }
+		}
+	}
+
+	focus = {
 		id = STP_STATE_OF_THE_REPUBLIC
 		icon = GFX_focus_STP_Nectar_of_the_Gods
 		x = 12
-		y = 2
-		cost = 2
-		prerequisite = { focus = STP_2160_budget }
+		y = 4
+		cost = 1
+		prerequisite = { focus = STP_BEHIND_THE_LIGHTS }
 		bypass = { has_country_flag = STP_cw_first_health_decline }
 		ai_will_do = { base = 20 }
 		completion_reward = {
@@ -57,7 +83,7 @@ focus_tree = {
 		id = STP_Show_Him_The_Truth
 		icon = GFX_focus_STP_Side_With_Maksim
 		x = 30
-		y = 3
+		y = 5
 		cost = 1
 		prerequisite = { focus = STP_STATE_OF_THE_REPUBLIC }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
@@ -74,7 +100,7 @@ focus_tree = {
 		id = STP_Govern_In_His_Name
 		icon = GFX_focus_STP_Govern_In_His_Name
 		x = -8
-		y = 3
+		y = 5
 		cost = 1
 		prerequisite = { focus = STP_STATE_OF_THE_REPUBLIC }
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
