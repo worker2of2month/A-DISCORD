@@ -578,6 +578,32 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertNotIn("ADISCORD_STP_nectar_story", (ROOT / path).read_text(encoding="utf-8-sig"))
         self.assertFalse(any(key.startswith("STP_nectar_") for key in values))
 
+    def test_intro_lore_is_paced_by_five_one_week_focuses(self):
+        tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+                    if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        order = (
+            ("STP_NECTAR_OF_GODS", None, "ADISCORD_STP_preparation.15"),
+            ("STP_REVOLUTION_FROM_THE_NORTH", "STP_NECTAR_OF_GODS", "ADISCORD_STP_preparation.23"),
+            ("STP_2160_budget", "STP_REVOLUTION_FROM_THE_NORTH", "ADISCORD_STP_preparation.16"),
+            ("STP_BEHIND_THE_LIGHTS", "STP_2160_budget", "ADISCORD_STP_preparation.25"),
+            ("STP_STATE_OF_THE_REPUBLIC", "STP_BEHIND_THE_LIGHTS", None),
+        )
+        for focus_id, parent, event_id in order:
+            focus = focuses[focus_id]
+            self.assertEqual(scalar(focus, "cost"), "1", focus_id)
+            if parent is not None:
+                self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), parent)
+            if event_id is not None:
+                reward = block(focus, "completion_reward")
+                call = block(reward, "country_event")
+                self.assertEqual(scalar(call, "id"), event_id)
+        events = {scalar(e.value, "id"): e.value for e in entries("events/ADISCORD_STP_events.txt")
+                  if e.key == "country_event"}
+        for event_id in ("ADISCORD_STP_preparation.23", "ADISCORD_STP_preparation.25"):
+            option = block(events[event_id], "option")
+            self.assertEqual(len(option), 1, "paced lore cards must close without scheduling another popup")
+
     def test_regional_preparation_appears_after_its_focus_and_restores_lost_assets(self):
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
@@ -2854,7 +2880,7 @@ class StelanderPreparationTests(unittest.TestCase):
     def test_prewar_branches_close_when_the_elections_finish(self):
         trees = entries("common/national_focus/ADISCORD_national_focus_STP.txt")
         tree = next(e.value for e in trees if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
-        intro = {"STP_NECTAR_OF_GODS", "STP_2160_budget", "STP_STATE_OF_THE_REPUBLIC"}
+        intro = {"STP_NECTAR_OF_GODS", "STP_REVOLUTION_FROM_THE_NORTH", "STP_2160_budget", "STP_BEHIND_THE_LIGHTS", "STP_STATE_OF_THE_REPUBLIC"}
         for focus in (e.value for e in tree if e.key == "focus"):
             focus_id = scalar(focus, "id")
             if focus_id not in intro:
