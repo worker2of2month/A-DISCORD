@@ -3035,6 +3035,85 @@ class ValFrontierCampaignTests(unittest.TestCase):
         peace_branch = next(e.value for e in walk(weekly) if e.key in ("if", "else_if") and any(x.key == "NOD" and any(y.key == "country_event" and scalar(y.value, "id") == "val_rework.113" for y in x.value) for x in e.value))
         self.assertLess(next(i for i, e in enumerate(peace_branch) if e.key == "VAL_frontier_save_quoted_target"), next(i for i, e in enumerate(peace_branch) if e.key == "NOD"))
 
+    def test_full_defeat_returns_all_party_cores_without_taking_foreign_land(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, parse_clausewitz
+        effect = block(parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_frontier_settle_defeat")
+        for participated, protector in ((False, False), (False, True), (True, False), (True, True)):
+            owners = {42: "VAL", 55: "VAL", 43: "OCA", 44: "OCA", 45: "OCA", 88: "VAL", 48: "VAL", 99: "OTH"}
+            cores = {42, 55, 43, 44, 45, 88, 99}
+            facts = {("VAL", "variable", "VAL_frontier_stage"): 3,
+                     ("STP", "exists", "yes"): True,
+                     ("STP", "has_country_flag", "STP_cw_won_union_battle"): True,
+                     ("STP", "has_country_flag", "VAL_frontier_guarantor"): participated,
+                     ("STP", "has_war_with", "VAL"): participated,
+                     ("NOD", "exists", "yes"): protector,
+                     ("NOD", "has_country_flag", "VAL_frontier_guarantor"): protector,
+                     ("NOD", "has_capitulated", "no"): True,
+                     ("VAL", "capital"): "48",
+                     ("48", "controller"): "STP"}
+            for state in owners:
+                facts[str(state), "is_core_of", "STP"] = state in cores
+            arrays = {}
+            donor_refreshes = {}
+            subordinated = []
+            closed = False
+            def execute(rows, stack=("VAL",)):
+                nonlocal closed
+                current = stack[-1]
+                taken = False
+                for e in rows:
+                    key, value = e.key, e.value
+                    if key in ("if", "else_if", "else"):
+                        if key == "if":
+                            taken = False
+                        if not taken and self.frontier_matches(next((x.value for x in value if x.key == "limit"), []), facts, current):
+                            taken = True
+                            execute([x for x in value if x.key != "limit"], stack)
+                    elif key == "clear_temp_array":
+                        arrays[value] = []
+                    elif key == "add_to_temp_array":
+                        arrays.setdefault(scalar(value, "array"), []).append(current)
+                    elif key == "every_subject_country":
+                        self.assertFalse(closed, "Snapshot subjects before defeat changes the hierarchy")
+                        execute(value, stack + ("OCA",))
+                    elif key == "every_owned_state":
+                        for state, owner in list(owners.items()):
+                            if owner == current and self.frontier_matches(block(value, "limit"), facts, str(state)):
+                                execute([x for x in value if x.key != "limit"], stack + (str(state),))
+                    elif key == "for_each_scope_loop":
+                        for state in list(arrays[scalar(value, "array")]):
+                            execute([x for x in value if x.key != "array"], stack + (state,))
+                    elif key in ("STP", "NOD"):
+                        execute(value, stack + (key,))
+                    elif key == "puppet":
+                        subordinated.append(scalar(value, "target"))
+                    elif key == "transfer_state":
+                        self.assertTrue(closed)
+                        owners[int(stack[-2] if value == "PREV" else value)] = current
+                    elif key == "VAL_frontier_settle_armistice":
+                        closed = True
+                        if participated:
+                            owners[42] = owners[55] = "STP"
+                        facts["STP", "has_country_flag", "VAL_frontier_guarantor"] = False
+                        facts["STP", "has_war_with", "VAL"] = False
+                    elif key == "ADISCORD_economy_mark_dirty":
+                        if current in ("VAL", "OCA"):
+                            donor_refreshes[current] = dict(owners)
+                    elif key in ("set_cosmetic_tag", "set_politics", "promote_character", "set_rule"):
+                        pass
+                    else:
+                        self.fail("Unsupported defeat operation: " + key)
+            execute(effect)
+            with self.subTest(participated=participated, protector=protector):
+                for state in (42, 55, 43, 44, 45, 88):
+                    self.assertEqual(owners[state], "STP" if participated else ("OCA" if state in (43, 44, 45) else "VAL"))
+                self.assertEqual(owners[48], "VAL")
+                self.assertEqual(owners[99], "OTH")
+                self.assertTrue(all(not values for values in arrays.values()))
+                self.assertEqual(set(donor_refreshes), {"VAL", "OCA"} if participated else set())
+                self.assertTrue(all(cached == owners for cached in donor_refreshes.values()))
+                self.assertEqual(subordinated, ["VAL"] if participated and protector else [])
+
     def test_armistice_compensates_only_the_party_that_actually_entered_the_war(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, parse_clausewitz
         effect = block(parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_frontier_settle_armistice")
