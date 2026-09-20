@@ -241,6 +241,7 @@ def package(apply=False):
     files[MOD / "map/ambient_object.txt"] = owned_section(MOD / "map/ambient_object.txt", f'''type = {{
     type = "{KEY}_entity"
     use_animation = no
+    always_visible = yes
     scale = 0.20
     object = {{
         name = "{KEY}"

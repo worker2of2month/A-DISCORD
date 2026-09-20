@@ -25,6 +25,7 @@ class KefreytLandmarkTests(unittest.TestCase):
     def test_footprint_stays_on_capital_land_and_foundation_meets_terrain(self):
         source = (ROOT / "map/ambient_object.txt").read_text()
         block = source.split('type = "' + KEY + '_entity"', 1)[1]
+        self.assertIn("always_visible = yes", block)
         x, y, z = map(float, re.search(r"position\s*=\s*\{([^}]+)", block)[1].split())
         with (ROOT / "map/definition.csv").open() as stream:
             colors = {tuple(map(int, row[1:4])) for row in csv.reader(stream, delimiter=";")

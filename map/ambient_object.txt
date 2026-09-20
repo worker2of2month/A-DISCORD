@@ -618,3 +618,17 @@ type={
 		}
 	}
 }
+
+# BEGIN ADISCORD Kefreyt arms combine
+type = {
+    type = "ADISCORD_kefreyt_arms_combine_entity"
+    use_animation = no
+    always_visible = yes
+    scale = 0.20
+    object = {
+        name = "ADISCORD_kefreyt_arms_combine"
+        position = { 3718.2 11.1 913.5 }
+        rotation = { 0 0 0 }
+    }
+}
+# END ADISCORD Kefreyt arms combine
