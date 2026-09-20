@@ -812,7 +812,12 @@ technologies = {
 	ADISCORD_tech_phase_synchronized_substations = {
 		factory_energy_consumption = -0.04
 		industry_repair_factor = 0.03
+		ADISCORD_economy_military_factory_expense_factor = -0.01
 		path = { leads_to_tech = ADISCORD_tech_ceramic_grid_insulators research_cost_coeff = 1 }
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
 		research_cost = 1.4
 		start_year = 2160
 		folder = {
@@ -960,7 +965,12 @@ technologies = {
 	ADISCORD_tech_load_following_microreactors = {
 		factory_energy_consumption = -0.05
 		nuclear_production_factor = 0.06
+		ADISCORD_economy_military_factory_expense_factor = -0.02
 		path = { leads_to_tech = ADISCORD_tech_microreactor_blocks research_cost_coeff = 1 }
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
 		research_cost = 1.62
 		start_year = 2168
 		folder = {
@@ -1083,11 +1093,16 @@ technologies = {
 	ADISCORD_tech_continental_load_balancing = {
 		factory_energy_consumption = -0.06
 		production_speed_buildings_factor = 0.04
+		ADISCORD_economy_military_factory_expense_factor = -0.02
 		path = { leads_to_tech = ADISCORD_tech_emergency_core_suppression research_cost_coeff = 1 }
 		enable_building = {
 			building = commercial_nuclear_reactor
 			level = 1
 		}
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
 		research_cost = 2.05
 		start_year = 2175
 		folder = {

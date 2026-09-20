@@ -1168,11 +1168,42 @@ def compact_side_branch(key: str) -> Branch:
     )
 
 
+PUBLIC_FINANCE_BRANCH = new_branch(
+    "public_finance", "ADISCORD_industry.txt", ("industry_folder",),
+    "Экономика и управление", "Economy and Administration", "finance",
+    (
+        ("treasury_accounting", "Казначейский учёт", "Treasury Accounting", "mechanical_computing", 2155),
+        ("public_procurement_standards", "Стандарты государственных закупок", "Public Procurement Standards", "computing_machine", 2160),
+        ("civilian_industrial_accounting", "Промышленный учёт", "Industrial Accounting", "improved_machine_tools", 2162),
+        ("customs_clearance_networks", "Единая таможенная служба", "Unified Customs Service", "radio", 2164),
+        ("administrative_digitization", "Цифровое делопроизводство", "Digital Administration", "improved_computing_machine", 2166),
+        ("production_cost_accounting", "Учёт производственных затрат", "Production Cost Accounting", "advanced_machine_tools", 2169),
+        ("integrated_budget_forecasts", "Сводное бюджетное планирование", "Integrated Budget Forecasts", "advanced_computing_machine", 2172),
+        ("automated_treasury_audit", "Автоматизированный финансовый контроль", "Automated Treasury Audit", "advanced_computing_machine", 2175),
+    ),
+)
+
+ADVANCED_MATERIALS_BRANCH = new_branch(
+    "advanced_materials", "ADISCORD_industry.txt", ("industry_folder",),
+    "Редкие материалы", "Advanced Materials", "resources",
+    (
+        ("precision_material_standards", "Стандарты чистоты материалов", "Material Purity Standards", "improved_machine_tools", 2155),
+        ("rare_components_industry", "Производство редких компонентов", "Rare Components Industry", "computing_machine", 2158),
+        ("rare_alloy_metallurgy", "Металлургия редких сплавов", "Rare Alloy Metallurgy", "excavation2", 2158),
+        ("precision_component_fabrication", "Прецизионная сборка компонентов", "Precision Component Fabrication", "advanced_computing_machine", 2166),
+        ("vacuum_alloy_refining", "Вакуумная очистка сплавов", "Vacuum Alloy Refining", "excavation4", 2166),
+        ("advanced_material_recycling", "Переработка редких материалов", "Advanced Material Recycling", "excavation5", 2173),
+    ),
+)
+
+
 BRANCHES = (
     PRODUCTION_BRANCH,
     INDUSTRY_ORGANIZATION_BRANCH,
     RECONSTRUCTION_BRANCH,
     full_authored_legacy_branch("resources"),
+    PUBLIC_FINANCE_BRANCH,
+    ADVANCED_MATERIALS_BRANCH,
     full_authored_legacy_branch("signals"),
     COMPUTING_BRANCH,
     full_authored_legacy_branch("power"),
@@ -1212,7 +1243,7 @@ BRANCHES = (
 )
 
 MAIN_BRANCH_KEYS_BY_FOLDER = {
-    "industry_folder": {"production", "industry_organization", "reconstruction", "resources"},
+    "industry_folder": {"production", "industry_organization", "reconstruction", "resources", "public_finance", "advanced_materials"},
     "electronics_folder": {"signals", "computing", "power"},
     "infantry_folder": {
         "small_arms", "squad_weapons", "anti_tank_infantry", "night_combat",
@@ -1687,7 +1718,13 @@ XOR_INDEX_GROUPS_BY_BRANCH = {
 
 
 def graph_for_branch(branch: Branch) -> BranchGraph:
-    if branch.key == "production":
+    if branch.key == "advanced_materials":
+        graph = make_graph(
+            (1, 0, 2, 0, 2, 1),
+            [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 5)],
+            (5,),
+        )
+    elif branch.key == "production":
         graph = temporary_production_graph()
     elif branch.key == "industry_organization":
         graph = industry_organization_graph()
@@ -2018,10 +2055,11 @@ STARTING_TECH_PROFILE_SEEDS = {
     "common": COMMON_STARTING_ROOTS,
     "industrial": tuple(
         tech_id
-        for branch_key in ("production", "reconstruction", "resources")
+        for branch_key in ("production", "reconstruction", "resources", "advanced_materials")
         for tech_id in branch_technology_ids_through(branch_key, 2158)
     ),
     "energy": branch_technology_ids_through("power", 2160),
+    "advanced_materials": branch_technology_ids_through("advanced_materials", 2158),
     "institutional": (
         *branch_technology_ids_through("signals", 2158),
         *branch_technology_ids_through("computing", 2158),
@@ -2085,7 +2123,7 @@ STARTING_TECH_PROFILES = {
 # 2160.1.1.  Empty tuples are intentional common-only assignments.
 STARTING_COUNTRY_TECH_PROFILES = {
     "YOR": ("fragment_low_tech",),
-    "RIV": ("fragment_low_tech",),
+    "RIV": ("fragment_low_tech", "advanced_materials"),
     "EYR": ("fragment_low_tech",),
     "EGC": ("fragment_low_tech",),
     "AIN": ("fragment_low_tech", "institutional"),
@@ -2293,6 +2331,8 @@ ENABLE_SUBUNITS = {
 
 # `level` is an absolute technology cap, not a +1 increment.
 ENABLE_BUILDINGS = {
+    "ADISCORD_tech_rare_components_industry": (("ADISCORD_rare_components_plant", 1),),
+    "ADISCORD_tech_rare_alloy_metallurgy": (("ADISCORD_rare_alloy_foundry", 1),),
     # Heavy strategic-resource complexes.
     "ADISCORD_tech_logistics_hub_networks": (("ADISCORD_thermal_power_complex", 1),),
     "ADISCORD_tech_borehole_sensor_grids": (("ADISCORD_strategic_mining_complex", 1),),
@@ -2326,6 +2366,16 @@ ENABLE_BUILDINGS = {
 
 
 BUILDING_RESOURCE_UPGRADES = {
+    "ADISCORD_tech_precision_component_fabrication": (
+        ("ADISCORD_rare_components_plant", "rare_components", 2),
+    ),
+    "ADISCORD_tech_vacuum_alloy_refining": (
+        ("ADISCORD_rare_alloy_foundry", "rare_alloys", 1),
+    ),
+    "ADISCORD_tech_advanced_material_recycling": (
+        ("ADISCORD_rare_components_plant", "rare_components", 1),
+        ("ADISCORD_rare_alloy_foundry", "rare_alloys", 1),
+    ),
     "ADISCORD_tech_high_pressure_polymer_synthesis": (
         ("ADISCORD_metallurgical_complex", "steel", 2),
     ),
@@ -3121,6 +3171,62 @@ def themed_programme_effects(
 # stable technology keys rather than list positions so later layout tweaks do
 # not silently change the economic model.
 COMPACT_EFFECTS_BY_TECH_KEY = {
+    "treasury_accounting": (
+        "ADISCORD_economy_tax_collection_factor = 0.02",
+        "ADISCORD_economy_admin_expense_factor = -0.02",
+    ),
+    "public_procurement_standards": (
+        "ADISCORD_economy_construction_expense_factor = -0.03",
+        "ADISCORD_economy_military_factory_expense_factor = -0.02",
+    ),
+    "civilian_industrial_accounting": (
+        "ADISCORD_economy_civilian_factory_income_factor = 0.04",
+        "ADISCORD_economy_tax_collection_factor = 0.02",
+    ),
+    "customs_clearance_networks": (
+        "ADISCORD_economy_trade_income_factor = 0.04",
+        "ADISCORD_economy_resource_rent_income_factor = 0.03",
+    ),
+    "administrative_digitization": (
+        "ADISCORD_economy_admin_expense_factor = -0.04",
+        "ADISCORD_economy_research_expense_factor = -0.03",
+    ),
+    "production_cost_accounting": (
+        "ADISCORD_economy_military_industry_income_factor = 0.04",
+        "ADISCORD_economy_military_factory_expense_factor = -0.03",
+    ),
+    "integrated_budget_forecasts": (
+        "ADISCORD_economy_construction_expense_factor = -0.03",
+        "ADISCORD_economy_admin_expense_factor = -0.03",
+    ),
+    "automated_treasury_audit": (
+        "ADISCORD_economy_tax_collection_factor = 0.03",
+        "ADISCORD_economy_civilian_factory_income_factor = 0.04",
+    ),
+    "precision_material_standards": (
+        "production_lack_of_resource_penalty_factor = -0.01",
+        "production_factory_efficiency_gain_factor = 0.01",
+    ),
+    "rare_components_industry": (
+        "production_factory_efficiency_gain_factor = 0.02",
+        "production_factory_max_efficiency_factor = 0.01",
+    ),
+    "rare_alloy_metallurgy": (
+        "production_lack_of_resource_penalty_factor = -0.02",
+        "production_factory_max_efficiency_factor = 0.01",
+    ),
+    "precision_component_fabrication": (
+        "production_factory_efficiency_gain_factor = 0.02",
+        "factory_energy_consumption = 0.02",
+    ),
+    "vacuum_alloy_refining": (
+        "production_factory_max_efficiency_factor = 0.02",
+        "factory_energy_consumption = 0.02",
+    ),
+    "advanced_material_recycling": (
+        "production_lack_of_resource_penalty_factor = -0.02",
+        "factory_energy_consumption = -0.02",
+    ),
     "armored_carrier_program": (
         "ADISCORD_mechanized_infantry = { defense = 0.03 reliability = 0.03 }",
     ),
@@ -3664,7 +3770,21 @@ def combat_package(
     )
 
 
+INDUSTRIAL_BUDGET_EFFECTS = {
+    "automated_assembly": ("ADISCORD_economy_civilian_factory_income_factor = 0.02",),
+    "predictive_maintenance": ("ADISCORD_economy_military_factory_expense_factor = -0.02",),
+    "autonomous_factory_cells": ("ADISCORD_economy_civilian_factory_income_factor = 0.03",),
+    "phase_synchronized_substations": ("ADISCORD_economy_military_factory_expense_factor = -0.01",),
+    "load_following_microreactors": ("ADISCORD_economy_military_factory_expense_factor = -0.02",),
+    "continental_load_balancing": ("ADISCORD_economy_military_factory_expense_factor = -0.02",),
+}
+
+
 def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
+    return base_effects_for(branch, tier) + INDUSTRIAL_BUDGET_EFFECTS.get(branch.techs[tier].key, ())
+
+
+def base_effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     """Return an effect package that reflects the actual programme selected.
 
     Filler-sized 0.4% effects made the old dense tree feel cosmetic.  A narrow
@@ -4539,6 +4659,62 @@ BRANCH_DESCRIPTION_EN = {
 
 
 TECHNICAL_TECH_DESCRIPTIONS = {
+    "treasury_accounting": (
+        "Единые реестры налогов и платежей уменьшают потери при сборе доходов и стоимость работы казначейства",
+        "Unified tax and payment registers reduce collection losses and treasury administration costs",
+    ),
+    "public_procurement_standards": (
+        "Типовые контракты и проверка смет сокращают бюджетные расходы на строительство и содержание военной промышленности",
+        "Standard contracts and cost reviews reduce budget spending on construction and military industry upkeep",
+    ),
+    "civilian_industrial_accounting": (
+        "Учёт выпуска и оборота предприятий повышает доходы от гражданской промышленности и собираемость налогов",
+        "Factory output and turnover accounting improve civilian industrial revenue and tax collection",
+    ),
+    "customs_clearance_networks": (
+        "Общий учёт грузов и сырьевых контрактов уменьшает потери торговых доходов и ресурсной ренты",
+        "Shared cargo and commodity contract records reduce losses in trade revenue and resource rents",
+    ),
+    "administrative_digitization": (
+        "Обмен документами между ведомствами сокращает административные издержки и расходы на организацию исследований",
+        "Interdepartmental document exchange reduces administrative overhead and research programme costs",
+    ),
+    "production_cost_accounting": (
+        "Сопоставление затрат и выпуска военных заводов повышает их бюджетную отдачу и снижает содержание",
+        "Comparing military factory costs and output increases their budget contribution and reduces upkeep",
+    ),
+    "integrated_budget_forecasts": (
+        "Согласование строительных заказов с бюджетным планом сокращает издержки управления и финансирования строительства",
+        "Coordinating construction orders with the budget plan reduces administrative and construction spending",
+    ),
+    "automated_treasury_audit": (
+        "Автоматическая сверка счетов выявляет недоимки и потери промышленных доходов",
+        "Automated account reconciliation identifies unpaid taxes and lost industrial revenue",
+    ),
+    "precision_material_standards": (
+        "Единые допуски по чистоте сырья подготавливают производство электронной компонентной базы и специальных сплавов",
+        "Common material purity tolerances prepare the production of electronic components and special alloys",
+    ),
+    "rare_components_industry": (
+        "Чистые сборочные линии выпускают редкие компоненты для датчиков, вычислителей, беспилотников и систем управления",
+        "Clean assembly lines produce rare components for sensors, computers, drones and control systems",
+    ),
+    "rare_alloy_metallurgy": (
+        "Контролируемая выплавка редких сплавов обеспечивает жаропрочные детали авиации, тяжёлую броню и артиллерийские узлы",
+        "Controlled rare alloy smelting supplies heat-resistant aircraft parts, heavy armour and artillery assemblies",
+    ),
+    "precision_component_fabrication": (
+        "Автоматический контроль сборки увеличивает выпуск завода редких компонентов с 4 до 6 единиц до региональных модификаторов",
+        "Automated assembly control increases rare components plant output from 4 to 6 units before regional modifiers",
+    ),
+    "vacuum_alloy_refining": (
+        "Удаление примесей в вакууме увеличивает выпуск завода редких сплавов с 3 до 4 единиц до региональных модификаторов",
+        "Vacuum impurity removal increases rare alloy foundry output from 3 to 4 units before regional modifiers",
+    ),
+    "advanced_material_recycling": (
+        "Возврат производственного брака увеличивает выпуск каждого завода ещё на единицу: до 7 компонентов или 5 сплавов, до региональных модификаторов",
+        "Recovering production scrap adds one further unit to each plant: 7 components or 5 alloys, before regional modifiers",
+    ),
     "distributed_ammunition_carriers": (
         "Небольшие колёсные роботы перевозят ящики с боеприпасами и разгружают расчёты группового оружия",
         "Small wheeled robots carry ammunition crates and reduce the carrying burden on weapon crews",
@@ -4703,6 +4879,8 @@ TECHNICAL_TECH_DESCRIPTIONS = {
 
 
 BUILDING_DISPLAY_NAMES = {
+    "ADISCORD_rare_components_plant": ("завод редких компонентов", "Rare Components Plant"),
+    "ADISCORD_rare_alloy_foundry": ("завод редких сплавов", "Rare Alloy Foundry"),
     "ADISCORD_metallurgical_complex": ("металлургический комплекс", "Metallurgical Complex"),
     "ADISCORD_electrolysis_complex": ("электролизный комплекс", "Electrolysis Complex"),
     "ADISCORD_strategic_mining_complex": ("комплекс стратегической добычи", "Strategic Mining Complex"),
@@ -4895,6 +5073,8 @@ def ai_will_do_for(branch: Branch, index: int) -> tuple[str, ...]:
         entries.append("modifier = { factor = 1.35 ADISCORD_economy_ai_is_crisis = yes }")
     if profile in {"production", "finance", "administration", "computing"}:
         entries.append("modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }")
+    if branch.key == "public_finance":
+        entries.append("modifier = { factor = 1.40 ADISCORD_economy_ai_is_crisis = yes }")
     if profile in {
         "infantry", "squad", "protection", "support", "logistics", "artillery",
         "anti_tank", "anti_air", "recon_armor", "combat_armor", "heavy_armor",
@@ -5193,22 +5373,25 @@ def technology_grid_position(branch: Branch, index: int) -> tuple[int, int]:
 def render_research_completion_effects(tech: Tech) -> list[str]:
     """Emit the one post-path ``on_research_complete`` block for a technology.
 
-    Both payoffs share a single block because a technology keeps only one
-    ``on_research_complete``; a second one would silently discard whichever was
-    written first. The block also has to follow the path entries, since the
-    research-balance contract counts numeric leaf modifiers up to the first
-    path and a research bonus is a reward rather than a modifier.
+    Resource upgrades, research rewards and budget invalidation share one
+    callback because the engine keeps only one ``on_research_complete``.
+    The block follows paths so research-balance checks distinguish immediate
+    rewards from persistent numeric modifiers.
     """
 
     building_upgrades = BUILDING_RESOURCE_UPGRADES.get(tech.id, ())
     payoff = RESEARCH_PAYOFFS.get(tech.id)
-    if not building_upgrades and payoff is None:
+    branch, index = TECH_POSITION_BY_ID[tech.id]
+    budget_effect = any(effect.startswith("ADISCORD_economy_") for effect in effects_for(branch, index))
+    if not building_upgrades and payoff is None and not budget_effect:
         return []
     if LEADER_TRAINING.get(tech.key) is not None:
         raise ValueError(
             f"{tech.id} already spends its on_research_complete on leader training"
         )
     lines = ["\t\ton_research_complete = {"]
+    if budget_effect:
+        lines.append("\t\t\thidden_effect = { ADISCORD_economy_mark_dirty = yes }")
     for building, resource, amount in building_upgrades:
         lines.extend((
             "\t\t\tmodify_building_resources = {",
@@ -5354,6 +5537,23 @@ def write_starting_technology_effect() -> None:
         lines.extend((
             "\t\tpopup = no",
             "\t}",
+        ))
+        # Startup calculates the first budget after granting profiles. Later
+        # grants must invalidate it without reinitializing an existing country.
+        if any(
+            effect.startswith("ADISCORD_economy_")
+            for tech_id in technology_ids
+            for effect in effects_for(*TECH_POSITION_BY_ID[tech_id])
+        ):
+            lines.extend((
+                "\thidden_effect = {",
+                "\t\tif = {",
+                "\t\t\tlimit = { has_variable = ADISCORD_economy_initialized }",
+                "\t\t\tADISCORD_economy_mark_dirty = yes",
+                "\t\t}",
+                "\t}",
+            ))
+        lines.extend((
             "}",
             "",
         ))

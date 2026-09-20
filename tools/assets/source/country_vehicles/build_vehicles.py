@@ -389,7 +389,7 @@ def inspect_mesh(path):
                 assert abs(sum(weights)-1) < .001
                 assert weights == [1, 0, 0, 0]
                 assert all(0 <= bone < len(bones) for bone in indices)
-            assert data.material.shader == ["PdxMeshAdvancedSnow"]
+            assert data.material.shader == ["PdxMeshAdvanced"]
             for channel in ("diff", "n", "spec"):
                 assert (path.parent/getattr(data.material,channel)[0]).is_file()
             report["triangles"] += len(data.tri)//3
@@ -449,7 +449,7 @@ def build(name):
     tag, role = name.split("_")
     family = "tank" if role == "tank" else "air"
     prefix = tag + "_" + family
-    spec = SimpleNamespace(shader=["PdxMeshAdvancedSnow"],diff=[prefix+"_diffuse.dds"],
+    spec = SimpleNamespace(shader=["PdxMeshAdvanced"],diff=[prefix+"_diffuse.dds"],
                            n=[prefix+"_normal.dds"],spec=[prefix+"_specular.dds"])
     material = pdx.create_shader(spec,name,str(ROOT))
     preview_gloss(material)

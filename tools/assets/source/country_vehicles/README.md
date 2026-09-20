@@ -17,7 +17,8 @@ aircraft skin, muddy tracks and soot-covered metal. The compiler maps these
 into separate tank and aircraft atlases, applies each country's muted palette
 and adds markings from the existing flags. Tanks receive the rougher armor and
 track treatment; aircraft use the panelled skin. All DDS maps have mip chains.
-The advanced shader uses the HOI4 GA normal encoding. Glass remains opaque to
+The advanced shader uses the HOI4 GA normal encoding and preserves the vehicle's
+paint in snowy terrain without a seasonal snow overlay. Glass remains opaque to
 avoid transparent sorting artifacts at map scale.
 
 Each model uses one material. Tanks have 46 bones: opposite track shoes and
@@ -71,6 +72,9 @@ three existing main battle tank equipment tiers; light and heavy tank classes
 retain their own appearances.
 
 Static validation cannot prove Clausewitz selection, shaders or particles.
+The shared `gfx/particles/vehicles/sonic_boom.asset` override hides all three
+expanding flyby emitters used by native and DLC supersonic aircraft. It does not
+change their flight paths, combat effects or sounds.
 Before a cold launch, record the source hashes of both registries, both air
 scripts and the packaged assets. In a fresh campaign verify VAL/NOD/STP tank
 movement and firing, fighter/CAS selection in the same air region, texture

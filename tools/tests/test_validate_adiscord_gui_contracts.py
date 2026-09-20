@@ -540,6 +540,18 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
 
 
 class CountryPoliticsGuiContractTests(unittest.TestCase):
+    def test_occupation_return_territory_is_not_accessible(self):
+        gui = (ROOT / 'interface/countryoccupationview.gui').read_text(encoding='utf-8-sig')
+        gui = gui_node_body(gui, 'occupied_territory_country_entry')
+        for name in ('return_territory_button', 'return_territory_button_pos_for_non_resistance'):
+            body = gui_node_body(gui, name)
+            self.assertRegex(body, r'position\s*=\s*\{\s*x\s*=\s*-10000\s+y\s*=\s*-10000\s*\}')
+        button = gui_node_body(gui, 'return_territory_button')
+        self.assertIn('alwaystransparent = yes', button)
+        self.assertNotIn('shortcut', button)
+        self.assertTrue(gui_node_body(gui, 'release_button'))
+        self.assertTrue(gui_node_body(gui, 'select_law_button'))
+
     def test_active_focus_controls_fit_their_visible_card(self):
         from PIL import Image
 

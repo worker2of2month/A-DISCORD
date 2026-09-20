@@ -3016,7 +3016,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 3110 height = 2960 min = { width = 100%% height = 100%% } }
+				size = { width = 4340 height = 2960 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_stripes" }
 				iconType = {
@@ -3290,6 +3290,40 @@ guiTypes = {
 			gridboxtype = {
 				name = "ADISCORD_tech_salvage_metallurgy_tree"
 				position = { x = 2310 y = 130 }
+				size = { width = 630 height = 2730 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_public_finance"
+				position = { x = 3030 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_PUBLIC_FINANCE"
+				maxWidth = 420
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_treasury_accounting_tree"
+				position = { x = 3030 y = 130 }
+				size = { width = 420 height = 2730 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_advanced_materials"
+				position = { x = 3540 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_ADVANCED_MATERIALS"
+				maxWidth = 630
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_precision_material_standards_tree"
+				position = { x = 3540 y = 130 }
 				size = { width = 630 height = 2730 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"

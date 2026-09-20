@@ -153,6 +153,10 @@ spriteTypes = {
 	}
 ###VAL
 	spriteType = {
+		name = "GFX_portrait_VAL_Valera_Solgalov_contracts"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Valera_Solgalov2.png"
+	}
+	spriteType = {
 	  	name = "GFX_portrait_VAL_Valera_Solgalov"
 	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Valera_Solgalov.png"
 	}

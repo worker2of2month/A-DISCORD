@@ -236,6 +236,59 @@ ADISCORD_convoy_buffer = {
 	ai_strategy = { type = equipment_production_min_factories id = convoy value = 1 }
 }
 
+# Land-front demand must leave room for coastal operations. The target predicate
+# is evaluated in the enemy country, with FROM referring to the planner.
+ADISCORD_coastal_invasion_planning = {
+	allowed = { OR = { original_tag = VAL original_tag = NOD original_tag = STP } }
+	enable = {
+		is_ai = yes
+		has_war = yes
+		has_capitulated = no
+		has_tech = ADISCORD_tech_restored_dockyards
+		num_divisions > 7
+		has_navy_size = { size > 19 type = convoy }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = naval_invasion_focus value = 10 }
+	ai_strategy = { type = naval_invasion_dominance_weight value = 30 }
+	ai_strategy = {
+		type = invasion_unit_request
+		country_trigger = { has_war_with = FROM has_capitulated = no }
+		value = 50
+	}
+}
+
+ADISCORD_coastal_dockyard_capacity = {
+	allowed = { OR = { original_tag = VAL original_tag = NOD original_tag = STP } }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war = no
+		num_of_naval_factories < 2
+		NOT = { ADISCORD_economy_ai_is_crisis = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = building_target id = dockyard value = 2 }
+}
+
+# The convoy buffer reserves one dockyard below 100 transports. A country with
+# only one dockyard must finish that reserve before maintaining its patrol fleet.
+ADISCORD_coastal_patrol_replacement = {
+	allowed = { OR = { original_tag = VAL original_tag = NOD original_tag = STP } }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		num_of_naval_factories > 0
+		has_navy_size = { size < 6 unit = ADISCORD_coastal_patrol_vessel }
+		OR = {
+			num_of_naval_factories > 1
+			NOT = { has_equipment = { convoy_1 < 100 } }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = equipment_production_min_factories_archetype id = ADISCORD_coastal_patrol_ship value = 1 }
+}
+
 # Allocation is independent of the number of war participants. Country profiles
 # add their relative priorities; execution and supply checks remain native.
 ADISCORD_active_enemy_front_concentration = {

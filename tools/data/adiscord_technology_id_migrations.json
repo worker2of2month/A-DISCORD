@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "legacy_count": 625,
-  "current_count": 568,
+  "current_count": 582,
   "migrations": {
     "ADISCORD_tech_active_hearing_protection": {
       "status": "preserved",

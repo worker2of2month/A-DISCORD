@@ -203,28 +203,28 @@ VAL_refresh_refugee_state = {
 	}
 }
 
-# COUNTRY VAL. Each regional campaign offers one admission window; later war
-# relations and expired windows must not create another population grant.
+# COUNTRY VAL. A regional campaign opens one bounded window for up to three
+# paid waves; later war relations must not reset the admission counter.
 VAL_open_refugee_waves = {
 	if = {
 		limit = { VAL_refugee_vorkerland_war = yes NOT = { has_country_flag = VAL_refugee_vorkerland_seen } }
 		set_country_flag = VAL_refugee_vorkerland_seen
-		set_country_flag = { flag = VAL_refugee_vorkerland_window days = 60 }
+		set_country_flag = { flag = VAL_refugee_vorkerland_window days = 180 }
 	}
 	if = {
 		limit = { VAL_refugee_stelander_war = yes NOT = { has_country_flag = VAL_refugee_stelander_seen } }
 		set_country_flag = VAL_refugee_stelander_seen
-		set_country_flag = { flag = VAL_refugee_stelander_window days = 60 }
+		set_country_flag = { flag = VAL_refugee_stelander_window days = 180 }
 	}
 	if = {
 		limit = { VAL_refugee_nodrul_war = yes NOT = { has_country_flag = VAL_refugee_nodrul_seen } }
 		set_country_flag = VAL_refugee_nodrul_seen
-		set_country_flag = { flag = VAL_refugee_nodrul_window days = 60 }
+		set_country_flag = { flag = VAL_refugee_nodrul_window days = 180 }
 	}
 	if = {
 		limit = { VAL_refugee_north_war = yes NOT = { has_country_flag = VAL_refugee_north_seen } }
 		set_country_flag = VAL_refugee_north_seen
-		set_country_flag = { flag = VAL_refugee_north_window days = 60 }
+		set_country_flag = { flag = VAL_refugee_north_window days = 180 }
 	}
 }
 
@@ -347,5 +347,27 @@ VAL_refund_corridor_project = {
 		clear_variable = VAL_corridor_deposit
 		clear_variable = VAL_corridor_project
 		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_refund_refugee_training = {
+	if = {
+		limit = { has_variable = VAL_refugee_training_escrow }
+		add_to_variable = { var = VAL_displaced_population value = VAL_refugee_training_escrow }
+		clear_variable = VAL_refugee_training_escrow
+		add_political_power = 75
+		VAL_refresh_refugee_state = yes
+	}
+}
+
+VAL_finish_refugee_training = {
+	if = {
+		limit = { has_variable = VAL_refugee_training_escrow }
+		if = {
+			limit = { has_capitulated = no is_subject = no }
+			clear_variable = VAL_refugee_training_escrow
+			add_manpower = 5000
+		}
+		else = { VAL_refund_refugee_training = yes }
 	}
 }

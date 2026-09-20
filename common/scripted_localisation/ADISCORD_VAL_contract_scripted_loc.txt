@@ -136,3 +136,27 @@ defined_text = {
 	text = { trigger = { has_country_flag = VAL_quarterly_contract_paid } localization_key = VAL_QUARTERLY_DELIVERED }
 	text = { localization_key = VAL_QUARTERLY_PENDING }
 }
+
+defined_text = {
+	name = VALGetFinalEnemy
+	text = { trigger = { VAL_final_crisis_coalition = yes } localization_key = VAL_FINAL_ENEMY_COALITION }
+	text = { localization_key = VAL_FINAL_ENEMY_NOD }
+}
+defined_text = {
+	name = VALGetFinalPhase
+	text = { trigger = { check_variable = { var = VAL_final_crisis_phase value = 1 compare = equals } } localization_key = VAL_FINAL_PHASE_PREPARING }
+	text = { trigger = { check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals } } localization_key = VAL_FINAL_PHASE_WAR }
+	text = { trigger = { check_variable = { var = VAL_final_crisis_phase value = 3 compare = equals } } localization_key = VAL_FINAL_PHASE_VICTORY }
+	text = { trigger = { check_variable = { var = VAL_final_crisis_phase value = 4 compare = equals } } localization_key = VAL_FINAL_PHASE_CLOSED }
+	text = { localization_key = VAL_FINAL_PHASE_WAITING }
+}
+defined_text = {
+	name = VALGetFinalSupply
+	text = { trigger = { check_variable = { var = VAL_final_supply_bonus value = 0 compare = less_than } } localization_key = VAL_FINAL_PREPARATION_READY }
+	text = { localization_key = VAL_FINAL_PREPARATION_MISSING }
+}
+defined_text = {
+	name = VALGetFinalRecon
+	text = { trigger = { check_variable = { var = VAL_final_planning_bonus value = 0 compare = greater_than } } localization_key = VAL_FINAL_PREPARATION_READY }
+	text = { localization_key = VAL_FINAL_PREPARATION_MISSING }
+}

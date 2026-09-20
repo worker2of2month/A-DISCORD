@@ -6,7 +6,7 @@ STP_elections_in_the_party = {
 	STP_debug_increase_suspicion = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+		visible = { is_debug = yes is_ai = no NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { always = yes }
 		cost = 0
 		days_remove = 1
@@ -18,12 +18,13 @@ STP_elections_in_the_party = {
 			}
 			STP_change_party_suspicion = yes
 		}
+		ai_will_do = { base = 0 }
 	}
 
 	STP_debug_decrease_suspicion = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+		visible = { is_debug = yes is_ai = no NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { always = yes }
 		cost = 0
 		days_remove = 1
@@ -35,12 +36,13 @@ STP_elections_in_the_party = {
 			}
 			STP_change_party_suspicion = yes
 		}
+		ai_will_do = { base = 0 }
 	}
 
 	STP_debug_increase_loyalty = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes has_country_flag = STP_sided_with_the_party_flag }
+		visible = { is_debug = yes is_ai = no has_country_flag = STP_sided_with_the_party_flag }
 		available = { always = yes }
 		cost = 0
 		days_remove = 1
@@ -52,12 +54,13 @@ STP_elections_in_the_party = {
 			}
 			STP_change_apparatus_loyalty = yes
 		}
+		ai_will_do = { base = 0 }
 	}
 
 	STP_debug_decrease_loyalty = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes has_country_flag = STP_sided_with_the_party_flag }
+		visible = { is_debug = yes is_ai = no has_country_flag = STP_sided_with_the_party_flag }
 		available = { always = yes }
 		cost = 0
 		days_remove = 1
@@ -69,12 +72,13 @@ STP_elections_in_the_party = {
 			}
 			STP_change_apparatus_loyalty = yes
 		}
+		ai_will_do = { base = 0 }
 	}
 
 	STP_debug_worsen_ivanov = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes }
+		visible = { is_debug = yes is_ai = no }
 		available = { always = yes }
 		cost = 0
 		days_remove = 1
@@ -90,12 +94,13 @@ STP_elections_in_the_party = {
 			}
 			STP_set_leader_health_stage = yes
 		}
+		ai_will_do = { base = 0 }
 	}
 
 	STP_debug_improve_ivanov = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes }
+		visible = { is_debug = yes is_ai = no }
 		available = { always = yes }
 		cost = 0
 		days_remove = 1
@@ -111,12 +116,13 @@ STP_elections_in_the_party = {
 			}
 			STP_set_leader_health_stage = yes
 		}
+		ai_will_do = { base = 0 }
 	}
 
 	STP_debug_set_bop = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes }
+		visible = { is_debug = yes is_ai = no }
 		available = { always = yes }
 		cost = 0
 		days_remove = 1
@@ -126,18 +132,20 @@ STP_elections_in_the_party = {
 			    id = STP_shabrat_election_legitimacy
 			}
 		}
+		ai_will_do = { base = 0 }
 	}
 
 	STP_debug_start_battle_for_stelander = {
 		icon = GFX_decision_ADISCORD_covert_operation
 		allowed = { tag = STP }
-		visible = { is_debug = yes NOT = { has_country_flag = STP_battle_for_stelander_active } }
+		visible = { is_debug = yes is_ai = no NOT = { has_country_flag = STP_battle_for_stelander_active } }
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
 			country_event = { id = ADISCORD_STP_regions.1 }
 		}
+		ai_will_do = { base = 0 }
 	}
 
 	# ============================================================
@@ -647,7 +655,7 @@ STP_shabrat_election_bop_category = {
 	STP_debug_increase_party_bop = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes }
+		visible = { is_debug = yes is_ai = no }
 		available = { always = yes }
 		cost = 0
 		days_remove = 1
@@ -658,12 +666,13 @@ STP_shabrat_election_bop_category = {
 				value = -0.25
 			}
 		}
+		ai_will_do = { base = 0 }
 	}
 
 	STP_debug_increase_shabrat_bop = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes }
+		visible = { is_debug = yes is_ai = no }
 		available = { always = yes }
 		cost = 0
 		days_remove = 1
@@ -674,6 +683,7 @@ STP_shabrat_election_bop_category = {
 				value = 0.25
 			}
 		}
+		ai_will_do = { base = 0 }
 	}
 }
 
@@ -1911,7 +1921,7 @@ STP_battle_for_stelander = {
 	STP_debug_reset_battle_for_stelander = {
 		icon = GFX_decision_ADISCORD_state_directive
 		allowed = { tag = STP }
-		visible = { is_debug = yes has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
+		visible = { is_debug = yes is_ai = no has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no
@@ -1919,16 +1929,18 @@ STP_battle_for_stelander = {
 			STP_end_battle_for_stelander = yes
 			STP_initialize_battle_for_stelander = yes
 		}
+		ai_will_do = { base = 0 }
 	}
 
 	STP_debug_end_battle_for_stelander = {
 		icon = GFX_decision_ADISCORD_state_directive
 		allowed = { tag = STP }
-		visible = { is_debug = yes has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
+		visible = { is_debug = yes is_ai = no has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active }
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no
 		complete_effect = { STP_end_battle_for_stelander = yes }
+		ai_will_do = { base = 0 }
 	}
 
 	STP_cw_agree_with_commander = {
@@ -4679,7 +4691,7 @@ STP_scenario_debug = {
 	STP_debug_start_civil_war = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes NOT = { has_global_flag = STP_cw_started } }
+		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_started } }
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no
@@ -4693,7 +4705,7 @@ STP_scenario_debug = {
 	STP_debug_resolve_party_victory = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = STP tag = STS } }
-		visible = { is_debug = yes NOT = { has_global_flag = STP_cw_union_wars_finished } }
+		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_union_wars_finished } }
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no
@@ -4707,7 +4719,7 @@ STP_scenario_debug = {
 	STP_debug_resolve_shabrat_victory = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = STP tag = STS } }
-		visible = { is_debug = yes NOT = { has_global_flag = STP_cw_union_wars_finished } }
+		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_union_wars_finished } }
 		available = { always = yes }
 		cost = 0
 		fire_only_once = no

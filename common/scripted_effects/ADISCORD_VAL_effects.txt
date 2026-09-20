@@ -339,6 +339,10 @@ VAL_refresh_contract_modifier = {
 		add_to_variable = { var = VAL_contract_military_income_factor value = 0.03 }
 	}
 	if = {
+		limit = { has_variable = VAL_contract_political_mandate }
+		add_to_variable = { var = VAL_contract_pp_gain value = VAL_contract_political_mandate }
+	}
+	if = {
 		limit = { has_country_flag = VAL_mercenary_state }
 		add_to_variable = { var = VAL_contract_org_regain value = 0.02 }
 	}
@@ -1526,52 +1530,83 @@ VAL_reclamation_begin_project = {
 }
 
 VAL_reclamation_refund_project = {
+	FROM = { VAL_reclamation_refund_state_project = yes }
+}
+
+# STATE: the state flag binds the country receipt to exactly one paid project.
+VAL_reclamation_refund_state_project = {
 	if = {
 		limit = {
-			check_variable = { var = VAL_reclamation_deposit value = 500 compare = equals }
-			FROM = { has_state_flag = VAL_reclamation_work_in_progress }
+			has_state_flag = VAL_reclamation_work_in_progress
+			VAL = { check_variable = { var = VAL_reclamation_deposit value = 500 compare = equals } }
 		}
-		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_reclamation_deposit }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_reclamation_deposit }
-		clear_variable = VAL_reclamation_deposit
-		FROM = { clr_state_flag = VAL_reclamation_work_in_progress }
-		ADISCORD_economy_mark_dirty = yes
+		clr_state_flag = VAL_reclamation_work_in_progress
+		VAL = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = VAL_reclamation_deposit }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_reclamation_deposit }
+			clear_variable = VAL_reclamation_deposit
+			ADISCORD_economy_mark_dirty = yes
+		}
 	}
 }
 
 VAL_reclamation_finish_project = {
+	FROM = { VAL_reclamation_finish_state_project = yes }
+}
+
+VAL_reclamation_finish_state_project = {
 	if = {
 		limit = {
-			check_variable = { var = VAL_reclamation_deposit value = 500 compare = equals }
-			FROM = { has_state_flag = VAL_reclamation_work_in_progress }
+			has_state_flag = VAL_reclamation_work_in_progress
+			VAL = { check_variable = { var = VAL_reclamation_deposit value = 500 compare = equals } }
 		}
 		if = {
-			limit = { VAL_reclamation_project_target_valid = yes }
-			clear_variable = VAL_reclamation_deposit
-			FROM = {
-				clr_state_flag = VAL_reclamation_work_in_progress
+			limit = { VAL_reclamation_state_project_valid = yes }
+			VAL = { clear_variable = VAL_reclamation_deposit }
+			clr_state_flag = VAL_reclamation_work_in_progress
+			if = {
+				limit = { NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } } }
 				if = {
-					limit = { NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } } }
-					if = {
-						limit = { infrastructure < 5 }
-						add_building_construction = { type = infrastructure level = 1 instant_build = yes }
-					}
-					else = { add_extra_state_shared_building_slots = 1 }
+					limit = { infrastructure < 5 }
+					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
 				}
-				else_if = {
-					limit = { check_variable = { var = VAL_reclamation_stage value = 1 compare = equals } }
-					add_extra_state_shared_building_slots = 2
-				}
-				else = {
-					add_extra_state_shared_building_slots = 1
-					if = { limit = { industrial_complex < 20 } add_building_construction = { type = industrial_complex level = 1 instant_build = yes } }
-				}
-				add_to_variable = { var = VAL_reclamation_stage value = 1 }
-				VAL_reclamation_refresh_state = yes
+				else = { add_extra_state_shared_building_slots = 1 }
 			}
-			ADISCORD_economy_mark_dirty = yes
+			else_if = {
+				limit = { check_variable = { var = VAL_reclamation_stage value = 1 compare = equals } }
+				add_extra_state_shared_building_slots = 2
+			}
+			else = {
+				add_extra_state_shared_building_slots = 1
+				if = { limit = { industrial_complex < 20 } add_building_construction = { type = industrial_complex level = 1 instant_build = yes } }
+			}
+			add_to_variable = { var = VAL_reclamation_stage value = 1 }
+			VAL_reclamation_refresh_state = yes
+			VAL = { ADISCORD_economy_mark_dirty = yes }
 		}
-		else = { VAL_reclamation_refund_project = yes }
+		else = { VAL_reclamation_refund_state_project = yes }
+	}
+}
+
+# COUNTRY: only an outstanding receipt opens the fixed seven-state recovery pool.
+VAL_reclamation_reconcile_project = {
+	if = {
+		limit = { check_variable = { var = VAL_reclamation_deposit value = 500 compare = equals } }
+		24 = { VAL_reclamation_reconcile_state_project = yes }
+		42 = { VAL_reclamation_reconcile_state_project = yes }
+		48 = { VAL_reclamation_reconcile_state_project = yes }
+		54 = { VAL_reclamation_reconcile_state_project = yes }
+		55 = { VAL_reclamation_reconcile_state_project = yes }
+		56 = { VAL_reclamation_reconcile_state_project = yes }
+		57 = { VAL_reclamation_reconcile_state_project = yes }
+	}
+}
+
+# STATE: never restart a paid deadline or let a missing native timer hold escrow forever.
+VAL_reclamation_reconcile_state_project = {
+	if = {
+		limit = { has_state_flag = { flag = VAL_reclamation_work_in_progress days > 44 } }
+		VAL_reclamation_finish_state_project = yes
 	}
 }
 
@@ -2837,6 +2872,7 @@ VAL_install_stelander_administration = {
     if = {
         limit = { OR = { tag = STP tag = STS } VAL = { exists = yes has_capitulated = no is_subject = no } }
         save_event_target_as = VAL_settlement_country
+        VAL_settle_frontier_partner_war = yes
         if = { limit = { has_war_with = VAL } white_peace = VAL }
         if = {
             limit = { OR = { NOT = { is_subject_of = VAL } NOT = { has_autonomy_state = autonomy_VAL_contract_administration } } }
@@ -2899,6 +2935,7 @@ VAL_install_nodrul_administration = {
     if = {
         limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
         VAL = { VAL_snapshot_nodrul_settlement = yes }
+        VAL_settle_frontier_partner_war = yes
         if = { limit = { has_war_with = VAL } white_peace = VAL }
         VAL = { VAL_partition_nodrul_settlement = yes }
         VAL = { set_autonomy = { target = NOD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
@@ -3042,6 +3079,37 @@ VAL_reject_frontier_ultimatum = {
     clr_country_flag = VAL_frontier_yubora_ultimatum
 }
 
+# VAL scope. Repeated war callbacks only add relations which are still missing.
+VAL_call_frontier_partner = {
+    if = {
+        limit = {
+            has_country_flag = VAL_nod_frontier_agreement
+            VAL_frontier_partner_available = yes
+            has_war_with = NOD
+            NOD = { exists = yes has_capitulated = no }
+            TFF = { NOT = { is_in_faction_with = NOD } }
+        }
+        TFF = {
+            if = { limit = { NOT = { has_war_with = NOD } } add_to_war = { targeted_alliance = VAL enemy = NOD hostility_reason = asked_to_join single_target_only = yes } }
+            if = {
+                limit = { has_war_with = NOD }
+                if = { limit = { VAL = { has_war_with = STP } STP = { has_country_flag = VAL_final_war_member } NOT = { has_war_with = STP is_in_faction_with = STP } } add_to_war = { targeted_alliance = VAL enemy = STP hostility_reason = asked_to_join single_target_only = yes } }
+                if = { limit = { VAL = { has_war_with = STS } STS = { has_country_flag = VAL_final_war_member } NOT = { has_war_with = STS is_in_faction_with = STS } } add_to_war = { targeted_alliance = VAL enemy = STS hostility_reason = asked_to_join single_target_only = yes } }
+                ADISCORD_TFF_begin_kefreyt_campaign = yes
+                VAL_call_frontier_administrations = yes
+            }
+        }
+    }
+}
+
+# COUNTRY defeated enemy. Close the partner's relations before installing a client.
+VAL_settle_frontier_partner_war = {
+    if = {
+        limit = { VAL = { has_country_flag = VAL_nod_frontier_agreement } TFF = { has_country_flag = TFF_kefreyt_northern_campaign } has_war_with = TFF }
+        white_peace = TFF
+    }
+}
+
 # TFF scope; only the two administrations transferred by this treaty participate.
 VAL_call_frontier_administrations = {
     if = {
@@ -3156,9 +3224,10 @@ VAL_finalize_reserved_settlements = {
     NOD = {
         if = {
             limit = { has_country_flag = VAL_final_settlement_commit }
-            clr_country_flag = VAL_final_settlement_commit
             clr_country_flag = VAL_final_defeat_pending
+            # white_peace dispatches on_peace before the subject is installed.
             VAL_install_nodrul_administration = yes
+            clr_country_flag = VAL_final_settlement_commit
         }
     }
 }
@@ -3370,4 +3439,116 @@ VAL_frontier_expire_nod_ultimatum = {
             VAL_frontier_join_existing_war = yes
         }
     }
+}
+
+# Final campaign: 1 preparation, 2 war, 3 victory, 4 closed. Only VAL's weekly
+# hook advances escalation; startup and war callbacks never advance the clock.
+VAL_final_crisis_initialize = {
+	if = {
+		limit = { NOT = { has_variable = VAL_final_crisis_phase } VAL_final_crisis_available = yes VAL_frontier_idle = yes }
+		set_variable = { var = VAL_final_crisis_phase value = 1 }
+		set_variable = { var = VAL_final_escalation value = 0 }
+		set_variable = { var = VAL_final_supply_bonus value = 0 }
+		set_variable = { var = VAL_final_planning_bonus value = 0 }
+		set_variable = { var = VAL_final_reserve_share value = 0 }
+		add_dynamic_modifier = { modifier = VAL_final_war_preparation }
+		if = {
+			limit = { check_variable = { var = VAL_refugee_nodrul_admitted value = 3 compare = less_than } }
+			set_country_flag = VAL_refugee_nodrul_seen
+			set_country_flag = { flag = VAL_refugee_nodrul_window days = 180 }
+		}
+		unlock_decision_tooltip = VAL_final_register_reserves
+		unlock_decision_tooltip = VAL_final_stockpile_supplies
+		unlock_decision_tooltip = VAL_final_reconnaissance
+	}
+}
+
+# COUNTRY participant. Preserve major status which belonged to another system.
+VAL_final_crisis_register_member = {
+	set_country_flag = VAL_final_war_member
+	if = { limit = { is_major = no } set_country_flag = VAL_final_war_added_major set_major = yes }
+}
+
+VAL_final_crisis_join_war = {
+	if = {
+		limit = { has_war_with = NOD NOT = { check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals } } }
+		set_variable = { var = VAL_final_crisis_phase value = 2 }
+		NOD = { VAL_final_crisis_register_member = yes }
+		STP = {
+			if = {
+				limit = { exists = yes has_capitulated = no OR = { is_in_faction_with = NOD is_subject_of = NOD NOD = { is_subject_of = STP } } NOT = { is_in_faction_with = VAL is_subject_of = VAL } }
+				if = { limit = { NOT = { has_war_with = VAL } } add_to_war = { targeted_alliance = NOD enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
+				if = { limit = { has_war_with = VAL } VAL_final_crisis_register_member = yes }
+			}
+		}
+		STS = {
+			if = {
+				limit = { exists = yes has_capitulated = no OR = { is_in_faction_with = NOD is_subject_of = NOD } NOT = { is_in_faction_with = VAL is_subject_of = VAL } }
+				if = { limit = { NOT = { has_war_with = VAL } } add_to_war = { targeted_alliance = NOD enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
+				if = { limit = { has_war_with = VAL } VAL_final_crisis_register_member = yes }
+			}
+		}
+		if = { limit = { NOT = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } } add_dynamic_modifier = { modifier = VAL_final_war_preparation } }
+		VAL_call_frontier_partner = yes
+		VAL_call_subjects_to_wars = yes
+	}
+}
+
+VAL_final_crisis_launch = {
+	if = {
+		limit = { VAL_final_crisis_preparing = yes }
+		NOD = { VAL_final_crisis_register_member = yes }
+		if = {
+			limit = { NOD = { is_subject_of = STP } }
+			STP = { VAL_final_crisis_register_member = yes }
+			declare_war_on = { target = STP type = annex_everything }
+			NOD = { if = { limit = { NOT = { has_war_with = VAL } } add_to_war = { targeted_alliance = STP enemy = VAL hostility_reason = asked_to_join single_target_only = yes } } }
+		}
+		else = { declare_war_on = { target = NOD type = annex_everything } }
+		VAL_final_crisis_join_war = yes
+	}
+}
+
+VAL_final_refund_supply_order = {
+	if = {
+		limit = { has_variable = VAL_final_supply_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_final_supply_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_final_supply_deposit }
+		clear_variable = VAL_final_supply_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_final_crisis_close = {
+	set_variable = { var = VAL_final_crisis_phase value = 4 }
+	if = { limit = { NOD = { OR = { is_subject_of = VAL has_country_flag = VAL_final_settlement_commit has_country_flag = VAL_final_capitulation_immediate } } has_capitulated = no is_subject = no } set_variable = { var = VAL_final_crisis_phase value = 3 } }
+	if = { limit = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } remove_dynamic_modifier = { modifier = VAL_final_war_preparation } }
+	VAL_final_refund_supply_order = yes
+	NOD = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
+	STP = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
+	STS = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
+}
+
+VAL_final_crisis_reconcile = {
+	if = {
+		limit = { check_variable = { var = VAL_final_crisis_phase value = 0 compare = greater_than } check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } }
+		if = { limit = { OR = { has_capitulated = yes is_subject = yes has_country_flag = VAL_stelander_defeated } } VAL_final_crisis_close = yes }
+		else_if = {
+			limit = { check_variable = { var = VAL_final_crisis_phase value = 1 compare = equals } }
+			if = { limit = { has_war_with = NOD VAL_final_campaign_separate_from_frontier = yes } VAL_final_crisis_join_war = yes }
+			else_if = { limit = { VAL_final_crisis_available = no } VAL_final_crisis_close = yes }
+		}
+		else_if = { limit = { NOT = { OR = { has_war_with = NOD has_war_with = STP has_war_with = STS } } } VAL_final_crisis_close = yes }
+	}
+}
+
+VAL_final_crisis_weekly = {
+	VAL_final_crisis_initialize = yes
+	VAL_final_crisis_reconcile = yes
+	if = {
+		limit = { VAL_final_crisis_preparing = yes }
+		add_to_variable = { var = VAL_final_escalation value = 5 }
+		clamp_variable = { var = VAL_final_escalation min = 0 max = 100 }
+		if = { limit = { check_variable = { var = VAL_final_escalation value = 100 compare = greater_than_or_equals } } VAL_final_crisis_launch = yes }
+	}
 }

@@ -13,6 +13,21 @@ NAMES = tuple(f"{tag}_{role}" for tag in ("VAL", "NOD", "STP") for role in ("tan
 
 
 class CountryVehicleTests(unittest.TestCase):
+    def test_supersonic_flyby_does_not_draw_pulsing_clouds(self):
+        path = ROOT / "gfx/particles/vehicles/sonic_boom.asset"
+        self.assertTrue(path.is_file(), "native sonic-boom emitters are still visible")
+        particle = path.read_text(encoding="utf-8")
+        self.assertRegex(particle, r'name\s*=\s*"sonic_boom_file"')
+        self.assertEqual(len(re.findall(r"\bsubsystem\s*=", particle)), 3)
+        self.assertEqual(re.findall(r"\bhide\s*=\s*(\w+)", particle), ["yes"] * 3)
+
+    def test_vehicles_keep_their_paint_in_snow(self):
+        for name in NAMES:
+            with self.subTest(name=name):
+                mesh = (DEST / (name + ".mesh")).read_bytes()
+                self.assertTrue(b"PdxMeshAdvanced\x00" in mesh, "missing paint shader")
+                self.assertFalse(b"PdxMeshAdvancedSnow" in mesh, "snow shader changes vehicle paint")
+
     def test_nine_distinct_native_meshes_have_current_verification(self):
         report = json.loads((SOURCE / "verification.json").read_text())
         self.assertEqual(set(report), set(NAMES))

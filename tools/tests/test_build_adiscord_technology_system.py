@@ -19,6 +19,77 @@ STARTING_PROFILE_MANIFEST = ROOT / "tools" / "data" / "adiscord_starting_technol
 
 
 class CompactTechnologyTreeContractTests(unittest.TestCase):
+    def test_budget_research_has_bounded_consumed_modifiers_and_refreshes_cache(self) -> None:
+        branch = generator.BRANCH_BY_KEY.get("public_finance")
+        self.assertIsNotNone(branch, "Public finance must be a playable research line")
+        definitions = (ROOT / "common/modifier_definitions/00_ADISCORD_economy_modifiers_definition.txt").read_text(encoding="utf-8-sig")
+        consumers = (ROOT / "common/scripted_effects/ADISCORD_economy_modifier_effects.txt").read_text(encoding="utf-8-sig")
+        totals: dict[str, float] = {}
+        for index, tech in enumerate(branch.techs):
+            rendered = generator.render_technology(branch, index)
+            modifiers = re.findall(r"(ADISCORD_economy_\w+) = (-?[\d.]+)", rendered)
+            self.assertGreaterEqual(len(modifiers), 2, tech.id)
+            for name, value in modifiers:
+                self.assertIn(name + " = {", definitions)
+                self.assertIn("modifier@" + name, consumers)
+                totals[name] = totals.get(name, 0) + float(value)
+            self.assertEqual(rendered.count("on_research_complete = {"), 1)
+            self.assertEqual(rendered.count("ADISCORD_economy_mark_dirty = yes"), 1)
+            self.assertNotIn("add_to_variable", rendered)
+        self.assertTrue(all(abs(value) <= 0.20 for value in totals.values()), totals)
+
+    def test_rare_material_supply_precedes_equipment_and_has_research_gates(self) -> None:
+        buildings = validator.collect_building_blocks()
+        equipment = validator.collect_equipment_blocks()
+        for resource, building, unlock in (
+            ("rare_components", "ADISCORD_rare_components_plant", "ADISCORD_tech_rare_components_industry"),
+            ("rare_alloys", "ADISCORD_rare_alloy_foundry", "ADISCORD_tech_rare_alloy_metallurgy"),
+        ):
+            with self.subTest(resource=resource):
+                self.assertIn(unlock, generator.CURRENT_TECH_IDS)
+                self.assertIn((building, 1), generator.ENABLE_BUILDINGS[unlock])
+                self.assertIn("hide_if_missing_tech = yes", buildings[building])
+                branch, index = generator.TECH_POSITION_BY_ID[unlock]
+                supply_year = branch.years[index]
+                consumers = []
+                for tech_id, items in generator.ENABLE_EQUIPMENT.items():
+                    for item in items:
+                        block = equipment[item]
+                        archetype = re.search(r"archetype = (\w+)", block)
+                        if "resources =" not in block and archetype:
+                            block = equipment[archetype.group(1)]
+                        if re.search(rf"\b{resource} = [1-9]", block):
+                            consumer_branch, consumer_index = generator.TECH_POSITION_BY_ID[tech_id]
+                            consumers.append(item)
+                            self.assertLess(supply_year, consumer_branch.years[consumer_index], item)
+                self.assertGreater(len(set(consumers)), 4)
+                upgrades = [amount for entries in generator.BUILDING_RESOURCE_UPGRADES.values()
+                            for target, res, amount in entries if target == building and res == resource]
+                self.assertTrue(upgrades)
+                self.assertLessEqual(sum(upgrades), 4)
+
+    def test_inherited_material_plants_and_budget_profile_grants_remain_usable(self) -> None:
+        unlocks = {"ADISCORD_tech_rare_components_industry", "ADISCORD_tech_rare_alloy_metallurgy"}
+        for tag in ("WRK", "RIV"):
+            starting = set(generator.STARTING_TECH_PROFILES["common"])
+            for profile in generator.STARTING_COUNTRY_TECH_PROFILES[tag]:
+                starting.update(generator.STARTING_TECH_PROFILES[profile])
+            self.assertTrue(unlocks <= starting, tag)
+        branch, index = generator.TECH_POSITION_BY_ID["ADISCORD_tech_predictive_maintenance"]
+        rendered = generator.render_technology(branch, index)
+        self.assertEqual(rendered.count("on_research_complete = {"), 1)
+        self.assertIn("add_tech_bonus = {", rendered)
+        self.assertIn("ADISCORD_economy_mark_dirty = yes", rendered)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "common/scripted_effects").mkdir(parents=True)
+            with patch.object(generator, "ROOT", root):
+                generator.write_starting_technology_effect()
+            text = (root / "common/scripted_effects/ADISCORD_technology_baseline_effects.txt").read_text(encoding="utf-8")
+        common = validator.extract_block(text, text.index("ADISCORD_grant_technology_profile_common = {"))
+        self.assertIn("has_variable = ADISCORD_economy_initialized", common)
+        self.assertIn("ADISCORD_economy_mark_dirty = yes", common)
+
     def test_country_uniform_sprites_resolve_to_regional_assets(self) -> None:
         icons = json.loads((ROOT / "tools/data/adiscord_technology_weapon_icons.json").read_text(encoding="utf-8"))["icons"]
         outputs = {entry["output"] for entry in icons}
@@ -127,6 +198,8 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 "industry_organization",
                 "reconstruction",
                 "resources",
+                "public_finance",
+                "advanced_materials",
             },
             "electronics_folder": {"signals", "computing", "power"},
             "infantry_folder": {

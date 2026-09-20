@@ -335,6 +335,76 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_ADISCORD_tech_treasury_accounting_medium"
+		textureFile = "gfx/interface/technologies/mechanical_computing.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_public_procurement_standards_medium"
+		textureFile = "gfx/interface/technologies/computing_machine.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_civilian_industrial_accounting_medium"
+		textureFile = "gfx/interface/technologies/improved_machine_tools.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_customs_clearance_networks_medium"
+		textureFile = "gfx/interface/technologies/radio.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_administrative_digitization_medium"
+		textureFile = "gfx/interface/technologies/improved_computing_machine.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_production_cost_accounting_medium"
+		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_integrated_budget_forecasts_medium"
+		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_automated_treasury_audit_medium"
+		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_precision_material_standards_medium"
+		textureFile = "gfx/interface/technologies/improved_machine_tools.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_rare_components_industry_medium"
+		textureFile = "gfx/interface/technologies/computing_machine.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_rare_alloy_metallurgy_medium"
+		textureFile = "gfx/interface/technologies/excavation2.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_precision_component_fabrication_medium"
+		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_vacuum_alloy_refining_medium"
+		textureFile = "gfx/interface/technologies/excavation4.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_advanced_material_recycling_medium"
+		textureFile = "gfx/interface/technologies/excavation5.dds"
+	}
+
+	SpriteType = {
 		name = "GFX_ADISCORD_tech_mesh_command_networks_medium"
 		textureFile = "gfx/interface/technologies/radio.dds"
 	}

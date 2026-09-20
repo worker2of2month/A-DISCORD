@@ -151,12 +151,13 @@ on_actions = {
             if = {
                 limit = { ROOT = { OR = { tag = VAL tag = TFF } } }
                 VAL = { clr_country_flag = VAL_nod_frontier_agreement clr_country_flag = VAL_nod_frontier_offer_pending clr_country_flag = VAL_frontier_yubora_ultimatum }
+                TFF = { ADISCORD_TFF_end_kefreyt_campaign = yes }
             }
             else_if = {
                 limit = {
                     ROOT = { tag = NOD }
-                    NOT = { FROM = { OR = { tag = VAL is_subject_of = VAL } } }
-                    NOT = { ROOT = { capital_scope = { VAL_frontier_controlled = yes } } }
+                    NOT = { FROM = { VAL_final_campaign_ally = yes } }
+                    NOT = { ROOT = { capital_scope = { controller = { VAL_final_campaign_ally = yes } } } }
                 }
                 VAL = { clr_country_flag = VAL_nod_frontier_agreement clr_country_flag = VAL_nod_frontier_offer_pending }
             }
@@ -204,7 +205,7 @@ on_actions = {
                         OR = { tag = STP tag = STS tag = NOD }
                         has_war_with = VAL
                         VAL = { exists = yes has_capitulated = no VAL_final_campaign_separate_from_frontier = yes }
-                        OR = { FROM = { OR = { tag = VAL is_subject_of = VAL } } capital_scope = { VAL_frontier_controlled = yes } }
+                        OR = { FROM = { VAL_final_campaign_ally = yes } capital_scope = { controller = { VAL_final_campaign_ally = yes } } }
                     }
                     if = {
                         limit = {
@@ -221,7 +222,11 @@ on_actions = {
                 }
             }
 
-			# END kefreyt:on_capitulation_immediate
+			if = {
+                limit = { ROOT = { tag = VAL has_variable = VAL_final_crisis_phase } }
+                ROOT = { VAL_final_crisis_close = yes set_variable = { var = VAL_final_crisis_phase value = 4 } }
+            }
+            # END kefreyt:on_capitulation_immediate
 
 			# BEGIN northern_reservation:on_capitulation_immediate
 			if = {
@@ -958,6 +963,8 @@ on_actions = {
             # BEGIN kefreyt:on_peace
             if = { limit = { STP = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STP = { VAL_cede_stelander_border = yes } }
             if = { limit = { STS = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STS = { VAL_cede_stelander_border = yes } }
+            if = { limit = { VAL = { exists = yes } } VAL = { VAL_final_crisis_reconcile = yes } }
+            TFF = { ADISCORD_TFF_reconcile_kefreyt_campaign = yes }
             # END kefreyt:on_peace
             # BEGIN stelander:on_peace
             STP = { STP_occidia_reconcile_peace = yes }

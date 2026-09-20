@@ -1,5 +1,27 @@
 ideas = {
 	country = {
+		VAL_armor_serial_production = {
+			picture = generic_armor
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			equipment_bonus = {
+				ADISCORD_recon_platform_archetype = { instant = yes build_cost_ic = -0.05 }
+				ADISCORD_combat_platform_archetype = { instant = yes build_cost_ic = -0.05 }
+				ADISCORD_heavy_platform_archetype = { instant = yes build_cost_ic = -0.05 }
+			}
+		}
+
+		VAL_armor_contract_production = {
+			picture = generic_armor
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			equipment_bonus = {
+				ADISCORD_recon_platform_archetype = { instant = yes build_cost_ic = -0.10 reliability = 0.05 }
+				ADISCORD_combat_platform_archetype = { instant = yes build_cost_ic = -0.10 reliability = 0.05 }
+				ADISCORD_heavy_platform_archetype = { instant = yes build_cost_ic = -0.10 reliability = 0.05 }
+			}
+		}
+
 		VAL_staff_war_mandate = {
 			picture = army_training
 			allowed = { original_tag = VAL }
@@ -127,6 +149,8 @@ ideas = {
 		VAL_army_of_the_ledger_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_attack_factor = 0.05 army_org_factor = 0.02 planning_speed = 0.03 } }
 		VAL_contract_throne_delta = { name = VAL_contract_state allowed = { always = no } modifier = { political_power_gain = 0.05 } }
 		VAL_weaponry_baron_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_military_industry_income_factor = 0.03 } }
+		VAL_Company_Mandates_delta = { name = VAL_contract_state allowed = { always = no } modifier = { political_power_gain = 0.15 } }
+		VAL_Contract_Arbitration_delta = { name = VAL_contract_state allowed = { always = no } modifier = { political_power_gain = 0.20 } }
 		VAL_mercenary_state_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_regain = 0.02 } }
 		VAL_harvest_ash_delta = { name = VAL_contract_state allowed = { always = no } modifier = { stability_factor = 0.02 } }
 		VAL_provincial_courts_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.03 } }

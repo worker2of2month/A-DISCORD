@@ -9,6 +9,7 @@ from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
 from tools.lib.paths import repository_root
+from tools.lib.vorkerland_collapse_manifest import DIRTY_GROUPS, EXZ_REMAINDER_GROUPS
 
 
 ROOT = repository_root()
@@ -18,12 +19,15 @@ STATE_IDS = (43, 44, 45, 88, 58, 59, 60, 61, 62, 63, 64, 65, 168)
 VAL_STATES = (24, 42, 48, 54, 55, 56, 57)
 STP_STATES = (1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88)
 NOD_STATES = (10, 11, 12, 13, 17, 18, 30)
-STATE_IDS = tuple(dict.fromkeys((*STATE_IDS, *VAL_STATES, *STP_STATES, *NOD_STATES)))
-EXZ_STATES = (167, 169, 171, 180, 182, 185)
+SOUTHERN_STATES = tuple(dict.fromkeys((
+    *DIRTY_GROUPS["ERT"], *EXZ_REMAINDER_GROUPS["ERT"],
+    *DIRTY_GROUPS["IRT"], *EXZ_REMAINDER_GROUPS["IRT"], 186,
+)))
+STATE_IDS = tuple(dict.fromkeys((*STATE_IDS, *VAL_STATES, *STP_STATES, *NOD_STATES, *SOUTHERN_STATES)))
 
 # Countries participating in the northern and Stelander campaigns; the last frame
 # represents a controller from outside this theatre.
-MAP_TAGS = ("VAL", "STP", "STS", "SRP", "NOD", "CIN", "OSF", "APH", "ERT", "NKA", "OCA", "YPR", "COF", "TFF")
+MAP_TAGS = ("VAL", "STP", "STS", "SRP", "NOD", "CIN", "OSF", "APH", "ERT", "NKA", "OCA", "YPR", "COF", "TFF", "EXZ", "IRT", "RZA")
 MAP_COSMETICS = {"STL_VAL_administration": "STP"}
 FRAME_COUNT = len(MAP_TAGS) + len(MAP_COSMETICS) + 1
 
@@ -81,7 +85,7 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int],
     province_to_color, land_colors = province_colors()
     state_sets = {
         state: state_provinces(state)
-        for state in (*STATE_IDS, *VAL_STATES, *EXZ_STATES)
+        for state in STATE_IDS
     }
     color_to_state = {
         province_to_color[province]: state
@@ -135,10 +139,6 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int],
         draw.line((0, y, WIDTH, y), fill=(34, 37, 38, 255), width=1)
     for x in range(0, WIDTH, 32):
         draw.line((x, 0, x, HEIGHT), fill=(34, 37, 38, 255), width=1)
-
-    for state in EXZ_STATES:
-        fill = Image.new("RGBA", background.size, (35, 37, 40, 255))
-        background.alpha_composite(Image.composite(fill, Image.new("RGBA", background.size), state_masks[state]))
 
     all_mask = Image.new("L", background.size, 0)
     for mask in state_masks.values():
