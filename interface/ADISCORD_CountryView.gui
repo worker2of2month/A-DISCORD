@@ -55,7 +55,7 @@ guiTypes = {
 			name = "ADISCORD_development_open"
 			position = { x = 0 y = 0 }
 			size = { x = 221 y = 36 }
-			quadTextureSprite = "GFX_button_221x34"
+			quadTextureSprite = "GFX_ADISCORD_politics_header_button"
 			buttonText = "ADISCORD_society_development_interface_header"
 			buttonFont = "hoi_16mbs"
 			clicksound = click_default

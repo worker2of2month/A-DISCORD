@@ -2199,6 +2199,9 @@ class StartupGuideContractTests(unittest.TestCase):
                 self.assertEqual(image.size, (size[0] * frames, size[1]))
         gui = self.read('interface/ADISCORD_startup_menu.gui')
         names = {_direct_scalar(e.value, 'name') for e in sprites}
+        country_gfx = economy_validator.parse_clausewitz(self.read('interface/ADISCORD_CountryView.gfx'))
+        names.update(_direct_scalar(e.value, 'name')
+                     for e in _unique_direct_block(country_gfx, 'spriteTypes'))
         for name in re.findall(r'(?:quadTextureSprite|spriteType)\s*=\s*"([^"]+)"', gui):
             self.assertIn(name, names)
         for tag in ('stp', 'val'):
@@ -2220,8 +2223,19 @@ class StartupGuideContractTests(unittest.TestCase):
         for name in ('manage_occupied_button', 'subjects_button_container', 'rules'):
             nx, ny = _gui_position(gui_node_body(native, name))
             self.assertFalse(x < nx + 32 and nx < x + w and y < ny + 32 and ny < y + h, name)
-        self.assertGreaterEqual(y, 516)
-        self.assertLessEqual(y + h, 545)
+        self.assertGreaterEqual(x, 190)
+        self.assertLessEqual(x + w, 340)
+        self.assertGreaterEqual(y, 325)
+        self.assertLessEqual(y + h, 445)
+
+    def test_briefing_text_accepts_scroll_input_inside_fixed_viewports(self):
+        gui = self.read('interface/ADISCORD_startup_menu.gui')
+        for name in ('ADISCORD_startup_country_body', 'ADISCORD_startup_body'):
+            with self.subTest(name=name):
+                body = gui_node_body(gui, name)
+                self.assertIn('fixedsize = yes', body)
+                self.assertIn('scrollbarType = "standardtext_slider"', body)
+                self.assertNotIn('alwaystransparent = yes', body)
 
     def test_stelander_intro_explains_shabrat_before_path_spoilers(self):
         russian = self.read('localisation/russian/ADISCORD_STP_l_russian.yml')

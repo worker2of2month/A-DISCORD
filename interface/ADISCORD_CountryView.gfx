@@ -1,4 +1,13 @@
 spriteTypes = {
+	corneredTileSpriteType = {
+		name = "GFX_ADISCORD_politics_header_button"
+		texturefile = "gfx/interface/tiled_plain_bg_adiscord.png"
+		size = { x = 221 y = 36 }
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = no
+		noOfFrames = 1
+		effectFile = "gfx/FX/buttonstate.lua"
+	}
 	progressbartype = {
 		name = "GFX_tno_politics_circular_progress_bar"
 		textureFile2 = "gfx/interface/CountryDevelopment/CountryDevelopment_slider_bad.png"

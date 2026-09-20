@@ -1983,9 +1983,9 @@ def task10_live_localisation_keys(gui_text, scripted_loc_text):
 TASK10_FIXED_LEVEL_POLICIES = ("tax", "army", "social")
 TASK10_NUMERIC_PROSE_EQUIVALENCES = {
     "ADISCORD_economy_action_repay_debt_tt": {
-        "russian": ("-50", "50"),
-        "english": ("50", "50"),
-        "reason": "Russian signs the treasury outflow; English says spend 50",
+        "russian": ("-500", "50"),
+        "english": ("50", "500"),
+        "reason": "Russian signs the treasury outflow; English says spend 500",
     },
     "ADISCORD_economy_research_controls_tt": {
         "russian": (
@@ -2068,8 +2068,8 @@ def task10_material_numeric_surface_issues(russian_text, english_text):
     issues = []
     exact_numeric_contracts = {
         "ADISCORD_economy_action_restructure_debt_tt": {
-            "russian": ("10%", "100", "15%", "35", "50"),
-            "english": ("10%", "100", "15%", "2", "35", "50"),
+            "russian": ("10%", "100", "30%", "35", "50"),
+            "english": ("10%", "100", "2", "30%", "35", "50"),
         },
         "ADISCORD_economy_buildings_tt": {
             "russian": ("+1.20", "+5%", "0.27", "1", "2", "4", "6"),
@@ -7645,11 +7645,11 @@ ADISCORD_task10_forbidden_cache_consumer = {
             planned_branch,
         )
         self.assertIn(
-            "add_to_variable = { var = ADISCORD_economy_inflation value = -8 }",
+            "add_to_variable = { var = ADISCORD_economy_inflation value = -12 }",
             block(EFFECTS, "ADISCORD_economy_stabilization_package"),
         )
         self.assertIn(
-            "add_to_variable = { var = ADISCORD_economy_inflation value = -2 }",
+            "add_to_variable = { var = ADISCORD_economy_inflation value = -4 }",
             block(EFFECTS, "ADISCORD_economy_reduce_money_emission"),
         )
 
@@ -8624,11 +8624,90 @@ class EconomyScriptFixture:
 class EconomyAccountingRegressionTests(unittest.TestCase):
     PREFIX = "ADISCORD_economy_"
 
+    def test_investment_programs_double_their_progress_and_preserve_cash_accounting(self):
+        p = self.PREFIX
+        cases = (("invest_reserves", "can_expand_public_capital", "economic", (12, 16, 16, 20, 12, 12, 12)),
+                 ("civilian_investment_action", "can_use_civilian_stimulus", "economic", (24, 40, 34, 44, 34, 24, 24)),
+                 ("military_investment_action", "can_use_military_investment", "army", (20, 20, 20, 20, 20, 28, 32)))
+        models = ("other", "decentralized_market", "mixed", "technocratic", "oligarchic_clan", "state_coordinated", "planned_bureaucratic")
+        for effect, gate, development, rewards in cases:
+            for model, reward in zip(models, rewards):
+                fixture = EconomyScriptFixture(
+                    facts={p + gate: True, **{p + "model_is_" + name: name == model for name in models}},
+                    stubs=(p + "initialize_country", p + "mark_dirty", p + "check_economic_development_upgrade", "add_timed_idea"))
+                values = fixture.scopes["A"]
+                values.update({p + "treasury": 500, p + "public_investment_stock": 9})
+                fixture.run(p + effect)
+                self.assertEqual(values[p + "treasury"], 400)
+                self.assertEqual(values[p + "current_month_action_costs"], 100)
+                self.assertEqual(values["ADISCORD_" + development + "_development_progress"], reward, (effect, model))
+                if effect == "invest_reserves":
+                    self.assertEqual(values[p + "public_investment_stock"], 10)
+
+    def test_emission_and_stabilization_deliver_the_larger_packages(self):
+        p = self.PREFIX
+        stubs = (p + "initialize_country", p + "mark_dirty", p + "calculate_macro_indicators", "add_timed_idea")
+        for room in (1000, 40):
+            fixture = EconomyScriptFixture(facts={p + "can_expand_money_emission": True}, stubs=stubs)
+            values = fixture.scopes["A"]
+            values.update({p + "treasury": 100, p + "treasury_cap": 100 + room})
+            fixture.run(p + "expand_money_emission")
+            self.assertEqual(values[p + "treasury"], 100 + min(room, 750))
+            self.assertEqual(values[p + "current_month_action_income"], min(room, 750))
+            self.assertEqual(values[p + "money_printing_level"], 1)
+        for full, deltas in ((True, (12, 15, 20, 10, 12)), (False, (6, 9, 12, 5, 6))):
+            fixture = EconomyScriptFixture(facts={p + "can_stabilize_macro": full, p + "can_stabilize_macro_crisis": not full}, stubs=stubs)
+            values = fixture.scopes["A"]
+            indicators = ("inflation", "fiscal_stress", "deficit_pressure", "price_shock", "action_overload_residue")
+            values.update({p + field: 30 for field in indicators})
+            values[p + "treasury"] = 100 if full else 0
+            fixture.run(p + "stabilization_package")
+            self.assertEqual(values[p + "treasury"], 0)
+            for field, delta in zip(indicators, deltas):
+                self.assertEqual(values[p + field], 30 - delta)
+
+    def test_larger_war_taxes_credit_only_room_and_keep_pressure_bounded(self):
+        p = self.PREFIX
+        for model, expected in (("mixed", 1000), ("state_coordinated", 1250), ("planned_bureaucratic", 1500)):
+            for room in (2000, 300):
+                fixture = EconomyScriptFixture(
+                    facts={p + "can_use_war_taxes": True, **{p + "model_is_" + name: name == model
+                           for name in ("mixed", "state_coordinated", "planned_bureaucratic", "decentralized_market")}},
+                    stubs=(p + "initialize_country", p + "mark_dirty", "add_timed_idea"))
+                values = fixture.scopes["A"]
+                values.update({p + "treasury": 100, p + "treasury_cap": 100 + room})
+                fixture.run(p + "war_taxes_action")
+                received = min(room, expected)
+                self.assertEqual(values[p + "treasury"], 100 + received)
+                self.assertEqual(values[p + "current_month_action_income"], received)
+                self.assertEqual(values[p + "action_overload_residue"], received / 100)
+                self.assertEqual(values[p + "war_fatigue_score"], 5)
+
+    def test_large_repayments_are_one_to_one_and_restructuring_writes_off_thirty_percent(self):
+        p = self.PREFIX
+        for effect, maximum in (("repay_debt", 500), ("early_repay_debt", 1000)):
+            for cash, debt in ((3000, 5000), (150, 5000), (3000, 125)):
+                fixture = EconomyScriptFixture(
+                    facts={p + "has_treasury_50": True, p + "has_debt": True, p + "can_early_repay_debt": True},
+                    stubs=tuple(p + name for name in ("initialize_country", "calculate_debt_metrics",
+                                "reconcile_debt_state_after_action", "update_macro_confidence", "mark_dirty")))
+                values = fixture.scopes["A"]
+                values.update({p + "treasury": cash, p + "debt": debt})
+                fixture.run(p + effect)
+                paid = min(maximum, cash, debt)
+                self.assertEqual(values[p + "treasury"], cash - paid)
+                self.assertEqual(values[p + "debt"], debt - paid)
+                self.assertEqual(values[p + "current_month_debt_paid"], paid)
+        fixture.facts[p + "can_restructure_debt"] = True
+        values[p + "debt"] = 5000
+        fixture.run(p + "restructure_debt")
+        self.assertEqual(values[p + "debt"], 3500)
+
     def test_manual_financing_distinguishes_bonds_and_external_loan_premiums(self):
         p = self.PREFIX
-        for effect, gate, inflation, premium in (("issue_internal_bonds", "can_take_debt", 1, 1.10),
-                                        ("take_external_loan", "can_take_external_loan", 1.5, 1.25)):
-            for room in (2000, 750):
+        for effect, gate, inflation, principal, liability in (("issue_internal_bonds", "can_take_debt", 1, 1500, 1700),
+                                        ("take_external_loan", "can_take_external_loan", 1.5, 2000, 2500)):
+            for room in (principal, 750):
                 with self.subTest(effect=effect, room=room):
                     fixture = EconomyScriptFixture(
                         facts={p + gate: True, p + "can_issue_internal_bonds": True,
@@ -8643,9 +8722,9 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                     values.update({p + "treasury": 100, p + "treasury_cap": 100 + room, p + "debt": 80})
                     fixture.run(p + effect)
                     self.assertEqual(values[p + "treasury"], 100 + room)
-                    self.assertAlmostEqual(values[p + "debt"], 80 + room * premium)
+                    self.assertAlmostEqual(values[p + "debt"], 80 + room * liability / principal)
                     self.assertEqual(values[p + "current_month_debt_added"], room)
-                    self.assertAlmostEqual(values[p + "inflation"], inflation * room / 2000)
+                    self.assertAlmostEqual(values[p + "inflation"], inflation * room / principal)
                     self.assertEqual(values[p + "recent_debt"], 1)
 
     def test_flat_weekly_income_is_in_cash_ai_balance_and_both_debt_denominators(self):
