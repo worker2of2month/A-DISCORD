@@ -1169,6 +1169,7 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.variables = {}
         self.modifiers = set()
         self.dirty = 0
+        self.layout_updates = 0
         self.removed_rights = []
         self.installed_ideas = set()
 
@@ -1219,6 +1220,8 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
                     self.removed_rights.append(str(value))
                 elif key == "add_ideas":
                     self.installed_ideas.add(value)
+                elif key == "mark_focus_tree_layout_dirty":
+                    self.layout_updates += 1
                 elif key == "ADISCORD_economy_mark_dirty":
                     self.dirty += 1
                 elif key in self.effects and value == "yes":
@@ -1233,6 +1236,7 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.run_effect("VAL_handle_vorkerland_war_outbreak")
         self.assertEqual(self.modifiers, {"VAL_economic_collapse", "VAL_arsenal_reputation"})
         self.assertAlmostEqual(self.variables["VAL_industrial_output"], -.73)
+        self.assertEqual(self.layout_updates, 1)
         expected = {"output": (-.75, .09), "construction": (-.57, .07),
                     "efficiency": (-.57, .07), "trade": (-.85, .10),
                     "income": (-.57, .07), "consumer": (.18, -.02)}
@@ -1248,6 +1252,16 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.run_effect("VAL_advance_economic_recovery")
         self.assertEqual(self.variables["VAL_economic_recovery_steps"], 9)
         self.assertGreaterEqual(self.dirty, 8)
+
+    def test_loading_active_crisis_refreshes_branch_and_preserves_penalty(self):
+        for flag in ("VAL_vorkerland_contracts_disrupted", "VAL_vorkerland_resource_access_initialized"):
+            self.facts[("VAL", "has_country_flag", flag)] = True
+        self.variables.update(VAL_economic_recovery_steps=2, VAL_arsenal_reputation_stage=0)
+        self.run_effect("VAL_initialize_arsenal_recovery")
+        self.assertEqual(self.layout_updates, 1)
+        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 2)
+        self.assertIn("VAL_economic_collapse", self.modifiers)
+        self.assertAlmostEqual(self.variables["VAL_industrial_output"], -.57)
 
     def test_loaded_recovery_removes_stale_modifiers_without_resetting_progress(self):
         self.variables.update(VAL_economic_recovery_steps=9, VAL_arsenal_reputation_stage=4,

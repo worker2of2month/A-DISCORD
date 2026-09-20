@@ -1163,6 +1163,7 @@ VAL_handle_vorkerland_war_outbreak = {
 	if = {
 		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }
 		set_country_flag = VAL_vorkerland_contracts_disrupted
+		mark_focus_tree_layout_dirty = yes
 		clr_country_flag = VAL_westerholm_offer_pending
 		remove_ideas = { VAL_big_buyers VAL_westerholm_concession_income }
 		set_variable = { var = VAL_economic_recovery_steps value = 0 }
@@ -2855,6 +2856,7 @@ VAL_initialize_arsenal_recovery = {
     # Reconcile loaded campaigns even when their numeric progress already exists.
     VAL_reconcile_supply_crisis = yes
     VAL_refresh_industrial_economy = yes
+    if = { limit = { has_country_flag = VAL_vorkerland_contracts_disrupted } mark_focus_tree_layout_dirty = yes }
 
 }
 
