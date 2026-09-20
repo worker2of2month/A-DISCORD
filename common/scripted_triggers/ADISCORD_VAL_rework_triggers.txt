@@ -658,14 +658,11 @@ VAL_frontier_bloc_target_eligible = {
 # COUNTRY target: predict the same faction compatibility used by assembly.
 VAL_frontier_nod_support_possible = {
 	NOD = {
-		exists = yes has_capitulated = no
+		exists = yes
+		has_capitulated = no
 		OR = { is_subject = no is_subject_of = STP }
-		NOT = { has_war_with = PREV is_in_faction_with = VAL }
-	}
-	OR = {
-		is_in_faction = no
-		NOD = { is_in_faction = no }
-		is_in_faction_with = NOD
+		NOT = { has_war_with = PREV }
+		NOT = { is_in_faction_with = VAL }
 	}
 }
 
