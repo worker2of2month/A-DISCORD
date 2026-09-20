@@ -114,7 +114,7 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_Govern_In_His_Name"
-		texturefile = "gfx/interface/goals/goal_generic_demand_territory.dds"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Govern_In_His_Name.png"
 	}
 
 	spriteType = {

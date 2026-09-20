@@ -26,6 +26,7 @@ SOUND_CATEGORY = Path("sound/superevents_category.asset")
 REGISTRY = Path("tools/data/adiscord_event_ids.json")
 MUSIC = Path("music/ADISCORD_music.asset")
 SONGS = Path("music/ADISCORD_songs.txt")
+PRESENTATION_SONGS = Path("music/ADISCORD_superevent_songs.txt")
 
 REQUIRED_FILES = (
     EVENTS,
@@ -41,6 +42,7 @@ REQUIRED_FILES = (
     REGISTRY,
     MUSIC,
     SONGS,
+    PRESENTATION_SONGS,
 )
 
 SUPEREVENT_IDS = (
@@ -363,12 +365,26 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     _check_order("sound effects", sound_effects, sound_effect_names, issues)
     _check_order("sound category", sound_category, sound_effect_names, issues)
 
+    if not re.search(r'^music_station\s*=\s*"adiscord_superevents"\s*$',
+                     source[PRESENTATION_SONGS], re.M):
+        issues.append("presentation music must use its hidden station")
+    for gui_path in (root / "interface").glob("*.gui"):
+        if re.search(r'name\s*=\s*"adiscord_superevents_(?:faceplate|stations_entry)"',
+                     gui_path.read_text(encoding="utf-8-sig")):
+            issues.append(f"presentation station must not have radio UI: {gui_path.name}")
+
     for effect in sound_effect_names:
         song = effect.removesuffix("_sound_e")
         assets = [block for block in blocks(source[MUSIC], r"^\s*music\s*=\s*\{")
                   if f'name = "{song}"' in block]
-        rotation = [block for block in blocks(source[SONGS], r"^\s*music\s*=\s*\{")
+        rotation = [block for block in blocks(source[PRESENTATION_SONGS], r"^\s*music\s*=\s*\{")
                     if f'song = "{song}"' in block]
+        for playlist in (root / "music").glob("*.txt"):
+            if playlist == root / PRESENTATION_SONGS:
+                continue
+            if re.search(rf'song\s*=\s*"{re.escape(song)}"',
+                         playlist.read_text(encoding="utf-8-sig")):
+                issues.append(f"presentation music must not appear in another playlist: {song}")
         if len(assets) != 1 or f'file = "{song}.ogg"' not in assets[0]:
             issues.append(f"missing or duplicate single-channel music asset {song}")
         if len(rotation) != 1:

@@ -6,6 +6,32 @@ spriteTypes = {
 	  	texturefile = "gfx/interface/decisions/STP/stp_election.png"
 	}
 
+
+### CATEGORY ICONS
+	spriteType = {
+		name = "GFX_decision_category_ADISCORD_deal"
+		texturefile = "gfx/interface/decisions/decision_category_ADISCORD_deal.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_category_ADISCORD_propaganda"
+		texturefile = "gfx/interface/decisions/decision_category_ADISCORD_propaganda.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_category_ADISCORD_science"
+		texturefile = "gfx/interface/decisions/decision_category_ADISCORD_science.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_decision_category_ADISCORD_factory"
+		texturefile = "gfx/interface/decisions/decision_category_ADISCORD_factory.png"
+		legacy_lazy_load = no
+	}
+
 ###GENERIC
 	spriteType = {
 		name = "GFX_decision_ADISCORD_state_directive"

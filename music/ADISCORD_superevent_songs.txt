@@ -1,0 +1,49 @@
+music_station = "adiscord_superevents"
+
+# No station GUI: these songs are registered only for scripted playback.
+# play_song requires song registration; zero weight excludes random playback.
+music = {
+	song = "superevent_vorkerland_civilwar"
+	chance = { factor = 0 }
+}
+music = {
+	song = "superevent_vorkerland_dirty_opening"
+	chance = { factor = 0 }
+}
+music = {
+	song = "superevent_vorkerland_worker_victory"
+	chance = { factor = 0 }
+}
+music = {
+	song = "superevent_vorkerland_utilitarian_victory"
+	chance = { factor = 0 }
+}
+music = {
+	song = "superevent_vorkerland_vlad_victory"
+	chance = { factor = 0 }
+}
+music = {
+	song = "superevent_vorkerland_dorian_victory"
+	chance = { factor = 0 }
+}
+music = {
+	song = "superevent_stelander_empire"
+	chance = { factor = 0 }
+}
+music = {
+	song = "superevent_stelander_party_victory"
+	chance = { factor = 0 }
+}
+music = {
+	song = "superevent_stelander_shabrat_victory"
+	chance = { factor = 0 }
+}
+music = {
+	song = "superevent_nam_resource_war"
+	chance = { factor = 0 }
+}
+music = {
+	song = "superevent_rus_last_empire"
+	chance = { factor = 0 }
+}
+

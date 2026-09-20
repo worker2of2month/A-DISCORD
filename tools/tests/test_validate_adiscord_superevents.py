@@ -41,6 +41,9 @@ class SupereventContractTests(unittest.TestCase):
         self.assertNotIn('_after_superevent', songs)
         self.assertEqual(songs.count('song = "ADISCORD_stp_civil_war_end"'), 1)
         self.assertIn('music_station = "adiscord_music"', songs)
+        visible_songs = (ROOT / "music/ADISCORD_songs.txt").read_text(encoding="utf-8-sig")
+        for item in PRESENTATIONS:
+            self.assertNotIn(f'song = "{item.name}"', visible_songs)
         self.assertNotIn('replace_path="music"', (ROOT / "descriptor.mod").read_text())
         self.assertFalse((ROOT / "music/_songs.txt").exists())
         self.assertFalse((ROOT / "music/music.asset").exists())
