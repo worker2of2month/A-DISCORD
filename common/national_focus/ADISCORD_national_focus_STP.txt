@@ -89,6 +89,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_pay_officials
+		search_filters = { FOCUS_FILTER_STP_DISTRICT_ADMINISTRATIONS }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -114,6 +115,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_repair_niansas
+		search_filters = { FOCUS_FILTER_STP_DISTRICT_ADMINISTRATIONS FOCUS_FILTER_STP_ELECTIONS }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag 3 = { infrastructure < 5 } }
@@ -134,6 +136,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_port_budget
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -157,6 +160,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ADRESS_PARTY_CRISIS
+		search_filters = { FOCUS_FILTER_STP_ELECTIONS }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -174,6 +178,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_Count_The_Loyalists
+		search_filters = { FOCUS_FILTER_STP_DISTRICT_ADMINISTRATIONS FOCUS_FILTER_STP_UNDERGROUND }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -200,6 +205,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_Call_For_Shabrat
+		search_filters = { FOCUS_FILTER_STP_DISTRICT_ADMINISTRATIONS FOCUS_FILTER_STP_UNDERGROUND }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -219,6 +225,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_delay_election_commission
+		search_filters = { FOCUS_FILTER_STP_ELECTIONS }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag has_active_mission = STP_cw_election_window }
@@ -249,6 +256,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_officer_contacts
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION FOCUS_FILTER_STP_UNDERGROUND }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -278,6 +286,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_prepare_capital_sabotage
+		search_filters = { FOCUS_FILTER_STP_UNDERGROUND }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -289,6 +298,8 @@ focus_tree = {
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_sabotage_capital
+			custom_effect_tooltip = STP_cw_sabotage_capital_preparation_tt
+			custom_effect_tooltip = STP_cw_sabotage_capital_result_tt
 			add_political_power = 75
 			add_command_power = 10
 			custom_effect_tooltip = STP_cw_suspicion_8_tt
@@ -297,6 +308,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_prepare_industry_sabotage
+		search_filters = { FOCUS_FILTER_STP_UNDERGROUND }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -316,6 +328,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_disruption_cells
+		search_filters = { FOCUS_FILTER_STP_UNDERGROUND }
 		icon = GFX_focus_generic_secret_service_agency
 		relative_position_id = STP_Show_Him_The_Truth
 		x = 5
@@ -336,6 +349,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_Garrisons_Hesitate
+		search_filters = { FOCUS_FILTER_STP_ELECTIONS FOCUS_FILTER_STP_ARMY_PREPARATION }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -361,6 +375,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_district_printing
+		search_filters = { FOCUS_FILTER_STP_PREPARATION_SLOTS FOCUS_FILTER_STP_ELECTIONS }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -379,6 +394,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_The_Silent_Mountain_March
+		search_filters = { FOCUS_FILTER_STP_DISTRICT_ADMINISTRATIONS FOCUS_FILTER_STP_ELECTIONS }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -403,6 +419,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_THE_MOUNTAIN_WINDOW
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		icon = GFX_focus_STP_Side_With_Maksim
@@ -420,6 +437,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_local_council_envoys
+		search_filters = { FOCUS_FILTER_STP_DISTRICT_ADMINISTRATIONS }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -443,6 +461,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_autonomy_guarantees
+		search_filters = { FOCUS_FILTER_STP_DISTRICT_ADMINISTRATIONS FOCUS_FILTER_STP_ARMY_PREPARATION }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag custom_trigger_tooltip = { tooltip = STP_cw_livonn_active_agreement_tt 45 = { is_owned_by = STP is_controlled_by = STP has_state_flag = STP_local_deal_asset } } }
@@ -464,6 +483,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_northern_dossier
+		search_filters = { FOCUS_FILTER_STP_NODRUL }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -482,6 +502,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_northern_desk
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION FOCUS_FILTER_STP_UNDERGROUND FOCUS_FILTER_STP_NODRUL }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -505,6 +526,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_seize_vorkerland_stores
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		relative_position_id = STP_Show_Him_The_Truth
 		dynamic = yes
 		allow_branch = {
@@ -556,6 +578,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_border_evidence
+		search_filters = { FOCUS_FILTER_STP_NODRUL }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -578,6 +601,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_arm_the_north
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION FOCUS_FILTER_STP_NODRUL }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -598,6 +622,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_cabinet_archives
+		search_filters = { FOCUS_FILTER_STP_UNDERGROUND }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -623,6 +648,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_expose_the_cabinet
+		search_filters = { FOCUS_FILTER_STP_ELECTIONS }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag has_active_mission = STP_cw_election_window }
@@ -647,6 +673,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_buy_silence
+		search_filters = { FOCUS_FILTER_STP_ELECTIONS FOCUS_FILTER_STP_UNDERGROUND }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag has_active_mission = STP_cw_election_window }
@@ -672,6 +699,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_Kefreite_Security_Offer
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag VAL = { exists = yes has_capitulated = no NOT = { has_war_with = STP } } }
@@ -690,6 +718,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_No_Mercenaries_In_Our_Mountains
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag }
@@ -716,6 +745,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_Turn_The_Young_Officers
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		icon = GFX_focus_STP_Turn_The_Young_Officers
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -3
@@ -741,6 +771,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_abila_reserve
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		icon = GFX_goal_generic_small_arms
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -3
@@ -794,6 +825,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_reserve_commanders
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		icon = GFX_focus_generic_military_academy
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -3
@@ -815,6 +847,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_casualty_routes
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		icon = GFX_focus_generic_supply_line
 		relative_position_id = STP_Show_Him_The_Truth
 		x = 0
@@ -835,6 +868,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_military_committee_fund
+		search_filters = { FOCUS_FILTER_STP_ELECTIONS FOCUS_FILTER_STP_ARMY_PREPARATION }
 		icon = GFX_goal_generic_army_artillery
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -4
@@ -868,6 +902,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_abila_workshops
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		icon = GFX_goal_generic_construct_mil_factory
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -2
@@ -891,6 +926,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_warehouse_inventory
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		relative_position_id = STP_Show_Him_The_Truth
 		x = 0
@@ -917,6 +953,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_supply_officers
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		icon = GFX_focus_generic_supply_line
 		relative_position_id = STP_Show_Him_The_Truth
 		x = 0
@@ -943,6 +980,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_district_administration
+		search_filters = { FOCUS_FILTER_STP_DISTRICT_ADMINISTRATIONS FOCUS_FILTER_STP_ELECTIONS }
 		icon = GFX_focus_generic_improve_the_administration
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -6
@@ -967,6 +1005,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_courier_service
+		search_filters = { FOCUS_FILTER_STP_PREPARATION_SLOTS FOCUS_FILTER_STP_UNDERGROUND }
 		icon = GFX_focus_generic_supply_line
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -6
@@ -995,6 +1034,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_operational_orders
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		icon = GFX_focus_STP_Operation_Last_Banquette
 		relative_position_id = STP_Show_Him_The_Truth
 		x = 3
@@ -1015,6 +1055,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_defensive_lines
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		icon = GFX_focus_generic_mountain_fortification
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -3
@@ -1034,6 +1075,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_heavy_reserve
+		search_filters = { FOCUS_FILTER_STP_ARMY_PREPARATION }
 		icon = GFX_goal_generic_army_artillery
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -3
@@ -1051,6 +1093,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_national_mandate
+		search_filters = { FOCUS_FILTER_STP_ELECTIONS }
 		icon = GFX_focus_STP_Triumph_Of_Common_Sense
 		relative_position_id = STP_Show_Him_The_Truth
 		x = -10
@@ -3687,6 +3730,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			custom_effect_tooltip = STP_cw_treasury_1200_tt
 			STP_receive_1200 = yes
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_commercial_recovery_delta } }
 			hidden_effect = {
@@ -6107,7 +6151,7 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_investment_development_fund }
 		ai_will_do = { base = 12 }
 		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_economy_precision_tooling
+			unlock_decision_tooltip = { decision = ADISCORD_economy_precision_tooling show_effect_tooltip = yes }
 			add_tech_bonus = {
 				name = STP_pc_investment_precision_industry
 				bonus = 0.5
@@ -6148,7 +6192,7 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_investment_precision_industry }
 		ai_will_do = { base = 12 }
 		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_economy_automated_industry
+			unlock_decision_tooltip = { decision = ADISCORD_economy_automated_industry show_effect_tooltip = yes }
 		}
 	}
 
@@ -6164,7 +6208,7 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_investment_special_metallurgy }
 		ai_will_do = { base = 6 }
 		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_economy_logistics_contract
+			unlock_decision_tooltip = { decision = ADISCORD_economy_logistics_contract show_effect_tooltip = yes }
 		}
 	}
 
@@ -6180,7 +6224,7 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_investment_automation }
 		ai_will_do = { base = 6 }
 		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_economy_national_computing
+			unlock_decision_tooltip = { decision = ADISCORD_economy_national_computing show_effect_tooltip = yes }
 		}
 	}
 
@@ -6196,8 +6240,8 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_investment_logistics }
 		ai_will_do = { base = 6 }
 		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_economy_drone_contract
-			unlock_decision_tooltip = ADISCORD_economy_platform_contract
+			unlock_decision_tooltip = { decision = ADISCORD_economy_drone_contract show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_economy_platform_contract show_effect_tooltip = yes }
 			add_tech_bonus = {
 				name = STP_pc_investment_defense_orders
 				bonus = 0.5

@@ -168,5 +168,79 @@ class TFFKefreytCampaignTests(unittest.TestCase):
                 self.apply("ADISCORD_TFF_reconcile_kefreyt_campaign")
                 self.assertFalse(self.ideas, (country, condition))
 
+
+class TFFCapitulationSettlementTests(unittest.TestCase):
+    def setUp(self):
+        from tools.lib.on_actions import scripted_peace_entries
+        from tools.tests.test_adiscord_stp_preparation import block
+        self.hooks = block(scripted_peace_entries(
+            "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt", "frontier"), "on_actions")
+
+    def resolved(self, items, captor="NOD"):
+        from dataclasses import replace
+        return [replace(e, key={"ROOT": "TFF", "FROM": captor}.get(e.key, e.key),
+                        value=self.resolved(e.value, captor) if isinstance(e.value, list) else e.value)
+                for e in items]
+
+    def test_second_war_requires_actual_nod_capture_and_excludes_first_campaign(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions
+        branch = block(block(block(self.hooks, "on_capitulation_immediate"), "effect"), "if")
+        facts = {("TFF", "is_subject", "no"): True, ("TFF", "has_war_with", "NOD"): True,
+                 ("NOD", "exists", "yes"): True, ("NOD", "is_subject", "no"): True,
+                 ("NOD", "has_capitulated", "no"): True,
+                 ("NOD", "variable", "STP_cw_northern_campaign_status"): 2}
+        gate = block(branch, "limit")
+        self.assertTrue(matches_conditions(self.resolved(gate), facts))
+        self.assertFalse(matches_conditions(self.resolved(gate, "VAL"), facts))
+        for key, value in ((("NOD", "variable", "STP_cw_northern_campaign_status"), 1),
+                           (("TFF", "is_subject", "no"), False),
+                           (("TFF", "has_war_with", "NOD"), False),
+                           (("NOD", "has_capitulated", "no"), False)):
+            self.assertFalse(matches_conditions(self.resolved(gate), {**facts, key: value}), key)
+        facts.update({("TFF", "capital"): "83", ("83", "controller"): "NOD"})
+        self.assertTrue(matches_conditions(self.resolved(gate, "VAL"), facts))
+
+    def test_late_callback_consumes_reservation_without_suppressing_later_defeats(self):
+        from tools.tests.test_adiscord_stp_preparation import block, selected_effects, scalar, walk
+        immediate = block(block(self.hooks, "on_capitulation_immediate"), "effect")
+        receipt = next(e.value for e in walk(immediate) if e.key == "set_country_flag")
+        marker = scalar(receipt, "flag")
+        self.assertEqual(scalar(receipt, "days"), "1")
+        late = self.resolved(block(block(self.hooks, "on_capitulation"), "effect"))
+        facts = {("TFF", "has_country_flag", marker): True}
+        outputs = list(selected_effects(late, facts))
+        self.assertIn(("set_global_flag", "skip_default_capitulation"), [(e.key, e.value) for _, e in outputs])
+        for scope, entry in outputs:
+            if entry.key == "clr_country_flag":
+                facts[scope, "has_country_flag", entry.value] = False
+        self.assertEqual(list(selected_effects(late, facts)), [])
+
+    def test_nonfaction_campaign_subjects_leave_the_war_before_puppeting(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, selected_effects
+        effect = block(parse_clausewitz(read(EFFECTS)), "ADISCORD_TFF_become_nod_subject")
+        facts = {("TFF", "exists", "yes"): True, ("TFF", "is_subject", "no"): True,
+                 ("NOD", "exists", "yes"): True, ("NOD", "is_subject", "no"): True,
+                 ("NOD", "has_capitulated", "no"): True,
+                 ("TFF", "has_war_with", "NOD"): True}
+        for relation in ("is_subject_of", "has_country_flag"):
+            for tag in ("STP", "STS"):
+                scenario = {**facts, ("TFF", "has_war_with", tag): True,
+                            (tag, relation, "NOD" if relation == "is_subject_of" else "VAL_final_war_member"): True}
+                output = list(selected_effects(effect, scenario, "TFF"))
+                peace = [e.value for _, e in output if e.key == "white_peace"]
+                self.assertEqual(peace, ["NOD", tag])
+                self.assertLess(next(i for i, (_, e) in enumerate(output) if e.key == "white_peace" and e.value == tag),
+                                next(i for i, (_, e) in enumerate(output) if e.key == "puppet"))
+
+    def test_subject_settlement_preserves_country_and_val_war(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, walk, scalar
+        effect = block(parse_clausewitz(read(EFFECTS)), "ADISCORD_TFF_become_nod_subject")
+        self.assertFalse(any(e.key == "annex_country" for e in walk(effect)))
+        puppet = next(e.value for e in walk(effect) if e.key == "puppet")
+        self.assertEqual(scalar(puppet, "target"), "TFF")
+        self.assertEqual(scalar(puppet, "end_wars"), "no")
+        self.assertNotIn("VAL", [e.value for e in walk(effect) if e.key == "white_peace"])
+
+
 if __name__ == "__main__":
     unittest.main()

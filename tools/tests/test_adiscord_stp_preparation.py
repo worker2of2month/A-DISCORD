@@ -61,6 +61,10 @@ def matches_conditions(items, facts, scope="STP"):
         if entry.key in ("owner", "controller"):
             country = facts.get((scope, entry.key))
             return country is not None and matches_conditions(entry.value, facts, country)
+        if entry.key == "any_enemy_country":
+            countries = {key[0] for key in facts if re.fullmatch(r"[A-Z]{3}", key[0])}
+            return any(facts.get((scope, "has_war_with", country), facts.get((country, "has_war_with", scope), False))
+                       and matches_conditions(entry.value, facts, country) for country in countries)
         if entry.key == "any_other_country":
             countries = {key[0] for key in facts if re.fullmatch(r"[A-Z]{3}", key[0])}
             return any(country != scope and facts.get((country, "exists", "yes"), False)
@@ -141,6 +145,8 @@ def matches_conditions(items, facts, scope="STP"):
         else:
             results.append(matches(entry))
             index += 1
+        if not results[-1]:
+            return False
     return all(results)
 
 

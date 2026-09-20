@@ -1,3 +1,19 @@
+# Opt-in guards for available and allowed_to_remove on laws and cabinet ideas.
+# Country flags grant manual changes only to definitions that use these guards.
+ADISCORD_manual_law_change_allowed = {
+	custom_trigger_tooltip = {
+		tooltip = ADISCORD_manual_law_change_allowed_tt
+		has_country_flag = ADISCORD_manual_law_change_allowed
+	}
+}
+
+ADISCORD_manual_minister_change_allowed = {
+	custom_trigger_tooltip = {
+		tooltip = ADISCORD_manual_minister_change_allowed_tt
+		has_country_flag = ADISCORD_manual_minister_change_allowed
+	}
+}
+
 is_completed_by_event = {
 	custom_trigger_tooltip = {
 		tooltip = completed_by_event_tooltip

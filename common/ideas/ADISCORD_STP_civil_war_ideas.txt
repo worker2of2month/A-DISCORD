@@ -940,7 +940,11 @@ ideas = {
 			visible = {
 				tag = STP
 			}
+			available = {
+				STP_party_minister_change_allowed = yes
+			}
 			allowed_to_remove = {
+				STP_party_minister_change_allowed = yes
 			}
 			traits = {
 				minister_trait_STP_hos_master_of_destinies

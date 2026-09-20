@@ -1,6 +1,30 @@
 spriteTypes = {
 
 ###STP
+	spriteType = {
+		name = "GFX_FOCUS_FILTER_STP_PREPARATION_SLOTS"
+		texturefile = "gfx/interface/focusview/filter/manpower_icon.dds"
+	}
+	spriteType = {
+		name = "GFX_FOCUS_FILTER_STP_DISTRICT_ADMINISTRATIONS"
+		texturefile = "gfx/interface/focusview/filter/territory_icon.dds"
+	}
+	spriteType = {
+		name = "GFX_FOCUS_FILTER_STP_ELECTIONS"
+		texturefile = "gfx/interface/focusview/filter/congress_icon.dds"
+	}
+	spriteType = {
+		name = "GFX_FOCUS_FILTER_STP_ARMY_PREPARATION"
+		texturefile = "gfx/interface/focusview/filter/military_character_icon.dds"
+	}
+	spriteType = {
+		name = "GFX_FOCUS_FILTER_STP_UNDERGROUND"
+		texturefile = "gfx/interface/focusview/filter/pol_violence.dds"
+	}
+	spriteType = {
+		name = "GFX_FOCUS_FILTER_STP_NODRUL"
+		texturefile = "gfx/interface/focusview/filter/autonomy_icon.dds"
+	}
   	spriteType = {
 	  	name = "GFX_focus_STP_Nectar_of_the_Gods"
 	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Nectar_of_the_Gods.png"

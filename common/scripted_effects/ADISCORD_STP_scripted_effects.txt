@@ -3735,15 +3735,19 @@ STP_cw_dismantle_northern_alliance = {
 STP_cw_settle_northern_victory = {
 	if = {
 		limit = { OR = { STP_cw_northern_campaign_won = yes STP_cw_northern_conference_won = yes } }
+        # White peace clears native capitulation; retain the accepted outcome locally.
+        set_temp_variable = { var = STP_cw_frontier_capitulated value = 0 }
+        if = {
+            limit = { OR = { TFF = { STP_cw_northern_opponent_defeated = yes } AND = { STP_cw_northern_conference_won = yes STP_cw_frontier_awarded_to_nod = yes } } }
+            set_temp_variable = { var = STP_cw_frontier_capitulated value = 1 }
+        }
 		if = {
 			limit = { STP_cw_northern_conference_won = yes }
 			set_variable = { var = STP_cw_northern_campaign_status value = 2 }
 			# These states have already been awarded to NOD's side by the conference.
 			YPR = { transfer_state = 8 transfer_state = 15 transfer_state = 16 transfer_state = 19 transfer_state = 20 transfer_state = 21 transfer_state = 22 }
-			TFF = { transfer_state = 83 transfer_state = 84 transfer_state = 85 transfer_state = 86 transfer_state = 87 transfer_state = 303 }
+			if = { limit = { check_variable = { var = STP_cw_frontier_capitulated value = 1 compare = equals } } TFF = { transfer_state = 83 transfer_state = 84 transfer_state = 85 transfer_state = 86 transfer_state = 87 transfer_state = 303 } }
 			transfer_state = 14
-			if = { limit = { TFF = { is_puppet_of = NOD } } set_autonomy = { target = TFF autonomy_state = autonomy_free end_wars = no end_civil_wars = no } }
-			if = { limit = { TFF = { is_in_faction_with = NOD } } remove_from_faction = TFF }
 		}
 		else = { set_variable = { var = STP_cw_northern_campaign_status value = 2 } }
 		activate_mission = NOD_cw_northern_redeployment
@@ -3764,9 +3768,14 @@ STP_cw_settle_northern_victory = {
 			limit = { COF = { exists = yes is_subject = no } }
 			annex_country = { target = COF transfer_troops = no }
 		}
+        if = {
+            limit = { check_variable = { var = STP_cw_frontier_capitulated value = 1 compare = equals } TFF = { exists = yes is_subject = no } }
+            puppet = { target = TFF end_wars = no end_civil_wars = no }
+            TFF = { ADISCORD_economy_mark_dirty = yes }
+        }
 		news_event = { id = ADISCORD_STP_cw.80 }
 		STS = { if = { limit = { exists = yes } STP_cw_poll_nod_intervention = yes } }
-		log = "[STP_NORTH] NOD victory after three accepted military defeats: YPR historical bounds checked, TFF independent"
+		log = "[STP_NORTH] NOD victory after YPR and COF defeats; Frontier dependency follows its military result"
 	}
 }
 

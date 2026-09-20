@@ -228,6 +228,20 @@ on_actions = {
             }
             # END kefreyt:on_capitulation_immediate
 
+            # BEGIN frontier:on_capitulation_immediate
+            if = {
+                limit = {
+                    ROOT = { tag = TFF is_subject = no has_war_with = NOD }
+                    NOD = { exists = yes is_subject = no has_capitulated = no NOT = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } } }
+                    OR = { FROM = { OR = { tag = NOD is_subject_of = NOD } } ROOT = { capital_scope = { controller = { OR = { tag = NOD is_subject_of = NOD } } } } }
+                }
+                ROOT = {
+                    set_country_flag = { flag = TFF_nod_capitulation_reserved value = 1 days = 1 }
+                    ADISCORD_TFF_become_nod_subject = yes
+                }
+            }
+            # END frontier:on_capitulation_immediate
+
 			# BEGIN northern_reservation:on_capitulation_immediate
 			if = {
 				limit = {
@@ -698,6 +712,14 @@ on_actions = {
             ROOT = { clr_country_flag = VAL_final_capitulation_immediate }
 
 			# END kefreyt:on_capitulation
+
+            # BEGIN frontier:on_capitulation
+            if = {
+                limit = { ROOT = { has_country_flag = TFF_nod_capitulation_reserved } }
+                set_global_flag = skip_default_capitulation
+                ROOT = { clr_country_flag = TFF_nod_capitulation_reserved }
+            }
+            # END frontier:on_capitulation
 
 			# BEGIN rin:on_capitulation
 			if = {

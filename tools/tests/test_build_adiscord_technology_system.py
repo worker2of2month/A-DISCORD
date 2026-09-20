@@ -19,6 +19,93 @@ STARTING_PROFILE_MANIFEST = ROOT / "tools" / "data" / "adiscord_starting_technol
 
 
 class CompactTechnologyTreeContractTests(unittest.TestCase):
+    def test_vertical_programmes_do_not_reserve_empty_research_years(self) -> None:
+        for branch in generator.BRANCHES:
+            if generator.HORIZONTAL_FOLDERS.intersection(branch.folders):
+                continue
+            rows = sorted({generator.technology_time_slot(branch, i) for i in range(len(branch.techs))})
+            with self.subTest(branch=branch.key):
+                self.assertEqual(rows[0], 0)
+                self.assertTrue(all((b - a) * generator.GRID_SLOT <= 140 for a, b in zip(rows, rows[1:])))
+
+    def test_officer_training_delivers_all_four_leader_attributes(self) -> None:
+        branch = generator.BRANCH_BY_KEY['officer_training']
+        rendered = '\n'.join(generator.render_technology(branch, i) for i in range(len(branch.techs)))
+        self.assertEqual(len(branch.techs), 8)
+        for attribute in ('attack', 'defense', 'planning', 'logistics'):
+            self.assertIn(f'add_{attribute} = 1', rendered)
+        self.assertEqual(rendered.count('on_research_complete ='), 7)
+
+    def test_single_lane_vertical_programme_has_no_empty_side_lane(self) -> None:
+        branch = generator.BRANCH_BY_KEY["public_finance"]
+        self.assertEqual(generator.technology_grid_position(branch, 0), (0, 0))
+        rendered = generator.render_folder("industry_folder")
+        self.assertRegex(rendered, rf'name = "{branch.techs[0].id}_tree"\s*position = \{{[^}}]+\}}\s*size = \{{ width = 210 ')
+
+    def test_naval_research_unlocks_multiple_producible_generations(self) -> None:
+        blocks = validator.collect_equipment_blocks()
+        for key in ('naval_support', 'surface_fleet', 'subsurface'):
+            branch = generator.BRANCH_BY_KEY[key]
+            unlocked = {equipment for tech in branch.techs for equipment in generator.ENABLE_EQUIPMENT.get(tech.id, ())}
+            with self.subTest(branch=key):
+                self.assertGreaterEqual(len(unlocked), 4)
+                for equipment in unlocked:
+                    self.assertIn(equipment, blocks)
+                    self.assertNotRegex(blocks[equipment], r'active\s*=\s*yes')
+
+    def test_aircraft_research_opens_bomber_and_maritime_production(self) -> None:
+        blocks = validator.collect_equipment_blocks()
+        for family in ('ADISCORD_bomber_archetype', 'ADISCORD_naval_aircraft_archetype'):
+            variants = {key for key, block in blocks.items() if re.search(rf'archetype\s*=\s*{family}\b', block)}
+            self.assertGreaterEqual(len(variants), 3, family)
+            unlocks = {equipment for items in generator.ENABLE_EQUIPMENT.values() for equipment in items}
+            self.assertTrue(variants <= unlocks, variants - unlocks)
+
+    def test_new_equipment_has_deployable_units_and_native_missions(self) -> None:
+        equipment = validator.collect_equipment_blocks()
+        units = "\n".join(path.read_text(encoding="utf-8") for path in (ROOT / "common/units").glob("*.txt"))
+        roles = {
+            "ADISCORD_cruiser_archetype": ("heavy_cruiser", None),
+            "ADISCORD_submarine_archetype": ("submarine", None),
+            "ADISCORD_bomber_archetype": ("ADISCORD_tactical_bomber", {"strategic_bomber", "cas", "attack_logistics"}),
+            "ADISCORD_naval_aircraft_archetype": ("nav_bomber", {"naval_bomber", "port_strike", "naval_patrol"}),
+        }
+        for family, (unit, missions) in roles.items():
+            match = re.search(rf"\b{unit}\s*=\s*\{{", units)
+            self.assertIsNotNone(match, unit)
+            unit_block = validator.extract_block(units, match.start())
+            self.assertRegex(unit_block, rf"need\s*=\s*\{{\s*{family}\s*=\s*1\s*\}}")
+            for key, block in equipment.items():
+                if not re.search(rf"\barchetype\s*=\s*{family}\b", block):
+                    continue
+                self.assertRegex(block, r"\bactive\s*=\s*no\b", key)
+                if missions:
+                    declared = re.search(r"allow_mission_type\s*=\s*\{([^}]+)\}", block)
+                    self.assertIsNotNone(declared, key)
+                    self.assertEqual(set(declared[1].split()), missions, key)
+                else:
+                    self.assertIn("critical_parts", unit_block)
+        naval = equipment["ADISCORD_naval_aircraft_2172"]
+        self.assertRegex(naval, r"\bnaval_strike_attack\s*=\s*[1-9]")
+        self.assertNotRegex(naval, r"\bnaval_attack\s*=")
+
+    def test_new_programmes_are_researched_instead_of_granted_to_every_country(self) -> None:
+        common = set(generator.STARTING_TECH_PROFILES["common"])
+        self.assertNotIn("ADISCORD_tech_reconstituted_staff_academies", common)
+        self.assertNotIn("ADISCORD_tech_twin_engine_aircraft", common)
+
+    def test_cruiser_and_submarine_ai_groups_are_optional_reinforcements(self) -> None:
+        taskforces = (ROOT / "common/ai_navy/taskforce/ADISCORD_taskforce_templates.txt").read_text(encoding="utf-8")
+        fleets = (ROOT / "common/ai_navy/fleet/ADISCORD_fleet_templates.txt").read_text(encoding="utf-8")
+        for taskforce, unit in (("ADISCORD_cruiser_strike", "heavy_cruiser"), ("ADISCORD_submarine_raiding", "submarine")):
+            match = re.search(rf"\b{taskforce}\s*=\s*\{{", taskforces)
+            self.assertIsNotNone(match, taskforce)
+            block = validator.extract_block(taskforces, match.start())
+            self.assertRegex(block, rf"min_composition\s*=\s*\{{\s*{unit}\s*=\s*\{{\s*amount\s*=\s*1")
+            self.assertRegex(block, r"NOT\s*=\s*\{\s*has_tech\s*=")
+            self.assertRegex(fleets, rf"optional_taskforces\s*=\s*\{{[^}}]*\b{taskforce}\s*=\s*1")
+            self.assertNotRegex(fleets, rf"required_taskforces\s*=\s*\{{[^}}]*\b{taskforce}\s*=")
+
     def test_budget_research_has_bounded_consumed_modifiers_and_refreshes_cache(self) -> None:
         branch = generator.BRANCH_BY_KEY.get("public_finance")
         self.assertIsNotNone(branch, "Public finance must be a playable research line")
@@ -210,10 +297,10 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 "protection",
                 "special_forces",
             },
-            "support_folder": {"field_support", "logistics", "rail"},
+            "support_folder": {"field_support", "logistics", "rail", "officer_training"},
             "artillery_folder": {"artillery", "anti_tank", "anti_air"},
             "armour_folder": {"recon_armor", "combat_armor", "heavy_armor"},
-            "air_techs_folder": {"fighter", "air_support", "strategic_air"},
+            "air_techs_folder": {"fighter", "air_support", "strategic_air", "bomber_maritime"},
             "naval_folder": {"naval_support", "surface_fleet", "subsurface"},
         }
         actual = getattr(generator, "MAIN_BRANCH_KEYS_BY_FOLDER", {})
@@ -572,20 +659,23 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
     def test_vertical_year_labels_sit_on_their_own_node_rows(self) -> None:
         rendered = generator.render_folder("industry_folder")
         label_rows = {
-            int(year): int(y)
-            for year, y in re.findall(
-                r'name = "ADISCORD_industry_folder_year_(\d+)"\s*'
+            (branch, int(year)): int(y)
+            for branch, year, y in re.findall(
+                r'name = "ADISCORD_industry_folder_year_([a-z_]+)_(\d+)"\s*'
                 r"position = \{ x = \d+ y = (\d+) \}",
                 rendered,
             )
         }
-        self.assertEqual(len(label_rows), len(generator.YEARS))
+        # The sparse materials programme has four dated rows, not nineteen
+        # empty calendar slots. Labels are independent from adjacent industry.
+        self.assertEqual(label_rows[("advanced_materials", 2155)], 148)
+        self.assertEqual(label_rows[("advanced_materials", 2173)], 568)
         for branch in [b for b in generator.BRANCHES if "industry_folder" in b.folders]:
             for index in range(len(branch.techs)):
                 _, y = generator.technology_grid_position(branch, index)
                 node_top = generator.GRID_Y + y * generator.GRID_SLOT
                 with self.subTest(technology=branch.techs[index].id):
-                    self.assertEqual(label_rows[branch.years[index]], node_top + 18)
+                    self.assertEqual(label_rows[(branch.key, branch.years[index])], node_top + 18)
 
     def test_horizontal_folder_grid_aligns_years_and_stacks_programmes(self) -> None:
         rendered = generator.render_folder("infantry_folder")
@@ -676,7 +766,6 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 "air_mobility",
                 "riverine_warfare",
                 "unmanned_ground_systems",
-                "officer_training",
             },
         )
         self.assertTrue(all(len(branches[key].techs) <= 3 for key in side_keys))

@@ -5,6 +5,7 @@ ADISCORD_coastal_dominance_fleet = {
 		ADISCORD_coastal_strike = 1
 	}
 	optional_taskforces = {
+		ADISCORD_cruiser_strike = 1
 		ADISCORD_coastal_strike = 1
 	}
 }
@@ -23,6 +24,7 @@ ADISCORD_coastal_raiding_fleet = {
 		ADISCORD_coastal_raiding = 1
 	}
 	optional_taskforces = {
+		ADISCORD_submarine_raiding = 1
 		ADISCORD_coastal_raiding = 1
 	}
 }

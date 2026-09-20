@@ -1,4 +1,24 @@
 sub_units = {
+	ADISCORD_tactical_bomber = {
+		sprite = medium_plane
+		priority = 1
+		active = yes
+		type = tactical_bomber
+		need = { ADISCORD_bomber_archetype = 1 }
+		categories = { category_tac_bomber }
+		land_air_wing_size = 100
+	}
+
+	nav_bomber = {
+		sprite = medium_plane
+		priority = 1
+		active = yes
+		type = naval_bomber
+		need = { ADISCORD_naval_aircraft_archetype = 1 }
+		categories = { category_nav_bomber }
+		land_air_wing_size = 100
+	}
+
 	fighter = {
 		sprite = ADISCORD_fighter
 		priority = 1

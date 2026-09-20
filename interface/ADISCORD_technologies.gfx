@@ -1670,13 +1670,38 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_operational_planning_exercises_medium"
+		name = "GFX_ADISCORD_tech_assault_command_curriculum_medium"
 		textureFile = "gfx/interface/technologies/mechanical_computing.dds"
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_adaptive_general_staff_medium"
+		name = "GFX_ADISCORD_tech_defensive_command_curriculum_medium"
 		textureFile = "gfx/interface/technologies/basic_encryption.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_operational_planning_exercises_medium"
+		textureFile = "gfx/interface/technologies/computing_machine.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_theater_logistics_wargames_medium"
+		textureFile = "gfx/interface/technologies/improved_encryption.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_rotational_front_commands_medium"
+		textureFile = "gfx/interface/technologies/improved_computing_machine.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_predictive_staff_colleges_medium"
+		textureFile = "gfx/interface/technologies/advanced_encryption.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_adaptive_general_staff_medium"
+		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
 	}
 
 	SpriteType = {
@@ -2376,7 +2401,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_high_altitude_interceptors_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_engines_1.dds"
+		textureFile = "gfx/interface/technologies/fighter2.dds"
 	}
 
 	SpriteType = {
@@ -2401,7 +2426,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_thrust_vectoring_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_aircraft_construction.dds"
+		textureFile = "gfx/interface/technologies/jet_fighter1.dds"
 	}
 
 	SpriteType = {
@@ -2416,7 +2441,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_cooperative_fighter_sensor_fusion_medium"
-		textureFile = "gfx/interface/technologies/jet_fighter2.dds"
+		textureFile = "gfx/interface/technologies/bba_tech_aircraft_construction.dds"
 	}
 
 	SpriteType = {
@@ -2446,12 +2471,52 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_distributed_interceptor_swarms_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_aircraft_construction.dds"
+		textureFile = "gfx/interface/technologies/jet_fighter2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_aerospace_interceptors_medium"
 		textureFile = "gfx/interface/technologies/bba_tech_engines_1.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_twin_engine_aircraft_medium"
+		textureFile = "gfx/interface/technologies/tactical_bomber1.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_maritime_patrol_aircraft_medium"
+		textureFile = "gfx/interface/technologies/naval_bomber2.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_pressurized_bombers_medium"
+		textureFile = "gfx/interface/technologies/tactical_bomber2.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_airborne_homing_torpedoes_medium"
+		textureFile = "gfx/interface/technologies/bba_tech_armor_piercing_bombs.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_stabilized_bomb_sights_medium"
+		textureFile = "gfx/interface/technologies/bba_tech_engines_1.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_long_range_maritime_aircraft_medium"
+		textureFile = "gfx/interface/technologies/naval_bomber3.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_jet_strike_bombers_medium"
+		textureFile = "gfx/interface/technologies/jet_tactical_bomber1.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_integrated_strike_navigation_medium"
+		textureFile = "gfx/interface/technologies/advanced_centimetric_radar.dds"
 	}
 
 	SpriteType = {
@@ -2486,7 +2551,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_precision_glide_bomb_kits_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_armor_piercing_bombs.dds"
+		textureFile = "gfx/interface/technologies/CAS2.dds"
 	}
 
 	SpriteType = {
@@ -2501,7 +2566,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_drone_air_wings_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_armor_piercing_bombs.dds"
+		textureFile = "gfx/interface/technologies/CAS3.dds"
 	}
 
 	SpriteType = {
@@ -2521,7 +2586,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_strike_wings_medium"
-		textureFile = "gfx/interface/technologies/sp_rockets_glide_bombs.dds"
+		textureFile = "gfx/interface/technologies/CAS3.dds"
 	}
 
 	SpriteType = {
@@ -2536,7 +2601,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_electromagnetic_cannon_pods_medium"
-		textureFile = "gfx/interface/technologies/CAS3.dds"
+		textureFile = "gfx/interface/technologies/bba_tech_engines_1.dds"
 	}
 
 	SpriteType = {
@@ -2546,7 +2611,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_persistent_sensor_strike_loops_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_armor_piercing_bombs.dds"
+		textureFile = "gfx/interface/technologies/CAS3.dds"
 	}
 
 	SpriteType = {

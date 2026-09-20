@@ -809,7 +809,8 @@ news_event = {
 news_event = {
 	id = ADISCORD_STP_cw.80
 	title = ADISCORD_STP_cw.80.t
-	desc = { trigger = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } } text = ADISCORD_STP_cw.80.d }
+	desc = { trigger = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } TFF = { is_subject_of = NOD } } text = ADISCORD_STP_cw.80.frontier_subject }
+	desc = { trigger = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } TFF = { NOT = { is_subject_of = NOD } } } text = ADISCORD_STP_cw.80.d }
 	desc = { trigger = { NOT = { AND = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } } } } text = ADISCORD_STP_cw.80.limited }
 	picture = GFX_news_event_adiscord_treaty_signing
 	major = yes

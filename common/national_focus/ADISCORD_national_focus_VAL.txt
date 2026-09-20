@@ -2346,7 +2346,7 @@ completion_reward = {
 		prerequisite = { focus = VAL_econ_development_fund }
 		ai_will_do = { base = 12 }
 		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_economy_precision_tooling
+			unlock_decision_tooltip = { decision = ADISCORD_economy_precision_tooling show_effect_tooltip = yes }
 			add_tech_bonus = {
 				name = VAL_econ_precision_industry
 				bonus = 0.5
@@ -2385,7 +2385,7 @@ completion_reward = {
 		prerequisite = { focus = VAL_econ_precision_industry }
 		ai_will_do = { base = 12 }
 		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_economy_automated_industry
+			unlock_decision_tooltip = { decision = ADISCORD_economy_automated_industry show_effect_tooltip = yes }
 		}
 	}
 
@@ -2400,7 +2400,7 @@ completion_reward = {
 		prerequisite = { focus = VAL_econ_special_metallurgy }
 		ai_will_do = { base = 6 }
 		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_economy_logistics_contract
+			unlock_decision_tooltip = { decision = ADISCORD_economy_logistics_contract show_effect_tooltip = yes }
 		}
 	}
 
@@ -2415,7 +2415,7 @@ completion_reward = {
 		prerequisite = { focus = VAL_econ_automation }
 		ai_will_do = { base = 6 }
 		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_economy_national_computing
+			unlock_decision_tooltip = { decision = ADISCORD_economy_national_computing show_effect_tooltip = yes }
 		}
 	}
 
@@ -2430,8 +2430,8 @@ completion_reward = {
 		prerequisite = { focus = VAL_econ_logistics }
 		ai_will_do = { base = 6 }
 		completion_reward = {
-			unlock_decision_tooltip = ADISCORD_economy_drone_contract
-			unlock_decision_tooltip = ADISCORD_economy_platform_contract
+			unlock_decision_tooltip = { decision = ADISCORD_economy_drone_contract show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = ADISCORD_economy_platform_contract show_effect_tooltip = yes }
 			add_tech_bonus = {
 				name = VAL_econ_defense_orders
 				bonus = 0.5

@@ -9,7 +9,7 @@ STP_elections_in_the_party = {
         }
 	}
 	visible_when_empty = yes
-	priority = 1
+	priority = 21
 }
 
 STP_scenario_debug = {

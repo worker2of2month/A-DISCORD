@@ -31,6 +31,52 @@ def block(text, name):
 
 
 class CivilWarContracts(unittest.TestCase):
+    def test_party_cabinet_lock_follows_shabrat_route_until_actual_war(self):
+        definitions = entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt") + entries("common/scripted_triggers/ADISCORD_scripted_triggers_generic.txt")
+        guard = ast_block(definitions, "STP_party_minister_change_allowed")
+        names = {entry.key for entry in definitions}
+
+        def expand(items):
+            result = []
+            for entry in items:
+                if isinstance(entry.value, list):
+                    result.append(replace(entry, value=expand(entry.value)))
+                elif entry.key in names:
+                    self.assertEqual(entry.value, "yes")
+                    result.append(replace(entry, key="AND", value=expand(ast_block(definitions, entry.key))))
+                else:
+                    result.append(entry)
+            return result
+
+        guard = expand(guard)
+        sided = {("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True}
+        cases = [
+            ("unselected", {}, "STP", True),
+            ("party", {("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True}, "STP", True),
+            ("shabrat", sided, "STP", False),
+            ("focus route", {("STP", "has_completed_focus", "STP_Show_Him_The_Truth"): True}, "STP", False),
+            ("elections finished", {**sided, ("STP", "has_country_flag", "STP_cw_elections_finished"): True}, "STP", False),
+            ("war started", {**sided, ("STP", "has_global_flag", "STP_cw_started"): True}, "STP", True),
+            ("explicit permission", {**sided, ("STP", "has_country_flag", "ADISCORD_manual_minister_change_allowed"): True}, "STP", True),
+            ("successor", {("STS", "has_country_flag", "STP_sided_with_Maksim_flag"): True}, "STS", True),
+        ]
+        for label, facts, scope, expected in cases:
+            with self.subTest(label=label):
+                self.assertEqual(matches_conditions(guard, facts, scope), expected)
+
+    def test_starting_party_ministers_guard_appointment_and_replacement(self):
+        history = read("history/countries/STP - StepanLand.txt")
+        ministers = set(re.findall(r"\bminister_STP_\w+", history))
+        self.assertEqual(len(ministers), 6)
+        definitions = [entry for path in ("common/ideas/ADISCORD_STP_civil_war_ideas.txt", "common/ideas/ADISCORD_ministers_all_countries.txt")
+                       for entry in walk(entries(path)) if entry.key in ministers]
+        self.assertEqual(len(definitions), len(ministers))
+        for minister in definitions:
+            for field in ("available", "allowed_to_remove"):
+                with self.subTest(minister=minister.key, field=field):
+                    self.assertEqual(scalar(ast_block(minister.value, field), "STP_party_minister_change_allowed"), "yes")
+            self.assertNotIn("STP_party_minister_change_allowed", {entry.key for entry in walk(ast_block(minister.value, "visible"))})
+
     def setUp(self):
         self.effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         self.triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
@@ -2327,7 +2373,7 @@ class NorthernCampaignContracts(unittest.TestCase):
                      **{(t, "has_capitulated", "yes"): done for t, done in zip(("YPR", "COF", "TFF"), accepted)},
                      **{(t, "variable", "STP_cw_capitulation_occupier"): 4 if done else 0
                         for t, done in zip(("YPR", "COF", "TFF"), accepted)}}
-            self.assertEqual(matches_conditions(won, facts, "NOD"), all(accepted), accepted)
+            self.assertEqual(matches_conditions(won, facts, "NOD"), all(accepted[:2]), accepted)
         facts.update({("YPR", "variable", "STP_cw_capitulation_occupier"): 5})
         self.assertFalse(matches_conditions(won, facts, "NOD"), "a foreign victor is not a NOD victory")
         for status in (2, 3, 4):
@@ -2350,7 +2396,7 @@ class NorthernCampaignContracts(unittest.TestCase):
         victory = ast_block(self.effects, "STP_cw_settle_northern_victory")
         self.assertEqual([scalar(e.value, "target") for e in walk(victory) if e.key == "annex_country"], ["COF"])
         puppet = [e.value for e in walk(victory) if e.key == "puppet"]
-        self.assertEqual(len(puppet), 1)
+        self.assertEqual(len(puppet), 2)
         self.assertEqual({e.key: e.value for e in puppet[0]}, {"target": "YPR", "end_wars": "no", "end_civil_wars": "no"})
         defeat = self.expand(ast_block(self.effects, "STP_cw_settle_northern_defeat"))
         for owned17, owned18 in ((True, True), (True, False), (False, True), (False, False)):
@@ -2428,16 +2474,18 @@ class NorthernCampaignContracts(unittest.TestCase):
         descriptions = [e.value for e in event if e.key == "desc"]
         historical = {int(e.value) for e in walk(ast_block(self.triggers, "STP_cw_ypr_has_only_historical_states"))
                       if e.key == "state"}
-        for dependent, owned, cof_annexed, expected in (
-            (True, historical, True, "ADISCORD_STP_cw.80.d"),
-            (True, historical | {17}, True, "ADISCORD_STP_cw.80.limited"),
-            (False, historical, True, "ADISCORD_STP_cw.80.limited"),
-            (True, historical, False, "ADISCORD_STP_cw.80.limited"),
+        for dependent, owned, cof_annexed, frontier_subject, expected in (
+            (True, historical, True, False, "ADISCORD_STP_cw.80.d"),
+            (True, historical, True, True, "ADISCORD_STP_cw.80.frontier_subject"),
+            (True, historical | {17}, True, False, "ADISCORD_STP_cw.80.limited"),
+            (False, historical, True, False, "ADISCORD_STP_cw.80.limited"),
+            (True, historical, False, False, "ADISCORD_STP_cw.80.limited"),
         ):
             with self.subTest(dependent=dependent, owned=sorted(owned), cof_annexed=cof_annexed):
                 # The ownership predicate is tested against real history above;
                 # this fixture supplies its result to the parsed event branches.
-                facts = {("YPR", "is_subject_of", "NOD"): dependent,
+                facts = {("TFF", "is_subject_of", "NOD"): frontier_subject,
+                         ("YPR", "is_subject_of", "NOD"): dependent,
                          ("YPR", "STP_cw_ypr_has_only_historical_states", "yes"): owned <= historical,
                          ("14", "is_owned_by", "NOD"): cof_annexed}
                 selected = [scalar(desc, "text") for desc in descriptions
@@ -2621,7 +2669,7 @@ class NorthernCampaignContracts(unittest.TestCase):
                     writes.append((current, entry.key, "native snapshot"))
                 elif entry.key in definitions:
                     run(definitions[entry.key], current, loser)
-                elif entry.key == "set_variable":
+                elif entry.key in ("set_variable", "set_temp_variable"):
                     variable, value = scalar(entry.value, "var"), float(scalar(entry.value, "value"))
                     facts[(current, "variable", variable)] = value
                     writes.append((current, entry.key, (variable, value)))
@@ -2706,53 +2754,76 @@ class NorthernCampaignContracts(unittest.TestCase):
             run(ast_block(self.effects, "STP_cw_dismantle_northern_alliance"), "NOD", "NOD")
             self.assertEqual(writes, [] if outsider else [(leader, "dismantle_faction", "yes")])
 
-    def test_coalition_retains_the_war_until_all_three_current_defeats(self):
+    def test_ypr_and_cof_defeat_settles_once_and_frontier_status_uses_its_own_result(self):
         from itertools import permutations
         for order in permutations(("YPR", "COF", "TFF")):
             self.setUp()
             facts, writes, cap, run = self.northern_callback_scenario()
-            for index, loser in enumerate(order):
-                facts[(loser, "variable", "STP_cw_capitulation_occupier")] = 1 if index == 0 else 4
-                facts[("STP", "is_in_faction_with", "NOD")] = index == 0
-                facts[("STP", "has_war_with", loser)] = index == 0
-                cap(loser)  # Native immediate may still report has_capitulated = no.
-                self.assertEqual(facts[(loser, "variable", "STP_cw_capitulation_occupier")], 4, order)
-                self.assertEqual(facts[("NOD", "has_war_with", loser)], index < 2, order)
-                if index < 2:
-                    self.assertFalse(any(key in ("white_peace", "set_major") for _, key, _ in writes))
-                    # Supply the subsequent native capitulation state explicitly.
+            defeated = set()
+            for loser in order:
+                if facts[("NOD", "variable", "STP_cw_northern_campaign_status")] == 2:
+                    break
+                facts[(loser, "variable", "STP_cw_capitulation_occupier")] = 4
+                cap(loser)
+                defeated.add(loser)
+                expected = 2 if {"YPR", "COF"} <= defeated else 1
+                self.assertEqual(facts[("NOD", "variable", "STP_cw_northern_campaign_status")], expected, order)
+                if expected == 1:
+                    self.assertFalse(any(key == "white_peace" for _, key, _ in writes))
                     facts[(loser, "has_capitulated", "yes")] = True
                     facts[(loser, "has_capitulated", "no")] = False
-                self.assertEqual(facts[("NOD", "variable", "STP_cw_northern_campaign_status")],
-                                 2 if index == 2 else 1, order)
-                facts[("STP", "is_in_faction_with", "NOD")] = False
-                facts[("STP", "exists", "yes")] = False
-                run(ast_block(self.effects, "STP_cw_poll_northern_campaign"), "NOD", loser)
-                self.assertEqual(facts[("NOD", "variable", "STP_cw_northern_campaign_status")],
-                                 2 if index == 2 else 1, order)
-            self.assertEqual([(scope, value) for scope, key, value in writes if key == "set_major"],
-                             [("YPR", "no"), ("COF", "no"), ("TFF", "no")])
-            self.assertLess(next(i for i, (_, key, _) in enumerate(writes) if key == "dismantle_faction"),
-                            next(i for i, (_, key, _) in enumerate(writes) if key == "puppet"))
-            self.assertEqual([w for w in writes if w[1] == "annex_country"], [("NOD", "annex_country", "COF")])
-            self.assertEqual([w for w in writes if w[1] == "puppet"], [("NOD", "puppet", "YPR")])
+            puppets = [value for _, key, value in writes if key == "puppet"]
+            self.assertEqual(puppets, ["YPR"] + (["TFF"] if "TFF" in defeated else []), order)
+            self.assertEqual([value for _, key, value in writes if key == "annex_country"], ["COF"])
             before = list(writes)
             cap(order[-1])
             run(ast_block(self.effects, "STP_cw_poll_northern_campaign"), "NOD", order[-1])
             self.assertEqual(writes, before, "terminal replay must not settle twice")
 
+    def test_liberated_frontier_is_not_puppeted_from_old_military_credit(self):
+        facts, writes, cap, _ = self.northern_callback_scenario()
+        facts["TFF", "variable", "STP_cw_capitulation_occupier"] = 4
+        cap("TFF")
+        facts["TFF", "has_capitulated", "yes"] = False
+        facts["TFF", "has_capitulated", "no"] = True
+        for loser in ("YPR", "COF"):
+            facts[loser, "variable", "STP_cw_capitulation_occupier"] = 4
+            cap(loser)
+            facts[loser, "has_capitulated", "yes"] = True
+        self.assertEqual(facts["NOD", "variable", "STP_cw_northern_campaign_status"], 2)
+        self.assertNotIn(("NOD", "puppet", "TFF"), writes)
+
+    def test_conference_keeps_a_surviving_frontier_and_subordinates_defeated_frontier(self):
+        for survives in (True, False):
+            self.setUp()
+            _, conference = self.northern_conference_facts()
+            facts, writes, _, run = self.northern_callback_scenario()
+            facts.update(conference)
+            for target in ("YPR", "COF", "TFF"):
+                facts["NOD", "has_war_with", target] = False
+            if survives:
+                for state in (83, 84, 85, 86, 87, 303):
+                    facts[str(state), "owner"] = "TFF"
+                    facts[str(state), "controller"] = "TFF"
+                    facts[str(state), "is_owned_by", "TFF"] = True
+                    facts[str(state), "is_controlled_by", "TFF"] = True
+            run(ast_block(self.effects, "STP_cw_settle_northern_victory"), "NOD", "NOD")
+            self.assertEqual(facts["NOD", "variable", "STP_cw_northern_campaign_status"], 2)
+            self.assertEqual(("NOD", "puppet", "TFF") in writes, not survives)
+            self.assertEqual(any(scope == "TFF" and key == "transfer_state" for scope, key, _ in writes), not survives)
+
     def test_liberated_coalition_member_must_be_defeated_again(self):
         facts, writes, cap, run = self.northern_callback_scenario()
-        for loser in ("YPR", "COF"):
+        for loser in ("YPR", "TFF"):
             facts[(loser, "variable", "STP_cw_capitulation_occupier")] = 4
             cap(loser)
             facts[(loser, "has_capitulated", "yes")] = True
             facts[(loser, "has_capitulated", "no")] = False
         facts[("YPR", "has_capitulated", "yes")] = False
         facts[("YPR", "has_capitulated", "no")] = True
-        facts[("TFF", "variable", "STP_cw_capitulation_occupier")] = 4
-        cap("TFF")
-        facts[("TFF", "has_capitulated", "yes")] = True
+        facts[("COF", "variable", "STP_cw_capitulation_occupier")] = 4
+        cap("COF")
+        facts[("COF", "has_capitulated", "yes")] = True
         self.assertEqual(facts[("NOD", "variable", "STP_cw_northern_campaign_status")], 1)
         self.assertFalse(any(key in ("white_peace", "annex_country", "puppet") for _, key, _ in writes))
         # A stale pending flag on YPR cannot substitute for a different ROOT's result.
@@ -2770,7 +2841,7 @@ class NorthernCampaignContracts(unittest.TestCase):
 
     def test_two_coalition_capitulations_do_not_prevent_a_later_nod_defeat(self):
         facts, writes, cap, _ = self.northern_callback_scenario()
-        for loser in ("YPR", "COF"):
+        for loser in ("YPR", "TFF"):
             facts[(loser, "variable", "STP_cw_capitulation_occupier")] = 4
             cap(loser)
         facts[("NOD", "variable", "STP_cw_capitulation_occupier")] = 8
@@ -2796,11 +2867,11 @@ class NorthernCampaignContracts(unittest.TestCase):
         self.assertFalse(any(key in ("annex_country", "puppet") for _, key, _ in writes))
 
     def test_final_awards_do_not_reparent_a_foreign_puppet(self):
-        for target in ("YPR", "COF"):
+        for target in ("YPR", "COF", "TFF"):
             self.setUp()
             facts, writes, cap, _ = self.northern_callback_scenario()
             facts[(target, "is_subject", "no")] = False
-            for loser in ("YPR", "COF", "TFF"):
+            for loser in ("TFF", "YPR", "COF"):
                 facts[(loser, "variable", "STP_cw_capitulation_occupier")] = 4
                 cap(loser)
                 facts[(loser, "has_capitulated", "yes")] = True
@@ -2857,7 +2928,7 @@ class NorthernCampaignContracts(unittest.TestCase):
         events = entries("events/ADISCORD_STP_events.txt")
         registry = json.loads((ROOT / "tools/data/adiscord_event_ids.json").read_text())
         localisation = read("localisation/russian/ADISCORD_STP_l_russian.yml")
-        values = dict(re.findall(r'^ ([\w.]+):\s*"(.*)"$', localisation, re.M))
+        values = dict(re.findall(r'^ ([\w.]+):(?:0)?\s*"(.*)"$', localisation, re.M))
         for number in (80, 81, 82):
             event_id = f"ADISCORD_STP_cw.{number}"
             matches = [e.value for e in events if e.key == "news_event" and scalar(e.value, "id") == event_id]
