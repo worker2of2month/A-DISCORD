@@ -34,6 +34,12 @@ spriteTypes = {
 
 ###GENERIC
 	spriteType = {
+		name = "GFX_decision_ADISCORD_propaganda"
+		texturefile = "gfx/interface/decisions/decision_category_ADISCORD_propaganda.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
 		name = "GFX_decision_ADISCORD_state_directive"
 		texturefile = "gfx/interface/decisions/decision_ADISCORD_state_directive.png"
 		legacy_lazy_load = no
