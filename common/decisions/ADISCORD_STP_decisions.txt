@@ -739,7 +739,7 @@ STP_battle_for_stelander = {
 				STP_political_action_slot_release = yes
 			}
 		}
-		ai_will_do = { base = 5 modifier = { factor = 3 FROM = { state = 3 } } modifier = { factor = 3 FROM = { state = 2 } } modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
+		ai_will_do = { base = 8 modifier = { factor = 4 FROM = { state = 3 } } modifier = { factor = 4 FROM = { state = 2 } } modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } } }
 	}
 
 	STP_cw_prepare_rifle_cache = {
@@ -1024,7 +1024,7 @@ STP_battle_for_stelander = {
 			}
 		}
 		ai_will_do = {
-			base = 5
+			base = 8
 			modifier = { factor = 2 FROM = { STP_region_party_strongest = yes } }
 			modifier = { factor = 3 FROM = { OR = { state = 2 state = 3 } } }
 			modifier = { factor = 0 NOT = { STP_cw_shabrat_ai_risk_allowed = yes } }
@@ -2415,7 +2415,7 @@ STP_cw_war_council = {
 		}
 		remove_effect = { custom_effect_tooltip = STP_cw_disruption_result_tt hidden_effect = { STP_cw_finish_disruption = yes } }
 		cancel_effect = { custom_effect_tooltip = STP_cw_disruption_refund_tt hidden_effect = { STP_cw_refund_disruption = yes } }
-		ai_will_do = { base = 5 }
+		ai_will_do = { base = 12 }
 	}
 
 

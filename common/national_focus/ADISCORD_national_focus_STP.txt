@@ -1964,6 +1964,8 @@ focus_tree = {
 		}
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			add_political_power = 25
+			add_command_power = 10
 			if = {
 				limit = {
 					OR = {

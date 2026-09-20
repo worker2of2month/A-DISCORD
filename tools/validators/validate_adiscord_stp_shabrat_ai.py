@@ -47,6 +47,9 @@ CORE_FOCUSES = (
 )
 DEPTH_FOCUSES = (
     "STP_Turn_The_Young_Officers",
+    "STP_cw_prepare_capital_sabotage",
+    "STP_cw_prepare_industry_sabotage",
+    "STP_cw_disruption_cells",
     "STP_cw_defensive_lines",
     "STP_cw_heavy_reserve",
     "STP_cw_abila_reserve",
@@ -58,7 +61,6 @@ DEPTH_FOCUSES = (
     "STP_cw_local_council_envoys",
     "STP_cw_autonomy_guarantees",
     "STP_Kefreite_Security_Offer",
-    "STP_cw_prepare_capital_sabotage",
 )
 WAR_FOCUSES = (
     "STP_cw_open_conscription",
