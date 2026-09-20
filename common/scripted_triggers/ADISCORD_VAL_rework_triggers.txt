@@ -513,22 +513,78 @@ VAL_only_occidian_states = {
 }
 
 # COUNTRY: a defeated member remains reserved until its active allies fall.
+VAL_final_faction_ally_still_fighting = {
+    OR = {
+        AND = {
+            tag = STP
+            OR = {
+                NOD = {
+                    exists = yes
+                    is_in_faction_with = STP
+                    has_war_with = VAL
+                    has_capitulated = no
+                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                }
+                STS = {
+                    exists = yes
+                    is_in_faction_with = STP
+                    has_war_with = VAL
+                    has_capitulated = no
+                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                }
+            }
+        }
+        AND = {
+            tag = STS
+            OR = {
+                NOD = {
+                    exists = yes
+                    is_in_faction_with = STS
+                    has_war_with = VAL
+                    has_capitulated = no
+                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                }
+                STP = {
+                    exists = yes
+                    is_in_faction_with = STS
+                    has_war_with = VAL
+                    has_capitulated = no
+                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                }
+            }
+        }
+        AND = {
+            tag = NOD
+            OR = {
+                STP = {
+                    exists = yes
+                    is_in_faction_with = NOD
+                    has_war_with = VAL
+                    has_capitulated = no
+                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                }
+                STS = {
+                    exists = yes
+                    is_in_faction_with = NOD
+                    has_war_with = VAL
+                    has_capitulated = no
+                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                }
+            }
+        }
+    }
+}
+
 VAL_final_settlement_ready = {
     has_country_flag = VAL_final_defeat_pending
-    # Only the current callback may stand in for the engine's pending capitulation.
+    # The current immediate callback counts as defeated even before the engine
+    # flips has_capitulated. Other members are checked only inside this theatre.
     OR = {
         has_capitulated = yes
         AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate }
     }
     VAL = { exists = yes has_capitulated = no is_subject = no }
-    NOT = {
-        any_other_country = {
-            is_in_faction_with = PREV
-            has_war_with = VAL
-            has_capitulated = no
-            NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
-        }
-    }
+    NOT = { VAL_final_faction_ally_still_fighting = yes }
 }
 
 VAL_is_contract_administration = {

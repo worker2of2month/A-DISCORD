@@ -71,12 +71,19 @@ class NodrulCapitulationReservationTests(unittest.TestCase):
         self.assertIn("NOT = { has_global_flag = skip_default_capitulation }", generic)
         self.assertIn("clr_global_flag = skip_default_capitulation", generic)
 
-    def test_nodrul_defeat_only_cedes_the_two_scripted_states(self) -> None:
-        defeat = named_block(read(EFFECTS), "STP_cw_settle_northern_defeat")
+    def test_nodrul_defeat_cedes_border_states_and_ainholm_claims(self) -> None:
+        source = read(EFFECTS)
+        defeat = named_block(source, "STP_cw_settle_northern_defeat")
+        ainholm = named_block(source, "STP_cw_cede_ainholm_to_frontier")
         self.assertIn("YPR = { transfer_state = 17 }", defeat)
         self.assertIn("YPR = { transfer_state = 18 }", defeat)
-        self.assertNotIn("annex_country", defeat)
-        self.assertNotIn("every_owned_state", defeat)
+        self.assertIn("STP_cw_cede_ainholm_to_frontier = yes", defeat)
+        self.assertIn("TFF = { transfer_state = 118 }", ainholm)
+        self.assertIn("TFF = { transfer_state = 119 }", ainholm)
+        self.assertIn("tag = AIN", ainholm)
+        self.assertIn("tag = NOD", ainholm)
+        self.assertNotIn("annex_country", defeat + ainholm)
+        self.assertNotIn("every_owned_state", defeat + ainholm)
 
 
 if __name__ == "__main__":

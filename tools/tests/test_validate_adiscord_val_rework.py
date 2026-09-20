@@ -3352,7 +3352,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         }
         self.assertTrue(self.match("VAL_final_settlement_ready", facts, "NOD"))
         facts.update({("STP", "exists", "yes"): True,
-                      ("STP", "is_in_faction_with", "PREV"): True,
+                      ("STP", "is_in_faction_with", "NOD"): True,
                       ("STP", "has_war_with", "VAL"): True,
                       ("STP", "has_capitulated", "no"): True})
         self.assertFalse(self.match("VAL_final_settlement_ready", facts, "NOD"))
@@ -3381,7 +3381,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
             ("VAL", "has_capitulated", "no"): True,
             ("VAL", "is_subject", "no"): True,
             ("NOD", "exists", "yes"): True,
-            ("NOD", "is_in_faction_with", "PREV"): True,
+            ("NOD", "is_in_faction_with", "STP"): True,
             ("NOD", "has_war_with", "VAL"): True,
             ("NOD", "has_capitulated", "no"): True,
         }
@@ -3390,11 +3390,45 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertTrue(self.match("VAL_final_settlement_ready", facts, "STP", root="NOD"))
         self.assertFalse(self.match("VAL_final_settlement_ready", facts, "STP"))
 
+    def test_final_settlement_uses_bounded_allies_and_two_phase_commit(self):
+        triggers = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
+        ally = named_block_spans(triggers, "VAL_final_faction_ally_still_fighting")[0].text
+        ready = named_block_spans(triggers, "VAL_final_settlement_ready")[0].text
+        self.assertNotIn("any_other_country", ready)
+        self.assertNotIn("PREV", ally)
+        for tag in ("STP", "STS", "NOD"):
+            self.assertIn(f"tag = {tag}", ally)
+
+        effects = EFFECTS_PATH.read_text(encoding="utf-8")
+        finalizer = named_block_spans(effects, "VAL_finalize_reserved_settlements")[0].text
+        first_install = min(finalizer.index(name) for name in (
+            "VAL_install_stelander_administration = yes",
+            "VAL_install_nodrul_administration = yes",
+        ))
+        last_snapshot = finalizer.rfind("set_country_flag = VAL_final_settlement_commit", 0, first_install)
+        self.assertGreaterEqual(last_snapshot, 0)
+        self.assertLess(last_snapshot, first_install)
+        self.assertIn("VAL_transfer_party_controlled_ainholm_to_frontier = yes", finalizer)
+
+    def test_party_controlled_ainholm_goes_to_frontier_on_kefreyt_victory(self):
+        effects = EFFECTS_PATH.read_text(encoding="utf-8")
+        transfer = named_block_spans(effects, "VAL_transfer_party_controlled_ainholm_to_frontier")[0].text
+        self.assertIn("has_country_flag = VAL_final_settlement_commit", transfer)
+        self.assertIn("has_country_flag = VAL_final_party_controlled_ainholm", transfer)
+        self.assertIn("owner = { OR = { tag = AIN tag = NOD tag = STP } }", transfer)
+        self.assertIn("transfer_state = 118", transfer)
+        self.assertIn("transfer_state = 119", transfer)
+        self.assertNotIn("annex_country", transfer)
+
     def test_final_settlement_runs_before_native_conference(self):
         source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text()
         immediate = source.split("# BEGIN kefreyt:on_capitulation_immediate", 1)[1].split("# END kefreyt:on_capitulation_immediate", 1)[0]
+        self.assertLess(immediate.index("set_country_flag = VAL_final_party_controlled_ainholm"),
+                        immediate.index("VAL_finalize_reserved_settlements = yes"))
         self.assertLess(immediate.index("set_country_flag = VAL_final_defeat_pending"),
                         immediate.index("VAL_finalize_reserved_settlements = yes"))
+        self.assertIn("118 = { OR = { is_owned_by = STP is_controlled_by = STP } }", immediate)
+        self.assertIn("119 = { OR = { is_owned_by = STP is_controlled_by = STP } }", immediate)
         self.assertIn("flag = VAL_final_capitulation_immediate days = 1", immediate)
         late = source.split("# BEGIN kefreyt:on_capitulation\n", 1)[1].split("# END kefreyt:on_capitulation", 1)[0]
         self.assertIn("clr_country_flag = VAL_final_capitulation_immediate", late)
@@ -3461,8 +3495,15 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertEqual(scalar(mods, "cic_to_overlord_factor"), "0.15")
         self.assertEqual(scalar(mods, "mic_to_overlord_factor"), "0.30")
         self.assertIn("151 43 29", (ROOT / "common/countries/NorthernContractAdministration.txt").read_text(encoding="utf-8"))
-        for folder in ("", "medium/", "small/"):
-            self.assertTrue((ROOT / f"gfx/flags/{folder}NKA.tga").is_file())
+        from PIL import Image
+        for folder, size in (("", (82, 52)), ("medium/", (41, 26)), ("small/", (10, 7))):
+            path = ROOT / f"gfx/flags/{folder}NKA.tga"
+            self.assertTrue(path.is_file())
+            with Image.open(path) as image:
+                self.assertEqual(image.size, size)
+                colors = image.convert("RGB").getcolors(maxcolors=size[0] * size[1])
+                self.assertIsNotNone(colors)
+                self.assertGreaterEqual(len(colors), 5)
 
     def test_map_check_detects_rgb_changes_with_unchanged_alpha(self):
         import tempfile

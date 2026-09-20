@@ -3711,6 +3711,28 @@ STP_cw_settle_northern_victory = {
 	}
 }
 
+# Restore the two Ainholm claims to TFF only from the defeated Nodrul colonial bloc.
+STP_cw_cede_ainholm_to_frontier = {
+	if = {
+		limit = { TFF = { exists = yes } }
+		118 = {
+			if = {
+				limit = { owner = { OR = { tag = AIN tag = NOD } } }
+				TFF = { transfer_state = 118 }
+				set_state_controller_to = TFF
+			}
+		}
+		119 = {
+			if = {
+				limit = { owner = { OR = { tag = AIN tag = NOD } } }
+				TFF = { transfer_state = 119 }
+				set_state_controller_to = TFF
+			}
+		}
+		TFF = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
 # Called only by the guarded immediate NOD capitulation callback, before native cap state flips.
 STP_cw_settle_northern_defeat = {
 	if = {
@@ -3729,6 +3751,7 @@ STP_cw_settle_northern_defeat = {
 		if = { limit = { has_war_with = TFF } white_peace = TFF }
 		clr_country_flag = NOD_cw_northern_war_started
 		STP_cw_end_northern_colonial_war = yes
+		STP_cw_cede_ainholm_to_frontier = yes
 		YPR = { set_major = no }
 		COF = { set_major = no }
 		TFF = { set_major = no }
@@ -3739,7 +3762,7 @@ STP_cw_settle_northern_defeat = {
 		}
 		news_event = { id = ADISCORD_STP_cw.81 }
 		STS = { if = { limit = { exists = yes } STP_cw_poll_nod_intervention = yes } }
-		log = "[STP_NORTH] NOD defeated by the north: separate peace, owned 17/18 ceded to YPR"
+		log = "[STP_NORTH] NOD defeated by the north: 17/18 ceded to YPR and Ainholm claims restored to TFF"
 	}
 }
 

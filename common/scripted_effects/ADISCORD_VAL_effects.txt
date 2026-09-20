@@ -2792,24 +2792,53 @@ VAL_install_nodrul_administration = {
     }
 }
 
+# COUNTRY VAL. Apply the Ainholm clause from the pre-capitulation snapshot.
+VAL_transfer_party_controlled_ainholm_to_frontier = {
+    if = {
+        limit = {
+            tag = VAL
+            TFF = { exists = yes }
+            STP = {
+                has_country_flag = VAL_final_settlement_commit
+                has_country_flag = VAL_final_party_controlled_ainholm
+            }
+            118 = { owner = { OR = { tag = AIN tag = NOD tag = STP } } }
+            119 = { owner = { OR = { tag = AIN tag = NOD tag = STP } } }
+        }
+        TFF = {
+            transfer_state = 118
+            transfer_state = 119
+            ADISCORD_economy_mark_dirty = yes
+        }
+        118 = { set_state_controller_to = TFF }
+        119 = { set_state_controller_to = TFF }
+        ADISCORD_economy_mark_dirty = yes
+        log = "[VAL] Party-held Ainholm transferred to the Free Frontier after Kefreyt coalition victory"
+    }
+}
+
 # COUNTRY VAL; event-driven, bounded to the three final-war recipients.
 VAL_finalize_reserved_settlements = {
+    # Snapshot every eligible coalition member before the first white peace or
+    # autonomy change mutates the shared war. This makes same-faction defeats
+    # settle as one transaction instead of invalidating the second member.
     STP = {
+        clr_country_flag = VAL_final_settlement_commit
         if = {
             limit = { VAL_final_settlement_ready = yes }
-            clr_country_flag = VAL_final_defeat_pending
-            VAL_install_stelander_administration = yes
+            set_country_flag = VAL_final_settlement_commit
         }
         else_if = {
             limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
             clr_country_flag = VAL_final_defeat_pending
+            clr_country_flag = VAL_final_party_controlled_ainholm
         }
     }
     STS = {
+        clr_country_flag = VAL_final_settlement_commit
         if = {
             limit = { VAL_final_settlement_ready = yes }
-            clr_country_flag = VAL_final_defeat_pending
-            VAL_install_stelander_administration = yes
+            set_country_flag = VAL_final_settlement_commit
         }
         else_if = {
             limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
@@ -2817,14 +2846,47 @@ VAL_finalize_reserved_settlements = {
         }
     }
     NOD = {
+        clr_country_flag = VAL_final_settlement_commit
         if = {
             limit = { VAL_final_settlement_ready = yes }
-            clr_country_flag = VAL_final_defeat_pending
-            VAL_install_nodrul_administration = yes
+            set_country_flag = VAL_final_settlement_commit
         }
         else_if = {
             limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
             clr_country_flag = VAL_final_defeat_pending
+        }
+    }
+
+    # The territorial clause is evaluated while the pre-settlement controllers
+    # still exist. Only the Party-side Stelander result can trigger it.
+    if = {
+        limit = { STP = { has_country_flag = VAL_final_settlement_commit } }
+        VAL_transfer_party_controlled_ainholm_to_frontier = yes
+    }
+
+    STP = {
+        if = {
+            limit = { has_country_flag = VAL_final_settlement_commit }
+            clr_country_flag = VAL_final_settlement_commit
+            clr_country_flag = VAL_final_defeat_pending
+            clr_country_flag = VAL_final_party_controlled_ainholm
+            VAL_install_stelander_administration = yes
+        }
+    }
+    STS = {
+        if = {
+            limit = { has_country_flag = VAL_final_settlement_commit }
+            clr_country_flag = VAL_final_settlement_commit
+            clr_country_flag = VAL_final_defeat_pending
+            VAL_install_stelander_administration = yes
+        }
+    }
+    NOD = {
+        if = {
+            limit = { has_country_flag = VAL_final_settlement_commit }
+            clr_country_flag = VAL_final_settlement_commit
+            clr_country_flag = VAL_final_defeat_pending
+            VAL_install_nodrul_administration = yes
         }
     }
 }
