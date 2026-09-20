@@ -21,27 +21,27 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           from collections import Counter
-          import hashlib, json, os, re, subprocess, sys
+          import json, os, re, subprocess, sys, textwrap
           root = Path.cwd()
           base = '2f110ab498612cd31dde6d557d32a57ec92d1266'
           tests = root / 'tools/tests/test_adiscord_english_localisation.py'
           before = tests.read_text()
-          addition = '''
-              def test_starting_unit_display_names_use_the_shared_latin_script(self):
-                  import re
-                  from tools.validators.validate_adiscord_english_localisation import CYRILLIC
-                  root = Path(__file__).resolve().parents[2]
-                  untranslated = []
-                  for path in sorted((root / 'history/units').rglob('*.txt')):
-                      for number, line in enumerate(path.read_text(encoding='utf-8-sig').splitlines(), 1):
-                          if line.lstrip().startswith('#'):
-                              continue
-                          for name in re.findall(r'\bname\s*=\s*"([^"\n]*)"', line):
-                              if CYRILLIC.search(name):
-                                  untranslated.append(f'{path.name}:{number}: {name}')
-                  self.assertEqual(untranslated, [])
+          addition = r'''
+          def test_starting_unit_display_names_use_the_shared_latin_script(self):
+              import re
+              from tools.validators.validate_adiscord_english_localisation import CYRILLIC
+              root = Path(__file__).resolve().parents[2]
+              untranslated = []
+              for path in sorted((root / 'history/units').rglob('*.txt')):
+                  for number, line in enumerate(path.read_text(encoding='utf-8-sig').splitlines(), 1):
+                      if line.lstrip().startswith('#'):
+                          continue
+                      for name in re.findall(r'\bname\s*=\s*"([^"\n]*)"', line):
+                          if CYRILLIC.search(name):
+                              untranslated.append(f'{path.name}:{number}: {name}')
+              self.assertEqual(untranslated, [])
           '''
-          addition = '\n'.join(line[10:] if line.startswith('          ') else line for line in addition.splitlines()) + '\n'
+          addition = textwrap.indent(textwrap.dedent(addition).strip() + '\n', '    ')
           marker = "\n\nif __name__ == '__main__':"
           assert marker in before and 'test_starting_unit_display_names_use_the_shared_latin_script' not in before
           tests.write_text(before.replace(marker, '\n' + addition + marker), encoding='utf-8')
