@@ -879,6 +879,27 @@ class ValStelanderContractTests(unittest.TestCase):
         for token in ("ADISCORD_economy_spend_50", "ADISCORD_economy_receive_50"):
             self.assertNotIn(token, without_success)
 
+    def test_occidian_conquest_bypasses_neutrality_without_granting_its_reward(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        triggers = {e.key: e.value for e in parse_clausewitz((ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8-sig"))}
+        facts = {}
+        for state in ("43", "44", "88"):
+            facts[(state, "is_controlled_by", "VAL")] = True
+        self.assertFalse(matches_conditions(triggers["VAL_occidia_secured"], facts, "VAL"))
+        for state in ("43", "44", "88"):
+            facts[(state, "is_owned_by", "VAL")] = True
+        self.assertTrue(matches_conditions(triggers["VAL_occidia_secured"], facts, "VAL"))
+        facts[("44", "is_controlled_by", "VAL")] = False
+        self.assertFalse(matches_conditions(triggers["VAL_occidia_secured"], facts, "VAL"))
+        facts = {("VAL", "VAL_occidian_administration_secured", "yes"): True}
+        self.assertTrue(matches_conditions(triggers["VAL_occidia_secured"], facts, "VAL"))
+        focus = self.focus("VAL_Keep_The_Arsenals")
+        self.assertEqual(" ".join(named_blocks(focus, "bypass")[0].split()), "bypass = { VAL_occidia_secured = yes }")
+        finish = self.focus("VAL_The_Steel_Contract")
+        self.assertIn("VAL_occidia_secured = yes", named_blocks(finish, "available")[0])
+        self.assertIn("OR = { has_country_flag = VAL_cw_military_course VAL_occidia_secured = yes }", finish)
+
     def test_each_exclusive_course_can_reach_the_contract_finish(self):
         finish = self.focus("VAL_The_Steel_Contract")
         prerequisites = [set(re.findall(r"focus\s*=\s*(\w+)", group))
@@ -1704,7 +1725,7 @@ class ValContractFormationTests(unittest.TestCase):
             pending = next(e.value for e in walk(block(decision, "complete_effect"))
                            if e.key == "set_country_flag" and isinstance(e.value, list)
                            and scalar(e.value, "flag") == "VAL_cw_arms_offer_pending")
-            self.assertEqual((scalar(pending, "value"), scalar(pending, "days")), (tier, "21"))
+            self.assertEqual((scalar(pending, "value"), scalar(pending, "days")), (tier, "35" if tier == "2" else "21"))
             for gate in (block(decision, "available"), block(options[option_id], "trigger")):
                 self.assertTrue(any(e.key == f"ADISCORD_economy_can_spend_{treasury}" for e in walk(gate)))
                 decision_text = only_named_block(self, DECISIONS_PATH.read_text(encoding="utf-8-sig"), decision_id)
@@ -3468,7 +3489,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         decisions = self.getblock(self.parse(DECISIONS_PATH.read_text(encoding="utf-8")), "VAL_vorkerland_aid")
         for name, equipment, amount in (("rifles", "infantry_equipment", "1000"), ("support", "support_equipment", "100")):
             decision = self.getblock(decisions, "VAL_aid_wrk_" + name)
-            self.assertEqual(self.scalar(decision, "cost"), "25")
+            self.assertEqual(self.scalar(decision, "cost"), "50")
             self.assertEqual(self.scalar(decision, "days_re_enable"), "30")
             self.assertEqual(self.scalar(self.getblock(decision, "ai_will_do"), "base"), "0")
             transfer = self.getblock(self.getblock(self.getblock(decision, "complete_effect"), "if"), "send_equipment")

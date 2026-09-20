@@ -3280,6 +3280,20 @@ STP_cw_finish_nod_warning = {
 		NOD = { add_to_war = { targeted_alliance = STP enemy = STS hostility_reason = asked_to_join single_target_only = yes } }
 		if = {
 			limit = { NOD = { has_war_with = STS } }
+			# Form the alliance only after the engine confirms entry into the party's war.
+			STP = {
+				if = {
+					limit = { NOT = { is_in_faction_with = NOD } }
+					if = { limit = { is_in_faction = yes } faction_leader = { remove_from_faction = STP } }
+					NOD = {
+						if = {
+							limit = { is_in_faction = no }
+							create_faction_from_template = { template = faction_template_ADISCORD_standard name = STP_nod_alliance }
+						}
+						faction_leader = { add_to_faction = STP }
+					}
+				}
+			}
 			set_country_flag = STP_cw_nod_entered
 			remove_mission = STP_cw_nod_warning
 			clr_country_flag = STP_cw_nod_warning_active

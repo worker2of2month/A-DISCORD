@@ -10,7 +10,9 @@ state={
 	local_supplies=0.000
 	resources = {
 		oil = 12
+		tungsten = 2
 	}
+
 
 	history={
 		owner = VAL

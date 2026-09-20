@@ -8,6 +8,21 @@ on_actions = {
 		}
 	}
 
+	on_war_relation_added = {
+		effect = {
+			if = {
+				limit = {
+					VAL = { exists = yes }
+					OR = {
+						ROOT = { OR = { tag = VAL tag = STP tag = STS tag = NOD tag = WKR tag = VAD tag = TVA } }
+						FROM = { OR = { tag = VAL tag = STP tag = STS tag = NOD tag = WKR tag = VAD tag = TVA } }
+					}
+				}
+				VAL = { VAL_open_refugee_waves = yes }
+			}
+		}
+	}
+
 	on_weekly_VAL = {
 		effect = {
 			VAL_logistics_market_weekly = yes

@@ -301,7 +301,7 @@ VAL_military_operations = {
   icon = generic_prepare_civil_war allowed = { tag = VAL }
   visible = { VAL_northern_volunteer_front_open = yes }
   available = { has_war = no has_capitulated = no is_subject = no NOT = { has_idea = VAL_northern_volunteer_mandate } }
-  cost = 25 days_re_enable = 30
+  cost = 50 days_re_enable = 30
   complete_effect = { add_ideas = VAL_northern_volunteer_mandate custom_effect_tooltip = VAL_northern_volunteers_tt }
   ai_will_do = { base = 10 }
  }
@@ -312,7 +312,7 @@ VAL_propaganda_campaigns = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
 		available = { ADISCORD_has_campaign_slot = yes }
-		cost = 25
+		cost = 50
 		days_remove = 50
 		days_re_enable = 70
 		modifier = {
@@ -328,7 +328,7 @@ VAL_propaganda_campaigns = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
 		available = { ADISCORD_has_campaign_slot = yes }
-		cost = 25
+		cost = 50
 		days_remove = 60
 		days_re_enable = 80
 		modifier = {
@@ -344,7 +344,7 @@ VAL_propaganda_campaigns = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
 		available = { ADISCORD_has_campaign_slot = yes }
-		cost = 20
+		cost = 40
 		days_remove = 45
 		days_re_enable = 70
 		modifier = {
@@ -361,7 +361,7 @@ VAL_propaganda_campaigns = {
 		allowed = { tag = VAL }
 		visible = { has_country_flag = VAL_westerholm_metal_lost }
 		available = { ADISCORD_has_campaign_slot = yes }
-		cost = 15
+		cost = 35
 		days_remove = 35
 		days_re_enable = 70
 		modifier = {
@@ -716,7 +716,7 @@ VAL_frontier = {
             custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
             OR = { CIN = { VAL_frontier_bloc_target_eligible = yes } OSF = { VAL_frontier_bloc_target_eligible = yes } APH = { VAL_frontier_bloc_target_eligible = yes } }
         }
-        cost = 75
+        cost = 100
         days_re_enable = 180
         complete_effect = {
             custom_effect_tooltip = VAL_frontier_demand_CIN_tt
@@ -742,7 +742,7 @@ VAL_frontier = {
             ERT = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = VAL } }
             168 = { is_owned_by = ERT is_controlled_by = ERT }
         }
-        cost = 75
+        cost = 100
         days_re_enable = 180
         complete_effect = {
             custom_effect_tooltip = VAL_frontier_demand_ERT_tt
@@ -758,7 +758,7 @@ VAL_frontier = {
   target_trigger = { FROM = { exists = yes } }
   visible = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated } }
   available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing }  }
-  cost = 50 days_remove = 30 days_re_enable = 90
+  cost = 75 days_remove = 30 days_re_enable = 90
   complete_effect = {
    custom_effect_tooltip = VAL_campaign_preparation_tt
    custom_effect_tooltip = VAL_nod_victory_tt
@@ -782,7 +782,7 @@ VAL_frontier = {
   target_trigger = { FROM = { exists = yes } }
   visible = { has_completed_focus = VAL_Stelander_Ultimatum NOT = { has_country_flag = VAL_stelander_defeated } }
   available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } FROM = { has_country_flag = VAL_stelander_refused } }
-  cost = 50 days_remove = 30 days_re_enable = 90
+  cost = 75 days_remove = 30 days_re_enable = 90
   complete_effect = {
    custom_effect_tooltip = VAL_campaign_preparation_tt
    custom_effect_tooltip = VAL_stelander_victory_tt
@@ -810,7 +810,7 @@ VAL_frontier = {
    NOT = { has_country_flag = VAL_campaign_mobilizing }
    FROM = { VAL_stelander_ultimatum_target = yes NOT = { has_country_flag = VAL_stelander_truce } NOT = { has_country_flag = VAL_stelander_refused } }
   }
-  cost = 25 days_re_enable = 90
+  cost = 50 days_re_enable = 90
   complete_effect = {
    custom_effect_tooltip = VAL_stelander_offer_tt
    hidden_effect = {
@@ -902,7 +902,7 @@ VAL_foreign_sales = {
 		icon = generic_political_pressure
 		visible = { has_completed_focus = VAL_Resource_War_Contracts NAM = { exists = yes } NOT = { has_country_flag = VAL_nam_concession_agreed } NOT = { has_country_flag = VAL_nam_concession_granted } }
 		available = { custom_trigger_tooltip = { tooltip = VAL_nam_concession_negotiable_tt VAL_nam_concession_negotiable = yes } NOT = { has_country_flag = VAL_nam_concession_offer_pending } }
-		cost = 25
+		cost = 50
 		days_re_enable = 30
 		complete_effect = {
 			custom_effect_tooltip = VAL_nam_concession_terms_tt
@@ -929,7 +929,7 @@ VAL_foreign_sales = {
 		target_trigger = { FROM = { exists = yes } }
 		visible = { has_completed_focus = VAL_Resource_War_Contracts FROM = { has_war = yes } }
 		available = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } } }
-		cost = 0
+		cost = 35
 		days_re_enable = 14
 		complete_effect = {
 			custom_effect_tooltip = VAL_resource_war_arms_offer_tt
@@ -950,7 +950,7 @@ VAL_foreign_sales = {
 		target_trigger = { FROM = { exists = yes } }
 		visible = { has_completed_focus = VAL_Resource_War_Contracts FROM = { has_war = yes } }
 		available = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } NOT = { has_idea = VAL_advisors_income } NOT = { command_power < 25 } NOT = { has_manpower < 2000 } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } NOT = { has_idea = VAL_paid_military_advisors } } }
-		cost = 0
+		cost = 50
 		days_re_enable = 14
 		complete_effect = {
 			custom_effect_tooltip = VAL_resource_war_personnel_offer_tt
@@ -1143,7 +1143,7 @@ VAL_cw_sell_arms_to_resistance = {
 			NOT = { has_equipment = { infantry_equipment < 3200 } }
 			STS = { exists = yes has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_50 = yes }
 		}
-		cost = 0
+		cost = 35
 		days_re_enable = 30
 		fire_only_once = no
 		complete_effect = {
@@ -1170,14 +1170,25 @@ VAL_cw_offer_contract_formations = {
 			NOT = { has_equipment = { support_equipment < 60 } }
 			STS = { exists = yes has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_100 = yes any_owned_state = { is_controlled_by = PREV } }
 		}
-		cost = 0
-		days_re_enable = 30
+		cost = 75
+		days_re_enable = 60
+		days_remove = 21
 		fire_only_once = no
 		complete_effect = {
 			custom_effect_tooltip = VAL_cw_formations_offer_tt
 			hidden_effect = {
-				set_country_flag = { flag = VAL_cw_arms_offer_pending value = 2 days = 21 }
-				STS = { country_event = { id = ADISCORD_STP_cw.50 } }
+				set_country_flag = { flag = VAL_cw_arms_offer_pending value = 2 days = 35 }
+			}
+		}
+		cancel_trigger = { OR = { has_capitulated = yes has_war_with = STS has_country_flag = VAL_cw_refused NOT = { STS = { exists = yes has_capitulated = no has_war_with = STP } } } }
+		cancel_effect = { hidden_effect = { if = { limit = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } } clr_country_flag = VAL_cw_arms_offer_pending } } }
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } has_capitulated = no NOT = { has_war_with = STS } NOT = { has_country_flag = VAL_cw_refused } STS = { exists = yes has_capitulated = no has_war_with = STP } }
+					STS = { country_event = { id = ADISCORD_STP_cw.50 } }
+				}
+				else = { if = { limit = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } } clr_country_flag = VAL_cw_arms_offer_pending } }
 			}
 		}
 		ai_will_do = { base = 12 }
@@ -1186,9 +1197,9 @@ VAL_cw_offer_contract_formations = {
   icon = generic_prepare_civil_war allowed = { tag = VAL }
   targets = { CIN OSF APH WRK WKR VAD TVA STP STS SRP NOD YPR COF TFF }
   target_trigger = { FROM = { exists = yes } }
-  visible = { has_completed_focus = VAL_Foreign_Broker_Licences FROM = { has_war = yes } }
+  visible = { has_completed_focus = VAL_Foreign_Broker_Licences FROM = { has_war = yes NOT = { tag = STS has_war_with = STP } } }
   available = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } } VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } }
-  cost = 0 days_re_enable = 14
+  cost = 35 days_re_enable = 35
   complete_effect = {
    custom_effect_tooltip = VAL_export_arms_offer_tt
    hidden_effect = {
@@ -1208,7 +1219,7 @@ VAL_cw_offer_contract_formations = {
   target_trigger = { FROM = { exists = yes } }
   visible = { has_completed_focus = VAL_Contingency_Ledgers FROM = { has_war = yes } }
   available = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } } NOT = { has_idea = VAL_advisors_income } NOT = { command_power < 25 } FROM = { NOT = { has_idea = VAL_paid_military_advisors } } }
-  cost = 0 days_re_enable = 14
+  cost = 50 days_re_enable = 70
   complete_effect = {
    custom_effect_tooltip = VAL_export_advisors_offer_tt
    hidden_effect = {
@@ -1229,7 +1240,7 @@ VAL_command_balance_category = {
 		icon = generic_army_support
 		visible = { has_power_balance = { id = VAL_command_balance } }
 		available = { has_capitulated = no is_subject = no power_balance_value = { id = VAL_command_balance value > -0.75 } }
-		cost = 50
+		cost = 75
 		days_re_enable = 90
 		complete_effect = {
 			add_power_balance_value = { id = VAL_command_balance value = -0.15 }
@@ -1240,7 +1251,7 @@ VAL_command_balance_category = {
 		icon = generic_political_pressure
 		visible = { has_power_balance = { id = VAL_command_balance } }
 		available = { has_capitulated = no is_subject = no power_balance_value = { id = VAL_command_balance value < 0.75 } }
-		cost = 50
+		cost = 75
 		days_re_enable = 90
 		complete_effect = {
 			add_power_balance_value = { id = VAL_command_balance value = 0.15 }
@@ -1251,7 +1262,7 @@ VAL_command_balance_category = {
 		icon = generic_army_support
 		visible = { has_power_balance = { id = VAL_command_balance } }
 		available = { has_capitulated = no is_subject = no has_war = yes NOT = { command_power < 25 } NOT = { has_idea = VAL_staff_war_mandate } }
-		cost = 75
+		cost = 100
 		days_re_enable = 180
 		complete_effect = {
 			add_command_power = -25
@@ -1264,7 +1275,7 @@ VAL_command_balance_category = {
 		icon = generic_political_pressure
 		visible = { has_power_balance = { id = VAL_command_balance } }
 		available = { has_capitulated = no is_subject = no has_war = no }
-		cost = 75
+		cost = 100
 		days_re_enable = 180
 		complete_effect = {
 			add_power_balance_value = { id = VAL_command_balance value = 0.20 }
@@ -1276,7 +1287,7 @@ VAL_command_balance_category = {
 		icon = generic_political_pressure
 		visible = { has_power_balance = { id = VAL_command_balance } }
 		available = { has_capitulated = no is_subject = no OR = { power_balance_value = { id = VAL_command_balance value < -0.10 } power_balance_value = { id = VAL_command_balance value > 0.10 } } }
-		cost = 100
+		cost = 150
 		days_re_enable = 120
 		complete_effect = {
 			if = { limit = { power_balance_value = { id = VAL_command_balance value < 0 } } add_power_balance_value = { id = VAL_command_balance value = 0.20 } }
@@ -1288,7 +1299,7 @@ VAL_command_balance_category = {
 		icon = generic_political_pressure
 		visible = { has_power_balance = { id = VAL_command_balance } }
 		available = { has_capitulated = no is_subject = no OR = { is_power_balance_in_range = { id = VAL_command_balance range = VAL_staff_dominance } is_power_balance_in_range = { id = VAL_command_balance range = VAL_solgalov_dominance } } }
-		cost = 150
+		cost = 200
 		days_re_enable = 180
 		complete_effect = {
 			if = { limit = { power_balance_value = { id = VAL_command_balance value < 0 } } add_power_balance_value = { id = VAL_command_balance value = 0.40 } }
@@ -1306,7 +1317,7 @@ VAL_vorkerland_aid = {
 			custom_trigger_tooltip = { tooltip = VAL_can_aid_vorkerland_tt VAL_can_aid_vorkerland = yes }
 			NOT = { has_equipment = { infantry_equipment < 1000 } }
 		}
-		cost = 25
+		cost = 50
 		days_re_enable = 30
 		complete_effect = {
 			if = {
@@ -1323,7 +1334,7 @@ VAL_vorkerland_aid = {
 			custom_trigger_tooltip = { tooltip = VAL_can_aid_vorkerland_tt VAL_can_aid_vorkerland = yes }
 			NOT = { has_equipment = { support_equipment < 100 } }
 		}
-		cost = 25
+		cost = 50
 		days_re_enable = 30
 		complete_effect = {
 			if = {
@@ -1353,7 +1364,7 @@ VAL_regional_integration = {
 		on_map_mode = map_and_decisions_view
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		cost = 50
-		days_remove = 60
+		days_remove = 90
 		fire_only_once = no
 		cancel_if_not_visible = yes
 		cancel_trigger = { VAL_regional_integration_target_valid = no }
@@ -1400,7 +1411,7 @@ VAL_regional_integration = {
 		on_map_mode = map_and_decisions_view
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		cost = 75
-		days_remove = 90
+		days_remove = 120
 		fire_only_once = no
 		cancel_if_not_visible = yes
 		cancel_trigger = { VAL_regional_integration_target_valid = no }
@@ -1442,7 +1453,7 @@ VAL_commonwealth_formation = {
 		available = {
 			custom_trigger_tooltip = { tooltip = VAL_commonwealth_requirements_tt VAL_can_proclaim_commonwealth = yes }
 		}
-		cost = 100
+		cost = 150
 		fire_only_once = yes
 		complete_effect = {
 			custom_effect_tooltip = VAL_commonwealth_proclaimed_tt

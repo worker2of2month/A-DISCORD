@@ -1695,7 +1695,7 @@ def main() -> int:
     )
     actions.add_argument("--apply-vorkerland-owners", action="store_true",
                          help="apply only the prewar confederation owners and cores")
-    actions.add_argument("--apply-val-resources", action="store_true", help="apply the oil-only Kefreyt homeland resource manifest")
+    actions.add_argument("--apply-val-resources", action="store_true", help="apply the Kefreyt homeland resource manifest")
     actions.add_argument("--check-val-resources", action="store_true", help="check the Kefreyt homeland resource manifest")
     args = parser.parse_args()
     if args.apply_val_resources or args.check_val_resources:

@@ -469,6 +469,19 @@ VAL_can_form_occidian_administration = {
 	}
 }
 
+# COUNTRY VAL. Direct annexation and the secured subject administration both
+# settle the Occidian objective; temporary occupation does not.
+VAL_occidia_secured = {
+	OR = {
+		AND = {
+			43 = { is_owned_by = VAL is_controlled_by = VAL }
+			44 = { is_owned_by = VAL is_controlled_by = VAL }
+			88 = { is_owned_by = VAL is_controlled_by = VAL }
+		}
+		VAL_occidian_administration_secured = yes
+	}
+}
+
 VAL_occidian_administration_secured = {
 	has_capitulated = no
 	is_subject = no

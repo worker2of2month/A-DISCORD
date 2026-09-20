@@ -62,7 +62,6 @@ soundeffect = {
     sounds = {
         sound = "VAL_neutral_001"
         sound = "VAL_neutral_002"
-        sound = "VAL_neutral_003"
         sound = "VAL_neutral_004"
     }
     max_audible = 1

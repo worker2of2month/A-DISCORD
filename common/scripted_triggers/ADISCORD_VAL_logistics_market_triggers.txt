@@ -98,3 +98,19 @@ VAL_regional_displacement_crisis = {
 		APH = { exists = yes has_war = yes }
 	}
 }
+
+VAL_refugee_vorkerland_war = {
+	OR = { WKR = { has_war_with = VAD } WKR = { has_war_with = TVA } VAD = { has_war_with = TVA } }
+}
+
+VAL_refugee_stelander_war = {
+	STP = { has_war_with = STS }
+}
+
+VAL_refugee_nodrul_war = {
+	NOD = { OR = { has_war_with = STP has_war_with = STS has_war_with = VAL } }
+}
+
+VAL_refugee_north_war = {
+	OR = { VAL = { has_war_with = CIN } VAL = { has_war_with = OSF } VAL = { has_war_with = APH } }
+}

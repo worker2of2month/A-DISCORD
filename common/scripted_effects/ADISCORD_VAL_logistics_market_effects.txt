@@ -203,17 +203,38 @@ VAL_refresh_refugee_state = {
 	}
 }
 
-VAL_update_refugees_weekly = {
+# COUNTRY VAL. Each regional campaign offers one admission window; later war
+# relations and expired windows must not create another population grant.
+VAL_open_refugee_waves = {
 	if = {
-		limit = { VAL_regional_displacement_crisis = yes }
-		if = {
-			limit = { has_country_flag = VAL_refugee_border_closed }
-			add_to_variable = { var = VAL_displaced_population value = 2 }
-		}
-		else = { add_to_variable = { var = VAL_displaced_population value = 5 } }
+		limit = { VAL_refugee_vorkerland_war = yes NOT = { has_country_flag = VAL_refugee_vorkerland_seen } }
+		set_country_flag = VAL_refugee_vorkerland_seen
+		set_country_flag = { flag = VAL_refugee_vorkerland_window days = 60 }
 	}
-	else_if = {
-		limit = { check_variable = { var = VAL_displaced_population value = 0 compare = greater_than } }
+	if = {
+		limit = { VAL_refugee_stelander_war = yes NOT = { has_country_flag = VAL_refugee_stelander_seen } }
+		set_country_flag = VAL_refugee_stelander_seen
+		set_country_flag = { flag = VAL_refugee_stelander_window days = 60 }
+	}
+	if = {
+		limit = { VAL_refugee_nodrul_war = yes NOT = { has_country_flag = VAL_refugee_nodrul_seen } }
+		set_country_flag = VAL_refugee_nodrul_seen
+		set_country_flag = { flag = VAL_refugee_nodrul_window days = 60 }
+	}
+	if = {
+		limit = { VAL_refugee_north_war = yes NOT = { has_country_flag = VAL_refugee_north_seen } }
+		set_country_flag = VAL_refugee_north_seen
+		set_country_flag = { flag = VAL_refugee_north_window days = 60 }
+	}
+}
+
+VAL_update_refugees_weekly = {
+	if = { limit = { has_country_flag = VAL_refugee_vorkerland_window NOT = { VAL_refugee_vorkerland_war = yes } } clr_country_flag = VAL_refugee_vorkerland_window }
+	if = { limit = { has_country_flag = VAL_refugee_stelander_window NOT = { VAL_refugee_stelander_war = yes } } clr_country_flag = VAL_refugee_stelander_window }
+	if = { limit = { has_country_flag = VAL_refugee_nodrul_window NOT = { VAL_refugee_nodrul_war = yes } } clr_country_flag = VAL_refugee_nodrul_window }
+	if = { limit = { has_country_flag = VAL_refugee_north_window NOT = { VAL_refugee_north_war = yes } } clr_country_flag = VAL_refugee_north_window }
+	if = {
+		limit = { NOT = { VAL_regional_displacement_crisis = yes } check_variable = { var = VAL_displaced_population value = 0 compare = greater_than } }
 		add_to_variable = { var = VAL_displaced_population value = -1 }
 	}
 	clamp_variable = { var = VAL_displaced_population min = 0 max = 100 }
@@ -225,4 +246,106 @@ VAL_logistics_market_weekly = {
 	if = { limit = { VAL_trade_corridors_unlocked = yes } VAL_pay_trade_corridors = yes }
 	VAL_update_refugees_weekly = yes
 	VAL_update_black_market_weekly = yes
+}
+
+# COUNTRY VAL. One paid corridor project occupies the construction office.
+VAL_begin_occidia_corridor_project = {
+	if = {
+		limit = { has_capitulated = no VAL_trade_route_occidia_open = yes check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } NOT = { has_variable = VAL_corridor_deposit } NOT = { has_country_flag = VAL_route_occidia_upgraded } }
+		ADISCORD_economy_spend_500 = yes
+		ADISCORD_economy_spend_250 = yes
+		set_variable = { var = VAL_corridor_deposit value = 750 }
+		set_variable = { var = VAL_corridor_project value = 1 }
+	}
+}
+VAL_finish_occidia_corridor_project = {
+	if = {
+		limit = { check_variable = { var = VAL_corridor_project value = 1 compare = equals } has_variable = VAL_corridor_deposit has_capitulated = no VAL_trade_route_occidia_open = yes }
+		clear_variable = VAL_corridor_deposit
+		clear_variable = VAL_corridor_project
+		set_country_flag = VAL_route_occidia_upgraded
+		43 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+		44 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+		88 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+		build_railway = { level = 3 fallback = yes start_state = 43 target_state = 88 }
+		VAL_refresh_trade_network = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+VAL_begin_north_corridor_project = {
+	if = {
+		limit = { has_capitulated = no VAL_trade_route_north_open = yes check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } NOT = { has_variable = VAL_corridor_deposit } NOT = { has_country_flag = VAL_route_north_upgraded } }
+		ADISCORD_economy_spend_500 = yes
+		ADISCORD_economy_spend_500 = yes
+		set_variable = { var = VAL_corridor_deposit value = 1000 }
+		set_variable = { var = VAL_corridor_project value = 2 }
+	}
+}
+VAL_finish_north_corridor_project = {
+	if = {
+		limit = { check_variable = { var = VAL_corridor_project value = 2 compare = equals } has_variable = VAL_corridor_deposit has_capitulated = no VAL_trade_route_north_open = yes }
+		clear_variable = VAL_corridor_deposit
+		clear_variable = VAL_corridor_project
+		set_country_flag = VAL_route_north_upgraded
+		59 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+		60 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+		61 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+		59 = { add_resource = { type = steel amount = 2 } }
+		61 = { add_resource = { type = tungsten amount = 2 } }
+		VAL_refresh_trade_network = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+VAL_begin_stelander_corridor_project = {
+	if = {
+		limit = { has_capitulated = no VAL_trade_route_stelander_open = yes check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_variable = VAL_corridor_deposit } NOT = { has_country_flag = VAL_route_stelander_upgraded } }
+		ADISCORD_economy_spend_500 = yes
+		set_variable = { var = VAL_corridor_deposit value = 500 }
+		set_variable = { var = VAL_corridor_project value = 3 }
+	}
+}
+VAL_finish_stelander_corridor_project = {
+	if = {
+		limit = { check_variable = { var = VAL_corridor_project value = 3 compare = equals } has_variable = VAL_corridor_deposit has_capitulated = no VAL_trade_route_stelander_open = yes }
+		clear_variable = VAL_corridor_deposit
+		clear_variable = VAL_corridor_project
+		set_country_flag = VAL_route_stelander_upgraded
+		29 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+		46 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+		29 = { add_extra_state_shared_building_slots = 1 }
+		46 = { add_extra_state_shared_building_slots = 1 }
+		VAL_refresh_trade_network = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+VAL_begin_vorkerland_corridor_project = {
+	if = {
+		limit = { has_capitulated = no VAL_trade_route_vorkerland_open = yes check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_variable = VAL_corridor_deposit } NOT = { has_country_flag = VAL_route_vorkerland_upgraded } }
+		ADISCORD_economy_spend_500 = yes
+		set_variable = { var = VAL_corridor_deposit value = 500 }
+		set_variable = { var = VAL_corridor_project value = 4 }
+	}
+}
+VAL_finish_vorkerland_corridor_project = {
+	if = {
+		limit = { check_variable = { var = VAL_corridor_project value = 4 compare = equals } has_variable = VAL_corridor_deposit has_capitulated = no VAL_trade_route_vorkerland_open = yes }
+		clear_variable = VAL_corridor_deposit
+		clear_variable = VAL_corridor_project
+		set_country_flag = VAL_route_vorkerland_upgraded
+		33 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+		set_temp_variable = { var = VAL_black_market_pressure_change value = -10 }
+		VAL_change_black_market_pressure = yes
+		VAL_refresh_trade_network = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+VAL_refund_corridor_project = {
+	if = {
+		limit = { has_variable = VAL_corridor_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_corridor_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_corridor_deposit }
+		clear_variable = VAL_corridor_deposit
+		clear_variable = VAL_corridor_project
+		ADISCORD_economy_mark_dirty = yes
+	}
 }

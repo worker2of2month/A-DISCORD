@@ -1731,6 +1731,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Stelander_Crisis_Opens }
 		mutually_exclusive = { focus = VAL_Arms_For_The_Burning focus = VAL_Seize_The_Northern_Passes }
+		bypass = { VAL_occidia_secured = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_cw_neutral_course_available_tt
@@ -1761,7 +1762,7 @@ focus_tree = {
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_cw_campaign_result_tt
-				OR = { has_country_flag = VAL_cw_arms_contract_fulfilled has_country_flag = VAL_cw_settled has_global_flag = STP_cw_union_wars_finished }
+				OR = { VAL_occidia_secured = yes has_country_flag = VAL_cw_arms_contract_fulfilled has_country_flag = VAL_cw_settled has_global_flag = STP_cw_union_wars_finished }
 			}
 		}
 		completion_reward = {
@@ -1771,7 +1772,7 @@ focus_tree = {
 				ADISCORD_economy_receive_15 = yes
 			}
 			else_if = {
-				limit = { has_country_flag = VAL_cw_military_course }
+				limit = { OR = { has_country_flag = VAL_cw_military_course VAL_occidia_secured = yes } }
 				VAL_invest_arsenal_industry = yes
 				army_experience = 15
 			}

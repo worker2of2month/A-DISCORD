@@ -10,6 +10,10 @@ VAL_population_markets = {
 	visible = {
 		OR = {
 			has_completed_focus = VAL_The_Contract_State
+			has_country_flag = VAL_refugee_vorkerland_window
+			has_country_flag = VAL_refugee_stelander_window
+			has_country_flag = VAL_refugee_nodrul_window
+			has_country_flag = VAL_refugee_north_window
 			check_variable = { var = VAL_displaced_population value = 0 compare = greater_than }
 			check_variable = { var = VAL_black_market_pressure value = 0 compare = greater_than }
 		}

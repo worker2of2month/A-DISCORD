@@ -1206,7 +1206,7 @@ class CivilWarContracts(unittest.TestCase):
         self.assertIn("targeted_alliance = STP", finish)
         self.assertIn("enemy = STS", finish)
         self.assertIn("single_target_only = yes", finish)
-        self.assertNotIn("create_faction", finish)
+        self.assertIn("create_faction_from_template", finish)
         begin = block(self.effects, "STP_cw_poll_nod_intervention")
         self.assertIn("STP_cw_sync_nod_warning = yes", begin)
         self.assertNotIn("activate_mission = NOD_cw_intervention_preparation", begin,
@@ -2166,6 +2166,26 @@ class NorthernCampaignContracts(unittest.TestCase):
                     self.assertEqual(matches_conditions(busy, facts), expected)
                     self.assertEqual(matches_conditions(gate, facts), expected)
         self.assertTrue(matches_conditions(gate, {**anchors, ("STP", "has_country_flag", "STP_cw_elections_finished"): True}))
+
+    def test_nod_alliance_requires_successful_entry_into_the_existing_party_war(self):
+        finish = ast_block(self.effects, "STP_cw_finish_nod_warning")
+        outer = ast_block(finish, "if")
+        join = ast_block(ast_block(outer, "NOD"), "add_to_war")
+        self.assertEqual(scalar(join, "targeted_alliance"), "STP")
+        self.assertEqual(scalar(join, "enemy"), "STS")
+        success = ast_block(outer, "if")
+        self.assertEqual(scalar(ast_block(ast_block(success, "limit"), "NOD"), "has_war_with"), "STS")
+        party = ast_block(success, "STP")
+        alliance = ast_block(party, "if")
+        self.assertEqual(scalar(ast_block(ast_block(alliance, "limit"), "NOT"), "is_in_faction_with"), "NOD")
+        nod = ast_block(alliance, "NOD")
+        create = ast_block(nod, "if")
+        self.assertEqual(scalar(ast_block(create, "limit"), "is_in_faction"), "no")
+        self.assertEqual(scalar(ast_block(create, "create_faction_from_template"), "template"),
+                         "faction_template_ADISCORD_standard")
+        self.assertEqual(scalar(ast_block(nod, "faction_leader"), "add_to_faction"), "STP")
+        failure = ast_block(outer, "else")
+        self.assertFalse([e for e in walk(failure) if e.key in {"add_to_faction", "create_faction_from_template"}])
 
     def test_northern_war_uses_one_defensive_alliance_and_one_declaration(self):
         start = ast_block(self.effects, "STP_cw_start_northern_war")

@@ -887,6 +887,7 @@
  ADISCORD_STP_cw.82.t: "Nodrul Opens the Northern Front"
  ADISCORD_STP_cw.82.d: "Nodrul's troops crossed the northern border after the final negotiations failed. The Yubor People's Republic, the Cult of the Children of the Forest and the Free Frontier, which until recently disputed roads, land and influence with one another, responded by forming the Northern Defence Alliance. Their headquarters agreed to fight as a single coalition until Nodrul's offensive ended.\n\nNodrul says the campaign must eliminate border instability and end an order its leadership considers a threat to regional security. The northern governments call the invasion an attempt to extend to them the same system of dependency that tied Nodrul to Stelander for decades.\n\nTwo parts of the region now face a crisis of the old order simultaneously. In the south, the dispute concerns Ivanov's inheritance; in the north, how far Nodrul's mandate can extend."
  ADISCORD_STP_cw.82.a: "Northern disputes have given way to a common war."
+ STP_nod_alliance: "Stelander-Nodrul Alliance"
  STP_northern_defence_alliance: "Northern Defence Alliance"
  STP_cw_cache_capacity_tt: "After delivery, Abilia's total reserve, including weapons in transit, will not exceed £infantry_equipment_texticon §Y96000§!."
  NOD_cw_northern_conscription: "Northern Conscription"
