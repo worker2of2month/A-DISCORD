@@ -2606,8 +2606,11 @@ class ValFrontierCampaignTests(unittest.TestCase):
             assembly = assemblies[0]
             declaration = next(i for i, e in enumerate(route) if e.key == "declare_war_on")
             self.assertLess(assembly, declaration)
+            invitations = block(definitions, "VAL_frontier_join_existing_war")
+            invited = next(e.value for e in invitations if e.key == "if" and scalar(block(e.value, "limit"), "has_war_with") == tag)
+            self.assertTrue(any(e.key == "VAL_frontier_join_existing_war" for e in walk(start)))
             for guarantor in ("NOD", "STP"):
-                call = next(e.value for e in walk(route) if e.key == "if" and any(c.key == guarantor and any(n.key == "add_to_war" for n in c.value) for c in e.value))
+                call = next(e.value for e in walk(invited) if e.key == "if" and any(c.key == guarantor and any(n.key == "add_to_war" for n in c.value) for c in e.value))
                 self.assertEqual(scalar(block(block(call, "limit"), guarantor), "is_in_faction_with"), tag)
                 self.assertEqual(scalar(block(block(block(call, "limit"), guarantor), "NOT"), "is_in_faction_with"), "VAL")
                 self.assertEqual(scalar(block(block(call, guarantor), "add_to_war"), "single_target_only"), "yes")
@@ -4216,7 +4219,7 @@ class ValFocusFlowTests(unittest.TestCase):
                 p = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
                 data = p.read_bytes()
                 self.assertTrue(data.startswith(b"\xef\xbb\xbf"))
-                text = data.decode("utf-8-sig")
+                text = data.decode("utf-8-sig").replace("\r\n", "\n")
                 self.assertRegex(text, rf'(?m)^\s*{fid}:\d*\s*"\[ROOT\.{function}\]"$')
                 for entry in self.loc_functions[function]:
                     if entry.key != "text":

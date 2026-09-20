@@ -4,6 +4,12 @@
 on_actions = {
 	on_capitulation_immediate = {
 		effect = {
+            if = {
+                limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
+                log = "[ADISCORD_PEACE] on_capitulation_immediate ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+                ROOT = { ADISCORD_debug_war_country_dump = yes }
+            }
+
 			# BEGIN stelander:on_capitulation_immediate
 			# Clear an unconsumed handoff so it cannot suppress another defeat.
 			ROOT = { clr_country_flag = STP_cw_northern_capitulation_pending }
@@ -225,6 +231,12 @@ on_actions = {
 	}
 	on_capitulation = {
 		effect = {
+            if = {
+                limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
+                log = "[ADISCORD_PEACE] on_capitulation ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+                ROOT = { ADISCORD_debug_war_country_dump = yes }
+            }
+
 			# BEGIN vorkerland_collapse:on_capitulation
 			# Defer faction creation until the final annexation fallback settles
 			# the local war and transfers its states to the actual victor.
@@ -861,6 +873,12 @@ on_actions = {
 	}
 	on_peace = {
 		effect = {
+            if = {
+                limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
+                log = "[ADISCORD_PEACE] on_peace ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+                ROOT = { ADISCORD_debug_war_country_dump = yes }
+            }
+
 			# BEGIN vorkerland_collapse:on_peace
 			ADISCORD_vorkerland_reconcile_coalition_obligation = yes
 			if = {
@@ -938,6 +956,12 @@ on_actions = {
 	}
 	on_peaceconference_ended = {
 		effect = {
+            if = {
+                limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
+                log = "[ADISCORD_PEACE] on_peaceconference_ended ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+                ROOT = { ADISCORD_debug_war_country_dump = yes }
+            }
+
 			# BEGIN stelander:on_peaceconference_ended
 			if = {
 				limit = { tag = NOD STP_cw_northern_conference_won = yes }

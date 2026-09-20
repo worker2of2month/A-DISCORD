@@ -179,16 +179,11 @@ class WorldNewsContracts(unittest.TestCase):
         self.assertNotIn("ADISCORD_debug_world_news_", self.ru)
         self.assertNotIn("ADISCORD_debug_world_news_", self.en)
 
-    def test_world_news_does_not_expand_shared_debug_category(self):
+    def test_shared_war_debug_category_is_available_to_every_test_country(self):
         category = named_block(self.debug_categories, "ADISCORD_scenario_debug_category")
-        for tag in (
-            "ZAO", "WPA", "WPS", "PWR", "PSD",
-            "NOD", "YPR", "COF", "TFF",
-            "STP", "STS", "SRP", "VAL",
-        ):
-            self.assertNotIn(f"tag = {tag}", category, tag)
-        for tag in ("WRK", "WKR", "VAD", "TVA", "IVN", "NAM", "EFL", "AZH", "SLF"):
-            self.assertIn(f"tag = {tag}", category, tag)
+        self.assertIn("always = yes", named_block(category, "allowed"))
+        self.assertIn("is_debug = yes", named_block(category, "visible"))
+        self.assertNotIn("tag =", category)
 
 
 if __name__ == "__main__":

@@ -1900,20 +1900,6 @@ VAL_frontier_start_war = {
             OSF = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             APH = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             declare_war_on = { target = CIN type = take_state_focus generator = { 58 } }
-            if = {
-                limit = { has_war_with = CIN }
-                CIN = { VAL_frontier_call_members = yes }
-                if = {
-                    limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = CIN NOT = { has_war_with = CIN is_in_faction_with = VAL } } }
-                    NOD = { add_to_war = { targeted_alliance = CIN enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
-                    if = { limit = { NOD = { has_war_with = VAL } } NOD = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
-                }
-                if = {
-                    limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = CIN NOT = { has_war_with = CIN is_in_faction_with = VAL } } }
-                    STP = { add_to_war = { targeted_alliance = CIN enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
-                    if = { limit = { STP = { has_war_with = VAL } } STP = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
-                }
-            }
         }
         if = {
             limit = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } }
@@ -1922,20 +1908,6 @@ VAL_frontier_start_war = {
             OSF = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             APH = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             declare_war_on = { target = OSF type = take_state_focus generator = { 61 } }
-            if = {
-                limit = { has_war_with = OSF }
-                OSF = { VAL_frontier_call_members = yes }
-                if = {
-                    limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = OSF NOT = { has_war_with = OSF is_in_faction_with = VAL } } }
-                    NOD = { add_to_war = { targeted_alliance = OSF enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
-                    if = { limit = { NOD = { has_war_with = VAL } } NOD = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
-                }
-                if = {
-                    limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = OSF NOT = { has_war_with = OSF is_in_faction_with = VAL } } }
-                    STP = { add_to_war = { targeted_alliance = OSF enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
-                    if = { limit = { STP = { has_war_with = VAL } } STP = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
-                }
-            }
         }
         if = {
             limit = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } }
@@ -1944,29 +1916,91 @@ VAL_frontier_start_war = {
             OSF = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             APH = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             declare_war_on = { target = APH type = take_state_focus generator = { 64 } }
-            if = {
-                limit = { has_war_with = APH }
-                APH = { VAL_frontier_call_members = yes }
-                if = {
-                    limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = APH NOT = { has_war_with = APH is_in_faction_with = VAL } } }
-                    NOD = { add_to_war = { targeted_alliance = APH enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
-                    if = { limit = { NOD = { has_war_with = VAL } } NOD = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
-                }
-                if = {
-                    limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = APH NOT = { has_war_with = APH is_in_faction_with = VAL } } }
-                    STP = { add_to_war = { targeted_alliance = APH enemy = VAL hostility_reason = asked_to_join single_target_only = yes } }
-                    if = { limit = { STP = { has_war_with = VAL } } STP = { set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes } }
-                }
-            }
         }
         if = {
             limit = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } }
             declare_war_on = { target = ERT type = take_state_focus generator = { 168 } }
         }
-        if = { limit = { has_war = no } VAL_frontier_close = yes }
+        VAL_frontier_join_existing_war = yes
+        # A declaration may enqueue its native relation. Confirm once after that tick,
+        # retaining the quoted target so an old callback cannot close a later campaign.
+        VAL_frontier_save_quoted_target = yes
+        hidden_effect = { country_event = { id = val_rework.117 hours = 1 } }
     }
     else = { VAL_frontier_close = yes }
 }
+
+# COUNTRY VAL: invite participants only into the selected target's live war.
+VAL_frontier_join_existing_war = {
+    if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } check_variable = { var = VAL_frontier_target value = 1 compare = equals } has_war_with = CIN }
+        CIN = { VAL_frontier_call_members = yes }
+        if = {
+            limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = CIN NOT = { has_war_with = CIN is_in_faction_with = VAL } } }
+            NOD = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = CIN enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
+        }
+        if = {
+            limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = CIN NOT = { has_war_with = CIN is_in_faction_with = VAL } } }
+            STP = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = CIN enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
+        }
+    }
+    if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } check_variable = { var = VAL_frontier_target value = 2 compare = equals } has_war_with = OSF }
+        OSF = { VAL_frontier_call_members = yes }
+        if = {
+            limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = OSF NOT = { has_war_with = OSF is_in_faction_with = VAL } } }
+            NOD = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = OSF enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
+        }
+        if = {
+            limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = OSF NOT = { has_war_with = OSF is_in_faction_with = VAL } } }
+            STP = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = OSF enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
+        }
+    }
+    if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } check_variable = { var = VAL_frontier_target value = 3 compare = equals } has_war_with = APH }
+        APH = { VAL_frontier_call_members = yes }
+        if = {
+            limit = { NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } is_in_faction_with = APH NOT = { has_war_with = APH is_in_faction_with = VAL } } }
+            NOD = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = APH enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
+        }
+        if = {
+            limit = { STP = { exists = yes has_capitulated = no has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } is_in_faction_with = APH NOT = { has_war_with = APH is_in_faction_with = VAL } } }
+            STP = { VAL_frontier_prepare_major = yes add_to_war = { targeted_alliance = APH enemy = VAL hostility_reason = asked_to_join single_target_only = yes } VAL_frontier_register_war_participant = yes }
+        }
+    }
+}
+
+# COUNTRY joining the war against VAL. Called from the native relation callback
+# as well as the synchronous route; never calls another declaration or invitation.
+VAL_frontier_register_war_participant = {
+    if = {
+        limit = {
+            has_war_with = VAL
+            VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+            OR = {
+                AND = { VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } OR = { tag = CIN is_in_faction_with = CIN } }
+                AND = { VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } OR = { tag = OSF is_in_faction_with = OSF } }
+                AND = { VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } OR = { tag = APH is_in_faction_with = APH } }
+            }
+        }
+        if = {
+            limit = { OR = { tag = CIN tag = OSF tag = APH } }
+            set_country_flag = VAL_frontier_member
+            VAL_frontier_prepare_major = yes
+        }
+        else_if = {
+            limit = {
+                OR = {
+                    AND = { tag = NOD OR = { is_subject = no is_subject_of = STP } }
+                    AND = { tag = STP has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } }
+                }
+            }
+            set_country_flag = VAL_frontier_guarantor
+            VAL_frontier_prepare_major = yes
+        }
+    }
+}
+
 
 VAL_frontier_reconcile_active_members = {
     # Repair missing entries before checking victory, using only the active campaign target.
@@ -2097,9 +2131,10 @@ VAL_frontier_call_members = {
     CIN = {
         if = {
             limit = { has_country_flag = VAL_frontier_member is_subject = no has_capitulated = no is_in_faction_with = event_target:VAL_frontier_war_target NOT = { has_war_with = VAL } }
+            VAL_frontier_prepare_major = yes
             add_to_war = { targeted_alliance = event_target:VAL_frontier_war_target enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
         }
-        if = {
+        else_if = {
             limit = { has_country_flag = VAL_frontier_member NOT = { has_war_with = VAL } }
             clr_country_flag = VAL_frontier_member
             if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
@@ -2108,9 +2143,10 @@ VAL_frontier_call_members = {
     OSF = {
         if = {
             limit = { has_country_flag = VAL_frontier_member is_subject = no has_capitulated = no is_in_faction_with = event_target:VAL_frontier_war_target NOT = { has_war_with = VAL } }
+            VAL_frontier_prepare_major = yes
             add_to_war = { targeted_alliance = event_target:VAL_frontier_war_target enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
         }
-        if = {
+        else_if = {
             limit = { has_country_flag = VAL_frontier_member NOT = { has_war_with = VAL } }
             clr_country_flag = VAL_frontier_member
             if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
@@ -2119,9 +2155,10 @@ VAL_frontier_call_members = {
     APH = {
         if = {
             limit = { has_country_flag = VAL_frontier_member is_subject = no has_capitulated = no is_in_faction_with = event_target:VAL_frontier_war_target NOT = { has_war_with = VAL } }
+            VAL_frontier_prepare_major = yes
             add_to_war = { targeted_alliance = event_target:VAL_frontier_war_target enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
         }
-        if = {
+        else_if = {
             limit = { has_country_flag = VAL_frontier_member NOT = { has_war_with = VAL } }
             clr_country_flag = VAL_frontier_member
             if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }

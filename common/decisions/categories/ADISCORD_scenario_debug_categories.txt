@@ -1,23 +1,6 @@
 ADISCORD_scenario_debug_category = {
-	allowed = {
-		OR = {
-			# Vorkerland collapse and claimant tools.
-			tag = WRK
-			tag = WKR
-			tag = VAD
-			tag = TVA
-			tag = RUS
-
-			# Itora intervention tools.
-			tag = IVN
-
-			# Resource-war tools.
-			tag = NAM
-			tag = EFL
-			tag = AZH
-			tag = SLF
-		}
-	}
+	# Shared war diagnostics are usable after switching to any test country.
+	allowed = { always = yes }
 	visible = { is_debug = yes }
 }
 
