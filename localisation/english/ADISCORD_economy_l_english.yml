@@ -497,3 +497,11 @@
  ADISCORD_country_development_cultural_growth_factor: "£ADISCORD_country_development_texticon Cultural Development Growth"
  ADISCORD_country_development_state_growth_factor: "£ADISCORD_country_development_texticon State Development Growth"
  ADISCORD_country_development_economic_growth_factor: "£ADISCORD_country_development_texticon Economic Development Growth"
+
+ isolation: "Isolation"
+ civilian_economy: "Civilian Economy"
+ partial_economic_mobilisation: "Partial Mobilisation"
+ war_economy: "War Economy"
+ free_trade: "Free Trade"
+ limited_exports: "Limited Exports"
+ closed_economy: "Closed Economy"
