@@ -2,6 +2,9 @@
   "schema_version": 1,
   "external_namespaces": ["lar_fake_intel_units"],
   "events": [
+    {"id": "val_contract.350", "namespace": "val_contract", "number": 350, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.351", "namespace": "val_contract", "number": 351, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.352", "namespace": "val_contract", "number": 352, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
     {"id": "ADISCORD_superevent.7", "namespace": "ADISCORD_superevent", "number": 7, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
     {"id": "ADISCORD_superevent.8", "namespace": "ADISCORD_superevent", "number": 8, "owner": "events/ADISCORD_superevents.txt", "subsystem": "superevents", "status": "active"},
     {"id": "val_rework.117", "namespace": "val_rework", "number": 117, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_rework", "status": "active"},

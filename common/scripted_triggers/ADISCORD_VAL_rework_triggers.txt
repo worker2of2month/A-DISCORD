@@ -611,9 +611,52 @@ VAL_final_settlement_ready = {
 }
 
 VAL_is_contract_administration = {
-    is_subject_of = VAL
+    OR = { is_subject_of = VAL AND = { OR = { tag = YPR tag = DCA } is_subject_of = TFF } }
     has_autonomy_state = autonomy_VAL_contract_administration
     has_country_leader_ideology = contractual_etatism
+}
+
+# A pending ultimatum is not an active frontier war and cannot reserve NOD's
+# separate capitulation after the tribes have already left the battlefield.
+VAL_final_campaign_separate_from_frontier = {
+    OR = {
+        VAL_frontier_idle = yes
+        NOT = { OR = { has_war_with = CIN has_war_with = OSF has_war_with = APH has_war_with = ERT } }
+    }
+}
+
+# Shared by the offer, its delayed answer and the postwar transfer.
+VAL_frontier_partner_available = {
+    VAL = { exists = yes has_capitulated = no is_subject = no }
+    TFF = { exists = yes has_capitulated = no is_subject = no NOT = { has_war_with = VAL } }
+}
+
+VAL_nod_frontier_offer_current = {
+    VAL_frontier_partner_available = yes
+    VAL = { has_completed_focus = VAL_Northern_Settlement NOT = { has_war_with = NOD has_country_flag = VAL_stelander_defeated } }
+    NOD = {
+        exists = yes has_capitulated = no is_subject = no
+        check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals }
+        NOT = { is_in_faction_with = VAL }
+    }
+    YPR = { OR = { exists = no is_subject_of = NOD } }
+    DCA = { exists = no }
+    20 = { owner = { OR = { tag = NOD is_subject_of = NOD } } }
+    15 = { owner = { OR = { tag = NOD is_subject_of = NOD } } }
+}
+
+# STATE: never divide an independent third country or a foreign occupation.
+VAL_nod_partition_state_available = {
+    owner = { OR = { tag = NOD is_subject_of = NOD tag = VAL is_subject_of = VAL } }
+    controller = { OR = { tag = NOD is_subject_of = NOD tag = VAL is_subject_of = VAL } }
+}
+
+VAL_frontier_ultimatum_current = {
+    VAL_frontier_partner_available = yes
+    TFF = { NOT = { is_in_faction_with = VAL } }
+    VAL = { has_country_flag = VAL_frontier_yubora_ultimatum }
+    YPR = { exists = yes has_capitulated = no is_subject_of = VAL }
+    DCA = { exists = yes has_capitulated = no is_subject_of = VAL }
 }
 
 VAL_can_attack_bezhaysk = {

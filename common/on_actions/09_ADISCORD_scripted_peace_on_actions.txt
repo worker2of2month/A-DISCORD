@@ -148,6 +148,18 @@ on_actions = {
 			# END stelander:on_capitulation_immediate
 
 			# BEGIN kefreyt:on_capitulation_immediate
+            if = {
+                limit = { ROOT = { OR = { tag = VAL tag = TFF } } }
+                VAL = { clr_country_flag = VAL_nod_frontier_agreement clr_country_flag = VAL_nod_frontier_offer_pending clr_country_flag = VAL_frontier_yubora_ultimatum }
+            }
+            else_if = {
+                limit = {
+                    ROOT = { tag = NOD }
+                    NOT = { FROM = { OR = { tag = VAL is_subject_of = VAL } } }
+                    NOT = { ROOT = { capital_scope = { VAL_frontier_controlled = yes } } }
+                }
+                VAL = { clr_country_flag = VAL_nod_frontier_agreement clr_country_flag = VAL_nod_frontier_offer_pending }
+            }
             if = { limit = { tag = VAL } clr_country_flag = VAL_occidian_settlement_pending }
             if = { limit = { OR = { tag = CIN tag = OSF tag = APH } has_war_with = VAL } VAL = { VAL_frontier_reconcile_active_members = yes } }
             clr_country_flag = VAL_frontier_capitulation_pending
@@ -191,8 +203,8 @@ on_actions = {
                     limit = {
                         OR = { tag = STP tag = STS tag = NOD }
                         has_war_with = VAL
-                        VAL = { exists = yes has_capitulated = no VAL_frontier_idle = yes }
-                        OR = { FROM = { tag = VAL } capital_scope = { VAL_frontier_controlled = yes } }
+                        VAL = { exists = yes has_capitulated = no VAL_final_campaign_separate_from_frontier = yes }
+                        OR = { FROM = { OR = { tag = VAL is_subject_of = VAL } } capital_scope = { VAL_frontier_controlled = yes } }
                     }
                     if = {
                         limit = {
@@ -204,7 +216,7 @@ on_actions = {
                     }
                     set_country_flag = VAL_final_defeat_pending
                     # The early peace can suppress the late callback; expire its reservation.
-                    set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+                    set_country_flag = { flag = VAL_final_capitulation_immediate value = 1 days = 1 }
                     VAL = { VAL_finalize_reserved_settlements = yes }
                 }
             }

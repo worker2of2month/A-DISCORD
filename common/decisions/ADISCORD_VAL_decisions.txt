@@ -809,12 +809,36 @@ VAL_frontier = {
     }
 
 
+    VAL_negotiate_yubora = {
+        icon = generic_diplomatic_treaty
+        allowed = { tag = VAL }
+        visible = {
+            has_completed_focus = VAL_Northern_Settlement
+            TFF = { exists = yes } NOD = { exists = yes is_subject = no }
+            NOT = { has_war_with = NOD has_country_flag = VAL_nod_frontier_agreement }
+        }
+        available = {
+            custom_trigger_tooltip = { tooltip = VAL_nod_frontier_offer_possible_tt VAL_nod_frontier_offer_current = yes }
+            custom_trigger_tooltip = { tooltip = VAL_nod_frontier_no_pending_tt NOT = { has_country_flag = VAL_nod_frontier_offer_pending has_country_flag = VAL_campaign_mobilizing } }
+        }
+        cost = 0
+        days_re_enable = 30
+        complete_effect = {
+            custom_effect_tooltip = VAL_nod_frontier_terms_tt
+            hidden_effect = {
+                set_country_flag = { flag = VAL_nod_frontier_offer_pending value = 1 days = 15 }
+                TFF = { country_event = { id = val_contract.350 } }
+            }
+        }
+        ai_will_do = { base = 20 }
+    }
+
  VAL_campaign_against_nod = {
   icon = generic_prepare_civil_war allowed = { tag = VAL }
   targets = { NOD }
   target_trigger = { FROM = { exists = yes } }
   visible = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no NOT = { has_war_with = ROOT } } }
-  available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing }  }
+  available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } custom_trigger_tooltip = { tooltip = VAL_nod_frontier_no_pending_tt NOT = { has_country_flag = VAL_nod_frontier_offer_pending } } }
   cost = 75 days_remove = 30 days_re_enable = 90
   complete_effect = {
    custom_effect_tooltip = VAL_campaign_preparation_tt

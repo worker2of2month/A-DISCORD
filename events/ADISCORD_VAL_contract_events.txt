@@ -803,10 +803,82 @@ country_event = {
 country_event = {
     id = val_contract.348
     title = val_contract.348.t
-    desc = val_contract.348.d
+    desc = { trigger = { DCA = { OR = { is_subject_of = VAL is_subject_of = TFF } } } text = val_contract.348.partition }
+    desc = { trigger = { DCA = { NOT = { OR = { is_subject_of = VAL is_subject_of = TFF } } } } text = val_contract.348.d }
     picture = GFX_event_adiscord_negotiation_table
     is_triggered_only = yes
     option = { name = val_contract.348.a }
+}
+
+# The first option is the unattended answer; an obsolete offer only closes.
+country_event = {
+    id = val_contract.350
+    title = val_contract.350.t
+    desc = val_contract.350.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    timeout_days = 14
+    option = {
+        name = val_contract.350.refuse
+        ai_chance = { factor = 20 }
+        hidden_effect = {
+            VAL = {
+                clr_country_flag = VAL_nod_frontier_offer_pending
+                country_event = { id = val_contract.351 }
+            }
+        }
+    }
+    option = {
+        name = val_contract.350.accept
+        trigger = { VAL_nod_frontier_offer_current = yes VAL = { has_country_flag = VAL_nod_frontier_offer_pending } }
+        ai_chance = { factor = 80 }
+        custom_effect_tooltip = VAL_nod_frontier_terms_tt
+        hidden_effect = {
+            VAL = {
+                set_country_flag = VAL_nod_frontier_agreement
+                clr_country_flag = VAL_nod_frontier_offer_pending
+                country_event = { id = val_contract.351 }
+            }
+        }
+    }
+}
+
+country_event = {
+    id = val_contract.351
+    title = val_contract.351.t
+    desc = { trigger = { has_country_flag = VAL_nod_frontier_agreement } text = val_contract.351.accepted }
+    desc = { trigger = { NOT = { has_country_flag = VAL_nod_frontier_agreement } } text = val_contract.351.refused }
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_contract.351.a }
+}
+
+country_event = {
+    id = val_contract.352
+    title = val_contract.352.t
+    desc = val_contract.352.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    timeout_days = 21
+    option = {
+        name = val_contract.352.accept
+        trigger = { VAL_frontier_ultimatum_current = yes }
+        ai_chance = { factor = 60 }
+        custom_effect_tooltip = VAL_nod_frontier_terms_tt
+        hidden_effect = { VAL_transfer_yubora_administrations = yes }
+    }
+    option = {
+        name = val_contract.352.refuse
+        trigger = { VAL_frontier_ultimatum_current = yes }
+        ai_chance = { factor = 40 }
+        custom_effect_tooltip = VAL_frontier_refusal_war_tt
+        hidden_effect = { VAL_reject_frontier_ultimatum = yes }
+    }
+    option = {
+        name = val_contract.352.obsolete
+        trigger = { VAL_frontier_ultimatum_current = no }
+        hidden_effect = { clr_country_flag = VAL_frontier_yubora_ultimatum }
+    }
 }
 
 country_event = {

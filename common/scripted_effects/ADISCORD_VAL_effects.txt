@@ -2898,7 +2898,9 @@ VAL_cede_stelander_border = {
 VAL_install_nodrul_administration = {
     if = {
         limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
+        VAL = { VAL_snapshot_nodrul_settlement = yes }
         if = { limit = { has_war_with = VAL } white_peace = VAL }
+        VAL = { VAL_partition_nodrul_settlement = yes }
         VAL = { set_autonomy = { target = NOD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
                 VAL = { VAL_call_subjects_to_wars = yes } }
         if = {
@@ -2919,6 +2921,146 @@ VAL_install_nodrul_administration = {
         set_rule = { can_join_factions = no can_create_factions = no }
         ADISCORD_economy_mark_dirty = yes
         VAL = { ADISCORD_economy_mark_dirty = yes }
+    }
+}
+
+# VAL scope. Country creation uses only the defeated bloc's captured footprint.
+# The three arrays survive white peace and the subsequent change of overlord.
+VAL_snapshot_nodrul_settlement = {
+    clear_temp_array = VAL_nod_ECA_states
+    clear_temp_array = VAL_nod_YPR_states
+    clear_temp_array = VAL_nod_DCA_states
+    if = {
+        limit = { ECA = { exists = no } }
+        13 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_ECA_states value = THIS } } }
+        17 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_ECA_states value = THIS } } }
+        18 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_ECA_states value = THIS } } }
+        14 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_ECA_states value = THIS } } }
+    }
+    if = {
+        limit = { YPR = { OR = { exists = no is_subject_of = NOD } } DCA = { exists = no } }
+        19 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_YPR_states value = THIS } } }
+        20 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_YPR_states value = THIS } } }
+        21 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_YPR_states value = THIS } } }
+        22 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_YPR_states value = THIS } } }
+        8 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_DCA_states value = THIS } } }
+        15 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_DCA_states value = THIS } } }
+        16 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_DCA_states value = THIS } } }
+    }
+}
+
+# Each recipient keeps its own army and administration tree after the partition.
+VAL_partition_nodrul_settlement = {
+    for_each_scope_loop = { array = VAL_nod_ECA_states add_core_of = ECA ECA = { transfer_state = PREV } set_state_controller_to = ECA }
+    for_each_scope_loop = { array = VAL_nod_YPR_states add_core_of = YPR YPR = { transfer_state = PREV } set_state_controller_to = YPR }
+    for_each_scope_loop = { array = VAL_nod_DCA_states add_core_of = DCA DCA = { transfer_state = PREV } set_state_controller_to = DCA }
+    if = {
+        limit = { check_variable = { var = VAL_nod_ECA_states^num value = 0 compare = greater_than } ECA = { exists = yes } }
+        set_autonomy = { target = ECA autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+        ECA = { inherit_technology = NOD VAL_initialize_partition_administration = yes }
+        NOD = { transfer_units_fraction = { target = ECA size = 0.4 stockpile_ratio = 0.4 army_ratio = 0.4 navy_ratio = 0 air_ratio = 0.4 keep_unit_leaders_trigger = { always = yes } } }
+    }
+    if = {
+        limit = { check_variable = { var = VAL_nod_DCA_states^num value = 0 compare = greater_than } DCA = { exists = yes } }
+        set_autonomy = { target = DCA autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+        DCA = { inherit_technology = YPR VAL_initialize_partition_administration = yes }
+        YPR = { transfer_units_fraction = { target = DCA size = 0.4 stockpile_ratio = 0.4 army_ratio = 0.4 navy_ratio = 0 air_ratio = 0.4 keep_unit_leaders_trigger = { always = yes } } }
+    }
+    if = {
+        limit = { check_variable = { var = VAL_nod_YPR_states^num value = 0 compare = greater_than } YPR = { exists = yes } }
+        set_autonomy = { target = YPR autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+        YPR = { VAL_initialize_partition_administration = yes }
+    }
+    if = {
+        limit = { check_variable = { var = VAL_nod_DCA_states^num value = 0 compare = greater_than } has_country_flag = VAL_nod_frontier_agreement VAL_frontier_partner_available = yes YPR = { is_subject_of = VAL } DCA = { is_subject_of = VAL } }
+        VAL_transfer_yubora_administrations = yes
+    }
+    else_if = {
+        limit = {
+            VAL_frontier_partner_available = yes
+            check_variable = { var = VAL_nod_DCA_states^num value = 0 compare = greater_than }
+            TFF = { NOT = { is_in_faction_with = VAL } }
+            NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals } }
+            YPR = { is_subject_of = VAL } DCA = { is_subject_of = VAL }
+        }
+        set_country_flag = { flag = VAL_frontier_yubora_ultimatum value = 1 days = 30 }
+        country_event = { id = val_contract.352 days = 1 }
+    }
+    clr_country_flag = VAL_nod_frontier_agreement
+    clr_country_flag = VAL_nod_frontier_offer_pending
+    clear_temp_array = VAL_nod_ECA_states
+    clear_temp_array = VAL_nod_YPR_states
+    clear_temp_array = VAL_nod_DCA_states
+    ADISCORD_economy_mark_dirty = yes
+    NOD = { ADISCORD_economy_mark_dirty = yes }
+}
+
+VAL_initialize_partition_administration = {
+    set_politics = { ruling_party = etatism elections_allowed = no }
+    if = { limit = { tag = ECA } if = { limit = { NOT = { has_character = ECA_Contract_Council } } recruit_character = ECA_Contract_Council } promote_character = { character = ECA_Contract_Council ideology = contractual_etatism } }
+    if = { limit = { tag = DCA } if = { limit = { NOT = { has_character = DCA_Contract_Council } } recruit_character = DCA_Contract_Council } promote_character = { character = DCA_Contract_Council ideology = contractual_etatism } }
+    if = { limit = { tag = YPR } set_cosmetic_tag = YPR_VAL_administration if = { limit = { NOT = { has_character = YPR_Contract_Council } } recruit_character = YPR_Contract_Council } promote_character = { character = YPR_Contract_Council ideology = contractual_etatism } }
+    load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+    set_rule = { can_join_factions = no can_create_factions = no }
+    ADISCORD_economy_mark_dirty = yes
+}
+
+# VAL scope. Move both administrations together; never annex an unrelated YPR.
+VAL_transfer_yubora_administrations = {
+    if = {
+        limit = { VAL_frontier_partner_available = yes YPR = { is_subject_of = VAL } DCA = { is_subject_of = VAL } }
+        NOD = { if = { limit = { has_war_with = TFF } white_peace = TFF } }
+        ECA = { if = { limit = { has_war_with = TFF } white_peace = TFF } }
+        YPR = {
+            if = { limit = { has_war_with = TFF } white_peace = TFF }
+            if = { limit = { is_in_faction = yes NOT = { is_in_faction_with = TFF } } faction_leader = { remove_from_faction = PREV } }
+        }
+        DCA = {
+            if = { limit = { has_war_with = TFF } white_peace = TFF }
+            if = { limit = { is_in_faction = yes NOT = { is_in_faction_with = TFF } } faction_leader = { remove_from_faction = PREV } }
+        }
+        TFF = {
+            set_autonomy = { target = YPR autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+            set_autonomy = { target = DCA autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+            if = { limit = { is_in_faction = yes } faction_leader = { add_to_faction = YPR add_to_faction = DCA } }
+            VAL_call_frontier_administrations = yes
+            ADISCORD_economy_mark_dirty = yes
+        }
+        YPR = { ADISCORD_economy_mark_dirty = yes }
+        DCA = { ADISCORD_economy_mark_dirty = yes }
+        ADISCORD_economy_mark_dirty = yes
+    }
+    clr_country_flag = VAL_frontier_yubora_ultimatum
+}
+
+VAL_reject_frontier_ultimatum = {
+    if = {
+        limit = { VAL_frontier_ultimatum_current = yes }
+        TFF = { declare_war_on = { target = VAL type = annex_everything } }
+        VAL_call_subjects_to_wars = yes
+    }
+    clr_country_flag = VAL_frontier_yubora_ultimatum
+}
+
+# TFF scope; only the two administrations transferred by this treaty participate.
+VAL_call_frontier_administrations = {
+    if = {
+        limit = { tag = TFF exists = yes is_subject = no has_war = yes }
+        every_enemy_country = {
+            save_event_target_as = VAL_frontier_administration_enemy
+            YPR = {
+                if = {
+                    limit = { is_subject_of = TFF has_capitulated = no NOT = { has_war_with = TFF has_war_with = event_target:VAL_frontier_administration_enemy is_in_faction_with = event_target:VAL_frontier_administration_enemy } }
+                    add_to_war = { targeted_alliance = TFF enemy = event_target:VAL_frontier_administration_enemy hostility_reason = asked_to_join single_target_only = yes }
+                }
+            }
+            DCA = {
+                if = {
+                    limit = { is_subject_of = TFF has_capitulated = no NOT = { has_war_with = TFF has_war_with = event_target:VAL_frontier_administration_enemy is_in_faction_with = event_target:VAL_frontier_administration_enemy } }
+                    add_to_war = { targeted_alliance = TFF enemy = event_target:VAL_frontier_administration_enemy hostility_reason = asked_to_join single_target_only = yes }
+                }
+            }
+        }
     }
 }
 

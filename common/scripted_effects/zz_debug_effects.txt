@@ -62,6 +62,17 @@ ADISCORD_debug_war_country_dump = {
     if = { limit = { has_country_flag = VAL_frontier_member } log = "[ADISCORD_PEACE] frontier_member=yes" }
     if = { limit = { has_country_flag = VAL_frontier_guarantor } log = "[ADISCORD_PEACE] frontier_guarantor=yes" }
     if = { limit = { has_country_flag = VAL_frontier_defeated } log = "[ADISCORD_PEACE] frontier_defeated_receipt=yes" }
+    if = { limit = { has_country_flag = VAL_final_defeat_pending } log = "[ADISCORD_PEACE] final_defeat_pending=yes" }
+    if = { limit = { has_country_flag = VAL_final_capitulation_immediate } log = "[ADISCORD_PEACE] final_capitulation_receipt=yes" }
+    if = { limit = { VAL_final_faction_ally_still_fighting = yes } log = "[ADISCORD_PEACE] final_ally_still_fighting=yes" }
+    if = {
+        limit = { OR = { tag = NOD tag = STP tag = STS tag = VAL } }
+        VAL = {
+            log = "[ADISCORD_PEACE] VAL frontier_stage=[?VAL_frontier_stage]"
+            if = { limit = { is_subject = yes } log = "[ADISCORD_PEACE] VAL is_subject=yes" }
+            if = { limit = { has_country_flag = VAL_nod_frontier_agreement } log = "[ADISCORD_PEACE] frontier_agreement=yes" }
+        }
+    }
     if = { limit = { is_in_faction = yes } faction_leader = { log = "[ADISCORD_PEACE] faction_leader=[THIS.GetTag]" } }
     capital_scope = { log = "[ADISCORD_PEACE] capital_state=[THIS.GetID]" }
     every_owned_state = { ADISCORD_debug_war_state_dump = yes }

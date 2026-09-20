@@ -244,4 +244,19 @@ characters = {
         portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
         country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
     }
+    ECA_Contract_Council = {
+        name = ECA_Contract_Council
+        portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+    }
+    DCA_Contract_Council = {
+        name = DCA_Contract_Council
+        portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } }
+        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+    }
+    YPR_Contract_Council = {
+        name = YPR_Contract_Council
+        portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+    }
 }

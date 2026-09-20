@@ -3544,7 +3544,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
                         immediate.index("VAL_finalize_reserved_settlements = yes"))
         self.assertIn("118 = { OR = { is_owned_by = STP is_controlled_by = STP } }", immediate)
         self.assertIn("119 = { OR = { is_owned_by = STP is_controlled_by = STP } }", immediate)
-        self.assertIn("flag = VAL_final_capitulation_immediate days = 1", immediate)
+        self.assertIn("flag = VAL_final_capitulation_immediate value = 1 days = 1", immediate)
         late = source.split("# BEGIN kefreyt:on_capitulation\n", 1)[1].split("# END kefreyt:on_capitulation", 1)[0]
         self.assertIn("clr_country_flag = VAL_final_capitulation_immediate", late)
         self.assertIn("set_global_flag = skip_default_capitulation", late)
@@ -3567,6 +3567,128 @@ class ValExpandedCampaignTests(unittest.TestCase):
             self.assertTrue(self.match("VAL_final_settlement_ready", facts, tag, root=tag))
             facts[tag, "has_country_flag", "VAL_final_capitulation_immediate"] = False
             self.assertFalse(self.match("VAL_final_settlement_ready", facts, tag, root=tag))
+
+    def test_nodrul_frontier_deal_rechecks_both_signatories(self):
+        facts = {
+            ("VAL", "exists", "yes"): True, ("VAL", "has_capitulated", "no"): True,
+            ("VAL", "is_subject", "no"): True,
+            ("TFF", "exists", "yes"): True, ("TFF", "has_capitulated", "no"): True,
+            ("TFF", "is_subject", "no"): True,
+        }
+        self.assertTrue(self.match("VAL_frontier_partner_available", facts))
+        for country in ("VAL", "TFF"):
+            for condition in ("exists", "has_capitulated", "is_subject"):
+                key = (country, condition, "yes" if condition == "exists" else "no")
+                blocked = dict(facts)
+                blocked[key] = False
+                self.assertFalse(self.match("VAL_frontier_partner_available", blocked))
+        facts["TFF", "has_war_with", "VAL"] = True
+        self.assertFalse(self.match("VAL_frontier_partner_available", facts))
+
+    def test_finished_tribal_war_cannot_reserve_separate_nodrul_defeat(self):
+        for stage in (0, 1, 2, 3):
+            facts = {("VAL", "variable", "VAL_frontier_stage"): stage}
+            self.assertTrue(self.match("VAL_final_campaign_separate_from_frontier", facts))
+            for enemy in ("CIN", "OSF", "APH", "ERT"):
+                active = {**facts, ("VAL", "has_war_with", enemy): True}
+                self.assertEqual(self.match("VAL_final_campaign_separate_from_frontier", active), stage == 0)
+
+    def test_nodrul_partition_is_bounded_and_precedes_subject_cleanup(self):
+        effects = EFFECTS_PATH.read_text(encoding="utf-8")
+        partition = named_block_spans(effects, "VAL_partition_nodrul_settlement")[0].text
+        for tag in ("ECA", "YPR", "DCA"):
+            self.assertIn(f"array = VAL_nod_{tag}_states", partition)
+        snapshot = named_block_spans(effects, "VAL_snapshot_nodrul_settlement")[0].text
+        self.assertNotIn("every_state", snapshot)
+        for state in (8, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22):
+            self.assertRegex(snapshot, rf"\b{state} = \{{")
+        install = named_block_spans(effects, "VAL_install_nodrul_administration")[0].text
+        self.assertLess(install.index("VAL_snapshot_nodrul_settlement = yes"), install.index("white_peace = VAL"))
+        self.assertLess(install.index("VAL_partition_nodrul_settlement = yes"), install.index("VAL_call_subjects_to_wars = yes"))
+
+    def test_nodrul_partition_selects_four_connected_regions_without_neutrals(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+        snapshot = self.getblock(self.parse(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_snapshot_nodrul_settlement")
+        nod = {"10", "11", "12", "13", "14", "17", "18", "30"}
+        yub = {"8", "15", "16", "19", "20", "21", "22"}
+        for annexed in (False, True):
+            for neutral in (None, "14", "16"):
+                owners = {s: "NOD" for s in nod}
+                owners.update({s: "NOD" if annexed else "YPR" for s in yub})
+                if neutral:
+                    owners[neutral] = "COF"
+                facts = {("ECA", "exists", "no"): True, ("DCA", "exists", "no"): True,
+                         ("YPR", "exists", "no"): annexed, ("YPR", "is_subject_of", "NOD"): not annexed}
+                for state, owner in owners.items():
+                    facts[state, "owner"] = owner
+                    facts[state, "controller"] = "VAL"
+                    facts[state, "VAL_nod_partition_state_available", "yes"] = self.match("VAL_nod_partition_state_available", facts, state)
+                arrays = {}
+                def collect(items, scope="VAL"):
+                    for e in items:
+                        if e.key == "clear_temp_array":
+                            arrays[e.value] = set()
+                        elif e.key == "if" and matches_conditions(self.getblock(e.value, "limit"), facts, scope):
+                            collect([x for x in e.value if x.key != "limit"], scope)
+                        elif e.key.isdigit():
+                            collect(e.value, e.key)
+                        elif e.key == "add_to_temp_array":
+                            arrays[self.scalar(e.value, "array")].add(scope)
+                collect(snapshot)
+                self.assertEqual(arrays["VAL_nod_ECA_states"], {"13", "14", "17", "18"} - {neutral})
+                self.assertEqual(arrays["VAL_nod_YPR_states"], {"19", "20", "21", "22"})
+                self.assertEqual(arrays["VAL_nod_DCA_states"], {"8", "15", "16"} - {neutral})
+                remaining = set(owners) - set().union(*arrays.values()) - ({neutral} if neutral else set())
+                self.assertEqual(remaining, {"10", "11", "12", "30"})
+        for owner, controller, allowed in (("NOD", "VAL", True), ("NOD", "COF", False), ("COF", "VAL", False), ("YPR", "VAL", False)):
+            self.assertEqual(self.match("VAL_nod_partition_state_available", {("20", "owner"): owner, ("20", "controller"): controller}, "20"), allowed)
+
+    def test_frontier_ultimatum_requires_live_administrations_and_war_choice(self):
+        event = self.events["val_contract.352"]
+        options = [e.value for e in event if e.key == "option"]
+        self.assertEqual(len(options), 3)
+        texts = str(options)
+        self.assertIn("VAL_transfer_yubora_administrations", texts)
+        self.assertIn("VAL_reject_frontier_ultimatum", texts)
+        effects = EFFECTS_PATH.read_text(encoding="utf-8")
+        rejection = named_block_spans(effects, "VAL_reject_frontier_ultimatum")[0].text
+        self.assertIn("VAL_frontier_ultimatum_current = yes", rejection)
+        self.assertIn("declare_war_on = { target = VAL", rejection)
+
+    def test_frontier_handoff_preserves_four_countries_and_joins_one_war(self):
+        effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
+        transfer = self.getblock(effects, "VAL_transfer_yubora_administrations")
+        body = self.getblock(transfer, "if")
+        tff = self.getblock(body, "TFF")
+        subjects = [self.scalar(e.value, "target") for e in tff if e.key == "set_autonomy"]
+        self.assertEqual(subjects, ["YPR", "DCA"])
+        self.assertNotIn("annex_country", str(transfer))
+        call = self.getblock(effects, "VAL_call_frontier_administrations")
+        enemy = self.getblock(self.getblock(call, "if"), "every_enemy_country")
+        for tag in ("YPR", "DCA"):
+            participant = self.getblock(self.getblock(enemy, tag), "if")
+            self.assertEqual(self.scalar(self.getblock(participant, "limit"), "is_subject_of"), "TFF")
+            war = self.getblock(participant, "add_to_war")
+            self.assertEqual(self.scalar(war, "targeted_alliance"), "TFF")
+            self.assertEqual(self.scalar(war, "enemy"), "event_target:VAL_frontier_administration_enemy")
+
+    def test_frontier_ultimatum_closes_if_either_administration_is_lost(self):
+        facts = {
+            ("VAL", "exists", "yes"): True, ("VAL", "has_capitulated", "no"): True,
+            ("VAL", "is_subject", "no"): True,
+            ("VAL", "has_country_flag", "VAL_frontier_yubora_ultimatum"): True,
+            ("TFF", "exists", "yes"): True, ("TFF", "has_capitulated", "no"): True,
+            ("TFF", "is_subject", "no"): True,
+        }
+        for tag in ("YPR", "DCA"):
+            facts[tag, "exists", "yes"] = True
+            facts[tag, "has_capitulated", "no"] = True
+            facts[tag, "is_subject_of", "VAL"] = True
+        self.assertTrue(self.match("VAL_frontier_ultimatum_current", facts))
+        for tag in ("YPR", "DCA"):
+            changed = dict(facts)
+            changed[tag, "is_subject_of", "VAL"] = False
+            self.assertFalse(self.match("VAL_frontier_ultimatum_current", changed))
 
     def test_stelander_border_cession_preserves_neutral_and_occupied_land(self):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, matches_conditions, walk
