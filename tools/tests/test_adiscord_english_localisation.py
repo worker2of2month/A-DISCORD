@@ -51,6 +51,18 @@ class EnglishLocalisationTests(unittest.TestCase):
         self.assertTrue(any('missing UTF-8 BOM' in issue for issue in issues))
         self.assertTrue(any('malformed' in issue for issue in issues))
 
+    def test_closed_texticon_can_touch_translated_prose(self):
+        self.write(self.root, 'russian', 'KEY: "£trigger_no£Недостаточно инициативы"')
+        self.write(self.root, 'english', 'KEY: "£trigger_no£Insufficient initiative"')
+        issues = audit(self.root, self.game)['issues']
+        self.assertFalse(any('token mismatch' in issue for issue in issues), issues)
+
+    def test_texticon_frame_is_preserved(self):
+        self.write(self.root, 'russian', 'KEY: "£operative_mission_icons_small|1£ Разведка"')
+        self.write(self.root, 'english', 'KEY: "£operative_mission_icons_small|2£ Intelligence"')
+        issues = audit(self.root, self.game)['issues']
+        self.assertTrue(any('token mismatch' in issue for issue in issues), issues)
+
     def test_native_static_alias_difference_is_accepted_only_for_native_pair(self):
         self.write(self.game, 'russian', 'KEY: "Скорость строительства укреплений"')
         self.write(self.game, 'english', 'KEY: "$bunker$ construction speed"')
@@ -59,6 +71,59 @@ class EnglishLocalisationTests(unittest.TestCase):
         self.assertFalse(audit(self.root, self.game)['issues'])
         self.write(self.root, 'russian', 'KEY: "Казна [?money|0]"')
         self.assertTrue(any('token mismatch' in issue for issue in audit(self.root, self.game)['issues']))
+
+
+class EnglishCatalogueCompletenessTests(unittest.TestCase):
+    """The distributed mod must not depend on vanilla for authored Russian text."""
+
+    def test_every_russian_key_has_an_english_entry(self):
+        from tools.validators.validate_adiscord_english_localisation import (
+            EXCLUDED_KEYS, read_entries,
+        )
+        root = Path(__file__).resolve().parents[2] / 'localisation'
+        russian, _ = read_entries(root, 'russian')
+        english, _ = read_entries(root, 'english')
+        missing = sorted(set(russian) - set(english) - EXCLUDED_KEYS)
+        self.assertEqual(missing, [], '\n'.join(missing))
+
+    def test_all_english_catalogues_are_well_formed_and_translated(self):
+        from tools.validators.validate_adiscord_english_localisation import (
+            CYRILLIC, read_entries,
+        )
+        root = Path(__file__).resolve().parents[2] / 'localisation'
+        english, issues = read_entries(root, 'english')
+        self.assertEqual(issues, [])
+        cyrillic = [key for key, entry in english.items() if CYRILLIC.search(entry['value'])]
+        self.assertEqual(cyrillic, [])
+
+    def test_nonempty_russian_text_has_nonempty_english_text(self):
+        from tools.validators.validate_adiscord_english_localisation import (
+            EXCLUDED_KEYS, read_entries,
+        )
+        root = Path(__file__).resolve().parents[2] / 'localisation'
+        russian, _ = read_entries(root, 'russian')
+        english, _ = read_entries(root, 'english')
+        empty = [key for key in russian.keys() & english.keys()
+                 if key not in EXCLUDED_KEYS and russian[key]['value'].strip()
+                 and not english[key]['value'].strip()]
+        self.assertEqual(sorted(empty), [])
+
+    def test_authored_catalogues_preserve_dynamic_tokens(self):
+        from collections import Counter
+        from tools.validators.validate_adiscord_english_localisation import (
+            TOKENS, read_entries,
+        )
+        root = Path(__file__).resolve().parents[2] / 'localisation'
+        russian, _ = read_entries(root, 'russian')
+        english, _ = read_entries(root, 'english')
+        differences = []
+        for key in sorted(russian.keys() & english.keys()):
+            source = russian[key]
+            if not Path(source['file']).name.startswith('ADISCORD_'):
+                continue
+            if Counter(TOKENS.findall(source['value'])) != Counter(TOKENS.findall(english[key]['value'])):
+                differences.append(key)
+        self.assertEqual(differences, [])
 
 
 if __name__ == '__main__':
