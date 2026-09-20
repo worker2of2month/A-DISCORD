@@ -371,8 +371,10 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                     if f'song = "{song}"' in block]
         if len(assets) != 1 or f'file = "{song}.ogg"' not in assets[0]:
             issues.append(f"missing or duplicate single-channel music asset {song}")
-        if rotation:
-            issues.append(f"presentation music must not appear in the radio playlist: {song}")
+        if len(rotation) != 1:
+            issues.append(f"presentation music needs one song registration for play_song: {song}")
+        elif not re.search(r"chance\s*=\s*\{\s*factor\s*=\s*0\s*\}", rotation[0]):
+            issues.append(f"presentation music must have zero random playback chance: {song}")
 
     if (root / RU_LOC).is_file() and not (root / RU_LOC).read_bytes().startswith(b"\xef\xbb\xbf"):
         issues.append("Russian superevent localisation must use UTF-8 BOM")

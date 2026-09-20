@@ -30,7 +30,13 @@ class SupereventContractTests(unittest.TestCase):
     def test_radio_keeps_only_mod_songs_and_preserves_vanilla(self):
         playlists = list((ROOT / "music").glob("*.txt"))
         songs = "\n".join(path.read_text(encoding="utf-8-sig") for path in playlists)
-        self.assertNotIn('song = "superevent_', songs)
+        from tools.validators.validate_adiscord_superevents import blocks
+
+        for item in PRESENTATIONS:
+            registered = [block for block in blocks(songs, r"^\s*music\s*=\s*\{")
+                          if f'song = "{item.name}"' in block]
+            self.assertEqual(len(registered), 1, item.name)
+            self.assertRegex(registered[0], r"chance\s*=\s*\{\s*factor\s*=\s*0\s*\}")
         self.assertNotIn('song = "one_minute_of_silence"', songs)
         self.assertNotIn('_after_superevent', songs)
         self.assertEqual(songs.count('song = "ADISCORD_stp_civil_war_end"'), 1)
