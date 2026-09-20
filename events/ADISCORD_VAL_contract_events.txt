@@ -837,6 +837,7 @@ country_event = {
             VAL = {
                 set_country_flag = VAL_nod_frontier_agreement
                 clr_country_flag = VAL_nod_frontier_offer_pending
+                VAL_call_frontier_partner = yes
                 country_event = { id = val_contract.351 }
             }
         }

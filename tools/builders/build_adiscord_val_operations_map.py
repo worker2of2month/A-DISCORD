@@ -21,7 +21,8 @@ STP_STATES = (1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88)
 NOD_STATES = (10, 11, 12, 13, 17, 18, 30)
 SOUTHERN_STATES = tuple(dict.fromkeys((
     *DIRTY_GROUPS["ERT"], *EXZ_REMAINDER_GROUPS["ERT"],
-    *DIRTY_GROUPS["IRT"], *EXZ_REMAINDER_GROUPS["IRT"], 186,
+    # IRT's peripheral state 330 is remote from the local theatre.
+    *DIRTY_GROUPS["IRT"], 186,
 )))
 STATE_IDS = tuple(dict.fromkeys((*STATE_IDS, *VAL_STATES, *STP_STATES, *NOD_STATES, *SOUTHERN_STATES)))
 

@@ -805,7 +805,7 @@ VAL_frontier = {
         visible = { VAL_frontier_decisions_visible = yes
             has_completed_focus = VAL_Northern_Settlement
             TFF = { exists = yes } NOD = { exists = yes is_subject = no }
-            NOT = { has_war_with = NOD has_country_flag = VAL_nod_frontier_agreement }
+            NOT = { has_country_flag = VAL_nod_frontier_agreement }
         }
         available = {
             custom_trigger_tooltip = { tooltip = VAL_nod_frontier_offer_possible_tt VAL_nod_frontier_offer_current = yes }

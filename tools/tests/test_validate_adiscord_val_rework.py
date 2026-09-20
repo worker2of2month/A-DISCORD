@@ -3821,6 +3821,19 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertIn("VAL_frontier_ultimatum_current = yes", rejection)
         self.assertIn("declare_war_on = { target = VAL", rejection)
 
+    def test_frontier_can_accept_during_war_but_not_as_nodrul_ally(self):
+        facts = self.final_crisis_facts()
+        facts.update({("TFF", "exists", "yes"): True, ("TFF", "has_capitulated", "no"): True,
+                      ("TFF", "is_subject", "no"): True,
+                      ("NOD", "variable", "STP_cw_northern_campaign_status"): 2,
+                      ("YPR", "exists", "no"): True, ("DCA", "exists", "no"): True,
+                      ("20", "owner"): "NOD", ("15", "owner"): "NOD"})
+        self.assertTrue(self.match("VAL_nod_frontier_offer_current", facts))
+        facts["VAL", "has_war_with", "NOD"] = True
+        self.assertTrue(self.match("VAL_nod_frontier_offer_current", facts))
+        facts["TFF", "is_in_faction_with", "NOD"] = True
+        self.assertFalse(self.match("VAL_nod_frontier_offer_current", facts))
+
     def test_agreed_frontier_partner_joins_val_war_without_a_second_declaration(self):
         from tools.tests.test_adiscord_stp_preparation import walk
         effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
@@ -4322,6 +4335,8 @@ class ValRegionalIntegrationTests(unittest.TestCase):
         for tag in ("ERT", "IRT"):
             expected.update(DIRTY_GROUPS[tag])
             expected.update(EXZ_REMAINDER_GROUPS[tag])
+        expected.discard(330)
+        self.assertNotIn(330, builder.STATE_IDS, "Remote IRT territory is outside the local operations map")
         self.assertTrue(expected.issubset(builder.STATE_IDS), expected - set(builder.STATE_IDS))
         self.assertTrue({"EXZ", "IRT", "RZA"}.issubset(builder.MAP_TAGS))
 

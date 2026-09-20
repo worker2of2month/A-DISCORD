@@ -985,26 +985,6 @@ scripted_gui = {
    VAL_ops_207_stl_val_administration_visible = { 207 = { controller = { has_cosmetic_tag = STL_VAL_administration } } }
    VAL_ops_207_other_visible = { 207 = { controller = { NOT = { OR = { tag = VAL tag = STP tag = STS tag = SRP tag = NOD tag = CIN tag = OSF tag = APH tag = ERT tag = NKA tag = OCA tag = YPR tag = COF tag = TFF tag = EXZ tag = IRT tag = RZA } } NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
    VAL_ops_207_contested_visible = { 207 = { controller = { tag = VAL OR = { NOT = { controls_province = 1136 } NOT = { controls_province = 2895 } NOT = { controls_province = 5119 } NOT = { controls_province = 6201 } NOT = { controls_province = 7663 } NOT = { controls_province = 16480 } } } } }
-   VAL_ops_330_val_visible = { 330 = { controller = { tag = VAL NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_stp_visible = { 330 = { controller = { tag = STP NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_sts_visible = { 330 = { controller = { tag = STS NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_srp_visible = { 330 = { controller = { tag = SRP NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_nod_visible = { 330 = { controller = { tag = NOD NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_cin_visible = { 330 = { controller = { tag = CIN NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_osf_visible = { 330 = { controller = { tag = OSF NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_aph_visible = { 330 = { controller = { tag = APH NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_ert_visible = { 330 = { controller = { tag = ERT NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_nka_visible = { 330 = { controller = { tag = NKA NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_oca_visible = { 330 = { controller = { tag = OCA NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_ypr_visible = { 330 = { controller = { tag = YPR NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_cof_visible = { 330 = { controller = { tag = COF NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_tff_visible = { 330 = { controller = { tag = TFF NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_exz_visible = { 330 = { controller = { tag = EXZ NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_irt_visible = { 330 = { controller = { tag = IRT NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_rza_visible = { 330 = { controller = { tag = RZA NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_stl_val_administration_visible = { 330 = { controller = { has_cosmetic_tag = STL_VAL_administration } } }
-   VAL_ops_330_other_visible = { 330 = { controller = { NOT = { OR = { tag = VAL tag = STP tag = STS tag = SRP tag = NOD tag = CIN tag = OSF tag = APH tag = ERT tag = NKA tag = OCA tag = YPR tag = COF tag = TFF tag = EXZ tag = IRT tag = RZA } } NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
-   VAL_ops_330_contested_visible = { 330 = { controller = { tag = VAL OR = { NOT = { controls_province = 192 } NOT = { controls_province = 874 } NOT = { controls_province = 1399 } NOT = { controls_province = 1417 } NOT = { controls_province = 2287 } NOT = { controls_province = 2522 } NOT = { controls_province = 2714 } NOT = { controls_province = 2772 } NOT = { controls_province = 3327 } NOT = { controls_province = 4064 } NOT = { controls_province = 5044 } NOT = { controls_province = 5085 } NOT = { controls_province = 5185 } NOT = { controls_province = 5411 } NOT = { controls_province = 5744 } NOT = { controls_province = 6387 } NOT = { controls_province = 7065 } NOT = { controls_province = 7256 } NOT = { controls_province = 7336 } NOT = { controls_province = 8133 } NOT = { controls_province = 8150 } NOT = { controls_province = 9239 } NOT = { controls_province = 9738 } NOT = { controls_province = 10321 } NOT = { controls_province = 10579 } NOT = { controls_province = 11053 } NOT = { controls_province = 11733 } NOT = { controls_province = 12774 } } } } }
    VAL_ops_186_val_visible = { 186 = { controller = { tag = VAL NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
    VAL_ops_186_stp_visible = { 186 = { controller = { tag = STP NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }
    VAL_ops_186_sts_visible = { 186 = { controller = { tag = STS NOT = { OR = { has_cosmetic_tag = STL_VAL_administration } } } } }

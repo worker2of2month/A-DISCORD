@@ -98,5 +98,75 @@ class TFFWartimeContractTests(unittest.TestCase):
         self.assertNotIn("province = 16533", forts)
 
 
+
+class TFFKefreytCampaignTests(unittest.TestCase):
+    def setUp(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz
+        self.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        self.facts = {("TFF", "exists", "yes"): True, ("TFF", "has_capitulated", "no"): True,
+                      ("TFF", "is_subject", "no"): True,
+                      ("VAL", "has_country_flag", "VAL_nod_frontier_agreement"): True}
+        self.ideas, self.news = set(), []
+
+    def apply(self, name):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects, scalar
+        for scope, entry in selected_effects(self.effects[name], self.facts, "TFF"):
+            if entry.key in self.effects:
+                self.apply(entry.key)
+            elif entry.key in ("set_country_flag", "clr_country_flag"):
+                self.facts[scope, "has_country_flag", entry.value] = entry.key == "set_country_flag"
+            elif entry.key == "set_global_flag":
+                self.facts[scope, "has_global_flag", entry.value] = True
+            elif entry.key == "add_ideas":
+                self.ideas.add(entry.value)
+            elif entry.key == "remove_ideas":
+                self.ideas.discard(entry.value)
+            elif entry.key == "news_event":
+                self.news.append(scalar(entry.value, "id"))
+            else:
+                self.fail(f"Unhandled TFF campaign effect: {entry.key}")
+
+    def test_acceptance_alone_does_not_publish_news_and_real_entry_is_idempotent(self):
+        self.apply("ADISCORD_TFF_begin_kefreyt_campaign")
+        self.assertFalse(self.ideas or self.news)
+        self.facts["VAL", "has_war_with", "NOD"] = True
+        self.apply("ADISCORD_TFF_begin_kefreyt_campaign")
+        self.assertFalse(self.ideas or self.news)
+        self.facts["TFF", "has_war_with", "NOD"] = True
+        for _ in range(3):
+            self.apply("ADISCORD_TFF_begin_kefreyt_campaign")
+        self.assertEqual(self.ideas, {"TFF_kefreyt_northern_campaign"})
+        self.assertEqual(self.news, ["ADISCORD_TFF.11"])
+
+    def test_refused_agreement_cannot_grant_bonus_or_news(self):
+        self.facts.update({("VAL", "has_war_with", "NOD"): True, ("TFF", "has_war_with", "NOD"): True,
+                           ("VAL", "has_country_flag", "VAL_nod_frontier_agreement"): False})
+        self.apply("ADISCORD_TFF_begin_kefreyt_campaign")
+        self.assertFalse(self.ideas or self.news)
+
+    def test_coalition_war_keeps_bonus_until_last_enemy_and_then_removes_only_it(self):
+        self.facts.update({("VAL", "has_war_with", "NOD"): True, ("TFF", "has_war_with", "NOD"): True})
+        self.apply("ADISCORD_TFF_begin_kefreyt_campaign")
+        self.ideas.add("TFF_emergency_frontier_command")
+        self.facts["TFF", "has_war_with", "NOD"] = False
+        self.facts["TFF", "has_war_with", "STP"] = True
+        self.apply("ADISCORD_TFF_reconcile_kefreyt_campaign")
+        self.assertIn("TFF_kefreyt_northern_campaign", self.ideas)
+        self.facts["TFF", "has_war_with", "STP"] = False
+        for _ in range(2):
+            self.apply("ADISCORD_TFF_reconcile_kefreyt_campaign")
+        self.assertEqual(self.ideas, {"TFF_emergency_frontier_command"})
+        self.assertFalse(self.facts["TFF", "has_country_flag", "TFF_kefreyt_northern_campaign"])
+
+    def test_defeat_or_subject_status_of_either_partner_ends_bonus(self):
+        for country in ("VAL", "TFF"):
+            for condition in ("has_capitulated", "is_subject"):
+                self.setUp()
+                self.facts.update({("VAL", "has_war_with", "NOD"): True, ("TFF", "has_war_with", "NOD"): True})
+                self.apply("ADISCORD_TFF_begin_kefreyt_campaign")
+                self.facts[country, condition, "yes"] = True
+                self.apply("ADISCORD_TFF_reconcile_kefreyt_campaign")
+                self.assertFalse(self.ideas, (country, condition))
+
 if __name__ == "__main__":
     unittest.main()

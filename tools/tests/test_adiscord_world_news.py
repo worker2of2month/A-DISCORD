@@ -187,7 +187,8 @@ class WorldNewsContracts(unittest.TestCase):
         self.assertIn("land_reinforce_rate", ideas)
         self.assertIn("TFF_kefreyt_northern_campaign", ideas)
         cleanup = named_block(source, "ADISCORD_TFF_reconcile_kefreyt_campaign")
-        self.assertIn("remove_ideas = TFF_kefreyt_northern_campaign", cleanup)
+        self.assertIn("ADISCORD_TFF_end_kefreyt_campaign = yes", cleanup)
+        self.assertIn("remove_ideas = TFF_kefreyt_northern_campaign", named_block(source, "ADISCORD_TFF_end_kefreyt_campaign"))
         peace = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
         self.assertIn("ADISCORD_TFF_reconcile_kefreyt_campaign = yes", named_block(peace, "on_peace"))
 

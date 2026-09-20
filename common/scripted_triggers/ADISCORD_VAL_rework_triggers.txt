@@ -664,7 +664,8 @@ VAL_frontier_partner_available = {
 
 VAL_nod_frontier_offer_current = {
     VAL_frontier_partner_available = yes
-    VAL = { has_completed_focus = VAL_Northern_Settlement NOT = { has_war_with = NOD has_country_flag = VAL_stelander_defeated } }
+    VAL = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated } }
+    TFF = { NOT = { is_in_faction_with = NOD } }
     NOD = {
         exists = yes has_capitulated = no is_subject = no
         check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals }
