@@ -28,27 +28,27 @@
 
 ## File Map
 
-- `common/on_actions/00_ADISCORD_on_actions.txt` — частота weekly/monthly/yearly.
-- `common/scripted_effects/ADISCORD_economy_effects.txt` — миграция schema 7, прогноз, недельное и годовое денежное исполнение, бухгалтерия.
-- `common/scripted_triggers/ADISCORD_economy_triggers.txt` — eligibility уровней симуляции.
-- `common/scripted_effects/ADISCORD_economy_modifier_effects.txt` — потребление публичных modifier definitions.
-- `common/modifier_definitions/00_ADISCORD_economy_modifiers_definition.txt` — публичный API модификаторов.
-- `common/synchronized_dynamic_tokens/ADISCORD_tokens.txt` — список разрешённых синхронизируемых modifier tokens.
-- `common/scripted_guis/ADISCORD_economy_scripted_gui.txt` — click/enabled/visible bindings GUI.
-- `interface/ADISCORD_economy.gui` — топбар, KPI, статус, бюджетные шкалы и действия.
-- `interface/ADISCORD_economy.gfx` — A-Discord sprite для временной иконки казны.
-- `gfx/interface/ADISCORD_economy_gui/treasury_icon.dds` — временный бинарный ассет из TDA.
-- `common/buildings/00_buildings.txt` — три экономических здания.
-- `common/ai_strategy/ADISCORD_economy_ai.txt` — строительные приоритеты ИИ по фискальному состоянию.
-- `localisation/russian/ADISCORD_economy_l_russian.yml` — недельные подписи, тултипы GUI и здания.
-- `localisation/russian/ADISCORD_economy_modifiers_l_russian.yml` — названия публичных модификаторов.
-- `docs/economy/economic-modifiers.md` — API для фокусов, идей и событий.
-- `docs/economy/economic-buildings.md` — технический баланс зданий и их игровые роли.
-- `docs/economy/temporary-assets.md` — происхождение и точка замены временной иконки.
-- `tools/test_adiscord_economy_weekly_contracts.py` — регрессии частоты, бухгалтерии, миграции и API.
-- `tools/test_validate_adiscord_gui_contracts.py` — структура топбара и бюджетных шкал.
-- `tools/validate_adiscord_economy_ai.py` — интеграционный статический валидатор экономики/ИИ.
-- `tools/validate_tc.py` — общий gate total conversion и запрет тяжёлых weekly scans.
+- `common/on_actions/00_ADISCORD_on_actions.txt` - частота weekly/monthly/yearly.
+- `common/scripted_effects/ADISCORD_economy_effects.txt` - миграция schema 7, прогноз, недельное и годовое денежное исполнение, бухгалтерия.
+- `common/scripted_triggers/ADISCORD_economy_triggers.txt` - eligibility уровней симуляции.
+- `common/scripted_effects/ADISCORD_economy_modifier_effects.txt` - потребление публичных modifier definitions.
+- `common/modifier_definitions/00_ADISCORD_economy_modifiers_definition.txt` - публичный API модификаторов.
+- `common/synchronized_dynamic_tokens/ADISCORD_tokens.txt` - список разрешённых синхронизируемых modifier tokens.
+- `common/scripted_guis/ADISCORD_economy_scripted_gui.txt` - click/enabled/visible bindings GUI.
+- `interface/ADISCORD_economy.gui` - топбар, KPI, статус, бюджетные шкалы и действия.
+- `interface/ADISCORD_economy.gfx` - A-Discord sprite для временной иконки казны.
+- `gfx/interface/ADISCORD_economy_gui/treasury_icon.dds` - временный бинарный ассет из TDA.
+- `common/buildings/00_buildings.txt` - три экономических здания.
+- `common/ai_strategy/ADISCORD_economy_ai.txt` - строительные приоритеты ИИ по фискальному состоянию.
+- `localisation/russian/ADISCORD_economy_l_russian.yml` - недельные подписи, тултипы GUI и здания.
+- `localisation/russian/ADISCORD_economy_modifiers_l_russian.yml` - названия публичных модификаторов.
+- `docs/economy/economic-modifiers.md` - API для фокусов, идей и событий.
+- `docs/economy/economic-buildings.md` - технический баланс зданий и их игровые роли.
+- `docs/economy/temporary-assets.md` - происхождение и точка замены временной иконки.
+- `tools/test_adiscord_economy_weekly_contracts.py` - регрессии частоты, бухгалтерии, миграции и API.
+- `tools/test_validate_adiscord_gui_contracts.py` - структура топбара и бюджетных шкал.
+- `tools/validate_adiscord_economy_ai.py` - интеграционный статический валидатор экономики/ИИ.
+- `tools/validate_tc.py` - общий gate total conversion и запрет тяжёлых weekly scans.
 
 ---
 

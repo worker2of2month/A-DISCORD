@@ -9,7 +9,7 @@ Implemented the permanent dirty-state bootstrap only within Task 4 scope.
 
 Fresh verification:
 
-- `python -m unittest tools.test_validate_adiscord_vorkerland_collapse.DirtyStateTests -v` — 4 tests OK.
-- `python tools/validate_adiscord_vorkerland_collapse.py --section dirty` — passed.
-- `python tools/validate_tc.py --limit 80` — all sections 0 findings.
+- `python -m unittest tools.test_validate_adiscord_vorkerland_collapse.DirtyStateTests -v` - 4 tests OK.
+- `python tools/validate_adiscord_vorkerland_collapse.py --section dirty` - passed.
+- `python tools/validate_tc.py --limit 80` - all sections 0 findings.
 - All 32 spawn-state province lists match `map/definition.csv` exactly with no cross-state duplicates; scoped braces and BOM checks pass; `git diff --check` is clean.

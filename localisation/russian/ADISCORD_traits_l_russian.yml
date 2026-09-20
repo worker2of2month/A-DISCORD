@@ -19,7 +19,7 @@
  STP_drake_undecided_desc: "Дрейк перейдёт к Шабрату, если до раскола завершён фокус «$STP_Turn_The_Young_Officers$». Иначе он останется на стороне партийного правительства."
  # BEGIN GENERATED: tools.builders.build_adiscord_ainholm_mandate
  AIN_concessionary_director: "Концессионный директор"
- AIN_concessionary_director_desc: "Умеет превращать зависимость в аккуратный договор, а изъятие ресурсов — в платную государственную услугу."
+ AIN_concessionary_director_desc: "Умеет превращать зависимость в аккуратный договор, а изъятие ресурсов - в платную государственную услугу."
  # END GENERATED: tools.builders.build_adiscord_ainholm_mandate
  # BEGIN CONSOLIDATED: ADISCORD_inner_frontier_countries_l_russian
  BOR_frontier_mediator: "Посредница пограничья"
@@ -37,7 +37,7 @@
  HON_first_citizen: "Первый гражданин"
  HON_first_citizen_desc: "Уок умеет превращать разногласия советов в устойчивые решения и лично отвечает за исполнение согласованной программы."
  SKN_iron_marshal: "Железный маршал"
- SKN_iron_marshal_desc: "Скад требует от штабов точных планов и от страны — ресурсов для их исполнения, даже когда военная дисциплина тормозит гражданские решения."
+ SKN_iron_marshal_desc: "Скад требует от штабов точных планов и от страны - ресурсов для их исполнения, даже когда военная дисциплина тормозит гражданские решения."
  VES_warden_of_western_gates: "Страж западных ворот"
  VES_warden_of_western_gates_desc: "Вест лично объезжает заставы и требует, чтобы каждая дорога имела запасной склад и подготовленную позицию."
  MON_emperor_of_the_northern_marches: "Император северных марок"

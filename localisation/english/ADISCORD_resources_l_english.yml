@@ -31,3 +31,4 @@
  ADISCORD_rare_alloy_foundry: "Rare Alloy Foundry"
  ADISCORD_rare_alloy_foundry_plural: "Rare Alloy Foundries"
  ADISCORD_rare_alloy_foundry_desc: "A specialised metallurgical plant for heat-resistant and ultra-hard alloys. Produces §Y3§! Rare Alloys, consumes one building slot, and places a substantial load on the regional power grid."
+ dam_add_energy_tt: "£GFX_energy_consumption_texticon Adds 10 energy by default."

@@ -547,7 +547,12 @@ def main() -> int:
         "--apply-states", nargs="+", type=int, choices=sorted(EXPECTED_STATES),
         help="write only selected builder-owned state histories",
     )
+    parser.add_argument("--english-localisation", action="store_true", help="check or apply only reviewed English names")
     args = parser.parse_args()
+    if args.english_localisation:
+        from tools.lib.localisation import sync_builder_english_localisation
+
+        return sync_builder_english_localisation(ROOT, "tools.builders.build_adiscord_inner_frontier_countries", apply=args.apply)
     if args.apply:
         print_summary()
         apply()

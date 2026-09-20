@@ -789,7 +789,7 @@ Expected: every command exits zero and the worktree is clean.
 Copy `A-Discord.mod` to the exact temporary path. Record the original descriptor SHA-256 first. Use `apply_patch` on the copy to change only:
 
 ```text
-name="A-Discord — Party Texticon Library"
+name="A-Discord - Party Texticon Library"
 path="C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/.worktrees/adiscord-party-texticon-library-32px"
 ```
 
@@ -797,7 +797,7 @@ Verify the original hash is unchanged and the copied descriptor contains the exa
 
 - [ ] **Step 3: Load computer-use instructions and start a fresh campaign**
 
-Use `computer-use:computer-use`. Through Steam and the Paradox Launcher, activate only `A-Discord — Party Texticon Library`, fully restart HOI4 1.19.2, and start a fresh non-Ironman campaign. Do not use Continue or an old save.
+Use `computer-use:computer-use`. Through Steam and the Paradox Launcher, activate only `A-Discord - Party Texticon Library`, fully restart HOI4 1.19.2, and start a fresh non-Ironman campaign. Do not use Continue or an old save.
 
 - [ ] **Step 4: Inspect the required party rows**
 

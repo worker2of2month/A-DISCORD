@@ -26,7 +26,7 @@ fixed before this gate can be trusted for subsequent tasks.
 
 ## Pass 2: Code quality findings
 
-### Important — duplicate dirty-state assignment is silently accepted
+### Important - duplicate dirty-state assignment is silently accepted
 
 `tools/validate_adiscord_vorkerland_collapse.py:60-68`
 
@@ -42,7 +42,7 @@ spawn-wave tasks, this can allow one contaminated state to be assigned to
 two countries. Count each transferable state across the group tuples and add
 a regression test which fails on a cross-group duplicate.
 
-### Important — state province parser treats comments as province IDs
+### Important - state province parser treats comments as province IDs
 
 `tools/validate_adiscord_vorkerland_collapse.py:43-45`
 

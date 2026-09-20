@@ -289,7 +289,7 @@ Copy-Item -LiteralPath $source -Destination $pilot
 Use `apply_patch` on the copied file to change only:
 
 ```text
-name="A-Discord — IVN 32px Pilot"
+name="A-Discord - IVN 32px Pilot"
 path="C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/A-Discord/.worktrees/ivn-roar-32px-pilot"
 ```
 
@@ -302,7 +302,7 @@ The two runs must use identical game version, UI scale, resolution, country, and
 Capture:
 
 1. 25x25 baseline with only `A-Discord` active.
-2. 32x32 pilot with only `A-Discord — IVN 32px Pilot` active.
+2. 32x32 pilot with only `A-Discord - IVN 32px Pilot` active.
 3. The entire party-name row, not a crop of the icon alone.
 4. Fresh `error.log` lines mentioning `IVN_roar_of_freedom`, `party_texticon`, `texture`, or `sprite`.
 
@@ -328,7 +328,7 @@ Open IVN's politics interface, capture the full `Рёв свободы` party ro
 
 - [ ] **Step 3: Start the 32x32 pilot run**
 
-In the launcher, deactivate the original mod and activate only `A-Discord — IVN 32px Pilot`. Start HOI4 again and create another fresh campaign as IVN with the same settings.
+In the launcher, deactivate the original mod and activate only `A-Discord - IVN 32px Pilot`. Start HOI4 again and create another fresh campaign as IVN with the same settings.
 
 - [ ] **Step 4: Capture the pilot politics view and fresh log evidence**
 

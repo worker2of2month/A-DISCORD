@@ -1,0 +1,13 @@
+﻿l_english:
+ AUTONOMY_RELATION_DESC: "$SUBJECT|UH$ is a $LEVEL|H$ of $MASTER|H$ \n"
+ AUTONOMY_RELATION_DESC2: "$LEVEL|H$"
+ autonomy_shadow_state: "Controlled Government"
+ autonomy_republic_in_Vorkerland: "Republic within Vorkerland"
+ autonomy_district_in_Vorkerland: "District within Vorkerland"
+ autonomy_vorkerland_sanitary_gate: "Sanitary Border Administration"
+ autonomy_feodal_baronage: "Feudal Barony"
+ autonomy_feodal_comitatus: "Feudal County"
+ autonomy_feodal_ducatus: "Feudal Duchy"
+ autonomy_contract_protectorate: "Treaty Protectorate"
+ autonomy_contract_client: "Treaty Client State"
+ autonomy_island_administration: "Island Administration"

@@ -1,0 +1,6 @@
+﻿l_english:
+ dam: "Dam"
+ dam_plural: "Dams"
+ dam_desc: "A dam supplies additional electricity to the region, improving industrial efficiency and resource extraction. \n £energy_consumption_texticon"
+ hidden_dam: "Dam"
+ hidden_dam_desc: "A dam supplies additional electricity to the region, improving industrial efficiency and resource extraction."

@@ -1,4 +1,4 @@
-# Recovery starting tree audit — 2026-08-08
+# Recovery starting tree audit - 2026-08-08
 
 ## Snapshot
 
@@ -6,7 +6,7 @@
 - HEAD: `078de95edc8710258c8ed4cd38165613839860b0`
 - HEAD subject: `docs: close A-Discord recovery plan gaps`
 - Index: no staged paths at capture.
-- Dirty worktree before this repository-tooling task: 370 paths — 284
+- Dirty worktree before this repository-tooling task: 370 paths - 284
   modified, 10 deleted, and 76 untracked. This is protected user work and is
   outside the Task 1 commit.
 - No active `git`, `python`, or `hoi4` process was observed at capture.

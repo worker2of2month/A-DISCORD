@@ -211,7 +211,12 @@ def main() -> int:
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
     actions.add_argument("--apply", action="store_true", help="write states, OOB, flags and localisation")
+    parser.add_argument("--english-localisation", action="store_true", help="check or apply only reviewed English names")
     args = parser.parse_args()
+    if args.english_localisation:
+        from tools.lib.localisation import sync_builder_english_localisation
+
+        return sync_builder_english_localisation(ROOT, "tools.builders.build_adiscord_ainholm_mandate", apply=args.apply)
     if args.apply:
         apply()
         return 0

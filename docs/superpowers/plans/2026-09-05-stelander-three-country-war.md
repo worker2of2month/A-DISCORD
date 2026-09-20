@@ -1,4 +1,4 @@
-# Stelander Three-Country War — integration plan and status
+# Stelander Three-Country War - integration plan and status
 
 **Goal:** deliver a playable STP preparation loop followed by an actual three-country war between STP, STS and SRP, with separate NOD and VAL interventions.
 

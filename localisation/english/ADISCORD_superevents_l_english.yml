@@ -1,10 +1,10 @@
-l_english:
+﻿l_english:
   superevent_vorkerland_civilwar_title: "The Vorkerland Civil War"
   superevent_vorkerland_civilwar_quote: "When words cease to cling closely to things, kingdoms fall, empires wane and vanish.\n\n- Ezra Pound"
   superevent_vorkerland_civilwar_comment: "No empire has ever been eternal"
 
   superevent_vorkerland_dirty_opening_title: "The Dirty Zone Opens"
-  superevent_vorkerland_dirty_opening_quote: "I will show you fear in a handful of dust.\n\n— T. S. Eliot, The Waste Land"
+  superevent_vorkerland_dirty_opening_quote: "I will show you fear in a handful of dust.\n\n- T. S. Eliot, The Waste Land"
   superevent_vorkerland_dirty_opening_comment: "The silent zone fractured into new territories"
 
   superevent_vorkerland_worker_victory_title: "Restoration of the Confederation"
@@ -20,7 +20,7 @@ l_english:
   superevent_vorkerland_vlad_victory_comment: "Vlad Petrichev imposed an imperial order"
 
   superevent_vorkerland_joint_victory_title: "The Joint Restoration of Vorkerland"
-  superevent_vorkerland_joint_victory_quote: "The army retook the centre, but victory became law only when the two camps agreed to share power."
+ superevent_vorkerland_joint_victory_quote: "Ambition must be made to counteract ambition.\n\n- James Madison, Federalist No. 51"
   superevent_vorkerland_joint_victory_comment: "The emergency council held Vorkerland together"
 
   superevent_vorkerland_dorian_victory_title: "The Technical Reconstruction of Vorkerland"

@@ -27,11 +27,11 @@
 
 Use the console command `event ADISCORD_vorkerland_collapse.<id>` with:
 
-- `1` — start the collapse sequence.
-- `85` — open the Dirty Zone sequence after its three-year scheduling flag has been set.
-- `20` — Worker victory.
-- `21` — Vlad victory.
-- `22` — Dorian victory.
-- `23` — fragmentation.
+- `1` - start the collapse sequence.
+- `85` - open the Dirty Zone sequence after its three-year scheduling flag has been set.
+- `20` - Worker victory.
+- `21` - Vlad victory.
+- `22` - Dorian victory.
+- `23` - fragmentation.
 
 After each run, inspect `error.log`, `game.log`, and `executed_commands.log` for new errors tied to `ADISCORD_vorkerland_collapse`.

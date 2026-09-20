@@ -40,7 +40,7 @@ staging и commit до отдельной приёмки не выполняют
 ## Границы и обязательные решения
 
 - Кампания начинается в 2160 году; основная плотность исследований остаётся в
-  2160–2175 годах, один поздний слой — в 2180 году.
+  2160–2175 годах, один поздний слой - в 2180 году.
 - Старые идентификаторы не сохраняются ради числа 625. Каждый прежний ID
   попадает в миграционный манифест как `preserved`, `replaced` или `removed`.
 - Удаление старого ID разрешено только после переноса разблокировок и удаления
@@ -52,7 +52,7 @@ staging и commit до отдельной приёмки не выполняют
 - Боковой узел не является предпосылкой магистрали, если его способность
   тематически необязательна.
 - Нативный триггер HOI4 `energy_ratio` используется для технологического ИИ:
-  дефицит — ниже `0.80`, нормальная сеть — выше `0.94`, промежуточное состояние
+  дефицит - ниже `0.80`, нормальная сеть - выше `0.94`, промежуточное состояние
   не форсирует ни одну специализацию.
 - Любой обычный узел с `industrial_capacity_factory` или
   `industrial_capacity_dockyard` не меньше `0.02` получает положительную цену
@@ -113,27 +113,27 @@ staging и commit до отдельной приёмки не выполняют
 
 ### Источники и тесты
 
-- `tools/build_adiscord_technology_system.py` — модель, графы, эффекты,
+- `tools/build_adiscord_technology_system.py` - модель, графы, эффекты,
   разблокировки, AI weights, генерация и стартовые профили.
-- `tools/adiscord_technology_applied_programmes.py` — переносимые тексты и
+- `tools/adiscord_technology_applied_programmes.py` - переносимые тексты и
   эффекты прикладных программ; после интеграции не содержит отдельной
   восьмиузловой геометрии.
 - `tools/adiscord_technology_expansions_civil.py` и
-  `tools/adiscord_technology_expansions_combat.py` — исходные узлы, из которых
+  `tools/adiscord_technology_expansions_combat.py` - исходные узлы, из которых
   выбираются сохраняемые поколения и боковые способности.
-- `tools/validate_adiscord_tech_doctrine.py` — независимый статический гейт.
-- `tools/test_build_adiscord_technology_system.py` — новый unit/contract suite.
-- `tools/data/adiscord_technology_legacy_manifest.json` — неизменяемый снимок
+- `tools/validate_adiscord_tech_doctrine.py` - независимый статический гейт.
+- `tools/test_build_adiscord_technology_system.py` - новый unit/contract suite.
+- `tools/data/adiscord_technology_legacy_manifest.json` - неизменяемый снимок
   прежних 625 ID, их годов, веток и разблокировок.
-- `tools/data/adiscord_technology_id_migrations.json` — явная карта судьбы
+- `tools/data/adiscord_technology_id_migrations.json` - явная карта судьбы
   каждого прежнего ID.
-- `tools/data/adiscord_starting_technology_profiles.json` — генерируемая карта
+- `tools/data/adiscord_starting_technology_profiles.json` - генерируемая карта
   профилей, наборов технологий и назначений тегов для валидатора.
 
 ### Генераторные выходы
 
-- `common/technologies/ADISCORD_*.txt` — девять доменных файлов.
-- `common/scripted_effects/ADISCORD_technology_baseline_effects.txt` — общая
+- `common/technologies/ADISCORD_*.txt` - девять доменных файлов.
+- `common/scripted_effects/ADISCORD_technology_baseline_effects.txt` - общая
   база, профильные пакеты и dispatch-эффекты.
 - `interface/ADISCORD_technologies.gfx`.
 - `interface/countrytechtreeview.gui`.
@@ -227,11 +227,11 @@ python -B -m unittest tools.test_build_adiscord_technology_system -v
   старые ID на семантически совпадающих узлах.
 - [ ] Перенести материальные технологии `finance`, `administration` и
   `civil_resilience`:
-  - фискальные записи и институты — в вычисления;
-  - резервное управление — в ресурсы и запасы;
-  - автоматизированные реестры — в надёжные массовые системы;
-  - реконструкцию и ремонт — в строительство;
-  - предиктивное бюджетирование — в одиночный боковой узел.
+  - фискальные записи и институты - в вычисления;
+  - резервное управление - в ресурсы и запасы;
+  - автоматизированные реестры - в надёжные массовые системы;
+  - реконструкцию и ремонт - в строительство;
+  - предиктивное бюджетирование - в одиночный боковой узел.
 - [ ] Реализовать временный XOR «гибкие линии / поток» с общим поздним
   промышленным ПО.
 - [ ] Реализовать постоянный XOR организации промышленности. Начальные
@@ -393,8 +393,8 @@ git diff --check
   броню, авиацию и флот на целевом разрешении.
 - [ ] Для каждой вкладки проверить названия, подсказки, линии, scrolling,
   clickability, XOR blocking и отсутствие карточек вне видимой области.
-- [ ] На трёх тестовых странах — слабая сеть, средняя экономика, промышленная
-  держава — сравнить до/после:
+- [ ] На трёх тестовых странах - слабая сеть, средняя экономика, промышленная
+  держава - сравнить до/после:
   - `energy_ratio`;
   - фактический factory/dockyard output;
   - концентрированную и распределённую специализацию;

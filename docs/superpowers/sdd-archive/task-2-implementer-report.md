@@ -2,7 +2,7 @@
 
 ## Commit
 
-`52b4079a1f0517aff890abd18880416fe9b00afd` — `feat: split vorkerland regional states`
+`52b4079a1f0517aff890abd18880416fe9b00afd` - `feat: split vorkerland regional states`
 
 The commit contains only the 13 state, localisation, and focused-test files named in the Task 2 brief.
 
@@ -22,9 +22,9 @@ The same focused command passed after the six new states and exact partitions we
 
 ## Validation
 
-- `python tools/validate_adiscord_vorkerland_collapse.py --section states` — passed.
-- `python tools/validate_tc.py --limit 80` — all sections reported 0 findings, including Map and states and Localisation headers; matches the supplied clean baseline.
-- `git diff --check` and `git diff --cached --check` — clean before commit.
+- `python tools/validate_adiscord_vorkerland_collapse.py --section states` - passed.
+- `python tools/validate_tc.py --limit 80` - all sections reported 0 findings, including Map and states and Localisation headers; matches the supplied clean baseline.
+- `git diff --check` and `git diff --cached --check` - clean before commit.
 - `localisation/russian/ADISCORD_vorkerland_collapse_states_l_russian.yml` was verified as UTF-8 BOM (`EF BB BF`).
 
 ## Concerns

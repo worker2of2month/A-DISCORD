@@ -14,7 +14,7 @@
 - Стартовые 14 дивизий STP, их расположение, опыт и коэффициенты оснащения не меняются.
 - `STP Mountain Resistance Militia` и `STP Urban Resistance Militia` отсутствуют в `history/units/STP.txt` и создаются только на стороне сопротивления во время гражданской войны.
 - Capital Guard остаётся `is_locked = yes`, `force_allow_recruiting = no`, `division_cap = 1` и существует на старте в одном экземпляре.
-- Утверждённая разведрота реализуется существующим `ADISCORD_recon_platform`, а линейная артиллерия — `ADISCORD_line_artillery`; STP уже начинает с `ADISCORD_tech_drone_recon_swarms`, поэтому новый юнит и новая технология не добавляются.
+- Утверждённая разведрота реализуется существующим `ADISCORD_recon_platform`, а линейная артиллерия - `ADISCORD_line_artillery`; STP уже начинает с `ADISCORD_tech_drone_recon_swarms`, поэтому новый юнит и новая технология не добавляются.
 - Русская локализация сохраняет UTF-8 BOM.
 - Не изменять и не включать в коммиты существующие dirty-файлы экономики: `common/scripted_localisation/ADISCORD_economy_scripted_loc.txt`, `interface/ADISCORD_economy.gui`, `localisation/russian/ADISCORD_economy_l_russian.yml`, `tools/test_validate_adiscord_gui_contracts.py`.
 - Каждый task-коммит содержит только перечисленные в нём файлы; перед коммитом проверять `git diff --cached --name-status`.
@@ -23,15 +23,15 @@
 
 ## File map
 
-- `common/ideas/steland.txt` — STP-версия духа, tooltip и безопасный `on_remove` unlock.
-- `common/ideas/nodral.txt` — отдельная NOD-версия прежнего духа без армейского ограничения.
-- `history/countries/STP - StepanLand.txt` — стартовый страновой lock с локализованной причиной.
-- `history/countries/NOD - Nodral.txt` — перевод NOD на отдельный дух.
-- `localisation/russian/ADISCORD_ideas_l_russian.yml` — описание STP-lock, причина блокировки и прежний текст для NOD.
-- `history/units/STP.txt` — только стартовые шаблоны и усиленная Capital Guard.
-- `common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt` — позднее идемпотентное создание militia-шаблонов.
-- `tools/validate_adiscord_stp_val_crisis.py` — read-only контракт STP-only lock, militia lifecycle и Capital Guard.
-- `tools/test_validate_adiscord_stp_val_crisis.py` — RED/GREEN тесты контракта и защита валидатора от регрессий.
+- `common/ideas/steland.txt` - STP-версия духа, tooltip и безопасный `on_remove` unlock.
+- `common/ideas/nodral.txt` - отдельная NOD-версия прежнего духа без армейского ограничения.
+- `history/countries/STP - StepanLand.txt` - стартовый страновой lock с локализованной причиной.
+- `history/countries/NOD - Nodral.txt` - перевод NOD на отдельный дух.
+- `localisation/russian/ADISCORD_ideas_l_russian.yml` - описание STP-lock, причина блокировки и прежний текст для NOD.
+- `history/units/STP.txt` - только стартовые шаблоны и усиленная Capital Guard.
+- `common/scripted_effects/ADISCORD_STP_VAL_crisis_war_effects.txt` - позднее идемпотентное создание militia-шаблонов.
+- `tools/validate_adiscord_stp_val_crisis.py` - read-only контракт STP-only lock, militia lifecycle и Capital Guard.
+- `tools/test_validate_adiscord_stp_val_crisis.py` - RED/GREEN тесты контракта и защита валидатора от регрессий.
 
 ### Task 1: Привязать армейский lock только к духу STP
 

@@ -27,13 +27,13 @@
 
 ### New files
 
-- `events/ADISCORD_superevents.txt` — sole owner of `ADISCORD_superevent`, `ADISCORD_superevent_audio`, and `ADISCORD_superevent_news` event definitions.
-- `tools/validators/validate_adiscord_superevents.py` — data-driven presentation inventory and structural validation.
-- `tools/tests/test_validate_adiscord_superevents.py` — unit/regression coverage for the new validator.
+- `events/ADISCORD_superevents.txt` - sole owner of `ADISCORD_superevent`, `ADISCORD_superevent_audio`, and `ADISCORD_superevent_news` event definitions.
+- `tools/validators/validate_adiscord_superevents.py` - data-driven presentation inventory and structural validation.
+- `tools/tests/test_validate_adiscord_superevents.py` - unit/regression coverage for the new validator.
 
 ### Removed file
 
-- `events/ADISCORD_news.txt` — obsolete generic owner name after its complete contents move to `events/ADISCORD_superevents.txt`.
+- `events/ADISCORD_news.txt` - obsolete generic owner name after its complete contents move to `events/ADISCORD_superevents.txt`.
 
 ### Existing presentation files normalized
 

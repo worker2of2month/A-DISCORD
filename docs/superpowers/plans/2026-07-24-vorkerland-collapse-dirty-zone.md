@@ -22,7 +22,7 @@
 - `ADISCORD_vorkerland_dirty_state` не получает `remove_trigger`, а код не вызывает `remove_dynamic_modifier`.
 - Не менять `map/provinces.bmp`, `map/definition.csv`, `map/terrain.bmp`, `map/strategicregions`, `map/railways.txt` или `map/supply_nodes.txt`.
 - Все видимые русские localisation-файлы сохранять UTF-8 BOM.
-- Новые публичные названия — географические или административные, без пафосных самоназваний.
+- Новые публичные названия - географические или административные, без пафосных самоназваний.
 - Игрок не получает дерево решений или обязательные выборы; результат создают войны и ИИ.
 
 ---

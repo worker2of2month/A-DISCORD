@@ -8,7 +8,7 @@ Restore a separate, player-visible war-exhaustion system for WRK and VAD that re
 
 The local The Fire Rises 1.0.8.3 installation at Steam Workshop item `3350890356` uses recurring timed missions and one variable-backed dynamic modifier. Its SOV mission ticks every 150 days; its PRC mission ticks every 200 days. The PRC increment is `-0.015` war support/attack/defence, `-0.01` organisation, `-0.02` recovery, and `-0.005` surrender limit per timeout. TFR does not derive these increments from casualties.
 
-A-Discord will retain the efficient TFR shape—an infrequent tick feeding one dynamic modifier—but use A-Discord's existing safe casualty-delta pattern (`casualties_k` minus a stored snapshot) rather than charging lifetime casualties repeatedly.
+A-Discord will retain the efficient TFR shape-an infrequent tick feeding one dynamic modifier-but use A-Discord's existing safe casualty-delta pattern (`casualties_k` minus a stored snapshot) rather than charging lifetime casualties repeatedly.
 
 ## Data flow
 
