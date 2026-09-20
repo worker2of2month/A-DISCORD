@@ -1,7 +1,8 @@
 on_actions = {
 	on_startup = {
 		effect = {
-			if = { limit = { VAL = { exists = yes } } VAL = { VAL_initialize_command_balance = yes VAL_initialize_arsenal_recovery = yes VAL_call_subjects_to_wars = yes VAL_check_nam_concession = yes } }
+			if = { limit = { VAL = { exists = yes } } VAL = { VAL_initialize_command_balance = yes VAL_initialize_arsenal_recovery = yes VAL_reconcile_final_war = yes VAL_grant_contract_warlord = yes VAL_call_subjects_to_wars = yes VAL_check_nam_concession = yes } }
+			OCA = { VAL_initialize_balchansk_administration = yes }
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_fresh_campaign_contract_v1
@@ -19,14 +20,14 @@ on_actions = {
 			if = { limit = { OR = { ROOT = { tag = VAL } FROM = { tag = VAL } } } VAL = { VAL_check_nam_concession = yes } }
 			if = {
 				limit = { OR = { ROOT = { tag = VAL } FROM = { tag = VAL } } }
-				VAL = { VAL_call_subjects_to_wars = yes }
+				VAL = { VAL_reconcile_final_war = yes VAL_call_subjects_to_wars = yes }
 			}
 		}
 	}
 
 	on_puppet = {
 		effect = {
-			if = { limit = { FROM = { tag = VAL } } VAL = { VAL_call_subjects_to_wars = yes } }
+			if = { limit = { FROM = { tag = VAL } } VAL = { VAL_call_subjects_to_wars = yes } OCA = { VAL_reconcile_balchansk_income = yes } }
 		}
 	}
 
@@ -69,6 +70,10 @@ on_actions = {
 				FROM.FROM = { clr_state_flag = VAL_bop_core_lost }
 			}
 
+            if = {
+                limit = { FROM.FROM = { OR = { state = 44 state = 88 } } OCA = { exists = yes } }
+                OCA = { VAL_reconcile_balchansk_income = yes }
+            }
 			VAL = { VAL_check_nam_concession = yes }
 			if = { limit = { VAL = { exists = yes has_country_flag = VAL_vorkerland_resource_access_active } 33 = { NOT = { is_controlled_by = WRK } } } VAL = { VAL_end_vorkerland_resource_access = yes } }
 			if = {

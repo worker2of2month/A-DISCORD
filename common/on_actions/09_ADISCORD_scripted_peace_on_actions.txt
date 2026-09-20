@@ -186,7 +186,7 @@ on_actions = {
                         OR = { tag = STP tag = STS tag = NOD }
                         has_war_with = VAL
                         VAL = { exists = yes has_capitulated = no VAL_frontier_idle = yes }
-                        OR = { FROM = { tag = VAL } capital_scope = { VAL_frontier_controlled = yes } }
+                        OR = { FROM = { tag = VAL } FROM = { is_subject_of = VAL has_war_with = ROOT } capital_scope = { VAL_frontier_controlled = yes } }
                     }
                     set_country_flag = VAL_final_defeat_pending
                     # The early peace can suppress the late callback; expire its reservation.
@@ -657,6 +657,12 @@ on_actions = {
                 set_global_flag = skip_default_capitulation
                 ROOT = { clr_country_flag = VAL_final_capitulation_immediate }
             }
+            if = {
+                limit = { ROOT = { tag = VAL } }
+                STP = { VAL_clear_final_war_member = yes clr_country_flag = VAL_final_defeat_pending }
+                STS = { VAL_clear_final_war_member = yes clr_country_flag = VAL_final_defeat_pending }
+                NOD = { VAL_clear_final_war_member = yes clr_country_flag = VAL_final_defeat_pending }
+            }
             if = { limit = { VAL = { exists = yes } } VAL = { VAL_finalize_reserved_settlements = yes } }
 
 			# END kefreyt:on_capitulation
@@ -917,6 +923,19 @@ on_actions = {
 			# END vorkerland_diplomacy:on_peace
 
             # BEGIN kefreyt:on_peace
+            # A limited frontier peace must not enrol its former guarantors
+            # into a final campaign when that handler clears its stage first.
+            if = {
+                limit = {
+                    OR = { tag = VAL tag = STP tag = STS tag = NOD tag = AIN }
+                    OR = {
+                        STP = { OR = { has_country_flag = VAL_final_defeat_pending has_country_flag = VAL_final_added_major } }
+                        STS = { OR = { has_country_flag = VAL_final_defeat_pending has_country_flag = VAL_final_added_major } }
+                        NOD = { OR = { has_country_flag = VAL_final_defeat_pending has_country_flag = VAL_final_added_major } }
+                    }
+                }
+                VAL = { VAL_reconcile_final_war = yes }
+            }
             if = { limit = { STP = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STP = { VAL_cede_stelander_border = yes } }
             if = { limit = { STS = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STS = { VAL_cede_stelander_border = yes } }
             # END kefreyt:on_peace

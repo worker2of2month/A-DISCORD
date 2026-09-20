@@ -2653,6 +2653,7 @@ VAL_form_occidian_administration = {
 				}
                 VAL = { VAL_call_subjects_to_wars = yes }
 			}
+			OCA = { VAL_initialize_balchansk_administration = yes }
 			clr_country_flag = VAL_occidian_settlement_pending
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -2707,7 +2708,7 @@ VAL_install_stelander_administration = {
     if = {
         limit = { OR = { tag = STP tag = STS } VAL = { exists = yes has_capitulated = no is_subject = no } }
         save_event_target_as = VAL_settlement_country
-        if = { limit = { has_war_with = VAL } white_peace = VAL }
+        VAL_end_final_wars = yes
         if = {
             limit = { OR = { NOT = { is_subject_of = VAL } NOT = { has_autonomy_state = autonomy_VAL_contract_administration } } }
             VAL = {
@@ -2768,7 +2769,7 @@ VAL_cede_stelander_border = {
 VAL_install_nodrul_administration = {
     if = {
         limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
-        if = { limit = { has_war_with = VAL } white_peace = VAL }
+        VAL_end_final_wars = yes
         VAL = { set_autonomy = { target = NOD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
                 VAL = { VAL_call_subjects_to_wars = yes } }
         if = {
@@ -2794,38 +2795,127 @@ VAL_install_nodrul_administration = {
 
 # COUNTRY VAL; event-driven, bounded to the three final-war recipients.
 VAL_finalize_reserved_settlements = {
-    STP = {
+    if = {
+        limit = { NOT = { has_country_flag = VAL_final_settlement_in_progress } }
+        set_country_flag = VAL_final_settlement_in_progress
+        # Snapshot all recipients before any peace, faction or autonomy effect.
+        # A native callback can re-enter here while the first treaty is applied.
+        set_temp_variable = { var = VAL_final_settle_STP value = 0 }
+        set_temp_variable = { var = VAL_final_settle_STS value = 0 }
+        set_temp_variable = { var = VAL_final_settle_NOD value = 0 }
+        if = { limit = { STP = { VAL_final_settlement_ready = yes } } set_temp_variable = { var = VAL_final_settle_STP value = 1 } }
+        if = { limit = { STS = { VAL_final_settlement_ready = yes } } set_temp_variable = { var = VAL_final_settle_STS value = 1 } }
+        if = { limit = { NOD = { VAL_final_settlement_ready = yes } } set_temp_variable = { var = VAL_final_settle_NOD value = 1 } }
+        VAL_end_final_subject_wars = yes
         if = {
-            limit = { VAL_final_settlement_ready = yes }
-            clr_country_flag = VAL_final_defeat_pending
-            VAL_install_stelander_administration = yes
+            limit = { check_variable = { var = VAL_final_settle_STP value = 1 compare = equals } }
+            STP = { STP_cw_cede_ainholm_to_frontier = yes }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_final_settle_NOD value = 1 compare = equals } }
+            NOD = { STP_cw_cede_ainholm_to_frontier = yes }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_final_settle_STP value = 1 compare = equals } }
+            STP = { VAL_install_stelander_administration = yes clr_country_flag = VAL_final_defeat_pending VAL_clear_final_war_member = yes }
         }
         else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
-            clr_country_flag = VAL_final_defeat_pending
+            limit = { STP = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } } }
+            STP = { clr_country_flag = VAL_final_defeat_pending }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_final_settle_STS value = 1 compare = equals } }
+            STS = { VAL_install_stelander_administration = yes clr_country_flag = VAL_final_defeat_pending VAL_clear_final_war_member = yes }
+        }
+        else_if = {
+            limit = { STS = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } } }
+            STS = { clr_country_flag = VAL_final_defeat_pending }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_final_settle_NOD value = 1 compare = equals } }
+            NOD = { VAL_install_nodrul_administration = yes clr_country_flag = VAL_final_defeat_pending VAL_clear_final_war_member = yes }
+        }
+        else_if = {
+            limit = { NOD = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } } }
+            NOD = { clr_country_flag = VAL_final_defeat_pending }
+        }
+        clr_country_flag = VAL_final_settlement_in_progress
+        VAL_call_subjects_to_wars = yes
+    }
+}
+
+# COUNTRY recipient: end only the war with VAL's actual co-belligerents.
+VAL_end_final_wars = {
+    save_event_target_as = VAL_settlement_enemy
+    every_enemy_country = {
+        limit = {
+            OR = {
+                tag = VAL
+                is_subject_of = VAL
+                AND = { is_in_faction_with = VAL has_war_together_with = VAL }
+            }
+        }
+        white_peace = event_target:VAL_settlement_enemy
+    }
+}
+
+# COUNTRY VAL: resolve the colony before changing either metropolitan government.
+VAL_end_final_subject_wars = {
+    AIN = {
+        if = {
+            limit = {
+                OR = {
+                    AND = { is_subject_of = NOD VAL = { check_variable = { var = VAL_final_settle_NOD value = 1 compare = equals } } }
+                    AND = { is_subject_of = STP VAL = { check_variable = { var = VAL_final_settle_STP value = 1 compare = equals } } }
+                }
+            }
+            VAL_end_final_wars = yes
         }
     }
-    STS = {
-        if = {
-            limit = { VAL_final_settlement_ready = yes }
-            clr_country_flag = VAL_final_defeat_pending
-            VAL_install_stelander_administration = yes
+}
+
+VAL_prepare_final_war_member = {
+    if = {
+        limit = { exists = yes has_war_with = VAL is_major = no }
+        set_country_flag = VAL_final_added_major
+        set_major = yes
+    }
+}
+
+VAL_clear_final_war_member = {
+    if = {
+        limit = { has_country_flag = VAL_final_added_major }
+        clr_country_flag = VAL_final_added_major
+        set_major = no
+    }
+}
+
+# COUNTRY VAL: fixed authored recipients, also used when loading an active war.
+VAL_reconcile_final_war = {
+    if = {
+        limit = { NOT = { has_country_flag = VAL_final_settlement_in_progress } }
+        STP = { VAL_reconcile_final_war_member = yes }
+        STS = { VAL_reconcile_final_war_member = yes }
+        NOD = { VAL_reconcile_final_war_member = yes }
+        VAL_finalize_reserved_settlements = yes
+    }
+}
+
+VAL_reconcile_final_war_member = {
+    if = {
+        limit = {
+            has_war_with = VAL
+            VAL = { exists = yes is_subject = no has_capitulated = no VAL_frontier_idle = yes }
         }
-        else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
-            clr_country_flag = VAL_final_defeat_pending
+        VAL_prepare_final_war_member = yes
+        if = {
+            limit = { has_capitulated = yes capital_scope = { VAL_frontier_controlled = yes } }
+            set_country_flag = VAL_final_defeat_pending
         }
     }
-    NOD = {
-        if = {
-            limit = { VAL_final_settlement_ready = yes }
-            clr_country_flag = VAL_final_defeat_pending
-            VAL_install_nodrul_administration = yes
-        }
-        else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
-            clr_country_flag = VAL_final_defeat_pending
-        }
+    else = {
+        VAL_clear_final_war_member = yes
+        clr_country_flag = VAL_final_defeat_pending
     }
 }
 
@@ -2833,6 +2923,37 @@ VAL_adopt_commonwealth = {
     if = {
         limit = { VAL_can_proclaim_commonwealth = yes }
         set_cosmetic_tag = VAL_commonwealth
+        VAL_grant_contract_warlord = yes
+    }
+}
+
+# The title belongs to Solgalov, not to a replacement council or an idea stack.
+VAL_grant_contract_warlord = {
+    if = {
+        limit = {
+            tag = VAL
+            has_cosmetic_tag = VAL_commonwealth
+            has_country_leader = { character = VAL_Valera_Solgalov ruling_only = yes }
+        }
+        VAL_Valera_Solgalov = {
+            if = {
+                limit = { NOT = { has_trait = VAL_contract_warlord } }
+                add_country_leader_trait = { ideology = contractual_etatism trait = VAL_contract_warlord }
+            }
+        }
+    }
+}
+
+VAL_initialize_balchansk_administration = {
+    if = {
+        limit = { tag = OCA exists = yes is_subject_of = VAL }
+        if = {
+            limit = { NOT = { has_focus_tree = VAL_administration_focus } }
+            load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+            mark_focus_tree_layout_dirty = yes
+        }
+        VAL_reconcile_balchansk_income = yes
+        ADISCORD_economy_mark_dirty = yes
     }
 }
 
@@ -2907,6 +3028,7 @@ VAL_call_subjects_to_wars = {
 			has_war = yes
 			is_subject = no
 			NOT = { has_country_flag = VAL_subject_war_dispatch_active }
+			NOT = { has_country_flag = VAL_final_settlement_in_progress }
 		}
 		set_country_flag = VAL_subject_war_dispatch_active
 		every_enemy_country = {
@@ -2971,4 +3093,19 @@ VAL_check_nam_concession = {
 		}
 		VAL_cancel_nam_concession = yes
 	}
+}
+
+
+# COUNTRY OCA: the earned institution resumes when its local asset returns.
+VAL_reconcile_balchansk_income = {
+    if = {
+        limit = { exists = yes is_subject_of = VAL has_completed_focus = OCA_harbour_customs owns_state = 44 controls_state = 44 }
+        if = { limit = { NOT = { has_idea = OCA_harbour_customs_service } } add_ideas = OCA_harbour_customs_service }
+    }
+    else_if = { limit = { has_idea = OCA_harbour_customs_service } remove_ideas = OCA_harbour_customs_service }
+    if = {
+        limit = { exists = yes is_subject_of = VAL has_completed_focus = OCA_mining_concessions owns_state = 88 controls_state = 88 }
+        if = { limit = { NOT = { has_idea = OCA_mining_concession_income } } add_ideas = OCA_mining_concession_income }
+    }
+    else_if = { limit = { has_idea = OCA_mining_concession_income } remove_ideas = OCA_mining_concession_income }
 }

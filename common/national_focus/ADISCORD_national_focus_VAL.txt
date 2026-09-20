@@ -1890,6 +1890,7 @@ focus_tree = {
         y = 17
         cost = 5
         prerequisite = { focus = VAL_Occidian_Registries }
+        mutually_exclusive = { focus = VAL_Balchansk_Charter }
         available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
         cancel_if_invalid = yes
         completion_reward = {
@@ -2371,4 +2372,37 @@ completion_reward = {
 		}
 		ai_will_do = { base = 5 }
 	}
+
+    focus = {
+        id = VAL_Balchansk_Charter
+        icon = GFX_focus_generic_treaty
+        x = 16
+        y = 17
+        cost = 5
+        prerequisite = { focus = VAL_Occidian_Registries }
+        mutually_exclusive = { focus = VAL_Integrate_Occidia }
+        available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
+        cancel_if_invalid = yes
+        completion_reward = {
+            OCA = { VAL_initialize_balchansk_administration = yes add_stability = 0.05 add_political_power = 75 add_ideas = OCA_chartered_administration }
+            add_ideas = VAL_balchansk_transit_contract
+        }
+        ai_will_do = { base = 12 }
+    }
+    focus = {
+        id = VAL_Balchansk_Clearing_House
+        icon = GFX_goal_generic_positive_trade_relations
+        x = 16
+        y = 19
+        cost = 5
+        prerequisite = { focus = VAL_Balchansk_Charter }
+        available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
+        cancel_if_invalid = yes
+        completion_reward = {
+            OCA = { add_ideas = OCA_joint_clearing_house }
+            add_tech_bonus = { name = VAL_Balchansk_Clearing_House bonus = 0.5 uses = 1 category = industry }
+            add_political_power = 75
+        }
+        ai_will_do = { base = 10 }
+    }
 }

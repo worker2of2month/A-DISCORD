@@ -61,7 +61,7 @@ class NodrulCapitulationReservationTests(unittest.TestCase):
         self.assertIn(f"ROOT = {{ has_country_flag = {pending} }}", immediate)
         self.assertIn(
             f"set_country_flag = {{ flag = {reserved} value = 1 days = 2 }}",
-            immediate,
+            " ".join(immediate.split()),
         )
         self.assertIn(f"ROOT = {{ has_country_flag = {reserved} }}", late)
         self.assertIn("set_global_flag = skip_default_capitulation", late)

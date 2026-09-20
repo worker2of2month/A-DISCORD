@@ -3737,6 +3737,7 @@ STP_cw_settle_northern_defeat = {
 			if = { limit = { 17 = { is_owned_by = NOD } } YPR = { transfer_state = 17 } }
 			if = { limit = { 18 = { is_owned_by = NOD } } YPR = { transfer_state = 18 } }
 		}
+		STP_cw_cede_ainholm_to_frontier = yes
 		news_event = { id = ADISCORD_STP_cw.81 }
 		STS = { if = { limit = { exists = yes } STP_cw_poll_nod_intervention = yes } }
 		log = "[STP_NORTH] NOD defeated by the north: separate peace, owned 17/18 ceded to YPR"
@@ -6344,5 +6345,40 @@ STP_occidia_reconcile_peace = {
     if = {
         limit = { has_country_flag = STP_occidia_campaign_active NOT = { has_war_with = SRP } }
         clr_country_flag = STP_occidia_campaign_active
+    }
+}
+
+
+# COUNTRY: preserve a bounded colonial army and player before the final transfer.
+# The authored Frontier survives northern capitulation; foreign-held districts
+# and an independent Ainholm are outside this territorial award.
+STP_cw_cede_ainholm_to_frontier = {
+    if = {
+        limit = {
+            OR = { tag = NOD AND = { tag = STP has_country_flag = STP_sided_with_the_party_flag } }
+            TFF = { exists = yes is_subject = no NOT = { has_war_with = VAL } }
+        }
+        save_event_target_as = STP_ainholm_defeated_government
+        if = {
+            limit = {
+                AIN = {
+                    exists = yes
+                    has_war = no
+                    NOT = { any_owned_state = { NOT = { OR = { state = 118 state = 119 } } } }
+                }
+                AIN = { NOT = { any_owned_state = { NOT = { STP_cw_ainholm_party_land = yes } } } }
+            }
+            if = { limit = { AIN = { is_ai = no } TFF = { is_ai = yes } } TFF = { change_tag_from = AIN } }
+            TFF = { annex_country = { target = AIN transfer_troops = yes } }
+        }
+        118 = {
+            if = { limit = { STP_cw_ainholm_party_land = yes } TFF = { transfer_state = 118 } set_state_controller_to = TFF }
+        }
+        119 = {
+            if = { limit = { STP_cw_ainholm_party_land = yes } TFF = { transfer_state = 119 } set_state_controller_to = TFF }
+        }
+        TFF = { ADISCORD_economy_mark_dirty = yes }
+        NOD = { ADISCORD_economy_mark_dirty = yes }
+        STP = { ADISCORD_economy_mark_dirty = yes }
     }
 }
