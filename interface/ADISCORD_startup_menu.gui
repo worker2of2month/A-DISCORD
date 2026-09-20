@@ -124,7 +124,7 @@ guiTypes = {
 			position = { x = 34 y = 260 }
 			size = { x = 359 y = 36 }
 			quadTextureSprite = "GFX_ADISCORD_startup_page"
-			buttonText = "ADISCORD_startup_diplomacy"
+			buttonText = "[ADISCORDGetStartupPageTitle2]"
 			buttonFont = "hoi_16mbs"
 			clicksound = click_default
 		}
@@ -133,7 +133,7 @@ guiTypes = {
 			position = { x = 34 y = 314 }
 			size = { x = 359 y = 36 }
 			quadTextureSprite = "GFX_ADISCORD_startup_page"
-			buttonText = "ADISCORD_startup_national"
+			buttonText = "[ADISCORDGetStartupPageTitle3]"
 			buttonFont = "hoi_16mbs"
 			clicksound = click_default
 		}
