@@ -1,7 +1,11 @@
 picture="thumbnail.png"
 version="1.19.2"
 tags={
+	"National Focuses"
+	"Ideologies"
+	"Gameplay"
 	"Alternative History"
+	"Map"
 }
 name="Abyss of Discord"
 replace_path="gfx/loadingscreens"
