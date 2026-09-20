@@ -3524,6 +3524,25 @@ VAL_final_crisis_close = {
 	if = { limit = { NOD = { OR = { is_subject_of = VAL has_country_flag = VAL_final_settlement_commit has_country_flag = VAL_final_capitulation_immediate } } has_capitulated = no is_subject = no } set_variable = { var = VAL_final_crisis_phase value = 3 } }
 	if = { limit = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } remove_dynamic_modifier = { modifier = VAL_final_war_preparation } }
 	VAL_final_refund_supply_order = yes
+
+	# Re-run the bounded postwar settlement after the final theatre closes.
+	# The frontier settlement can finish while VAL is still at war, in which case
+	# the administration trigger deliberately refuses to move the resource belt.
+	# Retrying here makes the Commonwealth gate reflect the actual peace settlement.
+	if = { limit = { VAL_can_form_northern_administration = yes } VAL_form_northern_administration = yes }
+	STP = {
+		if = {
+			limit = { exists = yes is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration }
+			VAL_cede_stelander_border = yes
+		}
+	}
+	STS = {
+		if = {
+			limit = { exists = yes is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration }
+			VAL_cede_stelander_border = yes
+		}
+	}
+
 	NOD = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
 	STP = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
 	STS = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
