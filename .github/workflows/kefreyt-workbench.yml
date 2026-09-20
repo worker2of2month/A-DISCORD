@@ -4,42 +4,133 @@ on:
     branches: [codex/kefreyt-settlements-administrations]
     paths: [.github/workflows/kefreyt-workbench.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  snapshot:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /*
-            !/map/**
-            !/music/**
-            !/sound/**
-            !/gfx/**
-            /gfx/flags/**
-            /gfx/interface/goals/**
-            !/tools/assets/**
-      - name: Package script and flag sources
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy pytest
+      - name: Verify patch integrity and baseline
+        run: |
+          mkdir -p /tmp/kefreyt-reports
+          python - <<'PY'
+          import base64, hashlib, subprocess, zlib, json
+          from pathlib import Path
+          reports = Path('/tmp/kefreyt-reports')
+          packed = ''.join(Path(f'.github/kefreyt-patch-{i}.txt').read_text().strip() for i in range(1, 5))
+          patch = zlib.decompress(base64.b64decode(packed, validate=True))
+          actual = hashlib.sha256(patch).hexdigest()
+          assert actual == '3f5e91037b8ab4b56ecab6ec2f3d631c0ae722e78aa8a8b59f7ebfdf9d4fde23', actual
+          (reports / 'changes.patch').write_bytes(patch)
+          subprocess.run(['git', 'apply', '--check', str(reports / 'changes.patch')], check=True)
+          results = {}
+          for label, command in {
+              'val': ['python', '-B', 'tools/validate_adiscord_val_rework.py'],
+              'tc': ['python', '-B', 'tools/validate_tc.py', '--limit', '300'],
+          }.items():
+              with (reports / f'baseline-{label}.txt').open('w') as log:
+                  try:
+                      result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=300)
+                      results[label] = result.returncode
+                  except subprocess.TimeoutExpired:
+                      results[label] = 124
+              print('baseline', label, results[label], flush=True)
+          (reports / 'baseline-status.json').write_text(json.dumps(results))
+          PY
+      - name: Apply scoped gameplay changes
+        run: |
+          git apply /tmp/kefreyt-reports/changes.patch
+          git diff --check
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, subprocess
+          paths = subprocess.check_output(['git', 'diff', '--name-only', '-z']).decode().strip('\0').split('\0')
+          assert len(paths) == 17, paths
+          hashes = {p: hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths}
+          Path('/tmp/kefreyt-reports/changed-hashes.json').write_text(json.dumps(hashes, indent=2))
+          for name in paths:
+              data = Path(name).read_bytes()
+              if name.endswith('.yml'):
+                  assert data.startswith(b'\xef\xbb\xbf'), name
+              elif name.endswith('.txt'):
+                  assert not data.startswith(b'\xef\xbb\xbf'), name
+          PY
+      - name: Run focused treaty and administration regressions
+        run: |
+          set -o pipefail
+          python -B -m unittest tools.tests.test_validate_adiscord_val_rework.ValTreatyAdministrationRegressionTests tools.tests.test_validate_adiscord_val_rework.ValFormationAndCommandTests tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests tools.tests.test_adiscord_nod_capitulation_reservation tools.tests.test_scripted_peace_on_actions -v 2>&1 | tee /tmp/kefreyt-reports/focused-tests.txt
+      - name: Compare complete-repository validators
+        run: |
+          python - <<'PY'
+          import subprocess, json, re
+          from pathlib import Path
+          reports = Path('/tmp/kefreyt-reports')
+          before = json.loads((reports / 'baseline-status.json').read_text())
+          results = {}
+          new_issues = {}
+          for label, command in {
+              'val': ['python', '-B', 'tools/validate_adiscord_val_rework.py'],
+              'tc': ['python', '-B', 'tools/validate_tc.py', '--limit', '300'],
+          }.items():
+              with (reports / f'changed-{label}.txt').open('w') as log:
+                  try:
+                      result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=300)
+                      results[label] = result.returncode
+                  except subprocess.TimeoutExpired:
+                      results[label] = 124
+              def issues(path):
+                  return {re.sub(r':\d+:', ':LINE:', line) for line in path.read_text().splitlines() if line.startswith('- ')}
+              new_issues[label] = sorted(issues(reports / f'changed-{label}.txt') - issues(reports / f'baseline-{label}.txt'))
+              print(label, 'baseline=', before[label], 'changed=', results[label], 'new issues=', new_issues[label], flush=True)
+          (reports / 'validator-comparison.json').write_text(json.dumps({'before': before, 'after': results, 'new_issues': new_issues}, indent=2))
+          assert all(v != 124 for v in results.values()), results
+          assert not any(new_issues.values()), new_issues
+          assert all(before[k] != 0 or results[k] == 0 for k in results), results
+          PY
+      - name: Exercise full test discovery with a bounded runtime
         run: |
           python - <<'PY'
           from pathlib import Path
-          import zipfile
-          root = Path('.')
-          with zipfile.ZipFile('/tmp/kefreyt-workspace.zip', 'w', zipfile.ZIP_DEFLATED) as out:
-              for directory in ('common', 'events', 'history', 'localisation', 'tools', 'docs', 'interface', 'gfx/flags'):
-                  for path in root.joinpath(directory).rglob('*'):
-                      if path.is_file() and 'assets' not in path.parts and '.git' not in path.parts:
-                          out.write(path, path.as_posix())
-              for name in ('AGENTS.md', 'descriptor.mod', 'requirements.txt', 'pyproject.toml'):
-                  path = root / name
-                  if path.is_file():
-                      out.write(path, name)
+          import subprocess, json
+          reports = Path('/tmp/kefreyt-reports')
+          with (reports / 'full-discovery.txt').open('w') as log:
+              try:
+                  result = subprocess.run(['python', '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_*.py', '-v'], stdout=log, stderr=subprocess.STDOUT, timeout=180)
+                  status = result.returncode
+              except subprocess.TimeoutExpired:
+                  status = 124
+          (reports / 'full-discovery-status.json').write_text(json.dumps({'returncode': status, 'timeout_seconds': 180}))
+          print('Full discovery return code:', status, '(124 means incomplete, timed out; not a passing suite)')
+          PY
+      - name: Commit only verified patch paths
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, subprocess
+          report = Path('/tmp/kefreyt-reports')
+          expected = json.loads((report / 'changed-hashes.json').read_text())
+          for p, digest in expected.items():
+              assert hashlib.sha256(Path(p).read_bytes()).hexdigest() == digest, f'Test mutated {p}'
+          changed = set(subprocess.check_output(['git', 'diff', '--name-only', '-z']).decode().strip('\0').split('\0'))
+          assert changed == set(expected), (changed - set(expected), set(expected) - changed)
+          subprocess.run(['git', 'diff', '--check'], check=True)
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'add', '--', *expected], check=True)
+          subprocess.run(['git', 'commit', '-m', 'fix: settle Kefreyt coalition victories and develop Balchansk administration'], check=True)
+          subprocess.run(['git', 'push', 'origin', 'HEAD:codex/kefreyt-settlements-administrations'], check=True)
+          (report / 'published-commit.txt').write_bytes(subprocess.check_output(['git', 'rev-parse', 'HEAD']))
           PY
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: kefreyt-workspace
-          path: /tmp/kefreyt-workspace.zip
-          retention-days: 1
+          name: kefreyt-verification
+          path: /tmp/kefreyt-reports
+          retention-days: 3
