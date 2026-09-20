@@ -28,7 +28,8 @@ jobs:
         run: |
           python - <<'PY'
           import base64, bz2, hashlib, pathlib, subprocess
-          data = bz2.decompress(base64.b64decode(pathlib.Path('.github/val-focus-audit.patch.b64').read_text()))
+          encoded = pathlib.Path('.github/val-focus-audit.patch.part1').read_text().strip() + pathlib.Path('.github/val-focus-audit.patch.b64').read_text().strip()
+          data = bz2.decompress(base64.b64decode(encoded))
           assert hashlib.sha256(data).hexdigest() == '8125cefdf6d114620b2ed93e99edaa56de29f31a5186ceb62f9c39236a62c235'
           subprocess.run(['git', 'apply', '--check', '-'], input=data, check=True)
           subprocess.run(['git', 'apply', '-'], input=data, check=True)
