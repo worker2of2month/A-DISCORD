@@ -2,13 +2,14 @@ name: Localisation audit
 on:
   pull_request:
     branches: [main]
+    paths: ['.github/workflows/localisation-audit.yml']
 permissions:
-  contents: read
+  contents: write
 jobs:
   audit:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/complete-english-localisation'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,39 +18,166 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install Pillow
-      - name: Compile and validate English catalogues
+      - name: Validate and prepare one-file commits on an isolated delivery branch
         run: |
-          python -B .github/apply_english.py > /tmp/translation-apply.log 2>&1
-          python -B -m unittest discover -s tools/tests -p test_adiscord_english_localisation.py -v > /tmp/focused-suite.log 2>&1
-          git diff --check -- localisation/english tools/tests/test_adiscord_english_localisation.py
-      - name: Export reviewed text sources
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, subprocess, sys
+          root = Path.cwd()
+          def run(label, args, expected=0):
+              with open('/tmp/' + label + '.log', 'w') as log:
+                  result = subprocess.run(args, stdout=log, stderr=subprocess.STDOUT)
+              if expected == 'failure':
+                  assert result.returncode != 0, label + ' must fail before the fix'
+              else:
+                  assert result.returncode == expected, label + ' failed; inspect its log'
+          focused = [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_adiscord_english_localisation.py', '-v']
+          tests = root / 'tools/tests/test_adiscord_english_localisation.py'
+          text = tests.read_text()
+          needle = '    def test_native_static_alias_difference_is_accepted_only_for_native_pair(self):\n'
+          insert = '''    def test_closed_texticon_can_touch_translated_prose(self):
+                  self.write(self.root, 'russian', 'KEY: "£trigger_no£Недостаточно инициативы"')
+                  self.write(self.root, 'english', 'KEY: "£trigger_no£Insufficient initiative"')
+                  issues = audit(self.root, self.game)['issues']
+                  self.assertFalse(any('token mismatch' in issue for issue in issues), issues)
+
+              def test_texticon_frame_is_preserved(self):
+                  self.write(self.root, 'russian', 'KEY: "£operative_mission_icons_small|1£ Разведка"')
+                  self.write(self.root, 'english', 'KEY: "£operative_mission_icons_small|2£ Intelligence"')
+                  issues = audit(self.root, self.game)['issues']
+                  self.assertTrue(any('token mismatch' in issue for issue in issues), issues)
+
+          '''
+          lines = insert.splitlines(True)
+          insert = lines[0] + ''.join(line[10:] if line.startswith('          ') else line for line in lines[1:])
+          assert needle in text
+          tests.write_text(text.replace(needle, insert + needle), encoding='utf-8')
+          run('focused-red', focused, expected='failure')
+          validator = root / 'tools/validators/validate_adiscord_english_localisation.py'
+          text = validator.read_text()
+          old = "TOKENS = re.compile(r'\\$[^$\\r\\n]+\\$|\\[[^\\]\\r\\n]+\\]|£[A-Za-z0-9_]+|@[A-Z0-9]{3}')"
+          new = "# Consume a texticon's frame and closing marker so adjacent English prose is\n# not mistaken for another icon, and frame changes remain detectable.\nTOKENS = re.compile(r'\\$[^$\\r\\n]+\\$|\\[[^\\]\\r\\n]+\\]|£[A-Za-z0-9_]+(?:\\|[0-9]+)?£?|@[A-Z0-9]{3}')"
+          assert old in text
+          validator.write_text(text.replace(old, new), encoding='utf-8')
+          run('translation-apply', [sys.executable, '-B', '.github/apply_english.py'])
+          Path('/tmp/translation-first-report.json').write_bytes(Path('/tmp/translation-report.json').read_bytes())
+          snapshot = {str(p): p.read_bytes() for p in Path('localisation/english').glob('*.yml')}
+          run('translation-idempotence', [sys.executable, '-B', '.github/apply_english.py'])
+          assert snapshot == {str(p): p.read_bytes() for p in Path('localisation/english').glob('*.yml')}
+          run('focused-green', focused)
+          run('whitespace', ['git', 'diff', '--check'])
+          expected = {
+              'localisation/english/ADISCORD_STP_l_english.yml': '2e90fdd212801fff5e136d82b5c19bf209940791',
+              'localisation/english/ADISCORD_economy_l_english.yml': '9e16df141c877c3d64113e246fc170e903593eae',
+              'localisation/english/ADISCORD_nam_resource_war_l_english.yml': 'c1a4a06e4fe215210660c94c3a65df26b60b5ebc',
+              'localisation/english/ADISCORD_scenario_debug_l_english.yml': 'b11664d0b23d911df2d5b97c119f9bfd0467d3ce',
+              'localisation/english/autonomy_l_english.yml': '10b51851a10bb13f2d35713f975f06bc3472bfc3',
+              'localisation/english/bookmarks_l_english.yml': 'f29b45dd68d12ac358e866070194cf8638390b12',
+              'localisation/english/buildings_l_english.yml': 'f902ff6e7e8470d9393ea91b901a2eaa025248b9',
+              'localisation/english/events_l_english.yml': '8eb4461aa0a4ad92bf254b77acadc03f33470a03',
+              'localisation/english/factions_l_english.yml': '8226dd7baf895352faf23399b9a33606d5f76dad',
+              'localisation/english/politics_l_english.yml': '9a95d3e022d5dbc862663935344c5a5f1881c324',
+              'localisation/english/state_l_english.yml': '734ef49656c7780de1130e2c3343714c92ce855d',
+              'localisation/english/vanilla_modifiericons_l_english.yml': '9a8943dada7125be33ceb9c6b9620e67839f3d10',
+              'tools/validators/validate_adiscord_english_localisation.py': '45eadfd4b66b127a4dbbeed86cd93b9b530fe056',
+              'tools/tests/test_adiscord_english_localisation.py': '3356ddbcd4d5bc06576967ae5a48dea7f31da949',
+          }
+          for path, wanted in expected.items():
+              raw = Path(path).read_bytes()
+              actual = hashlib.sha1(f'blob {len(raw)}\0'.encode() + raw).hexdigest()
+              assert actual == wanted, (path, actual, wanted)
+          changed = set(subprocess.check_output(['git', 'diff', '--name-only']).decode().splitlines())
+          untracked = set(subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard']).decode().splitlines())
+          assert changed | untracked == set(expected), (changed, untracked)
+          base = '7a611600667d912e7f563a9aac692b94d7eade1d'
+          subprocess.run(['git', 'fetch', '--depth=1', 'origin', base], check=True)
+          subprocess.run(['git', 'config', 'user.name', 'A-Discord localisation'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '81386071+worker2of2month@users.noreply.github.com'], check=True)
+          env = dict(os.environ, GIT_INDEX_FILE='/tmp/english-delivery-index')
+          subprocess.run(['git', 'read-tree', base], env=env, check=True)
+          parent, commits = base, []
+          paths = [p for p in expected if p.startswith('localisation/')]
+          paths += ['tools/validators/validate_adiscord_english_localisation.py', 'tools/tests/test_adiscord_english_localisation.py']
+          for path in paths:
+              blob = subprocess.check_output(['git', 'hash-object', '-w', path]).decode().strip()
+              subprocess.run(['git', 'update-index', '--add', '--cacheinfo', '100644', blob, path], env=env, check=True)
+              actual_paths = subprocess.check_output(['git', 'diff', '--cached', '--name-only', parent], env=env).decode().splitlines()
+              assert actual_paths == [path], actual_paths
+              tree = subprocess.check_output(['git', 'write-tree'], env=env).decode().strip()
+              message = 'l10n(en): complete ' + Path(path).name
+              if path.startswith('tools/validators/'):
+                  message = 'fix(l10n): preserve texticon frames and closing delimiters'
+              elif path.startswith('tools/tests/'):
+                  message = 'test(l10n): require complete English catalogues and valid texticons'
+              commit = subprocess.check_output(['git', 'commit-tree', tree, '-p', parent], input=(message + '\n').encode()).decode().strip()
+              commits.append({'path': path, 'blob': blob, 'commit': commit, 'parent': parent, 'message': message})
+              parent = commit
+          branch = 'codex/english-per-file-' + os.environ['GITHUB_RUN_ID']
+          subprocess.run(['git', 'push', 'origin', parent + ':refs/heads/' + branch], check=True)
+          manifest = {'base': base, 'head': parent, 'branch': branch, 'commits': commits}
+          Path('/tmp/per-file-commits.json').write_text(json.dumps(manifest, indent=2))
+          print(json.dumps(manifest, indent=2))
+          PY
+      - name: Export compiled files and focused verification
         if: always()
         run: |
           python - <<'PY'
-          import pathlib, subprocess, zipfile
-          paths = subprocess.check_output(['git', 'ls-files', '--cached', '--others', '--exclude-standard', '-z']).decode().split('\0')
-          suffixes = {'.py', '.json', '.md', '.yml', '.yaml', '.txt', '.gui', '.gfx', '.mod', '.lua', '.csv', '.asset', '.xml', '.ini', '.toml', '.tsv'}
-          with zipfile.ZipFile('/tmp/adiscord-english-review.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
-              for name in sorted(set(paths)):
-                  p = pathlib.Path(name)
-                  if p.is_file() and (p.suffix.lower() in suffixes or p.name in {'.gitignore', '.gitattributes'}):
-                      archive.write(p, 'source/' + name)
-              for p in pathlib.Path('/tmp').iterdir():
-                  if p.is_file() and (p.suffix == '.log' or p.name == 'translation-report.json'):
-                      archive.write(p, 'review/' + p.name)
+          import pathlib, zipfile
+          with zipfile.ZipFile('/tmp/english-per-file-review.zip', 'w', zipfile.ZIP_DEFLATED) as z:
+              for pattern in ['localisation/**/*.yml', 'tools/validators/validate_adiscord_english_localisation.py', 'tools/tests/test_adiscord_english_localisation.py']:
+                  for p in pathlib.Path('.').glob(pattern):
+                      z.write(p, 'source/' + str(p))
+              for p in pathlib.Path('/tmp').glob('*'):
+                  if p.is_file() and (p.suffix == '.log' or p.name in {'translation-first-report.json', 'translation-report.json', 'per-file-commits.json'}):
+                      z.write(p, 'review/' + p.name)
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: adiscord-english-review
-          path: /tmp/adiscord-english-review.zip
+          name: english-per-file-review
+          path: /tmp/english-per-file-review.zip
           retention-days: 3
-      - name: Repository validator
-        run: python -B tools/validate_tc.py --limit 300 > /tmp/repository-validator.log 2>&1
+      - name: Compare full-checkout regression checks
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from concurrent.futures import ThreadPoolExecutor
+          import json, os, re, signal, subprocess, sys
+          manifest = json.loads(Path('/tmp/per-file-commits.json').read_text())
+          subprocess.run(['git', 'worktree', 'add', '--detach', '/tmp/english-baseline', manifest['base']], check=True)
+          def check(label, command, cwd, seconds):
+              logfile = Path('/tmp/' + label + '.log')
+              with logfile.open('w') as log:
+                  process = subprocess.Popen(command, cwd=cwd, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+                  timed_out = False
+                  try:
+                      code = process.wait(timeout=seconds)
+                  except subprocess.TimeoutExpired:
+                      os.killpg(process.pid, signal.SIGKILL)
+                      process.wait()
+                      code, timed_out = 124, True
+              text = logfile.read_text(errors='replace')
+              return label, {'exit_code': code, 'timed_out': timed_out, 'failures': re.findall(r'^(?:FAIL|ERROR): (.*)$', text, re.M), 'summary': re.findall(r'^Ran .*|^OK.*|^FAILED .*', text, re.M)}
+          commands = [
+              ('baseline-validator', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], '/tmp/english-baseline', 300),
+              ('translated-validator', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], str(Path.cwd()), 300),
+              ('baseline-full-suite', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-v'], '/tmp/english-baseline', 600),
+              ('translated-full-suite', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-v'], str(Path.cwd()), 600),
+          ]
+          with ThreadPoolExecutor(max_workers=4) as executor:
+              results = dict(executor.map(lambda args: check(*args), commands))
+          Path('/tmp/full-verification.json').write_text(json.dumps(results, indent=2))
+          print(json.dumps(results, indent=2))
+          if any(v['exit_code'] for v in results.values()):
+              raise SystemExit('Full checks need review; no changes were pushed to main')
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: adiscord-english-validator
-          path: /tmp/repository-validator.log
+          name: english-full-verification
+          path: |
+            /tmp/*validator.log
+            /tmp/*full-suite.log
+            /tmp/full-verification.json
           if-no-files-found: ignore
           retention-days: 3
