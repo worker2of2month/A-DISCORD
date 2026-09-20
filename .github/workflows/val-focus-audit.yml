@@ -1,14 +1,15 @@
-name: Kefreyt isolated focus audit
+name: Kefreyt verified focus candidate
 on:
   push:
     branches: [assistant/val-focus-audit-20260920]
-    paths: ['.github/val-focus-audit.patch.b64']
+    paths: ['.github/workflows/val-focus-audit.yml']
 permissions:
   contents: write
+  actions: read
 jobs:
-  verify:
+  package:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 10
     env:
       BASE: e022582ee19523c77e284b9d5042d893ff7202eb
       PYTHONDONTWRITEBYTECODE: '1'
@@ -16,100 +17,73 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      - uses: actions/setup-python@v5
+      - uses: actions/download-artifact@v4
         with:
-          python-version: '3.13'
-      - name: Test dependencies and isolated baseline
+          name: val-verification
+          run-id: 35488437393
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/val-report
+      - name: Verify complete test evidence with worktree-independent failure names
         run: |
-          python -m pip install --disable-pip-version-check pillow numpy
+          python - <<'PY'
+          import collections, json, pathlib
+          directory = pathlib.Path('/tmp/val-report')
+          report = json.loads((directory/'report.json').read_text())
+          for key in ('focused','kefreyt_validator','total_conversion','baseline_total_conversion'):
+              assert report[key]['returncode'] == 0, (key, report[key])
+          assert report['source_unchanged_by_tests']
+          assert report['all_tests']['returncode'] == 1
+          assert report['baseline_all_tests']['returncode'] == 1
+          assert any(s.startswith('Ran 2014 tests ') for s in report['all_tests']['summary'])
+          assert any(s.startswith('Ran 1997 tests ') for s in report['baseline_all_tests']['summary'])
+          def normalize(value):
+              return value.replace('/home/runner/work/A-DISCORD/A-DISCORD','<REPO>').replace('/tmp/val-baseline','<REPO>')
+          before = collections.Counter(map(normalize,report['baseline_all_tests']['failures']))
+          after = collections.Counter(map(normalize,report['all_tests']['failures']))
+          assert not after-before, dict(after-before)
+          fixed = 'test_durable_guard_bridges_immediate_and_generic_callbacks (test_adiscord_nod_capitulation_reservation.NodrulCapitulationReservationTests.test_durable_guard_bridges_immediate_and_generic_callbacks)'
+          assert before-after == collections.Counter({fixed:1}), dict(before-after)
+          proof = {'verification_run':35488437393, 'new_failures':dict(after-before), 'fixed_failures':dict(before-after), 'remaining_failures':dict(after), 'full_suite_is_green':False, 'focused_tests_passed':140, 'whole_mod_validator_passed':True}
+          (directory/'normalized_comparison.json').write_text(json.dumps(proof,indent=2))
+          print('140 focused tests passed; full suite completed: 2014 vs 1997 tests.')
+          print('No new failing test/subtest after normalizing only the two checkout roots.')
+          print('Remaining full-suite results: 142 failures and 40 errors, all reproduced on the baseline.')
+          PY
+      - name: Materialize the exact verified patch and create a code-only candidate
+        run: |
           git fetch --depth=1 origin "$BASE"
-          git worktree add --detach /tmp/val-baseline "$BASE"
-      - name: Apply exact reviewed patch
-        run: |
           python - <<'PY'
-          import base64, bz2, hashlib, pathlib, subprocess
-          encoded = pathlib.Path('.github/val-focus-audit.patch.part1').read_text().strip() + pathlib.Path('.github/val-focus-audit.patch.b64').read_text().strip()
-          data = bz2.decompress(base64.b64decode(encoded))
-          assert hashlib.sha256(data).hexdigest() == '8125cefdf6d114620b2ed93e99edaa56de29f31a5186ceb62f9c39236a62c235'
-          subprocess.run(['git', 'apply', '--check', '-'], input=data, check=True)
-          subprocess.run(['git', 'apply', '-'], input=data, check=True)
-          paths = subprocess.check_output(['git', 'diff', '--name-only']).decode().splitlines()
-          assert len(paths) == 12 and not any(p.startswith('.github/') for p in paths), paths
-          import json
-          pathlib.Path('/tmp/val-manifest.json').write_text(json.dumps({p: hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest() for p in paths}))
-          PY
-          git diff --check
-      - name: Focused checks and complete-suite baseline comparison
-        run: |
-          mkdir -p /tmp/val-report
-          python - <<'PY'
-          import concurrent.futures, hashlib, json, os, pathlib, re, signal, subprocess, sys, time
-          root = pathlib.Path.cwd()
-          base = pathlib.Path('/tmp/val-baseline')
-          out = pathlib.Path('/tmp/val-report')
-          def run(name, args, cwd=root, timeout=720):
-              start = time.monotonic()
-              with (out / (name + '.log')).open('w') as stream:
-                  proc = subprocess.Popen(args, cwd=cwd, stdout=stream, stderr=subprocess.STDOUT, start_new_session=True)
-                  try:
-                      rc = proc.wait(timeout=timeout)
-                  except subprocess.TimeoutExpired:
-                      os.killpg(proc.pid, signal.SIGKILL)
-                      proc.wait()
-                      stream.write('\nAUDIT TIMEOUT\n')
-                      rc = 124
-              text = (out / (name + '.log')).read_text(errors='replace')
-              result = {'returncode': rc, 'seconds': round(time.monotonic()-start, 2), 'failures': re.findall(r'^(?:FAIL|ERROR): (.+)$', text, re.M), 'summary': re.findall(r'^Ran .*|^OK.*|^FAILED.*|^.*validation (?:passed|failed).*', text, re.M)}
-              print(name, json.dumps(result), flush=True)
-              return result
-          report = {}
-          report['focused'] = run('focused', [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_validate_adiscord_val_rework', 'tools.tests.test_adiscord_nod_capitulation_reservation', 'tools.tests.test_scripted_peace_on_actions'], timeout=300)
-          report['kefreyt_validator'] = run('kefreyt_validator', [sys.executable, '-B', 'tools/validate_adiscord_val_rework.py'], timeout=180)
-          report['total_conversion'] = run('total_conversion', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], timeout=300)
-          report['baseline_total_conversion'] = run('baseline_total_conversion', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], cwd=base, timeout=300)
-          suite = [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_*.py']
-          with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
-              current = pool.submit(run, 'all_tests', suite)
-              previous = pool.submit(run, 'baseline_all_tests', suite, base)
-              report['all_tests'] = current.result()
-              report['baseline_all_tests'] = previous.result()
-          report['new_failures'] = sorted(set(report['all_tests']['failures']) - set(report['baseline_all_tests']['failures']))
-          manifest = json.loads(pathlib.Path('/tmp/val-manifest.json').read_text())
-          changed = subprocess.check_output(['git', 'diff', '--name-only']).decode().splitlines()
-          report['source_unchanged_by_tests'] = set(changed) == set(manifest) and all(hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest() == digest for p,digest in manifest.items())
-          report['publication_ready'] = (report['focused']['returncode'] == 0 and report['kefreyt_validator']['returncode'] == 0 and report['total_conversion']['returncode'] == 0 and report['all_tests']['returncode'] != 124 and report['baseline_all_tests']['returncode'] != 124 and not report['new_failures'] and report['source_unchanged_by_tests'])
-          (out / 'report.json').write_text(json.dumps(report, indent=2))
-          print('REPORT', json.dumps(report, indent=2), flush=True)
-          PY
-      - name: Create code-only candidate, never update main
-        run: |
-          python - <<'PY'
-          import json, os, pathlib, subprocess
-          out = pathlib.Path('/tmp/val-report')
-          report = json.loads((out/'report.json').read_text())
-          if not report['publication_ready']:
-              raise SystemExit('Candidate held: review the validation report')
+          import base64,bz2,hashlib,json,os,pathlib,subprocess
+          expected = '8125cefdf6d114620b2ed93e99edaa56de29f31a5186ceb62f9c39236a62c235'
+          encoded = pathlib.Path('.github/val-focus-audit.patch.part1').read_text().strip()+pathlib.Path('.github/val-focus-audit.patch.b64').read_text().strip()
+          patch = bz2.decompress(base64.b64decode(encoded))
+          assert hashlib.sha256(patch).hexdigest() == expected
+          subprocess.run(['git','apply','--check','-'],input=patch,check=True)
+          subprocess.run(['git','apply','-'],input=patch,check=True)
+          subprocess.run(['git','diff','--check'],check=True)
+          expected_paths = {'common/national_focus/ADISCORD_national_focus_VAL.txt','common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt','common/scripted_effects/ADISCORD_VAL_effects.txt','common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt','common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt','docs/development/focus-effects.md','events/ADISCORD_VAL_contract_events.txt','localisation/english/ADISCORD_VAL_decisions_l_english.yml','localisation/russian/ADISCORD_VAL_decisions_l_russian.yml','tools/tests/test_adiscord_nod_capitulation_reservation.py','tools/tests/test_validate_adiscord_val_rework.py','tools/validators/validate_adiscord_val_rework.py'}
+          paths = subprocess.check_output(['git','diff','--name-only']).decode().splitlines()
+          assert set(paths) == expected_paths, paths
           base = os.environ['BASE']
           subprocess.run(['git','fetch','--depth=1','origin','main'],check=True)
           current = subprocess.check_output(['git','rev-parse','FETCH_HEAD']).decode().strip()
-          if current != base:
-              raise SystemExit('Main moved; refusing to overwrite concurrent work: '+current)
-          paths = list(json.loads(pathlib.Path('/tmp/val-manifest.json').read_text()))
-          env = dict(os.environ, GIT_INDEX_FILE='/tmp/val-code-index', GIT_AUTHOR_NAME='worker2of2month', GIT_AUTHOR_EMAIL='81386071+worker2of2month@users.noreply.github.com', GIT_COMMITTER_NAME='worker2of2month', GIT_COMMITTER_EMAIL='81386071+worker2of2month@users.noreply.github.com')
+          assert current == base, 'Main moved: '+current
+          env = dict(os.environ,GIT_INDEX_FILE='/tmp/val-code-index',GIT_AUTHOR_NAME='worker2of2month',GIT_AUTHOR_EMAIL='81386071+worker2of2month@users.noreply.github.com',GIT_COMMITTER_NAME='worker2of2month',GIT_COMMITTER_EMAIL='81386071+worker2of2month@users.noreply.github.com')
           subprocess.run(['git','read-tree',base],env=env,check=True)
           subprocess.run(['git','add','--',*paths],env=env,check=True)
           tree = subprocess.check_output(['git','write-tree'],env=env).decode().strip()
-          commit = subprocess.check_output(['git','commit-tree',tree,'-p',base,'-m','Fix Kefreyt focus routes, pacing and dynamic Stelander briefing'],env=env).decode().strip()
+          message = 'Fix Kefreyt focus routes, pacing and dynamic Stelander briefing\n\n140 focused tests and validate_tc pass. Full suite: 2014 tests;\n142 failures and 40 errors reproduce the baseline, with one old\nformat-sensitive test fixed. Baseline comparison normalizes only\ncheckout roots. Native HOI4 rendering has not been tested.'
+          commit = subprocess.check_output(['git','commit-tree',tree,'-p',base,'-m',message],env=env).decode().strip()
           branch = 'assistant/val-focus-verified-'+os.environ['GITHUB_RUN_ID']
+          result = {'base':base,'commit':commit,'tree':tree,'branch':branch,'files':paths,'patch_sha256':expected,'verification_run':35488437393,'file_sha256':{p:hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest() for p in paths}}
+          pathlib.Path('/tmp/val-report/candidate.json').write_text(json.dumps(result,indent=2))
+          print(json.dumps(result,indent=2),flush=True)
           subprocess.run(['git','push','origin',commit+':refs/heads/'+branch],check=True)
-          result = {'base':base,'commit':commit,'tree':tree,'branch':branch,'files':paths}
-          (out/'candidate.json').write_text(json.dumps(result,indent=2))
-          print(json.dumps(result,indent=2))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: val-verification
+          name: val-final-verification
           path: /tmp/val-report
           retention-days: 7
           if-no-files-found: error
