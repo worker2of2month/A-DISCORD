@@ -1,0 +1,42 @@
+name: Shabrat package checks
+on:
+  push:
+    branches: [codex/shabrat-uprisings-nod-ultimatum]
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            common
+            events
+            history
+            localisation
+            tools
+            docs/development
+            interface
+            map/definition.csv
+          sparse-checkout-cone-mode: false
+          lfs: false
+      - name: Export tracked source for regression checks
+        run: |
+          python3 - <<'PY'
+          import pathlib, subprocess, zipfile
+          root = pathlib.Path('.')
+          paths = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          with zipfile.ZipFile('/tmp/adiscord-source.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for name in paths:
+                  path = root / name
+                  if name and path.is_file() and not name.startswith('.github/'):
+                      archive.write(path, name)
+          print(subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: adiscord-source
+          path: /tmp/adiscord-source.zip
+          retention-days: 1
