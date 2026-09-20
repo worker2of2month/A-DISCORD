@@ -5028,9 +5028,11 @@ STP_pf_shift = {
 		if = { limit = { check_variable = { var = STP_pf_selected value = 6 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_merchants_influence } }
 		if = { limit = { check_variable = { var = STP_pf_selected value = 7 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_radicals_influence } }
 		set_temp_variable = { var = STP_pf_gain value = 5 }
+		# Dominant groups can recover support without accumulating more offices.
+		if = { limit = { check_variable = { var = STP_pf_old_influence value = 60 compare = greater_than_or_equals } } set_temp_variable = { var = STP_pf_gain value = 0 } }
 		set_temp_variable = { var = STP_pf_room value = 100 }
 		subtract_from_temp_variable = { var = STP_pf_room value = STP_pf_old_influence }
-		if = { limit = { check_variable = { var = STP_pf_room value = 5 compare = less_than } } set_temp_variable = { var = STP_pf_gain value = STP_pf_room } }
+		if = { limit = { check_variable = { var = STP_pf_room value = STP_pf_gain compare = less_than } } set_temp_variable = { var = STP_pf_gain value = STP_pf_room } }
 		if = {
 			limit = { check_variable = { var = STP_pf_room value = 0 compare = greater_than } }
 			set_temp_variable = { var = STP_pf_scale value = STP_pf_room }
@@ -5160,50 +5162,41 @@ STP_pf_clear = {
 
 # PARTY POSTWAR: refusing NOD's protectorate turns sovereignty into a timed invasion crisis.
 STP_pw_party_start_nod_invasion_threat = {
+	# Called by the sovereignty reward before native focus completion is guaranteed.
 	if = {
-		limit = {
-			tag = STP
-			has_country_flag = STP_cw_postwar
-			has_completed_focus = STP_pw_party_sovereignty
-			is_subject = no
-			NOD = { exists = yes has_capitulated = no is_subject = no }
-			NOT = { has_war_with = NOD }
+		limit = { tag = STP has_country_flag = STP_cw_postwar
+			NOT = { has_country_flag = STP_pw_party_nod_threat_active }
+			NOT = { has_country_flag = STP_pw_party_nod_invasion_active }
+			NOT = { has_country_flag = STP_pw_party_nod_invasion_defeated }
+			NOT = { has_country_flag = STP_pw_party_nod_invasion_lost }
 		}
-		clr_country_flag = STP_pw_party_nod_invasion_defeated
-		clr_country_flag = STP_pw_party_nod_invasion_active
 		set_country_flag = STP_pw_party_nod_threat_active
-		activate_mission = STP_pw_party_nod_invasion_countdown
-		country_event = { id = ADISCORD_STP_pc.28 hours = 1 }
-	}
-	else = {
-		clr_country_flag = STP_pw_party_nod_threat_active
-		set_country_flag = STP_pw_party_nod_invasion_defeated
-		mark_focus_tree_layout_dirty = yes
+		if = {
+			limit = { STP_pw_party_nod_threat_current = yes }
+			activate_mission = STP_pw_party_nod_invasion_countdown
+			country_event = { id = ADISCORD_STP_pc.28 hours = 1 }
+		}
+		else = { STP_pw_party_launch_nod_invasion = yes }
 	}
 }
-
 STP_pw_party_launch_nod_invasion = {
 	if = {
-		limit = {
-			tag = STP
-			has_country_flag = STP_pw_party_nod_threat_active
-			is_subject = no
-			has_capitulated = no
-			NOD = { exists = yes has_capitulated = no is_subject = no }
-			NOT = { has_war_with = NOD }
-		}
+		limit = { tag = STP has_country_flag = STP_pw_party_nod_threat_active }
 		clr_country_flag = STP_pw_party_nod_threat_active
-		set_country_flag = STP_pw_party_nod_invasion_active
-		NOD = {
-			add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 }
-			declare_war_on = { target = STP type = annex_everything }
+		if = {
+			limit = { OR = { is_subject = yes has_capitulated = yes } }
+			set_country_flag = STP_pw_party_nod_invasion_lost
 		}
-		country_event = { id = ADISCORD_STP_pc.29 hours = 1 }
-	}
-	else = {
-		clr_country_flag = STP_pw_party_nod_threat_active
-		clr_country_flag = STP_pw_party_nod_invasion_active
-		set_country_flag = STP_pw_party_nod_invasion_defeated
+		else_if = {
+			limit = { NOD = { exists = yes has_capitulated = no is_subject = no } }
+			set_country_flag = STP_pw_party_nod_invasion_active
+			NOD = {
+				add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 }
+				if = { limit = { NOT = { has_war_with = STP } } declare_war_on = { target = STP type = annex_everything } }
+			}
+			country_event = { id = ADISCORD_STP_pc.29 hours = 1 }
+		}
+		else = { set_country_flag = STP_pw_party_nod_invasion_defeated }
 		mark_focus_tree_layout_dirty = yes
 	}
 }

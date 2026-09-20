@@ -62,7 +62,7 @@ characters = {
 				large = GFX_portrait_VAL_Erika_Stahl
 			}
 		}
-		corps_commander = {
+		field_marshal = {
 			traits = { organizer }
 			skill = 2
 			attack_skill = 1

@@ -991,7 +991,7 @@ class StelanderPreparationTests(unittest.TestCase):
         actions = {a.key: a.value for c in categories for a in c.value if isinstance(a.value, list)}
         price_keys = {e.value for action in actions.values() for e in action if e.key == "custom_cost_text"}
         localisation = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(encoding="utf-8-sig")
-        values = dict(re.findall(r'^ ([\w.]+):\s*"(.*)"$', localisation, re.M))
+        values = dict(re.findall(r'^ ([\w.]+):(?:\d+)?\s*"(.*)"$', localisation, re.M))
         for key in price_keys:
             with self.subTest(price=key):
                 self.assertIn(key, values)

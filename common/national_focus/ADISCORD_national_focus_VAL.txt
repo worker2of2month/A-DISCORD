@@ -156,7 +156,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Contract_State }
 		ai_will_do = { base = 18 }
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 2000 producer = VAL }
 			custom_effect_tooltip = VAL_hot_production_lines_tt
 			hidden_effect = { add_ideas = VAL_hot_production_lines }
 
@@ -227,7 +227,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 4
 		y = 4
-		cost = 5
+		cost = 3
 		prerequisite = {
 			focus = VAL_Ballistics_Schools
 			focus = VAL_Brokered_Steel
@@ -240,7 +240,7 @@ focus_tree = {
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			if = {
 				limit = { has_completed_focus = VAL_Ballistics_Schools }
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 800 producer = VAL }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 4000 producer = VAL }
 			}
 			else_if = {
 				limit = { has_completed_focus = VAL_Brokered_Steel }
@@ -391,7 +391,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_INDUSTRY }
 		x = 35
 		y = 4
-		cost = 5
+		cost = 3
 		prerequisite = {
 			focus = VAL_Vorons_Companies
 			focus = VAL_Stahls_Schedules
@@ -773,6 +773,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_One_Ledger_One_Banner }
 		completion_reward = {
 			unlock_decision_tooltip = VAL_pay_quarterly_contract_norm
+			unlock_decision_tooltip = VAL_subcontract_quarterly_norm
 			if = {
 				limit = { NOT = { has_variable = VAL_contract_reputation_level } }
 				set_variable = { var = VAL_contract_reputation_level value = 3 }
@@ -834,7 +835,7 @@ focus_tree = {
 		y = 3
 		cost = 3
 		prerequisite = { focus = VAL_Contract_Accounting_Office }
-		completion_reward = { add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 producer = VAL } }
+		completion_reward = { add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = VAL } }
 		ai_will_do = { base = 3 modifier = { factor = 2 has_equipment = { infantry_equipment < 10000 } } }
 	}
 
@@ -844,11 +845,11 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
 		x = 2
 		y = 4
-		cost = 5
+		cost = 3
 		prerequisite = { focus = VAL_Ballistics_Schools }
 		completion_reward = {
 			add_political_power = 25
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 800 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = VAL }
 			effect_tooltip = {
 				if = {
 					limit = {
@@ -913,10 +914,10 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 5
 		y = 6
-		cost = 5
+		cost = 3
 		prerequisite = { focus = VAL_Export_Rifles_Not_Promises }
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 2000 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 6000 producer = VAL }
 		}
 		ai_will_do = { base = 20 }
 	}
@@ -1029,7 +1030,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_INDUSTRY }
 		x = 33
 		y = 5
-		cost = 5
+		cost = 3
 		prerequisite = { focus = VAL_Morns_Supply_Trains }
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_field_repair_delta } }
@@ -1297,7 +1298,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Salvage_Every_Barrel }
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = VAL }
 			effect_tooltip = {
 				if = {
 					limit = {
@@ -1407,12 +1408,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 5
 		y = 7
-		cost = 5
+		cost = 3
 		prerequisite = { focus = VAL_Arsenal_Reserve }
 		prerequisite = { focus = VAL_Inventory_The_Empty_Yards }
 		completion_reward = {
 			VAL_advance_economic_recovery = yes
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 2000 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 5000 producer = VAL }
 			add_political_power = 25
 		}
 		ai_will_do = { base = 25 }
@@ -1496,7 +1497,7 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY }
 		x = 41
 		y = 5
-		cost = 5
+		cost = 3
 		prerequisite = { focus = VAL_Contractor_Officers }
 		completion_reward = {
 			army_experience = 10
@@ -1531,11 +1532,11 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ARMY }
 		x = 36
 		y = 7
-		cost = 5
+		cost = 3
 		prerequisite = { focus = VAL_Reserve_Battalions }
 		completion_reward = {
 			add_manpower = 3000
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 4500 producer = VAL }
 		}
 		ai_will_do = { base = 4 }
 	}
@@ -1813,11 +1814,11 @@ focus_tree = {
 	focus = {
 		id = VAL_reclamation_survey
 		icon = GFX_goal_generic_consumer_goods
-		x = 42
+		x = -4
 		y = 10
-		cost = 3
+		cost = 2
+		prerequisite = { focus = VAL_Factories_Like_Cathedrals }
 		available = {
-			has_completed_focus = VAL_The_Harvest_Of_Ash
 			custom_trigger_tooltip = {
 				tooltip = VAL_reclamation_has_work_tt
 				OR = {
@@ -1838,7 +1839,7 @@ focus_tree = {
 	focus = {
 		id = VAL_reclamation_road_crews
 		icon = GFX_goal_generic_construct_infrastructure
-		x = 40
+		x = -6
 		y = 11
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_survey }
@@ -1849,10 +1850,12 @@ focus_tree = {
 	focus = {
 		id = VAL_reclamation_clean_water
 		icon = GFX_focus_generic_self_management
-		x = 44
+		x = -2
 		y = 11
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_survey }
+		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_1_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } } } }
+		cancel_if_invalid = yes
 		completion_reward = { unlock_decision_tooltip = { decision = VAL_reclamation_water show_effect_tooltip = yes } }
 		ai_will_do = { base = 3 }
 	}
@@ -1860,10 +1863,12 @@ focus_tree = {
 	focus = {
 		id = VAL_reclamation_workshops
 		icon = GFX_goal_generic_construct_civ_factory
-		x = 40
+		x = -6
 		y = 13
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_road_crews }
+		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_1_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } } } }
+		cancel_if_invalid = yes
 		completion_reward = { add_ideas = VAL_reclamation_workshops_idea }
 		ai_will_do = { base = 3 }
 	}
@@ -1871,10 +1876,12 @@ focus_tree = {
 	focus = {
 		id = VAL_reclamation_return_home
 		icon = GFX_goal_generic_national_unity
-		x = 44
+		x = -2
 		y = 13
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_clean_water }
+		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_2_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 2 compare = greater_than_or_equals } } } }
+		cancel_if_invalid = yes
 		completion_reward = { unlock_decision_tooltip = { decision = VAL_reclamation_settlement show_effect_tooltip = yes } }
 		ai_will_do = { base = 3 }
 	}
@@ -1882,13 +1889,26 @@ focus_tree = {
 	focus = {
 		id = VAL_reclamation_land_register
 		icon = GFX_focus_generic_improve_the_administration
-		x = 42
+		x = -4
 		y = 15
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_workshops }
 		prerequisite = { focus = VAL_reclamation_return_home }
+		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_3_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } } }
+		cancel_if_invalid = yes
 		completion_reward = { add_ideas = VAL_reclamation_land_register_idea }
 		ai_will_do = { base = 3 }
+	}
+
+	focus = {
+		id = VAL_reclamation_industrial_sites
+		icon = GFX_goal_generic_construct_civ_factory
+		x = -4
+		y = 16
+		cost = 3
+		prerequisite = { focus = VAL_reclamation_land_register }
+		completion_reward = { unlock_decision_tooltip = { decision = VAL_reclamation_industry show_effect_tooltip = yes } }
+		ai_will_do = { base = 5 }
 	}
 
     focus = {
@@ -2391,4 +2411,5 @@ completion_reward = {
 		}
 		ai_will_do = { base = 5 }
 	}
+
 }

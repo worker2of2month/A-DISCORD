@@ -27,6 +27,11 @@ recoils the gun and settles the hull. Flight trajectories and battle maneuvers
 remain native engine scenes, so the six jets need only a rigid idle clip.
 Do not treat a stationary aircraft idle as a missing flight-path animation.
 
+Rigid skins declare one influence per vertex but retain the native four-slot
+storage layout. All four indices address the same valid bone, with weights
+`1, 0, 0, 0`: the game shader fetches matrices even for zero-weight slots.
+The verifier checks padding indices as well as the weighted influence.
+
 The tank points forward along Blender -Y / Clausewitz -Z. Its `barrel` locator
 follows the gun; exhaust and track emitters follow their own assembly. Aircraft
 provide `root`, `gun1`, `gun2` and `bomb` locators for the native plane states.

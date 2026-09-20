@@ -350,6 +350,19 @@ def animate(model, rig, clip):
     pdx.export_animfile(str(ROOT/f"{model.name}_{clip}.anim"),frame_start=1,frame_end=frames)
 
 
+def export_rigid_mesh(path):
+    pdx.export_meshfile(str(path), exp_selected=True)
+    tree = pdx_data.read_meshfile(str(path))
+    for skin in tree.findall("./object/*/mesh/skin"):
+        weights, indices = skin.attrib["w"], skin.attrib["ix"]
+        assert all(weights[i:i+4] == [1, 0, 0, 0] for i in range(0, len(weights), 4))
+        skin.set("bones", [1])
+        # The game shader fetches all four matrices before multiplying by weights.
+        # Zero-weight slots must still address a valid matrix, not exporter padding -1.
+        skin.set("ix", [indices[i - i % 4] for i in range(len(indices))])
+    pdx_data.write_meshfile(str(path), tree)
+
+
 def inspect_mesh(path):
     report = {"triangles": 0, "materials": 0, "bones": 0}
     tree = pdx_data.read_meshfile(str(path))
@@ -367,17 +380,21 @@ def inspect_mesh(path):
             assert all((points[b]-points[a]).cross(points[c]-points[a]).length > 1e-9
                        for a,b,c in zip(data.tri[::3],data.tri[1::3],data.tri[2::3]))
             influences = data.skin.bones[0]
-            assert len(data.skin.w) == len(data.skin.ix) == n*influences
+            assert influences == 1, (path.name, "rigid skin must declare one influence")
+            # Native files keep four storage slots even for a one-influence skin.
+            assert len(data.skin.w) == len(data.skin.ix) == n*4
             for i in range(n):
-                weights = data.skin.w[i*influences:(i+1)*influences]
-                indices = data.skin.ix[i*influences:(i+1)*influences]
+                weights = data.skin.w[i*4:(i+1)*4]
+                indices = data.skin.ix[i*4:(i+1)*4]
                 assert abs(sum(weights)-1) < .001
-                assert all(0 <= bone < len(bones) for bone, weight in zip(indices, weights) if weight)
+                assert weights == [1, 0, 0, 0]
+                assert all(0 <= bone < len(bones) for bone in indices)
             assert data.material.shader == ["PdxMeshAdvancedSnow"]
             for channel in ("diff", "n", "spec"):
                 assert (path.parent/getattr(data.material,channel)[0]).is_file()
             report["triangles"] += len(data.tri)//3
             report["materials"] += 1
+    report["rigid_skin_slots_validated"] = True
     report["locators"] = [loc.tag for loc in tree.find("locator")]
     return report
 
@@ -443,7 +460,7 @@ def build(name):
     for empty in [o for o in bpy.context.scene.objects if o.type == "EMPTY"]:
         empty.select_set(True)
     bpy.context.view_layer.objects.active = obj
-    pdx.export_meshfile(str(ROOT/(name+".mesh")),exp_selected=True)
+    export_rigid_mesh(ROOT/(name+".mesh"))
     for clip in (("idle","move","attack") if role == "tank" else ("idle",)):
         animate(model,rig,clip)
     return verify_native(name)

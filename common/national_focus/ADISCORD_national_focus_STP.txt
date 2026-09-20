@@ -1636,6 +1636,8 @@ focus_tree = {
 			}
 			add_stability = -0.03
 			add_political_power = -50
+			custom_effect_tooltip = STP_pf_merchants_deal_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 6 } STP_pf_shift = yes }
 		}
 	}
 
@@ -1656,6 +1658,8 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 96 producer = ROOT }
 			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = ROOT }
 			custom_effect_tooltip = STP_party_shared_stocks_tt
+			custom_effect_tooltip = STP_pf_army_deal_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 4 } STP_pf_shift = yes }
 		}
 	}
 
@@ -1717,6 +1721,8 @@ focus_tree = {
 				add_to_variable = { var = STP_cw_party_political_power_gain value = 0.1 }
 				STP_cw_refresh_party_modifier = yes
 			}
+			custom_effect_tooltip = STP_pf_conservatives_deal_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 1 } STP_pf_shift = yes }
 		}
 	}
 
@@ -2547,7 +2553,11 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt STP_ps_war_active = yes }  }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = STP_ps_transport }
+		completion_reward = {
+			unlock_decision_tooltip = STP_ps_transport
+			custom_effect_tooltip = STP_pf_merchants_deal_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 6 } STP_pf_shift = yes }
+		}
 	}
 
 	focus = {
@@ -2577,6 +2587,8 @@ focus_tree = {
 				add_to_variable = { var = STP_cw_party_stability_factor value = 0.03 }
 				STP_cw_refresh_party_modifier = yes
 			}
+			custom_effect_tooltip = STP_pf_borons_deal_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 2 } STP_pf_shift = yes }
 		}
 	}
 
@@ -2603,6 +2615,8 @@ focus_tree = {
 				add_to_variable = { var = STP_cw_army_planning_speed value = 0.15 }
 				STP_cw_refresh_army_modifier = yes
 			}
+			custom_effect_tooltip = STP_pf_army_deal_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 4 } STP_pf_shift = yes }
 		}
 	}
 
@@ -3122,7 +3136,7 @@ focus_tree = {
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_district_congress focus = STP_pw_party_executive_secretariat }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_services_delivered_tt check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -3282,7 +3296,7 @@ focus_tree = {
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_commercial_recovery focus = STP_pw_party_defence_combine }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_industry_delivered_tt check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -3598,7 +3612,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_party_research_council }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } custom_trigger_tooltip = { tooltip = STP_party_ministries_restored_tt check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } custom_trigger_tooltip = { tooltip = STP_party_ministries_restored_tt check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } }  }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
@@ -3621,7 +3635,7 @@ focus_tree = {
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_party_local_cadres }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_district_consent_tt OR = { check_variable = { var = STP_pf_borons_support value = 50 compare = greater_than_or_equals } AND = { has_completed_focus = STP_party_district_compact check_variable = { var = STP_pf_borons_support value = 35 compare = greater_than_or_equals } } } } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
@@ -3645,7 +3659,7 @@ focus_tree = {
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_party_chain_of_command }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_central_consent_tt OR = { check_variable = { var = STP_pf_security_support value = 50 compare = greater_than_or_equals } AND = { has_completed_focus = STP_ROTATE_DISTRICT_COMMAND check_variable = { var = STP_pf_security_support value = 35 compare = greater_than_or_equals } } } } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
@@ -3669,7 +3683,7 @@ focus_tree = {
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_party_port_contracts }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_commercial_consent_tt check_variable = { var = STP_pf_merchants_support value = 45 compare = greater_than_or_equals } } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
@@ -3692,7 +3706,7 @@ focus_tree = {
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_party_industrial_board }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_military_consent_tt check_variable = { var = STP_pf_army_support value = 45 compare = greater_than_or_equals } } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
@@ -5421,7 +5435,7 @@ focus_tree = {
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_new_republic }
-		bypass = { OR = { NOD = { exists = no } NOD = { has_capitulated = yes } NOD = { is_subject = yes } has_war_with = NOD } }
+		bypass = { OR = { is_subject_of = NOD NOD = { exists = no } NOD = { has_capitulated = yes } NOD = { is_subject = yes } has_war_with = NOD } }
 		available = { STP_pc_focus_available = yes NOD = { exists = yes has_capitulated = no is_subject = no } NOT = { has_war_with = NOD } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 3 }
@@ -5438,6 +5452,7 @@ focus_tree = {
 		prerequisite = { focus = STP_pw_party_northern_protocol }
 		mutually_exclusive = { focus = STP_pw_party_sovereignty }
 		available = { STP_pc_focus_available = yes is_subject = no has_country_flag = STP_pw_party_nod_offer_accepted NOD = { exists = yes is_subject = no has_capitulated = no } NOT = { has_war_with = NOD } }
+		bypass = { is_subject_of = NOD }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 6 }
 		completion_reward = {

@@ -1,6 +1,9 @@
 # Independent Kefreyt contract-state modifier.
 
 VAL_contract_state = {
+	recon_factor = VAL_contract_recon_factor
+	send_volunteer_size = VAL_contract_volunteer_size
+	war_stability_factor = VAL_contract_war_stability
 	enable = { original_tag = VAL }
 	army_attack_factor = VAL_contract_attack_factor
 	army_defence_factor = VAL_contract_defence_factor

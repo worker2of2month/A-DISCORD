@@ -1470,8 +1470,28 @@ country_event = {
 	desc = ADISCORD_STP_pc.26.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
+	fire_only_once = yes
 	trigger = { tag = STP }
-	option = { name = ADISCORD_STP_pc.26.a }
+	option = { name = ADISCORD_STP_pc.26.a ai_chance = { base = 70 } }
+
+	option = {
+		name = ADISCORD_STP_pc.26.b
+		trigger = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+		ai_chance = { base = 30 }
+		if = {
+			limit = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+			custom_effect_tooltip = STP_party_settlement_26_tt
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 }
+				add_to_variable = { var = STP_pf_borons_support value = 8 }
+				add_to_variable = { var = STP_pf_merchants_support value = 8 }
+				subtract_from_variable = { var = STP_pf_security_support value = 12 }
+				STP_refresh_apparatus_loyalty = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
 }
 
 country_event = {
@@ -1480,8 +1500,28 @@ country_event = {
 	desc = ADISCORD_STP_pc.27.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
+	fire_only_once = yes
 	trigger = { tag = STP }
-	option = { name = ADISCORD_STP_pc.27.a }
+	option = { name = ADISCORD_STP_pc.27.a ai_chance = { base = 70 } }
+
+	option = {
+		name = ADISCORD_STP_pc.27.b
+		trigger = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+		ai_chance = { base = 30 }
+		if = {
+			limit = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+			custom_effect_tooltip = STP_party_settlement_27_tt
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 }
+				add_to_variable = { var = STP_pf_security_support value = 8 }
+				add_to_variable = { var = STP_pf_conservatives_support value = 8 }
+				subtract_from_variable = { var = STP_pf_borons_support value = 12 }
+				STP_refresh_apparatus_loyalty = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
 }
 
 country_event = {

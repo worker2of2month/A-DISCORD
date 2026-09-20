@@ -12,7 +12,7 @@
  VAL_State_Above_Captains: "The State Above the Captains"
  VAL_State_Above_Captains_desc: "The contract system will outlive its founders only when no company can consider itself the state's equal."
  VAL_Quarterly_Contract_Norm: "Quarterly Contract Quota"
- VAL_Quarterly_Contract_Norm_desc: "Every ninety days, the arsenals must supply four thousand rifles to fulfil foreign orders. Meeting the quota sustains confidence and revenue; failure destroys creditworthiness and may drag the country into a debt trap."
+ VAL_Quarterly_Contract_Norm_desc:0 "Every ninety days the arsenals must fulfil an export order. Deliver 4000 rifles for 10 political power, or pay independent contractors 1000 treasury and retain the weapons. An arsenal delivery improves reputation and earns military experience; subcontracting only preserves reputation. Early payment does not bring the next quarter forward."
  VAL_Contract_Accounting_Office: "Industrial Budget"
  VAL_Contract_Accounting_Office_desc: "Accounting for state orders will bring arsenal accounts, tax payments and production plans together. The reform increases recurring treasury income and reduces administrative expenditure."
  VAL_Salvage_Every_Barrel: "Restoring Weapon Reserves"
@@ -73,9 +73,9 @@
  VAL_campaign_the_mine_was_stolen: "They Stole Our Mine Campaign"
  VAL_campaign_the_mine_was_stolen_desc: "Following the loss of Vorkerland's metal, direct public anger outward and prepare society to fight for a new source of metal."
  VAL_quarterly_contract_deadline: "Quarterly Quota Deadline"
- VAL_quarterly_contract_deadline_desc: "We must deliver §Y4000 rifles§! by the end of the quarter. Missing the deadline lowers contract reputation by one level and immediately starts the next ninety-day period."
+ VAL_quarterly_contract_deadline_desc:0 "[ROOT.VALGetQuarterlyStatus]\n\nBefore the deadline choose an arsenal delivery or a subcontract. Delivery costs 4000 rifles and 10 political power; at quarter end it grants +1 reputation tier, 15 army experience and 15 command power. Subcontracting costs 1000 treasury and preserves reputation without military rewards. A missed order loses one reputation tier. The next period starts after this deadline."
  VAL_pay_quarterly_contract_norm: "Meet the Quarterly Quota"
- VAL_pay_quarterly_contract_norm_desc: "Deduct §Y4000 rifles§! and fulfil the current quota. A successful delivery restores one lost reputation level, up to the maximum."
+ VAL_pay_quarterly_contract_norm_desc:0 "Deliver 4000 rifles for 10 political power. At quarter end reputation rises by one tier, up to its maximum. Gain 15 army experience and 15 command power even at maximum reputation."
  VAL_big_buyers: "Major Buyers"
  VAL_big_buyers_desc: "While Vorkerland retains a unified market, major buyers provide a steady flow of orders: §G+20§! weekly income, §G+20%§! trade income, §G+10%§! civilian industry income, §G+8%§! military industry income, §G+8%§! investment confidence and §G+5%§! production efficiency growth.\n\nThe price of this dependence is §R+5%§! social expenditure, §R+5%§! state overload growth, §R-5%§! creditworthiness and §R-3%§! stability.\n\n    §RAny upheaval among our partners will end this support.§!\n\nKefreyt gains rights to steel in [33.GetName]. Deliveries end if civil war breaks out in Vorkerland or the state is lost. Kefreyt's homeland contains only oil."
  VAL_westerholm_concession_income: "Vorkerland Concession"
@@ -221,7 +221,7 @@
  VAL_One_Ledger_One_Banner: "One Ledger, One Banner"
  VAL_One_Ledger_One_Banner_desc: "Scattered contracts must become a state register. Kefreyt will remain a market for war, but that market will speak with one voice."
  VAL_Factories_Like_Cathedrals: "Modernising the Arms Factories"
- VAL_Factories_Like_Cathedrals_desc: "Arms factories remain Kefreyt's greatest asset. A joint order for equipment and repairs will expand output at working arsenals without spending money on empty buildings. We will also prepare 500 rifles and ensure that production lines remain continuously occupied."
+ VAL_Factories_Like_Cathedrals_desc: "Arms factories remain Kefreyt's greatest asset. A joint order for equipment and repairs will expand output at working arsenals without spending money on empty buildings. We will also prepare 2000 rifles and ensure that production lines remain continuously occupied."
  VAL_Keep_The_Lines_Hot: "Continuous Production Cycle"
  VAL_Keep_The_Lines_Hot_desc: "Shift schedules, spare components and common maintenance standards must eliminate downtime. Existing capacity will run more reliably, and the first batch will replenish our weapon reserve."
  VAL_Ballistics_Schools: "Ballistics Schools"
@@ -332,9 +332,9 @@
  VAL_EXPORT_INCOME_30: "30"
  VAL_EXPORT_INCOME_40: "40"
  VAL_reclamation: "Reclaiming the Land"
- VAL_reclamation_desc: "We will begin with damaged districts in Kefreyt itself. Road works, water purification and resettlement proceed in sequence: each stage takes 90 days and costs £ADISCORD_economy_treasury_texticon §Y500§!.\n\nOne contracting service can handle only one project. Completed work remains in the state after a change of government. If a work site is lost, the unused deposit is refunded in full; work may restart after control is restored. Clean districts need no further cleanup."
+ VAL_reclamation_desc:0 "Roads, clean water and resettlement each take 45 days and cost 500 treasury. One reclamation project can run at a time. Later focuses require completed work in a controlled region.\n\nAfter full recovery and land registration, industrial sites cost 1000 treasury and take 60 days to build two civilian factories. These projects can run independently in different recovered regions. Losing ownership or control refunds the entire unfinished-project deposit."
  VAL_reclamation_survey: "Reconstruction Bureau"
- VAL_reclamation_survey_desc: "We will map damaged roads, water intakes and abandoned settlements. Contractors will receive measurable assignments and payment upon completion."
+ VAL_reclamation_survey_desc:0 "The arsenals will fund a survey of damaged regions. Inspect roads, water supplies and abandoned settlements to begin reclamation alongside industrial development."
  VAL_reclamation_road_crews: "Road Crews"
  VAL_reclamation_road_crews_desc: "We will unite road workers and repair teams in a permanent service. Experience from the first clearances will help build routes across the country."
  VAL_reclamation_clean_water: "Clean Water"
@@ -358,10 +358,10 @@
  VAL_reclamation_water: "Clean the Water and Soil in [FROM.GetName]"
  VAL_reclamation_water_desc: "Stage two, after road clearance: restore water intakes and prepare construction sites. Loss of ownership or control cancels the current work with a full deposit refund."
  VAL_reclamation_settlement: "Resettle [FROM.GetName]"
- VAL_reclamation_settlement_desc: "Stage three, after sanitation: build a civilian factory and finish restoring the district. Loss of ownership or control cancels the current work with a full deposit refund."
- VAL_reclamation_roads_result_tt: "After §Y90 days§! in [FROM.GetName]: §G+1§! infrastructure (at the cap, §G+1§! building slot). One third of the original pollution penalties is offset."
- VAL_reclamation_water_result_tt: "After §Y90 days§! in [FROM.GetName]: §G+2§! building slots. Compensation for the original pollution penalties rises to two thirds."
- VAL_reclamation_settlement_result_tt: "After §Y90 days§! in [FROM.GetName]: §G+1§! building slot and §G1 civilian factory§!. The original pollution penalties will be fully offset."
+ VAL_reclamation_settlement_desc:0 "After water treatment, complete reclamation and add a building slot. A civilian factory is built if the region has fewer than 20. Losing ownership or control cancels the work and refunds the deposit in full."
+ VAL_reclamation_roads_result_tt: "After §Y45 days§! in [FROM.GetName]: §G+1§! infrastructure (at the cap, §G+1§! building slot). One third of the original pollution penalties is offset."
+ VAL_reclamation_water_result_tt: "After §Y45 days§! in [FROM.GetName]: §G+2§! building slots. Compensation for the original pollution penalties rises to two thirds."
+ VAL_reclamation_settlement_result_tt:0 "Fully offsets pollution penalties and adds a building slot and a civilian factory if the region has fewer than 20."
  VAL_reclamation_idle_tt: "The contracting service is free: no other funded reconstruction project is active."
  VAL_reclamation_refund_tt: "The unfinished stage is cancelled; the £ADISCORD_economy_treasury_texticon §Y500§! deposit is returned to Kefreyt. Completed stages remain."
  VAL_reclamation_cost: "£ADISCORD_economy_treasury_texticon §Y500§!"
@@ -927,3 +927,43 @@
  val_rework.118.a:0 "Inform headquarters."
  VAL_nod_ultimatum_objective_tt:0 "Every participating northern tribe is defeated and the territorial objective is secured. A liberated ally must be defeated again."
  VAL_nod_ultimatum_cancel_tt:0 "The campaign ends, Kefreyt capitulates or loses independence, or Nodrul can no longer maintain this threat."
+
+ VAL_subcontract_quarterly_norm:0 "Subcontract the quarterly order"
+
+ VAL_subcontract_quarterly_norm_desc:0 "Pay independent workshops 1000 treasury to fulfil the order. Our rifles stay in reserve and reputation is preserved. This option provides neither a reputation increase nor military experience. It closes the other payment option for this quarter."
+
+ VAL_quarterly_delivery_result_tt:0 "At quarter end: §G+1§! reputation tier (up to maximum), §G15§! army experience and §G15§! command power. This quarter cannot be paid twice."
+
+ VAL_quarterly_subcontract_result_tt:0 "Subcontractors fulfil the order: reputation is preserved without military rewards. The current quarterly deadline is unchanged."
+
+ VAL_reclamation_industrial_sites:0 "Industry on recovered land"
+
+ VAL_reclamation_industrial_sites_desc:0 "Reclamation must bring jobs back. Recovered and registered land can receive funded contracts for two civilian factories. Each region receives its own contract, allowing several sites to be developed at once."
+
+ VAL_reclamation_industry:0 "Develop recovered industrial sites"
+
+ VAL_reclamation_industry_desc:0 "After all three reclamation stages, invest 1000 treasury for 60 days: two building slots and two civilian factories. Requires ownership, control and at most 18 civilian factories. Losing eligibility refunds the deposit in full. One industrial contract per region."
+
+ VAL_reclamation_industry_result_tt:0 "The target region gains §G2§! building slots and §G2§! civilian factories. Other regions may develop in parallel."
+
+ VAL_reclamation_stage_1_tt:0 "At least one owned and controlled region has completed road works."
+
+ VAL_reclamation_stage_2_tt:0 "At least one owned and controlled region has completed water treatment."
+
+ VAL_reclamation_stage_3_tt:0 "At least one owned and controlled region has completed all three reclamation stages."
+
+ VAL_cost_treasury1000:0 "£ADISCORD_economy_treasury_texticon §Y1000§!"
+
+ VAL_cost_treasury1000_blocked:0 "£ADISCORD_economy_treasury_texticon §R1000§!"
+
+ VAL_cost_treasury1000_tooltip:0 "£ADISCORD_economy_treasury_texticon §Y1000§!"
+
+ VAL_reclamation_industry_refund_tt:0 "Industrial development is cancelled: 1000 treasury is refunded to Kefreyt. Reclamation is retained."
+
+ VAL_QUARTERLY_SUBCONTRACTED:0 "§GFulfilled: subcontracted order.§! Reputation will be preserved at quarter end."
+
+ VAL_QUARTERLY_DELIVERED:0 "§GFulfilled: arsenal delivery.§! Military rewards and reputation are granted at quarter end."
+
+ VAL_QUARTERLY_PENDING:0 "§YOrder not yet fulfilled.§!"
+
+ VAL_reclamation_industry_available_tt:0 "We own and control the region, all three reclamation stages are complete, and it has at most 18 civilian factories."

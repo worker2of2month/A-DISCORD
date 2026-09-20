@@ -375,6 +375,18 @@ VAL_propaganda_campaigns = {
 }
 
 VAL_contract_obligations = {
+	VAL_subcontract_quarterly_norm = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_quarterly_contract_active NOT = { has_country_flag = VAL_quarterly_contract_paid } }
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_text = VAL_cost_treasury1000
+		custom_cost_trigger = { VAL_can_spend_1000 = yes }
+		complete_effect = { custom_effect_tooltip = VAL_quarterly_subcontract_result_tt hidden_effect = { VAL_subcontract_quarterly_norm = yes } }
+		ai_will_do = { base = 30 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment < 6000 } } } }
+	}
+
 	VAL_quarterly_contract_deadline = {
 		icon = generic_production
 		allowed = { tag = VAL }
@@ -389,11 +401,11 @@ VAL_contract_obligations = {
 		icon = generic_production
 		allowed = { tag = VAL }
 		visible = { has_country_flag = VAL_quarterly_contract_active NOT = { has_country_flag = VAL_quarterly_contract_paid } }
-		available = { VAL_can_pay_quarterly_contract_norm = yes }
+		available = { has_capitulated = no }
 		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 4000 } } }
 		custom_cost_text = VAL_cost_pp10_r4000
 		cost = 0
-		complete_effect = { add_political_power = -10 VAL_pay_quarterly_contract_norm = yes }
+		complete_effect = { custom_effect_tooltip = VAL_quarterly_delivery_result_tt VAL_pay_quarterly_contract_norm = yes }
 		ai_will_do = {
 			base = 50
 			modifier = { factor = 0 NOT = { VAL_can_pay_quarterly_contract_norm = yes } }
@@ -510,6 +522,27 @@ VAL_rework_debug = {
 }
 
 VAL_reclamation = {
+	VAL_reclamation_industry = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		state_target = yes
+		targets = { 24 42 48 54 55 56 57 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = { has_completed_focus = VAL_reclamation_industrial_sites FROM = { is_owned_by = ROOT check_variable = { var = VAL_reclamation_stage value = 3 compare = equals } } }
+		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_industry_available_tt VAL_reclamation_industry_target_valid = yes } hidden_trigger = { FROM = { NOT = { has_variable = VAL_reclamation_industry_deposit } } } }
+		cost = 0
+		custom_cost_text = VAL_cost_treasury1000
+		custom_cost_trigger = { VAL_can_spend_1000 = yes }
+		days_remove = 60
+		cancel_trigger = { NOT = { VAL_reclamation_industry_target_valid = yes } }
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		complete_effect = { hidden_effect = { VAL_reclamation_begin_industry = yes } }
+		remove_effect = { custom_effect_tooltip = VAL_reclamation_industry_result_tt hidden_effect = { VAL_reclamation_finish_industry = yes } }
+		cancel_effect = { custom_effect_tooltip = VAL_reclamation_industry_refund_tt hidden_effect = { VAL_reclamation_refund_industry = yes } }
+		ai_will_do = { base = 5 modifier = { factor = 0 has_war = yes } }
+	}
+
 
 	VAL_reclamation_roads = {
 		icon = generic_construction
@@ -532,7 +565,7 @@ VAL_reclamation = {
 		cost = 0
 		custom_cost_text = VAL_reclamation_cost
 		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
-		days_remove = 90
+		days_remove = 45
 		fire_only_once = no
 		cancel_trigger = { OR = { has_capitulated = yes FROM = { OR = { NOT = { is_owned_by = ROOT } NOT = { is_controlled_by = ROOT } } } } }
 		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }
@@ -562,7 +595,7 @@ VAL_reclamation = {
 		cost = 0
 		custom_cost_text = VAL_reclamation_cost
 		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
-		days_remove = 90
+		days_remove = 45
 		fire_only_once = no
 		cancel_trigger = { OR = { has_capitulated = yes FROM = { OR = { NOT = { is_owned_by = ROOT } NOT = { is_controlled_by = ROOT } } } } }
 		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }
@@ -583,7 +616,7 @@ VAL_reclamation = {
 		}
 		available = {
 			has_capitulated = no
-			FROM = { is_owned_by = ROOT is_controlled_by = ROOT industrial_complex < 20 }
+			FROM = { is_owned_by = ROOT is_controlled_by = ROOT }
 			hidden_trigger = { VAL_reclamation_project_target_valid = yes }
 			custom_trigger_tooltip = { tooltip = VAL_reclamation_idle_tt NOT = { has_variable = VAL_reclamation_deposit } }
 		}
@@ -592,7 +625,7 @@ VAL_reclamation = {
 		cost = 0
 		custom_cost_text = VAL_reclamation_cost
 		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
-		days_remove = 90
+		days_remove = 45
 		fire_only_once = no
 		cancel_trigger = { OR = { has_capitulated = yes FROM = { OR = { NOT = { is_owned_by = ROOT } NOT = { is_controlled_by = ROOT } } } } }
 		complete_effect = { hidden_effect = { VAL_reclamation_begin_project = yes } }

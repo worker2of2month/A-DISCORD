@@ -129,3 +129,10 @@ defined_text = {
 	text = { trigger = { has_war_with = SRP } localization_key = VAL_passes_desc_war }
 	text = { localization_key = VAL_passes_desc_prepare }
 }
+
+defined_text = {
+	name = VALGetQuarterlyStatus
+	text = { trigger = { has_country_flag = { flag = VAL_quarterly_contract_paid value > 1 } } localization_key = VAL_QUARTERLY_SUBCONTRACTED }
+	text = { trigger = { has_country_flag = VAL_quarterly_contract_paid } localization_key = VAL_QUARTERLY_DELIVERED }
+	text = { localization_key = VAL_QUARTERLY_PENDING }
+}

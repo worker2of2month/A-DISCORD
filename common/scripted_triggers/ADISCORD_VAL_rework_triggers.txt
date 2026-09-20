@@ -1,7 +1,20 @@
-VAL_can_pay_quarterly_contract_norm = {
+VAL_can_spend_1000 = {
+	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+}
+
+VAL_can_subcontract_quarterly_norm = {
 	has_country_flag = VAL_quarterly_contract_active
 	NOT = { has_country_flag = VAL_quarterly_contract_paid }
-	ADISCORD_has_4000_infantry_equipment = yes
+	has_capitulated = no
+	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+}
+
+VAL_can_pay_quarterly_contract_norm = {
+	has_capitulated = no
+	NOT = { has_political_power < 10 }
+	has_country_flag = VAL_quarterly_contract_active
+	NOT = { has_country_flag = VAL_quarterly_contract_paid }
+	NOT = { has_equipment = { infantry_equipment < 4000 } }
 }
 
 # COUNTRY with the decision's target state in FROM.
@@ -22,9 +35,19 @@ VAL_reclamation_project_target_valid = {
 			AND = {
 				check_variable = { var = VAL_reclamation_stage value = 2 compare = equals }
 				ROOT = { has_completed_focus = VAL_reclamation_return_home }
-				industrial_complex < 20
 			}
 		}
+	}
+}
+
+VAL_reclamation_industry_target_valid = {
+	has_capitulated = no
+	has_completed_focus = VAL_reclamation_industrial_sites
+	FROM = {
+		is_owned_by = ROOT
+		is_controlled_by = ROOT
+		check_variable = { var = VAL_reclamation_stage value = 3 compare = equals }
+		industrial_complex < 19
 	}
 }
 

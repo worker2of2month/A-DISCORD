@@ -3,6 +3,7 @@
     "triangles": 3264,
     "materials": 1,
     "bones": 46,
+    "rigid_skin_slots_validated": true,
     "locators": [
       "barrel",
       "left_tracks",
@@ -28,7 +29,7 @@
       }
     },
     "files": {
-      "VAL_tank.mesh": "ed6fecf3753bad181b4cee5e3ac41c3b8f3137d2e8761e739c4c79b87f9bda08",
+      "VAL_tank.mesh": "0de438a8f8b1216e619419876acc20b814a33f31b9969a82526f21328dc4979b",
       "VAL_tank_idle.anim": "87a137a88f53ddf5a2c00c7780c7ecfce7e7abbb63013425a45c43af66611a76",
       "VAL_tank_move.anim": "2c888622030a4e9c06c852ff648e5e57ba0a852128d1623cab44e8db08207659",
       "VAL_tank_attack.anim": "5c1d5ed5a69099262f07abf7aa0285d1d265684f1152f06813a3dec7789772c9",
@@ -41,6 +42,7 @@
     "triangles": 1240,
     "materials": 1,
     "bones": 1,
+    "rigid_skin_slots_validated": true,
     "locators": [
       "root",
       "gun1",
@@ -55,7 +57,7 @@
       }
     },
     "files": {
-      "VAL_fighter.mesh": "232aa1db4abcc8b4a5b2ab164b5f7389be82e32cc5d2eb28d0e3b83ed6059fbc",
+      "VAL_fighter.mesh": "aeb5492d0a23f6997e1db0ed0082996678b598c241c75bc6a907b78bc0eb1841",
       "VAL_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
       "VAL_air_diffuse.dds": "dee86ea8bea75212d1aafb1b902028eaa218fba12d9215c1c5226f132561ba5e",
       "VAL_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
@@ -66,6 +68,7 @@
     "triangles": 1484,
     "materials": 1,
     "bones": 1,
+    "rigid_skin_slots_validated": true,
     "locators": [
       "root",
       "gun1",
@@ -80,7 +83,7 @@
       }
     },
     "files": {
-      "VAL_cas.mesh": "b4f30c896d9a5b448bfb7250f0a4fa453c3226e35e70f259bf27cfd2ddda543a",
+      "VAL_cas.mesh": "1e3b252c530c89258497b49f44190a8f6828ca0528cc997aa6b30ce086bf1dea",
       "VAL_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
       "VAL_air_diffuse.dds": "dee86ea8bea75212d1aafb1b902028eaa218fba12d9215c1c5226f132561ba5e",
       "VAL_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
@@ -91,6 +94,7 @@
     "triangles": 3120,
     "materials": 1,
     "bones": 46,
+    "rigid_skin_slots_validated": true,
     "locators": [
       "barrel",
       "left_tracks",
@@ -116,7 +120,7 @@
       }
     },
     "files": {
-      "NOD_tank.mesh": "65e58bf29a32ea8e9fe1c91145ba7ff58bd9463f1dc50c20002707b8f9d9a397",
+      "NOD_tank.mesh": "8582959f75755cc9994b4588b92e7958e5de4189d20064b9e7f4d0b21cb4b02a",
       "NOD_tank_idle.anim": "87a137a88f53ddf5a2c00c7780c7ecfce7e7abbb63013425a45c43af66611a76",
       "NOD_tank_move.anim": "2c888622030a4e9c06c852ff648e5e57ba0a852128d1623cab44e8db08207659",
       "NOD_tank_attack.anim": "5c1d5ed5a69099262f07abf7aa0285d1d265684f1152f06813a3dec7789772c9",
@@ -129,6 +133,7 @@
     "triangles": 1216,
     "materials": 1,
     "bones": 1,
+    "rigid_skin_slots_validated": true,
     "locators": [
       "root",
       "gun1",
@@ -143,7 +148,7 @@
       }
     },
     "files": {
-      "NOD_fighter.mesh": "481fb4dbeedb6c4bc07ccc65cbf282babecad852f0f24c7baa2fb960b9ab5b50",
+      "NOD_fighter.mesh": "9b2081c72c77bdb769a45061e049e89f3c580862aeceb0580766be4f9350b096",
       "NOD_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
       "NOD_air_diffuse.dds": "6a2bac34b0412a5caa2868609ec0c9d94961935ab11baba80754d3766a60848c",
       "NOD_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
@@ -154,6 +159,7 @@
     "triangles": 1484,
     "materials": 1,
     "bones": 1,
+    "rigid_skin_slots_validated": true,
     "locators": [
       "root",
       "gun1",
@@ -168,7 +174,7 @@
       }
     },
     "files": {
-      "NOD_cas.mesh": "602c8cbb6b1c462aaa108b502b237a0a263264143ca0c963bf25bbe6158c0a83",
+      "NOD_cas.mesh": "18519216ff5fef5182319f8e228afc98d133cdb2e5b6af3a04fb678e7f0eee56",
       "NOD_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
       "NOD_air_diffuse.dds": "6a2bac34b0412a5caa2868609ec0c9d94961935ab11baba80754d3766a60848c",
       "NOD_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
@@ -179,6 +185,7 @@
     "triangles": 3256,
     "materials": 1,
     "bones": 46,
+    "rigid_skin_slots_validated": true,
     "locators": [
       "barrel",
       "left_tracks",
@@ -204,7 +211,7 @@
       }
     },
     "files": {
-      "STP_tank.mesh": "57254352a8df8fda6731f94a7d6939f5f7a5fb025e89bdec20460265fc1a795c",
+      "STP_tank.mesh": "c1a8388916b454c9f45219c0e649a1b2893f583b2ad57693e5a9eee54847a93c",
       "STP_tank_idle.anim": "87a137a88f53ddf5a2c00c7780c7ecfce7e7abbb63013425a45c43af66611a76",
       "STP_tank_move.anim": "2c888622030a4e9c06c852ff648e5e57ba0a852128d1623cab44e8db08207659",
       "STP_tank_attack.anim": "5c1d5ed5a69099262f07abf7aa0285d1d265684f1152f06813a3dec7789772c9",
@@ -217,6 +224,7 @@
     "triangles": 940,
     "materials": 1,
     "bones": 1,
+    "rigid_skin_slots_validated": true,
     "locators": [
       "root",
       "gun1",
@@ -231,7 +239,7 @@
       }
     },
     "files": {
-      "STP_fighter.mesh": "43807a88daa60fa1206a5e43010e5e65336bb9b02ae759ab57fe984874426f5e",
+      "STP_fighter.mesh": "a38b5a443449dff10f6a4603d0bd0e1041555d2ea0963a7915397fe666540361",
       "STP_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
       "STP_air_diffuse.dds": "453b35e4e694da686eb33bee31d83ac60af3bc65f337584c92de1dba1bb1ac81",
       "STP_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
@@ -242,6 +250,7 @@
     "triangles": 1396,
     "materials": 1,
     "bones": 1,
+    "rigid_skin_slots_validated": true,
     "locators": [
       "root",
       "gun1",
@@ -256,7 +265,7 @@
       }
     },
     "files": {
-      "STP_cas.mesh": "ee885ec07e9739302bf1f5b40f5143f534136310fd74ce0ae3043f2611c13976",
+      "STP_cas.mesh": "fc2fff516e7afbc1333f991baa65e32a1efa15ca53458b7c0031cc0ec3a2a8a0",
       "STP_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
       "STP_air_diffuse.dds": "453b35e4e694da686eb33bee31d83ac60af3bc65f337584c92de1dba1bb1ac81",
       "STP_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",

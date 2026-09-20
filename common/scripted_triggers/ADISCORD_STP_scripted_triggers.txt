@@ -1533,3 +1533,14 @@ STP_pw_can_attack_bezhaysk = {
 		controls_state = 41
 	}
 }
+
+# The same live threat governs the countdown, payment and delivery.
+STP_pw_party_nod_threat_current = {
+	tag = STP
+	has_country_flag = STP_cw_postwar
+	has_country_flag = STP_pw_party_nod_threat_active
+	is_subject = no
+	has_capitulated = no
+	NOD = { exists = yes has_capitulated = no is_subject = no }
+	NOT = { has_war_with = NOD }
+}

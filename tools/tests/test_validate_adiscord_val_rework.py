@@ -628,27 +628,27 @@ class ValStelanderContractTests(unittest.TestCase):
             self.assertLess(calls.index("VAL_refresh_contract_modifier"), calls.index("ADISCORD_economy_mark_dirty"))
 
         specialisations = {
-            "VAL_company_rosters": {"VAL_contract_org_factor": 0.02},
-            "VAL_contractor_officers": {"VAL_contract_org_factor": 0.03},
+            "VAL_company_rosters": {"VAL_contract_org_factor": 0.06},
+            "VAL_contractor_officers": {"VAL_contract_org_factor": 0.07, "VAL_contract_attack_factor": 0.05},
             "VAL_motorized_columns": {"VAL_contract_supply_factor": -0.03},
-            "VAL_field_repair_corps": {"VAL_contract_org_regain": 0.03},
+            "VAL_field_repair_corps": {"VAL_contract_org_regain": 0.03, "VAL_contract_capture_factor": 0.04},
             "VAL_ministry_auditors": {"VAL_contract_trade_income_factor": 0.05},
-            "VAL_contract_general_staff": {"VAL_contract_planning_factor": 0.05, "VAL_contract_capture_factor": 0.03},
-            "VAL_border_survey_complete": {"VAL_contract_supply_factor": -0.03},
-            "VAL_company_service_code": {"VAL_contract_org_regain": 0.03},
-            "VAL_contract_nco_schools": {"VAL_contract_org_factor": 0.03},
+            "VAL_contract_general_staff": {"VAL_contract_volunteer_size": 4, "VAL_contract_planning_factor": 0.05, "VAL_contract_capture_factor": 0.07, "VAL_contract_attack_factor": 0.05, "VAL_contract_defence_factor": 0.05},
+            "VAL_border_survey_complete": {"VAL_contract_recon_factor": 0.20, "VAL_contract_supply_factor": -0.03, "VAL_contract_defence_factor": 0.05},
+            "VAL_company_service_code": {"VAL_contract_war_stability": 0.20, "VAL_contract_org_regain": 0.03},
+            "VAL_contract_nco_schools": {"VAL_contract_org_factor": 0.07},
             "VAL_provincial_brokers_network": {"VAL_contract_trade_income_factor": 0.03, "VAL_contract_pp_gain": 0.05},
             "VAL_doctrine_covert_intervention": {"VAL_contract_planning_factor": 0.05, "VAL_contract_capture_factor": 0.03},
             "VAL_doctrine_sustained_supply": {"VAL_contract_org_regain": 0.03, "VAL_contract_supply_factor": -0.05},
             "VAL_north_open_market": {"VAL_contract_trade_income_factor": 0.07, "VAL_contract_pp_gain": 0.10},
             "VAL_export_clearing_house": {"VAL_contract_trade_income_factor": 0.05},
-            "VAL_hire_out_war": {"VAL_contract_military_income_factor": 0.05},
+            "VAL_hire_out_war": {"VAL_contract_volunteer_size": 4, "VAL_contract_military_income_factor": 0.05},
             "VAL_paid_loyalty": {"VAL_contract_army_expense_factor": -0.03},
             "VAL_closed_ledgers": {"VAL_contract_pp_gain": 0.05},
             "VAL_state_above_captains": {"VAL_contract_command_power_factor": 0.05},
             "VAL_captains_cannot_veto": {"VAL_contract_org_factor": 0.03},
             "VAL_front_stories": {"VAL_contract_stability_factor": 0.03},
-            "VAL_army_of_the_ledger": {"VAL_contract_org_factor": 0.02, "VAL_contract_planning_factor": 0.03},
+            "VAL_army_of_the_ledger": {"VAL_contract_org_factor": 0.02, "VAL_contract_planning_factor": 0.03, "VAL_contract_attack_factor": 0.05},
             "VAL_contract_throne": {"VAL_contract_pp_gain": 0.05},
             "VAL_weaponry_baron": {"VAL_contract_military_income_factor": 0.03},
             "VAL_mercenary_state": {"VAL_contract_org_regain": 0.02},
@@ -788,7 +788,7 @@ class ValStelanderContractTests(unittest.TestCase):
                             if item.key == "VAL_can_pay_quarterly_contract_norm":
                                 return ("VAL_quarterly_contract_active" in flags
                                         and "VAL_quarterly_contract_paid" not in flags
-                                        and sum(pools.values()) > 3999)
+                                        and sum(pools.values()) >= 4000)
                             raise AssertionError(f"unhandled consumer condition: {item.key}")
 
                         def execute(items):
@@ -1018,7 +1018,7 @@ class ValRewardValidatorTests(unittest.TestCase):
         dummy = named_blocks(original, "VAL_company_rosters_delta")[0]
         for changed in (dummy.replace("always = no", "always = yes"),
                         dummy.replace("name = VAL_contract_state", "name = VAL_contract_army_1"),
-                        dummy.replace("army_org_factor = 0.02", "army_org_factor = 0.12")):
+                        dummy.replace("army_org_factor = 0.06", "army_org_factor = 0.12")):
             with self.subTest(changed=changed):
                 self.assertNotEqual(changed, dummy)
                 self.assertTrue(self.preview_issues(ideas=original.replace(dummy, changed))[1])
@@ -1039,7 +1039,7 @@ class ValNativePreviewTests(unittest.TestCase):
         ideas = block(block(parse_clausewitz(IDEAS_PATH.read_text(encoding="utf-8-sig")), "ideas"), "country")
         cases = {
             "VAL_Vorons_Companies": ("VAL_vorons_delta", {"planning_speed": 0.05, "equipment_capture_factor": 0.03}),
-            "VAL_Contractor_Officers": ("VAL_contractor_officers_delta", {"army_org_factor": 0.03}),
+            "VAL_Contractor_Officers": ("VAL_contractor_officers_delta", {"army_org_factor": 0.07, "army_attack_factor": 0.05}),
             "VAL_Motorized_Columns": ("VAL_motorized_columns_delta", {"supply_consumption_factor": -0.03}),
             "VAL_Gromovs_Assault_Tables": ("VAL_gromovs_delta", {"army_attack_factor": 0.04, "equipment_capture_factor": 0.05, "army_defence_factor": -0.02}),
             "VAL_Price_Of_Loyalty": ("VAL_captain_retainers_delta", {"command_power_gain_mult": 0.10}),
@@ -1050,19 +1050,19 @@ class ValNativePreviewTests(unittest.TestCase):
             "VAL_Field_Surgeons": ("VAL_ash_manpower_delta", {"conscription_factor": 0.05, "army_org_regain": 0.02}),
             "VAL_Bread_From_Barracks": ("VAL_ash_rear_delta", {"industrial_capacity_factory": 0.05, "consumer_goods_factor": -0.03}),
             "VAL_October_Of_2160": ("VAL_north_coercive_delta", {"ADISCORD_economy_military_industry_income_factor": 0.07, "army_attack_factor": 0.02, "stability_factor": -0.02}),
-            "VAL_Field_Repair_Corps": ("VAL_field_repair_delta", {"army_org_regain": 0.03}),
+            "VAL_Field_Repair_Corps": ("VAL_field_repair_delta", {"army_org_regain": 0.03, "equipment_capture_factor": 0.04}),
             "VAL_Ministry_Auditors": ("VAL_ministry_auditors_delta", {"ADISCORD_economy_trade_income_factor": 0.05}),
-            "VAL_Contract_General_Staff": ("VAL_general_staff_delta", {"planning_speed": 0.05, "equipment_capture_factor": 0.03}),
+            "VAL_Contract_General_Staff": ("VAL_general_staff_delta", {"send_volunteer_size": 4, "planning_speed": 0.05, "equipment_capture_factor": 0.07, "army_attack_factor": 0.05, "army_defence_factor": 0.05}),
             "VAL_Stahls_Schedules": ("VAL_stahls_delta", {"army_org_regain": 0.03, "supply_consumption_factor": -0.05}),
             "VAL_Trading_Partners": ("VAL_trading_partners_delta", {"ADISCORD_economy_trade_income_factor": 0.07, "political_power_gain": 0.10}),
             "VAL_Export_Clearing_House": ("VAL_export_clearing_delta", {"ADISCORD_economy_trade_income_factor": 0.05, "ADISCORD_economy_overall_income_factor": 0.10, "ADISCORD_economy_admin_expense_factor": -0.05}),
-            "VAL_Hire_Out_War": ("VAL_hire_out_war_delta", {"ADISCORD_economy_military_industry_income_factor": 0.05}),
+            "VAL_Hire_Out_War": ("VAL_hire_out_war_delta", {"send_volunteer_size": 4, "ADISCORD_economy_military_industry_income_factor": 0.05}),
             "VAL_Paid_Loyalty": ("VAL_paid_loyalty_delta", {"ADISCORD_economy_army_expense_factor": -0.03}),
             "VAL_Closed_Ledgers": ("VAL_closed_ledgers_delta", {"political_power_gain": 0.05}),
             "VAL_State_Above_Captains": ("VAL_state_above_captains_delta", {"command_power_gain_mult": 0.05}),
             "VAL_Captains_Cannot_Veto": ("VAL_captains_cannot_veto_delta", {"army_org_factor": 0.03}),
             "VAL_Stories_From_The_Front": ("VAL_front_stories_delta", {"stability_factor": 0.03}),
-            "VAL_Army_Of_The_Ledger": ("VAL_army_of_the_ledger_delta", {"army_org_factor": 0.02, "planning_speed": 0.03}),
+            "VAL_Army_Of_The_Ledger": ("VAL_army_of_the_ledger_delta", {"army_org_factor": 0.02, "planning_speed": 0.03, "army_attack_factor": 0.05}),
             "VAL_The_Contract_State": ("VAL_contract_throne_delta", {"political_power_gain": 0.05}),
             "VAL_The_Weaponry_Baron": ("VAL_weaponry_baron_delta", {"ADISCORD_economy_military_industry_income_factor": 0.03}),
             "VAL_The_Mercenary_State": ("VAL_mercenary_state_delta", {"army_org_regain": 0.02}),
@@ -1446,7 +1446,7 @@ class ValNorthernExportTests(unittest.TestCase):
                     self.assertFalse(flags)
 
     def test_custom_prices_include_native_blocked_and_hover_suffixes(self):
-        values = dict(re.findall(r'^ ([\w.]+):\s*"(.*)"$', LOCALISATION_PATH.read_text(encoding="utf-8-sig"), re.M))
+        values = dict(re.findall(r'^ ([\w.]+):(?:\d+)?\s*"(.*)"$', LOCALISATION_PATH.read_text(encoding="utf-8-sig"), re.M))
         price_keys = set(re.findall(r"custom_cost_text\s*=\s*(\w+)", DECISIONS_PATH.read_text(encoding="utf-8-sig")))
         for key in price_keys:
             with self.subTest(price=key):
@@ -2019,7 +2019,7 @@ class ValReclamationTests(unittest.TestCase):
                 self.assertEqual(len(rows), 1)
                 script = rows[0]
                 self.assertIn("targets = { 24 42 48 54 55 56 57 }", script)
-                self.assertIn("days_remove = 90", script)
+                self.assertIn("days_remove = 45", script)
                 self.assertIn("cost = 0", script)
                 self.assertIn("ADISCORD_economy_can_spend_500 = yes", script)
                 self.assertIn("NOT = { has_variable = VAL_reclamation_deposit }", script)
@@ -2043,7 +2043,7 @@ class ValReclamationTests(unittest.TestCase):
         flags, modifiers = set(), {(24, "ADISCORD_vorkerland_dirty_state"), (57, "ADISCORD_vorkerland_dirty_state")}
         owned = {24: True, 57: True}
         control = dict(owned)
-        buildings = defaultdict(float, {(24, "infrastructure"): 2})
+        buildings = defaultdict(float, {(24, "infrastructure"): 2, (24, "industrial_complex"): 20})
         foci = {"VAL_reclamation_survey", "VAL_reclamation_clean_water", "VAL_reclamation_return_home"}
         target = 24
         def number(value, scope):
@@ -2167,23 +2167,55 @@ class ValReclamationTests(unittest.TestCase):
             self.assertAlmostEqual(values[(24, "VAL_reclamation_resources")], stage * .20)
         self.assertEqual(buildings[(24, "infrastructure")], 3)
         self.assertEqual(buildings[(24, "slots")], 3)
-        self.assertEqual(buildings[(24, "industrial_complex")], 1)
+        self.assertEqual(buildings[(24, "industrial_complex")], 20)
         call("begin_project")
         self.assertNotIn(("VAL", "VAL_reclamation_deposit"), values)
         for key, penalty in (("people", -.75), ("resources", -.60), ("slots", -.40), ("construction", -.50), ("supply", .35)):
             self.assertAlmostEqual(values[(24, "VAL_reclamation_" + key)] + penalty, 0)
         self.assertFalse(flags)
 
+        foci.add("VAL_reclamation_industrial_sites")
+        values[("VAL", "ADISCORD_economy_treasury")] = 2000
+        call("begin_industry")
+        self.assertNotIn((24, "VAL_reclamation_industry_deposit"), values)
+        buildings[(24, "industrial_complex")] = 18
+        call("begin_industry")
+        call("begin_industry")
+        self.assertEqual(values[("VAL", "ADISCORD_economy_treasury")], 1000)
+        target = 57
+        values[(57, "VAL_reclamation_stage")] = 3
+        call("begin_industry")
+        self.assertEqual(values[("VAL", "ADISCORD_economy_treasury")], 0)
+        call("finish_industry")
+        call("finish_industry")
+        call("refund_industry")
+        self.assertEqual(buildings[(57, "industrial_complex")], 2)
+        self.assertEqual(values[(57, "VAL_reclamation_stage")], 4)
+        self.assertEqual(values[("VAL", "ADISCORD_economy_treasury")], 0)
+        target = 24
+        control[24] = False
+        call("finish_industry")
+        call("refund_industry")
+        self.assertEqual(values[("VAL", "ADISCORD_economy_treasury")], 1000)
+        self.assertEqual(buildings[(24, "industrial_complex")], 18)
+        control[24] = True
+        call("begin_industry")
+        call("finish_industry")
+        call("begin_industry")
+        self.assertEqual(values[("VAL", "ADISCORD_economy_treasury")], 0)
+        self.assertEqual(buildings[(24, "industrial_complex")], 20)
+        self.assertFalse(any("deposit" in key for scope, key in values))
+
     def test_focus_layout_and_localisation_contracts(self):
         from tools.tests.test_adiscord_stp_preparation import scalar, walk
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
         focuses = [e.value for e in walk(parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8"))) if e.key == "focus" and isinstance(e.value, list)]
         added = [f for f in focuses if scalar(f, "id").startswith("VAL_reclamation_")]
-        self.assertEqual(len(added), 6)
+        self.assertEqual(len(added), 7)
         survey = next(f for f in added if scalar(f, "id") == "VAL_reclamation_survey")
-        self.assertFalse(any(e.key == "prerequisite" for e in survey), "The separate programme must not draw a line across the central tree")
+        self.assertIn("VAL_Factories_Like_Cathedrals", [n.value for e in survey if e.key == "prerequisite" for n in e.value])
         available = next(e.value for e in survey if e.key == "available")
-        self.assertEqual(scalar(available, "has_completed_focus"), "VAL_The_Harvest_Of_Ash")
+        self.assertFalse(any(e.key == "has_completed_focus" for e in available))
         states = [e for e in walk(available) if e.key in {"24", "42", "48", "54", "55", "56", "57"}]
         self.assertEqual(len(states), 7)
         for state in states:
@@ -4446,6 +4478,108 @@ class NorthernUltimatumClockTests(unittest.TestCase):
                    ("VAL","VAL_frontier_members_beaten","yes"):beaten}
             calls=[e.key for _,e in selected_effects(effect,facts,"VAL")]
             self.assertEqual(calls,[expected] if expected else [])
+
+
+
+class ValQuarterlySettlementTests(unittest.TestCase):
+    def test_source_driven_payment_deadline_and_duplicate_settlement(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        effects = {e.key: e.value for e in parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8"))}
+        triggers = {e.key: e.value for e in parse_clausewitz((ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8"))}
+        for method in ("delivery", "subcontract", "missed"):
+            for reputation in (0, 3):
+                for cash, rifles, pp in ((999.5, 3999.5, 9.5), (1000, 4000, 10), (2000, 8000, 20)):
+                    with self.subTest(method=method, reputation=reputation, cash=cash, rifles=rifles, pp=pp):
+                        values = {"ADISCORD_economy_treasury": cash, "VAL_contract_reputation_level": reputation}
+                        flags = {"VAL_quarterly_contract_active": 1}
+                        resources = {"has_political_power": pp, "infantry_equipment": rifles, "xp": 0, "cp": 0, "events": 0}
+                        def number(v):
+                            return values[v] if v in values else float(v)
+                        def condition(rows):
+                            result = []
+                            i = 0
+                            while i < len(rows):
+                                e = rows[i]
+                                k, v = e.key, e.value
+                                if not k:
+                                    self.assertEqual(rows[i + 1].value, "<")
+                                    result.append(resources[v] < float(rows[i + 2].value))
+                                    i += 3
+                                    continue
+                                if k == "NOT": ok = not condition(v)
+                                elif k == "has_capitulated": ok = v == "no"
+                                elif k == "has_equipment": ok = condition(v)
+                                elif k == "has_country_flag":
+                                    if isinstance(v, list):
+                                        self.assertEqual([x.value for x in v if not x.key][:2], ["value", ">"])
+                                        ok = flags.get(scalar(v, "flag"), 0) > float(v[-1].value)
+                                    else: ok = v in flags
+                                elif k == "check_variable":
+                                    self.assertEqual(scalar(v, "compare"), "greater_than_or_equals")
+                                    ok = values.get(scalar(v, "var"), 0) >= number(scalar(v, "value"))
+                                elif k in triggers: ok = condition(triggers[k])
+                                else: self.fail("Unmodelled quarterly condition: " + k)
+                                result.append(ok)
+                                i += 1
+                            return all(result)
+                        def execute(rows):
+                            selected = False
+                            for e in rows:
+                                k, v = e.key, e.value
+                                if k == "if":
+                                    selected = condition(block(v, "limit"))
+                                    if selected: execute([x for x in v if x.key != "limit"])
+                                elif k == "else":
+                                    if not selected: execute(v)
+                                    selected = True
+                                elif k == "hidden_effect": execute(v)
+                                elif k == "set_country_flag":
+                                    if isinstance(v, list): flags[scalar(v, "flag")] = float(scalar(v, "value"))
+                                    else: flags[v] = 1
+                                elif k == "clr_country_flag": flags.pop(v, None)
+                                elif k in ("set_temp_variable", "add_to_variable"):
+                                    key = scalar(v, "var")
+                                    values[key] = number(scalar(v, "value")) + (values.get(key, 0) if k == "add_to_variable" else 0)
+                                elif k == "clamp_variable":
+                                    key = scalar(v, "var")
+                                    values[key] = min(float(scalar(v, "max")), max(float(scalar(v, "min")), values[key]))
+                                elif k == "STP_cw_pay_rifles":
+                                    flags.pop("STP_cw_rifles_paid", None)
+                                    amount = values["STP_cw_rifle_cost"]
+                                    if resources["infantry_equipment"] >= amount:
+                                        resources["infantry_equipment"] -= amount
+                                        flags["STP_cw_rifles_paid"] = 1
+                                elif k == "ADISCORD_economy_spend_500": values["ADISCORD_economy_treasury"] -= 500
+                                elif k == "add_political_power": resources["has_political_power"] += float(v)
+                                elif k == "army_experience": resources["xp"] += float(v)
+                                elif k == "add_command_power": resources["cp"] += float(v)
+                                elif k == "country_event": resources["events"] += 1
+                                elif k == "VAL_refresh_contract_reputation": pass
+                                elif k in effects: execute(effects[k])
+                                else: self.fail("Unmodelled quarterly effect: " + k)
+                        paid = (method == "delivery" and rifles >= 4000 and pp >= 10) or (method == "subcontract" and cash >= 1000)
+                        if method != "missed":
+                            effect = "VAL_pay_quarterly_contract_norm" if method == "delivery" else "VAL_subcontract_quarterly_norm"
+                            execute(effects[effect])
+                            execute(effects[effect])
+                            if paid:
+                                alternate = "VAL_subcontract_quarterly_norm" if method == "delivery" else "VAL_pay_quarterly_contract_norm"
+                                execute(effects[alternate])
+                        self.assertEqual(resources["events"], 0, "payment must not restart the quarter")
+                        self.assertEqual(resources["xp"], 0, "reward belongs to the deadline")
+                        self.assertEqual(resources["infantry_equipment"], rifles - (4000 if paid and method == "delivery" else 0))
+                        self.assertEqual(resources["has_political_power"], pp - (10 if paid and method == "delivery" else 0))
+                        self.assertEqual(values["ADISCORD_economy_treasury"], cash - (1000 if paid and method == "subcontract" else 0))
+                        execute(effects["VAL_resolve_quarterly_contract_norm"])
+                        execute(effects["VAL_resolve_quarterly_contract_norm"])
+                        self.assertEqual(resources["events"], 1)
+                        self.assertNotIn("VAL_quarterly_contract_active", flags)
+                        self.assertNotIn("VAL_quarterly_contract_paid", flags)
+                        delta = 1 if paid and method == "delivery" else 0 if paid else -1
+                        self.assertEqual(values["VAL_contract_reputation_level"], min(3, max(0, reputation + delta)))
+                        self.assertEqual(resources["xp"], 15 if paid and method == "delivery" else 0)
+                        self.assertEqual(resources["cp"], resources["xp"])
 
 
 if __name__ == "__main__":

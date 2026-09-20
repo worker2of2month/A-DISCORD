@@ -99,10 +99,10 @@ ideas = {
 
 		# Native delta previews only. These ideas are never installed.
 		VAL_contract_delta_dummy = { name = VAL_contract_state allowed = { always = no } modifier = { } }
-		VAL_company_rosters_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.02 } }
-		VAL_border_survey_delta = { name = VAL_contract_state allowed = { always = no } modifier = { supply_consumption_factor = -0.03 } }
-		VAL_company_service_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_regain = 0.03 } }
-		VAL_nco_schools_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.03 } }
+		VAL_company_rosters_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.06 } }
+		VAL_border_survey_delta = { name = VAL_contract_state allowed = { always = no } modifier = { recon_factor = 0.20 army_defence_factor = 0.05 supply_consumption_factor = -0.03 } }
+		VAL_company_service_delta = { name = VAL_contract_state allowed = { always = no } modifier = { war_stability_factor = 0.20 army_org_regain = 0.03 } }
+		VAL_nco_schools_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.07 } }
 		VAL_brokers_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.03 political_power_gain = 0.05 } }
 
 		VAL_vorons_delta = { name = VAL_contract_state allowed = { always = no } modifier = { planning_speed = 0.05 equipment_capture_factor = 0.03 } }
@@ -114,17 +114,17 @@ ideas = {
 				ADISCORD_economy_overall_income_factor = 0.10
 				ADISCORD_economy_admin_expense_factor = -0.05
 			} }
-		VAL_contractor_officers_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.03 } }
-		VAL_field_repair_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_regain = 0.03 } }
-		VAL_general_staff_delta = { name = VAL_contract_state allowed = { always = no } modifier = { planning_speed = 0.05 equipment_capture_factor = 0.03 } }
+		VAL_contractor_officers_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_attack_factor = 0.05 army_org_factor = 0.07 } }
+		VAL_field_repair_delta = { name = VAL_contract_state allowed = { always = no } modifier = { equipment_capture_factor = 0.04 army_org_regain = 0.03 } }
+		VAL_general_staff_delta = { name = VAL_contract_state allowed = { always = no } modifier = { send_volunteer_size = 4 army_defence_factor = 0.05 army_attack_factor = 0.05 planning_speed = 0.05 equipment_capture_factor = 0.07 } }
 		VAL_ministry_auditors_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.05 } }
-		VAL_hire_out_war_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_military_industry_income_factor = 0.05 } }
+		VAL_hire_out_war_delta = { name = VAL_contract_state allowed = { always = no } modifier = { send_volunteer_size = 4 ADISCORD_economy_military_industry_income_factor = 0.05 } }
 		VAL_paid_loyalty_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_army_expense_factor = -0.03 } }
 		VAL_closed_ledgers_delta = { name = VAL_contract_state allowed = { always = no } modifier = { political_power_gain = 0.05 } }
 		VAL_state_above_captains_delta = { name = VAL_contract_state allowed = { always = no } modifier = { command_power_gain_mult = 0.05 } }
 		VAL_captains_cannot_veto_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.03 } }
 		VAL_front_stories_delta = { name = VAL_contract_state allowed = { always = no } modifier = { stability_factor = 0.03 } }
-		VAL_army_of_the_ledger_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.02 planning_speed = 0.03 } }
+		VAL_army_of_the_ledger_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_attack_factor = 0.05 army_org_factor = 0.02 planning_speed = 0.03 } }
 		VAL_contract_throne_delta = { name = VAL_contract_state allowed = { always = no } modifier = { political_power_gain = 0.05 } }
 		VAL_weaponry_baron_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_military_industry_income_factor = 0.03 } }
 		VAL_mercenary_state_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_regain = 0.02 } }
@@ -259,18 +259,12 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				send_volunteer_size = 10
-				army_defence_factor = 0.1
-				army_core_defence_factor = -0.1
-				army_attack_factor = 0.15
-				army_core_attack_factor = -0.15
-				army_org_factor = 0.15
-				recon_factor = 0.2
+				send_volunteer_size = 2
+				army_org_factor = 0.03
 				planning_speed = -0.2
-				equipment_capture_factor = 0.1
-				war_stability_factor = 0.3
+				equipment_capture_factor = 0.02
+				war_stability_factor = 0.1
 				political_power_gain = -0.2
-				consumer_goods_factor = -0.1
 			}
 		}
 

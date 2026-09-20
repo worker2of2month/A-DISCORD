@@ -234,7 +234,12 @@ class WarDebugContractTests(unittest.TestCase):
         source = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
         category = block(parse_clausewitz(source.read_text(encoding="utf-8")), "ADISCORD_scenario_debug_category")
         decisions = [e for e in category if e.key.startswith("ADISCORD_debug_war_")]
-        self.assertGreaterEqual(len(decisions), 8, "Need start, occupation, liberation, peace and diagnostic controls")
+        self.assertTrue({
+            "ADISCORD_debug_war_log_on", "ADISCORD_debug_war_log_off",
+            "ADISCORD_debug_war_snapshot", "ADISCORD_debug_war_val_start",
+            "ADISCORD_debug_war_val_check", "ADISCORD_debug_war_val_abort",
+            "ADISCORD_debug_war_reserves",
+        }.issubset({e.key for e in decisions}))
         for e in decisions:
             with self.subTest(decision=e.key):
                 visible = block(e.value, "visible")

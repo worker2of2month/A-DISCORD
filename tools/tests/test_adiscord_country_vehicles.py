@@ -27,6 +27,7 @@ class CountryVehicleTests(unittest.TestCase):
                 self.assertLess(row["triangles"], 16000)
                 self.assertEqual(row["materials"], 1)
                 self.assertGreater(row["bones"], 0)
+                self.assertTrue(row["rigid_skin_slots_validated"])
                 self.assertGreater(row["animations"]["idle"]["samples"], 1)
                 if name.endswith("_tank"):
                     self.assertGreater(row["animations"]["move"]["max_vertex_motion"], .1)
