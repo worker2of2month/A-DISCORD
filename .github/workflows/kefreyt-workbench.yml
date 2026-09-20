@@ -17,9 +17,35 @@ jobs:
       - run: python -m pip install pillow numpy pytest
       - name: Integrate only Balchansk and Commonwealth features
         run: |
+          set -o pipefail
           mkdir -p /tmp/balchansk-reports
           python -B .github/balchansk-integrate.py 2>&1 | tee /tmp/balchansk-reports/integration.txt
           test -d /tmp/balchansk-integration
+      - name: Preserve callback order and formatting-independent reservation checks
+        working-directory: /tmp/balchansk-integration
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt')
+          text = path.read_text()
+          payload = ('            if = {\n'
+                     '                limit = { FROM.FROM = { OR = { state = 44 state = 88 } } OCA = { exists = yes } }\n'
+                     '                OCA = { VAL_reconcile_balchansk_income = yes }\n'
+                     '            }\n')
+          assert text.count(payload) == 1
+          text = text.replace(payload, '', 1)
+          anchor = '\t\t\tVAL = { VAL_check_nam_concession = yes }'
+          assert text.count(anchor) == 1
+          text = text.replace(anchor, payload + anchor, 1)
+          path.write_text(text)
+          path = Path('tools/tests/test_adiscord_nod_capitulation_reservation.py')
+          text = path.read_text()
+          needle = ('            f"set_country_flag = {{ flag = {reserved} value = 1 days = 2 }}",\n'
+                    '            immediate,')
+          replacement = needle.replace('            immediate,', '            " ".join(immediate.split()),')
+          assert text.count(needle) == 1
+          path.write_text(text.replace(needle, replacement, 1))
+          PY
       - name: Verify the integrated country package
         working-directory: /tmp/balchansk-integration
         run: |
@@ -46,7 +72,7 @@ jobs:
           import hashlib, json, re, subprocess, zipfile
           report = Path('/tmp/balchansk-reports')
           paths = subprocess.check_output(['git', 'diff', '--name-only', '-z']).decode().strip('\0').split('\0')
-          assert len(paths) == 11, paths
+          assert len(paths) == 12, paths
           assert not any('scripted_peace_on_actions' in p or p.startswith('gfx/') or 'ADISCORD_STP_' in p for p in paths), paths
           for path in paths:
               data = Path(path).read_bytes()
@@ -63,7 +89,7 @@ jobs:
           with zipfile.ZipFile(report / 'sources.zip', 'w', zipfile.ZIP_DEFLATED) as out:
               for p in paths:
                   out.write(p, p)
-              for p in ('common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt', 'common/scripted_effects/ADISCORD_STP_scripted_effects.txt', 'tools/tests/test_adiscord_nod_capitulation_reservation.py', 'gfx/flags/NKA.tga', 'gfx/flags/medium/NKA.tga', 'gfx/flags/small/NKA.tga'):
+              for p in ('common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt', 'common/scripted_effects/ADISCORD_STP_scripted_effects.txt', 'gfx/flags/NKA.tga', 'gfx/flags/medium/NKA.tga', 'gfx/flags/small/NKA.tga'):
                   out.write(p, p)
           subprocess.run(['git', 'diff', '--check'], check=True)
           subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
