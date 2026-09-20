@@ -55,6 +55,9 @@ def matches_conditions(items, facts, scope="STP"):
             return matches_conditions([child for child in entry.value if child.key != "tooltip"], facts, scope)
         if entry.key in ("AND", "hidden_trigger"):
             return matches_conditions(entry.value, facts, scope)
+        if entry.key == "capital_scope":
+            capital = facts.get((scope, "capital"))
+            return capital is not None and matches_conditions(entry.value, facts, capital)
         if entry.key in ("owner", "controller"):
             country = facts.get((scope, entry.key))
             return country is not None and matches_conditions(entry.value, facts, country)

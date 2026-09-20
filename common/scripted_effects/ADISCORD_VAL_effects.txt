@@ -1766,16 +1766,6 @@ VAL_frontier_settle_victory = {
     if = {
         limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
         set_country_flag = VAL_frontier_treaty_signed
-        # Occupied party borderlands form a bounded indemnity, never its entire country.
-        if = {
-            limit = { STP = { has_country_flag = VAL_frontier_guarantor } }
-            STP = {
-                every_owned_state = {
-                    limit = { is_controlled_by = VAL any_neighbor_state = { is_core_of = VAL } }
-                    set_state_flag = VAL_frontier_border_award
-                }
-            }
-        }
         set_temp_variable = { var = VAL_frontier_settle_CIN value = 0 }
         if = {
             limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } CIN = { has_country_flag = VAL_frontier_member } }
@@ -1792,15 +1782,10 @@ VAL_frontier_settle_victory = {
             set_temp_variable = { var = VAL_frontier_settle_APH value = 1 }
         }
         VAL_frontier_close = yes
-        every_state = {
-            limit = { has_state_flag = VAL_frontier_border_award }
-            clr_state_flag = VAL_frontier_border_award
-            if = { limit = { is_owned_by = STP } VAL = { transfer_state = PREV } }
-        }
         if = {
             limit = { OR = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } check_variable = { var = VAL_frontier_settle_CIN value = 1 compare = equals } } }
             if = {
-                limit = { has_completed_focus = VAL_frontier_commissioners CIN = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 58 = { OR = { is_controlled_by = VAL is_controlled_by = CIN } } 59 = { OR = { is_controlled_by = VAL is_controlled_by = CIN } } 60 = { OR = { is_controlled_by = VAL is_controlled_by = CIN } } }
+                limit = { has_completed_focus = VAL_frontier_commissioners CIN = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 58 = { OR = { VAL_frontier_controlled = yes is_controlled_by = CIN } } 59 = { OR = { VAL_frontier_controlled = yes is_controlled_by = CIN } } 60 = { OR = { VAL_frontier_controlled = yes is_controlled_by = CIN } } }
                 set_autonomy = { target = CIN autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
                 VAL = { VAL_call_subjects_to_wars = yes }
                 CIN = {
@@ -1812,15 +1797,15 @@ VAL_frontier_settle_victory = {
                 }
             }
             else = {
-                if = { limit = { 58 = { is_owned_by = CIN OR = { is_controlled_by = VAL is_controlled_by = CIN } } } transfer_state = 58 }
-                if = { limit = { 59 = { is_owned_by = CIN OR = { is_controlled_by = VAL is_controlled_by = CIN } } } transfer_state = 59 }
-                if = { limit = { 60 = { is_owned_by = CIN OR = { is_controlled_by = VAL is_controlled_by = CIN } } } transfer_state = 60 }
+                if = { limit = { 58 = { is_owned_by = CIN OR = { VAL_frontier_controlled = yes is_controlled_by = CIN } } } transfer_state = 58 }
+                if = { limit = { 59 = { is_owned_by = CIN OR = { VAL_frontier_controlled = yes is_controlled_by = CIN } } } transfer_state = 59 }
+                if = { limit = { 60 = { is_owned_by = CIN OR = { VAL_frontier_controlled = yes is_controlled_by = CIN } } } transfer_state = 60 }
             }
         }
         if = {
             limit = { OR = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } check_variable = { var = VAL_frontier_settle_OSF value = 1 compare = equals } } }
             if = {
-                limit = { has_completed_focus = VAL_frontier_commissioners OSF = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 61 = { OR = { is_controlled_by = VAL is_controlled_by = OSF } } 62 = { OR = { is_controlled_by = VAL is_controlled_by = OSF } } 63 = { OR = { is_controlled_by = VAL is_controlled_by = OSF } } }
+                limit = { has_completed_focus = VAL_frontier_commissioners OSF = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 61 = { OR = { VAL_frontier_controlled = yes is_controlled_by = OSF } } 62 = { OR = { VAL_frontier_controlled = yes is_controlled_by = OSF } } 63 = { OR = { VAL_frontier_controlled = yes is_controlled_by = OSF } } }
                 set_autonomy = { target = OSF autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
                 VAL = { VAL_call_subjects_to_wars = yes }
                 OSF = {
@@ -1832,15 +1817,15 @@ VAL_frontier_settle_victory = {
                 }
             }
             else = {
-                if = { limit = { 61 = { is_owned_by = OSF OR = { is_controlled_by = VAL is_controlled_by = OSF } } } transfer_state = 61 }
-                if = { limit = { 62 = { is_owned_by = OSF OR = { is_controlled_by = VAL is_controlled_by = OSF } } } transfer_state = 62 }
-                if = { limit = { 63 = { is_owned_by = OSF OR = { is_controlled_by = VAL is_controlled_by = OSF } } } transfer_state = 63 }
+                if = { limit = { 61 = { is_owned_by = OSF OR = { VAL_frontier_controlled = yes is_controlled_by = OSF } } } transfer_state = 61 }
+                if = { limit = { 62 = { is_owned_by = OSF OR = { VAL_frontier_controlled = yes is_controlled_by = OSF } } } transfer_state = 62 }
+                if = { limit = { 63 = { is_owned_by = OSF OR = { VAL_frontier_controlled = yes is_controlled_by = OSF } } } transfer_state = 63 }
             }
         }
         if = {
             limit = { OR = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } check_variable = { var = VAL_frontier_settle_APH value = 1 compare = equals } } }
             if = {
-                limit = { has_completed_focus = VAL_frontier_commissioners APH = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 64 = { OR = { is_controlled_by = VAL is_controlled_by = APH } } 65 = { OR = { is_controlled_by = VAL is_controlled_by = APH } } }
+                limit = { has_completed_focus = VAL_frontier_commissioners APH = { exists = yes VAL_frontier_has_only_claimed_states = yes OR = { is_subject = no is_subject_of = VAL } } 64 = { OR = { VAL_frontier_controlled = yes is_controlled_by = APH } } 65 = { OR = { VAL_frontier_controlled = yes is_controlled_by = APH } } }
                 set_autonomy = { target = APH autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
                 VAL = { VAL_call_subjects_to_wars = yes }
                 APH = {
@@ -1852,13 +1837,13 @@ VAL_frontier_settle_victory = {
                 }
             }
             else = {
-                if = { limit = { 64 = { is_owned_by = APH OR = { is_controlled_by = VAL is_controlled_by = APH } } } transfer_state = 64 }
-                if = { limit = { 65 = { is_owned_by = APH OR = { is_controlled_by = VAL is_controlled_by = APH } } } transfer_state = 65 }
+                if = { limit = { 64 = { is_owned_by = APH OR = { VAL_frontier_controlled = yes is_controlled_by = APH } } } transfer_state = 64 }
+                if = { limit = { 65 = { is_owned_by = APH OR = { VAL_frontier_controlled = yes is_controlled_by = APH } } } transfer_state = 65 }
             }
         }
         if = {
             limit = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } }
-                if = { limit = { 168 = { is_owned_by = ERT OR = { is_controlled_by = VAL is_controlled_by = ERT } } } transfer_state = 168 }
+                if = { limit = { 168 = { is_owned_by = ERT OR = { VAL_frontier_controlled = yes is_controlled_by = ERT } } } transfer_state = 168 }
         }
         VAL_form_northern_administration = yes
         add_stability = 0.05
@@ -1983,7 +1968,7 @@ VAL_frontier_start_war = {
     else = { VAL_frontier_close = yes }
 }
 
-VAL_frontier_weekly = {
+VAL_frontier_reconcile_active_members = {
     # Repair missing entries before checking victory, using only the active campaign target.
     if = {
         limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
@@ -1991,10 +1976,14 @@ VAL_frontier_weekly = {
         if = { limit = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } has_war_with = OSF } OSF = { VAL_frontier_reconcile_members = yes } }
         if = { limit = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } has_war_with = APH } APH = { VAL_frontier_reconcile_members = yes } }
     }
-    CIN = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { is_controlled_by = VAL } } } clr_country_flag = VAL_frontier_defeated } }
-    OSF = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { is_controlled_by = VAL } } } clr_country_flag = VAL_frontier_defeated } }
-    APH = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { is_controlled_by = VAL } } } clr_country_flag = VAL_frontier_defeated } }
-    ERT = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { is_controlled_by = VAL } } } clr_country_flag = VAL_frontier_defeated } }
+}
+
+VAL_frontier_weekly = {
+    VAL_frontier_reconcile_active_members = yes
+    CIN = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { VAL_frontier_controlled = yes } } } clr_country_flag = VAL_frontier_defeated } }
+    OSF = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { VAL_frontier_controlled = yes } } } clr_country_flag = VAL_frontier_defeated } }
+    APH = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { VAL_frontier_controlled = yes } } } clr_country_flag = VAL_frontier_defeated } }
+    ERT = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { VAL_frontier_controlled = yes } } } clr_country_flag = VAL_frontier_defeated } }
 
     if = {
         limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
@@ -2003,8 +1992,17 @@ VAL_frontier_weekly = {
             VAL_frontier_close = yes
         }
         else_if = {
-            limit = { VAL_frontier_target_occupied = yes VAL_frontier_members_beaten = yes VAL_frontier_guarantors_beaten = yes }
+            limit = { VAL_frontier_target_occupied = yes VAL_frontier_members_beaten = yes }
             VAL_frontier_settle_victory = yes
+        }
+        else_if = {
+            limit = {
+                check_variable = { var = VAL_frontier_target value = 4 compare = equals }
+                ERT = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } }
+                168 = { NOT = { OR = { VAL_frontier_controlled = yes is_controlled_by = ERT } } }
+            }
+            # The separate occupier retains its result; no treaty reward was delivered.
+            VAL_frontier_close = yes
         }
         else_if = {
             limit = { surrender_progress > 0.65 NOD = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL has_capitulated = no } NOT = { has_country_flag = VAL_frontier_armistice_offered } }
@@ -2046,7 +2044,6 @@ VAL_frontier_enrol_member = {
             ADISCORD_release_non_participating_minor_optimization = yes
         }
     }
-    else = { clr_country_flag = VAL_frontier_member }
 }
 
 # Target country scope. Reconcile the three tribes without replacing campaign receipts.
@@ -2055,14 +2052,13 @@ VAL_frontier_reconcile_members = {
         limit = {
             has_war_with = VAL
             is_in_faction = yes
-            OR = {
-                CIN = { VAL_frontier_member_eligible = yes }
-                OSF = { VAL_frontier_member_eligible = yes }
-                APH = { VAL_frontier_member_eligible = yes }
-            }
         }
         faction_leader = { save_global_event_target_as = VAL_frontier_coalition_anchor }
         CIN = {
+            if = {
+                limit = { has_war_with = VAL is_in_faction_with = event_target:VAL_frontier_coalition_anchor }
+                set_country_flag = VAL_frontier_member
+            }
             if = {
                 limit = { VAL_frontier_member_eligible = yes }
                 VAL_frontier_enrol_member = yes
@@ -2070,11 +2066,19 @@ VAL_frontier_reconcile_members = {
         }
         OSF = {
             if = {
+                limit = { has_war_with = VAL is_in_faction_with = event_target:VAL_frontier_coalition_anchor }
+                set_country_flag = VAL_frontier_member
+            }
+            if = {
                 limit = { VAL_frontier_member_eligible = yes }
                 VAL_frontier_enrol_member = yes
             }
         }
         APH = {
+            if = {
+                limit = { has_war_with = VAL is_in_faction_with = event_target:VAL_frontier_coalition_anchor }
+                set_country_flag = VAL_frontier_member
+            }
             if = {
                 limit = { VAL_frontier_member_eligible = yes }
                 VAL_frontier_enrol_member = yes

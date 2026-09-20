@@ -145,6 +145,19 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
         self.assertIn("news_event = { id = ADISCORD_superevent_news.2 }", effects)
         self.assertNotIn("transfer_state", effects)
 
+    def test_direct_proclamation_revalidates_requirements_and_is_idempotent(self):
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, selected_effects
+        source = parse_clausewitz(read(IMPERIAL_EFFECTS))
+        effect = block(source, "STP_proclaim_imperial_union")
+        for eligible in (False, True):
+            facts = {("STS", "STP_imperial_union_requirements_met", "yes"): eligible}
+            applied = list(selected_effects(effect, facts, "STS"))
+            self.assertEqual(any(e.key == "news_event" for _, e in applied), eligible)
+            self.assertEqual(any(e.key == "set_cosmetic_tag" for _, e in applied), eligible)
+        requirements = block(parse_clausewitz(read(IMPERIAL_TRIGGERS)), "STP_imperial_union_requirements_met")
+        self.assertTrue(any(e.key == "NOT" and any(c.key == "has_country_flag" and c.value == "STP_imperial_union_proclaimed" for c in e.value)
+                            for e in requirements))
+
 
 if __name__ == "__main__":
     unittest.main()

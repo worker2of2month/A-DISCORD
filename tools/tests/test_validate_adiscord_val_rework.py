@@ -2320,7 +2320,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, walk
         actions = block(parse_clausewitz(read_country_on_actions(ON_ACTIONS_PATH, 'kefreyt')), "on_actions")
         immediate = block(block(actions, "on_capitulation_immediate"), "effect")
-        handler = next(e.value for e in immediate if e.key == "if" and any(x.key == "set_country_flag" and x.value == "VAL_frontier_capitulation_pending" for x in e.value))
+        handler = next(e.value for e in immediate if e.key == "if" and any(x.key == "set_country_flag" and isinstance(x.value, list) and any(f.key == "flag" and f.value == "VAL_frontier_capitulation_pending" for f in x.value) for x in e.value))
         for target in (1, 2, 3):
             for tag in ("CIN", "OSF", "APH"):
                 facts = {
@@ -2536,6 +2536,9 @@ class ValFrontierCampaignTests(unittest.TestCase):
                     self.assertIn(frozenset(("VAL", tag)), wars)
                     self.assertIn("VAL_frontier_member", flags[tag])
                     self.assertIn(tag, majors)
+                flags["OSF"].discard("VAL_frontier_member")
+                execute(definitions["VAL_frontier_reconcile_members"], ["VAL", "CIN"])
+                self.assertIn("VAL_frontier_member", flags["OSF"])
                 snapshot = (repr(factions), repr(flags), set(wars), set(majors))
                 execute(definitions["VAL_frontier_reconcile_members"], ["VAL", "CIN"])
                 self.assertEqual(snapshot, (repr(factions), repr(flags), set(wars), set(majors)))
@@ -2607,29 +2610,204 @@ class ValFrontierCampaignTests(unittest.TestCase):
         self.assertLess(last_peace, first_major_cleanup)
         self.assertLess(last_peace, coalition_cleanup)
 
-    def test_each_guarantor_configuration_requires_the_named_military_result(self):
-        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, parse_clausewitz
+    def test_last_tribe_ends_campaign_without_invading_guarantors(self):
+        from itertools import permutations, product
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, walk
+        effects = parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8"))
+        weekly = block(effects, "VAL_frontier_weekly")
+        gate = next(block(e.value, "limit") for e in walk(weekly)
+                    if e.key == "else_if" and any(x.key == "VAL_frontier_settle_victory" for x in e.value))
+        for target, order, guarantors, occupier in product(range(1, 4), permutations(("CIN", "OSF", "APH")),
+                                                         product((False, True), repeat=2), ("VAL", "SUB")):
+            facts = {("VAL", "variable", "VAL_frontier_target"): target,
+                     ("SUB", "is_subject_of", "VAL"): True}
+            for tag, active in zip(("NOD", "STP"), guarantors):
+                facts[tag, "has_country_flag", "VAL_frontier_guarantor"] = active
+                facts[tag, "numeric", "surrender_progress"] = 0
+            for tag, capital in zip(("CIN", "OSF", "APH"), ("58", "61", "64")):
+                facts[tag, "has_country_flag", "VAL_frontier_member"] = True
+                facts[tag, "capital"] = capital
+            for index, tag in enumerate(order):
+                capital = facts[tag, "capital"]
+                facts[tag, "has_country_flag", "VAL_frontier_defeated"] = True
+                facts[capital, "is_controlled_by", occupier] = True
+                facts[capital, "controller"] = occupier
+                self.assertEqual(self.frontier_matches(gate, facts), index == 2)
+            for tag in order:
+                capital = facts[tag, "capital"]
+                liberated = {**facts, (capital, "is_controlled_by", occupier): False,
+                             (capital, "controller"): tag}
+                self.assertFalse(self.frontier_matches(gate, liberated))
+        victory = list(walk(block(effects, "VAL_frontier_settle_victory")))
+        self.assertFalse(any(e.key == "every_state" for e in victory), "Guarantors pay no territorial indemnity")
+
+    def test_eastern_claim_requires_live_campaign_and_our_control(self):
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz
         source = parse_clausewitz((ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8"))
-        gate = block(source, "VAL_frontier_guarantors_beaten")
-        for nod, party, nod_loss, party_loss, expected in (
-            (False, False, 0, 0, True),
-            (True, False, 0, 0, False),
-            (True, False, .26, 0, True),
-            (False, True, 0, 0, False),
-            (False, True, 0, .26, True),
-            (True, True, .26, 0, False),
-            (True, True, 0, .26, True),
-        ):
-            with self.subTest(nod=nod, party=party, nod_loss=nod_loss, party_loss=party_loss):
-                facts = {
-                    ("NOD", "has_country_flag", "VAL_frontier_guarantor"): nod,
-                    ("STP", "has_country_flag", "VAL_frontier_guarantor"): party,
-                    ("NOD", "numeric", "surrender_progress"): nod_loss,
-                    ("STP", "numeric", "surrender_progress"): party_loss,
-                }
-                self.assertEqual(matches_conditions(gate, facts, "VAL"), expected)
+        gate = block(source, "VAL_frontier_eastern_claim_ready")
+        facts = {("VAL", "exists", "yes"): True, ("VAL", "has_capitulated", "no"): True,
+                 ("VAL", "is_subject", "no"): True, ("VAL", "has_war_with", "ERT"): True,
+                 ("VAL", "variable", "VAL_frontier_stage"): 3,
+                 ("VAL", "variable", "VAL_frontier_target"): 4,
+                 ("168", "is_owned_by", "ERT"): True, ("SUB", "is_subject_of", "VAL"): True}
+        for controller, expected in (("VAL", True), ("SUB", True), ("RUS", False), ("ERT", False)):
+            occupied = {**facts, ("168", "is_controlled_by", controller): True, ("168", "controller"): controller}
+            self.assertEqual(self.frontier_matches(gate, occupied), expected)
+            for key, value in ((("VAL", "variable", "VAL_frontier_stage"), 0),
+                               (("VAL", "has_war_with", "ERT"), False),
+                               (("168", "is_owned_by", "ERT"), False),
+                               (("VAL", "has_capitulated", "no"), False)):
+                self.assertFalse(self.frontier_matches(gate, {**occupied, key: value}))
 
+    def settlement_fixture(self, commissioners=False, eastern=False):
+        """Execute the authored territorial settlement; native callback timing needs game QA.
 
+        Coalition enrolment is independently exercised above. This fixture starts
+        with its receipts and models bilateral white peace, state transfer and annex.
+        UI, economy and character effects are explicitly outside the state model.
+        """
+        from types import SimpleNamespace
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, parse_clausewitz
+        fixture = SimpleNamespace()
+        fixture.owners = {str(n): t for t, states in (("VAL", (24,)), ("NOD", (70,)),
+                          ("CIN", (58, 59, 60)), ("OSF", (61, 62, 63)), ("APH", (64, 65)),
+                          ("ERT", (167, 168, 169)), ("RUS", (170,))) for n in states}
+        fixture.controllers = dict(fixture.owners)
+        fixture.flags = {t: set() for t in ("VAL", "CIN", "OSF", "APH", "ERT", "RUS", "NOD", "STP", "NKA", "SUB")}
+        fixture.subjects = {"SUB": "VAL"}
+        fixture.vars = {("VAL", "VAL_frontier_stage"): 3, ("VAL", "VAL_frontier_target"): 4 if eastern else 1}
+        fixture.capitals = {"CIN": "58", "OSF": "61", "APH": "64", "VAL": "24", "ERT": "167", "NOD": "70"}
+        fixture.wars = {frozenset(("VAL", t)) for t in (("ERT",) if eastern else ("CIN", "OSF", "APH", "NOD"))}
+        fixture.majors = set()
+        fixture.events = []
+        fixture.stability = 0
+        for tag in (() if eastern else ("CIN", "OSF", "APH")):
+            fixture.flags[tag].update(("VAL_frontier_member", "VAL_frontier_added_major"))
+            fixture.majors.add(tag)
+        if not eastern:
+            fixture.flags["NOD"].update(("VAL_frontier_guarantor", "VAL_frontier_added_major"))
+            fixture.majors.add("NOD")
+        effects = {e.key: e.value for e in parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8"))}
+        rus = parse_clausewitz((ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8"))
+        effects["ADISCORD_vorkerland_rus_annex_dirty_target"] = block(rus, "ADISCORD_vorkerland_rus_annex_dirty_target")
+        def facts():
+            result = {}
+            for tag in fixture.flags:
+                exists = tag in fixture.owners.values()
+                result[tag, "exists", "yes"] = exists
+                result[tag, "exists", "no"] = not exists
+                result[tag, "has_capitulated", "no"] = True
+                result[tag, "is_subject", "no"] = tag not in fixture.subjects
+                result[tag, "has_war", "yes"] = any(tag in w for w in fixture.wars)
+                result[tag, "has_war", "no"] = not result[tag, "has_war", "yes"]
+                result[tag, "variable", "num_owned_states"] = sum(t == tag for t in fixture.owners.values())
+                result[tag, "owned_states"] = tuple(n for n, t in fixture.owners.items() if t == tag)
+                for target in fixture.flags:
+                    result[tag, "country_exists", target] = target in fixture.owners.values()
+                    result[tag, "has_war_with", target] = frozenset((tag, target)) in fixture.wars
+                for flag in fixture.flags[tag]: result[tag, "has_country_flag", flag] = True
+            for tag, capital in fixture.capitals.items(): result[tag, "capital"] = capital
+            for tag, overlord in fixture.subjects.items(): result[tag, "is_subject_of", overlord] = True
+            for (tag, name), value in fixture.vars.items(): result[tag, "variable", name] = value
+            for state, owner in fixture.owners.items():
+                result[state, "is_owned_by", owner] = True
+                result[state, "owner"] = owner
+                result[state, "controller"] = fixture.controllers[state]
+                result[state, "is_controlled_by", fixture.controllers[state]] = True
+            result["VAL", "has_completed_focus", "VAL_frontier_commissioners"] = commissioners
+            return result
+        def transfer(state, recipient):
+            fixture.owners[state] = recipient
+            fixture.controllers[state] = recipient
+        ignored = {"remove_mission", "remove_ideas", "ADISCORD_economy_mark_dirty", "ADISCORD_economy_initialize_country",
+                   "set_cosmetic_tag", "set_politics", "promote_character", "set_rule", "inherit_technology",
+                   "add_core_of", "remove_core_of", "VAL_frontier_reconcile_active_members", "VAL_frontier_release_coalition"}
+        def execute(rows, scope="VAL"):
+            taken = False
+            for entry in rows:
+                key, value = entry.key, entry.value
+                if key in ("if", "else_if", "else"):
+                    if key == "if": taken = False
+                    if not taken and (key == "else" or self.frontier_matches(block(value, "limit"), facts(), scope)):
+                        taken = True
+                        execute([e for e in value if e.key != "limit"], scope)
+                elif key in fixture.flags or key.isdigit(): execute(value, key)
+                elif key in ("hidden_effect",): execute(value, scope)
+                elif key in ignored: pass
+                elif key in effects: execute(effects[key], scope)
+                elif key in ("set_temp_variable", "set_variable"):
+                    fixture.vars[scope, scalar(value, "var")] = float(scalar(value, "value"))
+                elif key in ("set_country_flag", "clr_country_flag"):
+                    flag = scalar(value, "flag") if isinstance(value, list) else value
+                    if key == "set_country_flag": fixture.flags[scope].add(flag)
+                    else: fixture.flags[scope].discard(flag)
+                elif key in ("set_global_flag", "clr_global_flag"): pass
+                elif key == "set_major":
+                    if value == "yes": fixture.majors.add(scope)
+                    else: fixture.majors.discard(scope)
+                elif key == "white_peace":
+                    fixture.wars.discard(frozenset((scope, value)))
+                    for n, owner in fixture.owners.items():
+                        if {owner, fixture.controllers[n]} == {scope, value}: fixture.controllers[n] = owner
+                elif key == "transfer_state": transfer(value, scope)
+                elif key == "set_state_controller_to": fixture.controllers[scope] = value
+                elif key == "set_autonomy": fixture.subjects[scalar(value, "target")] = scope
+                elif key == "annex_country":
+                    target = scalar(value, "target")
+                    for n in list(fixture.owners):
+                        if fixture.owners[n] == target: transfer(n, scope)
+                    fixture.wars = {w for w in fixture.wars if target not in w}
+                elif key == "set_capital": fixture.capitals[scope] = scalar(value, "state")
+                elif key == "country_event": fixture.events.append(scalar(value, "id"))
+                elif key == "add_stability": fixture.stability += float(value)
+                else: self.fail("Unsupported settlement effect: " + key)
+        fixture.run = lambda name: execute(effects[name], "RUS" if name.startswith("ADISCORD_vorkerland_rus") else "VAL")
+        fixture.execute = execute
+        return fixture
+
+    def test_final_capitulation_delivers_all_tribes_after_receipts_are_cleared(self):
+        from itertools import permutations, product
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz
+        actions = block(parse_clausewitz(read_country_on_actions(ON_ACTIONS_PATH, "kefreyt")), "on_actions")
+        immediate = block(block(actions, "on_capitulation_immediate"), "effect")
+        handler = next(e for e in immediate if e.key == "if" and any(x.key == "set_country_flag" and isinstance(x.value, list)
+                       and any(f.key == "flag" and f.value == "VAL_frontier_capitulation_pending" for f in x.value) for x in e.value))
+        for commissioners, order in product((False, True), permutations(("CIN", "OSF", "APH"))):
+            model = self.settlement_fixture(commissioners)
+            for index, tag in enumerate(order):
+                model.controllers[model.capitals[tag]] = "VAL"
+                model.execute([handler], tag)
+                self.assertEqual(model.vars["VAL", "VAL_frontier_stage"], 0 if index == 2 else 3)
+                if index < 2: self.assertNotIn("NKA", model.owners.values())
+            for state in (58, 62, 63, 64, 65):
+                self.assertEqual(model.owners[str(state)], "NKA")
+                self.assertEqual(model.controllers[str(state)], "NKA")
+            for state in (59, 60, 61): self.assertEqual(model.owners[str(state)], "VAL")
+            self.assertEqual(model.subjects["NKA"], "VAL")
+            self.assertEqual(model.owners["70"], "NOD")
+            self.assertFalse(model.wars)
+            self.assertFalse(model.majors)
+            for tag in ("CIN", "OSF", "APH"):
+                self.assertNotIn("VAL_frontier_member", model.flags[tag])
+            snapshot = (dict(model.owners), dict(model.controllers), list(model.events), model.stability)
+            model.run("VAL_frontier_settle_victory")
+            self.assertEqual(snapshot, (model.owners, model.controllers, model.events, model.stability))
+
+    def test_eastern_award_precedes_rus_annex_without_taking_its_remaining_country(self):
+        for occupier, expected in (("VAL", "VAL"), ("SUB", "VAL"), ("RUS", "RUS")):
+            model = self.settlement_fixture(eastern=True)
+            model.controllers["168"] = occupier
+            model.controllers["167"] = "RUS"
+            model.vars["RUS", "ADISCORD_vorkerland_rus_campaign_target"] = 4
+            model.wars.add(frozenset(("RUS", "ERT")))
+            model.run("ADISCORD_vorkerland_rus_annex_dirty_target")
+            self.assertEqual(model.owners["168"], expected)
+            self.assertEqual(model.controllers["168"], expected)
+            for state in (167, 169): self.assertEqual(model.owners[str(state)], "RUS")
+            self.assertNotIn("ERT", model.owners.values())
+            before = (dict(model.owners), list(model.events))
+            model.run("ADISCORD_vorkerland_rus_annex_dirty_target")
+            self.assertEqual(before, (model.owners, model.events))
 
     def frontier_matches(self, rows, facts, scope="VAL"):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions, parse_clausewitz
@@ -2659,8 +2837,8 @@ class ValFrontierCampaignTests(unittest.TestCase):
                     ok = target is not None and check(v, target)
                 elif k == "capital_scope":
                     ok = (current, "capital") in facts and check(v, facts[(current, "capital")])
-                elif k == "controller":
-                    ok = (current, "controller") in facts and check(v, facts[(current, "controller")])
+                elif k in ("controller", "owner"):
+                    ok = (current, k) in facts and check(v, facts[(current, k)])
                 elif isinstance(v, list) and re.fullmatch(r"[A-Z]{3}|[0-9]+|ROOT", k):
                     ok = check(v, scope if k == "ROOT" else k)
                 elif k in triggers:
@@ -2710,6 +2888,11 @@ class ValFrontierCampaignTests(unittest.TestCase):
                      (tag, "has_country_flag", "VAL_frontier_defeated"): True,
                      (tag, "capital"): capital,
                      (capital, "is_controlled_by", "VAL"): True}
+            if tag == "ERT":
+                facts["168", "is_owned_by", "ERT"] = True
+                facts["168", "is_controlled_by", "ERT"] = True
+                foreign = {**facts, ("168", "is_controlled_by", "ERT"): False, ("168", "controller"): "RUS"}
+                self.assertFalse(self.frontier_matches(gate, foreign), "A foreign-held eastern claim cannot give a false victory")
             self.assertTrue(self.frontier_matches(gate, facts), "A recorded defeat settles before automatic state-controller changes")
             self.assertFalse(self.frontier_matches(gate, {**facts, (capital, "is_controlled_by", "VAL"): False}), "A liberated capital invalidates the old defeat")
             self.assertFalse(self.frontier_matches(gate, {**facts, (tag, "has_country_flag", "VAL_frontier_defeated"): False}), "Capital occupation without a capitulation is insufficient")
@@ -2722,7 +2905,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk, parse_clausewitz
         actions = block(parse_clausewitz(read_country_on_actions(ON_ACTIONS_PATH, 'kefreyt')), "on_actions")
         immediate = block(block(actions, "on_capitulation_immediate"), "effect")
-        handler = next(e.value for e in immediate if e.key == "if" and any(x.key == "set_country_flag" and x.value == "VAL_frontier_capitulation_pending" for x in e.value))
+        handler = next(e.value for e in immediate if e.key == "if" and any(x.key == "set_country_flag" and isinstance(x.value, list) and any(f.key == "flag" and f.value == "VAL_frontier_capitulation_pending" for f in x.value) for x in e.value))
         gate = block(handler, "limit")
         facts = {("VAL", "variable", "VAL_frontier_stage"): 3,
                  ("VAL", "variable", "VAL_frontier_target"): 1,

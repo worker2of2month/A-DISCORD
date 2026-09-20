@@ -1653,37 +1653,37 @@ ADISCORD_vorkerland_rus_current_target_capitulated = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
 			country_exists = SLA
 			has_war_with = SLA
-			SLA = { has_capitulated = yes }
+			SLA = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SLA } } } }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
 			country_exists = RZA
 			has_war_with = RZA
-			RZA = { has_capitulated = yes }
+			RZA = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = RZA } } } }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
 			country_exists = MLR
 			has_war_with = MLR
-			MLR = { has_capitulated = yes }
+			MLR = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = MLR } } } }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
 			country_exists = ERT
 			has_war_with = ERT
-			ERT = { has_capitulated = yes }
+			ERT = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ERT } } } }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
 			country_exists = IRT
 			has_war_with = IRT
-			IRT = { has_capitulated = yes }
+			IRT = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = IRT } } } }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
 			country_exists = SCA
 			has_war_with = SCA
-			SCA = { has_capitulated = yes }
+			SCA = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SCA } } } }
 		}
 	}
 }

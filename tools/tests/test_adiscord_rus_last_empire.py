@@ -185,10 +185,11 @@ class RusLastEmpireTests(unittest.TestCase):
         self.assertNotIn("ADISCORD_vorkerland_rus_can_proclaim_last_empire = {", read(FOCUS_FILE))
 
     def test_runtime_hooks_and_fronts_exist(self) -> None:
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
         on_actions = read_country_on_actions(ON_ACTIONS, 'vorkerland_collapse')
         self.assertIn("on_monthly_RUS", on_actions)
         self.assertIn("ADISCORD_vorkerland_check_rus_dirty_campaign = yes", on_actions)
-        capitulation = on_actions[on_actions.index("on_capitulation = {"):on_actions.index("on_puppet = {")]
+        capitulation = named_block(on_actions, "on_capitulation")
         self.assertIn("set_global_flag = skip_default_capitulation", capitulation)
         self.assertIn("ADISCORD_vorkerland_check_khan_border_war = yes", capitulation)
         ai = read(AI_FILE)
@@ -372,6 +373,8 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
             ("RUS", "has_war_with", "SLA"): True,
             ("RUS", "country_exists", "SLA"): True,
             ("SLA", "has_capitulated", "yes"): True,
+            ("SLA", "capital"): "170",
+            ("170", "is_controlled_by", "RUS"): True,
         })
         ready = self.expand(self.block(self.triggers, "ADISCORD_vorkerland_rus_current_target_ready"))
         self.assertTrue(self.matches(ready, capitulated, "RUS"))
@@ -382,6 +385,23 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
         annex = self._run("ADISCORD_vorkerland_rus_annex_dirty_target", capitulated)
         self.assertTrue(any(e.key == "annex_country" for _, e in annex))
         self.assertTrue(any(e.key == "every_owned_state" for _, e in annex))
+
+    def test_foreign_capitulation_cannot_award_rus_another_countrys_victory(self):
+        for target, tag in enumerate(("SLA", "RZA", "MLR", "ERT", "IRT", "SCA"), 1):
+            facts = self._active(target, {
+                ("RUS", "has_war_with", tag): True,
+                ("RUS", "country_exists", tag): True,
+                (tag, "has_capitulated", "yes"): True,
+                (tag, "capital"): "999", ("999", "is_controlled_by", "VAL"): True,
+            })
+            ready = self.expand(self.block(self.triggers, "ADISCORD_vorkerland_rus_current_target_ready"))
+            self.assertFalse(self.matches(ready, facts, "RUS"), tag)
+            settle = self._run("ADISCORD_vorkerland_rus_settle_dirty_target", facts)
+            self.assertNotIn("ADISCORD_vorkerland_rus_annex_dirty_target", self._calls(settle), tag)
+            won = {**facts, ("999", "is_controlled_by", "RUS"): True}
+            self.assertTrue(self.matches(ready, won, "RUS"), tag)
+            self.assertIn("ADISCORD_vorkerland_rus_annex_dirty_target",
+                          self._calls(self._run("ADISCORD_vorkerland_rus_settle_dirty_target", won)), tag)
 
     def test_border_war_absorbs_a_fully_occupied_republic(self) -> None:
         occupied = {

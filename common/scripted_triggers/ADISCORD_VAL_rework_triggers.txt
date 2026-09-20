@@ -57,17 +57,25 @@ VAL_frontier_target_owned = {
         AND = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } ERT = { exists = yes } 168 = { is_owned_by = ERT } } }
 }
 VAL_frontier_target_occupied = {
-    OR = { AND = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } OR = { AND = { 58 = { is_controlled_by = VAL OR = { is_owned_by = CIN is_owned_by = VAL } } 59 = { is_controlled_by = VAL OR = { is_owned_by = CIN is_owned_by = VAL } } 60 = { is_controlled_by = VAL OR = { is_owned_by = CIN is_owned_by = VAL } } } CIN = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } } } }
-        AND = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } OR = { AND = { 61 = { is_controlled_by = VAL OR = { is_owned_by = OSF is_owned_by = VAL } } 62 = { is_controlled_by = VAL OR = { is_owned_by = OSF is_owned_by = VAL } } 63 = { is_controlled_by = VAL OR = { is_owned_by = OSF is_owned_by = VAL } } } OSF = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } } } }
-        AND = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } OR = { AND = { 64 = { is_controlled_by = VAL OR = { is_owned_by = APH is_owned_by = VAL } } 65 = { is_controlled_by = VAL OR = { is_owned_by = APH is_owned_by = VAL } } } APH = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } } } }
-        AND = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } OR = { AND = { 168 = { is_controlled_by = VAL OR = { is_owned_by = ERT is_owned_by = VAL } } } ERT = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } } } } }
+    OR = { AND = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } OR = { AND = { 58 = { VAL_frontier_controlled = yes OR = { is_owned_by = CIN is_owned_by = VAL } } 59 = { VAL_frontier_controlled = yes OR = { is_owned_by = CIN is_owned_by = VAL } } 60 = { VAL_frontier_controlled = yes OR = { is_owned_by = CIN is_owned_by = VAL } } } CIN = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } } } }
+        AND = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } OR = { AND = { 61 = { VAL_frontier_controlled = yes OR = { is_owned_by = OSF is_owned_by = VAL } } 62 = { VAL_frontier_controlled = yes OR = { is_owned_by = OSF is_owned_by = VAL } } 63 = { VAL_frontier_controlled = yes OR = { is_owned_by = OSF is_owned_by = VAL } } } OSF = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } } } }
+        AND = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } OR = { AND = { 64 = { VAL_frontier_controlled = yes OR = { is_owned_by = APH is_owned_by = VAL } } 65 = { VAL_frontier_controlled = yes OR = { is_owned_by = APH is_owned_by = VAL } } } APH = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } } } }
+        AND = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } OR = { AND = { 168 = { VAL_frontier_controlled = yes OR = { is_owned_by = ERT is_owned_by = VAL } } } AND = { ERT = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } } 168 = { is_owned_by = ERT OR = { VAL_frontier_controlled = yes is_controlled_by = ERT } } } } } }
 }
-VAL_frontier_guarantors_beaten = {
-    OR = {
-        NOT = { OR = { NOD = { has_country_flag = VAL_frontier_guarantor } STP = { has_country_flag = VAL_frontier_guarantor } } }
-        STP = { has_country_flag = VAL_frontier_guarantor surrender_progress > 0.25 }
-        AND = { NOT = { STP = { has_country_flag = VAL_frontier_guarantor } } NOD = { has_country_flag = VAL_frontier_guarantor surrender_progress > 0.25 } }
-    }
+# STATE: subject occupation belongs to VAL's settlement, foreign occupation does not.
+VAL_frontier_controlled = {
+    OR = { is_controlled_by = VAL controller = { is_subject_of = VAL } }
+}
+
+# VAL: deliver the bounded eastern claim before another victor annexes ERT.
+VAL_frontier_eastern_claim_ready = {
+    exists = yes
+    has_capitulated = no
+    is_subject = no
+    check_variable = { var = VAL_frontier_stage value = 3 compare = equals }
+    check_variable = { var = VAL_frontier_target value = 4 compare = equals }
+    has_war_with = ERT
+    168 = { is_owned_by = ERT VAL_frontier_controlled = yes }
 }
 
 # Country scope: a commissariat cannot acquire third-party conquests.
@@ -215,20 +223,20 @@ VAL_frontier_members_beaten = {
     OR = {
         CIN = { NOT = { has_country_flag = VAL_frontier_member } }
         CIN = { exists = no }
-        CIN = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } }
-        AND = { 58 = { is_controlled_by = VAL OR = { is_owned_by = CIN is_owned_by = VAL } } 59 = { is_controlled_by = VAL OR = { is_owned_by = CIN is_owned_by = VAL } } 60 = { is_controlled_by = VAL OR = { is_owned_by = CIN is_owned_by = VAL } } }
+        CIN = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } }
+        AND = { 58 = { VAL_frontier_controlled = yes OR = { is_owned_by = CIN is_owned_by = VAL } } 59 = { VAL_frontier_controlled = yes OR = { is_owned_by = CIN is_owned_by = VAL } } 60 = { VAL_frontier_controlled = yes OR = { is_owned_by = CIN is_owned_by = VAL } } }
     }
     OR = {
         OSF = { NOT = { has_country_flag = VAL_frontier_member } }
         OSF = { exists = no }
-        OSF = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } }
-        AND = { 61 = { is_controlled_by = VAL OR = { is_owned_by = OSF is_owned_by = VAL } } 62 = { is_controlled_by = VAL OR = { is_owned_by = OSF is_owned_by = VAL } } 63 = { is_controlled_by = VAL OR = { is_owned_by = OSF is_owned_by = VAL } } }
+        OSF = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } }
+        AND = { 61 = { VAL_frontier_controlled = yes OR = { is_owned_by = OSF is_owned_by = VAL } } 62 = { VAL_frontier_controlled = yes OR = { is_owned_by = OSF is_owned_by = VAL } } 63 = { VAL_frontier_controlled = yes OR = { is_owned_by = OSF is_owned_by = VAL } } }
     }
     OR = {
         APH = { NOT = { has_country_flag = VAL_frontier_member } }
         APH = { exists = no }
-        APH = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } }
-        AND = { 64 = { is_controlled_by = VAL OR = { is_owned_by = APH is_owned_by = VAL } } 65 = { is_controlled_by = VAL OR = { is_owned_by = APH is_owned_by = VAL } } }
+        APH = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } }
+        AND = { 64 = { VAL_frontier_controlled = yes OR = { is_owned_by = APH is_owned_by = VAL } } 65 = { VAL_frontier_controlled = yes OR = { is_owned_by = APH is_owned_by = VAL } } }
     }
 }
 
@@ -293,14 +301,14 @@ VAL_northern_volunteer_front_open = {
 }
 
 VAL_cannibal_sphere_secured = {
- 58 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
- 59 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
- 60 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
- 61 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
- 62 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
- 63 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
- 64 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
- 65 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
+ 58 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+ 59 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+ 60 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+ 61 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+ 62 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+ 63 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+ 64 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+ 65 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
 }
 
 VAL_northern_resource_belt_owned = {

@@ -143,19 +143,20 @@ on_actions = {
 
 			# BEGIN kefreyt:on_capitulation_immediate
             if = { limit = { tag = VAL } clr_country_flag = VAL_occidian_settlement_pending }
+            if = { limit = { OR = { tag = CIN tag = OSF tag = APH } has_war_with = VAL } VAL = { VAL_frontier_reconcile_active_members = yes } }
             clr_country_flag = VAL_frontier_capitulation_pending
             if = {
                 limit = {
                     VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
-                    OR = { AND = { tag = CIN OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } } has_war_with = VAL capital_scope = { is_controlled_by = VAL } }
-                        AND = { tag = OSF OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } } has_war_with = VAL capital_scope = { is_controlled_by = VAL } }
-                        AND = { tag = APH OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } } has_war_with = VAL capital_scope = { is_controlled_by = VAL } }
-                        AND = { tag = ERT VAL = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } has_war_with = ERT } capital_scope = { is_controlled_by = VAL } }
-                        AND = { OR = { tag = NOD tag = STP } has_country_flag = VAL_frontier_guarantor has_war_with = VAL capital_scope = { is_controlled_by = VAL } }
+                    OR = { AND = { tag = CIN OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } } has_war_with = VAL capital_scope = { VAL_frontier_controlled = yes } }
+                        AND = { tag = OSF OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } } has_war_with = VAL capital_scope = { VAL_frontier_controlled = yes } }
+                        AND = { tag = APH OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } } has_war_with = VAL capital_scope = { VAL_frontier_controlled = yes } }
+                        AND = { tag = ERT VAL = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } has_war_with = ERT } OR = { capital_scope = { VAL_frontier_controlled = yes } VAL = { VAL_frontier_eastern_claim_ready = yes } } }
+                        AND = { OR = { tag = NOD tag = STP } has_country_flag = VAL_frontier_guarantor has_war_with = VAL capital_scope = { VAL_frontier_controlled = yes } }
                         AND = { tag = VAL capital_scope = { OR = { controller = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL } controller = { has_war_with = VAL OR = { has_country_flag = VAL_frontier_member AND = { tag = CIN VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } } AND = { tag = OSF VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } } AND = { tag = APH VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } } AND = { tag = ERT VAL = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } } } } } } } } }
                 }
                 if = { limit = { OR = { tag = CIN tag = OSF tag = APH tag = ERT } } set_country_flag = VAL_frontier_defeated }
-                set_country_flag = VAL_frontier_capitulation_pending
+                set_country_flag = { flag = VAL_frontier_capitulation_pending days = 1 }
                 set_global_flag = skip_default_capitulation
                 if = { limit = { tag = VAL } VAL_frontier_settle_defeat = yes }
                 else = { VAL = { VAL_frontier_weekly = yes } }
@@ -185,7 +186,7 @@ on_actions = {
                         OR = { tag = STP tag = STS tag = NOD }
                         has_war_with = VAL
                         VAL = { exists = yes has_capitulated = no VAL_frontier_idle = yes }
-                        OR = { FROM = { tag = VAL } capital_scope = { is_controlled_by = VAL } }
+                        OR = { FROM = { tag = VAL } capital_scope = { VAL_frontier_controlled = yes } }
                     }
                     set_country_flag = VAL_final_defeat_pending
                     # The early peace can suppress the late callback; expire its reservation.
@@ -449,6 +450,7 @@ on_actions = {
 				limit = {
 					country_exists = RUS
 					RUS = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+					ROOT = { capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ROOT } } } }
 					OR = {
 						AND = {
 							RUS = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }

@@ -9858,6 +9858,8 @@ ADISCORD_vorkerland_rus_annex_dirty_target = {
 	}
 	else_if = {
 		limit = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals } country_exists = ERT }
+		# Resolve the separately occupied VAL claim before consuming ERT ownership.
+		VAL = { if = { limit = { VAL_frontier_eastern_claim_ready = yes } VAL_frontier_settle_victory = yes } }
 		annex_country = { target = ERT transfer_troops = no }
 		if = {
 			limit = { country_exists = ERT }
@@ -10025,7 +10027,7 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_sla_playable = yes
-				AND = { country_exists = SLA has_war_with = SLA SLA = { has_capitulated = yes } }
+				AND = { country_exists = SLA has_war_with = SLA SLA = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SLA } } } } }
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
@@ -10044,7 +10046,7 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_rza_playable = yes
-				AND = { country_exists = RZA has_war_with = RZA RZA = { has_capitulated = yes } }
+				AND = { country_exists = RZA has_war_with = RZA RZA = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = RZA } } } } }
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
@@ -10062,7 +10064,7 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-				AND = { country_exists = MLR has_war_with = MLR MLR = { has_capitulated = yes } }
+				AND = { country_exists = MLR has_war_with = MLR MLR = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = MLR } } } } }
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
@@ -10080,7 +10082,7 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_ert_playable = yes
-				AND = { country_exists = ERT has_war_with = ERT ERT = { has_capitulated = yes } }
+				AND = { country_exists = ERT has_war_with = ERT ERT = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ERT } } } } }
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
@@ -10098,7 +10100,7 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_irt_playable = yes
-				AND = { country_exists = IRT has_war_with = IRT IRT = { has_capitulated = yes } }
+				AND = { country_exists = IRT has_war_with = IRT IRT = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = IRT } } } } }
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
@@ -10116,7 +10118,7 @@ ADISCORD_vorkerland_rus_settle_dirty_target = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
 			OR = {
 				ADISCORD_vorkerland_rus_holds_sca_playable = yes
-				AND = { country_exists = SCA has_war_with = SCA SCA = { has_capitulated = yes } }
+				AND = { country_exists = SCA has_war_with = SCA SCA = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SCA } } } } }
 			}
 		}
 		ADISCORD_vorkerland_rus_annex_dirty_target = yes
