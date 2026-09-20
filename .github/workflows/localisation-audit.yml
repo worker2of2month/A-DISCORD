@@ -1,0 +1,54 @@
+name: Localisation audit
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Export text sources for localisation review
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, zipfile, json, re, collections
+          paths = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          suffixes = {'.py', '.json', '.md', '.yml', '.yaml', '.txt', '.gui', '.gfx', '.mod', '.lua', '.csv', '.asset', '.xml', '.ini', '.toml'}
+          with zipfile.ZipFile('/tmp/adiscord-text-sources.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for name in paths:
+                  p = pathlib.Path(name)
+                  if p.is_file() and (p.suffix.lower() in suffixes or p.name in {'.gitignore', '.gitattributes'}):
+                      archive.write(p, name)
+          counts = collections.Counter()
+          values = {'russian': {}, 'english': {}}
+          pattern = re.compile(r'^\s*([^\s:#]+):\d*\s+"(.*)"\s*(?:#.*)?$')
+          for p in sorted(pathlib.Path('localisation').rglob('*.yml')):
+              text = p.read_text(encoding='utf-8-sig')
+              language = 'english' if 'l_english:' in text[:100] else 'russian' if 'l_russian:' in text[:100] else None
+              if not language:
+                  continue
+              for n, line in enumerate(text.splitlines(), 1):
+                  match = pattern.match(line)
+                  if match:
+                      values[language][match[1]] = (str(p), n, match[2])
+                      counts[language] += 1
+          missing = collections.Counter(v[0] for k,v in values['russian'].items() if k not in values['english'])
+          cyrillic = collections.Counter(v[0] for k,v in values['english'].items() if re.search('[А-Яа-яЁё]', v[2]))
+          print('ENTRY COUNTS', json.dumps(dict(counts)))
+          print('MISSING ENGLISH BY SOURCE', json.dumps(dict(missing), ensure_ascii=False, indent=2))
+          print('CYRILLIC ENGLISH VALUES', json.dumps(dict(cyrillic), ensure_ascii=False, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: adiscord-text-sources
+          path: /tmp/adiscord-text-sources.zip
+          retention-days: 3
+      - name: Focused English localisation tests
+        run: |
+          if [ -f tools/tests/test_adiscord_english_localisation.py ]; then
+            python -B -m unittest discover -s tools/tests -p test_adiscord_english_localisation.py -v
+          fi
