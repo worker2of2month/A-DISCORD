@@ -3524,6 +3524,7 @@ VAL_final_crisis_close = {
 	if = { limit = { NOD = { OR = { is_subject_of = VAL has_country_flag = VAL_final_settlement_commit has_country_flag = VAL_final_capitulation_immediate } } has_capitulated = no is_subject = no } set_variable = { var = VAL_final_crisis_phase value = 3 } }
 	if = { limit = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } remove_dynamic_modifier = { modifier = VAL_final_war_preparation } }
 	VAL_final_refund_supply_order = yes
+
 	NOD = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
 	STP = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
 	STS = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
@@ -3539,6 +3540,31 @@ VAL_final_crisis_reconcile = {
 			else_if = { limit = { VAL_final_crisis_available = no } VAL_final_crisis_close = yes }
 		}
 		else_if = { limit = { NOT = { OR = { has_war_with = NOD has_war_with = STP has_war_with = STS } } } VAL_final_crisis_close = yes }
+	}
+
+	# Postwar repair is intentionally retried by the weekly reconciliation pass.
+	# This covers both fresh settlements and development saves loaded after a
+	# previously completed final war, without relaxing any territorial requirement.
+	if = {
+		limit = {
+			check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals }
+			has_capitulated = no
+			is_subject = no
+			NOT = { has_cosmetic_tag = VAL_commonwealth }
+		}
+		if = { limit = { VAL_can_form_northern_administration = yes } VAL_form_northern_administration = yes }
+		STP = {
+			if = {
+				limit = { exists = yes is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration }
+				VAL_cede_stelander_border = yes
+			}
+		}
+		STS = {
+			if = {
+				limit = { exists = yes is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration }
+				VAL_cede_stelander_border = yes
+			}
+		}
 	}
 }
 

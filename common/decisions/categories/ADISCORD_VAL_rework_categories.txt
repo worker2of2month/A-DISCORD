@@ -53,7 +53,12 @@ VAL_vorkerland_aid = {
 
 VAL_final_war = {
 	allowed = { tag = VAL }
-	visible = { OR = { has_completed_focus = VAL_Northern_Settlement check_variable = { var = VAL_final_crisis_phase value = 0 compare = greater_than } } }
+	visible = {
+		OR = {
+			check_variable = { var = VAL_final_crisis_phase value = 1 compare = equals }
+			check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
+		}
+	}
 	visible_when_empty = yes
 	priority = 30
 }

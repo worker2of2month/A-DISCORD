@@ -1038,7 +1038,7 @@ VAL_frontier = {
 	VAL_proclaim_commonwealth = {
 		icon = generic_nationalism
 		allowed = { tag = VAL }
-		visible = { has_completed_focus = VAL_frontier_conference NOT = { has_cosmetic_tag = VAL_commonwealth }  NOT = { has_cosmetic_tag = VAL_commonwealth } }
+		visible = { has_completed_focus = VAL_frontier_conference NOT = { has_cosmetic_tag = VAL_commonwealth } }
 		available = {
 			custom_trigger_tooltip = { tooltip = VAL_commonwealth_requirements_tt VAL_can_proclaim_commonwealth = yes }
 		}

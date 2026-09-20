@@ -3920,7 +3920,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
             self.assertEqual(image.size, (35, 35))
         gfx = (ROOT / "interface/countrypoliticsview.gfx").read_text(encoding="utf-8")
         self.assertIn('name = "GFX_autonomy_VAL_contract_administration_icon"', gfx)
-        for name in ("VAL_commonwealth", "STL_VAL_administration", "NOD_VAL_administration"):
+        for name in ("VAL_commonwealth", "VAL_commonwealth_etatism", "STL_VAL_administration", "NOD_VAL_administration"):
             for folder, size in (("", (82, 52)), ("medium/", (41, 26)), ("small/", (10, 7))):
                 with Image.open(ROOT / f"gfx/flags/{folder}{name}.tga") as image:
                     self.assertEqual(image.size, size)
@@ -4188,6 +4188,22 @@ class ValExpandedCampaignTests(unittest.TestCase):
         panel = self.getblock(self.getblock(gui, "scripted_gui"), "ADISCORD_VAL_vorkerland_aid_panel")
         self.assertFalse(any(e.key in {"triggers", "effects", "properties"} for e in panel))
 
+    def test_final_war_category_hides_after_the_campaign_is_over(self):
+        source = (ROOT / "common/decisions/categories/ADISCORD_VAL_rework_categories.txt").read_text(encoding="utf-8")
+        category = named_block_spans(source, "VAL_final_war")[0].text
+        visible = named_block_spans(category, "visible")[0].text
+        self.assertIn("VAL_final_crisis_phase value = 1 compare = equals", visible)
+        self.assertIn("VAL_final_crisis_phase value = 2 compare = equals", visible)
+        self.assertNotIn("has_completed_focus = VAL_Northern_Settlement", visible)
+        self.assertNotIn("compare = greater_than", visible)
+
+    def test_final_crisis_reconcile_repairs_commonwealth_territory_after_victory(self):
+        reconcile = named_block_spans(EFFECTS_PATH.read_text(encoding="utf-8"), "VAL_final_crisis_reconcile")[0].text
+        self.assertIn("VAL_final_crisis_phase value = 3 compare = greater_than_or_equals", reconcile)
+        self.assertIn("VAL_can_form_northern_administration = yes", reconcile)
+        self.assertIn("VAL_form_northern_administration = yes", reconcile)
+        self.assertGreaterEqual(reconcile.count("VAL_cede_stelander_border = yes"), 2)
+
     def test_bezhaysk_operation_requires_stelander_defeat_and_a_valid_target(self):
         facts = {("VAL", "tag", "VAL"): True,
                  ("VAL", "has_capitulated", "no"): True,
@@ -4211,9 +4227,12 @@ class ValExpandedCampaignTests(unittest.TestCase):
         focus = focuses["VAL_Bezhaysk_Operation"]
         self.assertEqual(self.scalar(self.getblock(focus, "prerequisite"), "focus"), "VAL_Contracts_Outlive_Kings")
         self.assertEqual(self.scalar(focus, "cancel_if_invalid"), "yes")
-        reward = self.getblock(self.getblock(focus, "completion_reward"), "if")
-        self.assertEqual(self.scalar(self.getblock(reward, "limit"), "VAL_can_attack_bezhaysk"), "yes")
+        reward = self.getblock(focus, "completion_reward")
         self.assertEqual(self.scalar(self.getblock(reward, "declare_war_on"), "target"), "BJK")
+        self.assertEqual(self.scalar(self.getblock(reward, "declare_war_on"), "type"), "annex_everything")
+        self.assertFalse(any(e.key == "if" for e in reward), "a completed valid operation must not silently skip the war")
+        from tools.tests.test_adiscord_stp_preparation import walk
+        self.assertTrue(any(e.key == "VAL_call_subjects_to_wars" and e.value == "yes" for e in walk(reward)))
         positions = [(self.scalar(b, "x"), self.scalar(b, "y")) for b in focuses.values()]
         self.assertEqual(len(positions), len(set(positions)))
         self.assertLessEqual(max(int(y) for x, y in positions), 28)
