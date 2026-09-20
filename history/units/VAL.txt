@@ -49,15 +49,15 @@ division_template = {
 
 units = {
 	fleet = {
-		name = "Кефрейтская флотилия"
+		name = "Kefreyt Flotilla"
 		naval_base = 16535
 		task_force = {
-			name = "Охрана морских поставок"
+			name = "Maritime Supply Patrol"
 			location = 16535
-			ship = { name = "СК-301" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
-			ship = { name = "СК-302" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
-			ship = { name = "СК-303" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
-			ship = { name = "СК-304" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
+			ship = { name = "SK-301" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
+			ship = { name = "SK-302" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
+			ship = { name = "SK-303" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
+			ship = { name = "SK-304" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
 		}
 	}
 	division = {
