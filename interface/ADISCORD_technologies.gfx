@@ -2166,7 +2166,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_recovered_medium_chassis_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_1.dds"
+		textureFile = "gfx/interface/technologies/armor/ADISCORD_restored_main_battle_tank.png"
 	}
 
 	SpriteType = {

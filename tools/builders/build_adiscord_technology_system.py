@@ -448,7 +448,7 @@ autonomous_recon_screen|Автономное разведывательное о
         "combat_armor", "ADISCORD_armor.txt", ("armour_folder", "nsb_armour_folder"),
         "Основные боевые танки", "Main Battle Tanks", "combat_armor",
         techs("""
-recovered_medium_chassis|Восстановленное среднее шасси|Recovered Medium Chassis|basic_medium_tank
+recovered_medium_chassis|Восстановленный основной боевой танк|Restored Main Battle Tank|basic_medium_tank
 remote_weapon_stations|Дистанционно управляемые башенные установки|Remote-controlled Turret Mounts|improved_medium_tank
 composite_armor_arrays|Массивы композитной брони|Composite Armor Arrays|advanced_medium_tank
 semi_autonomous_combat_modules|Полуавтономное управление танком|Semi-autonomous Tank Control|basic_modern_tank
@@ -5862,22 +5862,33 @@ def write_starting_technology_profile_manifest() -> None:
     )
 
 
+CUSTOM_TECH_TEXTURES = {
+    "recovered_medium_chassis": "gfx/interface/technologies/armor/ADISCORD_restored_main_battle_tank.png",
+}
+
+
 def write_gfx() -> None:
     entries = []
     for branch in BRANCHES:
         for index, tech in enumerate(branch.techs):
             icon = icon_for_technology(branch, index)
-            variants = [(f"GFX_{tech.id}_medium", icon)]
-            if icon.startswith("ADISCORD_weapon_"):
+            custom_texture = CUSTOM_TECH_TEXTURES.get(tech.key)
+            variants = [(f"GFX_{tech.id}_medium", custom_texture or icon)]
+            if not custom_texture and icon.startswith("ADISCORD_weapon_"):
                 variants.extend(
                     (f"GFX_{tag}_{tech.id}_medium", icon.replace("ADISCORD_", f"ADISCORD_{tag}_", 1))
                     for tag in REGIONAL_SERVICE_ICON_TAGS
                 )
             for sprite, texture in variants:
+                texture_file = (
+                    texture
+                    if texture.startswith("gfx/")
+                    else f"gfx/interface/technologies/{texture}.dds"
+                )
                 entries.append(
                     "\tSpriteType = {\n"
                     f"\t\tname = \"{sprite}\"\n"
-                    f"\t\ttextureFile = \"gfx/interface/technologies/{texture}.dds\"\n"
+                    f"\t\ttextureFile = \"{texture_file}\"\n"
                     "\t}\n"
                 )
     content = (
