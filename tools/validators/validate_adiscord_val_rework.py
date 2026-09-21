@@ -1507,6 +1507,29 @@ def main() -> int:
             if idea_blocks and idea_id not in display_only and not re.search(r"\bpicture\s*=", mask_comments(idea_blocks[0])):
                 issues.append(f"idea {idea_id} has no picture")
 
+    # Kefreyt starts without domestic steel. Its initial steel supply comes from
+    # Vorkerland resource rights to state 33; later conquests/projects may add more.
+    for state_id, path in (
+        (24, "history/states/24-Irem.txt"),
+        (42, "history/states/42-Prigranichie.txt"),
+        (48, "history/states/48-Depoitodron.txt"),
+        (54, "history/states/54-Spastlant.txt"),
+        (55, "history/states/55-Erstantpeo.txt"),
+        (56, "history/states/56-Zeigen.txt"),
+        (57, "history/states/57-Zoilong.txt"),
+        (168, "history/states/168-168.txt"),
+    ):
+        homeland = read(path)
+        resources = named_blocks(homeland, "resources")
+        if resources and re.search(r"(?m)^\s*steel\s*=", resources[0]):
+            issues.append(f"Kefreyt homeland state {state_id} must not contain starting steel")
+    vorkerland_start = read("history/states/33-33.txt")
+    if not re.search(r"resources\s*=\s*\{[^}]*steel\s*=\s*16", vorkerland_start, re.S):
+        issues.append("state 33 must retain Kefreyt's starting Vorkerland steel source")
+    arsenal_init = named_blocks(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), "VAL_initialize_arsenal_recovery")
+    if not arsenal_init or "give_resource_rights = { receiver = VAL state = 33 }" not in arsenal_init[0]:
+        issues.append("Kefreyt startup must grant Vorkerland steel rights in state 33")
+
     state_202 = read("history/states/38-38.txt")
     if not re.search(r"resources\s*=\s*\{[^}]*steel\s*=\s*10", state_202, re.S):
         issues.append("state 38 does not contain the baseline Vorkerland steel deposit")
