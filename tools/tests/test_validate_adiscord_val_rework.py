@@ -3827,59 +3827,48 @@ class ValExpandedCampaignTests(unittest.TestCase):
 
 
 class ValRegionalIntegrationTests(unittest.TestCase):
-    def test_integration_boundaries_and_terminal_paths(self):
-        from dataclasses import replace
-        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, matches_conditions, selected_effects
+    def test_nationalisation_expands_one_adjacent_core_at_a_time(self):
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz
+
         definitions = parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8"))
-        decisions = block(definitions, "VAL_postwar_administration")
-        triggers = parse_clausewitz((ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8"))
-        valid = block(triggers, "VAL_regional_integration_target_valid")
-        flag = "VAL_regional_administration_in_progress"
+        postwar = block(definitions, "VAL_postwar_administration")
+        nationalise = block(postwar, "VAL_nationalise_region")
+        self.assertTrue(nationalise)
+        self.assertFalse(block(postwar, "VAL_establish_regional_administration"))
 
-        def expand(items):
-            return [replace(e, key="AND" if e.value == "yes" else "NOT", value=valid)
-                    if e.key == "VAL_regional_integration_target_valid" else
-                    replace(e, value=expand(e.value)) if isinstance(e.value, list) else e for e in items]
+        decisions_text = DECISIONS_PATH.read_text(encoding="utf-8")
+        trigger_text = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
+        focus_text = FOCUSES_PATH.read_text(encoding="utf-8")
 
-        def facts(compliance=60, resistance=19.9):
-            return {("VAL", "is_subject", "no"): True, ("VAL", "has_capitulated", "no"): True,
-                    ("FROM", "is_owned_by", "ROOT"): True, ("FROM", "is_controlled_by", "ROOT"): True,
-                    ("FROM", "numeric", "compliance"): compliance, ("FROM", "numeric", "resistance"): resistance}
+        decision_block = only_named_block(self, decisions_text, "VAL_nationalise_region")
+        target = only_named_block(self, decision_block, "target_trigger")
+        self.assertIn("any_neighbor_state = {", target)
+        self.assertIn("is_core_of = ROOT", target)
+        self.assertIn("is_owned_by = ROOT", target)
+        self.assertIn("is_controlled_by = ROOT", target)
+        self.assertIn("NOT = { is_core_of = ROOT }", target)
 
-        core = block(decisions, "VAL_nationalise_region")
-        prepare = block(decisions, "VAL_establish_regional_administration")
-        for compliance, resistance, ready in ((59.9, 0, False), (60, 19.9, True), (60, 20, False), (100, 0, True)):
-            f = facts(compliance, resistance)
-            self.assertEqual(matches_conditions(expand(block(core, "available")), f, "VAL"), ready)
-            self.assertEqual(matches_conditions(expand(block(prepare, "available")), f, "VAL"), not ready)
-        for decision, price in ((core, 75), (prepare, 50)):
-            for broken in (None, "is_owned_by", "is_controlled_by", "is_core_of", "is_subject", "has_capitulated", "resistance"):
-                f = facts(60 if decision is core else 30)
-                f["FROM", "has_state_flag", flag] = True
-                self.assertFalse(matches_conditions(expand(block(decision, "available")), f, "VAL"))
-                if broken in ("is_owned_by", "is_controlled_by"):
-                    f["FROM", broken, "ROOT"] = False
-                elif broken == "is_core_of":
-                    f["FROM", broken, "ROOT"] = True
-                elif broken in ("is_subject", "has_capitulated"):
-                    f["VAL", broken, "no"] = False
-                elif broken == "resistance":
-                    f["FROM", "numeric", "resistance"] = 20
-                effects = list(selected_effects(expand(block(decision, "remove_effect")), f, "VAL"))
-                succeeds = broken is None or broken == "resistance" and decision is prepare
-                rewards = [e.key for scope, e in effects if scope == "FROM"]
-                self.assertEqual("add_core_of" in rewards, succeeds and decision is core)
-                self.assertEqual("add_compliance" in rewards, succeeds and decision is prepare)
-                self.assertEqual(sum(float(e.value) for _, e in effects if e.key == "add_political_power"), 0 if succeeds else price)
-                self.assertIn("clr_state_flag", rewards)
-            f = facts(); f["FROM", "has_state_flag", flag] = True
-            cancellation = expand(block(decision, "cancel_effect"))
-            effects = list(selected_effects(cancellation, f, "VAL"))
-            self.assertEqual(sum(float(e.value) for _, e in effects if e.key == "add_political_power"), price)
-            f["FROM", "has_state_flag", flag] = False
-            self.assertFalse(any(e.key == "add_political_power" for _, e in selected_effects(cancellation, f, "VAL")))
-            self.assertFalse(any(e.key in ("add_core_of", "add_compliance", "add_political_power")
-                                 for _, e in selected_effects(expand(block(decision, "remove_effect")), f, "VAL")))
+        available = only_named_block(self, decision_block, "available")
+        self.assertIn("VAL_regional_integration_target_valid = yes", available)
+        self.assertIn("NOT = { has_country_flag = VAL_regional_integration_active }", available)
+        self.assertNotIn("compliance", decision_block)
+        self.assertNotIn("resistance", decision_block)
+        self.assertIn("cost = 75", decision_block)
+        self.assertIn("days_remove = 120", decision_block)
+        self.assertIn("fire_only_once = no", decision_block)
+        self.assertIn("add_core_of = ROOT", decision_block)
+        self.assertIn("set_country_flag = VAL_regional_integration_active", decision_block)
+        self.assertIn("clr_country_flag = VAL_regional_integration_active", decision_block)
+
+        trigger = only_named_block(self, trigger_text, "VAL_regional_integration_target_valid")
+        for token in ("has_war = no", "any_neighbor_state = {", "is_core_of = ROOT",
+                      "is_owned_by = ROOT", "is_controlled_by = ROOT"):
+            self.assertIn(token, trigger)
+
+        conference = self.focus("VAL_frontier_conference")
+        reward = only_named_block(self, conference, "completion_reward")
+        self.assertIn("unlock_decision_tooltip = VAL_nationalise_region", reward)
+        self.assertNotIn("VAL_establish_regional_administration", reward)
 
 
 class ValFormationAndCommandTests(unittest.TestCase):
