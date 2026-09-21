@@ -61,7 +61,7 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_capture_factor value = 0.0 }
 		set_variable = { var = VAL_contract_supply_factor value = 0.0 }
 		set_variable = { var = VAL_contract_planning_factor value = 0.0 }
-		set_variable = { var = VAL_contract_pp_gain value = -0.1 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.05 }
 		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
 		set_variable = { var = VAL_contract_state_overload_factor value = 0.0 }
 		set_variable = { var = VAL_contract_trade_income_factor value = 0.0 }
@@ -78,7 +78,7 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_capture_factor value = 0.02 }
 		set_variable = { var = VAL_contract_supply_factor value = 0.0 }
 		set_variable = { var = VAL_contract_planning_factor value = -0.05 }
-		set_variable = { var = VAL_contract_pp_gain value = -0.1 }
+		set_variable = { var = VAL_contract_pp_gain value = 0.05 }
 		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
 		set_variable = { var = VAL_contract_state_overload_factor value = 0.0 }
 		set_variable = { var = VAL_contract_trade_income_factor value = 0.0 }
@@ -95,7 +95,7 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_capture_factor value = 0.05 }
 		set_variable = { var = VAL_contract_supply_factor value = -0.03 }
 		set_variable = { var = VAL_contract_planning_factor value = -0.05 }
-		set_variable = { var = VAL_contract_pp_gain value = 0.0 }
+		set_variable = { var = VAL_contract_pp_gain value = 0.10 }
 		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
 		set_variable = { var = VAL_contract_state_overload_factor value = 0.03 }
 		set_variable = { var = VAL_contract_trade_income_factor value = 0.03 }
@@ -112,7 +112,7 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_capture_factor value = 0.08 }
 		set_variable = { var = VAL_contract_supply_factor value = -0.05 }
 		set_variable = { var = VAL_contract_planning_factor value = -0.1 }
-		set_variable = { var = VAL_contract_pp_gain value = -0.2 }
+		set_variable = { var = VAL_contract_pp_gain value = 0.15 }
 		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
 		set_variable = { var = VAL_contract_state_overload_factor value = 0.05 }
 		set_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
@@ -128,7 +128,7 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_capture_factor value = 0.1 }
 		set_variable = { var = VAL_contract_supply_factor value = -0.07 }
 		set_variable = { var = VAL_contract_planning_factor value = -0.15 }
-		set_variable = { var = VAL_contract_pp_gain value = -0.25 }
+		set_variable = { var = VAL_contract_pp_gain value = 0.20 }
 		set_variable = { var = VAL_contract_stability_factor value = -0.05 }
 		set_variable = { var = VAL_contract_state_overload_factor value = 0.08 }
 		set_variable = { var = VAL_contract_trade_income_factor value = 0.07 }
@@ -1020,14 +1020,49 @@ VAL_start_quarterly_contract_norm = {
 	activate_mission = VAL_quarterly_contract_deadline
 }
 
+# COUNTRY: caller sets positive temp VAL_contract_rifle_cost.
+# Debit mixed producer stocks exactly; success is reported only through VAL_contract_rifles_paid.
+VAL_pay_contract_rifles = {
+	clr_country_flag = VAL_contract_rifles_paid
+	set_temp_variable = { var = VAL_contract_rifles_remaining value = VAL_contract_rifle_cost }
+	if = {
+		limit = {
+			check_variable = { var = VAL_contract_rifle_cost value = 0 compare = greater_than }
+			check_variable = { var = num_equipment@infantry_equipment value = VAL_contract_rifle_cost compare = greater_than_or_equals }
+		}
+		every_possible_country = {
+			limit = { PREV = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } } }
+			PREV = {
+				if = {
+					limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = greater_than } }
+					set_temp_variable = { var = VAL_contract_rifles_removed value = num_equipment@infantry_equipment }
+					set_temp_variable = { var = VAL_contract_rifle_debit value = VAL_contract_rifles_remaining }
+					multiply_temp_variable = { var = VAL_contract_rifle_debit value = -1 }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = VAL_contract_rifle_debit producer = PREV }
+					subtract_from_temp_variable = { var = VAL_contract_rifles_removed value = num_equipment@infantry_equipment }
+					subtract_from_temp_variable = { var = VAL_contract_rifles_remaining value = VAL_contract_rifles_removed }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { var = VAL_contract_rifles_remaining value = 0 compare = equals } }
+			set_country_flag = VAL_contract_rifles_paid
+			log = "[VAL_CONTRACT] [THIS.GetTag] producer-aware rifle debit=[?VAL_contract_rifle_cost]"
+		}
+		else = {
+			log = "[VAL_CONTRACT] [THIS.GetTag] rifle debit incomplete; remaining=[?VAL_contract_rifles_remaining]"
+		}
+	}
+}
+
 VAL_pay_quarterly_contract_norm = {
 	hidden_effect = {
 		if = {
 			limit = { VAL_can_pay_quarterly_contract_norm = yes }
-			set_temp_variable = { var = STP_cw_rifle_cost value = 4000 }
-			STP_cw_pay_rifles = yes
+			set_temp_variable = { var = VAL_contract_rifle_cost value = 4000 }
+			VAL_pay_contract_rifles = yes
 			if = {
-				limit = { has_country_flag = STP_cw_rifles_paid }
+				limit = { has_country_flag = VAL_contract_rifles_paid }
 				set_country_flag = VAL_quarterly_contract_paid
 			}
 		}
@@ -1410,13 +1445,13 @@ VAL_cw_complete_arms_contract = {
 				}
 			}
 		}
-		set_temp_variable = { var = STP_cw_rifle_cost value = 3200 }
+		set_temp_variable = { var = VAL_contract_rifle_cost value = 3200 }
 		set_temp_variable = { var = VAL_cw_contract_manpower_debit value = 0 }
 		set_temp_variable = { var = VAL_cw_contract_squad_remaining value = 0 }
 		set_temp_variable = { var = VAL_cw_contract_support_remaining value = 0 }
 		if = {
 			limit = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } }
-			set_temp_variable = { var = STP_cw_rifle_cost value = 4420 }
+			set_temp_variable = { var = VAL_contract_rifle_cost value = 4420 }
 			set_temp_variable = { var = VAL_cw_contract_manpower_debit value = -12600 }
 			set_temp_variable = { var = VAL_cw_contract_squad_remaining value = 96 }
 			set_temp_variable = { var = VAL_cw_contract_support_remaining value = 60 }
@@ -1425,9 +1460,9 @@ VAL_cw_complete_arms_contract = {
 		set_temp_variable = { var = VAL_cw_contract_rifle_refund value = num_equipment@infantry_equipment }
 		set_temp_variable = { var = VAL_cw_contract_squad_refund value = num_equipment@ADISCORD_squad_weapons_equipment }
 		set_temp_variable = { var = VAL_cw_contract_support_refund value = num_equipment@support_equipment }
-		STP_cw_pay_rifles = yes
+		VAL_pay_contract_rifles = yes
 		if = {
-			limit = { has_country_flag = STP_cw_rifles_paid has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } }
+			limit = { has_country_flag = VAL_contract_rifles_paid has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } }
 			VAL_cw_pay_contract_auxiliary = yes
 		}
 		subtract_from_temp_variable = { var = VAL_cw_contract_rifle_refund value = num_equipment@infantry_equipment }
@@ -1435,13 +1470,13 @@ VAL_cw_complete_arms_contract = {
 		subtract_from_temp_variable = { var = VAL_cw_contract_support_refund value = num_equipment@support_equipment }
 		if = {
 			limit = {
-				has_country_flag = STP_cw_rifles_paid
-				check_variable = { var = VAL_cw_contract_rifle_refund value = STP_cw_rifle_cost compare = equals }
+				has_country_flag = VAL_contract_rifles_paid
+				check_variable = { var = VAL_cw_contract_rifle_refund value = VAL_contract_rifle_cost compare = equals }
 				check_variable = { var = VAL_cw_contract_squad_remaining value = 0 compare = equals }
 				check_variable = { var = VAL_cw_contract_support_remaining value = 0 compare = equals }
 			}
 			add_manpower = var:VAL_cw_contract_manpower_debit
-			set_variable = { var = STP_ps_val_receipt_rifles value = STP_cw_rifle_cost }
+			set_variable = { var = STP_ps_val_receipt_rifles value = VAL_contract_rifle_cost }
 			set_variable = { var = STP_ps_val_receipt_contract value = 1 }
 			if = { limit = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } } set_variable = { var = STP_ps_val_receipt_contract value = 2 } }
 			STS = {
@@ -1464,15 +1499,15 @@ VAL_cw_complete_arms_contract = {
 			army_experience = 5
 			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
 			VAL_change_contract_authority = yes
-			log = "[STP_CW] VAL contract settled: rifles=[?STP_cw_rifle_cost] donor manpower=[?VAL_cw_contract_manpower_debit]"
+			log = "[VAL_CONTRACT] contract settled: rifles=[?VAL_contract_rifle_cost] donor manpower=[?VAL_cw_contract_manpower_debit]"
 		}
 		else = {
-			clr_country_flag = STP_cw_rifles_paid
+			clr_country_flag = VAL_contract_rifles_paid
 			# Refund the measured equipment debit to VAL stock; the offer can be retried.
 			if = { limit = { check_variable = { var = VAL_cw_contract_rifle_refund value = 0 compare = greater_than } } add_equipment_to_stockpile = { type = infantry_equipment amount = VAL_cw_contract_rifle_refund producer = VAL } }
 			if = { limit = { check_variable = { var = VAL_cw_contract_squad_refund value = 0 compare = greater_than } } add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = VAL_cw_contract_squad_refund producer = VAL } }
 			if = { limit = { check_variable = { var = VAL_cw_contract_support_refund value = 0 compare = greater_than } } add_equipment_to_stockpile = { type = support_equipment amount = VAL_cw_contract_support_refund producer = VAL } }
-			log = "[STP_CW] VAL contract cancelled: incomplete equipment payment refunded"
+			log = "[VAL_CONTRACT] contract cancelled: incomplete equipment payment refunded"
 		}
 	}
 	clr_country_flag = VAL_cw_arms_offer_pending
@@ -1545,27 +1580,53 @@ VAL_reclamation_finish_project = {
 
 # STATE; compensation preserves restoration through an ownership change.
 VAL_reclamation_refresh_state = {
-	set_variable = { var = VAL_reclamation_people value = VAL_reclamation_stage }
-	multiply_variable = { var = VAL_reclamation_people value = 0.25 }
-	set_variable = { var = VAL_reclamation_resources value = VAL_reclamation_stage }
-	multiply_variable = { var = VAL_reclamation_resources value = 0.20 }
-	set_variable = { var = VAL_reclamation_slots value = VAL_reclamation_stage }
-	multiply_variable = { var = VAL_reclamation_slots value = 0.133333 }
-	set_variable = { var = VAL_reclamation_construction value = VAL_reclamation_stage }
-	multiply_variable = { var = VAL_reclamation_construction value = 0.166667 }
-	set_variable = { var = VAL_reclamation_supply value = VAL_reclamation_stage }
-	multiply_variable = { var = VAL_reclamation_supply value = -0.116667 }
+	# Reclamation is a state transition, not a second compensating modifier.
 	if = {
-		limit = { check_variable = { var = VAL_reclamation_stage value = 3 compare = equals } }
-		set_variable = { var = VAL_reclamation_slots value = 0.40 }
-		set_variable = { var = VAL_reclamation_construction value = 0.50 }
-		set_variable = { var = VAL_reclamation_supply value = -0.35 }
+		limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
+		remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
 	}
 	if = {
-		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_reclamation_recovered_land } } }
-		add_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }
+		limit = { has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier } }
+		remove_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
 	}
-	force_update_dynamic_modifier = yes
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier } }
+		remove_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAL_reclamation_stage_3_modifier } }
+		remove_dynamic_modifier = { modifier = VAL_reclamation_stage_3_modifier }
+	}
+
+	if = {
+		limit = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } }
+		add_dynamic_modifier = { modifier = VAL_reclamation_stage_3_modifier }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_reclamation_stage value = 2 compare = greater_than_or_equals } }
+		add_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+		add_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
+	}
+
+	# Remove variables used by the retired compensation modifier.
+	clear_variable = VAL_reclamation_people
+	clear_variable = VAL_reclamation_resources
+	clear_variable = VAL_reclamation_slots
+	clear_variable = VAL_reclamation_construction
+	clear_variable = VAL_reclamation_supply
+}
+
+VAL_migrate_reclamation_modifiers = {
+	24 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	42 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	48 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	54 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	55 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	56 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	57 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
 }
 
 # Foreign campaign: 1 = ultimatum, 2 = refusal, 3 = war, 0 = closed.
@@ -2737,10 +2798,6 @@ VAL_initialize_command_balance = {
 	}
 }
 
-# COUNTRY VAL. When Shabrat and Kefreyt defeat NOD in the same war, neither
-# side receives the whole country by callback order. NOD-owned states follow
-# their actual controller at surrender; northern states already settled to YPR
-# are therefore left untouched.
 VAL_settle_joint_nod_shabrat_victory = {
     if = {
         limit = {
