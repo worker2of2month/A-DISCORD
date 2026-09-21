@@ -5864,6 +5864,12 @@ def write_starting_technology_profile_manifest() -> None:
 
 CUSTOM_TECH_TEXTURES = {
     "recovered_medium_chassis": "gfx/interface/technologies/armor/ADISCORD_restored_main_battle_tank.png",
+    "recovered_shaped_charge_cells": "gfx/interface/technologies/ADISCORD_antitank_01_incendiary_bottle.png",
+    "disposable_launcher_standards": "gfx/interface/technologies/ADISCORD_antitank_02_satchel_charge.png",
+    "tandem_penetrator_packages": "gfx/interface/technologies/ADISCORD_antitank_03_shaped_charge_grenade.png",
+    "wire_guided_hunter_teams": "gfx/interface/technologies/ADISCORD_antitank_04_antitank_rifle.png",
+    "top_attack_profiles": "gfx/interface/technologies/ADISCORD_antitank_08_rocket_launcher.png",
+    "loitering_armor_hunters": "gfx/interface/technologies/ADISCORD_antitank_09_top_attack_seeker.png",
 }
 
 

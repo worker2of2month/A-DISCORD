@@ -1016,22 +1016,22 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_recovered_shaped_charge_cells_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_01_incendiary_bottle.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_antitank_01_incendiary_bottle.png"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_disposable_launcher_standards_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_02_satchel_charge.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_antitank_02_satchel_charge.png"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_tandem_penetrator_packages_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_03_shaped_charge_grenade.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_antitank_03_shaped_charge_grenade.png"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_wire_guided_hunter_teams_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_04_antitank_rifle.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_antitank_04_antitank_rifle.png"
 	}
 
 	SpriteType = {
@@ -1051,12 +1051,12 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_top_attack_profiles_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_08_rocket_launcher.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_antitank_08_rocket_launcher.png"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_loitering_armor_hunters_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_09_top_attack_seeker.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_antitank_09_top_attack_seeker.png"
 	}
 
 	SpriteType = {
