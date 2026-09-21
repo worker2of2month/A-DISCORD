@@ -5927,6 +5927,7 @@ STP_ps_resolve_val_supply = {
 			if = { limit = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } } ADISCORD_economy_receive_100 = yes }
 			else_if = { limit = { check_variable = { var = STP_ps_contract_type value = 1 compare = equals } } ADISCORD_economy_receive_50 = yes }
 			else_if = { limit = { check_variable = { var = STP_ps_contract_type value = 3 compare = equals } }
+				ADISCORD_economy_receive_100 = yes
 				if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
 				else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
 			}
