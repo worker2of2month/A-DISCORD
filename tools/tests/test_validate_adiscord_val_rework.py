@@ -3239,6 +3239,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
             branch = self.getblock(self.getblock(accept, "hidden_effect"), "if")
             self.assertEqual(self.scalar(self.getblock(branch, "limit"), f"VAL_export_{kind}_can_accept"), "yes")
             self.assertEqual(sum(e.key == "ADISCORD_economy_spend_100" for e in walk(branch)), 1)
+            self.assertEqual(sum(e.key == "ADISCORD_economy_receive_100" for e in walk(branch)), 1)
             self.assertIn("VAL_export_offer_" + kind, [e.value for e in walk(branch) if e.key == "clr_country_flag"])
             if kind == "arms":
                 transfer = next(e.value for e in walk(branch) if e.key == "send_equipment")
@@ -3247,14 +3248,19 @@ class ValExpandedCampaignTests(unittest.TestCase):
                 self.assertEqual(self.scalar(transfer, "target"), "ROOT")
                 self.assertFalse(any(e.key == "add_equipment_to_stockpile" for e in walk(branch)))
 
-    def test_income_cache_changes_on_expiry_as_well_as_acceptance(self):
+    def test_export_slots_are_capacity_markers_not_deferred_income(self):
         from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar
         country = block(block(parse_clausewitz(IDEAS_PATH.read_text(encoding="utf-8")), "ideas"), "country")
-        for idea in ("VAL_export_income_1", "VAL_export_income_2", "VAL_advisors_income"):
+        for idea in ("VAL_export_income_1", "VAL_export_income_2"):
             declaration = block(country, idea)
-            for hook in ("on_add", "on_remove"):
-                self.assertEqual(scalar(block(declaration, hook), "ADISCORD_economy_mark_dirty"), "yes")
-            self.assertEqual(scalar(block(declaration, "modifier"), "ADISCORD_economy_weekly_income"), "10")
+            self.assertFalse(block(declaration, "on_add"))
+            self.assertFalse(block(declaration, "on_remove"))
+            self.assertFalse(block(declaration, "modifier"))
+        advisers = block(country, "VAL_advisors_income")
+        self.assertFalse(block(advisers, "on_add"))
+        self.assertFalse(block(advisers, "on_remove"))
+        self.assertEqual(scalar(block(advisers, "modifier"), "planning_speed"), "-0.05")
+        self.assertIsNone(scalar(block(advisers, "modifier"), "ADISCORD_economy_weekly_income"))
 
     def test_supply_recovery_requires_occidia_and_all_eight_northern_states(self):
         facts = {("VAL", "VAL_cannibal_sphere_secured", "yes"): True}
@@ -3860,7 +3866,7 @@ class ValRegionalIntegrationTests(unittest.TestCase):
         self.assertIn("NOT = { has_country_flag = VAL_regional_integration_active }", available)
         self.assertNotIn("compliance", decision_block)
         self.assertNotIn("resistance", decision_block)
-        self.assertIn("cost = 75", decision_block)
+        self.assertIn("cost = 50", decision_block)
         self.assertIn("days_remove = 120", decision_block)
         self.assertIn("fire_only_once = no", decision_block)
         self.assertIn("add_core_of = ROOT", decision_block)
