@@ -3996,6 +3996,41 @@ class ValExpandedCampaignTests(unittest.TestCase):
             self.assertIn("VAL_northern_volunteer_host", [e.key for e in walk(guard)])
             self.assertFalse(any(e.key == "has_war" for e in walk(guard)))
 
+    def test_ai_prioritizes_shabrat_volunteers_before_its_own_war(self):
+        ai = (ROOT / "common/ai_strategy/VAL.txt").read_text(encoding="utf-8-sig")
+        shabrat = only_named_block(self, ai, "VAL_volunteers_to_STS")
+        self.assertIn("type = send_volunteers_desire", shabrat)
+        self.assertIn("id = STS", shabrat)
+        self.assertIn("value = 2000", shabrat)
+        for target in ("YPR", "COF", "TFF"):
+            northern = only_named_block(self, ai, f"VAL_volunteers_to_{target}")
+            self.assertIn("value = 200", northern)
+
+        on_actions = (ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt").read_text(
+            encoding="utf-8-sig"
+        )
+        weekly = only_named_block(self, on_actions, "on_weekly_VAL")
+        for token in (
+            "is_ai = yes",
+            "has_war = no",
+            "has_capitulated = no",
+            "is_subject = no",
+            "VAL_northern_volunteer_front_open = yes",
+            "NOT = { has_idea = VAL_northern_volunteer_mandate }",
+            "add_ideas = VAL_northern_volunteer_mandate",
+        ):
+            self.assertIn(token, weekly)
+
+        stp_effects = (
+            ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
+        ).read_text(encoding="utf-8-sig")
+        nod_join = only_named_block(self, stp_effects, "STP_cw_finish_nod_warning")
+        self.assertIn("limit = { NOD = { has_war_with = STS } }", nod_join)
+        val = only_named_block(self, nod_join, "VAL")
+        self.assertIn("is_ai = yes", val)
+        self.assertIn("STS = { VAL_northern_volunteer_host = yes }", val)
+        self.assertIn("add_ideas = VAL_northern_volunteer_mandate", val)
+
     def test_northern_partition_keeps_resource_states_out_of_subject(self):
         from tools.tests.test_adiscord_stp_preparation import walk
         effect = self.getblock(self.parse(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_form_northern_administration")

@@ -107,7 +107,22 @@ on_actions = {
             VAL_reconcile_supply_crisis = yes
             VAL_reclamation_reconcile_project = yes
             VAL_final_crisis_weekly = yes
-            if = { limit = { has_idea = VAL_northern_volunteer_mandate } VAL_reconcile_northern_volunteers = yes } if = { limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } } VAL_frontier_weekly = yes } }
+            # Save-safe AI fallback: authorize the named NOD-war volunteer mission
+            # as soon as a valid front exists. Human VAL still uses the 50 PP decision.
+            if = {
+                limit = {
+                    is_ai = yes
+                    has_war = no
+                    has_capitulated = no
+                    is_subject = no
+                    VAL_northern_volunteer_front_open = yes
+                    NOT = { has_idea = VAL_northern_volunteer_mandate }
+                }
+                add_ideas = VAL_northern_volunteer_mandate
+            }
+            if = { limit = { has_idea = VAL_northern_volunteer_mandate } VAL_reconcile_northern_volunteers = yes }
+            if = { limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } } VAL_frontier_weekly = yes }
+        }
     }
 
 }

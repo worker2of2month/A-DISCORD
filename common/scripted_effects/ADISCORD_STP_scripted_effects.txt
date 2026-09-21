@@ -3419,6 +3419,22 @@ STP_cw_finish_nod_warning = {
 		NOD = { add_to_war = { targeted_alliance = STP enemy = STS hostility_reason = asked_to_join single_target_only = yes } }
 		if = {
 			limit = { NOD = { has_war_with = STS } }
+			# Shabrat's volunteer window can be shorter than the normal AI decision cadence.
+			# Authorize AI Kefreite on the exact tick STS becomes a valid NOD-war host.
+			VAL = {
+				if = {
+					limit = {
+						is_ai = yes
+						has_war = no
+						has_capitulated = no
+						is_subject = no
+						NOT = { has_idea = VAL_northern_volunteer_mandate }
+						STS = { VAL_northern_volunteer_host = yes }
+					}
+					add_ideas = VAL_northern_volunteer_mandate
+					log = "[VAL AI] Immediate volunteer mandate for Shabrat after NOD intervention"
+				}
+			}
 			# Form the alliance only after the engine confirms entry into the party's war.
 			STP = {
 				if = {
