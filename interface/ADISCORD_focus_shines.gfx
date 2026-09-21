@@ -248,11 +248,11 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "STP_bookmark_maksim_shine"
-		texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_maksim.png"
+		name = "GFX_focus_STP_bookmark_support_shabrat_shine"
+		texturefile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_support_shabrat.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_maksim.png"
+			animationmaskfile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_support_shabrat.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -267,11 +267,11 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "STP_bookmark_party_shine"
-		texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_party.png"
+		name = "GFX_focus_STP_bookmark_support_party_shine"
+		texturefile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_support_party.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_party.png"
+			animationmaskfile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_support_party.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -286,11 +286,68 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "STP_bookmark_operation_shine"
-		texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_operation.png"
+		name = "GFX_focus_STP_bookmark_last_banquet_shine"
+		texturefile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_last_banquet.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_operation.png"
+			animationmaskfile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_last_banquet.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_VAL_bookmark_contract_state_shine"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contract_state.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contract_state.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_VAL_bookmark_trading_partners_shine"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_trading_partners.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_trading_partners.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_VAL_bookmark_october_2160_shine"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_october_2160.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_october_2160.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
