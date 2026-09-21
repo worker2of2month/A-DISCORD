@@ -92,6 +92,19 @@ DYNAMIC_MODIFIER_SCOPES: dict[str, tuple[str, str]] = {
         "applied per state by the collapse dirty-state effects to mark districts "
         "wrecked in the fighting",
     ),
+    "VAL_reclamation_stage_1_modifier": (
+        STATE,
+        "replaces the original contaminated-state modifier after Kefreyt completes "
+        "the first reclamation project in that state",
+    ),
+    "VAL_reclamation_stage_2_modifier": (
+        STATE,
+        "replaces reclamation stage one after Kefreyt completes the second state project",
+    ),
+    "VAL_reclamation_stage_3_modifier": (
+        STATE,
+        "marks a fully reclaimed state after the original contamination penalties are removed",
+    ),
     "ADISCORD_vorkerland_regional_autonomy": (
         STATE,
         "applied per state to districts administered locally rather than from the "
