@@ -71,9 +71,18 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		complete_effect = {
-			if = { limit = { tag = WKR } ADISCORD_vorkerland_apply_worker_map = yes }
-			else_if = { limit = { tag = VAD } ADISCORD_vorkerland_apply_vlad_map = yes }
-			else_if = { limit = { tag = TVA } ADISCORD_vorkerland_apply_dorian_map = yes }
+			if = {
+				limit = { tag = WKR }
+				ADISCORD_vorkerland_apply_worker_map = yes
+			}
+			else_if = {
+				limit = { tag = VAD }
+				ADISCORD_vorkerland_apply_vlad_map = yes
+			}
+			else_if = {
+				limit = { tag = TVA }
+				ADISCORD_vorkerland_apply_dorian_map = yes
+			}
 		}
 		ai_will_do = { factor = 0 }
 	}
@@ -191,16 +200,29 @@ ADISCORD_scenario_debug_category = {
 		complete_effect = {
 			if = {
 				limit = { is_debug = yes is_ai = no }
-				if = { limit = { FROM = { tag = CIN } } set_variable = { var = VAL_frontier_target value = 1 } }
-				else_if = { limit = { FROM = { tag = OSF } } set_variable = { var = VAL_frontier_target value = 2 } }
-				else_if = { limit = { FROM = { tag = APH } } set_variable = { var = VAL_frontier_target value = 3 } }
-				else = { set_variable = { var = VAL_frontier_target value = 4 } }
 				if = {
-				    limit = { VAL_frontier_prewar_eligible = yes }
-				    set_variable = { var = VAL_frontier_stage value = 2 }
-				    VAL_frontier_start_war = yes
+					limit = { FROM = { tag = CIN } }
+					set_variable = { var = VAL_frontier_target value = 1 }
 				}
-				else = { log = "[ADISCORD_PEACE] frontier debug entry rejected: ownership/control or sovereignty changed" }
+				else_if = {
+					limit = { FROM = { tag = OSF } }
+					set_variable = { var = VAL_frontier_target value = 2 }
+				}
+				else_if = {
+					limit = { FROM = { tag = APH } }
+					set_variable = { var = VAL_frontier_target value = 3 }
+				}
+				else = {
+					set_variable = { var = VAL_frontier_target value = 4 }
+				}
+				if = {
+					limit = { VAL_frontier_prewar_eligible = yes }
+					set_variable = { var = VAL_frontier_stage value = 2 }
+					VAL_frontier_start_war = yes
+				}
+				else = {
+					log = "[ADISCORD_PEACE] frontier debug entry rejected: ownership/control or sovereignty changed"
+				}
 			}
 		}
 		ai_will_do = { factor = 0 }
