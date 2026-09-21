@@ -633,7 +633,17 @@ VAL_regional_integration_target_valid = {
 	tag = VAL
 	is_subject = no
 	has_capitulated = no
-	FROM = { is_owned_by = ROOT is_controlled_by = ROOT NOT = { is_core_of = ROOT } }
+	has_war = no
+	FROM = {
+		is_owned_by = ROOT
+		is_controlled_by = ROOT
+		NOT = { is_core_of = ROOT }
+		any_neighbor_state = {
+			is_owned_by = ROOT
+			is_controlled_by = ROOT
+			is_core_of = ROOT
+		}
+	}
 }
 
 VAL_can_proclaim_commonwealth = {
