@@ -5,20 +5,15 @@ on_actions = {
 			if = {
 				limit = { VAL = { exists = yes } }
 				VAL = {
-					VAL_initialize_command_balance = yes
-					VAL_initialize_arsenal_recovery = yes
+					# Rebuild the persistent consumer on every load. The initializer preserves
+					# an existing authority value and only defaults it when it is absent.
+					VAL_initialize_contract_authority = yes
 					VAL_initialize_command_balance = yes
 					VAL_initialize_arsenal_recovery = yes
 					VAL_grant_contract_warlord = yes
 					VAL_reveal_stelander_focus_branch = yes
 					VAL_call_subjects_to_wars = yes
 					VAL_check_nam_concession = yes
-					# The contract-authority spirit is persistent, but older saves and
-					# interrupted startup chains may lack its dynamic-modifier consumer.
-					if = {
-						limit = { NOT = { has_dynamic_modifier = { modifier = VAL_contract_state } } }
-						VAL_initialize_contract_authority = yes
-					}
 				}
 			}
 			if = {
@@ -168,6 +163,9 @@ on_actions = {
 		}
 	}
 
+
+	on_weekly_VAL = {
+		effect = {
 			VAL_reconcile_supply_crisis = yes
 			VAL_reclamation_reconcile_project = yes
 			VAL_final_crisis_weekly = yes
@@ -184,6 +182,7 @@ on_actions = {
 				}
 				add_ideas = VAL_northern_volunteer_mandate
 			}
+			# Runtime fallback if another transition dropped the dynamic-modifier consumer.
 			if = {
 				limit = { NOT = { has_dynamic_modifier = { modifier = VAL_contract_state } } }
 				VAL_initialize_contract_authority = yes
@@ -196,5 +195,6 @@ on_actions = {
 				limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
 				VAL_frontier_weekly = yes
 			}
-
+		}
+	}
 }
