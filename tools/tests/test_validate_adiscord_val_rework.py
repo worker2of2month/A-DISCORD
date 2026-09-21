@@ -3767,10 +3767,50 @@ class ValExpandedCampaignTests(unittest.TestCase):
         snapshot = named_block_spans(effects, "VAL_snapshot_nodrul_settlement")[0].text
         self.assertNotIn("every_state", snapshot)
         for state in (8, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22):
-            self.assertRegex(snapshot, rf"\b{state} = \{{")
+            self.assertRegex(snapshot, rf"\\b{state} = \\{{")
+
         install = named_block_spans(effects, "VAL_install_nodrul_administration")[0].text
-        self.assertLess(install.index("VAL_snapshot_nodrul_settlement = yes"), install.index("white_peace = VAL"))
-        self.assertLess(install.index("VAL_partition_nodrul_settlement = yes"), install.index("VAL_call_subjects_to_wars = yes"))
+        finish = named_block_spans(effects, "VAL_finish_nodrul_administration")[0].text
+        complete = named_block_spans(effects, "VAL_complete_nodrul_administration")[0].text
+
+        self.assertLess(
+            install.index("VAL_snapshot_nodrul_settlement = yes"),
+            install.index("white_peace = VAL"),
+        )
+        self.assertLess(
+            install.index("VAL_partition_nodrul_settlement = yes"),
+            install.index("country_event = { id = val_contract.353 days = 1 }"),
+        )
+        # NOD begins as faction leader: the old alliance must be detached before
+        # the deferred autonomy conversion or the engine leaves only white peace.
+        self.assertIn("is_faction_leader = yes", install)
+        self.assertIn("dismantle_faction = yes", install)
+        self.assertIn("remove_from_faction = NOD", install)
+        self.assertNotIn("set_autonomy = {", install)
+
+        self.assertIn("is_in_faction = yes", complete)
+        self.assertIn("dismantle_faction = yes", complete)
+        self.assertIn("remove_from_faction = NOD", complete)
+        self.assertIn("target = NOD", complete)
+        self.assertIn("autonomy_state = autonomy_VAL_contract_administration", complete)
+        self.assertIn("country_event = { id = val_contract.353 days = 1 }", complete)
+        self.assertIn("value = 4", complete)
+        self.assertIn("compare = less_than", complete)
+
+        self.assertIn("is_subject_of = VAL", finish)
+        self.assertIn("NOD_VAL_administration", finish)
+        self.assertIn("VAL_call_subjects_to_wars = yes", finish)
+
+        events = (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(
+            encoding="utf-8"
+        )
+        retry353 = next(
+            block.text
+            for block in named_block_spans(events, "country_event")
+            if "id = val_contract.353" in block.text
+        )
+        self.assertIn("hidden = yes", retry353)
+        self.assertIn("VAL_complete_nodrul_administration = yes", retry353)
 
     def test_nodrul_partition_selects_four_connected_regions_without_neutrals(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions

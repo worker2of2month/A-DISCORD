@@ -2938,8 +2938,36 @@ VAL_install_nodrul_administration = {
         VAL_settle_frontier_partner_war = yes
         if = { limit = { has_war_with = VAL } white_peace = VAL }
         VAL = { VAL_partition_nodrul_settlement = yes }
-        VAL = { set_autonomy = { target = NOD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
-                VAL = { VAL_call_subjects_to_wars = yes } }
+
+        # Nodrul starts as the leader of the old Consortium. A faction leader
+        # cannot be converted into Kefreyt's subject reliably on the same tick.
+        # Detach that alliance first, then retry the autonomy conversion after
+        # the diplomatic cache has advanced by one day.
+        if = {
+            limit = { is_in_faction = yes }
+            if = {
+                limit = { is_faction_leader = yes }
+                faction_leader = { dismantle_faction = yes }
+            }
+            else = {
+                faction_leader = { remove_from_faction = NOD }
+            }
+        }
+        set_country_flag = VAL_nodrul_administration_pending
+        set_variable = { var = VAL_nodrul_administration_retry value = 0 }
+        country_event = { id = val_contract.353 days = 1 }
+    }
+}
+
+
+VAL_finish_nodrul_administration = {
+    if = {
+        limit = {
+            tag = NOD
+            has_country_flag = VAL_nodrul_administration_pending
+            is_subject_of = VAL
+            VAL = { exists = yes has_capitulated = no is_subject = no }
+        }
         if = {
             limit = { NOT = { has_cosmetic_tag = NOD_VAL_administration } }
             set_cosmetic_tag = NOD_VAL_administration
@@ -2956,8 +2984,77 @@ VAL_install_nodrul_administration = {
         remove_mission = NOD_cw_intervention_preparation
         remove_mission = NOD_cw_northern_redeployment
         set_rule = { can_join_factions = no can_create_factions = no }
+        clr_country_flag = VAL_nodrul_administration_pending
+        clear_variable = VAL_nodrul_administration_retry
         ADISCORD_economy_mark_dirty = yes
-        VAL = { ADISCORD_economy_mark_dirty = yes }
+        VAL = {
+            VAL_call_subjects_to_wars = yes
+            ADISCORD_economy_mark_dirty = yes
+        }
+    }
+}
+
+VAL_complete_nodrul_administration = {
+    if = {
+        limit = {
+            tag = NOD
+            has_country_flag = VAL_nodrul_administration_pending
+            VAL = { exists = yes has_capitulated = no is_subject = no }
+        }
+        if = {
+            limit = { is_subject_of = VAL }
+            VAL_finish_nodrul_administration = yes
+        }
+        else_if = {
+            limit = { is_in_faction = yes }
+            if = {
+                limit = { is_faction_leader = yes }
+                faction_leader = { dismantle_faction = yes }
+            }
+            else = {
+                faction_leader = { remove_from_faction = NOD }
+            }
+        }
+        else = {
+            VAL = {
+                set_autonomy = {
+                    target = NOD
+                    autonomy_state = autonomy_VAL_contract_administration
+                    freedom_level = 0.10
+                    end_wars = no
+                    end_civil_wars = no
+                }
+            }
+            if = {
+                limit = { is_subject_of = VAL }
+                VAL_finish_nodrul_administration = yes
+            }
+        }
+
+        # Bound the cache-retry loop. Normally one deferred tick is enough;
+        # four attempts leave room for nested peace/faction callbacks.
+        if = {
+            limit = { has_country_flag = VAL_nodrul_administration_pending }
+            add_to_variable = { var = VAL_nodrul_administration_retry value = 1 }
+            if = {
+                limit = {
+                    check_variable = {
+                        var = VAL_nodrul_administration_retry
+                        value = 4
+                        compare = less_than
+                    }
+                }
+                country_event = { id = val_contract.353 days = 1 }
+            }
+            else = {
+                set_country_flag = VAL_nodrul_administration_failed
+                log = "[VAL] Nodrul settlement failed after bounded faction/autonomy retries"
+            }
+        }
+    }
+    else = {
+        clr_country_flag = VAL_nodrul_administration_pending
+        clear_variable = VAL_nodrul_administration_retry
     }
 }
 

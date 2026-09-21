@@ -908,6 +908,16 @@ country_event = {
 	}
 }
 
+# Deferred Nodrul settlement: faction removal reaches the diplomatic cache on
+# the following day, so subject conversion cannot be trusted on capitulation tick.
+country_event = {
+    id = val_contract.353
+    hidden = yes
+    is_triggered_only = yes
+    trigger = { tag = NOD has_country_flag = VAL_nodrul_administration_pending }
+    immediate = { VAL_complete_nodrul_administration = yes }
+}
+
 # One-shot confirmation of native war entry, not a recurring campaign pulse.
 country_event = {
     id = val_rework.117
