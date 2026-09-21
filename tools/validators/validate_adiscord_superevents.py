@@ -365,32 +365,26 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     _check_order("sound effects", sound_effects, sound_effect_names, issues)
     _check_order("sound category", sound_category, sound_effect_names, issues)
 
-    if not re.search(r'^music_station\s*=\s*"adiscord_superevents"\s*$',
-                     source[PRESENTATION_SONGS], re.M):
-        issues.append("presentation music must use its hidden station")
-    for gui_path in (root / "interface").glob("*.gui"):
-        if re.search(r'name\s*=\s*"adiscord_superevents_(?:faceplate|stations_entry)"',
-                     gui_path.read_text(encoding="utf-8-sig")):
-            issues.append(f"presentation station must not have radio UI: {gui_path.name}")
+    # Presentation tracks are direct-play assets, not radio playlist entries.
+    # Registering them in any music/*.txt file makes HOI4 enumerate them in
+    # the music player even when their random-play chance is zero.
+    if re.search(r"(?m)^\s*music_station\s*=", source[PRESENTATION_SONGS]):
+        issues.append("presentation audio guard file must not define a music station")
+    if re.search(r"(?m)^\s*music\s*=", source[PRESENTATION_SONGS]):
+        issues.append("presentation audio guard file must not register radio songs")
 
     for effect in sound_effect_names:
         song = effect.removesuffix("_sound_e")
         assets = [block for block in blocks(source[MUSIC], r"^\s*music\s*=\s*\{")
                   if f'name = "{song}"' in block]
-        rotation = [block for block in blocks(source[PRESENTATION_SONGS], r"^\s*music\s*=\s*\{")
-                    if f'song = "{song}"' in block]
         for playlist in (root / "music").glob("*.txt"):
-            if playlist == root / PRESENTATION_SONGS:
-                continue
-            if re.search(rf'song\s*=\s*"{re.escape(song)}"',
+            if re.search(rf'(?m)^\s*song\s*=\s*"{re.escape(song)}"\s*$',
                          playlist.read_text(encoding="utf-8-sig")):
-                issues.append(f"presentation music must not appear in another playlist: {song}")
+                issues.append(
+                    f"presentation music must not be registered in radio playlists: {song}"
+                )
         if len(assets) != 1 or f'file = "{song}.ogg"' not in assets[0]:
             issues.append(f"missing or duplicate single-channel music asset {song}")
-        if len(rotation) != 1:
-            issues.append(f"presentation music needs one song registration for play_song: {song}")
-        elif not re.search(r"chance\s*=\s*\{\s*factor\s*=\s*0\s*\}", rotation[0]):
-            issues.append(f"presentation music must have zero random playback chance: {song}")
 
     if (root / RU_LOC).is_file() and not (root / RU_LOC).read_bytes().startswith(b"\xef\xbb\xbf"):
         issues.append("Russian superevent localisation must use UTF-8 BOM")

@@ -27,24 +27,34 @@ def copy_contract_tree(destination: Path) -> None:
 
 
 class SupereventContractTests(unittest.TestCase):
-    def test_radio_keeps_only_mod_songs_and_preserves_vanilla(self):
+    def test_radio_excludes_superevents_and_preserves_mod_music(self):
         playlists = list((ROOT / "music").glob("*.txt"))
         songs = "\n".join(path.read_text(encoding="utf-8-sig") for path in playlists)
-        from tools.validators.validate_adiscord_superevents import blocks
 
+        # Presentation audio is played directly from ADISCORD_music.asset.
+        # It must never be registered as a radio song, otherwise HOI4 exposes
+        # it in the music-player track list even with chance factor 0.
         for item in PRESENTATIONS:
-            registered = [block for block in blocks(songs, r"^\s*music\s*=\s*\{")
-                          if f'song = "{item.name}"' in block]
-            self.assertEqual(len(registered), 1, item.name)
-            self.assertRegex(registered[0], r"chance\s*=\s*\{\s*factor\s*=\s*0\s*\}")
+            self.assertNotIn(f'song = "{item.name}"', songs, item.name)
+
+        guard = (ROOT / "music/ADISCORD_superevent_songs.txt").read_text(
+            encoding="utf-8-sig"
+        )
+        self.assertNotIn("music_station =", guard)
+        self.assertNotIn("song =", guard)
+
         self.assertNotIn('song = "one_minute_of_silence"', songs)
         self.assertNotIn('_after_superevent', songs)
         self.assertEqual(songs.count('song = "ADISCORD_stp_civil_war_end"'), 1)
         self.assertIn('music_station = "adiscord_music"', songs)
-        visible_songs = (ROOT / "music/ADISCORD_songs.txt").read_text(encoding="utf-8-sig")
+        visible_songs = (ROOT / "music/ADISCORD_songs.txt").read_text(
+            encoding="utf-8-sig"
+        )
         for item in PRESENTATIONS:
             self.assertNotIn(f'song = "{item.name}"', visible_songs)
-        self.assertNotIn('replace_path="music"', (ROOT / "descriptor.mod").read_text())
+        self.assertNotIn(
+            'replace_path="music"', (ROOT / "descriptor.mod").read_text()
+        )
         self.assertFalse((ROOT / "music/_songs.txt").exists())
         self.assertFalse((ROOT / "music/music.asset").exists())
         assets = (ROOT / "music/ADISCORD_music.asset").read_text()
