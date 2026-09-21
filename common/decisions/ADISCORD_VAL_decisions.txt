@@ -385,7 +385,7 @@ VAL_contract_management = {
 		}
 		cost = 0
 		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
-		custom_cost_text = VAL_cost_treasury_100
+		custom_cost_text = ADISCORD_action_cost_treasury_100
 		days_re_enable = 90
 		complete_effect = {
 			ADISCORD_economy_spend_100 = yes
