@@ -1,8 +1,9 @@
 defined_text = {
 	name = VALGetContractAuthorityBand
 	text = { trigger = { check_variable = { var = VAL_contract_authority value = 90 compare = greater_than_or_equals } } localization_key = VAL_CONTRACT_AUTHORITY_DOMINANT }
-	text = { trigger = { check_variable = { var = VAL_contract_authority value = 70 compare = greater_than_or_equals } } localization_key = VAL_CONTRACT_AUTHORITY_COHERENT }
-	text = { trigger = { check_variable = { var = VAL_contract_authority value = 40 compare = greater_than_or_equals } } localization_key = VAL_CONTRACT_AUTHORITY_BROKERED }
+	text = { trigger = { check_variable = { var = VAL_contract_authority value = 75 compare = greater_than_or_equals } } localization_key = VAL_CONTRACT_AUTHORITY_CENTRALIZED }
+	text = { trigger = { check_variable = { var = VAL_contract_authority value = 50 compare = greater_than_or_equals } } localization_key = VAL_CONTRACT_AUTHORITY_COHERENT }
+	text = { trigger = { check_variable = { var = VAL_contract_authority value = 25 compare = greater_than_or_equals } } localization_key = VAL_CONTRACT_AUTHORITY_BROKERED }
 	text = { localization_key = VAL_CONTRACT_AUTHORITY_FRAGMENTED }
 }
 
