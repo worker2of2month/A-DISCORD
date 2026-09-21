@@ -311,47 +311,116 @@ VAL_frontier_workshop_target_valid = {
 
 # COUNTRY recipient: eligibility is rechecked at acceptance.
 VAL_export_customer = {
- NOT = { AND = { tag = EFL VAL = { has_country_flag = VAL_nam_concession_agreed } } }
- exists = yes has_capitulated = no has_war = yes
- NOT = { has_war_with = VAL }
- OR = { tag = CIN tag = OSF tag = APH tag = WRK tag = WKR tag = VAD tag = TVA tag = STP tag = STS tag = SRP tag = NOD tag = YPR tag = COF tag = TFF AND = { OR = { tag = NAM tag = EFL } VAL = { has_completed_focus = VAL_Resource_War_Contracts } } }
+	NOT = {
+		AND = {
+			tag = EFL
+			VAL = { has_country_flag = VAL_nam_concession_agreed }
+		}
+	}
+	exists = yes
+	has_capitulated = no
+	has_war = yes
+	NOT = { has_war_with = VAL }
+	OR = {
+		tag = CIN
+		tag = OSF
+		tag = APH
+		tag = WRK
+		tag = WKR
+		tag = VAD
+		tag = TVA
+		tag = STP
+		tag = STS
+		tag = SRP
+		tag = NOD
+		tag = YPR
+		tag = COF
+		tag = TFF
+		AND = {
+			OR = {
+				tag = NAM
+				tag = EFL
+			}
+			VAL = { has_completed_focus = VAL_Resource_War_Contracts }
+		}
+	}
 }
+
 VAL_export_slot_free = {
- OR = { NOT = { has_idea = VAL_export_income_1 } AND = { has_completed_focus = VAL_Northern_Clearing_House NOT = { has_idea = VAL_export_income_2 } } }
-
+	OR = {
+		NOT = { has_idea = VAL_export_income_1 }
+		AND = {
+			has_completed_focus = VAL_Northern_Clearing_House
+			NOT = { has_idea = VAL_export_income_2 }
+		}
+	}
 	NOT = { check_variable = { var = STP_ps_val_receipt_contract value = 3 compare = equals } }
-
 }
+
 VAL_export_arms_can_accept = {
- has_country_flag = VAL_export_offer_arms
- VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes
- VAL = { exists = yes has_capitulated = no has_country_flag = VAL_export_offer_pending VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } }
-
-	OR = { NOT = { tag = STS has_war_with = STP } VAL = { NOT = { has_variable = STP_ps_val_receipt_rifles } } }
-
+	has_country_flag = VAL_export_offer_arms
+	VAL_export_customer = yes
+	ADISCORD_economy_can_spend_100 = yes
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		has_country_flag = VAL_export_offer_pending
+		VAL_export_slot_free = yes
+		NOT = { has_equipment = { infantry_equipment < 2500 } }
+	}
+	OR = {
+		NOT = { tag = STS has_war_with = STP }
+		VAL = { NOT = { has_variable = STP_ps_val_receipt_rifles } }
+	}
 }
-VAL_export_advisors_can_accept = {
- has_country_flag = VAL_export_offer_advisors
- VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes
- NOT = { has_idea = VAL_paid_military_advisors }
- VAL = { exists = yes has_capitulated = no has_country_flag = VAL_export_offer_pending NOT = { has_idea = VAL_advisors_income } NOT = { command_power < 25 } }
- OR = {
-  NOT = { OR = { tag = NAM tag = EFL } }
-  AND = {
-   NOT = { has_country_flag = VAL_export_customer_cooldown }
-   VAL = { NOT = { has_manpower < 2000 } }
-  }
- }
 
+VAL_export_advisors_can_accept = {
+	has_country_flag = VAL_export_offer_advisors
+	VAL_export_customer = yes
+	ADISCORD_economy_can_spend_100 = yes
+	NOT = { has_idea = VAL_paid_military_advisors }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		has_country_flag = VAL_export_offer_pending
+		NOT = { has_idea = VAL_advisors_income }
+		NOT = { command_power < 25 }
+	}
+	OR = {
+		NOT = { OR = { tag = NAM tag = EFL } }
+		AND = {
+			NOT = { has_country_flag = VAL_export_customer_cooldown }
+			VAL = { NOT = { has_manpower < 2000 } }
+		}
+	}
 }
 
 VAL_northern_volunteer_host = {
- exists = yes has_capitulated = no is_subject = no has_war_with = NOD
- NOT = { has_war_with = VAL }
- OR = { tag = YPR tag = COF tag = TFF tag = STS AND = { tag = STP has_country_leader = { character = STP_maksim_shabrat } } }
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	has_war_with = NOD
+	NOT = { has_war_with = VAL }
+	OR = {
+		tag = YPR
+		tag = COF
+		tag = TFF
+		tag = STS
+		AND = {
+			tag = STP
+			has_country_leader = { character = STP_maksim_shabrat }
+		}
+	}
 }
+
 VAL_northern_volunteer_front_open = {
- OR = { YPR = { VAL_northern_volunteer_host = yes } COF = { VAL_northern_volunteer_host = yes } TFF = { VAL_northern_volunteer_host = yes } STS = { VAL_northern_volunteer_host = yes } STP = { VAL_northern_volunteer_host = yes } }
+	OR = {
+		YPR = { VAL_northern_volunteer_host = yes }
+		COF = { VAL_northern_volunteer_host = yes }
+		TFF = { VAL_northern_volunteer_host = yes }
+		STS = { VAL_northern_volunteer_host = yes }
+		STP = { VAL_northern_volunteer_host = yes }
+	}
 }
 
 VAL_cannibal_sphere_secured = {
@@ -757,21 +826,47 @@ VAL_nam_concession_deliverable = {
 
 # COUNTRY: select one diplomatic address for the common northern ultimatum.
 VAL_frontier_bloc_target_eligible = {
-	exists = yes is_subject = no has_capitulated = no
-	NOT = { is_in_faction_with = VAL has_war_with = VAL }
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = {
+		is_in_faction_with = VAL
+		has_war_with = VAL
+	}
 	OR = {
-		AND = { tag = CIN 58 = { is_owned_by = CIN is_controlled_by = CIN } 59 = { is_owned_by = CIN is_controlled_by = CIN } 60 = { is_owned_by = CIN is_controlled_by = CIN } }
-		AND = { tag = OSF 61 = { is_owned_by = OSF is_controlled_by = OSF } 62 = { is_owned_by = OSF is_controlled_by = OSF } 63 = { is_owned_by = OSF is_controlled_by = OSF } }
-		AND = { tag = APH 64 = { is_owned_by = APH is_controlled_by = APH } 65 = { is_owned_by = APH is_controlled_by = APH } }
+		AND = {
+			tag = CIN
+			58 = { is_owned_by = CIN is_controlled_by = CIN }
+			59 = { is_owned_by = CIN is_controlled_by = CIN }
+			60 = { is_owned_by = CIN is_controlled_by = CIN }
+		}
+		AND = {
+			tag = OSF
+			61 = { is_owned_by = OSF is_controlled_by = OSF }
+			62 = { is_owned_by = OSF is_controlled_by = OSF }
+			63 = { is_owned_by = OSF is_controlled_by = OSF }
+		}
+		AND = {
+			tag = APH
+			64 = { is_owned_by = APH is_controlled_by = APH }
+			65 = { is_owned_by = APH is_controlled_by = APH }
+		}
 	}
 }
 
 # COUNTRY target: predict the same faction compatibility used by assembly.
 VAL_frontier_nod_support_possible = {
 	NOD = {
-		exists = yes has_capitulated = no
-		OR = { is_subject = no is_subject_of = STP }
-		NOT = { has_war_with = PREV is_in_faction_with = VAL }
+		exists = yes
+		has_capitulated = no
+		OR = {
+			is_subject = no
+			is_subject_of = STP
+		}
+		NOT = {
+			has_war_with = PREV
+			is_in_faction_with = VAL
+		}
 	}
 	OR = {
 		is_in_faction = no
@@ -782,15 +877,43 @@ VAL_frontier_nod_support_possible = {
 
 VAL_frontier_nod_will_intervene = {
 	OR = {
-		AND = { VAL_frontier_idle = no check_variable = { var = VAL_frontier_target value = 1 compare = equals } CIN = { VAL_frontier_nod_support_possible = yes } }
-		AND = { VAL_frontier_idle = no check_variable = { var = VAL_frontier_target value = 2 compare = equals } OSF = { VAL_frontier_nod_support_possible = yes } }
-		AND = { VAL_frontier_idle = no check_variable = { var = VAL_frontier_target value = 3 compare = equals } APH = { VAL_frontier_nod_support_possible = yes } }
+		AND = {
+			VAL_frontier_idle = no
+			check_variable = { var = VAL_frontier_target value = 1 compare = equals }
+			CIN = { VAL_frontier_nod_support_possible = yes }
+		}
+		AND = {
+			VAL_frontier_idle = no
+			check_variable = { var = VAL_frontier_target value = 2 compare = equals }
+			OSF = { VAL_frontier_nod_support_possible = yes }
+		}
+		AND = {
+			VAL_frontier_idle = no
+			check_variable = { var = VAL_frontier_target value = 3 compare = equals }
+			APH = { VAL_frontier_nod_support_possible = yes }
+		}
 		AND = {
 			VAL_frontier_idle = yes
 			OR = {
-				CIN = { VAL_frontier_bloc_target_eligible = yes VAL_frontier_nod_support_possible = yes }
-				AND = { CIN = { VAL_frontier_bloc_target_eligible = no } OSF = { VAL_frontier_bloc_target_eligible = yes VAL_frontier_nod_support_possible = yes } }
-				AND = { CIN = { VAL_frontier_bloc_target_eligible = no } OSF = { VAL_frontier_bloc_target_eligible = no } APH = { VAL_frontier_bloc_target_eligible = yes VAL_frontier_nod_support_possible = yes } }
+				CIN = {
+					VAL_frontier_bloc_target_eligible = yes
+					VAL_frontier_nod_support_possible = yes
+				}
+				AND = {
+					CIN = { VAL_frontier_bloc_target_eligible = no }
+					OSF = {
+						VAL_frontier_bloc_target_eligible = yes
+						VAL_frontier_nod_support_possible = yes
+					}
+				}
+				AND = {
+					CIN = { VAL_frontier_bloc_target_eligible = no }
+					OSF = { VAL_frontier_bloc_target_eligible = no }
+					APH = {
+						VAL_frontier_bloc_target_eligible = yes
+						VAL_frontier_nod_support_possible = yes
+					}
+				}
 			}
 		}
 	}
