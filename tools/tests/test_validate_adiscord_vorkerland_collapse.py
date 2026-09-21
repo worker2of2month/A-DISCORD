@@ -2453,12 +2453,22 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("set_cosmetic_tag = WRK_vorkerland_utilitarian_republic", anton_path)
         self.assertIn("portrait = GFX_portrait_WRK_Anton_Bagley", anton_path)
         self.assertIn("ideology = utilitarian_accelerationism", successor)
+        self.assertLess(
+            anton_path.index("ADISCORD_vorkerland_promote_anton_bagley = yes"),
+            anton_path.index("ruling_party = utilitarism"),
+            "Anton must be registered before WKR switches to utilitarism or HOI4 generates a fallback leader",
+        )
         for token in (
             "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic",
             "ruling_party = utilitarism",
             "ADISCORD_vorkerland_promote_anton_bagley = yes",
         ):
             self.assertIn(token, worker_formation)
+        self.assertLess(
+            worker_formation.index("ADISCORD_vorkerland_promote_anton_bagley = yes"),
+            worker_formation.index("ruling_party = utilitarism"),
+            "Anton must be registered before restored WRK switches to utilitarism",
+        )
         finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
         self.assertIn("ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes", finalizer)
         self.assertIn("ADISCORD_vorkerland_show_worker_victory_superevent = yes", finalizer)
