@@ -60,20 +60,14 @@ ideas = {
 
   VAL_export_income_1 = {
    picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
-   on_add = { ADISCORD_economy_mark_dirty = yes }
-   on_remove = { ADISCORD_economy_mark_dirty = yes }
    modifier = { }
   }
   VAL_export_income_2 = {
    picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
-   on_add = { ADISCORD_economy_mark_dirty = yes }
-   on_remove = { ADISCORD_economy_mark_dirty = yes }
    modifier = { }
   }
   VAL_advisors_income = {
    picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
-   on_add = { ADISCORD_economy_mark_dirty = yes }
-   on_remove = { ADISCORD_economy_mark_dirty = yes }
    modifier = { planning_speed = -0.05 }
   }
   VAL_paid_military_advisors = {
