@@ -115,3 +115,23 @@ music = {
 	song = "ADISCORD_shot"
 	chance = { base = 10 }
 }
+
+music = {
+	song = "ADISCORD_capistrano_crush_kill"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_oomph_labyrinth"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_egorbez_kah"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_ksb_muzic_war"
+	chance = { base = 10 }
+}

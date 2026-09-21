@@ -125,3 +125,27 @@ music = {
 	file = "superevent_rus_last_empire.ogg"
 	volume = 1.0
 }
+
+music = {
+	name = "ADISCORD_capistrano_crush_kill"
+	file = "Crush, kill - Capistrano.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_oomph_labyrinth"
+	file = "Labyrinth - OOMPH!.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_egorbez_kah"
+	file = "kah - егорbez.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_ksb_muzic_war"
+	file = "ksb muzic - War.ogg"
+	volume = 0.65
+}
