@@ -164,8 +164,16 @@ class CivilWarContracts(unittest.TestCase):
         self.assertTrue(matches_conditions(ast_block(diplomacy, "DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER"), {}))
         self.assertFalse(matches_conditions(ast_block(diplomacy, "DIPLOMACY_JOIN_ALLY_ENABLE_TRIGGER"), {}))
         north = block(self.effects, "STP_cw_start_northern_war")
-        for ally in ("COF", "TFF"):
-            self.assertRegex(north, ally + r"\s*=\s*\{\s*add_to_war\s*=\s*\{\s*targeted_alliance = YPR")
+        self.assertRegex(north, r"COF\s*=\s*\{\s*add_to_war\s*=\s*\{\s*targeted_alliance = YPR")
+        self.assertNotRegex(north, r"TFF\s*=\s*\{\s*add_to_war\s*=")
+        self.assertIn("limit = { has_war_with = YPR has_war_with = COF }", north)
+        self.assertIn("STP_cw_release_tff_to_northern_war = yes", north)
+        release = block(self.effects, "STP_cw_release_tff_to_northern_war")
+        self.assertRegex(release, r"TFF\s*=\s*\{\s*add_to_war\s*=\s*\{\s*targeted_alliance = YPR")
+        self.assertIn("VAL = { has_war_with = NOD }", release)
+        self.assertIn("has_country_flag = VAL_campaign_mobilizing", release)
+        self.assertIn("has_country_flag = VAL_campaign_target", release)
+        self.assertIn("character = STP_maksim_shabrat", release)
 
     def test_northern_call_excludes_only_nod_to_stelander_until_peace(self):
         triggers = entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
