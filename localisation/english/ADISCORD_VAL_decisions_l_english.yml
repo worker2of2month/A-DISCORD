@@ -190,7 +190,7 @@
  VAL_debug_grant_contract_reserves_desc: "Adds treasury funds, rifles and support equipment for testing decisions."
  VAL_debug_reset_rework_state: "§RDEBUG:§! Reset Debug States"
  VAL_debug_reset_rework_state_desc: "Removes only debug crisis stages and test Vorkerland penalties, without changing focus progress."
- VAL_contract_state: "Contract State"
+ VAL_contract_state: "Contract System Authority"
  VAL_contract_state_desc: "Contract Authority: §Y[?VAL_contract_authority|0]/100§! — §Y[VALGetContractAuthorityBand]§!. The bonuses below are recalculated when authority or a completed military, industrial or administrative specialisation changes."
  VAL_CONTRACT_AUTHORITY_DOMINANT: "unified command"
  VAL_CONTRACT_AUTHORITY_CENTRALIZED: "centralised command"
