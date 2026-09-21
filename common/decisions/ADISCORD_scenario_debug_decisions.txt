@@ -273,6 +273,167 @@ ADISCORD_scenario_debug_category = {
 		}
 		ai_will_do = { factor = 0 }
 	}
+
+	ADISCORD_debug_war_declare = {
+		icon = generic_prepare_civil_war
+		targets = { VAL CIN OSF APH STP STS SRP NOD YPR COF TFF AIN WRK WKR VAD TVA IVN RUS SLA RZA MLR ERT IRT SCA NAM EFL AZH SLF }
+		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
+		visible = { is_debug = yes is_ai = no }
+		available = { has_capitulated = no is_subject = no NOT = { has_war_with = FROM is_in_faction_with = FROM } FROM = { has_capitulated = no is_subject = no } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				declare_war_on = { target = FROM type = annex_everything }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_join_faction = {
+		icon = generic_prepare_civil_war
+		targets = { VAL CIN OSF APH STP STS SRP NOD YPR COF TFF AIN WRK WKR VAD TVA IVN RUS SLA RZA MLR ERT IRT SCA NAM EFL AZH SLF }
+		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
+		visible = { is_debug = yes is_ai = no }
+		available = { is_subject = no is_in_faction = no has_capitulated = no NOT = { has_war_with = FROM } FROM = { has_capitulated = no OR = { is_subject = no is_in_faction = yes } } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				FROM = {
+				    if = { limit = { is_in_faction = no } create_faction_from_template = { template = faction_template_ADISCORD_standard name = ADISCORD_war_debug_faction } }
+				    faction_leader = { add_to_faction = ROOT }
+				}
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_join_wars = {
+		icon = generic_prepare_civil_war
+		targets = { VAL CIN OSF APH STP STS SRP NOD YPR COF TFF AIN WRK WKR VAD TVA IVN RUS SLA RZA MLR ERT IRT SCA NAM EFL AZH SLF }
+		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
+		visible = { is_debug = yes is_ai = no }
+		available = { has_capitulated = no is_subject = no is_in_faction_with = FROM FROM = { has_war = yes } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				FROM = {
+				    every_enemy_country = {
+				        limit = { NOT = { tag = ROOT is_in_faction_with = ROOT has_war_with = ROOT } }
+				        ROOT = { add_to_war = { targeted_alliance = FROM enemy = PREV hostility_reason = asked_to_join single_target_only = yes } }
+				    }
+				}
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_occupy_capital = {
+		icon = generic_prepare_civil_war
+		targets = { VAL CIN OSF APH STP STS SRP NOD YPR COF TFF AIN WRK WKR VAD TVA IVN RUS SLA RZA MLR ERT IRT SCA NAM EFL AZH SLF }
+		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
+		visible = { is_debug = yes is_ai = no }
+		available = { has_capitulated = no has_war_with = FROM }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				FROM = { capital_scope = { set_state_controller_to = ROOT } }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_occupy_country = {
+		icon = generic_prepare_civil_war
+		targets = { VAL CIN OSF APH STP STS SRP NOD YPR COF TFF AIN WRK WKR VAD TVA IVN RUS SLA RZA MLR ERT IRT SCA NAM EFL AZH SLF }
+		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
+		visible = { is_debug = yes is_ai = no }
+		available = { has_capitulated = no has_war_with = FROM }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				FROM = { every_owned_state = { set_state_controller_to = ROOT } }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_liberate = {
+		icon = generic_prepare_civil_war
+		targets = { VAL CIN OSF APH STP STS SRP NOD YPR COF TFF AIN WRK WKR VAD TVA IVN RUS SLA RZA MLR ERT IRT SCA NAM EFL AZH SLF }
+		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
+		visible = { is_debug = yes is_ai = no }
+		available = { has_war_with = FROM }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				FROM = { every_owned_state = { limit = { OR = { is_controlled_by = ROOT controller = { is_subject_of = ROOT } } } set_state_controller_to = PREV } }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_white_peace = {
+		icon = generic_prepare_civil_war
+		targets = { VAL CIN OSF APH STP STS SRP NOD YPR COF TFF AIN WRK WKR VAD TVA IVN RUS SLA RZA MLR ERT IRT SCA NAM EFL AZH SLF }
+		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
+		visible = { is_debug = yes is_ai = no }
+		available = { has_war_with = FROM }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				white_peace = FROM
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_major_on = {
+		icon = generic_prepare_civil_war
+		targets = { VAL CIN OSF APH STP STS SRP NOD YPR COF TFF AIN WRK WKR VAD TVA IVN RUS SLA RZA MLR ERT IRT SCA NAM EFL AZH SLF }
+		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
+		visible = { is_debug = yes is_ai = no }
+		available = { FROM = { is_major = no NOT = { has_country_flag = ADISCORD_war_debug_added_major } } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				FROM = { set_country_flag = ADISCORD_war_debug_added_major set_major = yes }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_major_off = {
+		icon = generic_prepare_civil_war
+		targets = { VAL CIN OSF APH STP STS SRP NOD YPR COF TFF AIN WRK WKR VAD TVA IVN RUS SLA RZA MLR ERT IRT SCA NAM EFL AZH SLF }
+		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
+		visible = { is_debug = yes is_ai = no }
+		available = { FROM = { has_country_flag = ADISCORD_war_debug_added_major } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				FROM = { set_major = no clr_country_flag = ADISCORD_war_debug_added_major }
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
 }
 
 # BEGIN CONSOLIDATED: ADISCORD_test_wars_decisions.txt
