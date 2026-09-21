@@ -98,12 +98,52 @@ class TestValContractUi(unittest.TestCase):
             self.assertIn(f"{decision} = {{", contract)
 
         postwar = named_block(decisions, "VAL_postwar_administration")
-        for decision in (
-            "VAL_establish_regional_administration",
-            "VAL_nationalise_region",
-            "VAL_proclaim_commonwealth",
-        ):
+        for decision in ("VAL_nationalise_region", "VAL_proclaim_commonwealth"):
             self.assertIn(f"{decision} = {{", postwar)
+        self.assertNotIn("VAL_establish_regional_administration =", postwar)
+
+    def test_sparse_contract_unlock_focuses_are_short_or_have_immediate_value(self) -> None:
+        focuses = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
+        for focus_id in (
+            "VAL_Foreign_Broker_Licences",
+            "VAL_Northern_Clearing_House",
+            "VAL_Contingency_Ledgers",
+            "VAL_econ_automation",
+            "VAL_econ_logistics",
+            "VAL_econ_computing",
+            "VAL_Resource_War_Contracts",
+            "VAL_frontier_return_irem",
+        ):
+            block = named_block(focuses[focuses.index(f"id = {focus_id}") - 80:], "focus")
+            self.assertIn("cost = 3", block, focus_id)
+
+        licences = focuses[focuses.index("id = VAL_Foreign_Broker_Licences"):]
+        self.assertIn("add_political_power = 25", licences[:1800])
+        self.assertIn("VAL_change_contract_authority = yes", licences[:1800])
+
+        clearing = focuses[focuses.index("id = VAL_Northern_Clearing_House"):]
+        self.assertIn("ADISCORD_economy_receive_15 = yes", clearing[:1200])
+
+        advisers = focuses[focuses.index("id = VAL_Contingency_Ledgers"):]
+        self.assertIn("add_command_power = 15", advisers[:1200])
+
+    def test_nationalisation_is_a_repeatable_adjacent_core_chain(self) -> None:
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        nationalise = named_block(decisions, "VAL_nationalise_region")
+        for token in (
+            "state_target = yes",
+            "any_neighbor_state = {",
+            "is_core_of = ROOT",
+            "is_owned_by = ROOT",
+            "is_controlled_by = ROOT",
+            "NOT = { is_core_of = ROOT }",
+            "set_country_flag = VAL_regional_integration_active",
+            "add_core_of = ROOT",
+            "fire_only_once = no",
+        ):
+            self.assertIn(token, nationalise)
+        self.assertNotIn("compliance", nationalise)
+        self.assertNotIn("resistance", nationalise)
 
 
 if __name__ == "__main__":
