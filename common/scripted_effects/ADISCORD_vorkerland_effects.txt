@@ -3562,9 +3562,12 @@ ADISCORD_vorkerland_apply_claimant_cosmetics = {
 			}
 		}
 		else = {
+			# Register Anton's authored utilitarian leader role before switching the
+			# ruling party. Otherwise HOI4 immediately fills the vacant utilitarian
+			# slot with a generated name from the WRK pool.
+			ADISCORD_vorkerland_promote_anton_bagley = yes
 			set_politics = { ruling_party = utilitarism elections_allowed = no }
 			set_cosmetic_tag = WRK_vorkerland_utilitarian_republic
-			ADISCORD_vorkerland_promote_anton_bagley = yes
 			set_country_leader_portrait = {
 				ideology = utilitarism
 				portrait = GFX_portrait_WRK_Anton_Bagley
@@ -7172,7 +7175,8 @@ ADISCORD_vorkerland_repair_claimant_identities = {
 			}
 			else = {
 				set_cosmetic_tag = WRK_vorkerland_utilitarian_republic
-				set_politics = { ruling_party = utilitarism elections_allowed = no }
+				# Repair/activate Anton before touching the ruling party so the engine
+				# never has a frame where utilitarism lacks an authored leader.
 				if = {
 					limit = {
 						NOT = {
@@ -7187,6 +7191,7 @@ ADISCORD_vorkerland_repair_claimant_identities = {
 						ideology = utilitarian_accelerationism
 					}
 				}
+				set_politics = { ruling_party = utilitarism elections_allowed = no }
 				set_country_leader_portrait = {
 					ideology = utilitarism
 					portrait = GFX_portrait_WRK_Anton_Bagley
@@ -8223,8 +8228,10 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 	}
 	else = {
 		set_cosmetic_tag = WRK_vorkerland_utilitarian_republic
-		set_politics = { ruling_party = utilitarism elections_allowed = no }
+		# The leader role must exist before the government flips to utilitarism;
+		# otherwise the generated-leader fallback can win the race.
 		ADISCORD_vorkerland_promote_anton_bagley = yes
+		set_politics = { ruling_party = utilitarism elections_allowed = no }
 	}
 	if = {
 		limit = {
