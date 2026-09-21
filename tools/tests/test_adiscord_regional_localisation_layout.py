@@ -79,8 +79,8 @@ class RegionalLocalisationLayoutTests(unittest.TestCase):
             key for other in RUSSIAN.glob("*.yml")
             for key in localisation_keys(other.read_text(encoding="utf-8-sig"))
         )
-        for focus in ("STP_Side_With_Maksim_bm", "STP_Operation_Last_Banquette_bm",
-                      "STP_Side_With_The_Party_bm"):
+        for focus in ("STP_bookmark_support_shabrat", "STP_bookmark_last_banquet",
+                      "STP_bookmark_support_party"):
             for key in (focus, f"{focus}_desc"):
                 self.assertIn(key, keys)
                 self.assertEqual(all_counts[key], 1, key)

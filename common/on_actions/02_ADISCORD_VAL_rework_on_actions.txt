@@ -1,7 +1,19 @@
 on_actions = {
 	on_startup = {
 		effect = {
-			if = { limit = { VAL = { exists = yes } } VAL = { VAL_initialize_command_balance = yes VAL_initialize_arsenal_recovery = yes VAL_reveal_stelander_focus_branch = yes VAL_call_subjects_to_wars = yes VAL_check_nam_concession = yes VAL_final_crisis_initialize = yes VAL_final_crisis_reconcile = yes VAL_call_frontier_partner = yes } }
+			if = {
+				limit = { VAL = { exists = yes } }
+				VAL = {
+					VAL_initialize_command_balance = yes
+					VAL_initialize_arsenal_recovery = yes
+					VAL_reveal_stelander_focus_branch = yes
+					VAL_call_subjects_to_wars = yes
+					VAL_check_nam_concession = yes
+					VAL_final_crisis_initialize = yes
+					VAL_final_crisis_reconcile = yes
+					VAL_call_frontier_partner = yes
+				}
+			}
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_fresh_campaign_contract_v1
@@ -16,7 +28,15 @@ on_actions = {
 
 	on_war_relation_added = {
 		effect = {
-            if = { limit = { OR = { ROOT = { tag = TFF } FROM = { tag = TFF } } } TFF = { VAL_call_frontier_administrations = yes } }
+			if = {
+				limit = {
+					OR = {
+						ROOT = { tag = TFF }
+						FROM = { tag = TFF }
+					}
+				}
+				TFF = { VAL_call_frontier_administrations = yes }
+			}
 			if = {
 				limit = { ROOT = { tag = VAL } }
 				FROM = { VAL_frontier_register_war_participant = yes }
@@ -34,17 +54,38 @@ on_actions = {
 				}
 				VAL = { VAL_reveal_stelander_focus_branch = yes }
 			}
-			if = { limit = { OR = { ROOT = { tag = VAL } FROM = { tag = VAL } } } VAL = { VAL_check_nam_concession = yes } }
 			if = {
-				limit = { OR = { ROOT = { tag = VAL } FROM = { tag = VAL } } }
-				VAL = { VAL_call_subjects_to_wars = yes VAL_final_crisis_initialize = yes VAL_final_crisis_reconcile = yes VAL_call_frontier_partner = yes }
+				limit = {
+					OR = {
+						ROOT = { tag = VAL }
+						FROM = { tag = VAL }
+					}
+				}
+				VAL = { VAL_check_nam_concession = yes }
+			}
+			if = {
+				limit = {
+					OR = {
+						ROOT = { tag = VAL }
+						FROM = { tag = VAL }
+					}
+				}
+				VAL = {
+					VAL_call_subjects_to_wars = yes
+					VAL_final_crisis_initialize = yes
+					VAL_final_crisis_reconcile = yes
+					VAL_call_frontier_partner = yes
+				}
 			}
 		}
 	}
 
 	on_puppet = {
 		effect = {
-			if = { limit = { FROM = { tag = VAL } } VAL = { VAL_call_subjects_to_wars = yes } }
+			if = {
+				limit = { FROM = { tag = VAL } }
+				VAL = { VAL_call_subjects_to_wars = yes }
+			}
 		}
 	}
 
@@ -82,13 +123,25 @@ on_actions = {
 			else_if = {
 				limit = { ROOT = { tag = VAL } FROM.FROM = { has_state_flag = VAL_bop_core_lost } }
 				ROOT = {
-					if = { limit = { has_power_balance = { id = VAL_command_balance } } add_power_balance_value = { id = VAL_command_balance value = 0.05 } }
+					if = {
+						limit = { has_power_balance = { id = VAL_command_balance } }
+						add_power_balance_value = { id = VAL_command_balance value = 0.05 }
+					}
 				}
 				FROM.FROM = { clr_state_flag = VAL_bop_core_lost }
 			}
 
 			VAL = { VAL_check_nam_concession = yes }
-			if = { limit = { VAL = { exists = yes has_country_flag = VAL_vorkerland_resource_access_active } 33 = { NOT = { is_controlled_by = WRK } } } VAL = { VAL_end_vorkerland_resource_access = yes } }
+			if = {
+				limit = {
+					VAL = {
+						exists = yes
+						has_country_flag = VAL_vorkerland_resource_access_active
+					}
+					33 = { NOT = { is_controlled_by = WRK } }
+				}
+				VAL = { VAL_end_vorkerland_resource_access = yes }
+			}
 			if = {
 				limit = {
 					VAL = {
@@ -102,27 +155,33 @@ on_actions = {
 		}
 	}
 
-    on_weekly_VAL = {
-        effect = {
-            VAL_reconcile_supply_crisis = yes
-            VAL_reclamation_reconcile_project = yes
-            VAL_final_crisis_weekly = yes
-            # Save-safe AI fallback: authorize the named NOD-war volunteer mission
-            # as soon as a valid front exists. Human VAL still uses the 50 PP decision.
-            if = {
-                limit = {
-                    is_ai = yes
-                    has_war = no
-                    has_capitulated = no
-                    is_subject = no
-                    VAL_northern_volunteer_front_open = yes
-                    NOT = { has_idea = VAL_northern_volunteer_mandate }
-                }
-                add_ideas = VAL_northern_volunteer_mandate
-            }
-            if = { limit = { has_idea = VAL_northern_volunteer_mandate } VAL_reconcile_northern_volunteers = yes }
-            if = { limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } } VAL_frontier_weekly = yes }
-        }
-    }
+	on_weekly_VAL = {
+		effect = {
+			VAL_reconcile_supply_crisis = yes
+			VAL_reclamation_reconcile_project = yes
+			VAL_final_crisis_weekly = yes
+			# Save-safe AI fallback: authorize the named NOD-war volunteer mission
+			# as soon as a valid front exists. Human VAL still uses the 50 PP decision.
+			if = {
+				limit = {
+					is_ai = yes
+					has_war = no
+					has_capitulated = no
+					is_subject = no
+					VAL_northern_volunteer_front_open = yes
+					NOT = { has_idea = VAL_northern_volunteer_mandate }
+				}
+				add_ideas = VAL_northern_volunteer_mandate
+			}
+			if = {
+				limit = { has_idea = VAL_northern_volunteer_mandate }
+				VAL_reconcile_northern_volunteers = yes
+			}
+			if = {
+				limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
+				VAL_frontier_weekly = yes
+			}
+		}
+	}
 
 }

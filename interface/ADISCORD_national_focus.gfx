@@ -153,16 +153,31 @@ spriteTypes = {
 ###STP BOOKMARK
 
 	spriteType = {
-	  	name = "STP_bookmark_maksim"
-	  	texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_maksim.png"
+		name = "GFX_focus_STP_bookmark_support_shabrat"
+		texturefile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_support_shabrat.png"
 	}
 	spriteType = {
-	  	name = "STP_bookmark_party"
-	  	texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_party.png"
+		name = "GFX_focus_STP_bookmark_last_banquet"
+		texturefile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_last_banquet.png"
 	}
 	spriteType = {
-	  	name = "STP_bookmark_operation"
-	  	texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_operation.png"
+		name = "GFX_focus_STP_bookmark_support_party"
+		texturefile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_support_party.png"
+	}
+
+###VAL BOOKMARK
+
+	spriteType = {
+		name = "GFX_focus_VAL_bookmark_contract_state"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contract_state.png"
+	}
+	spriteType = {
+		name = "GFX_focus_VAL_bookmark_trading_partners"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_trading_partners.png"
+	}
+	spriteType = {
+		name = "GFX_focus_VAL_bookmark_october_2160"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_october_2160.png"
 	}
 
 ###VAL
