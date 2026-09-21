@@ -127,6 +127,20 @@ class TestValContractUi(unittest.TestCase):
         advisers = focuses[focuses.index("id = VAL_Contingency_Ledgers"):]
         self.assertIn("add_command_power = 15", advisers[:1200])
 
+    def test_contract_authority_improves_political_cashflow(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        refresh = named_block(effects, "VAL_refresh_contract_modifier")
+        base_assignments = re.findall(r"set_variable = \{ var = VAL_contract_pp_gain value = (-?\d+(?:\.\d+)?) \}", refresh)
+        self.assertGreaterEqual(len(base_assignments), 5)
+        self.assertEqual(base_assignments[:5], ["-0.05", "0.05", "0.10", "0.15", "0.20"])
+
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        chancery = named_block(decisions, "VAL_fund_contract_chancery")
+        self.assertIn("ADISCORD_economy_can_spend_100 = yes", chancery)
+        self.assertIn("ADISCORD_economy_spend_100 = yes", chancery)
+        self.assertIn("add_political_power = 75", chancery)
+        self.assertIn("days_re_enable = 90", chancery)
+
     def test_nationalisation_is_a_repeatable_adjacent_core_chain(self) -> None:
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
         nationalise = named_block(decisions, "VAL_nationalise_region")
