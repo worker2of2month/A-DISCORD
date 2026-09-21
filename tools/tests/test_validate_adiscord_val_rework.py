@@ -2118,6 +2118,8 @@ class ValReclamationTests(unittest.TestCase):
                     flags.discard((scope, v))
                 elif k == "add_dynamic_modifier":
                     modifiers.add((scope, scalar(v, "modifier")))
+                elif k == "remove_dynamic_modifier":
+                    modifiers.discard((scope, scalar(v, "modifier")))
                 elif k == "add_extra_state_shared_building_slots":
                     buildings[(scope, "slots")] += float(v)
                 elif k == "add_building_construction":
@@ -2155,15 +2157,20 @@ class ValReclamationTests(unittest.TestCase):
             call("finish_project")
             self.assertEqual(values[(24, "VAL_reclamation_stage")], stage)
             self.assertEqual(values[("VAL", "ADISCORD_economy_treasury")], 1500 - 500 * stage)
-            self.assertAlmostEqual(values[(24, "VAL_reclamation_people")], stage * .25)
-            self.assertAlmostEqual(values[(24, "VAL_reclamation_resources")], stage * .20)
+            state_modifiers = {modifier for state, modifier in modifiers if state == 24}
+            self.assertEqual(state_modifiers, {f"VAL_reclamation_stage_{stage}_modifier"})
+            self.assertNotIn((24, "ADISCORD_vorkerland_dirty_state"), modifiers)
+            self.assertNotIn((24, "VAL_reclamation_recovered_land"), modifiers)
         self.assertEqual(buildings[(24, "infrastructure")], 3)
         self.assertEqual(buildings[(24, "slots")], 3)
         self.assertEqual(buildings[(24, "industrial_complex")], 1)
         call("begin_project")
         self.assertNotIn(("VAL", "VAL_reclamation_deposit"), values)
-        for key, penalty in (("people", -.75), ("resources", -.60), ("slots", -.40), ("construction", -.50), ("supply", .35)):
-            self.assertAlmostEqual(values[(24, "VAL_reclamation_" + key)] + penalty, 0)
+        for legacy in ("VAL_reclamation_people", "VAL_reclamation_resources", "VAL_reclamation_slots",
+                       "VAL_reclamation_construction", "VAL_reclamation_supply"):
+            self.assertNotIn((24, legacy), values)
+        self.assertEqual({modifier for state, modifier in modifiers if state == 24},
+                         {"VAL_reclamation_stage_3_modifier"})
         self.assertFalse(flags)
 
     def test_focus_layout_and_localisation_contracts(self):
