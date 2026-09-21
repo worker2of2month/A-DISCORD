@@ -1,0 +1,374 @@
+<div id="native-frame-sizing" data-mode="native">
+  <style>
+    #native-frame-sizing {
+      --game-bg: #0d1314;
+      --game-panel: #161e1f;
+      --game-panel-2: #202a29;
+      --game-well: #080d0e;
+      --game-line: #405554;
+      --game-line-hi: #71918b;
+      --game-text: #eef0ea;
+      --game-muted: #9ea9a4;
+      --game-cyan: #55a3a3;
+      --game-gold: #c1a255;
+      --game-green: #5f9469;
+      color: var(--game-text);
+    }
+
+    #native-frame-sizing * { box-sizing: border-box; }
+
+    #native-frame-sizing .mode-row,
+    #native-frame-sizing .screen-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    #native-frame-sizing button {
+      appearance: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font: inherit;
+      color: var(--secondary-foreground);
+      background: var(--secondary);
+      cursor: pointer;
+    }
+
+    #native-frame-sizing button[aria-pressed="true"] {
+      color: var(--primary-foreground);
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    #native-frame-sizing .formula {
+      margin: -2px 0 12px;
+      color: var(--muted-foreground);
+    }
+
+    #native-frame-sizing .game-window {
+      width: 100%;
+      max-width: 920px;
+      overflow: hidden;
+      color: var(--game-text);
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.012) 0 1px, transparent 1px 4px),
+        var(--game-bg);
+      border: 1px solid #344443;
+      box-shadow: 0 14px 34px rgba(0,0,0,.36);
+      font-family: "Arial Narrow", "Segoe UI", sans-serif;
+    }
+
+    #native-frame-sizing .titlebar {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      font-weight: 600;
+      background: linear-gradient(#303837, #181d1d);
+      border-bottom: 1px solid #52615e;
+    }
+
+    #native-frame-sizing .close {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      color: #ead39c;
+      border: 1px solid #80673e;
+      background: #222928;
+    }
+
+    #native-frame-sizing .game-body { padding: 8px; }
+    #native-frame-sizing .screen { display: none; }
+    #native-frame-sizing .screen.is-visible { display: block; }
+    #native-frame-sizing .label-line {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 9px;
+      background: linear-gradient(90deg, #101718, #222b2a 65%, #101718);
+      border-bottom: 1px solid var(--game-line-hi);
+    }
+
+    #native-frame-sizing .muted { color: var(--game-muted); }
+    #native-frame-sizing .cyan { color: var(--game-cyan); }
+    #native-frame-sizing .gold { color: var(--game-gold); }
+
+    #native-frame-sizing .tech-shell {
+      display: grid;
+      grid-template-columns: 548px minmax(180px, 1fr);
+      gap: 8px;
+    }
+
+    #native-frame-sizing .research-slots {
+      display: grid;
+      gap: 6px;
+      margin-top: 7px;
+    }
+
+    #native-frame-sizing .research-slot {
+      position: relative;
+      width: 100%;
+      height: 66px;
+      overflow: hidden;
+      background: linear-gradient(90deg, #0e1516, #1c2726 60%, #0b1112);
+      border: 1px solid var(--game-line);
+    }
+
+    #native-frame-sizing .slot-frame {
+      position: absolute;
+      left: 8px;
+      top: 7px;
+      height: 50px;
+      display: grid;
+      grid-template-columns: 47px minmax(0,1fr) 78px;
+      gap: 7px;
+      padding: 5px;
+      border: 1px solid var(--game-cyan);
+      background: rgba(4,10,12,.48);
+      transition: width .18s ease;
+    }
+
+    #native-frame-sizing[data-mode="native"] .slot-frame { width: 475px; }
+    #native-frame-sizing[data-mode="atlas"] .slot-frame { width: 950px; }
+
+    #native-frame-sizing .icon,
+    #native-frame-sizing .endcap {
+      display: grid;
+      place-items: center;
+      background: var(--game-well);
+      border: 1px solid #385150;
+    }
+
+    #native-frame-sizing .slot-copy {
+      display: grid;
+      align-content: center;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    #native-frame-sizing .slot-copy span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #native-frame-sizing .meter { height: 4px; background: #060a0b; }
+    #native-frame-sizing .meter i { display: block; width: 62%; height: 100%; background: var(--game-cyan); }
+
+    #native-frame-sizing .tech-note {
+      padding: 10px;
+      background: var(--game-panel);
+      border: 1px solid var(--game-line);
+    }
+
+    #native-frame-sizing .tab-strip {
+      display: flex;
+      width: 524px;
+      overflow: hidden;
+      margin-top: 8px;
+      border-bottom: 1px solid var(--game-line);
+    }
+
+    #native-frame-sizing .agency-tab {
+      flex: 0 0 auto;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(#202928, #111718);
+      border-right: 1px solid var(--game-line);
+      border-bottom: 3px solid var(--game-cyan);
+      transition: width .18s ease;
+    }
+
+    #native-frame-sizing[data-mode="native"] .agency-tab { width: 262px; }
+    #native-frame-sizing[data-mode="atlas"] .agency-tab { width: 524px; }
+
+    #native-frame-sizing .agency-top {
+      display: grid;
+      grid-template-columns: 70px minmax(0,1fr) 92px;
+      gap: 7px;
+      padding: 7px;
+      min-height: 76px;
+      border: 1px solid var(--game-line);
+      background: linear-gradient(105deg, #0b1213, #202a29 70%, #101718);
+    }
+
+    #native-frame-sizing .agency-copy { display: grid; align-content: center; gap: 5px; }
+    #native-frame-sizing .agency-action { display: grid; place-items: center; border: 1px solid var(--game-line-hi); background: #172020; }
+    #native-frame-sizing .agency-content { height: 185px; margin-top: 5px; border: 1px solid var(--game-line); background: var(--game-panel); }
+
+    #native-frame-sizing .deployment-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1.25fr) minmax(280px,.85fr);
+      gap: 8px;
+    }
+
+    #native-frame-sizing .deployment-panel {
+      padding: 6px;
+      border: 1px solid var(--game-line);
+      background: var(--game-panel);
+    }
+
+    #native-frame-sizing .deployment-list { display: grid; gap: 5px; margin-top: 6px; }
+    #native-frame-sizing .deploy-row {
+      min-height: 55px;
+      display: grid;
+      grid-template-columns: 48px minmax(0,1fr) 94px;
+      gap: 6px;
+      align-items: center;
+      padding: 5px;
+      overflow: hidden;
+      border: 1px solid var(--game-line);
+      background: linear-gradient(90deg, #111817, #202927);
+    }
+
+    #native-frame-sizing .priority-frame {
+      justify-self: end;
+      height: 21px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      overflow: hidden;
+      border: 1px solid #5b6864;
+      transition: width .18s ease;
+    }
+
+    #native-frame-sizing[data-mode="native"] .priority-frame { width: 20px; }
+    #native-frame-sizing[data-mode="atlas"] .priority-frame { width: 80px; }
+    #native-frame-sizing .priority-frame i { flex: 0 0 12px; height: 12px; margin-left: 3px; border-radius: 50%; background: var(--game-green); }
+
+    #native-frame-sizing .template-row {
+      min-height: 64px;
+      display: grid;
+      grid-template-columns: 58px minmax(0,1fr) 38px;
+      gap: 6px;
+      align-items: center;
+      padding: 5px;
+      border: 1px solid var(--game-line);
+      background: #141c1c;
+    }
+
+    #native-frame-sizing .dimension {
+      display: inline-block;
+      padding: 2px 5px;
+      color: var(--game-gold);
+      background: #090e0f;
+      border: 1px solid #66583a;
+    }
+
+    @media (max-width: 760px) {
+      #native-frame-sizing .tech-shell,
+      #native-frame-sizing .deployment-grid { grid-template-columns: 1fr; }
+      #native-frame-sizing .tech-shell > div:first-child { min-width: 0; }
+      #native-frame-sizing .tab-strip { width: 100%; }
+      #native-frame-sizing[data-mode="native"] .agency-tab { width: 50%; }
+    }
+  </style>
+
+  <h2>Размер одного кадра, а не всего DDS</h2>
+  <p class="subtitle">Переключи режим и посмотри, как один и тот же атлас ведёт себя на трёх экранах.</p>
+
+  <div class="mode-row" aria-label="Режим расчёта размера">
+    <button type="button" data-choice="atlas-size" aria-pressed="false" onclick="setFrameMode('atlas', this); toggleSelect(this)">A · Размер всего атласа</button>
+    <button type="button" data-choice="native-frame" aria-pressed="true" onclick="setFrameMode('native', this); toggleSelect(this)">B · Размер отдельного кадра</button>
+  </div>
+  <div id="frame-formula" class="formula" aria-live="polite">B · ширина кадра = ширина DDS ÷ число кадров</div>
+
+  <div class="screen-row" aria-label="Экран интерфейса">
+    <button type="button" aria-pressed="true" onclick="showFrameScreen('technology', this)">Технологии</button>
+    <button type="button" aria-pressed="false" onclick="showFrameScreen('agency', this)">Агентство</button>
+    <button type="button" aria-pressed="false" onclick="showFrameScreen('deployment', this)">Размещение</button>
+  </div>
+
+  <section class="screen is-visible" data-screen="technology" aria-label="Размеры кадра технологий">
+    <div class="game-window">
+      <div class="titlebar"><span>Исследования</span><span class="close">×</span></div>
+      <div class="game-body tech-shell">
+        <div>
+          <div class="label-line"><span>Ячейки для исследований</span><span class="cyan">1 / 4</span></div>
+          <div class="research-slots">
+            <div class="research-slot">
+              <div class="slot-frame">
+                <div class="icon">⚙</div>
+                <div class="slot-copy"><span>Выберите технологию для исследования</span><div class="meter"><i></i></div></div>
+                <div class="endcap">⌁</div>
+              </div>
+            </div>
+            <div class="research-slot">
+              <div class="slot-frame">
+                <div class="icon">⌖</div>
+                <div class="slot-copy"><span>Автоматическое оружие</span><div class="meter"><i style="width:78%"></i></div></div>
+                <div class="endcap gold">47 д.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tech-note">
+          <div class="gold">DDS 950 × 78 · 2 кадра</div>
+          <p class="muted">Нужный кадр: <span class="dimension">475 × 78</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="agency" aria-label="Размеры кадра агентства">
+    <div class="game-window">
+      <div class="titlebar"><span>Разведывательное агентство</span><span class="close">×</span></div>
+      <div class="game-body">
+        <div class="agency-top">
+          <div class="icon">◉</div>
+          <div class="agency-copy"><span>Создать агентство</span><span class="muted">5 фабрик · 30 дней</span><div class="meter"><i style="width:41%"></i></div></div>
+          <div class="agency-action">Создать</div>
+        </div>
+        <div class="tab-strip">
+          <div class="agency-tab">Операции</div>
+          <div class="agency-tab">Криптология</div>
+        </div>
+        <div class="agency-content"></div>
+        <p class="muted">DDS вкладок 524 × 53 · 2 кадра → <span class="dimension">262 × 53</span> на вкладку</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="deployment" aria-label="Размеры кадра размещения">
+    <div class="game-window">
+      <div class="titlebar"><span>Набрать и разместить</span><span class="close">×</span></div>
+      <div class="game-body deployment-grid">
+        <div class="deployment-panel">
+          <div class="label-line"><span>Пополнение и снабжение</span><span class="cyan">5 линий</span></div>
+          <div class="deployment-list">
+            <div class="deploy-row"><div class="icon">＋</div><div><div>Подкрепления</div><div class="meter"><i style="width:72%"></i></div></div><div class="priority-frame"><i></i></div></div>
+            <div class="deploy-row"><div class="icon">▲</div><div><div>Перевооружение</div><div class="meter"><i style="width:49%"></i></div></div><div class="priority-frame"><i></i></div></div>
+            <div class="deploy-row"><div class="icon">▣</div><div><div>Машины снабжения</div><div class="meter"><i style="width:64%"></i></div></div><div class="priority-frame"><i></i></div></div>
+          </div>
+          <p class="muted">DDS приоритета 80 × 21 · 4 кадра → <span class="dimension">20 × 21</span></p>
+        </div>
+        <div class="deployment-panel">
+          <div class="label-line"><span>Шаблоны дивизий</span><span class="gold">0 / 7</span></div>
+          <div class="deployment-list">
+            <div class="template-row"><div class="icon">⌖</div><div>Police division</div><span class="cyan">●</span></div>
+            <div class="template-row"><div class="icon">◒</div><div>Regular army</div><span class="cyan">●</span></div>
+            <div class="template-row"><div class="icon">◒</div><div>Capital Guard</div><span class="cyan">●</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    window.setFrameMode = function(mode, button) {
+      const root = document.getElementById('native-frame-sizing');
+      root.dataset.mode = mode;
+      root.querySelectorAll('.mode-row button').forEach((item) => item.setAttribute('aria-pressed', item === button ? 'true' : 'false'));
+      document.getElementById('frame-formula').textContent = mode === 'native'
+        ? 'B · ширина кадра = ширина DDS ÷ число кадров'
+        : 'A · движок получает ширину всего DDS, поэтому рамка растягивается и обрезается';
+    };
+
+    window.showFrameScreen = function(name, button) {
+      const root = document.getElementById('native-frame-sizing');
+      root.querySelectorAll('.screen').forEach((screen) => screen.classList.toggle('is-visible', screen.dataset.screen === name));
+      root.querySelectorAll('.screen-row button').forEach((item) => item.setAttribute('aria-pressed', item === button ? 'true' : 'false'));
+    };
+  </script>
+</div>
