@@ -1,7 +1,21 @@
 on_actions = {
 	on_startup = {
 		effect = {
-			if = { limit = { VAL = { exists = yes } } VAL = { VAL_initialize_command_balance = yes VAL_initialize_arsenal_recovery = yes VAL_call_subjects_to_wars = yes VAL_check_nam_concession = yes } }
+			if = {
+				limit = { VAL = { exists = yes } }
+				VAL = {
+					VAL_initialize_command_balance = yes
+					VAL_initialize_arsenal_recovery = yes
+					VAL_call_subjects_to_wars = yes
+					VAL_check_nam_concession = yes
+					# The contract-authority spirit is persistent, but older saves and
+					# interrupted startup chains may lack its dynamic-modifier consumer.
+					if = {
+						limit = { NOT = { has_dynamic_modifier = { modifier = VAL_contract_state } } }
+						VAL_initialize_contract_authority = yes
+					}
+				}
+			}
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_fresh_campaign_contract_v1
@@ -95,7 +109,13 @@ on_actions = {
     on_weekly_VAL = {
         effect = {
             VAL_reconcile_supply_crisis = yes
-            if = { limit = { has_idea = VAL_northern_volunteer_mandate } VAL_reconcile_northern_volunteers = yes } if = { limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } } VAL_frontier_weekly = yes } }
+            if = {
+                limit = { NOT = { has_dynamic_modifier = { modifier = VAL_contract_state } } }
+                VAL_initialize_contract_authority = yes
+            }
+            if = { limit = { has_idea = VAL_northern_volunteer_mandate } VAL_reconcile_northern_volunteers = yes }
+            if = { limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } } VAL_frontier_weekly = yes }
+        }
     }
 
 }
