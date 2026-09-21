@@ -770,7 +770,7 @@ class ValStelanderContractTests(unittest.TestCase):
                     with self.subTest(contract=name, total=stock, own=own_stock):
                         # The imported-stock case exposed the producer=VAL consumer bug.
                         pools = {"VAL": own_stock, "STP": stock - own_stock}
-                        flags = {"VAL_quarterly_contract_active", "STP_cw_rifles_paid"}
+                        flags = {"VAL_quarterly_contract_active", "VAL_contract_rifles_paid"}
                         values, payment_calls = {}, []
                         rewards = {"treasury": 0, "influence": 0}
 
@@ -802,11 +802,11 @@ class ValStelanderContractTests(unittest.TestCase):
                                 elif item.key == "set_temp_variable":
                                     data = fields(item)
                                     values[data["var"]] = number(data["value"])
-                                elif item.key == "STP_cw_pay_rifles":
+                                elif item.key == "VAL_pay_contract_rifles":
                                     # Boundary of the existing, separately tested payment API.
                                     # VAL supplies a price; only its fresh receipt permits success.
-                                    flags.discard("STP_cw_rifles_paid")
-                                    amount = values["STP_cw_rifle_cost"]
+                                    flags.discard("VAL_contract_rifles_paid")
+                                    amount = values["VAL_contract_rifle_cost"]
                                     payment_calls.append(amount)
                                     self.assertEqual(amount, price)
                                     if sum(pools.values()) >= amount:
@@ -814,7 +814,7 @@ class ValStelanderContractTests(unittest.TestCase):
                                             debit = min(pools[producer], amount)
                                             pools[producer] -= debit
                                             amount -= debit
-                                        flags.add("STP_cw_rifles_paid")
+                                        flags.add("VAL_contract_rifles_paid")
                                 elif item.key == "add_equipment_to_stockpile":
                                     data = fields(item)
                                     producer = data.get("producer", "VAL")
@@ -852,7 +852,7 @@ class ValStelanderContractTests(unittest.TestCase):
         contract = only_named_block(self, EFFECTS_PATH.read_text(encoding="utf-8-sig"), "VAL_cw_complete_arms_contract")
         guarded = named_blocks(contract, "if")
         success = next(item for item in guarded if re.match(
-            r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_country_flag\s*=\s*STP_cw_rifles_paid\s*check_variable", item))
+            r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_country_flag\s*=\s*VAL_contract_rifles_paid\s*check_variable", item))
         buyer = only_named_block(self, success, "STS")
         self.assertIn("ADISCORD_economy_spend_50 = yes", buyer)
         self.assertNotIn("add_equipment_to_stockpile", buyer)
@@ -872,7 +872,7 @@ class ValStelanderContractTests(unittest.TestCase):
         self.assertNotIn("ADISCORD_economy_receive_50 = yes", success)
         self.assertIn("set_country_flag = VAL_cw_arms_contract_fulfilled", success)
         self.assertIn("NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled }", contract)
-        self.assertLess(contract.index("STP_cw_pay_rifles = yes"), contract.index("ADISCORD_economy_spend_50 = yes"))
+        self.assertLess(contract.index("VAL_pay_contract_rifles = yes"), contract.index("ADISCORD_economy_spend_50 = yes"))
         self.assertNotRegex(contract, r"amount\s*=\s*-3200")
         # There must be no unconditional transfer after a failed stock check.
         without_success = contract.replace(success, "")
@@ -1617,15 +1617,15 @@ class ValNorthernExportTests(unittest.TestCase):
                                             stocks[scope][producer] = max(0, stocks[scope][producer] + number(data["amount"], scope, previous))
                                         elif key == "add_political_power": pp += float(value)
                                         elif key == "ADISCORD_economy_receive_15": revenue += 15; treasury += 15
-                                        elif key == "STP_cw_pay_rifles":
+                                        elif key == "VAL_pay_contract_rifles":
                                             # Old-source RED: account for the already tested immediate payment API.
-                                            flags[scope].discard("STP_cw_rifles_paid")
-                                            amount = values[scope]["STP_cw_rifle_cost"]
+                                            flags[scope].discard("VAL_contract_rifles_paid")
+                                            amount = values[scope]["VAL_contract_rifle_cost"]
                                             if sum(stocks[scope].values()) >= amount:
                                                 for producer in tags:
                                                     debit = min(stocks[scope][producer], amount)
                                                     stocks[scope][producer] -= debit; amount -= debit
-                                                flags[scope].add("STP_cw_rifles_paid")
+                                                flags[scope].add("VAL_contract_rifles_paid")
                                         elif key == "country_event":
                                             event_id = value if isinstance(value, str) else fields(item)["id"]
                                             accept = next(child for child in event_by_id[event_id] if child.key == "option")
@@ -1753,7 +1753,7 @@ class ValContractFormationTests(unittest.TestCase):
         rifle_effects = parse_clausewitz((ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8-sig"))
         scripts = {name: block(tree, name) for tree, name in (
             (effects, "VAL_cw_complete_arms_contract"), (effects, "VAL_cw_pay_contract_auxiliary"),
-            (rifle_effects, "STP_cw_pay_rifles"),
+            (effects, "VAL_pay_contract_rifles"),
             *[(rifle_effects, name) for name in ("STP_ps_dispatch_val_supply", "STP_ps_resolve_val_supply",
               "STP_ps_clear_val_receipt", "STP_ps_deliver_val_contract", "STP_ps_refund_val_supply")])}
         self.assertTrue(scripts["VAL_cw_pay_contract_auxiliary"])
@@ -1790,7 +1790,7 @@ class ValContractFormationTests(unittest.TestCase):
                     manpower = {"VAL": people - (.5 if scenario == "short_people" else 0), "STS": 0.0}
                     initial_stock = {equipment: sum(stock["VAL"][equipment].values()) for equipment in full_equipment}
                     initial_cash, initial_people = sum(cash.values()), sum(manpower.values())
-                    flags = {("VAL", "VAL_cw_trade_course"): 1, ("VAL", "STP_cw_rifles_paid"): 1}
+                    flags = {("VAL", "VAL_cw_trade_course"): 1, ("VAL", "VAL_contract_rifles_paid"): 1}
                     if scenario != "stale":
                         flags[("VAL", "VAL_cw_arms_offer_pending")] = tier
                     variables, templates = {}, {}
