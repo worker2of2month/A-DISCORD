@@ -9,8 +9,8 @@ DIRECTORY = ROOT / 'common/on_actions'
 SHARED = DIRECTORY / '09_ADISCORD_scripted_peace_on_actions.txt'
 GENERIC = DIRECTORY / 'ZZ_ADISCORD_default_capitulation_on_actions.txt'
 ORDER = {
-    'on_capitulation_immediate': ['stelander', 'kefreyt', 'northern_reservation'],
-    'on_capitulation': ['vorkerland_collapse', 'stelander', 'kefreyt', 'rin', 'nam', 'vorkerland_diplomacy', 'northern_reservation', 'livonn'],
+    'on_capitulation_immediate': ['stelander', 'kefreyt', 'frontier', 'northern_reservation'],
+    'on_capitulation': ['vorkerland_collapse', 'stelander', 'kefreyt', 'frontier', 'rin', 'nam', 'vorkerland_diplomacy', 'northern_reservation', 'livonn'],
     'on_peace': ['vorkerland_collapse', 'rin', 'vorkerland_diplomacy', 'kefreyt', 'stelander'],
     'on_peaceconference_ended': ['stelander'],
     'on_weekly_VAL': ['livonn'],
@@ -234,7 +234,12 @@ class WarDebugContractTests(unittest.TestCase):
         source = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
         category = block(parse_clausewitz(source.read_text(encoding="utf-8")), "ADISCORD_scenario_debug_category")
         decisions = [e for e in category if e.key.startswith("ADISCORD_debug_war_")]
-        self.assertGreaterEqual(len(decisions), 8, "Need start, occupation, liberation, peace and diagnostic controls")
+        self.assertTrue({
+            "ADISCORD_debug_war_log_on", "ADISCORD_debug_war_log_off",
+            "ADISCORD_debug_war_snapshot", "ADISCORD_debug_war_val_start",
+            "ADISCORD_debug_war_val_check", "ADISCORD_debug_war_val_abort",
+            "ADISCORD_debug_war_reserves",
+        }.issubset({e.key for e in decisions}))
         for e in decisions:
             with self.subTest(decision=e.key):
                 visible = block(e.value, "visible")
@@ -269,6 +274,8 @@ class FrontierWarEntryRegressionTests(unittest.TestCase):
         queued = [e for e in walk(start) if e.key == "country_event" and scalar(e.value, "id") == "val_rework.117"]
         self.assertEqual(len(queued), 1, "Native queued war entry needs a bounded confirmation")
         self.assertEqual(scalar(queued[0].value, "hours"), "1")
+        hidden = [e for e in walk(start) if e.key == "hidden_effect"]
+        self.assertTrue(any(queued[0] in e.value for e in hidden), "Technical confirmation must not announce an event in the reward")
         for e in walk(start):
             if e.key == "if" and any(x.key == "VAL_frontier_close" for x in e.value):
                 self.fail("Do not cancel a just-issued declaration using same-tick has_war")

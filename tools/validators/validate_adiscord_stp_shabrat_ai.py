@@ -26,7 +26,9 @@ SCORE_TOTAL = 102
 
 INTRO_FOCUSES = (
     "STP_NECTAR_OF_GODS",
+    "STP_REVOLUTION_FROM_THE_NORTH",
     "STP_2160_budget",
+    "STP_BEHIND_THE_LIGHTS",
     "STP_STATE_OF_THE_REPUBLIC",
 )
 CORE_FOCUSES = (
@@ -47,6 +49,9 @@ CORE_FOCUSES = (
 )
 DEPTH_FOCUSES = (
     "STP_Turn_The_Young_Officers",
+    "STP_cw_prepare_capital_sabotage",
+    "STP_cw_prepare_industry_sabotage",
+    "STP_cw_disruption_cells",
     "STP_cw_defensive_lines",
     "STP_cw_heavy_reserve",
     "STP_cw_abila_reserve",
@@ -58,23 +63,23 @@ DEPTH_FOCUSES = (
     "STP_cw_local_council_envoys",
     "STP_cw_autonomy_guarantees",
     "STP_Kefreite_Security_Offer",
-    "STP_cw_prepare_capital_sabotage",
 )
 WAR_FOCUSES = (
     "STP_cw_open_conscription",
     "STP_cw_unified_headquarters",
     "STP_cw_mobilization_register",
     "STP_cw_wartime_arsenals",
-    "STP_cw_road_to_fada",
     "STP_cw_supply_routes",
     "STP_cw_front_scouts",
     "STP_cw_mobile_workshops",
     "STP_cw_frontline_relief",
+    "STP_cw_route_columns",
+    "STP_cw_organize_underground",
+    "STP_cw_road_to_fada",
     "STP_cw_last_banquet",
     "STP_cw_cut_capital_roads",
     "STP_cw_government_quarter_assault",
     "STP_cw_line_formations",
-    "STP_cw_route_columns",
 )
 RECONSTRUCTION_FOCUSES = (
     "STP_cw_first_postwar_budget",
@@ -129,7 +134,9 @@ HEGEMONY_FOCUSES = (
 
 FOCUS_WEIGHTS = {
     "STP_NECTAR_OF_GODS": 20,
+    "STP_REVOLUTION_FROM_THE_NORTH": 20,
     "STP_2160_budget": 20,
+    "STP_BEHIND_THE_LIGHTS": 20,
     "STP_STATE_OF_THE_REPUBLIC": 20,
     "STP_Show_Him_The_Truth": 0,
     "STP_Govern_In_His_Name": 0,

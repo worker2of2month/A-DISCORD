@@ -192,6 +192,16 @@ on_actions = {
 	}
 	on_weekly_STP = {
 		effect = {
+			# Recover a lost native mission from the original election date.
+			if = {
+				limit = {
+					has_country_flag = { flag = STP_cw_elections_started days > 139 }
+					NOT = { has_active_mission = STP_cw_election_window }
+					NOT = { has_country_flag = STP_cw_elections_finished }
+					NOT = { has_global_flag = STP_cw_started }
+				}
+				STP_cw_finish_elections = yes
+			}
 			if = { limit = { STP_pf_active = yes }
 				STP_pf_initialize = yes
 				if = { limit = { OR = {

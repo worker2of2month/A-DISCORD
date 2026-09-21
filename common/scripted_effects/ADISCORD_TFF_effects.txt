@@ -20,3 +20,124 @@ ADISCORD_TFF_form_wartime_confederation = {
 		}
 	}
 }
+
+ADISCORD_TFF_begin_kefreyt_campaign = {
+	if = {
+		limit = {
+			tag = TFF
+			exists = yes
+			has_capitulated = no
+			is_subject = no
+			has_war_with = NOD
+			VAL = {
+				has_war_with = NOD
+				has_country_flag = VAL_nod_frontier_agreement
+			}
+		}
+		if = {
+			limit = { NOT = { has_country_flag = TFF_kefreyt_northern_campaign } }
+			set_country_flag = TFF_kefreyt_northern_campaign
+			add_ideas = TFF_kefreyt_northern_campaign
+		}
+		if = {
+			limit = { NOT = { has_global_flag = ADISCORD_news_frontier_second_war_published } }
+			set_global_flag = ADISCORD_news_frontier_second_war_published
+			news_event = { id = ADISCORD_TFF.11 hours = 1 }
+		}
+	}
+}
+
+ADISCORD_TFF_end_kefreyt_campaign = {
+	if = {
+		limit = { has_country_flag = TFF_kefreyt_northern_campaign }
+		remove_ideas = TFF_kefreyt_northern_campaign
+		clr_country_flag = TFF_kefreyt_northern_campaign
+	}
+}
+
+ADISCORD_TFF_reconcile_kefreyt_campaign = {
+	if = {
+		limit = {
+			has_country_flag = TFF_kefreyt_northern_campaign
+			OR = {
+				has_capitulated = yes
+				is_subject = yes
+				VAL = {
+					OR = {
+						exists = no
+						has_capitulated = yes
+						is_subject = yes
+					}
+				}
+				NOT = {
+					OR = {
+						has_war_with = NOD
+						has_war_with = STP
+						has_war_with = STS
+					}
+				}
+			}
+		}
+		ADISCORD_TFF_end_kefreyt_campaign = yes
+	}
+}
+
+# TFF scope after an accepted NOD capitulation outside the first northern campaign.
+ADISCORD_TFF_become_nod_subject = {
+	if = {
+		limit = {
+			tag = TFF
+			exists = yes
+			is_subject = no
+			NOD = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+			}
+		}
+		ADISCORD_TFF_end_kefreyt_campaign = yes
+		if = {
+			limit = { is_in_faction = yes }
+			faction_leader = { remove_from_faction = PREV }
+		}
+		if = {
+			limit = { has_war_with = NOD }
+			white_peace = NOD
+		}
+		if = {
+			limit = {
+				has_war_with = STP
+				STP = {
+					OR = {
+						is_in_faction_with = NOD
+						is_subject_of = NOD
+						has_country_flag = VAL_final_war_member
+					}
+				}
+			}
+			white_peace = STP
+		}
+		if = {
+			limit = {
+				has_war_with = STS
+				STS = {
+					OR = {
+						is_in_faction_with = NOD
+						is_subject_of = NOD
+						has_country_flag = VAL_final_war_member
+					}
+				}
+			}
+			white_peace = STS
+		}
+		NOD = {
+			puppet = {
+				target = TFF
+				end_wars = no
+				end_civil_wars = no
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}

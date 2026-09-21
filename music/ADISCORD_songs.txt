@@ -1,0 +1,137 @@
+
+music_station = "adiscord_music"
+
+music = {
+	song = "ADISCORD_val_theme"
+	chance = {
+		base = 10
+		modifier = {
+			factor = 0
+			NOT = { tag = VAL }
+		}
+	}
+}
+
+music = {
+	song = "ADISCORD_stp_shabrat"
+	chance = {
+		base = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_flag = STP_sided_with_Maksim_flag }
+		}
+		modifier = {
+			factor = 0
+			has_global_flag = STP_cw_started
+		}
+	}
+}
+
+music = {
+	song = "ADISCORD_stp_party_preparation"
+	chance = {
+		base = 10
+		modifier = {
+			factor = 0
+			NOT = { has_country_flag = STP_sided_with_the_party_flag }
+		}
+		modifier = {
+			factor = 0
+			has_global_flag = STP_cw_started
+		}
+	}
+}
+
+music = {
+	song = "ADISCORD_stp_party"
+	chance = {
+		base = 10
+		modifier = {
+			factor = 0
+			NOT = { has_global_flag = STP_cw_started }
+		}
+		modifier = {
+			factor = 0
+			has_global_flag = STP_cw_union_wars_finished
+		}
+		modifier = {
+			factor = 0
+			NOT = { tag = STP has_country_flag = STP_sided_with_the_party_flag has_war_with = STS }
+		}
+	}
+}
+
+music = {
+	song = "ADISCORD_stp_civil_war"
+	chance = {
+		base = 10
+		modifier = {
+			factor = 0
+			NOT = { has_global_flag = STP_cw_started }
+		}
+		modifier = {
+			factor = 0
+			has_global_flag = STP_cw_union_wars_finished
+		}
+		modifier = {
+			factor = 0
+			NOT = { tag = STS has_country_flag = STP_sided_with_Maksim_flag has_war_with = STP }
+		}
+	}
+}
+
+# Played by the opening postwar focus; excluded from random rotation.
+music = {
+	song = "ADISCORD_stp_civil_war_end"
+	chance = {
+		modifier = { factor = 0 }
+	}
+}
+
+# Kefreyt's postwar rotation follows the same settlement as its postwar content.
+music = {
+	song = "ADISCORD_val_postwar"
+	chance = {
+		base = 10
+		modifier = {
+			factor = 0
+			NOT = { AND = { tag = VAL has_global_flag = STP_cw_union_wars_finished } }
+		}
+	}
+}
+
+music = {
+	song = "ADISCORD_stp_party_postwar"
+	chance = {
+		base = 10
+		modifier = {
+			factor = 0
+			NOT = { AND = { tag = STP has_country_flag = STP_cw_postwar has_country_flag = STP_cw_won_union_battle } }
+		}
+	}
+}
+
+music = {
+	song = "ADISCORD_shot"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_capistrano_crush_kill"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_oomph_labyrinth"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_egorbez_kah"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_ksb_muzic_war"
+	chance = { base = 10 }
+}

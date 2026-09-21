@@ -12,21 +12,32 @@ bookmarks = {
 			ideology = hedonism
 			ideas = {
 				STP_hedonism_with_no_bondaries
+				STP_hidden_slaves_trade
 				STP_legalize
 				STP_worldwide_famous_tourist_destination
+				ADISCORD_economic_system_oligarchic_clan
 			}
 			focuses = {
-				STP_Side_With_Maksim_bm
-				STP_Operation_Last_Banquette_bm
-				STP_Side_With_The_Party_bm
+				STP_bookmark_support_shabrat
+				STP_bookmark_last_banquet
+				STP_bookmark_support_party
 			}
 		}
 
 		"VAL"={
 			history = "VAL_BOOKMARK_DESC"
-			ideology = pragmatism
+			ideology = etatism
 			ideas = {
 				VAL_harvest_of_ash
+				VAL_big_buyers
+				VAL_mercenary_state
+				ADISCORD_industrial_policy_military_prioritization
+				ADISCORD_economic_system_state_coordinated
+			}
+			focuses = {
+				VAL_bookmark_the_weaponry_baron
+				VAL_bookmark_different_views_on_freedom
+				VAL_bookmark_contracts_outlive_kings
 			}
 		}
 

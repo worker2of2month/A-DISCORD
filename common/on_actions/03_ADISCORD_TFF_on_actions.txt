@@ -1,7 +1,36 @@
 on_actions = {
+	on_startup = {
+		effect = {
+			TFF = { ADISCORD_TFF_reconcile_kefreyt_campaign = yes }
+		}
+	}
+
+	on_puppet = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						ROOT = { tag = TFF }
+						ROOT = { tag = VAL }
+					}
+				}
+				TFF = { ADISCORD_TFF_end_kefreyt_campaign = yes }
+			}
+		}
+	}
+
 	# ROOT is the attacking side and FROM is the defending side.
 	on_war_relation_added = {
 		effect = {
+			if = {
+				limit = {
+					OR = {
+						ROOT = { tag = TFF }
+						FROM = { tag = TFF }
+					}
+				}
+				TFF = { ADISCORD_TFF_begin_kefreyt_campaign = yes }
+			}
 			if = {
 				limit = {
 					OR = {

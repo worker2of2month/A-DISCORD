@@ -62,7 +62,7 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         opening = event_blocks(source)["ADISCORD_superevent_news.1"][1]
         immediate = named_block(opening, "immediate")
         self.assertIn("superevent_vorkerland_civilwar", immediate)
-        self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", immediate)
+        self.assertIn("ADISCORD_superevent_enqueue = yes", immediate)
         self.assertNotIn("every_country", immediate)
         for option in named_blocks(opening, "option"):
             self.assertNotIn("superevent_vorkerland_civilwar", option)

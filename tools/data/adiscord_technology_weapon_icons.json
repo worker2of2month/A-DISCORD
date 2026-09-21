@@ -367,7 +367,7 @@
       "family": "personal_antitank",
       "source": "personal_antitank_01_incendiary_bottle.dds",
       "source_uuid": "preserved-runtime:ADISCORD_antitank_01_incendiary_bottle.dds",
-      "source_sha256": "31565da97eae95426ea363fdb54b779175fc3a123895ec75c9727fc3f376169d",
+      "source_sha256": "5facbdaa26b714a84029f30cb5229dd4f99a7bb48a4528d9d9b892cc6de44b2f",
       "source_size": [
         72,
         72
@@ -380,50 +380,47 @@
     {
       "key": "satchel_charge",
       "family": "personal_antitank",
-      "source": "personal_antitank_generated_sheet.png",
-      "source_uuid": "imagegen:exec-d2783af6-bec4-4eb9-b711-89c5da67e4fe.png",
-      "source_sha256": "94a551e97b5a3aec5d38d26627d9711e054becd1be59d15fc71f6bb4cc74b6ce",
+      "source": "personal_antitank_02_satchel_charge.dds",
+      "source_uuid": "preserved-runtime:ADISCORD_antitank_02_satchel_charge.dds",
+      "source_sha256": "35fdce6c23ee48abede9aaf0b453b213a882f04e8b695d4f777bba5f91810493",
       "source_size": [
-        1536,
-        1024
+        72,
+        72
       ],
       "tier": 2,
       "kind": "compact",
-      "crop": [
-        384,
-        0,
-        768,
-        341
-      ],
-      "output": "ADISCORD_antitank_02_satchel_charge.dds"
+      "output": "ADISCORD_antitank_02_satchel_charge.dds",
+      "runtime_master": true
     },
     {
       "key": "shaped_charge_grenade",
       "family": "personal_antitank",
-      "source": "personal_antitank_03_shaped_charge_grenade.png",
-      "source_uuid": "imagegen:exec-958bd4a4-8930-4cc1-8849-c0b39aaff70a.png",
-      "source_sha256": "aec2e7d453a1f126f0b530109b303291c81b719c8bf037621aa0a260f33f0871",
+      "source": "personal_antitank_03_shaped_charge_grenade.dds",
+      "source_uuid": "preserved-runtime:ADISCORD_antitank_03_shaped_charge_grenade.dds",
+      "source_sha256": "d74d94ee3714e4d5441dfd07cc010aab0bc5800907c85d11c208c0cea4b34688",
       "source_size": [
-        1254,
-        1254
+        72,
+        72
       ],
       "tier": 3,
       "kind": "compact",
-      "output": "ADISCORD_antitank_03_shaped_charge_grenade.dds"
+      "output": "ADISCORD_antitank_03_shaped_charge_grenade.dds",
+      "runtime_master": true
     },
     {
       "key": "antitank_rifle",
       "family": "personal_antitank",
-      "source": "personal_antitank_04_antitank_rifle.png",
-      "source_uuid": "exec-20d6ac0c-539e-49e1-a05b-c5b7c4cf8411.png",
-      "source_sha256": "9b7864f08579e6205f54056d173abbafb6e32de2f9f8eef871270cb345132d64",
+      "source": "personal_antitank_04_antitank_rifle.dds",
+      "source_uuid": "preserved-runtime:ADISCORD_antitank_04_antitank_rifle.dds",
+      "source_sha256": "3aa2c2594e797befb24382718479500c75518ae1b1e808df5008fd57895179b6",
       "source_size": [
-        544,
-        536
+        72,
+        72
       ],
       "tier": 4,
       "kind": "compact",
-      "output": "ADISCORD_antitank_04_antitank_rifle.dds"
+      "output": "ADISCORD_antitank_04_antitank_rifle.dds",
+      "runtime_master": true
     },
     {
       "key": "wire_guidance",
@@ -476,30 +473,32 @@
     {
       "key": "rocket_launcher",
       "family": "personal_antitank",
-      "source": "personal_antitank_08_rocket_launcher.png",
-      "source_uuid": "exec-bef96afe-ca71-4a4c-ba94-93bbf2df9cb3.png",
-      "source_sha256": "dd7b1339f801bc624a62ac41699324d5b99bd32dc0aa3f1bf1481a4520f422bb",
+      "source": "personal_antitank_08_rocket_launcher.dds",
+      "source_uuid": "preserved-runtime:ADISCORD_antitank_08_rocket_launcher.dds",
+      "source_sha256": "27e01ebb2b24385e1158c3c842ee5c38087f030f3cb148750f6daa7674ce81cc",
       "source_size": [
-        1774,
-        887
+        72,
+        72
       ],
       "tier": 8,
       "kind": "compact",
-      "output": "ADISCORD_antitank_08_rocket_launcher.dds"
+      "output": "ADISCORD_antitank_08_rocket_launcher.dds",
+      "runtime_master": true
     },
     {
       "key": "top_attack_seeker",
       "family": "personal_antitank",
-      "source": "personal_antitank_09_top_attack_seeker.png",
-      "source_uuid": "imagegen:exec-2b4373a1-5d47-47d8-8b18-2d3e37afb4bd.png",
-      "source_sha256": "f4861ee9c18885a4c66a43827d6965106bc8f1b90eec4ec06dbb38110f266a86",
+      "source": "personal_antitank_09_top_attack_seeker.dds",
+      "source_uuid": "preserved-runtime:ADISCORD_antitank_09_top_attack_seeker.dds",
+      "source_sha256": "d0ca795d33aea46af9619c8066b1e9b574c8d80d94c905b3472b1beb01216c08",
       "source_size": [
-        1254,
-        1254
+        72,
+        72
       ],
       "tier": 9,
       "kind": "compact",
-      "output": "ADISCORD_antitank_09_top_attack_seeker.dds"
+      "output": "ADISCORD_antitank_09_top_attack_seeker.dds",
+      "runtime_master": true
     },
     {
       "key": "tandem_warhead",

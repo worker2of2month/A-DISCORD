@@ -1,0 +1,201 @@
+guiTypes = {
+	containerWindowType = {
+		name = "ADISCORD_startup_launcher"
+		position = { x = 211 y = 365 }
+		size = { width = 112 height = 36 }
+		buttonType = {
+			name = "ADISCORD_startup_open"
+			position = { x = 0 y = 0 }
+			size = { x = 112 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_politics_header_button"
+			buttonText = "ADISCORD_startup_open"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+	}
+
+	containerWindowType = {
+		name = "ADISCORD_startup_window"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 620 }
+		orientation = CENTER
+		origo = CENTER
+		moveable = yes
+		click_to_front = yes
+		background = { name = "background" quadTextureSprite = "GFX_ADISCORD_startup_background" }
+		instantTextboxType = {
+			name = "ADISCORD_startup_title"
+			position = { x = 34 y = 20 }
+			font = "hoi_24header"
+			text = "[GetName]"
+			maxWidth = 840
+			maxHeight = 30
+			format = left
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "ADISCORD_startup_subtitle"
+			position = { x = 34 y = 64 }
+			font = "hoi_16mbs"
+			text = "ADISCORD_startup_title"
+			maxWidth = 840
+			maxHeight = 24
+			format = left
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "ADISCORD_startup_close"
+			position = { x = 940 y = 12 }
+			size = { x = 36 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_close"
+			buttonText = "ADISCORD_startup_close"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
+			name = "ADISCORD_startup_country"
+			position = { x = 34 y = 570 }
+			size = { x = 221 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_tab"
+			buttonText = "ADISCORD_startup_country"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
+			name = "ADISCORD_startup_guide"
+			position = { x = 268 y = 570 }
+			size = { x = 221 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_tab"
+			buttonText = "ADISCORD_startup_guide"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
+			name = "ADISCORD_startup_paths"
+			position = { x = 502 y = 570 }
+			size = { x = 221 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_tab"
+			buttonText = "ADISCORD_startup_paths"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		iconType = {
+			name = "ADISCORD_startup_stp_picture"
+			position = { x = 746 y = 108 }
+			spriteType = "GFX_ADISCORD_startup_stp"
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "ADISCORD_startup_val_picture"
+			position = { x = 746 y = 108 }
+			spriteType = "GFX_ADISCORD_startup_val"
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "ADISCORD_startup_intro_note"
+			position = { x = 34 y = 100 }
+			font = "hoi_18mbs"
+			text = "ADISCORD_startup_intro_note"
+			maxWidth = 350
+			maxHeight = 38
+			format = left
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "ADISCORD_startup_page_0"
+			position = { x = 34 y = 152 }
+			size = { x = 359 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_page"
+			buttonText = "[ADISCORDGetStartupPageTitle0]"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
+			name = "ADISCORD_startup_page_1"
+			position = { x = 34 y = 206 }
+			size = { x = 359 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_page"
+			buttonText = "[ADISCORDGetStartupPageTitle1]"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
+			name = "ADISCORD_startup_page_2"
+			position = { x = 34 y = 260 }
+			size = { x = 359 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_page"
+			buttonText = "[ADISCORDGetStartupPageTitle2]"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
+			name = "ADISCORD_startup_page_3"
+			position = { x = 34 y = 314 }
+			size = { x = 359 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_page"
+			buttonText = "[ADISCORDGetStartupPageTitle3]"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		instantTextboxType = {
+			name = "ADISCORD_startup_guide_note"
+			position = { x = 34 y = 400 }
+			font = "hoi_16mbs"
+			text = "ADISCORD_startup_guide_note"
+			maxWidth = 396
+			maxHeight = 110
+			format = left
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "ADISCORD_startup_paths_note"
+			position = { x = 34 y = 310 }
+			font = "hoi_18mbs"
+			text = "ADISCORD_startup_paths_note"
+			maxWidth = 396
+			maxHeight = 180
+			format = left
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "ADISCORD_startup_country_body"
+			position = { x = 34 y = 138 }
+			font = "hoi_18mbs"
+			text = "[ADISCORDGetStartupBody]"
+			maxWidth = 675
+			maxHeight = 407
+			format = left
+			fixedsize = yes
+			scrollbarType = "standardtext_slider"
+		}
+		instantTextboxType = {
+			name = "ADISCORD_startup_body"
+			position = { x = 460 y = 152 }
+			font = "hoi_18mbs"
+			text = "[ADISCORDGetStartupBody]"
+			maxWidth = 500
+			maxHeight = 388
+			format = left
+			fixedsize = yes
+			scrollbarType = "standardtext_slider"
+		}
+		buttonType = {
+			name = "ADISCORD_startup_spoilers"
+			position = { x = 34 y = 510 }
+			size = { x = 359 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_page"
+			buttonText = "[ADISCORDGetStartupSpoilerLabel]"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+		buttonType = {
+			name = "ADISCORD_startup_play"
+			position = { x = 740 y = 570 }
+			size = { x = 221 y = 36 }
+			quadTextureSprite = "GFX_ADISCORD_startup_tab"
+			buttonText = "ADISCORD_startup_play"
+			buttonFont = "hoi_16mbs"
+			clicksound = click_default
+		}
+	}
+}

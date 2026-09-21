@@ -66,6 +66,8 @@ add_ideas = {
 
 set_stability = 0.63
 
+set_convoys = 100
+
 set_research_slots = 2
 
 ####### Diplomacy
