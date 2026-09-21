@@ -1576,7 +1576,15 @@ focus_tree = {
 		y = 7
 		cost = 3
 		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
-		completion_reward = { unlock_decision_tooltip = VAL_export_arms }
+		completion_reward = {
+			unlock_decision_tooltip = VAL_export_arms
+			add_political_power = 25
+			custom_effect_tooltip = VAL_focus_export_market_open_tt
+			hidden_effect = {
+				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
+				VAL_change_contract_authority = yes
+			}
+		}
 		ai_will_do = { base = 3 }
 	}
 
@@ -1588,7 +1596,11 @@ focus_tree = {
 		y = 8
 		cost = 3
 		prerequisite = { focus = VAL_Foreign_Broker_Licences }
-		completion_reward = { custom_effect_tooltip = VAL_export_second_slot_tt }
+		completion_reward = {
+			custom_effect_tooltip = VAL_export_second_slot_tt
+			ADISCORD_economy_receive_15 = yes
+			add_political_power = 25
+		}
 		ai_will_do = { base = 3 }
 	}
 
@@ -1598,9 +1610,13 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
 		x = 27
 		y = 9
-		cost = 5
+		cost = 3
 		prerequisite = { focus = VAL_Northern_Clearing_House }
-		completion_reward = { unlock_decision_tooltip = VAL_export_advisors }
+		completion_reward = {
+			unlock_decision_tooltip = VAL_export_advisors
+			add_command_power = 15
+			custom_effect_tooltip = VAL_focus_adviser_contracts_ready_tt
+		}
 		ai_will_do = { base = 4 }
 	}
 
@@ -1880,7 +1896,10 @@ focus_tree = {
         prerequisite = { focus = VAL_The_Steel_Contract }
         available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
         cancel_if_invalid = yes
-        completion_reward = { OCA = { add_stability = 0.05 add_political_power = 50 } }
+        completion_reward = {
+            custom_effect_tooltip = VAL_occidian_registries_reward_tt
+            OCA = { add_stability = 0.05 add_political_power = 50 }
+        }
         ai_will_do = { base = 10 }
     }
     focus = {
@@ -1964,7 +1983,7 @@ completion_reward = {
         icon = GFX_goal_generic_national_unity
         x = 32
         y = 17
-        cost = 5
+        cost = 3
         prerequisite = { focus = VAL_frontier_conference }
 
 
@@ -2237,13 +2256,14 @@ completion_reward = {
 		icon = GFX_goal_generic_production2
 		x = 2
 		y = 12
-		cost = 5
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		available = { is_subject = no has_capitulated = no }
 		prerequisite = { focus = VAL_econ_precision_industry }
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = ADISCORD_economy_automated_industry
+			custom_effect_tooltip = VAL_focus_paid_program_authorization_tt
 		}
 	}
 
@@ -2252,13 +2272,14 @@ completion_reward = {
 		icon = GFX_goal_generic_production2
 		x = 6
 		y = 12
-		cost = 5
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		available = { is_subject = no has_capitulated = no }
 		prerequisite = { focus = VAL_econ_special_metallurgy }
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			unlock_decision_tooltip = ADISCORD_economy_logistics_contract
+			custom_effect_tooltip = VAL_focus_paid_program_authorization_tt
 		}
 	}
 
@@ -2267,13 +2288,14 @@ completion_reward = {
 		icon = GFX_goal_generic_scientific_exchange
 		x = 2
 		y = 13
-		cost = 5
+		cost = 3
 		search_filters = { FOCUS_FILTER_INDUSTRY }
 		available = { is_subject = no has_capitulated = no }
 		prerequisite = { focus = VAL_econ_automation }
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			unlock_decision_tooltip = ADISCORD_economy_national_computing
+			custom_effect_tooltip = VAL_focus_paid_program_authorization_tt
 		}
 	}
 
@@ -2362,12 +2384,13 @@ completion_reward = {
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 36
 		y = 11
-		cost = 5
+		cost = 3
 		prerequisite = { focus = VAL_Foreign_Broker_Licences }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			unlock_decision_tooltip = VAL_resource_war_arms
 			unlock_decision_tooltip = VAL_resource_war_personnel
+			army_experience = 5
 		}
 		ai_will_do = { base = 5 }
 	}
