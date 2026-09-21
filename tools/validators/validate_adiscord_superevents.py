@@ -247,8 +247,18 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             if re.search(rf'(?m)^\s*name\s*=\s*"{re.escape(name)}"\s*$', block):
                 window = block
                 break
-        if re.search(r"\bshow_sound\s*=", window):
-            issues.append(f"GUI {name}: show_sound duplicates dispatched music playback")
+        show_sounds = re.findall(
+            r"(?m)^\s*show_sound\s*=\s*([A-Za-z0-9_]+)\s*$",
+            window,
+        )
+        if item.dedicated_sound_effect:
+            if show_sounds != [item.dedicated_sound_effect]:
+                issues.append(
+                    f"GUI {name}: expected show_sound = "
+                    f"{item.dedicated_sound_effect}, found {show_sounds}"
+                )
+        elif show_sounds:
+            issues.append(f"GUI {name}: unexpected show_sound {show_sounds}")
 
         for suffix, getter in (
             ("title", "GetSupereventTitle"),
@@ -365,9 +375,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     _check_order("sound effects", sound_effects, sound_effect_names, issues)
     _check_order("sound category", sound_category, sound_effect_names, issues)
 
-    # Presentation tracks are direct-play assets, not radio playlist entries.
-    # Registering them in any music/*.txt file makes HOI4 enumerate them in
-    # the music player even when their random-play chance is zero.
+    # Runtime presentation audio is a GUI show_sound effect. The legacy OGG
+    # assets may remain as non-radio fallback material, but registering them in
+    # music/*.txt makes HOI4 enumerate them in the music player.
     if re.search(r"(?m)^\s*music_station\s*=", source[PRESENTATION_SONGS]):
         issues.append("presentation audio guard file must not define a music station")
     if re.search(r"(?m)^\s*music\s*=", source[PRESENTATION_SONGS]):

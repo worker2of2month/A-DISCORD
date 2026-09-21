@@ -191,18 +191,39 @@ class SupereventContractTests(unittest.TestCase):
         gui = (ROOT / SCRIPTED_GUI).read_text(encoding="utf-8-sig")
         self.assertEqual(gui.count("ADISCORD_superevent_dispatch_next = yes"), len(PRESENTATIONS))
 
-    def test_presentation_playback_uses_only_one_music_channel(self) -> None:
+    def test_presentation_audio_uses_gui_sound_effects_without_radio_registration(self) -> None:
         from tools.validators.validate_adiscord_superevents import blocks
 
-        effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8-sig")
-        playback = blocks(effects, r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{")[0]
-        self.assertNotIn("sound_effect =", playback)
-        self.assertNotIn("one_minute_of_silence", playback)
+        effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(
+            encoding="utf-8-sig"
+        )
+        playback = blocks(
+            effects,
+            r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{",
+        )[0]
+        self.assertNotIn("scoped_sound_effect", playback)
+
         gui = (ROOT / "interface/superevents.gui").read_text(encoding="utf-8-sig")
-        self.assertNotIn("show_sound =", gui, "GUI audio duplicates the dispatched music track")
+        windows = blocks(gui, r"^\s*containerWindowType\s*=\s*\{")
         for item in PRESENTATIONS:
-            song = item.dedicated_sound_effect.removesuffix("_sound_e")
-            self.assertIn(f'play_song = "{song}"', playback)
+            window = next(
+                block
+                for block in windows
+                if f'name = "{item.name}"' in block
+            )
+            self.assertEqual(window.count("show_sound ="), 1, item.name)
+            self.assertIn(
+                f"show_sound = {item.dedicated_sound_effect}",
+                window,
+                item.name,
+            )
+
+        playlists = "\n".join(
+            path.read_text(encoding="utf-8-sig")
+            for path in (ROOT / "music").glob("*.txt")
+        )
+        for item in PRESENTATIONS:
+            self.assertNotIn(f'song = "{item.name}"', playlists, item.name)
 
     def test_repository_contract_is_clean(self) -> None:
         self.assertEqual(collect_issues(), [])
