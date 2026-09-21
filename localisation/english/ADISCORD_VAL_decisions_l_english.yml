@@ -888,4 +888,3 @@
  VAL_nationalise_region_complete_tt: "The state becomes a §YKefreyt core§!. Its directly held neighbours may now become eligible for the next nationalisation programme."
  VAL_fund_contract_chancery: "Fund the Contract Chancery"
  VAL_fund_contract_chancery_desc: "Buy administrative capacity instead of waiting for the political apparatus to recover on its own. Spend treasury funds on clerks, provincial offices and contract processing to gain political power. This may be repeated every 90 days."
- VAL_cost_treasury_100: "£ADISCORD_economy_treasury_texticon §Y100§!"
