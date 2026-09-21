@@ -1,11 +1,13 @@
 on_actions = {
 	on_startup = {
 		effect = {
+			OCA = { VAL_initialize_balchansk_administration = yes }
 			if = {
 				limit = { VAL = { exists = yes } }
 				VAL = {
 					VAL_initialize_command_balance = yes
 					VAL_initialize_arsenal_recovery = yes
+					VAL_grant_contract_warlord = yes
 					VAL_reveal_stelander_focus_branch = yes
 					VAL_call_subjects_to_wars = yes
 					VAL_check_nam_concession = yes
@@ -85,6 +87,7 @@ on_actions = {
 			if = {
 				limit = { FROM = { tag = VAL } }
 				VAL = { VAL_call_subjects_to_wars = yes }
+				OCA = { VAL_reconcile_balchansk_income = yes }
 			}
 		}
 	}
@@ -129,6 +132,11 @@ on_actions = {
 					}
 				}
 				FROM.FROM = { clr_state_flag = VAL_bop_core_lost }
+			}
+
+			if = {
+				limit = { FROM.FROM = { OR = { state = 44 state = 88 } } OCA = { exists = yes } }
+				OCA = { VAL_reconcile_balchansk_income = yes }
 			}
 
 			VAL = { VAL_check_nam_concession = yes }

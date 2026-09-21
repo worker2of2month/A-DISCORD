@@ -10,4 +10,14 @@ leader_traits = {
         army_org_factor = 0.05
     }
 
+    VAL_contract_warlord = {
+        random = no
+        sprite = 1
+        army_attack_factor = 0.05
+        army_org_factor = 0.05
+        planning_speed = 0.10
+        supply_consumption_factor = -0.05
+        command_power_gain = 0.10
+    }
+
 }
