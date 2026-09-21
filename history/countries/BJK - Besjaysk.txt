@@ -34,6 +34,7 @@ set_popularities = {
 set_stability = 0.67
 
 add_ideas = {
+	BJK_nodrul_influence
 	minister_BJK_Rodrik_Gate
 	minister_BJK_Kellan_Mark
 	minister_BJK_Mert_Alden
