@@ -1,5 +1,4 @@
 STP_elections_in_the_party = {
-	icon = ADISCORD_propaganda
 	picture = GFX_STP_decision_election_in_the_party
 	allowed = { tag = STP }
 	visible = {
@@ -10,7 +9,7 @@ STP_elections_in_the_party = {
         }
 	}
 	visible_when_empty = yes
-	priority = 21
+	priority = 1
 }
 
 STP_scenario_debug = {
@@ -60,7 +59,6 @@ STP_cw_external_intervention = {
 }
 
 STP_cw_northern_aid = {
-	icon = ADISCORD_deal
 	allowed = { OR = { tag = STP tag = STS } }
 	visible = {
 		has_country_flag = STP_cw_northern_aid_open
@@ -85,7 +83,7 @@ STP_imperial_union_category = {
 }
 
 STP_postwar_reconstruction_drive = {
-	icon = ADISCORD_factory
+	icon = generic_construction
 	allowed = { tag = STS }
 	visible = {
 		tag = STS
@@ -98,7 +96,7 @@ STP_postwar_reconstruction_drive = {
 }
 
 STP_postwar_propaganda_campaigns = {
-	icon = ADISCORD_propaganda
+	icon = generic_propaganda_campaigns
 	allowed = { tag = STS }
 	visible = {
 		tag = STS

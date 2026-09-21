@@ -151,18 +151,14 @@ focus_tree = {
     focus = {
         id = VAL_admin_restore_offices
         icon = GFX_focus_generic_improve_the_administration
-        x = 6
-        y = 0
-        cost = 3
+        x = 6 y = 0 cost = 3
         completion_reward = { add_political_power = 50 add_stability = 0.03 }
         ai_will_do = { base = 20 }
     }
     focus = {
         id = VAL_admin_reopen_workshops
         icon = GFX_goal_generic_construct_civ_factory
-        x = 4
-        y = 1
-        cost = 5
+        x = 4 y = 1 cost = 5
         prerequisite = { focus = VAL_admin_restore_offices }
         completion_reward = { capital_scope = { add_extra_state_shared_building_slots = 1 add_building_construction = { type = industrial_complex level = 1 instant_build = yes } } }
         ai_will_do = { base = 15 }
@@ -172,15 +168,13 @@ focus_tree = {
         icon = GFX_goal_generic_allies_build_infantry
         x = 8 y = 1 cost = 3
         prerequisite = { focus = VAL_admin_restore_offices }
-        completion_reward = { army_experience = 15 add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = THIS } }
+        completion_reward = { army_experience = 15 add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = VAL } }
         ai_will_do = { base = 15 }
     }
     focus = {
         id = VAL_admin_supply_depots
         icon = GFX_focus_generic_reinforcing_the_supply_network
-        x = 4
-        y = 2
-        cost = 3
+        x = 4 y = 2 cost = 3
         prerequisite = { focus = VAL_admin_reopen_workshops }
         completion_reward = { capital_scope = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } } }
         ai_will_do = { base = 10 }
@@ -188,9 +182,7 @@ focus_tree = {
     focus = {
         id = VAL_admin_professional_service
         icon = GFX_goal_generic_army_doctrines
-        x = 8
-        y = 2
-        cost = 3
+        x = 8 y = 2 cost = 3
         prerequisite = { focus = VAL_admin_local_guard }
         completion_reward = { add_command_power = 20 army_experience = 15 }
         ai_will_do = { base = 10 }
@@ -198,198 +190,10 @@ focus_tree = {
     focus = {
         id = VAL_admin_ratify_charter
         icon = GFX_focus_generic_treaty
-        x = 6
-        y = 3
-        cost = 3
+        x = 6 y = 3 cost = 3
         prerequisite = { focus = VAL_admin_supply_depots }
         prerequisite = { focus = VAL_admin_professional_service }
         completion_reward = { add_stability = 0.05 add_political_power = 75 }
         ai_will_do = { base = 10 }
-    }
-
-    # Balchansk: economic and security work support either administrative mandate.
-    focus = {
-        id = OCA_balchansk_mandate
-        icon = GFX_focus_generic_improve_the_administration
-        x = 16
-        y = 1
-        cost = 3
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = VAL_admin_restore_offices }
-        available = { VAL_is_contract_administration = yes owns_state = 43 controls_state = 43 }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes owns_state = 43 controls_state = 43 } add_stability = 0.05 add_political_power = 75 }
-        }
-        ai_will_do = { base = 12 }
-    }
-    focus = {
-        id = OCA_civilian_board
-        icon = GFX_focus_generic_treaty
-        x = 14
-        y = 2
-        cost = 3
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = OCA_balchansk_mandate }
-        mutually_exclusive = { focus = OCA_garrison_directorate }
-        available = { VAL_is_contract_administration = yes }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes } add_ideas = OCA_civilian_contract_board }
-        }
-        ai_will_do = { base = 12 }
-    }
-    focus = {
-        id = OCA_garrison_directorate
-        icon = GFX_goal_generic_allies_build_infantry
-        x = 18
-        y = 2
-        cost = 3
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = OCA_balchansk_mandate }
-        mutually_exclusive = { focus = OCA_civilian_board }
-        available = { VAL_is_contract_administration = yes }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes } add_ideas = OCA_garrison_contract_board army_experience = 20 }
-        }
-        ai_will_do = { base = 12 }
-    }
-    focus = {
-        id = OCA_municipal_services
-        icon = GFX_goal_generic_national_unity
-        x = 14
-        y = 3
-        cost = 5
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = OCA_civilian_board }
-        available = { VAL_is_contract_administration = yes }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes } add_stability = 0.08 add_manpower = 3000 }
-        }
-        ai_will_do = { base = 12 }
-    }
-    focus = {
-        id = OCA_paid_garrison
-        icon = GFX_goal_generic_army_doctrines
-        x = 18
-        y = 3
-        cost = 5
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = OCA_garrison_directorate }
-        available = { VAL_is_contract_administration = yes }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes } add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = VAL } army_experience = 20 }
-        }
-        ai_will_do = { base = 12 }
-    }
-    focus = {
-        id = OCA_harbour_customs
-        icon = GFX_goal_generic_positive_trade_relations
-        x = 10
-        y = 2
-        cost = 3
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = OCA_balchansk_mandate }
-        available = { VAL_is_contract_administration = yes owns_state = 44 controls_state = 44 }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes owns_state = 44 controls_state = 44 } add_ideas = OCA_harbour_customs_service }
-        }
-        ai_will_do = { base = 12 }
-    }
-    focus = {
-        id = OCA_balchansk_workshops
-        icon = GFX_goal_generic_construct_civ_factory
-        x = 10
-        y = 3
-        cost = 5
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = OCA_harbour_customs }
-        available = { VAL_is_contract_administration = yes owns_state = 43 controls_state = 43 }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes owns_state = 43 controls_state = 43 } 43 = { add_extra_state_shared_building_slots = 1 add_building_construction = { type = industrial_complex level = 1 instant_build = yes } } ADISCORD_economy_mark_dirty = yes }
-        }
-        ai_will_do = { base = 12 }
-    }
-    focus = {
-        id = OCA_mining_concessions
-        icon = GFX_goal_generic_production2
-        x = 10
-        y = 4
-        cost = 5
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = OCA_balchansk_workshops }
-        available = { VAL_is_contract_administration = yes owns_state = 88 controls_state = 88 }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes owns_state = 88 controls_state = 88 } 88 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } } add_ideas = OCA_mining_concession_income }
-        }
-        ai_will_do = { base = 12 }
-    }
-    focus = {
-        id = OCA_border_arsenals
-        icon = GFX_goal_generic_construct_mil_factory
-        x = 22
-        y = 2
-        cost = 5
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = OCA_balchansk_mandate }
-        available = { VAL_is_contract_administration = yes owns_state = 43 controls_state = 43 }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes owns_state = 43 controls_state = 43 } 43 = { add_extra_state_shared_building_slots = 1 add_building_construction = { type = arms_factory level = 1 instant_build = yes } } ADISCORD_economy_mark_dirty = yes }
-        }
-        ai_will_do = { base = 12 }
-    }
-    focus = {
-        id = OCA_contract_officers
-        icon = GFX_goal_generic_army_doctrines
-        x = 22
-        y = 3
-        cost = 3
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = OCA_border_arsenals }
-        available = { VAL_is_contract_administration = yes }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes } add_tech_bonus = { name = OCA_contract_officers bonus = 0.5 uses = 1 category = support_tech } add_command_power = 20 }
-        }
-        ai_will_do = { base = 12 }
-    }
-    focus = {
-        id = OCA_supply_corridor
-        icon = GFX_focus_generic_reinforcing_the_supply_network
-        x = 22
-        y = 4
-        cost = 5
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = OCA_contract_officers }
-        available = { VAL_is_contract_administration = yes owns_state = 44 controls_state = 44 }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes owns_state = 44 controls_state = 44 } 44 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } } add_ideas = OCA_supply_service }
-        }
-        ai_will_do = { base = 12 }
-    }
-    focus = {
-        id = OCA_renewed_charter
-        icon = GFX_focus_generic_treaty
-        x = 16
-        y = 5
-        cost = 5
-        allow_branch = { tag = OCA }
-        prerequisite = { focus = OCA_municipal_services focus = OCA_paid_garrison }
-        prerequisite = { focus = OCA_mining_concessions }
-        prerequisite = { focus = OCA_supply_corridor }
-        available = { VAL_is_contract_administration = yes }
-        cancel_if_invalid = yes
-        completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes } add_stability = 0.05 add_political_power = 100 add_ideas = OCA_settled_contracts }
-        }
-        ai_will_do = { base = 12 }
     }
 }

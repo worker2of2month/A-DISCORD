@@ -1,0 +1,12 @@
+
+music_station = "one_minute"
+
+music = {
+	song = "one_minute_of_silence"
+	chance = {
+		modifier = {
+			factor = 0
+		}		
+	}
+}
+

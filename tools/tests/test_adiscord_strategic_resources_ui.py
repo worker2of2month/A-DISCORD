@@ -300,8 +300,8 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             path.read_text(encoding="utf-8-sig")
             for path in (ROOT / "common/technologies").glob("*.txt")
         )
-        self.assertIn("ADISCORD_tech_rare_components_industry", current_technology)
-        self.assertIn("ADISCORD_tech_rare_alloy_metallurgy", current_technology)
+        self.assertNotIn("ADISCORD_tech_rare_components_industry", current_technology)
+        self.assertNotIn("ADISCORD_tech_rare_alloy_metallurgy", current_technology)
 
         contracts = {
             ROOT / "common/units/equipment/ADISCORD_support_equipment.txt": {

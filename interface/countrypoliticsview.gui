@@ -168,7 +168,7 @@ guiTypes = {
 			font = "hoi_36header"
 			borderSize = {x = 0 y = 0}
 			text = "POLITICAL_POLITICAL"
-			maxWidth = 175
+			maxWidth = 400
 			maxHeight = 20
 			fixedsize = yes
 		}		
@@ -697,9 +697,10 @@ guiTypes = {
 		
 		containerWindowType = {
 			name = "ideas"
-			# Negative height leaves only the bottom inset; development opens separately.
+			# Fill the space above the bottom-anchored 315 px development block.
+			# A negative height is a parent-relative bottom offset in HOI4 GUI layouts.
 			position = { x = 0 y = 545 }
-			size = { width=570 height=-8 }
+			size = { width=570 height=-315 }
 			clipping = yes
 			verticalScrollbar = "right_vertical_slider"
 			scroll_wheel_factor = 40

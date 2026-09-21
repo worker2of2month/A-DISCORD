@@ -1,43 +1,5 @@
 spriteTypes = {
 	SpriteType = {
-		name = "GFX_focus_STP_pc_shabrat_politics_shine"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds" 	# <- the animated file
-			animationrotation = -90.0		# -90 clockwise 90 counterclockwise(by default)
-			animationlooping = no			# yes or no ;)
-			animationtime = 0.75				# in seconds
-			animationdelay = 0			# in seconds
-			animationblendmode = "add"       #add, multiply, overlay
-			animationtype = "scrolling"      #scrolling, rotating, pulsing
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-
-		legacy_lazy_load = no
-	}
-	SpriteType = {
-		name = "GFX_focus_STP_End_Kefreit_shine"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_End_Kefreit.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_End_Kefreit.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-
-		legacy_lazy_load = no
-	}
-	SpriteType = {
 		name = "GFX_focus_STP_Nectar_of_the_Gods_shine"
 		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Nectar_of_the_Gods.png"
 		effectFile = "gfx/FX/buttonstate.lua"
@@ -248,11 +210,11 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_focus_STP_bookmark_support_shabrat_shine"
-		texturefile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_support_shabrat.png"
+		name = "STP_bookmark_maksim_shine"
+		texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_maksim.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_support_shabrat.png"
+			animationmaskfile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_maksim.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -267,11 +229,11 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_focus_STP_bookmark_support_party_shine"
-		texturefile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_support_party.png"
+		name = "STP_bookmark_party_shine"
+		texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_party.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_support_party.png"
+			animationmaskfile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_party.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -286,68 +248,11 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_focus_STP_bookmark_last_banquet_shine"
-		texturefile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_last_banquet.png"
+		name = "STP_bookmark_operation_shine"
+		texturefile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_operation.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/bookmark/GFX_focus_STP_bookmark_last_banquet.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
-
-	SpriteType = {
-		name = "GFX_focus_VAL_bookmark_the_weaponry_baron_shine"
-		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_the_weaponry_baron.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_the_weaponry_baron.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
-
-	SpriteType = {
-		name = "GFX_focus_VAL_bookmark_different_views_on_freedom_shine"
-		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_different_views_on_freedom.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_different_views_on_freedom.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
-
-	SpriteType = {
-		name = "GFX_focus_VAL_bookmark_contracts_outlive_kings_shine"
-		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contracts_outlive_kings.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contracts_outlive_kings.png"
+			animationmaskfile = "gfx/interface/goals/STP/Bookmark/STP_bookmark_operation.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -419,11 +324,11 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_focus_STP_All_In_shine"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_All_In.png"
+		name = "GFX_focus_STP_Emergency_Protocol_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/All in.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_All_In.png"
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/All in.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -534,10 +439,10 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_Show_Him_The_Truth_shine"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Side_With_Maksim.png"
+		texturefile = "gfx/interface/goals/focus_generic_self_management.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Side_With_Maksim.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_self_management.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -553,10 +458,10 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_Govern_In_His_Name_shine"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Govern_In_His_Name.png"
+		texturefile = "gfx/interface/goals/goal_generic_demand_territory.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Govern_In_His_Name.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_demand_territory.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -572,10 +477,10 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_Emergency_Presidium_shine"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Govern_In_His_Name.png"
+		texturefile = "gfx/interface/goals/goal_generic_political_pressure.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Govern_In_His_Name.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_political_pressure.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -591,10 +496,10 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_cw_expose_the_cabinet_shine"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Their_Eyes.png"
+		texturefile = "gfx/interface/goals/goal_generic_intelligence_exchange.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Open_Their_Eyes.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_intelligence_exchange.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -610,10 +515,10 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_focus_STP_cw_quiet_registers_shine"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_buy_silence.png"
+		texturefile = "gfx/interface/goals/goal_generic_intelligence_exchange.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_buy_silence.png"
+			animationmaskfile = "gfx/interface/goals/goal_generic_intelligence_exchange.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -629,10 +534,10 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_goal_generic_elections_shine"
-		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png"
+		texturefile = "gfx/interface/goals/focus_generic_election.dds"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png"
+			animationmaskfile = "gfx/interface/goals/focus_generic_election.dds"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -652,82 +557,6 @@ spriteTypes = {
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
 			animationmaskfile = "gfx/interface/goals/goal_generic_occypy_states_coastal.dds"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
-
-	SpriteType = {
-		name = "GFX_focus_VAL_Factories_Like_Cathedrals_shine"
-		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Factories_Like_Cathedrals.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Factories_Like_Cathedrals.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
-
-	SpriteType = {
-		name = "GFX_focus_VAL_The_Contract_State_shine"
-		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_The_Contract_State.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_The_Contract_State.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
-
-	SpriteType = {
-		name = "GFX_focus_VAL_Count_The_Captains_shine"
-		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Count_The_Captains.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Count_The_Captains.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
-			animationrotation = -90.0
-			animationlooping = no
-			animationtime = 0.75
-			animationdelay = 0
-			animationblendmode = "add"
-			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
-		}
-		legacy_lazy_load = no
-	}
-
-	SpriteType = {
-		name = "GFX_focus_VAL_Export_Rifles_Not_Promises_shine"
-		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Export_Rifles_Not_Promises.png"
-		effectFile = "gfx/FX/buttonstate.lua"
-		animation = {
-			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Export_Rifles_Not_Promises.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no

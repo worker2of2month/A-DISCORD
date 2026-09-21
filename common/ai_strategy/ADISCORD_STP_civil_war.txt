@@ -71,49 +71,14 @@ STS_shabrat_civil_war_army = {
 	ai_strategy = { type = role_ratio id = mobile value = 20 }
 	ai_strategy = { type = role_ratio id = militias value = -80 }
 	ai_strategy = { type = role_ratio id = garrison value = -40 }
-	ai_strategy = { type = equipment_production_factor id = infantry value = 60 }
+	ai_strategy = { type = equipment_production_factor id = infantry value = 40 }
 	ai_strategy = { type = equipment_production_factor id = support value = 15 }
 	ai_strategy = { type = force_concentration_factor value = 50 }
-	ai_strategy = { type = consider_weak id = STP value = 20 }
+	ai_strategy = { type = consider_weak id = STP value = 80 }
 	ai_strategy = { type = front_unit_request tag = STP value = 120 }
 	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1500 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
 	ai_strategy = { type = conquer id = STP value = 250 }
 	ai_strategy = { type = dont_defend_ally_borders value = 1 }
-}
-
-# Operational objectives reinforce the relevant part of the live party front.
-STS_shabrat_operation_front = {
-	allowed = { original_tag = STS }
-	enable = { is_ai = yes has_war_with = STP has_active_mission = STP_cw_front_operation }
-	abort_when_not_enabled = yes
-	ai_strategy = {
-		type = front_unit_request
-		state_trigger = {
-			is_controlled_by = STP
-			OR = {
-				AND = { state = 2 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 2 compare = equals } } }
-				AND = { state = 29 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 29 compare = equals } } }
-				AND = { state = 53 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 53 compare = equals } } }
-				AND = { state = 3 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 3 compare = equals } } }
-				AND = { state = 46 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 46 compare = equals } } }
-				AND = { state = 45 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 45 compare = equals } } }
-				AND = { state = 28 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 28 compare = equals } } }
-			}
-		}
-		value = 40
-	}
-}
-
-# Depleted formations recover before another assault; external fronts keep their policies.
-STS_shabrat_recover_party_front = {
-	allowed = { original_tag = STS }
-	enable = {
-		is_ai = yes has_war_with = STP
-		stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 }
-		has_idea = STP_cw_operation_disorganization
-	}
-	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1700 ordertype = front execution_type = careful execute_order = no manual_attack = no }
 }
 
 STS_shabrat_val_front = {

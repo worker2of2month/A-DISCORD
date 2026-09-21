@@ -14,56 +14,29 @@ the standard material price (`cic = 0.25`) because they are refined industrial
 inputs rather than raw ore. The nine-column trade override retains all native
 trade behavior and only widens the resource, filter and country-entry geometry.
 
-Late support equipment, drone carriers, advanced anti-air, interceptors and
-guided strike aircraft consume rare components. Late artillery, combat platforms,
-hardened trains and advanced aircraft consume rare alloys. The final combat
-platforms retain both material requirements rather than dropping the previous
-generation's rare input. Basic fighters, attack aircraft and early armour retain
-their conventional resource requirements. Existing plants in WRK and RIV state
-history form the initial supply; further plants are player-built,
+Late support equipment, drone carriers and advanced anti-air consume rare
+components. Late artillery, combat platforms and hardened trains consume rare
+alloys. Neither factory is placed in state history; both are player-built,
 slot-consuming industrial choices. They share the
 `ADISCORD_advanced_material_plants` state group, so one state cannot host both.
 
-## Technology integration
+## Planned technology integration
 
-The technology generator owns a six-node Advanced Materials branch. Components
-and alloys are independent research paths, so researching either plant does not
-require the other plant. Their final recycling technology requires both paths.
+The current technology generator is intentionally unchanged. A later dedicated
+technology pass should introduce the stable planned IDs below and then bind the
+existing building IDs without renaming them:
 
-| Technology ID | Responsibility |
+| Planned technology ID | Future responsibility |
 | --- | --- |
-| `ADISCORD_tech_rare_components_industry` | 2158: unlock the Components Plant, base output 4 |
-| `ADISCORD_tech_rare_alloy_metallurgy` | 2158: unlock the Rare Alloy Foundry, base output 3 |
-| `ADISCORD_tech_precision_component_fabrication` | 2166: +2 components per plant |
-| `ADISCORD_tech_vacuum_alloy_refining` | 2166: +1 alloy per foundry |
-| `ADISCORD_tech_advanced_material_recycling` | 2173: +1 output for each plant type |
+| `ADISCORD_tech_rare_components_industry` | unlock the Components Plant and later improve component yield |
+| `ADISCORD_tech_rare_alloy_metallurgy` | unlock the Rare Alloy Foundry and later improve alloy yield |
 
-Both plants require their technology. The industrial starting profile includes
-the two unlocks. RIV receives only the narrow material profile alongside its
-existing fragment profile, preserving its inherited factories without granting
-the full industrial package. Base output reaches 7 components or 5 alloys before
-regional modifiers. The 2166 upgrades each add 2% factory energy demand; recycling
-removes 2%. All equipment consumers have later research dates than the 2158
-plant unlocks. Research dates indicate availability, not guaranteed construction
-or a sufficient national supply; countries may also trade these resources.
+Until that pass, the buildings are directly constructible and no generated
+technology or starting-state file is touched.
 
-## Budget research
-
-The eight-node Economy and Administration line uses existing country economy
-modifiers consumed by `ADISCORD_economy_modifier_effects.txt`. Its cumulative
-effects, including the common accounting baseline, are +7% tax collection,
-+8% civilian industrial income, +4% trade income, +3% resource rent, +4% military
-industrial income, -9% administration costs, -6% construction costs, -5% military
-factory upkeep and -3% research costs. These affect their respective budget
-categories, not total income or expenses uniformly.
-
-Assembly and factory automation add a further +5% civilian industrial income.
-Predictive maintenance and three power-grid milestones reduce military factory
-upkeep by a further 7%. Existing native energy-consumption effects remain in
-force. Budget research invalidates the existing economy cache through its single
-research-completion callback, shared with any research reward. Scripted technology
-profile grants also invalidate that cache; no recurring technology scan or
-increment-only country variable is needed.
+Air-equipment consumers are intentionally deferred: that authoritative source is
+owned by concurrent aircraft work and must not be merged into this change without
+a separate balance audit.
 
 The economy window remains independent from Trade. Its top-bar button occupies
 the new slot immediately to the right of Trade, while the six treasury actions

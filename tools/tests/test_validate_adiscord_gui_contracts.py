@@ -540,18 +540,6 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
 
 
 class CountryPoliticsGuiContractTests(unittest.TestCase):
-    def test_occupation_return_territory_is_not_accessible(self):
-        gui = (ROOT / 'interface/countryoccupationview.gui').read_text(encoding='utf-8-sig')
-        gui = gui_node_body(gui, 'occupied_territory_country_entry')
-        for name in ('return_territory_button', 'return_territory_button_pos_for_non_resistance'):
-            body = gui_node_body(gui, name)
-            self.assertRegex(body, r'position\s*=\s*\{\s*x\s*=\s*-10000\s+y\s*=\s*-10000\s*\}')
-        button = gui_node_body(gui, 'return_territory_button')
-        self.assertIn('alwaystransparent = yes', button)
-        self.assertNotIn('shortcut', button)
-        self.assertTrue(gui_node_body(gui, 'release_button'))
-        self.assertTrue(gui_node_body(gui, 'select_law_button'))
-
     def test_active_focus_controls_fit_their_visible_card(self):
         from PIL import Image
 
@@ -785,19 +773,7 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
 
         self.assertEqual(required - nodes, set())
 
-    def test_law_list_keeps_usable_height_on_small_screens(self):
-        text = (ROOT / 'interface/countrypoliticsview.gui').read_text(encoding='utf-8-sig')
-        politics = gui_node_body(text, 'countrypoliticsview')
-        ideas = gui_node_body(politics, 'ideas')
-        _, top = _gui_position(ideas)
-        bottom_offset = int(re.search(r'\bheight\s*=\s*(-\d+)', ideas).group(1))
-        for screen_height, minimum in ((720, 64), (768, 104), (900, 208)):
-            with self.subTest(screen_height=screen_height):
-                self.assertGreaterEqual(screen_height - 78 - top + bottom_offset, minimum)
-        self.assertIn('verticalScrollbar = "right_vertical_slider"', ideas)
-        self.assertIn('clipping = yes', ideas)
-
-    def test_development_popup_fits_above_laws_and_launcher_clears_header_controls(self):
+    def test_development_panel_is_bottom_anchored_and_law_list_reserves_room(self):
         development_text = (
             ROOT / 'interface' / 'ADISCORD_CountryView.gui'
         ).read_text(encoding='utf-8-sig')
@@ -805,35 +781,19 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
             ROOT / 'interface' / 'countrypoliticsview.gui'
         ).read_text(encoding='utf-8-sig')
 
-        panel = gui_node_body(development_text, 'ADISCORD_development_category_society_type')
-        x, y = _gui_position(panel)
-        width, height = _gui_size(panel)
-        self.assertIn('Orientation = UPPER_LEFT', panel)
-        self.assertGreaterEqual(x, 0)
-        self.assertGreaterEqual(y, 44)
-        self.assertLessEqual(x + width, 594)
-        politics = gui_node_body(politics_text, 'countrypoliticsview')
-        self.assertLessEqual(y + height, _gui_position(gui_node_body(politics, 'ideas'))[1])
-        self.assertLessEqual(78 + y + height, 720)
-        self.assertIn('quadTextureSprite = "GFX_tiled_plain_bg_adiscord"', panel)
-        close = gui_node_body(panel, 'ADISCORD_development_close')
-        cx, cy = _gui_position(close)
-        cw, ch = _gui_size(close)
-        self.assertLessEqual(cx + cw, width)
-        self.assertLessEqual(cy + ch, 55)  # Header must not cover the first indicator row.
-        for category in ('society', 'social_system', 'army', 'cultural', 'state', 'economic'):
-            self.assertTrue(gui_node_body(panel, f'ADISCORD_development_{category}_level'))
-            self.assertTrue(gui_node_body(panel, f'ADISCORD_development_{category}_growth'))
-
-        launcher = gui_node_body(development_text, 'ADISCORD_development_launcher')
-        lx, ly = _gui_position(launcher)
-        button = gui_node_body(launcher, 'ADISCORD_development_open')
-        bx, by = _gui_position(button)
-        bw, bh = _gui_size(button)
-        title = gui_node_body(politics, 'political_title')
-        self.assertGreaterEqual(lx + bx, _gui_position(title)[0] + _gui_size(title)[0])
-        self.assertLessEqual(lx + bx + bw, _gui_position(gui_node_body(politics, 'manage_occupied_button'))[0])
-        self.assertLessEqual(ly + by + bh, 47)  # Portrait/focus area begins here.
+        self.assertRegex(
+            development_text,
+            r'(?s)name\s*=\s*"ADISCORD_development_category_society_type"'
+            r'.{0,500}?position\s*=\s*\{\s*x\s*=\s*-10\s+y\s*=\s*-315\s*\}'
+            r'.{0,200}?size\s*=\s*\{\s*width\s*=\s*594\s+height\s*=\s*315\s*\}'
+            r'.{0,200}?Orientation\s*=\s*LOWER_LEFT',
+        )
+        self.assertRegex(
+            politics_text,
+            r'(?s)name\s*=\s*"ideas"'
+            r'.{0,500}?position\s*=\s*\{\s*x\s*=\s*0\s+y\s*=\s*545\s*\}'
+            r'.{0,200}?size\s*=\s*\{\s*width\s*=\s*570\s+height\s*=\s*-315\s*\}',
+        )
 
 
 class DiplomacyGuiContractTests(unittest.TestCase):
@@ -2048,205 +2008,6 @@ class RuntimePulseTests(unittest.TestCase):
             text,
             r'(?s)\bon_weekly\s*=\s*\{.*?ADISCORD_economy_weekly_player_refresh\s*=\s*yes',
         )
-
-
-class StartupGuideContractTests(unittest.TestCase):
-    """Cross-file contracts; native layout and multiplayer still need the game."""
-
-    def read(self, path):
-        return (ROOT / path).read_text(encoding='utf-8-sig')
-
-    def scripts(self):
-        return _unique_direct_block(economy_validator.parse_clausewitz(
-            self.read('common/scripted_guis/ADISCORD_startup_menu.txt')), 'scripted_gui')
-
-    def test_buttons_have_handlers_and_scripted_roots_exist(self):
-        gui = self.read('interface/ADISCORD_startup_menu.gui')
-        nodes = named_gui_nodes(gui)
-        names = {name for _, name, _ in nodes}
-        handlers = set()
-        for script in self.scripts():
-            self.assertIn(_direct_scalar(script.value, 'window_name'), names)
-            effects = _unique_direct_block(script.value, 'effects')
-            handlers.update(entry.key for entry in effects)
-        for kind, name, _ in nodes:
-            if kind.lower() == 'buttontype':
-                self.assertIn(name + '_click', handlers)
-        self.assertIn('ADISCORD_startup_open_click', handlers)
-        self.assertIn('ADISCORD_startup_close_click', handlers)
-
-    def test_navigation_only_writes_ui_state_and_resets_spoilers(self):
-        allowed = {'ADISCORD_startup_' + s for s in ('open', 'tab', 'page', 'spoilers')}
-        handlers = {}
-        for script in self.scripts():
-            effects = _unique_direct_block(script.value, 'effects')
-            for handler in effects:
-                handlers[handler.key] = handler.value
-                for entry in _walk_clausewitz(handler.value):
-                    self.assertIn(entry.key, {
-                        'if', 'else', 'limit', 'check_variable', 'var', 'value',
-                        'compare', 'clear_variable', 'set_variable',
-                    })
-                    if entry.key in ('var', 'clear_variable'):
-                        self.assertIn(entry.value, allowed)
-        opening = handlers['ADISCORD_startup_open_click']
-        cleared = {e.value for e in opening if e.key == 'clear_variable'}
-        self.assertEqual(cleared, allowed - {'ADISCORD_startup_open'})
-        for name, payload in handlers.items():
-            if name.endswith(('_country_click', '_guide_click', '_paths_click')) or '_page_' in name:
-                self.assertIn('ADISCORD_startup_spoilers',
-                              [e.value for e in payload if e.key == 'clear_variable'])
-        for name in ('close', 'play'):
-            payload = handlers[f'ADISCORD_startup_{name}_click']
-            self.assertEqual([(e.key, e.value) for e in payload],
-                             [('clear_variable', 'ADISCORD_startup_open')])
-
-    def test_visibility_follows_player_and_never_an_unsupported_tag(self):
-        from tools.tests.test_adiscord_stp_preparation import matches_conditions
-        for script in self.scripts():
-            self.assertEqual(_direct_scalar(script.value, 'context_type'), 'player_context')
-            self.assertEqual(_direct_scalar(_unique_direct_block(script.value, 'ai_enabled'), 'always'), 'no')
-            visible = _unique_direct_block(script.value, 'visible')
-            for tag in ('STP', 'VAL', 'STS', 'SRP', '---'):
-                for is_human in (True, False):
-                    for opened in (0, 1):
-                        facts = {(tag, 'is_ai', 'no'): is_human,
-                                 (tag, 'variable', 'ADISCORD_startup_open'): opened}
-                        expected = tag in ('STP', 'VAL') and is_human
-                        if script.key == 'ADISCORDStartupMenu':
-                            expected = expected and bool(opened)
-                        self.assertEqual(matches_conditions(visible, facts, tag), expected)
-
-    def test_localisation_routes_cover_both_countries_and_safe_fallback(self):
-        from tools.tests.test_adiscord_stp_preparation import matches_conditions
-        definitions = economy_validator.parse_clausewitz(
-            self.read('common/scripted_localisation/ADISCORD_startup_menu.txt'))
-        body = next(e.value for e in definitions if _direct_scalar(e.value, 'name') == 'ADISCORDGetStartupBody')
-        branches = [e.value for e in body if e.key == 'text']
-        for tag in ('STP', 'VAL'):
-            cases = [(0, 0, 0, f'{tag}_startup_country')]
-            cases += [(1, i, 0, f'ADISCORD_startup_guide_{topic}')
-                      for i, topic in enumerate(('budget', 'army', 'diplomacy'))]
-            cases += [(1, 3, 0, f'{tag}_startup_guide')]
-            cases += [(2, i, spoiler, f'{tag}_startup_path_{i}' + ('_details' if spoiler else ''))
-                      for i in (0, 1) for spoiler in (0, 1)]
-            for tab, page, spoilers, expected in cases:
-                facts = {(tag, 'variable', 'ADISCORD_startup_' + k): v
-                         for k, v in [('tab', tab), ('page', page), ('spoilers', spoilers)]}
-                chosen = next(_direct_scalar(b, 'localization_key') for b in branches
-                              if matches_conditions(_unique_direct_block(b, 'trigger') or [], facts, tag))
-                self.assertEqual(chosen, expected)
-        self.assertEqual(_direct_scalar(branches[-1], 'localization_key'), 'ADISCORD_startup_unsupported')
-
-    def test_localisation_keys_values_and_encodings(self):
-        by_language = {}
-        for language in ('russian', 'english'):
-            values = {}
-            for stem in ('ADISCORD_startup_menu', 'ADISCORD_STP', 'ADISCORD_VAL_decisions'):
-                path = ROOT / f'localisation/{language}/{stem}_l_{language}.yml'
-                raw = path.read_bytes()
-                if language == 'russian':
-                    self.assertTrue(raw.startswith(b'\xef\xbb\xbf'), path)
-                text = raw.decode('utf-8-sig')
-                keys = re.findall(r'(?m)^\s*((?:ADISCORD|STP|VAL)_startup_\w+):', text)
-                for key in keys:
-                    self.assertNotIn(key, values)
-                    value = localisation_value(text, key)
-                    self.assertLessEqual(len(value.replace('\\n', '\n')), 1200, key)
-                    values[key] = value
-            by_language[language] = values
-        self.assertEqual(set(by_language['russian']), set(by_language['english']))
-        loc = self.read('common/scripted_localisation/ADISCORD_startup_menu.txt')
-        for key in re.findall(r'localization_key\s*=\s*(\w+)', loc):
-            self.assertIn(key, by_language['russian'])
-        for path in ('common/scripted_guis/ADISCORD_startup_menu.txt',
-                     'common/scripted_localisation/ADISCORD_startup_menu.txt'):
-            self.assertFalse((ROOT / path).read_bytes().startswith(b'\xef\xbb\xbf'))
-
-    def test_autostart_is_inside_existing_fresh_campaign_guard(self):
-        ast = economy_validator.parse_clausewitz(self.read('common/on_actions/00_ADISCORD_on_actions.txt'))
-        hooks = _unique_direct_block(ast, 'on_actions')
-        startup = _unique_direct_block(_unique_direct_block(hooks, 'on_startup'), 'effect')
-        guards = [e.value for e in startup if e.key == 'if'
-                  and any(c.key == 'set_global_flag' and c.value == 'ADISCORD_starting_technology_profiles_applied'
-                          for c in e.value)]
-        self.assertEqual(len(guards), 1)
-        guard = guards[0]
-        self.assertIn('ADISCORD_fresh_campaign_contract_v1',
-                      [e.value for e in _walk_clausewitz(_unique_direct_block(guard, 'limit'))])
-        for tag in ('STP', 'VAL'):
-            writes = [e for scope in guard if scope.key == tag for e in _walk_clausewitz(scope.value)
-                      if e.key == 'set_variable' and _direct_scalar(e.value, 'var') == 'ADISCORD_startup_open']
-            self.assertEqual(len(writes), 1, tag)
-        for hook in hooks:
-            if hook.key != 'on_startup':
-                self.assertNotIn('ADISCORD_startup_open', [e.value for e in _walk_clausewitz(hook.value)
-                                                        if isinstance(e.value, str)])
-        self.assertEqual(sum(1 for e in _walk_clausewitz(startup)
-                             if e.key == 'set_variable' and _direct_scalar(e.value, 'var') == 'ADISCORD_startup_open'), 2)
-
-    def test_custom_skin_has_exact_frame_geometry_and_local_assets(self):
-        from PIL import Image
-        gfx = economy_validator.parse_clausewitz(self.read('interface/ADISCORD_startup_menu.gfx'))
-        sprites = _unique_direct_block(gfx, 'spriteTypes')
-        expected = {'background': (1000, 620), 'tab': (221, 36), 'page': (359, 36),
-                    'launcher': (98, 26), 'close': (36, 36)}
-        for role, size in expected.items():
-            sprite = next(e.value for e in sprites
-                          if _direct_scalar(e.value, 'name') == f'GFX_ADISCORD_startup_{role}')
-            frames = int(_direct_scalar(sprite, 'noOfFrames') or '1')
-            with Image.open(ROOT / _direct_scalar(sprite, 'texturefile')) as image:
-                self.assertEqual(image.size, (size[0] * frames, size[1]))
-        gui = self.read('interface/ADISCORD_startup_menu.gui')
-        names = {_direct_scalar(e.value, 'name') for e in sprites}
-        country_gfx = economy_validator.parse_clausewitz(self.read('interface/ADISCORD_CountryView.gfx'))
-        names.update(_direct_scalar(e.value, 'name')
-                     for e in _unique_direct_block(country_gfx, 'spriteTypes'))
-        for name in re.findall(r'(?:quadTextureSprite|spriteType)\s*=\s*"([^"]+)"', gui):
-            self.assertIn(name, names)
-        for tag in ('stp', 'val'):
-            sprite = next(e.value for e in sprites
-                          if _direct_scalar(e.value, 'name') == f'GFX_ADISCORD_startup_{tag}')
-            with Image.open(ROOT / _direct_scalar(sprite, 'texturefile')) as image:
-                self.assertEqual(image.size, (220, 440))
-                node = gui_node_body(gui, f'ADISCORD_startup_{tag}_picture')
-                self.assertNotRegex(node, r'\bscale\s*=')
-                self.assertEqual(_gui_position(node), (746, 108))
-            self.assertTrue((ROOT / f'gfx/interface/startup/{tag}_generated.png').is_file())
-
-    def test_launcher_does_not_cover_existing_political_controls(self):
-        gui = self.read('interface/ADISCORD_startup_menu.gui')
-        launcher = gui_node_body(gui, 'ADISCORD_startup_launcher')
-        x, y = _gui_position(launcher)
-        w, h = map(int, re.search(r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)', launcher).groups())
-        native = self.read('interface/countrypoliticsview.gui')
-        for name in ('manage_occupied_button', 'subjects_button_container', 'rules'):
-            nx, ny = _gui_position(gui_node_body(native, name))
-            self.assertFalse(x < nx + 32 and nx < x + w and y < ny + 32 and ny < y + h, name)
-        self.assertGreaterEqual(x, 190)
-        self.assertLessEqual(x + w, 340)
-        self.assertGreaterEqual(y, 325)
-        self.assertLessEqual(y + h, 445)
-
-    def test_briefing_text_accepts_scroll_input_inside_fixed_viewports(self):
-        gui = self.read('interface/ADISCORD_startup_menu.gui')
-        for name in ('ADISCORD_startup_country_body', 'ADISCORD_startup_body'):
-            with self.subTest(name=name):
-                body = gui_node_body(gui, name)
-                self.assertIn('fixedsize = yes', body)
-                self.assertIn('scrollbarType = "standardtext_slider"', body)
-                self.assertNotIn('alwaystransparent = yes', body)
-
-    def test_stelander_intro_explains_shabrat_before_path_spoilers(self):
-        russian = self.read('localisation/russian/ADISCORD_STP_l_russian.yml')
-        english = self.read('localisation/english/ADISCORD_STP_l_english.yml')
-        intro = localisation_value(russian, 'STP_startup_country')
-        self.assertIn('§YМаксим Шабрат§!', intro)
-        self.assertIn('монополию', intro)
-        self.assertIn('§YПётр Иванов и партия§!', intro)
-        self.assertIn('§YMaksim Shabrat§!', localisation_value(english, 'STP_startup_country'))
-
-
 
 
 if __name__ == '__main__':

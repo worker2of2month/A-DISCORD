@@ -1,0 +1,16 @@
+[
+  {
+    "name": "us_infantry_geoShape-000",
+    "vertices": 27036,
+    "triangles": 9012,
+    "bones": 33,
+    "influences": 4
+  },
+  {
+    "name": "Contoured field helmet",
+    "vertices": 6707,
+    "triangles": 8428,
+    "bones": 33,
+    "influences": 4
+  }
+]

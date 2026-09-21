@@ -228,12 +228,3 @@ entity = {
 	pdxmesh = "ADISCORD_city_stelander_arcology_mesh"
 }
 # END ADISCORD Vorkensberg city
-
-# BEGIN ADISCORD Kefreyt arms combine
-entity = {
-    name = "ADISCORD_kefreyt_arms_combine_entity"
-    pdxmesh = "ADISCORD_kefreyt_arms_combine_mesh"
-    default_state = "idle"
-    state = { name = "idle" }
-}
-# END ADISCORD Kefreyt arms combine

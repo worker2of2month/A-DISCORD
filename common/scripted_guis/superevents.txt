@@ -11,7 +11,6 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_vorkerland_civilwar
-				ADISCORD_superevent_dispatch_next = yes
 			}
 		}
 	}
@@ -27,7 +26,6 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_vorkerland_dirty_opening
-				ADISCORD_superevent_dispatch_next = yes
 			}
 		}
 	}
@@ -43,7 +41,6 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_vorkerland_worker_victory
-				ADISCORD_superevent_dispatch_next = yes
 			}
 		}
 	}
@@ -59,7 +56,6 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_vorkerland_utilitarian_victory
-				ADISCORD_superevent_dispatch_next = yes
 			}
 		}
 	}
@@ -75,7 +71,6 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_vorkerland_vlad_victory
-				ADISCORD_superevent_dispatch_next = yes
 			}
 		}
 	}
@@ -91,7 +86,6 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_vorkerland_dorian_victory
-				ADISCORD_superevent_dispatch_next = yes
 			}
 		}
 	}
@@ -107,7 +101,6 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_stelander_empire
-				ADISCORD_superevent_dispatch_next = yes
 			}
 		}
 	}
@@ -124,7 +117,6 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_stelander_party_victory
-				ADISCORD_superevent_dispatch_next = yes
 
 			}
 		}
@@ -142,39 +134,6 @@ scripted_gui = {
 		effects = {
 			superevents_button_click = {
 				clr_global_flag = superevent_stelander_shabrat_victory
-				ADISCORD_superevent_dispatch_next = yes
-			}
-		}
-	}
-
-	superevent_nam_resource_war = {
-		window_name = "superevent_nam_resource_war"
-		context_type = player_context
-
-		visible = {
-			has_global_flag = superevent_nam_resource_war
-		}
-
-		effects = {
-			superevents_button_click = {
-				clr_global_flag = superevent_nam_resource_war
-				ADISCORD_superevent_dispatch_next = yes
-			}
-		}
-	}
-
-	superevent_rus_last_empire = {
-		window_name = "superevent_rus_last_empire"
-		context_type = player_context
-
-		visible = {
-			has_global_flag = superevent_rus_last_empire
-		}
-
-		effects = {
-			superevents_button_click = {
-				clr_global_flag = superevent_rus_last_empire
-				ADISCORD_superevent_dispatch_next = yes
 			}
 		}
 	}

@@ -1,0 +1,264 @@
+{
+  "skyscraper1": {
+    "scale": 0.32,
+    "min": [
+      -1.7212940454483032,
+      -2.70599102973938,
+      -5.338367938995361
+    ],
+    "max": [
+      1.195057988166809,
+      1.215317964553833,
+      5.503347873687744
+    ],
+    "map_size": [
+      0.9332326054573059,
+      1.2548187971115112,
+      3.469348907470703
+    ],
+    "parts": [
+      {
+        "vertices": 143,
+        "triangles": 88,
+        "material": {
+          "shader": [
+            "PdxMeshAdvancedSnow"
+          ],
+          "diff": [
+            "skyscraper1_diff.dds"
+          ],
+          "n": [
+            "basic_normal.dds"
+          ],
+          "spec": [
+            "basic_specular.dds"
+          ]
+        }
+      }
+    ]
+  },
+  "skyscraper2": {
+    "scale": 0.32,
+    "min": [
+      -1.5166130065917969,
+      -1.1970080137252808,
+      -8.028080940246582
+    ],
+    "max": [
+      1.5166130065917969,
+      1.1970080137252808,
+      11.222749710083008
+    ],
+    "map_size": [
+      0.9706323146820068,
+      0.7660850882530212,
+      6.160265922546387
+    ],
+    "parts": [
+      {
+        "vertices": 221,
+        "triangles": 92,
+        "material": {
+          "shader": [
+            "PdxMeshAdvancedSnow"
+          ],
+          "diff": [
+            "skyscraper2_diff.dds"
+          ],
+          "n": [
+            "basic_normal.dds"
+          ],
+          "spec": [
+            "basic_specular.dds"
+          ]
+        }
+      }
+    ]
+  },
+  "skyscraper3": {
+    "scale": 0.4,
+    "min": [
+      1.779750108718872,
+      -1.033372163772583,
+      -0.23650901019573212
+    ],
+    "max": [
+      4.492705821990967,
+      1.033372163772583,
+      15.648636817932129
+    ],
+    "map_size": [
+      1.0851823091506958,
+      0.8266977667808533,
+      6.354058742523193
+    ],
+    "parts": [
+      {
+        "vertices": 463,
+        "triangles": 188,
+        "material": {
+          "shader": [
+            "PdxMeshAdvancedSnow"
+          ],
+          "diff": [
+            "skyscraper3_diff.dds"
+          ],
+          "n": [
+            "basic_normal.dds"
+          ],
+          "spec": [
+            "basic_specular.dds"
+          ]
+        }
+      }
+    ]
+  },
+  "city_4_04": {
+    "scale": 2.6,
+    "min": [
+      -0.4503435492515564,
+      -0.4753390848636627,
+      -4.656612873077393e-10
+    ],
+    "max": [
+      0.4503435492515564,
+      0.4753390848636627,
+      0.3719160258769989
+    ],
+    "map_size": [
+      2.3417863845825195,
+      2.4717631340026855,
+      0.9669816493988037
+    ],
+    "parts": [
+      {
+        "vertices": 551,
+        "triangles": 273,
+        "material": {
+          "shader": [
+            "PdxMeshSnow"
+          ],
+          "diff": [
+            "city_d.dds"
+          ],
+          "n": [
+            "city_n.dds"
+          ],
+          "spec": [
+            "city_s.dds"
+          ]
+        }
+      },
+      {
+        "vertices": 100,
+        "triangles": 50,
+        "material": {
+          "shader": [
+            "PdxMeshSnow"
+          ],
+          "diff": [
+            "city_d.dds"
+          ],
+          "n": [
+            "city_n.dds"
+          ],
+          "spec": [
+            "city_s.dds"
+          ]
+        }
+      }
+    ]
+  },
+  "city_4_03": {
+    "scale": 1.6,
+    "min": [
+      -0.43388831615448,
+      -0.44931119680404663,
+      -1.8626450382086546e-09
+    ],
+    "max": [
+      0.205924391746521,
+      0.4542490243911743,
+      0.2952814996242523
+    ],
+    "map_size": [
+      1.0237003564834595,
+      1.4456963539123535,
+      0.4724504053592682
+    ],
+    "parts": [
+      {
+        "vertices": 172,
+        "triangles": 88,
+        "material": {
+          "shader": [
+            "PdxMeshSnow"
+          ],
+          "diff": [
+            "city_d.dds"
+          ],
+          "n": [
+            "city_n.dds"
+          ],
+          "spec": [
+            "city_s.dds"
+          ]
+        }
+      },
+      {
+        "vertices": 44,
+        "triangles": 24,
+        "material": {
+          "shader": [
+            "PdxMeshSnow"
+          ],
+          "diff": [
+            "city_d.dds"
+          ],
+          "n": [
+            "city_n.dds"
+          ],
+          "spec": [
+            "city_s.dds"
+          ]
+        }
+      }
+    ]
+  },
+  "western_buildings_4_02": {
+    "scale": 1.6,
+    "min": [
+      -0.467507004737854,
+      -0.4689030647277832,
+      -0.016952604055404663
+    ],
+    "max": [
+      0.4675091505050659,
+      0.4689030647277832,
+      0.17857417464256287
+    ],
+    "map_size": [
+      1.4960259199142456,
+      1.5004898309707642,
+      0.31284284591674805
+    ],
+    "parts": [
+      {
+        "vertices": 690,
+        "triangles": 400,
+        "material": {
+          "shader": [
+            "PdxMeshStandard"
+          ],
+          "diff": [
+            "western_buildings_diffuse.dds"
+          ],
+          "n": [
+            "Western_buildings_normals.dds"
+          ],
+          "spec": null
+        }
+      }
+    ]
+  }
+}

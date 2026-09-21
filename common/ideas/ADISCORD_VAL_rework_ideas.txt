@@ -1,118 +1,5 @@
 ideas = {
 	country = {
-		VAL_armor_serial_production = {
-			picture = generic_armor
-			allowed = { original_tag = VAL }
-			removal_cost = -1
-			equipment_bonus = {
-				ADISCORD_recon_platform_archetype = { instant = yes build_cost_ic = -0.05 }
-				ADISCORD_combat_platform_archetype = { instant = yes build_cost_ic = -0.05 }
-				ADISCORD_heavy_platform_archetype = { instant = yes build_cost_ic = -0.05 }
-			}
-		}
-
-		VAL_armor_contract_production = {
-			picture = generic_armor
-			allowed = { original_tag = VAL }
-			removal_cost = -1
-			equipment_bonus = {
-				ADISCORD_recon_platform_archetype = { instant = yes build_cost_ic = -0.10 reliability = 0.05 }
-				ADISCORD_combat_platform_archetype = { instant = yes build_cost_ic = -0.10 reliability = 0.05 }
-				ADISCORD_heavy_platform_archetype = { instant = yes build_cost_ic = -0.10 reliability = 0.05 }
-			}
-		}
-
-        VAL_balchansk_transit_contract = {
-            picture = VAL_contract_state
-            allowed = { tag = VAL }
-            allowed_civil_war = { always = yes }
-            cancel = { OR = { OCA = { exists = no } OCA = { NOT = { is_subject_of = VAL } } } }
-            removal_cost = -1
-            on_add = { ADISCORD_economy_mark_dirty = yes }
-            on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_weekly_income = 15 ADISCORD_economy_trade_income_factor = 0.03 }
-        }
-        OCA_chartered_administration = {
-            picture = VAL_contract_state
-            allowed = { tag = OCA }
-            allowed_civil_war = { always = yes }
-            cancel = { OR = { NOT = { is_subject_of = VAL } } }
-            removal_cost = -1
-            on_add = { ADISCORD_economy_mark_dirty = yes }
-            on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { stability_factor = 0.05 ADISCORD_economy_weekly_income = 10 }
-        }
-        OCA_joint_clearing_house = {
-            picture = VAL_contract_state
-            allowed = { tag = OCA }
-            allowed_civil_war = { always = yes }
-            cancel = { OR = { NOT = { is_subject_of = VAL } } }
-            removal_cost = -1
-            on_add = { ADISCORD_economy_mark_dirty = yes }
-            on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_trade_income_factor = 0.10 ADISCORD_economy_weekly_income = 10 }
-        }
-        OCA_civilian_contract_board = {
-            picture = VAL_contract_state
-            allowed = { tag = OCA }
-            allowed_civil_war = { always = yes }
-            cancel = { OR = { NOT = { is_subject_of = VAL } } }
-            removal_cost = -1
-            on_add = { ADISCORD_economy_mark_dirty = yes }
-            on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { production_speed_buildings_factor = 0.10 stability_factor = 0.05 }
-        }
-        OCA_garrison_contract_board = {
-            picture = VAL_contract_state
-            allowed = { tag = OCA }
-            allowed_civil_war = { always = yes }
-            cancel = { OR = { NOT = { is_subject_of = VAL } } }
-            removal_cost = -1
-            on_add = { ADISCORD_economy_mark_dirty = yes }
-            on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { army_org_factor = 0.05 training_time_army_factor = -0.10 }
-        }
-        OCA_harbour_customs_service = {
-            picture = VAL_contract_state
-            allowed = { tag = OCA }
-            allowed_civil_war = { always = yes }
-            cancel = { OR = { NOT = { is_subject_of = VAL } NOT = { controls_state = 44 } NOT = { owns_state = 44 } } }
-            removal_cost = -1
-            on_add = { ADISCORD_economy_mark_dirty = yes }
-            on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_weekly_income = 12 }
-        }
-        OCA_mining_concession_income = {
-            picture = VAL_contract_state
-            allowed = { tag = OCA }
-            allowed_civil_war = { always = yes }
-            cancel = { OR = { NOT = { is_subject_of = VAL } NOT = { controls_state = 88 } NOT = { owns_state = 88 } } }
-            removal_cost = -1
-            on_add = { ADISCORD_economy_mark_dirty = yes }
-            on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_weekly_income = 12 }
-        }
-        OCA_supply_service = {
-            picture = VAL_contract_state
-            allowed = { tag = OCA }
-            allowed_civil_war = { always = yes }
-            cancel = { OR = { NOT = { is_subject_of = VAL } } }
-            removal_cost = -1
-            on_add = { ADISCORD_economy_mark_dirty = yes }
-            on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { supply_consumption_factor = -0.08 army_org_regain = 0.05 }
-        }
-        OCA_settled_contracts = {
-            picture = VAL_contract_state
-            allowed = { tag = OCA }
-            allowed_civil_war = { always = yes }
-            cancel = { OR = { NOT = { is_subject_of = VAL } } }
-            removal_cost = -1
-            on_add = { ADISCORD_economy_mark_dirty = yes }
-            on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_weekly_income = 15 stability_factor = 0.05 }
-        }
-
 		VAL_staff_war_mandate = {
 			picture = army_training
 			allowed = { original_tag = VAL }
@@ -151,51 +38,52 @@ ideas = {
 			}
 		}
 
-	  	VAL_regional_settlement = {
-	   		picture = VAL_contract_state allowed = { original_tag = VAL } removal_cost = -1
-	   		on_add = { ADISCORD_economy_mark_dirty = yes }
-	   		modifier = { ADISCORD_economy_weekly_income = 10 stability_factor = 0.05 }
-	  	}
-	  	VAL_stelander_trade_terms = {
-	   		picture = VAL_contract_state allowed = { always = yes } removal_cost = -1
-	   		on_add = { ADISCORD_economy_mark_dirty = yes }
-	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
-	   		modifier = { ADISCORD_economy_trade_income_factor = 0.05 }
-	  	}
+  VAL_regional_settlement = {
+   picture = VAL_contract_state allowed = { original_tag = VAL } removal_cost = -1
+   on_add = { ADISCORD_economy_mark_dirty = yes }
+   modifier = { ADISCORD_economy_weekly_income = 10 stability_factor = 0.05 }
+  }
+  VAL_stelander_trade_terms = {
+   picture = VAL_contract_state allowed = { always = yes } removal_cost = -1
+   on_add = { ADISCORD_economy_mark_dirty = yes }
+   on_remove = { ADISCORD_economy_mark_dirty = yes }
+   modifier = { ADISCORD_economy_trade_income_factor = 0.05 }
+  }
 
-	  	VAL_northern_volunteer_mandate = {
-	   		picture = VAL_contract_state allowed = { original_tag = VAL } removal_cost = -1
-	   		rule = { can_send_volunteers = yes }
-	   		modifier = { send_volunteers_tension = -1 send_volunteer_divisions_required = -1 send_volunteer_size = 2 }
-	   		cancel = { OR = { has_war = yes has_capitulated = yes VAL_northern_volunteer_front_open = no } }
-	   		on_remove = { VAL_recall_northern_volunteers = yes }
-	  	}
+  VAL_northern_volunteer_mandate = {
+   picture = VAL_contract_state allowed = { original_tag = VAL } removal_cost = -1
+   rule = { can_send_volunteers = yes }
+   modifier = { send_volunteers_tension = -1 send_volunteer_divisions_required = -1 send_volunteer_size = 2 }
+   cancel = { OR = { has_war = yes has_capitulated = yes VAL_northern_volunteer_front_open = no } }
+   on_remove = { VAL_recall_northern_volunteers = yes }
+  }
 
-	  	VAL_export_income_1 = {
-	   		picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
-	   		on_add = { ADISCORD_economy_mark_dirty = yes }
-	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
-	   		modifier = { ADISCORD_economy_weekly_income = 10 }
-	  	}
-	  	VAL_export_income_2 = {
-	   		picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
-	   		on_add = { ADISCORD_economy_mark_dirty = yes }
-	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
-	   		modifier = { ADISCORD_economy_weekly_income = 10 }
-	  	}
-	  	VAL_advisors_income = {
-	   		picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
-	   		on_add = { ADISCORD_economy_mark_dirty = yes }
-	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
-	   		modifier = { ADISCORD_economy_weekly_income = 10 planning_speed = -0.05 }
-	  	}
-	  	VAL_paid_military_advisors = {
-	   		picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
-	   		cancel = { OR = { has_war_with = VAL VAL = { exists = no } } }
-	   		on_add = { ADISCORD_economy_mark_dirty = yes }
-	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
-	   		modifier = { army_org_regain = 0.05 planning_speed = 0.10 army_experience_gain_factor = 0.05 }
-	  }
+  VAL_export_income_1 = {
+   picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
+   on_add = { ADISCORD_economy_mark_dirty = yes }
+   on_remove = { ADISCORD_economy_mark_dirty = yes }
+   modifier = { ADISCORD_economy_weekly_income = 10 }
+  }
+  VAL_export_income_2 = {
+   picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
+   on_add = { ADISCORD_economy_mark_dirty = yes }
+   on_remove = { ADISCORD_economy_mark_dirty = yes }
+   modifier = { ADISCORD_economy_weekly_income = 10 }
+  }
+  VAL_advisors_income = {
+   picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
+   on_add = { ADISCORD_economy_mark_dirty = yes }
+   on_remove = { ADISCORD_economy_mark_dirty = yes }
+   modifier = { ADISCORD_economy_weekly_income = 10 planning_speed = -0.05 }
+  }
+  VAL_paid_military_advisors = {
+   picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
+   cancel = { OR = { has_war_with = VAL VAL = { exists = no } } }
+   on_add = { ADISCORD_economy_mark_dirty = yes }
+   on_remove = { ADISCORD_economy_mark_dirty = yes }
+   modifier = { army_org_regain = 0.05 planning_speed = 0.10 army_experience_gain_factor = 0.05 }
+  }
+
 
         VAL_frontier_transport_columns = {
             picture = VAL_contract_state
@@ -211,10 +99,10 @@ ideas = {
 
 		# Native delta previews only. These ideas are never installed.
 		VAL_contract_delta_dummy = { name = VAL_contract_state allowed = { always = no } modifier = { } }
-		VAL_company_rosters_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.06 } }
-		VAL_border_survey_delta = { name = VAL_contract_state allowed = { always = no } modifier = { recon_factor = 0.20 army_defence_factor = 0.05 supply_consumption_factor = -0.03 } }
-		VAL_company_service_delta = { name = VAL_contract_state allowed = { always = no } modifier = { war_stability_factor = 0.20 army_org_regain = 0.03 } }
-		VAL_nco_schools_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.07 } }
+		VAL_company_rosters_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.02 } }
+		VAL_border_survey_delta = { name = VAL_contract_state allowed = { always = no } modifier = { supply_consumption_factor = -0.03 } }
+		VAL_company_service_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_regain = 0.03 } }
+		VAL_nco_schools_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.03 } }
 		VAL_brokers_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.03 political_power_gain = 0.05 } }
 
 		VAL_vorons_delta = { name = VAL_contract_state allowed = { always = no } modifier = { planning_speed = 0.05 equipment_capture_factor = 0.03 } }
@@ -226,21 +114,19 @@ ideas = {
 				ADISCORD_economy_overall_income_factor = 0.10
 				ADISCORD_economy_admin_expense_factor = -0.05
 			} }
-		VAL_contractor_officers_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_attack_factor = 0.05 army_org_factor = 0.07 } }
-		VAL_field_repair_delta = { name = VAL_contract_state allowed = { always = no } modifier = { equipment_capture_factor = 0.04 army_org_regain = 0.03 } }
-		VAL_general_staff_delta = { name = VAL_contract_state allowed = { always = no } modifier = { send_volunteer_size = 4 army_defence_factor = 0.05 army_attack_factor = 0.05 planning_speed = 0.05 equipment_capture_factor = 0.07 } }
+		VAL_contractor_officers_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.03 } }
+		VAL_field_repair_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_regain = 0.03 } }
+		VAL_general_staff_delta = { name = VAL_contract_state allowed = { always = no } modifier = { planning_speed = 0.05 equipment_capture_factor = 0.03 } }
 		VAL_ministry_auditors_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.05 } }
-		VAL_hire_out_war_delta = { name = VAL_contract_state allowed = { always = no } modifier = { send_volunteer_size = 4 ADISCORD_economy_military_industry_income_factor = 0.05 } }
+		VAL_hire_out_war_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_military_industry_income_factor = 0.05 } }
 		VAL_paid_loyalty_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_army_expense_factor = -0.03 } }
 		VAL_closed_ledgers_delta = { name = VAL_contract_state allowed = { always = no } modifier = { political_power_gain = 0.05 } }
 		VAL_state_above_captains_delta = { name = VAL_contract_state allowed = { always = no } modifier = { command_power_gain_mult = 0.05 } }
 		VAL_captains_cannot_veto_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.03 } }
 		VAL_front_stories_delta = { name = VAL_contract_state allowed = { always = no } modifier = { stability_factor = 0.03 } }
-		VAL_army_of_the_ledger_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_attack_factor = 0.05 army_org_factor = 0.02 planning_speed = 0.03 } }
+		VAL_army_of_the_ledger_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_factor = 0.02 planning_speed = 0.03 } }
 		VAL_contract_throne_delta = { name = VAL_contract_state allowed = { always = no } modifier = { political_power_gain = 0.05 } }
 		VAL_weaponry_baron_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_military_industry_income_factor = 0.03 } }
-		VAL_Company_Mandates_delta = { name = VAL_contract_state allowed = { always = no } modifier = { political_power_gain = 0.15 } }
-		VAL_Contract_Arbitration_delta = { name = VAL_contract_state allowed = { always = no } modifier = { political_power_gain = 0.20 } }
 		VAL_mercenary_state_delta = { name = VAL_contract_state allowed = { always = no } modifier = { army_org_regain = 0.02 } }
 		VAL_harvest_ash_delta = { name = VAL_contract_state allowed = { always = no } modifier = { stability_factor = 0.02 } }
 		VAL_provincial_courts_delta = { name = VAL_contract_state allowed = { always = no } modifier = { ADISCORD_economy_trade_income_factor = 0.03 } }
@@ -373,12 +259,18 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
-				send_volunteer_size = 2
-				army_org_factor = 0.03
+				send_volunteer_size = 10
+				army_defence_factor = 0.1
+				army_core_defence_factor = -0.1
+				army_attack_factor = 0.15
+				army_core_attack_factor = -0.15
+				army_org_factor = 0.15
+				recon_factor = 0.2
 				planning_speed = -0.2
-				equipment_capture_factor = 0.02
-				war_stability_factor = 0.1
+				equipment_capture_factor = 0.1
+				war_stability_factor = 0.3
 				political_power_gain = -0.2
+				consumer_goods_factor = -0.1
 			}
 		}
 

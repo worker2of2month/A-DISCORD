@@ -1,5 +1,5 @@
 ADISCORD_economy_projects = {
-	icon = ADISCORD_science
+	icon = generic_construction
 	allowed = { OR = { tag = VAL tag = STS } }
 	visible = { ADISCORD_economy_projects_unlocked = yes }
 	visible_when_empty = yes

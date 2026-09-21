@@ -897,12 +897,11 @@ buildings = {
 	}
 
 	#### A-DISCORD advanced-material factories
-	#### The material branches unlock these plants independently; both share
-	#### one regional site, so industrial expansion requires separate states.
+	#### Deliberately not placed in state history. A later technology pass will
+	#### give them a dedicated unlock/upgrade branch without changing these IDs.
 
 	ADISCORD_rare_components_plant = {
 		show_on_map = 0
-		hide_if_missing_tech = yes
 		base_cost = 18000
 		per_controlled_building_extra_cost = 3500
 		icon_frame = 39
@@ -927,7 +926,6 @@ buildings = {
 
 	ADISCORD_rare_alloy_foundry = {
 		show_on_map = 0
-		hide_if_missing_tech = yes
 		base_cost = 22000
 		per_controlled_building_extra_cost = 4500
 		icon_frame = 40

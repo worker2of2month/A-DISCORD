@@ -117,22 +117,6 @@ def validate() -> list[str]:
         if not path.exists() or token not in path.read_text(encoding="utf-8-sig"):
             issues.append(f"{path.name} lacks {token}")
 
-    portrait = ROOT / "gfx" / "leaders" / "AIN" / "portrait_AIN_Elias_Marven.png"
-    if not portrait.is_file():
-        issues.append("AIN Elias Marven portrait is missing")
-    if (ROOT / "gfx" / "leaders" / "portrait.png").exists():
-        issues.append("AIN portrait must be renamed, not left as gfx/leaders/portrait.png")
-
-    portrait_gfx = (ROOT / "interface" / "ADISCORD_leader_portraits.gfx").read_text(encoding="utf-8-sig")
-    if 'name = "GFX_portrait_AIN_Elias_Marven"' not in portrait_gfx:
-        issues.append("GFX_portrait_AIN_Elias_Marven sprite is missing")
-    if 'texturefile = "gfx/leaders/AIN/portrait_AIN_Elias_Marven.png"' not in portrait_gfx:
-        issues.append("AIN Elias Marven sprite points at the wrong texture")
-
-    character_source = (ROOT / "common" / "characters" / "ADISCORD_ainholm_characters.txt").read_text(encoding="utf-8-sig")
-    if "large = GFX_portrait_AIN_Elias_Marven" not in character_source:
-        issues.append("AIN Elias Marven does not use the dedicated portrait")
-
     for localisation_path, expected_entries in AIN_LOCALISATION.items():
         if not localisation_path.exists():
             issues.append(f"shared AIN localisation is missing: {localisation_path.relative_to(ROOT)}")

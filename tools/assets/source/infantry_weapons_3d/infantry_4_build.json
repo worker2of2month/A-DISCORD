@@ -1,0 +1,35 @@
+{
+  "triangles": 13260,
+  "bones": 2,
+  "clips": {
+    "support": {
+      "fire_frames": [
+        1,
+        4,
+        7
+      ],
+      "ejection_frames": [
+        1,
+        4,
+        7
+      ]
+    },
+    "fire": {
+      "fire_frames": [
+        16,
+        19,
+        22
+      ],
+      "ejection_frames": [
+        16,
+        19,
+        22
+      ]
+    },
+    "idle": {
+      "fire_frames": [],
+      "ejection_frames": []
+    }
+  },
+  "animation_frames": 79
+}

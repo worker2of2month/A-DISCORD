@@ -45,14 +45,6 @@ defined_text = {
 		localization_key = superevent_stelander_shabrat_victory_quote
 	}
 	text = {
-		trigger = { has_global_flag = superevent_nam_resource_war }
-		localization_key = superevent_nam_resource_war_quote
-	}
-	text = {
-		trigger = { has_global_flag = superevent_rus_last_empire }
-		localization_key = superevent_rus_last_empire_quote
-	}
-	text = {
 		localization_key = superevent_inactive_quote
 	}
 }
@@ -104,14 +96,6 @@ defined_text = {
 		localization_key = superevent_stelander_shabrat_victory_title
 	}
 	text = {
-		trigger = { has_global_flag = superevent_nam_resource_war }
-		localization_key = superevent_nam_resource_war_title
-	}
-	text = {
-		trigger = { has_global_flag = superevent_rus_last_empire }
-		localization_key = superevent_rus_last_empire_title
-	}
-	text = {
 		localization_key = superevent_inactive_title
 	}
 }
@@ -161,14 +145,6 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_stelander_shabrat_victory }
 		localization_key = superevent_stelander_shabrat_victory_comment
-	}
-	text = {
-		trigger = { has_global_flag = superevent_nam_resource_war }
-		localization_key = superevent_nam_resource_war_comment
-	}
-	text = {
-		trigger = { has_global_flag = superevent_rus_last_empire }
-		localization_key = superevent_rus_last_empire_comment
 	}
 	text = {
 		localization_key = superevent_inactive_comment

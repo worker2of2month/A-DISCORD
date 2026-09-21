@@ -32,24 +32,12 @@
   superevent_stelander_empire_comment: "Стеландер снова поднимает голову"
 
   superevent_stelander_party_victory_title: "Победа партии в Стеландере"
-# Quote source: https://www.rjgeib.com/thoughts/1984/1984.html
-  superevent_stelander_party_victory_quote: "Цель власти - власть.\n\n- Джордж Оруэлл, «1984»"
+  superevent_stelander_party_victory_quote: "Восстание подавлено. Война оставила стране разрушенные города и опустевшие дома."
   superevent_stelander_party_victory_comment: "Партийная власть сохранена"
 
   superevent_stelander_shabrat_victory_title: "Победа Шабрата в Стеландере"
-# Quote source: https://www.folger.edu/explore/shakespeares-works/the-tempest/read/2/1/
-  superevent_stelander_shabrat_victory_quote: "Всё прошлое - лишь пролог.\n\n- Уильям Шекспир, «Буря»"
+  superevent_stelander_shabrat_victory_quote: "Партийный режим пал. На руинах прежнего порядка начинается борьба за будущее страны."
   superevent_stelander_shabrat_victory_comment: "Гражданская война окончена"
-
-# Quote source: https://gutenberg.ca/ebooks/butlersd-warisaracket/butlersd-warisaracket-00-e.html
-  superevent_nam_resource_war_title: "Ресурсная война"
-  superevent_nam_resource_war_quote: "Немногие наживаются - многие платят.\n\n- Смедли Батлер, «Война - это рэкет»"
-  superevent_nam_resource_war_comment: "За месторождения платят кровью"
-
-# Quote source: https://www.gutenberg.org/files/3207/3207-h/3207-h.htm#chap17
-  superevent_rus_last_empire_title: "Последняя империя"
-  superevent_rus_last_empire_quote: "Соглашения без меча - лишь слова.\n\n- Томас Гоббс, «Левиафан»"
-  superevent_rus_last_empire_comment: "Хан занял императорский престол"
 
   superevent_inactive_title: ""
   superevent_inactive_quote: ""

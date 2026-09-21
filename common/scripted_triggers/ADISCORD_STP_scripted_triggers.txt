@@ -43,19 +43,6 @@ STP_sided_with_Hedersett_trigger = {
 	}
 }
 
-# COUNTRY: the election result alone does not end the prewar cabinet's mandate.
-STP_party_minister_change_allowed = {
-	custom_trigger_tooltip = {
-		tooltip = STP_party_minister_change_allowed_tt
-		OR = {
-			NOT = { tag = STP }
-			NOT = { STP_sided_with_Maksim_trigger = yes }
-			has_global_flag = STP_cw_started
-			ADISCORD_manual_minister_change_allowed = yes
-		}
-	}
-}
-
 STP_has_political_action_slot = {
 	check_variable = { var = STP_political_action_slots_available value = 1 compare = greater_than_or_equals }
 }
@@ -702,7 +689,7 @@ STP_cw_northern_campaign_won = {
 	has_capitulated = no
 	YPR = { STP_cw_northern_opponent_defeated = yes }
 	COF = { STP_cw_northern_opponent_defeated = yes }
-	TFF = { exists = yes has_war_with = NOD }
+	TFF = { STP_cw_northern_opponent_defeated = yes }
 }
 
 # STATE: only territory awarded to the northern victor or its campaign subjects.
@@ -719,16 +706,6 @@ STP_cw_northern_state_awarded_to_nod = {
 			AND = { OR = { tag = AIN tag = YPR tag = COF tag = TFF } is_puppet_of = NOD }
 		}
 	}
-}
-
-# NOD: the full historical state package proves the Frontier conference outcome.
-STP_cw_frontier_awarded_to_nod = {
-	83 = { STP_cw_northern_state_awarded_to_nod = yes }
-	84 = { STP_cw_northern_state_awarded_to_nod = yes }
-	85 = { STP_cw_northern_state_awarded_to_nod = yes }
-	86 = { STP_cw_northern_state_awarded_to_nod = yes }
-	87 = { STP_cw_northern_state_awarded_to_nod = yes }
-	303 = { STP_cw_northern_state_awarded_to_nod = yes }
 }
 
 # NOD: the native conference may finish before the last immediate callback.
@@ -750,21 +727,12 @@ STP_cw_northern_conference_won = {
 	21 = { STP_cw_northern_state_awarded_to_nod = yes }
 	22 = { STP_cw_northern_state_awarded_to_nod = yes }
 	14 = { STP_cw_northern_state_awarded_to_nod = yes }
-	OR = {
-        AND = {
-            STP_cw_frontier_awarded_to_nod = yes
-            TFF = { OR = { exists = no is_subject = no is_subject_of = NOD } }
-        }
-        AND = {
-            TFF = { exists = yes is_subject = no has_capitulated = no }
-            83 = { is_owned_by = TFF is_controlled_by = TFF }
-            84 = { is_owned_by = TFF is_controlled_by = TFF }
-            85 = { is_owned_by = TFF is_controlled_by = TFF }
-            86 = { is_owned_by = TFF is_controlled_by = TFF }
-            87 = { is_owned_by = TFF is_controlled_by = TFF }
-            303 = { is_owned_by = TFF is_controlled_by = TFF }
-        }
-    }
+	83 = { STP_cw_northern_state_awarded_to_nod = yes }
+	84 = { STP_cw_northern_state_awarded_to_nod = yes }
+	85 = { STP_cw_northern_state_awarded_to_nod = yes }
+	86 = { STP_cw_northern_state_awarded_to_nod = yes }
+	87 = { STP_cw_northern_state_awarded_to_nod = yes }
+	303 = { STP_cw_northern_state_awarded_to_nod = yes }
 }
 
 # YPR scope. Do not turn unrelated conquered territory into a new NOD dependency.
@@ -1096,12 +1064,13 @@ STP_imperial_union_required_states_controlled = {
 
 STP_imperial_union_requirements_met = {
 	tag = STS
-	has_country_leader = {
-		character = STP_maksim_shabrat
-		ruling_only = yes
-	}
+	STP_pc_founder_rules = yes
+	has_completed_focus = STP_pc_hegemony_open
+	has_war = no
 	NOT = { has_country_flag = STP_imperial_union_proclaimed }
 	STP_imperial_union_kefreyt_defeated = yes
+	STP_imperial_union_nodrul_defeated = yes
+	OR = { STP_imperial_union_required_states_controlled = yes STP_imperial_union_client_settlement = yes }
 }
 
 # COUNTRY STS: the running focus, paid programme and unexpired deployment
@@ -1563,15 +1532,4 @@ STP_pw_can_attack_bezhaysk = {
 		owns_state = 41
 		controls_state = 41
 	}
-}
-
-# The same live threat governs the countdown, payment and delivery.
-STP_pw_party_nod_threat_current = {
-	tag = STP
-	has_country_flag = STP_cw_postwar
-	has_country_flag = STP_pw_party_nod_threat_active
-	is_subject = no
-	has_capitulated = no
-	NOD = { exists = yes has_capitulated = no is_subject = no }
-	NOT = { has_war_with = NOD }
 }

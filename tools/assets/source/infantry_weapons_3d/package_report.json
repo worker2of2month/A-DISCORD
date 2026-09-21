@@ -1,0 +1,238 @@
+{
+  "gfx\\entities\\ADISCORD_infantry_weapons.gfx": {
+    "bytes": 3117,
+    "sha256": "7b99adb75d415b6a96eabfff895077ce9f2957a83633c52178b8424ee4bdf892"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\animation.asset": {
+    "bytes": 2499,
+    "sha256": "858c2f26bd4a55190eb66dbc9b4e2fcb8ff85e0728aeb2aa0dbc52fb08c920c5"
+  },
+  "gfx\\entities\\zy_ADISCORD_infantry_weapon_progression.asset": {
+    "bytes": 17264,
+    "sha256": "768763746d7f25889ed2f35af16c901c806a530c7bb79a1062fb12f76fcc6454"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_0.mesh": {
+    "bytes": 245134,
+    "sha256": "9c3315b8ad0834a142c596bb5df7d8a2d5a1eb729ebfe06a7fac2be2d74f5698"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_0_fire.anim": {
+    "bytes": 2148,
+    "sha256": "7676ae0338c84ba5ae2f5ff6bb98386d40cbdc1bd12192a8da07ae765c0f00bb"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_0_support.anim": {
+    "bytes": 2148,
+    "sha256": "263c7e389f6eecdae02254dd11605f282b9514d81a8150c451f22b58a9d0e750"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_0_idle.anim": {
+    "bytes": 242,
+    "sha256": "413728f10b5e5eef9d60e7a2f1f35c9f18cc72ee7902a09551eaccc4eea6a76d"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_0_diffuse.dds": {
+    "bytes": 349680,
+    "sha256": "bdd98f9eeff19013c4256382fc709aa0a06ad3417964bec9842431e2eb215d88"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_0_normal.dds": {
+    "bytes": 349680,
+    "sha256": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_0_specular.dds": {
+    "bytes": 349680,
+    "sha256": "7ade7f32a2c1354524ecdc1b87adde1bfd5e6788d315b3fb459f3c9833d039a2"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_1.mesh": {
+    "bytes": 668286,
+    "sha256": "47db12b9aba576b2ebfef9d6f3625bb9e8e29a5c3173f9aba7e40066d2610c84"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_1_fire.anim": {
+    "bytes": 2148,
+    "sha256": "55c4c282c8b769b4bfc845ceaf01120997eb84601b69d55cd0cfccd1017bfcca"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_1_support.anim": {
+    "bytes": 2148,
+    "sha256": "c6e709372ffdbf2b1f69bade88fd1d96c1da075a5bf421138f4d7c27b3044407"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_1_idle.anim": {
+    "bytes": 242,
+    "sha256": "413728f10b5e5eef9d60e7a2f1f35c9f18cc72ee7902a09551eaccc4eea6a76d"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_1_diffuse.dds": {
+    "bytes": 349680,
+    "sha256": "590e935d6bd750b355df543375ee8de14c0f00dfbfad2131ac265d6b5f14928d"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_1_normal.dds": {
+    "bytes": 349680,
+    "sha256": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_1_specular.dds": {
+    "bytes": 349680,
+    "sha256": "7ade7f32a2c1354524ecdc1b87adde1bfd5e6788d315b3fb459f3c9833d039a2"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_2.mesh": {
+    "bytes": 668446,
+    "sha256": "2bd6d929def5b8cc75e05e7d734526e365bd626cc7b0ff38279f244b960014b0"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_2_fire.anim": {
+    "bytes": 2148,
+    "sha256": "55c4c282c8b769b4bfc845ceaf01120997eb84601b69d55cd0cfccd1017bfcca"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_2_support.anim": {
+    "bytes": 2148,
+    "sha256": "c6e709372ffdbf2b1f69bade88fd1d96c1da075a5bf421138f4d7c27b3044407"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_2_idle.anim": {
+    "bytes": 242,
+    "sha256": "413728f10b5e5eef9d60e7a2f1f35c9f18cc72ee7902a09551eaccc4eea6a76d"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_2_diffuse.dds": {
+    "bytes": 349680,
+    "sha256": "659266acc844ca751c93852dea76e3b897aef9c4aa85da283ff99e302027a967"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_2_normal.dds": {
+    "bytes": 349680,
+    "sha256": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_2_specular.dds": {
+    "bytes": 349680,
+    "sha256": "7ade7f32a2c1354524ecdc1b87adde1bfd5e6788d315b3fb459f3c9833d039a2"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_3.mesh": {
+    "bytes": 1036846,
+    "sha256": "707a7c9f3dce079ac0c62390d56e6d1b73a22d5d3e09e0a804ab984f9324f4f6"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_3_fire.anim": {
+    "bytes": 2148,
+    "sha256": "55c4c282c8b769b4bfc845ceaf01120997eb84601b69d55cd0cfccd1017bfcca"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_3_support.anim": {
+    "bytes": 2148,
+    "sha256": "c6e709372ffdbf2b1f69bade88fd1d96c1da075a5bf421138f4d7c27b3044407"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_3_idle.anim": {
+    "bytes": 242,
+    "sha256": "413728f10b5e5eef9d60e7a2f1f35c9f18cc72ee7902a09551eaccc4eea6a76d"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_3_diffuse.dds": {
+    "bytes": 349680,
+    "sha256": "2f3797b4aa3e85f8d1c83b9247fa8ab012d832bc92277124c42939d1f4393061"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_3_normal.dds": {
+    "bytes": 349680,
+    "sha256": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_3_specular.dds": {
+    "bytes": 349680,
+    "sha256": "7ade7f32a2c1354524ecdc1b87adde1bfd5e6788d315b3fb459f3c9833d039a2"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_4.mesh": {
+    "bytes": 1172670,
+    "sha256": "16c5797987d040c4bee36886c915c15f7fdf18da468a4b90a7bb0f5545b6c61b"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_4_fire.anim": {
+    "bytes": 2148,
+    "sha256": "55c4c282c8b769b4bfc845ceaf01120997eb84601b69d55cd0cfccd1017bfcca"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_4_support.anim": {
+    "bytes": 2148,
+    "sha256": "c6e709372ffdbf2b1f69bade88fd1d96c1da075a5bf421138f4d7c27b3044407"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_4_idle.anim": {
+    "bytes": 242,
+    "sha256": "413728f10b5e5eef9d60e7a2f1f35c9f18cc72ee7902a09551eaccc4eea6a76d"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_4_diffuse.dds": {
+    "bytes": 349680,
+    "sha256": "b81f48a0f7c2d7c5cf970948b80bfd648f7a6b89677a1a44bc2a7b656945f8bc"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_4_normal.dds": {
+    "bytes": 349680,
+    "sha256": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_4_specular.dds": {
+    "bytes": 349680,
+    "sha256": "7ade7f32a2c1354524ecdc1b87adde1bfd5e6788d315b3fb459f3c9833d039a2"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_5.mesh": {
+    "bytes": 1250910,
+    "sha256": "ea335ea6f2fb33acbdf80a903990b97faf1fd168d5d1956263f2be34a4466884"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_5_fire.anim": {
+    "bytes": 2148,
+    "sha256": "55c4c282c8b769b4bfc845ceaf01120997eb84601b69d55cd0cfccd1017bfcca"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_5_support.anim": {
+    "bytes": 2148,
+    "sha256": "c6e709372ffdbf2b1f69bade88fd1d96c1da075a5bf421138f4d7c27b3044407"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_5_idle.anim": {
+    "bytes": 242,
+    "sha256": "413728f10b5e5eef9d60e7a2f1f35c9f18cc72ee7902a09551eaccc4eea6a76d"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_5_diffuse.dds": {
+    "bytes": 349680,
+    "sha256": "cf889a962074455d83fe4fb203805a06381fed13c50af3077ea4266d4488d4c2"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_5_normal.dds": {
+    "bytes": 349680,
+    "sha256": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_5_specular.dds": {
+    "bytes": 349680,
+    "sha256": "7ade7f32a2c1354524ecdc1b87adde1bfd5e6788d315b3fb459f3c9833d039a2"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_6.mesh": {
+    "bytes": 1317790,
+    "sha256": "52c427ce35a2557ccf0f0e7d284e5ff12121e013e4a9dffb62de74bc649d79f1"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_6_fire.anim": {
+    "bytes": 2148,
+    "sha256": "55c4c282c8b769b4bfc845ceaf01120997eb84601b69d55cd0cfccd1017bfcca"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_6_support.anim": {
+    "bytes": 2148,
+    "sha256": "c6e709372ffdbf2b1f69bade88fd1d96c1da075a5bf421138f4d7c27b3044407"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_6_idle.anim": {
+    "bytes": 242,
+    "sha256": "413728f10b5e5eef9d60e7a2f1f35c9f18cc72ee7902a09551eaccc4eea6a76d"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_6_diffuse.dds": {
+    "bytes": 349680,
+    "sha256": "f36bc221ad15cfbb42adb64c699e627ad00286896dddbd521a24238842d83f39"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_6_normal.dds": {
+    "bytes": 349680,
+    "sha256": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_6_specular.dds": {
+    "bytes": 349680,
+    "sha256": "7ade7f32a2c1354524ecdc1b87adde1bfd5e6788d315b3fb459f3c9833d039a2"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_7.mesh": {
+    "bytes": 1377310,
+    "sha256": "1ce478565b601924abac6da2a6e199e273c6a2c65555619e57045a24d1e8bb56"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_7_fire.anim": {
+    "bytes": 2148,
+    "sha256": "55c4c282c8b769b4bfc845ceaf01120997eb84601b69d55cd0cfccd1017bfcca"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_7_support.anim": {
+    "bytes": 2148,
+    "sha256": "c6e709372ffdbf2b1f69bade88fd1d96c1da075a5bf421138f4d7c27b3044407"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_7_idle.anim": {
+    "bytes": 242,
+    "sha256": "413728f10b5e5eef9d60e7a2f1f35c9f18cc72ee7902a09551eaccc4eea6a76d"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_7_diffuse.dds": {
+    "bytes": 349680,
+    "sha256": "2b0bb0a414b4ea89c8ed22d6e047519408701ed5e869d0c9790843e197ace8df"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_7_normal.dds": {
+    "bytes": 349680,
+    "sha256": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810"
+  },
+  "gfx\\models\\units\\ADISCORD_weapons\\infantry_7_specular.dds": {
+    "bytes": 349680,
+    "sha256": "7ade7f32a2c1354524ecdc1b87adde1bfd5e6788d315b3fb459f3c9833d039a2"
+  }
+}

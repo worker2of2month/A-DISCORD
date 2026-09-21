@@ -1,18 +1,148 @@
+VAL_trade_corridors = {
+
+	VAL_invest_occidian_corridor = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Reopen_Trade_Routes NOT = { has_country_flag = VAL_route_occidia_upgraded } }
+		available = { has_capitulated = no VAL_trade_route_occidia_open = yes custom_trigger_tooltip = { tooltip = VAL_corridor_project_idle_tt NOT = { has_variable = VAL_corridor_deposit } } }
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } }
+		custom_cost_text = VAL_logistics_cost_750
+		cost = 0
+		days_remove = 90
+		complete_effect = { hidden_effect = { VAL_begin_occidia_corridor_project = yes } }
+		remove_effect = { custom_effect_tooltip = VAL_corridor_occidia_result_tt hidden_effect = {
+			if = { limit = { check_variable = { var = VAL_corridor_project value = 1 compare = equals } }
+				if = { limit = { has_capitulated = no VAL_trade_route_occidia_open = yes } VAL_finish_occidia_corridor_project = yes }
+				else = { VAL_refund_corridor_project = yes }
+			}
+		} }
+		cancel_trigger = { NOT = { AND = { has_capitulated = no VAL_trade_route_occidia_open = yes } } }
+		cancel_effect = { custom_effect_tooltip = VAL_corridor_project_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 1 compare = equals } } VAL_refund_corridor_project = yes } } }
+		ai_will_do = { base = 3 modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+	}
+
+	VAL_invest_northern_corridor = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Reopen_Trade_Routes NOT = { has_country_flag = VAL_route_north_upgraded } }
+		available = { has_capitulated = no VAL_trade_route_north_open = yes custom_trigger_tooltip = { tooltip = VAL_corridor_project_idle_tt NOT = { has_variable = VAL_corridor_deposit } } }
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
+		custom_cost_text = VAL_logistics_cost_1000
+		cost = 0
+		days_remove = 120
+		complete_effect = { hidden_effect = { VAL_begin_north_corridor_project = yes } }
+		remove_effect = { custom_effect_tooltip = VAL_corridor_north_result_tt hidden_effect = {
+			if = { limit = { check_variable = { var = VAL_corridor_project value = 2 compare = equals } }
+				if = { limit = { has_capitulated = no VAL_trade_route_north_open = yes } VAL_finish_north_corridor_project = yes }
+				else = { VAL_refund_corridor_project = yes }
+			}
+		} }
+		cancel_trigger = { NOT = { AND = { has_capitulated = no VAL_trade_route_north_open = yes } } }
+		cancel_effect = { custom_effect_tooltip = VAL_corridor_project_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 2 compare = equals } } VAL_refund_corridor_project = yes } } }
+		ai_will_do = { base = 3 modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+	}
+
+	VAL_invest_stelander_corridor = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Reopen_Trade_Routes NOT = { has_country_flag = VAL_route_stelander_upgraded } }
+		available = { has_capitulated = no VAL_trade_route_stelander_open = yes custom_trigger_tooltip = { tooltip = VAL_corridor_project_idle_tt NOT = { has_variable = VAL_corridor_deposit } } }
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
+		custom_cost_text = VAL_logistics_cost_500
+		cost = 0
+		days_remove = 60
+		complete_effect = { hidden_effect = { VAL_begin_stelander_corridor_project = yes } }
+		remove_effect = { custom_effect_tooltip = VAL_corridor_stelander_result_tt hidden_effect = {
+			if = { limit = { check_variable = { var = VAL_corridor_project value = 3 compare = equals } }
+				if = { limit = { has_capitulated = no VAL_trade_route_stelander_open = yes } VAL_finish_stelander_corridor_project = yes }
+				else = { VAL_refund_corridor_project = yes }
+			}
+		} }
+		cancel_trigger = { NOT = { AND = { has_capitulated = no VAL_trade_route_stelander_open = yes } } }
+		cancel_effect = { custom_effect_tooltip = VAL_corridor_project_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 3 compare = equals } } VAL_refund_corridor_project = yes } } }
+		ai_will_do = { base = 3 modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+	}
+
+	VAL_invest_vorkerland_corridor = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Reopen_Trade_Routes NOT = { has_country_flag = VAL_route_vorkerland_upgraded } }
+		available = { has_capitulated = no VAL_trade_route_vorkerland_open = yes custom_trigger_tooltip = { tooltip = VAL_corridor_project_idle_tt NOT = { has_variable = VAL_corridor_deposit } } }
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
+		custom_cost_text = VAL_logistics_cost_500
+		cost = 0
+		days_remove = 75
+		complete_effect = { hidden_effect = { VAL_begin_vorkerland_corridor_project = yes } }
+		remove_effect = { custom_effect_tooltip = VAL_corridor_vorkerland_result_tt hidden_effect = {
+			if = { limit = { check_variable = { var = VAL_corridor_project value = 4 compare = equals } }
+				if = { limit = { has_capitulated = no VAL_trade_route_vorkerland_open = yes } VAL_finish_vorkerland_corridor_project = yes }
+				else = { VAL_refund_corridor_project = yes }
+			}
+		} }
+		cancel_trigger = { NOT = { AND = { has_capitulated = no VAL_trade_route_vorkerland_open = yes } } }
+		cancel_effect = { custom_effect_tooltip = VAL_corridor_project_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 4 compare = equals } } VAL_refund_corridor_project = yes } } }
+		ai_will_do = { base = 3 modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+	}
+
+	VAL_secure_trade_columns = {
+		icon = generic_resources
+		allowed = { tag = VAL }
+		visible = {
+			VAL_trade_corridors_unlocked = yes
+			check_variable = { var = VAL_corridor_security value = 3 compare = less_than }
+		}
+		available = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = VAL_logistics_cost_250
+		cost = 0
+		days_re_enable = 35
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			add_to_variable = { var = VAL_corridor_security value = 1 }
+			clamp_variable = { var = VAL_corridor_security min = 0 max = 3 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = -5 }
+			VAL_change_black_market_pressure = yes
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_open_emergency_bypass = {
+		icon = generic_resources
+		allowed = { tag = VAL }
+		visible = { VAL_trade_corridors_unlocked = yes }
+		available = {
+			VAL_trade_network_disrupted = yes
+			NOT = { has_idea = VAL_emergency_bypass }
+			ADISCORD_economy_can_spend_250 = yes
+		}
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = VAL_logistics_cost_250
+		cost = 0
+		days_re_enable = 42
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			add_timed_idea = { idea = VAL_emergency_bypass days = 56 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = 6 }
+			VAL_change_black_market_pressure = yes
+		}
+		ai_will_do = { base = 8 }
+	}
+}
+
 VAL_population_markets = {
 	VAL_accept_vorkerland_refugees = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
 		visible = { has_country_flag = VAL_refugee_vorkerland_window VAL_refugee_vorkerland_war = yes }
-		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_wave_limit_tt check_variable = { var = VAL_refugee_vorkerland_admitted value = 3 compare = less_than } } custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt OR = { AND = { NOT = { has_variable = VAL_refugee_training_escrow } check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } AND = { has_variable = VAL_refugee_training_escrow check_variable = { var = VAL_displaced_population value = 80 compare = less_than_or_equals } } } } ADISCORD_economy_can_spend_250 = yes }
+		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_text = VAL_logistics_cost_250
 		cost = 0
-		days_re_enable = 30
+		fire_only_once = yes
 		complete_effect = {
 			ADISCORD_economy_spend_250 = yes
+			clr_country_flag = VAL_refugee_vorkerland_window
 			add_to_variable = { var = VAL_displaced_population value = 10 }
-			add_to_variable = { var = VAL_refugee_vorkerland_admitted value = 1 }
-			if = { limit = { check_variable = { var = VAL_refugee_vorkerland_admitted value = 3 compare = greater_than_or_equals } } clr_country_flag = VAL_refugee_vorkerland_window }
 			custom_effect_tooltip = VAL_refugee_admission_tt
 			set_temp_variable = { var = VAL_black_market_pressure_change value = 5 }
 			VAL_change_black_market_pressure = yes
@@ -25,16 +155,15 @@ VAL_population_markets = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
 		visible = { has_country_flag = VAL_refugee_stelander_window VAL_refugee_stelander_war = yes }
-		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_wave_limit_tt check_variable = { var = VAL_refugee_stelander_admitted value = 3 compare = less_than } } custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt OR = { AND = { NOT = { has_variable = VAL_refugee_training_escrow } check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } AND = { has_variable = VAL_refugee_training_escrow check_variable = { var = VAL_displaced_population value = 80 compare = less_than_or_equals } } } } ADISCORD_economy_can_spend_250 = yes }
+		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_text = VAL_logistics_cost_250
 		cost = 0
-		days_re_enable = 30
+		fire_only_once = yes
 		complete_effect = {
 			ADISCORD_economy_spend_250 = yes
+			clr_country_flag = VAL_refugee_stelander_window
 			add_to_variable = { var = VAL_displaced_population value = 10 }
-			add_to_variable = { var = VAL_refugee_stelander_admitted value = 1 }
-			if = { limit = { check_variable = { var = VAL_refugee_stelander_admitted value = 3 compare = greater_than_or_equals } } clr_country_flag = VAL_refugee_stelander_window }
 			custom_effect_tooltip = VAL_refugee_admission_tt
 			set_temp_variable = { var = VAL_black_market_pressure_change value = 5 }
 			VAL_change_black_market_pressure = yes
@@ -47,16 +176,15 @@ VAL_population_markets = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
 		visible = { has_country_flag = VAL_refugee_nodrul_window VAL_refugee_nodrul_war = yes }
-		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_wave_limit_tt check_variable = { var = VAL_refugee_nodrul_admitted value = 3 compare = less_than } } custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt OR = { AND = { NOT = { has_variable = VAL_refugee_training_escrow } check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } AND = { has_variable = VAL_refugee_training_escrow check_variable = { var = VAL_displaced_population value = 80 compare = less_than_or_equals } } } } ADISCORD_economy_can_spend_250 = yes }
+		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_text = VAL_logistics_cost_250
 		cost = 0
-		days_re_enable = 30
+		fire_only_once = yes
 		complete_effect = {
 			ADISCORD_economy_spend_250 = yes
+			clr_country_flag = VAL_refugee_nodrul_window
 			add_to_variable = { var = VAL_displaced_population value = 10 }
-			add_to_variable = { var = VAL_refugee_nodrul_admitted value = 1 }
-			if = { limit = { check_variable = { var = VAL_refugee_nodrul_admitted value = 3 compare = greater_than_or_equals } } clr_country_flag = VAL_refugee_nodrul_window }
 			custom_effect_tooltip = VAL_refugee_admission_tt
 			set_temp_variable = { var = VAL_black_market_pressure_change value = 5 }
 			VAL_change_black_market_pressure = yes
@@ -69,16 +197,15 @@ VAL_population_markets = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
 		visible = { has_country_flag = VAL_refugee_north_window VAL_refugee_north_war = yes }
-		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_wave_limit_tt check_variable = { var = VAL_refugee_north_admitted value = 3 compare = less_than } } custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt OR = { AND = { NOT = { has_variable = VAL_refugee_training_escrow } check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } AND = { has_variable = VAL_refugee_training_escrow check_variable = { var = VAL_displaced_population value = 80 compare = less_than_or_equals } } } } ADISCORD_economy_can_spend_250 = yes }
+		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_text = VAL_logistics_cost_250
 		cost = 0
-		days_re_enable = 30
+		fire_only_once = yes
 		complete_effect = {
 			ADISCORD_economy_spend_250 = yes
+			clr_country_flag = VAL_refugee_north_window
 			add_to_variable = { var = VAL_displaced_population value = 10 }
-			add_to_variable = { var = VAL_refugee_north_admitted value = 1 }
-			if = { limit = { check_variable = { var = VAL_refugee_north_admitted value = 3 compare = greater_than_or_equals } } clr_country_flag = VAL_refugee_north_window }
 			custom_effect_tooltip = VAL_refugee_admission_tt
 			set_temp_variable = { var = VAL_black_market_pressure_change value = 5 }
 			VAL_change_black_market_pressure = yes
@@ -111,34 +238,6 @@ VAL_population_markets = {
 			remove_ideas = VAL_closed_border_regime
 		}
 		ai_will_do = { base = 1 modifier = { factor = 3 NOT = { VAL_regional_displacement_crisis = yes } } }
-	}
-
-	VAL_train_refugee_volunteers = {
-		cancel_if_not_visible = no
-		icon = generic_prepare_civil_war
-		allowed = { tag = VAL }
-		visible = { OR = { has_completed_focus = VAL_Company_Service_Code VAL_final_crisis_preparing = yes } }
-		available = {
-			has_capitulated = no
-			is_subject = no
-			check_variable = { var = VAL_displaced_population value = 10 compare = greater_than_or_equals }
-			NOT = { has_variable = VAL_refugee_training_escrow }
-		}
-		cost = 75
-		days_remove = 35
-		days_re_enable = 30
-		complete_effect = {
-			custom_effect_tooltip = VAL_refugee_training_start_tt
-			hidden_effect = {
-				set_variable = { var = VAL_refugee_training_escrow value = 10 }
-				add_to_variable = { var = VAL_displaced_population value = -10 }
-				VAL_refresh_refugee_state = yes
-			}
-		}
-		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes } } }
-		cancel_effect = { VAL_refund_refugee_training = yes }
-		remove_effect = { VAL_finish_refugee_training = yes }
-		ai_will_do = { base = 8 }
 	}
 
 	VAL_contract_refugee_labor = {

@@ -1,7 +1,8 @@
 guiTypes = {
-	# Each station requires a faceplate and a station-list entry.
+	# A music station needs both a faceplate and a station-list entry. The old
+	# compatibility file only supplied the latter, producing an engine error.
 	containerWindowType = {
-		name = "adiscord_music_faceplate"
+		name = "one_minute_faceplate"
 		position = { x = 0 y = 0 }
 		size = { width = 590 height = 46 }
 
@@ -16,7 +17,7 @@ guiTypes = {
 			name = "track_name"
 			position = { x = 72 y = 20 }
 			font = "hoi_20b"
-			text = "A-DISCORD"
+			text = "One Minute of Silence"
 			maxWidth = 450
 			maxHeight = 25
 			format = center
@@ -36,7 +37,7 @@ guiTypes = {
 			name = "track_duration"
 			position = { x = 420 y = 30 }
 			font = "hoi_18b"
-			text = "00:00"
+			text = "01:00"
 			maxWidth = 50
 			maxHeight = 25
 			format = center
@@ -112,7 +113,7 @@ guiTypes = {
 	}
 
 	containerWindowType = {
-		name = "adiscord_music_stations_entry"
+		name = "one_minute_stations_entry"
 		size = { width = 162 height = 130 }
 
 		checkBoxType = {
@@ -120,17 +121,6 @@ guiTypes = {
 			position = { x = 0 y = 0 }
 			quadTextureSprite = "GFX_base_game_album_art"
 			clicksound = decisions_ui_button
-		}
-
-		instantTextboxType = {
-			name = "station_name"
-			position = { x = 0 y = 108 }
-			font = "hoi_20b"
-			text = "adiscord_music"
-			maxWidth = 162
-			maxHeight = 22
-			format = center
-			alwaystransparent = yes
 		}
 	}
 }

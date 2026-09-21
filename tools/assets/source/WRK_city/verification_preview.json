@@ -1,0 +1,900 @@
+{
+  "status": "offline checks pass",
+  "meshes": 9,
+  "textures": {
+    "City_concrete_diffuse.dds": {
+      "size": [
+        512,
+        512
+      ],
+      "mips": 10,
+      "bytes": 349680
+    },
+    "City_concrete_specular.dds": {
+      "size": [
+        256,
+        256
+      ],
+      "mips": 9,
+      "bytes": 87536
+    },
+    "City_detail_diffuse.dds": {
+      "size": [
+        256,
+        256
+      ],
+      "mips": 9,
+      "bytes": 87536
+    },
+    "City_detail_specular.dds": {
+      "size": [
+        256,
+        256
+      ],
+      "mips": 9,
+      "bytes": 87536
+    },
+    "City_glass_bronze_diffuse.dds": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mips": 11,
+      "bytes": 1398256
+    },
+    "City_glass_bronze_specular.dds": {
+      "size": [
+        256,
+        256
+      ],
+      "mips": 9,
+      "bytes": 87536
+    },
+    "City_glass_diffuse.dds": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mips": 11,
+      "bytes": 1398256
+    },
+    "City_glass_silver_diffuse.dds": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mips": 11,
+      "bytes": 1398256
+    },
+    "City_glass_silver_specular.dds": {
+      "size": [
+        256,
+        256
+      ],
+      "mips": 9,
+      "bytes": 87536
+    },
+    "City_glass_specular.dds": {
+      "size": [
+        256,
+        256
+      ],
+      "mips": 9,
+      "bytes": 87536
+    },
+    "City_glass_teal_diffuse.dds": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mips": 11,
+      "bytes": 1398256
+    },
+    "City_glass_teal_specular.dds": {
+      "size": [
+        256,
+        256
+      ],
+      "mips": 9,
+      "bytes": 87536
+    },
+    "City_normal.dds": {
+      "size": [
+        256,
+        256
+      ],
+      "mips": 9,
+      "bytes": 87536
+    },
+    "City_roof_diffuse.dds": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mips": 11,
+      "bytes": 1398256
+    },
+    "City_roof_specular.dds": {
+      "size": [
+        256,
+        256
+      ],
+      "mips": 9,
+      "bytes": 87536
+    },
+    "City_screen_diffuse.dds": {
+      "size": [
+        1024,
+        1024
+      ],
+      "mips": 11,
+      "bytes": 1398256
+    },
+    "City_screen_normal.dds": {
+      "size": [
+        256,
+        256
+      ],
+      "mips": 9,
+      "bytes": 87536
+    },
+    "City_screen_specular.dds": {
+      "size": [
+        256,
+        256
+      ],
+      "mips": 9,
+      "bytes": 87536
+    }
+  },
+  "placements": {
+    "tower_admin": 4,
+    "tower_business": 3,
+    "tower_residential": 4,
+    "quarter_business": 9,
+    "quarter_mixed": 1,
+    "quarter_residential": 2,
+    "stelander_spire": 2,
+    "stelander_twin": 2,
+    "stelander_arcology": 1
+  },
+  "total_placed_triangles": 42824,
+  "triangles_per_model": {
+    "tower_admin": 1056,
+    "tower_business": 1044,
+    "tower_residential": 1012,
+    "quarter_business": 2194,
+    "quarter_mixed": 1852,
+    "quarter_residential": 1980,
+    "stelander_spire": 1162,
+    "stelander_twin": 1156,
+    "stelander_arcology": 1226
+  },
+  "source_meshes_unchanged_from_HEAD": [
+    "city_4_04",
+    "city_4_03",
+    "western_buildings_4_02"
+  ],
+  "retired_skyscraper_files_removed": [
+    "gfx\\models\\buildings\\skyscraper1.mesh",
+    "gfx\\models\\buildings\\skyscraper1_diff.dds",
+    "gfx\\models\\buildings\\skyscraper2.mesh",
+    "gfx\\models\\buildings\\skyscraper2_diff.dds",
+    "gfx\\models\\buildings\\skyscraper3.mesh",
+    "gfx\\models\\buildings\\skyscraper3_diff.dds"
+  ],
+  "source_texture_hashes_unchanged": [
+    "gfx\\models\\buildings\\vorkerland_special\\ADISCORD_vorkerland_pyramid_windows.dds",
+    "gfx\\models\\buildings\\vorkerland_special\\ADISCORD_vorkerland_pyramid_wall.dds",
+    "gfx\\models\\buildings\\vorkerland_special\\ADISCORD_vorkerland_pyramid_roof.dds"
+  ],
+  "external_placements_preserved": 1,
+  "unrelated_registry_and_ambient_content_preserved": true,
+  "restored_city_palette_pixels": 457,
+  "original_city_mask_sha256": "b95d274b58ea35522d633b8dfed8e8e94f537b96f8442f23e35b6b8c36b7fbd3",
+  "procedural_cities": "original mask and loader restored; new buildings are standalone ambient entities only",
+  "landmark_placement": [
+    {
+      "entity": "ADISCORD_factory_entity",
+      "index": 0,
+      "position": [
+        3487.83008,
+        2.54531,
+        934.76
+      ],
+      "rotation": [
+        0.0,
+        370.0,
+        0.0
+      ],
+      "anchor": [
+        3493.83008,
+        16.0,
+        940.76
+      ],
+      "state": 49,
+      "province": 4486,
+      "move_distance": 8.48528137423857,
+      "terrain_range": [
+        13.099999999999998,
+        13.337485232761196
+      ],
+      "center_height": 13.1,
+      "footprint": [
+        [
+          -3.666656,
+          -0.234031
+        ],
+        [
+          -1.305585,
+          -3.7601
+        ],
+        [
+          -0.762479,
+          -3.919324
+        ],
+        [
+          -0.608605,
+          -3.946456
+        ],
+        [
+          -0.057402,
+          -3.789792
+        ],
+        [
+          0.076551,
+          -3.749951
+        ],
+        [
+          2.841493,
+          -2.016235
+        ],
+        [
+          3.420721,
+          -1.610655
+        ],
+        [
+          3.431573,
+          -1.549109
+        ],
+        [
+          3.599564,
+          1.023304
+        ],
+        [
+          1.989925,
+          3.322107
+        ],
+        [
+          1.60066,
+          3.723935
+        ],
+        [
+          1.424144,
+          3.802655
+        ],
+        [
+          0.270075,
+          4.006148
+        ],
+        [
+          -2.617108,
+          2.658915
+        ],
+        [
+          -2.916682,
+          2.489611
+        ],
+        [
+          -3.632354,
+          0.410427
+        ],
+        [
+          -3.656773,
+          0.271939
+        ]
+      ],
+      "footprint_states": [
+        49
+      ],
+      "contact_world_y": 13.07499773841858,
+      "clearance": 4.060587541447789,
+      "native_scale": 8.0,
+      "model_sha256": "24de1a88e402c283db4afa19650fe1ab60489b85d9d2804d0b23ad12ef25c69d"
+    },
+    {
+      "entity": "ADISCORD_factory_entity",
+      "index": 1,
+      "position": [
+        3595.69984,
+        2.28528,
+        767.51
+      ],
+      "rotation": [
+        0.0,
+        100.0,
+        0.0
+      ],
+      "anchor": [
+        3593.69984,
+        13.5,
+        767.51
+      ],
+      "state": 215,
+      "province": 10533,
+      "move_distance": 2.0,
+      "terrain_range": [
+        10.599999999999998,
+        11.143473221863982
+      ],
+      "center_height": 10.860031999999956,
+      "footprint": [
+        [
+          -3.946456,
+          0.608605
+        ],
+        [
+          -3.789792,
+          0.057402
+        ],
+        [
+          -3.749951,
+          -0.076551
+        ],
+        [
+          -2.016235,
+          -2.841493
+        ],
+        [
+          -1.610655,
+          -3.420721
+        ],
+        [
+          -1.549109,
+          -3.431573
+        ],
+        [
+          1.023304,
+          -3.599564
+        ],
+        [
+          3.322107,
+          -1.989925
+        ],
+        [
+          3.723935,
+          -1.60066
+        ],
+        [
+          3.802655,
+          -1.424144
+        ],
+        [
+          4.006148,
+          -0.270075
+        ],
+        [
+          2.658915,
+          2.617108
+        ],
+        [
+          2.489611,
+          2.916682
+        ],
+        [
+          0.410427,
+          3.632354
+        ],
+        [
+          0.271939,
+          3.656773
+        ],
+        [
+          -0.234031,
+          3.666656
+        ],
+        [
+          -3.7601,
+          1.305585
+        ],
+        [
+          -3.919324,
+          0.762479
+        ]
+      ],
+      "footprint_states": [
+        215
+      ],
+      "contact_world_y": 10.574999738418535,
+      "clearance": 4.060587541447789,
+      "native_scale": 8.0,
+      "model_sha256": "24de1a88e402c283db4afa19650fe1ab60489b85d9d2804d0b23ad12ef25c69d"
+    },
+    {
+      "entity": "ADISCORD_factory_entity",
+      "index": 2,
+      "position": [
+        3492.21984,
+        2.48309,
+        976.8
+      ],
+      "rotation": [
+        0.0,
+        180.0,
+        0.0
+      ],
+      "anchor": [
+        3492.21984,
+        16.9,
+        976.8
+      ],
+      "state": 51,
+      "province": 3347,
+      "move_distance": 0.0,
+      "terrain_range": [
+        14.337782714867199,
+        14.600000000000001
+      ],
+      "center_height": 14.400000000000002,
+      "footprint": [
+        [
+          -3.64844,
+          0.929688
+        ],
+        [
+          -3.367184,
+          -1.632816
+        ],
+        [
+          -1.382816,
+          -3.617184
+        ],
+        [
+          -0.929688,
+          -3.945312
+        ],
+        [
+          -0.742184,
+          -3.992184
+        ],
+        [
+          0.429688,
+          -3.992184
+        ],
+        [
+          3.039064,
+          -2.164064
+        ],
+        [
+          3.304688,
+          -1.945312
+        ],
+        [
+          3.64844,
+          0.22656
+        ],
+        [
+          3.64844,
+          0.367184
+        ],
+        [
+          3.570312,
+          0.867184
+        ],
+        [
+          0.632816,
+          3.929688
+        ],
+        [
+          0.070312,
+          3.992184
+        ],
+        [
+          -0.085936,
+          3.992184
+        ],
+        [
+          -0.60156,
+          3.742184
+        ],
+        [
+          -0.72656,
+          3.679688
+        ],
+        [
+          -3.14844,
+          1.492184
+        ],
+        [
+          -3.64844,
+          0.992184
+        ]
+      ],
+      "footprint_states": [
+        51
+      ],
+      "contact_world_y": 14.312777738418582,
+      "clearance": 4.060587418060594,
+      "native_scale": 8.0,
+      "model_sha256": "24de1a88e402c283db4afa19650fe1ab60489b85d9d2804d0b23ad12ef25c69d"
+    },
+    {
+      "entity": "ADISCORD_congress_entity",
+      "index": 0,
+      "position": [
+        3745.28,
+        0.8994,
+        939.79
+      ],
+      "rotation": [
+        0.0,
+        250.0,
+        0.0
+      ],
+      "anchor": [
+        3746.28,
+        11.6,
+        940.79
+      ],
+      "state": 28,
+      "province": 16386,
+      "move_distance": 1.4142135623730951,
+      "terrain_range": [
+        10.554678444422578,
+        11.1
+      ],
+      "center_height": 10.599999999999998,
+      "footprint": [
+        [
+          -1.68835,
+          0.261567
+        ],
+        [
+          -0.948865,
+          -1.770151
+        ],
+        [
+          -0.320655,
+          -1.628798
+        ],
+        [
+          1.287102,
+          -1.043622
+        ],
+        [
+          1.864704,
+          -0.746096
+        ],
+        [
+          1.125219,
+          1.285622
+        ],
+        [
+          0.35523,
+          1.516673
+        ],
+        [
+          0.072884,
+          1.538617
+        ],
+        [
+          -1.044836,
+          1.1318
+        ],
+        [
+          -1.247021,
+          0.933501
+        ]
+      ],
+      "footprint_states": [
+        28
+      ],
+      "contact_world_y": 10.529673884534834,
+      "clearance": 2.008427307330788,
+      "native_scale": 3.0,
+      "model_sha256": "da16557f85cf79a4be91449ac81b921d595ca9ee16cf0cface8283ca1ccbf608"
+    },
+    {
+      "entity": "ADISCORD_reactor_entity",
+      "index": 0,
+      "position": [
+        3521.11008,
+        1.71028,
+        893.46
+      ],
+      "rotation": [
+        0.0,
+        90.0,
+        0.0
+      ],
+      "anchor": [
+        3526.11008,
+        13.6,
+        905.46
+      ],
+      "state": 125,
+      "province": 2964,
+      "move_distance": 13.0,
+      "terrain_range": [
+        12.411073697520022,
+        12.9
+      ],
+      "center_height": 12.794936320000003,
+      "footprint": [
+        [
+          -4.99023,
+          -0.9082
+        ],
+        [
+          -3.75977,
+          -3.83789
+        ],
+        [
+          -3.42773,
+          -4.22852
+        ],
+        [
+          -2.06055,
+          -4.7168
+        ],
+        [
+          3.23242,
+          -4.99023
+        ],
+        [
+          3.58398,
+          -4.93164
+        ],
+        [
+          3.68164,
+          -4.87305
+        ],
+        [
+          4.87305,
+          -3.03711
+        ],
+        [
+          4.99023,
+          2.35352
+        ],
+        [
+          4.99023,
+          3.11523
+        ],
+        [
+          4.95117,
+          3.27148
+        ],
+        [
+          4.77539,
+          3.54492
+        ],
+        [
+          4.7168,
+          3.62305
+        ],
+        [
+          3.95508,
+          4.48242
+        ],
+        [
+          3.19336,
+          4.89258
+        ],
+        [
+          1.02539,
+          4.99023
+        ],
+        [
+          0.06836,
+          4.99023
+        ],
+        [
+          -1.61133,
+          4.79492
+        ],
+        [
+          -1.9043,
+          4.6582
+        ],
+        [
+          -2.06055,
+          4.58008
+        ],
+        [
+          -2.23633,
+          4.38477
+        ],
+        [
+          -4.9707,
+          -0.00977
+        ]
+      ],
+      "footprint_states": [
+        125
+      ],
+      "contact_world_y": 12.386076738081286,
+      "clearance": 6.107461779831291,
+      "native_scale": 10.0,
+      "model_sha256": "ad74dd63d4cf5cf802f89dde21d582ab491b8ef7296dc8c3812ed7fc34cebf9f"
+    },
+    {
+      "entity": "ADISCORD_reactor_entity",
+      "index": 1,
+      "position": [
+        3546.19008,
+        2.03298,
+        899.32
+      ],
+      "rotation": [
+        0.0,
+        370.0,
+        0.0
+      ],
+      "anchor": [
+        3545.19008,
+        11.8,
+        903.32
+      ],
+      "state": 125,
+      "province": 11937,
+      "move_distance": 4.123105625617661,
+      "terrain_range": [
+        9.7,
+        10.23801308281454
+      ],
+      "center_height": 9.761157120000002,
+      "footprint": [
+        [
+          -5.001879,
+          -0.754221
+        ],
+        [
+          -4.91811,
+          -1.066481
+        ],
+        [
+          -4.868309,
+          -1.233923
+        ],
+        [
+          -4.70649,
+          -1.440948
+        ],
+        [
+          -0.853531,
+          -4.89688
+        ],
+        [
+          0.027858,
+          -5.072124
+        ],
+        [
+          3.126707,
+          -4.369093
+        ],
+        [
+          3.56906,
+          -4.10993
+        ],
+        [
+          4.28733,
+          -2.848309
+        ],
+        [
+          5.475721,
+          2.316768
+        ],
+        [
+          5.479069,
+          2.673161
+        ],
+        [
+          5.438327,
+          2.779511
+        ],
+        [
+          3.837166,
+          4.271629
+        ],
+        [
+          -1.45122,
+          5.323102
+        ],
+        [
+          -2.201358,
+          5.455371
+        ],
+        [
+          -2.362017,
+          5.444037
+        ],
+        [
+          -2.661827,
+          5.31841
+        ],
+        [
+          -2.748944,
+          5.274277
+        ],
+        [
+          -3.72753,
+          4.673358
+        ],
+        [
+          -4.26373,
+          3.994433
+        ],
+        [
+          -4.73636,
+          1.876356
+        ],
+        [
+          -4.902547,
+          0.933866
+        ]
+      ],
+      "footprint_states": [
+        125
+      ],
+      "contact_world_y": 9.674997538081286,
+      "clearance": 6.10746117122737,
+      "native_scale": 10.0,
+      "model_sha256": "ad74dd63d4cf5cf802f89dde21d582ab491b8ef7296dc8c3812ed7fc34cebf9f"
+    },
+    {
+      "entity": "ADISCORD_reactor_2_entity",
+      "index": 0,
+      "position": [
+        3551.20992,
+        4.16995,
+        913.51
+      ],
+      "rotation": [
+        90.0,
+        270.0,
+        90.0
+      ],
+      "anchor": [
+        3535.20992,
+        14.6,
+        904.51
+      ],
+      "state": 125,
+      "province": 2974,
+      "move_distance": 18.35755975068582,
+      "terrain_range": [
+        12.055930999999998,
+        12.6
+      ],
+      "center_height": 12.53871392000001,
+      "footprint": [
+        [
+          -4.99023,
+          -4.99023
+        ],
+        [
+          4.99023,
+          -4.99023
+        ],
+        [
+          4.99023,
+          4.99023
+        ],
+        [
+          -4.99023,
+          4.99023
+        ]
+      ],
+      "footprint_states": [
+        125
+      ],
+      "contact_world_y": 12.030934015348368,
+      "clearance": 7.0572509453610905,
+      "native_scale": 10.0,
+      "model_sha256": "e1cb530316ddee9e2401bd52840f25da8faf039688e2e65bee892d67752c773c"
+    }
+  ],
+  "landmark_mesh_bytes_preserved": true,
+  "runtime": "This validator checks files only. See the infantry_weapons_3d QA runtime report for observed engine behavior."
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "name": "STP_infantry_hedonist_Shape-000",
+    "vertices": 4830,
+    "triangles": 1610,
+    "bones": 33,
+    "influences": 4
+  },
+  {
+    "name": "Contoured field helmet",
+    "vertices": 7074,
+    "triangles": 8801,
+    "bones": 33,
+    "influences": 4
+  }
+]

@@ -256,6 +256,4 @@
   A_DISCORD_menu_tooltip_1: "Мысль летит, а слова идут шагом. В этом вся драма писателя."
   focus_unlock_tooltip: "Это §GРазблокирует§! §YНовые Фокусы§!"
   completed_by_event_tooltip: "Этот фокус разблокируется только по §Yивенту§!"
-  ADISCORD_manual_law_change_allowed_tt:0 "Разрешена ручная смена этого закона; иначе он меняется через фокусы, решения и события."
-  ADISCORD_manual_minister_change_allowed_tt:0 "Разрешена ручная смена этого министра; иначе его назначение меняется через фокусы, решения и события."
 # END CONSOLIDATED: ADISCORD_menu_tooltips_l_russian.yml: generic UI

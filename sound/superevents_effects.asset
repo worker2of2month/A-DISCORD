@@ -93,39 +93,3 @@ soundeffect = {
 	max_audible_behaviour = fail
 	volume = 1.0
 }
-
-soundeffect = {
-	name = superevent_stelander_shabrat_victory_sound_e
-	loop = no
-	sounds = {
-		sound = superevent_stelander_shabrat_victory_sound
-	}
-	is3d = no
-	max_audible = 1
-	max_audible_behaviour = fail
-	volume = 1.0
-}
-
-soundeffect = {
-	name = superevent_nam_resource_war_sound_e
-	loop = no
-	sounds = {
-		sound = superevent_nam_resource_war_sound
-	}
-	is3d = no
-	max_audible = 1
-	max_audible_behaviour = fail
-	volume = 1.0
-}
-
-soundeffect = {
-	name = superevent_rus_last_empire_sound_e
-	loop = no
-	sounds = {
-		sound = superevent_rus_last_empire_sound
-	}
-	is3d = no
-	max_audible = 1
-	max_audible_behaviour = fail
-	volume = 1.0
-}

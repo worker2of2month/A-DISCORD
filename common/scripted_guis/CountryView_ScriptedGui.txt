@@ -78,37 +78,14 @@ scripted_gui = {
 
 ###country development
 
-    CountryDevelopmentLauncherScript = {
-        context_type = player_context
-        parent_window_name = "countrypoliticsview"
-        window_name = "ADISCORD_development_launcher"
-        visible = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
-        effects = {
-            ADISCORD_development_open_click = {
-                if = {
-                    limit = { check_variable = { var = ADISCORD_development_show_window value = 1 compare = greater_than_or_equals } }
-                    clear_variable = ADISCORD_development_show_window
-                }
-                else = {
-                    set_variable = { var = ADISCORD_development_show_window value = 1 }
-                }
-            }
-        }
-    }
-
     CountryDevelopmentScript = {
         context_type = player_context
         parent_window_name = "countrypoliticsview"
         window_name = "ADISCORD_development_category_society_type"
-        visible = {
-            OR = { ADISCORD_is_playable_development_country = yes is_ai = no }
-            check_variable = { var = ADISCORD_development_show_window value = 1 compare = greater_than_or_equals }
-        }
-        effects = {
-            ADISCORD_development_close_click = { clear_variable = ADISCORD_development_show_window }
-        }
 
         triggers = {
+            ADISCORD_development_category_society_type_visible = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
+
             ADISCORD_development_society_progress_bar_1_visible = { ADISCORD_society_development_progress_bar_1 = yes }
             ADISCORD_development_society_progress_bar_2_visible = { ADISCORD_society_development_progress_bar_2 = yes }
             ADISCORD_development_society_progress_bar_3_visible = { ADISCORD_society_development_progress_bar_3 = yes }

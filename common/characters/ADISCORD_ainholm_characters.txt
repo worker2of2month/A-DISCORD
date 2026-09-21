@@ -3,7 +3,7 @@ characters = {
 		name = AIN_Elias_Marven
 		portraits = {
 			civilian = {
-				large = GFX_portrait_AIN_Elias_Marven
+				large = GFX_Portrait_Forul_Generic_8
 			}
 		}
 		country_leader = {

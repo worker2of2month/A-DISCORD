@@ -1,0 +1,16 @@
+[
+  {
+    "name": "generic_army_headquartersShape-000",
+    "vertices": 6102,
+    "triangles": 2034,
+    "bones": 33,
+    "influences": 4
+  },
+  {
+    "name": "Northern field hat brim",
+    "vertices": 2838,
+    "triangles": 3442,
+    "bones": 33,
+    "influences": 4
+  }
+]

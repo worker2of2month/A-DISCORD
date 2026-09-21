@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "legacy_count": 625,
-  "current_count": 595,
+  "current_count": 568,
   "migrations": {
     "ADISCORD_tech_active_hearing_protection": {
       "status": "preserved",
@@ -144,8 +144,8 @@
       "replacement": "ADISCORD_tech_assault_breaching_packages"
     },
     "ADISCORD_tech_assault_command_curriculum": {
-      "status": "preserved",
-      "replacement": "ADISCORD_tech_assault_command_curriculum"
+      "status": "replaced",
+      "replacement": "ADISCORD_tech_reconstituted_staff_academies"
     },
     "ADISCORD_tech_assault_sapper_kits": {
       "status": "preserved",
@@ -640,8 +640,8 @@
       "replacement": "ADISCORD_tech_deep_strike_targeting"
     },
     "ADISCORD_tech_defensive_command_curriculum": {
-      "status": "preserved",
-      "replacement": "ADISCORD_tech_defensive_command_curriculum"
+      "status": "replaced",
+      "replacement": "ADISCORD_tech_reconstituted_staff_academies"
     },
     "ADISCORD_tech_demand_synchronized_fabrication": {
       "status": "replaced",
@@ -1632,8 +1632,8 @@
       "replacement": "ADISCORD_tech_assault_breaching_packages"
     },
     "ADISCORD_tech_predictive_staff_colleges": {
-      "status": "preserved",
-      "replacement": "ADISCORD_tech_predictive_staff_colleges"
+      "status": "replaced",
+      "replacement": "ADISCORD_tech_operational_planning_exercises"
     },
     "ADISCORD_tech_predictive_wheelset_maintenance": {
       "status": "preserved",
@@ -1960,8 +1960,8 @@
       "replacement": "ADISCORD_tech_rocket_test_stands"
     },
     "ADISCORD_tech_rotational_front_commands": {
-      "status": "preserved",
-      "replacement": "ADISCORD_tech_rotational_front_commands"
+      "status": "replaced",
+      "replacement": "ADISCORD_tech_operational_planning_exercises"
     },
     "ADISCORD_tech_route_optimization_ai": {
       "status": "preserved",
@@ -2376,8 +2376,8 @@
       "replacement": "ADISCORD_tech_terrain_mapping_suspension"
     },
     "ADISCORD_tech_theater_logistics_wargames": {
-      "status": "preserved",
-      "replacement": "ADISCORD_tech_theater_logistics_wargames"
+      "status": "replaced",
+      "replacement": "ADISCORD_tech_operational_planning_exercises"
     },
     "ADISCORD_tech_thermal_signature_liners": {
       "status": "preserved",

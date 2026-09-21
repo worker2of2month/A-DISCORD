@@ -110,25 +110,6 @@ on_actions = {
 					# V19 TDA-core: disabled hidden startup economic pseudo-building distribution.
 					# ADISCORD_distribute_starting_buildings_by_country = yes
 				}
-				# The fresh-campaign guard also prevents reopening the briefing on reload.
-				STP = {
-					if = {
-						limit = { is_ai = no date < 2160.1.2 }
-						set_variable = { var = ADISCORD_startup_open value = 1 }
-						clear_variable = ADISCORD_startup_tab
-						clear_variable = ADISCORD_startup_page
-						clear_variable = ADISCORD_startup_spoilers
-					}
-				}
-				VAL = {
-					if = {
-						limit = { is_ai = no date < 2160.1.2 }
-						set_variable = { var = ADISCORD_startup_open value = 1 }
-						clear_variable = ADISCORD_startup_tab
-						clear_variable = ADISCORD_startup_page
-						clear_variable = ADISCORD_startup_spoilers
-					}
-				}
 				set_global_flag = ADISCORD_starting_technology_profiles_applied
 			}
 		}

@@ -1,0 +1,16 @@
+[
+  {
+    "name": "GER_infantryShape-000",
+    "vertices": 7377,
+    "triangles": 2463,
+    "bones": 33,
+    "influences": 4
+  },
+  {
+    "name": "Field helmet shell",
+    "vertices": 10086,
+    "triangles": 12584,
+    "bones": 33,
+    "influences": 4
+  }
+]

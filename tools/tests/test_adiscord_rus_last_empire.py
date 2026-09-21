@@ -87,23 +87,6 @@ def localisation_entries(text: str) -> dict[str, str]:
 
 
 class RusLastEmpireTests(unittest.TestCase):
-    def test_proclamation_keeps_khan_in_new_ruling_party_with_dictator_portrait(self):
-        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
-        effect = named_block(read(EFFECT_FILE), "ADISCORD_vorkerland_rus_proclaim_last_empire")
-        self.assertIn("character = RUS_Mark_Rustan", effect)
-        self.assertIn("ideology = chauvinism_ideology", effect)
-        self.assertIn("set_portraits", effect)
-        self.assertIn("GFX_portrait_RUS_Mark_Rustan_dictator", effect)
-        self.assertIn("GFX_portrait_RUS_Mark_Rustan_dictator", read(ROOT / "interface/ADISCORD_leader_portraits.gfx"))
-
-    def test_border_peace_preserves_other_occupied_sla_states(self):
-        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
-        effect = named_block(read(EFFECT_FILE), "ADISCORD_vorkerland_resolve_khan_border_war")
-        sweep = named_block(effect, "every_controlled_state")
-        self.assertIn("is_owned_by = SLA", sweep)
-        self.assertIn("set_state_owner_to = RUS", sweep)
-        self.assertLess(effect.index("every_controlled_state"), effect.index("white_peace ="))
-
     def test_every_closed_zone_state_has_exactly_one_opening_successor(self) -> None:
         from tools.lib.vorkerland_collapse_manifest import DIRTY_GROUPS, EXZ_REMAINDER_GROUPS
         from tools.validators.validate_adiscord_vorkerland_collapse import named_block
@@ -458,20 +441,6 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
             if scope in {"49", "176"} and e.key == "set_state_owner_to"
         )
         self.assertLess(first_transfer, white_peace_pos)
-
-    def test_border_capitulation_annexes_before_partial_peace(self):
-        facts = {
-            ("RUS", "has_global_flag", "ADISCORD_vorkerland_khan_border_war_started"): True,
-            ("RUS", "country_exists", "SLA"): True,
-            ("RUS", "has_war_with", "SLA"): True,
-            ("SLA", "has_capitulated", "yes"): True,
-            ("SLA", "capital"): "51",
-            ("51", "is_controlled_by", "RUS"): True,
-            **self._hold_sla(False),
-        }
-        calls = self._calls(self._run("ADISCORD_vorkerland_check_khan_border_war", facts))
-        self.assertIn("ADISCORD_vorkerland_rus_settle_dirty_target", calls)
-        self.assertNotIn("ADISCORD_vorkerland_resolve_khan_border_war", calls)
 
     def test_invalid_target_or_own_capitulation_clears_the_operation(self) -> None:
         invalid = self._active(target=0)

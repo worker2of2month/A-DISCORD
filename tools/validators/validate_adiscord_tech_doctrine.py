@@ -1053,10 +1053,9 @@ def check_applied_technology_programmes(tech_blocks: dict[str, str]) -> list[str
         issues.append(f"expected 7 applied technology programmes, got {len(GENERATED_APPLIED_PROGRAMMES)}")
     for programme in GENERATED_APPLIED_PROGRAMMES:
         retained = [tech for tech in programme["techs"] if tech[0] in live_keys]
-        maximum = 3 if programme["key"] in GENERATED_SIDE_PROGRAMME_KEYS else len(programme["techs"])
-        if not 1 <= len(retained) <= maximum:
+        if not 1 <= len(retained) <= 3:
             issues.append(
-                f"applied programme {programme['key']} retains {len(retained)} technologies; expected 1-{maximum}"
+                f"applied programme {programme['key']} retains {len(retained)} technologies; expected 1-3"
             )
         for key, _ru, _en, _icon in programme["techs"]:
             if key not in live_keys:
@@ -2085,11 +2084,8 @@ def check_technology_ui_years() -> list[str]:
             continue
         for year in sorted(EXPECTED_TECH_UI_YEARS):
             count = len(re.findall(rf'\btext\s*=\s*"{year}"', folder_block))
-            expected = 1 if folder in GENERATED_HORIZONTAL_FOLDERS else sum(
-                int(year) in branch.years for branch in GENERATED_BRANCHES if folder in branch.folders
-            )
-            if count != expected:
-                issues.append(f"{folder} has {count} labels for era {year}; expected exactly {expected}")
+            if count != 1:
+                issues.append(f"{folder} has {count} labels for era {year}; expected exactly 1")
 
     return issues
 
@@ -2847,7 +2843,6 @@ def check_braces() -> list[str]:
 def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
     issues: list[str] = []
     costs: list[float] = []
-    equipment = collect_equipment_blocks()
     unlocks = (
         set(GENERATED_ENABLE_EQUIPMENT)
         | set(GENERATED_ENABLE_SUBUNITS)
@@ -2865,8 +2860,8 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
             year = branch.years[index]
 
             # Count numeric leaf modifiers before paths/cost/UI/AI metadata.
-            # A production unlock or a substantial family upgrade is a complete
-            # reward; adding unrelated modifiers just to raise a count is not.
+            # Every live technology must provide an actual package rather
+            # than a single cosmetic percentage hidden in a dense tree.
             effect_prefix = re.split(
                 r"(?m)^\s*(?:path|research_cost)\s*=",
                 block,
@@ -2875,15 +2870,7 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
             effect_count = len(
                 re.findall(r"\b[A-Za-z0-9_]+\s*=\s*-?[0-9]+(?:\.[0-9]+)?\b", effect_prefix)
             )
-            family_upgrade = any(
-                family in equipment and abs(float(value)) >= 0.06
-                for family, value in re.findall(
-                    r"\b(ADISCORD_[A-Za-z0-9_]+)\s*=\s*\{\s*[A-Za-z0-9_]+\s*=\s*(-?[0-9.]+)",
-                    effect_prefix,
-                )
-            )
-            minimum_effects = 0 if tech.id in unlocks else (1 if family_upgrade else 2)
-            if year >= 2160 and effect_count < minimum_effects:
+            if year >= 2160 and effect_count < 2:
                 issues.append(
                     f"post-2160 technology {tech.id} has only {effect_count} numeric gameplay effects"
                 )

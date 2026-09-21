@@ -51,14 +51,4 @@ spriteTypes = {
 		name = "GFX_superevent_stelander_shabrat_victory"
 		textureFile = "gfx/interface/superevents/STP/superevent_stelander_shabrat_victory.png"
 	}
-
-	spriteType = {
-		name = "GFX_superevent_nam_resource_war"
-		textureFile = "gfx/interface/superevents/NAM/namestnik lost.png"
-	}
-
-	spriteType = {
-		name = "GFX_superevent_rus_last_empire"
-		textureFile = "gfx/interface/superevents/RUS/last empire.png"
-	}
 }

@@ -9,6 +9,7 @@ state={
 	local_supplies=0.000
 	state_category = city
 	resources = {
+		steel = 8
 		aluminium = 4
 	}
 

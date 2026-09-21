@@ -1,0 +1,21 @@
+{
+  "original_sha256": "a1ccf92e70c13f062d17cc2bc35ddd99a3046402d6f66392780d2f38bfb1dc15",
+  "original_unchanged": true,
+  "design": "Irregular Voronoi fracture of an expanded upper sector, with surviving lower body and opposite crown.",
+  "sections": 19,
+  "moving_sections": 17,
+  "bones": 20,
+  "collapse_frames": 361,
+  "fps": 30,
+  "mesh": [
+    {
+      "name": "Tower structural section.002",
+      "vertices": 23436,
+      "triangles": 8420,
+      "bones": 20,
+      "influences": 4
+    }
+  ],
+  "ground_local_z": -18.897600173950195,
+  "actor_height_offset": 2.8346400260925293
+}

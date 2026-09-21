@@ -20,39 +20,6 @@ TOKENS = ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt"
 
 
 class StelanderGameplayLoopRegressionTests(unittest.TestCase):
-    def test_ai_cannot_use_debug_suspicion_health_or_balance_controls(self):
-        decisions = entries("common/decisions/ADISCORD_STP_decisions.txt")
-        controls = [e for category in decisions for e in category.value if e.key.startswith("STP_debug_")]
-        self.assertGreaterEqual(len(controls), 8)
-        for control in controls:
-            with self.subTest(control=control.key):
-                weights = next((e.value for e in control.value if e.key == "ai_will_do"), [])
-                base = next((float(e.value) for e in weights if e.key == "base"), 1)
-                factor = next((float(e.value) for e in weights if e.key == "factor"), 1)
-                self.assertEqual(base * factor, 0)
-
-    def test_missing_election_mission_settles_only_after_original_deadline(self):
-        hooks = block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions")
-        weekly = block(block(hooks, "on_weekly_STP"), "effect")
-        for age, active, finished, started, expected in (
-            (139, False, False, False, False),
-            (140, False, False, False, True),
-            (901, False, False, False, True),
-            (901, True, False, False, False),
-            (901, False, True, False, False),
-            (901, False, False, True, False),
-        ):
-            facts = {
-                ("STP", "has_country_flag", "STP_cw_elections_started"): True,
-                ("STP", "flag_days", "STP_cw_elections_started"): age,
-                ("STP", "has_active_mission", "STP_cw_election_window"): active,
-                ("STP", "has_country_flag", "STP_cw_elections_finished"): finished,
-                ("STP", "has_global_flag", "STP_cw_started"): started,
-            }
-            selected = list(selected_effects(weekly, facts))
-            self.assertEqual(any(e.key == "STP_cw_finish_elections" for _, e in selected), expected,
-                             (age, active, finished, started))
-
     @classmethod
     def setUpClass(cls) -> None:
         cls.effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")

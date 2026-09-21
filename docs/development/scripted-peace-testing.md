@@ -57,35 +57,6 @@ existing checks without granting a victory or marking anyone defeated.
 
 ## Runtime matrix
 
-The final VAL capitulation receipt has an explicit nonzero value and remains
-valid through the late callback's settlement attempt. Native `has_capitulated`
-may still be false in both callbacks. An unfinished frontier offer does not
-reserve a separate NOD defeat once VAL has no active war with the frontier targets.
-
-After NOD's northern victory, VAL can negotiate with an independent TFF before
-the final operation. NOD's settlement creates four contiguous administrations:
-NOD (10/11/12/30), ECA (13/17/18, plus defeated-bloc 14), YPR (19/20/21/22), and
-DCA (8/15/16). State ownership and control are captured before white peace.
-Independent YPR and foreign-controlled land are excluded. Thus a NOD defeat
-after its **loss** in the northern war does not authorize annexing free Yubora.
-ECA and DCA receive 40% of their respective predecessor's surviving army,
-air force and stockpile; fleets stay with NOD/YPR. A replay does not split again.
-
-The prewar agreement transfers both Yuboran administrations to TFF after victory.
-Without agreement they remain VAL subjects; a surviving independent TFF sends a
-21-day ultimatum. Acceptance, including timeout, transfers both subjects without
-redrawing their borders. Refusal declares TFF's war against VAL and calls VAL's
-subjects to that same war. Changed signatories or lost administrations invalidate
-the offer safely. Debug country dumps include the receipt, active-ally blocker
-and VAL frontier stage.
-
-Test NOD-owned and NOD-subject Yubora, accepted/refused/no prewar offer, 14-day
-offer timeout, 21-day ultimatum timeout, explicit refusal, TFF defeat/subjugation
-before settlement, foreign occupation of 14/16, and a repeated administration
-decision. Confirm owner, controller, overlord, focus tree and troop/stockpile
-totals for all four administrations, and reload before the capitulation when
-comparing outcomes. Source checks do not substitute for a cold-load campaign.
-
 | Scenario | Expected result |
 |---|---|
 | CIN/OSF/APH in each capitulation order | No missing defeated member in a generic final annexation. |

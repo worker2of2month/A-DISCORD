@@ -1,0 +1,26 @@
+{
+  "STP_shabrat_infantry.mesh": {
+    "geometry_skin_skeleton_unchanged": true,
+    "locator_bytes": 606,
+    "changed": true,
+    "sha256": "7b492d4a6eab816a92b150496e98c586b0454bee3327b17164d5243aed0bc0a6"
+  },
+  "STP_party.mesh": {
+    "geometry_skin_skeleton_unchanged": true,
+    "locator_bytes": 606,
+    "changed": true,
+    "sha256": "0a9504ecccc6c9c22416b4faa387a476fdf4ba237c8ab31eec031a64d7908cc1"
+  },
+  "STS_regular.mesh": {
+    "geometry_skin_skeleton_unchanged": true,
+    "locator_bytes": 606,
+    "changed": true,
+    "sha256": "db36b1156e90f8053a3a79aa4e0dced8faa6d3aa460fbf3a4280a89effac9741"
+  },
+  "VAL_regular.mesh": {
+    "geometry_skin_skeleton_unchanged": true,
+    "locator_bytes": 606,
+    "changed": true,
+    "sha256": "cbe3ee1522602c345e5594c6e8015dc1ddbd2ba5d8baada9e765eff4a1314378"
+  }
+}

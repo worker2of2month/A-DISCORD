@@ -1,0 +1,26 @@
+{
+  "idle": {
+    "frames": 181,
+    "sampled": [
+      1,
+      91,
+      181
+    ]
+  },
+  "moving": {
+    "frames": 41,
+    "sampled": [
+      1,
+      21,
+      41
+    ]
+  },
+  "attack_stand": {
+    "frames": 79,
+    "sampled": [
+      1,
+      40,
+      79
+    ]
+  }
+}

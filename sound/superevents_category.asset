@@ -10,9 +10,6 @@ category = {
 		superevent_vorkerland_dorian_victory_sound_e
 		superevent_stelander_empire_sound_e
 		superevent_stelander_party_victory_sound_e
-		superevent_stelander_shabrat_victory_sound_e
-		superevent_nam_resource_war_sound_e
-		superevent_rus_last_empire_sound_e
 	}
 	compressor = {
 		enabled = yes

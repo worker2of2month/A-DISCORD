@@ -8,18 +8,15 @@
   superevent_vorkerland_dirty_opening_comment: "The silent zone fractured into new territories"
 
   superevent_vorkerland_worker_victory_title: "Restoration of the Confederation"
-# Quote source: https://scaife.perseus.org/reader/urn:cts:latinLit:phi0631.phi002.perseus-eng2:10/
-  superevent_vorkerland_worker_victory_quote: "By concord even small states are increased, but by discord, even the greatest fall to nothing.\n\n- Sallust, The Jugurthine War"
+  superevent_vorkerland_worker_victory_quote: "Unity returned not as the old order, but as an agreement among those who survived its collapse."
   superevent_vorkerland_worker_victory_comment: "Worcker preserved a federal Vorkerland"
 
   superevent_vorkerland_utilitarian_victory_title: "The Utilitarian Restoration of Vorkerland"
-# Quote source: https://constitution.org/2-Authors/jb/frag_gov.htm
-  superevent_vorkerland_utilitarian_victory_quote: "It is the greatest happiness of the greatest number that is the measure of right and wrong.\n\n- Jeremy Bentham, A Fragment on Government"
+  superevent_vorkerland_utilitarian_victory_quote: "Victory was accepted only after the work had been measured and put back in motion."
   superevent_vorkerland_utilitarian_victory_comment: "Anton Bagley held Vorkerland as a measurable republic"
 
   superevent_vorkerland_vlad_victory_title: "The Military Restoration of Vorkerland"
-# Quote source: https://upload.wikimedia.org/wikipedia/commons/b/ba/Tacitus%2C_the_Agricola_and_Germania_%28IA_tacitusagricolag00taciiala%29.pdf
-  superevent_vorkerland_vlad_victory_quote: "Where they make a desert they call it peace.\n\n- Tacitus, Agricola"
+  superevent_vorkerland_vlad_victory_quote: "When the institutions vanished, the army declared itself the only institution left."
   superevent_vorkerland_vlad_victory_comment: "Vlad Petrichev imposed an imperial order"
 
   superevent_vorkerland_joint_victory_title: "The Joint Restoration of Vorkerland"
@@ -27,8 +24,7 @@
   superevent_vorkerland_joint_victory_comment: "The emergency council held Vorkerland together"
 
   superevent_vorkerland_dorian_victory_title: "The Technical Reconstruction of Vorkerland"
-# Quote source: https://www.marxists.org/archive/marx/works/1877/anti-duhring/ch24.htm
-  superevent_vorkerland_dorian_victory_quote: "The government of persons is replaced by the administration of things, and by the conduct of processes of production.\n\n- Friedrich Engels, Anti-Duhring"
+  superevent_vorkerland_dorian_victory_quote: "The ruins were catalogued, measured, and incorporated into a new plan of administration."
   superevent_vorkerland_dorian_victory_comment: "Dorian Worx entrusted the country to specialist administrations"
 
   superevent_stelander_empire_title: "Proclamation of the Stelander Imperial Union!"
@@ -36,24 +32,12 @@
   superevent_stelander_empire_comment: "Stelander raises its head again"
 
   superevent_stelander_party_victory_title: "Party Victory in Stelander"
-# Quote source: https://www.rjgeib.com/thoughts/1984/1984.html
-  superevent_stelander_party_victory_quote: "The object of power is power.\n\n- George Orwell, Nineteen Eighty-Four"
+  superevent_stelander_party_victory_quote: "The uprising has been crushed. The war leaves behind ruined cities and empty homes."
   superevent_stelander_party_victory_comment: "The Party retains power"
 
   superevent_stelander_shabrat_victory_title: "Shabrat's Victory in Stelander"
-# Quote source: https://www.folger.edu/explore/shakespeares-works/the-tempest/read/2/1/
-  superevent_stelander_shabrat_victory_quote: "What's past is prologue.\n\n- William Shakespeare, The Tempest"
+  superevent_stelander_shabrat_victory_quote: "The Party regime has fallen. A struggle for the country's future begins amid the ruins."
   superevent_stelander_shabrat_victory_comment: "The civil war is over"
-
-# Quote source: https://gutenberg.ca/ebooks/butlersd-warisaracket/butlersd-warisaracket-00-e.html
-  superevent_nam_resource_war_title: "The Resource War"
-  superevent_nam_resource_war_quote: "A few profit - and the many pay.\n\n- Smedley Butler, War Is a Racket"
-  superevent_nam_resource_war_comment: "The price of the deposits is paid in blood"
-
-# Quote source: https://www.gutenberg.org/files/3207/3207-h/3207-h.htm#chap17
-  superevent_rus_last_empire_title: "The Last Empire"
-  superevent_rus_last_empire_quote: "Covenants, without the sword, are but words.\n\n- Thomas Hobbes, Leviathan"
-  superevent_rus_last_empire_comment: "The Khan has taken the imperial throne"
 
   superevent_inactive_title: ""
   superevent_inactive_quote: ""

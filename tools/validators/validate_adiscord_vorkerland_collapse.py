@@ -2862,24 +2862,24 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if re.search(r"remove_ideas|swap_ideas|remove_dynamic_modifier", audio):
             issues.append(f"{audio_effect}: audio routing mutates country ideas")
     shared_audio = named_block(map_effects, "ADISCORD_vorkerland_play_superevent_sound")
-    if "every_country" in shared_audio or "scoped_sound_effect" in shared_audio:
+    if "limit = { is_ai = no }" in shared_audio or "every_country" in shared_audio:
         issues.append("shared superevent audio must stay unscoped for observer/spectator")
     if "scoped_sound_effect" in shared_audio:
         issues.append("shared superevent audio must not use scoped_sound_effect")
-    if 'play_song = "superevent_vorkerland_dirty_opening"' not in shared_audio:
+    if "sound_effect = superevent_vorkerland_dirty_opening_sound_e" not in shared_audio:
         issues.append("local superevent audio lost the dirty-opening sound")
     if "has_global_flag = superevent_vorkerland_dirty_opening" not in shared_audio:
         issues.append("local superevent audio no longer selects the dirty-opening sound")
-    if 'play_song = "superevent_vorkerland_utilitarian_victory"' not in shared_audio:
+    if "sound_effect = superevent_vorkerland_utilitarian_victory_sound_e" not in shared_audio:
         issues.append("local superevent audio lost the utilitarian-victory sound")
     if "has_global_flag = superevent_vorkerland_utilitarian_victory" not in shared_audio:
         issues.append("local superevent audio no longer selects the utilitarian-victory sound")
-    if 'play_song = "superevent_vorkerland_vlad_victory"' not in shared_audio:
+    if "sound_effect = superevent_vorkerland_vlad_victory_sound_e" not in shared_audio:
         issues.append("local superevent audio lost the vlad-victory sound")
     if "has_global_flag = superevent_vorkerland_vlad_victory" not in shared_audio:
         issues.append("local superevent audio no longer selects the vlad-victory sound")
-    if 'play_song = "one_minute_of_silence"' in shared_audio or "sound_effect =" in shared_audio:
-        issues.append("shared superevent audio must use only the single music channel")
+    if 'play_song = "one_minute_of_silence"' not in shared_audio:
+        issues.append("shared superevent audio lost the silence bed")
     if "add_ideas = ADISCORD_vorkerland_erased_nations" in prepare:
         issues.append("cultural-erasure spirit still leaks to every successor")
     finalizer = named_block(effects, "ADISCORD_vorkerland_finalize_conflict_spirits")
@@ -4310,7 +4310,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "hidden = yes",
         "is_triggered_only = yes",
         "superevent_vorkerland_civilwar",
-        "ADISCORD_superevent_enqueue = yes",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
     ):
         if token not in civilwar_event:
             issues.append(f"ADISCORD_superevent.1: civil-war presentation is missing {token}")
@@ -4323,7 +4323,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "hidden = yes",
         "is_triggered_only = yes",
         "superevent_vorkerland_worker_victory",
-        "ADISCORD_superevent_enqueue = yes",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
     ):
         if token not in worker_event:
             issues.append(f"ADISCORD_superevent.2: unscoped presentation is missing {token}")
@@ -4336,7 +4336,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "hidden = yes",
         "is_triggered_only = yes",
         "superevent_vorkerland_utilitarian_victory",
-        "ADISCORD_superevent_enqueue = yes",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
     ):
         if token not in utilitarian_event:
             issues.append(f"ADISCORD_superevent.3: unscoped presentation is missing {token}")
@@ -4349,7 +4349,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "hidden = yes",
         "is_triggered_only = yes",
         "superevent_vorkerland_dirty_opening",
-        "ADISCORD_superevent_enqueue = yes",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
     ):
         if token not in dirty_event:
             issues.append(f"ADISCORD_superevent.4: unscoped presentation is missing {token}")
@@ -4367,7 +4367,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "hidden = yes",
         "is_triggered_only = yes",
         "superevent_vorkerland_vlad_victory",
-        "ADISCORD_superevent_enqueue = yes",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
     ):
         if token not in vlad_event:
             issues.append(f"ADISCORD_superevent.5: unscoped presentation is missing {token}")
@@ -4380,7 +4380,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "hidden = yes",
         "is_triggered_only = yes",
         "superevent_vorkerland_dorian_victory",
-        "ADISCORD_superevent_enqueue = yes",
+        "ADISCORD_vorkerland_play_superevent_sound = yes",
     ):
         if token not in dorian_event:
             issues.append(f"ADISCORD_superevent.6: unscoped presentation is missing {token}")
@@ -4411,7 +4411,7 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             f"desc = {title_id}.d",
             "major = yes",
             "is_triggered_only = yes",
-            "ADISCORD_superevent_enqueue = yes",
+            "ADISCORD_vorkerland_play_superevent_sound = yes",
         ):
             if token not in definition:
                 issues.append(f"{news_id}: superevent news route is missing {token}")
@@ -4424,7 +4424,8 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         for token in (
             "hidden = yes",
             "is_triggered_only = yes",
-            f'play_song = "{sound_effect.removesuffix("_sound_e")}"',
+            f"sound_effect = {sound_effect}",
+            'play_song = "one_minute_of_silence"',
         ):
             if token not in audio_proxy:
                 issues.append(f"{audio_id}: unscoped audio proxy is missing {token}")

@@ -448,7 +448,7 @@ autonomous_recon_screen|Автономное разведывательное о
         "combat_armor", "ADISCORD_armor.txt", ("armour_folder", "nsb_armour_folder"),
         "Основные боевые танки", "Main Battle Tanks", "combat_armor",
         techs("""
-recovered_medium_chassis|Восстановленный основной боевой танк|Restored Main Battle Tank|basic_medium_tank
+recovered_medium_chassis|Восстановленное среднее шасси|Recovered Medium Chassis|basic_medium_tank
 remote_weapon_stations|Дистанционно управляемые башенные установки|Remote-controlled Turret Mounts|improved_medium_tank
 composite_armor_arrays|Массивы композитной брони|Composite Armor Arrays|advanced_medium_tank
 semi_autonomous_combat_modules|Полуавтономное управление танком|Semi-autonomous Tank Control|basic_modern_tank
@@ -1155,6 +1155,7 @@ SIDE_PROGRAMME_SELECTIONS = {
     "air_mobility": ("restored_airlift_planning", "vertical_envelopment_control", "precision_aerial_resupply"),
     "riverine_warfare": ("shallow_water_navigation_tables", "modular_landing_causeways", "rapid_beachhead_logistics"),
     "unmanned_ground_systems": ("teleoperated_scout_carts", "armed_recon_drones", "distributed_ground_swarm_control"),
+    "officer_training": ("reconstituted_staff_academies", "operational_planning_exercises", "adaptive_general_staff"),
 }
 SIDE_PROGRAMME_KEYS = set(SIDE_PROGRAMME_SELECTIONS)
 
@@ -1167,57 +1168,11 @@ def compact_side_branch(key: str) -> Branch:
     )
 
 
-PUBLIC_FINANCE_BRANCH = new_branch(
-    "public_finance", "ADISCORD_industry.txt", ("industry_folder",),
-    "Экономика и управление", "Economy and Administration", "finance",
-    (
-        ("treasury_accounting", "Казначейский учёт", "Treasury Accounting", "mechanical_computing", 2155),
-        ("public_procurement_standards", "Стандарты государственных закупок", "Public Procurement Standards", "computing_machine", 2160),
-        ("civilian_industrial_accounting", "Промышленный учёт", "Industrial Accounting", "improved_machine_tools", 2162),
-        ("customs_clearance_networks", "Единая таможенная служба", "Unified Customs Service", "radio", 2164),
-        ("administrative_digitization", "Цифровое делопроизводство", "Digital Administration", "improved_computing_machine", 2166),
-        ("production_cost_accounting", "Учёт производственных затрат", "Production Cost Accounting", "advanced_machine_tools", 2169),
-        ("integrated_budget_forecasts", "Сводное бюджетное планирование", "Integrated Budget Forecasts", "advanced_computing_machine", 2172),
-        ("automated_treasury_audit", "Автоматизированный финансовый контроль", "Automated Treasury Audit", "advanced_computing_machine", 2175),
-    ),
-)
-
-ADVANCED_MATERIALS_BRANCH = new_branch(
-    "advanced_materials", "ADISCORD_industry.txt", ("industry_folder",),
-    "Редкие материалы", "Advanced Materials", "resources",
-    (
-        ("precision_material_standards", "Стандарты чистоты материалов", "Material Purity Standards", "improved_machine_tools", 2155),
-        ("rare_components_industry", "Производство редких компонентов", "Rare Components Industry", "computing_machine", 2158),
-        ("rare_alloy_metallurgy", "Металлургия редких сплавов", "Rare Alloy Metallurgy", "excavation2", 2158),
-        ("precision_component_fabrication", "Прецизионная сборка компонентов", "Precision Component Fabrication", "advanced_computing_machine", 2166),
-        ("vacuum_alloy_refining", "Вакуумная очистка сплавов", "Vacuum Alloy Refining", "excavation4", 2166),
-        ("advanced_material_recycling", "Переработка редких материалов", "Advanced Material Recycling", "excavation5", 2173),
-    ),
-)
-
-
-AVIATION_PROGRAMME_BRANCH = new_branch(
-    "bomber_maritime", "ADISCORD_air.txt", ("air_techs_folder", "bba_air_techs_folder"),
-    "Бомбардировщики и морская авиация", "Bombers and Maritime Aircraft", "air_support",
-    (
-        ("twin_engine_aircraft", "Двухмоторные самолёты", "Twin-engine Aircraft", "tactical_bomber1", 2160),
-        ("maritime_patrol_aircraft", "Морские патрульные самолёты", "Maritime Patrol Aircraft", "naval_bomber1", 2164),
-        ("pressurized_bombers", "Бомбардировщики с гермокабиной", "Pressurized Bombers", "tactical_bomber2", 2164),
-        ("airborne_homing_torpedoes", "Самонаводящиеся авиационные торпеды", "Airborne Homing Torpedoes", "naval_bomber2", 2168),
-        ("stabilized_bomb_sights", "Стабилизированные бомбовые прицелы", "Stabilized Bomb Sights", "tactical_bomber2", 2168),
-        ("long_range_maritime_aircraft", "Дальние противокорабельные самолёты", "Long-range Maritime Strike Aircraft", "naval_bomber3", 2172),
-        ("jet_strike_bombers", "Реактивные ударные бомбардировщики", "Jet Strike Bombers", "jet_tactical_bomber1", 2172),
-        ("integrated_strike_navigation", "Комплексная прицельно-навигационная система", "Integrated Strike Navigation", "advanced_centimetric_radar", 2175),
-    ),
-)
-
 BRANCHES = (
     PRODUCTION_BRANCH,
     INDUSTRY_ORGANIZATION_BRANCH,
     RECONSTRUCTION_BRANCH,
     full_authored_legacy_branch("resources"),
-    PUBLIC_FINANCE_BRANCH,
-    ADVANCED_MATERIALS_BRANCH,
     full_authored_legacy_branch("signals"),
     COMPUTING_BRANCH,
     full_authored_legacy_branch("power"),
@@ -1236,11 +1191,7 @@ BRANCHES = (
     compact_linear_branch("logistics"),
     compact_linear_branch("rail"),
     compact_side_branch("combat_engineering"),
-    compact_legacy_branch(
-        "officer_training",
-        tuple(tech.key for tech in LEGACY_BRANCH_BY_KEY["officer_training"].techs),
-        years=(2162, 2164, 2164, 2169, 2169, 2172, 2172, 2175),
-    ),
+    compact_side_branch("officer_training"),
     ARTILLERY_BRANCH,
     compact_linear_branch("anti_tank"),
     compact_linear_branch("anti_air"),
@@ -1250,7 +1201,6 @@ BRANCHES = (
     compact_linear_branch("heavy_armor"),
     compact_side_branch("unmanned_ground_systems"),
     FIGHTER_BRANCH,
-    AVIATION_PROGRAMME_BRANCH,
     compact_linear_branch("air_support"),
     compact_linear_branch("strategic_air"),
     compact_side_branch("air_mobility"),
@@ -1262,16 +1212,16 @@ BRANCHES = (
 )
 
 MAIN_BRANCH_KEYS_BY_FOLDER = {
-    "industry_folder": {"production", "industry_organization", "reconstruction", "resources", "public_finance", "advanced_materials"},
+    "industry_folder": {"production", "industry_organization", "reconstruction", "resources"},
     "electronics_folder": {"signals", "computing", "power"},
     "infantry_folder": {
         "small_arms", "squad_weapons", "anti_tank_infantry", "night_combat",
         "protection", "special_forces",
     },
-    "support_folder": {"field_support", "logistics", "rail", "officer_training"},
+    "support_folder": {"field_support", "logistics", "rail"},
     "artillery_folder": {"artillery", "anti_tank", "anti_air"},
     "armour_folder": {"recon_armor", "combat_armor", "heavy_armor"},
-    "air_techs_folder": {"fighter", "air_support", "strategic_air", "bomber_maritime"},
+    "air_techs_folder": {"fighter", "air_support", "strategic_air"},
     "naval_folder": {"naval_support", "surface_fleet", "subsurface"},
 }
 
@@ -1737,19 +1687,7 @@ XOR_INDEX_GROUPS_BY_BRANCH = {
 
 
 def graph_for_branch(branch: Branch) -> BranchGraph:
-    if branch.key in {"officer_training", "bomber_maritime"}:
-        graph = make_graph(
-            (1, 0, 2, 0, 2, 0, 2, 1),
-            [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 6), (5, 7), (6, 7)],
-            (7,),
-        )
-    elif branch.key == "advanced_materials":
-        graph = make_graph(
-            (1, 0, 2, 0, 2, 1),
-            [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 5)],
-            (5,),
-        )
-    elif branch.key == "production":
+    if branch.key == "production":
         graph = temporary_production_graph()
     elif branch.key == "industry_organization":
         graph = industry_organization_graph()
@@ -1939,46 +1877,17 @@ ENABLE_EQUIPMENT = {
     "ADISCORD_tech_siege_platform_networks": ("ADISCORD_heavy_combat_platform_2200",),
     "ADISCORD_tech_reclaimed_jet_platforms": ("ADISCORD_fighter_airframe_2163",),
     "ADISCORD_tech_low_observable_inlet_geometry": ("ADISCORD_interceptor_airframe_2183",),
+    "ADISCORD_tech_cooperative_fighter_sensor_fusion": ("ADISCORD_interceptor_airframe_2183",),
     "ADISCORD_tech_loyal_wingmen": ("ADISCORD_interceptor_airframe_2183",),
     "ADISCORD_tech_battlefield_attack_aircraft": ("ADISCORD_cas_airframe_2170",),
     "ADISCORD_tech_vtol_assault_frames": ("ADISCORD_vtol_airframe_2170",),
-    "ADISCORD_tech_drone_air_wings": ("ADISCORD_drone_airframe_2183",),
+    "ADISCORD_tech_electromagnetic_cannon_pods": ("ADISCORD_drone_airframe_2183",),
     "ADISCORD_tech_orbital_tracking_relics": ("ADISCORD_rocket_strike_platform_2183",),
     "ADISCORD_tech_low_observable_cruise_missile_skins": ("ADISCORD_rocket_strike_platform_2183",),
     "ADISCORD_tech_suborbital_skip_glide_guidance": ("ADISCORD_deep_strike_airframe_2200",),
     "ADISCORD_tech_autonomous_strategic_strike_planning": ("ADISCORD_deep_strike_airframe_2200",),
     "ADISCORD_tech_suborbital_strike_systems": ("ADISCORD_orbital_tracking_platform_2200",),
 }
-
-
-# Production milestones retain existing technology IDs for saved campaigns.
-NAVAL_AIR_UNLOCKS = {
-    "coastal_patrols": ("ADISCORD_escort_ship_2155", "basic_destroyer"),
-    "variable_depth_sonar": ("ADISCORD_escort_ship_2163", "improved_destroyer"),
-    "autonomous_escorts": ("ADISCORD_escort_ship_2170", "advanced_destroyer"),
-    "predictive_convoy_defense_network": ("ADISCORD_escort_ship_2175", "advanced_destroyer"),
-    "modular_hull_standards": ("ADISCORD_cruiser_2155", "basic_heavy_cruiser"),
-    "modular_vertical_launch_cells": ("ADISCORD_cruiser_2163", "improved_heavy_cruiser"),
-    "railgun_batteries": ("ADISCORD_cruiser_2170", "advanced_heavy_cruiser"),
-    "distributed_horizon_targeting": ("ADISCORD_cruiser_2175", "advanced_heavy_cruiser"),
-    "quiet_propulsion": ("ADISCORD_submarine_2155", "basic_submarine"),
-    "wake_homing_torpedo_seekers": ("ADISCORD_submarine_2163", "improved_submarine"),
-    "autonomous_submarines": ("ADISCORD_submarine_2170", "advanced_submarine"),
-    "self_repairing_pressure_hulls": ("ADISCORD_submarine_2175", "advanced_submarine"),
-    "high_altitude_interceptors": ("ADISCORD_fighter_airframe_2161", "fighter2"),
-    "thrust_vectoring": ("ADISCORD_fighter_airframe_2166", "jet_fighter1"),
-    "loyal_wingmen": ("ADISCORD_fighter_airframe_2170", "jet_fighter2"),
-    "distributed_interceptor_swarms": ("ADISCORD_fighter_airframe_2175", "jet_fighter2"),
-    "precision_glide_bomb_kits": ("ADISCORD_attack_airframe_2163", "CAS2"),
-    "autonomous_strike_wings": ("ADISCORD_attack_airframe_2170", "CAS3"),
-    "persistent_sensor_strike_loops": ("ADISCORD_attack_airframe_2175", "CAS3"),
-    "maritime_patrol_aircraft": ("ADISCORD_naval_aircraft_2164", "naval_bomber2"),
-    "pressurized_bombers": ("ADISCORD_bomber_2164", "tactical_bomber2"),
-    "long_range_maritime_aircraft": ("ADISCORD_naval_aircraft_2172", "naval_bomber3"),
-    "jet_strike_bombers": ("ADISCORD_bomber_2172", "jet_tactical_bomber1"),
-}
-ENABLE_EQUIPMENT.update({f"ADISCORD_tech_{key}": (equipment,) for key, (equipment, _) in NAVAL_AIR_UNLOCKS.items()})
-ENABLE_EQUIPMENT["ADISCORD_tech_twin_engine_aircraft"] = ("ADISCORD_bomber_2160", "ADISCORD_naval_aircraft_2160")
 
 
 # Cross-row integration is intentionally dependency-only: drawing paths
@@ -2102,9 +2011,6 @@ COMMON_STARTING_ROOTS = tuple(
         BRANCH_BY_KEY[branch_key].techs[0].id
         for branch_keys in MAIN_BRANCH_KEYS_BY_FOLDER.values()
         for branch_key in branch_keys
-        # These programmes begin with research during the campaign. Making
-        # their UI headings prominent must not grant their roots at startup.
-        if branch_key not in {"officer_training", "bomber_maritime"}
     )
 )
 
@@ -2112,11 +2018,10 @@ STARTING_TECH_PROFILE_SEEDS = {
     "common": COMMON_STARTING_ROOTS,
     "industrial": tuple(
         tech_id
-        for branch_key in ("production", "reconstruction", "resources", "advanced_materials")
+        for branch_key in ("production", "reconstruction", "resources")
         for tech_id in branch_technology_ids_through(branch_key, 2158)
     ),
     "energy": branch_technology_ids_through("power", 2160),
-    "advanced_materials": branch_technology_ids_through("advanced_materials", 2158),
     "institutional": (
         *branch_technology_ids_through("signals", 2158),
         *branch_technology_ids_through("computing", 2158),
@@ -2180,7 +2085,7 @@ STARTING_TECH_PROFILES = {
 # 2160.1.1.  Empty tuples are intentional common-only assignments.
 STARTING_COUNTRY_TECH_PROFILES = {
     "YOR": ("fragment_low_tech",),
-    "RIV": ("fragment_low_tech", "advanced_materials"),
+    "RIV": ("fragment_low_tech",),
     "EYR": ("fragment_low_tech",),
     "EGC": ("fragment_low_tech",),
     "AIN": ("fragment_low_tech", "institutional"),
@@ -2388,8 +2293,6 @@ ENABLE_SUBUNITS = {
 
 # `level` is an absolute technology cap, not a +1 increment.
 ENABLE_BUILDINGS = {
-    "ADISCORD_tech_rare_components_industry": (("ADISCORD_rare_components_plant", 1),),
-    "ADISCORD_tech_rare_alloy_metallurgy": (("ADISCORD_rare_alloy_foundry", 1),),
     # Heavy strategic-resource complexes.
     "ADISCORD_tech_logistics_hub_networks": (("ADISCORD_thermal_power_complex", 1),),
     "ADISCORD_tech_borehole_sensor_grids": (("ADISCORD_strategic_mining_complex", 1),),
@@ -2423,16 +2326,6 @@ ENABLE_BUILDINGS = {
 
 
 BUILDING_RESOURCE_UPGRADES = {
-    "ADISCORD_tech_precision_component_fabrication": (
-        ("ADISCORD_rare_components_plant", "rare_components", 2),
-    ),
-    "ADISCORD_tech_vacuum_alloy_refining": (
-        ("ADISCORD_rare_alloy_foundry", "rare_alloys", 1),
-    ),
-    "ADISCORD_tech_advanced_material_recycling": (
-        ("ADISCORD_rare_components_plant", "rare_components", 1),
-        ("ADISCORD_rare_alloy_foundry", "rare_alloys", 1),
-    ),
     "ADISCORD_tech_high_pressure_polymer_synthesis": (
         ("ADISCORD_metallurgical_complex", "steel", 2),
     ),
@@ -3228,62 +3121,6 @@ def themed_programme_effects(
 # stable technology keys rather than list positions so later layout tweaks do
 # not silently change the economic model.
 COMPACT_EFFECTS_BY_TECH_KEY = {
-    "treasury_accounting": (
-        "ADISCORD_economy_tax_collection_factor = 0.02",
-        "ADISCORD_economy_admin_expense_factor = -0.02",
-    ),
-    "public_procurement_standards": (
-        "ADISCORD_economy_construction_expense_factor = -0.03",
-        "ADISCORD_economy_military_factory_expense_factor = -0.02",
-    ),
-    "civilian_industrial_accounting": (
-        "ADISCORD_economy_civilian_factory_income_factor = 0.04",
-        "ADISCORD_economy_tax_collection_factor = 0.02",
-    ),
-    "customs_clearance_networks": (
-        "ADISCORD_economy_trade_income_factor = 0.04",
-        "ADISCORD_economy_resource_rent_income_factor = 0.03",
-    ),
-    "administrative_digitization": (
-        "ADISCORD_economy_admin_expense_factor = -0.04",
-        "ADISCORD_economy_research_expense_factor = -0.03",
-    ),
-    "production_cost_accounting": (
-        "ADISCORD_economy_military_industry_income_factor = 0.04",
-        "ADISCORD_economy_military_factory_expense_factor = -0.03",
-    ),
-    "integrated_budget_forecasts": (
-        "ADISCORD_economy_construction_expense_factor = -0.03",
-        "ADISCORD_economy_admin_expense_factor = -0.03",
-    ),
-    "automated_treasury_audit": (
-        "ADISCORD_economy_tax_collection_factor = 0.03",
-        "ADISCORD_economy_civilian_factory_income_factor = 0.04",
-    ),
-    "precision_material_standards": (
-        "production_lack_of_resource_penalty_factor = -0.01",
-        "production_factory_efficiency_gain_factor = 0.01",
-    ),
-    "rare_components_industry": (
-        "production_factory_efficiency_gain_factor = 0.02",
-        "production_factory_max_efficiency_factor = 0.01",
-    ),
-    "rare_alloy_metallurgy": (
-        "production_lack_of_resource_penalty_factor = -0.02",
-        "production_factory_max_efficiency_factor = 0.01",
-    ),
-    "precision_component_fabrication": (
-        "production_factory_efficiency_gain_factor = 0.02",
-        "factory_energy_consumption = 0.02",
-    ),
-    "vacuum_alloy_refining": (
-        "production_factory_max_efficiency_factor = 0.02",
-        "factory_energy_consumption = 0.02",
-    ),
-    "advanced_material_recycling": (
-        "production_lack_of_resource_penalty_factor = -0.02",
-        "factory_energy_consumption = -0.02",
-    ),
     "armored_carrier_program": (
         "ADISCORD_mechanized_infantry = { defense = 0.03 reliability = 0.03 }",
     ),
@@ -3827,59 +3664,7 @@ def combat_package(
     )
 
 
-INDUSTRIAL_BUDGET_EFFECTS = {
-    "automated_assembly": ("ADISCORD_economy_civilian_factory_income_factor = 0.02",),
-    "predictive_maintenance": ("ADISCORD_economy_military_factory_expense_factor = -0.02",),
-    "autonomous_factory_cells": ("ADISCORD_economy_civilian_factory_income_factor = 0.03",),
-    "phase_synchronized_substations": ("ADISCORD_economy_military_factory_expense_factor = -0.01",),
-    "load_following_microreactors": ("ADISCORD_economy_military_factory_expense_factor = -0.02",),
-    "continental_load_balancing": ("ADISCORD_economy_military_factory_expense_factor = -0.02",),
-}
-
-
-# Equipment modifiers improve the manufactured family, including existing stock.
-NAVAL_AIR_WEAPON_EFFECTS = {
-    "radar_gunnery": ("ADISCORD_cruiser_archetype = { hg_attack = 0.06 }",),
-    "stabilized_naval_gun_directors": ("ADISCORD_cruiser_archetype = { hg_attack = 0.06 lg_attack = 0.04 }",),
-    "missile_batteries": ("ADISCORD_cruiser_archetype = { hg_attack = 0.08 }",),
-    "composite_armor_belts": ("ADISCORD_cruiser_archetype = { armor_value = 0.10 }",),
-    "cooperative_fleet_missile_defense": ("ADISCORD_cruiser_archetype = { anti_air_attack = 0.10 }",),
-    "superconducting_railgun_turrets": ("ADISCORD_cruiser_archetype = { hg_attack = 0.08 hg_armor_piercing = 0.08 }",),
-    "towed_array_sonar": ("ADISCORD_coastal_patrol_ship = { sub_detection = 0.10 sub_attack = 0.06 }",),
-    "containerized_escort_missile_cells": ("ADISCORD_coastal_patrol_ship = { lg_attack = 0.08 anti_air_attack = 0.08 }",),
-    "directed_energy_point_defense": ("ADISCORD_coastal_patrol_ship = { anti_air_attack = 0.12 }",),
-    "homing_torpedoes": ("ADISCORD_submarine_archetype = { torpedo_attack = 0.08 }",),
-    "anechoic_tile_bonding": ("ADISCORD_submarine_archetype = { sub_visibility = -0.06 }",),
-    "air_independent_cells": ("ADISCORD_submarine_archetype = { naval_range = 0.10 }",),
-    "fiber_optic_torpedo_control": ("ADISCORD_submarine_archetype = { torpedo_attack = 0.08 }",),
-    "supercavitating_interceptor_torpedoes": ("ADISCORD_submarine_archetype = { torpedo_attack = 0.10 }",),
-    "helmet_cued_targeting": ("ADISCORD_fighter_archetype = { air_attack = 0.08 }",),
-    "electronically_scanned_fighter_radar": ("ADISCORD_fighter_archetype = { air_attack = 0.06 air_defence = 0.04 }",),
-    "guided_munitions": ("ADISCORD_cas_archetype = { air_ground_attack = 0.08 }",),
-    "electromagnetic_cannon_pods": ("ADISCORD_cas_archetype = { air_ground_attack = 0.10 }",),
-    "twin_engine_aircraft": ("ADISCORD_bomber_archetype = { reliability = 0.02 }",),
-    "maritime_patrol_aircraft": ("ADISCORD_naval_aircraft_archetype = { air_range = 0.04 }",),
-    "pressurized_bombers": ("ADISCORD_bomber_archetype = { air_defence = 0.04 }",),
-    "airborne_homing_torpedoes": ("ADISCORD_naval_aircraft_archetype = { naval_strike_attack = 0.10 naval_strike_targetting = 0.08 }",),
-    "stabilized_bomb_sights": ("ADISCORD_bomber_archetype = { strategic_attack = 0.08 air_ground_attack = 0.06 }",),
-    "long_range_maritime_aircraft": ("ADISCORD_naval_aircraft_archetype = { naval_strike_targetting = 0.06 }",),
-    "jet_strike_bombers": ("ADISCORD_bomber_archetype = { strategic_attack = 0.06 }",),
-    "integrated_strike_navigation": (
-        "ADISCORD_bomber_archetype = { air_range = 0.08 strategic_attack = 0.06 }",
-        "ADISCORD_naval_aircraft_archetype = { air_range = 0.08 naval_strike_targetting = 0.06 }",
-    ),
-}
-
-
 def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
-    key = branch.techs[tier].key
-    package = NAVAL_AIR_WEAPON_EFFECTS.get(key)
-    if package is None:
-        package = base_effects_for(branch, tier)
-    return package + INDUSTRIAL_BUDGET_EFFECTS.get(key, ())
-
-
-def base_effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     """Return an effect package that reflects the actual programme selected.
 
     Filler-sized 0.4% effects made the old dense tree feel cosmetic.  A narrow
@@ -4535,10 +4320,6 @@ EQUIPMENT_UNLOCK_ICONS = {
 }
 
 
-EQUIPMENT_UNLOCK_ICONS.update({f"ADISCORD_tech_{key}": icon for key, (_, icon) in NAVAL_AIR_UNLOCKS.items()})
-EQUIPMENT_UNLOCK_ICONS["ADISCORD_tech_twin_engine_aircraft"] = "tactical_bomber1"
-
-
 COMPACT_ICON_OVERRIDES = {
     "dirty_energy_munitions": "sp_nuclear_isotope_separation",
     "trauma_registry_networks": "ADISCORD_equipment_casualty_monitor",
@@ -4758,62 +4539,6 @@ BRANCH_DESCRIPTION_EN = {
 
 
 TECHNICAL_TECH_DESCRIPTIONS = {
-    "treasury_accounting": (
-        "Единые реестры налогов и платежей уменьшают потери при сборе доходов и стоимость работы казначейства",
-        "Unified tax and payment registers reduce collection losses and treasury administration costs",
-    ),
-    "public_procurement_standards": (
-        "Типовые контракты и проверка смет сокращают бюджетные расходы на строительство и содержание военной промышленности",
-        "Standard contracts and cost reviews reduce budget spending on construction and military industry upkeep",
-    ),
-    "civilian_industrial_accounting": (
-        "Учёт выпуска и оборота предприятий повышает доходы от гражданской промышленности и собираемость налогов",
-        "Factory output and turnover accounting improve civilian industrial revenue and tax collection",
-    ),
-    "customs_clearance_networks": (
-        "Общий учёт грузов и сырьевых контрактов уменьшает потери торговых доходов и ресурсной ренты",
-        "Shared cargo and commodity contract records reduce losses in trade revenue and resource rents",
-    ),
-    "administrative_digitization": (
-        "Обмен документами между ведомствами сокращает административные издержки и расходы на организацию исследований",
-        "Interdepartmental document exchange reduces administrative overhead and research programme costs",
-    ),
-    "production_cost_accounting": (
-        "Сопоставление затрат и выпуска военных заводов повышает их бюджетную отдачу и снижает содержание",
-        "Comparing military factory costs and output increases their budget contribution and reduces upkeep",
-    ),
-    "integrated_budget_forecasts": (
-        "Согласование строительных заказов с бюджетным планом сокращает издержки управления и финансирования строительства",
-        "Coordinating construction orders with the budget plan reduces administrative and construction spending",
-    ),
-    "automated_treasury_audit": (
-        "Автоматическая сверка счетов выявляет недоимки и потери промышленных доходов",
-        "Automated account reconciliation identifies unpaid taxes and lost industrial revenue",
-    ),
-    "precision_material_standards": (
-        "Единые допуски по чистоте сырья подготавливают производство электронной компонентной базы и специальных сплавов",
-        "Common material purity tolerances prepare the production of electronic components and special alloys",
-    ),
-    "rare_components_industry": (
-        "Чистые сборочные линии выпускают редкие компоненты для датчиков, вычислителей, беспилотников и систем управления",
-        "Clean assembly lines produce rare components for sensors, computers, drones and control systems",
-    ),
-    "rare_alloy_metallurgy": (
-        "Контролируемая выплавка редких сплавов обеспечивает жаропрочные детали авиации, тяжёлую броню и артиллерийские узлы",
-        "Controlled rare alloy smelting supplies heat-resistant aircraft parts, heavy armour and artillery assemblies",
-    ),
-    "precision_component_fabrication": (
-        "Автоматический контроль сборки увеличивает выпуск завода редких компонентов с 4 до 6 единиц до региональных модификаторов",
-        "Automated assembly control increases rare components plant output from 4 to 6 units before regional modifiers",
-    ),
-    "vacuum_alloy_refining": (
-        "Удаление примесей в вакууме увеличивает выпуск завода редких сплавов с 3 до 4 единиц до региональных модификаторов",
-        "Vacuum impurity removal increases rare alloy foundry output from 3 to 4 units before regional modifiers",
-    ),
-    "advanced_material_recycling": (
-        "Возврат производственного брака увеличивает выпуск каждого завода ещё на единицу: до 7 компонентов или 5 сплавов, до региональных модификаторов",
-        "Recovering production scrap adds one further unit to each plant: 7 components or 5 alloys, before regional modifiers",
-    ),
     "distributed_ammunition_carriers": (
         "Небольшие колёсные роботы перевозят ящики с боеприпасами и разгружают расчёты группового оружия",
         "Small wheeled robots carry ammunition crates and reduce the carrying burden on weapon crews",
@@ -4978,8 +4703,6 @@ TECHNICAL_TECH_DESCRIPTIONS = {
 
 
 BUILDING_DISPLAY_NAMES = {
-    "ADISCORD_rare_components_plant": ("завод редких компонентов", "Rare Components Plant"),
-    "ADISCORD_rare_alloy_foundry": ("завод редких сплавов", "Rare Alloy Foundry"),
     "ADISCORD_metallurgical_complex": ("металлургический комплекс", "Metallurgical Complex"),
     "ADISCORD_electrolysis_complex": ("электролизный комплекс", "Electrolysis Complex"),
     "ADISCORD_strategic_mining_complex": ("комплекс стратегической добычи", "Strategic Mining Complex"),
@@ -4995,42 +4718,6 @@ BUILDING_DISPLAY_NAMES = {
     "stronghold_network": ("сеть укрепрайонов", "Stronghold Network"),
     "mega_gun_emplacement": ("позицию сверхтяжёлого орудия", "Mega-Gun Emplacement"),
 }
-
-
-TECHNICAL_TECH_DESCRIPTIONS.update({
-    "twin_engine_aircraft": (
-        "Общий двухмоторный планер открывает производство бомбардировщика и морского торпедоносца. Их вооружение и боевые задачи различаются",
-        "A common twin-engine airframe opens production of a bomber and a maritime torpedo aircraft with distinct weapons and missions",
-    ),
-    "maritime_patrol_aircraft": (
-        "Увеличенный запас топлива и поисковое оборудование позволяют новому морскому самолёту патрулировать удалённые коммуникации",
-        "Additional fuel and search equipment let the new maritime aircraft patrol distant shipping routes",
-    ),
-    "pressurized_bombers": (
-        "Гермокабина и усиленный планер повышают защищённость нового дальнего бомбардировщика",
-        "A pressure cabin and reinforced airframe improve protection on the new long-range bomber",
-    ),
-    "airborne_homing_torpedoes": (
-        "Самонаводящаяся торпеда повышает точность и поражающее действие морской авиации против кораблей",
-        "A homing torpedo improves maritime aircraft targeting and damage against ships",
-    ),
-    "stabilized_bomb_sights": (
-        "Стабилизация линии визирования уменьшает рассеивание бомб при ударах по наземным целям",
-        "Stabilized sight lines reduce bomb dispersion against ground targets",
-    ),
-    "long_range_maritime_aircraft": (
-        "Новый морской самолёт сочетает большую дальность с усиленным торпедным вооружением и средствами обнаружения кораблей",
-        "The new maritime aircraft combines longer range with heavier torpedo armament and improved ship detection",
-    ),
-    "jet_strike_bombers": (
-        "Реактивная силовая установка позволяет новому бомбардировщику быстрее выходить к цели с увеличенной боевой нагрузкой",
-        "Jet propulsion lets the new bomber reach its target faster while carrying a heavier weapons load",
-    ),
-    "integrated_strike_navigation": (
-        "Общая навигационная система увеличивает рабочую дальность и точность ударов бомбардировочной и морской авиации",
-        "An integrated navigation system improves operational range and strike accuracy for bomber and maritime aircraft",
-    ),
-})
 
 
 def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> list[str]:
@@ -5208,8 +4895,6 @@ def ai_will_do_for(branch: Branch, index: int) -> tuple[str, ...]:
         entries.append("modifier = { factor = 1.35 ADISCORD_economy_ai_is_crisis = yes }")
     if profile in {"production", "finance", "administration", "computing"}:
         entries.append("modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }")
-    if branch.key == "public_finance":
-        entries.append("modifier = { factor = 1.40 ADISCORD_economy_ai_is_crisis = yes }")
     if profile in {
         "infantry", "squad", "protection", "support", "logistics", "artillery",
         "anti_tank", "anti_air", "recon_armor", "combat_armor", "heavy_armor",
@@ -5263,7 +4948,7 @@ def ai_will_do_for(branch: Branch, index: int) -> tuple[str, ...]:
 
 
 def render_leader_training_effect(tech: Tech) -> list[str]:
-    """Award each selected general once, then release the temporary selection."""
+    """Render the bounded random-general improvement pattern used by TDA."""
 
     training = LEADER_TRAINING.get(tech.key)
     if training is None:
@@ -5477,8 +5162,7 @@ def technology_time_slot(branch: Branch, index: int) -> int:
 
     if HORIZONTAL_FOLDERS.intersection(branch.folders):
         return horizontal_visual_slots(branch)[index]
-    years = sorted(set(branch.years))
-    return years.index(branch.years[index]) * VERTICAL_YEAR_SLOT_MULTIPLIER
+    return chronological_grid_slot(branch.years[index], horizontal=False)
 
 
 def technology_grid_position(branch: Branch, index: int) -> tuple[int, int]:
@@ -5503,31 +5187,28 @@ def technology_grid_position(branch: Branch, index: int) -> tuple[int, int]:
     lane = graph.lanes[index]
     if HORIZONTAL_FOLDERS.intersection(branch.folders):
         return lane * HORIZONTAL_LANE_SLOT_MULTIPLIER, technology_time_slot(branch, index)
-    return (lane - min(graph.lanes)) * LANE_SLOT_MULTIPLIER, technology_time_slot(branch, index)
+    return lane * LANE_SLOT_MULTIPLIER, technology_time_slot(branch, index)
 
 
 def render_research_completion_effects(tech: Tech) -> list[str]:
     """Emit the one post-path ``on_research_complete`` block for a technology.
 
-    Resource upgrades, research rewards and budget invalidation share one
-    callback because the engine keeps only one ``on_research_complete``.
-    The block follows paths so research-balance checks distinguish immediate
-    rewards from persistent numeric modifiers.
+    Both payoffs share a single block because a technology keeps only one
+    ``on_research_complete``; a second one would silently discard whichever was
+    written first. The block also has to follow the path entries, since the
+    research-balance contract counts numeric leaf modifiers up to the first
+    path and a research bonus is a reward rather than a modifier.
     """
 
     building_upgrades = BUILDING_RESOURCE_UPGRADES.get(tech.id, ())
     payoff = RESEARCH_PAYOFFS.get(tech.id)
-    branch, index = TECH_POSITION_BY_ID[tech.id]
-    budget_effect = any(effect.startswith("ADISCORD_economy_") for effect in effects_for(branch, index))
-    if not building_upgrades and payoff is None and not budget_effect:
+    if not building_upgrades and payoff is None:
         return []
     if LEADER_TRAINING.get(tech.key) is not None:
         raise ValueError(
             f"{tech.id} already spends its on_research_complete on leader training"
         )
     lines = ["\t\ton_research_complete = {"]
-    if budget_effect:
-        lines.append("\t\t\thidden_effect = { ADISCORD_economy_mark_dirty = yes }")
     for building, resource, amount in building_upgrades:
         lines.extend((
             "\t\t\tmodify_building_resources = {",
@@ -5673,23 +5354,6 @@ def write_starting_technology_effect() -> None:
         lines.extend((
             "\t\tpopup = no",
             "\t}",
-        ))
-        # Startup calculates the first budget after granting profiles. Later
-        # grants must invalidate it without reinitializing an existing country.
-        if any(
-            effect.startswith("ADISCORD_economy_")
-            for tech_id in technology_ids
-            for effect in effects_for(*TECH_POSITION_BY_ID[tech_id])
-        ):
-            lines.extend((
-                "\thidden_effect = {",
-                "\t\tif = {",
-                "\t\t\tlimit = { has_variable = ADISCORD_economy_initialized }",
-                "\t\t\tADISCORD_economy_mark_dirty = yes",
-                "\t\t}",
-                "\t}",
-            ))
-        lines.extend((
             "}",
             "",
         ))
@@ -5862,39 +5526,22 @@ def write_starting_technology_profile_manifest() -> None:
     )
 
 
-CUSTOM_TECH_TEXTURES = {
-    "recovered_medium_chassis": "gfx/interface/technologies/armor/ADISCORD_restored_main_battle_tank.dds",
-    "recovered_shaped_charge_cells": "gfx/interface/technologies/ADISCORD_antitank_01_incendiary_bottle.dds",
-    "disposable_launcher_standards": "gfx/interface/technologies/ADISCORD_antitank_02_satchel_charge.dds",
-    "tandem_penetrator_packages": "gfx/interface/technologies/ADISCORD_antitank_03_shaped_charge_grenade.dds",
-    "wire_guided_hunter_teams": "gfx/interface/technologies/ADISCORD_antitank_04_antitank_rifle.dds",
-    "top_attack_profiles": "gfx/interface/technologies/ADISCORD_antitank_08_rocket_launcher.dds",
-    "loitering_armor_hunters": "gfx/interface/technologies/ADISCORD_antitank_09_top_attack_seeker.dds",
-}
-
-
 def write_gfx() -> None:
     entries = []
     for branch in BRANCHES:
         for index, tech in enumerate(branch.techs):
             icon = icon_for_technology(branch, index)
-            custom_texture = CUSTOM_TECH_TEXTURES.get(tech.key)
-            variants = [(f"GFX_{tech.id}_medium", custom_texture or icon)]
-            if not custom_texture and icon.startswith("ADISCORD_weapon_"):
+            variants = [(f"GFX_{tech.id}_medium", icon)]
+            if icon.startswith("ADISCORD_weapon_"):
                 variants.extend(
                     (f"GFX_{tag}_{tech.id}_medium", icon.replace("ADISCORD_", f"ADISCORD_{tag}_", 1))
                     for tag in REGIONAL_SERVICE_ICON_TAGS
                 )
             for sprite, texture in variants:
-                texture_file = (
-                    texture
-                    if texture.startswith("gfx/")
-                    else f"gfx/interface/technologies/{texture}.dds"
-                )
                 entries.append(
                     "\tSpriteType = {\n"
                     f"\t\tname = \"{sprite}\"\n"
-                    f"\t\ttextureFile = \"{texture_file}\"\n"
+                    f"\t\ttextureFile = \"gfx/interface/technologies/{texture}.dds\"\n"
                     "\t}\n"
                 )
     content = (
@@ -6057,194 +5704,11 @@ INFANTRY_FAMILY_LOCALISATION = {
 }
 
 
-NAVAL_AIR_UNIT_LOCALISATION = {
-    "ADISCORD_tactical_bomber": ("Бомбардировщик", "Bomber"),
-    "ADISCORD_tactical_bomber_desc": ("Бомбардировочная авиация для ударов по промышленности, снабжению и сухопутным войскам.", "Bomber aircraft for attacks on industry, supply and ground forces."),
-}
-
-
-NAVAL_AIR_EQUIPMENT_LOCALISATION = {
-    "ADISCORD_escort_ship_2155": (
-        "Эскортный корабль обр. 2155",
-        "Escort Ship Model 2155",
-        "Противолодочный корабль охранения с зенитным вооружением и средствами поиска подводных целей.",
-        "An escort with anti-submarine weapons, air defence and underwater detection.",
-    ),
-    "ADISCORD_escort_ship_2163": (
-        "Эскортный корабль обр. 2163",
-        "Escort Ship Model 2163",
-        "Противолодочный корабль охранения с зенитным вооружением и средствами поиска подводных целей.",
-        "An escort with anti-submarine weapons, air defence and underwater detection.",
-    ),
-    "ADISCORD_escort_ship_2170": (
-        "Эскортный корабль обр. 2170",
-        "Escort Ship Model 2170",
-        "Противолодочный корабль охранения с зенитным вооружением и средствами поиска подводных целей.",
-        "An escort with anti-submarine weapons, air defence and underwater detection.",
-    ),
-    "ADISCORD_escort_ship_2175": (
-        "Эскортный корабль обр. 2175",
-        "Escort Ship Model 2175",
-        "Противолодочный корабль охранения с зенитным вооружением и средствами поиска подводных целей.",
-        "An escort with anti-submarine weapons, air defence and underwater detection.",
-    ),
-    "ADISCORD_cruiser_2155": (
-        "Тяжёлый крейсер обр. 2155",
-        "Heavy Cruiser Model 2155",
-        "Крупный надводный корабль с дальней артиллерией, броневой защитой и эшелонированной ПВО. Требует прикрытия эскортом.",
-        "An armored capital ship with long-range guns and layered air defence. Requires screening escorts.",
-    ),
-    "ADISCORD_cruiser_2163": (
-        "Тяжёлый крейсер обр. 2163",
-        "Heavy Cruiser Model 2163",
-        "Крупный надводный корабль с дальней артиллерией, броневой защитой и эшелонированной ПВО. Требует прикрытия эскортом.",
-        "An armored capital ship with long-range guns and layered air defence. Requires screening escorts.",
-    ),
-    "ADISCORD_cruiser_2170": (
-        "Тяжёлый крейсер обр. 2170",
-        "Heavy Cruiser Model 2170",
-        "Крупный надводный корабль с дальней артиллерией, броневой защитой и эшелонированной ПВО. Требует прикрытия эскортом.",
-        "An armored capital ship with long-range guns and layered air defence. Requires screening escorts.",
-    ),
-    "ADISCORD_cruiser_2175": (
-        "Тяжёлый крейсер обр. 2175",
-        "Heavy Cruiser Model 2175",
-        "Крупный надводный корабль с дальней артиллерией, броневой защитой и эшелонированной ПВО. Требует прикрытия эскортом.",
-        "An armored capital ship with long-range guns and layered air defence. Requires screening escorts.",
-    ),
-    "ADISCORD_submarine_2155": (
-        "Подводная лодка обр. 2155",
-        "Submarine Model 2155",
-        "Торпедная подводная лодка для скрытного перехвата транспортов и атак надводных кораблей.",
-        "A torpedo submarine for covert convoy interdiction and attacks on surface ships.",
-    ),
-    "ADISCORD_submarine_2163": (
-        "Подводная лодка обр. 2163",
-        "Submarine Model 2163",
-        "Торпедная подводная лодка для скрытного перехвата транспортов и атак надводных кораблей.",
-        "A torpedo submarine for covert convoy interdiction and attacks on surface ships.",
-    ),
-    "ADISCORD_submarine_2170": (
-        "Подводная лодка обр. 2170",
-        "Submarine Model 2170",
-        "Торпедная подводная лодка для скрытного перехвата транспортов и атак надводных кораблей.",
-        "A torpedo submarine for covert convoy interdiction and attacks on surface ships.",
-    ),
-    "ADISCORD_submarine_2175": (
-        "Подводная лодка обр. 2175",
-        "Submarine Model 2175",
-        "Торпедная подводная лодка для скрытного перехвата транспортов и атак надводных кораблей.",
-        "A torpedo submarine for covert convoy interdiction and attacks on surface ships.",
-    ),
-    "ADISCORD_fighter_airframe_2161": (
-        "Истребитель обр. 2161",
-        "Fighter Model 2161",
-        "Серийный истребитель с улучшенным вооружением, скоростью и дальностью перехвата.",
-        "A production fighter with improved weapons, speed and interception range.",
-    ),
-    "ADISCORD_fighter_airframe_2166": (
-        "Истребитель обр. 2166",
-        "Fighter Model 2166",
-        "Серийный истребитель с улучшенным вооружением, скоростью и дальностью перехвата.",
-        "A production fighter with improved weapons, speed and interception range.",
-    ),
-    "ADISCORD_fighter_airframe_2170": (
-        "Истребитель обр. 2170",
-        "Fighter Model 2170",
-        "Серийный истребитель с улучшенным вооружением, скоростью и дальностью перехвата.",
-        "A production fighter with improved weapons, speed and interception range.",
-    ),
-    "ADISCORD_fighter_airframe_2175": (
-        "Истребитель обр. 2175",
-        "Fighter Model 2175",
-        "Серийный истребитель с улучшенным вооружением, скоростью и дальностью перехвата.",
-        "A production fighter with improved weapons, speed and interception range.",
-    ),
-    "ADISCORD_attack_airframe_2163": (
-        "Ударный самолёт обр. 2163",
-        "Attack Aircraft Model 2163",
-        "Самолёт непосредственной поддержки войск с усиленным ударным вооружением и защитой.",
-        "A close-support aircraft with improved strike weapons and protection.",
-    ),
-    "ADISCORD_attack_airframe_2170": (
-        "Ударный самолёт обр. 2170",
-        "Attack Aircraft Model 2170",
-        "Самолёт непосредственной поддержки войск с усиленным ударным вооружением и защитой.",
-        "A close-support aircraft with improved strike weapons and protection.",
-    ),
-    "ADISCORD_attack_airframe_2175": (
-        "Ударный самолёт обр. 2175",
-        "Attack Aircraft Model 2175",
-        "Самолёт непосредственной поддержки войск с усиленным ударным вооружением и защитой.",
-        "A close-support aircraft with improved strike weapons and protection.",
-    ),
-    "ADISCORD_bomber_2160": (
-        "Бомбардировщик обр. 2160",
-        "Bomber Model 2160",
-        "Дальний бомбардировщик для ударов по промышленности, коммуникациям и наземным войскам.",
-        "A long-range bomber for attacks on industry, logistics and ground forces.",
-    ),
-    "ADISCORD_bomber_2164": (
-        "Бомбардировщик обр. 2164",
-        "Bomber Model 2164",
-        "Дальний бомбардировщик для ударов по промышленности, коммуникациям и наземным войскам.",
-        "A long-range bomber for attacks on industry, logistics and ground forces.",
-    ),
-    "ADISCORD_bomber_2172": (
-        "Бомбардировщик обр. 2172",
-        "Bomber Model 2172",
-        "Дальний бомбардировщик для ударов по промышленности, коммуникациям и наземным войскам.",
-        "A long-range bomber for attacks on industry, logistics and ground forces.",
-    ),
-    "ADISCORD_naval_aircraft_2160": (
-        "Морской ударный самолёт обр. 2160",
-        "Maritime Strike Aircraft Model 2160",
-        "Самолёт морского патрулирования с торпедным вооружением для ударов по кораблям и портам.",
-        "A maritime patrol aircraft with torpedoes for attacks on ships and ports.",
-    ),
-    "ADISCORD_naval_aircraft_2164": (
-        "Морской ударный самолёт обр. 2164",
-        "Maritime Strike Aircraft Model 2164",
-        "Самолёт морского патрулирования с торпедным вооружением для ударов по кораблям и портам.",
-        "A maritime patrol aircraft with torpedoes for attacks on ships and ports.",
-    ),
-    "ADISCORD_naval_aircraft_2172": (
-        "Морской ударный самолёт обр. 2172",
-        "Maritime Strike Aircraft Model 2172",
-        "Самолёт морского патрулирования с торпедным вооружением для ударов по кораблям и портам.",
-        "A maritime patrol aircraft with torpedoes for attacks on ships and ports.",
-    ),
-    "ADISCORD_cruiser_archetype": (
-        "Тяжёлые крейсеры",
-        "Heavy Cruisers",
-        "Тяжёлые крейсеры.",
-        "Heavy Cruisers.",
-    ),
-    "ADISCORD_submarine_archetype": (
-        "Подводные лодки",
-        "Submarines",
-        "Подводные лодки.",
-        "Submarines.",
-    ),
-    "ADISCORD_bomber_archetype": (
-        "Бомбардировщики",
-        "Bombers",
-        "Бомбардировщики.",
-        "Bombers.",
-    ),
-    "ADISCORD_naval_aircraft_archetype": (
-        "Морская авиация",
-        "Maritime Aircraft",
-        "Морская авиация.",
-        "Maritime Aircraft.",
-    ),
-}
-
 def generated_localisation(language: str) -> list[str]:
     is_ru = language == "russian"
     lines = [
         f' {key}:0 "{names[0 if is_ru else 1]}"'
-        for mapping in (ACCESS_REQUIREMENT_LOCALISATION, INFANTRY_FAMILY_LOCALISATION, NAVAL_AIR_UNIT_LOCALISATION)
+        for mapping in (ACCESS_REQUIREMENT_LOCALISATION, INFANTRY_FAMILY_LOCALISATION)
         for key, names in mapping.items()
     ]
     lines.append("")
@@ -6262,14 +5726,6 @@ def generated_localisation(language: str) -> list[str]:
         lines.extend((
             f' {equipment_id}:0 "{name}"',
             f' {equipment_id}_short:0 "{short}"',
-            f' {equipment_id}_desc:0 "{description}"',
-        ))
-    lines.append("")
-    for equipment_id, (ru, en, description_ru, description_en) in NAVAL_AIR_EQUIPMENT_LOCALISATION.items():
-        name, description = (ru, description_ru) if is_ru else (en, description_en)
-        lines.extend((
-            f' {equipment_id}:0 "{name}"',
-            f' {equipment_id}_short:0 "{name}"',
             f' {equipment_id}_desc:0 "{description}"',
         ))
     lines.append("")
@@ -6333,7 +5789,7 @@ def write_localisation() -> None:
     generated_key = re.compile(r"^\s+([A-Za-z0-9_]+)\s*:")
     generated_equipment_keys = {
         suffix
-        for equipment_id in (*LAND_EQUIPMENT_LOCALISATION, *NAVAL_AIR_EQUIPMENT_LOCALISATION)
+        for equipment_id in LAND_EQUIPMENT_LOCALISATION
         for suffix in (equipment_id, f"{equipment_id}_short", f"{equipment_id}_desc")
     }
     for language, path in targets.items():
@@ -6350,7 +5806,6 @@ def write_localisation() -> None:
                 or key.startswith("ADISCORD_TECH_BRANCH_")
                 or key in ACCESS_REQUIREMENT_LOCALISATION
                 or key in INFANTRY_FAMILY_LOCALISATION
-                or key in NAVAL_AIR_UNIT_LOCALISATION
                 or key in generated_equipment_keys
             ):
                 continue
@@ -6414,16 +5869,18 @@ def render_folder(folder: str) -> str:
         height = max(700, cursor_y + 80)
     else:
         cursor_x = GRID_X
+        grid_height = (
+            max(YEAR_TO_Y.values()) * VERTICAL_YEAR_SLOT_MULTIPLIER + 1
+        ) * GRID_SLOT
         for branch in branches:
             graph = BRANCH_GRAPHS[branch.key]
-            grid_height = (max(technology_time_slot(branch, i) for i in range(len(branch.techs))) + 2) * GRID_SLOT
             grid_width = (
-                (max(graph.lanes) - min(graph.lanes) + 1) * LANE_SLOT_MULTIPLIER
+                max(graph.lanes) * LANE_SLOT_MULTIPLIER + LANE_SLOT_MULTIPLIER
             ) * GRID_SLOT
             branch_layouts.append((branch, cursor_x, GRID_Y, grid_width, grid_height))
             cursor_x += grid_width + BRANCH_GAP
         content_width = max(1180, cursor_x + 80)
-        height = max(700, GRID_Y + max(layout[4] for layout in branch_layouts) + 100)
+        height = max(700, GRID_Y + grid_height + 100)
     # Vanilla folder art embeds a fixed diagram unrelated to these branches.
     background = "GFX_ADISCORD_technology_transparent_tile"
     lines = [
@@ -6450,24 +5907,28 @@ def render_folder(folder: str) -> str:
         "\t\t\t\t\talwaystransparent = yes",
         "\t\t\t\t}",
     ]
-    # Vertical branches carry their own dated rows; a shared ruler would imply
-    # that independent programmes on the same row have the same research year.
-    year_labels = (
-        [(str(year), year, GRID_X + chronological_grid_slot(year, horizontal=True) * GRID_SLOT + 18, 84) for year in YEARS]
-        if horizontal else
-        [(f"{branch.key}_{year}", year, grid_x - 62,
-          grid_y + technology_time_slot(branch, branch.years.index(year)) * GRID_SLOT + 18)
-         for branch, grid_x, grid_y, _, _ in branch_layouts
-         for year in sorted(set(branch.years))]
-    )
-    for label, year, year_x, year_y in year_labels:
+    for year in YEARS:
+        if horizontal:
+            year_x = (
+                GRID_X
+                + chronological_grid_slot(year, horizontal=True) * GRID_SLOT
+                + 18
+            )
+            year_y = 84
+        else:
+            year_x = 24
+            year_y = (
+                GRID_Y
+                + chronological_grid_slot(year, horizontal=False) * GRID_SLOT
+                + 18
+            )
         lines.extend((
             "\t\t\t\tinstantTextBoxType = {",
-            f"\t\t\t\t\tname = \"ADISCORD_{folder}_year_{label}\"",
+            f"\t\t\t\t\tname = \"ADISCORD_{folder}_year_{year}\"",
             f"\t\t\t\t\tposition = {{ x = {year_x} y = {year_y} }}",
             "\t\t\t\t\tfont = \"hoi_18b\"",
             f"\t\t\t\t\ttext = \"{year}\"",
-            "\t\t\t\t\tmaxWidth = 56",
+            "\t\t\t\t\tmaxWidth = 94",
             "\t\t\t\t\tmaxHeight = 22",
             "\t\t\t\t\tformat = left",
             "\t\t\t\t\tOrientation = \"UPPER_LEFT\"",
@@ -6600,7 +6061,7 @@ def apply() -> None:
     write_starting_technology_profile_manifest()
     print(
         f"Generated {len(all_ids)} technologies in {len(BRANCHES)} content branches; "
-        f"{len(SIDE_PROGRAMME_KEYS)} applied branches are attached specialisations."
+        f"{len(APPLIED_PROGRAMME_KEYS)} applied branches are attached specialisations."
     )
 
 

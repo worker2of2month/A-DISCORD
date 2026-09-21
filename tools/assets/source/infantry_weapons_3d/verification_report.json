@@ -1,0 +1,520 @@
+{
+  "checked_at_utc": "2026-09-08T21:42:46.507777+00:00",
+  "overall_status": "Polished and exported. Native geometry, attachments, city sizes and tower collapse inspected in cold HOI4. Final division material appearance for every new body and weapon tier remains unverified.",
+  "changes": {
+    "cities": "Baked size factors: WRK towers 0.40, STP skyscrapers 0.30, quarters 0.60; negative foundation depth preserved. Nine independent entities; 31 ambient placements; no vanilla city aliases.",
+    "weapons": "Eight rounded and detailed technology tiers; narrower grips/forearms, shorter stocks/barrels and native rifle/MG pose families matched to attachments.",
+    "characters": "Four new bodies with rounded headgear, fitted masks/scarves, curved carriers and cloth pouches; Kefreyt has the heaviest distinct loadout. Armbands interpolate donor skin weights."
+  },
+  "weapon_meshes": 8,
+  "weapon_clips": 24,
+  "weapon_frames_checked": 1896,
+  "weapon_triangles": {
+    "infantry_0": 2516,
+    "infantry_1": 7752,
+    "infantry_2": 7752,
+    "infantry_3": 11712,
+    "infantry_4": 13044,
+    "infantry_5": 13944,
+    "infantry_6": 14624,
+    "infantry_7": 15304
+  },
+  "native_animation_roundtrip": {
+    "0": {
+      "mesh": [
+        {
+          "name": "infantry_0Shape",
+          "vertices": 2678,
+          "triangles": 2516,
+          "bones": 2,
+          "influences": 4
+        }
+      ],
+      "clips": {
+        "support": {
+          "active_frames": [
+            1,
+            37
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "fire": {
+          "active_frames": [
+            36,
+            67
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "idle": {
+          "active_frames": [],
+          "frames": 79,
+          "restored_at_end": true
+        }
+      }
+    },
+    "1": {
+      "mesh": [
+        {
+          "name": "infantry_1Shape",
+          "vertices": 7182,
+          "triangles": 7752,
+          "bones": 2,
+          "influences": 4
+        }
+      ],
+      "clips": {
+        "support": {
+          "active_frames": [
+            1,
+            4,
+            7
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "fire": {
+          "active_frames": [
+            16,
+            19,
+            22
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "idle": {
+          "active_frames": [],
+          "frames": 79,
+          "restored_at_end": true
+        }
+      }
+    },
+    "2": {
+      "mesh": [
+        {
+          "name": "infantry_2Shape",
+          "vertices": 7184,
+          "triangles": 7752,
+          "bones": 2,
+          "influences": 4
+        }
+      ],
+      "clips": {
+        "support": {
+          "active_frames": [
+            1,
+            4,
+            7
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "fire": {
+          "active_frames": [
+            16,
+            19,
+            22
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "idle": {
+          "active_frames": [],
+          "frames": 79,
+          "restored_at_end": true
+        }
+      }
+    },
+    "3": {
+      "mesh": [
+        {
+          "name": "infantry_3Shape",
+          "vertices": 11195,
+          "triangles": 11712,
+          "bones": 2,
+          "influences": 4
+        }
+      ],
+      "clips": {
+        "support": {
+          "active_frames": [
+            1,
+            4,
+            7
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "fire": {
+          "active_frames": [
+            16,
+            19,
+            22
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "idle": {
+          "active_frames": [],
+          "frames": 79,
+          "restored_at_end": true
+        }
+      }
+    },
+    "4": {
+      "mesh": [
+        {
+          "name": "infantry_4Shape",
+          "vertices": 12693,
+          "triangles": 13044,
+          "bones": 2,
+          "influences": 4
+        }
+      ],
+      "clips": {
+        "support": {
+          "active_frames": [
+            1,
+            4,
+            7
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "fire": {
+          "active_frames": [
+            16,
+            19,
+            22
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "idle": {
+          "active_frames": [],
+          "frames": 79,
+          "restored_at_end": true
+        }
+      }
+    },
+    "5": {
+      "mesh": [
+        {
+          "name": "infantry_5Shape",
+          "vertices": 13536,
+          "triangles": 13944,
+          "bones": 2,
+          "influences": 4
+        }
+      ],
+      "clips": {
+        "support": {
+          "active_frames": [
+            1,
+            4,
+            7
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "fire": {
+          "active_frames": [
+            16,
+            19,
+            22
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "idle": {
+          "active_frames": [],
+          "frames": 79,
+          "restored_at_end": true
+        }
+      }
+    },
+    "6": {
+      "mesh": [
+        {
+          "name": "infantry_6Shape",
+          "vertices": 14270,
+          "triangles": 14624,
+          "bones": 2,
+          "influences": 4
+        }
+      ],
+      "clips": {
+        "support": {
+          "active_frames": [
+            1,
+            4,
+            7
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "fire": {
+          "active_frames": [
+            16,
+            19,
+            22
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "idle": {
+          "active_frames": [],
+          "frames": 79,
+          "restored_at_end": true
+        }
+      }
+    },
+    "7": {
+      "mesh": [
+        {
+          "name": "infantry_7Shape",
+          "vertices": 14912,
+          "triangles": 15304,
+          "bones": 2,
+          "influences": 4
+        }
+      ],
+      "clips": {
+        "support": {
+          "active_frames": [
+            1,
+            4,
+            7
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "fire": {
+          "active_frames": [
+            16,
+            19,
+            22
+          ],
+          "frames": 79,
+          "restored_at_end": true
+        },
+        "idle": {
+          "active_frames": [],
+          "frames": 79,
+          "restored_at_end": true
+        }
+      }
+    }
+  },
+  "body_pose_audit": {
+    "report": "qa_polish_20260908/final/body_states_report.json",
+    "models": 5,
+    "clips": 115,
+    "evaluated_frames": 22430,
+    "errors": 0,
+    "source_hashes": {
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\entities\\ADISCORD_country_infantry.gfx": "880852aa17087d54fcb4e7c3424ce0e0e426abff095b26522a56455606b1ec39",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\animation.asset": "ac6a382aa4a2656b9ef9d504e04b6797a2783b2d9d6e0cedd440b910cb7a0a3f",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\STP_shabrat\\STP_shabrat_infantry.mesh": "512faf519fb2dc0fc1e1fe41e35b6f69ccf003029c2e6798448c8accbb6c7f77",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\STP_shabrat\\Shabrat_body_diffuse.dds": "6ac522408eb16f89fa0dc095e78bded9c4ab9674acc5e09d0b5b2eb6a9aa241f",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\STP_shabrat\\Shabrat_body_specular.dds": "f00f270ca9b14f72cc44937ae11af344895a49dbaf73b3c6154f667da12b4fcd",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\STP_shabrat\\Shabrat_body_normal.dds": "c563ff25e43966e87a619446a9bb45d033cc669b833eb7d3aec0c8dbf240418a",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\STP_shabrat\\Shabrat_gear_diffuse.dds": "bd113aa084c56cbe1023f65eaec51d25994ce8141e1d197cad83215b1b13f20a",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\STP_shabrat\\Shabrat_gear_specular.dds": "9e08abcdc6916e6631fd83c104c9f47f7421dd9c294b6885bf16fcbedca84cb5",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\STP_shabrat\\Shabrat_gear_normal.dds": "0a3002221566e16183160343f428771d87ea78ae77710d2782b5706eed71ed7f",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_idle_rifle.anim": "e08af4aaf57d00e6941f5e2803b59563cb351baf11a56ec668ed917e7391c8a7",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_attack_stand_rifle.anim": "1ca1deb13c5caf1a925b86e965347422da74a5d24c477d7aca9a40282824ef9f",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_attack_crouch_rifle.anim": "e3af3b3f6e1da953c22ef905285c6781768cd563415dd6b722921e910ea25938",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_charge_rifle.anim": "3c05fe67cd629594ce9aa609415878832e239bb7fa8c9928cd76e9f72496678d",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_charge_rifle_shoot.anim": "db977fab916efd084b871462d846b8c77b524889cbbe21df8f7ba5452bcd96ce",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_charge_mg.anim": "c99d7d02d80702062efa44b7392bd26e723402751c566ab79a7e8ca5e07ec6ad",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_charge_mg_shoot.anim": "ac4e705308d420f3d964d4b4b76eba6aae54d0e1ed9a0495537cdc5866ec2b23",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_moving_rifle.anim": "3435e1f4b59520cc513cf3ab56bc02b14e98eb59b2ca1573e27d7f4b1a646fec",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_march_rifle.anim": "199e94103c0cf034e1ec39ef16ff6241949e600461c114cfe70aee404639decc",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_retreat_rifle.anim": "db5e534aa01709c5079b7cdb9d8f3fca675350931bf1dd9deb8cf98e9fdf1f51",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_death_rifle.anim": "7a43f1aab2f04435c2f61105dbdb8ebbf18d511d7614e6bbcdae90b8f92fb730",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_long_idle01_rifle.anim": "2de404e04785faf3474f9f13df5ff76407dd8219ab40e01c9ff90e78a74fc1d6",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_long_idle02_rifle.anim": "7b01c732efcc9022b87bfc19e48775dd9f111fa4034da1379dba0454b4633c36",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_long_idle03_rifle.anim": "310fad70255683fda1fe0b3deebefe65ecbb2dc8636adb94b68729f2fdd92b71",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_long_idle04_rifle.anim": "cdf500492d200bc9aca2f37335e2adcc2535ee74b3ec6fb9d600f7df850cecf4",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_long_idle05_rifle.anim": "9c4528a39e0ecef1089a4035551d111b5fb5f497d1f908ff977f73d30b87525c",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_cavalry_rider_idle_rifle.anim": "3f78d1d4b3d0cb5683017493a72da28cb23696c78dbcf873c998011629b9a479",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_cavalry_rider_moving_rifle.anim": "4f0867349b0f7ee323b05eda0973a54f3be40eb69ae23450ced84dba368bbbbd",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_idle_training.anim": "dd1402107416159de2959ac07c52310732c923e059278c827635420d8640f2ef",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_jumping_jacks.anim": "8b622d7f81d5aadb9d60393da5584bc13733ffd01c8674e8ba4e5448361e9721",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_pushup.anim": "410aac604574a8b83f927d722770d60c379d1dc754a9a4ba48d4fc902837fe64",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_guard_rifle.anim": "66207346504aa257eab29bb030bdb3eb24465665494bc515131b2b864ad53967",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_aim_exercise.anim": "2976f3fdce971ff44e65df887ce9ebb3ddf8c4c2b21b26ece97c4d7d35861e7a",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STP_party.mesh": "b147524ac888b055b5d5e19d89d47e3395b07456fd3607656009a769dcd3a9b8",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STP_party_gear_diffuse.dds": "e38d30f571295be898e8aace69a127f88c209b6e43c89693c5a268e11577d54a",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STP_party_gear_specular.dds": "3a59ff2ef6fd6d6e79694a121d3f8b923de673c6e82aadb56a72e11ca1f86d3e",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STP_party_gear_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STP_party_body_diffuse.dds": "e8f918af6651a5bbb62baff118c16c58b323d177ee1fa101316b4e7d2d87c4fa",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STP_party_body_specular.dds": "3a59ff2ef6fd6d6e79694a121d3f8b923de673c6e82aadb56a72e11ca1f86d3e",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STP_party_body_normal.dds": "c563ff25e43966e87a619446a9bb45d033cc669b833eb7d3aec0c8dbf240418a",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_idle_mg.anim": "bd6ad770bc8e5c085fcebdf694121f92fed027d7d1397739955dd0ab3eb84523",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_attack_stand_mg.anim": "2197c767c7fcd3314a8c5b82053f10ca880d3d0701a98152178cbeff7562c31c",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_attack_crouch_mg.anim": "a427c239ab9d2e7448cb32ebdab49705c713b5a9a3800a2b8603a468020a12fa",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_moving_mg.anim": "8110ba370a0cc144bbab3149c66e79ef5ef18ac76a8549c85bb26f5c0551e0bf",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_march_mg.anim": "37799e4c1f05917b97e0bdbf0cd79f0f7c3615169c331db4f345bd021dfef21d",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_retreat_mg.anim": "cac9f65c9c9a76c258ec0db893caaecda50682d5e807b846e332286d48eaff5c",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_death_mg.anim": "cc283b9253a4b1c3328adcb3a34a72c2c1ef8f96ef772573b8ea91c8a4bb3b3c",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_long_idle01_mg.anim": "9ad6af144585e206be23d0a000a61970a71c92b1ab271d05fd0dffd7f29229b5",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_long_idle02_mg.anim": "658cffa3f7b1bf4b11786c10f2976ddd243d9bd92cbed73f95c89a4af4cf89b5",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_long_idle03_mg.anim": "e635b263fa1bb064914e971a3ad4387ba75698e645176d49ac174147e93c5ca1",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_long_idle04_mg.anim": "13ed50718faeb11f0414ceca881b6b4d73ec5350a3742cd806974b28f7ccf392",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_long_idle05_mg.anim": "d40b7b18e04a383bbd12b46f15602df939789eecf1fa7ffc8fa68737bae1cbf3",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_cavalry_rider_idle_mg.anim": "3c238a18f13b867aaefbb60388edcdc800cb20284ee2a40a0e6794adc47c00e7",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_cavalry_rider_moving_mg.anim": "fb996223e46eff06b320348713966860ecce0cda29f48a5bde5633ccd3bed764",
+      "Z:\\SteamLibrary\\steamapps\\common\\Hearts of Iron IV\\gfx\\models\\units\\GER_infantry_aim_exercise_mg.anim": "c918b018d691912b1891e933ff01c9c828d6deba62a89f91795ac1f0c930c704",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STS_regular.mesh": "1053111c9908966560c11424667f5c156213e38023222f4995b13193eef06337",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STS_regular_gear_diffuse.dds": "32f96f5fe3832e1470dd67ab38a955003983b2bba4598a5e26014ec7b136c576",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STS_regular_gear_specular.dds": "3a59ff2ef6fd6d6e79694a121d3f8b923de673c6e82aadb56a72e11ca1f86d3e",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STS_regular_gear_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STS_regular_body_diffuse.dds": "8f79ec7724e4dfec4ade6f4384a1a9dfb77116fc6b72c5b2271297c2d100db76",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STS_regular_body_specular.dds": "3a59ff2ef6fd6d6e79694a121d3f8b923de673c6e82aadb56a72e11ca1f86d3e",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\STS_regular_body_normal.dds": "c563ff25e43966e87a619446a9bb45d033cc669b833eb7d3aec0c8dbf240418a",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\VAL_regular.mesh": "756a7dcc3ceccd9a5195b13f1daad7e393cd7e4b94b2919419f87da060bf202e",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\VAL_regular_gear_diffuse.dds": "423642b415eabeab67ce6ff573e687981b038d7908fafb1f6151b98a64407cc0",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\VAL_regular_gear_specular.dds": "3a59ff2ef6fd6d6e79694a121d3f8b923de673c6e82aadb56a72e11ca1f86d3e",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\VAL_regular_gear_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\VAL_regular_body_diffuse.dds": "e17dfd9ff9b82ad2f8b4683441fb432ca5eb42ee0452fd699811ae75f49f6393",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\VAL_regular_body_specular.dds": "3a59ff2ef6fd6d6e79694a121d3f8b923de673c6e82aadb56a72e11ca1f86d3e",
+      "C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\gfx\\models\\units\\ADISCORD_regulars\\VAL_regular_body_normal.dds": "c563ff25e43966e87a619446a9bb45d033cc669b833eb7d3aec0c8dbf240418a"
+    },
+    "limitation": [
+      "Blender import/evaluation and Cycles DDS preview are not native HOI4 runtime evidence.",
+      "Renders show bodies and gear; native weapon attachments and effects are not reconstructed.",
+      "Attachment visibility is recorded, not assumed to require exactly one active node in every animation.",
+      "Finite geometry and bounded coordinates cannot establish absence of all self-intersections."
+    ]
+  },
+  "hold_renders": {
+    "count": 12,
+    "tiers": [
+      0,
+      1,
+      3,
+      7
+    ],
+    "states": [
+      "idle",
+      "moving",
+      "attack_stand"
+    ],
+    "files": "hold_<tier>_<state>.png"
+  },
+  "independent_review": "Native definitions, attachment inheritance and final three STS hold poses reviewed; armband opening repaired and re-reviewed without remaining finding.",
+  "jorodox_visual": {
+    "city": {
+      "meshes": 9,
+      "captures": 18,
+      "current_mesh_hashes": true,
+      "FrontSide": true,
+      "webgl_errors": 0,
+      "limitation": "Actual JoroDox loaders rendered in a local WebGL harness; Phong fallback is not HOI4 entity/lighting proof"
+    },
+    "weapon": {
+      "meshes": 8,
+      "captures": 16,
+      "current_mesh_hashes": true,
+      "FrontSide": true,
+      "webgl_errors": 0,
+      "limitation": "Actual JoroDox loaders rendered in a local WebGL harness; Phong fallback is not HOI4 entity/lighting proof"
+    }
+  },
+  "focused_tests": {
+    "passed": 148,
+    "log": "qa_polish_20260908/focused_final.log"
+  },
+  "total_conversion_validator": {
+    "status": "PASS",
+    "log": "qa_polish_20260908/validate_tc_final.log"
+  },
+  "git_diff_check_exit": 0,
+  "preserved": {
+    "original_body_binaries": "byte-equal HEAD in independent review; only animation registrations changed for existing automatic-weapon entities",
+    "procedural_city_files": "byte-equal HEAD; standalone buildings only"
+  },
+  "runtime": {
+    "HOI4_launched": true,
+    "renderer": "DirectX 11",
+    "campaign": "fresh STP, 2160-01-01, paused",
+    "actor_gallery": "Eight weapon tiers plus militia and three new regulars; temporary actors at scale 1.5 for grip inspection. The temporary create_entity gallery lacks native division atlas data: original bodies render white and other materials dark. These captures establish geometry and attachments, not final division colours or template assignment.",
+    "actual_divisions": "Existing STP divisions visible with rifles beside the gallery.",
+    "screenshots": {
+      "idle_geometry_only": "qa_20260908/shape_runtime_final_idle.jpg",
+      "support_geometry_only": "qa_20260908/shape_runtime_final_support.jpg",
+      "cities": "qa_20260908/shape_runtime_final_cities.jpg",
+      "tower_start": "qa_20260908/shape_runtime_tower_final_start.jpg",
+      "tower_ruins": "qa_20260908/shape_runtime_tower_final_ruins.jpg"
+    },
+    "loaded_sources": "qa_20260908/shape_runtime_session7_hashes_before.json",
+    "hash_comparison": {
+      "checked_files": 132,
+      "changed": []
+    },
+    "log": "qa_20260908/shape_runtime_session7_error.log",
+    "tower": {
+      "runtime_status": "Verified in cold session 7: concrete and windows visible; irregular upper collapse settles with lower structure preserved.",
+      "material": "PdxMeshStandard with RGB normal map; runtime diffuse capped at 2048 with full mip chain. Source bake remains 4096.",
+      "native_report": "../WRK_unity_tower/verification_report.json",
+      "native_frames_checked": 392,
+      "targeted_log_errors": 0
+    },
+    "limits": [
+      "Death state was triggered, but a fallen endpoint was not visually captured; native all-frame death clips passed offline.",
+      "Full Unity Tower story event and save/load reconstruction are not covered by an isolated actor check.",
+      "Cause of the historical white map surface is not established by a controlled A/B; it did not recur in the inspected area.",
+      "Whole-country eight-tier technology progression was not exercised through live research.",
+      "Temporary actor materials do not prove the final in-division appearance of every new uniform and weapon tier.",
+      "The nine city entities remain dark navy under the inspected native map lighting; JoroDox uses a Phong fallback and cannot validate native lighting."
+    ],
+    "observed_geometry_states": [
+      "idle",
+      "move",
+      "attack",
+      "defend",
+      "support_attack",
+      "retreat",
+      "training"
+    ],
+    "screenshot_scope": "Idle/support were saved directly in session 6; cities and tower were saved directly in final session 7. Other observed states have no retained valid screenshot.",
+    "hash_comparison_report": "qa_20260908/shape_runtime_session7_hash_comparison.json"
+  },
+  "unmodified_integration_limits": [
+    "The three separate regular aliases use weapon level 1; no automatic division-template reassignment was introduced."
+  ],
+  "package_checks": {
+    "weapons": {
+      "report": "package_report.json",
+      "files": 59
+    },
+    "regulars": {
+      "report": "../STP_regulars/package_report.json",
+      "files": 21
+    },
+    "militia": {
+      "report": "../STP_shabrat/package_report.json",
+      "files": 7
+    },
+    "cities": {
+      "report": "../WRK_city/package_report.json",
+      "files": 32
+    },
+    "tower": {
+      "report": "../WRK_unity_tower/package_report.json",
+      "files": 7
+    }
+  },
+  "runtime_cleanup": {
+    "original_profile_files_restored_byte_for_byte": [
+      "dlc_load.json",
+      "settings.txt",
+      "pdx_settings.txt"
+    ],
+    "temporary_qa_descriptor_removed": true,
+    "user_campaign_saves_modified": false
+  }
+}

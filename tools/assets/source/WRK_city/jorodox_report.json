@@ -1,0 +1,489 @@
+{
+  "tool": "JoroDox Tools",
+  "version": "0.8.1",
+  "meshes": {
+    "ADISCORD_city_quarter_business.mesh": [
+      {
+        "vertices": 399,
+        "triangles": 172,
+        "textures": [
+          "City_glass_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_specular.dds"
+        ]
+      },
+      {
+        "vertices": 1601,
+        "triangles": 692,
+        "textures": [
+          "City_concrete_diffuse.dds",
+          "City_normal.dds",
+          "City_concrete_specular.dds"
+        ]
+      },
+      {
+        "vertices": 793,
+        "triangles": 400,
+        "textures": [
+          "City_roof_diffuse.dds",
+          "City_normal.dds",
+          "City_roof_specular.dds"
+        ]
+      },
+      {
+        "vertices": 1961,
+        "triangles": 868,
+        "textures": [
+          "City_detail_diffuse.dds",
+          "City_normal.dds",
+          "City_detail_specular.dds"
+        ]
+      },
+      {
+        "vertices": 134,
+        "triangles": 60,
+        "textures": [
+          "City_glass_silver_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_silver_specular.dds"
+        ]
+      },
+      {
+        "vertices": 4,
+        "triangles": 2,
+        "textures": [
+          "City_screen_diffuse.dds",
+          "City_screen_normal.dds",
+          "City_screen_specular.dds"
+        ]
+      }
+    ],
+    "ADISCORD_city_quarter_mixed.mesh": [
+      {
+        "vertices": 279,
+        "triangles": 122,
+        "textures": [
+          "City_glass_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_specular.dds"
+        ]
+      },
+      {
+        "vertices": 1905,
+        "triangles": 810,
+        "textures": [
+          "City_concrete_diffuse.dds",
+          "City_normal.dds",
+          "City_concrete_specular.dds"
+        ]
+      },
+      {
+        "vertices": 829,
+        "triangles": 424,
+        "textures": [
+          "City_roof_diffuse.dds",
+          "City_normal.dds",
+          "City_roof_specular.dds"
+        ]
+      },
+      {
+        "vertices": 957,
+        "triangles": 448,
+        "textures": [
+          "City_detail_diffuse.dds",
+          "City_normal.dds",
+          "City_detail_specular.dds"
+        ]
+      },
+      {
+        "vertices": 113,
+        "triangles": 48,
+        "textures": [
+          "City_glass_silver_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_silver_specular.dds"
+        ]
+      }
+    ],
+    "ADISCORD_city_quarter_residential.mesh": [
+      {
+        "vertices": 272,
+        "triangles": 118,
+        "textures": [
+          "City_glass_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_specular.dds"
+        ]
+      },
+      {
+        "vertices": 2162,
+        "triangles": 910,
+        "textures": [
+          "City_concrete_diffuse.dds",
+          "City_normal.dds",
+          "City_concrete_specular.dds"
+        ]
+      },
+      {
+        "vertices": 892,
+        "triangles": 460,
+        "textures": [
+          "City_roof_diffuse.dds",
+          "City_normal.dds",
+          "City_roof_specular.dds"
+        ]
+      },
+      {
+        "vertices": 957,
+        "triangles": 448,
+        "textures": [
+          "City_detail_diffuse.dds",
+          "City_normal.dds",
+          "City_detail_specular.dds"
+        ]
+      },
+      {
+        "vertices": 94,
+        "triangles": 44,
+        "textures": [
+          "City_glass_silver_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_silver_specular.dds"
+        ]
+      }
+    ],
+    "ADISCORD_city_stelander_arcology.mesh": [
+      {
+        "vertices": 848,
+        "triangles": 358,
+        "textures": [
+          "City_concrete_diffuse.dds",
+          "City_normal.dds",
+          "City_concrete_specular.dds"
+        ]
+      },
+      {
+        "vertices": 371,
+        "triangles": 186,
+        "textures": [
+          "City_roof_diffuse.dds",
+          "City_normal.dds",
+          "City_roof_specular.dds"
+        ]
+      },
+      {
+        "vertices": 968,
+        "triangles": 448,
+        "textures": [
+          "City_detail_diffuse.dds",
+          "City_normal.dds",
+          "City_detail_specular.dds"
+        ]
+      },
+      {
+        "vertices": 162,
+        "triangles": 66,
+        "textures": [
+          "City_glass_teal_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_teal_specular.dds"
+        ]
+      },
+      {
+        "vertices": 202,
+        "triangles": 80,
+        "textures": [
+          "City_glass_bronze_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_bronze_specular.dds"
+        ]
+      },
+      {
+        "vertices": 201,
+        "triangles": 86,
+        "textures": [
+          "City_glass_silver_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_silver_specular.dds"
+        ]
+      },
+      {
+        "vertices": 4,
+        "triangles": 2,
+        "textures": [
+          "City_screen_diffuse.dds",
+          "City_screen_normal.dds",
+          "City_screen_specular.dds"
+        ]
+      }
+    ],
+    "ADISCORD_city_stelander_spire.mesh": [
+      {
+        "vertices": 733,
+        "triangles": 312,
+        "textures": [
+          "City_concrete_diffuse.dds",
+          "City_normal.dds",
+          "City_concrete_specular.dds"
+        ]
+      },
+      {
+        "vertices": 354,
+        "triangles": 162,
+        "textures": [
+          "City_roof_diffuse.dds",
+          "City_normal.dds",
+          "City_roof_specular.dds"
+        ]
+      },
+      {
+        "vertices": 1210,
+        "triangles": 532,
+        "textures": [
+          "City_detail_diffuse.dds",
+          "City_normal.dds",
+          "City_detail_specular.dds"
+        ]
+      },
+      {
+        "vertices": 296,
+        "triangles": 124,
+        "textures": [
+          "City_glass_teal_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_teal_specular.dds"
+        ]
+      },
+      {
+        "vertices": 72,
+        "triangles": 30,
+        "textures": [
+          "City_glass_bronze_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_bronze_specular.dds"
+        ]
+      },
+      {
+        "vertices": 4,
+        "triangles": 2,
+        "textures": [
+          "City_screen_diffuse.dds",
+          "City_screen_normal.dds",
+          "City_screen_specular.dds"
+        ]
+      }
+    ],
+    "ADISCORD_city_stelander_twin.mesh": [
+      {
+        "vertices": 787,
+        "triangles": 330,
+        "textures": [
+          "City_concrete_diffuse.dds",
+          "City_normal.dds",
+          "City_concrete_specular.dds"
+        ]
+      },
+      {
+        "vertices": 335,
+        "triangles": 174,
+        "textures": [
+          "City_roof_diffuse.dds",
+          "City_normal.dds",
+          "City_roof_specular.dds"
+        ]
+      },
+      {
+        "vertices": 860,
+        "triangles": 420,
+        "textures": [
+          "City_detail_diffuse.dds",
+          "City_normal.dds",
+          "City_detail_specular.dds"
+        ]
+      },
+      {
+        "vertices": 200,
+        "triangles": 86,
+        "textures": [
+          "City_glass_teal_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_teal_specular.dds"
+        ]
+      },
+      {
+        "vertices": 200,
+        "triangles": 86,
+        "textures": [
+          "City_glass_bronze_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_bronze_specular.dds"
+        ]
+      },
+      {
+        "vertices": 124,
+        "triangles": 56,
+        "textures": [
+          "City_glass_silver_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_silver_specular.dds"
+        ]
+      },
+      {
+        "vertices": 8,
+        "triangles": 4,
+        "textures": [
+          "City_screen_diffuse.dds",
+          "City_screen_normal.dds",
+          "City_screen_specular.dds"
+        ]
+      }
+    ],
+    "ADISCORD_city_tower_admin.mesh": [
+      {
+        "vertices": 136,
+        "triangles": 52,
+        "textures": [
+          "City_glass_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_specular.dds"
+        ]
+      },
+      {
+        "vertices": 639,
+        "triangles": 264,
+        "textures": [
+          "City_concrete_diffuse.dds",
+          "City_normal.dds",
+          "City_concrete_specular.dds"
+        ]
+      },
+      {
+        "vertices": 361,
+        "triangles": 162,
+        "textures": [
+          "City_roof_diffuse.dds",
+          "City_normal.dds",
+          "City_roof_specular.dds"
+        ]
+      },
+      {
+        "vertices": 1194,
+        "triangles": 532,
+        "textures": [
+          "City_detail_diffuse.dds",
+          "City_normal.dds",
+          "City_detail_specular.dds"
+        ]
+      },
+      {
+        "vertices": 106,
+        "triangles": 46,
+        "textures": [
+          "City_glass_silver_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_silver_specular.dds"
+        ]
+      }
+    ],
+    "ADISCORD_city_tower_business.mesh": [
+      {
+        "vertices": 206,
+        "triangles": 90,
+        "textures": [
+          "City_glass_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_specular.dds"
+        ]
+      },
+      {
+        "vertices": 768,
+        "triangles": 316,
+        "textures": [
+          "City_concrete_diffuse.dds",
+          "City_normal.dds",
+          "City_concrete_specular.dds"
+        ]
+      },
+      {
+        "vertices": 384,
+        "triangles": 180,
+        "textures": [
+          "City_roof_diffuse.dds",
+          "City_normal.dds",
+          "City_roof_specular.dds"
+        ]
+      },
+      {
+        "vertices": 963,
+        "triangles": 420,
+        "textures": [
+          "City_detail_diffuse.dds",
+          "City_normal.dds",
+          "City_detail_specular.dds"
+        ]
+      },
+      {
+        "vertices": 91,
+        "triangles": 38,
+        "textures": [
+          "City_glass_silver_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_silver_specular.dds"
+        ]
+      }
+    ],
+    "ADISCORD_city_tower_residential.mesh": [
+      {
+        "vertices": 148,
+        "triangles": 60,
+        "textures": [
+          "City_glass_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_specular.dds"
+        ]
+      },
+      {
+        "vertices": 1249,
+        "triangles": 516,
+        "textures": [
+          "City_concrete_diffuse.dds",
+          "City_normal.dds",
+          "City_concrete_specular.dds"
+        ]
+      },
+      {
+        "vertices": 477,
+        "triangles": 222,
+        "textures": [
+          "City_roof_diffuse.dds",
+          "City_normal.dds",
+          "City_roof_specular.dds"
+        ]
+      },
+      {
+        "vertices": 385,
+        "triangles": 168,
+        "textures": [
+          "City_detail_diffuse.dds",
+          "City_normal.dds",
+          "City_detail_specular.dds"
+        ]
+      },
+      {
+        "vertices": 106,
+        "triangles": 46,
+        "textures": [
+          "City_glass_silver_diffuse.dds",
+          "City_normal.dds",
+          "City_glass_silver_specular.dds"
+        ]
+      }
+    ]
+  },
+  "warnings": [
+    "Unknown shader: PdxMeshAdvancedSnow"
+  ],
+  "limitations": [
+    "JoroDox previews PdxMeshAdvancedSnow with a Phong fallback; this does not prove native snow, lighting or ambient height."
+  ]
+}

@@ -37,9 +37,3 @@
  ADISCORD_TFF.10.t: "The Frontier Establishes a Joint Military Command"
  ADISCORD_TFF.10.d: "The Free Frontier Assembly has established the Frontier Defence Confederation. For the duration of the war with Nodrul, the settlements are placing the coordination of supplies, reserves and defence under an emergency military command. Colt Ardent has received a limited mandate as coordinator.\n\nThe decision follows the difficulties that scattered detachments faced against a regular army: local self-government had failed to ensure coordinated action at the front. Yet the assembly is neither establishing a presidency nor abandoning the system of free communes. The new command's powers are tied to the war; how much shared authority the settlements are willing to tolerate remains an open question."
  ADISCORD_TFF.10.a: "A common defence requires common decisions."
-
- ADISCORD_TFF.11.t:0 "The Northern War Resumes"
- ADISCORD_TFF.11.d:0 "The Frontier has entered the war against Nodrul once again. This time its troops are fighting alongside Kefreyt: the agreement on Yuboria has become a joint military operation.\n\nFrontier commanders are calling up reserves and establishing supply depots along the northern roads. Victory is to place Iskhait and Duchebia under Frontier protection, while the Nodrul territories receive Kefreyt contract administrations. The peace that ended the first northern campaign proved to be only a respite."
- ADISCORD_TFF.11.a:0 "The north is at war again."
- TFF_kefreyt_northern_campaign:0 "A New Northern Campaign"
- TFF_kefreyt_northern_campaign_desc:0 "The agreement with Kefreyt gives the Frontier a chance to return to Yuboria. Joint supply plans and reserve mobilization strengthen its army for the common war. These bonuses end with the campaign, capitulation or loss of independence."

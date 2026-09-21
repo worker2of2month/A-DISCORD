@@ -106,7 +106,7 @@ type={
 	object={
 		name="ADISCORD_factory_entity"
 		position={
-			3487.83008 15.64531 934.76 
+			3487.83008 15.64531 934.76
 		}
 		rotation={
 			0 370 0 
@@ -115,7 +115,7 @@ type={
 	object={
 		name="ADISCORD_factory_entity"
 		position={
-			3595.69984 13.14531 767.51 
+			3595.69984 13.14531 767.51
 		}
 		rotation={
 			0 100 0 
@@ -124,7 +124,7 @@ type={
 	object={
 		name="ADISCORD_factory_entity"
 		position={
-			3492.21984 16.88309 976.8 
+			3492.21984 16.88309 976.8
 		}
 		rotation={
 			0 180 0 
@@ -185,7 +185,7 @@ type={
 	object={
 		name="ADISCORD_congress_entity"
 		position={
-			3745.84 11.5 940.78 
+			3745.28 11.4994 939.79
 		}
 		rotation={
 			0 250 0 
@@ -200,7 +200,7 @@ type={
 	object={
 		name="ADISCORD_reactor_entity"
 		position={
-			3529.99008 12.11 904.52 
+			3521.11008 14.50522 893.46
 		}
 		rotation={
 			0 90 0 
@@ -209,7 +209,7 @@ type={
 	object={
 		name="ADISCORD_reactor_entity"
 		position={
-			3545.96 11.79 903.63 
+			3546.19008 11.79414 899.32
 		}
 		rotation={
 			0 370 0 
@@ -224,10 +224,10 @@ type={
 	object={
 		name="ADISCORD_reactor_2_entity"
 		position={
-			3536.24 14.21 906.55 
+			3551.20992 16.70866 913.51
 		}
 		rotation={
-			100 270 90 
+			90 270 90 
 		}
 	}
 }
@@ -357,6 +357,15 @@ type={
 	object={
 		name="ADISCORD_city_quarter_business_07"
 		position={
+			3757.6 -0.43 1035.53 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_quarter_business_07"
+		position={
 			3747.95008 -0.33 986.62 
 		}
 		rotation={
@@ -444,15 +453,6 @@ type={
 			0 0 0 
 		}
 	}
-	object={
-		name="ADISCORD_city_quarter_business_07"
-		position={
-			3757.6 -0.43 1035.53 
-		}
-		rotation={
-			0 0 0 
-		}
-	}
 }
 type={
 	type="ADISCORD_city_quarter_mixed_entity"
@@ -502,6 +502,15 @@ type={
 		}
 	}
 	object={
+		name="ADISCORD_city_stelander_spire_01"
+		position={
+			3755.26016 -0.01 1035.43008 
+		}
+		rotation={
+			0 180 0 
+		}
+	}
+	object={
 		name="ADISCORD_city_stelander_spire_00"
 		position={
 			3738.78016 0.05303 936.69 
@@ -514,15 +523,6 @@ type={
 		name="ADISCORD_city_stelander_spire_01"
 		position={
 			3724.21984 -0.01 911.41 
-		}
-		rotation={
-			0 180 0 
-		}
-	}
-	object={
-		name="ADISCORD_city_stelander_spire_01"
-		position={
-			3755.26016 -0.01 1035.43008 
 		}
 		rotation={
 			0 180 0 
@@ -545,6 +545,24 @@ type={
 		name="ADISCORD_city_stelander_twin_00"
 		position={
 			3708.95008 0.1 997.42 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_twin_00"
+		position={
+			3756.07008 0.1 1037.5 
+		}
+		rotation={
+			0 0 0 
+		}
+	}
+	object={
+		name="ADISCORD_city_stelander_twin_00"
+		position={
+			3757.24 0.1 1035.54 
 		}
 		rotation={
 			0 0 0 
@@ -577,24 +595,6 @@ type={
 			0 270 0 
 		}
 	}
-	object={
-		name="ADISCORD_city_stelander_twin_00"
-		position={
-			3756.07008 0.1 1037.5 
-		}
-		rotation={
-			0 0 0 
-		}
-	}
-	object={
-		name="ADISCORD_city_stelander_twin_00"
-		position={
-			3757.24 0.1 1035.54 
-		}
-		rotation={
-			0 0 0 
-		}
-	}
 }
 type={
 	type="ADISCORD_city_stelander_arcology_entity"
@@ -615,21 +615,6 @@ type={
 		}
 		rotation={
 			0 90 0 
-		}
-	}
-}
-type={
-	type="ADISCORD_kefreyt_arms_combine_entity"
-	use_animation=no
-	scale=0.200000
-	always_visible=yes
-	object={
-		name="ADISCORD_kefreyt_arms_combine"
-		position={
-			3718.2 11.1 913.5 
-		}
-		rotation={
-			0 0 0 
 		}
 	}
 }

@@ -1,18 +1,5 @@
 ideas = {
 	country = {
-        TFF_kefreyt_northern_campaign = {
-            picture = generic_war_preparation
-            allowed = { always = no }
-            allowed_civil_war = { original_tag = TFF }
-            removal_cost = -1
-            modifier = {
-                army_org_factor = 0.10
-                army_core_defence_factor = 0.10
-                supply_consumption_factor = -0.10
-                mobilization_speed = 0.15
-            }
-        }
-
 		TFF_emergency_frontier_command = {
 			picture = generic_war_preparation
 			allowed = { always = no }
@@ -21,7 +8,7 @@ ideas = {
 			modifier = {
 				army_org_factor = 0.08
 				mobilization_speed = 0.10
-				land_reinforce_rate = 0.05
+				reinforce_rate = 0.05
 				war_support_factor = 0.08
 				planning_speed = 0.08
 				army_core_defence_factor = 0.05
@@ -70,7 +57,7 @@ ideas = {
 			modifier = {
 				planning_speed = 0.10
 				max_planning = 0.05
-				land_reinforce_rate = 0.05
+				reinforce_rate = 0.05
 				command_power_gain_mult = 0.10
 			}
 		}

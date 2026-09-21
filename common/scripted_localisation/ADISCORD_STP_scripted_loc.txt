@@ -569,21 +569,3 @@ defined_text = {
     text = { trigger = { has_country_flag = STP_sided_with_the_party_flag } localization_key = STP_ps_preparation_report }
     text = { localization_key = STP_ps_empty }
 }
-
-defined_text = {
-	name = STPGetReserveTrainingCost
-	text = { trigger = { tag = STS } localization_key = STP_cw_reserve_training_cost_volunteers }
-	text = { localization_key = STP_cw_reserve_training_cost_standard }
-}
-
-defined_text = {
-	name = STPGetReserveTrainingCostBlocked
-	text = { trigger = { tag = STS } localization_key = STP_cw_reserve_training_cost_blocked_volunteers }
-	text = { localization_key = STP_cw_reserve_training_cost_blocked_standard }
-}
-
-defined_text = {
-	name = STPGetReserveTrainingCostTooltip
-	text = { trigger = { tag = STS } localization_key = STP_cw_reserve_training_cost_tooltip_volunteers }
-	text = { localization_key = STP_cw_reserve_training_cost_tooltip_standard }
-}

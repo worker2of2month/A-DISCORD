@@ -2,7 +2,7 @@ add_namespace = ADISCORD_superevent
 add_namespace = ADISCORD_superevent_news
 add_namespace = ADISCORD_superevent_audio
 
-# Console compatibility gateways: event ADISCORD_superevent.1 through .8.
+# Console compatibility gateways: event ADISCORD_superevent.1 / .2 / .3 / .4 / .5 / .6
 # .1 starts the real Vorkerland collapse when possible, including the Unity
 # Tower destruction. Once the collapse has already started it becomes a safe
 # presentation replay. .2 is the Worker-victory presentation gateway used by
@@ -10,7 +10,6 @@ add_namespace = ADISCORD_superevent_audio
 # presentation: picture and sound without locking the campaign ending. .4 is
 # the Dirty Zone opening presentation and does not start the country cascade.
 # .5 is Vlad's imperial restoration; .6 is Dorian's utilitarian victory.
-# .7 presents the NAM resource war; .8 presents the Khan's Last Empire.
 # Audio is unscoped so observer/spectator hears the same track as a human.
 country_event = {
 	id = ADISCORD_superevent.1
@@ -26,9 +25,13 @@ country_event = {
 			WRK = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
 		}
 		else = {
-			# superevent_vorkerland_civilwar
-			set_temp_variable = { ADISCORD_superevent_request = 1 }
-			ADISCORD_superevent_enqueue = yes
+			ADISCORD_vorkerland_clear_superevent_flags = yes
+			set_global_flag = {
+				flag = superevent_vorkerland_civilwar
+				value = 1
+				days = 20
+			}
+			ADISCORD_vorkerland_play_superevent_sound = yes
 		}
 	}
 }
@@ -38,9 +41,13 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		# superevent_vorkerland_worker_victory
-		set_temp_variable = { ADISCORD_superevent_request = 3 }
-		ADISCORD_superevent_enqueue = yes
+		ADISCORD_vorkerland_clear_superevent_flags = yes
+		set_global_flag = {
+			flag = superevent_vorkerland_worker_victory
+			value = 1
+			days = 20
+		}
+		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
 country_event = {
@@ -49,9 +56,13 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		# superevent_vorkerland_utilitarian_victory
-		set_temp_variable = { ADISCORD_superevent_request = 4 }
-		ADISCORD_superevent_enqueue = yes
+		ADISCORD_vorkerland_clear_superevent_flags = yes
+		set_global_flag = {
+			flag = superevent_vorkerland_utilitarian_victory
+			value = 1
+			days = 20
+		}
+		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
 country_event = {
@@ -60,9 +71,13 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		# superevent_vorkerland_dirty_opening
-		set_temp_variable = { ADISCORD_superevent_request = 2 }
-		ADISCORD_superevent_enqueue = yes
+		ADISCORD_vorkerland_clear_superevent_flags = yes
+		set_global_flag = {
+			flag = superevent_vorkerland_dirty_opening
+			value = 1
+			days = 20
+		}
+		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
 country_event = {
@@ -71,9 +86,13 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		# superevent_vorkerland_vlad_victory
-		set_temp_variable = { ADISCORD_superevent_request = 5 }
-		ADISCORD_superevent_enqueue = yes
+		ADISCORD_vorkerland_clear_superevent_flags = yes
+		set_global_flag = {
+			flag = superevent_vorkerland_vlad_victory
+			value = 1
+			days = 20
+		}
+		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
 country_event = {
@@ -82,9 +101,13 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		# superevent_vorkerland_dorian_victory
-		set_temp_variable = { ADISCORD_superevent_request = 6 }
-		ADISCORD_superevent_enqueue = yes
+		ADISCORD_vorkerland_clear_superevent_flags = yes
+		set_global_flag = {
+			flag = superevent_vorkerland_dorian_victory
+			value = 1
+			days = 20
+		}
+		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
 
@@ -96,7 +119,8 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		play_song = "superevent_vorkerland_civilwar"
+		sound_effect = superevent_vorkerland_civilwar_sound_e
+		play_song = "one_minute_of_silence"
 	}
 }
 country_event = {
@@ -105,7 +129,8 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		play_song = "superevent_stelander_empire"
+		sound_effect = superevent_stelander_empire_sound_e
+		play_song = "one_minute_of_silence"
 	}
 }
 
@@ -128,9 +153,12 @@ news_event = { #vorkerland civilwar
 	# option made the superevent flag and audio wait for a player click.
 	immediate = {
 		hidden_effect = {
-			# superevent_vorkerland_civilwar
-			set_temp_variable = { ADISCORD_superevent_request = 1 }
-			ADISCORD_superevent_enqueue = yes
+			set_global_flag = {
+				flag = superevent_vorkerland_civilwar
+				value = 1
+				days = 20
+			}
+			ADISCORD_vorkerland_play_superevent_sound = yes
 		}
 	}
 
@@ -165,33 +193,15 @@ news_event = { #stelander empire
 	# belong to STP_proclaim_imperial_union, which is reached through gameplay.
 	immediate = {
 		hidden_effect = {
-			# superevent_stelander_empire
-			set_temp_variable = { ADISCORD_superevent_request = 7 }
-			ADISCORD_superevent_enqueue = yes
+			ADISCORD_vorkerland_clear_superevent_flags = yes
+			set_global_flag = {
+				flag = superevent_stelander_empire
+				value = 1
+				days = 20
+			}
+			ADISCORD_vorkerland_play_superevent_sound = yes
 		}
 	}
 
 	option = { name = news.1.a }
-}
-
-country_event = {
-	id = ADISCORD_superevent.7
-	hidden = yes
-	is_triggered_only = yes
-	immediate = {
-		# superevent_nam_resource_war
-		set_temp_variable = { ADISCORD_superevent_request = 10 }
-		ADISCORD_superevent_enqueue = yes
-	}
-}
-
-country_event = {
-	id = ADISCORD_superevent.8
-	hidden = yes
-	is_triggered_only = yes
-	immediate = {
-		# superevent_rus_last_empire
-		set_temp_variable = { ADISCORD_superevent_request = 11 }
-		ADISCORD_superevent_enqueue = yes
-	}
 }

@@ -114,7 +114,6 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		}
 		country_event = { id = ADISCORD_nam_resource_war.50 days = 420 }
 		news_event = { id = ADISCORD_nam_resource_news.1 hours = 1 }
-		ADISCORD_nam_show_resource_war_superevent = yes
 	}
 }
 
@@ -408,17 +407,4 @@ ADISCORD_nam_debug_resolve_coalition_victory = {
 
 ADISCORD_nam_debug_resolve_nam_victory = {
 	ADISCORD_nam_resource_war_resolve_nam_victory = yes
-}
-
-ADISCORD_nam_show_resource_war_superevent = {
-	if = {
-		limit = { any_country = { is_ai = no } }
-		random_country = {
-			limit = { is_ai = no }
-			country_event = { id = ADISCORD_superevent.7 }
-		}
-	}
-	else = {
-		country_event = { id = ADISCORD_superevent.7 }
-	}
 }
