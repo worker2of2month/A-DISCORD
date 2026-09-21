@@ -1054,9 +1054,9 @@ def main() -> int:
     if mask_comments(on_actions).count(initialize_call) != 1:
         issues.append("VAL rework initializer must have exactly one guarded runtime caller")
     for token in (
-        "set_temp_variable = { var = STP_cw_rifle_cost value = 4000 }",
-        "STP_cw_pay_rifles = yes",
-        "limit = { has_country_flag = STP_cw_rifles_paid }",
+        "set_temp_variable = { var = VAL_contract_rifle_cost value = 4000 }",
+        "VAL_pay_contract_rifles = yes",
+        "limit = { has_country_flag = VAL_contract_rifles_paid }",
         "VAL_contract_reputation_level",
         "VAL_vorkerland_contract_disruptions",
         "give_resource_rights = { receiver = VAL state = 38 }",
