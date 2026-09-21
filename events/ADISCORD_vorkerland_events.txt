@@ -1473,10 +1473,66 @@ country_event = {
 		else_if = {
 			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_join_retry } }
 			set_country_flag = ADISCORD_vorkerland_ivanland_front_join_retry
-			ZAO = { if = { limit = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
-			WPA = { if = { limit = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
-			WPS = { if = { limit = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
-			PSD = { if = { limit = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { has_war_with = IVN } } add_to_war = { targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join } } }
+			ZAO = {
+				if = {
+					limit = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = { has_war_with = IVN }
+					}
+					add_to_war = {
+						targeted_alliance = PWR
+						enemy = IVN
+						hostility_reason = asked_to_join
+					}
+				}
+			}
+			WPA = {
+				if = {
+					limit = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = { has_war_with = IVN }
+					}
+					add_to_war = {
+						targeted_alliance = PWR
+						enemy = IVN
+						hostility_reason = asked_to_join
+					}
+				}
+			}
+			WPS = {
+				if = {
+					limit = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = { has_war_with = IVN }
+					}
+					add_to_war = {
+						targeted_alliance = PWR
+						enemy = IVN
+						hostility_reason = asked_to_join
+					}
+				}
+			}
+			PSD = {
+				if = {
+					limit = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = { has_war_with = IVN }
+					}
+					add_to_war = {
+						targeted_alliance = PWR
+						enemy = IVN
+						hostility_reason = asked_to_join
+					}
+				}
+			}
 			set_country_flag = { flag = ADISCORD_vorkerland_ivanland_front_verification_pending days = 3 }
 			country_event = { id = ADISCORD_vorkerland_collapse.82 days = 1 }
 		}
