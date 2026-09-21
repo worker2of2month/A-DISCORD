@@ -45,8 +45,20 @@ class TestValContractUi(unittest.TestCase):
         contract_state = named_block(dynamic, "VAL_contract_state")
         self.assertIn("icon = GFX_idea_VAL_contract_state", contract_state)
 
+        on_actions = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
+        startup = named_block(on_actions, "on_startup")
+        weekly = named_block(on_actions, "on_weekly_VAL")
+        for recovery in (startup, weekly):
+            self.assertIn("has_dynamic_modifier = { modifier = VAL_contract_state }", recovery)
+            self.assertIn("VAL_initialize_contract_authority = yes", recovery)
+
+        history = read("history/countries/VAL - ValeraLand.txt")
+        self.assertIn("VAL_mercenary_state", history)
+
         english = read("localisation/english/ADISCORD_VAL_decisions_l_english.yml")
         russian = read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml")
+        self.assertIn('VAL_contract_state: "Contract System Authority"', english)
+        self.assertIn('VAL_contract_state: "Авторитет контрактной системы"', russian)
         for localisation in (english, russian):
             self.assertIn("[?VAL_contract_authority|0]/100", localisation)
             self.assertIn("[VALGetContractAuthorityBand]", localisation)
