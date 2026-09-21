@@ -61,7 +61,7 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_capture_factor value = 0.0 }
 		set_variable = { var = VAL_contract_supply_factor value = 0.0 }
 		set_variable = { var = VAL_contract_planning_factor value = 0.0 }
-		set_variable = { var = VAL_contract_pp_gain value = -0.1 }
+		set_variable = { var = VAL_contract_pp_gain value = -0.05 }
 		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
 		set_variable = { var = VAL_contract_state_overload_factor value = 0.0 }
 		set_variable = { var = VAL_contract_trade_income_factor value = 0.0 }
@@ -78,7 +78,7 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_capture_factor value = 0.02 }
 		set_variable = { var = VAL_contract_supply_factor value = 0.0 }
 		set_variable = { var = VAL_contract_planning_factor value = -0.05 }
-		set_variable = { var = VAL_contract_pp_gain value = -0.1 }
+		set_variable = { var = VAL_contract_pp_gain value = 0.05 }
 		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
 		set_variable = { var = VAL_contract_state_overload_factor value = 0.0 }
 		set_variable = { var = VAL_contract_trade_income_factor value = 0.0 }
@@ -95,7 +95,7 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_capture_factor value = 0.05 }
 		set_variable = { var = VAL_contract_supply_factor value = -0.03 }
 		set_variable = { var = VAL_contract_planning_factor value = -0.05 }
-		set_variable = { var = VAL_contract_pp_gain value = 0.0 }
+		set_variable = { var = VAL_contract_pp_gain value = 0.10 }
 		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
 		set_variable = { var = VAL_contract_state_overload_factor value = 0.03 }
 		set_variable = { var = VAL_contract_trade_income_factor value = 0.03 }
@@ -112,7 +112,7 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_capture_factor value = 0.08 }
 		set_variable = { var = VAL_contract_supply_factor value = -0.05 }
 		set_variable = { var = VAL_contract_planning_factor value = -0.1 }
-		set_variable = { var = VAL_contract_pp_gain value = -0.2 }
+		set_variable = { var = VAL_contract_pp_gain value = 0.15 }
 		set_variable = { var = VAL_contract_stability_factor value = 0.0 }
 		set_variable = { var = VAL_contract_state_overload_factor value = 0.05 }
 		set_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
@@ -128,7 +128,7 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_capture_factor value = 0.1 }
 		set_variable = { var = VAL_contract_supply_factor value = -0.07 }
 		set_variable = { var = VAL_contract_planning_factor value = -0.15 }
-		set_variable = { var = VAL_contract_pp_gain value = -0.25 }
+		set_variable = { var = VAL_contract_pp_gain value = 0.20 }
 		set_variable = { var = VAL_contract_stability_factor value = -0.05 }
 		set_variable = { var = VAL_contract_state_overload_factor value = 0.08 }
 		set_variable = { var = VAL_contract_trade_income_factor value = 0.07 }
