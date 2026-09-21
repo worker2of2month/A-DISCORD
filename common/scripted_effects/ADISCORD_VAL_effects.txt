@@ -1580,27 +1580,57 @@ VAL_reclamation_finish_project = {
 
 # STATE; compensation preserves restoration through an ownership change.
 VAL_reclamation_refresh_state = {
-	set_variable = { var = VAL_reclamation_people value = VAL_reclamation_stage }
-	multiply_variable = { var = VAL_reclamation_people value = 0.25 }
-	set_variable = { var = VAL_reclamation_resources value = VAL_reclamation_stage }
-	multiply_variable = { var = VAL_reclamation_resources value = 0.20 }
-	set_variable = { var = VAL_reclamation_slots value = VAL_reclamation_stage }
-	multiply_variable = { var = VAL_reclamation_slots value = 0.133333 }
-	set_variable = { var = VAL_reclamation_construction value = VAL_reclamation_stage }
-	multiply_variable = { var = VAL_reclamation_construction value = 0.166667 }
-	set_variable = { var = VAL_reclamation_supply value = VAL_reclamation_stage }
-	multiply_variable = { var = VAL_reclamation_supply value = -0.116667 }
+	# Reclamation is a state transition, not a second compensating modifier.
 	if = {
-		limit = { check_variable = { var = VAL_reclamation_stage value = 3 compare = equals } }
-		set_variable = { var = VAL_reclamation_slots value = 0.40 }
-		set_variable = { var = VAL_reclamation_construction value = 0.50 }
-		set_variable = { var = VAL_reclamation_supply value = -0.35 }
+		limit = { has_dynamic_modifier = { modifier = VAL_reclamation_recovered_land } }
+		remove_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }
 	}
 	if = {
-		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_reclamation_recovered_land } } }
-		add_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }
+		limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
+		remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
 	}
-	force_update_dynamic_modifier = yes
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier } }
+		remove_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier } }
+		remove_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAL_reclamation_stage_3_modifier } }
+		remove_dynamic_modifier = { modifier = VAL_reclamation_stage_3_modifier }
+	}
+
+	if = {
+		limit = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } }
+		add_dynamic_modifier = { modifier = VAL_reclamation_stage_3_modifier }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_reclamation_stage value = 2 compare = greater_than_or_equals } }
+		add_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+		add_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
+	}
+
+	# Remove variables used by the retired compensation modifier.
+	clear_variable = VAL_reclamation_people
+	clear_variable = VAL_reclamation_resources
+	clear_variable = VAL_reclamation_slots
+	clear_variable = VAL_reclamation_construction
+	clear_variable = VAL_reclamation_supply
+}
+
+VAL_migrate_reclamation_modifiers = {
+	24 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	42 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	48 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	54 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	55 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	56 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
+	57 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
 }
 
 # Foreign campaign: 1 = ultimatum, 2 = refusal, 3 = war, 0 = closed.
