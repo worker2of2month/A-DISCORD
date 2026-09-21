@@ -3,6 +3,13 @@ on_actions = {
 		effect = {
 			if = { limit = { VAL = { exists = yes } } VAL = { VAL_initialize_command_balance = yes VAL_initialize_arsenal_recovery = yes VAL_call_subjects_to_wars = yes VAL_check_nam_concession = yes } }
 			if = {
+				limit = { VAL = { exists = yes NOT = { has_country_flag = VAL_reclamation_modifier_migrated_v2 } } }
+				VAL = {
+					VAL_migrate_reclamation_modifiers = yes
+					set_country_flag = VAL_reclamation_modifier_migrated_v2
+				}
+			}
+			if = {
 				limit = {
 					has_global_flag = ADISCORD_fresh_campaign_contract_v1
 					NOT = { has_global_flag = ADISCORD_val_rework_fresh_campaign_v1 }
