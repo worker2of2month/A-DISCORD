@@ -30,6 +30,10 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png"
 	}
 	spriteType = {
+		name = "GFX_focus_STP_End_Kefreit"
+		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_End_Kefreit.png"
+	}
+	spriteType = {
 		name = "GFX_focus_STP_Nectar_of_the_Gods"
 	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Nectar_of_the_Gods.png"
 	}
