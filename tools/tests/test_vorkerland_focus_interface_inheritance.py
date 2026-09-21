@@ -10,7 +10,7 @@ VANILLA_ROOT = Path("Z:/SteamLibrary/steamapps/common/Hearts of Iron IV")
 ADDITIVE_SHINES = ROOT / "interface/ADISCORD_focus_shines.gfx"
 NATIONAL_FOCUS_GFX = ROOT / "interface/ADISCORD_national_focus.gfx"
 VANILLA_SHINES = VANILLA_ROOT / "interface/goals_shine.gfx"
-EXPECTED_CUSTOM_ONLY_SPRITES = 265
+EXPECTED_CUSTOM_ONLY_SPRITES = 266
 CONTINUOUS_FOCUS_PALETTE = ROOT / "common/continuous_focus/generic.txt"
 
 

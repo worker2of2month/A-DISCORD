@@ -4420,7 +4420,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_shabrat_politics
-		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		icon = GFX_focus_STP_pc_shabrat_politics
 		x = 16
 		y = 4
 		cost = 4

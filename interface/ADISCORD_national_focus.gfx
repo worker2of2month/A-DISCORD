@@ -26,7 +26,11 @@ spriteTypes = {
 		texturefile = "gfx/interface/focusview/filter/autonomy_icon.dds"
 	}
   	spriteType = {
-	  	name = "GFX_focus_STP_Nectar_of_the_Gods"
+		name = "GFX_focus_STP_pc_shabrat_politics"
+		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_Nectar_of_the_Gods"
 	  	texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_Nectar_of_the_Gods.png"
 	}
 	spriteType = {
