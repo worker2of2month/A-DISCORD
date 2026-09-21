@@ -12,14 +12,18 @@ VAL_reclamation_project_target_valid = {
 	FROM = {
 		is_owned_by = ROOT
 		is_controlled_by = ROOT
-		has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
 		OR = {
-			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
 			AND = {
+				has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
+				NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			}
+			AND = {
+				has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
 				check_variable = { var = VAL_reclamation_stage value = 1 compare = equals }
 				ROOT = { has_completed_focus = VAL_reclamation_clean_water }
 			}
 			AND = {
+				has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
 				check_variable = { var = VAL_reclamation_stage value = 2 compare = equals }
 				ROOT = { has_completed_focus = VAL_reclamation_return_home }
 				industrial_complex < 20
