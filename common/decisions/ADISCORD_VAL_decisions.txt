@@ -574,7 +574,7 @@ VAL_reclamation = {
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
 			has_completed_focus = VAL_reclamation_clean_water
-			FROM = { is_owned_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } check_variable = { var = VAL_reclamation_stage value = 1 compare = equals } }
+			FROM = { is_owned_by = ROOT has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier } check_variable = { var = VAL_reclamation_stage value = 1 compare = equals } }
 		}
 		available = {
 			has_capitulated = no
@@ -604,7 +604,7 @@ VAL_reclamation = {
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
 			has_completed_focus = VAL_reclamation_return_home
-			FROM = { is_owned_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } check_variable = { var = VAL_reclamation_stage value = 2 compare = equals } }
+			FROM = { is_owned_by = ROOT has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier } check_variable = { var = VAL_reclamation_stage value = 2 compare = equals } }
 		}
 		available = {
 			has_capitulated = no
