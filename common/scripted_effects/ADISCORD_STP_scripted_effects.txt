@@ -2254,7 +2254,13 @@ STP_cw_reserve_kefreyt_volunteers = {
 				1 = { STP_cw_deploy_kefreyt_volunteers = yes }
 			}
 			else = {
-				STP = { set_country_flag = STP_cw_kefreyt_shipment_received country_event = { id = ADISCORD_STP_preparation.8 } }
+				STP = {
+					set_country_flag = STP_cw_kefreyt_shipment_received
+					if = {
+						limit = { has_country_flag = STP_sided_with_Maksim_flag }
+						country_event = { id = ADISCORD_STP_preparation.8 }
+					}
+				}
 			}
 		}
 		else = {

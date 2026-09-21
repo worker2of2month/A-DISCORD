@@ -364,7 +364,9 @@ class StelanderPreparationTests(unittest.TestCase):
         settlement = next(e.value for e in reserve if e.key == "if")
         delivered = block(block(settlement, "else"), "STP")
         self.assertEqual(scalar(delivered, "set_country_flag"), "STP_cw_kefreyt_shipment_received")
-        self.assertEqual(scalar(block(delivered, "country_event"), "id"), "ADISCORD_STP_preparation.8")
+        notice = next(e.value for e in delivered if e.key == "if")
+        self.assertIn("STP_sided_with_Maksim_flag", str(block(notice, "limit")))
+        self.assertEqual(scalar(block(notice, "country_event"), "id"), "ADISCORD_STP_preparation.8")
         ledger_gate = block(block(settlement, "limit"), "1")
         self.assertFalse(matches_conditions(ledger_gate, {}, "1"))
         self.assertFalse(matches_conditions(ledger_gate, {("1", "variable", "STP_cw_kefreyt_volunteers"): 2}, "1"))
@@ -376,6 +378,55 @@ class StelanderPreparationTests(unittest.TestCase):
         last_split = max(e.line for e in walk(start) if e.key == "transfer_units_fraction")
         delivery = next(e for e in walk(start) if e.key == "STP_cw_materialize_region_assets")
         self.assertLess(last_split, delivery.line, "foreign formations must not enter the shared percentage split")
+
+    def test_kefreyt_reply_is_private_from_party_player(self):
+        events = entries("events/ADISCORD_STP_events.txt")
+        reply = next(e.value for e in events if e.key == "country_event"
+                     and scalar(e.value, "id") == "ADISCORD_STP_preparation.8")
+        gate = block(reply, "trigger")
+        shabrat = {("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True}
+        party = {("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True}
+        resistance = {("STS", "has_country_flag", "STP_cw_participant"): True}
+        self.assertTrue(matches_conditions(gate, shabrat, "STP"))
+        self.assertFalse(matches_conditions(gate, party, "STP"))
+        self.assertTrue(matches_conditions(gate, resistance, "STS"))
+
+        offer = next(e.value for e in events if e.key == "country_event"
+                     and scalar(e.value, "id") == "ADISCORD_STP_preparation.6")
+        for option_name in ("ADISCORD_STP_preparation.6.a", "ADISCORD_STP_preparation.6.b"):
+            option = next(e.value for e in offer if e.key == "option"
+                          and scalar(e.value, "name") == option_name)
+            hidden = block(option, "hidden_effect")
+            prewar_stp = [e.value for e in walk(hidden) if e.key == "STP"]
+            self.assertTrue(any("STP_sided_with_Maksim_flag" in str(scope) for scope in prewar_stp),
+                            option_name)
+
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        reserve = block(block(effects, "STP_cw_reserve_kefreyt_volunteers"), "if")
+        settlement = next(e.value for e in reserve if e.key == "if")
+        delivered = block(block(settlement, "else"), "STP")
+        self.assertEqual(scalar(delivered, "set_country_flag"),
+                         "STP_cw_kefreyt_shipment_received")
+        delivery_gate = next(e.value for e in delivered if e.key == "if")
+        self.assertIn("STP_sided_with_Maksim_flag", str(block(delivery_gate, "limit")))
+        self.assertEqual(scalar(block(delivery_gate, "country_event"), "id"),
+                         "ADISCORD_STP_preparation.8")
+
+    def test_northern_event_explicitly_surfaces_player_help(self):
+        events = entries("events/ADISCORD_STP_events.txt")
+        event = next(e.value for e in events if e.key == "country_event"
+                     and scalar(e.value, "id") == "ADISCORD_STP_preparation.13")
+        options = [e.value for e in event if e.key == "option"]
+        shabrat = next(o for o in options if scalar(o, "name") == "ADISCORD_STP_preparation.13.a")
+        party = next(o for o in options if scalar(o, "name") == "ADISCORD_STP_preparation.13.party_a")
+        self.assertEqual(scalar(shabrat, "custom_effect_tooltip"),
+                         "STP_cw_northern_event_help_tt")
+        self.assertEqual(scalar(party, "custom_effect_tooltip"),
+                         "STP_ps_northern_event_help_tt")
+        ru = read("localisation/russian/ADISCORD_STP_l_russian.yml")
+        self.assertIn("§YЭто преимущество можно усилить.§!", ru)
+        self.assertIn("STP_cw_northern_event_help_tt:", ru)
+        self.assertIn("STP_ps_northern_event_help_tt:", ru)
 
     def test_kefreyt_consent_is_available_without_stocks_and_queues_only_once(self):
         event = next(e.value for e in entries("events/ADISCORD_STP_events.txt")

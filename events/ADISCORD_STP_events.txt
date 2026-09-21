@@ -192,7 +192,14 @@ country_event = {
 				if = {
 					limit = { has_country_flag = VAL_cw_volunteers_pending }
 					if = { limit = { has_global_flag = STP_cw_started } STS = { country_event = { id = ADISCORD_STP_preparation.8 } } }
-					else = { STP = { country_event = { id = ADISCORD_STP_preparation.8 } } }
+					else = {
+						STP = {
+							if = {
+								limit = { has_country_flag = STP_sided_with_Maksim_flag }
+								country_event = { id = ADISCORD_STP_preparation.8 }
+							}
+						}
+					}
 					country_event = { id = ADISCORD_STP_preparation.22 days = 14 }
 				}
 			}
@@ -204,7 +211,14 @@ country_event = {
 		ai_chance = { factor = 1 }
 		hidden_effect = {
 			if = { limit = { has_global_flag = STP_cw_started } STS = { country_event = { id = ADISCORD_STP_preparation.8 } } }
-			else = { STP = { country_event = { id = ADISCORD_STP_preparation.8 } } }
+			else = {
+				STP = {
+					if = {
+						limit = { has_country_flag = STP_sided_with_Maksim_flag }
+						country_event = { id = ADISCORD_STP_preparation.8 }
+					}
+				}
+			}
 		}
 	}
 	option = {
@@ -250,6 +264,14 @@ country_event = {
 	}
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
+	# Defence in depth: direct callers are also gated, so a Party player never
+	# receives Shabrat's confidential Kefreyt correspondence.
+	trigger = {
+		OR = {
+			AND = { tag = STP has_country_flag = STP_sided_with_Maksim_flag }
+			AND = { tag = STS has_country_flag = STP_cw_participant }
+		}
+	}
 	option = { name = ADISCORD_STP_preparation.7.a }
 }
 
@@ -346,11 +368,34 @@ country_event = {
 country_event = {
 	id = ADISCORD_STP_preparation.13
 	title = ADISCORD_STP_preparation.13.t
-	desc = ADISCORD_STP_preparation.13.d
+	desc = {
+		trigger = { has_country_flag = STP_sided_with_Maksim_flag }
+		text = ADISCORD_STP_preparation.13.d
+	}
+	desc = {
+		trigger = { has_country_flag = STP_sided_with_the_party_flag }
+		text = ADISCORD_STP_preparation.13.party
+	}
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
-	trigger = { tag = STP has_active_mission = STP_cw_election_window }
-	option = { name = ADISCORD_STP_preparation.13.a }
+	trigger = {
+		tag = STP
+		has_active_mission = STP_cw_election_window
+		OR = {
+			has_country_flag = STP_sided_with_Maksim_flag
+			has_country_flag = STP_sided_with_the_party_flag
+		}
+	}
+	option = {
+		name = ADISCORD_STP_preparation.13.a
+		trigger = { has_country_flag = STP_sided_with_Maksim_flag }
+		custom_effect_tooltip = STP_cw_northern_event_help_tt
+	}
+	option = {
+		name = ADISCORD_STP_preparation.13.party_a
+		trigger = { has_country_flag = STP_sided_with_the_party_flag }
+		custom_effect_tooltip = STP_ps_northern_event_help_tt
+	}
 }
 
 country_event = {
