@@ -1096,13 +1096,12 @@ STP_imperial_union_required_states_controlled = {
 
 STP_imperial_union_requirements_met = {
 	tag = STS
-	STP_pc_founder_rules = yes
-	has_completed_focus = STP_pc_hegemony_open
-	has_war = no
+	has_country_leader = {
+		character = STP_maksim_shabrat
+		ruling_only = yes
+	}
 	NOT = { has_country_flag = STP_imperial_union_proclaimed }
 	STP_imperial_union_kefreyt_defeated = yes
-	STP_imperial_union_nodrul_defeated = yes
-	OR = { STP_imperial_union_required_states_controlled = yes STP_imperial_union_client_settlement = yes }
 }
 
 # COUNTRY STS: the running focus, paid programme and unexpired deployment
