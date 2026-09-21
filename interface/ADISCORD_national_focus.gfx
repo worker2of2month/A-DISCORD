@@ -168,16 +168,16 @@ spriteTypes = {
 ###VAL BOOKMARK
 
 	spriteType = {
-		name = "GFX_focus_VAL_bookmark_contract_state"
-		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contract_state.png"
+		name = "GFX_focus_VAL_bookmark_the_weaponry_baron"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_the_weaponry_baron.png"
 	}
 	spriteType = {
-		name = "GFX_focus_VAL_bookmark_trading_partners"
-		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_trading_partners.png"
+		name = "GFX_focus_VAL_bookmark_different_views_on_freedom"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_different_views_on_freedom.png"
 	}
 	spriteType = {
-		name = "GFX_focus_VAL_bookmark_october_2160"
-		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_october_2160.png"
+		name = "GFX_focus_VAL_bookmark_contracts_outlive_kings"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contracts_outlive_kings.png"
 	}
 
 ###VAL

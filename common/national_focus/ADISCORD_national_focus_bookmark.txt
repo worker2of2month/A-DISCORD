@@ -49,8 +49,8 @@ focus_tree = {
 	}
 
 	focus = {
-		id = VAL_bookmark_contract_state
-		icon = GFX_focus_VAL_bookmark_contract_state
+		id = VAL_bookmark_the_weaponry_baron
+		icon = GFX_focus_VAL_bookmark_the_weaponry_baron
 		x = -5
 		y = 1
 		cost = 5
@@ -59,8 +59,8 @@ focus_tree = {
 	}
 
 	focus = {
-		id = VAL_bookmark_trading_partners
-		icon = GFX_focus_VAL_bookmark_trading_partners
+		id = VAL_bookmark_different_views_on_freedom
+		icon = GFX_focus_VAL_bookmark_different_views_on_freedom
 		x = -5
 		y = 1
 		cost = 5
@@ -69,8 +69,8 @@ focus_tree = {
 	}
 
 	focus = {
-		id = VAL_bookmark_october_2160
-		icon = GFX_focus_VAL_bookmark_october_2160
+		id = VAL_bookmark_contracts_outlive_kings
+		icon = GFX_focus_VAL_bookmark_contracts_outlive_kings
 		x = -5
 		y = 1
 		cost = 5

@@ -305,11 +305,11 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_focus_VAL_bookmark_contract_state_shine"
-		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contract_state.png"
+		name = "GFX_focus_VAL_bookmark_the_weaponry_baron_shine"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_the_weaponry_baron.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contract_state.png"
+			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_the_weaponry_baron.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -324,11 +324,11 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_focus_VAL_bookmark_trading_partners_shine"
-		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_trading_partners.png"
+		name = "GFX_focus_VAL_bookmark_different_views_on_freedom_shine"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_different_views_on_freedom.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_trading_partners.png"
+			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_different_views_on_freedom.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
@@ -343,11 +343,11 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_focus_VAL_bookmark_october_2160_shine"
-		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_october_2160.png"
+		name = "GFX_focus_VAL_bookmark_contracts_outlive_kings_shine"
+		texturefile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contracts_outlive_kings.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_october_2160.png"
+			animationmaskfile = "gfx/interface/goals/VAL/bookmark/GFX_focus_VAL_bookmark_contracts_outlive_kings.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no

@@ -30,14 +30,14 @@ bookmarks = {
 			ideas = {
 				VAL_harvest_of_ash
 				VAL_big_buyers
-				ADISCORD_military_organization_contract_brigades
+				VAL_mercenary_state
 				ADISCORD_industrial_policy_military_prioritization
 				ADISCORD_economic_system_state_coordinated
 			}
 			focuses = {
-				VAL_bookmark_contract_state
-				VAL_bookmark_trading_partners
-				VAL_bookmark_october_2160
+				VAL_bookmark_the_weaponry_baron
+				VAL_bookmark_different_views_on_freedom
+				VAL_bookmark_contracts_outlive_kings
 			}
 		}
 
