@@ -291,12 +291,14 @@ class PartyRouteContracts(unittest.TestCase):
         selectors = []
         for decision_id, (money, pp, selector, tooltip) in expected.items():
             decision = self.decisions[decision_id]
-            self.assertEqual(one(decision, "cost"), pp)
+            self.assertEqual(one(decision, "cost"), "0")
+            self.assertTrue(any(e.key == "add_political_power" and e.value == "-" + pp for e in walk(one(decision, "complete_effect"))))
             self.assertIn("STP_pw_party_nod_threat_active", str(signature(one(decision, "visible"))))
             reward = one(decision, "complete_effect")
-            self.assertIn(("custom_effect_tooltip", tooltip), signature(reward))
+            self.assertTrue(any(e.key == "custom_effect_tooltip" and e.value == tooltip for e in walk(reward)))
             self.assertTrue(any(e.key == "var" and e.value == "STP_pf_selected" for e in walk(reward)))
-            snippet = raw[raw.index(decision_id):raw.index(decision_id) + 2600]
+            from tools.tests.test_adiscord_stp_party_balance import named_block
+            snippet = named_block(raw, decision_id)
             self.assertIn(f"value = {money}", snippet)
             self.assertIn(f"var = STP_pf_selected value = {selector}", snippet)
             self.assertEqual(snippet.count("STP_pf_shift = yes"), 1)
@@ -471,6 +473,20 @@ class PartyFactionContracts(unittest.TestCase):
     def setUpClass(cls):
         cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
         cls.triggers = {e.key: e.value for e in parse_clausewitz(read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"))}
+
+    def test_dominant_faction_can_recover_support_without_more_influence(self):
+        for influence in (60, 64.999, 96, 99, 100):
+            values, flags = self.simulate("STP_pf_initialize")
+            for key in self.KEYS:
+                values[f"STP_pf_{key}_influence"] = 0
+            values["STP_pf_conservatives_influence"] = str(100 - influence)
+            values["STP_pf_army_influence"] = influence
+            values["STP_pf_army_support"] = 0
+            for _ in range(5):
+                values["STP_pf_selected"] = 4
+                self.simulate("STP_pf_shift", values, flags)
+            self.assertAlmostEqual(float(values["STP_pf_army_influence"]), influence)
+            self.assertEqual(values["STP_pf_army_support"], 60)
 
     def simulate(self, effect, values=None, flags=None, tag="STP", nod=True, quantize=False):
         from decimal import Decimal, ROUND_DOWN

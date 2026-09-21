@@ -1,0 +1,28 @@
+ideas = {
+	country = {
+		BJK_nodrul_influence = {
+			picture = GFX_idea_NOD_home_of_hedonist_revolution
+
+			allowed = {
+				tag = BJK
+				NOD = {
+					exists = yes
+					is_subject = no
+				}
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+			cancel_if_invalid = yes
+
+			modifier = {
+				political_power_gain = -0.10
+				stability_factor = -0.05
+				war_support_factor = -0.05
+			}
+		}
+	}
+}

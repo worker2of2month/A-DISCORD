@@ -5,14 +5,10 @@ VAL_military_operations = {
 	scripted_gui = ADISCORD_VAL_operations_panel
 }
 
-VAL_propaganda_campaigns = {
-	allowed = { tag = VAL }
-	visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
-}
-
 VAL_contract_obligations = {
+	icon = ADISCORD_deal
 	allowed = { tag = VAL }
-	visible = { has_completed_focus = VAL_Quarterly_Contract_Norm }
+	visible = { OR = { VAL_contract_obligations_decisions_visible = yes has_completed_focus = VAL_Ministry_Of_Contract_Memory } }
 	visible_when_empty = yes
 }
 
@@ -23,6 +19,7 @@ VAL_rework_debug = {
 }
 
 VAL_reclamation = {
+	icon = ADISCORD_factory
 	allowed = { tag = VAL }
 	visible = { has_completed_focus = VAL_reclamation_survey }
 	visible_when_empty = yes
@@ -30,29 +27,14 @@ VAL_reclamation = {
 
 VAL_frontier = {
     allowed = { tag = VAL }
-    visible = {
-        OR = {
-            has_completed_focus = VAL_frontier_conference
-            AND = {
-                has_completed_focus = VAL_The_Steel_Contract
-                NOT = { has_completed_focus = VAL_Integrate_Occidia }
-                OCA = { exists = no }
-                OR = { has_country_flag = VAL_occidian_settlement_pending owns_state = 43 owns_state = 44 owns_state = 45 owns_state = 88 }
-            }
-        }
-    }
+    visible = { OR = { VAL_frontier_decisions_visible = yes has_country_flag = VAL_cw_livonn_settlement_pending } }
     visible_when_empty = yes
 }
 
-# --- livonn_settlement_categories ---
-VAL_livonn_settlement_category = {
-	allowed = { tag = VAL }
-	visible = { has_country_flag = VAL_cw_livonn_settlement_pending }
-}
-
 VAL_foreign_sales = {
+	icon = ADISCORD_deal
  allowed = { tag = VAL }
- visible = { OR = { has_completed_focus = VAL_Foreign_Broker_Licences has_country_flag = VAL_cw_trade_course has_country_flag = VAL_operation_sell_rifles_to_cin has_country_flag = VAL_operation_sell_rifles_to_osf } }
+ visible = { OR = { VAL_foreign_sales_decisions_visible = yes VAL_trade_corridors_unlocked = yes } }
  visible_when_empty = yes
 }
 
@@ -62,20 +44,21 @@ VAL_command_balance_category = {
 }
 
 VAL_vorkerland_aid = {
+	icon = ADISCORD_deal
 	allowed = { tag = VAL }
 	visible = { has_completed_focus = VAL_Operational_Directorate WRK = { exists = yes } }
 	visible_when_empty = yes
 	scripted_gui = ADISCORD_VAL_vorkerland_aid_panel
 }
 
-VAL_regional_integration = {
+VAL_final_war = {
 	allowed = { tag = VAL }
-	visible = { has_completed_focus = VAL_frontier_conference }
+	visible = {
+		OR = {
+			check_variable = { var = VAL_final_crisis_phase value = 1 compare = equals }
+			check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
+		}
+	}
 	visible_when_empty = yes
-}
-
-VAL_commonwealth_formation = {
-	allowed = { tag = VAL }
-	visible = { has_completed_focus = VAL_frontier_conference NOT = { has_cosmetic_tag = VAL_commonwealth } }
-	visible_when_empty = yes
+	priority = 30
 }

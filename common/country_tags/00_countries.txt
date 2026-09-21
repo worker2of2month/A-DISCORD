@@ -32,3 +32,5 @@ CIN = "countries/AshTribe.txt"
 
 NKA = "countries/NorthernContractAdministration.txt"
 OCA = "countries/OccidianContractAdministration.txt"
+ECA = "countries/EsnosContractAdministration.txt"
+DCA = "countries/DuchebiaContractAdministration.txt"

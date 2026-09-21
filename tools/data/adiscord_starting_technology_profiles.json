@@ -19,6 +19,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -32,7 +33,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ],
       "technologies": [
         "ADISCORD_tech_battlefield_attack_aircraft",
@@ -49,6 +51,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -62,7 +65,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "industrial": {
@@ -75,12 +79,18 @@
         "ADISCORD_tech_reconstruction_bureaus",
         "ADISCORD_tech_salvage_metallurgy",
         "ADISCORD_tech_grid_rationing",
-        "ADISCORD_tech_refinery_reclamation"
+        "ADISCORD_tech_refinery_reclamation",
+        "ADISCORD_tech_precision_material_standards",
+        "ADISCORD_tech_rare_components_industry",
+        "ADISCORD_tech_rare_alloy_metallurgy"
       ],
       "technologies": [
         "ADISCORD_tech_grid_rationing",
         "ADISCORD_tech_industrial_cluster_planning",
         "ADISCORD_tech_interchangeable_components",
+        "ADISCORD_tech_precision_material_standards",
+        "ADISCORD_tech_rare_alloy_metallurgy",
+        "ADISCORD_tech_rare_components_industry",
         "ADISCORD_tech_reconstruction_bureaus",
         "ADISCORD_tech_refinery_reclamation",
         "ADISCORD_tech_ruin_workshops",
@@ -101,6 +111,18 @@
         "ADISCORD_tech_phase_synchronized_substations",
         "ADISCORD_tech_radiation_mapping",
         "ADISCORD_tech_substation_networks"
+      ]
+    },
+    "advanced_materials": {
+      "seeds": [
+        "ADISCORD_tech_precision_material_standards",
+        "ADISCORD_tech_rare_components_industry",
+        "ADISCORD_tech_rare_alloy_metallurgy"
+      ],
+      "technologies": [
+        "ADISCORD_tech_precision_material_standards",
+        "ADISCORD_tech_rare_alloy_metallurgy",
+        "ADISCORD_tech_rare_components_industry"
       ]
     },
     "institutional": {
@@ -387,6 +409,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_data_archives",
         "ADISCORD_tech_recovered_fire_control",
@@ -405,7 +428,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "APH": {
@@ -443,6 +467,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -459,7 +484,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "ARS": {
@@ -497,6 +523,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -513,7 +540,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "AUR": {
@@ -551,6 +579,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -567,7 +596,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "AZH": {
@@ -610,6 +640,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_quiet_propulsion",
         "ADISCORD_tech_radar_gunnery",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -628,7 +659,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "BBV": {
@@ -666,6 +698,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -682,7 +715,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "BCM": {
@@ -720,6 +754,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -736,7 +771,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "BGT": {
@@ -774,6 +810,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -790,7 +827,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "BHG": {
@@ -828,6 +866,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -844,7 +883,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "BJK": {
@@ -882,6 +922,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -898,7 +939,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "BLD": {
@@ -936,6 +978,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -952,7 +995,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "BOR": {
@@ -998,6 +1042,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -1026,7 +1071,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "BRN": {
@@ -1064,6 +1110,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -1080,7 +1127,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "BTL": {
@@ -1124,6 +1172,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -1151,7 +1200,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "CIN": {
@@ -1189,6 +1239,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -1205,7 +1256,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "COF": {
@@ -1245,6 +1297,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_point_defense_aa",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -1264,7 +1317,8 @@
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
         "ADISCORD_tech_stabilized_autocannon_mounts",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "DAN": {
@@ -1308,6 +1362,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -1335,7 +1390,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "DOL": {
@@ -1373,6 +1429,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -1389,7 +1446,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "DRV": {
@@ -1427,6 +1485,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -1443,7 +1502,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "EFL": {
@@ -1492,6 +1552,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_quiet_propulsion",
         "ADISCORD_tech_radar_gunnery",
@@ -1521,7 +1582,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "EGC": {
@@ -1559,6 +1621,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -1575,7 +1638,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "ELN": {
@@ -1615,6 +1679,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_data_archives",
         "ADISCORD_tech_recovered_fire_control",
@@ -1630,7 +1695,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "EXZ": {
@@ -1667,6 +1733,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -1680,7 +1747,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "EYR": {
@@ -1691,13 +1759,13 @@
       "common_only": false,
       "rationale": "Autonomous district administration maintains basic workshops and territorial infantry.",
       "evidence": {
-        "states": 5,
-        "civilian_factories": 20,
-        "military_factories": 14,
+        "states": 2,
+        "civilian_factories": 8,
+        "military_factories": 7,
         "dockyards": 3,
-        "air_bases": 15,
-        "power_sites": 1,
-        "infrastructure_levels": 22,
+        "air_bases": 5,
+        "power_sites": 0,
+        "infrastructure_levels": 9,
         "research_slots": 2,
         "convoys": 0,
         "oob_divisions": 6,
@@ -1718,6 +1786,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -1734,7 +1803,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "FRS": {
@@ -1772,6 +1842,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -1788,7 +1859,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "GLP": {
@@ -1831,6 +1903,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_quiet_propulsion",
         "ADISCORD_tech_radar_gunnery",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -1849,7 +1922,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "HON": {
@@ -1895,6 +1969,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -1923,7 +1998,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "IIA": {
@@ -1961,6 +2037,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -1977,7 +2054,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "IVN": {
@@ -2031,6 +2109,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_pulse_doppler_radar",
         "ADISCORD_tech_radar_laying",
@@ -2064,7 +2143,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "KDL": {
@@ -2102,6 +2182,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -2118,7 +2199,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "KDR": {
@@ -2156,6 +2238,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -2172,7 +2255,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "KHV": {
@@ -2210,6 +2294,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -2226,7 +2311,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "KRL": {
@@ -2270,6 +2356,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -2297,7 +2384,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "KYZ": {
@@ -2337,6 +2425,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_phase_synchronized_substations",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_radiation_mapping",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
@@ -2355,7 +2444,8 @@
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
         "ADISCORD_tech_standardized_machine_tools",
-        "ADISCORD_tech_substation_networks"
+        "ADISCORD_tech_substation_networks",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "LYS": {
@@ -2396,6 +2486,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_data_archives",
         "ADISCORD_tech_recovered_fire_control",
@@ -2414,7 +2505,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "MON": {
@@ -2469,9 +2561,12 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_pulse_doppler_radar",
         "ADISCORD_tech_radar_laying",
+        "ADISCORD_tech_rare_alloy_metallurgy",
+        "ADISCORD_tech_rare_components_industry",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recoil_recovery",
         "ADISCORD_tech_reconstruction_bureaus",
@@ -2502,7 +2597,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "MZR": {
@@ -2542,6 +2638,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_phase_synchronized_substations",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_radiation_mapping",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
@@ -2560,7 +2657,8 @@
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
         "ADISCORD_tech_standardized_machine_tools",
-        "ADISCORD_tech_substation_networks"
+        "ADISCORD_tech_substation_networks",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "NAM": {
@@ -2603,6 +2701,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_quiet_propulsion",
         "ADISCORD_tech_radar_gunnery",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -2621,7 +2720,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "NOD": {
@@ -2645,7 +2745,7 @@
         "power_sites": 0,
         "infrastructure_levels": 18,
         "research_slots": 2,
-        "convoys": 0,
+        "convoys": 100,
         "oob_divisions": 38,
         "starting_doctrines": []
       },
@@ -2683,12 +2783,15 @@
         "ADISCORD_tech_phase_synchronized_substations",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_pulse_doppler_radar",
         "ADISCORD_tech_quiet_propulsion",
         "ADISCORD_tech_radar_gunnery",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_radiation_mapping",
+        "ADISCORD_tech_rare_alloy_metallurgy",
+        "ADISCORD_tech_rare_components_industry",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recoil_recovery",
         "ADISCORD_tech_reconstruction_bureaus",
@@ -2720,7 +2823,8 @@
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_substation_networks",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "NVR": {
@@ -2764,6 +2868,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -2791,7 +2896,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "ORV": {
@@ -2835,6 +2941,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -2862,7 +2969,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "OSF": {
@@ -2900,6 +3008,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -2916,7 +3025,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "PIV": {
@@ -2960,6 +3070,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -2987,7 +3098,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "PWR": {
@@ -3024,6 +3136,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -3037,7 +3150,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "RHM": {
@@ -3077,6 +3191,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_phase_synchronized_substations",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_radiation_mapping",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
@@ -3095,7 +3210,8 @@
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
         "ADISCORD_tech_standardized_machine_tools",
-        "ADISCORD_tech_substation_networks"
+        "ADISCORD_tech_substation_networks",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "RIN": {
@@ -3107,13 +3223,13 @@
       "common_only": false,
       "rationale": "Palatinate maintains a trained palace army while its wider economy remains politically and materially fragmented.",
       "evidence": {
-        "states": 6,
-        "civilian_factories": 6,
-        "military_factories": 5,
+        "states": 4,
+        "civilian_factories": 4,
+        "military_factories": 4,
         "dockyards": 0,
         "air_bases": 1,
         "power_sites": 0,
-        "infrastructure_levels": 19,
+        "infrastructure_levels": 13,
         "research_slots": 3,
         "convoys": 0,
         "oob_divisions": 5,
@@ -3139,6 +3255,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -3166,13 +3283,15 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "RIV": {
       "profiles": [
         "common",
-        "fragment_low_tech"
+        "fragment_low_tech",
+        "advanced_materials"
       ],
       "common_only": false,
       "rationale": "River administration supplies local garrisons from modest inherited workshops.",
@@ -3204,6 +3323,9 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
+        "ADISCORD_tech_rare_alloy_metallurgy",
+        "ADISCORD_tech_rare_components_industry",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -3220,7 +3342,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "RLY": {
@@ -3258,6 +3381,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -3274,7 +3398,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "ROM": {
@@ -3312,6 +3437,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -3328,7 +3454,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "RUS": {
@@ -3366,6 +3493,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -3382,7 +3510,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "SDR": {
@@ -3420,6 +3549,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -3436,7 +3566,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "SHL": {
@@ -3478,6 +3609,9 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
+        "ADISCORD_tech_rare_alloy_metallurgy",
+        "ADISCORD_tech_rare_components_industry",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_reconstruction_bureaus",
         "ADISCORD_tech_recovered_fire_control",
@@ -3496,7 +3630,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "SKN": {
@@ -3540,6 +3675,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -3567,7 +3703,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "SOL": {
@@ -3605,6 +3742,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -3621,7 +3759,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "SRV": {
@@ -3659,6 +3798,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -3675,7 +3815,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "STP": {
@@ -3746,12 +3887,15 @@
         "ADISCORD_tech_point_defense_aa",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_pulse_doppler_radar",
         "ADISCORD_tech_quiet_propulsion",
         "ADISCORD_tech_radar_gunnery",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_radiation_mapping",
+        "ADISCORD_tech_rare_alloy_metallurgy",
+        "ADISCORD_tech_rare_components_industry",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recoil_recovery",
         "ADISCORD_tech_reconstruction_bureaus",
@@ -3784,7 +3928,8 @@
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_substation_networks",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "SVL": {
@@ -3822,6 +3967,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -3838,7 +3984,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "TFF": {
@@ -3884,6 +4031,7 @@
         "ADISCORD_tech_point_defense_aa",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -3912,7 +4060,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "TMR": {
@@ -3953,6 +4102,9 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
+        "ADISCORD_tech_rare_alloy_metallurgy",
+        "ADISCORD_tech_rare_components_industry",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_reconstruction_bureaus",
         "ADISCORD_tech_recovered_fire_control",
@@ -3969,7 +4121,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "TRU": {
@@ -3982,13 +4135,13 @@
       "common_only": false,
       "rationale": "Organized Vorkerland successor with enough factories, infrastructure, and army continuity for core profiles.",
       "evidence": {
-        "states": 6,
-        "civilian_factories": 7,
-        "military_factories": 6,
+        "states": 8,
+        "civilian_factories": 9,
+        "military_factories": 7,
         "dockyards": 0,
         "air_bases": 0,
         "power_sites": 0,
-        "infrastructure_levels": 16,
+        "infrastructure_levels": 22,
         "research_slots": 2,
         "convoys": 0,
         "oob_divisions": 3,
@@ -4019,8 +4172,11 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
+        "ADISCORD_tech_rare_alloy_metallurgy",
+        "ADISCORD_tech_rare_components_industry",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recoil_recovery",
         "ADISCORD_tech_reconstruction_bureaus",
@@ -4050,7 +4206,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "VAL": {
@@ -4114,12 +4271,15 @@
         "ADISCORD_tech_point_defense_aa",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_pulse_doppler_radar",
         "ADISCORD_tech_quiet_propulsion",
         "ADISCORD_tech_radar_gunnery",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_radiation_mapping",
+        "ADISCORD_tech_rare_alloy_metallurgy",
+        "ADISCORD_tech_rare_components_industry",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recoil_recovery",
         "ADISCORD_tech_reconstruction_bureaus",
@@ -4152,7 +4312,8 @@
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_substation_networks",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "VES": {
@@ -4196,6 +4357,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -4223,7 +4385,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "VLA": {
@@ -4274,6 +4437,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_pulse_doppler_radar",
         "ADISCORD_tech_radar_laying",
@@ -4304,7 +4468,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "VLD": {
@@ -4342,6 +4507,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -4358,7 +4524,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "VRA": {
@@ -4396,6 +4563,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -4412,7 +4580,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "WCG": {
@@ -4456,6 +4625,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -4483,7 +4653,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "WEF": {
@@ -4534,6 +4705,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_pulse_doppler_radar",
         "ADISCORD_tech_radar_laying",
@@ -4564,7 +4736,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "WIT": {
@@ -4615,6 +4788,7 @@
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_quiet_propulsion",
         "ADISCORD_tech_radar_gunnery",
@@ -4645,7 +4819,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "WRK": {
@@ -4710,12 +4885,15 @@
         "ADISCORD_tech_phase_synchronized_substations",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_pulse_doppler_radar",
         "ADISCORD_tech_quiet_propulsion",
         "ADISCORD_tech_radar_gunnery",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_radiation_mapping",
+        "ADISCORD_tech_rare_alloy_metallurgy",
+        "ADISCORD_tech_rare_components_industry",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recoil_recovery",
         "ADISCORD_tech_reconstruction_bureaus",
@@ -4750,7 +4928,8 @@
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_substation_networks",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "YOR": {
@@ -4761,13 +4940,13 @@
       "common_only": false,
       "rationale": "Autonomous republic maintains territorial militia and basic workshop production.",
       "evidence": {
-        "states": 5,
-        "civilian_factories": 10,
-        "military_factories": 5,
+        "states": 8,
+        "civilian_factories": 22,
+        "military_factories": 12,
         "dockyards": 0,
-        "air_bases": 0,
-        "power_sites": 0,
-        "infrastructure_levels": 17,
+        "air_bases": 10,
+        "power_sites": 1,
+        "infrastructure_levels": 30,
         "research_slots": 2,
         "convoys": 0,
         "oob_divisions": 5,
@@ -4788,6 +4967,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -4804,7 +4984,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "YPR": {
@@ -4850,6 +5031,7 @@
         "ADISCORD_tech_point_defense_aa",
         "ADISCORD_tech_portable_at_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_proximity_fuzes",
         "ADISCORD_tech_radar_laying",
         "ADISCORD_tech_reclaimed_jet_platforms",
@@ -4878,7 +5060,8 @@
         "ADISCORD_tech_standardized_machine_tools",
         "ADISCORD_tech_standardized_transport_columns",
         "ADISCORD_tech_tandem_warheads",
-        "ADISCORD_tech_trauma_plates"
+        "ADISCORD_tech_trauma_plates",
+        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "ZAO": {
@@ -4916,6 +5099,7 @@
         "ADISCORD_tech_pack_transport",
         "ADISCORD_tech_passive_intensifier_cells",
         "ADISCORD_tech_postwar_weapon_standardization",
+        "ADISCORD_tech_precision_material_standards",
         "ADISCORD_tech_reclaimed_jet_platforms",
         "ADISCORD_tech_recovered_fire_control",
         "ADISCORD_tech_recovered_medium_chassis",
@@ -4932,7 +5116,8 @@
         "ADISCORD_tech_salvage_standards",
         "ADISCORD_tech_salvaged_at_guns",
         "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools"
+        "ADISCORD_tech_standardized_machine_tools",
+        "ADISCORD_tech_treasury_accounting"
       ]
     }
   }

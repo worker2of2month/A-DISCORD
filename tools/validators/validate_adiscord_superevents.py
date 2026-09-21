@@ -24,6 +24,9 @@ SOUNDS = Path("sound/superevents_sound.asset")
 SOUND_EFFECTS = Path("sound/superevents_effects.asset")
 SOUND_CATEGORY = Path("sound/superevents_category.asset")
 REGISTRY = Path("tools/data/adiscord_event_ids.json")
+MUSIC = Path("music/ADISCORD_music.asset")
+SONGS = Path("music/ADISCORD_songs.txt")
+PRESENTATION_SONGS = Path("music/ADISCORD_superevent_songs.txt")
 
 REQUIRED_FILES = (
     EVENTS,
@@ -37,6 +40,9 @@ REQUIRED_FILES = (
     SOUND_EFFECTS,
     SOUND_CATEGORY,
     REGISTRY,
+    MUSIC,
+    SONGS,
+    PRESENTATION_SONGS,
 )
 
 SUPEREVENT_IDS = (
@@ -46,6 +52,8 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.4",
     "ADISCORD_superevent.5",
     "ADISCORD_superevent.6",
+    "ADISCORD_superevent.7",
+    "ADISCORD_superevent.8",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -86,7 +94,9 @@ PRESENTATIONS = (
         "superevent_stelander_empire_sound_e",
     ),
     SupereventPresentation("superevent_stelander_party_victory", "superevent_stelander_party_victory_sound_e"),
-    SupereventPresentation("superevent_stelander_shabrat_victory", "superevent_stelander_party_victory_sound_e"),
+    SupereventPresentation("superevent_stelander_shabrat_victory", "superevent_stelander_shabrat_victory_sound_e"),
+    SupereventPresentation("superevent_nam_resource_war", "superevent_nam_resource_war_sound_e"),
+    SupereventPresentation("superevent_rus_last_empire", "superevent_rus_last_empire_sound_e"),
 )
 
 
@@ -232,16 +242,23 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             issues.append(
                 f"missing or duplicate GFX sprite GFX_{name}: found {gfx_names.count(name)}"
             )
-        expected_show_sound = (
-            item.dedicated_sound_effect or "superevent_vorkerland_civilwar_sound_e"
-        )
         window = ""
         for block in blocks(gui, r"^\s*containerWindowType\s*=\s*\{"):
             if re.search(rf'(?m)^\s*name\s*=\s*"{re.escape(name)}"\s*$', block):
                 window = block
                 break
-        if f"show_sound = {expected_show_sound}" not in window:
-            issues.append(f"GUI {name}: show_sound must be {expected_show_sound}")
+        show_sounds = re.findall(
+            r"(?m)^\s*show_sound\s*=\s*([A-Za-z0-9_]+)\s*$",
+            window,
+        )
+        if item.dedicated_sound_effect:
+            if show_sounds != [item.dedicated_sound_effect]:
+                issues.append(
+                    f"GUI {name}: expected show_sound = "
+                    f"{item.dedicated_sound_effect}, found {show_sounds}"
+                )
+        elif show_sounds:
+            issues.append(f"GUI {name}: unexpected show_sound {show_sounds}")
 
         for suffix, getter in (
             ("title", "GetSupereventTitle"),
@@ -358,6 +375,27 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     _check_order("sound effects", sound_effects, sound_effect_names, issues)
     _check_order("sound category", sound_category, sound_effect_names, issues)
 
+    # Runtime presentation audio is a GUI show_sound effect. The legacy OGG
+    # assets may remain as non-radio fallback material, but registering them in
+    # music/*.txt makes HOI4 enumerate them in the music player.
+    if re.search(r"(?m)^\s*music_station\s*=", source[PRESENTATION_SONGS]):
+        issues.append("presentation audio guard file must not define a music station")
+    if re.search(r"(?m)^\s*music\s*=", source[PRESENTATION_SONGS]):
+        issues.append("presentation audio guard file must not register radio songs")
+
+    for effect in sound_effect_names:
+        song = effect.removesuffix("_sound_e")
+        assets = [block for block in blocks(source[MUSIC], r"^\s*music\s*=\s*\{")
+                  if f'name = "{song}"' in block]
+        for playlist in (root / "music").glob("*.txt"):
+            if re.search(rf'(?m)^\s*song\s*=\s*"{re.escape(song)}"\s*$',
+                         playlist.read_text(encoding="utf-8-sig")):
+                issues.append(
+                    f"presentation music must not be registered in radio playlists: {song}"
+                )
+        if len(assets) != 1 or f'file = "{song}.ogg"' not in assets[0]:
+            issues.append(f"missing or duplicate single-channel music asset {song}")
+
     if (root / RU_LOC).is_file() and not (root / RU_LOC).read_bytes().startswith(b"\xef\xbb\xbf"):
         issues.append("Russian superevent localisation must use UTF-8 BOM")
 
@@ -393,7 +431,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                 f"found {entry.get('owner')!r}"
             )
 
-    if "ADISCORD_vorkerland_play_superevent_sound = yes" not in events:
+    if "ADISCORD_superevent_enqueue = yes" not in events:
         issues.append("events: presentation audio must use the shared unscoped helper")
     if "scoped_sound_effect" in events:
         issues.append("events: scoped_sound_effect silences observer/spectator")

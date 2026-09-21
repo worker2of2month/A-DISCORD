@@ -203,10 +203,20 @@ def validate() -> None:
 
     for state_id in STP_CLAIMS_ON_VAL:
         check(bool(re.search(r"(?m)^\s*add_claim_by\s*=\s*STP\s*$", histories.get(state_id, ""))), f"state {state_id}: missing STP claim")
-    check(EXPECTED_RESOURCE_TOTALS["VAL"] == {"oil": 19, "steel": 24, "aluminium": 8, "tungsten": 2, "chromium": 2}, "VAL homeland must retain its bounded contaminated deposits")
+    check(
+        EXPECTED_RESOURCE_TOTALS["VAL"] == {"oil": 19, "aluminium": 8, "tungsten": 2, "chromium": 2},
+        "VAL homeland resource contract drifted",
+    )
     for state_id, (_path, tag, *_rest) in TARGET_STATES.items():
         if tag == "VAL":
-            check(sum(amount for resource, amount in EXPECTED_RESOURCES[state_id].items() if resource != "oil") <= 12, f"state {state_id}: Kefreyt homeland metal deposits exceed the local cap")
+            check(
+                EXPECTED_RESOURCES[state_id].get("steel", 0) == 0,
+                f"state {state_id}: Kefreyt must have no domestic starting steel",
+            )
+            check(
+                sum(amount for resource, amount in EXPECTED_RESOURCES[state_id].items() if resource != "oil") <= 12,
+                f"state {state_id}: Kefreyt homeland metal deposits exceed the local cap",
+            )
 
 
 def main() -> int:

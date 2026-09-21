@@ -71,9 +71,18 @@ ADISCORD_scenario_debug_category = {
 		}
 		cost = 0
 		complete_effect = {
-			if = { limit = { tag = WKR } ADISCORD_vorkerland_apply_worker_map = yes }
-			else_if = { limit = { tag = VAD } ADISCORD_vorkerland_apply_vlad_map = yes }
-			else_if = { limit = { tag = TVA } ADISCORD_vorkerland_apply_dorian_map = yes }
+			if = {
+				limit = { tag = WKR }
+				ADISCORD_vorkerland_apply_worker_map = yes
+			}
+			else_if = {
+				limit = { tag = VAD }
+				ADISCORD_vorkerland_apply_vlad_map = yes
+			}
+			else_if = {
+				limit = { tag = TVA }
+				ADISCORD_vorkerland_apply_dorian_map = yes
+			}
 		}
 		ai_will_do = { factor = 0 }
 	}
@@ -133,7 +142,7 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
-	# War diagnostics use native occupation and diplomacy, never fake capitulation.
+	# Scenario controls call the production effects and retain their eligibility checks.
 	ADISCORD_debug_war_log_on = {
 		icon = generic_prepare_civil_war
 		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = ADISCORD_war_debug_logging } }
@@ -175,6 +184,91 @@ ADISCORD_scenario_debug_category = {
 			if = {
 				limit = { is_debug = yes is_ai = no }
 				ADISCORD_debug_war_snapshot = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_val_start = {
+		icon = generic_prepare_civil_war
+		targets = { CIN OSF APH ERT }
+		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = { VAL_frontier_postwar = yes VAL_frontier_idle = yes has_war = no FROM = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = ROOT } } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				if = {
+					limit = { FROM = { tag = CIN } }
+					set_variable = { var = VAL_frontier_target value = 1 }
+				}
+				else_if = {
+					limit = { FROM = { tag = OSF } }
+					set_variable = { var = VAL_frontier_target value = 2 }
+				}
+				else_if = {
+					limit = { FROM = { tag = APH } }
+					set_variable = { var = VAL_frontier_target value = 3 }
+				}
+				else = {
+					set_variable = { var = VAL_frontier_target value = 4 }
+				}
+				if = {
+					limit = { VAL_frontier_prewar_eligible = yes }
+					set_variable = { var = VAL_frontier_stage value = 2 }
+					VAL_frontier_start_war = yes
+				}
+				else = {
+					log = "[ADISCORD_PEACE] frontier debug entry rejected: ownership/control or sovereignty changed"
+				}
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_val_check = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				VAL_frontier_weekly = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_val_abort = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				VAL_frontier_close = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_reserves = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { is_debug = yes is_ai = no }
+				add_manpower = 50000
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = ROOT }
 			}
 		}
 		ai_will_do = { factor = 0 }
@@ -336,78 +430,6 @@ ADISCORD_scenario_debug_category = {
 			if = {
 				limit = { is_debug = yes is_ai = no }
 				FROM = { set_major = no clr_country_flag = ADISCORD_war_debug_added_major }
-			}
-		}
-		ai_will_do = { factor = 0 }
-	}
-
-	ADISCORD_debug_war_val_start = {
-		icon = generic_prepare_civil_war
-		targets = { CIN OSF APH ERT }
-		target_trigger = { FROM = { exists = yes NOT = { tag = ROOT } } }
-		visible = { is_debug = yes is_ai = no tag = VAL }
-		available = { VAL_frontier_postwar = yes VAL_frontier_idle = yes has_war = no FROM = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = ROOT } } }
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			if = {
-				limit = { is_debug = yes is_ai = no }
-				if = { limit = { FROM = { tag = CIN } } set_variable = { var = VAL_frontier_target value = 1 } }
-				else_if = { limit = { FROM = { tag = OSF } } set_variable = { var = VAL_frontier_target value = 2 } }
-				else_if = { limit = { FROM = { tag = APH } } set_variable = { var = VAL_frontier_target value = 3 } }
-				else = { set_variable = { var = VAL_frontier_target value = 4 } }
-				if = {
-				    limit = { VAL_frontier_prewar_eligible = yes }
-				    set_variable = { var = VAL_frontier_stage value = 2 }
-				    VAL_frontier_start_war = yes
-				}
-				else = { log = "[ADISCORD_PEACE] frontier debug entry rejected: ownership/control or sovereignty changed" }
-			}
-		}
-		ai_will_do = { factor = 0 }
-	}
-
-	ADISCORD_debug_war_val_check = {
-		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
-		available = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			if = {
-				limit = { is_debug = yes is_ai = no }
-				VAL_frontier_weekly = yes
-			}
-		}
-		ai_will_do = { factor = 0 }
-	}
-
-	ADISCORD_debug_war_val_abort = {
-		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no tag = VAL }
-		available = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			if = {
-				limit = { is_debug = yes is_ai = no }
-				VAL_frontier_close = yes
-			}
-		}
-		ai_will_do = { factor = 0 }
-	}
-
-	ADISCORD_debug_war_reserves = {
-		icon = generic_prepare_civil_war
-		visible = { is_debug = yes is_ai = no }
-		available = { always = yes }
-		cost = 0
-		fire_only_once = no
-		complete_effect = {
-			if = {
-				limit = { is_debug = yes is_ai = no }
-				add_manpower = 50000
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = ROOT }
 			}
 		}
 		ai_will_do = { factor = 0 }

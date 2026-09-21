@@ -66,6 +66,27 @@ country_event = {
 	option = { name = ADISCORD_STP_preparation.16.a }
 }
 
+# Pre-choice lore is paced through one-week focuses; each focus opens exactly one story card.
+country_event = {
+	id = ADISCORD_STP_preparation.23
+	title = ADISCORD_STP_preparation.23.t
+	desc = ADISCORD_STP_preparation.23.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+	option = { name = ADISCORD_STP_preparation.23.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.25
+	title = ADISCORD_STP_preparation.25.t
+	desc = ADISCORD_STP_preparation.25.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+	option = { name = ADISCORD_STP_preparation.25.a }
+}
+
 country_event = {
 	id = ADISCORD_STP_preparation.17
 	hidden = yes
@@ -171,7 +192,14 @@ country_event = {
 				if = {
 					limit = { has_country_flag = VAL_cw_volunteers_pending }
 					if = { limit = { has_global_flag = STP_cw_started } STS = { country_event = { id = ADISCORD_STP_preparation.8 } } }
-					else = { STP = { country_event = { id = ADISCORD_STP_preparation.8 } } }
+					else = {
+						STP = {
+							if = {
+								limit = { has_country_flag = STP_sided_with_Maksim_flag }
+								country_event = { id = ADISCORD_STP_preparation.8 }
+							}
+						}
+					}
 					country_event = { id = ADISCORD_STP_preparation.22 days = 14 }
 				}
 			}
@@ -183,7 +211,14 @@ country_event = {
 		ai_chance = { factor = 1 }
 		hidden_effect = {
 			if = { limit = { has_global_flag = STP_cw_started } STS = { country_event = { id = ADISCORD_STP_preparation.8 } } }
-			else = { STP = { country_event = { id = ADISCORD_STP_preparation.8 } } }
+			else = {
+				STP = {
+					if = {
+						limit = { has_country_flag = STP_sided_with_Maksim_flag }
+						country_event = { id = ADISCORD_STP_preparation.8 }
+					}
+				}
+			}
 		}
 	}
 	option = {
@@ -229,6 +264,14 @@ country_event = {
 	}
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
+	# Defence in depth: direct callers are also gated, so a Party player never
+	# receives Shabrat's confidential Kefreyt correspondence.
+	trigger = {
+		OR = {
+			AND = { tag = STP has_country_flag = STP_sided_with_Maksim_flag }
+			AND = { tag = STS has_country_flag = STP_cw_participant }
+		}
+	}
 	option = { name = ADISCORD_STP_preparation.7.a }
 }
 
@@ -325,11 +368,34 @@ country_event = {
 country_event = {
 	id = ADISCORD_STP_preparation.13
 	title = ADISCORD_STP_preparation.13.t
-	desc = ADISCORD_STP_preparation.13.d
+	desc = {
+		trigger = { has_country_flag = STP_sided_with_Maksim_flag }
+		text = ADISCORD_STP_preparation.13.d
+	}
+	desc = {
+		trigger = { has_country_flag = STP_sided_with_the_party_flag }
+		text = ADISCORD_STP_preparation.13.party
+	}
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
-	trigger = { tag = STP has_active_mission = STP_cw_election_window }
-	option = { name = ADISCORD_STP_preparation.13.a }
+	trigger = {
+		tag = STP
+		has_active_mission = STP_cw_election_window
+		OR = {
+			has_country_flag = STP_sided_with_Maksim_flag
+			has_country_flag = STP_sided_with_the_party_flag
+		}
+	}
+	option = {
+		name = ADISCORD_STP_preparation.13.a
+		trigger = { has_country_flag = STP_sided_with_Maksim_flag }
+		custom_effect_tooltip = STP_cw_northern_event_help_tt
+	}
+	option = {
+		name = ADISCORD_STP_preparation.13.party_a
+		trigger = { has_country_flag = STP_sided_with_the_party_flag }
+		custom_effect_tooltip = STP_ps_northern_event_help_tt
+	}
 }
 
 country_event = {
@@ -778,9 +844,9 @@ news_event = {
 	fire_only_once = yes
 	immediate = {
 		hidden_effect = {
-			ADISCORD_vorkerland_clear_superevent_flags = yes
-			set_global_flag = { flag = superevent_stelander_party_victory value = 1 days = 20 }
-			ADISCORD_vorkerland_play_superevent_sound = yes
+			# superevent_stelander_party_victory
+			set_temp_variable = { ADISCORD_superevent_request = 8 }
+			ADISCORD_superevent_enqueue = yes
 		}
 	}
 	option = { name = ADISCORD_STP_cw.71.a }
@@ -796,9 +862,9 @@ news_event = {
 	fire_only_once = yes
 	immediate = {
 		hidden_effect = {
-			ADISCORD_vorkerland_clear_superevent_flags = yes
-			set_global_flag = { flag = superevent_stelander_shabrat_victory value = 1 days = 20 }
-			ADISCORD_vorkerland_play_superevent_sound = yes
+			# superevent_stelander_shabrat_victory
+			set_temp_variable = { ADISCORD_superevent_request = 9 }
+			ADISCORD_superevent_enqueue = yes
 		}
 	}
 	option = { name = ADISCORD_STP_cw.72.a }
@@ -809,7 +875,8 @@ news_event = {
 news_event = {
 	id = ADISCORD_STP_cw.80
 	title = ADISCORD_STP_cw.80.t
-	desc = { trigger = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } } text = ADISCORD_STP_cw.80.d }
+	desc = { trigger = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } TFF = { is_subject_of = NOD } } text = ADISCORD_STP_cw.80.frontier_subject }
+	desc = { trigger = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } TFF = { NOT = { is_subject_of = NOD } } } text = ADISCORD_STP_cw.80.d }
 	desc = { trigger = { NOT = { AND = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } } } } text = ADISCORD_STP_cw.80.limited }
 	picture = GFX_news_event_adiscord_treaty_signing
 	major = yes
@@ -1470,8 +1537,28 @@ country_event = {
 	desc = ADISCORD_STP_pc.26.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
+	fire_only_once = yes
 	trigger = { tag = STP }
-	option = { name = ADISCORD_STP_pc.26.a }
+	option = { name = ADISCORD_STP_pc.26.a ai_chance = { base = 70 } }
+
+	option = {
+		name = ADISCORD_STP_pc.26.b
+		trigger = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+		ai_chance = { base = 30 }
+		if = {
+			limit = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+			custom_effect_tooltip = STP_party_settlement_26_tt
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 }
+				add_to_variable = { var = STP_pf_borons_support value = 8 }
+				add_to_variable = { var = STP_pf_merchants_support value = 8 }
+				subtract_from_variable = { var = STP_pf_security_support value = 12 }
+				STP_refresh_apparatus_loyalty = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
 }
 
 country_event = {
@@ -1480,8 +1567,28 @@ country_event = {
 	desc = ADISCORD_STP_pc.27.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
+	fire_only_once = yes
 	trigger = { tag = STP }
-	option = { name = ADISCORD_STP_pc.27.a }
+	option = { name = ADISCORD_STP_pc.27.a ai_chance = { base = 70 } }
+
+	option = {
+		name = ADISCORD_STP_pc.27.b
+		trigger = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+		ai_chance = { base = 30 }
+		if = {
+			limit = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+			custom_effect_tooltip = STP_party_settlement_27_tt
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 }
+				add_to_variable = { var = STP_pf_security_support value = 8 }
+				add_to_variable = { var = STP_pf_conservatives_support value = 8 }
+				subtract_from_variable = { var = STP_pf_borons_support value = 12 }
+				STP_refresh_apparatus_loyalty = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+	}
 }
 
 country_event = {
@@ -1509,8 +1616,27 @@ country_event = {
 		}
 	}
 	immediate = {
-		if = { limit = { tag = STP } scoped_play_song = "ADISCORD_stp_party" }
-		else_if = { limit = { tag = STS } scoped_play_song = "ADISCORD_stp_civil_war" }
+		# The chosen side is authoritative. change_tag_from can hand human control
+		# over after this callback has already been queued, so tag alone can briefly
+		# describe the old country and select the wrong civil-war theme.
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = STP_sided_with_Maksim_flag
+					tag = STS
+				}
+			}
+			scoped_play_song = "ADISCORD_stp_civil_war"
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_country_flag = STP_sided_with_the_party_flag
+					tag = STP
+				}
+			}
+			scoped_play_song = "ADISCORD_stp_party"
+		}
 	}
 }
 

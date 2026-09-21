@@ -172,6 +172,26 @@ class WorldNewsContracts(unittest.TestCase):
                 self.assertLessEqual(len(text), 3000)
                 self.assertLessEqual(len(text.encode("utf-8")), 5500)
 
+    def test_frontier_second_war_news_requires_real_joint_war_and_uses_valid_bonus(self):
+        source = read("common/scripted_effects/ADISCORD_TFF_effects.txt")
+        support = named_block(source, "ADISCORD_TFF_begin_kefreyt_campaign")
+        self.assertIn("has_war_with = NOD", support)
+        self.assertIn("VAL = { has_war_with = NOD", support)
+        self.assertIn("NOT = { has_global_flag = ADISCORD_news_frontier_second_war_published }", support)
+        self.assertIn("id = ADISCORD_TFF.11 hours = 1", support)
+        event = event_block(read("events/ADISCORD_TFF_events.txt"), "ADISCORD_TFF.11")
+        for token in ("major = yes", "fire_only_once = no", "is_triggered_only = yes"):
+            self.assertIn(token, event)
+        ideas = read("common/ideas/ADISCORD_TFF_ideas.txt")
+        self.assertNotRegex(ideas, r"(?m)^\s*reinforce_rate\s*=")
+        self.assertIn("land_reinforce_rate", ideas)
+        self.assertIn("TFF_kefreyt_northern_campaign", ideas)
+        cleanup = named_block(source, "ADISCORD_TFF_reconcile_kefreyt_campaign")
+        self.assertIn("ADISCORD_TFF_end_kefreyt_campaign = yes", cleanup)
+        self.assertIn("remove_ideas = TFF_kefreyt_northern_campaign", named_block(source, "ADISCORD_TFF_end_kefreyt_campaign"))
+        peace = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
+        self.assertIn("ADISCORD_TFF_reconcile_kefreyt_campaign = yes", named_block(peace, "on_peace"))
+
     def test_world_news_debug_smoke_decisions_are_not_shipped(self):
         self.assertFalse(
             (ROOT / "common/decisions/ADISCORD_world_news_debug_decisions.txt").exists()
@@ -179,16 +199,11 @@ class WorldNewsContracts(unittest.TestCase):
         self.assertNotIn("ADISCORD_debug_world_news_", self.ru)
         self.assertNotIn("ADISCORD_debug_world_news_", self.en)
 
-    def test_world_news_does_not_expand_shared_debug_category(self):
+    def test_shared_war_debug_category_is_available_to_every_test_country(self):
         category = named_block(self.debug_categories, "ADISCORD_scenario_debug_category")
-        for tag in (
-            "ZAO", "WPA", "WPS", "PWR", "PSD",
-            "NOD", "YPR", "COF", "TFF",
-            "STP", "STS", "SRP", "VAL",
-        ):
-            self.assertNotIn(f"tag = {tag}", category, tag)
-        for tag in ("WRK", "WKR", "VAD", "TVA", "IVN", "NAM", "EFL", "AZH", "SLF"):
-            self.assertIn(f"tag = {tag}", category, tag)
+        self.assertIn("always = yes", named_block(category, "allowed"))
+        self.assertIn("is_debug = yes", named_block(category, "visible"))
+        self.assertNotIn("tag =", category)
 
 
 if __name__ == "__main__":
