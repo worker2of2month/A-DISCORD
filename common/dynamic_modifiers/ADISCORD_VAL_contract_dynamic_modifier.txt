@@ -2,6 +2,7 @@
 
 VAL_contract_state = {
 	enable = { original_tag = VAL }
+	icon = GFX_idea_VAL_contract_state
 	army_attack_factor = VAL_contract_attack_factor
 	army_defence_factor = VAL_contract_defence_factor
 	army_org_factor = VAL_contract_org_factor

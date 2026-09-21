@@ -307,7 +307,7 @@ VAL_military_operations = {
  }
 }
 
-VAL_propaganda_campaigns = {
+VAL_contract_management = {
 	VAL_campaign_rifles_and_bread = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
@@ -372,9 +372,8 @@ VAL_propaganda_campaigns = {
 		remove_effect = { ADISCORD_campaign_slot_release = yes }
 		ai_will_do = { base = 4 }
 	}
-}
 
-VAL_contract_obligations = {
+
 	VAL_quarterly_contract_deadline = {
 		icon = generic_production
 		allowed = { tag = VAL }
@@ -399,7 +398,10 @@ VAL_contract_obligations = {
 			modifier = { factor = 0 NOT = { VAL_can_pay_quarterly_contract_norm = yes } }
 		}
 	}
+
 }
+
+
 
 VAL_rework_debug = {
 	VAL_debug_initialize_systems = {
@@ -1349,7 +1351,7 @@ VAL_vorkerland_aid = {
 	}
 }
 
-VAL_regional_integration = {
+VAL_postwar_administration = {
 	VAL_establish_regional_administration = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
@@ -1446,9 +1448,8 @@ VAL_regional_integration = {
 		}
 		ai_will_do = { base = 5 }
 	}
-}
 
-VAL_commonwealth_formation = {
+
 	VAL_proclaim_commonwealth = {
 		icon = generic_nationalism
 		allowed = { tag = VAL }
@@ -1464,4 +1465,7 @@ VAL_commonwealth_formation = {
 		}
 		ai_will_do = { base = 100 }
 	}
+
 }
+
+

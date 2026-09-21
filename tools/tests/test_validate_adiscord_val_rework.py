@@ -3831,7 +3831,7 @@ class ValRegionalIntegrationTests(unittest.TestCase):
         from dataclasses import replace
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, matches_conditions, selected_effects
         definitions = parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8"))
-        decisions = block(definitions, "VAL_regional_integration")
+        decisions = block(definitions, "VAL_postwar_administration")
         triggers = parse_clausewitz((ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8"))
         valid = block(triggers, "VAL_regional_integration_target_valid")
         flag = "VAL_regional_administration_in_progress"
