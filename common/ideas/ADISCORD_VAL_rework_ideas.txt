@@ -60,52 +60,51 @@ ideas = {
 			}
 		}
 
-  VAL_regional_settlement = {
-   picture = VAL_contract_state allowed = { original_tag = VAL } removal_cost = -1
-   on_add = { ADISCORD_economy_mark_dirty = yes }
-   modifier = { ADISCORD_economy_weekly_income = 10 stability_factor = 0.05 }
-  }
-  VAL_stelander_trade_terms = {
-   picture = VAL_contract_state allowed = { always = yes } removal_cost = -1
-   on_add = { ADISCORD_economy_mark_dirty = yes }
-   on_remove = { ADISCORD_economy_mark_dirty = yes }
-   modifier = { ADISCORD_economy_trade_income_factor = 0.05 }
-  }
+	  	VAL_regional_settlement = {
+	   		picture = VAL_contract_state allowed = { original_tag = VAL } removal_cost = -1
+	   		on_add = { ADISCORD_economy_mark_dirty = yes }
+	   		modifier = { ADISCORD_economy_weekly_income = 10 stability_factor = 0.05 }
+	  	}
+	  	VAL_stelander_trade_terms = {
+	   		picture = VAL_contract_state allowed = { always = yes } removal_cost = -1
+	   		on_add = { ADISCORD_economy_mark_dirty = yes }
+	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
+	   		modifier = { ADISCORD_economy_trade_income_factor = 0.05 }
+	  	}
 
-  VAL_northern_volunteer_mandate = {
-   picture = VAL_contract_state allowed = { original_tag = VAL } removal_cost = -1
-   rule = { can_send_volunteers = yes }
-   modifier = { send_volunteers_tension = -1 send_volunteer_divisions_required = -1 send_volunteer_size = 2 }
-   cancel = { OR = { has_war = yes has_capitulated = yes VAL_northern_volunteer_front_open = no } }
-   on_remove = { VAL_recall_northern_volunteers = yes }
-  }
+	  	VAL_northern_volunteer_mandate = {
+	   		picture = VAL_contract_state allowed = { original_tag = VAL } removal_cost = -1
+	   		rule = { can_send_volunteers = yes }
+	   		modifier = { send_volunteers_tension = -1 send_volunteer_divisions_required = -1 send_volunteer_size = 2 }
+	   		cancel = { OR = { has_war = yes has_capitulated = yes VAL_northern_volunteer_front_open = no } }
+	   		on_remove = { VAL_recall_northern_volunteers = yes }
+	  	}
 
-  VAL_export_income_1 = {
-   picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
-   on_add = { ADISCORD_economy_mark_dirty = yes }
-   on_remove = { ADISCORD_economy_mark_dirty = yes }
-   modifier = { ADISCORD_economy_weekly_income = 10 }
-  }
-  VAL_export_income_2 = {
-   picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
-   on_add = { ADISCORD_economy_mark_dirty = yes }
-   on_remove = { ADISCORD_economy_mark_dirty = yes }
-   modifier = { ADISCORD_economy_weekly_income = 10 }
-  }
-  VAL_advisors_income = {
-   picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
-   on_add = { ADISCORD_economy_mark_dirty = yes }
-   on_remove = { ADISCORD_economy_mark_dirty = yes }
-   modifier = { ADISCORD_economy_weekly_income = 10 planning_speed = -0.05 }
-  }
-  VAL_paid_military_advisors = {
-   picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
-   cancel = { OR = { has_war_with = VAL VAL = { exists = no } } }
-   on_add = { ADISCORD_economy_mark_dirty = yes }
-   on_remove = { ADISCORD_economy_mark_dirty = yes }
-   modifier = { army_org_regain = 0.05 planning_speed = 0.10 army_experience_gain_factor = 0.05 }
-  }
-
+	  	VAL_export_income_1 = {
+	   		picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
+	   		on_add = { ADISCORD_economy_mark_dirty = yes }
+	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
+	   		modifier = { ADISCORD_economy_weekly_income = 10 }
+	  	}
+	  	VAL_export_income_2 = {
+	   		picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
+	   		on_add = { ADISCORD_economy_mark_dirty = yes }
+	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
+	   		modifier = { ADISCORD_economy_weekly_income = 10 }
+	  	}
+	  	VAL_advisors_income = {
+	   		picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
+	   		on_add = { ADISCORD_economy_mark_dirty = yes }
+	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
+	   		modifier = { ADISCORD_economy_weekly_income = 10 planning_speed = -0.05 }
+	  	}
+	  	VAL_paid_military_advisors = {
+	   		picture = VAL_contract_state allowed = { always = yes } allowed_civil_war = { always = yes } removal_cost = -1
+	   		cancel = { OR = { has_war_with = VAL VAL = { exists = no } } }
+	   		on_add = { ADISCORD_economy_mark_dirty = yes }
+	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
+	   		modifier = { army_org_regain = 0.05 planning_speed = 0.10 army_experience_gain_factor = 0.05 }
+	  }
 
         VAL_frontier_transport_columns = {
             picture = VAL_contract_state
