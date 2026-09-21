@@ -2737,6 +2737,72 @@ VAL_initialize_command_balance = {
 	}
 }
 
+# COUNTRY VAL. When Shabrat and Kefreyt defeat NOD in the same war, neither
+# side receives the whole country by callback order. NOD-owned states follow
+# their actual controller at surrender; northern states already settled to YPR
+# are therefore left untouched.
+VAL_settle_joint_nod_shabrat_victory = {
+    if = {
+        limit = {
+            has_country_flag = VAL_joint_nod_campaign_with_sts
+            has_capitulated = no
+            is_subject = no
+            STS = {
+                exists = yes
+                has_capitulated = no
+                has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+            }
+            NOD = { exists = yes has_war_with = VAL has_war_with = STS }
+        }
+        10 = {
+            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 10 } }
+            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 10 } }
+        }
+        11 = {
+            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 11 } }
+            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 11 } }
+        }
+        12 = {
+            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 12 } }
+            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 12 } }
+        }
+        13 = {
+            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 13 } }
+            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 13 } }
+        }
+        17 = {
+            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 17 } }
+            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 17 } }
+        }
+        18 = {
+            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 18 } }
+            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 18 } }
+        }
+        30 = {
+            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 30 } }
+            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 30 } }
+        }
+
+        # Preserve the normal Shabrat victory bookkeeping and liberation route,
+        # then close Kefreyt's relation to the same defeated country separately.
+        STS = {
+            set_variable = { var = STP_pc_cap_side value = 2 }
+            STP_pc_begin_settlement = yes
+        }
+        NOD = {
+            if = { limit = { has_war_with = VAL } white_peace = VAL }
+            clr_country_flag = VAL_final_defeat_pending
+            clr_country_flag = VAL_final_capitulation_immediate
+        }
+        clr_country_flag = VAL_joint_nod_campaign_with_sts
+        # Keep the guard alive until the current immediate-capitulation chain ends.
+        set_country_flag = { flag = VAL_joint_nod_campaign_with_sts days = 1 }
+        ADISCORD_economy_mark_dirty = yes
+        STS = { ADISCORD_economy_mark_dirty = yes }
+        NOD = { if = { limit = { exists = yes } ADISCORD_economy_mark_dirty = yes } }
+    }
+}
+
 # --- final_campaign_administrations ---
 # COUNTRY STP/STS. Reuse the surviving country so armies, technology and the
 # player's seat remain intact. Only owned, uncontested border states are ceded.
