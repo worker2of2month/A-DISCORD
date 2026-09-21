@@ -1582,10 +1582,6 @@ VAL_reclamation_finish_project = {
 VAL_reclamation_refresh_state = {
 	# Reclamation is a state transition, not a second compensating modifier.
 	if = {
-		limit = { has_dynamic_modifier = { modifier = VAL_reclamation_recovered_land } }
-		remove_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }
-	}
-	if = {
 		limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
 		remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
 	}
