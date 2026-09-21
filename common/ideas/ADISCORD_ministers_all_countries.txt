@@ -30,7 +30,7 @@ ideas = {
 	}
 
 	political_advisor_minister_of_defense = {
-		minister_STP_Tarik_Menebhi = { name = minister_STP_Tarik_Menebhi default = no cost = 75 picture = minister_STP_Tarik_Menebhi allowed = { tag = STP } visible = { tag = STP } allowed_to_remove = { } traits = { minister_trait_STP_def_banquet_guard } }
+		minister_STP_Tarik_Menebhi = { name = minister_STP_Tarik_Menebhi default = no cost = 75 picture = minister_STP_Tarik_Menebhi allowed = { tag = STP } visible = { tag = STP } available = { STP_party_minister_change_allowed = yes } allowed_to_remove = { STP_party_minister_change_allowed = yes } traits = { minister_trait_STP_def_banquet_guard } }
 		minister_VAL_Arseny_Bragin = { name = minister_VAL_Arseny_Bragin default = no cost = 75 picture = generic_political_advisor_europe_2 allowed = { tag = VAL } visible = { tag = VAL } allowed_to_remove = { } traits = { minister_trait_VAL_def_contract_captain } }
 		minister_IVN_Darya_Koval = { name = minister_IVN_Darya_Koval default = no cost = 75 picture = generic_political_advisor_europe_3 allowed = { tag = IVN } visible = { tag = IVN } allowed_to_remove = { } traits = { minister_trait_IVN_def_bunker_doctrine } }
 		minister_WIT_Marta_Lisk = { name = minister_WIT_Marta_Lisk default = no cost = 75 picture = generic_political_advisor_europe_4 allowed = { tag = WIT } visible = { tag = WIT } allowed_to_remove = { } traits = { minister_trait_WIT_def_lean_columns } }
@@ -61,7 +61,7 @@ ideas = {
 	}
 
 	political_advisor_minister_of_economy = {
-		minister_STP_Camus_Onyx = { name = minister_STP_Camus_Onyx default = no cost = 75 picture = minister_STP_Camus_Onyx allowed = { tag = STP } visible = { tag = STP } allowed_to_remove = { } traits = { minister_trait_STP_eco_silk_ledgers } }
+		minister_STP_Camus_Onyx = { name = minister_STP_Camus_Onyx default = no cost = 75 picture = minister_STP_Camus_Onyx allowed = { tag = STP } visible = { tag = STP } available = { STP_party_minister_change_allowed = yes } allowed_to_remove = { STP_party_minister_change_allowed = yes } traits = { minister_trait_STP_eco_silk_ledgers } }
 		minister_VAL_Miron_Sablev = { name = minister_VAL_Miron_Sablev default = no cost = 75 picture = generic_political_advisor_europe_3 allowed = { tag = VAL } visible = { tag = VAL } allowed_to_remove = { } traits = { minister_trait_VAL_eco_weapon_broker } }
 		minister_IVN_Saveli_Ankor = { name = minister_IVN_Saveli_Ankor default = no cost = 75 picture = generic_political_advisor_europe_4 allowed = { tag = IVN } visible = { tag = IVN } allowed_to_remove = { } traits = { minister_trait_IVN_eco_forge_accountant } }
 		minister_WIT_Bruno_Hel = { name = minister_WIT_Bruno_Hel default = no cost = 75 picture = generic_political_advisor_europe_5 allowed = { tag = WIT } visible = { tag = WIT } allowed_to_remove = { } traits = { minister_trait_WIT_eco_thrifty_foundries } }
@@ -92,7 +92,7 @@ ideas = {
 	}
 
 	political_advisor_minister_of_health = {
-		minister_STP_Lorian_Vell = { name = minister_STP_Lorian_Vell default = no cost = 75 picture = generic_political_advisor_europe_4 allowed = { tag = STP } visible = { tag = STP } allowed_to_remove = { } traits = { minister_trait_STP_hea_private_clinics } }
+		minister_STP_Lorian_Vell = { name = minister_STP_Lorian_Vell default = no cost = 75 picture = generic_political_advisor_europe_4 allowed = { tag = STP } visible = { tag = STP } available = { STP_party_minister_change_allowed = yes } allowed_to_remove = { STP_party_minister_change_allowed = yes } traits = { minister_trait_STP_hea_private_clinics } }
 		minister_VAL_Lada_Khrom = { name = minister_VAL_Lada_Khrom default = no cost = 75 picture = generic_political_advisor_europe_5 allowed = { tag = VAL } visible = { tag = VAL } allowed_to_remove = { } traits = { minister_trait_VAL_hea_field_surgeons } }
 		minister_IVN_Inna_Rot = { name = minister_IVN_Inna_Rot default = no cost = 75 picture = generic_political_advisor_europe_6 allowed = { tag = IVN } visible = { tag = IVN } allowed_to_remove = { } traits = { minister_trait_IVN_hea_quiet_hospitals } }
 		minister_WIT_Nika_Voren = { name = minister_WIT_Nika_Voren default = no cost = 75 picture = generic_political_advisor_south_america_1 allowed = { tag = WIT } visible = { tag = WIT } allowed_to_remove = { } traits = { minister_trait_WIT_hea_fast_aid } }
@@ -123,7 +123,7 @@ ideas = {
 	}
 
 	political_advisor_minister_of_education = {
-		minister_STP_Vesper_Monray = { name = minister_STP_Vesper_Monray default = no cost = 75 picture = generic_political_advisor_europe_6 allowed = { tag = STP } visible = { tag = STP } allowed_to_remove = { } traits = { minister_trait_STP_edu_salon_academies } }
+		minister_STP_Vesper_Monray = { name = minister_STP_Vesper_Monray default = no cost = 75 picture = generic_political_advisor_europe_6 allowed = { tag = STP } visible = { tag = STP } available = { STP_party_minister_change_allowed = yes } allowed_to_remove = { STP_party_minister_change_allowed = yes } traits = { minister_trait_STP_edu_salon_academies } }
 		minister_VAL_Einar_Toll = { name = minister_VAL_Einar_Toll default = no cost = 75 picture = generic_political_advisor_south_america_1 allowed = { tag = VAL } visible = { tag = VAL } allowed_to_remove = { } traits = { minister_trait_VAL_edu_ballistics_schools } }
 		minister_IVN_Yaroslav_Metr = { name = minister_IVN_Yaroslav_Metr default = no cost = 75 picture = generic_political_advisor_south_america_2 allowed = { tag = IVN } visible = { tag = IVN } allowed_to_remove = { } traits = { minister_trait_IVN_edu_closed_lyceums } }
 		minister_WIT_Pavel_Kord = { name = minister_WIT_Pavel_Kord default = no cost = 75 picture = generic_political_advisor_asia_1 allowed = { tag = WIT } visible = { tag = WIT } allowed_to_remove = { } traits = { minister_trait_WIT_edu_practical_lessons } }
@@ -154,7 +154,7 @@ ideas = {
 	}
 
 	political_advisor_chief_of_intelligence = {
-		minister_STP_Cyan_Crowe = { name = minister_STP_Cyan_Crowe default = no cost = 75 picture = minister_STP_Cyan_Crowe allowed = { tag = STP } visible = { tag = STP } allowed_to_remove = { } traits = { minister_trait_STP_int_court_whispers } }
+		minister_STP_Cyan_Crowe = { name = minister_STP_Cyan_Crowe default = no cost = 75 picture = minister_STP_Cyan_Crowe allowed = { tag = STP } visible = { tag = STP } available = { STP_party_minister_change_allowed = yes } allowed_to_remove = { STP_party_minister_change_allowed = yes } traits = { minister_trait_STP_int_court_whispers } }
 		minister_VAL_Sava_Murat = { name = minister_VAL_Sava_Murat default = no cost = 75 picture = generic_political_advisor_south_america_2 allowed = { tag = VAL } visible = { tag = VAL } allowed_to_remove = { } traits = { minister_trait_VAL_int_contract_spies } }
 		minister_IVN_Alina_Sek = { name = minister_IVN_Alina_Sek default = no cost = 75 picture = generic_political_advisor_asia_1 allowed = { tag = IVN } visible = { tag = IVN } allowed_to_remove = { } traits = { minister_trait_IVN_int_locked_files } }
 		minister_WIT_Rina_Mist = { name = minister_WIT_Rina_Mist default = no cost = 75 picture = generic_political_advisor_asia_2 allowed = { tag = WIT } visible = { tag = WIT } allowed_to_remove = { } traits = { minister_trait_WIT_int_border_runners } }

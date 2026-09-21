@@ -25,7 +25,9 @@ STP_shabrat_intro_plan = {
 
 	ai_national_focuses = {
 		STP_NECTAR_OF_GODS
+		STP_REVOLUTION_FROM_THE_NORTH
 		STP_2160_budget
+		STP_BEHIND_THE_LIGHTS
 		STP_STATE_OF_THE_REPUBLIC
 	}
 
@@ -97,6 +99,9 @@ STP_shabrat_preparation_depth_plan = {
 
 	ai_national_focuses = {
 		STP_Turn_The_Young_Officers
+		STP_cw_prepare_capital_sabotage
+		STP_cw_prepare_industry_sabotage
+		STP_cw_disruption_cells
 		STP_cw_defensive_lines
 		STP_cw_heavy_reserve
 		STP_cw_abila_reserve
@@ -108,7 +113,6 @@ STP_shabrat_preparation_depth_plan = {
 		STP_cw_local_council_envoys
 		STP_cw_autonomy_guarantees
 		STP_Kefreite_Security_Offer
-		STP_cw_prepare_capital_sabotage
 	}
 
 	weight = { factor = 16 }
@@ -144,16 +148,17 @@ STS_shabrat_civil_war_plan = {
 		STP_cw_unified_headquarters
 		STP_cw_mobilization_register
 		STP_cw_wartime_arsenals
-		STP_cw_road_to_fada
 		STP_cw_supply_routes
 		STP_cw_front_scouts
 		STP_cw_mobile_workshops
 		STP_cw_frontline_relief
+		STP_cw_route_columns
+		STP_cw_organize_underground
+		STP_cw_road_to_fada
 		STP_cw_last_banquet
 		STP_cw_cut_capital_roads
 		STP_cw_government_quarter_assault
 		STP_cw_line_formations
-		STP_cw_route_columns
 	}
 
 	weight = { factor = 20 }

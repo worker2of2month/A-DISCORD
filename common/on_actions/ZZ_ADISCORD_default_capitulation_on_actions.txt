@@ -6,41 +6,59 @@ on_actions = {
 			if = {
 				limit = {
 					NOT = { has_global_flag = skip_default_capitulation }
-					# Do not end a faction war when the defeated country still has
-					# an active faction partner. The fallback runs for the last survivor.
+					FROM = { exists = yes has_capitulated = no }
+					# Neutral faction members cannot veto a war they never joined.
 					NOT = {
 						ROOT = {
 							is_in_faction = yes
 							any_other_country = {
 								is_in_faction_with = PREV
 								has_capitulated = no
-								OR = {
-									NOT = { PREV = { OR = { ADISCORD_vorkerland_is_main_claimant = yes has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major } } }
-									has_war_together_with = PREV
-								}
+								has_war_with = FROM
 							}
 						}
 					}
 				}
+				# Snapshot before white_peace can remove every faction war relation
+				# or annex_country can remove ROOT and its faction identity.
+				# Temporary arrays belong only to this callback, not to the save.
+				clear_temp_array = ADISCORD_peace_defeated_countries
+				clear_temp_array = ADISCORD_peace_awarded_states
 				FROM = {
 					every_enemy_country = {
 						limit = {
+							OR = { tag = ROOT has_capitulated = yes }
 							OR = {
-								original_tag = ROOT
+								tag = ROOT
 								is_in_faction_with = ROOT
 								is_puppet_of = ROOT
 							}
 						}
-						FROM = {
-							white_peace = PREV
-							PREV = { if = { limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major } set_major = no clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major clr_country_flag = ADISCORD_vorkerland_regional_auxiliary } }
-							annex_country = {
-								target = PREV
-								transfer_troops = no
-							}
+						add_to_temp_array = { array = ADISCORD_peace_defeated_countries value = THIS }
+						every_owned_state = {
+							add_to_temp_array = { array = ADISCORD_peace_awarded_states value = THIS }
 						}
 					}
 				}
+				for_each_scope_loop = {
+					array = ADISCORD_peace_defeated_countries
+					FROM = { if = { limit = { has_war_with = PREV } white_peace = PREV } }
+					if = {
+						limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major }
+						set_major = no
+						clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+						clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+					}
+					FROM = { annex_country = { target = PREV transfer_troops = no } }
+				}
+				# Only states owned by these defeated participants were captured.
+				# Include impassable remnants without sweeping cores of neighbours.
+				for_each_scope_loop = {
+					array = ADISCORD_peace_awarded_states
+					FROM = { transfer_state = PREV }
+				}
+				clear_temp_array = ADISCORD_peace_defeated_countries
+				clear_temp_array = ADISCORD_peace_awarded_states
 			}
 
 			# Vorkerland's central router deliberately reserves a defeated claimant

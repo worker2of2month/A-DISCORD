@@ -1,0 +1,275 @@
+{
+  "VAL_tank": {
+    "triangles": 3264,
+    "materials": 1,
+    "bones": 46,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "barrel",
+      "left_tracks",
+      "right_tracks",
+      "left_exhaust",
+      "right_exhaust"
+    ],
+    "animations": {
+      "idle": {
+        "samples": 2,
+        "max_vertex_motion": 0.0,
+        "loop_error": 0.0
+      },
+      "move": {
+        "samples": 5,
+        "max_vertex_motion": 6.53633585890149,
+        "loop_error": 4.76837158203125e-07
+      },
+      "attack": {
+        "samples": 5,
+        "max_vertex_motion": 0.31012601344701396,
+        "loop_error": 0.0
+      }
+    },
+    "files": {
+      "VAL_tank.mesh": "a8c84c9832350a4123e4030cf51daeb08c71906f590c15c811400d7ec5a2e607",
+      "VAL_tank_idle.anim": "87a137a88f53ddf5a2c00c7780c7ecfce7e7abbb63013425a45c43af66611a76",
+      "VAL_tank_move.anim": "2c888622030a4e9c06c852ff648e5e57ba0a852128d1623cab44e8db08207659",
+      "VAL_tank_attack.anim": "5c1d5ed5a69099262f07abf7aa0285d1d265684f1152f06813a3dec7789772c9",
+      "VAL_tank_diffuse.dds": "c0727b63371b8038cec94453eb7b77a8f0d125c7e313ad41386795acee6f7f80",
+      "VAL_tank_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
+      "VAL_tank_specular.dds": "5939df99eab3c47e0972739cff832aa5a75c18f4effc0c7f9a6d28c9a80a3d82"
+    }
+  },
+  "VAL_fighter": {
+    "triangles": 1240,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animations": {
+      "idle": {
+        "samples": 2,
+        "max_vertex_motion": 0.0,
+        "loop_error": 0.0
+      }
+    },
+    "files": {
+      "VAL_fighter.mesh": "97b6ec1d7c1d6e4cc85162ca4c307c003afc8be25e085c54a5c9c229b64620f4",
+      "VAL_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "VAL_air_diffuse.dds": "dee86ea8bea75212d1aafb1b902028eaa218fba12d9215c1c5226f132561ba5e",
+      "VAL_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
+      "VAL_air_specular.dds": "5939df99eab3c47e0972739cff832aa5a75c18f4effc0c7f9a6d28c9a80a3d82"
+    }
+  },
+  "VAL_cas": {
+    "triangles": 1484,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animations": {
+      "idle": {
+        "samples": 2,
+        "max_vertex_motion": 0.0,
+        "loop_error": 0.0
+      }
+    },
+    "files": {
+      "VAL_cas.mesh": "90fc550447bb01ca7ac370ebe34972d064a02243ea30484685c885c687d1fad1",
+      "VAL_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "VAL_air_diffuse.dds": "dee86ea8bea75212d1aafb1b902028eaa218fba12d9215c1c5226f132561ba5e",
+      "VAL_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
+      "VAL_air_specular.dds": "5939df99eab3c47e0972739cff832aa5a75c18f4effc0c7f9a6d28c9a80a3d82"
+    }
+  },
+  "NOD_tank": {
+    "triangles": 3120,
+    "materials": 1,
+    "bones": 46,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "barrel",
+      "left_tracks",
+      "right_tracks",
+      "left_exhaust",
+      "right_exhaust"
+    ],
+    "animations": {
+      "idle": {
+        "samples": 2,
+        "max_vertex_motion": 0.0,
+        "loop_error": 0.0
+      },
+      "move": {
+        "samples": 5,
+        "max_vertex_motion": 6.53633585890149,
+        "loop_error": 4.76837158203125e-07
+      },
+      "attack": {
+        "samples": 5,
+        "max_vertex_motion": 0.30949260461397093,
+        "loop_error": 0.0
+      }
+    },
+    "files": {
+      "NOD_tank.mesh": "8ba2c317b793c1f59ade5833a7282a8112726406feb9f70a9db37b1bdd09c2c4",
+      "NOD_tank_idle.anim": "87a137a88f53ddf5a2c00c7780c7ecfce7e7abbb63013425a45c43af66611a76",
+      "NOD_tank_move.anim": "2c888622030a4e9c06c852ff648e5e57ba0a852128d1623cab44e8db08207659",
+      "NOD_tank_attack.anim": "5c1d5ed5a69099262f07abf7aa0285d1d265684f1152f06813a3dec7789772c9",
+      "NOD_tank_diffuse.dds": "d9654ac86e74403b81b1ea89562592d839b32d723b762ef077b0f461319415a2",
+      "NOD_tank_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
+      "NOD_tank_specular.dds": "5939df99eab3c47e0972739cff832aa5a75c18f4effc0c7f9a6d28c9a80a3d82"
+    }
+  },
+  "NOD_fighter": {
+    "triangles": 1216,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animations": {
+      "idle": {
+        "samples": 2,
+        "max_vertex_motion": 0.0,
+        "loop_error": 0.0
+      }
+    },
+    "files": {
+      "NOD_fighter.mesh": "70cb74582325e995f167e4f64841898ef2017e88db87f372e424331cc5a2aecf",
+      "NOD_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "NOD_air_diffuse.dds": "6a2bac34b0412a5caa2868609ec0c9d94961935ab11baba80754d3766a60848c",
+      "NOD_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
+      "NOD_air_specular.dds": "5939df99eab3c47e0972739cff832aa5a75c18f4effc0c7f9a6d28c9a80a3d82"
+    }
+  },
+  "NOD_cas": {
+    "triangles": 1484,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animations": {
+      "idle": {
+        "samples": 2,
+        "max_vertex_motion": 0.0,
+        "loop_error": 0.0
+      }
+    },
+    "files": {
+      "NOD_cas.mesh": "d2490f8382a4ceb3d4308ed28a46dc5e9f74b4035954e19805dfac7e83956648",
+      "NOD_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "NOD_air_diffuse.dds": "6a2bac34b0412a5caa2868609ec0c9d94961935ab11baba80754d3766a60848c",
+      "NOD_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
+      "NOD_air_specular.dds": "5939df99eab3c47e0972739cff832aa5a75c18f4effc0c7f9a6d28c9a80a3d82"
+    }
+  },
+  "STP_tank": {
+    "triangles": 3256,
+    "materials": 1,
+    "bones": 46,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "barrel",
+      "left_tracks",
+      "right_tracks",
+      "left_exhaust",
+      "right_exhaust"
+    ],
+    "animations": {
+      "idle": {
+        "samples": 2,
+        "max_vertex_motion": 0.0,
+        "loop_error": 0.0
+      },
+      "move": {
+        "samples": 5,
+        "max_vertex_motion": 6.53633585890149,
+        "loop_error": 4.76837158203125e-07
+      },
+      "attack": {
+        "samples": 5,
+        "max_vertex_motion": 0.3076981982780713,
+        "loop_error": 0.0
+      }
+    },
+    "files": {
+      "STP_tank.mesh": "7c7aa5ef0f343bf765f068b1226ce886426becff5a8eadafec6932ff305cc9bf",
+      "STP_tank_idle.anim": "87a137a88f53ddf5a2c00c7780c7ecfce7e7abbb63013425a45c43af66611a76",
+      "STP_tank_move.anim": "2c888622030a4e9c06c852ff648e5e57ba0a852128d1623cab44e8db08207659",
+      "STP_tank_attack.anim": "5c1d5ed5a69099262f07abf7aa0285d1d265684f1152f06813a3dec7789772c9",
+      "STP_tank_diffuse.dds": "52264ef89824d414344d398dc11629af7768beafa750c89d07fc81b4c0707447",
+      "STP_tank_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
+      "STP_tank_specular.dds": "5939df99eab3c47e0972739cff832aa5a75c18f4effc0c7f9a6d28c9a80a3d82"
+    }
+  },
+  "STP_fighter": {
+    "triangles": 940,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animations": {
+      "idle": {
+        "samples": 2,
+        "max_vertex_motion": 0.0,
+        "loop_error": 0.0
+      }
+    },
+    "files": {
+      "STP_fighter.mesh": "9b6d90f33a4828ae29115f1103f56274048961dfade70001de5fcbfb3f115aa1",
+      "STP_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "STP_air_diffuse.dds": "453b35e4e694da686eb33bee31d83ac60af3bc65f337584c92de1dba1bb1ac81",
+      "STP_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
+      "STP_air_specular.dds": "5939df99eab3c47e0972739cff832aa5a75c18f4effc0c7f9a6d28c9a80a3d82"
+    }
+  },
+  "STP_cas": {
+    "triangles": 1396,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animations": {
+      "idle": {
+        "samples": 2,
+        "max_vertex_motion": 0.0,
+        "loop_error": 0.0
+      }
+    },
+    "files": {
+      "STP_cas.mesh": "59178052370140d45ab13b8f4229a79740f0bf2f463b84f9949eb89d2f2b3aac",
+      "STP_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "STP_air_diffuse.dds": "453b35e4e694da686eb33bee31d83ac60af3bc65f337584c92de1dba1bb1ac81",
+      "STP_air_normal.dds": "01ef2bc29bd40fb2c8e71634d6e3bfe55afa5180d574a8d3696760290b985dd1",
+      "STP_air_specular.dds": "5939df99eab3c47e0972739cff832aa5a75c18f4effc0c7f9a6d28c9a80a3d82"
+    }
+  }
+}

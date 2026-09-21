@@ -49,7 +49,7 @@ ADISCORD_vorkerland_collapse_category = {
 
 # --- diplomacy_categories ---
 ADISCORD_vorkerland_regional_diplomacy_category = {
-	icon = generic_diplomatic_treaty
+	icon = ADISCORD_deal
 	allowed = { OR = { tag = WKR tag = VAD } }
 	visible = {
 		OR = {
@@ -92,6 +92,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 }
 
 ADISCORD_vorkerland_allied_support_category = {
+	icon = ADISCORD_deal
 	allowed = { OR = { tag = WKR tag = VAD } }
 	visible = {
 		OR = {

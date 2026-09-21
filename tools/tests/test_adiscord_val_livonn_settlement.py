@@ -61,9 +61,9 @@ class ValLivonnSettlement(unittest.TestCase):
         self.assertIn("on_weekly_VAL = {", hook)
 
     def test_player_gets_two_mutually_exclusive_decisions_when_contract_exists(self):
-        category = source_section(read("common/decisions/categories/ADISCORD_VAL_rework_categories.txt"), "livonn_settlement_categories")
-        decisions = source_section(read("common/decisions/ADISCORD_VAL_decisions.txt"), "livonn_settlement_decisions")
-        self.assertIn("VAL_livonn_settlement_category = {", category)
+        category = read("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        self.assertIn("VAL_frontier = {", category)
         self.assertIn("has_country_flag = VAL_cw_livonn_settlement_pending", category)
         self.assertIn("VAL_honor_livonn_agreement = {", decisions)
         self.assertIn("VAL_keep_livonn = {", decisions)
@@ -72,7 +72,7 @@ class ValLivonnSettlement(unittest.TestCase):
 
     def test_localisation_exists_in_both_languages(self):
         ru = source_section(read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml"), "livonn_settlement_localisation")
-        en = read("localisation/english/ADISCORD_VAL_livonn_settlement_l_english.yml")
+        en = read("localisation/english/ADISCORD_VAL_decisions_l_english.yml")
         for key in (
             "VAL_livonn_settlement_category:",
             "VAL_honor_livonn_agreement:",

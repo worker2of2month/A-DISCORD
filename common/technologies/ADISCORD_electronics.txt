@@ -460,7 +460,7 @@ technologies = {
 		start_year = 2162
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -483,7 +483,7 @@ technologies = {
 		start_year = 2162
 		folder = {
 			name = electronics_folder
-			position = { x = 6 y = 10 }
+			position = { x = 6 y = 8 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -503,7 +503,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 14 }
+			position = { x = 0 y = 10 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -523,7 +523,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = electronics_folder
-			position = { x = 6 y = 14 }
+			position = { x = 6 y = 10 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -545,7 +545,7 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 18 }
+			position = { x = 3 y = 12 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -564,7 +564,7 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 22 }
+			position = { x = 0 y = 14 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -583,7 +583,7 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = electronics_folder
-			position = { x = 6 y = 22 }
+			position = { x = 6 y = 14 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -606,7 +606,7 @@ technologies = {
 		start_year = 2169
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 24 }
+			position = { x = 3 y = 16 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -625,7 +625,7 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 26 }
+			position = { x = 3 y = 18 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -642,7 +642,7 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 30 }
+			position = { x = 0 y = 20 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -661,7 +661,7 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = electronics_folder
-			position = { x = 6 y = 30 }
+			position = { x = 6 y = 20 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -694,7 +694,7 @@ technologies = {
 		start_year = 2174
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 34 }
+			position = { x = 3 y = 22 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -710,7 +710,7 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = electronics_folder
-			position = { x = 6 y = 36 }
+			position = { x = 6 y = 24 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -730,7 +730,7 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 36 }
+			position = { x = 3 y = 24 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -748,7 +748,7 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 38 }
+			position = { x = 3 y = 26 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -812,7 +812,12 @@ technologies = {
 	ADISCORD_tech_phase_synchronized_substations = {
 		factory_energy_consumption = -0.04
 		industry_repair_factor = 0.03
+		ADISCORD_economy_military_factory_expense_factor = -0.01
 		path = { leads_to_tech = ADISCORD_tech_ceramic_grid_insulators research_cost_coeff = 1 }
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
 		research_cost = 1.4
 		start_year = 2160
 		folder = {
@@ -960,7 +965,12 @@ technologies = {
 	ADISCORD_tech_load_following_microreactors = {
 		factory_energy_consumption = -0.05
 		nuclear_production_factor = 0.06
+		ADISCORD_economy_military_factory_expense_factor = -0.02
 		path = { leads_to_tech = ADISCORD_tech_microreactor_blocks research_cost_coeff = 1 }
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
 		research_cost = 1.62
 		start_year = 2168
 		folder = {
@@ -1083,11 +1093,16 @@ technologies = {
 	ADISCORD_tech_continental_load_balancing = {
 		factory_energy_consumption = -0.06
 		production_speed_buildings_factor = 0.04
+		ADISCORD_economy_military_factory_expense_factor = -0.02
 		path = { leads_to_tech = ADISCORD_tech_emergency_core_suppression research_cost_coeff = 1 }
 		enable_building = {
 			building = commercial_nuclear_reactor
 			level = 1
 		}
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
 		research_cost = 2.05
 		start_year = 2175
 		folder = {
@@ -1135,7 +1150,7 @@ technologies = {
 		start_year = 2162
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 10 }
+			position = { x = 0 y = 0 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -1152,7 +1167,7 @@ technologies = {
 		start_year = 2169
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 24 }
+			position = { x = 0 y = 2 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -1169,7 +1184,7 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 36 }
+			position = { x = 0 y = 4 }
 		}
 		ai_will_do = {
 			factor = 24

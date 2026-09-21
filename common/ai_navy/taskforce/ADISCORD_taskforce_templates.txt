@@ -1,4 +1,42 @@
 # One mission per template. Composition keys are subunits, not their map sprites.
+ADISCORD_cruiser_strike = {
+	allowed = {
+		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+	}
+	ai_will_do = {
+		factor = 1
+		modifier = { factor = 0 NOT = { has_tech = ADISCORD_tech_modular_hull_standards } }
+	}
+	keep_updated = yes
+	mission = { naval_strike }
+	min_composition = {
+		heavy_cruiser = { amount = 1 }
+		ADISCORD_coastal_patrol_vessel = { amount = 3 }
+	}
+	optimal_composition = {
+		heavy_cruiser = { amount = 1 }
+		ADISCORD_coastal_patrol_vessel = { amount = 4 }
+	}
+}
+
+ADISCORD_submarine_raiding = {
+	allowed = {
+		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+	}
+	ai_will_do = {
+		factor = 1
+		modifier = { factor = 0 NOT = { has_tech = ADISCORD_tech_quiet_propulsion } }
+	}
+	keep_updated = yes
+	mission = { convoy_raiding }
+	min_composition = {
+		submarine = { amount = 1 }
+	}
+	optimal_composition = {
+		submarine = { amount = 3 }
+	}
+}
+
 ADISCORD_coastal_patrol = {
 	allowed = {
 		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }

@@ -11,8 +11,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
-		show_sound = superevent_vorkerland_civilwar_sound_e
 		hide_sound = click_close
+		show_sound = superevent_vorkerland_civilwar_sound_e
 
 		iconType = { name = "superevent_vorkerland_civilwar" quadTextureSprite = "GFX_superevent_vorkerland_civilwar" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -35,8 +35,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
-		show_sound = superevent_vorkerland_dirty_opening_sound_e
 		hide_sound = click_close
+		show_sound = superevent_vorkerland_dirty_opening_sound_e
 
 		iconType = { name = "superevent_vorkerland_dirty_opening" quadTextureSprite = "GFX_superevent_vorkerland_dirty_opening" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -59,8 +59,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
-		show_sound = superevent_vorkerland_worker_victory_sound_e
 		hide_sound = click_close
+		show_sound = superevent_vorkerland_worker_victory_sound_e
 
 		iconType = { name = "superevent_vorkerland_worker_victory" quadTextureSprite = "GFX_superevent_vorkerland_worker_victory" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -83,8 +83,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
-		show_sound = superevent_vorkerland_utilitarian_victory_sound_e
 		hide_sound = click_close
+		show_sound = superevent_vorkerland_utilitarian_victory_sound_e
 
 		iconType = { name = "superevent_vorkerland_utilitarian_victory" quadTextureSprite = "GFX_superevent_vorkerland_utilitarian_victory" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -107,8 +107,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
-		show_sound = superevent_vorkerland_vlad_victory_sound_e
 		hide_sound = click_close
+		show_sound = superevent_vorkerland_vlad_victory_sound_e
 
 		iconType = { name = "superevent_vorkerland_vlad_victory" quadTextureSprite = "GFX_superevent_vorkerland_vlad_victory" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -131,8 +131,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
-		show_sound = superevent_vorkerland_dorian_victory_sound_e
 		hide_sound = click_close
+		show_sound = superevent_vorkerland_dorian_victory_sound_e
 
 		iconType = { name = "superevent_vorkerland_dorian_victory" quadTextureSprite = "GFX_superevent_vorkerland_dorian_victory" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -155,8 +155,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
-		show_sound = superevent_stelander_empire_sound_e
 		hide_sound = click_close
+		show_sound = superevent_stelander_empire_sound_e
 
 		iconType = { name = "superevent_stelander_empire" quadTextureSprite = "GFX_superevent_stelander_empire" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -180,8 +180,8 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
-		show_sound = superevent_stelander_party_victory_sound_e
 		hide_sound = click_close
+		show_sound = superevent_stelander_party_victory_sound_e
 
 		iconType = { name = "superevent_stelander_party_victory" quadTextureSprite = "GFX_superevent_stelander_party_victory" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
@@ -205,10 +205,58 @@ guiTypes = {
 		fade_type = linear
 		click_to_front = no
 		clipping = no
-		show_sound = superevent_stelander_party_victory_sound_e
 		hide_sound = click_close
+		show_sound = superevent_stelander_shabrat_victory_sound_e
 
 		iconType = { name = "superevent_stelander_shabrat_victory" quadTextureSprite = "GFX_superevent_stelander_shabrat_victory" position = { x = 0 y = 0 } alwaystransparent = yes }
+		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
+		iconType = { name = "supereventframe" quadTextureSprite = "GFX_supereventframe" alwaystransparent = yes }
+		iconType = { name = "supereventquote_bg" quadTextureSprite = "GFX_supereventquote" position = { x = 0 y = 0 } alwaystransparent = yes }
+		instantTextboxType = { name = "superevents_title" position = { x = 0 y = 20 } font = "hoi_36header" format = CENTER borderSize = { x = 0 y = 0 } text = "[GetSupereventTitle]" maxWidth = 1000 maxHeight = 500 fixedsize = yes }
+		instantTextboxType = { name = "superevents_quote" position = { x = 100 y = 470 } font = "hoi_20bs" format = RIGHT borderSize = { x = 0 y = 0 } text = "[GetSupereventQuote]" maxWidth = 800 maxHeight = 111 fixedsize = yes }
+		buttonType = { name = "superevents_button" spriteType = "GFX_supereventbutton" position = { x = 370 y = 550 } Orientation = "UPPER_LEFT" shortcut = "ESCAPE" clicksound = click_close }
+		instantTextboxType = { name = "superevents_comment" position = { x = 250 y = 200 } font = "hoi_16mbs" format = CENTER borderSize = { x = 0 y = 355 } text = "[GetSupereventComment]" maxWidth = 500 maxHeight = 111 fixedsize = yes }
+	}
+
+	containerWindowType = {
+		name = "superevent_nam_resource_war"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_nam_resource_war_sound_e
+
+		iconType = { name = "superevent_nam_resource_war" quadTextureSprite = "GFX_superevent_nam_resource_war" position = { x = 0 y = 0 } alwaystransparent = yes }
+		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
+		iconType = { name = "supereventframe" quadTextureSprite = "GFX_supereventframe" alwaystransparent = yes }
+		iconType = { name = "supereventquote_bg" quadTextureSprite = "GFX_supereventquote" position = { x = 0 y = 0 } alwaystransparent = yes }
+		instantTextboxType = { name = "superevents_title" position = { x = 0 y = 20 } font = "hoi_36header" format = CENTER borderSize = { x = 0 y = 0 } text = "[GetSupereventTitle]" maxWidth = 1000 maxHeight = 500 fixedsize = yes }
+		instantTextboxType = { name = "superevents_quote" position = { x = 100 y = 470 } font = "hoi_20bs" format = RIGHT borderSize = { x = 0 y = 0 } text = "[GetSupereventQuote]" maxWidth = 800 maxHeight = 111 fixedsize = yes }
+		buttonType = { name = "superevents_button" spriteType = "GFX_supereventbutton" position = { x = 370 y = 550 } Orientation = "UPPER_LEFT" shortcut = "ESCAPE" clicksound = click_close }
+		instantTextboxType = { name = "superevents_comment" position = { x = 250 y = 200 } font = "hoi_16mbs" format = CENTER borderSize = { x = 0 y = 355 } text = "[GetSupereventComment]" maxWidth = 500 maxHeight = 111 fixedsize = yes }
+	}
+
+	containerWindowType = {
+		name = "superevent_rus_last_empire"
+		position = { x = 0 y = 0 }
+		size = { width = 1000 height = 500 }
+		orientation = center
+		origo = center
+		fade_time = 100
+		moveable = yes
+		fade_type = linear
+		click_to_front = no
+		clipping = no
+		hide_sound = click_close
+		show_sound = superevent_rus_last_empire_sound_e
+
+		iconType = { name = "superevent_rus_last_empire" quadTextureSprite = "GFX_superevent_rus_last_empire" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }
 		iconType = { name = "supereventframe" quadTextureSprite = "GFX_supereventframe" alwaystransparent = yes }
 		iconType = { name = "supereventquote_bg" quadTextureSprite = "GFX_supereventquote" position = { x = 0 y = 0 } alwaystransparent = yes }

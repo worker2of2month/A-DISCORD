@@ -150,6 +150,36 @@ script_enum_equipment_category = {
 }
 
 script_enum_equipment_bonus_type = {
+	ADISCORD_attack_airframe_2163
+	ADISCORD_attack_airframe_2170
+	ADISCORD_attack_airframe_2175
+	ADISCORD_bomber_2160
+	ADISCORD_bomber_2164
+	ADISCORD_bomber_2172
+	ADISCORD_bomber_archetype
+	ADISCORD_cruiser_2155
+	ADISCORD_cruiser_2163
+	ADISCORD_cruiser_2170
+	ADISCORD_cruiser_2175
+	ADISCORD_cruiser_archetype
+	ADISCORD_escort_ship_2155
+	ADISCORD_escort_ship_2163
+	ADISCORD_escort_ship_2170
+	ADISCORD_escort_ship_2175
+	ADISCORD_fighter_airframe_2161
+	ADISCORD_fighter_airframe_2166
+	ADISCORD_fighter_airframe_2170
+	ADISCORD_fighter_airframe_2175
+	ADISCORD_naval_aircraft_2160
+	ADISCORD_naval_aircraft_2164
+	ADISCORD_naval_aircraft_2172
+	ADISCORD_naval_aircraft_archetype
+	ADISCORD_submarine_2155
+	ADISCORD_submarine_2163
+	ADISCORD_submarine_2170
+	ADISCORD_submarine_2175
+	ADISCORD_submarine_archetype
+
 	motorized_equipment
 	motorized_equipment_1
 	convoy

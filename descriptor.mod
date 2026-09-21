@@ -1,7 +1,11 @@
 picture="thumbnail.png"
 version="1.19.2"
 tags={
+	"National Focuses"
+	"Ideologies"
+	"Gameplay"
 	"Alternative History"
+	"Map"
 }
 name="Abyss of Discord"
 replace_path="gfx/loadingscreens"
@@ -80,6 +84,5 @@ replace_path="common/doctrines/subdoctrines/sea"
 replace_path="common/doctrines/subdoctrines/special_forces"
 replace_path="common/doctrines/tracks"
 replace_path="gfx/interface/equipmentdesigner/graphic_db"
-replace_path="music"
 supported_version="1.19.*"
 remote_file_id="3804676160"

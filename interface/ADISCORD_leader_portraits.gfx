@@ -153,6 +153,10 @@ spriteTypes = {
 	}
 ###VAL
 	spriteType = {
+		name = "GFX_portrait_VAL_Valera_Solgalov_contracts"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Valera_Solgalov2.png"
+	}
+	spriteType = {
 	  	name = "GFX_portrait_VAL_Valera_Solgalov"
 	  	texturefile = "gfx/leaders/VAL/portrait_VAL_Valera_Solgalov.png"
 	}
@@ -211,6 +215,10 @@ spriteTypes = {
 	  	name = "GFX_portrait_RUS_Mark_Rustan"
 	  	texturefile = "gfx/leaders/RUS/portrait_RUS_Mark_Rustan.png"
 	}
+	spriteType = {
+		name = "GFX_portrait_RUS_Mark_Rustan_dictator"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Mark_Rustan_dictator.png"
+	}
 ###NAM
 	spriteType = {
 	  	name = "GFX_portrait_NAM_Egor_Rom"
@@ -243,6 +251,11 @@ spriteTypes = {
 	spriteType = {
 	  	name = "GFX_portrait_NOD_Tobis_Bentlix"
 	  	texturefile = "gfx/leaders/NOD/portrait_NOD_Tobis_Bentlix.png"
+	}
+###AIN
+	spriteType = {
+		name = "GFX_portrait_AIN_Elias_Marven"
+		texturefile = "gfx/leaders/AIN/portrait_AIN_Elias_Marven.png"
 	}
 ###COF
 	spriteType = {
