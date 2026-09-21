@@ -432,20 +432,27 @@ class CivilWarContracts(unittest.TestCase):
         story = next(e.value for e in events if e.key == "country_event"
                      and scalar(e.value, "id") == "ADISCORD_STP_cw.94")
         self.assertEqual(scalar(playback, "hidden"), "yes")
-        for tag, enemy, song in (("STP", "STS", "ADISCORD_stp_party"),
-                                 ("STS", "STP", "ADISCORD_stp_civil_war")):
+        playback_cases = (
+            ("STP", "STS", "STP_sided_with_the_party_flag", "ADISCORD_stp_party"),
+            ("STS", "STP", "STP_sided_with_Maksim_flag", "ADISCORD_stp_civil_war"),
+            # Regression: the Shabrat choice can queue playback before change_tag_from
+            # finishes handing human control to STS. The side flag must win over tag.
+            ("STP", "STS", "STP_sided_with_Maksim_flag", "ADISCORD_stp_civil_war"),
+        )
+        for tag, enemy, side_flag, song in playback_cases:
             for human, war, finished in ((True, True, False), (False, True, False),
                                          (True, False, False), (True, True, True)):
                 facts = {(tag, "is_ai", "no"): human,
                          (tag, "has_war_with", enemy): war,
+                         (tag, "has_country_flag", side_flag): True,
                          (tag, "has_global_flag", "STP_cw_started"): True,
                          (tag, "has_global_flag", "STP_cw_union_wars_finished"): finished}
                 eligible = matches_conditions(ast_block(playback, "trigger"), facts, tag)
                 self.assertEqual(eligible, human and war and not finished)
                 if eligible:
-                    songs = [e.value for _, e in selected_effects(ast_block(playback, "immediate"), facts, tag)
-                             if e.key == "scoped_play_song"]
-                    self.assertEqual(songs, [song])
+                    chosen_songs = [e.value for _, e in selected_effects(ast_block(playback, "immediate"), facts, tag)
+                                    if e.key == "scoped_play_song"]
+                    self.assertEqual(chosen_songs, [song])
             self.assertEqual(matches_conditions(ast_block(story, "trigger"), {}, tag), tag == "STP")
         self.assertLess(first_time.value.index(next(e for e in first_time.value if e.key == "set_global_flag")),
                         first_time.value.index(next(e for e in first_time.value if e.key == "hidden_effect")))
@@ -453,11 +460,18 @@ class CivilWarContracts(unittest.TestCase):
         song = next(e.value for e in assets if e.key == "music" and scalar(e.value, "name") == "ADISCORD_stp_civil_war")
         self.assertEqual(scalar(song, "file"), "ADISCORD_stp_civil_war.ogg")
         self.assertTrue((ROOT / "music" / "ADISCORD_stp_civil_war.ogg").is_file())
-        playlist = next(e.value for e in entries("music/ADISCORD_songs.txt")
-                        if e.key == "music" and scalar(e.value, "song") == "ADISCORD_stp_civil_war")
-        flags = [e.value for e in walk(ast_block(playlist, "chance")) if e.key == "has_global_flag"]
+        playlists = {scalar(e.value, "song"): e.value for e in entries("music/ADISCORD_songs.txt")
+                     if e.key == "music" and scalar(e.value, "song") in
+                     {"ADISCORD_stp_party", "ADISCORD_stp_civil_war"}}
+        civil_chance = ast_block(playlists["ADISCORD_stp_civil_war"], "chance")
+        flags = [e.value for e in walk(civil_chance) if e.key == "has_global_flag"]
         self.assertIn("STP_cw_started", flags)
         self.assertIn("STP_cw_union_wars_finished", flags)
+        self.assertIn("STP_sided_with_Maksim_flag",
+                      [e.value for e in walk(civil_chance) if e.key == "has_country_flag"])
+        party_chance = ast_block(playlists["ADISCORD_stp_party"], "chance")
+        self.assertIn("STP_sided_with_the_party_flag",
+                      [e.value for e in walk(party_chance) if e.key == "has_country_flag"])
         self.assertIn('ADISCORD_stp_civil_war: "Арктида - Всё на кон"',
                       (ROOT / "localisation" / "russian" / "ADISCORD_music_l_russian.yml").read_text(encoding="utf-8-sig"))
 

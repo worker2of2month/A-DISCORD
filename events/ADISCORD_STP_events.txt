@@ -1571,8 +1571,27 @@ country_event = {
 		}
 	}
 	immediate = {
-		if = { limit = { tag = STP } scoped_play_song = "ADISCORD_stp_party" }
-		else_if = { limit = { tag = STS } scoped_play_song = "ADISCORD_stp_civil_war" }
+		# The chosen side is authoritative. change_tag_from can hand human control
+		# over after this callback has already been queued, so tag alone can briefly
+		# describe the old country and select the wrong civil-war theme.
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = STP_sided_with_Maksim_flag
+					tag = STS
+				}
+			}
+			scoped_play_song = "ADISCORD_stp_civil_war"
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_country_flag = STP_sided_with_the_party_flag
+					tag = STP
+				}
+			}
+			scoped_play_song = "ADISCORD_stp_party"
+		}
 	}
 }
 
