@@ -3345,6 +3345,31 @@ class ValExpandedCampaignTests(unittest.TestCase):
 
 
 
+    def test_joint_shabrat_nod_campaign_uses_one_war_and_controlled_settlement(self):
+        decisions = DECISIONS_PATH.read_text(encoding="utf-8")
+        campaign = named_block_spans(decisions, "VAL_campaign_against_nod")[0].text
+        self.assertIn("set_country_flag = VAL_joint_nod_campaign_with_sts", campaign)
+        self.assertIn("targeted_alliance = STS enemy = NOD", campaign)
+        self.assertIn("character = STP_maksim_shabrat ruling_only = yes", campaign)
+        self.assertIn("STP_cw_release_tff_to_northern_war = yes", campaign)
+
+        settlement = named_block_spans(EFFECTS_PATH.read_text(encoding="utf-8"),
+                                       "VAL_settle_joint_nod_shabrat_victory")[0].text
+        for state in ("10", "11", "12", "13", "17", "18", "30"):
+            self.assertIn(f"{state} = {{", settlement)
+            self.assertIn(f"VAL = {{ transfer_state = {state} }}", settlement)
+            self.assertIn(f"STS = {{ transfer_state = {state} }}", settlement)
+        self.assertIn("STP_pc_begin_settlement = yes", settlement)
+        self.assertIn("white_peace = VAL", settlement)
+        self.assertNotIn("VAL_install_nodrul_administration", settlement)
+
+        source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text()
+        immediate = source.split("# BEGIN kefreyt:on_capitulation_immediate", 1)[1].split("# END kefreyt:on_capitulation_immediate", 1)[0]
+        self.assertLess(immediate.index("VAL_settle_joint_nod_shabrat_victory = yes"),
+                        immediate.index("set_country_flag = VAL_final_defeat_pending"))
+        self.assertIn("has_country_flag = VAL_joint_nod_campaign_with_sts", immediate)
+        self.assertIn("has_war_with = STS", immediate)
+
     def test_final_settlement_waits_for_allies_and_rejects_liberation(self):
         facts = {
             ("NOD", "has_country_flag", "VAL_final_defeat_pending"): True,
