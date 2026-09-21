@@ -177,6 +177,15 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertIn("has_variable = ADISCORD_economy_initialized", common)
         self.assertIn("ADISCORD_economy_mark_dirty = yes", common)
 
+    def test_custom_technology_textures_are_runtime_dds(self) -> None:
+        self.assertTrue(generator.CUSTOM_TECH_TEXTURES)
+        for key, texture in generator.CUSTOM_TECH_TEXTURES.items():
+            with self.subTest(technology=key):
+                self.assertTrue(texture.endswith(".dds"), texture)
+                path = ROOT / texture
+                self.assertTrue(path.is_file(), path)
+                self.assertEqual(path.read_bytes()[:4], b"DDS ", path)
+
     def test_country_uniform_sprites_resolve_to_regional_assets(self) -> None:
         icons = json.loads((ROOT / "tools/data/adiscord_technology_weapon_icons.json").read_text(encoding="utf-8"))["icons"]
         outputs = {entry["output"] for entry in icons}
