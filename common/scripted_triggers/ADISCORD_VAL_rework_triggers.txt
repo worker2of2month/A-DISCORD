@@ -188,6 +188,23 @@ VAL_frontier_shabrat_buffer = {
 VAL_frontier_idle = {
     NOT = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
 }
+# COUNTRY VAL: withdraw a refused demand or defer it before issuing one.
+VAL_can_defer_frontier_expansion = {
+	tag = VAL
+	VAL_frontier_postwar = yes
+	has_war = no
+	OR = {
+		check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+		AND = {
+			VAL_frontier_idle = yes
+			has_completed_focus = VAL_frontier_security_plan
+			NOT = { has_completed_focus = VAL_frontier_treaty_offices }
+			NOT = { has_country_flag = VAL_frontier_treaty_signed }
+			NOT = { has_country_flag = VAL_frontier_expansion_deferred }
+		}
+	}
+}
+
 VAL_frontier_offer_is_current = {
     has_capitulated = no
     NOT = { has_war_with = VAL }

@@ -594,6 +594,16 @@ class KefreytOpeningThemeTests(unittest.TestCase):
         self.assertIn('song = "ADISCORD_val_theme"', (ROOT / "music/ADISCORD_songs.txt").read_text())
 
 class TestValProgression(unittest.TestCase):
+    def test_event_withdrawal_uses_the_same_deferral_and_revalidates_its_quote(self):
+        events = read('events/ADISCORD_VAL_contract_events.txt')
+        position = events.index('name = val_rework.111.withdraw')
+        start = events.rfind('option = {', 0, position)
+        option = named_block(events[start:], 'option')
+        hidden = named_block(option, 'hidden_effect')
+        self.assertIn('VAL_defer_frontier_expansion = yes', hidden)
+        self.assertIn('VAL_frontier_reply_is_current = yes', named_block(hidden, 'limit'))
+        self.assertIn('custom_effect_tooltip = VAL_frontier_withdraw_tt', option)
+
     def data(self):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar
         effects = parse_clausewitz(read('common/scripted_effects/ADISCORD_VAL_effects.txt'))
@@ -682,7 +692,7 @@ class TestValProgression(unittest.TestCase):
         for deferred in (False, True):
             for idle in (False, True):
                 facts = {('VAL', 'has_country_flag', 'VAL_frontier_expansion_deferred'): deferred,
-                         ('VAL', 'VAL_frontier_idle', 'yes'): idle}
+                         ('VAL', 'VAL_frontier_idle', 'yes'): idle, ('VAL', 'has_completed_focus', 'VAL_frontier_security_plan'): True}
                 self.assertEqual(matches_conditions(bypass, facts, 'VAL'), deferred and idle)
         for target in ('VAL_Northern_Settlement', 'VAL_Stelander_Ultimatum'):
             prerequisites = [scalar(e.value, 'focus') for e in focuses[target] if e.key == 'prerequisite']
@@ -715,15 +725,19 @@ class TestValProgression(unittest.TestCase):
         ai = block(withdrawal, 'ai_will_do')
         base = float(scalar(ai, 'base'))
         self.assertGreater(base, 0)
-        for ready in (False, True):
-            for viable in (False, True):
-                facts = {('VAL', 'VAL_ai_frontier_force_ready', 'yes'): ready,
-                         ('CIN', 'VAL_frontier_bloc_target_eligible', 'yes'): viable}
-                weight = base
-                for modifier in [e.value for e in ai if e.key == 'modifier']:
-                    if matches_conditions([e for e in modifier if e.key != 'factor'], facts, 'VAL'):
-                        weight *= float(scalar(modifier, 'factor'))
-                self.assertEqual(weight > 0, not (ready and viable))
+        for stage in (0, 2):
+            for ready in (False, True):
+                for viable in (False, True):
+                    facts = {('VAL', 'VAL_ai_frontier_force_ready', 'yes'): ready,
+                             ('VAL', 'variable', 'VAL_frontier_stage'): stage,
+                             ('VAL', 'VAL_frontier_idle', 'yes'): stage == 0,
+                             ('VAL', 'VAL_frontier_prewar_eligible', 'yes'): stage == 2 and viable,
+                             ('CIN', 'VAL_frontier_bloc_target_eligible', 'yes'): viable if stage == 0 else True}
+                    weight = base
+                    for modifier in [e.value for e in ai if e.key == 'modifier']:
+                        if matches_conditions([e for e in modifier if e.key != 'factor'], facts, 'VAL'):
+                            weight *= float(scalar(modifier, 'factor'))
+                    self.assertEqual(weight > 0, not (ready and viable), (stage, ready, viable))
 
     def test_deferral_and_map_proclamation_explain_their_consequences_in_both_languages(self):
         for language in ('russian', 'english'):

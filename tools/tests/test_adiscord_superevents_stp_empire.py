@@ -171,7 +171,7 @@ class SupereventObserverTests(unittest.TestCase):
     def machine(self, human=False):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar
         definitions = {e.key: e.value for e in parse_clausewitz(read(ROOT / 'common/scripted_effects/ADISCORD_vorkerland_effects.txt'))}
-        self.assertIn('ADISCORD_superevent_observer_tick', definitions)
+        self.assertTrue('ADISCORD_superevent_observer_tick' in definitions, 'missing observer timeout effect')
         hooks = block(parse_clausewitz(read(ROOT / 'common/on_actions/00_ADISCORD_on_actions.txt')), 'on_actions')
         daily = block(block(hooks, 'on_daily'), 'effect')
         state = {'flags': {}, 'ttl': {}, 'queue': [], 'variables': {}, 'human': human, 'played': [], 'scans': 0}
