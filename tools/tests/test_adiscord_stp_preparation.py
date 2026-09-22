@@ -3225,12 +3225,13 @@ class StelanderPreparationTests(unittest.TestCase):
                 for reference in entry.value:
                     self.assertIn(reference.value, focus_ids, "focus path contains a removed predecessor")
 
-    def test_shabrat_can_postpone_the_live_election_commission_once(self):
+    def test_shabrat_delay_applies_as_soon_as_the_focus_is_selected(self):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
                     if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
         focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_delay_election_commission")
         self.assertEqual((scalar(focus, "x"), scalar(focus, "y"), scalar(focus, "cost")), ("-14", "4", "2"))
         self.assertEqual(scalar(focus, "cancel_if_invalid"), "yes")
+        self.assertIn(("cancelable", "no"), [(e.key, e.value) for e in focus if not isinstance(e.value, list)])
         self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "STP_Call_For_Shabrat")
         available = block(focus, "available")
         facts = {("STP", "STP_cw_preparation_open", "yes"): True,
@@ -3238,28 +3239,50 @@ class StelanderPreparationTests(unittest.TestCase):
                  ("STP", "has_active_mission", "STP_cw_election_window"): True}
         self.assertTrue(matches_conditions(available, facts))
         self.assertFalse(matches_conditions(available, {**facts, ("STP", "has_active_mission", "STP_cw_election_window"): False}))
-        reward = block(focus, "completion_reward")
-        self.assertEqual({e.key for e in reward}, {"custom_effect_tooltip", "hidden_effect"})
-        shown = [e.value for e in reward if e.key == "custom_effect_tooltip"]
-        self.assertEqual(shown, ["STP_cw_delay_election_tt", "STP_cw_suspicion_15_tt"])
+
+        selections = [e.value for e in focus if e.key == "select_effect" and isinstance(e.value, list)]
+        self.assertEqual(len(selections), 1, "commission delay must start when the focus is selected")
+        selection = selections[0]
         both = {("STP", "has_active_mission", "STP_cw_election_window"): True,
                 ("STP", "has_active_mission", "STP_cw_credentials_review"): True}
+        selected = list(selected_effects(selection, both))
         extensions = [(scalar(e.value, "mission"), scalar(e.value, "days"))
-                      for _, e in selected_effects(reward, both) if e.key == "add_days_mission_timeout"]
+                      for _, e in selected if e.key == "add_days_mission_timeout"]
         self.assertEqual(extensions, [("STP_cw_election_window", "80"), ("STP_cw_credentials_review", "80")])
-        only_vote = list(selected_effects(reward, {("STP", "has_active_mission", "STP_cw_election_window"): True}))
-        self.assertEqual([(scalar(e.value, "mission"), scalar(e.value, "days"))
-                          for _, e in only_vote if e.key == "add_days_mission_timeout"],
-                         [("STP_cw_election_window", "80")])
-        self.assertEqual([scalar(e.value, "value") for _, e in only_vote if e.key == "set_temp_variable"], ["15"])
-        missed = list(selected_effects(reward, {}))
-        self.assertFalse(any(e.key == "add_days_mission_timeout" for _, e in missed))
-        self.assertFalse(any(e.key == "set_temp_variable" for _, e in missed))
+        self.assertEqual([scalar(e.value, "value") for _, e in selected if e.key == "set_temp_variable"], ["15"])
+
+        reward = block(focus, "completion_reward")
+        shown = [e.value for e in reward if e.key == "custom_effect_tooltip"]
+        self.assertEqual(shown, ["STP_cw_delay_election_tt", "STP_cw_suspicion_15_tt"])
+        self.assertFalse(any(e.key == "add_days_mission_timeout" for e in walk(reward)),
+                         "the 14-day focus timer must not postpone the actual delay")
+        self.assertFalse(any(e.key == "set_temp_variable" and isinstance(e.value, list)
+                             and scalar(e.value, "var") == "STP_party_suspicion_change"
+                             for e in walk(reward)),
+                         "suspicion belongs to the immediate select effect")
+
         loc = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(encoding="utf-8-sig")
-        self.assertIn("откладывает текущую сверку на §Y80 дней§!", loc)
-        self.assertNotIn("откладывает текущую сверку на §Y14 дней§!", loc)
+        self.assertIn("эффект применяется сразу после выбора фокуса", loc)
         tokens = (ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").read_text(encoding="utf-8")
         self.assertIn("STP_cw_credentials_review", tokens.splitlines())
+
+    def test_stelander_preparation_copy_prioritises_actions_over_army_ledger(self):
+        expectations = (
+            ("russian", "§YПЕРВЫЕ ШАГИ§!"),
+            ("english", "§YFIRST STEPS§!"),
+        )
+        for language, guide_marker in expectations:
+            path = ROOT / "localisation" / language / f"ADISCORD_STP_l_{language}.yml"
+            loc = path.read_text(encoding="utf-8-sig")
+            guide = next(line for line in loc.splitlines() if line.lstrip().startswith("STP_startup_guide:"))
+            self.assertIn(guide_marker, guide)
+            battle = next(line for line in loc.splitlines() if line.lstrip().startswith("STP_battle_for_stelander_desc:"))
+            self.assertNotIn("STP_cw_report_party_brigades", battle)
+            self.assertNotIn("STP_cw_report_resistance_brigades", battle)
+            self.assertIn("STP_political_action_slots_available", battle)
+            self.assertIn("[STPGetPreparationPressure]", battle)
+            self.assertIn("[STPGetLastPartyResponse]", battle)
+            self.assertIn("[STPGetNodStatus]", battle)
 
     def test_vorkerland_collapse_opens_dynamic_shabrat_asset_focuses(self):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
