@@ -1343,6 +1343,29 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.run_effect("VAL_reconcile_supply_crisis")
         self.assertEqual(self.dirty, before)
 
+    def test_refresh_cannot_drop_active_collapse_when_local_flag_is_lost(self):
+        self.facts[("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")] = True
+        self.variables.update(VAL_economic_recovery_steps=4, VAL_arsenal_reputation_stage=2)
+        self.run_effect("VAL_refresh_industrial_economy")
+        expected_output = self.variables["VAL_industrial_output"]
+        self.facts.pop(("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted"), None)
+        self.run_effect("VAL_refresh_industrial_economy")
+        self.assertTrue(self.facts.get(("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted"), False))
+        self.assertIn("VAL_economic_collapse", self.modifiers)
+        self.assertNotIn("VAL_contract_industry", self.modifiers)
+        self.assertAlmostEqual(self.variables["VAL_industrial_output"], expected_output)
+
+    def test_stage_nine_stays_in_collapse_until_final_recovery_receipt(self):
+        self.facts[("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")] = True
+        self.variables.update(VAL_economic_recovery_steps=9, VAL_arsenal_reputation_stage=4)
+        self.run_effect("VAL_refresh_industrial_economy")
+        self.assertIn("VAL_economic_collapse", self.modifiers)
+        self.assertNotIn("VAL_economic_miracle", self.modifiers)
+        self.facts[("VAL", "has_country_flag", "VAL_economic_recovery_completed")] = True
+        self.run_effect("VAL_refresh_industrial_economy")
+        self.assertIn("VAL_economic_miracle", self.modifiers)
+        self.assertNotIn("VAL_economic_collapse", self.modifiers)
+
     def test_legacy_supply_idea_migrates_without_reset_or_duplicate_penalty(self):
         self.installed_ideas.add("VAL_vorkerland_contract_disruptions")
         for focus in self.recovery_focuses[:3]:
@@ -1371,6 +1394,8 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
                     "efficiency": (-.57, .07), "trade": (-.85, .10),
                     "income": (-.57, .07), "consumer": (.18, -.02)}
         for stage in range(1, 10):
+            if stage == 9:
+                self.facts[("VAL", "has_country_flag", "VAL_economic_recovery_completed")] = True
             self.run_effect("VAL_advance_economic_recovery")
             for field, (base, increment) in expected.items():
                 self.assertAlmostEqual(self.variables[f"VAL_industrial_{field}"], base + stage * increment + (.02 if field == "output" else 0))
@@ -1458,6 +1483,9 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
             self.assertIn("cancel_if_invalid = yes", focus)
         final = next(f for f in named_blocks(text, "focus") if "id = VAL_Return_To_World_Market" in f)
         self.assertIn("prerequisite = { focus = VAL_Returning_Buyers }", final)
+        self.assertIn("set_country_flag = VAL_economic_recovery_completed", final)
+        self.assertLess(final.index("set_country_flag = VAL_economic_recovery_completed"),
+                        final.index("VAL_advance_economic_recovery = yes"))
 
     def test_starting_commanders_and_trait_are_earned(self):
         history = (ROOT / "history/countries/VAL - ValeraLand.txt").read_text(encoding="utf-8-sig")
