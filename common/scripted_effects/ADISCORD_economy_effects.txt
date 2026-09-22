@@ -2627,9 +2627,8 @@ ADISCORD_economy_take_debt = {
 ADISCORD_economy_repay_debt = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
-		limit = { ADISCORD_economy_has_treasury_50 = yes ADISCORD_economy_has_debt = yes }
+		limit = { ADISCORD_economy_has_treasury_500 = yes ADISCORD_economy_has_debt = yes }
 		set_variable = { var = ADISCORD_economy_repay_cash_temp value = 500 }
-		if = { limit = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = less_than } } set_variable = { var = ADISCORD_economy_repay_cash_temp value = ADISCORD_economy_treasury } }
 		# Repayment is one-to-one. Loan premiums and interest are charged when
 		# borrowing and through debt service; repayment must never mint treasury.
 		set_variable = { var = ADISCORD_economy_repay_debt_room_temp value = ADISCORD_economy_debt }
@@ -3162,7 +3161,7 @@ ADISCORD_economy_gui_try_repay_debt = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = {
-			ADISCORD_economy_has_treasury_50 = yes
+			ADISCORD_economy_has_treasury_500 = yes
 			ADISCORD_economy_has_debt = yes
 		}
 		ADISCORD_economy_repay_debt = yes

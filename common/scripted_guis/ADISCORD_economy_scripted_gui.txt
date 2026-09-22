@@ -138,7 +138,7 @@ scripted_gui = {
 			}
 			ADISCORD_economy_action_internal_bonds_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_issue_internal_bonds = yes }
 			ADISCORD_economy_action_external_loan_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_take_external_loan = yes }
-			ADISCORD_economy_action_repay_debt_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_has_treasury_50 = yes ADISCORD_economy_has_debt = yes }
+			ADISCORD_economy_action_repay_debt_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_has_treasury_500 = yes ADISCORD_economy_has_debt = yes }
 			ADISCORD_economy_action_restructure_debt_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_restructure_debt = yes }
 			ADISCORD_economy_action_stabilization_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_stabilize_macro = yes }
 			ADISCORD_economy_action_war_taxes_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_can_use_war_taxes = yes }

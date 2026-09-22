@@ -280,6 +280,7 @@ ADISCORD_economy_has_treasury_80 = { check_variable = { var = ADISCORD_economy_t
 ADISCORD_economy_has_treasury_90 = { check_variable = { var = ADISCORD_economy_treasury value = 90 compare = greater_than_or_equals } }
 ADISCORD_economy_has_treasury_100 = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
 ADISCORD_economy_has_treasury_150 = { check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals } }
+ADISCORD_economy_has_treasury_500 = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
 ADISCORD_economy_has_low_treasury = { check_variable = { var = ADISCORD_economy_treasury value = 50 compare = less_than } }
 ADISCORD_economy_has_large_reserve = { check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals } }
 
