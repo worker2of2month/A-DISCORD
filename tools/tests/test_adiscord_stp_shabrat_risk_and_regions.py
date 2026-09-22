@@ -160,7 +160,7 @@ class ShabratRiskAndRegionalTransferTests(unittest.TestCase):
         )
         self.assertIsNotNone(match)
         text = match.group(1)
-        for token in ("50%", "70%", "90%", "100%", "Шабрат", "вторая комиссия", "арест"):
+        for token in ("60%", "70%", "90%", "100%", "40 дней", "Шабрат", "вторая комиссия", "арест"):
             with self.subTest(token=token):
                 self.assertIn(token, text)
 
