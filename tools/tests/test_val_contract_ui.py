@@ -843,3 +843,124 @@ class TestValProgressionContinuation(unittest.TestCase):
         flags.clear()
         facts["VAL_campaign_objectives_met"] = True
         self.assertTrue(check("VAL_economic_settlement_ready"))
+
+
+class TestValReclamationCategory(unittest.TestCase):
+    def setUp(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        self.category = next(e.value for e in parse_clausewitz(read(
+            "common/decisions/categories/ADISCORD_VAL_rework_categories.txt"))
+            if e.key == "VAL_reclamation")
+        categories = parse_clausewitz(read("common/decisions/ADISCORD_VAL_decisions.txt"))
+        self.decisions = {e.key: e.value for e in next(
+            c.value for c in categories if c.key == "VAL_reclamation")}
+        self.triggers = {e.key: e.value for e in parse_clausewitz(read(
+            "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"))}
+        self.steps = (
+            ("VAL_reclamation_roads", "VAL_reclamation_survey"),
+            ("VAL_reclamation_water", "VAL_reclamation_clean_water"),
+            ("VAL_reclamation_settlement", "VAL_reclamation_return_home"),
+            ("VAL_reclamation_industry", "VAL_reclamation_industrial_sites"),
+        )
+
+    def expand(self, items):
+        from dataclasses import replace
+        expanded = []
+        for entry in items:
+            if entry.key in self.triggers:
+                self.assertIn(entry.value, ("yes", "no"))
+                expanded.append(replace(entry, key="AND" if entry.value == "yes" else "NOT",
+                                        value=self.expand(self.triggers[entry.key])))
+            elif isinstance(entry.value, list):
+                expanded.append(replace(entry, value=self.expand(entry.value)))
+            else:
+                expanded.append(entry)
+        return expanded
+
+    def facts(self, stage, *, survey=True, owned=True, controlled=True, dirty=True):
+        facts = {
+            ("VAL", "has_completed_focus", "VAL_reclamation_survey"): survey,
+            ("VAL", "has_capitulated", "no"): True,
+            ("FROM", "is_owned_by", "ROOT"): owned,
+            ("FROM", "is_owned_by", "VAL"): owned,
+            ("FROM", "is_controlled_by", "ROOT"): controlled,
+            ("FROM", "is_controlled_by", "VAL"): controlled,
+            ("FROM", "variable", "VAL_reclamation_stage"): stage,
+        }
+        modifiers = ("ADISCORD_vorkerland_dirty_state", "VAL_reclamation_stage_1_modifier",
+                     "VAL_reclamation_stage_2_modifier")
+        if dirty and stage < len(modifiers):
+            facts[("FROM", "has_dynamic_modifier", modifiers[stage])] = True
+        return facts
+
+    def matches(self, items, facts):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+        return matches_conditions(self.expand(items), facts, "VAL")
+
+    def decision_condition(self, decision, condition, facts):
+        from tools.tests.test_adiscord_stp_preparation import block
+        return self.matches(block(self.decisions[decision], condition), facts)
+
+    def visible_rows(self, facts):
+        return [name for name in self.decisions if self.decision_condition(name, "visible", facts)]
+
+    def test_empty_reclamation_category_is_not_forced_into_the_list(self):
+        from tools.tests.test_adiscord_stp_preparation import scalar
+        self.assertEqual(scalar(self.category, "visible_when_empty"), "no")
+        self.assertEqual(self.visible_rows(self.facts(0, dirty=False)), [])
+        self.assertEqual(self.visible_rows(self.facts(4)), [])
+        self.assertEqual(self.visible_rows(self.facts(0, owned=False)), [])
+
+    def test_each_local_stage_has_one_visible_followup_after_survey(self):
+        for stage, (name, _) in enumerate(self.steps):
+            with self.subTest(stage=stage):
+                self.assertEqual(self.visible_rows(self.facts(stage)), [name])
+                self.assertEqual(self.visible_rows(self.facts(stage, survey=False)), [])
+
+    def test_missing_followup_focus_blocks_execution_without_hiding_the_project(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+        for stage, (name, focus) in enumerate(self.steps[1:], 1):
+            with self.subTest(stage=stage):
+                facts = self.facts(stage)
+                self.assertTrue(self.decision_condition(name, "visible", facts))
+                available = block(self.decisions[name], "available")
+                self.assertEqual(scalar(available, "has_completed_focus"), focus)
+                self.assertFalse(self.matches(available, facts))
+                facts[("VAL", "has_completed_focus", focus)] = True
+                self.assertTrue(self.matches(available, facts))
+
+    def test_occupation_and_busy_work_keep_the_current_stage_readable(self):
+        for stage, (name, focus) in enumerate(self.steps):
+            with self.subTest(stage=stage):
+                facts = self.facts(stage, controlled=False)
+                facts[("VAL", "has_completed_focus", focus)] = True
+                self.assertTrue(self.decision_condition(name, "visible", facts))
+                self.assertFalse(self.decision_condition(name, "available", facts))
+                facts = self.facts(stage)
+                facts[("VAL", "has_completed_focus", focus)] = True
+                if stage == 3:
+                    facts[("FROM", "has_variable", "VAL_reclamation_industry_deposit")] = True
+                else:
+                    facts[("VAL", "has_variable", "VAL_reclamation_deposit")] = True
+                self.assertTrue(self.decision_condition(name, "visible", facts))
+                self.assertFalse(self.decision_condition(name, "available", facts))
+
+    def test_clean_and_foreign_states_do_not_gain_fake_reclamation_projects(self):
+        facts = self.facts(0, dirty=False)
+        for _, focus in self.steps:
+            facts[("VAL", "has_completed_focus", focus)] = True
+        self.assertEqual(self.visible_rows(facts), [])
+        for stage in range(4):
+            with self.subTest(stage=stage):
+                self.assertEqual(self.visible_rows(self.facts(stage, owned=False)), [])
+
+    def test_projects_stay_in_their_category_with_both_map_and_list_entries(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+        self.assertEqual(set(self.decisions), {name for name, _ in self.steps})
+        for name, _ in self.steps:
+            body = self.decisions[name]
+            self.assertEqual(scalar(body, "on_map_mode"), "map_and_decisions_view")
+            self.assertEqual(scalar(body, "cost"), "0")
+            targets = block(body, "targets")
+            self.assertEqual({e.value for e in targets}, {"24", "42", "48", "54", "55", "56", "57"})
+            self.assertEqual(scalar(body, "days_remove"), "60" if name.endswith("industry") else "90")
