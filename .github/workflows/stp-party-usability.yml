@@ -63,8 +63,14 @@ jobs:
           print('EXPECTED_RED',re.findall(r'(?m)^FAIL: (.*)$',red.stderr),flush=True)
           subprocess.run(['python','-B','/tmp/stp_party_apply.py'],check=True)
           subprocess.run(['python','-B','/tmp/stp_party_adjust.py'],check=True)
+          p=Path('tools/tests/test_adiscord_stp_preparation.py')
+          text=p.read_text(encoding='utf-8')
+          old='self.assertTrue(matches_conditions(visible, party), "Party government programs share this category")'
+          new='self.assertFalse(matches_conditions(visible, party), "Government programs moved out of the closed election category")'
+          assert text.count(old)==1
+          p.write_text(text.replace(old,new),encoding='utf-8')
           subprocess.run(['git','diff','--check'],check=True)
-          subprocess.run(['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_survival.PartyUsabilityContracts','tools.tests.test_adiscord_stp_party_balance.StelanderPartyBalanceContracts.test_party_route_requires_staged_defensive_recovery','-v'],check=True)
+          subprocess.run(['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_survival.PartyUsabilityContracts','tools.tests.test_adiscord_stp_party_balance.StelanderPartyBalanceContracts.test_party_route_requires_staged_defensive_recovery','tools.tests.test_adiscord_stp_preparation.StelanderPreparationTests.test_closed_preparation_removes_suspicion_and_its_display','-v'],check=True)
           after=run_suite('stp-party-after')
           new=after-baseline
           print('NEW_REGRESSIONS',sorted(new),flush=True)
@@ -92,7 +98,7 @@ jobs:
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add common events localisation tools/tests/test_adiscord_stp_party_survival.py tools/tests/test_adiscord_stp_party_route.py
+          git add common events localisation tools/tests/test_adiscord_stp_party_survival.py tools/tests/test_adiscord_stp_party_route.py tools/tests/test_adiscord_stp_preparation.py
           git commit -m 'fix(stp): streamline party management and supply countermeasures'
           git push origin HEAD:refs/heads/codex/stp-party-usability-final-20260922
           echo DELIVERY_COMMIT=$(git rev-parse HEAD)
