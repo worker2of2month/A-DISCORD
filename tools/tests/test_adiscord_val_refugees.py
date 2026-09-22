@@ -69,11 +69,29 @@ class RefugeeAdmissionTests(unittest.TestCase):
                     self.run_effect(self.effects["VAL_open_refugee_waves"])
                 self.assertFalse(self.visible(region))
 
-    def test_peace_hides_unspent_offer_immediately(self):
+    def test_opened_offer_survives_peace_until_its_timer_expires(self):
         self.facts[("VAL", "has_country_flag", "VAL_refugee_stelander_window")] = True
-        self.assertFalse(self.visible("stelander"))
+        self.assertTrue(self.visible("stelander"))
         self.facts[("VAL", "VAL_refugee_stelander_war", "yes")] = True
         self.assertTrue(self.visible("stelander"))
+
+    def test_canonical_story_flags_open_vorkerland_and_stelander_waves(self):
+        vorkerland = self.triggers["VAL_refugee_vorkerland_war"]
+        stelander = self.triggers["VAL_refugee_stelander_war"]
+        self.assertTrue(matches_conditions(
+            vorkerland,
+            {("VAL", "has_global_flag", "ADISCORD_vorkerland_collapse_wars_started"): True},
+            "VAL",
+        ))
+        self.assertTrue(matches_conditions(
+            stelander,
+            {("VAL", "has_global_flag", "STP_cw_started"): True},
+            "VAL",
+        ))
+
+    def test_weekly_update_does_not_clear_timed_admission_windows_on_peace(self):
+        weekly = self.effects["VAL_update_refugees_weekly"]
+        self.assertFalse(any(e.key == "clr_country_flag" for e in weekly))
 
     def test_unrelated_wars_do_not_qualify(self):
         facts = {("STP", "has_war_with", "NOD"): True}
@@ -173,6 +191,16 @@ class RefugeeAdmissionTests(unittest.TestCase):
             self.assertIn("[FROM.GetName]", loc)
             self.assertIn("VAL_fund_resettlement_depots:", loc)
             self.assertIn("180", loc)
+
+    def test_story_outbreaks_open_refugee_windows_immediately(self):
+        vorkerland_events = (ROOT / "events/ADISCORD_vorkerland_events.txt").read_text(encoding="utf-8-sig")
+        stelander_effects = (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8-sig")
+        outbreak = vorkerland_events.index("set_global_flag = ADISCORD_vorkerland_collapse_wars_started")
+        dirty = vorkerland_events.index("set_global_flag = ADISCORD_vorkerland_dirty_opened")
+        self.assertIn("VAL_open_refugee_waves = yes", vorkerland_events[outbreak:outbreak + 500])
+        self.assertIn("VAL_open_refugee_waves = yes", vorkerland_events[dirty:dirty + 500])
+        civil = stelander_effects.index("set_global_flag = STP_cw_started")
+        self.assertIn("VAL_open_refugee_waves = yes", stelander_effects[civil:civil + 500])
 
     def test_no_population_faucet_or_permanent_stability_farming(self):
         def walk(items):
