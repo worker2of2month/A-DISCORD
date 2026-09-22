@@ -1440,7 +1440,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_security_collegium
-		icon = GFX_focus_generic_secret_service_agency
+		icon = GFX_focus_STP_cw_security_collegium
 		relative_position_id = STP_Govern_In_His_Name
 		x = 4
 		y = 1
@@ -1491,7 +1491,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_protocol_office
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_STP_cw_protocol_office
 		relative_position_id = STP_Govern_In_His_Name
 		x = 9
 		y = 2
@@ -1514,7 +1514,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_public_lists
-		icon = GFX_focus_STP_All_In
+		icon = GFX_focus_STP_cw_public_lists
 		relative_position_id = STP_Govern_In_His_Name
 		x = 8
 		y = 3
@@ -1543,7 +1543,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_quiet_registers
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_STP_cw_quiet_registers
 		relative_position_id = STP_Govern_In_His_Name
 		x = 10
 		y = 3
@@ -1655,7 +1655,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_district_compact
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_STP_party_district_compact
 		relative_position_id = STP_Govern_In_His_Name
 		x = 2
 		y = 3

@@ -609,11 +609,87 @@ spriteTypes = {
 	}
 
 	spriteType = {
-		name = "GFX_focus_STP_cw_quiet_registers_shine"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_buy_silence.png"
+		name = "GFX_focus_STP_cw_public_lists_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_public_lists.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_buy_silence.png"
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_public_lists.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_protocol_office_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_protocol_office.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_protocol_office.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_security_collegium_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_security_collegium.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_security_collegium.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_cw_quiet_registers_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_quiet_registers.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_quiet_registers.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_district_compact_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_district_compact.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_district_compact.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
