@@ -5480,7 +5480,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_chain
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_STP_bookmark_support_party
 		x = 16
 		y = 4
 		cost = 5
@@ -5550,7 +5550,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_sot_state
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_STP_bookmark_last_banquet
 		x = 16
 		y = 7
 		cost = 5
