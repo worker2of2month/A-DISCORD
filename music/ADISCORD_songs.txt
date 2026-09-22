@@ -126,4 +126,7 @@ music = {
 	chance = { base = 10 }
 }
 
-
+music = {
+	song = "ADISCORD_last_warrior_dead_land"
+	chance = { base = 10 }
+}
