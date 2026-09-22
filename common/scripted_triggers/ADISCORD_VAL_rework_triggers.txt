@@ -2,6 +2,7 @@ VAL_final_crisis_available = {
 	tag = VAL
 	is_subject = no
 	has_capitulated = no
+	NOT = { has_country_flag = VAL_stelander_equal_alliance }
 	has_completed_focus = VAL_Northern_Settlement
 	VAL_stelander_dominated = yes
 	NOT = { has_country_flag = VAL_stelander_defeated }
@@ -336,7 +337,7 @@ VAL_ai_frontier_guarantor_preparation = {
 	NOT = { has_war_with = VAL }
 	NOT = { is_in_faction_with = VAL }
 	OR = {
-		AND = { tag = NOD OR = { is_subject = no is_subject_of = STP } VAL = { VAL_stelander_dominated = yes } }
+		AND = { tag = NOD OR = { is_subject = no is_subject_of = STP } }
 		AND = { tag = STP has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } }
 	}
 	VAL = {
@@ -1202,4 +1203,32 @@ VAL_qol_elite_army_available = {
 	OR = {
 		has_completed_focus = VAL_Contract_General_Staff
 	}
+}
+
+
+VAL_stelander_equal_partner_available = {
+ tag = VAL
+ has_country_flag = VAL_stelander_equal_recognition
+ is_subject = no
+ has_capitulated = no
+ has_war = no
+ NOT = { has_country_flag = VAL_stelander_defeated VAL_stelander_alliance_refused }
+ OR = {
+  STS = {
+   exists = yes
+   has_country_flag = VAL_stelander_equal_recognition
+   is_subject = no
+   has_capitulated = no
+   has_war = no
+   NOT = { has_war_with = VAL }
+  }
+  STP = {
+   exists = yes
+   has_country_flag = VAL_stelander_equal_recognition
+   is_subject = no
+   has_capitulated = no
+   has_war = no
+   NOT = { has_war_with = VAL }
+  }
+ }
 }
