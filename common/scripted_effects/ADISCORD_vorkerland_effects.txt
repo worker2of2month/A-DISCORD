@@ -488,14 +488,32 @@ ADISCORD_vorkerland_reconcile_campaign_state = {
 }
 
 # --- collapse_dirty_effects ---
+# Northern tribal land stays outside the contaminated belt regardless of its owner.
+ADISCORD_vorkerland_clear_northern_dirty_modifiers = {
+	58 = { ADISCORD_vorkerland_remove_dirty_state_modifier = yes }
+	59 = { ADISCORD_vorkerland_remove_dirty_state_modifier = yes }
+	60 = { ADISCORD_vorkerland_remove_dirty_state_modifier = yes }
+	61 = { ADISCORD_vorkerland_remove_dirty_state_modifier = yes }
+	62 = { ADISCORD_vorkerland_remove_dirty_state_modifier = yes }
+	63 = { ADISCORD_vorkerland_remove_dirty_state_modifier = yes }
+	64 = { ADISCORD_vorkerland_remove_dirty_state_modifier = yes }
+	65 = { ADISCORD_vorkerland_remove_dirty_state_modifier = yes }
+}
+
+ADISCORD_vorkerland_remove_dirty_state_modifier = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
+		remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
+		owner = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
 ADISCORD_vorkerland_apply_dirty_modifiers = {
     23 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     24 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     49 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     51 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     57 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    59 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    60 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     125 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     152 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
     153 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
