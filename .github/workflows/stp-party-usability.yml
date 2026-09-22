@@ -20,13 +20,30 @@ jobs:
           python-version: '3.12'
       - name: Install validator dependencies
         run: python -m pip install --disable-pip-version-check Pillow numpy
-      - name: Verify on the pinned gameplay base
+      - name: Verify on the current gameplay base
         run: |
           cp .github/stp_party_usability.py /tmp/stp_party_usability.py
           cp .github/stp_party_apply.py /tmp/stp_party_apply.py
           cp .github/stp_party_adjust.py /tmp/stp_party_adjust.py
-          git fetch --depth=1 origin d21917074259b4f29c8fe36ec20773aeb7ce2e45
-          git checkout --detach d21917074259b4f29c8fe36ec20773aeb7ce2e45
+          python -B - <<'PY'
+          from pathlib import Path
+          p=Path('/tmp/stp_party_usability.py')
+          text=p.read_text()
+          old="unlocks = {e.value for e in one(focus, 'completion_reward') if e.key == 'unlock_decision_tooltip'}"
+          new="unlocks = {one(e.value, 'decision') if isinstance(e.value, list) else e.value for e in one(focus, 'completion_reward') if e.key == 'unlock_decision_tooltip'}"
+          assert text.count(old)==1
+          p.write_text(text.replace(old,new))
+          p=Path('/tmp/stp_party_apply.py')
+          text=p.read_text()
+          for name in ('STP_ps_val_intercept','STP_ps_val_pressure'):
+              old='unlock_decision_tooltip = '+name
+              new='unlock_decision_tooltip = { decision = '+name+' show_effect_tooltip = yes } custom_effect_tooltip = '+name+'_desc'
+              assert text.count(old)==1, name
+              text=text.replace(old,new)
+          p.write_text(text)
+          PY
+          git fetch --depth=1 origin 457a8e2732363b61b3e0a5ac0a6de690e05887ee
+          git checkout --detach 457a8e2732363b61b3e0a5ac0a6de690e05887ee
           python -B - <<'PY'
           from pathlib import Path
           import subprocess, re, json, sys
@@ -77,7 +94,7 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add common events localisation tools/tests/test_adiscord_stp_party_survival.py tools/tests/test_adiscord_stp_party_route.py
           git commit -m 'fix(stp): streamline party management and supply countermeasures'
-          git push origin HEAD:refs/heads/codex/stp-party-usability-delivery-20260922
+          git push origin HEAD:refs/heads/codex/stp-party-usability-final-20260922
           echo DELIVERY_COMMIT=$(git rev-parse HEAD)
       - uses: actions/upload-artifact@v4
         if: always()
