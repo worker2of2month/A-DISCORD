@@ -2,6 +2,7 @@ capital = 20
 
 ADISCORD_grant_technology_profile_field_air_defense = yes
 ADISCORD_grant_technology_profile_land = yes
+ADISCORD_grant_technology_profile_air = yes
 oob = "YPR"
 ####### Characters
 
