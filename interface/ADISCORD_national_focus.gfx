@@ -91,7 +91,11 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_focus_STP_All_In"
-		texturefile = "gfx/interface/goals/_spare/STP/GFX_focus_STP_All_In.png"
+		texturefile = "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png"
+	}
+	spriteType = {
+		name = "GFX_focus_ADISCORD_All_In"
+		texturefile = "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png"
 	}
 	spriteType = {
 		name = "GFX_focus_STP_cw_arm_the_north"

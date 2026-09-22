@@ -5026,7 +5026,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_final_kefreyt
-		icon = GFX_focus_STP_End_Kefreit
+		icon = GFX_focus_ADISCORD_All_In
 		x = 12
 		y = 18
 		cost = 4
