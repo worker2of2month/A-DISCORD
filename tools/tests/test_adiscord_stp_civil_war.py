@@ -81,6 +81,22 @@ class CivilWarContracts(unittest.TestCase):
         self.effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         self.triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
 
+    def test_party_hostilities_clear_prewar_regime_spirits(self):
+        hostilities = block(self.effects, "STP_cw_begin_hostilities")
+        prewar_spirits = (
+            "STP_hedonism_with_no_bondaries",
+            "STP_hidden_slaves_trade",
+            "STP_legalize",
+            "STP_worldwide_famous_tourist_destination",
+        )
+        for spirit in prewar_spirits:
+            with self.subTest(spirit=spirit):
+                self.assertEqual(hostilities.count(f"remove_ideas = {spirit}"), 1)
+        self.assertNotIn("remove_ideas = ADISCORD_economic_system_oligarchic_clan", hostilities)
+        battle_spirit = hostilities.index("add_ideas = STP_cw_party_battle_spirit")
+        self.assertTrue(all(hostilities.index(f"remove_ideas = {spirit}") < battle_spirit
+                            for spirit in prewar_spirits))
+
     def test_northern_early_peace_uses_shared_defeat_and_war_clock(self):
         trigger = block(self.triggers, "NOD_cw_can_accept_northern_defeat")
         self.assertIn("NOT = { surrender_progress < 0.7 }", trigger)
