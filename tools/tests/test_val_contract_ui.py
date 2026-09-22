@@ -553,5 +553,17 @@ class TestValReclamationFollowThrough(unittest.TestCase):
                 for key in (name, name + "_desc"):
                     self.assertEqual(len(re.findall(rf'(?m)^\s*{key}:\d*\s+"[^"\r\n]+"\s*$', text)), 1, (language, key))
 
+    def test_reclamation_and_route_copy_preserve_localisation_references(self):
+        from collections import Counter
+        catalogues = {}
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            catalogues[language] = dict(re.findall(r'(?m)^\s*(\w+):\d*\s*"(.*)"$', text))
+        for key in ("VAL_reclamation_completion_tt", "VAL_startup_guide", "VAL_reclamation_desc",
+                    "VAL_reclamation_settlement_result_tt", "VAL_Balchansk_Charter_desc", "VAL_Balchansk_Clearing_House_desc"):
+            tokens = {language: Counter(re.findall(r'\$[A-Za-z0-9_]+\$|\[[^\]]+\]', values[key]))
+                      for language, values in catalogues.items()}
+            self.assertEqual(tokens["russian"], tokens["english"], key)
+
 if __name__ == "__main__":
     unittest.main()
