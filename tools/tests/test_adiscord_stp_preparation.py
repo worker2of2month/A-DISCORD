@@ -698,7 +698,8 @@ class StelanderPreparationTests(unittest.TestCase):
                     self.assertEqual(matches_conditions(target, current), matches_conditions(target, unlocked),
                                      "daily target caching must not retain an expired local restriction")
                 reward = block(focuses[focus_id], "completion_reward")
-                self.assertIn(decision_id, {e.value for e in reward if e.key == "unlock_decision_tooltip"})
+                self.assertIn(decision_id, {e.value if isinstance(e.value, str) else scalar(e.value, "decision")
+                                            for e in reward if e.key == "unlock_decision_tooltip"})
 
     def test_native_focus_completion_owns_the_three_persistent_unlocks(self):
         trees = [e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt") if e.key == "focus_tree"]
@@ -3406,7 +3407,8 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertEqual(scalar(block(evidence_reward, "add_intel"), "army_intel"), "20")
         self.assertEqual(scalar(block(evidence_reward, "add_intel"), "civilian_intel"), "15")
         reward = block(focus, "completion_reward")
-        self.assertEqual({e.value for e in reward if e.key == "unlock_decision_tooltip"},
+        self.assertEqual({e.value if isinstance(e.value, str) else scalar(e.value, "decision")
+                          for e in reward if e.key == "unlock_decision_tooltip"},
                          {"STP_cw_fund_northern_forts", "STP_cw_send_northern_engineers", "STP_cw_sabotage_nodrul"})
         self.assertEqual(scalar(reward, "add_political_power"), "50")
         self.assertEqual(scalar(reward, "add_command_power"), "15")

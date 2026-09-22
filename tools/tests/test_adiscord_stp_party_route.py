@@ -379,7 +379,9 @@ class PartyRouteContracts(unittest.TestCase):
     def test_assault_focus_unlocks_a_paid_order_instead_of_silent_spawn_attempt(self):
         reward = one(self.focus["STP_cw_assault_columns"], "completion_reward")
         self.assertNotIn("STP_cw_mobilize_assault_division", str(signature(reward)))
-        self.assertIn("STP_party_form_assault_column", children(reward, "unlock_decision_tooltip"))
+        self.assertIn("STP_party_form_assault_column",
+                      {v if isinstance(v, str) else one(v, "decision")
+                       for v in children(reward, "unlock_decision_tooltip")})
         d = self.decisions["STP_party_form_assault_column"]
         self.assertEqual(one(d, "cost"), "0")
         self.assertEqual(one(d, "days_re_enable"), "21")
