@@ -1,0 +1,51 @@
+name: Observer and Kefreyt verification
+on:
+  push:
+    branches: [fix/observer-val-progression]
+    paths: [.github/workflows/observer-val-fix.yml]
+permissions:
+  contents: write
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/observer-val-progression
+      - name: Collect source boundaries
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, subprocess
+          root = Path.cwd()
+          out = root / '.superpowers/observer-val-inspection'
+          out.mkdir(parents=True, exist_ok=True)
+          observer, val = [], []
+          for folder in ('common', 'events', 'history', 'localisation', 'tools/tests', 'tools/validators'):
+              for path in sorted((root / folder).rglob('*')):
+                  if path.suffix not in ('.txt', '.yml', '.py'):
+                      continue
+                  text = path.read_text(encoding='utf-8-sig')
+                  lines = text.splitlines()
+                  rel = path.relative_to(root).as_posix()
+                  if folder in ('common', 'events'):
+                      for i, line in enumerate(lines):
+                          if re.search(r'ADISCORD_superevent_(?:enqueue|dispatch_next|show|close|timeout)|is_observer|has_global_flag = \{.*superevent|superevent.*days', line):
+                              lo, hi = max(0, i - 3), min(len(lines), i + 16)
+                              observer.append(f'\n--- {rel}:{i+1} ---\n' + '\n'.join(f'{n+1}: {lines[n]}' for n in range(lo, hi)))
+                  if 'VAL' in path.name or folder == 'localisation':
+                      for i, line in enumerate(lines):
+                          if re.search(r'особого|особое|особым|Special_State|Special_Purpose|special_state|special_purpose|set_portraits|portrait.*[Vv]alera|VAL.*portrait|VAL_.*proclaim|VAL_.*form_', line):
+                              lo, hi = max(0, i - 5), min(len(lines), i + (12 if folder != 'localisation' else 3))
+                              val.append(f'\n--- {rel}:{i+1} ---\n' + '\n'.join(f'{n+1}: {lines[n]}' for n in range(lo, hi)))
+          (out / 'observer.txt').write_text('\n'.join(observer), encoding='utf-8')
+          (out / 'val.txt').write_text('\n'.join(val), encoding='utf-8')
+          inventory = subprocess.check_output(['git', 'ls-files', 'tools/tests/*val*', 'tools/tests/*VAL*', 'tools/tests/*superevent*', 'common/scripted_effects/*VAL*', 'common/scripted_triggers/*VAL*', 'common/ai_strategy_plans/*VAL*'], text=True)
+          (out / 'files.txt').write_text(inventory, encoding='utf-8')
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'add', '--', str(out)], check=True)
+          subprocess.run(['git', 'commit', '-m', 'ci: record targeted source inspection'], check=True)
+          subprocess.run(['git', 'push', 'origin', 'HEAD:fix/observer-val-progression'], check=True)
+          PY
