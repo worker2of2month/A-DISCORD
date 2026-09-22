@@ -11,7 +11,7 @@
  STP_heg_nationalisation_unlock_tt:0 "The Hegemony route can use the existing repeatable regional nationalisation programme."
  STP_heg_administration_unlock_tt:0 "Unlocks provisional administrations for defeated §YNodrul§!, §YYubor§!, §Ythe Frontier§! and §YKefreyt§!. Each administration may later be annexed through a separate 90 day integration decision."
  STP_heg_northern_war_tt:0 "Begins the final northern campaign against independent §YNodrul§!, §YYubor§! and §Ythe Frontier§!. Governments already subordinated to Steland are not attacked again."
- STP_heg_northern_resolved_tt:0 "The northern campaign has been started and Steland is no longer at war with Nodrul, Yubor or the Frontier."
+ STP_heg_northern_resolved_tt:0 "The northern campaign has been started and Steland is at peace with Nodrul, Yubor, the Frontier and Kefreyt before the second campaign begins."
  STP_heg_kefreyt_war_tt:0 "Begins the second final campaign against independent §YKefreyt§!."
  STP_heg_annex_complete_tt:0 "The provisional administration is dissolved and its territory is incorporated into Steland."
 
