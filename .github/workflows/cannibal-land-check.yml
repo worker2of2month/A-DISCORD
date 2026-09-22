@@ -1,0 +1,71 @@
+name: Northern land check
+on:
+  push:
+    branches: [fix/cannibal-clean-land]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            common
+            history/states
+            tools
+            docs/lore
+            localisation/russian
+            map
+          sparse-checkout-cone-mode: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inspect northern contamination sources
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, collections
+          root = Path('.')
+          effects = root / 'common/scripted_effects/ADISCORD_vorkerland_effects.txt'
+          text = effects.read_text(encoding='utf-8-sig')
+          key = 'ADISCORD_vorkerland_apply_dirty_modifiers'
+          start = re.search(r'(?m)^' + key + r'\s*=\s*\{', text).start()
+          opened = text.index('{', start)
+          depth = 1
+          end = opened + 1
+          while depth:
+              depth += (text[end] == '{') - (text[end] == '}')
+              end += 1
+          print('DIRTY_EFFECT', text[:start].count('\n') + 1)
+          print(text[start:end])
+          definitions = {}
+          for line in (root/'map/definition.csv').read_text(encoding='utf-8-sig').splitlines():
+              fields = line.split(';')
+              if fields[0].isdigit() and len(fields) > 6:
+                  definitions[int(fields[0])] = fields[6]
+          for file in (root/'history/states').glob('*.txt'):
+              data = file.read_text(encoding='utf-8-sig')
+              match = re.search(r'\bid\s*=\s*(\d+)', data)
+              if not match: continue
+              state = int(match.group(1))
+              if state not in set(range(58,66)) | set(range(178,194)): continue
+              owner = re.search(r'\bowner\s*=\s*(\w+)', data)
+              provinces = re.search(r'\bprovinces\s*=\s*\{([^}]+)\}', data)
+              ids = [int(x) for x in re.findall(r'\d+', provinces.group(1))]
+              print('STATE', state, file, 'OWNER', owner.group(1) if owner else None, 'TERRAIN', dict(collections.Counter(definitions.get(p) for p in ids)))
+          for folder in ('common/on_actions','common/dynamic_modifiers'):
+              for file in (root/folder).glob('*.txt'):
+                  data = file.read_text(encoding='utf-8-sig')
+                  if 'ADISCORD_vorkerland_dirty_state' in data or 'ADISCORD_vorkerland_apply_dirty_modifiers' in data:
+                      print('RELATED', file, 'LINES', len(data.splitlines()))
+          for file in (root/'tools').rglob('*.py'):
+              data = file.read_text(encoding='utf-8-sig')
+              if 'CONTAMINATED_STATES' in data or 'ADISCORD_vorkerland_apply_dirty_modifiers' in data:
+                  print('TOOL', file)
+          print('NORTH LORE')
+          data=(root/'docs/lore/countries/VAL.md').read_text(encoding='utf-8-sig')
+          for line in data.splitlines():
+              if any(x in line.lower() for x in ('канниб','антол','фарейн','химбер','северн')): print(line)
+          PY
