@@ -803,5 +803,39 @@ class PartySecondPackageContracts(unittest.TestCase):
         self.assertIn('STP_pw_party_nod_invasion_defeated', start)
 
 
+
+    def test_coalition_tooltips_match_the_sixty_percent_cap(self):
+        for language in ('russian', 'english'):
+            text = read(f'localisation/{language}/ADISCORD_STP_l_{language}.yml')
+            for faction in self.KEYS:
+                key = 'STP_pf_' + faction + '_deal_tt'
+                value = next(line for line in text.splitlines() if line.startswith(' ' + key + ':'))
+                self.assertNotIn('до 100%', value)
+                self.assertNotIn('up to 100%', value)
+                self.assertIn('60%', value)
+                self.assertIn('+12', value)
+                self.assertIn('-12', value)
+
+    def test_fixed_point_cap_and_legacy_shares_do_not_drift(self):
+        from decimal import Decimal, ROUND_DOWN
+        quantum = Decimal('0.001')
+        for faction in self.KEYS:
+            for initial in ('59.999', '60.000', '65.001', '99.999', '100.000'):
+                with self.subTest(faction=faction, initial=initial):
+                    values, flags = self.simulate('STP_pf_initialize')
+                    old = Decimal(initial)
+                    others = [k for k in self.KEYS if k != faction]
+                    share = ((100 - old) / 6).quantize(quantum, rounding=ROUND_DOWN)
+                    for k in others:
+                        values[f'STP_pf_{k}_influence'] = share
+                    values[f'STP_pf_{others[-1]}_influence'] = 100 - old - 5 * share
+                    values[f'STP_pf_{faction}_influence'] = old
+                    values['STP_pf_selected'] = self.KEYS.index(faction) + 1
+                    self.simulate('STP_pf_shift', values, flags, quantize=True)
+                    self.assertEqual(values[f'STP_pf_{faction}_influence'], max(old, Decimal(60)))
+                    self.assertEqual(sum(values[f'STP_pf_{k}_influence'] for k in self.KEYS), 100)
+                    self.assertTrue(all(values[f'STP_pf_{k}_influence'] >= 0 for k in self.KEYS))
+
+
 if __name__ == "__main__":
     unittest.main()
