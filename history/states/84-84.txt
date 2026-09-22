@@ -14,7 +14,7 @@ state={
 		owner = TFF
 		buildings = {
 			air_base = 2
-			16533 = { naval_base = 2 }
+			4887 = { naval_base = 2 }
 			infrastructure = 3
 			industrial_complex = 2
 			arms_factory = 2
