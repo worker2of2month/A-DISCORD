@@ -65,15 +65,27 @@ SEA_REGIONS = (
     SeaRegion(39, "southeastern-ocean", "Юго-восточный океан", "tropical_ocean", 4, 2),
 )
 
-# The enclosed Antolla basin is a separate, shallow inland sea.  It must not
-# be swallowed by the eastern-ocean partition or treated like a landlocked
-# lake: all six provinces form one navigable component around the inner
-# frontier countries.
+# Dedicated coastal theatres are cut from the macro partition so distant ocean
+# boundaries remain stable. Each cut and the remaining macro region must stay
+# connected. Antolla remains navigable through the existing Strugent canal.
 DEDICATED_SEA_REGIONS = (
-    SeaRegion(228, "antolla-sea", "Антолльское море", "temperate_ocean", 2, 2, "water_shallow_sea"),
+    SeaRegion(228, "antolla-sea", "Западное Антолльское море", "temperate_ocean", 2, 2, "water_shallow_sea"),
+    SeaRegion(229, "eastern-antolla-sea", "Восточное Антолльское море", "temperate_ocean", 2, 2, "water_shallow_sea"),
+    SeaRegion(230, "kefreite-coast", "Кефрейтское побережье", "temperate_ocean", 2, 2),
+    SeaRegion(231, "stelander-approaches", "Стеландские морские подступы", "temperate_ocean", 2, 2),
+    SeaRegion(232, "strugent-approaches", "Подступы к Стругентскому каналу", "temperate_ocean", 2, 2),
 )
 DEDICATED_SEA_PROVINCES = {
-    228: frozenset({16258, 16262, 16264, 16265, 16266, 16268}),
+    228: frozenset({16262, 16264, 16265}),
+    229: frozenset({16258, 16266, 16268}),
+    230: frozenset({13389, 14721, 15477}),
+    231: frozenset({13256, 13493, 13596, 14089, 14414, 15500}),
+    # The northern inlets have no exit outside these approaches. Keep them in
+    # this theatre rather than leaving detached fragments in the macro ocean.
+    232: frozenset({
+        13393, 13801, 13961, 14011, 14153, 14225, 14234, 14274, 14360,
+        14416, 14482, 14634, 14761, 14816, 14973, 15190, 15590, 15723, 16030,
+    }),
 }
 ALL_SEA_REGIONS = (*SEA_REGIONS, *DEDICATED_SEA_REGIONS)
 
