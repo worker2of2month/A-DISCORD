@@ -2212,7 +2212,7 @@ VAL_frontier_join_existing_war = {
             limit = { has_country_flag = VAL_nod_ultimatum_expired }
             NOD = {
                 if = {
-                    limit = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } NOT = { has_war_with = CIN has_war_with = VAL is_in_faction_with = VAL } }
+                    limit = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } VAL = { VAL_stelander_dominated = yes } NOT = { has_war_with = CIN has_war_with = VAL is_in_faction_with = VAL } }
                     add_to_war = { targeted_alliance = CIN enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
                     if = { limit = { has_war_with = VAL } set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes }
                 }
@@ -2233,7 +2233,7 @@ VAL_frontier_join_existing_war = {
             limit = { has_country_flag = VAL_nod_ultimatum_expired }
             NOD = {
                 if = {
-                    limit = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } NOT = { has_war_with = OSF has_war_with = VAL is_in_faction_with = VAL } }
+                    limit = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } VAL = { VAL_stelander_dominated = yes } NOT = { has_war_with = OSF has_war_with = VAL is_in_faction_with = VAL } }
                     add_to_war = { targeted_alliance = OSF enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
                     if = { limit = { has_war_with = VAL } set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes }
                 }
@@ -2254,7 +2254,7 @@ VAL_frontier_join_existing_war = {
             limit = { has_country_flag = VAL_nod_ultimatum_expired }
             NOD = {
                 if = {
-                    limit = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } NOT = { has_war_with = APH has_war_with = VAL is_in_faction_with = VAL } }
+                    limit = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } VAL = { VAL_stelander_dominated = yes } NOT = { has_war_with = APH has_war_with = VAL is_in_faction_with = VAL } }
                     add_to_war = { targeted_alliance = APH enemy = VAL hostility_reason = asked_to_join single_target_only = yes }
                     if = { limit = { has_war_with = VAL } set_country_flag = VAL_frontier_guarantor VAL_frontier_prepare_major = yes }
                 }
@@ -3917,6 +3917,7 @@ VAL_frontier_issue_nod_ultimatum = {
             check_variable = { var = VAL_frontier_target value = 4 compare = less_than }
             OR = { has_war_with = CIN has_war_with = OSF has_war_with = APH }
             NOT = { has_country_flag = VAL_nod_ultimatum_issued }
+            VAL_stelander_dominated = yes
             NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } NOT = { has_war_with = VAL is_in_faction_with = VAL has_war_with = CIN has_war_with = OSF has_war_with = APH } }
         }
         set_country_flag = VAL_nod_ultimatum_issued
