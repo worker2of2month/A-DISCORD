@@ -9,7 +9,7 @@ jobs:
   verify:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/val-expansion-integration-review'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,30 +19,97 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install pillow numpy pyyaml
-      - name: Verify the reachable paid objective and publish a clean branch
+      - name: Verify final bilingual reference and integrate current main
         run: |
-          cp .github/val_cleanup_finalize.py /tmp/val_cleanup_finalize.py
-          git fetch --no-tags --depth=1 origin e41f07d2417b09aec7461b586b33ecc1467f3800
-          git switch --detach e41f07d2417b09aec7461b586b33ecc1467f3800
-          export PYTHONPATH="$PWD"
-          python -B /tmp/val_cleanup_finalize.py
-      - name: Preserve evidence
+          git fetch --no-tags --depth=10 origin c90c4e76f0645f5ade9f70e65fc27b928e0035ea 457a8e2732363b61b3e0a5ac0a6de690e05887ee
+          git switch --detach c90c4e76f0645f5ade9f70e65fc27b928e0035ea
+          git config user.name 'A-DISCORD automation'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          python -B - <<'PY'
+          from pathlib import Path
+          import hashlib, json, re, subprocess, sys, textwrap
+          out = Path('/tmp/val-delivery-review'); out.mkdir(exist_ok=True)
+          method = r'''
+              def test_reclamation_and_route_copy_preserve_localisation_references(self):
+                  from collections import Counter
+                  catalogues = {}
+                  for language in ("russian", "english"):
+                      text = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+                      catalogues[language] = dict(re.findall(r'(?m)^\s*(\w+):\d*\s*"(.*)"$', text))
+                  for key in ("VAL_reclamation_completion_tt", "VAL_startup_guide", "VAL_reclamation_desc",
+                              "VAL_reclamation_settlement_result_tt", "VAL_Balchansk_Charter_desc", "VAL_Balchansk_Clearing_House_desc"):
+                      tokens = {language: Counter(re.findall(r'\$[A-Za-z0-9_]+\$|\[[^\]]+\]', values[key]))
+                                for language, values in catalogues.items()}
+                      self.assertEqual(tokens["russian"], tokens["english"], key)
+          '''
+          method = textwrap.indent(textwrap.dedent(method).strip() + '\n', '    ')
+          test = Path('tools/tests/test_val_contract_ui.py')
+          text = test.read_text(); marker = '\nif __name__ == "__main__":'
+          assert marker in text and 'def test_reclamation_and_route_copy_preserve_localisation_references' not in text
+          test.write_text(text.replace(marker, '\n' + method + marker))
+          command = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_val_contract_ui.TestValReclamationFollowThrough.test_reclamation_and_route_copy_preserve_localisation_references', '-v']
+          with (out / 'bilingual-red.log').open('w') as log:
+              result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT)
+          assert result.returncode == 1
+          assert 'FAIL:' in (out / 'bilingual-red.log').read_text() and 'ERROR:' not in (out / 'bilingual-red.log').read_text()
+          english = Path('localisation/english/ADISCORD_VAL_decisions_l_english.yml')
+          text = english.read_text(encoding='utf-8-sig')
+          old = 'Expansion is in the centre below Contracts Outlive Kings.'
+          assert text.count(old) == 1
+          english.write_text(text.replace(old, 'Expansion is in the centre below $VAL_Contracts_Outlive_Kings$.'), encoding='utf-8-sig')
+          subprocess.run(['git', 'diff', '--check'], check=True)
+          subprocess.run(['git', 'add', '--', str(test), str(english)], check=True)
+          subprocess.run(['git', 'commit', '-m', 'test(val): preserve bilingual expansion and reclamation references'], check=True)
+          subprocess.run(['git', 'merge', '--no-edit', '457a8e2732363b61b3e0a5ac0a6de690e05887ee'], check=True)
+          with (out / 'focused.log').open('w') as log:
+              result = subprocess.run([sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_val_contract_ui', '-v'], stdout=log, stderr=subprocess.STDOUT)
+          assert result.returncode == 0
+          print((out / 'focused.log').read_text(), flush=True)
+          with (out / 'validator.log').open('w') as log:
+              result = subprocess.run([sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], stdout=log, stderr=subprocess.STDOUT, timeout=180)
+          assert result.returncode == 0
+          base = '457a8e2732363b61b3e0a5ac0a6de690e05887ee'
+          paths = subprocess.check_output(['git', 'diff', '--name-only', base, 'HEAD']).decode().splitlines()
+          expected = {'common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt', 'common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt', 'common/scripted_effects/ADISCORD_VAL_effects.txt', 'common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt', 'localisation/english/ADISCORD_VAL_decisions_l_english.yml', 'localisation/russian/ADISCORD_VAL_decisions_l_russian.yml', 'tools/tests/test_val_contract_ui.py'}
+          assert set(paths) == expected, paths
+          subprocess.run(['git', 'diff', '--check', base, 'HEAD'], check=True)
+          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+          hashes = {}
+          for name in paths:
+              data = Path(name).read_bytes(); text = data.decode('utf-8-sig')
+              assert not re.search(r'(?m)^(<<<<<<< |=======\s*$|>>>>>>> )', text), name
+              if name.startswith('localisation/'):
+                  assert data.startswith(b'\xef\xbb\xbf'), name
+                  keys = re.findall(r'(?m)^\s*([A-Za-z0-9_.-]+):\d*\s*"', text)
+                  assert len(keys) == len(set(keys)), name
+              elif name.startswith('common/'):
+                  assert not data.startswith(b'\xef\xbb\xbf'), name
+                  parse_clausewitz(text)
+              target = out / 'source' / name; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(data)
+              hashes[name] = hashlib.sha256(data).hexdigest()
+          (out / 'changes.patch').write_bytes(subprocess.check_output(['git', 'diff', '--binary', base, 'HEAD']))
+          head = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
+          branch = 'fix/val-reclamation-final-35676596777'
+          subprocess.run(['git', 'push', 'origin', head + ':refs/heads/' + branch], check=True)
+          manifest = {'head':head, 'base':base, 'branch':branch, 'hashes':hashes, 'focused_tests':29, 'validator_exit':0, 'broad_verification_run':35676596777, 'native_runtime_tested':False}
+          (out / 'manifest.json').write_text(json.dumps(manifest, indent=2))
+          print('DELIVERY', json.dumps(manifest), flush=True)
+          PY
+      - name: Preserve final evidence
         if: always()
         run: |
-          mkdir -p /tmp/val-cleanup-review
-          git diff > /tmp/val-cleanup-review/remaining.diff
+          mkdir -p /tmp/val-delivery-review
           python - <<'PY'
           from pathlib import Path
           import zipfile
-          root = Path('/tmp/val-cleanup-review')
-          with zipfile.ZipFile('/tmp/val-cleanup-review.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+          root = Path('/tmp/val-delivery-review')
+          with zipfile.ZipFile('/tmp/val-delivery-review.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
               for path in root.rglob('*'):
-                  if path.is_file():
-                      archive.write(path, path.relative_to(root))
+                  if path.is_file(): archive.write(path, path.relative_to(root))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: val-cleanup-review
-          path: /tmp/val-cleanup-review.zip
+          name: val-delivery-review
+          path: /tmp/val-delivery-review.zip
           retention-days: 7
