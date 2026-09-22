@@ -1,0 +1,66 @@
+name: STP party second package
+on:
+  push:
+    branches: [codex/stp-party-packet2-work-20260922]
+    paths: ['.github/workflows/stp-party-packet2.yml', '.github/stp_party_packet2.py']
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect current mechanics
+        run: |
+          python -B - <<'PY'
+          from pathlib import Path
+          import re
+          def blocks(text):
+              pat=re.compile(r'(?m)^([\w.]+)\s*=\s*\{')
+              for m in pat.finditer(text):
+                  depth=0; quoted=False; comment=False; escaped=False
+                  for i in range(text.index('{',m.start()),len(text)):
+                      c=text[i]
+                      if comment:
+                          if c=='\n': comment=False
+                          continue
+                      if quoted:
+                          if c=='"' and not escaped: quoted=False
+                          escaped=(c=='\\' and not escaped)
+                          continue
+                      if c=='#': comment=True
+                      elif c=='"': quoted=True
+                      elif c=='{': depth+=1
+                      elif c=='}':
+                          depth-=1
+                          if depth==0:
+                              yield m.group(1),text[m.start():i+1]
+                              break
+          eff=Path('common/scripted_effects/ADISCORD_STP_scripted_effects.txt').read_text(encoding='utf-8-sig')
+          chosen={'STP_pf_shift','STP_pf_initialize','STP_refresh_apparatus_loyalty','STP_change_apparatus_loyalty','STP_pf_clear','STP_ps_begin_defence','STP_ps_finish_stage','STP_ps_start_stage','STP_pf_normalize','STP_cw_party_opening_effect','STP_ps_clear'}
+          report=[]
+          for name,body in blocks(eff):
+              if name in chosen: report.append(body)
+          Path('.github/packet2-effects.txt').write_text('\n\n'.join(report))
+          focus=Path('common/national_focus/ADISCORD_national_focus_STP.txt').read_text(encoding='utf-8-sig')
+          report=[]
+          lines=focus.splitlines()
+          for i,line in enumerate(lines):
+              if re.search(r'id = STP_(?:party|pw_party|ps_|cw_party)',line):
+                  report.append(str(i+1)+': '+'\n'.join(lines[i:i+18]))
+          Path('.github/packet2-focus.txt').write_text('\n\n'.join(report))
+          files=['common/on_actions/02_ADISCORD_STP_on_actions.txt','common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt','common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt','tools/tests/test_adiscord_stp_party_balance.py','tools/tests/test_adiscord_stp_party_route.py','common/ideas/ADISCORD_STP_civil_war_ideas.txt','common/ai_strategy_plans/ADISCORD_STP_plans.txt']
+          index=[]
+          for file in files:
+              text=Path(file).read_text(encoding='utf-8-sig')
+              index.append(file+'\n'+'\n'.join(str(i+1)+': '+l for i,l in enumerate(text.splitlines()) if any(s in l for s in ['STP_pf_','STP_ps_','STP_party_open','def test_','def simulate','on_weekly','on_daily','defence','opening'])))
+          Path('.github/packet2-index.txt').write_text('\n\n'.join(index))
+          print('INSPECTION_READY',[(p.name,p.stat().st_size) for p in Path('.github').glob('packet2-*.txt')])
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/packet2-*.txt
+          git commit -m 'ci(stp): record source inspection for second package'
+          git push
