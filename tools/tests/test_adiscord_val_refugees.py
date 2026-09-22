@@ -127,7 +127,7 @@ class RefugeeAdmissionTests(unittest.TestCase):
         body = self.decisions["VAL_fund_resettlement_depots"]
         self.assertEqual(scalar(body, "state_target"), "yes")
         targets = next(e.value for e in body if e.key == "targets")
-        self.assertEqual({int(e.key) for e in targets}, {24, 42, 55, 56})
+        self.assertEqual({int(e.value) for e in targets}, {24, 42, 55, 56})
         self.assertEqual(scalar(body, "cost"), "0")
         self.assertEqual(scalar(body, "custom_cost_text"), "VAL_logistics_cost_250")
 
