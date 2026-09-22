@@ -1,0 +1,64 @@
+name: STP party integration
+on:
+  push:
+    branches: [codex/stp-party-gameplay-20260922]
+    paths: ['.github/workflows/stp-party-integrate.yml', '.github/stp-party-integrate.py']
+permissions:
+  contents: write
+concurrency:
+  group: stp-party-integration
+  cancel-in-progress: true
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 40
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check Pillow numpy
+      - name: Prepare integration
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          git fetch --depth=40 origin codex/stp-party-qol-ready-20260922
+          git fetch --depth=1 origin "$SOURCE_SHA"
+          git show "$SOURCE_SHA:.github/stp-party-integrate.py" > /tmp/stp-party-integrate.py
+          git rev-parse HEAD > /tmp/stp-party-main-sha
+          git rev-parse refs/remotes/origin/codex/stp-party-qol-ready-20260922 > /tmp/stp-party-feature-sha
+          test "$(cat /tmp/stp-party-feature-sha)" = 4e42badfb80941237d7667f7673116495673c6b4
+      - name: Baseline of the merged UI pass
+        run: python -B /tmp/stp-party-integrate.py baseline
+      - name: Apply independent party gameplay changes
+        run: |
+          python -B /tmp/stp-party-integrate.py apply
+          git diff --check
+          git diff --stat
+      - name: Test gameplay and regression delta
+        run: |
+          python -B -m unittest tools.tests.test_adiscord_stp_party_qol -v
+          python -B /tmp/stp-party-integrate.py updated
+      - name: Validate total conversion
+        run: python -B tools/validate_tc.py --limit 300
+      - name: Export a conflict-resolved merge commit
+        run: |
+          git diff --check
+          git diff > /tmp/stp-party-integration-evidence/integration.patch
+          git add common/decisions/ADISCORD_STP_decisions.txt common/national_focus/ADISCORD_national_focus_STP.txt common/scripted_effects/ADISCORD_STP_scripted_effects.txt localisation/russian/ADISCORD_STP_l_russian.yml localisation/english/ADISCORD_STP_l_english.yml tools/tests/test_adiscord_stp_party_qol.py
+          git config user.name worker2of2month
+          git config user.email 81386071+worker2of2month@users.noreply.github.com
+          TREE=$(git write-tree)
+          COMMIT=$(printf '%s\n' 'Merge current main into party gameplay; preserve parallel UI and deferred layout fixes' | git commit-tree "$TREE" -p "$(cat /tmp/stp-party-feature-sha)" -p "$(cat /tmp/stp-party-main-sha)")
+          git push origin "$COMMIT:refs/heads/codex/stp-party-qol-ready-20260922"
+          echo "INTEGRATED_HEAD=$COMMIT"
+          echo "TESTED_BASE=$(cat /tmp/stp-party-main-sha)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-party-integration-evidence
+          path: /tmp/stp-party-integration-evidence
+          retention-days: 7
