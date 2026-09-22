@@ -3290,8 +3290,8 @@ class StelanderPreparationTests(unittest.TestCase):
                          if line.lstrip().startswith("STP_party_assault_price:"))
             hover = next(line for line in loc.splitlines()
                          if line.lstrip().startswith("STP_party_assault_price_tooltip:"))
-            price_pairs = re.findall(r"(£\\w+)\\s+§Y([0-9.]+)§!", price)
-            hover_pairs = re.findall(r"(£\\w+)\\s+§Y([0-9.]+)§!", hover)
+            price_pairs = re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", price)
+            hover_pairs = re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", hover)
             self.assertTrue(price_pairs)
             self.assertEqual(price_pairs, hover_pairs)
             verbose_price_copy = "Полная цена дивизии" if language == "russian" else "Full division cost"
