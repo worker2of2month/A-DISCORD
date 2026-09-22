@@ -1,0 +1,45 @@
+name: Fada and council regression review
+on:
+  push:
+    branches: [codex/fada-council-revanche]
+    paths:
+      - .github/workflows/fada-council-review.yml
+      - tools/fada_council_patch.py
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            common
+            events
+            localisation
+            tools
+            docs
+            history
+            interface
+      - name: Export source for scoped regression tests
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess, zipfile
+          paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', 'HEAD'], text=True).splitlines()
+          with zipfile.ZipFile('/tmp/fada-council-context.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              archive.writestr('_git_head.txt', subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True))
+              archive.writestr('_git_paths.txt', '\n'.join(paths))
+              for name in paths:
+                  path = Path(name)
+                  if path.is_file() and path.suffix in {'.txt', '.py', '.yml', '.md', '.gfx', '.gui', '.mod', '.json', '.csv', '.toml'}:
+                      archive.write(path, name)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fada-council-context
+          path: /tmp/fada-council-context.zip
+          retention-days: 2
