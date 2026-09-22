@@ -61,8 +61,8 @@
  A_DISCORD_menu_tooltip_1: "Thought flies, while words walk. Therein lies the whole drama of the writer."
  focus_unlock_tooltip: "This §GUnlocks§! §YNew Focuses§!"
  completed_by_event_tooltip: "This focus is unlocked only through an §Yevent§!"
- ADISCORD_manual_law_change_allowed_tt:0 "Manual changes to this law are permitted; otherwise it changes through focuses, decisions and events."
- ADISCORD_manual_minister_change_allowed_tt:0 "Manual replacement of this minister is permitted; otherwise appointments change through focuses, decisions and events."
+ ADISCORD_manual_law_change_allowed_tt:0 "Manual changes to this law are permitted, otherwise it changes through focuses, decisions and events."
+ ADISCORD_manual_minister_change_allowed_tt:0 "Manual replacement of this minister is permitted, otherwise appointments change through focuses, decisions and events."
 
  POLITICS_SUBGOAL: "Objective #$NUMBER$"
  DRIFT_DIM_RETURN: "Party inertia: §R-$VAL$§!\n"
