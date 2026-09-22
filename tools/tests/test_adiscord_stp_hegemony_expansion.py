@@ -88,6 +88,48 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         for tag in ("NOD", "YPR", "TFF"):
             self.assertIn(f"NOT = {{ has_war_with = {tag} }}", resolved)
 
+    def test_nod_acceptance_creates_an_annexable_puppet(self) -> None:
+        events = read("events/ADISCORD_STP_events.txt")
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        decisions = read("common/decisions/ADISCORD_STP_hegemony_decisions.txt")
+        self.assertIn("set_country_flag = STP_pc_nod_client_pending", events)
+        finalizer = named_block(effects, "STP_pc_finalize_nod_client_subject")
+        self.assertIn("puppet = NOD", finalizer)
+        self.assertIn("autonomy_state = autonomy_puppet", finalizer)
+        annex = named_block(decisions, "STP_heg_annex_nod_administration")
+        self.assertIn("has_autonomy_state = autonomy_puppet", annex)
+        self.assertIn("annex_country = { target = NOD transfer_troops = yes }", annex)
+
+    def test_second_kefreyt_war_uses_distinct_scripted_peace(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        peace = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
+        hegemony_actions = read("common/on_actions/11_ADISCORD_STP_hegemony_on_actions.txt")
+        settlement = named_block(effects, "STP_heg_settle_kefreyt_final")
+        self.assertIn("STP_pc_recover_stelander_cores_from_val = yes", settlement)
+        self.assertIn("every_enemy_country = {", settlement)
+        self.assertIn("has_country_flag = STP_heg_kefreyt_final_member", settlement)
+        self.assertNotIn("VAL_enter_stelander_defeat", settlement)
+        self.assertIn("STP_heg_settle_kefreyt_final = yes", peace)
+        self.assertIn("on_war_relation_added = {", hegemony_actions)
+        self.assertIn("set_country_flag = STP_heg_kefreyt_final_member", hegemony_actions)
+
+    def test_late_hegemony_focuses_are_shorter(self) -> None:
+        focuses = read("common/national_focus/ADISCORD_national_focus_STP.txt")
+        expected = {
+            "STP_pc_heg_nod_break": 3,
+            "STP_pc_heg_nod_force": 3,
+            "STP_pc_heg_clients": 3,
+            "STP_pc_heg_burden": 3,
+            "STP_pc_heg_administrations": 3,
+            "STP_pc_heg_final_north": 4,
+            "STP_pc_heg_final_kefreyt": 4,
+        }
+        for focus_id, cost in expected.items():
+            start = focuses.index(f"id = {focus_id}")
+            end = focuses.find("\n\tfocus = {", start)
+            block = focuses[start:end if end != -1 else len(focuses)]
+            self.assertIn(f"cost = {cost}", block, focus_id)
+
     def test_hegemony_can_nationalise_without_generic_citizenship_focus(self) -> None:
         decisions = read("common/decisions/ADISCORD_STP_decisions.txt")
         nationalise = named_block(decisions, "STP_pw_nationalise_region")

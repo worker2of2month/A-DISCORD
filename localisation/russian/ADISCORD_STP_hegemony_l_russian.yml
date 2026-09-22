@@ -20,8 +20,8 @@
 
  STP_heg_establish_nod_administration:0 "Создать временную администрацию Нодрула"
  STP_heg_establish_nod_administration_desc:0 "Заменить побеждённое правительство Нодрула временной администрацией, подчинённой Стеланду."
- STP_heg_annex_nod_administration:0 "Аннексировать администрацию Нодрула"
- STP_heg_annex_nod_administration_desc:0 "Начать 90-дневную интеграцию временной администрации Нодрула."
+ STP_heg_annex_nod_administration:0 "Аннексировать Нодрул"
+ STP_heg_annex_nod_administration_desc:0 "Начать 90-дневную интеграцию Нодрула независимо от того, вошёл ли он в гегемонию мирно как марионетка или был преобразован во временную администрацию после поражения."
 
  STP_heg_establish_ypr_administration:0 "Создать временную администрацию Юбора"
  STP_heg_establish_ypr_administration_desc:0 "Заменить побеждённое правительство Юбора временной администрацией, подчинённой Стеланду."

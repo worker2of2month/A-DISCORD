@@ -35,7 +35,10 @@ STP_hegemony_administration = {
 			NOD = {
 				exists = yes
 				is_subject_of = STS
-				has_autonomy_state = autonomy_STP_provisional_administration
+				OR = {
+					has_autonomy_state = autonomy_STP_provisional_administration
+					has_autonomy_state = autonomy_puppet
+				}
 			}
 		}
 		available = {
@@ -59,7 +62,10 @@ STP_hegemony_administration = {
 					NOD = {
 						exists = yes
 						is_subject_of = STS
-						has_autonomy_state = autonomy_STP_provisional_administration
+						OR = {
+							has_autonomy_state = autonomy_STP_provisional_administration
+							has_autonomy_state = autonomy_puppet
+						}
 						has_war = no
 					}
 				}

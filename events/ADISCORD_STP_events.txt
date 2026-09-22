@@ -1436,9 +1436,26 @@ country_event = {
 		name = STP_pc_accept_client_terms
 		trigger = { STP_pc_nod_offer_current = yes STS = { check_variable = { var = STP_pc_nod_offer_kind value = 2 compare = equals } } }
 		ai_chance = { base = 5 modifier = { factor = 5 has_war = yes } modifier = { factor = 4 strength_ratio = { tag = STS ratio < 0.6 } } }
-		if = { limit = { STP_pc_nod_offer_current = yes }
+		if = {
+			limit = { STP_pc_nod_offer_current = yes }
 			add_ideas = STP_pc_nod_client
-			hidden_effect = { STS = { set_country_flag = STP_pc_nod_terms_accepted clear_variable = STP_pc_nod_offer_kind if = { limit = { has_country_flag = STP_pc_hegemony_league } STP_pc_form_hegemony_league = yes } country_event = { id = ADISCORD_STP_pc.21 hours = 1 } } }
+			hidden_effect = {
+				if = {
+					limit = { is_subject = yes NOT = { is_subject_of = STS } }
+					overlord = { set_autonomy = { target = NOD autonomy_state = autonomy_free end_wars = no end_civil_wars = no } }
+				}
+				if = {
+					limit = { is_in_faction = yes }
+					if = { limit = { is_faction_leader = yes } faction_leader = { dismantle_faction = yes } }
+					else = { faction_leader = { remove_from_faction = NOD } }
+				}
+				set_country_flag = STP_pc_nod_client_pending
+				STS = {
+					set_country_flag = STP_pc_nod_terms_accepted
+					clear_variable = STP_pc_nod_offer_kind
+					country_event = { id = ADISCORD_STP_pc.21 days = 1 }
+				}
+			}
 		}
 	}
 	option = {
@@ -1518,7 +1535,16 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = { tag = STS }
-	immediate = { mark_focus_tree_layout_dirty = yes }
+	immediate = {
+		if = {
+			limit = {
+				FROM = { tag = NOD has_country_flag = STP_pc_nod_client_pending }
+				has_country_flag = STP_pc_nod_terms_accepted
+			}
+			STP_pc_finalize_nod_client_subject = yes
+		}
+		mark_focus_tree_layout_dirty = yes
+	}
 	option = { name = ADISCORD_STP_pc.21.a }
 }
 
