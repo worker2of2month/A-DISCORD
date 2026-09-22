@@ -76,6 +76,43 @@ on_actions = {
 				VAL = { ADISCORD_bezhaysk_settle_val_victory = yes }
 				clr_global_flag = skip_default_capitulation
 			}
+
+			if = {
+				limit = {
+					ROOT = {
+						tag = COF
+						has_war_with = VAL
+						NOT = {
+							any_enemy_country = {
+								NOT = { OR = { tag = VAL is_subject_of = VAL } }
+							}
+						}
+					}
+					VAL = { exists = yes has_capitulated = no has_country_flag = ADISCORD_bezhaysk_forest_campaign_active }
+					FROM = { OR = { tag = VAL is_subject_of = VAL } }
+				}
+				set_global_flag = skip_default_capitulation
+				VAL = { ADISCORD_bezhaysk_settle_forest_val_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						tag = COF
+						has_war_with = NOD
+						NOT = {
+							any_enemy_country = {
+								NOT = { OR = { tag = NOD is_subject_of = NOD } }
+							}
+						}
+					}
+					NOD = { exists = yes has_capitulated = no has_country_flag = ADISCORD_bezhaysk_forest_campaign_active }
+					FROM = { OR = { tag = NOD is_subject_of = NOD } }
+				}
+				set_global_flag = skip_default_capitulation
+				NOD = { ADISCORD_bezhaysk_settle_forest_nod_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
 		}
 	}
 }
