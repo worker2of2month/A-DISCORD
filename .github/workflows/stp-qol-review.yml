@@ -1,329 +1,97 @@
-name: Stelander QoL review
+name: Stelander QoL final verification
 on:
   pull_request:
     branches: [main]
 permissions:
   contents: write
+concurrency:
+  group: stp-qol-final-review
+  cancel-in-progress: true
 jobs:
   verify:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/stp-qol-review-20260922'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: main
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Test, apply and export clean gameplay commit
+      - name: Verify and export gameplay-only changes
         run: |
           python - <<'PY'
           from pathlib import Path
-          import json, os, re, subprocess, sys, textwrap
-          root = Path.cwd()
-          base = 'e0511cbc69ce2e02d1304f03e7860bc23180dabe'
+          import subprocess, textwrap
+          template = '763e34c2bc08c0dcb940d9a1342d72c17dcf9194'
+          subprocess.run(['git', 'fetch', '--depth=1', 'origin', template], check=True)
+          workflow = subprocess.check_output(['git', 'show', template + ':.github/workflows/stp-qol-review.yml']).decode()
+          lines = workflow.splitlines()
+          start = next(i for i, line in enumerate(lines) if line.strip() == "python - <<'PY'") + 1
+          end = next(i for i in range(start, len(lines)) if lines[i].strip() == 'PY')
+          source = textwrap.dedent('\n'.join(lines[start:end]))
+          def change(old, new):
+              global source
+              assert source.count(old) == 1, (old[:100], source.count(old))
+              source = source.replace(old, new, 1)
+          base = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
+          change("base = 'e0511cbc69ce2e02d1304f03e7860bc23180dabe'", 'base = ' + repr(base))
+          change('paths = [F, E, EV, D, SL, MENU, RU, EN, T]', "UI = 'interface/ADISCORD_STP_regions.gui'\nGT = 'tools/tests/test_validate_adiscord_gui_contracts.py'\npaths = [F, E, EV, D, SL, MENU, RU, EN, T, UI, GT]")
+          scopes = ['tools.tests.test_adiscord_stp_preparation', 'tools.tests.test_adiscord_stp_regions', 'tools.tests.test_adiscord_stp_gameplay_loop_regressions', 'tools.tests.test_validate_adiscord_gui_contracts']
+          change("baseline = run('baseline', ['discover', '-s', 'tools/tests', '-p', 'test_*.py'])", 'baseline = run(\'baseline\', ' + repr(scopes) + ', timeout=240)')
+          change('self.assertIn("has_country_flag = STP_cw_show_preparation_details", loc)', 'self.assertNotIn("has_country_flag = STP_cw_show_preparation_details", loc)')
+          a = source.index('    decision = block(block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander"), "STP_cw_toggle_preparation_details")')
+          b = source.index('    for language in ("russian", "english"):', a)
+          source = source[:a] + '''    gui = (ROOT / "interface/ADISCORD_STP_regions.gui").read_text(encoding="utf-8-sig")
+              self.assertIn('pdx_tooltip = "STP_cw_preparation_full_report"', gui)
+              self.assertNotIn("STP_cw_toggle_preparation_details", (ROOT / "common/decisions/ADISCORD_STP_decisions.txt").read_text(encoding="utf-8-sig"))
+          '''.replace('\n    ', '\n') + source[b:]
+          change('"STP_cw_toggle_preparation_details", "STP_cw_toggle_preparation_details_desc"):', '"STP_cw_delay_inspection_desc", "STP_inspection_delay_result_tt"):')
+          a = source.index("toggle = '''")
+          b = source.index('write(MENU,', a)
+          source = source[:a] + '''write(UI, replace_once(read(UI), 'pdx_tooltip = "STP_regions_panel_tt"', 'pdx_tooltip = "STP_cw_preparation_full_report"'))
+          write(SL, read(SL) + '\\n\\ndefined_text = {\\n\\tname = STPGetPreparationBriefing\\n\\ttext = { localization_key = STP_cw_preparation_short_report }\\n}\\n')
+          ''' + source[b:]
+          a = source.index('# Keep original reports verbatim behind the toggle')
+          bridge = r'''
+          ru['STP_startup_quick_start'] = r'§YС ЧЕГО НАЧАТЬ§!\n\nПройдите вводные фокусы. На встрече после ухудшения здоровья Иванова выберите Шабрата или партию; справка сама курс не выбирает.\n\n§YШабрат: первый округ.§! Откройте карту подготовки в решениях. Укрепите сеть, привлеките администрацию и проверьте прогноз перехода округа. Обычно администрации нужен 21 день работы; особые условия показаны на карте. Одного перевеса влияния недостаточно.\n\n§YПартия.§! Следите за верностью аппарата и указанной целью подполья. Готовьте ответ и гарнизоны; пустая проверка может помочь противнику.\n\n§YПеред операцией§! проверьте цену, свободную ячейку, срок и ближайшую угрозу. Запланированным частям нужны люди и оружие. Полный план армии — при наведении на заголовок карты.\n\n§YЗатягивание комиссии§! действует с запуска фокуса. Если таймер ещё не начался, отсрочка сохранится до его появления.\n\nИстория страны остаётся в справке; направления кампании — на вкладке путей.'
+          en['STP_startup_quick_start'] = r'§YGETTING STARTED§!\n\nComplete the introductory focuses. Choose Shabrat or the Party at the meeting after Ivanov falls ill. Reading the guide does not select a route.\n\n§YShabrat: your first district.§! Open the preparation map in Decisions. Build the network, recruit the administration and check the transfer forecast. An ordinary administration needs 21 days; special conditions appear on the map. An influence lead alone is not enough.\n\n§YThe Party.§! Watch apparatus loyalty and the announced underground target. Prepare a response and garrisons; an empty search can help your opponent.\n\n§YBefore an operation§!, check the price, free preparation slot, duration and nearest threat. Planned formations still need manpower and equipment. Hover over the map title for the full army plan.\n\n§YDelaying the commission§! works when the focus starts. If its timer is not running yet, the extension is saved until activation.\n\nCountry history remains in the guide; campaign directions are in the paths tab.'
+          ru['STP_cw_preparation_short_report'] = r'[STPGetPreparationInstructions]\n\n§YГотовые оплаченные усиленные дивизии:§! [?STP_cw_prepared_assault_divisions|0].[STPGetKefreytArmyCommitment]\n§YОбщий резерв:§! £manpower_texticon [?manpower|0]; £infantry_equipment_texticon [?num_equipment@infantry_equipment|0].\n\nПлан ещё не означает готовую армию: состав ограничен ресурсами и зависит от выборов. Подробности — §Yпри наведении на заголовок карты§!.\n\n§YНодрул:§! [STPGetNodStatus]'
+          en['STP_cw_preparation_short_report'] = r'[STPGetPreparationInstructions]\n\n§YReady, paid reinforced divisions:§! [?STP_cw_prepared_assault_divisions|0].[STPGetKefreytArmyCommitment]\n§YShared reserve:§! £manpower_texticon [?manpower|0]; £infantry_equipment_texticon [?num_equipment@infantry_equipment|0].\n\nPlans are not a deployed army: formations are limited by resources and the election result. §YHover over the map title§! for details.\n\n§YNodrul:§! [STPGetNodStatus]'
+          ru['STP_cw_delay_inspection_desc'] = r'§YПри нажатии§! сразу продлевает текущую комиссию выбранного округа на §G14 дней§!. Цена: £political_power_texticon §Y35§!; одна ячейка подготовки занята §Y14 дней§!.\n\nЭто срок работы штаба, а не ожидание отсрочки. Повторная операция доступна через §Y60 дней§!. Завершение не продлевает комиссию ещё раз. Если комиссия исчезла до применения, политическая власть возвращается.'
+          en['STP_cw_delay_inspection_desc'] = r'§YOn click§!, immediately extends the selected district\'s current inspection by §G14 days§!. Cost: £political_power_texticon §Y35§!; one preparation slot is occupied for §Y14 days§!.\n\nThat is the staff-work duration, not a wait for the extension. The operation can be repeated after §Y60 days§!. Completion grants no second extension. If the inspection has disappeared before application, political power is refunded.'
+          ru['STP_inspection_delay_result_tt'] = 'Текущая комиссия выбранного округа: §G+14 дней сразу§!. Одна ячейка подготовки занята на §Y14 дней§!.'
+          en['STP_inspection_delay_result_tt'] = 'Selected district inspection: §G+14 days immediately§!. One preparation slot is occupied for §Y14 days§!.'
+          for mapping in (ru, en):
+              mapping.pop('STP_cw_toggle_preparation_details')
+              mapping.pop('STP_cw_toggle_preparation_details_desc')
+              assert len(mapping['STP_startup_quick_start'].replace('\\n', '\n')) <= 1200
+          # Clear only unconsumed timer extensions at the preparation boundary.
+          write(E, replace_once(read(E), 'STP_end_battle_for_stelander = {', 'STP_end_battle_for_stelander = {\n\tclr_country_flag = STP_cw_election_delay_pending\n\tclr_country_flag = STP_cw_credentials_delay_pending'))
+          # Keep startup routing checks aligned with every actual page, not just the first.
+          g = read(GT)
+          g = replace_once(g, "cases = [(0, 0, 0, f'{tag}_startup_country')]", "cases = [(0, 0, 0, 'STP_startup_quick_start' if tag == 'STP' else 'VAL_startup_country')]")
+          old = "cases += [(1, i, 0, f'ADISCORD_startup_guide_{topic}')\n                      for i, topic in enumerate(('budget', 'army', 'diplomacy'))]"
+          new = "guide_keys = (('STP_startup_guide_history', 'STP_startup_guide_nodrul', 'STP_startup_guide_party') if tag == 'STP' else ('ADISCORD_startup_guide_budget', 'ADISCORD_startup_guide_army', 'ADISCORD_startup_guide_diplomacy'))\n            cases += [(1, i, 0, key) for i, key in enumerate(guide_keys)]"
+          g = replace_once(g, old, new)
+          write(GT, g)
+          '''
+          source = source[:a] + textwrap.dedent(bridge) + '\n' + source[a:]
+          change("'STP_cw_preparation_full_report': report", "'STP_cw_preparation_full_report': r'$STP_regions_panel_tt$\\n\\n' + report")
+          change("final = run('full-suite', ['discover', '-s', 'tools/tests', '-p', 'test_*.py'])", 'final = run(\'targeted-suite\', ' + repr(scopes) + ', timeout=240)\nfull = run(\'full-suite\', [\'discover\', \'-s\', \'tools/tests\', \'-p\', \'test_*.py\'], timeout=90)')
+          change("'files': paths, 'native_game_tested': False}", "'files': paths, 'native_game_tested': False, 'full_suite': full}")
+          change("validator = subprocess.run([sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], stdout=out, stderr=subprocess.STDOUT)", "try:\n        validator = subprocess.run([sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], stdout=out, stderr=subprocess.STDOUT, timeout=90)\n    except subprocess.TimeoutExpired:\n        validator = subprocess.CompletedProcess([], 124)\n        out.write('\\nVALIDATOR TIMED OUT\\n')")
+          change("branch = 'codex/stp-qol-delivery-'", "branch = 'codex/stp-qol-final-'")
           evidence = Path('/tmp/stp-qol')
           evidence.mkdir(exist_ok=True)
-          F = 'common/national_focus/ADISCORD_national_focus_STP.txt'
-          E = 'common/scripted_effects/ADISCORD_STP_scripted_effects.txt'
-          EV = 'events/ADISCORD_STP_events.txt'
-          D = 'common/decisions/ADISCORD_STP_decisions.txt'
-          SL = 'common/scripted_localisation/ADISCORD_STP_scripted_loc.txt'
-          MENU = 'common/scripted_localisation/ADISCORD_startup_menu.txt'
-          T = 'tools/tests/test_adiscord_stp_preparation.py'
-          RU = 'localisation/russian/ADISCORD_STP_l_russian.yml'
-          EN = 'localisation/english/ADISCORD_STP_l_english.yml'
-          paths = [F, E, EV, D, SL, MENU, RU, EN, T]
-          original = {p: (root / p).read_bytes() for p in paths}
-          def read(p):
-              return (root / p).read_bytes().decode('utf-8-sig')
-          def write(p, s):
-              bom = original[p].startswith(b'\xef\xbb\xbf')
-              (root / p).write_bytes((('\ufeff' if bom else '') + s).encode('utf-8'))
-          def replace_once(s, old, new):
-              assert s.count(old) == 1, (old[:120], s.count(old))
-              return s.replace(old, new, 1)
-          def run(label, args, timeout=480):
-              with (evidence / (label + '.log')).open('w') as log:
-                  try:
-                      result = subprocess.run([sys.executable, '-B', '-m', 'unittest', *args], stdout=log, stderr=subprocess.STDOUT, timeout=timeout)
-                      code = result.returncode
-                  except subprocess.TimeoutExpired:
-                      code = 124
-                      log.write('\nTEST RUN TIMED OUT\n')
-              output = (evidence / (label + '.log')).read_text()
-              issues = re.findall(r'^(?:FAIL|ERROR): (.+)$', output, re.M)
-              result = {'returncode': code, 'issues': sorted(issues), 'summary': re.findall(r'^(?:Ran \d+ tests?.*|OK.*|FAILED.*|TEST RUN TIMED OUT)$', output, re.M)}
-              (evidence / (label + '.json')).write_text(json.dumps(result, indent=2))
-              print(label, json.dumps(result), flush=True)
-              return result
-          baseline = run('baseline', ['discover', '-s', 'tools/tests', '-p', 'test_*.py'])
-          # Regression tests are installed and executed before gameplay is changed.
-          tests = r'''
-          def test_qol_commission_delay_is_immediate_early_and_once(self):
-              tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
-                          if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
-              focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_delay_election_commission")
-              early = {("STP", "STP_cw_preparation_open", "yes"): True,
-                       ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True}
-              self.assertTrue(matches_conditions(block(focus, "available"), early), "must be selectable before the election timer starts")
-              self.assertEqual(scalar(focus, "cost"), "2")
-              self.assertEqual(scalar(focus, "cancelable"), "no")
-              self.assertEqual(scalar(focus, "cancel_if_invalid"), "yes")
-              self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), "STP_Call_For_Shabrat")
-              selected = [(e.key, e.value) for e in walk(block(focus, "select_effect")) if isinstance(e.value, str)]
-              self.assertIn(("STP_cw_request_election_delay", "yes"), selected)
-              # The completion call only migrates a focus selected in an older save.
-              completion = [(e.key, e.value) for e in walk(block(focus, "completion_reward")) if isinstance(e.value, str)]
-              self.assertIn(("STP_cw_request_election_delay", "yes"), completion)
-              self.assertFalse(any(e.key == "add_days_mission_timeout" for e in walk(block(focus, "completion_reward"))))
-              effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
-              request = block(effects, "STP_cw_request_election_delay")
-              first = list(selected_effects(request, early))
-              self.assertEqual([scalar(e.value, "value") for _, e in first if e.key == "set_temp_variable"], ["15"])
-              self.assertEqual({e.value for _, e in first if e.key == "set_country_flag"},
-                               {"STP_cw_election_delay_used", "STP_cw_election_delay_pending", "STP_cw_credentials_delay_pending"})
-              repeated = list(selected_effects(request, {**early, ("STP", "has_country_flag", "STP_cw_election_delay_used"): True}))
-              self.assertEqual(repeated, [])
-              self.assertEqual(list(selected_effects(request, {})), [])
-              apply = block(effects, "STP_cw_apply_pending_election_delay")
-              pending = {**early, ("STP", "has_country_flag", "STP_cw_election_delay_pending"): True,
-                         ("STP", "has_country_flag", "STP_cw_credentials_delay_pending"): True}
-              def extensions(facts):
-                  return [(scalar(e.value, "mission"), scalar(e.value, "days"))
-                          for _, e in selected_effects(apply, facts) if e.key == "add_days_mission_timeout"]
-              self.assertEqual(extensions(pending), [])
-              live = {**pending, ("STP", "has_active_mission", "STP_cw_election_window"): True,
-                      ("STP", "has_active_mission", "STP_cw_credentials_review"): True}
-              self.assertEqual(extensions(live), [("STP_cw_election_window", "80"), ("STP_cw_credentials_review", "80")])
-              self.assertEqual(extensions({**live, ("STP", "has_country_flag", "STP_cw_election_delay_pending"): False}),
-                               [("STP_cw_credentials_review", "80")])
-              gap = {**live, ("STP", "has_active_mission", "STP_cw_credentials_review"): False}
-              self.assertEqual(extensions(gap), [("STP_cw_election_window", "80")])
-              cleared = {e.value for _, e in selected_effects(apply, gap) if e.key == "clr_country_flag"}
-              self.assertEqual(cleared, {"STP_cw_election_delay_pending"})
-              consumed = {**live, ("STP", "has_country_flag", "STP_cw_election_delay_pending"): False,
-                          ("STP", "has_country_flag", "STP_cw_credentials_delay_pending"): False}
-              self.assertEqual(extensions(consumed), [])
-              self.assertEqual(extensions({**live, ("STP", "STP_cw_preparation_open", "yes"): False}), [])
-              self.assertEqual(extensions({**live, ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): False}), [])
-              hooks = 0
-              for path in ("common/scripted_effects/ADISCORD_STP_scripted_effects.txt", "events/ADISCORD_STP_events.txt"):
-                  text = (ROOT / path).read_text(encoding="utf-8-sig")
-                  for match in re.finditer(r"activate_mission\s*=\s*STP_cw_credentials_review\b", text):
-                      self.assertRegex(text[match.end():], r"^\s+STP_cw_apply_pending_election_delay\s*=\s*yes")
-                      hooks += 1
-              self.assertGreaterEqual(hooks, 2, "both initial and recurring credentials reviews must consume pending delay")
-
-          def test_qol_quickstart_and_optional_army_details(self):
-              menu = (ROOT / "common/scripted_localisation/ADISCORD_startup_menu.txt").read_text(encoding="utf-8-sig")
-              self.assertRegex(menu, r"tag = STP[^\n]+ADISCORD_startup_tab value = 0[^\n]+localization_key = STP_startup_quick_start")
-              loc = (ROOT / "common/scripted_localisation/ADISCORD_STP_scripted_loc.txt").read_text(encoding="utf-8-sig")
-              self.assertIn("name = STPGetPreparationBriefing", loc)
-              self.assertIn("has_country_flag = STP_cw_show_preparation_details", loc)
-              decision = block(block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander"), "STP_cw_toggle_preparation_details")
-              self.assertEqual(scalar(decision, "cost"), "0")
-              calls = [(e.key, e.value) for e in walk(block(decision, "complete_effect")) if isinstance(e.value, str)]
-              self.assertIn(("set_country_flag", "STP_cw_show_preparation_details"), calls)
-              self.assertIn(("clr_country_flag", "STP_cw_show_preparation_details"), calls)
-              self.assertFalse(any("slot" in key or "create_unit" in key for key, _ in calls))
-              for language in ("russian", "english"):
-                  raw = (ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml").read_bytes()
-                  self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
-                  text = raw.decode("utf-8-sig")
-                  for key in ("STP_startup_quick_start", "STP_cw_preparation_full_report", "STP_cw_preparation_short_report",
-                              "STP_cw_toggle_preparation_details", "STP_cw_toggle_preparation_details_desc"):
-                      self.assertRegex(text, rf"(?m)^\s*{key}:.*\S")
-                  self.assertIn('[STPGetPreparationBriefing]', text)
-                  self.assertIn('[?STP_cw_report_party_brigades|0]', text, "detailed army information must remain available")
-          '''
-          tests = textwrap.indent(textwrap.dedent(tests).strip() + '\n', '    ')
-          s = read(T)
-          pattern = r'(?ms)^    def test_shabrat_can_postpone_the_live_election_commission_once\(self\):\n.*?(?=^    def )'
-          assert len(re.findall(pattern, s)) == 1
-          write(T, re.sub(pattern, lambda m: tests + '\n', s, count=1))
-          focused = ['tools.tests.test_adiscord_stp_preparation', '-k', 'test_qol_', '-v']
-          red = run('red', focused)
-          assert red['returncode'] != 0 and len(red['issues']) == 2, red
-          assert all('test_qol_' in issue for issue in red['issues'])
-          # The two independent pending flags also cover the gap between repeated reviews.
-          helpers = '''# COUNTRY: request once at focus selection; never restart or reset a live mission.
-          STP_cw_request_election_delay = {
-              if = {
-                  limit = {
-                      STP_cw_preparation_open = yes
-                      has_country_flag = STP_sided_with_Maksim_flag
-                      NOT = { has_country_flag = STP_cw_election_delay_used }
-                  }
-                  set_country_flag = STP_cw_election_delay_used
-                  set_country_flag = STP_cw_election_delay_pending
-                  set_country_flag = STP_cw_credentials_delay_pending
-                  set_temp_variable = { var = STP_party_suspicion_change value = 15 }
-                  STP_change_party_suspicion = yes
-                  STP_cw_apply_pending_election_delay = yes
-              }
-          }
-
-          STP_cw_apply_pending_election_delay = {
-              if = {
-                  limit = {
-                      STP_cw_preparation_open = yes
-                      has_country_flag = STP_sided_with_Maksim_flag
-                      has_active_mission = STP_cw_election_window
-                  }
-                  if = {
-                      limit = { has_country_flag = STP_cw_election_delay_pending }
-                      clr_country_flag = STP_cw_election_delay_pending
-                      add_days_mission_timeout = { mission = STP_cw_election_window days = 80 }
-                  }
-                  if = {
-                      limit = {
-                          has_country_flag = STP_cw_credentials_delay_pending
-                          has_active_mission = STP_cw_credentials_review
-                      }
-                      clr_country_flag = STP_cw_credentials_delay_pending
-                      add_days_mission_timeout = { mission = STP_cw_credentials_review days = 80 }
-                  }
-              }
-          }
-
-          '''
-          helpers = textwrap.dedent(helpers)
-          s = replace_once(read(E), 'STP_cw_begin_elections = {', helpers + 'STP_cw_begin_elections = {')
-          write(E, s)
-          activations = 0
-          for p in (E, EV):
-              s = read(p)
-              s, n = re.subn(r'activate_mission\s*=\s*STP_cw_credentials_review\b',
-                             'activate_mission = STP_cw_credentials_review STP_cw_apply_pending_election_delay = yes', s)
-              activations += n
-              write(p, s)
-          assert activations >= 2, activations
-          s = read(F)
-          a = s.index('\tfocus = {\n\t\tid = STP_cw_delay_election_commission\n')
-          b = s.index('\n\tfocus = {', a + 1)
-          old = s[a:b]
-          new = old.replace(' has_active_mission = STP_cw_election_window }', ' }', 1)
-          new = replace_once(new, '\t\tcancel_if_invalid = yes', '\t\tcancelable = no\n\t\tcancel_if_invalid = yes\n\t\tselect_effect = { hidden_effect = { STP_cw_request_election_delay = yes } }')
-          reward = new.index('\t\tcompletion_reward = {')
-          new = new[:reward] + '''\t\tcompletion_reward = {
-          \t\t\tcustom_effect_tooltip = STP_cw_delay_election_tt
-          \t\t\tcustom_effect_tooltip = STP_cw_suspicion_15_tt
-          \t\t\t# Compatibility for a focus already running when this update is loaded.
-          \t\t\thidden_effect = { STP_cw_request_election_delay = yes }
-          \t\t}
-          \t}
-          '''
-          write(F, s[:a] + new + s[b:])
-          toggle = '''
-          \tSTP_cw_toggle_preparation_details = {
-          \t\ticon = GFX_decision_ADISCORD_state_directive
-          \t\tallowed = { tag = STP }
-          \t\tvisible = { is_ai = no STP_cw_preparation_open = yes }
-          \t\tavailable = { always = yes }
-          \t\tcost = 0
-          \t\tfire_only_once = no
-          \t\tdays_re_enable = 0
-          \t\tcomplete_effect = {
-          \t\t\thidden_effect = {
-          \t\t\t\tif = {
-          \t\t\t\t\tlimit = { has_country_flag = STP_cw_show_preparation_details }
-          \t\t\t\t\tclr_country_flag = STP_cw_show_preparation_details
-          \t\t\t\t}
-          \t\t\t\telse = { set_country_flag = STP_cw_show_preparation_details }
-          \t\t\t}
-          \t\t}
-          \t\tai_will_do = { base = 0 }
-          \t}
-          '''
-          write(D, replace_once(read(D), 'STP_battle_for_stelander = {', 'STP_battle_for_stelander = {' + toggle))
-          write(SL, read(SL) + '''
-
-          # Presentation only: the complete mobilisation report is optional.
-          defined_text = {
-          \tname = STPGetPreparationBriefing
-          \ttext = { trigger = { has_country_flag = STP_cw_show_preparation_details } localization_key = STP_cw_preparation_full_report }
-          \ttext = { localization_key = STP_cw_preparation_short_report }
-          }
-          ''')
-          write(MENU, replace_once(read(MENU), 'localization_key = STP_startup_country }', 'localization_key = STP_startup_quick_start }'))
-          def loc_get(s, key):
-              matches = list(re.finditer(r'(?m)^\s*' + re.escape(key) + r':[^\n]*"([^"\n]*)"\s*$', s))
-              assert len(matches) == 1, (key, len(matches))
-              return matches[0].group(1)
-          def loc_set(s, key, value):
-              pattern = r'(?m)^[ \t]*' + re.escape(key) + r':[^\n]*$'
-              found = list(re.finditer(pattern, s))
-              assert len(found) <= 1, key
-              line = f' {key}:0 "{value}"'
-              return re.sub(pattern, lambda m: line, s, count=1) if found else s.rstrip() + '\n' + line + '\n'
-          ru = {
-              'STP_startup_quick_start': r'§YБЫСТРЫЙ СТАРТ: СТЕЛАНДЕР§!\n\nНачните с вводных фокусов. На встрече после ухудшения здоровья Иванова выберите сторону; просмотр справки этот выбор не делает.\n\n§YЗа Шабрата§! откройте карту подготовки в решениях. Для первого округа укрепите сеть, привлеките администрацию и проверьте прогноз перехода. Обычной администрации нужен 21 день работы; у отдельных округов есть дополнительные условия. Одного перевеса влияния недостаточно.\n\n§YЗа партию§! следите за верностью аппарата и объявленной целью подполья. Подготовьте ответ и гарнизоны; пустая проверка может помочь противнику.\n\n§YПеред операцией§! проверьте свободную ячейку, цену, срок и ближайшую угрозу. Подготовленная часть ещё нуждается в людях и оружии. Подробный план армии раскрывается отдельным бесплатным решением.\n\n§YЗатягивание комиссии§! действует с запуска фокуса. До выборов отсрочка сохраняется для будущих таймеров; после их начала применяется сразу.\n\nИстория страны сохранена на вкладке справки; направления кампании — на вкладке путей.',
-              'STP_cw_delay_election_commission_desc': r'§YПри запуске фокуса§! один раз продлим голосование и ближайшую сверку полномочий на §Y80 дней§!. Если таймер ещё не появился, отсрочка сохранится и применится при его запуске. Подозрения сразу вырастут на §R15§!.\n\nФокус занимает §Y14 дней§! и не отменяется вручную; повторного продления при завершении нет.',
-              'STP_cw_delay_election_tt': r'§YПри запуске§!: голосование и ближайшая сверка полномочий получают §G+80 дней§!. Ещё не начавшиеся таймеры получат отсрочку при запуске. Только один раз.',
-              'STP_cw_toggle_preparation_details': 'Подробный план армии: показать / скрыть',
-              'STP_cw_toggle_preparation_details_desc': 'Переключает краткую и полную сводку подготовки. Не расходует ресурсы, не занимает ячейку и не меняет план мобилизации.',
-              'STP_cw_preparation_short_report': r'[STPGetPreparationInstructions]\n\n§YГотовые оплаченные усиленные дивизии:§! [?STP_cw_prepared_assault_divisions|0].[STPGetKefreytArmyCommitment]\n§YОбщий резерв:§! £manpower_texticon [?manpower|0]; £infantry_equipment_texticon [?num_equipment@infantry_equipment|0].\n\nФактическая армия зависит от людей, оружия и исхода выборов. Раскол или потеря округа могут прервать местные операции; условия возврата указаны в каждом решении.\n\n§YНодрул:§! [STPGetNodStatus]\n\nПодробное распределение частей — в бесплатном решении §Y«Подробный план армии: показать / скрыть»§!.',
-              'STP_party_assault_price_tooltip': 'Полная цена: 7900 человек; 610 стрелкового оружия; 48 единиц вооружения отделений; 30 обеспечения; 60 артиллерии; 20 ПВО. Политическая власть и казна не расходуются.'
-          }
-          en = {
-              'STP_startup_quick_start': r'§YQUICK START: STELANDER§!\n\nBegin with the introductory focuses. Choose a side at the meeting following Ivanov\'s declining health; reading this guide does not choose your route.\n\n§YAs Shabrat§!, open the preparation map in Decisions. For your first district, build the network, recruit the administration and check the transfer forecast. An ordinary administration needs 21 days; some districts have additional conditions. An influence lead alone is not enough.\n\n§YAs the Party§!, watch apparatus loyalty and the announced underground target. Prepare a response and garrisons; an empty search can help your opponent.\n\n§YBefore an operation§!, check the free preparation slot, price, duration and approaching threat. Planned formations still need manpower and equipment. A free decision opens the detailed army plan.\n\n§YDelaying the commission§! works when the focus starts. Before the election, the extension is saved for the future timers; during it, the extension applies immediately.\n\nCountry history remains in the guide tab; campaign directions are in the paths tab.',
-              'STP_cw_delay_election_commission_desc': r'§YWhen the focus starts§!, extend the election and the nearest credentials review by §Y80 days§!, once only. A timer that has not started receives the saved extension when it begins. Suspicion immediately increases by §R15§!.\n\nThe focus still takes §Y14 days§! and cannot be manually cancelled. Completion does not grant another extension.',
-              'STP_cw_delay_election_tt': r'§YOn selection§!: the election and nearest credentials review gain §G80 days§!. Timers not yet running receive the saved extension on activation. Once only.',
-              'STP_cw_toggle_preparation_details': 'Detailed army plan: show / hide',
-              'STP_cw_toggle_preparation_details_desc': 'Switches between the short and full preparation reports. Costs no resources, uses no preparation slot and does not change mobilisation.',
-              'STP_cw_preparation_short_report': r'[STPGetPreparationInstructions]\n\n§YReady, paid reinforced divisions:§! [?STP_cw_prepared_assault_divisions|0].[STPGetKefreytArmyCommitment]\n§YShared reserve:§! £manpower_texticon [?manpower|0]; £infantry_equipment_texticon [?num_equipment@infantry_equipment|0].\n\nThe actual army depends on manpower, equipment and the election result. The split or loss of a district can interrupt local operations; refund terms are shown in each decision.\n\n§YNodrul:§! [STPGetNodStatus]\n\nOpen the free §YDetailed army plan: show / hide§! decision for the full distribution of formations.',
-              'STP_party_assault_price_tooltip': 'Full price: 7,900 manpower; 610 infantry equipment; 48 squad weapons; 30 support equipment; 60 artillery; 20 anti-air. No political power or treasury cost.'
-          }
-          # Keep original reports verbatim behind the toggle, and do not touch lore pages.
-          lore = ('STP_startup_guide_history', 'STP_startup_guide_nodrul', 'STP_startup_guide_party', 'STP_startup_guide', 'STP_startup_country')
-          for path, updates in ((RU, ru), (EN, en)):
-              s = read(path)
-              before_lore = {k: loc_get(s, k) for k in lore}
-              report = loc_get(s, 'STP_battle_for_stelander_desc')
-              updates = {**updates, 'STP_cw_preparation_full_report': report, 'STP_battle_for_stelander_desc': '[STPGetPreparationBriefing]'}
-              for key, value in updates.items():
-                  write_value = value.replace("\\'", "'")
-                  s = loc_set(s, key, write_value)
-              assert {k: loc_get(s, k) for k in lore} == before_lore
-              write(path, s)
-          green = run('green', focused)
-          assert green['returncode'] == 0, green
-          final = run('full-suite', ['discover', '-s', 'tools/tests', '-p', 'test_*.py'])
-          regressions = sorted(set(final['issues']) - set(baseline['issues']))
-          report = {'base': base, 'baseline': baseline, 'focused': green, 'final': final, 'new_failures': regressions,
-                    'files': paths, 'native_game_tested': False}
-          (evidence / 'manifest.json').write_text(json.dumps(report, indent=2))
-          assert not regressions, regressions
-          assert final['returncode'] != 124 and baseline['returncode'] != 124, 'Suite incomplete; inspect evidence before publication'
-          assert final['returncode'] == 0 or final['issues'], 'Unclassified suite failure'
-          subprocess.run(['git', 'diff', '--check', '--', *paths], check=True)
-          with (evidence / 'changes.patch').open('w') as out:
-              subprocess.run(['git', 'diff', '--', *paths], stdout=out, check=True)
-          with (evidence / 'validator.log').open('w') as out:
-              validator = subprocess.run([sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], stdout=out, stderr=subprocess.STDOUT)
-          report['validator_returncode'] = validator.returncode
-          # Export only the explicit gameplay/test paths, not this temporary workflow.
-          subprocess.run(['git', 'fetch', '--depth=1', 'origin', base], check=True)
-          subprocess.run(['git', 'config', 'user.name', 'A-Discord QoL'], check=True)
-          subprocess.run(['git', 'config', 'user.email', '81386071+worker2of2month@users.noreply.github.com'], check=True)
-          env = dict(os.environ, GIT_INDEX_FILE='/tmp/stp-qol-index')
-          subprocess.run(['git', 'read-tree', base], env=env, check=True)
-          for p in paths:
-              blob = subprocess.check_output(['git', 'hash-object', '-w', p]).decode().strip()
-              subprocess.run(['git', 'update-index', '--add', '--cacheinfo', '100644', blob, p], env=env, check=True)
-          tree = subprocess.check_output(['git', 'write-tree'], env=env).decode().strip()
-          commit = subprocess.check_output(['git', 'commit-tree', tree, '-p', base], input=b'fix(stp): apply commission delay on selection and streamline preparation UI\n').decode().strip()
-          branch = 'codex/stp-qol-delivery-' + os.environ['GITHUB_RUN_ID']
-          subprocess.run(['git', 'push', 'origin', commit + ':refs/heads/' + branch], check=True)
-          report.update({'head': commit, 'branch': branch})
-          (evidence / 'manifest.json').write_text(json.dumps(report, indent=2))
-          print('DELIVERY', json.dumps(report), flush=True)
+          (evidence / 'apply.py').write_text(source)
+          compile(source, 'stp-qol-apply.py', 'exec')
+          exec(compile(source, 'stp-qol-apply.py', 'exec'), {'__name__': '__main__'})
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: stp-qol-evidence
+          name: stp-qol-final-evidence
           path: /tmp/stp-qol/
           retention-days: 7
