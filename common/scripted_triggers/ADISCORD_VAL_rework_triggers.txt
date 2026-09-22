@@ -56,14 +56,18 @@ VAL_reclamation_state_project_valid = {
 	VAL = { has_capitulated = no has_completed_focus = VAL_reclamation_survey }
 	is_owned_by = VAL
 	is_controlled_by = VAL
-	has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
 	OR = {
-		NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
 		AND = {
+			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
+			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+		}
+		AND = {
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
 			check_variable = { var = VAL_reclamation_stage value = 1 compare = equals }
 			VAL = { has_completed_focus = VAL_reclamation_clean_water }
 		}
 		AND = {
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
 			check_variable = { var = VAL_reclamation_stage value = 2 compare = equals }
 			VAL = { has_completed_focus = VAL_reclamation_return_home }
 		}
@@ -923,7 +927,17 @@ VAL_regional_integration_target_valid = {
 	tag = VAL
 	is_subject = no
 	has_capitulated = no
-	FROM = { is_owned_by = ROOT is_controlled_by = ROOT NOT = { is_core_of = ROOT } }
+	has_war = no
+	FROM = {
+		is_owned_by = ROOT
+		is_controlled_by = ROOT
+		NOT = { is_core_of = ROOT }
+		any_neighbor_state = {
+			is_owned_by = ROOT
+			is_controlled_by = ROOT
+			is_core_of = ROOT
+		}
+	}
 }
 
 # State scope: local work and nationalisation reserve the same integration slot.

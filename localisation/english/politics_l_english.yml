@@ -9,6 +9,7 @@
  ADISCORD_action_cost_treasury_50_blocked: "£ADISCORD_economy_treasury_texticon §R50§!"
  ADISCORD_action_cost_treasury_100: "£ADISCORD_economy_treasury_texticon §Y100§!"
  ADISCORD_action_cost_treasury_100_blocked: "£ADISCORD_economy_treasury_texticon §R100§!"
+ ADISCORD_action_cost_treasury_100_tooltip: "£ADISCORD_economy_treasury_texticon §Y100§!"
  ADISCORD_action_cost_treasury_200: "£ADISCORD_economy_treasury_texticon §Y200§!"
  ADISCORD_action_cost_treasury_200_blocked: "£ADISCORD_economy_treasury_texticon §R200§!"
  ADISCORD_action_cost_treasury_500: "£ADISCORD_economy_treasury_texticon §Y500§!"

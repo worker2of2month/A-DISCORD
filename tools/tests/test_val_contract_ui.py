@@ -111,12 +111,68 @@ class TestValContractUi(unittest.TestCase):
             self.assertIn(f"{decision} = {{", contract)
 
         postwar = named_block(decisions, "VAL_postwar_administration")
-        for decision in (
-            "VAL_establish_regional_administration",
-            "VAL_nationalise_region",
-            "VAL_proclaim_commonwealth",
-        ):
+        for decision in ("VAL_nationalise_region", "VAL_proclaim_commonwealth"):
             self.assertIn(f"{decision} = {{", postwar)
+        self.assertNotIn("VAL_establish_regional_administration =", postwar)
+
+    def test_sparse_contract_unlock_focuses_are_short_or_have_immediate_value(self) -> None:
+        focuses = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
+        for focus_id in (
+            "VAL_Foreign_Broker_Licences",
+            "VAL_Northern_Clearing_House",
+            "VAL_Contingency_Ledgers",
+            "VAL_econ_automation",
+            "VAL_econ_logistics",
+            "VAL_econ_computing",
+            "VAL_Resource_War_Contracts",
+            "VAL_frontier_return_irem",
+        ):
+            block = named_block(focuses[focuses.index(f"id = {focus_id}") - 80:], "focus")
+            cost = re.search(r"(?m)^\s*cost\s*=\s*([0-9.]+)", block)
+            self.assertIsNotNone(cost, focus_id)
+            self.assertLessEqual(float(cost.group(1)), 3, focus_id)
+
+        licences = focuses[focuses.index("id = VAL_Foreign_Broker_Licences"):]
+        self.assertIn("add_political_power = 25", licences[:1800])
+        self.assertIn("VAL_change_contract_authority = yes", licences[:1800])
+
+        clearing = focuses[focuses.index("id = VAL_Northern_Clearing_House"):]
+        self.assertIn("ADISCORD_economy_receive_15 = yes", clearing[:1200])
+
+        advisers = focuses[focuses.index("id = VAL_Contingency_Ledgers"):]
+        self.assertIn("add_command_power = 15", advisers[:1200])
+
+    def test_contract_authority_improves_political_cashflow(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        refresh = named_block(effects, "VAL_refresh_contract_modifier")
+        base_assignments = re.findall(r"set_variable = \{ var = VAL_contract_pp_gain value = (-?\d+(?:\.\d+)?) \}", refresh)
+        self.assertGreaterEqual(len(base_assignments), 5)
+        self.assertEqual(base_assignments[:5], ["-0.05", "0.05", "0.10", "0.15", "0.20"])
+
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        chancery = named_block(decisions, "VAL_fund_contract_chancery")
+        self.assertIn("ADISCORD_economy_can_spend_100 = yes", chancery)
+        self.assertIn("ADISCORD_economy_spend_100 = yes", chancery)
+        self.assertIn("add_political_power = 75", chancery)
+        self.assertIn("days_re_enable = 90", chancery)
+
+    def test_nationalisation_is_a_repeatable_adjacent_core_chain(self) -> None:
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        nationalise = named_block(decisions, "VAL_nationalise_region")
+        for token in (
+            "state_target = yes",
+            "any_neighbor_state = {",
+            "is_core_of = ROOT",
+            "is_owned_by = ROOT",
+            "is_controlled_by = ROOT",
+            "NOT = { is_core_of = ROOT }",
+            "set_country_flag = VAL_regional_integration_active",
+            "add_core_of = ROOT",
+            "fire_only_once = no",
+        ):
+            self.assertIn(token, nationalise)
+        self.assertNotIn("compliance", nationalise)
+        self.assertNotIn("resistance", nationalise)
 
 
 class TestValPropagandaRewards(unittest.TestCase):
@@ -236,6 +292,85 @@ class TestValPropagandaRewards(unittest.TestCase):
         for decision_id in self.campaigns:
             self.assertEqual(len(re.findall(rf"(?m)^\s*{re.escape(decision_id)}\s*=\s*\{{", decisions)), 1)
 
+
+
+class TestValMergedContractFlows(unittest.TestCase):
+    def test_quarterly_payment_debits_pp_only_after_the_val_rifle_receipt(self):
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        decision = named_block(named_block(decisions, "VAL_contract_management"), "VAL_pay_quarterly_contract_norm")
+        self.assertNotIn("add_political_power", named_block(decision, "complete_effect"))
+        effect = named_block(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), "VAL_pay_quarterly_contract_norm")
+        self.assertNotIn("STP_cw_rifles_paid", effect)
+        self.assertEqual(effect.count("add_political_power = -10"), 1)
+        receipt = effect.index("has_country_flag = VAL_contract_rifles_paid")
+        self.assertLess(receipt, effect.index("add_political_power = -10"))
+        self.assertLess(effect.index("add_political_power = -10"), effect.index("set_country_flag = VAL_quarterly_contract_paid"))
+
+    def test_export_capacity_is_defined_once_and_is_not_a_second_payment(self):
+        ideas = read("common/ideas/ADISCORD_VAL_rework_ideas.txt")
+        for name in ("VAL_export_income_1", "VAL_export_income_2", "VAL_advisors_income", "VAL_paid_military_advisors"):
+            with self.subTest(idea=name):
+                self.assertEqual(len(re.findall(r"(?m)^\s*" + name + r"\s*=\s*\{", ideas)), 1)
+                self.assertNotIn("ADISCORD_economy_weekly_income", named_block(ideas, name))
+
+    def test_reclamation_state_and_industry_use_distinct_stage_gates(self):
+        text = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        state = named_block(text, "VAL_reclamation_state_project_valid")
+        for name in ("ADISCORD_vorkerland_dirty_state", "VAL_reclamation_stage_1_modifier", "VAL_reclamation_stage_2_modifier"):
+            self.assertIn("modifier = " + name, state)
+        self.assertNotIn("ROOT", state)
+        industry = named_block(text, "VAL_reclamation_industry_target_valid")
+        self.assertIn("value = 3 compare = equals", industry)
+        self.assertIn("industrial_complex < 19", industry)
+        self.assertNotIn("VAL_reclamation_clean_water", industry)
+        self.assertNotIn("ADISCORD_vorkerland_dirty_state", industry)
+
+    def test_reclamation_refresh_preserves_untreated_states_and_is_idempotent(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        text = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        raw = named_block(text, "VAL_reclamation_refresh_state")
+        self.assertNotIn("<<<<<<<", raw)
+        body = parse_clausewitz(raw)[0].value
+        def field(entry, key):
+            return next(e.value for e in entry.value if e.key == key)
+        for stage in (0, 1, 2, 3, 4):
+            modifiers = {"ADISCORD_vorkerland_dirty_state"}
+            values = {"VAL_reclamation_stage": stage}
+            def condition(e):
+                if e.key == "check_variable":
+                    actual = values.get(field(e, "var"), 0)
+                    target = float(field(e, "value"))
+                    return actual >= target
+                if e.key == "has_dynamic_modifier":
+                    return field(e, "modifier") in modifiers
+                raise AssertionError(e.key)
+            def execute(entries):
+                matched = False
+                for e in entries:
+                    if e.key in ("if", "else_if", "else"):
+                        if e.key == "if": matched = False
+                        limit = next((v.value for v in e.value if v.key == "limit"), [])
+                        if not matched and all(condition(v) for v in limit):
+                            execute([v for v in e.value if v.key != "limit"])
+                            matched = True
+                    elif e.key == "remove_dynamic_modifier": modifiers.discard(field(e, "modifier"))
+                    elif e.key == "add_dynamic_modifier": modifiers.add(field(e, "modifier"))
+                    elif e.key == "clear_variable": values.pop(e.value, None)
+                    else: raise AssertionError(e.key)
+            for repeat in range(2):
+                execute(body)
+                expected = {"ADISCORD_vorkerland_dirty_state"} if stage == 0 else {f"VAL_reclamation_stage_{min(stage, 3)}_modifier"}
+                with self.subTest(stage=stage, repeat=repeat): self.assertEqual(modifiers, expected)
+
+    def test_merge_preserves_corridor_ui_and_native_paid_program_previews(self):
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            self.assertIn("$VAL_trade_corridors_desc$", text)
+            self.assertIn("VAL_focus_paid_program_authorization_tt", text)
+            self.assertNotRegex(text, r"(?m)^(?:<<<<<<<|=======|>>>>>>>)")
+        focuses = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
+        for decision in ("ADISCORD_economy_automated_industry", "ADISCORD_economy_logistics_contract", "ADISCORD_economy_national_computing"):
+            self.assertIn("unlock_decision_tooltip = { decision = " + decision + " show_effect_tooltip = yes }", focuses)
 
 if __name__ == "__main__":
     unittest.main()

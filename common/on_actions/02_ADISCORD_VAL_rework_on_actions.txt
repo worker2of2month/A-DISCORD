@@ -17,6 +17,13 @@ on_actions = {
 				}
 			}
 			if = {
+				limit = { VAL = { exists = yes NOT = { has_country_flag = VAL_reclamation_modifier_migrated_v2 } } }
+				VAL = {
+					VAL_migrate_reclamation_modifiers = yes
+					set_country_flag = VAL_reclamation_modifier_migrated_v2
+				}
+			}
+			if = {
 				limit = {
 					has_global_flag = ADISCORD_fresh_campaign_contract_v1
 					NOT = { has_global_flag = ADISCORD_val_rework_fresh_campaign_v1 }

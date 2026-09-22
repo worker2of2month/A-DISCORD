@@ -797,6 +797,7 @@ country_event = {
 				else = {
 					ADISCORD_economy_spend_100 = yes
 					VAL = {
+						ADISCORD_economy_receive_100 = yes
 						send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
 						if = {
 							limit = { NOT = { has_idea = VAL_export_income_1 } }
@@ -865,6 +866,7 @@ country_event = {
 				ADISCORD_economy_spend_100 = yes
 				add_timed_idea = { idea = VAL_paid_military_advisors days = 70 }
 				VAL = {
+					ADISCORD_economy_receive_100 = yes
 					add_command_power = -25
 					add_timed_idea = { idea = VAL_advisors_income days = 70 }
 				}
