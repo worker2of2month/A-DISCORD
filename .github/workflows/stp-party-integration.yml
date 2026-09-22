@@ -1,0 +1,41 @@
+name: STP party QoL integration
+on:
+  push:
+    branches: [codex/stp-party-qol-20260922]
+    paths: ['.github/workflows/stp-party-integration.yml']
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check Pillow numpy
+      - name: Integrate reviewed focus changes and run verification
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import textwrap
+          _resolver_source=Path('.github/stp-party-resolve.py').read_text()
+          _workflow=Path('.github/workflows/stp-party-final.yml').read_text()
+          _script=textwrap.dedent(_workflow.split("python - <<'PY'\n",1)[1].split('\n          PY\n',1)[0])
+          _old="subprocess.run(['git','apply','--3way',str(patch)],check=True)"
+          _new="""application=subprocess.run(['git','apply','--3way',str(patch)])
+          conflicts=subprocess.check_output(['git','diff','--name-only','--diff-filter=U']).decode().splitlines()
+          assert set(conflicts) <= {'common/national_focus/ADISCORD_national_focus_STP.txt'},conflicts
+          assert application.returncode==0 or conflicts,'patch application failed without a known conflict'
+          exec(compile(_resolver_source,'party-focus-integration','exec'),globals())"""
+          assert _script.count(_old)==1
+          _script=_script.replace(_old,textwrap.dedent(_new))
+          exec(compile(_script,'party-integration-verification','exec'),globals())
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-party-final-evidence
+          path: /tmp/stp-party-final-evidence
+          retention-days: 3
