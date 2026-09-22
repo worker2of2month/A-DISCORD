@@ -1675,6 +1675,7 @@ STP_heg_northern_final_resolved = {
 	NOT = { has_war_with = NOD }
 	NOT = { has_war_with = YPR }
 	NOT = { has_war_with = TFF }
+	NOT = { has_war_with = VAL }
 }
 
 STP_heg_nod_administration_available = {
