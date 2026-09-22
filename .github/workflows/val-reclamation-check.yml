@@ -1,0 +1,33 @@
+name: Kefreyt reclamation verification
+on:
+  push:
+    branches: [codex/val-reclamation-category]
+    paths: [.github/workflows/val-reclamation-check.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Collect source snapshot
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, zipfile
+          root = pathlib.Path.cwd()
+          names = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          with zipfile.ZipFile('/tmp/reclamation-source.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for name in names:
+                  path = root / name
+                  if name and path.is_file() and path.suffix.lower() not in {'.dds', '.tga', '.png', '.jpg', '.jpeg', '.bmp', '.wav', '.ogg', '.mp3', '.webp', '.mesh', '.anim', '.xcf', '.psd', '.blend', '.kra', '.ttf', '.otf', '.pdf'}:
+                      archive.write(path, name)
+              archive.writestr('SNAPSHOT_COMMIT', subprocess.check_output(['git', 'rev-parse', 'HEAD']))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reclamation-source
+          path: /tmp/reclamation-source.zip
