@@ -1614,40 +1614,9 @@ STP_false_trail_counterintelligence_breakthrough = {
 }
 
 STP_resolve_false_trail = {
-	if = {
-		limit = { ROOT = { check_variable = { var = STP_party_suspicion value = 25 compare = less_than } } }
-		random_list = {
-			60 = { STP_false_trail_clean_redirect = yes }
-			30 = { STP_false_trail_noisy_redirect = yes }
-			10 = { STP_false_trail_courier_seized = yes }
-		}
-	}
-	else_if = {
-		limit = { ROOT = { check_variable = { var = STP_party_suspicion value = 50 compare = less_than } } }
-		random_list = {
-			35 = { STP_false_trail_clean_redirect = yes }
-			40 = { STP_false_trail_noisy_redirect = yes }
-			20 = { STP_false_trail_courier_seized = yes }
-			5 = { STP_false_trail_counterintelligence_breakthrough = yes }
-		}
-	}
-	else_if = {
-		limit = { ROOT = { check_variable = { var = STP_party_suspicion value = 70 compare = less_than } } }
-		random_list = {
-			15 = { STP_false_trail_clean_redirect = yes }
-			35 = { STP_false_trail_noisy_redirect = yes }
-			35 = { STP_false_trail_courier_seized = yes }
-			15 = { STP_false_trail_counterintelligence_breakthrough = yes }
-		}
-	}
-	else = {
-		random_list = {
-			5 = { STP_false_trail_clean_redirect = yes }
-			20 = { STP_false_trail_noisy_redirect = yes }
-			40 = { STP_false_trail_courier_seized = yes }
-			35 = { STP_false_trail_counterintelligence_breakthrough = yes }
-		}
-	}
+	# Save-compatibility fallback for trails prepared before immediate diversion.
+	STP_false_trail_clean_redirect = yes
+	set_state_flag = { flag = STP_false_trail_redirected days = 28 }
 }
 
 STP_resolve_party_inspection = {
@@ -1836,6 +1805,7 @@ STP_clear_region_runtime = {
 	clr_state_flag = STP_cw_garrison_evacuated
 	clr_state_flag = STP_cw_garrison_evacuation_in_progress
 	clr_state_flag = STP_false_trail_in_progress
+	clr_state_flag = STP_false_trail_redirected
 	clr_state_flag = STP_inspection_concession_prepared
 	STP_cw_return_preparation_reserves = yes
 	clr_state_flag = STP_region_participates
