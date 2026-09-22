@@ -162,6 +162,7 @@
  VAL_contract_administration_3: "Контрактная администрация III"
  VAL_contract_administration_3_desc: "Полностью собранная контрактная система повышает доходы и снижает перегрузку государственного аппарата."
  VAL_contract_industry_1: "Контрактная промышленность I"
+ VAL_contract_industry_preview: "Контрактная промышленность"
  VAL_contract_industry_1_desc: "Проверенные заказы ускоряют рост эффективности оружейных линий."
  VAL_contract_industry_2: "Контрактная промышленность II"
  VAL_contract_industry_2_desc: "Стандартизация и учёт повышают выпуск и уменьшают потери от нехватки сырья."
