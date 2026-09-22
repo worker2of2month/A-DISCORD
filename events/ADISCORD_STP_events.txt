@@ -53,6 +53,12 @@ country_event = {
 	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } }
 	immediate = { clear_variable = STP_nectar_story_page }
 	option = { name = ADISCORD_STP_preparation.15.a }
+	option = {
+		name = ADISCORD_STP_preparation.15.skip
+		trigger = { is_ai = no }
+		set_country_flag = STP_skip_intro_story_events
+		custom_effect_tooltip = STP_skip_intro_story_events_tt
+	}
 }
 
 country_event = {
@@ -61,7 +67,7 @@ country_event = {
 	desc = ADISCORD_STP_preparation.16.d
 	picture = GFX_event_adiscord_nectar_of_the_gods
 	is_triggered_only = yes
-	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } }
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started }  NOT = { has_country_flag = STP_skip_intro_story_events } }
 	immediate = { clear_variable = STP_nectar_story_page }
 	option = { name = ADISCORD_STP_preparation.16.a }
 }
@@ -73,7 +79,7 @@ country_event = {
 	desc = ADISCORD_STP_preparation.23.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag }  NOT = { has_country_flag = STP_skip_intro_story_events } }
 	option = { name = ADISCORD_STP_preparation.23.a }
 }
 
@@ -83,7 +89,7 @@ country_event = {
 	desc = ADISCORD_STP_preparation.25.d
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
-	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag } }
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag }  NOT = { has_country_flag = STP_skip_intro_story_events } }
 	option = { name = ADISCORD_STP_preparation.25.a }
 }
 

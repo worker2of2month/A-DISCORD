@@ -618,9 +618,16 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertLessEqual(len(rendered.encode("utf-8")), 5500)
             self.assertEqual([(e.key, e.value) for e in block(event, "immediate")],
                              [("clear_variable", "STP_nectar_story_page")])
-            option = block(event, "option")
-            self.assertIn(scalar(option, "name"), values)
-            self.assertEqual(len(option), 1, "closing must not schedule another event or settle focus rewards")
+            options = [entry.value for entry in event if entry.key == "option"]
+            self.assertIn(scalar(options[0], "name"), values)
+            if number == 15:
+                self.assertEqual(len(options), 2)
+                skip = options[1]
+                self.assertEqual(scalar(skip, "name"), "ADISCORD_STP_preparation.15.skip")
+                self.assertEqual(scalar(block(skip, "trigger"), "is_ai"), "no")
+                self.assertIn("STP_skip_intro_story_events", [e.value for e in walk(skip) if e.key == "set_country_flag"])
+            else:
+                self.assertEqual(len(options), 1, "later nectar lore must close without scheduling another event or settling focus rewards")
         self.assertEqual(hashlib.sha256(r"\n\n".join(chapters).encode("utf-8")).hexdigest(),
                          "b87894acba07ebab1224274870aef30f77c8c13f2591cce43785dd665a39f8ba")
         self.assertEqual(scalar(block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"), "add_political_power"), "35")
@@ -628,6 +635,28 @@ class StelanderPreparationTests(unittest.TestCase):
         for path in ("interface/ADISCORD_STP_regions.gui", "common/scripted_guis/ADISCORD_STP_regions_scripted_gui.txt"):
             self.assertNotIn("ADISCORD_STP_nectar_story", (ROOT / path).read_text(encoding="utf-8-sig"))
         self.assertFalse(any(key.startswith("STP_nectar_") for key in values))
+
+    def test_intro_story_skip_only_suppresses_lore_popups(self):
+        events = {scalar(e.value, "id"): e.value for e in entries("events/ADISCORD_STP_events.txt")
+                  if e.key == "country_event"}
+        first = events["ADISCORD_STP_preparation.15"]
+        options = [e.value for e in first if e.key == "option"]
+        self.assertEqual(len(options), 2)
+        self.assertIn("STP_skip_intro_story_events", [e.value for e in walk(options[1])
+                                                       if e.key == "set_country_flag"])
+        skipped = {("STP", "has_country_flag", "STP_skip_intro_story_events"): True}
+        for event_id in ("ADISCORD_STP_preparation.16",
+                         "ADISCORD_STP_preparation.23",
+                         "ADISCORD_STP_preparation.25"):
+            trigger = block(events[event_id], "trigger")
+            self.assertFalse(matches_conditions(trigger, skipped), event_id)
+            self.assertTrue(matches_conditions(trigger, {}), event_id)
+
+        tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+                    if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        self.assertEqual(scalar(block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"), "add_political_power"), "35")
+        self.assertEqual(scalar(block(focuses["STP_2160_budget"], "completion_reward"), "STP_receive_1200"), "yes")
 
     def test_intro_lore_is_paced_by_five_one_week_focuses(self):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")

@@ -420,10 +420,10 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_focus_STP_All_In_shine"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_All_In.png"
+		texturefile = "gfx/interface/goals/_spare/STP/GFX_focus_STP_All_In.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_All_In.png"
+			animationmaskfile = "gfx/interface/goals/_spare/STP/GFX_focus_STP_All_In.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
