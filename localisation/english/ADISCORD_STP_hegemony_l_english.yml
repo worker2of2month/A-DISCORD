@@ -1,0 +1,39 @@
+﻿l_english:
+ autonomy_STP_provisional_administration:0 "Stelander Provisional Administration"
+
+ STP_pc_heg_administrations:0 "Administrations of the Hegemony"
+ STP_pc_heg_administrations_desc:0 "The Hegemony needs more than occupied maps. Defeated governments can be reorganised into temporary administrations, while territory held directly by Steland can be nationalised through the existing regional programme."
+ STP_pc_heg_final_north:0 "Break the Northern Ring"
+ STP_pc_heg_final_north_desc:0 "Independent power in the north has become incompatible with Steland's claim to regional primacy. Nodrul, Yubor and the Frontier will be forced into the new order if they have not already submitted."
+ STP_pc_heg_final_kefreyt:0 "The Last Contract"
+ STP_pc_heg_final_kefreyt_desc:0 "Once the northern campaign is closed, only Kefreyt can still contest Steland's regional system. The second and final campaign will settle which state writes the rules."
+
+ STP_heg_nationalisation_unlock_tt:0 "The Hegemony route can use the existing repeatable regional nationalisation programme."
+ STP_heg_administration_unlock_tt:0 "Unlocks provisional administrations for defeated §YNodrul§!, §YYubor§!, §Ythe Frontier§! and §YKefreyt§!. Each administration may later be annexed through a separate 90 day integration decision."
+ STP_heg_northern_war_tt:0 "Begins the final northern campaign against independent §YNodrul§!, §YYubor§! and §Ythe Frontier§!. Governments already subordinated to Steland are not attacked again."
+ STP_heg_northern_resolved_tt:0 "The northern campaign has been started and Steland is no longer at war with Nodrul, Yubor or the Frontier."
+ STP_heg_kefreyt_war_tt:0 "Begins the second final campaign against independent §YKefreyt§!."
+ STP_heg_annex_complete_tt:0 "The provisional administration is dissolved and its territory is incorporated into Steland."
+
+ STP_hegemony_administration:0 "Hegemonic Administration"
+ STP_hegemony_administration_desc:0 "The Hegemony can preserve a defeated state as a temporary administration before deciding whether to keep it separate or absorb it."
+
+ STP_heg_establish_nod_administration:0 "Establish the Nodrul Provisional Administration"
+ STP_heg_establish_nod_administration_desc:0 "Replace the defeated Nodrul government with a temporary administration subordinate to Steland."
+ STP_heg_annex_nod_administration:0 "Annex the Nodrul Administration"
+ STP_heg_annex_nod_administration_desc:0 "Begin a 90 day integration of the Nodrul provisional administration."
+
+ STP_heg_establish_ypr_administration:0 "Establish the Yubor Provisional Administration"
+ STP_heg_establish_ypr_administration_desc:0 "Replace the defeated Yubor government with a temporary administration subordinate to Steland."
+ STP_heg_annex_ypr_administration:0 "Annex the Yubor Administration"
+ STP_heg_annex_ypr_administration_desc:0 "Begin a 90 day integration of the Yubor provisional administration."
+
+ STP_heg_establish_tff_administration:0 "Establish the Frontier Provisional Administration"
+ STP_heg_establish_tff_administration_desc:0 "Replace the defeated Frontier government with a temporary administration subordinate to Steland."
+ STP_heg_annex_tff_administration:0 "Annex the Frontier Administration"
+ STP_heg_annex_tff_administration_desc:0 "Begin a 90 day integration of the Frontier provisional administration."
+
+ STP_heg_establish_val_administration:0 "Establish the Kefreyt Provisional Administration"
+ STP_heg_establish_val_administration_desc:0 "Replace the defeated Kefreyt government with a temporary administration subordinate to Steland."
+ STP_heg_annex_val_administration:0 "Annex the Kefreyt Administration"
+ STP_heg_annex_val_administration_desc:0 "Begin a 90 day integration of the Kefreyt provisional administration."
