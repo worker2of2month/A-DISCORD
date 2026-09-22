@@ -3,6 +3,7 @@ VAL_final_crisis_available = {
 	is_subject = no
 	has_capitulated = no
 	has_completed_focus = VAL_Northern_Settlement
+	VAL_stelander_dominated = yes
 	NOT = { has_country_flag = VAL_stelander_defeated }
 	NOD = {
 		exists = yes
