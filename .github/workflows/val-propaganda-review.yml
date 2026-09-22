@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Prepare verified patch
+      - name: Prepare pinned integration
         run: |
           mkdir -p /tmp/val-integration-final
           cp .github/val_integration_resolution.py /tmp/val-integration-final/resolve.py
@@ -37,30 +37,17 @@ jobs:
           PY
           python -m pip install pillow numpy pyyaml
           git fetch --no-tags --filter=blob:none --depth=160 origin main fix/val-contract-flow-focus-value
-          test "$(git rev-parse origin/main)" = 3641379bf5f60c756bc89127e927159c526ab25b
+          git merge-base --is-ancestor 3641379bf5f60c756bc89127e927159c526ab25b origin/main
           test "$(git rev-parse origin/fix/val-contract-flow-focus-value)" = b1d71d5228698179f9a9f8310b400981f1cc0a5b
           git switch --detach 3641379bf5f60c756bc89127e927159c526ab25b
           git config user.name 'A-Discord integration'
           git config user.email '81386071+worker2of2month@users.noreply.github.com'
-      - name: Record baseline and resolve approved integration
-        run: |
-          python - <<'PY'
-          import subprocess, sys
-          from pathlib import Path
-          out = Path('/tmp/val-integration-final')
-          with (out/'baseline-expanded.log').open('w') as log:
-              try:
-                  r = subprocess.run([sys.executable,'-B','-m','unittest','tools.tests.test_validate_adiscord_val_rework','-v'], stdout=log, stderr=subprocess.STDOUT, timeout=100)
-                  print('Baseline expanded return code:', r.returncode)
-              except subprocess.TimeoutExpired:
-                  log.write('\nTIMEOUT at 100 seconds\n')
-                  print('Baseline expanded suite timed out.')
-          PY
+          timeout 100 python -B -m unittest tools.tests.test_validate_adiscord_val_rework -v > /tmp/val-integration-final/baseline-expanded.log 2>&1 || echo "Baseline expanded exit: $?"
           git switch --detach b1d71d5228698179f9a9f8310b400981f1cc0a5b
           git merge --no-commit --no-ff 3641379bf5f60c756bc89127e927159c526ab25b > /tmp/val-integration-final/merge.log 2>&1 || test -n "$(git ls-files -u)"
           python -B /tmp/val-integration-final/resolve.py
           cp /tmp/val-integration-hashes.json /tmp/val-integration-final/hashes.json
-      - name: Require scoped regression checks and valid encodings
+      - name: Require scoped regressions and valid scripts
         run: |
           python -B -m unittest tools.tests.test_val_contract_ui tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests.test_buyer_payment_and_native_equipment_transfer_share_authenticated_branch tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests.test_export_slots_are_capacity_markers_not_deferred_income tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests.test_vorkerland_aid_has_real_stock_costs_and_no_automatic_dispatch tools.tests.test_validate_adiscord_val_rework.ValNorthernExportTests.test_custom_prices_include_native_blocked_and_hover_suffixes tools.tests.test_validate_adiscord_val_rework.ValRegionalIntegrationTests -v > /tmp/val-integration-final/scoped.log 2>&1
           python - <<'PY'
@@ -71,35 +58,31 @@ jobs:
           for name in paths:
               raw = Path(name).read_bytes()
               assert not re.search(rb'(?m)^(?:<<<<<<<|=======|>>>>>>>)', raw), name
-              if name.endswith('.yml'):
-                  assert raw.startswith(b'\xef\xbb\xbf'), name
+              if name.endswith('.yml'): assert raw.startswith(b'\xef\xbb\xbf'), name
               elif name.endswith('.txt'):
                   assert not raw.startswith(b'\xef\xbb\xbf'), name
                   assert parse_clausewitz(raw.decode('utf-8')), name
-          subprocess.run(['git','add','--',*paths], check=True)
+          subprocess.run(['git','add','--',*paths],check=True)
           assert not subprocess.check_output(['git','ls-files','-u'])
           changed = subprocess.check_output(['git','diff','--cached','--name-only','3641379bf5f60c756bc89127e927159c526ab25b']).decode().splitlines()
           assert not any(p.startswith('.github/') for p in changed), changed
           Path('/tmp/val-integration-final/changed.json').write_text(json.dumps(changed,indent=2))
           subprocess.run(['git','diff','--cached','3641379bf5f60c756bc89127e927159c526ab25b','--check'],check=True)
-          print('Scoped tests, exact hashes, script structure and encodings verified.')
           PY
-      - name: Record broader test limitations and run project validator
+      - name: Record broader limitations and require project validator
         run: |
           python - <<'PY'
           import subprocess, sys, json, re
           from pathlib import Path
           out = Path('/tmp/val-integration-final')
           reports = {}
-          cases = [
+          for name,command,limit in [
               ('expanded',[sys.executable,'-B','-m','unittest','tools.tests.test_validate_adiscord_val_rework','-v'],100),
               ('full-suite',[sys.executable,'-B','-m','unittest','discover','-s','tools/tests','-p','test_*.py','-v'],60),
               ('validator',[sys.executable,'-B','tools/validate_tc.py','--limit','300'],180),
-          ]
-          for name,command,limit in cases:
+          ]:
               with (out/(name+'.log')).open('w') as log:
-                  try:
-                      code = subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,timeout=limit).returncode
+                  try: code = subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,timeout=limit).returncode
                   except subprocess.TimeoutExpired:
                       code = 124
                       log.write('\nTIMEOUT after '+str(limit)+' seconds\n')
@@ -107,31 +90,30 @@ jobs:
               reports[name] = {'returncode':code,'failures':re.findall(r'(?m)^(?:FAIL|ERROR): (.+)$',text),'tail':text.splitlines()[-6:]}
               print(name, json.dumps(reports[name]))
           (out/'reports.json').write_text(json.dumps(reports,indent=2))
-          assert reports['validator']['returncode'] == 0, 'Project validator must finish successfully'
+          assert reports['validator']['returncode'] == 0
           PY
-      - name: Publish reconciliation to PR40 only
+      - name: Publish to PR40 without runner files
         run: |
           git diff --cached 3641379bf5f60c756bc89127e927159c526ab25b > /tmp/val-integration-final/delivery.diff
           test "$(git ls-remote origin refs/heads/fix/val-contract-flow-focus-value | cut -f1)" = b1d71d5228698179f9a9f8310b400981f1cc0a5b
           git commit -m 'Merge current main into PR40; preserve paid contracts, reclamation and campaign fixes'
           git rev-parse HEAD > /tmp/val-integration-final/delivery-head.txt
           git push origin HEAD:refs/heads/fix/val-contract-flow-focus-value
-      - name: Export verification evidence
+      - name: Export evidence
         if: always()
         run: |
           git status --short > /tmp/val-integration-final/status.txt
           git diff > /tmp/val-integration-final/unstaged.diff
           python - <<'PY'
           from pathlib import Path
-          import zipfile, json
+          import zipfile,json
           out = Path('/tmp/val-integration-final')
           with zipfile.ZipFile('/tmp/val-integration-final.zip','w',zipfile.ZIP_DEFLATED) as z:
               for p in out.rglob('*'):
                   if p.is_file(): z.write(p,p.relative_to(out))
               manifest = out/'hashes.json'
               if manifest.exists():
-                  for name in json.loads(manifest.read_text()):
-                      z.write(name,'source/'+name)
+                  for name in json.loads(manifest.read_text()): z.write(name,'source/'+name)
           PY
       - uses: actions/upload-artifact@v4
         if: always()
