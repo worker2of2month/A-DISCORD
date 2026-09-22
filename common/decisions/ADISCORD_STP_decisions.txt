@@ -999,12 +999,22 @@ STP_battle_for_stelander = {
 			hidden_effect = {
 				if = {
 					limit = { FROM = { STP_region_is_operable = yes is_owned_by = ROOT has_state_flag = STP_party_inspection_active has_state_flag = STP_false_trail_in_progress } has_country_flag = STP_battle_for_stelander_active }
+					if = { limit = { FROM = { state = 2 } } set_variable = { var = STP_last_inspection_state value = 2 } }
+					else_if = { limit = { FROM = { state = 3 } } set_variable = { var = STP_last_inspection_state value = 3 } }
+					else_if = { limit = { FROM = { state = 29 } } set_variable = { var = STP_last_inspection_state value = 29 } }
+					else_if = { limit = { FROM = { state = 45 } } set_variable = { var = STP_last_inspection_state value = 45 } }
+					else_if = { limit = { FROM = { state = 46 } } set_variable = { var = STP_last_inspection_state value = 46 } }
+					else_if = { limit = { FROM = { state = 53 } } set_variable = { var = STP_last_inspection_state value = 53 } }
 					FROM = {
-						set_state_flag = STP_false_trail_prepared
 						set_temp_variable = { var = STP_region_influence_change value = 3 }
 						STP_add_party_influence = yes
 						STP_mark_region_player_action = yes
+						STP_false_trail_clean_redirect = yes
+						set_state_flag = { flag = STP_false_trail_redirected days = 28 }
+						clr_state_flag = STP_false_trail_prepared
+						STP_cw_abort_party_inspection = yes
 					}
+					STP_schedule_next_party_inspection = yes
 				}
 				if = {
 					limit = { FROM = { has_state_flag = STP_false_trail_in_progress } }
