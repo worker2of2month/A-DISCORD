@@ -161,7 +161,7 @@
  ADISCORD_economy_social_budget_mode_5: "§GUniversal support§!"
 
  ADISCORD_economy_tax_controls_tt: "§YTAXES - cash now or growth later§!\nCurrent level: [?ADISCORD_economy_tax_burden_mode|0]/5 - [GetADISCORDTaxBurdenModeLoc]\n\n[GetADISCORDTaxBurdenEffectsLoc]\n\nNext change in [?ADISCORD_economy_tax_change_cooldown|0] months."
- ADISCORD_economy_army_controls_tt: "§YARMY BUDGET - savings or readiness§!\nCurrent level: [?ADISCORD_economy_army_spending_mode|0]/5 - [GetADISCORDArmySpendingModeLoc]\n\n[GetADISCORDArmySpendingEffectsLoc]\n\nNext change in [?ADISCORD_economy_army_budget_change_cooldown|0] months."
+ ADISCORD_economy_army_controls_tt: "§YARMY BUDGET - savings or readiness§!\nCurrent level: [?ADISCORD_economy_army_spending_mode|0]/5 - [GetADISCORDArmySpendingModeLoc]\n\n[GetADISCORDArmySpendingEffectsLoc]\n\nNext change in [?ADISCORD_economy_army_budget_change_cooldown|0] months.[GetADISCORDEconomyNodDivisionCapacityLoc]"
  ADISCORD_economy_research_controls_tt: "Levels 1-5. §YRESEARCH FUNDING - cost and research speed§!\nCurrent level: [?ADISCORD_economy_research_spending_mode|0]/5 - [GetADISCORDResearchSpendingModeLoc]\n\n[GetADISCORDResearchSpendingEffectsLoc]\n\nResearch expense by level: §G-70%§! / §G-35%§! / §Y0%§! / §R+30%§! / §R+60%§!. Research speed: §R-8%§! / §R-3%§! / §Y0%§! / §G+8%§! / §G+15%§!. Level 5 also grants §G+5%§! construction speed.\n\nNext change in [?ADISCORD_economy_research_budget_change_cooldown|0] months."
  ADISCORD_economy_social_controls_tt: "§YSOCIAL BUDGET - savings or domestic stability§!\nCurrent level: [?ADISCORD_economy_social_spending_mode|0]/5 - [GetADISCORDSocialSpendingModeLoc]\n\n[GetADISCORDSocialSpendingEffectsLoc]\n\nNext change in [?ADISCORD_economy_social_budget_change_cooldown|0] months."
 
@@ -506,3 +506,5 @@
  free_trade: "Free Trade"
  limited_exports: "Limited Exports"
  closed_economy: "Closed Economy"
+ ADISCORD_economy_nod_division_capacity_tt: "\n\n§YNODRUL: ARMY CAPACITY§!\nDivisions under command at the last budget calculation: §Y[?ADISCORD_economy_nod_division_count|0]§!. Economic ceiling: §Y[?ADISCORD_economy_nod_division_capacity|0]§!. Excess: §R[?ADISCORD_economy_nod_excess_divisions|0]§!.\nThe ceiling is 12 plus civilian and military factories, up to 48. War adds 6. Fiscal stress of 45 or debt crisis level 2 subtracts 6. Stress of 75 or debt crisis level 3 subtracts 12 instead. The ceiling cannot fall below 12.\nEach division adds 0.5 to monthly army expenses. Each excess division adds another 2, before the army-budget multiplier and expense modifiers. Loans do not raise the ceiling.\nAI recruitment demand is reduced four divisions before the ceiling and suppressed at the ceiling. Existing units are not removed, and recruitment demand can recover after losses. Queued or scripted units can still exceed this economic ceiling and incur the extra cost."
+ ADISCORD_economy_nod_division_capacity_empty: ""

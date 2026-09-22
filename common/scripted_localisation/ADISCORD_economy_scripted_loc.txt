@@ -384,3 +384,12 @@ defined_text = {
 	text = { trigger = { check_variable = { var = ADISCORD_economy_postwar_demobilization_months value = 0 compare = greater_than } } localization_key = ADISCORD_economy_demobilization_status_active }
 	text = { localization_key = ADISCORD_economy_demobilization_status_inactive }
 }
+
+defined_text = {
+	name = GetADISCORDEconomyNodDivisionCapacityLoc
+	text = {
+		trigger = { tag = NOD has_variable = ADISCORD_economy_nod_division_capacity }
+		localization_key = ADISCORD_economy_nod_division_capacity_tt
+	}
+	text = { localization_key = ADISCORD_economy_nod_division_capacity_empty }
+}

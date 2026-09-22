@@ -8528,6 +8528,8 @@ class EconomyScriptFixture:
                 return bool(self.facts[key]) if isinstance(value, list) else self.facts[key] == (value == "yes")
             if key == "always":
                 return value == "yes"
+            if key == "tag":
+                return self.scopes[scope].get("tag", scope) == value
             if key == "has_variable":
                 return value in self.scopes[scope]
             if key == "has_idea":

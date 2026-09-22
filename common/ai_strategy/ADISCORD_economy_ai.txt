@@ -110,3 +110,34 @@ ADISCORD_ai_healthy_peace_infrastructure = {
 	ai_strategy = { type = building_target id = infrastructure value = 4 }
 	ai_strategy = { type = building_target id = industrial_complex value = 6 }
 }
+
+# These policies control new formation demand, not existing units or equipment
+# replacement. The early brake reduces queue overshoot, but is not a native cap.
+NOD_economy_army_capacity_approaching = {
+	allowed = { tag = NOD }
+	enable = {
+		tag = NOD
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_economy_has_current_schema = yes
+		has_variable = ADISCORD_economy_nod_recruitment_brake
+		ADISCORD_economy_nod_army_at_capacity = no
+		check_variable = { var = num_divisions value = ADISCORD_economy_nod_recruitment_brake compare = greater_than_or_equals }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = ai_wanted_divisions_factor value = -60 }
+}
+
+NOD_economy_army_capacity_reached = {
+	allowed = { tag = NOD }
+	enable = {
+		tag = NOD
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_economy_has_current_schema = yes
+		ADISCORD_economy_nod_army_at_capacity = yes
+	}
+	abort_when_not_enabled = yes
+	# Overrides the simultaneous generic war and doctrine demand bonuses.
+	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }
+}

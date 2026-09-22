@@ -773,5 +773,151 @@ class StelanderPurchasingPowerTests(unittest.TestCase):
             self.assertEqual(f.scopes[recipient][P + "current_month_action_income"], price)
 
 
+class NodrulDivisionEconomyTests(unittest.TestCase):
+    def fixture(self, divisions=38, civilian=9, military=12, war=False,
+                stress=0, crisis=0, tag="NOD", mode=3):
+        f = income_fixture(civilian=civilian, military=military)
+        f.facts.update({"has_army_manpower": True, "has_war": war,
+                        "is_ai": True, "has_capitulated": False})
+        f.scopes["A"].update({
+            "tag": tag, "num_divisions": divisions,
+            P + "army_spending_mode": mode,
+            P + "cached_army_organization_factor": 1,
+            P + "cached_army_organization_flat_expense": 0,
+            P + "fiscal_stress": stress, P + "debt_crisis_level": crisis,
+            P + "initialized": 1, P + "schema_version": 15,
+        })
+        return f
+
+    def calculate(self, **kwargs):
+        f = self.fixture(**kwargs)
+        f.run(P + "calculate_army_expenses")
+        return f
+
+    def test_each_additional_division_costs_money_at_equal_fielded_manpower(self):
+        costs = [self.calculate(divisions=d).scopes["A"][P + "army_expenses"]
+                 for d in (20, 21, 33, 34, 80, 81)]
+        self.assertAlmostEqual(costs[1] - costs[0], 0.5)
+        self.assertAlmostEqual(costs[3] - costs[2], 2.5)
+        self.assertAlmostEqual(costs[5] - costs[4], 2.5)
+
+    def test_starting_industry_allows_33_in_peace_and_39_in_war(self):
+        for war, cap in ((False, 33), (True, 39)):
+            with self.subTest(war=war):
+                v = self.calculate(war=war).scopes["A"]
+                self.assertEqual(v.get(P + "nod_division_capacity"), cap)
+                self.assertEqual(v.get(P + "nod_division_count"), 38)
+                self.assertEqual(v.get(P + "nod_excess_divisions"), max(38-cap, 0))
+
+    def test_stress_and_debt_reduce_capacity_once_not_cumulatively(self):
+        for stress, crisis, cap in ((44.99, 1, 33), (45, 0, 27), (0, 2, 27),
+                                    (74.99, 2, 27), (75, 0, 21), (0, 3, 21),
+                                    (100, 4, 21)):
+            with self.subTest(stress=stress, crisis=crisis):
+                v = self.calculate(stress=stress, crisis=crisis).scopes["A"]
+                self.assertEqual(v.get(P + "nod_division_capacity"), cap)
+
+    def test_capacity_has_a_floor_and_war_does_not_remove_the_ceiling(self):
+        for factories, war, crisis, cap in ((0, False, 4, 12), (0, True, 4, 12),
+                                            (100, False, 0, 48), (100, True, 0, 54),
+                                            (100, True, 4, 42)):
+            with self.subTest(factories=factories, war=war, crisis=crisis):
+                self.assertEqual(self.calculate(civilian=factories, military=0,
+                                 war=war, crisis=crisis).scopes["A"].get(P + "nod_division_capacity"), cap)
+
+    def test_low_funding_does_not_raise_capacity_and_previews_do_not_erase_pressure(self):
+        for level, factor in ((1, .25), (2, .6), (3, 1), (4, 1.5), (5, 2.5)):
+            with self.subTest(level=level):
+                live = self.calculate(divisions=50, mode=level)
+                baseline = self.calculate(divisions=50, mode=3)
+                v = live.scopes["A"]
+                self.assertEqual(v.get(P + "nod_division_capacity"), 33)
+                self.assertAlmostEqual(v[P + "army_expenses"],
+                                       baseline.scopes["A"][P + "army_expenses"] * factor)
+                before = dict(v)
+                v[P + "policy_preview_uses_cached_base_temp"] = 1
+                v["num_divisions"] = 200
+                live.run(P + "calculate_army_expenses")
+                self.assertAlmostEqual(v[P + "army_expenses"], before[P + "army_expenses"])
+                for key in ("nod_division_capacity", "nod_division_count", "nod_excess_divisions"):
+                    self.assertEqual(v.get(P + key), before.get(P + key))
+
+    def test_recalculation_is_idempotent_and_consumes_current_division_count(self):
+        f = self.calculate(divisions=50)
+        first = dict(f.scopes["A"])
+        for _ in range(5):
+            f.run(P + "calculate_army_expenses")
+        self.assertEqual(f.scopes["A"], first)
+        f.scopes["A"]["num_divisions"] = 20
+        f.run(P + "calculate_army_expenses")
+        self.assertEqual(f.scopes["A"].get(P + "nod_division_count"), 20)
+        self.assertEqual(f.scopes["A"].get(P + "nod_excess_divisions"), 0)
+        self.assertLess(f.scopes["A"][P + "army_expenses"], first[P + "army_expenses"])
+        self.assertEqual(f.scopes["A"][P + "treasury"], 100)
+
+    def test_new_cost_reaches_the_weekly_budget_without_double_charging(self):
+        f = self.calculate(divisions=34)
+        f.run(P + "sum_expenses")
+        f.run(P + "calculate_weekly_budget")
+        v = f.scopes["A"]
+        self.assertAlmostEqual(v[P + "weekly_expenses"], v[P + "army_expenses"] * 3 / 13)
+        self.assertEqual(v[P + "treasury"], 100)
+
+    def test_other_countries_keep_their_existing_army_cost_curve(self):
+        for tag in ("VAL", "STP", "STS", "WRK", "YPR"):
+            with self.subTest(tag=tag):
+                small = self.calculate(tag=tag, divisions=20).scopes["A"]
+                large = self.calculate(tag=tag, divisions=100).scopes["A"]
+                self.assertEqual(small[P + "army_expenses"], large[P + "army_expenses"])
+                self.assertNotIn(P + "nod_division_capacity", large)
+
+    def test_ai_stops_expansion_at_capacity_but_can_replace_losses(self):
+        text = read("common/ai_strategy/ADISCORD_economy_ai.txt")
+        strategies = {n.key: n.value for n in parse_clausewitz(text)}
+        self.assertIn("NOD_economy_army_capacity_reached", strategies)
+        stop = strategies["NOD_economy_army_capacity_reached"]
+        enables = next(n.value for n in stop if n.key == "enable")
+        self.assertEqual(next(n.value for n in stop if n.key == "abort_when_not_enabled"), "yes")
+        weights = [{c.key: c.value for c in n.value} for n in stop if n.key == "ai_strategy"]
+        self.assertIn({"type": "ai_wanted_divisions_factor", "value": "-1000"}, weights)
+        for d, expected in ((32, False), (33, True), (80, True)):
+            f = self.calculate(divisions=d)
+            self.assertEqual(f.condition(enables), expected)
+        for overrides in ({"tag": "VAL"}, {"is_ai": False}, {"has_capitulated": True}):
+            f = self.calculate(divisions=80)
+            if "tag" in overrides:
+                f.scopes["A"].update(overrides)
+            else:
+                f.facts.update(overrides)
+            self.assertFalse(f.condition(enables))
+        f = self.fixture(divisions=80)
+        self.assertFalse(f.condition(enables), "No zero-cap lock before first economy refresh")
+
+    def test_ai_brakes_before_the_cap_without_stacking_the_stop_policy(self):
+        strategies = {n.key: n.value for n in parse_clausewitz(read("common/ai_strategy/ADISCORD_economy_ai.txt"))}
+        self.assertIn("NOD_economy_army_capacity_approaching", strategies)
+        gate = next(n.value for n in strategies["NOD_economy_army_capacity_approaching"] if n.key == "enable")
+        for divisions, expected in ((28, False), (29, True), (32, True), (33, False)):
+            self.assertEqual(self.calculate(divisions=divisions).condition(gate), expected)
+
+    def test_capacity_details_are_connected_to_the_existing_army_tooltip(self):
+        script = read("common/scripted_localisation/ADISCORD_economy_scripted_loc.txt")
+        self.assertIn("name = GetADISCORDEconomyNodDivisionCapacityLoc", script)
+        for language in ("english", "russian"):
+            path = ROOT / f"localisation/{language}/ADISCORD_economy_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            text = path.read_text(encoding="utf-8-sig")
+            row = re.search(r"^ ADISCORD_economy_army_controls_tt:.*$", text, re.M).group()
+            self.assertIn("[GetADISCORDEconomyNodDivisionCapacityLoc]", row)
+            for key in ("nod_division_capacity", "nod_division_count", "nod_excess_divisions"):
+                self.assertIn("[?" + P + key + "|0]", text)
+
+    def test_existing_starting_forces_are_not_destroyed_or_rebuilt_by_the_cap(self):
+        effect = block(read("common/scripted_effects/ADISCORD_economy_effects.txt"),
+                       P + "calculate_army_expenses")
+        for forbidden in ("destroy_unit", "delete_units", "load_oob", "every_unit", "every_country", "every_state"):
+            self.assertNotIn(forbidden, effect)
+
+
 if __name__ == "__main__":
     unittest.main()
