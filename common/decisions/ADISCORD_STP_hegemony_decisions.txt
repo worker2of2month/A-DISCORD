@@ -1,0 +1,297 @@
+STP_hegemony_administration = {
+	allowed = { tag = STS }
+	visible = {
+		has_country_flag = STP_cw_postwar
+		has_completed_focus = STP_pc_heg_administrations
+		check_variable = { var = STP_pc_course value = 1 compare = equals }
+	}
+
+	STP_heg_establish_nod_administration = {
+		icon = generic_political_pressure
+		visible = {
+			OR = {
+				NOD = { exists = yes }
+				any_owned_state = { is_core_of = NOD }
+			}
+			NOT = {
+				NOD = {
+					is_subject_of = STS
+					has_autonomy_state = autonomy_STP_provisional_administration
+				}
+			}
+		}
+		available = { STP_heg_nod_administration_available = yes }
+		cost = 75
+		fire_only_once = no
+		complete_effect = {
+			STP_heg_prepare_nod_administration = yes
+		}
+		ai_will_do = { base = 8 }
+	}
+	STP_heg_annex_nod_administration = {
+		icon = generic_nationalism
+		visible = {
+			NOD = {
+				exists = yes
+				is_subject_of = STS
+				has_autonomy_state = autonomy_STP_provisional_administration
+			}
+		}
+		available = {
+			has_war = no
+			NOD = {
+				has_war = no
+				is_subject_of = STS
+				has_autonomy_state = autonomy_STP_provisional_administration
+			}
+			NOT = { has_country_flag = STP_heg_annex_nod_pending }
+		}
+		cost = 100
+		days_remove = 90
+		days_re_enable = 1
+		cancel_if_not_visible = yes
+		complete_effect = { set_country_flag = STP_heg_annex_nod_pending }
+		remove_effect = {
+			if = {
+				limit = {
+					has_country_flag = STP_heg_annex_nod_pending
+					NOD = {
+						exists = yes
+						is_subject_of = STS
+						has_autonomy_state = autonomy_STP_provisional_administration
+						has_war = no
+					}
+				}
+				clr_country_flag = STP_heg_annex_nod_pending
+				annex_country = { target = NOD transfer_troops = yes }
+				add_stability = 0.01
+				custom_effect_tooltip = STP_heg_annex_complete_tt
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { has_country_flag = STP_heg_annex_nod_pending }
+				clr_country_flag = STP_heg_annex_nod_pending
+				add_political_power = 100
+			}
+		}
+		ai_will_do = { base = 4 }
+	}
+	STP_heg_establish_ypr_administration = {
+		icon = generic_political_pressure
+		visible = {
+			OR = {
+				YPR = { exists = yes }
+				any_owned_state = { is_core_of = YPR }
+			}
+			NOT = {
+				YPR = {
+					is_subject_of = STS
+					has_autonomy_state = autonomy_STP_provisional_administration
+				}
+			}
+		}
+		available = { STP_heg_ypr_administration_available = yes }
+		cost = 75
+		fire_only_once = no
+		complete_effect = {
+			STP_heg_prepare_ypr_administration = yes
+		}
+		ai_will_do = { base = 8 }
+	}
+	STP_heg_annex_ypr_administration = {
+		icon = generic_nationalism
+		visible = {
+			YPR = {
+				exists = yes
+				is_subject_of = STS
+				has_autonomy_state = autonomy_STP_provisional_administration
+			}
+		}
+		available = {
+			has_war = no
+			YPR = {
+				has_war = no
+				is_subject_of = STS
+				has_autonomy_state = autonomy_STP_provisional_administration
+			}
+			NOT = { has_country_flag = STP_heg_annex_ypr_pending }
+		}
+		cost = 100
+		days_remove = 90
+		days_re_enable = 1
+		cancel_if_not_visible = yes
+		complete_effect = { set_country_flag = STP_heg_annex_ypr_pending }
+		remove_effect = {
+			if = {
+				limit = {
+					has_country_flag = STP_heg_annex_ypr_pending
+					YPR = {
+						exists = yes
+						is_subject_of = STS
+						has_autonomy_state = autonomy_STP_provisional_administration
+						has_war = no
+					}
+				}
+				clr_country_flag = STP_heg_annex_ypr_pending
+				annex_country = { target = YPR transfer_troops = yes }
+				add_stability = 0.01
+				custom_effect_tooltip = STP_heg_annex_complete_tt
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { has_country_flag = STP_heg_annex_ypr_pending }
+				clr_country_flag = STP_heg_annex_ypr_pending
+				add_political_power = 100
+			}
+		}
+		ai_will_do = { base = 4 }
+	}
+	STP_heg_establish_tff_administration = {
+		icon = generic_political_pressure
+		visible = {
+			OR = {
+				TFF = { exists = yes }
+				any_owned_state = { is_core_of = TFF }
+			}
+			NOT = {
+				TFF = {
+					is_subject_of = STS
+					has_autonomy_state = autonomy_STP_provisional_administration
+				}
+			}
+		}
+		available = { STP_heg_tff_administration_available = yes }
+		cost = 75
+		fire_only_once = no
+		complete_effect = {
+			STP_heg_prepare_tff_administration = yes
+		}
+		ai_will_do = { base = 8 }
+	}
+	STP_heg_annex_tff_administration = {
+		icon = generic_nationalism
+		visible = {
+			TFF = {
+				exists = yes
+				is_subject_of = STS
+				has_autonomy_state = autonomy_STP_provisional_administration
+			}
+		}
+		available = {
+			has_war = no
+			TFF = {
+				has_war = no
+				is_subject_of = STS
+				has_autonomy_state = autonomy_STP_provisional_administration
+			}
+			NOT = { has_country_flag = STP_heg_annex_tff_pending }
+		}
+		cost = 100
+		days_remove = 90
+		days_re_enable = 1
+		cancel_if_not_visible = yes
+		complete_effect = { set_country_flag = STP_heg_annex_tff_pending }
+		remove_effect = {
+			if = {
+				limit = {
+					has_country_flag = STP_heg_annex_tff_pending
+					TFF = {
+						exists = yes
+						is_subject_of = STS
+						has_autonomy_state = autonomy_STP_provisional_administration
+						has_war = no
+					}
+				}
+				clr_country_flag = STP_heg_annex_tff_pending
+				annex_country = { target = TFF transfer_troops = yes }
+				add_stability = 0.01
+				custom_effect_tooltip = STP_heg_annex_complete_tt
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { has_country_flag = STP_heg_annex_tff_pending }
+				clr_country_flag = STP_heg_annex_tff_pending
+				add_political_power = 100
+			}
+		}
+		ai_will_do = { base = 4 }
+	}
+	STP_heg_establish_val_administration = {
+		icon = generic_political_pressure
+		visible = {
+			OR = {
+				VAL = { exists = yes }
+				any_owned_state = { is_core_of = VAL }
+			}
+			NOT = {
+				VAL = {
+					is_subject_of = STS
+					has_autonomy_state = autonomy_STP_provisional_administration
+				}
+			}
+		}
+		available = { STP_heg_val_administration_available = yes }
+		cost = 75
+		fire_only_once = no
+		complete_effect = {
+			STP_heg_prepare_val_administration = yes
+		}
+		ai_will_do = { base = 8 }
+	}
+	STP_heg_annex_val_administration = {
+		icon = generic_nationalism
+		visible = {
+			VAL = {
+				exists = yes
+				is_subject_of = STS
+				has_autonomy_state = autonomy_STP_provisional_administration
+			}
+		}
+		available = {
+			has_war = no
+			VAL = {
+				has_war = no
+				is_subject_of = STS
+				has_autonomy_state = autonomy_STP_provisional_administration
+			}
+			NOT = { has_country_flag = STP_heg_annex_val_pending }
+		}
+		cost = 100
+		days_remove = 90
+		days_re_enable = 1
+		cancel_if_not_visible = yes
+		complete_effect = { set_country_flag = STP_heg_annex_val_pending }
+		remove_effect = {
+			if = {
+				limit = {
+					has_country_flag = STP_heg_annex_val_pending
+					VAL = {
+						exists = yes
+						is_subject_of = STS
+						has_autonomy_state = autonomy_STP_provisional_administration
+						has_war = no
+					}
+				}
+				clr_country_flag = STP_heg_annex_val_pending
+				annex_country = { target = VAL transfer_troops = yes }
+				add_stability = 0.01
+				custom_effect_tooltip = STP_heg_annex_complete_tt
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { has_country_flag = STP_heg_annex_val_pending }
+				clr_country_flag = STP_heg_annex_val_pending
+				add_political_power = 100
+			}
+		}
+		ai_will_do = { base = 4 }
+	}
+}
