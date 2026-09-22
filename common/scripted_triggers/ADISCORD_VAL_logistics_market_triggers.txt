@@ -114,3 +114,7 @@ VAL_refugee_nodrul_war = {
 VAL_refugee_north_war = {
 	OR = { VAL = { has_war_with = CIN } VAL = { has_war_with = OSF } VAL = { has_war_with = APH } }
 }
+
+VAL_refugee_perimeter_open = {
+	has_global_flag = ADISCORD_vorkerland_dirty_opened
+}

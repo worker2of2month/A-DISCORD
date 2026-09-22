@@ -386,6 +386,11 @@ VAL_open_refugee_waves = {
 		set_country_flag = VAL_refugee_north_seen
 		set_country_flag = { flag = VAL_refugee_north_window days = 180 }
 	}
+	if = {
+		limit = { VAL_refugee_perimeter_open = yes NOT = { has_country_flag = VAL_refugee_perimeter_seen } }
+		set_country_flag = VAL_refugee_perimeter_seen
+		set_country_flag = { flag = VAL_refugee_perimeter_window days = 180 }
+	}
 }
 
 VAL_update_refugees_weekly = {
