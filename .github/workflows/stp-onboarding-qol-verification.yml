@@ -24,6 +24,7 @@ jobs:
           python -B -m unittest -v \
             tools.tests.test_adiscord_stp_preparation.StelanderPreparationTests.test_shabrat_delay_applies_as_soon_as_the_focus_is_selected \
             tools.tests.test_adiscord_stp_preparation.StelanderPreparationTests.test_stelander_preparation_copy_prioritises_actions_over_army_ledger \
+            tools.tests.test_adiscord_stp_preparation.StelanderPreparationTests.test_native_stp_custom_prices_have_affordable_blocked_and_hover_labels \
             tools.tests.test_adiscord_stp_civil_war.CivilWarContracts.test_category_army_forecast_tracks_preparation_and_asset_loss \
             tools.tests.test_adiscord_stp_party_route.PartyRouteContracts.test_map_instructions_switch_without_exposing_the_army_ledger
       - name: Run total-conversion validator
