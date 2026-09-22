@@ -2,7 +2,7 @@ name: STP party second package
 on:
   push:
     branches: [codex/stp-party-packet2-work-20260922]
-    paths: ['.github/workflows/stp-party-packet2.yml', '.github/stp_party_packet2.py', '.github/stp_party_packet2_tests.py']
+    paths: ['.github/workflows/stp-party-packet2.yml', '.github/packet2-final-review.py']
 permissions:
   contents: write
 concurrency:
@@ -15,97 +15,37 @@ jobs:
       PYTHONPATH: .
     steps:
       - uses: actions/checkout@v4
-      - name: Prepare pinned verification
+      - name: Prepare tested gameplay revision
         run: |
-          cp .github/stp_party_packet2_tests.py /tmp/stp_party_packet2_tests.py
-          cp .github/stp_party_packet2.py /tmp/stp_party_packet2.py
-          python -B - <<'PY'
-          from pathlib import Path
-          p=Path('/tmp/stp_party_packet2.py')
-          text=p.read_text()
-          old='return block.replace(old, new)'
-          new="return block.replace(old, new).replace('var = STP_pf_room value = 5 compare = less_than', 'var = STP_pf_room value = STP_pf_gain compare = less_than')"
-          assert text.count(old)==1
-          text=text.replace(old,new)
-          old='        assert len(found) == 1, fid'
-          new=("        if not found and fid in concessions:\n"
-               "            assert 'STP_change_apparatus_loyalty = yes' not in block, fid\n"
-               "            assert block.count('STP_pf_shift = yes') == 1, fid\n"
-               "            return block\n"
-               "        assert len(found) == 1, fid")
-          assert text.count(old)==1
-          text=text.replace(old,new)
-          p.write_text(text)
-          compile(text,str(p),'exec')
-          PY
-          git fetch --depth=1 origin e0be4e27b763bff9524108d4536d4d3903b8772a
-          git checkout --detach e0be4e27b763bff9524108d4536d4d3903b8772a
-          python -m pip install --disable-pip-version-check Pillow numpy > /tmp/packet2-dependencies.txt
-      - name: Test baseline and expected failures
+          cp .github/packet2-final-review.py /tmp/packet2-final-review.py
+          git fetch --depth=1 origin e07d79c38584798f5fe010fdf58353e7da0856aa
+          git checkout --detach e07d79c38584798f5fe010fdf58353e7da0856aa
+          python -m pip install --disable-pip-version-check Pillow numpy > /tmp/packet2-review-dependencies.txt
+      - name: Reproduce and verify final review findings
         run: |
-          python -B - <<'PY'
-          from pathlib import Path
-          import subprocess, re, json
-          modules=['tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_route','tools.tests.test_adiscord_stp_party_balance','tools.tests.test_adiscord_stp_party_qol','tools.tests.test_adiscord_stp_preparation','tools.tests.test_adiscord_stp_civil_war','tools.tests.test_adiscord_stp_gameplay_loop_regressions']
-          result=subprocess.run(['python','-B','-m','unittest',*modules],capture_output=True,text=True)
-          output=result.stdout+result.stderr
-          Path('/tmp/packet2-baseline.txt').write_text(output)
-          failures=re.findall(r'(?m)^(?:FAIL|ERROR): (.*)$',output)
-          Path('/tmp/packet2-baseline.json').write_text(json.dumps({'modules':modules,'failures':failures}))
-          print('BASELINE',output[-140:],flush=True)
-          subprocess.run(['python','-B','/tmp/stp_party_packet2_tests.py'],check=True)
-          result=subprocess.run(['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_route.PartySecondPackageContracts'],capture_output=True,text=True)
-          output=result.stdout+result.stderr
-          Path('/tmp/packet2-red.txt').write_text(output)
-          print('EXPECTED_RED', sorted(set(re.findall(r'(?m)^FAIL: (\w+)',output))),flush=True)
-          assert result.returncode != 0 and 'ERROR:' not in output, output[-7000:]
-          print('RED_REPRODUCED',output[-140:],flush=True)
-          PY
-      - name: Apply and verify second package
-        run: |
-          python -B /tmp/stp_party_packet2.py
-          git diff --check
-          python -B - <<'PY'
-          from pathlib import Path
-          import subprocess, re, json, sys
-          focused=['tools.tests.test_adiscord_stp_party_route.PartySecondPackageContracts','tools.tests.test_adiscord_stp_party_route.PartyFactionContracts','tools.tests.test_adiscord_stp_party_balance.StelanderPartyBalanceContracts','tools.tests.test_adiscord_stp_party_qol']
-          result=subprocess.run(['python','-B','-m','unittest',*focused],capture_output=True,text=True)
-          output=result.stdout+result.stderr
-          Path('/tmp/packet2-focused.txt').write_text(output)
-          print('FOCUSED',output[-8000:],flush=True)
-          assert result.returncode == 0, 'Focused strategy/faction/balance contracts failed'
-          before=json.loads(Path('/tmp/packet2-baseline.json').read_text())
-          result=subprocess.run(['python','-B','-m','unittest',*before['modules']],capture_output=True,text=True)
-          output=result.stdout+result.stderr
-          Path('/tmp/packet2-after.txt').write_text(output)
-          after=set(re.findall(r'(?m)^(?:FAIL|ERROR): (.*)$',output))
-          new=after-set(before['failures'])
-          print('AFTER',output[-140:],flush=True)
-          print('NEW_REGRESSIONS',sorted(new),flush=True)
-          print('FIXED_BASELINE_FAILURES',sorted(set(before['failures'])-after),flush=True)
-          if new:
-              for section in re.split(r'\n={20,}\n',output):
-                  if any(name in section[:900] for name in new): print(section[:6000])
-              sys.exit('New regressions require investigation')
-          PY
-          python -B tools/validate_tc.py --limit 300 > /tmp/packet2-validator.txt 2>&1
-          echo 'TOTAL_CONVERSION_VALIDATOR_EXIT_0'
+          python -B /tmp/packet2-final-review.py
+          python -B tools/validate_tc.py --limit 300 > /tmp/packet2-review-validator.txt 2>&1
+          echo TOTAL_CONVERSION_VALIDATOR_EXIT_0
           git diff --check
           git diff --stat
           python -B - <<'PY'
           import subprocess
-          paths=subprocess.check_output(['git','diff','--name-only'],text=True).splitlines()
-          assert paths and all(p.startswith(('common/','events/','localisation/','tools/tests/','docs/development/')) for p in paths), paths
+          from pathlib import Path
+          names=subprocess.check_output(['git','diff','--name-only'],text=True).splitlines()
+          expected={'common/scripted_effects/ADISCORD_STP_scripted_effects.txt','tools/tests/test_adiscord_stp_party_route.py','localisation/russian/ADISCORD_STP_l_russian.yml','localisation/english/ADISCORD_STP_l_english.yml','docs/development/focus-effects.md'}
+          assert set(names)==expected, names
+          for lang in ('russian','english'):
+              assert Path(f'localisation/{lang}/ADISCORD_STP_l_{lang}.yml').read_bytes().startswith(b'\xef\xbb\xbf')
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add common events localisation tools/tests docs/development
-          git commit -m 'feat(stp): make party coalitions and prewar strategies shape recovery'
+          git add common/scripted_effects/ADISCORD_STP_scripted_effects.txt tools/tests/test_adiscord_stp_party_route.py localisation/russian/ADISCORD_STP_l_russian.yml localisation/english/ADISCORD_STP_l_english.yml docs/development/focus-effects.md
+          git commit -m 'fix(stp): preserve capped shares under rounding and match negotiation tooltips'
           git push origin HEAD:refs/heads/codex/stp-party-packet2-final-20260922
-          echo DELIVERY_COMMIT=$(git rev-parse HEAD)
+          echo FINAL_REVIEW_COMMIT=$(git rev-parse HEAD)
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: stp-party-second-package-evidence
-          path: /tmp/packet2-*.txt
+          name: stp-party-final-review-evidence
+          path: /tmp/packet2-review-*.txt
           retention-days: 7
