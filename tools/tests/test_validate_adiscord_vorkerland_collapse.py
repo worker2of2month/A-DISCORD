@@ -2468,6 +2468,27 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
         self.assertIn("ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes", finalizer)
         self.assertIn("ADISCORD_vorkerland_show_worker_victory_superevent = yes", finalizer)
+        self.assertIn("has_government = utilitarism", finalizer)
+        self.assertIn(
+            "has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }",
+            finalizer,
+        )
+        self.assertNotIn(
+            "limit = { NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists } }",
+            finalizer,
+        )
+        utilitarian_show = named_block(
+            phase_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent"
+        )
+        self.assertIn(
+            "NOT = { has_country_flag = ADISCORD_vorkerland_utilitarian_victory_presented }",
+            utilitarian_show,
+        )
+        self.assertIn(
+            "set_country_flag = ADISCORD_vorkerland_utilitarian_victory_presented",
+            utilitarian_show,
+        )
+        self.assertIn("country_event = { id = ADISCORD_superevent.3 }", utilitarian_show)
         self.assertIn(
             'WRK_vorkerland_utilitarian_republic: "Utilitarian Republic of Vorkerland"',
             recovery_en,

@@ -4208,16 +4208,22 @@ ADISCORD_vorkerland_show_worker_victory_superevent = {
 }
 
 ADISCORD_vorkerland_show_utilitarian_victory_superevent = {
-	set_global_flag = ADISCORD_vorkerland_central_victory_announced
+	# Anton's victory has its own receipt. This keeps the presentation repairable
+	# even if a shared victory lock survived an interrupted or debugged transition.
 	if = {
-		limit = { any_country = { is_ai = no } }
-		random_country = {
-			limit = { is_ai = no }
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_utilitarian_victory_presented } }
+		set_country_flag = ADISCORD_vorkerland_utilitarian_victory_presented
+		set_global_flag = ADISCORD_vorkerland_central_victory_announced
+		if = {
+			limit = { any_country = { is_ai = no } }
+			random_country = {
+				limit = { is_ai = no }
+				country_event = { id = ADISCORD_superevent.3 }
+			}
+		}
+		else = {
 			country_event = { id = ADISCORD_superevent.3 }
 		}
-	}
-	else = {
-		country_event = { id = ADISCORD_superevent.3 }
 	}
 }
 
@@ -8655,15 +8661,18 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 		if = {
 			limit = { has_country_flag = ADISCORD_vorkerland_route_worker }
 			set_global_flag = ADISCORD_vorkerland_worker_won
+			# Select the victory presentation from the state that actually survived
+			# reunification. The old fate flag can drift in repaired saves.
 			if = {
+				limit = {
+					has_government = utilitarism
+					has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+				}
+				ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes
+			}
+			else_if = {
 				limit = { NOT = { has_global_flag = ADISCORD_vorkerland_central_victory_announced } }
-				if = {
-					limit = { NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists } }
-					ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes
-				}
-				else = {
-					ADISCORD_vorkerland_show_worker_victory_superevent = yes
-				}
+				ADISCORD_vorkerland_show_worker_victory_superevent = yes
 			}
 			ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes
 			ADISCORD_vorkerland_offer_worker_mandate = yes

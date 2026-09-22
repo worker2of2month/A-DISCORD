@@ -3959,12 +3959,22 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
         issues.append("the mandate offer is not confined to the worker victory branch")
     if "ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes" not in finalizer:
         issues.append("Anton Bagley's worker-route victory lost its utilitarian presentation")
-    if not re.search(
-        r"NOT\s*=\s*\{\s*has_global_flag\s*=\s*ADISCORD_vorkerland_worker_safe_with_loyalists\s*\}"
-        r"[\s\S]*?ADISCORD_vorkerland_show_utilitarian_victory_superevent\s*=\s*yes",
-        finalizer,
+    utilitarian_identity = (
+        "has_government = utilitarism",
+        "has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }",
+    )
+    if not all(token in finalizer for token in utilitarian_identity):
+        issues.append("utilitarian victory presentation no longer keys off Anton's live WRK identity")
+    utilitarian_show = named_block(
+        map_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent"
+    )
+    for token in (
+        "NOT = { has_country_flag = ADISCORD_vorkerland_utilitarian_victory_presented }",
+        "set_country_flag = ADISCORD_vorkerland_utilitarian_victory_presented",
+        "country_event = { id = ADISCORD_superevent.3 }",
     ):
-        issues.append("utilitarian victory presentation is not confined to Anton's worker-route branch")
+        if token not in utilitarian_show:
+            issues.append(f"utilitarian victory presentation receipt is missing {token}")
     for branch in named_blocks(finalizer, "else_if"):
         if "ADISCORD_vorkerland_offer_worker_mandate = yes" in branch:
             issues.append("a non-worker victory branch still offers Nikita's mandate")
