@@ -1,0 +1,30 @@
+name: STP party route audit
+on:
+  push:
+    branches: [codex/stp-party-qol-20260922]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Export tracked source for offline verification
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, zipfile
+          with zipfile.ZipFile('/tmp/stp-source.zip', 'w', zipfile.ZIP_DEFLATED) as z:
+              for name in subprocess.check_output(['git','ls-files','-z']).decode().split('\0'):
+                  if not name:
+                      continue
+                  p=pathlib.Path(name)
+                  if p.suffix.lower() in {'.txt','.yml','.yaml','.py','.json','.csv','.md','.gui','.gfx','.asset','.lua','.mod'} or p.name in {'AGENTS.md','.gitignore'}:
+                      z.write(p,name)
+          print('snapshot_bytes',pathlib.Path('/tmp/stp-source.zip').stat().st_size)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stp-source
+          path: /tmp/stp-source.zip
+          retention-days: 1
