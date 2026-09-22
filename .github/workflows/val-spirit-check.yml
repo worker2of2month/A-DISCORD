@@ -88,9 +88,6 @@ jobs:
 
 
           '''
-          # The YAML block supplies four extra spaces after the first line.
-          addition = addition.splitlines(keepends=True)
-          addition = addition[0] + ''.join(line[4:] if line.startswith('    ') else line for line in addition[1:])
           assert text.count(marker) == 1
           assert 'class NationalSpiritOverflowTests' not in text
           tests.write_text(text.replace(marker, addition + marker))
