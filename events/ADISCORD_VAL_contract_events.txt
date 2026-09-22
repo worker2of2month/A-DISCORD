@@ -919,7 +919,12 @@ country_event = {
     44 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 44 } } }
     45 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 45 } } }
     88 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 88 } } }
-    VAL = { VAL_form_occidian_administration = yes }
+    VAL = {
+     VAL_return_stelander_cores = yes
+     VAL_form_occidian_administration = yes
+     set_country_flag = VAL_stelander_equal_recognition
+    }
+    set_country_flag = VAL_stelander_equal_recognition
     set_country_flag = { flag = VAL_stelander_truce days = 180 }
     add_timed_idea = { idea = VAL_stelander_trade_terms days = 180 }
     VAL = { clr_country_flag = VAL_stelander_offer_pending add_timed_idea = { idea = VAL_stelander_trade_terms days = 180 } }
@@ -1112,4 +1117,37 @@ country_event = {
     hidden = yes
     is_triggered_only = yes
     immediate = { VAL_frontier_expire_nod_ultimatum = yes }
+}
+
+
+country_event = {
+ id = val_contract.354
+ title = val_contract.354.t
+ desc = val_contract.354.d
+ picture = GFX_event_adiscord_negotiation_table
+ is_triggered_only = yes
+ timeout_days = 21
+ option = {
+  name = val_contract.354.refuse
+  ai_chance = { base = 90 }
+  hidden_effect = { VAL = { set_country_flag = VAL_stelander_alliance_refused clr_country_flag = VAL_stelander_alliance_offer_pending } }
+ }
+ option = {
+  name = val_contract.354.accept
+  trigger = { VAL = { has_country_flag = VAL_stelander_alliance_offer_pending } }
+  ai_chance = {
+   base = 10
+   modifier = { factor = 2 has_opinion = { target = VAL value > 74 } }
+   modifier = { factor = 0 has_country_leader = { character = STP_maksim_shabrat } }
+  }
+  custom_effect_tooltip = VAL_equal_alliance_accept_tt
+  hidden_effect = {
+   VAL = {
+    set_country_flag = VAL_stelander_equal_alliance
+    clr_country_flag = VAL_stelander_alliance_offer_pending
+    VAL_form_equal_stelander_alliance = yes
+   }
+   set_country_flag = VAL_stelander_equal_alliance
+  }
+ }
 }
