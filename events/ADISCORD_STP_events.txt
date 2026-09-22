@@ -135,6 +135,8 @@ country_event = {
 		log = "[STP CW] First decline: player chose Shabrat"
 		STP_cw_open_preparation = yes
 		complete_national_focus = STP_Show_Him_The_Truth
+		# Force the same tree to be rebuilt so the selected root offset and all relative children recenter immediately.
+		load_focus_tree = { tree = STP_focus keep_completed = yes }
 		mark_focus_tree_layout_dirty = yes
 		STP_cw_schedule_health = yes
 		custom_effect_tooltip = STP_cw_army_split_tt
@@ -146,6 +148,8 @@ country_event = {
 		log = "[STP CW] First decline: player chose party"
 		STP_cw_open_preparation = yes
 		complete_national_focus = STP_Govern_In_His_Name
+		# Keep Party selection symmetric with Shabrat: rebuild before marking the layout dirty.
+		load_focus_tree = { tree = STP_focus keep_completed = yes }
 		mark_focus_tree_layout_dirty = yes
 		STP_cw_schedule_health = yes
 		# A visible foothold gives the party something concrete to contain.

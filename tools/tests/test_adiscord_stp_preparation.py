@@ -2881,6 +2881,13 @@ class StelanderPreparationTests(unittest.TestCase):
         for option in options:
             selected.update(e.value for e in walk(option) if e.key == "set_country_flag")
             self.assertTrue(any(e.key == "complete_national_focus" for e in walk(option)))
+            reloads = [e.value for e in option if e.key == "load_focus_tree"]
+            self.assertEqual(len(reloads), 1)
+            self.assertEqual(scalar(reloads[0], "tree"), "STP_focus")
+            self.assertEqual(scalar(reloads[0], "keep_completed"), "yes")
+            calls = [e.key for e in option]
+            self.assertLess(calls.index("complete_national_focus"), calls.index("load_focus_tree"))
+            self.assertLess(calls.index("load_focus_tree"), calls.index("mark_focus_tree_layout_dirty"))
             self.assertIn(("mark_focus_tree_layout_dirty", "yes"), [(e.key, e.value) for e in walk(option)])
         self.assertIn("STP_sided_with_Maksim_flag", selected)
         self.assertIn("STP_sided_with_the_party_flag", selected)
