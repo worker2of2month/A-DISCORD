@@ -4,7 +4,7 @@ state={
 	provinces={
 		6 21 51 81 88 16372 16646
 	}
-	manpower=1230000
+	manpower=1550000
 	buildings_max_level_factor=1.000
 	state_category=city
 	local_supplies=0.000
@@ -15,6 +15,8 @@ state={
 			infrastructure = 3
 			industrial_complex = 2
 			arms_factory = 4
+			air_base = 1
+			21 = { naval_base = 2 }
 		}
 		add_core_of = YPR
 		victory_points = { 16372 15 }
