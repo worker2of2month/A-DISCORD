@@ -1,0 +1,179 @@
+VAL_frontier_close = {
+    remove_mission = VAL_nod_ultimatum
+    clr_country_flag = VAL_nod_ultimatum_issued
+    clr_country_flag = VAL_nod_ultimatum_expired
+    set_variable = { var = VAL_frontier_stage value = 0 }
+    CIN = { clr_country_flag = VAL_frontier_defeated }
+    OSF = { clr_country_flag = VAL_frontier_defeated }
+    APH = { clr_country_flag = VAL_frontier_defeated }
+    ERT = { clr_country_flag = VAL_frontier_defeated }
+    remove_mission = VAL_frontier_ultimatum_deadline
+    remove_ideas = VAL_frontier_transport_columns
+    clr_country_flag = VAL_frontier_armistice_offered
+    # Keep campaign majors until all campaign war relations have ended.
+    NOD = { if = { limit = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL } white_peace = VAL } }
+    STP = { if = { limit = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL } white_peace = VAL } }
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } has_war_with = CIN } white_peace = CIN }
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } has_war_with = OSF } white_peace = OSF }
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } has_war_with = APH } white_peace = APH }
+    if = { limit = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } has_war_with = ERT } white_peace = ERT }
+    CIN = { if = { limit = { has_country_flag = VAL_frontier_member has_war_with = VAL } white_peace = VAL } }
+    OSF = { if = { limit = { has_country_flag = VAL_frontier_member has_war_with = VAL } white_peace = VAL } }
+    APH = { if = { limit = { has_country_flag = VAL_frontier_member has_war_with = VAL } white_peace = VAL } }
+    if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+    NOD = {
+        clr_country_flag = VAL_frontier_guarantor
+        if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+    }
+    STP = {
+        clr_country_flag = VAL_frontier_guarantor
+        if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+    }
+    CIN = {
+        clr_country_flag = VAL_frontier_member
+        if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+    }
+    OSF = {
+        clr_country_flag = VAL_frontier_member
+        if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+    }
+    APH = {
+        clr_country_flag = VAL_frontier_member
+        if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+    }
+    VAL_frontier_release_coalition = yes
+    ADISCORD_economy_mark_dirty = yes
+}
+
+
+VAL_frontier_show_refusal = {
+    set_variable = { var = VAL_frontier_stage value = 2 }
+    remove_mission = VAL_frontier_ultimatum_deadline
+    VAL_frontier_save_quoted_target = yes
+    country_event = { id = val_rework.111 }
+}
+
+
+
+VAL_grant_contract_warlord = {
+    if = {
+        limit = {
+            tag = VAL
+            has_cosmetic_tag = VAL_commonwealth
+            has_country_leader = { character = VAL_Valera_Solgalov ruling_only = yes }
+        }
+        VAL_Valera_Solgalov = {
+            if = {
+                limit = { NOT = { has_trait = VAL_contract_warlord } }
+                add_country_leader_trait = { ideology = contractual_etatism trait = VAL_contract_warlord }
+            }
+        }
+    }
+}
+
+country_event = {
+	id = val_rework.111
+	title = val_rework.111.t
+	desc = val_rework.111.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_rework.111.prepare
+		trigger = {
+			check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+			VAL_frontier_reply_is_current = yes
+		}
+		ai_chance = { base = 0 }
+		custom_effect_tooltip = VAL_frontier_prepare_tt
+	}
+	option = {
+		name = val_rework.111.withdraw
+		trigger = {
+			check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+			VAL_frontier_reply_is_current = yes
+		}
+		ai_chance = { base = 30 }
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
+				VAL_frontier_close = yes
+			}
+		}
+	}
+	option = {
+		name = val_rework.111.war
+		trigger = {
+			check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+			VAL_frontier_reply_is_current = yes
+			VAL_frontier_prewar_eligible = yes
+			has_war = no
+		}
+		ai_chance = {
+			base = 70
+			modifier = { factor = 0 num_divisions < 24 }
+			modifier = { factor = 0.3 has_manpower < 20000 }
+		}
+		custom_effect_tooltip = VAL_frontier_war_tt
+		hidden_effect = { VAL_frontier_start_war = yes }
+	}
+	option = {
+		name = val_rework.closed
+		trigger = {
+			NOT = {
+				AND = {
+					check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+					VAL_frontier_reply_is_current = yes
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+    id = val_rework.117
+    hidden = yes
+    is_triggered_only = yes
+    immediate = {
+        if = {
+            limit = {
+                tag = VAL
+                VAL_frontier_reply_is_current = yes
+                check_variable = { var = VAL_frontier_stage value = 3 compare = equals }
+            }
+            VAL_frontier_join_existing_war = yes
+            if = { limit = { VAL_frontier_has_campaign_war = no } VAL_frontier_close = yes }
+        }
+    }
+}
+
+ VAL_frontier_treaty_offices:0 "Исполнение договора"
+ VAL_frontier_treaty_offices_desc:0 "Контрактное ведомство закрепит торговые маршруты и порядок расчётов с районами, полученными по пограничному соглашению.\n\nЧтобы открыть этот фокус, успешно завершите один из ультиматумов в разделе решений «$VAL_frontier$». После фокуса «$VAL_frontier_security_plan$» доступен «$VAL_frontier_demand_CIN$», а после «$VAL_frontier_return_irem$» — «$VAL_frontier_demand_ERT$».\n\nСоглашение оформляется автоматически, когда адресат принимает требования или поход заканчивается победой. В войне с племенами нужно разгромить всех племенных участников; захватывать Нодрул не требуется. Отзыв ультиматума и перемирие после поражения это условие не выполняют."
+ VAL_frontier_withdraw_demand:0 "Отозвать пограничный ультиматум"
+ VAL_frontier_withdraw_demand_desc:0 "Закрыть текущую кампанию и прекратить оплаченный транспортный контракт. Повторный ультиматум тому же адресату возможен после исходного срока в 180 дней."
+ VAL_frontier_withdraw_tt:0 "Требования отозваны; временные участники коалиции и транспортный контракт завершают участие. Собственный альянс северных племён сохраняется. Оплаченная подготовка не возмещается."
+ VAL_commonwealth:0 "Кефрейтское содружество"
+ VAL_commonwealth_DEF:0 "Кефрейтское содружество"
+ VAL_commonwealth_ADJ:0 "Кефрейтск"
+ VAL_commonwealth_etatism:0 "Кефрейтское содружество"
+ VAL_commonwealth_etatism_DEF:0 "Кефрейтское содружество"
+ VAL_commonwealth_etatism_ADJ:0 "Кефрейтск"
+ VAL_proclaim_commonwealth:0 "Провозгласить Кефрейтское содружество"
+ VAL_proclaim_commonwealth_desc:0 "Закрепить послевоенное устройство общим государственным договором. Кефрейт получит новое название и флаг; автономные администрации сохранят свои территории и особый статус."
+ VAL_commonwealth_requirements_tt:0 "Завершён фокус «Контракты переживают королей»; Кефрейт независим, не капитулировал и находится в мире; северные племена, Нодрул и Стеландер подчинены согласно целям кампании; северный ресурсный пояс удерживается; регионы §Y[29.GetName]§! и §Y[46.GetName]§! принадлежат Кефрейту и контролируются им; стабильность не ниже §Y50%§!"
+ VAL_commonwealth_proclaimed_tt:0 "Государство получит название §YКефрейтское содружество§! и новый флаг. Статус и территории марионеток сохранятся."
+
+ VAL_frontier_treaty_offices: "Implementing the Treaty"
+ VAL_frontier_treaty_offices_desc: "The contract department will establish trade routes and settlement procedures with the districts acquired through a frontier agreement.\n\nTo unlock this focus, successfully resolve one ultimatum in the \"$VAL_frontier$\" decision category. \"$VAL_frontier_security_plan$\" unlocks \"$VAL_frontier_demand_CIN$\"; \"$VAL_frontier_return_irem$\" unlocks \"$VAL_frontier_demand_ERT$\".\n\nThe agreement is concluded automatically when the recipient accepts the demands or the campaign ends in victory. The tribal war requires defeating every tribal participant; invading Nodrul is not required. Withdrawing an ultimatum or accepting an armistice after defeat does not fulfil this requirement."
+ VAL_frontier_withdraw_demand: "Withdraw the Frontier Ultimatum"
+ VAL_frontier_withdraw_demand_desc: "Close the current campaign and end the paid transport contract. Another ultimatum to the same recipient is possible after the original 180-day period."
+ VAL_frontier_withdraw_tt:0 "Withdraw the demands, release temporary coalition participants and end the transport contract. The northern tribes retain their own alliance. Preparation costs are not refunded."
+ VAL_commonwealth: "Kefreyt Commonwealth"
+ VAL_commonwealth_DEF: "the Kefreyt Commonwealth"
+ VAL_commonwealth_ADJ: "Kefreyt"
+ VAL_commonwealth_etatism: "Kefreyt Commonwealth"
+ VAL_commonwealth_etatism_DEF: "the Kefreyt Commonwealth"
+ VAL_commonwealth_etatism_ADJ: "Kefreyt"
+ VAL_proclaim_commonwealth: "Proclaim the Kefreyt Commonwealth"
+ VAL_proclaim_commonwealth_desc: "Establish the postwar settlement through a common state treaty. Kefreyt receives a new name and flag; autonomous administrations retain their territories and special status."
+ VAL_commonwealth_requirements_tt: "Contracts Outlive Kings is complete; Kefreyt is independent, has not capitulated and is at peace; the northern tribes, Nodrul and Stelander are subordinate according to the campaign goals; the northern resource belt is held; Kefreyt owns and controls §Y[29.GetName]§! and §Y[46.GetName]§!; stability is at least §Y50%§!"
+ VAL_commonwealth_proclaimed_tt: "The state adopts the name §YKefreyt Commonwealth§! and a new flag. Puppet status and territories are preserved."

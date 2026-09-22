@@ -167,6 +167,171 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
         self.assertTrue(any(e.key == "NOT" and any(c.key == "has_country_flag" and c.value == "STP_imperial_union_proclaimed" for c in e.value)
                             for e in requirements))
 
+class SupereventObserverTests(unittest.TestCase):
+    def machine(self, human=False):
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar
+        definitions = {e.key: e.value for e in parse_clausewitz(read(ROOT / 'common/scripted_effects/ADISCORD_vorkerland_effects.txt'))}
+        self.assertIn('ADISCORD_superevent_observer_tick', definitions)
+        hooks = block(parse_clausewitz(read(ROOT / 'common/on_actions/00_ADISCORD_on_actions.txt')), 'on_actions')
+        daily = block(block(hooks, 'on_daily'), 'effect')
+        state = {'flags': {}, 'ttl': {}, 'queue': [], 'variables': {}, 'human': human, 'played': [], 'scans': 0}
+
+        def number(value):
+            if value == 'global.ADISCORD_superevent_queue^num':
+                return len(state['queue'])
+            if value == 'global.ADISCORD_superevent_queue^0':
+                return state['queue'][0]
+            return state['variables'][value] if value in state['variables'] else int(value)
+
+        def condition(entry):
+            key, value = entry.key, entry.value
+            if key in ('AND', 'OR', 'NOT'):
+                values = [condition(e) for e in value]
+                return any(values) if key == 'OR' else not any(values) if key == 'NOT' else all(values)
+            if key == 'has_global_flag':
+                if isinstance(value, str):
+                    return value in state['flags']
+                flag = scalar(value, 'flag')
+                comparison = [e.value for e in value if not e.key]
+                self.assertEqual(comparison[:2], ['days', '>'])
+                return flag in state['flags'] and state['flags'][flag] > int(comparison[2])
+            if key == 'any_country':
+                self.assertEqual([(e.key, e.value) for e in value], [('is_ai', 'no')])
+                state['scans'] += 1
+                return state['human']
+            if key == 'is_in_array':
+                return number(scalar(value, 'value')) in state['queue']
+            if key == 'check_variable':
+                fields = {e.key: e.value for e in value}
+                if 'var' in fields:
+                    left, right = number(fields['var']), number(fields['value'])
+                    return {'greater_than': left > right, 'equals': left == right}[fields['compare']]
+                variable, expected = next(iter(fields.items()))
+                return number(variable) == number(expected)
+            self.fail(f'Unhandled observer condition: {key}')
+
+        def execute(body):
+            taken = False
+            for e in body:
+                key, value = e.key, e.value
+                if key in ('if', 'else_if', 'else'):
+                    if key == 'if':
+                        taken = False
+                    if not taken and (key == 'else' or all(condition(c) for c in block(value, 'limit'))):
+                        execute([c for c in value if c.key != 'limit'])
+                        taken = True
+                elif key == 'set_global_flag':
+                    flag = value if isinstance(value, str) else scalar(value, 'flag')
+                    state['flags'][flag] = 0
+                    if isinstance(value, list):
+                        state['ttl'][flag] = int(scalar(value, 'days'))
+                elif key == 'clr_global_flag':
+                    state['flags'].pop(value, None)
+                    state['ttl'].pop(value, None)
+                elif key == 'set_temp_variable':
+                    for field in value:
+                        state['variables'][field.key] = number(field.value)
+                elif key == 'add_to_array':
+                    state['queue'].append(number(scalar(value, 'value')))
+                elif key == 'remove_from_array':
+                    state['queue'].pop(number(scalar(value, 'index')))
+                elif key == 'ADISCORD_vorkerland_play_superevent_sound':
+                    active = [flag for flag in state['flags'] if flag.startswith('superevent_')]
+                    self.assertEqual(len(active), 1)
+                    state['played'].append(active[0])
+                elif key in definitions and value == 'yes':
+                    execute(definitions[key])
+                else:
+                    self.fail(f'Unhandled observer effect: {key}')
+
+        def advance(days):
+            for flag in list(state['flags']):
+                state['flags'][flag] += days
+                if flag in state['ttl'] and state['flags'][flag] >= state['ttl'][flag]:
+                    state['flags'].pop(flag)
+                    state['ttl'].pop(flag)
+
+        def request(index):
+            state['variables']['ADISCORD_superevent_request'] = index
+            execute(definitions['ADISCORD_superevent_enqueue'])
+
+        return state, execute, daily, advance, request
+
+    def test_all_observer_cards_expire_on_day_seven_and_queue_gets_its_own_period(self):
+        from tools.validators.validate_adiscord_superevents import PRESENTATIONS
+        for index, presentation in enumerate(PRESENTATIONS, 1):
+            with self.subTest(presentation=presentation.name):
+                state, execute, daily, advance, request = self.machine()
+                request(index)
+                following = index % len(PRESENTATIONS) + 1
+                request(following)
+                request(following)
+                self.assertEqual(state['queue'], [following])
+                advance(6)
+                execute(daily)
+                self.assertIn(presentation.name, state['flags'])
+                advance(1)
+                execute(daily)
+                self.assertNotIn(presentation.name, state['flags'])
+                next_name = PRESENTATIONS[following - 1].name
+                self.assertEqual(state['flags'][next_name], 0)
+                self.assertEqual(state['queue'], [])
+                scans = state['scans']
+                execute(daily)
+                self.assertEqual(state['scans'], scans)
+                self.assertEqual(state['flags'][next_name], 0)
+                advance(7)
+                execute(daily)
+                self.assertFalse(any(f.startswith('superevent_') for f in state['flags']))
+                self.assertEqual(len(state['played']), 2)
+
+    def test_human_campaigns_do_not_auto_close_and_switching_to_observer_recovers(self):
+        state, execute, daily, advance, request = self.machine(human=True)
+        request(1)
+        request(2)
+        advance(9)
+        execute(daily)
+        self.assertIn('superevent_vorkerland_civilwar', state['flags'])
+        self.assertEqual(state['queue'], [2])
+        scans = state['scans']
+        for _ in range(10):
+            execute(daily)
+        self.assertEqual(state['scans'], scans)
+        state['human'] = False
+        advance(1)
+        execute(daily)
+        self.assertNotIn('superevent_vorkerland_civilwar', state['flags'])
+        self.assertEqual(state['flags']['superevent_vorkerland_dirty_opening'], 0)
+
+    def test_early_manual_close_and_legacy_stacked_flags_cannot_expire_a_fresh_card(self):
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz
+        state, execute, daily, advance, request = self.machine()
+        gui = block(parse_clausewitz(read(ROOT / 'common/scripted_guis/superevents.txt')), 'scripted_gui')
+        window = block(gui, 'superevent_vorkerland_civilwar')
+        request(1)
+        request(2)
+        advance(3)
+        execute(block(block(window, 'effects'), 'superevents_button_click'))
+        advance(4)
+        execute(daily)
+        self.assertEqual(state['flags']['superevent_vorkerland_dirty_opening'], 4)
+        state['flags']['superevent_vorkerland_civilwar'] = 12
+        advance(1)
+        execute(daily)
+        self.assertNotIn('superevent_vorkerland_civilwar', state['flags'])
+        self.assertIn('superevent_vorkerland_dirty_opening', state['flags'])
+        self.assertEqual(len(state['played']), 2)
+
+    def test_daily_guard_precedes_the_only_country_scan_and_uses_no_delayed_country_owner(self):
+        source = read(ROOT / 'common/on_actions/00_ADISCORD_on_actions.txt')
+        self.assertIn('ADISCORD_superevent_observer_tick = yes', source)
+        daily = named_block(source, 'on_daily')
+        self.assertIn('NOT = { has_global_flag = ADISCORD_superevent_observer_day_checked }', daily)
+        effect = named_block(read(ROOT / 'common/scripted_effects/ADISCORD_vorkerland_effects.txt'), 'ADISCORD_superevent_observer_tick')
+        self.assertEqual(effect.count('any_country ='), 1)
+        self.assertNotIn('every_country', effect)
+        self.assertNotIn('country_event', effect)
+        self.assertLess(effect.index('set_global_flag'), effect.index('any_country'))
 
 if __name__ == "__main__":
     unittest.main()
