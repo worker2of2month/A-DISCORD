@@ -274,6 +274,7 @@ defined_text = {
 	text = { trigger = { has_state_flag = STP_inspection_concession_prepared } localization_key = STP_REGION_INSPECTION_CONCESSION }
 	text = { trigger = { has_state_flag = STP_false_trail_prepared } localization_key = STP_REGION_INSPECTION_FALSE_TRAIL_READY }
 	text = { trigger = { has_state_flag = STP_false_trail_in_progress } localization_key = STP_REGION_INSPECTION_FALSE_TRAIL_PENDING }
+	text = { trigger = { has_state_flag = STP_cw_inspection_protected } localization_key = STP_REGION_INSPECTION_PROTECTED }
 	text = { trigger = { has_state_flag = STP_party_inspection_active NOT = { has_state_flag = STP_party_counterintelligence_asset } } localization_key = STP_REGION_INSPECTION_ACTIVE }
 	text = { trigger = { has_state_flag = STP_party_counterintelligence_asset } localization_key = STP_REGION_INSPECTION_COUNTERINTELLIGENCE }
 	text = { localization_key = STP_REGION_EMPTY_LINE }
