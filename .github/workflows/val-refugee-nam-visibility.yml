@@ -12,8 +12,6 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -22,17 +20,39 @@ jobs:
       - name: Reproduce and verify the targeted repair
         run: |
           python - <<'PY'
+          from pathlib import Path
           import subprocess
           import yaml
-          original = subprocess.check_output([
-              'git', 'show',
-              '4e78f3fe3cb8c33316745e184ca11d9ba5633903:.github/workflows/val-refugee-nam-visibility.yml'
-          ], text=True)
+          original_sha = '4e78f3fe3cb8c33316745e184ca11d9ba5633903'
+          subprocess.run(['git', 'fetch', '--depth=1', 'origin', original_sha], check=True)
+          original = subprocess.check_output(['git', 'show', original_sha + ':.github/workflows/val-refugee-nam-visibility.yml'], text=True)
           workflow = yaml.safe_load(original)
           step = next(s for s in workflow['jobs']['fix']['steps'] if s.get('name') == 'Reproduce, repair and verify decision visibility')
           source = step['run'].split("python - <<'PY'\n", 1)[1].rsplit('\nPY', 1)[0]
+          ui_path = Path('tools/tests/test_val_contract_ui.py')
+          ui = ui_path.read_bytes().decode('utf-8')
+          try:
+              compile(ui, str(ui_path), 'exec')
+          except SyntaxError as error:
+              assert error.lineno == 846 and 'unmatched' in error.msg
+              print('REPRODUCED: existing contract UI test SyntaxError at line 846', flush=True)
+          else:
+              raise AssertionError('Expected the observed existing test syntax defect')
+          marker = 'class TestValProgressionContinuation(unittest.TestCase):'
+          assert ui.count(marker) == 2
+          first = ui.index(marker)
+          second = ui.index(marker, first + len(marker))
+          corrupt_tail = ')\n            self.assertIn("VAL_nod_campaign_foothold_tt", text)\n\n\n'
+          earlier = ui[first:second]
+          assert earlier.endswith(corrupt_tail)
+          earlier = earlier[:-len(corrupt_tail)].strip()
+          assert earlier == ui[second:].strip(), 'The duplicated class must be byte-identical before removing a copy'
+          repaired = ui[:first] + ui[second:]
+          compile(repaired, str(ui_path), 'exec')
+          ui_path.write_bytes(repaired.encode('utf-8'))
+          print('REPAIRED: removed only the identical duplicated test class and orphaned tail. All unique tests are retained.', flush=True)
           old = "suite = [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_*.py']"
-          new = "suite = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_adiscord_val_refugees', 'tools.tests.test_val_contract_ui', '-v']"
+          new = "CHANGED.append(Path('tools/tests/test_val_contract_ui.py'))\nsuite = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_adiscord_val_refugees', 'tools.tests.test_val_contract_ui', '-v']"
           assert source.count(old) == 1
           source = source.replace(old, new, 1)
           source = source.replace("'val-visibility-baseline-suite'", "'val-visibility-baseline-focused'")
@@ -41,7 +61,6 @@ jobs:
           source = source.replace('поток ещё не открыт либо срок приёма уже истёк.', 'поток ещё не открыт, срок приёма истёк или все три волны уже приняты.')
           source = source.replace('the flow has not opened yet or its admission window has expired.', 'the flow has not opened yet, its admission window has expired, or all three waves have already been admitted.')
           print('FULL SUITE STATUS: The unmodified repository suite timed out after 420 seconds in run 35772561507. No full-suite pass is claimed.', flush=True)
-          compile(source, 'val-visibility-repair', 'exec')
           exec(compile(source, 'val-visibility-repair', 'exec'))
           PY
       - name: Preserve verification logs
