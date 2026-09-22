@@ -458,6 +458,7 @@ STP_cw_inspection_region_openable = {
 	has_state_flag = STP_region_participates
 	is_owned_by = ROOT
 	NOT = { has_state_flag = STP_party_inspection_active }
+	NOT = { has_state_flag = STP_false_trail_redirected }
 }
 
 STP_cw_has_openable_inspection_region = {
