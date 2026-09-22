@@ -57,6 +57,10 @@ jobs:
           source = source.replace(old, new, 1)
           source = source.replace("'val-visibility-baseline-suite'", "'val-visibility-baseline-focused'")
           source = source.replace("'val-visibility-suite'", "'val-visibility-related-tests'")
+          old = "assert rc == 0, 'Focused regression tests failed'"
+          new = "focused_failures = set(re.findall(r'^(?:FAIL|ERROR): (.+)$', output, re.M))\nassert rc == 0 or focused_failures, 'Focused tests did not complete normally'\nassert focused_failures == base_failures, 'The patch changed baseline failure signatures'\nprint('UNCHANGED PRE-EXISTING ERRORS:', sorted(focused_failures), flush=True)\nrc, output = run('val-visibility-new-tests-green', red_cmd)\nassert rc == 0, 'A new visibility regression failed'"
+          assert source.count(old) == 1
+          source = source.replace(old, new, 1)
           source = source.replace("rc, output = run('val-visibility-related-tests', suite)", "rc, output = run('val-visibility-related-tests', [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_validate_adiscord_val_rework', '-v'])")
           source = source.replace('поток ещё не открыт либо срок приёма уже истёк.', 'поток ещё не открыт, срок приёма истёк или все три волны уже приняты.')
           source = source.replace('the flow has not opened yet or its admission window has expired.', 'the flow has not opened yet, its admission window has expired, or all three waves have already been admitted.')
