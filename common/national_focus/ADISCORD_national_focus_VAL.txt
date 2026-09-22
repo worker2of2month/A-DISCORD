@@ -2274,6 +2274,88 @@ completion_reward = {
   completion_reward = { unlock_decision_tooltip = { decision = VAL_stelander_ultimatum show_effect_tooltip = yes } unlock_decision_tooltip = { decision = VAL_campaign_against_stelander show_effect_tooltip = yes } }
   ai_will_do = { base = 20 }
  }
+
+ focus = {
+  id = VAL_Equal_Powers_Pact
+  icon = GFX_focus_generic_diplomatic_treaty
+  search_filters = { FOCUS_FILTER_POLITICAL }
+  x = 26
+  y = 20
+  cost = 3
+  prerequisite = { focus = VAL_Stelander_Ultimatum }
+  available = {
+   has_country_flag = VAL_stelander_equal_recognition
+   VAL_stelander_equal_partner_available = yes
+  }
+  mutually_exclusive = { focus = VAL_Campaign_Secured }
+  ai_will_do = { base = 1 }
+  completion_reward = {
+   add_political_power = 50
+   custom_effect_tooltip = VAL_equal_powers_offer_tt
+   hidden_effect = { VAL_offer_stelander_equal_alliance = yes }
+  }
+ }
+
+ focus = {
+  id = VAL_Joint_General_Staff
+  icon = GFX_goal_generic_allies_build_infantry
+  search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_POLITICAL }
+  x = 25
+  y = 21
+  cost = 4
+  prerequisite = { focus = VAL_Equal_Powers_Pact }
+  available = { has_country_flag = VAL_stelander_equal_alliance }
+  ai_will_do = { base = 3 }
+  completion_reward = {
+   army_experience = 15
+   add_command_power = 20
+   custom_effect_tooltip = VAL_joint_staff_tt
+   hidden_effect = { set_country_flag = VAL_stelander_joint_staff }
+  }
+ }
+
+ focus = {
+  id = VAL_Cross_Border_Contracts
+  icon = GFX_goal_generic_trade
+  search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
+  x = 27
+  y = 21
+  cost = 4
+  prerequisite = { focus = VAL_Equal_Powers_Pact }
+  available = { has_country_flag = VAL_stelander_equal_alliance }
+  ai_will_do = { base = 3 }
+  completion_reward = {
+   ADISCORD_economy_receive_100 = yes
+   add_stability = 0.03
+   custom_effect_tooltip = VAL_cross_border_contracts_tt
+   hidden_effect = {
+    set_country_flag = VAL_stelander_economic_pact
+    ADISCORD_economy_mark_dirty = yes
+   }
+  }
+ }
+
+ focus = {
+  id = VAL_Two_States_One_Frontier
+  icon = GFX_goal_generic_national_unity
+  search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_ARMY }
+  x = 26
+  y = 22
+  cost = 5
+  prerequisite = { focus = VAL_Joint_General_Staff }
+  prerequisite = { focus = VAL_Cross_Border_Contracts }
+  available = { has_country_flag = VAL_stelander_equal_alliance }
+  ai_will_do = { base = 3 }
+  completion_reward = {
+   add_war_support = 0.05
+   add_stability = 0.03
+   custom_effect_tooltip = VAL_two_states_frontier_tt
+   hidden_effect = {
+    set_country_flag = VAL_stelander_permanent_alliance
+    VAL_call_stelander_partner_to_wars = yes
+   }
+  }
+ }
  focus = {
   id = VAL_Campaign_Secured
   icon = GFX_focus_generic_treaty
