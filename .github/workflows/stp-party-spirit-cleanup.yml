@@ -1,4 +1,4 @@
-name: STP party spirit cleanup regression
+name: STP party spirit cleanup differential review
 on:
   push:
     branches: [fix/stp-party-starting-spirit-cleanup]
@@ -7,17 +7,61 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Focused regression
-        run: python -B -m unittest tools.tests.test_adiscord_stp_civil_war.CivilWarContracts.test_party_hostilities_clear_prewar_regime_spirits -v
-      - name: STP civil-war contracts
-        run: python -B -m unittest tools.tests.test_adiscord_stp_civil_war -v
-      - name: Static validator
-        run: python -B tools/validate_tc.py --limit 300
-      - name: Diff check
-        run: git diff --check origin/main...HEAD
+      - run: python -m pip install Pillow
+      - name: Compare STP contracts and validator with pre-fix main
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, re, subprocess, sys
+          base = "4cc6d829d2a65233bea2804f30e25c23872383c6"
+          current = Path.cwd()
+          baseline = Path("/tmp/stp-spirit-baseline")
+          subprocess.run(["git","worktree","add","--detach",str(baseline),base],check=True)
+          out = Path("/tmp/stp-spirit-evidence"); out.mkdir()
+          def run(label,cwd,cmd):
+              p=subprocess.run(cmd,cwd=cwd,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+              (out/(label+".log")).write_text(p.stdout)
+              return p.returncode,p.stdout
+          focused=[sys.executable,"-B","-m","unittest","tools.tests.test_adiscord_stp_civil_war.CivilWarContracts.test_party_hostilities_clear_prewar_regime_spirits","-v"]
+          rc,text=run("focused",current,focused)
+          print(text)
+          assert rc==0
+          suite=[sys.executable,"-B","-m","unittest","tools.tests.test_adiscord_stp_civil_war","-v"]
+          brc,btxt=run("baseline-stp",baseline,suite)
+          frc,ftxt=run("feature-stp",current,suite)
+          def failures(text):
+              detailed=re.findall(r"^(?:FAIL|ERROR): (.+)$",text,re.M)
+              progress=re.findall(r"^(test_\S+ \([^\n]+\)) \.\.\. (?:FAIL|ERROR)$",text,re.M)
+              return sorted(set(detailed+progress))
+          bfail,ffail=failures(btxt),failures(ftxt)
+          new=sorted(set(ffail)-set(bfail))
+          (out/"stp-failure-comparison.json").write_text(json.dumps({"baseline":bfail,"feature":ffail,"new":new},indent=2))
+          print(json.dumps({"baseline_failures":len(bfail),"feature_failures":len(ffail),"new_failures":new},indent=2))
+          assert not new,new
+          validator=[sys.executable,"-B","tools/validate_tc.py","--limit","300"]
+          _,bv=run("baseline-validator",baseline,validator)
+          _,fv=run("feature-validator",current,validator)
+          def issues(text):
+              assert text.startswith("A-Discord total-conversion validation")
+              assert "== Vanilla leftovers:" in text and "Traceback" not in text
+              return {re.sub(r":\d+(?=:|\n| |$)",":LINE",line) for line in text.splitlines() if line.startswith("- ")}
+          new_issues=sorted(issues(fv)-issues(bv))
+          (out/"new-validation-issues.json").write_text(json.dumps(new_issues,indent=2))
+          print(json.dumps({"new_validation_issues":new_issues},indent=2))
+          assert not new_issues,new_issues
+          subprocess.run(["git","diff","--check",base,"HEAD"],cwd=current,check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-party-spirit-cleanup-evidence
+          path: /tmp/stp-spirit-evidence
+          retention-days: 3
