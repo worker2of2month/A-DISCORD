@@ -1,0 +1,57 @@
+name: Technology timeline review
+on:
+  push:
+    branches: [fix/technology-timeline-labels]
+    paths: [.github/workflows/technology-timeline-review.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install Pillow
+      - name: Inspect native-grid coordinates and run baseline tests
+        run: |
+          python - <<'PY'
+          import json, subprocess, sys, zipfile
+          from pathlib import Path
+          from tools.builders import build_adiscord_technology_system as g
+          report = {'head': subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(), 'rules': [str(p) for p in Path('.').rglob('AGENTS.md')], 'vertical': [], 'horizontal_mismatches': []}
+          for b in g.BRANCHES:
+              graph = g.BRANCH_GRAPHS[b.key]
+              if g.HORIZONTAL_FOLDERS.intersection(b.folders):
+                  for i, year in enumerate(b.years):
+                      expected = g.chronological_grid_slot(year, horizontal=True)
+                      actual = g.technology_time_slot(b, i)
+                      if expected != actual:
+                          report['horizontal_mismatches'].append({'branch': b.key, 'tech': b.techs[i].key, 'year': year, 'expected_slot': expected, 'actual_slot': actual})
+              else:
+                  xs = [g.technology_grid_position(b, i)[0] for i in range(len(b.techs))]
+                  report['vertical'].append({'branch': b.key, 'lanes': [min(graph.lanes),max(graph.lanes)], 'x_bounds': [min(xs),max(xs)], 'research_years': sorted(set(b.years))})
+          test = subprocess.run([sys.executable,'-B','-m','unittest','tools.tests.test_build_adiscord_technology_system','tools.tests.test_adiscord_technology_ui','-v'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+          Path('/tmp/technology-baseline.log').write_text(test.stdout)
+          report['baseline_exit'] = test.returncode
+          print(test.stdout[-10000:])
+          Path('/tmp/technology-diagnosis.json').write_text(json.dumps(report, indent=2))
+          print(json.dumps(report, indent=2))
+          with zipfile.ZipFile('/tmp/technology-sources.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for folder in ('tools','interface','common/technologies'):
+                  for p in Path(folder).rglob('*'):
+                      if p.is_file() and '__pycache__' not in p.parts:
+                          z.write(p)
+              z.write('AGENTS.md')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: technology-timeline-diagnosis
+          path: |
+            /tmp/technology-sources.zip
+            /tmp/technology-baseline.log
+            /tmp/technology-diagnosis.json
+          retention-days: 3
