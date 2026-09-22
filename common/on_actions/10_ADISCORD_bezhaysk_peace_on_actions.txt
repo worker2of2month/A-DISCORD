@@ -3,7 +3,46 @@
 on_actions = {
 	on_capitulation_immediate = {
 		effect = {
+			# If Kefreyt and Nodrul fight the same Bezhaysk war, neither may consume
+			# the whole feudal bloc through the ordinary single-winner settlement.
 			if = {
+				limit = {
+					ROOT = {
+						tag = BJK
+						has_war_with = VAL
+						has_war_with = NOD
+						NOT = {
+							any_enemy_country = {
+								NOT = { OR = { tag = VAL tag = NOD is_subject_of = VAL is_subject_of = NOD } }
+							}
+						}
+					}
+					VAL = {
+						exists = yes
+						has_capitulated = no
+						has_war_together_with = NOD
+						OR = {
+							has_country_flag = ADISCORD_bezhaysk_campaign_active
+							has_completed_focus = VAL_Bezhaysk_Operation
+						}
+					}
+					NOD = { exists = yes has_capitulated = no }
+					FROM = { OR = { tag = VAL tag = NOD is_subject_of = VAL is_subject_of = NOD } }
+				}
+				ROOT = {
+					clr_country_flag = ADISCORD_bezhaysk_joint_default_val
+					clr_country_flag = ADISCORD_bezhaysk_joint_default_nod
+				}
+				if = {
+					limit = { FROM = { OR = { tag = NOD is_subject_of = NOD } } }
+					ROOT = { set_country_flag = ADISCORD_bezhaysk_joint_default_nod }
+				}
+				else = { ROOT = { set_country_flag = ADISCORD_bezhaysk_joint_default_val } }
+				set_global_flag = skip_default_capitulation
+				VAL = { ADISCORD_bezhaysk_settle_val_nod_joint_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			else_if = {
 				limit = {
 					ROOT = { tag = BJK has_war_with = STS }
 					STS = {
