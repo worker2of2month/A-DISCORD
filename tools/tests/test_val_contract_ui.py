@@ -48,9 +48,10 @@ class TestValContractUi(unittest.TestCase):
         on_actions = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
         startup = named_block(on_actions, "on_startup")
         weekly = named_block(on_actions, "on_weekly_VAL")
-        for recovery in (startup, weekly):
-            self.assertIn("has_dynamic_modifier = { modifier = VAL_contract_state }", recovery)
-            self.assertIn("VAL_initialize_contract_authority = yes", recovery)
+        self.assertEqual(startup.count("VAL_initialize_contract_authority = yes"), 1)
+        self.assertNotIn("NOT = { has_dynamic_modifier = { modifier = VAL_contract_state } }", startup)
+        self.assertIn("has_dynamic_modifier = { modifier = VAL_contract_state }", weekly)
+        self.assertIn("VAL_initialize_contract_authority = yes", weekly)
 
         history = read("history/countries/VAL - ValeraLand.txt")
         self.assertIn("VAL_mercenary_state", history)
