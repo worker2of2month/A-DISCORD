@@ -3194,12 +3194,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_conservatives_program_1_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 1 } }
+
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_civil_records_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.03 }
 				add_to_variable = { var = STP_pw_stability_factor value = 0.01 }
 				STP_pw_refresh_modifier = yes
 			}
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3216,6 +3220,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_radicals_program_1_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 14 } }
+
 			add_manpower = 6000
 			unlock_decision_tooltip = { decision = STP_pw_party_return_specialists show_effect_tooltip = yes } custom_effect_tooltip = STP_pw_party_return_specialists_desc
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_open_settlement_delta } }
@@ -3227,6 +3234,7 @@ focus_tree = {
 				STP_pf_shift = yes
 			}
 			custom_effect_tooltip = STP_pf_radicals_deal_tt
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3270,12 +3278,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_conservatives_program_2_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 2 } }
+
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_civil_charter_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_stability_factor value = 0.03 }
 				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.03 }
 				STP_pw_refresh_modifier = yes
 			}
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3480,12 +3492,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_army_program_1_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 7 } }
+
 			add_tech_bonus = { name = STP_pw_infantry_lessons_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_officer_school_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_planning_speed value = 0.10 }
 				STP_pw_refresh_modifier = yes
 			}
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3582,6 +3598,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_borons_program_1_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 3 } }
+
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_district_charters_post_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_stability_factor value = 0.04 }
@@ -3589,6 +3608,7 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_political_power_gain value = -0.05 }
 				STP_pw_refresh_modifier = yes
 			}
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3626,6 +3646,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_security_program_1_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 5 } }
+
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_personnel_commissions_post_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_political_power_gain value = 0.15 }
@@ -3633,6 +3656,7 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_production_speed_buildings_factor value = -0.03 }
 				STP_pw_refresh_modifier = yes
 			}
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3692,6 +3716,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_merchants_program_1_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 12 } }
+
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_port_contracts_post_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.1 }
@@ -3699,6 +3726,7 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0.1 }
 				STP_pw_refresh_modifier = yes
 			}
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3780,6 +3808,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_borons_program_2_tt
+			custom_effect_tooltip = STP_pf_radicals_program_2_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 4 } }
+
 			add_stability = 0.02
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_district_congress_delta } }
 			hidden_effect = {
@@ -3789,6 +3821,7 @@ focus_tree = {
 				STP_pw_refresh_modifier = yes
 			}
 			country_event = { id = ADISCORD_STP_pc.26 }
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3804,6 +3837,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_security_program_2_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 6 } }
+
 			custom_effect_tooltip = STP_qol_elite_administration_tt
 
 			add_political_power = 75
@@ -3815,6 +3851,7 @@ focus_tree = {
 				STP_pw_refresh_modifier = yes
 			}
 			country_event = { id = ADISCORD_STP_pc.27 }
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3830,6 +3867,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_merchants_program_2_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 13 } }
+
 			custom_effect_tooltip = STP_cw_treasury_1200_tt
 			STP_receive_1200 = yes
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_commercial_recovery_delta } }
@@ -3839,6 +3879,7 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_production_speed_buildings_factor value = 0.05 }
 				STP_pw_refresh_modifier = yes
 			}
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3878,6 +3919,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_army_program_2_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 9 } }
+
 			add_command_power = 20
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_fortress_corps_delta } }
 			hidden_effect = {
@@ -3885,6 +3929,7 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_army_org_regain value = 0.04 }
 				STP_pw_refresh_modifier = yes
 			}
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3900,6 +3945,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_army_program_2_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 8 } }
+
 			army_experience = 20
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_field_staff_delta } }
 			hidden_effect = {
@@ -3907,6 +3955,7 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_army_org_factor value = 0.03 }
 				STP_pw_refresh_modifier = yes
 			}
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -3922,6 +3971,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_advisers_program_2_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 11 } }
+
 			add_command_power = 15
 			add_tech_bonus = { name = STP_pw_party_joint_staff bonus = 0.5 uses = 1 category = infantry_weapons }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_joint_defence_board_delta } }
@@ -3933,6 +3985,7 @@ focus_tree = {
 				set_temp_variable = { var = STP_pf_selected value = 5 }
 				STP_pf_shift = yes
 			}
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 
@@ -5678,12 +5731,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			custom_effect_tooltip = STP_pf_advisers_program_1_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 10 } }
+
 			army_experience = 25
 			custom_effect_tooltip = STP_pw_party_nod_contract_tt
 			hidden_effect = {
 				set_country_flag = STP_pw_party_nod_arms_pending
 				NOD = { country_event = { id = ADISCORD_STP_pc.22 days = 1 } }
 			}
+			hidden_effect = { STP_pf_apply_focus_program = yes }
 		}
 	}
 	focus = {

@@ -493,7 +493,7 @@ class PartyFactionContracts(unittest.TestCase):
             self.assertAlmostEqual(float(values["STP_pf_army_influence"]), influence)
             self.assertEqual(values["STP_pf_army_support"], 60)
 
-    def simulate(self, effect, values=None, flags=None, tag="STP", nod=True, quantize=False):
+    def simulate(self, effect, values=None, flags=None, tag="STP", nod=True, quantize=False, focuses=()):
         from decimal import Decimal, ROUND_DOWN
         values = {} if values is None else values
         flags = {"STP_sided_with_the_party_flag"} if flags is None else flags
@@ -523,6 +523,8 @@ class PartyFactionContracts(unittest.TestCase):
                     result = e.value == "yes"
                 elif e.key == "has_country_flag":
                     result = e.value in flags
+                elif e.key == "has_completed_focus":
+                    result = e.value in focuses
                 elif e.key == "has_variable":
                     result = e.value in values
                 elif e.key == "has_dynamic_modifier":

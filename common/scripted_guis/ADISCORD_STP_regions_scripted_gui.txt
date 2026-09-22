@@ -98,7 +98,7 @@ scripted_gui = {
 	ADISCORD_STP_party_factions_panel = {
 		context_type = decision_category
 		window_name = "ADISCORD_STP_party_factions_window"
-		visible = { STP_pf_active = yes has_country_flag = STP_pf_initialized }
+		visible = { STP_pf_active = yes has_country_flag = STP_pf_initialized has_capitulated = no }
 		properties = {
 			STP_pf_conservatives_card = { frame = STP_pf_conservatives_frame }
 			STP_pf_borons_card = { frame = STP_pf_borons_frame }
