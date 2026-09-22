@@ -1,0 +1,86 @@
+name: Contract memory final UI review
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  verify:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/val-contract-memory-final-review'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow pyyaml numpy
+      - name: Verify native category references and export final commit
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, os, re, subprocess, sys, time
+          base = 'e0511cbc69ce2e02d1304f03e7860bc23180dabe'
+          source = 'codex/val-contract-memory-ready-35673291966'
+          out = Path('/tmp/val-contract-memory-final')
+          out.mkdir()
+          for attempt in range(30):
+              result = subprocess.run(['git', 'fetch', '--depth=1', 'origin', source], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+              if result.returncode == 0:
+                  break
+              time.sleep(10)
+          else:
+              raise RuntimeError('Verified source commit not available; main remains unchanged')
+          parent = subprocess.check_output(['git', 'rev-parse', 'FETCH_HEAD']).decode().strip()
+          subprocess.run(['git', 'checkout', '--detach', parent], check=True)
+          for language in ('russian', 'english'):
+              path = Path(f'localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml')
+              text = path.read_bytes().decode('utf-8-sig')
+              key = 'VAL_campaign_slot_granted_tt'
+              lines = text.splitlines()
+              matches = [i for i, line in enumerate(lines) if re.match(r'\s*' + key + ':', line)]
+              assert len(matches) == 1
+              if language == 'russian':
+                  value = 'Постоянно увеличивает число одновременно проводимых пропагандистских кампаний на §G1§!. Кампании находятся в категории решений §Y«$VAL_contract_management$»§!.'
+              else:
+                  value = 'Permanently increases the number of simultaneous propaganda campaigns by §G1§!. Campaigns are available in the §Y$VAL_contract_management$§! decision category.'
+              lines.pop(matches[0])
+              anchor = next(i for i, line in enumerate(lines) if re.match(r'\s*VAL_Ministry_Of_Contract_Memory_desc:', line))
+              lines.insert(anchor + 1, ' ' + key + ':0 "' + value + '"')
+              path.write_bytes(b'\xef\xbb\xbf' + ('\n'.join(lines) + '\n').encode('utf-8'))
+              assert text.count('VAL_contract_management:') == 1
+          command = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_validate_adiscord_val_rework.ValContractMemoryRewardTests', '-v']
+          with (out / 'focused.log').open('w') as log:
+              subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True, timeout=90)
+          subprocess.run(['git', 'diff', '--check'], check=True)
+          subprocess.run(['git', 'fetch', '--depth=1', 'origin', base], check=True)
+          paths = subprocess.check_output(['git', 'diff', '--name-only', base]).decode().splitlines()
+          assert len(paths) == 5 and not any(path.startswith('.github/') for path in paths), paths
+          (out / 'changes.patch').write_bytes(subprocess.check_output(['git', 'diff', base, '--', *paths]))
+          subprocess.run(['git', 'config', 'user.name', 'A-DISCORD automation'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '81386071+worker2of2month@users.noreply.github.com'], check=True)
+          env = dict(os.environ, GIT_INDEX_FILE='/tmp/val-contract-memory-final-index')
+          subprocess.run(['git', 'read-tree', base], env=env, check=True)
+          blobs = {}
+          for path in paths:
+              blob = subprocess.check_output(['git', 'hash-object', '-w', path]).decode().strip()
+              blobs[path] = blob
+              subprocess.run(['git', 'update-index', '--add', '--cacheinfo', '100644', blob, path], env=env, check=True)
+          tree = subprocess.check_output(['git', 'write-tree'], env=env).decode().strip()
+          commit = subprocess.check_output(['git', 'commit-tree', tree, '-p', base], input=b'fix(val): fund and expose contract-memory propaganda campaigns\n').decode().strip()
+          branch = 'codex/val-contract-memory-final-ready-' + os.environ['GITHUB_RUN_ID']
+          subprocess.run(['git', 'push', 'origin', commit + ':refs/heads/' + branch], check=True)
+          manifest = {'base': base, 'verified_source': parent, 'head': commit, 'tree': tree, 'branch': branch, 'blobs': blobs}
+          (out / 'manifest.json').write_text(json.dumps(manifest, indent=2))
+          print((out / 'focused.log').read_text())
+          print('FINAL_MANIFEST', json.dumps(manifest), flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: val-contract-memory-final-evidence
+          path: /tmp/val-contract-memory-final
+          retention-days: 3
