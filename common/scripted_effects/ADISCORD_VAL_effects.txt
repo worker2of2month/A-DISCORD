@@ -21,6 +21,7 @@ VAL_change_contract_authority = {
 
 VAL_refresh_contract_modifier = {
 	set_variable = { var = VAL_contract_recon_factor value = 0 }
+	set_variable = { var = VAL_contract_special_forces_min value = 0 }
 	set_variable = { var = VAL_contract_volunteer_size value = 2 }
 	set_variable = { var = VAL_contract_war_stability value = 0.1 }
 	set_variable = { var = VAL_contract_overall_income_factor value = 0 }
@@ -281,6 +282,7 @@ VAL_refresh_contract_modifier = {
 	}
 	if = {
 		limit = { has_country_flag = VAL_border_survey_complete }
+		add_to_variable = { var = VAL_contract_special_forces_min value = 12 }
 		add_to_variable = { var = VAL_contract_recon_factor value = 0.2 }
 		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
 		add_to_variable = { var = VAL_contract_defence_factor value = 0.05 }
@@ -1078,6 +1080,96 @@ VAL_apply_contract_reputation_0 = {
 		remove_ideas = VAL_contract_reputation_2
 		remove_ideas = VAL_contract_reputation_3
 		add_ideas = VAL_contract_reputation_0
+	}
+}
+
+# COUNTRY VAL: the focus pays for a fixed formation package, not a stockpile transfer.
+VAL_raise_mountain_contractors = {
+	custom_effect_tooltip = VAL_raise_mountain_contractors_tt
+	hidden_effect = {
+		if = {
+			limit = {
+				tag = VAL
+				has_capitulated = no
+				NOT = { has_country_flag = VAL_mountain_contractors_raised }
+				any_owned_state = { is_controlled_by = PREV }
+			}
+			if = {
+				limit = { NOT = { has_template = "Kefreyt Mountain Contractors" } }
+				division_template = {
+					name = "Kefreyt Mountain Contractors"
+					template_counter = 110
+					division_names_group = VAL_INF_01
+					is_locked = yes
+					force_allow_recruiting = yes
+					regiments = {
+						mountaineers = { x = 0 y = 0 }
+						mountaineers = { x = 0 y = 1 }
+						mountaineers = { x = 0 y = 2 }
+						mountaineers = { x = 1 y = 0 }
+						mountaineers = { x = 1 y = 1 }
+						mountaineers = { x = 1 y = 2 }
+					}
+					support = { engineer = { x = 0 y = 0 } }
+				}
+			}
+			# Explicit staffing avoids taking recruits from the free replacement pool.
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "division_template = \"Kefreyt Mountain Contractors\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = PREV
+					count = 2
+					allow_spawning_on_enemy_provs = no
+				}
+			}
+			set_country_flag = VAL_mountain_contractors_raised
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+# COUNTRY VAL: the focus pays for a fixed formation package, not a stockpile transfer.
+VAL_raise_reserve_battalions = {
+	custom_effect_tooltip = VAL_raise_reserve_battalions_tt
+	hidden_effect = {
+		if = {
+			limit = {
+				tag = VAL
+				has_capitulated = no
+				NOT = { has_country_flag = VAL_reserve_battalions_raised }
+				any_owned_state = { is_controlled_by = PREV }
+			}
+			if = {
+				limit = { NOT = { has_template = "Kefreyt Reserve Infantry" } }
+				division_template = {
+					name = "Kefreyt Reserve Infantry"
+					template_counter = 3
+					division_names_group = VAL_INF_01
+					is_locked = yes
+					force_allow_recruiting = yes
+					regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 0 y = 1 }
+						infantry = { x = 0 y = 2 }
+						infantry = { x = 1 y = 0 }
+						infantry = { x = 1 y = 1 }
+						infantry = { x = 1 y = 2 }
+					}
+					support = { engineer = { x = 0 y = 0 } }
+				}
+			}
+			# Explicit staffing avoids taking recruits from the free replacement pool.
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "division_template = \"Kefreyt Reserve Infantry\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = PREV
+					count = 2
+					allow_spawning_on_enemy_provs = no
+				}
+			}
+			set_country_flag = VAL_reserve_battalions_raised
+			ADISCORD_economy_mark_dirty = yes
+		}
 	}
 }
 

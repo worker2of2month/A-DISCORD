@@ -2,6 +2,7 @@
 
 VAL_contract_state = {
 	recon_factor = VAL_contract_recon_factor
+	special_forces_min = VAL_contract_special_forces_min
 	send_volunteer_size = VAL_contract_volunteer_size
 	war_stability_factor = VAL_contract_war_stability
 	enable = { original_tag = VAL }

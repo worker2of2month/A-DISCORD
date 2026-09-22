@@ -11123,6 +11123,154 @@
         "kind": "retain",
         "target": "script_party_exile_brigade"
       }
+    },
+    {
+      "key": "val_focus_mountain_contractors",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Kefreyt Mountain Contractors",
+      "display_name": "Kefreyt Mountain Contractors",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "mountaineers",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "mountaineers",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 59.214285714285715,
+        "manpower": 6300.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 36.0,
+          "infantry_equipment": 670.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.32
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "val_focus_mountain_contractors"
+      },
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": true
+      }
+    },
+    {
+      "key": "val_focus_reserve_infantry",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Kefreyt Reserve Infantry",
+      "display_name": "Kefreyt Reserve Infantry",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 50.642857142857146,
+        "manpower": 6300.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48.0,
+          "infantry_equipment": 610.0,
+          "support_equipment": 30.0
+        },
+        "supply": 0.38
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "val_focus_reserve_infantry"
+      },
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": true
+      }
     }
   ],
   "references": [
@@ -13358,6 +13506,26 @@
       "kind": "technical_reference",
       "technical_name": "Party Exile Brigade",
       "legacy_names": [],
+      "count": 1
+    },
+    {
+      "key": "val_focus_mountain_contractors_spawn",
+      "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Kefreyt Mountain Contractors",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1.0,
+      "count": 1
+    },
+    {
+      "key": "val_focus_reserve_infantry_spawn",
+      "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Kefreyt Reserve Infantry",
+      "legacy_names": [],
+      "start_experience_factor": 0.2,
+      "start_equipment_factor": 1.0,
       "count": 1
     }
   ]

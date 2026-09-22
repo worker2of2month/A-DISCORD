@@ -83,7 +83,7 @@ focus_tree = {
 		ai_will_do = { base = 10 }
 		completion_reward = {
 			add_power_balance_value = { id = VAL_command_balance value = 0.1 }
-			ADISCORD_economy_receive_15 = yes
+			ADISCORD_economy_receive_100 = yes
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_captain_retainers_delta } }
 			hidden_effect = {
@@ -412,7 +412,7 @@ focus_tree = {
 			modifier = { factor = 3 has_equipment = { infantry_equipment > 1999 } }
 		}
 		completion_reward = {
-			add_manpower = 1500
+			add_manpower = 6000
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 200 producer = VAL }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_gromovs_delta } }
 			hidden_effect = {
@@ -448,7 +448,7 @@ focus_tree = {
 			}
 			else_if = {
 				limit = { has_country_flag = VAL_doctrine_resource_raider }
-				add_manpower = 1000
+				add_manpower = 4000
 			}
 			hidden_effect = {
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
@@ -496,7 +496,7 @@ focus_tree = {
 			modifier = { factor = 2 has_equipment = { infantry_equipment < 1499 } }
 		}
 		completion_reward = {
-			add_manpower = 2000
+			add_manpower = 8000
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_ash_manpower_delta } }
 			hidden_effect = {
 				set_country_flag = VAL_ash_manpower_preservation
@@ -546,11 +546,11 @@ focus_tree = {
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			if = {
 				limit = { has_country_flag = VAL_ash_manpower_preservation }
-				add_manpower = 1500
+				add_manpower = 5000
 			}
 			else_if = {
 				limit = { has_country_flag = VAL_ash_rear_mobilization }
-				ADISCORD_economy_receive_15 = yes
+				ADISCORD_economy_receive_100 = yes
 			}
 			hidden_effect = {
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
@@ -1018,8 +1018,11 @@ focus_tree = {
 		y = 3
 		cost = 2
 		prerequisite = { focus = VAL_Company_Rosters }
+		available = { has_capitulated = no any_owned_state = { is_controlled_by = PREV } }
+		cancel_if_invalid = yes
 		completion_reward = {
-			army_experience = 5
+			VAL_raise_mountain_contractors = yes
+			army_experience = 15
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_border_survey_delta } }
 			hidden_effect = {
 				set_country_flag = VAL_border_survey_complete
@@ -1059,6 +1062,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Gromovs_Assault_Tables }
 		completion_reward = {
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 500 producer = VAL }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_motorized_columns_delta } }
 			VAL_apply_contract_army_2 = yes
 			hidden_effect = {
@@ -1155,7 +1159,13 @@ focus_tree = {
 		y = 5
 		cost = 5
 		prerequisite = { focus = VAL_Morns_Supply_Trains }
-		completion_reward = { add_manpower = 2500 add_war_support = 0.03 }
+		available = { has_capitulated = no any_owned_state = { is_controlled_by = PREV } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			VAL_raise_reserve_battalions = yes
+			add_manpower = 4000
+			add_war_support = 0.03
+		}
 		ai_will_do = { base = 2 modifier = { factor = 2 has_war = yes } }
 	}
 
@@ -1641,7 +1651,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_Field_Repair_Corps }
 		completion_reward = {
 			VAL_apply_contract_army_2 = yes
-			add_equipment_to_stockpile = { type = support_equipment amount = 300 producer = VAL }
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 200 producer = VAL }
+			add_equipment_to_stockpile = { type = support_equipment amount = 600 producer = VAL }
 		}
 		ai_will_do = { base = 4 }
 	}
@@ -1655,8 +1666,10 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Reserve_Battalions }
 		completion_reward = {
-			add_manpower = 3000
+			add_manpower = 10000
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 4500 producer = VAL }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 144 producer = VAL }
+			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = VAL }
 		}
 		ai_will_do = { base = 4 }
 	}
