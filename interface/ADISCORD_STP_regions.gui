@@ -110,36 +110,50 @@ guiTypes = {
 		instantTextBoxType = { name = "STP_pf_conservatives_name" position = { x = 76 y = 72 } text = "STP_pf_conservatives_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_conservatives_influence" position = { x = 76 y = 110 } text = "STP_pf_conservatives_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_conservatives_support" position = { x = 76 y = 130 } text = "STP_pf_conservatives_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
+		iconType = { name = "STP_pf_conservatives_effect_icon" position = { x = 12 y = 132 } spriteType = "GFX_ADISCORD_economy_tax_texticon" scale = 0.7 pdx_tooltip = "STP_pf_conservatives_tt" }
+		instantTextBoxType = { name = "STP_pf_conservatives_effect_value" position = { x = 31 y = 130 } text = "STP_pf_conservatives_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_conservatives_tt" }
 		iconType = { name = "STP_pf_borons_card" position = { x = 234 y = 64 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_borons_tt" }
 		iconType = { name = "STP_pf_borons_emblem" position = { x = 242 y = 72 } spriteType = "GFX_STP_pf_borons" alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_borons_name" position = { x = 306 y = 72 } text = "STP_pf_borons_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_borons_influence" position = { x = 306 y = 110 } text = "STP_pf_borons_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_borons_support" position = { x = 306 y = 130 } text = "STP_pf_borons_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
+		iconType = { name = "STP_pf_borons_effect_icon" position = { x = 242 y = 132 } spriteType = "GFX_construction_speed_texticon" scale = 0.7 pdx_tooltip = "STP_pf_borons_tt" }
+		instantTextBoxType = { name = "STP_pf_borons_effect_value" position = { x = 261 y = 130 } text = "STP_pf_borons_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_borons_tt" }
 		iconType = { name = "STP_pf_security_card" position = { x = 4 y = 162 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_security_tt" }
 		iconType = { name = "STP_pf_security_emblem" position = { x = 12 y = 170 } spriteType = "GFX_STP_pf_security" alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_security_name" position = { x = 76 y = 170 } text = "STP_pf_security_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_security_influence" position = { x = 76 y = 208 } text = "STP_pf_security_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_security_support" position = { x = 76 y = 228 } text = "STP_pf_security_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
+		iconType = { name = "STP_pf_security_effect_icon" position = { x = 12 y = 230 } spriteType = "GFX_STP_pf_stability_effect" scale = 0.7 pdx_tooltip = "STP_pf_security_tt" }
+		instantTextBoxType = { name = "STP_pf_security_effect_value" position = { x = 31 y = 228 } text = "STP_pf_security_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_security_tt" }
 		iconType = { name = "STP_pf_army_card" position = { x = 234 y = 162 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_army_tt" }
 		iconType = { name = "STP_pf_army_emblem" position = { x = 242 y = 170 } spriteType = "GFX_STP_pf_army" alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_army_name" position = { x = 306 y = 170 } text = "STP_pf_army_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_army_influence" position = { x = 306 y = 208 } text = "STP_pf_army_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_army_support" position = { x = 306 y = 228 } text = "STP_pf_army_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
+		iconType = { name = "STP_pf_army_effect_icon" position = { x = 242 y = 230 } spriteType = "GFX_STP_pf_organization_effect" scale = 0.7 pdx_tooltip = "STP_pf_army_tt" }
+		instantTextBoxType = { name = "STP_pf_army_effect_value" position = { x = 261 y = 228 } text = "STP_pf_army_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_army_tt" }
 		iconType = { name = "STP_pf_advisers_card" position = { x = 4 y = 260 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_advisers_tt" }
 		iconType = { name = "STP_pf_advisers_emblem" position = { x = 12 y = 268 } spriteType = "GFX_STP_pf_advisers" alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_advisers_name" position = { x = 76 y = 268 } text = "STP_pf_advisers_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_advisers_influence" position = { x = 76 y = 306 } text = "STP_pf_advisers_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_advisers_support" position = { x = 76 y = 326 } text = "STP_pf_advisers_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
+		iconType = { name = "STP_pf_advisers_effect_icon" position = { x = 12 y = 328 } spriteType = "GFX_planning_speed_texticon" scale = 0.7 pdx_tooltip = "STP_pf_advisers_tt" }
+		instantTextBoxType = { name = "STP_pf_advisers_effect_value" position = { x = 31 y = 326 } text = "STP_pf_advisers_effect_display" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_advisers_tt" }
 		iconType = { name = "STP_pf_merchants_card" position = { x = 234 y = 260 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_merchants_tt" }
 		iconType = { name = "STP_pf_merchants_emblem" position = { x = 242 y = 268 } spriteType = "GFX_STP_pf_merchants" alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_merchants_name" position = { x = 306 y = 268 } text = "STP_pf_merchants_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_merchants_influence" position = { x = 306 y = 306 } text = "STP_pf_merchants_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_merchants_support" position = { x = 306 y = 326 } text = "STP_pf_merchants_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
+		iconType = { name = "STP_pf_merchants_effect_icon" position = { x = 242 y = 328 } spriteType = "GFX_ADISCORD_economy_trade_texticon" scale = 0.7 pdx_tooltip = "STP_pf_merchants_tt" }
+		instantTextBoxType = { name = "STP_pf_merchants_effect_value" position = { x = 261 y = 326 } text = "STP_pf_merchants_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_merchants_tt" }
 		iconType = { name = "STP_pf_radicals_card" position = { x = 4 y = 358 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_radicals_tt" }
 		iconType = { name = "STP_pf_radicals_emblem" position = { x = 12 y = 366 } spriteType = "GFX_STP_pf_radicals" alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_radicals_name" position = { x = 76 y = 366 } text = "STP_pf_radicals_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_radicals_influence" position = { x = 76 y = 404 } text = "STP_pf_radicals_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
 		instantTextBoxType = { name = "STP_pf_radicals_support" position = { x = 76 y = 424 } text = "STP_pf_radicals_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
+		iconType = { name = "STP_pf_radicals_effect_icon" position = { x = 12 y = 426 } spriteType = "GFX_ADISCORD_economy_burden_texticon" scale = 0.7 pdx_tooltip = "STP_pf_radicals_tt" }
+		instantTextBoxType = { name = "STP_pf_radicals_effect_value" position = { x = 31 y = 424 } text = "STP_pf_radicals_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_radicals_tt" }
 		instantTextBoxType = { name = "STP_pf_help" position = { x = 244 y = 368 } text = "STP_pf_help" font = "hoi_16mbs" maxWidth = 204 maxHeight = 84 fixedsize = yes pdx_tooltip = "STP_pf_formula_tt" }
 	}
 

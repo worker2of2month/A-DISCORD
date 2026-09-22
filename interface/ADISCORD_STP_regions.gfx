@@ -27,4 +27,7 @@ spriteTypes = {
 	spriteType = { name = "GFX_STP_pf_advisers" texturefile = "gfx/interface/STP_regions/STP_regions_faction_advisers.png" transparencecheck = yes }
 	spriteType = { name = "GFX_STP_pf_merchants" texturefile = "gfx/interface/STP_regions/STP_regions_faction_merchants.png" transparencecheck = yes }
 	spriteType = { name = "GFX_STP_pf_radicals" texturefile = "gfx/interface/STP_regions/STP_regions_faction_radicals.png" transparencecheck = yes }
+
+	spriteType = { name = "GFX_STP_pf_stability_effect" texturefile = "gfx/interface/stability_icon.dds" legacy_lazy_load = no }
+	spriteType = { name = "GFX_STP_pf_organization_effect" texturefile = "gfx/texticons/organization_gain_texticon.dds" legacy_lazy_load = no }
 }

@@ -624,3 +624,15 @@ defined_text = {
 	text = { trigger = { tag = STP has_character = STP_maksim_shabrat has_country_leader = { character = STP_maksim_shabrat ruling_only = no } NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_participant } NOT = { has_country_flag = STP_cw_postwar } } localization_key = STP_maksim_shabrat_qol_party_label_long }
 	text = { localization_key = ADISCORD_qol_no_party_leader }
 }
+
+# The adviser contribution stops at the same connection edge as the native modifier.
+defined_text = {
+	name = GetSTPPFAdviserEffect
+	text = { trigger = { check_variable = { var = STP_pf_nod_connected value = 1 compare = equals } } localization_key = STP_pf_advisers_effect_value }
+	text = { localization_key = STP_pf_advisers_offline_value }
+}
+defined_text = {
+	name = GetSTPPFAdviserConnection
+	text = { trigger = { check_variable = { var = STP_pf_nod_connected value = 1 compare = equals } } localization_key = STP_pf_advisers_connected }
+	text = { localization_key = STP_pf_advisers_disconnected }
+}

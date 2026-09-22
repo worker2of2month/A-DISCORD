@@ -4892,8 +4892,135 @@ STP_pf_initialize = {
 	}
 }
 
-# Only mutations recalculate the seven contributions; GUI reads the cached values.
+# Program levels are derived caches. The finishing-focus input exists only inside its reward.
+STP_pf_refresh_programs = {
+	set_variable = { var = STP_pf_conservatives_program value = 0 }
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_pw_party_civil_records
+			check_variable = { var = STP_pf_finishing_program value = 1 compare = equals }
+		} }
+		set_variable = { var = STP_pf_conservatives_program value = 1 }
+	}
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_pw_party_civil_charter
+			check_variable = { var = STP_pf_finishing_program value = 2 compare = equals }
+		} }
+		set_variable = { var = STP_pf_conservatives_program value = 2 }
+	}
+	set_variable = { var = STP_pf_borons_program value = 0 }
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_party_district_charters
+			check_variable = { var = STP_pf_finishing_program value = 3 compare = equals }
+		} }
+		set_variable = { var = STP_pf_borons_program value = 1 }
+	}
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_pw_party_district_congress
+			check_variable = { var = STP_pf_finishing_program value = 4 compare = equals }
+		} }
+		set_variable = { var = STP_pf_borons_program value = 2 }
+	}
+	set_variable = { var = STP_pf_security_program value = 0 }
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_party_personnel_commissions
+			check_variable = { var = STP_pf_finishing_program value = 5 compare = equals }
+		} }
+		set_variable = { var = STP_pf_security_program value = 1 }
+	}
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_pw_party_executive_secretariat
+			check_variable = { var = STP_pf_finishing_program value = 6 compare = equals }
+		} }
+		set_variable = { var = STP_pf_security_program value = 2 }
+	}
+	set_variable = { var = STP_pf_army_program value = 0 }
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_pw_party_officer_school
+			check_variable = { var = STP_pf_finishing_program value = 7 compare = equals }
+		} }
+		set_variable = { var = STP_pf_army_program value = 1 }
+	}
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_pw_party_field_staff
+			check_variable = { var = STP_pf_finishing_program value = 8 compare = equals }
+			has_completed_focus = STP_pw_party_fortress_corps
+			check_variable = { var = STP_pf_finishing_program value = 9 compare = equals }
+		} }
+		set_variable = { var = STP_pf_army_program value = 2 }
+	}
+	set_variable = { var = STP_pf_advisers_program value = 0 }
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_pw_party_nod_military_mission
+			check_variable = { var = STP_pf_finishing_program value = 10 compare = equals }
+		} }
+		set_variable = { var = STP_pf_advisers_program value = 1 }
+	}
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_pw_party_joint_defence_board
+			check_variable = { var = STP_pf_finishing_program value = 11 compare = equals }
+		} }
+		set_variable = { var = STP_pf_advisers_program value = 2 }
+	}
+	set_variable = { var = STP_pf_merchants_program value = 0 }
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_party_port_contracts
+			check_variable = { var = STP_pf_finishing_program value = 12 compare = equals }
+		} }
+		set_variable = { var = STP_pf_merchants_program value = 1 }
+	}
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_pw_party_commercial_recovery
+			check_variable = { var = STP_pf_finishing_program value = 13 compare = equals }
+		} }
+		set_variable = { var = STP_pf_merchants_program value = 2 }
+	}
+	set_variable = { var = STP_pf_radicals_program value = 0 }
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_pw_party_open_settlement
+			check_variable = { var = STP_pf_finishing_program value = 14 compare = equals }
+		} }
+		set_variable = { var = STP_pf_radicals_program value = 1 }
+	}
+	if = {
+		limit = { OR = {
+			has_completed_focus = STP_pw_party_district_congress
+			check_variable = { var = STP_pf_finishing_program value = 4 compare = equals }
+		} }
+		set_variable = { var = STP_pf_radicals_program value = 2 }
+	}
+}
+
+# Do not rely on has_completed_focus for the reward that is still being executed.
+STP_pf_apply_focus_program = {
+	if = { limit = { STP_pf_active = yes has_country_flag = STP_pf_initialized } STP_refresh_apparatus_loyalty = yes }
+	set_temp_variable = { var = STP_pf_finishing_program value = 0 }
+}
+
+# Rebuild derived effects on load without replacing support, influence or negotiation dates.
+STP_pf_refresh_on_load = {
+	if = { limit = { STP_pf_active = yes }
+		STP_pf_initialize = yes
+		STP_refresh_apparatus_loyalty = yes
+	}
+	else = { STP_pf_clear = yes }
+}
+
+# Only mutations and load reconciliation recalculate contributions; GUI reads cached values.
 STP_pf_calculate = {
+	STP_pf_refresh_programs = yes
 	set_variable = { var = STP_apparatus_loyalty value = 0 }
 	clamp_variable = { var = STP_pf_conservatives_support min = 0 max = 100 }
 	set_variable = { var = STP_pf_conservatives_contribution value = STP_pf_conservatives_support }
@@ -4944,41 +5071,178 @@ STP_pf_calculate = {
 	add_to_variable = { var = STP_apparatus_loyalty value = STP_pf_radicals_contribution }
 	set_variable = { var = STP_pf_radicals_frame value = 1 }
 	if = { limit = { check_variable = { var = STP_pf_radicals_support value = 50 compare = greater_than_or_equals } } set_variable = { var = STP_pf_radicals_frame value = 2 } }
+	# Divide last: small multipliers must not discard the support/influence product.
+	set_variable = { var = STP_pf_conservatives_capacity value = 0.12 }
+	set_temp_variable = { var = STP_pf_positive_strength value = 7.5 }
+	if = {
+		limit = { check_variable = { var = STP_pf_conservatives_program value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_conservatives_capacity value = 0.15 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 10 }
+	}
+	if = {
+		limit = { check_variable = { var = STP_pf_conservatives_program value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_conservatives_capacity value = 0.18 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 12.5 }
+	}
 	set_variable = { var = STP_pf_conservatives_effect value = STP_pf_conservatives_support }
 	subtract_from_variable = { var = STP_pf_conservatives_effect value = 50 }
 	multiply_variable = { var = STP_pf_conservatives_effect value = STP_pf_conservatives_influence }
-	divide_variable = { var = STP_pf_conservatives_effect value = 100 }
-	multiply_variable = { var = STP_pf_conservatives_effect value = -0.002 }
+	if = {
+		limit = { check_variable = { var = STP_pf_conservatives_support value = 50 compare = greater_than } }
+		multiply_variable = { var = STP_pf_conservatives_effect value = STP_pf_positive_strength }
+	}
+	else = {
+		multiply_variable = { var = STP_pf_conservatives_effect value = 2 }
+	}
+	divide_variable = { var = STP_pf_conservatives_effect value = 100000 }
+	clamp_variable = { var = STP_pf_conservatives_effect min = -0.06 max = STP_pf_conservatives_capacity }
+	multiply_variable = { var = STP_pf_conservatives_effect value = -1 }
+	set_variable = { var = STP_pf_borons_capacity value = 0.12 }
+	set_temp_variable = { var = STP_pf_positive_strength value = 7.5 }
+	if = {
+		limit = { check_variable = { var = STP_pf_borons_program value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_borons_capacity value = 0.15 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 10 }
+	}
+	if = {
+		limit = { check_variable = { var = STP_pf_borons_program value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_borons_capacity value = 0.18 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 12.5 }
+	}
 	set_variable = { var = STP_pf_borons_effect value = STP_pf_borons_support }
 	subtract_from_variable = { var = STP_pf_borons_effect value = 50 }
 	multiply_variable = { var = STP_pf_borons_effect value = STP_pf_borons_influence }
-	divide_variable = { var = STP_pf_borons_effect value = 100 }
-	multiply_variable = { var = STP_pf_borons_effect value = 0.002 }
+	if = {
+		limit = { check_variable = { var = STP_pf_borons_support value = 50 compare = greater_than } }
+		multiply_variable = { var = STP_pf_borons_effect value = STP_pf_positive_strength }
+	}
+	else = {
+		multiply_variable = { var = STP_pf_borons_effect value = 2 }
+	}
+	divide_variable = { var = STP_pf_borons_effect value = 100000 }
+	clamp_variable = { var = STP_pf_borons_effect min = -0.06 max = STP_pf_borons_capacity }
+	set_variable = { var = STP_pf_security_capacity value = 0.06 }
+	set_temp_variable = { var = STP_pf_positive_strength value = 4 }
+	if = {
+		limit = { check_variable = { var = STP_pf_security_program value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_security_capacity value = 0.08 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 5 }
+	}
+	if = {
+		limit = { check_variable = { var = STP_pf_security_program value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_security_capacity value = 0.1 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 6.5 }
+	}
 	set_variable = { var = STP_pf_security_effect value = STP_pf_security_support }
 	subtract_from_variable = { var = STP_pf_security_effect value = 50 }
 	multiply_variable = { var = STP_pf_security_effect value = STP_pf_security_influence }
-	divide_variable = { var = STP_pf_security_effect value = 100 }
-	multiply_variable = { var = STP_pf_security_effect value = 0.001 }
+	if = {
+		limit = { check_variable = { var = STP_pf_security_support value = 50 compare = greater_than } }
+		multiply_variable = { var = STP_pf_security_effect value = STP_pf_positive_strength }
+	}
+	else = {
+		multiply_variable = { var = STP_pf_security_effect value = 1 }
+	}
+	divide_variable = { var = STP_pf_security_effect value = 100000 }
+	clamp_variable = { var = STP_pf_security_effect min = -0.03 max = STP_pf_security_capacity }
+	set_variable = { var = STP_pf_army_capacity value = 0.1 }
+	set_temp_variable = { var = STP_pf_positive_strength value = 7.5 }
+	if = {
+		limit = { check_variable = { var = STP_pf_army_program value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_army_capacity value = 0.13 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 10 }
+	}
+	if = {
+		limit = { check_variable = { var = STP_pf_army_program value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_army_capacity value = 0.16 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 12.5 }
+	}
 	set_variable = { var = STP_pf_army_effect value = STP_pf_army_support }
 	subtract_from_variable = { var = STP_pf_army_effect value = 50 }
 	multiply_variable = { var = STP_pf_army_effect value = STP_pf_army_influence }
-	divide_variable = { var = STP_pf_army_effect value = 100 }
-	multiply_variable = { var = STP_pf_army_effect value = 0.002 }
+	if = {
+		limit = { check_variable = { var = STP_pf_army_support value = 50 compare = greater_than } }
+		multiply_variable = { var = STP_pf_army_effect value = STP_pf_positive_strength }
+	}
+	else = {
+		multiply_variable = { var = STP_pf_army_effect value = 2 }
+	}
+	divide_variable = { var = STP_pf_army_effect value = 100000 }
+	clamp_variable = { var = STP_pf_army_effect min = -0.06 max = STP_pf_army_capacity }
+	set_variable = { var = STP_pf_advisers_capacity value = 0.2 }
+	set_temp_variable = { var = STP_pf_positive_strength value = 12.5 }
+	if = {
+		limit = { check_variable = { var = STP_pf_advisers_program value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_advisers_capacity value = 0.25 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 17.5 }
+	}
+	if = {
+		limit = { check_variable = { var = STP_pf_advisers_program value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_advisers_capacity value = 0.3 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 22.5 }
+	}
 	set_variable = { var = STP_pf_advisers_effect value = STP_pf_advisers_support }
 	subtract_from_variable = { var = STP_pf_advisers_effect value = 50 }
 	multiply_variable = { var = STP_pf_advisers_effect value = STP_pf_advisers_influence }
-	divide_variable = { var = STP_pf_advisers_effect value = 100 }
-	multiply_variable = { var = STP_pf_advisers_effect value = 0.004 }
+	if = {
+		limit = { check_variable = { var = STP_pf_advisers_support value = 50 compare = greater_than } }
+		multiply_variable = { var = STP_pf_advisers_effect value = STP_pf_positive_strength }
+	}
+	else = {
+		multiply_variable = { var = STP_pf_advisers_effect value = 4 }
+	}
+	divide_variable = { var = STP_pf_advisers_effect value = 100000 }
+	clamp_variable = { var = STP_pf_advisers_effect min = -0.12 max = STP_pf_advisers_capacity }
+	set_variable = { var = STP_pf_merchants_capacity value = 0.15 }
+	set_temp_variable = { var = STP_pf_positive_strength value = 10 }
+	if = {
+		limit = { check_variable = { var = STP_pf_merchants_program value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_merchants_capacity value = 0.22 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 15 }
+	}
+	if = {
+		limit = { check_variable = { var = STP_pf_merchants_program value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_merchants_capacity value = 0.3 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 20 }
+	}
 	set_variable = { var = STP_pf_merchants_effect value = STP_pf_merchants_support }
 	subtract_from_variable = { var = STP_pf_merchants_effect value = 50 }
 	multiply_variable = { var = STP_pf_merchants_effect value = STP_pf_merchants_influence }
-	divide_variable = { var = STP_pf_merchants_effect value = 100 }
-	multiply_variable = { var = STP_pf_merchants_effect value = 0.003 }
+	if = {
+		limit = { check_variable = { var = STP_pf_merchants_support value = 50 compare = greater_than } }
+		multiply_variable = { var = STP_pf_merchants_effect value = STP_pf_positive_strength }
+	}
+	else = {
+		multiply_variable = { var = STP_pf_merchants_effect value = 3 }
+	}
+	divide_variable = { var = STP_pf_merchants_effect value = 100000 }
+	clamp_variable = { var = STP_pf_merchants_effect min = -0.09 max = STP_pf_merchants_capacity }
+	set_variable = { var = STP_pf_radicals_capacity value = 0.2 }
+	set_temp_variable = { var = STP_pf_positive_strength value = 12.5 }
+	if = {
+		limit = { check_variable = { var = STP_pf_radicals_program value = 1 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_radicals_capacity value = 0.25 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 17.5 }
+	}
+	if = {
+		limit = { check_variable = { var = STP_pf_radicals_program value = 2 compare = greater_than_or_equals } }
+		set_variable = { var = STP_pf_radicals_capacity value = 0.3 }
+		set_temp_variable = { var = STP_pf_positive_strength value = 22.5 }
+	}
 	set_variable = { var = STP_pf_radicals_effect value = STP_pf_radicals_support }
 	subtract_from_variable = { var = STP_pf_radicals_effect value = 50 }
 	multiply_variable = { var = STP_pf_radicals_effect value = STP_pf_radicals_influence }
-	divide_variable = { var = STP_pf_radicals_effect value = 100 }
-	multiply_variable = { var = STP_pf_radicals_effect value = -0.003 }
+	if = {
+		limit = { check_variable = { var = STP_pf_radicals_support value = 50 compare = greater_than } }
+		multiply_variable = { var = STP_pf_radicals_effect value = STP_pf_positive_strength }
+	}
+	else = {
+		multiply_variable = { var = STP_pf_radicals_effect value = 3 }
+	}
+	divide_variable = { var = STP_pf_radicals_effect value = 100000 }
+	clamp_variable = { var = STP_pf_radicals_effect min = -0.09 max = STP_pf_radicals_capacity }
+	multiply_variable = { var = STP_pf_radicals_effect value = -1 }
+	set_temp_variable = { var = STP_pf_positive_strength value = 0 }
 	set_variable = { var = STP_pf_nod_connected value = 0 }
 	if = { limit = { STP_pf_nod_contacts = yes } set_variable = { var = STP_pf_nod_connected value = 1 } }
 	else = { set_variable = { var = STP_pf_advisers_effect value = 0 } }
@@ -5105,36 +5369,50 @@ STP_pf_clear = {
 		clear_variable = STP_pf_conservatives_contribution
 		clear_variable = STP_pf_conservatives_frame
 		clear_variable = STP_pf_conservatives_effect
+		clear_variable = STP_pf_conservatives_program
+		clear_variable = STP_pf_conservatives_capacity
 		clear_variable = STP_pf_borons_influence
 		clear_variable = STP_pf_borons_support
 		clear_variable = STP_pf_borons_contribution
 		clear_variable = STP_pf_borons_frame
 		clear_variable = STP_pf_borons_effect
+		clear_variable = STP_pf_borons_program
+		clear_variable = STP_pf_borons_capacity
 		clear_variable = STP_pf_security_influence
 		clear_variable = STP_pf_security_support
 		clear_variable = STP_pf_security_contribution
 		clear_variable = STP_pf_security_frame
 		clear_variable = STP_pf_security_effect
+		clear_variable = STP_pf_security_program
+		clear_variable = STP_pf_security_capacity
 		clear_variable = STP_pf_army_influence
 		clear_variable = STP_pf_army_support
 		clear_variable = STP_pf_army_contribution
 		clear_variable = STP_pf_army_frame
 		clear_variable = STP_pf_army_effect
+		clear_variable = STP_pf_army_program
+		clear_variable = STP_pf_army_capacity
 		clear_variable = STP_pf_advisers_influence
 		clear_variable = STP_pf_advisers_support
 		clear_variable = STP_pf_advisers_contribution
 		clear_variable = STP_pf_advisers_frame
 		clear_variable = STP_pf_advisers_effect
+		clear_variable = STP_pf_advisers_program
+		clear_variable = STP_pf_advisers_capacity
 		clear_variable = STP_pf_merchants_influence
 		clear_variable = STP_pf_merchants_support
 		clear_variable = STP_pf_merchants_contribution
 		clear_variable = STP_pf_merchants_frame
 		clear_variable = STP_pf_merchants_effect
+		clear_variable = STP_pf_merchants_program
+		clear_variable = STP_pf_merchants_capacity
 		clear_variable = STP_pf_radicals_influence
 		clear_variable = STP_pf_radicals_support
 		clear_variable = STP_pf_radicals_contribution
 		clear_variable = STP_pf_radicals_frame
 		clear_variable = STP_pf_radicals_effect
+		clear_variable = STP_pf_radicals_program
+		clear_variable = STP_pf_radicals_capacity
 		clear_variable = STP_pf_nod_connected
 		ADISCORD_economy_mark_dirty = yes
 	}

@@ -3983,12 +3983,14 @@ class PostwarFocusContracts(unittest.TestCase):
             for idea in (base, delta):
                 self.assertEqual(scalar(ast_block(idea, "allowed"), "always"), "no")
             expected = {bindings[e.key]: Decimal(e.value) for e in ast_block(delta, "modifier")}
-            writes = [e.value for e in walk(ast_block(reward, "hidden_effect")) if e.key == "add_to_variable"]
+            hidden = [e.value for e in reward if e.key == "hidden_effect"]
+            writes = [e.value for payload in hidden for e in walk(payload) if e.key == "add_to_variable"]
             actual = {scalar(e, "var"): Decimal(scalar(e, "value")) for e in writes}
             self.assertEqual(actual, expected, name)
             self.assertEqual(len(writes), len(actual))
             self.assertTrue(actual)
-            self.assertEqual(scalar(ast_block(reward, "hidden_effect"), "STP_pw_refresh_modifier"), "yes")
+            refreshes = [e.value for payload in hidden for e in payload if e.key == "STP_pw_refresh_modifier"]
+            self.assertEqual(refreshes, ["yes"], name)
             # Delta preview spirits must never become installed ideas.
             for entry in executable_entries(reward):
                 if entry.key in {"add_ideas", "swap_ideas", "add_timed_idea"}:

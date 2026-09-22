@@ -3,6 +3,7 @@ on_actions = {
     on_startup = {
         effect = {
 			STP = { STP_qol_initialize_staff = yes STP_qol_initialize_party_leaders = yes }
+			STP = { STP_pf_refresh_on_load = yes }
 			STS = { STP_qol_initialize_staff = yes }
 
             STP = {
