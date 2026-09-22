@@ -641,23 +641,41 @@ class PostwarContinuationContracts(unittest.TestCase):
         self.assertNotIn("promote_character = STP_grigory_sotnikov", start)
         self.assertIn("STP_pc_copy_split_flags = yes", start)
 
+    def test_shabrat_chooses_between_abilia_and_fada_after_victory(self) -> None:
+        focuses = war_focuses()
+        reward = block(focuses["STP_pc_after_victory"], "completion_reward")
+        hidden = block(reward, "hidden_effect")
+        hidden_text = str([(e.key, e.value) for e in hidden])
+        self.assertIn("STP_pc_founder_rules", hidden_text)
+        self.assertIn("ADISCORD_STP_pc.16", hidden_text)
+
+        event = event_block(read(EVENTS), "ADISCORD_STP_pc.16")
+        self.assertIn("STP_pc_founder_rules = yes", event)
+        self.assertIn("set_capital = 1", event)
+        self.assertIn("set_capital = 28", event)
+        self.assertIn("STP_pc_capital_abilia", event)
+        self.assertIn("STP_pc_capital_fada", event)
+        self.assertIn("28 = {", event)
+        self.assertIn("is_owned_by = ROOT", event)
+        self.assertIn("is_controlled_by = ROOT", event)
+        self.assertIn("add_stability = 0.03", event)
+        self.assertIn("add_political_power = 50", event)
+
     def test_events_are_registered_once(self) -> None:
         events = read(EVENTS)
         ledger = {entry["id"] for entry in json.loads(read(LEDGER))["events"]}
         loc = read(LOC)
         self.assertTrue(LOC.read_bytes().startswith(b"\xef\xbb\xbf"))
         self.assertIn("add_namespace = ADISCORD_STP_pc", events)
-        for number in range(1, 16):
+        for number in range(1, 17):
             event_id = f"ADISCORD_STP_pc.{number}"
             self.assertEqual(events.count(f"\tid = {event_id}\n"), 1, event_id)
             self.assertIn(event_id, ledger)
             self.assertIn(f" {event_id}.t:", loc)
             self.assertIn(f" {event_id}.d:", loc)
             self.assertIn(f"name = {event_id}.", event_block(events, event_id))
-        self.assertNotIn("\tid = ADISCORD_STP_pc.16\n", events)
-        self.assertNotIn(" ADISCORD_STP_pc.16.", loc)
-        reserved = next(entry for entry in json.loads(read(LEDGER))["events"] if entry["id"] == "ADISCORD_STP_pc.16")
-        self.assertEqual(reserved["status"], "reserved")
+        capital = next(entry for entry in json.loads(read(LEDGER))["events"] if entry["id"] == "ADISCORD_STP_pc.16")
+        self.assertEqual(capital["status"], "active")
 
     def test_postwar_wars_use_native_relations_without_marker_flags(self) -> None:
         gameplay = "\n".join((

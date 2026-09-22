@@ -4067,6 +4067,10 @@ focus_tree = {
 			custom_effect_tooltip = STP_pw_recovery_start_tt
 			hidden_effect = {
 				STP_pw_begin_recovery = yes
+				if = {
+					limit = { STP_pc_founder_rules = yes }
+					country_event = { id = ADISCORD_STP_pc.16 days = 1 }
+				}
 				if = { limit = { is_ai = no } scoped_play_song = "ADISCORD_stp_civil_war_end" }
 			}
 		}

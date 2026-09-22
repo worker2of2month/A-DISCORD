@@ -1306,6 +1306,45 @@ country_event = {
 	option = { name = ADISCORD_STP_pc.15.a }
 }
 
+# Shabrat's postwar capital settlement. Abilia is the resistance seat and historic
+# capital, while Fada offers the intact administrative machinery of the old regime.
+country_event = {
+	id = ADISCORD_STP_pc.16
+	title = ADISCORD_STP_pc.16.t
+	desc = ADISCORD_STP_pc.16.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = STS
+		STP_pc_founder_rules = yes
+	}
+
+	option = {
+		name = ADISCORD_STP_pc.16.a
+		ai_chance = { factor = 70 }
+		set_capital = 1
+		set_country_flag = STP_pc_capital_abilia
+		clr_country_flag = STP_pc_capital_fada
+		add_stability = 0.03
+	}
+
+	option = {
+		name = ADISCORD_STP_pc.16.b
+		trigger = {
+			28 = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+			}
+		}
+		ai_chance = { factor = 30 }
+		set_capital = 28
+		set_country_flag = STP_pc_capital_fada
+		clr_country_flag = STP_pc_capital_abilia
+		add_political_power = 50
+	}
+}
+
 # Continue timed operations after the previous mission callback has returned.
 country_event = {
 	id = ADISCORD_STP_cw.92
