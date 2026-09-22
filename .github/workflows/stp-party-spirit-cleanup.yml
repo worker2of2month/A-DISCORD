@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 8af88e2a67c081e0f128cc3910364c9d3a06635b
+          ref: 01247f3b78914c21664ecf87212a710218737f62
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
@@ -24,8 +24,8 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import json, re, subprocess, sys
-          base="4cc6d829d2a65233bea2804f30e25c23872383c6"
-          head="8af88e2a67c081e0f128cc3910364c9d3a06635b"
+          base="0a020137c2eeca5e6260829e37ca1dc86d4330e1"
+          head="01247f3b78914c21664ecf87212a710218737f62"
           assert subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip()==head
           subprocess.run(["git","fetch","--depth=1","origin",base],check=True)
           changed=subprocess.check_output(["git","diff","--name-only",base,head],text=True).splitlines()
