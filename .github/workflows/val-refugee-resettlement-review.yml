@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: fix/val-refugee-resettlement-delivery-20260922
           fetch-depth: 1
       - uses: actions/setup-python@v5
         with:
@@ -46,4 +46,5 @@ jobs:
               data = Path(name).read_bytes()
               assert data.startswith(b"\xef\xbb\xbf"), name
           PY
-          git diff --check origin/main...HEAD || git diff --check
+          git fetch --depth=1 origin main
+          git diff --check origin/main...HEAD
