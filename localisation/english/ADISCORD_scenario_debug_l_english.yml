@@ -39,10 +39,10 @@
  ADISCORD_test_wars_category: "Test Wars"
  ADISCORD_test_wars_category_desc: "Test decisions for checking regional conflicts."
  APH_start_test_war_with_OSF: "Test: War with OSF"
- APH_start_test_war_with_OSF_desc: "Start the subsequent test conflict between APH and OSF. If APH wins, it annexes OSF; if it loses, the borders remain unchanged."
+ APH_start_test_war_with_OSF_desc: "Start the subsequent test conflict between APH and OSF. If APH wins, it annexes OSF, if it loses, the borders remain unchanged."
 
  ADISCORD_debug_war_log_on: "§RDEBUG:§! Enable Peace Trace"
- ADISCORD_debug_war_log_on_desc: "Writes native capitulation and peace callbacks to game.log. Debug mode only; disable after testing."
+ ADISCORD_debug_war_log_on_desc: "Writes native capitulation and peace callbacks to game.log. Debug mode only, disable after testing."
  ADISCORD_debug_war_log_off: "§RDEBUG:§! Disable Peace Trace"
  ADISCORD_debug_war_log_off_desc: "Stops automatic peace tracing. Manual snapshots remain available."
  ADISCORD_debug_war_snapshot: "§RDEBUG:§! Dump War and Territory State"
