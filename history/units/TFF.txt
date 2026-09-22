@@ -164,9 +164,18 @@ units = {
 	}
 }
 
-##### No notable air forces #####
+##### Limited northern air arm #####
+
+air_wings = {
+	84 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "TFF" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = { owner = "TFF" amount = 20 }
+	}
+}
+
 
 instant_effect = {
+	add_fuel = 12000
 	add_equipment_to_stockpile = {
 		type = motorized_equipment_1
 		amount = 100
