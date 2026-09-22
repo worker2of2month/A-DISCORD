@@ -882,7 +882,11 @@ VAL_frontier = {
   targets = { NOD }
   target_trigger = { FROM = { exists = yes } }
   visible = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no NOT = { has_war_with = ROOT } } }
-  available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } }
+  available = {
+   custom_trigger_tooltip = { tooltip = VAL_nod_campaign_foothold_tt VAL_northern_foothold_secured = yes }
+   VAL_can_launch_final_campaign = yes
+   NOT = { has_country_flag = VAL_campaign_mobilizing }
+  }
   cost = 60 days_remove = 30 days_re_enable = 90
   complete_effect = {
    custom_effect_tooltip = VAL_campaign_preparation_tt
@@ -895,7 +899,7 @@ VAL_frontier = {
     }
    }
   }
-  cancel_trigger = { hidden_trigger = { OR = { has_war = yes has_capitulated = yes is_subject = yes has_country_flag = VAL_stelander_defeated FROM = { OR = { exists = no has_capitulated = yes is_subject = yes is_in_faction_with = VAL has_country_flag = VAL_stelander_truce } } } } }
+  cancel_trigger = { hidden_trigger = { OR = { has_war = yes has_capitulated = yes is_subject = yes has_country_flag = VAL_stelander_defeated NOT = { VAL_northern_foothold_secured = yes } FROM = { OR = { exists = no has_capitulated = yes is_subject = yes is_in_faction_with = VAL has_country_flag = VAL_stelander_truce } } } } }
   cancel_effect = {
    custom_effect_tooltip = VAL_campaign_cancelled_tt
    hidden_effect = {
@@ -906,7 +910,7 @@ VAL_frontier = {
   }
   remove_effect = {
    if = {
-    limit = { has_country_flag = VAL_campaign_mobilizing VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
+    limit = { has_country_flag = VAL_campaign_mobilizing VAL_northern_foothold_secured = yes VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
     if = {
      limit = {
       FROM = { tag = NOD }
