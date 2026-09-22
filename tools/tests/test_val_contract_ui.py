@@ -711,7 +711,8 @@ class TestValProgressionChoices(unittest.TestCase):
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             text = path.read_text(encoding="utf-8-sig")
             for key in ("VAL_defer_northern_expansion", "VAL_defer_northern_expansion_desc", "VAL_defer_northern_expansion_tt", "VAL_defer_northern_expansion_ready_tt", "VAL_economic_settlement_ready_tt", "VAL_northern_expansion_deferred_tt", "VAL_nod_campaign_foothold_tt"):
-                self.assertRegex(text, rf'(?m)^ {key}:\d* "[^\r\n]*"
+                self.assertRegex(text, rf'(?m)^ {key}:\d* "[^\r\n]*"$')
+            self.assertIn("VAL_nod_campaign_foothold_tt", text)
 
 
 class TestValProgressionContinuation(unittest.TestCase):
