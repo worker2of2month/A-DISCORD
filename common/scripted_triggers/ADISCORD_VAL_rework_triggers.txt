@@ -1203,3 +1203,31 @@ VAL_qol_elite_army_available = {
 		has_completed_focus = VAL_Contract_General_Staff
 	}
 }
+
+
+VAL_stelander_equal_partner_available = {
+ tag = VAL
+ has_country_flag = VAL_stelander_equal_recognition
+ is_subject = no
+ has_capitulated = no
+ has_war = no
+ NOT = { has_country_flag = VAL_stelander_defeated VAL_stelander_alliance_refused }
+ OR = {
+  STS = {
+   exists = yes
+   has_country_flag = VAL_stelander_equal_recognition
+   is_subject = no
+   has_capitulated = no
+   has_war = no
+   NOT = { has_war_with = VAL }
+  }
+  STP = {
+   exists = yes
+   has_country_flag = VAL_stelander_equal_recognition
+   is_subject = no
+   has_capitulated = no
+   has_war = no
+   NOT = { has_war_with = VAL }
+  }
+ }
+}
