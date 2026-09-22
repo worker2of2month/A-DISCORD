@@ -2,6 +2,7 @@ VAL_final_crisis_available = {
 	tag = VAL
 	is_subject = no
 	has_capitulated = no
+	NOT = { has_country_flag = VAL_stelander_equal_alliance }
 	has_completed_focus = VAL_Northern_Settlement
 	VAL_stelander_dominated = yes
 	NOT = { has_country_flag = VAL_stelander_defeated }
