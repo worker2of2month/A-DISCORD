@@ -1,85 +1,80 @@
-name: Observer and Kefreyt verification
+name: Observer and Kefreyt clean delivery verification
 on:
   push:
     branches: [fix/observer-val-progression]
-    paths: [.github/workflows/observer-val-fix.yml, .superpowers/observer-val-apply.py]
+    paths: [.github/workflows/observer-val-fix.yml]
 permissions:
   contents: write
-concurrency:
-  group: observer-val-verification
-  cancel-in-progress: false
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
         with:
           ref: fix/observer-val-progression
           fetch-depth: 100
-      - run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git fetch origin 0c52cb91cd23bf0a29ca3ee7c264eee35ec978a5 --depth=100
-          git merge --no-edit FETCH_HEAD
       - run: python -m pip install pillow numpy
-      - name: Inspect consumers and reproduce regressions
+      - name: Verify clean payload and related regressions
         run: |
           python - <<'PY'
           from pathlib import Path
-          import re, subprocess, base64, zlib, json
-          from tools.tests.test_val_contract_ui import named_block
+          from concurrent.futures import ThreadPoolExecutor
+          import json, os, re, signal, subprocess
           root = Path.cwd()
-          out = Path('.superpowers/observer-val-inspection')
-          out.mkdir(parents=True, exist_ok=True)
-          result = []
-          effects = Path('common/scripted_effects/ADISCORD_VAL_effects.txt').read_text()
-          for name in ('VAL_frontier_close', 'VAL_frontier_show_refusal', 'VAL_grant_contract_warlord'):
-              result.append(named_block(effects, name))
-          events = Path('events/ADISCORD_VAL_contract_events.txt').read_text()
-          for match in re.finditer(r'(?m)^country_event\s*=\s*\{', events):
-              body = named_block(events[match.start():], 'country_event')
-              if 'VAL_frontier_close' in body:
-                  result.append(body)
-          for lang in ('russian', 'english'):
-              path = Path(f'localisation/{lang}/ADISCORD_VAL_decisions_l_{lang}.yml')
-              result.append('\n'.join(line for line in path.read_text(encoding='utf-8-sig').splitlines() if re.match(r'\s*(VAL_frontier_(?:withdraw|treaty_offices)|VAL_(?:commonwealth|proclaim_commonwealth))', line)))
-          for path in (root/'tools').rglob('*.py'):
-              lines = path.read_text(encoding='utf-8-sig').splitlines()
-              for i,line in enumerate(lines):
-                  if 'Solgalov_contracts' in line or ('portrait' in line and 'Contracts_Outlive_Kings' in line):
-                      result.append(str(path.relative_to(root)) + ':' + str(i+1) + '\n' + '\n'.join(lines[max(0,i-8):i+8]))
-          (out/'latest.txt').write_text('\n\n'.join(result))
-          if not (out/'baseline.txt').exists():
-              command = ['python', '-B', '-m', 'unittest', 'tools.tests.test_adiscord_superevents_stp_empire', 'tools.tests.test_val_contract_ui', '-v']
-              r = subprocess.run(command, capture_output=True, text=True, timeout=100)
-              (out/'baseline.txt').write_text(r.stdout+r.stderr)
-          additions = json.loads(zlib.decompress(base64.b64decode(Path('.superpowers/observer-val-tests.b64').read_text())))
-          expected = {'tools/tests/test_adiscord_superevents_stp_empire.py', 'tools/tests/test_val_contract_ui.py'}
-          assert set(additions) == expected
-          for name, addition in additions.items():
-              path = Path(name)
-              before = path.read_text()
-              class_name = re.search(r'^class ([A-Za-z]+)', addition, re.M).group(1)
-              if ('class ' + class_name + '(') not in before:
-                  match = re.search(r'(?m)^if __name__', before)
-                  pos = match.start() if match else len(before)
-                  updated = before[:pos].rstrip() + '\n\n' + addition.strip() + '\n\n' + before[pos:]
-                  compile(updated, name, 'exec')
-                  path.write_text(updated)
-          if not (out/'regression-red.txt').exists():
-              command = ['python', '-B', '-m', 'unittest', 'tools.tests.test_adiscord_superevents_stp_empire.SupereventObserverTests', 'tools.tests.test_val_contract_ui.TestValProgression', '-v']
-              r = subprocess.run(command, capture_output=True, text=True, timeout=90)
-              output = r.stdout+r.stderr
-              print(output)
-              (out/'regression-red.txt').write_text(output)
-              assert r.returncode == 1 and 'FAIL:' in output and 'ERROR:' not in output
-          paths = sorted(expected) + [str(out/'latest.txt'), str(out/'baseline.txt'), str(out/'regression-red.txt')]
-          subprocess.run(['git', 'add', '--', *paths], check=True)
-          if subprocess.run(['git', 'diff', '--cached', '--quiet']).returncode:
-              subprocess.run(['git', 'commit', '-m', 'test: reproduce observer timeout and Kefreyt progression regressions'], check=True)
-          subprocess.run(['git', 'push', 'origin', 'HEAD:fix/observer-val-progression'], check=True)
+          directory = root / '.superpowers/observer-val-inspection'
+          previous = json.loads((directory/'report.json').read_text())
+          base = previous['base']
+          final = '89bd8bc015d3a4bb1c5447b7d10aedb846bc6ba1'
+          subprocess.run(['git', 'fetch', 'origin', 'fix/observer-val-lifecycle', '--depth=100'], check=True)
+          changed = subprocess.check_output(['git', 'diff', '--name-only', base, final], text=True).splitlines()
+          assert set(changed) == set(previous['paths']), changed
+          for path, blob in previous['paths'].items():
+              assert subprocess.check_output(['git', 'rev-parse', final+':'+path], text=True).strip() == blob, path
+          for name, sha in [('baseline', base), ('delivery', final)]:
+              subprocess.run(['git', 'worktree', 'add', '--detach', '/tmp/observer-val-'+name, sha], check=True)
+          report = {'commit': final, 'exact_verified_blobs': True, 'changed_paths': changed, 'checks': {}}
+          def run(name, checkout, args, timeout=100):
+              log_path = directory / (name+'.log')
+              with log_path.open('w') as log:
+                  process = subprocess.Popen(['python', '-B', *args], cwd='/tmp/observer-val-'+checkout, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+                  try:
+                      result = process.wait(timeout=timeout)
+                  except subprocess.TimeoutExpired:
+                      os.killpg(process.pid, signal.SIGKILL)
+                      process.wait()
+                      result = 124
+              text = log_path.read_text(errors='replace')
+              item = {'returncode': result, 'failures': re.findall(r'(?m)^(?:FAIL|ERROR): .+$', text), 'partial_failures': re.findall(r'(?m)^[ \t]*test_[^\n]+\.\.\. (?:FAIL|ERROR)[ \t]*$', text), 'summary': text[-10000:]}
+              report['checks'][name] = item
+              print(name, result, item['failures'], text[-1500:], flush=True)
+              return item
+          focused = ['-m', 'unittest', 'tools.tests.test_adiscord_superevents_stp_empire', 'tools.tests.test_val_contract_ui', '-v']
+          related = ['-m', 'unittest', 'tools.tests.test_adiscord_economy_rebalance.NorthernCampaignRouteTests', 'tools.tests.test_adiscord_english_localisation.EnglishCatalogueCompletenessTests', 'tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_task10_live_localisation_has_true_bilingual_semantic_parity', 'tools.tests.test_validate_adiscord_val_rework', '-v']
+          try:
+              assert run('clean_focused', 'delivery', focused)['returncode'] == 0
+              with ThreadPoolExecutor(max_workers=2) as pool:
+                  before = pool.submit(run, 'related_baseline', 'baseline', related, 110)
+                  after = pool.submit(run, 'related_delivery', 'delivery', related, 110)
+                  b, a = before.result(), after.result()
+              report['new_completed_failures'] = sorted(set(a['failures'])-set(b['failures']))
+              report['related_comparison_complete'] = b['returncode'] != 124 and a['returncode'] != 124
+              assert not report['new_completed_failures'], report['new_completed_failures']
+              tc = run('clean_validate_tc', 'delivery', ['tools/validate_tc.py', '--limit', '300'], 150)
+              assert tc['returncode'] == 0
+              subprocess.run(['git', 'diff', '--check', base, final], check=True)
+              report['diff_check_passed'] = True
+              report['status'] = 'verified'
+          except Exception as error:
+              report['status'] = 'failed'
+              report['error'] = repr(error)
+              raise
+          finally:
+              report_path = directory/'delivery-report.json'
+              report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
+              subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+              subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+              subprocess.run(['git', 'add', '--', str(report_path)], check=True)
+              subprocess.run(['git', 'commit', '-m', 'ci: record clean delivery and baseline comparison'], check=True)
+              subprocess.run(['git', 'push', 'origin', 'HEAD:fix/observer-val-progression'], check=True)
           PY
-      - name: Apply and verify requested corrections
-        if: hashFiles('.superpowers/observer-val-apply.py') != ''
-        run: python -B .superpowers/observer-val-apply.py
