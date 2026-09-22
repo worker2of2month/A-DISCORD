@@ -40,6 +40,14 @@ ADISCORD_bezhaysk_settle_sts_victory = {
 # Kefreyt keeps the historical feudal map instead of painting the entire realm.
 # Every surviving Bezhaysk holding becomes a contract administration.
 ADISCORD_bezhaysk_settle_val_victory = {
+	# BJK leads the starting feudal faction. Remove that alliance before changing
+	# individual overlords so no administration keeps a stale faction relation.
+	BJK = {
+		if = {
+			limit = { exists = yes is_in_faction = yes is_faction_leader = yes }
+			dismantle_faction = yes
+		}
+	}
 	if = {
 		limit = { BLD = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
 		BLD = { if = { limit = { has_war_with = VAL } white_peace = VAL } }
@@ -184,6 +192,14 @@ ADISCORD_bezhaysk_settle_val_victory = {
 # Historical feudal borders stay intact. Capital control is evaluated before
 # white peace so the occupation line cannot disappear before the award is chosen.
 ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
+	# BJK leads the starting feudal faction. Remove that alliance before changing
+	# individual overlords so no administration keeps a stale faction relation.
+	BJK = {
+		if = {
+			limit = { exists = yes is_in_faction = yes is_faction_leader = yes }
+			dismantle_faction = yes
+		}
+	}
 	VAL = {
 		set_country_flag = ADISCORD_bezhaysk_joint_settlement
 		set_country_flag = ADISCORD_bezhaysk_settlement_completed
