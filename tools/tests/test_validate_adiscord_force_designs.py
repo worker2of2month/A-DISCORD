@@ -947,6 +947,39 @@ class NorthernStartingForceTests(unittest.TestCase):
                     for entry in effect if entry.key == "add_equipment_production"
                 ))
 
+    def test_northern_rebalance_ports_use_real_coastal_provinces(self) -> None:
+        provinces = {
+            row.split(";")[0]: row.split(";")
+            for row in read("map/definition.csv").splitlines()
+            if row.strip()
+        }
+        ports = {
+            "COF": ("14-Flaem-Prana.txt", 8540),
+            "YPR": ("20-Eshait.txt", 21),
+            "TFF": ("84-84.txt", 4887),
+        }
+        for tag, (state_file, port) in ports.items():
+            with self.subTest(tag=tag):
+                state = named_block(read(f"history/states/{state_file}"), "state")
+                self.assertRegex(named_block(state, "provinces"), rf"\\b{port}\\b")
+                history = named_block(state, "history")
+                self.assertRegex(history, rf"owner\\s*=\\s*{tag}\\b")
+                base = named_block(named_block(history, "buildings"), str(port))
+                self.assertRegex(base, r"naval_base\\s*=\\s*2\\b")
+                self.assertEqual(provinces[str(port)][4:6], ["land", "true"])
+
+        for state_file, inland in (
+            ("14-Flaem-Prana.txt", 75),
+            ("20-Eshait.txt", 16372),
+            ("84-84.txt", 16533),
+        ):
+            with self.subTest(inland=inland):
+                history = named_block(
+                    named_block(read(f"history/states/{state_file}"), "state"),
+                    "history",
+                )
+                self.assertNotRegex(history, rf"\\b{inland}\\s*=\\s*\\{{[^}}]*naval_base")
+
     def test_northern_armies_have_owned_spawns_and_a_bounded_material_advantage(self) -> None:
         # Compare actual template equipment needs, not just the number of divisions.
         subunits = {
