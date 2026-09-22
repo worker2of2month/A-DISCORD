@@ -899,6 +899,41 @@ STP_cw_launch_northern_crisis = {
 }
 
 # NOD owns the mobilization; a Stelander succession cannot cancel its orders.
+# COUNTRY NOD. If Kefreyt is already mobilising against NOD, TFF remains
+# inside the northern alliance but does not enter the war before Kefreyt does.
+STP_cw_release_tff_to_northern_war = {
+	if = {
+		limit = {
+			check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
+			has_war_with = YPR
+			YPR = { exists = yes has_capitulated = no is_in_faction_with = TFF }
+			TFF = { exists = yes has_capitulated = no NOT = { has_war_with = NOD } }
+			OR = {
+				VAL = { has_war_with = NOD }
+				NOT = {
+					OR = {
+						AND = {
+							STS = {
+								exists = yes
+								has_capitulated = no
+								has_war_with = NOD
+								has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+							}
+						}
+						AND = {
+							VAL = { exists = yes has_country_flag = VAL_campaign_mobilizing }
+							has_country_flag = VAL_campaign_target
+						}
+					}
+				}
+			}
+		}
+		TFF = {
+			add_to_war = { targeted_alliance = YPR enemy = NOD hostility_reason = asked_to_join single_target_only = yes }
+		}
+	}
+}
+
 STP_cw_start_northern_war = {
 	if = {
 		limit = {
@@ -907,7 +942,8 @@ STP_cw_start_northern_war = {
 			check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = less_than }
 		}
 		clr_country_flag = STP_cw_northern_crisis_pending
-		# Entry requires all three members to be factionless.
+		# Entry requires all three members to be factionless. TFF may remain a
+		# non-belligerent member while Kefreyt's own NOD mobilisation is pending.
 		YPR = {
 			create_faction_from_template = { template = faction_template_ADISCORD_standard name = STP_northern_defence_alliance }
 			add_to_faction = COF
@@ -923,19 +959,19 @@ STP_cw_start_northern_war = {
 			if = {
 				limit = { has_war_with = YPR }
 				COF = { add_to_war = { targeted_alliance = YPR enemy = NOD hostility_reason = asked_to_join single_target_only = yes } }
-				TFF = { add_to_war = { targeted_alliance = YPR enemy = NOD hostility_reason = asked_to_join single_target_only = yes } }
 			}
 		}
 		if = {
-			limit = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
+			limit = { has_war_with = YPR has_war_with = COF }
 			set_variable = { var = STP_cw_northern_campaign_status value = 1 }
 			set_country_flag = NOD_cw_northern_war_started
+			STP_cw_release_tff_to_northern_war = yes
 			if = { limit = { NOT = { has_idea = NOD_cw_northern_offensive } } add_ideas = NOD_cw_northern_offensive }
 			# Northern deployment can permit an uprising before the election deadline.
 			country_event = { id = ADISCORD_STP_cw.42 days = 7 }
 			country_event = { id = ADISCORD_STP_preparation.12 days = 1 }
 			news_event = { id = ADISCORD_STP_cw.82 }
-			log = "[STP_NORTH] Northern alliance entered one war against NOD"
+			log = "[STP_NORTH] Northern alliance opened the NOD war; TFF entry follows the Kefreyt gate"
 		}
 		else = {
 			# Cancel the wars opened by this incomplete coalition entry.

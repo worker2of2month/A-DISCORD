@@ -311,7 +311,13 @@ VAL_contract_management = {
 	VAL_campaign_rifles_and_bread = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
-		available = { ADISCORD_has_campaign_slot = yes }
+		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+		}
 		cost = 50
 		days_remove = 50
 		days_re_enable = 70
@@ -327,7 +333,13 @@ VAL_contract_management = {
 	VAL_campaign_contracts_feed_families = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
-		available = { ADISCORD_has_campaign_slot = yes }
+		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+		}
 		cost = 50
 		days_remove = 60
 		days_re_enable = 80
@@ -343,12 +355,18 @@ VAL_contract_management = {
 	VAL_campaign_no_promise_without_payment = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
-		available = { ADISCORD_has_campaign_slot = yes }
-		cost = 40
+		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+		}
+		cost = 15
 		days_remove = 45
 		days_re_enable = 70
 		modifier = {
-			political_power_gain = 0.10
+			political_power_gain = 0.50
 			ADISCORD_economy_trade_income_factor = 0.08
 		}
 		complete_effect = { ADISCORD_campaign_slot_consume = yes ADISCORD_economy_mark_dirty = yes }
@@ -359,8 +377,13 @@ VAL_contract_management = {
 	VAL_campaign_the_mine_was_stolen = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
-		visible = { has_country_flag = VAL_westerholm_metal_lost }
-		available = { ADISCORD_has_campaign_slot = yes }
+		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory has_country_flag = VAL_westerholm_metal_lost }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+		}
 		cost = 35
 		days_remove = 35
 		days_re_enable = 70
@@ -415,7 +438,7 @@ VAL_contract_management = {
 		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 4000 } } }
 		custom_cost_text = VAL_cost_pp10_r4000
 		cost = 0
-		complete_effect = { add_political_power = -10 VAL_pay_quarterly_contract_norm = yes }
+		complete_effect = { VAL_pay_quarterly_contract_norm = yes }
 		ai_will_do = {
 			base = 50
 			modifier = { factor = 0 NOT = { VAL_can_pay_quarterly_contract_norm = yes } }
@@ -775,26 +798,52 @@ VAL_frontier = {
         }
         ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
     }
-
-
  VAL_campaign_against_nod = {
   icon = generic_prepare_civil_war allowed = { tag = VAL }
   targets = { NOD }
   target_trigger = { FROM = { exists = yes } }
   visible = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no NOT = { has_war_with = ROOT } } }
-  available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing }  }
+  available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } }
   cost = 60 days_remove = 30 days_re_enable = 90
   complete_effect = {
    custom_effect_tooltip = VAL_campaign_preparation_tt
    custom_effect_tooltip = VAL_nod_victory_tt
-   hidden_effect = { if = { limit = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } } set_country_flag = VAL_campaign_mobilizing FROM = { set_country_flag = VAL_campaign_target } } }
+   hidden_effect = {
+    if = {
+     limit = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } }
+     set_country_flag = VAL_campaign_mobilizing
+     FROM = { set_country_flag = VAL_campaign_target }
+    }
+   }
   }
   cancel_trigger = { hidden_trigger = { OR = { has_war = yes has_capitulated = yes is_subject = yes has_country_flag = VAL_stelander_defeated FROM = { OR = { exists = no has_capitulated = yes is_subject = yes is_in_faction_with = VAL has_country_flag = VAL_stelander_truce } } } } }
-  cancel_effect = { custom_effect_tooltip = VAL_campaign_cancelled_tt hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } } }
+  cancel_effect = {
+   custom_effect_tooltip = VAL_campaign_cancelled_tt
+   hidden_effect = {
+    clr_country_flag = VAL_campaign_mobilizing
+    FROM = { clr_country_flag = VAL_campaign_target }
+    NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
+   }
+  }
   remove_effect = {
    if = {
     limit = { has_country_flag = VAL_campaign_mobilizing VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
-    declare_war_on = { target = FROM type = annex_everything }
+    if = {
+     limit = {
+      FROM = { tag = NOD }
+      STS = {
+       exists = yes
+       has_capitulated = no
+       has_war_with = NOD
+       has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+      }
+      NOD = { has_war_with = STS }
+     }
+     set_country_flag = VAL_joint_nod_campaign_with_sts
+     add_to_war = { targeted_alliance = STS enemy = NOD hostility_reason = asked_to_join single_target_only = yes }
+    }
+    else = { declare_war_on = { target = FROM type = annex_everything } }
+    NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
    }
    hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } }
   }

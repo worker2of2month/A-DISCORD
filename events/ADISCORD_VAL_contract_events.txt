@@ -332,9 +332,12 @@ country_event = {
 	}
 	desc = {
 		text = val_rework.5.military
-		trigger = { has_country_flag = VAL_cw_military_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
+		trigger = { VAL_occidia_secured = yes NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
 	}
-	desc = { text = val_rework.5.neutral }
+	desc = {
+		text = val_rework.5.neutral
+		trigger = { NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } NOT = { VAL_occidia_secured = yes } }
+	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_rework.5.a }
@@ -373,7 +376,11 @@ country_event = {
 	desc = val_rework.9.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	option = { name = val_rework.9.a }
+	trigger = { tag = VAL has_focus_tree = VAL_focus has_global_flag = STP_cw_started }
+	option = {
+		name = val_rework.9.a
+		custom_effect_tooltip = VAL_stelander_focus_unlocked_tt
+	}
 }
 
 country_event = {
@@ -554,175 +561,330 @@ country_event = {
 }
 
 country_event = {
-    id = val_rework.100
-    title = val_rework.100.t
-    desc = val_rework.100.d
-    picture = GFX_event_adiscord_negotiation_table
-    is_triggered_only = yes
-    option = { name = val_rework.100.a }
-}
-country_event = {
-    id = val_rework.101
-    hidden = yes
-    is_triggered_only = yes
-    immediate = { VAL_reconcile_supply_crisis = yes ADISCORD_economy_mark_dirty = yes }
-}
-country_event = {
-    id = val_rework.110
-    title = val_rework.110.t
-    desc = { text = val_rework.110.ert trigger = { tag = ERT } }
-    desc = { text = val_rework.110.commission trigger = { NOT = { tag = ERT } VAL = { has_completed_focus = VAL_frontier_commissioners } } }
-    desc = { text = val_rework.110.direct trigger = { NOT = { tag = ERT } VAL = { has_completed_focus = VAL_frontier_provincial_offices } } }
-    picture = GFX_event_adiscord_negotiation_table
-    is_triggered_only = yes
-    option = { name = val_rework.110.no trigger = { VAL_frontier_offer_is_current = yes } ai_chance = { base = 75 } VAL_frontier_refuse = yes }
-    option = { name = val_rework.110.yes trigger = { tag = ERT VAL_frontier_offer_is_current = yes } ai_chance = { base = 25 modifier = { factor = 2 has_war = yes } modifier = { factor = 0 NOT = { tag = ERT } } } custom_effect_tooltip = VAL_frontier_accept_tt hidden_effect = { VAL_frontier_accept = yes } }
-    option = { name = val_rework.closed trigger = { NOT = { VAL_frontier_offer_is_current = yes } } }
-}
-country_event = {
-    id = val_rework.111
-    title = val_rework.111.t
-    desc = val_rework.111.d
-    picture = GFX_event_adiscord_negotiation_table
-    is_triggered_only = yes
-    option = {
-        name = val_rework.111.prepare
-        trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes }
-        ai_chance = { base = 0 }
-        custom_effect_tooltip = VAL_frontier_prepare_tt
-    }
-    option = { name = val_rework.111.withdraw trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes } ai_chance = { base = 30 } hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } } VAL_frontier_close = yes } } }
-    option = {
-        name = val_rework.111.war
-        trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes VAL_frontier_prewar_eligible = yes has_war = no }
-        ai_chance = { base = 70 modifier = { factor = 0 num_divisions < 24 } modifier = { factor = 0.3 has_manpower < 20000 } }
-        custom_effect_tooltip = VAL_frontier_war_tt
-        hidden_effect = { VAL_frontier_start_war = yes }
-    }
-    option = { name = val_rework.closed trigger = { NOT = { AND = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes } } } }
-}
-country_event = {
-    id = val_rework.113
-    title = val_rework.113.t
-    desc = val_rework.113.d
-    picture = GFX_event_adiscord_negotiation_table
-    is_triggered_only = yes
-    option = {
-        name = val_rework.113.accept
-        trigger = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } has_country_flag = VAL_frontier_armistice_offered VAL_frontier_reply_is_current = yes surrender_progress > 0.65 } }
-        ai_chance = { base = 75 }
-        custom_effect_tooltip = VAL_frontier_armistice_tt
-        hidden_effect = { VAL = { VAL_frontier_settle_armistice = yes } }
-    }
-    option = {
-        name = val_rework.113.refuse
-        trigger = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } has_country_flag = VAL_frontier_armistice_offered VAL_frontier_reply_is_current = yes surrender_progress > 0.65 } }
-        ai_chance = { base = 25 modifier = { factor = 2 VAL = { surrender_progress > 0.85 } } }
-        custom_effect_tooltip = VAL_frontier_refuse_peace_tt
-
-    }
-    option = { name = val_rework.closed trigger = { NOT = { AND = { has_war_with = VAL has_country_flag = VAL_frontier_guarantor VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } has_country_flag = VAL_frontier_armistice_offered VAL_frontier_reply_is_current = yes surrender_progress > 0.65 } } } } }
-}
-country_event = {
-    id = val_rework.115
-    title = val_rework.115.t
-    desc = val_rework.115.d
-    picture = GFX_event_adiscord_negotiation_table
-    is_triggered_only = yes
-    option = { name = val_rework.115.a }
-}
-country_event = {
-    id = val_rework.116
-    title = val_rework.116.t
-    desc = val_rework.116.d
-    picture = GFX_event_adiscord_negotiation_table
-    is_triggered_only = yes
-    option = { name = val_rework.116.a }
+	id = val_rework.100
+	title = val_rework.100.t
+	desc = val_rework.100.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.100.a }
 }
 
 country_event = {
- id = val_contract.340
- title = val_contract.340.t
- desc = val_contract.340.d
- picture = GFX_event_adiscord_negotiation_table
- is_triggered_only = yes
- timeout_days = 14
- option = {
-  name = VAL_export_decline
-  ai_chance = { base = 10 }
-  hidden_effect = { if = { limit = { has_country_flag = VAL_export_offer_arms } clr_country_flag = VAL_export_offer_arms VAL = { clr_country_flag = VAL_export_offer_pending } } }
- }
- option = {
-  name = VAL_export_accept
-  trigger = { VAL_export_arms_can_accept = yes }
-  ai_chance = { base = 90 }
-  custom_effect_tooltip = VAL_export_arms_accepted_tt
-  hidden_effect = {
-   if = {
-    limit = { VAL_export_arms_can_accept = yes }
+	id = val_rework.101
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		VAL_reconcile_supply_crisis = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+country_event = {
+	id = val_rework.110
+	title = val_rework.110.t
+	desc = {
+		text = val_rework.110.ert
+		trigger = { tag = ERT }
+	}
+	desc = {
+		text = val_rework.110.commission
+		trigger = {
+			NOT = { tag = ERT }
+			VAL = { has_completed_focus = VAL_frontier_commissioners }
+		}
+	}
+	desc = {
+		text = val_rework.110.direct
+		trigger = {
+			NOT = { tag = ERT }
+			VAL = { has_completed_focus = VAL_frontier_provincial_offices }
+		}
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_rework.110.no
+		trigger = { VAL_frontier_offer_is_current = yes }
+		ai_chance = { base = 75 }
+		VAL_frontier_refuse = yes
+	}
+	option = {
+		name = val_rework.110.yes
+		trigger = { tag = ERT VAL_frontier_offer_is_current = yes }
+		ai_chance = {
+			base = 25
+			modifier = { factor = 2 has_war = yes }
+			modifier = { factor = 0 NOT = { tag = ERT } }
+		}
+		custom_effect_tooltip = VAL_frontier_accept_tt
+		hidden_effect = { VAL_frontier_accept = yes }
+	}
+	option = {
+		name = val_rework.closed
+		trigger = { NOT = { VAL_frontier_offer_is_current = yes } }
+	}
+}
+
+country_event = {
+	id = val_rework.111
+	title = val_rework.111.t
+	desc = val_rework.111.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_rework.111.prepare
+		trigger = {
+			check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+			VAL_frontier_reply_is_current = yes
+		}
+		ai_chance = { base = 0 }
+		custom_effect_tooltip = VAL_frontier_prepare_tt
+	}
+	option = {
+		name = val_rework.111.withdraw
+		trigger = {
+			check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+			VAL_frontier_reply_is_current = yes
+		}
+		ai_chance = { base = 30 }
+		hidden_effect = {
+			if = {
+				limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
+				VAL_frontier_close = yes
+			}
+		}
+	}
+	option = {
+		name = val_rework.111.war
+		trigger = {
+			check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+			VAL_frontier_reply_is_current = yes
+			VAL_frontier_prewar_eligible = yes
+			has_war = no
+		}
+		ai_chance = {
+			base = 70
+			modifier = { factor = 0 num_divisions < 24 }
+			modifier = { factor = 0.3 has_manpower < 20000 }
+		}
+		custom_effect_tooltip = VAL_frontier_war_tt
+		hidden_effect = { VAL_frontier_start_war = yes }
+	}
+	option = {
+		name = val_rework.closed
+		trigger = {
+			NOT = {
+				AND = {
+					check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+					VAL_frontier_reply_is_current = yes
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = val_rework.113
+	title = val_rework.113.t
+	desc = val_rework.113.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = {
+		name = val_rework.113.accept
+		trigger = {
+			has_country_flag = VAL_frontier_guarantor
+			has_war_with = VAL
+			VAL = {
+				check_variable = { var = VAL_frontier_stage value = 3 compare = equals }
+				has_country_flag = VAL_frontier_armistice_offered
+				VAL_frontier_reply_is_current = yes
+				surrender_progress > 0.65
+			}
+		}
+		ai_chance = { base = 75 }
+		custom_effect_tooltip = VAL_frontier_armistice_tt
+		hidden_effect = { VAL = { VAL_frontier_settle_armistice = yes } }
+	}
+	option = {
+		name = val_rework.113.refuse
+		trigger = {
+			has_country_flag = VAL_frontier_guarantor
+			has_war_with = VAL
+			VAL = {
+				check_variable = { var = VAL_frontier_stage value = 3 compare = equals }
+				has_country_flag = VAL_frontier_armistice_offered
+				VAL_frontier_reply_is_current = yes
+				surrender_progress > 0.65
+			}
+		}
+		ai_chance = {
+			base = 25
+			modifier = { factor = 2 VAL = { surrender_progress > 0.85 } }
+		}
+		custom_effect_tooltip = VAL_frontier_refuse_peace_tt
+	}
+	option = {
+		name = val_rework.closed
+		trigger = {
+			NOT = {
+				AND = {
+					has_war_with = VAL
+					has_country_flag = VAL_frontier_guarantor
+					VAL = {
+						check_variable = { var = VAL_frontier_stage value = 3 compare = equals }
+						has_country_flag = VAL_frontier_armistice_offered
+						VAL_frontier_reply_is_current = yes
+						surrender_progress > 0.65
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = val_rework.115
+	title = val_rework.115.t
+	desc = val_rework.115.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.115.a }
+}
+
+country_event = {
+	id = val_rework.116
+	title = val_rework.116.t
+	desc = val_rework.116.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.116.a }
+}
+
+country_event = {
+	id = val_contract.340
+	title = val_contract.340.t
+	desc = val_contract.340.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 14
+	option = {
+		name = VAL_export_decline
+		ai_chance = { base = 10 }
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = VAL_export_offer_arms }
+				clr_country_flag = VAL_export_offer_arms
+				VAL = { clr_country_flag = VAL_export_offer_pending }
+			}
+		}
+	}
+	option = {
+		name = VAL_export_accept
+		trigger = { VAL_export_arms_can_accept = yes }
+		ai_chance = { base = 90 }
+		custom_effect_tooltip = VAL_export_arms_accepted_tt
+		hidden_effect = {
+			if = {
+				limit = { VAL_export_arms_can_accept = yes }
 				if = {
-					limit = { tag = STS has_war_with = STP NOT = { has_global_flag = STP_cw_union_wars_finished } }
+					limit = {
+						tag = STS
+						has_war_with = STP
+						NOT = { has_global_flag = STP_cw_union_wars_finished }
+					}
 					STP_ps_reserve_export_contract = yes
 				}
 				else = {
-    ADISCORD_economy_spend_100 = yes
-    VAL = {
-     ADISCORD_economy_receive_100 = yes
-     send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
-     if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
-     else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+					ADISCORD_economy_spend_100 = yes
+					VAL = {
+						ADISCORD_economy_receive_100 = yes
+						send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
+						if = {
+							limit = { NOT = { has_idea = VAL_export_income_1 } }
+							add_timed_idea = { idea = VAL_export_income_1 days = 70 }
+						}
+						else = {
+							add_timed_idea = { idea = VAL_export_income_2 days = 70 }
+						}
 					}
-    }
-    if = { limit = { tag = NAM ADISCORD_nam_resource_war_active = yes } VAL = { set_country_flag = VAL_nam_aid_delivered } }
-    clr_country_flag = VAL_export_offer_arms
-    set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
-    VAL = { clr_country_flag = VAL_export_offer_pending }
-   }
-  }
- }
+				}
+				if = {
+					limit = { tag = NAM ADISCORD_nam_resource_war_active = yes }
+					VAL = { set_country_flag = VAL_nam_aid_delivered }
+				}
+				clr_country_flag = VAL_export_offer_arms
+				set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+				VAL = { clr_country_flag = VAL_export_offer_pending }
+			}
+		}
+	}
 }
 
 country_event = {
- id = val_contract.341
- title = val_contract.341.t
- desc = { text = val_contract.341.personnel trigger = { OR = { tag = NAM tag = EFL } } }
- desc = { text = val_contract.341.d trigger = { NOT = { OR = { tag = NAM tag = EFL } } } }
- picture = GFX_event_adiscord_negotiation_table
- is_triggered_only = yes
- timeout_days = 14
- option = {
-  name = VAL_export_decline
-  ai_chance = { base = 10 }
-  hidden_effect = { if = { limit = { has_country_flag = VAL_export_offer_advisors } clr_country_flag = VAL_export_offer_advisors VAL = { clr_country_flag = VAL_export_offer_pending } } }
- }
- option = {
-  name = VAL_export_accept
-  trigger = { VAL_export_advisors_can_accept = yes }
-  ai_chance = { base = 90 }
-  if = { limit = { OR = { tag = NAM tag = EFL } } custom_effect_tooltip = VAL_resource_war_personnel_accepted_tt }
-  else = { custom_effect_tooltip = VAL_export_advisors_accepted_tt }
-  hidden_effect = {
-   if = {
-    limit = { VAL_export_advisors_can_accept = yes }
-    ADISCORD_economy_spend_100 = yes
-    add_timed_idea = { idea = VAL_paid_military_advisors days = 70 }
-    VAL = {
-     ADISCORD_economy_receive_100 = yes
-     add_command_power = -25
-     add_timed_idea = { idea = VAL_advisors_income days = 70 }
-    }
-    if = {
-     limit = { OR = { tag = NAM tag = EFL } }
-     VAL = { add_manpower = -2000 }
-     add_manpower = 2000
-    }
-    if = { limit = { tag = NAM ADISCORD_nam_resource_war_active = yes } VAL = { set_country_flag = VAL_nam_aid_delivered } }
-    clr_country_flag = VAL_export_offer_advisors
-    set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
-    VAL = { clr_country_flag = VAL_export_offer_pending }
-   }
-  }
- }
+	id = val_contract.341
+	title = val_contract.341.t
+	desc = {
+		text = val_contract.341.personnel
+		trigger = { OR = { tag = NAM tag = EFL } }
+	}
+	desc = {
+		text = val_contract.341.d
+		trigger = { NOT = { OR = { tag = NAM tag = EFL } } }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 14
+
+	option = {
+		name = VAL_export_decline
+		ai_chance = { base = 10 }
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = VAL_export_offer_advisors }
+				clr_country_flag = VAL_export_offer_advisors
+				VAL = { clr_country_flag = VAL_export_offer_pending }
+			}
+		}
+	}
+
+	option = {
+		name = VAL_export_accept
+		trigger = { VAL_export_advisors_can_accept = yes }
+		ai_chance = { base = 90 }
+
+		if = {
+			limit = { OR = { tag = NAM tag = EFL } }
+			custom_effect_tooltip = VAL_resource_war_personnel_accepted_tt
+		}
+		else = {
+			custom_effect_tooltip = VAL_export_advisors_accepted_tt
+		}
+
+		hidden_effect = {
+			if = {
+				limit = { VAL_export_advisors_can_accept = yes }
+				ADISCORD_economy_spend_100 = yes
+				add_timed_idea = { idea = VAL_paid_military_advisors days = 70 }
+				VAL = {
+					ADISCORD_economy_receive_100 = yes
+					add_command_power = -25
+					add_timed_idea = { idea = VAL_advisors_income days = 70 }
+				}
+				if = {
+					limit = { OR = { tag = NAM tag = EFL } }
+					VAL = { add_manpower = -2000 }
+					add_manpower = 2000
+				}
+				if = {
+					limit = { tag = NAM ADISCORD_nam_resource_war_active = yes }
+					VAL = { set_country_flag = VAL_nam_aid_delivered }
+				}
+				clr_country_flag = VAL_export_offer_advisors
+				set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+				VAL = { clr_country_flag = VAL_export_offer_pending }
+			}
+		}
+	}
 }
 
 country_event = {
@@ -801,10 +963,83 @@ country_event = {
 country_event = {
     id = val_contract.348
     title = val_contract.348.t
-    desc = val_contract.348.d
+    desc = { trigger = { DCA = { OR = { is_subject_of = VAL is_subject_of = TFF } } } text = val_contract.348.partition }
+    desc = { trigger = { DCA = { NOT = { OR = { is_subject_of = VAL is_subject_of = TFF } } } } text = val_contract.348.d }
     picture = GFX_event_adiscord_negotiation_table
     is_triggered_only = yes
     option = { name = val_contract.348.a }
+}
+
+# The first option is the unattended answer; an obsolete offer only closes.
+country_event = {
+    id = val_contract.350
+    title = val_contract.350.t
+    desc = val_contract.350.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    timeout_days = 14
+    option = {
+        name = val_contract.350.refuse
+        ai_chance = { factor = 20 }
+        hidden_effect = {
+            VAL = {
+                clr_country_flag = VAL_nod_frontier_offer_pending
+                country_event = { id = val_contract.351 }
+            }
+        }
+    }
+    option = {
+        name = val_contract.350.accept
+        trigger = { VAL_nod_frontier_offer_current = yes VAL = { has_country_flag = VAL_nod_frontier_offer_pending } }
+        ai_chance = { factor = 80 }
+        custom_effect_tooltip = VAL_nod_frontier_terms_tt
+        hidden_effect = {
+            VAL = {
+                set_country_flag = VAL_nod_frontier_agreement
+                clr_country_flag = VAL_nod_frontier_offer_pending
+                VAL_call_frontier_partner = yes
+                country_event = { id = val_contract.351 }
+            }
+        }
+    }
+}
+
+country_event = {
+    id = val_contract.351
+    title = val_contract.351.t
+    desc = { trigger = { has_country_flag = VAL_nod_frontier_agreement } text = val_contract.351.accepted }
+    desc = { trigger = { NOT = { has_country_flag = VAL_nod_frontier_agreement } } text = val_contract.351.refused }
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_contract.351.a }
+}
+
+country_event = {
+    id = val_contract.352
+    title = val_contract.352.t
+    desc = val_contract.352.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    timeout_days = 21
+    option = {
+        name = val_contract.352.accept
+        trigger = { VAL_frontier_ultimatum_current = yes }
+        ai_chance = { factor = 60 }
+        custom_effect_tooltip = VAL_nod_frontier_terms_tt
+        hidden_effect = { VAL_transfer_yubora_administrations = yes }
+    }
+    option = {
+        name = val_contract.352.refuse
+        trigger = { VAL_frontier_ultimatum_current = yes }
+        ai_chance = { factor = 40 }
+        custom_effect_tooltip = VAL_frontier_refusal_war_tt
+        hidden_effect = { VAL_reject_frontier_ultimatum = yes }
+    }
+    option = {
+        name = val_contract.352.obsolete
+        trigger = { VAL_frontier_ultimatum_current = no }
+        hidden_effect = { clr_country_flag = VAL_frontier_yubora_ultimatum }
+    }
 }
 
 country_event = {
@@ -833,6 +1068,16 @@ country_event = {
 	}
 }
 
+# Deferred Nodrul settlement: faction removal reaches the diplomatic cache on
+# the following day, so subject conversion cannot be trusted on capitulation tick.
+country_event = {
+    id = val_contract.353
+    hidden = yes
+    is_triggered_only = yes
+    trigger = { tag = NOD has_country_flag = VAL_nodrul_administration_pending }
+    immediate = { VAL_complete_nodrul_administration = yes }
+}
+
 # One-shot confirmation of native war entry, not a recurring campaign pulse.
 country_event = {
     id = val_rework.117
@@ -849,4 +1094,21 @@ country_event = {
             if = { limit = { VAL_frontier_has_campaign_war = no } VAL_frontier_close = yes }
         }
     }
+}
+
+country_event = {
+    id = val_rework.118
+    title = val_rework.118.t
+    desc = val_rework.118.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    option = { name = val_rework.118.a custom_effect_tooltip = VAL_nod_ultimatum_timeout_tt }
+}
+
+# Deferred settlement never removes the mission currently executing its callback.
+country_event = {
+    id = val_rework.119
+    hidden = yes
+    is_triggered_only = yes
+    immediate = { VAL_frontier_expire_nod_ultimatum = yes }
 }

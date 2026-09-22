@@ -666,6 +666,49 @@ class VorkerlandForceDesignTests(unittest.TestCase):
 
 
 class StartingCoastalFleetTests(unittest.TestCase):
+    def test_patrol_replacement_does_not_overbook_a_single_dockyard(self) -> None:
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar
+
+        source = parse_clausewitz(read("common/ai_strategy/default.txt"))
+        patrol = block(source, "ADISCORD_coastal_patrol_replacement")
+        capacity = next(e for e in block(patrol, "enable") if e.key == "OR")
+        convoy = block(source, "ADISCORD_convoy_buffer")
+        convoy_minimum = int(scalar(block(convoy, "ai_strategy"), "value"))
+        patrol_minimum = int(scalar(block(patrol, "ai_strategy"), "value"))
+        for yards in (1, 2, 3):
+            for stock in (0, 99, 100, 300):
+                facts = {("NOD", "numeric", "num_of_naval_factories"): yards,
+                         ("NOD", "equipment", "convoy_1"): stock}
+                reserved = convoy_minimum if matches_conditions(block(convoy, "enable"), facts, "NOD") else 0
+                if matches_conditions([capacity], facts, "NOD"):
+                    reserved += patrol_minimum
+                self.assertLessEqual(reserved, yards, (yards, stock))
+        for tag in ("VAL", "NOD", "STP"):
+            country = next((ROOT / "history/countries").glob(f"{tag} - *.txt"))
+            amount = scalar(parse_clausewitz(country.read_text(encoding="utf-8-sig")), "set_convoys")
+            self.assertGreaterEqual(int(amount), 100)
+
+    def test_invasion_policy_only_requests_units_against_actual_enemies(self) -> None:
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar
+
+        source = parse_clausewitz(read("common/ai_strategy/default.txt"))
+        policy = block(source, "ADISCORD_coastal_invasion_planning")
+        allowed = block(policy, "allowed")
+        for tag in ("VAL", "NOD", "STP", "STS", "NAM"):
+            facts = {(tag, "original_tag", tag): True}
+            self.assertEqual(matches_conditions(allowed, facts, tag), tag in ("VAL", "NOD", "STP"))
+        self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
+        strategy = next(e.value for e in policy if e.key == "ai_strategy"
+                        and scalar(e.value, "type") == "invasion_unit_request")
+        target = block(strategy, "country_trigger")
+        for enemy, capitulated in ((False, False), (True, False), (True, True)):
+            facts = {("TARGET", "has_war_with", "FROM"): enemy,
+                     ("TARGET", "has_capitulated", "no"): not capitulated}
+            self.assertEqual(matches_conditions(target, facts, "TARGET"), enemy and not capitulated)
+        enable = named_block(named_block(read("common/ai_strategy/default.txt"), "ADISCORD_coastal_invasion_planning"), "enable")
+        for condition in ("is_ai = yes", "has_war = yes", "has_capitulated = no"):
+            self.assertIn(condition, enable)
+
     def test_patrol_platform_is_available_before_startup_technology_grants(self) -> None:
         equipment = read("common/units/equipment/ADISCORD_convoy_equipment.txt")
         hull = named_block(equipment, "ADISCORD_coastal_patrol_ship_1")

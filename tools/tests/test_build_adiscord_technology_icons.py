@@ -115,10 +115,10 @@ class TechnologyIconSourceTests(unittest.TestCase):
         self.assertEqual(len({entry["source"] for entry in antitank}), 12)
         self.assertTrue(all(entry["kind"] == "compact" for entry in antitank))
         self.assertTrue(
-            all(len(entry["crop"]) == 4 for entry in antitank if entry["tier"] == 2)
+            all(len(entry["crop"]) == 4 for entry in antitank if entry["tier"] == 6)
         )
         self.assertTrue(
-            all("crop" not in entry for entry in antitank if entry["tier"] not in (2, 6))
+            all("crop" not in entry for entry in antitank if entry["tier"] != 6)
         )
 
     def test_redrawn_personal_antitank_icons_use_individual_sources(self) -> None:
@@ -132,21 +132,24 @@ class TechnologyIconSourceTests(unittest.TestCase):
         self.assertEqual(
             {tier: antitank[tier]["source"] for tier in range(3, 13)},
             {
-                3: "personal_antitank_03_shaped_charge_grenade.png",
-                4: "personal_antitank_04_antitank_rifle.png",
+                3: "personal_antitank_03_shaped_charge_grenade.dds",
+                4: "personal_antitank_04_antitank_rifle.dds",
                 5: "personal_antitank_05_wire_guidance.png",
                 6: "personal_antitank_06_recoilless_launcher.png",
                 7: "personal_antitank_07_saclos_guidance.png",
-                8: "personal_antitank_08_rocket_launcher.png",
-                9: "personal_antitank_09_top_attack_seeker.png",
+                8: "personal_antitank_08_rocket_launcher.dds",
+                9: "personal_antitank_09_top_attack_seeker.dds",
                 10: "personal_antitank_10_tandem_warhead.png",
                 11: "personal_antitank_11_loitering_munition.png",
                 12: "personal_antitank_12_multispectral_targeting.png",
             },
         )
         self.assertEqual(antitank[1]["source"], "personal_antitank_01_incendiary_bottle.dds")
-        self.assertTrue(antitank[1]["runtime_master"])
-        self.assertEqual(antitank[2]["source"], "personal_antitank_generated_sheet.png")
+        self.assertEqual(antitank[2]["source"], "personal_antitank_02_satchel_charge.dds")
+        self.assertEqual(
+            {tier for tier, entry in antitank.items() if entry.get("runtime_master")},
+            {1, 2, 3, 4, 8, 9},
+        )
 
 
 class TechnologyIconBuilderTests(unittest.TestCase):

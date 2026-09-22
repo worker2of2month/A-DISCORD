@@ -186,12 +186,37 @@ on_actions = {
                 if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
             }
 
+            # A shared NOD war has one settlement owner. Run it before VAL's
+            # ordinary final-campaign reservation can claim the whole country.
+            if = {
+                limit = {
+                    ROOT = { tag = NOD has_war_with = VAL has_war_with = STS }
+                    VAL = { exists = yes has_capitulated = no has_country_flag = VAL_joint_nod_campaign_with_sts }
+                    STS = {
+                        exists = yes
+                        has_capitulated = no
+                        has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+                    }
+                }
+                set_global_flag = skip_default_capitulation
+                VAL = { VAL_settle_joint_nod_shabrat_victory = yes }
+                clr_global_flag = skip_default_capitulation
+            }
+
             ROOT = {
                 if = {
                     limit = {
                         OR = { tag = STP tag = STS tag = NOD }
                         has_war_with = VAL
                         VAL = { exists = yes has_capitulated = no VAL_frontier_idle = yes }
+                        NOT = {
+                            AND = {
+                                tag = NOD
+                                has_war_with = STS
+                                VAL = { has_country_flag = VAL_joint_nod_campaign_with_sts }
+                                STS = { has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } }
+                            }
+                        }
                         OR = { FROM = { tag = VAL } capital_scope = { VAL_frontier_controlled = yes } }
                     }
                     set_country_flag = VAL_final_defeat_pending

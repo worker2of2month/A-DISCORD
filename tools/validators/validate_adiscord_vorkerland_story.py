@@ -410,7 +410,7 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
     opening_options = named_blocks(opening, "option")
     for token in (
         "superevent_vorkerland_civilwar",
-        "ADISCORD_vorkerland_play_superevent_sound = yes",
+        "ADISCORD_superevent_enqueue = yes",
     ):
         if token not in opening_immediate:
             issues.append(f"opening collapse superevent immediate is missing {token}")

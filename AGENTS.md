@@ -9,6 +9,11 @@ localisation to make a one-off correction. Use the builder's dry-run or
 `--check` mode before its explicit `--apply` mode, then prove a second run is
 idempotent when the builder changes data.
 
+## Public release
+
+Debug decisions and their required events, categories, and localisation may be
+included in the public release. Do not exclude them solely because they are debug content.
+
 ## Localisation encoding
 
 Russian localisation files use UTF-8 with a BOM. Preserve that BOM and verify

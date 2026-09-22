@@ -1438,7 +1438,10 @@ class ValNorthernExportTests(unittest.TestCase):
                     self.assertFalse(flags)
 
     def test_custom_prices_include_native_blocked_and_hover_suffixes(self):
-        values = dict(re.findall(r'^ ([\w.]+):\s*"(.*)"$', LOCALISATION_PATH.read_text(encoding="utf-8-sig"), re.M))
+        sources = (LOCALISATION_PATH, ROOT / "localisation/russian/politics_l_russian.yml")
+        values = dict(entry for path in sources for entry in re.findall(
+            r'^ ([\w.]+):(?:[0-9]+)?\s*"(.*)"$', path.read_text(encoding="utf-8-sig"), re.M
+        ))
         price_keys = set(re.findall(r"custom_cost_text\s*=\s*(\w+)", DECISIONS_PATH.read_text(encoding="utf-8-sig")))
         for key in price_keys:
             with self.subTest(price=key):
@@ -3253,14 +3256,14 @@ class ValExpandedCampaignTests(unittest.TestCase):
         country = block(block(parse_clausewitz(IDEAS_PATH.read_text(encoding="utf-8")), "ideas"), "country")
         for idea in ("VAL_export_income_1", "VAL_export_income_2"):
             declaration = block(country, idea)
-            self.assertFalse(block(declaration, "on_add"))
-            self.assertFalse(block(declaration, "on_remove"))
+            self.assertFalse(any(e.key == "on_add" for e in declaration))
+            self.assertFalse(any(e.key == "on_remove" for e in declaration))
             self.assertFalse(block(declaration, "modifier"))
         advisers = block(country, "VAL_advisors_income")
-        self.assertFalse(block(advisers, "on_add"))
-        self.assertFalse(block(advisers, "on_remove"))
+        self.assertFalse(any(e.key == "on_add" for e in advisers))
+        self.assertFalse(any(e.key == "on_remove" for e in advisers))
         self.assertEqual(scalar(block(advisers, "modifier"), "planning_speed"), "-0.05")
-        self.assertIsNone(scalar(block(advisers, "modifier"), "ADISCORD_economy_weekly_income"))
+        self.assertFalse(any(e.key == "ADISCORD_economy_weekly_income" for e in block(advisers, "modifier")))
 
     def test_supply_recovery_requires_occidia_and_all_eight_northern_states(self):
         facts = {("VAL", "VAL_cannibal_sphere_secured", "yes"): True}
@@ -3357,6 +3360,31 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertIn("end_wars = no end_civil_wars = no", install)
 
 
+
+    def test_joint_shabrat_nod_campaign_uses_one_war_and_controlled_settlement(self):
+        decisions = DECISIONS_PATH.read_text(encoding="utf-8")
+        campaign = named_block_spans(decisions, "VAL_campaign_against_nod")[0].text
+        self.assertIn("set_country_flag = VAL_joint_nod_campaign_with_sts", campaign)
+        self.assertIn("targeted_alliance = STS enemy = NOD", campaign)
+        self.assertIn("character = STP_maksim_shabrat ruling_only = yes", campaign)
+        self.assertIn("STP_cw_release_tff_to_northern_war = yes", campaign)
+
+        settlement = named_block_spans(EFFECTS_PATH.read_text(encoding="utf-8"),
+                                       "VAL_settle_joint_nod_shabrat_victory")[0].text
+        for state in ("10", "11", "12", "13", "17", "18", "30"):
+            self.assertIn(f"{state} = {{", settlement)
+            self.assertIn(f"VAL = {{ transfer_state = {state} }}", settlement)
+            self.assertIn(f"STS = {{ transfer_state = {state} }}", settlement)
+        self.assertIn("STP_pc_begin_settlement = yes", settlement)
+        self.assertIn("white_peace = VAL", settlement)
+        self.assertNotIn("VAL_install_nodrul_administration", settlement)
+
+        source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text()
+        immediate = source.split("# BEGIN kefreyt:on_capitulation_immediate", 1)[1].split("# END kefreyt:on_capitulation_immediate", 1)[0]
+        self.assertLess(immediate.index("VAL_settle_joint_nod_shabrat_victory = yes"),
+                        immediate.index("set_country_flag = VAL_final_defeat_pending"))
+        self.assertIn("has_country_flag = VAL_joint_nod_campaign_with_sts", immediate)
+        self.assertIn("has_war_with = STS", immediate)
 
     def test_final_settlement_waits_for_allies_and_rejects_liberation(self):
         facts = {
@@ -3688,7 +3716,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         decisions = self.getblock(self.parse(DECISIONS_PATH.read_text(encoding="utf-8")), "VAL_vorkerland_aid")
         for name, equipment, amount in (("rifles", "infantry_equipment", "1000"), ("support", "support_equipment", "100")):
             decision = self.getblock(decisions, "VAL_aid_wrk_" + name)
-            self.assertEqual(self.scalar(decision, "cost"), "50")
+            self.assertEqual(self.scalar(decision, "cost"), "30")
             self.assertEqual(self.scalar(decision, "days_re_enable"), "30")
             self.assertEqual(self.scalar(self.getblock(decision, "ai_will_do"), "base"), "0")
             transfer = self.getblock(self.getblock(self.getblock(decision, "complete_effect"), "if"), "send_equipment")
@@ -3847,7 +3875,7 @@ class ValRegionalIntegrationTests(unittest.TestCase):
         postwar = block(definitions, "VAL_postwar_administration")
         nationalise = block(postwar, "VAL_nationalise_region")
         self.assertTrue(nationalise)
-        self.assertFalse(block(postwar, "VAL_establish_regional_administration"))
+        self.assertFalse(any(e.key == "VAL_establish_regional_administration" for e in postwar))
 
         decisions_text = DECISIONS_PATH.read_text(encoding="utf-8")
         trigger_text = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
@@ -3878,7 +3906,8 @@ class ValRegionalIntegrationTests(unittest.TestCase):
                       "is_owned_by = ROOT", "is_controlled_by = ROOT"):
             self.assertIn(token, trigger)
 
-        conference = self.focus("VAL_frontier_conference")
+        conference = next(entry.text for entry in named_block_spans(focus_text, "focus")
+                          if re.search(r"\bid\s*=\s*VAL_frontier_conference\b", entry.text))
         reward = only_named_block(self, conference, "completion_reward")
         self.assertIn("unlock_decision_tooltip = VAL_nationalise_region", reward)
         self.assertNotIn("VAL_establish_regional_administration", reward)

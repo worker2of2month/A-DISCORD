@@ -455,32 +455,32 @@ country_event = {
         worker_event = event_block(news, "ADISCORD_superevent.2")
         self.assertIn("hidden = yes", worker_event)
         self.assertIn("superevent_vorkerland_worker_victory", worker_event)
-        self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", worker_event)
+        self.assertIn("ADISCORD_superevent_enqueue = yes", worker_event)
         self.assertNotIn("limit = { is_ai = no }", worker_event)
         self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", worker_event)
         utilitarian_event = event_block(news, "ADISCORD_superevent.3")
         self.assertIn("hidden = yes", utilitarian_event)
         self.assertIn("superevent_vorkerland_utilitarian_victory", utilitarian_event)
-        self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", utilitarian_event)
+        self.assertIn("ADISCORD_superevent_enqueue = yes", utilitarian_event)
         self.assertNotIn("limit = { is_ai = no }", utilitarian_event)
         self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", utilitarian_event)
         dirty_event = event_block(news, "ADISCORD_superevent.4")
         self.assertIn("hidden = yes", dirty_event)
         self.assertIn("superevent_vorkerland_dirty_opening", dirty_event)
-        self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", dirty_event)
+        self.assertIn("ADISCORD_superevent_enqueue = yes", dirty_event)
         self.assertNotIn("limit = { is_ai = no }", dirty_event)
         self.assertNotIn("ADISCORD_vorkerland_dirty_opened", dirty_event)
         self.assertNotIn("ADISCORD_vorkerland_collapse.11", dirty_event)
         vlad_event = event_block(news, "ADISCORD_superevent.5")
         self.assertIn("hidden = yes", vlad_event)
         self.assertIn("superevent_vorkerland_vlad_victory", vlad_event)
-        self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", vlad_event)
+        self.assertIn("ADISCORD_superevent_enqueue = yes", vlad_event)
         self.assertNotIn("limit = { is_ai = no }", vlad_event)
         self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", vlad_event)
         dorian_event = event_block(news, "ADISCORD_superevent.6")
         self.assertIn("hidden = yes", dorian_event)
         self.assertIn("superevent_vorkerland_dorian_victory", dorian_event)
-        self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", dorian_event)
+        self.assertIn("ADISCORD_superevent_enqueue = yes", dorian_event)
         self.assertNotIn("limit = { is_ai = no }", dorian_event)
         self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", dorian_event)
 
@@ -504,14 +504,14 @@ country_event = {
             self.assertIn("major = yes", definition)
             self.assertIn("is_triggered_only = yes", definition)
             self.assertNotIn("hidden = yes", definition)
-            self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", definition)
+            self.assertIn("ADISCORD_superevent_enqueue = yes", definition)
             self.assertNotIn("limit = { is_ai = no }", definition)
             audio_proxy = event_block(news, audio_id)
             self.assertNotIn("limit = { is_ai = no }", audio_proxy)
-            self.assertIn(f"sound_effect = {sound_effect}", audio_proxy)
+            self.assertIn(f'play_song = "{sound_effect.removesuffix("_sound_e")}"', audio_proxy)
 
         sound_effects = read("sound/superevents_effects.asset")
-        self.assertEqual(sound_effects.count("volume = 1.0"), 7)
+        self.assertEqual(sound_effects.count("volume = 1.0"), 8)
         for effect_name in (
             "superevent_vorkerland_civilwar_sound_e",
             "superevent_stelander_empire_sound_e",
@@ -526,13 +526,13 @@ country_event = {
         self.assertNotIn("limit = { is_ai = no }", local_audio)
         shared_audio = named_block(map_effects, "ADISCORD_vorkerland_play_superevent_sound")
         self.assertIn("has_global_flag = superevent_vorkerland_dirty_opening", shared_audio)
-        self.assertIn("sound_effect = superevent_vorkerland_dirty_opening_sound_e", shared_audio)
+        self.assertIn('play_song = "superevent_vorkerland_dirty_opening"', shared_audio)
         self.assertIn("has_global_flag = superevent_vorkerland_utilitarian_victory", shared_audio)
-        self.assertIn("sound_effect = superevent_vorkerland_utilitarian_victory_sound_e", shared_audio)
+        self.assertIn('play_song = "superevent_vorkerland_utilitarian_victory"', shared_audio)
         self.assertIn("has_global_flag = superevent_vorkerland_vlad_victory", shared_audio)
-        self.assertIn("sound_effect = superevent_vorkerland_vlad_victory_sound_e", shared_audio)
+        self.assertIn('play_song = "superevent_vorkerland_vlad_victory"', shared_audio)
         self.assertNotIn("scoped_sound_effect", shared_audio)
-        self.assertNotIn("limit = { is_ai = no }", shared_audio)
+        self.assertNotIn("scoped_sound_effect =", shared_audio)
         gfx = read("interface/superevents.gfx")
         self.assertIn(
             'textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"',
@@ -1365,7 +1365,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertNotIn("hidden = yes", opening_definition.group(1))
         self.assertIn("id = ADISCORD_superevent_news.1", opening_definition.group(0))
         self.assertIn(
-            "ADISCORD_vorkerland_play_superevent_sound = yes",
+            "ADISCORD_superevent_enqueue = yes",
             opening_definition.group(1),
         )
         self.assertNotIn("every_country", opening_definition.group(1))
@@ -2453,12 +2453,22 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("set_cosmetic_tag = WRK_vorkerland_utilitarian_republic", anton_path)
         self.assertIn("portrait = GFX_portrait_WRK_Anton_Bagley", anton_path)
         self.assertIn("ideology = utilitarian_accelerationism", successor)
+        self.assertLess(
+            anton_path.index("ADISCORD_vorkerland_promote_anton_bagley = yes"),
+            anton_path.index("ruling_party = utilitarism"),
+            "Anton must be registered before WKR switches to utilitarism or HOI4 generates a fallback leader",
+        )
         for token in (
             "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic",
             "ruling_party = utilitarism",
             "ADISCORD_vorkerland_promote_anton_bagley = yes",
         ):
             self.assertIn(token, worker_formation)
+        self.assertLess(
+            worker_formation.index("ADISCORD_vorkerland_promote_anton_bagley = yes"),
+            worker_formation.index("ruling_party = utilitarism"),
+            "Anton must be registered before restored WRK switches to utilitarism",
+        )
         finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
         self.assertIn("ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes", finalizer)
         self.assertIn("ADISCORD_vorkerland_show_worker_victory_superevent = yes", finalizer)

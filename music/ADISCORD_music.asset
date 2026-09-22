@@ -1,0 +1,145 @@
+music = {
+	name = "one_minute_of_silence"
+	file = "one_minute_of_silence.ogg"
+	volume = 0.0
+}
+
+music = {
+	name = "ADISCORD_stp_shabrat"
+	file = "ADISCORD_stp_shabrat.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_stp_party_preparation"
+	file = "ADISCORD_stp_party_preparation.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_stp_party"
+	file = "ADISCORD_stp_party.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_stp_civil_war"
+	file = "ADISCORD_stp_civil_war.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_val_theme"
+	file = "ADISCORD_val_theme.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_stp_civil_war_end"
+	file = "ADISCORD_stp_civil_war_end.ogg"
+	volume = 0.65
+}
+
+# Presentation tracks use the single music channel and are never random songs.
+# Audio owner: tools/builders/build_adiscord_superevent_music.py.
+music = {
+	name = "superevent_vorkerland_civilwar"
+	file = "superevent_vorkerland_civilwar.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_vorkerland_dirty_opening"
+	file = "superevent_vorkerland_dirty_opening.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_vorkerland_worker_victory"
+	file = "superevent_vorkerland_worker_victory.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_vorkerland_utilitarian_victory"
+	file = "superevent_vorkerland_utilitarian_victory.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_vorkerland_vlad_victory"
+	file = "superevent_vorkerland_vlad_victory.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_vorkerland_dorian_victory"
+	file = "superevent_vorkerland_dorian_victory.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_stelander_empire"
+	file = "superevent_stelander_empire.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_stelander_party_victory"
+	file = "superevent_stelander_party_victory.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_stelander_shabrat_victory"
+	file = "superevent_stelander_shabrat_victory.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "ADISCORD_val_postwar"
+	file = "ADISCORD_val_postwar.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_stp_party_postwar"
+	file = "ADISCORD_stp_party_postwar.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_shot"
+	file = "ADISCORD_shot.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "superevent_nam_resource_war"
+	file = "superevent_nam_resource_war.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "superevent_rus_last_empire"
+	file = "superevent_rus_last_empire.ogg"
+	volume = 1.0
+}
+
+music = {
+	name = "ADISCORD_capistrano_crush_kill"
+	file = "Crush, kill - Capistrano.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_oomph_labyrinth"
+	file = "Labyrinth - OOMPH!.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_last_warrior_dead_land"
+	file = "ADISCORD_last_warrior_dead_land.ogg"
+	volume = 0.65
+}

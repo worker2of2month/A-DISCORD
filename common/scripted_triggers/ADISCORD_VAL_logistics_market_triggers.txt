@@ -108,7 +108,7 @@ VAL_refugee_stelander_war = {
 }
 
 VAL_refugee_nodrul_war = {
-	NOD = { OR = { has_war_with = STP has_war_with = STS has_war_with = VAL } }
+	OR = { AND = { VAL_final_crisis_available = yes check_variable = { var = VAL_final_crisis_phase value = 1 compare = equals } } NOD = { OR = { has_war_with = STP has_war_with = STS has_war_with = VAL } } }
 }
 
 VAL_refugee_north_war = {

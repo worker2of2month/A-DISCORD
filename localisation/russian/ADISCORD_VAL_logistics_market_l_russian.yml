@@ -65,24 +65,24 @@
 
  VAL_refugee_border_open_tt: "Граница открыта для приёма беженцев"
 
- VAL_refugee_capacity_tt: "В системе размещения не более §Y900 тыс.§! человек"
+ VAL_refugee_capacity_tt:0 "Есть место для ещё §Y100 тыс.§! человек с учётом уже направленных на обучение."
 
  VAL_accept_vorkerland_refugees: "Принять беженцев из Воркерланда"
 
- VAL_accept_vorkerland_refugees_desc: "Однократно принять §Y100 тыс.§! беженцев за §Y250§! из казны. Решение доступно в течение §Y60 дней§! с начала этой войны, пока она продолжается. Приём не повышает стабильность и увеличивает давление серого рынка на §R5§!."
+ VAL_accept_vorkerland_refugees_desc:0 "Принять очередную волну из §Y100 тыс.§! беженцев за §Y250§! монет. Доступно до §Yтрёх волн§! из этого региона с интервалом §Y30 дней§! в течение §Y180 дней§! после открытия границы, пока сохраняется угроза. Каждая волна повышает давление серого рынка на §R5§!. Приём сам по себе не выдаёт армейских рекрутов: добровольцев нужно обучить."
 
  VAL_accept_stelander_refugees: "Принять беженцев из Стеландера"
 
- VAL_accept_stelander_refugees_desc: "Однократно принять §Y100 тыс.§! беженцев за §Y250§! из казны. Решение доступно в течение §Y60 дней§! с начала этой войны, пока она продолжается. Приём не повышает стабильность и увеличивает давление серого рынка на §R5§!."
+ VAL_accept_stelander_refugees_desc:0 "Принять очередную волну из §Y100 тыс.§! беженцев за §Y250§! монет. Доступно до §Yтрёх волн§! из этого региона с интервалом §Y30 дней§! в течение §Y180 дней§! после открытия границы, пока сохраняется угроза. Каждая волна повышает давление серого рынка на §R5§!. Приём сам по себе не выдаёт армейских рекрутов: добровольцев нужно обучить."
 
  VAL_accept_nodrul_refugees: "Принять беженцев из Нодрула"
 
- VAL_accept_nodrul_refugees_desc: "Однократно принять §Y100 тыс.§! беженцев за §Y250§! из казны. Решение доступно в течение §Y60 дней§! с начала этой войны, пока она продолжается. Приём не повышает стабильность и увеличивает давление серого рынка на §R5§!."
+ VAL_accept_nodrul_refugees_desc:0 "Принять очередную волну из §Y100 тыс.§! беженцев за §Y250§! монет. Доступно до §Yтрёх волн§! из этого региона с интервалом §Y30 дней§! в течение §Y180 дней§! после открытия границы, пока сохраняется угроза. Каждая волна повышает давление серого рынка на §R5§!. Приём сам по себе не выдаёт армейских рекрутов: добровольцев нужно обучить."
 
  VAL_accept_north_refugees: "Принять беженцев из северных стран"
 
- VAL_accept_north_refugees_desc: "Однократно принять §Y100 тыс.§! беженцев за §Y250§! из казны. Решение доступно в течение §Y60 дней§! с начала этой войны, пока она продолжается. Приём не повышает стабильность и увеличивает давление серого рынка на §R5§!."
- VAL_logistics_cost_100_blocked: "£ADISCORD_economy_treasury_texticon  §Y100§!"
+ VAL_accept_north_refugees_desc:0 "Принять очередную волну из §Y100 тыс.§! беженцев за §Y250§! монет. Доступно до §Yтрёх волн§! из этого региона с интервалом §Y30 дней§! в течение §Y180 дней§! после открытия границы, пока сохраняется угроза. Каждая волна повышает давление серого рынка на §R5§!. Приём сам по себе не выдаёт армейских рекрутов: добровольцев нужно обучить."
+ VAL_logistics_cost_100_blocked: "£ADISCORD_economy_treasury_texticon  §R100§!"
  VAL_logistics_cost_100_tooltip: "£ADISCORD_economy_treasury_texticon  §Y100§!"
  VAL_corridor_project_idle_tt: "Строительная контора не занята другим коридором"
  VAL_corridor_project_refund_tt: "Неиспользованная оплата проекта полностью возвращается в казну."
@@ -90,14 +90,19 @@
  VAL_corridor_north_result_tt: "Инфраструктура +1 в [59.GetName], [60.GetName] и [61.GetName]; в [59.GetName] добавляются 2 стали, в [61.GetName] - 2 вольфрама. Доход действующего маршрута: §G+10§! в неделю."
  VAL_corridor_stelander_result_tt: "Инфраструктура +1 и ячейка строительства +1 в каждом из регионов [29.GetName] и [46.GetName]. Доход действующего маршрута: §G+10§! в неделю."
  VAL_corridor_vorkerland_result_tt: "Инфраструктура +1 в регионе [33.GetName]; давление серого рынка снижается на 10. Доход действующего маршрута: §G+10§! в неделю."
- VAL_logistics_cost_250_blocked: "£ADISCORD_economy_treasury_texticon  §Y250§!"
+ VAL_logistics_cost_250_blocked: "£ADISCORD_economy_treasury_texticon  §R250§!"
  VAL_logistics_cost_250_tooltip: "£ADISCORD_economy_treasury_texticon  §Y250§!"
  VAL_logistics_cost_500: "£ADISCORD_economy_treasury_texticon  §Y500§!"
- VAL_logistics_cost_500_blocked: "£ADISCORD_economy_treasury_texticon  §Y500§!"
+ VAL_logistics_cost_500_blocked: "£ADISCORD_economy_treasury_texticon  §R500§!"
  VAL_logistics_cost_500_tooltip: "£ADISCORD_economy_treasury_texticon  §Y500§!"
  VAL_logistics_cost_750: "£ADISCORD_economy_treasury_texticon  §Y750§!"
- VAL_logistics_cost_750_blocked: "£ADISCORD_economy_treasury_texticon  §Y750§!"
+ VAL_logistics_cost_750_blocked: "£ADISCORD_economy_treasury_texticon  §R750§!"
  VAL_logistics_cost_750_tooltip: "£ADISCORD_economy_treasury_texticon  §Y750§!"
  VAL_logistics_cost_1000: "£ADISCORD_economy_treasury_texticon  §Y1000§!"
- VAL_logistics_cost_1000_blocked: "£ADISCORD_economy_treasury_texticon  §Y1000§!"
+ VAL_logistics_cost_1000_blocked: "£ADISCORD_economy_treasury_texticon  §R1000§!"
  VAL_logistics_cost_1000_tooltip: "£ADISCORD_economy_treasury_texticon  §Y1000§!"
+
+ VAL_refugee_wave_limit_tt:0 "Принято менее трёх волн из этого региона."
+ VAL_train_refugee_volunteers:0 "Обучить добровольцев из числа беженцев"
+ VAL_train_refugee_volunteers_desc:0 "Предложим добровольцам военную подготовку и оплачиваемую службу. На время обучения резервируется 100 тыс. размещённых беженцев. Через 35 дней армия получит 5000 подготовленных рекрутов. При отмене возвращаются 75 политвласти и зарезервированные люди."
+ VAL_refugee_training_start_tt:0 "Зарезервировано §Y100 тыс.§! размещённых беженцев. Через §Y35 дней§! в резерв армии поступит §G5000§! добровольцев. При отмене люди и §Y75§! политвласти возвращаются."

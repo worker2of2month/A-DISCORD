@@ -16,15 +16,42 @@ VAL_corridor_income_20 = {
 }
 
 VAL_initialize_logistics_market = {
-	if = { limit = { NOT = { has_variable = VAL_trade_corridors_active } } set_variable = { var = VAL_trade_corridors_active value = 0 } }
-	if = { limit = { NOT = { has_variable = VAL_trade_corridors_capacity } } set_variable = { var = VAL_trade_corridors_capacity value = 0 } }
-	if = { limit = { NOT = { has_variable = VAL_route_occidia_active } } set_variable = { var = VAL_route_occidia_active value = 0 } }
-	if = { limit = { NOT = { has_variable = VAL_route_north_active } } set_variable = { var = VAL_route_north_active value = 0 } }
-	if = { limit = { NOT = { has_variable = VAL_route_stelander_active } } set_variable = { var = VAL_route_stelander_active value = 0 } }
-	if = { limit = { NOT = { has_variable = VAL_route_vorkerland_active } } set_variable = { var = VAL_route_vorkerland_active value = 0 } }
-	if = { limit = { NOT = { has_variable = VAL_corridor_security } } set_variable = { var = VAL_corridor_security value = 0 } }
-	if = { limit = { NOT = { has_variable = VAL_black_market_pressure } } set_variable = { var = VAL_black_market_pressure value = 8 } }
-	if = { limit = { NOT = { has_variable = VAL_displaced_population } } set_variable = { var = VAL_displaced_population value = 0 } }
+	if = {
+		limit = { NOT = { has_variable = VAL_trade_corridors_active } }
+		set_variable = { var = VAL_trade_corridors_active value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = VAL_trade_corridors_capacity } }
+		set_variable = { var = VAL_trade_corridors_capacity value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = VAL_route_occidia_active } }
+		set_variable = { var = VAL_route_occidia_active value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = VAL_route_north_active } }
+		set_variable = { var = VAL_route_north_active value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = VAL_route_stelander_active } }
+		set_variable = { var = VAL_route_stelander_active value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = VAL_route_vorkerland_active } }
+		set_variable = { var = VAL_route_vorkerland_active value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = VAL_corridor_security } }
+		set_variable = { var = VAL_corridor_security value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = VAL_black_market_pressure } }
+		set_variable = { var = VAL_black_market_pressure value = 8 }
+	}
+	if = {
+		limit = { NOT = { has_variable = VAL_displaced_population } }
+		set_variable = { var = VAL_displaced_population value = 0 }
+	}
 	clamp_variable = { var = VAL_corridor_security min = 0 max = 3 }
 	clamp_variable = { var = VAL_black_market_pressure min = 0 max = 100 }
 	clamp_variable = { var = VAL_displaced_population min = 0 max = 100 }
@@ -36,10 +63,22 @@ VAL_initialize_logistics_market = {
 VAL_refresh_trade_network = {
 	# First opening permanently commissions a route. Losing it later creates a
 	# real commercial disruption rather than a penalty for unconquered land.
-	if = { limit = { VAL_trade_route_occidia_open = yes } set_country_flag = VAL_route_occidia_commissioned }
-	if = { limit = { VAL_trade_route_north_open = yes } set_country_flag = VAL_route_north_commissioned }
-	if = { limit = { VAL_trade_route_stelander_open = yes } set_country_flag = VAL_route_stelander_commissioned }
-	if = { limit = { VAL_trade_route_vorkerland_open = yes } set_country_flag = VAL_route_vorkerland_commissioned }
+	if = {
+		limit = { VAL_trade_route_occidia_open = yes }
+		set_country_flag = VAL_route_occidia_commissioned
+	}
+	if = {
+		limit = { VAL_trade_route_north_open = yes }
+		set_country_flag = VAL_route_north_commissioned
+	}
+	if = {
+		limit = { VAL_trade_route_stelander_open = yes }
+		set_country_flag = VAL_route_stelander_commissioned
+	}
+	if = {
+		limit = { VAL_trade_route_vorkerland_open = yes }
+		set_country_flag = VAL_route_vorkerland_commissioned
+	}
 
 	set_variable = { var = VAL_trade_corridors_active value = 0 }
 	set_variable = { var = VAL_trade_corridors_capacity value = 0 }
@@ -48,10 +87,22 @@ VAL_refresh_trade_network = {
 	set_variable = { var = VAL_route_stelander_active value = 0 }
 	set_variable = { var = VAL_route_vorkerland_active value = 0 }
 
-	if = { limit = { has_country_flag = VAL_route_occidia_commissioned } add_to_variable = { var = VAL_trade_corridors_capacity value = 1 } }
-	if = { limit = { has_country_flag = VAL_route_north_commissioned } add_to_variable = { var = VAL_trade_corridors_capacity value = 1 } }
-	if = { limit = { has_country_flag = VAL_route_stelander_commissioned } add_to_variable = { var = VAL_trade_corridors_capacity value = 1 } }
-	if = { limit = { has_country_flag = VAL_route_vorkerland_commissioned } add_to_variable = { var = VAL_trade_corridors_capacity value = 1 } }
+	if = {
+		limit = { has_country_flag = VAL_route_occidia_commissioned }
+		add_to_variable = { var = VAL_trade_corridors_capacity value = 1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_route_north_commissioned }
+		add_to_variable = { var = VAL_trade_corridors_capacity value = 1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_route_stelander_commissioned }
+		add_to_variable = { var = VAL_trade_corridors_capacity value = 1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_route_vorkerland_commissioned }
+		add_to_variable = { var = VAL_trade_corridors_capacity value = 1 }
+	}
 
 	if = {
 		limit = { VAL_trade_route_occidia_open = yes }
@@ -78,9 +129,18 @@ VAL_refresh_trade_network = {
 		limit = { VAL_trade_corridors_unlocked = yes }
 		if = {
 			limit = { check_variable = { var = VAL_trade_corridors_active value = 4 compare = greater_than_or_equals } }
-			if = { limit = { has_idea = VAL_corridor_network_fragmented } remove_ideas = VAL_corridor_network_fragmented }
-			if = { limit = { has_idea = VAL_corridor_network_partial } remove_ideas = VAL_corridor_network_partial }
-			if = { limit = { NOT = { has_idea = VAL_corridor_network_integrated } } add_ideas = VAL_corridor_network_integrated }
+			if = {
+				limit = { has_idea = VAL_corridor_network_fragmented }
+				remove_ideas = VAL_corridor_network_fragmented
+			}
+			if = {
+				limit = { has_idea = VAL_corridor_network_partial }
+				remove_ideas = VAL_corridor_network_partial
+			}
+			if = {
+				limit = { NOT = { has_idea = VAL_corridor_network_integrated } }
+				add_ideas = VAL_corridor_network_integrated
+			}
 		}
 		else_if = {
 			limit = {
@@ -92,20 +152,47 @@ VAL_refresh_trade_network = {
 					}
 				}
 			}
-			if = { limit = { has_idea = VAL_corridor_network_fragmented } remove_ideas = VAL_corridor_network_fragmented }
-			if = { limit = { has_idea = VAL_corridor_network_integrated } remove_ideas = VAL_corridor_network_integrated }
-			if = { limit = { NOT = { has_idea = VAL_corridor_network_partial } } add_ideas = VAL_corridor_network_partial }
+			if = {
+				limit = { has_idea = VAL_corridor_network_fragmented }
+				remove_ideas = VAL_corridor_network_fragmented
+			}
+			if = {
+				limit = { has_idea = VAL_corridor_network_integrated }
+				remove_ideas = VAL_corridor_network_integrated
+			}
+			if = {
+				limit = { NOT = { has_idea = VAL_corridor_network_partial } }
+				add_ideas = VAL_corridor_network_partial
+			}
 		}
 		else = {
-			if = { limit = { has_idea = VAL_corridor_network_partial } remove_ideas = VAL_corridor_network_partial }
-			if = { limit = { has_idea = VAL_corridor_network_integrated } remove_ideas = VAL_corridor_network_integrated }
-			if = { limit = { NOT = { has_idea = VAL_corridor_network_fragmented } } add_ideas = VAL_corridor_network_fragmented }
+			if = {
+				limit = { has_idea = VAL_corridor_network_partial }
+				remove_ideas = VAL_corridor_network_partial
+			}
+			if = {
+				limit = { has_idea = VAL_corridor_network_integrated }
+				remove_ideas = VAL_corridor_network_integrated
+			}
+			if = {
+				limit = { NOT = { has_idea = VAL_corridor_network_fragmented } }
+				add_ideas = VAL_corridor_network_fragmented
+			}
 		}
 	}
 	else = {
-		if = { limit = { has_idea = VAL_corridor_network_fragmented } remove_ideas = VAL_corridor_network_fragmented }
-		if = { limit = { has_idea = VAL_corridor_network_partial } remove_ideas = VAL_corridor_network_partial }
-		if = { limit = { has_idea = VAL_corridor_network_integrated } remove_ideas = VAL_corridor_network_integrated }
+		if = {
+			limit = { has_idea = VAL_corridor_network_fragmented }
+			remove_ideas = VAL_corridor_network_fragmented
+		}
+		if = {
+			limit = { has_idea = VAL_corridor_network_partial }
+			remove_ideas = VAL_corridor_network_partial
+		}
+		if = {
+			limit = { has_idea = VAL_corridor_network_integrated }
+			remove_ideas = VAL_corridor_network_integrated
+		}
 	}
 }
 
@@ -145,39 +232,105 @@ VAL_change_black_market_pressure = {
 VAL_refresh_black_market_state = {
 	if = {
 		limit = { check_variable = { var = VAL_black_market_pressure value = 75 compare = greater_than_or_equals } }
-		if = { limit = { has_idea = VAL_black_market_low } remove_ideas = VAL_black_market_low }
-		if = { limit = { has_idea = VAL_black_market_high } remove_ideas = VAL_black_market_high }
-		if = { limit = { NOT = { has_idea = VAL_black_market_crisis } } add_ideas = VAL_black_market_crisis }
+		if = {
+			limit = { has_idea = VAL_black_market_low }
+			remove_ideas = VAL_black_market_low
+		}
+		if = {
+			limit = { has_idea = VAL_black_market_high }
+			remove_ideas = VAL_black_market_high
+		}
+		if = {
+			limit = { NOT = { has_idea = VAL_black_market_crisis } }
+			add_ideas = VAL_black_market_crisis
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } }
-		if = { limit = { has_idea = VAL_black_market_low } remove_ideas = VAL_black_market_low }
-		if = { limit = { has_idea = VAL_black_market_crisis } remove_ideas = VAL_black_market_crisis }
-		if = { limit = { NOT = { has_idea = VAL_black_market_high } } add_ideas = VAL_black_market_high }
+		if = {
+			limit = { has_idea = VAL_black_market_low }
+			remove_ideas = VAL_black_market_low
+		}
+		if = {
+			limit = { has_idea = VAL_black_market_crisis }
+			remove_ideas = VAL_black_market_crisis
+		}
+		if = {
+			limit = { NOT = { has_idea = VAL_black_market_high } }
+			add_ideas = VAL_black_market_high
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = VAL_black_market_pressure value = 25 compare = greater_than_or_equals } }
-		if = { limit = { has_idea = VAL_black_market_high } remove_ideas = VAL_black_market_high }
-		if = { limit = { has_idea = VAL_black_market_crisis } remove_ideas = VAL_black_market_crisis }
-		if = { limit = { NOT = { has_idea = VAL_black_market_low } } add_ideas = VAL_black_market_low }
+		if = {
+			limit = { has_idea = VAL_black_market_high }
+			remove_ideas = VAL_black_market_high
+		}
+		if = {
+			limit = { has_idea = VAL_black_market_crisis }
+			remove_ideas = VAL_black_market_crisis
+		}
+		if = {
+			limit = { NOT = { has_idea = VAL_black_market_low } }
+			add_ideas = VAL_black_market_low
+		}
 	}
 	else = {
-		if = { limit = { has_idea = VAL_black_market_low } remove_ideas = VAL_black_market_low }
-		if = { limit = { has_idea = VAL_black_market_high } remove_ideas = VAL_black_market_high }
-		if = { limit = { has_idea = VAL_black_market_crisis } remove_ideas = VAL_black_market_crisis }
+		if = {
+			limit = { has_idea = VAL_black_market_low }
+			remove_ideas = VAL_black_market_low
+		}
+		if = {
+			limit = { has_idea = VAL_black_market_high }
+			remove_ideas = VAL_black_market_high
+		}
+		if = {
+			limit = { has_idea = VAL_black_market_crisis }
+			remove_ideas = VAL_black_market_crisis
+		}
 	}
 }
 
 VAL_update_black_market_weekly = {
 	set_temp_variable = { var = VAL_black_market_weekly_delta value = 0 }
 
-	if = { limit = { has_country_flag = VAL_route_occidia_commissioned NOT = { VAL_trade_route_occidia_open = yes } } add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 } }
-	if = { limit = { has_country_flag = VAL_route_north_commissioned NOT = { VAL_trade_route_north_open = yes } } add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 } }
-	if = { limit = { has_country_flag = VAL_route_stelander_commissioned NOT = { VAL_trade_route_stelander_open = yes } } add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 } }
-	if = { limit = { has_country_flag = VAL_route_vorkerland_commissioned NOT = { VAL_trade_route_vorkerland_open = yes } } add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 } }
+	if = {
+		limit = {
+			has_country_flag = VAL_route_occidia_commissioned
+			NOT = { VAL_trade_route_occidia_open = yes }
+		}
+		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_route_north_commissioned
+			NOT = { VAL_trade_route_north_open = yes }
+		}
+		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_route_stelander_commissioned
+			NOT = { VAL_trade_route_stelander_open = yes }
+		}
+		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_route_vorkerland_commissioned
+			NOT = { VAL_trade_route_vorkerland_open = yes }
+		}
+		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
+	}
 
-	if = { limit = { has_war = yes } add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 2 } }
-	if = { limit = { check_variable = { var = VAL_displaced_population value = 20 compare = greater_than_or_equals } } add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 1 } }
+	if = {
+		limit = { has_war = yes }
+		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 2 }
+	}
+	if = {
+		limit = { check_variable = { var = VAL_displaced_population value = 20 compare = greater_than_or_equals } }
+		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 1 }
+	}
 	if = {
 		limit = {
 			VAL_trade_corridors_unlocked = yes
@@ -196,35 +349,41 @@ VAL_update_black_market_weekly = {
 VAL_refresh_refugee_state = {
 	if = {
 		limit = { check_variable = { var = VAL_displaced_population value = 20 compare = greater_than_or_equals } }
-		if = { limit = { NOT = { has_idea = VAL_refugee_strain } } add_ideas = VAL_refugee_strain }
+		if = {
+			limit = { NOT = { has_idea = VAL_refugee_strain } }
+			add_ideas = VAL_refugee_strain
+		}
 	}
 	else = {
-		if = { limit = { has_idea = VAL_refugee_strain } remove_ideas = VAL_refugee_strain }
+		if = {
+			limit = { has_idea = VAL_refugee_strain }
+			remove_ideas = VAL_refugee_strain
+		}
 	}
 }
 
-# COUNTRY VAL. Each regional campaign offers one admission window; later war
-# relations and expired windows must not create another population grant.
+# COUNTRY VAL. A regional campaign opens one bounded window for up to three
+# paid waves; later war relations must not reset the admission counter.
 VAL_open_refugee_waves = {
 	if = {
 		limit = { VAL_refugee_vorkerland_war = yes NOT = { has_country_flag = VAL_refugee_vorkerland_seen } }
 		set_country_flag = VAL_refugee_vorkerland_seen
-		set_country_flag = { flag = VAL_refugee_vorkerland_window days = 60 }
+		set_country_flag = { flag = VAL_refugee_vorkerland_window days = 180 }
 	}
 	if = {
 		limit = { VAL_refugee_stelander_war = yes NOT = { has_country_flag = VAL_refugee_stelander_seen } }
 		set_country_flag = VAL_refugee_stelander_seen
-		set_country_flag = { flag = VAL_refugee_stelander_window days = 60 }
+		set_country_flag = { flag = VAL_refugee_stelander_window days = 180 }
 	}
 	if = {
 		limit = { VAL_refugee_nodrul_war = yes NOT = { has_country_flag = VAL_refugee_nodrul_seen } }
 		set_country_flag = VAL_refugee_nodrul_seen
-		set_country_flag = { flag = VAL_refugee_nodrul_window days = 60 }
+		set_country_flag = { flag = VAL_refugee_nodrul_window days = 180 }
 	}
 	if = {
 		limit = { VAL_refugee_north_war = yes NOT = { has_country_flag = VAL_refugee_north_seen } }
 		set_country_flag = VAL_refugee_north_seen
-		set_country_flag = { flag = VAL_refugee_north_window days = 60 }
+		set_country_flag = { flag = VAL_refugee_north_window days = 180 }
 	}
 }
 
@@ -347,5 +506,27 @@ VAL_refund_corridor_project = {
 		clear_variable = VAL_corridor_deposit
 		clear_variable = VAL_corridor_project
 		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_refund_refugee_training = {
+	if = {
+		limit = { has_variable = VAL_refugee_training_escrow }
+		add_to_variable = { var = VAL_displaced_population value = VAL_refugee_training_escrow }
+		clear_variable = VAL_refugee_training_escrow
+		add_political_power = 75
+		VAL_refresh_refugee_state = yes
+	}
+}
+
+VAL_finish_refugee_training = {
+	if = {
+		limit = { has_variable = VAL_refugee_training_escrow }
+		if = {
+			limit = { has_capitulated = no is_subject = no }
+			clear_variable = VAL_refugee_training_escrow
+			add_manpower = 5000
+		}
+		else = { VAL_refund_refugee_training = yes }
 	}
 }

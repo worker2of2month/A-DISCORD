@@ -567,14 +567,14 @@ def check_gfx_entity_ownership(limit):
     if not winter_terrain_texture.is_file():
         issues.append(f'{rel(winter_terrain_texture)} is missing winter contaminated terrain texture')
 
-    music_station = ROOT / "music" / "one_minute.txt"
+    music_station = ROOT / "music" / "ADISCORD_songs.txt"
     music_gui_path = ROOT / "interface" / "ADISCORD_musicplayer_compat.gui"
     if music_station.is_file():
         music_gui = read_text(music_gui_path) if music_gui_path.is_file() else ""
-        for widget in ("one_minute_faceplate", "one_minute_stations_entry"):
+        for widget in ("adiscord_music_faceplate", "adiscord_music_stations_entry"):
             if not re.search(rf'\bname\s*=\s*"{widget}"', music_gui):
                 issues.append(
-                    f'{rel(music_gui_path)} is missing {widget} required by music station one_minute'
+                    f'{rel(music_gui_path)} is missing {widget} required by music station adiscord_music'
                 )
     return issues[:limit], len(issues)
 

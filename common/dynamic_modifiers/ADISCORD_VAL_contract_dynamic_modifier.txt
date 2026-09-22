@@ -1,6 +1,9 @@
 # Independent Kefreyt contract-state modifier.
 
 VAL_contract_state = {
+	recon_factor = VAL_contract_recon_factor
+	send_volunteer_size = VAL_contract_volunteer_size
+	war_stability_factor = VAL_contract_war_stability
 	enable = { original_tag = VAL }
 	icon = GFX_idea_VAL_contract_state
 	army_attack_factor = VAL_contract_attack_factor
@@ -95,4 +98,12 @@ VAL_arsenal_reputation = {
     ADISCORD_economy_trade_income_factor = VAL_arsenal_trade
     ADISCORD_economy_creditworthiness_factor = VAL_arsenal_credit
     production_factory_max_efficiency_factor = VAL_arsenal_quality
+}
+
+VAL_final_war_preparation = {
+	enable = { original_tag = VAL }
+	icon = GFX_idea_VAL_worldwide_famous_weponry
+	supply_consumption_factor = VAL_final_supply_bonus
+	planning_speed = VAL_final_planning_bonus
+	conscription = VAL_final_reserve_share
 }

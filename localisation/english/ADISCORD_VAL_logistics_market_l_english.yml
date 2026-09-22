@@ -65,24 +65,24 @@
 
  VAL_refugee_border_open_tt: "The border is open to refugees"
 
- VAL_refugee_capacity_tt: "No more than §Y900,000§! people are in the resettlement system"
+ VAL_refugee_capacity_tt:0 "There is room for another §Y100,000§! people, including those reserved for training."
 
  VAL_accept_vorkerland_refugees: "Admit Refugees from Vorkerland"
 
- VAL_accept_vorkerland_refugees_desc: "Admit §Y100,000§! refugees once for §Y250§! treasury. Available for §Y60 days§! after this war begins, while it remains active. Admission grants no stability and increases grey-market pressure by §R5§!."
+ VAL_accept_vorkerland_refugees_desc:0 "Admit another wave of §Y100,000§! refugees for §Y250§! coins. Up to §Ythree waves§! from this region may be accepted at §Y30-day§! intervals within §Y180 days§! of the border opening while the threat persists. Each wave raises grey-market pressure by §R5§!. Admission alone does not grant army manpower: volunteers must be trained."
 
  VAL_accept_stelander_refugees: "Admit Refugees from Stelander"
 
- VAL_accept_stelander_refugees_desc: "Admit §Y100,000§! refugees once for §Y250§! treasury. Available for §Y60 days§! after this war begins, while it remains active. Admission grants no stability and increases grey-market pressure by §R5§!."
+ VAL_accept_stelander_refugees_desc:0 "Admit another wave of §Y100,000§! refugees for §Y250§! coins. Up to §Ythree waves§! from this region may be accepted at §Y30-day§! intervals within §Y180 days§! of the border opening while the threat persists. Each wave raises grey-market pressure by §R5§!. Admission alone does not grant army manpower: volunteers must be trained."
 
  VAL_accept_nodrul_refugees: "Admit Refugees from Nodrul"
 
- VAL_accept_nodrul_refugees_desc: "Admit §Y100,000§! refugees once for §Y250§! treasury. Available for §Y60 days§! after this war begins, while it remains active. Admission grants no stability and increases grey-market pressure by §R5§!."
+ VAL_accept_nodrul_refugees_desc:0 "Admit another wave of §Y100,000§! refugees for §Y250§! coins. Up to §Ythree waves§! from this region may be accepted at §Y30-day§! intervals within §Y180 days§! of the border opening while the threat persists. Each wave raises grey-market pressure by §R5§!. Admission alone does not grant army manpower: volunteers must be trained."
 
  VAL_accept_north_refugees: "Admit Refugees from the Northern Countries"
 
- VAL_accept_north_refugees_desc: "Admit §Y100,000§! refugees once for §Y250§! treasury. Available for §Y60 days§! after this war begins, while it remains active. Admission grants no stability and increases grey-market pressure by §R5§!."
- VAL_logistics_cost_100_blocked: "£ADISCORD_economy_treasury_texticon  §Y100§!"
+ VAL_accept_north_refugees_desc:0 "Admit another wave of §Y100,000§! refugees for §Y250§! coins. Up to §Ythree waves§! from this region may be accepted at §Y30-day§! intervals within §Y180 days§! of the border opening while the threat persists. Each wave raises grey-market pressure by §R5§!. Admission alone does not grant army manpower: volunteers must be trained."
+ VAL_logistics_cost_100_blocked: "£ADISCORD_economy_treasury_texticon  §R100§!"
  VAL_logistics_cost_100_tooltip: "£ADISCORD_economy_treasury_texticon  §Y100§!"
  VAL_corridor_project_idle_tt: "The construction office is not working on another corridor"
  VAL_corridor_project_refund_tt: "The project payment is returned to the treasury in full."
@@ -90,14 +90,19 @@
  VAL_corridor_north_result_tt: "+1 infrastructure in [59.GetName], [60.GetName] and [61.GetName]; add 2 steel in [59.GetName] and 2 tungsten in [61.GetName].Operational route income: §G+10§! per week."
  VAL_corridor_stelander_result_tt: "+1 infrastructure and +1 building slot in each of [29.GetName] and [46.GetName].Operational route income: §G+10§! per week."
  VAL_corridor_vorkerland_result_tt: "+1 infrastructure in [33.GetName]; grey-market pressure falls by 10.Operational route income: §G+10§! per week."
- VAL_logistics_cost_250_blocked: "£ADISCORD_economy_treasury_texticon  §Y250§!"
+ VAL_logistics_cost_250_blocked: "£ADISCORD_economy_treasury_texticon  §R250§!"
  VAL_logistics_cost_250_tooltip: "£ADISCORD_economy_treasury_texticon  §Y250§!"
  VAL_logistics_cost_500: "£ADISCORD_economy_treasury_texticon  §Y500§!"
- VAL_logistics_cost_500_blocked: "£ADISCORD_economy_treasury_texticon  §Y500§!"
+ VAL_logistics_cost_500_blocked: "£ADISCORD_economy_treasury_texticon  §R500§!"
  VAL_logistics_cost_500_tooltip: "£ADISCORD_economy_treasury_texticon  §Y500§!"
  VAL_logistics_cost_750: "£ADISCORD_economy_treasury_texticon  §Y750§!"
- VAL_logistics_cost_750_blocked: "£ADISCORD_economy_treasury_texticon  §Y750§!"
+ VAL_logistics_cost_750_blocked: "£ADISCORD_economy_treasury_texticon  §R750§!"
  VAL_logistics_cost_750_tooltip: "£ADISCORD_economy_treasury_texticon  §Y750§!"
  VAL_logistics_cost_1000: "£ADISCORD_economy_treasury_texticon  §Y1000§!"
- VAL_logistics_cost_1000_blocked: "£ADISCORD_economy_treasury_texticon  §Y1000§!"
+ VAL_logistics_cost_1000_blocked: "£ADISCORD_economy_treasury_texticon  §R1000§!"
  VAL_logistics_cost_1000_tooltip: "£ADISCORD_economy_treasury_texticon  §Y1000§!"
+
+ VAL_refugee_wave_limit_tt:0 "Fewer than three waves have been admitted from this region."
+ VAL_train_refugee_volunteers:0 "Train Refugee Volunteers"
+ VAL_train_refugee_volunteers_desc:0 "Offer volunteers military training and paid service. A group of 100,000 admitted refugees are reserved during training. After 35 days, 5000 trained recruits enter the army reserve. Cancellation returns 75 political power and the reserved population."
+ VAL_refugee_training_start_tt:0 "Reserve §Y100,000§! admitted refugees. After §Y35 days§!, gain §G5000§! volunteers in the army reserve. Cancellation returns the population and §Y75§! political power."

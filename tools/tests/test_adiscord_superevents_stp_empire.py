@@ -107,23 +107,32 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, empire)
         self.assertIn("superevent_stelander_empire", empire)
-        self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", empire)
+        self.assertIn("ADISCORD_superevent_enqueue = yes", empire)
         self.assertNotIn("limit = { is_ai = no }", empire)
 
-    def test_shabrat_imperial_union_requires_the_full_map(self) -> None:
+    def test_shabrat_imperial_union_opens_after_kefreyt_defeat_only(self) -> None:
         decisions = named_block(read(IMPERIAL_DECISIONS), "STP_imperial_union_category")
         triggers = read(IMPERIAL_TRIGGERS)
+        requirements = named_block(triggers, "STP_imperial_union_requirements_met")
+
         self.assertIn("STP_proclaim_imperial_union", decisions)
         self.assertIn("tag = STS", decisions)
         self.assertIn("STP_maksim_shabrat", decisions)
+        self.assertIn("STP_imperial_union_kefreyt_defeated = yes", decisions)
         self.assertIn("STP_imperial_union_requirements_met = yes", decisions)
-        self.assertIn("VAL", triggers)
-        self.assertIn("NOD", triggers)
-        required_states = named_block(triggers, "STP_imperial_union_required_states_controlled")
-        for state in REQUIRED_IMPERIAL_STATES:
-            self.assertIn(f"owns_state = {state}", required_states)
-            self.assertIn(f"controls_state = {state}", required_states)
-            self.assertIn(f"highlight_state_targets = {{ state = {state} }}", decisions)
+
+        # Kefreyt's defeat is the only campaign-progress gate.
+        self.assertIn("STP_imperial_union_kefreyt_defeated = yes", requirements)
+        self.assertNotIn("STP_imperial_union_nodrul_defeated", requirements)
+        self.assertNotIn("STP_imperial_union_required_states_controlled", requirements)
+        self.assertNotIn("STP_imperial_union_client_settlement", requirements)
+        self.assertNotIn("has_completed_focus = STP_pc_hegemony_open", requirements)
+        self.assertNotIn("STP_pc_founder_rules", requirements)
+        self.assertNotIn("has_war = no", requirements)
+
+        # The old full-map checklist must not hide or lock the proclamation.
+        self.assertNotIn("highlight_state_targets", decisions)
+        self.assertNotIn("has_completed_focus = STP_pc_hegemony_open", decisions)
 
     def test_postwar_victory_survives_settlement_cleanup(self) -> None:
         triggers = read(IMPERIAL_TRIGGERS)

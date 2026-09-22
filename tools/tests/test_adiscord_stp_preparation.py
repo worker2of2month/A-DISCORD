@@ -61,6 +61,10 @@ def matches_conditions(items, facts, scope="STP"):
         if entry.key in ("owner", "controller"):
             country = facts.get((scope, entry.key))
             return country is not None and matches_conditions(entry.value, facts, country)
+        if entry.key == "any_enemy_country":
+            countries = {key[0] for key in facts if re.fullmatch(r"[A-Z]{3}", key[0])}
+            return any(facts.get((scope, "has_war_with", country), facts.get((country, "has_war_with", scope), False))
+                       and matches_conditions(entry.value, facts, country) for country in countries)
         if entry.key == "any_other_country":
             countries = {key[0] for key in facts if re.fullmatch(r"[A-Z]{3}", key[0])}
             return any(country != scope and facts.get((country, "exists", "yes"), False)
@@ -141,6 +145,8 @@ def matches_conditions(items, facts, scope="STP"):
         else:
             results.append(matches(entry))
             index += 1
+        if not results[-1]:
+            return False
     return all(results)
 
 
@@ -178,6 +184,106 @@ def selected_effects(items, facts, scope="STP"):
 
 
 class StelanderPreparationTests(unittest.TestCase):
+    def test_shabrat_can_order_wartime_volunteers_without_resource_stocks(self):
+        decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council")
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        facts = {("STS", "tag", "STS"): True,
+                 ("STS", "has_completed_focus", "STP_cw_mobilization_register"): True,
+                 ("STS", "STP_cw_can_rearm", "yes"): True,
+                 ("STS", "owns_state", "1"): True, ("STS", "controls_state", "1"): True,
+                 ("STS", "manpower"): 0, ("STS", "numeric", "has_political_power"): 40}
+        brigade = block(decisions, "STP_cw_raise_territorial_brigade")
+        self.assertTrue(matches_conditions(block(brigade, "available"), facts, "STS"))
+        self.assertEqual(scalar(brigade, "cost"), "25")
+        training = block(decisions, "STP_cw_train_reserve_brigades")
+        self.assertTrue(matches_conditions(block(training, "custom_cost_trigger"), facts, "STS"))
+        paid = [e for _, e in selected_effects(block(training, "complete_effect"), facts, "STS")]
+        self.assertEqual([e.value for e in paid if e.key == "add_political_power"], ["-40"])
+        self.assertFalse(any(e.key in {"add_manpower", "STP_cw_pay_rifles", "add_equipment_to_stockpile"} for e in paid))
+        receipt = "STP_cw_training_political_payment"
+        self.assertIn(receipt, [e.value for e in paid if e.key == "set_country_flag"])
+        for political in (True, False):
+            refund_facts = facts | {("STS", "variable", "STP_cw_training_cohorts"): 2,
+                                   ("STS", "has_country_flag", receipt): political}
+            refund = [e for _, e in selected_effects(block(effects, "STP_cw_refund_reserve_training"), refund_facts, "STS")]
+            self.assertEqual(any(e.key == "add_manpower" for e in refund), not political)
+            self.assertEqual(any(e.key == "add_equipment_to_stockpile" for e in refund), not political)
+            self.assertIn(receipt, [e.value for e in refund if e.key == "clr_country_flag"])
+        settled_facts = facts | {("STS", "variable", "STP_cw_training_cohorts"): 2,
+                                 ("STS", "has_country_flag", receipt): True}
+        deliveries = []
+        for _ in range(2):
+            for scope, effect in selected_effects(block(effects, "STP_cw_finish_reserve_training"), settled_facts, "STS"):
+                deliveries.append(effect)
+                if effect.key == "clear_variable":
+                    settled_facts[(scope, "variable", effect.value)] = 0
+                elif effect.key == "clr_country_flag":
+                    settled_facts[(scope, "has_country_flag", effect.value)] = False
+        self.assertEqual(sum(e.key == "random_owned_controlled_state" for e in deliveries), 2)
+        self.assertFalse(settled_facts[("STS", "has_country_flag", receipt)])
+
+    def test_shabrat_war_resource_focuses_are_early_and_close_with_the_party_war(self):
+        trees = entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+        tree = next(e.value for e in trees if e.key == "focus_tree" and scalar(e.value, "id") == "STP_cw_focus")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        for focus_id, cost in (("STP_cw_open_local_depots", "1"), ("STP_cw_war_fund", "2")):
+            focus = focuses[focus_id]
+            self.assertEqual(scalar(focus, "cost"), cost)
+            self.assertEqual(scalar(focus, "cancel_if_invalid"), "yes")
+            self.assertFalse(matches_conditions(block(focus, "available"), {}))
+            self.assertTrue(matches_conditions(block(focus, "available"), {("STP", "has_war_with", "STP"): True}))
+        depots = block(focuses["STP_cw_open_local_depots"], "completion_reward")
+        self.assertEqual(scalar(block(depots, "add_equipment_to_stockpile"), "amount"), "8000")
+        self.assertNotIn("prerequisite", {e.key for e in focuses["STP_cw_open_local_depots"]})
+        fund = block(focuses["STP_cw_war_fund"], "completion_reward")
+        self.assertEqual(scalar(fund, "STP_receive_6000"), "yes")
+
+    def test_counterintelligence_missions_follow_each_district_without_releasing_it_early(self):
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")
+        start = block(effects, "STP_show_counterintelligence_mission")
+        cleanup = block(effects, "STP_end_battle_for_stelander")
+        marker = "STP_party_counterintelligence_asset"
+        for state in (2, 3, 29, 45, 46, 53):
+            with self.subTest(state=state):
+                mission_id = f"STP_counterintelligence_state_{state}"
+                facts = {(str(state), "state", str(state)): True,
+                         ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True,
+                         ("STP", "has_country_flag", "STP_battle_for_stelander_active"): True,
+                         (str(state), "has_state_flag", marker): True}
+                selected = [(scope, e.key, e.value) for scope, e in selected_effects(start, facts, str(state))]
+                self.assertEqual(selected, [("STP", "remove_mission", mission_id),
+                                            ("STP", "activate_mission", mission_id)])
+                mission = block(decisions, mission_id)
+                self.assertEqual(scalar(mission, "days_mission_timeout"), "56")
+                self.assertFalse(matches_conditions(block(mission, "available"), facts))
+                self.assertFalse(matches_conditions(block(mission, "cancel_trigger"), facts))
+                for change in ((str(state), "has_state_flag", marker),
+                               ("STP", "has_country_flag", "STP_battle_for_stelander_active")):
+                    self.assertTrue(matches_conditions(block(mission, "cancel_trigger"), facts | {change: False}))
+                self.assertFalse(any(e.key in {"set_state_flag", "clr_state_flag"} for e in walk(mission)),
+                                 "the display mission must not change the authoritative timed block")
+                self.assertIn(mission_id, [e.value for e in cleanup if e.key == "remove_mission"])
+
+    def test_every_counterintelligence_application_starts_its_display_timer(self):
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        applications = 0
+
+        def check(items):
+            nonlocal applications
+            for index, entry in enumerate(items):
+                if entry.key == "set_state_flag" and isinstance(entry.value, list):
+                    if scalar(entry.value, "flag") == "STP_party_counterintelligence_asset":
+                        applications += 1
+                        self.assertEqual(scalar(entry.value, "days"), "56")
+                        self.assertEqual((items[index + 1].key, items[index + 1].value),
+                                         ("STP_show_counterintelligence_mission", "yes"))
+                if isinstance(entry.value, list):
+                    check(entry.value)
+
+        check(effects)
+        self.assertEqual(applications, 3)
+
     def test_ai_preserves_electoral_mandate_and_paid_work_before_early_uprising(self):
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")
         weights = block(block(decisions, "STP_cw_start_uprising"), "ai_will_do")
@@ -258,7 +364,9 @@ class StelanderPreparationTests(unittest.TestCase):
         settlement = next(e.value for e in reserve if e.key == "if")
         delivered = block(block(settlement, "else"), "STP")
         self.assertEqual(scalar(delivered, "set_country_flag"), "STP_cw_kefreyt_shipment_received")
-        self.assertEqual(scalar(block(delivered, "country_event"), "id"), "ADISCORD_STP_preparation.8")
+        notice = next(e.value for e in delivered if e.key == "if")
+        self.assertIn("STP_sided_with_Maksim_flag", str(block(notice, "limit")))
+        self.assertEqual(scalar(block(notice, "country_event"), "id"), "ADISCORD_STP_preparation.8")
         ledger_gate = block(block(settlement, "limit"), "1")
         self.assertFalse(matches_conditions(ledger_gate, {}, "1"))
         self.assertFalse(matches_conditions(ledger_gate, {("1", "variable", "STP_cw_kefreyt_volunteers"): 2}, "1"))
@@ -270,6 +378,55 @@ class StelanderPreparationTests(unittest.TestCase):
         last_split = max(e.line for e in walk(start) if e.key == "transfer_units_fraction")
         delivery = next(e for e in walk(start) if e.key == "STP_cw_materialize_region_assets")
         self.assertLess(last_split, delivery.line, "foreign formations must not enter the shared percentage split")
+
+    def test_kefreyt_reply_is_private_from_party_player(self):
+        events = entries("events/ADISCORD_STP_events.txt")
+        reply = next(e.value for e in events if e.key == "country_event"
+                     and scalar(e.value, "id") == "ADISCORD_STP_preparation.8")
+        gate = block(reply, "trigger")
+        shabrat = {("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True}
+        party = {("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True}
+        resistance = {("STS", "has_country_flag", "STP_cw_participant"): True}
+        self.assertTrue(matches_conditions(gate, shabrat, "STP"))
+        self.assertFalse(matches_conditions(gate, party, "STP"))
+        self.assertTrue(matches_conditions(gate, resistance, "STS"))
+
+        offer = next(e.value for e in events if e.key == "country_event"
+                     and scalar(e.value, "id") == "ADISCORD_STP_preparation.6")
+        for option_name in ("ADISCORD_STP_preparation.6.a", "ADISCORD_STP_preparation.6.b"):
+            option = next(e.value for e in offer if e.key == "option"
+                          and scalar(e.value, "name") == option_name)
+            hidden = block(option, "hidden_effect")
+            prewar_stp = [e.value for e in walk(hidden) if e.key == "STP"]
+            self.assertTrue(any("STP_sided_with_Maksim_flag" in str(scope) for scope in prewar_stp),
+                            option_name)
+
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        reserve = block(block(effects, "STP_cw_reserve_kefreyt_volunteers"), "if")
+        settlement = next(e.value for e in reserve if e.key == "if")
+        delivered = block(block(settlement, "else"), "STP")
+        self.assertEqual(scalar(delivered, "set_country_flag"),
+                         "STP_cw_kefreyt_shipment_received")
+        delivery_gate = next(e.value for e in delivered if e.key == "if")
+        self.assertIn("STP_sided_with_Maksim_flag", str(block(delivery_gate, "limit")))
+        self.assertEqual(scalar(block(delivery_gate, "country_event"), "id"),
+                         "ADISCORD_STP_preparation.8")
+
+    def test_northern_event_explicitly_surfaces_player_help(self):
+        events = entries("events/ADISCORD_STP_events.txt")
+        event = next(e.value for e in events if e.key == "country_event"
+                     and scalar(e.value, "id") == "ADISCORD_STP_preparation.13")
+        options = [e.value for e in event if e.key == "option"]
+        shabrat = next(o for o in options if scalar(o, "name") == "ADISCORD_STP_preparation.13.a")
+        party = next(o for o in options if scalar(o, "name") == "ADISCORD_STP_preparation.13.party_a")
+        self.assertEqual(scalar(shabrat, "custom_effect_tooltip"),
+                         "STP_cw_northern_event_help_tt")
+        self.assertEqual(scalar(party, "custom_effect_tooltip"),
+                         "STP_ps_northern_event_help_tt")
+        ru = read("localisation/russian/ADISCORD_STP_l_russian.yml")
+        self.assertIn("§YЭто преимущество можно усилить.§!", ru)
+        self.assertIn("STP_cw_northern_event_help_tt:", ru)
+        self.assertIn("STP_ps_northern_event_help_tt:", ru)
 
     def test_kefreyt_consent_is_available_without_stocks_and_queues_only_once(self):
         event = next(e.value for e in entries("events/ADISCORD_STP_events.txt")
@@ -472,6 +629,32 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertNotIn("ADISCORD_STP_nectar_story", (ROOT / path).read_text(encoding="utf-8-sig"))
         self.assertFalse(any(key.startswith("STP_nectar_") for key in values))
 
+    def test_intro_lore_is_paced_by_five_one_week_focuses(self):
+        tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+                    if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        order = (
+            ("STP_NECTAR_OF_GODS", None, "ADISCORD_STP_preparation.15"),
+            ("STP_REVOLUTION_FROM_THE_NORTH", "STP_NECTAR_OF_GODS", "ADISCORD_STP_preparation.23"),
+            ("STP_2160_budget", "STP_REVOLUTION_FROM_THE_NORTH", "ADISCORD_STP_preparation.16"),
+            ("STP_BEHIND_THE_LIGHTS", "STP_2160_budget", "ADISCORD_STP_preparation.25"),
+            ("STP_STATE_OF_THE_REPUBLIC", "STP_BEHIND_THE_LIGHTS", None),
+        )
+        for focus_id, parent, event_id in order:
+            focus = focuses[focus_id]
+            self.assertEqual(scalar(focus, "cost"), "1", focus_id)
+            if parent is not None:
+                self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), parent)
+            if event_id is not None:
+                reward = block(focus, "completion_reward")
+                call = block(reward, "country_event")
+                self.assertEqual(scalar(call, "id"), event_id)
+        events = {scalar(e.value, "id"): e.value for e in entries("events/ADISCORD_STP_events.txt")
+                  if e.key == "country_event"}
+        for event_id in ("ADISCORD_STP_preparation.23", "ADISCORD_STP_preparation.25"):
+            option = block(events[event_id], "option")
+            self.assertEqual(len(option), 1, "paced lore cards must close without scheduling another popup")
+
     def test_regional_preparation_appears_after_its_focus_and_restores_lost_assets(self):
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
@@ -553,8 +736,8 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertFalse(matches_conditions(recruitment, resources, tag))
             unlocked = {**resources, (tag, "has_completed_focus", "STP_cw_mobilization_register"): True}
             self.assertTrue(matches_conditions(recruitment, unlocked, tag))
-            self.assertFalse(matches_conditions(recruitment, {**unlocked, (tag, "equipment", "infantry_equipment"): 599.5}, tag),
-                             "replacing the unlock marker must preserve the actual equipment requirement")
+            self.assertEqual(matches_conditions(recruitment, {**unlocked, (tag, "equipment", "infantry_equipment"): 599.5}, tag),
+                             tag == "STS", "only Shabrat recruits wartime volunteers for political power")
         for marker, focus in marker_focus.items():
             with self.subTest(marker=marker):
                 reward = block(focuses[focus], "completion_reward")
@@ -991,13 +1174,32 @@ class StelanderPreparationTests(unittest.TestCase):
         actions = {a.key: a.value for c in categories for a in c.value if isinstance(a.value, list)}
         price_keys = {e.value for action in actions.values() for e in action if e.key == "custom_cost_text"}
         localisation = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(encoding="utf-8-sig")
-        values = dict(re.findall(r'^ ([\w.]+):\s*"(.*)"$', localisation, re.M))
+        values = dict(re.findall(r'^ ([\w.]+):(?:\d+)?\s*"(.*)"$', localisation, re.M))
         for key in price_keys:
             with self.subTest(price=key):
                 self.assertIn(key, values)
                 self.assertIn(key + "_blocked", values, "native custom_cost_text automatically requests this suffix")
                 self.assertIn(key + "_tooltip", values)
                 base, blocked, tooltip = (values[key + suffix] for suffix in ("", "_blocked", "_tooltip"))
+                if key == "STP_cw_reserve_training_cost":
+                    scripted = entries("common/scripted_localisation/ADISCORD_STP_scripted_loc.txt")
+                    for tag in ("STS", "STP", "SRP"):
+                        rendered = []
+                        for value in (base, blocked, tooltip):
+                            name = value.strip("[]")
+                            getter = next(e.value for e in scripted if e.key == "defined_text" and scalar(e.value, "name") == name)
+                            options = [e.value for e in getter if e.key == "text"]
+                            chosen = next(option for option in options if not any(e.key == "trigger" for e in option)
+                                          or matches_conditions(block(option, "trigger"), {}, tag))
+                            rendered.append(values[scalar(chosen, "localization_key")])
+                        shown, unavailable, hover = rendered
+                        self.assertEqual(unavailable, shown.replace("§Y", "§R"))
+                        expected = [("£political_power_texticon", "40")]
+                        if tag != "STS":
+                            expected += [("£manpower_texticon", "12000"), ("£infantry_equipment_texticon", "1200")]
+                        self.assertEqual(re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", shown), expected)
+                        self.assertEqual(re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", hover), expected)
+                    continue
                 self.assertEqual(blocked, base.replace("§Y", "§R"))
                 prices = re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", base)
                 self.assertTrue(prices, "the price needs readable currency amounts")
@@ -2700,11 +2902,11 @@ class StelanderPreparationTests(unittest.TestCase):
                      and any(e.key == "set_country_flag" and e.value == "STP_sided_with_the_party_flag"
                              for e in walk(option.value)))
         self.assertNotIn("scoped_play_song", {e.key for e in walk(party.value)})
-        assets = entries("music/music.asset")
+        assets = entries("music/ADISCORD_music.asset")
         song = next(e.value for e in assets if e.key == "music" and scalar(e.value, "name") == "ADISCORD_stp_shabrat")
         self.assertEqual(scalar(song, "file"), "ADISCORD_stp_shabrat.ogg")
         self.assertTrue((ROOT / "music" / "ADISCORD_stp_shabrat.ogg").is_file())
-        station = entries("music/_songs.txt")
+        station = entries("music/ADISCORD_songs.txt")
         playlist = next(e.value for e in station if e.key == "music" and scalar(e.value, "song") == "ADISCORD_stp_shabrat")
         chance = block(playlist, "chance")
         self.assertEqual(scalar(chance, "base"), "10")
@@ -2729,7 +2931,7 @@ class StelanderPreparationTests(unittest.TestCase):
     def test_prewar_branches_close_when_the_elections_finish(self):
         trees = entries("common/national_focus/ADISCORD_national_focus_STP.txt")
         tree = next(e.value for e in trees if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
-        intro = {"STP_NECTAR_OF_GODS", "STP_2160_budget", "STP_STATE_OF_THE_REPUBLIC"}
+        intro = {"STP_NECTAR_OF_GODS", "STP_REVOLUTION_FROM_THE_NORTH", "STP_2160_budget", "STP_BEHIND_THE_LIGHTS", "STP_STATE_OF_THE_REPUBLIC"}
         for focus in (e.value for e in tree if e.key == "focus"):
             focus_id = scalar(focus, "id")
             if focus_id not in intro:

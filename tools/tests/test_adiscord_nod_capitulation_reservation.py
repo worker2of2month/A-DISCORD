@@ -59,10 +59,14 @@ class NodrulCapitulationReservationTests(unittest.TestCase):
         reserved = "STP_cw_northern_capitulation_reserved"
 
         self.assertIn(f"ROOT = {{ has_country_flag = {pending} }}", immediate)
-        self.assertRegex(
-            immediate,
-            rf"set_country_flag\s*=\s*\{{\s*flag\s*=\s*{reserved}\s+value\s*=\s*1\s+days\s*=\s*2\s*\}}",
-        )
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import walk, scalar
+        reservations = [e.value for e in walk(parse_clausewitz(immediate))
+                        if e.key == "set_country_flag" and isinstance(e.value, list)
+                        and scalar(e.value, "flag") == reserved]
+        self.assertEqual(len(reservations), 1)
+        self.assertEqual(scalar(reservations[0], "value"), "1")
+        self.assertEqual(scalar(reservations[0], "days"), "2")
         self.assertIn(f"ROOT = {{ has_country_flag = {reserved} }}", late)
         self.assertIn("set_global_flag = skip_default_capitulation", late)
 
@@ -71,12 +75,19 @@ class NodrulCapitulationReservationTests(unittest.TestCase):
         self.assertIn("NOT = { has_global_flag = skip_default_capitulation }", generic)
         self.assertIn("clr_global_flag = skip_default_capitulation", generic)
 
-    def test_nodrul_defeat_only_cedes_the_two_scripted_states(self) -> None:
-        defeat = named_block(read(EFFECTS), "STP_cw_settle_northern_defeat")
+    def test_nodrul_defeat_cedes_border_states_and_ainholm_claims(self) -> None:
+        source = read(EFFECTS)
+        defeat = named_block(source, "STP_cw_settle_northern_defeat")
+        ainholm = named_block(source, "STP_cw_cede_ainholm_to_frontier")
         self.assertIn("YPR = { transfer_state = 17 }", defeat)
         self.assertIn("YPR = { transfer_state = 18 }", defeat)
-        self.assertNotIn("annex_country", defeat)
-        self.assertNotIn("every_owned_state", defeat)
+        self.assertIn("STP_cw_cede_ainholm_to_frontier = yes", defeat)
+        self.assertIn("TFF = { transfer_state = 118 }", ainholm)
+        self.assertIn("TFF = { transfer_state = 119 }", ainholm)
+        self.assertIn("tag = AIN", ainholm)
+        self.assertIn("tag = NOD", ainholm)
+        self.assertNotIn("annex_country", defeat + ainholm)
+        self.assertNotIn("every_owned_state", defeat + ainholm)
 
 
 if __name__ == "__main__":
