@@ -5,8 +5,8 @@ STP_elections_in_the_party = {
 	visible = {
 		NOT = { has_global_flag = STP_cw_started }
 		NOT = { has_country_flag = STP_cw_elections_finished }
-}
-	visible_when_empty = no
+	}
+	visible_when_empty = yes
 	priority = 21
 }
 

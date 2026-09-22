@@ -2517,6 +2517,12 @@ STP_cw_prepare_successor = {
 
 # STP: transfer accumulated values after successors initialize their modifier variables.
 STP_cw_transfer_preparation_modifiers = {
+	# Shabrat inherits the actual prewar sovereign debt. The successor economy
+	# must not erase liabilities created while the player was still controlling STP.
+	STS = {
+		set_variable = { var = ADISCORD_economy_debt value = STP.ADISCORD_economy_debt }
+		ADISCORD_economy_mark_dirty = yes
+	}
 	if = {
 		limit = { has_country_flag = STP_cw_disruption_unlocked }
 		STS = { set_country_flag = STP_cw_disruption_unlocked }

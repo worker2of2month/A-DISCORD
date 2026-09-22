@@ -54,6 +54,13 @@ class PartyQualityOfLifeTests(unittest.TestCase):
 
 
 
+    def test_election_category_stays_visible_until_the_election_is_resolved(self):
+        category = self.categories['STP_elections_in_the_party']
+        self.assertEqual(scalar(category, 'visible_when_empty'), 'yes')
+        visible = block(category, 'visible')
+        self.assertIn('STP_cw_started', str(visible))
+        self.assertIn('STP_cw_elections_finished', str(visible))
+
     def test_pressure_affects_the_current_shipment_on_purchase(self):
         start = list(walk(block(self.decisions['STP_ps_val_pressure'], 'complete_effect')))
         self.assertIn('STP_ps_val_pressure_finish', [e.key for e in start])

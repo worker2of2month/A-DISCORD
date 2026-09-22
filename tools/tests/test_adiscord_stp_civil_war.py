@@ -81,6 +81,17 @@ class CivilWarContracts(unittest.TestCase):
         self.effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         self.triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
 
+    def test_shabrat_successor_inherits_prewar_sovereign_debt(self):
+        transfer = block(self.effects, "STP_cw_transfer_preparation_modifiers")
+        self.assertIn(
+            "set_variable = { var = ADISCORD_economy_debt value = STP.ADISCORD_economy_debt }",
+            transfer,
+        )
+        debt_copy = transfer.index(
+            "set_variable = { var = ADISCORD_economy_debt value = STP.ADISCORD_economy_debt }"
+        )
+        self.assertIn("ADISCORD_economy_mark_dirty = yes", transfer[debt_copy:])
+
     def test_party_hostilities_clear_prewar_regime_spirits(self):
         hostilities = block(self.effects, "STP_cw_begin_hostilities")
         prewar_spirits = (
