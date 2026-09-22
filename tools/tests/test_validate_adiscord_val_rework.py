@@ -4154,5 +4154,196 @@ class ValFormationAndCommandTests(unittest.TestCase):
         self.assertIn("VAL_refresh_industrial_economy = yes", init)
 
 
+class ValFocusRewardBalanceTests(unittest.TestCase):
+    """Validate authored rewards and lifecycle branches, not native spawning."""
+
+    PACKAGES = (
+        ("VAL_Border_Survey_Corps", "VAL_raise_mountain_contractors",
+         "VAL_mountain_contractors_raised", "Kefreyt Mountain Contractors", "mountaineers"),
+        ("VAL_Reserve_Battalions", "VAL_raise_reserve_battalions",
+         "VAL_reserve_battalions_raised", "Kefreyt Reserve Infantry", "infantry"),
+    )
+
+    @classmethod
+    def setUpClass(cls):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar
+        cls.effects = parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8"))
+        tree = block(parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8")), "focus_tree")
+        cls.focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+
+    def test_manpower_rewards_support_real_formation_scale(self):
+        from tools.tests.test_adiscord_stp_preparation import block, walk
+        expected = {"VAL_Gromovs_Assault_Tables": 6000, "VAL_Morns_Supply_Trains": 4000,
+                    "VAL_Field_Surgeons": 8000, "VAL_Dead_Villages_Still_Count": 5000,
+                    "VAL_Reserve_Battalions": 4000, "VAL_Operational_Reserves": 10000}
+        for focus, amount in expected.items():
+            with self.subTest(focus=focus):
+                rewards = block(self.focuses[focus], "completion_reward")
+                self.assertEqual([int(e.value) for e in walk(rewards) if e.key == "add_manpower"], [amount])
+
+    def test_logistics_rewards_deliver_actual_transport_and_replacements(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        for focus, expected in (
+            ("VAL_Motorized_Columns", {"motorized_equipment": 500}),
+            ("VAL_Logistics_Command", {"support_equipment": 600, "motorized_equipment": 200}),
+            ("VAL_Operational_Reserves", {"infantry_equipment": 4500,
+                "ADISCORD_squad_weapons_equipment": 144, "support_equipment": 120}),
+        ):
+            with self.subTest(focus=focus):
+                actual = {scalar(e.value, "type"): int(scalar(e.value, "amount"))
+                          for e in walk(block(self.focuses[focus], "completion_reward"))
+                          if e.key == "add_equipment_to_stockpile"}
+                self.assertEqual(actual, expected)
+
+    def test_civilian_alternative_keeps_a_material_reward(self):
+        from tools.tests.test_adiscord_stp_preparation import block, selected_effects
+        for focus, flags in (("VAL_Price_Of_Loyalty", {}),
+                             ("VAL_Dead_Villages_Still_Count", {
+                                 ("VAL", "has_country_flag", "VAL_ash_rear_mobilization"): True})):
+            selected = list(selected_effects(block(self.focuses[focus], "completion_reward"), flags, "VAL"))
+            self.assertIn("ADISCORD_economy_receive_100", [e.key for _, e in selected])
+            self.assertNotIn("ADISCORD_economy_receive_15", [e.key for _, e in selected])
+
+    def test_grant_focuses_have_live_territory_gate_and_unchanged_duration(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions
+        facts = {("VAL", "has_capitulated", "no"): True,
+                 ("VAL", "owns_state", "54"): True, ("VAL", "controls_state", "54"): True}
+        for focus, effect, _, _, _ in self.PACKAGES:
+            with self.subTest(focus=focus):
+                self.assertEqual(scalar(block(self.focuses[focus], "completion_reward"), effect), "yes")
+                self.assertEqual(scalar(self.focuses[focus], "cost"),
+                                 "2" if focus == "VAL_Border_Survey_Corps" else "5")
+                available = block(self.focuses[focus], "available")
+                self.assertTrue(matches_conditions(available, facts, "VAL"))
+                self.assertFalse(matches_conditions(available, facts | {("VAL", "controls_state", "54"): False}, "VAL"))
+                self.assertFalse(matches_conditions(available, facts | {("VAL", "has_capitulated", "no"): False}, "VAL"))
+
+    def test_formations_are_once_only_and_do_not_depend_on_stockpile_or_capital(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects, walk
+        for _, effect, receipt, _, _ in self.PACKAGES:
+            with self.subTest(effect=effect):
+                facts = {("VAL", "has_capitulated", "no"): True,
+                         ("VAL", "owns_state", "54"): True, ("VAL", "controls_state", "54"): True}
+                body = block(self.effects, effect)
+                grants = []
+                for _ in range(2):
+                    for scope, e in selected_effects(body, facts, "VAL"):
+                        if e.key == "set_country_flag":
+                            facts[scope, "has_country_flag", e.value] = True
+                        elif e.key == "random_owned_controlled_state":
+                            grants.append(e)
+                self.assertEqual(len(grants), 1)
+                spawn = block(grants[0].value, "create_unit")
+                self.assertEqual(scalar(spawn, "owner"), "PREV")
+                self.assertEqual(scalar(spawn, "count"), "2")
+                self.assertEqual(scalar(spawn, "allow_spawning_on_enemy_provs"), "no")
+                self.assertTrue(facts.get(("VAL", "has_country_flag", receipt)))
+                self.assertFalse(any(e.key in {"add_manpower", "add_equipment_to_stockpile", "capital_scope"}
+                                     for e in walk(body)))
+                for change in ({("VAL", "controls_state", "54"): False},
+                               {("VAL", "has_capitulated", "no"): False}):
+                    failed = facts | {("VAL", "has_country_flag", receipt): False} | change
+                    selected = list(selected_effects(body, failed, "VAL"))
+                    self.assertFalse(any(e.key in {"random_owned_controlled_state", "set_country_flag"}
+                                         for _, e in selected))
+                self.assertFalse(any(e.key == "random_owned_controlled_state"
+                                     for _, e in selected_effects(body, facts, "STP")))
+
+    def test_fixed_templates_match_personnel_and_equipment_promised(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar, walk
+        units = block(parse_clausewitz((ROOT / "common/units/ADISCORD_land_units.txt").read_text()), "sub_units")
+        for _, effect, _, name, battalion in self.PACKAGES:
+            with self.subTest(effect=effect):
+                body = block(self.effects, effect)
+                template = next((e.value for e in walk(body) if e.key == "division_template"), None)
+                self.assertIsNotNone(template, "the reward must create its template in existing saves")
+                self.assertEqual(scalar(template, "name"), name)
+                self.assertEqual(scalar(template, "is_locked"), "yes")
+                self.assertEqual(scalar(template, "force_allow_recruiting"), "yes")
+                regiments, support = block(template, "regiments"), block(template, "support")
+                self.assertEqual([e.key for e in regiments], [battalion] * 6)
+                self.assertEqual([e.key for e in support], ["engineer"])
+                manpower = 0
+                equipment = {}
+                for company in regiments + support:
+                    definition = block(units, company.key)
+                    manpower += int(scalar(definition, "manpower"))
+                    for need in block(definition, "need"):
+                        equipment[need.key] = equipment.get(need.key, 0) + int(need.value)
+                self.assertEqual(manpower, 6300)
+                self.assertEqual(equipment, {"infantry_equipment": 670 if battalion == "mountaineers" else 610,
+                    "ADISCORD_squad_weapons_equipment": 36 if battalion == "mountaineers" else 48,
+                    "support_equipment": 30})
+                spawning = next(e.value for e in walk(body) if e.key == "create_unit")
+                definition = parse_clausewitz(scalar(spawning, "division"))
+                self.assertEqual(scalar(definition, "division_template"), name)
+                self.assertEqual(float(scalar(definition, "start_manpower_factor")), 1.0)
+                self.assertEqual(float(scalar(definition, "start_equipment_factor")), 1.0)
+                self.assertGreaterEqual(float(scalar(definition, "start_experience_factor")), .2)
+                self.assertIn("ADISCORD_economy_mark_dirty", [e.key for e in walk(body)])
+
+    def test_formation_replays_cannot_be_scheduled_from_startup(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        on_actions = ON_ACTIONS_PATH.read_text(encoding="utf-8")
+        for focus, effect, receipt, _, _ in self.PACKAGES:
+            body = block(self.effects, effect)
+            self.assertNotIn(effect + " = yes", on_actions)
+            self.assertEqual(scalar(body, "custom_effect_tooltip"), effect + "_tt")
+            self.assertEqual([e.value for e in walk(body) if e.key == "set_country_flag"], [receipt])
+            self.assertFalse(any(e.key in {"country_event", "clr_country_flag"} for e in walk(body)))
+            # One real caller, no bonus on each monthly pulse or country initializer.
+            self.assertEqual(FOCUSES_PATH.read_text().count(effect + " = yes"), 1, focus)
+
+    def test_mountain_reward_has_matching_persistent_special_forces_capacity(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar, selected_effects
+        source = EFFECTS_PATH.read_text(encoding="utf-8")
+        refresh = block(parse_clausewitz(source), "VAL_refresh_contract_modifier")
+        field = "VAL_contract_special_forces_min"
+        resets = [e for e in refresh if e.key == "set_variable" and scalar(e.value, "var") == field]
+        self.assertEqual(len(resets), 1)
+        self.assertEqual(scalar(resets[0].value, "value"), "0")
+        branches = [e for e in refresh if e.key == "if" and any(
+            c.key == "has_country_flag" and c.value == "VAL_border_survey_complete"
+            for c in block(e.value, "limit"))]
+        self.assertEqual(len(branches), 1)
+        for active in (False, True):
+            chosen = selected_effects(branches, {("VAL", "has_country_flag", "VAL_border_survey_complete"): active}, "VAL")
+            delta = sum(float(scalar(e.value, "value")) for _, e in chosen
+                        if e.key == "add_to_variable" and scalar(e.value, "var") == field)
+            self.assertEqual(delta, 12 if active else 0)
+        dynamic = parse_clausewitz((ROOT / "common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt").read_text())
+        self.assertEqual(scalar(block(dynamic, "VAL_contract_state"), "special_forces_min"), field)
+        preview = only_named_block(self, IDEAS_PATH.read_text(), "VAL_border_survey_delta")
+        self.assertEqual(scalar(block(block(parse_clausewitz(preview), "VAL_border_survey_delta"), "modifier"),
+                                "special_forces_min"), "12")
+
+    def test_new_templates_and_spawn_sites_are_covered_by_the_force_audit(self):
+        import json
+        audit = json.loads((ROOT / "tools/data/division_template_audit.json").read_text())
+        for _, _, _, name, _ in self.PACKAGES:
+            rows = [row for row in audit["templates"] if row["technical_name"] == name]
+            self.assertEqual(len(rows), 1, name)
+            self.assertEqual(rows[0]["computed"]["manpower"], 6300)
+            self.assertEqual(rows[0]["source"]["path"], "common/scripted_effects/ADISCORD_VAL_effects.txt")
+            refs = [row for row in audit["references"] if row["technical_name"] == name]
+            self.assertEqual(len(refs), 1, name)
+            self.assertEqual(refs[0]["kind"], "create_unit")
+            self.assertEqual(refs[0]["count"], 1)
+
+    def test_formation_tooltips_are_localized_and_match_both_packages(self):
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            source = path.read_text(encoding="utf-8-sig")
+            for _, effect, _, _, _ in self.PACKAGES:
+                values = re.findall(r'^\s*' + effect + r'_tt:\d*\s+"([^"\n]*)"\s*$', source, re.M)
+                self.assertEqual(len(values), 1, effect)
+                self.assertIn("6300", values[0])
+                self.assertIn("100%", values[0])
+                self.assertIn("§Y2", values[0])
+                self.assertNotIn(";", values[0])
+                self.assertNotIn("—", values[0])
+
+
 if __name__ == "__main__":
     unittest.main()
