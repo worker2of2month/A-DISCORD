@@ -3,8 +3,8 @@
  EFFECT_UNLOCK_DECISION:0 "£decision_icon_small Будет открыто решение: $NAME|H$$EFFECT$."
 
 #aat_tooltips_l_braz_por
- DEN_military_advisors_cost_big_tt: "£army_advisor_cost_texticon  Стоимость всех военных советников: §G−15%§!" #Weird indentetion in order to show of the leader traits tt properly
- DEN_military_advisors_cost_small_tt: "£army_advisor_cost_texticon  Стоимость всех военных советников: §G−10%§!"
+ DEN_military_advisors_cost_big_tt: "£army_advisor_cost_texticon  Стоимость всех военных советников: §G-15%§!" #Weird indentetion in order to show of the leader traits tt properly
+ DEN_military_advisors_cost_small_tt: "£army_advisor_cost_texticon  Стоимость всех военных советников: §G-10%§!"
 
 #abilities_l_russian
  ABILITY_TOOLTIP_COST:0 "£command_power_texticon  Расход командного ресурса: $VALUE|H$"
@@ -1915,7 +1915,7 @@ modifier_army_sub_unit_long_range_patrol_support_defence_factor: "£defence_long
  TERRAIN_ADDITIONAL_WIDTH:0 "£combat_width_texticon  Ширина фронта на каждом дополнительном направлении: $VALUE|=0Y$"
 
 #traits_l_russian
- il_duce_laws_cost_tt: "  – £economy_laws_cost_texticon  Затраты на законы об экономике, торговле и призыве: §G−15%§!"
+ il_duce_laws_cost_tt: "  - £economy_laws_cost_texticon  Затраты на законы об экономике, торговле и призыве: §G-15%§!"
  SKILL_ATTACK:0 "£attack_texticon  §HАтака§!"
  SKILL_DEFENSE:0 "£defence_texticon  §HОборона§!"
  SKILL_PLANNING:0 "£planning_trait_texticon  §HПланирование§!"
