@@ -1188,9 +1188,9 @@ class NorthernStartingForceTests(unittest.TestCase):
         profiles = ast.literal_eval(assignment.value)
         expected = {
             "NOD": ("industrial", "energy", "institutional", "land", "air", "naval"),
-            "YPR": ("fragment_low_tech", "land", "field_air_defense"),
-            "COF": ("fragment_low_tech", "field_air_defense"),
-            "TFF": ("fragment_low_tech", "land", "field_air_defense"),
+            "YPR": ("fragment_low_tech", "land", "air", "field_air_defense"),
+            "COF": ("fragment_low_tech", "air", "field_air_defense"),
+            "TFF": ("fragment_low_tech", "land", "air", "field_air_defense"),
         }
         for tag, profile in expected.items():
             with self.subTest(tag=tag):
