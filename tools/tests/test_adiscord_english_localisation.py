@@ -51,6 +51,13 @@ class EnglishLocalisationTests(unittest.TestCase):
         self.assertTrue(any('missing UTF-8 BOM' in issue for issue in issues))
         self.assertTrue(any('malformed' in issue for issue in issues))
 
+    def test_forbidden_editorial_punctuation_is_rejected_in_both_languages(self):
+        self.write(self.root, 'russian', 'KEY: "Фраза — ещё; фраза"')
+        self.write(self.root, 'english', 'KEY: "Phrase – more; phrase"')
+        issues = audit(self.root, self.game)['issues']
+        forbidden = [issue for issue in issues if 'forbidden player-facing punctuation' in issue]
+        self.assertEqual(len(forbidden), 2, issues)
+
     def test_closed_texticon_can_touch_translated_prose(self):
         self.write(self.root, 'russian', 'KEY: "£trigger_no£Недостаточно инициативы"')
         self.write(self.root, 'english', 'KEY: "£trigger_no£Insufficient initiative"')

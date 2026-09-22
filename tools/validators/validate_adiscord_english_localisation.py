@@ -14,12 +14,13 @@ ENTRY = re.compile(r'^\s*([^\s:#]+):\d*\s*"((?:[^"\\]|\\.)*)"\s*(?:#.*)?$')
 # not mistaken for another icon, and frame changes remain detectable.
 TOKENS = re.compile(r'\$[^$\r\n]+\$|\[[^\]\r\n]+\]|£[A-Za-z0-9_]+(?:\|[0-9]+)?£?|@[A-Z0-9]{3}')
 CYRILLIC = re.compile(r'[А-Яа-яЁё]')
+FORBIDDEN_PUNCTUATION = re.compile(r'[—–−‑;]')
 # AGENTS.md forbids adding localisation for the exclusion zone.
 EXCLUDED_KEYS = {'EXZ_pragmatism_party', 'EXZ_No_Authority', 'EXZ_No_Authority_desc'}
 
 
 def comparable(value: str) -> str:
-    return value.translate(str.maketrans({'—': '-', '–': '-', '−': '-'}))
+    return value.translate(str.maketrans({'—': '-', '–': '-', '−': '-', '‑': '-'}))
 
 
 def read_entries(root: Path, language: str) -> tuple[dict, list[str]]:
@@ -43,6 +44,8 @@ def read_entries(root: Path, language: str) -> tuple[dict, list[str]]:
                 issues.append(f'{path}:{number}: malformed localisation entry')
                 continue
             key, value = match.groups()
+            if FORBIDDEN_PUNCTUATION.search(value):
+                issues.append(f'{path}:{number}: {key}: forbidden player-facing punctuation')
             entries[key] = {'value': value, 'file': str(path), 'line': number}
     return entries, issues
 
@@ -75,8 +78,6 @@ def audit(root: Path, game_root: Path) -> dict:
             issues.append(f'{translated["file"]}:{translated["line"]}: {key}: empty English translation')
         if CYRILLIC.search(translated['value']):
             issues.append(f'{translated["file"]}:{translated["line"]}: {key}: Cyrillic in English')
-        if re.search('[—–−]', translated['value']):
-            issues.append(f'{translated["file"]}:{translated["line"]}: {key}: non-ASCII dash in English')
         source_tokens = Counter(TOKENS.findall(entry['value']))
         target_tokens = Counter(TOKENS.findall(translated['value']))
         # Native languages sometimes use different static aliases or formatting.

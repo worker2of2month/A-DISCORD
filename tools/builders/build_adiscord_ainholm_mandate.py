@@ -39,7 +39,7 @@ AIN_LOCALISATION = {
     },
     TRAIT_LOCALISATION_PATH: {
         "AIN_concessionary_director": "Концессионный директор",
-        "AIN_concessionary_director_desc": "Умеет превращать зависимость в аккуратный договор, а изъятие ресурсов — в платную государственную услугу.",
+        "AIN_concessionary_director_desc": "Умеет превращать зависимость в аккуратный договор, а изъятие ресурсов - в платную государственную услугу.",
     },
     IDEA_LOCALISATION_PATH: {
         "AIN_concession_economy": "Концессионная экономика",
