@@ -1665,3 +1665,61 @@ STP_qol_elite_army_available = {
 		has_completed_focus = STP_pw_party_professional_service
 	}
 }
+
+
+# COUNTRY STS: the second hegemony campaign cannot begin while any northern
+# relation created by the first campaign is still at war.
+STP_heg_northern_final_resolved = {
+	tag = STS
+	has_completed_focus = STP_pc_heg_final_north
+	NOT = { has_war_with = NOD }
+	NOT = { has_war_with = YPR }
+	NOT = { has_war_with = TFF }
+	NOT = { has_war_with = VAL }
+}
+
+STP_heg_nod_administration_available = {
+	tag = STS
+	has_country_flag = STP_heg_administrations_unlocked
+	has_war = no
+	OR = {
+		NOD = { is_subject_of = STS }
+		NOD = { has_country_flag = STP_heg_defeated_by_sts }
+		NOD = { has_country_flag = STP_pc_defeated_by_sts }
+		AND = { NOT = { NOD = { exists = yes } } any_owned_state = { is_core_of = NOD } }
+	}
+}
+
+STP_heg_ypr_administration_available = {
+	tag = STS
+	has_country_flag = STP_heg_administrations_unlocked
+	has_war = no
+	OR = {
+		YPR = { is_subject_of = STS }
+		YPR = { has_country_flag = STP_heg_defeated_by_sts }
+		AND = { NOT = { YPR = { exists = yes } } any_owned_state = { is_core_of = YPR } }
+	}
+}
+
+STP_heg_tff_administration_available = {
+	tag = STS
+	has_country_flag = STP_heg_administrations_unlocked
+	has_war = no
+	OR = {
+		TFF = { is_subject_of = STS }
+		TFF = { has_country_flag = STP_heg_defeated_by_sts }
+		AND = { NOT = { TFF = { exists = yes } } any_owned_state = { is_core_of = TFF } }
+	}
+}
+
+STP_heg_val_administration_available = {
+	tag = STS
+	has_country_flag = STP_heg_administrations_unlocked
+	has_war = no
+	OR = {
+		VAL = { is_subject_of = STS }
+		VAL = { has_country_flag = STP_heg_defeated_by_sts }
+		VAL = { has_country_flag = VAL_cw_defeated }
+		AND = { NOT = { VAL = { exists = yes } } any_owned_state = { is_core_of = VAL } }
+	}
+}

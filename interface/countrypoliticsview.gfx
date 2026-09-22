@@ -678,4 +678,8 @@ spriteTypes = {
         name = "GFX_autonomy_VAL_contract_administration_icon"
         textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
     }
+    spriteType = {
+        name = "GFX_autonomy_STP_provisional_administration_icon"
+        textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
+    }
 }
