@@ -1839,7 +1839,7 @@ focus_tree = {
 				set_country_flag = VAL_cw_trade_course
 			}
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 2 }
 	}
 
 	focus = {
@@ -1868,7 +1868,7 @@ focus_tree = {
 			custom_effect_tooltip = VAL_stelander_focus_current_status_tt
 			hidden_effect = { set_country_flag = VAL_cw_military_course }
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 20 }
 	}
 
 	focus = {
@@ -2272,7 +2272,7 @@ completion_reward = {
   cost = 3
   prerequisite = { focus = VAL_frontier_treaty_offices }
   completion_reward = { unlock_decision_tooltip = { decision = VAL_stelander_ultimatum show_effect_tooltip = yes } unlock_decision_tooltip = { decision = VAL_campaign_against_stelander show_effect_tooltip = yes } }
-  ai_will_do = { base = 8 }
+  ai_will_do = { base = 20 }
  }
  focus = {
   id = VAL_Campaign_Secured
