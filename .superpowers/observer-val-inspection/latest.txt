@@ -177,3 +177,21 @@ country_event = {
  VAL_proclaim_commonwealth_desc: "Establish the postwar settlement through a common state treaty. Kefreyt receives a new name and flag; autonomous administrations retain their territories and special status."
  VAL_commonwealth_requirements_tt: "Contracts Outlive Kings is complete; Kefreyt is independent, has not capitulated and is at peace; the northern tribes, Nodrul and Stelander are subordinate according to the campaign goals; the northern resource belt is held; Kefreyt owns and controls §Y[29.GetName]§! and §Y[46.GetName]§!; stability is at least §Y50%§!"
  VAL_commonwealth_proclaimed_tt: "The state adopts the name §YKefreyt Commonwealth§! and a new flag. Puppet status and territories are preserved."
+
+tools/tests/test_val_contract_ui.py:609
+        decisions = parse_clausewitz(read('common/decisions/ADISCORD_VAL_decisions.txt'))
+        tree = block(parse_clausewitz(read('common/national_focus/ADISCORD_national_focus_VAL.txt')), 'focus_tree')
+        focuses = {scalar(e.value, 'id'): e.value for e in tree if e.key == 'focus'}
+        return effects, triggers, decisions, focuses
+
+    def test_solgalov_portrait_changes_at_proclamation_not_at_unlock(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
+        effects, _, _, focuses = self.data()
+        self.assertNotIn('GFX_portrait_VAL_Valera_Solgalov_contracts', str(focuses['VAL_Contracts_Outlive_Kings']))
+        adoption = block(effects, 'VAL_adopt_commonwealth')
+        for eligible in (False, True):
+            facts = {('VAL', 'VAL_can_proclaim_commonwealth', 'yes'): eligible}
+            selected = [e.key for _, e in selected_effects(adoption, facts, 'VAL')]
+            self.assertEqual('set_cosmetic_tag' in selected, eligible)
+            self.assertEqual('VAL_sync_solgalov_portrait' in selected, eligible)
+            if eligible:
