@@ -65,6 +65,25 @@ class BezhayskPeaceTests(unittest.TestCase):
         self.assertIn("autonomy_state = autonomy_NOD_protected_administration", joint)
         self.assertGreaterEqual(joint.count("set_country_flag = ADISCORD_bezhaysk_joint_settlement"), 2)
 
+    def test_joint_award_is_selected_before_white_peace(self) -> None:
+        effects = self.read("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")
+        start = effects.index("ADISCORD_bezhaysk_settle_val_nod_joint_victory = {")
+        end = effects.index("ADISCORD_bezhaysk_settle_forest_val_victory = {")
+        joint = effects[start:end]
+        for tag, capital in (
+            ("BLD", 31),
+            ("BHG", 5),
+            ("BGT", 4),
+            ("BBV", 7),
+            ("BCM", 9),
+            ("BJK", 41),
+        ):
+            package_start = joint.index(f"limit = {{ {tag} = {{ exists = yes")
+            package = joint[package_start:]
+            controller = package.index(f"{capital} = {{ controller =")
+            first_peace = package.index("white_peace =")
+            self.assertLess(controller, first_peace, tag)
+
     def test_nodrul_has_a_distinct_protected_administration_level(self) -> None:
         autonomy = self.read("common/autonomous_states/ADISCORD_contract_clients.txt")
         self.assertIn("id = autonomy_NOD_protected_administration", autonomy)
