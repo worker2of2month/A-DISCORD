@@ -38,6 +38,7 @@ try:
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
         technology_grid_position as generated_technology_grid_position,
+        render_folder as render_generated_technology_folder,
     )
     from tools.builders.build_adiscord_doctrine_system import (
         GRANDS as GENERATED_GRANDS,
@@ -77,6 +78,7 @@ except ModuleNotFoundError:
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
         technology_grid_position as generated_technology_grid_position,
+        render_folder as render_generated_technology_folder,
     )
     from builders.build_adiscord_doctrine_system import (
         GRANDS as GENERATED_GRANDS,
@@ -2065,6 +2067,21 @@ def check_technology_replace_path() -> list[str]:
     return issues
 
 
+def technology_layout_elements(text: str) -> dict[str, list[tuple[str, ...]]]:
+    """Collect generated labels, headings and grids without whitespace sensitivity."""
+
+    elements: dict[str, list[tuple[str, ...]]] = {}
+    for match in re.finditer(r"\b(?:instantTextBoxType|gridboxtype)\s*=\s*\{", text):
+        block = extract_block(text, match.start())
+        name_match = re.search(r'\bname\s*=\s*"(ADISCORD_[^"]+)"', block)
+        if name_match is None:
+            continue
+        name = name_match.group(1)
+        tokens = tuple(re.findall(r'"[^"]*"|[{}=]|[^\s{}=]+', block))
+        elements.setdefault(name, []).append(tokens)
+    return elements
+
+
 def check_technology_ui_years() -> list[str]:
     issues: list[str] = []
     gui_path = ROOT / "interface" / "countrytechtreeview.gui"
@@ -2083,6 +2100,17 @@ def check_technology_ui_years() -> list[str]:
         if not folder_block:
             issues.append(f"technology UI is missing folder container {folder}")
             continue
+        expected_elements = technology_layout_elements(render_generated_technology_folder(folder))
+        actual_elements = technology_layout_elements(folder_block)
+        for name in sorted(expected_elements.keys() | actual_elements.keys()):
+            if name not in expected_elements:
+                issues.append(f"{folder} has unexpected generated layout element {name}")
+            elif name not in actual_elements:
+                issues.append(f"{folder} is missing generated layout element {name}")
+            elif len(actual_elements[name]) != 1:
+                issues.append(f"{folder} has duplicate generated layout element {name}")
+            elif actual_elements[name] != expected_elements[name]:
+                issues.append(f"{folder}: {name} does not match its generated text or geometry")
         for year in sorted(EXPECTED_TECH_UI_YEARS):
             count = len(re.findall(rf'\btext\s*=\s*"{year}"', folder_block))
             expected = 1 if folder in GENERATED_HORIZONTAL_FOLDERS else sum(

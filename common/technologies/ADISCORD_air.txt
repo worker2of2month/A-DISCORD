@@ -8,11 +8,11 @@ technologies = {
 		start_year = 2150
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 0 }
+			position = { x = 0 y = 0 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 0 }
+			position = { x = 0 y = 0 }
 		}
 		ai_will_do = {
 			factor = 23.625
@@ -32,11 +32,11 @@ technologies = {
 		start_year = 2155
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 2 }
+			position = { x = 0 y = 2 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 2 }
+			position = { x = 0 y = 2 }
 		}
 		ai_will_do = {
 			factor = 17.5
@@ -56,11 +56,11 @@ technologies = {
 		start_year = 2158
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 4 }
+			position = { x = 0 y = 4 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 4 }
+			position = { x = 0 y = 4 }
 		}
 		ai_will_do = {
 			factor = 17.5
@@ -80,11 +80,11 @@ technologies = {
 		start_year = 2160
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 6 }
+			position = { x = 0 y = 6 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 6 }
+			position = { x = 0 y = 6 }
 		}
 		ai_will_do = {
 			factor = 17.5
@@ -105,11 +105,11 @@ technologies = {
 		start_year = 2161
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 8 }
+			position = { x = 0 y = 8 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 8 }
+			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
 			factor = 18.9
@@ -129,11 +129,11 @@ technologies = {
 		start_year = 2162
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 10 }
+			position = { x = 0 y = 10 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 10 }
+			position = { x = 0 y = 10 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -152,11 +152,11 @@ technologies = {
 		start_year = 2163
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 12 }
+			position = { x = 0 y = 12 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 12 }
+			position = { x = 0 y = 12 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -175,11 +175,11 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 14 }
+			position = { x = 0 y = 14 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 14 }
+			position = { x = 0 y = 14 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -199,11 +199,11 @@ technologies = {
 		start_year = 2165
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 16 }
+			position = { x = 0 y = 16 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 16 }
+			position = { x = 0 y = 16 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -224,11 +224,11 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 18 }
+			position = { x = 0 y = 18 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 18 }
+			position = { x = 0 y = 18 }
 		}
 		ai_will_do = {
 			factor = 18.9
@@ -248,11 +248,11 @@ technologies = {
 		start_year = 2167
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 20 }
+			position = { x = 0 y = 20 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 20 }
+			position = { x = 0 y = 20 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -273,11 +273,11 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 22 }
+			position = { x = 0 y = 22 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 22 }
+			position = { x = 0 y = 22 }
 		}
 		ai_will_do = {
 			factor = 18.9
@@ -297,11 +297,11 @@ technologies = {
 		start_year = 2169
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 24 }
+			position = { x = 0 y = 24 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 24 }
+			position = { x = 0 y = 24 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -322,11 +322,11 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 26 }
+			position = { x = 0 y = 26 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 26 }
+			position = { x = 0 y = 26 }
 		}
 		ai_will_do = {
 			factor = 18.9
@@ -346,11 +346,11 @@ technologies = {
 		start_year = 2171
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 28 }
+			position = { x = 0 y = 28 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 28 }
+			position = { x = 0 y = 28 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -371,11 +371,11 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 30 }
+			position = { x = 0 y = 30 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 30 }
+			position = { x = 0 y = 30 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -398,11 +398,11 @@ technologies = {
 		start_year = 2173
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 32 }
+			position = { x = -3 y = 32 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 32 }
+			position = { x = -3 y = 32 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -426,11 +426,11 @@ technologies = {
 		start_year = 2174
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 34 }
+			position = { x = 3 y = 34 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 34 }
+			position = { x = 3 y = 34 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -451,11 +451,11 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 36 }
+			position = { x = -3 y = 36 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 36 }
+			position = { x = -3 y = 36 }
 		}
 		ai_will_do = {
 			factor = 18.9
@@ -474,11 +474,11 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 38 }
+			position = { x = 3 y = 38 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 38 }
+			position = { x = 3 y = 38 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -499,11 +499,11 @@ technologies = {
 		start_year = 2160
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 0 }
+			position = { x = 0 y = 0 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 0 }
+			position = { x = 0 y = 0 }
 		}
 		ai_will_do = {
 			factor = 20.25
@@ -523,11 +523,11 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 2 }
+			position = { x = -3 y = 2 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 2 }
+			position = { x = -3 y = 2 }
 		}
 		ai_will_do = {
 			factor = 16.2
@@ -547,11 +547,11 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 2 }
+			position = { x = 3 y = 2 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 2 }
+			position = { x = 3 y = 2 }
 		}
 		ai_will_do = {
 			factor = 16.2
@@ -570,11 +570,11 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 4 }
+			position = { x = -3 y = 4 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 4 }
+			position = { x = -3 y = 4 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -593,11 +593,11 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 4 }
+			position = { x = 3 y = 4 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 4 }
+			position = { x = 3 y = 4 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -617,11 +617,11 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 6 }
+			position = { x = -3 y = 6 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 6 }
+			position = { x = -3 y = 6 }
 		}
 		ai_will_do = {
 			factor = 16.2
@@ -641,11 +641,11 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 6 }
+			position = { x = 3 y = 6 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 6 }
+			position = { x = 3 y = 6 }
 		}
 		ai_will_do = {
 			factor = 16.2
@@ -668,11 +668,11 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 8 }
+			position = { x = 0 y = 8 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 8 }
+			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -693,11 +693,11 @@ technologies = {
 		start_year = 2150
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 0 }
+			position = { x = 0 y = 0 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 0 }
+			position = { x = 0 y = 0 }
 		}
 		ai_will_do = {
 			factor = 20.25
@@ -716,11 +716,11 @@ technologies = {
 		start_year = 2155
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 2 }
+			position = { x = 0 y = 2 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 2 }
+			position = { x = 0 y = 2 }
 		}
 		ai_will_do = {
 			factor = 15
@@ -740,11 +740,11 @@ technologies = {
 		start_year = 2158
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 4 }
+			position = { x = 0 y = 4 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 4 }
+			position = { x = 0 y = 4 }
 		}
 		ai_will_do = {
 			factor = 15
@@ -764,11 +764,11 @@ technologies = {
 		start_year = 2160
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 6 }
+			position = { x = 0 y = 6 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 6 }
+			position = { x = 0 y = 6 }
 		}
 		ai_will_do = {
 			factor = 15
@@ -790,11 +790,11 @@ technologies = {
 		start_year = 2161
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 8 }
+			position = { x = 0 y = 8 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 8 }
+			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
 			factor = 16.2
@@ -814,11 +814,11 @@ technologies = {
 		start_year = 2162
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 10 }
+			position = { x = -3 y = 10 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 10 }
+			position = { x = -3 y = 10 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -839,11 +839,11 @@ technologies = {
 		start_year = 2163
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 12 }
+			position = { x = 3 y = 12 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 12 }
+			position = { x = 3 y = 12 }
 		}
 		ai_will_do = {
 			factor = 16.2
@@ -863,11 +863,11 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 14 }
+			position = { x = -3 y = 14 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 14 }
+			position = { x = -3 y = 14 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -887,11 +887,11 @@ technologies = {
 		start_year = 2165
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 16 }
+			position = { x = 3 y = 16 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 16 }
+			position = { x = 3 y = 16 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -912,11 +912,11 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 18 }
+			position = { x = -3 y = 18 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 18 }
+			position = { x = -3 y = 18 }
 		}
 		ai_will_do = {
 			factor = 16.2
@@ -936,11 +936,11 @@ technologies = {
 		start_year = 2167
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 20 }
+			position = { x = 3 y = 20 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 20 }
+			position = { x = 3 y = 20 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -960,11 +960,11 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 22 }
+			position = { x = -3 y = 22 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 22 }
+			position = { x = -3 y = 22 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -984,11 +984,11 @@ technologies = {
 		start_year = 2169
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 24 }
+			position = { x = 3 y = 24 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 24 }
+			position = { x = 3 y = 24 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -1013,11 +1013,11 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 26 }
+			position = { x = -3 y = 26 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 26 }
+			position = { x = -3 y = 26 }
 		}
 		ai_will_do = {
 			factor = 16.2
@@ -1037,11 +1037,11 @@ technologies = {
 		start_year = 2171
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 28 }
+			position = { x = 3 y = 28 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 28 }
+			position = { x = 3 y = 28 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -1061,11 +1061,11 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 30 }
+			position = { x = -3 y = 30 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 30 }
+			position = { x = -3 y = 30 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -1084,11 +1084,11 @@ technologies = {
 		start_year = 2173
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 32 }
+			position = { x = 3 y = 32 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 32 }
+			position = { x = 3 y = 32 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -1108,11 +1108,11 @@ technologies = {
 		start_year = 2174
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 34 }
+			position = { x = -3 y = 34 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 34 }
+			position = { x = -3 y = 34 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -1133,11 +1133,11 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 36 }
+			position = { x = 3 y = 36 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 36 }
+			position = { x = 3 y = 36 }
 		}
 		ai_will_do = {
 			factor = 16.2
@@ -1161,11 +1161,11 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 38 }
+			position = { x = 0 y = 38 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 38 }
+			position = { x = 0 y = 38 }
 		}
 		ai_will_do = {
 			factor = 12
@@ -1185,11 +1185,11 @@ technologies = {
 		start_year = 2150
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 0 }
+			position = { x = 0 y = 0 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 0 }
+			position = { x = 0 y = 0 }
 		}
 		ai_will_do = {
 			factor = 10
@@ -1209,11 +1209,11 @@ technologies = {
 		start_year = 2155
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 2 }
+			position = { x = 0 y = 2 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 2 }
+			position = { x = 0 y = 2 }
 		}
 		ai_will_do = {
 			factor = 10
@@ -1233,11 +1233,11 @@ technologies = {
 		start_year = 2158
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 4 }
+			position = { x = 0 y = 4 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 4 }
+			position = { x = 0 y = 4 }
 		}
 		ai_will_do = {
 			factor = 10
@@ -1257,11 +1257,11 @@ technologies = {
 		start_year = 2160
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 6 }
+			position = { x = 0 y = 6 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 6 }
+			position = { x = 0 y = 6 }
 		}
 		ai_will_do = {
 			factor = 10
@@ -1286,11 +1286,11 @@ technologies = {
 		start_year = 2161
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 8 }
+			position = { x = 0 y = 8 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 8 }
+			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
 			factor = 9.6
@@ -1310,11 +1310,11 @@ technologies = {
 		start_year = 2162
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 10 }
+			position = { x = -3 y = 10 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 10 }
+			position = { x = -3 y = 10 }
 		}
 		ai_will_do = {
 			factor = 8
@@ -1334,11 +1334,11 @@ technologies = {
 		start_year = 2163
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 12 }
+			position = { x = 3 y = 12 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 12 }
+			position = { x = 3 y = 12 }
 		}
 		ai_will_do = {
 			factor = 8
@@ -1358,11 +1358,11 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 14 }
+			position = { x = -3 y = 14 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 14 }
+			position = { x = -3 y = 14 }
 		}
 		ai_will_do = {
 			factor = 8
@@ -1382,11 +1382,11 @@ technologies = {
 		start_year = 2165
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 16 }
+			position = { x = 3 y = 16 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 16 }
+			position = { x = 3 y = 16 }
 		}
 		ai_will_do = {
 			factor = 8
@@ -1407,11 +1407,11 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 18 }
+			position = { x = -3 y = 18 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 18 }
+			position = { x = -3 y = 18 }
 		}
 		ai_will_do = {
 			factor = 10.8
@@ -1432,11 +1432,11 @@ technologies = {
 		start_year = 2167
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 20 }
+			position = { x = 3 y = 20 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 20 }
+			position = { x = 3 y = 20 }
 		}
 		ai_will_do = {
 			factor = 10.8
@@ -1469,11 +1469,11 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 22 }
+			position = { x = 0 y = 22 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 22 }
+			position = { x = 0 y = 22 }
 		}
 		ai_will_do = {
 			factor = 8
@@ -1493,11 +1493,11 @@ technologies = {
 		start_year = 2169
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 24 }
+			position = { x = -3 y = 24 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 24 }
+			position = { x = -3 y = 24 }
 		}
 		ai_will_do = {
 			factor = 8
@@ -1521,11 +1521,11 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 26 }
+			position = { x = 3 y = 26 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 26 }
+			position = { x = 3 y = 26 }
 		}
 		ai_will_do = {
 			factor = 9.6
@@ -1545,11 +1545,11 @@ technologies = {
 		start_year = 2171
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 28 }
+			position = { x = -3 y = 28 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 28 }
+			position = { x = -3 y = 28 }
 		}
 		ai_will_do = {
 			factor = 8
@@ -1569,11 +1569,11 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 30 }
+			position = { x = 3 y = 30 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 30 }
+			position = { x = 3 y = 30 }
 		}
 		ai_will_do = {
 			factor = 8
@@ -1593,11 +1593,11 @@ technologies = {
 		start_year = 2173
 		folder = {
 			name = air_techs_folder
-			position = { x = 0 y = 32 }
+			position = { x = -3 y = 32 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 0 y = 32 }
+			position = { x = -3 y = 32 }
 		}
 		ai_will_do = {
 			factor = 8
@@ -1618,11 +1618,11 @@ technologies = {
 		start_year = 2174
 		folder = {
 			name = air_techs_folder
-			position = { x = 6 y = 34 }
+			position = { x = 3 y = 34 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 6 y = 34 }
+			position = { x = 3 y = 34 }
 		}
 		ai_will_do = {
 			factor = 10.8
@@ -1647,11 +1647,11 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 36 }
+			position = { x = 0 y = 36 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 36 }
+			position = { x = 0 y = 36 }
 		}
 		ai_will_do = {
 			factor = 10.8
@@ -1675,11 +1675,11 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = air_techs_folder
-			position = { x = 3 y = 38 }
+			position = { x = 0 y = 38 }
 		}
 		folder = {
 			name = bba_air_techs_folder
-			position = { x = 3 y = 38 }
+			position = { x = 0 y = 38 }
 		}
 		ai_will_do = {
 			factor = 12.96

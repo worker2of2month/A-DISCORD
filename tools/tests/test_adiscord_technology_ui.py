@@ -390,6 +390,25 @@ class TechnologyUiContractTests(unittest.TestCase):
             )
             self.assertEqual(len(pattern.findall(gui)), 2, name)
 
+
+    def test_tree_skin_is_idempotent_for_generated_and_mixed_input(self) -> None:
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(encoding="utf-8")
+        self.assertEqual(builder.apply_tree_skin(gui), gui)
+        old, (new, _) = next(iter(builder.TREE_SPRITE_REPLACEMENTS.items()))
+        mixed = gui.replace(f'"{new}"', f'"{old}"', 1)
+        self.assertEqual(builder.apply_tree_skin(mixed), gui)
+
+    def test_tree_skin_still_rejects_missing_or_duplicate_widgets(self) -> None:
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(encoding="utf-8")
+        sprite = builder.FOLDER_TAB_CONTRACTS[0].target_name
+        for broken in (
+            gui.replace(f'"{sprite}"', '"missing_sprite"', 1),
+            gui + f'\nquadTextureSprite = "{sprite}"\n',
+        ):
+            with self.subTest(occurrences=broken.count(f'"{sprite}"')):
+                with self.assertRaises(ValueError):
+                    builder.apply_tree_skin(broken)
+
     def test_tree_skin_uses_tree_and_detail_roles(self) -> None:
         gui = (ROOT / "interface/countrytechtreeview.gui").read_text(
             encoding="utf-8-sig"

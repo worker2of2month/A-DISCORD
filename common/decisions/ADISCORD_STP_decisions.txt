@@ -4157,13 +4157,15 @@ STP_ps_nod_credit_useful = yes
 		visible = {  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }   }
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }  NOT = { has_variable = STP_ps_val_intelligence_deposit }  }
 			custom_trigger_tooltip = { tooltip = STP_ps_val_intelligence_time_available_tt STP_ps_val_intelligence_time_available = yes }
-}
+
+            VAL = { NOT = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } } }
+        }
 		cost = 0
 		custom_cost_text = STP_ps_val_intelligence_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals } }
 		complete_effect = { hidden_effect = { if = { limit = {
 STP_ps_val_intelligence_time_available = yes
-  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }  NOT = { has_variable = STP_ps_val_intelligence_deposit } check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals } }
+  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }  NOT = { has_variable = STP_ps_val_intelligence_deposit } check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }  VAL = { NOT = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } } } }
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 450 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 450 }
 					ADISCORD_economy_mark_dirty = yes
@@ -4191,13 +4193,15 @@ STP_ps_val_intelligence_time_available = yes
 		visible = {  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes }  }
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes } NOT = { has_variable = STP_ps_val_intercept_deposit }  }
 			custom_trigger_tooltip = { tooltip = STP_ps_val_intercept_time_available_tt STP_ps_val_intercept_time_available = yes }
-}
+
+            VAL = { NOT = { check_variable = { var = STP_ps_val_intercepted_sequence value = STP_ps_val_sequence compare = equals } } }
+        }
 		cost = 0
 		custom_cost_text = STP_ps_val_intercept_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals } }
 		complete_effect = { hidden_effect = { if = { limit = {
 STP_ps_val_intercept_time_available = yes
-  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes } NOT = { has_variable = STP_ps_val_intercept_deposit } check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals } }
+  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes } NOT = { has_variable = STP_ps_val_intercept_deposit } check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }  VAL = { NOT = { check_variable = { var = STP_ps_val_intercepted_sequence value = STP_ps_val_sequence compare = equals } } } }
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1200 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1200 }
 					ADISCORD_economy_mark_dirty = yes
@@ -4232,7 +4236,7 @@ STP_ps_val_intercept_time_available = yes
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1500 }
 					ADISCORD_economy_mark_dirty = yes
 					set_variable = { var = STP_ps_val_pressure_deposit value = 1500 }
-					activate_mission = STP_ps_val_pressure_work
+					STP_ps_val_pressure_finish = yes
 				} } }
 		ai_will_do = { base = 5 }
 	}

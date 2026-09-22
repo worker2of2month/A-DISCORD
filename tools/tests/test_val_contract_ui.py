@@ -54,15 +54,23 @@ class TestValContractUi(unittest.TestCase):
         self.assertIn("VAL_initialize_contract_authority = yes", weekly)
 
         history = read("history/countries/VAL - ValeraLand.txt")
-        self.assertIn("VAL_mercenary_state", history)
+        self.assertNotIn("VAL_mercenary_state", history)
 
         english = read("localisation/english/ADISCORD_VAL_decisions_l_english.yml")
         russian = read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml")
-        self.assertIn('VAL_contract_state: "Contract System Authority"', english)
-        self.assertIn('VAL_contract_state: "Авторитет контрактной системы"', russian)
+        self.assertIn('VAL_contract_state: "$VAL_mercenary_state$"', english)
+        self.assertIn('VAL_contract_state: "$VAL_mercenary_state$"', russian)
         for localisation in (english, russian):
             self.assertIn("[?VAL_contract_authority|0]/100", localisation)
             self.assertIn("[VALGetContractAuthorityBand]", localisation)
+
+    def test_supply_crisis_is_named_in_the_visible_dynamic_spirit(self):
+        for language, supply_name in (("russian", "разрыв поставок"), ("english", "Disrupted Supplies")):
+            text = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            label = re.search(r'^ VAL_economic_collapse:[^\n]*', text, re.M).group()
+            self.assertIn(supply_name, label)
+            self.assertRegex(text, r'VAL_vorkerland_contract_disruptions_desc:[^\n]*"\$VAL_economic_collapse_desc\$"')
+            self.assertIn("[?VAL_economic_recovery_steps|0]/9", text)
 
     def test_authority_labels_match_modifier_bands(self) -> None:
         scripted = read("common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt")

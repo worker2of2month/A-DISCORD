@@ -1188,12 +1188,12 @@ focus_tree = {
 				add_to_variable = { var = STP_cw_party_political_power_gain value = 0.15 }
 				add_to_variable = { var = STP_cw_party_stability_factor value = 0.03 }
 				STP_cw_refresh_party_modifier = yes
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 5 }
-				STP_change_apparatus_loyalty = yes
+
+
 				set_temp_variable = { var = STP_pf_selected value = 1 }
 				STP_pf_shift = yes
 			}
-			custom_effect_tooltip = STP_cw_loyalty_plus_5_tt
+
 			custom_effect_tooltip = STP_pf_conservatives_deal_tt
 		}
 	}
@@ -1281,12 +1281,12 @@ focus_tree = {
 				add_to_variable = { var = STP_cw_army_org_factor value = 0.10 }
 				add_to_variable = { var = STP_cw_army_planning_speed value = 0.15 }
 				STP_cw_refresh_army_modifier = yes
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 5 }
-				STP_change_apparatus_loyalty = yes
+
+
 				set_temp_variable = { var = STP_pf_selected value = 3 }
 				STP_pf_shift = yes
 			}
-			custom_effect_tooltip = STP_cw_loyalty_plus_5_tt
+
 			custom_effect_tooltip = STP_pf_security_deal_tt
 		}
 	}
@@ -1445,10 +1445,10 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = { decision = STP_cw_interrupt_opposition show_effect_tooltip = yes } custom_effect_tooltip = STP_cw_interrupt_opposition_desc
 			custom_effect_tooltip = STP_cw_security_collegium_tt
-			custom_effect_tooltip = STP_cw_loyalty_plus_8_tt
+
 			hidden_effect = {
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 8 }
-				STP_change_apparatus_loyalty = yes
+
+
 				set_temp_variable = { var = STP_pf_selected value = 3 }
 				STP_pf_shift = yes
 			}
@@ -1601,12 +1601,12 @@ focus_tree = {
 			army_experience = 15
 			custom_effect_tooltip = STP_party_mobile_reserve_tt
 			effect_tooltip = { add_timed_idea = { idea = STP_cw_offensive_preparation days = 35 } }
-			custom_effect_tooltip = STP_cw_loyalty_plus_6_tt
+
 			hidden_effect = {
 				set_country_flag = STP_party_mobile_reserve_ready
 				STP_cw_refresh_army_report = yes
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 6 }
-				STP_change_apparatus_loyalty = yes
+
+
 				set_temp_variable = { var = STP_pf_selected value = 4 }
 				STP_pf_shift = yes
 			}
@@ -2700,7 +2700,7 @@ focus_tree = {
 	focus = {
 		id = STP_party_war_directorate
 		prerequisite = { focus = STP_party_rear_administration }
-		prerequisite = { focus = STP_ps_operational_reserve }
+		prerequisite = { focus = STP_ps_operational_reserve focus = STP_ps_route_security }
 		icon = GFX_goal_generic_army_doctrines
 		x = 7
 		y = 3
@@ -6023,13 +6023,18 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt STP_ps_war_active = yes }  }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_reserve_training show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_reserve_training_desc }
+		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_reserve_training show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_reserve_training_desc
+		add_timed_idea = { idea = STP_ps_reserve_idea days = 42 }
+			custom_effect_tooltip = STP_ps_policy_faction_4_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 4 } STP_pf_shift = yes }
+	}
+		mutually_exclusive = { focus = STP_ps_route_security }
 	}
 
 
 	focus = {
 		id = STP_ps_route_security
-		prerequisite = { focus = STP_cw_guard_the_pier focus = STP_party_rear_administration }
+		prerequisite = { focus = STP_cw_unified_headquarters }
 		icon = GFX_focus_generic_supply_line
 		x = 11
 		y = 2
@@ -6040,7 +6045,12 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt STP_ps_war_active = yes } controls_province = 145 controls_province = 45 }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_secure_routes show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_secure_routes_desc }
+		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_secure_routes show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_secure_routes_desc
+		add_timed_idea = { idea = STP_ps_route_guard_idea days = 42 }
+			custom_effect_tooltip = STP_ps_policy_faction_3_tt
+			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 3 } STP_pf_shift = yes }
+	}
+		mutually_exclusive = { focus = STP_ps_operational_reserve }
 	}
 
 
@@ -6094,7 +6104,21 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt STP_ps_war_active = yes } custom_trigger_tooltip = { tooltip = STP_ps_government_operational_tt STP_ps_government_operational = yes } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_val_intelligence show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intelligence_desc unlock_decision_tooltip = { decision = STP_ps_val_intercept show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intercept_desc unlock_decision_tooltip = { decision = STP_ps_val_pressure show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_pressure_desc }
+		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_val_intelligence show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intelligence_desc unlock_decision_tooltip = { decision = STP_ps_val_intercept show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intercept_desc unlock_decision_tooltip = { decision = STP_ps_val_pressure show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_pressure_desc
+		if = {
+                limit = { VAL = { exists = yes } }
+                add_intel = { target = VAL army_intel = 10 }
+            }
+            custom_effect_tooltip = STP_ps_counter_supply_current_tt
+            hidden_effect = {
+                VAL = {
+                    if = {
+                        limit = { has_variable = STP_ps_val_receipt_rifles }
+                        set_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence }
+                    }
+                }
+            }
+	}
 	}
 
 

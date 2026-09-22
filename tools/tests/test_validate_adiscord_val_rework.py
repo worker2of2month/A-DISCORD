@@ -1121,15 +1121,15 @@ class ValNativePreviewTests(unittest.TestCase):
 
         ideas = block(block(parse_clausewitz(IDEAS_PATH.read_text(encoding="utf-8-sig")), "ideas"), "country")
         expected_modifiers = {
-            "VAL_industry_1_dummy": ("VAL_contract_industry_1", {}),
-            "VAL_industry_2_dummy": ("VAL_contract_industry_2", {}),
-            "VAL_industry_1_delta": ("VAL_contract_industry_1", {"industrial_capacity_factory": 0.04, "production_factory_efficiency_gain_factor": 0.05}),
-            "VAL_industry_2_delta": ("VAL_contract_industry_2", {"industrial_capacity_factory": 0.07, "production_factory_efficiency_gain_factor": 0.08, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
-            "VAL_industry_1_to_2_delta": ("VAL_contract_industry_2", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.03, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
-            "VAL_industry_3_dummy": ("VAL_contract_industry_3", {}),
-            "VAL_industry_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.10, "production_factory_efficiency_gain_factor": 0.12, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
-            "VAL_industry_1_to_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.06, "production_factory_efficiency_gain_factor": 0.07, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
-            "VAL_industry_2_to_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.04, "production_factory_max_efficiency_factor": 0.03, "production_lack_of_resource_penalty_factor": -0.05, "ADISCORD_economy_military_industry_income_factor": 0.08}),
+            "VAL_industry_1_dummy": ("VAL_contract_industry_preview", {}),
+            "VAL_industry_2_dummy": ("VAL_contract_industry_preview", {}),
+            "VAL_industry_1_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.04, "production_factory_efficiency_gain_factor": 0.05}),
+            "VAL_industry_2_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.07, "production_factory_efficiency_gain_factor": 0.08, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
+            "VAL_industry_1_to_2_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.03, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
+            "VAL_industry_3_dummy": ("VAL_contract_industry_preview", {}),
+            "VAL_industry_3_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.10, "production_factory_efficiency_gain_factor": 0.12, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
+            "VAL_industry_1_to_3_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.06, "production_factory_efficiency_gain_factor": 0.07, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
+            "VAL_industry_2_to_3_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.04, "production_factory_max_efficiency_factor": 0.03, "production_lack_of_resource_penalty_factor": -0.05, "ADISCORD_economy_military_industry_income_factor": 0.08}),
         }
         for idea_id, (name, modifiers) in expected_modifiers.items():
             idea = block(ideas, idea_id)
@@ -1193,6 +1193,8 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.layout_updates = 0
         self.removed_rights = []
         self.installed_ideas = set()
+        self.temporary = {}
+        self.events = []
 
     def run_effect(self, name):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions, scalar
@@ -1201,7 +1203,7 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
             try:
                 return float(value)
             except ValueError:
-                return self.variables.get(value, 0)
+                return self.temporary.get(value, self.variables.get(value, 0))
 
         def execute(items):
             matched = False
@@ -1212,9 +1214,11 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
                         matched = False
                     guard = next((c.value for c in value if c.key == "limit"), [])
                     facts = dict(self.facts)
-                    for var, amount in self.variables.items():
+                    for var, amount in {**self.variables, **self.temporary}.items():
                         facts[("VAL", "variable", var)] = amount
                         facts[("VAL", "has_variable", var)] = True
+                    for idea in self.installed_ideas:
+                        facts[("VAL", "has_idea", idea)] = True
                     for modifier in self.modifiers:
                         facts[("VAL", "has_dynamic_modifier", modifier)] = True
                     if not matched and matches_conditions(guard, facts, "VAL"):
@@ -1222,6 +1226,8 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
                         matched = True
                 elif key == "hidden_effect":
                     execute(value)
+                elif key == "set_temp_variable":
+                    self.temporary[scalar(value, "var")] = number(scalar(value, "value"))
                 elif key in ("set_variable", "add_to_variable", "multiply_variable"):
                     var, amount = scalar(value, "var"), number(scalar(value, "value"))
                     old = self.variables.get(var, 0)
@@ -1241,6 +1247,11 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
                     self.removed_rights.append(str(value))
                 elif key == "add_ideas":
                     self.installed_ideas.add(value)
+                elif key == "remove_ideas":
+                    names = [e.value for e in value] if isinstance(value, list) else [value]
+                    self.installed_ideas.difference_update(names)
+                elif key == "country_event":
+                    self.events.append(scalar(value, "id"))
                 elif key == "mark_focus_tree_layout_dirty":
                     self.layout_updates += 1
                 elif key == "ADISCORD_economy_mark_dirty":
@@ -1250,6 +1261,89 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
                 elif key not in {"effect_tooltip", "custom_effect_tooltip", "remove_ideas", "country_event", "force_update_dynamic_modifier"}:
                     self.fail(f"Unsupported economic effect: {key}")
         execute(self.effects[name])
+
+    def test_mercenary_spirit_combines_existing_base_and_authority_without_stacking(self):
+        self.installed_ideas.add("VAL_mercenary_state")
+        self.run_effect("VAL_initialize_contract_authority")
+        self.assertNotIn("VAL_mercenary_state", self.installed_ideas)
+        self.assertIn("VAL_contract_state", self.modifiers)
+        expected = {"volunteer_size": 2, "war_stability": .1, "org_factor": .08,
+                    "capture_factor": .04, "planning_factor": -.25, "pp_gain": -.15}
+        for suffix, value in expected.items():
+            self.assertAlmostEqual(self.variables["VAL_contract_" + suffix], value, msg=suffix)
+        snapshot = dict(self.variables)
+        self.run_effect("VAL_initialize_contract_authority")
+        self.assertEqual(self.variables, snapshot)
+        self.variables["VAL_contract_authority"] = 95
+        self.facts[("VAL", "has_country_flag", "VAL_mercenary_state")] = True
+        self.run_effect("VAL_initialize_contract_authority")
+        self.assertAlmostEqual(self.variables["VAL_contract_org_factor"], .15)
+        self.assertAlmostEqual(self.variables["VAL_contract_pp_gain"], 0)
+        self.assertAlmostEqual(self.variables["VAL_contract_org_regain"], .12)
+        self.modifiers.remove("VAL_contract_state")
+        snapshot = dict(self.variables)
+        self.run_effect("VAL_initialize_contract_authority")
+        self.assertEqual(self.variables, snapshot)
+        self.assertIn("VAL_contract_state", self.modifiers)
+
+    def test_missing_reputation_consumer_is_rebuilt_at_saved_stage(self):
+        self.variables["VAL_arsenal_reputation_stage"] = 5
+        self.facts[("VAL", "has_country_flag", "VAL_vorkerland_resource_access_initialized")] = True
+        self.run_effect("VAL_initialize_arsenal_recovery")
+        self.assertIn("VAL_arsenal_reputation", self.modifiers)
+        self.assertEqual(self.variables["VAL_arsenal_reputation_stage"], 5)
+        self.assertAlmostEqual(self.variables["VAL_arsenal_quality"], .1)
+
+    def test_missed_world_collapse_is_reconciled_once(self):
+        self.variables["VAL_arsenal_reputation_stage"] = 4
+        self.facts[("VAL", "has_global_flag", "ADISCORD_vorkerland_collapse_wars_started")] = True
+        self.run_effect("VAL_reconcile_supply_crisis")
+        self.assertIn("VAL_economic_collapse", self.modifiers)
+        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 0)
+        self.assertEqual(self.variables["VAL_arsenal_reputation_stage"], 0)
+        self.assertEqual(self.events, ["val_rework.100"])
+        snapshot = (dict(self.variables), self.dirty, self.layout_updates, list(self.events))
+        self.run_effect("VAL_reconcile_supply_crisis")
+        self.assertEqual((self.variables, self.dirty, self.layout_updates, self.events), snapshot)
+
+    def test_missed_local_flag_does_not_reset_existing_recovery(self):
+        self.variables.update(VAL_economic_recovery_steps=7, VAL_arsenal_reputation_stage=3,
+                              VAL_arsenal_investment=.06)
+        self.facts[("VAL", "has_global_flag", "ADISCORD_vorkerland_collapse_wars_started")] = True
+        self.run_effect("VAL_reconcile_supply_crisis")
+        self.assertTrue(self.facts.get(("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted"), False))
+        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 7)
+        self.assertEqual(self.variables["VAL_arsenal_reputation_stage"], 3)
+        self.assertAlmostEqual(self.variables["VAL_industrial_output"], -.06)
+        self.assertFalse(self.events)
+
+    def test_missing_crisis_consumer_is_repaired_without_repeating_rewards(self):
+        self.facts[("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")] = True
+        self.variables.update(VAL_economic_recovery_steps=5, VAL_arsenal_reputation_stage=2)
+        self.run_effect("VAL_reconcile_supply_crisis")
+        self.assertIn("VAL_economic_collapse", self.modifiers)
+        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 5)
+        self.assertFalse(self.events)
+        before = self.dirty
+        self.run_effect("VAL_reconcile_supply_crisis")
+        self.assertEqual(self.dirty, before)
+
+    def test_legacy_supply_idea_migrates_without_reset_or_duplicate_penalty(self):
+        self.installed_ideas.add("VAL_vorkerland_contract_disruptions")
+        for focus in self.recovery_focuses[:3]:
+            self.facts[("VAL", "has_completed_focus", focus)] = True
+        self.variables["VAL_arsenal_reputation_stage"] = 2
+        self.run_effect("VAL_reconcile_supply_crisis")
+        self.assertEqual(self.variables.get("VAL_economic_recovery_steps"), 3)
+        self.assertIn("VAL_economic_collapse", self.modifiers)
+        self.assertNotIn("VAL_vorkerland_contract_disruptions", self.installed_ideas)
+        self.assertFalse(self.events)
+
+    def test_peacetime_reconciliation_does_not_invent_a_supply_crisis(self):
+        self.run_effect("VAL_reconcile_supply_crisis")
+        self.assertNotIn("VAL_economic_collapse", self.modifiers)
+        self.assertNotIn("VAL_economic_recovery_steps", self.variables)
+        self.assertFalse(self.events)
 
     def test_outbreak_recovery_and_late_callbacks_preserve_final_state(self):
         self.run_effect("VAL_invest_arsenal_industry")
@@ -1291,21 +1385,21 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
             self.facts[("VAL", "has_country_flag", flag)] = True
         self.modifiers.update(("VAL_contract_industry", "VAL_economic_collapse", "VAL_economic_miracle"))
         self.run_effect("VAL_initialize_arsenal_recovery")
-        self.assertEqual(self.modifiers, {"VAL_economic_miracle"})
+        self.assertEqual(self.modifiers, {"VAL_economic_miracle", "VAL_arsenal_reputation"})
         self.assertEqual(self.variables["VAL_economic_recovery_steps"], 9)
         self.assertEqual(self.variables["VAL_arsenal_reputation_stage"], 4)
         self.assertEqual(self.variables["VAL_arsenal_investment_output"], 0.06)
         snapshot = dict(self.variables)
         self.run_effect("VAL_initialize_arsenal_recovery")
         self.assertEqual(self.variables, snapshot)
-        self.assertEqual(self.modifiers, {"VAL_economic_miracle"})
+        self.assertEqual(self.modifiers, {"VAL_economic_miracle", "VAL_arsenal_reputation"})
 
     def test_existing_campaign_reconciliation_is_once_only(self):
         self.facts[("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")] = True
         for focus in self.recovery_focuses[:3]:
             self.facts[("VAL", "has_completed_focus", focus)] = True
         self.run_effect("VAL_reconcile_supply_crisis")
-        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 3)
+        self.assertEqual(self.variables.get("VAL_economic_recovery_steps"), 3)
         snapshot = (dict(self.variables), self.dirty)
         self.run_effect("VAL_reconcile_supply_crisis")
         self.assertEqual((self.variables, self.dirty), snapshot)

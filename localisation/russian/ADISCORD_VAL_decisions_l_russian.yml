@@ -93,7 +93,7 @@
  VAL_westerholm_concession_income: "Воркерландская концессия"
  VAL_westerholm_concession_income_desc: "Кефрейт получает металл и арендный доход от разработки месторождения в Воркерланде."
  VAL_vorkerland_contract_disruptions:0 "Разрыв воркерландских поставок"
- VAL_vorkerland_contract_disruptions_desc:0 "Потеря заказов и сырья обрушила доходы и загрузку заводов. Экспорт временно поддерживает казну. Штраф снимает фокус «Собственная база снабжения» после подчинения земель каннибалов и присоединения Окцидии: Балчанска, Гавани и Шахтёрского посёлка."
+ VAL_vorkerland_contract_disruptions_desc: "$VAL_economic_collapse_desc$"
  VAL_vorkerland_metal_shortage: "Дефицит воркерландского металла"
  VAL_vorkerland_metal_shortage_desc: "Потеря контроля над воркерландским месторождением лишила промышленность привычного сырьевого канала."
  VAL_contract_reputation_3: "Безупречная контрактная репутация"
@@ -162,6 +162,7 @@
  VAL_contract_administration_3: "Контрактная администрация III"
  VAL_contract_administration_3_desc: "Полностью собранная контрактная система повышает доходы и снижает перегрузку государственного аппарата."
  VAL_contract_industry_1: "Контрактная промышленность I"
+ VAL_contract_industry_preview: "Контрактная промышленность"
  VAL_contract_industry_1_desc: "Проверенные заказы ускоряют рост эффективности оружейных линий."
  VAL_contract_industry_2: "Контрактная промышленность II"
  VAL_contract_industry_2_desc: "Стандартизация и учёт повышают выпуск и уменьшают потери от нехватки сырья."
@@ -214,8 +215,8 @@
  VAL_debug_reset_rework_state_desc: "Убирает только отладочные стадии кризиса и тестовые штрафы Воркерланда, не трогая прохождение фокусов."
 
 
- VAL_contract_state: "Авторитет контрактной системы"
- VAL_contract_state_desc: "Авторитет контрактной системы: §Y[?VAL_contract_authority|0]/100§! — §Y[VALGetContractAuthorityBand]§!. Бонусы ниже пересчитываются при изменении авторитета или завершении военной, промышленной либо административной специализации."
+ VAL_contract_state: "$VAL_mercenary_state$"
+ VAL_contract_state_desc: "$VAL_mercenary_state_desc$\n\nАвторитет контрактной системы: §Y[?VAL_contract_authority|0]/100§! — §Y[VALGetContractAuthorityBand]§!. Бонусы ниже пересчитываются при изменении авторитета или завершении военной, промышленной либо административной специализации."
  VAL_CONTRACT_AUTHORITY_DOMINANT: "единое командование"
  VAL_CONTRACT_AUTHORITY_CENTRALIZED: "централизованное командование"
  VAL_CONTRACT_AUTHORITY_COHERENT: "устойчивая система"
@@ -741,7 +742,7 @@ VAL_reclamation: "Возвращение земли"
 
  VAL_contract_industry_desc:0 "Арсеналы и гражданские подрядчики работают по общим производственным договорам. Вложения повышают отдачу существующих предприятий."
 
- VAL_economic_collapse:0 "Экономический крах"
+ VAL_economic_collapse: "Экономический крах: разрыв поставок"
 
  VAL_economic_collapse_desc:0 "Гражданская война в Воркерланде оборвала заказы, платежи и доступ к металлу. Завершено антикризисных программ: [?VAL_economic_recovery_steps|0]/9. Первые шесть восстанавливают производство во время кризиса; последние три требуют победы, новой базы снабжения и возвращения заказчиков. Репутация фабрик восстанавливается отдельно."
 

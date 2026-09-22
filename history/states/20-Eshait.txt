@@ -4,7 +4,7 @@ state={
 	provinces={
 		6 21 51 81 88 16372 16646
 	}
-	manpower=1230000
+	manpower=1450000
 	buildings_max_level_factor=1.000
 	state_category=city
 	local_supplies=0.000
@@ -12,6 +12,8 @@ state={
 	history = {
 		owner = YPR
 		buildings = {
+			air_base = 2
+			16372 = { naval_base = 2 }
 			infrastructure = 3
 			industrial_complex = 2
 			arms_factory = 4
