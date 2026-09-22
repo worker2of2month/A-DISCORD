@@ -803,56 +803,6 @@ STP_cw_prepare_opposition = {
 
 }
 
-# STATE: the timed state flag owns the restriction; this mission only displays it.
-# A repeated police action restarts both deadlines in the same effect.
-STP_show_counterintelligence_mission = {
-	if = {
-		limit = { STP = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_battle_for_stelander_active } }
-		if = {
-			limit = { state = 2 }
-			STP = {
-				remove_mission = STP_counterintelligence_state_2
-				activate_mission = STP_counterintelligence_state_2
-			}
-		}
-		else_if = {
-			limit = { state = 3 }
-			STP = {
-				remove_mission = STP_counterintelligence_state_3
-				activate_mission = STP_counterintelligence_state_3
-			}
-		}
-		else_if = {
-			limit = { state = 29 }
-			STP = {
-				remove_mission = STP_counterintelligence_state_29
-				activate_mission = STP_counterintelligence_state_29
-			}
-		}
-		else_if = {
-			limit = { state = 45 }
-			STP = {
-				remove_mission = STP_counterintelligence_state_45
-				activate_mission = STP_counterintelligence_state_45
-			}
-		}
-		else_if = {
-			limit = { state = 46 }
-			STP = {
-				remove_mission = STP_counterintelligence_state_46
-				activate_mission = STP_counterintelligence_state_46
-			}
-		}
-		else_if = {
-			limit = { state = 53 }
-			STP = {
-				remove_mission = STP_counterintelligence_state_53
-				activate_mission = STP_counterintelligence_state_53
-			}
-		}
-	}
-}
-
 # STATE scope. Focus and decision consumers use the same visible police action.
 STP_cw_secure_party_district = {
 	STP_cw_assess_search_evidence = yes
@@ -866,7 +816,6 @@ STP_cw_secure_party_district = {
 	clr_state_flag = STP_resistance_sabotage_asset
 	clr_state_flag = STP_local_deal_asset
 	set_state_flag = { flag = STP_party_counterintelligence_asset value = 1 days = 56 }
-	STP_show_counterintelligence_mission = yes
 	if = { limit = { OR = { state = 2 state = 29 } } set_state_flag = STP_party_reinforced_garrison_asset }
 	set_temp_variable = { var = STP_region_influence_change value = 15 }
 	STP_add_party_influence = yes
@@ -949,16 +898,6 @@ STP_cw_launch_northern_crisis = {
 	}
 }
 
-# NOD: the campaign clock belongs to the northern war, not the Stelander succession.
-NOD_cw_exhaust_northern_push = {
-	remove_ideas = NOD_cw_northern_offensive
-	if = {
-		limit = { has_capitulated = no OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } }
-		add_ideas = NOD_cw_stalled_army
-	}
-}
-
-
 # NOD owns the mobilization; a Stelander succession cannot cancel its orders.
 # COUNTRY NOD. If Kefreyt is already mobilising against NOD, TFF remains
 # inside the northern alliance but does not enter the war before Kefreyt does.
@@ -1026,13 +965,8 @@ STP_cw_start_northern_war = {
 			limit = { has_war_with = YPR has_war_with = COF }
 			set_variable = { var = STP_cw_northern_campaign_status value = 1 }
 			set_country_flag = NOD_cw_northern_war_started
-<<<<<<< HEAD
 			STP_cw_release_tff_to_northern_war = yes
 			if = { limit = { NOT = { has_idea = NOD_cw_northern_offensive } } add_ideas = NOD_cw_northern_offensive }
-=======
-			add_timed_idea = { idea = NOD_cw_northern_offensive days = 70 }
-			activate_mission = NOD_cw_northern_push
->>>>>>> parent of 15bd2e5f (Reverted)
 			# Northern deployment can permit an uprising before the election deadline.
 			country_event = { id = ADISCORD_STP_cw.42 days = 7 }
 			country_event = { id = ADISCORD_STP_preparation.12 days = 1 }
@@ -1669,7 +1603,6 @@ STP_false_trail_counterintelligence_breakthrough = {
 	set_temp_variable = { var = STP_region_influence_change value = 10 }
 	STP_add_party_influence = yes
 	set_state_flag = { flag = STP_party_counterintelligence_asset value = 1 days = 56 }
-	STP_show_counterintelligence_mission = yes
 	clr_state_flag = STP_niansas_transfer_secured
 	clr_state_flag = STP_resistance_administration_asset
 	clr_state_flag = STP_resistance_garrison_asset
@@ -1728,7 +1661,6 @@ STP_resolve_party_inspection = {
 			limit = { STP_region_has_detectable_assets = yes }
 			set_temp_variable = { var = STP_cw_inspection_found_assets value = 1 }
 			set_state_flag = { flag = STP_party_counterintelligence_asset value = 1 days = 56 }
-			STP_show_counterintelligence_mission = yes
 		}
 		STP_cw_return_preparation_reserves = yes
 		clr_state_flag = STP_resistance_sabotage_asset
@@ -1960,12 +1892,6 @@ STP_end_battle_for_stelander = {
 	remove_mission = STP_party_inspection_state_45
 	remove_mission = STP_party_inspection_state_46
 	remove_mission = STP_party_inspection_state_53
-	remove_mission = STP_counterintelligence_state_2
-	remove_mission = STP_counterintelligence_state_3
-	remove_mission = STP_counterintelligence_state_29
-	remove_mission = STP_counterintelligence_state_45
-	remove_mission = STP_counterintelligence_state_46
-	remove_mission = STP_counterintelligence_state_53
 	1 = { STP_clear_region_runtime = yes }
 	2 = { STP_clear_region_runtime = yes }
 	3 = { STP_clear_region_runtime = yes }
@@ -2031,54 +1957,6 @@ STP_cw_refund_nod_sabotage_rifles = {
 	30 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
 }
 
-# Fixed two-battalion package; ordinary recruitment cannot consume this template.
-STP_cw_ensure_rear_cell_template = {
-	if = {
-		limit = { NOT = { has_template = "Stelander Underground Cell" } }
-		division_template = {
-			name = "Stelander Underground Cell"
-			template_counter = 12
-			is_locked = yes
-			force_allow_recruiting = no
-			regiments = {
-				ADISCORD_territorial = { x = 0 y = 0 }
-				ADISCORD_territorial = { x = 0 y = 1 }
-			}
-		}
-	}
-}
-
-# STS, target state in FROM. Debit every producer before creating the paid formation.
-STP_cw_raise_rear_cell = {
-	if = {
-		limit = {
-			tag = STS has_war_with = STP has_capitulated = no
-			has_completed_focus = STP_cw_organize_underground
-			NOT = { has_country_flag = STP_cw_postwar }
-			NOT = { has_manpower < 2000 }
-			NOT = { has_equipment = { infantry_equipment < 200 } }
-			NOT = { has_political_power < 35 }
-			FROM = { is_owned_by = STP is_controlled_by = STP NOT = { has_state_flag = STP_cw_rear_cell_raised } }
-		}
-		set_temp_variable = { var = STP_cw_rifle_cost value = 200 }
-		STP_cw_pay_rifles = yes
-		if = {
-			limit = { has_country_flag = STP_cw_rifles_paid }
-			add_manpower = -2000
-			add_political_power = -35
-			STP_cw_ensure_rear_cell_template = yes
-			FROM = {
-				set_state_flag = STP_cw_rear_cell_raised
-				create_unit = {
-					division = "division_template = \"Stelander Underground Cell\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
-					owner = STS
-					allow_spawning_on_enemy_provs = yes
-				}
-			}
-		}
-	}
-}
-
 # COUNTRY scope. Six ADISCORD_territorial: 6 * (1000 manpower + 100 rifles).
 # create_unit supplies its own contents: debit the real pools first.
 STP_cw_mobilize_brigade = {
@@ -2111,22 +1989,6 @@ STP_cw_mobilize_brigade = {
 			}
 			log = "[STP_CW] [THIS.GetTag] brigade paid: 6000 manpower, 600 rifles; remaining manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
 		}
-	}
-}
-
-# COUNTRY: the wartime Shabrat decision pays for volunteers with political power.
-# Initial army distribution and other countries still use reserve-backed mobilisation.
-STP_cw_mobilize_volunteer_brigade = {
-	if = {
-		limit = { tag = STS NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes any_owned_state = { is_controlled_by = PREV } }
-		if = {
-			limit = { any_owned_state = { is_controlled_by = PREV STP_cw_state_faces_rival = yes } }
-			random_owned_controlled_state = {
-				limit = { STP_cw_state_faces_rival = yes }
-				STP_cw_create_territorial_brigade = yes
-			}
-		}
-		else = { random_owned_controlled_state = { STP_cw_create_territorial_brigade = yes } }
 	}
 }
 
@@ -2294,13 +2156,7 @@ STP_cw_reserve_kefreyt_volunteers = {
 				1 = { STP_cw_deploy_kefreyt_volunteers = yes }
 			}
 			else = {
-				STP = {
-					set_country_flag = STP_cw_kefreyt_shipment_received
-					if = {
-						limit = { has_country_flag = STP_sided_with_Maksim_flag }
-						country_event = { id = ADISCORD_STP_preparation.8 }
-					}
-				}
+				STP = { set_country_flag = STP_cw_kefreyt_shipment_received country_event = { id = ADISCORD_STP_preparation.8 } }
 			}
 		}
 		else = {
@@ -2443,20 +2299,15 @@ STP_cw_refund_reserve_training = {
 	if = {
 		limit = { hidden_trigger = { check_variable = { var = STP_cw_training_cohorts value = 2 compare = equals } } }
 		hidden_effect = { clear_variable = STP_cw_training_cohorts }
-		if = {
-			limit = { NOT = { has_country_flag = STP_cw_training_political_payment } }
-			add_manpower = 12000
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 }
-		}
+		add_manpower = 12000
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 }
 	}
-	hidden_effect = { clr_country_flag = STP_cw_training_political_payment }
 }
 
 STP_cw_finish_reserve_training = {
 	if = {
 		limit = { check_variable = { var = STP_cw_training_cohorts value = 2 compare = equals } NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes any_owned_state = { is_controlled_by = PREV } }
 		clear_variable = STP_cw_training_cohorts
-		clr_country_flag = STP_cw_training_political_payment
 		for_loop_effect = {
 			end = 2
 			value = STP_cw_formation_index
@@ -3465,22 +3316,6 @@ STP_cw_finish_nod_warning = {
 		NOD = { add_to_war = { targeted_alliance = STP enemy = STS hostility_reason = asked_to_join single_target_only = yes } }
 		if = {
 			limit = { NOD = { has_war_with = STS } }
-			# Shabrat's volunteer window can be shorter than the normal AI decision cadence.
-			# Authorize AI Kefreite on the exact tick STS becomes a valid NOD-war host.
-			VAL = {
-				if = {
-					limit = {
-						is_ai = yes
-						has_war = no
-						has_capitulated = no
-						is_subject = no
-						NOT = { has_idea = VAL_northern_volunteer_mandate }
-						STS = { VAL_northern_volunteer_host = yes }
-					}
-					add_ideas = VAL_northern_volunteer_mandate
-					log = "[VAL AI] Immediate volunteer mandate for Shabrat after NOD intervention"
-				}
-			}
 			# Form the alliance only after the engine confirms entry into the party's war.
 			STP = {
 				if = {
@@ -3877,19 +3712,15 @@ STP_cw_dismantle_northern_alliance = {
 STP_cw_settle_northern_victory = {
 	if = {
 		limit = { OR = { STP_cw_northern_campaign_won = yes STP_cw_northern_conference_won = yes } }
-        # White peace clears native capitulation; retain the accepted outcome locally.
-        set_temp_variable = { var = STP_cw_frontier_capitulated value = 0 }
-        if = {
-            limit = { OR = { TFF = { STP_cw_northern_opponent_defeated = yes } AND = { STP_cw_northern_conference_won = yes STP_cw_frontier_awarded_to_nod = yes } } }
-            set_temp_variable = { var = STP_cw_frontier_capitulated value = 1 }
-        }
 		if = {
 			limit = { STP_cw_northern_conference_won = yes }
 			set_variable = { var = STP_cw_northern_campaign_status value = 2 }
 			# These states have already been awarded to NOD's side by the conference.
 			YPR = { transfer_state = 8 transfer_state = 15 transfer_state = 16 transfer_state = 19 transfer_state = 20 transfer_state = 21 transfer_state = 22 }
-			if = { limit = { check_variable = { var = STP_cw_frontier_capitulated value = 1 compare = equals } } TFF = { transfer_state = 83 transfer_state = 84 transfer_state = 85 transfer_state = 86 transfer_state = 87 transfer_state = 303 } }
+			TFF = { transfer_state = 83 transfer_state = 84 transfer_state = 85 transfer_state = 86 transfer_state = 87 transfer_state = 303 }
 			transfer_state = 14
+			if = { limit = { TFF = { is_puppet_of = NOD } } set_autonomy = { target = TFF autonomy_state = autonomy_free end_wars = no end_civil_wars = no } }
+			if = { limit = { TFF = { is_in_faction_with = NOD } } remove_from_faction = TFF }
 		}
 		else = { set_variable = { var = STP_cw_northern_campaign_status value = 2 } }
 		activate_mission = NOD_cw_northern_redeployment
@@ -3910,36 +3741,9 @@ STP_cw_settle_northern_victory = {
 			limit = { COF = { exists = yes is_subject = no } }
 			annex_country = { target = COF transfer_troops = no }
 		}
-        if = {
-            limit = { check_variable = { var = STP_cw_frontier_capitulated value = 1 compare = equals } TFF = { exists = yes is_subject = no } }
-            puppet = { target = TFF end_wars = no end_civil_wars = no }
-            TFF = { ADISCORD_economy_mark_dirty = yes }
-        }
 		news_event = { id = ADISCORD_STP_cw.80 }
 		STS = { if = { limit = { exists = yes } STP_cw_poll_nod_intervention = yes } }
-		log = "[STP_NORTH] NOD victory after YPR and COF defeats; Frontier dependency follows its military result"
-	}
-}
-
-# Restore the two Ainholm claims to TFF only from the defeated Nodrul colonial bloc.
-STP_cw_cede_ainholm_to_frontier = {
-	if = {
-		limit = { TFF = { exists = yes } }
-		118 = {
-			if = {
-				limit = { owner = { OR = { tag = AIN tag = NOD } } }
-				TFF = { transfer_state = 118 }
-				set_state_controller_to = TFF
-			}
-		}
-		119 = {
-			if = {
-				limit = { owner = { OR = { tag = AIN tag = NOD } } }
-				TFF = { transfer_state = 119 }
-				set_state_controller_to = TFF
-			}
-		}
-		TFF = { ADISCORD_economy_mark_dirty = yes }
+		log = "[STP_NORTH] NOD victory after three accepted military defeats: YPR historical bounds checked, TFF independent"
 	}
 }
 
@@ -3961,7 +3765,6 @@ STP_cw_settle_northern_defeat = {
 		if = { limit = { has_war_with = TFF } white_peace = TFF }
 		clr_country_flag = NOD_cw_northern_war_started
 		STP_cw_end_northern_colonial_war = yes
-		STP_cw_cede_ainholm_to_frontier = yes
 		YPR = { set_major = no }
 		COF = { set_major = no }
 		TFF = { set_major = no }
@@ -3972,7 +3775,7 @@ STP_cw_settle_northern_defeat = {
 		}
 		news_event = { id = ADISCORD_STP_cw.81 }
 		STS = { if = { limit = { exists = yes } STP_cw_poll_nod_intervention = yes } }
-		log = "[STP_NORTH] NOD defeated by the north: 17/18 ceded to YPR and Ainholm claims restored to TFF"
+		log = "[STP_NORTH] NOD defeated by the north: separate peace, owned 17/18 ceded to YPR"
 	}
 }
 
@@ -5040,13 +4843,6 @@ STP_receive_3000 = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
-STP_receive_6000 = {
-	ADISCORD_economy_initialize_country = yes
-	add_to_variable = { var = ADISCORD_economy_treasury value = 6000 }
-	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 6000 }
-	ADISCORD_economy_mark_dirty = yes
-}
-
 STP_cw_spend_6000 = {
 	ADISCORD_economy_initialize_country = yes
 	subtract_from_variable = { var = ADISCORD_economy_treasury value = 6000 }
@@ -5186,11 +4982,9 @@ STP_pf_shift = {
 		if = { limit = { check_variable = { var = STP_pf_selected value = 6 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_merchants_influence } }
 		if = { limit = { check_variable = { var = STP_pf_selected value = 7 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_radicals_influence } }
 		set_temp_variable = { var = STP_pf_gain value = 5 }
-		# Dominant groups can recover support without accumulating more offices.
-		if = { limit = { check_variable = { var = STP_pf_old_influence value = 60 compare = greater_than_or_equals } } set_temp_variable = { var = STP_pf_gain value = 0 } }
 		set_temp_variable = { var = STP_pf_room value = 100 }
 		subtract_from_temp_variable = { var = STP_pf_room value = STP_pf_old_influence }
-		if = { limit = { check_variable = { var = STP_pf_room value = STP_pf_gain compare = less_than } } set_temp_variable = { var = STP_pf_gain value = STP_pf_room } }
+		if = { limit = { check_variable = { var = STP_pf_room value = 5 compare = less_than } } set_temp_variable = { var = STP_pf_gain value = STP_pf_room } }
 		if = {
 			limit = { check_variable = { var = STP_pf_room value = 0 compare = greater_than } }
 			set_temp_variable = { var = STP_pf_scale value = STP_pf_room }
@@ -5320,41 +5114,50 @@ STP_pf_clear = {
 
 # PARTY POSTWAR: refusing NOD's protectorate turns sovereignty into a timed invasion crisis.
 STP_pw_party_start_nod_invasion_threat = {
-	# Called by the sovereignty reward before native focus completion is guaranteed.
 	if = {
-		limit = { tag = STP has_country_flag = STP_cw_postwar
-			NOT = { has_country_flag = STP_pw_party_nod_threat_active }
-			NOT = { has_country_flag = STP_pw_party_nod_invasion_active }
-			NOT = { has_country_flag = STP_pw_party_nod_invasion_defeated }
-			NOT = { has_country_flag = STP_pw_party_nod_invasion_lost }
+		limit = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			has_completed_focus = STP_pw_party_sovereignty
+			is_subject = no
+			NOD = { exists = yes has_capitulated = no is_subject = no }
+			NOT = { has_war_with = NOD }
 		}
+		clr_country_flag = STP_pw_party_nod_invasion_defeated
+		clr_country_flag = STP_pw_party_nod_invasion_active
 		set_country_flag = STP_pw_party_nod_threat_active
-		if = {
-			limit = { STP_pw_party_nod_threat_current = yes }
-			activate_mission = STP_pw_party_nod_invasion_countdown
-			country_event = { id = ADISCORD_STP_pc.28 hours = 1 }
-		}
-		else = { STP_pw_party_launch_nod_invasion = yes }
+		activate_mission = STP_pw_party_nod_invasion_countdown
+		country_event = { id = ADISCORD_STP_pc.28 hours = 1 }
+	}
+	else = {
+		clr_country_flag = STP_pw_party_nod_threat_active
+		set_country_flag = STP_pw_party_nod_invasion_defeated
+		mark_focus_tree_layout_dirty = yes
 	}
 }
+
 STP_pw_party_launch_nod_invasion = {
 	if = {
-		limit = { tag = STP has_country_flag = STP_pw_party_nod_threat_active }
+		limit = {
+			tag = STP
+			has_country_flag = STP_pw_party_nod_threat_active
+			is_subject = no
+			has_capitulated = no
+			NOD = { exists = yes has_capitulated = no is_subject = no }
+			NOT = { has_war_with = NOD }
+		}
 		clr_country_flag = STP_pw_party_nod_threat_active
-		if = {
-			limit = { OR = { is_subject = yes has_capitulated = yes } }
-			set_country_flag = STP_pw_party_nod_invasion_lost
+		set_country_flag = STP_pw_party_nod_invasion_active
+		NOD = {
+			add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 }
+			declare_war_on = { target = STP type = annex_everything }
 		}
-		else_if = {
-			limit = { NOD = { exists = yes has_capitulated = no is_subject = no } }
-			set_country_flag = STP_pw_party_nod_invasion_active
-			NOD = {
-				add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 }
-				if = { limit = { NOT = { has_war_with = STP } } declare_war_on = { target = STP type = annex_everything } }
-			}
-			country_event = { id = ADISCORD_STP_pc.29 hours = 1 }
-		}
-		else = { set_country_flag = STP_pw_party_nod_invasion_defeated }
+		country_event = { id = ADISCORD_STP_pc.29 hours = 1 }
+	}
+	else = {
+		clr_country_flag = STP_pw_party_nod_threat_active
+		clr_country_flag = STP_pw_party_nod_invasion_active
+		set_country_flag = STP_pw_party_nod_invasion_defeated
 		mark_focus_tree_layout_dirty = yes
 	}
 }
