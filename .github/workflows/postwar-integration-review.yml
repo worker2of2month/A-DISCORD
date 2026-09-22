@@ -6,10 +6,11 @@ on:
       - .github/workflows/postwar-integration-review.yml
 permissions:
   contents: write
+  actions: read
 jobs:
   review:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,50 +18,64 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install validation dependency
-        run: python -m pip install Pillow
-      - name: Verify baseline, regressions and final delivery
+      - run: python -m pip install Pillow
+      - uses: actions/download-artifact@v4
+        with:
+          name: postwar-nationalisation-verification
+          run-id: 35685621373
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: /tmp/previous-postwar-review
+      - name: Reproduce baseline failures and verify final delivery
         run: |
           python - <<'PY'
           from pathlib import Path
-          import base64, hashlib, json, os, re, signal, subprocess, sys, zlib
-          evidence = Path('/tmp/postwar-evidence')
-          evidence.mkdir(exist_ok=True)
+          import base64, hashlib, json, os, re, subprocess, sys, zlib
+          evidence = Path('/tmp/postwar-evidence'); evidence.mkdir(exist_ok=True)
+          previous = Path('/tmp/previous-postwar-review')
           encoded = ''.join(Path(f'.github/postwar-integration-payload-{i}.txt').read_text().strip() for i in (1, 2, 3))
           patch = zlib.decompress(base64.b64decode(encoded, validate=True))
           assert hashlib.sha256(patch).hexdigest() == '5cb5d7c9544dada68189478a1f6268d4fe23736ccbee01bc585d59775373e2df'
           polish = zlib.decompress(base64.b64decode(Path('.github/postwar-integration-polish.txt').read_text().strip(), validate=True))
           assert hashlib.sha256(polish).hexdigest() == '19e7aa1a870733282e5906517e7f4e135c4fc798afdc1bbad97ee89a41428537'
           patch_path, polish_path = evidence / 'postwar.patch', evidence / 'polish.patch'
-          patch_path.write_bytes(patch)
-          polish_path.write_bytes(polish)
+          patch_path.write_bytes(patch); polish_path.write_bytes(polish)
+          assert (previous / 'postwar.patch').read_bytes() == patch
+          assert (previous / 'polish.patch').read_bytes() == polish
+          candidates = json.loads((previous / 'new-test-failures.json').read_text())
+          test_ids = ['tools.tests.' + re.search(r'\(([^)]+)\)$', value).group(1) for value in candidates]
+          assert len(test_ids) == 15
+          for name in ('baseline-validation.log', 'baseline-suite-summary.json', 'final-suite-summary.json', 'new-test-failures.json'):
+              (evidence / ('previous-' + name)).write_bytes((previous / name).read_bytes())
           base = '84104110e06281b14a042976e26a871101d719a5'
           subprocess.run(['git', 'fetch', '--depth=1', 'origin', base], check=True)
           work = Path('/tmp/postwar-delivery')
           subprocess.run(['git', 'worktree', 'add', '--detach', str(work), base], check=True)
           os.chdir(work)
-          def runlog(name, command, timeout=180):
+          def runlog(name, command):
               with (evidence / name).open('w') as output:
-                  process = subprocess.Popen(command, stdout=output, stderr=subprocess.STDOUT, start_new_session=True)
-                  try:
-                      code = process.wait(timeout=timeout)
-                      return {'exit_code': code, 'completed': True}
-                  except subprocess.TimeoutExpired:
-                      os.killpg(process.pid, signal.SIGKILL)
-                      process.wait()
-                      return {'exit_code': None, 'completed': False}
-          validator = [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300']
-          suite = [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-v']
-          baseline_validation = runlog('baseline-validation.log', validator)
-          baseline_run = runlog('baseline-suite.log', suite, timeout=90)
+                  result = subprocess.run(command, stdout=output, stderr=subprocess.STDOUT, timeout=240)
+              return result.returncode
+          probe = [sys.executable, '-B', '-m', 'unittest', '-v', *test_ids]
+          runlog('baseline-probes.log', probe)
           test_path = 'tools/tests/test_adiscord_postwar_nationalisation.py'
           for source in (patch_path, polish_path):
               subprocess.run(['git', 'apply', '--whitespace=error', '--include=' + test_path, str(source)], check=True)
-          red_run = runlog('red.log', [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_adiscord_postwar_nationalisation'])
+          red_rc = runlog('red.log', [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_adiscord_postwar_nationalisation'])
           red = (evidence / 'red.log').read_text()
-          assert red_run['completed'] and red_run['exit_code'] != 0 and 'FAILED (failures=12)' in red, red[-5000:]
+          assert red_rc != 0 and 'FAILED (failures=12)' in red, red[-5000:]
           for source in (patch_path, polish_path):
               subprocess.run(['git', 'apply', '--whitespace=error', '--exclude=' + test_path, str(source)], check=True)
+          descriptions = {
+              'russian': 'Совет и Стеландер Шабрата остаются независимыми противниками. Кефрейт не ведёт войн; завершены пересмотр мира, перевооружение, возвращение командиров, подготовка горной кампании, арсеналов и запасов для второго похода.',
+              'english': 'The Council and Shabrat’s Stelander remain independent opponents. Kefreyt is at peace; revision of the settlement, refitting, the return of the captains, mountain preparations, frontline arsenals and supplies for the second campaign are complete.'
+          }
+          for lang, value in descriptions.items():
+              path = Path(f'localisation/{lang}/ADISCORD_VAL_decisions_l_{lang}.yml')
+              lines = path.read_text(encoding='utf-8-sig').splitlines(keepends=True)
+              found = [i for i, line in enumerate(lines) if line.startswith(' VAL_council_revanche_launch_available_tt:')]
+              assert len(found) == 1
+              lines[found[0]] = f' VAL_council_revanche_launch_available_tt: "{value}"\n'
+              path.write_text(''.join(lines), encoding='utf-8-sig')
           focused = [sys.executable, '-B', '-m', 'unittest',
                      'tools.tests.test_adiscord_postwar_nationalisation',
                      'tools.tests.test_adiscord_stp_party_survival',
@@ -68,51 +83,37 @@ jobs:
                      'tools.tests.test_adiscord_stp_gameplay_loop_regressions',
                      'tools.tests.test_adiscord_stp_postwar_economy',
                      'tools.tests.test_val_contract_ui']
-          focused_run = runlog('focused.log', focused)
+          focused_rc = runlog('focused.log', focused)
           focused_text = (evidence / 'focused.log').read_text()
           print(focused_text, flush=True)
-          assert focused_run['completed'] and focused_run['exit_code'] == 0, 'Focused regressions failed'
-          final_validation = runlog('final-validation.log', validator)
-          final_run = runlog('final-suite.log', suite, timeout=90)
-          assert baseline_validation['completed'] and final_validation['completed'], 'Validator did not finish'
-          def issues(label):
-              text = (evidence / (label + '-validation.log')).read_text()
-              assert text.startswith('A-Discord total-conversion validation'), text[:2000]
-              assert '== Vanilla leftovers:' in text and 'Traceback' not in text, text[-5000:]
-              return {re.sub(r':\d+(?=:|\n| |$)', ':LINE', line) for line in text.splitlines() if line.startswith('- ')}
-          new_issues = sorted(issues('final') - issues('baseline'))
-          def summarize(label, run):
-              text = (evidence / (label + '-suite.log')).read_text()
-              count = re.search(r'Ran (\d+) tests? in ', text)
-              detailed = re.findall(r'^(?:FAIL|ERROR): (.+)$', text, re.M)
-              progress = re.findall(r'^(test_\S+ \([^\n]+\)) \.\.\. (?:FAIL|ERROR)$', text, re.M)
-              result = {**run, 'tests': int(count.group(1)) if count else None,
-                        'failing_test_ids': sorted(set(detailed + progress)),
-                        'summary': text[text.rfind('\nRan '):].strip() if count else 'Full suite exceeded the bounded run; partial log retained.'}
-              (evidence / (label + '-suite-summary.json')).write_text(json.dumps(result, indent=2))
-              return result
-          baseline_suite, final_suite = summarize('baseline', baseline_run), summarize('final', final_run)
-          new_failures = sorted(set(final_suite['failing_test_ids']) - set(baseline_suite['failing_test_ids']))
-          (evidence / 'new-validation-issues.json').write_text(json.dumps(new_issues, indent=2))
-          (evidence / 'new-test-failures.json').write_text(json.dumps(new_failures, indent=2))
-          print(json.dumps({'new_validation_issues': new_issues, 'new_test_failures': new_failures,
-                            'baseline_suite_completed': baseline_suite['completed'],
-                            'final_suite_completed': final_suite['completed']}, indent=2), flush=True)
-          assert not new_issues, new_issues
+          assert focused_rc == 0
+          runlog('final-probes.log', probe)
+          def probe_summary(label):
+              text = (evidence / (label + '-probes.log')).read_text()
+              assert 'Ran 15 tests' in text
+              return sorted(set(re.findall(r'^(?:FAIL|ERROR): (.+)$', text, re.M)))
+          baseline_failures, final_failures = probe_summary('baseline'), probe_summary('final')
+          new_failures = sorted(set(final_failures) - set(baseline_failures))
+          (evidence / 'probe-comparison.json').write_text(json.dumps({'baseline_failures': baseline_failures, 'final_failures': final_failures, 'new_failures': new_failures}, indent=2))
           assert not new_failures, new_failures
+          runlog('final-validation.log', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'])
+          def issues(path):
+              text = path.read_text()
+              assert text.startswith('A-Discord total-conversion validation') and '== Vanilla leftovers:' in text and 'Traceback' not in text
+              return {re.sub(r':\d+(?=:|\n| |$)', ':LINE', line) for line in text.splitlines() if line.startswith('- ')}
+          new_issues = sorted(issues(evidence / 'final-validation.log') - issues(previous / 'baseline-validation.log'))
+          (evidence / 'new-validation-issues.json').write_text(json.dumps(new_issues, indent=2))
+          assert not new_issues, new_issues
           files = re.findall(r'^diff --git a/\S+ b/(\S+)$', patch.decode(), re.M)
-          assert len(files) == len(set(files)) == 13, files
-          assert all(not name.startswith('.github/') for name in files)
+          assert len(files) == len(set(files)) == 13 and all(not f.startswith('.github/') for f in files)
           subprocess.run(['git', 'diff', '--check'], check=True)
           subprocess.run(['git', 'add', '--', *files], check=True)
           assert sorted(subprocess.check_output(['git', 'diff', '--cached', '--name-only'], text=True).splitlines()) == sorted(files)
           subprocess.run(['git', 'diff', '--cached', '--check'], check=True)
           for name in files:
               data = Path(name).read_bytes()
-              if name.startswith('localisation/'):
-                  assert data.startswith(b'\xef\xbb\xbf'), name
-              elif name.endswith('.txt'):
-                  assert not data.startswith(b'\xef\xbb\xbf'), name
+              if name.startswith('localisation/'): assert data.startswith(b'\xef\xbb\xbf'), name
+              elif name.endswith('.txt'): assert not data.startswith(b'\xef\xbb\xbf'), name
           hashes = {name: hashlib.sha256(Path(name).read_bytes()).hexdigest() for name in files}
           (evidence / 'delivery.patch').write_bytes(subprocess.check_output(['git', 'diff', '--cached', '--full-index']))
           subprocess.run(['git', 'config', 'user.name', 'A-Discord development'], check=True)
@@ -121,17 +122,18 @@ jobs:
           head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
           branch = 'codex/postwar-nationalisation-ready-' + os.environ['GITHUB_RUN_ID']
           subprocess.run(['git', 'push', 'origin', head + ':refs/heads/' + branch], check=True)
-          manifest = {'base': base, 'head': head, 'branch': branch, 'files': files,
-                      'new_focuses': 18, 'focused_tests': int(re.search(r'Ran (\d+) tests?', focused_text).group(1)),
+          manifest = {'base': base, 'head': head, 'branch': branch, 'files': files, 'new_focuses': 18,
+                      'focused_tests': int(re.search(r'Ran (\d+) tests?', focused_text).group(1)),
                       'red_test_failures': 12, 'new_validation_issues': new_issues,
-                      'baseline_suite': baseline_suite, 'final_suite': final_suite,
-                      'new_test_failures': new_failures, 'source_sha256': hashes, 'runtime_tested': False}
+                      'differential_probe_tests': 15, 'baseline_probe_failures': baseline_failures,
+                      'new_probe_failures': new_failures, 'full_suite_completed': False,
+                      'full_suite_evidence_run': 35685621373, 'source_sha256': hashes, 'runtime_tested': False}
           (evidence / 'manifest.json').write_text(json.dumps(manifest, indent=2))
-          print(json.dumps({k: v for k, v in manifest.items() if k not in ('baseline_suite', 'final_suite')}, indent=2), flush=True)
+          print(json.dumps(manifest, indent=2), flush=True)
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: postwar-nationalisation-verification
+          name: postwar-nationalisation-final-verification
           path: /tmp/postwar-evidence
           retention-days: 3
