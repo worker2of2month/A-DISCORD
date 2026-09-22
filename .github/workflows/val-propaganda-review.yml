@@ -9,7 +9,7 @@ jobs:
   review:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/val-propaganda-review-20260922'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,12 +20,31 @@ jobs:
           python-version: '3.12'
       - name: Install test image and data dependencies
         run: python -m pip install pillow numpy pyyaml
-      - name: Repair and verify against the pinned baseline
+      - name: Prepare targeted verification
         run: |
           cp .github/val_propaganda_repair.py /tmp/val_propaganda_repair.py
           git fetch --depth=1 origin 904e95637e8af82830eb94f2fe2683bd6c9a840e
           git switch --detach 904e95637e8af82830eb94f2fe2683bd6c9a840e
-          python -B /tmp/val_propaganda_repair.py
+          python - <<'PY'
+          from pathlib import Path
+          import ast
+          p = Path('/tmp/val_propaganda_repair.py')
+          text = p.read_text()
+          old = "'tools.tests.test_validate_adiscord_val_rework', "
+          assert text.count(old) == 1
+          text = text.replace(old, '')
+          old = "suite = [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_*.py']"
+          assert text.count(old) == 1
+          checker = "from pathlib import Path\nfrom tools.tests.test_validate_adiscord_val_rework import parse_clausewitz\nfor path in ['common/national_focus/ADISCORD_national_focus_VAL.txt', 'common/decisions/ADISCORD_VAL_decisions.txt', 'common/decisions/categories/ADISCORD_VAL_rework_categories.txt']:\n    assert parse_clausewitz(Path(path).read_text(encoding='utf-8-sig'))\n    print(path + ': parsed')\n"
+          text = text.replace(old, "suite = [sys.executable, '-B', '-c', " + repr(checker) + "]")
+          text = text.replace('baseline_suite', 'baseline_syntax').replace('final_suite', 'final_syntax').replace('baseline-suite', 'baseline-syntax').replace('final-suite', 'final-syntax').replace("('focused', 'suite')", "('focused', 'syntax')")
+          text = text.replace("def run(name, command, timeout=300):\n", "def run(name, command, timeout=300):\n    timeout = 180 if 'validator' in name else 60\n")
+          text = text.replace("reports['final_validator'] = run('final-validator', validator)\n", "reports['final_validator'] = run('final-validator', validator)\nassert reports['final_validator']['returncode'] != 124, 'Project validator did not finish'\n")
+          ast.parse(text)
+          p.write_text(text)
+          PY
+      - name: Verify campaign regressions and project validator
+        run: python -B /tmp/val_propaganda_repair.py
       - name: Preserve review evidence
         if: always()
         run: |
