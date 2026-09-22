@@ -6856,6 +6856,32 @@ STP_heg_start_northern_final_war = {
 			NOT = { has_country_flag = STP_heg_northern_final_started }
 		}
 		set_country_flag = STP_heg_northern_final_started
+
+		# Break outside dependency links before the northern declarations. This keeps
+		# Kefreyt out of the first campaign even if it previously subordinated Yubor
+		# or the Frontier through its own contract path.
+		NOD = {
+			if = {
+				limit = { exists = yes is_subject = yes NOT = { is_subject_of = STS } }
+				overlord = { set_autonomy = { target = NOD autonomy_state = autonomy_free end_wars = no end_civil_wars = no } }
+			}
+			if = { limit = { exists = yes is_in_faction = yes NOT = { is_in_faction_with = STS } } leave_faction = yes }
+		}
+		YPR = {
+			if = {
+				limit = { exists = yes is_subject = yes NOT = { is_subject_of = STS } }
+				overlord = { set_autonomy = { target = YPR autonomy_state = autonomy_free end_wars = no end_civil_wars = no } }
+			}
+			if = { limit = { exists = yes is_in_faction = yes NOT = { is_in_faction_with = STS } } leave_faction = yes }
+		}
+		TFF = {
+			if = {
+				limit = { exists = yes is_subject = yes NOT = { is_subject_of = STS } }
+				overlord = { set_autonomy = { target = TFF autonomy_state = autonomy_free end_wars = no end_civil_wars = no } }
+			}
+			if = { limit = { exists = yes is_in_faction = yes NOT = { is_in_faction_with = STS } } leave_faction = yes }
+		}
+
 		if = {
 			limit = {
 				NOD = { exists = yes has_capitulated = no is_subject = no NOT = { is_in_faction_with = STS } }
