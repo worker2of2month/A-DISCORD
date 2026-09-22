@@ -178,9 +178,18 @@ units = {
 	}
 }
 
-##### No notable air forces #####
+##### Limited northern air arm #####
+
+air_wings = {
+	20 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "YPR" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = { owner = "YPR" amount = 50 }
+	}
+}
+
 
 instant_effect = {
+	add_fuel = 15000
 	add_equipment_to_stockpile = {
 		type = motorized_equipment_1
 		amount = 180
