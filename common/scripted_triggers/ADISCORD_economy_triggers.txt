@@ -742,3 +742,10 @@ ADISCORD_economy_can_start_platform_contract = {
 	check_variable = { var = resource@rare_components value = 8 compare = greater_than_or_equals }
 	check_variable = { var = resource@rare_alloys value = 12 compare = greater_than_or_equals }
 }
+
+# Live division count keeps the AI gate responsive between weekly budget snapshots.
+ADISCORD_economy_nod_army_at_capacity = {
+	tag = NOD
+	has_variable = ADISCORD_economy_nod_division_capacity
+	check_variable = { var = num_divisions value = ADISCORD_economy_nod_division_capacity compare = greater_than_or_equals }
+}

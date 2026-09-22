@@ -1204,6 +1204,48 @@ ADISCORD_economy_sum_expenses = {
 	ADISCORD_economy_apply_overall_expense_modifier_factor = yes
 	clamp_variable = { var = ADISCORD_economy_monthly_expenses min = 0 max = 10000 }
 }
+# Country-local formation overhead uses the same industry snapshot as the budget.
+# It is recalculated only for a real expense refresh, never for cached previews.
+ADISCORD_economy_calculate_nod_division_load = {
+	set_variable = { var = ADISCORD_economy_nod_division_capacity value = ADISCORD_economy_cached_civilian_factories }
+	add_to_variable = { var = ADISCORD_economy_nod_division_capacity value = ADISCORD_economy_cached_military_factories }
+	add_to_variable = { var = ADISCORD_economy_nod_division_capacity value = 12 }
+	clamp_variable = { var = ADISCORD_economy_nod_division_capacity min = 12 max = 48 }
+	if = { limit = { has_war = yes } add_to_variable = { var = ADISCORD_economy_nod_division_capacity value = 6 } }
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = ADISCORD_economy_fiscal_stress value = 75 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = greater_than_or_equals }
+			}
+		}
+		subtract_from_variable = { var = ADISCORD_economy_nod_division_capacity value = 12 }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				check_variable = { var = ADISCORD_economy_fiscal_stress value = 45 compare = greater_than_or_equals }
+				check_variable = { var = ADISCORD_economy_debt_crisis_level value = 2 compare = greater_than_or_equals }
+			}
+		}
+		subtract_from_variable = { var = ADISCORD_economy_nod_division_capacity value = 6 }
+	}
+	clamp_variable = { var = ADISCORD_economy_nod_division_capacity min = 12 max = 54 }
+	set_variable = { var = ADISCORD_economy_nod_recruitment_brake value = ADISCORD_economy_nod_division_capacity }
+	subtract_from_variable = { var = ADISCORD_economy_nod_recruitment_brake value = 4 }
+	# num_divisions includes formations under country control, including scripted units.
+	set_variable = { var = ADISCORD_economy_nod_division_count value = num_divisions }
+	set_variable = { var = ADISCORD_economy_nod_excess_divisions value = ADISCORD_economy_nod_division_count }
+	subtract_from_variable = { var = ADISCORD_economy_nod_excess_divisions value = ADISCORD_economy_nod_division_capacity }
+	clamp_variable = { var = ADISCORD_economy_nod_excess_divisions min = 0 max = 10000 }
+	set_temp_variable = { var = ADISCORD_economy_nod_division_cost_temp value = ADISCORD_economy_nod_division_count }
+	multiply_temp_variable = { var = ADISCORD_economy_nod_division_cost_temp value = 0.5 }
+	add_to_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_nod_division_cost_temp }
+	set_temp_variable = { var = ADISCORD_economy_nod_division_cost_temp value = ADISCORD_economy_nod_excess_divisions }
+	multiply_temp_variable = { var = ADISCORD_economy_nod_division_cost_temp value = 2 }
+	add_to_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_nod_division_cost_temp }
+}
+
 ADISCORD_economy_calculate_army_expenses = {
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_policy_preview_uses_cached_base_temp value = 1 compare = greater_than_or_equals } }
@@ -1230,6 +1272,7 @@ ADISCORD_economy_calculate_army_expenses = {
 		# Player-controlled spending must have enough fiscal weight to remain
 		# meaningful after the exact 3/13 monthly-to-weekly settlement.
 		multiply_variable = { var = ADISCORD_economy_army_expenses value = 2.00 }
+		if = { limit = { tag = NOD } ADISCORD_economy_calculate_nod_division_load = yes }
 		set_variable = { var = ADISCORD_economy_army_expense_policy_base value = ADISCORD_economy_army_expenses }
 	}
 	if = { limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 1 compare = equals } } multiply_variable = { var = ADISCORD_economy_army_expenses value = 0.25 } }
