@@ -4,54 +4,103 @@ on:
     branches: [fix/technology-timeline-labels]
     paths: [.github/workflows/technology-timeline-review.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  inspect:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: python -m pip install Pillow
-      - name: Inspect native-grid coordinates and run baseline tests
+      - name: Apply tested source patches, regenerate and verify
         run: |
           python - <<'PY'
-          import json, subprocess, sys, zipfile
           from pathlib import Path
+          import base64, hashlib, json, os, re, subprocess, sys, zlib
+          evidence = Path('/tmp/timeline-review')
+          evidence.mkdir()
+          tests = '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'
+          code = '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'
+          def run(args, name, timeout=180):
+              with (evidence / (name + '.log')).open('w') as log:
+                  try:
+                      result = subprocess.run(args, stdout=log, stderr=subprocess.STDOUT, timeout=timeout)
+                      status = result.returncode
+                  except subprocess.TimeoutExpired:
+                      status = 124
+                      log.write('\nTIMEOUT\n')
+              output = (evidence / (name + '.log')).read_text()
+              print(name, status, output[-1800:])
+              return status, output
+          decoded = {}
+          for name, value in [('tests',tests), ('code',code)]:
+              decoded[name] = zlib.decompress(base64.b64decode(value, validate=True))
+              (evidence / (name + '.patch')).write_bytes(decoded[name])
+          modules = [sys.executable,'-B','-m','unittest','tools.tests.test_build_adiscord_technology_system','tools.tests.test_adiscord_technology_ui','-v']
+          before_status, before = run(modules, 'baseline')
+          run([sys.executable,'-B','-m','tools.builders.build_adiscord_technology_system','--check'], 'generator-check-before')
+          subprocess.run(['git','apply','--check','-'],input=decoded['tests'],check=True)
+          subprocess.run(['git','apply','-'],input=decoded['tests'],check=True)
+          cls = 'tools.tests.test_build_adiscord_technology_system.CompactTechnologyTreeContractTests.'
+          new = ['test_native_grid_cross_axis_is_centered_beneath_each_branch_title','test_horizontal_ruler_dates_match_every_technology_start_year','test_year_label_centres_align_with_native_technology_cells','test_ui_validator_rejects_swapped_dates_displaced_labels_and_wrong_titles']
+          status, red = run([sys.executable,'-B','-m','unittest',*[cls+n for n in new],'-v'], 'red')
+          assert status != 0 and 'FAIL:' in red and 'ERROR:' not in red
+          subprocess.run(['git','apply','--check','-'],input=decoded['code'],check=True)
+          subprocess.run(['git','apply','-'],input=decoded['code'],check=True)
           from tools.builders import build_adiscord_technology_system as g
-          report = {'head': subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(), 'rules': [str(p) for p in Path('.').rglob('AGENTS.md')], 'vertical': [], 'horizontal_mismatches': []}
-          for b in g.BRANCHES:
-              graph = g.BRANCH_GRAPHS[b.key]
-              if g.HORIZONTAL_FOLDERS.intersection(b.folders):
-                  for i, year in enumerate(b.years):
-                      expected = g.chronological_grid_slot(year, horizontal=True)
-                      actual = g.technology_time_slot(b, i)
-                      if expected != actual:
-                          report['horizontal_mismatches'].append({'branch': b.key, 'tech': b.techs[i].key, 'year': year, 'expected_slot': expected, 'actual_slot': actual})
-              else:
-                  xs = [g.technology_grid_position(b, i)[0] for i in range(len(b.techs))]
-                  report['vertical'].append({'branch': b.key, 'lanes': [min(graph.lanes),max(graph.lanes)], 'x_bounds': [min(xs),max(xs)], 'research_years': sorted(set(b.years))})
-          test = subprocess.run([sys.executable,'-B','-m','unittest','tools.tests.test_build_adiscord_technology_system','tools.tests.test_adiscord_technology_ui','-v'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-          Path('/tmp/technology-baseline.log').write_text(test.stdout)
-          report['baseline_exit'] = test.returncode
-          print(test.stdout[-10000:])
-          Path('/tmp/technology-diagnosis.json').write_text(json.dumps(report, indent=2))
-          print(json.dumps(report, indent=2))
-          with zipfile.ZipFile('/tmp/technology-sources.zip','w',zipfile.ZIP_DEFLATED) as z:
-              for folder in ('tools','interface','common/technologies'):
-                  for p in Path(folder).rglob('*'):
-                      if p.is_file() and '__pycache__' not in p.parts:
-                          z.write(p)
-              z.write('AGENTS.md')
+          from tools.validators import validate_adiscord_tech_doctrine as v
+          files = [Path('common/technologies')/f for f in sorted({b.file for b in g.BRANCHES})]
+          old = {p:p.read_bytes() for p in files}
+          g.write_technology_files(); g.write_gui()
+          generated = files + [Path('interface/countrytechtreeview.gui')]
+          first = {p:p.read_bytes() for p in generated}
+          g.write_technology_files(); g.write_gui()
+          assert all(p.read_bytes()==data for p,data in first.items()), 'non-idempotent generator'
+          strip = lambda s: re.sub(r'position = \{ x = -?\d+ y = -?\d+ \}', 'position = { VISUAL }', s.decode())
+          assert all(strip(old[p])==strip(p.read_bytes()) for p in files), 'nonvisual technology changes'
+          assert v.check_technology_ui_years()==[], v.check_technology_ui_years()
+          from tools.tests.test_build_adiscord_technology_system import CompactTechnologyTreeContractTests as T
+          focused = [n for n in dir(T) if n.startswith('test_') and any(w in n for w in ('horizontal','vertical','native_grid','year_label','ui_validator','every_node_fits','consecutive_rungs','validator_accepts','gui_regeneration'))]
+          ui = 'tools.tests.test_adiscord_technology_ui.TechnologyUiContractTests.'
+          focus_status, _ = run([sys.executable,'-B','-m','unittest',*[cls+n for n in focused],ui+'test_tree_skin_is_idempotent_for_generated_and_mixed_input',ui+'test_tree_skin_still_rejects_missing_or_duplicate_widgets','-v'], 'focused')
+          assert focus_status == 0
+          after_status, after = run(modules, 'after')
+          failures = lambda s: sorted(re.findall(r'^(?:FAIL|ERROR): (.+)$', s, re.M))
+          assert failures(before)==failures(after), {'new_failures':sorted(set(failures(after))-set(failures(before)))}
+          check_status, _ = run([sys.executable,'-B','-m','tools.builders.build_adiscord_technology_system','--check'], 'generator-check-after')
+          tc_status, _ = run([sys.executable,'-B','tools/validate_tc.py','--limit','300'], 'validate-tc')
+          suite_status, _ = run([sys.executable,'-B','-m','unittest','discover','-s','tools/tests'], 'full-suite',timeout=180)
+          changed = subprocess.check_output(['git','diff','--name-only']).decode().splitlines()
+          allowed = [str(p) for p in generated] + ['tools/builders/build_adiscord_technology_system.py','tools/builders/build_adiscord_technology_ui_assets.py','tools/validators/validate_adiscord_tech_doctrine.py','tools/tests/test_build_adiscord_technology_system.py','tools/tests/test_adiscord_technology_ui.py']
+          assert set(changed)==set(allowed),changed
+          subprocess.run(['git','diff','--check'],check=True)
+          (evidence/'final.patch').write_bytes(subprocess.check_output(['git','diff','--',*changed]))
+          base = subprocess.check_output(['git','rev-parse','212442a3dc4d5543d7efae7cdb3ab7ac9fae2eca^']).decode().strip()
+          env = dict(os.environ,GIT_INDEX_FILE='/tmp/timeline-delivery-index')
+          subprocess.run(['git','read-tree',base],env=env,check=True)
+          for path in changed:
+              blob=subprocess.check_output(['git','hash-object','-w',path]).decode().strip()
+              subprocess.run(['git','update-index','--add','--cacheinfo','100644',blob,path],env=env,check=True)
+          tree=subprocess.check_output(['git','write-tree'],env=env).decode().strip()
+          subprocess.run(['git','config','user.name','A-Discord technology maintenance'],check=True)
+          subprocess.run(['git','config','user.email','81386071+worker2of2month@users.noreply.github.com'],check=True)
+          commit=subprocess.check_output(['git','commit-tree',tree,'-p',base],input=b'fix(technology): align all branch titles and year rulers with native grids\n').decode().strip()
+          branch='fix/technology-timeline-verified-'+os.environ['GITHUB_RUN_ID']
+          subprocess.run(['git','push','origin',commit+':refs/heads/'+branch],check=True)
+          report={'base':base,'head':commit,'branch':branch,'changed_files':changed,'folders':len(g.FOLDER_BACKGROUNDS),'branches':len(g.BRANCHES),'technologies':sum(len(b.techs) for b in g.BRANCHES),'focused_tests':len(focused)+2,'focused_exit':focus_status,'baseline_failures':failures(before),'after_failures':failures(after),'no_new_module_failures':True,'generator_check_exit':check_status,'validate_tc_exit':tc_status,'full_suite_exit':suite_status,'idempotent':True,'gameplay_unchanged':True,'runtime_verified':False}
+          (evidence/'manifest.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: technology-timeline-diagnosis
-          path: |
-            /tmp/technology-sources.zip
-            /tmp/technology-baseline.log
-            /tmp/technology-diagnosis.json
+          name: technology-timeline-review
+          path: /tmp/timeline-review/
           retention-days: 3
