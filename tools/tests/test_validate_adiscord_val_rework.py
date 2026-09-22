@@ -1090,6 +1090,23 @@ class ValNativePreviewTests(unittest.TestCase):
                 with self.subTest(family=family, target=tier, current=level):
                     self.assertEqual(preview(helper), expected)
 
+    def test_specialization_preview_validator_rejects_dynamic_drift(self):
+        effects = EFFECTS_PATH.read_text(encoding="utf-8-sig")
+        drifted = effects.replace(
+            "add_to_variable = { var = VAL_contract_org_factor value = 0.07 }",
+            "add_to_variable = { var = VAL_contract_org_factor value = 0.071 }",
+            1,
+        )
+        accepted, issues = self.validate_previews(effects=drifted)
+        self.assertEqual(accepted, set())
+        self.assertTrue(
+            any(
+                "VAL_contract_army_3 differs from VAL_contract_state" in issue
+                for issue in issues
+            ),
+            issues,
+        )
+
     def test_industry_preview_depends_on_current_tier(self):
         from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
