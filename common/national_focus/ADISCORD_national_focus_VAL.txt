@@ -2385,7 +2385,12 @@ completion_reward = {
         prerequisite = { focus = VAL_Returning_Buyers }
         available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
         cancel_if_invalid = yes
-        completion_reward = { VAL_advance_economic_recovery = yes VAL_restore_arsenal_reputation = yes effect_tooltip = { add_ideas = VAL_arsenal_quality_delta } }
+        completion_reward = {
+            set_country_flag = VAL_economic_recovery_completed
+            VAL_advance_economic_recovery = yes
+            VAL_restore_arsenal_reputation = yes
+            effect_tooltip = { add_ideas = VAL_arsenal_quality_delta }
+        }
         ai_will_do = { base = 30 }
     }
 
