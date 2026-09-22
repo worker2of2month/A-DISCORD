@@ -607,7 +607,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_October_Of_2160
-		icon = GFX_goal_generic_dangerous_deal
+		icon = GFX_focus_ADISCORD_All_In
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		x = 29
 		y = 5

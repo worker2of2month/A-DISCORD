@@ -68,6 +68,32 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         self.assertNotIn("GFX_portrait_STP_Maksim_Shabrat_dictator", freedom_lock)
         self.assertIn("portrait = GFX_portrait_STP_Maksim_Shabrat_dictator", effects)
 
+    def test_all_in_icon_is_shared_by_the_two_high_stakes_focuses(self) -> None:
+        stp = read("common/national_focus/ADISCORD_national_focus_STP.txt")
+        val = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
+        gfx = read("interface/ADISCORD_national_focus.gfx")
+        shine = read("interface/ADISCORD_focus_shines.gfx")
+
+        self.assertRegex(
+            stp,
+            r"(?s)id = STP_pc_heg_final_kefreyt\b.*?icon = GFX_focus_ADISCORD_All_In",
+        )
+        self.assertRegex(
+            val,
+            r"(?s)id = VAL_October_Of_2160\b.*?icon = GFX_focus_ADISCORD_All_In",
+        )
+        self.assertIn(
+            'texturefile = "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png"',
+            gfx,
+        )
+        self.assertIn('name = "GFX_focus_ADISCORD_All_In_shine"', shine)
+        self.assertTrue(
+            (ROOT / "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png").is_file()
+        )
+        self.assertFalse(
+            (ROOT / "gfx/interface/goals/_spare/STP/GFX_focus_STP_All_In.png").exists()
+        )
+
     def test_final_campaigns_are_staged_north_then_kefreyt(self) -> None:
         focuses = read("common/national_focus/ADISCORD_national_focus_STP.txt")
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
