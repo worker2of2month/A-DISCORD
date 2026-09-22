@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: e76eaf99e6d1fedf523557f2f8c8c64abae6b922
       - name: Export source for local verification
         run: |
           python -B - <<'PY'
@@ -27,6 +29,6 @@ jobs:
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: adiscord-adviser-source
+          name: adiscord-adviser-source-current
           path: /tmp/adiscord-adviser-source.zip
           retention-days: 1
