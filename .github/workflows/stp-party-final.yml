@@ -1,0 +1,91 @@
+name: STP party QoL final verification
+on:
+  push:
+    branches: [codex/stp-party-qol-20260922]
+    paths: ['.github/workflows/stp-party-final.yml']
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check Pillow numpy
+      - name: Verify merged patch and publish source-only branch
+        run: |
+          python - <<'PY'
+          import base64, hashlib, json, os, pathlib, re, subprocess, sys, time, zlib
+          root=pathlib.Path.cwd()
+          out=pathlib.Path('/tmp/stp-party-final-evidence');out.mkdir()
+          source_base='bee29e55159abf21f0787e0512d81afd16393eb4'
+          text=''.join((root/f'.github/stp-delta/{i:02d}.b64').read_text().strip() for i in range(9))
+          data=zlib.decompress(base64.b64decode(text,validate=True))
+          assert hashlib.sha256(data).hexdigest()=='9fff48a608b8f064e29be7dc9465c42e6548aae8c3f4e00edca6acc68187fe10'
+          delta=json.loads(data);paths=[d['path'] for d in delta]
+          assert len(paths)==len(set(paths))==11
+          for d in delta:
+              p=root/d['path'];b=p.read_bytes()
+              assert hashlib.sha256(b).hexdigest()==d['before'], d['path']
+              lines=b.decode('utf-8').splitlines(keepends=True)
+              rebuilt=''.join(''.join(lines[c[0]:c[1]]) if isinstance(c,list) else c for c in d['chunks']).encode('utf-8')
+              assert hashlib.sha256(rebuilt).hexdigest()==d['after'],d['path']
+              p.write_bytes(rebuilt)
+          subprocess.run([sys.executable,'.github/stp-party-finalize.py'],check=True)
+          paths.append('tools/tests/test_adiscord_stp_preparation.py')
+          assert set(subprocess.check_output(['git','diff','--name-only']).decode().splitlines())==set(paths)
+          patch=out/'party-qol.patch'
+          patch.write_bytes(subprocess.check_output(['git','diff','--binary','--',*paths]))
+          subprocess.run(['git','checkout','--',*paths],check=True)
+          subprocess.run(['git','fetch','--depth=1','origin','main'],check=True)
+          base=subprocess.check_output(['git','rev-parse','FETCH_HEAD']).decode().strip()
+          subprocess.run(['git','checkout','--detach',base],check=True)
+          def run(name,args,timeout=180):
+              start=time.monotonic();timed_out=False
+              with (out/(name+'.log')).open('w') as log:
+                  try:code=subprocess.run(args,stdout=log,stderr=subprocess.STDOUT,timeout=timeout).returncode
+                  except subprocess.TimeoutExpired:code=124;timed_out=True
+              content=(out/(name+'.log')).read_text(errors='replace')
+              result={'exit_code':code,'timed_out':timed_out,'seconds':round(time.monotonic()-start,2),'failures':re.findall(r'^(?:FAIL|ERROR): (.+)$',content,re.M),'summary':re.findall(r'^(?:Ran .*|FAILED .*|OK)$',content,re.M)}
+              (out/(name+'.json')).write_text(json.dumps(result,indent=2))
+              print(name,json.dumps(result),flush=True)
+              return result
+          py=[sys.executable,'-B']
+          broad=py+['-m','unittest','tools.tests.test_adiscord_stp_preparation','tools.tests.test_adiscord_stp_civil_war','tools.tests.test_adiscord_stp_party_route','tools.tests.test_adiscord_stp_party_survival','-v']
+          baseline=run('baseline-stp',broad)
+          assert not baseline['timed_out']
+          subprocess.run(['git','apply','--3way',str(patch)],check=True)
+          subprocess.run(['git','diff','--cached','--check'],check=True)
+          actual=subprocess.check_output(['git','diff','--cached','--name-only']).decode().splitlines()
+          assert set(actual)==set(paths),actual
+          focused=run('focused',py+['-m','unittest','tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_route.PartyFactionContracts','tools.tests.test_adiscord_stp_preparation.StelanderPreparationTests.test_closed_preparation_removes_suspicion_and_its_display','-v'])
+          head=run('head-stp',broad)
+          new_failures=sorted(set(head['failures'])-set(baseline['failures']))
+          fixed=sorted(set(baseline['failures'])-set(head['failures']))
+          validator=run('validate-tc',py+['tools/validate_tc.py','--limit','300'],240)
+          full=run('full-suite',py+['-m','unittest','discover','-s','tools/tests','-p','test_*.py','-v'],180)
+          summary={'base':base,'original_qol_base':source_base,'paths':paths,'focused':focused,'baseline_stp':baseline,'head_stp':head,'new_stp_failures':new_failures,'fixed_stp_failures':fixed,'validator':validator,'full_suite':full,'native_game_tested':False}
+          (out/'summary.json').write_text(json.dumps(summary,indent=2))
+          assert focused['exit_code']==0,'focused regressions failed'
+          assert not head['timed_out'] and not new_failures,new_failures
+          assert validator['exit_code']==0,'TC validator failed'
+          assert not subprocess.check_output(['git','diff','--name-only']).strip(),'tests modified tracked files'
+          tree=subprocess.check_output(['git','write-tree']).decode().strip()
+          subprocess.run(['git','config','user.name','github-actions[bot]'],check=True)
+          subprocess.run(['git','config','user.email','41898282+github-actions[bot]@users.noreply.github.com'],check=True)
+          commit=subprocess.check_output(['git','commit-tree',tree,'-p',base],input=b'fix(stp): consolidate party decisions and repair foreign operations\n').decode().strip()
+          branch='codex/stp-party-qol-final-'+os.environ['GITHUB_RUN_ID']
+          subprocess.run(['git','push','origin',commit+':refs/heads/'+branch],check=True)
+          summary.update(head=commit,branch=branch,tree=tree)
+          (out/'summary.json').write_text(json.dumps(summary,indent=2))
+          print('DELIVERY',json.dumps({'head':commit,'branch':branch,'new_failures':new_failures}),flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-party-final-evidence
+          path: /tmp/stp-party-final-evidence
+          retention-days: 3
