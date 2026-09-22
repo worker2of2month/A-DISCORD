@@ -1,0 +1,102 @@
+
+
+class ValContractMemoryRewardTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        cls.parse = staticmethod(parse_clausewitz)
+        cls.focus_tree = cls.one(parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8")), "focus_tree")
+        cls.decisions = parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8"))
+        cls.campaigns = cls.one(cls.decisions, "VAL_contract_management")
+        cls.categories = parse_clausewitz((ROOT / "common/decisions/categories/ADISCORD_VAL_rework_categories.txt").read_text(encoding="utf-8"))
+        cls.shared = parse_clausewitz((ROOT / "common/scripted_effects/ADISCORD_shared_action_effects.txt").read_text(encoding="utf-8"))
+        cls.general = ("VAL_campaign_rifles_and_bread", "VAL_campaign_contracts_feed_families", "VAL_campaign_no_promise_without_payment")
+
+    @staticmethod
+    def values(entries, key):
+        return [entry.value for entry in entries if entry.key == key]
+
+    @classmethod
+    def one(cls, entries, key):
+        values = cls.values(entries, key)
+        if len(values) != 1:
+            raise AssertionError(f"Expected one {key}, found {len(values)}")
+        return values[0]
+
+    def reward(self, focus_id):
+        focus = next(entry.value for entry in self.focus_tree if entry.key == "focus" and self.values(entry.value, "id") == [focus_id])
+        return self.one(focus, "completion_reward")
+
+    def test_ministry_funds_one_campaign_with_a_visible_reward(self):
+        reward = self.reward("VAL_Ministry_Of_Contract_Memory")
+        self.assertEqual(self.values(reward, "add_political_power"), ["50"])
+        for decision in self.general:
+            self.assertLessEqual(float(self.one(self.one(self.campaigns, decision), "cost")), 50)
+
+    def test_ministry_names_the_three_immediate_campaign_unlocks(self):
+        reward = self.reward("VAL_Ministry_Of_Contract_Memory")
+        self.assertEqual(set(self.values(reward, "unlock_decision_tooltip")), set(self.general))
+
+    def test_both_slot_focuses_show_capacity_and_hide_bookkeeping(self):
+        for focus_id, flag in (("VAL_Ministry_Of_Contract_Memory", "VAL_propaganda_slot_granted"), ("VAL_Two_Concurrent_Narratives", "VAL_second_propaganda_slot_granted")):
+            with self.subTest(focus=focus_id):
+                reward = self.reward(focus_id)
+                self.assertIn("VAL_campaign_slot_granted_tt", self.values(reward, "custom_effect_tooltip"))
+                hidden = self.one(reward, "hidden_effect")
+                guard = self.one(hidden, "if")
+                self.assertEqual(self.one(self.one(self.one(guard, "limit"), "NOT"), "has_country_flag"), flag)
+                self.assertEqual(self.values(guard, "ADISCORD_campaign_slot_grant"), ["yes"])
+                self.assertEqual(self.values(guard, "set_country_flag"), [flag])
+                self.assertEqual(self.values(reward, "set_country_flag"), [])
+
+    def test_quarterly_route_does_not_unlock_ministry_campaigns(self):
+        for decision in self.general:
+            with self.subTest(decision=decision):
+                visible = self.one(self.one(self.campaigns, decision), "visible")
+                self.assertEqual(self.values(visible, "has_completed_focus"), ["VAL_Ministry_Of_Contract_Memory"])
+                self.assertEqual(self.values(visible, "OR"), [])
+
+    def test_mine_campaign_requires_ministry_and_actual_metal_loss(self):
+        visible = self.one(self.one(self.campaigns, "VAL_campaign_the_mine_was_stolen"), "visible")
+        self.assertEqual(self.values(visible, "has_completed_focus"), ["VAL_Ministry_Of_Contract_Memory"])
+        self.assertEqual(self.values(visible, "has_country_flag"), ["VAL_westerholm_metal_lost"])
+
+    def test_campaigns_release_the_same_slot_and_keep_shortages_visible(self):
+        for decision in (*self.general, "VAL_campaign_the_mine_was_stolen"):
+            with self.subTest(decision=decision):
+                entry = self.one(self.campaigns, decision)
+                self.assertEqual(self.values(self.one(entry, "available"), "ADISCORD_has_campaign_slot"), ["yes"])
+                self.assertEqual(self.values(self.one(entry, "complete_effect"), "ADISCORD_campaign_slot_consume"), ["yes"])
+                self.assertEqual(self.values(self.one(entry, "remove_effect"), "ADISCORD_campaign_slot_release"), ["yes"])
+        for effect in ("ADISCORD_campaign_slot_grant", "ADISCORD_campaign_slot_release"):
+            delta = self.one(self.one(self.shared, effect), "add_to_variable")
+            self.assertEqual(self.one(delta, "var"), "ADISCORD_available_campaign_slots")
+            self.assertEqual(self.one(delta, "value"), "1")
+        consume = self.one(self.one(self.shared, "ADISCORD_campaign_slot_consume"), "if")
+        self.assertEqual(self.one(self.one(consume, "limit"), "ADISCORD_has_campaign_slot"), "yes")
+        delta = self.one(consume, "add_to_variable")
+        self.assertEqual(self.one(delta, "var"), "ADISCORD_available_campaign_slots")
+        self.assertEqual(self.one(delta, "value"), "-1")
+
+    def test_combined_category_preserves_quarterly_contracts(self):
+        visible = self.one(self.one(self.categories, "VAL_contract_management"), "visible")
+        self.assertEqual(set(self.values(self.one(visible, "OR"), "has_completed_focus")), {"VAL_Ministry_Of_Contract_Memory", "VAL_Quarterly_Contract_Norm"})
+        for decision in ("VAL_quarterly_contract_deadline", "VAL_pay_quarterly_contract_norm"):
+            self.one(self.campaigns, decision)
+        for path in (FOCUSES_PATH, DECISIONS_PATH, ROOT / "common/decisions/categories/ADISCORD_VAL_rework_categories.txt"):
+            self.assertIsNone(re.search(r"(?m)^(?:<{7}|={7}|>{7})(?: |$)", path.read_text(encoding="utf-8")))
+
+    def test_campaign_capacity_and_funding_are_localised_in_both_languages(self):
+        for language in ("russian", "english"):
+            with self.subTest(language=language):
+                path = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+                raw = path.read_bytes()
+                self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+                text = raw.decode("utf-8-sig")
+                for key in ("VAL_campaign_slot_granted_tt", "VAL_Ministry_Of_Contract_Memory_desc", "VAL_contract_management_desc"):
+                    entries = re.findall(rf'^\s*{key}:\d*\s*"([^\n]*)"\s*$', text, re.MULTILINE)
+                    self.assertEqual(len(entries), 1, key)
+                    if key.endswith("Memory_desc"):
+                        self.assertIn("50", entries[0])
+                    if key == "VAL_contract_management_desc":
+                        self.assertIn("[?ADISCORD_available_campaign_slots|0]", entries[0])
