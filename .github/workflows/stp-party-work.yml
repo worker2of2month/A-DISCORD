@@ -1,41 +1,96 @@
-name: STP party gameplay work
+name: STP party gameplay verification
 on:
   push:
     branches: [codex/stp-party-gameplay-20260922]
-    paths: ['.github/workflows/stp-party-work.yml', '.github/stp-party-apply.py']
+    paths: ['.github/workflows/stp-party-work.yml', '.github/stp-party-apply.py', '.github/stp-party-refine.py', 'tools/tests/test_adiscord_stp_party_qol.py']
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: stp-party-gameplay-work
   cancel-in-progress: true
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: python -m pip install --disable-pip-version-check Pillow numpy
-      - name: Reproduce new contracts
+      - name: Prepare test runner and reviewed patch
+        env:
+          PATCH_REF: ${{ github.sha }}
         run: |
+          git fetch --depth=1 origin "$PATCH_REF"
+          git show "$PATCH_REF:.github/stp-party-apply.py" > /tmp/stp-party-apply.py
+          git show "$PATCH_REF:tools/tests/test_adiscord_stp_party_qol.py" > tools/tests/test_adiscord_stp_party_qol.py
+          if git cat-file -e "$PATCH_REF:.github/stp-party-refine.py" 2>/dev/null; then
+            git show "$PATCH_REF:.github/stp-party-refine.py" > /tmp/stp-party-refine.py
+          fi
           python -B - <<'PY'
-          import io, json, unittest
-          suite=unittest.defaultTestLoader.loadTestsFromName('tools.tests.test_adiscord_stp_party_qol')
-          out=io.StringIO()
-          result=unittest.TextTestRunner(stream=out, verbosity=2).run(suite)
-          print(out.getvalue())
-          print('RED_SUMMARY',json.dumps({'tests':result.testsRun,'failures':len(result.failures),'errors':len(result.errors)}))
-          assert not result.errors, 'Test harness error, not a missing feature'
-          assert len(result.failures)>=10, 'Expected missing party changes'
+          import os
+          from pathlib import Path
+          p=Path('/tmp/stp-party-evidence'); p.mkdir(exist_ok=True)
+          Path('/tmp/stp-party-base').write_text(os.popen('git rev-parse HEAD').read().strip())
+          runner='''import io, json, sys, unittest
+          from pathlib import Path
+          out = io.StringIO()
+          names = ['tools.tests.test_adiscord_stp_party_route', 'tools.tests.test_adiscord_stp_party_survival', 'tools.tests.test_adiscord_stp_party_balance', 'tools.tests.test_adiscord_stp_preparation', 'tools.tests.test_adiscord_stp_civil_war']
+          result = unittest.TextTestRunner(stream=out, verbosity=1).run(unittest.defaultTestLoader.loadTestsFromNames(names))
+          data = {'tests': result.testsRun, 'failures': {str(t): s for t,s in result.failures}, 'errors': {str(t): s for t,s in result.errors}}
+          Path('/tmp/stp-party-evidence/' + sys.argv[1] + '.json').write_text(json.dumps(data))
+          print(sys.argv[1], json.dumps({'tests': result.testsRun, 'failures': len(result.failures), 'errors': len(result.errors)}))
+          '''
+          Path('/tmp/stp-party-suite.py').write_text(runner)
+          compile(Path('/tmp/stp-party-apply.py').read_text(), 'apply.py', 'exec')
           PY
-      - name: Existing party regression baseline
+      - name: Existing regression baseline
+        run: PYTHONPATH=. python -B /tmp/stp-party-suite.py baseline
+      - name: Apply party changes
         run: |
+          python -B /tmp/stp-party-apply.py
+          if test -f /tmp/stp-party-refine.py; then python -B /tmp/stp-party-refine.py; fi
+          git diff --check
+      - name: Verify new party contracts
+        run: python -B -m unittest tools.tests.test_adiscord_stp_party_qol -v
+      - name: Check for new regressions
+        run: |
+          PYTHONPATH=. python -B /tmp/stp-party-suite.py updated
           python -B - <<'PY'
-          import io,json,unittest
-          names=['tools.tests.test_adiscord_stp_party_route','tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_balance','tools.tests.test_adiscord_stp_preparation']
-          out=io.StringIO()
-          result=unittest.TextTestRunner(stream=out,verbosity=1).run(unittest.defaultTestLoader.loadTestsFromNames(names))
-          print('BASELINE',json.dumps({'tests':result.testsRun,'failures':[str(t) for t,_ in result.failures],'errors':[str(t) for t,_ in result.errors]}))
+          import json
+          from pathlib import Path
+          p=Path('/tmp/stp-party-evidence')
+          before=json.loads((p/'baseline.json').read_text()); after=json.loads((p/'updated.json').read_text())
+          regressions={}
+          for kind in ('failures','errors'):
+              for name,trace in after[kind].items():
+                  if name not in before['failures'] and name not in before['errors']:
+                      regressions[name]=trace
+          for name,trace in regressions.items(): print('NEW REGRESSION',name,trace)
+          print('REGRESSION_DELTA',len(regressions))
+          assert not regressions
           PY
+      - name: Validate total conversion
+        run: python -B tools/validate_tc.py --limit 300
+      - name: Export gameplay-only branch
+        run: |
+          git diff --check
+          git diff --stat
+          git diff > /tmp/stp-party-evidence/party.patch
+          git switch -c codex/stp-party-qol-ready-20260922
+          git config user.name worker2of2month
+          git config user.email 81386071+worker2of2month@users.noreply.github.com
+          git add common/decisions/ADISCORD_STP_decisions.txt common/decisions/categories/ADISCORD_decision_categories_STP.txt common/national_focus/ADISCORD_national_focus_STP.txt common/scripted_effects/ADISCORD_STP_scripted_effects.txt common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt common/scripted_localisation/ADISCORD_STP_scripted_loc.txt common/on_actions/02_ADISCORD_STP_on_actions.txt common/synchronized_dynamic_tokens/ADISCORD_tokens.txt localisation/russian/ADISCORD_STP_l_russian.yml localisation/english/ADISCORD_STP_l_english.yml tools/tests/test_adiscord_stp_party_qol.py tools/tests/test_adiscord_stp_party_survival.py tools/tests/test_adiscord_stp_party_route.py tools/tests/test_adiscord_stp_party_balance.py tools/tests/test_adiscord_stp_preparation.py tools/tests/test_adiscord_stp_civil_war.py
+          git commit -m "feat(stp): streamline party command and make foreign supply actions usable"
+          git push origin HEAD:refs/heads/codex/stp-party-qol-ready-20260922
+          echo "DELIVERED_HEAD=$(git rev-parse HEAD)"
+          echo "TESTED_BASE=$(cat /tmp/stp-party-base)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-party-gameplay-evidence
+          path: /tmp/stp-party-evidence
+          retention-days: 7
