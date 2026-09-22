@@ -115,6 +115,34 @@ class ProductiveIncomeTests(unittest.TestCase):
         self.assertEqual(f.scopes["A"][P + "treasury"], 100)
 
 
+class DebtRepaymentGateTests(unittest.TestCase):
+    def test_standard_repayment_requires_full_500_treasury_chunk(self):
+        triggers = read("common/scripted_triggers/ADISCORD_economy_triggers.txt")
+        effects = read("common/scripted_effects/ADISCORD_economy_effects.txt")
+        gui = read("common/scripted_guis/ADISCORD_economy_scripted_gui.txt")
+        ru = read("localisation/russian/ADISCORD_economy_l_russian.yml")
+        en = read("localisation/english/ADISCORD_economy_l_english.yml")
+
+        gate = block(triggers, "ADISCORD_economy_has_treasury_500")
+        self.assertIn("value = 500", gate)
+        self.assertIn("compare = greater_than_or_equals", gate)
+
+        gui_try = block(effects, "ADISCORD_economy_gui_try_repay_debt")
+        repay = block(effects, "ADISCORD_economy_repay_debt")
+        self.assertIn("ADISCORD_economy_has_treasury_500 = yes", gui_try)
+        self.assertIn("ADISCORD_economy_has_treasury_500 = yes", repay)
+        self.assertNotIn("ADISCORD_economy_has_treasury_50 = yes", gui_try)
+        self.assertNotIn("ADISCORD_economy_has_treasury_50 = yes", repay)
+        self.assertNotIn("value = ADISCORD_economy_treasury", repay)
+
+        self.assertIn(
+            "ADISCORD_economy_action_repay_debt_click_enabled = { ADISCORD_economy_should_show_player_ui = yes ADISCORD_economy_has_treasury_500 = yes ADISCORD_economy_has_debt = yes }",
+            gui,
+        )
+        self.assertIn("Требует §Y500§! в казне", ru)
+        self.assertIn("Requires §Y500§! treasury", en)
+
+
 class NorthernCampaignRouteTests(unittest.TestCase):
     def test_frontier_does_not_require_participation_in_the_stelander_crisis(self):
         nodes = focus(read("common/national_focus/ADISCORD_national_focus_VAL.txt"), "VAL_frontier_conference")
