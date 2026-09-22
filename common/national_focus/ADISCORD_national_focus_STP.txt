@@ -4945,6 +4945,101 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_pc_heg_administrations
+		icon = GFX_focus_generic_improve_the_administration
+		x = 12
+		y = 16
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			hidden_trigger = {
+				STP_pc_hegemony_continues = yes
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+			}
+		}
+		prerequisite = { focus = STP_pc_heg_burden }
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			add_political_power = 75
+			unlock_decision_tooltip = { decision = STP_pw_nationalise_region show_effect_tooltip = yes }
+			custom_effect_tooltip = STP_heg_nationalisation_unlock_tt
+			custom_effect_tooltip = STP_heg_administration_unlock_tt
+			hidden_effect = { set_country_flag = STP_heg_administrations_unlocked }
+		}
+	}
+
+	focus = {
+		id = STP_pc_heg_final_north
+		icon = GFX_goal_generic_major_war
+		x = 12
+		y = 17
+		cost = 5
+		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			hidden_trigger = {
+				STP_pc_hegemony_continues = yes
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+			}
+		}
+		bypass = {
+			AND = {
+				OR = { NOT = { NOD = { exists = yes } } NOD = { is_subject_of = STS } }
+				OR = { NOT = { YPR = { exists = yes } } YPR = { is_subject_of = STS } }
+				OR = { NOT = { TFF = { exists = yes } } TFF = { is_subject_of = STS } }
+			}
+		}
+		prerequisite = { focus = STP_pc_heg_administrations }
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			custom_effect_tooltip = STP_heg_northern_war_tt
+			hidden_effect = { STP_heg_start_northern_final_war = yes }
+		}
+	}
+
+	focus = {
+		id = STP_pc_heg_final_kefreyt
+		icon = GFX_focus_STP_End_Kefreit
+		x = 12
+		y = 18
+		cost = 5
+		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_heg_northern_resolved_tt
+				STP_heg_northern_final_resolved = yes
+			}
+			hidden_trigger = {
+				STP_pc_hegemony_continues = yes
+				check_variable = { var = STP_pc_course value = 1 compare = equals }
+			}
+		}
+		bypass = {
+			OR = {
+				NOT = { VAL = { exists = yes } }
+				VAL = { is_subject_of = STS }
+			}
+		}
+		prerequisite = { focus = STP_pc_heg_final_north }
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			custom_effect_tooltip = STP_heg_kefreyt_war_tt
+			hidden_effect = { STP_heg_start_kefreyt_final_war = yes }
+		}
+	}
+
+	focus = {
 		id = STP_pc_lib_assembly
 		icon = GFX_focus_generic_self_management
 		x = 20
