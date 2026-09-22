@@ -1264,6 +1264,7 @@
       "profiles": [
         "common",
         "fragment_low_tech",
+        "air",
         "field_air_defense"
       ],
       "common_only": false,
@@ -3993,6 +3994,7 @@
         "common",
         "fragment_low_tech",
         "land",
+        "air",
         "field_air_defense"
       ],
       "common_only": false,
@@ -4993,6 +4995,7 @@
         "common",
         "fragment_low_tech",
         "land",
+        "air",
         "field_air_defense"
       ],
       "common_only": false,
