@@ -1,0 +1,93 @@
+name: Add Last Warrior song
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/add-last-warrior-song.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  convert-and-register:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Convert source MP3 to HOI4 OGG
+        shell: bash
+        run: |
+          set -euo pipefail
+          src='music/Последний_Воин_Мёртвой_Земли_Orgia_Pravednikov.mp3'
+          dst='music/ADISCORD_last_warrior_dead_land.ogg'
+          test -f "$src"
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          ffmpeg -y -i "$src" -map_metadata -1 -vn -c:a libvorbis -q:a 5 "$dst"
+          test -s "$dst"
+
+      - name: Register track and localisation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          song_id = "ADISCORD_last_warrior_dead_land"
+
+          asset = Path("music/ADISCORD_music.asset")
+          text = asset.read_text(encoding="utf-8-sig")
+          if f'name = "{song_id}"' not in text:
+              text = text.rstrip() + f'''\n\nmusic = {{
+          \tname = "{song_id}"
+          \tfile = "ADISCORD_last_warrior_dead_land.ogg"
+          \tvolume = 0.65
+          }}\n'''
+              asset.write_text(text, encoding="utf-8")
+
+          songs = Path("music/ADISCORD_songs.txt")
+          text = songs.read_text(encoding="utf-8-sig")
+          if f'song = "{song_id}"' not in text:
+              text = text.rstrip() + f'''\n\nmusic = {{
+          \tsong = "{song_id}"
+          \tchance = {{ base = 10 }}
+          }}\n'''
+              songs.write_text(text, encoding="utf-8")
+
+          locs = {
+              Path("localisation/russian/ADISCORD_music_l_russian.yml"):
+                  ' ADISCORD_last_warrior_dead_land:0 "Оргия Праведников - Последний Воин Мёртвой Земли"',
+              Path("localisation/english/ADISCORD_music_l_english.yml"):
+                  ' ADISCORD_last_warrior_dead_land:0 "Orgia Pravednikov - Posledniy Voin Myortvoy Zemli"',
+          }
+          for path, line in locs.items():
+              text = path.read_text(encoding="utf-8-sig")
+              if "ADISCORD_last_warrior_dead_land:" not in text:
+                  text = text.rstrip() + "\n" + line + "\n"
+                  path.write_text(text, encoding="utf-8-sig")
+          PY
+
+      - name: Verify and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'name = "ADISCORD_last_warrior_dead_land"' music/ADISCORD_music.asset
+          grep -q 'song = "ADISCORD_last_warrior_dead_land"' music/ADISCORD_songs.txt
+          grep -q 'ADISCORD_last_warrior_dead_land:' localisation/russian/ADISCORD_music_l_russian.yml
+          grep -q 'ADISCORD_last_warrior_dead_land:' localisation/english/ADISCORD_music_l_english.yml
+          test -s music/ADISCORD_last_warrior_dead_land.ogg
+
+          git config user.name "A-DISCORD automation"
+          git config user.email "81386071+worker2of2month@users.noreply.github.com"
+          git add -- music/ADISCORD_last_warrior_dead_land.ogg music/ADISCORD_music.asset music/ADISCORD_songs.txt localisation/russian/ADISCORD_music_l_russian.yml localisation/english/ADISCORD_music_l_english.yml
+          git rm -- .github/workflows/add-last-warrior-song.yml
+          git diff --cached --check
+          git commit -m "music: add Last Warrior of the Dead Land"
+          git push origin HEAD:main
