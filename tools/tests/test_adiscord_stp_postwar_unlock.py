@@ -42,7 +42,7 @@ class StelanderPostwarUnlockRegressionTests(unittest.TestCase):
 
     def test_deferred_white_peace_gets_a_self_healing_retry(self) -> None:
         recovery = read_country_on_actions(RECOVERY, 'stelander')
-        self.assertIsNone(re.search(r"(?m)^\\s*on_daily\\s*=", recovery))
+        self.assertIsNone(re.search(r"(?m)^\s*on_daily\s*=", recovery))
         for hook in ("on_daily_STP", "on_daily_STS"):
             daily = named_block(recovery, hook)
             for token in (
