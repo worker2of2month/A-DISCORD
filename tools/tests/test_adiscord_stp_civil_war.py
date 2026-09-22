@@ -81,6 +81,23 @@ class CivilWarContracts(unittest.TestCase):
         self.effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         self.triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
 
+    def test_party_hostilities_clear_prewar_regime_spirits(self):
+        hostilities = block(self.effects, "STP_cw_begin_hostilities")
+        prewar_spirits = (
+            "STP_hedonism_with_no_bondaries",
+            "STP_hidden_slaves_trade",
+            "STP_legalize",
+            "STP_worldwide_famous_tourist_destination",
+        )
+        for spirit in prewar_spirits:
+            with self.subTest(spirit=spirit):
+                self.assertEqual(hostilities.count(f"remove_ideas = {spirit}"), 1)
+        self.assertNotIn("remove_ideas = ADISCORD_economic_system_oligarchic_clan", hostilities)
+        positions = [hostilities.find(f"remove_ideas = {spirit}") for spirit in prewar_spirits]
+        if all(position >= 0 for position in positions):
+            battle_spirit = hostilities.index("add_ideas = STP_cw_party_battle_spirit")
+            self.assertLess(max(positions), battle_spirit)
+
     def test_northern_early_peace_uses_shared_defeat_and_war_clock(self):
         trigger = block(self.triggers, "NOD_cw_can_accept_northern_defeat")
         self.assertIn("NOT = { surrender_progress < 0.7 }", trigger)
@@ -3966,12 +3983,14 @@ class PostwarFocusContracts(unittest.TestCase):
             for idea in (base, delta):
                 self.assertEqual(scalar(ast_block(idea, "allowed"), "always"), "no")
             expected = {bindings[e.key]: Decimal(e.value) for e in ast_block(delta, "modifier")}
-            writes = [e.value for e in walk(ast_block(reward, "hidden_effect")) if e.key == "add_to_variable"]
+            hidden = [e.value for e in reward if e.key == "hidden_effect"]
+            writes = [e.value for payload in hidden for e in walk(payload) if e.key == "add_to_variable"]
             actual = {scalar(e, "var"): Decimal(scalar(e, "value")) for e in writes}
             self.assertEqual(actual, expected, name)
             self.assertEqual(len(writes), len(actual))
             self.assertTrue(actual)
-            self.assertEqual(scalar(ast_block(reward, "hidden_effect"), "STP_pw_refresh_modifier"), "yes")
+            refreshes = [e.value for payload in hidden for e in payload if e.key == "STP_pw_refresh_modifier"]
+            self.assertEqual(refreshes, ["yes"], name)
             # Delta preview spirits must never become installed ideas.
             for entry in executable_entries(reward):
                 if entry.key in {"add_ideas", "swap_ideas", "add_timed_idea"}:

@@ -518,6 +518,28 @@ VAL_northern_volunteer_front_open = {
 	}
 }
 
+# COUNTRY VAL. A deliberate campaign against Nodrul needs a real northern
+# foothold. One complete tribal settlement is enough; the full supply base
+# still requires all eight states later.
+VAL_northern_foothold_secured = {
+ OR = {
+  AND = {
+   58 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+   59 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+   60 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+  }
+  AND = {
+   61 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+   62 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+   63 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+  }
+  AND = {
+   64 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+   65 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+  }
+ }
+}
+
 VAL_cannibal_sphere_secured = {
  58 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
  59 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }

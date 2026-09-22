@@ -2780,6 +2780,12 @@ STP_cw_begin_hostilities = {
 		if = {
 			limit = { NOT = { has_global_flag = STP_cw_started } }
 			set_global_flag = STP_cw_started
+			# The Party remains STP through the split, so explicitly retire the
+			# prewar hedonist-regime spirits when open hostilities begin.
+			remove_ideas = STP_hedonism_with_no_bondaries
+			remove_ideas = STP_hidden_slaves_trade
+			remove_ideas = STP_legalize
+			remove_ideas = STP_worldwide_famous_tourist_destination
 			if = { limit = { VAL = { exists = yes } } VAL = { VAL_open_refugee_waves = yes } }
 			hidden_effect = {
 				# Playback waits until change_tag_from has assigned the human to the chosen side.
