@@ -1,11 +1,9 @@
 air_wings = {
-	# The capital airfield receives two fighter groups and two smaller
-	# ground-support groups, giving WKR a deliberate central-air-command edge.
-	# Additional aircraft from the collapse effect remain as replacements.
+	# The capital airfield receives one fighter group and one ground-support
+	# group. WKR keeps a usable air arm without a unique 2:1 opening advantage
+	# over the Vadl claimant; additional aircraft remain finite replacements.
 	32 = {
 		ADISCORD_fighter_airframe_2163 = { owner = "WKR" amount = 100 }
-		ADISCORD_fighter_airframe_2163 = { owner = "WKR" amount = 100 }
-		ADISCORD_cas_airframe_2170 = { owner = "WKR" amount = 50 }
 		ADISCORD_cas_airframe_2170 = { owner = "WKR" amount = 50 }
 	}
 }

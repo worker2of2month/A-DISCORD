@@ -3009,13 +3009,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if not country or "add_manpower = 8000" not in country.group(1) or "amount = 600" not in country.group(1):
             issues.append(f"{tag}: central claimant reserve is missing")
     wkr_initial = named_block(initial, "WKR")
-    wkr_air_stockpile = "type = ADISCORD_fighter_airframe_2163 amount = 60 producer = WKR"
-    wkr_cas_stockpile = "type = ADISCORD_cas_airframe_2170 amount = 30 producer = WKR"
+    wkr_air_stockpile = "type = ADISCORD_fighter_airframe_2163 amount = 30 producer = WKR"
+    wkr_cas_stockpile = "type = ADISCORD_cas_airframe_2170 amount = 15 producer = WKR"
     wkr_air_oob = 'load_oob = "WRK_vorkerland_collapse_air"'
     for token in (
         wkr_air_stockpile,
         wkr_cas_stockpile,
-        "add_fuel = 15000",
+        "add_fuel = 10000",
         wkr_air_oob,
     ):
         if token not in wkr_initial:

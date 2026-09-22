@@ -517,8 +517,8 @@ class VorkerlandForceDesignTests(unittest.TestCase):
                 "history/units/WRK_vorkerland_collapse_air.txt",
                 "WRK_vorkerland_collapse_air",
                 "32",
-                2,
-                2,
+                1,
+                1,
             ),
             "VAD": (
                 "history/units/VAD_vorkerland_collapse_air.txt",
@@ -557,14 +557,14 @@ class VorkerlandForceDesignTests(unittest.TestCase):
         vad = named_block(initial, "VAD")
         self.assertIn('load_oob = "WRK_vorkerland_collapse_air"', wkr)
         self.assertIn('load_oob = "VAD_vorkerland_collapse_air"', vad)
-        self.assertIn("add_fuel = 15000", wkr)
+        self.assertIn("add_fuel = 10000", wkr)
         self.assertIn("add_fuel = 7500", vad)
         self.assertIn(
-            "type = ADISCORD_fighter_airframe_2163 amount = 60 producer = WKR",
+            "type = ADISCORD_fighter_airframe_2163 amount = 30 producer = WKR",
             wkr,
         )
         self.assertIn(
-            "type = ADISCORD_cas_airframe_2170 amount = 30 producer = WKR",
+            "type = ADISCORD_cas_airframe_2170 amount = 15 producer = WKR",
             wkr,
         )
         self.assertIn(
@@ -581,7 +581,7 @@ class VorkerlandForceDesignTests(unittest.TestCase):
             self.assertLess(
                 wkr.index(technology),
                 wkr.index(
-                    "type = ADISCORD_fighter_airframe_2163 amount = 60 producer = WKR"
+                    "type = ADISCORD_fighter_airframe_2163 amount = 30 producer = WKR"
                 ),
             )
             self.assertLess(
