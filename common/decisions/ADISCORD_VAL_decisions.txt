@@ -669,7 +669,7 @@ VAL_reclamation = {
 		on_map_mode = map_and_decisions_view
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		cost = 0
-		custom_cost_text = VAL_cost_treasury1000_tooltip
+		custom_cost_text = VAL_cost_treasury1000
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
 		days_remove = 60
 		fire_only_once = no
