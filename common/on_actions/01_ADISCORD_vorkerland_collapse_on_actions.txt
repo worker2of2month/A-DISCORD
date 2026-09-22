@@ -1,6 +1,7 @@
 on_actions = {
 	on_startup = {
 		effect = {
+			ADISCORD_vorkerland_clear_northern_dirty_modifiers = yes
 			# on_startup is unscoped; the landmark state survives WRK's collapse.
 			40 = { ADISCORD_vorkerland_sync_unity_tower_visual = yes }
 			40 = { ADISCORD_vorkerland_reconcile_dirty_zone_remainder = yes }
