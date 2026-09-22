@@ -109,3 +109,4 @@
  VAL_train_refugee_volunteers:0 "Train Refugee Volunteers"
  VAL_train_refugee_volunteers_desc:0 "Offer volunteers military training and paid service. A group of 100,000 admitted refugees are reserved during training. After 35 days, 5000 trained recruits enter the army reserve. Cancellation returns 75 political power and the reserved population."
  VAL_refugee_training_start_tt:0 "Reserve §Y100,000§! admitted refugees. After §Y35 days§!, gain §G5000§! volunteers in the army reserve. Cancellation returns the population and §Y75§! political power."
+ VAL_refugee_window_open_tt: "An admission window is open for this refugee route. It lasts §Y180 days§! from the start of the flow. If this condition is unmet, the flow has not opened yet, its admission window has expired, or all three waves have already been admitted."

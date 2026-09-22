@@ -2690,6 +2690,7 @@ completion_reward = {
 		prerequisite = { focus = VAL_Foreign_Broker_Licences }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			unlock_decision_tooltip = { decision = VAL_negotiate_nam_metals show_effect_tooltip = yes }
 			unlock_decision_tooltip = { decision = VAL_resource_war_arms show_effect_tooltip = yes }
 			unlock_decision_tooltip = { decision = VAL_resource_war_personnel show_effect_tooltip = yes }
 			army_experience = 5
