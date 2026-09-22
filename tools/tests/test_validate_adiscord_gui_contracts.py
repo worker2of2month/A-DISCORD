@@ -539,6 +539,50 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
     return issues
 
 
+class NationalSpiritOverflowTests(unittest.TestCase):
+    """Check the authored scroll axis, not the native renderer's output."""
+
+    def assert_horizontal_overflow(self, filename, grid_name):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        text = (ROOT / "interface" / filename).read_text(encoding="utf-8-sig")
+        entries = parse_clausewitz(text)
+        panels = [
+            entry.value for entry in _walk_clausewitz(entries)
+            if entry.key.lower() == "containerwindowtype"
+            and isinstance(entry.value, list)
+            and _direct_scalar(entry.value, "name") == "national_spirit_container"
+        ]
+        self.assertEqual(len(panels), 1)
+        panel = panels[0]
+        self.assertTrue(_direct_scalar(panel, "horizontalScrollbar"))
+        self.assertIsNone(_direct_scalar(panel, "verticalScrollbar"))
+        grids = [
+            entry.value for entry in panel
+            if entry.key.lower() == "gridboxtype"
+            and _direct_scalar(entry.value, "name") == grid_name
+        ]
+        self.assertEqual(len(grids), 1, "retain the native overflow grid as a direct child")
+        grid = grids[0]
+        # Fixed columns grow downward, outside the horizontal-only viewport.
+        # Bound rows instead so all later spirits remain on the scrollable axis.
+        self.assertEqual(_direct_scalar(grid, "max_slots_vertical"), "2")
+        self.assertIsNone(_direct_scalar(grid, "max_slots_horizontal"))
+        self.assertFalse(_direct_clausewitz(grid, "max_slots"))
+        slots = _unique_direct_block(grid, "slotsize")
+        size = _unique_direct_block(grid, "size")
+        self.assertLessEqual(
+            2 * int(_direct_scalar(slots, "height")),
+            int(_direct_scalar(size, "height")),
+        )
+
+    def test_politics_spirits_overflow_along_the_scrollbar(self):
+        self.assert_horizontal_overflow("countrypoliticsview.gui", "spirit_grid_over_defined")
+
+    def test_diplomacy_spirits_overflow_along_the_scrollbar(self):
+        self.assert_horizontal_overflow("countrydiplomacyview.gui", "nat_spirit_ideas_grid_over_defined")
+
+
 class CountryPoliticsGuiContractTests(unittest.TestCase):
     def test_occupation_return_territory_is_not_accessible(self):
         gui = (ROOT / 'interface/countryoccupationview.gui').read_text(encoding='utf-8-sig')

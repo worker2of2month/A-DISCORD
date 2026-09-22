@@ -666,7 +666,7 @@ guiTypes = {
 					position = { x = 10 y = 1 }
 					size = { width = 330 height = 68 }
 					slotsize = { width = 33 height = 34 }
-					max_slots_horizontal = 10
+					max_slots_vertical = 2
 					format = "UPPER_LEFT"
 				}
 			}
