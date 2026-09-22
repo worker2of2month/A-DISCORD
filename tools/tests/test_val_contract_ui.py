@@ -688,6 +688,10 @@ class TestValProgressionChoices(unittest.TestCase):
         if "available = {" in stelander:
             self.assertNotIn("VAL_northern_foothold_secured", named_block(stelander, "available"))
 
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        nod_intervention = named_block(effects, "VAL_frontier_issue_nod_ultimatum")
+        self.assertNotIn("VAL_northern_foothold_secured", nod_intervention)
+
     def test_economic_route_does_not_require_bypassed_military_rewards(self):
         reopen = self.focus("VAL_Reopen_Trade_Routes")
         debts = self.focus("VAL_Settle_Industrial_Debts")
