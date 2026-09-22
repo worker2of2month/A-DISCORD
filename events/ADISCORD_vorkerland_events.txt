@@ -785,6 +785,7 @@ country_event = {
 		# day later, after released-country faction membership has entered the cache.
 		ADISCORD_vorkerland_teardown_confederation = yes
 		set_global_flag = ADISCORD_vorkerland_collapse_wars_started
+		if = { limit = { VAL = { exists = yes } } VAL = { VAL_open_refugee_waves = yes } }
 		ADISCORD_vorkerland_apply_central_attrition = yes
 		WKR = { ADISCORD_vorkerland_initialize_legitimacy = yes }
 		VAD = { ADISCORD_vorkerland_initialize_legitimacy = yes }
@@ -950,6 +951,7 @@ country_event = {
 	}
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_dirty_opened
+		if = { limit = { VAL = { exists = yes } } VAL = { VAL_open_refugee_waves = yes } }
 		ADISCORD_vorkerland_show_dirty_opening_superevent = yes
 		# One successor per date gives the engine time to rebuild ownership,
 		# supply and front data while keeping the whole reveal under two weeks.
