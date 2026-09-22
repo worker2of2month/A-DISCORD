@@ -2780,6 +2780,7 @@ STP_cw_begin_hostilities = {
 		if = {
 			limit = { NOT = { has_global_flag = STP_cw_started } }
 			set_global_flag = STP_cw_started
+			if = { limit = { VAL = { exists = yes } } VAL = { VAL_open_refugee_waves = yes } }
 			hidden_effect = {
 				# Playback waits until change_tag_from has assigned the human to the chosen side.
 				country_event = { id = ADISCORD_STP_cw.95 hours = 1 }
