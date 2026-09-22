@@ -4173,3 +4173,68 @@ VAL_qol_initialize_party_leaders = {
 		}
 	}
 }
+
+
+# COUNTRY VAL: recognition of political equality ends any remaining territorial
+# claim on Stelander's national territory. Only states actually owned by VAL move.
+VAL_return_stelander_cores = {
+ if = {
+  limit = { tag = VAL }
+  every_owned_state = {
+   limit = {
+    OR = { is_core_of = STP is_core_of = STS }
+   }
+   if = {
+    limit = { STS = { exists = yes } is_core_of = STS }
+    transfer_state_to = STS
+    set_state_controller_to = STS
+   }
+   else_if = {
+    limit = { STP = { exists = yes } is_core_of = STP }
+    transfer_state_to = STP
+    set_state_controller_to = STP
+   }
+  }
+  ADISCORD_economy_mark_dirty = yes
+ }
+}
+
+VAL_offer_stelander_equal_alliance = {
+ if = {
+  limit = { tag = VAL VAL_stelander_equal_partner_available = yes NOT = { has_country_flag = VAL_stelander_alliance_offer_pending } }
+  set_country_flag = VAL_stelander_alliance_offer_pending
+  if = {
+   limit = { STS = { exists = yes has_country_flag = VAL_stelander_equal_recognition } }
+   STS = { country_event = { id = val_contract.354 days = 1 } }
+  }
+  else_if = {
+   limit = { STP = { exists = yes has_country_flag = VAL_stelander_equal_recognition } }
+   STP = { country_event = { id = val_contract.354 days = 1 } }
+  }
+ }
+}
+
+VAL_form_equal_stelander_alliance = {
+ if = {
+  limit = { tag = VAL }
+  if = {
+   limit = { NOT = { is_in_faction = yes } }
+   create_faction_from_template = { template = faction_template_ADISCORD_standard name = VAL_stelander_equal_alliance_name }
+  }
+  if = {
+   limit = { STS = { exists = yes NOT = { is_in_faction_with = VAL } } }
+   add_to_faction = STS
+  }
+  else_if = {
+   limit = { STP = { exists = yes NOT = { is_in_faction_with = VAL } } }
+   add_to_faction = STP
+  }
+ }
+}
+
+VAL_call_stelander_partner_to_wars = {
+ if = {
+  limit = { tag = VAL has_country_flag = VAL_stelander_equal_alliance }
+  if = { limit = { STS = { exists = yes is_in_faction_with = VAL } } STS = { add_to_war = { targeted_alliance = VAL enemy = NOD single_target_only = no } } }
+ }
+}
