@@ -1,0 +1,109 @@
+name: Plain Kefreyt party name verification
+on:
+  push:
+    branches: [fix/val-plain-state-party-name-20260922]
+    paths: [.github/workflows/val-party-name-check.yml]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install Pillow
+      - name: Test and remove the state party leader suffix
+        shell: bash
+        run: |
+          python - <<'PY'
+          import collections, hashlib, json, pathlib, re, subprocess
+          out = pathlib.Path('/tmp/val-party-name-evidence')
+          out.mkdir()
+          summary = {'base': subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()}
+          def run(name, args, timeout=60):
+              with (out / (name + '.txt')).open('w') as log:
+                  try:
+                      result = subprocess.run(args, stdout=log, stderr=subprocess.STDOUT, timeout=timeout)
+                      code = result.returncode
+                  except subprocess.TimeoutExpired:
+                      code = 124
+                      log.write('\nTIMEOUT=' + str(timeout) + '\n')
+              text = (out / (name + '.txt')).read_text()
+              summary[name] = {'exit': code, 'failures': re.findall(r'^(?:FAIL|ERROR): .*$', text, re.M), 'tail': text[-2000:]}
+              print(name, json.dumps(summary[name], ensure_ascii=False), flush=True)
+              return code
+          unit = ['python', '-B', '-m', 'unittest']
+          suite = ['tools.tests.test_adiscord_playable_staff', '-v']
+          run('baseline-staff', unit + suite)
+          tests = pathlib.Path('tools/tests/test_adiscord_playable_staff.py')
+          original_test = tests.read_bytes()
+          marker = b'class PlayableStaffTests(unittest.TestCase):\n'
+          addition = '''    def test_val_state_party_names_are_plain_in_both_languages(self):
+                  expected = {
+                      'russian': 'Государственная партия Кефрейта',
+                      'english': 'Kefreyt State Party',
+                  }
+                  for language, name in expected.items():
+                      path = ROOT / f'localisation/{language}/parties_l_{language}.yml'
+                      data = path.read_bytes()
+                      self.assertTrue(data.startswith(b'\\xef\\xbb\\xbf'), language)
+                      text = data.decode('utf-8-sig')
+                      for suffix in ('', '_long'):
+                          key = 'VAL_etatism_party' + suffix
+                          with self.subTest(language=language, key=key):
+                              values = re.findall(
+                                  rf'^[ \\t]*{key}:(?:\\d+)?[ \\t]*"([^"\\r\\n]*)"[ \\t]*$',
+                                  text, re.M,
+                              )
+                              self.assertEqual(values, ['£GFX_VAL_etatist_party_texticon ' + name])
+
+          '''
+          assert original_test.count(marker) == 1
+          assert b'def test_val_state_party_names_are_plain_in_both_languages' not in original_test
+          tests.write_bytes(original_test.replace(marker, marker + addition.encode('utf-8')))
+          target = ['tools.tests.test_adiscord_playable_staff.PlayableStaffTests.test_val_state_party_names_are_plain_in_both_languages', '-v']
+          assert run('red', unit + target) == 1
+          assert len(summary['red']['failures']) == 4
+          assert all(line.startswith('FAIL:') for line in summary['red']['failures'])
+          paths = []
+          summary['original_blobs'] = {}
+          for language in ('russian', 'english'):
+              path = pathlib.Path(f'localisation/{language}/parties_l_{language}.yml')
+              old = path.read_bytes()
+              summary['original_blobs'][str(path)] = hashlib.sha1(b'blob ' + str(len(old)).encode() + b'\0' + old).hexdigest()
+              new = old
+              for token in (b'[GetVALStatePartyLeader]', b'[GetVALStatePartyLeaderLong]'):
+                  assert old.count(token) == 1
+                  new = new.replace(token, b'')
+              assert new.startswith(b'\xef\xbb\xbf')
+              assert new.count(b'\n') == old.count(b'\n')
+              path.write_bytes(new)
+              paths.append(str(path))
+          assert run('green', unit + target) == 0
+          run('after-staff', unit + suite)
+          assert summary['after-staff']['exit'] == summary['baseline-staff']['exit']
+          assert collections.Counter(summary['after-staff']['failures']) == collections.Counter(summary['baseline-staff']['failures'])
+          run('tc-validator', ['python', '-B', 'tools/validate_tc.py', '--limit', '300'], timeout=100)
+          run('full-suite', unit + ['discover', '-s', 'tools/tests', '-p', 'test*.py', '-v'], timeout=60)
+          paths.append(str(tests))
+          subprocess.run(['git', 'diff', '--check'], check=True)
+          (out / 'change.patch').write_bytes(subprocess.check_output(['git', 'diff', '--'] + paths))
+          summary['blobs'] = {name: subprocess.check_output(['git', 'hash-object', name]).decode().strip() for name in paths}
+          for name in paths:
+              (out / pathlib.Path(name).name).write_bytes(pathlib.Path(name).read_bytes())
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'add', '--'] + paths, check=True)
+          subprocess.run(['git', 'commit', '-m', 'fix(loc): use plain Kefreyt state party names'], check=True)
+          summary['commit'] = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
+          summary['runtime'] = 'HOI4 was not launched. Only the four state party names and one regression test changed.'
+          (out / 'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2))
+          subprocess.run(['git', 'push', 'origin', 'HEAD:fix/val-plain-state-party-name-20260922'], check=True)
+          print(json.dumps(summary, ensure_ascii=False, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: val-party-name-evidence
+          path: /tmp/val-party-name-evidence
+          retention-days: 7
