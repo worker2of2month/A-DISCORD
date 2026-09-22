@@ -1,0 +1,13 @@
+ADISCORD_bezhaysk_postwar_operations = {
+	icon = generic_political_pressure
+	allowed = { OR = { tag = VAL tag = NOD } }
+	visible = {
+		COF = { exists = yes }
+		OR = {
+			AND = { tag = VAL has_completed_focus = VAL_Bezhaysk_Operation }
+			has_country_flag = ADISCORD_bezhaysk_joint_settlement
+		}
+	}
+	visible_when_empty = no
+	priority = 24
+}
