@@ -47,4 +47,4 @@ jobs:
               assert data.startswith(b"\xef\xbb\xbf"), name
           PY
           git fetch --depth=1 origin main
-          git diff --check origin/main...HEAD
+          git diff --check origin/main HEAD
