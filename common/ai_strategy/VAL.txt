@@ -289,6 +289,8 @@ ADISCORD_VAL_volunteer_air_defence = {
 		STP_cw_kefreyt_aid_open = yes
 		num_of_military_factories > 7
 		has_tech = ADISCORD_tech_improvised_air_defense
+		# The generic AA buffer owns the factory floor after this technology.
+		NOT = { has_tech = ADISCORD_tech_point_defense_aa }
 		has_equipment = { anti_air_equipment < 60 }
 	}
 	abort_when_not_enabled = yes
