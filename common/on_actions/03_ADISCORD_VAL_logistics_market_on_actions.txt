@@ -32,7 +32,11 @@ on_actions = {
 	on_state_control_changed = {
 		effect = {
 			if = {
-				limit = { VAL = { exists = yes VAL_trade_corridors_unlocked = yes } }
+				limit = {
+					# Only these authored route nodes can change corridor availability.
+					FROM.FROM = { OR = { state = 29 state = 33 state = 43 state = 44 state = 46 state = 59 state = 60 state = 61 state = 88 } }
+					VAL = { exists = yes VAL_trade_corridors_unlocked = yes }
+				}
 				VAL = { VAL_refresh_trade_network = yes }
 			}
 		}
