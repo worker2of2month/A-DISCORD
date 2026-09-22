@@ -1,3 +1,5 @@
+# Silent music-channel carrier for super-events. The actual presentation audio
+# remains GUI show_sound; this track only interrupts ordinary radio music.
 music = {
 	name = "one_minute_of_silence"
 	file = "one_minute_of_silence.ogg"

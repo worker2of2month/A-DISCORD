@@ -44,7 +44,9 @@ class SupereventContractTests(unittest.TestCase):
         self.assertNotIn("music_station =", guard)
         self.assertNotIn("song =", guard)
 
-        self.assertNotIn('song = "one_minute_of_silence"', songs)
+        # The silent carrier is the one exception: play_song requires a station
+        # registration, while factor 0 keeps it out of weighted shuffle.
+        self.assertEqual(songs.count('song = "one_minute_of_silence"'), 1)
         self.assertNotIn('_after_superevent', songs)
         self.assertEqual(songs.count('song = "ADISCORD_stp_civil_war_end"'), 1)
         self.assertIn('music_station = "adiscord_music"', songs)

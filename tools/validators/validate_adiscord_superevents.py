@@ -383,6 +383,29 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     if re.search(r"(?m)^\s*music\s*=", source[PRESENTATION_SONGS]):
         issues.append("presentation audio guard file must not register radio songs")
 
+    # play_song resolves through the music database. Keep the silence carrier in
+    # the real station with zero random chance so a super-event can reliably
+    # interrupt whatever radio track is already playing without entering shuffle.
+    silence_assets = [
+        block
+        for block in blocks(source[MUSIC], r"^\s*music\s*=\s*\{")
+        if 'name = "one_minute_of_silence"' in block
+    ]
+    if len(silence_assets) != 1 or 'file = "one_minute_of_silence.ogg"' not in silence_assets[0]:
+        issues.append("super-event silence carrier must have exactly one music asset")
+
+    silence_registrations = [
+        block
+        for block in blocks(source[SONGS], r"^\s*music\s*=\s*\{")
+        if 'song = "one_minute_of_silence"' in block
+    ]
+    if len(silence_registrations) != 1:
+        issues.append(
+            "super-event silence carrier must be registered exactly once in ADISCORD_songs.txt"
+        )
+    elif not re.search(r"\bfactor\s*=\s*0(?:\.0+)?\b", silence_registrations[0]):
+        issues.append("super-event silence carrier must have zero random-play chance")
+
     for effect in sound_effect_names:
         song = effect.removesuffix("_sound_e")
         assets = [block for block in blocks(source[MUSIC], r"^\s*music\s*=\s*\{")

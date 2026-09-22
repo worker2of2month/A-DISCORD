@@ -1,6 +1,16 @@
 
 music_station = "adiscord_music"
 
+# Silent carrier used by the shared super-event helper. It is a real music
+# database entry so play_song can take over the music channel, but weighted
+# shuffle can never choose it on its own.
+music = {
+	song = "one_minute_of_silence"
+	chance = {
+		modifier = { factor = 0 }
+	}
+}
+
 music = {
 	song = "ADISCORD_val_theme"
 	chance = {
