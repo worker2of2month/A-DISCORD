@@ -1,0 +1,73 @@
+# Scripted settlement for the Bezhaysk campaign.
+# The campaign is against the feudal bloc as it exists when BJK falls.
+# Only members that are still tied to BJK and fighting the winner are annexed.
+
+ADISCORD_bezhaysk_settle_sts_victory = {
+	if = {
+		limit = { BLD = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BLD } white_peace = BLD }
+		annex_country = { target = BLD transfer_troops = no }
+	}
+	if = {
+		limit = { BHG = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BHG } white_peace = BHG }
+		annex_country = { target = BHG transfer_troops = no }
+	}
+	if = {
+		limit = { BGT = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BGT } white_peace = BGT }
+		annex_country = { target = BGT transfer_troops = no }
+	}
+	if = {
+		limit = { BBV = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BBV } white_peace = BBV }
+		annex_country = { target = BBV transfer_troops = no }
+	}
+	if = {
+		limit = { BCM = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BCM } white_peace = BCM }
+		annex_country = { target = BCM transfer_troops = no }
+	}
+	if = {
+		limit = { BJK = { exists = yes } }
+		if = { limit = { has_war_with = BJK } white_peace = BJK }
+		annex_country = { target = BJK transfer_troops = no }
+	}
+	clr_country_flag = ADISCORD_bezhaysk_campaign_active
+	ADISCORD_economy_mark_dirty = yes
+}
+
+ADISCORD_bezhaysk_settle_val_victory = {
+	if = {
+		limit = { BLD = { exists = yes has_war_with = VAL OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BLD } white_peace = BLD }
+		annex_country = { target = BLD transfer_troops = no }
+	}
+	if = {
+		limit = { BHG = { exists = yes has_war_with = VAL OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BHG } white_peace = BHG }
+		annex_country = { target = BHG transfer_troops = no }
+	}
+	if = {
+		limit = { BGT = { exists = yes has_war_with = VAL OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BGT } white_peace = BGT }
+		annex_country = { target = BGT transfer_troops = no }
+	}
+	if = {
+		limit = { BBV = { exists = yes has_war_with = VAL OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BBV } white_peace = BBV }
+		annex_country = { target = BBV transfer_troops = no }
+	}
+	if = {
+		limit = { BCM = { exists = yes has_war_with = VAL OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BCM } white_peace = BCM }
+		annex_country = { target = BCM transfer_troops = no }
+	}
+	if = {
+		limit = { BJK = { exists = yes } }
+		if = { limit = { has_war_with = BJK } white_peace = BJK }
+		annex_country = { target = BJK transfer_troops = no }
+	}
+	clr_country_flag = ADISCORD_bezhaysk_campaign_active
+	ADISCORD_economy_mark_dirty = yes
+}
