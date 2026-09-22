@@ -2113,6 +2113,32 @@ VAL_frontier_settle_defeat = {
     }
 }
 
+# COUNTRY VAL. All enrolled cannibal states receive their own declaration in the
+# same execution. Do not depend on allied AI accepting an add_to_war call.
+VAL_frontier_declare_all_tribal_members = {
+    if = {
+        limit = {
+            CIN = { exists = yes has_capitulated = no has_country_flag = VAL_frontier_member }
+            NOT = { has_war_with = CIN }
+        }
+        declare_war_on = { target = CIN type = take_state_focus generator = { 58 } }
+    }
+    if = {
+        limit = {
+            OSF = { exists = yes has_capitulated = no has_country_flag = VAL_frontier_member }
+            NOT = { has_war_with = OSF }
+        }
+        declare_war_on = { target = OSF type = take_state_focus generator = { 61 } }
+    }
+    if = {
+        limit = {
+            APH = { exists = yes has_capitulated = no has_country_flag = VAL_frontier_member }
+            NOT = { has_war_with = APH }
+        }
+        declare_war_on = { target = APH type = take_state_focus generator = { 64 } }
+    }
+}
+
 VAL_frontier_start_war = {
     if = {
         limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_prewar_eligible = yes has_war = no }
@@ -2124,7 +2150,7 @@ VAL_frontier_start_war = {
             CIN = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             OSF = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             APH = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
-            declare_war_on = { target = CIN type = take_state_focus generator = { 58 } }
+            VAL_frontier_declare_all_tribal_members = yes
         }
         if = {
             limit = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } }
@@ -2132,7 +2158,7 @@ VAL_frontier_start_war = {
             CIN = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             OSF = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             APH = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
-            declare_war_on = { target = OSF type = take_state_focus generator = { 61 } }
+            VAL_frontier_declare_all_tribal_members = yes
         }
         if = {
             limit = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } }
@@ -2140,7 +2166,7 @@ VAL_frontier_start_war = {
             CIN = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             OSF = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
             APH = { if = { limit = { has_country_flag = VAL_frontier_member } VAL_frontier_prepare_major = yes } }
-            declare_war_on = { target = APH type = take_state_focus generator = { 64 } }
+            VAL_frontier_declare_all_tribal_members = yes
         }
         if = {
             limit = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } }
