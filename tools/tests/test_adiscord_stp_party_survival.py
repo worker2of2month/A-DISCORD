@@ -236,15 +236,16 @@ class PartySurvivalContracts(unittest.TestCase):
             self.assertIn('6000', text)
             self.assertIn('600', text)
 
-    def test_preparation_uses_existing_election_category_without_extra_tabs(self):
+    def test_preparation_uses_existing_context_categories_without_extra_tabs(self):
         categories = {e.key: e.value for e in parse_clausewitz(read(DECISIONS))}
         definitions = {e.key for e in parse_clausewitz(read('common/decisions/categories/ADISCORD_decision_categories_STP.txt'))}
         for old in ('STP_ps_party_programs', 'STP_ps_northern_support', 'STP_ps_supply_routes'):
             self.assertNotIn(old, categories)
             self.assertNotIn(old, definitions)
-        elections = {e.key for e in categories['STP_elections_in_the_party']}
-        self.assertTrue({'STP_ps_build_radio', 'STP_ps_build_hq', 'STP_ps_prepare_evacuation',
-                         'STP_ps_fund_nod', 'STP_ps_arm_nod', 'STP_ps_val_intelligence', 'STP_ps_val_intercept'} <= elections)
+        government = {e.key for e in categories['STP_party_factions']}
+        foreign = {e.key for e in categories['STP_cw_external_intervention']}
+        self.assertTrue({'STP_ps_build_radio', 'STP_ps_build_hq', 'STP_ps_prepare_evacuation'} <= government)
+        self.assertTrue({'STP_ps_fund_nod', 'STP_ps_arm_nod', 'STP_ps_val_intelligence', 'STP_ps_val_intercept'} <= foreign)
         council = {e.key for e in categories['STP_cw_war_council']}
         self.assertTrue({'STP_ps_reorg_1_funded', 'STP_ps_ammunition', 'STP_ps_transport'} <= council)
 

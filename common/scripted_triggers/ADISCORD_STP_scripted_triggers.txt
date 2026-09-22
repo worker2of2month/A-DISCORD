@@ -1575,3 +1575,26 @@ STP_pw_party_nod_threat_current = {
 	NOD = { exists = yes has_capitulated = no is_subject = no }
 	NOT = { has_war_with = NOD }
 }
+
+# COUNTRY STP: entry windows include the entire paid operation and a one-day margin.
+STP_ps_val_recon_window = {
+    VAL = {
+        has_active_mission = STP_ps_val_departure
+        check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 22 compare = greater_than_or_equals }
+    }
+}
+STP_ps_val_intercept_window = {
+    VAL = {
+        has_active_mission = STP_ps_val_departure
+        check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 15 compare = greater_than_or_equals }
+    }
+}
+STP_ps_val_pressure_available = {
+    tag = STP
+    exists = yes
+    has_capitulated = no
+    has_country_flag = STP_sided_with_the_party_flag
+    OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes }
+    OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }
+    VAL = { STP_ps_val_supply_open = yes }
+}

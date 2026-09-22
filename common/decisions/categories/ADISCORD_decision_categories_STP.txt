@@ -3,13 +3,10 @@ STP_elections_in_the_party = {
 	picture = GFX_STP_decision_election_in_the_party
 	allowed = { tag = STP }
 	visible = {
-		OR = {
-            AND = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } }
-            AND = { has_country_flag = STP_sided_with_the_party_flag NOT = { has_global_flag = STP_cw_union_wars_finished } }
-            has_variable = STP_ps_nod_receipt_type
-        }
+		NOT = { has_global_flag = STP_cw_started }
+		NOT = { has_country_flag = STP_cw_elections_finished }
 	}
-	visible_when_empty = yes
+	visible_when_empty = no
 	priority = 21
 }
 
@@ -37,7 +34,7 @@ STP_battle_for_stelander = {
 STP_cw_war_council = {
 	allowed = { OR = { tag = STP tag = STS tag = SRP } }
 	visible = { OR = { has_country_flag = STP_cw_participant has_country_flag = STP_cw_postwar } }
-	visible_when_empty = yes
+	visible_when_empty = no
 	priority = 20
 }
 
@@ -53,7 +50,31 @@ STP_cw_external_intervention = {
 			has_active_mission = NOD_cw_northern_redeployment
 			NOD = { has_country_flag = NOD_cw_intervention_approved }
 			AND = { tag = STP has_country_flag = STP_cw_northern_strategy_supply STP_cw_nod_busy_in_north = yes }
-		}
+		AND = {
+                tag = STP
+                has_country_flag = STP_sided_with_the_party_flag
+                NOT = { has_global_flag = STP_cw_union_wars_finished }
+                OR = {
+                    has_completed_focus = STP_ps_foreign_supply_desk
+                    has_completed_focus = STP_ps_northern_credit
+                    has_completed_focus = STP_ps_northern_arms
+                    has_completed_focus = STP_ps_northern_engineers
+                    has_completed_focus = STP_ps_expedition_logistics
+                    has_country_flag = STP_ps_prepare_evacuation_completed
+                }
+            }
+            AND = {
+                tag = STP
+                OR = {
+                    has_variable = STP_ps_nod_receipt_type
+                    has_variable = STP_ps_val_intelligence_deposit
+                    has_variable = STP_ps_val_intercept_deposit
+                    has_variable = STP_ps_val_pressure_deposit
+                    has_country_flag = STP_pw_party_nod_threat_active
+                    has_country_flag = STP_pw_party_nod_invasion_active
+                }
+            }
+	}
 	}
 	visible_when_empty = no
 	priority = 35
@@ -117,20 +138,7 @@ STP_party_factions = {
 	scripted_gui = ADISCORD_STP_party_factions_panel
 }
 
-STP_postwar_nod_ultimatum = {
-	icon = generic_prepare_civil_war
-	allowed = { tag = STP }
-	visible = {
-		tag = STP
-		has_country_flag = STP_cw_postwar
-		OR = {
-			has_country_flag = STP_pw_party_nod_threat_active
-			has_country_flag = STP_pw_party_nod_invasion_active
-		}
-	}
-	visible_when_empty = yes
-	priority = 40
-}
+
 
 
 

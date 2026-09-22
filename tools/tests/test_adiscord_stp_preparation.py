@@ -1980,7 +1980,7 @@ class StelanderPreparationTests(unittest.TestCase):
             closed = {("STP", kind, phase): True}
             self.assertFalse(matches_conditions(visible, closed), "The resistance briefing closes with preparation")
             party = {**closed, ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True}
-            self.assertTrue(matches_conditions(visible, party), "Party government programs share this category")
+            self.assertFalse(matches_conditions(visible, party), "Government programmes moved out of the completed election panel")
             self.assertFalse(matches_conditions(visible, {**party,
                 ("STP", "has_global_flag", "STP_cw_union_wars_finished"): True}))
 

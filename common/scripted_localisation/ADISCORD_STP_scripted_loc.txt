@@ -587,3 +587,47 @@ defined_text = {
 	text = { trigger = { tag = STS } localization_key = STP_cw_reserve_training_cost_tooltip_volunteers }
 	text = { localization_key = STP_cw_reserve_training_cost_tooltip_standard }
 }
+
+# Country-specific briefings keep foreign and government reports out of the election panel.
+defined_text = {
+    name = STPGetWarCouncilBriefing
+    text = { trigger = { tag = STP has_country_flag = STP_cw_postwar } localization_key = STP_PARTY_RECON_BRIEFING }
+    text = { trigger = { tag = STP } localization_key = STP_PARTY_WAR_BRIEFING }
+    text = { localization_key = STP_GENERAL_WAR_BRIEFING }
+}
+defined_text = {
+    name = STPGetForeignBriefing
+    text = { trigger = { tag = STP has_country_flag = STP_sided_with_the_party_flag } localization_key = STP_PARTY_FOREIGN_BRIEFING }
+    text = { localization_key = STP_GENERAL_FOREIGN_BRIEFING }
+}
+defined_text = {
+    name = STPGetPartyCargoStatus
+    text = { trigger = { has_variable = STP_ps_val_intercept_deposit } localization_key = STP_ps_cargo_intercept_work }
+    text = { trigger = { has_variable = STP_ps_val_intelligence_deposit } localization_key = STP_ps_cargo_recon_work }
+    text = {
+        trigger = { VAL = { has_variable = STP_ps_val_receipt_rifles check_variable = { var = STP_ps_val_intercepted_sequence value = STP_ps_val_sequence compare = equals } } }
+        localization_key = STP_ps_cargo_intercept_ready
+    }
+    text = { trigger = { VAL = { has_active_mission = STP_ps_val_departure } } localization_key = STP_ps_cargo_departure }
+    text = { trigger = { VAL = { has_variable = STP_ps_val_receipt_rifles } } localization_key = STP_ps_cargo_wait }
+    text = { localization_key = STP_ps_cargo_none }
+}
+defined_text = {
+    name = STPGetPartyAidStatus
+    text = { trigger = { check_variable = { var = STP_ps_nod_receipt_stage value = 2 compare = equals } } localization_key = STP_ps_aid_transit }
+    text = { trigger = { has_variable = STP_ps_nod_receipt_type } localization_key = STP_ps_aid_preparing }
+    text = { trigger = { NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement } } localization_key = STP_ps_aid_confirmed }
+    text = { localization_key = STP_ps_aid_unconfirmed }
+}
+defined_text = {
+    name = STPGetPartyRadioStatus
+    text = { trigger = { has_country_flag = STP_ps_build_radio_completed } localization_key = STP_ps_project_ready }
+    text = { trigger = { has_variable = STP_ps_build_radio_deposit } localization_key = STP_ps_project_running }
+    text = { localization_key = STP_ps_project_not_ready }
+}
+defined_text = {
+    name = STPGetPartyHQStatus
+    text = { trigger = { has_country_flag = STP_ps_build_hq_completed } localization_key = STP_ps_project_ready }
+    text = { trigger = { has_variable = STP_ps_build_hq_deposit } localization_key = STP_ps_project_running }
+    text = { localization_key = STP_ps_project_not_ready }
+}
