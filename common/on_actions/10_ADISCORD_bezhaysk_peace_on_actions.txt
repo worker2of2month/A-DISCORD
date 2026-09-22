@@ -44,6 +44,25 @@ on_actions = {
 			}
 			else_if = {
 				limit = {
+					ROOT = {
+						tag = BJK
+						has_war_with = STP
+						NOT = { any_enemy_country = { NOT = { OR = { tag = STP is_subject_of = STP } } } }
+					}
+					STP = {
+						exists = yes
+						has_capitulated = no
+						has_country_flag = STP_cw_postwar
+						OR = { has_country_flag = ADISCORD_bezhaysk_campaign_active has_completed_focus = STP_pw_party_bezhaysk_campaign }
+					}
+					FROM = { OR = { tag = STP is_subject_of = STP } }
+				}
+				set_global_flag = skip_default_capitulation
+				STP = { ADISCORD_bezhaysk_settle_stp_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			else_if = {
+				limit = {
 					ROOT = { tag = BJK has_war_with = STS }
 					STS = {
 						exists = yes

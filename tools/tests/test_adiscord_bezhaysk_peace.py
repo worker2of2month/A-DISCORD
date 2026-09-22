@@ -18,19 +18,29 @@ class BezhayskPeaceTests(unittest.TestCase):
         router = self.read("common/on_actions/10_ADISCORD_bezhaysk_peace_on_actions.txt")
         for effect in (
             "ADISCORD_bezhaysk_settle_sts_victory = yes",
+            "ADISCORD_bezhaysk_settle_stp_victory = yes",
             "ADISCORD_bezhaysk_settle_val_victory = yes",
             "ADISCORD_bezhaysk_settle_val_nod_joint_victory = yes",
             "ADISCORD_bezhaysk_settle_forest_val_victory = yes",
             "ADISCORD_bezhaysk_settle_forest_nod_victory = yes",
         ):
             self.assertIn(effect, router)
-        self.assertEqual(router.count("set_global_flag = skip_default_capitulation"), 5)
+        self.assertEqual(router.count("set_global_flag = skip_default_capitulation"), 6)
 
     def test_settlement_covers_the_feudal_bloc(self) -> None:
         effects = self.read("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")
         for tag in ("BJK", "BLD", "BHG", "BGT", "BBV", "BCM"):
             self.assertIn(f"target = {tag}", effects)
         self.assertIn("white_peace = BJK", effects)
+
+    def test_party_has_an_authored_bezhaysk_settlement(self) -> None:
+        effects = self.read("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")
+        start = effects.index("ADISCORD_bezhaysk_settle_stp_victory = {")
+        end = effects.index("ADISCORD_bezhaysk_settle_val_victory = {")
+        settlement = effects[start:end]
+        for tag in ("BJK", "BLD", "BHG", "BGT", "BBV", "BCM"):
+            self.assertIn(f"annex_country = {{ target = {tag} transfer_troops = no }}", settlement)
+        self.assertIn("set_country_flag = STP_pw_party_bezhaysk_victory", settlement)
 
     def test_kefreyt_uses_contract_clients_instead_of_direct_annexation(self) -> None:
         effects = self.read("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")

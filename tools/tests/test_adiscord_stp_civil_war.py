@@ -3926,7 +3926,7 @@ class PostwarFocusContracts(unittest.TestCase):
                         self.assertEqual(len(completed & party.keys()), 18, selected)
                         self.assertIn("STP_pw_party_settled_state", completed, selected)
 
-        for tag, prefix, expected in (("STS", "STP_pw_republic_", 16), ("STP", "STP_pw_party_", 25)):
+        for tag, prefix, expected in (("STS", "STP_pw_republic_", 16), ("STP", "STP_pw_party_", 29)):
             focuses = {k: v for k, v in self.new.items() if k.startswith(prefix)}
             self.assertEqual(len(focuses), expected, tag)
             self.assertEqual(scalar(focuses[prefix + "settled_state"], "cost"), "4")

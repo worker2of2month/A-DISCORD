@@ -257,6 +257,43 @@ class PartyRouteContracts(unittest.TestCase):
         }
         self.assertIn("STP_pw_party_foreign_settlement", final_requirements)
 
+    def test_postwar_party_gets_bezhaysk_and_kefreyt_campaigns(self):
+        root = self.focus["STP_pw_party_external_mandate"]
+        self.assertIn(
+            "STP_pw_party_settled_state",
+            [e.value for p in children(root, "prerequisite") for e in p],
+        )
+        for focus_id, decision_id, target in (
+            ("STP_pw_party_bezhaysk_campaign", "STP_pw_party_launch_bezhaysk_operation", "BJK"),
+            ("STP_pw_party_kefreyt_campaign", "STP_pw_party_launch_kefreyt_operation", "VAL"),
+        ):
+            focus = self.focus[focus_id]
+            self.assertIn(
+                "STP_pw_party_external_mandate",
+                [e.value for p in children(focus, "prerequisite") for e in p],
+            )
+            reward = one(focus, "completion_reward")
+            self.assertIn(decision_id, [e.value for e in walk(reward) if e.key == "decision"])
+            decision = self.decisions[decision_id]
+            self.assertIn("tag", [e.key for e in one(decision, "allowed")])
+            self.assertIn(target, [e.value for e in walk(one(decision, "complete_effect")) if e.key == "target"])
+
+        final = self.focus["STP_pw_party_regional_order"]
+        prerequisites = {e.value for p in children(final, "prerequisite") for e in p if e.key == "focus"}
+        self.assertEqual(prerequisites, {"STP_pw_party_bezhaysk_campaign", "STP_pw_party_kefreyt_campaign"})
+        triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        self.assertIn("STP_pw_party_can_attack_bezhaysk = {", triggers)
+        self.assertIn("STP_pw_party_can_attack_kefreyt = {", triggers)
+        self.assertIn("STP_pw_party_external_order_resolved = {", triggers)
+        plan = read(PLANS)
+        for focus_id in (
+            "STP_pw_party_external_mandate",
+            "STP_pw_party_bezhaysk_campaign",
+            "STP_pw_party_kefreyt_campaign",
+            "STP_pw_party_regional_order",
+        ):
+            self.assertIn(focus_id, plan)
+
     def test_sovereignty_opens_a_terminal_nod_invasion_crisis(self):
         sovereignty = one(self.focus["STP_pw_party_sovereignty"], "completion_reward")
         self.assertIn("STP_pw_party_start_nod_invasion_threat", str(signature(sovereignty)))

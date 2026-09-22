@@ -7102,3 +7102,19 @@ STP_heg_settle_kefreyt_final = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
+
+
+# COUNTRY STP: terminal settlement for the Party's independent Kefreyt campaign.
+STP_pw_party_settle_kefreyt_victory = {
+	if = {
+		limit = { tag = STP has_country_flag = STP_pw_party_kefreyt_campaign_active VAL = { exists = yes } }
+		VAL = { if = { limit = { is_in_faction = yes is_faction_leader = yes } dismantle_faction = yes } }
+		if = { limit = { has_war_with = VAL } white_peace = VAL }
+		annex_country = { target = VAL transfer_troops = no }
+		clr_country_flag = STP_pw_party_kefreyt_campaign_active
+		set_country_flag = STP_pw_party_kefreyt_victory
+		add_political_power = 75
+		add_war_support = 0.03
+		ADISCORD_economy_mark_dirty = yes
+	}
+}

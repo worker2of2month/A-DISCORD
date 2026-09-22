@@ -37,6 +37,43 @@ ADISCORD_bezhaysk_settle_sts_victory = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
+ADISCORD_bezhaysk_settle_stp_victory = {
+	if = {
+		limit = { BLD = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BLD } white_peace = BLD }
+		annex_country = { target = BLD transfer_troops = no }
+	}
+	if = {
+		limit = { BHG = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BHG } white_peace = BHG }
+		annex_country = { target = BHG transfer_troops = no }
+	}
+	if = {
+		limit = { BGT = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BGT } white_peace = BGT }
+		annex_country = { target = BGT transfer_troops = no }
+	}
+	if = {
+		limit = { BBV = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BBV } white_peace = BBV }
+		annex_country = { target = BBV transfer_troops = no }
+	}
+	if = {
+		limit = { BCM = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { has_war_with = BCM } white_peace = BCM }
+		annex_country = { target = BCM transfer_troops = no }
+	}
+	if = {
+		limit = { BJK = { exists = yes } }
+		if = { limit = { has_war_with = BJK } white_peace = BJK }
+		annex_country = { target = BJK transfer_troops = no }
+	}
+	clr_country_flag = ADISCORD_bezhaysk_campaign_active
+	set_country_flag = ADISCORD_bezhaysk_settlement_completed
+	set_country_flag = STP_pw_party_bezhaysk_victory
+	ADISCORD_economy_mark_dirty = yes
+}
+
 # Kefreyt keeps the historical feudal map instead of painting the entire realm.
 # Every surviving Bezhaysk holding becomes a contract administration.
 ADISCORD_bezhaysk_settle_val_victory = {

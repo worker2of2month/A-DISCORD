@@ -411,6 +411,10 @@ STP_party_reconstruction_plan = {
 		STP_party_research_council
 		STP_party_technical_institutes
 		STP_pw_party_settled_state
+		STP_pw_party_external_mandate
+		STP_pw_party_bezhaysk_campaign
+		STP_pw_party_kefreyt_campaign
+		STP_pw_party_regional_order
 	}
 	weight = { factor = 20 }
 }

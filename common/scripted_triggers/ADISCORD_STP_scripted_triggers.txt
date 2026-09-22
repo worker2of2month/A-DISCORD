@@ -1567,6 +1567,50 @@ STP_pw_can_attack_bezhaysk = {
 	}
 }
 
+# COUNTRY STP: postwar Party campaign against the Bezhaysk capital domain.
+STP_pw_party_can_attack_bezhaysk = {
+	tag = STP
+	has_country_flag = STP_cw_postwar
+	STP_pw_can_reconstruct = yes
+	is_subject = no
+	has_war = no
+	NOT = { is_in_faction_with = BJK }
+	BJK = { exists = yes has_capitulated = no is_subject = no owns_state = 41 controls_state = 41 }
+}
+
+# COUNTRY STP: postwar Party campaign against an independent Kefreyt.
+STP_pw_party_can_attack_kefreyt = {
+	tag = STP
+	has_country_flag = STP_cw_postwar
+	STP_pw_can_reconstruct = yes
+	is_subject = no
+	has_war = no
+	NOT = { has_country_flag = STP_pw_party_kefreyt_campaign_active }
+	NOT = { has_country_flag = STP_pw_party_kefreyt_victory }
+	NOT = { is_in_faction_with = VAL }
+	VAL = { exists = yes has_capitulated = no is_subject = no }
+}
+
+# COUNTRY STP: both late regional campaigns have reached a terminal state.
+STP_pw_party_external_order_resolved = {
+	tag = STP
+	has_country_flag = STP_cw_postwar
+	STP_pw_can_reconstruct = yes
+	OR = {
+		has_country_flag = STP_pw_party_bezhaysk_victory
+		NOT = { BJK = { exists = yes } }
+		BJK = { is_subject_of = STP }
+		BJK = { NOT = { owns_state = 41 } }
+		41 = { is_owned_by = STP }
+	}
+	OR = {
+		has_country_flag = STP_pw_party_kefreyt_victory
+		NOT = { VAL = { exists = yes } }
+		VAL = { is_subject_of = STP }
+	}
+}
+
+
 # The same live threat governs the countdown, payment and delivery.
 STP_pw_party_nod_threat_current = {
 	tag = STP

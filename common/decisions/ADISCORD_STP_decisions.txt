@@ -2268,6 +2268,46 @@ STP_cw_war_council = {
 		ai_will_do = { base = 2 }
 	}
 
+	STP_pw_party_launch_bezhaysk_operation = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_bezhaysk_campaign NOT = { has_country_flag = ADISCORD_bezhaysk_campaign_active } BJK = { exists = yes owns_state = 41 } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_bezhaysk_available_tt STP_pw_party_can_attack_bezhaysk = yes } }
+		cost = 0
+		complete_effect = {
+			effect_tooltip = { declare_war_on = { target = BJK type = annex_everything } }
+			hidden_effect = {
+				if = {
+					limit = { has_completed_focus = STP_pw_party_bezhaysk_campaign STP_pw_party_can_attack_bezhaysk = yes }
+					set_country_flag = ADISCORD_bezhaysk_campaign_active
+					BJK = { ADISCORD_release_non_participating_minor_optimization = yes }
+					declare_war_on = { target = BJK type = annex_everything }
+				}
+			}
+		}
+		ai_will_do = { base = 4 }
+	}
+
+	STP_pw_party_launch_kefreyt_operation = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_kefreyt_campaign NOT = { has_country_flag = STP_pw_party_kefreyt_campaign_active } NOT = { has_country_flag = STP_pw_party_kefreyt_victory } VAL = { exists = yes } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_kefreyt_available_tt STP_pw_party_can_attack_kefreyt = yes } }
+		cost = 0
+		complete_effect = {
+			effect_tooltip = { declare_war_on = { target = VAL type = annex_everything } }
+			hidden_effect = {
+				if = {
+					limit = { has_completed_focus = STP_pw_party_kefreyt_campaign STP_pw_party_can_attack_kefreyt = yes }
+					set_country_flag = STP_pw_party_kefreyt_campaign_active
+					declare_war_on = { target = VAL type = annex_everything }
+				}
+			}
+		}
+		ai_will_do = { base = 3 }
+	}
+
+
 
 	# The fixed wartime template and its existing payment helper own the price.
 	STP_party_form_assault_column = {
