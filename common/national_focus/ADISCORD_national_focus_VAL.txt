@@ -2592,6 +2592,7 @@ completion_reward = {
 		completion_reward = {
 			# Availability is continuously checked by cancel_if_invalid. Rechecking the
 			# full gate on the completion tick could silently consume the focus without war.
+			set_country_flag = ADISCORD_bezhaysk_campaign_active
 			declare_war_on = { target = BJK type = annex_everything }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
 		}
