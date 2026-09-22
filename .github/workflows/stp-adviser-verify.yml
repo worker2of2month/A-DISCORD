@@ -1,0 +1,145 @@
+name: STP adviser redesign verification
+on:
+  push:
+    branches: [codex/stp-adviser-redesign-work-20260922]
+    paths: ['.github/workflows/stp-adviser-verify.yml']
+permissions:
+  contents: write
+concurrency:
+  group: stp-adviser-redesign
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify patch transport
+        run: |
+          python -B - <<'PY'
+          from pathlib import Path
+          import base64, hashlib, zlib, json
+          hashes = [
+              '94fcc7d3e7d1f6b831bba7e9f04b81a9390466a8e755908e3ec08c9f5956d560',
+              '5845623ed8e5a18c15b383d4084beb03c9363b514b04739f849f1e457b48c9d3',
+              'b6ab4045c9779bf4672fc654b736124b1f392822d2010a9d5e7fa802336af065',
+              '65685ea0e5023a9c38bed5f9dfd6532f4063f331b753d5b45bea4458ca854708',
+              'daaa060dcd4d20587d7f08a225ec47a2e5516607d942e684ac0157c833e2e4c9',
+              '463b582f20da4a149041c91f05c79767c0fcfa8246a1f5ef90935e96dac6f146',
+              'f46b96a018aff03af09e59f0b1db1aaf4bc16c2be63f46bc68ebbd548d9ef030',
+              '2b81ce2c690ea6bb7b5e8f29bfaee3f5005c6cc1f5b744cc5febe42b9aa4b28d',
+              'b8fdb150c717295a26d929cf465a0edb88c1fdbb486c4c8b8d9c87dc86b05b62',
+              'cae195b0e9ddc2c7e210f4f96ed56f142af3a61a5bcf8d69f4e46adcda3aa80d',
+          ]
+          chunks = []
+          errors = []
+          for i, expected in enumerate(hashes, 1):
+              name = '09-fixed.txt' if i == 9 else f'{i:02}.txt'
+              data = ''.join(Path('.github/adviser-data', name).read_text().split()).encode()
+              actual = hashlib.sha256(data).hexdigest()
+              print('TRANSPORT', name, len(data), actual)
+              if actual != expected: errors.append(name)
+              chunks.append(data)
+          assert not errors, 'Transport checksum mismatch: ' + ', '.join(errors)
+          raw = zlib.decompress(base64.b64decode(b''.join(chunks), validate=True))
+          assert hashlib.sha256(raw).hexdigest() == '66b5deed0b1238e73f42a8c6b7b915781eed8d7aa421ac4ba359623de9daacc5'
+          manifest = json.loads(raw)
+          assert all(not Path(p).is_absolute() and '..' not in Path(p).parts and p.startswith(('common/', 'events/', 'localisation/', 'tools/tests/', 'tools/data/', 'docs/development/')) for p in manifest)
+          Path('/tmp/adviser-evidence').mkdir(exist_ok=True)
+          Path('/tmp/adviser-manifest.json').write_bytes(raw)
+          print('VERIFIED_MANIFEST', len(manifest), len(raw))
+          PY
+      - name: Check out pinned integration base
+        run: |
+          git fetch --depth=1 origin e76eaf99e6d1fedf523557f2f8c8c64abae6b922
+          git checkout --detach e76eaf99e6d1fedf523557f2f8c8c64abae6b922
+          python -m pip install --disable-pip-version-check Pillow numpy
+          python -B - <<'PY'
+          from pathlib import Path
+          runner = '''import io,json,unittest,sys
+          from pathlib import Path
+          names=['tools.tests.test_adiscord_stp_party_route','tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_qol','tools.tests.test_adiscord_stp_party_balance','tools.tests.test_adiscord_stp_preparation','tools.tests.test_adiscord_stp_civil_war','tools.tests.test_adiscord_stp_gameplay_loop_regressions']
+          stream=io.StringIO()
+          result=unittest.TextTestRunner(stream=stream).run(unittest.defaultTestLoader.loadTestsFromNames(names))
+          data={'tests':result.testsRun,'failures':{str(t):trace for t,trace in result.failures},'errors':{str(t):trace for t,trace in result.errors}}
+          prefix=Path('/tmp/adviser-evidence')/sys.argv[1]
+          prefix.with_suffix('.json').write_text(json.dumps(data))
+          prefix.with_suffix('.txt').write_text(stream.getvalue())
+          print(sys.argv[1],data['tests'],len(data['failures']),len(data['errors']),flush=True)
+          '''
+          Path('/tmp/adviser-suite.py').write_text(runner)
+          PY
+      - name: Record full-source regression baseline
+        run: python -B /tmp/adviser-suite.py before
+      - name: Apply reviewed hash-guarded changes
+        run: |
+          python -B - <<'PY'
+          from pathlib import Path
+          import json, hashlib
+          manifest=json.loads(Path('/tmp/adviser-manifest.json').read_text())
+          for name, item in manifest.items():
+              path=Path(name)
+              original=path.read_bytes()
+              assert hashlib.sha256(original).hexdigest()==item['before'], 'Base changed: '+name
+              lines=original.decode('utf-8').splitlines(keepends=True)
+              for start,end,text in reversed(item['edits']): lines[start:end]=[text]
+              result=''.join(lines).encode('utf-8')
+              assert hashlib.sha256(result).hexdigest()==item['after'], 'Patch reconstruction mismatch: '+name
+              path.write_bytes(result)
+          print('APPLIED_EXACT_FILES',len(manifest))
+          PY
+          git diff --check
+      - name: Verify all focused Party contracts
+        run: |
+          python -B -m unittest tools.tests.test_adiscord_stp_party_route tools.tests.test_adiscord_stp_party_survival tools.tests.test_adiscord_stp_party_qol tools.tests.test_adiscord_stp_party_balance > /tmp/adviser-evidence/focused.txt 2>&1
+          cat /tmp/adviser-evidence/focused.txt
+      - name: Verify full-source regression delta
+        run: |
+          python -B /tmp/adviser-suite.py after
+          python -B - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('/tmp/adviser-evidence')
+          before=json.loads((root/'before.json').read_text())
+          after=json.loads((root/'after.json').read_text())
+          old=set(before['failures'])|set(before['errors'])
+          new={**after['failures'],**after['errors']}
+          regressions={key:trace for key,trace in new.items() if key not in old}
+          for name,trace in regressions.items(): print('NEW_REGRESSION',name,trace[:8000])
+          print('NEW_REGRESSIONS',len(regressions))
+          print('REMOVED_BASELINE_FAILURES',sorted(old-set(new)))
+          assert not regressions
+          PY
+      - name: Run total-conversion validator
+        run: |
+          python -B tools/validate_tc.py --limit 300 > /tmp/adviser-evidence/validator.txt 2>&1
+          tail -25 /tmp/adviser-evidence/validator.txt
+          echo VALIDATOR_EXIT_ZERO
+      - name: Export tested gameplay-only commit
+        run: |
+          git diff --check
+          git diff --stat
+          git diff --binary > /tmp/adviser-evidence/adviser-redesign.patch
+          python -B - <<'PY'
+          from pathlib import Path
+          import json,subprocess
+          paths=list(json.loads(Path('/tmp/adviser-manifest.json').read_text()))
+          actual=subprocess.check_output(['git','diff','--name-only'],text=True).splitlines()
+          assert set(actual)==set(paths), (actual,paths)
+          subprocess.run(['git','add','--',*paths],check=True)
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'feat(stp): replace exile with domestic continuity and explicit adviser leverage'
+          git push origin HEAD:refs/heads/codex/stp-adviser-redesign-20260922
+          echo DELIVERY_COMMIT=$(git rev-parse HEAD)
+          echo $(git rev-parse HEAD) > /tmp/adviser-evidence/delivery-commit.txt
+          echo e76eaf99e6d1fedf523557f2f8c8c64abae6b922 > /tmp/adviser-evidence/tested-base.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-adviser-redesign-evidence
+          path: /tmp/adviser-evidence
+          retention-days: 7
