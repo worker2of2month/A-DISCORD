@@ -14,7 +14,7 @@ state={
 		add_core_of = COF
 		buildings = {
 			air_base = 2
-			75 = { naval_base = 2 }
+			8540 = { naval_base = 2 }
 			infrastructure = 2
 			industrial_complex = 1
 			arms_factory = 2
