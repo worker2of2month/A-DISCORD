@@ -1,0 +1,42 @@
+# Bezhaysk is a dedicated postwar target for Stelander and Kefreyt.
+# Resolve it before the normal faction capitulation path can open a peace conference.
+on_actions = {
+	on_capitulation_immediate = {
+		effect = {
+			if = {
+				limit = {
+					ROOT = { tag = BJK has_war_with = STS }
+					STS = {
+						exists = yes
+						has_capitulated = no
+						OR = {
+							has_country_flag = ADISCORD_bezhaysk_campaign_active
+							has_completed_focus = STP_pw_take_bezhaysk
+						}
+					}
+					FROM = { OR = { tag = STS is_subject_of = STS } }
+				}
+				set_global_flag = skip_default_capitulation
+				STS = { ADISCORD_bezhaysk_settle_sts_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = BJK has_war_with = VAL }
+					VAL = {
+						exists = yes
+						has_capitulated = no
+						OR = {
+							has_country_flag = ADISCORD_bezhaysk_campaign_active
+							has_completed_focus = VAL_Bezhaysk_Operation
+						}
+					}
+					FROM = { OR = { tag = VAL is_subject_of = VAL } }
+				}
+				set_global_flag = skip_default_capitulation
+				VAL = { ADISCORD_bezhaysk_settle_val_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+		}
+	}
+}
