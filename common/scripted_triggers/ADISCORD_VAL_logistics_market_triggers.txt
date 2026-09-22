@@ -100,11 +100,14 @@ VAL_regional_displacement_crisis = {
 }
 
 VAL_refugee_vorkerland_war = {
-	OR = { WKR = { has_war_with = VAD } WKR = { has_war_with = TVA } VAD = { has_war_with = TVA } }
+	# The collapse can involve many regional claimants; the canonical outbreak flag
+	# is more reliable than any one pair of surviving tags.
+	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 }
 
 VAL_refugee_stelander_war = {
-	STP = { has_war_with = STS }
+	# The civil-war start flag survives tag swaps and the scripted STP/STS setup.
+	has_global_flag = STP_cw_started
 }
 
 VAL_refugee_nodrul_war = {
