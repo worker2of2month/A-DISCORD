@@ -1603,7 +1603,7 @@
  STP_pc_nod_ratify: "Secure the Northern Border"
  STP_pc_nod_ratify_desc: "Following Nodrul's acceptance, we will agree on border-service procedures. Peaceful recognition removes the need to prepare an offensive, but does not make Nodrul a dependent government."
  STP_pc_val_demand_offer_tt: "Kefreyt will receive a demand for political dependence. Refusal will unlock military preparations, but will not declare war."
- STP_pc_nod_demand_offer_tt: "Nodrul will receive a demand for political dependence. Refusal will unlock military preparations, but will not declare war."
+ STP_pc_nod_demand_offer_tt: "Nodrul will receive a demand for political dependence. Acceptance makes Nodrul a Steland puppet that can later be annexed through the hegemony administration system. Refusal unlocks military preparations, but does not declare war."
  STP_pc_val_trade_offer_tt: "Kefreyt will receive an offer of a mutual treaty. Only after it accepts will we pay £ADISCORD_economy_treasury_texticon §Y1800§!, or §Y900§! if the wartime accounts have already been settled. Both countries will receive a non-aggression pact, §G+3%§! military factory output and §G-3%§! supply consumption. Kefreyt will remain independent."
  STP_pc_nod_border_offer_tt: "Nodrul will receive an offer of mutual recognition. After it accepts, we will pay £ADISCORD_economy_treasury_texticon §Y1350§!. Both countries will sign a non-aggression pact and reduce army expenditure by §G8%§!. Nodrul will remain independent."
  STP_pc_campaign_preparation_tt: "Unlocks paid supply preparation: £ADISCORD_economy_treasury_texticon §Y900§! and §Y35 days§!. The order to go to war will then remain available for §Y90 days§!. The enemy will receive a warning; the focus itself does not declare war."
