@@ -1320,7 +1320,7 @@ STP_cw_trim_excess_party_inspections = {
 	STP_cw_count_live_party_inspections = yes
 	set_temp_variable = { var = STP_cw_inspection_target value = 0 }
 	if = {
-		limit = { check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals } }
+		limit = { check_variable = { var = STP_party_suspicion value = 60 compare = greater_than_or_equals } }
 		set_temp_variable = { var = STP_cw_inspection_target value = 2 }
 	}
 	else = { set_temp_variable = { var = STP_cw_inspection_target value = 1 } }
@@ -1446,11 +1446,11 @@ STP_cw_open_one_party_inspection = {
 			STP_cw_has_openable_inspection_region = yes
 			OR = {
 				AND = {
-					check_variable = { var = STP_party_suspicion value = 50 compare = less_than }
+					check_variable = { var = STP_party_suspicion value = 60 compare = less_than }
 					check_variable = { var = STP_cw_live_inspection_count value = 1 compare = less_than }
 				}
 				AND = {
-					check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals }
+					check_variable = { var = STP_party_suspicion value = 60 compare = greater_than_or_equals }
 					check_variable = { var = STP_cw_live_inspection_count value = 2 compare = less_than }
 				}
 			}
@@ -1806,6 +1806,7 @@ STP_clear_region_runtime = {
 	clr_state_flag = STP_cw_garrison_evacuation_in_progress
 	clr_state_flag = STP_false_trail_in_progress
 	clr_state_flag = STP_false_trail_redirected
+	clr_state_flag = STP_cw_inspection_protected
 	clr_state_flag = STP_inspection_concession_prepared
 	STP_cw_return_preparation_reserves = yes
 	clr_state_flag = STP_region_participates
