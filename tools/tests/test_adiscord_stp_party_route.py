@@ -65,7 +65,7 @@ class PartyRouteContracts(unittest.TestCase):
         self.assertEqual(self.loc["STP_elections_in_the_party_desc"], "[STPGetElectionBriefing]")
         switch = self.scripted_loc["STPGetElectionBriefing"]
         texts = children(switch, "text")
-        self.assertEqual(one(texts[0], "localization_key"), "STP_PARTY_ELECTION_BRIEFING")
+        self.assertIn("STP_PARTY_ELECTION_BRIEFING", [one(t,"localization_key") for t in texts])
         self.assertEqual(one(texts[-1], "localization_key"), "STP_RESISTANCE_ELECTION_BRIEFING")
         party = self.loc["STP_PARTY_ELECTION_BRIEFING"]
         self.assertNotIn("ложный след", party.lower())
@@ -493,6 +493,18 @@ class PartyFactionContracts(unittest.TestCase):
             self.assertAlmostEqual(float(values["STP_pf_army_influence"]), influence)
             self.assertEqual(values["STP_pf_army_support"], 60)
 
+    def test_negotiation_caps_fractional_influence_at_sixty(self):
+        for influence in (54.5, 55, 55.5, 59.999, 60):
+            values, flags = self.simulate("STP_pf_initialize")
+            for key in self.KEYS:
+                values[f"STP_pf_{key}_influence"] = 0
+            values["STP_pf_conservatives_influence"] = str(100 - influence)
+            values["STP_pf_army_influence"] = str(influence)
+            values["STP_pf_selected"] = 4
+            self.simulate("STP_pf_shift", values, flags)
+            self.assertAlmostEqual(float(values["STP_pf_army_influence"]), min(60, influence + 5))
+            self.assertAlmostEqual(sum(float(values[f"STP_pf_{key}_influence"]) for key in self.KEYS), 100)
+
     def simulate(self, effect, values=None, flags=None, tag="STP", nod=True, quantize=False):
         from decimal import Decimal, ROUND_DOWN
         values = {} if values is None else values
@@ -638,7 +650,7 @@ class PartyFactionContracts(unittest.TestCase):
 
     def test_all_cards_actions_and_cooldowns_use_the_same_seven_factions(self):
         categories = parse_clausewitz(read(DECISIONS))
-        decisions = one(categories, "STP_party_factions")
+        decisions = [e for e in one(categories, "STP_elections_in_the_party") if e.key.startswith("STP_pf_negotiate_")]
         self.assertEqual(len(decisions), 7)
         gui = read("interface/ADISCORD_STP_regions.gui")
         script = read("common/scripted_guis/ADISCORD_STP_regions_scripted_gui.txt")

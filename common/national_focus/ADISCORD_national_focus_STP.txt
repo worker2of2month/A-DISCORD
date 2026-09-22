@@ -1893,8 +1893,9 @@ focus_tree = {
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 2
 		prerequisite = { focus = STP_ps_northern_partner }
+		mutually_exclusive = { focus = STP_ps_northern_arms }
 		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
-		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_nod_agreement_ready_tt NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement } }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_fund_nod show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_fund_nod_desc }
@@ -1909,8 +1910,9 @@ focus_tree = {
 		relative_position_id = STP_Govern_In_His_Name
 		cost = 2
 		prerequisite = { focus = STP_ps_northern_partner }
+		mutually_exclusive = { focus = STP_ps_northern_credit }
 		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
-		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_nod_agreement_ready_tt NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement } }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_arm_nod show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_arm_nod_desc }
@@ -1926,7 +1928,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = STP_ps_northern_arms }
 		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
-		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_nod_agreement_ready_tt NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement } }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_engineers_nod show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_engineers_nod_desc }
@@ -1942,7 +1944,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = STP_ps_northern_credit focus = STP_ps_northern_arms }
 		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
-		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_nod_agreement_ready_tt NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement } }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = { army_experience = 10 add_command_power = 10 add_war_support = 0.02 }
@@ -1958,7 +1960,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = STP_ps_joint_staff }
 		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
-		available = { NOD = { STP_ps_nod_can_host_exiles = yes }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_nod_agreement_ready_tt NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement } }  custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_expedition_nod show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_expedition_nod_desc }
@@ -1993,7 +1995,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_val_intelligence show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intelligence_desc }
+		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_val_intelligence show_effect_tooltip = yes } unlock_decision_tooltip = { decision = STP_ps_val_intercept show_effect_tooltip = yes } unlock_decision_tooltip = { decision = STP_ps_val_pressure show_effect_tooltip = yes } }
 	}
 
 }
@@ -6091,7 +6093,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt STP_ps_war_active = yes } custom_trigger_tooltip = { tooltip = STP_ps_government_operational_tt STP_ps_government_operational = yes } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_val_intelligence show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intelligence_desc unlock_decision_tooltip = { decision = STP_ps_val_intercept show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intercept_desc unlock_decision_tooltip = { decision = STP_ps_val_pressure show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_pressure_desc }
+		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_val_intelligence show_effect_tooltip = yes } unlock_decision_tooltip = { decision = STP_ps_val_intercept show_effect_tooltip = yes } unlock_decision_tooltip = { decision = STP_ps_val_pressure show_effect_tooltip = yes } }
 	}
 
 

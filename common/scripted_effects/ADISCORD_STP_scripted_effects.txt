@@ -4982,9 +4982,16 @@ STP_pf_shift = {
 		if = { limit = { check_variable = { var = STP_pf_selected value = 6 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_merchants_influence } }
 		if = { limit = { check_variable = { var = STP_pf_selected value = 7 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_radicals_influence } }
 		set_temp_variable = { var = STP_pf_gain value = 5 }
+		# Above the negotiation cap, recover support without concentrating power.
+		if = { limit = { check_variable = { var = STP_pf_old_influence value = 55 compare = greater_than } }
+			set_temp_variable = { var = STP_pf_gain value = 60 }
+			subtract_from_temp_variable = { var = STP_pf_gain value = STP_pf_old_influence }
+		}
+		if = { limit = { check_variable = { var = STP_pf_old_influence value = 60 compare = greater_than_or_equals } }
+			set_temp_variable = { var = STP_pf_gain value = 0 }
+		}
 		set_temp_variable = { var = STP_pf_room value = 100 }
 		subtract_from_temp_variable = { var = STP_pf_room value = STP_pf_old_influence }
-		if = { limit = { check_variable = { var = STP_pf_room value = 5 compare = less_than } } set_temp_variable = { var = STP_pf_gain value = STP_pf_room } }
 		if = {
 			limit = { check_variable = { var = STP_pf_room value = 0 compare = greater_than } }
 			set_temp_variable = { var = STP_pf_scale value = STP_pf_room }
@@ -6004,7 +6011,7 @@ STP_ps_val_intercept_refund = {
 }
 STP_ps_val_intercept_finish = {
 	if = { limit = { has_variable = STP_ps_val_intercept_deposit }
-		if = { limit = { STP_ps_val_intelligence_available = yes check_variable = { var = STP_ps_val_intercept_sequence value = VAL.STP_ps_val_sequence compare = equals } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes } }
+		if = { limit = { STP_ps_val_intelligence_available = yes check_variable = { var = STP_ps_val_intercept_sequence value = VAL.STP_ps_val_sequence compare = equals } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } } }
 			clear_variable = STP_ps_val_intercept_deposit
 
 
@@ -6030,7 +6037,12 @@ STP_ps_val_pressure_finish = {
 			clear_variable = STP_ps_val_pressure_deposit
 
 			set_country_flag = { flag = STP_ps_val_pressure_cooldown value = 1 days = 60 }
-			VAL = { set_country_flag = { flag = STP_ps_val_pressure_active value = 1 days = 60 } }
+			VAL = {
+				set_country_flag = { flag = STP_ps_val_pressure_active value = 1 days = 60 }
+				if = { limit = { has_active_mission = STP_ps_val_departure }
+					add_days_mission_timeout = { mission = STP_ps_val_departure days = 14 }
+				}
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
 		else = { STP_ps_val_pressure_refund = yes }

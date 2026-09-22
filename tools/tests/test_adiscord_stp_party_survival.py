@@ -244,7 +244,9 @@ class PartySurvivalContracts(unittest.TestCase):
             self.assertNotIn(old, definitions)
         elections = {e.key for e in categories['STP_elections_in_the_party']}
         self.assertTrue({'STP_ps_build_radio', 'STP_ps_build_hq', 'STP_ps_prepare_evacuation',
-                         'STP_ps_fund_nod', 'STP_ps_arm_nod', 'STP_ps_val_intelligence', 'STP_ps_val_intercept'} <= elections)
+                         } <= elections)
+        foreign = {e.key for e in categories['STP_cw_external_intervention']}
+        self.assertTrue({'STP_ps_fund_nod', 'STP_ps_arm_nod', 'STP_ps_val_intelligence', 'STP_ps_val_intercept'} <= foreign)
         council = {e.key for e in categories['STP_cw_war_council']}
         self.assertTrue({'STP_ps_reorg_1_funded', 'STP_ps_ammunition', 'STP_ps_transport'} <= council)
 
@@ -466,3 +468,121 @@ class PartyWartimeFocusContracts(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class PartyQolContracts(unittest.TestCase):
+    """Exercise category ownership and paid convoy operations, not native rendering."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.categories = {e.key: e.value for e in parse_clausewitz(read(DECISIONS))}
+        cls.decisions = {e.key: e.value for c in cls.categories.values() for e in c if isinstance(e.value, list)}
+        cls.triggers = {e.key: e.value for e in parse_clausewitz(read(TRIGGERS))}
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+
+    def test_presidium_owns_faction_actions_and_the_only_faction_panel(self):
+        categories = {e.key:e.value for e in parse_clausewitz(read('common/decisions/categories/ADISCORD_decision_categories_STP.txt'))}
+        self.assertNotIn('STP_party_factions', self.categories)
+        self.assertNotIn('STP_party_factions', categories)
+        presidium = self.categories['STP_elections_in_the_party']
+        self.assertEqual(sum(e.key.startswith('STP_pf_negotiate_') for e in presidium), 7)
+        self.assertEqual(one(categories['STP_elections_in_the_party'], 'scripted_gui'), 'ADISCORD_STP_party_factions_panel')
+        self.assertEqual(one(categories['STP_battle_for_stelander'], 'scripted_gui'), 'ADISCORD_STP_regions_panel')
+        self.assertEqual(one(categories['STP_cw_war_council'], 'visible_when_empty'), 'no')
+
+    def test_foreign_orders_and_their_timers_have_one_owner(self):
+        foreign = self.categories['STP_cw_external_intervention']
+        for key in ('STP_ps_fund_nod', 'STP_ps_arm_nod', 'STP_ps_nod_dispatch',
+                    'STP_ps_nod_delivery', 'STP_ps_nod_route_wait', 'STP_ps_cancel_nod',
+                    'STP_ps_val_intelligence', 'STP_ps_val_intelligence_work',
+                    'STP_ps_val_intercept', 'STP_ps_val_intercept_work',
+                    'STP_ps_val_pressure', 'STP_ps_val_pressure_work'):
+            self.assertEqual(sum(e.key == key for e in foreign), 1, key)
+            self.assertEqual(sum(e.key == key for c in self.categories.values() for e in c), 1, key)
+        categories = {e.key:e.value for e in parse_clausewitz(read('common/decisions/categories/ADISCORD_decision_categories_STP.txt'))}
+        visible = one(categories['STP_cw_external_intervention'], 'visible')
+        facts = {('STP','tag','STP'):True, ('STP','STP_cw_preparation_open','yes'):True,
+                 ('STP','has_country_flag','STP_sided_with_the_party_flag'):True,
+                 ('STP','has_completed_focus','STP_ps_foreign_supply_desk'):True}
+        self.assertTrue(matches_conditions(visible, facts))
+
+    def cargo_facts(self, known=False, intercepted=False, days=28, waiting=False):
+        return {('STP','STP_ps_val_intelligence_available','yes'):True,
+                ('STP','has_completed_focus','STP_ps_foreign_supply_desk'):True,
+                ('VAL','variable','STP_ps_val_sequence'):3,
+                ('VAL','variable','STP_ps_val_known_sequence'):3 if known else 0,
+                ('VAL','variable','STP_ps_val_intercepted_sequence'):3 if intercepted else 0,
+                ('VAL','variable','STP_ps_val_receipt_stage'):1,
+                ('VAL','has_active_mission','STP_ps_val_departure'):not waiting,
+                ('VAL','has_active_mission','STP_ps_val_route_wait'):waiting,
+                ('VAL','variable','days_mission_timeout@STP_ps_val_departure'):days}
+
+    def test_recon_and_interception_reject_duplicate_or_late_payment(self):
+        for gate, known, days in (('STP_ps_val_recon_start_allowed',False,7),
+                                  ('STP_ps_val_intercept_start_allowed',True,14)):
+            self.assertIn(gate,self.triggers)
+            body = self.triggers[gate]
+            self.assertTrue(matches_conditions(body,self.cargo_facts(known=known,days=days+1)))
+            self.assertFalse(matches_conditions(body,self.cargo_facts(known=known,days=days)))
+            self.assertTrue(matches_conditions(body,self.cargo_facts(known=known,days=0,waiting=True)))
+        self.assertFalse(matches_conditions(self.triggers['STP_ps_val_recon_start_allowed'],self.cargo_facts(known=True)))
+        self.assertFalse(matches_conditions(self.triggers['STP_ps_val_intercept_start_allowed'],self.cargo_facts(known=True,intercepted=True)))
+        for decision, gate in (('STP_ps_val_intelligence','STP_ps_val_recon_start_allowed'),
+                               ('STP_ps_val_intercept','STP_ps_val_intercept_start_allowed')):
+            body=self.decisions[decision]
+            for section in ('available','complete_effect'):
+                self.assertIn((gate,'yes'),[(e.key,e.value) for e in walk(one(body,section)) if isinstance(e.value,str)])
+
+    def test_waiting_convoy_can_be_ambushed_without_an_open_route(self):
+        for section in ('visible','cancel_trigger'):
+            body=self.decisions['STP_ps_val_intercept' if section=='visible' else 'STP_ps_val_intercept_work']
+            self.assertNotIn('STP_ps_val_land_route',str(signature(one(body,section))))
+        finish=self.effects['STP_ps_val_intercept_finish']
+        self.assertNotIn('STP_ps_val_land_route',str(signature(finish)))
+        self.assertIn('STP_ps_val_intercept_sequence',str(signature(finish)))
+
+    def test_pressure_delays_a_live_departure_without_fabricating_delivery(self):
+        effect=self.effects['STP_ps_val_pressure_finish']
+        facts={('STP','has_variable','STP_ps_val_pressure_deposit'):True,
+               ('STP','tag','STP'):True, ('STP','STP_cw_preparation_open','yes'):True,
+               ('STP','has_completed_focus','STP_ps_foreign_supply_desk'):True,
+               ('VAL','exists','yes'):True}
+        for active in (False,True):
+            writes=list(selected_effects(effect,{**facts,('VAL','has_active_mission','STP_ps_val_departure'):active}))
+            delays=[(scope,one(e.value,'mission'),one(e.value,'days')) for scope,e in writes if e.key=='add_days_mission_timeout']
+            self.assertEqual(delays,[('VAL','STP_ps_val_departure','14')] if active else [])
+            self.assertFalse(any(e.key in ('add_equipment_to_stockpile','STP_ps_resolve_val_supply') for _,e in writes))
+
+    def test_northern_contract_precedes_spending_focuses_and_choices_are_symmetric(self):
+        trees=parse_clausewitz(read('common/national_focus/ADISCORD_national_focus_STP.txt'))
+        focuses={one(f.value,'id'):f.value for t in trees for f in t.value if f.key=='focus'}
+        for fid in ('STP_ps_northern_credit','STP_ps_northern_arms','STP_ps_northern_engineers',
+                    'STP_ps_joint_staff','STP_ps_expedition_logistics'):
+            self.assertIn('STP_ps_aid_agreement',str(signature(one(focuses[fid],'available'))),fid)
+        for first,second in (('STP_ps_northern_credit','STP_ps_northern_arms'),('STP_ps_northern_arms','STP_ps_northern_credit')):
+            self.assertIn('mutually_exclusive',[e.key for e in focuses[first]])
+            self.assertEqual(one(one(focuses[first],'mutually_exclusive'),'focus'),second)
+        alternatives=one(focuses['STP_ps_joint_staff'],'prerequisite')
+        self.assertEqual({e.value for e in alternatives},{'STP_ps_northern_credit','STP_ps_northern_arms'})
+        for fid in ('STP_ps_foreign_supply_desk','STP_ps_counter_supply'):
+            unlocks=[one(e.value,'decision') if isinstance(e.value,list) else e.value for e in one(focuses[fid],'completion_reward') if e.key=='unlock_decision_tooltip']
+            self.assertEqual(len(unlocks), len(set(unlocks)), fid)
+            self.assertTrue({'STP_ps_val_intelligence','STP_ps_val_intercept','STP_ps_val_pressure'} <= set(unlocks))
+
+    def test_short_party_briefing_and_concrete_foreign_results_in_both_languages(self):
+        for language in ('russian','english'):
+            source=read(f'localisation/{language}/ADISCORD_STP_l_{language}.yml')
+            loc=dict(re.findall(r'^ ([\w.]+):(?:\d+)?\s*"(.*)"$',source,re.M))
+            for key in ('STP_PARTY_ELECTION_BRIEFING','STP_ps_preparation_report','STP_ps_war_report'):
+                self.assertLess(len(loc[key]),450,key)
+            self.assertIn('[STPGetPartyForeignBriefing]',loc['STP_cw_external_intervention_desc'])
+            self.assertIn('[STPGetPartyConvoyStatus]',loc['STP_ps_val_intelligence_desc'])
+            for key in ('STP_ps_val_intelligence_result_tt','STP_ps_val_intercept_result_tt','STP_ps_val_pressure_result_tt'):
+                self.assertIn(key,loc)
+            for key,value in loc.items():
+                if re.fullmatch(r'STP_pf_\w+_deal_tt', key):
+                    self.assertLess(len(value), 260, key)
+                    self.assertNotIn('до 100%', value)
+                    self.assertNotIn('up to 100%', value)
+        tokens=read('common/synchronized_dynamic_tokens/ADISCORD_tokens.txt').splitlines()
+        self.assertIn('STP_ps_val_departure',tokens)

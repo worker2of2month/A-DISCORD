@@ -1979,10 +1979,15 @@ class StelanderPreparationTests(unittest.TestCase):
             kind = "has_global_flag" if phase == "STP_cw_started" else "has_country_flag"
             closed = {("STP", kind, phase): True}
             self.assertFalse(matches_conditions(visible, closed), "The resistance briefing closes with preparation")
-            party = {**closed, ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True}
-            self.assertTrue(matches_conditions(visible, party), "Party government programs share this category")
+            party = {**closed, ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True,
+                     ("STP", "STP_pf_active", "yes"): True}
+            self.assertTrue(matches_conditions(visible, party), "Active factions keep the Presidium available")
+            self.assertTrue(matches_conditions(visible, {**party,
+                ("STP", "has_global_flag", "STP_cw_union_wars_finished"): True}),
+                "Postwar faction management must remain accessible")
             self.assertFalse(matches_conditions(visible, {**party,
-                ("STP", "has_global_flag", "STP_cw_union_wars_finished"): True}))
+                ("STP", "STP_pf_active", "yes"): False}),
+                "Without preparation or active factions the Presidium closes")
 
 
     def test_dynamic_and_dummy_display_names_and_icons_resolve(self):

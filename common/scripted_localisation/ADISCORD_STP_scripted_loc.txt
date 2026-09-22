@@ -533,6 +533,8 @@ defined_text = {
 # Country briefing selects a complete set of instructions, not just the metric.
 defined_text = {
 	name = STPGetElectionBriefing
+	text = { trigger = { has_country_flag = STP_sided_with_the_party_flag has_country_flag = STP_cw_postwar } localization_key = STP_PARTY_POSTWAR_BRIEFING }
+	text = { trigger = { has_country_flag = STP_sided_with_the_party_flag STP_ps_war_active = yes } localization_key = STP_PARTY_WAR_BRIEFING }
 	text = { trigger = { has_country_flag = STP_sided_with_the_party_flag } localization_key = STP_PARTY_ELECTION_BRIEFING }
 	text = { localization_key = STP_RESISTANCE_ELECTION_BRIEFING }
 }
@@ -586,4 +588,31 @@ defined_text = {
 	name = STPGetReserveTrainingCostTooltip
 	text = { trigger = { tag = STS } localization_key = STP_cw_reserve_training_cost_tooltip_volunteers }
 	text = { localization_key = STP_cw_reserve_training_cost_tooltip_standard }
+}
+
+
+defined_text = {
+	name = STPGetPoliticsTitle
+	text = { trigger = { has_country_flag = STP_sided_with_the_party_flag } localization_key = STP_party_presidium_title }
+	text = { localization_key = STP_succession_crisis_title }
+}
+
+defined_text = {
+	name = STPGetPartyForeignBriefing
+	text = { trigger = { tag = STP has_country_flag = STP_sided_with_the_party_flag } localization_key = STP_ps_foreign_briefing }
+	text = { localization_key = STP_foreign_briefing_generic }
+}
+
+defined_text = {
+	name = STPGetPartyNorthernAgreement
+	text = { trigger = { NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement } } localization_key = STP_ps_nod_agreement_accepted }
+	text = { localization_key = STP_ps_nod_agreement_missing }
+}
+
+defined_text = {
+	name = STPGetPartyConvoyStatus
+	text = { trigger = { VAL = { has_variable = STP_ps_val_receipt_rifles check_variable = { var = STP_ps_val_intercepted_sequence value = STP_ps_val_sequence compare = equals } } } localization_key = STP_ps_convoy_ambushed }
+	text = { trigger = { VAL = { has_variable = STP_ps_val_receipt_rifles has_active_mission = STP_ps_val_route_wait } } localization_key = STP_ps_convoy_waiting }
+	text = { trigger = { VAL = { has_variable = STP_ps_val_receipt_rifles has_active_mission = STP_ps_val_departure } } localization_key = STP_ps_convoy_preparing }
+	text = { localization_key = STP_ps_convoy_none }
 }

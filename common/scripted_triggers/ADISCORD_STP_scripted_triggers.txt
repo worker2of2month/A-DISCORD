@@ -1455,6 +1455,7 @@ STP_ps_val_supply_open = {
 }
 STP_ps_val_intelligence_available = {
 	tag = STP exists = yes has_capitulated = no
+	has_country_flag = STP_sided_with_the_party_flag
 	OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes }
 	VAL = { has_variable = STP_ps_val_receipt_rifles }
 }
@@ -1574,4 +1575,41 @@ STP_pw_party_nod_threat_current = {
 	has_capitulated = no
 	NOD = { exists = yes has_capitulated = no is_subject = no }
 	NOT = { has_war_with = NOD }
+}
+
+
+# STP: payment is tied to one outstanding cargo, with time to perform the work.
+STP_ps_val_recon_start_allowed = {
+	STP_ps_val_intelligence_available = yes
+	OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }
+	NOT = { has_variable = STP_ps_val_intelligence_deposit }
+	VAL = {
+		check_variable = { var = STP_ps_val_receipt_stage value = 1 compare = equals }
+		NOT = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } }
+		OR = {
+			has_active_mission = STP_ps_val_route_wait
+			AND = {
+				has_active_mission = STP_ps_val_departure
+				check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 7 compare = greater_than }
+            }
+        }
+    }
+}
+
+STP_ps_val_intercept_start_allowed = {
+	STP_ps_val_intelligence_available = yes
+	OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }
+	NOT = { has_variable = STP_ps_val_intercept_deposit }
+	VAL = {
+		check_variable = { var = STP_ps_val_receipt_stage value = 1 compare = equals }
+		check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals }
+		NOT = { check_variable = { var = STP_ps_val_intercepted_sequence value = STP_ps_val_sequence compare = equals } }
+		OR = {
+			has_active_mission = STP_ps_val_route_wait
+			AND = {
+				has_active_mission = STP_ps_val_departure
+				check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 14 compare = greater_than }
+            }
+        }
+    }
 }
