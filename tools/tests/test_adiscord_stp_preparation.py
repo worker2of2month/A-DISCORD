@@ -3283,6 +3283,8 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertIn("[STPGetPreparationPressure]", battle)
             self.assertIn("[STPGetLastPartyResponse]", battle)
             self.assertIn("[STPGetNodStatus]", battle)
+            noisy_deployment = "Приоритет развёртывания" if language == "russian" else "Deployment prioritises"
+            self.assertNotIn(noisy_deployment, loc)
 
     def test_vorkerland_collapse_opens_dynamic_shabrat_asset_focuses(self):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
