@@ -1,0 +1,124 @@
+name: Temporary guarded branch cleanup
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+permissions:
+  contents: write
+  pull-requests: read
+  actions: read
+concurrency:
+  group: branch-cleanup-20260922
+  cancel-in-progress: false
+jobs:
+  audit:
+    if: github.repository == 'worker2of2month/A-DISCORD' && github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'maintenance/branch-cleanup-20260922'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Audit all refs and delete only proven merged inactive branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import base64, json, os, pathlib, subprocess, urllib.request
+          REPO = 'worker2of2month/A-DISCORD'
+          SELF = 'maintenance/branch-cleanup-20260922'
+          API = 'https://api.github.com/repos/' + REPO
+          token = os.environ['GH_TOKEN']
+          def api(path):
+              req = urllib.request.Request(API + path, headers={'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json'})
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  return json.load(response)
+          def pages(path, key=None):
+              result = []
+              for page in range(1, 30):
+                  payload = api(path + ('&' if '?' in path else '?') + 'per_page=100&page=' + str(page))
+                  items = payload[key] if key else payload
+                  result.extend(items)
+                  if len(items) < 100:
+                      return result
+              raise RuntimeError('Pagination limit reached; refusing incomplete inventory')
+          def git(*args, check=True):
+              result = subprocess.run(['git', *args], cwd='audit-repo', text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+              if check and result.returncode:
+                  raise RuntimeError('git ' + ' '.join(args) + '\n' + result.stderr)
+              return result
+          def output(*args):
+              return git(*args).stdout.strip()
+          def is_ancestor(older, newer):
+              result = git('merge-base', '--is-ancestor', older, newer, check=False)
+              if result.returncode not in (0, 1):
+                  raise RuntimeError(result.stderr)
+              return result.returncode == 0
+          def held_refs():
+              prs = pages('/pulls?state=open')
+              held = {'main', SELF, 'wip/map-relief-archive'}
+              held.update(p['head']['ref'] for p in prs if p['head']['repo'] and p['head']['repo']['full_name'] == REPO)
+              runs = api('/actions/runs?per_page=100')['workflow_runs']
+              held.update(r['head_branch'] for r in runs if r['status'] != 'completed' and r.get('head_branch'))
+              return held, [{'number': p['number'], 'branch': p['head']['ref'], 'sha': p['head']['sha'], 'draft': p['draft'], 'title': p['title']} for p in prs]
+          pathlib.Path('audit-repo').mkdir()
+          git('init', '-q')
+          git('remote', 'add', 'origin', 'https://github.com/' + REPO + '.git')
+          header = 'AUTHORIZATION: basic ' + base64.b64encode(('x-access-token:' + token).encode()).decode()
+          git('config', 'http.https://github.com/.extraheader', header)
+          git('config', 'remote.origin.promisor', 'true')
+          git('config', 'remote.origin.partialclonefilter', 'blob:none')
+          git('fetch', '--quiet', '--filter=blob:none', '--no-tags', 'origin', '+refs/heads/*:refs/remotes/origin/*')
+          main = output('rev-parse', 'refs/remotes/origin/main')
+          branches = pages('/branches')
+          held, prs = held_refs()
+          records = []
+          for branch in branches:
+              name, sha = branch['name'], branch['commit']['sha']
+              if git('cat-file', '-e', sha + '^{commit}', check=False).returncode:
+                  git('fetch', '--quiet', '--filter=blob:none', 'origin', sha)
+              merged = is_ancestor(sha, main)
+              record = {'branch': name, 'sha': sha, 'protected': branch['protected'], 'held': name in held, 'merged': merged}
+              if merged:
+                  record['classification'] = 'merged'
+              else:
+                  base = output('merge-base', main, sha)
+                  paths = output('diff', '--name-only', base, sha).splitlines()
+                  record.update(base=base, paths=paths, ahead=int(output('rev-list', '--count', main + '..' + sha)), commits=output('log', '--format=%h %s', '--max-count=12', main + '..' + sha).splitlines())
+                  record['classification'] = 'workflow_only' if paths and all(p.startswith('.github/workflows/') for p in paths) else 'unmerged'
+              records.append(record)
+          held_now, prs_now = held_refs()
+          fresh_main = api('/git/ref/heads/main')['object']['sha']
+          if fresh_main != main:
+              git('fetch', '--quiet', '--filter=blob:none', 'origin', fresh_main)
+          assert is_ancestor(main, fresh_main), 'main was rewritten; refusing deletion'
+          candidates = [r for r in records if r['merged'] and not r['protected'] and r['branch'] not in held_now]
+          failures = []
+          for offset in range(0, len(candidates), 10):
+              batch = candidates[offset:offset + 10]
+              args = ['push', '--atomic']
+              args += ['--force-with-lease=refs/heads/' + r['branch'] + ':' + r['sha'] for r in batch]
+              args += ['origin'] + [':refs/heads/' + r['branch'] for r in batch]
+              result = git(*args, check=False)
+              if result.returncode:
+                  failures.append({'branches': [r['branch'] for r in batch], 'error': result.stderr})
+              else:
+                  print('DELETED_MERGED ' + json.dumps([r['branch'] for r in batch]), flush=True)
+          remaining = pages('/branches')
+          remaining_names = {b['name'] for b in remaining}
+          deleted = [r for r in records if r['branch'] not in remaining_names]
+          report = {'repository': REPO, 'main_before': main, 'main_after': api('/git/ref/heads/main')['object']['sha'], 'open_prs': prs_now, 'records': records, 'deleted': deleted, 'remaining': remaining, 'failures': failures}
+          pathlib.Path('branch-audit.json').write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding='utf-8')
+          for record in records:
+              if record['branch'] in remaining_names:
+                  print('REMAINING ' + json.dumps(record, ensure_ascii=False), flush=True)
+          summary = {'before': len(branches), 'deleted_merged': len(deleted), 'remaining': len(remaining), 'failed_batches': len(failures), 'main': report['main_after']}
+          print('SUMMARY ' + json.dumps(summary), flush=True)
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write('## Guarded branch cleanup\n\n```json\n' + json.dumps(summary, indent=2) + '\n```\n\nAll deleted refs were ancestors of main; open PRs, active runs, protected refs and the map archive were preserved. Exact-SHA leases and atomic batches prevented deleting concurrent updates. No gameplay or main ref was written.\n')
+          git('config', '--unset-all', 'http.https://github.com/.extraheader')
+          assert not failures, 'Some deletion batches were safely refused; inspect report'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: branch-audit-${{ github.run_id }}
+          path: branch-audit.json
+          retention-days: 30
