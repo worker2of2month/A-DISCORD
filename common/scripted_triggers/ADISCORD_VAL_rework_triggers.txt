@@ -85,8 +85,21 @@ VAL_reclamation_industry_target_valid = {
 	}
 }
 
+# COUNTRY: only the original seven regions can complete the national reclamation programme.
+VAL_reclamation_fully_restored = {
+	has_completed_focus = VAL_reclamation_return_home
+	NOT = { has_variable = VAL_reclamation_deposit }
+	24 = { is_owned_by = VAL is_controlled_by = VAL check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } }
+	42 = { is_owned_by = VAL is_controlled_by = VAL check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } }
+	48 = { is_owned_by = VAL is_controlled_by = VAL check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } }
+	54 = { is_owned_by = VAL is_controlled_by = VAL check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } }
+	55 = { is_owned_by = VAL is_controlled_by = VAL check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } }
+	56 = { is_owned_by = VAL is_controlled_by = VAL check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } }
+	57 = { is_owned_by = VAL is_controlled_by = VAL check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } }
+}
+
+# The historical ID is retained; a foreign civil war does not gate Kefreyt's northern policy.
 VAL_frontier_postwar = {
-    has_global_flag = STP_cw_union_wars_finished
     has_capitulated = no
     is_subject = no
     NOT = { has_country_flag = VAL_stelander_defeated }

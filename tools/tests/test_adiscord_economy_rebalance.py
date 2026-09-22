@@ -120,7 +120,7 @@ class NorthernCampaignRouteTests(unittest.TestCase):
         nodes = focus(read("common/national_focus/ADISCORD_national_focus_VAL.txt"), "VAL_frontier_conference")
         alternatives = [{c.value for c in n.value if c.key == "focus"}
                         for n in nodes if n.key == "prerequisite"]
-        self.assertIn({"VAL_The_Steel_Contract", "VAL_Market_Roads_North"}, alternatives)
+        self.assertEqual(alternatives, [{"VAL_Contracts_Outlive_Kings"}])
         self.assertTrue(any(n.key == "VAL_frontier_postwar" for n in walk(nodes)))
 
     def test_demand_and_offensive_share_a_force_quality_gate_not_24_divisions(self):
