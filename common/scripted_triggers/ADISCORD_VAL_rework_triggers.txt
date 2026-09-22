@@ -74,6 +74,81 @@ VAL_reclamation_state_project_valid = {
 	}
 }
 
+# COUNTRY VAL: all seven home regions must be restored, not lost or occupied.
+VAL_reclamation_complete = {
+	has_completed_focus = VAL_reclamation_return_home
+	24 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		NOT = {
+			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
+		}
+	}
+	42 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		NOT = {
+			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
+		}
+	}
+	48 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		NOT = {
+			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
+		}
+	}
+	54 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		NOT = {
+			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
+		}
+	}
+	55 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		NOT = {
+			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
+		}
+	}
+	56 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		NOT = {
+			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
+		}
+	}
+	57 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		NOT = {
+			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
+			has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier }
+		}
+	}
+}
+
 VAL_reclamation_industry_target_valid = {
 	has_capitulated = no
 	has_completed_focus = VAL_reclamation_industrial_sites
@@ -86,7 +161,6 @@ VAL_reclamation_industry_target_valid = {
 }
 
 VAL_frontier_postwar = {
-    has_global_flag = STP_cw_union_wars_finished
     has_capitulated = no
     is_subject = no
     NOT = { has_country_flag = VAL_stelander_defeated }
