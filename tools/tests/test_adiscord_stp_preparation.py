@@ -3286,6 +3286,17 @@ class StelanderPreparationTests(unittest.TestCase):
             noisy_deployment = "Приоритет развёртывания" if language == "russian" else "Deployment prioritises"
             self.assertNotIn(noisy_deployment, loc)
 
+            price = next(line for line in loc.splitlines()
+                         if line.lstrip().startswith("STP_party_assault_price:"))
+            hover = next(line for line in loc.splitlines()
+                         if line.lstrip().startswith("STP_party_assault_price_tooltip:"))
+            price_pairs = re.findall(r"(£\\w+)\\s+§Y([0-9.]+)§!", price)
+            hover_pairs = re.findall(r"(£\\w+)\\s+§Y([0-9.]+)§!", hover)
+            self.assertTrue(price_pairs)
+            self.assertEqual(price_pairs, hover_pairs)
+            verbose_price_copy = "Полная цена дивизии" if language == "russian" else "Full division cost"
+            self.assertNotIn(verbose_price_copy, hover)
+
     def test_vorkerland_collapse_opens_dynamic_shabrat_asset_focuses(self):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
                     if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
