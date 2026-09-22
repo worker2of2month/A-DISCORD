@@ -600,10 +600,11 @@ VAL_reclamation = {
 		targets = { 24 42 48 54 55 56 57 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
-			has_completed_focus = VAL_reclamation_clean_water
+			has_completed_focus = VAL_reclamation_survey
 			FROM = { is_owned_by = ROOT has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier } check_variable = { var = VAL_reclamation_stage value = 1 compare = equals } }
 		}
 		available = {
+			has_completed_focus = VAL_reclamation_clean_water
 			has_capitulated = no
 			FROM = { is_owned_by = ROOT is_controlled_by = ROOT }
 			hidden_trigger = { VAL_reclamation_project_target_valid = yes }
@@ -630,10 +631,11 @@ VAL_reclamation = {
 		targets = { 24 42 48 54 55 56 57 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
-			has_completed_focus = VAL_reclamation_return_home
+			has_completed_focus = VAL_reclamation_survey
 			FROM = { is_owned_by = ROOT has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier } check_variable = { var = VAL_reclamation_stage value = 2 compare = equals } }
 		}
 		available = {
+			has_completed_focus = VAL_reclamation_return_home
 			has_capitulated = no
 			FROM = { is_owned_by = ROOT is_controlled_by = ROOT industrial_complex < 20 }
 			hidden_trigger = { VAL_reclamation_project_target_valid = yes }
@@ -660,13 +662,14 @@ VAL_reclamation = {
 		targets = { 24 42 48 54 55 56 57 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
-			has_completed_focus = VAL_reclamation_industrial_sites
+			has_completed_focus = VAL_reclamation_survey
 			FROM = {
 				is_owned_by = ROOT
 				check_variable = { var = VAL_reclamation_stage value = 3 compare = equals }
 			}
 		}
 		available = {
+			has_completed_focus = VAL_reclamation_industrial_sites
 			VAL_reclamation_industry_target_valid = yes
 			FROM = { NOT = { has_variable = VAL_reclamation_industry_deposit } }
 		}

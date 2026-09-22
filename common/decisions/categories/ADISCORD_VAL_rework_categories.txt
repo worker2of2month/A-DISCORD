@@ -25,7 +25,7 @@ VAL_rework_debug = {
 VAL_reclamation = {
 	allowed = { tag = VAL }
 	visible = { has_completed_focus = VAL_reclamation_survey }
-	visible_when_empty = yes
+	visible_when_empty = no
 }
 
 VAL_frontier = {
