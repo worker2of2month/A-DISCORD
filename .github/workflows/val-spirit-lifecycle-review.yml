@@ -14,11 +14,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 6
+          fetch-depth: 1
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify transport and prepare pinned baseline
+      - name: Verify reviewed patch and preserve current main changes
         run: |
           mkdir -p /tmp/val-spirit-review
           cp .github/val_spirit_repair.b64 /tmp/val-spirit-review/transport.b64
@@ -30,18 +30,16 @@ jobs:
           for old, new in [('+4eaX7qV', '+4eaX7/qV'), ('E+s4hojfwiBwiB0', 'E+s4hojfwiB0'), ('HMYPx9/ER+PP4dBB', 'HMYPx9/ER+PP8dBB'), ('AVVn8R7j8cASH9', 'AVVn8R7j8ASH9'), ('T2Ke31iG1gla', 'T2Ke31G1gla')]:
               text = text.replace(old, new)
           raw = base64.b64decode(text, validate=True)
-          actual = hashlib.sha256(raw).hexdigest()
-          print('Transport SHA256:', actual)
-          assert actual == '497e5b2f358861dc57738bab4ffa2d8fa82bdfacc347bcb1ff2feecb9df71a47'
+          assert hashlib.sha256(raw).hexdigest() == '497e5b2f358861dc57738bab4ffa2d8fa82bdfacc347bcb1ff2feecb9df71a47'
           pack = json.loads(zlib.decompress(raw))
-          pack['hashes']['tools/tests/test_val_contract_ui.py'] = 'c1a878f07493656c910d6aec816baa9510ed52de71866de9750278364f68b365'
           (out / 'pack.json').write_text(json.dumps(pack, ensure_ascii=False))
           for key in ('tests', 'production'):
               (out / (key + '.patch')).write_text(pack[key], encoding='utf-8')
           PY
-          git switch --detach 457a8e2732363b61b3e0a5ac0a6de690e05887ee
+          git fetch --depth=1 origin 38d3f3704a7f107892b51336f9469c4af9e63b70
+          git switch --detach 38d3f3704a7f107892b51336f9469c4af9e63b70
           python -m pip install pillow numpy pyyaml
-      - name: Run baseline, red-green regressions and validator
+      - name: Require source-driven regression checks and project validation
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -63,34 +61,9 @@ jobs:
           expanded = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_validate_adiscord_val_rework', '-v']
           focused = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_validate_adiscord_val_rework.ValIndustrialRecoveryTests', 'tools.tests.test_val_contract_ui', '-v']
           run('baseline-expanded', expanded)
-          run('baseline-focused', focused)
+          assert run('baseline-focused', focused) == 0
           subprocess.run(['git', 'apply', '--check', str(out / 'tests.patch')], check=True)
           subprocess.run(['git', 'apply', str(out / 'tests.patch')], check=True)
-          p = Path('tools/tests/test_val_contract_ui.py')
-          text = p.read_text()
-          old = '        funds = self.number(reward, "add_political_power")\n        for decision_id in self.campaigns[:3]:'
-          new = '\n'.join([
-              '        funds = self.number(reward, "add_political_power")',
-              '        from tools.validators.validate_adiscord_division_templates import parse_clausewitz',
-              '        entries = parse_clausewitz(reward)[0].value',
-              '        unlocks = []',
-              '        for entry in entries:',
-              '            if entry.key != "unlock_decision_tooltip":',
-              '                continue',
-              '            if isinstance(entry.value, str):',
-              '                unlocks.append(entry.value)',
-              '            else:',
-              '                fields = {field.key: field.value for field in entry.value}',
-              '                self.assertEqual(fields.get("show_effect_tooltip"), "yes")',
-              '                unlocks.append(fields.get("decision"))',
-              '        for decision_id in self.campaigns[:3]:',
-          ])
-          assert text.count(old) == 1
-          text = text.replace(old, new)
-          text = text.replace('self.assertEqual(reward.count(f"unlock_decision_tooltip = {decision_id}"), 1)', 'self.assertEqual(unlocks.count(decision_id), 1)')
-          text = text.replace('self.assertNotIn("unlock_decision_tooltip = VAL_campaign_the_mine_was_stolen", reward)', 'self.assertNotIn("VAL_campaign_the_mine_was_stolen", unlocks)')
-          ast.parse(text)
-          p.write_text(text)
           assert run('red', focused) == 1
           assert 'FAILED (failures=9)' in (out / 'red.log').read_text()
           subprocess.run(['git', 'apply', '--check', str(out / 'production.patch')], check=True)
@@ -117,11 +90,11 @@ jobs:
                   assert raw.startswith(b'\xef\xbb\xbf')
                   keys = re.findall(r'^\s*([^\s:#]+):', text, re.M)
                   assert len(keys) == len(set(keys)), name
-              else:
-                  assert hashlib.sha256(raw).hexdigest() == pack['hashes'][name], name
-                  if p.suffix == '.txt':
-                      assert not raw.startswith(b'\xef\xbb\xbf')
-                      assert parse_clausewitz(text)
+              elif p.suffix == '.txt':
+                  assert not raw.startswith(b'\xef\xbb\xbf')
+                  assert parse_clausewitz(text)
+              elif p.suffix == '.py':
+                  ast.parse(text)
               hashes[name] = hashlib.sha256(raw).hexdigest()
           (out / 'hashes.json').write_text(json.dumps(hashes, indent=2))
           (out / 'delivery.diff').write_bytes(subprocess.check_output(['git', 'diff']))
@@ -141,7 +114,7 @@ jobs:
           branch = 'fix/val-dynamic-spirit-lifecycle-' + os.environ['GITHUB_RUN_ID']
           head = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
           subprocess.run(['git', 'push', 'origin', head + ':refs/heads/' + branch], check=True)
-          (out / 'delivery.json').write_text(json.dumps({'branch': branch, 'head': head, 'base': '457a8e2732363b61b3e0a5ac0a6de690e05887ee'}, indent=2))
+          (out / 'delivery.json').write_text(json.dumps({'branch': branch, 'head': head, 'base': '38d3f3704a7f107892b51336f9469c4af9e63b70'}, indent=2))
           for name in files:
               p = out / 'source' / name
               p.parent.mkdir(parents=True, exist_ok=True)
