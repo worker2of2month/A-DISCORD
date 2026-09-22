@@ -206,7 +206,12 @@ class TestValPropagandaRewards(unittest.TestCase):
         funds = self.number(reward, "add_political_power")
         for decision_id in self.campaigns[:3]:
             with self.subTest(decision=decision_id):
-                self.assertEqual(reward.count(f"unlock_decision_tooltip = {decision_id}"), 1)
+                from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+                rewards = parse_clausewitz(reward)[0].value
+                unlocked = [entry.value if isinstance(entry.value, str)
+                            else next(child.value for child in entry.value if child.key == "decision")
+                            for entry in rewards if entry.key == "unlock_decision_tooltip"]
+                self.assertEqual(unlocked.count(decision_id), 1)
                 self.assertGreaterEqual(funds, self.number(self.decision(decision_id), "cost"))
         self.assertIn("custom_effect_tooltip = VAL_campaign_mine_unlock_tt", reward)
         self.assertNotIn("unlock_decision_tooltip = VAL_campaign_the_mine_was_stolen", reward)
@@ -376,51 +381,36 @@ class TestValMergedContractFlows(unittest.TestCase):
 class TestValReclamationCompletion(unittest.TestCase):
     states = (24, 42, 48, 54, 55, 56, 57)
 
-    def test_all_seven_home_regions_must_finish_the_paid_three_stage_programme(self):
+    def test_paid_reclamation_matches_the_actual_starting_contamination(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
         text = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
         gate = parse_clausewitz(named_block(text, "VAL_reclamation_complete"))[0].value
         self.assertEqual({e.key for e in gate if e.key.isdigit()}, {str(n) for n in self.states})
-
-        def matches(entries, facts, scope="VAL"):
-            for e in entries:
-                if e.key.isdigit():
-                    ok = matches(e.value, facts, e.key)
-                elif e.key == "NOT":
-                    ok = not any(matches([child], facts, scope) for child in e.value)
-                elif e.key == "check_variable":
-                    fields = {child.key: child.value for child in e.value}
-                    self.assertEqual(fields["compare"], "greater_than_or_equals")
-                    ok = facts.get((scope, "variable", fields["var"]), 0) >= float(fields["value"])
-                elif e.key == "has_dynamic_modifier":
-                    fields = {child.key: child.value for child in e.value}
-                    ok = facts.get((scope, e.key, fields["modifier"]), False)
-                else:
-                    ok = facts.get((scope, e.key, e.value), False)
-                if not ok:
-                    return False
-            return True
-
+        pollution = named_block(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+                                "ADISCORD_vorkerland_apply_dirty_modifiers")
+        initially_dirty = {int(e.key) for e in parse_clausewitz(pollution)[0].value if e.key.isdigit()} & set(self.states)
+        self.assertEqual(initially_dirty, {24, 57}, "Review the paid objective when starting contamination changes")
         complete = {("VAL", "has_completed_focus", "VAL_reclamation_return_home"): True}
         for state in self.states:
             complete.update({
-                (str(state), "variable", "VAL_reclamation_stage"): 3,
+                (str(state), "variable", "VAL_reclamation_stage"): 3 if state in initially_dirty else 0,
                 (str(state), "is_owned_by", "VAL"): True,
                 (str(state), "is_controlled_by", "VAL"): True,
             })
-        self.assertTrue(matches(gate, complete))
-        self.assertFalse(matches(gate, {}), "No vacuous completion before any reclamation")
+        self.assertTrue(matches_conditions(gate, complete, "VAL"), "Clean home regions have no paid reclamation decision")
+        self.assertFalse(matches_conditions(gate, {}, "VAL"), "No completion before paid reclamation")
+        self.assertFalse(matches_conditions(gate, complete | {("VAL", "has_variable", "VAL_reclamation_deposit"): True}, "VAL"))
         for state in self.states:
-            for stage in (0, 1, 2):
-                with self.subTest(state=state, incomplete_stage=stage):
-                    self.assertFalse(matches(gate, {**complete, (str(state), "variable", "VAL_reclamation_stage"): stage}))
+            for stage in (0, 1, 2, 3, 4):
+                expected = stage >= 3 or (stage == 0 and state not in initially_dirty)
+                with self.subTest(state=state, stage=stage):
+                    self.assertEqual(matches_conditions(gate, complete | {(str(state), "variable", "VAL_reclamation_stage"): stage}, "VAL"), expected)
             for key in ("is_owned_by", "is_controlled_by"):
-                with self.subTest(state=state, missing=key):
-                    self.assertFalse(matches(gate, {**complete, (str(state), key, "VAL"): False}))
+                self.assertFalse(matches_conditions(gate, complete | {(str(state), key, "VAL"): False}, "VAL"))
             for modifier in ("ADISCORD_vorkerland_dirty_state", "VAL_reclamation_stage_1_modifier", "VAL_reclamation_stage_2_modifier"):
-                with self.subTest(state=state, contamination=modifier):
-                    self.assertFalse(matches(gate, {**complete, (str(state), "has_dynamic_modifier", modifier): True}))
-        self.assertTrue(matches(gate, {**complete, ("999", "variable", "VAL_reclamation_stage"): 0}), "New conquests are outside the seven-region programme")
+                self.assertFalse(matches_conditions(gate, complete | {(str(state), "has_dynamic_modifier", modifier): True}, "VAL"))
+        self.assertTrue(matches_conditions(gate, complete | {("999", "variable", "VAL_reclamation_stage"): 0}, "VAL"))
 
     def test_spirit_removal_is_one_time_and_does_not_revoke_earned_focus_bonuses(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -523,6 +513,45 @@ class TestValExpansionRoute(unittest.TestCase):
             active.remove(name)
             done.add(name)
         for name in focuses: visit(name)
+
+
+class TestValReclamationFollowThrough(unittest.TestCase):
+    def test_paid_deadline_matches_the_native_decision_duration(self):
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        fallback = named_block(effects, "VAL_reclamation_reconcile_state_project")
+        age = int(re.search(r"days\s*>\s*(\d+)", fallback).group(1))
+        for suffix in ("roads", "water", "settlement"):
+            decision = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_reclamation_" + suffix)
+            days = int(re.search(r"days_remove\s*=\s*(\d+)", decision).group(1))
+            self.assertEqual(age + 1, days)
+
+    def test_recapturing_the_last_restored_home_region_rechecks_the_spirit(self):
+        actions = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
+        hook = named_block(actions, "on_state_control_changed")
+        self.assertIn("ROOT = { tag = VAL has_idea = VAL_harvest_of_ash }", hook)
+        self.assertIn("ROOT = { VAL_complete_reclamation = yes }", hook)
+        for state in (24, 42, 48, 54, 55, 56, 57):
+            self.assertIn("state = " + str(state), hook)
+        self.assertNotIn("VAL_complete_reclamation", named_block(actions, "on_weekly_VAL"))
+
+    def test_legacy_compensation_is_removed_by_the_new_save_migration(self):
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        refresh = named_block(effects, "VAL_reclamation_refresh_state")
+        self.assertIn("has_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }", refresh)
+        self.assertIn("remove_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }", refresh)
+        self.assertNotIn("add_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }", effects)
+        legacy = named_block(read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"), "VAL_reclamation_recovered_land")
+        self.assertIn("enable = { always = no }", legacy)
+        startup = named_block(read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"), "on_startup")
+        self.assertIn("NOT = { has_country_flag = VAL_reclamation_modifier_migrated_v3 }", startup)
+        self.assertIn("set_country_flag = VAL_reclamation_modifier_migrated_v3", startup)
+
+    def test_balchansk_branch_has_localised_names_and_descriptions(self):
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            for name in ("VAL_Balchansk_Charter", "VAL_Balchansk_Clearing_House"):
+                for key in (name, name + "_desc"):
+                    self.assertEqual(len(re.findall(rf'(?m)^\s*{key}:\d*\s+"[^"\r\n]+"\s*$', text)), 1, (language, key))
 
 if __name__ == "__main__":
     unittest.main()
