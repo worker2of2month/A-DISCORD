@@ -1140,6 +1140,18 @@ VAL_council_can_launch_revanche = {
 	has_completed_focus = VAL_defeat_Revise_The_Settlement
 	has_completed_focus = VAL_defeat_Refit_For_Return
 	has_completed_focus = VAL_defeat_Bring_The_Captains_Home
+	has_completed_focus = VAL_defeat_Mountain_Exercises
+	has_completed_focus = VAL_defeat_Frontline_Arsenals
+	has_completed_focus = VAL_defeat_Supply_For_The_Return
+}
+
+# COUNTRY VAL: domestic recovery does not depend on the foreign leader surviving.
+VAL_council_in_office = {
+    tag = VAL
+    has_country_flag = VAL_stelander_defeated
+    has_country_leader = { character = VAL_Commanders_Council ruling_only = yes }
+    is_subject = no
+    has_capitulated = no
 }
 
 # Playable staffing: original cabinet and civil-war commanders are unchanged.
