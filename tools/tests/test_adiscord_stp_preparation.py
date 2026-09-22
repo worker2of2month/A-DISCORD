@@ -998,21 +998,20 @@ class StelanderPreparationTests(unittest.TestCase):
         for key in ("STP_party_inspection_active", "STP_resistance_garrison_asset"):
             self.assertRegex(loc, r"(?m)^ " + key + r':\s*"[^"\r\n]+"')
 
-    def test_false_trail_shows_only_current_band_and_remains_readable_after_preparation(self):
-        definitions = entries("common/scripted_localisation/ADISCORD_STP_scripted_loc.txt")
-        odds = next(e.value for e in definitions if e.key == "defined_text" and scalar(e.value, "name") == "STPGetFalseTrailOdds")
-        for suspicion, expected in ((0, "HIDDEN"), (24.999, "HIDDEN"), (25, "LOW"), (49.999, "LOW"),
-                                    (50, "MEDIUM"), (69.999, "MEDIUM"), (70, "HIGH"), (100, "HIGH")):
-            with self.subTest(suspicion=suspicion):
-                facts = {("STP", "variable", "STP_party_suspicion"): suspicion}
-                chosen = next(e.value for e in odds if e.key == "text" and
-                              (not any(v.key == "trigger" for v in e.value) or matches_conditions(block(e.value, "trigger"), facts)))
-                self.assertEqual(scalar(chosen, "localization_key"), "STP_FALSE_TRAIL_ODDS_" + expected)
+    def test_false_trail_is_guaranteed_after_preparation(self):
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        resolver = block(effects, "STP_resolve_false_trail")
+        self.assertIn("STP_false_trail_clean_redirect", {entry.key for entry in resolver})
+        self.assertNotIn("random_list", {entry.key for entry in walk(resolver)})
+
         loc = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(encoding="utf-8-sig")
-        for key in ("STP_prepare_false_trail_desc", "STP_REGION_INSPECTION_FALSE_TRAIL_READY"):
+        for key in ("STP_prepare_false_trail_desc", "STP_false_trail_result_tt"):
             line = next(line for line in loc.splitlines() if line.startswith(" " + key + ":"))
-            self.assertIn("[STP.STPGetFalseTrailOdds]", line)
-        self.assertNotIn("шансы указаны в решении", loc)
+            self.assertNotIn("[STP.STPGetFalseTrailOdds]", line)
+        self.assertIn("гарантированно", next(line for line in loc.splitlines()
+                                             if line.startswith(" STP_prepare_false_trail_desc:")).lower())
+        self.assertIn("28 дней", next(line for line in loc.splitlines()
+                                      if line.startswith(" STP_false_trail_result_tt:")))
 
     def test_rifle_reserve_focuses_require_full_stock_and_shared_cache_capacity(self):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
