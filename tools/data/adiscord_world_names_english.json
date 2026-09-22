@@ -2639,8 +2639,24 @@
           "english": "Southeastern Tselmar"
         },
         "STRATEGICREGION_228": {
-          "russian": "Антолльское море",
-          "english": "Antolla Sea"
+          "russian": "Западное Антолльское море",
+          "english": "Western Antolla Sea"
+        },
+        "STRATEGICREGION_229": {
+          "russian": "Восточное Антолльское море",
+          "english": "Eastern Antolla Sea"
+        },
+        "STRATEGICREGION_230": {
+          "russian": "Кефрейтское побережье",
+          "english": "Kefreite Coast"
+        },
+        "STRATEGICREGION_231": {
+          "russian": "Стеландские морские подступы",
+          "english": "Stelander Approaches"
+        },
+        "STRATEGICREGION_232": {
+          "russian": "Подступы к Стругентскому каналу",
+          "english": "Strugent Canal Approaches"
         }
       }
     }
