@@ -1,3 +1,4 @@
+ADISCORD_grant_technology_profile_air = yes
 capital = 20
 
 ADISCORD_grant_technology_profile_field_air_defense = yes
