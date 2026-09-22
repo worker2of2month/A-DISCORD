@@ -12,7 +12,7 @@ create_faction_from_template = {
 	name = faction_besjaysk_kingdom
 }
 add_to_faction = BLD
-add_to_faction = BHD
+add_to_faction = BHG
 add_to_faction = BGT
 add_to_faction = BBV
 add_to_faction = BCM
