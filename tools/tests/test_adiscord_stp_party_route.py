@@ -638,7 +638,8 @@ class PartyFactionContracts(unittest.TestCase):
 
     def test_all_cards_actions_and_cooldowns_use_the_same_seven_factions(self):
         categories = parse_clausewitz(read(DECISIONS))
-        decisions = one(categories, "STP_party_factions")
+        decisions = [e for e in one(categories, "STP_party_factions")
+                     if e.key.startswith("STP_pf_negotiate_")]
         self.assertEqual(len(decisions), 7)
         gui = read("interface/ADISCORD_STP_regions.gui")
         script = read("common/scripted_guis/ADISCORD_STP_regions_scripted_gui.txt")

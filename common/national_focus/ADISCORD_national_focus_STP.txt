@@ -1993,7 +1993,10 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_val_intelligence show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intelligence_desc }
+		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_val_intelligence show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intelligence_desc
+			unlock_decision_tooltip = { decision = STP_ps_val_intercept show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intercept_desc
+			unlock_decision_tooltip = { decision = STP_ps_val_pressure show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_pressure_desc
+}
 	}
 
 }
