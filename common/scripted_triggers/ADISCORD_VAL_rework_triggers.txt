@@ -1080,3 +1080,39 @@ VAL_foreign_sales_decisions_visible = {
 VAL_can_spend_750 = {
 	check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals }
 }
+
+
+# Policy is explicit; merely not researching the military branch is not a choice.
+VAL_can_defer_northern_expansion = {
+    tag = VAL
+    has_completed_focus = VAL_frontier_security_plan
+    VAL_frontier_postwar = yes
+    VAL_frontier_idle = yes
+    has_war = no
+    NOT = { has_country_flag = VAL_frontier_expansion_deferred }
+    NOT = { has_country_flag = VAL_frontier_treaty_signed }
+    NOT = { has_country_flag = VAL_campaign_mobilizing }
+}
+
+VAL_northern_expansion_deferred = {
+    has_country_flag = VAL_frontier_expansion_deferred
+    has_completed_focus = VAL_frontier_security_plan
+    has_capitulated = no
+    is_subject = no
+    has_war = no
+    VAL_frontier_idle = yes
+    NOT = { has_country_flag = VAL_campaign_mobilizing }
+    NOT = { has_country_flag = VAL_stelander_defeated }
+}
+
+# Commercial recovery does not certify territorial victory or remove a resource shortage.
+VAL_economic_settlement_ready = {
+    OR = {
+        VAL_campaign_objectives_met = yes
+        AND = {
+            VAL_northern_expansion_deferred = yes
+            has_completed_focus = VAL_Returning_Buyers
+            has_completed_focus = VAL_Contingency_Ledgers
+        }
+    }
+}

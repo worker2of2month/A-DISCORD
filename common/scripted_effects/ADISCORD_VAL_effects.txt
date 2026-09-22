@@ -3583,6 +3583,7 @@ VAL_adopt_commonwealth = {
     if = {
         limit = { VAL_can_proclaim_commonwealth = yes }
         set_cosmetic_tag = VAL_commonwealth
+        VAL_sync_solgalov_portrait = yes
         VAL_grant_contract_warlord = yes
     }
 }
@@ -3970,4 +3971,41 @@ VAL_final_crisis_weekly = {
 		clamp_variable = { var = VAL_final_escalation min = 0 max = 100 }
 		if = { limit = { check_variable = { var = VAL_final_escalation value = 100 compare = greater_than_or_equals } } VAL_final_crisis_launch = yes }
 	}
+}
+
+
+# The cosmetic state is authoritative, including when repairing an older save.
+VAL_sync_solgalov_portrait = {
+    if = {
+        limit = { has_character = VAL_Valera_Solgalov }
+        if = {
+            limit = { has_cosmetic_tag = VAL_commonwealth }
+            set_portraits = {
+                character = VAL_Valera_Solgalov
+                civilian = { large = GFX_portrait_VAL_Valera_Solgalov_contracts }
+            }
+        }
+        else = {
+            set_portraits = {
+                character = VAL_Valera_Solgalov
+                civilian = { large = GFX_portrait_VAL_Valera_Solgalov }
+            }
+        }
+    }
+}
+
+# Only an explicit prewar withdrawal selects the alternative route.
+# The bilateral Irem claim does not determine the northern policy.
+VAL_frontier_withdraw_and_defer = {
+    if = {
+        limit = {
+            has_war = no
+            check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+        }
+        if = {
+            limit = { check_variable = { var = VAL_frontier_target value = 4 compare = less_than } }
+            set_country_flag = VAL_frontier_expansion_deferred
+        }
+        VAL_frontier_close = yes
+    }
 }

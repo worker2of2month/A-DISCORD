@@ -688,6 +688,47 @@ VAL_reclamation = {
 }
 
 VAL_frontier = {
+
+    VAL_defer_northern_expansion = {
+        icon = generic_political_pressure
+        allowed = { tag = VAL }
+        visible = {
+            has_completed_focus = VAL_frontier_security_plan
+            NOT = { has_country_flag = VAL_frontier_expansion_deferred }
+            NOT = { has_country_flag = VAL_frontier_treaty_signed }
+        }
+        available = {
+            custom_trigger_tooltip = {
+                tooltip = VAL_defer_northern_expansion_ready_tt
+                VAL_can_defer_northern_expansion = yes
+            }
+        }
+        cost = 0
+        complete_effect = {
+            custom_effect_tooltip = VAL_defer_northern_expansion_tt
+            hidden_effect = {
+                if = {
+                    limit = { VAL_can_defer_northern_expansion = yes }
+                    set_country_flag = VAL_frontier_expansion_deferred
+                }
+            }
+        }
+        ai_will_do = {
+            base = 5
+            modifier = { factor = 10 has_completed_focus = VAL_Trading_Partners }
+            modifier = {
+                factor = 0
+                VAL_ai_frontier_force_ready = yes
+                NOT = { has_completed_focus = VAL_Trading_Partners }
+                OR = {
+                    CIN = { VAL_frontier_bloc_target_eligible = yes }
+                    OSF = { VAL_frontier_bloc_target_eligible = yes }
+                    APH = { VAL_frontier_bloc_target_eligible = yes }
+                }
+            }
+        }
+    }
+
     VAL_ratify_postwar_administration = {
         icon = generic_political_pressure
         targets = { STP STS NOD }
@@ -758,7 +799,7 @@ VAL_frontier = {
         allowed = { tag = VAL }
         visible = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
         cost = 0
-        complete_effect = { custom_effect_tooltip = VAL_frontier_withdraw_tt hidden_effect = { VAL_frontier_close = yes } }
+        complete_effect = { custom_effect_tooltip = VAL_frontier_withdraw_tt hidden_effect = { VAL_frontier_withdraw_and_defer = yes } }
         ai_will_do = { base = 0 }
     }
     VAL_frontier_transport_contract = {
@@ -810,11 +851,12 @@ VAL_frontier = {
                 if = { limit = { CIN = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 1 } }
                 else_if = { limit = { OSF = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 2 } }
                 else_if = { limit = { APH = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 3 } }
+                clr_country_flag = VAL_frontier_expansion_deferred
                 VAL_frontier_record_ultimatum = yes
                 event_target:VAL_frontier_quoted_target = { country_event = { id = val_rework.110 } }
             }
         }
-        ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
+        ai_will_do = { base = 20 modifier = { factor = 0 has_country_flag = VAL_frontier_expansion_deferred } modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
     }
     VAL_frontier_demand_ERT = {
         icon = generic_political_pressure
@@ -1544,7 +1586,23 @@ VAL_postwar_administration = {
 	VAL_proclaim_commonwealth = {
 		icon = generic_nationalism
 		allowed = { tag = VAL }
-		visible = { NOT = { has_cosmetic_tag = VAL_commonwealth } }
+        state_target = yes
+        targets = { 48 }
+        target_trigger = { FROM = { state = 48 } }
+        on_map_mode = map_and_decisions_view
+        highlight_states = {
+            highlight_state_targets = {
+                OR = {
+                    state = 48 state = 29 state = 46
+                    state = 58 state = 59 state = 60 state = 61
+                    state = 62 state = 63 state = 64 state = 65
+                    state = 10 state = 11 state = 12 state = 13
+                    state = 17 state = 18 state = 30
+                    is_core_of = STP
+                }
+            }
+        }
+		visible = { has_completed_focus = VAL_Contracts_Outlive_Kings NOT = { has_cosmetic_tag = VAL_commonwealth } }
 		available = {
 			custom_trigger_tooltip = { tooltip = VAL_commonwealth_requirements_tt VAL_can_proclaim_commonwealth = yes }
 		}
