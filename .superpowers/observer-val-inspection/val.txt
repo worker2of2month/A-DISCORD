@@ -1,0 +1,600 @@
+
+--- common/characters/VAL.txt:16 ---
+11: 
+12: 	VAL_Valera_Solgalov = {
+13: 		name = VAL_Valera_Solgalov
+14: 		portraits = {
+15: 			civilian = {
+16: 				large = GFX_portrait_VAL_Valera_Solgalov
+17: 			}
+18: 		}
+19: 		country_leader = {
+20: 			ideology = contractual_etatism
+21: 			expire = "2200.1.1.1"
+22: 			id = -1
+23: 		}
+24: 	}
+25: 
+26: 	VAL_Commanders_Council = {
+27: 		name = VAL_Commanders_Council
+
+--- common/characters/VAL.txt:215 ---
+210: 			planning_skill = 6
+211: 			logistics_skill = 5
+212: 			legacy_id = -1
+213: 		}
+214: 	}
+215:     CIN_VAL_commission = { name = CIN_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+216:     OSF_VAL_commission = { name = OSF_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+217:     APH_VAL_commission = { name = APH_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+218:     VAL_party_administration = { name = VAL_party_administration portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+219: 
+220: 
+221:     NKA_Contract_Council = {
+222:         name = NKA_Contract_Council
+223:         portraits = { civilian = { large = GFX_portrait_NKA_Viktor_Karst } }
+224:         country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+225:     }
+226:     OCA_Contract_Council = {
+
+--- common/characters/VAL.txt:216 ---
+211: 			logistics_skill = 5
+212: 			legacy_id = -1
+213: 		}
+214: 	}
+215:     CIN_VAL_commission = { name = CIN_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+216:     OSF_VAL_commission = { name = OSF_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+217:     APH_VAL_commission = { name = APH_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+218:     VAL_party_administration = { name = VAL_party_administration portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+219: 
+220: 
+221:     NKA_Contract_Council = {
+222:         name = NKA_Contract_Council
+223:         portraits = { civilian = { large = GFX_portrait_NKA_Viktor_Karst } }
+224:         country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+225:     }
+226:     OCA_Contract_Council = {
+227:         name = OCA_Contract_Council
+
+--- common/characters/VAL.txt:217 ---
+212: 			legacy_id = -1
+213: 		}
+214: 	}
+215:     CIN_VAL_commission = { name = CIN_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+216:     OSF_VAL_commission = { name = OSF_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+217:     APH_VAL_commission = { name = APH_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+218:     VAL_party_administration = { name = VAL_party_administration portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+219: 
+220: 
+221:     NKA_Contract_Council = {
+222:         name = NKA_Contract_Council
+223:         portraits = { civilian = { large = GFX_portrait_NKA_Viktor_Karst } }
+224:         country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+225:     }
+226:     OCA_Contract_Council = {
+227:         name = OCA_Contract_Council
+228:         portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+
+--- common/characters/VAL.txt:218 ---
+213: 		}
+214: 	}
+215:     CIN_VAL_commission = { name = CIN_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+216:     OSF_VAL_commission = { name = OSF_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+217:     APH_VAL_commission = { name = APH_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }
+218:     VAL_party_administration = { name = VAL_party_administration portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } } country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" id = -1 } }
+219: 
+220: 
+221:     NKA_Contract_Council = {
+222:         name = NKA_Contract_Council
+223:         portraits = { civilian = { large = GFX_portrait_NKA_Viktor_Karst } }
+224:         country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+225:     }
+226:     OCA_Contract_Council = {
+227:         name = OCA_Contract_Council
+228:         portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+229:         country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+
+--- common/decisions/ADISCORD_VAL_decisions.txt:948 ---
+943:             has_completed_focus = VAL_The_Steel_Contract
+944:             NOT = { has_completed_focus = VAL_Integrate_Occidia }
+945:             OCA = { exists = no }
+946:             OR = { has_country_flag = VAL_occidian_settlement_pending owns_state = 43 owns_state = 44 owns_state = 45 owns_state = 88 }
+947:         }
+948:         available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_ready_tt VAL_can_form_occidian_administration = yes } }
+949:         cost = 0
+950:         complete_effect = {
+951:             custom_effect_tooltip = VAL_occidian_administration_tt
+952:             hidden_effect = { VAL_form_occidian_administration = yes }
+953:         }
+954:         ai_will_do = { base = 20 }
+955:     }
+956: 
+957:     VAL_create_northern_administration = {
+958:         icon = generic_political_pressure
+959:         allowed = { tag = VAL }
+
+--- common/decisions/ADISCORD_VAL_decisions.txt:952 ---
+947:         }
+948:         available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_ready_tt VAL_can_form_occidian_administration = yes } }
+949:         cost = 0
+950:         complete_effect = {
+951:             custom_effect_tooltip = VAL_occidian_administration_tt
+952:             hidden_effect = { VAL_form_occidian_administration = yes }
+953:         }
+954:         ai_will_do = { base = 20 }
+955:     }
+956: 
+957:     VAL_create_northern_administration = {
+958:         icon = generic_political_pressure
+959:         allowed = { tag = VAL }
+960:         visible = {
+961:             has_completed_focus = VAL_frontier_security_plan
+962:             OR = {
+963:                 NKA = { exists = no }
+
+--- common/decisions/ADISCORD_VAL_decisions.txt:974 ---
+969:                         61 = { is_owned_by = NKA }
+970:                     }
+971:                 }
+972:             }
+973:         }
+974:         available = { custom_trigger_tooltip = { tooltip = VAL_northern_administration_ready_tt VAL_can_form_northern_administration = yes } }
+975:         cost = 0
+976:         complete_effect = { custom_effect_tooltip = VAL_northern_administration_tt hidden_effect = { VAL_form_northern_administration = yes } }
+977:         ai_will_do = { base = 20 }
+978:     }
+979: }
+980: 
+981: # --- livonn_settlement_decisions ---
+982: VAL_livonn_settlement_category = {
+983: 	VAL_honor_livonn_agreement = {
+984: 		icon = generic_prepare_civil_war
+985: 		allowed = { tag = VAL }
+
+--- common/decisions/ADISCORD_VAL_decisions.txt:976 ---
+971:                 }
+972:             }
+973:         }
+974:         available = { custom_trigger_tooltip = { tooltip = VAL_northern_administration_ready_tt VAL_can_form_northern_administration = yes } }
+975:         cost = 0
+976:         complete_effect = { custom_effect_tooltip = VAL_northern_administration_tt hidden_effect = { VAL_form_northern_administration = yes } }
+977:         ai_will_do = { base = 20 }
+978:     }
+979: }
+980: 
+981: # --- livonn_settlement_decisions ---
+982: VAL_livonn_settlement_category = {
+983: 	VAL_honor_livonn_agreement = {
+984: 		icon = generic_prepare_civil_war
+985: 		allowed = { tag = VAL }
+986: 		visible = {
+987: 			has_country_flag = VAL_cw_livonn_settlement_pending
+
+--- common/decisions/ADISCORD_VAL_decisions.txt:1544 ---
+1539: 		}
+1540: 		ai_will_do = { base = 8 }
+1541: 	}
+1542: 
+1543: 
+1544: 	VAL_proclaim_commonwealth = {
+1545: 		icon = generic_nationalism
+1546: 		allowed = { tag = VAL }
+1547: 		visible = { NOT = { has_cosmetic_tag = VAL_commonwealth } }
+1548: 		available = {
+1549: 			custom_trigger_tooltip = { tooltip = VAL_commonwealth_requirements_tt VAL_can_proclaim_commonwealth = yes }
+1550: 		}
+1551: 		cost = 150
+1552: 		fire_only_once = yes
+1553: 		complete_effect = {
+1554: 			custom_effect_tooltip = VAL_commonwealth_proclaimed_tt
+1555: 			hidden_effect = { VAL_adopt_commonwealth = yes }
+
+--- common/decisions/ADISCORD_VAL_decisions.txt:1549 ---
+1544: 	VAL_proclaim_commonwealth = {
+1545: 		icon = generic_nationalism
+1546: 		allowed = { tag = VAL }
+1547: 		visible = { NOT = { has_cosmetic_tag = VAL_commonwealth } }
+1548: 		available = {
+1549: 			custom_trigger_tooltip = { tooltip = VAL_commonwealth_requirements_tt VAL_can_proclaim_commonwealth = yes }
+1550: 		}
+1551: 		cost = 150
+1552: 		fire_only_once = yes
+1553: 		complete_effect = {
+1554: 			custom_effect_tooltip = VAL_commonwealth_proclaimed_tt
+1555: 			hidden_effect = { VAL_adopt_commonwealth = yes }
+1556: 		}
+1557: 		ai_will_do = { base = 100 }
+1558: 	}
+1559: 
+1560: }
+
+--- common/decisions/ADISCORD_VAL_decisions.txt:1554 ---
+1549: 			custom_trigger_tooltip = { tooltip = VAL_commonwealth_requirements_tt VAL_can_proclaim_commonwealth = yes }
+1550: 		}
+1551: 		cost = 150
+1552: 		fire_only_once = yes
+1553: 		complete_effect = {
+1554: 			custom_effect_tooltip = VAL_commonwealth_proclaimed_tt
+1555: 			hidden_effect = { VAL_adopt_commonwealth = yes }
+1556: 		}
+1557: 		ai_will_do = { base = 100 }
+1558: 	}
+1559: 
+1560: }
+1561: 
+1562: 
+
+--- common/national_focus/ADISCORD_national_focus_VAL.txt:1750 ---
+1745: 		ai_will_do = {
+1746: 			base = 1
+1747: 
+1748: 		}
+1749: 		completion_reward = {
+1750: 			unlock_decision_tooltip = { decision = VAL_proclaim_commonwealth show_effect_tooltip = yes }
+1751: 			custom_effect_tooltip = VAL_focus_authority_5_tt
+1752: 			add_stability = 0.1
+1753: 			add_war_support = 0.1
+1754: 			add_political_power = 150
+1755: 			VAL_invest_arsenal_industry = yes
+1756: 			country_event = { id = val_rework.4 }
+1757: 			hidden_effect = {
+1758: 				if = {
+1759: 					limit = { has_character = VAL_Valera_Solgalov }
+1760: 					set_portraits = {
+1761: 						character = VAL_Valera_Solgalov
+
+--- common/national_focus/ADISCORD_national_focus_VAL.txt:1760 ---
+1755: 			VAL_invest_arsenal_industry = yes
+1756: 			country_event = { id = val_rework.4 }
+1757: 			hidden_effect = {
+1758: 				if = {
+1759: 					limit = { has_character = VAL_Valera_Solgalov }
+1760: 					set_portraits = {
+1761: 						character = VAL_Valera_Solgalov
+1762: 						civilian = { large = GFX_portrait_VAL_Valera_Solgalov_contracts }
+1763: 					}
+1764: 				}
+1765: 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
+1766: 				VAL_change_contract_authority = yes
+1767: 			}
+1768: 		}
+1769: 	}
+1770: 
+1771: 	#############################################
+
+--- common/national_focus/ADISCORD_national_focus_VAL.txt:1762 ---
+1757: 			hidden_effect = {
+1758: 				if = {
+1759: 					limit = { has_character = VAL_Valera_Solgalov }
+1760: 					set_portraits = {
+1761: 						character = VAL_Valera_Solgalov
+1762: 						civilian = { large = GFX_portrait_VAL_Valera_Solgalov_contracts }
+1763: 					}
+1764: 				}
+1765: 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
+1766: 				VAL_change_contract_authority = yes
+1767: 			}
+1768: 		}
+1769: 	}
+1770: 
+1771: 	#############################################
+1772: 	### DYNAMIC STELANDER CRISIS STRATEGIES
+1773: 	#############################################
+
+--- common/scripted_effects/ADISCORD_VAL_effects.txt:2044 ---
+2039:         }
+2040:         if = {
+2041:             limit = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } }
+2042:                 if = { limit = { 168 = { is_owned_by = ERT OR = { VAL_frontier_controlled = yes is_controlled_by = ERT } } } transfer_state = 168 }
+2043:         }
+2044:         VAL_form_northern_administration = yes
+2045:         add_stability = 0.05
+2046:         country_event = { id = val_rework.115 }
+2047:     }
+2048: }
+2049: 
+2050: VAL_frontier_settle_armistice = {
+2051:     if = {
+2052:         limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+2053:         set_country_flag = VAL_frontier_armistice_signed
+2054:         set_temp_variable = { var = VAL_frontier_party_receives_border value = 0 }
+2055:         if = {
+
+--- common/scripted_effects/ADISCORD_VAL_effects.txt:2528 ---
+2523: 
+2524: 		# Formation is the authoritative territorial step. The weekly/on-action
+2525: 		# callers only stage the political choice after Livonn is actually in OCA.
+2526: 		if = {
+2527: 			limit = { NOT = { 45 = { is_owned_by = OCA is_controlled_by = OCA } } }
+2528: 			VAL_form_occidian_administration = yes
+2529: 		}
+2530: 		if = {
+2531: 			limit = { 45 = { is_owned_by = OCA is_controlled_by = OCA } }
+2532: 			set_country_flag = VAL_cw_livonn_settlement_staged
+2533: 			if = {
+2534: 				limit = {
+2535: 					45 = { has_state_flag = STP_local_deal_asset }
+2536: 					STS = { exists = yes has_capitulated = no }
+2537: 				}
+2538: 				set_country_flag = VAL_cw_livonn_settlement_pending
+2539: 			}
+
+--- common/scripted_effects/ADISCORD_VAL_effects.txt:2785 ---
+2780:  }
+2781: }
+2782: 
+2783: # COUNTRY VAL. The resource belt stays under direct rule; five states form NKA.
+2784: # Existing subjects with foreign land keep that land and their separate government.
+2785: VAL_form_northern_administration = {
+2786:     if = {
+2787:         limit = { VAL_can_form_northern_administration = yes }
+2788:         # Seed from a country that survives the transfer, preserving its army
+2789:         # until the following bounded annexation can move it to the administration.
+2790:         if = {
+2791:             limit = { NKA = { exists = no } 58 = { OR = { is_owned_by = VAL owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } } }
+2792:             NKA = { transfer_state = 58 }
+2793:         }
+2794:         if = {
+2795:             limit = { NKA = { exists = no } 62 = { OR = { is_owned_by = VAL owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } } }
+2796:             NKA = { transfer_state = 62 }
+
+--- common/scripted_effects/ADISCORD_VAL_effects.txt:2787 ---
+2782: 
+2783: # COUNTRY VAL. The resource belt stays under direct rule; five states form NKA.
+2784: # Existing subjects with foreign land keep that land and their separate government.
+2785: VAL_form_northern_administration = {
+2786:     if = {
+2787:         limit = { VAL_can_form_northern_administration = yes }
+2788:         # Seed from a country that survives the transfer, preserving its army
+2789:         # until the following bounded annexation can move it to the administration.
+2790:         if = {
+2791:             limit = { NKA = { exists = no } 58 = { OR = { is_owned_by = VAL owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } } }
+2792:             NKA = { transfer_state = 58 }
+2793:         }
+2794:         if = {
+2795:             limit = { NKA = { exists = no } 62 = { OR = { is_owned_by = VAL owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } } }
+2796:             NKA = { transfer_state = 62 }
+2797:         }
+2798:         if = {
+
+--- common/scripted_effects/ADISCORD_VAL_effects.txt:2914 ---
+2909:     }
+2910: }
+2911: 
+2912: # COUNTRY VAL. Create the administration before absorbing a defeated country,
+2913: # so its army and a player can follow the bounded military settlement.
+2914: VAL_form_occidian_administration = {
+2915: 	if = {
+2916: 		limit = { VAL_can_form_occidian_administration = yes }
+2917: 
+2918: 		# Seed OCA with a state whose donor survives the first transfer. During the
+2919: 		# military settlement republican Livonn can provide a fallback; districts
+2920: 		# belonging to STP/STS or another country are never eligible.
+2921: 		if = {
+2922: 			limit = {
+2923: 				OCA = { exists = no }
+2924: 				43 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+2925: 			}
+
+--- common/scripted_effects/ADISCORD_VAL_effects.txt:2916 ---
+2911: 
+2912: # COUNTRY VAL. Create the administration before absorbing a defeated country,
+2913: # so its army and a player can follow the bounded military settlement.
+2914: VAL_form_occidian_administration = {
+2915: 	if = {
+2916: 		limit = { VAL_can_form_occidian_administration = yes }
+2917: 
+2918: 		# Seed OCA with a state whose donor survives the first transfer. During the
+2919: 		# military settlement republican Livonn can provide a fallback; districts
+2920: 		# belonging to STP/STS or another country are never eligible.
+2921: 		if = {
+2922: 			limit = {
+2923: 				OCA = { exists = no }
+2924: 				43 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+2925: 			}
+2926: 			OCA = { transfer_state = 43 }
+2927: 		}
+
+--- common/scripted_effects/ADISCORD_VAL_effects.txt:3584 ---
+3579:     }
+3580: }
+3581: 
+3582: VAL_adopt_commonwealth = {
+3583:     if = {
+3584:         limit = { VAL_can_proclaim_commonwealth = yes }
+3585:         set_cosmetic_tag = VAL_commonwealth
+3586:         VAL_grant_contract_warlord = yes
+3587:     }
+3588: }
+3589: 
+3590: # Country VAL. Initialize once; loading a save must preserve earned progress.
+3591: VAL_initialize_arsenal_recovery = {
+3592:     if = {
+3593:         limit = { has_country_flag = VAL_vorkerland_resource_access_active OR = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started 33 = { NOT = { is_owned_by = WRK is_controlled_by = WRK } } } }
+3594:         VAL_end_vorkerland_resource_access = yes
+3595:     }
+
+--- common/scripted_effects/ADISCORD_VAL_effects.txt:3948 ---
+3943: 			check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals }
+3944: 			has_capitulated = no
+3945: 			is_subject = no
+3946: 			NOT = { has_cosmetic_tag = VAL_commonwealth }
+3947: 		}
+3948: 		if = { limit = { VAL_can_form_northern_administration = yes } VAL_form_northern_administration = yes }
+3949: 		STP = {
+3950: 			if = {
+3951: 				limit = { exists = yes is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration }
+3952: 				VAL_cede_stelander_border = yes
+3953: 			}
+3954: 		}
+3955: 		STS = {
+3956: 			if = {
+3957: 				limit = { exists = yes is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration }
+3958: 				VAL_cede_stelander_border = yes
+3959: 			}
+
+--- common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt:617 ---
+612:  NOT = { has_country_flag = VAL_stelander_defeated }
+613:  has_war = no has_capitulated = no is_subject = no VAL_frontier_idle = yes
+614:  FROM = { exists = yes has_capitulated = no OR = { is_subject = no AND = { tag = NOD is_subject_of = STP } } NOT = { is_in_faction_with = VAL } NOT = { has_country_flag = VAL_stelander_truce } }
+615: }
+616: 
+617: VAL_can_form_northern_administration = {
+618:     VAL_cannibal_sphere_secured = yes
+619:     has_capitulated = no
+620:     is_subject = no
+621:     has_war = no
+622:     OR = {
+623:         NKA = { exists = no }
+624:         AND = {
+625:             NKA = { exists = yes is_subject_of = VAL has_war = no }
+626:             OR = {
+627:                 59 = { is_owned_by = NKA }
+628:                 60 = { is_owned_by = NKA }
+
+--- common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt:680 ---
+675: VAL_livonn_available_for_administration = {
+676: 	OR = { is_owned_by = VAL is_owned_by = SRP is_owned_by = OCA }
+677: 	VAL_occidian_state_available = yes
+678: }
+679: 
+680: VAL_can_form_occidian_administration = {
+681: 	tag = VAL
+682: 	has_capitulated = no
+683: 	is_subject = no
+684: 	NOT = { has_completed_focus = VAL_Integrate_Occidia }
+685: 	OR = { OCA = { exists = no } OCA = { is_subject_of = VAL has_war = no } }
+686: 	43 = { VAL_occidian_state_available = yes }
+687: 	44 = { VAL_occidian_state_available = yes }
+688: 	88 = { VAL_occidian_state_available = yes }
+689: 	OR = {
+690: 		OCA = { exists = yes }
+691: 		43 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+
+--- common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt:1043 ---
+1038: 	NOT = { is_core_of = VAL }
+1039: 	NOT = { has_state_flag = VAL_regional_administration_in_progress }
+1040: 	OR = { compliance < 60 NOT = { resistance < 20 } }
+1041: }
+1042: 
+1043: VAL_can_proclaim_commonwealth = {
+1044: 	tag = VAL
+1045: 	has_completed_focus = VAL_Contracts_Outlive_Kings
+1046: 	VAL_campaign_objectives_met = yes
+1047: 	NOT = { has_cosmetic_tag = VAL_commonwealth }
+1048: 	NOT = { stability < 0.50 }
+1049: 	29 = { is_owned_by = VAL is_controlled_by = VAL }
+1050: 	46 = { is_owned_by = VAL is_controlled_by = VAL }
+1051: }
+1052: 
+1053: # COUNTRY VAL: the actual party-resistance war, not the succession countdown.
+1054: VAL_stelander_civil_war_active = {
+
+--- events/ADISCORD_VAL_contract_events.txt:921 ---
+916:     limit = { VAL_stelander_offer_current = yes }
+917:     43 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 43 } } }
+918:     44 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 44 } } }
+919:     45 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 45 } } }
+920:     88 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 88 } } }
+921:     VAL = { VAL_form_occidian_administration = yes }
+922:     set_country_flag = { flag = VAL_stelander_truce days = 180 }
+923:     add_timed_idea = { idea = VAL_stelander_trade_terms days = 180 }
+924:     VAL = { clr_country_flag = VAL_stelander_offer_pending add_timed_idea = { idea = VAL_stelander_trade_terms days = 180 } }
+925:     clr_country_flag = VAL_stelander_offer
+926:    }
+927:   }
+928:  }
+929: }
+930: country_event = {
+931:  id = val_contract.345 title = val_contract.345.t desc = val_contract.345.d
+932:  picture = GFX_event_adiscord_negotiation_table is_triggered_only = yes
+
+--- localisation/english/ADISCORD_VAL_decisions_l_english.yml:867 ---
+862:  VAL_nod_frontier_unavailable: "§Gwill not join at present: participation conditions or alliance compatibility are not met§!"
+863:  VAL_postwar_administration: "Postwar Administration"
+864:  VAL_postwar_administration_desc: "Kefreyt integrates directly held territory as a continuous administrative frontier. Only an owned, controlled non-core state bordering an existing Kefreyt core may be nationalised. One nationalisation programme runs at a time; when it finishes, the new core opens its own neighbouring states for the next step. Autonomous contract administrations remain separate until their land is directly incorporated."
+865:  VAL_nationalise_region: "Nationalise Border State: [FROM.GetName]"
+866:  VAL_nationalise_region_desc: "Extend Kefreyt's citizenship, taxation and military registration across the administrative frontier. The target must be directly owned and controlled, non-core, and border an existing Kefreyt core. After §Y120 days§! it becomes a core and enables nationalisation of its own neighbours. Only one state may be processed at a time. If eligibility is lost, the §Y50§! political-power cost is refunded."
+867:  VAL_proclaim_commonwealth: "Proclaim the Kefreyt Commonwealth"
+868:  VAL_proclaim_commonwealth_desc: "Establish the postwar settlement through a common state treaty. Kefreyt receives a new name and flag; autonomous administrations retain their territories and special status."
+869:  VAL_commonwealth_requirements_tt: "Contracts Outlive Kings is complete; Kefreyt is independent, has not capitulated and is at peace; the northern tribes, Nodrul and Stelander are subordinate according to the campaign goals; the northern resource belt is held; Kefreyt owns and controls §Y[29.GetName]§! and §Y[46.GetName]§!; stability is at least §Y50%§!"
+
+--- localisation/english/ADISCORD_VAL_decisions_l_english.yml:868 ---
+863:  VAL_postwar_administration: "Postwar Administration"
+864:  VAL_postwar_administration_desc: "Kefreyt integrates directly held territory as a continuous administrative frontier. Only an owned, controlled non-core state bordering an existing Kefreyt core may be nationalised. One nationalisation programme runs at a time; when it finishes, the new core opens its own neighbouring states for the next step. Autonomous contract administrations remain separate until their land is directly incorporated."
+865:  VAL_nationalise_region: "Nationalise Border State: [FROM.GetName]"
+866:  VAL_nationalise_region_desc: "Extend Kefreyt's citizenship, taxation and military registration across the administrative frontier. The target must be directly owned and controlled, non-core, and border an existing Kefreyt core. After §Y120 days§! it becomes a core and enables nationalisation of its own neighbours. Only one state may be processed at a time. If eligibility is lost, the §Y50§! political-power cost is refunded."
+867:  VAL_proclaim_commonwealth: "Proclaim the Kefreyt Commonwealth"
+868:  VAL_proclaim_commonwealth_desc: "Establish the postwar settlement through a common state treaty. Kefreyt receives a new name and flag; autonomous administrations retain their territories and special status."
+869:  VAL_commonwealth_requirements_tt: "Contracts Outlive Kings is complete; Kefreyt is independent, has not capitulated and is at peace; the northern tribes, Nodrul and Stelander are subordinate according to the campaign goals; the northern resource belt is held; Kefreyt owns and controls §Y[29.GetName]§! and §Y[46.GetName]§!; stability is at least §Y50%§!"
+870:  VAL_commonwealth_proclaimed_tt: "The state adopts the name §YKefreyt Commonwealth§! and a new flag. Puppet status and territories are preserved."
+
+--- localisation/english/ADISCORD_VAL_decisions_l_english.yml:870 ---
+865:  VAL_nationalise_region: "Nationalise Border State: [FROM.GetName]"
+866:  VAL_nationalise_region_desc: "Extend Kefreyt's citizenship, taxation and military registration across the administrative frontier. The target must be directly owned and controlled, non-core, and border an existing Kefreyt core. After §Y120 days§! it becomes a core and enables nationalisation of its own neighbours. Only one state may be processed at a time. If eligibility is lost, the §Y50§! political-power cost is refunded."
+867:  VAL_proclaim_commonwealth: "Proclaim the Kefreyt Commonwealth"
+868:  VAL_proclaim_commonwealth_desc: "Establish the postwar settlement through a common state treaty. Kefreyt receives a new name and flag; autonomous administrations retain their territories and special status."
+869:  VAL_commonwealth_requirements_tt: "Contracts Outlive Kings is complete; Kefreyt is independent, has not capitulated and is at peace; the northern tribes, Nodrul and Stelander are subordinate according to the campaign goals; the northern resource belt is held; Kefreyt owns and controls §Y[29.GetName]§! and §Y[46.GetName]§!; stability is at least §Y50%§!"
+870:  VAL_commonwealth_proclaimed_tt: "The state adopts the name §YKefreyt Commonwealth§! and a new flag. Puppet status and territories are preserved."
+871:  VAL_staff_influence: "The Generals' Advisory Voice"
+872:  VAL_staff_dominance: "General Staff Dictate"
+
+--- localisation/russian/ADISCORD_STP_l_russian.yml:2877 ---
+2872:  STP_startup_guide_party_title:0 "Партия и Нижний рынок"
+2873:  STP_startup_guide_party:0 "§YЧТО СКРЫВАЕТ ВИТРИНА ПАРТИИ§!\n\nПалата Высших Домов обещает свободу частной жизни, дешёвые удовольствия и государство, которое не задаёт лишних вопросов. Для многих это реальное улучшение после поколений войны — именно поэтому режим нельзя свести только к страху.\n\nНо богатство распределено крайне неравномерно. Высшие Дома и гильдии держат лицензии, порты, шахты и выгодные контракты; столица и курорты растут быстрее высокогорья, где закрываются школы и не хватает собственных специалистов. Партия всё чаще импортирует кадры из Нодрула вместо развития местных институтов.\n\nСамая тёмная часть системы — §YНижний рынок§!: сеть клубов, складов, агентств, фиктивных контрактов и частной охраны, через которую проходят похищенные люди, принудительный труд и торговля детьми. Это фактическое рабство, прикрытое коммерческой бюрократией. Часть полиции и чиновников защищает сеть, потому что общий архив платежей способен показать не отдельное преступление, а карту всего режима."
+2874:  STP_startup_guide_shabrat_title:0 "Как играть кризис"
+2875:  STP_startup_path_0_title:0 "Курс Шабрата"
+2876:  STP_startup_path_1_title:0 "Партийный курс"
+2877:  STP_startup_path_0:0 "§YКУРС ШАБРАТА§!\n\nСопротивление добивается власти через общественную поддержку, работу в районах и договорённости с военными. Его положение определяется не только итогом голосования, но и тем, какие учреждения и формирования переживут подготовительный период.\n\nЭтот маршрут требует распределять ограниченные ресурсы между политической кампанией и реальной военной готовностью. Сильный мандат помогает, но не заменяет работающую администрацию и надёжное командование.\n\nПодробности особого исхода выборов доступны по кнопке раскрытия условий."
+2878:  STP_startup_path_1:0 "§YПАРТИЙНЫЙ КУРС§!\n\nСохраните власть партии после ухода лидера, на котором держался старый порядок. Районный аппарат, безопасность и армейское командование становятся опорой в борьбе с сопротивлением.\n\nПолитическая победа даёт мандат, однако не устраняет вооружённый конфликт. Подготовка должна обеспечить войскам людей, оружие и устойчивые позиции к моменту раскола.\n\nЭто борьба за сохранение государства и партийного контроля; дальнейший курс определяется событиями и доступными после войны фокусами."
+2879:  STP_startup_path_0_details:0 "§YШАБРАТ: УСЛОВИЯ ОСОБОГО ИСХОДА§!\n\nОграниченное партийное восстание требует одновременно:\n- выбранной стороны Шабрата и его доступности без ареста;\n- легитимности не ниже 80%;\n- действующего публичного соглашения с командованием;\n- доступного, не арестованного Равеля и подготовленного гарнизона в [2.GetName] или [29.GetName];\n- собственных, контролируемых администраций сопротивления в [2.GetName] и [3.GetName], непрерывно работающих более 20 дней.\n\nУсловия проверяются при подведении итогов выборов. Обычная победа этого исхода не гарантирует. Провал одного условия сохраняет отдельные результаты подготовки, но оставляет большой военный раскол.\n\nСеверный сосед готовит вмешательство отдельно; мир на его фронте ещё не означает немедленное вступление."
+
+--- localisation/russian/ADISCORD_VAL_decisions_l_russian.yml:721 ---
+716:  NKA_Contract_Council:0 "Виктор Карст"
+717:  autonomy_VAL_contract_administration:0 "Договорная администрация Кефрейта"
+718:  VAL_create_northern_administration:0 "Оформить Северную договорную администрацию"
+719:  VAL_create_northern_administration_desc:0 "Антолла, Фарейн и Химбер составят собственный ресурсный пояс Кефрейта. Пять остальных северных регионов объединятся в зависимую администрацию со столицей в Килнете. Договор передаёт Кефрейту 15% гражданских и 30% военных заводов, предоставляет 35% долю рекрутов в колониальных шаблонах и льготный доступ к сырью. Администрация сохраняет собственную армию."
+720:  VAL_northern_administration_ready_tt:0 "Все восемь северных регионов принадлежат и подконтрольны Кефрейту или его подчинённым; Кефрейт и племенные государства находятся в мире. Администрация ещё не существует либо остаётся нашей мирной марионеткой и владеет частью ресурсного пояса. Для создания хотя бы один из пяти передаваемых регионов должен принадлежать Кефрейту либо стране с более чем одним регионом."
+721:  VAL_northern_administration_tt:0 "Антолла, Фарейн и Химбер переходят под прямое владение Кефрейта. Медрон, Хеланд, Милхам, Килнет и Хебтава образуют Северную договорную администрацию с особым договорным статусом. Столица - Килнет. Владения вне восьми северных регионов не передаются."
+722:  val_contract.346.t:0 "Северная договорная администрация"
+723:  val_contract.346.d:0 "В Килнете собрали представителей пяти северных регионов и положили перед ними один общий устав. Антолла, Фарейн и Химбер Кефрейт оставляет под прямым управлением, считая их сырьевые предприятия частью собственной хозяйственной базы. Остальным территориям предлагают местную администрацию, собственный кадровый учёт и сохранение частей, если те войдут в новый договорный порядок.\n\nСистема намеренно устроена не как обычная оккупация. Местные чиновники остаются на местах, но внешняя политика и ключевые хозяйственные решения больше не являются их самостоятельным делом. Кефрейт получает долю производственных мощностей, право строить и льготный доступ к торговле.\n\nНа карте появляется Северная договорная администрация. В реестре она выглядит как клиент. Для жителей это будет государство, которое продолжает говорить местными голосами, но подписывает самые важные бумаги чужой печатью."
+
+--- localisation/russian/ADISCORD_VAL_decisions_l_russian.yml:932 ---
+927:  VAL_postwar_administration:0 "Послевоенное управление"
+928:  VAL_postwar_administration_desc:0 "Кефрейт интегрирует непосредственно удерживаемые земли как непрерывно расширяющуюся административную границу. Национализировать можно только принадлежащий и контролируемый Кефрейтом ненациональный регион, который граничит с уже национальной территорией. Одновременно идёт только одна программа; после её завершения новый core открывает для следующего шага собственных соседей. Автономные договорные администрации остаются отдельными до прямого присоединения их земель."
+929:  VAL_nationalise_region:0 "Национализировать пограничный регион: [FROM.GetName]"
+930:  VAL_nationalise_region_desc:0 "Распространить систему гражданства, налогов и воинского учёта Кефрейта дальше по административной границе. Регион должен напрямую принадлежать и контролироваться Кефрейтом, не быть core и граничить с уже национальной территорией. Через §Y120 дней§! он станет core и откроет для национализации собственных соседей. Одновременно можно обрабатывать только один регион. При утрате условий §Y50§! политической власти возвращаются."
+931: 
+932:  VAL_proclaim_commonwealth:0 "Провозгласить Кефрейтское содружество"
+933:  VAL_proclaim_commonwealth_desc:0 "Закрепить послевоенное устройство общим государственным договором. Кефрейт получит новое название и флаг; автономные администрации сохранят свои территории и особый статус."
+934:  VAL_commonwealth_requirements_tt:0 "Завершён фокус «Контракты переживают королей»; Кефрейт независим, не капитулировал и находится в мире; северные племена, Нодрул и Стеландер подчинены согласно целям кампании; северный ресурсный пояс удерживается; регионы §Y[29.GetName]§! и §Y[46.GetName]§! принадлежат Кефрейту и контролируются им; стабильность не ниже §Y50%§!"
+
+--- localisation/russian/ADISCORD_VAL_decisions_l_russian.yml:933 ---
+928:  VAL_postwar_administration_desc:0 "Кефрейт интегрирует непосредственно удерживаемые земли как непрерывно расширяющуюся административную границу. Национализировать можно только принадлежащий и контролируемый Кефрейтом ненациональный регион, который граничит с уже национальной территорией. Одновременно идёт только одна программа; после её завершения новый core открывает для следующего шага собственных соседей. Автономные договорные администрации остаются отдельными до прямого присоединения их земель."
+929:  VAL_nationalise_region:0 "Национализировать пограничный регион: [FROM.GetName]"
+930:  VAL_nationalise_region_desc:0 "Распространить систему гражданства, налогов и воинского учёта Кефрейта дальше по административной границе. Регион должен напрямую принадлежать и контролироваться Кефрейтом, не быть core и граничить с уже национальной территорией. Через §Y120 дней§! он станет core и откроет для национализации собственных соседей. Одновременно можно обрабатывать только один регион. При утрате условий §Y50§! политической власти возвращаются."
+931: 
+932:  VAL_proclaim_commonwealth:0 "Провозгласить Кефрейтское содружество"
+933:  VAL_proclaim_commonwealth_desc:0 "Закрепить послевоенное устройство общим государственным договором. Кефрейт получит новое название и флаг; автономные администрации сохранят свои территории и особый статус."
+934:  VAL_commonwealth_requirements_tt:0 "Завершён фокус «Контракты переживают королей»; Кефрейт независим, не капитулировал и находится в мире; северные племена, Нодрул и Стеландер подчинены согласно целям кампании; северный ресурсный пояс удерживается; регионы §Y[29.GetName]§! и §Y[46.GetName]§! принадлежат Кефрейту и контролируются им; стабильность не ниже §Y50%§!"
+935:  VAL_commonwealth_proclaimed_tt:0 "Государство получит название §YКефрейтское содружество§! и новый флаг. Статус и территории марионеток сохранятся."
+
+--- localisation/russian/ADISCORD_VAL_decisions_l_russian.yml:935 ---
+930:  VAL_nationalise_region_desc:0 "Распространить систему гражданства, налогов и воинского учёта Кефрейта дальше по административной границе. Регион должен напрямую принадлежать и контролироваться Кефрейтом, не быть core и граничить с уже национальной территорией. Через §Y120 дней§! он станет core и откроет для национализации собственных соседей. Одновременно можно обрабатывать только один регион. При утрате условий §Y50§! политической власти возвращаются."
+931: 
+932:  VAL_proclaim_commonwealth:0 "Провозгласить Кефрейтское содружество"
+933:  VAL_proclaim_commonwealth_desc:0 "Закрепить послевоенное устройство общим государственным договором. Кефрейт получит новое название и флаг; автономные администрации сохранят свои территории и особый статус."
+934:  VAL_commonwealth_requirements_tt:0 "Завершён фокус «Контракты переживают королей»; Кефрейт независим, не капитулировал и находится в мире; северные племена, Нодрул и Стеландер подчинены согласно целям кампании; северный ресурсный пояс удерживается; регионы §Y[29.GetName]§! и §Y[46.GetName]§! принадлежат Кефрейту и контролируются им; стабильность не ниже §Y50%§!"
+935:  VAL_commonwealth_proclaimed_tt:0 "Государство получит название §YКефрейтское содружество§! и новый флаг. Статус и территории марионеток сохранятся."
+936:  VAL_staff_influence:0 "Совещательный голос генералитета"
+937:  VAL_staff_dominance:0 "Диктат генерального штаба"
+
+--- localisation/russian/parties_l_russian.yml:54 ---
+49:   hedonism_ideology: "Классический Гедонизм"
+50:   hedonism_ideology_desc: "Гедонизм - это философская и моральная идеология, которая основывается на стремлении к получению удовольствия и минимизации страданий. В мире, вдохновленном гедонистическими принципами, счастье и удовлетворение считаются высшими целями, а жизнь воспринимается как поиск удовольствий разных видов: физического, интеллектуального и эмоционального. Государства, выбирающие гедонистский подход, должны сосредоточиться на создании общества, где основной акцент делается на улучшение качества жизни, наслаждение моментами и удовлетворение потребностей граждан."
+51:   aristocratic_hedonism: "Аристократический гедонизм"
+52:   aristocratic_hedonism_desc: "Аристократический гедонизм - идеология Партии гедонистов, утверждающая, что высшей целью государства является не равенство и не всеобщее благополучие, а создание условий для полноценной, свободной и прекрасной жизни тех, кто способен её по-настоящему оценить. В представлении гедонистов общество неизбежно разделено на меньшинство творцов, собственников, офицеров, покровителей искусства и законодателей вкуса - и большинство, обязанное поддерживать установленный ими порядок. Принадлежность к новой аристократии определяется не только происхождением, но богатством, влиянием, образованием, красотой и способностью превратить собственную жизнь в произведение искусства. \n\n Партия обещает рядовым гражданам безопасность, зрелища, ограниченное материальное благополучие и освобождение от тяжести политической ответственности. Взамен от них требуют лояльности, труда и признания естественного превосходства правящей элиты. Роскошь верхов не считается признаком разложения: напротив, она объявляется доказательством жизнеспособности государства. Если дворцы освещены, театры открыты, а столы знати полны, значит цивилизация всё ещё существует."
+53:   chauvinism_ideology: "Шовинизм"
+54:   chauvinism_ideology_desc: "Шовинизм - это идеология, основанная на убеждении в превосходстве одной группы людей над другими. Эта концепция характеризуется агрессивной преданностью своей нации, культуре или социальному классу, что проявляется в неприязни к инородцам, другим группам и альтернативным точкам зрения. Шовинизм предполагает, что члены своей группы обладают особыми правами и привилегиями, в то время как другие рассматриваются как второсортные или угроза."
+55: 
+56:   ##local parties

@@ -1,0 +1,520 @@
+
+--- common/scripted_effects/ADISCORD_vorkerland_effects.txt:4059 ---
+4056: 
+4057: # Global FIFO survives the requesting country's annexation and player handoff.
+4058: # Requests and button clicks are the only dispatch points; no periodic polling.
+4059: ADISCORD_superevent_enqueue = {
+4060: 	if = {
+4061: 		limit = {
+4062: 			NOT = { is_in_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request } }
+4063: 			NOT = { OR = {
+4064: 				AND = { check_variable = { ADISCORD_superevent_request = 1 } has_global_flag = superevent_vorkerland_civilwar }
+4065: 				AND = { check_variable = { ADISCORD_superevent_request = 2 } has_global_flag = superevent_vorkerland_dirty_opening }
+4066: 				AND = { check_variable = { ADISCORD_superevent_request = 3 } has_global_flag = superevent_vorkerland_worker_victory }
+4067: 				AND = { check_variable = { ADISCORD_superevent_request = 4 } has_global_flag = superevent_vorkerland_utilitarian_victory }
+4068: 				AND = { check_variable = { ADISCORD_superevent_request = 5 } has_global_flag = superevent_vorkerland_vlad_victory }
+4069: 				AND = { check_variable = { ADISCORD_superevent_request = 6 } has_global_flag = superevent_vorkerland_dorian_victory }
+4070: 				AND = { check_variable = { ADISCORD_superevent_request = 7 } has_global_flag = superevent_stelander_empire }
+4071: 				AND = { check_variable = { ADISCORD_superevent_request = 8 } has_global_flag = superevent_stelander_party_victory }
+4072: 				AND = { check_variable = { ADISCORD_superevent_request = 9 } has_global_flag = superevent_stelander_shabrat_victory }
+4073: 				AND = { check_variable = { ADISCORD_superevent_request = 10 } has_global_flag = superevent_nam_resource_war }
+4074: 				AND = { check_variable = { ADISCORD_superevent_request = 11 } has_global_flag = superevent_rus_last_empire }
+
+--- common/scripted_effects/ADISCORD_vorkerland_effects.txt:4079 ---
+4076: 		}
+4077: 		add_to_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request }
+4078: 	}
+4079: 	ADISCORD_superevent_dispatch_next = yes
+4080: }
+4081: 
+4082: ADISCORD_superevent_dispatch_next = {
+4083: 	if = {
+4084: 		limit = {
+4085: 			check_variable = { var = global.ADISCORD_superevent_queue^num value = 0 compare = greater_than }
+4086: 			NOT = { OR = {
+4087: 				has_global_flag = superevent_vorkerland_civilwar
+4088: 				has_global_flag = superevent_vorkerland_dirty_opening
+4089: 				has_global_flag = superevent_vorkerland_worker_victory
+4090: 				has_global_flag = superevent_vorkerland_utilitarian_victory
+4091: 				has_global_flag = superevent_vorkerland_vlad_victory
+4092: 				has_global_flag = superevent_vorkerland_dorian_victory
+4093: 				has_global_flag = superevent_stelander_empire
+4094: 				has_global_flag = superevent_stelander_party_victory
+
+--- common/scripted_effects/ADISCORD_vorkerland_effects.txt:4082 ---
+4079: 	ADISCORD_superevent_dispatch_next = yes
+4080: }
+4081: 
+4082: ADISCORD_superevent_dispatch_next = {
+4083: 	if = {
+4084: 		limit = {
+4085: 			check_variable = { var = global.ADISCORD_superevent_queue^num value = 0 compare = greater_than }
+4086: 			NOT = { OR = {
+4087: 				has_global_flag = superevent_vorkerland_civilwar
+4088: 				has_global_flag = superevent_vorkerland_dirty_opening
+4089: 				has_global_flag = superevent_vorkerland_worker_victory
+4090: 				has_global_flag = superevent_vorkerland_utilitarian_victory
+4091: 				has_global_flag = superevent_vorkerland_vlad_victory
+4092: 				has_global_flag = superevent_vorkerland_dorian_victory
+4093: 				has_global_flag = superevent_stelander_empire
+4094: 				has_global_flag = superevent_stelander_party_victory
+4095: 				has_global_flag = superevent_stelander_shabrat_victory
+4096: 				has_global_flag = superevent_nam_resource_war
+4097: 				has_global_flag = superevent_rus_last_empire
+
+--- common/scripted_guis/superevents.txt:14 ---
+11: 		effects = {
+12: 			superevents_button_click = {
+13: 				clr_global_flag = superevent_vorkerland_civilwar
+14: 				ADISCORD_superevent_dispatch_next = yes
+15: 			}
+16: 		}
+17: 	}
+18: 
+19: 	superevent_vorkerland_dirty_opening = {
+20: 		window_name = "superevent_vorkerland_dirty_opening"
+21: 		context_type = player_context
+22: 
+23: 		visible = {
+24: 			has_global_flag = superevent_vorkerland_dirty_opening
+25: 		}
+26: 
+27: 		effects = {
+28: 			superevents_button_click = {
+29: 				clr_global_flag = superevent_vorkerland_dirty_opening
+
+--- common/scripted_guis/superevents.txt:30 ---
+27: 		effects = {
+28: 			superevents_button_click = {
+29: 				clr_global_flag = superevent_vorkerland_dirty_opening
+30: 				ADISCORD_superevent_dispatch_next = yes
+31: 			}
+32: 		}
+33: 	}
+34: 
+35: 	superevent_vorkerland_worker_victory = {
+36: 		window_name = "superevent_vorkerland_worker_victory"
+37: 		context_type = player_context
+38: 
+39: 		visible = {
+40: 			has_global_flag = superevent_vorkerland_worker_victory
+41: 		}
+42: 
+43: 		effects = {
+44: 			superevents_button_click = {
+45: 				clr_global_flag = superevent_vorkerland_worker_victory
+
+--- common/scripted_guis/superevents.txt:46 ---
+43: 		effects = {
+44: 			superevents_button_click = {
+45: 				clr_global_flag = superevent_vorkerland_worker_victory
+46: 				ADISCORD_superevent_dispatch_next = yes
+47: 			}
+48: 		}
+49: 	}
+50: 
+51: 	superevent_vorkerland_utilitarian_victory = {
+52: 		window_name = "superevent_vorkerland_utilitarian_victory"
+53: 		context_type = player_context
+54: 
+55: 		visible = {
+56: 			has_global_flag = superevent_vorkerland_utilitarian_victory
+57: 		}
+58: 
+59: 		effects = {
+60: 			superevents_button_click = {
+61: 				clr_global_flag = superevent_vorkerland_utilitarian_victory
+
+--- common/scripted_guis/superevents.txt:62 ---
+59: 		effects = {
+60: 			superevents_button_click = {
+61: 				clr_global_flag = superevent_vorkerland_utilitarian_victory
+62: 				ADISCORD_superevent_dispatch_next = yes
+63: 			}
+64: 		}
+65: 	}
+66: 
+67: 	superevent_vorkerland_vlad_victory = {
+68: 		window_name = "superevent_vorkerland_vlad_victory"
+69: 		context_type = player_context
+70: 
+71: 		visible = {
+72: 			has_global_flag = superevent_vorkerland_vlad_victory
+73: 		}
+74: 
+75: 		effects = {
+76: 			superevents_button_click = {
+77: 				clr_global_flag = superevent_vorkerland_vlad_victory
+
+--- common/scripted_guis/superevents.txt:78 ---
+75: 		effects = {
+76: 			superevents_button_click = {
+77: 				clr_global_flag = superevent_vorkerland_vlad_victory
+78: 				ADISCORD_superevent_dispatch_next = yes
+79: 			}
+80: 		}
+81: 	}
+82: 
+83: 	superevent_vorkerland_dorian_victory = {
+84: 		window_name = "superevent_vorkerland_dorian_victory"
+85: 		context_type = player_context
+86: 
+87: 		visible = {
+88: 			has_global_flag = superevent_vorkerland_dorian_victory
+89: 		}
+90: 
+91: 		effects = {
+92: 			superevents_button_click = {
+93: 				clr_global_flag = superevent_vorkerland_dorian_victory
+
+--- common/scripted_guis/superevents.txt:94 ---
+91: 		effects = {
+92: 			superevents_button_click = {
+93: 				clr_global_flag = superevent_vorkerland_dorian_victory
+94: 				ADISCORD_superevent_dispatch_next = yes
+95: 			}
+96: 		}
+97: 	}
+98: 
+99: 	superevent_stelander_empire = {
+100: 		window_name = "superevent_stelander_empire"
+101: 		context_type = player_context
+102: 
+103: 		visible = {
+104: 			has_global_flag = superevent_stelander_empire
+105: 		}
+106: 
+107: 		effects = {
+108: 			superevents_button_click = {
+109: 				clr_global_flag = superevent_stelander_empire
+
+--- common/scripted_guis/superevents.txt:110 ---
+107: 		effects = {
+108: 			superevents_button_click = {
+109: 				clr_global_flag = superevent_stelander_empire
+110: 				ADISCORD_superevent_dispatch_next = yes
+111: 			}
+112: 		}
+113: 	}
+114: 
+115: 
+116: 	superevent_stelander_party_victory = {
+117: 		window_name = "superevent_stelander_party_victory"
+118: 		context_type = player_context
+119: 
+120: 		visible = {
+121: 			has_global_flag = superevent_stelander_party_victory
+122: 		}
+123: 
+124: 		effects = {
+125: 			superevents_button_click = {
+
+--- common/scripted_guis/superevents.txt:127 ---
+124: 		effects = {
+125: 			superevents_button_click = {
+126: 				clr_global_flag = superevent_stelander_party_victory
+127: 				ADISCORD_superevent_dispatch_next = yes
+128: 
+129: 			}
+130: 		}
+131: 	}
+132: 
+133: 
+134: 	superevent_stelander_shabrat_victory = {
+135: 		window_name = "superevent_stelander_shabrat_victory"
+136: 		context_type = player_context
+137: 
+138: 		visible = {
+139: 			has_global_flag = superevent_stelander_shabrat_victory
+140: 		}
+141: 
+142: 		effects = {
+
+--- common/scripted_guis/superevents.txt:145 ---
+142: 		effects = {
+143: 			superevents_button_click = {
+144: 				clr_global_flag = superevent_stelander_shabrat_victory
+145: 				ADISCORD_superevent_dispatch_next = yes
+146: 			}
+147: 		}
+148: 	}
+149: 
+150: 	superevent_nam_resource_war = {
+151: 		window_name = "superevent_nam_resource_war"
+152: 		context_type = player_context
+153: 
+154: 		visible = {
+155: 			has_global_flag = superevent_nam_resource_war
+156: 		}
+157: 
+158: 		effects = {
+159: 			superevents_button_click = {
+160: 				clr_global_flag = superevent_nam_resource_war
+
+--- common/scripted_guis/superevents.txt:161 ---
+158: 		effects = {
+159: 			superevents_button_click = {
+160: 				clr_global_flag = superevent_nam_resource_war
+161: 				ADISCORD_superevent_dispatch_next = yes
+162: 			}
+163: 		}
+164: 	}
+165: 
+166: 	superevent_rus_last_empire = {
+167: 		window_name = "superevent_rus_last_empire"
+168: 		context_type = player_context
+169: 
+170: 		visible = {
+171: 			has_global_flag = superevent_rus_last_empire
+172: 		}
+173: 
+174: 		effects = {
+175: 			superevents_button_click = {
+176: 				clr_global_flag = superevent_rus_last_empire
+
+--- common/scripted_guis/superevents.txt:177 ---
+174: 		effects = {
+175: 			superevents_button_click = {
+176: 				clr_global_flag = superevent_rus_last_empire
+177: 				ADISCORD_superevent_dispatch_next = yes
+178: 			}
+179: 		}
+180: 	}
+181: }
+
+--- events/ADISCORD_STP_events.txt:855 ---
+852: 		hidden_effect = {
+853: 			# superevent_stelander_party_victory
+854: 			set_temp_variable = { ADISCORD_superevent_request = 8 }
+855: 			ADISCORD_superevent_enqueue = yes
+856: 		}
+857: 	}
+858: 	option = { name = ADISCORD_STP_cw.71.a }
+859: }
+860: 
+861: news_event = {
+862: 	id = ADISCORD_STP_cw.72
+863: 	title = ADISCORD_STP_cw.72.t
+864: 	desc = ADISCORD_STP_cw.72.d
+865: 	picture = GFX_news_event_adiscord_urban_resistance
+866: 	major = yes
+867: 	is_triggered_only = yes
+868: 	fire_only_once = yes
+869: 	immediate = {
+870: 		hidden_effect = {
+
+--- events/ADISCORD_STP_events.txt:873 ---
+870: 		hidden_effect = {
+871: 			# superevent_stelander_shabrat_victory
+872: 			set_temp_variable = { ADISCORD_superevent_request = 9 }
+873: 			ADISCORD_superevent_enqueue = yes
+874: 		}
+875: 	}
+876: 	option = { name = ADISCORD_STP_cw.72.a }
+877: }
+878: 
+879: 
+880: # Northern campaign news. The campaign status owns one-time settlement and dispatch.
+881: news_event = {
+882: 	id = ADISCORD_STP_cw.80
+883: 	title = ADISCORD_STP_cw.80.t
+884: 	desc = { trigger = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } TFF = { is_subject_of = NOD } } text = ADISCORD_STP_cw.80.frontier_subject }
+885: 	desc = { trigger = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } TFF = { NOT = { is_subject_of = NOD } } } text = ADISCORD_STP_cw.80.d }
+886: 	desc = { trigger = { NOT = { AND = { YPR = { is_subject_of = NOD STP_cw_ypr_has_only_historical_states = yes } 14 = { is_owned_by = NOD } } } } text = ADISCORD_STP_cw.80.limited }
+887: 	picture = GFX_news_event_adiscord_treaty_signing
+888: 	major = yes
+
+--- events/ADISCORD_superevents.txt:31 ---
+28: 		else = {
+29: 			# superevent_vorkerland_civilwar
+30: 			set_temp_variable = { ADISCORD_superevent_request = 1 }
+31: 			ADISCORD_superevent_enqueue = yes
+32: 		}
+33: 	}
+34: }
+35: country_event = {
+36: 	id = ADISCORD_superevent.2
+37: 	hidden = yes
+38: 	is_triggered_only = yes
+39: 
+40: 	immediate = {
+41: 		# superevent_vorkerland_worker_victory
+42: 		set_temp_variable = { ADISCORD_superevent_request = 3 }
+43: 		ADISCORD_superevent_enqueue = yes
+44: 	}
+45: }
+46: country_event = {
+
+--- events/ADISCORD_superevents.txt:43 ---
+40: 	immediate = {
+41: 		# superevent_vorkerland_worker_victory
+42: 		set_temp_variable = { ADISCORD_superevent_request = 3 }
+43: 		ADISCORD_superevent_enqueue = yes
+44: 	}
+45: }
+46: country_event = {
+47: 	id = ADISCORD_superevent.3
+48: 	hidden = yes
+49: 	is_triggered_only = yes
+50: 
+51: 	immediate = {
+52: 		# superevent_vorkerland_utilitarian_victory
+53: 		set_temp_variable = { ADISCORD_superevent_request = 4 }
+54: 		ADISCORD_superevent_enqueue = yes
+55: 	}
+56: }
+57: country_event = {
+58: 	id = ADISCORD_superevent.4
+
+--- events/ADISCORD_superevents.txt:54 ---
+51: 	immediate = {
+52: 		# superevent_vorkerland_utilitarian_victory
+53: 		set_temp_variable = { ADISCORD_superevent_request = 4 }
+54: 		ADISCORD_superevent_enqueue = yes
+55: 	}
+56: }
+57: country_event = {
+58: 	id = ADISCORD_superevent.4
+59: 	hidden = yes
+60: 	is_triggered_only = yes
+61: 
+62: 	immediate = {
+63: 		# superevent_vorkerland_dirty_opening
+64: 		set_temp_variable = { ADISCORD_superevent_request = 2 }
+65: 		ADISCORD_superevent_enqueue = yes
+66: 	}
+67: }
+68: country_event = {
+69: 	id = ADISCORD_superevent.5
+
+--- events/ADISCORD_superevents.txt:65 ---
+62: 	immediate = {
+63: 		# superevent_vorkerland_dirty_opening
+64: 		set_temp_variable = { ADISCORD_superevent_request = 2 }
+65: 		ADISCORD_superevent_enqueue = yes
+66: 	}
+67: }
+68: country_event = {
+69: 	id = ADISCORD_superevent.5
+70: 	hidden = yes
+71: 	is_triggered_only = yes
+72: 
+73: 	immediate = {
+74: 		# superevent_vorkerland_vlad_victory
+75: 		set_temp_variable = { ADISCORD_superevent_request = 5 }
+76: 		ADISCORD_superevent_enqueue = yes
+77: 	}
+78: }
+79: country_event = {
+80: 	id = ADISCORD_superevent.6
+
+--- events/ADISCORD_superevents.txt:76 ---
+73: 	immediate = {
+74: 		# superevent_vorkerland_vlad_victory
+75: 		set_temp_variable = { ADISCORD_superevent_request = 5 }
+76: 		ADISCORD_superevent_enqueue = yes
+77: 	}
+78: }
+79: country_event = {
+80: 	id = ADISCORD_superevent.6
+81: 	hidden = yes
+82: 	is_triggered_only = yes
+83: 
+84: 	immediate = {
+85: 		# superevent_vorkerland_dorian_victory
+86: 		set_temp_variable = { ADISCORD_superevent_request = 6 }
+87: 		ADISCORD_superevent_enqueue = yes
+88: 	}
+89: }
+90: 
+91: # Console audio proxies. News events play through the shared unscoped helper
+
+--- events/ADISCORD_superevents.txt:87 ---
+84: 	immediate = {
+85: 		# superevent_vorkerland_dorian_victory
+86: 		set_temp_variable = { ADISCORD_superevent_request = 6 }
+87: 		ADISCORD_superevent_enqueue = yes
+88: 	}
+89: }
+90: 
+91: # Console audio proxies. News events play through the shared unscoped helper
+92: # instead of dispatching to a human country that observer mode does not have.
+93: country_event = {
+94: 	id = ADISCORD_superevent_audio.1
+95: 	hidden = yes
+96: 	is_triggered_only = yes
+97: 
+98: 	immediate = {
+99: 		play_song = "superevent_vorkerland_civilwar"
+100: 	}
+101: }
+102: country_event = {
+
+--- events/ADISCORD_superevents.txt:133 ---
+130: 		hidden_effect = {
+131: 			# superevent_vorkerland_civilwar
+132: 			set_temp_variable = { ADISCORD_superevent_request = 1 }
+133: 			ADISCORD_superevent_enqueue = yes
+134: 		}
+135: 	}
+136: 
+137: 	option = {
+138: 		name = news.0.a
+139: 		# The paper covers the map. When the human closes it, pull their
+140: 		# camera to the Tower so the approach is visible.
+141: 		hidden_effect = {
+142: 			if = {
+143: 				limit = {
+144: 					is_ai = no
+145: 					has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved
+146: 				}
+147: 				goto_province = 16428
+148: 			}
+
+--- events/ADISCORD_superevents.txt:170 ---
+167: 		hidden_effect = {
+168: 			# superevent_stelander_empire
+169: 			set_temp_variable = { ADISCORD_superevent_request = 7 }
+170: 			ADISCORD_superevent_enqueue = yes
+171: 		}
+172: 	}
+173: 
+174: 	option = { name = news.1.a }
+175: }
+176: 
+177: country_event = {
+178: 	id = ADISCORD_superevent.7
+179: 	hidden = yes
+180: 	is_triggered_only = yes
+181: 	immediate = {
+182: 		# superevent_nam_resource_war
+183: 		set_temp_variable = { ADISCORD_superevent_request = 10 }
+184: 		ADISCORD_superevent_enqueue = yes
+185: 	}
+
+--- events/ADISCORD_superevents.txt:184 ---
+181: 	immediate = {
+182: 		# superevent_nam_resource_war
+183: 		set_temp_variable = { ADISCORD_superevent_request = 10 }
+184: 		ADISCORD_superevent_enqueue = yes
+185: 	}
+186: }
+187: 
+188: country_event = {
+189: 	id = ADISCORD_superevent.8
+190: 	hidden = yes
+191: 	is_triggered_only = yes
+192: 	immediate = {
+193: 		# superevent_rus_last_empire
+194: 		set_temp_variable = { ADISCORD_superevent_request = 11 }
+195: 		ADISCORD_superevent_enqueue = yes
+196: 	}
+197: }
+
+--- events/ADISCORD_superevents.txt:195 ---
+192: 	immediate = {
+193: 		# superevent_rus_last_empire
+194: 		set_temp_variable = { ADISCORD_superevent_request = 11 }
+195: 		ADISCORD_superevent_enqueue = yes
+196: 	}
+197: }
