@@ -76,5 +76,6 @@ for path in subprocess.check_output(['git', 'diff', '--name-only'], text=True).s
     for i in additions:
         if 0 <= i < len(current):
             current[i] = current[i].rstrip('\r\n').rstrip(' \t') + '\n'
-    p.write_bytes((b'\xef\xbb\xbf' if bom else b'') + ''.join(current).encode('utf-8'))
+    result = ''.join(current).rstrip('\r\n') + '\n'
+    p.write_bytes((b'\xef\xbb\xbf' if bom else b'') + result.encode('utf-8'))
 print('CATEGORY_CONTRACTS_MIGRATED; NATIVE_LOCALISATION_FORMAT_PRESERVED')
