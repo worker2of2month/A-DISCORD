@@ -1,0 +1,67 @@
+name: VAL spirit lifecycle check
+on:
+  push:
+    branches: [fix/val-economic-spirit-lifecycle-20260922]
+    paths: [.github/workflows/val-spirit-check.yml]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect source and baseline evidence
+        shell: bash
+        run: |
+          mkdir -p /tmp/val-evidence
+          python - <<'PY'
+          import pathlib, re, subprocess, tarfile
+          root = pathlib.Path('.')
+          out = pathlib.Path('/tmp/val-evidence')
+          files = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          with tarfile.open(out / 'source.tar.gz', 'w:gz') as archive:
+              for name in files:
+                  path = pathlib.Path(name)
+                  if path.is_file() and path.suffix.lower() in {'.py', '.txt', '.md', '.yml', '.yaml', '.json', '.lua', '.gui', '.gfx', '.mod', '.csv', '.toml', '.cfg', '.ini'}:
+                      archive.add(path, arcname=name)
+          with (out / 'inspection.txt').open('w') as report:
+              report.write(subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode())
+              for name in files:
+                  if pathlib.Path(name).name == 'AGENTS.md':
+                      report.write('\n=== ' + name + ' ===\n' + pathlib.Path(name).read_text())
+              source = pathlib.Path('common/scripted_effects/ADISCORD_VAL_effects.txt').read_text()
+              for key in ['VAL_refresh_arsenal_reputation', 'VAL_refresh_industrial_economy', 'VAL_initialize_rework', 'VAL_reconcile_supply_crisis']:
+                  match = re.search(r'(?m)^' + key + r'\s*=\s*\{', source)
+                  if not match:
+                      continue
+                  opening = source.index('{', match.start())
+                  depth = 1
+                  end = opening + 1
+                  while depth and end < len(source):
+                      depth += (source[end] == '{') - (source[end] == '}')
+                      end += 1
+                  report.write('\n=== ' + key + ' ===\n' + source[match.start():end] + '\n')
+              for line in pathlib.Path('localisation/russian/ADISCORD_VAL_decisions_l_russian.yml').read_text(encoding='utf-8-sig').splitlines():
+                  if any(word in line.lower() for word in ['доверие', 'доверия', 'val_arsenal_reputation:', 'val_economic_collapse:']):
+                      report.write(line + '\n')
+          commands = [
+              ('baseline-val', ['python', '-B', '-m', 'unittest', 'tools.tests.test_validate_adiscord_val_rework', 'tools.tests.test_val_contract_ui', '-v']),
+              ('baseline-validator', ['python', '-B', 'tools/validate_tc.py', '--limit', '300']),
+          ]
+          for label, command in commands:
+              with (out / (label + '.txt')).open('w') as log:
+                  try:
+                      result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=150)
+                      log.write('\nEXIT_CODE=' + str(result.returncode) + '\n')
+                  except subprocess.TimeoutExpired:
+                      log.write('\nTIMEOUT=150\n')
+          print((out / 'inspection.txt').read_text())
+          for path in out.glob('baseline-*.txt'):
+              print('\n=== ' + path.name + ' ===\n' + path.read_text()[-16000:])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: val-spirit-baseline
+          path: /tmp/val-evidence
+          retention-days: 7
