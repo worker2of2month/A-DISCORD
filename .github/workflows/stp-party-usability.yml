@@ -3,7 +3,7 @@ on:
   push:
     branches: [codex/stp-party-usability-20260922]
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: stp-party-usability
   cancel-in-progress: true
@@ -20,26 +20,59 @@ jobs:
           python-version: '3.12'
       - name: Install validator dependencies
         run: python -m pip install --disable-pip-version-check Pillow numpy
-      - name: Capture existing party baseline
+      - name: Verify on the pinned gameplay base
         run: |
+          cp .github/stp_party_usability.py /tmp/stp_party_usability.py
+          cp .github/stp_party_apply.py /tmp/stp_party_apply.py
+          git fetch --depth=1 origin d21917074259b4f29c8fe36ec20773aeb7ce2e45
+          git checkout --detach d21917074259b4f29c8fe36ec20773aeb7ce2e45
           python -B - <<'PY'
-          import subprocess, re, json
           from pathlib import Path
-          modules = ['tools.tests.test_adiscord_stp_party_survival', 'tools.tests.test_adiscord_stp_party_route', 'tools.tests.test_adiscord_stp_party_balance']
-          r = subprocess.run(['python','-B','-m','unittest',*modules],capture_output=True,text=True)
-          Path('/tmp/stp-party-baseline.txt').write_text(r.stdout+r.stderr)
-          print(json.dumps({'returncode': r.returncode, 'failures': re.findall(r'(?m)^(?:FAIL|ERROR): (.*)$',r.stderr), 'summary':r.stderr[-120:]},ensure_ascii=False))
+          import subprocess, re, json, sys
+          modules=['tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_route','tools.tests.test_adiscord_stp_party_balance']
+          def run_suite(label):
+              r=subprocess.run(['python','-B','-m','unittest',*modules],capture_output=True,text=True)
+              output=r.stdout+r.stderr
+              Path('/tmp/'+label+'.txt').write_text(output)
+              failures=set(re.findall(r'(?m)^(?:FAIL|ERROR): (.*)$',output))
+              print(label, json.dumps({'returncode':r.returncode,'failures':sorted(failures),'summary':output[-150:]},ensure_ascii=False),flush=True)
+              return failures
+          baseline=run_suite('stp-party-baseline')
+          subprocess.run(['python','-B','/tmp/stp_party_usability.py'],check=True)
+          red=subprocess.run(['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_survival.PartyUsabilityContracts'],capture_output=True,text=True)
+          Path('/tmp/stp-party-red.txt').write_text(red.stdout+red.stderr)
+          assert red.returncode != 0 and 'ERROR:' not in red.stderr, red.stderr[-3000:]
+          print('EXPECTED_RED',re.findall(r'(?m)^FAIL: (.*)$',red.stderr),flush=True)
+          subprocess.run(['python','-B','/tmp/stp_party_apply.py'],check=True)
+          subprocess.run(['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_survival.PartyUsabilityContracts','tools.tests.test_adiscord_stp_party_balance.StelanderPartyBalanceContracts.test_party_route_requires_staged_defensive_recovery','-v'],check=True)
+          after=run_suite('stp-party-after')
+          new=after-baseline
+          print('NEW_REGRESSIONS',sorted(new),flush=True)
+          print('BASELINE_FAILURES_FIXED',sorted(baseline-after),flush=True)
+          if new:
+              text=Path('/tmp/stp-party-after.txt').read_text()
+              print(text[-20000:])
+              sys.exit('New party regressions must be resolved.')
+          print('PATCH_TESTS_VERIFIED',flush=True)
           PY
-      - name: Demonstrate missing behavior
+      - name: Validate total conversion
         run: |
-          python -B .github/stp_party_usability.py
-          python -B - <<'PY'
-          import unittest, sys
-          suite=unittest.defaultTestLoader.loadTestsFromName('tools.tests.test_adiscord_stp_party_survival.PartyUsabilityContracts')
-          result=unittest.TextTestRunner(verbosity=2).run(suite)
-          if result.errors:
-              sys.exit('Regression tests have errors; fix the tests before implementation.')
-          if not result.failures:
-              sys.exit('Expected failing behavior was not reproduced.')
-          print('EXPECTED_RED_CONFIRMED',len(result.failures))
-          PY
+          python -B tools/validate_tc.py --limit 300 > /tmp/stp-party-validator.txt 2>&1
+          tail -n 50 /tmp/stp-party-validator.txt
+      - name: Check patch and export gameplay-only branch
+        run: |
+          git diff --check
+          git diff --stat
+          git diff --name-only | grep '^.github/' && exit 1 || true
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add common events localisation tools/tests/test_adiscord_stp_party_survival.py
+          git commit -m 'fix(stp): streamline party management and supply countermeasures'
+          git push origin HEAD:refs/heads/codex/stp-party-usability-delivery-20260922
+          echo DELIVERY_COMMIT=$(git rev-parse HEAD)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-party-usability-evidence
+          path: /tmp/stp-party-*.txt
+          retention-days: 7
