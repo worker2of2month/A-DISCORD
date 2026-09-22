@@ -4,64 +4,135 @@ on:
     branches: [fix/val-economic-spirit-lifecycle-20260922]
     paths: [.github/workflows/val-spirit-check.yml]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  inspect:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Collect source and baseline evidence
+        with:
+          ref: fix/val-economic-spirit-lifecycle-20260922
+      - run: python -m pip install Pillow
+      - name: Verify and commit bounded overflow repair
         shell: bash
         run: |
           mkdir -p /tmp/val-evidence
           python - <<'PY'
-          import pathlib, re, subprocess, tarfile
-          root = pathlib.Path('.')
+          import collections, json, pathlib, re, subprocess
           out = pathlib.Path('/tmp/val-evidence')
-          files = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
-          with tarfile.open(out / 'source.tar.gz', 'w:gz') as archive:
-              for name in files:
-                  path = pathlib.Path(name)
-                  if path.is_file() and path.suffix.lower() in {'.py', '.txt', '.md', '.yml', '.yaml', '.json', '.lua', '.gui', '.gfx', '.mod', '.csv', '.toml', '.cfg', '.ini'}:
-                      archive.add(path, arcname=name)
-          with (out / 'inspection.txt').open('w') as report:
-              report.write(subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode())
-              for name in files:
-                  if pathlib.Path(name).name == 'AGENTS.md':
-                      report.write('\n=== ' + name + ' ===\n' + pathlib.Path(name).read_text())
-              source = pathlib.Path('common/scripted_effects/ADISCORD_VAL_effects.txt').read_text()
-              for key in ['VAL_refresh_arsenal_reputation', 'VAL_refresh_industrial_economy', 'VAL_initialize_rework', 'VAL_reconcile_supply_crisis']:
-                  match = re.search(r'(?m)^' + key + r'\s*=\s*\{', source)
-                  if not match:
-                      continue
-                  opening = source.index('{', match.start())
-                  depth = 1
-                  end = opening + 1
-                  while depth and end < len(source):
-                      depth += (source[end] == '{') - (source[end] == '}')
-                      end += 1
-                  report.write('\n=== ' + key + ' ===\n' + source[match.start():end] + '\n')
-              for line in pathlib.Path('localisation/russian/ADISCORD_VAL_decisions_l_russian.yml').read_text(encoding='utf-8-sig').splitlines():
-                  if any(word in line.lower() for word in ['доверие', 'доверия', 'val_arsenal_reputation:', 'val_economic_collapse:']):
-                      report.write(line + '\n')
-          commands = [
-              ('baseline-val', ['python', '-B', '-m', 'unittest', 'tools.tests.test_validate_adiscord_val_rework', 'tools.tests.test_val_contract_ui', '-v']),
-              ('baseline-validator', ['python', '-B', 'tools/validate_tc.py', '--limit', '300']),
-          ]
-          for label, command in commands:
+          summary = {}
+          def run(label, command, timeout=60):
               with (out / (label + '.txt')).open('w') as log:
                   try:
-                      result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=150)
-                      log.write('\nEXIT_CODE=' + str(result.returncode) + '\n')
+                      code = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=timeout).returncode
                   except subprocess.TimeoutExpired:
-                      log.write('\nTIMEOUT=150\n')
-          print((out / 'inspection.txt').read_text())
-          for path in out.glob('baseline-*.txt'):
-              print('\n=== ' + path.name + ' ===\n' + path.read_text()[-16000:])
+                      code = 124
+                      log.write('\nTIMEOUT=' + str(timeout) + '\n')
+              text = (out / (label + '.txt')).read_text()
+              summary[label] = {'exit': code, 'failures': re.findall(r'^(?:FAIL|ERROR): .+$', text, re.M), 'tail': text[-2200:]}
+              print(label, json.dumps(summary[label], ensure_ascii=False), flush=True)
+              return code
+          unit = ['python', '-B', '-m', 'unittest']
+          gui = ['tools.tests.test_validate_adiscord_gui_contracts', '-q']
+          economy = ['tools.tests.test_validate_adiscord_val_rework.ValIndustrialRecoveryTests', '-q']
+          validator = ['python', '-B', 'tools/validate_tc.py', '--limit', '300']
+          run('baseline-gui', unit + gui)
+          run('baseline-economy', unit + economy)
+          run('baseline-validator', validator)
+          tests = pathlib.Path('tools/tests/test_validate_adiscord_gui_contracts.py')
+          text = tests.read_text()
+          marker = 'class CountryPoliticsGuiContractTests(unittest.TestCase):\n'
+          addition = '''class NationalSpiritOverflowTests(unittest.TestCase):
+              """Check the authored scroll axis, not the native renderer's output."""
+
+              def assert_horizontal_overflow(self, filename, grid_name):
+                  from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+                  text = (ROOT / "interface" / filename).read_text(encoding="utf-8-sig")
+                  entries = parse_clausewitz(text)
+                  panels = [
+                      entry.value for entry in _walk_clausewitz(entries)
+                      if entry.key.lower() == "containerwindowtype"
+                      and isinstance(entry.value, list)
+                      and _direct_scalar(entry.value, "name") == "national_spirit_container"
+                  ]
+                  self.assertEqual(len(panels), 1)
+                  panel = panels[0]
+                  self.assertTrue(_direct_scalar(panel, "horizontalScrollbar"))
+                  self.assertIsNone(_direct_scalar(panel, "verticalScrollbar"))
+                  grids = [
+                      entry.value for entry in panel
+                      if entry.key.lower() == "gridboxtype"
+                      and _direct_scalar(entry.value, "name") == grid_name
+                  ]
+                  self.assertEqual(len(grids), 1, "retain the native overflow grid as a direct child")
+                  grid = grids[0]
+                  # Fixed columns grow downward, outside the horizontal-only viewport.
+                  # Bound rows instead so all later spirits remain on the scrollable axis.
+                  self.assertEqual(_direct_scalar(grid, "max_slots_vertical"), "2")
+                  self.assertIsNone(_direct_scalar(grid, "max_slots_horizontal"))
+                  self.assertFalse(_direct_clausewitz(grid, "max_slots"))
+                  slots = _unique_direct_block(grid, "slotsize")
+                  size = _unique_direct_block(grid, "size")
+                  self.assertLessEqual(
+                      2 * int(_direct_scalar(slots, "height")),
+                      int(_direct_scalar(size, "height")),
+                  )
+
+              def test_politics_spirits_overflow_along_the_scrollbar(self):
+                  self.assert_horizontal_overflow("countrypoliticsview.gui", "spirit_grid_over_defined")
+
+              def test_diplomacy_spirits_overflow_along_the_scrollbar(self):
+                  self.assert_horizontal_overflow("countrydiplomacyview.gui", "nat_spirit_ideas_grid_over_defined")
+
+
+          '''
+          # The YAML block supplies four extra spaces after the first line.
+          addition = addition.splitlines(keepends=True)
+          addition = addition[0] + ''.join(line[4:] if line.startswith('    ') else line for line in addition[1:])
+          assert text.count(marker) == 1
+          assert 'class NationalSpiritOverflowTests' not in text
+          tests.write_text(text.replace(marker, addition + marker))
+          target = ['tools.tests.test_validate_adiscord_gui_contracts.NationalSpiritOverflowTests', '-v']
+          assert run('red', unit + target) == 1
+          assert len(summary['red']['failures']) == 2
+          paths = []
+          for filename, grid in [('countrypoliticsview.gui', 'spirit_grid_over_defined'), ('countrydiplomacyview.gui', 'nat_spirit_ideas_grid_over_defined')]:
+              path = pathlib.Path('interface') / filename
+              old = path.read_text()
+              pattern = r'(name\s*=\s*"' + grid + r'"[\s\S]*?)max_slots_horizontal = 10'
+              new, count = re.subn(pattern, r'\1max_slots_vertical = 2', old, count=1)
+              assert count == 1
+              path.write_text(new)
+              paths.append(str(path))
+          assert run('green', unit + target) == 0
+          run('after-gui', unit + gui)
+          run('after-economy', unit + economy)
+          run('after-validator', validator)
+          for name in ['gui', 'economy']:
+              assert summary['baseline-' + name]['exit'] == summary['after-' + name]['exit']
+              assert collections.Counter(summary['baseline-' + name]['failures']) == collections.Counter(summary['after-' + name]['failures'])
+          assert (out / 'baseline-validator.txt').read_text() == (out / 'after-validator.txt').read_text()
+          run('full-suite', unit + ['discover', '-s', 'tools/tests', '-p', 'test*.py', '-q'], timeout=90)
+          paths.append(str(tests))
+          subprocess.run(['git', 'diff', '--check'], check=True)
+          (out / 'change.patch').write_bytes(subprocess.check_output(['git', 'diff', '--'] + paths))
+          for path in paths:
+              (out / pathlib.Path(path).name).write_bytes(pathlib.Path(path).read_bytes())
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'add', '--'] + paths, check=True)
+          subprocess.run(['git', 'commit', '-m', 'fix(ui): keep national spirits on the horizontal scroll axis'], check=True)
+          summary['commit'] = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
+          summary['runtime'] = 'Not tested in Hearts of Iron IV. Static GUI contract and script lifecycle checks only.'
+          (out / 'summary.json').write_text(json.dumps(summary, indent=2, ensure_ascii=False))
+          subprocess.run(['git', 'push', 'origin', 'HEAD:fix/val-economic-spirit-lifecycle-20260922'], check=True)
+          print(json.dumps(summary, indent=2, ensure_ascii=False))
           PY
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: val-spirit-baseline
+          name: val-spirit-verification
           path: /tmp/val-evidence
           retention-days: 7
