@@ -2,6 +2,9 @@ on_actions = {
 
     on_startup = {
         effect = {
+			STP = { STP_qol_initialize_staff = yes STP_qol_initialize_party_leaders = yes }
+			STS = { STP_qol_initialize_staff = yes }
+
             STP = {
                 if = {
                     limit = {

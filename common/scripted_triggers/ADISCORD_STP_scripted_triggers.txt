@@ -1612,3 +1612,37 @@ STP_cw_fada_captured = {
 	STP_cw_fada_battle_active = yes
 	STS = { controls_province = 145 }
 }
+
+# Playable staffing: original cabinet and civil-war commanders are unchanged.
+STP_qol_staff_available = {
+	OR = { tag = STP tag = STS }
+	has_capitulated = no
+	has_country_flag = STP_cw_postwar
+}
+
+STP_qol_elite_administration_available = {
+	STP_qol_staff_available = yes
+	OR = {
+		has_completed_focus = STP_pc_shabrat_cabinet
+		has_completed_focus = STP_pw_republic_district_authority
+		has_completed_focus = STP_pw_party_executive_secretariat
+	}
+}
+
+STP_qol_elite_industry_available = {
+	STP_qol_staff_available = yes
+	OR = {
+		has_completed_focus = STP_pc_investment_integrated_economy
+		has_completed_focus = STP_pw_republic_industrial_settlement
+		has_completed_focus = STP_pw_party_industrial_settlement
+	}
+}
+
+STP_qol_elite_army_available = {
+	STP_qol_staff_available = yes
+	OR = {
+		has_completed_focus = STP_pc_army_staff_doctrine
+		has_completed_focus = STP_pw_republic_professional_service
+		has_completed_focus = STP_pw_party_professional_service
+	}
+}

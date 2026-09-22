@@ -55,14 +55,14 @@
 
   ##local parties
   #STP
-  STP_humanism_party: "Гражданская партия Стеланда"
-  STP_humanism_party_long: "Гражданская партия Стеланда"
+  STP_humanism_party: "Гражданская партия Стеланда[GetSTPPrewarHumanistLeader]"
+  STP_humanism_party_long: "Гражданская партия Стеланда[GetSTPPrewarHumanistLeaderLong]"
 
   STP_utilitarism_party: "Партия рационального развития"
   STP_utilitarism_party_long: "Партия рационального развития и общественной эффективности"
 
-  STP_chauvinism_party: "Национальная партия Стеланда"
-  STP_chauvinism_party_long: "Национальная партия Стеланда"
+  STP_chauvinism_party: "Национальная партия Стеланда[GetSTPPrewarNationalLeader]"
+  STP_chauvinism_party_long: "Национальная партия Стеланда[GetSTPPrewarNationalLeaderLong]"
 
   STP_pragmatism_party: "Партия порядка и реформ"
   STP_pragmatism_party_long: "Партия порядка и реформ"
@@ -108,11 +108,11 @@
   VAL_utilitarism_party: "Партия развития и эффективности"
   VAL_utilitarism_party_long: "Партия развития и эффективности Кефрейта"
 
-  VAL_chauvinism_party: "Национальная партия Кефрейта"
-  VAL_chauvinism_party_long: "Национальная партия Кефрейта"
+  VAL_chauvinism_party: "Национальная партия Кефрейта[GetVALNationalPartyLeader]"
+  VAL_chauvinism_party_long: "Национальная партия Кефрейта[GetVALNationalPartyLeaderLong]"
 
-  VAL_pragmatism_party: "Партия порядка и реформ"
-  VAL_pragmatism_party_long: "Партия порядка и реформ Кефрейта"
+  VAL_pragmatism_party: "Партия порядка и реформ[GetVALPragmatistPartyLeader]"
+  VAL_pragmatism_party_long: "Партия порядка и реформ Кефрейта[GetVALPragmatistPartyLeaderLong]"
 
   VAL_anarchism_party: "Конфедерация общин Кефрейта"
   VAL_anarchism_party_long: "Конфедерация общин и советов Кефрейта"
@@ -120,11 +120,11 @@
   VAL_technocracy_party: "Партия науки и управления"
   VAL_technocracy_party_long: "Партия науки и управления Кефрейта"
 
-  VAL_etatism_party: "£GFX_VAL_etatist_party_texticon Государственная партия Кефрейта"
-  VAL_etatism_party_long: "£GFX_VAL_etatist_party_texticon Государственная партия Кефрейта"
+  VAL_etatism_party: "£GFX_VAL_etatist_party_texticon Государственная партия Кефрейта[GetVALStatePartyLeader]"
+  VAL_etatism_party_long: "£GFX_VAL_etatist_party_texticon Государственная партия Кефрейта[GetVALStatePartyLeaderLong]"
 
-  VAL_hedonism_party: "Совет домов Кефрейта"
-  VAL_hedonism_party_long: "Совет домов и лицензированных гильдий Кефрейта"
+  VAL_hedonism_party: "Совет домов Кефрейта[GetVALHedonistPartyLeader]"
+  VAL_hedonism_party_long: "Совет домов и лицензированных гильдий Кефрейта[GetVALHedonistPartyLeaderLong]"
 
    # EFL
   EFL_humanism_party: "£GFX_unknown_party_texticon Народная Реформа Эфлора"

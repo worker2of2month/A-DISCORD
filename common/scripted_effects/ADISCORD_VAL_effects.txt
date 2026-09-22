@@ -4030,3 +4030,41 @@ VAL_council_reconcile_revanche = {
 		clr_country_flag = VAL_council_revanche_active
 	}
 }
+
+# Idempotent staff delivery. The receipt survives retirement and annexation.
+VAL_qol_initialize_staff = {
+	if = {
+		limit = { VAL_qol_staff_available = yes NOT = { has_country_flag = VAL_qol_regular_officers_delivered } }
+		set_country_flag = VAL_qol_regular_officers_delivered
+		if = { limit = { NOT = { has_character = VAL_Anton_Rein } } recruit_character = VAL_Anton_Rein }
+		if = { limit = { NOT = { has_character = VAL_Irina_Karst } } recruit_character = VAL_Irina_Karst }
+	}
+	if = { limit = { VAL_qol_elite_army_available = yes } VAL_qol_grant_elite_officer = yes }
+}
+
+# Called directly by completion rewards; never tests its own finishing focus.
+VAL_qol_grant_elite_officer = {
+	if = {
+		limit = { VAL_qol_staff_available = yes NOT = { has_country_flag = VAL_qol_elite_officer_delivered } }
+		set_country_flag = VAL_qol_elite_officer_delivered
+		if = { limit = { NOT = { has_character = VAL_Viktor_Bran } } recruit_character = VAL_Viktor_Bran }
+	}
+}
+
+# Existing commanders provide named opposition figures; their command roles stay intact.
+VAL_qol_initialize_party_leaders = {
+	if = {
+		limit = { tag = VAL NOT = { has_country_flag = VAL_qol_party_leaders_initialized } NOT = { has_country_flag = VAL_stelander_defeated } }
+		set_country_flag = VAL_qol_party_leaders_initialized
+		if = {
+			limit = { has_character = VAL_Boris_Gromov NOT = { has_government = chauvinism } }
+			add_country_leader_role = { character = VAL_Boris_Gromov promote_leader = yes country_leader = { ideology = chauvinism_ideology expire = "2200.1.1.1" } }
+			promote_character = { character = VAL_Boris_Gromov ideology = chauvinism_ideology }
+		}
+		if = {
+			limit = { has_character = VAL_Renata_Morn NOT = { has_government = pragmatism } }
+			add_country_leader_role = { character = VAL_Renata_Morn promote_leader = yes country_leader = { ideology = pragmatism_ideology expire = "2200.1.1.1" } }
+			promote_character = { character = VAL_Renata_Morn ideology = pragmatism_ideology }
+		}
+	}
+}

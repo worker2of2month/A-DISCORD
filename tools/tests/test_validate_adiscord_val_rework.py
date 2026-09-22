@@ -959,6 +959,25 @@ class ValRewardValidatorTests(unittest.TestCase):
             EFFECTS_PATH.read_text(encoding="utf-8-sig"),
         )
 
+    def test_named_selectable_staff_and_designers_are_not_country_spirit_previews(self):
+        original = IDEAS_PATH.read_text(encoding="utf-8-sig")
+        additions = """
+        political_advisor_head_of_state = {
+            VAL_named_advisor = { name = VAL_named_advisor allowed = { tag = VAL } cost = 75 }
+        }
+        industrial_concern = {
+            VAL_named_concern = { name = VAL_concern_name allowed = { tag = VAL } cost = 75 }
+        }
+        materiel_manufacturer = {
+            VAL_named_designer = { name = VAL_designer_name allowed = { tag = VAL } cost = 75 }
+        }
+        """
+        augmented = original[:original.rfind("}")] + additions + original[original.rfind("}"):]
+        accepted, issues = self.preview_issues(ideas=augmented)
+        self.assertEqual(issues, [])
+        self.assertTrue({"VAL_named_advisor", "VAL_named_concern", "VAL_named_designer"}.isdisjoint(accepted))
+        self.assertIn("VAL_contract_delta_dummy", accepted)
+
     def test_production_preview_contracts_are_valid(self):
         accepted, issues = self.preview_issues()
         self.assertEqual(issues, [])

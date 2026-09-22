@@ -1,6 +1,8 @@
 on_actions = {
 	on_startup = {
 		effect = {
+			VAL = { VAL_qol_initialize_staff = yes VAL_qol_initialize_party_leaders = yes }
+
 			OCA = { VAL_initialize_balchansk_administration = yes }
 			if = {
 				limit = { VAL = { exists = yes } }

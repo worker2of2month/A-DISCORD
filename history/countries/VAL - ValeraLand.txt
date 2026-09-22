@@ -99,3 +99,6 @@ STP = {
 # The VAL AI strategy still asks these countries for market access after setup.
 
 recruit_character = VAL_party_administration
+
+VAL_qol_initialize_staff = yes
+VAL_qol_initialize_party_leaders = yes

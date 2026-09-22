@@ -951,26 +951,214 @@ ideas = {
 			}
 		}
 		minister_STS_Marta_Eirich = { name = minister_STS_Marta_Eirich default = no cost = 75 picture = generic_political_advisor_europe_1 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_hos_district_chancery } }
+
+		minister_STP_Pavel_Ruden = {
+			name = minister_STP_Pavel_Ruden
+			picture = generic_political_advisor_europe_1
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_staff_available = yes }
+			allowed_to_remove = { STP_qol_staff_available = yes }
+			cost = 75
+			traits = { ADISCORD_qol_registrar }
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_STP_Nikolai_Vedenin = {
+			name = minister_STP_Nikolai_Vedenin
+			picture = generic_political_advisor_europe_1
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_elite_administration_available = yes }
+			allowed_to_remove = { STP_qol_staff_available = yes }
+			cost = 125
+			traits = { ADISCORD_qol_chancellor }
+			ai_will_do = { factor = 2 }
+		}
 	}
 
 	political_advisor_minister_of_defense = {
 		minister_STS_Leonid_Barchel = { name = minister_STS_Leonid_Barchel default = no cost = 75 picture = generic_political_advisor_europe_2 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_def_mountain_staff } }
+
+		minister_STP_Elena_Savina = {
+			name = minister_STP_Elena_Savina
+			picture = generic_political_advisor_europe_2
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_staff_available = yes }
+			allowed_to_remove = { STP_qol_staff_available = yes }
+			cost = 75
+			traits = { ADISCORD_qol_quartermaster }
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_STP_Oleg_Vershin = {
+			name = minister_STP_Oleg_Vershin
+			picture = generic_political_advisor_europe_3
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_elite_army_available = yes }
+			allowed_to_remove = { STP_qol_staff_available = yes }
+			cost = 125
+			traits = { ADISCORD_qol_general_staff }
+			ai_will_do = { factor = 2 }
+		}
 	}
 
 	political_advisor_minister_of_economy = {
 		minister_STS_Ignat_Forel = { name = minister_STS_Ignat_Forel default = no cost = 75 picture = generic_political_advisor_europe_3 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_eco_workshop_ledgers } }
+
+		minister_STP_Anton_Belik = {
+			name = minister_STP_Anton_Belik
+			picture = generic_political_advisor_europe_3
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_staff_available = yes }
+			allowed_to_remove = { STP_qol_staff_available = yes }
+			cost = 75
+			traits = { ADISCORD_qol_construction }
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_STP_Maria_Serebryak = {
+			name = minister_STP_Maria_Serebryak
+			picture = generic_political_advisor_europe_2
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_elite_industry_available = yes }
+			allowed_to_remove = { STP_qol_staff_available = yes }
+			cost = 125
+			traits = { ADISCORD_qol_industrial_planner }
+			ai_will_do = { factor = 2 }
+		}
 	}
 
 	political_advisor_minister_of_health = {
 		minister_STS_Nika_Volgina = { name = minister_STS_Nika_Volgina default = no cost = 75 picture = generic_political_advisor_europe_4 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_hea_field_wards } }
+
+		minister_STP_Sofia_Lanskaya = {
+			name = minister_STP_Sofia_Lanskaya
+			picture = generic_political_advisor_europe_4
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_staff_available = yes }
+			allowed_to_remove = { STP_qol_staff_available = yes }
+			cost = 75
+			traits = { ADISCORD_qol_medical }
+			ai_will_do = { factor = 1 }
+		}
 	}
 
 	political_advisor_minister_of_education = {
 		minister_STS_Tomas_Krey = { name = minister_STS_Tomas_Krey default = no cost = 75 picture = generic_political_advisor_europe_5 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_edu_local_schools } }
+
+		minister_STP_Viktor_Kedrov = {
+			name = minister_STP_Viktor_Kedrov
+			picture = generic_political_advisor_europe_5
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_staff_available = yes }
+			allowed_to_remove = { STP_qol_staff_available = yes }
+			cost = 75
+			traits = { ADISCORD_qol_education }
+			ai_will_do = { factor = 1 }
+		}
 	}
 
 	political_advisor_chief_of_intelligence = {
 		minister_STS_Lia_Verst = { name = minister_STS_Lia_Verst default = no cost = 75 picture = generic_political_advisor_europe_6 allowed = { tag = STS } visible = { tag = STS has_country_flag = STP_cw_postwar } allowed_to_remove = { } traits = { minister_trait_STS_int_mountain_net } }
 
+
+		minister_STP_Daria_Orlova = {
+			name = minister_STP_Daria_Orlova
+			picture = generic_political_advisor_europe_6
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_staff_available = yes }
+			allowed_to_remove = { STP_qol_staff_available = yes }
+			cost = 75
+			traits = { ADISCORD_qol_security }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	industrial_concern = {
+		STP_qol_construction_company = {
+			name = STP_qol_construction_company
+			picture = ADISCORD_economic_system_mixed
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_staff_available = yes }
+			cost = 75
+			research_bonus = { industry = 0.05 }
+			modifier = { production_speed_infrastructure_factor = 0.05 }
+			ai_will_do = { factor = 1 }
+		}
+
+		STP_qol_precision_company = {
+			name = STP_qol_precision_company
+			picture = ADISCORD_economic_system_technocratic
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_staff_available = yes }
+			cost = 75
+			research_bonus = { electronics = 0.05 }
+			modifier = { research_speed_factor = 0.01 }
+			ai_will_do = { factor = 1 }
+		}
+
+		STP_qol_integrated_company = {
+			name = STP_qol_integrated_company
+			picture = ADISCORD_economic_system_state_coordinated
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes }
+			available = { STP_qol_elite_industry_available = yes }
+			cost = 125
+			research_bonus = { industry = 0.10 electronics = 0.05 }
+			modifier = { industrial_capacity_factory = 0.04 }
+			ai_will_do = { factor = 2 }
+		}
+	}
+
+	materiel_manufacturer = {
+		STP_qol_arsenal_designer = {
+			name = STP_qol_arsenal
+			picture = ADISCORD_economic_system_industrializing
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
+			available = { STP_qol_staff_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
+			cost = 75
+			research_bonus = { infantry_weapons = 0.05 support_tech = 0.05 }
+			equipment_bonus = { infantry_equipment = { reliability = 0.03 } ADISCORD_squad_weapons_equipment = { reliability = 0.03 } support_equipment = { reliability = 0.03 } }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	aircraft_manufacturer = {
+		STP_qol_airworks_designer = {
+			name = STP_qol_airworks
+			picture = ADISCORD_economic_system_technocratic
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
+			available = { STP_qol_staff_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
+			cost = 75
+			research_bonus = { air_equipment = 0.05 }
+			equipment_bonus = { ADISCORD_fighter_archetype = { reliability = 0.03 } ADISCORD_cas_archetype = { reliability = 0.03 } }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	tank_manufacturer = {
+		STP_qol_armor_bureau_designer = {
+			name = STP_qol_armor_bureau
+			picture = ADISCORD_economic_system_state_coordinated
+			allowed = { OR = { tag = STP tag = STS } }
+			visible = { STP_qol_staff_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
+			available = { STP_qol_elite_army_available = yes NOT = { has_dlc = "Arms Against Tyranny" } }
+			cost = 125
+			research_bonus = { armor = 0.08 }
+			equipment_bonus = { ADISCORD_combat_platform_archetype = { reliability = 0.03 } }
+			ai_will_do = { factor = 1 }
+		}
 	}
 }

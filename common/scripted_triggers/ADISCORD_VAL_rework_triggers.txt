@@ -1141,3 +1141,30 @@ VAL_council_can_launch_revanche = {
 	has_completed_focus = VAL_defeat_Refit_For_Return
 	has_completed_focus = VAL_defeat_Bring_The_Captains_Home
 }
+
+# Playable staffing: original cabinet and civil-war commanders are unchanged.
+VAL_qol_staff_available = {
+	tag = VAL
+	has_capitulated = no
+}
+
+VAL_qol_elite_administration_available = {
+	VAL_qol_staff_available = yes
+	OR = {
+		has_completed_focus = VAL_State_Contract
+	}
+}
+
+VAL_qol_elite_industry_available = {
+	VAL_qol_staff_available = yes
+	OR = {
+		has_completed_focus = VAL_Industrial_Mobilization_Plan
+	}
+}
+
+VAL_qol_elite_army_available = {
+	VAL_qol_staff_available = yes
+	OR = {
+		has_completed_focus = VAL_Contract_General_Staff
+	}
+}

@@ -2358,6 +2358,7 @@ STP_cw_finish_mobilization = {
 	clr_country_flag = STP_cw_disruption_cooldown
 	clear_variable = STP_cw_disruption_completed
 	set_country_flag = STP_cw_postwar
+	STP_qol_initialize_staff = yes
 	mark_focus_tree_layout_dirty = yes
 	if = { limit = { OR = { tag = STP tag = STS } } STS = { STP_cw_stop_operations = yes } }
 	if = { limit = { has_idea = STP_cw_emergency_laboratories } remove_ideas = STP_cw_emergency_laboratories }
@@ -2631,7 +2632,10 @@ STP_cw_release_resistance_officeholders = {
 	}
 	if = {
 		limit = { has_character = STP_grigory_sotnikov }
-		STP_grigory_sotnikov = { remove_country_leader_role = { ideology = steland_military_directory } }
+		STP_grigory_sotnikov = {
+			remove_country_leader_role = { ideology = humanism_ideology }
+			remove_country_leader_role = { ideology = steland_military_directory }
+		}
 	}
 	if = {
 		limit = { has_character = STP_ilya_gornin }
@@ -6505,5 +6509,48 @@ STP_pc_annex_defeated_council = {
 		if = { limit = { has_war_with = VAL } white_peace = VAL }
 		annex_country = { target = VAL transfer_troops = no }
 		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# Idempotent staff delivery. The receipt survives retirement and annexation.
+STP_qol_initialize_staff = {
+	if = {
+		limit = { STP_qol_staff_available = yes NOT = { has_global_flag = STP_qol_regular_officers_delivered } }
+		set_global_flag = STP_qol_regular_officers_delivered
+		if = { limit = { NOT = { has_character = STP_Pavel_Gromin } } recruit_character = STP_Pavel_Gromin }
+		if = { limit = { NOT = { has_character = STP_Elena_Vetrova } } recruit_character = STP_Elena_Vetrova }
+	}
+	if = { limit = { STP_qol_elite_army_available = yes } STP_qol_grant_elite_officer = yes }
+}
+
+# Called directly by completion rewards; never tests its own finishing focus.
+STP_qol_grant_elite_officer = {
+	if = {
+		limit = { STP_qol_staff_available = yes NOT = { has_global_flag = STP_qol_elite_officer_delivered } }
+		set_global_flag = STP_qol_elite_officer_delivered
+		if = { limit = { NOT = { has_character = STP_Oleg_Vershin } } recruit_character = STP_Oleg_Vershin }
+	}
+}
+
+# Sotnikov leads the legal humanists before the split; his military-directory
+# role remains owned by the existing civil-war/postwar story.
+STP_qol_initialize_party_leaders = {
+	if = {
+		limit = {
+			tag = STP
+			NOT = { has_global_flag = STP_cw_started }
+			NOT = { has_country_flag = STP_cw_participant }
+			NOT = { has_country_flag = STP_cw_postwar }
+			NOT = { has_country_flag = STP_qol_prewar_leaders_initialized }
+			NOT = { has_government = humanism }
+			NOT = { has_government = etatism }
+		}
+		set_country_flag = STP_qol_prewar_leaders_initialized
+		if = {
+			limit = { has_character = STP_grigory_sotnikov }
+			STP_grigory_sotnikov = { remove_country_leader_role = { ideology = steland_military_directory } }
+			add_country_leader_role = { character = STP_grigory_sotnikov promote_leader = yes country_leader = { ideology = humanism_ideology expire = "2200.1.1.1" } }
+			promote_character = { character = STP_grigory_sotnikov ideology = humanism_ideology }
+		}
 	}
 }

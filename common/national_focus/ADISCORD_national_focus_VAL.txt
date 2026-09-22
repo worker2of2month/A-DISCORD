@@ -1169,6 +1169,13 @@ focus_tree = {
 		prerequisite = { focus = VAL_Field_Repair_Corps }
 		prerequisite = { focus = VAL_Reserve_Battalions }
 		completion_reward = {
+			custom_effect_tooltip = VAL_qol_armor_bureau_tt
+			if = { limit = { has_dlc = "Arms Against Tyranny" } unlock_military_industrial_organization_tooltip = mio:VAL_qol_armor_bureau }
+
+			VAL_qol_grant_elite_officer = yes
+
+			custom_effect_tooltip = VAL_qol_elite_army_tt
+
             if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Dmitri_Karsov } } } recruit_character = VAL_Dmitri_Karsov }
 			add_power_balance_value = { id = VAL_command_balance value = -0.15 }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_general_staff_delta } }
@@ -1323,6 +1330,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_Provincial_Contract_Courts }
 		prerequisite = { focus = VAL_Captains_Cannot_Veto }
 		completion_reward = {
+			custom_effect_tooltip = VAL_qol_elite_administration_tt
+
 			VAL_apply_contract_administration_3 = yes
 			custom_effect_tooltip = VAL_focus_authority_10_tt
 			hidden_effect = {
@@ -1541,6 +1550,10 @@ focus_tree = {
 		prerequisite = { focus = VAL_Three_Shift_Arsenals }
 		prerequisite = { focus = VAL_Reserve_Accounting }
 		completion_reward = {
+			custom_effect_tooltip = VAL_qol_industry_company_tt
+
+			custom_effect_tooltip = VAL_qol_elite_industry_tt
+
 			VAL_advance_economic_recovery = yes
 			VAL_industrial_finale_path_extra = yes
 			effect_tooltip = {

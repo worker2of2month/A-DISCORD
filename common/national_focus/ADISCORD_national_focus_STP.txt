@@ -2767,6 +2767,8 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_qol_elite_administration_tt
+
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_district_authority_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_political_power_gain value = 0.10 }
@@ -3000,6 +3002,10 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_qol_industry_company_tt
+
+			custom_effect_tooltip = STP_qol_elite_industry_tt
+
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_industrial_settlement_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.05 }
@@ -3078,6 +3084,13 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_qol_armor_bureau_tt
+			if = { limit = { has_dlc = "Arms Against Tyranny" } unlock_military_industrial_organization_tooltip = mio:STP_qol_armor_bureau }
+
+			STP_qol_grant_elite_officer = yes
+
+			custom_effect_tooltip = STP_qol_elite_army_tt
+
 			add_tech_bonus = { name = STP_pc_army_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_professional_service_delta } }
 			hidden_effect = { add_to_variable = { var = STP_pw_army_org_factor value = 0.05 } add_to_variable = { var = STP_pw_training_time_factor value = -0.1 } STP_pw_refresh_modifier = yes }
@@ -3417,6 +3430,10 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_qol_industry_company_tt
+
+			custom_effect_tooltip = STP_qol_elite_industry_tt
+
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_industrial_settlement_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.05 }
@@ -3507,6 +3524,13 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			custom_effect_tooltip = STP_qol_armor_bureau_tt
+			if = { limit = { has_dlc = "Arms Against Tyranny" } unlock_military_industrial_organization_tooltip = mio:STP_qol_armor_bureau }
+
+			STP_qol_grant_elite_officer = yes
+
+			custom_effect_tooltip = STP_qol_elite_army_tt
+
 			army_experience = 15
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_professional_service_delta } }
 			hidden_effect = {
@@ -3780,6 +3804,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			custom_effect_tooltip = STP_qol_elite_administration_tt
+
 			add_political_power = 75
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_executive_secretariat_delta } }
 			hidden_effect = {
@@ -4010,6 +4036,8 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_after_victory }
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			custom_effect_tooltip = STP_qol_elite_administration_tt
+
 			set_party_name = {
 				ideology = chauvinism
 				long_name = STS_chauvinism_party_long
@@ -4200,6 +4228,13 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_pc_army_republic_control }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			custom_effect_tooltip = STP_qol_armor_bureau_tt
+			if = { limit = { has_dlc = "Arms Against Tyranny" } unlock_military_industrial_organization_tooltip = mio:STP_qol_armor_bureau }
+
+			STP_qol_grant_elite_officer = yes
+
+			custom_effect_tooltip = STP_qol_elite_army_tt
+
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_army_staff_delta } }
 			hidden_effect = {
 					add_to_variable = { var = STP_pw_army_org_factor value = 0.08 }
@@ -6382,6 +6417,10 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_investment_export_finance }
 		ai_will_do = { base = 6 }
 		completion_reward = {
+			custom_effect_tooltip = STP_qol_industry_company_tt
+
+			custom_effect_tooltip = STP_qol_elite_industry_tt
+
 			add_ideas = ADISCORD_economy_integrated_economy
 			hidden_effect = {
 				ADISCORD_economy_mark_dirty = yes

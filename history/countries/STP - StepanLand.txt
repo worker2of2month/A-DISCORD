@@ -107,3 +107,5 @@ add_equipment_to_stockpile = {
 	amount = 1500
 	producer = WRK
 }
+
+STP_qol_initialize_party_leaders = yes

@@ -179,4 +179,57 @@ leader_traits = {
 	minister_trait_BCM_int_toll_spies = { random = no intel_network_gain_factor = 0.16 drift_defence_factor = 0.06 consumer_goods_factor = 0.02 ai_will_do = { factor = 1 } }
 	minister_trait_YPR_int_council_listeners = { random = no operative_slot = 1 compliance_growth = 0.04 political_power_gain = -0.03 ai_will_do = { factor = 1 } }
 	minister_trait_BTL_int_orderly_files = { random = no intel_network_gain_factor = 0.12 resistance_growth = -0.02 stability_factor = -0.02 ai_will_do = { factor = 1 } }
+
+	ADISCORD_qol_registrar = {
+		random = no
+		political_power_gain = 0.05
+		stability_factor = 0.01
+	}
+
+	ADISCORD_qol_quartermaster = {
+		random = no
+		supply_consumption_factor = -0.03
+		mobilization_speed = 0.05
+	}
+
+	ADISCORD_qol_construction = {
+		random = no
+		production_speed_industrial_complex_factor = 0.04
+		production_speed_infrastructure_factor = 0.04
+	}
+
+	ADISCORD_qol_medical = {
+		random = no
+		monthly_population = 0.03
+		stability_factor = 0.01
+	}
+
+	ADISCORD_qol_education = {
+		random = no
+		research_speed_factor = 0.02
+	}
+
+	ADISCORD_qol_security = {
+		random = no
+		decryption = 0.05
+		drift_defence_factor = 0.10
+	}
+
+	ADISCORD_qol_chancellor = {
+		random = no
+		political_power_gain = 0.10
+		stability_factor = 0.03
+	}
+
+	ADISCORD_qol_industrial_planner = {
+		random = no
+		industrial_capacity_factory = 0.04
+		production_speed_industrial_complex_factor = 0.05
+	}
+
+	ADISCORD_qol_general_staff = {
+		random = no
+		army_org_factor = 0.04
+		planning_speed = 0.05
+	}
 }
