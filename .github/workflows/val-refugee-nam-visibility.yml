@@ -1,0 +1,224 @@
+name: Verify Kefreyt decision visibility
+on:
+  push:
+    branches: [codex/val-refugee-nam-visibility]
+    paths: [.github/workflows/val-refugee-nam-visibility.yml]
+permissions:
+  contents: write
+jobs:
+  fix:
+    if: github.repository == 'worker2of2month/A-DISCORD' && github.ref == 'refs/heads/codex/val-refugee-nam-visibility'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validator dependencies
+        run: python -m pip install Pillow numpy PyYAML
+      - name: Reproduce, repair and verify decision visibility
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          import subprocess
+          import sys
+          import textwrap
+          ROOT = Path.cwd()
+          BRANCH = 'codex/val-refugee-nam-visibility'
+          TEST_PATH = Path('tools/tests/test_adiscord_val_refugees.py')
+          CHANGED = [
+              TEST_PATH,
+              Path('common/decisions/ADISCORD_VAL_logistics_market_decisions.txt'),
+              Path('common/decisions/ADISCORD_VAL_decisions.txt'),
+              Path('common/national_focus/ADISCORD_national_focus_VAL.txt'),
+              Path('localisation/russian/ADISCORD_VAL_logistics_market_l_russian.yml'),
+              Path('localisation/english/ADISCORD_VAL_logistics_market_l_english.yml'),
+          ]
+          def run(name, command, timeout=420):
+              result = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
+              output = result.stdout + result.stderr
+              Path('/tmp/' + name + '.log').write_text(output, encoding='utf-8')
+              print(f'=== {name}: exit {result.returncode} ===', flush=True)
+              print(output[-10000:], flush=True)
+              return result.returncode, output
+          suite = [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_*.py']
+          base_rc, base_output = run('val-visibility-baseline-suite', suite)
+          base_failures = set(re.findall(r'^(?:FAIL|ERROR): (.+)$', base_output, re.M))
+          assert base_rc == 0 or base_failures, 'Baseline did not complete normally'
+          tests = TEST_PATH.read_text(encoding='utf-8')
+          marker = '\n\nclass KefreytVoiceTests(unittest.TestCase):'
+          assert tests.count(marker) == 1
+          addition = r'''
+              def test_admission_rows_show_required_windows_after_contract_state(self):
+                  self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
+                  for region in (*REGIONS, "perimeter"):
+                      with self.subTest(region=region):
+                          self.assertTrue(self.visible(region))
+          
+              def test_expired_admission_rows_remain_readable_without_renewal(self):
+                  self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
+                  self.facts[("VAL", "ADISCORD_economy_can_spend_250", "yes")] = True
+                  for region in (*REGIONS, "perimeter"):
+                      with self.subTest(region=region):
+                          self.facts[("VAL", "has_country_flag", f"VAL_refugee_{region}_seen")] = True
+                          self.run_effect(self.effects["VAL_open_refugee_waves"])
+                          self.assertTrue(self.visible(region))
+                          available = next(e.value for e in self.decisions[f"VAL_accept_{region}_refugees"] if e.key == "available")
+                          self.assertFalse(matches_conditions(available, self.facts, "VAL"))
+                          self.assertNotIn(f"VAL_refugee_{region}_window", self.windows)
+          
+              def test_visible_admission_requires_a_live_window_and_localised_reason(self):
+                  self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
+                  self.facts[("VAL", "ADISCORD_economy_can_spend_250", "yes")] = True
+                  for region in (*REGIONS, "perimeter"):
+                      with self.subTest(region=region):
+                          available = next(e.value for e in self.decisions[f"VAL_accept_{region}_refugees"] if e.key == "available")
+                          self.assertFalse(matches_conditions(available, self.facts, "VAL"))
+                          window = ("VAL", "has_country_flag", f"VAL_refugee_{region}_window")
+                          self.facts[window] = True
+                          self.assertTrue(matches_conditions(available, self.facts, "VAL"))
+                          self.facts[window] = False
+                  for language in ("russian", "english"):
+                      loc = (ROOT / f"localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml").read_text(encoding="utf-8-sig")
+                      self.assertIn(" VAL_refugee_window_open_tt:", loc)
+          
+          
+          class KefreytDecisionVisibilityTests(unittest.TestCase):
+              def test_viceroy_offer_is_visible_from_foreign_broker_licences(self):
+                  categories = load("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
+                  decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_foreign_sales"]}
+                  facts = {("VAL", "has_completed_focus", "VAL_Foreign_Broker_Licences"): True,
+                           ("NAM", "exists", "yes"): True}
+                  category = next(e.value for e in categories["VAL_foreign_sales"] if e.key == "visible")
+                  visible = next(e.value for e in decisions["VAL_negotiate_nam_metals"] if e.key == "visible")
+                  self.assertTrue(matches_conditions(category, facts, "VAL"))
+                  self.assertTrue(matches_conditions(visible, facts, "VAL"))
+                  for flag in ("VAL_nam_concession_agreed", "VAL_nam_concession_granted"):
+                      with self.subTest(flag=flag):
+                          self.assertFalse(matches_conditions(visible, {**facts, ("VAL", "has_country_flag", flag): True}, "VAL"))
+                  self.assertFalse(matches_conditions(visible, {**facts, ("NAM", "exists", "yes"): False}, "VAL"))
+          
+              def test_viceroy_offer_exposes_the_required_focus_without_bypassing_it(self):
+                  decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_foreign_sales"]}
+                  available = next(e.value for e in decisions["VAL_negotiate_nam_metals"] if e.key == "available")
+                  self.assertEqual(scalar(available, "has_completed_focus"), "VAL_Resource_War_Contracts")
+                  facts = {("VAL", "VAL_nam_concession_negotiable", "yes"): True}
+                  self.assertFalse(matches_conditions(available, facts, "VAL"))
+                  facts[("VAL", "has_completed_focus", "VAL_Resource_War_Contracts")] = True
+                  self.assertTrue(matches_conditions(available, facts, "VAL"))
+                  facts[("VAL", "has_country_flag", "VAL_nam_concession_offer_pending")] = True
+                  self.assertFalse(matches_conditions(available, facts, "VAL"))
+          
+              def test_resource_war_focus_announces_the_viceroy_treaty(self):
+                  tree = load("common/national_focus/ADISCORD_national_focus_VAL.txt")["focus_tree"]
+                  focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "VAL_Resource_War_Contracts")
+                  reward = next(e.value for e in focus if e.key == "completion_reward")
+                  unlocks = {scalar(e.value, "decision") for e in reward if e.key == "unlock_decision_tooltip"}
+                  self.assertTrue({"VAL_negotiate_nam_metals", "VAL_resource_war_arms", "VAL_resource_war_personnel"} <= unlocks)
+          '''
+          tests = tests.replace(marker, '\n' + textwrap.dedent(addition).rstrip() + marker)
+          TEST_PATH.write_text(tests, encoding='utf-8')
+          new_tests = [
+              'RefugeeAdmissionTests.test_admission_rows_show_required_windows_after_contract_state',
+              'RefugeeAdmissionTests.test_expired_admission_rows_remain_readable_without_renewal',
+              'RefugeeAdmissionTests.test_visible_admission_requires_a_live_window_and_localised_reason',
+              'KefreytDecisionVisibilityTests.test_viceroy_offer_is_visible_from_foreign_broker_licences',
+              'KefreytDecisionVisibilityTests.test_viceroy_offer_exposes_the_required_focus_without_bypassing_it',
+              'KefreytDecisionVisibilityTests.test_resource_war_focus_announces_the_viceroy_treaty',
+          ]
+          red_cmd = [sys.executable, '-B', '-m', 'unittest', '-v'] + ['tools.tests.test_adiscord_val_refugees.' + name for name in new_tests]
+          red_rc, red_output = run('val-visibility-red', red_cmd)
+          assert red_rc != 0 and '\nERROR:' not in red_output
+          for name in new_tests:
+              assert 'FAIL: ' + name.split('.')[-1] in red_output, name
+          def replace_once(path, old, new):
+              data = path.read_bytes()
+              text = data.decode('utf-8')
+              assert text.count(old) == 1, (str(path), old[:100], text.count(old))
+              path.write_bytes(text.replace(old, new, 1).encode('utf-8'))
+          def decision_span(text, name):
+              match = re.search(r'(?m)^\s*' + re.escape(name) + r'\s*=\s*\{', text)
+              assert match, name
+              start = text.index('{', match.start())
+              depth = 1
+              for end in range(start + 1, len(text)):
+                  depth += (text[end] == '{') - (text[end] == '}')
+                  if depth == 0:
+                      return match.start(), end + 1
+              raise AssertionError('Unclosed decision: ' + name)
+          path = CHANGED[1]
+          text = path.read_bytes().decode('utf-8')
+          for region in ('vorkerland', 'stelander', 'nodrul', 'north', 'perimeter'):
+              start, end = decision_span(text, f'VAL_accept_{region}_refugees')
+              block = text[start:end]
+              old = f'visible = {{ has_country_flag = VAL_refugee_{region}_window }}'
+              new = (f'visible = {{\n\t\t\tOR = {{\n\t\t\t\thas_completed_focus = VAL_The_Contract_State\n'
+                     f'\t\t\t\thas_country_flag = VAL_refugee_{region}_window\n\t\t\t}}\n\t\t}}')
+              assert block.count(old) == 1
+              block = block.replace(old, new, 1)
+              gate = f'custom_trigger_tooltip = {{ tooltip = VAL_refugee_window_open_tt has_country_flag = VAL_refugee_{region}_window }} '
+              assert block.count('available = { ') == 1
+              block = block.replace('available = { ', 'available = { ' + gate, 1)
+              text = text[:start] + block + text[end:]
+          path.write_bytes(text.encode('utf-8'))
+          path = CHANGED[2]
+          text = path.read_bytes().decode('utf-8')
+          start, end = decision_span(text, 'VAL_negotiate_nam_metals')
+          block = text[start:end]
+          old = 'visible = { has_completed_focus = VAL_Resource_War_Contracts NAM = { exists = yes }'
+          new = 'visible = { OR = { has_completed_focus = VAL_Foreign_Broker_Licences has_completed_focus = VAL_Resource_War_Contracts } NAM = { exists = yes }'
+          assert block.count(old) == 1
+          block = block.replace(old, new, 1)
+          assert block.count('available = { ') == 1
+          block = block.replace('available = { ', 'available = { has_completed_focus = VAL_Resource_War_Contracts ', 1)
+          path.write_bytes((text[:start] + block + text[end:]).encode('utf-8'))
+          old = '\t\t\tunlock_decision_tooltip = { decision = VAL_resource_war_arms show_effect_tooltip = yes }'
+          new = '\t\t\tunlock_decision_tooltip = { decision = VAL_negotiate_nam_metals show_effect_tooltip = yes }\n' + old
+          replace_once(CHANGED[3], old, new)
+          values = {
+              'russian': 'Для этого направления открыто окно приёма беженцев. Оно действует §Y180 дней§! после появления потока. Если условие не выполнено, поток ещё не открыт либо срок приёма уже истёк.',
+              'english': 'An admission window is open for this refugee route. It lasts §Y180 days§! from the start of the flow. If this condition is unmet, the flow has not opened yet or its admission window has expired.',
+          }
+          for language, value in values.items():
+              path = Path(f'localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml')
+              data = path.read_bytes()
+              if language == 'russian':
+                  assert data.startswith(b'\xef\xbb\xbf')
+              text = data.decode('utf-8')
+              assert ' VAL_refugee_window_open_tt:' not in text
+              path.write_bytes((text.rstrip('\r\n') + '\n VAL_refugee_window_open_tt: "' + value + '"\n').encode('utf-8'))
+              assert path.read_bytes().startswith(b'\xef\xbb\xbf') == data.startswith(b'\xef\xbb\xbf')
+          old = 'facts = {("VAL", "ADISCORD_economy_can_spend_250", "yes"): True}'
+          new = 'facts = {("VAL", "ADISCORD_economy_can_spend_250", "yes"): True, ("VAL", "has_country_flag", f"VAL_refugee_{region}_window"): True}'
+          replace_once(TEST_PATH, old, new)
+          focused = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_adiscord_val_refugees', 'tools.tests.test_val_contract_ui', '-v']
+          rc, output = run('val-visibility-focused', focused)
+          assert rc == 0, 'Focused regression tests failed'
+          rc, output = run('val-visibility-suite', suite)
+          failures = set(re.findall(r'^(?:FAIL|ERROR): (.+)$', output, re.M))
+          assert rc == 0 or failures, 'Suite did not complete normally'
+          assert not (failures - base_failures), 'New suite failures: ' + repr(failures - base_failures)
+          print('PRE-EXISTING SUITE FAILURES:', sorted(failures), flush=True)
+          rc, output = run('val-visibility-validate', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'])
+          assert rc == 0, 'Total conversion validator failed'
+          subprocess.run(['git', 'diff', '--check'], check=True)
+          status = subprocess.check_output(['git', 'diff', '--name-only'], text=True).splitlines()
+          assert set(status) == {str(path) for path in CHANGED}, status
+          for path in CHANGED[1:4]:
+              assert not path.read_bytes().startswith(b'\xef\xbb\xbf'), str(path)
+          subprocess.run(['git', 'diff', '--stat'], check=True)
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'add', '--'] + [str(path) for path in CHANGED], check=True)
+          subprocess.run(['git', 'commit', '-m', 'fix: expose Kefreyt refugee windows and viceroy treaty requirements'], check=True)
+          subprocess.run(['git', 'push', 'origin', 'HEAD:refs/heads/' + BRANCH], check=True)
+          print('VERIFIED_FIX_COMMIT=' + subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(), flush=True)
+          PY
+      - name: Preserve verification logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: val-decision-visibility-logs
+          path: /tmp/val-visibility-*.log
