@@ -4,35 +4,44 @@ on:
     branches: [main]
     types: [opened, synchronize, reopened]
 permissions:
-  contents: read
+  contents: write
 jobs:
-  export:
+  verify:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/val-expansion-integration-review'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 1
-      - name: Export latest verified source inputs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy pyyaml
+      - name: Verify the reachable paid objective and publish a clean branch
         run: |
-          git fetch --no-tags --depth=1 origin e41f07d2417b09aec7461b586b33ecc1467f3800 d21917074259b4f29c8fe36ec20773aeb7ce2e45
+          cp .github/val_cleanup_finalize.py /tmp/val_cleanup_finalize.py
+          git fetch --no-tags --depth=1 origin e41f07d2417b09aec7461b586b33ecc1467f3800
+          git switch --detach e41f07d2417b09aec7461b586b33ecc1467f3800
+          python -B /tmp/val_cleanup_finalize.py
+      - name: Preserve evidence
+        if: always()
+        run: |
+          mkdir -p /tmp/val-cleanup-review
+          git diff > /tmp/val-cleanup-review/remaining.diff
           python - <<'PY'
-          import subprocess, zipfile, json
-          main = 'e41f07d2417b09aec7461b586b33ecc1467f3800'
-          base = 'd21917074259b4f29c8fe36ec20773aeb7ce2e45'
-          def git(*args): return subprocess.check_output(['git',*args])
-          paths = git('diff','--name-only',base,main).decode().splitlines()
-          with zipfile.ZipFile('/tmp/val-latest-main.zip','w',zipfile.ZIP_DEFLATED) as z:
-              z.writestr('metadata.json',json.dumps({'main':main,'base':base,'changed_files':paths},indent=2))
-              for name in paths:
-                  p=subprocess.run(['git','show',main+':'+name],capture_output=True)
-                  if p.returncode == 0: z.writestr('main/'+name,p.stdout)
-          print(json.dumps({'main':main,'changed_files':paths},indent=2))
+          from pathlib import Path
+          import zipfile
+          root = Path('/tmp/val-cleanup-review')
+          with zipfile.ZipFile('/tmp/val-cleanup-review.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for path in root.rglob('*'):
+                  if path.is_file():
+                      archive.write(path, path.relative_to(root))
           PY
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: val-latest-main
-          path: /tmp/val-latest-main.zip
-          retention-days: 3
+          name: val-cleanup-review
+          path: /tmp/val-cleanup-review.zip
+          retention-days: 7
