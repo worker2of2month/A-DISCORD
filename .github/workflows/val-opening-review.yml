@@ -1,4 +1,4 @@
-name: Kefreyt opening music and wave recovery
+name: Kefreyt opening repair integration
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -9,7 +9,7 @@ jobs:
   verify:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'fix/val-opening-music-wave-review'
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
         with:
@@ -18,65 +18,54 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install media verification dependency
-        run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
-      - name: Pin gameplay baseline
+      - name: Verify integration and update gameplay PR62 only
         run: |
-          cp .github/val_opening_repair.py /tmp/val_opening_repair.py
-          git fetch --depth=1 origin 38d3f3704a7f107892b51336f9469c4af9e63b70
-          git switch --detach 38d3f3704a7f107892b51336f9469c4af9e63b70
-      - name: Test before and after and validate media
-        run: |
-          mkdir -p /tmp/val-opening-review
+          mkdir -p /tmp/val-opening-integration
+          git fetch --no-tags --filter=blob:none --depth=96 origin 7e5c1efe4ef2d987d18c4927ef86ec281f232671 440f8a2a6931cc778ec537d217e03b0bcc2c815c
+          git switch --detach 7e5c1efe4ef2d987d18c4927ef86ec281f232671
           python - <<'PY'
+          import hashlib, io, json, subprocess, sys
           from pathlib import Path
-          import hashlib, io, json, os, subprocess, sys, unittest
-          root = Path.cwd()
-          out = Path('/tmp/val-opening-review')
-          broad = ['tools.tests.test_val_contract_ui', 'tools.tests.test_adiscord_val_refugees']
-          new = ['tools.tests.test_val_contract_ui.KefreytOpeningThemeTests', 'tools.tests.test_adiscord_val_refugees.RefugeeAdmissionTests.test_startup_and_weekly_recover_only_unseen_war_windows']
-          def run(name, names):
-              script = 'import io,json,unittest\nfrom pathlib import Path\n'
-              script += 's=io.StringIO()\nr=unittest.TextTestRunner(stream=s,verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames('+repr(names)+'))\n'
-              script += 'Path('+repr(str(out/(name+'.log')))+').write_text(s.getvalue())\n'
-              script += 'Path('+repr(str(out/(name+'.json')))+').write_text(json.dumps({"tests":r.testsRun,"failures":[t.id() for t,_ in r.failures],"errors":[t.id() for t,_ in r.errors]},indent=2))\n'
-              subprocess.run([sys.executable, '-B', '-c', script], check=True, timeout=90)
-              data=json.loads((out/(name+'.json')).read_text()); print(name,data,flush=True);return data
-          baseline=run('baseline',broad)
-          subprocess.run([sys.executable,'/tmp/val_opening_repair.py','tests'],check=True)
-          red=run('red',new)
-          assert red['tests']==2 and len(red['failures'])==2 and not red['errors'], red
-          subprocess.run([sys.executable,'/tmp/val_opening_repair.py','fix'],check=True)
-          green=run('green',new)
-          assert green['tests']==2 and not green['failures'] and not green['errors'],green
-          final=run('final',broad)
-          assert set(final['failures']) <= set(baseline['failures']), final
-          assert set(final['errors']) <= set(baseline['errors']), final
-          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+          out=Path('/tmp/val-opening-integration')
+          main='7e5c1efe4ef2d987d18c4927ef86ec281f232671'
+          delivery='440f8a2a6931cc778ec537d217e03b0bcc2c815c'
           paths=['common/national_focus/ADISCORD_national_focus_VAL.txt','common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt','tools/tests/test_val_contract_ui.py','tools/tests/test_adiscord_val_refugees.py']
-          for name in paths[:2]:
-              data=(root/name).read_bytes();assert not data.startswith(b'\xef\xbb\xbf');assert parse_clausewitz(data.decode())
-          assert (root/'music/ADISCORD_val_theme.ogg').read_bytes()[:4]==b'OggS'
-          probe=subprocess.check_output(['ffprobe','-v','error','-show_format','-show_streams','-of','json','music/ADISCORD_val_theme.ogg'])
-          media=json.loads(probe);assert float(media['format']['duration'])>0;assert media['streams'][0]['codec_type']=='audio'
-          (out/'media.json').write_bytes(probe)
-          subprocess.run(['git','diff','--check'],check=True)
-          actual=subprocess.check_output(['git','diff','--name-only']).decode().splitlines();assert set(actual)==set(paths),actual
-          (out/'changes.patch').write_bytes(subprocess.check_output(['git','diff','--binary']))
-          (out/'manifest.json').write_text(json.dumps({n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in paths},indent=2))
+          def run(name,names):
+              code='import io,json,unittest\nfrom pathlib import Path\n'
+              code+='s=io.StringIO()\nr=unittest.TextTestRunner(stream=s,verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames('+repr(names)+'))\n'
+              code+='Path('+repr(str(out/(name+'.log')))+').write_text(s.getvalue())\n'
+              code+='Path('+repr(str(out/(name+'.json')))+').write_text(json.dumps({"tests":r.testsRun,"failures":[t.id() for t,_ in r.failures],"errors":[t.id() for t,_ in r.errors]}))\n'
+              subprocess.run([sys.executable,'-B','-c',code],check=True,timeout=90)
+              result=json.loads((out/(name+'.json')).read_text());print(name,result,flush=True);return result
+          broad=['tools.tests.test_val_contract_ui','tools.tests.test_adiscord_val_refugees']
+          before=run('current-main',broad)
+          subprocess.run(['git','switch','--detach',delivery],check=True)
           subprocess.run(['git','config','user.name','A-Discord maintenance'],check=True)
           subprocess.run(['git','config','user.email','81386071+worker2of2month@users.noreply.github.com'],check=True)
-          subprocess.run(['git','add','--',*paths],check=True)
-          subprocess.run(['git','commit','-m','fix(val): start opening theme and recover missed refugee admissions'],check=True)
+          subprocess.run(['git','merge','--no-commit','--no-ff',main],check=True)
+          focused=run('focused',['tools.tests.test_val_contract_ui.KefreytOpeningThemeTests','tools.tests.test_adiscord_val_refugees.RefugeeAdmissionTests'])
+          assert not focused['failures'] and not focused['errors'],focused
+          after=run('integrated',broad)
+          assert set(after['failures'])<=set(before['failures']),after
+          assert set(after['errors'])<=set(before['errors']),after
+          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+          for name in paths[:2]:
+              assert parse_clausewitz(Path(name).read_text(encoding='utf-8'))
+              original=subprocess.check_output(['git','show',delivery+':'+name])
+              assert original==Path(name).read_bytes(),name
+          subprocess.run(['git','diff','--cached','--check'],check=True)
+          actual=subprocess.check_output(['git','diff','--cached','--name-only',main]).decode().splitlines()
+          assert set(actual)==set(paths),actual
+          patch=subprocess.check_output(['git','diff','--cached',main]);(out/'changes.patch').write_bytes(patch)
+          subprocess.run(['git','commit','-m','Merge current main into the verified opening music and refugee recovery fix'],check=True)
           head=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip()
-          branch='fix/val-opening-music-waves-'+os.environ['GITHUB_RUN_ID']
-          subprocess.run(['git','push','origin','HEAD:refs/heads/'+branch],check=True)
-          report={'base':'38d3f3704a7f107892b51336f9469c4af9e63b70','head':head,'branch':branch,'baseline':baseline,'red':red,'green':green,'final':final,'game_runtime_tested':False,'scope':'Opening-theme callback and recovery of existing war-admission windows only; no regional resettlement or perimeter admission added.'}
+          subprocess.run(['git','push','origin','HEAD:refs/heads/fix/val-opening-music-waves-35678420974'],check=True)
+          report={'tested_main':main,'head':head,'branch':'fix/val-opening-music-waves-35678420974','baseline':before,'focused':focused,'integrated':after,'gameplay_identical_to_prior_verified_patch':True,'game_runtime_tested':False}
           (out/'report.json').write_text(json.dumps(report,indent=2));print(json.dumps(report,indent=2))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: val-opening-review
-          path: /tmp/val-opening-review
+          name: val-opening-integration
+          path: /tmp/val-opening-integration
           retention-days: 7
