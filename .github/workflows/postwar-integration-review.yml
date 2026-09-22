@@ -21,91 +21,89 @@ jobs:
       - run: python -m pip install Pillow
       - uses: actions/download-artifact@v4
         with:
-          name: postwar-nationalisation-verification
-          run-id: 35685621373
+          name: postwar-nationalisation-final-verification
+          run-id: 35686221912
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: /tmp/previous-postwar-review
-      - name: Reproduce baseline failures and verify final delivery
+          path: /tmp/verified-postwar
+      - name: Integrate current main without replacing concurrent changes
         run: |
           python - <<'PY'
           from pathlib import Path
-          import base64, hashlib, json, os, re, subprocess, sys, zlib
-          evidence = Path('/tmp/postwar-evidence'); evidence.mkdir(exist_ok=True)
-          previous = Path('/tmp/previous-postwar-review')
-          encoded = ''.join(Path(f'.github/postwar-integration-payload-{i}.txt').read_text().strip() for i in (1, 2, 3))
-          patch = zlib.decompress(base64.b64decode(encoded, validate=True))
-          assert hashlib.sha256(patch).hexdigest() == '5cb5d7c9544dada68189478a1f6268d4fe23736ccbee01bc585d59775373e2df'
-          polish = zlib.decompress(base64.b64decode(Path('.github/postwar-integration-polish.txt').read_text().strip(), validate=True))
-          assert hashlib.sha256(polish).hexdigest() == '19e7aa1a870733282e5906517e7f4e135c4fc798afdc1bbad97ee89a41428537'
-          patch_path, polish_path = evidence / 'postwar.patch', evidence / 'polish.patch'
-          patch_path.write_bytes(patch); polish_path.write_bytes(polish)
-          assert (previous / 'postwar.patch').read_bytes() == patch
-          assert (previous / 'polish.patch').read_bytes() == polish
-          candidates = json.loads((previous / 'new-test-failures.json').read_text())
-          test_ids = ['tools.tests.' + re.search(r'\(([^)]+)\)$', value).group(1) for value in candidates]
-          assert len(test_ids) == 15
-          for name in ('baseline-validation.log', 'baseline-suite-summary.json', 'final-suite-summary.json', 'new-test-failures.json'):
-              (evidence / ('previous-' + name)).write_bytes((previous / name).read_bytes())
-          base = '84104110e06281b14a042976e26a871101d719a5'
-          subprocess.run(['git', 'fetch', '--depth=1', 'origin', base], check=True)
-          work = Path('/tmp/postwar-delivery')
+          import hashlib, json, os, re, subprocess, sys
+          evidence = Path('/tmp/postwar-integrated'); evidence.mkdir(exist_ok=True)
+          prior = json.loads(Path('/tmp/verified-postwar/manifest.json').read_text())
+          old = '84104110e06281b14a042976e26a871101d719a5'
+          feature = '726b311dd61088627367ac11133a468d9fd99a19'
+          base = '0b3667dc6c2c3b93aa3adf215e6d5c4a14844b3c'
+          assert prior['base'] == old and prior['head'] == feature
+          assert prior['focused_tests'] == 129 and not prior['new_probe_failures']
+          files = prior['files']
+          assert len(files) == len(set(files)) == 13 and all(not x.startswith('.github/') for x in files)
+          for ref in (old, feature, base):
+              subprocess.run(['git', 'fetch', '--depth=1', 'origin', ref], check=True)
+          work = Path('/tmp/postwar-integrated-delivery')
           subprocess.run(['git', 'worktree', 'add', '--detach', str(work), base], check=True)
           os.chdir(work)
           def runlog(name, command):
               with (evidence / name).open('w') as output:
                   result = subprocess.run(command, stdout=output, stderr=subprocess.STDOUT, timeout=240)
               return result.returncode
-          probe = [sys.executable, '-B', '-m', 'unittest', '-v', *test_ids]
-          runlog('baseline-probes.log', probe)
-          test_path = 'tools/tests/test_adiscord_postwar_nationalisation.py'
-          for source in (patch_path, polish_path):
-              subprocess.run(['git', 'apply', '--whitespace=error', '--include=' + test_path, str(source)], check=True)
-          red_rc = runlog('red.log', [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_adiscord_postwar_nationalisation'])
-          red = (evidence / 'red.log').read_text()
-          assert red_rc != 0 and 'FAILED (failures=12)' in red, red[-5000:]
-          for source in (patch_path, polish_path):
-              subprocess.run(['git', 'apply', '--whitespace=error', '--exclude=' + test_path, str(source)], check=True)
-          descriptions = {
-              'russian': 'Совет и Стеландер Шабрата остаются независимыми противниками. Кефрейт не ведёт войн; завершены пересмотр мира, перевооружение, возвращение командиров, подготовка горной кампании, арсеналов и запасов для второго похода.',
-              'english': 'The Council and Shabrat’s Stelander remain independent opponents. Kefreyt is at peace; revision of the settlement, refitting, the return of the captains, mountain preparations, frontline arsenals and supplies for the second campaign are complete.'
-          }
-          for lang, value in descriptions.items():
-              path = Path(f'localisation/{lang}/ADISCORD_VAL_decisions_l_{lang}.yml')
-              lines = path.read_text(encoding='utf-8-sig').splitlines(keepends=True)
-              found = [i for i, line in enumerate(lines) if line.startswith(' VAL_council_revanche_launch_available_tt:')]
-              assert len(found) == 1
-              lines[found[0]] = f' VAL_council_revanche_launch_available_tt: "{value}"\n'
-              path.write_text(''.join(lines), encoding='utf-8-sig')
+          validator = [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300']
+          runlog('baseline-validation.log', validator)
+          staff = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_adiscord_playable_staff']
+          baseline_staff = runlog('baseline-staff.log', staff)
+          assert baseline_staff == 0, (evidence / 'baseline-staff.log').read_text()
+          append_files = {'common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt', 'common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt'}
+          resolutions = {}
+          for index, name in enumerate(files):
+              source = subprocess.run(['git', 'show', old + ':' + name], capture_output=True)
+              original = source.stdout if source.returncode == 0 else None
+              proposed = subprocess.check_output(['git', 'show', feature + ':' + name])
+              assert hashlib.sha256(proposed).hexdigest() == prior['source_sha256'][name]
+              path = Path(name)
+              current = path.read_bytes() if path.exists() else None
+              if current == original:
+                  merged = proposed
+                  resolutions[name] = 'unchanged in concurrent main'
+              elif original is not None and name in append_files and current.startswith(original):
+                  suffix = current[len(original):]
+                  assert suffix.strip() and suffix not in proposed
+                  merged = proposed + suffix
+                  resolutions[name] = 'preserved complete independent staff-trigger append'
+              else:
+                  assert original is not None and current is not None, name
+                  tmp = evidence / ('merge-' + str(index)); tmp.mkdir()
+                  for label, data in [('current', current), ('base', original), ('feature', proposed)]:
+                      (tmp / label).write_bytes(data)
+                  result = subprocess.run(['git', 'merge-file', '-p', str(tmp / 'current'), str(tmp / 'base'), str(tmp / 'feature')], capture_output=True)
+                  (tmp / 'result').write_bytes(result.stdout)
+                  assert result.returncode == 0, 'Manual merge required: ' + name
+                  merged = result.stdout
+                  resolutions[name] = 'clean three-way merge'
+              assert b'<<<<<<<' not in merged and b'>>>>>>>' not in merged
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_bytes(merged)
+          (evidence / 'resolutions.json').write_text(json.dumps(resolutions, indent=2))
           focused = [sys.executable, '-B', '-m', 'unittest',
                      'tools.tests.test_adiscord_postwar_nationalisation',
                      'tools.tests.test_adiscord_stp_party_survival',
                      'tools.tests.test_adiscord_val_stelander_defeat',
                      'tools.tests.test_adiscord_stp_gameplay_loop_regressions',
                      'tools.tests.test_adiscord_stp_postwar_economy',
-                     'tools.tests.test_val_contract_ui']
+                     'tools.tests.test_val_contract_ui',
+                     'tools.tests.test_adiscord_playable_staff']
           focused_rc = runlog('focused.log', focused)
           focused_text = (evidence / 'focused.log').read_text()
           print(focused_text, flush=True)
           assert focused_rc == 0
-          runlog('final-probes.log', probe)
-          def probe_summary(label):
-              text = (evidence / (label + '-probes.log')).read_text()
-              assert 'Ran 15 tests' in text
-              return sorted(set(re.findall(r'^(?:FAIL|ERROR): (.+)$', text, re.M)))
-          baseline_failures, final_failures = probe_summary('baseline'), probe_summary('final')
-          new_failures = sorted(set(final_failures) - set(baseline_failures))
-          (evidence / 'probe-comparison.json').write_text(json.dumps({'baseline_failures': baseline_failures, 'final_failures': final_failures, 'new_failures': new_failures}, indent=2))
-          assert not new_failures, new_failures
-          runlog('final-validation.log', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'])
-          def issues(path):
-              text = path.read_text()
+          runlog('final-validation.log', validator)
+          def issues(label):
+              text = (evidence / (label + '-validation.log')).read_text()
               assert text.startswith('A-Discord total-conversion validation') and '== Vanilla leftovers:' in text and 'Traceback' not in text
               return {re.sub(r':\d+(?=:|\n| |$)', ':LINE', line) for line in text.splitlines() if line.startswith('- ')}
-          new_issues = sorted(issues(evidence / 'final-validation.log') - issues(previous / 'baseline-validation.log'))
+          new_issues = sorted(issues('final') - issues('baseline'))
           (evidence / 'new-validation-issues.json').write_text(json.dumps(new_issues, indent=2))
           assert not new_issues, new_issues
-          files = re.findall(r'^diff --git a/\S+ b/(\S+)$', patch.decode(), re.M)
-          assert len(files) == len(set(files)) == 13 and all(not f.startswith('.github/') for f in files)
           subprocess.run(['git', 'diff', '--check'], check=True)
           subprocess.run(['git', 'add', '--', *files], check=True)
           assert sorted(subprocess.check_output(['git', 'diff', '--cached', '--name-only'], text=True).splitlines()) == sorted(files)
@@ -120,20 +118,19 @@ jobs:
           subprocess.run(['git', 'config', 'user.email', '81386071+worker2of2month@users.noreply.github.com'], check=True)
           subprocess.run(['git', 'commit', '-m', 'feat: add postwar nationalisation and expand Stelander and Council branches'], check=True)
           head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
-          branch = 'codex/postwar-nationalisation-ready-' + os.environ['GITHUB_RUN_ID']
+          branch = 'codex/postwar-nationalisation-integrated-' + os.environ['GITHUB_RUN_ID']
           subprocess.run(['git', 'push', 'origin', head + ':refs/heads/' + branch], check=True)
           manifest = {'base': base, 'head': head, 'branch': branch, 'files': files, 'new_focuses': 18,
                       'focused_tests': int(re.search(r'Ran (\d+) tests?', focused_text).group(1)),
-                      'red_test_failures': 12, 'new_validation_issues': new_issues,
-                      'differential_probe_tests': 15, 'baseline_probe_failures': baseline_failures,
-                      'new_probe_failures': new_failures, 'full_suite_completed': False,
-                      'full_suite_evidence_run': 35685621373, 'source_sha256': hashes, 'runtime_tested': False}
+                      'new_validation_issues': new_issues, 'resolutions': resolutions,
+                      'prior_feature_verification_run': 35686221912, 'whole_suite_completed': False,
+                      'source_sha256': hashes, 'runtime_tested': False}
           (evidence / 'manifest.json').write_text(json.dumps(manifest, indent=2))
           print(json.dumps(manifest, indent=2), flush=True)
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: postwar-nationalisation-final-verification
-          path: /tmp/postwar-evidence
+          name: postwar-nationalisation-integrated-verification
+          path: /tmp/postwar-integrated
           retention-days: 3
