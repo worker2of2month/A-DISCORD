@@ -133,3 +133,14 @@ STP_ps_exile = {
 	visible_when_empty = yes
 	priority = 40
 }
+
+STP_postwar_administration = {
+    icon = ADISCORD_deal
+    allowed = { OR = { tag = STP tag = STS } }
+    visible = {
+        has_country_flag = STP_cw_postwar
+        has_completed_focus = STP_pw_regional_citizenship
+    }
+    visible_when_empty = yes
+    priority = 19
+}

@@ -1613,6 +1613,25 @@ STP_cw_fada_captured = {
 	STS = { controls_province = 145 }
 }
 
+# COUNTRY with a state in FROM: integration follows a directly held core frontier.
+STP_pw_regional_integration_target_valid = {
+    OR = { tag = STP tag = STS }
+    STP_pw_can_reconstruct = yes
+    is_subject = no
+    has_war = no
+    has_completed_focus = STP_pw_regional_citizenship
+    FROM = {
+        is_owned_by = ROOT
+        is_controlled_by = ROOT
+        NOT = { is_core_of = ROOT }
+        any_neighbor_state = {
+            is_owned_by = ROOT
+            is_controlled_by = ROOT
+            is_core_of = ROOT
+        }
+    }
+}
+
 # Playable staffing: original cabinet and civil-war commanders are unchanged.
 STP_qol_staff_available = {
 	OR = { tag = STP tag = STS }

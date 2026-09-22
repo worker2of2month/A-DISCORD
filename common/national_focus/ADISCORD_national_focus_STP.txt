@@ -6429,6 +6429,167 @@ focus_tree = {
 	}
 
 
+	# Civil registration and integration for either postwar government.
+
+	focus = {
+		id = STP_pw_regional_citizenship
+		icon = GFX_focus_generic_treaty
+		x = 18
+		y = 3
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar OR = { tag = STP tag = STS } }
+		offset = { x = 24 y = 1 trigger = { tag = STS } }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = STP_pc_after_victory focus = STP_pw_party_new_republic }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_integration_government_tt STP_pw_can_reconstruct = yes is_subject = no } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			unlock_decision_tooltip = { decision = STP_pw_nationalise_region show_effect_tooltip = yes }
+			custom_effect_tooltip = STP_pw_integration_chain_tt
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = STP_pw_cadastral_commissions
+		icon = GFX_focus_generic_improve_the_administration
+		x = -2
+		y = 1
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar OR = { tag = STP tag = STS } }
+		relative_position_id = STP_pw_regional_citizenship
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = STP_pw_regional_citizenship }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 75
+			add_stability = 0.03
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = STP_pw_regional_connections
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 2
+		y = 1
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar OR = { tag = STP tag = STS } }
+		relative_position_id = STP_pw_regional_citizenship
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = STP_pw_regional_citizenship }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			if = {
+				limit = { any_owned_state = { is_controlled_by = ROOT infrastructure < 5 } }
+				random_owned_controlled_state = {
+					limit = { infrastructure < 5 }
+					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+				}
+			}
+			else = { add_political_power = 50 }
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = STP_pw_workshop_contracts
+		icon = GFX_goal_generic_construct_civ_factory
+		x = -2
+		y = 2
+		cost = 5
+		allow_branch = { has_country_flag = STP_cw_postwar OR = { tag = STP tag = STS } }
+		relative_position_id = STP_pw_regional_citizenship
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = STP_pw_cadastral_commissions }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			if = {
+				limit = { any_owned_state = { is_controlled_by = ROOT NOT = { is_core_of = ROOT } free_building_slots = { building = industrial_complex size > 0 include_locked = yes } } }
+				random_owned_controlled_state = {
+					limit = { NOT = { is_core_of = ROOT } free_building_slots = { building = industrial_complex size > 0 include_locked = yes } }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+			}
+			else = { add_political_power = 75 }
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = STP_pw_local_officer_courses
+		icon = GFX_focus_generic_military_academy
+		x = 2
+		y = 2
+		cost = 4
+		allow_branch = { has_country_flag = STP_cw_postwar OR = { tag = STP tag = STS } }
+		relative_position_id = STP_pw_regional_citizenship
+		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = STP_pw_regional_connections }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 20
+			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = ROOT }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = STP_pw_common_market
+		icon = GFX_goal_generic_positive_trade_relations
+		x = 0
+		y = 3
+		cost = 5
+		allow_branch = { has_country_flag = STP_cw_postwar OR = { tag = STP tag = STS } }
+		relative_position_id = STP_pw_regional_citizenship
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = STP_pw_workshop_contracts }
+		prerequisite = { focus = STP_pw_local_officer_courses }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 100
+			add_stability = 0.04
+			add_tech_bonus = { name = STP_pw_common_market bonus = 0.5 uses = 1 category = industry }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = STP_pw_kefreyt_settlement
+		icon = GFX_goal_generic_construct_mil_factory
+		x = 0
+		y = 4
+		cost = 5
+		allow_branch = { has_country_flag = STP_cw_postwar OR = { tag = STP tag = STS } }
+		relative_position_id = STP_pw_regional_citizenship
+		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = STP_pw_common_market }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_kefreyt_settlement_available_tt STP_pw_can_reconstruct = yes is_subject = no has_war = no VAL = { exists = no } any_owned_state = { is_core_of = VAL is_controlled_by = ROOT } } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			if = {
+				limit = { any_owned_state = { is_controlled_by = ROOT is_core_of = VAL free_building_slots = { building = arms_factory size > 0 include_locked = yes } } }
+				random_owned_controlled_state = {
+					limit = { is_core_of = VAL free_building_slots = { building = arms_factory size > 0 include_locked = yes } }
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+				}
+			}
+			else = { add_political_power = 100 }
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+
 }
 
 shared_focus = {
