@@ -573,5 +573,25 @@ class TestValReclamationFollowThrough(unittest.TestCase):
                       for language, values in catalogues.items()}
             self.assertEqual(tokens["russian"], tokens["english"], key)
 
+
+class KefreytOpeningThemeTests(unittest.TestCase):
+    def test_first_focus_plays_registered_theme_for_human_country(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        tree = parse_clausewitz((ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt").read_text())[0].value
+        focus = next(e.value for e in tree if e.key == "focus" and any(c.key == "id" and c.value == "VAL_The_Contract_State" for c in e.value))
+        reward = next(e.value for e in focus if e.key == "completion_reward")
+        hidden = next(e.value for e in reward if e.key == "hidden_effect")
+        guarded = [e.value for e in hidden if e.key == "if" and any(c.key == "scoped_play_song" for c in e.value)]
+        self.assertEqual(len(guarded), 1, "The opening focus must start Kefreyt's theme exactly once")
+        limit = next(e.value for e in guarded[0] if e.key == "limit")
+        self.assertEqual([(e.key, e.value) for e in limit], [("is_ai", "no")])
+        self.assertEqual([e.value for e in guarded[0] if e.key == "scoped_play_song"], ["ADISCORD_val_theme"])
+        self.assertFalse(any(e.key == "play_song" for e in reward + hidden + guarded[0]))
+        assets = parse_clausewitz((ROOT / "music/ADISCORD_music.asset").read_text())
+        theme = [e.value for e in assets if e.key == "music" and any(c.key == "name" and c.value == "ADISCORD_val_theme" for c in e.value)]
+        self.assertEqual(len(theme), 1)
+        self.assertIn(("file", "ADISCORD_val_theme.ogg"), [(e.key, e.value) for e in theme[0]])
+        self.assertIn('song = "ADISCORD_val_theme"', (ROOT / "music/ADISCORD_songs.txt").read_text())
+
 if __name__ == "__main__":
     unittest.main()

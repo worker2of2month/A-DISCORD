@@ -39,6 +39,23 @@ class RefugeeAdmissionTests(unittest.TestCase):
         body = next(e.value for e in self.decisions[f"VAL_accept_{region}_refugees"] if e.key == "visible")
         return matches_conditions(body, self.facts, "VAL")
 
+    def test_startup_and_weekly_recover_only_unseen_war_windows(self):
+        for entry in ("VAL_initialize_logistics_market", "VAL_update_refugees_weekly"):
+            calls = [e for e in self.effects[entry] if e.key == "VAL_open_refugee_waves"]
+            self.assertEqual(len(calls), 1, f"{entry} must recover a missed war notification")
+            self.assertEqual(calls[0].value, "yes")
+            for region in REGIONS:
+                with self.subTest(entry=entry, region=region):
+                    self.setUp()
+                    self.facts[("VAL", f"VAL_refugee_{region}_war", "yes")] = True
+                    self.run_effect(self.effects[calls[0].key])
+                    window = f"VAL_refugee_{region}_window"
+                    self.assertTrue(self.visible(region))
+                    self.assertEqual(self.windows[window], 180)
+                    self.facts[("VAL", "has_country_flag", window)] = False
+                    self.run_effect(self.effects[calls[0].key])
+                    self.assertFalse(self.visible(region), "Expired windows must not be restarted")
+
     def test_each_war_opens_once_and_expiry_does_not_reopen(self):
         for region in REGIONS:
             with self.subTest(region=region):

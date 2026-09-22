@@ -58,6 +58,7 @@ VAL_initialize_logistics_market = {
 	VAL_refresh_trade_network = yes
 	VAL_refresh_black_market_state = yes
 	VAL_refresh_refugee_state = yes
+	VAL_open_refugee_waves = yes
 }
 
 VAL_refresh_trade_network = {
@@ -388,6 +389,8 @@ VAL_open_refugee_waves = {
 }
 
 VAL_update_refugees_weekly = {
+	# Recover missed war notifications without renewing an already seen wave.
+	VAL_open_refugee_waves = yes
 	if = { limit = { has_country_flag = VAL_refugee_vorkerland_window NOT = { VAL_refugee_vorkerland_war = yes } } clr_country_flag = VAL_refugee_vorkerland_window }
 	if = { limit = { has_country_flag = VAL_refugee_stelander_window NOT = { VAL_refugee_stelander_war = yes } } clr_country_flag = VAL_refugee_stelander_window }
 	if = { limit = { has_country_flag = VAL_refugee_nodrul_window NOT = { VAL_refugee_nodrul_war = yes } } clr_country_flag = VAL_refugee_nodrul_window }
