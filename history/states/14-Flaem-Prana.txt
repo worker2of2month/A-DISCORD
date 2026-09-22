@@ -4,7 +4,7 @@ state={
 	provinces={
 		2 75 5421 8540 16359 16373 16381 
 	}
-	manpower=80000
+	manpower=220000
 	buildings_max_level_factor=1.000
 	state_category=town
 	local_supplies=0.000
@@ -13,6 +13,8 @@ state={
 		owner = COF
 		add_core_of = COF
 		buildings = {
+			air_base = 2
+			75 = { naval_base = 2 }
 			infrastructure = 2
 			industrial_complex = 1
 			arms_factory = 2

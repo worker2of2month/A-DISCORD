@@ -164,9 +164,15 @@ units = {
 	}
 }
 
-##### No notable air forces #####
+air_wings = {
+	84 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "TFF" amount = 100 }
+	}
+}
+
 
 instant_effect = {
+	add_fuel = 10000
 	add_equipment_to_stockpile = {
 		type = motorized_equipment_1
 		amount = 100

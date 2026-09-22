@@ -2198,7 +2198,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "BRN": ("fragment_low_tech",),
     "BTL": ("fragment_low_tech", "land"),
     "CIN": ("fragment_low_tech",),
-    "COF": ("fragment_low_tech", "field_air_defense"),
+    "COF": ("fragment_low_tech", "field_air_defense", "air"),
     "DAN": ("fragment_low_tech", "land"),
     "DOL": ("fragment_low_tech",),
     "DRV": ("fragment_low_tech",),
@@ -2246,7 +2246,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
         "field_air_defense",
     ),
     "SVL": ("fragment_low_tech",),
-    "TFF": ("fragment_low_tech", "land", "field_air_defense"),
+    "TFF": ("fragment_low_tech", "land", "field_air_defense", "air"),
     "TMR": ("industrial",),
     "TRU": ("industrial", "institutional", "land"),
     "VAL": ("industrial", "energy", "institutional", "land", "air", "naval", "field_air_defense"),
@@ -2258,7 +2258,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "WIT": ("institutional", "land", "naval"),
     "WRK": ("industrial", "energy", "institutional", "land", "air", "naval", "armored_core"),
     "WCG": ("fragment_low_tech", "land"),
-    "YPR": ("fragment_low_tech", "land", "field_air_defense"),
+    "YPR": ("fragment_low_tech", "land", "field_air_defense", "air"),
     "ZAO": ("fragment_low_tech",),
 }
 
