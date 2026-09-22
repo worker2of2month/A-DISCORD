@@ -985,7 +985,7 @@ class ValRewardValidatorTests(unittest.TestCase):
         dummy = named_blocks(original, "VAL_company_rosters_delta")[0]
         for changed in (dummy.replace("always = no", "always = yes"),
                         dummy.replace("name = VAL_contract_state", "name = VAL_contract_army_1"),
-                        dummy.replace("army_org_factor = 0.02", "army_org_factor = 0.12")):
+                        dummy.replace("army_org_factor = 0.06", "army_org_factor = 0.12")):
             with self.subTest(changed=changed):
                 self.assertNotEqual(changed, dummy)
                 self.assertTrue(self.preview_issues(ideas=original.replace(dummy, changed))[1])
@@ -1092,12 +1092,16 @@ class ValNativePreviewTests(unittest.TestCase):
 
     def test_specialization_preview_validator_rejects_dynamic_drift(self):
         effects = EFFECTS_PATH.read_text(encoding="utf-8-sig")
-        drifted = effects.replace(
-            "add_to_variable = { var = VAL_contract_org_factor value = 0.07 }",
-            "add_to_variable = { var = VAL_contract_org_factor value = 0.071 }",
-            1,
+        source = (
+            "limit = { check_variable = { var = VAL_contract_army_level value = 3 compare = equals } }\n"
+            "\t\tadd_to_variable = { var = VAL_contract_org_factor value = 0.07 }"
         )
-        accepted, issues = self.validate_previews(effects=drifted)
+        changed = source.replace("value = 0.07", "value = 0.071")
+        self.assertIn(source, effects)
+        drifted = effects.replace(source, changed, 1)
+        sources = self.preview_sources()
+        sources["effects"] = drifted
+        accepted, issues = self.preview_issues(sources=sources)
         self.assertEqual(accepted, set())
         self.assertTrue(
             any(
