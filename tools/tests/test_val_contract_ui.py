@@ -54,15 +54,23 @@ class TestValContractUi(unittest.TestCase):
         self.assertIn("VAL_initialize_contract_authority = yes", weekly)
 
         history = read("history/countries/VAL - ValeraLand.txt")
-        self.assertIn("VAL_mercenary_state", history)
+        self.assertNotIn("VAL_mercenary_state", history)
 
         english = read("localisation/english/ADISCORD_VAL_decisions_l_english.yml")
         russian = read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml")
-        self.assertIn('VAL_contract_state: "Contract System Authority"', english)
-        self.assertIn('VAL_contract_state: "Авторитет контрактной системы"', russian)
+        self.assertIn('VAL_contract_state: "$VAL_mercenary_state$"', english)
+        self.assertIn('VAL_contract_state: "$VAL_mercenary_state$"', russian)
         for localisation in (english, russian):
             self.assertIn("[?VAL_contract_authority|0]/100", localisation)
             self.assertIn("[VALGetContractAuthorityBand]", localisation)
+
+    def test_supply_crisis_is_named_in_the_visible_dynamic_spirit(self):
+        for language, supply_name in (("russian", "разрыв поставок"), ("english", "Disrupted Supplies")):
+            text = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            label = re.search(r'^ VAL_economic_collapse:[^\n]*', text, re.M).group()
+            self.assertIn(supply_name, label)
+            self.assertRegex(text, r'VAL_vorkerland_contract_disruptions_desc:[^\n]*"\$VAL_economic_collapse_desc\$"')
+            self.assertIn("[?VAL_economic_recovery_steps|0]/9", text)
 
     def test_authority_labels_match_modifier_bands(self) -> None:
         scripted = read("common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt")
@@ -204,12 +212,24 @@ class TestValPropagandaRewards(unittest.TestCase):
         reward = named_block(self.focus("VAL_Ministry_Of_Contract_Memory"), "completion_reward")
         self.assertRegex(reward, r"(?m)^\t{3}add_political_power = 50$")
         funds = self.number(reward, "add_political_power")
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        entries = parse_clausewitz(reward)[0].value
+        unlocks = []
+        for entry in entries:
+            if entry.key != "unlock_decision_tooltip":
+                continue
+            if isinstance(entry.value, str):
+                unlocks.append(entry.value)
+            else:
+                fields = {field.key: field.value for field in entry.value}
+                self.assertEqual(fields.get("show_effect_tooltip"), "yes")
+                unlocks.append(fields.get("decision"))
         for decision_id in self.campaigns[:3]:
             with self.subTest(decision=decision_id):
-                self.assertEqual(reward.count(f"unlock_decision_tooltip = {decision_id}"), 1)
+                self.assertEqual(unlocks.count(decision_id), 1)
                 self.assertGreaterEqual(funds, self.number(self.decision(decision_id), "cost"))
         self.assertIn("custom_effect_tooltip = VAL_campaign_mine_unlock_tt", reward)
-        self.assertNotIn("unlock_decision_tooltip = VAL_campaign_the_mine_was_stolen", reward)
+        self.assertNotIn("VAL_campaign_the_mine_was_stolen", unlocks)
 
     def test_slot_rewards_hide_bookkeeping_and_preserve_one_time_grants(self) -> None:
         for focus_id, flag, tooltip in (
