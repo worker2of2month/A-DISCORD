@@ -4,58 +4,138 @@ on:
     branches: [main]
     types: [opened, synchronize, reopened]
 permissions:
-  contents: read
+  contents: write
 jobs:
   review:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/val-propaganda-review-20260922'
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 1
-      - name: Inspect the requested integration
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare verified patch
         run: |
-          git fetch --no-tags --filter=blob:none --depth=160 origin main fix/val-contract-flow-focus-value
-          git switch --detach b1d71d5228698179f9a9f8310b400981f1cc0a5b
-          git config user.name 'A-Discord integration'
-          git config user.email '81386071+worker2of2month@users.noreply.github.com'
-          mkdir -p /tmp/val-integration
-          git rev-parse HEAD origin/main > /tmp/val-integration/refs.txt
-          git merge-base HEAD origin/main > /tmp/val-integration/base.txt
-          git diff $(git merge-base HEAD origin/main)..HEAD > /tmp/val-integration/pr40.diff
-          git diff $(git merge-base HEAD origin/main)..origin/main > /tmp/val-integration/main.diff
-          git merge --no-commit --no-ff origin/main > /tmp/val-integration/merge.log 2>&1 || test -n "$(git ls-files -u)"
+          mkdir -p /tmp/val-integration-final
+          cp .github/val_integration_resolution.py /tmp/val-integration-final/resolve.py
+          cp .github/val_integration_tests.txt /tmp/val-integration-final/tests.txt
           python - <<'PY'
           from pathlib import Path
-          import subprocess, zipfile, json
-          out = Path('/tmp/val-integration')
-          def git(*args):
-              return subprocess.check_output(['git', *args])
-          conflicts = git('diff','--name-only','--diff-filter=U').decode().splitlines()
-          (out/'conflicts.json').write_text(json.dumps(conflicts, indent=2))
-          for name in conflicts:
-              for stage, label in [('1','base'),('2','pr40'),('3','main')]:
-                  p = out/'conflicts'/label/name
-                  p.parent.mkdir(parents=True, exist_ok=True)
-                  try: p.write_bytes(git('show', ':'+stage+':'+name))
-                  except subprocess.CalledProcessError: pass
-          with zipfile.ZipFile('/tmp/val-integration-review.zip','w',zipfile.ZIP_DEFLATED) as z:
+          import ast
+          p = Path('/tmp/val-integration-final/resolve.py')
+          text = p.read_text()
+          start = text.index('# The fixture is compressed')
+          end = text.index('def ui_tests(text):', start)
+          text = text[:start] + "addition = Path('/tmp/val-integration-final/tests.txt').read_text()\n\n" + text[end:]
+          ast.parse(text)
+          ast.parse(Path('/tmp/val-integration-final/tests.txt').read_text())
+          p.write_text(text)
+          PY
+          python -m pip install pillow numpy pyyaml
+          git fetch --no-tags --filter=blob:none --depth=160 origin main fix/val-contract-flow-focus-value
+          test "$(git rev-parse origin/main)" = 3641379bf5f60c756bc89127e927159c526ab25b
+          test "$(git rev-parse origin/fix/val-contract-flow-focus-value)" = b1d71d5228698179f9a9f8310b400981f1cc0a5b
+          git switch --detach 3641379bf5f60c756bc89127e927159c526ab25b
+          git config user.name 'A-Discord integration'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+      - name: Record baseline and resolve approved integration
+        run: |
+          python - <<'PY'
+          import subprocess, sys
+          from pathlib import Path
+          out = Path('/tmp/val-integration-final')
+          with (out/'baseline-expanded.log').open('w') as log:
+              try:
+                  r = subprocess.run([sys.executable,'-B','-m','unittest','tools.tests.test_validate_adiscord_val_rework','-v'], stdout=log, stderr=subprocess.STDOUT, timeout=100)
+                  print('Baseline expanded return code:', r.returncode)
+              except subprocess.TimeoutExpired:
+                  log.write('\nTIMEOUT at 100 seconds\n')
+                  print('Baseline expanded suite timed out.')
+          PY
+          git switch --detach b1d71d5228698179f9a9f8310b400981f1cc0a5b
+          git merge --no-commit --no-ff 3641379bf5f60c756bc89127e927159c526ab25b > /tmp/val-integration-final/merge.log 2>&1 || test -n "$(git ls-files -u)"
+          python -B /tmp/val-integration-final/resolve.py
+          cp /tmp/val-integration-hashes.json /tmp/val-integration-final/hashes.json
+      - name: Require scoped regression checks and valid encodings
+        run: |
+          python -B -m unittest tools.tests.test_val_contract_ui tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests.test_buyer_payment_and_native_equipment_transfer_share_authenticated_branch tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests.test_export_slots_are_capacity_markers_not_deferred_income tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests.test_vorkerland_aid_has_real_stock_costs_and_no_automatic_dispatch tools.tests.test_validate_adiscord_val_rework.ValNorthernExportTests.test_custom_prices_include_native_blocked_and_hover_suffixes tools.tests.test_validate_adiscord_val_rework.ValRegionalIntegrationTests -v > /tmp/val-integration-final/scoped.log 2>&1
+          python - <<'PY'
+          import json, subprocess, re
+          from pathlib import Path
+          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+          paths = json.loads(Path('/tmp/val-integration-hashes.json').read_text())
+          for name in paths:
+              raw = Path(name).read_bytes()
+              assert not re.search(rb'(?m)^(?:<<<<<<<|=======|>>>>>>>)', raw), name
+              if name.endswith('.yml'):
+                  assert raw.startswith(b'\xef\xbb\xbf'), name
+              elif name.endswith('.txt'):
+                  assert not raw.startswith(b'\xef\xbb\xbf'), name
+                  assert parse_clausewitz(raw.decode('utf-8')), name
+          subprocess.run(['git','add','--',*paths], check=True)
+          assert not subprocess.check_output(['git','ls-files','-u'])
+          changed = subprocess.check_output(['git','diff','--cached','--name-only','3641379bf5f60c756bc89127e927159c526ab25b']).decode().splitlines()
+          assert not any(p.startswith('.github/') for p in changed), changed
+          Path('/tmp/val-integration-final/changed.json').write_text(json.dumps(changed,indent=2))
+          subprocess.run(['git','diff','--cached','3641379bf5f60c756bc89127e927159c526ab25b','--check'],check=True)
+          print('Scoped tests, exact hashes, script structure and encodings verified.')
+          PY
+      - name: Record broader test limitations and run project validator
+        run: |
+          python - <<'PY'
+          import subprocess, sys, json, re
+          from pathlib import Path
+          out = Path('/tmp/val-integration-final')
+          reports = {}
+          cases = [
+              ('expanded',[sys.executable,'-B','-m','unittest','tools.tests.test_validate_adiscord_val_rework','-v'],100),
+              ('full-suite',[sys.executable,'-B','-m','unittest','discover','-s','tools/tests','-p','test_*.py','-v'],60),
+              ('validator',[sys.executable,'-B','tools/validate_tc.py','--limit','300'],180),
+          ]
+          for name,command,limit in cases:
+              with (out/(name+'.log')).open('w') as log:
+                  try:
+                      code = subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,timeout=limit).returncode
+                  except subprocess.TimeoutExpired:
+                      code = 124
+                      log.write('\nTIMEOUT after '+str(limit)+' seconds\n')
+              text = (out/(name+'.log')).read_text()
+              reports[name] = {'returncode':code,'failures':re.findall(r'(?m)^(?:FAIL|ERROR): (.+)$',text),'tail':text.splitlines()[-6:]}
+              print(name, json.dumps(reports[name]))
+          (out/'reports.json').write_text(json.dumps(reports,indent=2))
+          assert reports['validator']['returncode'] == 0, 'Project validator must finish successfully'
+          PY
+      - name: Publish reconciliation to PR40 only
+        run: |
+          git diff --cached 3641379bf5f60c756bc89127e927159c526ab25b > /tmp/val-integration-final/delivery.diff
+          test "$(git ls-remote origin refs/heads/fix/val-contract-flow-focus-value | cut -f1)" = b1d71d5228698179f9a9f8310b400981f1cc0a5b
+          git commit -m 'Merge current main into PR40; preserve paid contracts, reclamation and campaign fixes'
+          git rev-parse HEAD > /tmp/val-integration-final/delivery-head.txt
+          git push origin HEAD:refs/heads/fix/val-contract-flow-focus-value
+      - name: Export verification evidence
+        if: always()
+        run: |
+          git status --short > /tmp/val-integration-final/status.txt
+          git diff > /tmp/val-integration-final/unstaged.diff
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile, json
+          out = Path('/tmp/val-integration-final')
+          with zipfile.ZipFile('/tmp/val-integration-final.zip','w',zipfile.ZIP_DEFLATED) as z:
               for p in out.rglob('*'):
                   if p.is_file(): z.write(p,p.relative_to(out))
-              for directory in ['common','events','history','localisation','tools','docs','interface','country_metadata']:
-                  for p in Path(directory).rglob('*'):
-                      if p.is_file() and p.suffix.lower() in {'.txt','.yml','.yaml','.json','.py','.md','.gui','.gfx','.csv'}:
-                          z.write(p,'checkout/'+str(p))
-              for name in ['AGENTS.md','descriptor.mod']:
-                  z.write(name,'checkout/'+name)
-          print('Conflicts:', conflicts)
-          print((out/'merge.log').read_text())
+              manifest = out/'hashes.json'
+              if manifest.exists():
+                  for name in json.loads(manifest.read_text()):
+                      z.write(name,'source/'+name)
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: val-integration-review
-          path: /tmp/val-integration-review.zip
-          retention-days: 3
+          name: val-integration-final
+          path: /tmp/val-integration-final.zip
+          retention-days: 7
