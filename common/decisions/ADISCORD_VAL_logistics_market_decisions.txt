@@ -87,6 +87,28 @@ VAL_population_markets = {
 		ai_will_do = { base = 1 modifier = { factor = 0 check_variable = { var = VAL_displaced_population value = 20 compare = greater_than_or_equals } } }
 	}
 
+	VAL_accept_perimeter_refugees = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { has_country_flag = VAL_refugee_perimeter_window VAL_refugee_perimeter_open = yes }
+		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_wave_limit_tt check_variable = { var = VAL_refugee_perimeter_admitted value = 3 compare = less_than } } custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt OR = { AND = { NOT = { has_variable = VAL_refugee_training_escrow } check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } AND = { has_variable = VAL_refugee_training_escrow check_variable = { var = VAL_displaced_population value = 80 compare = less_than_or_equals } } } } ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = VAL_logistics_cost_250
+		cost = 0
+		days_re_enable = 30
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			add_to_variable = { var = VAL_displaced_population value = 10 }
+			add_to_variable = { var = VAL_refugee_perimeter_admitted value = 1 }
+			if = { limit = { check_variable = { var = VAL_refugee_perimeter_admitted value = 3 compare = greater_than_or_equals } } clr_country_flag = VAL_refugee_perimeter_window }
+			custom_effect_tooltip = VAL_refugee_admission_tt
+			set_temp_variable = { var = VAL_black_market_pressure_change value = 5 }
+			VAL_change_black_market_pressure = yes
+			VAL_refresh_refugee_state = yes
+		}
+		ai_will_do = { base = 1 modifier = { factor = 0 check_variable = { var = VAL_displaced_population value = 20 compare = greater_than_or_equals } } }
+	}
+
 	VAL_close_refugee_border = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
@@ -162,20 +184,51 @@ VAL_population_markets = {
 	VAL_fund_resettlement_depots = {
 		icon = generic_construction
 		allowed = { tag = VAL }
-		visible = { check_variable = { var = VAL_displaced_population value = 20 compare = greater_than_or_equals } }
-		available = { ADISCORD_economy_can_spend_250 = yes }
+		state_target = yes
+		targets = { 24 42 55 56 }
+		target_trigger = { FROM = { is_owned_by = ROOT is_controlled_by = ROOT } }
+		visible = {
+			check_variable = { var = VAL_displaced_population value = 10 compare = greater_than_or_equals }
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+				NOT = { has_state_flag = VAL_refugee_resettled_once }
+				NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
+				NOT = { has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier } }
+				NOT = { has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier } }
+			}
+		}
+		available = {
+			ADISCORD_economy_can_spend_250 = yes
+			check_variable = { var = VAL_displaced_population value = 10 compare = greater_than_or_equals }
+			FROM = {
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+				NOT = { has_state_flag = VAL_refugee_resettled_once }
+				NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
+				NOT = { has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier } }
+				NOT = { has_dynamic_modifier = { modifier = VAL_reclamation_stage_2_modifier } }
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
 		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_text = VAL_logistics_cost_250
 		cost = 0
-		days_re_enable = 60
+		fire_only_once = no
 		complete_effect = {
 			ADISCORD_economy_spend_250 = yes
-			add_to_variable = { var = VAL_displaced_population value = -20 }
+			add_to_variable = { var = VAL_displaced_population value = -10 }
+			FROM = {
+				add_manpower = 100000
+				set_state_flag = VAL_refugee_resettled_once
+			}
+			custom_effect_tooltip = VAL_refugee_resettlement_result_tt
 			set_temp_variable = { var = VAL_black_market_pressure_change value = -5 }
 			VAL_change_black_market_pressure = yes
 			VAL_refresh_refugee_state = yes
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = { base = 8 }
 	}
 
 	VAL_organize_refugee_return = {
