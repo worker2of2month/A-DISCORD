@@ -337,7 +337,7 @@ VAL_ai_frontier_guarantor_preparation = {
 	NOT = { has_war_with = VAL }
 	NOT = { is_in_faction_with = VAL }
 	OR = {
-		AND = { tag = NOD OR = { is_subject = no is_subject_of = STP } }
+		AND = { tag = NOD OR = { is_subject = no is_subject_of = STP } VAL = { VAL_stelander_dominated = yes } }
 		AND = { tag = STP has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } }
 	}
 	VAL = {
