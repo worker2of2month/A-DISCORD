@@ -1862,7 +1862,7 @@
  STP_party_form_assault_column_desc: "Immediately form one reinforced division using a fixed wartime template. All personnel and equipment are drawn from our actual reserves. Another order becomes available after §Y21 days§!, only while the civil war against the resistance continues. Once it ends, the old prices no longer apply. The Party's reinforced division template retains its original composition until the civil war ends; ordinary recruitment using it is not prohibited."
  STP_party_assault_price: "£manpower_texticon §Y7900§! £infantry_equipment_texticon §Y610§! / §Y48§! squad / §Y30§! support / £artillery_texticon §Y60§! £anti_air_texticon §Y20§!"
  STP_party_assault_price_blocked: "£manpower_texticon §R7900§! £infantry_equipment_texticon §R610§! / §R48§! squad / §R30§! support / £artillery_texticon §R60§! £anti_air_texticon §R20§!"
- STP_party_assault_price_tooltip: "The order requires the §Yfull package§! of manpower and equipment shown in the price line. Partial packages are not deducted; political power and treasury funds are not spent."
+ STP_party_assault_price_tooltip: "£manpower_texticon §Y7900§! £infantry_equipment_texticon §Y610§! / §Y48§! squad / §Y30§! support / £artillery_texticon §Y60§! £anti_air_texticon §Y20§!\nRequires the full package; partial packages are not deducted. Political power and treasury funds are not spent."
  STP_party_assault_ready_tt: "The reserve contains all 7900 men and the full equipment package for one reinforced division"
  STP_party_assault_order_tt: "§GOne reinforced division will be formed§! from the Party's paid reserves. No partial package is deducted."
  ADISCORD_STP_pc.25.t: "A Signature without the President"
