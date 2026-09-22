@@ -85,8 +85,4 @@ replace_path="common/doctrines/subdoctrines/special_forces"
 replace_path="common/doctrines/tracks"
 replace_path="gfx/interface/equipmentdesigner/graphic_db"
 supported_version="1.19.*"
-<<<<<<< HEAD
 remote_file_id="3804714082"
-=======
-remote_file_id="3804676160"
->>>>>>> parent of 15bd2e5f (Reverted)
