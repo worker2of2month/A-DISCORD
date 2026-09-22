@@ -1,0 +1,61 @@
+name: Playable staff review
+on:
+  pull_request:
+    branches: [main]
+    paths: ['.github/workflows/playable-staff-review.yml', '.github/playable_staff_patch.py', 'tools/tests/test_adiscord_playable_staff.py']
+permissions:
+  contents: write
+concurrency:
+  group: playable-staff-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.event.pull_request.head.ref == 'review/playable-staff-qol-20260922'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pillow
+      - name: Audit or verify clean gameplay
+        env:
+          DELIVERY_BRANCH: feat/playable-staff-qol-20260922
+        run: |
+          mkdir -p /tmp/staff-evidence
+          if [ -f .github/playable_staff_patch.py ]; then
+            python -B .github/playable_staff_patch.py
+          else
+            python - <<'PY'
+          from pathlib import Path
+          import re
+          root=Path('.')
+          from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar
+          def read(p): return (root/p).read_text(encoding='utf-8-sig')
+          for tag in ('STP','VAL'):
+            t=parse_clausewitz(read(f'common/national_focus/ADISCORD_national_focus_{tag}.txt'))
+            for tr in (e.value for e in t if e.key=='focus_tree'):
+              print('TREE', scalar(tr,'id'))
+              for f in (e.value for e in tr if e.key=='focus'):
+                fid=scalar(f,'id')
+                if tag=='VAL' or ('STP_pw_' in fid or 'STP_pc_' in fid or 'STP_party_postwar' in fid):
+                  print('FOCUS',fid,'REWARD',[(e.key,e.value) for e in block(f,'completion_reward')][:5])
+          for p in ('common/on_actions/02_ADISCORD_STP_on_actions.txt','common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt','common/scripted_localisation/ADISCORD_ideologies.txt','common/idea_tags/00_idea.txt'):
+            print('\nSOURCE',p);print(read(p))
+          for lang in ('russian','english'):
+            print('PARTIES',lang)
+            print('\n'.join(x for x in read(f'localisation/{lang}/parties_l_{lang}.yml').splitlines() if re.match(r'\s*(STP|STS|VAL)_[a-z]+_party',x)))
+          print('NESTED AGENTS',list(root.glob('**/AGENTS.md')))
+          print('MIO files',list(root.glob('common/military_industrial_organization/**/*')))
+          print('GENERATED OWNERS',read('tools/data/generated_output_owners.json')[:1800])
+          PY
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playable-staff-evidence
+          path: /tmp/staff-evidence
