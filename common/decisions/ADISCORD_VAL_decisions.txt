@@ -311,7 +311,13 @@ VAL_contract_management = {
 	VAL_campaign_rifles_and_bread = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
-		available = { ADISCORD_has_campaign_slot = yes }
+		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+		}
 		cost = 50
 		days_remove = 50
 		days_re_enable = 70
@@ -327,7 +333,13 @@ VAL_contract_management = {
 	VAL_campaign_contracts_feed_families = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
-		available = { ADISCORD_has_campaign_slot = yes }
+		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+		}
 		cost = 50
 		days_remove = 60
 		days_re_enable = 80
@@ -343,12 +355,18 @@ VAL_contract_management = {
 	VAL_campaign_no_promise_without_payment = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
-		available = { ADISCORD_has_campaign_slot = yes }
-		cost = 40
+		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+		}
+		cost = 15
 		days_remove = 45
 		days_re_enable = 70
 		modifier = {
-			political_power_gain = 0.10
+			political_power_gain = 0.50
 			ADISCORD_economy_trade_income_factor = 0.08
 		}
 		complete_effect = { ADISCORD_campaign_slot_consume = yes ADISCORD_economy_mark_dirty = yes }
@@ -359,8 +377,13 @@ VAL_contract_management = {
 	VAL_campaign_the_mine_was_stolen = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
-		visible = { has_country_flag = VAL_westerholm_metal_lost }
-		available = { ADISCORD_has_campaign_slot = yes }
+		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory has_country_flag = VAL_westerholm_metal_lost }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+		}
 		cost = 35
 		days_remove = 35
 		days_re_enable = 70
