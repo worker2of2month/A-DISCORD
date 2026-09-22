@@ -75,6 +75,69 @@ def event_block(text: str, event_id: str, event_type: str = "country_event") -> 
     raise AssertionError(f"missing event: {event_id}")
 
 
+class NorthernLandContaminationTests(unittest.TestCase):
+    states = set(range(58, 66))
+    effects_path = "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
+
+    def test_northern_tribal_land_is_excluded_from_dirty_bootstrap(self):
+        from tools.lib.vorkerland_collapse_manifest import CONTAMINATED_STATES, DIRTY_GROUPS
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        self.assertFalse(self.states & CONTAMINATED_STATES)
+        block = named_block(read(self.effects_path), "ADISCORD_vorkerland_apply_dirty_modifiers")
+        applied = {int(entry.key) for entry in parse_clausewitz(block)[0].value}
+        self.assertFalse(self.states & applied)
+        self.assertEqual(applied, CONTAMINATED_STATES)
+        self.assertTrue({24, 57} <= applied)
+        self.assertTrue({state for group in DIRTY_GROUPS.values() for state in group} <= applied)
+
+    def test_northern_tribal_provinces_have_ordinary_terrain(self):
+        terrain = {}
+        for line in read("map/definition.csv").splitlines():
+            fields = line.split(";")
+            if fields[0].isdigit() and len(fields) > 6:
+                terrain[int(fields[0])] = fields[6]
+        found = set()
+        for path in (ROOT / "history/states").glob("*.txt"):
+            source = path.read_text(encoding="utf-8-sig")
+            match = re.search(r"\bid\s*=\s*(\d+)", source)
+            if not match or int(match.group(1)) not in self.states:
+                continue
+            state = int(match.group(1))
+            found.add(state)
+            provinces = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source)
+            self.assertIsNotNone(provinces)
+            for province in map(int, re.findall(r"\d+", provinces.group(1))):
+                self.assertNotEqual(terrain[province], "contaminated", (state, province))
+        self.assertEqual(found, self.states)
+
+    def test_northern_save_cleanup_is_ungated_bounded_and_owner_independent(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        source = read(self.effects_path)
+        cleanup_id = "ADISCORD_vorkerland_clear_northern_dirty_modifiers"
+        helper_id = "ADISCORD_vorkerland_remove_dirty_state_modifier"
+        dirty_id = "ADISCORD_vorkerland_dirty_state"
+        self.assertTrue(re.search(r"(?m)^" + cleanup_id + r"\s*=\s*\{", source), "missing northern cleanup")
+        cleanup = parse_clausewitz(named_block(source, cleanup_id))[0].value
+        self.assertEqual({entry.key for entry in cleanup}, {str(state) for state in self.states})
+        self.assertEqual(len(cleanup), len(self.states))
+        for entry in cleanup:
+            self.assertEqual([(call.key, call.value) for call in entry.value], [(helper_id, "yes")])
+        helper = parse_clausewitz(named_block(source, helper_id))[0].value
+        self.assertEqual([entry.key for entry in helper], ["if"])
+        branch = helper[0].value
+        self.assertEqual([entry.key for entry in branch], ["limit", "remove_dynamic_modifier", "owner"])
+        self.assertEqual([entry.key for entry in branch[0].value], ["has_dynamic_modifier"])
+        guard = branch[0].value[0].value
+        self.assertEqual([(entry.key, entry.value) for entry in guard], [("modifier", dirty_id)])
+        self.assertEqual([(entry.key, entry.value) for entry in branch[1].value], [("modifier", dirty_id)])
+        self.assertEqual([(entry.key, entry.value) for entry in branch[2].value], [("ADISCORD_economy_mark_dirty", "yes")])
+        startup = parse_clausewitz(named_block(read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_startup"))[0].value
+        payload = next(entry.value for entry in startup if entry.key == "effect")
+        self.assertEqual([entry.value for entry in payload if entry.key == cleanup_id], ["yes"])
+
+
 class VorkerlandCollapseValidatorTests(unittest.TestCase):
     def test_prewar_compact_ratifies_after_second_commitment_in_either_order(self) -> None:
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
