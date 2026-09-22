@@ -27,6 +27,11 @@ VAL_contract_state = {
 	ADISCORD_economy_admin_expense_factor = VAL_contract_admin_expense_factor
 }
 
+# Retain the serialized legacy ID only for guarded removal from older saves.
+VAL_reclamation_recovered_land = {
+	enable = { always = no }
+}
+
 # State reclamation is represented by one status at a time.
 # These are the net penalties after replacing the original contaminated-state modifier.
 VAL_reclamation_stage_1_modifier = {
