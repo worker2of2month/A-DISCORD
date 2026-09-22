@@ -665,7 +665,13 @@ on_actions = {
 				set_global_flag = skip_default_capitulation
 				if = {
 					limit = { ROOT = { tag = VAL } }
-					STS = { set_variable = { var = STP_pc_cap_side value = 1 } STP_pc_begin_settlement = yes }
+					if = {
+						limit = { STS = { has_country_flag = STP_heg_kefreyt_final_started } }
+						STS = { STP_heg_settle_kefreyt_final = yes }
+					}
+					else = {
+						STS = { set_variable = { var = STP_pc_cap_side value = 1 } STP_pc_begin_settlement = yes }
+					}
 				}
 				else_if = {
 					limit = { ROOT = { tag = NOD } }
