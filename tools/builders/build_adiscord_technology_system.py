@@ -66,6 +66,8 @@ YEAR_TO_Y = {year: index for index, year in enumerate(YEARS)}
 GRID_X = 150
 GRID_Y = 130
 GRID_SLOT = 70
+YEAR_LABEL_WIDTH = 56
+YEAR_LABEL_HEIGHT = 22
 # Line segments tile on a 70px square. Wider row spacing uses whole cells so
 # connector ends still meet; two cells also leave room for 84px equipment cards.
 HORIZONTAL_LANE_SLOT_MULTIPLIER = 2
@@ -5311,165 +5313,20 @@ def chronological_grid_slot(year: int, *, horizontal: bool) -> int:
     return slot * multiplier
 
 
-def graph_distances(
-    start: int,
-    adjacency: tuple[tuple[int, ...], ...],
-) -> dict[int, int]:
-    """Return shortest edge distances from one node in a small acyclic graph."""
-
-    distances = {start: 0}
-    frontier = [start]
-    while frontier:
-        source = frontier.pop(0)
-        for target in adjacency[source]:
-            distance = distances[source] + 1
-            if target in distances and distances[target] <= distance:
-                continue
-            distances[target] = distance
-            frontier.append(target)
-    return distances
-
-
-def balanced_binary_pairs(graph: BranchGraph) -> tuple[tuple[int, int], ...]:
-    """Find symmetric fork entries and merge exits that should share a column.
-
-    Clausewitz draws every path independently. If the two arms of a balanced
-    diamond start or end in different chronological columns, their elbows
-    overlap without sharing a centrepiece and leave the visible breaks seen in
-    horizontal trees. Unequal arms remain staggered because aligning those
-    would create backwards or misleading routes.
-    """
-
-    reverse: list[list[int]] = [[] for _ in graph.lanes]
-    for source, targets in enumerate(graph.successors):
-        for target in targets:
-            reverse[target].append(source)
-    reverse_adjacency = tuple(tuple(parents) for parents in reverse)
-
-    pairs: set[tuple[int, int]] = set()
-    for targets in graph.successors:
-        if len(targets) != 2:
-            continue
-        left, right = targets
-        left_distances = graph_distances(left, graph.successors)
-        right_distances = graph_distances(right, graph.successors)
-        common = set(left_distances).intersection(right_distances)
-        if common:
-            meeting = min(
-                common,
-                key=lambda node: (
-                    max(left_distances[node], right_distances[node]),
-                    left_distances[node] + right_distances[node],
-                    node,
-                ),
-            )
-            if left_distances[meeting] == right_distances[meeting]:
-                pairs.add(tuple(sorted((left, right))))
-
-    for parents in reverse_adjacency:
-        if len(parents) != 2:
-            continue
-        left, right = parents
-        left_distances = graph_distances(left, reverse_adjacency)
-        right_distances = graph_distances(right, reverse_adjacency)
-        common = set(left_distances).intersection(right_distances)
-        if common:
-            meeting = min(
-                common,
-                key=lambda node: (
-                    max(left_distances[node], right_distances[node]),
-                    left_distances[node] + right_distances[node],
-                    node,
-                ),
-            )
-            if left_distances[meeting] == right_distances[meeting]:
-                pairs.add(tuple(sorted((left, right))))
-    return tuple(sorted(pairs))
-
-
 def horizontal_visual_slots(branch: Branch) -> tuple[int, ...]:
-    """Align balanced diamonds without changing their gameplay start years."""
+    """Keep every node under its actual research year, including fork arms."""
 
-    graph = BRANCH_GRAPHS[branch.key]
-    base = tuple(
+    slots = tuple(
         chronological_grid_slot(year, horizontal=True)
         for year in branch.years
     )
-    slots = list(base)
-    reverse: list[list[int]] = [[] for _ in graph.lanes]
-    for source, targets in enumerate(graph.successors):
-        for target in targets:
-            reverse[target].append(source)
-    multi_arm_groups = {
-        tuple(sorted(group))
-        for group in (*graph.successors, *(tuple(parents) for parents in reverse))
-        if len(group) >= 3
-    }
-    alignment_groups = {
-        *balanced_binary_pairs(graph),
-        *multi_arm_groups,
-    }
-
-    def jumps_a_bystander(group: tuple[int, ...], candidate: int) -> bool:
-        """Would aligning ``group`` on ``candidate`` overtake a non-member node?
-
-        A group may compress its own arms into one column -- that is the whole
-        point of aligning a balanced fork. What it must never do is carry an arm
-        past a node it does not contain, because that node owns an earlier
-        column for a later year and the tab then contradicts its own year
-        headers: special forces once drew a 2167 rung right of the 2172 one and
-        under the 2175 label.
-        """
-
-        bystanders = [index for index in range(len(branch.years)) if index not in group]
-        for index in group:
-            limit = min(
-                (
-                    base[other]
-                    for other in bystanders
-                    if branch.years[other] > branch.years[index]
-                ),
-                default=max(base),
-            )
-            if candidate > limit:
-                return True
-        return False
-
-    for group in sorted(alignment_groups):
-        candidate = max(base[index] for index in group)
-        neighbours = tuple(
-            source
-            for source, targets in enumerate(graph.successors)
-            if any(index in targets for index in group)
-        )
-        successors = tuple(
-            target
-            for index in group
-            for target in graph.successors[index]
-        )
-        if neighbours and candidate <= max(base[index] for index in neighbours):
-            continue
-        if successors and candidate >= min(base[index] for index in successors):
-            continue
-        if jumps_a_bystander(group, candidate):
-            continue
-        for index in group:
-            slots[index] = candidate
-
-    for source, targets in enumerate(graph.successors):
+    for source, targets in enumerate(BRANCH_GRAPHS[branch.key].successors):
         for target in targets:
             if slots[source] >= slots[target]:
                 raise ValueError(
                     f"{branch.key}: non-chronological visual edge {source}->{target}"
                 )
-    for early, early_year in enumerate(branch.years):
-        for late, late_year in enumerate(branch.years):
-            if early_year < late_year and slots[early] > slots[late]:
-                raise ValueError(
-                    f"{branch.key}: {branch.techs[early].key} ({early_year}) is drawn "
-                    f"right of {branch.techs[late].key} ({late_year})"
-                )
-    return tuple(slots)
+    return slots
 
 
 def technology_time_slot(branch: Branch, index: int) -> int:
@@ -5482,28 +5339,26 @@ def technology_time_slot(branch: Branch, index: int) -> int:
 
 
 def technology_grid_position(branch: Branch, index: int) -> tuple[int, int]:
-    """Return the folder slot pair in the order the gridbox ``format`` expects.
+    """Return signed cross-axis slots and chronological time slots.
 
-    ``format`` decides which member of the pair Clausewitz spends on which
-    screen axis, so the two orientations are not simply transposed coordinates:
-
-    * ``format = "UP"`` reads the pair as written, ``x`` across and ``y`` down.
-    * ``format = "LEFT"`` swaps them: ``x`` becomes the vertical band row scaled
-      by ``slot_height`` and ``y`` becomes the horizontal step scaled by
-      ``slot_width``.
-
-    Vanilla is the reference for the swapped case. Its infantry tab reads
-    left-to-right -- every year label sits at ``y = 50`` with x stepping 140 --
-    yet each technology stores the year in ``position.y`` and its capability row
-    in ``position.x``. Writing time into ``x`` instead makes a left-to-right tab
-    stack one whole band height per rung and run off the bottom of its gridbox.
+    Native technology grids centre cross-axis slot zero inside the gridbox.
+    ``UP`` spends position.x across and position.y down; ``LEFT`` swaps those
+    screen axes. Both therefore need signed lane offsets around the midpoint
+    of the occupied lanes, not offsets measured from the box's upper-left.
     """
 
     graph = BRANCH_GRAPHS[branch.key]
-    lane = graph.lanes[index]
-    if HORIZONTAL_FOLDERS.intersection(branch.folders):
-        return lane * HORIZONTAL_LANE_SLOT_MULTIPLIER, technology_time_slot(branch, index)
-    return (lane - min(graph.lanes)) * LANE_SLOT_MULTIPLIER, technology_time_slot(branch, index)
+    multiplier = (
+        HORIZONTAL_LANE_SLOT_MULTIPLIER
+        if HORIZONTAL_FOLDERS.intersection(branch.folders)
+        else LANE_SLOT_MULTIPLIER
+    )
+    doubled_slot = (
+        2 * graph.lanes[index] - min(graph.lanes) - max(graph.lanes)
+    ) * multiplier
+    if doubled_slot % 2:
+        raise ValueError(f"{branch.key}: lane spacing cannot centre integer grid slots")
+    return doubled_slot // 2, technology_time_slot(branch, index)
 
 
 def render_research_completion_effects(tech: Tech) -> list[str]:
@@ -6406,7 +6261,8 @@ def render_folder(folder: str) -> str:
         for branch in branches:
             graph = BRANCH_GRAPHS[branch.key]
             grid_height = (
-                (max(graph.lanes) + 1) * HORIZONTAL_LANE_SLOT_MULTIPLIER * GRID_SLOT
+                (max(graph.lanes) - min(graph.lanes) + 1)
+                * HORIZONTAL_LANE_SLOT_MULTIPLIER * GRID_SLOT
             )
             branch_layouts.append((branch, GRID_X, cursor_y, grid_width, grid_height))
             cursor_y += grid_height + BRANCH_GAP
@@ -6452,14 +6308,26 @@ def render_folder(folder: str) -> str:
     ]
     # Vertical branches carry their own dated rows; a shared ruler would imply
     # that independent programmes on the same row have the same research year.
-    year_labels = (
-        [(str(year), year, GRID_X + chronological_grid_slot(year, horizontal=True) * GRID_SLOT + 18, 84) for year in YEARS]
-        if horizontal else
-        [(f"{branch.key}_{year}", year, grid_x - 62,
-          grid_y + technology_time_slot(branch, branch.years.index(year)) * GRID_SLOT + 18)
-         for branch, grid_x, grid_y, _, _ in branch_layouts
-         for year in sorted(set(branch.years))]
-    )
+    if horizontal:
+        year_labels = [
+            (
+                str(year), year,
+                GRID_X + chronological_grid_slot(year, horizontal=True) * GRID_SLOT
+                + (GRID_SLOT - YEAR_LABEL_WIDTH) // 2,
+                84,
+            )
+            for year in YEARS
+        ]
+    else:
+        year_labels = [
+            (
+                f"{branch.key}_{year}", year, grid_x - 62,
+                grid_y + technology_time_slot(branch, branch.years.index(year)) * GRID_SLOT
+                + (GRID_SLOT - YEAR_LABEL_HEIGHT) // 2,
+            )
+            for branch, grid_x, grid_y, _, _ in branch_layouts
+            for year in sorted(set(branch.years))
+        ]
     for label, year, year_x, year_y in year_labels:
         lines.extend((
             "\t\t\t\tinstantTextBoxType = {",
@@ -6467,9 +6335,9 @@ def render_folder(folder: str) -> str:
             f"\t\t\t\t\tposition = {{ x = {year_x} y = {year_y} }}",
             "\t\t\t\t\tfont = \"hoi_18b\"",
             f"\t\t\t\t\ttext = \"{year}\"",
-            "\t\t\t\t\tmaxWidth = 56",
-            "\t\t\t\t\tmaxHeight = 22",
-            "\t\t\t\t\tformat = left",
+            f"\t\t\t\t\tmaxWidth = {YEAR_LABEL_WIDTH}",
+            f"\t\t\t\t\tmaxHeight = {YEAR_LABEL_HEIGHT}",
+            f"\t\t\t\t\tformat = {'center' if horizontal else 'left'}",
             "\t\t\t\t\tOrientation = \"UPPER_LEFT\"",
             "\t\t\t\t}",
         ))
@@ -6530,7 +6398,12 @@ def write_gui() -> None:
         name = name_match.group(1)
         named_blocks[name] = (start, end, text[start:end])
         if name in FOLDER_BACKGROUNDS:
-            replacements.append((start, end, render_folder(name)))
+            # Replace indentation with the generated block instead of adding
+            # another prefix on every repository-GUI regeneration.
+            line_start = text.rfind("\n", 0, start) + 1
+            if text[line_start:start].strip():
+                raise ValueError(f"Technology folder {name} must begin on its own line")
+            replacements.append((line_start, end, render_folder(name)))
             found.add(name)
     missing = set(FOLDER_BACKGROUNDS) - found
     if missing:

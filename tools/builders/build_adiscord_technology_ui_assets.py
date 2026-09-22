@@ -383,12 +383,17 @@ def render_gui() -> str:
 
 
 def apply_tree_skin(text: str) -> str:
+    # The system builder can start from the already skinned repository GUI.
+    # Normalise each token before the strict count check so mixed regenerated
+    # folders remain valid without accepting missing or duplicate widgets.
     for contract, (_, _, count) in zip(FOLDER_TAB_CONTRACTS, FOLDER_TABS):
+        text = text.replace(f'"{contract.target_name}"', f'"{contract.source_name}"')
         text = replace_counted(text, contract.source_name, contract.target_name, count)
     detail_background = re.compile(
-        r'#SpriteType\s*=\s*"GFX_technology_info_bg"'
+        r'(?:#SpriteType\s*=\s*"GFX_technology_info_bg"'
+        r'|SpriteType\s*=\s*"GFX_ADISCORD_technology_info")'
         r'(?P<gap>\s*)'
-        r'SpriteType\s*=\s*"GFX_tiled_window_thin_border2"'
+        r'#?SpriteType\s*=\s*"GFX_tiled_window_thin_border2"'
     )
     text, count = detail_background.subn(
         'SpriteType = "GFX_ADISCORD_technology_info"'
@@ -399,9 +404,10 @@ def apply_tree_skin(text: str) -> str:
     if count != 2:
         raise ValueError(f"technology detail background: expected 2, found {count}")
     for old, (new, expected) in TREE_SPRITE_REPLACEMENTS.items():
+        text = text.replace(f'"{new}"', f'"{old}"')
         text = replace_counted(text, old, new, expected)
     text = replace_gui_block(text, "instantTextboxType", "tech_info_special_description", (
-        (r'font\s*=\s*"hoi4_typewriter16_inverted"', 'font = "hoi4_typewriter16"'),
+        (r'font\s*=\s*"hoi4_typewriter16(?:_inverted)?"', 'font = "hoi4_typewriter16"'),
     ), expected=2)
     return text
 

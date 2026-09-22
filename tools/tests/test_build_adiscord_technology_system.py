@@ -19,6 +19,114 @@ STARTING_PROFILE_MANIFEST = ROOT / "tools" / "data" / "adiscord_starting_technol
 
 
 class CompactTechnologyTreeContractTests(unittest.TestCase):
+
+    @staticmethod
+    def _named_gui_block(text: str, kind: str, name: str) -> str:
+        for match in re.finditer(rf"\b{kind}\s*=\s*\{{", text):
+            block = validator.extract_block(text, match.start())
+            if re.search(rf'\bname\s*=\s*"{re.escape(name)}"', block):
+                return block
+        raise AssertionError(f"Missing {kind}: {name}")
+
+    def test_native_grid_cross_axis_is_centered_beneath_each_branch_title(self) -> None:
+        for folder in generator.FOLDER_BACKGROUNDS:
+            rendered = generator.render_folder(folder)
+            horizontal = folder in generator.HORIZONTAL_FOLDERS
+            for branch in (b for b in generator.BRANCHES if folder in b.folders):
+                grid = self._named_gui_block(rendered, "gridboxtype", branch.techs[0].id + "_tree")
+                size = re.search(r"size = \{ width = (\d+) height = (\d+) \}", grid)
+                cross_size = int(size[2 if horizontal else 1])
+                # Native cross-axis slot zero lies at the gridbox centre.
+                centers = [
+                    cross_size / 2 + generator.technology_grid_position(branch, i)[0] * 70
+                    for i in range(len(branch.techs))
+                ]
+                half_card = 42 if horizontal else 102
+                with self.subTest(folder=folder, branch=branch.key):
+                    self.assertEqual((min(centers) + max(centers)) / 2, cross_size / 2)
+                    self.assertGreaterEqual(min(centers) - half_card, 0)
+                    self.assertLessEqual(max(centers) + half_card, cross_size)
+
+    def test_horizontal_ruler_dates_match_every_technology_start_year(self) -> None:
+        for branch in generator.BRANCHES:
+            if not generator.HORIZONTAL_FOLDERS.intersection(branch.folders):
+                continue
+            for index, tech in enumerate(branch.techs):
+                text = generator.render_technology(branch, index)
+                year = int(re.search(r"\bstart_year = (\d+)", text)[1])
+                with self.subTest(technology=tech.id):
+                    self.assertEqual(
+                        generator.technology_time_slot(branch, index),
+                        generator.YEAR_TO_Y[year] * 3,
+                    )
+
+    def test_year_label_centres_align_with_native_technology_cells(self) -> None:
+        for folder in generator.FOLDER_BACKGROUNDS:
+            rendered = generator.render_folder(folder)
+            horizontal = folder in generator.HORIZONTAL_FOLDERS
+            for branch in (b for b in generator.BRANCHES if folder in b.folders):
+                grid = self._named_gui_block(rendered, "gridboxtype", branch.techs[0].id + "_tree")
+                origin = re.search(r"position = \{ x = (-?\d+) y = (-?\d+) \}", grid)
+                for index, year in enumerate(branch.years):
+                    label_id = str(year) if horizontal else f"{branch.key}_{year}"
+                    label = self._named_gui_block(
+                        rendered, "instantTextBoxType", f"ADISCORD_{folder}_year_{label_id}"
+                    )
+                    pos = re.search(r"position = \{ x = (-?\d+) y = (-?\d+) \}", label)
+                    extent = int(re.search(
+                        r"maxWidth = (\d+)" if horizontal else r"maxHeight = (\d+)", label
+                    )[1])
+                    axis = 1 if horizontal else 2
+                    cell_center = int(origin[axis]) + generator.technology_time_slot(branch, index) * 70 + 35
+                    with self.subTest(folder=folder, technology=branch.techs[index].id):
+                        self.assertEqual(int(pos[axis]) + extent / 2, cell_center)
+                        self.assertIn(f'text = "{year}"', label)
+
+    def test_ui_validator_rejects_swapped_dates_displaced_labels_and_wrong_titles(self) -> None:
+        original = "\n".join(generator.render_folder(folder) for folder in generator.FOLDER_BACKGROUNDS)
+        label_a = self._named_gui_block(original, "instantTextBoxType", "ADISCORD_industry_folder_year_production_2150")
+        label_b = self._named_gui_block(original, "instantTextBoxType", "ADISCORD_industry_folder_year_production_2155")
+        swapped = original.replace(label_a, label_a.replace('text = "2150"', 'text = "2155"'))
+        swapped = swapped.replace(label_b, label_b.replace('text = "2155"', 'text = "2150"'))
+        displaced = original.replace(label_a, re.sub(r"position = \{ x = -?\d+", "position = { x = 999", label_a))
+        title = self._named_gui_block(original, "instantTextBoxType", "ADISCORD_branch_production")
+        wrong_title = original.replace(title, title.replace("ADISCORD_TECH_BRANCH_PRODUCTION", "ADISCORD_TECH_BRANCH_RECONSTRUCTION"))
+        grid = self._named_gui_block(original, "gridboxtype", "ADISCORD_tech_standardized_machine_tools_tree")
+        displaced_grid = original.replace(grid, re.sub(r"position = \{ x = -?\d+", "position = { x = 999", grid))
+        mutations = (
+            ("swapped", swapped), ("displaced", displaced), ("wrong_title", wrong_title),
+            ("displaced_grid", displaced_grid),
+            ("missing", original.replace(label_a, "")),
+            ("duplicate", original.replace(label_a, label_a + label_a)),
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "interface/countrytechtreeview.gui"
+            path.parent.mkdir()
+            path.write_text(original, encoding="utf-8")
+            with patch.object(validator, "ROOT", root):
+                self.assertEqual(validator.check_technology_ui_years(), [])
+                for name, broken in mutations:
+                    with self.subTest(mutation=name):
+                        path.write_text(broken, encoding="utf-8")
+                        self.assertTrue(validator.check_technology_ui_years())
+
+    def test_gui_regeneration_from_repository_is_idempotent(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / "interface/countrytechtreeview.gui"
+            output.parent.mkdir()
+            output.write_bytes((ROOT / "interface/countrytechtreeview.gui").read_bytes())
+            with patch.object(generator, "ROOT", root), patch.object(
+                generator, "BASE_GAME", root / "uninstalled_game"
+            ):
+                generator.write_gui()
+                first = output.read_bytes()
+                generator.write_gui()
+                self.assertEqual(output.read_bytes(), first)
+            with patch.object(validator, "ROOT", root):
+                self.assertEqual(validator.check_technology_ui_years(), [])
+
     def test_vertical_programmes_do_not_reserve_empty_research_years(self) -> None:
         for branch in generator.BRANCHES:
             if generator.HORIZONTAL_FOLDERS.intersection(branch.folders):
@@ -258,7 +366,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             folder: (int(x), int(y))
             for folder, x, y in re.findall(
                 r"folder\s*=\s*\{\s*name\s*=\s*([A-Za-z0-9_]+)\s*"
-                r"position\s*=\s*\{\s*x\s*=\s*(\d+)\s*y\s*=\s*(\d+)",
+                r"position\s*=\s*\{\s*x\s*=\s*(-?\d+)\s*y\s*=\s*(-?\d+)",
                 rendered,
                 flags=re.DOTALL,
             )
@@ -511,14 +619,14 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertEqual(
             positions,
             {
-                0: (2, 0),
-                3: (4, 15),
-                15: (2, 57),
+                0: (0, 0),
+                3: (2, 9),
+                15: (0, 57),
             },
         )
         for index in range(len(small_arms.techs)):
             x, y = generator.technology_grid_position(small_arms, index)
-            self.assertEqual(x, 2 * generator.BRANCH_GRAPHS["small_arms"].lanes[index])
+            self.assertEqual(x, 2 * (generator.BRANCH_GRAPHS["small_arms"].lanes[index] - 1))
             self.assertEqual(y, generator.technology_time_slot(small_arms, index))
 
         armor = generator.BRANCH_BY_KEY["recon_armor"]
@@ -526,7 +634,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             positions = self._folder_positions(generator.render_technology(armor, index))
             self.assertEqual(positions["armour_folder"], positions["nsb_armour_folder"])
 
-    def test_horizontal_programmes_share_visual_fork_and_merge_columns(self) -> None:
+    def test_horizontal_programmes_retain_authored_fork_and_merge_years(self) -> None:
         branch = generator.BRANCH_BY_KEY["combat_armor"]
         graph = generator.BRANCH_GRAPHS[branch.key]
 
@@ -535,7 +643,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertGreater(len({branch.years[index] for index in fork_targets}), 1)
         self.assertEqual(
             {generator.technology_time_slot(branch, index) for index in fork_targets},
-            {generator.technology_time_slot(branch, fork_targets[0])},
+            {generator.YEAR_TO_Y[branch.years[index]] * 3 for index in fork_targets},
         )
 
         merge_parents = tuple(
@@ -547,7 +655,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertGreater(len({branch.years[index] for index in merge_parents}), 1)
         self.assertEqual(
             {generator.technology_time_slot(branch, index) for index in merge_parents},
-            {generator.technology_time_slot(branch, merge_parents[0])},
+            {generator.YEAR_TO_Y[branch.years[index]] * 3 for index in merge_parents},
         )
 
         for source, targets in enumerate(graph.successors):
@@ -604,50 +712,26 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertEqual(generator.XOR_INDEX_GROUPS_BY_BRANCH["combat_armor"], ((16, 17),))
 
     def test_every_node_fits_inside_its_own_declared_gridbox(self) -> None:
-        """A node placed outside its gridbox is drawn on the wrong axis.
-
-        This regressed once: time was written to x on left-to-right tabs, and
-        because ``format = "LEFT"`` spends x on the vertical axis the infantry
-        and armour rungs stepped a whole band height each and ran off the bottom
-        of a 288px box while the year headers still ran across the tab.
-        """
-
-        for folder in sorted({f for b in generator.BRANCHES for f in b.folders}):
+        for folder in generator.FOLDER_BACKGROUNDS:
+            rendered = generator.render_folder(folder)
             horizontal = folder in generator.HORIZONTAL_FOLDERS
-            for branch in [b for b in generator.BRANCHES if folder in b.folders]:
-                graph = generator.BRANCH_GRAPHS[branch.key]
-                if horizontal:
-                    across_extent = (
-                        max(generator.YEAR_TO_Y.values())
-                        * generator.HORIZONTAL_YEAR_SLOT_MULTIPLIER
-                        + generator.HORIZONTAL_YEAR_SLOT_MULTIPLIER
-                    ) * generator.GRID_SLOT
-                    down_extent = (
-                        (max(graph.lanes) + 1)
-                        * generator.HORIZONTAL_LANE_SLOT_MULTIPLIER
-                        * generator.GRID_SLOT
-                    )
-                    across_slot = generator.GRID_SLOT
-                    down_slot = generator.GRID_SLOT
-                else:
-                    across_extent = (
-                        max(graph.lanes) * generator.LANE_SLOT_MULTIPLIER
-                        + generator.LANE_SLOT_MULTIPLIER
-                    ) * generator.GRID_SLOT
-                    down_extent = (
-                        max(generator.YEAR_TO_Y.values())
-                        * generator.VERTICAL_YEAR_SLOT_MULTIPLIER
-                        + 1
-                    ) * generator.GRID_SLOT
-                    across_slot = down_slot = generator.GRID_SLOT
+            for branch in (b for b in generator.BRANCHES if folder in b.folders):
+                grid = self._named_gui_block(
+                    rendered, "gridboxtype", branch.techs[0].id + "_tree"
+                )
+                size = re.search(r"size = \{ width = (\d+) height = (\d+) \}", grid)
+                width, height = int(size[1]), int(size[2])
                 for index, tech in enumerate(branch.techs):
                     x, y = generator.technology_grid_position(branch, index)
-                    # "LEFT" spends x on the vertical axis and y on the
-                    # horizontal one; "UP" reads the pair as written.
-                    down, across = (x, y) if horizontal else (y, x)
+                    if horizontal:
+                        across, down = y * 70 + 35, height / 2 + x * 70
+                    else:
+                        across, down = width / 2 + x * 70, y * 70 + 35
                     with self.subTest(folder=folder, technology=tech.id):
-                        self.assertLessEqual((across + 1) * across_slot, across_extent)
-                        self.assertLessEqual((down + 1) * down_slot, down_extent)
+                        self.assertGreaterEqual(across, 0)
+                        self.assertLessEqual(across, width)
+                        self.assertGreaterEqual(down, 0)
+                        self.assertLessEqual(down, height)
 
     def test_consecutive_rungs_leave_room_for_their_connector(self) -> None:
         """Adjacent research years must not draw 72px icons 70px apart."""
@@ -677,14 +761,14 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         }
         # The sparse materials programme has four dated rows, not nineteen
         # empty calendar slots. Labels are independent from adjacent industry.
-        self.assertEqual(label_rows[("advanced_materials", 2155)], 148)
-        self.assertEqual(label_rows[("advanced_materials", 2173)], 568)
+        self.assertEqual(label_rows[("advanced_materials", 2155)], 154)
+        self.assertEqual(label_rows[("advanced_materials", 2173)], 574)
         for branch in [b for b in generator.BRANCHES if "industry_folder" in b.folders]:
             for index in range(len(branch.techs)):
                 _, y = generator.technology_grid_position(branch, index)
                 node_top = generator.GRID_Y + y * generator.GRID_SLOT
                 with self.subTest(technology=branch.techs[index].id):
-                    self.assertEqual(label_rows[(branch.key, branch.years[index])], node_top + 18)
+                    self.assertEqual(label_rows[(branch.key, branch.years[index])], node_top + 24)
 
     def test_horizontal_folder_grid_aligns_years_and_stacks_programmes(self) -> None:
         rendered = generator.render_folder("infantry_folder")
