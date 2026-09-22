@@ -783,6 +783,57 @@ STP_battle_for_stelander = {
 		}
 	}
 
+	STP_cw_protect_district_from_inspection = {
+		icon = GFX_decision_ADISCORD_covert_operation
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_Count_The_Loyalists
+			has_country_flag = STP_sided_with_Maksim_flag
+			has_country_flag = STP_battle_for_stelander_active
+			STP_cw_preparation_open = yes
+			FROM = {
+				STP_region_is_operable = yes
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+				NOT = { has_state_flag = STP_party_inspection_active }
+				NOT = { has_state_flag = STP_cw_inspection_protected }
+				NOT = { has_state_flag = STP_false_trail_redirected }
+			}
+		}
+		available = {
+			FROM = {
+				STP_region_is_operable = yes
+				is_owned_by = ROOT
+				is_controlled_by = ROOT
+				NOT = { has_state_flag = STP_party_inspection_active }
+				NOT = { has_state_flag = STP_cw_inspection_protected }
+				NOT = { has_state_flag = STP_false_trail_redirected }
+			}
+		}
+		state_target = yes
+		targets = { 2 3 29 45 46 53 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		on_map_mode = map_and_decisions_view
+		custom_cost_trigger = { NOT = { has_political_power < 25 } STP_cw_can_spend_600 = yes }
+		custom_cost_text = STP_cost_pp25_t600
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = STP_cw_protect_district_from_inspection_tt
+			add_political_power = -25
+			STP_cw_spend_600 = yes
+			hidden_effect = {
+				FROM = { set_state_flag = { flag = STP_cw_inspection_protected days = 40 } }
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = { factor = 4 check_variable = { var = STP_party_suspicion value = 60 compare = greater_than_or_equals } }
+			modifier = { factor = 2 FROM = { STP_region_resistance_strongest = yes } }
+		}
+	}
+
 	# Procedural delays occupy staff; immediate concessions trade local assets.
 	STP_cw_delay_inspection = {
 		icon = GFX_decision_ADISCORD_state_directive
