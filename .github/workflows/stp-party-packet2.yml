@@ -28,13 +28,11 @@ jobs:
           assert text.count(old)==1
           text=text.replace(old,new)
           old='        assert len(found) == 1, fid'
-          new='''        if not found and fid in concessions:
-                      assert 'STP_change_apparatus_loyalty = yes' not in block, fid
-                      assert block.count('STP_pf_shift = yes') == 1, fid
-                      return block
-                  assert len(found) == 1, fid'''
-          # Remove YAML indentation from the continuation lines of the Python replacement.
-          new=new.replace('\n          ', '\n')
+          new=("        if not found and fid in concessions:\n"
+               "            assert 'STP_change_apparatus_loyalty = yes' not in block, fid\n"
+               "            assert block.count('STP_pf_shift = yes') == 1, fid\n"
+               "            return block\n"
+               "        assert len(found) == 1, fid")
           assert text.count(old)==1
           text=text.replace(old,new)
           p.write_text(text)
