@@ -1,0 +1,128 @@
+name: Party gameplay delivery verification
+on:
+  push:
+    branches: [codex/stp-party-delivery-review-20260922]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validator dependencies
+        run: python -m pip install --disable-pip-version-check Pillow numpy
+      - name: Apply verified delta without replacing concurrent edits
+        run: |
+          python - <<'PY'
+          import base64, difflib, hashlib, json, lzma, re, subprocess
+          from pathlib import Path
+          evidence = Path('/tmp/stp-party-evidence')
+          evidence.mkdir(exist_ok=True)
+          encoded = ''.join(Path(f'.github/party-qol-transport/{i}.b64').read_text().strip() for i in range(5))
+          raw = lzma.decompress(base64.b64decode(encoded, validate=True))
+          assert hashlib.sha256(raw).hexdigest() == '57c0fd1d233d41cb0763be1f552eb4a557144af85f44d5641e7664304f1502e1', 'Transport checksum mismatch'
+          changes = json.loads(raw)
+          base = 'bee29e55159abf21f0787e0512d81afd16393eb4'
+          def git(*args):
+              return subprocess.check_output(['git', *args], text=True).strip()
+          subprocess.run(['git', 'fetch', '--depth=1', 'origin', base, '+refs/heads/main:refs/remotes/origin/main'], check=True)
+          target = git('rev-parse', 'origin/main')
+          subprocess.run(['git', 'checkout', '--detach', target], check=True)
+          planned = {}
+          rebased = []
+          for change in changes:
+              path = Path(change['path'])
+              assert not path.is_absolute() and '..' not in path.parts and not str(path).startswith('.github/'), path
+              if change['before'] is None:
+                  assert not path.exists(), f'New file already exists: {path}'
+                  original = b''
+                  current = b''
+              else:
+                  original = subprocess.check_output(['git', 'show', base + ':' + str(path)])
+                  assert hashlib.sha256(original).hexdigest() == change['before'], f'Source snapshot mismatch: {path}'
+                  current = path.read_bytes()
+              old = original.decode('utf-8').splitlines(keepends=True)
+              desired = old.copy()
+              for i, j, text in reversed(change['ops']):
+                  desired[i:j] = [text]
+              desired_bytes = ''.join(desired).encode('utf-8')
+              assert hashlib.sha256(desired_bytes).hexdigest() == change['after'], f'Delta checksum mismatch: {path}'
+              if current == original:
+                  planned[path] = desired_bytes
+                  continue
+              rebased.append(str(path))
+              now = current.decode('utf-8').splitlines(keepends=True)
+              blocks = difflib.SequenceMatcher(None, old, now, autojunk=False).get_matching_blocks()
+              translated = []
+              for i, j, text in change['ops']:
+                  if i == j == len(old):
+                      start = end = len(now)
+                  elif i == j:
+                      anchors = [b for b in blocks if b.size and b.a <= i < b.a + b.size]
+                      if not anchors:
+                          anchors = [b for b in blocks if b.size and b.a + b.size == i]
+                      assert len(anchors) == 1, f'Concurrent insertion conflict: {path}:{i}'
+                      start = end = anchors[0].b + i - anchors[0].a
+                  else:
+                      anchors = [b for b in blocks if b.a <= i and j <= b.a + b.size]
+                      assert len(anchors) == 1, f'Concurrent replacement conflict: {path}:{i}-{j}'
+                      start = anchors[0].b + i - anchors[0].a
+                      end = start + j - i
+                      assert now[start:end] == old[i:j]
+                  translated.append((start, end, text))
+              assert all(translated[i][1] <= translated[i+1][0] for i in range(len(translated)-1)), path
+              for i, j, text in reversed(translated):
+                  now[i:j] = [text]
+              planned[path] = ''.join(now).encode('utf-8')
+          (evidence / 'application.json').write_text(json.dumps({'base': base, 'target': target, 'rebased_files': rebased, 'files': [str(p) for p in planned]}, indent=2))
+          print('MAIN_TARGET', target, 'REBASED', json.dumps(rebased), flush=True)
+          modules = ['tools.tests.test_adiscord_stp_party_route', 'tools.tests.test_adiscord_stp_party_survival', 'tools.tests.test_adiscord_stp_preparation', 'tools.tests.test_adiscord_stp_civil_war', 'tools.tests.test_adiscord_stp_regions', 'tools.tests.test_validate_adiscord_val_rework']
+          def run(label, command):
+              result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+              (evidence / (label + '.log')).write_text(result.stdout)
+              issues = sorted(set(re.findall(r'^(?:FAIL|ERROR): (.*)$', result.stdout, re.M)))
+              summary = [line for line in result.stdout.splitlines() if re.match(r'^(Ran |FAILED|OK$)', line)]
+              print(label, json.dumps({'returncode': result.returncode, 'issues': issues, 'summary': summary}), flush=True)
+              return result, issues
+          baseline, before = run('baseline', ['python', '-B', '-m', 'unittest', *modules])
+          probe = Path('tools/tests/test_adiscord_stp_party_qol.py')
+          probe.write_bytes(planned[probe])
+          red, _ = run('red', ['python', '-B', '-m', 'unittest', 'tools.tests.test_adiscord_stp_party_qol'])
+          probe.unlink()
+          assert red.returncode != 0, 'The new regression contracts did not detect missing changes'
+          for path, content in planned.items():
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_bytes(content)
+          focused, _ = run('focused', ['python', '-B', '-m', 'unittest', 'tools.tests.test_adiscord_stp_party_qol', *modules[:2]])
+          after_run, after = run('extended', ['python', '-B', '-m', 'unittest', 'tools.tests.test_adiscord_stp_party_qol', *modules])
+          new_issues = sorted(set(after) - set(before))
+          fixed_issues = sorted(set(before) - set(after))
+          print('REGRESSION_DELTA', json.dumps({'new': new_issues, 'fixed': fixed_issues}), flush=True)
+          validator, _ = run('validator', ['python', '-B', 'tools/validate_tc.py', '--limit', '300'])
+          (evidence / 'party.patch').write_bytes(subprocess.check_output(['git', 'diff', '--binary']))
+          if focused.returncode or new_issues or validator.returncode:
+              print('FAILED GATE: see evidence artifact for full output', flush=True)
+              raise SystemExit(1)
+          subprocess.run(['git', 'diff', '--check'], check=True)
+          delivery = 'codex/stp-party-qol-delivery-20260922'
+          assert not git('ls-remote', '--heads', 'origin', delivery), 'Delivery branch already exists; no force push permitted'
+          subprocess.run(['git', 'checkout', '-b', delivery], check=True)
+          subprocess.run(['git', 'config', 'user.name', 'worker2of2month'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '81386071+worker2of2month@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'add', '--', *[str(p) for p in planned]], check=True)
+          subprocess.run(['git', 'commit', '-m', 'feat(stp): consolidate party decisions and make foreign operations actionable'], check=True)
+          sha = git('rev-parse', 'HEAD')
+          (evidence / 'delivery.json').write_text(json.dumps({'sha': sha, 'branch': delivery, 'parent': target, 'focused': focused.returncode, 'new_failures': new_issues, 'fixed': fixed_issues, 'validator_exit': validator.returncode}, indent=2))
+          subprocess.run(['git', 'push', 'origin', 'HEAD:refs/heads/' + delivery], check=True)
+          print('DELIVERY_COMMIT', sha, flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-party-verification
+          path: /tmp/stp-party-evidence/
+          retention-days: 7
