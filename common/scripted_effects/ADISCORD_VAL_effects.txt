@@ -1281,6 +1281,23 @@ VAL_grant_westerholm_concession = {
 	}
 }
 
+VAL_assert_vorkerland_metal_shortage = {
+	if = {
+		limit = { NOT = { has_completed_focus = VAL_New_Supply_Base } }
+		set_country_flag = VAL_westerholm_metal_lost
+		if = {
+			limit = { NOT = { has_idea = VAL_vorkerland_metal_shortage } }
+			add_ideas = VAL_vorkerland_metal_shortage
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+	else_if = {
+		limit = { has_idea = VAL_vorkerland_metal_shortage }
+		remove_ideas = VAL_vorkerland_metal_shortage
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
 VAL_handle_vorkerland_war_outbreak = {
 	if = {
 		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }
@@ -1290,6 +1307,7 @@ VAL_handle_vorkerland_war_outbreak = {
 		remove_ideas = { VAL_big_buyers VAL_westerholm_concession_income }
 		set_variable = { var = VAL_economic_recovery_steps value = 0 }
 		VAL_end_vorkerland_resource_access = yes
+		VAL_assert_vorkerland_metal_shortage = yes
 		set_variable = { var = VAL_arsenal_reputation_stage value = 0 }
 		VAL_refresh_arsenal_reputation = yes
 		VAL_refresh_industrial_economy = yes
@@ -1306,7 +1324,7 @@ VAL_handle_westerholm_loss = {
 		clr_country_flag = VAL_westerholm_resource_rights_active
 		set_country_flag = VAL_westerholm_metal_lost
 		remove_ideas = VAL_westerholm_concession_income
-		if = { limit = { NOT = { has_completed_focus = VAL_New_Supply_Base } } add_ideas = VAL_vorkerland_metal_shortage }
+		VAL_assert_vorkerland_metal_shortage = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
@@ -2790,6 +2808,10 @@ VAL_reconcile_supply_crisis = {
 		}
 		VAL_refresh_arsenal_reputation = yes
 	}
+	if = {
+		limit = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+		VAL_assert_vorkerland_metal_shortage = yes
+	}
 }
 # COUNTRY VAL: first-defeat transition; the council has its own later war route.
 # This closes every inherited offensive pipeline before the technical peace
@@ -3700,6 +3722,7 @@ VAL_end_vorkerland_resource_access = {
         limit = { has_country_flag = VAL_vorkerland_resource_access_active }
         remove_resource_rights = 33
         clr_country_flag = VAL_vorkerland_resource_access_active
+        VAL_assert_vorkerland_metal_shortage = yes
         ADISCORD_economy_mark_dirty = yes
     }
     VAL_handle_westerholm_loss = yes
