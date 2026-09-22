@@ -24,12 +24,13 @@ jobs:
         run: |
           cp .github/stp_party_usability.py /tmp/stp_party_usability.py
           cp .github/stp_party_apply.py /tmp/stp_party_apply.py
+          cp .github/stp_party_adjust.py /tmp/stp_party_adjust.py
           git fetch --depth=1 origin d21917074259b4f29c8fe36ec20773aeb7ce2e45
           git checkout --detach d21917074259b4f29c8fe36ec20773aeb7ce2e45
           python -B - <<'PY'
           from pathlib import Path
           import subprocess, re, json, sys
-          modules=['tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_route','tools.tests.test_adiscord_stp_party_balance']
+          modules=['tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_route','tools.tests.test_adiscord_stp_party_balance','tools.tests.test_adiscord_stp_preparation','tools.tests.test_adiscord_stp_civil_war','tools.tests.test_adiscord_stp_gameplay_loop_regressions']
           def run_suite(label):
               r=subprocess.run(['python','-B','-m','unittest',*modules],capture_output=True,text=True)
               output=r.stdout+r.stderr
@@ -44,6 +45,8 @@ jobs:
           assert red.returncode != 0 and 'ERROR:' not in red.stderr, red.stderr[-3000:]
           print('EXPECTED_RED',re.findall(r'(?m)^FAIL: (.*)$',red.stderr),flush=True)
           subprocess.run(['python','-B','/tmp/stp_party_apply.py'],check=True)
+          subprocess.run(['python','-B','/tmp/stp_party_adjust.py'],check=True)
+          subprocess.run(['git','diff','--check'],check=True)
           subprocess.run(['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_survival.PartyUsabilityContracts','tools.tests.test_adiscord_stp_party_balance.StelanderPartyBalanceContracts.test_party_route_requires_staged_defensive_recovery','-v'],check=True)
           after=run_suite('stp-party-after')
           new=after-baseline
@@ -51,8 +54,10 @@ jobs:
           print('BASELINE_FAILURES_FIXED',sorted(baseline-after),flush=True)
           if new:
               text=Path('/tmp/stp-party-after.txt').read_text()
-              print(text[-20000:])
-              sys.exit('New party regressions must be resolved.')
+              sections=re.split(r'\n={20,}\n',text)
+              for section in sections:
+                  if any(name in section[:800] for name in new): print(section[:6000])
+              sys.exit('New regressions must be resolved.')
           print('PATCH_TESTS_VERIFIED',flush=True)
           PY
       - name: Validate total conversion
@@ -63,10 +68,14 @@ jobs:
         run: |
           git diff --check
           git diff --stat
-          git diff --name-only | grep '^.github/' && exit 1 || true
+          python -B - <<'PY'
+          import subprocess
+          paths=subprocess.check_output(['git','diff','--name-only'],text=True).splitlines()
+          assert paths and all(p.startswith(('common/','events/','localisation/','tools/tests/')) for p in paths), paths
+          PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add common events localisation tools/tests/test_adiscord_stp_party_survival.py
+          git add common events localisation tools/tests/test_adiscord_stp_party_survival.py tools/tests/test_adiscord_stp_party_route.py
           git commit -m 'fix(stp): streamline party management and supply countermeasures'
           git push origin HEAD:refs/heads/codex/stp-party-usability-delivery-20260922
           echo DELIVERY_COMMIT=$(git rev-parse HEAD)
