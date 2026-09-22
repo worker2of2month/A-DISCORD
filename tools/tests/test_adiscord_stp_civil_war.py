@@ -284,7 +284,9 @@ class CivilWarContracts(unittest.TestCase):
         localisation = read("localisation/russian/ADISCORD_STP_l_russian.yml")
         description = next(line for line in localisation.splitlines() if line.lstrip().startswith("STP_battle_for_stelander_desc:"))
         for variable in ("STP_cw_report_party_brigades", "STP_cw_report_resistance_brigades", "STP_cw_prepared_assault_divisions"):
-            self.assertIn("[?" + variable + "|0]", description)
+            self.assertNotIn("[?" + variable + "|0]", description)
+        self.assertIn("[?manpower|0]", description)
+        self.assertIn("[?num_equipment@infantry_equipment|0]", description)
         self.assertIn("ADISCORD_STP_preparation.7.a:", localisation)
 
     def test_human_handoff_precedes_any_time_at_war(self):
