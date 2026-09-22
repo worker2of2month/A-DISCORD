@@ -595,3 +595,97 @@ class KefreytOpeningThemeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestValProgressionChoices(unittest.TestCase):
+    def focus(self, name):
+        source = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
+        marker = re.search(r"\bid\s*=\s*" + re.escape(name) + r"\s", source)
+        self.assertIsNotNone(marker, name)
+        starts = list(re.finditer(r"(?m)^\s*focus\s*=\s*\{", source[:marker.start()]))
+        return named_block(source[starts[-1].start():], "focus")
+
+    def test_portrait_belongs_to_proclamation_not_unlock(self):
+        focus = self.focus("VAL_Contracts_Outlive_Kings")
+        self.assertNotIn("set_portraits", focus)
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        adopt = named_block(effects, "VAL_adopt_commonwealth")
+        self.assertIn("VAL_can_proclaim_commonwealth = yes", adopt)
+        self.assertLess(adopt.index("set_cosmetic_tag = VAL_commonwealth"),
+                        adopt.index("VAL_sync_solgalov_portrait = yes"))
+        sync = named_block(effects, "VAL_sync_solgalov_portrait")
+        self.assertIn("has_character = VAL_Valera_Solgalov", sync)
+        self.assertIn("has_cosmetic_tag = VAL_commonwealth", sync)
+        self.assertIn("large = GFX_portrait_VAL_Valera_Solgalov_contracts", sync)
+        self.assertIn("large = GFX_portrait_VAL_Valera_Solgalov }", sync)
+        self.assertNotIn("recruit_character", sync)
+        startup = named_block(read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"), "on_startup")
+        self.assertEqual(startup.count("VAL_sync_solgalov_portrait = yes"), 1)
+
+    def test_proclamation_has_one_map_marker_and_keeps_real_requirements(self):
+        decision = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_proclaim_commonwealth")
+        for token in ("state_target = yes", "targets = { 48 }", "on_map_mode = map_and_decisions_view", "highlight_states", "cost = 150", "VAL_can_proclaim_commonwealth = yes"):
+            self.assertIn(token, decision)
+        self.assertIn("has_completed_focus = VAL_Contracts_Outlive_Kings", named_block(decision, "visible"))
+        self.assertNotIn("VAL_can_proclaim_commonwealth", named_block(decision, "visible"))
+        trigger = named_block(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"), "VAL_can_proclaim_commonwealth")
+        self.assertIn("VAL_campaign_objectives_met = yes", trigger)
+        self.assertNotIn("deferred", trigger)
+
+    def test_frontier_bypass_requires_explicit_choice_and_an_idle_peace(self):
+        focus = self.focus("VAL_frontier_treaty_offices")
+        bypass = named_block(focus, "bypass")
+        self.assertIn("VAL_northern_expansion_deferred = yes", bypass)
+        triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        gate = named_block(triggers, "VAL_northern_expansion_deferred")
+        for token in ("has_country_flag = VAL_frontier_expansion_deferred", "has_completed_focus = VAL_frontier_security_plan", "VAL_frontier_idle = yes", "has_war = no", "has_capitulated = no", "is_subject = no"):
+            self.assertIn(token, gate)
+        self.assertNotIn("is_ai", gate)
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        defer = named_block(decisions, "VAL_defer_northern_expansion")
+        self.assertIn("VAL_can_defer_northern_expansion = yes", named_block(defer, "available"))
+        self.assertIn("ai_will_do", defer)
+        reward = named_block(defer, "complete_effect")
+        for forbidden in ("transfer_state", "annex_country", "add_core_of", "set_cosmetic_tag", "VAL_frontier_treaty_signed"):
+            self.assertNotIn(forbidden, reward)
+        self.assertIn("set_country_flag = VAL_frontier_expansion_deferred", reward)
+
+    def test_declining_then_reopening_does_not_leave_a_stale_opt_out(self):
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        withdraw = named_block(decisions, "VAL_frontier_withdraw_demand")
+        self.assertIn("VAL_frontier_withdraw_and_defer = yes", withdraw)
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        withdraw_effect = named_block(effects, "VAL_frontier_withdraw_and_defer")
+        self.assertIn("value = 2 compare = equals", withdraw_effect)
+        self.assertIn("has_war = no", withdraw_effect)
+        self.assertIn("VAL_frontier_close = yes", withdraw_effect)
+        self.assertIn("set_country_flag = VAL_frontier_expansion_deferred", withdraw_effect)
+        demand = named_block(decisions, "VAL_frontier_demand_CIN")
+        self.assertIn("clr_country_flag = VAL_frontier_expansion_deferred", named_block(demand, "complete_effect"))
+        self.assertIn("VAL_ai_frontier_force_ready", named_block(demand, "ai_will_do"))
+        self.assertIn("has_country_flag = VAL_frontier_expansion_deferred", named_block(demand, "ai_will_do"))
+
+    def test_economic_route_does_not_require_bypassed_military_rewards(self):
+        reopen = self.focus("VAL_Reopen_Trade_Routes")
+        debts = self.focus("VAL_Settle_Industrial_Debts")
+        self.assertIn("focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers", reopen)
+        self.assertIn("focus = VAL_New_Supply_Base focus = VAL_Contingency_Ledgers", reopen)
+        self.assertIn("focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers", debts)
+        for name in ("VAL_Reopen_Trade_Routes", "VAL_Settle_Industrial_Debts", "VAL_Return_To_World_Market"):
+            with self.subTest(name=name):
+                focus = self.focus(name)
+                self.assertIn("VAL_economic_settlement_ready = yes", named_block(focus, "available"))
+                self.assertNotIn("bypass", focus)
+        gate = named_block(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"), "VAL_economic_settlement_ready")
+        for token in ("VAL_campaign_objectives_met = yes", "VAL_northern_expansion_deferred = yes", "has_completed_focus = VAL_Returning_Buyers", "has_completed_focus = VAL_Contingency_Ledgers"):
+            self.assertIn(token, gate)
+        for name in ("VAL_Campaign_Secured", "VAL_New_Supply_Base", "VAL_Veterans_Of_The_Campaign"):
+            self.assertNotIn("bypass", self.focus(name))
+
+    def test_choice_and_economic_conditions_are_localised_in_both_languages(self):
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            text = path.read_text(encoding="utf-8-sig")
+            for key in ("VAL_defer_northern_expansion", "VAL_defer_northern_expansion_desc", "VAL_defer_northern_expansion_tt", "VAL_defer_northern_expansion_ready_tt", "VAL_economic_settlement_ready_tt", "VAL_northern_expansion_deferred_tt"):
+                self.assertRegex(text, rf'(?m)^ {key}:\d* "[^\r\n]*"$')

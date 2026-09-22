@@ -170,3 +170,38 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ObserverSupereventTimeoutTests(unittest.TestCase):
+    def test_timeout_covers_every_registered_presentation_and_starts_at_seven_days(self):
+        source = read(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        tick = named_block(source, "ADISCORD_superevent_observer_tick")
+        guis = read(ROOT / "common/scripted_guis/superevents.txt")
+        flags = set(re.findall(r"window_name\s*=\s*\"(superevent_[a-z_]+)\"", guis))
+        self.assertTrue(flags)
+        ages = re.findall(r"has_global_flag\s*=\s*\{\s*flag\s*=\s*(superevent_[a-z_]+)\s+days\s*>\s*(\d+)\s*\}", tick)
+        self.assertEqual({name for name, _ in ages}, flags)
+        for name, threshold in ages:
+            with self.subTest(presentation=name):
+                self.assertEqual(int(threshold), 6)
+                self.assertFalse(6 > int(threshold))
+                self.assertTrue(7 > int(threshold))
+                self.assertIn(f"clr_global_flag = {name}", tick)
+        self.assertNotIn("ADISCORD_vorkerland_clear_superevent_flags = yes", tick)
+        self.assertNotIn("clear_array", tick)
+        self.assertNotIn("set_global_flag = superevent_", tick)
+        self.assertEqual(tick.count("ADISCORD_superevent_dispatch_next = yes"), 1)
+        self.assertLess(tick.rindex("clr_global_flag"), tick.index("ADISCORD_superevent_dispatch_next = yes"))
+
+    def test_observer_timeout_is_globally_guarded_and_never_closes_a_human_session(self):
+        tick = named_block(read(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"), "ADISCORD_superevent_observer_tick")
+        self.assertIn("NOT = { any_country = { is_ai = no } }", tick)
+        self.assertIn("NOT = { has_global_flag = ADISCORD_superevent_observer_checked_today }", tick)
+        self.assertIn("set_global_flag = { flag = ADISCORD_superevent_observer_checked_today days = 1 }", tick)
+        self.assertLess(tick.index("set_global_flag"), tick.index("any_country"))
+        self.assertNotIn("every_country", tick)
+        actions = read(ROOT / "common/on_actions/00_ADISCORD_on_actions.txt")
+        daily = named_block(actions, "on_daily")
+        self.assertEqual(daily.count("ADISCORD_superevent_observer_tick = yes"), 1)
+        self.assertNotIn("every_country", daily)
+        self.assertNotIn("is_ai = no", daily)

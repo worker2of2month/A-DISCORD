@@ -4055,7 +4055,7 @@ ADISCORD_vorkerland_end_internal_wars = {
 }
 
 # Global FIFO survives the requesting country's annexation and player handoff.
-# Requests and button clicks are the only dispatch points; no periodic polling.
+# Requests, button clicks and observer expiry advance the shared queue.
 ADISCORD_superevent_enqueue = {
 	if = {
 		limit = {
@@ -10321,4 +10321,45 @@ ADISCORD_vorkerland_show_last_empire_superevent = {
 	else = {
 		country_event = { id = ADISCORD_superevent.8 }
 	}
+}
+
+
+# The daily hook is country-scoped. The global guard permits at most one human
+# scan per day, only while a presentation is overdue. No request-country or
+# client-local state is used, so annexation and mixed human sessions stay safe.
+ADISCORD_superevent_observer_tick = {
+    if = {
+        limit = {
+            NOT = { has_global_flag = ADISCORD_superevent_observer_checked_today }
+            OR = {
+                has_global_flag = { flag = superevent_vorkerland_civilwar days > 6 }
+                has_global_flag = { flag = superevent_vorkerland_dirty_opening days > 6 }
+                has_global_flag = { flag = superevent_vorkerland_worker_victory days > 6 }
+                has_global_flag = { flag = superevent_vorkerland_utilitarian_victory days > 6 }
+                has_global_flag = { flag = superevent_vorkerland_vlad_victory days > 6 }
+                has_global_flag = { flag = superevent_vorkerland_dorian_victory days > 6 }
+                has_global_flag = { flag = superevent_stelander_empire days > 6 }
+                has_global_flag = { flag = superevent_stelander_party_victory days > 6 }
+                has_global_flag = { flag = superevent_stelander_shabrat_victory days > 6 }
+                has_global_flag = { flag = superevent_nam_resource_war days > 6 }
+                has_global_flag = { flag = superevent_rus_last_empire days > 6 }
+            }
+        }
+        set_global_flag = { flag = ADISCORD_superevent_observer_checked_today days = 1 }
+        if = {
+            limit = { NOT = { any_country = { is_ai = no } } }
+            if = { limit = { has_global_flag = { flag = superevent_vorkerland_civilwar days > 6 } } clr_global_flag = superevent_vorkerland_civilwar }
+            if = { limit = { has_global_flag = { flag = superevent_vorkerland_dirty_opening days > 6 } } clr_global_flag = superevent_vorkerland_dirty_opening }
+            if = { limit = { has_global_flag = { flag = superevent_vorkerland_worker_victory days > 6 } } clr_global_flag = superevent_vorkerland_worker_victory }
+            if = { limit = { has_global_flag = { flag = superevent_vorkerland_utilitarian_victory days > 6 } } clr_global_flag = superevent_vorkerland_utilitarian_victory }
+            if = { limit = { has_global_flag = { flag = superevent_vorkerland_vlad_victory days > 6 } } clr_global_flag = superevent_vorkerland_vlad_victory }
+            if = { limit = { has_global_flag = { flag = superevent_vorkerland_dorian_victory days > 6 } } clr_global_flag = superevent_vorkerland_dorian_victory }
+            if = { limit = { has_global_flag = { flag = superevent_stelander_empire days > 6 } } clr_global_flag = superevent_stelander_empire }
+            if = { limit = { has_global_flag = { flag = superevent_stelander_party_victory days > 6 } } clr_global_flag = superevent_stelander_party_victory }
+            if = { limit = { has_global_flag = { flag = superevent_stelander_shabrat_victory days > 6 } } clr_global_flag = superevent_stelander_shabrat_victory }
+            if = { limit = { has_global_flag = { flag = superevent_nam_resource_war days > 6 } } clr_global_flag = superevent_nam_resource_war }
+            if = { limit = { has_global_flag = { flag = superevent_rus_last_empire days > 6 } } clr_global_flag = superevent_rus_last_empire }
+            ADISCORD_superevent_dispatch_next = yes
+        }
+    }
 }

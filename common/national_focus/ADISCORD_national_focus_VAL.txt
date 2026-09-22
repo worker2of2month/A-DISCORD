@@ -1755,13 +1755,6 @@ focus_tree = {
 			VAL_invest_arsenal_industry = yes
 			country_event = { id = val_rework.4 }
 			hidden_effect = {
-				if = {
-					limit = { has_character = VAL_Valera_Solgalov }
-					set_portraits = {
-						character = VAL_Valera_Solgalov
-						civilian = { large = GFX_portrait_VAL_Valera_Solgalov_contracts }
-					}
-				}
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
 				VAL_change_contract_authority = yes
 			}
@@ -2198,6 +2191,7 @@ completion_reward = {
                 add_political_power = 25
             }
             unlock_decision_tooltip = { decision = VAL_frontier_demand_CIN show_effect_tooltip = yes }
+            unlock_decision_tooltip = { decision = VAL_defer_northern_expansion show_effect_tooltip = yes }
 
 
 			add_political_power = 75
@@ -2212,6 +2206,12 @@ completion_reward = {
         y = 18
         cost = 5
         prerequisite = { focus = VAL_frontier_security_plan }
+        bypass = {
+            custom_trigger_tooltip = {
+                tooltip = VAL_northern_expansion_deferred_tt
+                VAL_northern_expansion_deferred = yes
+            }
+        }
         available = {
             has_country_flag = VAL_frontier_treaty_signed
             custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
@@ -2337,9 +2337,9 @@ completion_reward = {
         x = 16
         y = 24
         cost = 5
-        prerequisite = { focus = VAL_Campaign_Secured }
-        prerequisite = { focus = VAL_New_Supply_Base }
-        available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
+        prerequisite = { focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers }
+        prerequisite = { focus = VAL_New_Supply_Base focus = VAL_Contingency_Ledgers }
+        available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
         cancel_if_invalid = yes
         completion_reward = { VAL_advance_economic_recovery = yes ADISCORD_economy_receive_100 = yes add_stability = 0.01 }
         ai_will_do = { base = 30 }
@@ -2352,9 +2352,9 @@ completion_reward = {
         x = 20
         y = 24
         cost = 5
-        prerequisite = { focus = VAL_Campaign_Secured }
+        prerequisite = { focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers }
         prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
-        available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
+        available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
         cancel_if_invalid = yes
         completion_reward = { VAL_advance_economic_recovery = yes add_political_power = 35 add_stability = 0.02 }
         ai_will_do = { base = 30 }
@@ -2370,7 +2370,7 @@ completion_reward = {
         prerequisite = { focus = VAL_Reopen_Trade_Routes }
         prerequisite = { focus = VAL_Settle_Industrial_Debts }
         prerequisite = { focus = VAL_Returning_Buyers }
-        available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
+        available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
         cancel_if_invalid = yes
         completion_reward = { VAL_advance_economic_recovery = yes VAL_restore_arsenal_reputation = yes effect_tooltip = { add_ideas = VAL_arsenal_quality_delta } }
         ai_will_do = { base = 30 }

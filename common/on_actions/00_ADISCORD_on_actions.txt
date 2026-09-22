@@ -1,6 +1,12 @@
 ####Country Development
 
 on_actions = {
+    on_daily = {
+        effect = {
+            ADISCORD_superevent_observer_tick = yes
+        }
+    }
+
 	on_startup = {
 		effect = {
 			create_entity = { ##poluted zone
