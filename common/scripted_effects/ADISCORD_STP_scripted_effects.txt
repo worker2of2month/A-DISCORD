@@ -5414,6 +5414,38 @@ STP_pf_clear = {
 	clear_variable = STP_ps_reorg_3_specialization_days
 }
 
+# COUNTRY STP: sever only the shared alliance, retaining everyone else's faction.
+STP_pw_party_break_nod_alliance = {
+	if = {
+		limit = { tag = STP is_subject = no has_capitulated = no is_in_faction_with = NOD }
+		if = {
+			limit = { is_faction_leader = yes }
+			remove_from_faction = NOD
+		}
+		else = { faction_leader = { remove_from_faction = STP } }
+	}
+}
+
+# Loading during preparation must not restart its mission or change the flag date.
+# An expired declaration has its active receipt but no war relation to NOD.
+STP_pw_party_reconcile_nod_invasion = {
+	if = {
+		limit = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			NOT = { has_country_flag = STP_pw_party_nod_invasion_defeated has_country_flag = STP_pw_party_nod_invasion_lost }
+		}
+		if = {
+			limit = { has_country_flag = STP_pw_party_nod_threat_active }
+			STP_pw_party_break_nod_alliance = yes
+		}
+		else_if = {
+			limit = { has_country_flag = STP_pw_party_nod_invasion_active NOT = { has_war_with = NOD } }
+			STP_pw_party_launch_nod_invasion = yes
+		}
+	}
+}
+
 # PARTY POSTWAR: refusing NOD's protectorate turns sovereignty into a timed invasion crisis.
 STP_pw_party_start_nod_invasion_threat = {
 	if = {
@@ -5441,6 +5473,7 @@ STP_pw_party_start_nod_invasion_threat = {
 				set_country_flag = STP_pw_party_nod_invasion_active
 			}
 			else = {
+				STP_pw_party_break_nod_alliance = yes
 				set_country_flag = STP_pw_party_nod_threat_active
 				activate_mission = STP_pw_party_nod_invasion_countdown
 				country_event = { id = ADISCORD_STP_pc.28 hours = 1 }
@@ -5455,25 +5488,42 @@ STP_pw_party_start_nod_invasion_threat = {
 
 STP_pw_party_launch_nod_invasion = {
 	if = {
-		limit = { tag = STP has_country_flag = STP_pw_party_nod_threat_active }
-		clr_country_flag = STP_pw_party_nod_threat_active
+		limit = {
+			tag = STP
+			OR = {
+				has_country_flag = STP_pw_party_nod_threat_active
+				AND = { has_country_flag = STP_pw_party_nod_invasion_active NOT = { has_war_with = NOD } }
+			}
+			NOT = { has_country_flag = STP_pw_party_nod_invasion_defeated has_country_flag = STP_pw_party_nod_invasion_lost }
+		}
 		if = {
 			limit = { OR = { has_capitulated = yes is_subject = yes } }
+			clr_country_flag = STP_pw_party_nod_threat_active
 			clr_country_flag = STP_pw_party_nod_invasion_active
 			set_country_flag = STP_pw_party_nod_invasion_lost
 			mark_focus_tree_layout_dirty = yes
 		}
 		else_if = {
 			limit = { NOD = { exists = yes has_capitulated = no is_subject = no } }
-			set_country_flag = STP_pw_party_nod_invasion_active
-			NOD = { add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 } }
 			if = {
-				limit = { NOT = { has_war_with = NOD } }
-				NOD = { declare_war_on = { target = STP type = annex_everything } }
+				limit = { is_in_faction_with = NOD }
+				STP_pw_party_break_nod_alliance = yes
+				# Let the diplomatic cache advance before declaring against a former ally.
+				country_event = { id = ADISCORD_STP_pc.33 days = 1 }
 			}
-			country_event = { id = ADISCORD_STP_pc.29 hours = 1 }
+			else = {
+				clr_country_flag = STP_pw_party_nod_threat_active
+				set_country_flag = STP_pw_party_nod_invasion_active
+				NOD = { add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 } }
+				if = {
+					limit = { NOT = { has_war_with = NOD } }
+					NOD = { declare_war_on = { target = STP type = annex_everything } }
+				}
+				country_event = { id = ADISCORD_STP_pc.29 hours = 1 }
+			}
 		}
 		else = {
+			clr_country_flag = STP_pw_party_nod_threat_active
 			clr_country_flag = STP_pw_party_nod_invasion_active
 			set_country_flag = STP_pw_party_nod_invasion_defeated
 			mark_focus_tree_layout_dirty = yes
