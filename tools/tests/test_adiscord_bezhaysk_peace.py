@@ -26,6 +26,26 @@ class BezhayskPeaceTests(unittest.TestCase):
             self.assertIn(f"target = {tag}", effects)
         self.assertIn("white_peace = BJK", effects)
 
+    def test_joint_kefreyt_nodrul_settlement_is_prioritized(self) -> None:
+        router = self.read("common/on_actions/10_ADISCORD_bezhaysk_peace_on_actions.txt")
+        joint = router.index("ADISCORD_bezhaysk_settle_val_nod_joint_victory = yes")
+        single_val = router.index("ADISCORD_bezhaysk_settle_val_victory = yes")
+        self.assertLess(joint, single_val)
+        self.assertIn("has_war_together_with = NOD", router)
+        self.assertIn("ADISCORD_bezhaysk_joint_default_nod", router)
+        self.assertIn("ADISCORD_bezhaysk_joint_default_val", router)
+
+    def test_joint_settlement_keeps_feudal_holdings_indivisible(self) -> None:
+        effects = self.read("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")
+        start = effects.index("ADISCORD_bezhaysk_settle_val_nod_joint_victory = {")
+        joint = effects[start:]
+        for tag in ("BJK", "BLD", "BHG", "BGT", "BBV", "BCM"):
+            self.assertIn(f"target = {tag}", joint)
+        for capital in (41, 31, 5, 4, 7, 9):
+            self.assertIn(f"{capital} = {{ controller =", joint)
+        self.assertIn("VAL = { set_country_flag = ADISCORD_bezhaysk_joint_settlement }", joint)
+        self.assertIn("NOD = { set_country_flag = ADISCORD_bezhaysk_joint_settlement }", joint)
+
     def test_bezhaysk_starting_faction_uses_real_hachoesia_tag(self) -> None:
         history = self.read("history/countries/BJK - Besjaysk.txt")
         self.assertIn("add_to_faction = BHG", history)
