@@ -110,7 +110,8 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
         self.assertIn("STP_cw_has_other_openable_inspection", {e.key for e in walk(opener)})
         suspicion_caps = [(scalar(e.value, "var"), scalar(e.value, "value"), scalar(e.value, "compare"))
                           for e in walk(opener) if e.key == "check_variable"]
-        self.assertIn(("STP_party_suspicion", "50", "less_than"), suspicion_caps)
+        self.assertIn(("STP_party_suspicion", "60", "less_than"), suspicion_caps)
+        self.assertIn(("STP_party_suspicion", "60", "greater_than_or_equals"), suspicion_caps)
         self.assertIn(("STP_party_suspicion", "50", "greater_than_or_equals"), suspicion_caps)
         for state in INSPECTION_STATES:
             mission = f"STP_party_inspection_state_{state}"
@@ -141,7 +142,7 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
         second = block(self.triggers, "STP_cw_second_inspection_unlocked")
         threshold = next(e.value for e in second if e.key == "check_variable")
         self.assertEqual((scalar(threshold, "var"), scalar(threshold, "value"), scalar(threshold, "compare")),
-                         ("STP_party_suspicion", "50", "greater_than_or_equals"))
+                         ("STP_party_suspicion", "60", "greater_than_or_equals"))
         pair_guard = block(self.triggers, "STP_cw_two_inspections_active")
         pairs = set()
         for group in (e.value for e in walk(pair_guard) if e.key == "AND"):
