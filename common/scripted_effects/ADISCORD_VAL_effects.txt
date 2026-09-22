@@ -4235,6 +4235,13 @@ VAL_form_equal_stelander_alliance = {
 VAL_call_stelander_partner_to_wars = {
  if = {
   limit = { tag = VAL has_country_flag = VAL_stelander_equal_alliance }
-  if = { limit = { STS = { exists = yes is_in_faction_with = VAL } } STS = { add_to_war = { targeted_alliance = VAL enemy = NOD single_target_only = no } } }
+  if = {
+   limit = { has_war_with = NOD STS = { exists = yes is_in_faction_with = VAL NOT = { has_war_with = NOD } } }
+   STS = { add_to_war = { targeted_alliance = VAL enemy = NOD single_target_only = no } }
+  }
+  else_if = {
+   limit = { has_war_with = NOD STP = { exists = yes is_in_faction_with = VAL NOT = { has_war_with = NOD } } }
+   STP = { add_to_war = { targeted_alliance = VAL enemy = NOD single_target_only = no } }
+  }
  }
 }
