@@ -1,0 +1,166 @@
+name: Contract memory reward review
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  verify:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/val-contract-memory-check'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow pyyaml numpy
+      - name: Test, patch and export clean commit
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, importlib, json, os, re, subprocess, sys
+          base = 'e0511cbc69ce2e02d1304f03e7860bc23180dabe'
+          root = Path.cwd()
+          out = Path('/tmp/val-contract-memory')
+          out.mkdir()
+          regression = (root / '.github/val_contract_memory_regression.txt').read_text(encoding='utf-8')
+          subprocess.run(['git', 'fetch', '--depth=1', 'origin', base], check=True)
+          subprocess.run(['git', 'checkout', '--detach', base], check=True)
+          module = 'tools.tests.test_validate_adiscord_val_rework'
+          test_path = root / 'tools/tests/test_validate_adiscord_val_rework.py'
+          focus_path = root / 'common/national_focus/ADISCORD_national_focus_VAL.txt'
+          decisions_path = root / 'common/decisions/ADISCORD_VAL_decisions.txt'
+          paths = [str(p.relative_to(root)) for p in (focus_path, decisions_path, test_path)]
+          paths += [f'localisation/{lang}/ADISCORD_VAL_decisions_l_{lang}.yml' for lang in ('russian', 'english')]
+          before = {p: hashlib.sha256((root / p).read_bytes()).hexdigest() for p in paths}
+          results = {}
+          def run(label, args, timeout=180):
+              with (out / (label + '.log')).open('w') as log:
+                  try:
+                      code = subprocess.run(args, stdout=log, stderr=subprocess.STDOUT, timeout=timeout).returncode
+                  except subprocess.TimeoutExpired:
+                      code = 124
+              text = (out / (label + '.log')).read_text(errors='replace')
+              failures = re.findall(r'^(?:FAIL|ERROR): .+$', text, re.MULTILINE)
+              results[label] = {'returncode': code, 'failures': failures, 'summary': text[-2500:]}
+              print(label, json.dumps(results[label], ensure_ascii=False), flush=True)
+              return code, text
+          focused = [sys.executable, '-B', '-m', 'unittest', module, '-v']
+          run('baseline-focused', focused)
+          run('baseline-tc', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'])
+          text = test_path.read_text(encoding='utf-8')
+          assert 'class ValContractMemoryRewardTests' not in text
+          main = re.search(r'(?m)^if __name__ == [\'\"]__main__[\'\"]:', text)
+          at = main.start() if main else len(text)
+          test_path.write_text(text[:at] + regression + '\n\n' + text[at:], encoding='utf-8')
+          target = [sys.executable, '-B', '-m', 'unittest', module + '.ValContractMemoryRewardTests', '-v']
+          code, red = run('red', target)
+          assert code == 1 and 'FAIL:' in red and 'ERROR:' not in red, 'Regression must fail for missing behavior, not import errors'
+          sys.path.insert(0, str(root))
+          helper = importlib.import_module(module)
+          general = ('VAL_campaign_rifles_and_bread', 'VAL_campaign_contracts_feed_families', 'VAL_campaign_no_promise_without_payment')
+          def replace_focus(text, focus_id, flag, funding):
+              matches = [b for b in helper.named_block_spans(text, 'focus') if re.search(r'\bid\s*=\s*' + re.escape(focus_id) + r'\b', b.text)]
+              assert len(matches) == 1, focus_id
+              focus = matches[0]
+              rewards = helper.named_block_spans(focus.text, 'completion_reward')
+              assert len(rewards) == 1
+              reward = rewards[0]
+              expected = 'completion_reward = {\n\t\t\tif = {\n\t\t\t\tlimit = { NOT = { has_country_flag = ' + flag + ' } }\n\t\t\t\tADISCORD_campaign_slot_grant = yes\n\t\t\t\tset_country_flag = ' + flag + '\n\t\t\t}\n\t\t}'
+              assert reward.text == expected, focus_id
+              lines = ['completion_reward = {']
+              if funding:
+                  lines.append('\t\t\tadd_political_power = 50')
+              lines.append('\t\t\tcustom_effect_tooltip = VAL_campaign_slot_granted_tt')
+              if funding:
+                  lines.extend('\t\t\tunlock_decision_tooltip = ' + decision for decision in general)
+              lines.extend(['\t\t\thidden_effect = {', '\t\t\t\tif = {', '\t\t\t\t\tlimit = { NOT = { has_country_flag = ' + flag + ' } }', '\t\t\t\t\tADISCORD_campaign_slot_grant = yes', '\t\t\t\t\tset_country_flag = ' + flag, '\t\t\t\t}', '\t\t\t}', '\t\t}'])
+              start, end = focus.start + reward.start, focus.start + reward.end
+              return text[:start] + '\n'.join(lines) + text[end:]
+          text = focus_path.read_bytes().decode('utf-8')
+          text = replace_focus(text, 'VAL_Ministry_Of_Contract_Memory', 'VAL_propaganda_slot_granted', True)
+          text = replace_focus(text, 'VAL_Two_Concurrent_Narratives', 'VAL_second_propaganda_slot_granted', False)
+          focus_path.write_bytes(text.encode('utf-8'))
+          text = decisions_path.read_bytes().decode('utf-8')
+          for decision in (*general, 'VAL_campaign_the_mine_was_stolen'):
+              blocks = helper.named_block_spans(text, decision)
+              assert len(blocks) == 1
+              block = blocks[0]
+              original = block.text
+              if decision in general:
+                  assert not helper.named_block_spans(original, 'visible')
+                  marker = '\t\tallowed = { tag = VAL }'
+                  assert original.count(marker) == 1
+                  updated = original.replace(marker, marker + '\n\t\tvisible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }')
+              else:
+                  marker = 'visible = { has_country_flag = VAL_westerholm_metal_lost }'
+                  assert original.count(marker) == 1
+                  updated = original.replace(marker, 'visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory has_country_flag = VAL_westerholm_metal_lost }')
+              text = text[:block.start] + updated + text[block.end:]
+          decisions_path.write_bytes(text.encode('utf-8'))
+          descriptions = {
+              'russian': 'Государству нужны не только винтовки, но и право объяснять, почему каждый новый контракт был неизбежен. Министерство получает один постоянный слот пропагандистских кампаний и открывает кампании поддержки производства, семей контрактников и оплаченных обязательств. На запуск первой кампании выделяется 50 политической власти.',
+              'english': 'The state needs not only rifles, but the means to explain why each new contract was inevitable. The ministry gains one permanent propaganda campaign slot and unlocks campaigns supporting production, contractors\' families and paid obligations. It provides 50 political power to fund the first campaign.',
+          }
+          tips = {
+              'russian': 'Постоянно увеличивает число одновременно проводимых пропагандистских кампаний на §G1§!. Кампании находятся в категории решений §Y«Управление контрактным государством»§!.',
+              'english': 'Permanently increases the number of simultaneous propaganda campaigns by §G1§!. Campaigns are available in the §YContract State Management§! decision category.',
+          }
+          slot_lines = {
+              'russian': 'Свободные слоты пропагандистских кампаний: §Y[?ADISCORD_available_campaign_slots|0]§!. Завершение кампании освобождает занятый слот.',
+              'english': 'Free propaganda campaign slots: §Y[?ADISCORD_available_campaign_slots|0]§!. A campaign releases its slot when it ends.',
+          }
+          for lang in ('russian', 'english'):
+              path = root / f'localisation/{lang}/ADISCORD_VAL_decisions_l_{lang}.yml'
+              raw = path.read_bytes()
+              assert raw.startswith(b'\xef\xbb\xbf')
+              text = raw.decode('utf-8-sig')
+              key = 'VAL_Ministry_Of_Contract_Memory_desc'
+              text, count = re.subn(r'^\s*' + key + r':\d*[^\n]*', lambda m: ' ' + key + ':0 "' + descriptions[lang] + '"', text, flags=re.MULTILINE)
+              assert count == 1
+              key = 'VAL_contract_management_desc'
+              pattern = r'^( *' + key + r':\d*\s*"[^\n]*)"\s*$'
+              text, count = re.subn(pattern, lambda m: m.group(1) + '\\n\\n' + slot_lines[lang] + '"', text, flags=re.MULTILINE)
+              assert count == 1
+              assert not re.search(r'^\s*VAL_campaign_slot_granted_tt:', text, re.MULTILINE)
+              text = text.rstrip('\r\n') + '\n VAL_campaign_slot_granted_tt:0 "' + tips[lang] + '"\n'
+              path.write_bytes(b'\xef\xbb\xbf' + text.encode('utf-8'))
+          code, _ = run('green', target)
+          assert code == 0, 'New regression suite failed'
+          run('final-focused', focused)
+          new_failures = set(results['final-focused']['failures']) - set(results['baseline-focused']['failures'])
+          assert not new_failures, new_failures
+          assert results['final-focused']['returncode'] != 124
+          run('final-tc', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'])
+          run('full-suite', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_*.py'], timeout=240)
+          subprocess.run(['git', 'diff', '--check'], check=True)
+          changed = subprocess.check_output(['git', 'diff', '--name-only']).decode().splitlines()
+          assert set(changed) == set(paths), changed
+          (out / 'changes.patch').write_bytes(subprocess.check_output(['git', 'diff', '--', *paths]))
+          subprocess.run(['git', 'config', 'user.name', 'A-DISCORD automation'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '81386071+worker2of2month@users.noreply.github.com'], check=True)
+          env = dict(os.environ, GIT_INDEX_FILE='/tmp/val-contract-memory-index')
+          subprocess.run(['git', 'read-tree', base], env=env, check=True)
+          blobs = {}
+          for path in paths:
+              blob = subprocess.check_output(['git', 'hash-object', '-w', path]).decode().strip()
+              blobs[path] = blob
+              subprocess.run(['git', 'update-index', '--add', '--cacheinfo', '100644', blob, path], env=env, check=True)
+          tree = subprocess.check_output(['git', 'write-tree'], env=env).decode().strip()
+          commit = subprocess.check_output(['git', 'commit-tree', tree, '-p', base], input=b'fix(val): make contract memory fund and expose propaganda campaigns\n').decode().strip()
+          branch = 'codex/val-contract-memory-ready-' + os.environ['GITHUB_RUN_ID']
+          subprocess.run(['git', 'push', 'origin', commit + ':refs/heads/' + branch], check=True)
+          manifest = {'base': base, 'head': commit, 'branch': branch, 'tree': tree, 'blobs': blobs, 'before_sha256': before, 'checks': results}
+          (out / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
+          print('DELIVERY_MANIFEST', json.dumps(manifest, ensure_ascii=False), flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: val-contract-memory-evidence
+          path: /tmp/val-contract-memory
+          retention-days: 3
