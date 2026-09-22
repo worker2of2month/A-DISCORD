@@ -1,0 +1,55 @@
+name: Playable roster verification
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: write
+  pull-requests: read
+jobs:
+  review:
+    if: github.head_ref == 'codex/playable-rosters-review-20260922'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+          sparse-checkout: |
+            common
+            history
+            events
+            interface
+            localisation
+            tools
+            docs
+            .github
+          sparse-checkout-cone-mode: true
+      - name: Package source and verify
+        run: |
+          mkdir -p /tmp/roster-evidence
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess, zipfile, json
+          root = Path.cwd()
+          with zipfile.ZipFile('/tmp/roster-evidence/source.zip', 'w', zipfile.ZIP_DEFLATED) as z:
+              for folder in ('common','history','events','interface','localisation','tools','docs'):
+                  for p in (root/folder).rglob('*'):
+                      if p.is_file() and p.suffix in ('.txt','.py','.yml','.yaml','.json','.gfx','.gui','.md','.mod','.csv'):
+                          z.write(p, p.relative_to(root))
+              for name in ('AGENTS.md','descriptor.mod','.gitignore'):
+                  if (root/name).exists(): z.write(root/name, name)
+              tree = subprocess.check_output(['git','ls-tree','-r','-l','HEAD'], text=True)
+              z.writestr('_git_tree.txt',tree)
+          print('SOURCE_SNAPSHOT_READY')
+          PY
+          if test -f .github/playable_roster_patch.py; then
+            python .github/playable_roster_patch.py
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playable-roster-evidence
+          path: /tmp/roster-evidence
+          retention-days: 7
