@@ -5337,7 +5337,10 @@ STP_postwar_administration = {
         }
         visible = {
             has_country_flag = STP_cw_postwar
-            has_completed_focus = STP_pw_regional_citizenship
+            OR = {
+                has_completed_focus = STP_pw_regional_citizenship
+                has_completed_focus = STP_pc_heg_administrations
+            }
         }
         available = {
             custom_trigger_tooltip = {
