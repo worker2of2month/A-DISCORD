@@ -256,15 +256,14 @@ focus_tree = {
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
 		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag has_active_mission = STP_cw_election_window }
 		cancel_if_invalid = yes
+		cancelable = no
 		icon = GFX_focus_generic_improve_the_administration
 		x = -14
 		y = 4
 		cost = 2
 		prerequisite = { focus = STP_Call_For_Shabrat }
 		ai_will_do = { base = 6 }
-		completion_reward = {
-			custom_effect_tooltip = STP_cw_delay_election_tt
-			custom_effect_tooltip = STP_cw_suspicion_15_tt
+		select_effect = {
 			hidden_effect = {
 				if = {
 					limit = { has_active_mission = STP_cw_election_window }
@@ -277,6 +276,10 @@ focus_tree = {
 					STP_change_party_suspicion = yes
 				}
 			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = STP_cw_delay_election_tt
+			custom_effect_tooltip = STP_cw_suspicion_15_tt
 		}
 	}
 
