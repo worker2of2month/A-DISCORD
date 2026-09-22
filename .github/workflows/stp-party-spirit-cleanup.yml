@@ -1,67 +1,81 @@
-name: STP party spirit cleanup differential review
+name: STP party spirit cleanup final verification
 on:
   push:
     branches: [fix/stp-party-starting-spirit-cleanup]
+    paths:
+      - .github/workflows/stp-party-spirit-cleanup.yml
 permissions:
   contents: read
 jobs:
-  test:
+  verify:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: 8af88e2a67c081e0f128cc3910364c9d3a06635b
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: python -m pip install Pillow
-      - name: Compare STP contracts and validator with pre-fix main
+      - name: Verify exact delivery commit against main
         run: |
           python - <<'PY'
           from pathlib import Path
           import json, re, subprocess, sys
-          base = "4cc6d829d2a65233bea2804f30e25c23872383c6"
-          current = Path.cwd()
-          baseline = Path("/tmp/stp-spirit-baseline")
+          base="4cc6d829d2a65233bea2804f30e25c23872383c6"
+          head="8af88e2a67c081e0f128cc3910364c9d3a06635b"
+          assert subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip()==head
+          subprocess.run(["git","fetch","--depth=1","origin",base],check=True)
+          changed=subprocess.check_output(["git","diff","--name-only",base,head],text=True).splitlines()
+          assert changed==[
+            "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+            "tools/tests/test_adiscord_stp_civil_war.py",
+          ],changed
+          subprocess.run(["git","diff","--check",base,head],check=True)
+          baseline=Path("/tmp/stp-final-baseline")
           subprocess.run(["git","worktree","add","--detach",str(baseline),base],check=True)
-          out = Path("/tmp/stp-spirit-evidence"); out.mkdir()
+          out=Path("/tmp/stp-final-evidence"); out.mkdir()
           def run(label,cwd,cmd):
               p=subprocess.run(cmd,cwd=cwd,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
               (out/(label+".log")).write_text(p.stdout)
               return p.returncode,p.stdout
           focused=[sys.executable,"-B","-m","unittest","tools.tests.test_adiscord_stp_civil_war.CivilWarContracts.test_party_hostilities_clear_prewar_regime_spirits","-v"]
-          rc,text=run("focused",current,focused)
+          rc,text=run("focused",Path.cwd(),focused)
           print(text)
           assert rc==0
           suite=[sys.executable,"-B","-m","unittest","tools.tests.test_adiscord_stp_civil_war","-v"]
-          brc,btxt=run("baseline-stp",baseline,suite)
-          frc,ftxt=run("feature-stp",current,suite)
+          _,btxt=run("baseline-stp",baseline,suite)
+          _,ftxt=run("feature-stp",Path.cwd(),suite)
           def failures(text):
               detailed=re.findall(r"^(?:FAIL|ERROR): (.+)$",text,re.M)
               progress=re.findall(r"^(test_\S+ \([^\n]+\)) \.\.\. (?:FAIL|ERROR)$",text,re.M)
               return sorted(set(detailed+progress))
           bfail,ffail=failures(btxt),failures(ftxt)
           new=sorted(set(ffail)-set(bfail))
-          (out/"stp-failure-comparison.json").write_text(json.dumps({"baseline":bfail,"feature":ffail,"new":new},indent=2))
           print(json.dumps({"baseline_failures":len(bfail),"feature_failures":len(ffail),"new_failures":new},indent=2))
           assert not new,new
           validator=[sys.executable,"-B","tools/validate_tc.py","--limit","300"]
           _,bv=run("baseline-validator",baseline,validator)
-          _,fv=run("feature-validator",current,validator)
+          _,fv=run("feature-validator",Path.cwd(),validator)
           def issues(text):
               assert text.startswith("A-Discord total-conversion validation")
               assert "== Vanilla leftovers:" in text and "Traceback" not in text
               return {re.sub(r":\d+(?=:|\n| |$)",":LINE",line) for line in text.splitlines() if line.startswith("- ")}
           new_issues=sorted(issues(fv)-issues(bv))
-          (out/"new-validation-issues.json").write_text(json.dumps(new_issues,indent=2))
           print(json.dumps({"new_validation_issues":new_issues},indent=2))
           assert not new_issues,new_issues
-          subprocess.run(["git","diff","--check",base,"HEAD"],cwd=current,check=True)
+          (out/"manifest.json").write_text(json.dumps({
+              "base":base,"head":head,"changed_files":changed,
+              "focused_regression":"pass","baseline_failures":len(bfail),
+              "feature_failures":len(ffail),"new_failures":new,
+              "new_validation_issues":new_issues,"runtime_tested":False
+          },indent=2))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: stp-party-spirit-cleanup-evidence
-          path: /tmp/stp-spirit-evidence
+          name: stp-party-spirit-cleanup-final
+          path: /tmp/stp-final-evidence
           retention-days: 3
