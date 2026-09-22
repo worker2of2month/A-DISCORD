@@ -1,4 +1,4 @@
-name: Observer and Kefreyt clean delivery verification
+name: Observer and Kefreyt final verification
 on:
   push:
     branches: [fix/observer-val-progression]
@@ -8,73 +8,67 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
         with:
           ref: fix/observer-val-progression
           fetch-depth: 100
       - run: python -m pip install pillow numpy
-      - name: Verify clean payload and related regressions
+      - name: Verify final branch and canonical proclamation name
         run: |
           python - <<'PY'
           from pathlib import Path
-          from concurrent.futures import ThreadPoolExecutor
-          import json, os, re, signal, subprocess
+          import json, re, subprocess
           root = Path.cwd()
-          directory = root / '.superpowers/observer-val-inspection'
-          previous = json.loads((directory/'report.json').read_text())
-          base = previous['base']
-          final = '89bd8bc015d3a4bb1c5447b7d10aedb846bc6ba1'
+          reports = root/'.superpowers/observer-val-inspection'
+          prior = json.loads((reports/'delivery-report.json').read_text())
+          assert prior['status'] == 'verified'
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
           subprocess.run(['git', 'fetch', 'origin', 'fix/observer-val-lifecycle', '--depth=100'], check=True)
-          changed = subprocess.check_output(['git', 'diff', '--name-only', base, final], text=True).splitlines()
-          assert set(changed) == set(previous['paths']), changed
-          for path, blob in previous['paths'].items():
-              assert subprocess.check_output(['git', 'rev-parse', final+':'+path], text=True).strip() == blob, path
-          for name, sha in [('baseline', base), ('delivery', final)]:
-              subprocess.run(['git', 'worktree', 'add', '--detach', '/tmp/observer-val-'+name, sha], check=True)
-          report = {'commit': final, 'exact_verified_blobs': True, 'changed_paths': changed, 'checks': {}}
-          def run(name, checkout, args, timeout=100):
-              log_path = directory / (name+'.log')
-              with log_path.open('w') as log:
-                  process = subprocess.Popen(['python', '-B', *args], cwd='/tmp/observer-val-'+checkout, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
-                  try:
-                      result = process.wait(timeout=timeout)
-                  except subprocess.TimeoutExpired:
-                      os.killpg(process.pid, signal.SIGKILL)
-                      process.wait()
-                      result = 124
-              text = log_path.read_text(errors='replace')
-              item = {'returncode': result, 'failures': re.findall(r'(?m)^(?:FAIL|ERROR): .+$', text), 'partial_failures': re.findall(r'(?m)^[ \t]*test_[^\n]+\.\.\. (?:FAIL|ERROR)[ \t]*$', text), 'summary': text[-10000:]}
-              report['checks'][name] = item
-              print(name, result, item['failures'], text[-1500:], flush=True)
-              return item
-          focused = ['-m', 'unittest', 'tools.tests.test_adiscord_superevents_stp_empire', 'tools.tests.test_val_contract_ui', '-v']
-          related = ['-m', 'unittest', 'tools.tests.test_adiscord_economy_rebalance.NorthernCampaignRouteTests', 'tools.tests.test_adiscord_english_localisation.EnglishCatalogueCompletenessTests', 'tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_task10_live_localisation_has_true_bilingual_semantic_parity', 'tools.tests.test_validate_adiscord_val_rework', '-v']
+          expected = '89bd8bc015d3a4bb1c5447b7d10aedb846bc6ba1'
+          assert subprocess.check_output(['git', 'rev-parse', 'FETCH_HEAD'], text=True).strip() == expected
+          delivery = Path('/tmp/observer-val-final')
+          subprocess.run(['git', 'worktree', 'add', '--detach', str(delivery), expected], check=True)
+          path = delivery/'localisation/russian/ADISCORD_VAL_decisions_l_russian.yml'
+          raw = path.read_bytes()
+          text = raw.decode('utf-8-sig')
+          canonical = (delivery/'localisation/russian/nsb_characters_l_russian.yml').read_text(encoding='utf-8-sig')
+          assert re.search(r'VAL_Valera_Solgalov:\s*"Валера Солгалов"', canonical)
+          old, new = 'Портрет Валеры Сольгалова', 'Портрет Валеры Солгалова'
+          assert text.count(old) == 2
           try:
-              assert run('clean_focused', 'delivery', focused)['returncode'] == 0
-              with ThreadPoolExecutor(max_workers=2) as pool:
-                  before = pool.submit(run, 'related_baseline', 'baseline', related, 110)
-                  after = pool.submit(run, 'related_delivery', 'delivery', related, 110)
-                  b, a = before.result(), after.result()
-              report['new_completed_failures'] = sorted(set(a['failures'])-set(b['failures']))
-              report['related_comparison_complete'] = b['returncode'] != 124 and a['returncode'] != 124
-              assert not report['new_completed_failures'], report['new_completed_failures']
-              tc = run('clean_validate_tc', 'delivery', ['tools/validate_tc.py', '--limit', '300'], 150)
-              assert tc['returncode'] == 0
-              subprocess.run(['git', 'diff', '--check', base, final], check=True)
-              report['diff_check_passed'] = True
-              report['status'] = 'verified'
-          except Exception as error:
-              report['status'] = 'failed'
-              report['error'] = repr(error)
-              raise
-          finally:
-              report_path = directory/'delivery-report.json'
-              report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
-              subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
-              subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
-              subprocess.run(['git', 'add', '--', str(report_path)], check=True)
-              subprocess.run(['git', 'commit', '-m', 'ci: record clean delivery and baseline comparison'], check=True)
-              subprocess.run(['git', 'push', 'origin', 'HEAD:fix/observer-val-progression'], check=True)
+              assert old not in text, 'Proclamation copy must match canonical Solgalov spelling'
+          except AssertionError as error:
+              print('RED:', error, flush=True)
+          else:
+              raise AssertionError('Expected spelling regression was not reproduced')
+          fixed = text.replace(old, new)
+          path.write_bytes(fixed.encode('utf-8-sig'))
+          assert old not in fixed and fixed.count(new) == 2
+          assert path.read_bytes().startswith(b'\xef\xbb\xbf')
+          assert raw.count(b'\n') == path.read_bytes().count(b'\n')
+          report = {'parent': expected, 'canonical_spelling_red_green': True, 'checks': {}}
+          for name, command in [
+              ('focused', ['python', '-B', '-m', 'unittest', 'tools.tests.test_adiscord_superevents_stp_empire', 'tools.tests.test_val_contract_ui', '-v']),
+              ('validate_tc', ['python', '-B', 'tools/validate_tc.py', '--limit', '300']),
+              ('diff_check', ['git', 'diff', '--check']),
+          ]:
+              result = subprocess.run(command, cwd=delivery, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=160)
+              report['checks'][name] = {'returncode': result.returncode, 'output': result.stdout[-15000:]}
+              print(name, result.returncode, result.stdout[-1200:], flush=True)
+              assert result.returncode == 0, (name, result.stdout[-4000:])
+          changed = subprocess.check_output(['git', 'diff', '--name-only'], cwd=delivery, text=True).splitlines()
+          assert changed == ['localisation/russian/ADISCORD_VAL_decisions_l_russian.yml'], changed
+          subprocess.run(['git', 'add', '--', changed[0]], cwd=delivery, check=True)
+          subprocess.run(['git', 'commit', '-m', 'fix(l10n): use canonical Solgalov spelling in proclamation text'], cwd=delivery, check=True)
+          report['commit'] = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=delivery, text=True).strip()
+          subprocess.run(['git', 'push', 'origin', 'HEAD:fix/observer-val-lifecycle'], cwd=delivery, check=True)
+          report['status'] = 'verified'
+          destination = reports/'final-report.json'
+          destination.write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
+          subprocess.run(['git', 'add', '--', str(destination)], check=True)
+          subprocess.run(['git', 'commit', '-m', 'ci: record final observer and Kefreyt verification'], check=True)
+          subprocess.run(['git', 'push', 'origin', 'HEAD:fix/observer-val-progression'], check=True)
           PY
