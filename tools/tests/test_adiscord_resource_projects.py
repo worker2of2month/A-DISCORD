@@ -140,6 +140,20 @@ class ProjectFixture(EconomyScriptFixture):
 
 
 class ResourceProjectTransactions(unittest.TestCase):
+    def test_project_cost_localisation_uses_native_resource_icons(self):
+        for language in ('russian', 'english'):
+            loc = read(f'localisation/{language}/ADISCORD_economy_l_{language}.yml')
+            for name in PROJECTS:
+                for suffix in ('', '_blocked', '_tooltip'):
+                    key = f'{P}{name}_cost{suffix}:0'
+                    line = next((row for row in loc.splitlines() if key in row), None)
+                    self.assertIsNotNone(line, (language, key))
+                    self.assertIn('£resources_strip|8', line, (language, key))
+                    self.assertIn('£resources_strip|9', line, (language, key))
+                    self.assertIn('£civ_factory', line, (language, key))
+                    self.assertNotIn('компоненты §', line, (language, key))
+                    self.assertNotIn('rare components §', line, (language, key))
+
     def test_exact_start_prices_and_actual_resource_allocation(self):
         for name,(pid,cost,c,a,days) in PROJECTS.items():
             with self.subTest(project=name):
