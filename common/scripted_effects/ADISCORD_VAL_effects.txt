@@ -2429,8 +2429,23 @@ VAL_refresh_industrial_economy = {
 	set_variable = { var = VAL_industrial_trade value = 0 }
 	set_variable = { var = VAL_industrial_income value = 0 }
 	set_variable = { var = VAL_industrial_consumer value = 0 }
+	# Recovery progress is the durable crisis marker. If the local presentation flag
+	# is ever lost between callbacks, restore it before recalculating the consumer.
 	if = {
-		limit = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+		limit = {
+			NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+			has_variable = VAL_economic_recovery_steps
+		}
+		set_country_flag = VAL_vorkerland_contracts_disrupted
+	}
+	if = {
+		limit = {
+			OR = {
+				has_country_flag = VAL_vorkerland_contracts_disrupted
+				has_variable = VAL_economic_recovery_steps
+				has_country_flag = VAL_economic_recovery_completed
+			}
+		}
 		clamp_variable = { var = VAL_economic_recovery_steps min = 0 max = 9 }
 		set_variable = { var = VAL_industrial_output value = VAL_economic_recovery_steps }
 		multiply_variable = { var = VAL_industrial_output value = 0.09 }
@@ -2455,13 +2470,24 @@ VAL_refresh_industrial_economy = {
 	if = { limit = { has_variable = VAL_civilian_investment } add_to_variable = { var = VAL_industrial_construction value = VAL_civilian_investment } }
 	remove_ideas = { VAL_vorkerland_contract_disruptions VAL_worldwide_famous_weponry }
 	if = {
-		limit = { NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted } }
+		limit = {
+			NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+			NOT = { has_variable = VAL_economic_recovery_steps }
+			NOT = { has_country_flag = VAL_economic_recovery_completed }
+		}
 		if = { limit = { has_dynamic_modifier = VAL_economic_collapse } remove_dynamic_modifier = { modifier = VAL_economic_collapse } }
 		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = { modifier = VAL_economic_miracle } }
 		if = { limit = { NOT = { has_dynamic_modifier = VAL_contract_industry } } add_dynamic_modifier = { modifier = VAL_contract_industry } }
 	}
 	else_if = {
-		limit = { check_variable = { var = VAL_economic_recovery_steps value = 9 compare = less_than } }
+		# The collapse persists until the final recovery focus explicitly commits
+		# completion. A numeric stage by itself must never make the crisis vanish.
+		limit = {
+			OR = {
+				NOT = { has_country_flag = VAL_economic_recovery_completed }
+				check_variable = { var = VAL_economic_recovery_steps value = 9 compare = less_than }
+			}
+		}
 		if = { limit = { has_dynamic_modifier = VAL_contract_industry } remove_dynamic_modifier = { modifier = VAL_contract_industry } }
 		if = { limit = { has_dynamic_modifier = VAL_economic_miracle } remove_dynamic_modifier = { modifier = VAL_economic_miracle } }
 		if = { limit = { NOT = { has_dynamic_modifier = VAL_economic_collapse } } add_dynamic_modifier = { modifier = VAL_economic_collapse } }
@@ -2638,6 +2664,33 @@ VAL_reconcile_northern_volunteers = {
 
 # Совместимость уже начавшегося экономического кризиса.
 VAL_reconcile_supply_crisis = {
+	# Migrate old saves that already reached the restored economy before the
+	# explicit completion receipt existed. The visible miracle is sufficient
+	# evidence after stage 9 even if a later focus-tree swap hid the old focus.
+	if = {
+		limit = {
+			NOT = { has_country_flag = VAL_economic_recovery_completed }
+			OR = {
+				has_completed_focus = VAL_Return_To_World_Market
+				AND = {
+					has_variable = VAL_economic_recovery_steps
+					check_variable = { var = VAL_economic_recovery_steps value = 9 compare = greater_than_or_equals }
+					has_dynamic_modifier = { modifier = VAL_economic_miracle }
+				}
+			}
+		}
+		set_country_flag = VAL_economic_recovery_completed
+		if = {
+			limit = {
+				has_completed_focus = VAL_Return_To_World_Market
+				OR = {
+					NOT = { has_variable = VAL_economic_recovery_steps }
+					check_variable = { var = VAL_economic_recovery_steps value = 9 compare = less_than }
+				}
+			}
+			set_variable = { var = VAL_economic_recovery_steps value = 9 }
+		}
+	}
 	# Recover missed outbreak callbacks from world state without resetting earned progress.
 	if = {
 		limit = {
@@ -2687,14 +2740,14 @@ VAL_reconcile_supply_crisis = {
 				has_idea = VAL_vorkerland_contract_disruptions
 				has_dynamic_modifier = { modifier = VAL_contract_industry }
 				AND = {
-					check_variable = { var = VAL_economic_recovery_steps value = 9 compare = less_than }
+					NOT = { has_country_flag = VAL_economic_recovery_completed }
 					OR = {
 						NOT = { has_dynamic_modifier = { modifier = VAL_economic_collapse } }
 						has_dynamic_modifier = { modifier = VAL_economic_miracle }
 					}
 				}
 				AND = {
-					check_variable = { var = VAL_economic_recovery_steps value = 9 compare = greater_than_or_equals }
+					has_country_flag = VAL_economic_recovery_completed
 					OR = {
 						NOT = { has_dynamic_modifier = { modifier = VAL_economic_miracle } }
 						has_dynamic_modifier = { modifier = VAL_economic_collapse }
