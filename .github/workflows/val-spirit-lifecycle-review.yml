@@ -1,0 +1,129 @@
+name: Kefreyt spirit lifecycle review
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: write
+jobs:
+  verify:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/val-spirit-lifecycle-review'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify transport and prepare pinned baseline
+        run: |
+          mkdir -p /tmp/val-spirit-review
+          cp .github/val_spirit_repair.b64 /tmp/val-spirit-review/transport.b64
+          python - <<'PY'
+          import base64, hashlib, json, zlib
+          from pathlib import Path
+          out = Path('/tmp/val-spirit-review')
+          text = (out / 'transport.b64').read_text().strip()
+          for old, new in [('+4eaX7qV', '+4eaX7/qV'), ('E+s4hojfwiBwiB0', 'E+s4hojfwiB0'), ('HMYPx9/ER+PP4dBB', 'HMYPx9/ER+PP8dBB'), ('AVVn8R7j8cASH9', 'AVVn8R7j8ASH9'), ('T2Ke31iG1gla', 'T2Ke31G1gla')]:
+              text = text.replace(old, new)
+          raw = base64.b64decode(text, validate=True)
+          actual = hashlib.sha256(raw).hexdigest()
+          print('Transport SHA256:', actual)
+          assert actual == '497e5b2f358861dc57738bab4ffa2d8fa82bdfacc347bcb1ff2feecb9df71a47'
+          pack = json.loads(zlib.decompress(raw))
+          (out / 'pack.json').write_text(json.dumps(pack, ensure_ascii=False))
+          for key in ('tests', 'production'):
+              (out / (key + '.patch')).write_text(pack[key], encoding='utf-8')
+          PY
+          git switch --detach 457a8e2732363b61b3e0a5ac0a6de690e05887ee
+          python -m pip install pillow numpy pyyaml
+      - name: Run baseline, red-green regressions and validator
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, re, subprocess, sys
+          out = Path('/tmp/val-spirit-review')
+          reports = {}
+          def run(name, command, seconds=120):
+              with (out / (name + '.log')).open('w') as log:
+                  try:
+                      code = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=seconds).returncode
+                  except subprocess.TimeoutExpired:
+                      code = 124
+                      log.write('\nTIMEOUT\n')
+              text = (out / (name + '.log')).read_text()
+              reports[name] = {'returncode': code, 'failures': sorted(re.findall(r'^(?:FAIL|ERROR): (.+)$', text, re.M)), 'tail': text.splitlines()[-5:]}
+              print(name, json.dumps(reports[name]))
+              (out / 'reports.json').write_text(json.dumps(reports, indent=2))
+              return code
+          expanded = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_validate_adiscord_val_rework', '-v']
+          focused = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_validate_adiscord_val_rework.ValIndustrialRecoveryTests', 'tools.tests.test_val_contract_ui', '-v']
+          run('baseline-expanded', expanded)
+          subprocess.run(['git', 'apply', '--check', str(out / 'tests.patch')], check=True)
+          subprocess.run(['git', 'apply', str(out / 'tests.patch')], check=True)
+          assert run('red', focused) == 1
+          assert 'FAILED (failures=9)' in (out / 'red.log').read_text()
+          subprocess.run(['git', 'apply', '--check', str(out / 'production.patch')], check=True)
+          subprocess.run(['git', 'apply', str(out / 'production.patch')], check=True)
+          assert run('green', focused) == 0
+          run('final-expanded', expanded)
+          before, after = reports['baseline-expanded'], reports['final-expanded']
+          assert before['returncode'] != 124 and after['returncode'] != 124
+          assert set(after['failures']) <= set(before['failures']), 'New expanded-suite failure'
+          run('full-suite', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_*.py', '-v'], 75)
+          assert run('validator', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], 180) == 0
+          subprocess.run(['git', 'diff', '--check'], check=True)
+          pack = json.loads((out / 'pack.json').read_text())
+          changed = subprocess.check_output(['git', 'diff', '--name-only']).decode().splitlines()
+          assert set(changed) == set(pack['files']), changed
+          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+          hashes = {}
+          for name in changed:
+              p = Path(name)
+              raw = p.read_bytes()
+              text = raw.decode('utf-8-sig')
+              assert not re.search(r'(?m)^(<<<<<<<|=======|>>>>>>>)', text)
+              if name.startswith('localisation/'):
+                  assert raw.startswith(b'\xef\xbb\xbf')
+                  keys = re.findall(r'^\s*([^\s:#]+):', text, re.M)
+                  assert len(keys) == len(set(keys)), name
+              else:
+                  assert hashlib.sha256(raw).hexdigest() == pack['hashes'][name], name
+                  if p.suffix == '.txt':
+                      assert not raw.startswith(b'\xef\xbb\xbf')
+                      assert parse_clausewitz(text)
+              hashes[name] = hashlib.sha256(raw).hexdigest()
+          (out / 'hashes.json').write_text(json.dumps(hashes, indent=2))
+          (out / 'delivery.diff').write_bytes(subprocess.check_output(['git', 'diff']))
+          PY
+      - name: Publish verified gameplay-only branch
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, os, subprocess
+          out = Path('/tmp/val-spirit-review')
+          files = json.loads((out / 'pack.json').read_text())['files']
+          subprocess.run(['git', 'config', 'user.name', 'A-Discord fixes'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '81386071+worker2of2month@users.noreply.github.com'], check=True)
+          for name in files:
+              subprocess.run(['git', 'add', '--', name], check=True)
+              subprocess.run(['git', 'commit', '-m', 'fix(val): reconcile visible dynamic spirits in ' + Path(name).name], check=True)
+          branch = 'fix/val-dynamic-spirit-lifecycle-' + os.environ['GITHUB_RUN_ID']
+          head = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
+          subprocess.run(['git', 'push', 'origin', head + ':refs/heads/' + branch], check=True)
+          (out / 'delivery.json').write_text(json.dumps({'branch': branch, 'head': head, 'base': '457a8e2732363b61b3e0a5ac0a6de690e05887ee'}, indent=2))
+          for name in files:
+              p = out / 'source' / name
+              p.parent.mkdir(parents=True, exist_ok=True)
+              p.write_bytes(Path(name).read_bytes())
+          print((out / 'delivery.json').read_text())
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: val-spirit-review
+          path: /tmp/val-spirit-review
+          retention-days: 7
