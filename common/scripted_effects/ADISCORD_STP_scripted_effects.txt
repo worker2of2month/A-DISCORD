@@ -4128,6 +4128,10 @@ STP_pc_lock_hegemony = {
 		}
 	}
 	set_politics = { ruling_party = chauvinism elections_allowed = no }
+	set_country_leader_portrait = {
+		ideology = chauvinism
+		portrait = GFX_portrait_STP_Maksim_Shabrat_hegemony
+	}
 }
 
 # STS: lock course 2. Hegemony is closed. Vanilla elections stay off.
@@ -6838,4 +6842,143 @@ STP_qol_initialize_party_leaders = {
 			promote_character = { character = STP_grigory_sotnikov ideology = humanism_ideology }
 		}
 	}
+}
+
+
+# Shabrat hegemony endgame.
+# The first campaign clears independent northern governments. Kefreyt is kept
+# for a separate second campaign unless another alliance has already dragged it in.
+STP_heg_start_northern_final_war = {
+	if = {
+		limit = {
+			tag = STS
+			check_variable = { var = STP_pc_course value = 1 compare = equals }
+			NOT = { has_country_flag = STP_heg_northern_final_started }
+		}
+		set_country_flag = STP_heg_northern_final_started
+		if = {
+			limit = {
+				NOD = { exists = yes has_capitulated = no is_subject = no NOT = { is_in_faction_with = STS } }
+				NOT = { has_war_with = NOD }
+			}
+			declare_war_on = { target = NOD type = annex_everything }
+		}
+		if = {
+			limit = {
+				YPR = { exists = yes has_capitulated = no is_subject = no NOT = { is_in_faction_with = STS } }
+				NOT = { has_war_with = YPR }
+			}
+			declare_war_on = { target = YPR type = annex_everything }
+		}
+		if = {
+			limit = {
+				TFF = { exists = yes has_capitulated = no is_subject = no NOT = { is_in_faction_with = STS } }
+				NOT = { has_war_with = TFF }
+			}
+			declare_war_on = { target = TFF type = annex_everything }
+		}
+	}
+}
+
+STP_heg_start_kefreyt_final_war = {
+	if = {
+		limit = {
+			tag = STS
+			check_variable = { var = STP_pc_course value = 1 compare = equals }
+			STP_heg_northern_final_resolved = yes
+			NOT = { has_country_flag = STP_heg_kefreyt_final_started }
+		}
+		set_country_flag = STP_heg_kefreyt_final_started
+		if = {
+			limit = {
+				VAL = { exists = yes has_capitulated = no is_subject = no NOT = { is_in_faction_with = STS } }
+				NOT = { has_war_with = VAL }
+			}
+			declare_war_on = { target = VAL type = annex_everything }
+		}
+	}
+}
+
+STP_heg_prepare_nod_administration = {
+	if = {
+		limit = { NOD = { exists = yes } }
+		NOD = {
+			if = {
+				limit = { is_subject = yes NOT = { is_subject_of = STS } }
+				overlord = { set_autonomy = { target = NOD autonomy_state = autonomy_free end_wars = no end_civil_wars = no } }
+			}
+			if = { limit = { is_in_faction = yes NOT = { is_in_faction_with = STS } } leave_faction = yes }
+		}
+		set_autonomy = { target = NOD autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 end_wars = no end_civil_wars = no }
+		NOD = { set_country_flag = STP_heg_provisional_administration }
+	}
+	else_if = {
+		limit = { NOT = { NOD = { exists = yes } } any_owned_state = { is_core_of = NOD } }
+		release_autonomy = { target = NOD autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 }
+		NOD = { set_country_flag = STP_heg_provisional_administration }
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_heg_prepare_ypr_administration = {
+	if = {
+		limit = { YPR = { exists = yes } }
+		YPR = {
+			if = {
+				limit = { is_subject = yes NOT = { is_subject_of = STS } }
+				overlord = { set_autonomy = { target = YPR autonomy_state = autonomy_free end_wars = no end_civil_wars = no } }
+			}
+			if = { limit = { is_in_faction = yes NOT = { is_in_faction_with = STS } } leave_faction = yes }
+		}
+		set_autonomy = { target = YPR autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 end_wars = no end_civil_wars = no }
+		YPR = { set_country_flag = STP_heg_provisional_administration }
+	}
+	else_if = {
+		limit = { NOT = { YPR = { exists = yes } } any_owned_state = { is_core_of = YPR } }
+		release_autonomy = { target = YPR autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 }
+		YPR = { set_country_flag = STP_heg_provisional_administration }
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_heg_prepare_tff_administration = {
+	if = {
+		limit = { TFF = { exists = yes } }
+		TFF = {
+			if = {
+				limit = { is_subject = yes NOT = { is_subject_of = STS } }
+				overlord = { set_autonomy = { target = TFF autonomy_state = autonomy_free end_wars = no end_civil_wars = no } }
+			}
+			if = { limit = { is_in_faction = yes NOT = { is_in_faction_with = STS } } leave_faction = yes }
+		}
+		set_autonomy = { target = TFF autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 end_wars = no end_civil_wars = no }
+		TFF = { set_country_flag = STP_heg_provisional_administration }
+	}
+	else_if = {
+		limit = { NOT = { TFF = { exists = yes } } any_owned_state = { is_core_of = TFF } }
+		release_autonomy = { target = TFF autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 }
+		TFF = { set_country_flag = STP_heg_provisional_administration }
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+STP_heg_prepare_val_administration = {
+	if = {
+		limit = { VAL = { exists = yes } }
+		VAL = {
+			if = {
+				limit = { is_subject = yes NOT = { is_subject_of = STS } }
+				overlord = { set_autonomy = { target = VAL autonomy_state = autonomy_free end_wars = no end_civil_wars = no } }
+			}
+			if = { limit = { is_in_faction = yes NOT = { is_in_faction_with = STS } } leave_faction = yes }
+		}
+		set_autonomy = { target = VAL autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 end_wars = no end_civil_wars = no }
+		VAL = { set_country_flag = STP_heg_provisional_administration }
+	}
+	else_if = {
+		limit = { NOT = { VAL = { exists = yes } } any_owned_state = { is_core_of = VAL } }
+		release_autonomy = { target = VAL autonomy_state = autonomy_STP_provisional_administration freedom_level = 0.05 }
+		VAL = { set_country_flag = STP_heg_provisional_administration }
+	}
+	ADISCORD_economy_mark_dirty = yes
 }
