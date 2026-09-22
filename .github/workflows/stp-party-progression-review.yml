@@ -1,0 +1,45 @@
+name: STP party progression review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: write
+concurrency:
+  group: stp-party-progression-review
+  cancel-in-progress: true
+jobs:
+  verify:
+    if: github.head_ref == 'review/stp-party-faction-progression'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+      - name: Sources and verification
+        run: |
+          mkdir -p /tmp/party-evidence
+          if [ -f .github/stp_party_delivery.py ]; then
+            python -B .github/stp_party_delivery.py
+          else
+            python - <<'PY'
+          from pathlib import Path
+          import zipfile, subprocess
+          root = Path('.')
+          with zipfile.ZipFile('/tmp/party-evidence/source.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for p in root.rglob('*'):
+                  if not p.is_file() or '.git' in p.parts: continue
+                  if p.suffix.lower() in ('.txt','.py','.json','.yml','.gfx','.gui','.md','.lua','.csv','.mod','.fnt') or (str(p).startswith('gfx/interface') and p.stat().st_size < 200000):
+                      z.write(p,str(p))
+          with open('/tmp/party-evidence/baseline-party.txt','w') as f:
+              result=subprocess.run(['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_balance','-v'],stdout=f,stderr=subprocess.STDOUT)
+          print('Baseline party test exit:',result.returncode)
+          PY
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: party-progression-evidence
+          path: /tmp/party-evidence
+          retention-days: 7
