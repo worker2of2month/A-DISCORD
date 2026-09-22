@@ -5,7 +5,7 @@ STP_elections_in_the_party = {
 	visible = {
 		NOT = { has_global_flag = STP_cw_started }
 		NOT = { has_country_flag = STP_cw_elections_finished }
-	}
+}
 	visible_when_empty = no
 	priority = 21
 }
@@ -50,31 +50,16 @@ STP_cw_external_intervention = {
 			has_active_mission = NOD_cw_northern_redeployment
 			NOD = { has_country_flag = NOD_cw_intervention_approved }
 			AND = { tag = STP has_country_flag = STP_cw_northern_strategy_supply STP_cw_nod_busy_in_north = yes }
-		AND = {
-                tag = STP
-                has_country_flag = STP_sided_with_the_party_flag
-                NOT = { has_global_flag = STP_cw_union_wars_finished }
-                OR = {
-                    has_completed_focus = STP_ps_foreign_supply_desk
-                    has_completed_focus = STP_ps_northern_credit
-                    has_completed_focus = STP_ps_northern_arms
-                    has_completed_focus = STP_ps_northern_engineers
-                    has_completed_focus = STP_ps_expedition_logistics
-                    has_country_flag = STP_ps_prepare_evacuation_completed
-                }
-            }
-            AND = {
-                tag = STP
-                OR = {
-                    has_variable = STP_ps_nod_receipt_type
-                    has_variable = STP_ps_val_intelligence_deposit
-                    has_variable = STP_ps_val_intercept_deposit
-                    has_variable = STP_ps_val_pressure_deposit
-                    has_country_flag = STP_pw_party_nod_threat_active
-                    has_country_flag = STP_pw_party_nod_invasion_active
-                }
-            }
-	}
+
+
+            AND = { tag = STP has_country_flag = STP_sided_with_the_party_flag STP_cw_preparation_open = yes }
+            has_variable = STP_ps_nod_receipt_type
+            has_variable = STP_ps_val_intelligence_deposit
+            has_variable = STP_ps_val_intercept_deposit
+            has_variable = STP_ps_val_pressure_deposit
+            AND = { tag = STP has_country_flag = STP_cw_postwar OR = { has_country_flag = STP_pw_party_nod_threat_active has_country_flag = STP_pw_party_nod_invasion_active } }
+
+}
 	}
 	visible_when_empty = no
 	priority = 35

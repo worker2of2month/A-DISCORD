@@ -1576,25 +1576,26 @@ STP_pw_party_nod_threat_current = {
 	NOT = { has_war_with = NOD }
 }
 
-# COUNTRY STP: entry windows include the entire paid operation and a one-day margin.
-STP_ps_val_recon_window = {
+# COUNTRY STP: reserve a full response chain plus one day before departure.
+STP_ps_val_intelligence_time_available = {
     VAL = {
         has_active_mission = STP_ps_val_departure
         check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 22 compare = greater_than_or_equals }
     }
 }
-STP_ps_val_intercept_window = {
+STP_ps_val_intercept_time_available = {
     VAL = {
         has_active_mission = STP_ps_val_departure
         check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 15 compare = greater_than_or_equals }
     }
 }
-STP_ps_val_pressure_available = {
-    tag = STP
-    exists = yes
-    has_capitulated = no
-    has_country_flag = STP_sided_with_the_party_flag
-    OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes }
-    OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }
-    VAL = { STP_ps_val_supply_open = yes }
+# COUNTRY STP: funding is not a purchase of automatic military intervention.
+STP_ps_nod_credit_useful = {
+    NOD = {
+        OR = {
+            STP_ps_northern_front_active = yes
+            NOD_cw_intervention_possible = yes
+            AND = { has_country_flag = NOD_cw_entered has_war_with = STS }
+        }
+    }
 }

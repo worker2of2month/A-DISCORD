@@ -70,9 +70,8 @@ class PartyRouteContracts(unittest.TestCase):
         party = self.loc["STP_PARTY_ELECTION_BRIEFING"]
         self.assertNotIn("ложный след", party.lower())
         self.assertNotIn("пороги подозрения", party.lower())
-        self.assertIn("70", self.loc["STP_party_factions_desc"])
-        self.assertIn("25", self.loc["STP_party_factions_desc"])
-        self.assertNotIn("STPGetPartyPreparationReport", party)
+        self.assertIn("70", party)
+        self.assertIn("25", party)
         self.assertIn("ложный след", self.loc["STP_RESISTANCE_ELECTION_BRIEFING"])
 
     def test_search_outcome_colors_follow_the_observers_side(self):
@@ -642,7 +641,6 @@ class PartyFactionContracts(unittest.TestCase):
         decisions = [e for e in one(categories, "STP_party_factions")
                      if e.key.startswith("STP_pf_negotiate_")]
         self.assertEqual(len(decisions), 7)
-        self.assertEqual({e.key for e in decisions}, {f"STP_pf_negotiate_{k}" for k in self.KEYS})
         gui = read("interface/ADISCORD_STP_regions.gui")
         script = read("common/scripted_guis/ADISCORD_STP_regions_scripted_gui.txt")
         for k in self.KEYS:

@@ -188,27 +188,6 @@ STP_elections_in_the_party = {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 STP_shabrat_election_bop_category = {
@@ -4038,11 +4017,15 @@ STP_cw_external_intervention = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_ps_northern_credit NOT = { has_global_flag = STP_cw_union_wars_finished } }
-		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_can_aid_nod = yes NOT = { has_variable = STP_ps_nod_receipt_type } NOT = { has_country_flag = STP_ps_fund_nod_cooldown }    } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_can_aid_nod = yes NOT = { has_variable = STP_ps_nod_receipt_type } NOT = { has_country_flag = STP_ps_fund_nod_cooldown }    }
+			custom_trigger_tooltip = { tooltip = STP_ps_nod_credit_useful_tt STP_ps_nod_credit_useful = yes }
+}
 		cost = 0
 		custom_cost_text = STP_ps_fund_nod_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals }  }
-		complete_effect = { hidden_effect = { if = { limit = { STP_ps_can_aid_nod = yes NOT = { has_variable = STP_ps_nod_receipt_type } NOT = { has_country_flag = STP_ps_fund_nod_cooldown }  check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals }  }
+		complete_effect = { hidden_effect = { if = { limit = {
+STP_ps_nod_credit_useful = yes
+ STP_ps_can_aid_nod = yes NOT = { has_variable = STP_ps_nod_receipt_type } NOT = { has_country_flag = STP_ps_fund_nod_cooldown }  check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals }  }
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1500 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1500 }
 					ADISCORD_economy_mark_dirty = yes
@@ -4052,12 +4035,9 @@ STP_cw_external_intervention = {
 
 					activate_mission = STP_ps_nod_dispatch
 					add_days_mission_timeout = { mission = STP_ps_nod_dispatch days = 13 }
-				} }
-		custom_effect_tooltip = STP_ps_fund_nod_result_tt
-	}
+				} } }
 		ai_will_do = { base = 3 modifier = { factor = 0 check_variable = { var = ADISCORD_economy_treasury value = 7500 compare = less_than } } }
 	}
-
 	STP_ps_arm_nod = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
@@ -4068,12 +4048,9 @@ STP_cw_external_intervention = {
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } NOT = { has_equipment = { infantry_equipment < 1200 } } NOT = { has_equipment = { artillery_equipment < 100 } } NOT = { has_equipment = { support_equipment < 60 } } }
 		complete_effect = { hidden_effect = { if = { limit = { STP_ps_can_aid_nod = yes NOT = { has_variable = STP_ps_nod_receipt_type } NOT = { has_country_flag = STP_ps_arm_nod_cooldown } NOD = { STP_ps_northern_front_active = yes } check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } NOT = { has_equipment = { infantry_equipment < 1200 } } NOT = { has_equipment = { artillery_equipment < 100 } } NOT = { has_equipment = { support_equipment < 60 } } }
 					STP_ps_pay_nod_arms = yes
-				} }
-		custom_effect_tooltip = STP_ps_arm_nod_result_tt
-	}
+				} } }
 		ai_will_do = { base = 3 modifier = { factor = 0 check_variable = { var = ADISCORD_economy_treasury value = 6300 compare = less_than } } }
 	}
-
 	STP_ps_engineers_nod = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
@@ -4092,12 +4069,9 @@ STP_cw_external_intervention = {
 
 					activate_mission = STP_ps_nod_dispatch
 					add_days_mission_timeout = { mission = STP_ps_nod_dispatch days = 20 }
-				} }
-		custom_effect_tooltip = STP_ps_engineers_nod_result_tt
-	}
+				} } }
 		ai_will_do = { base = 3 modifier = { factor = 0 check_variable = { var = ADISCORD_economy_treasury value = 9000 compare = less_than } } }
 	}
-
 	STP_ps_expedition_nod = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
@@ -4116,12 +4090,9 @@ STP_cw_external_intervention = {
 
 					activate_mission = STP_ps_nod_dispatch
 					add_days_mission_timeout = { mission = STP_ps_nod_dispatch days = 20 }
-				} }
-		custom_effect_tooltip = STP_ps_expedition_nod_result_tt
-	}
+				} } }
 		ai_will_do = { base = 3 modifier = { factor = 0 check_variable = { var = ADISCORD_economy_treasury value = 7800 compare = less_than } } }
 	}
-
 	STP_ps_nod_dispatch = {
 		allowed = { tag = STP }
 		activation = { always = no }
@@ -4134,7 +4105,6 @@ STP_cw_external_intervention = {
 		timeout_effect = { hidden_effect = { STP_ps_dispatch_nod = yes } }
 		cancel_effect = { hidden_effect = { STP_ps_refund_nod = yes } }
 	}
-
 	STP_ps_nod_delivery = {
 		allowed = { tag = STP }
 		activation = { always = no }
@@ -4147,7 +4117,6 @@ STP_cw_external_intervention = {
 		timeout_effect = { hidden_effect = { STP_ps_deliver_nod = yes } }
 		cancel_effect = { hidden_effect = { STP_ps_deliver_nod = yes } }
 	}
-
 	STP_ps_cancel_nod = {
 		allowed = { tag = STP }
 		visible = { check_variable = { var = STP_ps_nod_receipt_stage value = 1 compare = equals } }
@@ -4155,7 +4124,6 @@ STP_cw_external_intervention = {
 		complete_effect = { hidden_effect = { STP_ps_refund_nod = yes remove_mission = STP_ps_nod_dispatch remove_mission = STP_ps_nod_route_wait } }
 		ai_will_do = { base = 0 }
 	}
-
 	STP_ps_nod_route_wait = {
 		allowed = { tag = STP }
 		activation = { always = no }
@@ -4168,124 +4136,6 @@ STP_cw_external_intervention = {
 		timeout_effect = { hidden_effect = { STP_ps_dispatch_nod = yes } }
 		cancel_effect = { hidden_effect = { STP_ps_refund_nod = yes } }
 	}
-
-	STP_ps_val_intelligence = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = {  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }   }
-		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }  NOT = { has_variable = STP_ps_val_intelligence_deposit }  }
-		custom_trigger_tooltip = { tooltip = STP_ps_val_recon_window_tt STP_ps_val_recon_window = yes }
-			custom_trigger_tooltip = { tooltip = STP_ps_val_intelligence_fresh_tt VAL = { NOT = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } } } }
-	}
-		cost = 0
-		custom_cost_text = STP_ps_val_intelligence_cost
-		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals } }
-		complete_effect = { hidden_effect = { if = { limit = {  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }  NOT = { has_variable = STP_ps_val_intelligence_deposit } check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
-		STP_ps_val_recon_window = yes
-				VAL = { NOT = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } } }
-	}
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 450 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 450 }
-					ADISCORD_economy_mark_dirty = yes
-					set_variable = { var = STP_ps_val_intelligence_deposit value = 450 }
-					set_variable = { var = STP_ps_val_intelligence_sequence value = VAL.STP_ps_val_sequence }
-					activate_mission = STP_ps_val_intelligence_work
-				} }
-		custom_effect_tooltip = STP_ps_val_intelligence_result_tt
-	}
-		ai_will_do = { base = 5 }
-	}
-
-	STP_ps_val_intelligence_work = {
-		allowed = { tag = STP }
-		activation = { always = no }
-		available = { hidden_trigger = { always = no } }
-		visible = { has_active_mission = STP_ps_val_intelligence_work }
-		days_mission_timeout = 7
-		selectable_mission = no
-		fire_only_once = no
-		cancel_trigger = { OR = { NOT = { check_variable = { var = STP_ps_val_intelligence_sequence value = VAL.STP_ps_val_sequence compare = equals } } NOT = { STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }  } }
-		} timeout_effect = { hidden_effect = { STP_ps_val_intelligence_finish = yes } }
-		cancel_effect = { hidden_effect = { STP_ps_val_intelligence_refund = yes } }
-	}
-
-	STP_ps_val_intercept = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = {  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes }  }
-		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes } NOT = { has_variable = STP_ps_val_intercept_deposit }  }
-		custom_trigger_tooltip = { tooltip = STP_ps_val_intercept_window_tt STP_ps_val_intercept_window = yes }
-			custom_trigger_tooltip = { tooltip = STP_ps_val_intercept_fresh_tt VAL = { NOT = { check_variable = { var = STP_ps_val_intercepted_sequence value = STP_ps_val_sequence compare = equals } } } }
-	}
-		cost = 0
-		custom_cost_text = STP_ps_val_intercept_cost
-		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals } }
-		complete_effect = { hidden_effect = { if = { limit = {  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes } NOT = { has_variable = STP_ps_val_intercept_deposit } check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
-		STP_ps_val_intercept_window = yes
-				VAL = { NOT = { check_variable = { var = STP_ps_val_intercepted_sequence value = STP_ps_val_sequence compare = equals } } }
-	}
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1200 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1200 }
-					ADISCORD_economy_mark_dirty = yes
-					set_variable = { var = STP_ps_val_intercept_deposit value = 1200 }
-					set_variable = { var = STP_ps_val_intercept_sequence value = VAL.STP_ps_val_sequence }
-					activate_mission = STP_ps_val_intercept_work
-				} }
-		custom_effect_tooltip = STP_ps_val_intercept_result_tt
-	}
-		ai_will_do = { base = 5 }
-	}
-
-	STP_ps_val_intercept_work = {
-		allowed = { tag = STP }
-		activation = { always = no }
-		available = { hidden_trigger = { always = no } }
-		visible = { has_active_mission = STP_ps_val_intercept_work }
-		days_mission_timeout = 14
-		selectable_mission = no
-		fire_only_once = no
-		cancel_trigger = { OR = { NOT = { check_variable = { var = STP_ps_val_intercept_sequence value = VAL.STP_ps_val_sequence compare = equals } } NOT = { STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes } } }
-		} timeout_effect = { hidden_effect = { STP_ps_val_intercept_finish = yes } }
-		cancel_effect = { hidden_effect = { STP_ps_val_intercept_refund = yes } }
-	}
-
-	STP_ps_val_pressure = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		visible = {  tag = STP OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { exists = yes }  }
-		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  tag = STP OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { exists = yes } NOT = { has_variable = STP_ps_val_pressure_deposit } NOT = { has_country_flag = STP_ps_val_pressure_cooldown }  }
-		custom_trigger_tooltip = { tooltip = STP_ps_val_pressure_available_tt STP_ps_val_pressure_available = yes }
-	}
-		cost = 0
-		custom_cost_text = STP_ps_val_pressure_cost
-		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals } }
-		complete_effect = { hidden_effect = { if = { limit = {  tag = STP OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { exists = yes } NOT = { has_variable = STP_ps_val_pressure_deposit } NOT = { has_country_flag = STP_ps_val_pressure_cooldown } check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals }
-		STP_ps_val_pressure_available = yes
-	}
-					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1500 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1500 }
-					ADISCORD_economy_mark_dirty = yes
-					set_variable = { var = STP_ps_val_pressure_deposit value = 1500 }
-					STP_ps_val_pressure_finish = yes
-				} }
-		custom_effect_tooltip = STP_ps_val_pressure_result_tt
-	}
-		ai_will_do = { base = 5 }
-	}
-
-	STP_ps_val_pressure_work = {
-		allowed = { tag = STP }
-		activation = { always = no }
-		available = { hidden_trigger = { always = no } }
-		visible = { has_active_mission = STP_ps_val_pressure_work }
-		days_mission_timeout = 21
-		selectable_mission = no
-		fire_only_once = no
-		cancel_trigger = { NOT = { tag = STP OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { exists = yes } } }
-		timeout_effect = { hidden_effect = { STP_ps_val_pressure_finish = yes } }
-		cancel_effect = { hidden_effect = { STP_ps_val_pressure_refund = yes } }
-	}
-
 	STP_ps_evacuate_funds = {
 		allowed = { tag = STP }
 		visible = { has_country_flag = STP_ps_prepare_evacuation_completed NOT = { has_variable = STP_ps_evacuated_money } }
@@ -4301,11 +4151,118 @@ STP_cw_external_intervention = {
 				} } }
 		ai_will_do = { base = 0 }
 	}
+	STP_ps_val_intelligence = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = {  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }   }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }  NOT = { has_variable = STP_ps_val_intelligence_deposit }  }
+			custom_trigger_tooltip = { tooltip = STP_ps_val_intelligence_time_available_tt STP_ps_val_intelligence_time_available = yes }
 
+            VAL = { NOT = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } } }
+        }
+		cost = 0
+		custom_cost_text = STP_ps_val_intelligence_cost
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals } }
+		complete_effect = { hidden_effect = { if = { limit = {
+STP_ps_val_intelligence_time_available = yes
+  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }  NOT = { has_variable = STP_ps_val_intelligence_deposit } check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }  VAL = { NOT = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } } } }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 450 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 450 }
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = { var = STP_ps_val_intelligence_deposit value = 450 }
+					set_variable = { var = STP_ps_val_intelligence_sequence value = VAL.STP_ps_val_sequence }
+					activate_mission = STP_ps_val_intelligence_work
+				} } }
+		ai_will_do = { base = 5 }
+	}
+	STP_ps_val_intelligence_work = {
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_active_mission = STP_ps_val_intelligence_work }
+		days_mission_timeout = 7
+		selectable_mission = no
+		fire_only_once = no
+		cancel_trigger = { OR = { NOT = { check_variable = { var = STP_ps_val_intelligence_sequence value = VAL.STP_ps_val_sequence compare = equals } } NOT = { STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }  } }
+		} timeout_effect = { hidden_effect = { STP_ps_val_intelligence_finish = yes } }
+		cancel_effect = { hidden_effect = { STP_ps_val_intelligence_refund = yes } }
+	}
+	STP_ps_val_intercept = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = {  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes }  }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes } NOT = { has_variable = STP_ps_val_intercept_deposit }  }
+			custom_trigger_tooltip = { tooltip = STP_ps_val_intercept_time_available_tt STP_ps_val_intercept_time_available = yes }
+
+            VAL = { NOT = { check_variable = { var = STP_ps_val_intercepted_sequence value = STP_ps_val_sequence compare = equals } } }
+        }
+		cost = 0
+		custom_cost_text = STP_ps_val_intercept_cost
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals } }
+		complete_effect = { hidden_effect = { if = { limit = {
+STP_ps_val_intercept_time_available = yes
+  STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes } NOT = { has_variable = STP_ps_val_intercept_deposit } check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }  VAL = { NOT = { check_variable = { var = STP_ps_val_intercepted_sequence value = STP_ps_val_sequence compare = equals } } } }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1200 }
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = { var = STP_ps_val_intercept_deposit value = 1200 }
+					set_variable = { var = STP_ps_val_intercept_sequence value = VAL.STP_ps_val_sequence }
+					activate_mission = STP_ps_val_intercept_work
+				} } }
+		ai_will_do = { base = 5 }
+	}
+	STP_ps_val_intercept_work = {
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_active_mission = STP_ps_val_intercept_work }
+		days_mission_timeout = 14
+		selectable_mission = no
+		fire_only_once = no
+		cancel_trigger = { OR = { NOT = { check_variable = { var = STP_ps_val_intercept_sequence value = VAL.STP_ps_val_sequence compare = equals } } NOT = { STP_ps_val_intelligence_available = yes OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes } } }
+		} timeout_effect = { hidden_effect = { STP_ps_val_intercept_finish = yes } }
+		cancel_effect = { hidden_effect = { STP_ps_val_intercept_refund = yes } }
+	}
+	STP_ps_val_pressure = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = {  tag = STP OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { exists = yes }  }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  tag = STP OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { exists = yes } NOT = { has_variable = STP_ps_val_pressure_deposit } NOT = { has_country_flag = STP_ps_val_pressure_cooldown }  } }
+		cost = 0
+		custom_cost_text = STP_ps_val_pressure_cost
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals } }
+		complete_effect = { hidden_effect = { if = { limit = {  tag = STP OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { exists = yes } NOT = { has_variable = STP_ps_val_pressure_deposit } NOT = { has_country_flag = STP_ps_val_pressure_cooldown } check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals } }
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1500 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1500 }
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = { var = STP_ps_val_pressure_deposit value = 1500 }
+					STP_ps_val_pressure_finish = yes
+				} } }
+		ai_will_do = { base = 5 }
+	}
+	STP_ps_val_pressure_work = {
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_active_mission = STP_ps_val_pressure_work }
+		days_mission_timeout = 21
+		selectable_mission = no
+		fire_only_once = no
+		cancel_trigger = { NOT = { tag = STP OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { exists = yes } } }
+		timeout_effect = { hidden_effect = { STP_ps_val_pressure_finish = yes } }
+		cancel_effect = { hidden_effect = { STP_ps_val_pressure_refund = yes } }
+	}
 	STP_pw_party_nod_invasion_countdown = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { has_country_flag = STP_pw_party_nod_threat_active }
+		visible = {
+tag = STP
+		has_country_flag = STP_cw_postwar
+		OR = {
+			has_country_flag = STP_pw_party_nod_threat_active
+			has_country_flag = STP_pw_party_nod_invasion_active
+		}
+ has_country_flag = STP_pw_party_nod_threat_active }
 		available = { hidden_trigger = { always = no } }
 		days_mission_timeout = 90
 		cancel_trigger = { STP_pw_party_nod_threat_current = no }
@@ -4314,11 +4271,17 @@ STP_cw_external_intervention = {
 		fire_only_once = yes
 		timeout_effect = { hidden_effect = { STP_pw_party_launch_nod_invasion = yes } }
 	}
-
 	STP_pw_party_nod_emergency_mobilization = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { has_country_flag = STP_pw_party_nod_threat_active }
+		visible = {
+tag = STP
+		has_country_flag = STP_cw_postwar
+		OR = {
+			has_country_flag = STP_pw_party_nod_threat_active
+			has_country_flag = STP_pw_party_nod_invasion_active
+		}
+ has_country_flag = STP_pw_party_nod_threat_active }
 		available = {
 			STP_pw_party_nod_threat_current = yes
 			NOT = { has_country_flag = STP_pw_party_nod_emergency_mobilized }
@@ -4353,11 +4316,17 @@ STP_cw_external_intervention = {
 		}
 		ai_will_do = { base = 20 }
 	}
-
 	STP_pw_party_nod_fortify_border = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { has_country_flag = STP_pw_party_nod_threat_active }
+		visible = {
+tag = STP
+		has_country_flag = STP_cw_postwar
+		OR = {
+			has_country_flag = STP_pw_party_nod_threat_active
+			has_country_flag = STP_pw_party_nod_invasion_active
+		}
+ has_country_flag = STP_pw_party_nod_threat_active }
 		available = {
 			STP_pw_party_nod_threat_current = yes
 			NOT = { has_country_flag = STP_pw_party_nod_border_fortified }
@@ -4406,11 +4375,17 @@ STP_cw_external_intervention = {
 		}
 		ai_will_do = { base = 20 }
 	}
-
 	STP_pw_party_nod_staff_readiness = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { has_country_flag = STP_pw_party_nod_threat_active }
+		visible = {
+tag = STP
+		has_country_flag = STP_cw_postwar
+		OR = {
+			has_country_flag = STP_pw_party_nod_threat_active
+			has_country_flag = STP_pw_party_nod_invasion_active
+		}
+ has_country_flag = STP_pw_party_nod_threat_active }
 		available = {
 			STP_pw_party_nod_threat_current = yes
 			NOT = { has_country_flag = STP_pw_party_nod_staff_ready }
@@ -5124,7 +5099,6 @@ STP_party_factions = {
 				} } }
 		ai_will_do = { base = 5 }
 	}
-
 	STP_ps_build_radio_work = {
 		allowed = { tag = STP }
 		activation = { always = no }
@@ -5137,7 +5111,6 @@ STP_party_factions = {
 		timeout_effect = { hidden_effect = { STP_ps_build_radio_finish = yes } }
 		cancel_effect = { hidden_effect = { STP_ps_build_radio_refund = yes } }
 	}
-
 	STP_ps_build_hq = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
@@ -5155,7 +5128,6 @@ STP_party_factions = {
 				} } }
 		ai_will_do = { base = 5 }
 	}
-
 	STP_ps_build_hq_work = {
 		allowed = { tag = STP }
 		activation = { always = no }
@@ -5168,7 +5140,6 @@ STP_party_factions = {
 		timeout_effect = { hidden_effect = { STP_ps_build_hq_finish = yes } }
 		cancel_effect = { hidden_effect = { STP_ps_build_hq_refund = yes } }
 	}
-
 	STP_ps_prepare_evacuation = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
@@ -5186,7 +5157,6 @@ STP_party_factions = {
 				} } }
 		ai_will_do = { base = 5 }
 	}
-
 	STP_ps_prepare_evacuation_work = {
 		allowed = { tag = STP }
 		activation = { always = no }

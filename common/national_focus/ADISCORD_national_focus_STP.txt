@@ -1994,9 +1994,9 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = { unlock_decision_tooltip = { decision = STP_ps_val_intelligence show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intelligence_desc
-		unlock_decision_tooltip = STP_ps_val_intercept
-			unlock_decision_tooltip = STP_ps_val_pressure
-	}
+			unlock_decision_tooltip = { decision = STP_ps_val_intercept show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_intercept_desc
+			unlock_decision_tooltip = { decision = STP_ps_val_pressure show_effect_tooltip = yes } custom_effect_tooltip = STP_ps_val_pressure_desc
+}
 	}
 
 }

@@ -1649,7 +1649,7 @@ VAL_reclamation_reconcile_project = {
 # STATE: never restart a paid deadline or let a missing native timer hold escrow forever.
 VAL_reclamation_reconcile_state_project = {
 	if = {
-		limit = { has_state_flag = { flag = VAL_reclamation_work_in_progress days > 44 } }
+		limit = { has_state_flag = { flag = VAL_reclamation_work_in_progress days > 89 } }
 		VAL_reclamation_finish_state_project = yes
 	}
 }
@@ -1658,6 +1658,10 @@ VAL_reclamation_reconcile_state_project = {
 VAL_reclamation_refresh_state = {
 	if = {
 		limit = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+		if = {
+			limit = { has_dynamic_modifier = { modifier = VAL_reclamation_recovered_land } }
+			remove_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }
+		}
 		if = {
 			limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
 			remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
