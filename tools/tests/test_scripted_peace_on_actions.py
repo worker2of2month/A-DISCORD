@@ -280,6 +280,33 @@ class FrontierWarEntryRegressionTests(unittest.TestCase):
             if e.key == "if" and any(x.key == "VAL_frontier_close" for x in e.value):
                 self.fail("Do not cancel a just-issued declaration using same-tick has_war")
 
+    def test_kefreyt_declares_on_all_enrolled_tribes_without_waiting_for_ai(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        effects = self.effects()
+        start = block(effects, "VAL_frontier_start_war")
+        helper_calls = [e for e in walk(start) if e.key == "VAL_frontier_declare_all_tribal_members"]
+        self.assertEqual(len(helper_calls), 3, "Each tribal ultimatum branch must use the common simultaneous declaration helper")
+
+        helper = block(effects, "VAL_frontier_declare_all_tribal_members")
+        expected = {"CIN": "58", "OSF": "61", "APH": "64"}
+        declarations = {}
+        for entry in walk(helper):
+            if entry.key != "declare_war_on":
+                continue
+            target = scalar(entry.value, "target")
+            generator = block(entry.value, "generator")
+            state = next(x.value for x in generator if x.key.isdigit()) if False else None
+            # generator is represented as anonymous numeric entries by the Clausewitz parser.
+            numeric = [x.key for x in generator if x.key.isdigit()]
+            if not numeric:
+                numeric = [x.value for x in generator if isinstance(x.value, str) and x.value.isdigit()]
+            declarations[target] = numeric[0] if numeric else None
+
+        self.assertEqual(set(declarations), set(expected))
+        for tag, state in expected.items():
+            self.assertIn(f"target = {tag}", str(helper))
+            self.assertIn(f"generator = {{ {state} }}", str(helper).replace("\n", " "))
+
     def test_calling_an_ally_never_clears_its_membership_in_the_same_branch(self):
         from tools.tests.test_adiscord_stp_preparation import block, walk
         calls = block(self.effects(), "VAL_frontier_call_members")
