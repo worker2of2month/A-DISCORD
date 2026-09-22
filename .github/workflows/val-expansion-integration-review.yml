@@ -24,6 +24,7 @@ jobs:
           cp .github/val_cleanup_finalize.py /tmp/val_cleanup_finalize.py
           git fetch --no-tags --depth=1 origin e41f07d2417b09aec7461b586b33ecc1467f3800
           git switch --detach e41f07d2417b09aec7461b586b33ecc1467f3800
+          export PYTHONPATH="$PWD"
           python -B /tmp/val_cleanup_finalize.py
       - name: Preserve evidence
         if: always()
