@@ -44,7 +44,7 @@ class StelanderInspectionSchedulerRegressionTests(unittest.TestCase):
         second = named_block(triggers, "STP_cw_second_inspection_unlocked")
 
         self.assertIn(
-            "var = STP_party_suspicion value = 50 compare = greater_than_or_equals",
+            "var = STP_party_suspicion value = 60 compare = greater_than_or_equals",
             second,
         )
         self.assertIn("NOT = { STP_cw_two_inspections_active = yes }", second)
