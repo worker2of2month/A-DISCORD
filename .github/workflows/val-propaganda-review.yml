@@ -35,7 +35,7 @@ jobs:
           text = text.replace(old, '')
           old = "suite = [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_*.py']"
           assert text.count(old) == 1
-          checker = "from pathlib import Path\nfrom tools.tests.test_validate_adiscord_val_rework import parse_clausewitz\nfor path in ['common/national_focus/ADISCORD_national_focus_VAL.txt', 'common/decisions/ADISCORD_VAL_decisions.txt', 'common/decisions/categories/ADISCORD_VAL_rework_categories.txt']:\n    assert parse_clausewitz(Path(path).read_text(encoding='utf-8-sig'))\n    print(path + ': parsed')\n"
+          checker = "from pathlib import Path\nfrom tools.validators.validate_adiscord_division_templates import parse_clausewitz\nfor path in ['common/national_focus/ADISCORD_national_focus_VAL.txt', 'common/decisions/ADISCORD_VAL_decisions.txt', 'common/decisions/categories/ADISCORD_VAL_rework_categories.txt']:\n    assert parse_clausewitz(Path(path).read_text(encoding='utf-8-sig'))\n    print(path + ': parsed')\n"
           text = text.replace(old, "suite = [sys.executable, '-B', '-c', " + repr(checker) + "]")
           text = text.replace('baseline_suite', 'baseline_syntax').replace('final_suite', 'final_syntax').replace('baseline-suite', 'baseline-syntax').replace('final-suite', 'final-syntax').replace("('focused', 'suite')", "('focused', 'syntax')")
           text = text.replace("def run(name, command, timeout=300):\n", "def run(name, command, timeout=300):\n    timeout = 180 if 'validator' in name else 60\n")
