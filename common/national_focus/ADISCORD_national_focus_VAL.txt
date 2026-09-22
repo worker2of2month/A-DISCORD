@@ -2259,6 +2259,7 @@ completion_reward = {
   y = 20
   cost = 3
   prerequisite = { focus = VAL_frontier_treaty_offices }
+  available = { custom_trigger_tooltip = { tooltip = VAL_nod_campaign_foothold_tt VAL_northern_foothold_secured = yes } }
   completion_reward = { unlock_decision_tooltip = { decision = VAL_negotiate_yubora show_effect_tooltip = yes } unlock_decision_tooltip = { decision = VAL_campaign_against_nod show_effect_tooltip = yes } }
   ai_will_do = { base = 8 }
  }
