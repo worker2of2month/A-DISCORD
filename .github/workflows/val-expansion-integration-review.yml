@@ -4,137 +4,35 @@ on:
     branches: [main]
     types: [opened, synchronize, reopened]
 permissions:
-  contents: write
+  contents: read
 jobs:
-  verify:
+  export:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/val-expansion-integration-review'
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 1
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - run: python -m pip install pillow numpy pyyaml
-      - name: Verify and publish the clean gameplay branch
+      - name: Export latest verified source inputs
         run: |
-          cp .github/val_central_expansion.py /tmp/val_central_expansion.py
-          cp .github/val_central_regressions.py /tmp/val_central_regressions.py
-          git fetch --no-tags --depth=1 origin d21917074259b4f29c8fe36ec20773aeb7ce2e45
-          git switch --detach d21917074259b4f29c8fe36ec20773aeb7ce2e45
+          git fetch --no-tags --depth=1 origin e41f07d2417b09aec7461b586b33ecc1467f3800 d21917074259b4f29c8fe36ec20773aeb7ce2e45
           python - <<'PY'
-          import concurrent.futures, hashlib, json, os, re, subprocess, sys
-          from pathlib import Path
-          out = Path('/tmp/val-central-review')
-          out.mkdir(exist_ok=True)
-          reports = {}
-          def run(name, command, timeout=180):
-              with (out / (name + '.log')).open('w') as log:
-                  try:
-                      result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=timeout)
-                      code = result.returncode
-                  except subprocess.TimeoutExpired:
-                      log.write('\nTIMEOUT after ' + str(timeout) + ' seconds\n')
-                      code = 124
-              text = (out / (name + '.log')).read_text(errors='replace')
-              failures = re.findall(r'^(?:FAIL|ERROR): (.+)$', text, re.M)
-              live_failures = [line for line in text.splitlines() if re.search(r'\.\.\. (FAIL|ERROR)$', line)]
-              report = {'returncode': code, 'failures': failures, 'observed_failures': live_failures, 'tail': text.splitlines()[-6:]}
-              print(name, json.dumps(report), flush=True)
-              return report
-          broad = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_val_contract_ui', 'tools.tests.test_val_export_market', 'tools.tests.test_validate_adiscord_val_rework', 'tools.tests.test_adiscord_economy_rebalance', '-v']
-          reports['baseline_broad'] = run('baseline-broad', broad)
-          assert reports['baseline_broad']['returncode'] != 124, 'Baseline did not finish'
-          path = Path('tools/tests/test_val_contract_ui.py')
-          text = path.read_text()
-          marker = '\nif __name__ == "__main__":'
-          assert marker in text and 'class TestValExpansionAndReclamation' not in text
-          path.write_text(text.replace(marker, Path('/tmp/val_central_regressions.py').read_text() + marker))
-          reports['red'] = run('red', [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_val_contract_ui.TestValExpansionAndReclamation', '-v'])
-          assert reports['red']['returncode'] == 1 and reports['red']['failures'], 'New regressions must fail before the change'
-          assert 'ERROR:' not in (out / 'red.log').read_text(), 'Red must be assertions, not broken tests'
-          subprocess.run([sys.executable, '-B', '/tmp/val_central_expansion.py'], check=True)
-          reports['focused'] = run('focused', [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_val_contract_ui', 'tools.tests.test_adiscord_economy_rebalance.NorthernCampaignRouteTests', '-v'])
-          assert reports['focused']['returncode'] == 0
-          jobs = {
-              'final_broad': ('final-broad', broad, 180),
-              'validator': ('validator', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], 180),
-              'whole_suite': ('whole-suite', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_*.py', '-v'], 300),
-          }
-          with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
-              futures = {key: pool.submit(run, *args) for key, args in jobs.items()}
-              for key, future in futures.items():
-                  reports[key] = future.result()
-          (out / 'verification.json').write_text(json.dumps(reports, indent=2))
-          assert reports['final_broad']['returncode'] != 124
-          added = set(reports['final_broad']['failures']) - set(reports['baseline_broad']['failures'])
-          assert not added, ('New broad regressions', sorted(added))
-          assert reports['validator']['returncode'] == 0
-          expected = {
-              'common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt',
-              'common/national_focus/ADISCORD_national_focus_VAL.txt',
-              'common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt',
-              'common/scripted_effects/ADISCORD_VAL_effects.txt',
-              'common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt',
-              'localisation/english/ADISCORD_VAL_decisions_l_english.yml',
-              'localisation/english/ADISCORD_ideas_l_english.yml',
-              'localisation/russian/ADISCORD_VAL_decisions_l_russian.yml',
-              'localisation/russian/ADISCORD_ideas_l_russian.yml',
-              'tools/tests/test_adiscord_economy_rebalance.py',
-              'tools/tests/test_val_contract_ui.py',
-          }
-          actual = set(subprocess.check_output(['git', 'diff', '--name-only']).decode().splitlines())
-          assert actual == expected, (actual - expected, expected - actual)
-          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
-          hashes = {}
-          for name in sorted(expected):
-              data = Path(name).read_bytes()
-              text = data.decode('utf-8-sig')
-              assert not re.search(r'(?m)^(<<<<<<< |=======\s*$|>>>>>>> )', text), name
-              if name.startswith('localisation/'):
-                  assert data.startswith(b'\xef\xbb\xbf'), name
-                  keys = re.findall(r'(?m)^\s*([A-Za-z0-9_.-]+):\d*\s*"', text)
-                  assert len(set(keys)) == len(keys), name
-              elif name.startswith('common/'):
-                  assert not data.startswith(b'\xef\xbb\xbf'), name
-                  parse_clausewitz(text)
-              hashes[name] = hashlib.sha256(data).hexdigest()
-              dest = out / 'source' / name
-              dest.parent.mkdir(parents=True, exist_ok=True)
-              dest.write_bytes(data)
-          subprocess.run(['git', 'diff', '--check'], check=True)
-          (out / 'changes.patch').write_bytes(subprocess.check_output(['git', 'diff', '--binary']))
-          subprocess.run(['git', 'config', 'user.name', 'A-DISCORD automation'], check=True)
-          subprocess.run(['git', 'config', 'user.email', '81386071+worker2of2month@users.noreply.github.com'], check=True)
-          subprocess.run(['git', 'add', '--', *sorted(expected)], check=True)
-          subprocess.run(['git', 'commit', '-m', 'fix(val): center expansion and complete national reclamation'], check=True)
-          head = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
-          branch = 'codex/val-central-expansion-final-' + os.environ['GITHUB_RUN_ID']
-          subprocess.run(['git', 'push', 'origin', head + ':refs/heads/' + branch], check=True)
-          manifest = {'base': 'd21917074259b4f29c8fe36ec20773aeb7ce2e45', 'head': head, 'branch': branch, 'hashes': hashes, 'native_runtime_tested': False}
-          (out / 'manifest.json').write_text(json.dumps(manifest, indent=2))
-          print('DELIVERY', json.dumps(manifest), flush=True)
-          PY
-      - name: Preserve evidence
-        if: always()
-        run: |
-          mkdir -p /tmp/val-central-review
-          git diff > /tmp/val-central-review/remaining.diff
-          python - <<'PY'
-          from pathlib import Path
-          import zipfile
-          root = Path('/tmp/val-central-review')
-          with zipfile.ZipFile('/tmp/val-central-review.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
-              for path in root.rglob('*'):
-                  if path.is_file():
-                      archive.write(path, path.relative_to(root))
+          import subprocess, zipfile, json
+          main = 'e41f07d2417b09aec7461b586b33ecc1467f3800'
+          base = 'd21917074259b4f29c8fe36ec20773aeb7ce2e45'
+          def git(*args): return subprocess.check_output(['git',*args])
+          paths = git('diff','--name-only',base,main).decode().splitlines()
+          with zipfile.ZipFile('/tmp/val-latest-main.zip','w',zipfile.ZIP_DEFLATED) as z:
+              z.writestr('metadata.json',json.dumps({'main':main,'base':base,'changed_files':paths},indent=2))
+              for name in paths:
+                  p=subprocess.run(['git','show',main+':'+name],capture_output=True)
+                  if p.returncode == 0: z.writestr('main/'+name,p.stdout)
+          print(json.dumps({'main':main,'changed_files':paths},indent=2))
           PY
       - uses: actions/upload-artifact@v4
-        if: always()
         with:
-          name: val-central-review
-          path: /tmp/val-central-review.zip
-          retention-days: 7
+          name: val-latest-main
+          path: /tmp/val-latest-main.zip
+          retention-days: 3
