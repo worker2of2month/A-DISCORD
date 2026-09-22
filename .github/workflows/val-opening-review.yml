@@ -18,6 +18,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install media verification dependency
+        run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
       - name: Pin gameplay baseline
         run: |
           cp .github/val_opening_repair.py /tmp/val_opening_repair.py
