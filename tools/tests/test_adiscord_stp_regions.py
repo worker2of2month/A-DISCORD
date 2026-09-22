@@ -177,6 +177,27 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         openable = named_block(read(TRIGGERS), "STP_cw_inspection_region_openable")
         self.assertIn("NOT = { has_state_flag = STP_false_trail_redirected }", openable)
 
+    def test_preemptive_inspection_protection_lasts_forty_days(self) -> None:
+        decision = named_block(read(DECISIONS), "STP_cw_protect_district_from_inspection")
+        self.assertIn("has_completed_focus = STP_Count_The_Loyalists", decision)
+        self.assertIn("state_target = yes", decision)
+        self.assertIn("targets = { 2 3 29 45 46 53 }", decision)
+        self.assertIn("NOT = { has_state_flag = STP_party_inspection_active }", decision)
+        self.assertIn("NOT = { has_state_flag = STP_cw_inspection_protected }", decision)
+        self.assertIn("has_political_power < 25", decision)
+        self.assertIn("STP_cw_can_spend_600 = yes", decision)
+        self.assertIn("add_political_power = -25", decision)
+        self.assertIn("STP_cw_spend_600 = yes", decision)
+        self.assertIn("flag = STP_cw_inspection_protected days = 40", decision)
+
+        openable = named_block(read(TRIGGERS), "STP_cw_inspection_region_openable")
+        self.assertIn("NOT = { has_state_flag = STP_cw_inspection_protected }", openable)
+
+        loc = read(LOCALISATION)
+        self.assertIn("STP_cw_protect_district_from_inspection_tt", loc)
+        self.assertIn("40 дней", loc)
+        self.assertIn("STP_REGION_INSPECTION_PROTECTED", loc)
+
     def test_concession_surrenders_the_administrator_without_destroying_military_assets(self) -> None:
         decision = named_block(read(DECISIONS), "STP_cw_sacrifice_local_contact")
         self.assertIn("has_state_flag = STP_resistance_administration_asset", named_block(decision, "available"))
