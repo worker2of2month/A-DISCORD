@@ -3262,7 +3262,7 @@ class StelanderPreparationTests(unittest.TestCase):
                          "suspicion belongs to the immediate select effect")
 
         loc = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(encoding="utf-8-sig")
-        self.assertIn("эффект применяется сразу после выбора фокуса", loc)
+        self.assertIn("Эффект применяется сразу после выбора фокуса", loc)
         tokens = (ROOT / "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").read_text(encoding="utf-8")
         self.assertIn("STP_cw_credentials_review", tokens.splitlines())
 
