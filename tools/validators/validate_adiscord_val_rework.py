@@ -414,6 +414,64 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
             issues.append(f"preview {idea} has unknown native name {names[idea]}")
 
     refresh = script_children(parse_clausewitz(effects_text), "VAL_refresh_contract_modifier")
+    # Specialization tier templates must exactly match what the visible
+    # VAL_contract_state dynamic modifier receives from the authoritative level.
+    specialization_levels = {
+        "administration": "VAL_contract_administration_level",
+        "army": "VAL_contract_army_level",
+        "industry": "VAL_contract_industry_level",
+    }
+    dynamic_contract_map = native_maps.get("VAL_contract_state", {})
+    specialization_vectors: dict[str, dict[int, dict[str, float]]] = {}
+    for family, level_variable in specialization_levels.items():
+        tier_vectors: dict[int, dict[str, float]] = {}
+        for branch in (e for e in refresh if e.key in {"if", "else_if"}):
+            limits = script_children(branch.value, "limit")
+            checks = [
+                e for e in walk_script(limits)
+                if e.key == "check_variable" and isinstance(e.value, list)
+            ]
+            matching = []
+            for check in checks:
+                fields = script_fields(check.value)
+                if (
+                    fields.get("var") == level_variable
+                    and fields.get("compare") == "equals"
+                ):
+                    matching.append(fields)
+            if len(matching) != 1:
+                continue
+            try:
+                tier = int(float(matching[0]["value"]))
+            except (KeyError, ValueError):
+                continue
+            vector: dict[str, float] = {}
+            for effect in branch.value:
+                if effect.key != "add_to_variable" or not isinstance(effect.value, list):
+                    continue
+                fields = script_fields(effect.value)
+                modifier = dynamic_contract_map.get(fields.get("var", ""))
+                if not modifier:
+                    continue
+                try:
+                    vector[modifier] = vector.get(modifier, 0) + float(fields["value"])
+                except (KeyError, ValueError):
+                    continue
+            tier_vectors[tier] = vector
+        specialization_vectors[family] = tier_vectors
+        for tier in range(1, 4):
+            template = f"VAL_contract_{family}_{tier}"
+            expected = vectors.get(template, {})
+            actual = tier_vectors.get(tier)
+            if actual is None:
+                issues.append(
+                    f"specialization tier template {template} has no dynamic-modifier tier branch"
+                )
+            elif actual != expected:
+                issues.append(
+                    f"specialization tier template {template} differs from VAL_contract_state"
+                )
+
     flag_deltas: dict[str, dict[str, float]] = {}
     for branch in (e for e in refresh if e.key == "if"):
         flags = [e.value for e in walk_script(script_children(branch.value, "limit")) if e.key == "has_country_flag"]
