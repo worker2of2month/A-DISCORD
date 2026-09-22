@@ -4,7 +4,7 @@ state={
 	provinces={
 		18 24 31 52 76 79 97 102 105 107
 	}
-	manpower=160000
+	manpower=240000
 
 	state_category = rural
 	buildings_max_level_factor=1.000
@@ -15,6 +15,7 @@ state={
 		add_core_of = TFF
 		buildings = {
 			infrastructure = 2
+			24 = { naval_base = 2 }
 		}
 		victory_points = { 105 3 }
 	}
