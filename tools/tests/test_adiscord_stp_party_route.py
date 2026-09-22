@@ -81,9 +81,12 @@ class PartyRouteContracts(unittest.TestCase):
         self.assertTrue(self.loc["STP_PARTY_OUTCOME_11"].startswith("§R"))
         self.assertTrue(self.loc["STP_PARTY_RESPONSE_COURIER_SEIZED"].startswith("§R"))
 
-    def test_map_instructions_switch_without_hiding_army_forecast(self):
-        self.assertIn("[STPGetPreparationInstructions]", self.loc["STP_battle_for_stelander_desc"])
-        self.assertIn("STP_cw_report_party_brigades", self.loc["STP_battle_for_stelander_desc"])
+    def test_map_instructions_switch_without_exposing_the_army_ledger(self):
+        description = self.loc["STP_battle_for_stelander_desc"]
+        self.assertIn("[STPGetPreparationInstructions]", description)
+        self.assertNotIn("STP_cw_report_party_brigades", description)
+        self.assertNotIn("STP_cw_report_resistance_brigades", description)
+        self.assertIn("STP_political_action_slots_available", description)
         self.assertIn("STP_PARTY_MAP_INSTRUCTIONS", str(signature(self.scripted_loc["STPGetPreparationInstructions"])))
         self.assertEqual(one(children(self.scripted_loc["STPGetInspectionStatus"], "text")[0], "localization_key"), "STP_REGION_PARTY_INSPECTION_STATUS")
 
