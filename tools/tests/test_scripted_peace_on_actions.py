@@ -295,17 +295,10 @@ class FrontierWarEntryRegressionTests(unittest.TestCase):
                 continue
             target = scalar(entry.value, "target")
             generator = block(entry.value, "generator")
-            state = next(x.value for x in generator if x.key.isdigit()) if False else None
-            # generator is represented as anonymous numeric entries by the Clausewitz parser.
-            numeric = [x.key for x in generator if x.key.isdigit()]
-            if not numeric:
-                numeric = [x.value for x in generator if isinstance(x.value, str) and x.value.isdigit()]
-            declarations[target] = numeric[0] if numeric else None
+            state = next((x.value for x in generator if x.key == "" and isinstance(x.value, str)), None)
+            declarations[target] = state
 
-        self.assertEqual(set(declarations), set(expected))
-        for tag, state in expected.items():
-            self.assertIn(f"target = {tag}", str(helper))
-            self.assertIn(f"generator = {{ {state} }}", str(helper).replace("\n", " "))
+        self.assertEqual(declarations, expected)
 
     def test_calling_an_ally_never_clears_its_membership_in_the_same_branch(self):
         from tools.tests.test_adiscord_stp_preparation import block, walk
