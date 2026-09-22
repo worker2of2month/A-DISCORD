@@ -1,0 +1,32 @@
+name: STP adviser review
+on:
+  push:
+    branches: [codex/stp-adviser-redesign-work-20260922]
+    paths: ['.github/workflows/stp-adviser-review.yml']
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Export source for local verification
+        run: |
+          python -B - <<'PY'
+          from pathlib import Path
+          import subprocess, zipfile
+          paths = subprocess.check_output(['git', 'ls-files'], text=True).splitlines()
+          extensions = {'.txt', '.yml', '.yaml', '.py', '.md', '.csv', '.json', '.gui', '.gfx', '.lua', '.mod', '.sh', '.ps1', '.toml', '.ini', '.asset'}
+          with zipfile.ZipFile('/tmp/adiscord-adviser-source.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for name in paths:
+                  p = Path(name)
+                  if p.is_file() and (p.suffix.lower() in extensions or p.name in {'.gitignore', '.gitattributes'}):
+                      archive.write(p, name)
+              archive.writestr('SOURCE_COMMIT', subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True))
+          print('SOURCE_EXPORT_BYTES', Path('/tmp/adiscord-adviser-source.zip').stat().st_size)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: adiscord-adviser-source
+          path: /tmp/adiscord-adviser-source.zip
+          retention-days: 1
