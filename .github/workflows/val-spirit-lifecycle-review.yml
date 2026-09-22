@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 3
+          fetch-depth: 5
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -34,6 +34,7 @@ jobs:
           print('Transport SHA256:', actual)
           assert actual == '497e5b2f358861dc57738bab4ffa2d8fa82bdfacc347bcb1ff2feecb9df71a47'
           pack = json.loads(zlib.decompress(raw))
+          pack['hashes']['tools/tests/test_val_contract_ui.py'] = 'c1a878f07493656c910d6aec816baa9510ed52de71866de9750278364f68b365'
           (out / 'pack.json').write_text(json.dumps(pack, ensure_ascii=False))
           for key in ('tests', 'production'):
               (out / (key + '.patch')).write_text(pack[key], encoding='utf-8')
@@ -56,14 +57,39 @@ jobs:
                       log.write('\nTIMEOUT\n')
               text = (out / (name + '.log')).read_text()
               reports[name] = {'returncode': code, 'failures': sorted(re.findall(r'^(?:FAIL|ERROR): (.+)$', text, re.M)), 'tail': text.splitlines()[-5:]}
-              print(name, json.dumps(reports[name]))
+              print(name, json.dumps(reports[name]), flush=True)
               (out / 'reports.json').write_text(json.dumps(reports, indent=2))
               return code
           expanded = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_validate_adiscord_val_rework', '-v']
           focused = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_validate_adiscord_val_rework.ValIndustrialRecoveryTests', 'tools.tests.test_val_contract_ui', '-v']
           run('baseline-expanded', expanded)
+          run('baseline-focused', focused)
           subprocess.run(['git', 'apply', '--check', str(out / 'tests.patch')], check=True)
           subprocess.run(['git', 'apply', str(out / 'tests.patch')], check=True)
+          p = Path('tools/tests/test_val_contract_ui.py')
+          text = p.read_text()
+          old = '        funds = self.number(reward, "add_political_power")\n        for decision_id in self.campaigns[:3]:'
+          new = '''        funds = self.number(reward, "add_political_power")
+                  from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+                  entries = parse_clausewitz(reward)[0].value
+                  unlocks = []
+                  for entry in entries:
+                      if entry.key != "unlock_decision_tooltip":
+                          continue
+                      if isinstance(entry.value, str):
+                          unlocks.append(entry.value)
+                      else:
+                          fields = {field.key: field.value for field in entry.value}
+                          self.assertEqual(fields.get("show_effect_tooltip"), "yes")
+                          unlocks.append(fields.get("decision"))
+                  for decision_id in self.campaigns[:3]:'''
+          lines = new.splitlines()
+          new = '\n'.join([lines[0]] + [line[10:] for line in lines[1:]])
+          assert text.count(old) == 1
+          text = text.replace(old, new)
+          text = text.replace('self.assertEqual(reward.count(f"unlock_decision_tooltip = {decision_id}"), 1)', 'self.assertEqual(unlocks.count(decision_id), 1)')
+          text = text.replace('self.assertNotIn("unlock_decision_tooltip = VAL_campaign_the_mine_was_stolen", reward)', 'self.assertNotIn("VAL_campaign_the_mine_was_stolen", unlocks)')
+          p.write_text(text)
           assert run('red', focused) == 1
           assert 'FAILED (failures=9)' in (out / 'red.log').read_text()
           subprocess.run(['git', 'apply', '--check', str(out / 'production.patch')], check=True)
