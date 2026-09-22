@@ -7,6 +7,7 @@ VAL_population_markets = {
 			has_country_flag = VAL_refugee_stelander_window
 			has_country_flag = VAL_refugee_nodrul_window
 			has_country_flag = VAL_refugee_north_window
+			has_country_flag = VAL_refugee_perimeter_window
 			check_variable = { var = VAL_displaced_population value = 0 compare = greater_than }
 			check_variable = { var = VAL_black_market_pressure value = 0 compare = greater_than }
 		}
