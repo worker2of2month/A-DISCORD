@@ -6904,6 +6904,7 @@ STP_heg_start_kefreyt_final_war = {
 			NOT = { has_country_flag = STP_heg_kefreyt_final_started }
 		}
 		set_country_flag = STP_heg_kefreyt_final_started
+		VAL = { if = { limit = { exists = yes } set_country_flag = STP_heg_kefreyt_final_member } }
 		if = {
 			limit = {
 				VAL = { exists = yes has_capitulated = no is_subject = no NOT = { is_in_faction_with = STS } }
@@ -6996,4 +6997,59 @@ STP_heg_prepare_val_administration = {
 		VAL = { set_country_flag = STP_heg_provisional_administration }
 	}
 	ADISCORD_economy_mark_dirty = yes
+}
+
+
+# STS: the hegemony demand becomes a real subject relationship after Nodrul's
+# old faction has had one day to leave the diplomatic cache.
+STP_pc_finalize_nod_client_subject = {
+	if = {
+		limit = {
+			tag = STS
+			has_country_flag = STP_pc_nod_terms_accepted
+			NOD = { exists = yes has_country_flag = STP_pc_nod_client_pending NOT = { has_war_with = STS } }
+		}
+		puppet = NOD
+		set_autonomy = {
+			target = NOD
+			autonomy_state = autonomy_puppet
+			freedom_level = 0.10
+			end_wars = no
+			end_civil_wars = no
+		}
+		NOD = {
+			clr_country_flag = STP_pc_nod_client_pending
+			add_ideas = STP_pc_nod_client
+		}
+		if = { limit = { has_country_flag = STP_pc_hegemony_league } STP_pc_form_hegemony_league = yes }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# STS: the second hegemony war has its own settlement. It does not replay the
+# first Kefreyt settlement or replace Kefreyt's government. Only participants
+# registered for this final war are white-peaced.
+STP_heg_settle_kefreyt_final = {
+	if = {
+		limit = {
+			tag = STS
+			has_country_flag = STP_heg_kefreyt_final_started
+			has_war_with = VAL
+		}
+		STP_pc_recover_stelander_cores_from_val = yes
+		VAL = {
+			set_country_flag = STP_heg_defeated_by_sts
+			clear_variable = STP_cw_capitulation_occupier
+		}
+		every_enemy_country = {
+			limit = { has_country_flag = STP_heg_kefreyt_final_member }
+			clr_country_flag = STP_heg_kefreyt_final_member
+			white_peace = STS
+		}
+		if = { limit = { has_war_with = VAL } white_peace = VAL }
+		clr_country_flag = STP_heg_kefreyt_final_started
+		set_country_flag = STP_heg_kefreyt_final_won
+		ADISCORD_economy_update_postwar_demobilization = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
 }
