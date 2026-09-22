@@ -1,0 +1,256 @@
+STP_refresh_apparatus_loyalty = {
+	if = { limit = { has_country_flag = STP_pf_initialized } STP_pf_calculate = yes }
+	clamp_variable = {
+		var = STP_apparatus_loyalty
+		min = 0
+		max = 100
+	}
+	set_variable = {
+		var = STP_loy_political_power_factor
+		value = STP_apparatus_loyalty
+	}
+	multiply_variable = {
+		var = STP_loy_political_power_factor
+		value = 0.004
+	}
+	add_to_variable = {
+		var = STP_loy_political_power_factor
+		value = -0.20
+	}
+	clamp_variable = {
+		var = STP_loy_political_power_factor
+		min = -0.20
+		max = 0.20
+	}
+	set_variable = {
+		var = STP_loy_stability_factor
+		value = STP_apparatus_loyalty
+	}
+	multiply_variable = {
+		var = STP_loy_stability_factor
+		value = 0.001
+	}
+	add_to_variable = {
+		var = STP_loy_stability_factor
+		value = -0.05
+	}
+	clamp_variable = {
+		var = STP_loy_stability_factor
+		min = -0.05
+		max = 0.05
+	}
+	force_update_dynamic_modifier = yes
+}
+
+STP_change_apparatus_loyalty = {
+	# General administrative work changes every faction's support equally.
+	if = {
+		limit = { has_country_flag = STP_pf_initialized }
+		add_to_variable = { var = STP_pf_conservatives_support value = STP_apparatus_loyalty_change }
+		add_to_variable = { var = STP_pf_borons_support value = STP_apparatus_loyalty_change }
+		add_to_variable = { var = STP_pf_security_support value = STP_apparatus_loyalty_change }
+		add_to_variable = { var = STP_pf_army_support value = STP_apparatus_loyalty_change }
+		add_to_variable = { var = STP_pf_advisers_support value = STP_apparatus_loyalty_change }
+		add_to_variable = { var = STP_pf_merchants_support value = STP_apparatus_loyalty_change }
+		add_to_variable = { var = STP_pf_radicals_support value = STP_apparatus_loyalty_change }
+	}
+	else = {
+		add_to_variable = { var = STP_apparatus_loyalty value = STP_apparatus_loyalty_change }
+	}
+	STP_refresh_apparatus_loyalty = yes
+	set_temp_variable = {
+		var = STP_apparatus_loyalty_change
+		value = 0
+	}
+}
+
+STP_pf_initialize = {
+	if = {
+		limit = { STP_pf_active = yes NOT = { has_country_flag = STP_pf_initialized } }
+		if = { limit = { NOT = { has_variable = STP_apparatus_loyalty } } set_variable = { var = STP_apparatus_loyalty value = 40 } }
+		set_variable = { var = STP_pf_conservatives_influence value = 24 }
+		set_variable = { var = STP_pf_conservatives_support value = STP_apparatus_loyalty }
+		set_variable = { var = STP_pf_borons_influence value = 16 }
+		set_variable = { var = STP_pf_borons_support value = STP_apparatus_loyalty }
+		set_variable = { var = STP_pf_security_influence value = 16 }
+		set_variable = { var = STP_pf_security_support value = STP_apparatus_loyalty }
+		set_variable = { var = STP_pf_army_influence value = 18 }
+		set_variable = { var = STP_pf_army_support value = STP_apparatus_loyalty }
+		set_variable = { var = STP_pf_advisers_influence value = 8 }
+		set_variable = { var = STP_pf_advisers_support value = STP_apparatus_loyalty }
+		set_variable = { var = STP_pf_merchants_influence value = 10 }
+		set_variable = { var = STP_pf_merchants_support value = STP_apparatus_loyalty }
+		set_variable = { var = STP_pf_radicals_influence value = 8 }
+		set_variable = { var = STP_pf_radicals_support value = STP_apparatus_loyalty }
+		set_country_flag = STP_pf_initialized
+		STP_refresh_apparatus_loyalty = yes
+	}
+}
+
+STP_pf_shift = {
+	if = {
+		limit = { STP_pf_active = yes has_country_flag = STP_pf_initialized check_variable = { var = STP_pf_selected value = 1 compare = greater_than_or_equals } check_variable = { var = STP_pf_selected value = 7 compare = less_than_or_equals } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 1 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_conservatives_influence } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 2 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_borons_influence } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 3 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_security_influence } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 4 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_army_influence } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 5 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_advisers_influence } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 6 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_merchants_influence } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 7 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_radicals_influence } }
+		set_temp_variable = { var = STP_pf_gain value = 5 }
+		set_temp_variable = { var = STP_pf_room value = 100 }
+		subtract_from_temp_variable = { var = STP_pf_room value = STP_pf_old_influence }
+		if = { limit = { check_variable = { var = STP_pf_room value = 5 compare = less_than } } set_temp_variable = { var = STP_pf_gain value = STP_pf_room } }
+		if = {
+			limit = { check_variable = { var = STP_pf_room value = 0 compare = greater_than } }
+			set_temp_variable = { var = STP_pf_scale value = STP_pf_room }
+			subtract_from_temp_variable = { var = STP_pf_scale value = STP_pf_gain }
+			multiply_variable = { var = STP_pf_conservatives_influence value = STP_pf_scale }
+			divide_variable = { var = STP_pf_conservatives_influence value = STP_pf_room }
+			multiply_variable = { var = STP_pf_borons_influence value = STP_pf_scale }
+			divide_variable = { var = STP_pf_borons_influence value = STP_pf_room }
+			multiply_variable = { var = STP_pf_security_influence value = STP_pf_scale }
+			divide_variable = { var = STP_pf_security_influence value = STP_pf_room }
+			multiply_variable = { var = STP_pf_army_influence value = STP_pf_scale }
+			divide_variable = { var = STP_pf_army_influence value = STP_pf_room }
+			multiply_variable = { var = STP_pf_advisers_influence value = STP_pf_scale }
+			divide_variable = { var = STP_pf_advisers_influence value = STP_pf_room }
+			multiply_variable = { var = STP_pf_merchants_influence value = STP_pf_scale }
+			divide_variable = { var = STP_pf_merchants_influence value = STP_pf_room }
+			multiply_variable = { var = STP_pf_radicals_influence value = STP_pf_scale }
+			divide_variable = { var = STP_pf_radicals_influence value = STP_pf_room }
+		}
+		if = { limit = { check_variable = { var = STP_pf_selected value = 1 compare = equals } }
+			set_variable = { var = STP_pf_conservatives_influence value = STP_pf_old_influence }
+			add_to_variable = { var = STP_pf_conservatives_influence value = STP_pf_gain }
+			add_to_variable = { var = STP_pf_conservatives_support value = 12 }
+			subtract_from_variable = { var = STP_pf_radicals_support value = 12 }
+		}
+		if = { limit = { check_variable = { var = STP_pf_selected value = 2 compare = equals } }
+			set_variable = { var = STP_pf_borons_influence value = STP_pf_old_influence }
+			add_to_variable = { var = STP_pf_borons_influence value = STP_pf_gain }
+			add_to_variable = { var = STP_pf_borons_support value = 12 }
+			subtract_from_variable = { var = STP_pf_merchants_support value = 12 }
+		}
+		if = { limit = { check_variable = { var = STP_pf_selected value = 3 compare = equals } }
+			set_variable = { var = STP_pf_security_influence value = STP_pf_old_influence }
+			add_to_variable = { var = STP_pf_security_influence value = STP_pf_gain }
+			add_to_variable = { var = STP_pf_security_support value = 12 }
+			subtract_from_variable = { var = STP_pf_borons_support value = 12 }
+		}
+		if = { limit = { check_variable = { var = STP_pf_selected value = 4 compare = equals } }
+			set_variable = { var = STP_pf_army_influence value = STP_pf_old_influence }
+			add_to_variable = { var = STP_pf_army_influence value = STP_pf_gain }
+			add_to_variable = { var = STP_pf_army_support value = 12 }
+			subtract_from_variable = { var = STP_pf_advisers_support value = 12 }
+		}
+		if = { limit = { check_variable = { var = STP_pf_selected value = 5 compare = equals } }
+			set_variable = { var = STP_pf_advisers_influence value = STP_pf_old_influence }
+			add_to_variable = { var = STP_pf_advisers_influence value = STP_pf_gain }
+			add_to_variable = { var = STP_pf_advisers_support value = 12 }
+			subtract_from_variable = { var = STP_pf_army_support value = 12 }
+		}
+		if = { limit = { check_variable = { var = STP_pf_selected value = 6 compare = equals } }
+			set_variable = { var = STP_pf_merchants_influence value = STP_pf_old_influence }
+			add_to_variable = { var = STP_pf_merchants_influence value = STP_pf_gain }
+			add_to_variable = { var = STP_pf_merchants_support value = 12 }
+			subtract_from_variable = { var = STP_pf_security_support value = 12 }
+		}
+		if = { limit = { check_variable = { var = STP_pf_selected value = 7 compare = equals } }
+			set_variable = { var = STP_pf_radicals_influence value = STP_pf_old_influence }
+			add_to_variable = { var = STP_pf_radicals_influence value = STP_pf_gain }
+			add_to_variable = { var = STP_pf_radicals_support value = 12 }
+			subtract_from_variable = { var = STP_pf_conservatives_support value = 12 }
+		}
+		set_temp_variable = { var = STP_pf_remainder value = 100 }
+		subtract_from_temp_variable = { var = STP_pf_remainder value = STP_pf_conservatives_influence }
+		subtract_from_temp_variable = { var = STP_pf_remainder value = STP_pf_borons_influence }
+		subtract_from_temp_variable = { var = STP_pf_remainder value = STP_pf_security_influence }
+		subtract_from_temp_variable = { var = STP_pf_remainder value = STP_pf_army_influence }
+		subtract_from_temp_variable = { var = STP_pf_remainder value = STP_pf_advisers_influence }
+		subtract_from_temp_variable = { var = STP_pf_remainder value = STP_pf_merchants_influence }
+		subtract_from_temp_variable = { var = STP_pf_remainder value = STP_pf_radicals_influence }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 1 compare = equals } } add_to_variable = { var = STP_pf_conservatives_influence value = STP_pf_remainder } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 2 compare = equals } } add_to_variable = { var = STP_pf_borons_influence value = STP_pf_remainder } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 3 compare = equals } } add_to_variable = { var = STP_pf_security_influence value = STP_pf_remainder } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 4 compare = equals } } add_to_variable = { var = STP_pf_army_influence value = STP_pf_remainder } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 5 compare = equals } } add_to_variable = { var = STP_pf_advisers_influence value = STP_pf_remainder } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 6 compare = equals } } add_to_variable = { var = STP_pf_merchants_influence value = STP_pf_remainder } }
+		if = { limit = { check_variable = { var = STP_pf_selected value = 7 compare = equals } } add_to_variable = { var = STP_pf_radicals_influence value = STP_pf_remainder } }
+		STP_refresh_apparatus_loyalty = yes
+	}
+	set_temp_variable = { var = STP_pf_selected value = 0 }
+}
+
+STP_pf_clear = {
+	if = { limit = { has_country_flag = STP_pf_initialized }
+		clr_country_flag = STP_pf_initialized
+		clr_country_flag = STP_pf_negotiation_cooldown
+		if = { limit = { has_dynamic_modifier = { modifier = STP_pf_balance_dynamic } } remove_dynamic_modifier = { modifier = STP_pf_balance_dynamic } }
+		if = { limit = { has_dynamic_modifier = { modifier = STP_apparatus_loyalty_dynamic_modifier } } remove_dynamic_modifier = { modifier = STP_apparatus_loyalty_dynamic_modifier } }
+		clear_variable = STP_pf_conservatives_influence
+		clear_variable = STP_pf_conservatives_support
+		clear_variable = STP_pf_conservatives_contribution
+		clear_variable = STP_pf_conservatives_frame
+		clear_variable = STP_pf_conservatives_effect
+		clear_variable = STP_pf_borons_influence
+		clear_variable = STP_pf_borons_support
+		clear_variable = STP_pf_borons_contribution
+		clear_variable = STP_pf_borons_frame
+		clear_variable = STP_pf_borons_effect
+		clear_variable = STP_pf_security_influence
+		clear_variable = STP_pf_security_support
+		clear_variable = STP_pf_security_contribution
+		clear_variable = STP_pf_security_frame
+		clear_variable = STP_pf_security_effect
+		clear_variable = STP_pf_army_influence
+		clear_variable = STP_pf_army_support
+		clear_variable = STP_pf_army_contribution
+		clear_variable = STP_pf_army_frame
+		clear_variable = STP_pf_army_effect
+		clear_variable = STP_pf_advisers_influence
+		clear_variable = STP_pf_advisers_support
+		clear_variable = STP_pf_advisers_contribution
+		clear_variable = STP_pf_advisers_frame
+		clear_variable = STP_pf_advisers_effect
+		clear_variable = STP_pf_merchants_influence
+		clear_variable = STP_pf_merchants_support
+		clear_variable = STP_pf_merchants_contribution
+		clear_variable = STP_pf_merchants_frame
+		clear_variable = STP_pf_merchants_effect
+		clear_variable = STP_pf_radicals_influence
+		clear_variable = STP_pf_radicals_support
+		clear_variable = STP_pf_radicals_contribution
+		clear_variable = STP_pf_radicals_frame
+		clear_variable = STP_pf_radicals_effect
+		clear_variable = STP_pf_nod_connected
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_ps_begin_defence = {
+	if = {
+		limit = { STP_ps_war_active = yes NOT = { has_variable = STP_ps_stage } }
+		set_variable = { var = STP_ps_stage value = 1 }
+		STP_ps_refresh_defence = yes
+		STP_ps_poll_nodes = yes
+	}
+}
+
+STP_ps_finish_stage = {
+	if = {
+		limit = { STP_ps_war_active = yes has_variable = STP_ps_reorg_deposit }
+		# Read control at the actual deadline; the daily node pulse may run later.
+		if = {
+			limit = { STP_ps_government_operational = yes }
+			clear_variable = STP_ps_reorg_deposit
+			add_to_variable = { var = STP_ps_stage value = 1 }
+			clamp_variable = { var = STP_ps_stage min = 1 max = 4 }
+			STP_ps_refresh_defence = yes
+		}
+		else = {
+			set_variable = { var = STP_ps_paused_days value = 1 }
+			STP_ps_open_congress_crisis = yes
+		}
+	}
+}

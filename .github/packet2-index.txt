@@ -1,0 +1,307 @@
+common/on_actions/02_ADISCORD_STP_on_actions.txt
+15:                     limit = { exists = yes STP_ps_war_active = yes has_variable = STP_ps_stage }
+16:                     STP_ps_refresh_defence = yes
+23: 	on_weekly_VAL = {
+25: 			if = { limit = { STP_cw_kefreyt_aid_open = yes NOT = { has_country_flag = STP_ps_val_offer_sent } STP = { has_country_flag = { flag = STP_sided_with_the_party_flag days > 7 } } }
+26: 				set_country_flag = STP_ps_val_offer_sent
+31: 	on_daily_NOD = {
+33: 			if = { limit = { has_country_flag = STP_ps_expedition_ready }
+34: 				if = { limit = { OR = { NOD_cw_intervention_possible = yes AND = { has_country_flag = NOD_cw_entered has_war_with = STS } } } STP_ps_apply_expedition = yes }
+35: 				else = { clr_country_flag = STP_ps_expedition_ready }
+37: 			if = { limit = { has_country_flag = STP_ps_exile_received STP_ps_nod_can_host_exiles = no } STP_ps_close_exile = yes }
+38: 			if = { limit = { has_idea = STP_ps_engineers_idea STP_ps_northern_front_active = no } remove_ideas = STP_ps_engineers_idea }
+39: 			if = { limit = { has_idea = STP_ps_expedition_idea NOT = { has_war_with = STS } } remove_ideas = STP_ps_expedition_idea }
+42: 	on_daily_STP = {
+44: 			if = { limit = { STP_ps_war_active = yes }
+45: 				STP_ps_begin_defence = yes
+46: 				STP_ps_poll_nodes = yes
+48: 			else_if = { limit = { OR = { has_variable = STP_ps_reorg_deposit has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } } STP_ps_close_defence = yes }
+51: 	on_daily = {
+66: 	on_weekly_STS = {
+81: 			if = { limit = { OR = { AND = { ROOT = { tag = STP } FROM = { tag = STS } } AND = { ROOT = { tag = STS } FROM = { tag = STP } } } } STP = { STP_ps_begin_defence = yes } }
+144: 	on_weekly = {
+214: 	on_weekly_STP = {
+226: 			if = { limit = { STP_pf_active = yes }
+227: 				STP_pf_initialize = yes
+229: 					AND = { STP_pf_nod_contacts = yes check_variable = { var = STP_pf_nod_connected value = 0 compare = equals } }
+230: 					AND = { STP_pf_nod_contacts = no check_variable = { var = STP_pf_nod_connected value = 1 compare = equals } }
+233: 			else = { STP_pf_clear = yes }
+
+common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt
+53: 	army_core_defence_factor = STP_cw_mandate_core_defence
+112: STP_pf_balance_dynamic = {
+113: 	enable = { STP_pf_active = yes has_country_flag = STP_pf_initialized has_capitulated = no }
+114: 	ADISCORD_economy_admin_expense_factor = STP_pf_conservatives_effect
+115: 	production_speed_buildings_factor = STP_pf_borons_effect
+116: 	stability_factor = STP_pf_security_effect
+117: 	army_org_factor = STP_pf_army_effect
+118: 	planning_speed = STP_pf_advisers_effect
+119: 	ADISCORD_economy_trade_income_factor = STP_pf_merchants_effect
+120: 	ADISCORD_economy_war_fatigue_gain_factor = STP_pf_radicals_effect
+123: STP_ps_defence_dynamic = {
+125: 	enable = { STP_ps_war_active = yes }
+126: 	breakthrough_factor = STP_ps_breakthrough
+127: 	planning_speed = STP_ps_planning
+129: STP_ps_nodes_dynamic = {
+131: 	enable = { STP_ps_war_active = yes }
+132: 	ADISCORD_economy_admin_expense_factor = STP_ps_emergency_expense
+133: 	planning_speed = STP_ps_node_planning
+134: 	army_speed_factor = STP_ps_node_redeployment
+
+common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt
+822: 		AND = { tag = STP has_country_flag = STP_ps_restored_dependency is_subject_of = NOD }
+1354: STP_pf_active = {
+1360: STP_pf_nod_contacts = {
+1365: STP_pf_can_negotiate = {
+1366:  hidden_trigger = { STP_pf_active = yes has_country_flag = STP_pf_initialized }
+1368:  custom_trigger_tooltip = { tooltip = STP_pf_cooldown_tt NOT = { has_country_flag = STP_pf_negotiation_cooldown } }
+1372: STP_ps_holds_congress = { controls_province = 145 }
+1373: STP_ps_government_operational = {
+1374: 	OR = { STP_ps_holds_congress = yes has_country_flag = STP_ps_temporary_government }
+1376: STP_ps_war_active = {
+1380: STP_ps_can_counterattack = {
+1381: 	STP_ps_war_active = yes
+1382: 	STP_ps_government_operational = yes
+1383: 	check_variable = { var = STP_ps_stage value = 4 compare = equals }
+1385: STP_ps_can_start_stage = {
+1386: 	STP_ps_war_active = yes STP_ps_government_operational = yes
+1387: 	NOT = { has_variable = STP_ps_reorg_deposit }
+1388: 	NOT = { has_variable = STP_ps_paused_days }
+1389: 	NOT = { has_active_mission = STP_ps_reorg_1 }
+1390: 	NOT = { has_active_mission = STP_ps_reorg_2 }
+1391: 	NOT = { has_active_mission = STP_ps_reorg_3 }
+1394: STP_ps_nod_can_host_exiles = {
+1398: STP_ps_can_aid_nod = {
+1401: 	NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement }
+1403: STP_ps_northern_front_active = {
+1409: STP_ps_nod_order_current = {
+1410: 	STP_ps_can_aid_nod = yes
+1412: 		check_variable = { var = STP_ps_nod_receipt_type value = 1 compare = equals }
+1415: 				check_variable = { var = STP_ps_nod_receipt_type value = 2 compare = equals }
+1416: 				check_variable = { var = STP_ps_nod_receipt_type value = 3 compare = equals }
+1418: 			NOD = { STP_ps_northern_front_active = yes }
+1421: 			check_variable = { var = STP_ps_nod_receipt_type value = 4 compare = equals }
+1433: STP_ps_val_land_route = {
+1446: STP_ps_val_supply_open = {
+1456: STP_ps_val_intelligence_available = {
+1458: 	OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes }
+1459: 	VAL = { has_variable = STP_ps_val_receipt_rifles }
+1462: STP_ps_local_program_open = {
+1471: STP_ps_nod_supply_route = {
+1485: STP_ps_exile_formation_context = {
+1486: 	STP_ps_nod_can_host_exiles = yes
+1487: 	has_country_flag = STP_ps_exile_received
+1533: STP_ps_can_launch_return = {
+1534: 	STP_ps_nod_can_host_exiles = yes
+1535: 	has_country_flag = STP_ps_exile_received
+1536: 	has_completed_focus = STP_ps_return_campaign_focus
+1537: 	has_country_flag = STP_ps_return_terms_accepted
+1538: 	has_country_flag = STP_ps_exile_training_completed
+1539: 	NOT = { has_country_flag = STP_ps_return_closed }
+1540: 	NOT = { has_country_flag = STP_ps_return_campaign }
+1547: STP_ps_hedersett_available = {
+1580: STP_ps_val_intelligence_time_available = {
+1582:         has_active_mission = STP_ps_val_departure
+1583:         check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 22 compare = greater_than_or_equals }
+1586: STP_ps_val_intercept_time_available = {
+1588:         has_active_mission = STP_ps_val_departure
+1589:         check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 15 compare = greater_than_or_equals }
+1593: STP_ps_nod_credit_useful = {
+1596:             STP_ps_northern_front_active = yes
+
+tools/tests/test_adiscord_stp_party_balance.py
+47:     def test_faction_negotiations_remain_bounded_and_expensive(self) -> None:
+49:             block = named_block(self.decisions, f"STP_pf_negotiate_{faction}")
+53:                 rf"check_variable\s*=\s*\{{\s*var\s*=\s*STP_pf_{faction}_influence\s+value\s*=\s*60\s+compare\s*=\s*less_than\s*\}}",
+57:                 r"flag\s*=\s*STP_pf_negotiation_cooldown\s+value\s*=\s*1\s+days\s*=\s*30",
+60:         calculate = named_block(self.effects, "STP_pf_calculate")
+61:         arithmetic = one(parse_clausewitz(calculate), "STP_pf_calculate")
+64:             target = f"STP_pf_{faction}_effect"
+72:             self.assertEqual(values[:4], [f"STP_pf_{faction}_support", "50",
+73:                                           f"STP_pf_{faction}_influence", "100"])
+78:         shift = named_block(self.effects, "STP_pf_shift")
+81:             r"set_temp_variable\s*=\s*\{\s*var\s*=\s*STP_pf_gain\s+value\s*=\s*5\s*\}",
+89:     def test_party_route_requires_staged_defensive_recovery(self) -> None:
+91:         self.assertIn("STP_ps_begin_defence = yes", actions)
+92:         begin = named_block(self.effects, "STP_ps_begin_defence")
+93:         self.assertIn("NOT = { has_variable = STP_ps_stage }", begin)
+94:         recovery = named_block(self.effects, "STP_ps_refresh_defence")
+96:             self.assertIn("var = STP_ps_breakthrough value = " + value, recovery)
+97:         self.assertNotIn("army_defence_factor = -", recovery)
+100:             funded = named_block(self.decisions, f"STP_ps_reorg_{stage}_funded")
+101:             self.assertIn("STP_ps_reorg_deposit", funded)
+104:     def test_congress_crisis_depends_on_the_city_and_penalizes_once(self) -> None:
+105:         crisis = named_block(self.effects, "STP_ps_open_congress_crisis")
+106:         self.assertIn("STP_ps_holds_congress = no", crisis)
+107:         self.assertIn("NOT = { has_country_flag = STP_ps_congress_fell }", crisis)
+112:         self.assertIn("STP_ps_pause_reorganisation = yes", crisis)
+116:     def test_balance_mechanics_have_player_facing_localisation(self) -> None:
+117:         for key in ("STP_ps_reorg_1:", "STP_ps_reorg_1_desc:",
+118:                     "STP_ps_congress_deadline:", "STP_ps_congress_deadline_desc:"):
+121:     def test_northern_preparation_charges_both_currencies(self) -> None:
+137:     def test_sovereignty_dispatch_does_not_read_its_own_completion(self) -> None:
+142:     def test_reform_capstones_require_delivered_recovery(self) -> None:
+152:     def test_northern_timeout_distinguishes_war_defeat_and_absent_enemy(self) -> None:
+174:     def test_northern_payments_reject_fractional_shortfalls(self) -> None:
+186:     def test_prewar_settlement_eases_but_does_not_lock_postwar_course(self) -> None:
+197:                          ("STP", "variable", f"STP_pf_{faction}_support"): support}
+203:     def test_ai_negotiates_for_the_pending_reform_only_until_consent(self) -> None:
+208:                 ("army", "STP_party_industrial_board", "STP_pw_party_defence_combine", 45)):
+209:             name = "STP_pf_negotiate_" + faction
+216:                      ("STP", "variable", f"STP_pf_{faction}_support"): threshold - .01}
+220:                             {("STP", "variable", f"STP_pf_{faction}_support"): threshold}):
+223:     def test_settlement_event_left_open_cannot_spend_after_charter(self) -> None:
+233:                      ("STP", "STP_pf_active", "yes"): True,
+239:                             {("STP", "STP_pf_active", "yes"): False}):
+
+tools/tests/test_adiscord_stp_party_route.py
+64:     def test_entire_election_briefing_switches_side(self):
+77:     def test_search_outcome_colors_follow_the_observers_side(self):
+84:     def test_map_instructions_switch_without_exposing_the_army_ledger(self):
+112:     def test_fiscal_specialization_does_not_remove_basic_state_or_defence(self):
+120:     def test_both_district_methods_reach_presidium_and_mandate(self):
+129:     def test_prewar_tactical_combinations_reach_supply_and_mandate(self):
+142:     def test_district_courses_unlock_only_their_own_operation(self):
+154:     def test_mobile_reserve_is_paid_before_base_army_and_bonus_waits_for_hostilities(self):
+175:     def test_first_intercept_includes_every_prerequisite_day(self):
+188:     def test_late_election_callbacks_cannot_move_a_finished_election(self):
+199:     def test_both_postwar_settlements_keep_distinct_capstones_before_the_charter(self):
+215:     def test_economic_choice_stays_separate_until_branch_capstone(self):
+218:             "STP_pw_party_accountable_arsenals": ("STP_party_industrial_board", "STP_pw_party_defence_combine"),
+229:     def test_army_choice_is_logistics_or_field_service_not_a_linear_chain(self):
+243:             self.assertIn("STP_pw_party_southern_defence", done)
+245:     def test_foreign_axis_is_independent_and_required_for_final_settlement(self):
+254:                          {"STP_pw_party_joint_defence_board", "STP_pw_party_armed_neutrality"})
+260:     def test_sovereignty_opens_a_terminal_nod_invasion_crisis(self):
+287:     def test_nod_crisis_has_three_real_preparation_decisions(self):
+289:             "STP_pw_party_nod_emergency_mobilization": ("900", "50", "3", "STP_pf_security_deal_tt"),
+290:             "STP_pw_party_nod_fortify_border": ("1080", "35", "2", "STP_pf_borons_deal_tt"),
+291:             "STP_pw_party_nod_staff_readiness": ("720", "35", "4", "STP_pf_army_deal_tt"),
+302:             self.assertTrue(any(e.key == "var" and e.value == "STP_pf_selected" for e in walk(reward)))
+306:             self.assertIn(f"var = STP_pf_selected value = {selector}", snippet)
+307:             self.assertEqual(snippet.count("STP_pf_shift = yes"), 1)
+313:     def test_protectorate_deepens_adviser_influence_in_paid_and_institutional_steps(self):
+317:         self.assertIn("var = STP_pf_selected value = 5", arms)
+318:         self.assertEqual(arms.count("STP_pf_shift = yes"), 1)
+319:         board = one(self.focus["STP_pw_party_joint_defence_board"], "completion_reward")
+320:         self.assertTrue(any(e.key == "var" and e.value == "STP_pf_selected" for e in walk(board)))
+321:         self.assertTrue(any(e.key == "STP_pf_shift" and e.value == "yes" for e in walk(board)))
+323:     def test_independent_foreign_settlement_waits_for_nod_outcome(self):
+328:     def test_nod_invasion_loss_is_terminal_for_the_party_country(self):
+337:     def test_nod_invasion_events_and_ai_profile_are_registered(self):
+349:     def test_party_income_and_credit_deltas_have_real_consumers(self):
+355:     def test_new_focus_dummies_exactly_match_live_aggregate_deltas(self):
+379:     def test_assault_focus_unlocks_a_paid_order_instead_of_silent_spawn_attempt(self):
+393:     def test_party_plans_abort_at_phase_boundaries(self):
+401:     def test_new_focuses_and_tooltips_are_localized_and_phase_scoped(self):
+412:     def test_party_order_template_is_fixed_before_any_wartime_edit(self):
+422:     def test_assault_price_checks_every_exact_fractional_boundary(self):
+435:     def test_party_narrative_responses_are_context_specific(self):
+454:     def test_no_internal_party_balance_added(self):
+462:     def test_encoding_and_one_line_localisation(self):
+482:     def test_dominant_faction_can_recover_support_without_more_influence(self):
+484:             values, flags = self.simulate("STP_pf_initialize")
+486:                 values[f"STP_pf_{key}_influence"] = 0
+487:             values["STP_pf_conservatives_influence"] = str(100 - influence)
+488:             values["STP_pf_army_influence"] = influence
+489:             values["STP_pf_army_support"] = 0
+491:                 values["STP_pf_selected"] = 4
+492:                 self.simulate("STP_pf_shift", values, flags)
+493:             self.assertAlmostEqual(float(values["STP_pf_army_influence"]), influence)
+494:             self.assertEqual(values["STP_pf_army_support"], 60)
+496:     def simulate(self, effect, values=None, flags=None, tag="STP", nod=True, quantize=False):
+516:                 elif e.key == "STP_pf_nod_contacts":
+549:                 elif e.key in self.effects and e.key.startswith(("STP_pf_", "STP_refresh_apparatus", "STP_change_apparatus")):
+579:     def test_initialization_preserves_old_loyalty_and_does_not_reset_on_reopen(self):
+581:             values, flags = self.simulate("STP_pf_initialize", {"STP_apparatus_loyalty": initial})
+583:             self.assertEqual(sum(values[f"STP_pf_{k}_influence"] for k in self.KEYS), 100)
+585:             self.simulate("STP_pf_initialize", values, flags)
+587:         values, flags = self.simulate("STP_pf_initialize", tag="STS")
+588:         self.assertNotIn("STP_pf_initialized", flags)
+591:     def test_long_redistribution_sequences_conserve_influence_and_bound_support(self):
+594:             values, flags = self.simulate("STP_pf_initialize", quantize=quantize)
+597:                 values["STP_pf_selected"] = rng.randint(1, 7)
+598:                 self.simulate("STP_pf_shift", values, flags, quantize=quantize)
+599:                 weights = [values[f"STP_pf_{k}_influence"] for k in self.KEYS]
+602:                 self.assertTrue(all(0 <= values[f"STP_pf_{k}_support"] <= 100 for k in self.KEYS))
+603:                 expected = sum(values[f"STP_pf_{k}_support"] * values[f"STP_pf_{k}_influence"] for k in self.KEYS) / 100
+606:     def test_general_rewards_and_opposed_deals_have_no_free_support_cycle(self):
+607:         values, flags = self.simulate("STP_pf_initialize")
+612:             values["STP_pf_selected"] = selected
+613:             self.simulate("STP_pf_shift", values, flags)
+614:         self.assertTrue(all(values[f"STP_pf_{k}_support"] == 46 for k in self.KEYS))
+619:     def test_invalid_selector_does_not_mutate_factions_and_no_contacts_removes_aid(self):
+620:         values, flags = self.simulate("STP_pf_initialize")
+623:             values["STP_pf_selected"] = selected
+624:             self.simulate("STP_pf_shift", values, flags)
+626:         values["STP_pf_advisers_support"] = 100
+628:         self.assertEqual(values["STP_pf_advisers_effect"], 0)
+629:         self.assertEqual(values["STP_pf_advisers_support"], 100)
+631:     def test_terminal_cleanup_and_wartime_persistence(self):
+632:         values, flags = self.simulate("STP_pf_initialize")
+633:         self.simulate("STP_pf_clear", values, flags)
+634:         self.assertNotIn("STP_pf_initialized", flags)
+635:         self.assertFalse(any(f"STP_pf_{k}_influence" in values for k in self.KEYS))
+636:         self.assertIn("STP_pf_active", str(signature(self.effects["STP_end_battle_for_stelander"])))
+637:         self.assertIn("STP_pf_clear", str(signature(self.effects["STP_cw_settle_union_victory"])))
+639:     def test_all_cards_actions_and_cooldowns_use_the_same_seven_factions(self):
+642:                      if e.key.startswith("STP_pf_negotiate_")]
+647:             action = one(decisions, f"STP_pf_negotiate_{k}")
+652:             self.assertEqual(one(cooldown, "flag"), "STP_pf_negotiation_cooldown")
+655:             self.assertIn(f'name = "STP_pf_{k}_card"', gui)
+656:             self.assertIn(f"frame = STP_pf_{k}_frame", script)
+
+common/ideas/ADISCORD_STP_civil_war_ideas.txt
+108: 			modifier = { army_core_defence_factor = 0.05 }
+208: 		STP_cw_distributed_defence_idea = {
+221: 			modifier = { army_org_regain = 0.20 army_core_defence_factor = 0.10 training_time_factor = -0.15 mobilization_speed = 0.20 }
+226: 			modifier = { army_org_regain = 0.30 army_core_defence_factor = 0.15 training_time_factor = -0.20 mobilization_speed = 0.30 }
+231: 			modifier = { army_org_regain = 0.10 army_core_defence_factor = 0.05 }
+301: 			modifier = { army_defence_factor = 0.08 }
+316: 		STP_cw_static_defence = {
+321: 			modifier = { army_defence_factor = 0.15 army_attack_factor = -0.15 army_speed_factor = -0.10 }
+556: 		STP_pc_mountain_defence = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.08 } }
+563: 		STP_pc_drift_defence = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { drift_defence_factor = 0.25 } }
+568: 		STP_pc_border_watch = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.05 } }
+569: 		STP_pc_nod_watch = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.05 } }
+716: 			modifier = { army_core_defence_factor = 0.10 dig_in_speed_factor = 0.20 }
+731: 			modifier = { army_core_defence_factor = 0.08 planning_speed = 0.10 supply_consumption_factor = -0.05 }
+887: 		STP_pw_party_defence_combine_delta = {
+902: 		STP_pw_party_joint_defence_board_delta = {
+919: 		STP_ps_transport_idea = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 army_org_regain = 0.05 } }
+921: 		STP_ps_route_guard_idea = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_core_defence_factor = 0.05 } }
+923: 		STP_ps_reserve_idea = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_org_regain = 0.08 training_time_factor = -0.10 } }
+925: 		STP_ps_engineers_idea = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 army_org_regain = 0.05 } }
+927: 		STP_ps_expedition_idea = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 } }
+
+common/ai_strategy_plans/ADISCORD_STP_plans.txt
+291: 		STP_ps_foreign_supply_desk
+292: 		STP_ps_radio_network
+293: 		STP_ps_reserve_hq
+294: 		STP_ps_northern_partner
+295: 		STP_ps_northern_credit
+303: 		STP_ps_northern_arms
+304: 		STP_ps_joint_staff
+305: 		STP_ps_asylum_protocol
+306: 		STP_ps_evacuation_plan
+307: 		STP_ps_northern_engineers
+308: 		STP_ps_expedition_logistics
+321: 		STP_ps_temporary_presidium
+322: 		STP_ps_restore_couriers
+326: 		STP_ps_operational_reserve
+329: 		STP_ps_ammunition_board
+330: 		STP_ps_counter_supply
+334: 		STP_ps_route_security
+340: 		STP_ps_retake_congress
+366: 		STP_ps_district_fund
+367: 		STP_ps_permanent_security
+368: 		STP_ps_cells_agreement
+369: 		STP_ps_presidium_authority
+382: 		STP_pw_party_defence_combine
+392: 		STP_pw_party_southern_defence
+400: 		STP_pw_party_joint_defence_board
+410: STP_ps_exile_plan = {
+414: 	enable = { tag = NOD is_ai = yes has_country_flag = STP_ps_exile_received }
+415: 	abort = { OR = { has_capitulated = yes has_country_flag = STP_ps_return_closed } }
+417: 		STP_ps_exile_office STP_ps_exile_survivors STP_ps_host_agreement
+418: 		STP_ps_exile_formations STP_ps_return_terms STP_ps_return_campaign_focus
