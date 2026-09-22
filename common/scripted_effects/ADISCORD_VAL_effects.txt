@@ -2,6 +2,8 @@
 # Kefreyt contract authority.
 
 VAL_initialize_contract_authority = {
+	# The ordinary idea is a bookmark preview; active campaigns use one dynamic spirit.
+	remove_ideas = VAL_mercenary_state
 	if = { limit = { NOT = { has_variable = VAL_CIN_influence } } set_variable = { var = VAL_CIN_influence value = 0 } }
 	if = { limit = { NOT = { has_variable = VAL_OSF_influence } } set_variable = { var = VAL_OSF_influence value = 0 } }
 	if = { limit = { NOT = { has_variable = VAL_APH_influence } } set_variable = { var = VAL_APH_influence value = 0 } }
@@ -19,8 +21,8 @@ VAL_change_contract_authority = {
 
 VAL_refresh_contract_modifier = {
 	set_variable = { var = VAL_contract_recon_factor value = 0 }
-	set_variable = { var = VAL_contract_volunteer_size value = 0 }
-	set_variable = { var = VAL_contract_war_stability value = 0 }
+	set_variable = { var = VAL_contract_volunteer_size value = 2 }
+	set_variable = { var = VAL_contract_war_stability value = 0.1 }
 	set_variable = { var = VAL_contract_overall_income_factor value = 0 }
 	set_variable = { var = VAL_contract_admin_expense_factor value = 0 }
 	if = {
@@ -138,6 +140,12 @@ VAL_refresh_contract_modifier = {
 		set_variable = { var = VAL_contract_military_income_factor value = 0.07 }
 		set_variable = { var = VAL_contract_army_expense_factor value = -0.07 }
 	}
+
+	# Base mercenary institutions are included once in every recalculation.
+	add_to_variable = { var = VAL_contract_org_factor value = 0.03 }
+	add_to_variable = { var = VAL_contract_capture_factor value = 0.02 }
+	add_to_variable = { var = VAL_contract_planning_factor value = -0.2 }
+	add_to_variable = { var = VAL_contract_pp_gain value = -0.2 }
 
 	# Recalculate persistent focus bonuses when a focus or authority value changes.
 	set_variable = { var = VAL_contract_factory_output_factor value = 0.0 }
@@ -2582,8 +2590,33 @@ VAL_reconcile_northern_volunteers = {
 
 # Совместимость уже начавшегося экономического кризиса.
 VAL_reconcile_supply_crisis = {
-	# Однократное восстановление состояния старой кампании; недельный вызов
-	# не пересчитывает действующий модификатор и не снимает штраф по времени.
+	# Recover missed outbreak callbacks from world state without resetting earned progress.
+	if = {
+		limit = {
+			NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted }
+			OR = {
+				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+				has_idea = VAL_vorkerland_contract_disruptions
+				has_dynamic_modifier = { modifier = VAL_economic_collapse }
+				has_dynamic_modifier = { modifier = VAL_economic_miracle }
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_variable = VAL_economic_recovery_steps
+					has_idea = VAL_vorkerland_contract_disruptions
+					has_dynamic_modifier = { modifier = VAL_economic_collapse }
+					has_dynamic_modifier = { modifier = VAL_economic_miracle }
+				}
+			}
+			set_country_flag = VAL_vorkerland_contracts_disrupted
+			remove_ideas = { VAL_big_buyers VAL_westerholm_concession_income }
+			VAL_end_vorkerland_resource_access = yes
+			mark_focus_tree_layout_dirty = yes
+		}
+		else = { VAL_handle_vorkerland_war_outbreak = yes }
+	}
 	if = {
 		limit = { has_country_flag = VAL_vorkerland_contracts_disrupted NOT = { has_variable = VAL_economic_recovery_steps } }
 		set_variable = { var = VAL_economic_recovery_steps value = 0 }
@@ -2597,6 +2630,38 @@ VAL_reconcile_supply_crisis = {
 		if = { limit = { has_completed_focus = VAL_Settle_Industrial_Debts } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
 		if = { limit = { has_completed_focus = VAL_Return_To_World_Market } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
 		VAL_refresh_industrial_economy = yes
+	}
+	# Progress can survive a missing consumer. Repair only an inconsistent presentation.
+	if = {
+		limit = {
+			has_country_flag = VAL_vorkerland_contracts_disrupted
+			OR = {
+				has_idea = VAL_vorkerland_contract_disruptions
+				has_dynamic_modifier = { modifier = VAL_contract_industry }
+				AND = {
+					check_variable = { var = VAL_economic_recovery_steps value = 9 compare = less_than }
+					OR = {
+						NOT = { has_dynamic_modifier = { modifier = VAL_economic_collapse } }
+						has_dynamic_modifier = { modifier = VAL_economic_miracle }
+					}
+				}
+				AND = {
+					check_variable = { var = VAL_economic_recovery_steps value = 9 compare = greater_than_or_equals }
+					OR = {
+						NOT = { has_dynamic_modifier = { modifier = VAL_economic_miracle } }
+						has_dynamic_modifier = { modifier = VAL_economic_collapse }
+					}
+				}
+			}
+		}
+		VAL_refresh_industrial_economy = yes
+	}
+	if = {
+		limit = {
+			has_variable = VAL_arsenal_reputation_stage
+			NOT = { has_dynamic_modifier = { modifier = VAL_arsenal_reputation } }
+		}
+		VAL_refresh_arsenal_reputation = yes
 	}
 }
 # COUNTRY VAL: terminal political transition after defeat by Shabrat.
@@ -3484,8 +3549,8 @@ VAL_initialize_arsenal_recovery = {
         limit = { NOT = { has_variable = VAL_arsenal_reputation_stage } }
         set_variable = { var = VAL_arsenal_reputation_stage value = 4 }
         if = { limit = { has_country_flag = VAL_vorkerland_contracts_disrupted } set_variable = { var = VAL_arsenal_reputation_stage value = 0 } }
-        VAL_refresh_arsenal_reputation = yes
     }
+    VAL_refresh_arsenal_reputation = yes
     if = {
         limit = { NOT = { has_country_flag = VAL_vorkerland_resource_access_initialized } }
         set_country_flag = VAL_vorkerland_resource_access_initialized
