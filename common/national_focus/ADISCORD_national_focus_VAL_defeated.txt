@@ -86,7 +86,7 @@ focus_tree = {
 		x = 8
 		y = 4
 		cost = 4
-		prerequisite = { focus = VAL_defeat_Articles_Of_Command }
+		prerequisite = { focus = VAL_defeat_Rebuild_The_Registry }
 		mutually_exclusive = { focus = VAL_defeat_Revise_The_Settlement }
 		completion_reward = {
 			add_stability = 0.05
@@ -149,7 +149,7 @@ focus_tree = {
 		x = 12
 		y = 4
 		cost = 5
-		prerequisite = { focus = VAL_defeat_Articles_Of_Command }
+		prerequisite = { focus = VAL_defeat_Rebuild_The_Registry }
 		mutually_exclusive = { focus = VAL_defeat_No_Second_Expedition }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
 		cancel_if_invalid = yes
@@ -181,9 +181,9 @@ focus_tree = {
 		id = VAL_defeat_Return_To_The_Passes
 		icon = GFX_goal_generic_major_war
 		x = 12
-		y = 6
+		y = 9
 		cost = 6
-		prerequisite = { focus = VAL_defeat_Refit_For_Return }
+		prerequisite = { focus = VAL_defeat_Supply_For_The_Return }
 		prerequisite = { focus = VAL_defeat_Bring_The_Captains_Home }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_launch_available_tt VAL_council_can_launch_revanche = yes } }
 		cancel_if_invalid = yes
@@ -192,6 +192,209 @@ focus_tree = {
 			hidden_effect = { VAL_council_begin_revanche = yes }
 		}
 		ai_will_do = { base = 25 }
+	}
+
+	focus = {
+		id = VAL_defeat_Rebuild_The_Registry
+		icon = GFX_focus_generic_treaty
+		x = 10
+		y = 3
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = VAL_defeat_Articles_Of_Command }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			unlock_decision_tooltip = { decision = VAL_nationalise_region show_effect_tooltip = yes }
+			custom_effect_tooltip = VAL_frontier_nationalisation_chain_tt
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Repair_The_Workshops
+		icon = GFX_focus_generic_industry_3
+		x = 4
+		y = 4
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = VAL_defeat_Reopen_The_Depots }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			VAL_invest_civilian_industry = yes
+			add_tech_bonus = { name = VAL_defeat_Repair_The_Workshops bonus = 0.5 uses = 1 category = industry }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Restore_Freight_Routes
+		icon = GFX_focus_generic_reinforcing_the_supply_network
+		x = 4
+		y = 5
+		cost = 4
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY }
+		prerequisite = { focus = VAL_defeat_Repair_The_Workshops }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			if = {
+				limit = { any_owned_state = { is_controlled_by = ROOT infrastructure < 5 } }
+				random_owned_controlled_state = {
+					limit = { infrastructure < 5 }
+					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+				}
+			}
+			else = { add_political_power = 50 }
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Veterans_Register
+		icon = GFX_focus_generic_limited_social_mobilization
+		x = 16
+		y = 4
+		cost = 4
+		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = VAL_defeat_Bring_The_Captains_Home }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = 4000
+			add_stability = 0.03
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Staff_College
+		icon = GFX_focus_generic_military_academy
+		x = 16
+		y = 5
+		cost = 5
+		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = VAL_defeat_Veterans_Register }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 25
+			add_tech_bonus = { name = VAL_defeat_Staff_College bonus = 0.5 uses = 1 category = support_tech }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Civilian_Contracts
+		icon = GFX_goal_generic_positive_trade_relations
+		x = 6
+		y = 7
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = VAL_defeat_Contracts_Without_Conquest }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			VAL_invest_civilian_industry = yes
+			ADISCORD_economy_receive_15 = yes
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Technical_Institute
+		icon = GFX_goal_generic_scientific_exchange
+		x = 8
+		y = 8
+		cost = 6
+		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = VAL_defeat_Civilian_Contracts }
+		prerequisite = { focus = VAL_defeat_Staff_College }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			if = { limit = { num_research_slots < 5 } add_research_slot = 1 }
+			else = { add_tech_bonus = { name = VAL_defeat_Technical_Institute bonus = 0.5 uses = 2 category = industry } }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Mountain_Exercises
+		icon = GFX_goal_generic_army_doctrines
+		x = 12
+		y = 6
+		cost = 5
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = VAL_defeat_Refit_For_Return }
+		prerequisite = { focus = VAL_defeat_Staff_College }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 30
+			add_equipment_to_stockpile = { type = support_equipment amount = 200 producer = VAL }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Frontline_Arsenals
+		icon = GFX_goal_generic_production2
+		x = 14
+		y = 7
+		cost = 5
+		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = VAL_defeat_Mountain_Exercises }
+		prerequisite = { focus = VAL_defeat_Repair_The_Workshops }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			VAL_invest_arsenal_industry = yes
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = VAL }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Supply_For_The_Return
+		icon = GFX_focus_generic_reinforcing_the_supply_network
+		x = 12
+		y = 8
+		cost = 5
+		search_filters = { FOCUS_FILTER_ARMY }
+		prerequisite = { focus = VAL_defeat_Frontline_Arsenals }
+		prerequisite = { focus = VAL_defeat_Restore_Freight_Routes }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = VAL }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 150 producer = VAL }
+			add_equipment_to_stockpile = { type = support_equipment amount = 200 producer = VAL }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Recovered_State
+		icon = GFX_focus_generic_improve_the_administration
+		x = 10
+		y = 11
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = VAL_defeat_Technical_Institute focus = VAL_defeat_Return_To_The_Passes }
+		prerequisite = { focus = VAL_defeat_Restore_Freight_Routes }
+		prerequisite = { focus = VAL_defeat_Staff_College }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovered_state_available_tt VAL_council_in_office = yes has_war = no } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			ADISCORD_economy_receive_15 = yes
+			add_political_power = 75
+			add_stability = 0.05
+		}
+		ai_will_do = { base = 10 }
 	}
 }
 

@@ -70,6 +70,6 @@ VAL_vorkerland_aid = {
 
 VAL_postwar_administration = {
 	allowed = { tag = VAL }
-	visible = { OR = { has_completed_focus = VAL_frontier_conference has_completed_focus = VAL_Contracts_Outlive_Kings } }
+	visible = { OR = { has_completed_focus = VAL_frontier_conference has_completed_focus = VAL_Contracts_Outlive_Kings has_completed_focus = VAL_defeat_Rebuild_The_Registry } }
 	visible_when_empty = yes
 }
