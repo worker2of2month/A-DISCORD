@@ -4,52 +4,42 @@ on:
     branches: [codex/stp-party-usability-20260922]
 permissions:
   contents: read
+concurrency:
+  group: stp-party-usability
+  cancel-in-progress: true
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: .
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Inspect current native contracts
+      - name: Install validator dependencies
+        run: python -m pip install --disable-pip-version-check Pillow numpy
+      - name: Capture existing party baseline
         run: |
           python -B - <<'PY'
+          import subprocess, re, json
           from pathlib import Path
-          import json, re
-          from tools.validators.validate_adiscord_economy_ai import parse_clausewitz
-          def read(p): return Path(p).read_text(encoding='utf-8-sig')
-          def parse(p): return parse_clausewitz(read(p))
-          def brief(es):
-              return {e.key: brief(e.value) if isinstance(e.value,list) else e.value for e in es}
-          def walk(es):
-              for e in es:
-                  yield e
-                  if isinstance(e.value,list): yield from walk(e.value)
-          ds=parse('common/decisions/ADISCORD_STP_decisions.txt')
-          print('PARTY_CATEGORY_OWNERSHIP')
-          for c in ds:
-              if isinstance(c.value,list):
-                  print(c.key, [e.key for e in c.value if isinstance(e.value,list)])
-          print('PARTY_FOCUS_SUMMARIES')
-          fs=parse('common/national_focus/ADISCORD_national_focus_STP.txt')
-          for e in walk(fs):
-              if e.key=='focus' and isinstance(e.value,list):
-                  d=brief(e.value)
-                  if d.get('id','').startswith(('STP_party_','STP_ps_')):
-                      print(json.dumps(d,ensure_ascii=False))
-          print('RELEVANT_SCRIPT_BLOCKS')
-          wanted={'STP_cw_open_preparation','STP_initialize_core_mechanics','STP_ps_begin_defence','STP_ps_refresh_defence','STP_ps_val_pressure_finish','STP_ps_authorize_val_supply','STP_ps_prepare_opposition_second','STP_cw_schedule_opposition','STP_ps_nod_procurement_credit'}
-          for e in parse('common/scripted_effects/ADISCORD_STP_scripted_effects.txt'):
-              if e.key in wanted: print(e.key,json.dumps(brief(e.value),ensure_ascii=False))
-          print('BRIEFINGS')
-          loc=read('localisation/russian/ADISCORD_STP_l_russian.yml')
-          for line in loc.splitlines():
-              if re.match(r'^ (STP_elections_in_the_party_desc|STP_party_factions_desc|STP_cw_war_council_desc|STP_cw_external_intervention_desc|STP_ps_preparation_report|STP_ps_war_report|STP_PARTY_ELECTION_BRIEFING|STP_PARTY_MAP_INSTRUCTIONS|STP_ps_val_pressure_desc|STP_ps_fund_nod_desc|STP_ps_ammunition_result_tt|STP_ps_ammunition_cost|STP_pw_party_recovery_report):',line): print(line)
-          print('FOCUS_LAYOUT_STARTUP_AND_GENERATOR')
-          for p in Path('common/on_actions').glob('*.txt'):
-              text=read(p)
-              if 'on_startup' in text and 'STP' in text: print(p.as_posix(),text[:14000])
-          print('INSPECTION_END')
+          modules = ['tools.tests.test_adiscord_stp_party_survival', 'tools.tests.test_adiscord_stp_party_route', 'tools.tests.test_adiscord_stp_party_balance']
+          r = subprocess.run(['python','-B','-m','unittest',*modules],capture_output=True,text=True)
+          Path('/tmp/stp-party-baseline.txt').write_text(r.stdout+r.stderr)
+          print(json.dumps({'returncode': r.returncode, 'failures': re.findall(r'(?m)^(?:FAIL|ERROR): (.*)$',r.stderr), 'summary':r.stderr[-120:]},ensure_ascii=False))
+          PY
+      - name: Demonstrate missing behavior
+        run: |
+          python -B .github/stp_party_usability.py
+          python -B - <<'PY'
+          import unittest, sys
+          suite=unittest.defaultTestLoader.loadTestsFromName('tools.tests.test_adiscord_stp_party_survival.PartyUsabilityContracts')
+          result=unittest.TextTestRunner(verbosity=2).run(suite)
+          if result.errors:
+              sys.exit('Regression tests have errors; fix the tests before implementation.')
+          if not result.failures:
+              sys.exit('Expected failing behavior was not reproduced.')
+          print('EXPECTED_RED_CONFIRMED',len(result.failures))
           PY
