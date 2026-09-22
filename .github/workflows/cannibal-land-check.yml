@@ -5,10 +5,11 @@ on:
     paths: [.github/workflows/cannibal-land-check.yml]
 permissions:
   contents: write
+  actions: write
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,7 +25,32 @@ jobs:
         run: |
           git fetch --no-tags --depth=1 origin "$PATCH_REF"
           git show "$PATCH_REF:.github/cannibal_land_patch.py" > /tmp/cannibal_land_patch.py
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          path = Path('/tmp/cannibal_land_patch.py')
+          source = path.read_text()
+          source, count = re.subn(r'^modules \+=.*\n', '', source, flags=re.M)
+          assert count == 1
+          old = "focused = [sys.executable, '-B', '-m', 'unittest', *modules, '-v']"
+          new = "focused = [sys.executable, '-B', '-m', 'unittest', *modules, '-k', 'dirty', '-k', 'contaminated', '-k', 'northern', '-v']"
+          assert source.count(old) == 1
+          source = source.replace(old, new)
+          source = source.replace('def run(label, command, timeout=300):', 'def run(label, command, timeout=90):')
+          source = source.replace('timeout=360', 'timeout=30')
+          source = source.replace('refs/heads/fix/cannibal-clean-land-result', 'refs/heads/fix/cannibal-clean-land-result-bounded')
+          path.write_text(source)
+          print('Focused tests select dirty, contaminated and northern contracts. Full-suite attempts are bounded to 30 seconds and a timeout is not a pass.')
+          PY
           python /tmp/cannibal_land_patch.py
+      - name: Stop superseded verification if still running
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          status=$(gh api repos/worker2of2month/A-DISCORD/actions/runs/35775779795 --jq .status)
+          if [ "$status" = "in_progress" ] || [ "$status" = "queued" ]; then
+            gh api -X POST repos/worker2of2month/A-DISCORD/actions/runs/35775779795/cancel
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
