@@ -93,9 +93,10 @@ class CivilWarContracts(unittest.TestCase):
             with self.subTest(spirit=spirit):
                 self.assertEqual(hostilities.count(f"remove_ideas = {spirit}"), 1)
         self.assertNotIn("remove_ideas = ADISCORD_economic_system_oligarchic_clan", hostilities)
-        battle_spirit = hostilities.index("add_ideas = STP_cw_party_battle_spirit")
-        self.assertTrue(all(hostilities.index(f"remove_ideas = {spirit}") < battle_spirit
-                            for spirit in prewar_spirits))
+        positions = [hostilities.find(f"remove_ideas = {spirit}") for spirit in prewar_spirits]
+        if all(position >= 0 for position in positions):
+            battle_spirit = hostilities.index("add_ideas = STP_cw_party_battle_spirit")
+            self.assertLess(max(positions), battle_spirit)
 
     def test_northern_early_peace_uses_shared_defeat_and_war_clock(self):
         trigger = block(self.triggers, "NOD_cw_can_accept_northern_defeat")
