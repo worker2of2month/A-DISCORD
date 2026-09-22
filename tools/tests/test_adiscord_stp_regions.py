@@ -162,14 +162,20 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         items = [line for line in value.split(r"\n") if line.startswith("- ")]
         self.assertEqual(len(items), 5)
 
-    def test_late_false_trail_cannot_protect_a_different_inspection(self) -> None:
+    def test_false_trail_closes_current_inspection_and_blocks_immediate_recheck(self) -> None:
         operation = named_block(read(DECISIONS), "STP_prepare_false_trail")
         self.assertIn("STP_party_inspection_active", named_block(operation, "cancel_trigger"))
         completion = named_block(operation, "remove_effect")
         self.assertIn("has_state_flag = STP_party_inspection_active", named_block(completion, "limit"))
         self.assertIn("STP_false_trail_in_progress", named_block(operation, "complete_effect"))
         self.assertIn("clr_state_flag = STP_false_trail_in_progress", named_block(operation, "cancel_effect"))
+        self.assertIn("STP_false_trail_clean_redirect = yes", completion)
+        self.assertIn("STP_cw_abort_party_inspection = yes", completion)
+        self.assertIn("STP_schedule_next_party_inspection = yes", completion)
+        self.assertIn("flag = STP_false_trail_redirected days = 28", completion)
         self.assertIn("clr_state_flag = STP_false_trail_in_progress", completion)
+        openable = named_block(read(TRIGGERS), "STP_cw_inspection_region_openable")
+        self.assertIn("NOT = { has_state_flag = STP_false_trail_redirected }", openable)
 
     def test_concession_surrenders_the_administrator_without_destroying_military_assets(self) -> None:
         decision = named_block(read(DECISIONS), "STP_cw_sacrifice_local_contact")
