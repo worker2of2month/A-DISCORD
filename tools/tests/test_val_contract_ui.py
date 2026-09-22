@@ -665,6 +665,29 @@ class TestValProgressionChoices(unittest.TestCase):
         self.assertIn("VAL_ai_frontier_force_ready", named_block(demand, "ai_will_do"))
         self.assertIn("has_country_flag = VAL_frontier_expansion_deferred", named_block(demand, "ai_will_do"))
 
+    def test_nodrul_campaign_waits_for_a_real_northern_foothold(self):
+        triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        foothold = named_block(triggers, "VAL_northern_foothold_secured")
+        for group in (("58", "59", "60"), ("61", "62", "63"), ("64", "65")):
+            for state in group:
+                self.assertIn(f"{state} = {{", foothold)
+        self.assertIn("OR =", foothold)
+
+        northern = self.focus("VAL_Northern_Settlement")
+        available = named_block(northern, "available")
+        self.assertIn("VAL_northern_foothold_secured = yes", available)
+        self.assertIn("VAL_nod_campaign_foothold_tt", available)
+
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        nod = named_block(decisions, "VAL_campaign_against_nod")
+        self.assertIn("VAL_northern_foothold_secured = yes", named_block(nod, "available"))
+        self.assertIn("NOT = { VAL_northern_foothold_secured = yes }", named_block(nod, "cancel_trigger"))
+        self.assertIn("VAL_northern_foothold_secured = yes", named_block(nod, "remove_effect"))
+
+        stelander = self.focus("VAL_Stelander_Ultimatum")
+        if "available = {" in stelander:
+            self.assertNotIn("VAL_northern_foothold_secured", named_block(stelander, "available"))
+
     def test_economic_route_does_not_require_bypassed_military_rewards(self):
         reopen = self.focus("VAL_Reopen_Trade_Routes")
         debts = self.focus("VAL_Settle_Industrial_Debts")
@@ -687,8 +710,99 @@ class TestValProgressionChoices(unittest.TestCase):
             path = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             text = path.read_text(encoding="utf-8-sig")
-            for key in ("VAL_defer_northern_expansion", "VAL_defer_northern_expansion_desc", "VAL_defer_northern_expansion_tt", "VAL_defer_northern_expansion_ready_tt", "VAL_economic_settlement_ready_tt", "VAL_northern_expansion_deferred_tt"):
-                self.assertRegex(text, rf'(?m)^ {key}:\d* "[^\r\n]*"$')
+            for key in ("VAL_defer_northern_expansion", "VAL_defer_northern_expansion_desc", "VAL_defer_northern_expansion_tt", "VAL_defer_northern_expansion_ready_tt", "VAL_economic_settlement_ready_tt", "VAL_northern_expansion_deferred_tt", "VAL_nod_campaign_foothold_tt"):
+                self.assertRegex(text, rf'(?m)^ {key}:\d* "[^\r\n]*"
+
+
+class TestValProgressionContinuation(unittest.TestCase):
+    def refusal(self):
+        source = read("events/ADISCORD_VAL_contract_events.txt")
+        marker = source.index("id = val_rework.111\n")
+        return named_block(source[source.rfind("country_event", 0, marker):], "country_event")
+
+    def test_proclamation_category_is_visible_from_its_unlock(self):
+        category = named_block(read("common/decisions/categories/ADISCORD_VAL_rework_categories.txt"), "VAL_postwar_administration")
+        visible = named_block(category, "visible")
+        for focus in ("VAL_frontier_conference", "VAL_Contracts_Outlive_Kings"):
+            self.assertIn("has_completed_focus = " + focus, visible)
+        self.assertIn("OR =", visible)
+
+    def test_refusal_event_selects_the_same_safe_withdrawal_as_the_decision(self):
+        event = self.refusal()
+        marker = event.index("name = val_rework.111.withdraw")
+        option = named_block(event[event.rfind("option", 0, marker):], "option")
+        reward = named_block(option, "hidden_effect")
+        self.assertIn("VAL_frontier_reply_is_current = yes", reward)
+        self.assertIn("VAL_frontier_withdraw_and_defer = yes", reward)
+        self.assertNotIn("VAL_frontier_close = yes", reward)
+        self.assertIn("custom_effect_tooltip = VAL_frontier_withdraw_tt", option)
+
+    def test_ai_refusal_event_uses_the_same_force_gate_as_decisions(self):
+        event = self.refusal()
+        marker = event.index("name = val_rework.111.war")
+        option = named_block(event[event.rfind("option", 0, marker):], "option")
+        chance = named_block(option, "ai_chance")
+        self.assertIn("VAL_ai_frontier_force_ready = no", chance)
+        self.assertNotIn("num_divisions < 24", chance)
+
+    def test_opt_out_and_recovery_evaluate_the_real_trigger_graph(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        definitions = {e.key: e.value for e in parse_clausewitz(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"))}
+        flags, focuses = set(), {"VAL_frontier_security_plan"}
+        facts = {"has_war": False, "is_subject": False, "has_capitulated": False,
+                 "VAL_frontier_stage": 0, "VAL_campaign_objectives_met": False}
+
+        def evaluate(entry):
+            key, value = entry.key, entry.value
+            if key in ("OR", "AND", "NOT"):
+                result = [evaluate(e) for e in value]
+                return any(result) if key == "OR" else (not all(result) if key == "NOT" else all(result))
+            if key == "has_country_flag": return value in flags
+            if key == "has_completed_focus": return value in focuses
+            if key == "tag": return value == "VAL"
+            if key in ("has_war", "is_subject", "has_capitulated", "VAL_campaign_objectives_met"):
+                return facts[key] == (value == "yes")
+            if key == "check_variable":
+                data = {e.key: e.value for e in value}
+                self.assertEqual(data["compare"], "greater_than")
+                return facts.get(data["var"], 0) > float(data["value"])
+            if key in definitions:
+                self.assertIn(value, ("yes", "no"))
+                return all(evaluate(e) for e in definitions[key]) == (value == "yes")
+            self.fail("Unimplemented trigger in this fixture: " + key)
+
+        def check(name): return all(evaluate(e) for e in definitions[name])
+        self.assertTrue(check("VAL_can_defer_northern_expansion"))
+        self.assertFalse(check("VAL_northern_expansion_deferred"))
+        flags.add("VAL_frontier_expansion_deferred")
+        self.assertFalse(check("VAL_can_defer_northern_expansion"))
+        self.assertTrue(check("VAL_northern_expansion_deferred"))
+        self.assertFalse(check("VAL_economic_settlement_ready"))
+        focuses.add("VAL_Returning_Buyers")
+        self.assertFalse(check("VAL_economic_settlement_ready"))
+        focuses.add("VAL_Contingency_Ledgers")
+        self.assertTrue(check("VAL_economic_settlement_ready"))
+        for key in ("has_war", "is_subject", "has_capitulated"):
+            with self.subTest(blocker=key):
+                facts[key] = True
+                self.assertFalse(check("VAL_northern_expansion_deferred"))
+                self.assertFalse(check("VAL_economic_settlement_ready"))
+                facts[key] = False
+        for stage in (1, 2, 3):
+            facts["VAL_frontier_stage"] = stage
+            self.assertFalse(check("VAL_northern_expansion_deferred"))
+        facts["VAL_frontier_stage"] = 0
+        for flag in ("VAL_campaign_mobilizing", "VAL_stelander_defeated"):
+            flags.add(flag)
+            self.assertFalse(check("VAL_economic_settlement_ready"))
+            flags.remove(flag)
+        focuses.remove("VAL_frontier_security_plan")
+        self.assertFalse(check("VAL_northern_expansion_deferred"))
+        flags.clear()
+        facts["VAL_campaign_objectives_met"] = True
+        self.assertTrue(check("VAL_economic_settlement_ready"))
+)
+            self.assertIn("VAL_nod_campaign_foothold_tt", text)
 
 
 class TestValProgressionContinuation(unittest.TestCase):
