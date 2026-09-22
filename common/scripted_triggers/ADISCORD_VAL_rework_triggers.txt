@@ -830,9 +830,18 @@ VAL_final_settlement_ready = {
 }
 
 VAL_is_contract_administration = {
-    OR = { is_subject_of = VAL AND = { OR = { tag = YPR tag = DCA } is_subject_of = TFF } }
-    has_autonomy_state = autonomy_VAL_contract_administration
-    has_country_leader_ideology = contractual_etatism
+    OR = {
+        AND = {
+            OR = { is_subject_of = VAL AND = { OR = { tag = YPR tag = DCA } is_subject_of = TFF } }
+            has_autonomy_state = autonomy_VAL_contract_administration
+            has_country_leader_ideology = contractual_etatism
+        }
+        AND = {
+            is_subject_of = VAL
+            has_country_flag = ADISCORD_bezhaysk_val_administration
+            has_autonomy_state = autonomy_VAL_contract_administration
+        }
+    }
 }
 
 # A pending ultimatum is not an active frontier war and cannot reserve NOD's
