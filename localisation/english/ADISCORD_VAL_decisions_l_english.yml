@@ -47,15 +47,8 @@
  VAL_Inventory_The_Empty_Yards_desc: "The government needs verified figures on machine tools, raw materials and unfinished orders. An inventory will establish which plants can resume work immediately and which need new equipment."
  VAL_military_operations: "Military Operations"
  VAL_military_operations_desc: "The operational situation in Occidia, the northern lands and South Tsaygen. Colours reflect current control. Sales are found under Export Contracts."
-<<<<<<< HEAD
  VAL_contract_management: "Contract Management"
  VAL_contract_management_desc: "Run the domestic machinery of the contract state. Propaganda campaigns are limited by available media slots, while the quarterly delivery norm protects Kefreyt's reputation, revenue and ability to service its debt."
-=======
- VAL_propaganda_campaigns: "Propaganda Campaigns"
- VAL_propaganda_campaigns_desc: "The number of simultaneous campaigns cannot exceed the available propaganda slots."
- VAL_contract_obligations: "Contracts and State Campaigns"
- VAL_contract_obligations_desc: "Regular deliveries sustain Kefreyt’s reputation and revenue. State campaigns build support for the contract system and use the shared propaganda slots."
->>>>>>> parent of 15bd2e5f (Reverted)
  VAL_operations_panel_title: "OPERATIONS MAP"
  VAL_operations_panel_tt: "The map shows Steland, [CIN.GetName], [OSF.GetName] and the northern borderlands. Participants use the same country names as the main map."
  VAL_operations_map_tt: "The lands of Kefreyt, Stelander, Nodrul and the cannibals. Countries are shown in their national colours according to current state control. Internal borders and yellow hatching for divided control appear only in territory administered by Kefreyt.\n\nEconomic recovery requires the northern economic base and the integration of Occidia. Ertia is not required for recovery."
@@ -756,11 +749,7 @@
  VAL_receive_stelander_border_desc: "Complete district transfers delayed by foreign occupation. This decision concerns only land belonging to the subordinate Steland Administration; neutral countries lose no territory."
  VAL_receive_stelander_border_tt: "[46.GetName] and [29.GetName], if owned by the Steland Administration, pass to Kefreyt if controlled by the administration or Kefreyt itself."
  VAL_stelander_victory_tt: "Military victory establishes the Steland Contract Administration under Andrei Rudnev. [46.GetName] and [29.GetName], if owned by the defeated country, pass to Kefreyt; its other lands and army remain with the puppet. Foreign occupation delays a disputed district's transfer. Kefreyt adopts the name Kefreyt Commonwealth and a new flag."
-<<<<<<< HEAD
  VAL_nod_victory_tt: "A standalone Kefreyt victory turns Nodrul into the Nodrul Contract Administration. If Shabrat is already fighting Nodrul, Kefreyt instead joins his war: on victory, Nodrul-owned states pass to whichever of the two actually controls them at surrender, while northern settlements already awarded to their claimants are preserved."
-=======
- VAL_nod_victory_tt:0 "Victory divides Nodrul between the Nodrul Protectorate and Esnos Contract Administration under Kefreyt. If Nodrul controls Yubora, Iskhait and Duchebia administrations are formed from its territory. Their patron is determined by the Frontier agreement."
->>>>>>> parent of 15bd2e5f (Reverted)
  val_contract.347.t: "Steland Contract Administration"
  val_contract.347.d: "Military victory has acquired a civilian successor. Administration of defeated Stelander passes to Andrei Rudnev's contract government. Local institutions and the army remain, but foreign policy and leadership appointments now depend on Kefreyt.\n\nThe treaty provides for direct integration of [46.GetName] and [29.GetName] if they belong to the defeated country. Transfer of land under foreign occupation is delayed until control returns. Its remaining territory stays under the administration; neutral countries' borders are preserved.\n\nA new Steland flag rises over the institutions. Kefreyt announces the formation of the Kefreyt Commonwealth, a union of the metropole and its contract states."
  val_contract.347.a: "Secure the contract administration."
