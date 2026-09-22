@@ -50,6 +50,9 @@ HEGEMONY_COURSE_IDS = (
     "STP_pc_heg_nod_force",
     "STP_pc_heg_clients",
     "STP_pc_heg_burden",
+    "STP_pc_heg_administrations",
+    "STP_pc_heg_final_north",
+    "STP_pc_heg_final_kefreyt",
 )
 FREEDOM_COURSE_IDS = (
     "STP_pc_lib_assembly",
