@@ -698,6 +698,14 @@ class TestValProgressionChoices(unittest.TestCase):
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         nod_intervention = named_block(effects, "VAL_frontier_issue_nod_ultimatum")
         self.assertNotIn("VAL_northern_foothold_secured", nod_intervention)
+        self.assertIn("VAL_stelander_dominated = yes", nod_intervention)
+
+        frontier_join = named_block(effects, "VAL_frontier_join_existing_war")
+        self.assertEqual(frontier_join.count("VAL = { VAL_stelander_dominated = yes }"), 3)
+
+        guarantor_ai = named_block(triggers, "VAL_ai_frontier_guarantor_preparation")
+        self.assertIn("tag = NOD", guarantor_ai)
+        self.assertIn("VAL = { VAL_stelander_dominated = yes }", guarantor_ai)
 
     def test_ai_strongly_prefers_occidian_invasion_course(self):
         military = self.focus("VAL_Seize_The_Northern_Passes")
