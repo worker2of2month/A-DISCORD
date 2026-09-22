@@ -1,0 +1,89 @@
+name: Party Nodrul invasion regression
+on:
+  push:
+    branches: [fix/stp-party-nod-invasion-20260922]
+    paths: [.github/workflows/stp-nod-invasion-check.yml]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install Pillow
+      - name: Compare baseline and regression repair
+        shell: bash
+        run: |
+          python - <<'PY'
+          import base64, collections, hashlib, json, pathlib, re, subprocess, zlib
+          out = pathlib.Path('/tmp/stp-nod-evidence')
+          out.mkdir()
+          summary = {}
+          paths = {
+              'common/on_actions/02_ADISCORD_STP_on_actions.txt': '12d60079a7cd96fdcfaaa19215cf0ba0094083ec',
+              'common/scripted_effects/ADISCORD_STP_scripted_effects.txt': 'b26cd507d1706ca360955633db9d7e347f8d8a04',
+              'events/ADISCORD_STP_events.txt': '663b61d8f8134fc45a61d5d8f83b3e9f569eaa35',
+              'tools/tests/test_adiscord_stp_party_balance.py': '964ccfb4a369c66654b4be2e3bf44207007821ad',
+          }
+          for path, expected in paths.items():
+              assert subprocess.check_output(['git', 'rev-parse', 'HEAD:' + path]).decode().strip() == expected, path
+          def run(label, command, timeout=180):
+              with (out / (label + '.txt')).open('w') as log:
+                  try:
+                      code = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, timeout=timeout).returncode
+                  except subprocess.TimeoutExpired:
+                      code = 124
+                      log.write('\nTIMEOUT=' + str(timeout) + '\n')
+              text = (out / (label + '.txt')).read_text()
+              summary[label] = {'exit': code, 'failures': re.findall(r'^(?:FAIL|ERROR): .+$', text, re.M), 'tail': text[-1800:]}
+              (out / 'summary.json').write_text(json.dumps(summary, indent=2))
+              print(label, code, summary[label]['tail'], flush=True)
+              return code
+          unit = ['python', '-B', '-m', 'unittest']
+          related = ['tools.tests.test_adiscord_stp_party_balance', 'tools.tests.test_adiscord_stp_party_route', 'tools.tests.test_adiscord_stp_postwar_continuation', 'tools.tests.test_adiscord_stp_party_survival', '-v']
+          target = ['tools.tests.test_adiscord_stp_party_balance.PartyNodInvasionLifecycleTests', '-v']
+          validator = ['python', '-B', 'tools/validate_tc.py', '--limit', '300']
+          run('baseline-related', unit + related)
+          run('baseline-validator', validator)
+          tests = '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'
+          fix = 'eNrNWN9P4zgQfm7/Cks83ENp6C9aWGmlRfBy0glWwOm0T5YbT1rfJnHOdoAu4n+/sZ20dQnQ9PZ0V+2qIR6Px99883lcLpKE9PsLYQg7iWWWyfxE5pTFRshcnwxG9OLq17vLm9srenf/lW6GIvNkyLz1lK7IOTyR4YhPB4NZFMUzmCSjIRkOBtPJpNvv9w+Io9vr9Q6J5csX0p8cT0lvcjwj+MdmmHwmz11SfyBJIDb+XafTQU/2mViPf8mUilwYwVLxA6g2DPH8TFagm4YLpsyKpsA4KF2ZvbzyWSRUQaJAL23AqWR8bdrbNX2sfCqIZR6LFGguOS75wDTuY2eJu33CRuPNzu2nWq/LG6iiYyUKA5x6iPRJAPfuaMiZ9nMr8sxH05ifDqJoep7AOZs1kucA7wGLDphv6XQ6GTpGue/xmWVVldIY064qDrln+sCUYPMU8KWz0ZhFqRZ0THUBsUsNs2yknK101yWmd0Qub36/vr/9Zqd8IhoeQCFv0xUxSyB6yRRwwtJUsDyGY6LAMMxzviDWcCVzIJBq+EWTxDM96vYCHs0VsO+OQ7UTF3KvI5LqoZOKTLhiIIYtfOxEaKrL+Z++SnJJlkzTmBXClClDmPxLNBI5rRamj8Is8f31zZXn9WaBrRVwSm3vqyaoBAWZfACaKJnVZt6jHXUmdrPO0Ssvz6R5tt3Ni/OP//Gfhfw3LEGLIS+V/SoUIFguNSQrtcG9GfSGRaQMEUaTTGhXfVKReMnyBbjkJCnCxRGOyPq8yAk8FcKmi0Oc1v4QOOfCxvMA6DUGJBqZl3YV8ogMUpB6UyPtVncT+KYQvJFEB+Q6ke4vlzxZ5katqAva8zPGJaQ2GIOzur65dzC+Yb0OaDsMyiEBR4hWs1Jc1qf8babs49Askd2GVtiu1fQD9iPfAj7Rg9dfb6iKYBtChDUoiabwUlbm8bJB4ev4KsqSI/L14vb+G/l6c3f/x8XtJyRNUmrLXfSNxV8oabBWJIOuVkqPPA01oICscjNiogcucWIERlmar0SSp4WOuqG+3KsD3fnYa6krgLLa+Nk6LVxNvYHbitP+NFg2oLsJvoDsBYDB+yeid972YBbfpp7RoRprQfvRev8c/mY+7n1cijbeSWFVkWDQ6iIo9EZWcrS9RJDZIxH+fT0eHRqYT47O56M2uK8k99mzm1ltt98IhxSj+gqTlVLqD8Qs5vbTcpbx+SnXVxf/Zsl/vJfyilZyykJ5MzD1nCO29M3OO3dcVxtpX32yJ6zmqq6lRrYTbtZGVPfaSLjUlOjAJDgK1kaygVO2RS9Q2Zb7UN4bP7sNzwJbepO/q2mJ+iMXjzPD5KyvuOJX5lxhNIKNBUcWKUQ7qFyEzjIWG47D2I7STQZT09dIHZTmzION/gub511HYrvX8DZeXVAHVALMJUUmFVh5ZTlOTxR14eapT2LataE/d47LWKL07rTwbYNI7CNFxdFKjNsmmISsxhfMP7grOeQSAVV/DYitsBuGYuDERzIsE9Ex6vI+9tTkcfjGuRhUN/h4XOQzB1Gml7nZ7PGedxqglrwxpv/NOK8tErN6Dw4LH1j0P8n89cqscbif6yA9WGxrwoG930Hzc4l2L+rLvXvG1Q39+l0PJ8OeRSdJ4N4Pp+EN/cPXPjr+QdGtgMaziYz22e679HYNkCvMowgyKK68j2TnGXQVMuDiNlEu5v3axd4n2pWABxZCs5h050LC7NYLLDF5tRd1+uRI3Lt7vCplAXqjgJ7VLhLoUGtynCtiFy6SyQPenRtRJqiuRU0TewPCnlZWKmq1qkZGXRDW81QXagfKG5jA+BGdpuAyuvVdvuwPh4bfxJ4r5WobjMdkaFYCStCr37yevM2ROprUFPWX6csfoxGgwEOGWG2f4xhCywMmwDqBrp/A+Wi8NA='
+          # Correct transmission-only substitutions before verifying the compressed checksums.
+          tests = tests.replace('PuKyojAjW', 'PuKzoAjW').replace('J8JpiF5g', 'JtpiF5g')
+          fix = fix.replace('BWJIOuVk', 'BWJZIOuVk')
+          for label, data in [('tests', tests), ('fix', fix)]:
+              (out / (label + '.patch')).write_bytes(zlib.decompress(base64.b64decode(data)))
+          subprocess.run(['git', 'apply', str(out / 'tests.patch')], check=True)
+          assert run('red', unit + target) == 1
+          assert 'FAILED (failures=9)' in (out / 'red.txt').read_text()
+          subprocess.run(['git', 'apply', str(out / 'fix.patch')], check=True)
+          assert run('green', unit + target) == 0
+          run('after-related', unit + related)
+          run('after-validator', validator)
+          assert summary['baseline-related']['exit'] != 124
+          assert summary['after-related']['exit'] == summary['baseline-related']['exit']
+          assert collections.Counter(summary['after-related']['failures']) == collections.Counter(summary['baseline-related']['failures'])
+          assert summary['after-validator']['exit'] == summary['baseline-validator']['exit'] == 0
+          before = (out / 'baseline-validator.txt').read_text()
+          after = (out / 'after-validator.txt').read_text()
+          assert before == after
+          run('full-suite', unit + ['discover', '-s', 'tools/tests', '-p', 'test*.py', '-v'], timeout=120)
+          subprocess.run(['git', 'diff', '--check'], check=True)
+          (out / 'change.patch').write_bytes(subprocess.check_output(['git', 'diff', '--'] + list(paths)))
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'add', '--'] + list(paths), check=True)
+          subprocess.run(['git', 'commit', '-m', 'fix(stp): sever party alliance before Nodrul invasion'], check=True)
+          summary['commit'] = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
+          summary['blobs'] = {path: subprocess.check_output(['git', 'rev-parse', 'HEAD:' + path]).decode().strip() for path in paths}
+          summary['runtime'] = 'No Hearts of Iron IV runtime test. Authored branches, callbacks and static validators only.'
+          (out / 'summary.json').write_text(json.dumps(summary, indent=2))
+          subprocess.run(['git', 'push', 'origin', 'HEAD:fix/stp-party-nod-invasion-20260922'], check=True)
+          print(json.dumps({key: summary[key] for key in ['commit', 'blobs', 'runtime']}, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stp-party-nod-invasion-evidence
+          path: /tmp/stp-nod-evidence
+          retention-days: 7
