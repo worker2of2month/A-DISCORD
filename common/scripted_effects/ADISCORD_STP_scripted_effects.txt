@@ -4105,6 +4105,10 @@ STP_pc_lock_hegemony = {
 		}
 	}
 	set_politics = { ruling_party = chauvinism elections_allowed = no }
+	set_portraits = {
+		character = STP_maksim_shabrat
+		civilian = { large = GFX_portrait_STP_Maksim_Shabrat_hegemony }
+	}
 	set_country_leader_portrait = {
 		ideology = chauvinism
 		portrait = GFX_portrait_STP_Maksim_Shabrat_hegemony
@@ -4122,6 +4126,14 @@ STP_pc_lock_freedom = {
 		}
 	}
 	set_politics = { ruling_party = humanism elections_allowed = no }
+	set_portraits = {
+		character = STP_maksim_shabrat
+		civilian = { large = GFX_portrait_STP_Maksim_Shabrat_freedom }
+	}
+	set_country_leader_portrait = {
+		ideology = humanism
+		portrait = GFX_portrait_STP_Maksim_Shabrat_freedom
+	}
 	add_popularity = { ideology = humanism popularity = 0.15 }
 }
 

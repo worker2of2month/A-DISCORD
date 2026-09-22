@@ -82,6 +82,10 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_portrait_STP_Maksim_Shabrat_hegemony"
+		texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat_uniform.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_STP_Maksim_Shabrat_freedom"
 		texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat_alternative.png"
 	}
 	spriteType = {

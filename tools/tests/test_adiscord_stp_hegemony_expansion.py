@@ -41,14 +41,31 @@ def named_block(text: str, name: str) -> str:
 
 
 class ShabratHegemonyExpansionTests(unittest.TestCase):
-    def test_hegemony_gets_distinct_non_imperial_portrait(self) -> None:
+    def test_shabrat_route_focuses_swap_portraits_immediately(self) -> None:
         gfx = read("interface/ADISCORD_leader_portraits.gfx")
+        focuses = read("common/national_focus/ADISCORD_national_focus_STP.txt")
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+
         self.assertIn('name = "GFX_portrait_STP_Maksim_Shabrat_hegemony"', gfx)
+        self.assertIn('texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat_uniform.png"', gfx)
+        self.assertIn('name = "GFX_portrait_STP_Maksim_Shabrat_freedom"', gfx)
         self.assertIn('texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat_alternative.png"', gfx)
-        lock = named_block(effects, "STP_pc_lock_hegemony")
-        self.assertIn("portrait = GFX_portrait_STP_Maksim_Shabrat_hegemony", lock)
-        self.assertNotIn("GFX_portrait_STP_Maksim_Shabrat_dictator", lock)
+
+        hegemony = re.search(r"(?ms)id = STP_pc_hegemony_open\b.*?(?=\n\tfocus = \{)", focuses)
+        freedom = re.search(r"(?ms)id = STP_pc_freedom_open\b.*?(?=\n\tfocus = \{)", focuses)
+        self.assertIsNotNone(hegemony)
+        self.assertIsNotNone(freedom)
+        self.assertIn("set_portraits", hegemony.group(0))
+        self.assertIn("GFX_portrait_STP_Maksim_Shabrat_hegemony", hegemony.group(0))
+        self.assertIn("set_portraits", freedom.group(0))
+        self.assertIn("GFX_portrait_STP_Maksim_Shabrat_freedom", freedom.group(0))
+
+        hegemony_lock = named_block(effects, "STP_pc_lock_hegemony")
+        freedom_lock = named_block(effects, "STP_pc_lock_freedom")
+        self.assertIn("GFX_portrait_STP_Maksim_Shabrat_hegemony", hegemony_lock)
+        self.assertIn("GFX_portrait_STP_Maksim_Shabrat_freedom", freedom_lock)
+        self.assertNotIn("GFX_portrait_STP_Maksim_Shabrat_dictator", hegemony_lock)
+        self.assertNotIn("GFX_portrait_STP_Maksim_Shabrat_dictator", freedom_lock)
         self.assertIn("portrait = GFX_portrait_STP_Maksim_Shabrat_dictator", effects)
 
     def test_final_campaigns_are_staged_north_then_kefreyt(self) -> None:
