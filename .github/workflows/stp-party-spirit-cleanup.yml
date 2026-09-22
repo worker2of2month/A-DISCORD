@@ -1,0 +1,23 @@
+name: STP party spirit cleanup regression
+on:
+  push:
+    branches: [fix/stp-party-starting-spirit-cleanup]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Focused regression
+        run: python -B -m unittest tools.tests.test_adiscord_stp_civil_war.CivilWarContracts.test_party_hostilities_clear_prewar_regime_spirits -v
+      - name: STP civil-war contracts
+        run: python -B -m unittest tools.tests.test_adiscord_stp_civil_war -v
+      - name: Static validator
+        run: python -B tools/validate_tc.py --limit 300
+      - name: Diff check
+        run: git diff --check origin/main...HEAD
