@@ -1,0 +1,47 @@
+name: Kefreyt expansion integration review
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+jobs:
+  export:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/val-expansion-integration-review'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+      - name: Export pinned source and three-way integration inputs
+        run: |
+          git fetch --no-tags --depth=100 origin 3641379bf5f60c756bc89127e927159c526ab25b b1d71d5228698179f9a9f8310b400981f1cc0a5b
+          python - <<'PY'
+          import subprocess, zipfile, json
+          from pathlib import Path
+          main = '3641379bf5f60c756bc89127e927159c526ab25b'
+          head = 'b1d71d5228698179f9a9f8310b400981f1cc0a5b'
+          def git(*args): return subprocess.check_output(['git', *args])
+          base = git('merge-base', main, head).decode().strip()
+          paths = git('diff', '--name-only', base, head).decode().splitlines()
+          all_paths = git('ls-tree', '-r', '--name-only', main).decode().splitlines()
+          suffixes = {'.txt','.yml','.yaml','.py','.json','.md','.lua','.gui','.gfx','.mod','.csv','.asset'}
+          with zipfile.ZipFile('/tmp/val-expansion-sources.zip','w',zipfile.ZIP_DEFLATED) as z:
+              z.writestr('metadata.json', json.dumps({'main':main,'pr40_head':head,'merge_base':base,'changed_files':paths,'all_paths':all_paths},indent=2))
+              for name in all_paths:
+                  if Path(name).suffix.lower() in suffixes and not name.startswith('.superpowers/'):
+                      z.writestr('main/'+name,git('show',main+':'+name))
+              z.writestr('pr40.diff',git('diff','--binary',base,head))
+              for ref,label in [(base,'base'),(head,'head')]:
+                  for name in paths:
+                      p=subprocess.run(['git','show',ref+':'+name],capture_output=True)
+                      if p.returncode == 0: z.writestr(label+'/'+name,p.stdout)
+          print(json.dumps({'main':main,'pr40_head':head,'merge_base':base,'changed_files':paths},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: val-expansion-sources
+          path: /tmp/val-expansion-sources.zip
+          retention-days: 3
