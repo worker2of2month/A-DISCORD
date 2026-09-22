@@ -1121,15 +1121,15 @@ class ValNativePreviewTests(unittest.TestCase):
 
         ideas = block(block(parse_clausewitz(IDEAS_PATH.read_text(encoding="utf-8-sig")), "ideas"), "country")
         expected_modifiers = {
-            "VAL_industry_1_dummy": ("VAL_contract_industry_1", {}),
-            "VAL_industry_2_dummy": ("VAL_contract_industry_2", {}),
-            "VAL_industry_1_delta": ("VAL_contract_industry_1", {"industrial_capacity_factory": 0.04, "production_factory_efficiency_gain_factor": 0.05}),
-            "VAL_industry_2_delta": ("VAL_contract_industry_2", {"industrial_capacity_factory": 0.07, "production_factory_efficiency_gain_factor": 0.08, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
-            "VAL_industry_1_to_2_delta": ("VAL_contract_industry_2", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.03, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
-            "VAL_industry_3_dummy": ("VAL_contract_industry_3", {}),
-            "VAL_industry_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.10, "production_factory_efficiency_gain_factor": 0.12, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
-            "VAL_industry_1_to_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.06, "production_factory_efficiency_gain_factor": 0.07, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
-            "VAL_industry_2_to_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.04, "production_factory_max_efficiency_factor": 0.03, "production_lack_of_resource_penalty_factor": -0.05, "ADISCORD_economy_military_industry_income_factor": 0.08}),
+            "VAL_industry_1_dummy": ("VAL_contract_industry_preview", {}),
+            "VAL_industry_2_dummy": ("VAL_contract_industry_preview", {}),
+            "VAL_industry_1_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.04, "production_factory_efficiency_gain_factor": 0.05}),
+            "VAL_industry_2_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.07, "production_factory_efficiency_gain_factor": 0.08, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
+            "VAL_industry_1_to_2_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.03, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
+            "VAL_industry_3_dummy": ("VAL_contract_industry_preview", {}),
+            "VAL_industry_3_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.10, "production_factory_efficiency_gain_factor": 0.12, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
+            "VAL_industry_1_to_3_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.06, "production_factory_efficiency_gain_factor": 0.07, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
+            "VAL_industry_2_to_3_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.04, "production_factory_max_efficiency_factor": 0.03, "production_lack_of_resource_penalty_factor": -0.05, "ADISCORD_economy_military_industry_income_factor": 0.08}),
         }
         for idea_id, (name, modifiers) in expected_modifiers.items():
             idea = block(ideas, idea_id)
