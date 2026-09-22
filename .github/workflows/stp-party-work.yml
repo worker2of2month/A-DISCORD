@@ -1,0 +1,64 @@
+name: STP party gameplay work
+on:
+  push:
+    branches: [codex/stp-party-gameplay-20260922]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inspect relevant source
+        run: |
+          python -B - <<'PY'
+          import re, json
+          from pathlib import Path
+          from tools.validators.validate_adiscord_economy_ai import parse_clausewitz
+          def read(path): return Path(path).read_text(encoding='utf-8-sig')
+          def scalar(es,k): return next((e.value for e in es if e.key==k and isinstance(e.value,str)),None)
+          def block(es,k): return next((e.value for e in es if e.key==k and isinstance(e.value,list)),[])
+          def fmt(es): return ' '.join((e.key+' = { '+fmt(e.value)+' }') if isinstance(e.value,list) else ((e.key+' = ' if e.key else '')+e.value) for e in es)
+          decisions=parse_clausewitz(read('common/decisions/ADISCORD_STP_decisions.txt'))
+          print('=== CATEGORIES AND ACTIONS ===')
+          for cat in decisions:
+              if isinstance(cat.value,list): print(cat.key, ', '.join(e.key for e in cat.value if isinstance(e.value,list)))
+          print('=== PARTY FOCUS SUMMARIES ===')
+          trees=parse_clausewitz(read('common/national_focus/ADISCORD_national_focus_STP.txt'))
+          for tree in trees:
+              if not isinstance(tree.value,list): continue
+              for f in tree.value:
+                  if f.key!='focus': continue
+                  fid=scalar(f.value,'id') or ''
+                  if fid.startswith(('STP_party_','STP_ps_','STP_pw_party_')) or scalar(f.value,'relative_position_id')=='STP_Govern_In_His_Name':
+                      print(fid, 'cost',scalar(f.value,'cost'),'xy',scalar(f.value,'x'),scalar(f.value,'y'),'pre', ';'.join(fmt(e.value) for e in f.value if e.key=='prerequisite'),'mutex',fmt(block(f.value,'mutually_exclusive')),'reward',fmt(block(f.value,'completion_reward')))
+          wanted={'STP_ps_val_pressure','STP_ps_val_pressure_work','STP_ps_ammunition','STP_ps_ammunition_work','STP_ps_nod_delivery','STP_ps_nod_dispatch','STP_ps_val_departure'}
+          print('=== RELEVANT DECISIONS ===')
+          for cat in decisions:
+              if isinstance(cat.value,list):
+                  for d in cat.value:
+                      if d.key in wanted: print(d.key,' = { ',fmt(d.value),' }')
+          print('=== PARTY SUPPORT EFFECTS ===')
+          effects=parse_clausewitz(read('common/scripted_effects/ADISCORD_STP_scripted_effects.txt'))
+          wanted={'STP_refresh_apparatus_loyalty','STP_cw_schedule_opposition','STP_ps_nod_procurement_credit','STP_pf_apply_army','STP_ps_build_radio_finish','STP_ps_build_hq_finish'}
+          for e in effects:
+              if e.key in wanted: print(e.key,' = { ',fmt(e.value),' }')
+          print('=== FACTION AND CREDIT REFERENCES ===')
+          src=read('common/scripted_effects/ADISCORD_STP_scripted_effects.txt')
+          ls=src.splitlines()
+          for i,l in enumerate(ls):
+              if 'STP_ps_nod_procurement_credit' in l or re.match(r'^STP_pf_.*=',l): print(i+1,'\n'.join(ls[max(0,i-2):i+20]))
+          print('=== RELEVANT LOCALISATION ===')
+          keys={'STP_party_factions_desc','STP_elections_in_the_party_desc','STP_PARTY_ELECTION_BRIEFING','STP_PARTY_MAP_INSTRUCTIONS','STP_ps_preparation_report','STP_cw_war_council_desc','STP_cw_external_intervention_desc','STP_ps_war_report','STP_ps_val_pressure_desc','STP_ps_val_intercept_desc','STP_ps_val_intelligence_desc','STP_ps_fund_nod_desc','STP_ps_ammunition_desc','STP_ps_ammunition_result_tt','STP_ps_build_radio_desc','STP_ps_build_hq_desc'}
+          for line in read('localisation/russian/ADISCORD_STP_l_russian.yml').splitlines():
+              if line.strip().split(':',1)[0] in keys: print(line)
+          print('=== EXISTING TARGETED TEST NAMES ===')
+          for p in Path('tools/tests').glob('*stp*party*.py'):
+              print(p, '\n'.join(re.findall(r'^    def (test_[^(]+)',read(p),re.M)))
+          print('=== STARTUP/ON_ACTIONS ===')
+          print(read('common/on_actions/02_ADISCORD_STP_on_actions.txt')[:8500])
+          PY
