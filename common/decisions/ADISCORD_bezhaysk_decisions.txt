@@ -1,0 +1,58 @@
+ADISCORD_bezhaysk_postwar_operations = {
+	ADISCORD_bezhaysk_subjugate_forest_val = {
+		icon = generic_territory_or_war
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_Bezhaysk_Operation
+			COF = { exists = yes NOT = { is_subject_of = VAL } }
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			has_war = no
+			COF = {
+				exists = yes
+				has_capitulated = no
+				has_war = no
+				is_subject = no
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		cost = 50
+		complete_effect = {
+			set_country_flag = ADISCORD_bezhaysk_forest_campaign_active
+			COF = { ADISCORD_release_non_participating_minor_optimization = yes }
+			declare_war_on = { target = COF type = annex_everything }
+			hidden_effect = { VAL_call_subjects_to_wars = yes }
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	ADISCORD_bezhaysk_subjugate_forest_nod = {
+		icon = generic_territory_or_war
+		allowed = { tag = NOD }
+		visible = {
+			has_country_flag = ADISCORD_bezhaysk_joint_settlement
+			COF = { exists = yes NOT = { is_subject_of = NOD } }
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			has_war = no
+			COF = {
+				exists = yes
+				has_capitulated = no
+				has_war = no
+				is_subject = no
+				NOT = { is_in_faction_with = NOD }
+			}
+		}
+		cost = 50
+		complete_effect = {
+			set_country_flag = ADISCORD_bezhaysk_forest_campaign_active
+			COF = { ADISCORD_release_non_participating_minor_optimization = yes }
+			declare_war_on = { target = COF type = annex_everything }
+		}
+		ai_will_do = { base = 2 }
+	}
+}
