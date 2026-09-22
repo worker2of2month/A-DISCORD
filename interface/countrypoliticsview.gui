@@ -658,7 +658,7 @@ guiTypes = {
 					position = { x = 1 y = 0 }
 					size = { width = 354 height = 67 }
 					slotsize = { width = 75 height = 75 }
-					max_slots = { x = 6 y = 1 }
+					max_slots = { x = 55 y = 1 }
 					format = "UPPER_LEFT"
 				}
 				gridboxtype = {
