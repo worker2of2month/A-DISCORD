@@ -606,6 +606,7 @@ def check_autonomy_chains(limit):
         **{identifier: feudal for identifier in feudal},
         **{identifier: contracts for identifier in contracts},
         "autonomy_VAL_contract_administration": {"autonomy_VAL_contract_administration"},
+        "autonomy_STP_provisional_administration": {"autonomy_STP_provisional_administration"},
         "autonomy_shadow_state": {"autonomy_shadow_state"},
         "autonomy_supervised_state": {"autonomy_supervised_state"},
         "autonomy_collaboration_government": {"autonomy_collaboration_government"},
