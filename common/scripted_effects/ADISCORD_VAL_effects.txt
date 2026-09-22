@@ -1284,12 +1284,15 @@ VAL_grant_westerholm_concession = {
 VAL_assert_vorkerland_metal_shortage = {
 	if = {
 		limit = { NOT = { has_completed_focus = VAL_New_Supply_Base } }
-		set_country_flag = VAL_westerholm_metal_lost
+		if = {
+			limit = { NOT = { has_country_flag = VAL_westerholm_metal_lost } }
+			set_country_flag = VAL_westerholm_metal_lost
+		}
 		if = {
 			limit = { NOT = { has_idea = VAL_vorkerland_metal_shortage } }
 			add_ideas = VAL_vorkerland_metal_shortage
+			ADISCORD_economy_mark_dirty = yes
 		}
-		ADISCORD_economy_mark_dirty = yes
 	}
 	else_if = {
 		limit = { has_idea = VAL_vorkerland_metal_shortage }
