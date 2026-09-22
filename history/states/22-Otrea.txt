@@ -5,7 +5,7 @@ state={
 		92 103 132 137 140 
 	}
 	buildings_max_level_factor=1.000
-        manpower=130000
+        manpower=180000
         state_category = town
 
     history = {
