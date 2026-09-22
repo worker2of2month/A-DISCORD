@@ -4,6 +4,7 @@ on_actions = {
         effect = {
 			STP = { STP_qol_initialize_staff = yes STP_qol_initialize_party_leaders = yes }
 			STP = { STP_pf_refresh_on_load = yes }
+			STP = { STP_pw_party_reconcile_nod_invasion = yes }
 			STS = { STP_qol_initialize_staff = yes }
 
             STP = {

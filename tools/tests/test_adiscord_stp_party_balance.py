@@ -389,5 +389,114 @@ class FactionProgramContracts(unittest.TestCase):
             loc=read(ROOT/f'localisation/{language}/ADISCORD_STP_l_{language}.yml')
             self.assertIn('STP_pf_advisers_disconnected',loc)
 
+class PartyNodInvasionLifecycleTests(unittest.TestCase):
+    """Exercise authored branches and callbacks, not native diplomatic execution."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = parse_clausewitz(read(EFFECTS))
+        cls.events = parse_clausewitz(read(ROOT / "events/ADISCORD_STP_events.txt"))
+
+    def facts(self, **flags):
+        result = {
+            ("STP", "has_country_flag", "STP_cw_postwar"): True,
+            ("STP", "is_subject", "no"): True,
+            ("STP", "has_capitulated", "no"): True,
+            ("NOD", "exists", "yes"): True,
+            ("NOD", "has_capitulated", "no"): True,
+            ("NOD", "is_subject", "no"): True,
+        }
+        result.update({("STP", "has_country_flag", name): value for name, value in flags.items()})
+        return result
+
+    def selected(self, name, facts):
+        return list(selected_effects(one(self.effects, name), facts))
+
+    def test_sovereignty_breaks_the_shared_alliance_before_starting_the_clock(self):
+        chosen = self.selected("STP_pw_party_start_nod_invasion_threat", self.facts())
+        keys = [e.key for _, e in chosen]
+        self.assertIn("STP_pw_party_break_nod_alliance", keys)
+        self.assertLess(keys.index("STP_pw_party_break_nod_alliance"), keys.index("activate_mission"))
+        for receipt in ("STP_pw_party_nod_threat_active", "STP_pw_party_nod_invasion_active",
+                        "STP_pw_party_nod_invasion_defeated", "STP_pw_party_nod_invasion_lost"):
+            self.assertEqual(self.selected("STP_pw_party_start_nod_invasion_threat",
+                                           self.facts(**{receipt: True})), [])
+
+    def test_alliance_break_preserves_the_remaining_faction(self):
+        for leader, member in (("NOD", "STP"), ("AIN", "STP"), ("STP", "NOD")):
+            with self.subTest(leader=leader):
+                facts = self.facts() | {
+                    ("STP", "is_in_faction_with", "NOD"): True,
+                    ("STP", "is_faction_leader", "yes"): leader == "STP",
+                    ("STP", "faction_leader"): leader,
+                }
+                chosen = self.selected("STP_pw_party_break_nod_alliance", facts)
+                self.assertEqual([(s, e.key, e.value) for s, e in chosen],
+                                 [(leader, "remove_from_faction", member)])
+        self.assertEqual(self.selected("STP_pw_party_break_nod_alliance", self.facts()), [])
+
+    def test_allied_timeout_defers_declaration_without_consuming_the_threat(self):
+        facts = self.facts(STP_pw_party_nod_threat_active=True) | {
+            ("STP", "is_in_faction_with", "NOD"): True}
+        chosen = self.selected("STP_pw_party_launch_nod_invasion", facts)
+        self.assertIn("STP_pw_party_break_nod_alliance", [e.key for _, e in chosen])
+        self.assertFalse(any(e.key in {"declare_war_on", "set_country_flag", "clr_country_flag"}
+                             for _, e in chosen))
+        callbacks = [e.value for _, e in chosen if e.key == "country_event"]
+        self.assertEqual(len(callbacks), 1)
+        self.assertEqual(one(callbacks[0], "id"), "ADISCORD_STP_pc.33")
+        self.assertEqual(one(callbacks[0], "days"), "1")
+
+    def test_expired_save_can_launch_once_and_terminal_outcomes_stay_closed(self):
+        facts = self.facts(STP_pw_party_nod_invasion_active=True)
+        chosen = self.selected("STP_pw_party_launch_nod_invasion", facts)
+        declarations = [(s, one(e.value, "target")) for s, e in chosen if e.key == "declare_war_on"]
+        self.assertEqual(declarations, [("NOD", "STP")])
+        self.assertEqual(self.selected("STP_pw_party_launch_nod_invasion", facts | {
+            ("STP", "has_war_with", "NOD"): True}), [])
+        for receipt in ("STP_pw_party_nod_invasion_defeated", "STP_pw_party_nod_invasion_lost"):
+            self.assertEqual(self.selected("STP_pw_party_launch_nod_invasion", facts | {
+                ("STP", "has_country_flag", receipt): True}), [])
+
+    def test_load_repair_keeps_the_original_preparation_deadline(self):
+        chosen = self.selected("STP_pw_party_reconcile_nod_invasion", self.facts(
+            STP_pw_party_nod_threat_active=True))
+        self.assertEqual([e.key for _, e in chosen], ["STP_pw_party_break_nod_alliance"])
+        chosen = self.selected("STP_pw_party_reconcile_nod_invasion", self.facts(
+            STP_pw_party_nod_invasion_active=True))
+        self.assertEqual([e.key for _, e in chosen], ["STP_pw_party_launch_nod_invasion"])
+        for facts in (self.facts(), self.facts(STP_pw_party_nod_invasion_active=True) | {
+                ("STP", "has_war_with", "NOD"): True},
+                self.facts(STP_pw_party_nod_invasion_defeated=True)):
+            self.assertEqual(self.selected("STP_pw_party_reconcile_nod_invasion", facts), [])
+        actions = parse_clausewitz(read(ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt"))
+        startup = one(one(one(actions, "on_actions"), "on_startup"), "effect")
+        self.assertIn(("STP", "STP_pw_party_reconcile_nod_invasion"),
+                      [(s, e.key) for s, e in selected_effects(startup, self.facts())])
+
+    def test_deferred_callback_is_registered_with_its_owner(self):
+        import json
+
+        registry = json.loads(read(ROOT / "tools/data/adiscord_event_ids.json"))
+        matches = [entry for entry in registry["events"] if entry["id"] == "ADISCORD_STP_pc.33"]
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0]["owner"], "events/ADISCORD_STP_events.txt")
+        self.assertEqual(matches[0]["status"], "active")
+
+    def test_deferred_callback_is_hidden_and_never_requeues_a_failed_detachment(self):
+        events = [e.value for e in self.events if e.key == "country_event"
+                  and one(e.value, "id") == "ADISCORD_STP_pc.33"]
+        self.assertEqual(len(events), 1)
+        event = events[0]
+        self.assertEqual(one(event, "hidden"), "yes")
+        self.assertEqual(one(event, "is_triggered_only"), "yes")
+        trigger = one(event, "trigger")
+        self.assertFalse(matches_conditions(trigger, self.facts() | {
+            ("STP", "is_in_faction_with", "NOD"): True}))
+        self.assertTrue(matches_conditions(trigger, self.facts()))
+        self.assertEqual([e.key for _, e in selected_effects(one(event, "immediate"), self.facts())],
+                         ["STP_pw_party_launch_nod_invasion"])
+
+
 if __name__ == "__main__":
     unittest.main()

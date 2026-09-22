@@ -1748,6 +1748,23 @@ country_event = {
 }
 
 country_event = {
+	id = ADISCORD_STP_pc.33
+	hidden = yes
+	is_triggered_only = yes
+	# Never loop a rejected detachment. Changed sovereignty still reaches cleanup.
+	trigger = {
+		tag = STP
+		OR = {
+			NOT = { is_in_faction_with = NOD }
+			has_capitulated = yes
+			is_subject = yes
+			NOD = { OR = { exists = no has_capitulated = yes is_subject = yes } }
+		}
+	}
+	immediate = { STP_pw_party_launch_nod_invasion = yes }
+}
+
+country_event = {
 	id = ADISCORD_STP_cw.200
 	title = STP_ps_agreement_title
 	desc = STP_ps_agreement_desc
