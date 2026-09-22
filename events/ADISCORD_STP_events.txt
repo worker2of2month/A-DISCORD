@@ -1798,6 +1798,7 @@ country_event = {
 	immediate = {
 		if = {
 			limit = { has_completed_focus = STP_pw_take_bezhaysk STP_pw_can_attack_bezhaysk = yes }
+			set_country_flag = ADISCORD_bezhaysk_campaign_active
 			BJK = { ADISCORD_release_non_participating_minor_optimization = yes }
 			declare_war_on = { target = BJK type = annex_everything }
 		}
