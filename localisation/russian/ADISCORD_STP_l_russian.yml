@@ -284,7 +284,7 @@
  STP_debug_set_bop: "§RDEBUG:§! Включить BOP"
 
  STP_battle_for_stelander: "Битва за Стеландер"
- STP_battle_for_stelander_desc: "[STPGetPreparationInstructions]\n\n§YПеред расколом проверьте§!\n• §YОкруга:§! яркий цвет на карте показывает фактический переход; бледный — только текущий перевес.\n• §YОперации:§! свободно §C[?STP_political_action_slots_available|0]§! из §Y[?STP_political_action_slots_total|0]§!. [STPGetPreparationPressure]\n• §YПоследняя проверка:§! [STPGetLastPartyResponse]\n• §YОбщий резерв:§! £manpower_texticon §Y[?manpower|0]§!, £infantry_equipment_texticon §Y[?num_equipment@infantry_equipment|0]§!. Подготовленные части требуют реальных ресурсов; точная цена указана в решении их формирования.[STPGetKefreytArmyCommitment]\n• §YНодрул:§! [STPGetNodStatus]\n\nРаскол, потеря округа или контрразведка могут прервать местную операцию. Возврат оплаты и запасов указан прямо в её условиях."
+ STP_battle_for_stelander_desc: "[STPGetPreparationInstructions]\n\n§YПеред расколом проверьте§!\n- §YОкруга:§! яркий цвет на карте показывает фактический переход; бледный — только текущий перевес.\n- §YОперации:§! свободно §C[?STP_political_action_slots_available|0]§! из §Y[?STP_political_action_slots_total|0]§!. [STPGetPreparationPressure]\n- §YПоследняя проверка:§! [STPGetLastPartyResponse]\n- §YОбщий резерв:§! £manpower_texticon §Y[?manpower|0]§!, £infantry_equipment_texticon §Y[?num_equipment@infantry_equipment|0]§!. Подготовленные части требуют реальных ресурсов; точная цена указана в решении их формирования.[STPGetKefreytArmyCommitment]\n- §YНодрул:§! [STPGetNodStatus]\n\nРаскол, потеря округа или контрразведка могут прервать местную операцию. Возврат оплаты и запасов указан прямо в её условиях."
  STP_PREPARATION_PRESSURE_PARTY: "§YПодполье Шабрата:§! таймер показывает подготовку его связных. Высокая верность аппарата задерживает следующую операцию; низкая ускоряет её. Проверяйте указанный округ или перехватывайте подготовку после коллегии безопасности."
  STP_PREPARATION_PRESSURE_SHABRAT: "§YПартийные комиссии:§! цель и срок указаны в миссии. При подозрениях от 50 партия ведёт две комиссии одновременно. Начатые переговоры с гарнизонами, снабжение и диверсии могут быть раскрыты ещё до завершения."
  STP_regions_panel_title: "Кому подчинится Стеландер?"
@@ -2505,8 +2505,10 @@
  STP_ps_evacuate_funds_desc: "Однократно списывает 3000 казны в эвакуационный резерв. При принятом изгнании средства получит Нодрул; при победе партии резерв возвращается. Отказ в убежище означает утрату вывезенных средств."
 
  STP_ps_accept_return_terms: "Принять условия возвращения"
+ STP_ps_accept_return_terms_desc: "Закрепляет согласие Нодрула на партийный план возвращения. Стеландер будет восстановлен как зависимое государство Нодрула только после успешной военной кампании."
 
  STP_ps_launch_return: "Начать кампанию возвращения"
+ STP_ps_launch_return_desc: "После принятия условий запускает подготовленную кампанию возвращения против Шабрата. Победа восстановит Стеландер как зависимое государство Нодрула."
 
  STP_ps_exile_training_cost: "£ADISCORD_economy_treasury_texticon §Y1800§!"
 

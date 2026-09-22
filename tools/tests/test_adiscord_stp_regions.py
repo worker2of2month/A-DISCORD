@@ -151,6 +151,17 @@ def assigned_value(block: str, variable: str) -> int:
 
 
 class STPRegionalMechanicsTests(unittest.TestCase):
+    def test_preparation_checklist_uses_supported_list_markers(self) -> None:
+        description = re.search(
+            r'(?m)^[ \t]*STP_battle_for_stelander_desc:[ \t]*(?:[0-9]+[ \t]*)?"([^\r\n]*)"[ \t]*$',
+            read(LOCALISATION),
+        )
+        self.assertIsNotNone(description, "checklist must be a single quoted localisation line")
+        value = description.group(1)
+        self.assertNotIn("\u2022", value, "unsupported bullet glyph renders as a question mark")
+        items = [line for line in value.split(r"\n") if line.startswith("- ")]
+        self.assertEqual(len(items), 5)
+
     def test_late_false_trail_cannot_protect_a_different_inspection(self) -> None:
         operation = named_block(read(DECISIONS), "STP_prepare_false_trail")
         self.assertIn("STP_party_inspection_active", named_block(operation, "cancel_trigger"))
