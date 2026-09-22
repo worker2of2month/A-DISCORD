@@ -2228,13 +2228,14 @@ class StartupGuideContractTests(unittest.TestCase):
         self.assertGreaterEqual(y, 325)
         self.assertLessEqual(y + h, 445)
 
-    def test_briefing_text_accepts_scroll_input_inside_fixed_viewports(self):
+    def test_briefing_text_uses_native_scrollable_text_viewports(self):
         gui = self.read('interface/ADISCORD_startup_menu.gui')
         for name in ('ADISCORD_startup_country_body', 'ADISCORD_startup_body'):
             with self.subTest(name=name):
                 body = gui_node_body(gui, name)
-                self.assertIn('fixedsize = yes', body)
-                self.assertIn('scrollbarType = "standardtext_slider"', body)
+                self.assertNotIn('fixedsize = yes', body)
+                self.assertIn('scrollbarType = standardtext_slider', body)
+                self.assertRegex(body, r'maxHeight\s*=\s*(?:388|407)')
                 self.assertNotIn('alwaystransparent = yes', body)
 
     def test_stelander_intro_explains_shabrat_before_path_spoilers(self):
