@@ -1,0 +1,66 @@
+name: Compact seas review
+on:
+  push:
+    branches: [fix/compact-kefreite-nodrul-seas]
+    paths:
+      - .github/workflows/compact-seas-review.yml
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install Pillow numpy pytest
+      - name: Collect map inputs and geometry
+        run: |
+          mkdir -p /tmp/compact-seas
+          python - <<'PY'
+          import json, re, tarfile
+          from pathlib import Path
+          from tools.builders import build_adiscord_strategic_regions as b
+          root = Path('.')
+          types, colors = b.load_province_definitions()
+          adjacency = b.load_province_adjacency(types, colors, include_special_adjacencies=False)
+          positions = b.load_province_positions()
+          states = b.load_states()
+          owners = {}
+          for path in Path('history/states').glob('*.txt'):
+              text = path.read_text(encoding='utf-8-sig')
+              sid = re.search(r'\bid\s*=\s*(\d+)', text)
+              owner = re.search(r'\bowner\s*=\s*([A-Z0-9]{3})', text)
+              if sid and owner:
+                  owners[int(sid[1])] = owner[1]
+          coastal = {}
+          for sid, provinces in states.items():
+              owner = owners.get(sid, '')
+              if owner not in ('VAL', 'NOD', 'STP', 'KDR'):
+                  continue
+              water = {n for p in provinces for n in adjacency[p] if types[n] == 'sea'}
+              if water:
+                  coastal.setdefault(owner, {})[sid] = sorted(water)
+          data = {'types': types, 'adjacency': {p: sorted(n) for p, n in adjacency.items()}, 'positions': positions, 'states': {s: sorted(p) for s, p in states.items()}, 'owners': owners, 'coastal': coastal}
+          Path('/tmp/compact-seas/geometry.json').write_text(json.dumps(data), encoding='utf-8')
+          print('COASTAL STATES', json.dumps(coastal, sort_keys=True))
+          for path in sorted(root.rglob('AGENTS.md')):
+              print('RULES', path, '\n', path.read_text(encoding='utf-8'))
+          with tarfile.open('/tmp/compact-seas/source.tar.gz', 'w:gz') as archive:
+              for dirname in ('tools', 'tests', 'map', 'history', 'localisation/replace', 'localisation/english', 'common/country_tags', 'docs/development'):
+                  directory = root / dirname
+                  if directory.exists():
+                      for path in directory.rglob('*'):
+                          if path.is_file() and (path.suffix in ('.py', '.txt', '.csv', '.yml', '.md', '.toml', '.json') or path.name == 'provinces.bmp'):
+                              archive.add(path, arcname=str(path))
+              for filename in ('AGENTS.md', 'pyproject.toml', 'pytest.ini', 'requirements.txt', 'descriptor.mod'):
+                  if (root / filename).exists():
+                      archive.add(root / filename, arcname=filename)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: compact-seas-inputs
+          path: /tmp/compact-seas
+          retention-days: 2
