@@ -680,9 +680,16 @@ class TestValProgressionChoices(unittest.TestCase):
 
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
         nod = named_block(decisions, "VAL_campaign_against_nod")
+        self.assertIn("VAL_stelander_dominated = yes", named_block(nod, "available"))
+        self.assertIn("VAL_nod_requires_stelander_victory_tt", named_block(nod, "available"))
         self.assertIn("VAL_northern_foothold_secured = yes", named_block(nod, "available"))
+        self.assertIn("NOT = { VAL_stelander_dominated = yes }", named_block(nod, "cancel_trigger"))
         self.assertIn("NOT = { VAL_northern_foothold_secured = yes }", named_block(nod, "cancel_trigger"))
+        self.assertIn("VAL_stelander_dominated = yes", named_block(nod, "remove_effect"))
         self.assertIn("VAL_northern_foothold_secured = yes", named_block(nod, "remove_effect"))
+
+        final_crisis = named_block(triggers, "VAL_final_crisis_available")
+        self.assertIn("VAL_stelander_dominated = yes", final_crisis)
 
         stelander = self.focus("VAL_Stelander_Ultimatum")
         if "available = {" in stelander:
@@ -691,6 +698,28 @@ class TestValProgressionChoices(unittest.TestCase):
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         nod_intervention = named_block(effects, "VAL_frontier_issue_nod_ultimatum")
         self.assertNotIn("VAL_northern_foothold_secured", nod_intervention)
+
+    def test_ai_strongly_prefers_occidian_invasion_course(self):
+        military = self.focus("VAL_Seize_The_Northern_Passes")
+        trade = self.focus("VAL_Arms_For_The_Burning")
+        neutral = self.focus("VAL_Keep_The_Arsenals")
+
+        def ai_base(focus):
+            ai = named_block(focus, "ai_will_do")
+            match = re.search(r"\bbase\s*=\s*([0-9.]+)", ai)
+            self.assertIsNotNone(match)
+            return float(match.group(1))
+
+        self.assertGreaterEqual(ai_base(military), 5 * ai_base(trade))
+        self.assertGreaterEqual(ai_base(military), 10 * ai_base(neutral))
+
+        mobilization = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_cw_begin_mobilization")
+        ai = named_block(mobilization, "ai_will_do")
+        self.assertIn("factor = 5 has_country_flag = VAL_cw_military_course", ai)
+        self.assertIn("factor = 2 has_country_flag = VAL_cw_trade_course", ai)
+
+        stelander_campaign = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_campaign_against_stelander")
+        self.assertIn("base = 30", named_block(stelander_campaign, "ai_will_do"))
 
     def test_economic_route_does_not_require_bypassed_military_rewards(self):
         reopen = self.focus("VAL_Reopen_Trade_Routes")
@@ -714,7 +743,7 @@ class TestValProgressionChoices(unittest.TestCase):
             path = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             text = path.read_text(encoding="utf-8-sig")
-            for key in ("VAL_defer_northern_expansion", "VAL_defer_northern_expansion_desc", "VAL_defer_northern_expansion_tt", "VAL_defer_northern_expansion_ready_tt", "VAL_economic_settlement_ready_tt", "VAL_northern_expansion_deferred_tt", "VAL_nod_campaign_foothold_tt"):
+            for key in ("VAL_defer_northern_expansion", "VAL_defer_northern_expansion_desc", "VAL_defer_northern_expansion_tt", "VAL_defer_northern_expansion_ready_tt", "VAL_economic_settlement_ready_tt", "VAL_northern_expansion_deferred_tt", "VAL_nod_campaign_foothold_tt", "VAL_nod_requires_stelander_victory_tt"):
                 self.assertRegex(text, rf'(?m)^ {key}:\d* "[^\r\n]*"$')
             self.assertIn("VAL_nod_campaign_foothold_tt", text)
 
