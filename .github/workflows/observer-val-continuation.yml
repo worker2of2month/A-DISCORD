@@ -1,0 +1,38 @@
+name: Observer and Kefreyt entry-point verification
+on:
+  push:
+    branches: [fix/observer-val-final]
+    paths: [.github/workflows/observer-val-continuation.yml]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/observer-val-ready
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow
+      - name: Test lifecycle entry points before and after correction
+        run: |
+          git fetch --depth=1 origin fix/observer-val-final
+          git show FETCH_HEAD:.superpowers/observer-val-followup.py > /tmp/observer-val-followup.py
+          python -B /tmp/observer-val-followup.py
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: observer-val-entrypoint-verification
+          path: |
+            /tmp/observer-val-followup.json
+            /tmp/continuation_*.log
+            /tmp/all_regressions.log
+            /tmp/tc_followup.log
+            /tmp/suite_followup.log
+            /tmp/final_regressions.log
+            /tmp/final_diff.log
+          retention-days: 7
