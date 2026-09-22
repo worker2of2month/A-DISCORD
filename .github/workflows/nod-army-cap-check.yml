@@ -1,0 +1,121 @@
+name: Verify Nodrul economic army capacity
+on:
+  push:
+    branches: [codex/nod-economic-army-cap]
+    paths: [.github/workflows/nod-army-cap-check.yml]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validator dependencies
+        run: python -m pip install Pillow numpy PyYAML
+      - name: Reproduce, verify and commit the scoped change
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64, os, re, signal, subprocess, sys, zlib
+          expected = {
+              'common/ai_strategy/ADISCORD_economy_ai.txt': 'f6b2b1cc11084e75749ca77a4fe571faefc6889d',
+              'common/scripted_effects/ADISCORD_economy_effects.txt': '05926f6f91671d30797faccc5396b79b771022c6',
+              'common/scripted_localisation/ADISCORD_economy_scripted_loc.txt': '1a945dc32255bd1ba1824a6af27562a04733f496',
+              'common/scripted_triggers/ADISCORD_economy_triggers.txt': '1d315fdaca64b7469f153633f5c8d102bf985972',
+              'localisation/english/ADISCORD_economy_l_english.yml': '23b064691bb519d215a651ce7a4f62df325bb4e9',
+              'localisation/russian/ADISCORD_economy_l_russian.yml': 'acaf670dfb69899a197a5b5face3ee515a6236c9',
+              'tools/tests/test_adiscord_economy_rebalance.py': 'f4e17522abaa7caeda3fe4acae6529dfe0a50044',
+              'tools/tests/test_adiscord_economy_weekly_contracts.py': '777d147ca5f9034e157dfa1e35c49fe8ab6c4ed6',
+          }
+          expected['localisation/russian/ADISCORD_economy_l_russian.yml'] = 'acaf670dfb69899a197a5b5face3ee515e6236c9'
+          for path, sha in expected.items():
+              actual = subprocess.check_output(['git', 'hash-object', path], text=True).strip()
+              assert actual == sha, (path, actual, sha)
+          logs = Path('/tmp/nod-cap-verification')
+          logs.mkdir(exist_ok=True)
+          def run(name, command, timeout=180):
+              path = logs / (name + '.log')
+              with path.open('w', encoding='utf-8') as output:
+                  process = subprocess.Popen(command, stdout=output, stderr=subprocess.STDOUT, start_new_session=True)
+                  try:
+                      rc = process.wait(timeout=timeout)
+                  except subprocess.TimeoutExpired:
+                      os.killpg(process.pid, signal.SIGTERM)
+                      try:
+                          process.wait(timeout=5)
+                      except subprocess.TimeoutExpired:
+                          os.killpg(process.pid, signal.SIGKILL)
+                          process.wait()
+                      rc = 124
+                      output.write('\nTIMEOUT: execution exceeded the verification time bound. No complete pass is claimed.\n')
+              text = path.read_text(encoding='utf-8', errors='replace')
+              print(name, 'EXIT', rc, flush=True)
+              print(text[-3000:], flush=True)
+              return rc, text
+          def failures(text):
+              return sorted(set(re.findall(r'^(?:FAIL|ERROR): (.+)$', text, re.M)))
+          focused = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_adiscord_economy_rebalance', '-v']
+          base_rc, base_text = run('baseline', focused)
+          base_failures = failures(base_text)
+          assert base_rc == 1 and len(base_failures) == 1 and 'test_frontier_does_not_require_participation_in_the_stelander_crisis' in base_failures[0], base_failures
+          patches = {
+          'tests': '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',
+          'gameplay': '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'
+          }
+          def apply(name):
+              data = zlib.decompress(base64.b64decode(patches[name], validate=True))
+              path = logs / (name + '.patch')
+              path.write_bytes(data)
+              subprocess.run(['git', 'apply', '--check', str(path)], check=True)
+              subprocess.run(['git', 'apply', str(path)], check=True)
+          apply('tests')
+          new_tests = [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_adiscord_economy_rebalance.NodrulDivisionEconomyTests', '-v']
+          red_rc, red_text = run('red', new_tests)
+          assert red_rc == 1 and 'Ran 12 tests' in red_text and '\nERROR:' not in red_text and 'FAILED (failures=' in red_text
+          apply('gameplay')
+          green_rc, green_text = run('green', new_tests)
+          assert green_rc == 0 and 'Ran 12 tests' in green_text
+          after_rc, after_text = run('related', focused)
+          assert after_rc == base_rc and failures(after_text) == base_failures, failures(after_text)
+          preview_rc, preview_text = run('preview', [sys.executable, '-B', '-m', 'unittest', 'tools.tests.test_adiscord_economy_weekly_contracts.WeeklyEconomyContracts.test_policy_previews_are_side_effect_bounded_and_restore_live_state', '-v'])
+          assert preview_rc == 0
+          validator_rc, validator_text = run('validate-tc', [sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'])
+          assert validator_rc == 0
+          suite_rc, suite_text = run('full-suite', [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_*.py', '-v'], timeout=60)
+          subprocess.run(['git', 'diff', '--check'], check=True)
+          changed = subprocess.check_output(['git', 'diff', '--name-only'], text=True).splitlines()
+          assert set(changed) == set(expected), changed
+          for path in changed:
+              if path.endswith('.yml'):
+                  assert Path(path).read_bytes().startswith(b'\xef\xbb\xbf'), path
+              elif path.endswith('.txt'):
+                  assert not Path(path).read_bytes().startswith(b'\xef\xbb\xbf'), path
+          (logs / 'final.patch').write_bytes(subprocess.check_output(['git', 'diff', '--binary']))
+          summary = '\n'.join([
+              'New Nodrul scenarios: 12 PASS after observed failing baseline.',
+              'Related module baseline: ' + str(base_failures),
+              'Related module after: ' + str(failures(after_text)),
+              'Native policy-preview fixture: PASS.',
+              'Total-conversion validator exit: ' + str(validator_rc) + ' (read findings separately).',
+              'Full-suite exit: ' + str(suite_rc) + ' (124 denotes timeout, not a full pass).',
+              'Full-suite observed failures: ' + str(failures(suite_text)),
+              'Native HOI4 and user save were not run.',
+          ])
+          (logs / 'summary.txt').write_text(summary + '\n', encoding='utf-8')
+          print(summary, flush=True)
+          subprocess.run(['git', 'config', 'user.name', 'github-actions[bot]'], check=True)
+          subprocess.run(['git', 'config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com'], check=True)
+          subprocess.run(['git', 'add', '--', *expected], check=True)
+          subprocess.run(['git', 'commit', '-m', 'balance: tie Nodrul division capacity and upkeep to its economy'], check=True)
+          subprocess.run(['git', 'push', 'origin', 'HEAD:refs/heads/codex/nod-economic-army-cap'], check=True)
+          print('VERIFIED_COMMIT=' + subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(), flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nod-economic-army-cap-verification
+          path: /tmp/nod-cap-verification/
