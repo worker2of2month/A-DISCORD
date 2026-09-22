@@ -1772,3 +1772,31 @@ country_event = {
     }
     immediate = { mark_focus_tree_layout_dirty = yes }
 }
+
+# ROOT must be the losing party for the shared civil-war settlement.
+country_event = {
+	id = ADISCORD_STP_cw.205
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { tag = STP STP_cw_fada_captured = yes }
+			STS = {
+				if = {
+					limit = { has_country_flag = STP_cw_last_banquet_started }
+					STP_cw_resolve_last_banquet_success = yes
+				}
+				STP_cw_settle_union_victory = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.32
+	title = STP_pc_council_revanche_title
+	desc = STP_pc_council_revanche_desc
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	option = { name = STP_pc_council_revanche_response }
+}

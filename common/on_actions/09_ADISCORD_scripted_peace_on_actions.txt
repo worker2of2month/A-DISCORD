@@ -960,6 +960,7 @@ on_actions = {
 			# END vorkerland_diplomacy:on_peace
 
             # BEGIN kefreyt:on_peace
+            VAL = { VAL_council_reconcile_revanche = yes }
             if = { limit = { STP = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STP = { VAL_cede_stelander_border = yes } }
             if = { limit = { STS = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STS = { VAL_cede_stelander_border = yes } }
             # END kefreyt:on_peace

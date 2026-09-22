@@ -83,10 +83,11 @@ focus_tree = {
 	focus = {
 		id = VAL_defeat_No_Second_Expedition
 		icon = GFX_focus_generic_treaty
-		x = 10
-		y = 3
+		x = 8
+		y = 4
 		cost = 4
 		prerequisite = { focus = VAL_defeat_Articles_Of_Command }
+		mutually_exclusive = { focus = VAL_defeat_Revise_The_Settlement }
 		completion_reward = {
 			add_stability = 0.05
 			add_war_support = -0.05
@@ -127,8 +128,8 @@ focus_tree = {
 	focus = {
 		id = VAL_defeat_Contracts_Without_Conquest
 		icon = GFX_focus_generic_diplomatic_treaty
-		x = 10
-		y = 5
+		x = 8
+		y = 6
 		cost = 5
 		prerequisite = { focus = VAL_defeat_Reopen_The_Depots }
 		prerequisite = { focus = VAL_defeat_No_Second_Expedition }
@@ -138,6 +139,57 @@ focus_tree = {
 			VAL_invest_civilian_industry = yes
 			add_stability = 0.05
 			add_political_power = 100
+		}
+		ai_will_do = { base = 25 }
+	}
+
+	focus = {
+		id = VAL_defeat_Revise_The_Settlement
+		icon = GFX_goal_generic_political_pressure
+		x = 12
+		y = 4
+		cost = 5
+		prerequisite = { focus = VAL_defeat_Articles_Of_Command }
+		mutually_exclusive = { focus = VAL_defeat_No_Second_Expedition }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.1
+			custom_effect_tooltip = VAL_council_revanche_stakes_tt
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = VAL_defeat_Refit_For_Return
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 12
+		y = 5
+		cost = 6
+		prerequisite = { focus = VAL_defeat_Revise_The_Settlement }
+		prerequisite = { focus = VAL_defeat_Reopen_The_Depots }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = VAL }
+			army_experience = 20
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	focus = {
+		id = VAL_defeat_Return_To_The_Passes
+		icon = GFX_goal_generic_major_war
+		x = 12
+		y = 6
+		cost = 6
+		prerequisite = { focus = VAL_defeat_Refit_For_Return }
+		prerequisite = { focus = VAL_defeat_Bring_The_Captains_Home }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_launch_available_tt VAL_council_can_launch_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_council_revanche_war_tt
+			hidden_effect = { VAL_council_begin_revanche = yes }
 		}
 		ai_will_do = { base = 25 }
 	}
