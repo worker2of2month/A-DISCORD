@@ -394,12 +394,10 @@ VAL_open_refugee_waves = {
 }
 
 VAL_update_refugees_weekly = {
-	# Recover missed war notifications without renewing an already seen wave.
+	# Recover missed crisis notifications without renewing an already seen wave.
+	# Once opened, the timed 180-day flag is authoritative: peace must not erase
+	# an already offered admission window before the player can use it.
 	VAL_open_refugee_waves = yes
-	if = { limit = { has_country_flag = VAL_refugee_vorkerland_window NOT = { VAL_refugee_vorkerland_war = yes } } clr_country_flag = VAL_refugee_vorkerland_window }
-	if = { limit = { has_country_flag = VAL_refugee_stelander_window NOT = { VAL_refugee_stelander_war = yes } } clr_country_flag = VAL_refugee_stelander_window }
-	if = { limit = { has_country_flag = VAL_refugee_nodrul_window NOT = { VAL_refugee_nodrul_war = yes } } clr_country_flag = VAL_refugee_nodrul_window }
-	if = { limit = { has_country_flag = VAL_refugee_north_window NOT = { VAL_refugee_north_war = yes } } clr_country_flag = VAL_refugee_north_window }
 	if = {
 		limit = { NOT = { VAL_regional_displacement_crisis = yes } check_variable = { var = VAL_displaced_population value = 0 compare = greater_than } }
 		add_to_variable = { var = VAL_displaced_population value = -1 }
