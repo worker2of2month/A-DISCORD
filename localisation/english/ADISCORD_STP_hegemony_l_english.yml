@@ -20,8 +20,8 @@
 
  STP_heg_establish_nod_administration:0 "Establish the Nodrul Provisional Administration"
  STP_heg_establish_nod_administration_desc:0 "Replace the defeated Nodrul government with a temporary administration subordinate to Steland."
- STP_heg_annex_nod_administration:0 "Annex the Nodrul Administration"
- STP_heg_annex_nod_administration_desc:0 "Begin a 90 day integration of the Nodrul provisional administration."
+ STP_heg_annex_nod_administration:0 "Annex Nodrul"
+ STP_heg_annex_nod_administration_desc:0 "Begin a 90 day integration of Nodrul, whether it entered the Hegemony peacefully as a puppet or was reorganised as a provisional administration after defeat."
 
  STP_heg_establish_ypr_administration:0 "Establish the Yubor Provisional Administration"
  STP_heg_establish_ypr_administration_desc:0 "Replace the defeated Yubor government with a temporary administration subordinate to Steland."
