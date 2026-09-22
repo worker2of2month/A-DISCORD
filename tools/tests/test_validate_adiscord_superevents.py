@@ -213,6 +213,16 @@ class SupereventContractTests(unittest.TestCase):
             r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{",
         )[0]
         self.assertNotIn("scoped_sound_effect", playback)
+        self.assertEqual(playback.count('play_song = "one_minute_of_silence"'), 1)
+        self.assertNotIn('play_song = "superevent_', playback)
+
+        sound_effects = (ROOT / "sound/superevents_effects.asset").read_text(encoding="utf-8-sig")
+        shabrat_effect = next(
+            block
+            for block in blocks(sound_effects, r"^\s*soundeffect\s*=\s*\{")
+            if "name = superevent_stelander_shabrat_victory_sound_e" in block
+        )
+        self.assertIn("volume = 0.80", shabrat_effect)
 
         gui = (ROOT / "interface/superevents.gui").read_text(encoding="utf-8-sig")
         windows = blocks(gui, r"^\s*containerWindowType\s*=\s*\{")
@@ -509,6 +519,16 @@ if __name__ == "__main__":
             r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{",
         )[0]
         self.assertNotIn("scoped_sound_effect", playback)
+        self.assertEqual(playback.count('play_song = "one_minute_of_silence"'), 1)
+        self.assertNotIn('play_song = "superevent_', playback)
+
+        sound_effects = (ROOT / "sound/superevents_effects.asset").read_text(encoding="utf-8-sig")
+        shabrat_effect = next(
+            block
+            for block in blocks(sound_effects, r"^\s*soundeffect\s*=\s*\{")
+            if "name = superevent_stelander_shabrat_victory_sound_e" in block
+        )
+        self.assertIn("volume = 0.80", shabrat_effect)
 
         gui = (ROOT / "interface/superevents.gui").read_text(encoding="utf-8-sig")
         windows = blocks(gui, r"^\s*containerWindowType\s*=\s*\{")
@@ -806,6 +826,16 @@ if __name__ == "__main__":
             r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{",
         )[0]
         self.assertNotIn("scoped_sound_effect", playback)
+        self.assertEqual(playback.count('play_song = "one_minute_of_silence"'), 1)
+        self.assertNotIn('play_song = "superevent_', playback)
+
+        sound_effects = (ROOT / "sound/superevents_effects.asset").read_text(encoding="utf-8-sig")
+        shabrat_effect = next(
+            block
+            for block in blocks(sound_effects, r"^\s*soundeffect\s*=\s*\{")
+            if "name = superevent_stelander_shabrat_victory_sound_e" in block
+        )
+        self.assertIn("volume = 0.80", shabrat_effect)
 
         gui = (ROOT / "interface/superevents.gui").read_text(encoding="utf-8-sig")
         windows = blocks(gui, r"^\s*containerWindowType\s*=\s*\{")
@@ -1099,6 +1129,16 @@ if __name__ == "__main__":
             r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{",
         )[0]
         self.assertNotIn("scoped_sound_effect", playback)
+        self.assertEqual(playback.count('play_song = "one_minute_of_silence"'), 1)
+        self.assertNotIn('play_song = "superevent_', playback)
+
+        sound_effects = (ROOT / "sound/superevents_effects.asset").read_text(encoding="utf-8-sig")
+        shabrat_effect = next(
+            block
+            for block in blocks(sound_effects, r"^\s*soundeffect\s*=\s*\{")
+            if "name = superevent_stelander_shabrat_victory_sound_e" in block
+        )
+        self.assertIn("volume = 0.80", shabrat_effect)
 
         gui = (ROOT / "interface/superevents.gui").read_text(encoding="utf-8-sig")
         windows = blocks(gui, r"^\s*containerWindowType\s*=\s*\{")

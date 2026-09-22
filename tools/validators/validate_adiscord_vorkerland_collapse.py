@@ -2864,22 +2864,12 @@ def validate_events(root: Path, issues: list[str]) -> None:
     shared_audio = named_block(map_effects, "ADISCORD_vorkerland_play_superevent_sound")
     if "every_country" in shared_audio or "scoped_sound_effect" in shared_audio:
         issues.append("shared superevent audio must stay unscoped for observer/spectator")
-    if "scoped_sound_effect" in shared_audio:
-        issues.append("shared superevent audio must not use scoped_sound_effect")
-    if 'play_song = "superevent_vorkerland_dirty_opening"' not in shared_audio:
-        issues.append("local superevent audio lost the dirty-opening sound")
-    if "has_global_flag = superevent_vorkerland_dirty_opening" not in shared_audio:
-        issues.append("local superevent audio no longer selects the dirty-opening sound")
-    if 'play_song = "superevent_vorkerland_utilitarian_victory"' not in shared_audio:
-        issues.append("local superevent audio lost the utilitarian-victory sound")
-    if "has_global_flag = superevent_vorkerland_utilitarian_victory" not in shared_audio:
-        issues.append("local superevent audio no longer selects the utilitarian-victory sound")
-    if 'play_song = "superevent_vorkerland_vlad_victory"' not in shared_audio:
-        issues.append("local superevent audio lost the vlad-victory sound")
-    if "has_global_flag = superevent_vorkerland_vlad_victory" not in shared_audio:
-        issues.append("local superevent audio no longer selects the vlad-victory sound")
-    if 'play_song = "one_minute_of_silence"' in shared_audio or "sound_effect =" in shared_audio:
-        issues.append("shared superevent audio must use only the single music channel")
+    if shared_audio.count('play_song = "one_minute_of_silence"') != 1:
+        issues.append("shared superevent audio must reserve the music channel with one_minute_of_silence")
+    if 'play_song = "superevent_' in shared_audio:
+        issues.append("shared superevent audio must not duplicate presentation audio on the music channel")
+    if "sound_effect =" in shared_audio:
+        issues.append("shared superevent audio must leave presentation playback to GUI show_sound")
     if "add_ideas = ADISCORD_vorkerland_erased_nations" in prepare:
         issues.append("cultural-erasure spirit still leaks to every successor")
     finalizer = named_block(effects, "ADISCORD_vorkerland_finalize_conflict_spirits")

@@ -4164,49 +4164,9 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 # Unscoped playback. Observer/spectator has no human country, so a
 # human-only dispatch never reaches the local client.
 ADISCORD_vorkerland_play_superevent_sound = {
-	if = {
-		limit = { has_global_flag = superevent_vorkerland_dirty_opening }
-		play_song = "superevent_vorkerland_dirty_opening"
-	}
-	else_if = {
-		limit = { has_global_flag = superevent_vorkerland_utilitarian_victory }
-		play_song = "superevent_vorkerland_utilitarian_victory"
-	}
-	else_if = {
-		limit = { has_global_flag = superevent_vorkerland_worker_victory }
-		play_song = "superevent_vorkerland_worker_victory"
-	}
-	else_if = {
-		limit = { has_global_flag = superevent_vorkerland_vlad_victory }
-		play_song = "superevent_vorkerland_vlad_victory"
-	}
-	else_if = {
-		limit = { has_global_flag = superevent_vorkerland_dorian_victory }
-		play_song = "superevent_vorkerland_dorian_victory"
-	}
-	else_if = {
-		limit = { has_global_flag = superevent_stelander_party_victory }
-		play_song = "superevent_stelander_party_victory"
-	}
-	else_if = {
-		limit = { has_global_flag = superevent_stelander_shabrat_victory }
-		play_song = "superevent_stelander_shabrat_victory"
-	}
-	else_if = {
-		limit = { has_global_flag = superevent_stelander_empire }
-		play_song = "superevent_stelander_empire"
-	}
-	else_if = {
-		limit = { has_global_flag = superevent_nam_resource_war }
-		play_song = "superevent_nam_resource_war"
-	}
-	else_if = {
-		limit = { has_global_flag = superevent_rus_last_empire }
-		play_song = "superevent_rus_last_empire"
-	}
-	else = {
-		play_song = "superevent_vorkerland_civilwar"
-	}
+	# GUI show_sound owns presentation audio. Reserve the music channel with a
+	# silent track so normal radio music cannot bleed underneath a superevent.
+	play_song = "one_minute_of_silence"
 }
 
 ADISCORD_vorkerland_play_collapse_superevent_audio = {

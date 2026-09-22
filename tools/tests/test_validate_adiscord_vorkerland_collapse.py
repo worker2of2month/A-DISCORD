@@ -525,14 +525,10 @@ country_event = {
         self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", local_audio)
         self.assertNotIn("limit = { is_ai = no }", local_audio)
         shared_audio = named_block(map_effects, "ADISCORD_vorkerland_play_superevent_sound")
-        self.assertIn("has_global_flag = superevent_vorkerland_dirty_opening", shared_audio)
-        self.assertIn('play_song = "superevent_vorkerland_dirty_opening"', shared_audio)
-        self.assertIn("has_global_flag = superevent_vorkerland_utilitarian_victory", shared_audio)
-        self.assertIn('play_song = "superevent_vorkerland_utilitarian_victory"', shared_audio)
-        self.assertIn("has_global_flag = superevent_vorkerland_vlad_victory", shared_audio)
-        self.assertIn('play_song = "superevent_vorkerland_vlad_victory"', shared_audio)
+        self.assertEqual(shared_audio.count('play_song = "one_minute_of_silence"'), 1)
+        self.assertNotIn('play_song = "superevent_', shared_audio)
         self.assertNotIn("scoped_sound_effect", shared_audio)
-        self.assertNotIn("scoped_sound_effect =", shared_audio)
+        self.assertNotIn("sound_effect =", shared_audio)
         gfx = read("interface/superevents.gfx")
         self.assertIn(
             'textureFile = "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"',

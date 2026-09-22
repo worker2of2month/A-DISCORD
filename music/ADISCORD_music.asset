@@ -93,7 +93,7 @@ music = {
 music = {
 	name = "superevent_stelander_shabrat_victory"
 	file = "superevent_stelander_shabrat_victory.ogg"
-	volume = 1.0
+	volume = 0.80
 }
 
 music = {
