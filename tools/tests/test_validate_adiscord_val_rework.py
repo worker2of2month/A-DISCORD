@@ -420,61 +420,34 @@ class ValTierTransitionContractTests(unittest.TestCase):
                 r"\bVAL_clear_foreign_operation\s*=\s*yes\b",
             )
 
-    def test_each_contract_tier_is_declared_once_and_apply_effects_use_only_it(self) -> None:
+    def test_each_contract_tier_is_declared_once_and_upward_apply_effects_do_not_install_it(self) -> None:
         hidden_ideas = only_named_block(self, self.ideas, "hidden_ideas")
         declared = set().union(*map(set, FAMILIES.values()))
-
-        for command in (
-            "add_idea",
-            "add_ideas",
-            "remove_idea",
-            "remove_ideas",
-            "swap_ideas",
-        ):
-            for form, assignment, expected in (
-                (
-                    "scalar",
-                    "VAL_contract_not_declared",
-                    {"VAL_contract_not_declared"},
-                ),
-                (
-                    "brace",
-                    "{ VAL_contract_administration_1 VAL_contract_not_declared }",
-                    {"VAL_contract_administration_1", "VAL_contract_not_declared"},
-                ),
-            ):
-                with self.subTest(command=command, form=form):
-                    probe = (
-                        "VAL_apply_contract_probe = {\n"
-                        f"\t{command} = {assignment}\n"
-                        "\t# VAL_contract_ignored_comment\n"
-                        '\tcustom_effect_tooltip = "VAL_contract_ignored_string"\n'
-                        "}"
-                    )
-                    operands = self.contract_tier_operands(probe)
-                    self.assertEqual(operands, expected)
-                    self.assertFalse(operands <= declared)
 
         for family in FAMILIES.values():
             for idea in family:
                 with self.subTest(idea=idea):
                     self.assertEqual(len(named_blocks(hidden_ideas, idea)), 1)
 
-        apply_effect_names = re.findall(
-            r"(?m)^\s*(VAL_apply_contract_[A-Za-z0-9_]+)\s*=\s*\{",
-            mask_comments(self.effects),
-        )
-        self.assertTrue(apply_effect_names, "expected VAL contract apply effects")
-        referenced_tiers: set[str] = set()
-        for effect_name in apply_effect_names:
-            with self.subTest(effect=effect_name):
+        for family in UPWARD_FAMILIES:
+            for tier in range(1, 4):
+                effect_name = f"VAL_apply_contract_{family}_{tier}"
                 effect = only_named_block(self, self.effects, effect_name)
-                used_tiers = self.contract_tier_operands(effect)
-                referenced_tiers.update(used_tiers)
-                self.assertTrue(used_tiers <= declared, used_tiers - declared)
-        self.assertTrue(referenced_tiers, "expected tier ideas in VAL apply effects")
+                engine = effect
+                for preview in named_blocks(engine, "effect_tooltip"):
+                    engine = engine.replace(preview, "")
+                self.assertEqual(
+                    self.contract_tier_operands(engine),
+                    set(),
+                    f"{effect_name} must use level variables + VAL_contract_state, not runtime tier ideas",
+                )
+                self.assertEqual(engine.count("VAL_refresh_contract_modifier = yes"), 1)
 
-    def test_upward_apply_effects_rebuild_from_authoritative_levels(self) -> None:
+        for tier in range(4):
+            effect = only_named_block(self, self.effects, f"VAL_apply_contract_reputation_{tier}")
+            self.assertTrue(self.contract_tier_operands(effect) <= declared)
+
+    def test_upward_apply_effects_refresh_dynamic_modifier_from_authoritative_levels(self) -> None:
         for family in UPWARD_FAMILIES:
             variable = LEVEL_VARIABLES[family]
             for tier, target in enumerate(FAMILIES[family], start=1):
@@ -486,14 +459,16 @@ class ValTierTransitionContractTests(unittest.TestCase):
                     self.assertNotRegex(engine_effect, r"\bhas_idea\s*=")
                     self.assertNotRegex(engine_effect, r"\bswap_ideas\s*=")
                     successful = self.transition_branch(effect, variable, tier)
-                    self.assert_hidden_rebuild(successful.text, family, target)
-                    if tier < 3:
-                        self.assert_authoritative_guard(successful, variable, tier)
-                    if family in {"administration", "industry"}:
-                        self.assertRegex(
-                            successful.text,
-                            r"\bADISCORD_economy_mark_dirty\s*=\s*yes\b",
-                        )
+                    self.assert_authoritative_guard(successful, variable, tier)
+                    self.assertEqual(
+                        self.contract_tier_operands(engine_effect),
+                        set(),
+                        "specialization tiers must not be installed as runtime ideas",
+                    )
+                    self.assertEqual(
+                        engine_effect.count("VAL_refresh_contract_modifier = yes"),
+                        1,
+                    )
 
     def test_reputation_apply_effects_rebuild_selected_authoritative_tier(self) -> None:
         refresh = only_named_block(self, self.effects, "VAL_refresh_contract_reputation")
@@ -1010,7 +985,7 @@ class ValRewardValidatorTests(unittest.TestCase):
         dummy = named_blocks(original, "VAL_company_rosters_delta")[0]
         for changed in (dummy.replace("always = no", "always = yes"),
                         dummy.replace("name = VAL_contract_state", "name = VAL_contract_army_1"),
-                        dummy.replace("army_org_factor = 0.02", "army_org_factor = 0.12")):
+                        dummy.replace("army_org_factor = 0.06", "army_org_factor = 0.12")):
             with self.subTest(changed=changed):
                 self.assertNotEqual(changed, dummy)
                 self.assertTrue(self.preview_issues(ideas=original.replace(dummy, changed))[1])
@@ -1115,21 +1090,42 @@ class ValNativePreviewTests(unittest.TestCase):
                 with self.subTest(family=family, target=tier, current=level):
                     self.assertEqual(preview(helper), expected)
 
+    def test_specialization_preview_validator_rejects_dynamic_drift(self):
+        effects = EFFECTS_PATH.read_text(encoding="utf-8-sig")
+        source = (
+            "limit = { check_variable = { var = VAL_contract_army_level value = 3 compare = equals } }\n"
+            "\t\tadd_to_variable = { var = VAL_contract_org_factor value = 0.07 }"
+        )
+        changed = source.replace("value = 0.07", "value = 0.071")
+        self.assertIn(source, effects)
+        drifted = effects.replace(source, changed, 1)
+        sources = self.preview_sources()
+        sources["effects"] = drifted
+        accepted, issues = self.preview_issues(sources=sources)
+        self.assertEqual(accepted, set())
+        self.assertTrue(
+            any(
+                "VAL_contract_army_3 differs from VAL_contract_state" in issue
+                for issue in issues
+            ),
+            issues,
+        )
+
     def test_industry_preview_depends_on_current_tier(self):
         from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
         ideas = block(block(parse_clausewitz(IDEAS_PATH.read_text(encoding="utf-8-sig")), "ideas"), "country")
         expected_modifiers = {
-            "VAL_industry_1_dummy": ("VAL_contract_industry_preview", {}),
-            "VAL_industry_2_dummy": ("VAL_contract_industry_preview", {}),
-            "VAL_industry_1_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.04, "production_factory_efficiency_gain_factor": 0.05}),
-            "VAL_industry_2_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.07, "production_factory_efficiency_gain_factor": 0.08, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
-            "VAL_industry_1_to_2_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.03, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
-            "VAL_industry_3_dummy": ("VAL_contract_industry_preview", {}),
-            "VAL_industry_3_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.10, "production_factory_efficiency_gain_factor": 0.12, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
-            "VAL_industry_1_to_3_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.06, "production_factory_efficiency_gain_factor": 0.07, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
-            "VAL_industry_2_to_3_delta": ("VAL_contract_industry_preview", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.04, "production_factory_max_efficiency_factor": 0.03, "production_lack_of_resource_penalty_factor": -0.05, "ADISCORD_economy_military_industry_income_factor": 0.08}),
+            "VAL_industry_1_dummy": ("VAL_contract_industry_1", {}),
+            "VAL_industry_2_dummy": ("VAL_contract_industry_2", {}),
+            "VAL_industry_1_delta": ("VAL_contract_industry_1", {"industrial_capacity_factory": 0.04, "production_factory_efficiency_gain_factor": 0.05}),
+            "VAL_industry_2_delta": ("VAL_contract_industry_2", {"industrial_capacity_factory": 0.07, "production_factory_efficiency_gain_factor": 0.08, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
+            "VAL_industry_1_to_2_delta": ("VAL_contract_industry_2", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.03, "production_factory_max_efficiency_factor": 0.05, "production_lack_of_resource_penalty_factor": -0.05}),
+            "VAL_industry_3_dummy": ("VAL_contract_industry_3", {}),
+            "VAL_industry_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.10, "production_factory_efficiency_gain_factor": 0.12, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
+            "VAL_industry_1_to_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.06, "production_factory_efficiency_gain_factor": 0.07, "production_factory_max_efficiency_factor": 0.08, "production_lack_of_resource_penalty_factor": -0.10, "ADISCORD_economy_military_industry_income_factor": 0.08}),
+            "VAL_industry_2_to_3_delta": ("VAL_contract_industry_3", {"industrial_capacity_factory": 0.03, "production_factory_efficiency_gain_factor": 0.04, "production_factory_max_efficiency_factor": 0.03, "production_lack_of_resource_penalty_factor": -0.05, "ADISCORD_economy_military_industry_income_factor": 0.08}),
         }
         for idea_id, (name, modifiers) in expected_modifiers.items():
             idea = block(ideas, idea_id)

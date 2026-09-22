@@ -152,6 +152,89 @@ VAL_refresh_contract_modifier = {
 	set_variable = { var = VAL_contract_conscription_factor value = 0.0 }
 	set_variable = { var = VAL_contract_command_power_factor value = 0.0 }
 	set_variable = { var = VAL_contract_consumer_goods_factor value = 0.0 }
+	set_variable = { var = VAL_contract_tax_collection_factor value = 0.0 }
+	set_variable = { var = VAL_contract_reinforce_rate value = 0.0 }
+	set_variable = { var = VAL_contract_efficiency_gain_factor value = 0.0 }
+	set_variable = { var = VAL_contract_max_efficiency_factor value = 0.0 }
+	set_variable = { var = VAL_contract_resource_penalty_factor value = 0.0 }
+
+	# Legacy specialization ideas used to carry these stats. Strip them so old saves do not double-count.
+	remove_ideas = VAL_contract_administration_1
+	remove_ideas = VAL_contract_administration_2
+	remove_ideas = VAL_contract_administration_3
+	remove_ideas = VAL_contract_army_1
+	remove_ideas = VAL_contract_army_2
+	remove_ideas = VAL_contract_army_3
+	remove_ideas = VAL_contract_industry_1
+	remove_ideas = VAL_contract_industry_2
+	remove_ideas = VAL_contract_industry_3
+
+	# Administration specialization is now part of the visible contract-state dynamic modifier.
+	if = {
+		limit = { check_variable = { var = VAL_contract_administration_level value = 3 compare = equals } }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.12 }
+		add_to_variable = { var = VAL_contract_stability_factor value = 0.06 }
+		add_to_variable = { var = VAL_contract_tax_collection_factor value = 0.10 }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_state_overload_factor value = -0.08 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_administration_level value = 2 compare = equals } }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.08 }
+		add_to_variable = { var = VAL_contract_stability_factor value = 0.04 }
+		add_to_variable = { var = VAL_contract_tax_collection_factor value = 0.07 }
+		add_to_variable = { var = VAL_contract_trade_income_factor value = 0.03 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_administration_level value = 1 compare = equals } }
+		add_to_variable = { var = VAL_contract_pp_gain value = 0.05 }
+		add_to_variable = { var = VAL_contract_stability_factor value = 0.02 }
+		add_to_variable = { var = VAL_contract_tax_collection_factor value = 0.04 }
+	}
+
+	# Army specialization is aggregated into the same dynamic modifier.
+	if = {
+		limit = { check_variable = { var = VAL_contract_army_level value = 3 compare = equals } }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.07 }
+		add_to_variable = { var = VAL_contract_planning_factor value = 0.15 }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.05 }
+		add_to_variable = { var = VAL_contract_reinforce_rate value = 0.02 }
+		add_to_variable = { var = VAL_contract_command_power_factor value = 0.10 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_army_level value = 2 compare = equals } }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_planning_factor value = 0.10 }
+		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
+		add_to_variable = { var = VAL_contract_reinforce_rate value = 0.01 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_army_level value = 1 compare = equals } }
+		add_to_variable = { var = VAL_contract_org_factor value = 0.03 }
+		add_to_variable = { var = VAL_contract_planning_factor value = 0.05 }
+	}
+
+	# Industry specialization is aggregated into the same dynamic modifier.
+	if = {
+		limit = { check_variable = { var = VAL_contract_industry_level value = 3 compare = equals } }
+		add_to_variable = { var = VAL_contract_factory_output_factor value = 0.10 }
+		add_to_variable = { var = VAL_contract_efficiency_gain_factor value = 0.12 }
+		add_to_variable = { var = VAL_contract_max_efficiency_factor value = 0.08 }
+		add_to_variable = { var = VAL_contract_resource_penalty_factor value = -0.10 }
+		add_to_variable = { var = VAL_contract_military_income_factor value = 0.08 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_industry_level value = 2 compare = equals } }
+		add_to_variable = { var = VAL_contract_factory_output_factor value = 0.07 }
+		add_to_variable = { var = VAL_contract_efficiency_gain_factor value = 0.08 }
+		add_to_variable = { var = VAL_contract_max_efficiency_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_resource_penalty_factor value = -0.05 }
+	}
+	else_if = {
+		limit = { check_variable = { var = VAL_contract_industry_level value = 1 compare = equals } }
+		add_to_variable = { var = VAL_contract_factory_output_factor value = 0.04 }
+		add_to_variable = { var = VAL_contract_efficiency_gain_factor value = 0.05 }
+	}
 
 	# Successful northern contracts establish permanent broker networks (0-3 per region).
 	if = {
@@ -730,11 +813,7 @@ VAL_apply_contract_administration_1 = {
 		}
 		hidden_effect = {
 			set_variable = { var = VAL_contract_administration_level value = 1 }
-			remove_ideas = VAL_contract_administration_1
-			remove_ideas = VAL_contract_administration_2
-			remove_ideas = VAL_contract_administration_3
-			add_ideas = VAL_contract_administration_1
-			ADISCORD_economy_mark_dirty = yes
+			VAL_refresh_contract_modifier = yes
 		}
 	}
 }
@@ -762,11 +841,7 @@ VAL_apply_contract_administration_2 = {
 		}
 		hidden_effect = {
 			set_variable = { var = VAL_contract_administration_level value = 2 }
-			remove_ideas = VAL_contract_administration_1
-			remove_ideas = VAL_contract_administration_2
-			remove_ideas = VAL_contract_administration_3
-			add_ideas = VAL_contract_administration_2
-			ADISCORD_economy_mark_dirty = yes
+			VAL_refresh_contract_modifier = yes
 		}
 	}
 }
@@ -798,11 +873,7 @@ VAL_apply_contract_administration_3 = {
 		}
 		hidden_effect = {
 			set_variable = { var = VAL_contract_administration_level value = 3 }
-			remove_ideas = VAL_contract_administration_1
-			remove_ideas = VAL_contract_administration_2
-			remove_ideas = VAL_contract_administration_3
-			add_ideas = VAL_contract_administration_3
-			ADISCORD_economy_mark_dirty = yes
+			VAL_refresh_contract_modifier = yes
 		}
 	}
 }
@@ -820,13 +891,7 @@ VAL_apply_contract_industry_1 = {
 			}
 		}
 		set_variable = { var = VAL_contract_industry_level value = 1 }
-		hidden_effect = {
-			remove_ideas = VAL_contract_industry_1
-			remove_ideas = VAL_contract_industry_2
-			remove_ideas = VAL_contract_industry_3
-			add_ideas = VAL_contract_industry_1
-			ADISCORD_economy_mark_dirty = yes
-		}
+		hidden_effect = { VAL_refresh_contract_modifier = yes }
 	}
 }
 
@@ -843,13 +908,7 @@ VAL_apply_contract_industry_2 = {
 			}
 		}
 		set_variable = { var = VAL_contract_industry_level value = 2 }
-		hidden_effect = {
-			remove_ideas = VAL_contract_industry_1
-			remove_ideas = VAL_contract_industry_2
-			remove_ideas = VAL_contract_industry_3
-			add_ideas = VAL_contract_industry_2
-			ADISCORD_economy_mark_dirty = yes
-		}
+		hidden_effect = { VAL_refresh_contract_modifier = yes }
 	}
 }
 
@@ -877,13 +936,7 @@ VAL_apply_contract_industry_3 = {
 			}
 		}
 		set_variable = { var = VAL_contract_industry_level value = 3 }
-		hidden_effect = {
-			remove_ideas = VAL_contract_industry_1
-			remove_ideas = VAL_contract_industry_2
-			remove_ideas = VAL_contract_industry_3
-			add_ideas = VAL_contract_industry_3
-			ADISCORD_economy_mark_dirty = yes
-		}
+		hidden_effect = { VAL_refresh_contract_modifier = yes }
 	}
 }
 
@@ -906,10 +959,7 @@ VAL_apply_contract_army_1 = {
 		}
 		hidden_effect = {
 			set_variable = { var = VAL_contract_army_level value = 1 }
-			remove_ideas = VAL_contract_army_1
-			remove_ideas = VAL_contract_army_2
-			remove_ideas = VAL_contract_army_3
-			add_ideas = VAL_contract_army_1
+			VAL_refresh_contract_modifier = yes
 		}
 	}
 }
@@ -937,10 +987,7 @@ VAL_apply_contract_army_2 = {
 		}
 		hidden_effect = {
 			set_variable = { var = VAL_contract_army_level value = 2 }
-			remove_ideas = VAL_contract_army_1
-			remove_ideas = VAL_contract_army_2
-			remove_ideas = VAL_contract_army_3
-			add_ideas = VAL_contract_army_2
+			VAL_refresh_contract_modifier = yes
 		}
 	}
 }
@@ -972,10 +1019,7 @@ VAL_apply_contract_army_3 = {
 		}
 		hidden_effect = {
 			set_variable = { var = VAL_contract_army_level value = 3 }
-			remove_ideas = VAL_contract_army_1
-			remove_ideas = VAL_contract_army_2
-			remove_ideas = VAL_contract_army_3
-			add_ideas = VAL_contract_army_3
+			VAL_refresh_contract_modifier = yes
 		}
 	}
 }

@@ -414,6 +414,64 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
             issues.append(f"preview {idea} has unknown native name {names[idea]}")
 
     refresh = script_children(parse_clausewitz(effects_text), "VAL_refresh_contract_modifier")
+    # Specialization tier templates must exactly match what the visible
+    # VAL_contract_state dynamic modifier receives from the authoritative level.
+    specialization_levels = {
+        "administration": "VAL_contract_administration_level",
+        "army": "VAL_contract_army_level",
+        "industry": "VAL_contract_industry_level",
+    }
+    dynamic_contract_map = native_maps.get("VAL_contract_state", {})
+    specialization_vectors: dict[str, dict[int, dict[str, float]]] = {}
+    for family, level_variable in specialization_levels.items():
+        tier_vectors: dict[int, dict[str, float]] = {}
+        for branch in (e for e in refresh if e.key in {"if", "else_if"}):
+            limits = script_children(branch.value, "limit")
+            checks = [
+                e for e in walk_script(limits)
+                if e.key == "check_variable" and isinstance(e.value, list)
+            ]
+            matching = []
+            for check in checks:
+                fields = script_fields(check.value)
+                if (
+                    fields.get("var") == level_variable
+                    and fields.get("compare") == "equals"
+                ):
+                    matching.append(fields)
+            if len(matching) != 1:
+                continue
+            try:
+                tier = int(float(matching[0]["value"]))
+            except (KeyError, ValueError):
+                continue
+            vector: dict[str, float] = {}
+            for effect in branch.value:
+                if effect.key != "add_to_variable" or not isinstance(effect.value, list):
+                    continue
+                fields = script_fields(effect.value)
+                modifier = dynamic_contract_map.get(fields.get("var", ""))
+                if not modifier:
+                    continue
+                try:
+                    vector[modifier] = vector.get(modifier, 0) + float(fields["value"])
+                except (KeyError, ValueError):
+                    continue
+            tier_vectors[tier] = vector
+        specialization_vectors[family] = tier_vectors
+        for tier in range(1, 4):
+            template = f"VAL_contract_{family}_{tier}"
+            expected = vectors.get(template, {})
+            actual = tier_vectors.get(tier)
+            if actual is None:
+                issues.append(
+                    f"specialization tier template {template} has no dynamic-modifier tier branch"
+                )
+            elif actual != expected:
+                issues.append(
+                    f"specialization tier template {template} differs from VAL_contract_state"
+                )
+
     flag_deltas: dict[str, dict[str, float]] = {}
     for branch in (e for e in refresh if e.key == "if"):
         flags = [e.value for e in walk_script(script_children(branch.value, "limit")) if e.key == "has_country_flag"]
@@ -1175,7 +1233,6 @@ def main() -> int:
                 issues.append(f"expected exactly one tier effect {effect_id}")
                 continue
             effect_block = effect_blocks[0].text
-            # Native previews are not tier mutations; validate the executable renderer separately.
             for preview in named_blocks(effect_block, "effect_tooltip"):
                 effect_block = effect_block.replace(preview, "")
             engine_effect = mask_comments(effect_block)
@@ -1193,7 +1250,7 @@ def main() -> int:
                 setters += direct_named_blocks(hidden_block.text, "set_variable", hidden_block.start)
             if len(limits) != 1 or len(setters) != 1 or len(hidden_blocks) != 1:
                 issues.append(
-                    f"{effect_id} must directly contain one limit, level setter, and hidden renderer"
+                    f"{effect_id} must directly contain one limit, level setter, and hidden refresh"
                 )
                 continue
             limit = limits[0]
@@ -1208,26 +1265,21 @@ def main() -> int:
                 missing_checks = direct_named_blocks(guard.text, "NOT", guard.start)
                 level_checks = direct_named_blocks(guard.text, "check_variable", guard.start)
                 guard_operands = assignment_names_at_depth(guard.text, 1)
-                if len(guard_operands) != 2 or set(guard_operands) != {
-                    "NOT",
-                    "check_variable",
-                }:
+                if len(guard_operands) != 2 or set(guard_operands) != {"NOT", "check_variable"}:
                     issues.append(
                         f"{effect_id} OR guard must contain only missing-variable and less-than checks"
                     )
                 if (
                     len(missing_checks) != 1
                     or assignment_values(missing_checks[0].text, "has_variable") != [variable]
-                    or assignment_names_at_depth(missing_checks[0].text, 1)
-                    != ["has_variable"]
+                    or assignment_names_at_depth(missing_checks[0].text, 1) != ["has_variable"]
                 ):
                     issues.append(f"{effect_id} does not guard the missing {variable}")
                 if len(level_checks) != 1 or (
                     scalar_values(level_checks[0].text, "var") != [variable]
                     or scalar_values(level_checks[0].text, "value") != [str(tier)]
                     or scalar_values(level_checks[0].text, "compare") != ["less_than"]
-                    or assignment_names_at_depth(level_checks[0].text, 1)
-                    != ["var", "value", "compare"]
+                    or assignment_names_at_depth(level_checks[0].text, 1) != ["var", "value", "compare"]
                 ):
                     issues.append(f"{effect_id} does not guard {variable} as less than {tier}")
             setter = setters[0].text
@@ -1237,19 +1289,20 @@ def main() -> int:
                 re.DOTALL,
             ):
                 issues.append(f"{effect_id} does not set {variable} to {tier}")
-            hidden = validate_hidden_renderer(effect_id, branch.text, family, target)
-            all_removals = scalar_values(effect_block, "remove_ideas")
-            all_additions = scalar_values(effect_block, "add_ideas")
-            if hidden is not None and (
-                all_removals != scalar_values(hidden, "remove_ideas")
-                or all_additions != scalar_values(hidden, "add_ideas")
-            ):
-                issues.append(f"{effect_id} renders tier ideas outside hidden_effect")
-            dirty_calls = scalar_values(hidden or "", "ADISCORD_economy_mark_dirty")
-            if family in {"administration", "industry"} and dirty_calls != ["yes"]:
-                issues.append(f"{effect_id} must mark the economy dirty inside its renderer")
-            if family == "army" and dirty_calls:
-                issues.append(f"{effect_id} must not mark the economy dirty")
+            tier_refs = set(
+                re.findall(
+                    rf"\bVAL_contract_{family}_[1-3]\b",
+                    mask_non_code(engine_effect),
+                )
+            )
+            if tier_refs:
+                issues.append(
+                    f"{effect_id} still installs/removes runtime tier ideas: "
+                    + ", ".join(sorted(tier_refs))
+                )
+            refresh_calls = scalar_values(hidden_blocks[0].text, "VAL_refresh_contract_modifier")
+            if refresh_calls != ["yes"]:
+                issues.append(f"{effect_id} must refresh VAL_contract_state exactly once")
 
     reputation_refresh = named_block_spans(effects, "VAL_refresh_contract_reputation")
     if len(reputation_refresh) != 1:
