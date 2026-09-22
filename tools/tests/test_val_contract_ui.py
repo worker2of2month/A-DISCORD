@@ -372,5 +372,157 @@ class TestValMergedContractFlows(unittest.TestCase):
         for decision in ("ADISCORD_economy_automated_industry", "ADISCORD_economy_logistics_contract", "ADISCORD_economy_national_computing"):
             self.assertIn("unlock_decision_tooltip = { decision = " + decision + " show_effect_tooltip = yes }", focuses)
 
+
+class TestValReclamationCompletion(unittest.TestCase):
+    states = (24, 42, 48, 54, 55, 56, 57)
+
+    def test_all_seven_home_regions_must_finish_the_paid_three_stage_programme(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        text = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        gate = parse_clausewitz(named_block(text, "VAL_reclamation_complete"))[0].value
+        self.assertEqual({e.key for e in gate if e.key.isdigit()}, {str(n) for n in self.states})
+
+        def matches(entries, facts, scope="VAL"):
+            for e in entries:
+                if e.key.isdigit():
+                    ok = matches(e.value, facts, e.key)
+                elif e.key == "NOT":
+                    ok = not any(matches([child], facts, scope) for child in e.value)
+                elif e.key == "check_variable":
+                    fields = {child.key: child.value for child in e.value}
+                    self.assertEqual(fields["compare"], "greater_than_or_equals")
+                    ok = facts.get((scope, "variable", fields["var"]), 0) >= float(fields["value"])
+                elif e.key == "has_dynamic_modifier":
+                    fields = {child.key: child.value for child in e.value}
+                    ok = facts.get((scope, e.key, fields["modifier"]), False)
+                else:
+                    ok = facts.get((scope, e.key, e.value), False)
+                if not ok:
+                    return False
+            return True
+
+        complete = {("VAL", "has_completed_focus", "VAL_reclamation_return_home"): True}
+        for state in self.states:
+            complete.update({
+                (str(state), "variable", "VAL_reclamation_stage"): 3,
+                (str(state), "is_owned_by", "VAL"): True,
+                (str(state), "is_controlled_by", "VAL"): True,
+            })
+        self.assertTrue(matches(gate, complete))
+        self.assertFalse(matches(gate, {}), "No vacuous completion before any reclamation")
+        for state in self.states:
+            for stage in (0, 1, 2):
+                with self.subTest(state=state, incomplete_stage=stage):
+                    self.assertFalse(matches(gate, {**complete, (str(state), "variable", "VAL_reclamation_stage"): stage}))
+            for key in ("is_owned_by", "is_controlled_by"):
+                with self.subTest(state=state, missing=key):
+                    self.assertFalse(matches(gate, {**complete, (str(state), key, "VAL"): False}))
+            for modifier in ("ADISCORD_vorkerland_dirty_state", "VAL_reclamation_stage_1_modifier", "VAL_reclamation_stage_2_modifier"):
+                with self.subTest(state=state, contamination=modifier):
+                    self.assertFalse(matches(gate, {**complete, (str(state), "has_dynamic_modifier", modifier): True}))
+        self.assertTrue(matches(gate, {**complete, ("999", "variable", "VAL_reclamation_stage"): 0}), "New conquests are outside the seven-region programme")
+
+    def test_spirit_removal_is_one_time_and_does_not_revoke_earned_focus_bonuses(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        effect = parse_clausewitz(named_block(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), "VAL_complete_reclamation"))[0].value
+        self.assertEqual(len(effect), 1)
+        branch = effect[0]
+        self.assertEqual(branch.key, "if")
+        limit = next(e.value for e in branch.value if e.key == "limit")
+        self.assertEqual({(e.key, e.value) for e in limit}, {("has_idea", "VAL_harvest_of_ash"), ("VAL_reclamation_complete", "yes")})
+        body = [(e.key, e.value) for e in branch.value if e.key != "limit"]
+        self.assertEqual(body, [("remove_ideas", "VAL_harvest_of_ash"), ("ADISCORD_economy_mark_dirty", "yes")])
+        for completed in (False, True):
+            ideas = {"VAL_harvest_of_ash"}
+            invalidations = 0
+            for _ in range(2):
+                ready = all((e.value in ideas) if e.key == "has_idea" else completed for e in limit)
+                if ready:
+                    for key, value in body:
+                        if key == "remove_ideas": ideas.discard(value)
+                        elif key == "ADISCORD_economy_mark_dirty": invalidations += 1
+            self.assertEqual("VAL_harvest_of_ash" in ideas, not completed)
+            self.assertEqual(invalidations, int(completed))
+
+    def test_final_paid_result_and_old_save_startup_check_completion(self):
+        text = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        finish = named_block(text, "VAL_reclamation_finish_state_project")
+        self.assertIn("VAL_complete_reclamation = yes", finish)
+        self.assertLess(finish.index("add_to_variable = { var = VAL_reclamation_stage"), finish.index("VAL_complete_reclamation = yes"))
+        self.assertIn("VAL = { VAL_complete_reclamation = yes", finish)
+        self.assertNotIn("VAL_complete_reclamation", named_block(text, "VAL_reclamation_refund_state_project"))
+        actions = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
+        startup = named_block(actions, "on_startup")
+        self.assertGreater(startup.index("VAL_complete_reclamation = yes"), startup.index("VAL_migrate_reclamation_modifiers = yes"))
+        self.assertNotIn("VAL_complete_reclamation", named_block(actions, "on_weekly_VAL"))
+        focuses = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
+        self.assertNotIn("remove_ideas = VAL_harvest_of_ash", focuses)
+        self.assertNotIn("VAL_complete_reclamation = yes", focuses)
+
+    def test_reclamation_goal_is_visible_in_both_languages_and_the_spirit(self):
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            keys = dict(re.findall(r'(?m)^\s*([\w.]+):(?:\d+)?\s*"(.*)"$', text))
+            for key in ("VAL_reclamation_desc", "VAL_reclamation_settlement_result_tt"):
+                self.assertIn("$VAL_reclamation_completion_tt$", keys[key])
+            self.assertIn("$VAL_harvest_of_ash$", keys["VAL_reclamation_completion_tt"])
+            for state in self.states:
+                self.assertIn(f"[{state}.GetName]", keys["VAL_reclamation_completion_tt"])
+            ideas = read(f"localisation/{language}/ADISCORD_ideas_l_{language}.yml")
+            desc = re.search(r'(?m)^\s*VAL_harvest_of_ash_desc:(?:\d+)?\s*"(.*)"$', ideas).group(1)
+            self.assertIn("$VAL_reclamation_completion_tt$", desc)
+
+
+class TestValExpansionRoute(unittest.TestCase):
+    def test_north_policy_does_not_wait_for_someone_elses_civil_war(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        text = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        gate = named_block(text, "VAL_frontier_postwar")
+        self.assertNotIn("STP_cw_union_wars_finished", gate)
+        self.assertNotIn("VAL_stelander_civil_war_active", gate)
+        for check in ("has_capitulated = no", "is_subject = no", "NOT = { has_country_flag = VAL_stelander_defeated }"):
+            self.assertIn(check, gate)
+        entries = parse_clausewitz(gate)[0].value
+        def matches(facts):
+            return all(not facts.get(child.value, False) if e.key == "NOT" else facts.get(e.key, "no") == e.value
+                       for e in entries for child in (e.value if e.key == "NOT" else [e]))
+        self.assertTrue(matches({"STP_cw_union_wars_finished": False, "VAL_stelander_civil_war_active": True}))
+        for blocked in ("has_capitulated", "is_subject"):
+            self.assertFalse(matches({blocked: "yes"}))
+        self.assertFalse(matches({"VAL_stelander_defeated": True}))
+        decisions = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_frontier")
+        for name in ("VAL_frontier_demand_CIN", "VAL_frontier_demand_ERT", "VAL_frontier_begin_offensive"):
+            self.assertIn("has_war = no", named_block(named_block(decisions, name), "available"))
+        self.assertIn("STP_cw_union_wars_finished", named_block(text, "VAL_stelander_ultimatum_target"))
+
+    def test_expansion_is_central_visible_and_has_no_prerequisite_cycle(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        tree = parse_clausewitz(read("common/national_focus/ADISCORD_national_focus_VAL.txt"))[0].value
+        def get(entries, key):
+            return next(e.value for e in entries if e.key == key)
+        focuses = {get(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        entry = focuses["VAL_frontier_conference"]
+        spine = focuses["VAL_Contracts_Outlive_Kings"]
+        self.assertEqual(get(entry, "x"), get(spine, "x"))
+        self.assertEqual(float(get(entry, "y")), float(get(spine, "y")) + 2)
+        groups = [e.value for e in entry if e.key == "prerequisite"]
+        self.assertEqual(len(groups), 1)
+        self.assertEqual({e.value for e in groups[0]}, {"VAL_Contracts_Outlive_Kings", "VAL_The_Steel_Contract", "VAL_Market_Roads_North"})
+        for name in ("VAL_frontier_conference", "VAL_frontier_security_plan"):
+            self.assertIn("FOCUS_FILTER_ANNEXATION", [e.value for e in get(focuses[name], "search_filters")])
+        coords = [(get(f, "x"), get(f, "y")) for f in focuses.values()]
+        self.assertEqual(len(coords), len(set(coords)))
+        done, active = set(), set()
+        def visit(name):
+            self.assertNotIn(name, active, f"Cyclic focus route at {name}")
+            if name in done: return
+            active.add(name)
+            for block in focuses[name]:
+                if block.key == "prerequisite":
+                    for parent in block.value: visit(parent.value)
+            active.remove(name)
+            done.add(name)
+        for name in focuses: visit(name)
+
 if __name__ == "__main__":
     unittest.main()

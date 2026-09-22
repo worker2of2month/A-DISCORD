@@ -24,7 +24,7 @@
  VAL_worldwide_famous_weponry: "World-Renowned Arms Factories"
  VAL_worldwide_famous_weponry_desc: "The factories here are like cathedrals: loud, hot and sacred. Their assembly lines produce steel that will speak in place of diplomacy a month from now.\n\nTheir reputation is impeccable: precision, reliability and scale. So is the price: it is always paid in someone else's blood."
  VAL_harvest_of_ash: "Land of Ash"
- VAL_harvest_of_ash_desc: "The land here is cursed. It no longer yields life, only barbed wire and dry branches reaching skywards like the bony hands of the dead. Peasants harvest unexploded shells and their ancestors' bones. Hunger is no visitor here, but the permanent master, and even the setting sun seems sickly and blood-red.\n\n\n\n\n\n £GFX_VAL_harvest_of_ash_banner \n\n"
+ VAL_harvest_of_ash_desc: "The land here is cursed. It no longer yields life, only barbed wire and dry branches reaching skywards like the bony hands of the dead. Peasants harvest unexploded shells and their ancestors' bones. Hunger is no visitor here, but the permanent master, and even the setting sun seems sickly and blood-red.\n\n\n\n\n\n £GFX_VAL_harvest_of_ash_banner \n\n\n\n$VAL_reclamation_completion_tt$"
  WRK_ashes_of_the_crown: "Ashes of the Crown"
  WRK_ashes_of_the_crown_desc: "The old order burned without grandeur, in the everyday business of papers, orders and fear. The crown turned to ash, and with it the familiar system of loyalties.\n\nWe inherited ruined symbols and a crowd that remembers greatness but has forgotten how to pay for it. The power vacuum smells of smoke: whoever draws the first breath will begin dictating the new age.\n\n\n\n\n\n £GFX_WRK_ashes_of_the_crown_banner \n\n"
  WRK_hourglass_of_discord: "Hourglass of Discord"

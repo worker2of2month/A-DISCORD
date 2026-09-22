@@ -1617,9 +1617,18 @@ VAL_reclamation_finish_state_project = {
 			}
 			add_to_variable = { var = VAL_reclamation_stage value = 1 }
 			VAL_reclamation_refresh_state = yes
-			VAL = { ADISCORD_economy_mark_dirty = yes }
+			VAL = { VAL_complete_reclamation = yes ADISCORD_economy_mark_dirty = yes }
 		}
 		else = { VAL_reclamation_refund_state_project = yes }
+	}
+}
+
+# COUNTRY VAL: the idea itself is the receipt; preserve the separate focus reward flag.
+VAL_complete_reclamation = {
+	if = {
+		limit = { has_idea = VAL_harvest_of_ash VAL_reclamation_complete = yes }
+		remove_ideas = VAL_harvest_of_ash
+		ADISCORD_economy_mark_dirty = yes
 	}
 }
 
