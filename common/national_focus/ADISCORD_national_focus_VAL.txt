@@ -700,10 +700,17 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_The_Contract_State }
 		completion_reward = {
-			if = {
-				limit = { NOT = { has_country_flag = VAL_propaganda_slot_granted } }
-				ADISCORD_campaign_slot_grant = yes
-				set_country_flag = VAL_propaganda_slot_granted
+			add_political_power = 50
+			custom_effect_tooltip = VAL_campaign_slot_granted_tt
+			unlock_decision_tooltip = VAL_campaign_rifles_and_bread
+			unlock_decision_tooltip = VAL_campaign_contracts_feed_families
+			unlock_decision_tooltip = VAL_campaign_no_promise_without_payment
+			hidden_effect = {
+				if = {
+					limit = { NOT = { has_country_flag = VAL_propaganda_slot_granted } }
+					ADISCORD_campaign_slot_grant = yes
+					set_country_flag = VAL_propaganda_slot_granted
+				}
 			}
 		}
 		ai_will_do = { base = 3 modifier = { factor = 2 has_stability < 0.65 } }
@@ -1371,10 +1378,13 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Wireless_Contract_Bureau }
 		completion_reward = {
-			if = {
-				limit = { NOT = { has_country_flag = VAL_second_propaganda_slot_granted } }
-				ADISCORD_campaign_slot_grant = yes
-				set_country_flag = VAL_second_propaganda_slot_granted
+			custom_effect_tooltip = VAL_campaign_slot_granted_tt
+			hidden_effect = {
+				if = {
+					limit = { NOT = { has_country_flag = VAL_second_propaganda_slot_granted } }
+					ADISCORD_campaign_slot_grant = yes
+					set_country_flag = VAL_second_propaganda_slot_granted
+				}
 			}
 		}
 		ai_will_do = { base = 4 }
