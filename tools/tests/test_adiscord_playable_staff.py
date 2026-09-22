@@ -134,6 +134,25 @@ class World:
 
 
 class PlayableStaffTests(unittest.TestCase):
+    def test_val_state_party_names_are_plain_in_both_languages(self):
+        expected = {
+            'russian': 'Государственная партия Кефрейта',
+            'english': 'Kefreyt State Party',
+        }
+        for language, name in expected.items():
+            path = ROOT / f'localisation/{language}/parties_l_{language}.yml'
+            data = path.read_bytes()
+            self.assertTrue(data.startswith(b'\xef\xbb\xbf'), language)
+            text = data.decode('utf-8-sig')
+            for suffix in ('', '_long'):
+                key = 'VAL_etatism_party' + suffix
+                with self.subTest(language=language, key=key):
+                    values = re.findall(
+                        rf'^[ \t]*{key}:(?:\d+)?[ \t]*"([^"\r\n]*)"[ \t]*$',
+                        text, re.M,
+                    )
+                    self.assertEqual(values, ['£GFX_VAL_etatist_party_texticon ' + name])
+
     def test_basic_ministers_use_all_six_native_slots_and_live_phase_gate(self):
         for country, people in BASIC_MINISTERS.items():
             ideas=block(parse(IDEAS[country]), 'ideas')

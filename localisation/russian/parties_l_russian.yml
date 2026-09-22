@@ -120,8 +120,8 @@
   VAL_technocracy_party: "Партия науки и управления"
   VAL_technocracy_party_long: "Партия науки и управления Кефрейта"
 
-  VAL_etatism_party: "£GFX_VAL_etatist_party_texticon Государственная партия Кефрейта[GetVALStatePartyLeader]"
-  VAL_etatism_party_long: "£GFX_VAL_etatist_party_texticon Государственная партия Кефрейта[GetVALStatePartyLeaderLong]"
+  VAL_etatism_party: "£GFX_VAL_etatist_party_texticon Государственная партия Кефрейта"
+  VAL_etatism_party_long: "£GFX_VAL_etatist_party_texticon Государственная партия Кефрейта"
 
   VAL_hedonism_party: "Совет домов Кефрейта[GetVALHedonistPartyLeader]"
   VAL_hedonism_party_long: "Совет домов и лицензированных гильдий Кефрейта[GetVALHedonistPartyLeaderLong]"
