@@ -1156,10 +1156,10 @@ focus_tree = {
 		completion_reward = {
 			add_stability = 0.05
 			add_political_power = 35
-			custom_effect_tooltip = STP_cw_loyalty_plus_5_tt
+			custom_effect_tooltip = STP_PRESIDENT_REMAINS_IN_OFFICE_strategy_tt
 			hidden_effect = {
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 5 }
-				STP_change_apparatus_loyalty = yes
+				add_to_variable = { var = STP_pf_conservatives_support value = 8 }
+				STP_refresh_apparatus_loyalty = yes
 			}
 		}
 	}
@@ -1195,6 +1195,8 @@ focus_tree = {
 			}
 
 			custom_effect_tooltip = STP_pf_conservatives_deal_tt
+			custom_effect_tooltip = STP_GUARANTEE_MINISTERS_strategy_tt
+			hidden_effect = { add_to_variable = { var = STP_ps_reorg_1_specialization_days value = -4 } }
 		}
 	}
 
@@ -1220,10 +1222,10 @@ focus_tree = {
 			}
 			custom_effect_tooltip = STP_party_district_survey_tt
 			add_political_power = 25
-			custom_effect_tooltip = STP_cw_loyalty_plus_8_tt
+			custom_effect_tooltip = STP_PARTY_DISCIPLINE_strategy_tt
 			hidden_effect = {
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 8 }
-				STP_change_apparatus_loyalty = yes
+				add_to_variable = { var = STP_pf_security_support value = 10 }
+				STP_refresh_apparatus_loyalty = yes
 			}
 		}
 	}
@@ -1252,6 +1254,8 @@ focus_tree = {
 				STP_pf_shift = yes
 			}
 			custom_effect_tooltip = STP_pf_army_deal_tt
+			custom_effect_tooltip = STP_defense_budget_strategy_tt
+			hidden_effect = { add_to_variable = { var = STP_ps_reorg_2_specialization_days value = -4 } }
 		}
 	}
 
@@ -1348,6 +1352,8 @@ focus_tree = {
 			}
 			custom_effect_tooltip = STP_cw_party_defence_tt
 			hidden_effect = { set_country_flag = STP_cw_party_defence_ready }
+			custom_effect_tooltip = STP_cw_protect_congress_strategy_tt
+			hidden_effect = { add_to_variable = { var = STP_ps_reorg_1_specialization_days value = -3 } }
 		}
 	}
 
@@ -1375,10 +1381,11 @@ focus_tree = {
 				add_to_variable = { var = STP_cw_party_stability_factor value = 0.02 }
 				add_to_variable = { var = STP_cw_party_command_power_gain_mult value = 0.10 }
 				STP_cw_refresh_party_modifier = yes
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 6 }
-				STP_change_apparatus_loyalty = yes
+				add_to_variable = { var = STP_pf_conservatives_support value = 6 }
+				add_to_variable = { var = STP_pf_security_support value = 6 }
+				STP_refresh_apparatus_loyalty = yes
 			}
-			custom_effect_tooltip = STP_cw_loyalty_plus_6_tt
+			custom_effect_tooltip = STP_EMERGENCY_PRESIDIUM_strategy_tt
 		}
 	}
 
@@ -1422,10 +1429,11 @@ focus_tree = {
 					46 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT STP_region_is_operable = yes } STP_cw_secure_party_district = yes } }
 				}
 			}
-			custom_effect_tooltip = STP_cw_loyalty_plus_4_tt
+			custom_effect_tooltip = STP_THE_PARTY_CLOSES_RANKS_strategy_tt
 			hidden_effect = {
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 4 }
-				STP_change_apparatus_loyalty = yes
+				add_to_variable = { var = STP_pf_conservatives_support value = 8 }
+				add_to_variable = { var = STP_pf_army_support value = 4 }
+				STP_refresh_apparatus_loyalty = yes
 			}
 		}
 	}
@@ -1496,10 +1504,10 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = { decision = STP_cw_seal_protocol show_effect_tooltip = yes } custom_effect_tooltip = STP_cw_seal_protocol_desc
 			custom_effect_tooltip = STP_cw_protocol_office_tt
-			custom_effect_tooltip = STP_cw_loyalty_plus_5_tt
+			custom_effect_tooltip = STP_cw_protocol_office_strategy_tt
 			hidden_effect = {
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 5 }
-				STP_change_apparatus_loyalty = yes
+				add_to_variable = { var = STP_pf_conservatives_support value = 8 }
+				STP_refresh_apparatus_loyalty = yes
 			}
 		}
 	}
@@ -1550,10 +1558,11 @@ focus_tree = {
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.04 }
 			add_political_power = 25
 			custom_effect_tooltip = STP_cw_quiet_registers_tt
-			custom_effect_tooltip = STP_cw_loyalty_plus_10_tt
+			custom_effect_tooltip = STP_cw_quiet_registers_strategy_tt
 			hidden_effect = {
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 10 }
-				STP_change_apparatus_loyalty = yes
+				add_to_variable = { var = STP_pf_conservatives_support value = 10 }
+				add_to_variable = { var = STP_pf_borons_support value = 6 }
+				STP_refresh_apparatus_loyalty = yes
 			}
 		}
 	}
@@ -1574,10 +1583,10 @@ focus_tree = {
 			add_political_power = 40
 			unlock_decision_tooltip = { decision = STP_cw_publish_directive show_effect_tooltip = yes } custom_effect_tooltip = STP_cw_publish_directive_desc
 			custom_effect_tooltip = STP_cw_press_office_tt
-			custom_effect_tooltip = STP_cw_loyalty_plus_5_tt
+			custom_effect_tooltip = STP_cw_press_office_strategy_tt
 			hidden_effect = {
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 5 }
-				STP_change_apparatus_loyalty = yes
+				add_to_variable = { var = STP_pf_radicals_support value = 8 }
+				STP_refresh_apparatus_loyalty = yes
 			}
 		}
 	}
@@ -1611,6 +1620,8 @@ focus_tree = {
 				STP_pf_shift = yes
 			}
 			custom_effect_tooltip = STP_pf_army_deal_tt
+			custom_effect_tooltip = STP_cw_capital_oath_strategy_tt
+			hidden_effect = { add_to_variable = { var = STP_ps_reorg_3_specialization_days value = -7 } }
 		}
 	}
 
@@ -1631,10 +1642,11 @@ focus_tree = {
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.10 }
 			add_political_power = 75
 			custom_effect_tooltip = STP_cw_party_mandate_tt
-			custom_effect_tooltip = STP_cw_loyalty_plus_10_tt
+			custom_effect_tooltip = STP_cw_party_mandate_strategy_tt
 			hidden_effect = {
-				set_temp_variable = { var = STP_apparatus_loyalty_change value = 10 }
-				STP_change_apparatus_loyalty = yes
+				add_to_variable = { var = STP_pf_conservatives_support value = 10 }
+				add_to_variable = { var = STP_pf_borons_support value = 10 }
+				STP_refresh_apparatus_loyalty = yes
 			}
 		}
 	}

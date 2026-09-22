@@ -4982,11 +4982,21 @@ STP_pf_shift = {
 		if = { limit = { check_variable = { var = STP_pf_selected value = 6 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_merchants_influence } }
 		if = { limit = { check_variable = { var = STP_pf_selected value = 7 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_radicals_influence } }
 		set_temp_variable = { var = STP_pf_gain value = 5 }
+		set_temp_variable = { var = STP_pf_gain_room value = 60 }
+		subtract_from_temp_variable = { var = STP_pf_gain_room value = STP_pf_old_influence }
+		if = {
+			limit = { check_variable = { var = STP_pf_old_influence value = 60 compare = greater_than_or_equals } }
+			set_temp_variable = { var = STP_pf_gain value = 0 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_pf_gain_room value = 5 compare = less_than } }
+			set_temp_variable = { var = STP_pf_gain value = STP_pf_gain_room }
+		}
 		set_temp_variable = { var = STP_pf_room value = 100 }
 		subtract_from_temp_variable = { var = STP_pf_room value = STP_pf_old_influence }
-		if = { limit = { check_variable = { var = STP_pf_room value = 5 compare = less_than } } set_temp_variable = { var = STP_pf_gain value = STP_pf_room } }
+		if = { limit = { check_variable = { var = STP_pf_room value = STP_pf_gain compare = less_than } } set_temp_variable = { var = STP_pf_gain value = STP_pf_room } }
 		if = {
-			limit = { check_variable = { var = STP_pf_room value = 0 compare = greater_than } }
+			limit = { check_variable = { var = STP_pf_gain value = 0 compare = greater_than } }
 			set_temp_variable = { var = STP_pf_scale value = STP_pf_room }
 			subtract_from_temp_variable = { var = STP_pf_scale value = STP_pf_gain }
 			multiply_variable = { var = STP_pf_conservatives_influence value = STP_pf_scale }
@@ -5054,13 +5064,12 @@ STP_pf_shift = {
 		subtract_from_temp_variable = { var = STP_pf_remainder value = STP_pf_advisers_influence }
 		subtract_from_temp_variable = { var = STP_pf_remainder value = STP_pf_merchants_influence }
 		subtract_from_temp_variable = { var = STP_pf_remainder value = STP_pf_radicals_influence }
-		if = { limit = { check_variable = { var = STP_pf_selected value = 1 compare = equals } } add_to_variable = { var = STP_pf_conservatives_influence value = STP_pf_remainder } }
-		if = { limit = { check_variable = { var = STP_pf_selected value = 2 compare = equals } } add_to_variable = { var = STP_pf_borons_influence value = STP_pf_remainder } }
-		if = { limit = { check_variable = { var = STP_pf_selected value = 3 compare = equals } } add_to_variable = { var = STP_pf_security_influence value = STP_pf_remainder } }
-		if = { limit = { check_variable = { var = STP_pf_selected value = 4 compare = equals } } add_to_variable = { var = STP_pf_army_influence value = STP_pf_remainder } }
-		if = { limit = { check_variable = { var = STP_pf_selected value = 5 compare = equals } } add_to_variable = { var = STP_pf_advisers_influence value = STP_pf_remainder } }
-		if = { limit = { check_variable = { var = STP_pf_selected value = 6 compare = equals } } add_to_variable = { var = STP_pf_merchants_influence value = STP_pf_remainder } }
-		if = { limit = { check_variable = { var = STP_pf_selected value = 7 compare = equals } } add_to_variable = { var = STP_pf_radicals_influence value = STP_pf_remainder } }
+		# Keep rounding residue outside the selected faction's capped share.
+		if = {
+			limit = { check_variable = { var = STP_pf_selected value = 1 compare = equals } }
+			add_to_variable = { var = STP_pf_borons_influence value = STP_pf_remainder }
+		}
+		else = { add_to_variable = { var = STP_pf_conservatives_influence value = STP_pf_remainder } }
 		STP_refresh_apparatus_loyalty = yes
 	}
 	set_temp_variable = { var = STP_pf_selected value = 0 }
@@ -5110,6 +5119,9 @@ STP_pf_clear = {
 		clear_variable = STP_pf_nod_connected
 		ADISCORD_economy_mark_dirty = yes
 	}
+	clear_variable = STP_ps_reorg_1_specialization_days
+	clear_variable = STP_ps_reorg_2_specialization_days
+	clear_variable = STP_ps_reorg_3_specialization_days
 }
 
 # PARTY POSTWAR: refusing NOD's protectorate turns sovereignty into a timed invasion crisis.
@@ -5118,47 +5130,64 @@ STP_pw_party_start_nod_invasion_threat = {
 		limit = {
 			tag = STP
 			has_country_flag = STP_cw_postwar
-			has_completed_focus = STP_pw_party_sovereignty
-			is_subject = no
-			NOD = { exists = yes has_capitulated = no is_subject = no }
-			NOT = { has_war_with = NOD }
+			NOT = {
+				OR = {
+					has_country_flag = STP_pw_party_nod_threat_active
+					has_country_flag = STP_pw_party_nod_invasion_active
+					has_country_flag = STP_pw_party_nod_invasion_defeated
+					has_country_flag = STP_pw_party_nod_invasion_lost
+				}
+			}
 		}
-		clr_country_flag = STP_pw_party_nod_invasion_defeated
-		clr_country_flag = STP_pw_party_nod_invasion_active
-		set_country_flag = STP_pw_party_nod_threat_active
-		activate_mission = STP_pw_party_nod_invasion_countdown
-		country_event = { id = ADISCORD_STP_pc.28 hours = 1 }
-	}
-	else = {
-		clr_country_flag = STP_pw_party_nod_threat_active
-		set_country_flag = STP_pw_party_nod_invasion_defeated
-		mark_focus_tree_layout_dirty = yes
+		if = {
+			limit = { OR = { has_capitulated = yes is_subject = yes } }
+			set_country_flag = STP_pw_party_nod_invasion_lost
+			mark_focus_tree_layout_dirty = yes
+		}
+		else_if = {
+			limit = { NOD = { exists = yes has_capitulated = no is_subject = no } }
+			if = {
+				limit = { has_war_with = NOD }
+				set_country_flag = STP_pw_party_nod_invasion_active
+			}
+			else = {
+				set_country_flag = STP_pw_party_nod_threat_active
+				activate_mission = STP_pw_party_nod_invasion_countdown
+				country_event = { id = ADISCORD_STP_pc.28 hours = 1 }
+			}
+		}
+		else = {
+			set_country_flag = STP_pw_party_nod_invasion_defeated
+			mark_focus_tree_layout_dirty = yes
+		}
 	}
 }
 
 STP_pw_party_launch_nod_invasion = {
 	if = {
-		limit = {
-			tag = STP
-			has_country_flag = STP_pw_party_nod_threat_active
-			is_subject = no
-			has_capitulated = no
-			NOD = { exists = yes has_capitulated = no is_subject = no }
-			NOT = { has_war_with = NOD }
-		}
+		limit = { tag = STP has_country_flag = STP_pw_party_nod_threat_active }
 		clr_country_flag = STP_pw_party_nod_threat_active
-		set_country_flag = STP_pw_party_nod_invasion_active
-		NOD = {
-			add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 }
-			declare_war_on = { target = STP type = annex_everything }
+		if = {
+			limit = { OR = { has_capitulated = yes is_subject = yes } }
+			clr_country_flag = STP_pw_party_nod_invasion_active
+			set_country_flag = STP_pw_party_nod_invasion_lost
+			mark_focus_tree_layout_dirty = yes
 		}
-		country_event = { id = ADISCORD_STP_pc.29 hours = 1 }
-	}
-	else = {
-		clr_country_flag = STP_pw_party_nod_threat_active
-		clr_country_flag = STP_pw_party_nod_invasion_active
-		set_country_flag = STP_pw_party_nod_invasion_defeated
-		mark_focus_tree_layout_dirty = yes
+		else_if = {
+			limit = { NOD = { exists = yes has_capitulated = no is_subject = no } }
+			set_country_flag = STP_pw_party_nod_invasion_active
+			NOD = { add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 } }
+			if = {
+				limit = { NOT = { has_war_with = NOD } }
+				NOD = { declare_war_on = { target = STP type = annex_everything } }
+			}
+			country_event = { id = ADISCORD_STP_pc.29 hours = 1 }
+		}
+		else = {
+			clr_country_flag = STP_pw_party_nod_invasion_active
+			set_country_flag = STP_pw_party_nod_invasion_defeated
+			mark_focus_tree_layout_dirty = yes
+		}
 	}
 }
 
@@ -5301,6 +5330,9 @@ STP_ps_close_defence = {
 	clr_country_flag = STP_ps_congress_crisis
 	if = { limit = { has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_defence_dynamic } }
 	if = { limit = { has_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } } remove_dynamic_modifier = { modifier = STP_ps_nodes_dynamic } }
+	clear_variable = STP_ps_reorg_1_specialization_days
+	clear_variable = STP_ps_reorg_2_specialization_days
+	clear_variable = STP_ps_reorg_3_specialization_days
 }
 STP_ps_open_congress_crisis = {
 	if = {
@@ -6398,4 +6430,52 @@ STP_occidia_reconcile_peace = {
         limit = { has_country_flag = STP_occidia_campaign_active NOT = { has_war_with = SRP } }
         clr_country_flag = STP_occidia_campaign_active
     }
+}
+
+
+# COUNTRY STP: snapshot institutional preparation and faction cooperation at payment.
+STP_ps_adjust_reorg_1 = {
+	if = {
+		limit = { STP_ps_war_active = yes has_active_mission = STP_ps_reorg_1 }
+		if = {
+			limit = { has_variable = STP_ps_reorg_1_specialization_days }
+			add_days_mission_timeout = { mission = STP_ps_reorg_1 days = STP_ps_reorg_1_specialization_days }
+		}
+		if = {
+			limit = { has_country_flag = STP_pf_initialized check_variable = { var = STP_pf_conservatives_support value = 35 compare = less_than } }
+			add_days_mission_timeout = { mission = STP_ps_reorg_1 days = 7 }
+		}
+	}
+}
+
+
+# COUNTRY STP: snapshot institutional preparation and faction cooperation at payment.
+STP_ps_adjust_reorg_2 = {
+	if = {
+		limit = { STP_ps_war_active = yes has_active_mission = STP_ps_reorg_2 }
+		if = {
+			limit = { has_variable = STP_ps_reorg_2_specialization_days }
+			add_days_mission_timeout = { mission = STP_ps_reorg_2 days = STP_ps_reorg_2_specialization_days }
+		}
+		if = {
+			limit = { has_country_flag = STP_pf_initialized check_variable = { var = STP_pf_merchants_support value = 35 compare = less_than } }
+			add_days_mission_timeout = { mission = STP_ps_reorg_2 days = 7 }
+		}
+	}
+}
+
+
+# COUNTRY STP: snapshot institutional preparation and faction cooperation at payment.
+STP_ps_adjust_reorg_3 = {
+	if = {
+		limit = { STP_ps_war_active = yes has_active_mission = STP_ps_reorg_3 }
+		if = {
+			limit = { has_variable = STP_ps_reorg_3_specialization_days }
+			add_days_mission_timeout = { mission = STP_ps_reorg_3 days = STP_ps_reorg_3_specialization_days }
+		}
+		if = {
+			limit = { has_country_flag = STP_pf_initialized check_variable = { var = STP_pf_army_support value = 35 compare = less_than } }
+			add_days_mission_timeout = { mission = STP_ps_reorg_3 days = 7 }
+		}
+	}
 }
