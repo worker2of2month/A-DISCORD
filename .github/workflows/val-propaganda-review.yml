@@ -1,75 +1,61 @@
-name: Kefreyt propaganda repair review
+name: Kefreyt integration review
 on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
 permissions:
-  contents: write
+  contents: read
 jobs:
   review:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/val-propaganda-review-20260922'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 3
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install test image and data dependencies
-        run: python -m pip install pillow numpy pyyaml
-      - name: Prepare targeted verification
+          fetch-depth: 1
+      - name: Inspect the requested integration
         run: |
-          cp .github/val_propaganda_repair.py /tmp/val_propaganda_repair.py
-          git fetch --depth=1 origin 904e95637e8af82830eb94f2fe2683bd6c9a840e
-          git switch --detach 904e95637e8af82830eb94f2fe2683bd6c9a840e
+          git fetch --no-tags --filter=blob:none --depth=160 origin main fix/val-contract-flow-focus-value
+          git switch --detach b1d71d5228698179f9a9f8310b400981f1cc0a5b
+          git config user.name 'A-Discord integration'
+          git config user.email '81386071+worker2of2month@users.noreply.github.com'
+          mkdir -p /tmp/val-integration
+          git rev-parse HEAD origin/main > /tmp/val-integration/refs.txt
+          git merge-base HEAD origin/main > /tmp/val-integration/base.txt
+          git diff $(git merge-base HEAD origin/main)..HEAD > /tmp/val-integration/pr40.diff
+          git diff $(git merge-base HEAD origin/main)..origin/main > /tmp/val-integration/main.diff
+          git merge --no-commit --no-ff origin/main > /tmp/val-integration/merge.log 2>&1 || test -n "$(git ls-files -u)"
           python - <<'PY'
           from pathlib import Path
-          import ast
-          p = Path('/tmp/val_propaganda_repair.py')
-          text = p.read_text()
-          old = "'tools.tests.test_validate_adiscord_val_rework', "
-          assert text.count(old) == 1
-          text = text.replace(old, '')
-          old = "suite = [sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-p', 'test_*.py']"
-          assert text.count(old) == 1
-          checker = "from pathlib import Path\nfrom tools.validators.validate_adiscord_division_templates import parse_clausewitz\nfor path in ['common/national_focus/ADISCORD_national_focus_VAL.txt', 'common/decisions/ADISCORD_VAL_decisions.txt', 'common/decisions/categories/ADISCORD_VAL_rework_categories.txt']:\n    assert parse_clausewitz(Path(path).read_text(encoding='utf-8-sig'))\n    print(path + ': parsed')\n"
-          text = text.replace(old, "suite = [sys.executable, '-B', '-c', " + repr(checker) + "]")
-          text = text.replace('baseline_suite', 'baseline_syntax').replace('final_suite', 'final_syntax').replace('baseline-suite', 'baseline-syntax').replace('final-suite', 'final-syntax').replace("('focused', 'suite')", "('focused', 'syntax')")
-          text = text.replace("def run(name, command, timeout=300):\n", "def run(name, command, timeout=300):\n    timeout = 180 if 'validator' in name else 60\n")
-          text = text.replace("reports['final_validator'] = run('final-validator', validator)\n", "reports['final_validator'] = run('final-validator', validator)\nassert reports['final_validator']['returncode'] != 124, 'Project validator did not finish'\n")
-          ast.parse(text)
-          p.write_text(text)
-          PY
-      - name: Verify campaign regressions and project validator
-        run: python -B /tmp/val_propaganda_repair.py
-      - name: Preserve review evidence
-        if: always()
-        run: |
-          mkdir -p /tmp/val-propaganda-review
-          git diff --check > /tmp/val-propaganda-review/diff-check.log 2>&1 || true
-          git diff > /tmp/val-propaganda-review/remaining.diff
-          python - <<'PY'
-          from pathlib import Path
-          import zipfile
-          out = Path('/tmp/val-propaganda-review')
-          paths = ['common/national_focus/ADISCORD_national_focus_VAL.txt', 'common/decisions/ADISCORD_VAL_decisions.txt', 'common/decisions/categories/ADISCORD_VAL_rework_categories.txt', 'common/scripted_effects/ADISCORD_shared_action_effects.txt', 'common/scripted_effects/ADISCORD_VAL_effects.txt', 'tools/tests/test_val_contract_ui.py', 'localisation/russian/ADISCORD_VAL_decisions_l_russian.yml', 'localisation/english/ADISCORD_VAL_decisions_l_english.yml']
-          for name in paths:
-              p = Path(name)
-              if p.is_file():
-                  target = out / 'source' / name
-                  target.parent.mkdir(parents=True, exist_ok=True)
-                  target.write_bytes(p.read_bytes())
-          with zipfile.ZipFile('/tmp/val-propaganda-review.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+          import subprocess, zipfile, json
+          out = Path('/tmp/val-integration')
+          def git(*args):
+              return subprocess.check_output(['git', *args])
+          conflicts = git('diff','--name-only','--diff-filter=U').decode().splitlines()
+          (out/'conflicts.json').write_text(json.dumps(conflicts, indent=2))
+          for name in conflicts:
+              for stage, label in [('1','base'),('2','pr40'),('3','main')]:
+                  p = out/'conflicts'/label/name
+                  p.parent.mkdir(parents=True, exist_ok=True)
+                  try: p.write_bytes(git('show', ':'+stage+':'+name))
+                  except subprocess.CalledProcessError: pass
+          with zipfile.ZipFile('/tmp/val-integration-review.zip','w',zipfile.ZIP_DEFLATED) as z:
               for p in out.rglob('*'):
-                  if p.is_file():
-                      archive.write(p, p.relative_to(out))
+                  if p.is_file(): z.write(p,p.relative_to(out))
+              for directory in ['common','events','history','localisation','tools','docs','interface','country_metadata']:
+                  for p in Path(directory).rglob('*'):
+                      if p.is_file() and p.suffix.lower() in {'.txt','.yml','.yaml','.json','.py','.md','.gui','.gfx','.csv'}:
+                          z.write(p,'checkout/'+str(p))
+              for name in ['AGENTS.md','descriptor.mod']:
+                  z.write(name,'checkout/'+name)
+          print('Conflicts:', conflicts)
+          print((out/'merge.log').read_text())
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: val-propaganda-review
-          path: /tmp/val-propaganda-review.zip
-          retention-days: 7
+          name: val-integration-review
+          path: /tmp/val-integration-review.zip
+          retention-days: 3
