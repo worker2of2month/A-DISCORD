@@ -4031,6 +4031,72 @@ VAL_final_crisis_close = {
 }
 
 VAL_final_crisis_reconcile = {
+	# Save-safe repair for campaigns created before the Stelander-first gate.
+	# An old final NOD war must not become an untracked permanent war after load.
+	if = {
+		limit = {
+			has_war_with = NOD
+			VAL_stelander_dominated = no
+			OR = {
+				check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
+				NOD = { has_country_flag = VAL_final_war_member }
+			}
+			NOD = { NOT = { has_country_flag = VAL_frontier_guarantor } }
+			NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }
+		}
+		NOD = { if = { limit = { has_war_with = VAL } white_peace = VAL } }
+		if = {
+			limit = { check_variable = { var = VAL_final_crisis_phase value = 0 compare = greater_than } }
+			VAL_final_crisis_close = yes
+		}
+	}
+
+	# Recover a missed immediate-capitulation callback in a valid final campaign.
+	# Defeated registered members stay reserved until every required ally is down.
+	if = {
+		limit = {
+			check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
+			VAL_stelander_dominated = yes
+			has_war_with = NOD
+			NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }
+		}
+		NOD = {
+			if = {
+				limit = { has_war_with = VAL has_country_flag = VAL_final_war_member has_capitulated = yes NOT = { has_country_flag = VAL_final_defeat_pending } }
+				set_country_flag = VAL_final_defeat_pending
+			}
+		}
+		STP = {
+			if = {
+				limit = { has_war_with = VAL has_country_flag = VAL_final_war_member has_capitulated = yes NOT = { has_country_flag = VAL_final_defeat_pending } }
+				set_country_flag = VAL_final_defeat_pending
+			}
+		}
+		STS = {
+			if = {
+				limit = { has_war_with = VAL has_country_flag = VAL_final_war_member has_capitulated = yes NOT = { has_country_flag = VAL_final_defeat_pending } }
+				set_country_flag = VAL_final_defeat_pending
+			}
+		}
+		VAL_finalize_reserved_settlements = yes
+	}
+
+	# The shared Shabrat campaign owns its own peace. Recover it separately if
+	# the immediate capitulation callback was skipped by an older save.
+	if = {
+		limit = {
+			check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
+			has_country_flag = VAL_joint_nod_campaign_with_sts
+			NOD = { exists = yes has_war_with = VAL has_war_with = STS has_capitulated = yes }
+			STS = {
+				exists = yes
+				has_capitulated = no
+				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+			}
+		}
+		VAL_settle_joint_nod_shabrat_victory = yes
+	}
+
 	if = {
 		limit = { check_variable = { var = VAL_final_crisis_phase value = 0 compare = greater_than } check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } }
 		if = { limit = { OR = { has_capitulated = yes is_subject = yes has_country_flag = VAL_stelander_defeated } } VAL_final_crisis_close = yes }
