@@ -1,4 +1,25 @@
 on_actions = {
+
+    on_startup = {
+        effect = {
+            STP = {
+                if = {
+                    limit = {
+                        exists = yes
+                        NOT = { has_global_flag = STP_cw_started }
+                        OR = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_sided_with_the_party_flag }
+                    }
+                    country_event = { id = ADISCORD_STP_preparation.26 hours = 1 }
+                }
+                if = {
+                    limit = { exists = yes STP_ps_war_active = yes has_variable = STP_ps_stage }
+                    STP_ps_refresh_defence = yes
+                }
+            }
+        }
+    }
+
+
 	on_weekly_VAL = {
 		effect = {
 			if = { limit = { STP_cw_kefreyt_aid_open = yes NOT = { has_country_flag = STP_ps_val_offer_sent } STP = { has_country_flag = { flag = STP_sided_with_the_party_flag days > 7 } } }

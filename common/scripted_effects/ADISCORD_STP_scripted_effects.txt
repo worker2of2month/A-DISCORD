@@ -5218,9 +5218,9 @@ STP_ps_begin_defence = {
 STP_ps_refresh_defence = {
 	set_variable = { var = STP_ps_breakthrough value = 0 }
 	set_variable = { var = STP_ps_planning value = 0 }
-	if = { limit = { check_variable = { var = STP_ps_stage value = 1 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.45 } set_variable = { var = STP_ps_planning value = -0.5 } }
-	if = { limit = { check_variable = { var = STP_ps_stage value = 2 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.3 } set_variable = { var = STP_ps_planning value = -0.3 } }
-	if = { limit = { check_variable = { var = STP_ps_stage value = 3 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.15 } set_variable = { var = STP_ps_planning value = -0.15 } }
+	if = { limit = { STP_ps_war_active = yes check_variable = { var = STP_ps_stage value = 1 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.45 } set_variable = { var = STP_ps_planning value = -0.5 } }
+	if = { limit = { STP_ps_war_active = yes check_variable = { var = STP_ps_stage value = 2 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.3 } set_variable = { var = STP_ps_planning value = -0.3 } }
+	if = { limit = { STP_ps_war_active = yes check_variable = { var = STP_ps_stage value = 3 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.15 } set_variable = { var = STP_ps_planning value = -0.15 } }
 	if = { limit = { STP_ps_war_active = yes NOT = { has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } } add_dynamic_modifier = { modifier = STP_ps_defence_dynamic } }
 }
 STP_ps_finish_stage = {
@@ -6030,7 +6030,13 @@ STP_ps_val_pressure_finish = {
 			clear_variable = STP_ps_val_pressure_deposit
 
 			set_country_flag = { flag = STP_ps_val_pressure_cooldown value = 1 days = 60 }
-			VAL = { set_country_flag = { flag = STP_ps_val_pressure_active value = 1 days = 60 } }
+			VAL = {
+                set_country_flag = { flag = STP_ps_val_pressure_active value = 1 days = 60 }
+                if = {
+                    limit = { has_active_mission = STP_ps_val_departure }
+                    add_days_mission_timeout = { mission = STP_ps_val_departure days = 14 }
+                }
+            }
 			ADISCORD_economy_mark_dirty = yes
 		}
 		else = { STP_ps_val_pressure_refund = yes }

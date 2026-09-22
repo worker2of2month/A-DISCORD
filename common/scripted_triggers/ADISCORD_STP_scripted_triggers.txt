@@ -1575,3 +1575,27 @@ STP_pw_party_nod_threat_current = {
 	NOD = { exists = yes has_capitulated = no is_subject = no }
 	NOT = { has_war_with = NOD }
 }
+
+# COUNTRY STP: reserve a full response chain plus one day before departure.
+STP_ps_val_intelligence_time_available = {
+    VAL = {
+        has_active_mission = STP_ps_val_departure
+        check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 22 compare = greater_than_or_equals }
+    }
+}
+STP_ps_val_intercept_time_available = {
+    VAL = {
+        has_active_mission = STP_ps_val_departure
+        check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 15 compare = greater_than_or_equals }
+    }
+}
+# COUNTRY STP: funding is not a purchase of automatic military intervention.
+STP_ps_nod_credit_useful = {
+    NOD = {
+        OR = {
+            STP_ps_northern_front_active = yes
+            NOD_cw_intervention_possible = yes
+            AND = { has_country_flag = NOD_cw_entered has_war_with = STS }
+        }
+    }
+}
