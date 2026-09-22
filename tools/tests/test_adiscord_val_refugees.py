@@ -107,6 +107,73 @@ class RefugeeAdmissionTests(unittest.TestCase):
             facts[("VAL", "variable", "VAL_displaced_population")] = 80
             self.assertTrue(matches_conditions(available, facts, "VAL"))
 
+    def test_perimeter_opening_creates_one_bounded_admission_window(self):
+        trigger = self.triggers["VAL_refugee_perimeter_open"]
+        self.assertTrue(matches_conditions(
+            trigger,
+            {("VAL", "has_global_flag", "ADISCORD_vorkerland_dirty_opened"): True},
+            "VAL",
+        ))
+        self.facts[("VAL", "VAL_refugee_perimeter_open", "yes")] = True
+        self.run_effect(self.effects["VAL_open_refugee_waves"])
+        flag = "VAL_refugee_perimeter_window"
+        self.assertEqual(self.windows[flag], 180)
+        self.assertTrue(self.visible("perimeter"))
+        self.facts[("VAL", "has_country_flag", flag)] = False
+        self.run_effect(self.effects["VAL_open_refugee_waves"])
+        self.assertFalse(self.visible("perimeter"), "The one-time Perimeter window must not renew")
+
+    def test_resettlement_depots_move_people_into_low_population_home_states(self):
+        body = self.decisions["VAL_fund_resettlement_depots"]
+        self.assertEqual(scalar(body, "state_target"), "yes")
+        targets = next(e.value for e in body if e.key == "targets")
+        self.assertEqual({int(e.key) for e in targets}, {24, 42, 55, 56})
+        self.assertEqual(scalar(body, "cost"), "0")
+        self.assertEqual(scalar(body, "custom_cost_text"), "VAL_logistics_cost_250")
+
+        available = next(e.value for e in body if e.key == "available")
+        state_gate = next(e.value for e in available if e.key == "FROM")
+        def negates(key, value=None):
+            for entry in state_gate:
+                if entry.key != "NOT":
+                    continue
+                for child in entry.value:
+                    if child.key != key:
+                        continue
+                    if value is None and child.value:
+                        return True
+                    if key == "has_dynamic_modifier" and scalar(child.value, "modifier") == value:
+                        return True
+                    if child.value == value:
+                        return True
+            return False
+        self.assertTrue(negates("has_state_flag", "VAL_refugee_resettled_once"))
+        for modifier in (
+            "ADISCORD_vorkerland_dirty_state",
+            "VAL_reclamation_stage_1_modifier",
+            "VAL_reclamation_stage_2_modifier",
+        ):
+            self.assertTrue(negates("has_dynamic_modifier", modifier), modifier)
+
+        reward = next(e.value for e in body if e.key == "complete_effect")
+        self.assertEqual(sum(e.key == "ADISCORD_economy_spend_250" for e in reward), 1)
+        pool = [e.value for e in reward if e.key == "add_to_variable"
+                and scalar(e.value, "var") == "VAL_displaced_population"]
+        self.assertEqual(len(pool), 1)
+        self.assertEqual(scalar(pool[0], "value"), "-10")
+        destination = next(e.value for e in reward if e.key == "FROM")
+        self.assertEqual(scalar(destination, "add_manpower"), "100000")
+        self.assertEqual(scalar(destination, "set_state_flag"), "VAL_refugee_resettled_once")
+        self.assertFalse(any(e.key == "add_manpower" for e in reward),
+                         "Resettlement must increase state population, not the country manpower pool")
+
+        for language in ("english", "russian"):
+            loc = (ROOT / f"localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml").read_text(encoding="utf-8-sig")
+            self.assertIn("VAL_accept_perimeter_refugees:", loc)
+            self.assertIn("[FROM.GetName]", loc)
+            self.assertIn("VAL_fund_resettlement_depots:", loc)
+            self.assertIn("180", loc)
+
     def test_no_population_faucet_or_permanent_stability_farming(self):
         def walk(items):
             for e in items:
