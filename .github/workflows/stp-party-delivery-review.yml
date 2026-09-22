@@ -15,16 +15,16 @@ jobs:
           python-version: '3.12'
       - name: Install validator dependencies
         run: python -m pip install --disable-pip-version-check Pillow numpy
-      - name: Apply verified delta without replacing concurrent edits
+      - name: Reconcile and verify gameplay delta
         run: |
           python - <<'PY'
-          import base64, difflib, hashlib, json, lzma, re, subprocess
+          import base64, difflib, hashlib, json, lzma, re, subprocess, zipfile
           from pathlib import Path
           evidence = Path('/tmp/stp-party-evidence')
           evidence.mkdir(exist_ok=True)
           encoded = ''.join(Path(f'.github/party-qol-transport/{i}.b64').read_text().strip() for i in range(5))
           raw = lzma.decompress(base64.b64decode(encoded, validate=True))
-          assert hashlib.sha256(raw).hexdigest() == '57c0fd1d233d41cb0763be1f552eb4a557144af85f44d5641e7664304f1502e1', 'Transport checksum mismatch'
+          assert hashlib.sha256(raw).hexdigest() == '57c0fd1d233d41cb0763be1f552eb4a557144af85f44d5641e7664304f1502e1'
           changes = json.loads(raw)
           base = 'bee29e55159abf21f0787e0512d81afd16393eb4'
           def git(*args):
@@ -32,31 +32,42 @@ jobs:
           subprocess.run(['git', 'fetch', '--depth=1', 'origin', base, '+refs/heads/main:refs/remotes/origin/main'], check=True)
           target = git('rev-parse', 'origin/main')
           subprocess.run(['git', 'checkout', '--detach', target], check=True)
-          planned = {}
-          rebased = []
+          with zipfile.ZipFile(evidence / 'current-text.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for change in changes:
+                  path = Path(change['path'])
+                  if path.is_file():
+                      archive.write(path, str(path))
+          # These two native syntaxes identify the same unlock. Preserve the new
+          # preview form when adding rewards to a concurrently edited focus.
+          native = re.compile(r'unlock_decision_tooltip = \{ decision = (\w+) show_effect_tooltip = yes \}(?: custom_effect_tooltip = \1_desc)?')
+          scalar_unlock = re.compile(r'unlock_decision_tooltip = (\w+)')
+          planned, rebased, conflicts = {}, [], []
           for change in changes:
               path = Path(change['path'])
               assert not path.is_absolute() and '..' not in path.parts and not str(path).startswith('.github/'), path
               if change['before'] is None:
                   assert not path.exists(), f'New file already exists: {path}'
-                  original = b''
-                  current = b''
+                  original = current = b''
               else:
                   original = subprocess.check_output(['git', 'show', base + ':' + str(path)])
-                  assert hashlib.sha256(original).hexdigest() == change['before'], f'Source snapshot mismatch: {path}'
+                  assert hashlib.sha256(original).hexdigest() == change['before'], f'Snapshot mismatch: {path}'
                   current = path.read_bytes()
               old = original.decode('utf-8').splitlines(keepends=True)
               desired = old.copy()
               for i, j, text in reversed(change['ops']):
                   desired[i:j] = [text]
               desired_bytes = ''.join(desired).encode('utf-8')
-              assert hashlib.sha256(desired_bytes).hexdigest() == change['after'], f'Delta checksum mismatch: {path}'
+              assert hashlib.sha256(desired_bytes).hexdigest() == change['after'], path
               if current == original:
                   planned[path] = desired_bytes
                   continue
               rebased.append(str(path))
               now = current.decode('utf-8').splitlines(keepends=True)
-              blocks = difflib.SequenceMatcher(None, old, now, autojunk=False).get_matching_blocks()
+              if str(path) == 'common/national_focus/ADISCORD_national_focus_STP.txt':
+                  normalized = [native.sub(lambda m: 'unlock_decision_tooltip = ' + m.group(1), line) for line in now]
+              else:
+                  normalized = now
+              blocks = difflib.SequenceMatcher(None, old, normalized, autojunk=False).get_matching_blocks()
               translated = []
               for i, j, text in change['ops']:
                   if i == j == len(old):
@@ -65,21 +76,51 @@ jobs:
                       anchors = [b for b in blocks if b.size and b.a <= i < b.a + b.size]
                       if not anchors:
                           anchors = [b for b in blocks if b.size and b.a + b.size == i]
-                      assert len(anchors) == 1, f'Concurrent insertion conflict: {path}:{i}'
+                      if len(anchors) != 1:
+                          conflicts.append([str(path), i, j, 'insertion'])
+                          continue
                       start = end = anchors[0].b + i - anchors[0].a
                   else:
                       anchors = [b for b in blocks if b.a <= i and j <= b.a + b.size]
-                      assert len(anchors) == 1, f'Concurrent replacement conflict: {path}:{i}-{j}'
+                      if len(anchors) != 1:
+                          conflicts.append([str(path), i, j, 'replacement'])
+                          continue
                       start = anchors[0].b + i - anchors[0].a
                       end = start + j - i
-                      assert now[start:end] == old[i:j]
+                      assert normalized[start:end] == old[i:j]
+                      if now[start:end] != old[i:j]:
+                          assert str(path) == 'common/national_focus/ADISCORD_national_focus_STP.txt'
+                          previews = {m.group(1): m.group(0) for m in native.finditer(''.join(now[start:end]))}
+                          text = scalar_unlock.sub(lambda m: previews.get(m.group(1), m.group(0)), text)
+                          assert all(k in text for k in previews), f'Lost concurrent unlock: {path}'
                   translated.append((start, end, text))
+              if any(c[0] == str(path) for c in conflicts):
+                  continue
               assert all(translated[i][1] <= translated[i+1][0] for i in range(len(translated)-1)), path
               for i, j, text in reversed(translated):
                   now[i:j] = [text]
               planned[path] = ''.join(now).encode('utf-8')
-          (evidence / 'application.json').write_text(json.dumps({'base': base, 'target': target, 'rebased_files': rebased, 'files': [str(p) for p in planned]}, indent=2))
-          print('MAIN_TARGET', target, 'REBASED', json.dumps(rebased), flush=True)
+          (evidence / 'application.json').write_text(json.dumps({'base': base, 'target': target, 'rebased_files': rebased, 'conflicts': conflicts, 'files': [str(p) for p in planned]}, indent=2))
+          print('APPLICATION', json.dumps({'target': target, 'rebased': rebased, 'conflicts': conflicts}), flush=True)
+          assert not conflicts, 'Concurrent changes require explicit reconciliation; no gameplay files written'
+          # Keep the numerical cap and both native tooltip syntaxes under test.
+          for language, old_text, new_text in (
+              ('russian', 'влияние §Y+5 п.п.§! (до 100%', 'влияние до §Y+5 п.п.§! (не выше 60%'),
+              ('english', 'influence §Y+5 percentage points§! (up to 100%', 'influence up to §Y+5 percentage points§! (capped at 60%')):
+              path = Path(f'localisation/{language}/ADISCORD_STP_l_{language}.yml')
+              text = planned[path].decode('utf-8')
+              assert text.count(old_text) == 7, language
+              planned[path] = text.replace(old_text, new_text).encode('utf-8')
+          probe = Path('tools/tests/test_adiscord_stp_party_qol.py')
+          text = planned[probe].decode()
+          old_test = "{e.value for e in reward if e.key=='unlock_decision_tooltip'}"
+          new_test = "{scalar(e.value,'decision') if isinstance(e.value,list) else e.value for e in reward if e.key=='unlock_decision_tooltip'}"
+          assert text.count(old_test) == 1
+          text = text.replace(old_test, new_test)
+          anchor = "            self.assertIn('STP_party_military_slot_tt',loc)"
+          assert text.count(anchor) == 1
+          text = text.replace(anchor, anchor + "\n            for faction in ('conservatives','borons','security','army','advisers','merchants','radicals'):\n                deal=loc[f'STP_pf_{faction}_deal_tt']\n                self.assertNotIn('до 100%' if language=='russian' else 'up to 100%',deal)\n                self.assertIn('60%',deal)")
+          planned[probe] = text.encode()
           modules = ['tools.tests.test_adiscord_stp_party_route', 'tools.tests.test_adiscord_stp_party_survival', 'tools.tests.test_adiscord_stp_preparation', 'tools.tests.test_adiscord_stp_civil_war', 'tools.tests.test_adiscord_stp_regions', 'tools.tests.test_validate_adiscord_val_rework']
           def run(label, command):
               result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -89,11 +130,10 @@ jobs:
               print(label, json.dumps({'returncode': result.returncode, 'issues': issues, 'summary': summary}), flush=True)
               return result, issues
           baseline, before = run('baseline', ['python', '-B', '-m', 'unittest', *modules])
-          probe = Path('tools/tests/test_adiscord_stp_party_qol.py')
           probe.write_bytes(planned[probe])
           red, _ = run('red', ['python', '-B', '-m', 'unittest', 'tools.tests.test_adiscord_stp_party_qol'])
           probe.unlink()
-          assert red.returncode != 0, 'The new regression contracts did not detect missing changes'
+          assert red.returncode != 0, 'New tests did not detect missing changes'
           for path, content in planned.items():
               path.parent.mkdir(parents=True, exist_ok=True)
               path.write_bytes(content)
@@ -105,11 +145,10 @@ jobs:
           validator, _ = run('validator', ['python', '-B', 'tools/validate_tc.py', '--limit', '300'])
           (evidence / 'party.patch').write_bytes(subprocess.check_output(['git', 'diff', '--binary']))
           if focused.returncode or new_issues or validator.returncode:
-              print('FAILED GATE: see evidence artifact for full output', flush=True)
-              raise SystemExit(1)
+              raise SystemExit('FAILED GATE: see complete evidence logs')
           subprocess.run(['git', 'diff', '--check'], check=True)
           delivery = 'codex/stp-party-qol-delivery-20260922'
-          assert not git('ls-remote', '--heads', 'origin', delivery), 'Delivery branch already exists; no force push permitted'
+          assert not git('ls-remote', '--heads', 'origin', delivery), 'Delivery branch already exists; no force push'
           subprocess.run(['git', 'checkout', '-b', delivery], check=True)
           subprocess.run(['git', 'config', 'user.name', 'worker2of2month'], check=True)
           subprocess.run(['git', 'config', 'user.email', '81386071+worker2of2month@users.noreply.github.com'], check=True)
