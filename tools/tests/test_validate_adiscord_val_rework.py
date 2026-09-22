@@ -1456,6 +1456,28 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         final = next(f for f in named_blocks(focuses, "focus") if "id = VAL_Industrial_Mobilization_Plan" in f)
         for prerequisite in ("VAL_Three_Shift_Arsenals", "VAL_Reserve_Accounting"):
             self.assertIn(f"prerequisite = {{ focus = {prerequisite} }}", final)
+        supply_base = next(f for f in named_blocks(focuses, "focus") if "id = VAL_New_Supply_Base" in f)
+        self.assertIn("remove_ideas = VAL_vorkerland_metal_shortage", supply_base)
+
+    def test_base_vorkerland_metal_access_loss_creates_shortage_without_optional_concession(self):
+        self.facts[("VAL", "has_country_flag", "VAL_vorkerland_resource_access_active")] = True
+        self.variables["VAL_arsenal_reputation_stage"] = 4
+        self.run_effect("VAL_handle_vorkerland_war_outbreak")
+        self.assertEqual(self.removed_rights, ["33"])
+        self.assertIn("VAL_vorkerland_metal_shortage", self.installed_ideas)
+        self.assertTrue(self.facts.get(("VAL", "has_country_flag", "VAL_westerholm_metal_lost"), False))
+
+        dirty = self.dirty
+        self.run_effect("VAL_reconcile_supply_crisis")
+        self.assertIn("VAL_vorkerland_metal_shortage", self.installed_ideas)
+        self.assertEqual(self.dirty, dirty, "A healthy shortage consumer must not dirty the economy every week")
+
+    def test_reconcile_repairs_missing_metal_shortage_during_supply_crisis(self):
+        self.facts[("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")] = True
+        self.variables.update(VAL_economic_recovery_steps=2, VAL_arsenal_reputation_stage=0)
+        self.run_effect("VAL_reconcile_supply_crisis")
+        self.assertIn("VAL_vorkerland_metal_shortage", self.installed_ideas)
+        self.assertTrue(self.facts.get(("VAL", "has_country_flag", "VAL_westerholm_metal_lost"), False))
 
     def test_reputation_and_resource_loss_are_once_only(self):
         for flag in ("VAL_vorkerland_resource_access_active", "VAL_westerholm_resource_rights_active"):
