@@ -284,16 +284,16 @@ ideas = {
 				command_power_gain_mult = 0.10
 			} }
 
-		# Industry previews follow the authoritative tier, including an already completed upgrade.
-		VAL_industry_1_dummy = { name = VAL_contract_industry_1 allowed = { always = no } modifier = { } }
-		VAL_industry_2_dummy = { name = VAL_contract_industry_2 allowed = { always = no } modifier = { } }
-		VAL_industry_3_dummy = { name = VAL_contract_industry_3 allowed = { always = no } modifier = { } }
-		VAL_industry_1_delta = { name = VAL_contract_industry_1 allowed = { always = no } modifier = { industrial_capacity_factory = 0.04 production_factory_efficiency_gain_factor = 0.05 } }
-		VAL_industry_2_delta = { name = VAL_contract_industry_2 allowed = { always = no } modifier = { industrial_capacity_factory = 0.07 production_factory_efficiency_gain_factor = 0.08 production_factory_max_efficiency_factor = 0.05 production_lack_of_resource_penalty_factor = -0.05 } }
-		VAL_industry_1_to_2_delta = { name = VAL_contract_industry_2 allowed = { always = no } modifier = { industrial_capacity_factory = 0.03 production_factory_efficiency_gain_factor = 0.03 production_factory_max_efficiency_factor = 0.05 production_lack_of_resource_penalty_factor = -0.05 } }
-		VAL_industry_3_delta = { name = VAL_contract_industry_3 allowed = { always = no } modifier = { industrial_capacity_factory = 0.10 production_factory_efficiency_gain_factor = 0.12 production_factory_max_efficiency_factor = 0.08 production_lack_of_resource_penalty_factor = -0.10 ADISCORD_economy_military_industry_income_factor = 0.08 } }
-		VAL_industry_1_to_3_delta = { name = VAL_contract_industry_3 allowed = { always = no } modifier = { industrial_capacity_factory = 0.06 production_factory_efficiency_gain_factor = 0.07 production_factory_max_efficiency_factor = 0.08 production_lack_of_resource_penalty_factor = -0.10 ADISCORD_economy_military_industry_income_factor = 0.08 } }
-		VAL_industry_2_to_3_delta = { name = VAL_contract_industry_3 allowed = { always = no } modifier = { industrial_capacity_factory = 0.03 production_factory_efficiency_gain_factor = 0.04 production_factory_max_efficiency_factor = 0.03 production_lack_of_resource_penalty_factor = -0.05 ADISCORD_economy_military_industry_income_factor = 0.08 } }
+		# Industry previews follow the authoritative tier mechanically, but use one neutral display name without I/II/III.
+		VAL_industry_1_dummy = { name = VAL_contract_industry_preview allowed = { always = no } modifier = { } }
+		VAL_industry_2_dummy = { name = VAL_contract_industry_preview allowed = { always = no } modifier = { } }
+		VAL_industry_3_dummy = { name = VAL_contract_industry_preview allowed = { always = no } modifier = { } }
+		VAL_industry_1_delta = { name = VAL_contract_industry_preview allowed = { always = no } modifier = { industrial_capacity_factory = 0.04 production_factory_efficiency_gain_factor = 0.05 } }
+		VAL_industry_2_delta = { name = VAL_contract_industry_preview allowed = { always = no } modifier = { industrial_capacity_factory = 0.07 production_factory_efficiency_gain_factor = 0.08 production_factory_max_efficiency_factor = 0.05 production_lack_of_resource_penalty_factor = -0.05 } }
+		VAL_industry_1_to_2_delta = { name = VAL_contract_industry_preview allowed = { always = no } modifier = { industrial_capacity_factory = 0.03 production_factory_efficiency_gain_factor = 0.03 production_factory_max_efficiency_factor = 0.05 production_lack_of_resource_penalty_factor = -0.05 } }
+		VAL_industry_3_delta = { name = VAL_contract_industry_preview allowed = { always = no } modifier = { industrial_capacity_factory = 0.10 production_factory_efficiency_gain_factor = 0.12 production_factory_max_efficiency_factor = 0.08 production_lack_of_resource_penalty_factor = -0.10 ADISCORD_economy_military_industry_income_factor = 0.08 } }
+		VAL_industry_1_to_3_delta = { name = VAL_contract_industry_preview allowed = { always = no } modifier = { industrial_capacity_factory = 0.06 production_factory_efficiency_gain_factor = 0.07 production_factory_max_efficiency_factor = 0.08 production_lack_of_resource_penalty_factor = -0.10 ADISCORD_economy_military_industry_income_factor = 0.08 } }
+		VAL_industry_2_to_3_delta = { name = VAL_contract_industry_preview allowed = { always = no } modifier = { industrial_capacity_factory = 0.03 production_factory_efficiency_gain_factor = 0.04 production_factory_max_efficiency_factor = 0.03 production_lack_of_resource_penalty_factor = -0.05 ADISCORD_economy_military_industry_income_factor = 0.08 } }
 
 		VAL_big_buyers = {
 			picture = GFX_idea_VAL_big_buyers
