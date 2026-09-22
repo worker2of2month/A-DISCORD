@@ -165,8 +165,7 @@ guiTypes = {
 			maxWidth = 675
 			maxHeight = 407
 			format = left
-			fixedsize = yes
-			scrollbarType = "standardtext_slider"
+			scrollbarType = standardtext_slider
 		}
 		instantTextboxType = {
 			name = "ADISCORD_startup_body"
@@ -176,8 +175,7 @@ guiTypes = {
 			maxWidth = 500
 			maxHeight = 388
 			format = left
-			fixedsize = yes
-			scrollbarType = "standardtext_slider"
+			scrollbarType = standardtext_slider
 		}
 		buttonType = {
 			name = "ADISCORD_startup_spoilers"
