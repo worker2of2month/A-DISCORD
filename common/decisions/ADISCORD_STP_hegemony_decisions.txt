@@ -9,6 +9,7 @@ STP_hegemony_administration = {
 	STP_heg_establish_nod_administration = {
 		icon = generic_political_pressure
 		visible = {
+			NOT = { has_country_flag = STP_heg_nod_integrated }
 			OR = {
 				NOD = { exists = yes }
 				any_owned_state = { is_core_of = NOD }
@@ -63,10 +64,15 @@ STP_hegemony_administration = {
 					}
 				}
 				clr_country_flag = STP_heg_annex_nod_pending
+				set_country_flag = STP_heg_nod_integrated
 				annex_country = { target = NOD transfer_troops = yes }
 				add_stability = 0.01
 				custom_effect_tooltip = STP_heg_annex_complete_tt
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			else = {
+				clr_country_flag = STP_heg_annex_nod_pending
+				add_political_power = 100
 			}
 		}
 		cancel_effect = {
@@ -81,6 +87,7 @@ STP_hegemony_administration = {
 	STP_heg_establish_ypr_administration = {
 		icon = generic_political_pressure
 		visible = {
+			NOT = { has_country_flag = STP_heg_ypr_integrated }
 			OR = {
 				YPR = { exists = yes }
 				any_owned_state = { is_core_of = YPR }
@@ -135,10 +142,15 @@ STP_hegemony_administration = {
 					}
 				}
 				clr_country_flag = STP_heg_annex_ypr_pending
+				set_country_flag = STP_heg_ypr_integrated
 				annex_country = { target = YPR transfer_troops = yes }
 				add_stability = 0.01
 				custom_effect_tooltip = STP_heg_annex_complete_tt
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			else = {
+				clr_country_flag = STP_heg_annex_ypr_pending
+				add_political_power = 100
 			}
 		}
 		cancel_effect = {
@@ -153,6 +165,7 @@ STP_hegemony_administration = {
 	STP_heg_establish_tff_administration = {
 		icon = generic_political_pressure
 		visible = {
+			NOT = { has_country_flag = STP_heg_tff_integrated }
 			OR = {
 				TFF = { exists = yes }
 				any_owned_state = { is_core_of = TFF }
@@ -207,10 +220,15 @@ STP_hegemony_administration = {
 					}
 				}
 				clr_country_flag = STP_heg_annex_tff_pending
+				set_country_flag = STP_heg_tff_integrated
 				annex_country = { target = TFF transfer_troops = yes }
 				add_stability = 0.01
 				custom_effect_tooltip = STP_heg_annex_complete_tt
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			else = {
+				clr_country_flag = STP_heg_annex_tff_pending
+				add_political_power = 100
 			}
 		}
 		cancel_effect = {
@@ -225,6 +243,7 @@ STP_hegemony_administration = {
 	STP_heg_establish_val_administration = {
 		icon = generic_political_pressure
 		visible = {
+			NOT = { has_country_flag = STP_heg_val_integrated }
 			OR = {
 				VAL = { exists = yes }
 				any_owned_state = { is_core_of = VAL }
@@ -279,10 +298,15 @@ STP_hegemony_administration = {
 					}
 				}
 				clr_country_flag = STP_heg_annex_val_pending
+				set_country_flag = STP_heg_val_integrated
 				annex_country = { target = VAL transfer_troops = yes }
 				add_stability = 0.01
 				custom_effect_tooltip = STP_heg_annex_complete_tt
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			else = {
+				clr_country_flag = STP_heg_annex_val_pending
+				add_political_power = 100
 			}
 		}
 		cancel_effect = {
