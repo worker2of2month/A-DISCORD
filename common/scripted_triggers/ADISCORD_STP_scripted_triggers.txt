@@ -448,7 +448,7 @@ STP_cw_two_inspections_active = {
 # COUNTRY: one additional commission is available in the watched suspicion band,
 # but only while fewer than two inspection districts are already active.
 STP_cw_second_inspection_unlocked = {
-	check_variable = { var = STP_party_suspicion value = 50 compare = greater_than_or_equals }
+	check_variable = { var = STP_party_suspicion value = 60 compare = greater_than_or_equals }
 	NOT = { STP_cw_two_inspections_active = yes }
 }
 
@@ -459,6 +459,7 @@ STP_cw_inspection_region_openable = {
 	is_owned_by = ROOT
 	NOT = { has_state_flag = STP_party_inspection_active }
 	NOT = { has_state_flag = STP_false_trail_redirected }
+	NOT = { has_state_flag = STP_cw_inspection_protected }
 }
 
 STP_cw_has_openable_inspection_region = {
