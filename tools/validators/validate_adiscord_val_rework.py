@@ -391,7 +391,12 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
     declarations = [e for group in ideas_root if isinstance(group.value, list)
                     for e in group.value if isinstance(e.value, list)]
     ideas = {e.key: e.value for e in declarations}
-    candidates = {key for key, body in ideas.items() if "name" in script_fields(body)}
+    # Selectable ministers and designers may use a display name without being
+    # country-spirit previews. Only native spirit categories participate in swaps.
+    spirit_ids = {entry.key for group in ideas_root
+                  if group.key in {"country", "hidden_ideas"} and isinstance(group.value, list)
+                  for entry in group.value if isinstance(entry.value, list)}
+    candidates = {key for key in spirit_ids if "name" in script_fields(ideas[key])}
     names = {key: script_fields(ideas[key])["name"] for key in candidates}
     native_maps = {e.key: {v: k for k, v in script_fields(e.value).items()}
                    for e in parse_clausewitz(dynamic_text) if isinstance(e.value, list)}

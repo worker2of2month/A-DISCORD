@@ -161,3 +161,51 @@ defined_text = {
 	text = { trigger = { check_variable = { var = VAL_final_planning_bonus value = 0 compare = greater_than } } localization_key = VAL_FINAL_PREPARATION_READY }
 	text = { localization_key = VAL_FINAL_PREPARATION_MISSING }
 }
+
+defined_text = {
+	name = GetVALStatePartyLeader
+	text = { trigger = { tag = VAL has_character = VAL_Valera_Solgalov has_country_leader = { character = VAL_Valera_Solgalov ruling_only = no } } localization_key = VAL_Valera_Solgalov_qol_party_label }
+	text = { localization_key = ADISCORD_qol_no_party_leader }
+}
+
+defined_text = {
+	name = GetVALStatePartyLeaderLong
+	text = { trigger = { tag = VAL has_character = VAL_Valera_Solgalov has_country_leader = { character = VAL_Valera_Solgalov ruling_only = no } } localization_key = VAL_Valera_Solgalov_qol_party_label_long }
+	text = { localization_key = ADISCORD_qol_no_party_leader }
+}
+
+defined_text = {
+	name = GetVALHedonistPartyLeader
+	text = { trigger = { tag = VAL has_character = VAL_Artem_Rask has_country_leader = { character = VAL_Artem_Rask ruling_only = no } } localization_key = VAL_Artem_Rask_qol_party_label }
+	text = { localization_key = ADISCORD_qol_no_party_leader }
+}
+
+defined_text = {
+	name = GetVALHedonistPartyLeaderLong
+	text = { trigger = { tag = VAL has_character = VAL_Artem_Rask has_country_leader = { character = VAL_Artem_Rask ruling_only = no } } localization_key = VAL_Artem_Rask_qol_party_label_long }
+	text = { localization_key = ADISCORD_qol_no_party_leader }
+}
+
+defined_text = {
+	name = GetVALNationalPartyLeader
+	text = { trigger = { tag = VAL has_character = VAL_Boris_Gromov has_country_leader = { character = VAL_Boris_Gromov ruling_only = no } } localization_key = VAL_Boris_Gromov_qol_party_label }
+	text = { localization_key = ADISCORD_qol_no_party_leader }
+}
+
+defined_text = {
+	name = GetVALNationalPartyLeaderLong
+	text = { trigger = { tag = VAL has_character = VAL_Boris_Gromov has_country_leader = { character = VAL_Boris_Gromov ruling_only = no } } localization_key = VAL_Boris_Gromov_qol_party_label_long }
+	text = { localization_key = ADISCORD_qol_no_party_leader }
+}
+
+defined_text = {
+	name = GetVALPragmatistPartyLeader
+	text = { trigger = { tag = VAL has_character = VAL_Renata_Morn has_country_leader = { character = VAL_Renata_Morn ruling_only = no } } localization_key = VAL_Renata_Morn_qol_party_label }
+	text = { localization_key = ADISCORD_qol_no_party_leader }
+}
+
+defined_text = {
+	name = GetVALPragmatistPartyLeaderLong
+	text = { trigger = { tag = VAL has_character = VAL_Renata_Morn has_country_leader = { character = VAL_Renata_Morn ruling_only = no } } localization_key = VAL_Renata_Morn_qol_party_label_long }
+	text = { localization_key = ADISCORD_qol_no_party_leader }
+}

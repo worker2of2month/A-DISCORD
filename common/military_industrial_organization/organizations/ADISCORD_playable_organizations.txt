@@ -1,0 +1,307 @@
+# Playable-country organizations. The dormant examples in mio.txt remain disabled.
+
+STP_qol_arsenal = {
+	name = STP_qol_arsenal
+	icon = GFX_idea_ADISCORD_economic_system_industrializing
+	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
+	allowed = { OR = { tag = STP tag = STS } }
+	visible = { FROM = { STP_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	available = { FROM = { STP_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	equipment_type = { infantry_equipment ADISCORD_squad_weapons_equipment support_equipment }
+	research_categories = { infantry_weapons support_tech }
+	research_bonus = 0.05
+	task_capacity = 2
+	initial_trait = {
+		name = ADISCORD_qol_mio_initial
+		equipment_bonus = { reliability = 0.03 }
+		production_bonus = { production_efficiency_gain_factor = 0.03 }
+	}
+	trait = {
+		token = STP_qol_arsenal_standards
+		name = ADISCORD_qol_mio_standards
+		icon = GFX_idea_ADISCORD_economic_system_industrializing
+		position = { x = 1 y = 0 }
+		equipment_bonus = { reliability = 0.03 }
+	}
+	trait = {
+		token = STP_qol_arsenal_volume
+		name = ADISCORD_qol_mio_volume
+		icon = GFX_idea_ADISCORD_economic_system_industrializing
+		position = { x = 0 y = 1 }
+		any_parent = { STP_qol_arsenal_standards }
+		mutually_exclusive = { STP_qol_arsenal_quality }
+		production_bonus = { production_cost_factor = -0.04 }
+	}
+	trait = {
+		token = STP_qol_arsenal_quality
+		name = ADISCORD_qol_mio_quality
+		icon = GFX_idea_ADISCORD_economic_system_industrializing
+		position = { x = 2 y = 1 }
+		any_parent = { STP_qol_arsenal_standards }
+		mutually_exclusive = { STP_qol_arsenal_volume }
+		equipment_bonus = { soft_attack = 0.04 }
+	}
+	trait = {
+		token = STP_qol_arsenal_integration
+		name = ADISCORD_qol_mio_integration
+		icon = GFX_idea_ADISCORD_economic_system_industrializing
+		position = { x = 1 y = 2 }
+		any_parent = { STP_qol_arsenal_volume STP_qol_arsenal_quality }
+		production_bonus = { production_efficiency_cap_factor = 0.04 }
+	}
+}
+
+STP_qol_airworks = {
+	name = STP_qol_airworks
+	icon = GFX_idea_ADISCORD_economic_system_technocratic
+	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
+	allowed = { OR = { tag = STP tag = STS } }
+	visible = { FROM = { STP_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	available = { FROM = { STP_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	equipment_type = { ADISCORD_fighter_archetype ADISCORD_cas_archetype }
+	research_categories = { air_equipment }
+	research_bonus = 0.05
+	task_capacity = 2
+	initial_trait = {
+		name = ADISCORD_qol_mio_initial
+		equipment_bonus = { reliability = 0.03 }
+		production_bonus = { production_efficiency_gain_factor = 0.03 }
+	}
+	trait = {
+		token = STP_qol_airworks_standards
+		name = ADISCORD_qol_mio_standards
+		icon = GFX_idea_ADISCORD_economic_system_technocratic
+		position = { x = 1 y = 0 }
+		equipment_bonus = { reliability = 0.03 }
+	}
+	trait = {
+		token = STP_qol_airworks_volume
+		name = ADISCORD_qol_mio_volume
+		icon = GFX_idea_ADISCORD_economic_system_technocratic
+		position = { x = 0 y = 1 }
+		any_parent = { STP_qol_airworks_standards }
+		mutually_exclusive = { STP_qol_airworks_quality }
+		production_bonus = { production_cost_factor = -0.04 }
+	}
+	trait = {
+		token = STP_qol_airworks_quality
+		name = ADISCORD_qol_mio_quality
+		icon = GFX_idea_ADISCORD_economic_system_technocratic
+		position = { x = 2 y = 1 }
+		any_parent = { STP_qol_airworks_standards }
+		mutually_exclusive = { STP_qol_airworks_volume }
+		equipment_bonus = { air_agility = 0.04 }
+	}
+	trait = {
+		token = STP_qol_airworks_integration
+		name = ADISCORD_qol_mio_integration
+		icon = GFX_idea_ADISCORD_economic_system_technocratic
+		position = { x = 1 y = 2 }
+		any_parent = { STP_qol_airworks_volume STP_qol_airworks_quality }
+		production_bonus = { production_efficiency_cap_factor = 0.04 }
+	}
+}
+
+STP_qol_armor_bureau = {
+	name = STP_qol_armor_bureau
+	icon = GFX_idea_ADISCORD_economic_system_state_coordinated
+	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
+	allowed = { OR = { tag = STP tag = STS } }
+	visible = { FROM = { STP_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	available = { FROM = { STP_qol_elite_army_available = yes has_dlc = "Arms Against Tyranny" } }
+	equipment_type = { ADISCORD_combat_platform_archetype }
+	research_categories = { armor }
+	research_bonus = 0.08
+	task_capacity = 2
+	initial_trait = {
+		name = ADISCORD_qol_mio_initial
+		equipment_bonus = { reliability = 0.03 }
+		production_bonus = { production_efficiency_gain_factor = 0.03 }
+	}
+	trait = {
+		token = STP_qol_armor_bureau_standards
+		name = ADISCORD_qol_mio_standards
+		icon = GFX_idea_ADISCORD_economic_system_state_coordinated
+		position = { x = 1 y = 0 }
+		equipment_bonus = { reliability = 0.03 }
+	}
+	trait = {
+		token = STP_qol_armor_bureau_volume
+		name = ADISCORD_qol_mio_volume
+		icon = GFX_idea_ADISCORD_economic_system_state_coordinated
+		position = { x = 0 y = 1 }
+		any_parent = { STP_qol_armor_bureau_standards }
+		mutually_exclusive = { STP_qol_armor_bureau_quality }
+		production_bonus = { production_cost_factor = -0.04 }
+	}
+	trait = {
+		token = STP_qol_armor_bureau_quality
+		name = ADISCORD_qol_mio_quality
+		icon = GFX_idea_ADISCORD_economic_system_state_coordinated
+		position = { x = 2 y = 1 }
+		any_parent = { STP_qol_armor_bureau_standards }
+		mutually_exclusive = { STP_qol_armor_bureau_volume }
+		equipment_bonus = { armor_value = 0.04 }
+	}
+	trait = {
+		token = STP_qol_armor_bureau_integration
+		name = ADISCORD_qol_mio_integration
+		icon = GFX_idea_ADISCORD_economic_system_state_coordinated
+		position = { x = 1 y = 2 }
+		any_parent = { STP_qol_armor_bureau_volume STP_qol_armor_bureau_quality }
+		production_bonus = { production_efficiency_cap_factor = 0.04 }
+	}
+}
+
+VAL_qol_arsenal = {
+	name = VAL_qol_arsenal
+	icon = GFX_idea_ADISCORD_economic_system_industrializing
+	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
+	allowed = { tag = VAL }
+	visible = { FROM = { VAL_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	available = { FROM = { VAL_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	equipment_type = { infantry_equipment ADISCORD_squad_weapons_equipment support_equipment }
+	research_categories = { infantry_weapons support_tech }
+	research_bonus = 0.05
+	task_capacity = 2
+	initial_trait = {
+		name = ADISCORD_qol_mio_initial
+		equipment_bonus = { reliability = 0.03 }
+		production_bonus = { production_efficiency_gain_factor = 0.03 }
+	}
+	trait = {
+		token = VAL_qol_arsenal_standards
+		name = ADISCORD_qol_mio_standards
+		icon = GFX_idea_ADISCORD_economic_system_industrializing
+		position = { x = 1 y = 0 }
+		equipment_bonus = { reliability = 0.03 }
+	}
+	trait = {
+		token = VAL_qol_arsenal_volume
+		name = ADISCORD_qol_mio_volume
+		icon = GFX_idea_ADISCORD_economic_system_industrializing
+		position = { x = 0 y = 1 }
+		any_parent = { VAL_qol_arsenal_standards }
+		mutually_exclusive = { VAL_qol_arsenal_quality }
+		production_bonus = { production_cost_factor = -0.04 }
+	}
+	trait = {
+		token = VAL_qol_arsenal_quality
+		name = ADISCORD_qol_mio_quality
+		icon = GFX_idea_ADISCORD_economic_system_industrializing
+		position = { x = 2 y = 1 }
+		any_parent = { VAL_qol_arsenal_standards }
+		mutually_exclusive = { VAL_qol_arsenal_volume }
+		equipment_bonus = { soft_attack = 0.04 }
+	}
+	trait = {
+		token = VAL_qol_arsenal_integration
+		name = ADISCORD_qol_mio_integration
+		icon = GFX_idea_ADISCORD_economic_system_industrializing
+		position = { x = 1 y = 2 }
+		any_parent = { VAL_qol_arsenal_volume VAL_qol_arsenal_quality }
+		production_bonus = { production_efficiency_cap_factor = 0.04 }
+	}
+}
+
+VAL_qol_airworks = {
+	name = VAL_qol_airworks
+	icon = GFX_idea_ADISCORD_economic_system_technocratic
+	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
+	allowed = { tag = VAL }
+	visible = { FROM = { VAL_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	available = { FROM = { VAL_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	equipment_type = { ADISCORD_fighter_archetype ADISCORD_cas_archetype }
+	research_categories = { air_equipment }
+	research_bonus = 0.05
+	task_capacity = 2
+	initial_trait = {
+		name = ADISCORD_qol_mio_initial
+		equipment_bonus = { reliability = 0.03 }
+		production_bonus = { production_efficiency_gain_factor = 0.03 }
+	}
+	trait = {
+		token = VAL_qol_airworks_standards
+		name = ADISCORD_qol_mio_standards
+		icon = GFX_idea_ADISCORD_economic_system_technocratic
+		position = { x = 1 y = 0 }
+		equipment_bonus = { reliability = 0.03 }
+	}
+	trait = {
+		token = VAL_qol_airworks_volume
+		name = ADISCORD_qol_mio_volume
+		icon = GFX_idea_ADISCORD_economic_system_technocratic
+		position = { x = 0 y = 1 }
+		any_parent = { VAL_qol_airworks_standards }
+		mutually_exclusive = { VAL_qol_airworks_quality }
+		production_bonus = { production_cost_factor = -0.04 }
+	}
+	trait = {
+		token = VAL_qol_airworks_quality
+		name = ADISCORD_qol_mio_quality
+		icon = GFX_idea_ADISCORD_economic_system_technocratic
+		position = { x = 2 y = 1 }
+		any_parent = { VAL_qol_airworks_standards }
+		mutually_exclusive = { VAL_qol_airworks_volume }
+		equipment_bonus = { air_agility = 0.04 }
+	}
+	trait = {
+		token = VAL_qol_airworks_integration
+		name = ADISCORD_qol_mio_integration
+		icon = GFX_idea_ADISCORD_economic_system_technocratic
+		position = { x = 1 y = 2 }
+		any_parent = { VAL_qol_airworks_volume VAL_qol_airworks_quality }
+		production_bonus = { production_efficiency_cap_factor = 0.04 }
+	}
+}
+
+VAL_qol_armor_bureau = {
+	name = VAL_qol_armor_bureau
+	icon = GFX_idea_ADISCORD_economic_system_state_coordinated
+	# allowed is evaluated in COUNTRY scope during registration, not at unlock time.
+	allowed = { tag = VAL }
+	visible = { FROM = { VAL_qol_staff_available = yes has_dlc = "Arms Against Tyranny" } }
+	available = { FROM = { VAL_qol_elite_army_available = yes has_dlc = "Arms Against Tyranny" } }
+	equipment_type = { ADISCORD_combat_platform_archetype }
+	research_categories = { armor }
+	research_bonus = 0.08
+	task_capacity = 2
+	initial_trait = {
+		name = ADISCORD_qol_mio_initial
+		equipment_bonus = { reliability = 0.03 }
+		production_bonus = { production_efficiency_gain_factor = 0.03 }
+	}
+	trait = {
+		token = VAL_qol_armor_bureau_standards
+		name = ADISCORD_qol_mio_standards
+		icon = GFX_idea_ADISCORD_economic_system_state_coordinated
+		position = { x = 1 y = 0 }
+		equipment_bonus = { reliability = 0.03 }
+	}
+	trait = {
+		token = VAL_qol_armor_bureau_volume
+		name = ADISCORD_qol_mio_volume
+		icon = GFX_idea_ADISCORD_economic_system_state_coordinated
+		position = { x = 0 y = 1 }
+		any_parent = { VAL_qol_armor_bureau_standards }
+		mutually_exclusive = { VAL_qol_armor_bureau_quality }
+		production_bonus = { production_cost_factor = -0.04 }
+	}
+	trait = {
+		token = VAL_qol_armor_bureau_quality
+		name = ADISCORD_qol_mio_quality
+		icon = GFX_idea_ADISCORD_economic_system_state_coordinated
+		position = { x = 2 y = 1 }
+		any_parent = { VAL_qol_armor_bureau_standards }
+		mutually_exclusive = { VAL_qol_armor_bureau_volume }
+		equipment_bonus = { armor_value = 0.04 }
+	}
+	trait = {
+		token = VAL_qol_armor_bureau_integration
+		name = ADISCORD_qol_mio_integration
+		icon = GFX_idea_ADISCORD_economic_system_state_coordinated
+		position = { x = 1 y = 2 }
+		any_parent = { VAL_qol_armor_bureau_volume VAL_qol_armor_bureau_quality }
+		production_bonus = { production_efficiency_cap_factor = 0.04 }
+	}
+}
