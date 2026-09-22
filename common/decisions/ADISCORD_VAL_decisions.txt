@@ -753,13 +753,50 @@ VAL_frontier = {
         complete_effect = { custom_effect_tooltip = VAL_frontier_war_tt hidden_effect = { VAL_frontier_start_war = yes } }
         ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
     }
+
     VAL_frontier_withdraw_demand = {
         icon = generic_political_pressure
         allowed = { tag = VAL }
-        visible = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
+        visible = {
+            OR = {
+                check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+                AND = {
+                    has_completed_focus = VAL_frontier_security_plan
+                    NOT = { has_completed_focus = VAL_frontier_treaty_offices }
+                    NOT = { has_country_flag = VAL_frontier_treaty_signed }
+                    NOT = { has_country_flag = VAL_frontier_expansion_deferred }
+                }
+            }
+        }
+        available = {
+            custom_trigger_tooltip = { tooltip = VAL_frontier_can_defer_tt VAL_can_defer_frontier_expansion = yes }
+        }
         cost = 0
-        complete_effect = { custom_effect_tooltip = VAL_frontier_withdraw_tt hidden_effect = { VAL_frontier_close = yes } }
-        ai_will_do = { base = 0 }
+        complete_effect = {
+            custom_effect_tooltip = VAL_frontier_withdraw_tt
+            hidden_effect = { VAL_defer_frontier_expansion = yes }
+        }
+        ai_will_do = {
+            base = 25
+            modifier = {
+                factor = 0
+                VAL_ai_frontier_force_ready = yes
+                OR = {
+                    AND = {
+                        check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
+                        VAL_frontier_prewar_eligible = yes
+                    }
+                    AND = {
+                        VAL_frontier_idle = yes
+                        OR = {
+                            CIN = { VAL_frontier_bloc_target_eligible = yes }
+                            OSF = { VAL_frontier_bloc_target_eligible = yes }
+                            APH = { VAL_frontier_bloc_target_eligible = yes }
+                        }
+                    }
+                }
+            }
+        }
     }
     VAL_frontier_transport_contract = {
         icon = generic_resources
@@ -1544,7 +1581,35 @@ VAL_postwar_administration = {
 	VAL_proclaim_commonwealth = {
 		icon = generic_nationalism
 		allowed = { tag = VAL }
-		visible = { NOT = { has_cosmetic_tag = VAL_commonwealth } }
+		state_target = yes
+		target_trigger = { FROM = { is_owned_by = ROOT is_capital = yes } }
+		on_map_mode = map_and_decisions_view
+		highlight_states = {
+			highlight_state_targets = {
+				OR = {
+					state = FROM
+					is_core_of = STP
+					state = 29
+					state = 46
+					state = 58
+					state = 59
+					state = 60
+					state = 61
+					state = 62
+					state = 63
+					state = 64
+					state = 65
+					state = 10
+					state = 11
+					state = 12
+					state = 13
+					state = 17
+					state = 18
+					state = 30
+				}
+			}
+		}
+		visible = { has_completed_focus = VAL_Contracts_Outlive_Kings NOT = { has_cosmetic_tag = VAL_commonwealth } }
 		available = {
 			custom_trigger_tooltip = { tooltip = VAL_commonwealth_requirements_tt VAL_can_proclaim_commonwealth = yes }
 		}

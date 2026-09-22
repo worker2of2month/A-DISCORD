@@ -593,5 +593,159 @@ class KefreytOpeningThemeTests(unittest.TestCase):
         self.assertIn(("file", "ADISCORD_val_theme.ogg"), [(e.key, e.value) for e in theme[0]])
         self.assertIn('song = "ADISCORD_val_theme"', (ROOT / "music/ADISCORD_songs.txt").read_text())
 
+class TestValProgression(unittest.TestCase):
+    def test_event_withdrawal_uses_the_same_deferral_and_revalidates_its_quote(self):
+        events = read('events/ADISCORD_VAL_contract_events.txt')
+        position = events.index('name = val_rework.111.withdraw')
+        start = events.rfind('option = {', 0, position)
+        option = named_block(events[start:], 'option')
+        hidden = named_block(option, 'hidden_effect')
+        self.assertIn('VAL_defer_frontier_expansion = yes', hidden)
+        self.assertIn('VAL_frontier_reply_is_current = yes', named_block(hidden, 'limit'))
+        self.assertIn('custom_effect_tooltip = VAL_frontier_withdraw_tt', option)
+
+    def data(self):
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar
+        effects = parse_clausewitz(read('common/scripted_effects/ADISCORD_VAL_effects.txt'))
+        triggers = parse_clausewitz(read('common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt'))
+        decisions = parse_clausewitz(read('common/decisions/ADISCORD_VAL_decisions.txt'))
+        tree = block(parse_clausewitz(read('common/national_focus/ADISCORD_national_focus_VAL.txt')), 'focus_tree')
+        focuses = {scalar(e.value, 'id'): e.value for e in tree if e.key == 'focus'}
+        return effects, triggers, decisions, focuses
+
+    def test_solgalov_portrait_changes_at_proclamation_not_at_unlock(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
+        effects, _, _, focuses = self.data()
+        self.assertNotIn('GFX_portrait_VAL_Valera_Solgalov_contracts', str(focuses['VAL_Contracts_Outlive_Kings']))
+        adoption = block(effects, 'VAL_adopt_commonwealth')
+        for eligible in (False, True):
+            facts = {('VAL', 'VAL_can_proclaim_commonwealth', 'yes'): eligible}
+            selected = [e.key for _, e in selected_effects(adoption, facts, 'VAL')]
+            self.assertEqual('set_cosmetic_tag' in selected, eligible)
+            self.assertEqual('VAL_sync_solgalov_portrait' in selected, eligible)
+            if eligible:
+                self.assertLess(selected.index('set_cosmetic_tag'), selected.index('VAL_sync_solgalov_portrait'))
+        sync = block(effects, 'VAL_sync_solgalov_portrait')
+        for present in (False, True):
+            for proclaimed in (False, True):
+                facts = {('VAL', 'has_character', 'VAL_Valera_Solgalov'): present,
+                         ('VAL', 'has_cosmetic_tag', 'VAL_commonwealth'): proclaimed}
+                selected = [e for _, e in selected_effects(sync, facts, 'VAL')]
+                portraits = [scalar(block(e.value, 'civilian'), 'large') for e in selected if e.key == 'set_portraits']
+                expected = 'GFX_portrait_VAL_Valera_Solgalov' + ('_contracts' if proclaimed else '')
+                self.assertEqual(portraits, [expected] if present else [])
+                self.assertFalse(any(e.key in ('recruit_character', 'promote_character') for e in selected))
+        startup = named_block(read('common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt'), 'on_startup')
+        self.assertEqual(startup.count('VAL_sync_solgalov_portrait = yes'), 1)
+
+    def test_proclamation_has_one_capital_marker_even_before_territorial_requirements_are_met(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions
+        _, _, decisions, _ = self.data()
+        decision = block(block(decisions, 'VAL_postwar_administration'), 'VAL_proclaim_commonwealth')
+        self.assertIn('state_target', [e.key for e in decision])
+        self.assertEqual(scalar(decision, 'state_target'), 'yes')
+        self.assertEqual(scalar(decision, 'on_map_mode'), 'map_and_decisions_view')
+        self.assertEqual(scalar(decision, 'cost'), '150')
+        self.assertIn('VAL_can_proclaim_commonwealth', str(block(decision, 'available')))
+        visible = block(decision, 'visible')
+        facts = {('VAL', 'has_completed_focus', 'VAL_Contracts_Outlive_Kings'): True}
+        self.assertTrue(matches_conditions(visible, facts, 'VAL'))
+        self.assertNotIn('VAL_can_proclaim_commonwealth', str(visible))
+        for owned in (False, True):
+            for capital in (False, True):
+                fixture = {('FROM', 'is_owned_by', 'ROOT'): owned, ('FROM', 'is_capital', 'yes'): capital}
+                self.assertEqual(matches_conditions(block(decision, 'target_trigger'), fixture, 'VAL'), owned and capital)
+        category = named_block(read('common/decisions/categories/ADISCORD_VAL_rework_categories.txt'), 'VAL_postwar_administration')
+        self.assertIn('has_completed_focus = VAL_Contracts_Outlive_Kings', named_block(category, 'visible'))
+        highlights = str(block(decision, 'highlight_states'))
+        for state in (29, 46, 58, 59, 60, 61, 62, 63, 64, 65, 10, 11, 12, 13, 17, 18, 30):
+            self.assertIn("value='" + str(state) + "'", highlights)
+        self.assertIn('is_core_of', highlights)
+
+    def test_deferral_is_available_before_an_ultimatum_and_after_refusal_but_never_during_war(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions
+        _, triggers, _, _ = self.data()
+        self.assertIn('VAL_can_defer_frontier_expansion', [e.key for e in triggers])
+        gate = block(triggers, 'VAL_can_defer_frontier_expansion')
+        for stage in (0, 1, 2, 3):
+            for peaceful in (False, True):
+                for permitted in (False, True):
+                    for unlocked in (False, True):
+                        facts = {('VAL', 'VAL_frontier_postwar', 'yes'): permitted,
+                                 ('VAL', 'has_war', 'no'): peaceful,
+                                 ('VAL', 'VAL_frontier_idle', 'yes'): stage == 0,
+                                 ('VAL', 'variable', 'VAL_frontier_stage'): stage,
+                                 ('VAL', 'has_completed_focus', 'VAL_frontier_security_plan'): unlocked}
+                        expected = permitted and peaceful and (stage == 2 or stage == 0 and unlocked)
+                        self.assertEqual(matches_conditions(gate, facts, 'VAL'), expected, (stage, peaceful, permitted, unlocked))
+        for marker in ('VAL_frontier_treaty_signed', 'VAL_frontier_expansion_deferred'):
+            facts = {('VAL', 'VAL_frontier_postwar', 'yes'): True, ('VAL', 'has_war', 'no'): True,
+                     ('VAL', 'VAL_frontier_idle', 'yes'): True, ('VAL', 'has_completed_focus', 'VAL_frontier_security_plan'): True,
+                     ('VAL', 'has_country_flag', marker): True}
+            self.assertFalse(matches_conditions(gate, facts, 'VAL'))
+
+    def test_explicit_deferral_bypasses_only_offices_and_keeps_real_campaign_and_resource_requirements(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, scalar, selected_effects
+        effects, triggers, decisions, focuses = self.data()
+        self.assertIn('bypass', [e.key for e in focuses['VAL_frontier_treaty_offices']])
+        bypass = block(focuses['VAL_frontier_treaty_offices'], 'bypass')
+        for deferred in (False, True):
+            for idle in (False, True):
+                facts = {('VAL', 'has_country_flag', 'VAL_frontier_expansion_deferred'): deferred,
+                         ('VAL', 'VAL_frontier_idle', 'yes'): idle, ('VAL', 'has_completed_focus', 'VAL_frontier_security_plan'): True}
+                self.assertEqual(matches_conditions(bypass, facts, 'VAL'), deferred and idle)
+        for target in ('VAL_Northern_Settlement', 'VAL_Stelander_Ultimatum'):
+            prerequisites = [scalar(e.value, 'focus') for e in focuses[target] if e.key == 'prerequisite']
+            self.assertEqual(prerequisites, ['VAL_frontier_treaty_offices'])
+        for target in ('VAL_New_Supply_Base', 'VAL_Campaign_Secured'):
+            self.assertNotIn('bypass', [e.key for e in focuses[target]])
+        final = str(block(triggers, 'VAL_campaign_objectives_met'))
+        for guard in ('VAL_cannibal_sphere_secured', 'VAL_northern_resource_belt_owned', 'VAL_nod_dominated', 'VAL_stelander_dominated'):
+            self.assertIn(guard, final)
+        self.assertNotIn('VAL_frontier_expansion_deferred', final)
+        defer = block(effects, 'VAL_defer_frontier_expansion')
+        for eligible in (False, True):
+            for stage in (0, 2):
+                for treaty in (False, True):
+                    facts = {('VAL', 'VAL_can_defer_frontier_expansion', 'yes'): eligible,
+                             ('VAL', 'variable', 'VAL_frontier_stage'): stage,
+                             ('VAL', 'has_country_flag', 'VAL_frontier_treaty_signed'): treaty}
+                    selected = [e for _, e in selected_effects(defer, facts, 'VAL')]
+                    self.assertEqual(any(e.key == 'VAL_frontier_close' for e in selected), eligible and stage == 2)
+                    flags = [e.value for e in selected if e.key == 'set_country_flag']
+                    self.assertEqual(flags, ['VAL_frontier_expansion_deferred'] if eligible and not treaty else [])
+                    self.assertFalse(any(e.key in ('transfer_state', 'add_ideas', 'complete_national_focus', 'add_to_variable') for e in selected))
+        withdrawal = block(block(decisions, 'VAL_frontier'), 'VAL_frontier_withdraw_demand')
+        self.assertIn('VAL_defer_frontier_expansion', str(block(withdrawal, 'complete_effect')))
+
+    def test_ai_can_withdraw_when_unready_and_prefers_a_viable_northern_campaign_when_ready(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions
+        _, _, decisions, _ = self.data()
+        withdrawal = block(block(decisions, 'VAL_frontier'), 'VAL_frontier_withdraw_demand')
+        ai = block(withdrawal, 'ai_will_do')
+        base = float(scalar(ai, 'base'))
+        self.assertGreater(base, 0)
+        for stage in (0, 2):
+            for ready in (False, True):
+                for viable in (False, True):
+                    facts = {('VAL', 'VAL_ai_frontier_force_ready', 'yes'): ready,
+                             ('VAL', 'variable', 'VAL_frontier_stage'): stage,
+                             ('VAL', 'VAL_frontier_idle', 'yes'): stage == 0,
+                             ('VAL', 'VAL_frontier_prewar_eligible', 'yes'): stage == 2 and viable,
+                             ('CIN', 'VAL_frontier_bloc_target_eligible', 'yes'): viable if stage == 0 else True}
+                    weight = base
+                    for modifier in [e.value for e in ai if e.key == 'modifier']:
+                        if matches_conditions([e for e in modifier if e.key != 'factor'], facts, 'VAL'):
+                            weight *= float(scalar(modifier, 'factor'))
+                    self.assertEqual(weight > 0, not (ready and viable), (stage, ready, viable))
+
+    def test_deferral_and_map_proclamation_explain_their_consequences_in_both_languages(self):
+        for language in ('russian', 'english'):
+            path = ROOT / f'localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml'
+            self.assertTrue(path.read_bytes().startswith(b'\xef\xbb\xbf'))
+            text = path.read_text(encoding='utf-8-sig')
+            for key in ('VAL_frontier_deferred_tt', 'VAL_frontier_can_defer_tt', 'VAL_commonwealth_proclaimed_tt'):
+                self.assertRegex(text, rf'(?m)^ {key}:(?:[0-9]+)?[ \t]+"[^\r\n]+"$')
+
 if __name__ == "__main__":
     unittest.main()

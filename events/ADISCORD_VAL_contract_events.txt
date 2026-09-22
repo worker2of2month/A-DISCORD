@@ -647,10 +647,11 @@ country_event = {
 			VAL_frontier_reply_is_current = yes
 		}
 		ai_chance = { base = 30 }
+		custom_effect_tooltip = VAL_frontier_withdraw_tt
 		hidden_effect = {
 			if = {
-				limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
-				VAL_frontier_close = yes
+				limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_reply_is_current = yes }
+				VAL_defer_frontier_expansion = yes
 			}
 		}
 	}

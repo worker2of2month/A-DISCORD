@@ -1755,13 +1755,6 @@ focus_tree = {
 			VAL_invest_arsenal_industry = yes
 			country_event = { id = val_rework.4 }
 			hidden_effect = {
-				if = {
-					limit = { has_character = VAL_Valera_Solgalov }
-					set_portraits = {
-						character = VAL_Valera_Solgalov
-						civilian = { large = GFX_portrait_VAL_Valera_Solgalov_contracts }
-					}
-				}
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
 				VAL_change_contract_authority = yes
 			}
@@ -2198,6 +2191,7 @@ completion_reward = {
                 add_political_power = 25
             }
             unlock_decision_tooltip = { decision = VAL_frontier_demand_CIN show_effect_tooltip = yes }
+            unlock_decision_tooltip = { decision = VAL_frontier_withdraw_demand show_effect_tooltip = yes }
 
 
 			add_political_power = 75
@@ -2212,6 +2206,14 @@ completion_reward = {
         y = 18
         cost = 5
         prerequisite = { focus = VAL_frontier_security_plan }
+        bypass = {
+            custom_trigger_tooltip = {
+                tooltip = VAL_frontier_deferred_tt
+                has_country_flag = VAL_frontier_expansion_deferred
+                has_completed_focus = VAL_frontier_security_plan
+                VAL_frontier_idle = yes
+            }
+        }
         available = {
             has_country_flag = VAL_frontier_treaty_signed
             custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }

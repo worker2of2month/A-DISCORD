@@ -1853,6 +1853,25 @@ VAL_frontier_close = {
     ADISCORD_economy_mark_dirty = yes
 }
 
+# The deferral authorizes a focus bypass, never a successful territorial settlement.
+VAL_defer_frontier_expansion = {
+	if = {
+		limit = { VAL_can_defer_frontier_expansion = yes }
+		if = {
+			limit = {
+				NOT = { has_country_flag = VAL_frontier_treaty_signed }
+				NOT = { has_completed_focus = VAL_frontier_treaty_offices }
+			}
+			set_country_flag = VAL_frontier_expansion_deferred
+		}
+		if = {
+			limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
+			VAL_frontier_close = yes
+		}
+	}
+}
+
+
 # The saved leader identifies the existing alliance; only new memberships carry receipts.
 VAL_frontier_join_coalition = {
     if = {
@@ -3579,10 +3598,31 @@ VAL_finalize_reserved_settlements = {
     }
 }
 
+# Reconcile presentation from the actual formable, including pre-proclamation saves.
+VAL_sync_solgalov_portrait = {
+	if = {
+		limit = { has_character = VAL_Valera_Solgalov }
+		if = {
+			limit = { has_cosmetic_tag = VAL_commonwealth }
+			set_portraits = {
+				character = VAL_Valera_Solgalov
+				civilian = { large = GFX_portrait_VAL_Valera_Solgalov_contracts }
+			}
+		}
+		else = {
+			set_portraits = {
+				character = VAL_Valera_Solgalov
+				civilian = { large = GFX_portrait_VAL_Valera_Solgalov }
+			}
+		}
+	}
+}
+
 VAL_adopt_commonwealth = {
     if = {
         limit = { VAL_can_proclaim_commonwealth = yes }
         set_cosmetic_tag = VAL_commonwealth
+        VAL_sync_solgalov_portrait = yes
         VAL_grant_contract_warlord = yes
     }
 }

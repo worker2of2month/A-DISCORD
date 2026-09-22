@@ -188,6 +188,14 @@ on_actions = {
 			}
 		}
 	}
+	on_daily = {
+		effect = {
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_superevent_observer_day_checked } }
+				ADISCORD_superevent_observer_tick = yes
+			}
+		}
+	}
 	on_weekly = {
 		effect = {
 			# Country-scoped cash settlement. Forecast inputs are cached country
