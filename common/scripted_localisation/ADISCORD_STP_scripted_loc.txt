@@ -554,15 +554,7 @@ defined_text = {
 	text = { trigger = { has_country_flag = STP_ps_temporary_government } localization_key = STP_ps_cabinet_operating }
 	text = { localization_key = STP_ps_government_lost }
 }
-defined_text = {
-	name = STPGetPartyHandoff
-	text = { localization_key = STP_ps_handoff_disabled }
-}
-defined_text = {
-	name = STPGetPartyAsylum
-	text = { trigger = { NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_asylum_agreement } } localization_key = STP_ps_asylum_accepted }
-	text = { localization_key = STP_ps_asylum_unconfirmed }
-}
+
 
 defined_text = {
     name = STPGetPartyPreparationReport
@@ -599,4 +591,10 @@ defined_text = {
     text = { trigger = { VAL = { has_active_mission = STP_ps_val_departure } } localization_key = STP_ps_cargo_departure_report }
     text = { trigger = { VAL = { has_variable = STP_ps_val_receipt_rifles } } localization_key = STP_ps_cargo_waiting_report }
     text = { localization_key = STP_ps_cargo_none_report }
+}
+
+defined_text = {
+	name = STPGetPartyGovernmentReserve
+	text = { trigger = { has_variable = STP_ps_evacuated_money } localization_key = STP_ps_reserve_status_ready }
+	text = { localization_key = STP_ps_reserve_status_empty }
 }

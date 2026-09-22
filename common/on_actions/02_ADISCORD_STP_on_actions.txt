@@ -2,7 +2,15 @@ on_actions = {
 
     on_startup = {
         effect = {
+            NOD = {
+                if = {
+                    limit = { OR = { has_country_flag = STP_ps_exile_received has_country_flag = STP_ps_exile_pending has_country_flag = STP_ps_asylum_agreement has_country_flag = STP_ps_asylum_requested has_country_flag = STP_ps_return_campaign has_variable = STP_ps_exile_formation_deposit has_variable = STP_ps_exile_training_deposit has_variable = STP_ps_exile_money } }
+                    STP_ps_close_exile = yes
+                }
+            }
             STP = {
+                if = { limit = { exists = yes has_country_flag = STP_pf_initialized } STP_refresh_apparatus_loyalty = yes }
+                STP_ps_use_government_reserve = yes
                 if = {
                     limit = {
                         exists = yes
@@ -34,7 +42,6 @@ on_actions = {
 				if = { limit = { OR = { NOD_cw_intervention_possible = yes AND = { has_country_flag = NOD_cw_entered has_war_with = STS } } } STP_ps_apply_expedition = yes }
 				else = { clr_country_flag = STP_ps_expedition_ready }
 			}
-			if = { limit = { has_country_flag = STP_ps_exile_received STP_ps_nod_can_host_exiles = no } STP_ps_close_exile = yes }
 			if = { limit = { has_idea = STP_ps_engineers_idea STP_ps_northern_front_active = no } remove_ideas = STP_ps_engineers_idea }
 			if = { limit = { has_idea = STP_ps_expedition_idea NOT = { has_war_with = STS } } remove_ideas = STP_ps_expedition_idea }
 		}

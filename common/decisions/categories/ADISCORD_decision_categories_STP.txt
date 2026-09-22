@@ -122,14 +122,3 @@ STP_party_factions = {
 	priority = 36
 	scripted_gui = ADISCORD_STP_party_factions_panel
 }
-
-
-
-
-
-STP_ps_exile = {
-	allowed = { tag = NOD }
-	visible = { has_country_flag = STP_ps_exile_received }
-	visible_when_empty = yes
-	priority = 40
-}

@@ -1358,7 +1358,7 @@ STP_pf_active = {
  NOT = { has_country_flag = STP_sided_with_Maksim_flag }
 }
 STP_pf_nod_contacts = {
- NOD = { exists = yes has_capitulated = no }
+ NOD = { exists = yes has_capitulated = no is_subject = no }
  NOT = { has_war_with = NOD }
  NOT = { has_completed_focus = STP_pw_party_sovereignty }
 }
@@ -1391,14 +1391,14 @@ STP_ps_can_start_stage = {
 	NOT = { has_active_mission = STP_ps_reorg_3 }
 }
 
-STP_ps_nod_can_host_exiles = {
+STP_ps_nod_partner_available = {
 	tag = NOD exists = yes has_capitulated = no is_subject = no
 	NOT = { has_war_with = STP }
 }
 STP_ps_can_aid_nod = {
 	tag = STP exists = yes has_capitulated = no
 	NOT = { has_global_flag = STP_cw_union_wars_finished }
-	NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement }
+	NOD = { STP_ps_nod_partner_available = yes has_country_flag = STP_ps_aid_agreement }
 }
 STP_ps_northern_front_active = {
 	tag = NOD exists = yes has_capitulated = no
@@ -1482,11 +1482,7 @@ STP_ps_nod_supply_route = {
 	}
 }
 
-STP_ps_exile_formation_context = {
-	STP_ps_nod_can_host_exiles = yes
-	has_country_flag = STP_ps_exile_received
-	any_owned_state = { is_controlled_by = PREV }
-}
+STP_ps_exile_formation_context = { always = no }
 
 # COUNTRY STP/STS. The victor gets a late route only while Kefreyt has not committed.
 STP_occidia_invasion_available = {
@@ -1529,19 +1525,8 @@ STP_occidia_victory_ready = {
     }
 }
 
-# NOD: the paid preparation and the native war must name the same live opponent.
-STP_ps_can_launch_return = {
-	STP_ps_nod_can_host_exiles = yes
-	has_country_flag = STP_ps_exile_received
-	has_completed_focus = STP_ps_return_campaign_focus
-	has_country_flag = STP_ps_return_terms_accepted
-	has_country_flag = STP_ps_exile_training_completed
-	NOT = { has_country_flag = STP_ps_return_closed }
-	NOT = { has_country_flag = STP_ps_return_campaign }
-	NOT = { is_in_faction_with = STS }
-	STP = { exists = no }
-	STS = { exists = yes has_capitulated = no NOT = { is_subject_of = NOD } }
-}
+# Retained identifiers reject callbacks from retired return preparations.
+STP_ps_can_launch_return = { always = no }
 
 # Country holding the character: an arrested politician cannot join either transfer.
 STP_ps_hedersett_available = {

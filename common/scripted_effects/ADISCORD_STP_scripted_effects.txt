@@ -3595,13 +3595,7 @@ STP_cw_check_union_wars_finished = {
 			STP_ps_close_defence = yes
 			STP_ps_refund_cabinet = yes
 			STP_ps_refund_nod = yes
-			if = { limit = { exists = yes NOT = { has_country_flag = STP_ps_exile_settled } has_variable = STP_ps_evacuated_money }
-				set_temp_variable = { var = STP_ps_refund value = STP_ps_evacuated_money }
-				clear_variable = STP_ps_evacuated_money
-				add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
-				ADISCORD_economy_mark_dirty = yes
-			}
+			STP_ps_refund_government_reserve = yes
 		}
 
 
@@ -4950,6 +4944,9 @@ STP_pf_calculate = {
 	multiply_variable = { var = STP_pf_advisers_effect value = STP_pf_advisers_influence }
 	divide_variable = { var = STP_pf_advisers_effect value = 100 }
 	multiply_variable = { var = STP_pf_advisers_effect value = 0.004 }
+	clamp_variable = { var = STP_pf_advisers_effect min = 0 max = 0.2 }
+	set_variable = { var = STP_pf_advisers_pressure value = STP_pf_advisers_influence }
+	multiply_variable = { var = STP_pf_advisers_pressure value = -0.002 }
 	set_variable = { var = STP_pf_merchants_effect value = STP_pf_merchants_support }
 	subtract_from_variable = { var = STP_pf_merchants_effect value = 50 }
 	multiply_variable = { var = STP_pf_merchants_effect value = STP_pf_merchants_influence }
@@ -4962,7 +4959,7 @@ STP_pf_calculate = {
 	multiply_variable = { var = STP_pf_radicals_effect value = -0.003 }
 	set_variable = { var = STP_pf_nod_connected value = 0 }
 	if = { limit = { STP_pf_nod_contacts = yes } set_variable = { var = STP_pf_nod_connected value = 1 } }
-	else = { set_variable = { var = STP_pf_advisers_effect value = 0 } }
+	else = { set_variable = { var = STP_pf_advisers_effect value = 0 } set_variable = { var = STP_pf_advisers_pressure value = 0 } }
 	if = { limit = { STP_pf_active = yes }
 		if = { limit = { NOT = { has_dynamic_modifier = { modifier = STP_pf_balance_dynamic } } } add_dynamic_modifier = { modifier = STP_pf_balance_dynamic } }
 		if = { limit = { NOT = { has_dynamic_modifier = { modifier = STP_apparatus_loyalty_dynamic_modifier } } } add_dynamic_modifier = { modifier = STP_apparatus_loyalty_dynamic_modifier } }
@@ -5075,6 +5072,21 @@ STP_pf_shift = {
 	set_temp_variable = { var = STP_pf_selected value = 0 }
 }
 
+STP_pf_limit_adviser_influence = {
+	if = {
+		limit = { STP_pf_active = yes has_country_flag = STP_pf_initialized STP_pf_nod_contacts = yes check_variable = { var = STP_pf_advisers_influence value = 0 compare = greater_than } }
+		set_temp_variable = { var = STP_pf_mandate_transfer value = 5 }
+		if = { limit = { check_variable = { var = STP_pf_advisers_influence value = 5 compare = less_than } }
+			set_temp_variable = { var = STP_pf_mandate_transfer value = STP_pf_advisers_influence }
+		}
+		subtract_from_variable = { var = STP_pf_advisers_influence value = STP_pf_mandate_transfer }
+		add_to_variable = { var = STP_pf_army_influence value = STP_pf_mandate_transfer }
+		subtract_from_variable = { var = STP_pf_advisers_support value = 12 }
+		add_to_variable = { var = STP_pf_army_support value = 8 }
+		STP_refresh_apparatus_loyalty = yes
+	}
+}
+
 STP_pf_clear = {
 	if = { limit = { has_country_flag = STP_pf_initialized }
 		clr_country_flag = STP_pf_initialized
@@ -5106,6 +5118,7 @@ STP_pf_clear = {
 		clear_variable = STP_pf_advisers_contribution
 		clear_variable = STP_pf_advisers_frame
 		clear_variable = STP_pf_advisers_effect
+		clear_variable = STP_pf_advisers_pressure
 		clear_variable = STP_pf_merchants_influence
 		clear_variable = STP_pf_merchants_support
 		clear_variable = STP_pf_merchants_contribution
@@ -5334,6 +5347,36 @@ STP_ps_close_defence = {
 	clear_variable = STP_ps_reorg_2_specialization_days
 	clear_variable = STP_ps_reorg_3_specialization_days
 }
+
+STP_ps_refund_government_reserve = {
+	if = {
+		limit = { has_variable = STP_ps_evacuated_money }
+		set_temp_variable = { var = STP_ps_refund value = STP_ps_evacuated_money }
+		clear_variable = STP_ps_evacuated_money
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_ps_use_government_reserve = {
+	if = {
+		limit = {
+			STP_ps_war_active = yes
+			STP_ps_government_operational = no
+			has_variable = STP_ps_evacuated_money
+			check_variable = { var = STP_ps_evacuated_money value = 3000 compare = greater_than_or_equals }
+			any_owned_state = { is_controlled_by = PREV }
+		}
+		clear_variable = STP_ps_evacuated_money
+		set_country_flag = STP_ps_temporary_government
+		STP_ps_refund_cabinet = yes
+		remove_mission = STP_ps_cabinet_work
+		STP_ps_resolve_congress_crisis = yes
+		custom_effect_tooltip = STP_ps_reserve_used_tt
+	}
+}
+
 STP_ps_open_congress_crisis = {
 	if = {
 		limit = { STP_ps_war_active = yes STP_ps_holds_congress = no NOT = { has_country_flag = STP_ps_congress_crisis } }
@@ -5345,6 +5388,7 @@ STP_ps_open_congress_crisis = {
 			set_temp_variable = { var = STP_apparatus_loyalty_change value = -20 }
 			STP_change_apparatus_loyalty = yes
 		}
+		STP_ps_use_government_reserve = yes
 		if = { limit = { STP_ps_government_operational = no }
 			STP_ps_pause_reorganisation = yes
 			if = { limit = { NOT = { has_country_flag = STP_ps_district_concessions } } activate_mission = STP_ps_congress_deadline }
@@ -5659,7 +5703,7 @@ set_temp_variable = { var = STP_ps_receipt_type value = STP_ps_nod_receipt_type 
 		STP_ps_clear_nod_receipt = yes
 		if = { limit = { check_variable = { var = STP_ps_receipt_type value = 1 compare = equals } } set_country_flag = { flag = STP_ps_fund_nod_cooldown value = 1 days = 42 } }
 		if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } } set_country_flag = { flag = STP_ps_arm_nod_cooldown value = 1 days = 28 } }
-		if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes } }
+		if = { limit = { NOD = { STP_ps_nod_partner_available = yes } }
 			if = { limit = { check_variable = { var = STP_ps_receipt_type value = 1 compare = equals } }
 				NOD = {
 					ADISCORD_economy_initialize_country = yes
@@ -5696,7 +5740,7 @@ STP_ps_apply_expedition = {
 }
 
 STP_ps_request_northern_agreement = {
-	if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes NOT = { has_country_flag = STP_ps_agreement_requested } } }
+	if = { limit = { NOD = { STP_ps_nod_partner_available = yes NOT = { has_country_flag = STP_ps_agreement_requested } } }
 		NOD = { set_country_flag = STP_ps_agreement_requested country_event = { id = ADISCORD_STP_cw.200 } }
 	}
 }
@@ -5743,112 +5787,11 @@ STP_ps_prepare_exile = {
 		STP_ps_refund_nod = yes
 		# An outgoing convoy is settled once before the donor ceases to exist.
 		STP_ps_deliver_nod = yes
-		if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes OR = { has_country_flag = STP_ps_asylum_agreement AND = { is_ai = yes NOT = { has_country_flag = STP_ps_asylum_requested } } } } }
-			STP_ps_settle_exile = yes
-		}
-		else_if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes is_ai = no NOT = { has_country_flag = STP_ps_asylum_requested } } }
-			STP_ps_snapshot_exile = yes
-			NOD = { set_country_flag = STP_ps_exile_pending country_event = { id = ADISCORD_STP_cw.201 } }
-		}
-	}
-}
-STP_ps_snapshot_exile = {
-	NOD = {
-		set_variable = { var = STP_ps_exile_money value = STP.STP_ps_evacuated_money }
-		set_variable = { var = STP_ps_exile_loyalty value = STP.STP_apparatus_loyalty }
-	}
-	clear_variable = STP_ps_evacuated_money
-
-	NOD = { set_variable = { var = STP_ps_exile_conservatives_support value = STP.STP_pf_conservatives_support } }
-	NOD = { set_variable = { var = STP_ps_exile_conservatives_influence value = STP.STP_pf_conservatives_influence } }
-	NOD = { set_variable = { var = STP_ps_exile_borons_support value = STP.STP_pf_borons_support } }
-	NOD = { set_variable = { var = STP_ps_exile_borons_influence value = STP.STP_pf_borons_influence } }
-	NOD = { set_variable = { var = STP_ps_exile_security_support value = STP.STP_pf_security_support } }
-	NOD = { set_variable = { var = STP_ps_exile_security_influence value = STP.STP_pf_security_influence } }
-	NOD = { set_variable = { var = STP_ps_exile_army_support value = STP.STP_pf_army_support } }
-	NOD = { set_variable = { var = STP_ps_exile_army_influence value = STP.STP_pf_army_influence } }
-	NOD = { set_variable = { var = STP_ps_exile_advisers_support value = STP.STP_pf_advisers_support } }
-	NOD = { set_variable = { var = STP_ps_exile_advisers_influence value = STP.STP_pf_advisers_influence } }
-	NOD = { set_variable = { var = STP_ps_exile_merchants_support value = STP.STP_pf_merchants_support } }
-	NOD = { set_variable = { var = STP_ps_exile_merchants_influence value = STP.STP_pf_merchants_influence } }
-	NOD = { set_variable = { var = STP_ps_exile_radicals_support value = STP.STP_pf_radicals_support } }
-	NOD = { set_variable = { var = STP_ps_exile_radicals_influence value = STP.STP_pf_radicals_influence } }
-}
-STP_ps_settle_exile = {
-	STP_ps_snapshot_exile = yes
-	NOD = { STP_ps_accept_exile = yes }
-}
-STP_ps_accept_exile = {
-	if = { limit = { STP_ps_nod_can_host_exiles = yes NOT = { has_country_flag = STP_ps_exile_received } }
-		set_country_flag = STP_ps_exile_received
-		clr_country_flag = STP_ps_exile_pending
-		set_temp_variable = { var = STP_ps_credit value = STP_ps_exile_money }
-		clear_variable = STP_ps_exile_money
-		add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_credit }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_credit }
-		ADISCORD_economy_mark_dirty = yes
-		# Only an existing character can move; no recruitment of dead officeholders.
-		STP = { if = { limit = { STP_ps_hedersett_available = yes }
-				STP_rufus_hedersett = { remove_country_leader_role = { ideology = aristocratic_hedonism } }
-				set_nationality = { character = STP_rufus_hedersett target_country = NOD }
-			} }
-		mark_focus_tree_layout_dirty = yes
-		country_event = { id = ADISCORD_STP_cw.202 }
+		STP_ps_refund_government_reserve = yes
 	}
 }
 
 
-STP_ps_begin_return = {
-	if = { limit = { STP_ps_can_launch_return = yes }
-		if = { limit = { NOT = { has_war_with = STS } } declare_war_on = { target = STS type = annex_everything } }
-		# A rejected declaration must leave the decision available for another attempt.
-		if = { limit = { has_war_with = STS } set_country_flag = STP_ps_return_campaign }
-	}
-}
-STP_ps_settle_return = {
-	# Actual NOD victory, never a paid project's completion.
-	if = { limit = { tag = NOD has_country_flag = STP_ps_return_campaign STP = { exists = no } STS = { has_capitulated = yes } }
-		STP_ps_close_exile = yes
-		STS = { if = { limit = { has_war_with = NOD } white_peace = NOD }
-			every_owned_state = { limit = { is_core_of = STP } STP = { transfer_state = PREV } }
-		}
-		STP = {
-			if = { limit = { exists = yes }
-				set_country_flag = STP_ps_restored_dependency
-				set_variable = { var = STP_pf_conservatives_support value = NOD.STP_ps_exile_conservatives_support }
-				set_variable = { var = STP_pf_conservatives_influence value = NOD.STP_ps_exile_conservatives_influence }
-				set_variable = { var = STP_pf_borons_support value = NOD.STP_ps_exile_borons_support }
-				set_variable = { var = STP_pf_borons_influence value = NOD.STP_ps_exile_borons_influence }
-				set_variable = { var = STP_pf_security_support value = NOD.STP_ps_exile_security_support }
-				set_variable = { var = STP_pf_security_influence value = NOD.STP_ps_exile_security_influence }
-				set_variable = { var = STP_pf_army_support value = NOD.STP_ps_exile_army_support }
-				set_variable = { var = STP_pf_army_influence value = NOD.STP_ps_exile_army_influence }
-				set_variable = { var = STP_pf_advisers_support value = NOD.STP_ps_exile_advisers_support }
-				set_variable = { var = STP_pf_advisers_influence value = NOD.STP_ps_exile_advisers_influence }
-				set_variable = { var = STP_pf_merchants_support value = NOD.STP_ps_exile_merchants_support }
-				set_variable = { var = STP_pf_merchants_influence value = NOD.STP_ps_exile_merchants_influence }
-				set_variable = { var = STP_pf_radicals_support value = NOD.STP_ps_exile_radicals_support }
-				set_variable = { var = STP_pf_radicals_influence value = NOD.STP_ps_exile_radicals_influence }
-				set_country_flag = STP_pf_initialized
-				STP_refresh_apparatus_loyalty = yes
-				set_country_flag = STP_sided_with_the_party_flag
-				clr_country_flag = STP_sided_with_Maksim_flag
-				STP_cw_finish_mobilization = yes
-				every_owned_state = { set_state_controller_to = STP }
-				load_focus_tree = { tree = STP_cw_focus keep_completed = yes }
-			}
-		}
-		if = { limit = { STP = { exists = yes } }
-			set_autonomy = { target = STP autonomy_state = autonomy_puppet }
-			if = { limit = { STP_ps_hedersett_available = yes }
-				set_nationality = { character = STP_rufus_hedersett target_country = STP }
-				STP = { STP_rufus_hedersett = { add_country_leader_role = { country_leader = { ideology = aristocratic_hedonism expire = "2300.1.1" } } } promote_character = STP_rufus_hedersett }
-			}
-			else = { STP = { create_country_leader = { name = STP_ps_return_council_name desc = STP_ps_return_council_desc ideology = aristocratic_hedonism expire = "2300.1.1" } } }
-			if = { limit = { is_ai = no } country_event = { id = ADISCORD_STP_cw.203 } }
-		}
-	}
-}
 
 STP_ps_exile_training_refund = {
 	if = { limit = { has_variable = STP_ps_exile_training_deposit }
@@ -5859,18 +5802,7 @@ STP_ps_exile_training_refund = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
-STP_ps_exile_training_finish = {
-	if = { limit = { has_variable = STP_ps_exile_training_deposit }
-		if = { limit = { tag = NOD STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_exile_received }
-			clear_variable = STP_ps_exile_training_deposit
-			set_country_flag = STP_ps_exile_training_completed
-
-			army_experience = 15
-			ADISCORD_economy_mark_dirty = yes
-		}
-		else = { STP_ps_exile_training_refund = yes }
-	}
-}
+STP_ps_exile_training_finish = { STP_ps_exile_training_refund = yes }
 
 STP_ps_institution_payment_refund = {
 	if = { limit = { has_variable = STP_ps_institution_payment_deposit }
@@ -6255,43 +6187,9 @@ STP_ps_exile_formation_refund = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
-STP_ps_exile_formation_finish = {
-	if = { limit = { has_variable = STP_ps_exile_formation_deposit }
-		if = { limit = { tag = NOD STP_ps_exile_formation_context = yes has_country_flag = STP_ps_exile_received }
-			clear_variable = STP_ps_exile_formation_deposit
+STP_ps_exile_formation_finish = { STP_ps_exile_formation_refund = yes }
 
-			set_country_flag = { flag = STP_ps_exile_formation_cooldown value = 1 days = 28 }
-			STP_ps_deliver_exile_formation = yes
-			ADISCORD_economy_mark_dirty = yes
-		}
-		else = { STP_ps_exile_formation_refund = yes }
-	}
-}
 
-STP_ps_deliver_exile_formation = {
-	if = { limit = { NOT = { has_template = "Party Exile Brigade" } }
-		division_template = {
-			name = "Party Exile Brigade"
-			is_locked = yes
-			force_allow_recruiting = no
-			regiments = {
-				ADISCORD_territorial = { x = 0 y = 0 }
-				ADISCORD_territorial = { x = 0 y = 1 }
-				ADISCORD_territorial = { x = 0 y = 2 }
-				ADISCORD_territorial = { x = 1 y = 0 }
-				ADISCORD_territorial = { x = 1 y = 1 }
-				ADISCORD_territorial = { x = 1 y = 2 }
-			}
-		}
-	}
-	random_owned_controlled_state = {
-		create_unit = {
-			division = "division_template = \"Party Exile Brigade\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
-			owner = PREV
-			allow_spawning_on_enemy_provs = no
-		}
-	}
-}
 
 STP_ps_pay_nod_arms = {
 	set_temp_variable = { var = STP_cw_rifle_cost value = 1200 }
@@ -6347,11 +6245,6 @@ STP_ps_authorize_val_supply = {
 	set_country_flag = STP_ps_val_authorized
 }
 
-STP_ps_request_asylum = {
-	if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes NOT = { has_country_flag = STP_ps_asylum_requested } } }
-		NOD = { set_country_flag = STP_ps_asylum_requested country_event = { id = ADISCORD_STP_cw.204 } }
-	}
-}
 
 # STS buyer; the existing acceptance gate has checked both parties and the price.
 STP_ps_reserve_export_contract = {
@@ -6382,18 +6275,49 @@ STP_ps_reserve_export_contract = {
 	}
 }
 
-# NOD: settle fixed-price exile orders before closing or restoring the party.
+# Refund receipts before retiring legacy missions; never recreate their country or army.
 STP_ps_close_exile = {
 	STP_ps_exile_formation_refund = yes
 	STP_ps_exile_training_refund = yes
 	remove_mission = STP_ps_exile_formation_work
 	remove_mission = STP_ps_exile_training_work
-	clr_country_flag = STP_ps_exile_received
-	clr_country_flag = STP_ps_return_campaign
-	set_country_flag = STP_ps_return_closed
-	if = { limit = { has_template = "Party Exile Brigade" }
-		set_division_template_lock = { division_template = "Party Exile Brigade" is_locked = no }
+	if = {
+		limit = { has_variable = STP_ps_exile_money }
+		set_temp_variable = { var = STP_ps_legacy_reserve value = STP_ps_exile_money }
+		clear_variable = STP_ps_exile_money
+		STP = {
+			if = {
+				limit = { exists = yes }
+				add_to_variable = { var = ADISCORD_economy_treasury value = PREV.STP_ps_legacy_reserve }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.STP_ps_legacy_reserve }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
 	}
+	clr_country_flag = STP_ps_exile_received
+	clr_country_flag = STP_ps_exile_pending
+	clr_country_flag = STP_ps_asylum_requested
+	clr_country_flag = STP_ps_asylum_agreement
+	clr_country_flag = STP_ps_return_campaign
+	clr_country_flag = STP_ps_return_terms_accepted
+	clr_country_flag = STP_ps_exile_training_completed
+	clr_country_flag = STP_ps_exile_formation_cooldown
+	clr_country_flag = STP_ps_return_closed
+	clear_variable = STP_ps_exile_loyalty
+	clear_variable = STP_ps_exile_conservatives_support
+	clear_variable = STP_ps_exile_conservatives_influence
+	clear_variable = STP_ps_exile_borons_support
+	clear_variable = STP_ps_exile_borons_influence
+	clear_variable = STP_ps_exile_security_support
+	clear_variable = STP_ps_exile_security_influence
+	clear_variable = STP_ps_exile_army_support
+	clear_variable = STP_ps_exile_army_influence
+	clear_variable = STP_ps_exile_advisers_support
+	clear_variable = STP_ps_exile_advisers_influence
+	clear_variable = STP_ps_exile_merchants_support
+	clear_variable = STP_ps_exile_merchants_influence
+	clear_variable = STP_ps_exile_radicals_support
+	clear_variable = STP_ps_exile_radicals_influence
 	mark_focus_tree_layout_dirty = yes
 }
 

@@ -406,16 +406,3 @@ STP_party_reconstruction_plan = {
 	}
 	weight = { factor = 20 }
 }
-
-STP_ps_exile_plan = {
-	name = "Party exile"
-	desc = ""
-	allowed = { original_tag = NOD }
-	enable = { tag = NOD is_ai = yes has_country_flag = STP_ps_exile_received }
-	abort = { OR = { has_capitulated = yes has_country_flag = STP_ps_return_closed } }
-	ai_national_focuses = {
-		STP_ps_exile_office STP_ps_exile_survivors STP_ps_host_agreement
-		STP_ps_exile_formations STP_ps_return_terms STP_ps_return_campaign_focus
-	}
-	weight = { factor = 15 }
-}

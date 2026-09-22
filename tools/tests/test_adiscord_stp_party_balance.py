@@ -67,8 +67,11 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
             self.assertEqual([e.key for e in writes], [
                 "set_variable", "subtract_from_variable", "multiply_variable",
                 "divide_variable", "multiply_variable",
-            ], faction)
-            values = [one(e.value, "value") for e in writes]
+            ] + (["clamp_variable"] if faction == "advisers" else []), faction)
+            if faction == "advisers":
+                self.assertEqual(one(writes[-1].value, "min"), "0")
+                self.assertEqual(one(writes[-1].value, "max"), "0.2")
+            values = [one(e.value, "value") for e in writes if e.key != "clamp_variable"]
             self.assertEqual(values[:4], [f"STP_pf_{faction}_support", "50",
                                           f"STP_pf_{faction}_influence", "100"])
             coefficients.append(abs(float(values[4])))

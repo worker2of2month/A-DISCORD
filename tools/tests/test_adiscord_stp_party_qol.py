@@ -16,10 +16,10 @@ FOREIGN = ('STP_ps_fund_nod', 'STP_ps_arm_nod', 'STP_ps_engineers_nod',
            'STP_ps_expedition_nod', 'STP_ps_nod_dispatch', 'STP_ps_nod_delivery',
            'STP_ps_cancel_nod', 'STP_ps_nod_route_wait', 'STP_ps_val_intelligence',
            'STP_ps_val_intelligence_work', 'STP_ps_val_intercept',
-           'STP_ps_val_intercept_work', 'STP_ps_val_pressure', 'STP_ps_val_pressure_work',
-           'STP_ps_evacuate_funds')
+           'STP_ps_val_intercept_work', 'STP_ps_val_pressure', 'STP_ps_val_pressure_work')
 GOVERNMENT = ('STP_ps_build_radio', 'STP_ps_build_radio_work', 'STP_ps_build_hq',
-              'STP_ps_build_hq_work', 'STP_ps_prepare_evacuation', 'STP_ps_prepare_evacuation_work')
+              'STP_ps_build_hq_work', 'STP_ps_prepare_evacuation', 'STP_ps_prepare_evacuation_work',
+              'STP_ps_evacuate_funds', 'STP_ps_release_government_reserve')
 POLICIES = ('STP_ps_operational_reserve', 'STP_ps_route_security')
 
 

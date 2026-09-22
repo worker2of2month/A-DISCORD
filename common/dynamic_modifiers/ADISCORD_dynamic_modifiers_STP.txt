@@ -116,6 +116,7 @@ STP_pf_balance_dynamic = {
 	stability_factor = STP_pf_security_effect
 	army_org_factor = STP_pf_army_effect
 	planning_speed = STP_pf_advisers_effect
+	political_power_factor = STP_pf_advisers_pressure
 	ADISCORD_economy_trade_income_factor = STP_pf_merchants_effect
 	ADISCORD_economy_war_fatigue_gain_factor = STP_pf_radicals_effect
 }
