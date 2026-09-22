@@ -1,0 +1,49 @@
+name: Kefreyt refugee resettlement review
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+jobs:
+  verify:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'fix/val-refugee-resettlement-review-20260922'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Targeted regressions
+        run: |
+          python -B -m unittest -v             tools.tests.test_adiscord_val_refugees.RefugeeAdmissionTests.test_perimeter_opening_creates_one_bounded_admission_window             tools.tests.test_adiscord_val_refugees.RefugeeAdmissionTests.test_resettlement_depots_move_people_into_low_population_home_states
+      - name: Existing Kefreyt opening and refugee contracts
+        run: |
+          python -B -m unittest -v             tools.tests.test_val_contract_ui             tools.tests.test_adiscord_val_refugees.RefugeeAdmissionTests
+      - name: Structural validation
+        run: |
+          python -B - <<'PY'
+          from pathlib import Path
+          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+          for name in (
+              "common/decisions/ADISCORD_VAL_logistics_market_decisions.txt",
+              "common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt",
+              "common/scripted_triggers/ADISCORD_VAL_logistics_market_triggers.txt",
+              "common/decisions/categories/ADISCORD_VAL_logistics_market_categories.txt",
+              "common/national_focus/ADISCORD_national_focus_VAL.txt",
+          ):
+              data = Path(name).read_bytes()
+              assert not data.startswith(b"\xef\xbb\xbf"), name
+              assert parse_clausewitz(data.decode("utf-8")), name
+          for name in (
+              "localisation/russian/ADISCORD_VAL_logistics_market_l_russian.yml",
+              "localisation/english/ADISCORD_VAL_logistics_market_l_english.yml",
+          ):
+              data = Path(name).read_bytes()
+              assert data.startswith(b"\xef\xbb\xbf"), name
+          PY
+          git diff --check origin/main...HEAD || git diff --check
