@@ -138,6 +138,7 @@ country_event = {
 		# Force the same tree to be rebuilt so the selected root offset and all relative children recenter immediately.
 		load_focus_tree = { tree = STP_focus keep_completed = yes }
 		mark_focus_tree_layout_dirty = yes
+			hidden_effect = { country_event = { id = ADISCORD_STP_preparation.26 hours = 1 } }
 		STP_cw_schedule_health = yes
 		custom_effect_tooltip = STP_cw_army_split_tt
 	}
@@ -151,6 +152,7 @@ country_event = {
 		# Keep Party selection symmetric with Shabrat: rebuild before marking the layout dirty.
 		load_focus_tree = { tree = STP_focus keep_completed = yes }
 		mark_focus_tree_layout_dirty = yes
+			hidden_effect = { country_event = { id = ADISCORD_STP_preparation.26 hours = 1 } }
 		STP_cw_schedule_health = yes
 		# A visible foothold gives the party something concrete to contain.
 		3 = {
@@ -1755,4 +1757,18 @@ country_event = {
 			declare_war_on = { target = BJK type = annex_everything }
 		}
 	}
+}
+
+
+# The side flags and forced focus completion must settle before recalculating offsets.
+country_event = {
+    id = ADISCORD_STP_preparation.26
+    hidden = yes
+    is_triggered_only = yes
+    trigger = {
+        tag = STP
+        NOT = { has_global_flag = STP_cw_started }
+        OR = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_sided_with_the_party_flag }
+    }
+    immediate = { mark_focus_tree_layout_dirty = yes }
 }

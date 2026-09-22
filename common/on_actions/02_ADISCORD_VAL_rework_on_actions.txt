@@ -17,10 +17,11 @@ on_actions = {
 				}
 			}
 			if = {
-				limit = { VAL = { exists = yes NOT = { has_country_flag = VAL_reclamation_modifier_migrated_v2 } } }
+				limit = { VAL = { exists = yes NOT = { has_country_flag = VAL_reclamation_modifier_migrated_v3 } } }
 				VAL = {
 					VAL_migrate_reclamation_modifiers = yes
-					set_country_flag = VAL_reclamation_modifier_migrated_v2
+					set_country_flag = VAL_reclamation_modifier_migrated_v3
+					clr_country_flag = VAL_reclamation_modifier_migrated_v2
 				}
 			}
 			VAL = { if = { limit = { exists = yes has_idea = VAL_harvest_of_ash } VAL_complete_reclamation = yes } }
@@ -145,6 +146,14 @@ on_actions = {
 			if = {
 				limit = { FROM.FROM = { OR = { state = 44 state = 88 } } OCA = { exists = yes } }
 				OCA = { VAL_reconcile_balchansk_income = yes }
+			}
+
+			if = {
+				limit = {
+					ROOT = { tag = VAL has_idea = VAL_harvest_of_ash }
+					FROM.FROM = { OR = { state = 24 state = 42 state = 48 state = 54 state = 55 state = 56 state = 57 } }
+				}
+				ROOT = { VAL_complete_reclamation = yes }
 			}
 
 			VAL = { VAL_check_nam_concession = yes }

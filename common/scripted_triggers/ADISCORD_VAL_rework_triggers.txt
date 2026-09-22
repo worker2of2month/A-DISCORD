@@ -74,9 +74,11 @@ VAL_reclamation_state_project_valid = {
 	}
 }
 
-# COUNTRY VAL: all seven home regions must be restored, not lost or occupied.
+# COUNTRY VAL: 24 and 57 start contaminated; clean home regions have no paid project.
+# All seven must remain owned, controlled and free of unfinished contamination.
 VAL_reclamation_complete = {
 	has_completed_focus = VAL_reclamation_return_home
+	NOT = { has_variable = VAL_reclamation_deposit }
 	24 = {
 		is_owned_by = VAL
 		is_controlled_by = VAL
@@ -90,7 +92,10 @@ VAL_reclamation_complete = {
 	42 = {
 		is_owned_by = VAL
 		is_controlled_by = VAL
-		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		OR = {
+			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		}
 		NOT = {
 			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
 			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
@@ -100,7 +105,10 @@ VAL_reclamation_complete = {
 	48 = {
 		is_owned_by = VAL
 		is_controlled_by = VAL
-		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		OR = {
+			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		}
 		NOT = {
 			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
 			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
@@ -110,7 +118,10 @@ VAL_reclamation_complete = {
 	54 = {
 		is_owned_by = VAL
 		is_controlled_by = VAL
-		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		OR = {
+			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		}
 		NOT = {
 			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
 			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
@@ -120,7 +131,10 @@ VAL_reclamation_complete = {
 	55 = {
 		is_owned_by = VAL
 		is_controlled_by = VAL
-		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		OR = {
+			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		}
 		NOT = {
 			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
 			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
@@ -130,7 +144,10 @@ VAL_reclamation_complete = {
 	56 = {
 		is_owned_by = VAL
 		is_controlled_by = VAL
-		check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		OR = {
+			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
+		}
 		NOT = {
 			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
 			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }

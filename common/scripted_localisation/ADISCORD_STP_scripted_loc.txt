@@ -587,3 +587,16 @@ defined_text = {
 	text = { trigger = { tag = STS } localization_key = STP_cw_reserve_training_cost_tooltip_volunteers }
 	text = { localization_key = STP_cw_reserve_training_cost_tooltip_standard }
 }
+
+
+defined_text = {
+    name = STPGetPartyForeignReport
+    text = { trigger = { tag = STP has_country_flag = STP_sided_with_the_party_flag } localization_key = STP_ps_foreign_report }
+    text = { localization_key = STP_ps_empty }
+}
+defined_text = {
+    name = STPGetPartyCargoStatus
+    text = { trigger = { VAL = { has_active_mission = STP_ps_val_departure } } localization_key = STP_ps_cargo_departure_report }
+    text = { trigger = { VAL = { has_variable = STP_ps_val_receipt_rifles } } localization_key = STP_ps_cargo_waiting_report }
+    text = { localization_key = STP_ps_cargo_none_report }
+}
