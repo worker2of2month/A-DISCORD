@@ -18,18 +18,37 @@ jobs:
       - name: Prepare pinned verification
         run: |
           cp .github/stp_party_packet2_tests.py /tmp/stp_party_packet2_tests.py
-          if test -f .github/stp_party_packet2.py; then cp .github/stp_party_packet2.py /tmp/stp_party_packet2.py; fi
-          git fetch --depth=1 origin 38d3f3704a7f107892b51336f9469c4af9e63b70
-          git checkout --detach 38d3f3704a7f107892b51336f9469c4af9e63b70
+          cp .github/stp_party_packet2.py /tmp/stp_party_packet2.py
+          python -B - <<'PY'
+          from pathlib import Path
+          p=Path('/tmp/stp_party_packet2.py')
+          text=p.read_text()
+          old='return block.replace(old, new)'
+          new="return block.replace(old, new).replace('var = STP_pf_room value = 5 compare = less_than', 'var = STP_pf_room value = STP_pf_gain compare = less_than')"
+          assert text.count(old)==1
+          text=text.replace(old,new)
+          old='        assert len(found) == 1, fid'
+          new='''        if not found and fid in concessions:
+                      assert 'STP_change_apparatus_loyalty = yes' not in block, fid
+                      assert block.count('STP_pf_shift = yes') == 1, fid
+                      return block
+                  assert len(found) == 1, fid'''
+          # Remove YAML indentation from the continuation lines of the Python replacement.
+          new=new.replace('\n          ', '\n')
+          assert text.count(old)==1
+          text=text.replace(old,new)
+          p.write_text(text)
+          compile(text,str(p),'exec')
+          PY
+          git fetch --depth=1 origin e0be4e27b763bff9524108d4536d4d3903b8772a
+          git checkout --detach e0be4e27b763bff9524108d4536d4d3903b8772a
           python -m pip install --disable-pip-version-check Pillow numpy > /tmp/packet2-dependencies.txt
       - name: Test baseline and expected failures
         run: |
           python -B - <<'PY'
           from pathlib import Path
           import subprocess, re, json
-          modules=['tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_route','tools.tests.test_adiscord_stp_party_balance']
-          if Path('/tmp/stp_party_packet2.py').exists():
-              modules += ['tools.tests.test_adiscord_stp_preparation','tools.tests.test_adiscord_stp_civil_war','tools.tests.test_adiscord_stp_gameplay_loop_regressions']
+          modules=['tools.tests.test_adiscord_stp_party_survival','tools.tests.test_adiscord_stp_party_route','tools.tests.test_adiscord_stp_party_balance','tools.tests.test_adiscord_stp_party_qol','tools.tests.test_adiscord_stp_preparation','tools.tests.test_adiscord_stp_civil_war','tools.tests.test_adiscord_stp_gameplay_loop_regressions']
           result=subprocess.run(['python','-B','-m','unittest',*modules],capture_output=True,text=True)
           output=result.stdout+result.stderr
           Path('/tmp/packet2-baseline.txt').write_text(output)
@@ -40,23 +59,22 @@ jobs:
           result=subprocess.run(['python','-B','-m','unittest','tools.tests.test_adiscord_stp_party_route.PartySecondPackageContracts'],capture_output=True,text=True)
           output=result.stdout+result.stderr
           Path('/tmp/packet2-red.txt').write_text(output)
-          print('EXPECTED_RED',re.findall(r'(?m)^FAIL: (.*)$',output),flush=True)
+          print('EXPECTED_RED', sorted(set(re.findall(r'(?m)^FAIL: (\w+)',output))),flush=True)
           assert result.returncode != 0 and 'ERROR:' not in output, output[-7000:]
           print('RED_REPRODUCED',output[-140:],flush=True)
           PY
-      - name: Apply and verify second package when present
+      - name: Apply and verify second package
         run: |
-          if ! test -f /tmp/stp_party_packet2.py; then echo 'TEST_ONLY_NO_GAMEPLAY_CHANGES'; exit 0; fi
           python -B /tmp/stp_party_packet2.py
           git diff --check
           python -B - <<'PY'
           from pathlib import Path
           import subprocess, re, json, sys
-          focused=['tools.tests.test_adiscord_stp_party_route.PartySecondPackageContracts','tools.tests.test_adiscord_stp_party_route.PartyFactionContracts','tools.tests.test_adiscord_stp_party_balance.StelanderPartyBalanceContracts']
+          focused=['tools.tests.test_adiscord_stp_party_route.PartySecondPackageContracts','tools.tests.test_adiscord_stp_party_route.PartyFactionContracts','tools.tests.test_adiscord_stp_party_balance.StelanderPartyBalanceContracts','tools.tests.test_adiscord_stp_party_qol']
           result=subprocess.run(['python','-B','-m','unittest',*focused],capture_output=True,text=True)
           output=result.stdout+result.stderr
           Path('/tmp/packet2-focused.txt').write_text(output)
-          print('FOCUSED',output[-6000:],flush=True)
+          print('FOCUSED',output[-8000:],flush=True)
           assert result.returncode == 0, 'Focused strategy/faction/balance contracts failed'
           before=json.loads(Path('/tmp/packet2-baseline.json').read_text())
           result=subprocess.run(['python','-B','-m','unittest',*before['modules']],capture_output=True,text=True)
@@ -72,7 +90,7 @@ jobs:
                   if any(name in section[:900] for name in new): print(section[:6000])
               sys.exit('New regressions require investigation')
           PY
-          python -B tools/validate_tc.py --limit 60 > /tmp/packet2-validator.txt 2>&1
+          python -B tools/validate_tc.py --limit 300 > /tmp/packet2-validator.txt 2>&1
           echo 'TOTAL_CONVERSION_VALIDATOR_EXIT_0'
           git diff --check
           git diff --stat
