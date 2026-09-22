@@ -1,0 +1,38 @@
+name: Observer and Kefreyt final verification
+on:
+  push:
+    branches: [fix/observer-val-final]
+    paths:
+      - .github/workflows/observer-val-final.yml
+      - .superpowers/observer-val-change.py
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/observer-val-final
+          fetch-depth: 4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow
+      - name: Test then apply the bounded gameplay corrections
+        run: python -B .superpowers/observer-val-change.py
+      - name: Preserve exact test and patch evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: observer-val-verification
+          path: |
+            /tmp/observer-val-report.json
+            /tmp/observer_val_*.log
+            /tmp/focused_*.log
+            /tmp/validate_tc.log
+            /tmp/full_suite.log
+            /tmp/regression_final.log
+            /tmp/diff_check.log
+          retention-days: 7
