@@ -108,7 +108,7 @@ class RefugeeAdmissionTests(unittest.TestCase):
             population = next(e.value for e in reward if e.key == "add_to_variable")
             self.assertEqual(scalar(population, "value"), "10")
             available = next(e.value for e in body if e.key == "available")
-            facts = {("VAL", "ADISCORD_economy_can_spend_250", "yes"): True}
+            facts = {("VAL", "ADISCORD_economy_can_spend_250", "yes"): True, ("VAL", "has_country_flag", f"VAL_refugee_{region}_window"): True}
             self.assertTrue(matches_conditions(available, facts, "VAL"))
             facts[("VAL", "has_country_flag", "VAL_refugee_border_closed")] = True
             self.assertFalse(matches_conditions(available, facts, "VAL"))
@@ -216,6 +216,73 @@ class RefugeeAdmissionTests(unittest.TestCase):
         labor = list(walk(self.decisions["VAL_contract_refugee_labor"]))
         self.assertEqual(next(e.value for e in labor if e.key == "add_manpower"), "2500")
 
+
+    def test_admission_rows_show_required_windows_after_contract_state(self):
+        self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
+        for region in (*REGIONS, "perimeter"):
+            with self.subTest(region=region):
+                self.assertTrue(self.visible(region))
+
+    def test_expired_admission_rows_remain_readable_without_renewal(self):
+        self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
+        self.facts[("VAL", "ADISCORD_economy_can_spend_250", "yes")] = True
+        for region in (*REGIONS, "perimeter"):
+            with self.subTest(region=region):
+                self.facts[("VAL", "has_country_flag", f"VAL_refugee_{region}_seen")] = True
+                self.run_effect(self.effects["VAL_open_refugee_waves"])
+                self.assertTrue(self.visible(region))
+                available = next(e.value for e in self.decisions[f"VAL_accept_{region}_refugees"] if e.key == "available")
+                self.assertFalse(matches_conditions(available, self.facts, "VAL"))
+                self.assertNotIn(f"VAL_refugee_{region}_window", self.windows)
+
+    def test_visible_admission_requires_a_live_window_and_localised_reason(self):
+        self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
+        self.facts[("VAL", "ADISCORD_economy_can_spend_250", "yes")] = True
+        for region in (*REGIONS, "perimeter"):
+            with self.subTest(region=region):
+                available = next(e.value for e in self.decisions[f"VAL_accept_{region}_refugees"] if e.key == "available")
+                self.assertFalse(matches_conditions(available, self.facts, "VAL"))
+                window = ("VAL", "has_country_flag", f"VAL_refugee_{region}_window")
+                self.facts[window] = True
+                self.assertTrue(matches_conditions(available, self.facts, "VAL"))
+                self.facts[window] = False
+        for language in ("russian", "english"):
+            loc = (ROOT / f"localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml").read_text(encoding="utf-8-sig")
+            self.assertIn(" VAL_refugee_window_open_tt:", loc)
+
+
+class KefreytDecisionVisibilityTests(unittest.TestCase):
+    def test_viceroy_offer_is_visible_from_foreign_broker_licences(self):
+        categories = load("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
+        decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_foreign_sales"]}
+        facts = {("VAL", "has_completed_focus", "VAL_Foreign_Broker_Licences"): True,
+                 ("NAM", "exists", "yes"): True}
+        category = next(e.value for e in categories["VAL_foreign_sales"] if e.key == "visible")
+        visible = next(e.value for e in decisions["VAL_negotiate_nam_metals"] if e.key == "visible")
+        self.assertTrue(matches_conditions(category, facts, "VAL"))
+        self.assertTrue(matches_conditions(visible, facts, "VAL"))
+        for flag in ("VAL_nam_concession_agreed", "VAL_nam_concession_granted"):
+            with self.subTest(flag=flag):
+                self.assertFalse(matches_conditions(visible, {**facts, ("VAL", "has_country_flag", flag): True}, "VAL"))
+        self.assertFalse(matches_conditions(visible, {**facts, ("NAM", "exists", "yes"): False}, "VAL"))
+
+    def test_viceroy_offer_exposes_the_required_focus_without_bypassing_it(self):
+        decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_foreign_sales"]}
+        available = next(e.value for e in decisions["VAL_negotiate_nam_metals"] if e.key == "available")
+        self.assertEqual(scalar(available, "has_completed_focus"), "VAL_Resource_War_Contracts")
+        facts = {("VAL", "VAL_nam_concession_negotiable", "yes"): True}
+        self.assertFalse(matches_conditions(available, facts, "VAL"))
+        facts[("VAL", "has_completed_focus", "VAL_Resource_War_Contracts")] = True
+        self.assertTrue(matches_conditions(available, facts, "VAL"))
+        facts[("VAL", "has_country_flag", "VAL_nam_concession_offer_pending")] = True
+        self.assertFalse(matches_conditions(available, facts, "VAL"))
+
+    def test_resource_war_focus_announces_the_viceroy_treaty(self):
+        tree = load("common/national_focus/ADISCORD_national_focus_VAL.txt")["focus_tree"]
+        focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "VAL_Resource_War_Contracts")
+        reward = next(e.value for e in focus if e.key == "completion_reward")
+        unlocks = {scalar(e.value, "decision") for e in reward if e.key == "unlock_decision_tooltip"}
+        self.assertTrue({"VAL_negotiate_nam_metals", "VAL_resource_war_arms", "VAL_resource_war_personnel"} <= unlocks)
 
 class KefreytVoiceTests(unittest.TestCase):
     def test_every_playable_clip_fits_shared_cooldown_at_slowest_pitch(self):
