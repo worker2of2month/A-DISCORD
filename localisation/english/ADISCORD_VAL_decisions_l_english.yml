@@ -366,8 +366,8 @@
  VAL_reclamation_water_desc: "Stage two, after road clearance: restore water intakes and prepare construction sites. Loss of ownership or control cancels the current work with a full deposit refund."
  VAL_reclamation_settlement: "Resettle [FROM.GetName]"
  VAL_reclamation_settlement_desc:0 "After water treatment, complete reclamation and add a building slot. A civilian factory is built if the region has fewer than 20. Losing ownership or control cancels the work and refunds the deposit in full."
- VAL_reclamation_roads_result_tt: "After §Y45 days§! in [FROM.GetName]: §G+1§! infrastructure (at the cap, §G+1§! building slot). One third of the original pollution penalties is offset."
- VAL_reclamation_water_result_tt: "After §Y45 days§! in [FROM.GetName]: §G+2§! building slots. Compensation for the original pollution penalties rises to two thirds."
+ VAL_reclamation_roads_result_tt:0 "After §Y90 days§! in [FROM.GetName]: §G+1§! infrastructure (at the cap, §G+1§! building slot). One third of the original pollution penalties is offset."
+ VAL_reclamation_water_result_tt:0 "After §Y90 days§! in [FROM.GetName]: §G+2§! building slots. Compensation for the original pollution penalties rises to two thirds."
  VAL_reclamation_settlement_result_tt:0 "Fully offsets pollution penalties and adds a building slot and a civilian factory if the region has fewer than 20.\n\n$VAL_reclamation_completion_tt$"
  VAL_reclamation_completion_tt:0 "Complete all three decision stages (roads, water purification and resettlement) in all seven home regions: [24.GetName], [42.GetName], [48.GetName], [54.GetName], [55.GetName], [56.GetName], [57.GetName]. Once Kefreyt owns and controls all seven fully restored regions, the §Y$VAL_harvest_of_ash$§! national spirit is removed automatically. Focuses alone are not enough; additional industrial-site projects are not required."
  VAL_reclamation_idle_tt: "The contracting service is free: no other funded reconstruction project is active."
@@ -957,6 +957,10 @@
  VAL_reclamation_industry_desc:0 "After all three reclamation stages, invest 1000 treasury for 60 days: two building slots and two civilian factories. Requires ownership, control and at most 18 civilian factories. Losing eligibility refunds the deposit in full. One industrial contract per region."
 
  VAL_reclamation_industry_result_tt:0 "The target region gains §G2§! building slots and §G2§! civilian factories. Other regions may develop in parallel."
+ VAL_focus_reclamation_roads_preview_tt:0 "§YWhat the decision does:§! starts a §Y90-day§! cleanup in a polluted state for £ADISCORD_economy_treasury_texticon §Y500§!. On completion: §G+1§! infrastructure (or §G+1§! building slot at the cap) and one third of the original pollution penalties are offset."
+ VAL_focus_reclamation_water_preview_tt:0 "§YWhat the decision does:§! after road clearance, starts a §Y90-day§! water-and-soil cleanup for £ADISCORD_economy_treasury_texticon §Y500§!. On completion: §G+2§! building slots and pollution-penalty compensation rises to two thirds."
+ VAL_focus_reclamation_settlement_preview_tt:0 "§YWhat the decision does:§! after cleanup, starts a §Y90-day§! resettlement stage for £ADISCORD_economy_treasury_texticon §Y500§!. On completion pollution penalties are fully removed, the state gains §G+1§! building slot and §G+1§! civilian factory if it has fewer than 20."
+ VAL_focus_reclamation_industry_preview_tt:0 "§YWhat the decision does:§! after full reclamation, invest £ADISCORD_economy_treasury_texticon §Y1000§! for §Y60 days§! to add §G+2§! building slots and §G+2§! civilian factories in the selected state."
 
  VAL_reclamation_stage_1_tt:0 "At least one owned and controlled region has completed road works."
 

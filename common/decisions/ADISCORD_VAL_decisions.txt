@@ -648,6 +648,43 @@ VAL_reclamation = {
 		cancel_effect = { custom_effect_tooltip = VAL_reclamation_refund_tt hidden_effect = { VAL_reclamation_refund_project = yes } }
 		ai_will_do = { base = 5 modifier = { factor = 0 has_war = yes } }
 	}
+
+	VAL_reclamation_industry = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		state_target = yes
+		targets = { 24 42 48 54 55 56 57 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			has_completed_focus = VAL_reclamation_industrial_sites
+			FROM = {
+				is_owned_by = ROOT
+				check_variable = { var = VAL_reclamation_stage value = 3 compare = equals }
+			}
+		}
+		available = {
+			VAL_reclamation_industry_target_valid = yes
+			FROM = { NOT = { has_variable = VAL_reclamation_industry_deposit } }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		cost = 0
+		custom_cost_text = VAL_cost_treasury1000
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
+		days_remove = 60
+		fire_only_once = no
+		cancel_trigger = { NOT = { VAL_reclamation_industry_target_valid = yes } }
+		complete_effect = { hidden_effect = { VAL_reclamation_begin_industry = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_reclamation_industry_result_tt
+			hidden_effect = { VAL_reclamation_finish_industry = yes }
+		}
+		cancel_effect = {
+			custom_effect_tooltip = VAL_reclamation_industry_refund_tt
+			hidden_effect = { VAL_reclamation_refund_industry = yes }
+		}
+		ai_will_do = { base = 4 modifier = { factor = 0 has_war = yes } }
+	}
 }
 
 VAL_frontier = {
