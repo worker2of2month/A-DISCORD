@@ -612,3 +612,91 @@ class PartyUsabilityContracts(unittest.TestCase):
                      if f.key == 'focus' and one(f.value, 'id') == 'STP_ps_foreign_supply_desk')
         unlocks = {one(e.value, 'decision') if isinstance(e.value, list) else e.value for e in one(focus, 'completion_reward') if e.key == 'unlock_decision_tooltip'}
         self.assertEqual(unlocks, {'STP_ps_val_intelligence', 'STP_ps_val_intercept', 'STP_ps_val_pressure'})
+
+
+class FadaMissionContracts(unittest.TestCase):
+    """Read actual mission gates and the loser-scoped settlement dispatcher."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = {e.key: e.value for e in parse_clausewitz(read(TRIGGERS))}
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        cls.missions = {d.key: d.value for c in parse_clausewitz(read(DECISIONS))
+                        for d in c.value if isinstance(d.value, list)}
+
+    def expand(self, nodes):
+        result = []
+        for e in nodes:
+            if e.key in {'STP_cw_fada_battle_active', 'STP_cw_fada_captured'}:
+                self.assertIn(e.value, ('yes', 'no'))
+                self.assertIn(e.key, self.triggers)
+                result.append(Entry('AND' if e.value == 'yes' else 'NOT',
+                                    self.expand(self.triggers[e.key]), e.line))
+            else:
+                result.append(Entry(e.key, self.expand(e.value) if isinstance(e.value, list) else e.value,
+                                    e.line, e.quoted))
+        return result
+
+    def test_both_sides_get_long_automatic_high_priority_fada_missions(self):
+        for tag, name in [('STS', 'STP_cw_take_fada'), ('STP', 'STP_cw_hold_fada')]:
+            with self.subTest(tag=tag):
+                self.assertIn(name, self.missions)
+                mission = self.missions[name]
+                self.assertEqual(one(one(mission, 'allowed'), 'tag'), tag)
+                self.assertEqual(one(one(mission, 'activation'), 'STP_cw_fada_battle_active'), 'yes')
+                self.assertGreaterEqual(int(one(mission, 'days_mission_timeout')), 365)
+                self.assertGreaterEqual(int(one(mission, 'priority')), 100)
+                self.assertEqual(one(mission, 'fire_only_once'), 'no')
+                self.assertEqual(one(mission, 'selectable_mission'), 'no')
+                self.assertNotIn('has_completed_focus', str(signature(mission)))
+                self.assertEqual(one(one(one(mission, 'highlight_states'), 'highlight_state_targets'), 'state'), '28')
+                self.assertNotIn('annex_country', str(signature(one(mission, 'timeout_effect'))))
+                self.assertNotIn('STP_cw_resolve_fada_capture', str(signature(one(mission, 'timeout_effect'))))
+
+    def test_fada_outcome_requires_current_capture_and_a_live_civil_war(self):
+        self.assertIn('STP_cw_fada_captured', self.triggers)
+        gate = self.expand(self.triggers['STP_cw_fada_captured'])
+        for tag, captured, at_war, finished, sts_exists in product(('STP', 'STS'), (False, True), (False, True), (False, True), (False, True)):
+            facts = {
+                (tag, 'has_global_flag', 'STP_cw_started'): True,
+                (tag, 'has_global_flag', 'STP_cw_union_wars_finished'): finished,
+                ('STP', 'exists', 'yes'): True,
+                ('STS', 'exists', 'yes'): sts_exists,
+                ('STP', 'has_war_with', 'STS'): at_war,
+                ('STS', 'controls_province', '145'): captured,
+            }
+            actual = matches_conditions(gate, facts, tag)
+            self.assertEqual(actual, captured and at_war and not finished and sts_exists,
+                             (tag, captured, at_war, finished, sts_exists))
+
+    def test_both_missions_call_the_same_rechecked_loser_scoped_dispatcher(self):
+        for name in ('STP_cw_take_fada', 'STP_cw_hold_fada'):
+            self.assertIn(name, self.missions)
+            mission = self.missions[name]
+            self.assertIn('STP_cw_fada_captured', str(signature(one(mission, 'available'))))
+            self.assertIn('STP_cw_resolve_fada_capture', str(signature(one(mission, 'complete_effect'))))
+        self.assertIn('STP_cw_resolve_fada_capture', self.effects)
+        dispatch = self.effects['STP_cw_resolve_fada_capture']
+        self.assertIn('STP_cw_fada_captured', str(signature(one(one(dispatch, 'if'), 'limit'))))
+        receiver = one(one(dispatch, 'if'), 'STP')
+        self.assertEqual(one(one(receiver, 'country_event'), 'id'), 'ADISCORD_STP_cw.205')
+        events = parse_clausewitz(read('events/ADISCORD_STP_events.txt'))
+        handlers = [e.value for e in events if e.key == 'country_event' and one(e.value, 'id') == 'ADISCORD_STP_cw.205']
+        self.assertEqual(len(handlers), 1)
+        handler = handlers[0]
+        self.assertEqual(one(handler, 'hidden'), 'yes')
+        self.assertIn('STP_cw_fada_captured', str(signature(one(handler, 'immediate'))))
+        winner = one(one(one(handler, 'immediate'), 'if'), 'STS')
+        self.assertIn('STP_cw_resolve_last_banquet_success', str(signature(winner)))
+        self.assertEqual(one(winner, 'STP_cw_settle_union_victory'), 'yes')
+
+    def test_union_cleanup_removes_both_fada_missions(self):
+        cleanup = str(signature(self.effects['STP_cw_check_union_wars_finished']))
+        for name in ('STP_cw_take_fada', 'STP_cw_hold_fada'):
+            self.assertIn(name, cleanup)
+
+    def test_fada_mission_text_exists_in_both_languages(self):
+        for language in ('russian', 'english'):
+            text = read(f'localisation/{language}/ADISCORD_STP_l_{language}.yml')
+            for name in ('STP_cw_take_fada', 'STP_cw_hold_fada', 'STP_cw_fada_captured_tt', 'STP_cw_fada_timeout_tt'):
+                self.assertRegex(text, rf'(?m)^ {name}:')

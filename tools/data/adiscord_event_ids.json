@@ -2,6 +2,8 @@
   "schema_version": 1,
   "external_namespaces": ["lar_fake_intel_units"],
   "events": [
+    {"id": "ADISCORD_STP_pc.32", "namespace": "ADISCORD_STP_pc", "number": 32, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
+    {"id": "ADISCORD_STP_cw.205", "namespace": "ADISCORD_STP_cw", "number": 205, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_civil_war", "status": "active"},
     {"id": "ADISCORD_TFF.11", "namespace": "ADISCORD_TFF", "number": 11, "owner": "events/ADISCORD_TFF_events.txt", "subsystem": "tff_wartime", "status": "active"},
     {"id": "val_contract.350", "namespace": "val_contract", "number": 350, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
     {"id": "val_contract.351", "namespace": "val_contract", "number": 351, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},

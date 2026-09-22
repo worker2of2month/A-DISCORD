@@ -3591,7 +3591,9 @@ STP_cw_check_union_wars_finished = {
 			NOT = { STP = { has_war_with = STS } }
 		}
 		set_global_flag = STP_cw_union_wars_finished
+		STS = { remove_mission = STP_cw_take_fada }
 		STP = {
+			remove_mission = STP_cw_hold_fada
 			STP_ps_close_defence = yes
 			STP_ps_refund_cabinet = yes
 			STP_ps_refund_nod = yes
@@ -4352,8 +4354,14 @@ STP_pc_begin_settlement = {
 			set_variable = { var = STP_pc_this_opponent value = 1 }
 			set_variable = { var = STP_pc_this_result value = 1 }
 			STP_pc_recover_stelander_cores_from_val = yes
-			VAL = { VAL_enter_stelander_defeat = yes }
-			if = { limit = { has_war_with = VAL } white_peace = VAL }
+			if = {
+				limit = { VAL = { has_country_flag = VAL_council_revanche_active } }
+				STP_pc_annex_defeated_council = yes
+			}
+			else = {
+				VAL = { VAL_enter_stelander_defeat = yes }
+				if = { limit = { has_war_with = VAL } white_peace = VAL }
+			}
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_pc_cap_side value = 2 compare = equals } }
@@ -6477,5 +6485,25 @@ STP_ps_adjust_reorg_3 = {
 			limit = { has_country_flag = STP_pf_initialized check_variable = { var = STP_pf_army_support value = 35 compare = less_than } }
 			add_days_mission_timeout = { mission = STP_ps_reorg_3 days = 7 }
 		}
+	}
+}
+
+# A country event establishes STP as ROOT before entering the shared settlement.
+# Calling the settlement directly from the STS mission would annex the winner.
+STP_cw_resolve_fada_capture = {
+	if = {
+		limit = { STP_cw_fada_captured = yes }
+		STP = { country_event = { id = ADISCORD_STP_cw.205 } }
+	}
+}
+
+# STS: the council's second defeat ends independence, not merely the expedition.
+STP_pc_annex_defeated_council = {
+	if = {
+		limit = { tag = STS VAL = { exists = yes has_country_flag = VAL_council_revanche_active } }
+		VAL = { clr_country_flag = VAL_council_revanche_active }
+		if = { limit = { has_war_with = VAL } white_peace = VAL }
+		annex_country = { target = VAL transfer_troops = no }
+		ADISCORD_economy_mark_dirty = yes
 	}
 }

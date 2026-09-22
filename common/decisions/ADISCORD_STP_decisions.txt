@@ -2122,6 +2122,44 @@ STP_battle_for_stelander = {
 }
 
 STP_cw_war_council = {
+	STP_cw_take_fada = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		activation = { STP_cw_fada_battle_active = yes }
+		available = { custom_trigger_tooltip = { tooltip = STP_cw_fada_captured_tt STP_cw_fada_captured = yes } }
+		cancel_trigger = { STP_cw_fada_battle_active = no }
+		selectable_mission = no
+		fire_only_once = no
+		priority = 100
+		days_mission_timeout = 365
+		days_re_enable = 1
+		highlight_states = { highlight_state_targets = { state = 28 } }
+		complete_effect = {
+			custom_effect_tooltip = STP_cw_fada_victory_tt
+			hidden_effect = { STP_cw_resolve_fada_capture = yes }
+		}
+		timeout_effect = { custom_effect_tooltip = STP_cw_fada_timeout_tt }
+	}
+
+	STP_cw_hold_fada = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		activation = { STP_cw_fada_battle_active = yes }
+		available = { custom_trigger_tooltip = { tooltip = STP_cw_fada_captured_tt STP_cw_fada_captured = yes } }
+		cancel_trigger = { STP_cw_fada_battle_active = no }
+		selectable_mission = no
+		fire_only_once = no
+		priority = 100
+		days_mission_timeout = 365
+		days_re_enable = 1
+		highlight_states = { highlight_state_targets = { state = 28 } }
+		complete_effect = {
+			custom_effect_tooltip = STP_cw_fada_defeat_tt
+			hidden_effect = { STP_cw_resolve_fada_capture = yes }
+		}
+		timeout_effect = { custom_effect_tooltip = STP_cw_fada_timeout_tt }
+	}
+
 	STP_cw_raise_rear_cell = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }

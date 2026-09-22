@@ -1599,3 +1599,16 @@ STP_ps_nod_credit_useful = {
         }
     }
 }
+
+# COUNTRY: the same objective is evaluated for both civil-war participants.
+STP_cw_fada_battle_active = {
+	has_global_flag = STP_cw_started
+	NOT = { has_global_flag = STP_cw_union_wars_finished }
+	STP = { exists = yes has_war_with = STS }
+	STS = { exists = yes }
+}
+
+STP_cw_fada_captured = {
+	STP_cw_fada_battle_active = yes
+	STS = { controls_province = 145 }
+}

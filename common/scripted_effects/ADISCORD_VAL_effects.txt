@@ -2712,7 +2712,7 @@ VAL_reconcile_supply_crisis = {
 		VAL_refresh_arsenal_reputation = yes
 	}
 }
-# COUNTRY VAL: terminal political transition after defeat by Shabrat.
+# COUNTRY VAL: first-defeat transition; the council has its own later war route.
 # This closes every inherited offensive pipeline before the technical peace
 # and replaces Solgalov's campaign tree with the commanders' recovery program.
 VAL_enter_stelander_defeat = {
@@ -4008,4 +4008,25 @@ VAL_frontier_withdraw_and_defer = {
         }
         VAL_frontier_close = yes
     }
+}
+
+VAL_council_begin_revanche = {
+	if = {
+		limit = { VAL_council_can_launch_revanche = yes }
+		set_country_flag = VAL_council_revanche_active
+		declare_war_on = { target = STS type = annex_everything }
+		if = {
+			limit = { has_war_with = STS }
+			STS = { country_event = { id = ADISCORD_STP_pc.32 } }
+		}
+		else = { clr_country_flag = VAL_council_revanche_active }
+	}
+}
+
+# COUNTRY VAL: a separately arranged peace must not mark an unrelated later war.
+VAL_council_reconcile_revanche = {
+	if = {
+		limit = { has_country_flag = VAL_council_revanche_active NOT = { has_war_with = STS } }
+		clr_country_flag = VAL_council_revanche_active
+	}
 }
