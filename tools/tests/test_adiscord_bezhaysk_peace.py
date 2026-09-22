@@ -84,6 +84,18 @@ class BezhayskPeaceTests(unittest.TestCase):
             first_peace = package.index("white_peace =")
             self.assertLess(controller, first_peace, tag)
 
+    def test_feudal_faction_is_dismantled_before_new_overlords(self) -> None:
+        effects = self.read("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")
+        for name in (
+            "ADISCORD_bezhaysk_settle_val_victory = {",
+            "ADISCORD_bezhaysk_settle_val_nod_joint_victory = {",
+        ):
+            start = effects.index(name)
+            end = effects.find("\nADISCORD_", start + len(name))
+            block = effects[start:] if end == -1 else effects[start:end]
+            self.assertIn("dismantle_faction = yes", block)
+            self.assertLess(block.index("dismantle_faction = yes"), block.index("set_autonomy = {"))
+
     def test_nodrul_has_a_distinct_protected_administration_level(self) -> None:
         autonomy = self.read("common/autonomous_states/ADISCORD_contract_clients.txt")
         self.assertIn("id = autonomy_NOD_protected_administration", autonomy)
