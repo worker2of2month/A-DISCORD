@@ -4994,7 +4994,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_final_north
-		icon = GFX_goal_generic_major_war
+		icon = GFX_focus_STP_Break_The_Northern_Ring
 		x = 12
 		y = 17
 		cost = 4
