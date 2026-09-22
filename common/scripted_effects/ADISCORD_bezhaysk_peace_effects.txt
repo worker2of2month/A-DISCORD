@@ -71,3 +71,133 @@ ADISCORD_bezhaysk_settle_val_victory = {
 	clr_country_flag = ADISCORD_bezhaysk_campaign_active
 	ADISCORD_economy_mark_dirty = yes
 }
+
+
+# Joint Kefreyt-Nodrul settlement.
+# Each feudal holding remains an indivisible package. The side controlling its
+# capital receives the whole holding. If neither partner controls the capital,
+# the side credited with BJK's capitulation receives the unresolved package.
+ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
+	VAL = { set_country_flag = ADISCORD_bezhaysk_joint_settlement }
+	NOD = { set_country_flag = ADISCORD_bezhaysk_joint_settlement }
+
+	if = {
+		limit = { BLD = { exists = yes OR = { has_war_with = VAL has_war_with = NOD } OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { NOD = { has_war_with = BLD } } NOD = { white_peace = BLD } }
+		if = { limit = { VAL = { has_war_with = BLD } } VAL = { white_peace = BLD } }
+		if = {
+			limit = { 31 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			NOD = { annex_country = { target = BLD transfer_troops = no } }
+		}
+		else_if = {
+			limit = { 31 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			VAL = { annex_country = { target = BLD transfer_troops = no } }
+		}
+		else_if = {
+			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
+			NOD = { annex_country = { target = BLD transfer_troops = no } }
+		}
+		else = { VAL = { annex_country = { target = BLD transfer_troops = no } } }
+	}
+
+	if = {
+		limit = { BHG = { exists = yes OR = { has_war_with = VAL has_war_with = NOD } OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { NOD = { has_war_with = BHG } } NOD = { white_peace = BHG } }
+		if = { limit = { VAL = { has_war_with = BHG } } VAL = { white_peace = BHG } }
+		if = {
+			limit = { 5 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			NOD = { annex_country = { target = BHG transfer_troops = no } }
+		}
+		else_if = {
+			limit = { 5 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			VAL = { annex_country = { target = BHG transfer_troops = no } }
+		}
+		else_if = {
+			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
+			NOD = { annex_country = { target = BHG transfer_troops = no } }
+		}
+		else = { VAL = { annex_country = { target = BHG transfer_troops = no } } }
+	}
+
+	if = {
+		limit = { BGT = { exists = yes OR = { has_war_with = VAL has_war_with = NOD } OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { NOD = { has_war_with = BGT } } NOD = { white_peace = BGT } }
+		if = { limit = { VAL = { has_war_with = BGT } } VAL = { white_peace = BGT } }
+		if = {
+			limit = { 4 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			NOD = { annex_country = { target = BGT transfer_troops = no } }
+		}
+		else_if = {
+			limit = { 4 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			VAL = { annex_country = { target = BGT transfer_troops = no } }
+		}
+		else_if = {
+			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
+			NOD = { annex_country = { target = BGT transfer_troops = no } }
+		}
+		else = { VAL = { annex_country = { target = BGT transfer_troops = no } } }
+	}
+
+	if = {
+		limit = { BBV = { exists = yes OR = { has_war_with = VAL has_war_with = NOD } OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { NOD = { has_war_with = BBV } } NOD = { white_peace = BBV } }
+		if = { limit = { VAL = { has_war_with = BBV } } VAL = { white_peace = BBV } }
+		if = {
+			limit = { 7 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			NOD = { annex_country = { target = BBV transfer_troops = no } }
+		}
+		else_if = {
+			limit = { 7 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			VAL = { annex_country = { target = BBV transfer_troops = no } }
+		}
+		else_if = {
+			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
+			NOD = { annex_country = { target = BBV transfer_troops = no } }
+		}
+		else = { VAL = { annex_country = { target = BBV transfer_troops = no } } }
+	}
+
+	if = {
+		limit = { BCM = { exists = yes OR = { has_war_with = VAL has_war_with = NOD } OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		if = { limit = { NOD = { has_war_with = BCM } } NOD = { white_peace = BCM } }
+		if = { limit = { VAL = { has_war_with = BCM } } VAL = { white_peace = BCM } }
+		if = {
+			limit = { 9 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			NOD = { annex_country = { target = BCM transfer_troops = no } }
+		}
+		else_if = {
+			limit = { 9 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			VAL = { annex_country = { target = BCM transfer_troops = no } }
+		}
+		else_if = {
+			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
+			NOD = { annex_country = { target = BCM transfer_troops = no } }
+		}
+		else = { VAL = { annex_country = { target = BCM transfer_troops = no } } }
+	}
+
+	if = {
+		limit = { BJK = { exists = yes } }
+		if = { limit = { NOD = { has_war_with = BJK } } NOD = { white_peace = BJK } }
+		if = { limit = { VAL = { has_war_with = BJK } } VAL = { white_peace = BJK } }
+		if = {
+			limit = { 41 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			NOD = { annex_country = { target = BJK transfer_troops = no } }
+		}
+		else_if = {
+			limit = { 41 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			VAL = { annex_country = { target = BJK transfer_troops = no } }
+		}
+		else_if = {
+			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
+			NOD = { annex_country = { target = BJK transfer_troops = no } }
+		}
+		else = { VAL = { annex_country = { target = BJK transfer_troops = no } } }
+	}
+
+	VAL = {
+		clr_country_flag = ADISCORD_bezhaysk_campaign_active
+		ADISCORD_economy_mark_dirty = yes
+	}
+	NOD = { ADISCORD_economy_mark_dirty = yes }
+}
