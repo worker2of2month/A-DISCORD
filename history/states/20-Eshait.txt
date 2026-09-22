@@ -13,7 +13,7 @@ state={
 		owner = YPR
 		buildings = {
 			air_base = 2
-			16372 = { naval_base = 2 }
+			21 = { naval_base = 2 }
 			infrastructure = 3
 			industrial_complex = 2
 			arms_factory = 4
