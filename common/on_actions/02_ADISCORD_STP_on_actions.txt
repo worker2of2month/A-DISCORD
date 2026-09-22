@@ -51,13 +51,21 @@ on_actions = {
 				STP_ps_poll_nodes = yes
 			}
 			else_if = { limit = { OR = { has_variable = STP_ps_reorg_deposit has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } } STP_ps_close_defence = yes }
+			if = {
+				limit = {
+					has_global_flag = STP_cw_started
+					NOT = { has_global_flag = STP_cw_union_wars_finished }
+					has_country_flag = STP_cw_won_union_battle
+					has_country_flag = STP_cw_postwar
+				}
+				STP_cw_check_union_wars_finished = yes
+			}
 		}
 	}
-	on_daily = {
+	on_daily_STS = {
 		effect = {
 			if = {
 				limit = {
-					OR = { tag = STP tag = STS }
 					has_global_flag = STP_cw_started
 					NOT = { has_global_flag = STP_cw_union_wars_finished }
 					has_country_flag = STP_cw_won_union_battle

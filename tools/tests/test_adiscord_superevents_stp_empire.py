@@ -198,6 +198,10 @@ class ObserverSupereventTimeoutTests(unittest.TestCase):
         self.assertIn("NOT = { any_country = { is_ai = no } }", tick)
         self.assertIn("NOT = { has_global_flag = ADISCORD_superevent_observer_checked_today }", tick)
         self.assertIn("set_global_flag = { flag = ADISCORD_superevent_observer_checked_today days = 1 }", tick)
+        self.assertLess(
+            tick.index("set_global_flag = { flag = ADISCORD_superevent_observer_checked_today days = 1 }"),
+            tick.index("has_global_flag = { flag = superevent_vorkerland_civilwar days > 6 }"),
+        )
         self.assertLess(tick.index("set_global_flag"), tick.index("any_country"))
         self.assertNotIn("every_country", tick)
         actions = read(ROOT / "common/on_actions/00_ADISCORD_on_actions.txt")

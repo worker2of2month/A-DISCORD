@@ -42,17 +42,18 @@ class StelanderPostwarUnlockRegressionTests(unittest.TestCase):
 
     def test_deferred_white_peace_gets_a_self_healing_retry(self) -> None:
         recovery = read_country_on_actions(RECOVERY, 'stelander')
-        daily = named_block(recovery, "on_daily")
-        for token in (
-            "OR = { tag = STP tag = STS }",
-            "has_global_flag = STP_cw_started",
-            "NOT = { has_global_flag = STP_cw_union_wars_finished }",
-            "has_country_flag = STP_cw_won_union_battle",
-            "has_country_flag = STP_cw_postwar",
-            "STP_cw_check_union_wars_finished = yes",
-        ):
-            self.assertIn(token, daily)
-        self.assertNotIn("SRP", daily)
+        self.assertIsNone(re.search(r"(?m)^\s*on_daily\s*=", recovery))
+        for hook in ("on_daily_STP", "on_daily_STS"):
+            daily = named_block(recovery, hook)
+            for token in (
+                "has_global_flag = STP_cw_started",
+                "NOT = { has_global_flag = STP_cw_union_wars_finished }",
+                "has_country_flag = STP_cw_won_union_battle",
+                "has_country_flag = STP_cw_postwar",
+                "STP_cw_check_union_wars_finished = yes",
+            ):
+                self.assertIn(token, daily)
+            self.assertNotIn("SRP", daily)
 
     def test_budget_tooltip_marks_the_republic_condition_as_a_separate_alternative(self) -> None:
         ru = read(RU_LOC)
