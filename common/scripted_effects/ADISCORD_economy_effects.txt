@@ -17,7 +17,6 @@ ADISCORD_economy_initialize_country = {
 		ADISCORD_economy_refresh_open_window = yes
 		ADISCORD_economy_update_stretched = yes
 		ADISCORD_economy_calculate_macro_indicators = yes
-		ADISCORD_economy_update_model_and_cycle = yes
 		ADISCORD_economy_calculate_development_multiplier = yes
 		ADISCORD_economy_refresh_spending_ideas = yes
 		ADISCORD_economy_update_gui = yes
