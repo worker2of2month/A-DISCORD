@@ -1,0 +1,23 @@
+name: VAL focus overlap smoke
+
+on:
+  push:
+    branches:
+      - fix/val-focus-node-overlaps
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focus clarity
+        run: python -B -m unittest tools.tests.test_adiscord_val_focus_clarity
+      - name: Northern route regression
+        run: python -B -m unittest tools.tests.test_adiscord_economy_rebalance.NorthernCampaignRouteTests
+      - name: Expansion layout regression
+        run: python -B -m unittest tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests.test_expansion_is_split_into_early_war_bands_and_late_continuation
+      - name: Diff check
+        run: git diff --check HEAD^ HEAD
