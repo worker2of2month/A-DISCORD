@@ -2250,6 +2250,7 @@ focus_tree = {
 		x = 34
 		y = 13
 		cost = 4
+		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		prerequisite = { focus = VAL_Foreign_Broker_Licences }
 		available = {
 			custom_trigger_tooltip = {
