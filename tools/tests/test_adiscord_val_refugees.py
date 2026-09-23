@@ -242,7 +242,7 @@ class RefugeeAdmissionTests(unittest.TestCase):
     def test_admission_cost_capacity_and_single_payment(self):
         for region in REGIONS:
             body = self.decisions[f"VAL_accept_{region}_refugees"]
-            self.assertEqual(scalar(body, "days_re_enable"), "365")
+            self.assertEqual(scalar(body, "days_re_enable"), "90")
             reward = next(e.value for e in body if e.key == "complete_effect")
             self.assertEqual(sum(e.key == "ADISCORD_economy_spend_100" for e in reward), 1)
             self.assertFalse(any(e.key == "clr_country_flag" for e in reward))
@@ -251,7 +251,11 @@ class RefugeeAdmissionTests(unittest.TestCase):
             self.assertEqual(scalar(population, "value"), expected_amount)
             available = next(e.value for e in body if e.key == "available")
             facts = {("VAL", "ADISCORD_economy_can_spend_100", "yes"): True, ("VAL", f"VAL_refugee_{region}_war", "yes"): True}
+            facts[("VAL", "variable", f"VAL_refugee_{region}_admitted")] = 0
             self.assertTrue(matches_conditions(available, facts, "VAL"))
+            facts[("VAL", "variable", f"VAL_refugee_{region}_admitted")] = 3
+            self.assertFalse(matches_conditions(available, facts, "VAL"))
+            facts[("VAL", "variable", f"VAL_refugee_{region}_admitted")] = 0
             facts[("VAL", "has_country_flag", "VAL_refugee_border_closed")] = True
             self.assertFalse(matches_conditions(available, facts, "VAL"))
             facts[("VAL", "has_country_flag", "VAL_refugee_border_closed")] = False
@@ -659,7 +663,7 @@ class RefugeeTrainingTests(unittest.TestCase):
             self.run_effect("VAL_finish_housing")
             self.run_effect("VAL_refund_housing")
             self.assertNotIn("VAL_housing_deposit", self.variables)
-            self.assertEqual(self.variables["VAL_refugee_housing"], 40 if sovereign else 20)
+            self.assertEqual(self.variables["VAL_refugee_housing"], 50 if sovereign else 20)
             self.assertEqual(self.variables["ADISCORD_economy_treasury"], 0 if sovereign else 250)
 
 
