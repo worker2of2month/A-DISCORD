@@ -1,5 +1,37 @@
 ideas = {
 	country = {
+		# Postwar policy previews; these ideas are never installed.
+		STP_pw_party_command_army_delta = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.03 stability_factor = -0.02 }
+		}
+		STP_pw_party_command_security_delta = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { always = no }
+			modifier = { stability_factor = 0.04 planning_speed = -0.10 }
+		}
+		STP_pw_party_requisition_delta = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_overall_income_factor = -0.05 }
+		}
+		STP_pw_party_contracts_delta = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_overall_income_factor = 0.05 ADISCORD_economy_admin_expense_factor = 0.03 }
+		}
+		STP_pw_party_joint_staff_delta = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { always = no }
+			modifier = { planning_speed = 0.10 ADISCORD_economy_admin_expense_factor = 0.05 }
+		}
+		STP_pw_party_domestic_staff_delta = {
+			picture = ADISCORD_law_civic_emergency_committees
+			allowed = { always = no }
+			modifier = { army_org_factor = 0.02 planning_speed = -0.05 }
+		}
+
 
 		STP_pc_val_compact = {
 			picture = ADISCORD_law_civic_emergency_committees

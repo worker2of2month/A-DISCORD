@@ -109,3 +109,11 @@ add_equipment_to_stockpile = {
 }
 
 STP_qol_initialize_party_leaders = yes
+
+# Roles are granted by the staff effects after their gameplay prerequisites.
+recruit_character = STP_Pavel_Gromin
+recruit_character = STP_Elena_Vetrova
+recruit_character = STP_Oleg_Vershin
+
+# The administration effect activates this dormant political role.
+recruit_character = STP_VAL_Andrei_Rudnev

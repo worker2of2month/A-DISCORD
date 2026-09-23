@@ -2,12 +2,7 @@ VAL_population_markets = {
 	VAL_accept_vorkerland_refugees = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		visible = {
-			OR = {
-				has_completed_focus = VAL_The_Contract_State
-				has_country_flag = VAL_refugee_vorkerland_window
-			}
-		}
+		visible = { has_country_flag = VAL_refugee_vorkerland_window }
 		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_window_open_tt has_country_flag = VAL_refugee_vorkerland_window } custom_trigger_tooltip = { tooltip = VAL_refugee_wave_limit_tt check_variable = { var = VAL_refugee_vorkerland_admitted value = 3 compare = less_than } } custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt OR = { AND = { NOT = { has_variable = VAL_refugee_training_escrow } check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } AND = { has_variable = VAL_refugee_training_escrow check_variable = { var = VAL_displaced_population value = 80 compare = less_than_or_equals } } } } ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_text = VAL_logistics_cost_250
@@ -29,12 +24,7 @@ VAL_population_markets = {
 	VAL_accept_stelander_refugees = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		visible = {
-			OR = {
-				has_completed_focus = VAL_The_Contract_State
-				has_country_flag = VAL_refugee_stelander_window
-			}
-		}
+		visible = { has_country_flag = VAL_refugee_stelander_window }
 		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_window_open_tt has_country_flag = VAL_refugee_stelander_window } custom_trigger_tooltip = { tooltip = VAL_refugee_wave_limit_tt check_variable = { var = VAL_refugee_stelander_admitted value = 3 compare = less_than } } custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt OR = { AND = { NOT = { has_variable = VAL_refugee_training_escrow } check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } AND = { has_variable = VAL_refugee_training_escrow check_variable = { var = VAL_displaced_population value = 80 compare = less_than_or_equals } } } } ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_text = VAL_logistics_cost_250
@@ -56,12 +46,7 @@ VAL_population_markets = {
 	VAL_accept_nodrul_refugees = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		visible = {
-			OR = {
-				has_completed_focus = VAL_The_Contract_State
-				has_country_flag = VAL_refugee_nodrul_window
-			}
-		}
+		visible = { has_country_flag = VAL_refugee_nodrul_window }
 		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_window_open_tt has_country_flag = VAL_refugee_nodrul_window } custom_trigger_tooltip = { tooltip = VAL_refugee_wave_limit_tt check_variable = { var = VAL_refugee_nodrul_admitted value = 3 compare = less_than } } custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt OR = { AND = { NOT = { has_variable = VAL_refugee_training_escrow } check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } AND = { has_variable = VAL_refugee_training_escrow check_variable = { var = VAL_displaced_population value = 80 compare = less_than_or_equals } } } } ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_text = VAL_logistics_cost_250
@@ -83,12 +68,7 @@ VAL_population_markets = {
 	VAL_accept_north_refugees = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		visible = {
-			OR = {
-				has_completed_focus = VAL_The_Contract_State
-				has_country_flag = VAL_refugee_north_window
-			}
-		}
+		visible = { has_country_flag = VAL_refugee_north_window }
 		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_window_open_tt has_country_flag = VAL_refugee_north_window } custom_trigger_tooltip = { tooltip = VAL_refugee_wave_limit_tt check_variable = { var = VAL_refugee_north_admitted value = 3 compare = less_than } } custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt OR = { AND = { NOT = { has_variable = VAL_refugee_training_escrow } check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } AND = { has_variable = VAL_refugee_training_escrow check_variable = { var = VAL_displaced_population value = 80 compare = less_than_or_equals } } } } ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_text = VAL_logistics_cost_250
@@ -110,12 +90,7 @@ VAL_population_markets = {
 	VAL_accept_perimeter_refugees = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		visible = {
-			OR = {
-				has_completed_focus = VAL_The_Contract_State
-				has_country_flag = VAL_refugee_perimeter_window
-			}
-		}
+		visible = { has_country_flag = VAL_refugee_perimeter_window }
 		available = { custom_trigger_tooltip = { tooltip = VAL_refugee_window_open_tt has_country_flag = VAL_refugee_perimeter_window } custom_trigger_tooltip = { tooltip = VAL_refugee_wave_limit_tt check_variable = { var = VAL_refugee_perimeter_admitted value = 3 compare = less_than } } custom_trigger_tooltip = { tooltip = VAL_refugee_border_open_tt NOT = { has_country_flag = VAL_refugee_border_closed } } custom_trigger_tooltip = { tooltip = VAL_refugee_capacity_tt OR = { AND = { NOT = { has_variable = VAL_refugee_training_escrow } check_variable = { var = VAL_displaced_population value = 90 compare = less_than_or_equals } } AND = { has_variable = VAL_refugee_training_escrow check_variable = { var = VAL_displaced_population value = 80 compare = less_than_or_equals } } } } ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
 		custom_cost_text = VAL_logistics_cost_250

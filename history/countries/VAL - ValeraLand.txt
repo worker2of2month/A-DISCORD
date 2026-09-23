@@ -32,6 +32,7 @@ set_popularities = {
 }
 
 add_ideas = {
+	VAL_contract_service
 	ADISCORD_society_type_industrial
 	ADISCORD_information_state_bulletins
 	ADISCORD_military_organization_contract_brigades
@@ -102,3 +103,8 @@ recruit_character = VAL_party_administration
 
 VAL_qol_initialize_staff = yes
 VAL_qol_initialize_party_leaders = yes
+
+# Roles are granted by the staff effects after their gameplay prerequisites.
+recruit_character = VAL_Anton_Rein
+recruit_character = VAL_Irina_Karst
+recruit_character = VAL_Viktor_Bran

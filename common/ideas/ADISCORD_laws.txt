@@ -7,6 +7,12 @@ ideas = {
 			picture = ADISCORD_society_type_traditional
 			cost = 75
 			removal_cost = -1
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_society_type_scripted_only_tt
+					always = no
+				}
+			}
 
 			modifier = {
 				stability_factor = 0.045
@@ -42,6 +48,12 @@ ideas = {
 			picture = ADISCORD_society_type_agrarian
 			cost = 75
 			removal_cost = -1
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_society_type_scripted_only_tt
+					always = no
+				}
+			}
 
 			modifier = {
 				monthly_population = 0.045
@@ -68,6 +80,12 @@ ideas = {
 			picture = ADISCORD_society_type_industrial
 			cost = 75
 			removal_cost = -1
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_society_type_scripted_only_tt
+					always = no
+				}
+			}
 			default = yes
 
 			modifier = {
@@ -96,15 +114,13 @@ ideas = {
 			picture = ADISCORD_society_type_post_industrial
 			cost = 75
 			removal_cost = -1
-
 			available = {
-				OR = {
-					has_government = technocracy
-					has_government = humanism
-					ADISCORD_economic_development_at_least_3 = yes
-					ADISCORD_society_development_at_least_3 = yes
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_society_type_scripted_only_tt
+					always = no
 				}
 			}
+
 
 			modifier = {
 				research_speed_factor = 0.0525
@@ -141,17 +157,13 @@ ideas = {
 			picture = ADISCORD_society_type_information
 			cost = 75
 			removal_cost = -1
-
 			available = {
-				OR = {
-					has_government = technocracy
-					ADISCORD_country_development_at_least_4 = yes
-					AND = {
-						ADISCORD_economic_development_at_least_4 = yes
-						ADISCORD_society_development_at_least_4 = yes
-					}
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_society_type_scripted_only_tt
+					always = no
 				}
 			}
+
 
 			modifier = {
 				research_speed_factor = 0.09
@@ -190,6 +202,12 @@ ideas = {
 			picture = ADISCORD_society_type_industrial
 			cost = 75
 			removal_cost = -1
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_society_type_scripted_only_tt
+					always = no
+				}
+			}
 
 			modifier = {
 				stability_factor = 0.04

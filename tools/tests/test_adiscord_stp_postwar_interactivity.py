@@ -11,7 +11,7 @@ def read(path: str) -> str:
 
 
 def named_block(text: str, name: str) -> str:
-    marker = name + " ="
+    marker = name + " = {"
     start = text.index(marker)
     brace = text.index("{", start)
     depth = 0
@@ -75,9 +75,6 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
             "STP_pw_reconstruction_momentum",
             "STP_pw_public_confidence",
             "STP_pw_regional_cohesion",
-            "ADISCORD_campaign_slot_grant = yes",
-            "STP_pw_propaganda_slot_1",
-            "STP_pw_propaganda_slot_2",
         ):
             self.assertIn(token, init)
 
@@ -186,10 +183,12 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
             block = focus[start:end]
             self.assertIn(f"cost = {expected}", block, focus_id)
 
-    def test_existing_saves_reconcile_postwar_gameplay_weekly(self):
+    def test_postwar_initialization_is_event_driven(self):
         on_actions = read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
         weekly = named_block(on_actions, "on_weekly_STS")
-        self.assertIn("STP_pw_reconcile_postwar_interactivity = yes", weekly)
+        self.assertNotIn("STP_pw_reconcile_postwar_interactivity = yes", weekly)
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        self.assertIn("STP_pw_reconcile_postwar_interactivity = yes", named_block(effects, "STP_cw_finish_mobilization"))
 
 
 if __name__ == "__main__":

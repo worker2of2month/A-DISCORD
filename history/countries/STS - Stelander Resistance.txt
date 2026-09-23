@@ -11,3 +11,11 @@ set_popularities = {
 }
 set_stability = 0.35
 set_war_support = 0.65
+
+# Roles are granted by the staff effects after their gameplay prerequisites.
+recruit_character = STS_Pavel_Gromin
+recruit_character = STS_Elena_Vetrova
+recruit_character = STS_Oleg_Vershin
+
+# The administration effect activates this dormant political role.
+recruit_character = STS_VAL_Andrei_Rudnev

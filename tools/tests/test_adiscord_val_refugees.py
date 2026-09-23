@@ -75,7 +75,7 @@ class RefugeeAdmissionTests(unittest.TestCase):
         self.facts[("VAL", "VAL_refugee_stelander_war", "yes")] = True
         self.assertTrue(self.visible("stelander"))
 
-    def test_canonical_story_flags_open_vorkerland_and_stelander_waves(self):
+    def test_refugee_windows_require_actual_outbreaks(self):
         vorkerland = self.triggers["VAL_refugee_vorkerland_war"]
         stelander = self.triggers["VAL_refugee_stelander_war"]
         self.assertTrue(matches_conditions(
@@ -85,9 +85,16 @@ class RefugeeAdmissionTests(unittest.TestCase):
         ))
         self.assertTrue(matches_conditions(
             stelander,
-            {("VAL", "has_global_flag", "STP_cw_started"): True},
+            {("STP", "has_war_with", "STS"): True},
             "VAL",
         ))
+
+    def test_prewar_split_and_nod_crisis_do_not_open_refugee_windows(self):
+        facts = {("VAL", "has_global_flag", "STP_cw_started"): True,
+                 ("VAL", "VAL_final_crisis_available", "yes"): True,
+                 ("VAL", "variable", "VAL_final_crisis_phase"): 1}
+        for region in ("stelander", "nodrul"):
+            self.assertFalse(matches_conditions(self.triggers[f"VAL_refugee_{region}_war"], facts, "VAL"))
 
     def test_weekly_update_does_not_clear_timed_admission_windows_on_peace(self):
         weekly = self.effects["VAL_update_refugees_weekly"]
@@ -217,20 +224,20 @@ class RefugeeAdmissionTests(unittest.TestCase):
         self.assertEqual(next(e.value for e in labor if e.key == "add_manpower"), "2500")
 
 
-    def test_admission_rows_show_required_windows_after_contract_state(self):
+    def test_contract_state_does_not_reveal_peacetime_admission(self):
         self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
         for region in (*REGIONS, "perimeter"):
             with self.subTest(region=region):
-                self.assertTrue(self.visible(region))
+                self.assertFalse(self.visible(region))
 
-    def test_expired_admission_rows_remain_readable_without_renewal(self):
+    def test_expired_admission_rows_hide_without_renewal(self):
         self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
         self.facts[("VAL", "ADISCORD_economy_can_spend_250", "yes")] = True
         for region in (*REGIONS, "perimeter"):
             with self.subTest(region=region):
                 self.facts[("VAL", "has_country_flag", f"VAL_refugee_{region}_seen")] = True
                 self.run_effect(self.effects["VAL_open_refugee_waves"])
-                self.assertTrue(self.visible(region))
+                self.assertFalse(self.visible(region))
                 available = next(e.value for e in self.decisions[f"VAL_accept_{region}_refugees"] if e.key == "available")
                 self.assertFalse(matches_conditions(available, self.facts, "VAL"))
                 self.assertNotIn(f"VAL_refugee_{region}_window", self.windows)
@@ -244,6 +251,7 @@ class RefugeeAdmissionTests(unittest.TestCase):
                 self.assertFalse(matches_conditions(available, self.facts, "VAL"))
                 window = ("VAL", "has_country_flag", f"VAL_refugee_{region}_window")
                 self.facts[window] = True
+                self.assertTrue(self.visible(region))
                 self.assertTrue(matches_conditions(available, self.facts, "VAL"))
                 self.facts[window] = False
         for language in ("russian", "english"):
@@ -467,7 +475,7 @@ class FinalSupplySettlementTests(unittest.TestCase):
     def setUp(self):
         self.effects = load("common/scripted_effects/ADISCORD_VAL_effects.txt")
         self.effects.update(load("common/scripted_effects/ADISCORD_shared_action_effects.txt"))
-        self.decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_final_war"]}
+        self.decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_frontier"]}
         self.variables = {"ADISCORD_economy_treasury": 500, "VAL_final_crisis_phase": 1}
         self.facts = {("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True}
         self.rewards = []

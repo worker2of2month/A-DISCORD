@@ -31,6 +31,22 @@ def block(text, name):
 
 
 class CivilWarContracts(unittest.TestCase):
+    def test_weekly_civil_war_dispatch_is_country_scoped_and_ordered(self):
+        actions = ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions")
+        self.assertFalse(any(e.key == "on_weekly" for e in actions))
+        expected = {
+            "NOD": ["STP_cw_poll_nod_intervention"],
+            "STP": ["STP_cw_start", "STP_cw_begin_hostilities"],
+            "STS": ["STP_cw_begin_hostilities"],
+        }
+        tracked = {name for names in expected.values() for name in names}
+        for tag, names in expected.items():
+            hooks = [e for e in actions if e.key == "on_weekly_" + tag]
+            self.assertEqual(len(hooks), 1)
+            payload = ast_block(hooks[0].value, "effect")
+            self.assertEqual([e.key for e in walk(payload) if e.key in tracked], names)
+            self.assertFalse({e.key for e in walk(payload)} & {"every_country", "every_possible_country"})
+
     def test_party_cabinet_lock_follows_shabrat_route_until_actual_war(self):
         definitions = entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt") + entries("common/scripted_triggers/ADISCORD_scripted_triggers_generic.txt")
         guard = ast_block(definitions, "STP_party_minister_change_allowed")
@@ -971,7 +987,7 @@ class CivilWarContracts(unittest.TestCase):
 
     def test_blocked_deadline_retries_only_stp_without_reopening_elections(self):
         on_actions = ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions")
-        weekly = ast_block(ast_block(on_actions, "on_weekly"), "effect")
+        weekly = ast_block(ast_block(on_actions, "on_weekly_STP"), "effect")
         retry = next(e.value for e in weekly if e.key == "if" and any(v.key == "STP_cw_start" for v in e.value))
         gate = ast_block(retry, "limit")
         finished = {("STP", "has_country_flag", "STP_cw_elections_finished"): True}
@@ -1404,7 +1420,7 @@ class CivilWarContracts(unittest.TestCase):
         self.assertLess(cleared.line, min(e.line for e in walk(start) if e.key in ("STP_cw_mobilize_brigade", "STP_cw_mobilize_assault_division")))
 
     def test_val_busy_offer_retries_once_and_dispatcher_rechecks_before_display(self):
-        weekly = ast_block(ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions"), "on_weekly"), "effect")
+        weekly = ast_block(ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions"), "on_weekly_VAL"), "effect")
         retry = next((e.value for e in weekly if e.key == "if" and any(v.key == "country_event"
                       and scalar(v.value, "id") == "ADISCORD_STP_cw.22" for v in walk(e.value))), None)
         self.assertIsNotNone(retry, "VAL must not lose the only offer while a foreign contract occupies its slot")
@@ -1722,29 +1738,25 @@ class CivilWarContracts(unittest.TestCase):
             self.assertIn(f"has_war_with = {tag}", busy)
             self.assertIn(f"{tag} = {{ exists = yes has_capitulated = no }}", busy)
         on_actions = read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
-        weekly = block(on_actions, "on_weekly")
-        self.assertIn("tag = STS", weekly)
+        weekly = block(on_actions, "on_weekly_NOD")
+        self.assertIn("tag = NOD", weekly)
         self.assertIn("STP_cw_poll_nod_intervention = yes", weekly)
         self.assertNotIn("every_country", weekly)
 
     def test_weekly_nod_poll_stops_after_peace_but_keeps_pending_warning_cleanup(self):
         actions = ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions")
-        weekly = ast_block(ast_block(actions, "on_weekly"), "effect")
         for tag in ("STP", "STS", "NOD", "VAL"):
-            for started in (False, True):
-                for finished in (False, True):
-                    for warning in (False, True):
-                        for entered in (False, True):
-                            with self.subTest(tag=tag, started=started, finished=finished, warning=warning, entered=entered):
-                                facts = {(tag, "has_global_flag", "STP_cw_started"): started,
-                                         (tag, "has_global_flag", "STP_cw_union_wars_finished"): finished,
-                                         (tag, "has_active_mission", "STP_cw_nod_warning"): warning,
-                                         (tag, "has_country_flag", "STP_cw_nod_entered"): entered}
-                                selected = [scope for scope, e in selected_effects(weekly, facts, tag)
-                                            if e.key == "STP_cw_poll_nod_intervention"]
-                                expected = tag == "STS" and started and not entered and (warning or not finished)
-                                self.assertEqual(selected, ["STS"] if expected else [],
-                                                 "peace stops polling; an active warning still receives the existing cleanup")
+            weekly = ast_block(ast_block(actions, "on_weekly_" + tag), "effect")
+            for possible in (False, True):
+                for approved in (False, True):
+                    with self.subTest(tag=tag, possible=possible, approved=approved):
+                        facts = {(tag, "NOD_cw_intervention_possible", "yes"): possible,
+                                 (tag, "has_country_flag", "NOD_cw_intervention_approved"): approved}
+                        selected = [scope for scope, e in selected_effects(weekly, facts, tag)
+                                    if e.key == "STP_cw_poll_nod_intervention"]
+                        expected = tag == "NOD" and (possible or approved)
+                        self.assertEqual(selected, ["NOD"] if expected else [],
+                                         "an approved intervention must receive cleanup even when entry becomes impossible")
 
     def test_val_visible_timer_has_no_independent_war_callback(self):
         decisions = read("common/decisions/ADISCORD_STP_decisions.txt")
@@ -2149,8 +2161,9 @@ class CommanderLoyaltyContracts(unittest.TestCase):
         self.assertLess(war.rindex("STP_cw_prepared_supply_lines"), war.index("declare_war_on"))
         self.assertIn("tag = STS", war)
         self.assertIn("declare_war_on = { target = STP type = annex_everything }", war)
-        weekly = ast_block(ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions"), "on_weekly")
-        retries = [e.value for e in ast_block(weekly, "effect")
+        actions = ast_block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions")
+        weekly = [e for tag in ("STP", "STS") for e in ast_block(ast_block(actions, "on_weekly_" + tag), "effect")]
+        retries = [e.value for e in weekly
                    if e.key == "if" and any(child.key == "STP_cw_begin_hostilities" for child in e.value)]
         self.assertEqual(len(retries), 2)
         retry = retries[0]

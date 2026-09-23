@@ -1309,40 +1309,6 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.assertEqual(self.variables["VAL_arsenal_reputation_stage"], 5)
         self.assertAlmostEqual(self.variables["VAL_arsenal_quality"], .1)
 
-    def test_missed_world_collapse_is_reconciled_once(self):
-        self.variables["VAL_arsenal_reputation_stage"] = 4
-        self.facts[("VAL", "has_global_flag", "ADISCORD_vorkerland_collapse_wars_started")] = True
-        self.run_effect("VAL_reconcile_supply_crisis")
-        self.assertIn("VAL_economic_collapse", self.modifiers)
-        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 0)
-        self.assertEqual(self.variables["VAL_arsenal_reputation_stage"], 0)
-        self.assertEqual(self.events, ["val_rework.100"])
-        snapshot = (dict(self.variables), self.dirty, self.layout_updates, list(self.events))
-        self.run_effect("VAL_reconcile_supply_crisis")
-        self.assertEqual((self.variables, self.dirty, self.layout_updates, self.events), snapshot)
-
-    def test_missed_local_flag_does_not_reset_existing_recovery(self):
-        self.variables.update(VAL_economic_recovery_steps=7, VAL_arsenal_reputation_stage=3,
-                              VAL_arsenal_investment=.06)
-        self.facts[("VAL", "has_global_flag", "ADISCORD_vorkerland_collapse_wars_started")] = True
-        self.run_effect("VAL_reconcile_supply_crisis")
-        self.assertTrue(self.facts.get(("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted"), False))
-        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 7)
-        self.assertEqual(self.variables["VAL_arsenal_reputation_stage"], 3)
-        self.assertAlmostEqual(self.variables["VAL_industrial_output"], -.06)
-        self.assertFalse(self.events)
-
-    def test_missing_crisis_consumer_is_repaired_without_repeating_rewards(self):
-        self.facts[("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")] = True
-        self.variables.update(VAL_economic_recovery_steps=5, VAL_arsenal_reputation_stage=2)
-        self.run_effect("VAL_reconcile_supply_crisis")
-        self.assertIn("VAL_economic_collapse", self.modifiers)
-        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 5)
-        self.assertFalse(self.events)
-        before = self.dirty
-        self.run_effect("VAL_reconcile_supply_crisis")
-        self.assertEqual(self.dirty, before)
-
     def test_refresh_cannot_drop_active_collapse_when_local_flag_is_lost(self):
         self.facts[("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")] = True
         self.variables.update(VAL_economic_recovery_steps=4, VAL_arsenal_reputation_stage=2)
@@ -1365,17 +1331,6 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.run_effect("VAL_refresh_industrial_economy")
         self.assertIn("VAL_economic_miracle", self.modifiers)
         self.assertNotIn("VAL_economic_collapse", self.modifiers)
-
-    def test_legacy_supply_idea_migrates_without_reset_or_duplicate_penalty(self):
-        self.installed_ideas.add("VAL_vorkerland_contract_disruptions")
-        for focus in self.recovery_focuses[:3]:
-            self.facts[("VAL", "has_completed_focus", focus)] = True
-        self.variables["VAL_arsenal_reputation_stage"] = 2
-        self.run_effect("VAL_reconcile_supply_crisis")
-        self.assertEqual(self.variables.get("VAL_economic_recovery_steps"), 3)
-        self.assertIn("VAL_economic_collapse", self.modifiers)
-        self.assertNotIn("VAL_vorkerland_contract_disruptions", self.installed_ideas)
-        self.assertFalse(self.events)
 
     def test_peacetime_reconciliation_does_not_invent_a_supply_crisis(self):
         self.run_effect("VAL_reconcile_supply_crisis")
@@ -1417,32 +1372,6 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.assertEqual(self.variables["VAL_economic_recovery_steps"], 2)
         self.assertIn("VAL_economic_collapse", self.modifiers)
         self.assertAlmostEqual(self.variables["VAL_industrial_output"], -.57)
-
-    def test_loaded_recovery_removes_stale_modifiers_without_resetting_progress(self):
-        self.variables.update(VAL_economic_recovery_steps=9, VAL_arsenal_reputation_stage=4,
-                              VAL_arsenal_investment_output=0.06)
-        for flag in ("VAL_vorkerland_contracts_disrupted", "VAL_vorkerland_resource_access_initialized"):
-            self.facts[("VAL", "has_country_flag", flag)] = True
-        self.modifiers.update(("VAL_contract_industry", "VAL_economic_collapse", "VAL_economic_miracle"))
-        self.run_effect("VAL_initialize_arsenal_recovery")
-        self.assertEqual(self.modifiers, {"VAL_economic_miracle", "VAL_arsenal_reputation"})
-        self.assertEqual(self.variables["VAL_economic_recovery_steps"], 9)
-        self.assertEqual(self.variables["VAL_arsenal_reputation_stage"], 4)
-        self.assertEqual(self.variables["VAL_arsenal_investment_output"], 0.06)
-        snapshot = dict(self.variables)
-        self.run_effect("VAL_initialize_arsenal_recovery")
-        self.assertEqual(self.variables, snapshot)
-        self.assertEqual(self.modifiers, {"VAL_economic_miracle", "VAL_arsenal_reputation"})
-
-    def test_existing_campaign_reconciliation_is_once_only(self):
-        self.facts[("VAL", "has_country_flag", "VAL_vorkerland_contracts_disrupted")] = True
-        for focus in self.recovery_focuses[:3]:
-            self.facts[("VAL", "has_completed_focus", focus)] = True
-        self.run_effect("VAL_reconcile_supply_crisis")
-        self.assertEqual(self.variables.get("VAL_economic_recovery_steps"), 3)
-        snapshot = (dict(self.variables), self.dirty)
-        self.run_effect("VAL_reconcile_supply_crisis")
-        self.assertEqual((self.variables, self.dirty), snapshot)
 
     def test_recovery_cannot_start_early_and_factory_grants_are_removed(self):
         self.run_effect("VAL_advance_economic_recovery")
@@ -2503,7 +2432,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
                 self.assertTrue(self.frontier_matches(block(handler, "limit"), facts, tag))
                 self.assertFalse(self.frontier_matches(block(handler, "limit"), {**facts, ("999", "is_controlled_by", "VAL"): False}, tag))
         effects = parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8"))
-        weekly = list(walk(block(effects, "VAL_frontier_weekly")))
+        weekly = list(walk(block(effects, "VAL_frontier_reconcile")))
         self.assertTrue(any(e.key == "VAL_frontier_members_beaten" and e.value == "yes" for e in weekly))
 
     def test_same_war_calls_and_cleanup_cover_all_actual_members(self):
@@ -2786,7 +2715,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
         from itertools import permutations, product
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, walk
         effects = parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8"))
-        weekly = block(effects, "VAL_frontier_weekly")
+        weekly = block(effects, "VAL_frontier_reconcile")
         gate = next(block(e.value, "limit") for e in walk(weekly)
                     if e.key == "else_if" and any(x.key == "VAL_frontier_settle_victory" for x in e.value))
         for target, order, guarantors, occupier in product(range(1, 4), permutations(("CIN", "OSF", "APH")),

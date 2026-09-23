@@ -237,6 +237,7 @@ ADISCORD_scenario_debug_category = {
 		complete_effect = {
 			if = {
 				limit = { is_debug = yes is_ai = no }
+				VAL_frontier_reconcile = yes
 				VAL_frontier_weekly = yes
 			}
 		}

@@ -188,7 +188,7 @@ ideas = {
 	   		cancel = { OR = { has_war_with = VAL VAL = { exists = no } } }
 	   		on_add = { ADISCORD_economy_mark_dirty = yes }
 	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
-	   		modifier = { army_org_regain = 0.05 planning_speed = 0.10 army_experience_gain_factor = 0.05 }
+			modifier = { army_org_regain = 0.05 planning_speed = 0.10 experience_gain_army_factor = 0.05 }
 	  }
 
         VAL_frontier_transport_columns = {
@@ -868,6 +868,28 @@ ideas = {
 			research_bonus = { armor = 0.08 }
 			equipment_bonus = { ADISCORD_combat_platform_archetype = { reliability = 0.03 } }
 			ai_will_do = { factor = 1 }
+		}
+	}
+
+	mobilization_laws = {
+		VAL_contract_service = {
+			picture = VAL_contract_service
+			allowed = { original_tag = VAL }
+			allowed_civil_war = { always = yes }
+			cost = 150
+			removal_cost = -1
+			level = 6
+			available = { original_tag = VAL }
+			modifier = {
+				conscription = 0.0125
+				army_org_regain = 0.10
+				attrition = -0.10
+				planning_speed = 0.10
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 	}
 }

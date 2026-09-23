@@ -312,6 +312,18 @@ VAL_military_operations = {
 }
 
 VAL_contract_management = {
+	VAL_subcontract_quarterly_norm = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		visible = { VAL_contract_obligations_decisions_visible = yes has_country_flag = VAL_quarterly_contract_active NOT = { has_country_flag = VAL_quarterly_contract_paid } }
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_text = VAL_cost_treasury1000
+		custom_cost_trigger = { VAL_can_spend_1000 = yes }
+		complete_effect = { custom_effect_tooltip = VAL_quarterly_subcontract_result_tt hidden_effect = { VAL_subcontract_quarterly_norm = yes } }
+		ai_will_do = { base = 30 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment < 6000 } } } }
+	}
+
 	VAL_campaign_rifles_and_bread = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
@@ -695,6 +707,126 @@ VAL_reclamation = {
 }
 
 VAL_frontier = {
+	VAL_final_reconnaissance = {
+		icon = generic_intelligence_exchange
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = { VAL_final_crisis_preparing = yes check_variable = { var = VAL_final_escalation value = 25 compare = greater_than_or_equals } NOT = { check_variable = { var = VAL_final_planning_bonus value = 0 compare = greater_than } } }
+		cost = 75
+		days_remove = 21
+		complete_effect = { custom_effect_tooltip = VAL_final_reconnaissance_start_tt }
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals } } } }
+		cancel_effect = { add_political_power = 75 }
+		remove_effect = {
+			if = {
+				limit = { has_capitulated = no is_subject = no check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } }
+				add_intel = { target = NOD army_intel = 20 }
+				hidden_effect = { set_variable = { var = VAL_final_planning_bonus value = 0.15 } if = { limit = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } force_update_dynamic_modifier = yes } }
+				custom_effect_tooltip = VAL_final_reconnaissance_ready_tt
+			}
+			else = { add_political_power = 75 }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_final_stockpile_supplies = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = { VAL_final_crisis_preparing = yes NOT = { check_variable = { var = VAL_final_supply_bonus value = 0 compare = less_than } } }
+		available = { ADISCORD_economy_can_spend_500 = yes NOT = { has_variable = VAL_final_supply_deposit } }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
+		custom_cost_text = VAL_logistics_cost_500
+		cost = 0
+		days_remove = 35
+		complete_effect = {
+			ADISCORD_economy_spend_500 = yes
+			custom_effect_tooltip = VAL_final_supply_preparation_tt
+			hidden_effect = { set_variable = { var = VAL_final_supply_deposit value = 500 } }
+		}
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals } } } }
+		cancel_effect = { VAL_final_refund_supply_order = yes }
+		remove_effect = {
+			if = {
+				limit = { has_variable = VAL_final_supply_deposit has_capitulated = no is_subject = no check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } }
+				hidden_effect = { clear_variable = VAL_final_supply_deposit set_variable = { var = VAL_final_supply_bonus value = -0.10 } if = { limit = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } force_update_dynamic_modifier = yes } }
+				custom_effect_tooltip = VAL_final_supply_ready_tt
+			}
+			else = { VAL_final_refund_supply_order = yes }
+		}
+		ai_will_do = { base = 12 }
+	}
+
+	VAL_final_register_reserves = {
+		icon = generic_manpower
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = { VAL_final_crisis_preparing = yes OR = { has_idea = volunteer_only has_idea = disarmed_nation } }
+		available = { has_war_support > 0.1 }
+		cost = 150
+		days_remove = 28
+		complete_effect = { custom_effect_tooltip = VAL_final_reserve_registration_tt }
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals } } } }
+		cancel_effect = { add_political_power = 150 }
+		remove_effect = {
+			if = {
+				limit = { has_capitulated = no is_subject = no check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } OR = { has_idea = volunteer_only has_idea = disarmed_nation } }
+				add_ideas = limited_conscription
+			}
+			else = { add_political_power = 150 }
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	VAL_nod_ultimatum = {
+        icon = generic_political_pressure
+        allowed = { tag = VAL }
+        activation = { always = no }
+        visible = { VAL_frontier_decisions_visible = yes has_active_mission = VAL_nod_ultimatum }
+        available = { custom_trigger_tooltip = { tooltip = VAL_nod_ultimatum_objective_tt VAL_frontier_target_occupied = yes VAL_frontier_members_beaten = yes } }
+        selectable_mission = no
+        is_good = no
+        days_mission_timeout = 100
+        cancel_trigger = {
+            custom_trigger_tooltip = {
+                tooltip = VAL_nod_ultimatum_cancel_tt
+                OR = {
+                    NOT = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+                    has_capitulated = yes
+                    is_subject = yes
+                    NOT = { OR = { has_war_with = CIN has_war_with = OSF has_war_with = APH } }
+                    NOD = { OR = { exists = no has_capitulated = yes is_in_faction_with = VAL has_war_with = VAL AND = { is_subject = yes NOT = { is_subject_of = STP } } } }
+                }
+            }
+        }
+        complete_effect = { custom_effect_tooltip = VAL_nod_ultimatum_success_tt hidden_effect = { country_event = { id = val_rework.119 hours = 1 } } }
+        timeout_effect = { custom_effect_tooltip = VAL_nod_ultimatum_timeout_tt hidden_effect = { set_country_flag = VAL_nod_ultimatum_expired country_event = { id = val_rework.119 hours = 1 } } }
+    }
+
+	VAL_negotiate_yubora = {
+        icon = generic_diplomatic_treaty
+        allowed = { tag = VAL }
+        visible = { VAL_frontier_decisions_visible = yes
+            has_completed_focus = VAL_Northern_Settlement
+            TFF = { exists = yes } NOD = { exists = yes is_subject = no }
+            NOT = { has_country_flag = VAL_nod_frontier_agreement }
+        }
+        available = {
+            custom_trigger_tooltip = { tooltip = VAL_nod_frontier_offer_possible_tt VAL_nod_frontier_offer_current = yes }
+            custom_trigger_tooltip = { tooltip = VAL_nod_frontier_no_pending_tt NOT = { has_country_flag = VAL_nod_frontier_offer_pending has_country_flag = VAL_campaign_mobilizing } }
+        }
+        cost = 0
+        days_re_enable = 30
+        complete_effect = {
+            custom_effect_tooltip = VAL_nod_frontier_terms_tt
+            hidden_effect = {
+                set_country_flag = { flag = VAL_nod_frontier_offer_pending value = 1 days = 15 }
+                TFF = { country_event = { id = val_contract.350 } }
+            }
+        }
+        ai_will_do = { base = 20 }
+    }
+
 
     VAL_defer_northern_expansion = {
         icon = generic_political_pressure
@@ -1603,7 +1735,7 @@ VAL_postwar_administration = {
         target_trigger = { FROM = { state = 48 } }
         on_map_mode = map_and_decisions_view
         highlight_states = {
-            highlight_state_targets = {
+            highlight_states_trigger = {
                 OR = {
                     state = 48 state = 29 state = 46
                     state = 58 state = 59 state = 60 state = 61

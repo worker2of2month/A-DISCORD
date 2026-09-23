@@ -19,7 +19,7 @@ class ValStelanderDefeatTests(unittest.TestCase):
             "set_country_flag = VAL_cw_defeated",
             "set_country_flag = VAL_cw_settled",
             "retire_character = VAL_Valera_Solgalov",
-            "recruit_character = VAL_Commanders_Council",
+            "has_character = VAL_Commanders_Council",
             "promote_character = { character = VAL_Commanders_Council ideology = contractual_etatism }",
             "load_focus_tree = { tree = VAL_defeated_focus keep_completed = no }",
             "mark_focus_tree_layout_dirty = yes",

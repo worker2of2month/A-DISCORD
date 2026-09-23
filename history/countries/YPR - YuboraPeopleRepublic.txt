@@ -34,3 +34,6 @@ add_ideas = {
 }
 
 set_research_slots = 2
+
+# The administration effect activates this dormant political role.
+recruit_character = YPR_Contract_Council

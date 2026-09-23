@@ -1,22 +1,10 @@
 on_actions = {
 	on_startup = {
 		effect = {
-			ADISCORD_vorkerland_clear_northern_dirty_modifiers = yes
+			58 = { ADISCORD_vorkerland_clear_northern_dirty_modifiers = yes }
 			# on_startup is unscoped; the landmark state survives WRK's collapse.
 			40 = { ADISCORD_vorkerland_sync_unity_tower_visual = yes }
 			40 = { ADISCORD_vorkerland_reconcile_dirty_zone_remainder = yes }
-			# Save migration: older reunified campaigns may still preserve the wartime
-			# Oitfort committee. Terminal WRK owns state 34 directly in the current design.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_reunification_verified
-					NOT = { has_global_flag = ADISCORD_vorkerland_wtd_terminal_cleanup_v1 }
-					country_exists = WRK
-					country_exists = WTD
-				}
-				WRK = { ADISCORD_vorkerland_absorb_wtd_after_reunification = yes }
-				set_global_flag = ADISCORD_vorkerland_wtd_terminal_cleanup_v1
-			}
 			# Country history seeds this marker only while creating a fresh campaign.
 			# Once consumed, later loads cannot schedule the collapse again.
 			WRK = {

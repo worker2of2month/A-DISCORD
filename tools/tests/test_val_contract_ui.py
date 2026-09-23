@@ -442,7 +442,16 @@ class TestValReclamationCompletion(unittest.TestCase):
             self.assertEqual("VAL_harvest_of_ash" in ideas, not completed)
             self.assertEqual(invalidations, int(completed))
 
-    def test_final_paid_result_and_old_save_startup_check_completion(self):
+    def test_reclamation_callbacks_resolve_explicit_state_receipts(self):
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        for action in ("finish", "refund"):
+            callback = named_block(effects, f"VAL_reclamation_{action}_project")
+            self.assertNotIn("FROM =", callback)
+            self.assertIn("var = VAL_reclamation_deposit value = 500 compare = equals", callback)
+            for state in (24, 42, 48, 54, 55, 56, 57):
+                self.assertIn(f"{state} = {{ VAL_reclamation_{action}_state_project = yes }}", callback)
+
+    def test_final_paid_result_checks_completion_without_save_migration(self):
         text = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         finish = named_block(text, "VAL_reclamation_finish_state_project")
         self.assertIn("VAL_complete_reclamation = yes", finish)
@@ -451,7 +460,8 @@ class TestValReclamationCompletion(unittest.TestCase):
         self.assertNotIn("VAL_complete_reclamation", named_block(text, "VAL_reclamation_refund_state_project"))
         actions = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
         startup = named_block(actions, "on_startup")
-        self.assertGreater(startup.index("VAL_complete_reclamation = yes"), startup.index("VAL_migrate_reclamation_modifiers = yes"))
+        self.assertNotIn("VAL_migrate_reclamation_modifiers", startup)
+        self.assertNotIn("VAL_complete_reclamation", startup)
         self.assertNotIn("VAL_complete_reclamation", named_block(actions, "on_weekly_VAL"))
         focuses = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
         self.assertNotIn("remove_ideas = VAL_harvest_of_ash", focuses)
@@ -542,7 +552,7 @@ class TestValReclamationFollowThrough(unittest.TestCase):
             self.assertIn("state = " + str(state), hook)
         self.assertNotIn("VAL_complete_reclamation", named_block(actions, "on_weekly_VAL"))
 
-    def test_legacy_compensation_is_removed_by_the_new_save_migration(self):
+    def test_legacy_compensation_is_disabled_without_save_migration(self):
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         refresh = named_block(effects, "VAL_reclamation_refresh_state")
         self.assertIn("has_dynamic_modifier = { modifier = VAL_reclamation_recovered_land }", refresh)
@@ -551,8 +561,7 @@ class TestValReclamationFollowThrough(unittest.TestCase):
         legacy = named_block(read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"), "VAL_reclamation_recovered_land")
         self.assertIn("enable = { always = no }", legacy)
         startup = named_block(read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"), "on_startup")
-        self.assertIn("NOT = { has_country_flag = VAL_reclamation_modifier_migrated_v3 }", startup)
-        self.assertIn("set_country_flag = VAL_reclamation_modifier_migrated_v3", startup)
+        self.assertNotIn("VAL_reclamation_modifier_migrated_v3", startup)
 
     def test_balchansk_branch_has_localised_names_and_descriptions(self):
         for language in ("russian", "english"):

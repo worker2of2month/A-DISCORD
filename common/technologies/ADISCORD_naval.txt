@@ -113,7 +113,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_towed_array_sonar = {
-		ADISCORD_coastal_patrol_ship = { sub_detection = 0.10 sub_attack = 0.06 }
+		ADISCORD_coastal_patrol_vessel = { sub_detection = 0.10 sub_attack = 0.06 }
 		path = { leads_to_tech = ADISCORD_tech_escort_integrated_electric_propulsion research_cost_coeff = 1 }
 		research_cost = 1.405
 		start_year = 2162
@@ -157,7 +157,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_containerized_escort_missile_cells = {
-		ADISCORD_coastal_patrol_ship = { lg_attack = 0.08 anti_air_attack = 0.08 }
+		ADISCORD_coastal_patrol_vessel = { lg_attack = 0.08 anti_air_attack = 0.08 }
 		path = { leads_to_tech = ADISCORD_tech_escort_integrated_electric_propulsion research_cost_coeff = 1 }
 		research_cost = 1.46
 		start_year = 2164
@@ -351,7 +351,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_directed_energy_point_defense = {
-		ADISCORD_coastal_patrol_ship = { anti_air_attack = 0.12 }
+		ADISCORD_coastal_patrol_vessel = { anti_air_attack = 0.12 }
 		path = { leads_to_tech = ADISCORD_tech_distributed_acoustic_pickets research_cost_coeff = 1 }
 		research_cost = 1.68
 		start_year = 2172
@@ -516,7 +516,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_radar_gunnery = {
-		ADISCORD_cruiser_archetype = { hg_attack = 0.06 }
+		heavy_cruiser = { hg_attack = 0.06 }
 		path = { leads_to_tech = ADISCORD_tech_stabilized_naval_gun_directors research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2158
@@ -537,7 +537,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_stabilized_naval_gun_directors = {
-		ADISCORD_cruiser_archetype = { hg_attack = 0.06 lg_attack = 0.04 }
+		heavy_cruiser = { hg_attack = 0.06 lg_attack = 0.04 }
 		path = { leads_to_tech = ADISCORD_tech_missile_batteries research_cost_coeff = 1 }
 		research_cost = 1.5
 		start_year = 2160
@@ -558,7 +558,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_missile_batteries = {
-		ADISCORD_cruiser_archetype = { hg_attack = 0.08 }
+		heavy_cruiser = { hg_attack = 0.08 }
 		path = { leads_to_tech = ADISCORD_tech_phased_array_mast_complexes research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_modular_vertical_launch_cells research_cost_coeff = 1 }
 		research_cost = 1.528
@@ -647,7 +647,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_composite_armor_belts = {
-		ADISCORD_cruiser_archetype = { armor_value = 0.10 }
+		heavy_cruiser = { armor_value = 0.10 }
 		path = { leads_to_tech = ADISCORD_tech_cooperative_fleet_missile_defense research_cost_coeff = 1 }
 		research_cost = 1.637
 		start_year = 2165
@@ -690,7 +690,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_cooperative_fleet_missile_defense = {
-		ADISCORD_cruiser_archetype = { anti_air_attack = 0.10 }
+		heavy_cruiser = { anti_air_attack = 0.10 }
 		path = { leads_to_tech = ADISCORD_tech_long_range_railgun_fire_control research_cost_coeff = 1 }
 		research_cost = 1.692
 		start_year = 2167
@@ -778,7 +778,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_superconducting_railgun_turrets = {
-		ADISCORD_cruiser_archetype = { hg_attack = 0.08 hg_armor_piercing = 0.08 }
+		heavy_cruiser = { hg_attack = 0.08 hg_armor_piercing = 0.08 }
 		path = { leads_to_tech = ADISCORD_tech_directed_energy_broadside_defense research_cost_coeff = 1 }
 		research_cost = 1.802
 		start_year = 2171
@@ -959,7 +959,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_homing_torpedoes = {
-		ADISCORD_submarine_archetype = { torpedo_attack = 0.08 }
+		submarine = { torpedo_attack = 0.08 }
 		path = { leads_to_tech = ADISCORD_tech_anechoic_tile_bonding research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2158
@@ -980,7 +980,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_anechoic_tile_bonding = {
-		ADISCORD_submarine_archetype = { sub_visibility = -0.06 }
+		submarine = { sub_visibility = -0.06 }
 		path = { leads_to_tech = ADISCORD_tech_air_independent_cells research_cost_coeff = 1 }
 		research_cost = 1.4
 		start_year = 2160
@@ -1001,7 +1001,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_air_independent_cells = {
-		ADISCORD_submarine_archetype = { naval_range = 0.10 }
+		submarine = { naval_range = 0.10 }
 		path = { leads_to_tech = ADISCORD_tech_pumpjet_propulsors research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_wake_homing_torpedo_seekers research_cost_coeff = 1 }
 		research_cost = 1.427
@@ -1156,7 +1156,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_fiber_optic_torpedo_control = {
-		ADISCORD_submarine_archetype = { torpedo_attack = 0.08 }
+		submarine = { torpedo_attack = 0.08 }
 		path = { leads_to_tech = ADISCORD_tech_underwater_vehicle_deployment_bays research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_autonomous_submarines research_cost_coeff = 1 }
 		dependencies = {
@@ -1253,7 +1253,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_supercavitating_interceptor_torpedoes = {
-		ADISCORD_submarine_archetype = { torpedo_attack = 0.10 }
+		submarine = { torpedo_attack = 0.10 }
 		path = { leads_to_tech = ADISCORD_tech_distributed_abyssal_comm_relays research_cost_coeff = 1 }
 		research_cost = 1.73
 		start_year = 2172

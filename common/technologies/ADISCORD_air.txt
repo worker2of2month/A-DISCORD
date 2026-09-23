@@ -146,7 +146,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_electronically_scanned_fighter_radar = {
-		ADISCORD_fighter_archetype = { air_attack = 0.06 air_defence = 0.04 }
+		fighter = { air_attack = 0.06 air_defence = 0.04 }
 		path = { leads_to_tech = ADISCORD_tech_helmet_cued_targeting research_cost_coeff = 1 }
 		research_cost = 1.532
 		start_year = 2163
@@ -169,7 +169,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_helmet_cued_targeting = {
-		ADISCORD_fighter_archetype = { air_attack = 0.08 }
+		fighter = { air_attack = 0.08 }
 		path = { leads_to_tech = ADISCORD_tech_fighter_infrared_search_track research_cost_coeff = 1 }
 		research_cost = 1.56
 		start_year = 2164
@@ -491,7 +491,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_twin_engine_aircraft = {
-		ADISCORD_bomber_archetype = { reliability = 0.02 }
+		ADISCORD_tactical_bomber = { reliability = 0.02 }
 		path = { leads_to_tech = ADISCORD_tech_maritime_patrol_aircraft research_cost_coeff = 1 }
 		path = { leads_to_tech = ADISCORD_tech_pressurized_bombers research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_bomber_2160 ADISCORD_naval_aircraft_2160 }
@@ -516,7 +516,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_maritime_patrol_aircraft = {
-		ADISCORD_naval_aircraft_archetype = { air_range = 0.04 }
+		nav_bomber = { air_range = 0.04 }
 		path = { leads_to_tech = ADISCORD_tech_airborne_homing_torpedoes research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_naval_aircraft_2164 }
 		research_cost = 2.05
@@ -540,7 +540,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_pressurized_bombers = {
-		ADISCORD_bomber_archetype = { air_defence = 0.04 }
+		ADISCORD_tactical_bomber = { air_defence = 0.04 }
 		path = { leads_to_tech = ADISCORD_tech_stabilized_bomb_sights research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_bomber_2164 }
 		research_cost = 2.05
@@ -564,7 +564,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_airborne_homing_torpedoes = {
-		ADISCORD_naval_aircraft_archetype = { naval_strike_attack = 0.10 naval_strike_targetting = 0.08 }
+		nav_bomber = { naval_strike_attack = 0.10 naval_strike_targetting = 0.08 }
 		path = { leads_to_tech = ADISCORD_tech_long_range_maritime_aircraft research_cost_coeff = 1 }
 		research_cost = 1.62
 		start_year = 2168
@@ -587,7 +587,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_stabilized_bomb_sights = {
-		ADISCORD_bomber_archetype = { strategic_attack = 0.08 air_ground_attack = 0.06 }
+		ADISCORD_tactical_bomber = { strategic_attack = 0.08 air_ground_attack = 0.06 }
 		path = { leads_to_tech = ADISCORD_tech_jet_strike_bombers research_cost_coeff = 1 }
 		research_cost = 1.62
 		start_year = 2168
@@ -610,7 +610,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_long_range_maritime_aircraft = {
-		ADISCORD_naval_aircraft_archetype = { naval_strike_targetting = 0.06 }
+		nav_bomber = { naval_strike_targetting = 0.06 }
 		path = { leads_to_tech = ADISCORD_tech_integrated_strike_navigation research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_naval_aircraft_2172 }
 		research_cost = 2.05
@@ -634,7 +634,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_jet_strike_bombers = {
-		ADISCORD_bomber_archetype = { strategic_attack = 0.06 }
+		ADISCORD_tactical_bomber = { strategic_attack = 0.06 }
 		path = { leads_to_tech = ADISCORD_tech_integrated_strike_navigation research_cost_coeff = 1 }
 		enable_equipments = { ADISCORD_bomber_2172 }
 		research_cost = 2.05
@@ -658,8 +658,8 @@ technologies = {
 	}
 
 	ADISCORD_tech_integrated_strike_navigation = {
-		ADISCORD_bomber_archetype = { air_range = 0.08 strategic_attack = 0.06 }
-		ADISCORD_naval_aircraft_archetype = { air_range = 0.08 naval_strike_targetting = 0.06 }
+		ADISCORD_tactical_bomber = { air_range = 0.08 strategic_attack = 0.06 }
+		nav_bomber = { air_range = 0.08 naval_strike_targetting = 0.06 }
 		dependencies = {
 			ADISCORD_tech_long_range_maritime_aircraft = 1
 			ADISCORD_tech_jet_strike_bombers = 1
@@ -710,7 +710,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_guided_munitions = {
-		ADISCORD_cas_archetype = { air_ground_attack = 0.08 }
+		cas = { air_ground_attack = 0.08 }
 		path = { leads_to_tech = ADISCORD_tech_armored_cockpits research_cost_coeff = 1 }
 		research_cost = 0.55
 		start_year = 2155
@@ -1078,7 +1078,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_electromagnetic_cannon_pods = {
-		ADISCORD_cas_archetype = { air_ground_attack = 0.10 }
+		cas = { air_ground_attack = 0.10 }
 		path = { leads_to_tech = ADISCORD_tech_persistent_sensor_strike_loops research_cost_coeff = 1 }
 		research_cost = 1.757
 		start_year = 2173

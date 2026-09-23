@@ -1323,7 +1323,7 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_pc.16.a
 		ai_chance = { factor = 70 }
-		set_capital = 1
+		set_capital = { state = 1 }
 		set_country_flag = STP_pc_capital_abilia
 		clr_country_flag = STP_pc_capital_fada
 		add_stability = 0.03
@@ -1338,7 +1338,7 @@ country_event = {
 			}
 		}
 		ai_chance = { factor = 30 }
-		set_capital = 28
+		set_capital = { state = 28 }
 		set_country_flag = STP_pc_capital_fada
 		clr_country_flag = STP_pc_capital_abilia
 		add_political_power = 50
@@ -1576,8 +1576,58 @@ country_event = {
 	desc = ADISCORD_STP_pc.23.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	trigger = { tag = STP }
-	option = { name = ADISCORD_STP_pc.23.a }
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_cabinet } }
+	option = {
+		name = ADISCORD_STP_pc.23.apparatus
+		trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_cabinet } }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_cabinet } }
+			custom_effect_tooltip = STP_pw_party_cabinet_apparatus_tt
+			custom_effect_tooltip = STP_pf_conservatives_deal_tt
+			hidden_effect = {
+				set_variable = { var = STP_pw_party_cabinet value = 1 }
+
+				set_temp_variable = { var = STP_pf_selected value = 1 }
+				STP_pf_shift = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.23.districts
+		trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_cabinet } }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_cabinet } }
+			custom_effect_tooltip = STP_pw_party_cabinet_districts_tt
+			custom_effect_tooltip = STP_pf_borons_deal_tt
+			hidden_effect = {
+				set_variable = { var = STP_pw_party_cabinet value = 2 }
+
+				set_temp_variable = { var = STP_pf_selected value = 2 }
+				STP_pf_shift = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.23.delegates
+		trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_cabinet } }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_cabinet } }
+			custom_effect_tooltip = STP_pw_party_cabinet_delegates_tt
+			custom_effect_tooltip = STP_pf_radicals_deal_tt
+			hidden_effect = {
+				set_variable = { var = STP_pw_party_cabinet value = 3 }
+
+				set_temp_variable = { var = STP_pf_selected value = 7 }
+				STP_pf_shift = yes
+			}
+		}
+	}
+	option = { name = STP_pc_offer_closed trigger = { OR = { STP_pw_party_story_current = no has_variable = STP_pw_party_cabinet } } }
 }
 
 country_event = {
@@ -1888,4 +1938,234 @@ country_event = {
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	option = { name = STP_pc_council_revanche_response }
+}
+
+# A single deferred read after a peace, annexation or territorial callback.
+country_event = {
+    id = ADISCORD_STP_cw.206
+    hidden = yes
+    is_triggered_only = yes
+    immediate = { STP_cw_reconcile_scripted_peace = yes }
+}
+
+# Party postwar settlement: appointments, command and reconstruction contracts.
+country_event = {
+	id = ADISCORD_STP_pc.34
+	title = ADISCORD_STP_pc.34.t
+	desc = ADISCORD_STP_pc.34.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_command } }
+	option = {
+		name = ADISCORD_STP_pc.34.army
+		trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_command } }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_command } }
+			effect_tooltip = { add_ideas = STP_pw_party_command_army_delta }
+			custom_effect_tooltip = STP_pw_party_security_objects_tt
+			custom_effect_tooltip = STP_pf_army_deal_tt
+			hidden_effect = {
+				set_variable = { var = STP_pw_party_command value = 1 }
+				add_to_variable = { var = STP_pw_army_org_factor value = 0.03 }
+				add_to_variable = { var = STP_pw_stability_factor value = -0.02 }
+				subtract_from_variable = { var = STP_pf_security_support value = 8 }
+				STP_pw_refresh_modifier = yes
+				set_temp_variable = { var = STP_pf_selected value = 4 }
+				STP_pf_shift = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.34.security
+		trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_command } }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_command } }
+			effect_tooltip = { add_ideas = STP_pw_party_command_security_delta }
+			custom_effect_tooltip = STP_pw_party_army_objects_tt
+			custom_effect_tooltip = STP_pf_security_deal_tt
+			hidden_effect = {
+				set_variable = { var = STP_pw_party_command value = 2 }
+				add_to_variable = { var = STP_pw_stability_factor value = 0.04 }
+				add_to_variable = { var = STP_pw_planning_speed value = -0.10 }
+				subtract_from_variable = { var = STP_pf_army_support value = 8 }
+				STP_pw_refresh_modifier = yes
+				set_temp_variable = { var = STP_pf_selected value = 3 }
+				STP_pf_shift = yes
+			}
+		}
+	}
+	option = { name = STP_pc_offer_closed trigger = { OR = { STP_pw_party_story_current = no has_variable = STP_pw_party_command } } }
+}
+country_event = {
+	id = ADISCORD_STP_pc.35
+	title = ADISCORD_STP_pc.35.t
+	desc = ADISCORD_STP_pc.35.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_credit } }
+	option = {
+		name = ADISCORD_STP_pc.35.requisition
+		trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_credit } }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_credit } }
+			effect_tooltip = { add_ideas = STP_pw_party_requisition_delta }
+			custom_effect_tooltip = STP_pw_party_requisition_tt
+			custom_effect_tooltip = STP_pf_security_deal_tt
+			hidden_effect = {
+				set_variable = { var = STP_pw_party_credit value = 2 }
+				add_to_variable = { var = ADISCORD_economy_treasury value = 540 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 540 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = -0.05 }
+				subtract_from_variable = { var = STP_pf_merchants_support value = 12 }
+				STP_pw_refresh_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = STP_pf_selected value = 3 }
+				STP_pf_shift = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.35.contracts
+		trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_credit } check_variable = { var = ADISCORD_economy_treasury value = 360 compare = greater_than_or_equals } }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_credit } check_variable = { var = ADISCORD_economy_treasury value = 360 compare = greater_than_or_equals } }
+			effect_tooltip = { add_ideas = STP_pw_party_contracts_delta }
+			custom_effect_tooltip = STP_pw_party_contracts_tt
+			custom_effect_tooltip = STP_pf_merchants_deal_tt
+			hidden_effect = {
+				set_variable = { var = STP_pw_party_credit value = 1 }
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 360 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 360 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.05 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.03 }
+				STP_pw_refresh_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = STP_pf_selected value = 6 }
+				STP_pf_shift = yes
+			}
+		}
+	}
+	option = { name = STP_pc_offer_closed trigger = { OR = { STP_pw_party_story_current = no has_variable = STP_pw_party_credit } } }
+}
+country_event = {
+	id = ADISCORD_STP_pc.36
+	title = ADISCORD_STP_pc.36.t
+	desc = ADISCORD_STP_pc.36.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 21
+	trigger = { tag = NOD }
+	option = {
+		name = ADISCORD_STP_pc.36.refuse
+		trigger = { STP_pw_party_compact_current = yes }
+		ai_chance = { base = 30 }
+		custom_effect_tooltip = STP_pw_party_compact_refused_tt
+		hidden_effect = {
+			if = {
+				limit = { STP_pw_party_compact_current = yes }
+				STP = {
+					clr_country_flag = STP_pw_party_compact_pending
+					set_country_flag = STP_pw_party_compact_refused
+					country_event = { id = ADISCORD_STP_pc.37 hours = 1 }
+				}
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.36.accept
+		trigger = { STP_pw_party_compact_current = yes }
+		ai_chance = { base = 70 modifier = { factor = 2 has_war = yes } }
+		custom_effect_tooltip = STP_pw_party_compact_settlement_tt
+		hidden_effect = { STP_pw_party_settle_compact = yes }
+	}
+	option = {
+		name = STP_pc_offer_closed
+		trigger = { STP_pw_party_compact_current = no }
+		hidden_effect = {
+			STP = {
+				if = {
+					limit = { has_country_flag = STP_pw_party_compact_pending }
+					clr_country_flag = STP_pw_party_compact_pending
+					set_country_flag = STP_pw_party_compact_refused
+					country_event = { id = ADISCORD_STP_pc.37 hours = 1 }
+				}
+			}
+		}
+	}
+}
+country_event = {
+	id = ADISCORD_STP_pc.37
+	title = ADISCORD_STP_pc.37.t
+	desc = { trigger = { has_country_flag = STP_pw_party_nod_compact } text = ADISCORD_STP_pc.37.accepted }
+	desc = { trigger = { NOT = { has_country_flag = STP_pw_party_nod_compact } } text = ADISCORD_STP_pc.37.refused }
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STP }
+	option = { name = ADISCORD_STP_pc.37.a }
+}
+country_event = {
+	id = ADISCORD_STP_pc.38
+	title = ADISCORD_STP_pc.38.t
+	desc = ADISCORD_STP_pc.38.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_mission_policy } }
+	option = {
+		name = ADISCORD_STP_pc.38.joint
+		trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_mission_policy } is_subject_of = NOD }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_mission_policy } is_subject_of = NOD }
+			effect_tooltip = { add_ideas = STP_pw_party_joint_staff_delta }
+			custom_effect_tooltip = STP_pf_advisers_deal_tt
+			hidden_effect = {
+				set_variable = { var = STP_pw_party_mission_policy value = 1 }
+				add_to_variable = { var = STP_pw_planning_speed value = 0.10 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.05 }
+				STP_pw_refresh_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = STP_pf_selected value = 5 }
+				STP_pf_shift = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_pc.38.domestic
+		trigger = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_mission_policy } is_subject_of = NOD }
+		ai_chance = { base = 50 }
+		if = {
+			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_mission_policy } is_subject_of = NOD }
+			effect_tooltip = { add_ideas = STP_pw_party_domestic_staff_delta }
+			custom_effect_tooltip = STP_pf_army_deal_tt
+			hidden_effect = {
+				set_variable = { var = STP_pw_party_mission_policy value = 2 }
+				add_to_variable = { var = STP_pw_army_org_factor value = 0.02 }
+				add_to_variable = { var = STP_pw_planning_speed value = -0.05 }
+				STP_pw_refresh_modifier = yes
+				set_temp_variable = { var = STP_pf_selected value = 4 }
+				STP_pf_shift = yes
+			}
+		}
+	}
+	option = { name = STP_pc_offer_closed trigger = { OR = { STP_pw_party_story_current = no has_variable = STP_pw_party_mission_policy NOT = { is_subject_of = NOD } } } }
+}
+country_event = {
+	id = ADISCORD_STP_pc.39
+	title = ADISCORD_STP_pc.39.t
+	desc = ADISCORD_STP_pc.39.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { STP_pw_party_story_current = yes }
+	option = { name = ADISCORD_STP_pc.39.a }
 }

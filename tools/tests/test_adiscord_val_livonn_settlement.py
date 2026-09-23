@@ -58,7 +58,9 @@ class ValLivonnSettlement(unittest.TestCase):
         self.assertIn("ROOT = { tag = SRP }", hook)
         self.assertIn("VAL = {", hook)
         self.assertIn("VAL_cw_stage_livonn_settlement = yes", hook)
-        self.assertIn("on_weekly_VAL = {", hook)
+        self.assertNotIn("on_weekly_VAL = {", hook)
+        self.assertIn("on_state_control_changed = {", hook)
+        self.assertIn("STP_cw_queue_peace_reconciliation = yes", hook)
 
     def test_player_gets_two_mutually_exclusive_decisions_when_contract_exists(self):
         category = read("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")

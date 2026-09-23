@@ -316,7 +316,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			if = { limit = { num_research_slots < 5 } add_research_slot = 1 }
+			if = { limit = { amount_research_slots < 5 } add_research_slot = 1 }
 			else = { add_tech_bonus = { name = VAL_defeat_Technical_Institute bonus = 0.5 uses = 2 category = industry } }
 		}
 		ai_will_do = { base = 10 }

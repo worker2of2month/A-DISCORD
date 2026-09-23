@@ -1078,7 +1078,7 @@ VAL_can_proclaim_commonwealth = {
 	has_completed_focus = VAL_Contracts_Outlive_Kings
 	VAL_campaign_objectives_met = yes
 	NOT = { has_cosmetic_tag = VAL_commonwealth }
-	NOT = { stability < 0.50 }
+	NOT = { has_stability < 0.50 }
 	29 = { is_owned_by = VAL is_controlled_by = VAL }
 	46 = { is_owned_by = VAL is_controlled_by = VAL }
 }
@@ -1221,7 +1221,7 @@ VAL_stelander_equal_partner_available = {
  is_subject = no
  has_capitulated = no
  has_war = no
- NOT = { has_country_flag = VAL_stelander_defeated VAL_stelander_alliance_refused }
+ NOT = { has_country_flag = VAL_stelander_defeated has_country_flag = VAL_stelander_alliance_refused }
  OR = {
   STS = {
    exists = yes

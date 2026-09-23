@@ -165,7 +165,7 @@ on_actions = {
                 set_country_flag = { flag = VAL_frontier_capitulation_pending days = 1 }
                 set_global_flag = skip_default_capitulation
                 if = { limit = { tag = VAL } VAL_frontier_settle_defeat = yes }
-                else = { VAL = { VAL_frontier_weekly = yes } }
+                else = { VAL = { VAL_frontier_reconcile = yes } }
                 clr_global_flag = skip_default_capitulation
             }
             else_if = {
@@ -686,6 +686,10 @@ on_actions = {
 				}
 			}
 
+			if = {
+				limit = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } }
+				FROM = { STP_cw_queue_peace_reconciliation = yes }
+			}
 			# END stelander:on_capitulation
 
 			# BEGIN kefreyt:on_capitulation
@@ -701,6 +705,8 @@ on_actions = {
                 ROOT = { clr_country_flag = VAL_final_capitulation_immediate }
             }
             if = { limit = { VAL = { exists = yes } } VAL = { VAL_finalize_reserved_settlements = yes } }
+
+			VAL_queue_frontier_reconciliation = yes
 
 			# END kefreyt:on_capitulation
 
@@ -969,10 +975,15 @@ on_actions = {
             VAL = { VAL_council_reconcile_revanche = yes }
             if = { limit = { STP = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STP = { VAL_cede_stelander_border = yes } }
             if = { limit = { STS = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STS = { VAL_cede_stelander_border = yes } }
+            VAL_queue_frontier_reconciliation = yes
             # END kefreyt:on_peace
             # BEGIN stelander:on_peace
             STP = { STP_occidia_reconcile_peace = yes }
             STS = { STP_occidia_reconcile_peace = yes }
+            if = {
+                limit = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } }
+                STP_cw_queue_peace_reconciliation = yes
+            }
             # END stelander:on_peace
 
 
@@ -992,24 +1003,58 @@ on_actions = {
 				STP_cw_settle_northern_victory = yes
 			}
 
+			if = {
+				limit = { OR = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } FROM = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } } }
+				STP_cw_queue_peace_reconciliation = yes
+			}
 			# END stelander:on_peaceconference_ended
+			# BEGIN kefreyt:on_peaceconference_ended
+			VAL_queue_frontier_reconciliation = yes
+			VAL = { VAL_check_nam_concession = yes }
+			# END kefreyt:on_peaceconference_ended
 
 		}
 	}
-	on_weekly_VAL = {
+	on_annex = {
 		effect = {
-			# BEGIN livonn:on_weekly_VAL
+			# BEGIN stelander:on_annex
+			# ROOT survives the annexation; FROM may no longer own any state.
+			if = {
+				limit = { OR = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } FROM = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } } }
+				STP_cw_queue_peace_reconciliation = yes
+			}
+			# An annexed NOD no longer receives its country pulse. Close its pending intervention now.
+			if = { limit = { FROM = { tag = NOD } } STP_cw_poll_nod_intervention = yes }
+			# END stelander:on_annex
+			# BEGIN kefreyt:on_annex
+			VAL_queue_frontier_reconciliation = yes
+			if = { limit = { FROM = { tag = NAM } } VAL = { VAL_check_nam_concession = yes } }
+			# END kefreyt:on_annex
+		}
+	}
+	on_state_control_changed = {
+		effect = {
+			# BEGIN livonn:on_state_control_changed
+			# FROM.FROM is the state; defer until its transfer has completed.
+			if = {
+				limit = { FROM.FROM = { OR = { state = 43 state = 44 state = 45 state = 88 } } }
+				STP_cw_queue_peace_reconciliation = yes
+			}
+			# END livonn:on_state_control_changed
+			# BEGIN frontier:on_state_control_changed
+			# Capitals can relocate within a participant's remaining territory.
 			if = {
 				limit = {
-					has_country_flag = VAL_cw_postwar
-					NOT = { has_country_flag = VAL_cw_livonn_settlement_staged }
-					NOT = { has_country_flag = VAL_cw_livonn_settlement_resolved }
+					FROM.FROM = {
+						OR = {
+							state = 58 state = 59 state = 60 state = 61 state = 62 state = 63 state = 64 state = 65 state = 168
+							owner = { OR = { tag = CIN tag = OSF tag = APH tag = ERT } }
+						}
+					}
 				}
-				VAL_cw_stage_livonn_settlement = yes
+				VAL_queue_frontier_reconciliation = yes
 			}
-
-			# END livonn:on_weekly_VAL
-
+			# END frontier:on_state_control_changed
 		}
 	}
 }

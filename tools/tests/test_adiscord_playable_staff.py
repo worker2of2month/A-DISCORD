@@ -56,6 +56,13 @@ class World:
         self.focuses = set(focuses)
         self.characters = set()
         self.recruited = []
+        self.commissioned = []
+        history = next((ROOT / 'history/countries').glob(tag + ' - *.txt'))
+        reserves = set(GENERALS.get(tag, ()))
+        if tag == 'STS':
+            reserves = {name.replace('STP_', 'STS_') for name in GENERALS['STP']}
+        self.characters.update(e.value for e in parse_clausewitz(history.read_text(encoding='utf-8-sig'))
+                               if e.key == 'recruit_character' and e.value in reserves)
         self.dlc = dlc
         self.government = 'etatism' if tag == 'VAL' else 'hedonism'
         self.roles = {}
@@ -69,11 +76,11 @@ class World:
             effects = 'ADISCORD_STP_scripted_effects.txt' if country == 'STP' else 'ADISCORD_VAL_effects.txt'
             self.scripts.update({e.key:e.value for e in parse('common/scripted_effects/' + effects)})
 
-    def condition(self, rows):
+    def condition(self, rows, character=None):
         def one(e):
             k,v=e.key,e.value
             if k in ('AND', 'hidden_trigger', 'FROM', 'ROOT', 'owner'):
-                return self.condition(v)
+                return self.condition(v, character)
             if k == 'OR': return any(one(x) for x in v)
             if k == 'NOT': return not any(one(x) for x in v)
             if k == 'always': return v == 'yes'
@@ -84,6 +91,8 @@ class World:
             if k == 'has_global_flag': return v in self.global_flags
             if k == 'has_completed_focus': return v in self.focuses
             if k == 'has_character': return v in self.characters
+            if k == 'has_ideology': return v in self.roles.get(character, set())
+            if k in self.characters and isinstance(v, list): return self.condition(v, k)
             if k == 'has_government': return self.government == v
             if k == 'has_country_leader': return scalar(v, 'character') in self.leaders.values()
             if k == 'has_dlc': return self.dlc
@@ -96,11 +105,11 @@ class World:
         for e in rows:
             k,v=e.key,e.value
             if k == 'if':
-                chain=self.condition(block(v,'limit'))
+                chain=self.condition(block(v,'limit'), character)
                 if chain: self.execute([x for x in v if x.key != 'limit'], character)
             elif k == 'else_if':
                 if chain is False:
-                    chain=self.condition(block(v,'limit'))
+                    chain=self.condition(block(v,'limit'), character)
                     if chain: self.execute([x for x in v if x.key != 'limit'], character)
             elif k == 'else':
                 if chain is False: self.execute(v, character)
@@ -111,6 +120,11 @@ class World:
             elif k == 'clr_country_flag': self.flags.discard(v)
             elif k == 'recruit_character':
                 self.characters.add(v); self.recruited.append(v)
+            elif k == 'add_corps_commander_role':
+                target = scalar(v, 'character')
+                if target not in self.characters:
+                    raise AssertionError('commander role requires a registered character')
+                self.commissioned.append(target)
             elif k == 'add_country_leader_role':
                 target = scalar(v, 'character') if character is None else character
                 if target not in self.characters:
@@ -134,6 +148,21 @@ class World:
 
 
 class PlayableStaffTests(unittest.TestCase):
+    def test_deferred_staff_is_registered_in_history_without_early_roles(self):
+        for tag in ('STP', 'STS', 'VAL'):
+            history = next((ROOT / 'history/countries').glob(tag + ' - *.txt'))
+            registered = {e.value for e in parse_clausewitz(history.read_text(encoding='utf-8-sig'))
+                          if e.key == 'recruit_character'}
+            chars = block(parse('common/characters/' + ('STP' if tag == 'STS' else tag) + '.txt'), 'characters')
+            for name in GENERALS['STP' if tag == 'STS' else tag]:
+                token = name.replace('STP_', 'STS_') if tag == 'STS' else name
+                with self.subTest(country=tag, character=token):
+                    self.assertIn(token, registered)
+                    person = block(chars, token)
+                    self.assertFalse(optional_block(person, 'corps_commander'))
+        for file in ('ADISCORD_STP_scripted_effects.txt', 'ADISCORD_VAL_effects.txt'):
+            self.assertFalse('recruit_character' in read('common/scripted_effects/' + file), file)
+
     def test_val_state_party_names_are_plain_in_both_languages(self):
         expected = {
             'russian': 'Государственная партия Кефрейта',
@@ -172,18 +201,20 @@ class PlayableStaffTests(unittest.TestCase):
         for country in ('STP','VAL'):
             for tag in (('STP','STS') if country=='STP' else ('VAL',)):
                 w=World(tag)
+                expected = {name.replace('STP_', 'STS_') if tag == 'STS' else name
+                            for name in GENERALS[country][:2]}
                 effect=w.scripts.get(country+'_qol_initialize_staff')
                 self.assertTrue(effect, country)
                 w.execute(effect)
-                self.assertEqual(set(w.recruited),set(GENERALS[country][:2]) if country=='VAL' else set())
+                self.assertEqual(set(w.commissioned), expected if country=='VAL' else set())
                 w.flags.add('STP_cw_postwar')
                 w.execute(effect)
-                self.assertEqual(set(w.recruited),set(GENERALS[country][:2]))
+                self.assertEqual(set(w.commissioned), expected)
                 w.characters.clear()
-                before=list(w.recruited)
+                before=list(w.commissioned)
                 w.execute(effect)
-                self.assertEqual(w.recruited,before,'initialization cannot resurrect retired officers')
-                self.assertNotIn(GENERALS[country][2],w.recruited)
+                self.assertEqual(w.commissioned,before,'initialization cannot resurrect retired officers')
+                self.assertNotIn(GENERALS[country][2],w.commissioned)
 
     def test_mio_country_registration_is_not_blocked_by_live_focus_or_postwar_state(self):
         rows=parse(MIO_PATH)
@@ -241,11 +272,51 @@ class PlayableStaffTests(unittest.TestCase):
             for i,name in enumerate(names):
                 body=block(chars,name)
                 self.assertTrue(body,name)
-                role=block(body,'corps_commander')
-                self.assertTrue(role,name)
+                self.assertFalse(optional_block(body,'corps_commander'))
+                effects=World(country).scripts
+                roles=[e.value for e in walk(effects[country+'_qol_initialize_staff'] + effects[country+'_qol_grant_elite_officer'])
+                       if e.key == 'add_corps_commander_role' and scalar(e.value,'character') == name]
+                self.assertEqual(len(roles),1,name)
+                role=roles[0]
                 self.assertEqual(int(scalar(role,'skill')),4 if i==2 else 2)
         history=read('history/countries/STP - StepanLand.txt')
-        for name in GENERALS['STP']:self.assertNotIn('recruit_character = '+name,history)
+        for name in GENERALS['STP']:self.assertEqual(history.count('recruit_character = '+name),1)
+
+    def test_administrators_are_dormant_until_the_settlement_grants_the_role(self):
+        chars=block(parse('common/characters/VAL.txt'),'characters')
+        effects=World('VAL').scripts
+        for tag,token in (('STP','STP_VAL_Andrei_Rudnev'), ('STS','STS_VAL_Andrei_Rudnev'),
+                          ('NOD','NOD_VAL_Contract_Council'), ('YPR','YPR_Contract_Council')):
+            history=next((ROOT/'history/countries').glob(tag+' - *.txt')).read_text(encoding='utf-8-sig')
+            self.assertEqual(history.count('recruit_character = '+token),1)
+            self.assertFalse(optional_block(block(chars,token),'country_leader'))
+            grants=[e.value for rows in effects.values() for e in walk(rows)
+                    if e.key=='add_country_leader_role'
+                    and any(x.key=='character' and x.value==token for x in e.value)]
+            self.assertEqual(len(grants),1,token)
+            self.assertEqual(scalar(block(grants[0],'country_leader'),'ideology'),'contractual_etatism')
+            guards=[e for rows in effects.values() for e in walk(rows)
+                    if e.key=='if' and any(x.key=='add_country_leader_role'
+                        and any(y.key=='character' and y.value==token for y in x.value)
+                        for x in e.value)]
+            self.assertEqual(len(guards),1,token)
+            w=World(tag)
+            w.characters.add(token)
+            w.execute(guards)
+            self.assertEqual(w.roles[token],{'contractual_etatism'})
+            w.execute(guards)
+            self.assertEqual(w.role_writes,[(token,'contractual_etatism')])
+
+    def test_successor_reserves_do_not_depend_on_the_other_claimant(self):
+        for tag in ('STP','STS'):
+            w=World(tag,postwar=True)
+            w.execute(w.scripts['STP_qol_initialize_staff'])
+            w.execute(w.scripts['STP_qol_grant_elite_officer'])
+            expected=[name.replace('STP_',tag+'_') for name in GENERALS['STP']]
+            self.assertEqual(w.commissioned,expected)
+            w.execute(w.scripts['STP_qol_initialize_staff'])
+            w.execute(w.scripts['STP_qol_grant_elite_officer'])
+            self.assertEqual(w.commissioned,expected)
 
     def test_elite_routes_unlock_for_party_and_resistance_but_not_early(self):
         routes = {
@@ -276,17 +347,17 @@ class PlayableStaffTests(unittest.TestCase):
                 self.assertEqual(len(grant),1,fid)
                 w=World(country,postwar=True)
                 w.execute(grant)
-                self.assertIn(GENERALS[country][2],w.characters)
-                w.characters.clear(); before=list(w.recruited)
+                self.assertIn(GENERALS[country][2],w.commissioned)
+                w.characters.clear(); before=list(w.commissioned)
                 w.execute(grant)
-                self.assertEqual(w.recruited,before)
+                self.assertEqual(w.commissioned,before)
 
     def test_new_stelander_roster_is_unique_across_revived_claimants(self):
         first=World('STS',True); second=World('STP',True)
         first.execute(first.scripts['STP_qol_initialize_staff'])
         second.global_flags=first.global_flags
         second.execute(second.scripts['STP_qol_initialize_staff'])
-        self.assertEqual(second.recruited,[])
+        self.assertEqual(second.commissioned,[])
 
     def test_exact_settlement_and_startup_hooks_exist_without_periodic_scans(self):
         w=World()

@@ -12,9 +12,10 @@ ORDER = {
     'on_capitulation_immediate': ['stelander', 'kefreyt', 'frontier', 'northern_reservation'],
     'on_capitulation': ['vorkerland_collapse', 'stelander', 'kefreyt', 'frontier', 'rin', 'nam', 'vorkerland_diplomacy', 'northern_reservation', 'livonn'],
     'on_peace': ['vorkerland_collapse', 'rin', 'vorkerland_diplomacy', 'kefreyt', 'stelander'],
-    'on_peaceconference_ended': ['stelander'],
-    'on_weekly_VAL': ['livonn'],
-}
+    'on_peaceconference_ended': ['stelander', 'kefreyt'],
+    'on_annex': ['stelander', 'kefreyt'],
+    'on_state_control_changed': ['livonn', 'frontier'],
+    }
 
 def native_hooks(source):
     roots = [e.value for e in parse_clausewitz(source) if e.key == 'on_actions']
@@ -326,6 +327,116 @@ class FrontierWarEntryRegressionTests(unittest.TestCase):
         self.assertEqual(scalar(found[0], "is_triggered_only"), "yes")
         gate = block(block(block(found[0], "immediate"), "if"), "limit")
         self.assertEqual(scalar(gate, "VAL_frontier_reply_is_current"), "yes")
+
+
+
+class EventDrivenPeaceTests(unittest.TestCase):
+    def test_settlement_recovery_has_no_periodic_caller(self):
+        from tools.tests.test_adiscord_stp_preparation import walk
+        forbidden = {"STP_cw_poll_northern_campaign", "STP_cw_check_union_wars_finished",
+                     "VAL_cw_stage_livonn_settlement", "STP_cw_queue_peace_reconciliation",
+                     "STP_cw_reconcile_scripted_peace"}
+        for path in DIRECTORY.glob("*.txt"):
+            for hook in native_hooks(path.read_text(encoding="utf-8-sig")):
+                if hook.key.startswith(("on_daily", "on_weekly", "on_monthly", "on_yearly")):
+                    self.assertFalse({e.key for e in walk(hook.value)} & forbidden, (path.name, hook.key))
+
+    def test_deferred_recovery_is_one_shot_and_rechecks_live_results(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, block, scalar, walk, selected_effects
+        events = entries("events/ADISCORD_STP_events.txt")
+        event = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.206")
+        self.assertEqual(scalar(event, "hidden"), "yes")
+        self.assertEqual(scalar(event, "is_triggered_only"), "yes")
+        self.assertEqual(scalar(block(event, "immediate"), "STP_cw_reconcile_scripted_peace"), "yes")
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        recovery = block(effects, "STP_cw_reconcile_scripted_peace")
+        for key in ("country_event", "every_country", "every_possible_country", "STP_cw_queue_peace_reconciliation"):
+            self.assertNotIn(key, {e.key for e in walk(recovery)})
+        for tag in ("STP", "STS"):
+            for won in (False, True):
+                for postwar in (False, True):
+                    for finished in (False, True):
+                        facts = {(tag, "has_global_flag", "STP_cw_started"): True,
+                                 (tag, "has_global_flag", "STP_cw_union_wars_finished"): finished,
+                                 (tag, "has_country_flag", "STP_cw_won_union_battle"): won,
+                                 (tag, "has_country_flag", "STP_cw_postwar"): postwar}
+                        calls = [e.key for _, e in selected_effects(recovery, facts, tag)]
+                        self.assertEqual("STP_cw_check_union_wars_finished" in calls, won and postwar and not finished)
+        for status in (0, 1, 2, 3, 4):
+            facts = {("NOD", "variable", "STP_cw_northern_campaign_status"): status}
+            calls = [e.key for _, e in selected_effects(recovery, facts, "NOD")]
+            self.assertEqual("STP_cw_poll_northern_campaign" in calls, status == 1)
+        for staged, resolved in ((False, False), (True, False), (False, True)):
+            facts = {("VAL", "has_country_flag", "VAL_cw_postwar"): True,
+                     ("VAL", "has_country_flag", "VAL_cw_livonn_settlement_staged"): staged,
+                     ("VAL", "has_country_flag", "VAL_cw_livonn_settlement_resolved"): resolved}
+            calls = [e.key for _, e in selected_effects(recovery, facts, "VAL")]
+            self.assertEqual("VAL_cw_stage_livonn_settlement" in calls, not staged and not resolved)
+
+    def test_native_edges_cover_external_peace_annexation_and_control(self):
+        from tools.tests.test_adiscord_stp_preparation import block, walk
+        hooks = native_hooks(SHARED.read_text(encoding="utf-8"))
+        for name in ("on_capitulation", "on_peace", "on_annex", "on_peaceconference_ended", "on_state_control_changed"):
+            with self.subTest(hook=name):
+                self.assertIn("STP_cw_queue_peace_reconciliation", {e.key for e in walk(block(hooks, name))})
+        control = str([(e.key, e.value) for e in walk(block(hooks, "on_state_control_changed"))])
+        for state in ("43", "44", "45", "88"):
+            self.assertIn("'state', '" + state + "'", control)
+
+    def test_scripted_winners_queue_after_their_final_state_writes(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, block, walk
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        for name in ("STP_cw_settle_union_victory", "STP_cw_settle_nod_victory", "VAL_cw_settle_republics"):
+            rows = list(walk(block(effects, name)))
+            queue = next(e.line for e in rows if e.key == "STP_cw_queue_peace_reconciliation")
+            check = next(e.line for e in rows if e.key == "STP_cw_check_union_wars_finished")
+            self.assertGreater(queue, check)
+
+    def test_queue_requires_pending_work_and_a_surviving_host(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, block, scalar, selected_effects
+        queue = block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_queue_peace_reconciliation")
+        for exists in (False, True):
+            for status in (0, 1, 2, 3, 4):
+                facts = {("NOD", "exists", "yes"): exists,
+                         ("NOD", "variable", "STP_cw_northern_campaign_status"): status}
+                chosen = list(selected_effects(queue, facts, "WRK"))
+                calls = [e.value for _, e in chosen if e.key == "country_event"]
+                self.assertTrue(all(scope == "NOD" for scope, e in chosen if e.key == "country_event"))
+                self.assertEqual(any(e.key == "STP_cw_poll_northern_campaign" for _, e in chosen), not exists and status == 1)
+                self.assertEqual(len(calls), int(exists and status == 1))
+                if calls:
+                    self.assertEqual(scalar(calls[0], "hours"), "1")
+                    self.assertEqual(scalar(calls[0], "id"), "ADISCORD_STP_cw.206")
+
+    def test_annex_and_capitulation_schedule_on_the_survivor(self):
+        from dataclasses import replace
+        from tools.tests.test_adiscord_stp_preparation import block, selected_effects
+        hooks = native_hooks(SHARED.read_text(encoding="utf-8"))
+        def scopes(rows, root, victor):
+            return [replace(e, key={"ROOT": root, "FROM": victor}.get(e.key, e.key),
+                            value=scopes(e.value, root, victor) if isinstance(e.value, list) else e.value)
+                    for e in rows]
+        # Read only this subsystem's last branch; other countries have separate handlers.
+        annex = block(block(hooks, "on_annex"), "effect")
+        for loser, expected in (("NOD", True), ("TFF", True), ("SRP", True), ("STP", True), ("RUS", False)):
+            calls = [(scope, e.key) for scope, e in selected_effects(scopes(annex, "WRK", loser), {}, "WRK") if e.key == "STP_cw_queue_peace_reconciliation"]
+            self.assertEqual(calls, [("WRK", "STP_cw_queue_peace_reconciliation")] if expected else [])
+        from tools.lib.on_actions import read_scripted_peace
+        country = native_hooks(read_scripted_peace(SHARED, "stelander"))
+        late = block(block(country, "on_capitulation"), "effect")[-1:]
+        calls = [(scope, e.key) for scope, e in selected_effects(scopes(late, "NOD", "WRK"), {}, "NOD")]
+        self.assertEqual(calls, [("WRK", "STP_cw_queue_peace_reconciliation")])
+
+    def test_authored_partial_peaces_notify_without_waiting_for_total_peace(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, block, walk
+        for path, name in (
+            ("common/scripted_effects/ADISCORD_TFF_effects.txt", "ADISCORD_TFF_become_nod_subject"),
+            ("common/scripted_effects/ADISCORD_VAL_effects.txt", "VAL_transfer_yubora_administrations"),
+        ):
+            rows = list(walk(block(entries(path), name)))
+            queue = next(e.line for e in rows if e.key == "STP_cw_queue_peace_reconciliation")
+            self.assertGreater(queue, max(e.line for e in rows if e.key == "white_peace"))
+
 
 if __name__ == '__main__':
     unittest.main()

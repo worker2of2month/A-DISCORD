@@ -934,6 +934,14 @@ STP_cw_release_tff_to_northern_war = {
 	}
 }
 
+NOD_cw_exhaust_northern_push = {
+	remove_ideas = NOD_cw_northern_offensive
+	if = {
+		limit = { has_capitulated = no OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } }
+		add_ideas = NOD_cw_stalled_army
+	}
+}
+
 STP_cw_start_northern_war = {
 	if = {
 		limit = {
@@ -1930,6 +1938,66 @@ STP_cw_refund_nod_sabotage_rifles = {
 
 # COUNTRY scope. Six ADISCORD_territorial: 6 * (1000 manpower + 100 rifles).
 # create_unit supplies its own contents: debit the real pools first.
+STP_cw_ensure_rear_cell_template = {
+	if = {
+		limit = { NOT = { has_template = "Stelander Underground Cell" } }
+		division_template = {
+			name = "Stelander Underground Cell"
+			template_counter = 12
+			is_locked = yes
+			force_allow_recruiting = no
+			regiments = {
+				ADISCORD_territorial = { x = 0 y = 0 }
+				ADISCORD_territorial = { x = 0 y = 1 }
+			}
+		}
+	}
+}
+
+STP_cw_raise_rear_cell = {
+	if = {
+		limit = {
+			tag = STS has_war_with = STP has_capitulated = no
+			has_completed_focus = STP_cw_organize_underground
+			NOT = { has_country_flag = STP_cw_postwar }
+			NOT = { has_manpower < 2000 }
+			NOT = { has_equipment = { infantry_equipment < 200 } }
+			NOT = { has_political_power < 35 }
+			FROM = { is_owned_by = STP is_controlled_by = STP NOT = { has_state_flag = STP_cw_rear_cell_raised } }
+		}
+		set_temp_variable = { var = STP_cw_rifle_cost value = 200 }
+		STP_cw_pay_rifles = yes
+		if = {
+			limit = { has_country_flag = STP_cw_rifles_paid }
+			add_manpower = -2000
+			add_political_power = -35
+			STP_cw_ensure_rear_cell_template = yes
+			FROM = {
+				set_state_flag = STP_cw_rear_cell_raised
+				create_unit = {
+					division = "division_template = \"Stelander Underground Cell\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = STS
+					allow_spawning_on_enemy_provs = yes
+				}
+			}
+		}
+	}
+}
+
+STP_cw_mobilize_volunteer_brigade = {
+	if = {
+		limit = { tag = STS NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes any_owned_state = { is_controlled_by = PREV } }
+		if = {
+			limit = { any_owned_state = { is_controlled_by = PREV STP_cw_state_faces_rival = yes } }
+			random_owned_controlled_state = {
+				limit = { STP_cw_state_faces_rival = yes }
+				STP_cw_create_territorial_brigade = yes
+			}
+		}
+		else = { random_owned_controlled_state = { STP_cw_create_territorial_brigade = yes } }
+	}
+}
+
 STP_cw_mobilize_brigade = {
 	if = {
 		limit = {
@@ -2329,6 +2397,7 @@ STP_cw_finish_mobilization = {
 	clr_country_flag = STP_cw_disruption_cooldown
 	clear_variable = STP_cw_disruption_completed
 	set_country_flag = STP_cw_postwar
+	STP_pw_reconcile_postwar_interactivity = yes
 	STP_qol_initialize_staff = yes
 	mark_focus_tree_layout_dirty = yes
 	if = { limit = { OR = { tag = STP tag = STS } } STS = { STP_cw_stop_operations = yes } }
@@ -2605,22 +2674,22 @@ STP_cw_refresh_officer_loyalties = {
 STP_cw_release_resistance_officeholders = {
 	if = {
 		limit = { has_character = STP_maksim_shabrat }
-		STP_maksim_shabrat = { remove_country_leader_role = { ideology = national_legitimism } }
+		STP_maksim_shabrat = { if = { limit = { has_ideology = national_legitimism } remove_country_leader_role = { ideology = national_legitimism } } }
 	}
 	if = {
 		limit = { has_character = STP_grigory_sotnikov }
 		STP_grigory_sotnikov = {
-			remove_country_leader_role = { ideology = humanism_ideology }
-			remove_country_leader_role = { ideology = steland_military_directory }
+			if = { limit = { has_ideology = humanism_ideology } remove_country_leader_role = { ideology = humanism_ideology } }
+			if = { limit = { has_ideology = steland_military_directory } remove_country_leader_role = { ideology = steland_military_directory } }
 		}
 	}
 	if = {
 		limit = { has_character = STP_ilya_gornin }
-		STP_ilya_gornin = { remove_country_leader_role = { ideology = steland_liberationism } }
+		STP_ilya_gornin = { if = { limit = { has_ideology = steland_liberationism } remove_country_leader_role = { ideology = steland_liberationism } } }
 	}
 	if = {
 		limit = { has_character = STP_vera_tikh }
-		STP_vera_tikh = { remove_country_leader_role = { ideology = utilitarism_ideology } }
+		STP_vera_tikh = { if = { limit = { has_ideology = utilitarism_ideology } remove_country_leader_role = { ideology = utilitarism_ideology } } }
 	}
 }
 
@@ -3254,6 +3323,7 @@ VAL_cw_settle_republics = {
 		country_event = { id = ADISCORD_STP_cw.23 }
 		log = "[STP_CW] VAL military settlement: temporary administration of 43/44/45/88"
 		STP_cw_check_union_wars_finished = yes
+		STP_cw_queue_peace_reconciliation = yes
 	}
 }
 
@@ -3569,6 +3639,89 @@ STP_cw_end_nod_intervention = {
 	}
 }
 
+# Each recipient owns its deferred event so ROOT remains the country whose
+# war is being checked. An annexed NOD can only close its abandoned campaign.
+STP_cw_queue_peace_reconciliation = {
+	NOD = {
+		if = {
+			limit = {
+				check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
+			}
+			if = {
+				limit = { exists = yes }
+				country_event = { id = ADISCORD_STP_cw.206 hours = 1 }
+			}
+			else = { STP_cw_poll_northern_campaign = yes }
+		}
+	}
+	STP = {
+		if = {
+			limit = {
+				has_global_flag = STP_cw_started
+				NOT = { has_global_flag = STP_cw_union_wars_finished }
+				has_country_flag = STP_cw_won_union_battle
+				has_country_flag = STP_cw_postwar
+				exists = yes
+			}
+			country_event = { id = ADISCORD_STP_cw.206 hours = 1 }
+		}
+	}
+	STS = {
+		if = {
+			limit = {
+				has_global_flag = STP_cw_started
+				NOT = { has_global_flag = STP_cw_union_wars_finished }
+				has_country_flag = STP_cw_won_union_battle
+				has_country_flag = STP_cw_postwar
+				exists = yes
+			}
+			country_event = { id = ADISCORD_STP_cw.206 hours = 1 }
+		}
+	}
+	VAL = {
+		if = {
+			limit = {
+				has_country_flag = VAL_cw_postwar
+				NOT = { has_country_flag = VAL_cw_livonn_settlement_staged }
+				NOT = { has_country_flag = VAL_cw_livonn_settlement_resolved }
+				exists = yes
+			}
+			country_event = { id = ADISCORD_STP_cw.206 hours = 1 }
+		}
+	}
+}
+
+# Recheck live relations once after the callback; terminal guards also cover
+# duplicate notifications. This effect never queues another recovery attempt.
+STP_cw_reconcile_scripted_peace = {
+	if = {
+		limit = {
+			tag = NOD
+			check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
+		}
+		STP_cw_poll_northern_campaign = yes
+	}
+	else_if = {
+		limit = {
+			OR = { tag = STP tag = STS }
+			has_global_flag = STP_cw_started
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+			has_country_flag = STP_cw_won_union_battle
+			has_country_flag = STP_cw_postwar
+		}
+		STP_cw_check_union_wars_finished = yes
+	}
+	else_if = {
+		limit = {
+			tag = VAL
+			has_country_flag = VAL_cw_postwar
+			NOT = { has_country_flag = VAL_cw_livonn_settlement_staged }
+			NOT = { has_country_flag = VAL_cw_livonn_settlement_resolved }
+		}
+		VAL_cw_stage_livonn_settlement = yes
+	}
+}
+
 # Called after an actual settlement. Only the STP/STS war determines the
 # union outcome; a separate VAL/SRP war neither delays nor completes it.
 STP_cw_check_union_wars_finished = {
@@ -3662,6 +3815,7 @@ STP_cw_settle_union_victory = {
 	if = { limit = { tag = STP } news_event = { id = ADISCORD_STP_cw.71 hours = 1 } }
 	else_if = { limit = { tag = STS } news_event = { id = ADISCORD_STP_cw.72 hours = 1 } }
 	STP_cw_check_union_wars_finished = yes
+	STP_cw_queue_peace_reconciliation = yes
 }
 
 STP_cw_settle_nod_victory = {
@@ -3679,6 +3833,7 @@ STP_cw_settle_nod_victory = {
 		}
 		log = "[STP_CW] NOD military victory restores STS territory to STP"
 		STP_cw_check_union_wars_finished = yes
+		STP_cw_queue_peace_reconciliation = yes
 	}
 }
 
@@ -3848,7 +4003,7 @@ STP_pw_rebuild_economy_after_unification = {
 }
 
 # Three funded programs remove the reconstruction burden in equal steps.
-# STS: save-safe initialization for active postwar gameplay.
+# STS: initialize at the postwar transition; clamp after authored value changes.
 # The three values are deliberately country variables so the decision category
 # can expose them directly without a bespoke GUI.
 STP_pw_reconcile_postwar_interactivity = {
@@ -3860,22 +4015,6 @@ STP_pw_reconcile_postwar_interactivity = {
 		clamp_variable = { var = STP_pw_reconstruction_momentum min = 0 max = 100 }
 		clamp_variable = { var = STP_pw_public_confidence min = 0 max = 100 }
 		clamp_variable = { var = STP_pw_regional_cohesion min = 0 max = 100 }
-		if = {
-			limit = {
-				has_completed_focus = STP_pc_development_country_must_live
-				NOT = { has_country_flag = STP_pw_propaganda_slot_1 }
-			}
-			ADISCORD_campaign_slot_grant = yes
-			set_country_flag = STP_pw_propaganda_slot_1
-		}
-		if = {
-			limit = {
-				has_completed_focus = STP_pc_development_generation_reconstruction
-				NOT = { has_country_flag = STP_pw_propaganda_slot_2 }
-			}
-			ADISCORD_campaign_slot_grant = yes
-			set_country_flag = STP_pw_propaganda_slot_2
-		}
 	}
 }
 
@@ -4855,6 +4994,13 @@ STP_receive_3000 = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
+STP_receive_6000 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = 6000 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 6000 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
 STP_cw_spend_6000 = {
 	ADISCORD_economy_initialize_country = yes
 	subtract_from_variable = { var = ADISCORD_economy_treasury value = 6000 }
@@ -5432,6 +5578,7 @@ STP_pw_party_reconcile_nod_invasion = {
 	if = {
 		limit = {
 			tag = STP
+			NOT = { has_country_flag = STP_pw_party_nod_compact }
 			has_country_flag = STP_cw_postwar
 			NOT = { has_country_flag = STP_pw_party_nod_invasion_defeated has_country_flag = STP_pw_party_nod_invasion_lost }
 		}
@@ -5451,6 +5598,7 @@ STP_pw_party_start_nod_invasion_threat = {
 	if = {
 		limit = {
 			tag = STP
+			NOT = { has_country_flag = STP_pw_party_nod_compact }
 			has_country_flag = STP_cw_postwar
 			NOT = {
 				OR = {
@@ -5490,6 +5638,7 @@ STP_pw_party_launch_nod_invasion = {
 	if = {
 		limit = {
 			tag = STP
+			NOT = { has_country_flag = STP_pw_party_nod_compact }
 			OR = {
 				has_country_flag = STP_pw_party_nod_threat_active
 				AND = { has_country_flag = STP_pw_party_nod_invasion_active NOT = { has_war_with = NOD } }
@@ -5499,6 +5648,7 @@ STP_pw_party_launch_nod_invasion = {
 		if = {
 			limit = { OR = { has_capitulated = yes is_subject = yes } }
 			clr_country_flag = STP_pw_party_nod_threat_active
+			clr_country_flag = STP_pw_party_compact_pending
 			clr_country_flag = STP_pw_party_nod_invasion_active
 			set_country_flag = STP_pw_party_nod_invasion_lost
 			mark_focus_tree_layout_dirty = yes
@@ -5513,6 +5663,7 @@ STP_pw_party_launch_nod_invasion = {
 			}
 			else = {
 				clr_country_flag = STP_pw_party_nod_threat_active
+			clr_country_flag = STP_pw_party_compact_pending
 				set_country_flag = STP_pw_party_nod_invasion_active
 				NOD = { add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 } }
 				if = {
@@ -5524,6 +5675,7 @@ STP_pw_party_launch_nod_invasion = {
 		}
 		else = {
 			clr_country_flag = STP_pw_party_nod_threat_active
+			clr_country_flag = STP_pw_party_compact_pending
 			clr_country_flag = STP_pw_party_nod_invasion_active
 			set_country_flag = STP_pw_party_nod_invasion_defeated
 			mark_focus_tree_layout_dirty = yes
@@ -5544,6 +5696,7 @@ STP_pw_party_settle_nod_invasion_defeat = {
 			add_war_support = -0.10
 		}
 		clr_country_flag = STP_pw_party_nod_threat_active
+			clr_country_flag = STP_pw_party_compact_pending
 		clr_country_flag = STP_pw_party_nod_invasion_active
 		set_country_flag = STP_pw_party_nod_invasion_defeated
 		add_stability = 0.08
@@ -5568,6 +5721,7 @@ STP_pw_party_settle_nod_invasion_victory = {
 		if = { limit = { has_war_with = STP } white_peace = STP }
 		STP = {
 			clr_country_flag = STP_pw_party_nod_threat_active
+			clr_country_flag = STP_pw_party_compact_pending
 			clr_country_flag = STP_pw_party_nod_invasion_active
 			set_country_flag = STP_pw_party_nod_invasion_lost
 		}
@@ -6845,8 +6999,54 @@ STP_qol_initialize_staff = {
 	if = {
 		limit = { STP_qol_staff_available = yes NOT = { has_global_flag = STP_qol_regular_officers_delivered } }
 		set_global_flag = STP_qol_regular_officers_delivered
-		if = { limit = { NOT = { has_character = STP_Pavel_Gromin } } recruit_character = STP_Pavel_Gromin }
-		if = { limit = { NOT = { has_character = STP_Elena_Vetrova } } recruit_character = STP_Elena_Vetrova }
+		if = {
+			limit = { tag = STP has_character = STP_Pavel_Gromin }
+			add_corps_commander_role = {
+				character = STP_Pavel_Gromin
+				traits = { infantry_leader }
+				skill = 2
+				attack_skill = 2
+				defense_skill = 2
+				planning_skill = 2
+				logistics_skill = 2
+			}
+		}
+		if = {
+			limit = { tag = STS has_character = STS_Pavel_Gromin }
+			add_corps_commander_role = {
+				character = STS_Pavel_Gromin
+				traits = { infantry_leader }
+				skill = 2
+				attack_skill = 2
+				defense_skill = 2
+				planning_skill = 2
+				logistics_skill = 2
+			}
+		}
+		if = {
+			limit = { tag = STP has_character = STP_Elena_Vetrova }
+			add_corps_commander_role = {
+				character = STP_Elena_Vetrova
+				traits = { organizer }
+				skill = 2
+				attack_skill = 2
+				defense_skill = 2
+				planning_skill = 2
+				logistics_skill = 2
+			}
+		}
+		if = {
+			limit = { tag = STS has_character = STS_Elena_Vetrova }
+			add_corps_commander_role = {
+				character = STS_Elena_Vetrova
+				traits = { organizer }
+				skill = 2
+				attack_skill = 2
+				defense_skill = 2
+				planning_skill = 2
+				logistics_skill = 2
+			}
+		}
 	}
 	if = { limit = { STP_qol_elite_army_available = yes } STP_qol_grant_elite_officer = yes }
 }
@@ -6856,7 +7056,30 @@ STP_qol_grant_elite_officer = {
 	if = {
 		limit = { STP_qol_staff_available = yes NOT = { has_global_flag = STP_qol_elite_officer_delivered } }
 		set_global_flag = STP_qol_elite_officer_delivered
-		if = { limit = { NOT = { has_character = STP_Oleg_Vershin } } recruit_character = STP_Oleg_Vershin }
+		if = {
+			limit = { tag = STP has_character = STP_Oleg_Vershin }
+			add_corps_commander_role = {
+				character = STP_Oleg_Vershin
+				traits = { logistics_wizard }
+				skill = 4
+				attack_skill = 4
+				defense_skill = 4
+				planning_skill = 4
+				logistics_skill = 4
+			}
+		}
+		if = {
+			limit = { tag = STS has_character = STS_Oleg_Vershin }
+			add_corps_commander_role = {
+				character = STS_Oleg_Vershin
+				traits = { logistics_wizard }
+				skill = 4
+				attack_skill = 4
+				defense_skill = 4
+				planning_skill = 4
+				logistics_skill = 4
+			}
+		}
 	}
 }
 
@@ -7116,5 +7339,29 @@ STP_pw_party_settle_kefreyt_victory = {
 		add_political_power = 75
 		add_war_support = 0.03
 		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY NOD: consent, transfer and threat closure form one guarded settlement.
+STP_pw_party_settle_compact = {
+	if = {
+		limit = { STP_pw_party_compact_current = yes }
+		ADISCORD_economy_initialize_country = yes
+		add_to_variable = { var = ADISCORD_economy_treasury value = 1350 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1350 }
+		ADISCORD_economy_mark_dirty = yes
+		STP = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 1350 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1350 }
+			clr_country_flag = STP_pw_party_compact_pending
+			clr_country_flag = STP_pw_party_nod_threat_active
+			clr_country_flag = STP_pw_party_nod_invasion_active
+			set_country_flag = STP_pw_party_nod_compact
+			# Clear the cause before the mission's cancellation callback can run.
+			remove_decision = STP_pw_party_nod_invasion_countdown
+			ADISCORD_economy_mark_dirty = yes
+			mark_focus_tree_layout_dirty = yes
+			country_event = { id = ADISCORD_STP_pc.37 hours = 1 }
+		}
 	}
 }

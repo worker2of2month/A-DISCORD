@@ -1729,8 +1729,18 @@ VAL_reclamation_begin_project = {
 	}
 }
 
+# COUNTRY: resolve the paid state from its receipt; tooltip callbacks may lack a state FROM.
 VAL_reclamation_refund_project = {
-	FROM = { VAL_reclamation_refund_state_project = yes }
+	if = {
+		limit = { check_variable = { var = VAL_reclamation_deposit value = 500 compare = equals } }
+		24 = { VAL_reclamation_refund_state_project = yes }
+		42 = { VAL_reclamation_refund_state_project = yes }
+		48 = { VAL_reclamation_refund_state_project = yes }
+		54 = { VAL_reclamation_refund_state_project = yes }
+		55 = { VAL_reclamation_refund_state_project = yes }
+		56 = { VAL_reclamation_refund_state_project = yes }
+		57 = { VAL_reclamation_refund_state_project = yes }
+	}
 }
 
 # STATE: the state flag binds the country receipt to exactly one paid project.
@@ -1750,8 +1760,18 @@ VAL_reclamation_refund_state_project = {
 	}
 }
 
+# COUNTRY: resolve the paid state from its receipt; tooltip callbacks may lack a state FROM.
 VAL_reclamation_finish_project = {
-	FROM = { VAL_reclamation_finish_state_project = yes }
+	if = {
+		limit = { check_variable = { var = VAL_reclamation_deposit value = 500 compare = equals } }
+		24 = { VAL_reclamation_finish_state_project = yes }
+		42 = { VAL_reclamation_finish_state_project = yes }
+		48 = { VAL_reclamation_finish_state_project = yes }
+		54 = { VAL_reclamation_finish_state_project = yes }
+		55 = { VAL_reclamation_finish_state_project = yes }
+		56 = { VAL_reclamation_finish_state_project = yes }
+		57 = { VAL_reclamation_finish_state_project = yes }
+	}
 }
 
 VAL_reclamation_finish_state_project = {
@@ -1864,16 +1884,6 @@ VAL_reclamation_refresh_state = {
 		clear_variable = VAL_reclamation_construction
 		clear_variable = VAL_reclamation_supply
 	}
-}
-
-VAL_migrate_reclamation_modifiers = {
-	24 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
-	42 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
-	48 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
-	54 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
-	55 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
-	56 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
-	57 = { if = { limit = { has_variable = VAL_reclamation_stage } VAL_reclamation_refresh_state = yes } }
 }
 
 # State receipts keep paid industrial projects independent across regions.
@@ -2405,7 +2415,31 @@ VAL_frontier_reconcile_active_members = {
     }
 }
 
+# Surrender progress and prewar eligibility retain a bounded periodic check.
 VAL_frontier_weekly = {
+    if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } VAL_frontier_has_campaign_war = yes NOT = { AND = { VAL_frontier_target_occupied = yes VAL_frontier_members_beaten = yes } } surrender_progress > 0.65 NOD = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL has_capitulated = no } NOT = { has_country_flag = VAL_frontier_armistice_offered } }
+        set_country_flag = VAL_frontier_armistice_offered
+        VAL_frontier_save_quoted_target = yes
+        NOD = { country_event = { id = val_rework.113 } }
+    }
+    else_if = {
+        limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } check_variable = { var = VAL_frontier_stage value = 3 compare = less_than } VAL_frontier_prewar_eligible = no }
+        VAL_frontier_close = yes
+    }
+}
+
+# Native notifications may run before ownership and war relations finish changing.
+VAL_queue_frontier_reconciliation = {
+    VAL = {
+        if = {
+            limit = { exists = yes check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
+            country_event = { id = val_rework.102 hours = 1 }
+        }
+    }
+}
+
+VAL_frontier_reconcile = {
     VAL_frontier_reconcile_active_members = yes
     CIN = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { VAL_frontier_controlled = yes } } } clr_country_flag = VAL_frontier_defeated } }
     OSF = { if = { limit = { has_country_flag = VAL_frontier_defeated capital_scope = { NOT = { VAL_frontier_controlled = yes } } } clr_country_flag = VAL_frontier_defeated } }
@@ -2430,12 +2464,6 @@ VAL_frontier_weekly = {
             }
             # The separate occupier retains its result; no treaty reward was delivered.
             VAL_frontier_close = yes
-        }
-        else_if = {
-            limit = { surrender_progress > 0.65 NOD = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL has_capitulated = no } NOT = { has_country_flag = VAL_frontier_armistice_offered } }
-            set_country_flag = VAL_frontier_armistice_offered
-            VAL_frontier_save_quoted_target = yes
-            NOD = { country_event = { id = val_rework.113 } }
         }
         else_if = { limit = { has_war = no } VAL_frontier_close = yes }
     }
@@ -2686,8 +2714,8 @@ VAL_cw_stage_livonn_settlement = {
 			NOT = { has_country_flag = VAL_cw_livonn_settlement_resolved }
 		}
 
-		# Formation is the authoritative territorial step. The weekly/on-action
-		# callers only stage the political choice after Livonn is actually in OCA.
+		# Formation is the authoritative territorial step. Settlement and control
+		# callbacks stage the political choice only after Livonn is actually in OCA.
 		if = {
 			limit = { NOT = { 45 = { is_owned_by = OCA is_controlled_by = OCA } } }
 			VAL_form_occidian_administration = yes
@@ -2801,108 +2829,8 @@ VAL_reconcile_northern_volunteers = {
  if = { limit = { STP = { has_volunteers_amount_from = { tag = VAL count > 0 } NOT = { VAL_northern_volunteer_host = yes } } } recall_volunteers_from = STP }
 }
 
-# Совместимость уже начавшегося экономического кризиса.
+# COUNTRY VAL: refresh the shortage after an authored supply change.
 VAL_reconcile_supply_crisis = {
-	# Migrate old saves that already reached the restored economy before the
-	# explicit completion receipt existed. The visible miracle is sufficient
-	# evidence after stage 9 even if a later focus-tree swap hid the old focus.
-	if = {
-		limit = {
-			NOT = { has_country_flag = VAL_economic_recovery_completed }
-			OR = {
-				has_completed_focus = VAL_Return_To_World_Market
-				AND = {
-					has_variable = VAL_economic_recovery_steps
-					check_variable = { var = VAL_economic_recovery_steps value = 9 compare = greater_than_or_equals }
-					has_dynamic_modifier = { modifier = VAL_economic_miracle }
-				}
-			}
-		}
-		set_country_flag = VAL_economic_recovery_completed
-		if = {
-			limit = {
-				has_completed_focus = VAL_Return_To_World_Market
-				OR = {
-					NOT = { has_variable = VAL_economic_recovery_steps }
-					check_variable = { var = VAL_economic_recovery_steps value = 9 compare = less_than }
-				}
-			}
-			set_variable = { var = VAL_economic_recovery_steps value = 9 }
-		}
-	}
-	# Recover missed outbreak callbacks from world state without resetting earned progress.
-	if = {
-		limit = {
-			NOT = { has_country_flag = VAL_vorkerland_contracts_disrupted }
-			OR = {
-				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-				has_idea = VAL_vorkerland_contract_disruptions
-				has_dynamic_modifier = { modifier = VAL_economic_collapse }
-				has_dynamic_modifier = { modifier = VAL_economic_miracle }
-			}
-		}
-		if = {
-			limit = {
-				OR = {
-					has_variable = VAL_economic_recovery_steps
-					has_idea = VAL_vorkerland_contract_disruptions
-					has_dynamic_modifier = { modifier = VAL_economic_collapse }
-					has_dynamic_modifier = { modifier = VAL_economic_miracle }
-				}
-			}
-			set_country_flag = VAL_vorkerland_contracts_disrupted
-			remove_ideas = { VAL_big_buyers VAL_westerholm_concession_income }
-			VAL_end_vorkerland_resource_access = yes
-			mark_focus_tree_layout_dirty = yes
-		}
-		else = { VAL_handle_vorkerland_war_outbreak = yes }
-	}
-	if = {
-		limit = { has_country_flag = VAL_vorkerland_contracts_disrupted NOT = { has_variable = VAL_economic_recovery_steps } }
-		set_variable = { var = VAL_economic_recovery_steps value = 0 }
-		if = { limit = { has_completed_focus = VAL_Vorkerland_Contracts_Burn } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
-		if = { limit = { has_completed_focus = VAL_Inventory_The_Empty_Yards } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
-		if = { limit = { has_completed_focus = VAL_Mobilize_Machine_Shops } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
-		if = { limit = { has_completed_focus = VAL_Three_Shift_Arsenals } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
-		if = { limit = { has_completed_focus = VAL_Reserve_Accounting } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
-		if = { limit = { has_completed_focus = VAL_Industrial_Mobilization_Plan } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
-		if = { limit = { has_completed_focus = VAL_Reopen_Trade_Routes } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
-		if = { limit = { has_completed_focus = VAL_Settle_Industrial_Debts } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
-		if = { limit = { has_completed_focus = VAL_Return_To_World_Market } add_to_variable = { var = VAL_economic_recovery_steps value = 1 } }
-		VAL_refresh_industrial_economy = yes
-	}
-	# Progress can survive a missing consumer. Repair only an inconsistent presentation.
-	if = {
-		limit = {
-			has_country_flag = VAL_vorkerland_contracts_disrupted
-			OR = {
-				has_idea = VAL_vorkerland_contract_disruptions
-				has_dynamic_modifier = { modifier = VAL_contract_industry }
-				AND = {
-					NOT = { has_country_flag = VAL_economic_recovery_completed }
-					OR = {
-						NOT = { has_dynamic_modifier = { modifier = VAL_economic_collapse } }
-						has_dynamic_modifier = { modifier = VAL_economic_miracle }
-					}
-				}
-				AND = {
-					has_country_flag = VAL_economic_recovery_completed
-					OR = {
-						NOT = { has_dynamic_modifier = { modifier = VAL_economic_miracle } }
-						has_dynamic_modifier = { modifier = VAL_economic_collapse }
-					}
-				}
-			}
-		}
-		VAL_refresh_industrial_economy = yes
-	}
-	if = {
-		limit = {
-			has_variable = VAL_arsenal_reputation_stage
-			NOT = { has_dynamic_modifier = { modifier = VAL_arsenal_reputation } }
-		}
-		VAL_refresh_arsenal_reputation = yes
-	}
 	if = {
 		limit = { has_country_flag = VAL_vorkerland_contracts_disrupted }
 		VAL_assert_vorkerland_metal_shortage = yes
@@ -2950,10 +2878,6 @@ VAL_enter_stelander_defeat = {
 		if = {
 			limit = { has_character = VAL_Valera_Solgalov }
 			retire_character = VAL_Valera_Solgalov
-		}
-		if = {
-			limit = { NOT = { has_character = VAL_Commanders_Council } }
-			recruit_character = VAL_Commanders_Council
 		}
 		if = {
 			limit = { has_character = VAL_Commanders_Council }
@@ -3333,11 +3257,11 @@ VAL_install_stelander_administration = {
             set_politics = { ruling_party = etatism elections_allowed = no }
             if = {
                 limit = { tag = STP }
-                if = { limit = { NOT = { has_character = STP_VAL_Andrei_Rudnev } } recruit_character = STP_VAL_Andrei_Rudnev }
+                if = { limit = { has_character = STP_VAL_Andrei_Rudnev STP_VAL_Andrei_Rudnev = { NOT = { has_ideology = contractual_etatism } } } add_country_leader_role = { character = STP_VAL_Andrei_Rudnev promote_leader = no country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" } } }
                 promote_character = { character = STP_VAL_Andrei_Rudnev ideology = contractual_etatism }
             }
             else = {
-                if = { limit = { NOT = { has_character = STS_VAL_Andrei_Rudnev } } recruit_character = STS_VAL_Andrei_Rudnev }
+                if = { limit = { has_character = STS_VAL_Andrei_Rudnev STS_VAL_Andrei_Rudnev = { NOT = { has_ideology = contractual_etatism } } } add_country_leader_role = { character = STS_VAL_Andrei_Rudnev promote_leader = no country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" } } }
                 promote_character = { character = STS_VAL_Andrei_Rudnev ideology = contractual_etatism }
             }
             if = { limit = { has_power_balance = { id = STP_shabrat_election_legitimacy } } remove_power_balance = { id = STP_shabrat_election_legitimacy } }
@@ -3418,7 +3342,7 @@ VAL_finish_nodrul_administration = {
             limit = { NOT = { has_cosmetic_tag = NOD_VAL_administration } }
             set_cosmetic_tag = NOD_VAL_administration
             set_politics = { ruling_party = etatism elections_allowed = no }
-            if = { limit = { NOT = { has_character = NOD_VAL_Contract_Council } } recruit_character = NOD_VAL_Contract_Council }
+            if = { limit = { has_character = NOD_VAL_Contract_Council NOD_VAL_Contract_Council = { NOT = { has_ideology = contractual_etatism } } } add_country_leader_role = { character = NOD_VAL_Contract_Council promote_leader = no country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" } } }
             promote_character = { character = NOD_VAL_Contract_Council ideology = contractual_etatism }
             load_focus_tree = { tree = VAL_administration_focus keep_completed = no }
             mark_focus_tree_layout_dirty = yes
@@ -3577,9 +3501,9 @@ VAL_partition_nodrul_settlement = {
 
 VAL_initialize_partition_administration = {
     set_politics = { ruling_party = etatism elections_allowed = no }
-    if = { limit = { tag = ECA } if = { limit = { NOT = { has_character = ECA_Contract_Council } } recruit_character = ECA_Contract_Council } promote_character = { character = ECA_Contract_Council ideology = contractual_etatism } }
-    if = { limit = { tag = DCA } if = { limit = { NOT = { has_character = DCA_Contract_Council } } recruit_character = DCA_Contract_Council } promote_character = { character = DCA_Contract_Council ideology = contractual_etatism } }
-    if = { limit = { tag = YPR } set_cosmetic_tag = YPR_VAL_administration if = { limit = { NOT = { has_character = YPR_Contract_Council } } recruit_character = YPR_Contract_Council } promote_character = { character = YPR_Contract_Council ideology = contractual_etatism } }
+    if = { limit = { tag = ECA } promote_character = { character = ECA_Contract_Council ideology = contractual_etatism } }
+    if = { limit = { tag = DCA } promote_character = { character = DCA_Contract_Council ideology = contractual_etatism } }
+    if = { limit = { tag = YPR } set_cosmetic_tag = YPR_VAL_administration if = { limit = { has_character = YPR_Contract_Council YPR_Contract_Council = { NOT = { has_ideology = contractual_etatism } } } add_country_leader_role = { character = YPR_Contract_Council promote_leader = no country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" } } } promote_character = { character = YPR_Contract_Council ideology = contractual_etatism } }
     load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
     set_rule = { can_join_factions = no can_create_factions = no }
     ADISCORD_economy_mark_dirty = yes
@@ -3611,6 +3535,7 @@ VAL_transfer_yubora_administrations = {
         ADISCORD_economy_mark_dirty = yes
     }
     clr_country_flag = VAL_frontier_yubora_ultimatum
+	STP_cw_queue_peace_reconciliation = yes
 }
 
 VAL_reject_frontier_ultimatum = {
@@ -3805,8 +3730,6 @@ VAL_initialize_arsenal_recovery = {
             set_country_flag = VAL_vorkerland_resource_access_active
         }
     }
-    # Reconcile loaded campaigns even when their numeric progress already exists.
-    VAL_reconcile_supply_crisis = yes
     VAL_refresh_industrial_economy = yes
     if = { limit = { has_country_flag = VAL_vorkerland_contracts_disrupted } mark_focus_tree_layout_dirty = yes }
 
@@ -4300,8 +4223,30 @@ VAL_qol_initialize_staff = {
 	if = {
 		limit = { VAL_qol_staff_available = yes NOT = { has_country_flag = VAL_qol_regular_officers_delivered } }
 		set_country_flag = VAL_qol_regular_officers_delivered
-		if = { limit = { NOT = { has_character = VAL_Anton_Rein } } recruit_character = VAL_Anton_Rein }
-		if = { limit = { NOT = { has_character = VAL_Irina_Karst } } recruit_character = VAL_Irina_Karst }
+		if = {
+			limit = { has_character = VAL_Anton_Rein }
+			add_corps_commander_role = {
+				character = VAL_Anton_Rein
+				traits = { commando }
+				skill = 2
+				attack_skill = 2
+				defense_skill = 2
+				planning_skill = 2
+				logistics_skill = 2
+			}
+		}
+		if = {
+			limit = { has_character = VAL_Irina_Karst }
+			add_corps_commander_role = {
+				character = VAL_Irina_Karst
+				traits = { organizer }
+				skill = 2
+				attack_skill = 2
+				defense_skill = 2
+				planning_skill = 2
+				logistics_skill = 2
+			}
+		}
 	}
 	if = { limit = { VAL_qol_elite_army_available = yes } VAL_qol_grant_elite_officer = yes }
 }
@@ -4311,7 +4256,18 @@ VAL_qol_grant_elite_officer = {
 	if = {
 		limit = { VAL_qol_staff_available = yes NOT = { has_country_flag = VAL_qol_elite_officer_delivered } }
 		set_country_flag = VAL_qol_elite_officer_delivered
-		if = { limit = { NOT = { has_character = VAL_Viktor_Bran } } recruit_character = VAL_Viktor_Bran }
+		if = {
+			limit = { has_character = VAL_Viktor_Bran }
+			add_corps_commander_role = {
+				character = VAL_Viktor_Bran
+				traits = { panzer_leader }
+				skill = 4
+				attack_skill = 4
+				defense_skill = 4
+				planning_skill = 4
+				logistics_skill = 4
+			}
+		}
 	}
 }
 

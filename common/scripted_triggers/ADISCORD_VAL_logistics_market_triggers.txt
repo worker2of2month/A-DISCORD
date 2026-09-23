@@ -106,12 +106,12 @@ VAL_refugee_vorkerland_war = {
 }
 
 VAL_refugee_stelander_war = {
-	# The civil-war start flag survives tag swaps and the scripted STP/STS setup.
-	has_global_flag = STP_cw_started
+	# The split can precede hostilities while the player chooses a side.
+	STP = { has_war_with = STS }
 }
 
 VAL_refugee_nodrul_war = {
-	OR = { AND = { VAL_final_crisis_available = yes check_variable = { var = VAL_final_crisis_phase value = 1 compare = equals } } NOD = { OR = { has_war_with = STP has_war_with = STS has_war_with = VAL } } }
+	NOD = { OR = { has_war_with = STP has_war_with = STS has_war_with = VAL } }
 }
 
 VAL_refugee_north_war = {
@@ -120,4 +120,20 @@ VAL_refugee_north_war = {
 
 VAL_refugee_perimeter_open = {
 	has_global_flag = ADISCORD_vorkerland_dirty_opened
+}
+
+# COUNTRY VAL: compare route inputs before the weekly payment, including war and autonomy changes.
+VAL_trade_network_changed = {
+	OR = {
+		AND = { VAL_trade_route_occidia_open = yes NOT = { check_variable = { var = VAL_route_occidia_active value = 1 compare = equals } } }
+		AND = { VAL_trade_route_occidia_open = no check_variable = { var = VAL_route_occidia_active value = 1 compare = equals } }
+		AND = { VAL_trade_route_north_open = yes NOT = { check_variable = { var = VAL_route_north_active value = 1 compare = equals } } }
+		AND = { VAL_trade_route_north_open = no check_variable = { var = VAL_route_north_active value = 1 compare = equals } }
+		AND = { VAL_trade_route_stelander_open = yes NOT = { check_variable = { var = VAL_route_stelander_active value = 1 compare = equals } } }
+		AND = { VAL_trade_route_stelander_open = no check_variable = { var = VAL_route_stelander_active value = 1 compare = equals } }
+		AND = { VAL_trade_route_vorkerland_open = yes NOT = { check_variable = { var = VAL_route_vorkerland_active value = 1 compare = equals } } }
+		AND = { VAL_trade_route_vorkerland_open = no check_variable = { var = VAL_route_vorkerland_active value = 1 compare = equals } }
+		AND = { VAL_trade_corridors_unlocked = yes NOT = { OR = { has_idea = VAL_corridor_network_fragmented has_idea = VAL_corridor_network_partial has_idea = VAL_corridor_network_integrated } } }
+		AND = { VAL_trade_corridors_unlocked = no OR = { has_idea = VAL_corridor_network_fragmented has_idea = VAL_corridor_network_partial has_idea = VAL_corridor_network_integrated } }
+	}
 }

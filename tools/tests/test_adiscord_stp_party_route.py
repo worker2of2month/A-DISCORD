@@ -876,5 +876,205 @@ class PartySecondPackageContracts(unittest.TestCase):
                     self.assertTrue(all(values[f'STP_pf_{k}_influence'] >= 0 for k in self.KEYS))
 
 
+class PartyPostwarCoalitionContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = {e.key: e.value for e in parse_clausewitz(read('common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt'))}
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        cls.events = {one(e.value, 'id'): e.value for e in parse_clausewitz(read(EVENTS)) if e.key == 'country_event'}
+
+    def expanded(self, items):
+        from dataclasses import replace
+        result = []
+        for entry in items:
+            if entry.key in self.triggers:
+                self.assertIn(entry.value, ('yes', 'no'))
+                result.append(replace(entry, key='AND' if entry.value == 'yes' else 'NOT',
+                                      value=self.expanded(self.triggers[entry.key])))
+            else:
+                result.append(replace(entry, value=self.expanded(entry.value)) if isinstance(entry.value, list) else entry)
+        return result
+
+    def test_every_cabinet_needs_its_own_live_support(self):
+        self.assertIn('STP_pw_party_cabinet_backed', self.triggers.keys())
+        for cabinet, faction in ((1, 'conservatives'), (2, 'borons'), (3, 'radicals')):
+            for support in (59.999, 60, 100):
+                facts = {('STP', 'variable', 'STP_pw_party_cabinet'): cabinet,
+                         ('STP', 'variable', f'STP_pf_{faction}_support'): support}
+                self.assertEqual(matches_conditions(self.expanded(self.triggers['STP_pw_party_cabinet_backed']), facts), support >= 60)
+
+    def test_compact_rechecks_both_countries_and_exact_payment(self):
+        self.assertIn('STP_pw_party_compact_current', self.triggers.keys())
+        # Keep the coalition predicate independent here: this checks settlement lifecycle.
+        facts = {('NOD', 'exists', 'yes'): True, ('NOD', 'is_subject', 'no'): True,
+                 ('NOD', 'has_capitulated', 'no'): True,
+                 ('STP', 'exists', 'yes'): True, ('STP', 'is_subject', 'no'): True,
+                 ('STP', 'has_capitulated', 'no'): True,
+                 ('STP', 'has_country_flag', 'STP_cw_postwar'): True,
+                 ('STP', 'has_country_flag', 'STP_sided_with_the_party_flag'): True,
+                 ('STP', 'has_country_flag', 'STP_pw_party_nod_threat_active'): True,
+                 ('STP', 'has_country_flag', 'STP_pw_party_compact_pending'): True,
+                 ('STP', 'STP_pw_party_compact_coalition', 'yes'): True,
+                 ('STP', 'variable', 'ADISCORD_economy_treasury'): 1350}
+        from dataclasses import replace
+        def expand_lifecycle(items):
+            result = []
+            for e in items:
+                if e.key in self.triggers and e.key != 'STP_pw_party_compact_coalition':
+                    result.append(replace(e, key='AND' if e.value == 'yes' else 'NOT', value=expand_lifecycle(self.triggers[e.key])))
+                else:
+                    result.append(replace(e, value=expand_lifecycle(e.value)) if isinstance(e.value, list) else e)
+            return result
+        gate = expand_lifecycle(self.triggers['STP_pw_party_compact_current'])
+        self.assertTrue(matches_conditions(gate, facts, 'NOD'))
+        changes = [(('STP', 'variable', 'ADISCORD_economy_treasury'), 1349.999),
+                   (('STP', 'has_war_with', 'NOD'), True),
+                   (('STP', 'has_country_flag', 'STP_pw_party_compact_pending'), False),
+                   (('STP', 'has_country_flag', 'STP_pw_party_nod_compact'), True),
+                   (('STP', 'has_country_flag', 'STP_pw_party_nod_threat_active'), False),
+                   (('STP', 'STP_pw_party_compact_coalition', 'yes'), False),
+                   (('NOD', 'is_subject', 'no'), False),
+                   (('STP', 'has_capitulated', 'no'), False)]
+        for key, value in changes:
+            with self.subTest(key=key):
+                self.assertFalse(matches_conditions(gate, facts | {key: value}, 'NOD'))
+
+    def test_settlement_is_atomic_and_clears_threat_before_mission(self):
+        self.assertIn('STP_pw_party_settle_compact', self.effects.keys())
+        effect = self.effects['STP_pw_party_settle_compact']
+        branches = children(effect, 'if')
+        self.assertEqual(len(branches), 1)
+        self.assertIn(('STP_pw_party_compact_current', 'yes'), signature(one(branches[0], 'limit')))
+        writes = [(e.key, one(e.value, 'var'), one(e.value, 'value')) for e in walk(effect)
+                  if e.key in ('subtract_from_variable', 'add_to_variable')]
+        self.assertEqual(writes.count(('subtract_from_variable', 'ADISCORD_economy_treasury', '1350')), 1)
+        self.assertEqual(writes.count(('add_to_variable', 'ADISCORD_economy_treasury', '1350')), 1)
+        text = str(signature(effect))
+        self.assertLess(text.index("('clr_country_flag', 'STP_pw_party_nod_threat_active')"), text.index("('remove_decision', 'STP_pw_party_nod_invasion_countdown')"))
+        for name in ('STP_pw_party_launch_nod_invasion', 'STP_pw_party_start_nod_invasion_threat'):
+            self.assertIn('STP_pw_party_nod_compact', str(signature(self.effects[name])))
+
+    def test_story_choices_recheck_receipts_and_expired_offer_has_exit(self):
+        for eid, variable in (('ADISCORD_STP_pc.23', 'STP_pw_party_cabinet'),
+                              ('ADISCORD_STP_pc.34', 'STP_pw_party_command'),
+                              ('ADISCORD_STP_pc.35', 'STP_pw_party_credit')):
+            self.assertIn(eid, self.events)
+            event = self.events[eid]
+            self.assertEqual(one(event, 'timeout_days'), '14')
+            options = children(event, 'option')
+            self.assertGreaterEqual(len(options), 3)
+            for option in options:
+                if children(option, 'if'):
+                    gate = str(signature(one(one(option, 'if'), 'limit')))
+                    self.assertIn(variable, gate)
+                    self.assertIn('STP_pw_party_story_current', gate)
+            self.assertIn('STP_pc_offer_closed', [one(o, 'name') for o in options])
+        self.assertIn('ADISCORD_STP_pc.36', self.events)
+        offer = self.events['ADISCORD_STP_pc.36']
+        self.assertEqual(one(offer, 'timeout_days'), '21')
+        self.assertEqual(one(children(offer, 'option')[0], 'name'), 'ADISCORD_STP_pc.36.refuse')
+        self.assertIn('STP_pc_offer_closed', [one(o, 'name') for o in children(offer, 'option')])
+
+    def coalition_facts(self, cabinet=1, command=1, credit=1):
+        values = {'STP_pw_party_cabinet': cabinet, 'STP_pw_party_command': command,
+                  'STP_pw_party_credit': credit, 'STP_pw_recovery_industry': 1,
+                  'STP_pw_recovery_services': 1, 'ADISCORD_economy_treasury': 2700}
+        values.update({f'STP_pf_{f}_support': 60 for f in
+                       ('conservatives', 'borons', 'radicals', 'army', 'security', 'merchants')})
+        facts = {('STP', 'variable', k): v for k, v in values.items()}
+        for country in ('STP', 'NOD'):
+            for key, value in (('exists', 'yes'), ('is_subject', 'no'), ('has_capitulated', 'no')):
+                facts[(country, key, value)] = True
+        for flag in ('STP_cw_postwar', 'STP_sided_with_the_party_flag',
+                     'STP_pw_party_nod_threat_active', 'STP_pw_party_compact_pending'):
+            facts[('STP', 'has_country_flag', flag)] = True
+        for focus in ('STP_pw_party_officer_school', 'STP_pw_party_supply_service'):
+            facts[('STP', 'has_completed_focus', focus)] = True
+        return facts
+
+    def test_all_twelve_coalitions_can_negotiate_but_need_actual_recovery(self):
+        from itertools import product
+        gate = self.expanded(self.triggers['STP_pw_party_compact_coalition'])
+        for cabinet, command, credit in product((1, 2, 3), (1, 2), (1, 2)):
+            facts = self.coalition_facts(cabinet, command, credit)
+            with self.subTest(cabinet=cabinet, command=command, credit=credit):
+                self.assertTrue(matches_conditions(gate, facts))
+                self.assertFalse(matches_conditions(gate, facts | {('STP', 'variable', 'STP_pw_recovery_industry'): 0}))
+                self.assertFalse(matches_conditions(gate, facts | {('STP', 'has_completed_focus', 'STP_pw_party_officer_school'): False}))
+                self.assertFalse(matches_conditions(gate, facts | {('STP', 'has_completed_focus', 'STP_pw_party_supply_service'): False}))
+                professional = facts | {('STP', 'has_completed_focus', 'STP_pw_party_supply_service'): False,
+                                        ('STP', 'has_completed_focus', 'STP_pw_party_professional_service'): True}
+                self.assertTrue(matches_conditions(gate, professional))
+                no_services = facts | {('STP', 'variable', 'STP_pw_recovery_services'): 0}
+                self.assertEqual(matches_conditions(gate, no_services), credit == 1)
+
+    def test_security_and_requisition_paths_have_recoverable_support_boundaries(self):
+        gate = self.expanded(self.triggers['STP_pw_party_compact_coalition'])
+        facts = self.coalition_facts(command=2, credit=2)
+        for faction in ('army', 'merchants'):
+            for value in (44.999, 45, 59.999, 60):
+                self.assertEqual(matches_conditions(gate, facts | {('STP', 'variable', f'STP_pf_{faction}_support'): value}), value >= 45)
+        for value in (59.999, 60):
+            self.assertEqual(matches_conditions(gate, facts | {('STP', 'variable', 'STP_pf_security_support'): value}), value >= 60)
+
+    def test_a_second_consent_cannot_charge_even_when_funds_remain(self):
+        facts = self.coalition_facts()
+        facts[('NOD', 'variable', 'ADISCORD_economy_treasury')] = 700
+        effect = self.expanded(self.effects['STP_pw_party_settle_compact'])
+        for attempt in range(2):
+            issued = list(selected_effects(effect, facts, 'NOD'))
+            if attempt:
+                self.assertEqual(issued, [])
+            for scope, e in issued:
+                if e.key in ('add_to_variable', 'subtract_from_variable'):
+                    key = (scope, 'variable', one(e.value, 'var'))
+                    facts[key] = facts.get(key, 0) + float(one(e.value, 'value')) * (1 if e.key == 'add_to_variable' else -1)
+                elif e.key in ('set_country_flag', 'clr_country_flag'):
+                    facts[(scope, 'has_country_flag', e.value)] = e.key == 'set_country_flag'
+            self.assertEqual(facts[('STP', 'variable', 'ADISCORD_economy_treasury')], 1350)
+            self.assertEqual(facts[('NOD', 'variable', 'ADISCORD_economy_treasury')], 2050)
+            self.assertFalse(facts[('STP', 'has_country_flag', 'STP_pw_party_nod_threat_active')])
+            self.assertFalse(facts[('STP', 'has_country_flag', 'STP_pw_party_compact_pending')])
+
+    def test_offer_leaves_room_for_recipient_timeout_and_does_not_pause_mission(self):
+        decisions = {d.key: d.value for c in parse_clausewitz(read(DECISIONS)) for d in c.value if isinstance(d.value, list)}
+        offer = decisions['STP_pw_party_offer_compact']
+        facts = self.coalition_facts()
+        facts[('STP', 'has_country_flag', 'STP_pw_party_compact_pending')] = False
+        facts[('STP', 'has_active_mission', 'STP_pw_party_nod_invasion_countdown')] = True
+        gate = self.expanded(one(offer, 'available'))
+        for days in (21, 21.999, 22, 90):
+            scenario = facts | {('STP', 'variable', 'days_mission_timeout@STP_pw_party_nod_invasion_countdown'): days}
+            self.assertEqual(matches_conditions(gate, scenario), days >= 22)
+        keys = [e.key for e in walk(one(offer, 'complete_effect'))]
+        self.assertFalse({'remove_decision', 'activate_mission', 'add_days_mission_timeout', 'subtract_from_variable'} & set(keys))
+        self.assertIn('STP_pw_party_nod_invasion_countdown', read('common/synchronized_dynamic_tokens/ADISCORD_tokens.txt').splitlines())
+
+    def test_story_pages_and_substitutions_fit_both_editorial_limits(self):
+        for language in ('russian', 'english'):
+            path = f'localisation/{language}/ADISCORD_STP_l_{language}.yml'
+            self.assertTrue((ROOT / path).read_bytes().startswith(b'\xef\xbb\xbf'))
+            loc = dict(re.findall(r'^\s*([^#\s:]+):(?:\d+)?\s*"(.*)"\s*$', read(path), re.M))
+            expansions = {}
+            for entry in parse_clausewitz(read(SCRIPTED_LOC)):
+                name = one(entry.value, 'name')
+                if name.startswith('STPGetPostwar'):
+                    values = [loc[e.value] for e in walk(entry.value) if e.key == 'localization_key']
+                    expansions[name] = max(values, key=lambda v: len(v.encode('utf-8')))
+            keys = ['ADISCORD_STP_pc.23.d', 'ADISCORD_STP_pc.28.d',
+                    'ADISCORD_STP_pc.34.d', 'ADISCORD_STP_pc.35.d', 'ADISCORD_STP_pc.36.d',
+                    'ADISCORD_STP_pc.37.accepted', 'ADISCORD_STP_pc.37.refused',
+                    'ADISCORD_STP_pc.38.d', 'ADISCORD_STP_pc.39.d']
+            for key in keys:
+                text = loc[key]
+                for name, value in expansions.items():
+                    text = text.replace('[' + name + ']', value)
+                text = text.replace(r'\n', '\n')
+                self.assertNotIn('[STPGet', text, key)
+                self.assertLessEqual(len(text), 3000, key)
+                self.assertLessEqual(len(text.encode('utf-8')), 5500, key)
+                self.assertNotIn('§Y', text, key)
+
+
 if __name__ == "__main__":
     unittest.main()

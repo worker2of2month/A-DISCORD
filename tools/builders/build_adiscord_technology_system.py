@@ -3841,34 +3841,34 @@ INDUSTRIAL_BUDGET_EFFECTS = {
 
 # Equipment modifiers improve the manufactured family, including existing stock.
 NAVAL_AIR_WEAPON_EFFECTS = {
-    "radar_gunnery": ("ADISCORD_cruiser_archetype = { hg_attack = 0.06 }",),
-    "stabilized_naval_gun_directors": ("ADISCORD_cruiser_archetype = { hg_attack = 0.06 lg_attack = 0.04 }",),
-    "missile_batteries": ("ADISCORD_cruiser_archetype = { hg_attack = 0.08 }",),
-    "composite_armor_belts": ("ADISCORD_cruiser_archetype = { armor_value = 0.10 }",),
-    "cooperative_fleet_missile_defense": ("ADISCORD_cruiser_archetype = { anti_air_attack = 0.10 }",),
-    "superconducting_railgun_turrets": ("ADISCORD_cruiser_archetype = { hg_attack = 0.08 hg_armor_piercing = 0.08 }",),
-    "towed_array_sonar": ("ADISCORD_coastal_patrol_ship = { sub_detection = 0.10 sub_attack = 0.06 }",),
-    "containerized_escort_missile_cells": ("ADISCORD_coastal_patrol_ship = { lg_attack = 0.08 anti_air_attack = 0.08 }",),
-    "directed_energy_point_defense": ("ADISCORD_coastal_patrol_ship = { anti_air_attack = 0.12 }",),
-    "homing_torpedoes": ("ADISCORD_submarine_archetype = { torpedo_attack = 0.08 }",),
-    "anechoic_tile_bonding": ("ADISCORD_submarine_archetype = { sub_visibility = -0.06 }",),
-    "air_independent_cells": ("ADISCORD_submarine_archetype = { naval_range = 0.10 }",),
-    "fiber_optic_torpedo_control": ("ADISCORD_submarine_archetype = { torpedo_attack = 0.08 }",),
-    "supercavitating_interceptor_torpedoes": ("ADISCORD_submarine_archetype = { torpedo_attack = 0.10 }",),
-    "helmet_cued_targeting": ("ADISCORD_fighter_archetype = { air_attack = 0.08 }",),
-    "electronically_scanned_fighter_radar": ("ADISCORD_fighter_archetype = { air_attack = 0.06 air_defence = 0.04 }",),
-    "guided_munitions": ("ADISCORD_cas_archetype = { air_ground_attack = 0.08 }",),
-    "electromagnetic_cannon_pods": ("ADISCORD_cas_archetype = { air_ground_attack = 0.10 }",),
-    "twin_engine_aircraft": ("ADISCORD_bomber_archetype = { reliability = 0.02 }",),
-    "maritime_patrol_aircraft": ("ADISCORD_naval_aircraft_archetype = { air_range = 0.04 }",),
-    "pressurized_bombers": ("ADISCORD_bomber_archetype = { air_defence = 0.04 }",),
-    "airborne_homing_torpedoes": ("ADISCORD_naval_aircraft_archetype = { naval_strike_attack = 0.10 naval_strike_targetting = 0.08 }",),
-    "stabilized_bomb_sights": ("ADISCORD_bomber_archetype = { strategic_attack = 0.08 air_ground_attack = 0.06 }",),
-    "long_range_maritime_aircraft": ("ADISCORD_naval_aircraft_archetype = { naval_strike_targetting = 0.06 }",),
-    "jet_strike_bombers": ("ADISCORD_bomber_archetype = { strategic_attack = 0.06 }",),
+    "radar_gunnery": ("heavy_cruiser = { hg_attack = 0.06 }",),
+    "stabilized_naval_gun_directors": ("heavy_cruiser = { hg_attack = 0.06 lg_attack = 0.04 }",),
+    "missile_batteries": ("heavy_cruiser = { hg_attack = 0.08 }",),
+    "composite_armor_belts": ("heavy_cruiser = { armor_value = 0.10 }",),
+    "cooperative_fleet_missile_defense": ("heavy_cruiser = { anti_air_attack = 0.10 }",),
+    "superconducting_railgun_turrets": ("heavy_cruiser = { hg_attack = 0.08 hg_armor_piercing = 0.08 }",),
+    "towed_array_sonar": ("ADISCORD_coastal_patrol_vessel = { sub_detection = 0.10 sub_attack = 0.06 }",),
+    "containerized_escort_missile_cells": ("ADISCORD_coastal_patrol_vessel = { lg_attack = 0.08 anti_air_attack = 0.08 }",),
+    "directed_energy_point_defense": ("ADISCORD_coastal_patrol_vessel = { anti_air_attack = 0.12 }",),
+    "homing_torpedoes": ("submarine = { torpedo_attack = 0.08 }",),
+    "anechoic_tile_bonding": ("submarine = { sub_visibility = -0.06 }",),
+    "air_independent_cells": ("submarine = { naval_range = 0.10 }",),
+    "fiber_optic_torpedo_control": ("submarine = { torpedo_attack = 0.08 }",),
+    "supercavitating_interceptor_torpedoes": ("submarine = { torpedo_attack = 0.10 }",),
+    "helmet_cued_targeting": ("fighter = { air_attack = 0.08 }",),
+    "electronically_scanned_fighter_radar": ("fighter = { air_attack = 0.06 air_defence = 0.04 }",),
+    "guided_munitions": ("cas = { air_ground_attack = 0.08 }",),
+    "electromagnetic_cannon_pods": ("cas = { air_ground_attack = 0.10 }",),
+    "twin_engine_aircraft": ("ADISCORD_tactical_bomber = { reliability = 0.02 }",),
+    "maritime_patrol_aircraft": ("nav_bomber = { air_range = 0.04 }",),
+    "pressurized_bombers": ("ADISCORD_tactical_bomber = { air_defence = 0.04 }",),
+    "airborne_homing_torpedoes": ("nav_bomber = { naval_strike_attack = 0.10 naval_strike_targetting = 0.08 }",),
+    "stabilized_bomb_sights": ("ADISCORD_tactical_bomber = { strategic_attack = 0.08 air_ground_attack = 0.06 }",),
+    "long_range_maritime_aircraft": ("nav_bomber = { naval_strike_targetting = 0.06 }",),
+    "jet_strike_bombers": ("ADISCORD_tactical_bomber = { strategic_attack = 0.06 }",),
     "integrated_strike_navigation": (
-        "ADISCORD_bomber_archetype = { air_range = 0.08 strategic_attack = 0.06 }",
-        "ADISCORD_naval_aircraft_archetype = { air_range = 0.08 naval_strike_targetting = 0.06 }",
+        "ADISCORD_tactical_bomber = { air_range = 0.08 strategic_attack = 0.06 }",
+        "nav_bomber = { air_range = 0.08 naval_strike_targetting = 0.06 }",
     ),
 }
 
@@ -5496,9 +5496,10 @@ def render_technology(branch: Branch, index: int) -> str:
     return "\n".join(lines)
 
 
-def write_technology_files() -> None:
+def technology_file_outputs() -> dict[Path, str]:
     technology_dir = ROOT / "common" / "technologies"
     files = sorted({branch.file for branch in BRANCHES})
+    outputs = {}
     for filename in files:
         blocks = [
             render_technology(branch, index)
@@ -5507,7 +5508,13 @@ def write_technology_files() -> None:
             for index in range(len(branch.techs))
         ]
         content = "technologies = {\n" + "\n\n".join(blocks) + "\n}\n"
-        (technology_dir / filename).write_text(content, encoding="utf-8")
+        outputs[technology_dir / filename] = content
+    return outputs
+
+
+def write_technology_files() -> None:
+    for path, content in technology_file_outputs().items():
+        path.write_text(content, encoding="utf-8")
 
 
 def write_starting_technology_effect() -> None:
@@ -6483,7 +6490,19 @@ def main() -> int:
     actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
     actions.add_argument("--apply", action="store_true", help="write technology files, manifests, GUI and localisation")
     actions.add_argument("--apply-starting-profiles", action="store_true", help="write only starting technology effects and the country profile manifest")
+    parser.add_argument("--technology-data-only", action="store_true", help="check or apply technology scripts without regenerating UI, localisation or country history")
     args = parser.parse_args()
+    if args.technology_data_only:
+        if args.apply_starting_profiles:
+            parser.error("--technology-data-only cannot update starting profiles")
+        changed = [path for path, content in technology_file_outputs().items()
+                   if not path.exists() or path.read_text(encoding="utf-8-sig") != content]
+        if args.apply:
+            write_technology_files()
+        print(f"Technology scripts {'updated' if args.apply else 'different'}: {len(changed)}")
+        for path in changed:
+            print(path.relative_to(ROOT))
+        return int(bool(changed) and not args.apply)
     if args.apply_starting_profiles:
         write_starting_technology_effect()
         write_starting_technology_profile_manifest()

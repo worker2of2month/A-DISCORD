@@ -1655,3 +1655,166 @@ entity = { clone = "ADISCORD_WRK_line_infantry_8_entity" name = "YOR_confederati
 entity = { clone = "ADISCORD_WRK_line_infantry_8_entity" name = "YOR_confederation_ADISCORD_militia_8_entity" }
 entity = { clone = "ADISCORD_WRK_line_infantry_8_entity" name = "YOR_confederation_mountaineers_8_entity" }
 # END ADISCORD infantry forms
+
+# BEGIN ADISCORD northern infantry
+entity = { clone = "STP_infantry_entity" name = "COF_infantry_entity" pdxmesh = "ADISCORD_COF_field_rifle_mesh" }
+entity = { clone = "COF_infantry_entity" name = "COF_ADISCORD_militia_entity" }
+entity = { clone = "COF_infantry_entity" name = "COF_ADISCORD_territorial_entity" }
+entity = { clone = "COF_infantry_entity" name = "COF_mountaineers_entity" }
+entity = { clone = "STP_infantry_2_entity" name = "COF_infantry_2_entity" pdxmesh = "ADISCORD_COF_field_mg_mesh" }
+entity = { clone = "COF_infantry_2_entity" name = "COF_ADISCORD_militia_2_entity" }
+entity = { clone = "COF_infantry_2_entity" name = "COF_ADISCORD_territorial_2_entity" }
+entity = { clone = "COF_infantry_2_entity" name = "COF_mountaineers_2_entity" }
+entity = { clone = "STP_infantry_3_entity" name = "COF_infantry_3_entity" pdxmesh = "ADISCORD_COF_field_mg_mesh" }
+entity = { clone = "COF_infantry_3_entity" name = "COF_ADISCORD_militia_3_entity" }
+entity = { clone = "COF_infantry_3_entity" name = "COF_ADISCORD_territorial_3_entity" }
+entity = { clone = "COF_infantry_3_entity" name = "COF_mountaineers_3_entity" }
+entity = { clone = "STP_infantry_4_entity" name = "COF_infantry_4_entity" pdxmesh = "ADISCORD_COF_field_mg_mesh" }
+entity = { clone = "COF_infantry_4_entity" name = "COF_ADISCORD_militia_4_entity" }
+entity = { clone = "COF_infantry_4_entity" name = "COF_ADISCORD_territorial_4_entity" }
+entity = { clone = "COF_infantry_4_entity" name = "COF_mountaineers_4_entity" }
+entity = { clone = "STP_infantry_5_entity" name = "COF_infantry_5_entity" pdxmesh = "ADISCORD_COF_field_mg_mesh" }
+entity = { clone = "COF_infantry_5_entity" name = "COF_ADISCORD_militia_5_entity" }
+entity = { clone = "COF_infantry_5_entity" name = "COF_ADISCORD_territorial_5_entity" }
+entity = { clone = "COF_infantry_5_entity" name = "COF_mountaineers_5_entity" }
+entity = { clone = "STP_infantry_6_entity" name = "COF_infantry_6_entity" pdxmesh = "ADISCORD_COF_field_mg_mesh" }
+entity = { clone = "COF_infantry_6_entity" name = "COF_ADISCORD_militia_6_entity" }
+entity = { clone = "COF_infantry_6_entity" name = "COF_ADISCORD_territorial_6_entity" }
+entity = { clone = "COF_infantry_6_entity" name = "COF_mountaineers_6_entity" }
+entity = { clone = "STP_infantry_7_entity" name = "COF_infantry_7_entity" pdxmesh = "ADISCORD_COF_field_mg_mesh" }
+entity = { clone = "COF_infantry_7_entity" name = "COF_ADISCORD_militia_7_entity" }
+entity = { clone = "COF_infantry_7_entity" name = "COF_ADISCORD_territorial_7_entity" }
+entity = { clone = "COF_infantry_7_entity" name = "COF_mountaineers_7_entity" }
+entity = { clone = "STP_infantry_8_entity" name = "COF_infantry_8_entity" pdxmesh = "ADISCORD_COF_field_mg_mesh" }
+entity = { clone = "COF_infantry_8_entity" name = "COF_ADISCORD_militia_8_entity" }
+entity = { clone = "COF_infantry_8_entity" name = "COF_ADISCORD_territorial_8_entity" }
+entity = { clone = "COF_infantry_8_entity" name = "COF_mountaineers_8_entity" }
+entity = { clone = "STP_infantry_entity" name = "YPR_infantry_entity" pdxmesh = "ADISCORD_YPR_field_rifle_mesh" }
+entity = { clone = "YPR_infantry_entity" name = "YPR_ADISCORD_militia_entity" }
+entity = { clone = "YPR_infantry_entity" name = "YPR_ADISCORD_territorial_entity" }
+entity = { clone = "YPR_infantry_entity" name = "YPR_mountaineers_entity" }
+entity = { clone = "YPR_infantry_entity" name = "YPR_VAL_administration_infantry_entity" }
+entity = { clone = "YPR_ADISCORD_militia_entity" name = "YPR_VAL_administration_ADISCORD_militia_entity" }
+entity = { clone = "YPR_ADISCORD_territorial_entity" name = "YPR_VAL_administration_ADISCORD_territorial_entity" }
+entity = { clone = "YPR_mountaineers_entity" name = "YPR_VAL_administration_mountaineers_entity" }
+entity = { clone = "STP_infantry_2_entity" name = "YPR_infantry_2_entity" pdxmesh = "ADISCORD_YPR_field_mg_mesh" }
+entity = { clone = "YPR_infantry_2_entity" name = "YPR_ADISCORD_militia_2_entity" }
+entity = { clone = "YPR_infantry_2_entity" name = "YPR_ADISCORD_territorial_2_entity" }
+entity = { clone = "YPR_infantry_2_entity" name = "YPR_mountaineers_2_entity" }
+entity = { clone = "YPR_infantry_2_entity" name = "YPR_VAL_administration_infantry_2_entity" }
+entity = { clone = "YPR_ADISCORD_militia_2_entity" name = "YPR_VAL_administration_ADISCORD_militia_2_entity" }
+entity = { clone = "YPR_ADISCORD_territorial_2_entity" name = "YPR_VAL_administration_ADISCORD_territorial_2_entity" }
+entity = { clone = "YPR_mountaineers_2_entity" name = "YPR_VAL_administration_mountaineers_2_entity" }
+entity = { clone = "STP_infantry_3_entity" name = "YPR_infantry_3_entity" pdxmesh = "ADISCORD_YPR_field_mg_mesh" }
+entity = { clone = "YPR_infantry_3_entity" name = "YPR_ADISCORD_militia_3_entity" }
+entity = { clone = "YPR_infantry_3_entity" name = "YPR_ADISCORD_territorial_3_entity" }
+entity = { clone = "YPR_infantry_3_entity" name = "YPR_mountaineers_3_entity" }
+entity = { clone = "YPR_infantry_3_entity" name = "YPR_VAL_administration_infantry_3_entity" }
+entity = { clone = "YPR_ADISCORD_militia_3_entity" name = "YPR_VAL_administration_ADISCORD_militia_3_entity" }
+entity = { clone = "YPR_ADISCORD_territorial_3_entity" name = "YPR_VAL_administration_ADISCORD_territorial_3_entity" }
+entity = { clone = "YPR_mountaineers_3_entity" name = "YPR_VAL_administration_mountaineers_3_entity" }
+entity = { clone = "STP_infantry_4_entity" name = "YPR_infantry_4_entity" pdxmesh = "ADISCORD_YPR_field_mg_mesh" }
+entity = { clone = "YPR_infantry_4_entity" name = "YPR_ADISCORD_militia_4_entity" }
+entity = { clone = "YPR_infantry_4_entity" name = "YPR_ADISCORD_territorial_4_entity" }
+entity = { clone = "YPR_infantry_4_entity" name = "YPR_mountaineers_4_entity" }
+entity = { clone = "YPR_infantry_4_entity" name = "YPR_VAL_administration_infantry_4_entity" }
+entity = { clone = "YPR_ADISCORD_militia_4_entity" name = "YPR_VAL_administration_ADISCORD_militia_4_entity" }
+entity = { clone = "YPR_ADISCORD_territorial_4_entity" name = "YPR_VAL_administration_ADISCORD_territorial_4_entity" }
+entity = { clone = "YPR_mountaineers_4_entity" name = "YPR_VAL_administration_mountaineers_4_entity" }
+entity = { clone = "STP_infantry_5_entity" name = "YPR_infantry_5_entity" pdxmesh = "ADISCORD_YPR_field_mg_mesh" }
+entity = { clone = "YPR_infantry_5_entity" name = "YPR_ADISCORD_militia_5_entity" }
+entity = { clone = "YPR_infantry_5_entity" name = "YPR_ADISCORD_territorial_5_entity" }
+entity = { clone = "YPR_infantry_5_entity" name = "YPR_mountaineers_5_entity" }
+entity = { clone = "YPR_infantry_5_entity" name = "YPR_VAL_administration_infantry_5_entity" }
+entity = { clone = "YPR_ADISCORD_militia_5_entity" name = "YPR_VAL_administration_ADISCORD_militia_5_entity" }
+entity = { clone = "YPR_ADISCORD_territorial_5_entity" name = "YPR_VAL_administration_ADISCORD_territorial_5_entity" }
+entity = { clone = "YPR_mountaineers_5_entity" name = "YPR_VAL_administration_mountaineers_5_entity" }
+entity = { clone = "STP_infantry_6_entity" name = "YPR_infantry_6_entity" pdxmesh = "ADISCORD_YPR_field_mg_mesh" }
+entity = { clone = "YPR_infantry_6_entity" name = "YPR_ADISCORD_militia_6_entity" }
+entity = { clone = "YPR_infantry_6_entity" name = "YPR_ADISCORD_territorial_6_entity" }
+entity = { clone = "YPR_infantry_6_entity" name = "YPR_mountaineers_6_entity" }
+entity = { clone = "YPR_infantry_6_entity" name = "YPR_VAL_administration_infantry_6_entity" }
+entity = { clone = "YPR_ADISCORD_militia_6_entity" name = "YPR_VAL_administration_ADISCORD_militia_6_entity" }
+entity = { clone = "YPR_ADISCORD_territorial_6_entity" name = "YPR_VAL_administration_ADISCORD_territorial_6_entity" }
+entity = { clone = "YPR_mountaineers_6_entity" name = "YPR_VAL_administration_mountaineers_6_entity" }
+entity = { clone = "STP_infantry_7_entity" name = "YPR_infantry_7_entity" pdxmesh = "ADISCORD_YPR_field_mg_mesh" }
+entity = { clone = "YPR_infantry_7_entity" name = "YPR_ADISCORD_militia_7_entity" }
+entity = { clone = "YPR_infantry_7_entity" name = "YPR_ADISCORD_territorial_7_entity" }
+entity = { clone = "YPR_infantry_7_entity" name = "YPR_mountaineers_7_entity" }
+entity = { clone = "YPR_infantry_7_entity" name = "YPR_VAL_administration_infantry_7_entity" }
+entity = { clone = "YPR_ADISCORD_militia_7_entity" name = "YPR_VAL_administration_ADISCORD_militia_7_entity" }
+entity = { clone = "YPR_ADISCORD_territorial_7_entity" name = "YPR_VAL_administration_ADISCORD_territorial_7_entity" }
+entity = { clone = "YPR_mountaineers_7_entity" name = "YPR_VAL_administration_mountaineers_7_entity" }
+entity = { clone = "STP_infantry_8_entity" name = "YPR_infantry_8_entity" pdxmesh = "ADISCORD_YPR_field_mg_mesh" }
+entity = { clone = "YPR_infantry_8_entity" name = "YPR_ADISCORD_militia_8_entity" }
+entity = { clone = "YPR_infantry_8_entity" name = "YPR_ADISCORD_territorial_8_entity" }
+entity = { clone = "YPR_infantry_8_entity" name = "YPR_mountaineers_8_entity" }
+entity = { clone = "YPR_infantry_8_entity" name = "YPR_VAL_administration_infantry_8_entity" }
+entity = { clone = "YPR_ADISCORD_militia_8_entity" name = "YPR_VAL_administration_ADISCORD_militia_8_entity" }
+entity = { clone = "YPR_ADISCORD_territorial_8_entity" name = "YPR_VAL_administration_ADISCORD_territorial_8_entity" }
+entity = { clone = "YPR_mountaineers_8_entity" name = "YPR_VAL_administration_mountaineers_8_entity" }
+entity = { clone = "STP_infantry_entity" name = "TFF_infantry_entity" pdxmesh = "ADISCORD_TFF_field_rifle_mesh" }
+entity = { clone = "TFF_infantry_entity" name = "TFF_ADISCORD_militia_entity" }
+entity = { clone = "TFF_infantry_entity" name = "TFF_ADISCORD_territorial_entity" }
+entity = { clone = "TFF_infantry_entity" name = "TFF_mountaineers_entity" }
+entity = { clone = "TFF_infantry_entity" name = "TFF_frontier_defense_confederation_infantry_entity" }
+entity = { clone = "TFF_ADISCORD_militia_entity" name = "TFF_frontier_defense_confederation_ADISCORD_militia_entity" }
+entity = { clone = "TFF_ADISCORD_territorial_entity" name = "TFF_frontier_defense_confederation_ADISCORD_territorial_entity" }
+entity = { clone = "TFF_mountaineers_entity" name = "TFF_frontier_defense_confederation_mountaineers_entity" }
+entity = { clone = "STP_infantry_2_entity" name = "TFF_infantry_2_entity" pdxmesh = "ADISCORD_TFF_field_mg_mesh" }
+entity = { clone = "TFF_infantry_2_entity" name = "TFF_ADISCORD_militia_2_entity" }
+entity = { clone = "TFF_infantry_2_entity" name = "TFF_ADISCORD_territorial_2_entity" }
+entity = { clone = "TFF_infantry_2_entity" name = "TFF_mountaineers_2_entity" }
+entity = { clone = "TFF_infantry_2_entity" name = "TFF_frontier_defense_confederation_infantry_2_entity" }
+entity = { clone = "TFF_ADISCORD_militia_2_entity" name = "TFF_frontier_defense_confederation_ADISCORD_militia_2_entity" }
+entity = { clone = "TFF_ADISCORD_territorial_2_entity" name = "TFF_frontier_defense_confederation_ADISCORD_territorial_2_entity" }
+entity = { clone = "TFF_mountaineers_2_entity" name = "TFF_frontier_defense_confederation_mountaineers_2_entity" }
+entity = { clone = "STP_infantry_3_entity" name = "TFF_infantry_3_entity" pdxmesh = "ADISCORD_TFF_field_mg_mesh" }
+entity = { clone = "TFF_infantry_3_entity" name = "TFF_ADISCORD_militia_3_entity" }
+entity = { clone = "TFF_infantry_3_entity" name = "TFF_ADISCORD_territorial_3_entity" }
+entity = { clone = "TFF_infantry_3_entity" name = "TFF_mountaineers_3_entity" }
+entity = { clone = "TFF_infantry_3_entity" name = "TFF_frontier_defense_confederation_infantry_3_entity" }
+entity = { clone = "TFF_ADISCORD_militia_3_entity" name = "TFF_frontier_defense_confederation_ADISCORD_militia_3_entity" }
+entity = { clone = "TFF_ADISCORD_territorial_3_entity" name = "TFF_frontier_defense_confederation_ADISCORD_territorial_3_entity" }
+entity = { clone = "TFF_mountaineers_3_entity" name = "TFF_frontier_defense_confederation_mountaineers_3_entity" }
+entity = { clone = "STP_infantry_4_entity" name = "TFF_infantry_4_entity" pdxmesh = "ADISCORD_TFF_field_mg_mesh" }
+entity = { clone = "TFF_infantry_4_entity" name = "TFF_ADISCORD_militia_4_entity" }
+entity = { clone = "TFF_infantry_4_entity" name = "TFF_ADISCORD_territorial_4_entity" }
+entity = { clone = "TFF_infantry_4_entity" name = "TFF_mountaineers_4_entity" }
+entity = { clone = "TFF_infantry_4_entity" name = "TFF_frontier_defense_confederation_infantry_4_entity" }
+entity = { clone = "TFF_ADISCORD_militia_4_entity" name = "TFF_frontier_defense_confederation_ADISCORD_militia_4_entity" }
+entity = { clone = "TFF_ADISCORD_territorial_4_entity" name = "TFF_frontier_defense_confederation_ADISCORD_territorial_4_entity" }
+entity = { clone = "TFF_mountaineers_4_entity" name = "TFF_frontier_defense_confederation_mountaineers_4_entity" }
+entity = { clone = "STP_infantry_5_entity" name = "TFF_infantry_5_entity" pdxmesh = "ADISCORD_TFF_field_mg_mesh" }
+entity = { clone = "TFF_infantry_5_entity" name = "TFF_ADISCORD_militia_5_entity" }
+entity = { clone = "TFF_infantry_5_entity" name = "TFF_ADISCORD_territorial_5_entity" }
+entity = { clone = "TFF_infantry_5_entity" name = "TFF_mountaineers_5_entity" }
+entity = { clone = "TFF_infantry_5_entity" name = "TFF_frontier_defense_confederation_infantry_5_entity" }
+entity = { clone = "TFF_ADISCORD_militia_5_entity" name = "TFF_frontier_defense_confederation_ADISCORD_militia_5_entity" }
+entity = { clone = "TFF_ADISCORD_territorial_5_entity" name = "TFF_frontier_defense_confederation_ADISCORD_territorial_5_entity" }
+entity = { clone = "TFF_mountaineers_5_entity" name = "TFF_frontier_defense_confederation_mountaineers_5_entity" }
+entity = { clone = "STP_infantry_6_entity" name = "TFF_infantry_6_entity" pdxmesh = "ADISCORD_TFF_field_mg_mesh" }
+entity = { clone = "TFF_infantry_6_entity" name = "TFF_ADISCORD_militia_6_entity" }
+entity = { clone = "TFF_infantry_6_entity" name = "TFF_ADISCORD_territorial_6_entity" }
+entity = { clone = "TFF_infantry_6_entity" name = "TFF_mountaineers_6_entity" }
+entity = { clone = "TFF_infantry_6_entity" name = "TFF_frontier_defense_confederation_infantry_6_entity" }
+entity = { clone = "TFF_ADISCORD_militia_6_entity" name = "TFF_frontier_defense_confederation_ADISCORD_militia_6_entity" }
+entity = { clone = "TFF_ADISCORD_territorial_6_entity" name = "TFF_frontier_defense_confederation_ADISCORD_territorial_6_entity" }
+entity = { clone = "TFF_mountaineers_6_entity" name = "TFF_frontier_defense_confederation_mountaineers_6_entity" }
+entity = { clone = "STP_infantry_7_entity" name = "TFF_infantry_7_entity" pdxmesh = "ADISCORD_TFF_field_mg_mesh" }
+entity = { clone = "TFF_infantry_7_entity" name = "TFF_ADISCORD_militia_7_entity" }
+entity = { clone = "TFF_infantry_7_entity" name = "TFF_ADISCORD_territorial_7_entity" }
+entity = { clone = "TFF_infantry_7_entity" name = "TFF_mountaineers_7_entity" }
+entity = { clone = "TFF_infantry_7_entity" name = "TFF_frontier_defense_confederation_infantry_7_entity" }
+entity = { clone = "TFF_ADISCORD_militia_7_entity" name = "TFF_frontier_defense_confederation_ADISCORD_militia_7_entity" }
+entity = { clone = "TFF_ADISCORD_territorial_7_entity" name = "TFF_frontier_defense_confederation_ADISCORD_territorial_7_entity" }
+entity = { clone = "TFF_mountaineers_7_entity" name = "TFF_frontier_defense_confederation_mountaineers_7_entity" }
+entity = { clone = "STP_infantry_8_entity" name = "TFF_infantry_8_entity" pdxmesh = "ADISCORD_TFF_field_mg_mesh" }
+entity = { clone = "TFF_infantry_8_entity" name = "TFF_ADISCORD_militia_8_entity" }
+entity = { clone = "TFF_infantry_8_entity" name = "TFF_ADISCORD_territorial_8_entity" }
+entity = { clone = "TFF_infantry_8_entity" name = "TFF_mountaineers_8_entity" }
+entity = { clone = "TFF_infantry_8_entity" name = "TFF_frontier_defense_confederation_infantry_8_entity" }
+entity = { clone = "TFF_ADISCORD_militia_8_entity" name = "TFF_frontier_defense_confederation_ADISCORD_militia_8_entity" }
+entity = { clone = "TFF_ADISCORD_territorial_8_entity" name = "TFF_frontier_defense_confederation_ADISCORD_territorial_8_entity" }
+entity = { clone = "TFF_mountaineers_8_entity" name = "TFF_frontier_defense_confederation_mountaineers_8_entity" }
+# END ADISCORD northern infantry

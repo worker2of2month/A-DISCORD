@@ -57,17 +57,11 @@ class OitfortTerminalCleanupTests(unittest.TestCase):
         reunified = named_block(triggers, "ADISCORD_vorkerland_reunification_verified")
         self.assertIn("NOT = { country_exists = WTD }", reunified)
 
-    def test_old_save_reconciles_wtd_on_startup(self):
+    def test_startup_does_not_migrate_old_reunifications(self):
         on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         startup = named_block(on_actions, "on_startup")
-        for token in (
-            "has_global_flag = ADISCORD_vorkerland_reunification_verified",
-            "country_exists = WRK",
-            "country_exists = WTD",
-            "WRK = { ADISCORD_vorkerland_absorb_wtd_after_reunification = yes }",
-            "ADISCORD_vorkerland_wtd_terminal_cleanup_v1",
-        ):
-            self.assertIn(token, startup)
+        self.assertNotIn("ADISCORD_vorkerland_absorb_wtd_after_reunification", startup)
+        self.assertNotIn("ADISCORD_vorkerland_wtd_terminal_cleanup_v1", startup)
 
     def test_postwar_core_decision_describes_automatic_absorption(self):
         decisions = read("common/decisions/ADISCORD_vorkerland_decisions.txt")

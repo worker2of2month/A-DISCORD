@@ -637,3 +637,55 @@ defined_text = {
 	text = { trigger = { check_variable = { var = STP_pf_nod_connected value = 1 compare = equals } } localization_key = STP_pf_advisers_connected }
 	text = { localization_key = STP_pf_advisers_disconnected }
 }
+
+defined_text = {
+	name = STPGetPostwarCabinet
+	text = { trigger = { check_variable = { var = STP_pw_party_cabinet value = 1 compare = equals } } localization_key = STP_pw_party_cabinet_apparatus_status }
+	text = { trigger = { check_variable = { var = STP_pw_party_cabinet value = 2 compare = equals } } localization_key = STP_pw_party_cabinet_districts_status }
+	text = { trigger = { check_variable = { var = STP_pw_party_cabinet value = 3 compare = equals } } localization_key = STP_pw_party_cabinet_delegates_status }
+	text = { localization_key = STP_pw_party_cabinet_unset_status }
+}
+
+defined_text = {
+	name = STPGetPostwarCommand
+	text = { trigger = { check_variable = { var = STP_pw_party_command value = 1 compare = equals } } localization_key = STP_pw_party_command_army_status }
+	text = { trigger = { check_variable = { var = STP_pw_party_command value = 2 compare = equals } } localization_key = STP_pw_party_command_security_status }
+	text = { localization_key = STP_pw_party_command_unset_status }
+}
+
+defined_text = {
+	name = STPGetPostwarCredit
+	text = { trigger = { check_variable = { var = STP_pw_party_credit value = 1 compare = equals } } localization_key = STP_pw_party_credit_contracts_status }
+	text = { trigger = { check_variable = { var = STP_pw_party_credit value = 2 compare = equals } } localization_key = STP_pw_party_credit_requisition_status }
+	text = { localization_key = STP_pw_party_credit_unset_status }
+}
+
+defined_text = {
+	name = STPGetPostwarMission
+	text = { trigger = { check_variable = { var = STP_pw_party_mission_policy value = 1 compare = equals } } localization_key = STP_pw_party_mission_policy_joint_status }
+	text = { trigger = { check_variable = { var = STP_pw_party_mission_policy value = 2 compare = equals } } localization_key = STP_pw_party_mission_policy_domestic_status }
+	text = { localization_key = STP_pw_party_mission_policy_unset_status }
+}
+
+defined_text = {
+	name = STPGetPostwarNorth
+	text = { trigger = { has_country_flag = STP_pw_party_nod_compact } localization_key = STP_pw_party_north_compact_status }
+	text = { trigger = { is_subject_of = NOD } localization_key = STP_pw_party_north_subject_status }
+	text = { trigger = { has_country_flag = STP_pw_party_nod_invasion_defeated } localization_key = STP_pw_party_north_victory_status }
+	text = { trigger = { has_country_flag = STP_pw_party_nod_invasion_active } localization_key = STP_pw_party_north_war_status }
+	text = { trigger = { has_country_flag = STP_pw_party_compact_pending } localization_key = STP_pw_party_north_pending_status }
+	text = { trigger = { has_country_flag = STP_pw_party_compact_refused } localization_key = STP_pw_party_north_refused_status }
+	text = { trigger = { has_country_flag = STP_pw_party_nod_threat_active } localization_key = STP_pw_party_north_threat_status }
+	text = { localization_key = STP_pw_party_north_unset_status }
+}
+defined_text = {
+	name = STPGetPostwarCoalitionReport
+	text = { trigger = { tag = STP has_country_flag = STP_cw_postwar } localization_key = STP_pw_party_coalition_report }
+	text = { localization_key = STP_pw_party_no_coalition_report }
+}
+defined_text = {
+	name = STPGetPostwarPromise
+	text = { trigger = { has_completed_focus = STP_party_district_compact } localization_key = STP_pw_party_promise_districts }
+	text = { trigger = { has_completed_focus = STP_ROTATE_DISTRICT_COMMAND } localization_key = STP_pw_party_promise_rotation }
+	text = { localization_key = STP_pw_party_promise_emergency }
+}

@@ -144,3 +144,13 @@ STP_postwar_administration = {
     visible_when_empty = yes
     priority = 19
 }
+
+STP_hegemony_administration = {
+	allowed = { tag = STS }
+	visible = {
+		has_country_flag = STP_cw_postwar
+		has_completed_focus = STP_pc_heg_administrations
+		check_variable = { var = STP_pc_course value = 1 compare = equals }
+	}
+	visible_when_empty = no
+}

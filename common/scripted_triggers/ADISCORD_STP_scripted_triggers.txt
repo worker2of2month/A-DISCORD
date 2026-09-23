@@ -1769,3 +1769,56 @@ STP_heg_val_administration_available = {
 		AND = { NOT = { VAL = { exists = yes } } any_owned_state = { is_core_of = VAL } }
 	}
 }
+
+# COUNTRY STP: mandates are historical choices; support is checked at each settlement.
+STP_pw_party_story_current = {
+	STP_pf_active = yes
+	has_country_flag = STP_cw_postwar
+	has_capitulated = no
+}
+STP_pw_party_cabinet_backed = {
+	OR = {
+		AND = { check_variable = { var = STP_pw_party_cabinet value = 1 compare = equals } check_variable = { var = STP_pf_conservatives_support value = 60 compare = greater_than_or_equals } }
+		AND = { check_variable = { var = STP_pw_party_cabinet value = 2 compare = equals } check_variable = { var = STP_pf_borons_support value = 60 compare = greater_than_or_equals } }
+		AND = { check_variable = { var = STP_pw_party_cabinet value = 3 compare = equals } check_variable = { var = STP_pf_radicals_support value = 60 compare = greater_than_or_equals } }
+	}
+}
+STP_pw_party_compact_coalition = {
+	custom_trigger_tooltip = { tooltip = STP_pw_party_cabinet_backed_tt STP_pw_party_cabinet_backed = yes }
+	custom_trigger_tooltip = {
+		tooltip = STP_pw_party_command_backed_tt
+		OR = {
+			AND = { check_variable = { var = STP_pw_party_command value = 1 compare = equals } check_variable = { var = STP_pf_army_support value = 60 compare = greater_than_or_equals } }
+			AND = { check_variable = { var = STP_pw_party_command value = 2 compare = equals } check_variable = { var = STP_pf_security_support value = 60 compare = greater_than_or_equals } check_variable = { var = STP_pf_army_support value = 45 compare = greater_than_or_equals } }
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_pw_party_supply_backed_tt
+		has_completed_focus = STP_pw_party_officer_school
+		OR = { has_completed_focus = STP_pw_party_supply_service has_completed_focus = STP_pw_party_professional_service }
+		check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals }
+	}
+	custom_trigger_tooltip = {
+		tooltip = STP_pw_party_credit_backed_tt
+		OR = {
+			AND = { check_variable = { var = STP_pw_party_credit value = 1 compare = equals } check_variable = { var = STP_pf_merchants_support value = 60 compare = greater_than_or_equals } }
+			AND = { check_variable = { var = STP_pw_party_credit value = 2 compare = equals } check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } check_variable = { var = STP_pf_merchants_support value = 45 compare = greater_than_or_equals } }
+		}
+	}
+}
+# COUNTRY NOD: a live reply can settle only this outstanding offer, before hostilities.
+STP_pw_party_compact_current = {
+	tag = NOD
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	STP = {
+		exists = yes
+		STP_pw_party_story_current = yes
+		STP_pw_party_nod_threat_current = yes
+		has_country_flag = STP_pw_party_compact_pending
+		NOT = { has_country_flag = STP_pw_party_nod_compact }
+		STP_pw_party_compact_coalition = yes
+		check_variable = { var = ADISCORD_economy_treasury value = 1350 compare = greater_than_or_equals }
+	}
+}

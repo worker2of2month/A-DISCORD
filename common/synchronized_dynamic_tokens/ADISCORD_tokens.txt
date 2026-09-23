@@ -81,3 +81,4 @@ STP_ps_reorg_3
 
 STP_ps_opposition_preparation_second
 STP_ps_val_departure
+STP_pw_party_nod_invasion_countdown

@@ -1166,7 +1166,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_GUARANTEE_MINISTERS
-		icon = GFX_focus_STP_Side_With_The_Party
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS
 		relative_position_id = STP_Govern_In_His_Name
 		x = -8
 		y = 2
@@ -1261,7 +1261,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ROTATE_DISTRICT_COMMAND
-		icon = GFX_focus_generic_military_mission
+		icon = GFX_focus_STP_ROTATE_DISTRICT_COMMAND
 		relative_position_id = STP_Govern_In_His_Name
 		x = 6
 		y = 3
@@ -1569,7 +1569,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_press_office
-		icon = GFX_goal_generic_propaganda
+		icon = GFX_focus_STP_cw_press_office
 		relative_position_id = STP_Govern_In_His_Name
 		x = -3
 		y = 4
@@ -3470,6 +3470,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			country_event = { id = ADISCORD_STP_pc.34 days = 1 }
 			unlock_decision_tooltip = { decision = STP_pw_party_refit_guard show_effect_tooltip = yes } custom_effect_tooltip = STP_pw_party_refit_guard_desc
 			army_experience = 20
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_army_register_delta } }
@@ -3572,6 +3573,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			country_event = { id = ADISCORD_STP_pc.39 days = 1 }
 			remove_ideas = STP_pw_party_last_purge
 			add_stability = 0.05
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_settled_state_delta } }
@@ -3771,6 +3773,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			country_event = { id = ADISCORD_STP_pc.35 days = 1 }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_revenue_service_post_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.12 }
@@ -4048,6 +4051,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			country_event = { id = ADISCORD_STP_pc.38 days = 1 }
 			custom_effect_tooltip = STP_pf_advisers_program_2_tt
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 11 } }
 
@@ -4103,6 +4107,7 @@ focus_tree = {
 			OR = {
 				is_subject_of = NOD
 				has_country_flag = STP_pw_party_nod_invasion_defeated
+				has_country_flag = STP_pw_party_nod_compact
 				NOD = { exists = no }
 				NOD = { has_capitulated = yes }
 				NOD = { is_subject = yes }
@@ -5888,6 +5893,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 6 }
 		completion_reward = {
+			unlock_decision_tooltip = { decision = STP_pw_party_offer_compact }
 			add_timed_idea = { idea = STP_cw_arsenal_shifts days = 180 }
 			if = {
 				limit = { capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT free_building_slots = { building = arms_factory size > 0 include_locked = yes } } }
@@ -6148,7 +6154,11 @@ focus_tree = {
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_country_development_global_growth_factor value = 0.05 }
 				STP_pw_refresh_modifier = yes
-				STP_pw_reconcile_postwar_interactivity = yes
+				if = {
+					limit = { NOT = { has_country_flag = STP_pw_propaganda_slot_1 } }
+					ADISCORD_campaign_slot_grant = yes
+					set_country_flag = STP_pw_propaganda_slot_1
+				}
 			}
 		}
 	}
@@ -6239,7 +6249,11 @@ focus_tree = {
 				add_to_variable = { var = STP_pw_ADISCORD_country_development_state_growth_factor value = 0.05 }
 				add_to_variable = { var = STP_pw_ADISCORD_country_development_economic_growth_factor value = 0.05 }
 				STP_pw_refresh_modifier = yes
-				STP_pw_reconcile_postwar_interactivity = yes
+				if = {
+					limit = { NOT = { has_country_flag = STP_pw_propaganda_slot_2 } }
+					ADISCORD_campaign_slot_grant = yes
+					set_country_flag = STP_pw_propaganda_slot_2
+				}
 			}
 		}
 	}

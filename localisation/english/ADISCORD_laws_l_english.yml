@@ -227,3 +227,4 @@
  ADISCORD_training_reserve_cycles_desc: "Reservists return for scheduled exercises. Trained replacements join the army faster, but exercises increase military spending and interrupt civilian work."
  ADISCORD_internal_security_civilian_oversight: "Civilian Police Oversight"
  ADISCORD_internal_security_civilian_oversight_desc: "Independent commissions investigate complaints and review police conduct. Accountability builds trust, but adds review costs and limits emergency powers."
+ ADISCORD_society_type_scripted_only_tt: "Social structure is set at the start and changes only through focuses and story events."

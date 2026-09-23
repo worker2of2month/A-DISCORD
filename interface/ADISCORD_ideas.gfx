@@ -75,6 +75,10 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/STP/Ministers/minister_STP_portrait_STP_Cyan_Crowe.png"
 	}
 ###VAL
+	spriteType = {
+		name = "GFX_idea_VAL_contract_service"
+		texturefile = "gfx/interface/ideas/VAL/idea_VAL_contract_service.png"
+	}
  #ideas
  	spriteType = {
 	  	name = "GFX_idea_VAL_mercenary_state"

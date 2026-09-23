@@ -140,4 +140,5 @@ ADISCORD_TFF_become_nod_subject = {
 		}
 		ADISCORD_economy_mark_dirty = yes
 	}
+	STP_cw_queue_peace_reconciliation = yes
 }

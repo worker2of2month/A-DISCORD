@@ -103,7 +103,7 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
             self.fail("Entity clone cycle")
 
         expected = {}
-        for prefix in ("STP", "STS", "NOD", "VAL", "CIN", "OSF", "APH"):
+        for prefix in ("STP", "STS", "NOD", "VAL", "CIN", "OSF", "APH", "COF", "YPR", "TFF"):
             for level in range(8):
                 expected[custom_entity_name(prefix + "_infantry", level)] = "rifle" if level == 0 else "mg"
         for name in ("ADISCORD_STP_party_entity", "ADISCORD_STS_regular_entity", "ADISCORD_VAL_regular_entity"):

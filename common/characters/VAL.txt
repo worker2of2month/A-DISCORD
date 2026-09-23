@@ -232,17 +232,14 @@ characters = {
     STP_VAL_Andrei_Rudnev = {
         name = VAL_Andrei_Rudnev
         portraits = { civilian = { large = GFX_portrait_VAL_Andrei_Rudnev } }
-        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
     }
     STS_VAL_Andrei_Rudnev = {
         name = VAL_Andrei_Rudnev
         portraits = { civilian = { large = GFX_portrait_VAL_Andrei_Rudnev } }
-        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
     }
     NOD_VAL_Contract_Council = {
         name = NOD_VAL_Contract_Council
         portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
-        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
     }
     ECA_Contract_Council = {
         name = ECA_Contract_Council
@@ -257,49 +254,21 @@ characters = {
     YPR_Contract_Council = {
         name = YPR_Contract_Council
         portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
-        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
     }
 
 	VAL_Anton_Rein = {
 		name = VAL_Anton_Rein
 		portraits = { army = { large = GFX_Portrait_Forul_Generic_4 } }
-		corps_commander = {
-			traits = { commando }
-			skill = 2
-			attack_skill = 2
-			defense_skill = 2
-			planning_skill = 2
-			logistics_skill = 2
-			legacy_id = -1
-		}
 	}
 
 	VAL_Irina_Karst = {
 		name = VAL_Irina_Karst
 		gender = female
 		portraits = { army = { large = GFX_Portrait_Forul_Generic_5 } }
-		corps_commander = {
-			traits = { organizer }
-			skill = 2
-			attack_skill = 2
-			defense_skill = 2
-			planning_skill = 2
-			logistics_skill = 2
-			legacy_id = -1
-		}
 	}
 
 	VAL_Viktor_Bran = {
 		name = VAL_Viktor_Bran
 		portraits = { army = { large = GFX_Portrait_Forul_Generic_6 } }
-		corps_commander = {
-			traits = { panzer_leader }
-			skill = 4
-			attack_skill = 4
-			defense_skill = 4
-			planning_skill = 4
-			logistics_skill = 4
-			legacy_id = -1
-		}
 	}
 }

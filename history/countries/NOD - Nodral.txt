@@ -80,3 +80,6 @@ set_autonomy = {
 	target = AIN
 	autonomous_state = autonomy_colony
 }
+
+# The administration effect activates this dormant political role.
+recruit_character = NOD_VAL_Contract_Council

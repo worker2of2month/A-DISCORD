@@ -19,6 +19,25 @@ STARTING_PROFILE_MANIFEST = ROOT / "tools" / "data" / "adiscord_starting_technol
 
 
 class CompactTechnologyTreeContractTests(unittest.TestCase):
+    def test_weapon_programmes_target_registered_subunits(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        units = {}
+        for filename in ("ADISCORD_air_units.txt", "ADISCORD_naval_units.txt"):
+            source = (ROOT / "common/units" / filename).read_text(encoding="utf-8-sig")
+            for root in parse_clausewitz(source):
+                for unit in root.value:
+                    units[unit.key] = unit.value
+        for branch in generator.BRANCHES:
+            for index, tech in enumerate(branch.techs):
+                if tech.key not in generator.NAVAL_AIR_WEAPON_EFFECTS:
+                    continue
+                for effect in generator.effects_for(branch, index):
+                    for entry in parse_clausewitz(effect):
+                        if isinstance(entry.value, list):
+                            with self.subTest(technology=tech.id, target=entry.key):
+                                self.assertIn(entry.key, set(units))
+
 
     @staticmethod
     def _named_gui_block(text: str, kind: str, name: str) -> str:

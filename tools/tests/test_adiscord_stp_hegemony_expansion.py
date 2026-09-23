@@ -117,7 +117,7 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
     def test_nod_acceptance_creates_an_annexable_puppet(self) -> None:
         events = read("events/ADISCORD_STP_events.txt")
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
-        decisions = read("common/decisions/ADISCORD_STP_hegemony_decisions.txt")
+        decisions = read("common/decisions/ADISCORD_STP_decisions.txt")
         self.assertIn("set_country_flag = STP_pc_nod_client_pending", events)
         finalizer = named_block(effects, "STP_pc_finalize_nod_client_subject")
         self.assertIn("puppet = NOD", finalizer)
@@ -164,7 +164,7 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
 
     def test_provisional_administrations_are_closed_and_annexable(self) -> None:
         autonomy = read("common/autonomous_states/ADISCORD_STP_provisional_administration.txt")
-        decisions = read("common/decisions/ADISCORD_STP_hegemony_decisions.txt")
+        decisions = read("common/decisions/ADISCORD_STP_decisions.txt")
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         self.assertIn("id = autonomy_STP_provisional_administration", autonomy)
         self.assertIn(
@@ -175,7 +175,7 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
             self.assertIn(f"STP_heg_establish_{key}_administration = {{", decisions)
             self.assertIn(f"STP_heg_annex_{key}_administration = {{", decisions)
         self.assertEqual(decisions.count("days_remove = 90"), 4)
-        self.assertEqual(decisions.count("cost = 100"), 4)
+        self.assertEqual(named_block(decisions, "STP_hegemony_administration").count("cost = 100"), 4)
         self.assertGreaterEqual(effects.count("autonomy_STP_provisional_administration"), 8)
 
     def test_defeat_receipts_gate_new_administrations(self) -> None:

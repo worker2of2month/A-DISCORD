@@ -407,7 +407,7 @@ VAL_update_refugees_weekly = {
 }
 
 VAL_logistics_market_weekly = {
-	VAL_refresh_trade_network = yes
+	if = { limit = { VAL_trade_network_changed = yes } VAL_refresh_trade_network = yes }
 	if = { limit = { VAL_trade_corridors_unlocked = yes } VAL_pay_trade_corridors = yes }
 	VAL_update_refugees_weekly = yes
 	VAL_update_black_market_weekly = yes
