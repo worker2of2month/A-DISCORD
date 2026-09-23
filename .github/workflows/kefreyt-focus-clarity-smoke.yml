@@ -19,8 +19,12 @@ jobs:
         run: python -B -m unittest tools.tests.test_adiscord_val_focus_clarity
       - name: Refugee balance regression
         run: python -B -m unittest tools.tests.test_adiscord_val_refugee_balance
-      - name: Refugee system regression
-        run: python -B -m unittest tools.tests.test_adiscord_val_refugees
+      - name: Refugee admission regression
+        run: python -B -m unittest tools.tests.test_adiscord_val_refugees.RefugeeAdmissionTests
+      - name: Refugee training regression
+        run: python -B -m unittest tools.tests.test_adiscord_val_refugees.RefugeeTrainingTests
+      - name: Refugee training cost contract
+        run: python -B -m unittest tools.tests.test_adiscord_val_refugees.WastelandCampaignTests.test_custom_training_price_uses_exact_boundaries
       - name: Focus layout contract
         run: python -B -m unittest tools.tests.test_val_contract_ui.TestValExpansionRoute.test_expansion_is_split_into_early_war_bands_and_late_continuation
       - name: Scripted peace bus
