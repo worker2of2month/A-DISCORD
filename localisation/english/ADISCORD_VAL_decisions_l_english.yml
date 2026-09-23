@@ -25,7 +25,7 @@
  VAL_State_Above_Captains: "The State Above the Captains"
  VAL_State_Above_Captains_desc: "The contract system will outlive its founders only when no company can consider itself the state's equal."
  VAL_Quarterly_Contract_Norm: "Quarterly Contract Quota"
- VAL_Quarterly_Contract_Norm_desc:0 "Every ninety days the arsenals must fulfil an export order. Deliver 40000 rifles for 10 political power, or pay independent contractors 1000 treasury and retain the weapons. An arsenal delivery improves reputation and earns military experience; subcontracting only preserves reputation. Early payment does not bring the next quarter forward."
+ VAL_Quarterly_Contract_Norm_desc:0 "Every ninety days the arsenals must fulfil an export order. Deliver 40000 rifles for §Y10§! £political_power_texticon, or pay independent contractors 1000 treasury and retain the weapons. An arsenal delivery improves reputation and earns military experience; subcontracting only preserves reputation. Early payment does not bring the next quarter forward."
  VAL_Contract_Accounting_Office: "Industrial Budget"
  VAL_Contract_Accounting_Office_desc: "Accounting for state orders will bring arsenal accounts, tax payments and production plans together. The reform increases recurring treasury income and reduces administrative expenditure."
  VAL_Salvage_Every_Barrel: "Restoring Weapon Reserves"
@@ -68,25 +68,25 @@
  VAL_operations_legend: "§RKefreyt§! / lighter - administration\n§BLocal authority§!   §OEnemy§!   §gOther controller§!"
  VAL_focus_operations_map_unlock_tt: "Unlocks the §YMilitary Operations§! decision category and an interactive map of neighbouring regions."
  VAL_ops_finance_cin_contacts: "Contacts with [CIN.GetNameDef]"
- VAL_ops_finance_cin_contacts_desc: "For £political_power_texticon §Y10§! and £ADISCORD_economy_treasury_texticon §Y50§!, [CIN.GetName] will decide within §Y21 days§! whether to admit Kefreyt's brokers. Acceptance raises the network by §Y1 level§! (§G+2%§! trade income, capped at §Y3§! / §G6%§!). Refusal, disappearance, capitulation or war refunds §Y50§!; political costs are not refunded. Current network: §Y[?VAL_CIN_influence|0]/3§!."
+ VAL_ops_finance_cin_contacts_desc: "For §Y10§! £political_power_texticon and £ADISCORD_economy_treasury_texticon §Y50§!, [CIN.GetName] will decide within §Y21 days§! whether to admit Kefreyt's brokers. Acceptance raises the network by §Y1 level§! (§G+2%§! trade income, capped at §Y3§! / §G6%§!). Refusal, disappearance, capitulation or war refunds §Y50§!; political costs are not refunded. Current network: §Y[?VAL_CIN_influence|0]/3§!."
  VAL_ops_sell_rifles_to_cin: "Rifles for [CIN.GetNameDef]"
- VAL_ops_sell_rifles_to_cin_desc: "Reserve £infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§! rifles. After §Y21 days§!, [CIN.GetName] will accept or reject the shipment. Acceptance gives Kefreyt £ADISCORD_economy_treasury_texticon §G[VALGetExportIncome]§! and raises the buyer's network by §Y2 levels§! (up to §Y3§!, each granting §G2%§! trade income). Refusal, disappearance, capitulation or war returns the rifles. After Military Adviser Contracts, the offer will go to the second northern buyer if it can still accept the shipment. £political_power_texticon §Y10§! is not refunded. Quantity and revenue are fixed when the reserve is placed."
+ VAL_ops_sell_rifles_to_cin_desc: "Reserve £infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§! rifles. After §Y21 days§!, [CIN.GetName] will accept or reject the shipment. Acceptance gives Kefreyt £ADISCORD_economy_treasury_texticon §G[VALGetExportIncome]§! and raises the buyer's network by §Y2 levels§! (up to §Y3§!, each granting §G2%§! trade income). Refusal, disappearance, capitulation or war returns the rifles. After Military Adviser Contracts, the offer will go to the second northern buyer if it can still accept the shipment. §Y10§! £political_power_texticon is not refunded. Quantity and revenue are fixed when the reserve is placed."
  VAL_ops_finance_osf_contacts: "Contacts with [OSF.GetNameDef]"
- VAL_ops_finance_osf_contacts_desc: "For £political_power_texticon §Y10§! and £ADISCORD_economy_treasury_texticon §Y50§!, [OSF.GetName] will decide within §Y21 days§! whether to admit Kefreyt's brokers. Acceptance raises the network by §Y1 level§! (§G+2%§! trade income, capped at §Y3§! / §G6%§!). Refusal, disappearance, capitulation or war refunds §Y50§!; political costs are not refunded. Current network: §Y[?VAL_OSF_influence|0]/3§!."
+ VAL_ops_finance_osf_contacts_desc: "For §Y10§! £political_power_texticon and £ADISCORD_economy_treasury_texticon §Y50§!, [OSF.GetName] will decide within §Y21 days§! whether to admit Kefreyt's brokers. Acceptance raises the network by §Y1 level§! (§G+2%§! trade income, capped at §Y3§! / §G6%§!). Refusal, disappearance, capitulation or war refunds §Y50§!; political costs are not refunded. Current network: §Y[?VAL_OSF_influence|0]/3§!."
  VAL_ops_sell_rifles_to_osf: "Rifles for [OSF.GetNameDef]"
- VAL_ops_sell_rifles_to_osf_desc: "Reserve £infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§! rifles. After §Y21 days§!, [OSF.GetName] will accept or reject the shipment. Acceptance gives Kefreyt £ADISCORD_economy_treasury_texticon §G[VALGetExportIncome]§! and raises the buyer's network by §Y2 levels§! (up to §Y3§!, each granting §G2%§! trade income). Refusal, disappearance, capitulation or war returns the rifles. After Military Adviser Contracts, the offer will go to the second northern buyer if it can still accept the shipment. £political_power_texticon §Y10§! is not refunded. Quantity and revenue are fixed when the reserve is placed."
+ VAL_ops_sell_rifles_to_osf_desc: "Reserve £infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§! rifles. After §Y21 days§!, [OSF.GetName] will accept or reject the shipment. Acceptance gives Kefreyt £ADISCORD_economy_treasury_texticon §G[VALGetExportIncome]§! and raises the buyer's network by §Y2 levels§! (up to §Y3§!, each granting §G2%§! trade income). Refusal, disappearance, capitulation or war returns the rifles. After Military Adviser Contracts, the offer will go to the second northern buyer if it can still accept the shipment. §Y10§! £political_power_texticon is not refunded. Quantity and revenue are fixed when the reserve is placed."
  VAL_campaign_rifles_and_bread: "Rifles and Bread Campaign"
  VAL_campaign_rifles_and_bread_desc: "For fifty days, link military production to the promise of everyday security. Occupies one propaganda slot."
  VAL_campaign_contracts_feed_families: "Contracts Feed Families Campaign"
  VAL_campaign_contracts_feed_families_desc: "For sixty days, present the contract economy as the only guarantee of employment and order."
  VAL_campaign_no_promise_without_payment: "No Promises Without Payment Campaign"
- VAL_campaign_no_promise_without_payment_desc:0 "Spend £political_power_texticon §Y15§! to turn our business reputation into political and commercial influence. For §Y45 days§!: §G+0.50§! daily political power and §G+8%§! trade income. The campaign occupies one slot until it ends."
+ VAL_campaign_no_promise_without_payment_desc:0 "Spend §Y15§! £political_power_texticon to turn our business reputation into political and commercial influence. For §Y45 days§!: §G+0.50§! £political_power_texticon daily and §G+8%§! trade income. The campaign occupies one slot until it ends."
  VAL_campaign_the_mine_was_stolen: "They Stole Our Mine Campaign"
  VAL_campaign_the_mine_was_stolen_desc: "Following the loss of Vorkerland's metal, direct public anger outward and prepare society to fight for a new source of metal."
  VAL_quarterly_contract_deadline: "Quarterly Quota Deadline"
- VAL_quarterly_contract_deadline_desc:0 "[ROOT.VALGetQuarterlyStatus]\n\nBefore the deadline choose an arsenal delivery or a subcontract. Delivery costs 40000 rifles and 10 political power; at quarter end it grants +1 reputation tier, 15 army experience and 15 command power. Subcontracting costs 1000 treasury and preserves reputation without military rewards. A missed order loses one reputation tier. The next period starts after this deadline."
+ VAL_quarterly_contract_deadline_desc:0 "[ROOT.VALGetQuarterlyStatus]\n\nBefore the deadline choose an arsenal delivery or a subcontract. Delivery costs 40000 rifles and §Y10§! £political_power_texticon; at quarter end it grants +1 reputation tier, 15 army experience and 15 command power. Subcontracting costs 1000 treasury and preserves reputation without military rewards. A missed order loses one reputation tier. The next period starts after this deadline."
  VAL_pay_quarterly_contract_norm: "Meet the Quarterly Quota"
- VAL_pay_quarterly_contract_norm_desc:0 "Deliver 40000 rifles for 10 political power. At quarter end reputation rises by one tier, up to its maximum. Gain 15 army experience and 15 command power even at maximum reputation."
+ VAL_pay_quarterly_contract_norm_desc:0 "Deliver 40000 rifles for §Y10§! £political_power_texticon. At quarter end reputation rises by one tier, up to its maximum. Gain 15 army experience and 15 command power even at maximum reputation."
  VAL_big_buyers: "Major Buyers"
  VAL_big_buyers_desc: "While Vorkerland retains a unified market, major buyers provide a steady flow of orders: §G+20§! weekly income, §G+20%§! trade income, §G+10%§! civilian industry income, §G+8%§! military industry income, §G+8%§! investment confidence and §G+5%§! production efficiency growth.\n\nThe price of this dependence is §R+5%§! social expenditure, §R+5%§! state overload growth, §R-5%§! creditworthiness and §R-3%§! stability.\n\n    §RAny upheaval among our partners will end this support.§!\n\nKefreyt gains rights to steel in [33.GetName]. Deliveries end if civil war breaks out in Vorkerland or the state is lost. Kefreyt's homeland contains only oil."
  VAL_westerholm_concession_income: "Vorkerland Concession"
@@ -316,7 +316,7 @@
  VAL_cw_campaign_result_tt: "A supply agreement has been fulfilled, Kefreyt's operation has ended, or the civil war has ended."
  VAL_cw_field_reports_bonus: "Reports from the Stelander Front"
  VAL_cw_sell_arms_to_resistance: "Offer Supplies to Shabrat"
- VAL_cw_sell_arms_to_resistance_desc: "Preparing the offer costs §Y35§! political power, which is not refunded if declined. Offer the resistance £infantry_equipment_texticon §Y32000§! rifles for £ADISCORD_economy_treasury_texticon §Y500§!. The buyer must agree; weapons and payment are transferred together after another stockpile check. A fulfilled agreement grants §Y5§! army experience and §Y5§! contract authority. A rejected offer may be repeated after 30 days; the agreement can be fulfilled only once."
+ VAL_cw_sell_arms_to_resistance_desc: "Preparing the offer costs §Y35§! £political_power_texticon, which is not refunded if declined. Offer the resistance £infantry_equipment_texticon §Y32000§! rifles for £ADISCORD_economy_treasury_texticon §Y500§!. The buyer must agree; weapons and payment are transferred together after another stockpile check. A fulfilled agreement grants §Y5§! army experience and §Y5§! contract authority. A rejected offer may be repeated after 30 days; the agreement can be fulfilled only once."
  VAL_cw_arms_offer_tt: "Offer the resistance £infantry_equipment_texticon §Y32000§! rifles for £ADISCORD_economy_treasury_texticon §Y500§!. Weapons and funds remain with their owners until acceptance."
  VAL_cw_buy_arms_tt: "If the conditions still hold, receive £infantry_equipment_texticon §Y32000§! rifles and transfer £ADISCORD_economy_treasury_texticon §Y500§! to Kefreyt."
  VAL_cw_begin_mobilization: "Begin Mobilisation in the Passes"
@@ -341,23 +341,23 @@
  VAL_cw_settled: "Kefreyt's eastern operation has ended"
  VAL_cw_arms_contract_fulfilled: "The arms agreement with the resistance has been fulfilled"
  VAL_foreign_operation_active: "The foreign operation slot is occupied"
- VAL_cost_pp10_t50: "£political_power_texticon §Y10§! £ADISCORD_economy_treasury_texticon §Y50§!"
- VAL_cost_pp10_t50_blocked: "£political_power_texticon §R10§! £ADISCORD_economy_treasury_texticon §R50§!"
- VAL_cost_pp10_t50_tooltip: "Cost: £political_power_texticon §Y10§! £ADISCORD_economy_treasury_texticon §Y50§!"
- VAL_cost_northern_export: "£political_power_texticon §Y10§! £infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§!"
- VAL_cost_northern_export_blocked: "£political_power_texticon §R10§! £infantry_equipment_texticon §R[VALGetExportRifleQuantity]§!"
- VAL_cost_northern_export_tooltip: "Cost: £political_power_texticon §Y10§! £infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§!"
- VAL_cost_pp10_r4000: "£political_power_texticon §Y10§! £infantry_equipment_texticon §Y40000§!"
- VAL_cost_pp10_r4000_blocked: "£political_power_texticon §R10§! £infantry_equipment_texticon §R40000§!"
- VAL_cost_pp10_r4000_tooltip: "Cost: £political_power_texticon §Y10§! £infantry_equipment_texticon §Y40000§!"
+ VAL_cost_pp10_t50: "§Y10§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y50§!"
+ VAL_cost_pp10_t50_blocked: "§R10§! £political_power_texticon £ADISCORD_economy_treasury_texticon §R50§!"
+ VAL_cost_pp10_t50_tooltip: "Cost: §Y10§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y50§!"
+ VAL_cost_northern_export: "§Y10§! £political_power_texticon £infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§!"
+ VAL_cost_northern_export_blocked: "§R10§! £political_power_texticon £infantry_equipment_texticon §R[VALGetExportRifleQuantity]§!"
+ VAL_cost_northern_export_tooltip: "Cost: §Y10§! £political_power_texticon £infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§!"
+ VAL_cost_pp10_r4000: "§Y10§! £political_power_texticon £infantry_equipment_texticon §Y40000§!"
+ VAL_cost_pp10_r4000_blocked: "§R10§! £political_power_texticon £infantry_equipment_texticon §R40000§!"
+ VAL_cost_pp10_r4000_tooltip: "Cost: §Y10§! £political_power_texticon £infantry_equipment_texticon §Y40000§!"
  VAL_northern_export_reserved_tt: "£infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§! rifles will be reserved for §Y21 days§!. The recipient will accept or reject the shipment. Acceptance yields £ADISCORD_economy_treasury_texticon §G[VALGetExportIncome]§!."
- VAL_northern_export_cancelled_tt: "Reserved rifles will return to the stockpile. The £political_power_texticon §Y10§! cost is not refunded."
+ VAL_northern_export_cancelled_tt: "Reserved rifles will return to the stockpile. The §Y10§! £political_power_texticon cost is not refunded."
  VAL_northern_contacts_reserved_tt: "£ADISCORD_economy_treasury_texticon §Y50§! will be invested in developing the network for §Y21 days§!. Success adds §G2%§! trade income."
- VAL_northern_contacts_cancelled_tt: "The invested £ADISCORD_economy_treasury_texticon §Y50§! will be returned. The £political_power_texticon §Y10§! cost is not refunded."
+ VAL_northern_contacts_cancelled_tt: "The invested £ADISCORD_economy_treasury_texticon §Y50§! will be returned. The §Y10§! £political_power_texticon cost is not refunded."
  VAL_CIN_influence: "Broker network level with [CIN.GetNameDef]"
  VAL_OSF_influence: "Broker network level with [OSF.GetNameDef]"
  VAL_cw_offer_contract_formations: "Offer Shabrat Two Contract Regiments"
- VAL_cw_offer_contract_formations_desc: "Preparing the offer costs §Y75§! political power, which is not refunded if declined. Assembly takes §Y21 days§!; the offer is sent after preparation. Offer the resistance two trained infantry regiments with engineers and £infantry_equipment_texticon §Y32000§! reserve rifles for £ADISCORD_economy_treasury_texticon §Y1000§!. The full package costs Kefreyt £manpower_texticon §Y12600§! personnel, £infantry_equipment_texticon §Y44600§! rifles, §Y96§! squad weapon sets and §Y60§! additional equipment. The regiments remain until the war ends; their composition and recruitment are locked. Settlement follows buyer acceptance and another stockpile check. An ordinary shipment for §Y500§! treasury funds is also available."
+ VAL_cw_offer_contract_formations_desc: "Preparing the offer costs §Y75§! £political_power_texticon, which is not refunded if declined. Assembly takes §Y21 days§!; the offer is sent after preparation. Offer the resistance two trained infantry regiments with engineers and £infantry_equipment_texticon §Y32000§! reserve rifles for £ADISCORD_economy_treasury_texticon §Y1000§!. The full package costs Kefreyt £manpower_texticon §Y12600§! personnel, £infantry_equipment_texticon §Y44600§! rifles, §Y96§! squad weapon sets and §Y60§! additional equipment. The regiments remain until the war ends; their composition and recruitment are locked. Settlement follows buyer acceptance and another stockpile check. An ordinary shipment for §Y500§! treasury funds is also available."
  VAL_cw_formations_offer_tt: "After §Y21 days§! of preparation: Offer two fully equipped infantry regiments with engineers and £infantry_equipment_texticon §Y32000§! rifles for £ADISCORD_economy_treasury_texticon §Y1000§!. The regiments will be recalled after the war. Resources remain in Kefreyt until the resistance agrees. Total cost: £manpower_texticon §Y12600§! personnel, £infantry_equipment_texticon §Y44600§! rifles, §Y96§! squad weapon sets and §Y60§! additional equipment."
  VAL_cw_buy_formations_tt: "Transfer £ADISCORD_economy_treasury_texticon §Y1000§! to Kefreyt. Receive two infantry regiments with engineers, each with £manpower_texticon §Y6300§! personnel, plus £infantry_equipment_texticon §Y32000§! rifles for the stockpile. The regiments remain until the war ends; their composition and recruitment are locked. Kefreyt supplies the personnel and equipment. Settlement is cancelled if conditions have changed."
  ADISCORD_STP_cw.50.full: "Kefreyt offers two contract infantry regiments with engineers. The units will arrive trained and fully equipped. Another 32000 rifles will go to the stockpile for army replacements. The regiments will remain until the war ends; their composition cannot be changed, nor can new units be recruited using their template.\n\nKefreyt asks 1000 from our treasury for the entire package. Its government has authorised dispatch, but funds, personnel and equipment will be transferred only after our acceptance and another stockpile check. The agreement does not commit Kefreyt to entering the war."
@@ -652,7 +652,7 @@
  val_contract.340.d: "Kefreyt offers 25000 rifles for a single payment of 100 treasury funds. The weapons will be transferred after signing. The seller receives its payment through the clearing house over 70 days.\n\nThe offer is valid for 14 days. War with the seller, capitulation or insufficient resources prevents payment."
  VAL_export_arms_accepted_tt: "For 100 treasury funds, the country receives 25000 rifles from Kefreyt's stockpiles. Kefreyt receives the §G100 treasury§! payment immediately; the export desk remains occupied for 70 days."
  VAL_export_advisors: "Send Advisers: [FROM.GetName]"
- VAL_export_advisors_desc: "Preparing the offer costs §Y30§! political power, which is not refunded if declined. Offer a 70-day military mission for 100 treasury funds. On acceptance, Kefreyt receives §G100 treasury§!, spends 25 command power and suffers a 5% planning-speed penalty while its staff is abroad. The recipient gains the Kefreyt Military Advisers idea."
+ VAL_export_advisors_desc: "Preparing the offer costs §Y30§! £political_power_texticon, which is not refunded if declined. Offer a 70-day military mission for 100 treasury funds. On acceptance, Kefreyt receives §G100 treasury§!, spends 25 command power and suffers a 5% planning-speed penalty while its staff is abroad. The recipient gains the Kefreyt Military Advisers idea."
  VAL_export_advisors_offer_tt: "The recipient receives an offer valid for 14 days. No weapons, money or command power are deducted before acceptance. The price and contract duration are fixed."
  val_contract.341.t: "Kefreyt's Offer: Military Advisers"
  val_contract.341.d: "Kefreyt offers a team of staff instructors for 70 days. The price is 100 treasury funds. The mission increases planning speed by 10%, organisation recovery by 5% and army experience gain by 5%.\n\nThe offer is valid for 14 days. War with the seller, capitulation or insufficient resources prevents payment."
@@ -676,9 +676,9 @@
  VAL_supply_base_secured_tt: "All eight cannibal states are owned and controlled by Kefreyt or its subjects. Antolla, Fareyn, Himber, Balchansk, Harbour and the Mining Settlement are owned and controlled by Kefreyt itself."
  VAL_campaign_objectives_tt: "Kefreyt is independent and at peace. It directly owns the northern resource belt; the remaining cannibal lands belong to it or its subjects. Nodrul, Stelander's party government and Shabrat's state are defeated or subordinate, with their main territory in Kefreyt's sphere. Peaceful republics in districts gained during Stelander's split, and lands ceded to Yapert in the northern peace, do not require reconquest."
  VAL_campaign_against_nod: "Prepare a Campaign Against Nodrul"
- VAL_campaign_against_nod_desc: "Mobilisation lasts 30 days and costs 60 political power. A campaign against Nodrul is available only after a §Yreal victory over Stelander§!: its successor governments must be destroyed or subordinated to Kefreyt and the Steland core territory must be inside Kefreyt's sphere. A northern foothold is also required. If Shabrat is already at war with Nodrul, Kefreyt joins that same war; otherwise a separate war begins. Losing control of Stelander, the foothold, the target, or the target entering our faction cancels preparations."
+ VAL_campaign_against_nod_desc: "Mobilisation lasts 30 days and costs §Y60§! £political_power_texticon. A campaign against Nodrul is available only after a §Yreal victory over Stelander§!: its successor governments must be destroyed or subordinated to Kefreyt and the Steland core territory must be inside Kefreyt's sphere. A northern foothold is also required. If Shabrat is already at war with Nodrul, Kefreyt joins that same war; otherwise a separate war begins. Losing control of Stelander, the foothold, the target, or the target entering our faction cancels preparations."
  VAL_campaign_against_stelander: "Prepare for War: [FROM.GetName]"
- VAL_campaign_against_stelander_desc: "Mobilisation lasts 30 days and costs 60 political power. A separate war against the selected country then begins. The target's disappearance, subordination or entry into our faction cancels preparations. The end of other wars does not count as victory over this target."
+ VAL_campaign_against_stelander_desc: "Mobilisation lasts 30 days and costs §Y60§! £political_power_texticon. A separate war against the selected country then begins. The target's disappearance, subordination or entry into our faction cancels preparations. The end of other wars does not count as victory over this target."
  VAL_campaign_preparation_tt: "War against the selected country begins in 30 days if conditions still hold. Another such campaign is unavailable during preparation."
  VAL_nod_campaign_foothold_tt: "A separate campaign against Nodrul requires a northern foothold: every state of at least one tribal bloc must be owned and controlled by Kefreyt or its administration."
  VAL_nod_requires_stelander_victory_tt: "Kefreyt must first win a §Yreal victory over Stelander§!: STP and STS must be destroyed or subordinated to Kefreyt and their core territory must lie inside Kefreyt's sphere."
@@ -882,7 +882,7 @@
  val_contract.341.personnel: "Kefreyt offers 2000 servicemen to replenish our manpower pool and staff instructors for 70 days. The price is 100 treasury funds. The instructors increase planning speed by 10%, organisation recovery by 5% and army experience gain by 5%.\n\nThe offer is valid for 14 days. Personnel transfer and payment occur together upon acceptance."
  VAL_resource_war_personnel_accepted_tt: "For 100 treasury funds, we receive 2000 manpower and Kefreyt military advisers for 70 days. Kefreyt spends 2000 manpower and 25 command power, receiving +10 weekly income for 70 days."
  VAL_negotiate_nam_metals: "Discuss an Island Concession with the Viceroy"
- VAL_negotiate_nam_metals_desc:0 "Offer aid in exchange for Western Island extraction rights following the governor's victory. The agreement locks our side. Preparing the offer costs 50 political power, not refunded on refusal."
+ VAL_negotiate_nam_metals_desc:0 "Offer aid in exchange for Western Island extraction rights following the governor's victory. The agreement locks our side. Preparing the offer costs §Y50§! £political_power_texticon, not refunded on refusal."
  VAL_nam_concession_negotiable_tt:0 "The resource war is active; no side is selected. The governor is independent and holds the Western Island district. No rival offer or recent Eflorian contract is active."
  VAL_nam_concession_terms_tt:0 "After acceptance: 90 days for 50000 rifles OR 2000 personnel OR two volunteer divisions for 30 consecutive days. Full aid and the governor's victory grant Western Island extraction rights."
  VAL_register_nam_concession: "Register the Island Concession"
@@ -925,7 +925,7 @@
  VAL_focus_export_market_open_tt:0 "Opens sales of 25000 rifles for 500 treasury and the route to large orders. Northern partners can buy in peacetime."
  VAL_focus_adviser_contracts_ready_tt: "Unlocks paid military-adviser offers. Adviser missions use their own slot: only one Kefreyt adviser contract may be active at a time."
  VAL_focus_paid_program_authorization_tt: "§YAuthorization only:§! the listed industrial programme must still be funded and completed through the §YIndustrial Programmes§! decisions before its material reward is received."
- VAL_occidian_registries_reward_tt: "The §YOccidian Contract Administration§! gains §G+5% Stability§! and §G+50 Political Power§!."
+ VAL_occidian_registries_reward_tt: "The §YOccidian Contract Administration§! gains §G+5% Stability§! and §G+50§! £political_power_texticon."
  VAL_frontier_nationalisation_chain_tt: "Unlocks repeatable map nationalisation for directly held §Ystates adjacent to an existing Kefreyt core§!. Each completed core expands the next set of eligible neighbouring states."
  VAL_nationalise_region_complete_tt: "The state becomes a §YKefreyt core§!. Its directly held neighbours may now become eligible for the next nationalisation programme."
  VAL_fund_contract_chancery: "Fund the Contract Chancery"
@@ -1091,24 +1091,24 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_final_reduce_tension_tt:0 "Tension falls by §G15§!, buying three additional weeks at its normal rate of growth."
  VAL_final_register_reserves:0 "Register the Reserves"
  VAL_final_register_reserves_desc:0 "Military commissioners will introduce limited conscription over 28 days. A higher existing law will never be downgraded. Political power is refunded on cancellation or if the law has already been raised."
- VAL_final_reserve_registration_tt:0 "After §Y28 days§!, introduce §YLimited Conscription§!. Cancellation or an already raised law refunds §Y150§! political power."
+ VAL_final_reserve_registration_tt:0 "After §Y28 days§!, introduce §YLimited Conscription§!. Cancellation or an already raised law refunds §Y150§! £political_power_texticon."
  VAL_final_stockpile_supplies:0 "Prepare Army Depots"
  VAL_final_stockpile_supplies_desc:0 "Purchase and distribute supplies for a sustained campaign. Preparation takes 35 days and continues if war starts earlier. Cancellation before delivery refunds the money."
  VAL_final_supply_preparation_tt:0 "After §Y35 days§!, army supply consumption falls by §G10%§! through the crisis and war. Cancellation refunds §Y500§! coins."
  VAL_final_supply_ready_tt:0 "Army supply consumption: §G-10%§! through the crisis and war."
  VAL_final_reconnaissance:0 "Survey the Offensive Routes"
  VAL_final_reconnaissance_desc:0 "Over 21 days, the staff will combine maps, intelligence reports and reconnaissance. Preparation improves planning and reveals information about Nodrul's army. Cancellation refunds the political power."
- VAL_final_reconnaissance_start_tt:0 "After §Y21 days§!: §G+20§! army intelligence on Nodrul and §G+15%§! planning speed through the crisis and war. Cancellation refunds §Y75§! political power."
+ VAL_final_reconnaissance_start_tt:0 "After §Y21 days§!: §G+20§! army intelligence on Nodrul and §G+15%§! planning speed through the crisis and war. Cancellation refunds §Y75§! £political_power_texticon."
  VAL_final_reconnaissance_ready_tt:0 "Planning speed: §G+15%§! through the crisis and war."
  VAL_final_expand_reserve_contracts:0 "Expand Reserve Contracts"
  VAL_final_expand_reserve_contracts_desc:0 "Offer emergency contracts to people outside the existing reserve. After 28 days, the recruitable population share rises by one percentage point. Emergency obligations end with the crisis and war."
- VAL_final_reserve_contracts_start_tt:0 "After §Y28 days§!: §G+1.00 percentage point§! recruitable population through the crisis and war. Cancellation refunds §Y100§! political power."
+ VAL_final_reserve_contracts_start_tt:0 "After §Y28 days§!: §G+1.00 percentage point§! recruitable population through the crisis and war. Cancellation refunds §Y100§! £political_power_texticon."
  VAL_final_reserve_contracts_ready_tt:0 "Recruitable population: §G+1.00 percentage point§! through the crisis and war."
  VAL_final_war_preparation:0 "Final War Preparations"
  VAL_final_war_preparation_desc:0 "Paid supply depots, reconnaissance and reserve contracts prepare Kefreyt for confrontation with Nodrul. Temporary bonuses end with the crisis and war."
 
  VAL_regional_administration_campaign:0 "Establish civil administration across all regions"
- VAL_regional_administration_campaign_desc:0 "A joint programme for all owned and controlled non-core states with compliance below 60 or resistance at least 20. For 50 political power, each eligible state immediately gains 15 compliance and loses 10 resistance. Available again after 90 days. States with an integration programme already in progress are excluded."
+ VAL_regional_administration_campaign_desc:0 "A joint programme for all owned and controlled non-core states with compliance below 60 or resistance at least 20. For §Y50§! £political_power_texticon, each eligible state immediately gains 15 compliance and loses 10 resistance. Available again after 90 days. States with an integration programme already in progress are excluded."
 
 # Campaign briefing
  VAL_startup_country:0 "§YKEFREYT§!\n\nKefreyt lives by contracts, arsenals and the sale of force. Arms factories and mercenary companies give it influence far beyond its borders, but each new commitment needs payment and supply.\n\nBehind industrial power lie a weak social foundation, the consequences of earlier wars and commanders with interests of their own. The state must bind these forces to shared obligations, or yield once more to private arrangements.\n\n§YFirst priorities§!\nStrengthen the contract system, review the budget and check army requirements. In the north, a choice awaits between closer trade and a policy of pressure. Arms production only pays off when routes and customers can be relied upon."
@@ -1278,7 +1278,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_northern_aid_deadline:0 "Fulfil the northern aid pledge"
  VAL_northern_aid_deadline_desc:0 "Shared pledge to [YPR.GetName], [COF.GetName] and [TFF.GetName]. Complete one form of aid within 90 days, counted across all three recipients.\n\n- Rifles: [?VAL_northern_aid_rifles|0]/50000.\n- Personnel: [?VAL_northern_aid_personnel|0]/2000.\n- At least two volunteer divisions in total: [?VAL_northern_aid_volunteer_days|0]/30 consecutive days.\n\nThe timer resets if fewer than two divisions remain with active recipients. Insufficient aid earns no victory reward. Only defeat of the northern campaign triggers the penalty, not the loss of one recipient."
  VAL_negotiate_efl_metals:0 "Support the Eflor-Azhar coalition"
- VAL_negotiate_efl_metals_desc:0 "Offer aid in exchange for Western Island extraction rights following coalition victory. The agreement locks our side. Preparing the offer costs 50 political power, not refunded on refusal."
+ VAL_negotiate_efl_metals_desc:0 "Offer aid in exchange for Western Island extraction rights following coalition victory. The agreement locks our side. Preparing the offer costs §Y50§! £political_power_texticon, not refunded on refusal."
  VAL_efl_concession_negotiable_tt:0 "The resource war is active; no side is selected. Eflor is independent. No rival offer or recent contract with the governor is active."
  VAL_efl_concession_terms_tt:0 "After acceptance: 90 days for 50000 rifles OR 2000 personnel OR two volunteer divisions for 30 consecutive days. Full aid and coalition victory grant extraction rights if Eflor owns and controls the Western Island district."
  val_contract.368.t:0 "Kefreyt offers aid to the coalition"
@@ -1318,7 +1318,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_resource_war_active_tt:0 "The resource war is ongoing"
  VAL_trade_routes:0 "Trade routes"
  VAL_trade_routes_desc:0 "Security: §Y[?VAL_corridor_security|0]/3§!. £ADISCORD_economy_trade_texticon Grey market: §Y[?VAL_black_market_pressure|0]/100§!.\nBrokers: §Y[?VAL_broker_dependence|0]/3§!. Weekly change: §Y[?VAL_black_market_last_delta|=0]§!.\nLost to the grey market last week: £ADISCORD_economy_treasury_texticon §Y[?VAL_black_market_loss_last_week|1]§!.\nTotal lost: £ADISCORD_economy_treasury_texticon §Y[?VAL_black_market_loss_total|1]§!.\nHover over the map for thresholds and causes."
- VAL_trade_map_tt:0 "Rail sections have sleepers. Dashed connections link nodes without a continuous railway. Colours show contractual corridor availability. Hover over a route name below the map.\n\nThe §Ygrey market§! diverts regular treasury income into underground trade. Losses apply to the ordinary budget, positive weekly bonuses and corridor payments. One-off rewards, loans and deposit refunds are unaffected.\n\nOnly the current tier applies:\n§Y0-24§!: no losses.\n§Y25-49§!: income §Y-10%§!; administration expenses §Y+2%§!; stability §Y-1%§!.\n§Y50-74§!: income §Y-25%§!; administration expenses §Y+5%§!; stability §Y-3%§!.\n§Y75-100§!: income §Y-50%§!; administration expenses §Y+10%§!; stability §Y-6%§!; political power §Y-0.05/day§!.\n\nLast week means income lost in the latest completed budget period; total means losses since tracking began. Extra administration expenses are excluded. Forecasts and opening the panel do not increase these counters. Route amounts already reflect current losses.\n\nWeekly change:\n- +3 per disrupted previously operating route;\n- +2 while at war, +3 when housing is overcrowded;\n- +1 per level of broker dependence;\n- -2 when all commissioned routes operate, with at least one open;\n- -1 per level of security.\nAt pressure 50 or higher and security below 3, operating routes are marked at risk; this warning alone does not close a route, but the income reductions above apply."
+ VAL_trade_map_tt:0 "Rail sections have sleepers. Dashed connections link nodes without a continuous railway. Colours show contractual corridor availability. Hover over a route name below the map.\n\nThe §Ygrey market§! diverts regular treasury income into underground trade. Losses apply to the ordinary budget, positive weekly bonuses and corridor payments. One-off rewards, loans and deposit refunds are unaffected.\n\nOnly the current tier applies:\n§Y0-24§!: no losses.\n§Y25-49§!: income §Y-10%§!; administration expenses §Y+2%§!; stability §Y-1%§!.\n§Y50-74§!: income §Y-25%§!; administration expenses §Y+5%§!; stability §Y-3%§!.\n§Y75-100§!: income §Y-50%§!; administration expenses §Y+10%§!; stability §Y-6%§!; §Y-0.05/day§! £political_power_texticon.\n\nLast week means income lost in the latest completed budget period; total means losses since tracking began. Extra administration expenses are excluded. Forecasts and opening the panel do not increase these counters. Route amounts already reflect current losses.\n\nWeekly change:\n- +3 per disrupted previously operating route;\n- +2 while at war, +3 when housing is overcrowded;\n- +1 per level of broker dependence;\n- -2 when all commissioned routes operate, with at least one open;\n- -1 per level of security.\nAt pressure 50 or higher and security below 3, operating routes are marked at risk; this warning alone does not close a route, but the income reductions above apply."
  VAL_trade_map_legend:0 "§GOpen§!  §YAt risk§!  §RStopped§!\nGrey dashed line - not commissioned"
  VAL_trade_occidia_1:0 "§L1. Occidia: not commissioned§![VALTradeOccidiaIncome]"
  VAL_trade_occidia_2:0 "§G1. Occidia: open§![VALTradeOccidiaIncome]"
@@ -1374,13 +1374,13 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_order_2_withdraw:0 "Cancel order: [VAL_order_2_partner.GetNameDef]"
  VAL_order_2_refund_tt:0 "Terminate and free the slot. Completed deliveries remain settled; the signing fee is not refunded. Legacy advance refund: [?VAL_order_2_advance|1]."
  VAL_offer_order_arms:0 "25000 rifles per quarter"
- VAL_order_offer_arms_desc:0 "Quota: 25000 rifles each quarter, 500 treasury per delivery. Four deliveries over one year. Kefreyt pays 100 political power on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
+ VAL_order_offer_arms_desc:0 "Quota: 25000 rifles each quarter, 500 treasury per delivery. Four deliveries over one year. Kefreyt pays §Y100§! £political_power_texticon on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
  VAL_offer_order_bulk:0 "50000 rifles per quarter"
- VAL_order_offer_bulk_desc:0 "Quota: 50000 rifles each quarter, 1000 treasury per delivery. Four deliveries over one year. Kefreyt pays 100 political power on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
+ VAL_order_offer_bulk_desc:0 "Quota: 50000 rifles each quarter, 1000 treasury per delivery. Four deliveries over one year. Kefreyt pays §Y100§! £political_power_texticon on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
  VAL_offer_order_arsenal:0 "100000 rifles per quarter"
- VAL_order_offer_arsenal_desc:0 "Quota: 100000 rifles each quarter, 2250 treasury per delivery. Four deliveries over one year. Kefreyt pays 100 political power on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
+ VAL_order_offer_arsenal_desc:0 "Quota: 100000 rifles each quarter, 2250 treasury per delivery. Four deliveries over one year. Kefreyt pays §Y100§! £political_power_texticon on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
  VAL_offer_order_strategic:0 "200000 rifles per quarter"
- VAL_order_offer_strategic_desc:0 "Quota: 200000 rifles each quarter, 5000 treasury per delivery. Four deliveries over one year. Kefreyt pays 100 political power on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
+ VAL_order_offer_strategic_desc:0 "Quota: 200000 rifles each quarter, 5000 treasury per delivery. Four deliveries over one year. Kefreyt pays §Y100§! £political_power_texticon on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
 
  VAL_military_offer_title:0 "Kefreyt military contract"
  VAL_military_offer_1:0 "Contract: hold the capital region for 90 days"
@@ -1447,9 +1447,9 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_menu_concessions:0 "Resource agreements"
 
- VAL_market_menu_desc:0 "Partner: [VALMenuPartnerName].\n\nUse the separate Trade Agreement decision to sign an annual agreement for 100 political power.\n\nThis menu recruits volunteers from partner reserves for treasury. Hover for numbers, price and blocking conditions."
+ VAL_market_menu_desc:0 "Partner: [VALMenuPartnerName].\n\nUse the separate Trade Agreement decision to sign an annual agreement for §Y100§! £political_power_texticon.\n\nThis menu recruits volunteers from partner reserves for treasury. Hover for numbers, price and blocking conditions."
 
- VAL_weapons_menu_desc:0 "Partner: [VALMenuPartnerName].\n\nReady stock is a one-off sale for full payment. Quarterly agreements cover four deliveries in a year and cost 100 political power to sign. No advance or passive income. Buyers may be at peace.\n\nQuarterly supply: [VALOrderMenuStatus]"
+ VAL_weapons_menu_desc:0 "Partner: [VALMenuPartnerName].\n\nReady stock is a one-off sale for full payment. Quarterly agreements cover four deliveries in a year and cost §Y100§! £political_power_texticon to sign. No advance or passive income. Buyers may be at peace.\n\nQuarterly supply: [VALOrderMenuStatus]"
 
  VAL_ready_menu_desc:0 "Packages: 25000 / 50000 / 100000 / 200000 rifles for 500 / 1000 / 2250 / 5000 treasury. The buyer receives weapons; Kefreyt receives payment.\n\nRequires the unlocking focus, a free slot, equipment and buyer funds. Unavailable offers are hidden. Large packages are on the next page."
 
@@ -1479,7 +1479,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  val_contract.411.t:0 "Trade agreement expired"
 
- val_contract.411.d:0 "The annual agreement with [FROM.GetName] has ended. Office income has stopped.\n\nThe partner is available in Foreign Agreements again. A new agreement requires mutual consent and 100 political power. There is no automatic renewal or charge."
+ val_contract.411.d:0 "The annual agreement with [FROM.GetName] has ended. Office income has stopped.\n\nThe partner is available in Foreign Agreements again. A new agreement requires mutual consent and §Y100§! £political_power_texticon. There is no automatic renewal or charge."
 
  val_contract.411.a:0 "Acknowledged"
 
@@ -1495,7 +1495,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_market_quote_15:0 "15"
 
- VAL_quarterly_need_pp:0 "Signing requires 100 political power."
+ VAL_quarterly_need_pp:0 "Signing requires §Y100§! £political_power_texticon."
 
  VAL_quarterly_already_signed:0 "An annual supply agreement with this buyer is already active."
 
@@ -1517,7 +1517,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  val_contract.420.t:0 "Annual supply agreement fulfilled"
 
- val_contract.420.d:0 "Four quarterly deliveries to [VAL_quarterly_notice_partner.GetName] have been completed and paid. The term has ended and the slot is free. A new agreement requires buyer consent and another 100 political power fee."
+ val_contract.420.d:0 "Four quarterly deliveries to [VAL_quarterly_notice_partner.GetName] have been completed and paid. The term has ended and the slot is free. A new agreement requires buyer consent and another §Y100§! £political_power_texticon fee."
 
  val_contract.421.t:0 "Supply agreement terminated"
 
@@ -1540,14 +1540,14 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_offer_blocked_weapons:0 "Unavailable now. Requires full stock, buyer funds, a free export slot, an open route and no active deal cooldown."
 
- VAL_offer_blocked_orders:0 "Unavailable now. Requires 100 political power, a free slot, an open corridor, settled refunds and no pending reply."
+ VAL_offer_blocked_orders:0 "Unavailable now. Requires §Y100§! £political_power_texticon, a free slot, an open corridor, settled refunds and no pending reply."
 
  VAL_offer_blocked_military:0 "Unavailable now. Requires participation in the customer war, 25 command power, 500 customer treasury and a free military contract. Recovery requires enemy-held territory."
 
- VAL_offer_blocked_advisors:0 "Unavailable now. Requires 30 political power, 25 command power, 100 buyer treasury and a free adviser slot. The buyer must be at war."
+ VAL_offer_blocked_advisors:0 "Unavailable now. Requires §Y30§! £political_power_texticon, 25 command power, 100 buyer treasury and a free adviser slot. The buyer must be at war."
 
 
- VAL_offer_blocked_concessions:0 "Unavailable now. Check 50 political power, resource-region control, side selection and pending replies."
+ VAL_offer_blocked_concessions:0 "Unavailable now. Check §Y50§! £political_power_texticon, resource-region control, side selection and pending replies."
 
  VAL_offer_blocked_reply:0 "Wait for the outstanding offer response first."
 
@@ -1661,13 +1661,13 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_sign_annual_trade:0 "Trade agreement: [FROM.GetName]"
 
- VAL_sign_annual_trade_desc:0 "365-day agreement. Kefreyt earns [VALTradeDecisionIncome] treasury weekly; the partner earns 1. Decision cost: 100 political power. Refusal, no response or invalidation refunds the fee. Signed agreements leave this list until expiry."
+ VAL_sign_annual_trade_desc:0 "365-day agreement. Kefreyt earns [VALTradeDecisionIncome] treasury weekly; the partner earns 1. Decision cost: §Y100§! £political_power_texticon. Refusal, no response or invalidation refunds the fee. Signed agreements leave this list until expiry."
 
  VAL_trade_decision_terms_tt:0 "Offer an annual trade agreement. The decision already pays the fee: acceptance has no further charge; refusal refunds it."
 
- VAL_trade_fee_prepaid:0 "Kefreyt paid 100 political power when sending this offer; refusal refunds it."
+ VAL_trade_fee_prepaid:0 "Kefreyt paid §Y100§! £political_power_texticon when sending this offer; refusal refunds it."
 
- VAL_trade_fee_legacy:0 "This is a previously sent offer: Kefreyt pays 100 political power only on acceptance."
+ VAL_trade_fee_legacy:0 "This is a previously sent offer: Kefreyt pays §Y100§! £political_power_texticon only on acceptance."
 
  VAL_trade_decision_available_tt:0 "Enough political power; no active agreement, war, pending reply or contact cooldown with this partner."
 
@@ -1687,7 +1687,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_quarterly_partner_supply_desc:0 "Choose 25000 / 50000 / 100000 / 200000 rifles per quarter for 500 / 1000 / 2250 / 5000 treasury per shipment. Completed focuses unlock quantities.\n\nFour deliveries over a year. Signing costs £pol_power 100 after buyer consent; opening the selection is free. No advance; payment on dispatch. Requires a free slot and open corridor. A missed deadline grants 15 days of grace, then termination."
 
- VAL_quarterly_decision_ready_tt:0 "Requires 100 political power, a free slot, an open corridor, settled refunds, no active supply agreement with this buyer and no pending reply."
+ VAL_quarterly_decision_ready_tt:0 "Requires §Y100§! £political_power_texticon, a free slot, an open corridor, settled refunds, no active supply agreement with this buyer and no pending reply."
 
  VAL_quarterly_decision_result_tt:0 "Choose a quarterly quota, then send the buyer an offer."
 
@@ -1729,12 +1729,12 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_trade_income_zero:0 " - £ADISCORD_economy_treasury_texticon §L0§!/week"
  VAL_trade_income_base:0 " - £ADISCORD_economy_treasury_texticon §Y+[VALTradeBaseNetIncome]§!/week"
  VAL_trade_income_upgraded:0 " - £ADISCORD_economy_treasury_texticon §Y+[VALTradeUpgradedNetIncome]§!/week"
- VAL_trade_grey_market_tt:0 "The §Ygrey market§! diverts regular treasury income into underground trade. Losses apply to the ordinary budget, positive weekly bonuses and corridor payments. One-off rewards, loans and deposit refunds are unaffected.\n\nOnly the current tier applies:\n§Y0-24§!: no losses.\n§Y25-49§!: income §Y-10%§!; administration expenses §Y+2%§!; stability §Y-1%§!.\n§Y50-74§!: income §Y-25%§!; administration expenses §Y+5%§!; stability §Y-3%§!.\n§Y75-100§!: income §Y-50%§!; administration expenses §Y+10%§!; stability §Y-6%§!; political power §Y-0.05/day§!.\n\nLast week means income lost in the latest completed budget period; total means losses since tracking began. Extra administration expenses are excluded. Forecasts and opening the panel do not increase these counters. Route amounts already reflect current losses.\n\nWeekly change:\n- +3 per disrupted previously operating route;\n- +2 while at war, +3 when housing is overcrowded;\n- +1 per level of broker dependence;\n- -2 when all commissioned routes operate, with at least one open;\n- -1 per level of security.\nAt pressure 50 or higher and security below 3, operating routes are marked at risk; this warning alone does not close a route, but the income reductions above apply."
+ VAL_trade_grey_market_tt:0 "The §Ygrey market§! diverts regular treasury income into underground trade. Losses apply to the ordinary budget, positive weekly bonuses and corridor payments. One-off rewards, loans and deposit refunds are unaffected.\n\nOnly the current tier applies:\n§Y0-24§!: no losses.\n§Y25-49§!: income §Y-10%§!; administration expenses §Y+2%§!; stability §Y-1%§!.\n§Y50-74§!: income §Y-25%§!; administration expenses §Y+5%§!; stability §Y-3%§!.\n§Y75-100§!: income §Y-50%§!; administration expenses §Y+10%§!; stability §Y-6%§!; §Y-0.05/day§! £political_power_texticon.\n\nLast week means income lost in the latest completed budget period; total means losses since tracking began. Extra administration expenses are excluded. Forecasts and opening the panel do not increase these counters. Route amounts already reflect current losses.\n\nWeekly change:\n- +3 per disrupted previously operating route;\n- +2 while at war, +3 when housing is overcrowded;\n- +1 per level of broker dependence;\n- -2 when all commissioned routes operate, with at least one open;\n- -1 per level of security.\nAt pressure 50 or higher and security below 3, operating routes are marked at risk; this warning alone does not close a route, but the income reductions above apply."
  val_contract.424.t:0 "Trade agreement signed"
- val_contract.424.d:0 "[FROM.GetName] accepted the trade offer. The agreement lasts 365 days and provides weekly income to both countries. The 100 political power already paid covers the fee; no second payment is taken.\n\nNew offers to this country become available after 365 days."
+ val_contract.424.d:0 "[FROM.GetName] accepted the trade offer. The agreement lasts 365 days and provides weekly income to both countries. The §Y100§! £political_power_texticon already paid covers the fee; no second payment is taken.\n\nNew offers to this country become available after 365 days."
  val_contract.424.a:0 "Understood"
  val_contract.425.t:0 "Trade agreement did not proceed"
- val_contract.425.d:0 "The trade agreement with [FROM.GetName] did not proceed.\n\nReason: [VALPartnerFailureReason]\n\nThe 100 political power payment was refunded. Offers to this country are hidden for 365 days."
+ val_contract.425.d:0 "The trade agreement with [FROM.GetName] did not proceed.\n\nReason: [VALPartnerFailureReason]\n\nThe §Y100§! £political_power_texticon payment was refunded. Offers to this country are hidden for 365 days."
  val_contract.425.a:0 "Understood"
  VAL_trade_net_base_0:0 "20"
  VAL_trade_net_base_25:0 "18"

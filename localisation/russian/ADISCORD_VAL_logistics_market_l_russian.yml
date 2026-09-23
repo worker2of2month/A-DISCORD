@@ -27,11 +27,11 @@
  VAL_open_refugee_border: "Снова открыть переходы"
  VAL_open_refugee_border_desc: "Восстановить торговлю и разрешить приём по ещё действующим предложениям. Повторное открытие границы не создаёт новых волн беженцев."
  VAL_contract_refugee_labor: "Предложить рабочие контракты"
- VAL_contract_refugee_labor_desc:0 "Занять £population_texticon §Y100 тыс.§! свободных переселенцев на строительстве на 90 дней за £pol_power §Y75§! политической власти. Пока действует контракт, они недоступны для вербовки и переселения, но по-прежнему занимают жильё. По завершении или отмене все рабочие возвращаются в свободный пул."
+ VAL_contract_refugee_labor_desc:0 "Занять £population_texticon §Y100 тыс.§! свободных переселенцев на строительстве на 90 дней за §Y75§! £political_power_texticon. Пока действует контракт, они недоступны для вербовки и переселения, но по-прежнему занимают жильё. По завершении или отмене все рабочие возвращаются в свободный пул."
  VAL_fund_resettlement_depots: "Переселить беженцев в [FROM.GetName]"
  VAL_fund_resettlement_depots_desc: "Переселить £population_texticon §Y100 тыс.§! уже принятых беженцев в [FROM.GetName] за §Y250§! из казны. Население региона навсегда увеличится на §G100 тыс.§!. Программа доступна только в выбранных малонаселённых домашних регионах Кефрейта под нашим контролем, не работает при незавершённой очистке загрязнения и проводится в каждом регионе один раз."
  VAL_organize_refugee_return: "Организовать возвращение"
- VAL_organize_refugee_return_desc: "После окончания региональных войн организовать безопасное возвращение £population_texticon §Y150 тыс.§! человек за §Y35§! политической власти. Снизится нагрузка на систему размещения; стабильность и политическая власть не начисляются."
+ VAL_organize_refugee_return_desc: "После окончания региональных войн организовать безопасное возвращение £population_texticon §Y150 тыс.§! человек за §Y35§! £political_power_texticon. Снизится нагрузка на систему размещения; стабильность и политическая власть не начисляются."
  VAL_license_grey_brokers: "Лицензировать серых брокеров"
  VAL_license_grey_brokers_desc: "Не уничтожать подпольную сеть, а заставить её платить за право работать. Казна немедленно получит §G50§!, но давление серого рынка возрастёт на §R15§!."
  VAL_buy_contraband_arms: "Закупить оружие вне реестра"
@@ -113,23 +113,23 @@
 
  VAL_refugee_wave_limit_tt:0 "Принято менее трёх волн из этого региона."
  VAL_train_refugee_volunteers:0 "Обучить добровольцев из числа беженцев"
- VAL_train_refugee_volunteers_desc:0 "Обучить £population_texticon §Y5 тыс.§! добровольцев из свободных переселенцев. Срок: 35 дней. Цена: £pol_power §Y75§! политической власти и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения. Люди остаются на обеспечении до завершения обучения. При капитуляции или потере независимости обучение отменяется с возвратом людей и затрат."
- VAL_refugee_training_start_tt:0 "£population_texticon §Y5 тыс.§! добровольцев из числа переселенцев начнут §Y35-дневное§! обучение и затем пополнят армейский резерв. Остальные жители остаются. При отмене возвращаются добровольцы, £pol_power §Y75§! политической власти и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения."
+ VAL_train_refugee_volunteers_desc:0 "Обучить £population_texticon §Y5 тыс.§! добровольцев из свободных переселенцев. Срок: 35 дней. Цена: §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения. Люди остаются на обеспечении до завершения обучения. При капитуляции или потере независимости обучение отменяется с возвратом людей и затрат."
+ VAL_refugee_training_start_tt:0 "£population_texticon §Y5 тыс.§! добровольцев из числа переселенцев начнут §Y35-дневное§! обучение и затем пополнят армейский резерв. Остальные жители остаются. При отмене возвращаются добровольцы, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения."
  VAL_refugee_window_open_tt: "Для этого направления открыто окно приёма беженцев. Оно действует §Y180 дней§! после появления потока. Если условие не выполнено, поток ещё не открыт, срок приёма истёк или все три волны уже приняты."
  VAL_refugee_war_active_tt: "Война этого направления продолжается; решение можно использовать один раз в год."
  VAL_refugee_perimeter_active_tt: "Периметр открыт; решение можно использовать один раз в год."
 
- VAL_local_training_start_tt:0 "£population_texticon §Y5 тыс.§! местных добровольцев начнут §Y35-дневное§! обучение. При отмене возвращаются добровольцы, £pol_power §Y75§! политической власти и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения."
+ VAL_local_training_start_tt:0 "£population_texticon §Y5 тыс.§! местных добровольцев начнут §Y35-дневное§! обучение. При отмене возвращаются добровольцы, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения."
 
  VAL_recruit_local_volunteers:0 "Вербовать местных добровольцев"
 
- VAL_recruit_local_volunteers_desc:0 "Призыв остаётся на уровне 1,25%. Дополнительный договорной резерв равен 2% исходного населения семи регионов Кефрейта и не возобновляется. Каждый набор: £population_texticon §Y5 тыс.§! местных добровольцев, 35 дней, £pol_power §Y75§! политической власти и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения. При капитуляции или потере независимости — полный возврат."
+ VAL_recruit_local_volunteers_desc:0 "Призыв остаётся на уровне 1,25%. Дополнительный договорной резерв равен 2% исходного населения семи регионов Кефрейта и не возобновляется. Каждый набор: £population_texticon §Y5 тыс.§! местных добровольцев, 35 дней, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения. При капитуляции или потере независимости — полный возврат."
 
- VAL_training_cost:0 "£population_texticon §Y5000§! £pol_power §Y75§! £infantry_equipment_texticon §Y5000§!"
+ VAL_training_cost:0 "£population_texticon §Y5000§! §Y75§! £political_power_texticon £infantry_equipment_texticon §Y5000§!"
 
- VAL_training_cost_blocked:0 "£population_texticon §R5000§! £pol_power §R75§! £infantry_equipment_texticon §R5000§!"
+ VAL_training_cost_blocked:0 "£population_texticon §R5000§! §R75§! £political_power_texticon £infantry_equipment_texticon §R5000§!"
 
- VAL_training_cost_tooltip:0 "Нужно £population_texticon §Y5 000§! добровольцев из указанного в решении резерва, £pol_power §Y75§! политической власти и £infantry_equipment_texticon §Y5000§! пехотного снаряжения."
+ VAL_training_cost_tooltip:0 "Нужно £population_texticon §Y5 000§! добровольцев из указанного в решении резерва, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! пехотного снаряжения."
 
  VAL_labor_program_tt:0 "£population_texticon §Y100 тыс.§! свободных переселенцев займут рабочие места на 90 дней: +8% к скорости строительства и +5% к гражданским доходам, -1% к стабильности. Затем все вернутся в свободный пул."
 
@@ -145,6 +145,6 @@
 
  VAL_broker_audit_tt:0 "Зависимость от посредников: -1. Лицензии и закупки контрабанды закрываются на 60 дней."
 
- VAL_labor_cost:0 "£population_texticon §Y100 000§! £pol_power §Y75§!"
- VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! £pol_power §R75§!"
- VAL_labor_cost_tooltip:0 "Нужно £population_texticon §Y100 000§! свободных переселенцев и £pol_power §Y75§! политической власти. Люди резервируются на 90 дней и возвращаются после завершения или отмены контракта."
+ VAL_labor_cost:0 "£population_texticon §Y100 000§! §Y75§! £political_power_texticon"
+ VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! §R75§! £political_power_texticon"
+ VAL_labor_cost_tooltip:0 "Нужно £population_texticon §Y100 000§! свободных переселенцев и §Y75§! £political_power_texticon. Люди резервируются на 90 дней и возвращаются после завершения или отмены контракта."
