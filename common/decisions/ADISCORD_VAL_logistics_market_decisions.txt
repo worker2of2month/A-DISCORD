@@ -20,18 +20,22 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
-			ADISCORD_economy_can_spend_250 = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_vorkerland_admitted value = 3 compare = less_than }
+			}
+			ADISCORD_economy_can_spend_100 = yes
 		}
-		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
-		custom_cost_text = VAL_logistics_cost_250
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = VAL_logistics_cost_100
 		cost = 0
-		days_re_enable = 365
+		days_re_enable = 60
 		complete_effect = {
-			ADISCORD_economy_spend_250 = yes
+			ADISCORD_economy_spend_100 = yes
 			add_to_variable = { var = VAL_displaced_population value = 30 }
 			add_to_variable = { var = VAL_refugee_vorkerland_admitted value = 1 }
 			custom_effect_tooltip = VAL_refugee_admission_vorkerland_tt
-			set_temp_variable = { var = VAL_black_market_pressure_change value = 5 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = 2 }
 			VAL_change_black_market_pressure = yes
 			VAL_refresh_refugee_state = yes
 		}
@@ -59,18 +63,22 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
-			ADISCORD_economy_can_spend_250 = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_stelander_admitted value = 3 compare = less_than }
+			}
+			ADISCORD_economy_can_spend_100 = yes
 		}
-		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
-		custom_cost_text = VAL_logistics_cost_250
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = VAL_logistics_cost_100
 		cost = 0
-		days_re_enable = 365
+		days_re_enable = 60
 		complete_effect = {
-			ADISCORD_economy_spend_250 = yes
+			ADISCORD_economy_spend_100 = yes
 			add_to_variable = { var = VAL_displaced_population value = 20 }
 			add_to_variable = { var = VAL_refugee_stelander_admitted value = 1 }
 			custom_effect_tooltip = VAL_refugee_admission_stelander_tt
-			set_temp_variable = { var = VAL_black_market_pressure_change value = 5 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = 2 }
 			VAL_change_black_market_pressure = yes
 			VAL_refresh_refugee_state = yes
 		}
@@ -98,18 +106,22 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
-			ADISCORD_economy_can_spend_250 = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_nodrul_admitted value = 3 compare = less_than }
+			}
+			ADISCORD_economy_can_spend_100 = yes
 		}
-		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
-		custom_cost_text = VAL_logistics_cost_250
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = VAL_logistics_cost_100
 		cost = 0
-		days_re_enable = 365
+		days_re_enable = 60
 		complete_effect = {
-			ADISCORD_economy_spend_250 = yes
+			ADISCORD_economy_spend_100 = yes
 			add_to_variable = { var = VAL_displaced_population value = 10 }
 			add_to_variable = { var = VAL_refugee_nodrul_admitted value = 1 }
 			custom_effect_tooltip = VAL_refugee_admission_nodrul_tt
-			set_temp_variable = { var = VAL_black_market_pressure_change value = 5 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = 2 }
 			VAL_change_black_market_pressure = yes
 			VAL_refresh_refugee_state = yes
 		}
@@ -137,18 +149,22 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
-			ADISCORD_economy_can_spend_250 = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_north_admitted value = 3 compare = less_than }
+			}
+			ADISCORD_economy_can_spend_100 = yes
 		}
-		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
-		custom_cost_text = VAL_logistics_cost_250
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = VAL_logistics_cost_100
 		cost = 0
-		days_re_enable = 365
+		days_re_enable = 60
 		complete_effect = {
-			ADISCORD_economy_spend_250 = yes
+			ADISCORD_economy_spend_100 = yes
 			add_to_variable = { var = VAL_displaced_population value = 10 }
 			add_to_variable = { var = VAL_refugee_north_admitted value = 1 }
 			custom_effect_tooltip = VAL_refugee_admission_north_tt
-			set_temp_variable = { var = VAL_black_market_pressure_change value = 5 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = 2 }
 			VAL_change_black_market_pressure = yes
 			VAL_refresh_refugee_state = yes
 		}
@@ -176,18 +192,22 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
-			ADISCORD_economy_can_spend_250 = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_perimeter_admitted value = 3 compare = less_than }
+			}
+			ADISCORD_economy_can_spend_100 = yes
 		}
-		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
-		custom_cost_text = VAL_logistics_cost_250
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = VAL_logistics_cost_100
 		cost = 0
-		days_re_enable = 365
+		days_re_enable = 60
 		complete_effect = {
-			ADISCORD_economy_spend_250 = yes
+			ADISCORD_economy_spend_100 = yes
 			add_to_variable = { var = VAL_displaced_population value = 10 }
 			add_to_variable = { var = VAL_refugee_perimeter_admitted value = 1 }
 			custom_effect_tooltip = VAL_refugee_admission_perimeter_tt
-			set_temp_variable = { var = VAL_black_market_pressure_change value = 5 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = 2 }
 			VAL_change_black_market_pressure = yes
 			VAL_refresh_refugee_state = yes
 		}
@@ -232,14 +252,14 @@ VAL_population_markets = {
 			NOT = { has_variable = VAL_refugee_training_escrow }
 		}
 		cost = 0
-		custom_cost_trigger = { NOT = { has_political_power < 75 } NOT = { has_equipment = { infantry_equipment < 5000 } } check_variable = { var = VAL_displaced_population value = 0.5 compare = greater_than_or_equals } }
+		custom_cost_trigger = { NOT = { has_political_power < 50 } NOT = { has_equipment = { infantry_equipment < 2500 } } check_variable = { var = VAL_displaced_population value = 0.5 compare = greater_than_or_equals } }
 		custom_cost_text = VAL_training_cost
 		days_remove = 35
 		days_re_enable = 30
 		complete_effect = {
 			custom_effect_tooltip = VAL_refugee_training_start_tt
-			add_political_power = -75
-			add_equipment_to_stockpile = { type = infantry_equipment amount = -5000 }
+			add_political_power = -50
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -2500 }
 			hidden_effect = {
 				set_variable = { var = VAL_refugee_training_escrow value = 0.5 }
 				add_to_variable = { var = VAL_displaced_population value = -0.5 }
@@ -260,7 +280,7 @@ VAL_population_markets = {
 		cost = 0
 		custom_cost_text = VAL_labor_cost
 		custom_cost_trigger = {
-			NOT = { has_political_power < 75 }
+			NOT = { has_political_power < 50 }
 			check_variable = { var = VAL_displaced_population value = 10 compare = greater_than_or_equals }
 		}
 		days_remove = 90
@@ -270,12 +290,12 @@ VAL_population_markets = {
 				limit = {
 					has_capitulated = no
 					is_subject = no
-					NOT = { has_political_power < 75 }
+					NOT = { has_political_power < 50 }
 					check_variable = { var = VAL_displaced_population value = 10 compare = greater_than_or_equals }
 					NOT = { has_variable = VAL_refugee_labor_escrow }
 				}
 				custom_effect_tooltip = VAL_labor_program_tt
-				add_political_power = -75
+				add_political_power = -50
 				hidden_effect = {
 					set_variable = { var = VAL_refugee_labor_escrow value = 10 }
 					add_to_variable = { var = VAL_displaced_population value = -10 }
@@ -394,11 +414,15 @@ VAL_population_markets = {
 		visible = { has_completed_focus = VAL_The_Contract_State }
 		available = { has_capitulated = no is_subject = no check_variable = { var = VAL_refugee_housing value = 100 compare = less_than } NOT = { has_variable = VAL_housing_deposit } }
 		cost = 0
-		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
-		custom_cost_text = VAL_logistics_cost_500
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = VAL_logistics_cost_250
 		days_remove = 45
 		cancel_if_not_visible = no
-		complete_effect = { ADISCORD_economy_spend_500 = yes set_variable = { var = VAL_housing_deposit value = 500 } custom_effect_tooltip = VAL_housing_start_tt }
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			set_variable = { var = VAL_housing_deposit value = 250 }
+			custom_effect_tooltip = VAL_housing_start_tt
+		}
 		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes } } }
 		cancel_effect = { VAL_refund_housing = yes }
 		remove_effect = { VAL_finish_housing = yes }
