@@ -1153,16 +1153,7 @@ VAL_frontier = {
 		allowed = { tag = VAL }
 		state_target = yes
 		target_trigger = {
-			FROM = {
-				is_owned_by = ROOT
-				is_controlled_by = ROOT
-				NOT = { is_core_of = ROOT }
-				any_neighbor_state = {
-					is_owned_by = ROOT
-					is_controlled_by = ROOT
-					is_core_of = ROOT
-				}
-			}
+			FROM = { VAL_regional_integration_state_valid = yes }
 		}
 		visible = {
 			OR = { has_completed_focus = VAL_frontier_conference has_completed_focus = VAL_defeat_Rebuild_The_Registry }
@@ -1171,7 +1162,10 @@ VAL_frontier = {
 		available = {
 			VAL_regional_integration_target_valid = yes
 			NOT = { has_country_flag = VAL_regional_integration_active }
-			FROM = { NOT = { has_state_flag = VAL_regional_administration_in_progress } }
+			FROM = {
+				VAL_regional_integration_state_valid = yes
+				NOT = { has_state_flag = VAL_regional_administration_in_progress }
+			}
 		}
 		on_map_mode = map_and_decisions_view
 		highlight_states = { highlight_state_targets = { state = FROM } }
@@ -1180,7 +1174,12 @@ VAL_frontier = {
 		days_re_enable = 1
 		fire_only_once = no
 		cancel_if_not_visible = yes
-		cancel_trigger = { VAL_regional_integration_target_valid = no }
+		cancel_trigger = {
+			OR = {
+				VAL_regional_integration_target_valid = no
+				FROM = { VAL_regional_integration_state_valid = no }
+			}
+		}
 		complete_effect = {
 			hidden_effect = {
 				set_country_flag = VAL_regional_integration_active
@@ -1192,7 +1191,10 @@ VAL_frontier = {
 				limit = {
 					VAL_regional_integration_target_valid = yes
 					has_country_flag = VAL_regional_integration_active
-					FROM = { has_state_flag = VAL_regional_administration_in_progress }
+					FROM = {
+						VAL_regional_integration_state_valid = yes
+						has_state_flag = VAL_regional_administration_in_progress
+					}
 				}
 				FROM = { add_core_of = ROOT }
 				add_stability = 0.01
