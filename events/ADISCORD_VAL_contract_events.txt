@@ -1162,7 +1162,14 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { tag = NAM VAL = { has_country_flag = VAL_nam_concession_offer_pending VAL_nam_concession_negotiable = yes } }
-				VAL = { VAL_commit_nam_resource_aid = yes }
+				VAL_begin_partner_contract_year = yes
+				VAL = {
+					set_country_flag = VAL_nam_concession_agreed
+					clr_country_flag = VAL_nam_concession_offer_pending
+					clr_country_flag = VAL_efl_concession_offer_pending
+					set_variable = { var = VAL_resource_aid_side value = 1 }
+					VAL_start_resource_aid = yes
+				}
 			}
 		}
 	}
