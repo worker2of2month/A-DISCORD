@@ -5,7 +5,15 @@ VAL_military_operations = {
 	VAL_cw_begin_mobilization = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
-		visible = { OR = { has_country_flag = VAL_cw_military_course has_country_flag = VAL_cw_trade_course } NOT = { has_country_flag = VAL_cw_entered } NOT = { has_country_flag = VAL_cw_settled } NOT = { has_country_flag = VAL_stelander_defeated } }
+		visible = {
+			OR = {
+				has_country_flag = VAL_cw_military_course
+				has_country_flag = VAL_cw_trade_course
+			}
+			NOT = { has_country_flag = VAL_cw_entered }
+			NOT = { has_country_flag = VAL_cw_settled }
+			NOT = { has_country_flag = VAL_stelander_defeated }
+		}
 		available = { VAL_cw_can_intervene = yes }
 		cost = 0
 		days_re_enable = 21
@@ -654,7 +662,16 @@ VAL_frontier = {
 		remove_effect = {
 			if = {
 				limit = { has_variable = VAL_final_supply_deposit has_capitulated = no is_subject = no check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } }
-				hidden_effect = { clear_variable = VAL_final_supply_deposit set_variable = { var = VAL_final_supply_bonus value = -0.10 } if = { limit = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } force_update_dynamic_modifier = yes } }
+				hidden_effect = {
+					clear_variable = VAL_final_supply_deposit
+					set_variable = { var = VAL_final_supply_bonus value = -0.10 }
+					if = {
+						limit = {
+							has_dynamic_modifier = { modifier = VAL_final_war_preparation }
+						}
+						force_update_dynamic_modifier = yes
+					}
+				}
 				custom_effect_tooltip = VAL_final_supply_ready_tt
 			}
 			else = { VAL_final_refund_supply_order = yes }
@@ -1506,7 +1523,16 @@ VAL_foreign_sales = {
 
 		visible = { has_country_flag = VAL_operation_sell_rifles_to_cin }
 		available = { hidden_trigger = { always = no } }
-		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 50000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 25000 } } } } }
+		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = {
+							AND = {
+								has_completed_focus = VAL_Foreign_Broker_Licences
+								NOT = { has_equipment = { infantry_equipment < 50000 } }
+							}
+							AND = {
+								NOT = { has_completed_focus = VAL_Foreign_Broker_Licences }
+								NOT = { has_equipment = { infantry_equipment < 25000 } }
+							}
+						} }
 		custom_cost_text = VAL_cost_northern_export
 		cost = 0
 		days_remove = 21
@@ -1521,7 +1547,16 @@ VAL_foreign_sales = {
 						NOT = { has_war_with = CIN }
 						CIN = { exists = yes has_capitulated = no }
 						NOT = { has_political_power < 10 }
-						OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 50000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 25000 } } } }
+						OR = {
+							AND = {
+								has_completed_focus = VAL_Foreign_Broker_Licences
+								NOT = { has_equipment = { infantry_equipment < 50000 } }
+							}
+							AND = {
+								NOT = { has_completed_focus = VAL_Foreign_Broker_Licences }
+								NOT = { has_equipment = { infantry_equipment < 25000 } }
+							}
+						}
 					}
 					VAL_reserve_export_rifles = yes
 					if = {
@@ -1566,7 +1601,17 @@ VAL_foreign_sales = {
 				hidden_effect = { CIN = { country_event = { id = val_contract.310 } } }
 			}
 			else_if = {
-				limit = { has_country_flag = VAL_operation_sell_rifles_to_cin has_country_flag = VAL_export_rifles_reserved has_completed_focus = VAL_Contingency_Ledgers has_capitulated = no NOT = { has_war_with = OSF } OSF = { exists = yes has_capitulated = no } }
+				limit = {
+					has_country_flag = VAL_operation_sell_rifles_to_cin
+					has_country_flag = VAL_export_rifles_reserved
+					has_completed_focus = VAL_Contingency_Ledgers
+					has_capitulated = no
+					NOT = { has_war_with = OSF }
+					OSF = {
+						exists = yes
+						has_capitulated = no
+					}
+				}
 				custom_effect_tooltip = VAL_northern_export_buyer_choice_tt
 				hidden_effect = { OSF = { country_event = { id = val_contract.311 } } }
 			}
@@ -1590,7 +1635,16 @@ VAL_foreign_sales = {
 
 		visible = { has_country_flag = VAL_operation_sell_rifles_to_osf }
 		available = { hidden_trigger = { always = no } }
-		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 50000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 25000 } } } } }
+		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = {
+							AND = {
+								has_completed_focus = VAL_Foreign_Broker_Licences
+								NOT = { has_equipment = { infantry_equipment < 50000 } }
+							}
+							AND = {
+								NOT = { has_completed_focus = VAL_Foreign_Broker_Licences }
+								NOT = { has_equipment = { infantry_equipment < 25000 } }
+							}
+						} }
 		custom_cost_text = VAL_cost_northern_export
 		cost = 0
 		days_remove = 21
@@ -1605,7 +1659,16 @@ VAL_foreign_sales = {
 						NOT = { has_war_with = OSF }
 						OSF = { exists = yes has_capitulated = no }
 						NOT = { has_political_power < 10 }
-						OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 50000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 25000 } } } }
+						OR = {
+							AND = {
+								has_completed_focus = VAL_Foreign_Broker_Licences
+								NOT = { has_equipment = { infantry_equipment < 50000 } }
+							}
+							AND = {
+								NOT = { has_completed_focus = VAL_Foreign_Broker_Licences }
+								NOT = { has_equipment = { infantry_equipment < 25000 } }
+							}
+						}
 					}
 					VAL_reserve_export_rifles = yes
 					if = {
@@ -1650,7 +1713,17 @@ VAL_foreign_sales = {
 				hidden_effect = { OSF = { country_event = { id = val_contract.311 } } }
 			}
 			else_if = {
-				limit = { has_country_flag = VAL_operation_sell_rifles_to_osf has_country_flag = VAL_export_rifles_reserved has_completed_focus = VAL_Contingency_Ledgers has_capitulated = no NOT = { has_war_with = CIN } CIN = { exists = yes has_capitulated = no } }
+				limit = {
+					has_country_flag = VAL_operation_sell_rifles_to_osf
+					has_country_flag = VAL_export_rifles_reserved
+					has_completed_focus = VAL_Contingency_Ledgers
+					has_capitulated = no
+					NOT = { has_war_with = CIN }
+					CIN = {
+						exists = yes
+						has_capitulated = no
+					}
+				}
 				custom_effect_tooltip = VAL_northern_export_buyer_choice_tt
 				hidden_effect = { CIN = { country_event = { id = val_contract.310 } } }
 			}
@@ -1765,13 +1838,39 @@ VAL_foreign_sales = {
 		targets = { CIN OSF APH WRK WKR VAD TVA STP STS SRP NOD YPR COF TFF }
 		target_trigger = { FROM = { exists = yes } }
 		visible = { always = no has_completed_focus = VAL_Contingency_Ledgers FROM = { has_war = yes } }
-		available = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } } NOT = { has_idea = VAL_advisors_income } NOT = { command_power < 25 } FROM = { NOT = { has_idea = VAL_paid_military_advisors } } }
+		available = {
+			has_capitulated = no
+			NOT = { has_country_flag = VAL_export_offer_pending }
+			FROM = {
+				VAL_export_customer = yes
+				ADISCORD_economy_can_spend_100 = yes
+				NOT = { has_country_flag = VAL_export_customer_cooldown }
+			}
+			NOT = { has_idea = VAL_advisors_income }
+			NOT = { command_power < 25 }
+			FROM = {
+				NOT = { has_idea = VAL_paid_military_advisors }
+			}
+		}
 		cost = 30 days_re_enable = 70
 		complete_effect = {
 			custom_effect_tooltip = VAL_export_advisors_offer_tt
 			hidden_effect = {
 				if = {
-					limit = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } } NOT = { has_idea = VAL_advisors_income } NOT = { command_power < 25 } FROM = { NOT = { has_idea = VAL_paid_military_advisors } } }
+					limit = {
+						has_capitulated = no
+					NOT = { has_country_flag = VAL_export_offer_pending }
+					FROM = {
+						VAL_export_customer = yes
+						ADISCORD_economy_can_spend_100 = yes
+						NOT = { has_country_flag = VAL_export_customer_cooldown }
+					}
+					NOT = { has_idea = VAL_advisors_income }
+					NOT = { command_power < 25 }
+					FROM = {
+						NOT = { has_idea = VAL_paid_military_advisors }
+					}
+					}
 					set_country_flag = { flag = VAL_export_offer_pending days = 14 }
 					FROM = { set_country_flag = { flag = VAL_export_offer_advisors days = 14 } random_enemy_country = { save_global_event_target_as = VAL_advisor_enemy }
 						country_event = { id = val_contract.341 } }
@@ -2121,7 +2220,19 @@ VAL_contract_obligations = {
 				limit = { FROM = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } } check_variable = { var = ADISCORD_economy_treasury value = FROM.VAL_refund_due compare = greater_than_or_equals } }
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = FROM.VAL_refund_due }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = FROM.VAL_refund_due }
-				FROM = { ADISCORD_economy_initialize_country = yes add_to_variable = { var = ADISCORD_economy_treasury value = VAL_refund_due } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_refund_due } set_variable = { var = VAL_refund_due value = 0 } ADISCORD_economy_mark_dirty = yes }
+				FROM = {
+					ADISCORD_economy_initialize_country = yes
+					add_to_variable = {
+						var = ADISCORD_economy_treasury
+						value = VAL_refund_due
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_income
+						value = VAL_refund_due
+					}
+					set_variable = { var = VAL_refund_due value = 0 }
+					ADISCORD_economy_mark_dirty = yes
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
