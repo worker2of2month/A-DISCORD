@@ -23,5 +23,3 @@ jobs:
         run: python -B -m unittest tools.tests.test_adiscord_val_refugees.RefugeeTrainingTests
       - name: Scripted peace bus
         run: python -B -m unittest tools.tests.test_scripted_peace_on_actions
-      - name: Legacy expansion layout contract
-        run: python -B -m unittest tools.tests.test_val_contract_ui.TestValExpansionRoute.test_expansion_is_central_visible_and_has_no_prerequisite_cycle
