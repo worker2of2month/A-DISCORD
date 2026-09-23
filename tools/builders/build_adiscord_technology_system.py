@@ -36,9 +36,8 @@ def ensure_technology_state_gfx_current() -> None:
         )
 # The campaign starts in 2160. Keep only a short recovered baseline before
 # that date, place the overwhelming majority of research in the playable
-# 2160-2175 window, and leave one small 2180 endgame generation. This follows
-# Darkest Hour's useful cadence: dense playable eras, not decades of empty
-# waiting between otherwise interesting nodes.
+# 2160-2175 window, and leave one small 2180 endgame generation. Dense playable
+# eras avoid decades of empty waiting between otherwise interesting nodes.
 LEGACY_YEARS = (
     2100, 2120, 2140, 2150,
     2160, 2162, 2164, 2166, 2168,
@@ -73,11 +72,9 @@ YEAR_LABEL_HEIGHT = 22
 HORIZONTAL_LANE_SLOT_MULTIPLIER = 2
 LANE_SLOT_MULTIPLIER = 3
 BRANCH_GAP = 90
-# Measured against the two reference mods: their per-technology combat lines run
-# about 0.05 with capstones near 0.10, where ours were near 0.02 and read as
-# cosmetic. Doubling the combat band lands on their numbers without touching the
-# economy percentages, which already matched. Organisation is deliberately left
-# out of the multiplier because it is an absolute value, not a percentage.
+# Per-technology combat bonuses use a visible baseline around 0.05 with
+# capstones near 0.10. Organisation is deliberately excluded from the
+# multiplier because it is an absolute value rather than a percentage.
 COMBAT_INTENSITY = 2.0
 COMBAT_PROFILES = frozenset({
     "infantry",
@@ -688,7 +685,7 @@ APPLIED_PROGRAMME_KEYS = {programme["key"] for programme in APPLIED_PROGRAMMES}
 
 
 def build_applied_branches() -> tuple[Branch, ...]:
-    """Create optional TDA-style programmes without lengthening old trunks."""
+    """Create optional side programmes without lengthening the main trunks."""
 
     return tuple(
         Branch(
@@ -4682,8 +4679,8 @@ def icon_for_technology(branch: Branch, index: int) -> str:
     icon = ICON_ALIASES.get(tech.icon, tech.icon)
 
     # The GUI selects the wide item template for equipment unlocks. Preserve a
-    # readable vehicle/weapon silhouette there; the old code compacted these
-    # sprites and turned trains and tanks into unrelated support-company icons.
+    # readable vehicle or weapon silhouette instead of compacting equipment into
+    # unrelated support-company icons.
     if tech.id in ENABLE_EQUIPMENT:
         candidate = EQUIPMENT_UNLOCK_ICONS.get(tech.id, icon)
         size = technology_icon_size(candidate)
