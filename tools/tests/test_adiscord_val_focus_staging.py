@@ -180,6 +180,22 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 focus_id,
             )
 
+    def test_every_staged_allow_branch_focus_is_dynamic(self) -> None:
+        ids = re.findall(r"(?m)^\s*id\s*=\s*(VAL_[A-Za-z0-9_]+)\s*$", self.focuses)
+        staged = []
+        for focus_id in ids:
+            block = focus_block(self.focuses, focus_id)
+            if "allow_branch" not in block:
+                continue
+            staged.append(focus_id)
+            self.assertIn(
+                "dynamic = yes",
+                block,
+                f"{focus_id} can hide dynamically, so it must also be able to reappear dynamically",
+            )
+        self.assertIn("VAL_frontier_security_plan", staged)
+        self.assertGreaterEqual(len(staged), 50)
+
     def test_focus_completion_refreshes_dynamic_layout(self) -> None:
         hook = named_block(self.on_actions, "on_focus_completed")
         self.assertIn("tag = VAL", hook)
