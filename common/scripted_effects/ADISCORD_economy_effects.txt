@@ -792,9 +792,9 @@ ADISCORD_economy_full_refresh_if_needed = {
 	}
 }
 ADISCORD_economy_light_update = {
-	# Cheap TDA-style forecast/update. Idea-backed economic model and policy
-	# factors are cached by monthly/yearly refreshes and by opening the window;
-	# the weekly cash pulse must not query every law again.
+	# Cheap forecast update. Idea-backed economic model and policy factors are
+	# cached by monthly/yearly refreshes and by opening the window; the weekly
+	# cash pulse must not query every law again.
 	ADISCORD_economy_calculate_income = yes
 	ADISCORD_economy_calculate_macro_indicators = yes
 	ADISCORD_economy_calculate_expenses = yes
@@ -2053,8 +2053,8 @@ ADISCORD_economy_apply_weekly_balance = {
 }
 
 ADISCORD_economy_apply_monthly_balance = {
-	# V19 TDA-core: one country, one month, one applied balance.
-	# If the balance pushes the treasury below zero, auto-loan only covers the uncovered part.
+	# Apply one monthly balance in the current country scope. If the treasury
+	# falls below zero, automatic borrowing covers only the uncovered amount.
 	set_variable = { var = ADISCORD_economy_last_auto_borrowing value = 0 }
 	set_variable = { var = ADISCORD_economy_pending_debt_notification_previous_state value = ADISCORD_economy_debt_state }
 	set_variable = { var = ADISCORD_economy_pending_debt_notification_amount value = 0 }
@@ -2924,7 +2924,7 @@ ADISCORD_economy_apply_tax_burden_side_effects = {
 
 
 ADISCORD_economy_recover_starting_building_counters = {
-	# V19: disabled. Hardcoded STP/WRK/VAL recovery was the source of fake global-looking counts.
+	# Compatibility no-op retained for existing callers.
 }
 
 ADISCORD_economy_recount_economic_buildings = {
