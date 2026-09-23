@@ -639,7 +639,7 @@
  VAL_frontier_workshop_refund_tt: "The paid 500 treasury funds return to Kefreyt; the facility will not be built."
  VAL_frontier_workshop_idle_tt: "This district has no workshop project already paid for."
  VAL_foreign_sales:0 "Foreign agreements"
- VAL_foreign_sales_desc:0 "Choose a partner: stock sales, arsenal orders, aid or military service. Agreements take effect only after the other party accepts. After a successful deal, new offers to that country become available after 365 days. Offers are hidden when the recipient is ineligible; our resource shortages remain visible in the requirements. A refusal hides offers to that country for 365 days.\n\nTrade office income: £ADISCORD_economy_treasury_texticon §G+[?VAL_contract_market_weekly_income|0]§! per week."
+ VAL_foreign_sales_desc:0 "Choose a partner: stock sales, arsenal orders, aid or military service. Agreements take effect only after the other party accepts. After a successful deal, new offers to that country become available after 365 days. Offers that cannot currently be made are hidden and return automatically when their requirements are met. A refusal hides offers to that country for 365 days.\n\nTrade office income: £ADISCORD_economy_treasury_texticon §G+[?VAL_contract_market_weekly_income|0]§! per week."
  VAL_export_income_1: "Active Arms Contract"
  VAL_export_income_1_desc: "This export desk is occupied for 70 days after payment and shipment. The buyer paid in full on acceptance; renewal requires a new order."
  VAL_export_income_2: "Second Arms Contract"

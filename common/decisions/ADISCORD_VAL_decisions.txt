@@ -1340,6 +1340,7 @@ VAL_foreign_sales = {
 			FROM = {
 				VAL_partner_commerce_visible = yes
 				VAL_trade_recipient_ready = yes
+				VAL_partner_trade_can_offer = yes
 			}
 			OR = {
 				AND = { FROM = { tag = CIN } NOT = { has_country_flag = VAL_market_contract_CIN_active } }
@@ -1387,6 +1388,7 @@ VAL_foreign_sales = {
 			FROM = {
 				VAL_partner_commerce_visible = yes
 				VAL_hire_recipient_ready = yes
+				VAL_partner_hire_can_offer = yes
 			}
 			OR = {
 				has_completed_focus = VAL_Resource_War_Contracts
@@ -1437,6 +1439,7 @@ VAL_foreign_sales = {
 			FROM = {
 				VAL_partner_orders_visible = yes
 				VAL_quarterly_recipient_ready = yes
+				VAL_order_can_offer = yes
 			}
 		}
 		available = { custom_trigger_tooltip = { tooltip = VAL_quarterly_decision_ready_tt FROM = { VAL_order_can_offer = yes } } }
@@ -1457,6 +1460,12 @@ VAL_foreign_sales = {
 			FROM = {
 				VAL_partner_weapons_visible = yes
 				VAL_ready_recipient_ready = yes
+				OR = {
+					VAL_partner_arms_can_offer = yes
+					VAL_partner_bulk_can_offer = yes
+					VAL_partner_arsenal_can_offer = yes
+					VAL_partner_strategic_can_offer = yes
+				}
 			}
 		}
 		available = {
@@ -1489,7 +1498,9 @@ VAL_foreign_sales = {
 			FROM = {
 				VAL_partner_support_visible = yes
 				VAL_special_recipient_ready = yes
+				VAL_partner_special_offerable = yes
 			}
+			VAL_partner_desk_free = yes
 			OR = {
 				has_completed_focus = VAL_Resource_War_Contracts
 				has_completed_focus = VAL_Contingency_Ledgers
