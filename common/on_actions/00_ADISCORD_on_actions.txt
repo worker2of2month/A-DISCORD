@@ -1,15 +1,16 @@
-####Country Development
+# Country development
 
 on_actions = {
-    on_daily = {
-        effect = {
-            ADISCORD_superevent_observer_tick = yes
-        }
-    }
+	on_daily = {
+		effect = {
+			ADISCORD_superevent_observer_tick = yes
+		}
+	}
 
 	on_startup = {
 		effect = {
-			create_entity = { ##poluted zone
+			# Persistent polluted-zone map entities.
+			create_entity = {
 			    entity = ADISCORD_global_entity
 			    id = 1
 			    x = 42
@@ -20,7 +21,6 @@ on_actions = {
 			    rotation = 1.2
 			    scale = 0.03
 			    min_zoom = 5555.0
-			    #visible = scripted_trigger_name
 			}
 			create_entity = {
 			    entity = ADISCORD_global_entity
@@ -33,21 +33,7 @@ on_actions = {
 			    rotation = 1.2
 			    scale = 0.02
 			    min_zoom = 5555.0
-			    #visible = scripted_trigger_name
 			}
-			#create_entity = { ##clouds
-			#    entity = ADISCORD_global_entity_2
-			#    id = 2
-			#    x = 42
-			#    y = 21
-			#    z = -100.000
-			#    province = 6713
-			#    state = 42
-			#    rotation = 1.2
-			#    scale = 1.02
-			#    min_zoom = 5555.0
-			#    #visible = scripted_trigger_name
-			#}
 			# Scenario history is the sole provenance producer. A pre-contract save
 			# cannot enter this branch, while the completion sentinel prevents a
 			# fresh campaign reload from overwriting research or development.
@@ -113,8 +99,6 @@ on_actions = {
 						}
 					}
 					ADISCORD_economy_initialize_country = yes
-					# V19 TDA-core: disabled hidden startup economic pseudo-building distribution.
-					# ADISCORD_distribute_starting_buildings_by_country = yes
 				}
 				# The fresh-campaign guard also prevents reopening the briefing on reload.
 				STP = {

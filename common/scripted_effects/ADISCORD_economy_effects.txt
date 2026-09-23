@@ -792,9 +792,9 @@ ADISCORD_economy_full_refresh_if_needed = {
 	}
 }
 ADISCORD_economy_light_update = {
-	# Cheap TDA-style forecast/update. Idea-backed economic model and policy
-	# factors are cached by monthly/yearly refreshes and by opening the window;
-	# the weekly cash pulse must not query every law again.
+	# Cheap forecast update. Idea-backed economic model and policy factors are
+	# cached by monthly/yearly refreshes and by opening the window; the weekly
+	# cash pulse must not query every law again.
 	ADISCORD_economy_calculate_income = yes
 	ADISCORD_economy_calculate_macro_indicators = yes
 	ADISCORD_economy_calculate_expenses = yes
@@ -2053,8 +2053,8 @@ ADISCORD_economy_apply_weekly_balance = {
 }
 
 ADISCORD_economy_apply_monthly_balance = {
-	# V19 TDA-core: one country, one month, one applied balance.
-	# If the balance pushes the treasury below zero, auto-loan only covers the uncovered part.
+	# Apply one monthly balance in the current country scope. If the treasury
+	# falls below zero, automatic borrowing covers only the uncovered amount.
 	set_variable = { var = ADISCORD_economy_last_auto_borrowing value = 0 }
 	set_variable = { var = ADISCORD_economy_pending_debt_notification_previous_state value = ADISCORD_economy_debt_state }
 	set_variable = { var = ADISCORD_economy_pending_debt_notification_amount value = 0 }
@@ -2158,7 +2158,7 @@ ADISCORD_economy_apply_monthly_balance = {
 
 
 ADISCORD_economy_update_fiscal_stress = {
-	# TDA-lite pass: fiscal stress is a slow warning indicator, not a self-feeding death spiral.
+	# Fiscal stress is a slow warning indicator, not a self-feeding death spiral.
 	set_variable = { var = ADISCORD_economy_fiscal_stress_delta value = 0 }
 	if = { limit = { check_variable = { var = ADISCORD_economy_interest_share_income value = 10 compare = greater_than_or_equals } } add_to_variable = { var = ADISCORD_economy_fiscal_stress_delta value = 0.5 } }
 	if = { limit = { check_variable = { var = ADISCORD_economy_interest_share_income value = 25 compare = greater_than_or_equals } } add_to_variable = { var = ADISCORD_economy_fiscal_stress_delta value = 1.0 } }
@@ -2188,7 +2188,7 @@ ADISCORD_economy_update_fiscal_stress = {
 
 
 ADISCORD_economy_update_inflation = {
-	# TDA-lite pass: inflation moves slowly and is primarily caused by explicit emission, shocks and crises.
+	# Inflation moves slowly and is primarily caused by explicit emission, shocks and crises.
 	# Planned-bureaucratic systems suppress visible market inflation; deficits become shortages/overload instead.
 	if = {
 		limit = { ADISCORD_economy_model_is_planned_bureaucratic = yes }
@@ -2242,7 +2242,7 @@ ADISCORD_economy_update_inflation = {
 		divide_variable = { var = ADISCORD_economy_inflation_pressure_temp value = ADISCORD_economy_final_price_stability_factor_bp }
 		set_variable = { var = ADISCORD_economy_inflation_delta_temp value = ADISCORD_economy_inflation_pressure_temp }
 		divide_variable = { var = ADISCORD_economy_inflation_delta_temp value = 6 }
-		# Like TDA, ordinary inactivity is not an anti-inflation policy. Market
+		# Ordinary inactivity is not an anti-inflation policy. Market
 		# inflation is sticky and falls only through explicit stabilisation actions.
 		clamp_variable = { var = ADISCORD_economy_inflation_delta_temp min = 0 max = 1.5 }
 		multiply_variable = { var = ADISCORD_economy_inflation_delta_temp value = ADISCORD_economy_tick_scale }
@@ -2897,7 +2897,7 @@ ADISCORD_economy_reduce_inflation = {
 }
 
 ADISCORD_economy_apply_tax_burden_side_effects = {
-	# TDA-lite pass: taxation levels affect the tax base first. They should not directly create runaway inflation.
+	# Taxation levels affect the tax base first and should not directly create runaway inflation.
 	# Extreme taxation creates mild price-shock/fiscal-pressure only; inflation is handled by ADISCORD_economy_update_inflation.
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = less_than_or_equals } }
@@ -2924,7 +2924,7 @@ ADISCORD_economy_apply_tax_burden_side_effects = {
 
 
 ADISCORD_economy_recover_starting_building_counters = {
-	# V19: disabled. Hardcoded STP/WRK/VAL recovery was the source of fake global-looking counts.
+	# Compatibility no-op retained for existing callers.
 }
 
 ADISCORD_economy_recount_economic_buildings = {

@@ -1,4 +1,4 @@
-"""Build northern infantry models; preview before installing with --apply.
+"""Build northern infantry models. preview before installing with --apply.
 
 Blender: --background --python this_file -- --build --output PATH
 Python: this_file --output PATH (stages the preview package)
@@ -128,7 +128,7 @@ def build(output):
             bpy.data.objects.remove(obj, do_unlink=True)
     body.name = 'COF_body'
 
-    # Identify whole anatomical/garment islands across UV seams; cutting at a
+    # Identify whole anatomical/garment islands across UV seams. cutting at a
     # height would leave a hat brim and remove part of the scalp underneath.
     key = lambda co: tuple(round(x, 4) for x in co)
     keys = [key(v.co) for v in body.data.vertices]
@@ -208,7 +208,7 @@ def build(output):
                  cloth('Dark knitted cap', (.039, .030, .021))]
     for mat in materials:
         body.data.materials.append(mat)
-    # Blend cloth zones in texture space; polygon-wise colour assignment leaves
+    # Blend cloth zones in texture space. polygon-wise colour assignment leaves
     # large triangular colour borders on the low-resolution shoulder wrap.
     nodes, links = materials[0].node_tree.nodes, materials[0].node_tree.links
     ao = next(n for n in nodes if n.type == 'AMBIENT_OCCLUSION')
@@ -480,29 +480,41 @@ def build_field(tag, output):
             # Neutralise native insignia on upper sleeves and shoulder boards.
             separate = nodes.new('ShaderNodeSeparateXYZ')
             links.new(coordinates.outputs['Object'], separate.inputs[0])
-            absolute = nodes.new('ShaderNodeMath'); absolute.operation = 'ABSOLUTE'
+            absolute = nodes.new('ShaderNodeMath')
+            absolute.operation = 'ABSOLUTE'
             links.new(separate.outputs['X'], absolute.inputs[0])
-            outside = nodes.new('ShaderNodeMath'); outside.operation = 'GREATER_THAN'
+            outside = nodes.new('ShaderNodeMath')
+            outside.operation = 'GREATER_THAN'
             outside.inputs[1].default_value = .55
             links.new(absolute.outputs[0], outside.inputs[0])
-            upper = nodes.new('ShaderNodeMapRange'); upper.interpolation_type = 'SMOOTHSTEP'
+            upper = nodes.new('ShaderNodeMapRange')
+            upper.interpolation_type = 'SMOOTHSTEP'
             upper.inputs['From Min'].default_value = 5.15
             upper.inputs['From Max'].default_value = 5.50
             links.new(separate.outputs['Z'], upper.inputs['Value'])
-            region = nodes.new('ShaderNodeMath'); region.operation = 'MULTIPLY'
-            links.new(outside.outputs[0], region.inputs[0]); links.new(upper.outputs[0], region.inputs[1])
+            region = nodes.new('ShaderNodeMath')
+            region.operation = 'MULTIPLY'
+            links.new(outside.outputs[0], region.inputs[0])
+            links.new(upper.outputs[0], region.inputs[1])
             clean = nodes.new('ShaderNodeMixRGB')
-            links.new(region.outputs[0], clean.inputs[0]); links.new(bw.outputs[0], clean.inputs[1])
+            links.new(region.outputs[0], clean.inputs[0])
+            links.new(bw.outputs[0], clean.inputs[1])
             clean.inputs[2].default_value = (.50, .50, .50, 1)
-            intensity = nodes.new('ShaderNodeMath'); intensity.operation = 'MULTIPLY_ADD'
-            intensity.inputs[1].default_value = .90; intensity.inputs[2].default_value = .36
+            intensity = nodes.new('ShaderNodeMath')
+            intensity.operation = 'MULTIPLY_ADD'
+            intensity.inputs[1].default_value = .90
+            intensity.inputs[2].default_value = .36
             links.new(clean.outputs[0], intensity.inputs[0])
-            multiply = nodes.new('ShaderNodeMixRGB'); multiply.blend_type = 'MULTIPLY'
+            multiply = nodes.new('ShaderNodeMixRGB')
+            multiply.blend_type = 'MULTIPLY'
             multiply.inputs[0].default_value = 1
-            links.new(ramp.outputs[0], multiply.inputs[1]); links.new(intensity.outputs[0], multiply.inputs[2])
+            links.new(ramp.outputs[0], multiply.inputs[1])
+            links.new(intensity.outputs[0], multiply.inputs[2])
             color_socket = multiply.outputs[0]
-        ao = nodes.new('ShaderNodeAmbientOcclusion'); ao.inputs['Distance'].default_value = .12
-        links.new(color_socket, ao.inputs['Color']); links.new(ao.outputs['Color'], shader.inputs['Base Color'])
+        ao = nodes.new('ShaderNodeAmbientOcclusion')
+        ao.inputs['Distance'].default_value = .12
+        links.new(color_socket, ao.inputs['Color'])
+        links.new(ao.outputs['Color'], shader.inputs['Base Color'])
         return material
 
     olive = (.155, .178, .105)
@@ -530,8 +542,11 @@ def build_field(tag, output):
     bake_diffuse(body, output / f'{tag}_body.png', tag + '_body')
     gear = []
     def mesh(name, vertices, faces, material, bone='back_mid'):
-        data = bpy.data.meshes.new(name); data.from_pydata(vertices, [], faces); data.update()
-        obj = bpy.data.objects.new(name, data); scene.collection.objects.link(obj)
+        data = bpy.data.meshes.new(name)
+        data.from_pydata(vertices, [], faces)
+        data.update()
+        obj = bpy.data.objects.new(name, data)
+        scene.collection.objects.link(obj)
         obj.data.materials.append(material)
         obj.vertex_groups.new(name=bone).add(list(range(len(vertices))), 1, 'REPLACE')
         obj.modifiers.new('Infantry rig', 'ARMATURE').object = rig
@@ -545,7 +560,8 @@ def build_field(tag, output):
         for row in range(12):
             t = row / 11
             for i in range(40):
-                a = math.tau * i / 40; radius = math.cos(t * math.pi / 2)
+                a = math.tau * i / 40
+                radius = math.cos(t * math.pi / 2)
                 vertices.append((.43 * radius * math.cos(a) + .025 * t, -.07 + .49 * radius * math.sin(a), 6.91 + .38 * math.sin(t * math.pi / 2)))
         mesh('Knitted field cap', vertices, [(r * 40 + i, r * 40 + (i + 1) % 40, (r + 1) * 40 + (i + 1) % 40, (r + 1) * 40 + i) for r in range(11) for i in range(40)], wool, 'head')
         vertices = [(.44 * math.cos(i * math.tau / 40), -.07 + .50 * math.sin(i * math.tau / 40), 6.91 + r * .12) for r in range(2) for i in range(40)]
@@ -566,27 +582,40 @@ def build_field(tag, output):
         obj.select_set(True)
         for face in obj.data.polygons: face.use_smooth = True
     bpy.context.view_layer.objects.active = gear[0]
-    bpy.ops.object.join(); equipment = bpy.context.object; equipment.name = tag + '_gear'
-    solid = equipment.modifiers.new('Fabric thickness', 'SOLIDIFY'); solid.thickness = .008
+    bpy.ops.object.join()
+    equipment = bpy.context.object
+    equipment.name = tag + '_gear'
+    solid = equipment.modifiers.new('Fabric thickness', 'SOLIDIFY')
+    solid.thickness = .008
     bpy.ops.object.modifier_apply(modifier=solid.name)
-    bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT')
-    bpy.ops.uv.smart_project(island_margin=.015); bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_all(action='SELECT')
+    bpy.ops.uv.smart_project(island_margin=.015)
+    bpy.ops.object.mode_set(mode='OBJECT')
     bake_diffuse(equipment, output / f'{tag}_gear.png', tag + '_gear')
     for obj, part in ((body, 'body'), (equipment, 'gear')):
         (output / f'{tag}_field_{part}_diffuse.dds').write_bytes((output / f'{tag}_{part}.png').read_bytes())
         for kind in ('normal', 'specular'):
             (output / f'{tag}_field_{part}_{kind}.dds').write_bytes(NORMALS[tag].read_bytes())
-        bm = bmesh.new(); bm.from_mesh(obj.data)
-        bmesh.ops.triangulate(bm, faces=list(bm.faces)); bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
+        bm = bmesh.new()
+        bm.from_mesh(obj.data)
+        bmesh.ops.triangulate(bm, faces=list(bm.faces))
+        bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
         bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.calc_area() < 1e-12], context='FACES_ONLY')
-        bm.to_mesh(obj.data); bm.free()
+        bm.to_mesh(obj.data)
+        bm.free()
         spec = SimpleNamespace(shader=['PdxMeshAdvanced'], diff=[f'{tag}_field_{part}_diffuse.dds'], n=[f'{tag}_field_{part}_normal.dds'], spec=[f'{tag}_field_{part}_specular.dds'])
-        mat = pdx.create_shader(spec, tag + '_' + part, str(output)); obj.data.materials.clear(); obj.data.materials.append(mat)
+        mat = pdx.create_shader(spec, tag + '_' + part, str(output))
+        obj.data.materials.clear()
+        obj.data.materials.append(mat)
         for face in obj.data.polygons: face.material_index = 0
-    bpy.ops.object.select_all(action='DESELECT'); body.select_set(True); equipment.select_set(True)
+    bpy.ops.object.select_all(action='DESELECT')
+    body.select_set(True)
+    equipment.select_set(True)
     path = output / f'{tag}_field.mesh'
     pdx.export_meshfile(str(path), exp_selected=True, exp_locs=False)
-    data, donor_data = path.read_bytes(), donor.read_bytes(); marker = b'[locator\0'
+    data, donor_data = path.read_bytes(), donor.read_bytes()
+    marker = b'[locator\0'
     assert data.count(marker) == donor_data.count(marker) == 1
     path.write_bytes(data[:data.index(marker)] + donor_data[donor_data.index(marker):])
     finalize_mesh(path)

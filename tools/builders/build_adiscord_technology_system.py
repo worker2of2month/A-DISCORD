@@ -36,9 +36,8 @@ def ensure_technology_state_gfx_current() -> None:
         )
 # The campaign starts in 2160. Keep only a short recovered baseline before
 # that date, place the overwhelming majority of research in the playable
-# 2160-2175 window, and leave one small 2180 endgame generation. This follows
-# Darkest Hour's useful cadence: dense playable eras, not decades of empty
-# waiting between otherwise interesting nodes.
+# 2160-2175 window, and leave one small 2180 endgame generation. Dense playable
+# eras avoid decades of empty waiting between otherwise interesting nodes.
 LEGACY_YEARS = (
     2100, 2120, 2140, 2150,
     2160, 2162, 2164, 2166, 2168,
@@ -73,11 +72,9 @@ YEAR_LABEL_HEIGHT = 22
 HORIZONTAL_LANE_SLOT_MULTIPLIER = 2
 LANE_SLOT_MULTIPLIER = 3
 BRANCH_GAP = 90
-# Measured against the two reference mods: their per-technology combat lines run
-# about 0.05 with capstones near 0.10, where ours were near 0.02 and read as
-# cosmetic. Doubling the combat band lands on their numbers without touching the
-# economy percentages, which already matched. Organisation is deliberately left
-# out of the multiplier because it is an absolute value, not a percentage.
+# Per-technology combat bonuses use a visible baseline around 0.05 with
+# capstones near 0.10. Organisation is deliberately excluded from the
+# multiplier because it is an absolute value rather than a percentage.
 COMBAT_INTENSITY = 2.0
 COMBAT_PROFILES = frozenset({
     "infantry",
@@ -688,7 +685,7 @@ APPLIED_PROGRAMME_KEYS = {programme["key"] for programme in APPLIED_PROGRAMMES}
 
 
 def build_applied_branches() -> tuple[Branch, ...]:
-    """Create optional TDA-style programmes without lengthening old trunks."""
+    """Create optional side programmes without lengthening the main trunks."""
 
     return tuple(
         Branch(
@@ -3373,9 +3370,9 @@ COMPACT_EFFECTS_BY_TECH_KEY = {
         "production_factory_start_efficiency_factor = 0.02",
         "production_factory_efficiency_gain_factor = 0.02",
     ),
-    # The concentrated school escalates to a real capstone: both reference mods
-    # end their industry chains near 0.15-0.20 factory output, and they charge for
-    # it with bombing exposure and retooling time rather than a flat ramp.
+    # The concentrated school escalates to a real capstone instead of flattening
+    # every tier into the same factory-output ramp. The stronger final step is
+    # balanced by bombing exposure and retooling time.
     "concentrated_industrial_zones": (
         "industrial_capacity_factory = 0.05",
         "industrial_capacity_dockyard = 0.04",
@@ -3953,11 +3950,9 @@ def base_effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     tier_count = len(branch.techs)
     progress = 0 if tier_count <= 1 else tier * 6 / (tier_count - 1)
     capstone_scale = 1.45 if tier == tier_count - 1 else 1.0
-    # Economy percentages already match what The Fire Rises and The Darkest Hour
-    # ship, but their combat lines sit near 0.05 while ours sat near 0.02. The
-    # multiplier is applied to the two bands here rather than at each of the four
-    # downstream effect tables, so every route through this function stays in
-    # step and economy branches are left exactly as they were.
+    # Combat lines use a dedicated intensity multiplier while economy
+    # percentages remain unchanged. Applying the multiplier to the two bands here
+    # keeps every downstream effect table in step.
     intensity = COMBAT_INTENSITY if profile in COMBAT_PROFILES else 1.0
     small = (0.012 + progress * 0.001) * capstone_scale * intensity
     medium = (0.020 + progress * 0.002) * capstone_scale * intensity
@@ -4682,8 +4677,8 @@ def icon_for_technology(branch: Branch, index: int) -> str:
     icon = ICON_ALIASES.get(tech.icon, tech.icon)
 
     # The GUI selects the wide item template for equipment unlocks. Preserve a
-    # readable vehicle/weapon silhouette there; the old code compacted these
-    # sprites and turned trains and tanks into unrelated support-company icons.
+    # readable vehicle or weapon silhouette instead of compacting equipment into
+    # unrelated support-company icons.
     if tech.id in ENABLE_EQUIPMENT:
         candidate = EQUIPMENT_UNLOCK_ICONS.get(tech.id, icon)
         size = technology_icon_size(candidate)

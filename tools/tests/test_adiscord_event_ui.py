@@ -206,7 +206,7 @@ class EventWindowUiTests(unittest.TestCase):
         self.assertIsNotNone(slot_match)
         self.assertLessEqual(options_y + int(slot_match.group(1)) * 4, _size(bottom)[1])
 
-        # Match the expanding COUNTRY Description in vanilla/TFR. A scrollbar
+        # Match the native expanding COUNTRY Description. A scrollbar
         # can clip the painted text while the handler still reserves its full height.
         # This checks the chosen configuration, not the engine's runtime geometry.
         self.assertNotRegex(description, r"\bfixedsize\s*=\s*yes\b")
