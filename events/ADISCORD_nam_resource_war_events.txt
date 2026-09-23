@@ -51,6 +51,24 @@ country_event = {
 	option = { name = ADISCORD_nam_resource_war.2.a }
 }
 
+# Kefreite receives an explicit player-facing notice when its hidden
+# resource-war focus branch becomes available.
+country_event = {
+	id = ADISCORD_nam_resource_war.3
+	title = ADISCORD_nam_resource_war.3.t
+	desc = ADISCORD_nam_resource_war.3.d
+	picture = GFX_event_adiscord_vorkerland_explosion
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		tag = VAL
+		ADISCORD_nam_resource_war_active = yes
+	}
+
+	option = { name = ADISCORD_nam_resource_war.3.a }
+}
+
 # Hard ceiling for an edge case in which neither mainland AI can convert its
 # strength into capitulation. Control of the resource basin decides the treaty.
 country_event = {
