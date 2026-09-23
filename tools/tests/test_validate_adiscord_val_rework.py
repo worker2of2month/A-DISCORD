@@ -3468,7 +3468,8 @@ class ValExpandedCampaignTests(unittest.TestCase):
             if name != "VAL_Resource_War_Contracts":
                 dependencies = [e.value for e in walk(body) if e.key == "focus"]
                 self.assertNotIn("VAL_Resource_War_Contracts", dependencies, name)
-        self.assertEqual(self.scalar(self.getblock(focuses["VAL_Return_Southern_Tsaygen"], "prerequisite"), "focus"), "VAL_Foreign_Broker_Licences")
+        tsaygen_prerequisites = [self.scalar(group, "focus") for group in self.getblocks(focuses["VAL_Return_Southern_Tsaygen"], "prerequisite")]
+        self.assertEqual(tsaygen_prerequisites, ["VAL_Contracts_Outlive_Kings", "VAL_Foreign_Broker_Licences"])
         self.assertEqual(self.scalar(self.getblock(focuses["VAL_frontier_return_irem"], "prerequisite"), "focus"), "VAL_Return_Southern_Tsaygen")
 
     def test_resource_war_transitions_invalidate_the_focus_layout_without_an_aid_contract(self):
