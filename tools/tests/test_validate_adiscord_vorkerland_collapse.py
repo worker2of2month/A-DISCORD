@@ -3365,7 +3365,7 @@ class InterventionAndVisualTests(unittest.TestCase):
                 definition.group(1),
                 news_id,
             )
-            for token in ("major = yes", "is_triggered_only = yes", "fire_only_once = yes"):
+            for token in ("major = yes", "is_triggered_only = yes", "fire_only_once = no"):
                 self.assertIn(token, definition.group(1), news_id)
             self.assertNotIn("hidden = yes", definition.group(1), news_id)
             self.assertIn(f"NOT = {{ has_global_flag = {shown_flag} }}", outcome, news_id)
