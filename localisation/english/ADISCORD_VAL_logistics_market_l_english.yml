@@ -3,7 +3,7 @@
  VAL_trade_corridors_desc: "Kefreyt can no longer treat trade as a line in a ledger. Cargo must physically pass through ports, depots, passes and dependent administrations.\n\nOperational corridors: §Y[?VAL_trade_corridors_active|0]/[?VAL_trade_corridors_capacity|0]§! commissioned\nRoute security: §Y[?VAL_corridor_security|0]/3§!\nGrey-market pressure: §Y[?VAL_black_market_pressure|0]/100§!\n\nEach open route brings §G20§! to the treasury every week. An upgraded route adds another §G10§!. A route only becomes an obligation after it has actually opened once; losing a key node thereafter stops the payment and feeds smuggling. Income amounts are before grey-market losses."
 
  VAL_population_markets: "Population and Refugees"
- VAL_population_markets_desc:0 "£population_texticon Available refugees: §Y[?VAL_displaced_population|1]§! × §Y10,000§!. Training: §Y[?VAL_refugee_training_escrow|1]§!; labour: §Y[?VAL_refugee_labor_escrow|1]§! × §Y10,000§!.\n£population_texticon Housed: §Y[?VAL_population_present|1]§! / §Y[?VAL_refugee_housing|0]§! × §Y10,000§!. £manpower_texticon Local volunteer reserve: §Y[?VAL_local_volunteer_pool|1]§! × §Y10,000§!.\n\nCivilians do not disappear automatically. Labour reserves people for £time_texticon §Y90 days§!; training converts exactly £manpower_texticon §Y5,000§! volunteers into army manpower after £time_texticon §Y35 days§!. Resettlement moves £population_texticon §Y100,000§! inhabitants to the chosen cleared state. Active decisions show completion times."
+ VAL_population_markets_desc:0 "£population_texticon Available: §Y[?VAL_displaced_population|1]§! × §Y10,000§! | Housed: §Y[?VAL_population_present|1]§! / §Y[?VAL_refugee_housing|0]§! × §Y10,000§!\n£manpower_texticon Local volunteer reserve: §Y[?VAL_local_volunteer_pool|1]§! × §Y10,000§!\n\nUse the decisions below to admit, house, employ, train or resettle people."
 
  VAL_logistics_cost_50: "£ADISCORD_economy_treasury_texticon  §Y50§!"
  VAL_logistics_cost_100: "£ADISCORD_economy_treasury_texticon  §Y100§!"
@@ -27,7 +27,7 @@
  VAL_open_refugee_border: "Reopen the Crossings"
  VAL_open_refugee_border_desc: "Restore trade and allow admission through offers that are still open. Reopening the border does not create new refugee waves."
  VAL_contract_refugee_labor: "Offer Work Contracts"
- VAL_contract_refugee_labor_desc:0 "Employ £population_texticon §Y100,000§! available refugees in construction for 90 days, costing £pol_power §Y75§! political power. Workers still need housing and cannot be recruited or resettled until completion or cancellation, when all workers return to the available pool."
+ VAL_contract_refugee_labor_desc:0 "Reserve £population_texticon §Y100,000§! refugees for §Y90 days§!. Cost: £pol_power §Y50§!. While active: §G+8%§! construction speed and §G+5%§! civilian income."
  VAL_fund_resettlement_depots: "Resettle Refugees in [FROM.GetName]"
  VAL_fund_resettlement_depots_desc: "Move £population_texticon §Y100,000§! admitted refugees into [FROM.GetName] for §Y250§! treasury. The state gains §G100,000 permanent population§!. This program is limited to selected low-population Kefreyt home regions under our control, cannot operate while pollution reclamation is unfinished, and can be used only once per region."
  VAL_organize_refugee_return: "Organize Refugee Return"
@@ -61,13 +61,13 @@
  VAL_refugee_contract_labor: "Contracts for the Displaced"
  VAL_refugee_contract_labor_desc: "Part of the displaced population has received formal work contracts and entered construction and industrial projects."
 
- VAL_refugee_admission_tt: "Admit §Y100,000§! refugees. Grey-market pressure: §R+5§!."
+ VAL_refugee_admission_tt: "Admit §Y100,000§! refugees. Grey-market pressure: §R+3§!."
 
- VAL_refugee_admission_vorkerland_tt: "Admit §Y300,000§! refugees. Grey-market pressure: §R+5§!."
- VAL_refugee_admission_stelander_tt: "Admit §Y200,000§! refugees. Grey-market pressure: §R+5§!."
- VAL_refugee_admission_nodrul_tt: "Admit §Y100,000§! refugees. Grey-market pressure: §R+5§!."
- VAL_refugee_admission_north_tt: "Admit §Y100,000§! refugees. Grey-market pressure: §R+5§!."
- VAL_refugee_admission_perimeter_tt: "Admit §Y100,000§! refugees. Grey-market pressure: §R+5§!."
+ VAL_refugee_admission_vorkerland_tt: "Admit §Y300,000§! refugees. Grey-market pressure: §R+3§!."
+ VAL_refugee_admission_stelander_tt: "Admit §Y200,000§! refugees. Grey-market pressure: §R+3§!."
+ VAL_refugee_admission_nodrul_tt: "Admit §Y100,000§! refugees. Grey-market pressure: §R+3§!."
+ VAL_refugee_admission_north_tt: "Admit §Y100,000§! refugees. Grey-market pressure: §R+3§!."
+ VAL_refugee_admission_perimeter_tt: "Admit §Y100,000§! refugees. Grey-market pressure: §R+3§!."
 
  VAL_refugee_border_open_tt: "The border is open to refugees"
 
@@ -75,21 +75,21 @@
 
  VAL_accept_vorkerland_refugees: "Admit Refugees from Vorkerland"
 
- VAL_accept_vorkerland_refugees_desc:0 "While the war continues, admit §Y300,000§! refugees for §Y250§! coins. The decision can be repeated no more than once per year; grey-market pressure rises by §R5§!. Admitted people enter the resettlement reserve; army manpower must be trained separately."
+ VAL_accept_vorkerland_refugees_desc:0 "Cost: £ADISCORD_economy_treasury_texticon §Y100§!\nResult: £population_texticon §G+300,000§! refugees\nGrey-market pressure: §R+3§!\nCooldown: §Y365 days§!."
 
  VAL_accept_stelander_refugees: "Admit Refugees from Stelander"
 
- VAL_accept_stelander_refugees_desc:0 "While the war continues, admit §Y200,000§! refugees for §Y250§! coins. The decision can be repeated no more than once per year; grey-market pressure rises by §R5§!. Admitted people enter the resettlement reserve; army manpower must be trained separately."
+ VAL_accept_stelander_refugees_desc:0 "Cost: £ADISCORD_economy_treasury_texticon §Y100§!\nResult: £population_texticon §G+200,000§! refugees\nGrey-market pressure: §R+3§!\nCooldown: §Y365 days§!."
 
  VAL_accept_nodrul_refugees: "Admit Refugees from Nodrul"
 
- VAL_accept_nodrul_refugees_desc:0 "While the war continues, admit §Y100,000§! refugees for §Y250§! coins. The decision can be repeated no more than once per year; grey-market pressure rises by §R5§!. Admitted people enter the resettlement reserve; army manpower must be trained separately."
+ VAL_accept_nodrul_refugees_desc:0 "Cost: £ADISCORD_economy_treasury_texticon §Y100§!\nResult: £population_texticon §G+100,000§! refugees\nGrey-market pressure: §R+3§!\nCooldown: §Y365 days§!."
 
  VAL_accept_north_refugees: "Admit Refugees from the Northern Countries"
 
- VAL_accept_north_refugees_desc:0 "While the northern war continues, admit §Y100,000§! refugees for §Y250§! coins. The decision can be repeated no more than once per year; grey-market pressure rises by §R5§!. Admitted people enter the resettlement reserve; army manpower must be trained separately."
+ VAL_accept_north_refugees_desc:0 "Cost: £ADISCORD_economy_treasury_texticon §Y100§!\nResult: £population_texticon §G+100,000§! refugees\nGrey-market pressure: §R+3§!\nCooldown: §Y365 days§!."
  VAL_accept_perimeter_refugees: "Admit Refugees from Beyond the Perimeter"
- VAL_accept_perimeter_refugees_desc:0 "While the Perimeter is open, admit §Y100,000§! refugees for §Y250§! coins. The decision can be repeated no more than once per year; grey-market pressure rises by §R5§!. Admitted people enter the resettlement reserve; army manpower must be trained separately."
+ VAL_accept_perimeter_refugees_desc:0 "Cost: £ADISCORD_economy_treasury_texticon §Y100§!\nResult: £population_texticon §G+100,000§! refugees\nGrey-market pressure: §R+3§!\nCooldown: §Y365 days§!."
  VAL_refugee_resettlement_result_tt:0 "£population_texticon §Y100,000§! displaced people settle permanently in §Y[FROM.GetName]§!."
  VAL_logistics_cost_100_blocked: "£ADISCORD_economy_treasury_texticon  §R100§!"
  VAL_logistics_cost_100_tooltip: "£ADISCORD_economy_treasury_texticon  §Y100§!"
@@ -113,8 +113,8 @@
 
  VAL_refugee_wave_limit_tt:0 "Fewer than three waves have been admitted from this region."
  VAL_train_refugee_volunteers:0 "Train Refugee Volunteers"
- VAL_train_refugee_volunteers_desc:0 "Train £population_texticon §Y5,000§! available refugees for 35 days using £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment. Trainees still need housing until completion. Capitulation or subjugation cancels training and refunds the people and costs."
- VAL_refugee_training_start_tt:0 "Reserve exactly £population_texticon §Y5,000§! refugees for §Y35 days§!, then add them to army manpower. Cancellation returns the volunteers, £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment."
+ VAL_train_refugee_volunteers_desc:0 "Reserve £population_texticon §Y10,000§! refugees for §Y35 days§!. Cost: £pol_power §Y50§! and £infantry_equipment_texticon §Y2500§!. Completion adds £manpower_texticon §G10,000§! army manpower."
+ VAL_refugee_training_start_tt:0 "After §Y35 days§!: £manpower_texticon §G+10,000§! army manpower. Cancellation returns the people, £pol_power §Y50§! and £infantry_equipment_texticon §Y2500§!."
  VAL_refugee_window_open_tt: "An admission window is open for this refugee route. It lasts §Y180 days§! from the start of the flow. If this condition is unmet, the flow has not opened yet, its admission window has expired, or all three waves have already been admitted."
  VAL_refugee_war_active_tt: "This route's war is ongoing; the decision can be used once per year."
  VAL_refugee_perimeter_active_tt: "The Perimeter is open; the decision can be used once per year."
@@ -125,17 +125,17 @@
 
  VAL_recruit_local_volunteers_desc:0 "Conscription remains at 1.25%. The additional contract reserve is 2% of the initial population of Kefreyt's seven states and does not replenish. Each intake trains £population_texticon §Y5,000§! local volunteers over 35 days for £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment. Capitulation or subjugation refunds the full intake."
 
- VAL_training_cost:0 "£population_texticon §Y5000§! £pol_power §Y75§! £infantry_equipment_texticon §Y5000§!"
+ VAL_training_cost:0 "£population_texticon §Y10000§! £pol_power §Y50§! £infantry_equipment_texticon §Y2500§!"
 
- VAL_training_cost_blocked:0 "£population_texticon §R5000§! £pol_power §R75§! £infantry_equipment_texticon §R5000§!"
+ VAL_training_cost_blocked:0 "£population_texticon §R10000§! £pol_power §R50§! £infantry_equipment_texticon §R2500§!"
 
- VAL_training_cost_tooltip:0 "Requires £population_texticon §Y5,000§! volunteers from the reserve named in the decision, £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment."
+ VAL_training_cost_tooltip:0 "Requires £population_texticon §Y10,000§! refugees, £pol_power §Y50§! political power and £infantry_equipment_texticon §Y2500§! infantry equipment."
 
  VAL_labor_program_tt:0 "Reserve £population_texticon §Y100,000§! available refugees for 90 days: +8% construction speed, +5% civilian income, -1% stability. All workers then return to the available pool."
 
  VAL_expand_refugee_housing:0 "Expand temporary settlements"
 
- VAL_expand_refugee_housing_desc:0 "Spend 500 coins to house 200,000 additional people after 45 days. Maximum capacity: one million. Capitulation or subjugation refunds the payment."
+ VAL_expand_refugee_housing_desc:0 "Cost: £ADISCORD_economy_treasury_texticon §Y250§!\nTime: §Y45 days§!\nResult: housing capacity §G+200,000§!."
 
  VAL_housing_start_tt:0 "After 45 days: housing for 200,000 additional people."
 
@@ -145,6 +145,6 @@
 
  VAL_broker_audit_tt:0 "Broker dependence: -1. Broker licences and contraband purchases are unavailable for 60 days."
 
- VAL_labor_cost:0 "£population_texticon §Y100 000§! £pol_power §Y75§!"
- VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! £pol_power §R75§!"
- VAL_labor_cost_tooltip:0 "Requires £population_texticon §Y100,000§! available refugees and £pol_power §Y75§! political power. People are reserved for 90 days and return on completion or cancellation."
+ VAL_labor_cost:0 "£population_texticon §Y100 000§! £pol_power §Y50§!"
+ VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! £pol_power §R50§!"
+ VAL_labor_cost_tooltip:0 "Requires £population_texticon §Y100,000§! available refugees and £pol_power §Y50§! political power."
