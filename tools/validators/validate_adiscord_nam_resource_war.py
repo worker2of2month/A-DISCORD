@@ -247,6 +247,7 @@ def main() -> int:
     hostilities = named_block(effects, "ADISCORD_nam_resource_war_begin_hostilities")
     for mutation in (
         "set_global_flag = ADISCORD_nam_resource_war_started",
+        "country_event = { id = ADISCORD_nam_resource_war.3 hours = 1 }",
         'load_oob = "NAM_resource_war"',
         "create_faction_from_template = {",
         "declare_war_on = { target = NAM type = annex_everything }",
@@ -268,7 +269,7 @@ def main() -> int:
         "country_exists = AZH",
         "set_global_flag = ADISCORD_nam_resource_war_scheduled",
         "id = ADISCORD_nam_resource_war.1",
-        "days = 120",
+        "days = 850",
         "random_days = 90",
     ):
         check(schedule.count(token) == 1, f"bounded resource-war schedule lacks exact token: {token}")
