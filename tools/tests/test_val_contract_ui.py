@@ -1019,7 +1019,8 @@ class TestValExpansionRoute(unittest.TestCase):
             for group in frontier
             if group.key == "prerequisite"
         ]
-        self.assertEqual(groups, [{"VAL_One_Ledger_One_Banner"}, {"VAL_Different_Views_On_Freedom"}])
+        self.assertEqual(groups, [{"VAL_One_Ledger_One_Banner"}, {"VAL_Trading_Partners", "VAL_October_Of_2160"}])
+        self.assertNotIn("VAL_Different_Views_On_Freedom", {item for group in groups for item in group})
         self.assertNotIn("VAL_The_Steel_Contract", {item for group in groups for item in group})
 
         coords = [(get(f, "x"), get(f, "y")) for f in focuses.values()]
