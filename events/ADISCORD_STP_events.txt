@@ -56,8 +56,8 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_preparation.15.skip
 		trigger = { is_ai = no }
-		set_country_flag = STP_skip_intro_story_events
 		custom_effect_tooltip = STP_skip_intro_story_events_tt
+		hidden_effect = { set_country_flag = STP_skip_intro_story_events }
 	}
 }
 
@@ -433,10 +433,12 @@ country_event = {
 
 	option = {
 		name = ADISCORD_STP_regions.1.a
-		set_country_flag = STP_sided_with_Maksim_flag
-		if = {
-			limit = { NOT = { has_country_flag = STP_battle_for_stelander_active } }
-			STP_initialize_battle_for_stelander = yes
+		hidden_effect = {
+			set_country_flag = STP_sided_with_Maksim_flag
+			if = {
+				limit = { NOT = { has_country_flag = STP_battle_for_stelander_active } }
+				STP_initialize_battle_for_stelander = yes
+			}
 		}
 	}
 }
@@ -1334,9 +1336,11 @@ country_event = {
 		name = ADISCORD_STP_pc.16.a
 		ai_chance = { factor = 70 }
 		set_capital = { state = 1 }
-		set_country_flag = STP_pc_capital_abilia
-		clr_country_flag = STP_pc_capital_fada
 		add_stability = 0.03
+		hidden_effect = {
+			set_country_flag = STP_pc_capital_abilia
+			clr_country_flag = STP_pc_capital_fada
+		}
 	}
 
 	option = {
@@ -1349,9 +1353,11 @@ country_event = {
 		}
 		ai_chance = { factor = 30 }
 		set_capital = { state = 28 }
-		set_country_flag = STP_pc_capital_fada
-		clr_country_flag = STP_pc_capital_abilia
 		add_political_power = 50
+		hidden_effect = {
+			set_country_flag = STP_pc_capital_fada
+			clr_country_flag = STP_pc_capital_abilia
+		}
 	}
 }
 
