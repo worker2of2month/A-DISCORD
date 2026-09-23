@@ -582,11 +582,11 @@ class RefugeeTrainingTests(unittest.TestCase):
         self.decision_effect("VAL_train_refugee_volunteers", "complete_effect")
         self.assertEqual(self.variables["VAL_displaced_population"], 9.5)
         self.assertEqual(self.variables["VAL_refugee_training_escrow"], 0.5)
-        self.assertEqual(self.rewards, [("add_political_power", -50), ("equipment", -250)])
+        self.assertEqual(self.rewards, [("add_political_power", -50), ("equipment", -2500)])
         for _ in range(2):
             self.decision_effect("VAL_train_refugee_volunteers", "remove_effect")
         self.decision_effect("VAL_train_refugee_volunteers", "cancel_effect")
-        self.assertEqual(self.rewards, [("add_political_power", -50), ("equipment", -250), ("add_manpower", 5000)])
+        self.assertEqual(self.rewards, [("add_political_power", -50), ("equipment", -2500), ("add_manpower", 5000)])
         self.assertNotIn("VAL_refugee_training_escrow", self.variables)
 
     def test_country_loss_refunds_people_and_pp_once_without_recruits(self):
@@ -598,7 +598,7 @@ class RefugeeTrainingTests(unittest.TestCase):
                 self.decision_effect("VAL_train_refugee_volunteers", "remove_effect")
                 self.decision_effect("VAL_train_refugee_volunteers", "cancel_effect")
                 self.assertEqual(self.variables["VAL_displaced_population"], 10)
-                self.assertEqual(self.rewards, [("add_political_power", -50), ("equipment", -250), ("add_political_power", 50), ("equipment", 250)])
+                self.assertEqual(self.rewards, [("add_political_power", -50), ("equipment", -2500), ("add_political_power", 50), ("equipment", 2500)])
                 self.assertNotIn("VAL_refugee_training_escrow", self.variables)
 
     def test_active_training_and_fractional_shortage_block_new_payment(self):
