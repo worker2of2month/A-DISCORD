@@ -471,7 +471,7 @@ VAL_export_arms_can_accept = {
 		has_capitulated = no
 		has_country_flag = VAL_export_offer_pending
 		VAL_export_slot_free = yes
-		NOT = { has_equipment = { infantry_equipment < 2500 } }
+		NOT = { has_equipment = { infantry_equipment < 25000 } }
 	}
 	OR = {
 		NOT = { tag = STS has_war_with = STP }
@@ -1375,7 +1375,7 @@ VAL_partner_arms_terms_valid = {
 	OR = { VAL_contract_partner = yes VAL_export_customer = yes }
 	NOT = { tag = STS has_war_with = STP }
 	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
-	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } }
+	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 25000 } } }
 }
 VAL_partner_arms_can_offer = {
  VAL = { has_completed_focus = VAL_Foreign_Broker_Licences }
@@ -1396,7 +1396,7 @@ VAL_partner_bulk_terms_valid = {
 	OR = { VAL_contract_partner = yes VAL_export_customer = yes }
 	NOT = { tag = STS has_war_with = STP }
 	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
-	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 5000 } } }
+	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 50000 } } }
 }
 VAL_partner_bulk_can_offer = {
  VAL = { has_completed_focus = VAL_Bulk_Arms_Contracts }
@@ -1417,7 +1417,7 @@ VAL_partner_arsenal_terms_valid = {
 	OR = { VAL_contract_partner = yes VAL_export_customer = yes }
 	NOT = { tag = STS has_war_with = STP }
 	check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals }
-	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 10000 } } }
+	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 100000 } } }
 }
 VAL_partner_arsenal_can_offer = {
  VAL = { has_completed_focus = VAL_Army_Arsenal_Orders }
@@ -1438,7 +1438,7 @@ VAL_partner_strategic_terms_valid = {
 	OR = { VAL_contract_partner = yes VAL_export_customer = yes }
 	NOT = { tag = STS has_war_with = STP }
 	check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals }
-	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 20000 } } }
+	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 200000 } } }
 }
 VAL_partner_strategic_can_offer = {
  VAL = { has_completed_focus = VAL_Strategic_Arms_Exports }
@@ -1711,12 +1711,37 @@ VAL_order_can_accept = {
  }
 }
 
+VAL_order_1_partner_can_pay = {
+	OR = {
+		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 375 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 375 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 500 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 750 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 1000 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 1687.5 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 1687.5 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 2250 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 3750 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 3750 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 5000 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals } }
+	}
+}
+VAL_order_2_partner_can_pay = {
+	OR = {
+		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 375 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 375 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 500 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 750 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 1000 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 1687.5 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 1687.5 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 2250 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 3750 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 3750 compare = greater_than_or_equals } }
+		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 5000 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals } }
+	}
+}
+
 VAL_order_1_can_dispatch = {
     check_variable = { var = VAL_order_1_state value = 1 compare = equals }
     NOT = { has_country_flag = VAL_order_1_quarter_paid }
     NOT = { has_country_flag = VAL_order_1_expired }
     has_active_mission = VAL_order_1_deadline
-    event_target:VAL_order_1_partner = { VAL_order_partner_valid = yes VAL_order_partner_route_open = yes check_variable = { var = ADISCORD_economy_treasury value = VAL.VAL_order_1_remaining compare = greater_than_or_equals } }
+    event_target:VAL_order_1_partner = { VAL_order_partner_valid = yes VAL_order_partner_route_open = yes VAL_order_1_partner_can_pay = yes }
     NOT = { has_equipment = { infantry_equipment < VAL_order_1_quantity } }
 }
 VAL_order_2_can_dispatch = {
@@ -1724,7 +1749,7 @@ VAL_order_2_can_dispatch = {
     NOT = { has_country_flag = VAL_order_2_quarter_paid }
     NOT = { has_country_flag = VAL_order_2_expired }
     has_active_mission = VAL_order_2_deadline
-    event_target:VAL_order_2_partner = { VAL_order_partner_valid = yes VAL_order_partner_route_open = yes check_variable = { var = ADISCORD_economy_treasury value = VAL.VAL_order_2_remaining compare = greater_than_or_equals } }
+    event_target:VAL_order_2_partner = { VAL_order_partner_valid = yes VAL_order_partner_route_open = yes VAL_order_2_partner_can_pay = yes }
     NOT = { has_equipment = { infantry_equipment < VAL_order_2_quantity } }
 }
 

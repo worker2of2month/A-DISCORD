@@ -294,7 +294,7 @@ class ValPartnerSettlementTests(unittest.TestCase):
                     self.fail(f"Unmodelled transaction effect: {key}")
         run(self.effects[name], buyer)
 
-    def facts(self, kind, quantity=2500, price=500, buyer="CIN"):
+    def facts(self, kind, quantity=25000, price=500, buyer="CIN"):
         return {
             ("VAL", "exists", "yes"): True,
             ("VAL", "has_capitulated", "no"): True,
@@ -310,7 +310,7 @@ class ValPartnerSettlementTests(unittest.TestCase):
         }
 
     def test_sales_conserve_cash_and_weapons_and_settle_only_once(self):
-        for kind, quantity, price in (("arms", 2500, 500), ("bulk", 5000, 1000), ("arsenal", 10000, 2250), ("strategic", 20000, 5000)):
+        for kind, quantity, price in (("arms", 25000, 500), ("bulk", 50000, 1000), ("arsenal", 100000, 2250), ("strategic", 200000, 5000)):
             for buyer in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
                 with self.subTest(kind=kind, buyer=buyer):
                     facts = self.facts(kind, quantity, price, buyer)
@@ -327,7 +327,7 @@ class ValPartnerSettlementTests(unittest.TestCase):
                     self.assertEqual(facts, after)
 
     def test_invalid_or_fractionally_short_sales_never_pay(self):
-        for kind, quantity, price in (("arms", 2500, 500), ("bulk", 5000, 1000), ("arsenal", 10000, 2250), ("strategic", 20000, 5000)):
+        for kind, quantity, price in (("arms", 25000, 500), ("bulk", 50000, 1000), ("arsenal", 100000, 2250), ("strategic", 200000, 5000)):
             changes = [
                 {("VAL", "equipment", "infantry_equipment"): quantity - .01},
                 {("CIN", "variable", "ADISCORD_economy_treasury"): price - .01},
@@ -348,7 +348,7 @@ class ValPartnerSettlementTests(unittest.TestCase):
                     self.assertEqual(facts, before)
 
     def test_second_export_slot_requires_focus_and_is_consumed(self):
-        facts = self.facts("bulk", 5000, 1000)
+        facts = self.facts("bulk", 50000, 1000)
         facts["VAL", "has_idea", "VAL_export_income_1"] = True
         self.assertFalse(self.matches("VAL_partner_bulk_can_accept", facts, "CIN"))
         facts["VAL", "has_completed_focus", "VAL_Northern_Clearing_House"] = True
@@ -356,7 +356,7 @@ class ValPartnerSettlementTests(unittest.TestCase):
         self.assertTrue(facts["VAL", "has_idea", "VAL_export_income_2"])
 
     def test_all_order_sizes_count_as_nam_concession_aid(self):
-        for kind, quantity, price in (("arms", 2500, 500), ("bulk", 5000, 1000), ("arsenal", 10000, 2250), ("strategic", 20000, 5000)):
+        for kind, quantity, price in (("arms", 25000, 500), ("bulk", 50000, 1000), ("arsenal", 100000, 2250), ("strategic", 200000, 5000)):
             with self.subTest(kind=kind):
                 facts = self.facts(kind, quantity, price, "NAM")
                 facts["NAM", "has_war", "yes"] = True
@@ -368,10 +368,10 @@ class ValPartnerSettlementTests(unittest.TestCase):
                 facts["VAL", "has_active_mission", "VAL_resource_aid_deadline"] = True
                 self.execute(f"VAL_settle_partner_{kind}", facts, "NAM")
                 self.assertEqual(facts["VAL", "variable", "VAL_resource_aid_rifles"], quantity)
-                self.assertEqual(bool(facts.get(("VAL", "has_country_flag", "VAL_nam_aid_delivered"))), quantity >= 5000)
+                self.assertEqual(bool(facts.get(("VAL", "has_country_flag", "VAL_nam_aid_delivered"))), quantity >= 50000)
 
     def test_sale_after_aid_deadline_does_not_restore_concession_credit(self):
-        facts = self.facts("bulk", 5000, 1000, "NAM")
+        facts = self.facts("bulk", 50000, 1000, "NAM")
         facts.update({("NAM", "has_war", "yes"): True,
                       ("NAM", "has_war_with", "EFL"): True,
                       ("NAM", "ADISCORD_nam_resource_war_active", "yes"): True,
@@ -379,7 +379,7 @@ class ValPartnerSettlementTests(unittest.TestCase):
                       ("VAL", "variable", "VAL_resource_aid_side"): 1,
                       ("VAL", "variable", "VAL_resource_aid_state"): -1})
         self.execute("VAL_settle_partner_bulk", facts, "NAM")
-        self.assertEqual(facts["NAM", "equipment", "infantry_equipment"], 5000)
+        self.assertEqual(facts["NAM", "equipment", "infantry_equipment"], 50000)
         self.assertNotIn(("VAL", "variable", "VAL_resource_aid_rifles"), facts)
 
     def test_partner_market_income_is_a_dynamic_modifier_not_an_idea(self):
@@ -1654,9 +1654,9 @@ class ValQuarterlySupplyTests(unittest.TestCase):
         for slot in (1, 2):
             prefix = f"VAL_order_{slot}"
             flags = {prefix+"_quarterly"}
-            values = {prefix+"_state": 1, prefix+"_completed": 0, prefix+"_remaining": 500, prefix+"_quantity": 2500}
+            values = {prefix+"_state": 1, prefix+"_completed": 0, prefix+"_remaining": 500, prefix+"_quantity": 25000}
             cash = {"VAL": 0, "buyer": 2000}
-            equipment = {"VAL": 10000, "buyer": 0}
+            equipment = {"VAL": 100000, "buyer": 0}
             events = []
             timer = [90]
             def number(value):
@@ -1671,7 +1671,7 @@ class ValQuarterlySupplyTests(unittest.TestCase):
                     elif e.key == "has_country_flag": answer = e.value in flags
                     elif e.key == "has_capitulated": answer = False
                     elif e.key.startswith("event_target:"): answer = True
-                    elif e.key == prefix+"_can_dispatch": answer = prefix+"_quarter_paid" not in flags and prefix+"_expired" not in flags and cash["buyer"] >= 500 and equipment["VAL"] >= 2500
+                    elif e.key == prefix+"_can_dispatch": answer = prefix+"_quarter_paid" not in flags and prefix+"_expired" not in flags and cash["buyer"] >= 500 and equipment["VAL"] >= 25000
                     elif e.key == "check_variable":
                         a=values.get(scalar(e.value,"var"),0);b=number(scalar(e.value,"value"));op=scalar(e.value,"compare")
                         answer={"equals":a==b,"greater_than_or_equals":a>=b}[op]
@@ -1700,7 +1700,7 @@ class ValQuarterlySupplyTests(unittest.TestCase):
                     elif key=="activate_mission": timer[0]=30
                     elif key=="add_days_mission_timeout": timer[0]+=number(scalar(val,"days"))
                     elif key=="country_event": events.append(scalar(val,"id"))
-                    elif key in ("VAL_refresh_order_summary","ADISCORD_economy_mark_dirty","VAL_contract_record_success","save_event_target_as","remove_mission"): pass
+                    elif key in ("VAL_refresh_order_summary","ADISCORD_economy_initialize_country","ADISCORD_economy_mark_dirty","VAL_contract_record_success","save_event_target_as","remove_mission"): pass
                     elif key in effects: run(effects[key],scope)
                     else: self.fail("Unmodelled effect: "+key)
             for quarter in range(4):
@@ -1713,7 +1713,7 @@ class ValQuarterlySupplyTests(unittest.TestCase):
                 run(effects[prefix+"_quarterly_reconcile"])
                 if quarter<3: self.assertEqual(timer[0],95 if quarter==2 else 90)
             self.assertEqual(cash,{"VAL":2000,"buyer":0})
-            self.assertEqual(equipment,{"VAL":0,"buyer":10000})
+            self.assertEqual(equipment,{"VAL":0,"buyer":100000})
             self.assertEqual(events,["val_contract.420"])
             self.assertEqual(values[prefix+"_state"],0)
             # A missed quarter grants exactly 15 days, then cancellation frees the slot.
@@ -1727,6 +1727,24 @@ class ValQuarterlySupplyTests(unittest.TestCase):
             self.assertEqual(values[prefix+"_state"],0)
             self.assertEqual(events[-1],"val_contract.421")
             self.assertEqual(cash,{"VAL":2000,"buyer":0})
+
+    def test_quarterly_orders_auto_dispatch_and_use_literal_cash_tariffs(self):
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        reconcile = named_block(effects, "VAL_contract_reconcile")
+        self.assertIn("VAL_order_1_can_dispatch = yes", reconcile)
+        self.assertIn("VAL_order_1_dispatch = yes", reconcile)
+        self.assertIn("VAL_order_2_can_dispatch = yes", reconcile)
+        self.assertIn("VAL_order_2_dispatch = yes", reconcile)
+        for slot in (1, 2):
+            helper = named_block(effects, f"VAL_order_{slot}_settle_payment")
+            for amount in ("375", "500", "750", "1000", "1687.5", "2250", "3750", "5000"):
+                self.assertIn(f"ADISCORD_economy_treasury value = {amount}", helper)
+            dispatch = named_block(effects, f"VAL_order_{slot}_dispatch")
+            legacy = named_block(effects, f"VAL_order_{slot}_legacy_dispatch")
+            self.assertIn(f"VAL_order_{slot}_settle_payment = yes", dispatch)
+            self.assertIn(f"VAL_order_{slot}_settle_payment = yes", legacy)
+            self.assertNotIn(f"VAL.VAL_order_{slot}_remaining", dispatch)
+            self.assertNotIn(f"VAL.VAL_order_{slot}_remaining", legacy)
 
 
 class ValPartnerVisibilityTests(unittest.TestCase):
