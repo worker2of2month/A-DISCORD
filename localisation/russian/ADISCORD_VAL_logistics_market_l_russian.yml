@@ -125,9 +125,9 @@
 
  VAL_recruit_local_volunteers_desc:0 "Призыв остаётся на уровне 1,25%. Дополнительный договорной резерв равен 2% исходного населения семи регионов Кефрейта и не возобновляется. Каждый набор: £population_texticon §Y5 тыс.§! местных добровольцев, 35 дней, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения. При капитуляции или потере независимости — полный возврат."
 
- VAL_training_cost:0 "£population_texticon §Y5000§! £pol_power §Y75§! £infantry_equipment_texticon §Y5000§!"
+ VAL_training_cost:0 "£population_texticon §Y5000§! §Y75§! £political_power_texticon £infantry_equipment_texticon §Y5000§!"
 
- VAL_training_cost_blocked:0 "£population_texticon §R5000§! £pol_power §R75§! £infantry_equipment_texticon §R5000§!"
+ VAL_training_cost_blocked:0 "£population_texticon §R5000§! §R75§! £political_power_texticon £infantry_equipment_texticon §R5000§!"
 
  VAL_training_cost_tooltip:0 "Нужно £population_texticon §Y5 000§! добровольцев из указанного в решении резерва, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! пехотного снаряжения."
 
@@ -145,6 +145,6 @@
 
  VAL_broker_audit_tt:0 "Зависимость от посредников: -1. Лицензии и закупки контрабанды закрываются на 60 дней."
 
- VAL_labor_cost:0 "£population_texticon §Y100 000§! £pol_power §Y75§!"
- VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! £pol_power §R75§!"
+ VAL_labor_cost:0 "£population_texticon §Y100 000§! §Y75§! £political_power_texticon"
+ VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! §R75§! £political_power_texticon"
  VAL_labor_cost_tooltip:0 "Нужно £population_texticon §Y100 000§! свободных переселенцев и §Y75§! £political_power_texticon. Люди резервируются на 90 дней и возвращаются после завершения или отмены контракта."
