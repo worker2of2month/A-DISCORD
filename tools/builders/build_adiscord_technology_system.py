@@ -3370,9 +3370,9 @@ COMPACT_EFFECTS_BY_TECH_KEY = {
         "production_factory_start_efficiency_factor = 0.02",
         "production_factory_efficiency_gain_factor = 0.02",
     ),
-    # The concentrated school escalates to a real capstone: both reference mods
-    # end their industry chains near 0.15-0.20 factory output, and they charge for
-    # it with bombing exposure and retooling time rather than a flat ramp.
+    # The concentrated school escalates to a real capstone instead of flattening
+    # every tier into the same factory-output ramp. The stronger final step is
+    # balanced by bombing exposure and retooling time.
     "concentrated_industrial_zones": (
         "industrial_capacity_factory = 0.05",
         "industrial_capacity_dockyard = 0.04",
@@ -3950,11 +3950,9 @@ def base_effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
     tier_count = len(branch.techs)
     progress = 0 if tier_count <= 1 else tier * 6 / (tier_count - 1)
     capstone_scale = 1.45 if tier == tier_count - 1 else 1.0
-    # Economy percentages already match what The Fire Rises and The Darkest Hour
-    # ship, but their combat lines sit near 0.05 while ours sat near 0.02. The
-    # multiplier is applied to the two bands here rather than at each of the four
-    # downstream effect tables, so every route through this function stays in
-    # step and economy branches are left exactly as they were.
+    # Combat lines use a dedicated intensity multiplier while economy
+    # percentages remain unchanged. Applying the multiplier to the two bands here
+    # keeps every downstream effect table in step.
     intensity = COMBAT_INTENSITY if profile in COMBAT_PROFILES else 1.0
     small = (0.012 + progress * 0.001) * capstone_scale * intensity
     medium = (0.020 + progress * 0.002) * capstone_scale * intensity
