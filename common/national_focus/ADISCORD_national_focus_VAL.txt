@@ -1797,7 +1797,7 @@ focus_tree = {
 		icon = GFX_focus_VAL_Contracts_Outlive_Kings
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 20
-		y = 12
+		y = 17
 		cost = 5
 		prerequisite = { focus = VAL_State_Contract }
 		prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
@@ -1908,6 +1908,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			custom_effect_tooltip = VAL_stelander_military_course_tt
 			add_war_support = 0.05
 			add_command_power = 25
 			army_experience = 5
@@ -2118,7 +2119,7 @@ focus_tree = {
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY }
 		x = 12
-		y = 16
+		y = 21
 		cost = 5
 		prerequisite = { focus = VAL_The_Steel_Contract }
 		available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
@@ -2134,7 +2135,7 @@ focus_tree = {
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY }
 		x = 14
-		y = 18
+		y = 23
 		cost = 5
 		prerequisite = { focus = VAL_Occidian_Registries }
 		mutually_exclusive = { focus = VAL_Balchansk_Charter }
@@ -2153,7 +2154,7 @@ focus_tree = {
 		icon = GFX_goal_generic_positive_trade_relations
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_DECISIONS }
 		x = 20
-		y = 16
+		y = 21
 		cost = 3
 		prerequisite = { focus = VAL_Contracts_Outlive_Kings focus = VAL_The_Steel_Contract focus = VAL_Market_Roads_North }
 		available = { custom_trigger_tooltip = { tooltip = VAL_frontier_postwar_ready_tt VAL_frontier_postwar = yes } }
@@ -2171,7 +2172,7 @@ focus_tree = {
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
 		x = 16
-		y = 17
+		y = 22
 		cost = 3
 		prerequisite = { focus = VAL_frontier_conference }
 		completion_reward = {
@@ -2194,7 +2195,7 @@ focus_tree = {
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ECONOMY }
 		x = 19
-		y = 18
+		y = 23
 		cost = 3
 		prerequisite = { focus = VAL_frontier_conference }
 
@@ -2220,7 +2221,7 @@ focus_tree = {
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY }
 		x = 21
-		y = 18
+		y = 23
 		cost = 3
 		prerequisite = { focus = VAL_frontier_conference }
 
@@ -2246,7 +2247,7 @@ focus_tree = {
 		icon = GFX_goal_generic_territory_or_war
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 32
-		y = 12
+		y = 18
 		cost = 4
 		prerequisite = { focus = VAL_Foreign_Broker_Licences }
 		available = {
@@ -2270,13 +2271,14 @@ focus_tree = {
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 32
-		y = 13
+		y = 19
 		cost = 5
 		prerequisite = { focus = VAL_Return_Southern_Tsaygen }
 		available = { VAL_wasteland_invasion_available = yes }
 		bypass = { owns_state = 169 }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = VAL_frontier_return_irem_war_tt
 			declare_war_on = { target = ERT type = take_state_focus generator = { 169 } }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
 		}
@@ -2287,7 +2289,7 @@ focus_tree = {
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 32
-		y = 15
+		y = 21
 		cost = 5
 		prerequisite = { focus = VAL_frontier_return_irem }
 		available = {
@@ -2305,7 +2307,7 @@ focus_tree = {
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 32
-		y = 17
+		y = 23
 		cost = 5
 		prerequisite = { focus = VAL_Wasteland_Charter }
 		available = {
@@ -2315,7 +2317,11 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		completion_reward = { declare_war_on = { target = ERT type = take_state_focus generator = { 167 170 171 184 185 203 } } hidden_effect = { VAL_call_subjects_to_wars = yes } }
+		completion_reward = {
+			custom_effect_tooltip = VAL_southern_expansion_war_tt
+			declare_war_on = { target = ERT type = take_state_focus generator = { 167 170 171 184 185 203 } }
+			hidden_effect = { VAL_call_subjects_to_wars = yes }
+		}
 		ai_will_do = { base = 8 }
 	}
 	focus = {
@@ -2323,7 +2329,7 @@ focus_tree = {
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 32
-		y = 19
+		y = 25
 		cost = 5
 		prerequisite = { focus = VAL_Southern_Expansion }
 		available = {
@@ -2333,7 +2339,11 @@ focus_tree = {
 			}
 		}
 		cancel_if_invalid = yes
-		completion_reward = { declare_war_on = { target = IRT type = take_state_focus generator = { 178 180 181 182 183 193 206 207 } } hidden_effect = { VAL_call_subjects_to_wars = yes } }
+		completion_reward = {
+			custom_effect_tooltip = VAL_eastern_expansion_war_tt
+			declare_war_on = { target = IRT type = take_state_focus generator = { 178 180 181 182 183 193 206 207 } }
+			hidden_effect = { VAL_call_subjects_to_wars = yes }
+		}
 		ai_will_do = { base = 8 }
 	}
 
@@ -2342,12 +2352,13 @@ focus_tree = {
 		icon = GFX_focus_generic_mountain_fortification
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 20
-		y = 20
+		y = 25
 		cost = 3
 		prerequisite = { focus = VAL_frontier_commissioners focus = VAL_frontier_provincial_offices }
 		prerequisite = { focus = VAL_frontier_logistics }
 
 		completion_reward = {
+			custom_effect_tooltip = VAL_frontier_security_plan_war_tt
 			if = {
 				limit = { has_completed_focus = VAL_frontier_commissioners }
 				ADISCORD_economy_receive_15 = yes
@@ -2369,7 +2380,7 @@ focus_tree = {
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
 		x = 20
-		y = 21
+		y = 26
 		cost = 5
 		prerequisite = { focus = VAL_frontier_security_plan }
 		bypass = {
@@ -2409,7 +2420,7 @@ focus_tree = {
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
 		x = 18
-		y = 22
+		y = 27
 		cost = 5
 		prerequisite = { focus = VAL_frontier_treaty_offices }
 		available = { custom_trigger_tooltip = { tooltip = VAL_supply_base_secured_tt VAL_supply_base_secured = yes } }
@@ -2425,7 +2436,7 @@ focus_tree = {
 		icon = GFX_focus_generic_mountain_fortification
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 22
-		y = 22
+		y = 27
 		cost = 3
 		prerequisite = { focus = VAL_frontier_treaty_offices }
 		available = { custom_trigger_tooltip = { tooltip = VAL_nod_campaign_foothold_tt VAL_northern_foothold_secured = yes } }
@@ -2437,7 +2448,7 @@ focus_tree = {
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 24
-		y = 22
+		y = 27
 		cost = 3
 		prerequisite = { focus = VAL_frontier_treaty_offices }
 		completion_reward = { unlock_decision_tooltip = { decision = VAL_stelander_ultimatum show_effect_tooltip = yes } unlock_decision_tooltip = { decision = VAL_campaign_against_stelander show_effect_tooltip = yes } }
@@ -2449,7 +2460,7 @@ focus_tree = {
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		x = 26
-		y = 23
+		y = 28
 		cost = 3
 		prerequisite = { focus = VAL_Stelander_Ultimatum }
 		available = {
@@ -2472,7 +2483,7 @@ focus_tree = {
 		icon = GFX_goal_generic_allies_build_infantry
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
 		x = 25
-		y = 24
+		y = 29
 		cost = 4
 		prerequisite = { focus = VAL_Equal_Powers_Pact }
 		available = { has_country_flag = VAL_stelander_equal_alliance }
@@ -2490,7 +2501,7 @@ focus_tree = {
 		icon = GFX_goal_generic_trade
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY }
 		x = 27
-		y = 24
+		y = 29
 		cost = 4
 		prerequisite = { focus = VAL_Equal_Powers_Pact }
 		available = { has_country_flag = VAL_stelander_equal_alliance }
@@ -2511,7 +2522,7 @@ focus_tree = {
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		x = 26
-		y = 25
+		y = 30
 		cost = 5
 		prerequisite = { focus = VAL_Joint_General_Staff }
 		prerequisite = { focus = VAL_Cross_Border_Contracts }
@@ -2533,7 +2544,7 @@ focus_tree = {
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		x = 22
-		y = 24
+		y = 29
 		cost = 5
 		prerequisite = { focus = VAL_Northern_Settlement }
 		prerequisite = { focus = VAL_Stelander_Ultimatum }
@@ -2603,7 +2614,7 @@ focus_tree = {
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
 		x = 20
-		y = 26
+		y = 31
 		cost = 5
 		prerequisite = { focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers }
 		prerequisite = { focus = VAL_New_Supply_Base focus = VAL_Contingency_Ledgers }
@@ -2618,7 +2629,7 @@ focus_tree = {
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
 		x = 24
-		y = 26
+		y = 31
 		cost = 5
 		prerequisite = { focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers }
 		prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
@@ -2633,7 +2644,7 @@ focus_tree = {
 		icon = GFX_goal_generic_trade
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
 		x = 22
-		y = 28
+		y = 33
 		cost = 5
 		prerequisite = { focus = VAL_Reopen_Trade_Routes }
 		prerequisite = { focus = VAL_Settle_Industrial_Debts }
@@ -2655,7 +2666,7 @@ focus_tree = {
 		icon = GFX_goal_generic_army_doctrines
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 26
-		y = 26
+		y = 31
 		cost = 3
 		prerequisite = { focus = VAL_Campaign_Secured }
 		prerequisite = { focus = VAL_Army_Of_The_Ledger }
@@ -2862,13 +2873,14 @@ focus_tree = {
 		id = VAL_Bezhaysk_Operation
 		icon = GFX_goal_generic_position_armies
 		x = 30
-		y = 13
+		y = 18
 		cost = 5
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		available = { custom_trigger_tooltip = { tooltip = VAL_bezhaysk_operation_available_tt VAL_can_attack_bezhaysk = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
+			custom_effect_tooltip = VAL_bezhaysk_operation_war_tt
 			# Availability is continuously checked by cancel_if_invalid. Rechecking the
 			# full gate on the completion tick could silently consume the focus without war.
 			set_country_flag = ADISCORD_bezhaysk_campaign_active
@@ -2920,7 +2932,7 @@ focus_tree = {
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ECONOMY }
 		x = 10
-		y = 18
+		y = 23
 		cost = 5
 		prerequisite = { focus = VAL_Occidian_Registries }
 		mutually_exclusive = { focus = VAL_Integrate_Occidia }
@@ -2937,7 +2949,7 @@ focus_tree = {
 		icon = GFX_goal_generic_positive_trade_relations
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY }
 		x = 10
-		y = 20
+		y = 25
 		cost = 5
 		prerequisite = { focus = VAL_Balchansk_Charter }
 		available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
