@@ -2255,7 +2255,7 @@ focus_tree = {
 				VAL_southern_tsaygen_revenge_available = yes
 			}
 		}
-		bypass = { owns_state = 168 }
+		bypass = { has_global_flag = ADISCORD_vorkerland_dirty_opened owns_state = 168 }
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_return_southern_tsaygen_war_tt
