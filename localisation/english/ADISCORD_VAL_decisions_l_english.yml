@@ -4,6 +4,7 @@
  FOCUS_FILTER_VAL_CONTRACTS:0 "Contracts and Arms Exports"
  FOCUS_FILTER_VAL_ECONOMY:0 "Treasury and Industry"
  FOCUS_FILTER_VAL_ARMY:0 "Army and Supply"
+ FOCUS_FILTER_VAL_MANPOWER:0 "Manpower"
  FOCUS_FILTER_VAL_AUTHORITY:0 "Authority and Captain Loyalty"
  FOCUS_FILTER_VAL_STELANDER:0 "Stelander Crisis"
  FOCUS_FILTER_VAL_EXPANSION:0 "Expansion and Treaties"
