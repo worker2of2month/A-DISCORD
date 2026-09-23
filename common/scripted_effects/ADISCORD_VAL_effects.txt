@@ -4957,6 +4957,18 @@ VAL_call_stelander_partner_to_wars = {
 # --- War aid contracts ---
 # Aid state: 1 collecting, 2 fulfilled, -1 deadline missed, 3 settled.
 
+VAL_commit_nam_resource_aid = {
+	if = {
+		limit = { VAL_nam_concession_negotiable = yes }
+		NAM = { VAL_begin_partner_contract_year = yes }
+		set_country_flag = VAL_nam_concession_agreed
+		clr_country_flag = VAL_nam_concession_offer_pending
+		clr_country_flag = VAL_efl_concession_offer_pending
+		set_variable = { var = VAL_resource_aid_side value = 1 }
+		VAL_start_resource_aid = yes
+	}
+}
+
 VAL_start_resource_aid = {
 	if = {
 		limit = { NOT = { has_variable = VAL_resource_aid_state } }
