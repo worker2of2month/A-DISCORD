@@ -360,6 +360,93 @@ VAL_population_markets = {
 	}
 
 
+	VAL_offer_settlement_bounties = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_The_Contract_State }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			NOT = { has_country_flag = VAL_refugee_border_closed }
+			check_variable = { var = VAL_population_present value = VAL_refugee_housing compare = less_than }
+			ADISCORD_economy_can_spend_250 = yes
+		}
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = VAL_logistics_cost_250
+		cost = 0
+		days_re_enable = 90
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			add_to_variable = { var = VAL_displaced_population value = 3 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = 2 }
+			VAL_change_black_market_pressure = yes
+			VAL_refresh_refugee_state = yes
+			custom_effect_tooltip = VAL_settlement_bounties_tt
+		}
+		ai_will_do = {
+			base = 3
+			modifier = { factor = 4 has_manpower < 20000 }
+			modifier = { factor = 0 check_variable = { var = VAL_population_present value = VAL_refugee_housing compare = greater_than_or_equals } }
+		}
+	}
+
+	VAL_naturalize_refugee_households = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_The_Contract_State }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			NOT = { has_political_power < 50 }
+			check_variable = { var = VAL_displaced_population value = 2 compare = greater_than_or_equals }
+		}
+		cost = 50
+		days_re_enable = 45
+		complete_effect = {
+			add_to_variable = { var = VAL_displaced_population value = -2 }
+			add_to_variable = { var = VAL_local_volunteer_pool value = 1 }
+			set_temp_variable = { var = VAL_black_market_pressure_change value = -1 }
+			VAL_change_black_market_pressure = yes
+			VAL_refresh_refugee_state = yes
+			custom_effect_tooltip = VAL_naturalization_result_tt
+		}
+		ai_will_do = { base = 6 modifier = { factor = 5 has_manpower < 20000 } }
+	}
+
+	VAL_emergency_service_contracts = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = { OR = { has_completed_focus = VAL_Company_Service_Code VAL_final_crisis_preparing = yes } }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			ADISCORD_economy_can_spend_500 = yes
+			NOT = { command_power < 25 }
+			NOT = { has_equipment = { infantry_equipment < 10000 } }
+			check_variable = { var = VAL_local_volunteer_pool value = 1 compare = greater_than_or_equals }
+		}
+		custom_cost_trigger = {
+			ADISCORD_economy_can_spend_500 = yes
+			NOT = { command_power < 25 }
+			NOT = { has_equipment = { infantry_equipment < 10000 } }
+			check_variable = { var = VAL_local_volunteer_pool value = 1 compare = greater_than_or_equals }
+		}
+		custom_cost_text = VAL_emergency_service_cost
+		cost = 0
+		days_re_enable = 90
+		complete_effect = {
+			ADISCORD_economy_spend_500 = yes
+			add_command_power = -25
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -10000 }
+			add_to_variable = { var = VAL_local_volunteer_pool value = -1 }
+			add_manpower = 10000
+			add_stability = -0.01
+			VAL_refresh_refugee_state = yes
+			custom_effect_tooltip = VAL_emergency_service_result_tt
+		}
+		ai_will_do = { base = 2 modifier = { factor = 10 has_manpower < 12000 } modifier = { factor = 0 NOT = { has_manpower < 30000 } } }
+	}
+
 	VAL_recruit_local_volunteers = {
 		cancel_if_not_visible = no
 		icon = generic_prepare_civil_war
