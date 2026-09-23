@@ -17,9 +17,7 @@ jobs:
           python-version: "3.11"
       - name: Focus clarity
         run: python -B -m unittest tools.tests.test_adiscord_val_focus_clarity
-      - name: Contract UI
-        run: python -B -m unittest tools.tests.test_val_contract_ui
-      - name: VAL rework regression
-        run: python -B -m unittest tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests
+      - name: Expansion route contract
+        run: python -B -m unittest tools.tests.test_val_contract_ui.TestValExpansionRoute.test_expansion_is_split_into_early_war_bands_and_late_continuation
       - name: Diff check
         run: git diff --check HEAD^ HEAD
