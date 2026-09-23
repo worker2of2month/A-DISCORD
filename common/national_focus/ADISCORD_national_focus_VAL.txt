@@ -3100,6 +3100,33 @@ focus_tree = {
 	}
 
 	focus = {
+		id = VAL_Support_The_Viceroy
+		dynamic = yes
+		icon = GFX_goal_generic_allies_build_infantry
+		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
+		x = 12
+		y = 6
+		cost = 2
+		allow_branch = {
+			has_completed_focus = VAL_Resource_War_Contracts
+			ADISCORD_nam_resource_war_active = yes
+		}
+		prerequisite = { focus = VAL_Resource_War_Contracts }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_support_viceroy_available_tt
+				VAL_nam_concession_negotiable = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_support_viceroy_effect_tt
+			hidden_effect = { VAL_commit_nam_resource_aid = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
 		id = VAL_Southern_Trade_Charter
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
