@@ -14,6 +14,33 @@ def load(path):
     return {e.key: e.value for e in parse_clausewitz((ROOT / path).read_text(encoding="utf-8-sig"))}
 
 
+class RefugeeTooltipContractTests(unittest.TestCase):
+    def test_black_market_reconciliation_is_hidden_from_decision_tooltips(self):
+        effects = load("common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt")
+        body = effects["VAL_change_black_market_pressure"]
+        self.assertEqual([entry.key for entry in body], ["hidden_effect"])
+        hidden = body[0].value
+        rendered = " ".join(str(entry.key) for entry in hidden)
+        self.assertIn("if", rendered)
+        self.assertIn("else", rendered)
+
+    def test_naturalization_keeps_a_concise_custom_result_tooltip(self):
+        decisions = {
+            e.key: e.value
+            for e in load("common/decisions/ADISCORD_VAL_logistics_market_decisions.txt")["VAL_population_markets"]
+        }
+        naturalize = decisions["VAL_naturalize_refugee_households"]
+        complete = next(e.value for e in naturalize if e.key == "complete_effect")
+        self.assertTrue(any(
+            e.key == "custom_effect_tooltip" and e.value == "VAL_naturalization_result_tt"
+            for e in complete
+        ))
+        self.assertTrue(any(
+            e.key == "VAL_change_black_market_pressure" and e.value == "yes"
+            for e in complete
+        ))
+
+
 class WeeklyTradeTests(unittest.TestCase):
     def setUp(self):
         self.effects = load("common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt")
