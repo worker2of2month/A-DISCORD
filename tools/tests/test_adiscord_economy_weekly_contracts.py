@@ -27,6 +27,7 @@ from tools.validators.validate_adiscord_minor_optimization import (
     EXPECTED_SLOTS,
     RESTORE_SLOTS,
     country_inventory,
+    bezhaysk_administration_release_issues,
     minor_lifecycle_issues,
     participation_index,
     research_restore_slots,
@@ -4144,15 +4145,15 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 ("add_to_variable", "ADISCORD_economy_consumer_goods_income", 0.00),
             ),
             4: (
-                ("multiply_variable", "ADISCORD_economy_personal_income", 1.25),
-                ("multiply_variable", "ADISCORD_economy_business_income", 1.12),
-                ("multiply_variable", "ADISCORD_economy_factory_income", 1.08),
+                ("multiply_variable", "ADISCORD_economy_personal_income", 1.40),
+                ("multiply_variable", "ADISCORD_economy_business_income", 1.30),
+                ("multiply_variable", "ADISCORD_economy_factory_income", 1.20),
                 ("add_to_variable", "ADISCORD_economy_consumer_goods_income", -0.10),
             ),
             5: (
-                ("multiply_variable", "ADISCORD_economy_personal_income", 1.50),
-                ("multiply_variable", "ADISCORD_economy_business_income", 1.25),
-                ("multiply_variable", "ADISCORD_economy_factory_income", 1.15),
+                ("multiply_variable", "ADISCORD_economy_personal_income", 1.80),
+                ("multiply_variable", "ADISCORD_economy_business_income", 1.60),
+                ("multiply_variable", "ADISCORD_economy_factory_income", 1.40),
                 ("add_to_variable", "ADISCORD_economy_consumer_goods_income", -0.30),
             ),
         }
@@ -4169,7 +4170,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 {"ADISCORD_economy_army_expenses"},
                 {
                     level: (("multiply_variable", "ADISCORD_economy_army_expenses", factor),)
-                    for level, factor in enumerate((0.25, 0.60, 1.00, 1.50, 2.50), 1)
+                    for level, factor in enumerate((0.25, 0.60, 1.00, 1.30, 1.70), 1)
                 },
             ),
             "research": (
@@ -5499,6 +5500,8 @@ class WeeklyEconomyContracts(unittest.TestCase):
             r"var\s*=\s*ADISCORD_economy_weekly_ready\s+value\s*=\s*1\s+"
             r"compare\s*=\s*greater_than_or_equals\s*\}\s*\}\s*"
             r"ADISCORD_economy_light_update\s*=\s*yes\s*"
+            r"set_temp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_weekly_crisis_before_temp\s+"
+            r"value\s*=\s*ADISCORD_economy_debt_crisis_level\s*\}\s*"
             r"ADISCORD_economy_apply_weekly_balance\s*=\s*yes",
         )
 
@@ -8326,12 +8329,9 @@ class FreshEconomyInitializationTests(unittest.TestCase):
         self.assertTrue(any("migration" in issue for issue in issues), issues)
 
     def test_scheduled_gate_and_external_migration_caller_are_rejected(self):
-        widened = TRIGGERS.replace(
-            "ADISCORD_economy_should_monthly_update = {\n"
-            "\tADISCORD_economy_has_current_schema = yes\n",
-            "ADISCORD_economy_should_monthly_update = {\n",
-            1,
-        )
+        monthly = block(TRIGGERS, "ADISCORD_economy_should_monthly_update")
+        widened = TRIGGERS.replace(monthly, monthly.replace("ADISCORD_economy_has_current_schema = yes", "", 1), 1)
+        self.assertNotEqual(widened, TRIGGERS)
         self.assertTrue(self._issues(triggers=widened))
         issues = self._issues(
             runtime_sources={
@@ -8368,6 +8368,9 @@ class DormantMinorLifecycleTests(unittest.TestCase):
                 return state["tag"] == entry.value
             if entry.key in {"is_ai", "has_war"}:
                 return state[entry.key] == (entry.value == "yes")
+            if entry.key in {"ADISCORD_economy_has_current_schema", "ADISCORD_economy_is_primary_tier_country",
+                             "ADISCORD_economy_is_secondary_tier_country"}:
+                return entry.value == "no"
             if entry.key in self.definitions:
                 return self.condition(self.definitions[entry.key], state) == (entry.value == "yes")
             self.fail(f"unsupported condition in static lifecycle fixture: {entry.key}")
@@ -8499,14 +8502,14 @@ class EconomyScriptFixture:
     the test. This fixture proves script data flow, not Clausewitz loading/UI.
     """
 
-    def __init__(self, countries=None, facts=None, stubs=()):
+    def __init__(self, countries=None, facts=None, stubs=(), texts=()):
         self.scopes = countries if countries is not None else {"A": {}}
         self.facts = {"STP_uses_campaign_currency_scale": False, **(facts or {})}
         self.stubs = set(stubs)
         self.calls = []
         self.definitions = {
             node.key: node.value
-            for text in (EFFECTS, TRIGGERS)
+            for text in (EFFECTS, TRIGGERS, *texts)
             for node in parse_clausewitz(text)
         }
 
@@ -8519,6 +8522,10 @@ class EconomyScriptFixture:
             return self.scopes[scope].get(value, 0)
 
     def condition(self, entries, scope="A", previous=None, root="A"):
+        if entries and all(not entry.key for entry in entries):
+            name, operator, amount = (entry.value for entry in entries)
+            left, right = self.number(name, scope, previous), self.number(amount, scope, previous)
+            return {">": left > right, "<": left < right}[operator]
         def one(node):
             key, value = node.key, node.value
             if key in ("AND", "OR", "NOT"):
@@ -8528,13 +8535,15 @@ class EconomyScriptFixture:
                 return bool(self.facts[key]) if isinstance(value, list) else self.facts[key] == (value == "yes")
             if key == "always":
                 return value == "yes"
-            if key == "tag":
+            if key in ("tag", "original_tag"):
                 return self.scopes[scope].get("tag", scope) == value
+            if key in ("is_ai", "has_war"):
+                return self.scopes[scope].get(key, False) == (value == "yes")
             if key == "has_variable":
                 return value in self.scopes[scope]
             if key == "has_idea":
                 return self.scopes[scope].get("idea@" + value, False)
-            if key == "has_country_flag":
+            if key in ("has_country_flag", "has_global_flag"):
                 return bool(self.scopes[scope].get(value, False))
             if key == "is_controlled_by":
                 target = previous if value == "PREV" else root if value == "ROOT" else value
@@ -8615,6 +8624,16 @@ class EconomyScriptFixture:
                     else:
                         raise AssertionError(f"unsupported variable operation {key}")
                 self.scopes[scope][target] = result
+            elif key in ("set_country_flag", "clr_country_flag"):
+                self.scopes[scope][value] = key == "set_country_flag"
+            elif key in ("add_ideas", "remove_ideas"):
+                ideas = [child.value for child in value] if isinstance(value, list) else [value]
+                for idea in ideas:
+                    self.scopes[scope]["idea@" + idea] = key == "add_ideas"
+            elif key == "set_research_slots":
+                self.scopes[scope]["research_slots"] = int(value)
+            elif key == "country_lock_all_division_template":
+                self.scopes[scope]["templates_locked"] = value == "yes"
             elif key in self.stubs:
                 self.calls.append(key)
             elif key in self.definitions and value == "yes":
@@ -8623,8 +8642,204 @@ class EconomyScriptFixture:
                 raise AssertionError(f"unsupported fixture effect {key} = {value}")
 
 
+class DormantEconomyRegressionTests(unittest.TestCase):
+    P = "ADISCORD_economy_"
+    FLAG = "ADISCORD_non_participating_minor_optimized"
+
+    def test_bezhaysk_administrations_release_even_neutral_minors(self):
+        source = (ROOT / "common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt").read_text(encoding="utf-8")
+        source = source[:source.index("ADISCORD_bezhaysk_settle_forest_val_victory = {")]
+        self.assertEqual(bezhaysk_administration_release_issues(source), [])
+        release = "ADISCORD_release_non_participating_minor_optimization = yes"
+        for match in re.finditer(re.escape(release), source):
+            mutated = source[:match.start()] + source[match.end():]
+            self.assertTrue(bezhaysk_administration_release_issues(mutated))
+
+    def fixture(self, tag="BJK", ai=True):
+        p = self.P
+        texts = tuple((ROOT / "common" / directory / filename).read_text(encoding="utf-8")
+                      for directory, filename in (
+                          ("scripted_effects", "ADISCORD_minor_optimization_effects.txt"),
+                          ("scripted_triggers", "ADISCORD_minor_optimization_triggers.txt")))
+        fixture = EconomyScriptFixture(texts=(*texts, MODIFIER_EFFECTS), facts={
+            p + "is_primary_tier_country": False, p + "is_secondary_tier_country": True,
+            "surrender_progress": False,
+        }, stubs=(p + "full_refresh", p + "light_update", p + "refresh_ai_assistance_income_cache"))
+        fixture.scopes["A"].update({"tag": tag, "is_ai": ai, self.FLAG: True,
+            "ADISCORD_fresh_campaign_contract_v1": True,
+            "ADISCORD_minor_optimization_fresh_campaign_v1": True,
+            p + "initialized": 1, p + "schema_version": 15, p + "simulation_tier": 2,
+            p + "weekly_source_cache_ready": 1, p + "treasury": 123.25,
+            p + "debt": 67.5, p + "overflow_investment_fund": 31.75,
+            p + "current_month_action_costs": 17.5,
+            p + "accounting_period_treasury_start": 140.75})
+        return fixture
+
+    def test_suppressed_country_cannot_enter_any_periodic_economy_even_after_player_takeover(self):
+        for ai in (True, False):
+            for tier in (0, 1, 2, 3):
+                fixture = self.fixture(ai=ai)
+                fixture.scopes["A"][self.P + "simulation_tier"] = tier
+                for cadence in ("weekly", "monthly", "yearly"):
+                    with self.subTest(ai=ai, tier=tier, cadence=cadence):
+                        self.assertFalse(fixture.condition(fixture.definitions[self.P + "should_" + cadence + "_update"]))
+                fixture.run(self.P + "prepare_weekly_country")
+                self.assertEqual(fixture.scopes["A"][self.P + "weekly_ready"], 0)
+
+    def test_suppression_removes_assistance_and_preserves_balances(self):
+        fixture = self.fixture()
+        values = fixture.scopes["A"]
+        values[self.FLAG] = False
+        values["idea@" + self.P + "ai_assistance_base"] = True
+        values[self.P + "ai_assistance_signature"] = 12
+        saved = {key: values[key] for key in values if any(
+            part in key for part in ("treasury", "debt", "fund", "action_costs"))}
+        fixture.run("ADISCORD_apply_non_participating_minor_optimization")
+        self.assertEqual(values[self.P + "simulation_tier"], 3)
+        self.assertFalse(values["idea@" + self.P + "ai_assistance_base"])
+        self.assertEqual({key: values[key] for key in saved}, saved)
+        self.assertEqual(values["research_slots"], 0)
+
+    def test_release_reprices_once_after_unlock_without_settling_frozen_weeks(self):
+        for ai in (True, False):
+            fixture = self.fixture(ai=ai)
+            values = fixture.scopes["A"]
+            values[self.P + "simulation_tier"] = 3
+            saved = {key: values[key] for key in values if any(
+                part in key for part in ("treasury", "debt", "fund", "action_costs"))}
+            fixture.run("ADISCORD_release_non_participating_minor_optimization")
+            self.assertFalse(values[self.FLAG])
+            self.assertEqual(values["research_slots"], 2)
+            self.assertFalse(values["templates_locked"])
+            self.assertEqual(values[self.P + "simulation_tier"], 2 if ai else 0)
+            self.assertEqual({key: values[key] for key in saved}, saved)
+            self.assertEqual(fixture.calls.count(self.P + "full_refresh"), 1)
+            self.assertEqual(fixture.calls.count(self.P + "light_update"), 1)
+            self.assertNotIn(self.P + "set_default_values", fixture.calls)
+            self.assertNotIn(self.P + "apply_weekly_balance", fixture.calls)
+            fixture.run("ADISCORD_release_non_participating_minor_optimization")
+            self.assertEqual(fixture.calls.count(self.P + "full_refresh"), 1)
+            self.assertTrue(fixture.condition(fixture.definitions[self.P + "should_weekly_update"]))
+
+    def test_noncurrent_save_release_does_not_reset_existing_money(self):
+        fixture = self.fixture()
+        values = fixture.scopes["A"]
+        values[self.P + "schema_version"] = 14
+        values["ADISCORD_fresh_campaign_contract_v1"] = False
+        fixture.run("ADISCORD_release_non_participating_minor_optimization")
+        self.assertEqual(values[self.P + "treasury"], 123.25)
+        self.assertEqual(values[self.P + "debt"], 67.5)
+        self.assertNotIn(self.P + "full_refresh", fixture.calls)
+
+    def test_fresh_initialization_and_suppression_commute_for_all_six_budgeted_minors(self):
+        p = self.P
+        for tag in ("BJK", "BLD", "BHG", "BGT", "BBV", "BCM"):
+            results = []
+            for order in ((p + "initialize_country", "ADISCORD_apply_non_participating_minor_optimization"),
+                          ("ADISCORD_apply_non_participating_minor_optimization", p + "initialize_country")):
+                fixture = self.fixture(tag=tag)
+                values = fixture.scopes["A"]
+                for key in tuple(values):
+                    if key.startswith(p):
+                        del values[key]
+                values[self.FLAG] = False
+                fixture.stubs.update({"ADISCORD_initialize_society_development_variables",
+                    p + "initialize_from_development", p + "apply_country_starting_profile",
+                    p + "update_model_and_cycle", p + "refresh_open_window", p + "update_stretched",
+                    p + "calculate_macro_indicators", p + "calculate_development_multiplier",
+                    p + "refresh_spending_ideas"})
+                for effect in order:
+                    fixture.run(effect)
+                self.assertEqual(values[p + "simulation_tier"], 3)
+                self.assertEqual(values[p + "initialized"], 1)
+                self.assertEqual(values[p + "schema_version"], 15)
+                self.assertFalse(values.get("idea@" + p + "ai_assistance_base", False))
+                self.assertEqual(fixture.calls.count(p + "set_default_values"), 1)
+                results.append(tuple(values.get(p + key, 0) for key in ("treasury", "debt", "overflow_investment_fund")))
+            self.assertEqual(results[0], results[1], tag)
+
+    def test_monthly_player_recovery_precedes_budget_and_silent_ai_skips_all_work(self):
+        monthly = parse_clausewitz(block(ON_ACTIONS, "on_monthly"))
+        yearly = parse_clausewitz(block(ON_ACTIONS, "on_yearly"))
+        for ai in (True, False):
+            fixture = self.fixture(ai=ai)
+            fixture.facts.update({"ADISCORD_is_playable_development_country": False,
+                                  "ADISCORD_is_secondary_development_country": True})
+            fixture.stubs.update({self.P + "monthly_update", self.P + "yearly_update",
+                                 "ADISCORD_tick_all_society_development_monthly",
+                                 "ADISCORD_tick_all_society_development_yearly"})
+            for hook in (monthly, yearly):
+                payload = next(node.value for node in hook if node.key == "effect")
+                fixture.execute(payload, "A", None, "A")
+            if ai:
+                self.assertTrue(fixture.scopes["A"][self.FLAG])
+                self.assertNotIn(self.P + "set_simulation_tier", fixture.calls)
+                self.assertNotIn(self.P + "monthly_update", fixture.calls)
+                self.assertNotIn(self.P + "yearly_update", fixture.calls)
+                self.assertNotIn("ADISCORD_tick_all_society_development_yearly", fixture.calls)
+            else:
+                self.assertFalse(fixture.scopes["A"][self.FLAG])
+                self.assertLess(fixture.calls.index(self.P + "full_refresh"), fixture.calls.index(self.P + "monthly_update"))
+                self.assertEqual(fixture.calls.count(self.P + "full_refresh"), 1)
+
+
 class EconomyAccountingRegressionTests(unittest.TestCase):
     PREFIX = "ADISCORD_economy_"
+
+    def test_weekly_expense_dedup_preserves_settlement_crisis_and_current_runway(self):
+        p = self.PREFIX
+        development = (ROOT / "common/scripted_triggers/ADISCORD_society_development_triggers.txt").read_text(encoding="utf-8")
+        # Income and pre-settlement macro inputs are supplied as cached inputs;
+        # settlement, expense repricing, crisis streaks and display arithmetic run.
+        stubs = tuple(p + name for name in ("calculate_income", "calculate_macro_indicators",
+                                           "queue_debt_notification"))
+        reference = parse_clausewitz('''reference = {
+            ADISCORD_economy_prepare_weekly_country = yes
+            ADISCORD_economy_light_update = yes
+            ADISCORD_economy_apply_weekly_balance = yes
+            ADISCORD_economy_update_overflow_investments = yes
+            if = {
+                limit = { check_variable = { var = ADISCORD_economy_last_auto_borrowing value = 0 compare = greater_than } }
+                set_temp_variable = { var = ADISCORD_economy_skip_overload_decay_temp value = 1 }
+                ADISCORD_economy_update_stretched = yes
+                ADISCORD_economy_sync_weekly_loan_ideas = yes
+            }
+            ADISCORD_economy_calculate_expenses = yes
+            ADISCORD_economy_calculate_monthly_balance = yes
+            ADISCORD_economy_calculate_weekly_budget = yes
+            ADISCORD_economy_update_gui = yes
+        }''')[0].value
+        cases = (("BJK", 1000, 0, 0, 1, 13, 0), ("BJK", 0, 0, 0, 2, 13, 0),
+                 ("NOD", 1000, 40, 3, 2, 13, 0), ("BJK", 1000, 40, 3, 2, 13, 0),
+                 ("BJK", 1000, 0, 0, 1, 130, 9), ("BJK", 100, 0, 0, 1, 13, 10))
+        for tag, cash, interest_share, emergency_streak, expense_passes, income, fund in cases:
+            with self.subTest(tag=tag, cash=cash, emergency_streak=emergency_streak):
+                fixtures = [EconomyScriptFixture(texts=(MODIFIER_EFFECTS, development), stubs=stubs) for _ in range(2)]
+                for fixture in fixtures:
+                    values = fixture.scopes["A"]
+                    values.update({"tag": tag, "is_ai": True, "num_battalions": 130, "num_divisions": 20})
+                    values.update({p + key: value for key, value in {
+                        "initialized": 1, "schema_version": 15, "weekly_source_cache_ready": 1,
+                        "treasury": cash, "accounting_period_treasury_start": cash, "treasury_cap": 1000,
+                        "monthly_income": income, "cached_army_organization_factor": 1,
+                        "overflow_investment_fund": fund,
+                        "army_spending_mode": 3, "interest_share_income": interest_share,
+                        "debt_emergency_streak": emergency_streak, "debt_state": 2 if emergency_streak else 0,
+                        "debt_crisis_level": 2 if emergency_streak else 0,
+                    }.items()})
+                    for factor in set(re.findall(r"ADISCORD_economy_final_\w+_factor_bp", MODIFIER_EFFECTS)):
+                        values[factor] = 100
+                    values["idea@" + p + "overflow_investments"] = fund == 0
+                live, control = fixtures
+                live.run(p + "weekly_update")
+                control.execute(reference, "A", None, "A")
+                for key, value in control.scopes["A"].items():
+                    self.assertAlmostEqual(live.scopes["A"].get(key, 0), value, msg=key)
+                self.assertEqual(live.calls.count(p + "calculate_expenses"), expense_passes)
+                self.assertEqual(live.calls.count(p + "apply_weekly_balance"), 1)
+                if emergency_streak:
+                    self.assertEqual(live.scopes["A"][p + "debt_state"], 3)
+                    self.assertEqual(live.scopes["A"][p + "last_auto_borrowing"], 0)
 
     def test_investment_programs_double_their_progress_and_preserve_cash_accounting(self):
         p = self.PREFIX

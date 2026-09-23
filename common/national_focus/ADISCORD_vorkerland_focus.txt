@@ -4974,8 +4974,6 @@ focus_tree = {
 			modifier = { factor = 2 has_war = yes }
 		}
 	}
-
-
 	focus = {
 		id = TVA_issue_emergency_output_norms
 		icon = GFX_focus_TVA_issue_emergency_output_norms
@@ -7161,6 +7159,27 @@ focus_tree = {
 		ai_will_do = { base = 16 }
 	}
 
+	focus = {
+		id = WRK_worker_restore_unity_tower
+		icon = GFX_focus_WRK_worker_restore_unity_tower
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		x = 0
+		y = 1
+		relative_position_id = WRK_worker_write_constitutional_guarantees
+		cost = 4
+		prerequisite = { focus = WRK_worker_write_constitutional_guarantees }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_worker }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = 0.01
+			add_political_power = 10
+			add_command_power = 5
+			ADISCORD_vorkerland_restore_unity_tower = yes
+		}
+		ai_will_do = { base = 14 }
+	}
+
 	# ---------------------------------------------------------------------
 	# Postwar Joint route: council legitimacy and a disciplined district state.
 	# ---------------------------------------------------------------------
@@ -7527,6 +7546,27 @@ focus_tree = {
 		ai_will_do = { base = 16 }
 	}
 
+	focus = {
+		id = WRK_joint_restore_unity_tower
+		icon = GFX_focus_WRK_joint_restore_unity_tower
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		x = 0
+		y = 1
+		relative_position_id = WRK_joint_impose_reunification_settlement
+		cost = 4
+		prerequisite = { focus = WRK_joint_impose_reunification_settlement }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = 0.01
+			add_political_power = 10
+			add_command_power = 5
+			ADISCORD_vorkerland_restore_unity_tower = yes
+		}
+		ai_will_do = { base = 14 }
+	}
+
 	# ---------------------------------------------------------------------
 	# Postwar Worx route: technical reconstruction, public engineering and a
 	# permanent technocratic settlement. Retired IDs remain inert and reserved.
@@ -7888,6 +7928,27 @@ focus_tree = {
 			}
 		}
 		ai_will_do = { base = 16 }
+	}
+
+	focus = {
+		id = WRK_utilitarian_restore_unity_tower
+		icon = GFX_focus_WRK_utilitarian_restore_unity_tower
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_STABILITY }
+		x = 0
+		y = 1
+		relative_position_id = WRK_utilitarian_build_measurable_republic
+		cost = 4
+		prerequisite = { focus = WRK_utilitarian_build_measurable_republic }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = 0.01
+			add_political_power = 10
+			add_command_power = 5
+			ADISCORD_vorkerland_restore_unity_tower = yes
+		}
+		ai_will_do = { base = 14 }
 	}
 
 	# ---------------------------------------------------------------------

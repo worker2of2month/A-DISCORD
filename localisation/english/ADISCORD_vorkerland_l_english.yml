@@ -1,4 +1,4 @@
-﻿l_english:
+l_english:
 # --- buildings_l_english ---
  ADISCORD_unity_tower_complex: "Unity Tower Complex"
  ADISCORD_unity_tower_complex_plural: "Unity Tower Complexes"
@@ -225,6 +225,12 @@
  TVA_open_the_remaining_fronts_effect_tt: "Declares separate annexation wars on every remaining independent central minor among §YEYR, EGC, RIV, REV, YOR, NDN, SWB, VHV, and OSV§!, and on every remaining rival central major among §YWKR and VAD§!. Distance does not block the declaration. Available after the central war begins. Coalition members are not separate targets; allies keep their membership."
  WRK_worker_convene_reunification_congress: "Convene the Reunification Congress"
  WRK_worker_convene_reunification_congress_desc: "The victorious worker government will ask surviving councils and republics to define reunification as renewed consent rather than a conqueror's decree."
+ WRK_worker_restore_unity_tower: "Restore the Unity Tower"
+ WRK_worker_restore_unity_tower_desc: "The worker government will return the Tower to its former silhouette and make the ruins an open centre of the republic."
+ WRK_joint_restore_unity_tower: "Restore the Tower by Charter"
+ WRK_joint_restore_unity_tower_desc: "The joint chancery will restore the Tower as a shared symbol of law, the army, and the districts."
+ WRK_utilitarian_restore_unity_tower: "Reconstruct the Tower from Plans"
+ WRK_utilitarian_restore_unity_tower_desc: "The directorate will rebuild the Tower from surviving calculations and return it to service as a communications and administrative hub."
  WRK_worker_open_erased_nations_archives: "Open the Erased Nations Archives"
  WRK_worker_open_erased_nations_archives_desc: "Suppressed registers and testimony will be published so displaced communities can prove who they were and what was taken from them."
  WRK_worker_recognize_free_republics: "Recognise the Free Republics"
@@ -1664,3 +1670,7 @@
  ADISCORD_vorkerland_news.3.yastrebtsev.d: "Vorkerland's electoral commissions have announced Mark Yastrebtsev's victory. Nikita Worcker relinquishes the leadership following the vote held after the civil war. The humanists receive a mandate to govern.\n\nThe transfer of power ends the emergency cabinet's rule. A new government will now lead the country's reconstruction."
  ADISCORD_vorkerland_news.3.filopo.d: "Vorkerland's electoral commissions have announced Necro Filopo's victory. The vote called after the civil war has removed Nikita Worcker from the leadership and brought the chauvinists to power.\n\nThe new government inherits a state that has barely survived its collapse. Former members of the confederation and foreign neighbours will be watching its course closely."
  ADISCORD_vorkerland_news.3.a: "The result is announced."
+
+ ADISCORD_vorkerland_news.4.t: "Vorkerland Rebuilds the Unity Tower"
+ ADISCORD_vorkerland_news.4.d: "After the civil war, the government of [ROOT.GetNameDef] has announced the restoration of the Unity Tower. Workers, engineers, and archivists are returning the complex to its former silhouette and preparing it to serve again as the centre of administration, communications, and the memory of a reunited country. For every claimant the project means something different, but rebuilding the republic also means rebuilding its symbols."
+ ADISCORD_vorkerland_news.4.a: "The Tower will stand for unity again."

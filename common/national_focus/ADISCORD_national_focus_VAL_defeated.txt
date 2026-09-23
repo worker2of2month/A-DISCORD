@@ -212,7 +212,7 @@ focus_tree = {
 		x = 10
 		y = 3
 		cost = 4
-		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_RECOVERY }
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_DECISIONS }
 		prerequisite = { focus = VAL_defeat_Articles_Of_Command }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
 		cancel_if_invalid = yes

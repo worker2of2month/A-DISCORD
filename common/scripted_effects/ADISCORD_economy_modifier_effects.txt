@@ -354,6 +354,7 @@ ADISCORD_economy_calculate_final_modifier_factors = {
 	add_to_variable = { var = ADISCORD_country_development_final_economic_growth_factor_bp value = ADISCORD_country_development_policy_economic_growth_bonus_bp }
 	ADISCORD_economy_apply_visible_modifier_definition_factors = yes
 	ADISCORD_economy_clamp_modifier_factors = yes
+	if = { limit = { tag = VAL } VAL_black_market_reduce_weekly_bonus = yes }
 }
 
 ADISCORD_economy_apply_visible_modifier_definition_factors = {

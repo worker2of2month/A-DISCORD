@@ -625,22 +625,77 @@ defined_text = {
 
 defined_text = {
  name = VALHireDecisionPeople
- text = { trigger = { FROM = { tag = CIN } } localization_key = VAL_hire_value_3000 }
- text = { trigger = { FROM = { tag = OSF } } localization_key = VAL_hire_value_4000 }
- text = { trigger = { FROM = { tag = APH } } localization_key = VAL_hire_value_2000 }
- text = { trigger = { FROM = { tag = COF } } localization_key = VAL_hire_value_3000 }
- text = { trigger = { FROM = { tag = TFF } } localization_key = VAL_hire_value_4000 }
- text = { trigger = { FROM = { tag = YPR } } localization_key = VAL_hire_value_5000 }
- text = { localization_key = VAL_hire_value_unknown }
+ text = { localization_key = VAL_hire_value_5000 }
 }
 
 defined_text = {
  name = VALHireDecisionPrice
- text = { trigger = { FROM = { tag = CIN } } localization_key = VAL_hire_value_300 }
- text = { trigger = { FROM = { tag = OSF } } localization_key = VAL_hire_value_400 }
- text = { trigger = { FROM = { tag = APH } } localization_key = VAL_hire_value_200 }
- text = { trigger = { FROM = { tag = COF } } localization_key = VAL_hire_value_300 }
- text = { trigger = { FROM = { tag = TFF } } localization_key = VAL_hire_value_400 }
- text = { trigger = { FROM = { tag = YPR } } localization_key = VAL_hire_value_500 }
- text = { localization_key = VAL_hire_value_unknown }
+ text = { localization_key = VAL_hire_value_500 }
+}
+
+defined_text = {
+ name = VALTradeOccidiaIncome
+ text = { trigger = { VAL_trade_route_occidia_open = no } localization_key = VAL_trade_income_zero }
+ text = { trigger = { has_country_flag = VAL_route_occidia_upgraded } localization_key = VAL_trade_income_upgraded }
+ text = { localization_key = VAL_trade_income_base }
+}
+
+defined_text = {
+ name = VALTradeNorthIncome
+ text = { trigger = { VAL_trade_route_north_open = no } localization_key = VAL_trade_income_zero }
+ text = { trigger = { has_country_flag = VAL_route_north_upgraded } localization_key = VAL_trade_income_upgraded }
+ text = { localization_key = VAL_trade_income_base }
+}
+
+defined_text = {
+ name = VALTradeStelanderIncome
+ text = { trigger = { VAL_trade_route_stelander_open = no } localization_key = VAL_trade_income_zero }
+ text = { trigger = { has_country_flag = VAL_route_stelander_upgraded } localization_key = VAL_trade_income_upgraded }
+ text = { localization_key = VAL_trade_income_base }
+}
+
+defined_text = {
+ name = VALTradeVorkerlandIncome
+ text = { trigger = { VAL_trade_route_vorkerland_open = no } localization_key = VAL_trade_income_zero }
+ text = { trigger = { has_country_flag = VAL_route_vorkerland_upgraded } localization_key = VAL_trade_income_upgraded }
+ text = { localization_key = VAL_trade_income_base }
+}
+
+defined_text = {
+ name = VALTradeBaseNetIncome
+ text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 75 compare = greater_than_or_equals } } localization_key = VAL_trade_net_base_75 }
+ text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } } localization_key = VAL_trade_net_base_50 }
+ text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 25 compare = greater_than_or_equals } } localization_key = VAL_trade_net_base_25 }
+ text = { localization_key = VAL_trade_net_base_0 }
+}
+
+defined_text = {
+ name = VALTradeUpgradedNetIncome
+ text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 75 compare = greater_than_or_equals } } localization_key = VAL_trade_net_upgraded_75 }
+ text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } } localization_key = VAL_trade_net_upgraded_50 }
+ text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 25 compare = greater_than_or_equals } } localization_key = VAL_trade_net_upgraded_25 }
+ text = { localization_key = VAL_trade_net_upgraded_0 }
+}
+
+defined_text = {
+ name = VALPartnerFailureReason
+ text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 2 compare = equals } } } localization_key = VAL_partner_failure_2 }
+ text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 3 compare = equals } } } localization_key = VAL_partner_failure_3 }
+ text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 4 compare = equals } } } localization_key = VAL_partner_failure_4 }
+ text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 5 compare = equals } } } localization_key = VAL_partner_failure_5 }
+ text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 6 compare = equals } } } localization_key = VAL_partner_failure_6 }
+ text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 7 compare = equals } } } localization_key = VAL_partner_failure_7 }
+ text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 8 compare = equals } } } localization_key = VAL_partner_failure_8 }
+ text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 9 compare = equals } } } localization_key = VAL_partner_failure_9 }
+ text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 10 compare = equals } } } localization_key = VAL_partner_failure_10 }
+ text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 11 compare = equals } } } localization_key = VAL_partner_failure_11 }
+ text = { localization_key = VAL_partner_failure_1 }
+}
+
+
+defined_text = {
+ name = VALTradeSouthIncome
+ text = { trigger = { VAL_trade_route_south_open = no } localization_key = VAL_trade_income_zero }
+ text = { trigger = { has_country_flag = VAL_route_south_upgraded } localization_key = VAL_trade_income_upgraded }
+ text = { localization_key = VAL_trade_income_base }
 }

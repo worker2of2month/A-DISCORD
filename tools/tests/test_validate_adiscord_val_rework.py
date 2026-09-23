@@ -324,6 +324,34 @@ class ValTradeMapTests(unittest.TestCase):
         self.assertEqual(builder.trade_route_states()["occidia"], (43, 44, 88))
         self.assertEqual(builder.trade_route_states()["north"], (59, 60, 61))
         self.assertEqual(builder.trade_route_states()["vorkerland"], (33,))
+        self.assertEqual(builder.trade_route_states()["south"], (68, 691, 70))
+
+    def test_debug_category_exposes_south_route_controls_only_in_debug_mode(self):
+        source = (ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt").read_text(encoding="utf-8")
+        for decision in ("ADISCORD_debug_val_open_south_route", "ADISCORD_debug_val_close_south_route", "ADISCORD_debug_val_upgrade_south_route", "ADISCORD_debug_val_reset_corridor_project", "ADISCORD_debug_val_fund_treasury"):
+            start = source.index(f"\n\t{decision} = {{")
+            end = source.index("\n\t}", start) + 3
+            block = source[start:end]
+            self.assertIn("is_debug = yes", block)
+            self.assertIn("tag = VAL", block)
+        self.assertIn("ADISCORD_debug_val_open_south_route", source)
+        self.assertIn("VAL_refresh_trade_network = yes", source)
+
+    def test_trade_panel_keeps_legend_below_all_route_rows(self):
+        from tools.builders import build_adiscord_val_operations_map as builder
+        boxes = {state: (0, 0, 10, 10) for state in builder.STATE_IDS}
+        gui = builder.interface_outputs(boxes)["interface/ADISCORD_VAL_operations.gui"]
+        self.assertIn("size = { width = 460 height = 545 }", gui)
+        self.assertIn('name = "legend" position = { x = 20 y = 490 }', gui)
+
+    def test_southern_route_does_not_require_northern_corridor_unlock(self):
+        from tools.builders import build_adiscord_val_operations_map as builder
+        boxes = {state: (0, 0, 10, 10) for state in builder.STATE_IDS}
+        script = builder.interface_outputs(boxes)["common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt"]
+        south = script[script.index("trade_south_1_visible"):script.index("trade_south_4_label_visible")]
+        self.assertIn("has_completed_focus = VAL_Southern_Trade_Charter", south)
+        self.assertIn("ADISCORD_debug_val_south_route_active", south)
+        self.assertNotIn("trade_north_1_visible = { OR = {", south)
 
     def test_trade_panel_replaces_static_aid_map_without_removing_operations(self):
         from tools.builders import build_adiscord_val_operations_map as builder
@@ -1923,6 +1951,28 @@ class ValNorthernExportTests(unittest.TestCase):
 
 
 class ValContractFormationTests(unittest.TestCase):
+    def test_shabrat_prices_match_offer_and_settlement(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        decisions = DECISIONS_PATH.read_text(encoding="utf-8-sig")
+        effects = EFFECTS_PATH.read_text(encoding="utf-8-sig")
+        events = (ROOT / "events/ADISCORD_STP_events.txt").read_text(encoding="utf-8-sig")
+        offer = next(e.value for e in parse_clausewitz(events) if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.50")
+        for decision, option, price in (("VAL_cw_sell_arms_to_resistance", "ADISCORD_STP_cw.50.a", 500), ("VAL_cw_offer_contract_formations", "ADISCORD_STP_cw.50.c", 1000)):
+            gate = next(e.value for e in offer if e.key == "option" and scalar(e.value, "name") == option)
+            text = only_named_block(self, decisions, decision)
+            expected = "ADISCORD_economy_can_spend_500" if price == 500 else "value = 1000 compare = greater_than_or_equals"
+            self.assertIn(expected, text)
+            if price == 500:
+                self.assertTrue(any(e.key == expected for e in walk(block(gate, "trigger"))))
+            else:
+                self.assertTrue(any(e.key == "check_variable" and scalar(e.value, "value") == "1000" for e in walk(block(gate, "trigger"))))
+        payment = only_named_block(self, effects, "VAL_cw_complete_arms_contract")
+        self.assertIn("ADISCORD_economy_spend_500 = yes ADISCORD_economy_spend_500 = yes", payment)
+        resolver = only_named_block(self, (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8"), "STP_ps_resolve_val_supply")
+        self.assertIn("value = STP_ps_val_receipt_money", resolver)
+        self.assertIn("var = ADISCORD_economy_treasury value = STP_ps_cargo_payment", resolver)
+
     def test_donor_selects_the_package_and_buyer_cannot_upgrade_it(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -1942,8 +1992,8 @@ class ValContractFormationTests(unittest.TestCase):
         offer = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.50")
         options = {scalar(e.value, "name"): e.value for e in offer if e.key == "option"}
         for decision_id, tier, option_id, treasury, manpower, rifles in (
-            ("VAL_cw_sell_arms_to_resistance", "1", "ADISCORD_STP_cw.50.a", "50", None, "32000"),
-            ("VAL_cw_offer_contract_formations", "2", "ADISCORD_STP_cw.50.c", "100", "12600", "43340"),
+            ("VAL_cw_sell_arms_to_resistance", "1", "ADISCORD_STP_cw.50.a", "500", None, "32000"),
+            ("VAL_cw_offer_contract_formations", "2", "ADISCORD_STP_cw.50.c", "1000", "12600", "43340"),
         ):
             decision = decisions[decision_id]
             pending = next(e.value for e in walk(block(decision, "complete_effect"))
@@ -1951,7 +2001,10 @@ class ValContractFormationTests(unittest.TestCase):
                            and scalar(e.value, "flag") == "VAL_cw_arms_offer_pending")
             self.assertEqual((scalar(pending, "value"), scalar(pending, "days")), (tier, "35" if tier == "2" else "21"))
             for gate in (block(decision, "available"), block(options[option_id], "trigger")):
-                self.assertTrue(any(e.key == f"ADISCORD_economy_can_spend_{treasury}" for e in walk(gate)))
+                if treasury == "1000":
+                    self.assertTrue(any(e.key == "check_variable" and scalar(e.value, "var") == "ADISCORD_economy_treasury" and scalar(e.value, "value") == treasury and scalar(e.value, "compare") == "greater_than_or_equals" for e in walk(gate)))
+                else:
+                    self.assertTrue(any(e.key == f"ADISCORD_economy_can_spend_{treasury}" for e in walk(gate)))
                 decision_text = only_named_block(self, DECISIONS_PATH.read_text(encoding="utf-8-sig"), decision_id)
                 if manpower is None:
                     self.assertNotIn("has_manpower", decision_text)
@@ -1987,7 +2040,7 @@ class ValContractFormationTests(unittest.TestCase):
         full_equipment = {rifle: 43340, squad: 96, support: 60}
         for tier in (1, 2, 3, 99):
             full = tier > 1
-            price, people = (100, 12600) if full else (50, 0)
+            price, people = (1000, 12600) if full else (500, 0)
             required = full_equipment if full else {rifle: 32000, squad: 0, support: 0}
             scenarios = ["exact", "mixed", "short_money", "short_people", "stale", "no_land", "unlisted_creator"]
             scenarios += ["short_" + equipment for equipment, amount in required.items() if amount]
@@ -2117,7 +2170,9 @@ class ValContractFormationTests(unittest.TestCase):
                                         execute([e for e in entry.value if e.key != "limit"], creator, scope)
                             elif key in ("set_variable", "add_to_variable", "set_temp_variable", "multiply_temp_variable", "subtract_from_temp_variable"):
                                 variable, value = scalar(entry.value, "var"), number(scalar(entry.value, "value"), scope)
-                                if key in ("set_temp_variable", "set_variable"):
+                                if variable == "ADISCORD_economy_treasury" and key == "add_to_variable":
+                                    cash[scope] += value
+                                elif key in ("set_temp_variable", "set_variable"):
                                     variables[(scope, variable)] = value
                                 elif key == "add_to_variable":
                                     variables[(scope, variable)] = variables.get((scope, variable), 0) + value
@@ -2173,7 +2228,7 @@ class ValContractFormationTests(unittest.TestCase):
                                 experience_rewards += number(entry.value, scope)
                             elif key == "VAL_change_contract_authority":
                                 authority_rewards += variables[(scope, "ADISCORD_VAL_effect_value")]
-                            elif key not in ("log", "country_event"):
+                            elif key not in ("log", "country_event", "ADISCORD_economy_mark_dirty"):
                                 self.fail(f"Unsupported contract operation: {key}")
                     execute(scripts["VAL_cw_complete_arms_contract"])
                     paid = scenario in ("exact", "mixed")

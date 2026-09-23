@@ -358,8 +358,11 @@ def main() -> int:
     check(-1 not in (create_position, declare_position, join_position)
           and create_position < declare_position < join_position,
           "faction creation, EFL declaration, and AZH war entry are in the wrong order")
-    check("transfer_state = 68" in effects and "69 = { add_claim_by = NAM }" in effects,
+    check("transfer_state = 691" in effects and "69 = { add_claim_by = NAM }" in effects,
           "NAM victory is missing its limited border compensation")
+    check("NAM = { transfer_state = 68 }" not in effects
+          and "691 = { remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM }" in effects,
+          "NAM victory must transfer the connected Eflorian border state 691")
     check(
         "228 = { add_core_of = NAM" not in effects
         and "231 = { add_core_of = NAM" not in effects,

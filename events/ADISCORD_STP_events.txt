@@ -791,7 +791,7 @@ country_event = {
 		name = ADISCORD_STP_cw.50.a
 		ai_chance = { factor = 90 }
 		trigger = {
-			has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_50 = yes
+			has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_500 = yes
 			VAL = { exists = yes has_capitulated = no has_country_flag = { flag = VAL_cw_arms_offer_pending value < 2 } has_country_flag = VAL_cw_trade_course NOT = { has_war_with = STS } NOT = { has_equipment = { infantry_equipment < 32000 } } }
 		}
 		custom_effect_tooltip = VAL_cw_buy_arms_tt
@@ -801,7 +801,7 @@ country_event = {
 		name = ADISCORD_STP_cw.50.c
 		ai_chance = { factor = 90 }
 		trigger = {
-			has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_100 = yes any_owned_state = { is_controlled_by = PREV }
+			has_capitulated = no has_war_with = STP check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } any_owned_state = { is_controlled_by = PREV }
 			VAL = { exists = yes has_capitulated = no has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } has_country_flag = VAL_cw_trade_course NOT = { has_war_with = STS } NOT = { has_equipment = { infantry_equipment < 43340 } } NOT = { has_manpower < 12600 } NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 96 } } NOT = { has_equipment = { support_equipment < 60 } } }
 		}
 		custom_effect_tooltip = VAL_cw_buy_formations_tt

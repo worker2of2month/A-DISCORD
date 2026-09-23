@@ -142,6 +142,66 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
+	# VAL trade-route controls keep the real route refresh and payment path intact.
+	ADISCORD_debug_val_open_south_route = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { is_debug = yes is_ai = no NOT = { has_country_flag = ADISCORD_debug_val_south_route_active } }
+		cost = 0
+		complete_effect = {
+			set_country_flag = ADISCORD_debug_val_south_route_active
+			set_country_flag = VAL_efl_concession_active
+			VAL_refresh_trade_network = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_val_close_south_route = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { is_debug = yes is_ai = no has_country_flag = ADISCORD_debug_val_south_route_active }
+		cost = 0
+		complete_effect = {
+			clr_country_flag = ADISCORD_debug_val_south_route_active
+			clr_country_flag = VAL_efl_concession_active
+			clr_country_flag = VAL_route_south_commissioned
+			clr_country_flag = VAL_route_south_upgraded
+			VAL_refresh_trade_network = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_val_upgrade_south_route = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { is_debug = yes is_ai = no has_country_flag = ADISCORD_debug_val_south_route_active NOT = { has_country_flag = VAL_route_south_upgraded } }
+		cost = 0
+		complete_effect = {
+			set_country_flag = VAL_route_south_upgraded
+			set_country_flag = VAL_route_south_commissioned
+			VAL_refresh_trade_network = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_val_reset_corridor_project = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { is_debug = yes is_ai = no has_variable = VAL_corridor_project }
+		cost = 0
+		complete_effect = { VAL_refund_corridor_project = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_val_fund_treasury = {
+		icon = generic_economy
+		allowed = { tag = VAL }
+		visible = { is_debug = yes is_ai = no }
+		cost = 0
+		complete_effect = { set_variable = { var = ADISCORD_economy_treasury value = 5000 } ADISCORD_economy_mark_dirty = yes }
+		ai_will_do = { factor = 0 }
+	}
+
 	# Scenario controls call the production effects and retain their eligibility checks.
 	ADISCORD_debug_war_log_on = {
 		icon = generic_prepare_civil_war

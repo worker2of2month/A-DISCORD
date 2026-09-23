@@ -1,4 +1,7 @@
 spriteTypes = {
+	spriteType = { name = "GFX_focus_WRK_worker_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
 
 ###STP
 	spriteType = {
@@ -217,6 +220,10 @@ spriteTypes = {
 	}
 
 ###VAL
+	spriteType = {
+		name = "GFX_FOCUS_FILTER_VAL_DECISIONS"
+		texturefile = "gfx/interface/focusview/filter/congress_icon.dds"
+	}
 	spriteType = {
 		name = "GFX_FOCUS_FILTER_VAL_CONTRACTS"
 		texturefile = "gfx/interface/focusview/filter/international_trade_icon.dds"

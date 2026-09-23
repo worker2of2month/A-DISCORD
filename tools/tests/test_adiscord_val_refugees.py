@@ -61,7 +61,8 @@ class WeeklyTradeTests(unittest.TestCase):
                     matched = True
                     self.execute([c for c in value if c.key != "limit"])
             elif key in ("set_variable", "add_to_variable", "set_temp_variable",
-                         "add_to_temp_variable", "subtract_from_temp_variable"):
+                         "add_to_temp_variable", "subtract_from_temp_variable", "subtract_from_variable",
+                         "multiply_variable", "divide_variable", "multiply_temp_variable", "divide_temp_variable"):
                 name, raw = scalar(value, "var"), scalar(value, "value")
                 try:
                     amount = float(raw)
@@ -69,6 +70,10 @@ class WeeklyTradeTests(unittest.TestCase):
                     amount = self.variables.get(raw, 0)
                 if key.startswith("set_"):
                     self.variables[name] = amount
+                elif key.startswith("multiply_"):
+                    self.variables[name] = self.variables.get(name, 0) * amount
+                elif key.startswith("divide_"):
+                    self.variables[name] = self.variables.get(name, 0) / amount
                 else:
                     self.variables[name] = self.variables.get(name, 0) + (-amount if key.startswith("subtract_") else amount)
             elif key == "clamp_variable":
@@ -121,7 +126,7 @@ class WeeklyTradeTests(unittest.TestCase):
     def test_partner_war_closes_and_peace_reopens_route_without_control_change(self):
         self.facts["33", "is_owned_by", "WRK"] = True
         self.facts["33", "is_controlled_by", "WRK"] = True
-        for peaceful, treasury, pressure in ((True, 140, 19), (False, 160, 31), (True, 200, 40)):
+        for peaceful, treasury, pressure in ((True, 140, 19), (False, 160, 31), (True, 196, 40)):
             with self.subTest(peaceful=peaceful, treasury=treasury):
                 self.facts["WRK", "has_war", "no"] = peaceful
                 self.execute(self.effects["VAL_logistics_market_weekly"])
@@ -170,7 +175,8 @@ class RefugeeAdmissionTests(unittest.TestCase):
                     self.assertEqual(self.windows[window], 180)
                     self.facts[("VAL", "has_country_flag", window)] = False
                     self.run_effect(self.effects[calls[0].key])
-                    self.assertFalse(self.visible(region), "Expired windows must not be restarted")
+                    self.assertTrue(self.visible(region), "Opened directions must remain visible after expiry")
+                    self.assertFalse(self.facts[("VAL", "has_country_flag", window)], "Expired windows must not be restarted")
 
     def test_each_war_opens_once_and_expiry_does_not_reopen(self):
         for region in REGIONS:
@@ -183,10 +189,20 @@ class RefugeeAdmissionTests(unittest.TestCase):
                 self.facts[("VAL", "has_country_flag", flag)] = False
                 for _ in range(4):
                     self.run_effect(self.effects["VAL_open_refugee_waves"])
-                self.assertFalse(self.visible(region))
+                self.assertTrue(self.visible(region))
+                self.assertFalse(self.facts[("VAL", "has_country_flag", flag)])
 
-    def test_opened_offer_survives_peace_until_its_timer_expires(self):
-        self.facts[("VAL", "has_country_flag", "VAL_refugee_stelander_window")] = True
+    def test_expired_direction_stays_visible_but_cannot_take_payment(self):
+        for region in (*REGIONS, "perimeter"):
+            with self.subTest(region=region):
+                self.facts = {("VAL", "has_country_flag", f"VAL_refugee_{region}_seen"): True,
+                              ("VAL", "ADISCORD_economy_can_spend_250", "yes"): True}
+                self.assertTrue(self.visible(region))
+                available = next(e.value for e in self.decisions[f"VAL_accept_{region}_refugees"] if e.key == "available")
+                self.assertFalse(matches_conditions(available, self.facts, "VAL"))
+
+    def test_opened_offer_remains_visible_after_the_war_ends(self):
+        self.facts[("VAL", "has_country_flag", "VAL_refugee_stelander_seen")] = True
         self.assertTrue(self.visible("stelander"))
         self.facts[("VAL", "VAL_refugee_stelander_war", "yes")] = True
         self.assertTrue(self.visible("stelander"))
@@ -196,7 +212,9 @@ class RefugeeAdmissionTests(unittest.TestCase):
         stelander = self.triggers["VAL_refugee_stelander_war"]
         self.assertTrue(matches_conditions(
             vorkerland,
-            {("VAL", "has_global_flag", "ADISCORD_vorkerland_collapse_wars_started"): True},
+            {("VAL", "has_global_flag", "ADISCORD_vorkerland_collapse_wars_started"): True,
+             ("WKR", "exists", "yes"): True,
+             ("WKR", "has_war", "yes"): True},
             "VAL",
         ))
         self.assertTrue(matches_conditions(
@@ -224,28 +242,27 @@ class RefugeeAdmissionTests(unittest.TestCase):
     def test_admission_cost_capacity_and_single_payment(self):
         for region in REGIONS:
             body = self.decisions[f"VAL_accept_{region}_refugees"]
-            self.assertEqual(scalar(body, "days_re_enable"), "30")
+            self.assertEqual(scalar(body, "days_re_enable"), "365")
             reward = next(e.value for e in body if e.key == "complete_effect")
             self.assertEqual(sum(e.key == "ADISCORD_economy_spend_250" for e in reward), 1)
             self.assertFalse(any(e.key == "clr_country_flag" for e in reward))
-            population = next(e.value for e in reward if e.key == "add_to_variable")
-            self.assertEqual(scalar(population, "value"), "10")
+            population = next(e.value for e in reward if e.key == "add_to_variable" and scalar(e.value, "var") == "VAL_displaced_population")
+            expected_amount = {"vorkerland": "30", "stelander": "20", "nodrul": "10", "north": "10"}[region]
+            self.assertEqual(scalar(population, "value"), expected_amount)
             available = next(e.value for e in body if e.key == "available")
-            facts = {("VAL", "ADISCORD_economy_can_spend_250", "yes"): True, ("VAL", "has_country_flag", f"VAL_refugee_{region}_window"): True}
+            facts = {("VAL", "ADISCORD_economy_can_spend_250", "yes"): True, ("VAL", f"VAL_refugee_{region}_war", "yes"): True}
             self.assertTrue(matches_conditions(available, facts, "VAL"))
             facts[("VAL", "has_country_flag", "VAL_refugee_border_closed")] = True
             self.assertFalse(matches_conditions(available, facts, "VAL"))
             facts[("VAL", "has_country_flag", "VAL_refugee_border_closed")] = False
-            facts[("VAL", "variable", "VAL_population_present")] = 90.01
+            capacity_limit = {"vorkerland": 70, "stelander": 80, "nodrul": 90, "north": 90}[region]
+            facts[("VAL", "variable", "VAL_population_present")] = capacity_limit + 0.01
             self.assertFalse(matches_conditions(available, facts, "VAL"))
             facts[("VAL", "variable", "VAL_population_present")] = 0
-            facts[("VAL", "variable", f"VAL_refugee_{region}_admitted")] = 3
-            self.assertFalse(matches_conditions(available, facts, "VAL"))
-            facts[("VAL", "variable", f"VAL_refugee_{region}_admitted")] = 2
             facts[("VAL", "has_variable", "VAL_refugee_training_escrow")] = True
-            facts[("VAL", "variable", "VAL_population_present")] = 90.5
+            facts[("VAL", "variable", "VAL_population_present")] = capacity_limit + 0.5
             self.assertFalse(matches_conditions(available, facts, "VAL"))
-            facts[("VAL", "variable", "VAL_population_present")] = 90
+            facts[("VAL", "variable", "VAL_population_present")] = capacity_limit
             self.assertTrue(matches_conditions(available, facts, "VAL"))
 
     def test_perimeter_opening_creates_one_bounded_admission_window(self):
@@ -262,7 +279,8 @@ class RefugeeAdmissionTests(unittest.TestCase):
         self.assertTrue(self.visible("perimeter"))
         self.facts[("VAL", "has_country_flag", flag)] = False
         self.run_effect(self.effects["VAL_open_refugee_waves"])
-        self.assertFalse(self.visible("perimeter"), "The one-time Perimeter window must not renew")
+        self.assertTrue(self.visible("perimeter"))
+        self.assertFalse(self.facts[("VAL", "has_country_flag", flag)], "The one-time Perimeter window must not renew")
 
     def test_resettlement_depots_move_people_into_low_population_home_states(self):
         body = self.decisions["VAL_fund_resettlement_depots"]
@@ -347,30 +365,31 @@ class RefugeeAdmissionTests(unittest.TestCase):
             with self.subTest(region=region):
                 self.assertFalse(self.visible(region))
 
-    def test_expired_admission_rows_hide_without_renewal(self):
+    def test_expired_admission_rows_show_reason_without_renewal(self):
         self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
         self.facts[("VAL", "ADISCORD_economy_can_spend_250", "yes")] = True
         for region in (*REGIONS, "perimeter"):
             with self.subTest(region=region):
                 self.facts[("VAL", "has_country_flag", f"VAL_refugee_{region}_seen")] = True
                 self.run_effect(self.effects["VAL_open_refugee_waves"])
-                self.assertFalse(self.visible(region))
+                self.assertTrue(self.visible(region))
                 available = next(e.value for e in self.decisions[f"VAL_accept_{region}_refugees"] if e.key == "available")
                 self.assertFalse(matches_conditions(available, self.facts, "VAL"))
                 self.assertNotIn(f"VAL_refugee_{region}_window", self.windows)
 
-    def test_visible_admission_requires_a_live_window_and_localised_reason(self):
+    def test_visible_admission_requires_a_live_war_and_localised_reason(self):
         self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
         self.facts[("VAL", "ADISCORD_economy_can_spend_250", "yes")] = True
         for region in (*REGIONS, "perimeter"):
             with self.subTest(region=region):
                 available = next(e.value for e in self.decisions[f"VAL_accept_{region}_refugees"] if e.key == "available")
                 self.assertFalse(matches_conditions(available, self.facts, "VAL"))
-                window = ("VAL", "has_country_flag", f"VAL_refugee_{region}_window")
-                self.facts[window] = True
+                if region == "perimeter":
+                    self.facts[("VAL", "VAL_refugee_perimeter_open", "yes")] = True
+                else:
+                    self.facts[("VAL", f"VAL_refugee_{region}_war", "yes")] = True
                 self.assertTrue(self.visible(region))
                 self.assertTrue(matches_conditions(available, self.facts, "VAL"))
-                self.facts[window] = False
         for language in ("russian", "english"):
             loc = (ROOT / f"localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml").read_text(encoding="utf-8-sig")
             self.assertIn(" VAL_refugee_window_open_tt:", loc)
@@ -553,7 +572,8 @@ class RefugeeTrainingTests(unittest.TestCase):
         self.effects = load("common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt")
         self.decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_logistics_market_decisions.txt")["VAL_population_markets"]}
         self.variables = {"VAL_displaced_population": 10}
-        self.facts = {("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True}
+        self.facts = {("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True,
+                      ("VAL", "numeric", "has_political_power"): 75}
         self.rewards = []
 
     def test_training_reserves_people_and_cannot_deliver_twice(self):
@@ -588,6 +608,24 @@ class RefugeeTrainingTests(unittest.TestCase):
 
 
 
+    def test_labor_payment_rechecks_people_power_and_existing_contract(self):
+        for people, pp, active, paid in ((0, 75, False, False), (9.999, 75, False, False),
+                                          (10, 74.999, False, False), (10, 75, False, True),
+                                          (20, 75, True, False)):
+            with self.subTest(people=people, pp=pp, active=active):
+                self.setUp()
+                self.variables["VAL_displaced_population"] = people
+                self.facts[("VAL", "numeric", "has_political_power")] = pp
+                if active:
+                    self.variables["VAL_refugee_labor_escrow"] = 10
+                self.decision_effect("VAL_contract_refugee_labor", "complete_effect")
+                self.assertEqual(self.variables["VAL_displaced_population"], people - (10 if paid else 0))
+                self.assertEqual(self.rewards, [("add_political_power", -75)] if paid else [])
+                if paid:
+                    self.decision_effect("VAL_contract_refugee_labor", "complete_effect")
+                    self.assertEqual(self.variables["VAL_displaced_population"], 0)
+                    self.assertEqual(self.rewards, [("add_political_power", -75)])
+
     def test_labor_returns_every_worker_once_on_completion_or_cancellation(self):
         for result in ("remove_effect", "cancel_effect"):
             self.setUp()
@@ -600,7 +638,7 @@ class RefugeeTrainingTests(unittest.TestCase):
             self.assertEqual(self.variables["VAL_displaced_population"], 10)
             self.assertNotIn("VAL_refugee_labor_escrow", self.variables)
             self.assertFalse(self.facts[("VAL", "has_idea", "VAL_refugee_contract_labor")])
-            self.assertFalse(self.rewards)
+            self.assertEqual(self.rewards, [("add_political_power", -75)])
 
     def test_local_training_spends_its_own_finite_reserve(self):
         self.variables["VAL_local_volunteer_pool"] = 1
@@ -661,6 +699,179 @@ class FinalSupplySettlementTests(unittest.TestCase):
                 self.assertEqual(self.variables["ADISCORD_economy_current_month_action_income"], 500)
                 self.assertNotIn("VAL_final_supply_deposit", self.variables)
                 self.assertNotIn("VAL_final_supply_bonus", self.variables)
+
+
+
+class GreyMarketIncomeTests(unittest.TestCase):
+    def fixture(self, pressure):
+        from tools.tests.test_adiscord_economy_weekly_contracts import EconomyScriptFixture
+        fixture = EconomyScriptFixture(
+            countries={"VAL": {"VAL_black_market_pressure": pressure}},
+            texts=((ROOT / "common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt").read_text(encoding="utf-8-sig"),),
+            stubs=("ADISCORD_economy_initialize_country", "ADISCORD_economy_mark_dirty"),
+        )
+        return fixture, fixture.scopes["VAL"]
+
+    def test_thresholds_apply_to_budget_bonus_and_corridor_cash(self):
+        for pressure, rate in ((0, 0), (24.99, 0), (25, .1), (49.99, .1),
+                               (50, .25), (74.99, .25), (75, .5), (100, .5)):
+            with self.subTest(pressure=pressure):
+                f, v = self.fixture(pressure)
+                v.update(ADISCORD_economy_monthly_income=1300,
+                         ADISCORD_economy_final_weekly_income_bonus=20,
+                         ADISCORD_economy_treasury=100)
+                f.run("VAL_black_market_reduce_monthly_income", scope="VAL")
+                f.run("VAL_black_market_reduce_weekly_bonus", scope="VAL")
+                f.run("VAL_corridor_income_20", scope="VAL")
+                f.run("VAL_corridor_income_10", scope="VAL")
+                self.assertAlmostEqual(v["ADISCORD_economy_monthly_income"], 1300*(1-rate))
+                self.assertAlmostEqual(v["ADISCORD_economy_final_weekly_income_bonus"], 20*(1-rate))
+                self.assertAlmostEqual(v["ADISCORD_economy_treasury"], 100+30*(1-rate))
+                self.assertAlmostEqual(v["ADISCORD_economy_current_month_action_income"], 30*(1-rate))
+                f.run("VAL_black_market_record_budget_loss", scope="VAL")
+                self.assertAlmostEqual(v["VAL_black_market_loss_last_week"], 350*rate)
+                self.assertAlmostEqual(v["VAL_black_market_loss_total"], 350*rate)
+                self.assertEqual(v["VAL_black_market_route_loss_pending"], 0)
+
+    def test_forecasts_do_not_count_as_losses_and_settlement_consumes_pending_once(self):
+        f, v = self.fixture(75)
+        for _ in range(3):
+            v.update(ADISCORD_economy_monthly_income=1300,
+                     ADISCORD_economy_final_weekly_income_bonus=20)
+            f.run("VAL_black_market_reduce_monthly_income", scope="VAL")
+            f.run("VAL_black_market_reduce_weekly_bonus", scope="VAL")
+        self.assertEqual(v.get("VAL_black_market_loss_total", 0), 0)
+        f.run("VAL_corridor_income_20", scope="VAL")
+        f.run("VAL_black_market_record_budget_loss", scope="VAL")
+        self.assertAlmostEqual(v["VAL_black_market_loss_last_week"], 170)
+        self.assertAlmostEqual(v["VAL_black_market_loss_total"], 170)
+        f.run("VAL_black_market_record_budget_loss", scope="VAL")
+        self.assertAlmostEqual(v["VAL_black_market_loss_last_week"], 160)
+        self.assertAlmostEqual(v["VAL_black_market_loss_total"], 330)
+
+    def test_zero_income_and_negative_bonus_do_not_create_fictitious_losses(self):
+        f, v = self.fixture(100)
+        v.update(ADISCORD_economy_monthly_income=0,
+                 ADISCORD_economy_final_weekly_income_bonus=-5)
+        f.run("VAL_black_market_reduce_monthly_income", scope="VAL")
+        f.run("VAL_black_market_reduce_weekly_bonus", scope="VAL")
+        f.run("VAL_black_market_record_budget_loss", scope="VAL")
+        self.assertEqual(v["ADISCORD_economy_final_weekly_income_bonus"], -5)
+        self.assertEqual(v["VAL_black_market_loss_last_week"], 0)
+
+    def test_paid_week_reconciles_cash_and_loss_without_double_debit(self):
+        f, v = self.fixture(75)
+        f.stubs.update(("ADISCORD_economy_update_debt_state_after_settlement",
+                        "ADISCORD_economy_queue_debt_notification"))
+        v.update(ADISCORD_economy_monthly_income=1300,
+                 ADISCORD_economy_monthly_expenses=130,
+                 ADISCORD_economy_final_weekly_income_bonus=20,
+                 ADISCORD_economy_treasury=100,
+                 ADISCORD_economy_treasury_cap=5000,
+                 ADISCORD_economy_accounting_period_treasury_start=100)
+        f.run("VAL_black_market_reduce_monthly_income", scope="VAL")
+        f.run("VAL_black_market_reduce_weekly_bonus", scope="VAL")
+        f.run("ADISCORD_economy_calculate_monthly_balance", scope="VAL")
+        f.run("ADISCORD_economy_calculate_weekly_budget", scope="VAL")
+        self.assertAlmostEqual(v["ADISCORD_economy_monthly_balance"] * 3 / 13, 130)
+        f.run("VAL_corridor_income_20", scope="VAL")
+        f.run("VAL_corridor_income_10", scope="VAL")
+        f.run("ADISCORD_economy_apply_weekly_balance", scope="VAL")
+        self.assertAlmostEqual(v["ADISCORD_economy_treasury"], 245)
+        self.assertAlmostEqual(v["ADISCORD_economy_last_period_unexplained_delta"], 0)
+        self.assertAlmostEqual(v["VAL_black_market_loss_last_week"], 175)
+        self.assertAlmostEqual(v["VAL_black_market_loss_total"], 175)
+
+    def test_full_and_tax_only_income_refresh_apply_loss_once(self):
+        f, v = self.fixture(75)
+        f.stubs.update("ADISCORD_economy_" + name for name in (
+            "calculate_personal_income", "calculate_business_income", "calculate_consumer_goods_income",
+            "calculate_factory_income", "calculate_resource_income", "calculate_building_income",
+            "apply_law_income_modifiers", "cache_tax_dependent_income_base", "apply_tax_burden_to_income",
+            "apply_institutional_income_factors", "apply_income_modifier_factors",
+            "apply_development_income_multipliers", "apply_overall_income_modifier_factor"))
+        for bucket, amount in (("personal", 300), ("business", 400), ("consumer_goods", 300), ("factory", 300)):
+            v["ADISCORD_economy_" + bucket + "_income"] = amount
+            v["ADISCORD_economy_tax_" + bucket + "_income_base"] = amount
+        for name in ("tax_collection", "population_tax_income", "civilian_factory_income",
+                     "trade_income", "military_industry_income"):
+            v["ADISCORD_economy_final_" + name + "_factor_bp"] = 100
+        v["ADISCORD_economy_income_multiplier"] = 100
+        for effect in ("calculate_income", "calculate_income", "recalculate_tax_dependent_income",
+                       "recalculate_tax_dependent_income"):
+            f.run("ADISCORD_economy_" + effect, scope="VAL")
+            self.assertEqual(v["ADISCORD_economy_monthly_income"], 650)
+            self.assertEqual(v.get("VAL_black_market_loss_total", 0), 0)
+
+    def test_native_bonus_collection_rebuilds_net_value_without_compounding(self):
+        f, v = self.fixture(50)
+        f.definitions.update(load("common/scripted_effects/ADISCORD_economy_modifier_effects.txt"))
+        v["modifier@ADISCORD_economy_weekly_income"] = 20
+        for _ in range(3):
+            f.run("ADISCORD_economy_calculate_final_modifier_factors", scope="VAL")
+            self.assertEqual(v["ADISCORD_economy_final_weekly_income_bonus"], 15)
+            self.assertEqual(v["VAL_black_market_bonus_loss"], 5)
+        self.assertEqual(v.get("VAL_black_market_loss_total", 0), 0)
+
+    def test_route_display_matches_the_income_actually_paid(self):
+        source = (ROOT / "common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt").read_text(encoding="utf-8-sig")
+        definitions = {scalar(e.value, "name"): e.value for e in parse_clausewitz(source) if e.key == "defined_text"}
+        for lang in ("russian", "english"):
+            text = (ROOT / f"localisation/{lang}/ADISCORD_VAL_decisions_l_{lang}.yml").read_text(encoding="utf-8-sig")
+            loc = dict(re.findall(r'^ (VAL_trade_net_\w+):0 "([^"\r\n]*)"', text, re.M))
+            for pressure in (0, 25, 50, 75):
+                for upgraded in (False, True):
+                    f, v = self.fixture(pressure)
+                    name = "VALTrade" + ("Upgraded" if upgraded else "Base") + "NetIncome"
+                    for entry in definitions[name]:
+                        if entry.key != "text":
+                            continue
+                        guard = next((c.value for c in entry.value if c.key == "trigger"), [])
+                        if f.condition(guard, scope="VAL"):
+                            expected = float(loc[scalar(entry.value, "localization_key")])
+                            break
+                    f.run("VAL_corridor_income_20", scope="VAL")
+                    if upgraded:
+                        f.run("VAL_corridor_income_10", scope="VAL")
+                    self.assertAlmostEqual(v["ADISCORD_economy_treasury"], expected)
+
+    def test_loading_a_save_preserves_recorded_losses(self):
+        f, v = self.fixture(50)
+        f.stubs.update(("VAL_refresh_trade_network", "VAL_refresh_black_market_state",
+                        "VAL_refresh_refugee_state", "VAL_open_refugee_waves"))
+        v.update(VAL_black_market_loss_total=123, VAL_black_market_loss_last_week=50,
+                 VAL_black_market_route_loss_pending=3)
+        for _ in range(2):
+            f.run("VAL_initialize_logistics_market", scope="VAL")
+        self.assertEqual(v["VAL_black_market_loss_total"], 123)
+        self.assertEqual(v["VAL_black_market_loss_last_week"], 50)
+        self.assertEqual(v["VAL_black_market_route_loss_pending"], 3)
+
+    def test_other_country_budget_is_unaffected(self):
+        f, v = self.fixture(75)
+        f.scopes["OTHER"] = v
+        f.stubs.update(("ADISCORD_economy_update_debt_state_after_settlement",
+                        "ADISCORD_economy_queue_debt_notification"))
+        v.update(ADISCORD_economy_weekly_income=100, ADISCORD_economy_weekly_balance=100,
+                 ADISCORD_economy_treasury=100, ADISCORD_economy_treasury_cap=5000,
+                 ADISCORD_economy_accounting_period_treasury_start=100)
+        f.run("ADISCORD_economy_apply_weekly_balance", scope="OTHER")
+        self.assertEqual(v["ADISCORD_economy_treasury"], 200)
+        self.assertNotIn("VAL_black_market_loss_total", v)
+
+    def test_route_loss_survives_recovery_before_budget_settlement(self):
+        f, v = self.fixture(75)
+        f.run("VAL_corridor_income_20", scope="VAL")
+        v.update(VAL_black_market_pressure=0, ADISCORD_economy_monthly_income=1300,
+                 ADISCORD_economy_final_weekly_income_bonus=20)
+        f.run("VAL_black_market_reduce_monthly_income", scope="VAL")
+        f.run("VAL_black_market_reduce_weekly_bonus", scope="VAL")
+        f.run("VAL_black_market_record_budget_loss", scope="VAL")
+        self.assertEqual(v["VAL_black_market_loss_last_week"], 10)
+        self.assertEqual(v["VAL_black_market_loss_total"], 10)
+        f.run("VAL_black_market_record_budget_loss", scope="VAL")
+        self.assertEqual(v["VAL_black_market_loss_last_week"], 0)
+        self.assertEqual(v["VAL_black_market_loss_total"], 10)
 
 
 if __name__ == "__main__":

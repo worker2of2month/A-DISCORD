@@ -225,20 +225,20 @@ on_actions = {
 	}
 	on_monthly = {
 		effect = {
+			# Restore native capacity before selecting the returning country's tier.
+			if = {
+				limit = { has_country_flag = ADISCORD_non_participating_minor_optimized }
+				ADISCORD_reconcile_non_participating_minor_optimization = yes
+			}
 			# Reconcile human handoffs, partial peace and changes of major status
 			# before selecting cadence. Only current enemies are inspected.
 			if = {
-				limit = { ADISCORD_economy_has_current_schema = yes }
+				limit = { NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized } ADISCORD_economy_has_current_schema = yes }
 				if = {
 					limit = { OR = { has_war = yes has_country_flag = ADISCORD_economy_fighting_human } }
 					ADISCORD_economy_refresh_war_participation_tier = yes
 				}
 				else = { ADISCORD_economy_set_simulation_tier = yes }
-			}
-			# HOI4 monthly pulse is already country-scoped. Do not every_country here.
-			if = {
-				limit = { has_country_flag = ADISCORD_non_participating_minor_optimized }
-				ADISCORD_reconcile_non_participating_minor_optimization = yes
 			}
 			if = {
 				limit = { ADISCORD_economy_should_monthly_update = yes }
@@ -265,6 +265,7 @@ on_actions = {
 					has_global_flag = ADISCORD_fresh_campaign_contract_v1
 					ADISCORD_is_secondary_development_country = yes
 					is_ai = yes
+					NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }
 				}
 				ADISCORD_tick_all_society_development_yearly = yes
 			}

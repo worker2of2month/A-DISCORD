@@ -1552,7 +1552,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
             detonation.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes"), 1,
         )
         self.assertIn(
-            "country_event = { id = ADISCORD_vorkerland_collapse.5 hours = 1 }",
+            "country_event = { id = ADISCORD_vorkerland_collapse.5 days = 30 }",
             detonation,
         )
         self.assertIn("ADISCORD_vorkerland_sync_unity_tower_visual = yes", settle)

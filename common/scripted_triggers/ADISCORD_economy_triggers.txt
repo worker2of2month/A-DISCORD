@@ -92,6 +92,7 @@ ADISCORD_economy_is_dormant = {
 }
 
 ADISCORD_economy_should_monthly_update = {
+	NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }
 	ADISCORD_economy_has_current_schema = yes
 	OR = {
 		ADISCORD_economy_is_player_tier_country = yes
@@ -100,6 +101,7 @@ ADISCORD_economy_should_monthly_update = {
 }
 
 ADISCORD_economy_should_weekly_update = {
+	NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }
 	has_variable = ADISCORD_economy_initialized
 	has_variable = ADISCORD_economy_weekly_source_cache_ready
 	check_variable = { var = ADISCORD_economy_schema_version value = 15 compare = greater_than_or_equals }
@@ -114,6 +116,7 @@ ADISCORD_economy_should_weekly_update = {
 }
 
 ADISCORD_economy_should_yearly_update = {
+	NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }
 	ADISCORD_economy_has_current_schema = yes
 	ADISCORD_economy_is_secondary_tier_country = yes
 	NOT = { ADISCORD_economy_should_monthly_update = yes }

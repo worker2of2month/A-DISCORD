@@ -87,7 +87,7 @@ VAL_northern_war_aid = {
 	icon = ADISCORD_deal
 	priority = 99
 	allowed = { tag = VAL }
-	visible = { VAL_northern_volunteer_front_open = yes }
+	visible = { VAL_northern_volunteer_front_open = yes NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } } }
 	visible_when_empty = yes
 }
 

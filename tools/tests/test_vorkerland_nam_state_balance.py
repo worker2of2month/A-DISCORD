@@ -271,6 +271,21 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         )
         self.assertRegex(residual, r"2038\s*=\s*\{\s*naval_base\s*=\s*1\s*\}")
 
+    def test_nam_victory_uses_connected_eflorian_border_state(self) -> None:
+        effects = (
+            builder.ROOT / "common" / "scripted_effects" / "ADISCORD_nam_resource_war_effects.txt"
+        ).read_text(encoding="utf-8-sig")
+        self.assertIn("NAM = { transfer_state = 691 }", effects)
+        self.assertIn(
+            "691 = { remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM }",
+            effects,
+        )
+        self.assertNotIn("NAM = { transfer_state = 68 }", effects)
+
+        nam_mainland = {67, NAM_SVETLOGORSK_STATE_ID, NAM_RESIDUAL_CITY_STATE_ID, NAM_DRYRIVER_STATE_ID}
+        self.assertIn(691, set().union(*(self.physical_state_adjacency[state] for state in nam_mainland)))
+        self.assertNotIn(68, set().union(*(self.physical_state_adjacency[state] for state in nam_mainland)))
+
     def test_nam_prewar_forts_cover_real_coalition_border_provinces(self) -> None:
         decisions = (
             builder.ROOT / "common" / "decisions" / "ADISCORD_nam_resource_war_decisions.txt"

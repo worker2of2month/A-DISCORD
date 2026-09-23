@@ -528,7 +528,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = WKR }
-	immediate = { news_event = { id = ADISCORD_vorkerland_claimant.100 hours = 1 } }
+	immediate = { country_event = { id = ADISCORD_vorkerland_claimant.100 hours = 1 } }
 	option = { name = ADISCORD_vorkerland_claimant.30.a }
 }
 
@@ -540,7 +540,7 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = VAD }
-	immediate = { news_event = { id = ADISCORD_vorkerland_claimant.101 hours = 1 } }
+	immediate = { country_event = { id = ADISCORD_vorkerland_claimant.101 hours = 1 } }
 	option = { name = ADISCORD_vorkerland_claimant.31.a }
 }
 
@@ -552,38 +552,35 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = TVA }
-	immediate = { news_event = { id = ADISCORD_vorkerland_claimant.102 hours = 1 } }
+	immediate = { country_event = { id = ADISCORD_vorkerland_claimant.102 hours = 1 } }
 	option = { name = ADISCORD_vorkerland_claimant.32.a }
 }
 
-news_event = {
+country_event = {
 	id = ADISCORD_vorkerland_claimant.100
 	title = ADISCORD_vorkerland_claimant.100.t
 	desc = ADISCORD_vorkerland_claimant.100.d
-	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
-	major = yes
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
 	option = { name = ADISCORD_vorkerland_claimant.100.a }
 }
 
-news_event = {
+country_event = {
 	id = ADISCORD_vorkerland_claimant.101
 	title = ADISCORD_vorkerland_claimant.101.t
 	desc = ADISCORD_vorkerland_claimant.101.d
-	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
-	major = yes
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
 	option = { name = ADISCORD_vorkerland_claimant.101.a }
 }
 
-news_event = {
+country_event = {
 	id = ADISCORD_vorkerland_claimant.102
 	title = ADISCORD_vorkerland_claimant.102.t
 	desc = ADISCORD_vorkerland_claimant.102.d
-	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
-	major = yes
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	fire_only_once = yes
 	option = { name = ADISCORD_vorkerland_claimant.102.a }
@@ -748,7 +745,9 @@ country_event = {
 				damage = 0.1
 			}
 		}
-		country_event = { id = ADISCORD_vorkerland_collapse.5 hours = 1 }
+		# The half-speed tower clip runs for about 24 seconds; leave the
+		# temporary actor alive long enough for it to reach its ruins state.
+		country_event = { id = ADISCORD_vorkerland_collapse.5 days = 30 }
 	}
 }
 
@@ -1961,6 +1960,17 @@ news_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	option = { name = ADISCORD_vorkerland_news.3.a }
+}
+
+news_event = {
+	id = ADISCORD_vorkerland_news.4
+	title = ADISCORD_vorkerland_news.4.t
+	desc = ADISCORD_vorkerland_news.4.d
+	picture = GFX_news_event_adiscord_parliament_chamber
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_vorkerland_news.4.a }
 }
 
 # --- diplomacy_events ---

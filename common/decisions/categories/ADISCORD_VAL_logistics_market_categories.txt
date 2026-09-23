@@ -3,13 +3,22 @@ VAL_population_markets = {
 	visible = {
 		OR = {
 			has_completed_focus = VAL_The_Contract_State
+			VAL_refugee_vorkerland_war = yes
+			VAL_refugee_stelander_war = yes
+			VAL_refugee_nodrul_war = yes
+			VAL_refugee_north_war = yes
+			VAL_refugee_perimeter_open = yes
 			has_country_flag = VAL_refugee_vorkerland_window
+			has_country_flag = VAL_refugee_vorkerland_seen
 			has_country_flag = VAL_refugee_stelander_window
+			has_country_flag = VAL_refugee_stelander_seen
 			has_country_flag = VAL_refugee_nodrul_window
+			has_country_flag = VAL_refugee_nodrul_seen
 			has_country_flag = VAL_refugee_north_window
+			has_country_flag = VAL_refugee_north_seen
 			has_country_flag = VAL_refugee_perimeter_window
+			has_country_flag = VAL_refugee_perimeter_seen
 			check_variable = { var = VAL_displaced_population value = 0 compare = greater_than }
-			check_variable = { var = VAL_black_market_pressure value = 0 compare = greater_than }
 		}
 	}
 	visible_when_empty = yes
@@ -18,7 +27,20 @@ VAL_population_markets = {
 
 VAL_trade_routes = {
     allowed = { tag = VAL }
-    visible = { VAL_trade_corridors_unlocked = yes }
+    visible = {
+        OR = {
+            VAL_trade_corridors_unlocked = yes
+            has_completed_focus = VAL_Southern_Trade_Charter
+            has_completed_focus = VAL_The_Contract_State
+            has_country_flag = VAL_refugee_vorkerland_window
+            has_country_flag = VAL_refugee_stelander_window
+            has_country_flag = VAL_refugee_nodrul_window
+            has_country_flag = VAL_refugee_north_window
+            has_country_flag = VAL_refugee_perimeter_window
+            check_variable = { var = VAL_displaced_population value = 0 compare = greater_than }
+            check_variable = { var = VAL_black_market_pressure value = 0 compare = greater_than }
+        }
+    }
     visible_when_empty = yes
     scripted_gui = ADISCORD_VAL_trade_routes_panel
 }

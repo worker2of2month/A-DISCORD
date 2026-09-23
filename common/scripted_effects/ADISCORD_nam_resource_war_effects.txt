@@ -334,10 +334,12 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 		}
 		688 = { remove_core_of = SLF add_core_of = NAM set_state_controller_to = NAM }
 
-		# A narrow Eflorian border district is the only annexation. Azhar survives,
-		# while recognising a Svetlogorsk claim to the Black Basin.
-		NAM = { transfer_state = 68 }
-		68 = { add_core_of = NAM set_state_controller_to = NAM }
+		# A narrow Eflorian border district is the only annexation. State 691
+		# touches NAM's mainland; state 68 is separated by Eflorian territory and
+		# would leave an isolated Svetlogorsk enclave. Azhar survives while
+		# recognising a Svetlogorsk claim to the Black Basin.
+		NAM = { transfer_state = 691 }
+		691 = { remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM }
 		69 = { add_claim_by = NAM }
 		NAM = {
 			set_country_flag = NAM_treaty_independence_recognised

@@ -856,9 +856,22 @@ ADISCORD_vorkerland_sync_unity_tower_visual = {
 	# Shared actor 610040. Create it from the landmark state so a later WRK
 	# annex cannot drop it. Destroy first: same-id replace is not reliable.
 	# min_zoom 2000 is the authored strategic-haze threshold for this actor.
-	40 = {
-		destroy_entity = 610040
+		40 = {
+			destroy_entity = 610040
 		if = {
+			limit = { has_global_flag = ADISCORD_vorkerland_unity_tower_restored }
+			create_entity = {
+				entity = ADISCORD_vorkerland_pyramid_entity
+				id = 610040
+				x = 3159.92992
+				y = 725.68
+				z = 2.83464
+				rotation = 5.410520681
+				scale = 0.15
+				min_zoom = 2000
+			}
+		}
+		else_if = {
 			limit = { has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved }
 			create_entity = {
 				entity = ADISCORD_unity_tower_ruins_entity
@@ -884,6 +897,18 @@ ADISCORD_vorkerland_sync_unity_tower_visual = {
 				min_zoom = 2000
 			}
 		}
+	}
+}
+
+# The three postwar claimant routes use their own focus to finance the same
+# landmark restoration. The global guard keeps the news and actor replacement
+# single-shot across focus retries, handoff, and save-load.
+ADISCORD_vorkerland_restore_unity_tower = {
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_vorkerland_unity_tower_restored } }
+		set_global_flag = ADISCORD_vorkerland_unity_tower_restored
+		40 = { ADISCORD_vorkerland_sync_unity_tower_visual = yes }
+		news_event = { id = ADISCORD_vorkerland_news.4 }
 	}
 }
 

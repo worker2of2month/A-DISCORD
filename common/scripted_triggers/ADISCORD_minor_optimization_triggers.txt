@@ -58,6 +58,7 @@ ADISCORD_minor_optimization_needs_release = {
 # Base help is limited to simulated AI countries that receive monthly or yearly
 # economy updates. Dormant tier 3 countries and every player are excluded.
 ADISCORD_economy_ai_assistance_is_eligible = {
+	NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }
 	has_global_flag = ADISCORD_minor_optimization_fresh_campaign_v1
 	is_ai = yes
 	check_variable = { var = ADISCORD_economy_simulation_tier value = 1 compare = greater_than_or_equals }

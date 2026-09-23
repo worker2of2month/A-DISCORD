@@ -279,6 +279,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BLD = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -329,6 +330,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BLD = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -381,6 +383,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BHG = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -431,6 +434,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BHG = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -483,6 +487,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BGT = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -533,6 +538,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BGT = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -585,6 +591,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BBV = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -635,6 +642,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BBV = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -687,6 +695,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BCM = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -737,6 +746,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BCM = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -789,6 +799,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BJK = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -839,6 +850,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BJK = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
+				ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}

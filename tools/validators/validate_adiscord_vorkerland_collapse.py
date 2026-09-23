@@ -1300,7 +1300,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append("collapse.3 still detonates before the Tower close-up finishes")
     if detonation.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes") != 1:
         issues.append("collapse.4 must play the Tower clip exactly once")
-    if "country_event = { id = ADISCORD_vorkerland_collapse.5 hours = 1 }" not in detonation:
+    if "country_event = { id = ADISCORD_vorkerland_collapse.5 days = 30 }" not in detonation:
         issues.append("collapse.4 must settle the ruins actor after the clip")
     if "ADISCORD_vorkerland_sync_unity_tower_visual = yes" not in settle:
         issues.append("collapse.5 must restore the durable ruins actor")

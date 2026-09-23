@@ -7,6 +7,10 @@ ADISCORD_apply_non_participating_minor_optimization = {
 		country_lock_all_division_template = yes
 		set_research_slots = 0
 		set_country_flag = ADISCORD_non_participating_minor_optimized
+		if = {
+			limit = { ADISCORD_economy_has_current_schema = yes }
+			ADISCORD_economy_set_simulation_tier = yes
+		}
 	}
 }
 
@@ -75,6 +79,19 @@ ADISCORD_release_non_participating_minor_optimization = {
 		ADISCORD_restore_non_participating_minor_research_slots = yes
 		clr_country_flag = ADISCORD_non_participating_minor_optimized
 		set_country_flag = ADISCORD_non_participating_minor_released
+		# Reprice restored slots and production after unlocking, without paying
+		# skipped weeks or replacing the existing treasury, debt and ledger.
+		if = {
+			limit = { ADISCORD_economy_has_current_schema = yes }
+			ADISCORD_economy_initialize_country = yes
+			ADISCORD_economy_full_refresh = yes
+			ADISCORD_economy_light_update = yes
+			ADISCORD_economy_update_gui = yes
+		}
+		else_if = {
+			limit = { OR = { is_ai = no ADISCORD_economy_is_primary_tier_country = yes ADISCORD_economy_is_secondary_tier_country = yes } }
+			ADISCORD_economy_initialize_country = yes
+		}
 	}
 }
 
@@ -84,10 +101,6 @@ ADISCORD_reconcile_non_participating_minor_optimization = {
 	if = {
 		limit = { ADISCORD_minor_optimization_needs_release = yes }
 		ADISCORD_release_non_participating_minor_optimization = yes
-		if = {
-			limit = { is_ai = no }
-			ADISCORD_economy_initialize_country = yes
-		}
 	}
 }
 

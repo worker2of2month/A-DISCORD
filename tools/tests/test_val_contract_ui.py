@@ -253,7 +253,7 @@ class ValPartnerSettlementTests(unittest.TestCase):
                         run([e for e in value if e.key != "limit"], scope)
                 elif key in ("VAL", "ROOT"):
                     run(value, "VAL" if key == "VAL" else buyer)
-                elif key in ("ADISCORD_economy_initialize_country", "ADISCORD_economy_mark_dirty"):
+                elif key in ("ADISCORD_economy_initialize_country", "ADISCORD_economy_mark_dirty", "log"):
                     continue
                 elif key in self.effects:
                     self.assertEqual(value, "yes")
@@ -296,6 +296,7 @@ class ValPartnerSettlementTests(unittest.TestCase):
             ("VAL", "has_capitulated", "no"): True,
             (buyer, "exists", "yes"): True,
             (buyer, "has_capitulated", "no"): True,
+            (buyer, "has_war", "no"): True,
             ("VAL", "has_country_flag", "VAL_partner_offer_pending"): True,
             ("VAL", "has_country_flag", "VAL_export_offer_pending"): True,
             (buyer, "has_country_flag", "VAL_partner_offer_" + kind): True,
@@ -388,7 +389,7 @@ class ValPartnerSettlementTests(unittest.TestCase):
                     self.assertTrue(self.matches("test_trade_cancel", {(country, "has_capitulated", "yes"): True}, scope))
 
     def test_recruitment_transfers_real_manpower_and_money(self):
-        for buyer, men, price in (("CIN", 3000, 300), ("OSF", 4000, 400), ("APH", 2000, 200), ("COF", 3000, 300), ("TFF", 4000, 400), ("YPR", 5000, 500)):
+        for buyer, men, price in ((tag, 5000, 500) for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR")):
             for available in (men - .01, men):
                 with self.subTest(buyer=buyer, available=available):
                     facts = self.facts("hire", buyer=buyer)
@@ -396,7 +397,10 @@ class ValPartnerSettlementTests(unittest.TestCase):
                     before = dict(facts)
                     self.execute("VAL_settle_partner_hire", facts, buyer)
                     if available < men:
-                        self.assertEqual(facts, before)
+                        for key, value in before.items():
+                            if key[1] in ("numeric", "variable"):
+                                self.assertEqual(facts[key], value)
+                        self.assertEqual(facts["VAL", "scheduled", "val_contract.423"], (1,))
                     else:
                         self.assertEqual(facts[buyer, "numeric", "has_manpower"], 0)
                         self.assertEqual(facts["VAL", "numeric", "has_manpower"], men)
@@ -1434,7 +1438,9 @@ class ValAnnualMarketTests(unittest.TestCase):
     def test_signed_partner_row_is_hidden_and_expiry_cleans_before_choice(self):
         decision = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_sign_annual_trade")
         visible = named_block(decision, "visible")
-        self.assertRegex(visible, r"FROM\s*=\s*\{[^{}]*NOT\s*=\s*\{\s*has_country_flag\s*=\s*VAL_market_term_started")
+        self.assertIn("VAL_trade_recipient_ready = yes", visible)
+        recipient = named_block(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"), "VAL_trade_recipient_ready")
+        self.assertIn("NOT = { has_country_flag = VAL_market_term_started }", recipient)
         source = read("events/ADISCORD_VAL_contract_events.txt")
         start = re.search(r"country_event = \{\s*id = val_contract\.411\b", source).start()
         expiry = named_block(source[start:], "country_event")
@@ -1618,6 +1624,8 @@ class ValNativeTradeFeeTests(unittest.TestCase):
         self.assertNotIn("custom_cost_text",decision)
         self.assertIn("set_country_flag = VAL_trade_fee_paid",decision)
         self.assertNotIn("add_political_power = -100",decision)
+        self.assertNotIn("save_event_target_as = VAL_trade_recipient", decision)
+        self.assertNotIn("event_target:VAL_trade_recipient", decision)
 
     def test_prepaid_trade_does_not_charge_twice_and_refund_is_guarded(self):
         effects=read("common/scripted_effects/ADISCORD_VAL_effects.txt")
@@ -1628,6 +1636,16 @@ class ValNativeTradeFeeTests(unittest.TestCase):
         self.assertIn("add_political_power = 100",refund)
         self.assertIn("clr_country_flag = VAL_trade_fee_paid",refund)
 
+
+    def test_periodic_reconciliation_only_refunds_stale_receipts(self):
+        effects=read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        reconcile=named_block(effects,"VAL_reconcile_trade_fees")
+        self.assertEqual(reconcile.count("VAL_reconcile_stale_trade_fee = yes"),6)
+        self.assertEqual(reconcile.count("has_country_flag = VAL_trade_fee_paid AND ="),6)
+        self.assertNotIn("VAL_refund_trade_fee = yes",reconcile)
+        stale=named_block(effects,"VAL_reconcile_stale_trade_fee")
+        self.assertIn("VAL_record_partner_refusal = yes",stale)
+        self.assertIn("add_political_power = 100",stale)
 
     def test_prepaid_acceptance_and_refusal_settle_only_once(self):
         model=ValPartnerSettlementTests()
@@ -1644,6 +1662,9 @@ class ValNativeTradeFeeTests(unittest.TestCase):
                 model.execute("VAL_close_partner_offer",facts,"CIN")
             self.assertEqual(facts["VAL","numeric","has_political_power"],0 if outcome=="accept" else 100)
             self.assertFalse(facts["CIN","has_country_flag","VAL_trade_fee_paid"])
+            self.assertTrue(facts["CIN","has_country_flag","VAL_partner_contact_cooldown"])
+            reply = "val_contract.424" if outcome == "accept" else "val_contract.425"
+            self.assertEqual(facts["VAL","scheduled",reply], (1,))
             after=dict(facts)
             model.execute("VAL_refund_trade_fee",facts,"CIN")
             self.assertEqual(facts,after)
@@ -1697,3 +1718,237 @@ class ValReplacementReserveTests(unittest.TestCase):
             self.assertGreater(weights[0], weights[1])
             self.assertGreater(weights[1], 0)
             self.assertEqual(weights[2], 0)
+
+
+class ValHireReceiptTests(unittest.TestCase):
+    setUpClass = classmethod(ValPartnerSettlementTests.setUpClass.__func__)
+    matches = ValPartnerSettlementTests.matches
+    execute = ValPartnerSettlementTests.execute
+    facts = ValPartnerSettlementTests.facts
+
+    def test_reserved_hire_fee_is_settled_once_and_reply_is_sent(self):
+        for buyer, people, price in ((tag, 5000, 500) for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR")):
+            with self.subTest(buyer=buyer):
+                facts = self.facts("hire", buyer=buyer)
+                facts[buyer,"numeric","has_manpower"] = people
+                facts["VAL","variable","ADISCORD_economy_treasury"] = price
+                before = facts[buyer,"variable","ADISCORD_economy_treasury"]
+                self.execute("VAL_reserve_partner_hire_fee", facts, buyer)
+                self.assertEqual(facts["VAL","variable","ADISCORD_economy_treasury"], 0)
+                self.assertTrue(self.matches("VAL_partner_hire_can_accept", facts, buyer))
+                self.execute("VAL_settle_partner_hire", facts, buyer)
+                self.assertEqual(facts["VAL","numeric","has_manpower"], people)
+                self.assertEqual(facts[buyer,"variable","ADISCORD_economy_treasury"], before + price)
+                self.assertEqual(facts["VAL","variable","ADISCORD_economy_treasury"], 0)
+                self.assertEqual(facts["VAL","scheduled","val_contract.422"], (1,))
+                after = dict(facts)
+                self.execute("VAL_settle_partner_hire", facts, buyer)
+                self.execute("VAL_decline_partner_hire", facts, buyer)
+                self.assertEqual(after, facts)
+
+    def test_refusal_expiry_and_failed_settlement_refund_once(self):
+        for reason in ("refusal", "expired", "short_reserve"):
+            facts = self.facts("hire", buyer="CIN")
+            facts["CIN","numeric","has_manpower"] = 5000
+            self.execute("VAL_reserve_partner_hire_fee", facts)
+            if reason == "expired":
+                facts["CIN","has_country_flag","VAL_partner_offer_hire"] = False
+            if reason == "short_reserve":
+                facts["CIN","numeric","has_manpower"] = 4999.9
+                self.execute("VAL_settle_partner_hire", facts)
+            else:
+                self.execute("VAL_decline_partner_hire", facts)
+            self.assertEqual(facts["VAL","variable","ADISCORD_economy_treasury"], 1000)
+            self.assertEqual(facts["VAL","scheduled","val_contract.423"], (1,))
+            self.assertFalse(facts["VAL","has_country_flag","VAL_partner_offer_pending"])
+            self.assertFalse(facts["CIN","has_country_flag","VAL_hire_fee_500_paid"])
+            after = dict(facts)
+            self.execute("VAL_decline_partner_hire", facts)
+            self.assertEqual(after, facts)
+
+    def test_custom_price_and_expiry_reconciliation_are_wired(self):
+        decision = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_hire_partner_volunteers")
+        self.assertIn("custom_cost_text = VAL_hire_decision_cost", decision)
+        self.assertIn("cost = 0", decision)
+        self.assertIn("value = 500 compare = greater_than_or_equals", named_block(decision, "custom_cost_trigger"))
+        self.assertIn("VAL_reserve_partner_hire_fee = yes", named_block(decision, "complete_effect"))
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        self.assertIn("VAL_reconcile_hire_fees = yes", named_block(effects, "VAL_contract_reconcile"))
+        for language in ("russian", "english"):
+            loc = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            for suffix in ("", "_blocked", "_tooltip"):
+                self.assertIn("VAL_hire_decision_cost_500" + suffix + ":0", loc)
+
+
+class ValHireFixedCostTests(unittest.TestCase):
+    def test_fixed_quotes_cover_each_partner_once_and_match_exact_affordability(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        expected = {500: {"CIN", "COF", "APH", "OSF", "TFF", "YPR"}}
+        covered = set()
+        for price, targets in expected.items():
+            name = "VAL_hire_partner_volunteers"
+            decision = named_block(decisions, name)
+            actual = set(re.findall(r"\b[A-Z]{3}\b", named_block(decision, "targets")))
+            self.assertEqual(actual, targets)
+            self.assertFalse(covered & actual)
+            covered |= actual
+            self.assertIn(f"custom_cost_text = VAL_hire_decision_cost_{price}", decision)
+            guard = block(parse_clausewitz(decision)[0].value, "custom_cost_trigger")
+            for balance, enabled in ((price - .01, False), (price, True), (price + 1, True)):
+                self.assertEqual(matches_conditions(guard, {("VAL", "variable", "ADISCORD_economy_treasury"): balance}, "VAL"), enabled)
+            for language in ("russian", "english"):
+                loc = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+                for suffix in ("", "_blocked", "_tooltip"):
+                    value = re.search(rf'^ VAL_hire_decision_cost_{price}{suffix}:0 "(.*)"$', loc, re.M).group(1)
+                    self.assertIn(str(price), value)
+                    self.assertIn("£ADISCORD_economy_treasury_texticon", value)
+                    self.assertNotIn("[", value)
+        self.assertEqual(covered, {"CIN", "COF", "APH", "OSF", "TFF", "YPR"})
+
+
+class ValHireReplyTests(ValHireReceiptTests):
+    def test_superseded_prepaid_quote_refunds_original_price_once(self):
+        for buyer, price in (("CIN",300),("COF",300),("OSF",400),("TFF",400),("APH",200),("YPR",500)):
+            facts = self.facts("hire", buyer=buyer)
+            facts[buyer,"has_country_flag","VAL_hire_fee_paid"] = True
+            facts[buyer,"numeric","has_manpower"] = 5000
+            facts["VAL","variable","ADISCORD_economy_treasury"] = 1000-price
+            self.assertFalse(self.matches("VAL_partner_hire_can_accept", facts, buyer))
+            self.execute("VAL_decline_partner_hire", facts, buyer)
+            self.assertEqual(facts["VAL","variable","ADISCORD_economy_treasury"],1000)
+            after=dict(facts)
+            self.execute("VAL_decline_partner_hire", facts, buyer)
+            self.assertEqual(facts,after)
+
+    def test_actual_recipient_event_accepts_valid_offer_and_routes_refusal(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar
+        events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
+        event = next(e.value for e in events if e.key=="country_event" and scalar(e.value,"id")=="val_contract.364")
+        options = {scalar(e.value,"name"):e.value for e in event if e.key=="option"}
+        refusal = options["VAL_export_decline"]
+        self.assertEqual(scalar(block(refusal,"hidden_effect"),"VAL_decline_partner_hire"),"yes")
+        modifier = block(block(refusal,"ai_chance"),"modifier")
+        self.assertEqual(scalar(modifier,"factor"),"0")
+        self.assertEqual(scalar(modifier,"VAL_partner_hire_can_accept"),"yes")
+        self.assertEqual(scalar(block(options["VAL_export_accept"],"hidden_effect"),"VAL_settle_partner_hire"),"yes")
+
+
+class ValHirePeaceTests(ValHireReceiptTests):
+    def test_partner_war_blocks_acceptance_and_refunds_pending_payment(self):
+        facts=self.facts("hire",buyer="CIN")
+        facts["CIN","numeric","has_manpower"]=5000
+        self.execute("VAL_reserve_partner_hire_fee",facts)
+        self.assertTrue(self.matches("VAL_partner_hire_can_accept",facts,"CIN"))
+        facts["CIN","has_war","no"]=False
+        self.assertFalse(self.matches("VAL_partner_hire_can_accept",facts,"CIN"))
+        self.execute("VAL_settle_partner_hire",facts)
+        self.assertEqual(facts["VAL","variable","ADISCORD_economy_treasury"],1000)
+        self.assertEqual(facts["CIN","numeric","has_manpower"],5000)
+        self.assertEqual(facts["VAL","scheduled","val_contract.423"],(1,))
+
+    def test_kefreyt_war_does_not_block_a_peaceful_partner(self):
+        facts=self.facts("hire",buyer="CIN")
+        facts["CIN","numeric","has_manpower"]=5000
+        facts["VAL","has_war","no"]=False
+        facts["VAL","has_war","yes"]=True
+        self.assertTrue(self.matches("VAL_partner_hire_can_accept",facts,"CIN"))
+
+
+class ValAnnualDecisionVisibilityTests(unittest.TestCase):
+    def test_rows_hide_by_recipient_readiness_and_keep_local_cost_checks(self):
+        source=read("common/decisions/ADISCORD_VAL_decisions.txt")
+        pairs={"VAL_sign_annual_trade":"VAL_trade_recipient_ready", "VAL_hire_partner_volunteers":"VAL_hire_recipient_ready", "VAL_quarterly_partner_supply":"VAL_quarterly_recipient_ready", "VAL_ready_partner_supply":"VAL_ready_recipient_ready", "VAL_partner_contract":"VAL_special_recipient_ready"}
+        for key,predicate in pairs.items():
+            decision=named_block(source,key)
+            visible=named_block(decision,"visible")
+            self.assertIn(predicate+" = yes",visible)
+            self.assertNotIn("custom_trigger_tooltip",visible)
+            self.assertNotIn("has_political_power",visible)
+            self.assertEqual(named_block(decision,"target_trigger").strip(),"target_trigger = { FROM = { exists = yes } }")
+            self.assertNotIn("days_re_enable = 365",decision)
+
+    def test_success_year_helper_is_separate_from_refusal_handling(self):
+        effects=read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        self.assertIn("flag = VAL_partner_contact_cooldown days = 365",named_block(effects,"VAL_begin_partner_contract_year"))
+        for key in ("VAL_settle_partner_trade","VAL_settle_partner_hire","VAL_settle_partner_arms","VAL_settle_partner_bulk","VAL_settle_partner_arsenal","VAL_settle_partner_strategic","VAL_accept_order_1","VAL_accept_order_2","VAL_accept_quarterly_order_1","VAL_accept_quarterly_order_2","VAL_accept_military_contract","VAL_record_advisor_conflict"):
+            self.assertEqual(named_block(effects,key).count("VAL_begin_partner_contract_year = yes"),1,key)
+        for key in ("VAL_decline_partner_hire","VAL_close_partner_offer","VAL_close_order_offer","VAL_refund_trade_fee"):
+            self.assertNotIn("VAL_begin_partner_contract_year",named_block(effects,key))
+
+
+class ValRecipientVisibilityTests(ValHireReceiptTests):
+    def test_our_shortage_does_not_hide_a_willing_hire_partner(self):
+        facts=self.facts("hire",buyer="CIN")
+        facts["CIN","numeric","has_manpower"]=5000
+        facts["VAL","variable","ADISCORD_economy_treasury"]=0
+        self.assertTrue(self.matches("VAL_hire_recipient_ready",facts,"CIN"))
+        self.assertFalse(self.matches("VAL_partner_hire_funds_ready",facts,"CIN"))
+        for condition in ("war","people","cooldown"):
+            scenario=dict(facts)
+            if condition=="war":scenario["CIN","has_war","no"]=False
+            if condition=="people":scenario["CIN","numeric","has_manpower"]=4999.9
+            if condition=="cooldown":scenario["CIN","has_country_flag","VAL_partner_contact_cooldown"]=True
+            self.assertFalse(self.matches("VAL_hire_recipient_ready",scenario,"CIN"),condition)
+
+    def test_refusal_hides_partner_and_stale_reply_cannot_restart_cooldown(self):
+        facts=self.facts("hire",buyer="CIN")
+        facts["CIN","numeric","has_manpower"]=5000
+        self.execute("VAL_decline_partner_hire",facts)
+        self.assertFalse(self.matches("VAL_hire_recipient_ready",facts,"CIN"))
+        self.assertTrue(facts["CIN","has_country_flag","VAL_partner_contact_cooldown"])
+        facts["CIN","has_country_flag","VAL_partner_contact_cooldown"]=False
+        self.assertTrue(self.matches("VAL_hire_recipient_ready",facts,"CIN"))
+        after=dict(facts)
+        self.execute("VAL_record_partner_refusal",facts)
+        self.assertEqual(facts,after)
+        self.assertIn("flag = VAL_partner_contact_cooldown days = 365",named_block(read("common/scripted_effects/ADISCORD_VAL_effects.txt"),"VAL_record_partner_refusal"))
+
+
+class ValTradeReplyTests(unittest.TestCase):
+    def test_eligible_ai_cannot_randomly_decline_trade(self):
+        source = read("events/ADISCORD_VAL_contract_events.txt")
+        start = re.search(r"(?m)^country_event = \{\s*id = val_contract\.362\b", source).start()
+        event = named_block(source[start:], "country_event")
+        decline = named_block(event, "option")
+        self.assertIn("ai_chance = { base = 0 }", decline)
+        self.assertNotIn("immediate = { VAL_resolve_partner_trade_reply = yes }", event)
+        self.assertIn("VAL_decline_partner_trade = yes", decline)
+
+    def test_expired_paid_trade_hides_for_a_year_and_refunds_once(self):
+        model = ValPartnerSettlementTests()
+        model.setUpClass()
+        facts = model.facts("trade", buyer="CIN")
+        facts["CIN", "has_country_flag", "VAL_trade_fee_paid"] = True
+        facts["CIN", "has_country_flag", "VAL_partner_offer_trade"] = False
+        facts["VAL", "numeric", "has_political_power"] = 0
+        model.execute("VAL_refund_trade_fee", facts, "CIN")
+        self.assertFalse(model.matches("VAL_trade_recipient_ready", facts, "CIN"))
+        self.assertEqual(facts["VAL", "scheduled", "val_contract.425"], (1,))
+        self.assertEqual(facts["VAL", "numeric", "has_political_power"], 100)
+        settled = dict(facts)
+        model.execute("VAL_refund_trade_fee", facts, "CIN")
+        self.assertEqual(facts, settled)
+
+
+class ValFailureReasonTests(ValHireReceiptTests):
+    def test_failure_reason_is_captured_before_refund_clears_evidence(self):
+        for outcome, reason in (("decline", 1), ("expiry", 6), ("lost_pending", 7), ("war", 4)):
+            facts = self.facts("trade")
+            facts["CIN", "has_country_flag", "VAL_trade_fee_paid"] = True
+            if outcome == "expiry": facts["CIN", "has_country_flag", "VAL_partner_offer_trade"] = False
+            if outcome == "lost_pending": facts["VAL", "has_country_flag", "VAL_partner_offer_pending"] = False
+            if outcome == "war": facts["CIN", "has_war_with", "VAL"] = True
+            self.execute("VAL_refund_trade_fee", facts)
+            self.assertEqual(facts["CIN", "variable", "VAL_partner_failure_reason"], reason, outcome)
+            after = dict(facts)
+            self.execute("VAL_refund_trade_fee", facts)
+            self.assertEqual(after, facts)
+
+
+class ValParallelOfferTests(ValHireReceiptTests):
+    def test_recipient_offer_does_not_depend_on_shared_desk_flag(self):
+        source = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        current = named_block(source, "VAL_partner_offer_current")
+        self.assertNotIn("has_country_flag = VAL_partner_offer_pending", current)
+        self.assertIn("has_country_flag = VAL_partner_offer_trade", named_block(source, "VAL_partner_trade_can_accept"))

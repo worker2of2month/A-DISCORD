@@ -708,6 +708,7 @@ POSTWAR_ROUTE_FOCUSES = {
         "WRK_worker_devolve_reconstruction_grants",
         "WRK_worker_ratify_republican_compact",
         "WRK_worker_write_constitutional_guarantees",
+        "WRK_worker_restore_unity_tower",
     ),
     "ADISCORD_vorkerland_route_joint": (
         "WRK_joint_convene_restoration_council",
@@ -720,6 +721,7 @@ POSTWAR_ROUTE_FOCUSES = {
         "WRK_joint_retain_emergency_inspectorate",
         "WRK_joint_codify_single_chain_of_command",
         "WRK_joint_impose_reunification_settlement",
+        "WRK_joint_restore_unity_tower",
     ),
     "ADISCORD_vorkerland_route_utilitarian": (
         "WRK_utilitarian_form_reconstruction_directorate",
@@ -732,6 +734,7 @@ POSTWAR_ROUTE_FOCUSES = {
         "WRK_utilitarian_prioritize_industrial_recovery",
         "WRK_utilitarian_publish_reconstruction_ledger",
         "WRK_utilitarian_build_measurable_republic",
+        "WRK_utilitarian_restore_unity_tower",
     ),
 }
 
@@ -768,8 +771,8 @@ def wrk_focus_texture_path(focus_id: str) -> str:
 
 def _check_focus_gfx(focus_gfx: str, shine_source: str) -> list[str]:
     issues: list[str] = []
-    if len(WRK_TREE_FOCUSES) != 40 or len(set(WRK_TREE_FOCUSES)) != 40:
-        issues.append("WRK drop-in focus icon manifest must contain 40 unique ids")
+    if len(WRK_TREE_FOCUSES) != 43 or len(set(WRK_TREE_FOCUSES)) != 43:
+        issues.append("WRK drop-in focus icon manifest must contain 43 unique ids")
     for focus_id in FOCUS_IDS:
         sprite = focus_icon_name(focus_id)
         texture = focus_texture_path(focus_id)
@@ -942,9 +945,9 @@ WARTIME_TERMINALS = {
 }
 
 POSTWAR_ROUTE_TERMINALS = {
-    "ADISCORD_vorkerland_route_worker": "WRK_worker_write_constitutional_guarantees",
-    "ADISCORD_vorkerland_route_joint": "WRK_joint_impose_reunification_settlement",
-    "ADISCORD_vorkerland_route_utilitarian": "WRK_utilitarian_build_measurable_republic",
+    "ADISCORD_vorkerland_route_worker": "WRK_worker_restore_unity_tower",
+    "ADISCORD_vorkerland_route_joint": "WRK_joint_restore_unity_tower",
+    "ADISCORD_vorkerland_route_utilitarian": "WRK_utilitarian_restore_unity_tower",
 }
 
 POSTWAR_POLICY_CHOICE_PAIRS = (
@@ -2992,8 +2995,8 @@ def collect_issues() -> list[str]:
 
     if tuple(blocks) != FOCUS_IDS:
         issues.append(f"focus IDs/order differ from the 235-focus lifecycle manifest: {tuple(blocks)}")
-    if len(FOCUS_IDS) != 235:
-        issues.append(f"validator manifest must contain 235 definitions, found {len(FOCUS_IDS)}")
+    if len(FOCUS_IDS) != 238:
+        issues.append(f"validator manifest must contain 238 definitions, found {len(FOCUS_IDS)}")
     issues.extend(_check_graph(blocks))
 
     if len(continuous_palettes) != 1:
@@ -4902,15 +4905,15 @@ def collect_issues() -> list[str]:
     )
 
     for route_flag, focus_ids in POSTWAR_ROUTE_FOCUSES.items():
-        if len(focus_ids) != 10:
+        if len(focus_ids) != 11:
             issues.append(
-                f"postwar route {route_flag} must contain ten authored definitions, "
+                f"postwar route {route_flag} must contain eleven authored definitions, "
                 f"found {len(focus_ids)}"
             )
         terminal_id = POSTWAR_ROUTE_TERMINALS[route_flag]
-        if _focus_cost(blocks.get(terminal_id, "")) != 5:
+        if _focus_cost(blocks.get(terminal_id, "")) != 4:
             issues.append(
-                f"postwar settlement {terminal_id} must remain a bundled cost-5 capstone"
+                f"postwar restoration {terminal_id} must remain a bundled cost-4 capstone"
             )
         paths = _postwar_completion_paths(blocks, focus_ids, terminal_id)
         if len(paths) != 2:
@@ -4924,9 +4927,9 @@ def collect_issues() -> list[str]:
                 f"postwar route {route_flag} has nodes outside every terminal path {missing}"
             )
         for path in paths:
-            if len(path) != 9:
+            if len(path) != 10:
                 issues.append(
-                    f"postwar route {route_flag} terminal path must complete nine focuses, "
+                    f"postwar route {route_flag} terminal path must complete ten focuses, "
                     f"found {len(path)}"
                 )
             cost_units = sum(_focus_cost(blocks.get(focus_id, "")) for focus_id in path)

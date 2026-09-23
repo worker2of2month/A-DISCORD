@@ -67,6 +67,25 @@ VAL_trade_route_vorkerland_open = {
 	}
 }
 
+# COUNTRY VAL. The southern artery is an Eflor concession route opened only after the coalition victory.
+VAL_trade_route_south_open = {
+	tag = VAL
+	OR = {
+		VAL_trade_corridors_unlocked = yes
+		has_completed_focus = VAL_Southern_Trade_Charter
+		has_country_flag = ADISCORD_debug_val_south_route_active
+	}
+	OR = {
+		AND = {
+			has_country_flag = VAL_efl_concession_active
+			68 = { is_owned_by = EFL is_controlled_by = EFL }
+			691 = { is_owned_by = EFL is_controlled_by = EFL }
+			70 = { is_owned_by = EFL is_controlled_by = EFL }
+		}
+		has_country_flag = ADISCORD_debug_val_south_route_active
+	}
+}
+
 # Only a previously commissioned route counts as a disruption. Future expansion
 # targets do not create fictitious shortages before Kefreyt ever opens them.
 VAL_trade_network_disrupted = {
@@ -77,6 +96,7 @@ VAL_trade_network_disrupted = {
 		AND = { has_country_flag = VAL_route_north_commissioned NOT = { VAL_trade_route_north_open = yes } }
 		AND = { has_country_flag = VAL_route_stelander_commissioned NOT = { VAL_trade_route_stelander_open = yes } }
 		AND = { has_country_flag = VAL_route_vorkerland_commissioned NOT = { VAL_trade_route_vorkerland_open = yes } }
+		AND = { has_country_flag = VAL_route_south_commissioned NOT = { VAL_trade_route_south_open = yes } }
 	}
 }
 
@@ -102,8 +122,11 @@ VAL_regional_displacement_crisis = {
 
 VAL_refugee_vorkerland_war = {
 	# The collapse can involve many regional claimants; the canonical outbreak flag
-	# is more reliable than any one pair of surviving tags.
+	# is more reliable than any one pair of surviving tags, but admission ends
+	# once the claimant wars are over.
 	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+	OR = { WRK = { exists = yes has_war = yes } WKR = { exists = yes has_war = yes } VAD = { exists = yes has_war = yes } TVA = { exists = yes has_war = yes } }
 }
 
 VAL_refugee_stelander_war = {
@@ -134,6 +157,8 @@ VAL_trade_network_changed = {
 		AND = { VAL_trade_route_stelander_open = no check_variable = { var = VAL_route_stelander_active value = 1 compare = equals } }
 		AND = { VAL_trade_route_vorkerland_open = yes NOT = { check_variable = { var = VAL_route_vorkerland_active value = 1 compare = equals } } }
 		AND = { VAL_trade_route_vorkerland_open = no check_variable = { var = VAL_route_vorkerland_active value = 1 compare = equals } }
+		AND = { VAL_trade_route_south_open = yes NOT = { check_variable = { var = VAL_route_south_active value = 1 compare = equals } } }
+		AND = { VAL_trade_route_south_open = no check_variable = { var = VAL_route_south_active value = 1 compare = equals } }
 		AND = { VAL_trade_corridors_unlocked = yes NOT = { OR = { has_idea = VAL_corridor_network_fragmented has_idea = VAL_corridor_network_partial has_idea = VAL_corridor_network_integrated } } }
 		AND = { VAL_trade_corridors_unlocked = no OR = { has_idea = VAL_corridor_network_fragmented has_idea = VAL_corridor_network_partial has_idea = VAL_corridor_network_integrated } }
 	}

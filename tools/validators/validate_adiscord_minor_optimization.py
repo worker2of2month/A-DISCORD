@@ -124,6 +124,43 @@ EVENT_AWAKENED_PARTICIPATION = {
     for tag in ("MON", "RIN")
 }
 
+# The feudal bloc wakes on war entry or when an authored settlement installs
+# an administration without requiring that minor to have joined the war.
+BEZHAYSK_TAGS = {"BJK", "BLD", "BHG", "BGT", "BBV", "BCM"}
+for _tag in BEZHAYSK_TAGS:
+    EVENT_AWAKENED_PARTICIPATION[_tag] = {
+        Path("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"),
+        Path("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt"),
+    }
+EVENT_AWAKENED_PARTICIPATION["BJK"].update({
+    Path("common/decisions/ADISCORD_STP_decisions.txt"),
+    Path("common/national_focus/ADISCORD_national_focus_STP.txt"),
+    Path("common/national_focus/ADISCORD_national_focus_VAL.txt"),
+    Path("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+    Path("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"),
+    Path("events/ADISCORD_STP_events.txt"),
+})
+
+
+def bezhaysk_administration_release_issues(text: str) -> list[str]:
+    """Every administration payload must wake its country before cache invalidation."""
+    issues = []
+
+    def inspect(entries, scope=None):
+        markers = {"ADISCORD_bezhaysk_val_administration", "ADISCORD_bezhaysk_nod_administration"}
+        if scope in BEZHAYSK_TAGS and any(node.key == "set_country_flag" and node.value in markers for node in entries):
+            releases = [i for i, node in enumerate(entries)
+                        if node.key == "ADISCORD_release_non_participating_minor_optimization" and node.value == "yes"]
+            refreshes = [i for i, node in enumerate(entries) if node.key == "ADISCORD_economy_mark_dirty"]
+            if len(releases) != 1 or not refreshes or releases[0] >= refreshes[0]:
+                issues.append(f"{scope}: Bezhaysk administration must release suppression before refreshing economy")
+        for node in entries:
+            if isinstance(node.value, list):
+                inspect(node.value, node.key if re.fullmatch(r"[A-Z]{3}", node.key) else scope)
+
+    inspect(parse_clausewitz(text))
+    return issues
+
 
 def read(path: Path) -> str:
     return path.read_text(encoding="utf-8-sig")
@@ -275,7 +312,9 @@ def minor_lifecycle_issues(triggers: str, effects: str, hooks: str, shared_hooks
             if = { limit = { ADISCORD_can_optimize_non_participating_minor = yes }
                 add_ideas = ADISCORD_non_participating_minor_optimization
                 country_lock_all_division_template = yes set_research_slots = 0
-                set_country_flag = ADISCORD_non_participating_minor_optimized }
+                set_country_flag = ADISCORD_non_participating_minor_optimized
+                if = { limit = { ADISCORD_economy_has_current_schema = yes }
+                    ADISCORD_economy_set_simulation_tier = yes } }
         '''),
         (effects, "ADISCORD_release_non_participating_minor_optimization", '''
             if = { limit = { has_country_flag = ADISCORD_non_participating_minor_optimized }
@@ -283,12 +322,19 @@ def minor_lifecycle_issues(triggers: str, effects: str, hooks: str, shared_hooks
                 country_lock_all_division_template = no
                 ADISCORD_restore_non_participating_minor_research_slots = yes
                 clr_country_flag = ADISCORD_non_participating_minor_optimized
-                set_country_flag = ADISCORD_non_participating_minor_released }
+                set_country_flag = ADISCORD_non_participating_minor_released
+                if = { limit = { ADISCORD_economy_has_current_schema = yes }
+                    ADISCORD_economy_initialize_country = yes
+                    ADISCORD_economy_full_refresh = yes
+                    ADISCORD_economy_light_update = yes
+                    ADISCORD_economy_update_gui = yes }
+                else_if = {
+                    limit = { OR = { is_ai = no ADISCORD_economy_is_primary_tier_country = yes ADISCORD_economy_is_secondary_tier_country = yes } }
+                    ADISCORD_economy_initialize_country = yes } }
         '''),
         (effects, "ADISCORD_reconcile_non_participating_minor_optimization", '''
             if = { limit = { ADISCORD_minor_optimization_needs_release = yes }
-                ADISCORD_release_non_participating_minor_optimization = yes
-                if = { limit = { is_ai = no } ADISCORD_economy_initialize_country = yes } }
+                ADISCORD_release_non_participating_minor_optimization = yes }
         '''),
     )
     for text, name, expected in contracts:
@@ -339,6 +385,8 @@ def minor_lifecycle_issues(triggers: str, effects: str, hooks: str, shared_hooks
 def validate(root: Path = ROOT) -> list[str]:
     root = Path(root)
     issues: list[str] = []
+    issues.extend(bezhaysk_administration_release_issues(read(
+        root / "common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")))
     trigger_text = read(
         root / "common/scripted_triggers/ADISCORD_minor_optimization_triggers.txt"
     )

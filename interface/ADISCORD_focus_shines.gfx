@@ -1,4 +1,7 @@
 spriteTypes = {
+	spriteType = { name = "GFX_focus_WRK_worker_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
 	SpriteType = {
 		name = "GFX_focus_STP_GUARANTEE_MINISTERS_shine"
 		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/party before civilwar.png"

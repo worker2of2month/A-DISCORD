@@ -877,7 +877,7 @@ class BattalionArmyUpkeepTests(unittest.TestCase):
         self.assertEqual(costs, [10, 10, 10])
 
     def test_war_funding_and_weekly_conversion_apply_once(self):
-        for mode, factor in ((1, .25), (2, .6), (3, 1), (4, 1.5), (5, 2.5)):
+        for mode, factor in ((1, .25), (2, .6), (3, 1), (4, 1.3), (5, 1.7)):
             for war in (False, True):
                 f = self.calculate(100, mode, war)
                 expected = 10 * factor * (1.25 if war else 1)
@@ -895,7 +895,7 @@ class BattalionArmyUpkeepTests(unittest.TestCase):
         f.scopes["A"].update({P + "policy_preview_uses_cached_base_temp": 1,
                               "num_battalions": 999, P + "army_spending_mode": 4})
         f.run(P + "calculate_army_expenses")
-        self.assertAlmostEqual(f.scopes["A"][P + "army_expenses"], 30)
+        self.assertAlmostEqual(f.scopes["A"][P + "army_expenses"], 26)
         self.assertEqual(f.scopes["A"][P + "army_battalion_count"], 200)
 
     def test_national_premium_reaches_weekly_budget(self):
@@ -1039,7 +1039,7 @@ class NodrulDivisionEconomyTests(unittest.TestCase):
                                  war=war, crisis=crisis).scopes["A"].get(P + "nod_division_capacity"), cap)
 
     def test_low_funding_does_not_raise_capacity_and_previews_do_not_erase_pressure(self):
-        for level, factor in ((1, .25), (2, .6), (3, 1), (4, 1.5), (5, 2.5)):
+        for level, factor in ((1, .25), (2, .6), (3, 1), (4, 1.3), (5, 1.7)):
             with self.subTest(level=level):
                 live = self.calculate(divisions=50, mode=level)
                 baseline = self.calculate(divisions=50, mode=3)

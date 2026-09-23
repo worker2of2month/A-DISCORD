@@ -71,7 +71,7 @@ STP_cw_northern_aid = {
 	visible = {
 		has_country_flag = STP_cw_northern_aid_open
 		NOT = { has_global_flag = STP_cw_union_wars_finished }
-		NOD = { exists = yes has_capitulated = no }
+		NOD = { exists = yes has_capitulated = no check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
 	}
 	visible_when_empty = yes
 	priority = 34
