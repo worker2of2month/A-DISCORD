@@ -3,7 +3,7 @@
  VAL_trade_corridors_desc: "Кефрейт больше не может считать торговлю строчкой в бухгалтерской книге. Груз должен физически пройти через порты, склады, перевалы и зависимые администрации.\n\nДействующие коридоры: §Y[?VAL_trade_corridors_active|0]/[?VAL_trade_corridors_capacity|0]§! введённых в эксплуатацию\nОхрана маршрутов: §Y[?VAL_corridor_security|0]/3§!\nДавление серого рынка: §Y[?VAL_black_market_pressure|0]/100§!\n\nДо потерь серого рынка каждый открытый маршрут приносит §Y20§! казне в неделю. Модернизированный маршрут приносит ещё §G10§!. Маршрут начинает считаться обязательством только после первого фактического открытия: потеря его ключевого узла прекращает выплату и усиливает контрабанду."
 
  VAL_population_markets: "Население и переселенцы"
- VAL_population_markets_desc:0 "£population_texticon Свободные переселенцы: §Y[?VAL_displaced_population|1]§! × §Y10§! тыс.\n£population_texticon Жильё занято: §Y[?VAL_population_present|1]§! / §Y[?VAL_refugee_housing|0]§! × §Y10§! тыс.\n£manpower_texticon Местный резерв: §Y[?VAL_local_volunteer_pool|1]§! × §Y10§! тыс.\n\nПриём беженцев пополняет свободный резерв. Обучение превращает §Y10 тыс.§! переселенцев в армейский резерв за §Y35 дней§!. Рабочий контракт занимает §Y100 тыс.§! человек на §Y90 дней§!."
+ VAL_population_markets_desc:0 "£population_texticon Свободные переселенцы: §Y[?VAL_displaced_population|1]§! × §Y10§! тыс.\n£population_texticon Жильё занято: §Y[?VAL_population_present|1]§! / §Y[?VAL_refugee_housing|0]§! × §Y10§! тыс.\n£manpower_texticon Местный резерв: §Y[?VAL_local_volunteer_pool|1]§! × §Y10§! тыс.\n\nПриём и подъёмные увеличивают население. Натурализация создаёт местный резерв. Обучение и экстренные контракты переводят резервы в людские ресурсы."
 
  VAL_logistics_cost_50: "£ADISCORD_economy_treasury_texticon  §Y50§!"
  VAL_logistics_cost_100: "£ADISCORD_economy_treasury_texticon  §Y100§!"
@@ -120,6 +120,19 @@
  VAL_refugee_perimeter_active_tt:0 "Периметр открыт. Приём доступен раз в §Y90 дней§!."
 
  VAL_local_training_start_tt:0 "£population_texticon §Y5 тыс.§! местных добровольцев начнут §Y35-дневное§! обучение. При отмене возвращаются добровольцы, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения."
+
+ VAL_offer_settlement_bounties:0 "Выплатить подъёмные переселенцам"
+ VAL_offer_settlement_bounties_desc:0 "Оплатить переезд и гарантировать первые контракты рабочим и семьям из-за границы Кефрейта. Программа привлекает §Y30 тыс.§! новых жителей в систему размещения, стоит §Y250§! монет и повышает давление серого рынка на §R2§!. Доступно раз в §Y90 дней§!."
+ VAL_settlement_bounties_tt:0 "£population_texticon §Y30 тыс.§! новых переселенцев. Давление серого рынка: §R+2§!."
+
+ VAL_naturalize_refugee_households:0 "Натурализовать семьи переселенцев"
+ VAL_naturalize_refugee_households_desc:0 "Перевести давно обосновавшиеся семьи из временного статуса в постоянное контрактное гражданство. §Y20 тыс.§! человек покинут свободный резерв переселенцев и создадут §Y10 тыс.§! местного служебного резерва. Цена: §Y50§! политической власти. Доступно раз в §Y45 дней§!."
+ VAL_naturalization_result_tt:0 "Преобразовать £population_texticon §Y20 тыс.§! переселенцев в £manpower_texticon §Y10 тыс.§! местного служебного резерва. Давление серого рынка: §G-1§!."
+
+ VAL_emergency_service_contracts:0 "Заключить экстренные служебные контракты"
+ VAL_emergency_service_contracts_desc:0 "Обойти обычный цикл подготовки и сразу мобилизовать крупную группу контрактного резерва. Потратить §Y500§! монет, §Y25§! командного ресурса, £infantry_equipment_texticon §Y10 тыс.§! единиц пехотного снаряжения и £population_texticon §Y10 тыс.§! местного резерва, чтобы немедленно получить £manpower_texticon §Y10 тыс.§! людских ресурсов. Стабильность: §R-1%§!. Доступно раз в §Y90 дней§!."
+ VAL_emergency_service_cost:0 "£ADISCORD_economy_treasury_texticon §Y500§!  £command_power §Y25§!  £infantry_equipment_texticon §Y10000§!  £population_texticon §Y10000§!"
+ VAL_emergency_service_result_tt:0 "Немедленно получить £manpower_texticon §Y10 тыс.§! людских ресурсов. Стабильность: §R-1%§!."
 
  VAL_recruit_local_volunteers:0 "Вербовать местных добровольцев"
 
