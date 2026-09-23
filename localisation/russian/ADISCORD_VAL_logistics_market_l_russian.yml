@@ -3,7 +3,7 @@
  VAL_trade_corridors_desc: "Кефрейт больше не может считать торговлю строчкой в бухгалтерской книге. Груз должен физически пройти через порты, склады, перевалы и зависимые администрации.\n\nДействующие коридоры: §Y[?VAL_trade_corridors_active|0]/[?VAL_trade_corridors_capacity|0]§! введённых в эксплуатацию\nОхрана маршрутов: §Y[?VAL_corridor_security|0]/3§!\nДавление серого рынка: §Y[?VAL_black_market_pressure|0]/100§!\n\nДо потерь серого рынка каждый открытый маршрут приносит §Y20§! казне в неделю. Модернизированный маршрут приносит ещё §G10§!. Маршрут начинает считаться обязательством только после первого фактического открытия: потеря его ключевого узла прекращает выплату и усиливает контрабанду."
 
  VAL_population_markets: "Население и переселенцы"
- VAL_population_markets_desc:0 "£population_texticon Свободные: §Y[?VAL_displaced_population|1]§! × §Y10§! тыс. | Размещено: §Y[?VAL_population_present|1]§! / §Y[?VAL_refugee_housing|0]§! × §Y10§! тыс.\n£manpower_texticon Местный резерв добровольцев: §Y[?VAL_local_volunteer_pool|1]§! × §Y10§! тыс.\n\nРешения ниже отвечают за приём, жильё, работу, обучение и переселение людей."
+ VAL_population_markets_desc:0 "£population_texticon Свободные переселенцы: §Y[?VAL_displaced_population|1]§! × §Y10§! тыс.\n£population_texticon Жильё занято: §Y[?VAL_population_present|1]§! / §Y[?VAL_refugee_housing|0]§! × §Y10§! тыс.\n£manpower_texticon Местный резерв: §Y[?VAL_local_volunteer_pool|1]§! × §Y10§! тыс.\n\nПриём беженцев пополняет свободный резерв. Обучение превращает §Y10 тыс.§! переселенцев в армейский резерв за §Y35 дней§!. Рабочий контракт занимает §Y100 тыс.§! человек на §Y90 дней§!."
 
  VAL_logistics_cost_50: "£ADISCORD_economy_treasury_texticon  §Y50§!"
  VAL_logistics_cost_100: "£ADISCORD_economy_treasury_texticon  §Y100§!"
@@ -27,7 +27,7 @@
  VAL_open_refugee_border: "Снова открыть переходы"
  VAL_open_refugee_border_desc: "Восстановить торговлю и разрешить приём по ещё действующим предложениям. Повторное открытие границы не создаёт новых волн беженцев."
  VAL_contract_refugee_labor: "Предложить рабочие контракты"
- VAL_contract_refugee_labor_desc:0 "Зарезервировать £population_texticon §Y100 тыс.§! беженцев на §Y90 дней§!. Цена: §Y50§! £political_power_texticon. Пока программа действует: §G+8%§! к скорости строительства и §G+5%§! к гражданским доходам."
+ VAL_contract_refugee_labor_desc:0 "Занять £population_texticon §Y100 тыс.§! свободных переселенцев на строительстве на 90 дней за §Y75§! £political_power_texticon. Пока действует контракт, они недоступны для вербовки и переселения, но по-прежнему занимают жильё. По завершении или отмене все рабочие возвращаются в свободный пул."
  VAL_fund_resettlement_depots: "Переселить беженцев в [FROM.GetName]"
  VAL_fund_resettlement_depots_desc: "Переселить £population_texticon §Y100 тыс.§! уже принятых беженцев в [FROM.GetName] за §Y250§! из казны. Население региона навсегда увеличится на §G100 тыс.§!. Программа доступна только в выбранных малонаселённых домашних регионах Кефрейта под нашим контролем, не работает при незавершённой очистке загрязнения и проводится в каждом регионе один раз."
  VAL_organize_refugee_return: "Организовать возвращение"
@@ -55,19 +55,19 @@
  VAL_black_market_crisis: "Государство двух бухгалтерий"
  VAL_black_market_crisis_desc: "Подпольный оборот лишает казну §Y50%§! регулярного дохода, включая выплаты торговых коридоров. Растут расходы на управление, падает стабильность. Денежные потери показаны в разделе «Торговые пути»."
  VAL_refugee_strain: "Перегруженная система размещения"
- VAL_refugee_strain_desc: "Слишком много перемещённых людей одновременно зависят от жилья, транспорта, медицины и продовольственных норм Кефрейта."
+ VAL_refugee_strain_desc:0 "Переполнение жилья повышает социальные расходы на §R7%§!, товары народного потребления на §R1%§! и снижает стабильность на §R2%§!."
  VAL_closed_border_regime: "Закрытые переходы"
  VAL_closed_border_regime_desc: "Чрезвычайный пограничный режим снижает поток людей, но задерживает и законные сделки."
  VAL_refugee_contract_labor: "Контракты для переселенцев"
- VAL_refugee_contract_labor_desc: "Часть перемещённого населения получила формальные рабочие контракты и включена в строительные и промышленные проекты."
+ VAL_refugee_contract_labor_desc:0 "Рабочие контракты дают §G+12%§! к скорости строительства и §G+8%§! к гражданским доходам ценой §R-1%§! стабильности."
 
  VAL_refugee_admission_tt: "Принять §Y100 тыс.§! беженцев. Давление серого рынка: §R+3§!."
 
- VAL_refugee_admission_vorkerland_tt: "Принять §Y300 тыс.§! беженцев. Давление серого рынка: §R+3§!."
- VAL_refugee_admission_stelander_tt: "Принять §Y200 тыс.§! беженцев. Давление серого рынка: §R+3§!."
- VAL_refugee_admission_nodrul_tt: "Принять §Y100 тыс.§! беженцев. Давление серого рынка: §R+3§!."
- VAL_refugee_admission_north_tt: "Принять §Y100 тыс.§! беженцев. Давление серого рынка: §R+3§!."
- VAL_refugee_admission_perimeter_tt: "Принять §Y100 тыс.§! беженцев. Давление серого рынка: §R+3§!."
+ VAL_refugee_admission_vorkerland_tt:0 "Принять §Y300 тыс.§! беженцев. Давление серого рынка: §R+3§!."
+ VAL_refugee_admission_stelander_tt:0 "Принять §Y200 тыс.§! беженцев. Давление серого рынка: §R+3§!."
+ VAL_refugee_admission_nodrul_tt:0 "Принять §Y100 тыс.§! беженцев. Давление серого рынка: §R+3§!."
+ VAL_refugee_admission_north_tt:0 "Принять §Y100 тыс.§! беженцев. Давление серого рынка: §R+3§!."
+ VAL_refugee_admission_perimeter_tt:0 "Принять §Y100 тыс.§! беженцев. Давление серого рынка: §R+3§!."
 
  VAL_refugee_border_open_tt: "Граница открыта для приёма беженцев"
 
@@ -75,21 +75,21 @@
 
  VAL_accept_vorkerland_refugees: "Принять беженцев из Воркерланда"
 
- VAL_accept_vorkerland_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+300 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nПовтор: через §Y365 дней§!."
+ VAL_accept_vorkerland_refugees_desc:0 "Принять §Y300 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
 
  VAL_accept_stelander_refugees: "Принять беженцев из Стеландера"
 
- VAL_accept_stelander_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+200 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nПовтор: через §Y365 дней§!."
+ VAL_accept_stelander_refugees_desc:0 "Принять §Y200 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
 
  VAL_accept_nodrul_refugees: "Принять беженцев из Нодрула"
 
- VAL_accept_nodrul_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+100 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nПовтор: через §Y365 дней§!."
+ VAL_accept_nodrul_refugees_desc:0 "Принять §Y100 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
 
  VAL_accept_north_refugees: "Принять беженцев из северных стран"
 
- VAL_accept_north_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+100 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nПовтор: через §Y365 дней§!."
+ VAL_accept_north_refugees_desc:0 "Принять §Y100 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
  VAL_accept_perimeter_refugees: "Принять беженцев из-за Периметра"
- VAL_accept_perimeter_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+100 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nПовтор: через §Y365 дней§!."
+ VAL_accept_perimeter_refugees_desc:0 "Принять §Y100 тыс.§! беженцев за §Y100§! монет. Серый рынок: §R+3§!. Повторно через §Y90 дней§!. Люди пополняют резерв переселения."
  VAL_refugee_resettlement_result_tt:0 "£population_texticon §Y100 тыс.§! перемещённых людей навсегда поселяются в регионе §Y[FROM.GetName]§!."
  VAL_logistics_cost_100_blocked: "£ADISCORD_economy_treasury_texticon  §R100§!"
  VAL_logistics_cost_100_tooltip: "£ADISCORD_economy_treasury_texticon  §Y100§!"
@@ -113,11 +113,11 @@
 
  VAL_refugee_wave_limit_tt:0 "Принято менее трёх волн из этого региона."
  VAL_train_refugee_volunteers:0 "Обучить добровольцев из числа беженцев"
- VAL_train_refugee_volunteers_desc:0 "Зарезервировать £population_texticon §Y10 тыс.§! беженцев на §Y35 дней§!. Цена: §Y50§! £political_power_texticon и £infantry_equipment_texticon §Y2500§!. После обучения: £manpower_texticon §G+10 тыс.§! армейского резерва."
- VAL_refugee_training_start_tt:0 "Через §Y35 дней§!: £manpower_texticon §G+10 тыс.§! армейского резерва. При отмене возвращаются люди, §Y50§! £political_power_texticon и £infantry_equipment_texticon §Y2500§!."
+ VAL_train_refugee_volunteers_desc:0 "Обучить £population_texticon §Y5 тыс.§! добровольцев из свободных переселенцев. Срок: 35 дней. Цена: £pol_power §Y75§! политической власти и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения. Люди остаются на обеспечении до завершения обучения. При капитуляции или потере независимости обучение отменяется с возвратом людей и затрат."
+ VAL_refugee_training_start_tt:0 "£population_texticon §Y10 тыс.§! переселенцев начнут §Y35-дневное§! обучение и затем пополнят армейский резерв. При отмене возвращаются люди, £pol_power §Y75§! политической власти и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения."
  VAL_refugee_window_open_tt: "Для этого направления открыто окно приёма беженцев. Оно действует §Y180 дней§! после появления потока. Если условие не выполнено, поток ещё не открыт, срок приёма истёк или все три волны уже приняты."
- VAL_refugee_war_active_tt: "Война этого направления продолжается; решение можно использовать один раз в год."
- VAL_refugee_perimeter_active_tt: "Периметр открыт; решение можно использовать один раз в год."
+ VAL_refugee_war_active_tt:0 "Война этого направления продолжается. Приём доступен раз в §Y90 дней§!."
+ VAL_refugee_perimeter_active_tt:0 "Периметр открыт. Приём доступен раз в §Y90 дней§!."
 
  VAL_local_training_start_tt:0 "£population_texticon §Y5 тыс.§! местных добровольцев начнут §Y35-дневное§! обучение. При отмене возвращаются добровольцы, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения."
 
@@ -125,17 +125,20 @@
 
  VAL_recruit_local_volunteers_desc:0 "Призыв остаётся на уровне 1,25%. Дополнительный договорной резерв равен 2% исходного населения семи регионов Кефрейта и не возобновляется. Каждый набор: £population_texticon §Y5 тыс.§! местных добровольцев, 35 дней, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения. При капитуляции или потере независимости — полный возврат."
 
- VAL_training_cost:0 "£population_texticon §Y10000§! §Y50§! £political_power_texticon £infantry_equipment_texticon §Y2500§!"
+ VAL_refugee_training_cost:0 "£population_texticon §Y10000§! £pol_power §Y75§! £infantry_equipment_texticon §Y5000§!"
+ VAL_refugee_training_cost_blocked:0 "£population_texticon §R10000§! £pol_power §R75§! £infantry_equipment_texticon §R5000§!"
+ VAL_refugee_training_cost_tooltip:0 "Требуется £population_texticon §Y10 тыс.§! свободных переселенцев, £pol_power §Y75§! политической власти и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения."
+ VAL_training_cost:0 "£population_texticon §Y5000§! §Y75§! £political_power_texticon £infantry_equipment_texticon §Y5000§!"
 
- VAL_training_cost_blocked:0 "£population_texticon §R10000§! §R50§! £political_power_texticon £infantry_equipment_texticon §R2500§!"
+ VAL_training_cost_blocked:0 "£population_texticon §R5000§! §R75§! £political_power_texticon £infantry_equipment_texticon §R5000§!"
 
- VAL_training_cost_tooltip:0 "Нужно £population_texticon §Y10 тыс.§! беженцев, §Y50§! £political_power_texticon и £infantry_equipment_texticon §Y2500§! пехотного снаряжения."
+ VAL_training_cost_tooltip:0 "Нужно £population_texticon §Y5 000§! добровольцев из указанного в решении резерва, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! пехотного снаряжения."
 
- VAL_labor_program_tt:0 "£population_texticon §Y100 тыс.§! беженцев работают 90 дней: §G+8%§! к скорости строительства и §G+5%§! к гражданским доходам. Затем все возвращаются в свободный пул."
+ VAL_labor_program_tt:0 "£population_texticon §Y100 тыс.§! переселенцев работают 90 дней: §G+12%§! к скорости строительства, §G+8%§! к гражданским доходам, §R-1%§! к стабильности. Затем люди возвращаются в свободный резерв."
 
  VAL_expand_refugee_housing:0 "Расширить временные поселения"
 
- VAL_expand_refugee_housing_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y250§!\nСрок: §Y45 дней§!\nРезультат: вместимость жилья §G+200 тыс.§!."
+ VAL_expand_refugee_housing_desc:0 "За §Y250§! монет подготовить места для ещё §Y200 тыс.§! человек. Срок: §Y45 дней§!. Максимальная вместимость: 1 млн. При капитуляции или потере независимости деньги возвращаются."
 
  VAL_housing_start_tt:0 "Через 45 дней: +200 тыс. мест размещения."
 
@@ -145,6 +148,6 @@
 
  VAL_broker_audit_tt:0 "Зависимость от посредников: -1. Лицензии и закупки контрабанды закрываются на 60 дней."
 
- VAL_labor_cost:0 "£population_texticon §Y100 000§! §Y50§! £political_power_texticon"
- VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! §R50§! £political_power_texticon"
- VAL_labor_cost_tooltip:0 "Нужно £population_texticon §Y100 тыс.§! свободных беженцев и §Y50§! £political_power_texticon."
+ VAL_labor_cost:0 "£population_texticon §Y100 000§! £pol_power §Y75§!"
+ VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! £pol_power §R75§!"
+ VAL_labor_cost:0 "£population_texticon §Y100 000§! §Y75§! £political_power_texticon"

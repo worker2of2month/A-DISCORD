@@ -648,8 +648,8 @@ VAL_refund_refugee_training = {
 		limit = { has_variable = VAL_refugee_training_escrow }
 		add_to_variable = { var = VAL_displaced_population value = VAL_refugee_training_escrow }
 		clear_variable = VAL_refugee_training_escrow
-		add_political_power = 50
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 2500 producer = VAL }
+		add_political_power = 75
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 5000 producer = VAL }
 		VAL_refresh_refugee_state = yes
 	}
 }

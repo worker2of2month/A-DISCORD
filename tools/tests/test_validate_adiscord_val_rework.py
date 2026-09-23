@@ -1331,17 +1331,16 @@ class ValNativePreviewTests(unittest.TestCase):
                          "VAL_Standard_Cartridges", "VAL_Three_Shift_Arsenals", "VAL_Industrial_Mobilization_Plan"):
             focus = next(b for b in named_blocks(FOCUSES_PATH.read_text(encoding="utf-8-sig"), "focus") if "id = " + focus_id in b)
             reward = block(block(parse_clausewitz(focus), "focus"), "completion_reward")
-            tooltip_keys = [e.value for e in reward if e.key == "custom_effect_tooltip"]
-            if focus_id in {"VAL_Contract_Accounting_Office", "VAL_Munitions_Board"}:
-                self.assertIn("VAL_contract_industry_tier_1_tt", tooltip_keys)
-            if focus_id in {"VAL_Standardize_Rifle_Lots", "VAL_Standard_Cartridges", "VAL_Three_Shift_Arsenals"}:
-                self.assertIn("VAL_contract_industry_tier_2_tt", tooltip_keys)
-            if focus_id == "VAL_Industrial_Mobilization_Plan":
-                self.assertIn("VAL_contract_industry_tier_3_tt", tooltip_keys)
             for level in (None, 0, 1, 2, 3):
                 facts = {("VAL", "variable", "VAL_contract_industry_level"): level or 0,
                          ("VAL", "has_variable", "VAL_contract_industry_level"): level is not None}
                 expected = []
+                if focus_id in {"VAL_Contract_Accounting_Office", "VAL_Munitions_Board"} and (level or 0) < 1:
+                    expected = [("VAL_industry_1_dummy", "VAL_industry_1_delta")]
+                elif focus_id in {"VAL_Standardize_Rifle_Lots", "VAL_Standard_Cartridges", "VAL_Three_Shift_Arsenals"} and (level or 0) < 2:
+                    expected = [("VAL_industry_2_dummy", "VAL_industry_1_to_2_delta" if level == 1 else "VAL_industry_2_delta")]
+                elif focus_id == "VAL_Industrial_Mobilization_Plan" and (level or 0) < 3:
+                    expected = [("VAL_industry_3_dummy", "VAL_industry_3_delta" if (level or 0) < 1 else "VAL_industry_1_to_3_delta" if level == 1 else "VAL_industry_2_to_3_delta")]
                 if focus_id in {"VAL_Contract_Accounting_Office", "VAL_Industrial_Mobilization_Plan"}:
                     expected.append(("VAL_contract_delta_dummy", "VAL_fiscal_administration_delta"))
                 with self.subTest(focus=focus_id, level=level):
@@ -3465,11 +3464,14 @@ class ValExpandedCampaignTests(unittest.TestCase):
             facts = {("VAL", "ADISCORD_nam_resource_war_active", "yes"): active}
             for gate in ("allow_branch", "available"):
                 self.assertEqual(matches_conditions(self.getblock(focus, gate), facts, "VAL"), active)
+        southern_trade_dependencies = [e.value for e in walk(focuses["VAL_Southern_Trade_Charter"]) if e.key == "focus"]
+        self.assertIn("VAL_Resource_War_Contracts", southern_trade_dependencies)
         for name, body in focuses.items():
-            if name != "VAL_Resource_War_Contracts":
+            if name not in ("VAL_Resource_War_Contracts", "VAL_Southern_Trade_Charter"):
                 dependencies = [e.value for e in walk(body) if e.key == "focus"]
                 self.assertNotIn("VAL_Resource_War_Contracts", dependencies, name)
-        self.assertEqual(self.scalar(self.getblock(focuses["VAL_Return_Southern_Tsaygen"], "prerequisite"), "focus"), "VAL_Foreign_Broker_Licences")
+        tsaygen_prerequisites = [self.scalar(entry.value, "focus") for entry in focuses["VAL_Return_Southern_Tsaygen"] if entry.key == "prerequisite"]
+        self.assertEqual(tsaygen_prerequisites, ["VAL_Contracts_Outlive_Kings", "VAL_Foreign_Broker_Licences"])
         self.assertEqual(self.scalar(self.getblock(focuses["VAL_frontier_return_irem"], "prerequisite"), "focus"), "VAL_Return_Southern_Tsaygen")
 
     def test_resource_war_transitions_invalidate_the_focus_layout_without_an_aid_contract(self):
