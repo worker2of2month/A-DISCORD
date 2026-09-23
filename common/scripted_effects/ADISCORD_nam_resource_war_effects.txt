@@ -12,10 +12,12 @@ ADISCORD_nam_resource_war_schedule = {
 			country_exists = AZH
 		}
 		set_global_flag = ADISCORD_nam_resource_war_scheduled
+		# The Svetlogorye resource war is deliberately a later regional crisis:
+		# preserve the old 90-day variance while moving the whole window +730 days.
 		NAM = {
 			country_event = {
 				id = ADISCORD_nam_resource_war.1
-				days = 120
+				days = 850
 				random_days = 90
 			}
 		}
@@ -42,7 +44,13 @@ ADISCORD_nam_resource_war_start = {
 
 ADISCORD_nam_resource_war_begin_hostilities = {
 	set_global_flag = ADISCORD_nam_resource_war_started
-	VAL = { if = { limit = { exists = yes has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes } }
+	VAL = {
+		if = {
+			limit = { exists = yes has_focus_tree = VAL_focus }
+			mark_focus_tree_layout_dirty = yes
+			country_event = { id = ADISCORD_nam_resource_war.3 hours = 1 }
+		}
+	}
 	clr_global_flag = ADISCORD_nam_resource_war_scheduled
 	clr_global_flag = ADISCORD_nam_resource_war_EFL_defeated
 	clr_global_flag = ADISCORD_nam_resource_war_AZH_defeated
