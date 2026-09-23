@@ -73,7 +73,7 @@ EXTERNAL_DISPATCH = (
     (
         WORKER_FATE_EFFECT,
         COLLAPSE_EVENTS,
-        "ADISCORD_vorkerland_collapse.1 immediate, after the Worker fate roll",
+        "ADISCORD_vorkerland_collapse.6 immediate, one day after the Unity Tower detonation",
     ),
     (
         VARIANT_EFFECT,
@@ -572,6 +572,17 @@ def upstream_contract_issues(root: Path, campaign_state_effects: str) -> list[st
     for flag, _ in WORKER_FATE_DISPATCH:
         if f"set_global_flag = {flag}" not in collapse:
             issues.append(f"Worker fate news reads {flag}, which the collapse layer no longer sets")
+
+    collapse_defs = event_blocks(collapse)
+    outbreak = collapse_defs.get("ADISCORD_vorkerland_collapse.1", ("", ""))[1]
+    detonation = collapse_defs.get("ADISCORD_vorkerland_collapse.4", ("", ""))[1]
+    fate_report = collapse_defs.get("ADISCORD_vorkerland_collapse.6", ("", ""))[1]
+    if f"{WORKER_FATE_EFFECT} = yes" in outbreak:
+        issues.append("Worker fate news is published before the Unity Tower detonation")
+    if "WKR = { country_event = { id = ADISCORD_vorkerland_collapse.6 days = 1 } }" not in detonation:
+        issues.append("Unity Tower detonation no longer schedules the one-day-delayed Worker fate report")
+    if f"{WORKER_FATE_EFFECT} = yes" not in fate_report:
+        issues.append("collapse.6 no longer publishes Worker fate after the Tower detonation")
 
     focus_path = root / CIVIL_WAR_FOCUS
     focus = focus_path.read_text(encoding="utf-8-sig") if focus_path.is_file() else ""
