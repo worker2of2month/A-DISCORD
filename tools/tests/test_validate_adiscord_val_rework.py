@@ -3248,6 +3248,34 @@ class ValNumericPreviewChainTests(unittest.TestCase):
 
 
 class ValExpandedCampaignTests(unittest.TestCase):
+    def test_war_aid_requires_a_complete_alternative_not_a_token_shipment(self):
+        for campaign in ("resource", "northern"):
+            name = f"VAL_{campaign}_aid_sufficient"
+            self.assertIn(name, self.triggers)
+            for rifles, personnel, days, expected in (
+                (0, 0, 0, False), (4999.9, 0, 0, False),
+                (5000, 0, 0, True), (0, 1999.9, 0, False),
+                (0, 2000, 0, True), (0, 0, 29, False), (0, 0, 30, True),
+            ):
+                facts = {("VAL", "variable", f"VAL_{campaign}_aid_rifles"): rifles,
+                         ("VAL", "variable", f"VAL_{campaign}_aid_personnel"): personnel,
+                         ("VAL", "variable", f"VAL_{campaign}_aid_volunteer_days"): days}
+                self.assertEqual(self.match(name, facts), expected, (campaign, rifles, personnel, days))
+
+    def test_war_categories_close_without_an_active_conflict_and_keep_volunteers_together(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+        categories = self.parse((ROOT / "common/decisions/categories/ADISCORD_VAL_rework_categories.txt").read_text(encoding="utf-8"))
+        decisions = self.parse(DECISIONS_PATH.read_text(encoding="utf-8"))
+        for category, trigger in (("VAL_resource_war_aid", "ADISCORD_nam_resource_war_active"),
+                                  ("VAL_northern_war_aid", "VAL_northern_volunteer_front_open")):
+            self.assertIn(category, [e.key for e in categories])
+            visible = self.getblock(self.getblock(categories, category), "visible")
+            self.assertFalse(matches_conditions(visible, {}, "VAL"))
+            self.assertTrue(matches_conditions(visible, {("VAL", trigger, "yes"): True}, "VAL"))
+        north = self.getblock(decisions, "VAL_northern_war_aid")
+        self.assertIn("VAL_northern_volunteers", [e.key for e in north])
+        self.assertNotIn("VAL_northern_volunteers", [e.key for e in self.getblock(decisions, "VAL_military_operations")])
+
     @classmethod
     def setUpClass(cls):
         from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar

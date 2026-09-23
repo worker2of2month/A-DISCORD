@@ -1,4 +1,11 @@
 on_actions = {
+	on_daily_VAL = {
+		effect = {
+			VAL_resource_aid_daily = yes
+			VAL_northern_aid_daily = yes
+		}
+	}
+
 	on_startup = {
 		effect = {
 			VAL = { VAL_qol_initialize_staff = yes VAL_qol_initialize_party_leaders = yes }
@@ -16,7 +23,7 @@ on_actions = {
 					VAL_sync_solgalov_portrait = yes
 					VAL_reveal_stelander_focus_branch = yes
 					VAL_call_subjects_to_wars = yes
-					VAL_check_nam_concession = yes
+					VAL_check_nam_concession = yes VAL_check_efl_concession = yes
 				}
 			}
 			if = {
@@ -67,7 +74,7 @@ on_actions = {
 						FROM = { tag = VAL }
 					}
 				}
-				VAL = { VAL_check_nam_concession = yes }
+				VAL = { VAL_check_nam_concession = yes VAL_check_efl_concession = yes }
 			}
 			if = {
 				limit = {
@@ -154,7 +161,7 @@ on_actions = {
 
 			if = {
 				limit = { FROM.FROM = { state = 230 } }
-				VAL = { VAL_check_nam_concession = yes }
+				VAL = { VAL_check_nam_concession = yes VAL_check_efl_concession = yes }
 			}
 			if = {
 				limit = {

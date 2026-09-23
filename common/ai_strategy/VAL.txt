@@ -493,3 +493,17 @@ VAL_final_campaign_STS = {
  abort_when_not_enabled = yes
  ai_strategy = { type = prepare_for_war id = STS value = 150 }
 }
+
+VAL_resource_volunteers_to_NAM = {
+	allowed = { tag = VAL }
+	enable = { has_idea = VAL_resource_volunteer_mandate has_war = no NAM = { VAL_resource_aid_recipient = yes } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = send_volunteers_desire id = NAM value = 200 }
+}
+
+VAL_resource_volunteers_to_EFL = {
+	allowed = { tag = VAL }
+	enable = { has_idea = VAL_resource_volunteer_mandate has_war = no EFL = { VAL_resource_aid_recipient = yes } }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = send_volunteers_desire id = EFL value = 200 }
+}

@@ -41,31 +41,20 @@ country_event = {
 	option = { name = val_contract.family.cancel ai_chance = { base = 1 } }
 	option = {
 		name = VAL_partner_trade
-		trigger = { VAL_partner_desk_free = yes CIN = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } CIN = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-					AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-					AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-					AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-					AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-					AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes CIN = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } CIN = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-							AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-							AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-							AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-							AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-							AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } } } }
+
+		trigger = { CIN = { VAL_partner_trade_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_trade_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes CIN = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } CIN = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-							AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-							AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-							AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-							AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-							AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } }
+
+				limit = { CIN = { VAL_partner_trade_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				CIN = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_trade days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.362 }
@@ -75,16 +64,20 @@ country_event = {
 	}
 	option = {
 		name = VAL_partner_arms
-		trigger = { VAL_partner_desk_free = yes CIN = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } CIN = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes CIN = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } CIN = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } } } }
+
+		trigger = { CIN = { VAL_partner_arms_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_arms_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes CIN = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } CIN = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } }
+
+				limit = { CIN = { VAL_partner_arms_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				CIN = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_arms days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.363 }
@@ -94,16 +87,20 @@ country_event = {
 	}
 	option = {
 		name = VAL_partner_hire
-		trigger = { VAL_partner_desk_free = yes CIN = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } CIN = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes CIN = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } CIN = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } } } }
+
+		trigger = { CIN = { VAL_partner_hire_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_hire_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes CIN = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } CIN = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } }
+
+				limit = { CIN = { VAL_partner_hire_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				CIN = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_hire days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.364 }
@@ -122,31 +119,20 @@ country_event = {
 	option = { name = val_contract.family.cancel ai_chance = { base = 1 } }
 	option = {
 		name = VAL_partner_trade
-		trigger = { VAL_partner_desk_free = yes OSF = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } OSF = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-					AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-					AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-					AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-					AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-					AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes OSF = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } OSF = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-							AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-							AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-							AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-							AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-							AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } } } }
+
+		trigger = { OSF = { VAL_partner_trade_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_trade_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes OSF = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } OSF = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-							AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-							AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-							AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-							AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-							AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } }
+
+				limit = { OSF = { VAL_partner_trade_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				OSF = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_trade days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.362 }
@@ -156,16 +142,20 @@ country_event = {
 	}
 	option = {
 		name = VAL_partner_arms
-		trigger = { VAL_partner_desk_free = yes OSF = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } OSF = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes OSF = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } OSF = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } } } }
+
+		trigger = { OSF = { VAL_partner_arms_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_arms_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes OSF = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } OSF = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } }
+
+				limit = { OSF = { VAL_partner_arms_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				OSF = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_arms days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.363 }
@@ -175,16 +165,20 @@ country_event = {
 	}
 	option = {
 		name = VAL_partner_hire
-		trigger = { VAL_partner_desk_free = yes OSF = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } OSF = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes OSF = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } OSF = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } } } }
+
+		trigger = { OSF = { VAL_partner_hire_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_hire_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes OSF = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } OSF = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } }
+
+				limit = { OSF = { VAL_partner_hire_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				OSF = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_hire days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.364 }
@@ -203,31 +197,20 @@ country_event = {
 	option = { name = val_contract.family.cancel ai_chance = { base = 1 } }
 	option = {
 		name = VAL_partner_trade
-		trigger = { VAL_partner_desk_free = yes APH = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } APH = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-					AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-					AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-					AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-					AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-					AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes APH = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } APH = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-							AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-							AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-							AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-							AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-							AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } } } }
+
+		trigger = { APH = { VAL_partner_trade_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_trade_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes APH = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } APH = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-							AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-							AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-							AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-							AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-							AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } }
+
+				limit = { APH = { VAL_partner_trade_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				APH = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_trade days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.362 }
@@ -237,16 +220,20 @@ country_event = {
 	}
 	option = {
 		name = VAL_partner_arms
-		trigger = { VAL_partner_desk_free = yes APH = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } APH = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes APH = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } APH = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } } } }
+
+		trigger = { APH = { VAL_partner_arms_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_arms_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes APH = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } APH = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } }
+
+				limit = { APH = { VAL_partner_arms_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				APH = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_arms days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.363 }
@@ -256,16 +243,20 @@ country_event = {
 	}
 	option = {
 		name = VAL_partner_hire
-		trigger = { VAL_partner_desk_free = yes APH = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } APH = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes APH = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } APH = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } } } }
+
+		trigger = { APH = { VAL_partner_hire_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_hire_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes APH = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } APH = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } }
+
+				limit = { APH = { VAL_partner_hire_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				APH = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_hire days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.364 }
@@ -816,8 +807,8 @@ country_event = {
 					}
 				}
 				if = {
-					limit = { tag = NAM ADISCORD_nam_resource_war_active = yes }
-					VAL = { set_country_flag = VAL_nam_aid_delivered }
+					limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+					VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 2500 } VAL_complete_resource_aid = yes }
 				}
 				clr_country_flag = VAL_export_offer_arms
 				set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
@@ -883,8 +874,8 @@ country_event = {
 					add_manpower = 2000
 				}
 				if = {
-					limit = { tag = NAM ADISCORD_nam_resource_war_active = yes }
-					VAL = { set_country_flag = VAL_nam_aid_delivered }
+					limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+					VAL = { add_to_variable = { var = VAL_resource_aid_personnel value = 2000 } VAL_complete_resource_aid = yes }
 				}
 				clr_country_flag = VAL_export_offer_advisors
 				set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
@@ -1074,7 +1065,7 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { tag = NAM VAL = { has_country_flag = VAL_nam_concession_offer_pending VAL_nam_concession_negotiable = yes } }
-				VAL = { set_country_flag = VAL_nam_concession_agreed clr_country_flag = VAL_nam_concession_offer_pending }
+				VAL = { set_country_flag = VAL_nam_concession_agreed clr_country_flag = VAL_nam_concession_offer_pending set_variable = { var = VAL_resource_aid_side value = 1 } VAL_start_resource_aid = yes }
 			}
 		}
 	}
@@ -1179,31 +1170,20 @@ country_event = {
 	option = { name = val_contract.family.cancel ai_chance = { base = 1 } }
 	option = {
 		name = VAL_partner_trade
-		trigger = { VAL_partner_desk_free = yes event_target:VAL_contract_partner = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } event_target:VAL_contract_partner = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-					AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-					AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-					AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-					AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-					AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes event_target:VAL_contract_partner = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } event_target:VAL_contract_partner = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-							AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-							AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-							AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-							AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-							AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } } } }
+
+		trigger = { event_target:VAL_contract_partner = { VAL_partner_trade_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_trade_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes event_target:VAL_contract_partner = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } event_target:VAL_contract_partner = { OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-							AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-							AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-							AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-							AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-							AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } } } }
+
+				limit = { event_target:VAL_contract_partner = { VAL_partner_trade_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				event_target:VAL_contract_partner = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_trade days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.362 }
@@ -1213,16 +1193,20 @@ country_event = {
 	}
 	option = {
 		name = VAL_partner_arms
-		trigger = { VAL_partner_desk_free = yes event_target:VAL_contract_partner = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } event_target:VAL_contract_partner = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes event_target:VAL_contract_partner = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } event_target:VAL_contract_partner = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } } } }
+
+		trigger = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_arms_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes event_target:VAL_contract_partner = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } has_completed_focus = VAL_Foreign_Broker_Licences VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } event_target:VAL_contract_partner = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } } }
+
+				limit = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				event_target:VAL_contract_partner = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_arms days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.363 }
@@ -1232,16 +1216,20 @@ country_event = {
 	}
 	option = {
 		name = VAL_partner_hire
-		trigger = { VAL_partner_desk_free = yes event_target:VAL_contract_partner = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } event_target:VAL_contract_partner = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } }
-		ai_chance = { base = 10 modifier = { factor = 0 NOT = { VAL_partner_desk_free = yes event_target:VAL_contract_partner = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } event_target:VAL_contract_partner = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } } } }
+
+		trigger = { event_target:VAL_contract_partner = { VAL_partner_hire_can_offer = yes } }
+
+		ai_chance = { base = 10 }
 		custom_effect_tooltip = VAL_partner_hire_tt
 
 		hidden_effect = {
 			if = {
-				limit = { VAL_partner_desk_free = yes event_target:VAL_contract_partner = { VAL_contract_partner = yes NOT = { has_country_flag = VAL_partner_contact_cooldown } } event_target:VAL_contract_partner = { NOT = { has_country_flag = VAL_partner_hire_cooldown } OR = { AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } } AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } } AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } } AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } } } } }
+
+				limit = { event_target:VAL_contract_partner = { VAL_partner_hire_can_offer = yes } }
 				set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
 				set_country_flag = { flag = VAL_export_offer_pending days = 16 }
 				event_target:VAL_contract_partner = {
+					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_hire days = 14 }
 					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
 					country_event = { id = val_contract.364 }
@@ -1375,4 +1363,85 @@ country_event = {
 		custom_effect_tooltip = VAL_partner_strategic_accepted_tt
 		hidden_effect = { VAL_settle_partner_strategic = yes }
 	}
+}
+
+country_event = {
+	id = val_contract.368
+	title = val_contract.368.t
+	desc = val_contract.368.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 14
+	option = {
+		name = val_contract.349.refuse
+		ai_chance = { base = 20 }
+		hidden_effect = { VAL = { clr_country_flag = VAL_efl_concession_offer_pending } }
+	}
+	option = {
+		name = val_contract.349.accept
+		trigger = { tag = EFL VAL = { has_country_flag = VAL_efl_concession_offer_pending VAL_efl_concession_negotiable = yes } }
+		ai_chance = { base = 80 }
+		custom_effect_tooltip = VAL_efl_concession_terms_tt
+		hidden_effect = {
+			if = {
+				limit = { tag = EFL VAL = { has_country_flag = VAL_efl_concession_offer_pending VAL_efl_concession_negotiable = yes } }
+				VAL = { clr_country_flag = VAL_efl_concession_offer_pending set_variable = { var = VAL_resource_aid_side value = 2 } VAL_start_resource_aid = yes }
+			}
+		}
+	}
+}
+
+# Defer timeout settlement until the mission callback has released its own object.
+country_event = {
+	id = val_contract.369
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { tag = VAL check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } }
+			VAL_complete_resource_aid = yes
+			VAL_fail_resource_aid = yes
+		}
+	}
+}
+
+# Defer timeout settlement until the mission callback has released its own object.
+country_event = {
+	id = val_contract.370
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { tag = VAL check_variable = { var = VAL_northern_aid_state value = 1 compare = equals } }
+			VAL_complete_northern_aid = yes
+			VAL_fail_northern_aid = yes
+		}
+	}
+}
+
+country_event = {
+	id = val_contract.371
+	title = val_contract.371.t
+	desc = val_contract.371.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_contract.371.a }
+}
+
+country_event = {
+	id = val_contract.372
+	title = val_contract.372.t
+	desc = val_contract.372.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_contract.372.a }
+}
+
+country_event = {
+	id = val_contract.373
+	title = val_contract.373.t
+	desc = val_contract.373.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_contract.373.a }
 }

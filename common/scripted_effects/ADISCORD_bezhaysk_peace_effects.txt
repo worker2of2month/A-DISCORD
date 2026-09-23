@@ -87,7 +87,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 	}
 	if = {
 		limit = { BLD = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BLD = { if = { limit = { has_war_with = VAL } white_peace = VAL } }
+		BLD = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BLD = { is_subject = yes } }
 			BLD = { OVERLORD = { set_autonomy = { target = BLD autonomy_state = autonomy_free } } }
@@ -110,7 +110,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 	}
 	if = {
 		limit = { BHG = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BHG = { if = { limit = { has_war_with = VAL } white_peace = VAL } }
+		BHG = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BHG = { is_subject = yes } }
 			BHG = { OVERLORD = { set_autonomy = { target = BHG autonomy_state = autonomy_free } } }
@@ -133,7 +133,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 	}
 	if = {
 		limit = { BGT = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BGT = { if = { limit = { has_war_with = VAL } white_peace = VAL } }
+		BGT = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BGT = { is_subject = yes } }
 			BGT = { OVERLORD = { set_autonomy = { target = BGT autonomy_state = autonomy_free } } }
@@ -156,7 +156,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 	}
 	if = {
 		limit = { BBV = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BBV = { if = { limit = { has_war_with = VAL } white_peace = VAL } }
+		BBV = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BBV = { is_subject = yes } }
 			BBV = { OVERLORD = { set_autonomy = { target = BBV autonomy_state = autonomy_free } } }
@@ -179,7 +179,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 	}
 	if = {
 		limit = { BCM = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BCM = { if = { limit = { has_war_with = VAL } white_peace = VAL } }
+		BCM = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BCM = { is_subject = yes } }
 			BCM = { OVERLORD = { set_autonomy = { target = BCM autonomy_state = autonomy_free } } }
@@ -202,7 +202,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 	}
 	if = {
 		limit = { BJK = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BJK = { if = { limit = { has_war_with = VAL } white_peace = VAL } }
+		BJK = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BJK = { is_subject = yes } }
 			BJK = { OVERLORD = { set_autonomy = { target = BJK autonomy_state = autonomy_free } } }

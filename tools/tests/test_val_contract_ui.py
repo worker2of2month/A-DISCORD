@@ -39,6 +39,205 @@ def named_block(text: str, name: str) -> str:
     raise AssertionError(f"unclosed block {name}")
 
 
+class ValPartnerSettlementTests(unittest.TestCase):
+    """Execute the authored transaction branches; this is not native-engine proof."""
+
+    @classmethod
+    def setUpClass(cls):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        cls.triggers = {e.key: e.value for e in parse_clausewitz(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"))}
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read("common/scripted_effects/ADISCORD_VAL_effects.txt"))}
+
+    def matches(self, name, facts, scope):
+        from tools.tests.test_validate_adiscord_val_rework import ValExpandedCampaignTests
+        return ValExpandedCampaignTests.match(self, name, facts, scope, root=scope)
+
+    def execute(self, name, facts, buyer="CIN"):
+        from tools.tests.test_adiscord_stp_preparation import scalar, block
+        from tools.tests.test_validate_adiscord_val_rework import ValExpandedCampaignTests
+
+        def run(rows, scope):
+            taken = False
+            for row in rows:
+                key, value = row.key, row.value
+                if key in ("if", "else_if", "else"):
+                    if key == "if":
+                        taken = False
+                    if key != "else":
+                        self.triggers["test_partner_condition"] = block(value, "limit")
+                    if not taken and (key == "else" or ValExpandedCampaignTests.match(self, "test_partner_condition", facts, scope, root=buyer)):
+                        taken = True
+                        run([e for e in value if e.key != "limit"], scope)
+                elif key in ("VAL", "ROOT"):
+                    run(value, "VAL" if key == "VAL" else buyer)
+                elif key in ("ADISCORD_economy_initialize_country", "ADISCORD_economy_mark_dirty"):
+                    continue
+                elif key in self.effects:
+                    self.assertEqual(value, "yes")
+                    run(self.effects[key], scope)
+                elif key == "set_variable":
+                    facts[scope, "variable", scalar(value, "var")] = float(scalar(value, "value"))
+                elif key in ("add_to_variable", "subtract_from_variable"):
+                    field = (scope, "variable", scalar(value, "var"))
+                    facts[field] = facts.get(field, 0) + float(scalar(value, "value")) * (1 if key == "add_to_variable" else -1)
+                elif key in ("set_country_flag", "clr_country_flag"):
+                    flag = scalar(value, "flag") if isinstance(value, list) else value
+                    facts[scope, "has_country_flag", flag] = key == "set_country_flag"
+                elif key in ("add_ideas", "add_timed_idea"):
+                    idea = scalar(value, "idea") if isinstance(value, list) else value
+                    facts[scope, "has_idea", idea] = True
+                elif key == "send_equipment":
+                    self.assertEqual(scalar(value, "target"), "ROOT")
+                    amount = float(scalar(value, "amount"))
+                    equipment = scalar(value, "equipment")
+                    facts[scope, "equipment", equipment] -= amount
+                    facts[buyer, "equipment", equipment] = facts.get((buyer, "equipment", equipment), 0) + amount
+                elif key == "add_manpower":
+                    facts[scope, "numeric", "has_manpower"] = facts.get((scope, "numeric", "has_manpower"), 0) + float(value)
+                else:
+                    self.fail(f"Unmodelled transaction effect: {key}")
+        run(self.effects[name], buyer)
+
+    def facts(self, kind, quantity=2500, price=500, buyer="CIN"):
+        return {
+            ("VAL", "exists", "yes"): True,
+            ("VAL", "has_capitulated", "no"): True,
+            (buyer, "exists", "yes"): True,
+            (buyer, "has_capitulated", "no"): True,
+            ("VAL", "has_country_flag", "VAL_partner_offer_pending"): True,
+            ("VAL", "has_country_flag", "VAL_export_offer_pending"): True,
+            (buyer, "has_country_flag", "VAL_partner_offer_" + kind): True,
+            ("VAL", "equipment", "infantry_equipment"): quantity,
+            (buyer, "variable", "ADISCORD_economy_treasury"): price,
+            ("VAL", "variable", "ADISCORD_economy_treasury"): 1000,
+        }
+
+    def test_sales_conserve_cash_and_weapons_and_settle_only_once(self):
+        for kind, quantity, price in (("arms", 2500, 500), ("bulk", 5000, 1000), ("arsenal", 10000, 2250), ("strategic", 20000, 5000)):
+            for buyer in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
+                with self.subTest(kind=kind, buyer=buyer):
+                    facts = self.facts(kind, quantity, price, buyer)
+                    self.assertTrue(self.matches(f"VAL_partner_{kind}_can_accept", facts, buyer))
+                    self.execute(f"VAL_settle_partner_{kind}", facts, buyer)
+                    self.assertEqual(facts[buyer, "variable", "ADISCORD_economy_treasury"], 0)
+                    self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 1000 + price)
+                    self.assertEqual(facts["VAL", "equipment", "infantry_equipment"], 0)
+                    self.assertEqual(facts[buyer, "equipment", "infantry_equipment"], quantity)
+                    self.assertEqual(facts[buyer, "variable", "ADISCORD_economy_current_month_action_costs"], price)
+                    self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_current_month_action_income"], price)
+                    after = dict(facts)
+                    self.execute(f"VAL_settle_partner_{kind}", facts, buyer)
+                    self.assertEqual(facts, after)
+
+    def test_invalid_or_fractionally_short_sales_never_pay(self):
+        for kind, quantity, price in (("arms", 2500, 500), ("bulk", 5000, 1000), ("arsenal", 10000, 2250), ("strategic", 20000, 5000)):
+            changes = [
+                {("VAL", "equipment", "infantry_equipment"): quantity - .01},
+                {("CIN", "variable", "ADISCORD_economy_treasury"): price - .01},
+                {("CIN", "exists", "yes"): False},
+                {("CIN", "has_capitulated", "no"): False},
+                {("VAL", "has_capitulated", "no"): False},
+                {("CIN", "has_war_with", "VAL"): True},
+                {("CIN", "has_country_flag", "VAL_partner_offer_" + kind): False},
+                {("VAL", "has_country_flag", "VAL_partner_offer_pending"): False},
+                {("VAL", "has_idea", "VAL_export_income_1"): True},
+                {("VAL", "variable", "STP_ps_val_receipt_contract"): 3},
+            ]
+            for change in changes:
+                with self.subTest(kind=kind, change=change):
+                    facts = {**self.facts(kind, quantity, price), **change}
+                    before = dict(facts)
+                    self.execute(f"VAL_settle_partner_{kind}", facts)
+                    self.assertEqual(facts, before)
+
+    def test_second_export_slot_requires_focus_and_is_consumed(self):
+        facts = self.facts("bulk", 5000, 1000)
+        facts["VAL", "has_idea", "VAL_export_income_1"] = True
+        self.assertFalse(self.matches("VAL_partner_bulk_can_accept", facts, "CIN"))
+        facts["VAL", "has_completed_focus", "VAL_Northern_Clearing_House"] = True
+        self.execute("VAL_settle_partner_bulk", facts)
+        self.assertTrue(facts["VAL", "has_idea", "VAL_export_income_2"])
+
+    def test_all_order_sizes_count_as_nam_concession_aid(self):
+        for kind, quantity, price in (("arms", 2500, 500), ("bulk", 5000, 1000), ("arsenal", 10000, 2250), ("strategic", 20000, 5000)):
+            with self.subTest(kind=kind):
+                facts = self.facts(kind, quantity, price, "NAM")
+                facts["NAM", "has_war", "yes"] = True
+                facts["NAM", "ADISCORD_nam_resource_war_active", "yes"] = True
+                facts["NAM", "has_war_with", "EFL"] = True
+                facts["VAL", "has_completed_focus", "VAL_Resource_War_Contracts"] = True
+                facts["VAL", "variable", "VAL_resource_aid_side"] = 1
+                facts["VAL", "variable", "VAL_resource_aid_state"] = 1
+                facts["VAL", "has_active_mission", "VAL_resource_aid_deadline"] = True
+                self.execute(f"VAL_settle_partner_{kind}", facts, "NAM")
+                self.assertEqual(facts["VAL", "variable", "VAL_resource_aid_rifles"], quantity)
+                self.assertEqual(bool(facts.get(("VAL", "has_country_flag", "VAL_nam_aid_delivered"))), quantity >= 5000)
+
+    def test_sale_after_aid_deadline_does_not_restore_concession_credit(self):
+        facts = self.facts("bulk", 5000, 1000, "NAM")
+        facts.update({("NAM", "has_war", "yes"): True,
+                      ("NAM", "has_war_with", "EFL"): True,
+                      ("NAM", "ADISCORD_nam_resource_war_active", "yes"): True,
+                      ("VAL", "has_completed_focus", "VAL_Resource_War_Contracts"): True,
+                      ("VAL", "variable", "VAL_resource_aid_side"): 1,
+                      ("VAL", "variable", "VAL_resource_aid_state"): -1})
+        self.execute("VAL_settle_partner_bulk", facts, "NAM")
+        self.assertEqual(facts["NAM", "equipment", "infantry_equipment"], 5000)
+        self.assertNotIn(("VAL", "variable", "VAL_resource_aid_rifles"), facts)
+
+    def test_both_trade_spirits_end_on_either_capitulation(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import block
+        ideas = block(block(parse_clausewitz(read("common/ideas/ADISCORD_VAL_rework_ideas.txt")), "ideas"), "country")
+        for idea, scope in (("VAL_market_CIN", "VAL"), ("VAL_partner_market_access", "CIN")):
+            self.triggers["test_trade_cancel"] = block(block(ideas, idea), "cancel")
+            for country in ("VAL", "CIN"):
+                with self.subTest(idea=idea, capitulated=country):
+                    self.assertTrue(self.matches("test_trade_cancel", {(country, "has_capitulated", "yes"): True}, scope))
+
+    def test_recruitment_transfers_real_manpower_and_money(self):
+        for buyer, men, price in (("CIN", 3000, 300), ("OSF", 4000, 400), ("APH", 2000, 200), ("COF", 3000, 300), ("TFF", 4000, 400), ("YPR", 5000, 500)):
+            for available in (men - .01, men):
+                with self.subTest(buyer=buyer, available=available):
+                    facts = self.facts("hire", buyer=buyer)
+                    facts[buyer, "numeric", "has_manpower"] = available
+                    before = dict(facts)
+                    self.execute("VAL_settle_partner_hire", facts, buyer)
+                    if available < men:
+                        self.assertEqual(facts, before)
+                    else:
+                        self.assertEqual(facts[buyer, "numeric", "has_manpower"], 0)
+                        self.assertEqual(facts["VAL", "numeric", "has_manpower"], men)
+                        self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 1000 - price)
+                        self.assertEqual(facts[buyer, "variable", "ADISCORD_economy_treasury"], 500 + price)
+                        after = dict(facts)
+                        self.execute("VAL_settle_partner_hire", facts, buyer)
+                        self.assertEqual(facts, after)
+
+    def test_trade_pays_partner_and_does_not_stack_existing_office(self):
+        for buyer in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
+            facts = self.facts("trade", buyer=buyer)
+            self.execute("VAL_settle_partner_trade", facts, buyer)
+            self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 800)
+            self.assertEqual(facts[buyer, "variable", "ADISCORD_economy_treasury"], 700)
+            self.assertTrue(facts["VAL", "has_idea", "VAL_market_" + buyer])
+            facts["VAL", "has_country_flag", "VAL_partner_offer_pending"] = True
+            facts[buyer, "has_country_flag", "VAL_partner_offer_trade"] = True
+            after = dict(facts)
+            self.execute("VAL_settle_partner_trade", facts, buyer)
+            self.assertEqual(facts, after)
+
+    def test_refusal_and_expired_reply_do_not_debit_or_close_another_offer(self):
+        facts = self.facts("strategic", 20000, 5000)
+        self.execute("VAL_close_partner_offer", facts)
+        self.assertEqual(facts["VAL", "equipment", "infantry_equipment"], 20000)
+        self.assertEqual(facts["CIN", "variable", "ADISCORD_economy_treasury"], 5000)
+        facts["VAL", "has_country_flag", "VAL_partner_offer_pending"] = True
+        after = dict(facts)
+        self.execute("VAL_close_partner_offer", facts)
+        self.assertEqual(facts, after)
+
+
 class TestValContractUi(unittest.TestCase):
     def test_partner_menus_fit_four_answers(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz

@@ -309,6 +309,7 @@ ADISCORD_nam_resource_war_resolve_coalition_victory = {
 		}
 
 		ADISCORD_nam_resource_war_clear_temporary_support = yes
+		VAL = { VAL_settle_resource_aid = yes }
 		EFL = { news_event = { id = ADISCORD_nam_resource_news.2 hours = 1 } }
 	}
 }
@@ -340,7 +341,7 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 			add_stability = 0.15
 		}
 		ADISCORD_nam_resource_war_clear_temporary_support = yes
-		VAL = { VAL_deliver_nam_concession = yes }
+		VAL = { VAL_deliver_nam_concession = yes VAL_settle_resource_aid = yes }
 		NAM = { news_event = { id = ADISCORD_nam_resource_news.3 hours = 1 } }
 	}
 }

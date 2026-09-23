@@ -2,6 +2,12 @@
   "schema_version": 1,
   "external_namespaces": ["lar_fake_intel_units"],
   "events": [
+    {"id": "val_contract.368", "namespace": "val_contract", "number": 368, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.369", "namespace": "val_contract", "number": 369, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.370", "namespace": "val_contract", "number": 370, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.371", "namespace": "val_contract", "number": 371, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.372", "namespace": "val_contract", "number": 372, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.373", "namespace": "val_contract", "number": 373, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
     {"id": "val_contract.361", "namespace": "val_contract", "number": 361, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
     {"id": "val_contract.362", "namespace": "val_contract", "number": 362, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
     {"id": "val_contract.363", "namespace": "val_contract", "number": 363, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},

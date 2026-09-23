@@ -1,4 +1,5 @@
 from pathlib import Path
+from tools.lib.on_actions import read_scripted_peace
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -8,6 +9,20 @@ class BezhayskPeaceTests(unittest.TestCase):
     def read(self, path: str) -> str:
         return (ROOT / path).read_text(encoding="utf-8-sig")
 
+    def test_val_explicitly_calls_every_current_vassal_on_the_defensive_side(self):
+        from tools.tests.test_adiscord_val_refugees import load
+        from tools.tests.test_adiscord_stp_preparation import scalar
+        effect = load("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")["ADISCORD_bezhaysk_join_val_campaign"]
+        self.assertEqual({e.key for e in effect}, {"BLD", "BHG", "BGT", "BBV", "BCM"})
+        for scope in effect:
+            body = scope.value[0].value
+            war = next(e.value for e in body if e.key == "add_to_war")
+            self.assertEqual(scalar(war, "targeted_alliance"), "BJK")
+            self.assertEqual(scalar(war, "enemy"), "VAL")
+        from tools.builders.build_adiscord_val_operations_map import BJK_STATES, MAP_TAGS
+        self.assertLessEqual({4, 5, 6, 7, 9, 31, 41}, set(BJK_STATES))
+        self.assertLessEqual({"BJK", "BLD", "BHG", "BGT", "BBV", "BCM"}, set(MAP_TAGS))
+
     def test_both_campaigns_record_their_authored_war(self) -> None:
         stp = self.read("events/ADISCORD_STP_events.txt")
         val = self.read("common/national_focus/ADISCORD_national_focus_VAL.txt")
@@ -15,7 +30,7 @@ class BezhayskPeaceTests(unittest.TestCase):
         self.assertIn("set_country_flag = ADISCORD_bezhaysk_campaign_active", val)
 
     def test_capitulation_router_handles_all_authored_routes(self) -> None:
-        router = self.read("common/on_actions/10_ADISCORD_bezhaysk_peace_on_actions.txt")
+        router = read_scripted_peace(ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt", "bezhaysk")
         for effect in (
             "ADISCORD_bezhaysk_settle_sts_victory = yes",
             "ADISCORD_bezhaysk_settle_stp_victory = yes",
@@ -25,7 +40,7 @@ class BezhayskPeaceTests(unittest.TestCase):
             "ADISCORD_bezhaysk_settle_forest_nod_victory = yes",
         ):
             self.assertIn(effect, router)
-        self.assertEqual(router.count("set_global_flag = skip_default_capitulation"), 6)
+        self.assertEqual(router.count("set_global_flag = skip_default_capitulation"), 7)
 
     def test_settlement_covers_the_feudal_bloc(self) -> None:
         effects = self.read("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")
@@ -54,7 +69,7 @@ class BezhayskPeaceTests(unittest.TestCase):
         )
 
     def test_joint_kefreyt_nodrul_settlement_is_prioritized(self) -> None:
-        router = self.read("common/on_actions/10_ADISCORD_bezhaysk_peace_on_actions.txt")
+        router = read_scripted_peace(ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt", "bezhaysk")
         joint = router.index("ADISCORD_bezhaysk_settle_val_nod_joint_victory = yes")
         single_val = router.index("ADISCORD_bezhaysk_settle_val_victory = yes")
         self.assertLess(joint, single_val)

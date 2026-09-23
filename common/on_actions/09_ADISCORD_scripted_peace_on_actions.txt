@@ -10,6 +10,8 @@ on_actions = {
                 ROOT = { ADISCORD_debug_war_country_dump = yes }
             }
 
+			ROOT = { VAL_northern_aid_capitulation = yes }
+
 			# BEGIN stelander:on_capitulation_immediate
 			# Clear an unconsumed handoff so it cannot suppress another defeat.
 			ROOT = { clr_country_flag = STP_cw_northern_capitulation_pending }
@@ -227,6 +229,145 @@ on_actions = {
             }
 
 			# END kefreyt:on_capitulation_immediate
+
+			# BEGIN bezhaysk:on_capitulation_immediate
+
+			# If Kefreyt and Nodrul fight the same Bezhaysk war, neither may consume
+			# the whole feudal bloc through the ordinary single-winner settlement.
+			if = {
+				limit = {
+					ROOT = {
+						tag = BJK
+						has_war_with = VAL
+						has_war_with = NOD
+						NOT = {
+							any_enemy_country = {
+								NOT = { OR = { tag = VAL tag = NOD is_subject_of = VAL is_subject_of = NOD } }
+							}
+						}
+					}
+					VAL = {
+						exists = yes
+						has_capitulated = no
+						has_war_together_with = NOD
+						OR = {
+							has_country_flag = ADISCORD_bezhaysk_campaign_active
+							has_completed_focus = VAL_Bezhaysk_Operation
+						}
+					}
+					NOD = { exists = yes has_capitulated = no }
+					FROM = { OR = { tag = VAL tag = NOD is_subject_of = VAL is_subject_of = NOD } }
+				}
+				ROOT = {
+					clr_country_flag = ADISCORD_bezhaysk_joint_default_val
+					clr_country_flag = ADISCORD_bezhaysk_joint_default_nod
+				}
+				if = {
+					limit = { FROM = { OR = { tag = NOD is_subject_of = NOD } } }
+					ROOT = { set_country_flag = ADISCORD_bezhaysk_joint_default_nod }
+				}
+				else = { ROOT = { set_country_flag = ADISCORD_bezhaysk_joint_default_val } }
+				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending days = 1 } }
+				set_global_flag = skip_default_capitulation
+				VAL = { ADISCORD_bezhaysk_settle_val_nod_joint_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						tag = BJK
+						has_war_with = STP
+						NOT = { any_enemy_country = { NOT = { OR = { tag = STP is_subject_of = STP } } } }
+					}
+					STP = {
+						exists = yes
+						has_capitulated = no
+						has_country_flag = STP_cw_postwar
+						OR = { has_country_flag = ADISCORD_bezhaysk_campaign_active has_completed_focus = STP_pw_party_bezhaysk_campaign }
+					}
+					FROM = { OR = { tag = STP is_subject_of = STP } }
+				}
+				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending days = 1 } }
+				set_global_flag = skip_default_capitulation
+				STP = { ADISCORD_bezhaysk_settle_stp_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = BJK has_war_with = STS }
+					STS = {
+						exists = yes
+						has_capitulated = no
+						OR = {
+							has_country_flag = ADISCORD_bezhaysk_campaign_active
+							has_completed_focus = STP_pw_take_bezhaysk
+						}
+					}
+					FROM = { OR = { tag = STS is_subject_of = STS } }
+				}
+				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending days = 1 } }
+				set_global_flag = skip_default_capitulation
+				STS = { ADISCORD_bezhaysk_settle_sts_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = BJK has_war_with = VAL }
+					VAL = {
+						exists = yes
+						has_capitulated = no
+						OR = {
+							has_country_flag = ADISCORD_bezhaysk_campaign_active
+							has_completed_focus = VAL_Bezhaysk_Operation
+						}
+					}
+					FROM = { OR = { tag = VAL is_subject_of = VAL } }
+				}
+				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending days = 1 } }
+				set_global_flag = skip_default_capitulation
+				VAL = { ADISCORD_bezhaysk_settle_val_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+
+			if = {
+				limit = {
+					ROOT = {
+						tag = COF
+						has_war_with = VAL
+						NOT = {
+							any_enemy_country = {
+								NOT = { OR = { tag = VAL is_subject_of = VAL } }
+							}
+						}
+					}
+					VAL = { exists = yes has_capitulated = no has_country_flag = ADISCORD_bezhaysk_forest_campaign_active }
+					FROM = { OR = { tag = VAL is_subject_of = VAL } }
+				}
+				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending days = 1 } }
+				set_global_flag = skip_default_capitulation
+				VAL = { ADISCORD_bezhaysk_settle_forest_val_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						tag = COF
+						has_war_with = NOD
+						NOT = {
+							any_enemy_country = {
+								NOT = { OR = { tag = NOD is_subject_of = NOD } }
+							}
+						}
+					}
+					NOD = { exists = yes has_capitulated = no has_country_flag = ADISCORD_bezhaysk_forest_campaign_active }
+					FROM = { OR = { tag = NOD is_subject_of = NOD } }
+				}
+				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending days = 1 } }
+				set_global_flag = skip_default_capitulation
+				NOD = { ADISCORD_bezhaysk_settle_forest_nod_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			# END bezhaysk:on_capitulation_immediate
 
 			# BEGIN northern_reservation:on_capitulation_immediate
 			if = {
@@ -873,6 +1014,29 @@ on_actions = {
 			ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
 
 			# END vorkerland_diplomacy:on_capitulation
+
+			# BEGIN bezhaysk:on_capitulation
+            # The immediate settlement can remove the war before this late hook.
+            # A one-day handoff expires if white peace suppresses the late callback.
+            if = {
+                limit = {
+                    OR = {
+                        ROOT = { has_country_flag = ADISCORD_bezhaysk_capitulation_pending }
+                        AND = {
+                            ROOT = { OR = { tag = BLD tag = BHG tag = BGT tag = BBV tag = BCM } has_war_with = VAL OR = { is_subject_of = BJK is_in_faction_with = BJK } }
+                            BJK = { exists = yes has_war_with = VAL }
+                            VAL = { exists = yes has_capitulated = no has_country_flag = ADISCORD_bezhaysk_campaign_active }
+                            OR = {
+                                FROM = { OR = { tag = VAL is_subject_of = VAL } }
+                                AND = { VAL = { has_war_together_with = NOD } FROM = { OR = { tag = NOD is_subject_of = NOD } } }
+                            }
+                        }
+                    }
+                }
+                ROOT = { clr_country_flag = ADISCORD_bezhaysk_capitulation_pending }
+                set_global_flag = skip_default_capitulation
+            }
+            # END bezhaysk:on_capitulation
 
 			# BEGIN northern_reservation:on_capitulation
 			if = {

@@ -650,10 +650,7 @@ focus_tree = {
 			add_political_power = 75
 			if = {
 				limit = { has_completed_focus = VAL_Trading_Partners }
-				ADISCORD_economy_initialize_country = yes
-				add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
-				ADISCORD_economy_mark_dirty = yes
+				VAL_receive_contract_grant_300 = yes
 			}
 			else_if = {
 				limit = { has_completed_focus = VAL_October_Of_2160 }
@@ -1736,10 +1733,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Foreign_Broker_Licences }
 		completion_reward = {
 			custom_effect_tooltip = VAL_export_second_slot_tt
-			ADISCORD_economy_initialize_country = yes
-			add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
-			ADISCORD_economy_mark_dirty = yes
+			VAL_receive_contract_grant_300 = yes
 			add_political_power = 25
 		}
 		ai_will_do = { base = 3 }
@@ -2800,6 +2794,7 @@ completion_reward = {
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			unlock_decision_tooltip = { decision = VAL_negotiate_nam_metals show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = VAL_negotiate_efl_metals show_effect_tooltip = yes }
 			unlock_decision_tooltip = { decision = VAL_resource_war_arms show_effect_tooltip = yes }
 			unlock_decision_tooltip = { decision = VAL_resource_war_personnel show_effect_tooltip = yes }
 			army_experience = 5

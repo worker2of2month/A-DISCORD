@@ -589,7 +589,9 @@ VAL_finish_refugee_labor = {
 VAL_refund_housing = {
 	if = {
 		limit = { has_variable = VAL_housing_deposit }
-		ADISCORD_economy_receive_500 = yes
+		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_housing_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_housing_deposit }
+		ADISCORD_economy_mark_dirty = yes
 		clear_variable = VAL_housing_deposit
 	}
 }

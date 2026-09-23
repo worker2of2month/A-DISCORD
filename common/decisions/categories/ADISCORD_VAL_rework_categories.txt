@@ -1,6 +1,6 @@
 VAL_military_operations = {
 	allowed = { tag = VAL }
-	visible = { OR = { has_country_flag = VAL_operations_map_unlocked VAL_northern_volunteer_front_open = yes } }
+	visible = { has_country_flag = VAL_operations_map_unlocked }
 	visible_when_empty = yes
 	scripted_gui = ADISCORD_VAL_operations_panel
 }
@@ -71,5 +71,21 @@ VAL_vorkerland_aid = {
 VAL_postwar_administration = {
 	allowed = { tag = VAL }
 	visible = { OR = { has_completed_focus = VAL_frontier_conference has_completed_focus = VAL_Contracts_Outlive_Kings has_completed_focus = VAL_defeat_Rebuild_The_Registry } }
+	visible_when_empty = yes
+}
+
+VAL_resource_war_aid = {
+	icon = generic_army_support
+	priority = 100
+	allowed = { tag = VAL }
+	visible = { ADISCORD_nam_resource_war_active = yes }
+	visible_when_empty = yes
+}
+
+VAL_northern_war_aid = {
+	icon = generic_army_support
+	priority = 99
+	allowed = { tag = VAL }
+	visible = { VAL_northern_volunteer_front_open = yes }
 	visible_when_empty = yes
 }

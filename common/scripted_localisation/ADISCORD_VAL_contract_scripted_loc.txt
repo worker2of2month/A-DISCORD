@@ -209,3 +209,28 @@ defined_text = {
 	text = { trigger = { tag = VAL has_character = VAL_Renata_Morn has_country_leader = { character = VAL_Renata_Morn ruling_only = no } } localization_key = VAL_Renata_Morn_qol_party_label_long }
 	text = { localization_key = ADISCORD_qol_no_party_leader }
 }
+
+defined_text = {
+	name = VALGetResourceAidStatus
+	text = { trigger = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } } localization_key = VAL_AID_COLLECTING }
+	text = { trigger = { check_variable = { var = VAL_resource_aid_state value = 2 compare = equals } } localization_key = VAL_AID_FULFILLED }
+	text = { trigger = { check_variable = { var = VAL_resource_aid_state value = -1 compare = equals } } localization_key = VAL_AID_FAILED }
+	text = { trigger = { check_variable = { var = VAL_resource_aid_state value = 3 compare = equals } } localization_key = VAL_AID_SETTLED }
+	text = { localization_key = VAL_AID_UNCOMMITTED }
+}
+
+defined_text = {
+	name = VALGetNorthernAidStatus
+	text = { trigger = { check_variable = { var = VAL_northern_aid_state value = 1 compare = equals } } localization_key = VAL_AID_COLLECTING }
+	text = { trigger = { check_variable = { var = VAL_northern_aid_state value = 2 compare = equals } } localization_key = VAL_AID_FULFILLED }
+	text = { trigger = { check_variable = { var = VAL_northern_aid_state value = -1 compare = equals } } localization_key = VAL_AID_FAILED }
+	text = { trigger = { check_variable = { var = VAL_northern_aid_state value = 3 compare = equals } } localization_key = VAL_AID_SETTLED }
+	text = { localization_key = VAL_AID_UNCOMMITTED }
+}
+
+defined_text = {
+	name = VALGetResourceAidSide
+	text = { trigger = { check_variable = { var = VAL_resource_aid_side value = 1 compare = equals } } localization_key = VAL_AID_SIDE_NAM }
+	text = { trigger = { check_variable = { var = VAL_resource_aid_side value = 2 compare = equals } } localization_key = VAL_AID_SIDE_EFL }
+	text = { localization_key = VAL_AID_SIDE_NONE }
+}

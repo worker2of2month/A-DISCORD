@@ -795,7 +795,294 @@ VAL_resolve_active_aph_operation = {
 	else_if = { limit = { has_country_flag = VAL_operation_APH_prepare_separate_terms } set_temp_variable = { var = ADISCORD_VAL_family_code value = 5 } VAL_resolve_aph_operation = yes }
 }
 
+# COUNTRY recipient. Timeout is decline; a stale event cannot close a later offer.
+VAL_close_partner_offer = {
+	if = {
+		limit = { OR = { has_country_flag = VAL_partner_offer_trade has_country_flag = VAL_partner_offer_hire has_country_flag = VAL_partner_offer_arms has_country_flag = VAL_partner_offer_bulk has_country_flag = VAL_partner_offer_arsenal has_country_flag = VAL_partner_offer_strategic } }
+		clr_country_flag = VAL_partner_offer_trade
+		clr_country_flag = VAL_partner_offer_hire
+		clr_country_flag = VAL_partner_offer_arms
+		clr_country_flag = VAL_partner_offer_bulk
+		clr_country_flag = VAL_partner_offer_arsenal
+		clr_country_flag = VAL_partner_offer_strategic
+		VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending }
+	}
+}
+
+VAL_settle_partner_trade = {
+	if = {
+		limit = { VAL_partner_trade_can_accept = yes }
+		VAL = { ADISCORD_economy_initialize_country = yes
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+			ADISCORD_economy_mark_dirty = yes }
+		ADISCORD_economy_initialize_country = yes
+		add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+		ADISCORD_economy_mark_dirty = yes
+		if = { limit = { tag = CIN } VAL = { add_ideas = VAL_market_CIN } }
+		if = { limit = { tag = OSF } VAL = { add_ideas = VAL_market_OSF } }
+		if = { limit = { tag = APH } VAL = { add_ideas = VAL_market_APH } }
+		if = { limit = { tag = COF } VAL = { add_ideas = VAL_market_COF } }
+		if = { limit = { tag = TFF } VAL = { add_ideas = VAL_market_TFF } }
+		if = { limit = { tag = YPR } VAL = { add_ideas = VAL_market_YPR } }
+		add_ideas = VAL_partner_market_access
+		VAL_close_partner_offer = yes
+	}
+}
+VAL_settle_partner_hire = {
+	if = {
+		limit = { VAL_partner_hire_can_accept = yes }
+		if = {
+			limit = { tag = CIN }
+			add_manpower = -3000
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+			ADISCORD_economy_mark_dirty = yes
+			VAL = { add_manpower = 3000 ADISCORD_economy_initialize_country = yes
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+				ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = { tag = OSF }
+			add_manpower = -4000
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
+			ADISCORD_economy_mark_dirty = yes
+			VAL = { add_manpower = 4000 ADISCORD_economy_initialize_country = yes
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
+				ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = { tag = APH }
+			add_manpower = -2000
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+			ADISCORD_economy_mark_dirty = yes
+			VAL = { add_manpower = 2000 ADISCORD_economy_initialize_country = yes
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+				ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = { tag = COF }
+			add_manpower = -3000
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+			ADISCORD_economy_mark_dirty = yes
+			VAL = { add_manpower = 3000 ADISCORD_economy_initialize_country = yes
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+				ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = { tag = TFF }
+			add_manpower = -4000
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
+			ADISCORD_economy_mark_dirty = yes
+			VAL = { add_manpower = 4000 ADISCORD_economy_initialize_country = yes
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
+				ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = { tag = YPR }
+			add_manpower = -5000
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+			ADISCORD_economy_mark_dirty = yes
+			VAL = { add_manpower = 5000 ADISCORD_economy_initialize_country = yes
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 500 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 500 }
+				ADISCORD_economy_mark_dirty = yes }
+		}
+		set_country_flag = { flag = VAL_partner_hire_cooldown days = 180 }
+		VAL_close_partner_offer = yes
+	}
+}
+
+# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
+VAL_settle_partner_arms = {
+	if = {
+		limit = { VAL_partner_arms_can_accept = yes }
+		ADISCORD_economy_initialize_country = yes
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 500 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 500 }
+		ADISCORD_economy_mark_dirty = yes
+		VAL = {
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+			ADISCORD_economy_mark_dirty = yes
+			send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
+			if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
+			else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+		}
+		if = {
+			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 2500 } VAL_complete_resource_aid = yes }
+		}
+		set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+		VAL_close_partner_offer = yes
+	}
+}
+
+# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
+VAL_settle_partner_bulk = {
+	if = {
+		limit = { VAL_partner_bulk_can_accept = yes }
+		ADISCORD_economy_initialize_country = yes
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
+		ADISCORD_economy_mark_dirty = yes
+		VAL = {
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 }
+			ADISCORD_economy_mark_dirty = yes
+			send_equipment = { equipment = infantry_equipment amount = 5000 target = ROOT }
+			if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
+			else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+		}
+		if = {
+			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 5000 } VAL_complete_resource_aid = yes }
+		}
+		set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+		VAL_close_partner_offer = yes
+	}
+}
+
+# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
+VAL_settle_partner_arsenal = {
+	if = {
+		limit = { VAL_partner_arsenal_can_accept = yes }
+		ADISCORD_economy_initialize_country = yes
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 2250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 2250 }
+		ADISCORD_economy_mark_dirty = yes
+		VAL = {
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 2250 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2250 }
+			ADISCORD_economy_mark_dirty = yes
+			send_equipment = { equipment = infantry_equipment amount = 10000 target = ROOT }
+			if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
+			else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+		}
+		if = {
+			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 10000 } VAL_complete_resource_aid = yes }
+		}
+		set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+		VAL_close_partner_offer = yes
+	}
+}
+
+# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
+VAL_settle_partner_strategic = {
+	if = {
+		limit = { VAL_partner_strategic_can_accept = yes }
+		ADISCORD_economy_initialize_country = yes
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 5000 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 5000 }
+		ADISCORD_economy_mark_dirty = yes
+		VAL = {
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 5000 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 5000 }
+			ADISCORD_economy_mark_dirty = yes
+			send_equipment = { equipment = infantry_equipment amount = 20000 target = ROOT }
+			if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
+			else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+		}
+		if = {
+			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 20000 } VAL_complete_resource_aid = yes }
+		}
+		set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+		VAL_close_partner_offer = yes
+	}
+}
+
+# COUNTRY VAL. The charter consumes only the secured bridgehead; Irem remains VAL.
+VAL_form_wasteland_administration = {
+    if = {
+        limit = { has_global_flag = ADISCORD_vorkerland_dirty_opened owns_state = 169 controls_state = 169 is_subject = no has_capitulated = no NOT = { has_war_with = ERT } WCA = { exists = no } }
+        WCA = {
+            transfer_state = 169
+            set_capital = { state = 169 remember_old_capital = no }
+            inherit_technology = VAL
+            set_politics = { ruling_party = etatism elections_allowed = no }
+            set_rule = { can_join_factions = no can_create_factions = no }
+            ADISCORD_economy_initialize_country = yes
+            ADISCORD_economy_mark_dirty = yes
+        }
+        169 = { add_core_of = WCA set_state_controller_to = WCA }
+        set_autonomy = { target = WCA autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+        WCA = { load_focus_tree = { tree = VAL_administration_focus keep_completed = yes } }
+        VAL_call_subjects_to_wars = yes
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+# COUNTRY defeated ERT/IRT. Settle only the current opponent and fixed map sector.
+VAL_settle_wasteland_capitulation = {
+    set_global_flag = skip_default_capitulation
+    save_event_target_as = VAL_wasteland_defeated
+    every_enemy_country = {
+        limit = { OR = { tag = VAL is_subject_of = VAL } }
+        white_peace = event_target:VAL_wasteland_defeated
+    }
+    if = {
+        limit = { tag = ERT }
+        if = {
+            limit = { VAL = { has_completed_focus = VAL_Southern_Expansion VAL_wasteland_administration_ready = yes } }
+            167 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 167 } add_core_of = WCA set_state_controller_to = WCA } }
+            169 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 169 } add_core_of = WCA set_state_controller_to = WCA } }
+            170 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 170 } add_core_of = WCA set_state_controller_to = WCA } }
+            171 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 171 } add_core_of = WCA set_state_controller_to = WCA } }
+            184 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 184 } add_core_of = WCA set_state_controller_to = WCA } }
+            185 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 185 } add_core_of = WCA set_state_controller_to = WCA } }
+            203 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 203 } add_core_of = WCA set_state_controller_to = WCA } }
+        }
+        else = { 169 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } VAL = { transfer_state = 169 } set_state_controller_to = VAL } } }
+    }
+    else_if = {
+        limit = { tag = IRT }
+        178 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 178 } add_core_of = WCA set_state_controller_to = WCA } }
+        180 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 180 } add_core_of = WCA set_state_controller_to = WCA } }
+        181 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 181 } add_core_of = WCA set_state_controller_to = WCA } }
+        182 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 182 } add_core_of = WCA set_state_controller_to = WCA } }
+        183 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 183 } add_core_of = WCA set_state_controller_to = WCA } }
+        193 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 193 } add_core_of = WCA set_state_controller_to = WCA } }
+        206 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 206 } add_core_of = WCA set_state_controller_to = WCA } }
+        207 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 207 } add_core_of = WCA set_state_controller_to = WCA } }
+    }
+    VAL = { ADISCORD_economy_mark_dirty = yes }
+    WCA = { if = { limit = { exists = yes } ADISCORD_economy_mark_dirty = yes } }
+}
+
 # --- rework_effects ---
+VAL_receive_contract_grant_300 = {
+    custom_effect_tooltip = VAL_contract_grant_300_tt
+    hidden_effect = {
+        ADISCORD_economy_initialize_country = yes
+        add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+        ADISCORD_economy_mark_dirty = yes
+    }
+}
+
+
 VAL_apply_contract_administration_1 = {
 	if = {
 		limit = {
@@ -4361,261 +4648,280 @@ VAL_call_stelander_partner_to_wars = {
  }
 }
 
-# COUNTRY recipient. Timeout is decline; a stale event cannot close a later offer.
-VAL_close_partner_offer = {
+# --- War aid contracts ---
+# Aid state: 1 collecting, 2 fulfilled, -1 deadline missed, 3 settled.
+
+VAL_start_resource_aid = {
 	if = {
-		limit = { OR = { has_country_flag = VAL_partner_offer_trade has_country_flag = VAL_partner_offer_hire has_country_flag = VAL_partner_offer_arms has_country_flag = VAL_partner_offer_bulk has_country_flag = VAL_partner_offer_arsenal has_country_flag = VAL_partner_offer_strategic } }
-		clr_country_flag = VAL_partner_offer_trade
-		clr_country_flag = VAL_partner_offer_hire
-		clr_country_flag = VAL_partner_offer_arms
-		clr_country_flag = VAL_partner_offer_bulk
-		clr_country_flag = VAL_partner_offer_arsenal
-		clr_country_flag = VAL_partner_offer_strategic
-		VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending }
+		limit = { NOT = { has_variable = VAL_resource_aid_state } }
+		set_variable = { var = VAL_resource_aid_state value = 1 }
+		set_variable = { var = VAL_resource_aid_rifles value = 0 }
+		set_variable = { var = VAL_resource_aid_personnel value = 0 }
+		set_variable = { var = VAL_resource_aid_volunteer_days value = 0 }
+		activate_mission = VAL_resource_aid_deadline
+		add_ideas = VAL_resource_volunteer_mandate
 	}
 }
 
-VAL_settle_partner_trade = {
+# Called by mission success as well as direct deliveries; never removes its own mission.
+VAL_complete_resource_aid = {
 	if = {
-		limit = { VAL_partner_trade_can_accept = yes }
-		VAL = { ADISCORD_economy_initialize_country = yes
-			subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
-			ADISCORD_economy_mark_dirty = yes }
-		ADISCORD_economy_initialize_country = yes
-		add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+		limit = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } VAL_resource_aid_sufficient = yes }
+		set_variable = { var = VAL_resource_aid_state value = 2 }
+		if = { limit = { check_variable = { var = VAL_resource_aid_side value = 1 compare = equals } } set_country_flag = VAL_nam_aid_delivered }
+	}
+}
+
+VAL_fail_resource_aid = {
+	if = {
+		limit = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } }
+		set_variable = { var = VAL_resource_aid_state value = -1 }
+		country_event = { id = val_contract.371 }
+	}
+}
+
+VAL_deliver_resource_aid_arms = {
+	if = {
+		limit = {
+			has_capitulated = no
+			is_subject = no
+			check_variable = { var = VAL_resource_aid_state value = 1 compare = equals }
+			FROM = { VAL_resource_aid_recipient = yes }
+			NOT = { has_equipment = { infantry_equipment < 2500 } }
+		}
+		send_equipment = { equipment = infantry_equipment amount = 2500 target = FROM }
+		add_to_variable = { var = VAL_resource_aid_rifles value = 2500 }
+		VAL_complete_resource_aid = yes
+	}
+}
+
+VAL_deliver_resource_aid_personnel = {
+	if = {
+		limit = {
+			has_capitulated = no
+			is_subject = no
+			check_variable = { var = VAL_resource_aid_state value = 1 compare = equals }
+			FROM = { VAL_resource_aid_recipient = yes }
+			NOT = { has_manpower < 2000 } NOT = { command_power < 25 }
+		}
+		add_manpower = -2000
+		add_command_power = -25
+		FROM = { add_manpower = 2000 add_timed_idea = { idea = VAL_paid_military_advisors days = 70 } }
+		add_to_variable = { var = VAL_resource_aid_personnel value = 2000 }
+		VAL_complete_resource_aid = yes
+	}
+}
+
+VAL_start_northern_aid = {
+	if = {
+		limit = { NOT = { has_variable = VAL_northern_aid_state } }
+		set_variable = { var = VAL_northern_aid_state value = 1 }
+		set_variable = { var = VAL_northern_aid_rifles value = 0 }
+		set_variable = { var = VAL_northern_aid_personnel value = 0 }
+		set_variable = { var = VAL_northern_aid_volunteer_days value = 0 }
+		activate_mission = VAL_northern_aid_deadline
+
+	}
+}
+
+# Called by mission success as well as direct deliveries; never removes its own mission.
+VAL_complete_northern_aid = {
+	if = {
+		limit = { check_variable = { var = VAL_northern_aid_state value = 1 compare = equals } VAL_northern_aid_sufficient = yes }
+		set_variable = { var = VAL_northern_aid_state value = 2 }
+
+	}
+}
+
+VAL_fail_northern_aid = {
+	if = {
+		limit = { check_variable = { var = VAL_northern_aid_state value = 1 compare = equals } }
+		set_variable = { var = VAL_northern_aid_state value = -1 }
+		country_event = { id = val_contract.371 }
+	}
+}
+
+VAL_deliver_northern_aid_arms = {
+	if = {
+		limit = {
+			has_capitulated = no
+			is_subject = no
+			check_variable = { var = VAL_northern_aid_state value = 1 compare = equals }
+			FROM = { VAL_northern_aid_recipient = yes }
+			NOT = { has_equipment = { infantry_equipment < 2500 } }
+		}
+		send_equipment = { equipment = infantry_equipment amount = 2500 target = FROM }
+		add_to_variable = { var = VAL_northern_aid_rifles value = 2500 }
+		VAL_complete_northern_aid = yes
+	}
+}
+
+VAL_deliver_northern_aid_personnel = {
+	if = {
+		limit = {
+			has_capitulated = no
+			is_subject = no
+			check_variable = { var = VAL_northern_aid_state value = 1 compare = equals }
+			FROM = { VAL_northern_aid_recipient = yes }
+			NOT = { has_manpower < 2000 } NOT = { command_power < 25 }
+		}
+		add_manpower = -2000
+		add_command_power = -25
+		FROM = { add_manpower = 2000 add_timed_idea = { idea = VAL_paid_military_advisors days = 70 } }
+		add_to_variable = { var = VAL_northern_aid_personnel value = 2000 }
+		VAL_complete_northern_aid = yes
+	}
+}
+
+VAL_resource_aid_daily = {
+	if = {
+		limit = { has_variable = VAL_resource_aid_state NOT = { check_variable = { var = VAL_resource_aid_state value = 3 compare = equals } } }
+		if = {
+			limit = { ADISCORD_nam_resource_war_active = no }
+			VAL_settle_resource_aid = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } }
+			if = {
+				limit = {
+					OR = {
+						NAM = { VAL_resource_aid_recipient = yes has_volunteers_amount_from = { tag = VAL count > 1 } }
+						EFL = { VAL_resource_aid_recipient = yes has_volunteers_amount_from = { tag = VAL count > 1 } }
+					}
+				}
+				add_to_variable = { var = VAL_resource_aid_volunteer_days value = 1 }
+			}
+			else = { set_variable = { var = VAL_resource_aid_volunteer_days value = 0 } }
+			VAL_complete_resource_aid = yes
+		}
+	}
+}
+
+# Called after the territorial settlement: EFL may only grant a deposit it now owns.
+VAL_settle_resource_aid = {
+	if = {
+		limit = { has_variable = VAL_resource_aid_state NOT = { check_variable = { var = VAL_resource_aid_state value = 3 compare = equals } } }
+		VAL_complete_resource_aid = yes
+		if = {
+			limit = {
+				has_capitulated = no
+				is_subject = no
+				check_variable = { var = VAL_resource_aid_state value = 2 compare = equals }
+				check_variable = { var = VAL_resource_aid_side value = 1 compare = equals }
+				has_global_flag = ADISCORD_nam_resource_war_nam_victory
+			}
+			VAL_deliver_nam_concession = yes
+		}
+		else_if = {
+			limit = {
+				has_capitulated = no
+				is_subject = no
+				check_variable = { var = VAL_resource_aid_state value = 2 compare = equals }
+				check_variable = { var = VAL_resource_aid_side value = 2 compare = equals }
+				has_global_flag = ADISCORD_nam_resource_war_coalition_victory
+				NOT = { has_war_with = EFL }
+				EFL = { exists = yes is_subject = no has_capitulated = no }
+				230 = { is_owned_by = EFL is_controlled_by = EFL }
+			}
+			EFL = { give_resource_rights = { receiver = VAL state = 230 } ADISCORD_economy_mark_dirty = yes }
+			set_country_flag = VAL_efl_concession_active
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } }
+			VAL_fail_resource_aid = yes
+		}
+		set_variable = { var = VAL_resource_aid_state value = 3 }
+		remove_mission = VAL_resource_aid_deadline
+		remove_ideas = VAL_resource_volunteer_mandate
+		clr_country_flag = VAL_nam_concession_offer_pending
+		clr_country_flag = VAL_efl_concession_offer_pending
+	}
+}
+
+VAL_check_efl_concession = {
+	if = {
+		limit = {
+			has_country_flag = VAL_efl_concession_active
+			OR = { has_war_with = EFL EFL = { exists = no } 230 = { NOT = { is_owned_by = EFL is_controlled_by = EFL } } }
+		}
+		remove_resource_rights = 230
+		clr_country_flag = VAL_efl_concession_active
 		ADISCORD_economy_mark_dirty = yes
-		if = { limit = { tag = CIN } VAL = { add_ideas = VAL_market_CIN } }
-		if = { limit = { tag = OSF } VAL = { add_ideas = VAL_market_OSF } }
-		if = { limit = { tag = APH } VAL = { add_ideas = VAL_market_APH } }
-		if = { limit = { tag = COF } VAL = { add_ideas = VAL_market_COF } }
-		if = { limit = { tag = TFF } VAL = { add_ideas = VAL_market_TFF } }
-		if = { limit = { tag = YPR } VAL = { add_ideas = VAL_market_YPR } }
-		add_ideas = VAL_partner_market_access
-		VAL_close_partner_offer = yes
-	}
-}
-VAL_settle_partner_hire = {
-	if = {
-		limit = { VAL_partner_hire_can_accept = yes }
-		if = {
-			limit = { tag = CIN }
-			add_manpower = -3000
-			ADISCORD_economy_initialize_country = yes
-			add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
-			ADISCORD_economy_mark_dirty = yes
-			VAL = { add_manpower = 3000 ADISCORD_economy_initialize_country = yes
-				subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
-				ADISCORD_economy_mark_dirty = yes }
-		}
-		if = {
-			limit = { tag = OSF }
-			add_manpower = -4000
-			ADISCORD_economy_initialize_country = yes
-			add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
-			ADISCORD_economy_mark_dirty = yes
-			VAL = { add_manpower = 4000 ADISCORD_economy_initialize_country = yes
-				subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
-				ADISCORD_economy_mark_dirty = yes }
-		}
-		if = {
-			limit = { tag = APH }
-			add_manpower = -2000
-			ADISCORD_economy_initialize_country = yes
-			add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
-			ADISCORD_economy_mark_dirty = yes
-			VAL = { add_manpower = 2000 ADISCORD_economy_initialize_country = yes
-				subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
-				ADISCORD_economy_mark_dirty = yes }
-		}
-		if = {
-			limit = { tag = COF }
-			add_manpower = -3000
-			ADISCORD_economy_initialize_country = yes
-			add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
-			ADISCORD_economy_mark_dirty = yes
-			VAL = { add_manpower = 3000 ADISCORD_economy_initialize_country = yes
-				subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
-				ADISCORD_economy_mark_dirty = yes }
-		}
-		if = {
-			limit = { tag = TFF }
-			add_manpower = -4000
-			ADISCORD_economy_initialize_country = yes
-			add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
-			ADISCORD_economy_mark_dirty = yes
-			VAL = { add_manpower = 4000 ADISCORD_economy_initialize_country = yes
-				subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
-				ADISCORD_economy_mark_dirty = yes }
-		}
-		if = {
-			limit = { tag = YPR }
-			add_manpower = -5000
-			ADISCORD_economy_initialize_country = yes
-			add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
-			ADISCORD_economy_mark_dirty = yes
-			VAL = { add_manpower = 5000 ADISCORD_economy_initialize_country = yes
-				subtract_from_variable = { var = ADISCORD_economy_treasury value = 500 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 500 }
-				ADISCORD_economy_mark_dirty = yes }
-		}
-		set_country_flag = { flag = VAL_partner_hire_cooldown days = 180 }
-		VAL_close_partner_offer = yes
+		EFL = { ADISCORD_economy_mark_dirty = yes }
 	}
 }
 
-# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
-VAL_settle_partner_arms = {
+VAL_northern_aid_daily = {
 	if = {
-		limit = { VAL_partner_arms_can_accept = yes }
-		ADISCORD_economy_initialize_country = yes
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 500 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 500 }
+		limit = { has_variable = VAL_northern_aid_state NOT = { check_variable = { var = VAL_northern_aid_state value = 3 compare = equals } } }
+		if = {
+			limit = { OR = { NOT = { exists = event_target:VAL_northern_aid_partner } event_target:VAL_northern_aid_partner = { has_capitulated = yes has_war_with = NOD } } }
+			VAL_settle_northern_aid_defeat = yes
+		}
+		else_if = {
+			limit = { event_target:VAL_northern_aid_partner = { NOT = { has_war_with = NOD } } }
+			# A peace without an observed military result has no victory reward.
+			VAL_close_northern_aid = yes
+		}
+		else_if = {
+			limit = { OR = { has_capitulated = yes is_subject = yes event_target:VAL_northern_aid_partner = { has_war_with = VAL } } }
+			VAL_close_northern_aid = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = VAL_northern_aid_state value = 1 compare = equals } }
+			if = {
+				limit = { event_target:VAL_northern_aid_partner = { VAL_northern_volunteer_host = yes has_volunteers_amount_from = { tag = VAL count > 1 } } }
+				add_to_variable = { var = VAL_northern_aid_volunteer_days value = 1 }
+			}
+			else = { set_variable = { var = VAL_northern_aid_volunteer_days value = 0 } }
+			VAL_complete_northern_aid = yes
+		}
+	}
+}
+
+# COUNTRY capitulating ROOT. Capture the result before treaty handlers remove war relations.
+VAL_northern_aid_capitulation = {
+	if = {
+		limit = { VAL = { has_variable = VAL_northern_aid_state NOT = { check_variable = { var = VAL_northern_aid_state value = 3 compare = equals } } } }
+		if = {
+			limit = { is_same_country = event_target:VAL_northern_aid_partner has_war_with = NOD }
+			VAL = { VAL_settle_northern_aid_defeat = yes }
+		}
+		else_if = {
+			limit = { tag = NOD event_target:VAL_northern_aid_partner = { exists = yes has_capitulated = no has_war_with = NOD } }
+			VAL = { VAL_settle_northern_aid_victory = yes }
+		}
+	}
+}
+
+VAL_settle_northern_aid_victory = {
+	if = {
+		limit = { has_variable = VAL_northern_aid_state NOT = { check_variable = { var = VAL_northern_aid_state value = 3 compare = equals } } }
+		VAL_complete_northern_aid = yes
+		if = {
+			limit = { has_capitulated = no is_subject = no check_variable = { var = VAL_northern_aid_state value = 2 compare = equals } }
+			add_timed_idea = { idea = VAL_northern_aid_success days = 180 }
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = val_contract.372 }
+		}
+		else = { VAL_fail_northern_aid = yes }
+		VAL_close_northern_aid = yes
+	}
+}
+
+VAL_settle_northern_aid_defeat = {
+	if = {
+		limit = { has_variable = VAL_northern_aid_state NOT = { check_variable = { var = VAL_northern_aid_state value = 3 compare = equals } } }
+		add_timed_idea = { idea = VAL_northern_aid_failure days = 180 }
 		ADISCORD_economy_mark_dirty = yes
-		VAL = {
-			ADISCORD_economy_initialize_country = yes
-			add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
-			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
-			if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
-			else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
-		}
-		set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
-		VAL_close_partner_offer = yes
+		country_event = { id = val_contract.373 }
+		VAL_close_northern_aid = yes
 	}
 }
 
-# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
-VAL_settle_partner_bulk = {
-	if = {
-		limit = { VAL_partner_bulk_can_accept = yes }
-		ADISCORD_economy_initialize_country = yes
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
-		ADISCORD_economy_mark_dirty = yes
-		VAL = {
-			ADISCORD_economy_initialize_country = yes
-			add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 }
-			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 5000 target = ROOT }
-			if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
-			else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
-		}
-		set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
-		VAL_close_partner_offer = yes
-	}
-}
-
-# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
-VAL_settle_partner_arsenal = {
-	if = {
-		limit = { VAL_partner_arsenal_can_accept = yes }
-		ADISCORD_economy_initialize_country = yes
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 2250 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 2250 }
-		ADISCORD_economy_mark_dirty = yes
-		VAL = {
-			ADISCORD_economy_initialize_country = yes
-			add_to_variable = { var = ADISCORD_economy_treasury value = 2250 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2250 }
-			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 10000 target = ROOT }
-			if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
-			else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
-		}
-		set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
-		VAL_close_partner_offer = yes
-	}
-}
-
-# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
-VAL_settle_partner_strategic = {
-	if = {
-		limit = { VAL_partner_strategic_can_accept = yes }
-		ADISCORD_economy_initialize_country = yes
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 5000 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 5000 }
-		ADISCORD_economy_mark_dirty = yes
-		VAL = {
-			ADISCORD_economy_initialize_country = yes
-			add_to_variable = { var = ADISCORD_economy_treasury value = 5000 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 5000 }
-			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 20000 target = ROOT }
-			if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
-			else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
-		}
-		set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
-		VAL_close_partner_offer = yes
-	}
-}
-
-# COUNTRY VAL. The charter consumes only the secured bridgehead; Irem remains VAL.
-VAL_form_wasteland_administration = {
-    if = {
-        limit = { has_global_flag = ADISCORD_vorkerland_dirty_opened owns_state = 169 controls_state = 169 is_subject = no has_capitulated = no NOT = { has_war_with = ERT } WCA = { exists = no } }
-        WCA = {
-            transfer_state = 169
-            set_capital = { state = 169 remember_old_capital = no }
-            inherit_technology = VAL
-            set_politics = { ruling_party = etatism elections_allowed = no }
-            set_rule = { can_join_factions = no can_create_factions = no }
-            ADISCORD_economy_initialize_country = yes
-            ADISCORD_economy_mark_dirty = yes
-        }
-        169 = { add_core_of = WCA set_state_controller_to = WCA }
-        set_autonomy = { target = WCA autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
-        VAL_call_subjects_to_wars = yes
-        ADISCORD_economy_mark_dirty = yes
-    }
-}
-# COUNTRY defeated ERT/IRT. Settle only the current opponent and fixed map sector.
-VAL_settle_wasteland_capitulation = {
-    set_global_flag = skip_default_capitulation
-    save_event_target_as = VAL_wasteland_defeated
-    every_enemy_country = {
-        limit = { OR = { tag = VAL is_subject_of = VAL } }
-        white_peace = event_target:VAL_wasteland_defeated
-    }
-    if = {
-        limit = { tag = ERT }
-        if = {
-            limit = { VAL = { has_completed_focus = VAL_Southern_Expansion VAL_wasteland_administration_ready = yes } }
-            167 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 167 } add_core_of = WCA set_state_controller_to = WCA } }
-            169 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 169 } add_core_of = WCA set_state_controller_to = WCA } }
-            170 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 170 } add_core_of = WCA set_state_controller_to = WCA } }
-            171 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 171 } add_core_of = WCA set_state_controller_to = WCA } }
-            184 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 184 } add_core_of = WCA set_state_controller_to = WCA } }
-            185 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 185 } add_core_of = WCA set_state_controller_to = WCA } }
-            203 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 203 } add_core_of = WCA set_state_controller_to = WCA } }
-        }
-        else = { 169 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } VAL = { transfer_state = 169 } set_state_controller_to = VAL } } }
-    }
-    else_if = {
-        limit = { tag = IRT }
-        178 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 178 } add_core_of = WCA set_state_controller_to = WCA } }
-        180 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 180 } add_core_of = WCA set_state_controller_to = WCA } }
-        181 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 181 } add_core_of = WCA set_state_controller_to = WCA } }
-        182 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 182 } add_core_of = WCA set_state_controller_to = WCA } }
-        183 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 183 } add_core_of = WCA set_state_controller_to = WCA } }
-        193 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 193 } add_core_of = WCA set_state_controller_to = WCA } }
-        206 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 206 } add_core_of = WCA set_state_controller_to = WCA } }
-        207 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 207 } add_core_of = WCA set_state_controller_to = WCA } }
-    }
-    VAL = { ADISCORD_economy_mark_dirty = yes }
-    WCA = { if = { limit = { exists = yes } ADISCORD_economy_mark_dirty = yes } }
+VAL_close_northern_aid = {
+	set_variable = { var = VAL_northern_aid_state value = 3 }
+	remove_mission = VAL_northern_aid_deadline
+	clear_global_event_target = VAL_northern_aid_partner
 }

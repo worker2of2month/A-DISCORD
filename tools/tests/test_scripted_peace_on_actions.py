@@ -9,8 +9,8 @@ DIRECTORY = ROOT / 'common/on_actions'
 SHARED = DIRECTORY / '09_ADISCORD_scripted_peace_on_actions.txt'
 GENERIC = DIRECTORY / 'ZZ_ADISCORD_default_capitulation_on_actions.txt'
 ORDER = {
-    'on_capitulation_immediate': ['stelander', 'kefreyt', 'frontier', 'northern_reservation'],
-    'on_capitulation': ['vorkerland_collapse', 'stelander', 'kefreyt', 'frontier', 'rin', 'nam', 'vorkerland_diplomacy', 'northern_reservation', 'livonn'],
+    'on_capitulation_immediate': ['stelander', 'kefreyt', 'frontier', 'bezhaysk', 'northern_reservation'],
+    'on_capitulation': ['vorkerland_collapse', 'stelander', 'kefreyt', 'frontier', 'rin', 'nam', 'vorkerland_diplomacy', 'bezhaysk', 'northern_reservation', 'livonn'],
     'on_peace': ['vorkerland_collapse', 'rin', 'vorkerland_diplomacy', 'kefreyt', 'stelander'],
     'on_peaceconference_ended': ['stelander', 'kefreyt'],
     'on_annex': ['stelander', 'kefreyt'],

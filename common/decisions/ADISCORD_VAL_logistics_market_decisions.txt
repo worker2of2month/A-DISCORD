@@ -147,7 +147,7 @@ VAL_population_markets = {
 			NOT = { has_variable = VAL_refugee_training_escrow }
 		}
 		cost = 0
-		custom_cost_trigger = { political_power > 74.999 NOT = { has_equipment = { infantry_equipment < 500 } } }
+		custom_cost_trigger = { NOT = { political_power < 75 } NOT = { has_equipment = { infantry_equipment < 500 } } }
 		custom_cost_text = VAL_training_cost
 		days_remove = 35
 		days_re_enable = 30
@@ -327,7 +327,7 @@ VAL_population_markets = {
 			NOT = { has_variable = VAL_local_training_escrow }
 		}
 		cost = 0
-		custom_cost_trigger = { political_power > 74.999 NOT = { has_equipment = { infantry_equipment < 500 } } }
+		custom_cost_trigger = { NOT = { political_power < 75 } NOT = { has_equipment = { infantry_equipment < 500 } } }
 		custom_cost_text = VAL_training_cost
 		days_remove = 35
 		days_re_enable = 30
