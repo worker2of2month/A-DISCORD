@@ -56,8 +56,8 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_preparation.15.skip
 		trigger = { is_ai = no }
-		set_country_flag = STP_skip_intro_story_events
 		custom_effect_tooltip = STP_skip_intro_story_events_tt
+		hidden_effect = { set_country_flag = STP_skip_intro_story_events }
 	}
 }
 
@@ -137,37 +137,41 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_preparation.1.a
 		ai_chance = { factor = 90 }
-		set_country_flag = STP_sided_with_Maksim_flag
-		log = "[STP CW] First decline: player chose Shabrat"
-		STP_cw_open_preparation = yes
-		complete_national_focus = STP_Show_Him_The_Truth
-		# Force the same tree to be rebuilt so the selected root offset and all relative children recenter immediately.
-		load_focus_tree = { tree = STP_focus keep_completed = yes }
-		mark_focus_tree_layout_dirty = yes
-			hidden_effect = { country_event = { id = ADISCORD_STP_preparation.26 hours = 1 } }
-		STP_cw_schedule_health = yes
 		custom_effect_tooltip = STP_cw_army_split_tt
+		hidden_effect = {
+			set_country_flag = STP_sided_with_Maksim_flag
+			log = "[STP CW] First decline: player chose Shabrat"
+			STP_cw_open_preparation = yes
+			complete_national_focus = STP_Show_Him_The_Truth
+			# Force the same tree to be rebuilt so the selected root offset and all relative children recenter immediately.
+			load_focus_tree = { tree = STP_focus keep_completed = yes }
+			mark_focus_tree_layout_dirty = yes
+			country_event = { id = ADISCORD_STP_preparation.26 hours = 1 }
+			STP_cw_schedule_health = yes
+		}
 	}
 	option = {
 		name = ADISCORD_STP_preparation.1.b
 		ai_chance = { factor = 10 }
-		set_country_flag = STP_sided_with_the_party_flag
-		log = "[STP CW] First decline: player chose party"
-		STP_cw_open_preparation = yes
-		complete_national_focus = STP_Govern_In_His_Name
-		# Keep Party selection symmetric with Shabrat: rebuild before marking the layout dirty.
-		load_focus_tree = { tree = STP_focus keep_completed = yes }
-		mark_focus_tree_layout_dirty = yes
-			hidden_effect = { country_event = { id = ADISCORD_STP_preparation.26 hours = 1 } }
-		STP_cw_schedule_health = yes
-		# A visible foothold gives the party something concrete to contain.
-		3 = {
-			set_temp_variable = { var = STP_region_influence_change value = 20 }
-			STP_add_resistance_influence = yes
-			set_state_flag = STP_resistance_administration_asset
-		}
-		STP_cw_schedule_opposition = yes
 		custom_effect_tooltip = STP_cw_party_preparation_tt
+		hidden_effect = {
+			set_country_flag = STP_sided_with_the_party_flag
+			log = "[STP CW] First decline: player chose party"
+			STP_cw_open_preparation = yes
+			complete_national_focus = STP_Govern_In_His_Name
+			# Keep Party selection symmetric with Shabrat: rebuild before marking the layout dirty.
+			load_focus_tree = { tree = STP_focus keep_completed = yes }
+			mark_focus_tree_layout_dirty = yes
+			country_event = { id = ADISCORD_STP_preparation.26 hours = 1 }
+			STP_cw_schedule_health = yes
+			# A visible foothold gives the party something concrete to contain.
+			3 = {
+				set_temp_variable = { var = STP_region_influence_change value = 20 }
+				STP_add_resistance_influence = yes
+				set_state_flag = STP_resistance_administration_asset
+			}
+			STP_cw_schedule_opposition = yes
+		}
 	}
 }
 
@@ -333,9 +337,11 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_preparation.10.b
 		ai_chance = { factor = 0 }
-		clr_country_flag = STP_cw_northern_crisis_pending
-		set_variable = { var = STP_cw_northern_campaign_status value = 4 }
-		STP = { country_event = { id = ADISCORD_STP_preparation.14 } }
+		hidden_effect = {
+			clr_country_flag = STP_cw_northern_crisis_pending
+			set_variable = { var = STP_cw_northern_campaign_status value = 4 }
+			STP = { country_event = { id = ADISCORD_STP_preparation.14 } }
+		}
 	}
 }
 
@@ -429,10 +435,12 @@ country_event = {
 
 	option = {
 		name = ADISCORD_STP_regions.1.a
-		set_country_flag = STP_sided_with_Maksim_flag
-		if = {
-			limit = { NOT = { has_country_flag = STP_battle_for_stelander_active } }
-			STP_initialize_battle_for_stelander = yes
+		hidden_effect = {
+			set_country_flag = STP_sided_with_Maksim_flag
+			if = {
+				limit = { NOT = { has_country_flag = STP_battle_for_stelander_active } }
+				STP_initialize_battle_for_stelander = yes
+			}
 		}
 	}
 }
@@ -729,8 +737,8 @@ country_event = {
 		name = ADISCORD_STP_cw.30.b
 		trigger = { STS = { exists = yes } NOT = { has_country_flag = STP_sided_with_the_party_flag } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_cw_side_republics } }
 		ai_chance = { base = 0 }
-		set_country_flag = STP_sided_with_Maksim_flag
 		hidden_effect = {
+			set_country_flag = STP_sided_with_Maksim_flag
 			STS = { set_country_flag = STP_sided_with_Maksim_flag }
 			STP_cw_commission_korsh = yes
 			STP_cw_begin_hostilities = yes
@@ -1055,9 +1063,9 @@ country_event = {
 				}
 			}
 		}
-		set_country_flag = STP_gornin_introduced
 		custom_effect_tooltip = ADISCORD_STP_pc.3.b_tt
 		hidden_effect = {
+			set_country_flag = STP_gornin_introduced
 			if = { limit = { STS = { exists = yes } } STS = { set_country_flag = STP_gornin_introduced } }
 			STP_pc_install_resistance_successor = yes
 		}
@@ -1224,36 +1232,42 @@ country_event = {
 		name = ADISCORD_STP_pc.11.a
 		trigger = { STP_pc_liberation_reply_is_current = yes }
 		ai_chance = { base = 70 }
-		if = {
-			limit = { STP_pc_liberation_reply_is_current = yes }
+		custom_effect_tooltip = STP_pc_liberation_package_accept_tt
+		hidden_effect = {
 			if = {
-				limit = { tag = VAL }
-				set_cosmetic_tag = VAL_liberated
-				add_ideas = VAL_liberated_settlement
+				limit = { STP_pc_liberation_reply_is_current = yes }
+				if = {
+					limit = { tag = VAL }
+					set_cosmetic_tag = VAL_liberated
+					add_ideas = VAL_liberated_settlement
+				}
+				else_if = {
+					limit = { tag = NOD }
+					set_cosmetic_tag = NOD_mandate_broken
+					add_ideas = NOD_mandate_broken
+				}
+				STP_pc_finish_liberation_package = yes
 			}
-			else_if = {
-				limit = { tag = NOD }
-				set_cosmetic_tag = NOD_mandate_broken
-				add_ideas = NOD_mandate_broken
-			}
-			hidden_effect = { STP_pc_finish_liberation_package = yes }
 		}
 	}
 	option = {
 		name = ADISCORD_STP_pc.11.b
 		trigger = { STP_pc_liberation_reply_is_current = yes }
 		ai_chance = { base = 30 }
-		if = {
-			limit = { STP_pc_liberation_reply_is_current = yes }
+		custom_effect_tooltip = STP_pc_liberation_package_refuse_tt
+		hidden_effect = {
 			if = {
-				limit = { tag = VAL }
-				set_country_flag = STP_pc_val_refused_package
+				limit = { STP_pc_liberation_reply_is_current = yes }
+				if = {
+					limit = { tag = VAL }
+					set_country_flag = STP_pc_val_refused_package
+				}
+				else_if = {
+					limit = { tag = NOD }
+					set_country_flag = STP_pc_nod_refused_package
+				}
+				STP_pc_finish_liberation_package = yes
 			}
-			else_if = {
-				limit = { tag = NOD }
-				set_country_flag = STP_pc_nod_refused_package
-			}
-			hidden_effect = { STP_pc_finish_liberation_package = yes }
 		}
 	}
 	option = {
@@ -1324,9 +1338,11 @@ country_event = {
 		name = ADISCORD_STP_pc.16.a
 		ai_chance = { factor = 70 }
 		set_capital = { state = 1 }
-		set_country_flag = STP_pc_capital_abilia
-		clr_country_flag = STP_pc_capital_fada
 		add_stability = 0.03
+		hidden_effect = {
+			set_country_flag = STP_pc_capital_abilia
+			clr_country_flag = STP_pc_capital_fada
+		}
 	}
 
 	option = {
@@ -1339,9 +1355,11 @@ country_event = {
 		}
 		ai_chance = { factor = 30 }
 		set_capital = { state = 28 }
-		set_country_flag = STP_pc_capital_fada
-		clr_country_flag = STP_pc_capital_abilia
 		add_political_power = 50
+		hidden_effect = {
+			set_country_flag = STP_pc_capital_fada
+			clr_country_flag = STP_pc_capital_abilia
+		}
 	}
 }
 

@@ -2909,15 +2909,22 @@ class StelanderPreparationTests(unittest.TestCase):
         selected = set()
         for option in options:
             selected.update(e.value for e in walk(option) if e.key == "set_country_flag")
-            self.assertTrue(any(e.key == "complete_national_focus" for e in walk(option)))
-            reloads = [e.value for e in option if e.key == "load_focus_tree"]
+            self.assertEqual(
+                [e.key for e in option if e.key not in {"name", "ai_chance", "custom_effect_tooltip", "hidden_effect"}],
+                [],
+                "technical side-choice effects must stay hidden from the event option tooltip",
+            )
+            self.assertIn("custom_effect_tooltip", {e.key for e in option})
+            mechanics = block(option, "hidden_effect")
+            self.assertTrue(any(e.key == "complete_national_focus" for e in mechanics))
+            reloads = [e.value for e in mechanics if e.key == "load_focus_tree"]
             self.assertEqual(len(reloads), 1)
             self.assertEqual(scalar(reloads[0], "tree"), "STP_focus")
             self.assertEqual(scalar(reloads[0], "keep_completed"), "yes")
-            calls = [e.key for e in option]
+            calls = [e.key for e in mechanics]
             self.assertLess(calls.index("complete_national_focus"), calls.index("load_focus_tree"))
             self.assertLess(calls.index("load_focus_tree"), calls.index("mark_focus_tree_layout_dirty"))
-            self.assertIn(("mark_focus_tree_layout_dirty", "yes"), [(e.key, e.value) for e in walk(option)])
+            self.assertIn(("mark_focus_tree_layout_dirty", "yes"), [(e.key, e.value) for e in mechanics])
         self.assertIn("STP_sided_with_Maksim_flag", selected)
         self.assertIn("STP_sided_with_the_party_flag", selected)
 
@@ -2933,7 +2940,7 @@ class StelanderPreparationTests(unittest.TestCase):
         shabrat = next(option for option in choice if option.key == "option"
                        and any(e.key == "set_country_flag" and e.value == "STP_sided_with_Maksim_flag"
                                for e in walk(option.value)))
-        self.assertEqual(scalar(shabrat.value, "complete_national_focus"), "STP_Show_Him_The_Truth")
+        self.assertEqual(scalar(block(shabrat.value, "hidden_effect"), "complete_national_focus"), "STP_Show_Him_The_Truth")
         party = next(option for option in choice if option.key == "option"
                      and any(e.key == "set_country_flag" and e.value == "STP_sided_with_the_party_flag"
                              for e in walk(option.value)))
