@@ -2096,6 +2096,29 @@ class ValAnnualDecisionVisibilityTests(unittest.TestCase):
                 self.assertEqual(target_trigger.strip(),"target_trigger = { FROM = { exists = yes } }")
             self.assertNotIn("days_re_enable = 365",decision)
 
+    def test_weapon_supply_unlocks_stay_visible_when_current_terms_are_blocked(self):
+        decisions=read("common/decisions/ADISCORD_VAL_decisions.txt")
+        triggers=read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+
+        ready=named_block(decisions,"VAL_ready_partner_supply")
+        ready_visible=named_block(ready,"visible")
+        ready_available=named_block(ready,"available")
+        self.assertIn("VAL_ready_recipient_ready = yes",ready_visible)
+        self.assertNotIn("VAL_partner_arms_can_offer = yes",ready_visible)
+        self.assertNotIn("always = yes",ready_available)
+        for predicate in ("VAL_partner_arms_can_offer","VAL_partner_bulk_can_offer",
+                          "VAL_partner_arsenal_can_offer","VAL_partner_strategic_can_offer"):
+            self.assertIn(predicate+" = yes",ready_available)
+
+        recipient=named_block(triggers,"VAL_ready_recipient_ready")
+        for predicate in ("VAL_partner_arms_funds_ready","VAL_partner_bulk_funds_ready",
+                          "VAL_partner_arsenal_funds_ready","VAL_partner_strategic_funds_ready"):
+            self.assertNotIn(predicate,recipient)
+
+        quarterly=named_block(decisions,"VAL_quarterly_partner_supply")
+        self.assertNotIn("VAL_order_can_offer = yes",named_block(quarterly,"visible"))
+        self.assertIn("VAL_order_can_offer = yes",named_block(quarterly,"available"))
+
     def test_success_year_helper_is_separate_from_refusal_handling(self):
         effects=read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         self.assertIn("flag = VAL_partner_contact_cooldown days = 365",named_block(effects,"VAL_begin_partner_contract_year"))
