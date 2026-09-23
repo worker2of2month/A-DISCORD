@@ -241,7 +241,7 @@ def _trade_entry_background() -> Image.Image:
 
 
 def _defcon_strip_bytes() -> bytes:
-    """Return the approved TFR-style textured DEFCON frame strip unchanged."""
+    """Return the approved textured DEFCON frame strip unchanged."""
     if not WORLD_TENSION_SOURCE.is_file():
         raise RuntimeError(
             f"missing DEFCON source art: {WORLD_TENSION_SOURCE.relative_to(ROOT)}"
