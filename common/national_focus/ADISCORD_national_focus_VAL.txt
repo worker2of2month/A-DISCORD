@@ -2784,6 +2784,7 @@ completion_reward = {
 			# full gate on the completion tick could silently consume the focus without war.
 			set_country_flag = ADISCORD_bezhaysk_campaign_active
 			declare_war_on = { target = BJK type = annex_everything }
+			hidden_effect = { ADISCORD_bezhaysk_join_val_campaign = yes }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
 		}
 		ai_will_do = { base = 5 }

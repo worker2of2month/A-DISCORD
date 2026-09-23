@@ -19,7 +19,7 @@ STATE_IDS = (43, 44, 45, 88, 58, 59, 60, 61, 62, 63, 64, 65, 168)
 VAL_STATES = (24, 42, 48, 54, 55, 56, 57)
 STP_STATES = (1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88)
 NOD_STATES = (10, 11, 12, 13, 17, 18, 30)
-BJK_STATES = (41,)
+BJK_STATES = (4, 5, 6, 7, 9, 31, 41)
 COF_STATES = (14,)
 YPR_STATES = (8, 15, 16, 19, 20, 21, 22)
 TFF_STATES = (83, 84, 85, 86, 87, 303)
@@ -33,7 +33,7 @@ STATE_IDS = tuple(dict.fromkeys((*STATE_IDS, *VAL_STATES, *STP_STATES, *NOD_STAT
 
 # Countries participating in the northern and Stelander campaigns; the last frame
 # represents a controller from outside this theatre.
-MAP_TAGS = ("VAL", "STP", "STS", "SRP", "NOD", "CIN", "OSF", "APH", "ERT", "NKA", "OCA", "YPR", "COF", "TFF", "EXZ", "IRT", "RZA", "BJK")
+MAP_TAGS = ("VAL", "STP", "STS", "SRP", "NOD", "CIN", "OSF", "APH", "ERT", "NKA", "OCA", "YPR", "COF", "TFF", "EXZ", "IRT", "RZA", "BJK", "BLD", "BHG", "BGT", "BBV", "BCM", "WCA")
 MAP_COSMETICS = {"STL_VAL_administration": "STP"}
 FRAME_COUNT = len(MAP_TAGS) + len(MAP_COSMETICS) + 1
 

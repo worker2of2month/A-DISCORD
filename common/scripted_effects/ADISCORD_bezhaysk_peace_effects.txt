@@ -102,6 +102,8 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 		BLD = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 			set_rule = { can_join_factions = no can_create_factions = no }
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -123,6 +125,8 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 		BHG = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 			set_rule = { can_join_factions = no can_create_factions = no }
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -144,6 +148,8 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 		BGT = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 			set_rule = { can_join_factions = no can_create_factions = no }
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -165,6 +171,8 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 		BBV = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 			set_rule = { can_join_factions = no can_create_factions = no }
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -186,6 +194,8 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 		BCM = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 			set_rule = { can_join_factions = no can_create_factions = no }
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -207,6 +217,8 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 		BJK = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 			set_rule = { can_join_factions = no can_create_factions = no }
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -291,6 +303,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BLD = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -338,6 +352,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BLD = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -389,6 +405,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BHG = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -436,6 +454,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BHG = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -487,6 +507,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BGT = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -534,6 +556,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BGT = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -585,6 +609,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BBV = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -632,6 +658,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BBV = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -683,6 +711,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BCM = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -730,6 +760,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BCM = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -781,6 +813,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BJK = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -828,6 +862,8 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BJK = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 				set_rule = { can_join_factions = no can_create_factions = no }
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -862,6 +898,8 @@ ADISCORD_bezhaysk_settle_forest_val_victory = {
 	}
 	COF = {
 		set_country_flag = ADISCORD_bezhaysk_val_administration
+			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+			ADISCORD_release_non_participating_minor_optimization = yes
 		set_country_flag = ADISCORD_forest_cult_subjugated
 		set_rule = { can_join_factions = no can_create_factions = no }
 		ADISCORD_economy_mark_dirty = yes
@@ -894,4 +932,43 @@ ADISCORD_bezhaysk_settle_forest_nod_victory = {
 	}
 	clr_country_flag = ADISCORD_bezhaysk_forest_campaign_active
 	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY VAL, immediately after declaring war on BJK.
+ADISCORD_bezhaysk_join_val_campaign = {
+    BLD = {
+        if = {
+            limit = { exists = yes has_capitulated = no OR = { is_subject_of = BJK is_in_faction_with = BJK } NOT = { has_war_with = VAL is_in_faction_with = VAL } }
+            ADISCORD_release_non_participating_minor_optimization = yes
+            add_to_war = { targeted_alliance = BJK enemy = VAL hostility_reason = asked_to_join }
+        }
+    }
+    BHG = {
+        if = {
+            limit = { exists = yes has_capitulated = no OR = { is_subject_of = BJK is_in_faction_with = BJK } NOT = { has_war_with = VAL is_in_faction_with = VAL } }
+            ADISCORD_release_non_participating_minor_optimization = yes
+            add_to_war = { targeted_alliance = BJK enemy = VAL hostility_reason = asked_to_join }
+        }
+    }
+    BGT = {
+        if = {
+            limit = { exists = yes has_capitulated = no OR = { is_subject_of = BJK is_in_faction_with = BJK } NOT = { has_war_with = VAL is_in_faction_with = VAL } }
+            ADISCORD_release_non_participating_minor_optimization = yes
+            add_to_war = { targeted_alliance = BJK enemy = VAL hostility_reason = asked_to_join }
+        }
+    }
+    BBV = {
+        if = {
+            limit = { exists = yes has_capitulated = no OR = { is_subject_of = BJK is_in_faction_with = BJK } NOT = { has_war_with = VAL is_in_faction_with = VAL } }
+            ADISCORD_release_non_participating_minor_optimization = yes
+            add_to_war = { targeted_alliance = BJK enemy = VAL hostility_reason = asked_to_join }
+        }
+    }
+    BCM = {
+        if = {
+            limit = { exists = yes has_capitulated = no OR = { is_subject_of = BJK is_in_faction_with = BJK } NOT = { has_war_with = VAL is_in_faction_with = VAL } }
+            ADISCORD_release_non_participating_minor_optimization = yes
+            add_to_war = { targeted_alliance = BJK enemy = VAL hostility_reason = asked_to_join }
+        }
+    }
 }
