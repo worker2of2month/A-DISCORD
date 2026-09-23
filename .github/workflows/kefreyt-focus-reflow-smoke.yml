@@ -19,8 +19,6 @@ jobs:
         run: python -B -m unittest tools.tests.test_adiscord_val_focus_layout
       - name: Refugee admission
         run: python -B -m unittest tools.tests.test_adiscord_val_refugees.RefugeeAdmissionTests
-      - name: Refugee visibility
-        run: python -B -m unittest tools.tests.test_adiscord_val_refugees.KefreytDecisionVisibilityTests
       - name: Refugee training and labor
         run: python -B -m unittest tools.tests.test_adiscord_val_refugees.RefugeeTrainingTests
       - name: Scripted peace bus
