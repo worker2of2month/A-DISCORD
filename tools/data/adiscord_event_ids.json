@@ -1277,6 +1277,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_nam_resource_war.3",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 3,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_nam_resource_war.50",
       "namespace": "ADISCORD_nam_resource_war",
       "number": 50,
