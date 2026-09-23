@@ -4,6 +4,7 @@
  FOCUS_FILTER_VAL_CONTRACTS:0 "Контракты и экспорт оружия"
  FOCUS_FILTER_VAL_ECONOMY:0 "Казна и промышленность"
  FOCUS_FILTER_VAL_ARMY:0 "Армия и снабжение"
+ FOCUS_FILTER_VAL_MANPOWER:0 "Людские ресурсы"
  FOCUS_FILTER_VAL_AUTHORITY:0 "Власть и лояльность капитанов"
  FOCUS_FILTER_VAL_STELANDER:0 "Стеландерский кризис"
  FOCUS_FILTER_VAL_EXPANSION:0 "Экспансия и договоры"
