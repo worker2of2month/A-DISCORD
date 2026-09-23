@@ -2955,36 +2955,34 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			if = {
-				limit = {
-					any_owned_state = {
-						is_controlled_by = ROOT
-						OR = { is_core_of = STP is_core_of = STS }
-						free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
-					}
-				}
-				random_owned_controlled_state = {
+			custom_effect_tooltip = STP_pw_civil_factory_or_reserve_tt
+			hidden_effect = {
+				if = {
 					limit = {
-						OR = { is_core_of = STP is_core_of = STS }
-						free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+						any_owned_state = {
+							is_controlled_by = ROOT
+							OR = { is_core_of = STP is_core_of = STS }
+							free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+						}
 					}
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+					random_owned_controlled_state = {
+						limit = {
+							OR = { is_core_of = STP is_core_of = STS }
+							free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+						}
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+					}
 				}
-			}
-			else = {
-				custom_effect_tooltip = STP_pw_industry_reserve_tt
-				hidden_effect = {
+				else = {
 					ADISCORD_economy_initialize_country = yes
 					add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 }
 				}
-			}
-			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_civil_workshops_delta } }
-			hidden_effect = {
 				add_to_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0.10 }
 				STP_pw_refresh_modifier = yes
 			}
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_civil_workshops_delta } }
 		}
 	}
 
@@ -2999,36 +2997,34 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			if = {
-				limit = {
-					any_owned_state = {
-						is_controlled_by = ROOT
-						OR = { is_core_of = STP is_core_of = STS }
-						free_building_slots = { building = arms_factory size > 0 include_locked = yes }
-					}
-				}
-				random_owned_controlled_state = {
+			custom_effect_tooltip = STP_pw_arms_factory_or_reserve_tt
+			hidden_effect = {
+				if = {
 					limit = {
-						OR = { is_core_of = STP is_core_of = STS }
-						free_building_slots = { building = arms_factory size > 0 include_locked = yes }
+						any_owned_state = {
+							is_controlled_by = ROOT
+							OR = { is_core_of = STP is_core_of = STS }
+							free_building_slots = { building = arms_factory size > 0 include_locked = yes }
+						}
 					}
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+					random_owned_controlled_state = {
+						limit = {
+							OR = { is_core_of = STP is_core_of = STS }
+							free_building_slots = { building = arms_factory size > 0 include_locked = yes }
+						}
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+					}
 				}
-			}
-			else = {
-				custom_effect_tooltip = STP_pw_industry_reserve_tt
-				hidden_effect = {
+				else = {
 					ADISCORD_economy_initialize_country = yes
 					add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 }
 				}
-			}
-			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_accountable_arsenals_delta } }
-			hidden_effect = {
 				add_to_variable = { var = STP_pw_industrial_capacity_factory value = 0.05 }
 				STP_pw_refresh_modifier = yes
 			}
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_accountable_arsenals_delta } }
 		}
 	}
 
@@ -3405,36 +3401,34 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			if = {
-				limit = {
-					any_owned_state = {
-						is_controlled_by = ROOT
-						OR = { is_core_of = STP is_core_of = STS }
-						free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
-					}
-				}
-				random_owned_controlled_state = {
+			custom_effect_tooltip = STP_pw_civil_factory_or_reserve_tt
+			hidden_effect = {
+				if = {
 					limit = {
-						OR = { is_core_of = STP is_core_of = STS }
-						free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+						any_owned_state = {
+							is_controlled_by = ROOT
+							OR = { is_core_of = STP is_core_of = STS }
+							free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+						}
 					}
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+					random_owned_controlled_state = {
+						limit = {
+							OR = { is_core_of = STP is_core_of = STS }
+							free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+						}
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+					}
 				}
-			}
-			else = {
-				custom_effect_tooltip = STP_pw_industry_reserve_tt
-				hidden_effect = {
+				else = {
 					ADISCORD_economy_initialize_country = yes
 					add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 }
 				}
-			}
-			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_civil_workshops_delta } }
-			hidden_effect = {
 				add_to_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.05 }
 				STP_pw_refresh_modifier = yes
 			}
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_civil_workshops_delta } }
 		}
 	}
 
@@ -3451,37 +3445,35 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			if = {
-				limit = {
-					any_owned_state = {
-						is_controlled_by = ROOT
-						OR = { is_core_of = STP is_core_of = STS }
-						free_building_slots = { building = arms_factory size > 0 include_locked = yes }
-					}
-				}
-				random_owned_controlled_state = {
+			custom_effect_tooltip = STP_pw_arms_factory_or_reserve_tt
+			hidden_effect = {
+				if = {
 					limit = {
-						OR = { is_core_of = STP is_core_of = STS }
-						free_building_slots = { building = arms_factory size > 0 include_locked = yes }
+						any_owned_state = {
+							is_controlled_by = ROOT
+							OR = { is_core_of = STP is_core_of = STS }
+							free_building_slots = { building = arms_factory size > 0 include_locked = yes }
+						}
 					}
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+					random_owned_controlled_state = {
+						limit = {
+							OR = { is_core_of = STP is_core_of = STS }
+							free_building_slots = { building = arms_factory size > 0 include_locked = yes }
+						}
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+					}
 				}
-			}
-			else = {
-				custom_effect_tooltip = STP_pw_industry_reserve_tt
-				hidden_effect = {
+				else = {
 					ADISCORD_economy_initialize_country = yes
 					add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 }
 				}
-			}
-			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_accountable_arsenals_delta } }
-			hidden_effect = {
 				add_to_variable = { var = STP_pw_industrial_capacity_factory value = 0.08 }
 				add_to_variable = { var = STP_pw_production_speed_industrial_complex_factor value = -0.05 }
 				STP_pw_refresh_modifier = yes
 			}
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_accountable_arsenals_delta } }
 		}
 	}
 
@@ -4297,21 +4289,22 @@ focus_tree = {
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			custom_effect_tooltip = STP_qol_elite_administration_tt
-
-			set_party_name = {
-				ideology = chauvinism
-				long_name = STS_chauvinism_party_long
-				name = STS_chauvinism_party
+			hidden_effect = {
+				set_party_name = {
+					ideology = chauvinism
+					long_name = STS_chauvinism_party_long
+					name = STS_chauvinism_party
+				}
+				add_ideas = {
+					minister_STS_Marta_Eirich
+					minister_STS_Leonid_Barchel
+					minister_STS_Ignat_Forel
+					minister_STS_Nika_Volgina
+					minister_STS_Tomas_Krey
+					minister_STS_Lia_Verst
+				}
+				ADISCORD_economy_mark_dirty = yes
 			}
-			add_ideas = {
-				minister_STS_Marta_Eirich
-				minister_STS_Leonid_Barchel
-				minister_STS_Ignat_Forel
-				minister_STS_Nika_Volgina
-				minister_STS_Tomas_Krey
-				minister_STS_Lia_Verst
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 	}
 
@@ -5328,21 +5321,21 @@ focus_tree = {
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			custom_effect_tooltip = STP_pc_lib_civil_army_tt
-			if = {
-				limit = { STP_cw_sotnikov_available = yes }
-				add_advisor_role = {
-					character = STP_grigory_sotnikov
-					activate = yes
-					advisor = {
-						slot = high_command
-						idea_token = STP_pc_sotnikov_civil_staff
-						traits = { army_regrouping_1 }
-						cost = 100
-					}
-				}
-			}
 			effect_tooltip = { add_ideas = STP_pc_lib_civil_army_delta }
 			hidden_effect = {
+				if = {
+					limit = { STP_cw_sotnikov_available = yes }
+					add_advisor_role = {
+						character = STP_grigory_sotnikov
+						activate = yes
+						advisor = {
+							slot = high_command
+							idea_token = STP_pc_sotnikov_civil_staff
+							traits = { army_regrouping_1 }
+							cost = 100
+						}
+					}
+				}
 				add_to_variable = { var = STP_pw_army_org_factor value = 0.04 }
 				add_to_variable = { var = STP_pw_political_power_gain value = 0.10 }
 				STP_pw_refresh_modifier = yes
@@ -6016,15 +6009,17 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = { decision = STP_pw_party_offer_compact }
 			add_timed_idea = { idea = STP_cw_arsenal_shifts days = 180 }
-			if = {
-				limit = { capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT free_building_slots = { building = arms_factory size > 0 include_locked = yes } } }
-				capital_scope = {
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = { type = arms_factory level = 1 instant_build = yes }
-				}
-			}
-			else = { custom_effect_tooltip = STP_pw_industry_reserve_tt hidden_effect = { STP_receive_900 = yes } }
+			custom_effect_tooltip = STP_pw_arms_factory_or_reserve_tt
+			custom_effect_tooltip = STP_pf_army_deal_tt
 			hidden_effect = {
+				if = {
+					limit = { capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT free_building_slots = { building = arms_factory size > 0 include_locked = yes } } }
+					capital_scope = {
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+					}
+				}
+				else = { STP_receive_900 = yes }
 				clr_country_flag = STP_pw_party_nod_offer_pending
 				clr_country_flag = STP_pw_party_nod_offer_accepted
 				ADISCORD_economy_mark_dirty = yes
@@ -6035,7 +6030,6 @@ focus_tree = {
 				force_update_dynamic_modifier = yes
 				STP_pw_party_start_nod_invasion_threat = yes
 			}
-			custom_effect_tooltip = STP_pf_army_deal_tt
 		}
 	}
 	focus = {
@@ -6277,26 +6271,26 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_economy_reopen_tax_offices }
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			if = {
-				limit = {
-					any_owned_state = {
-						is_controlled_by = ROOT
-						OR = { is_core_of = STP is_core_of = STS }
-						free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
-					}
-				}
-				random_owned_controlled_state = {
-					limit = {
-						OR = { is_core_of = STP is_core_of = STS }
-						free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
-					}
-					add_extra_state_shared_building_slots = 1
-					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
-				}
-			}
-			else = { STP_receive_900 = yes }
 			custom_effect_tooltip = STP_pc_economy_repair_workshops_tt
 			hidden_effect = {
+				if = {
+					limit = {
+						any_owned_state = {
+							is_controlled_by = ROOT
+							OR = { is_core_of = STP is_core_of = STS }
+							free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+						}
+					}
+					random_owned_controlled_state = {
+						limit = {
+							OR = { is_core_of = STP is_core_of = STS }
+							free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+						}
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+					}
+				}
+				else = { STP_receive_900 = yes }
 				add_to_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0.15 }
 				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.10 }
 				STP_pw_refresh_modifier = yes

@@ -515,11 +515,17 @@ class PostwarContinuationContracts(unittest.TestCase):
             ["STP_pc_after_victory"],
         )
         reward = block(focus, "completion_reward")
-        party = block(reward, "set_party_name")
+        self.assertEqual(
+            {e.key for e in reward},
+            {"custom_effect_tooltip", "hidden_effect"},
+            "cabinet bookkeeping must not expand the focus reward tooltip",
+        )
+        mechanics = block(reward, "hidden_effect")
+        party = block(mechanics, "set_party_name")
         self.assertEqual(scalar(party, "ideology"), "chauvinism")
         self.assertEqual(scalar(party, "name"), "STS_chauvinism_party")
         self.assertEqual(scalar(party, "long_name"), "STS_chauvinism_party_long")
-        ministers = {e.value or e.key for e in block(reward, "add_ideas")} - {""}
+        ministers = {e.value or e.key for e in block(mechanics, "add_ideas")} - {""}
         self.assertEqual(
             ministers,
             {
@@ -934,7 +940,9 @@ class PostwarContinuationContracts(unittest.TestCase):
 
     def test_scripted_advisor_role_contains_no_database_triggers(self) -> None:
         reward = block(war_focuses()["STP_pc_lib_civil_army"], "completion_reward")
-        role = next(e.value for e in walk(reward) if e.key == "add_advisor_role")
+        self.assertFalse(any(e.key in {"if", "add_advisor_role"} for e in reward))
+        self.assertIn("hidden_effect", {e.key for e in reward})
+        role = next(e.value for e in walk(block(reward, "hidden_effect")) if e.key == "add_advisor_role")
         advisor = block(role, "advisor")
         self.assertFalse({"allowed", "visible", "available", "ai_will_do", "on_add", "on_remove"} & {e.key for e in advisor})
         self.assertEqual(scalar(advisor, "slot"), "high_command")
