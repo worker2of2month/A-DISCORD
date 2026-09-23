@@ -23,6 +23,9 @@ focus_tree = {
 	### Layout guide: left arsenal/recovery (x 0-10), central administration (x 12-22),
 	### foreign contracts (x 24-32), and army (x 34-44); crisis and postwar routes start at y 12.
 	### The reclamation programme stays detached at x <= 0 so its state work does not cross the core tree.
+	### Progressive focus reveal: future Kefreyt chapters stay out of the tree until
+	### their existing prerequisite/world-state gate becomes relevant. These allow_branch
+	### checks are presentation-only and must never be stricter than gameplay prerequisites.
 	### CENTRAL SPINE: THE CONTRACT THRONE
 	#############################################
 
@@ -57,6 +60,9 @@ focus_tree = {
 		x = 20
 		y = 1
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_The_Contract_State
+		}
 		prerequisite = { focus = VAL_The_Contract_State }
 		ai_will_do = { base = 15 }
 		completion_reward = {
@@ -82,6 +88,9 @@ focus_tree = {
 		x = 18
 		y = 2
 		cost = 2
+		allow_branch = {
+			has_completed_focus = VAL_The_Weaponry_Baron
+		}
 		prerequisite = { focus = VAL_The_Weaponry_Baron }
 		ai_will_do = { base = 10 }
 		completion_reward = {
@@ -105,6 +114,9 @@ focus_tree = {
 		x = 22
 		y = 2
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_The_Weaponry_Baron
+		}
 		prerequisite = { focus = VAL_The_Weaponry_Baron }
 		ai_will_do = { base = 10 }
 		completion_reward = {
@@ -128,6 +140,10 @@ focus_tree = {
 		x = 25
 		y = 3
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Price_Of_Loyalty
+			has_completed_focus = VAL_Count_The_Captains
+		}
 		prerequisite = { focus = VAL_Price_Of_Loyalty }
 		prerequisite = { focus = VAL_Count_The_Captains }
 		ai_will_do = { base = 10 }
@@ -156,6 +172,9 @@ focus_tree = {
 		x = 6
 		y = 1
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_The_Contract_State
+		}
 		prerequisite = { focus = VAL_The_Contract_State }
 		ai_will_do = { base = 18 }
 		completion_reward = {
@@ -179,6 +198,9 @@ focus_tree = {
 		x = 4
 		y = 3
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Factories_Like_Cathedrals
+		}
 		prerequisite = { focus = VAL_Factories_Like_Cathedrals }
 		mutually_exclusive = { focus = VAL_Brokered_Steel }
 		ai_will_do = {
@@ -207,6 +229,9 @@ focus_tree = {
 		x = 8
 		y = 3
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Factories_Like_Cathedrals
+		}
 		prerequisite = { focus = VAL_Factories_Like_Cathedrals }
 		mutually_exclusive = { focus = VAL_Ballistics_Schools }
 		ai_will_do = {
@@ -230,6 +255,9 @@ focus_tree = {
 		x = 6
 		y = 4
 		cost = 3
+		allow_branch = {
+			OR = { has_completed_focus = VAL_Ballistics_Schools has_completed_focus = VAL_Brokered_Steel }
+		}
 		prerequisite = {
 			focus = VAL_Ballistics_Schools
 			focus = VAL_Brokered_Steel
@@ -270,6 +298,9 @@ focus_tree = {
 		x = 36
 		y = 1
 		cost = 4
+		allow_branch = {
+			has_completed_focus = VAL_The_Contract_State
+		}
 		prerequisite = { focus = VAL_The_Contract_State }
 		ai_will_do = { base = 1 modifier = { factor = 30 has_manpower < 30000 } }
 		completion_reward = {
@@ -291,6 +322,9 @@ focus_tree = {
 		x = 44
 		y = 2
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_The_Mercenary_State
+		}
 		prerequisite = { focus = VAL_The_Mercenary_State }
 		ai_will_do = { base = 1 }
 		completion_reward = {
@@ -309,6 +343,9 @@ focus_tree = {
 		x = 44
 		y = 4
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Company_Mandates
+		}
 		prerequisite = { focus = VAL_Company_Mandates }
 		ai_will_do = { base = 1 }
 		completion_reward = {
@@ -327,6 +364,9 @@ focus_tree = {
 		x = 36
 		y = 2
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_The_Mercenary_State
+		}
 		prerequisite = { focus = VAL_The_Mercenary_State }
 		ai_will_do = {
 			base = 1
@@ -351,6 +391,9 @@ focus_tree = {
 		x = 32
 		y = 3
 		cost = 4
+		allow_branch = {
+			has_completed_focus = VAL_Hire_Out_War
+		}
 		prerequisite = { focus = VAL_Hire_Out_War }
 		mutually_exclusive = {
 			focus = VAL_Stahls_Schedules
@@ -376,6 +419,9 @@ focus_tree = {
 		x = 36
 		y = 3
 		cost = 4
+		allow_branch = {
+			has_completed_focus = VAL_Hire_Out_War
+		}
 		prerequisite = { focus = VAL_Hire_Out_War }
 		mutually_exclusive = {
 			focus = VAL_Vorons_Companies
@@ -403,6 +449,9 @@ focus_tree = {
 		x = 38
 		y = 3
 		cost = 4
+		allow_branch = {
+			has_completed_focus = VAL_Hire_Out_War
+		}
 		prerequisite = { focus = VAL_Hire_Out_War }
 		mutually_exclusive = {
 			focus = VAL_Vorons_Companies
@@ -430,6 +479,9 @@ focus_tree = {
 		x = 36
 		y = 4
 		cost = 3
+		allow_branch = {
+			OR = { has_completed_focus = VAL_Vorons_Companies has_completed_focus = VAL_Stahls_Schedules has_completed_focus = VAL_Gromovs_Assault_Tables }
+		}
 		prerequisite = {
 			focus = VAL_Vorons_Companies
 			focus = VAL_Stahls_Schedules
@@ -469,6 +521,9 @@ focus_tree = {
 		x = -2
 		y = 6
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_reclamation_survey
+		}
 		prerequisite = { focus = VAL_reclamation_survey }
 		ai_will_do = { base = 1 }
 		completion_reward = {
@@ -537,6 +592,9 @@ focus_tree = {
 		x = -2
 		y = 8
 		cost = 5
+		allow_branch = {
+			OR = { has_completed_focus = VAL_Field_Surgeons has_completed_focus = VAL_Bread_From_Barracks }
+		}
 		prerequisite = {
 			focus = VAL_Field_Surgeons
 			focus = VAL_Bread_From_Barracks
@@ -571,6 +629,9 @@ focus_tree = {
 		x = 26
 		y = 4
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_One_Ledger_One_Banner
+		}
 		prerequisite = { focus = VAL_One_Ledger_One_Banner }
 		ai_will_do = { base = 20 }
 		completion_reward = {
@@ -592,6 +653,9 @@ focus_tree = {
 		x = 25
 		y = 5
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Market_Roads_North
+		}
 		prerequisite = { focus = VAL_Market_Roads_North }
 		mutually_exclusive = { focus = VAL_October_Of_2160 }
 		ai_will_do = {
@@ -615,6 +679,9 @@ focus_tree = {
 		x = 27
 		y = 5
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Market_Roads_North
+		}
 		prerequisite = { focus = VAL_Market_Roads_North }
 		mutually_exclusive = { focus = VAL_Trading_Partners }
 		ai_will_do = {
@@ -640,6 +707,9 @@ focus_tree = {
 		x = 26
 		y = 6
 		cost = 5
+		allow_branch = {
+			OR = { has_completed_focus = VAL_Trading_Partners has_completed_focus = VAL_October_Of_2160 }
+		}
 		prerequisite = {
 			focus = VAL_Trading_Partners
 			focus = VAL_October_Of_2160
@@ -666,6 +736,9 @@ focus_tree = {
 		x = 14
 		y = 1
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_The_Contract_State
+		}
 		prerequisite = { focus = VAL_The_Contract_State }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_operations_map_unlock_tt
@@ -687,6 +760,9 @@ focus_tree = {
 		x = 28
 		y = 1
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_The_Contract_State
+		}
 		prerequisite = { focus = VAL_The_Contract_State }
 		completion_reward = {
 			add_political_power = 50
@@ -713,6 +789,9 @@ focus_tree = {
 		x = 18
 		y = 4
 		cost = 2
+		allow_branch = {
+			has_completed_focus = VAL_Price_Of_Loyalty
+		}
 		prerequisite = { focus = VAL_Price_Of_Loyalty }
 		completion_reward = {
 			add_stability = 0.03
@@ -736,6 +815,9 @@ focus_tree = {
 		x = 22
 		y = 4
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Count_The_Captains
+		}
 		prerequisite = { focus = VAL_Count_The_Captains }
 		completion_reward = {
 			add_political_power = 25
@@ -757,6 +839,10 @@ focus_tree = {
 		x = 20
 		y = 5
 		cost = 4
+		allow_branch = {
+			has_completed_focus = VAL_Paid_Loyalty
+			has_completed_focus = VAL_Provincial_Brokers
+		}
 		prerequisite = { focus = VAL_Paid_Loyalty }
 		prerequisite = { focus = VAL_Provincial_Brokers }
 		completion_reward = {
@@ -780,6 +866,9 @@ focus_tree = {
 		x = 18
 		y = 6
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Closed_Ledgers
+		}
 		prerequisite = { focus = VAL_Closed_Ledgers }
 		completion_reward = {
 			add_power_balance_value = { id = VAL_command_balance value = 0.15 }
@@ -803,6 +892,9 @@ focus_tree = {
 		x = 22
 		y = 6
 		cost = 4
+		allow_branch = {
+			has_completed_focus = VAL_Closed_Ledgers
+		}
 		prerequisite = { focus = VAL_Closed_Ledgers }
 		completion_reward = {
 			unlock_decision_tooltip = { decision = VAL_pay_quarterly_contract_norm show_effect_tooltip = yes }
@@ -832,6 +924,9 @@ focus_tree = {
 		x = 2
 		y = 2
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Factories_Like_Cathedrals
+		}
 		prerequisite = { focus = VAL_Factories_Like_Cathedrals }
 		completion_reward = {
 			add_political_power = 30
@@ -964,6 +1059,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Brokered_Steel }
 		allow_branch = {
+			has_completed_focus = VAL_Brokered_Steel
 			WRK = { exists = yes }
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
 		}
@@ -985,6 +1081,9 @@ focus_tree = {
 		x = 40
 		y = 2
 		cost = 2
+		allow_branch = {
+			has_completed_focus = VAL_The_Mercenary_State
+		}
 		prerequisite = { focus = VAL_The_Mercenary_State }
 		completion_reward = {
 			army_experience = 5
@@ -1127,6 +1226,9 @@ focus_tree = {
 		x = 34
 		y = 5
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Morns_Supply_Trains
+		}
 		prerequisite = { focus = VAL_Morns_Supply_Trains }
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_field_repair_delta } }
@@ -1146,6 +1248,9 @@ focus_tree = {
 		x = 38
 		y = 5
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Morns_Supply_Trains
+		}
 		prerequisite = { focus = VAL_Morns_Supply_Trains }
 		available = { has_capitulated = no any_owned_state = { is_controlled_by = PREV } }
 		cancel_if_invalid = yes
@@ -1164,6 +1269,10 @@ focus_tree = {
 		x = 36
 		y = 9
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Logistics_Command
+			has_completed_focus = VAL_Operational_Reserves
+		}
 		prerequisite = { focus = VAL_Logistics_Command }
 		prerequisite = { focus = VAL_Operational_Reserves }
 		completion_reward = {
@@ -1199,6 +1308,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Operational_Directorate }
 		allow_branch = {
+			has_completed_focus = VAL_Operational_Directorate
 			OR = {
 				has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 				has_country_flag = VAL_debug_vorkerland_collapse
@@ -1240,6 +1350,9 @@ focus_tree = {
 		x = 14
 		y = 2
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Operational_Directorate
+		}
 		prerequisite = { focus = VAL_Operational_Directorate }
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_ministry_auditors_delta } }
@@ -1260,6 +1373,9 @@ focus_tree = {
 		x = 22
 		y = 8
 		cost = 4
+		allow_branch = {
+			has_completed_focus = VAL_Quarterly_Contract_Norm
+		}
 		prerequisite = { focus = VAL_Quarterly_Contract_Norm }
 		completion_reward = {
 			VAL_apply_contract_administration_2 = yes
@@ -1275,6 +1391,9 @@ focus_tree = {
 		x = 20
 		y = 7
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Closed_Ledgers
+		}
 		prerequisite = { focus = VAL_Closed_Ledgers }
 		completion_reward = {
 			VAL_apply_contract_administration_2 = yes
@@ -1296,6 +1415,9 @@ focus_tree = {
 		x = 18
 		y = 8
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_State_Above_Captains
+		}
 		prerequisite = { focus = VAL_State_Above_Captains }
 		completion_reward = {
 			add_stability = 0.03
@@ -1318,6 +1440,11 @@ focus_tree = {
 		x = 20
 		y = 10
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Central_Payment_Office
+			has_completed_focus = VAL_Provincial_Contract_Courts
+			has_completed_focus = VAL_Captains_Cannot_Veto
+		}
 		prerequisite = { focus = VAL_Central_Payment_Office }
 		prerequisite = { focus = VAL_Provincial_Contract_Courts }
 		prerequisite = { focus = VAL_Captains_Cannot_Veto }
@@ -1346,6 +1473,9 @@ focus_tree = {
 		x = 30
 		y = 2
 		cost = 2
+		allow_branch = {
+			has_completed_focus = VAL_Ministry_Of_Contract_Memory
+		}
 		prerequisite = { focus = VAL_Ministry_Of_Contract_Memory }
 		completion_reward = {
 			add_ideas = VAL_contract_propaganda_office
@@ -1405,6 +1535,9 @@ focus_tree = {
 		x = 2
 		y = 4
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Salvage_Every_Barrel
+		}
 		prerequisite = { focus = VAL_Salvage_Every_Barrel }
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 producer = VAL }
@@ -1458,6 +1591,9 @@ focus_tree = {
 		x = 4
 		y = 5
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Standardize_Rifle_Lots
+		}
 		prerequisite = { focus = VAL_Standardize_Rifle_Lots }
 		completion_reward = {
 			add_tech_bonus = { name = VAL_standard_cartridges_bonus bonus = 1.0 uses = 1 category = infantry_weapons }
@@ -1488,6 +1624,9 @@ focus_tree = {
 		x = 4
 		y = 8
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Mobilize_Machine_Shops
+		}
 		prerequisite = { focus = VAL_Mobilize_Machine_Shops }
 		completion_reward = {
 			VAL_advance_economic_recovery = yes
@@ -1518,6 +1657,10 @@ focus_tree = {
 		x = 8
 		y = 8
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Arsenal_Reserve
+			has_completed_focus = VAL_Inventory_The_Empty_Yards
+		}
 		prerequisite = { focus = VAL_Arsenal_Reserve }
 		prerequisite = { focus = VAL_Inventory_The_Empty_Yards }
 		completion_reward = {
@@ -1535,6 +1678,12 @@ focus_tree = {
 		x = 6
 		y = 10
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Munitions_Board
+			OR = { has_completed_focus = VAL_Standard_Cartridges has_completed_focus = VAL_Brokered_Steel }
+			has_completed_focus = VAL_Three_Shift_Arsenals
+			has_completed_focus = VAL_Reserve_Accounting
+		}
 		prerequisite = { focus = VAL_Munitions_Board }
 		prerequisite = {
 			focus = VAL_Standard_Cartridges
@@ -1592,6 +1741,9 @@ focus_tree = {
 		x = 40
 		y = 4
 		cost = 2
+		allow_branch = {
+			has_completed_focus = VAL_Company_Rosters
+		}
 		prerequisite = { focus = VAL_Company_Rosters }
 		completion_reward = {
 			unlock_decision_tooltip = { decision = VAL_recruit_local_volunteers show_effect_tooltip = yes }
@@ -1633,6 +1785,9 @@ focus_tree = {
 		x = 34
 		y = 7
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Field_Repair_Corps
+		}
 		prerequisite = { focus = VAL_Field_Repair_Corps }
 		completion_reward = {
 			VAL_apply_contract_army_2 = yes
@@ -1649,6 +1804,9 @@ focus_tree = {
 		x = 38
 		y = 7
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Reserve_Battalions
+		}
 		prerequisite = { focus = VAL_Reserve_Battalions }
 		completion_reward = {
 			add_manpower = 10000
@@ -1666,6 +1824,9 @@ focus_tree = {
 		x = 36
 		y = 10
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Contract_General_Staff
+		}
 		prerequisite = { focus = VAL_Contract_General_Staff }
 		completion_reward = {
 			VAL_reform_mercenary_payroll = yes
@@ -1693,6 +1854,9 @@ focus_tree = {
 		x = 27
 		y = 8
 		cost = 2
+		allow_branch = {
+			OR = { has_completed_focus = VAL_Trading_Partners has_completed_focus = VAL_October_Of_2160 }
+		}
 		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
 		completion_reward = {
 			unlock_decision_tooltip = { decision = VAL_ready_partner_supply show_effect_tooltip = yes }
@@ -1797,6 +1961,11 @@ focus_tree = {
 		x = 20
 		y = 12
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_State_Contract
+			has_completed_focus = VAL_Industrial_Mobilization_Plan
+			has_completed_focus = VAL_Army_Of_The_Ledger
+		}
 		prerequisite = { focus = VAL_State_Contract }
 		prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
 		prerequisite = { focus = VAL_Army_Of_The_Ledger }
@@ -2000,6 +2169,9 @@ focus_tree = {
 		x = -2
 		y = 5
 		cost = 2
+		allow_branch = {
+			has_completed_focus = VAL_Factories_Like_Cathedrals
+		}
 		prerequisite = { focus = VAL_Factories_Like_Cathedrals }
 		available = {
 			custom_trigger_tooltip = {
@@ -2119,6 +2291,9 @@ focus_tree = {
 		x = 12
 		y = 11
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_The_Steel_Contract
+		}
 		prerequisite = { focus = VAL_The_Steel_Contract }
 		available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
 		cancel_if_invalid = yes
@@ -2135,6 +2310,9 @@ focus_tree = {
 		x = 14
 		y = 13
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Occidian_Registries
+		}
 		prerequisite = { focus = VAL_Occidian_Registries }
 		mutually_exclusive = { focus = VAL_Balchansk_Charter }
 		available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
@@ -2154,6 +2332,10 @@ focus_tree = {
 		x = 24
 		y = 8
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_One_Ledger_One_Banner
+			OR = { has_completed_focus = VAL_Trading_Partners has_completed_focus = VAL_October_Of_2160 }
+		}
 		prerequisite = { focus = VAL_One_Ledger_One_Banner }
 		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
 		available = { custom_trigger_tooltip = { tooltip = VAL_frontier_postwar_ready_tt VAL_frontier_postwar = yes } }
@@ -2248,6 +2430,10 @@ focus_tree = {
 		x = 34
 		y = 13
 		cost = 4
+		allow_branch = {
+			has_completed_focus = VAL_Contracts_Outlive_Kings
+			has_completed_focus = VAL_Foreign_Broker_Licences
+		}
 		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		prerequisite = { focus = VAL_Foreign_Broker_Licences }
 		available = {
@@ -2273,6 +2459,9 @@ focus_tree = {
 		x = 34
 		y = 14
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Return_Southern_Tsaygen
+		}
 		prerequisite = { focus = VAL_Return_Southern_Tsaygen }
 		available = { VAL_wasteland_invasion_available = yes }
 		bypass = { owns_state = 169 }
@@ -2291,6 +2480,9 @@ focus_tree = {
 		x = 34
 		y = 16
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_frontier_return_irem
+		}
 		prerequisite = { focus = VAL_frontier_return_irem }
 		available = {
 			custom_trigger_tooltip = {
@@ -2309,6 +2501,9 @@ focus_tree = {
 		x = 34
 		y = 18
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Wasteland_Charter
+		}
 		prerequisite = { focus = VAL_Wasteland_Charter }
 		available = {
 			custom_trigger_tooltip = {
@@ -2331,6 +2526,9 @@ focus_tree = {
 		x = 34
 		y = 20
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Southern_Expansion
+		}
 		prerequisite = { focus = VAL_Southern_Expansion }
 		available = {
 			custom_trigger_tooltip = {
@@ -2354,6 +2552,10 @@ focus_tree = {
 		x = 24
 		y = 11
 		cost = 3
+		allow_branch = {
+			OR = { has_completed_focus = VAL_frontier_commissioners has_completed_focus = VAL_frontier_provincial_offices }
+			has_completed_focus = VAL_frontier_logistics
+		}
 		prerequisite = { focus = VAL_frontier_commissioners focus = VAL_frontier_provincial_offices }
 		prerequisite = { focus = VAL_frontier_logistics }
 
@@ -2382,6 +2584,9 @@ focus_tree = {
 		x = 24
 		y = 13
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_frontier_security_plan
+		}
 		prerequisite = { focus = VAL_frontier_security_plan }
 		bypass = {
 			custom_trigger_tooltip = {
@@ -2422,6 +2627,9 @@ focus_tree = {
 		x = 22
 		y = 14
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_frontier_treaty_offices
+		}
 		prerequisite = { focus = VAL_frontier_treaty_offices }
 		available = { custom_trigger_tooltip = { tooltip = VAL_supply_base_secured_tt VAL_supply_base_secured = yes } }
 		completion_reward = {
@@ -2438,6 +2646,9 @@ focus_tree = {
 		x = 26
 		y = 14
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_frontier_treaty_offices
+		}
 		prerequisite = { focus = VAL_frontier_treaty_offices }
 		available = { custom_trigger_tooltip = { tooltip = VAL_nod_campaign_foothold_tt VAL_northern_foothold_secured = yes } }
 		completion_reward = { unlock_decision_tooltip = { decision = VAL_negotiate_yubora show_effect_tooltip = yes } unlock_decision_tooltip = { decision = VAL_campaign_against_nod show_effect_tooltip = yes } }
@@ -2450,6 +2661,9 @@ focus_tree = {
 		x = 28
 		y = 14
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_frontier_treaty_offices
+		}
 		prerequisite = { focus = VAL_frontier_treaty_offices }
 		completion_reward = { unlock_decision_tooltip = { decision = VAL_stelander_ultimatum show_effect_tooltip = yes } unlock_decision_tooltip = { decision = VAL_campaign_against_stelander show_effect_tooltip = yes } }
 		ai_will_do = { base = 20 }
@@ -2462,6 +2676,9 @@ focus_tree = {
 		x = 28
 		y = 15
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Stelander_Ultimatum
+		}
 		prerequisite = { focus = VAL_Stelander_Ultimatum }
 		available = {
 			custom_trigger_tooltip = {
@@ -2485,6 +2702,9 @@ focus_tree = {
 		x = 27
 		y = 16
 		cost = 4
+		allow_branch = {
+			has_completed_focus = VAL_Equal_Powers_Pact
+		}
 		prerequisite = { focus = VAL_Equal_Powers_Pact }
 		available = { has_country_flag = VAL_stelander_equal_alliance }
 		ai_will_do = { base = 3 }
@@ -2503,6 +2723,9 @@ focus_tree = {
 		x = 29
 		y = 16
 		cost = 4
+		allow_branch = {
+			has_completed_focus = VAL_Equal_Powers_Pact
+		}
 		prerequisite = { focus = VAL_Equal_Powers_Pact }
 		available = { has_country_flag = VAL_stelander_equal_alliance }
 		ai_will_do = { base = 3 }
@@ -2524,6 +2747,10 @@ focus_tree = {
 		x = 28
 		y = 17
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Joint_General_Staff
+			has_completed_focus = VAL_Cross_Border_Contracts
+		}
 		prerequisite = { focus = VAL_Joint_General_Staff }
 		prerequisite = { focus = VAL_Cross_Border_Contracts }
 		available = { has_country_flag = VAL_stelander_equal_alliance }
@@ -2546,6 +2773,10 @@ focus_tree = {
 		x = 24
 		y = 16
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Northern_Settlement
+			has_completed_focus = VAL_Stelander_Ultimatum
+		}
 		prerequisite = { focus = VAL_Northern_Settlement }
 		prerequisite = { focus = VAL_Stelander_Ultimatum }
 		available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
@@ -2563,6 +2794,9 @@ focus_tree = {
 		x = 10
 		y = 7
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Inventory_The_Empty_Yards
+		}
 		prerequisite = { focus = VAL_Inventory_The_Empty_Yards }
 		available = { has_country_flag = VAL_vorkerland_contracts_disrupted }
 		cancel_if_invalid = yes
@@ -2616,6 +2850,10 @@ focus_tree = {
 		x = 22
 		y = 18
 		cost = 5
+		allow_branch = {
+			OR = { has_completed_focus = VAL_Campaign_Secured has_completed_focus = VAL_Returning_Buyers }
+			OR = { has_completed_focus = VAL_New_Supply_Base has_completed_focus = VAL_Contingency_Ledgers }
+		}
 		prerequisite = { focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers }
 		prerequisite = { focus = VAL_New_Supply_Base focus = VAL_Contingency_Ledgers }
 		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
@@ -2631,6 +2869,10 @@ focus_tree = {
 		x = 26
 		y = 18
 		cost = 5
+		allow_branch = {
+			OR = { has_completed_focus = VAL_Campaign_Secured has_completed_focus = VAL_Returning_Buyers }
+			has_completed_focus = VAL_Industrial_Mobilization_Plan
+		}
 		prerequisite = { focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers }
 		prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
 		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
@@ -2646,6 +2888,11 @@ focus_tree = {
 		x = 24
 		y = 20
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Reopen_Trade_Routes
+			has_completed_focus = VAL_Settle_Industrial_Debts
+			has_completed_focus = VAL_Returning_Buyers
+		}
 		prerequisite = { focus = VAL_Reopen_Trade_Routes }
 		prerequisite = { focus = VAL_Settle_Industrial_Debts }
 		prerequisite = { focus = VAL_Returning_Buyers }
@@ -2670,6 +2917,10 @@ focus_tree = {
 		x = 28
 		y = 18
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Campaign_Secured
+			has_completed_focus = VAL_Army_Of_The_Ledger
+		}
 		prerequisite = { focus = VAL_Campaign_Secured }
 		prerequisite = { focus = VAL_Army_Of_The_Ledger }
 		available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
@@ -2686,6 +2937,9 @@ focus_tree = {
 		x = 4
 		y = 11
 		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_Industrial_Mobilization_Plan
+		}
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		available = {
 			is_subject = no
@@ -2877,6 +3131,9 @@ focus_tree = {
 		x = 30
 		y = 13
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Contracts_Outlive_Kings
+		}
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		available = { custom_trigger_tooltip = { tooltip = VAL_bezhaysk_operation_available_tt VAL_can_attack_bezhaysk = yes } }
@@ -2902,7 +3159,8 @@ focus_tree = {
 		x = 14
 		y = 4
 		cost = 3
-		allow_branch = { ADISCORD_nam_resource_war_active = yes }
+		allow_branch = {
+			has_completed_focus = VAL_Ministry_Auditors ADISCORD_nam_resource_war_active = yes }
 		available = { custom_trigger_tooltip = { tooltip = VAL_resource_war_active_tt ADISCORD_nam_resource_war_active = yes } }
 		cancel_if_invalid = yes
 		prerequisite = { focus = VAL_Ministry_Auditors }
@@ -2938,6 +3196,9 @@ focus_tree = {
 		x = 10
 		y = 13
 		cost = 5
+		allow_branch = {
+			has_completed_focus = VAL_Occidian_Registries
+		}
 		prerequisite = { focus = VAL_Occidian_Registries }
 		mutually_exclusive = { focus = VAL_Integrate_Occidia }
 		available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }

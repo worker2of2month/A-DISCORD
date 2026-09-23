@@ -3,8 +3,18 @@
 
 VAL_trade_corridors_unlocked = {
 	OR = {
-		has_completed_focus = VAL_One_Ledger_One_Banner
+		AND = {
+			has_completed_focus = VAL_The_Steel_Contract
+			has_completed_focus = VAL_reclamation_industrial_sites
+		}
+		# Legacy late-game/save compatibility. The standing north flag is
+		# deliberately excluded because that route is commissioned from game start.
 		has_completed_focus = VAL_Reopen_Trade_Routes
+		has_country_flag = VAL_route_occidia_commissioned
+		has_country_flag = VAL_route_west_commissioned
+		has_country_flag = VAL_route_stelander_commissioned
+		has_country_flag = VAL_route_vorkerland_commissioned
+		has_country_flag = VAL_route_south_commissioned
 	}
 }
 
@@ -80,12 +90,8 @@ VAL_trade_route_vorkerland_open = {
 VAL_trade_route_south_open = {
 	tag = VAL
 	OR = {
-		VAL_trade_corridors_unlocked = yes
-		has_completed_focus = VAL_Southern_Trade_Charter
-		has_country_flag = ADISCORD_debug_val_south_route_active
-	}
-	OR = {
 		AND = {
+			VAL_trade_corridors_unlocked = yes
 			has_country_flag = VAL_efl_concession_active
 			68 = { is_owned_by = EFL is_controlled_by = EFL }
 			691 = { is_owned_by = EFL is_controlled_by = EFL }

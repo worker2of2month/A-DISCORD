@@ -111,7 +111,7 @@ class WeeklyTradeTests(unittest.TestCase):
                 self.execute(self.effects["VAL_logistics_market_weekly"])
                 count = mask.bit_count()
                 self.assertEqual(self.variables["VAL_trade_corridors_active"], count)
-                income = 20 * count + (10 if mask & 1 else 0) + (20 if count < 4 else 0)
+                income = 30 * count + (20 if mask & 1 else 0) + (30 if count < 4 else 0)
                 delta = 3 * (4 - count) if count < 4 else -2
                 self.assertEqual(self.variables["ADISCORD_economy_treasury"], 100 + income)
                 self.assertEqual(self.variables["ADISCORD_economy_current_month_action_income"], income)
@@ -120,10 +120,60 @@ class WeeklyTradeTests(unittest.TestCase):
                 self.execute(self.effects["VAL_logistics_market_weekly"])
                 self.assertEqual(self.variables["ADISCORD_economy_treasury"], 100 + 2 * income)
 
-    def test_corridor_payment_dispatch_is_not_focus_gated(self):
+    def test_standing_north_payment_remains_passive_before_second_wave(self):
         weekly = self.effects["VAL_logistics_market_weekly"]
         self.assertTrue(any(e.key == "VAL_pay_trade_corridors" for e in weekly),
                         "the standing north route must pay before later corridors are unlocked")
+        self.assertNotIn("VAL_trade_corridors_unlocked", " ".join(e.key for e in weekly))
+
+    def test_corridors_require_stelander_and_reclamation_on_fresh_campaign(self):
+        gate = self.triggers["VAL_trade_corridors_unlocked"]
+        base = {
+            ("VAL", "has_completed_focus", "VAL_The_Steel_Contract"): True,
+            ("VAL", "has_completed_focus", "VAL_reclamation_industrial_sites"): True,
+        }
+        self.assertTrue(matches_conditions(gate, base, "VAL"))
+        self.assertFalse(matches_conditions(
+            gate,
+            {("VAL", "has_completed_focus", "VAL_The_Steel_Contract"): True},
+            "VAL",
+        ))
+        self.assertFalse(matches_conditions(
+            gate,
+            {("VAL", "has_completed_focus", "VAL_reclamation_industrial_sites"): True},
+            "VAL",
+        ))
+        self.assertFalse(matches_conditions(
+            gate,
+            {("VAL", "has_completed_focus", "VAL_One_Ledger_One_Banner"): True},
+            "VAL",
+        ))
+        # New standing North is commissioned from game start and must NOT unlock
+        # the late corridor UI. Legacy expansion routes still preserve old saves.
+        self.assertFalse(matches_conditions(
+            gate,
+            {("VAL", "has_country_flag", "VAL_route_north_commissioned"): True},
+            "VAL",
+        ))
+        self.assertTrue(matches_conditions(
+            gate,
+            {("VAL", "has_country_flag", "VAL_route_west_commissioned"): True},
+            "VAL",
+        ))
+
+    def test_grey_market_is_dormant_before_corridor_unlock(self):
+        self.facts.clear()
+        self.variables = {
+            "VAL_black_market_pressure": 80,
+            "VAL_black_market_last_delta": 7,
+            "VAL_broker_dependence": 3,
+            "VAL_corridor_security": 0,
+            "VAL_population_present": 40,
+            "VAL_refugee_housing": 20,
+        }
+        self.execute(self.effects["VAL_update_black_market_weekly"])
+        self.assertEqual(self.variables["VAL_black_market_pressure"], 0)
+        self.assertEqual(self.variables["VAL_black_market_last_delta"], 0)
 
     def test_locked_trade_and_uncommissioned_routes_produce_no_income_or_penalty(self):
         self.facts.clear()
@@ -135,7 +185,7 @@ class WeeklyTradeTests(unittest.TestCase):
     def test_partner_war_closes_and_peace_reopens_route_without_control_change(self):
         self.facts["33", "is_owned_by", "WRK"] = True
         self.facts["33", "is_controlled_by", "WRK"] = True
-        for peaceful, treasury, pressure in ((True, 140, 19), (False, 160, 31), (True, 196, 40)):
+        for peaceful, treasury, pressure in ((True, 160, 19), (False, 190, 31), (True, 244, 40)):
             with self.subTest(peaceful=peaceful, treasury=treasury):
                 self.facts["WRK", "has_war", "no"] = peaceful
                 self.execute(self.effects["VAL_logistics_market_weekly"])
@@ -473,7 +523,7 @@ class CorridorProjectTests(unittest.TestCase):
         self.decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_logistics_market_decisions.txt")["VAL_trade_routes"]}
         self.variables = {"ADISCORD_economy_treasury": 3000}
         self.facts = {("VAL", "has_capitulated", "no"): True}
-        for region in ("occidia", "north", "stelander", "vorkerland"):
+        for region in ("occidia", "west", "stelander", "vorkerland"):
             self.facts[("VAL", f"VAL_trade_route_{region}_open", "yes")] = True
         self.rewards = []
 
@@ -860,9 +910,9 @@ class GreyMarketIncomeTests(unittest.TestCase):
                         if f.condition(guard, scope="VAL"):
                             expected = float(loc[scalar(entry.value, "localization_key")])
                             break
-                    f.run("VAL_corridor_income_20", scope="VAL")
+                    f.run("VAL_corridor_income_30", scope="VAL")
                     if upgraded:
-                        f.run("VAL_corridor_income_10", scope="VAL")
+                        f.run("VAL_corridor_income_20", scope="VAL")
                     self.assertAlmostEqual(v["ADISCORD_economy_treasury"], expected)
 
     def test_loading_a_save_preserves_recorded_losses(self):
@@ -958,7 +1008,8 @@ class WastelandCampaignTests(unittest.TestCase):
         facts = {("VAL", "variable", "VAL_population_present"): 30,
                  ("VAL", "variable", "VAL_refugee_housing"): 20,
                  ("VAL", "has_war", "yes"): True,
-                 ("VAL", "has_country_flag", "VAL_route_occidia_commissioned"): True}
+                 ("VAL", "has_country_flag", "VAL_route_occidia_commissioned"): True,
+                 ("VAL", "VAL_trade_corridors_unlocked", "yes"): True}
         def delta(facts, dependence, security):
             total = 0
             for _, e in selected_effects(effects["VAL_update_black_market_weekly"], facts, "VAL"):
