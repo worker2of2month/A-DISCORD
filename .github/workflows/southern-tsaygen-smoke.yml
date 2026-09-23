@@ -1,0 +1,23 @@
+name: Southern Tsaygen smoke
+
+on:
+  push:
+    branches:
+      - fix/val-southern-tsaygen-revenge
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependency
+        run: python -m pip install --disable-pip-version-check pillow
+      - name: Southern Tsaygen regression
+        run: python -B -m unittest tools.tests.test_adiscord_val_southern_tsaygen
+      - name: VAL prerequisite contract
+        run: python -B -m unittest tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests.test_resource_war_focus_visibility_follows_the_war_without_hiding_irem
+      - name: VAL contract UI
+        run: python -B -m unittest tools.tests.test_val_contract_ui
