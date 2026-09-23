@@ -2662,7 +2662,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
 
     def test_transport_price_exact_boundaries_and_one_debit(self):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar, walk
-        decisions = block(parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8")), "VAL_frontier")
+        decisions = block(parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8")), "VAL_military_operations")
         contract = block(decisions, "VAL_frontier_transport_contract")
         self.assertEqual(scalar(contract, "cost"), "0")
         price = block(contract, "custom_cost_trigger")
