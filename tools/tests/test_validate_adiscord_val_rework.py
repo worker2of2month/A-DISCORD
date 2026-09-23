@@ -354,14 +354,21 @@ class ValTradeMapTests(unittest.TestCase):
             self.assertIn(marker, tooltip)
             self.assertIn("0-24", tooltip)
 
-    def test_southern_route_does_not_require_northern_corridor_unlock(self):
+    def test_southern_route_uses_common_second_wave_corridor_unlock(self):
         from tools.builders import build_adiscord_val_operations_map as builder
         boxes = {state: (0, 0, 10, 10) for state in builder.STATE_IDS}
         script = builder.interface_outputs(boxes)["common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt"]
         south = script[script.index("trade_south_1_visible"):script.index("trade_south_4_label_visible")]
-        self.assertIn("has_completed_focus = VAL_Southern_Trade_Charter", south)
-        self.assertIn("ADISCORD_debug_val_south_route_active", south)
-        self.assertNotIn("trade_north_1_visible = { OR = {", south)
+        self.assertIn("VAL_trade_corridors_unlocked = yes", south)
+        self.assertNotIn("has_completed_focus = VAL_Southern_Trade_Charter", south)
+        self.assertNotIn("ADISCORD_debug_val_south_route_active", south)
+        self.assertIn("trade_north_map_visible = { always = yes }", script)
+
+    def test_russian_trade_localisation_distinguishes_west_and_standing_north(self):
+        text = (ROOT / "localisation/russian/ADISCORD_VAL_decisions_l_russian.yml").read_text(encoding="utf-8-sig")
+        self.assertIn('VAL_trade_west_1:0 "§L2. Запад:', text)
+        self.assertIn('VAL_trade_north_1:0 "§L6. Север:', text)
+        self.assertIn('VAL_upgrade_north_route:0 "Модернизировать западный коридор"', text)
 
     def test_trade_panel_replaces_static_aid_map_without_removing_operations(self):
         from tools.builders import build_adiscord_val_operations_map as builder
