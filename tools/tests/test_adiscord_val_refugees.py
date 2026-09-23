@@ -976,7 +976,7 @@ class WastelandCampaignTests(unittest.TestCase):
                 (75, 5000, threshold - 0.001, False),
             ):
                 facts = {
-                    ("VAL", "numeric", "political_power"): pp,
+                    ("VAL", "numeric", "has_political_power"): pp,
                     ("VAL", "equipment", "infantry_equipment"): rifles,
                     ("VAL", "variable", pool): people,
                 }
