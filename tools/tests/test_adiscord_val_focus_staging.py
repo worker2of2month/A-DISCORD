@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 FOCUS_PATH = ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
 ON_ACTIONS_PATH = ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"
+RU_LOC_PATH = ROOT / "localisation/russian/ADISCORD_VAL_decisions_l_russian.yml"
 
 
 def read(path: Path) -> str:
@@ -76,65 +77,79 @@ class KefreytFocusStagingTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.focuses = read(FOCUS_PATH)
         cls.on_actions = read(ON_ACTIONS_PATH)
+        cls.ru_loc = read(RU_LOC_PATH)
 
-    def test_opening_screen_is_small_then_reveals_five_pillars(self) -> None:
-        self.assertNotIn("allow_branch", focus_block(self.focuses, "VAL_The_Contract_State"))
-        for focus_id in (
+    def test_first_act_is_a_visible_roadmap_not_a_single_button(self) -> None:
+        first_act = (
+            "VAL_The_Contract_State",
             "VAL_The_Weaponry_Baron",
+            "VAL_Price_Of_Loyalty",
+            "VAL_Count_The_Captains",
+            "VAL_One_Ledger_One_Banner",
             "VAL_Factories_Like_Cathedrals",
+            "VAL_Ballistics_Schools",
+            "VAL_Brokered_Steel",
+            "VAL_Export_Rifles_Not_Promises",
             "VAL_The_Mercenary_State",
+            "VAL_Company_Mandates",
+            "VAL_Contract_Arbitration",
+            "VAL_Hire_Out_War",
+            "VAL_Vorons_Companies",
+            "VAL_Stahls_Schedules",
+            "VAL_Gromovs_Assault_Tables",
+            "VAL_Morns_Supply_Trains",
+            "VAL_reclamation_survey",
+            "VAL_The_Harvest_Of_Ash",
+            "VAL_Field_Surgeons",
+            "VAL_Bread_From_Barracks",
+            "VAL_Dead_Villages_Still_Count",
+            "VAL_reclamation_road_crews",
+            "VAL_reclamation_clean_water",
+            "VAL_reclamation_workshops",
+            "VAL_reclamation_return_home",
+            "VAL_reclamation_land_register",
+            "VAL_reclamation_industrial_sites",
+            "VAL_Market_Roads_North",
+            "VAL_Trading_Partners",
+            "VAL_October_Of_2160",
+            "VAL_Different_Views_On_Freedom",
             "VAL_Operational_Directorate",
             "VAL_Ministry_Of_Contract_Memory",
-        ):
-            self.assertIn(
-                "has_completed_focus = VAL_The_Contract_State",
-                allow(self.focuses, focus_id),
-                focus_id,
+        )
+        for focus_id in first_act:
+            self.assertNotIn(
+                "allow_branch",
+                focus_block(self.focuses, focus_id),
+                f"{focus_id} must be visible as part of the opening roadmap",
             )
 
-    def test_pillars_expand_only_after_their_existing_milestones(self) -> None:
+    def test_second_layer_roots_reveal_in_meaningful_chunks(self) -> None:
         expected = {
-            "VAL_Price_Of_Loyalty": "VAL_The_Weaponry_Baron",
-            "VAL_Ballistics_Schools": "VAL_Factories_Like_Cathedrals",
+            "VAL_Paid_Loyalty": "VAL_Price_Of_Loyalty",
+            "VAL_Provincial_Brokers": "VAL_Count_The_Captains",
             "VAL_Contract_Accounting_Office": "VAL_Factories_Like_Cathedrals",
-            "VAL_Hire_Out_War": "VAL_The_Mercenary_State",
             "VAL_Company_Rosters": "VAL_The_Mercenary_State",
+            "VAL_Field_Repair_Corps": "VAL_Morns_Supply_Trains",
+            "VAL_Reserve_Battalions": "VAL_Morns_Supply_Trains",
             "VAL_Ministry_Auditors": "VAL_Operational_Directorate",
             "VAL_Wireless_Contract_Bureau": "VAL_Ministry_Of_Contract_Memory",
-            "VAL_Market_Roads_North": "VAL_One_Ledger_One_Banner",
+            "VAL_Occidian_Registries": "VAL_The_Steel_Contract",
+            "VAL_Audit_Lost_Contracts": "VAL_Inventory_The_Empty_Yards",
             "VAL_econ_development_fund": "VAL_Industrial_Mobilization_Plan",
             "VAL_Bezhaysk_Operation": "VAL_Contracts_Outlive_Kings",
         }
-        for focus_id, prerequisite in expected.items():
+        for focus_id, milestone in expected.items():
             self.assertIn(
-                f"has_completed_focus = {prerequisite}",
+                f"has_completed_focus = {milestone}",
                 allow(self.focuses, focus_id),
                 focus_id,
             )
 
-    def test_join_nodes_preserve_original_or_semantics(self) -> None:
-        export = allow(self.focuses, "VAL_Export_Rifles_Not_Promises")
-        self.assertRegex(
-            export,
-            r"OR\s*=\s*\{[^}]*VAL_Ballistics_Schools[^}]*VAL_Brokered_Steel",
-        )
-
-        reopen = allow(self.focuses, "VAL_Reopen_Trade_Routes")
-        self.assertRegex(
-            reopen,
-            r"OR\s*=\s*\{[^}]*VAL_Campaign_Secured[^}]*VAL_Returning_Buyers",
-        )
-        self.assertRegex(
-            reopen,
-            r"OR\s*=\s*\{[^}]*VAL_New_Supply_Base[^}]*VAL_Contingency_Ledgers",
-        )
-
-        debts = allow(self.focuses, "VAL_Settle_Industrial_Debts")
-        self.assertRegex(
-            debts,
-            r"OR\s*=\s*\{[^}]*VAL_Campaign_Secured[^}]*VAL_Returning_Buyers",
-        )
-        self.assertIn("VAL_Industrial_Mobilization_Plan", debts)
+    def test_foreign_clearing_house_waits_for_the_northern_choice(self) -> None:
+        gate = allow(self.focuses, "VAL_Foreign_Broker_Licences")
+        self.assertIn("VAL_Trading_Partners", gate)
+        self.assertIn("VAL_October_Of_2160", gate)
+        self.assertIn("OR =", gate)
 
     def test_world_reactive_branches_still_use_world_state(self) -> None:
         stelander = allow(self.focuses, "VAL_Stelander_Crisis_Opens")
@@ -149,9 +164,8 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_collapse_wars_started", vorkerland)
         self.assertIn("has_completed_focus = VAL_Operational_Directorate", vorkerland)
 
-    def test_regional_and_postwar_content_is_not_on_the_opening_screen(self) -> None:
+    def test_late_campaign_roots_remain_hidden(self) -> None:
         expected = {
-            "VAL_Occidian_Registries": "VAL_The_Steel_Contract",
             "VAL_frontier_conference": "VAL_One_Ledger_One_Banner",
             "VAL_Return_Southern_Tsaygen": "VAL_Contracts_Outlive_Kings",
             "VAL_Wasteland_Charter": "VAL_frontier_return_irem",
@@ -174,6 +188,10 @@ class KefreytFocusStagingTests(unittest.TestCase):
 
         startup = named_block(self.on_actions, "on_startup")
         self.assertIn("mark_focus_tree_layout_dirty = yes", startup)
+
+    def test_contract_state_has_the_correct_russian_title(self) -> None:
+        self.assertIn('VAL_The_Contract_State: "Государство контрактов"', self.ru_loc)
+        self.assertNotIn('VAL_The_Contract_State: "Проклятая земля"', self.ru_loc)
 
     def test_no_parallel_focus_phase_state_machine_was_added(self) -> None:
         self.assertNotIn("VAL_focus_reveal_phase", self.focuses)
