@@ -169,7 +169,6 @@ focus_tree = {
 		}
 	}
 
-
 	focus = {
 		id = VAL_Ballistics_Schools
 		icon = GFX_goal_generic_scientific_exchange
@@ -1188,10 +1187,6 @@ focus_tree = {
 	### WORLD-REACTIVE FILES
 	#############################################
 
-
-
-
-
 	focus = {
 		id = VAL_Vorkerland_Contracts_Burn
 		icon = GFX_goal_generic_major_war
@@ -1230,8 +1225,6 @@ focus_tree = {
 		}
 		ai_will_do = { base = 50 }
 	}
-
-
 
 	#############################################
 	### POLITICAL ADMINISTRATION
@@ -1745,7 +1738,6 @@ focus_tree = {
 		ai_will_do = { base = 4 }
 	}
 
-
 	# Large orders retain the shared export capacity and require buyer consent.
 
 	focus = {
@@ -2204,7 +2196,20 @@ focus_tree = {
 		prerequisite = { focus = VAL_frontier_conference }
 
 		mutually_exclusive = { focus = VAL_frontier_provincial_offices }
-		completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_trade_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_trade_bonus value = 0.1 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } custom_effect_tooltip = VAL_frontier_commissioners_tt }
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = VAL_contract_delta_dummy
+					add_idea = VAL_frontier_trade_delta
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_frontier_trade_bonus value = 0.1 }
+				VAL_refresh_contract_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+			custom_effect_tooltip = VAL_frontier_commissioners_tt
+		}
 		ai_will_do = { base = 25 }
 	}
 	focus = {
@@ -2217,7 +2222,20 @@ focus_tree = {
 		prerequisite = { focus = VAL_frontier_conference }
 
 		mutually_exclusive = { focus = VAL_frontier_commissioners }
-		completion_reward = { effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_output_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_output_bonus value = 0.05 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } custom_effect_tooltip = VAL_frontier_provinces_tt }
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = VAL_contract_delta_dummy
+					add_idea = VAL_frontier_output_delta
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_frontier_output_bonus value = 0.05 }
+				VAL_refresh_contract_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+			custom_effect_tooltip = VAL_frontier_provinces_tt
+		}
 		ai_will_do = { base = 25 }
 	}
 	focus = {
@@ -2271,7 +2289,25 @@ focus_tree = {
 		y = 19
 		cost = 5
 		prerequisite = { focus = VAL_Southern_Expansion }
-		available = { VAL_wasteland_administration_ready = yes WCA = { owns_state = 184 controls_state = 184 owns_state = 185 controls_state = 185 } NOT = { has_war_with = ERT has_war_with = IRT } IRT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no } }
+		available = {
+			VAL_wasteland_administration_ready = yes
+			WCA = {
+				owns_state = 184
+				controls_state = 184
+				owns_state = 185
+				controls_state = 185
+			}
+			NOT = {
+				has_war_with = ERT
+				has_war_with = IRT
+			}
+			IRT = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				is_in_faction = no
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = { declare_war_on = { target = IRT type = take_state_focus generator = { 178 180 181 182 183 193 206 207 } } hidden_effect = { VAL_call_subjects_to_wars = yes } }
 		ai_will_do = { base = 8 }
@@ -2300,7 +2336,6 @@ focus_tree = {
 			unlock_decision_tooltip = { decision = VAL_frontier_demand_CIN show_effect_tooltip = yes }
 			unlock_decision_tooltip = { decision = VAL_defer_northern_expansion show_effect_tooltip = yes }
 
-
 			add_political_power = 75
 		}
 		ai_will_do = { base = 45 }
@@ -2324,10 +2359,26 @@ focus_tree = {
 			custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
 		}
 
-		completion_reward = { unlock_decision_tooltip = { decision = VAL_frontier_workshops show_effect_tooltip = yes } effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_trade_delta } } hidden_effect = { add_to_variable = { var = VAL_frontier_trade_bonus value = 0.1 } VAL_refresh_contract_modifier = yes ADISCORD_economy_mark_dirty = yes } add_stability = 0.05 }
+		completion_reward = {
+			unlock_decision_tooltip = {
+				decision = VAL_frontier_workshops
+				show_effect_tooltip = yes
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = VAL_contract_delta_dummy
+					add_idea = VAL_frontier_trade_delta
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = VAL_frontier_trade_bonus value = 0.1 }
+				VAL_refresh_contract_modifier = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_stability = 0.05
+		}
 		ai_will_do = { base = 5 }
 	}
-
 
 	focus = {
 		id = VAL_New_Supply_Base
@@ -2757,7 +2808,6 @@ focus_tree = {
 		}
 	}
 
-
 	focus = {
 		id = VAL_Bezhaysk_Operation
 		icon = GFX_goal_generic_position_armies
@@ -2801,7 +2851,6 @@ focus_tree = {
 		ai_will_do = { base = 5 }
 	}
 
-
 	focus = {
 		id = VAL_Southern_Trade_Charter
 		icon = GFX_focus_generic_diplomatic_treaty
@@ -2815,7 +2864,6 @@ focus_tree = {
 		completion_reward = { unlock_decision_tooltip = { decision = VAL_upgrade_south_route show_effect_tooltip = yes } add_political_power = 50 }
 		ai_will_do = { base = 6 }
 	}
-
 
 	focus = {
 		id = VAL_Balchansk_Charter
