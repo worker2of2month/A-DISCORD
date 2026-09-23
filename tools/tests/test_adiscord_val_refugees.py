@@ -587,7 +587,7 @@ class RefugeeTrainingTests(unittest.TestCase):
         for _ in range(2):
             self.decision_effect("VAL_train_refugee_volunteers", "remove_effect")
         self.decision_effect("VAL_train_refugee_volunteers", "cancel_effect")
-        self.assertEqual(self.rewards, [("add_political_power", -75), ("equipment", -500), ("add_manpower", 10000)])
+        self.assertEqual(self.rewards, [("add_political_power", -75), ("equipment", -5000), ("add_manpower", 10000)])
         self.assertNotIn("VAL_refugee_training_escrow", self.variables)
 
     def test_country_loss_refunds_people_and_pp_once_without_recruits(self):
