@@ -1331,16 +1331,17 @@ class ValNativePreviewTests(unittest.TestCase):
                          "VAL_Standard_Cartridges", "VAL_Three_Shift_Arsenals", "VAL_Industrial_Mobilization_Plan"):
             focus = next(b for b in named_blocks(FOCUSES_PATH.read_text(encoding="utf-8-sig"), "focus") if "id = " + focus_id in b)
             reward = block(block(parse_clausewitz(focus), "focus"), "completion_reward")
+            tooltip_keys = [e.value for e in reward if e.key == "custom_effect_tooltip"]
+            if focus_id in {"VAL_Standardize_Rifle_Lots", "VAL_Standard_Cartridges", "VAL_Three_Shift_Arsenals"}:
+                self.assertIn("VAL_contract_industry_tier_2_tt", tooltip_keys)
+            if focus_id == "VAL_Industrial_Mobilization_Plan":
+                self.assertIn("VAL_contract_industry_tier_3_tt", tooltip_keys)
             for level in (None, 0, 1, 2, 3):
                 facts = {("VAL", "variable", "VAL_contract_industry_level"): level or 0,
                          ("VAL", "has_variable", "VAL_contract_industry_level"): level is not None}
                 expected = []
                 if focus_id in {"VAL_Contract_Accounting_Office", "VAL_Munitions_Board"} and (level or 0) < 1:
                     expected = [("VAL_industry_1_dummy", "VAL_industry_1_delta")]
-                elif focus_id in {"VAL_Standardize_Rifle_Lots", "VAL_Standard_Cartridges", "VAL_Three_Shift_Arsenals"} and (level or 0) < 2:
-                    expected = [("VAL_industry_2_dummy", "VAL_industry_1_to_2_delta" if level == 1 else "VAL_industry_2_delta")]
-                elif focus_id == "VAL_Industrial_Mobilization_Plan" and (level or 0) < 3:
-                    expected = [("VAL_industry_3_dummy", "VAL_industry_3_delta" if (level or 0) < 1 else "VAL_industry_1_to_3_delta" if level == 1 else "VAL_industry_2_to_3_delta")]
                 if focus_id in {"VAL_Contract_Accounting_Office", "VAL_Industrial_Mobilization_Plan"}:
                     expected.append(("VAL_contract_delta_dummy", "VAL_fiscal_administration_delta"))
                 with self.subTest(focus=focus_id, level=level):
