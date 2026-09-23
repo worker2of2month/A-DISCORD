@@ -1,0 +1,27 @@
+name: Runtime simplification smoke tests
+
+on:
+  push:
+    branches:
+      - refactor/runtime-simplification-20260923
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pillow
+      - name: Scripted peace tests
+        run: python -B -m unittest tools.tests.test_scripted_peace_on_actions
+      - name: Bezhaysk tests
+        run: python -B -m unittest tools.tests.test_adiscord_bezhaysk_peace
+      - name: VAL peace recovery tests
+        run: python -B -m unittest tools.tests.test_adiscord_val_nodrul_peace_recovery
+      - name: Runtime hotpath tests
+        run: python -B -m unittest tools.tests.test_adiscord_runtime_hotpath_optimization
+      - name: VAL validator
+        run: python -B tools/validate_adiscord_val_rework.py
