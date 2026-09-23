@@ -807,15 +807,17 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = { decision = VAL_pay_quarterly_contract_norm show_effect_tooltip = yes }
 			unlock_decision_tooltip = { decision = VAL_subcontract_quarterly_norm show_effect_tooltip = yes }
-			if = {
-				limit = { NOT = { has_variable = VAL_contract_reputation_level } }
-				set_variable = { var = VAL_contract_reputation_level value = 3 }
-				set_variable = { var = VAL_quarterly_contract_failures value = 0 }
-			}
-			VAL_refresh_contract_reputation = yes
-			if = {
-				limit = { NOT = { has_country_flag = VAL_quarterly_contract_active } }
-				VAL_start_quarterly_contract_norm = yes
+			hidden_effect = {
+				if = {
+					limit = { NOT = { has_variable = VAL_contract_reputation_level } }
+					set_variable = { var = VAL_contract_reputation_level value = 3 }
+					set_variable = { var = VAL_quarterly_contract_failures value = 0 }
+				}
+				VAL_refresh_contract_reputation = yes
+				if = {
+					limit = { NOT = { has_country_flag = VAL_quarterly_contract_active } }
+					VAL_start_quarterly_contract_norm = yes
+				}
 			}
 		}
 		ai_will_do = { base = 2 modifier = { factor = 0.5 has_equipment = { infantry_equipment < 100000 } } }
@@ -835,17 +837,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Factories_Like_Cathedrals }
 		completion_reward = {
 			add_political_power = 30
-			effect_tooltip = {
-				if = {
-					limit = {
-						OR = {
-							NOT = { has_variable = VAL_contract_industry_level }
-							check_variable = { var = VAL_contract_industry_level value = 1 compare = less_than }
-						}
-					}
-					swap_ideas = { remove_idea = VAL_industry_1_dummy add_idea = VAL_industry_1_delta }
-				}
-			}
+			custom_effect_tooltip = VAL_contract_industry_tier_1_tt
 			hidden_effect = {
 				VAL_apply_contract_industry_1 = yes
 			}
@@ -1394,17 +1386,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Salvage_Every_Barrel }
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 producer = VAL }
-			effect_tooltip = {
-				if = {
-					limit = {
-						OR = {
-							NOT = { has_variable = VAL_contract_industry_level }
-							check_variable = { var = VAL_contract_industry_level value = 1 compare = less_than }
-						}
-					}
-					swap_ideas = { remove_idea = VAL_industry_1_dummy add_idea = VAL_industry_1_delta }
-				}
-			}
+			custom_effect_tooltip = VAL_contract_industry_tier_1_tt
 			hidden_effect = { VAL_apply_contract_industry_1 = yes }
 		}
 		ai_will_do = { base = 4 modifier = { factor = 2 has_equipment = { infantry_equipment < 100000 } } }
