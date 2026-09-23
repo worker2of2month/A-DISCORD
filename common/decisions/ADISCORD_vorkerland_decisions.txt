@@ -888,7 +888,19 @@ ADISCORD_vorkerland_collapse_category = {
 		fire_only_once = yes
 		complete_effect = {
 			set_global_flag = ADISCORD_vorkerland_val_contract_signed
-			WKR = { add_ideas = ADISCORD_vorkerland_val_contract_support add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4000 producer = VAL } add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = VAL } }
+			WKR = {
+				add_ideas = ADISCORD_vorkerland_val_contract_support
+				add_equipment_to_stockpile = {
+					type = infantry_equipment_0
+					amount = 4000
+					producer = VAL
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 60
+					producer = VAL
+				}
+			}
 		}
 		ai_will_do = { factor = 100 }
 	}
@@ -899,7 +911,19 @@ ADISCORD_vorkerland_collapse_category = {
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_val_contract_signed } VAD = { exists = yes NOT = { has_capitulated = yes } } }
 		cost = 35
 		fire_only_once = yes
-		complete_effect = { set_global_flag = ADISCORD_vorkerland_val_contract_signed VAD = { add_ideas = ADISCORD_vorkerland_val_contract_support add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4000 producer = VAL } add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = VAL } } }
+		complete_effect = { set_global_flag = ADISCORD_vorkerland_val_contract_signed VAD = {
+				add_ideas = ADISCORD_vorkerland_val_contract_support
+				add_equipment_to_stockpile = {
+					type = infantry_equipment_0
+					amount = 4000
+					producer = VAL
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 60
+					producer = VAL
+				}
+			} }
 		ai_will_do = { factor = 100 }
 	}
 
@@ -909,7 +933,19 @@ ADISCORD_vorkerland_collapse_category = {
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_val_contract_signed } TVA = { exists = yes NOT = { has_capitulated = yes } } }
 		cost = 35
 		fire_only_once = yes
-		complete_effect = { set_global_flag = ADISCORD_vorkerland_val_contract_signed TVA = { add_ideas = ADISCORD_vorkerland_val_contract_support add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4000 producer = VAL } add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = VAL } } }
+		complete_effect = { set_global_flag = ADISCORD_vorkerland_val_contract_signed TVA = {
+				add_ideas = ADISCORD_vorkerland_val_contract_support
+				add_equipment_to_stockpile = {
+					type = infantry_equipment_0
+					amount = 4000
+					producer = VAL
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 60
+					producer = VAL
+				}
+			} }
 		ai_will_do = { factor = 100 }
 	}
 
@@ -1458,15 +1494,177 @@ ADISCORD_vorkerland_focus_operations_category = {
 		fire_only_once = no
 		complete_effect = {
 			ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes
-			if = { limit = { any_neighbor_country = { tag = EYR } EYR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr EYR = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
-			if = { limit = { any_neighbor_country = { tag = EGC } EGC = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc EGC = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
-			if = { limit = { any_neighbor_country = { tag = RIV } RIV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv RIV = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
-			if = { limit = { any_neighbor_country = { tag = REV } REV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev REV = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
-			if = { limit = { any_neighbor_country = { tag = YOR } YOR = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor YOR = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
-			if = { limit = { any_neighbor_country = { tag = NDN } NDN = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn NDN = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
-			if = { limit = { any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb SWB = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
-			if = { limit = { any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv VHV = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
-			if = { limit = { any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } } set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv OSV = { ADISCORD_vorkerland_leave_inherited_faction = yes } }
+			if = {
+				limit = {
+					any_neighbor_country = { tag = EYR }
+					EYR = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = {
+							OR = {
+								has_war_with = WKR
+								has_war_with = VAD
+								has_war_with = TVA
+							}
+						}
+					}
+				}
+				set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr
+				EYR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			}
+			if = {
+				limit = {
+					any_neighbor_country = { tag = EGC }
+					EGC = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = {
+							OR = {
+								has_war_with = WKR
+								has_war_with = VAD
+								has_war_with = TVA
+							}
+						}
+					}
+				}
+				set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc
+				EGC = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			}
+			if = {
+				limit = {
+					any_neighbor_country = { tag = RIV }
+					RIV = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = {
+							OR = {
+								has_war_with = WKR
+								has_war_with = VAD
+								has_war_with = TVA
+							}
+						}
+					}
+				}
+				set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv
+				RIV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			}
+			if = {
+				limit = {
+					any_neighbor_country = { tag = REV }
+					REV = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = {
+							OR = {
+								has_war_with = WKR
+								has_war_with = VAD
+								has_war_with = TVA
+							}
+						}
+					}
+				}
+				set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev
+				REV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			}
+			if = {
+				limit = {
+					any_neighbor_country = { tag = YOR }
+					YOR = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = {
+							OR = {
+								has_war_with = WKR
+								has_war_with = VAD
+								has_war_with = TVA
+							}
+						}
+					}
+				}
+				set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor
+				YOR = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			}
+			if = {
+				limit = {
+					any_neighbor_country = { tag = NDN }
+					NDN = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = {
+							OR = {
+								has_war_with = WKR
+								has_war_with = VAD
+								has_war_with = TVA
+							}
+						}
+					}
+				}
+				set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn
+				NDN = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			}
+			if = {
+				limit = {
+					any_neighbor_country = { tag = SWB }
+					SWB = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = {
+							OR = {
+								has_war_with = WKR
+								has_war_with = VAD
+								has_war_with = TVA
+							}
+						}
+					}
+				}
+				set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb
+				SWB = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			}
+			if = {
+				limit = {
+					any_neighbor_country = { tag = VHV }
+					VHV = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = {
+							OR = {
+								has_war_with = WKR
+								has_war_with = VAD
+								has_war_with = TVA
+							}
+						}
+					}
+				}
+				set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv
+				VHV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			}
+			if = {
+				limit = {
+					any_neighbor_country = { tag = OSV }
+					OSV = {
+						exists = yes
+						is_subject = no
+						NOT = { has_capitulated = yes }
+						NOT = {
+							OR = {
+								has_war_with = WKR
+								has_war_with = VAD
+								has_war_with = TVA
+							}
+						}
+					}
+				}
+				set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv
+				OSV = { ADISCORD_vorkerland_leave_inherited_faction = yes }
+			}
 			if = {
 				limit = {
 					OR = {
