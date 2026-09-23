@@ -308,6 +308,11 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_VAL_Bread_From_Barracks"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Bread_From_Barracks.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_VAL_Reclamation_Survey"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reclamation_Survey.png"
 	}

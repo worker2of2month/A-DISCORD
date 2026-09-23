@@ -508,7 +508,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Bread_From_Barracks
-		icon = GFX_goal_generic_construct_civ_factory
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY }
 		x = -1
 		y = 7
