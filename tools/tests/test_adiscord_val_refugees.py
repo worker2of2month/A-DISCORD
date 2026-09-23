@@ -196,7 +196,7 @@ class RefugeeAdmissionTests(unittest.TestCase):
         for region in (*REGIONS, "perimeter"):
             with self.subTest(region=region):
                 self.facts = {("VAL", "has_country_flag", f"VAL_refugee_{region}_seen"): True,
-                              ("VAL", "ADISCORD_economy_can_spend_250", "yes"): True}
+                              ("VAL", "ADISCORD_economy_can_spend_100", "yes"): True}
                 self.assertTrue(self.visible(region))
                 available = next(e.value for e in self.decisions[f"VAL_accept_{region}_refugees"] if e.key == "available")
                 self.assertFalse(matches_conditions(available, self.facts, "VAL"))
@@ -242,15 +242,18 @@ class RefugeeAdmissionTests(unittest.TestCase):
     def test_admission_cost_capacity_and_single_payment(self):
         for region in REGIONS:
             body = self.decisions[f"VAL_accept_{region}_refugees"]
-            self.assertEqual(scalar(body, "days_re_enable"), "365")
+            self.assertEqual(scalar(body, "days_re_enable"), "90")
+            self.assertEqual(scalar(body, "custom_cost_text"), "VAL_logistics_cost_100")
             reward = next(e.value for e in body if e.key == "complete_effect")
-            self.assertEqual(sum(e.key == "ADISCORD_economy_spend_250" for e in reward), 1)
+            self.assertEqual(sum(e.key == "ADISCORD_economy_spend_100" for e in reward), 1)
+            pressure = next(e.value for e in reward if e.key == "set_temp_variable" and scalar(e.value, "var") == "VAL_black_market_pressure_change")
+            self.assertEqual(scalar(pressure, "value"), "3")
             self.assertFalse(any(e.key == "clr_country_flag" for e in reward))
             population = next(e.value for e in reward if e.key == "add_to_variable" and scalar(e.value, "var") == "VAL_displaced_population")
             expected_amount = {"vorkerland": "30", "stelander": "20", "nodrul": "10", "north": "10"}[region]
             self.assertEqual(scalar(population, "value"), expected_amount)
             available = next(e.value for e in body if e.key == "available")
-            facts = {("VAL", "ADISCORD_economy_can_spend_250", "yes"): True, ("VAL", f"VAL_refugee_{region}_war", "yes"): True}
+            facts = {("VAL", "ADISCORD_economy_can_spend_100", "yes"): True, ("VAL", f"VAL_refugee_{region}_war", "yes"): True}
             self.assertTrue(matches_conditions(available, facts, "VAL"))
             facts[("VAL", "has_country_flag", "VAL_refugee_border_closed")] = True
             self.assertFalse(matches_conditions(available, facts, "VAL"))
@@ -367,7 +370,7 @@ class RefugeeAdmissionTests(unittest.TestCase):
 
     def test_expired_admission_rows_show_reason_without_renewal(self):
         self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
-        self.facts[("VAL", "ADISCORD_economy_can_spend_250", "yes")] = True
+        self.facts[("VAL", "ADISCORD_economy_can_spend_100", "yes")] = True
         for region in (*REGIONS, "perimeter"):
             with self.subTest(region=region):
                 self.facts[("VAL", "has_country_flag", f"VAL_refugee_{region}_seen")] = True
@@ -379,7 +382,7 @@ class RefugeeAdmissionTests(unittest.TestCase):
 
     def test_visible_admission_requires_a_live_war_and_localised_reason(self):
         self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
-        self.facts[("VAL", "ADISCORD_economy_can_spend_250", "yes")] = True
+        self.facts[("VAL", "ADISCORD_economy_can_spend_100", "yes")] = True
         for region in (*REGIONS, "perimeter"):
             with self.subTest(region=region):
                 available = next(e.value for e in self.decisions[f"VAL_accept_{region}_refugees"] if e.key == "available")
@@ -578,13 +581,13 @@ class RefugeeTrainingTests(unittest.TestCase):
 
     def test_training_reserves_people_and_cannot_deliver_twice(self):
         self.decision_effect("VAL_train_refugee_volunteers", "complete_effect")
-        self.assertEqual(self.variables["VAL_displaced_population"], 9.5)
-        self.assertEqual(self.variables["VAL_refugee_training_escrow"], 0.5)
+        self.assertEqual(self.variables["VAL_displaced_population"], 9)
+        self.assertEqual(self.variables["VAL_refugee_training_escrow"], 1)
         self.assertEqual(self.rewards, [("add_political_power", -75), ("equipment", -500)])
         for _ in range(2):
             self.decision_effect("VAL_train_refugee_volunteers", "remove_effect")
         self.decision_effect("VAL_train_refugee_volunteers", "cancel_effect")
-        self.assertEqual(self.rewards, [("add_political_power", -75), ("equipment", -500), ("add_manpower", 5000)])
+        self.assertEqual(self.rewards, [("add_political_power", -75), ("equipment", -500), ("add_manpower", 10000)])
         self.assertNotIn("VAL_refugee_training_escrow", self.variables)
 
     def test_country_loss_refunds_people_and_pp_once_without_recruits(self):
@@ -601,7 +604,7 @@ class RefugeeTrainingTests(unittest.TestCase):
 
     def test_active_training_and_fractional_shortage_block_new_payment(self):
         body = next(e.value for e in self.decisions["VAL_train_refugee_volunteers"] if e.key == "available")
-        for people, active, expected in ((0.499, False, False), (0.5, False, True), (20, True, False)):
+        for people, active, expected in ((0.999, False, False), (1, False, True), (20, True, False)):
             facts = {**self.facts, ("VAL", "variable", "VAL_displaced_population"): people,
                      ("VAL", "has_variable", "VAL_refugee_training_escrow"): active}
             self.assertEqual(matches_conditions(body, facts, "VAL"), expected)
@@ -649,6 +652,15 @@ class RefugeeTrainingTests(unittest.TestCase):
         self.decision_effect("VAL_recruit_local_volunteers", "remove_effect")
         self.assertEqual(self.rewards.count(("add_manpower", 5000)), 1)
         self.assertEqual(self.variables["VAL_local_volunteer_pool"], 0.5)
+
+    def test_housing_expansion_costs_250_for_200k_capacity(self):
+        decision = self.decisions["VAL_expand_refugee_housing"]
+        self.assertEqual(scalar(decision, "custom_cost_text"), "VAL_logistics_cost_250")
+        complete = next(e.value for e in decision if e.key == "complete_effect")
+        self.assertEqual(sum(e.key == "ADISCORD_economy_spend_250" for e in complete), 1)
+        deposit = next(e.value for e in complete if e.key == "set_variable")
+        self.assertEqual(scalar(deposit, "var"), "VAL_housing_deposit")
+        self.assertEqual(scalar(deposit, "value"), "250")
 
     def test_housing_completion_and_failed_completion_cannot_duplicate_receipt(self):
         for sovereign in (True, False):
@@ -948,11 +960,24 @@ class WastelandCampaignTests(unittest.TestCase):
         self.assertEqual(delta(healthy, 0, 3), -5)
 
     def test_custom_training_price_uses_exact_boundaries(self):
-        decisions = load("common/decisions/ADISCORD_VAL_logistics_market_decisions.txt")["VAL_population_markets"]
-        for decision in decisions:
-            if decision.key not in ("VAL_train_refugee_volunteers", "VAL_recruit_local_volunteers"): continue
-            self.assertEqual(scalar(decision.value, "cost"), "0")
-            guard = next(e.value for e in decision.value if e.key == "custom_cost_trigger")
-            for pp, rifles, expected in ((75, 500, True), (74.99, 500, False), (75, 499.99, False)):
-                facts = {("VAL", "numeric", "political_power"): pp, ("VAL", "equipment", "infantry_equipment"): rifles}
+        decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_logistics_market_decisions.txt")["VAL_population_markets"]}
+        for name, pool, threshold, cost_text in (
+            ("VAL_train_refugee_volunteers", "VAL_displaced_population", 1, "VAL_refugee_training_cost"),
+            ("VAL_recruit_local_volunteers", "VAL_local_volunteer_pool", 0.5, "VAL_training_cost"),
+        ):
+            decision = decisions[name]
+            self.assertEqual(scalar(decision, "cost"), "0")
+            self.assertEqual(scalar(decision, "custom_cost_text"), cost_text)
+            guard = next(e.value for e in decision if e.key == "custom_cost_trigger")
+            for pp, rifles, people, expected in (
+                (75, 500, threshold, True),
+                (74.99, 500, threshold, False),
+                (75, 499.99, threshold, False),
+                (75, 500, threshold - 0.001, False),
+            ):
+                facts = {
+                    ("VAL", "numeric", "political_power"): pp,
+                    ("VAL", "equipment", "infantry_equipment"): rifles,
+                    ("VAL", "variable", pool): people,
+                }
                 self.assertEqual(matches_conditions(guard, facts, "VAL"), expected)
