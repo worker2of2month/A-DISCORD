@@ -518,12 +518,12 @@ VAL_reform_mercenary_payroll = {
 # Infantry stock preserves producer and quantity; named variants are not tracked.
 VAL_reserve_export_rifles = {
 	clr_country_flag = VAL_export_rifles_reserved
-	set_temp_variable = { var = VAL_export_rifles_remaining value = 25000 }
-	if = { limit = { has_completed_focus = VAL_Foreign_Broker_Licences } set_temp_variable = { var = VAL_export_rifles_remaining value = 50000 } }
+	set_temp_variable = { var = VAL_export_rifles_remaining value = 2500 }
+	if = { limit = { has_completed_focus = VAL_Foreign_Broker_Licences } set_temp_variable = { var = VAL_export_rifles_remaining value = 5000 } }
 	if = {
 		limit = { OR = {
-			AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 50000 } } }
-			AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 25000 } } }
+			AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 5000 } } }
+			AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 2500 } } }
 		} }
 		every_possible_country = {
 			limit = { VAL = { check_variable = { var = VAL_export_rifles_remaining value = 0 compare = greater_than } } }
@@ -1146,12 +1146,12 @@ VAL_settle_partner_arms = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
 			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 25000 target = ROOT }
+			send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
 			VAL_record_instant_export = yes
 		}
 		if = {
 			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
-			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 25000 } VAL_complete_resource_aid = yes }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 2500 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
 		VAL_contract_record_success = yes
@@ -1173,12 +1173,12 @@ VAL_settle_partner_bulk = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 }
 			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 50000 target = ROOT }
+			send_equipment = { equipment = infantry_equipment amount = 5000 target = ROOT }
 			VAL_record_instant_export = yes
 		}
 		if = {
 			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
-			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 50000 } VAL_complete_resource_aid = yes }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 5000 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
 		VAL_contract_record_success = yes
@@ -1200,12 +1200,12 @@ VAL_settle_partner_arsenal = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = 2250 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2250 }
 			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 100000 target = ROOT }
+			send_equipment = { equipment = infantry_equipment amount = 10000 target = ROOT }
 			VAL_record_instant_export = yes
 		}
 		if = {
 			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
-			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 100000 } VAL_complete_resource_aid = yes }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 10000 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
 		VAL_contract_record_success = yes
@@ -1227,12 +1227,12 @@ VAL_settle_partner_strategic = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = 5000 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 5000 }
 			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 200000 target = ROOT }
+			send_equipment = { equipment = infantry_equipment amount = 20000 target = ROOT }
 			VAL_record_instant_export = yes
 		}
 		if = {
 			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
-			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 200000 } VAL_complete_resource_aid = yes }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 20000 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
 		VAL_contract_record_success = yes
@@ -5358,7 +5358,7 @@ VAL_accept_order_1 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 125 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 125 }
-            set_variable = { var = VAL_order_1_quantity value = 25000 }
+            set_variable = { var = VAL_order_1_quantity value = 2500 }
             set_variable = { var = VAL_order_1_price value = 500 }
             set_variable = { var = VAL_order_1_advance value = 125 }
             set_variable = { var = VAL_order_1_remaining value = 375 }
@@ -5376,7 +5376,7 @@ VAL_accept_order_1 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
-            set_variable = { var = VAL_order_1_quantity value = 50000 }
+            set_variable = { var = VAL_order_1_quantity value = 5000 }
             set_variable = { var = VAL_order_1_price value = 1000 }
             set_variable = { var = VAL_order_1_advance value = 250 }
             set_variable = { var = VAL_order_1_remaining value = 750 }
@@ -5394,7 +5394,7 @@ VAL_accept_order_1 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 562.5 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 562.5 }
-            set_variable = { var = VAL_order_1_quantity value = 100000 }
+            set_variable = { var = VAL_order_1_quantity value = 10000 }
             set_variable = { var = VAL_order_1_price value = 2250 }
             set_variable = { var = VAL_order_1_advance value = 562.5 }
             set_variable = { var = VAL_order_1_remaining value = 1687.5 }
@@ -5412,7 +5412,7 @@ VAL_accept_order_1 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 1250 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1250 }
-            set_variable = { var = VAL_order_1_quantity value = 200000 }
+            set_variable = { var = VAL_order_1_quantity value = 20000 }
             set_variable = { var = VAL_order_1_price value = 5000 }
             set_variable = { var = VAL_order_1_advance value = 1250 }
             set_variable = { var = VAL_order_1_remaining value = 3750 }
@@ -5494,7 +5494,7 @@ VAL_accept_order_2 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 125 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 125 }
-            set_variable = { var = VAL_order_2_quantity value = 25000 }
+            set_variable = { var = VAL_order_2_quantity value = 2500 }
             set_variable = { var = VAL_order_2_price value = 500 }
             set_variable = { var = VAL_order_2_advance value = 125 }
             set_variable = { var = VAL_order_2_remaining value = 375 }
@@ -5512,7 +5512,7 @@ VAL_accept_order_2 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
-            set_variable = { var = VAL_order_2_quantity value = 50000 }
+            set_variable = { var = VAL_order_2_quantity value = 5000 }
             set_variable = { var = VAL_order_2_price value = 1000 }
             set_variable = { var = VAL_order_2_advance value = 250 }
             set_variable = { var = VAL_order_2_remaining value = 750 }
@@ -5530,7 +5530,7 @@ VAL_accept_order_2 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 562.5 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 562.5 }
-            set_variable = { var = VAL_order_2_quantity value = 100000 }
+            set_variable = { var = VAL_order_2_quantity value = 10000 }
             set_variable = { var = VAL_order_2_price value = 2250 }
             set_variable = { var = VAL_order_2_advance value = 562.5 }
             set_variable = { var = VAL_order_2_remaining value = 1687.5 }
@@ -5548,7 +5548,7 @@ VAL_accept_order_2 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 1250 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1250 }
-            set_variable = { var = VAL_order_2_quantity value = 200000 }
+            set_variable = { var = VAL_order_2_quantity value = 20000 }
             set_variable = { var = VAL_order_2_price value = 5000 }
             set_variable = { var = VAL_order_2_advance value = 1250 }
             set_variable = { var = VAL_order_2_remaining value = 3750 }
@@ -5724,10 +5724,10 @@ VAL_accept_quarterly_order_1 = {
   activate_mission = VAL_order_1_deadline
   add_days_mission_timeout = { mission = VAL_order_1_deadline days = 60 }
  }
- if = { limit = { check_variable = { var = VAL_order_quote_tier value = 1 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 25000 } set_variable = { var = VAL_order_1_price value = 500 } set_variable = { var = VAL_order_1_remaining value = 500 } } }
- if = { limit = { check_variable = { var = VAL_order_quote_tier value = 2 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 50000 } set_variable = { var = VAL_order_1_price value = 1000 } set_variable = { var = VAL_order_1_remaining value = 1000 } } }
- if = { limit = { check_variable = { var = VAL_order_quote_tier value = 3 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 100000 } set_variable = { var = VAL_order_1_price value = 2250 } set_variable = { var = VAL_order_1_remaining value = 2250 } } }
- if = { limit = { check_variable = { var = VAL_order_quote_tier value = 4 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 200000 } set_variable = { var = VAL_order_1_price value = 5000 } set_variable = { var = VAL_order_1_remaining value = 5000 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 1 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 2500 } set_variable = { var = VAL_order_1_price value = 500 } set_variable = { var = VAL_order_1_remaining value = 500 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 2 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 5000 } set_variable = { var = VAL_order_1_price value = 1000 } set_variable = { var = VAL_order_1_remaining value = 1000 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 3 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 10000 } set_variable = { var = VAL_order_1_price value = 2250 } set_variable = { var = VAL_order_1_remaining value = 2250 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 4 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 20000 } set_variable = { var = VAL_order_1_price value = 5000 } set_variable = { var = VAL_order_1_remaining value = 5000 } } }
  VAL = { VAL_refresh_order_summary = yes }
  VAL_begin_partner_contract_year = yes
  VAL_close_order_offer = yes
@@ -5828,10 +5828,10 @@ VAL_accept_quarterly_order_2 = {
   activate_mission = VAL_order_2_deadline
   add_days_mission_timeout = { mission = VAL_order_2_deadline days = 60 }
  }
- if = { limit = { check_variable = { var = VAL_order_quote_tier value = 1 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 25000 } set_variable = { var = VAL_order_2_price value = 500 } set_variable = { var = VAL_order_2_remaining value = 500 } } }
- if = { limit = { check_variable = { var = VAL_order_quote_tier value = 2 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 50000 } set_variable = { var = VAL_order_2_price value = 1000 } set_variable = { var = VAL_order_2_remaining value = 1000 } } }
- if = { limit = { check_variable = { var = VAL_order_quote_tier value = 3 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 100000 } set_variable = { var = VAL_order_2_price value = 2250 } set_variable = { var = VAL_order_2_remaining value = 2250 } } }
- if = { limit = { check_variable = { var = VAL_order_quote_tier value = 4 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 200000 } set_variable = { var = VAL_order_2_price value = 5000 } set_variable = { var = VAL_order_2_remaining value = 5000 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 1 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 2500 } set_variable = { var = VAL_order_2_price value = 500 } set_variable = { var = VAL_order_2_remaining value = 500 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 2 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 5000 } set_variable = { var = VAL_order_2_price value = 1000 } set_variable = { var = VAL_order_2_remaining value = 1000 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 3 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 10000 } set_variable = { var = VAL_order_2_price value = 2250 } set_variable = { var = VAL_order_2_remaining value = 2250 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 4 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 20000 } set_variable = { var = VAL_order_2_price value = 5000 } set_variable = { var = VAL_order_2_remaining value = 5000 } } }
  VAL = { VAL_refresh_order_summary = yes }
  VAL_begin_partner_contract_year = yes
  VAL_close_order_offer = yes
