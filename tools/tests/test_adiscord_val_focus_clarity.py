@@ -106,6 +106,52 @@ class KefreytFocusClarityTests(unittest.TestCase):
         self.assertIn("prerequisite = { focus = VAL_Contracts_Outlive_Kings }", tsaygen)
         self.assertIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", tsaygen)
 
+    def test_same_row_focuses_keep_visual_clearance(self) -> None:
+        positions: list[tuple[str, int, int]] = []
+        for match in re.finditer(r"(?m)^\\s*focus\\s*=\\s*\\{", self.focuses):
+            start = match.start()
+            opening = self.focuses.find("{", start)
+            depth = 0
+            quoted = False
+            escaped = False
+            for index in range(opening, len(self.focuses)):
+                char = self.focuses[index]
+                if quoted:
+                    if escaped:
+                        escaped = False
+                    elif char == "\\":
+                        escaped = True
+                    elif char == '"':
+                        quoted = False
+                    continue
+                if char == '"':
+                    quoted = True
+                elif char == "{":
+                    depth += 1
+                elif char == "}":
+                    depth -= 1
+                    if depth == 0:
+                        body = self.focuses[start:index + 1]
+                        id_match = re.search(r"\\bid\\s*=\\s*([A-Za-z0-9_]+)", body)
+                        x_match = re.search(r"(?m)^\\s*x\\s*=\\s*(-?\\d+)", body)
+                        y_match = re.search(r"(?m)^\\s*y\\s*=\\s*(-?\\d+)", body)
+                        if id_match and x_match and y_match:
+                            positions.append((id_match.group(1), int(x_match.group(1)), int(y_match.group(1))))
+                        break
+
+        rows: dict[int, list[tuple[int, str]]] = {}
+        for focus_id, x, y in positions:
+            rows.setdefault(y, []).append((x, focus_id))
+
+        for y, row in rows.items():
+            row.sort()
+            for (left_x, left_id), (right_x, right_id) in zip(row, row[1:]):
+                self.assertGreaterEqual(
+                    right_x - left_x,
+                    2,
+                    f"Focus nodes visually merge on row {y}: {left_id} at x={left_x}, {right_id} at x={right_x}",
+                )
+
     def test_population_and_cannibal_routes_no_longer_wait_for_late_spine(self) -> None:
         harvest = focus(self.focuses, "VAL_The_Harvest_Of_Ash")
         self.assertIn("prerequisite = { focus = VAL_The_Contract_State }", harvest)
