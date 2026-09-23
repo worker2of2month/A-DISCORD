@@ -1531,6 +1531,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         approach = event_block(events, "ADISCORD_vorkerland_collapse.3")
         detonation = event_block(events, "ADISCORD_vorkerland_collapse.4")
         settle = event_block(events, "ADISCORD_vorkerland_collapse.5")
+        fate_report = event_block(events, "ADISCORD_vorkerland_collapse.6")
         self.assertIn(f"goto_province = {UNITY_TOWER_PROVINCE}", approach)
         self.assertIn(
             "country_event = { id = ADISCORD_vorkerland_collapse.4 hours = 1 }",
@@ -1550,6 +1551,16 @@ class BorderWarArchitectureTests(unittest.TestCase):
         )
         self.assertEqual(
             detonation.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes"), 1,
+        )
+        self.assertIn(
+            "WKR = { country_event = { id = ADISCORD_vorkerland_collapse.6 days = 1 } }",
+            detonation,
+        )
+        self.assertNotIn("ADISCORD_vorkerland_story_report_worker_fate = yes", outbreak)
+        self.assertIn("ADISCORD_vorkerland_story_report_worker_fate = yes", fate_report)
+        self.assertLess(
+            detonation.find("launch_nuke = {"),
+            detonation.find("ADISCORD_vorkerland_collapse.6 days = 1"),
         )
         self.assertIn(
             "country_event = { id = ADISCORD_vorkerland_collapse.5 days = 30 }",
