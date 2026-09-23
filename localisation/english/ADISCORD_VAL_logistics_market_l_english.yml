@@ -3,7 +3,7 @@
  VAL_trade_corridors_desc: "Kefreyt can no longer treat trade as a line in a ledger. Cargo must physically pass through ports, depots, passes and dependent administrations.\n\nOperational corridors: §Y[?VAL_trade_corridors_active|0]/[?VAL_trade_corridors_capacity|0]§! commissioned\nRoute security: §Y[?VAL_corridor_security|0]/3§!\nGrey-market pressure: §Y[?VAL_black_market_pressure|0]/100§!\n\nEach open route brings §G20§! to the treasury every week. An upgraded route adds another §G10§!. A route only becomes an obligation after it has actually opened once; losing a key node thereafter stops the payment and feeds smuggling. Income amounts are before grey-market losses."
 
  VAL_population_markets: "Population and Refugees"
- VAL_population_markets_desc:0 "£population_texticon Available refugees: §Y[?VAL_displaced_population|1]§! × §Y10,000§!\n£population_texticon Housing used: §Y[?VAL_population_present|1]§! / §Y[?VAL_refugee_housing|0]§! × §Y10,000§!\n£manpower_texticon Local reserve: §Y[?VAL_local_volunteer_pool|1]§! × §Y10,000§!\n\nAdmissions add people to the free reserve. Training turns §Y10,000§! refugees into army manpower in §Y35 days§!. Labour contracts reserve §Y100,000§! people for §Y90 days§!."
+ VAL_population_markets_desc:0 "£population_texticon Available refugees: §Y[?VAL_displaced_population|1]§! × §Y10,000§!\n£population_texticon Housing used: §Y[?VAL_population_present|1]§! / §Y[?VAL_refugee_housing|0]§! × §Y10,000§!\n£manpower_texticon Local reserve: §Y[?VAL_local_volunteer_pool|1]§! × §Y10,000§!\n\nAdmissions and settlement bounties add civilians. Naturalization builds the local reserve. Training and emergency contracts turn those reserves into manpower."
 
  VAL_logistics_cost_50: "£ADISCORD_economy_treasury_texticon  §Y50§!"
  VAL_logistics_cost_100: "£ADISCORD_economy_treasury_texticon  §Y100§!"
@@ -120,6 +120,19 @@
  VAL_refugee_perimeter_active_tt:0 "The Perimeter is open. Admission is available once every §Y90 days§!."
 
  VAL_local_training_start_tt:0 "Reserve £population_texticon §Y5,000§! local volunteers for §Y35 days§!. Cancellation returns the volunteers, §Y75§! £political_power_texticon and £infantry_equipment_texticon §Y5000§! infantry equipment."
+
+ VAL_offer_settlement_bounties:0 "Offer Settlement Bounties"
+ VAL_offer_settlement_bounties_desc:0 "Pay relocation grants and guaranteed first contracts to attract workers and families from outside Kefreyt. The programme brings §Y30,000§! new civilians into the refugee system, costs §Y250§! treasury funds and raises grey-market pressure by §R2§!. Available once every §Y90 days§!."
+ VAL_settlement_bounties_tt:0 "Gain £population_texticon §Y30,000§! available settlers. Grey-market pressure: §R+2§!."
+
+ VAL_naturalize_refugee_households:0 "Naturalize Refugee Households"
+ VAL_naturalize_refugee_households_desc:0 "Move established refugee households out of temporary status and into permanent contract citizenship. §Y20,000§! refugees leave the free refugee pool and create §Y10,000§! people in the local service reserve. Cost: §Y50§! political power. Available once every §Y45 days§!."
+ VAL_naturalization_result_tt:0 "Convert £population_texticon §Y20,000§! refugees into £manpower_texticon §Y10,000§! local service reserve. Grey-market pressure: §G-1§!."
+
+ VAL_emergency_service_contracts:0 "Issue Emergency Service Contracts"
+ VAL_emergency_service_contracts_desc:0 "Bypass the normal training cycle and mobilize a full block of local contract reservists. Spend §Y500§! treasury funds, §Y25§! command power, £infantry_equipment_texticon §Y10,000§! infantry equipment and £population_texticon §Y10,000§! local reserve to gain £manpower_texticon §Y10,000§! manpower immediately. Stability: §R-1%§!. Available once every §Y90 days§!."
+ VAL_emergency_service_cost:0 "£ADISCORD_economy_treasury_texticon §Y500§!  £command_power §Y25§!  £infantry_equipment_texticon §Y10000§!  £population_texticon §Y10000§!"
+ VAL_emergency_service_result_tt:0 "Gain £manpower_texticon §Y10,000§! manpower immediately. Stability: §R-1%§!."
 
  VAL_recruit_local_volunteers:0 "Recruit local volunteers"
 
