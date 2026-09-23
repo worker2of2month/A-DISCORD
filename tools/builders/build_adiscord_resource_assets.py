@@ -982,8 +982,8 @@ def _right_cluster_background() -> Image.Image:
             width=2,
         )
 
-    # DEFCON has its own vertical instrument bay; the TFR texture supplies the
-    # coloured number and label, while the engine still supplies the percent.
+    # DEFCON has its own vertical instrument bay. The source texture supplies
+    # the coloured number and label, while the engine supplies the percent.
     draw.rounded_rectangle((244, 0, 310, 98), radius=11, fill=(18, 29, 33, 255), outline=black, width=2)
     draw.rounded_rectangle((247, 3, 307, 95), radius=9, fill=(10, 20, 23, 255), outline=cyan_dark, width=2)
     draw.rounded_rectangle((250, 6, 304, 92), radius=7, outline=steel_soft, width=1)
