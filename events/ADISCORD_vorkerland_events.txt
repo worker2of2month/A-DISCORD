@@ -1390,7 +1390,7 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		tag = IVN
+		OR = { tag = IVN tag = PWR tag = PSD tag = ZAO tag = WPA tag = WPS }
 		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
 		NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_restored }
 	}
@@ -1407,7 +1407,7 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		tag = IVN
+		OR = { tag = IVN tag = PWR tag = PSD tag = ZAO tag = WPA tag = WPS }
 		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
 		NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_restored }
 	}
@@ -1574,7 +1574,7 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		tag = IVN
+		OR = { tag = IVN tag = PWR tag = PSD tag = ZAO tag = WPA tag = WPS }
 		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
 		NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_restored }
 	}
@@ -1959,7 +1959,14 @@ news_event = {
 news_event = {
 	id = ADISCORD_vorkerland_news.2
 	title = ADISCORD_vorkerland_news.2.t
-	desc = ADISCORD_vorkerland_news.2.d
+	desc = {
+		text = ADISCORD_vorkerland_news.2.capitulated
+		trigger = { has_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention }
+	}
+	desc = {
+		text = ADISCORD_vorkerland_news.2.d
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention } }
+	}
 	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
 	major = yes
 	is_triggered_only = yes
