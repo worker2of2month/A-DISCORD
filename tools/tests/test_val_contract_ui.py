@@ -1654,9 +1654,9 @@ class ValQuarterlySupplyTests(unittest.TestCase):
         for slot in (1, 2):
             prefix = f"VAL_order_{slot}"
             flags = {prefix+"_quarterly"}
-            values = {prefix+"_state": 1, prefix+"_completed": 0, prefix+"_remaining": 500, prefix+"_quantity": 25000}
+            values = {prefix+"_state": 1, prefix+"_completed": 0, prefix+"_remaining": 500, prefix+"_quantity": 2500}
             cash = {"VAL": 0, "buyer": 2000}
-            equipment = {"VAL": 100000, "buyer": 0}
+            equipment = {"VAL": 10000, "buyer": 0}
             events = []
             timer = [90]
             def number(value):
@@ -1671,7 +1671,7 @@ class ValQuarterlySupplyTests(unittest.TestCase):
                     elif e.key == "has_country_flag": answer = e.value in flags
                     elif e.key == "has_capitulated": answer = False
                     elif e.key.startswith("event_target:"): answer = True
-                    elif e.key == prefix+"_can_dispatch": answer = prefix+"_quarter_paid" not in flags and prefix+"_expired" not in flags and cash["buyer"] >= 500 and equipment["VAL"] >= 25000
+                    elif e.key == prefix+"_can_dispatch": answer = prefix+"_quarter_paid" not in flags and prefix+"_expired" not in flags and cash["buyer"] >= 500 and equipment["VAL"] >= 2500
                     elif e.key == "check_variable":
                         a=values.get(scalar(e.value,"var"),0);b=number(scalar(e.value,"value"));op=scalar(e.value,"compare")
                         answer={"equals":a==b,"greater_than_or_equals":a>=b}[op]
@@ -1713,7 +1713,7 @@ class ValQuarterlySupplyTests(unittest.TestCase):
                 run(effects[prefix+"_quarterly_reconcile"])
                 if quarter<3: self.assertEqual(timer[0],95 if quarter==2 else 90)
             self.assertEqual(cash,{"VAL":2000,"buyer":0})
-            self.assertEqual(equipment,{"VAL":0,"buyer":100000})
+            self.assertEqual(equipment,{"VAL":0,"buyer":10000})
             self.assertEqual(events,["val_contract.420"])
             self.assertEqual(values[prefix+"_state"],0)
             # A missed quarter grants exactly 15 days, then cancellation frees the slot.
