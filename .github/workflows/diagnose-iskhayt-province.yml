@@ -1,4 +1,4 @@
-name: Diagnose Iskhayt capital province
+name: Diagnose Iskhayt micro-adjacencies
 
 on:
   push:
@@ -15,161 +15,135 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Pillow
         run: python -m pip install --disable-pip-version-check pillow
-      - name: Diagnose province 16372
+      - name: Audit local one-pixel borders
         shell: bash
         run: |
           python - <<'PY'
           from __future__ import annotations
-          import csv, math, re
-          from collections import Counter, defaultdict, deque
+          import csv,re
+          from collections import Counter,defaultdict
           from pathlib import Path
           from PIL import Image
 
-          TARGET=16372
-          COMPARE={6,48,85,16372,16646}
           rgb_to_id={}
-          id_to_rgb={}
           definition={}
           with open("map/definition.csv",encoding="utf-8-sig",newline="") as fh:
               for row in csv.reader(fh,delimiter=";"):
                   if len(row)>=8 and row[0].isdigit():
                       pid=int(row[0]); rgb=tuple(map(int,row[1:4]))
-                      rgb_to_id[rgb]=pid; id_to_rgb[pid]=rgb; definition[pid]=row
+                      rgb_to_id[rgb]=pid; definition[pid]=row
 
+          states={}
           state_by={}
           for path in Path("history/states").glob("*.txt"):
               text=path.read_text(encoding="utf-8-sig",errors="replace")
               mi=re.search(r"\bid\s*=\s*(\d+)",text)
               mp=re.search(r"\bprovinces\s*=\s*\{([^}]*)\}",text,re.S)
               if not (mi and mp): continue
-              sid=int(mi.group(1))
-              for tok in re.findall(r"\d+",mp.group(1)):
-                  state_by.setdefault(int(tok),[]).append(sid)
+              sid=int(mi.group(1)); ps=set(map(int,re.findall(r"\d+",mp.group(1))))
+              states[sid]=ps
+              for p in ps: state_by[p]=sid
 
-          prov=Image.open("map/provinces.bmp").convert("RGB")
-          w,h=prov.size
-          ppx=prov.load()
-          coords=defaultdict(list)
+          focus_states=set(range(13,23))
+          focus_provs=set().union(*(states.get(s,set()) for s in focus_states))
+
+          im=Image.open("map/provinces.bmp").convert("RGB")
+          w,h=im.size; px=im.load()
           grid=[-1]*(w*h)
           for y in range(h):
               for x in range(w):
-                  pid=rgb_to_id.get(ppx[x,y],-1)
-                  grid[y*w+x]=pid
-                  if pid in COMPARE: coords[pid].append((x,y))
+                  grid[y*w+x]=rgb_to_id.get(px[x,y],-1)
 
-          def adjacency_counts(pid):
-              c=Counter()
-              for x,y in coords[pid]:
-                  for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
-                      nx,ny=x+dx,y+dy
-                      if 0<=nx<w and 0<=ny<h:
-                          q=grid[ny*w+nx]
-                          if q!=pid: c[q]+=1
-              return c
-
-          def components(pid):
-              rem=set(coords[pid]); out=[]
-              while rem:
-                  s=rem.pop(); q=[s]; n=1
-                  while q:
-                      x,y=q.pop()
-                      for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
-                          p=(x+dx,y+dy)
-                          if p in rem: rem.remove(p); q.append(p); n+=1
-                  out.append(n)
-              return sorted(out,reverse=True)
-
-          print("TARGET DEF",definition[TARGET])
-          print("TARGET STATE",state_by.get(TARGET))
-          for pid in sorted(COMPARE):
-              pts=coords[pid]
-              xs=[x for x,y in pts]; ys=[y for x,y in pts]
-              print("GEOM",pid,{
-                  "area":len(pts),
-                  "bbox":[min(xs),min(ys),max(xs),max(ys)],
-                  "components":components(pid),
-                  "adj":[(n,c,state_by.get(n),definition.get(n,[None]*8)[4] if n in definition else None) for n,c in adjacency_counts(pid).most_common()]
-              })
-
-          # Hole / one-pixel neck checks for target.
-          target=set(coords[TARGET])
-          articulation=[]
-          for removed in target:
-              rest=target-{removed}
-              s=next(iter(rest)); seen={s}; q=[s]
-              while q:
-                  x,y=q.pop()
-                  for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
-                      p=(x+dx,y+dy)
-                      if p in rest and p not in seen:
-                          seen.add(p); q.append(p)
-              if len(seen)!=len(rest): articulation.append(removed)
-          print("ARTICULATION",articulation)
-
-          # Anchors from unitstacks.
-          rows=[]
-          for raw in Path("map/unitstacks.txt").read_text(encoding="utf-8-sig",errors="replace").splitlines():
-              f=raw.split(";")
-              if f and f[0].isdigit() and int(f[0])==TARGET:
-                  rows.append(raw)
-          print("UNITSTACK TARGET")
-          for r in rows: print(r)
-          type0=[r.split(";") for r in rows if r.split(";")[1]=="0"][0]
-          x=float(type0[2]); z=float(type0[4]); mx=round(x); my=h-1-round(z)
-          print("TYPE0 PIXEL",mx,my,"province",grid[my*w+mx])
-
-          # Rail route validation.
-          adj=defaultdict(set)
+          borders=Counter()
+          contacts=defaultdict(list)
           for y in range(h):
               for x in range(w):
                   a=grid[y*w+x]
                   if x+1<w:
                       b=grid[y*w+x+1]
-                      if a!=b: adj[a].add(b); adj[b].add(a)
+                      if a!=b and (a in focus_provs or b in focus_provs):
+                          k=tuple(sorted((a,b))); borders[k]+=1; contacts[k].append((x,y,x+1,y))
                   if y+1<h:
                       b=grid[(y+1)*w+x]
-                      if a!=b: adj[a].add(b); adj[b].add(a)
-          print("RAILS")
-          for raw in Path("map/railways.txt").read_text(encoding="utf-8-sig",errors="replace").splitlines():
-              parts=raw.split()
-              if str(TARGET) not in parts: continue
-              route=list(map(int,parts[2:]))
-              print(raw)
-              print([(a,b,b in adj[a]) for a,b in zip(route,route[1:])])
+                      if a!=b and (a in focus_provs or b in focus_provs):
+                          k=tuple(sorted((a,b))); borders[k]+=1; contacts[k].append((x,y,x,y+1))
 
-          for p in ["map/supply_nodes.txt","map/buildings.txt","map/weatherpositions.txt"]:
-              path=Path(p)
-              print("REF",p)
-              if path.exists():
-                  hits=[raw for raw in path.read_text(encoding="utf-8-sig",errors="replace").splitlines() if re.search(rf"(?<!\d){TARGET}(?!\d)",raw)]
-                  for hit in hits: print(hit)
-                  print("count",len(hits))
+          print("SHORT CROSS-STATE LAND BORDERS <= 4 EDGES")
+          short=[]
+          for (a,b),n in sorted(borders.items(),key=lambda kv:(kv[1],kv[0])):
+              sa,sb=state_by.get(a),state_by.get(b)
+              if sa==sb or sa not in focus_states or sb not in focus_states: continue
+              if definition.get(a,[None]*8)[4]!="land" or definition.get(b,[None]*8)[4]!="land": continue
+              if n<=4:
+                  short.append((a,b,n,sa,sb))
+                  print(a,b,"edges",n,"states",sa,sb,"contacts",contacts[(a,b)])
 
-          # Sample relevant visual/map layers over target and compare neighbours.
-          layer_paths=["map/heightmap.bmp","map/terrain.bmp","map/rivers.bmp","map/cities.bmp","map/trees.bmp"]
-          for lp in layer_paths:
-              path=Path(lp)
-              if not path.exists(): continue
-              im=Image.open(path)
-              print("LAYER",lp,"mode",im.mode,"size",im.size)
-              if im.size != prov.size:
-                  print("  size differs from provinces; skipped pixel comparison")
-                  continue
-              for pid in sorted(COMPARE):
-                  vals=[im.getpixel((x,y)) for x,y in coords[pid]]
-                  counts=Counter(vals)
-                  print(" ",pid,"minmax", (min(vals),max(vals)) if vals and isinstance(vals[0],int) else "n/a","top",counts.most_common(12))
+          def local_ascii(pair):
+              a,b=pair
+              cs=contacts[pair]
+              xs=[]; ys=[]
+              for x1,y1,x2,y2 in cs:
+                  xs += [x1,x2]; ys += [y1,y2]
+              cx=sum(xs)//len(xs); cy=sum(ys)//len(ys)
+              x0,x1=cx-5,cx+5; y0,y1=cy-5,cy+5
+              nearby=sorted(set(grid[y*w+x] for y in range(max(0,y0),min(h,y1+1)) for x in range(max(0,x0),min(w,x1+1))))
+              alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+              mapping={}
+              for i,p in enumerate(nearby):
+                  mapping[p]=alphabet[i] if i<len(alphabet) else "?"
+              print("PAIR",a,b,"mapping",[(mapping[p],p,state_by.get(p)) for p in nearby])
+              for y in range(y0,y1+1):
+                  row=""
+                  for x in range(x0,x1+1):
+                      row+=mapping.get(grid[y*w+x],"?")
+                  print(f"{y:04d}",row)
 
-          # Detect 2x2 checkerboard / X-junctions touching TARGET, which are notorious
-          # for ambiguous corner topology in Clausewitz maps.
-          xs=[x for x,y in target]; ys=[y for x,y in target]
-          x0,x1=min(xs)-2,max(xs)+2; y0,y1=min(ys)-2,max(ys)+2
-          crosses=[]
-          for y in range(y0,y1):
-              for x in range(x0,x1):
-                  a=grid[y*w+x]; b=grid[y*w+x+1]
-                  c=grid[(y+1)*w+x]; d=grid[(y+1)*w+x+1]
-                  if a==d and b==c and a!=b and TARGET in (a,b,c,d):
-                      crosses.append((x,y,a,b,c,d))
-          print("X_JUNCTIONS",crosses)
+          for pair in [(6,127),(51,108),(6,85),(81,16646)]:
+              k=tuple(sorted(pair))
+              if k in borders:
+                  print("DETAIL",pair,"edges",borders[k],"contacts",contacts[k])
+                  local_ascii(k)
+
+          # Detect if a short border comes from a removable one-pixel spur on either side.
+          print("REMOVABLE SPUR TEST")
+          coords=defaultdict(set)
+          relevant=set()
+          for a,b,n,sa,sb in short: relevant.update((a,b))
+          for y in range(h):
+              for x in range(w):
+                  p=grid[y*w+x]
+                  if p in relevant: coords[p].add((x,y))
+
+          def connected(points):
+              if not points: return False
+              start=next(iter(points)); seen={start}; q=[start]
+              while q:
+                  x,y=q.pop()
+                  for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
+                      z=(x+dx,y+dy)
+                      if z in points and z not in seen:
+                          seen.add(z); q.append(z)
+              return len(seen)==len(points)
+
+          for a,b,n,sa,sb in short:
+              k=(a,b) if a<b else (b,a)
+              contact_pixels=set()
+              for x1,y1,x2,y2 in contacts[k]:
+                  contact_pixels.update(((x1,y1),(x2,y2)))
+              for p in (a,b):
+                  candidates=[pt for pt in contact_pixels if pt in coords[p]]
+                  removable=[]
+                  for pt in candidates:
+                      rest=coords[p]-{pt}
+                      if connected(rest):
+                          # if removing this pixel destroys the a-b adjacency
+                          x,y=pt
+                          touching=False
+                          other=b if p==a else a
+                          for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
+                              q=(x+dx,y+dy)
+                              if q in coords[other]: touching=True
+                          if touching: removable.append(pt)
+                  if removable:
+                      print("pair",a,b,"province",p,"removable_contact_pixels",removable)
           PY
