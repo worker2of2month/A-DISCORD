@@ -231,6 +231,380 @@ VAL_military_operations = {
 		ai_will_do = { base = 4 }
 	}
 
+
+	# Offensive campaigns and their preparation belong in Military Operations.
+
+	VAL_final_reconnaissance = {
+		icon = generic_intelligence_exchange
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = { VAL_final_crisis_preparing = yes check_variable = { var = VAL_final_escalation value = 25 compare = greater_than_or_equals } NOT = { check_variable = { var = VAL_final_planning_bonus value = 0 compare = greater_than } } }
+		cost = 75
+		days_remove = 21
+		complete_effect = { custom_effect_tooltip = VAL_final_reconnaissance_start_tt }
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals } } } }
+		cancel_effect = { add_political_power = 75 }
+		remove_effect = {
+			if = {
+				limit = { has_capitulated = no is_subject = no check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } }
+				add_intel = { target = NOD army_intel = 20 }
+				hidden_effect = { set_variable = { var = VAL_final_planning_bonus value = 0.15 } if = { limit = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } force_update_dynamic_modifier = yes } }
+				custom_effect_tooltip = VAL_final_reconnaissance_ready_tt
+			}
+			else = { add_political_power = 75 }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_final_stockpile_supplies = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = { VAL_final_crisis_preparing = yes NOT = { check_variable = { var = VAL_final_supply_bonus value = 0 compare = less_than } } }
+		available = { ADISCORD_economy_can_spend_500 = yes NOT = { has_variable = VAL_final_supply_deposit } }
+		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
+		custom_cost_text = VAL_logistics_cost_500
+		cost = 0
+		days_remove = 35
+		complete_effect = {
+			ADISCORD_economy_spend_500 = yes
+			custom_effect_tooltip = VAL_final_supply_preparation_tt
+			hidden_effect = { set_variable = { var = VAL_final_supply_deposit value = 500 } }
+		}
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals } } } }
+		cancel_effect = { VAL_final_refund_supply_order = yes }
+		remove_effect = {
+			if = {
+				limit = { has_variable = VAL_final_supply_deposit has_capitulated = no is_subject = no check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } }
+				hidden_effect = {
+					clear_variable = VAL_final_supply_deposit
+					set_variable = { var = VAL_final_supply_bonus value = -0.10 }
+					if = {
+						limit = {
+							has_dynamic_modifier = { modifier = VAL_final_war_preparation }
+						}
+						force_update_dynamic_modifier = yes
+					}
+				}
+				custom_effect_tooltip = VAL_final_supply_ready_tt
+			}
+			else = { VAL_final_refund_supply_order = yes }
+		}
+		ai_will_do = { base = 12 }
+	}
+
+	VAL_final_register_reserves = {
+		icon = generic_manpower
+		allowed = { tag = VAL }
+		cancel_if_not_visible = no
+		visible = { VAL_final_crisis_preparing = yes OR = { has_idea = volunteer_only has_idea = disarmed_nation } }
+		available = { has_war_support > 0.1 }
+		cost = 150
+		days_remove = 28
+		complete_effect = { custom_effect_tooltip = VAL_final_reserve_registration_tt }
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals } } } }
+		cancel_effect = { add_political_power = 150 }
+		remove_effect = {
+			if = {
+				limit = { has_capitulated = no is_subject = no check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } OR = { has_idea = volunteer_only has_idea = disarmed_nation } }
+				add_ideas = limited_conscription
+			}
+			else = { add_political_power = 150 }
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	VAL_nod_ultimatum = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		activation = { always = no }
+		visible = { VAL_frontier_decisions_visible = yes has_active_mission = VAL_nod_ultimatum }
+		available = { custom_trigger_tooltip = { tooltip = VAL_nod_ultimatum_objective_tt VAL_frontier_target_occupied = yes VAL_frontier_members_beaten = yes } }
+		selectable_mission = no
+		is_good = no
+		days_mission_timeout = 100
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nod_ultimatum_cancel_tt
+				OR = {
+					NOT = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+					has_capitulated = yes
+					is_subject = yes
+					NOT = { OR = { has_war_with = CIN has_war_with = OSF has_war_with = APH } }
+					NOD = { OR = { exists = no has_capitulated = yes is_in_faction_with = VAL has_war_with = VAL AND = { is_subject = yes NOT = { is_subject_of = STP } } } }
+				}
+			}
+		}
+		complete_effect = { custom_effect_tooltip = VAL_nod_ultimatum_success_tt hidden_effect = { country_event = { id = val_rework.119 hours = 1 } } }
+		timeout_effect = { custom_effect_tooltip = VAL_nod_ultimatum_timeout_tt hidden_effect = { set_country_flag = VAL_nod_ultimatum_expired country_event = { id = val_rework.119 hours = 1 } } }
+	}
+
+	VAL_frontier_begin_offensive = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
+		available = { VAL_frontier_prewar_eligible = yes has_war = no }
+		cost = 0
+		complete_effect = { custom_effect_tooltip = VAL_frontier_war_tt hidden_effect = { VAL_frontier_start_war = yes } }
+		ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
+	}
+
+	VAL_frontier_withdraw_demand = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
+		cost = 0
+		complete_effect = { custom_effect_tooltip = VAL_frontier_withdraw_tt hidden_effect = { VAL_frontier_withdraw_and_defer = yes } }
+		ai_will_do = { base = 0 }
+	}
+
+	VAL_frontier_transport_contract = {
+		icon = generic_resources
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_frontier_logistics check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
+		available = { has_capitulated = no NOT = { has_idea = VAL_frontier_transport_columns } }
+		cost = 0
+		custom_cost_text = VAL_frontier_transport_cost
+		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes NOT = { has_equipment = { motorized_equipment < 100 } } }
+		fire_only_once = no
+		complete_effect = {
+			add_timed_idea = { idea = VAL_frontier_transport_columns days = 180 }
+			hidden_effect = {
+				ADISCORD_economy_spend_50 = yes
+				add_equipment_to_stockpile = { type = motorized_equipment amount = -100 }
+			}
+		}
+		ai_will_do = { base = 5 modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
+	}
+
+	VAL_frontier_ultimatum_deadline = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		activation = { always = no }
+		visible = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } }
+		available = { hidden_trigger = { always = no } }
+		is_good = no
+		days_mission_timeout = 21
+		selectable_mission = no
+		cancel_trigger = { NOT = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } }
+		timeout_effect = { hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } VAL_frontier_show_refusal = yes } } }
+	}
+
+	VAL_frontier_demand_CIN = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_frontier_security_plan OR = { CIN = { exists = yes is_subject = no } OSF = { exists = yes is_subject = no } APH = { exists = yes is_subject = no } } }
+		available = {
+			VAL_frontier_postwar = yes
+			has_war = no
+			custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
+			OR = { CIN = { VAL_frontier_bloc_target_eligible = yes } OSF = { VAL_frontier_bloc_target_eligible = yes } APH = { VAL_frontier_bloc_target_eligible = yes } }
+		}
+		cost = 75
+		days_re_enable = 180
+		complete_effect = {
+			custom_effect_tooltip = VAL_frontier_demand_CIN_tt
+			custom_effect_tooltip = VAL_frontier_nod_forecast_tt
+			hidden_effect = {
+				if = { limit = { CIN = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 1 } }
+				else_if = { limit = { OSF = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 2 } }
+				else_if = { limit = { APH = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 3 } }
+				clr_country_flag = VAL_frontier_expansion_deferred
+				VAL_frontier_record_ultimatum = yes
+				event_target:VAL_frontier_quoted_target = { country_event = { id = val_rework.110 } }
+			}
+		}
+		ai_will_do = { base = 20 modifier = { factor = 0 has_country_flag = VAL_frontier_expansion_deferred } modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
+	}
+
+	VAL_frontier_demand_ERT = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Return_Southern_Tsaygen ERT = { exists = yes is_subject = no } 168 = { is_owned_by = ERT } }
+		available = {
+			VAL_frontier_postwar = yes
+			has_war = no
+			custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
+			ERT = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = VAL } }
+			168 = { is_owned_by = ERT is_controlled_by = ERT }
+		}
+		cost = 75
+		days_re_enable = 180
+		complete_effect = {
+			custom_effect_tooltip = VAL_frontier_demand_ERT_tt
+			hidden_effect = { set_variable = { var = VAL_frontier_target value = 4 } VAL_frontier_record_ultimatum = yes ERT = { country_event = { id = val_rework.110 } } }
+		}
+		ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
+	}
+
+	VAL_campaign_against_nod = {
+		icon = generic_prepare_civil_war allowed = { tag = VAL }
+		targets = { NOD }
+		target_trigger = { FROM = { exists = yes } }
+		visible = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no NOT = { has_war_with = ROOT } } }
+		available = {
+			custom_trigger_tooltip = { tooltip = VAL_nod_requires_stelander_victory_tt VAL_stelander_dominated = yes }
+			custom_trigger_tooltip = { tooltip = VAL_nod_campaign_foothold_tt VAL_northern_foothold_secured = yes }
+			VAL_can_launch_final_campaign = yes
+			NOT = { has_country_flag = VAL_campaign_mobilizing }
+		}
+		cost = 60 days_remove = 30 days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = VAL_campaign_preparation_tt
+			custom_effect_tooltip = VAL_nod_victory_tt
+			hidden_effect = {
+				if = {
+					limit = { VAL_stelander_dominated = yes VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } }
+					set_country_flag = VAL_campaign_mobilizing
+					FROM = { set_country_flag = VAL_campaign_target }
+				}
+			}
+		}
+		cancel_trigger = {
+			hidden_trigger = {
+				OR = {
+					has_war = yes
+					has_capitulated = yes
+					is_subject = yes
+					has_country_flag = VAL_stelander_defeated
+					NOT = { VAL_stelander_dominated = yes }
+					NOT = { VAL_northern_foothold_secured = yes }
+					FROM = {
+						OR = {
+							exists = no
+							has_capitulated = yes
+							is_subject = yes
+							is_in_faction_with = VAL
+							has_country_flag = VAL_stelander_truce
+						}
+					}
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = VAL_campaign_cancelled_tt
+			hidden_effect = {
+				clr_country_flag = VAL_campaign_mobilizing
+				FROM = { clr_country_flag = VAL_campaign_target }
+				NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
+			}
+		}
+		remove_effect = {
+			if = {
+				limit = { has_country_flag = VAL_campaign_mobilizing VAL_stelander_dominated = yes VAL_northern_foothold_secured = yes VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
+				if = {
+					limit = {
+						FROM = { tag = NOD }
+						STS = {
+							exists = yes
+							has_capitulated = no
+							has_war_with = NOD
+							has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+						}
+						NOD = { has_war_with = STS }
+					}
+					set_country_flag = VAL_joint_nod_campaign_with_sts
+					add_to_war = { targeted_alliance = STS enemy = NOD hostility_reason = asked_to_join single_target_only = yes }
+				}
+				else = { declare_war_on = { target = FROM type = annex_everything } }
+				NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
+			}
+			hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	VAL_campaign_against_stelander = {
+		icon = generic_prepare_civil_war allowed = { tag = VAL }
+		targets = { STP STS }
+		target_trigger = { FROM = { exists = yes } }
+		visible = { has_completed_focus = VAL_Stelander_Ultimatum NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no } }
+		available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } FROM = { OR = { has_country_flag = VAL_stelander_refused has_war_with = ROOT } } }
+		cost = 60 days_remove = 30 days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = VAL_campaign_preparation_tt
+			custom_effect_tooltip = VAL_stelander_victory_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_can_launch_final_campaign = yes
+						NOT = { has_country_flag = VAL_campaign_mobilizing }
+						FROM = { OR = { has_country_flag = VAL_stelander_refused has_war_with = ROOT } }
+					}
+					set_country_flag = VAL_campaign_mobilizing
+					FROM = { set_country_flag = VAL_campaign_target }
+				}
+			}
+		}
+		cancel_trigger = {
+			hidden_trigger = {
+				OR = {
+					AND = { has_war = yes NOT = { has_war_with = FROM } }
+					has_capitulated = yes
+					is_subject = yes
+					has_country_flag = VAL_stelander_defeated
+					FROM = {
+						OR = {
+							exists = no
+							has_capitulated = yes
+							is_subject = yes
+							is_in_faction_with = VAL
+							has_country_flag = VAL_stelander_truce
+						}
+					}
+				}
+			}
+		}
+		cancel_effect = { custom_effect_tooltip = VAL_campaign_cancelled_tt hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } } }
+		remove_effect = {
+			if = {
+				limit = { has_country_flag = VAL_campaign_mobilizing VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
+				if = {
+					limit = { FROM = { has_war_with = ROOT } }
+					hidden_effect = { VAL_call_subjects_to_wars = yes }
+				}
+				else = {
+					declare_war_on = { target = FROM type = annex_everything }
+					hidden_effect = { VAL_call_subjects_to_wars = yes }
+				}
+			}
+			hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } }
+		}
+		ai_will_do = { base = 30 }
+	}
+
+	VAL_stelander_ultimatum = {
+		icon = generic_political_pressure allowed = { tag = VAL }
+		targets = { STP STS }
+		target_trigger = { FROM = { exists = yes } }
+		visible = { has_completed_focus = VAL_Stelander_Ultimatum NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no NOT = { has_war_with = ROOT } } }
+		available = {
+			has_war = no NOT = { has_country_flag = VAL_stelander_offer_pending }
+			NOT = { has_country_flag = VAL_campaign_mobilizing }
+			FROM = { VAL_stelander_ultimatum_target = yes NOT = { has_country_flag = VAL_stelander_truce } NOT = { has_country_flag = VAL_stelander_refused } }
+		}
+		cost = 50 days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = VAL_stelander_offer_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						has_war = no
+						NOT = { has_country_flag = VAL_stelander_offer_pending }
+						NOT = { has_country_flag = VAL_campaign_mobilizing }
+						FROM = {
+							VAL_stelander_ultimatum_target = yes
+							NOT = { has_country_flag = VAL_stelander_truce }
+							NOT = { has_country_flag = VAL_stelander_refused }
+						}
+					}
+					set_country_flag = { flag = VAL_stelander_offer_pending days = 21 }
+					FROM = { set_country_flag = { flag = VAL_stelander_offer days = 21 } country_event = { id = val_contract.343 } country_event = { id = val_contract.344 days = 21 } }
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
 }
 
 VAL_contract_management = {
@@ -623,110 +997,9 @@ VAL_reclamation = {
 }
 
 VAL_frontier = {
-	VAL_final_reconnaissance = {
-		icon = generic_intelligence_exchange
-		allowed = { tag = VAL }
-		cancel_if_not_visible = no
-		visible = { VAL_final_crisis_preparing = yes check_variable = { var = VAL_final_escalation value = 25 compare = greater_than_or_equals } NOT = { check_variable = { var = VAL_final_planning_bonus value = 0 compare = greater_than } } }
-		cost = 75
-		days_remove = 21
-		complete_effect = { custom_effect_tooltip = VAL_final_reconnaissance_start_tt }
-		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals } } } }
-		cancel_effect = { add_political_power = 75 }
-		remove_effect = {
-			if = {
-				limit = { has_capitulated = no is_subject = no check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } }
-				add_intel = { target = NOD army_intel = 20 }
-				hidden_effect = { set_variable = { var = VAL_final_planning_bonus value = 0.15 } if = { limit = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } force_update_dynamic_modifier = yes } }
-				custom_effect_tooltip = VAL_final_reconnaissance_ready_tt
-			}
-			else = { add_political_power = 75 }
-		}
-		ai_will_do = { base = 10 }
-	}
 
-	VAL_final_stockpile_supplies = {
-		icon = generic_production
-		allowed = { tag = VAL }
-		cancel_if_not_visible = no
-		visible = { VAL_final_crisis_preparing = yes NOT = { check_variable = { var = VAL_final_supply_bonus value = 0 compare = less_than } } }
-		available = { ADISCORD_economy_can_spend_500 = yes NOT = { has_variable = VAL_final_supply_deposit } }
-		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
-		custom_cost_text = VAL_logistics_cost_500
-		cost = 0
-		days_remove = 35
-		complete_effect = {
-			ADISCORD_economy_spend_500 = yes
-			custom_effect_tooltip = VAL_final_supply_preparation_tt
-			hidden_effect = { set_variable = { var = VAL_final_supply_deposit value = 500 } }
-		}
-		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals } } } }
-		cancel_effect = { VAL_final_refund_supply_order = yes }
-		remove_effect = {
-			if = {
-				limit = { has_variable = VAL_final_supply_deposit has_capitulated = no is_subject = no check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } }
-				hidden_effect = {
-					clear_variable = VAL_final_supply_deposit
-					set_variable = { var = VAL_final_supply_bonus value = -0.10 }
-					if = {
-						limit = {
-							has_dynamic_modifier = { modifier = VAL_final_war_preparation }
-						}
-						force_update_dynamic_modifier = yes
-					}
-				}
-				custom_effect_tooltip = VAL_final_supply_ready_tt
-			}
-			else = { VAL_final_refund_supply_order = yes }
-		}
-		ai_will_do = { base = 12 }
-	}
 
-	VAL_final_register_reserves = {
-		icon = generic_manpower
-		allowed = { tag = VAL }
-		cancel_if_not_visible = no
-		visible = { VAL_final_crisis_preparing = yes OR = { has_idea = volunteer_only has_idea = disarmed_nation } }
-		available = { has_war_support > 0.1 }
-		cost = 150
-		days_remove = 28
-		complete_effect = { custom_effect_tooltip = VAL_final_reserve_registration_tt }
-		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes check_variable = { var = VAL_final_crisis_phase value = 3 compare = greater_than_or_equals } } } }
-		cancel_effect = { add_political_power = 150 }
-		remove_effect = {
-			if = {
-				limit = { has_capitulated = no is_subject = no check_variable = { var = VAL_final_crisis_phase value = 3 compare = less_than } OR = { has_idea = volunteer_only has_idea = disarmed_nation } }
-				add_ideas = limited_conscription
-			}
-			else = { add_political_power = 150 }
-		}
-		ai_will_do = { base = 20 }
-	}
 
-	VAL_nod_ultimatum = {
-		icon = generic_political_pressure
-		allowed = { tag = VAL }
-		activation = { always = no }
-		visible = { VAL_frontier_decisions_visible = yes has_active_mission = VAL_nod_ultimatum }
-		available = { custom_trigger_tooltip = { tooltip = VAL_nod_ultimatum_objective_tt VAL_frontier_target_occupied = yes VAL_frontier_members_beaten = yes } }
-		selectable_mission = no
-		is_good = no
-		days_mission_timeout = 100
-		cancel_trigger = {
-			custom_trigger_tooltip = {
-				tooltip = VAL_nod_ultimatum_cancel_tt
-				OR = {
-					NOT = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
-					has_capitulated = yes
-					is_subject = yes
-					NOT = { OR = { has_war_with = CIN has_war_with = OSF has_war_with = APH } }
-					NOD = { OR = { exists = no has_capitulated = yes is_in_faction_with = VAL has_war_with = VAL AND = { is_subject = yes NOT = { is_subject_of = STP } } } }
-				}
-			}
-		}
-		complete_effect = { custom_effect_tooltip = VAL_nod_ultimatum_success_tt hidden_effect = { country_event = { id = val_rework.119 hours = 1 } } }
-		timeout_effect = { custom_effect_tooltip = VAL_nod_ultimatum_timeout_tt hidden_effect = { set_country_flag = VAL_nod_ultimatum_expired country_event = { id = val_rework.119 hours = 1 } } }
-	}
 
 	VAL_negotiate_yubora = {
 		icon = generic_diplomatic_treaty
@@ -849,266 +1122,8 @@ VAL_frontier = {
 		cancel_effect = { custom_effect_tooltip = VAL_frontier_workshop_refund_tt hidden_effect = { VAL_frontier_refund_workshop = yes } }
 		ai_will_do = { base = 2 modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
 	}
-	VAL_frontier_begin_offensive = {
-		icon = generic_political_pressure
-		allowed = { tag = VAL }
-		visible = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
-		available = { VAL_frontier_prewar_eligible = yes has_war = no }
-		cost = 0
-		complete_effect = { custom_effect_tooltip = VAL_frontier_war_tt hidden_effect = { VAL_frontier_start_war = yes } }
-		ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
-	}
-	VAL_frontier_withdraw_demand = {
-		icon = generic_political_pressure
-		allowed = { tag = VAL }
-		visible = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } }
-		cost = 0
-		complete_effect = { custom_effect_tooltip = VAL_frontier_withdraw_tt hidden_effect = { VAL_frontier_withdraw_and_defer = yes } }
-		ai_will_do = { base = 0 }
-	}
-	VAL_frontier_transport_contract = {
-		icon = generic_resources
-		allowed = { tag = VAL }
-		visible = { has_completed_focus = VAL_frontier_logistics check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
-		available = { has_capitulated = no NOT = { has_idea = VAL_frontier_transport_columns } }
-		cost = 0
-		custom_cost_text = VAL_frontier_transport_cost
-		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes NOT = { has_equipment = { motorized_equipment < 100 } } }
-		fire_only_once = no
-		complete_effect = {
-			add_timed_idea = { idea = VAL_frontier_transport_columns days = 180 }
-			hidden_effect = {
-				ADISCORD_economy_spend_50 = yes
-				add_equipment_to_stockpile = { type = motorized_equipment amount = -100 }
-			}
-		}
-		ai_will_do = { base = 5 modifier = { factor = 0 ADISCORD_economy_ai_is_crisis = yes } }
-	}
-	VAL_frontier_ultimatum_deadline = {
-		icon = generic_political_pressure
-		allowed = { tag = VAL }
-		activation = { always = no }
-		visible = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } }
-		available = { hidden_trigger = { always = no } }
-		is_good = no
-		days_mission_timeout = 21
-		selectable_mission = no
-		cancel_trigger = { NOT = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } }
-		timeout_effect = { hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } VAL_frontier_show_refusal = yes } } }
-	}
-	VAL_frontier_demand_CIN = {
-		icon = generic_political_pressure
-		allowed = { tag = VAL }
-		visible = { has_completed_focus = VAL_frontier_security_plan OR = { CIN = { exists = yes is_subject = no } OSF = { exists = yes is_subject = no } APH = { exists = yes is_subject = no } } }
-		available = {
-			VAL_frontier_postwar = yes
-			has_war = no
-			custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
-			OR = { CIN = { VAL_frontier_bloc_target_eligible = yes } OSF = { VAL_frontier_bloc_target_eligible = yes } APH = { VAL_frontier_bloc_target_eligible = yes } }
-		}
-		cost = 75
-		days_re_enable = 180
-		complete_effect = {
-			custom_effect_tooltip = VAL_frontier_demand_CIN_tt
-			custom_effect_tooltip = VAL_frontier_nod_forecast_tt
-			hidden_effect = {
-				if = { limit = { CIN = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 1 } }
-				else_if = { limit = { OSF = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 2 } }
-				else_if = { limit = { APH = { VAL_frontier_bloc_target_eligible = yes } } set_variable = { var = VAL_frontier_target value = 3 } }
-				clr_country_flag = VAL_frontier_expansion_deferred
-				VAL_frontier_record_ultimatum = yes
-				event_target:VAL_frontier_quoted_target = { country_event = { id = val_rework.110 } }
-			}
-		}
-		ai_will_do = { base = 20 modifier = { factor = 0 has_country_flag = VAL_frontier_expansion_deferred } modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
-	}
-	VAL_frontier_demand_ERT = {
-		icon = generic_political_pressure
-		allowed = { tag = VAL }
-		visible = { has_completed_focus = VAL_Return_Southern_Tsaygen ERT = { exists = yes is_subject = no } 168 = { is_owned_by = ERT } }
-		available = {
-			VAL_frontier_postwar = yes
-			has_war = no
-			custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
-			ERT = { has_capitulated = no is_subject = no NOT = { is_in_faction_with = VAL } }
-			168 = { is_owned_by = ERT is_controlled_by = ERT }
-		}
-		cost = 75
-		days_re_enable = 180
-		complete_effect = {
-			custom_effect_tooltip = VAL_frontier_demand_ERT_tt
-			hidden_effect = { set_variable = { var = VAL_frontier_target value = 4 } VAL_frontier_record_ultimatum = yes ERT = { country_event = { id = val_rework.110 } } }
-		}
-		ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
-	}
-	VAL_campaign_against_nod = {
-		icon = generic_prepare_civil_war allowed = { tag = VAL }
-		targets = { NOD }
-		target_trigger = { FROM = { exists = yes } }
-		visible = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no NOT = { has_war_with = ROOT } } }
-		available = {
-			custom_trigger_tooltip = { tooltip = VAL_nod_requires_stelander_victory_tt VAL_stelander_dominated = yes }
-			custom_trigger_tooltip = { tooltip = VAL_nod_campaign_foothold_tt VAL_northern_foothold_secured = yes }
-			VAL_can_launch_final_campaign = yes
-			NOT = { has_country_flag = VAL_campaign_mobilizing }
-		}
-		cost = 60 days_remove = 30 days_re_enable = 90
-		complete_effect = {
-			custom_effect_tooltip = VAL_campaign_preparation_tt
-			custom_effect_tooltip = VAL_nod_victory_tt
-			hidden_effect = {
-				if = {
-					limit = { VAL_stelander_dominated = yes VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } }
-					set_country_flag = VAL_campaign_mobilizing
-					FROM = { set_country_flag = VAL_campaign_target }
-				}
-			}
-		}
-		cancel_trigger = {
-			hidden_trigger = {
-				OR = {
-					has_war = yes
-					has_capitulated = yes
-					is_subject = yes
-					has_country_flag = VAL_stelander_defeated
-					NOT = { VAL_stelander_dominated = yes }
-					NOT = { VAL_northern_foothold_secured = yes }
-					FROM = {
-						OR = {
-							exists = no
-							has_capitulated = yes
-							is_subject = yes
-							is_in_faction_with = VAL
-							has_country_flag = VAL_stelander_truce
-						}
-					}
-				}
-			}
-		}
-		cancel_effect = {
-			custom_effect_tooltip = VAL_campaign_cancelled_tt
-			hidden_effect = {
-				clr_country_flag = VAL_campaign_mobilizing
-				FROM = { clr_country_flag = VAL_campaign_target }
-				NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
-			}
-		}
-		remove_effect = {
-			if = {
-				limit = { has_country_flag = VAL_campaign_mobilizing VAL_stelander_dominated = yes VAL_northern_foothold_secured = yes VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
-				if = {
-					limit = {
-						FROM = { tag = NOD }
-						STS = {
-							exists = yes
-							has_capitulated = no
-							has_war_with = NOD
-							has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
-						}
-						NOD = { has_war_with = STS }
-					}
-					set_country_flag = VAL_joint_nod_campaign_with_sts
-					add_to_war = { targeted_alliance = STS enemy = NOD hostility_reason = asked_to_join single_target_only = yes }
-				}
-				else = { declare_war_on = { target = FROM type = annex_everything } }
-				NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
-			}
-			hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } }
-		}
-		ai_will_do = { base = 8 }
-	}
 
-	VAL_campaign_against_stelander = {
-		icon = generic_prepare_civil_war allowed = { tag = VAL }
-		targets = { STP STS }
-		target_trigger = { FROM = { exists = yes } }
-		visible = { has_completed_focus = VAL_Stelander_Ultimatum NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no } }
-		available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } FROM = { OR = { has_country_flag = VAL_stelander_refused has_war_with = ROOT } } }
-		cost = 60 days_remove = 30 days_re_enable = 90
-		complete_effect = {
-			custom_effect_tooltip = VAL_campaign_preparation_tt
-			custom_effect_tooltip = VAL_stelander_victory_tt
-			hidden_effect = {
-				if = {
-					limit = {
-						VAL_can_launch_final_campaign = yes
-						NOT = { has_country_flag = VAL_campaign_mobilizing }
-						FROM = { OR = { has_country_flag = VAL_stelander_refused has_war_with = ROOT } }
-					}
-					set_country_flag = VAL_campaign_mobilizing
-					FROM = { set_country_flag = VAL_campaign_target }
-				}
-			}
-		}
-		cancel_trigger = {
-			hidden_trigger = {
-				OR = {
-					AND = { has_war = yes NOT = { has_war_with = FROM } }
-					has_capitulated = yes
-					is_subject = yes
-					has_country_flag = VAL_stelander_defeated
-					FROM = {
-						OR = {
-							exists = no
-							has_capitulated = yes
-							is_subject = yes
-							is_in_faction_with = VAL
-							has_country_flag = VAL_stelander_truce
-						}
-					}
-				}
-			}
-		}
-		cancel_effect = { custom_effect_tooltip = VAL_campaign_cancelled_tt hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } } }
-		remove_effect = {
-			if = {
-				limit = { has_country_flag = VAL_campaign_mobilizing VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
-				if = {
-					limit = { FROM = { has_war_with = ROOT } }
-					hidden_effect = { VAL_call_subjects_to_wars = yes }
-				}
-				else = {
-					declare_war_on = { target = FROM type = annex_everything }
-					hidden_effect = { VAL_call_subjects_to_wars = yes }
-				}
-			}
-			hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } }
-		}
-		ai_will_do = { base = 30 }
-	}
 
-	VAL_stelander_ultimatum = {
-		icon = generic_political_pressure allowed = { tag = VAL }
-		targets = { STP STS }
-		target_trigger = { FROM = { exists = yes } }
-		visible = { has_completed_focus = VAL_Stelander_Ultimatum NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no NOT = { has_war_with = ROOT } } }
-		available = {
-			has_war = no NOT = { has_country_flag = VAL_stelander_offer_pending }
-			NOT = { has_country_flag = VAL_campaign_mobilizing }
-			FROM = { VAL_stelander_ultimatum_target = yes NOT = { has_country_flag = VAL_stelander_truce } NOT = { has_country_flag = VAL_stelander_refused } }
-		}
-		cost = 50 days_re_enable = 90
-		complete_effect = {
-			custom_effect_tooltip = VAL_stelander_offer_tt
-			hidden_effect = {
-				if = {
-					limit = {
-						has_war = no
-						NOT = { has_country_flag = VAL_stelander_offer_pending }
-						NOT = { has_country_flag = VAL_campaign_mobilizing }
-						FROM = {
-							VAL_stelander_ultimatum_target = yes
-							NOT = { has_country_flag = VAL_stelander_truce }
-							NOT = { has_country_flag = VAL_stelander_refused }
-						}
-					}
-					set_country_flag = { flag = VAL_stelander_offer_pending days = 21 }
-					FROM = { set_country_flag = { flag = VAL_stelander_offer days = 21 } country_event = { id = val_contract.343 } country_event = { id = val_contract.344 days = 21 } }
-				}
-			}
-		}
-		ai_will_do = { base = 10 }
-	}
 
 	VAL_create_occidian_administration = {
 		icon = generic_political_pressure
