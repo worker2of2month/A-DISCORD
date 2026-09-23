@@ -27,7 +27,7 @@
  VAL_open_refugee_border: "Reopen the Crossings"
  VAL_open_refugee_border_desc: "Restore trade and allow admission through offers that are still open. Reopening the border does not create new refugee waves."
  VAL_contract_refugee_labor: "Offer Work Contracts"
- VAL_contract_refugee_labor_desc:0 "Employ £population_texticon §Y100,000§! available refugees in construction for 90 days, costing §Y75§! £political_power_texticon. Workers still need housing and cannot be recruited or resettled until completion or cancellation, when all workers return to the available pool."
+ VAL_contract_refugee_labor_desc:0 "Reserve £population_texticon §Y100,000§! refugees for §Y90 days§! at §Y50§! £political_power_texticon. While active: construction speed §G+12%§!, civilian income §G+8%§!."
  VAL_fund_resettlement_depots: "Resettle Refugees in [FROM.GetName]"
  VAL_fund_resettlement_depots_desc: "Move £population_texticon §Y100,000§! admitted refugees into [FROM.GetName] for §Y250§! treasury. The state gains §G100,000 permanent population§!. This program is limited to selected low-population Kefreyt home regions under our control, cannot operate while pollution reclamation is unfinished, and can be used only once per region."
  VAL_organize_refugee_return: "Organize Refugee Return"
@@ -75,21 +75,21 @@
 
  VAL_accept_vorkerland_refugees: "Admit Refugees from Vorkerland"
 
- VAL_accept_vorkerland_refugees_desc:0 "Admit §Y300,000§! refugees for §Y100§! coins. Grey market: §R+3§!. Repeat after §Y90 days§!. The admitted population enters the resettlement reserve."
+ VAL_accept_vorkerland_refugees_desc:0 "Admit §Y300,000§! refugees for £ADISCORD_economy_treasury_texticon §Y100§!. Grey market: §R+3§!. Up to §Y3 waves§!, repeat after §Y90 days§!."
 
  VAL_accept_stelander_refugees: "Admit Refugees from Stelander"
 
- VAL_accept_stelander_refugees_desc:0 "Admit §Y200,000§! refugees for §Y100§! coins. Grey market: §R+3§!. Repeat after §Y90 days§!. The admitted population enters the resettlement reserve."
+ VAL_accept_stelander_refugees_desc:0 "Admit §Y200,000§! refugees for £ADISCORD_economy_treasury_texticon §Y100§!. Grey market: §R+3§!. Up to §Y3 waves§!, repeat after §Y90 days§!."
 
  VAL_accept_nodrul_refugees: "Admit Refugees from Nodrul"
 
- VAL_accept_nodrul_refugees_desc:0 "Admit §Y100,000§! refugees for §Y100§! coins. Grey market: §R+3§!. Repeat after §Y90 days§!. The admitted population enters the resettlement reserve."
+ VAL_accept_nodrul_refugees_desc:0 "Admit §Y100,000§! refugees for £ADISCORD_economy_treasury_texticon §Y100§!. Grey market: §R+3§!. Up to §Y3 waves§!, repeat after §Y90 days§!."
 
  VAL_accept_north_refugees: "Admit Refugees from the Northern Countries"
 
- VAL_accept_north_refugees_desc:0 "Admit §Y100,000§! refugees for §Y100§! coins. Grey market: §R+3§!. Repeat after §Y90 days§!. The admitted population enters the resettlement reserve."
+ VAL_accept_north_refugees_desc:0 "Admit §Y100,000§! refugees for £ADISCORD_economy_treasury_texticon §Y100§!. Grey market: §R+3§!. Up to §Y3 waves§!, repeat after §Y90 days§!."
  VAL_accept_perimeter_refugees: "Admit Refugees from Beyond the Perimeter"
- VAL_accept_perimeter_refugees_desc:0 "Admit §Y100,000§! refugees for §Y100§! coins. Grey market: §R+3§!. Repeat after §Y90 days§!. The admitted population enters the resettlement reserve."
+ VAL_accept_perimeter_refugees_desc:0 "Admit §Y100,000§! refugees for £ADISCORD_economy_treasury_texticon §Y100§!. Grey market: §R+3§!. Up to §Y3 waves§!, repeat after §Y90 days§!."
  VAL_refugee_resettlement_result_tt:0 "£population_texticon §Y100,000§! displaced people settle permanently in §Y[FROM.GetName]§!."
  VAL_logistics_cost_100_blocked: "£ADISCORD_economy_treasury_texticon  §R100§!"
  VAL_logistics_cost_100_tooltip: "£ADISCORD_economy_treasury_texticon  §Y100§!"
@@ -111,10 +111,10 @@
  VAL_logistics_cost_1000_blocked: "£ADISCORD_economy_treasury_texticon  §R1000§!"
  VAL_logistics_cost_1000_tooltip: "£ADISCORD_economy_treasury_texticon  §Y1000§!"
 
- VAL_refugee_wave_limit_tt:0 "Fewer than three waves have been admitted from this region."
+ VAL_refugee_wave_limit_tt:0 "Fewer than §Y3 waves§! have been admitted from this route."
  VAL_train_refugee_volunteers:0 "Train Refugee Volunteers"
- VAL_train_refugee_volunteers_desc:0 "Train £population_texticon §Y5,000§! available refugees for 35 days using £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment. Trainees still need housing until completion. Capitulation or subjugation cancels training and refunds the people and costs."
- VAL_refugee_training_start_tt:0 "Reserve £population_texticon §Y10,000§! refugees for §Y35 days§!, then add them to army manpower. Cancellation returns the people, £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment."
+ VAL_train_refugee_volunteers_desc:0 "Train £population_texticon §Y10,000§! refugees for §Y35 days§!. Cost: §Y50§! £political_power_texticon and £infantry_equipment_texticon §Y2500§!."
+ VAL_refugee_training_start_tt:0 "After §Y35 days§!: £manpower_texticon §G+10,000§!. Cancellation returns the people, §Y50§! £political_power_texticon and £infantry_equipment_texticon §Y2500§!."
  VAL_refugee_window_open_tt: "An admission window is open for this refugee route. It lasts §Y180 days§! from the start of the flow. If this condition is unmet, the flow has not opened yet, its admission window has expired, or all three waves have already been admitted."
  VAL_refugee_war_active_tt:0 "This route's war is ongoing. Admission is available once every §Y90 days§!."
  VAL_refugee_perimeter_active_tt:0 "The Perimeter is open. Admission is available once every §Y90 days§!."
@@ -125,22 +125,22 @@
 
  VAL_recruit_local_volunteers_desc:0 "Conscription remains at 1.25%. The additional contract reserve is 2% of the initial population of Kefreyt's seven states and does not replenish. Each intake trains £population_texticon §Y5,000§! local volunteers over 35 days for §Y75§! £political_power_texticon and £infantry_equipment_texticon §Y5000§! infantry equipment. Capitulation or subjugation refunds the full intake."
 
- VAL_refugee_training_cost:0 "£population_texticon §Y10000§! £pol_power §Y75§! £infantry_equipment_texticon §Y5000§!"
- VAL_refugee_training_cost_blocked:0 "£population_texticon §R10000§! £pol_power §R75§! £infantry_equipment_texticon §R5000§!"
- VAL_refugee_training_cost_tooltip:0 "Requires £population_texticon §Y10,000§! available refugees, £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment."
+ VAL_refugee_training_cost:0 "£population_texticon §Y10000§! §Y50§! £political_power_texticon £infantry_equipment_texticon §Y2500§!"
+ VAL_refugee_training_cost_blocked:0 "£population_texticon §R10000§! §R50§! £political_power_texticon £infantry_equipment_texticon §R2500§!"
+ VAL_refugee_training_cost_tooltip:0 "Requires £population_texticon §Y10,000§! available refugees, §Y50§! £political_power_texticon and £infantry_equipment_texticon §Y2500§!."
  VAL_training_cost:0 "£population_texticon §Y5000§! §Y75§! £political_power_texticon £infantry_equipment_texticon §Y5000§!"
 
  VAL_training_cost_blocked:0 "£population_texticon §R5000§! §R75§! £political_power_texticon £infantry_equipment_texticon §R5000§!"
 
  VAL_training_cost_tooltip:0 "Requires £population_texticon §Y5,000§! volunteers from the reserve named in the decision, §Y75§! £political_power_texticon and £infantry_equipment_texticon §Y5000§! infantry equipment."
 
- VAL_labor_program_tt:0 "Reserve £population_texticon §Y100,000§! refugees for 90 days: §G+12%§! construction speed, §G+8%§! civilian income, §R-1%§! stability. The workers then return to the free reserve."
+ VAL_labor_program_tt:0 "For §Y90 days§!: construction speed §G+12%§!, civilian income §G+8%§!. All workers then return."
 
  VAL_expand_refugee_housing:0 "Expand temporary settlements"
 
- VAL_expand_refugee_housing_desc:0 "Spend §Y250§! coins to house §Y200,000§! additional people after §Y45 days§!. Maximum capacity: one million. Capitulation or subjugation refunds the payment."
+ VAL_expand_refugee_housing_desc:0 "Cost: £ADISCORD_economy_treasury_texticon §Y250§!. Time: §Y45 days§!. Housing capacity: §G+300,000§!."
 
- VAL_housing_start_tt:0 "After 45 days: housing for 200,000 additional people."
+ VAL_housing_start_tt:0 "After §Y45 days§!: housing capacity §G+300,000§!."
 
  VAL_broker_market_open_tt:0 "Broker audit has ended; dealers are available again"
 
@@ -148,6 +148,7 @@
 
  VAL_broker_audit_tt:0 "Broker dependence: -1. Broker licences and contraband purchases are unavailable for 60 days."
 
- VAL_labor_cost:0 "£population_texticon §Y100 000§! £pol_power §Y75§!"
- VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! £pol_power §R75§!"
+ VAL_labor_cost:0 "£population_texticon §Y100 000§! §Y50§! £political_power_texticon"
+ VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! §R50§! £political_power_texticon"
+ VAL_labor_cost_tooltip:0 "Requires £population_texticon §Y100,000§! available refugees and §Y50§! £political_power_texticon."
  VAL_labor_cost:0 "£population_texticon §Y100 000§! §Y75§! £political_power_texticon"
