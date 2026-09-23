@@ -961,7 +961,27 @@ VAL_frontier = {
 				}
 			}
 		}
-		cancel_trigger = { hidden_trigger = { OR = { has_war = yes has_capitulated = yes is_subject = yes has_country_flag = VAL_stelander_defeated NOT = { VAL_stelander_dominated = yes } NOT = { VAL_northern_foothold_secured = yes } FROM = { OR = { exists = no has_capitulated = yes is_subject = yes is_in_faction_with = VAL has_country_flag = VAL_stelander_truce } } } } }
+		cancel_trigger = {
+			hidden_trigger = {
+				OR = {
+					has_war = yes
+					has_capitulated = yes
+					is_subject = yes
+					has_country_flag = VAL_stelander_defeated
+					NOT = { VAL_stelander_dominated = yes }
+					NOT = { VAL_northern_foothold_secured = yes }
+					FROM = {
+						OR = {
+							exists = no
+							has_capitulated = yes
+							is_subject = yes
+							is_in_faction_with = VAL
+							has_country_flag = VAL_stelander_truce
+						}
+					}
+				}
+			}
+		}
 		cancel_effect = {
 			custom_effect_tooltip = VAL_campaign_cancelled_tt
 			hidden_effect = {
@@ -1005,9 +1025,37 @@ VAL_frontier = {
 		complete_effect = {
 			custom_effect_tooltip = VAL_campaign_preparation_tt
 			custom_effect_tooltip = VAL_stelander_victory_tt
-			hidden_effect = { if = { limit = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } FROM = { has_country_flag = VAL_stelander_refused } } set_country_flag = VAL_campaign_mobilizing FROM = { set_country_flag = VAL_campaign_target } } }
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_can_launch_final_campaign = yes
+						NOT = { has_country_flag = VAL_campaign_mobilizing }
+						FROM = { has_country_flag = VAL_stelander_refused }
+					}
+					set_country_flag = VAL_campaign_mobilizing
+					FROM = { set_country_flag = VAL_campaign_target }
+				}
+			}
 		}
-		cancel_trigger = { hidden_trigger = { OR = { has_war = yes has_capitulated = yes is_subject = yes has_country_flag = VAL_stelander_defeated FROM = { OR = { exists = no has_capitulated = yes is_subject = yes is_in_faction_with = VAL has_country_flag = VAL_stelander_truce } } } } }
+		cancel_trigger = {
+			hidden_trigger = {
+				OR = {
+					has_war = yes
+					has_capitulated = yes
+					is_subject = yes
+					has_country_flag = VAL_stelander_defeated
+					FROM = {
+						OR = {
+							exists = no
+							has_capitulated = yes
+							is_subject = yes
+							is_in_faction_with = VAL
+							has_country_flag = VAL_stelander_truce
+						}
+					}
+				}
+			}
+		}
 		cancel_effect = { custom_effect_tooltip = VAL_campaign_cancelled_tt hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } } }
 		remove_effect = {
 			if = {
@@ -1034,7 +1082,16 @@ VAL_frontier = {
 			custom_effect_tooltip = VAL_stelander_offer_tt
 			hidden_effect = {
 				if = {
-					limit = { has_war = no NOT = { has_country_flag = VAL_stelander_offer_pending } NOT = { has_country_flag = VAL_campaign_mobilizing } FROM = { VAL_stelander_ultimatum_target = yes NOT = { has_country_flag = VAL_stelander_truce } NOT = { has_country_flag = VAL_stelander_refused } } }
+					limit = {
+						has_war = no
+						NOT = { has_country_flag = VAL_stelander_offer_pending }
+						NOT = { has_country_flag = VAL_campaign_mobilizing }
+						FROM = {
+							VAL_stelander_ultimatum_target = yes
+							NOT = { has_country_flag = VAL_stelander_truce }
+							NOT = { has_country_flag = VAL_stelander_refused }
+						}
+					}
 					set_country_flag = { flag = VAL_stelander_offer_pending days = 21 }
 					FROM = { set_country_flag = { flag = VAL_stelander_offer days = 21 } country_event = { id = val_contract.343 } country_event = { id = val_contract.344 days = 21 } }
 				}
