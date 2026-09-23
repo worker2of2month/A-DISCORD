@@ -1918,7 +1918,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_northern_credit
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_STP_ps_northern_credit
 		x = 16
 		y = 2
 		relative_position_id = STP_Govern_In_His_Name
@@ -1934,7 +1934,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_northern_arms
-		icon = GFX_focus_generic_supply_line
+		icon = GFX_focus_STP_ps_northern_arms
 		x = 20
 		y = 2
 		relative_position_id = STP_Govern_In_His_Name
@@ -1966,7 +1966,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_joint_staff
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_STP_ps_joint_staff
 		x = 18
 		y = 3
 		relative_position_id = STP_Govern_In_His_Name
@@ -1998,7 +1998,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_asylum_protocol
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_STP_ps_asylum_protocol
 		x = 20
 		y = 4
 		relative_position_id = STP_Govern_In_His_Name

@@ -182,6 +182,22 @@ spriteTypes = {
 		name = "GFX_focus_STP_party_war_transport"
 		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_war_transport.png"
 	}
+	spriteType = {
+		name = "GFX_focus_STP_ps_northern_credit"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_ps_northern_credit.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_ps_northern_arms"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_ps_northern_arms.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_ps_joint_staff"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_ps_joint_staff.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_ps_asylum_protocol"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_ps_asylum_protocol.png"
+	}
 
 	spriteType = {
 		name = "GFX_goal_generic_elections"
