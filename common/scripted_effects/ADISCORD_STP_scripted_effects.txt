@@ -940,6 +940,18 @@ NOD_cw_exhaust_northern_push = {
 		limit = { has_capitulated = no OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } }
 		add_ideas = NOD_cw_stalled_army
 	}
+	YPR = {
+		if = {
+			limit = { exists = yes has_capitulated = no has_war_with = NOD }
+			add_ideas = YPR_cw_northern_resolve
+		}
+	}
+	TFF = {
+		if = {
+			limit = { exists = yes has_capitulated = no has_war_with = NOD }
+			add_ideas = TFF_cw_northern_resolve
+		}
+	}
 }
 
 STP_cw_start_northern_war = {
