@@ -345,9 +345,6 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
     required_effect_tokens = (
         "ADISCORD_vorkerland_story_showdown_announced",
         "ADISCORD_vorkerland_story_first_claimant_capital_fell",
-        "32 = { is_controlled_by = ROOT }",
-        "75 = { is_controlled_by = ROOT }",
-        "36 = { is_controlled_by = ROOT }",
         "tag = WTD",
         "tag = VLA",
         "tag = SOL",
@@ -359,6 +356,26 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
     for token in required_effect_tokens:
         if token not in story_effects:
             issues.append(f"story effects are missing contract token {token}")
+
+    capital_fall = named_block(
+        story_effects, "ADISCORD_vorkerland_story_check_first_claimant_capital_fall"
+    )
+    for claimant, states in (
+        ("WKR", (32, 33, 40, 200, 201)),
+        ("VAD", (75, 106, 107, 121)),
+        ("TVA", (36, 37, 38, 39, 324)),
+    ):
+        for state_id in states:
+            token = f"{state_id} = {{ is_controlled_by = ROOT }}"
+            if token not in capital_fall:
+                issues.append(
+                    f"{claimant} first-fall news must require control of home state {state_id}"
+                )
+        if f"FROM = {{ tag = {claimant} }}" in capital_fall:
+            issues.append(
+                f"{claimant} first-fall news must depend on full regional control, "
+                "not on who held only the final changed state"
+            )
 
     issues.extend(dispatch_issues(story_effects))
 
