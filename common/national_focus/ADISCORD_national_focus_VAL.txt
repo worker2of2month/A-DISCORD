@@ -1799,9 +1799,15 @@ focus_tree = {
 		x = 20
 		y = 17
 		cost = 5
-		prerequisite = { focus = VAL_State_Contract }
-		prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
-		prerequisite = { focus = VAL_Army_Of_The_Ledger }
+		prerequisite = { focus = VAL_The_Steel_Contract }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_postwar_foundations_ready_tt
+				has_completed_focus = VAL_State_Contract
+				has_completed_focus = VAL_Industrial_Mobilization_Plan
+				has_completed_focus = VAL_Army_Of_The_Ledger
+			}
+		}
 		ai_will_do = {
 			base = 1
 
@@ -2156,9 +2162,14 @@ focus_tree = {
 		x = 20
 		y = 21
 		cost = 3
-		prerequisite = { focus = VAL_Contracts_Outlive_Kings focus = VAL_The_Steel_Contract focus = VAL_Market_Roads_North }
-		available = { custom_trigger_tooltip = { tooltip = VAL_frontier_postwar_ready_tt VAL_frontier_postwar = yes } }
-
+		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_frontier_conference_ready_tt
+				has_completed_focus = VAL_Market_Roads_North
+				VAL_frontier_postwar = yes
+			}
+		}
 		completion_reward = {
 			unlock_decision_tooltip = { decision = VAL_nationalise_region show_effect_tooltip = yes }
 			custom_effect_tooltip = VAL_frontier_nationalisation_chain_tt
