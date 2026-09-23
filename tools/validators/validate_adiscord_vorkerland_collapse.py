@@ -2344,7 +2344,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if "picture = GFX_news_event_adiscord_vorkerland_explosion" in body:
             issues.append(f"{news_id}: Ivanland outcome still reuses the Unity Tower explosion")
         for token in (
-            "major = yes", "is_triggered_only = yes", "fire_only_once = yes",
+            "major = yes", "is_triggered_only = yes", "fire_only_once = no",
             f"title = {news_id}.t", f"desc = {news_id}.d",
             f"option = {{ name = {news_id}.a }}",
         ):
