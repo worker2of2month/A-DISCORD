@@ -4370,14 +4370,13 @@ class ValRegionalIntegrationTests(unittest.TestCase):
 
         decision_block = only_named_block(self, decisions_text, "VAL_nationalise_region")
         target = only_named_block(self, decision_block, "target_trigger")
-        self.assertIn("any_neighbor_state = {", target)
-        self.assertIn("is_core_of = ROOT", target)
-        self.assertIn("is_owned_by = ROOT", target)
-        self.assertIn("is_controlled_by = ROOT", target)
-        self.assertIn("NOT = { is_core_of = ROOT }", target)
+        self.assertIn("VAL_regional_integration_state_valid = yes", target)
+        self.assertNotIn("is_owned_by = ROOT", target)
+        self.assertNotIn("is_controlled_by = ROOT", target)
 
         available = only_named_block(self, decision_block, "available")
         self.assertIn("VAL_regional_integration_target_valid = yes", available)
+        self.assertIn("VAL_regional_integration_state_valid = yes", available)
         self.assertIn("NOT = { has_country_flag = VAL_regional_integration_active }", available)
         self.assertNotIn("compliance", decision_block)
         self.assertNotIn("resistance", decision_block)
@@ -4388,10 +4387,21 @@ class ValRegionalIntegrationTests(unittest.TestCase):
         self.assertIn("set_country_flag = VAL_regional_integration_active", decision_block)
         self.assertIn("clr_country_flag = VAL_regional_integration_active", decision_block)
 
-        trigger = only_named_block(self, trigger_text, "VAL_regional_integration_target_valid")
-        for token in ("has_war = no", "any_neighbor_state = {", "is_core_of = ROOT",
-                      "is_owned_by = ROOT", "is_controlled_by = ROOT"):
-            self.assertIn(token, trigger)
+        country_trigger = only_named_block(self, trigger_text, "VAL_regional_integration_target_valid")
+        self.assertIn("has_war = no", country_trigger)
+        self.assertNotIn("FROM =", country_trigger)
+        for token in ("is_owned_by", "is_controlled_by", "is_core_of", "any_neighbor_state"):
+            self.assertNotIn(token, country_trigger)
+
+        state_trigger = only_named_block(self, trigger_text, "VAL_regional_integration_state_valid")
+        for token in ("any_neighbor_state = {", "is_core_of = VAL",
+                      "is_owned_by = VAL", "is_controlled_by = VAL",
+                      "NOT = { is_core_of = VAL }"):
+            self.assertIn(token, state_trigger)
+
+        cancel = only_named_block(self, decision_block, "cancel_trigger")
+        self.assertIn("VAL_regional_integration_target_valid = no", cancel)
+        self.assertIn("VAL_regional_integration_state_valid = no", cancel)
 
         conference = next(entry.text for entry in named_block_spans(focus_text, "focus")
                           if re.search(r"\bid\s*=\s*VAL_frontier_conference\b", entry.text))

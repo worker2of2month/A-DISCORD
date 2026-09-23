@@ -639,19 +639,25 @@ class TestValContractUi(unittest.TestCase):
 
     def test_nationalisation_is_a_repeatable_adjacent_core_chain(self) -> None:
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
         nationalise = named_block(decisions, "VAL_nationalise_region")
         for token in (
             "state_target = yes",
-            "any_neighbor_state = {",
-            "is_core_of = ROOT",
-            "is_owned_by = ROOT",
-            "is_controlled_by = ROOT",
-            "NOT = { is_core_of = ROOT }",
+            "VAL_regional_integration_state_valid = yes",
             "set_country_flag = VAL_regional_integration_active",
             "add_core_of = ROOT",
             "fire_only_once = no",
         ):
             self.assertIn(token, nationalise)
+        state_gate = named_block(triggers, "VAL_regional_integration_state_valid")
+        for token in (
+            "any_neighbor_state = {",
+            "is_core_of = VAL",
+            "is_owned_by = VAL",
+            "is_controlled_by = VAL",
+            "NOT = { is_core_of = VAL }",
+        ):
+            self.assertIn(token, state_gate)
         self.assertNotIn("compliance", nationalise)
         self.assertNotIn("resistance", nationalise)
 

@@ -1099,15 +1099,18 @@ VAL_regional_integration_target_valid = {
 			STP = { has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } }
 		}
 	}
-	FROM = {
-		is_owned_by = ROOT
-		is_controlled_by = ROOT
-		NOT = { is_core_of = ROOT }
-		any_neighbor_state = {
-			is_owned_by = ROOT
-			is_controlled_by = ROOT
-			is_core_of = ROOT
-		}
+}
+
+# STATE: decision target. Keep state ownership checks out of the country-scope
+# integration trigger so scripted-trigger scope cannot reinterpret FROM as a country.
+VAL_regional_integration_state_valid = {
+	is_owned_by = VAL
+	is_controlled_by = VAL
+	NOT = { is_core_of = VAL }
+	any_neighbor_state = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+		is_core_of = VAL
 	}
 }
 
