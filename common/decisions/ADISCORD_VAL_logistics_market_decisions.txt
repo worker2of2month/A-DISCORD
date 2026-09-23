@@ -595,15 +595,15 @@ VAL_trade_routes = {
 		}
 		ai_will_do = { base = 3 }
 	}
-	VAL_upgrade_north_route = {
+	VAL_upgrade_west_route = {
 		icon = generic_construction
 		allowed = { tag = VAL }
-		visible = { VAL_trade_corridors_unlocked = yes NOT = { has_country_flag = VAL_route_north_upgraded } }
+		visible = { VAL_trade_corridors_unlocked = yes NOT = { has_country_flag = VAL_route_west_upgraded } }
 		available = {
 			has_capitulated = no
 			custom_trigger_tooltip = {
-				tooltip = VAL_route_north_available_tt
-				VAL_trade_route_north_open = yes
+				tooltip = VAL_route_west_available_tt
+				VAL_trade_route_west_open = yes
 			}
 			custom_trigger_tooltip = {
 				tooltip = VAL_route_project_free_tt
@@ -615,13 +615,13 @@ VAL_trade_routes = {
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
 		days_remove = 30
 		cancel_if_not_visible = no
-		complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_north_corridor_project = yes } }
-		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_north_open = yes } } } }
+		complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_west_corridor_project = yes } }
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_west_open = yes } } } }
 		cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 2 compare = equals } } VAL_refund_corridor_project = yes } } }
 		remove_effect = {
 			hidden_effect = {
 				if = { limit = { check_variable = { var = VAL_corridor_project value = 2 compare = equals } }
-					if = { limit = { has_capitulated = no VAL_trade_route_north_open = yes } VAL_finish_north_corridor_project = yes }
+					if = { limit = { has_capitulated = no VAL_trade_route_west_open = yes } VAL_finish_west_corridor_project = yes }
 					else = { VAL_refund_corridor_project = yes }
 				}
 			}

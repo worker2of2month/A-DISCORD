@@ -251,7 +251,10 @@ def trade_route_states() -> dict[str, tuple[int, ...]]:
     """Read the authored corridor nodes from their authoritative predicates."""
     text = (ROOT / "common/scripted_triggers/ADISCORD_VAL_logistics_market_triggers.txt").read_text(encoding="utf-8")
     result = {}
-    for route in ("occidia", "north", "stelander", "vorkerland", "south"):
+    for route in ("occidia", "west", "stelander", "vorkerland", "south", "north"):
+        if route == "north":
+            result[route] = ()
+            continue
         start = text.index(f"VAL_trade_route_{route}_open = {{")
         end = text.index("\n}", start)
         result[route] = tuple(int(n) for n in re.findall(r"(?m)^\s+(\d+) = \{", text[start:end]))
@@ -392,6 +395,10 @@ def render_trade_routes() -> dict[str, Image.Image]:
     chains = {}
     all_points = [center(origin)]
     for route, states in routes.items():
+        if route == "north":
+            # Standing external route: keep it out of the land-corridor crop.
+            chains[route] = None
+            continue
         anchors = [origin, *(node(state) for state in states)]
         segments = []
         for a, b in zip(anchors, anchors[1:]):
@@ -419,6 +426,30 @@ def render_trade_routes() -> dict[str, Image.Image]:
     palette = ((130, 139, 144, 255), (115, 196, 127, 255), (240, 192, 69, 255), (230, 93, 79, 255))
     for route_index, (route, segments) in enumerate(chains.items(), 1):
         strip = Image.new("RGBA", (WIDTH*4, HEIGHT))
+        if route == "north":
+            glyph_6 = ("111", "100", "111", "101", "111")
+            for frame, color in enumerate(palette):
+                layer = Image.new("RGBA", (WIDTH, HEIGHT))
+                draw = ImageDraw.Draw(layer)
+                if frame == 0:
+                    for y in range(30, 92, 8):
+                        draw.rectangle((301, y, 302, min(y + 3, 91)), fill=color)
+                elif frame == 3:
+                    draw.rectangle((301, 30, 302, 54), fill=color)
+                    draw.rectangle((301, 62, 302, 91), fill=color)
+                    draw.line((297, 55, 306, 64), fill=color, width=1)
+                    draw.line((306, 55, 297, 64), fill=color, width=1)
+                else:
+                    draw.rectangle((301, 30, 302, 91), fill=color)
+                draw.rectangle((297, 21, 306, 29), fill=(17, 25, 29, 255), outline=color, width=1)
+                draw.rectangle((300, 18, 303, 20), fill=color)
+                for gy, row in enumerate(glyph_6):
+                    for gx, bit in enumerate(row):
+                        if bit == "1":
+                            draw.point((300 + gx, 23 + gy), fill=color)
+                strip.paste(layer, (frame * WIDTH, 0))
+            output["VAL_trade_route_north.png"] = strip
+            continue
         for frame, color in enumerate(palette):
             layer = Image.new("RGBA", (WIDTH, HEIGHT))
             draw = ImageDraw.Draw(layer)
@@ -448,7 +479,7 @@ def render_trade_routes() -> dict[str, Image.Image]:
                     draw.text((x+5,y-8), "!", fill=color)
             # Match endpoint numbers to the native translated route rows.
             x, y = project(segments[-1][0][-1])
-            ox, oy = {"occidia": (-16, -19), "north": (6, -18),
+            ox, oy = {"occidia": (-16, -19), "west": (6, -18),
                       "stelander": (-18, 5), "vorkerland": (7, -5), "south": (7, 5)}[route]
             draw.rectangle((x+ox-2, y+oy-1, x+ox+9, y+oy+13), fill=(17, 25, 29, 255), outline=color)
             draw.text((x+ox, y+oy), str(route_index), fill=color)
@@ -492,7 +523,7 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
             frame_variable = f"operations_state_{state}_frame"
             script.append(f'   {name} = {{ frame = {frame_variable} }}\n')
         script.append("  }\n }\n")
-    gui.append(' containerWindowType = { name = "ADISCORD_VAL_trade_routes_window" position = { x = 0 y = 0 } size = { width = 460 height = 545 }\n')
+    gui.append(' containerWindowType = { name = "ADISCORD_VAL_trade_routes_window" position = { x = 0 y = 0 } size = { width = 460 height = 570 }\n')
     gui.append('  iconType = { name = "trade_map" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_map" pdx_tooltip = "VAL_trade_map_tt" }\n')
     gfx.append(' spriteType = { name = "GFX_VAL_trade_map" texturefile = "gfx/interface/VAL_operations/VAL_trade_map.png" }\n')
     script.append(' ADISCORD_VAL_trade_routes_panel = { context_type = decision_category window_name = "ADISCORD_VAL_trade_routes_window" visible = { always = yes } triggers = {\n')
@@ -506,11 +537,15 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
             f'NOT = {{ VAL_trade_route_{route}_open = yes }} has_country_flag = VAL_route_{route}_commissioned',
         )
         route_gate = (
+            "always = yes"
+            if route == "north"
+            else (
             "OR = { VAL_trade_corridors_unlocked = yes "
             "has_completed_focus = VAL_Southern_Trade_Charter "
             "has_country_flag = ADISCORD_debug_val_south_route_active }"
             if route == "south"
             else "VAL_trade_corridors_unlocked = yes"
+            )
         )
         icon_name = f"trade_{route}_map"
         frame_variable = f"{icon_name}_frame"
@@ -521,7 +556,7 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
             # A separate status row gives each overlapping route its own hit area.
             gui.append(f'  instantTextBoxType = {{ name = "{name}_label" position = {{ x = 20 y = {354+row*25} }} font = "hoi_16mbs" text = "VAL_trade_{route}_{frame}" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_{route}_tt" }}\n')
             script.append(f'  {name}_label_visible = {{ {route_gate} {condition} }}\n')
-    gui.append('  instantTextBoxType = { name = "legend" position = { x = 20 y = 490 } font = "hoi_16mbs" text = "VAL_trade_map_legend" maxWidth = 420 maxHeight = 48 }\n }\n}\n')
+    gui.append('  instantTextBoxType = { name = "legend" position = { x = 20 y = 515 } font = "hoi_16mbs" text = "VAL_trade_map_legend" maxWidth = 420 maxHeight = 48 }\n }\n}\n')
     gfx.append('}\n')
     script.append(' }\n  properties = {\n')
     for route in trade_route_states():

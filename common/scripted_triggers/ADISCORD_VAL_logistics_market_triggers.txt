@@ -32,14 +32,23 @@ VAL_trade_route_occidia_open = {
 	88 = { VAL_trade_state_in_contract_sphere = yes }
 }
 
-# COUNTRY VAL. The northern belt is the compact resource spine through Antolla,
-# Farein and Himber, regardless of whether VAL or NKA administers it directly.
-VAL_trade_route_north_open = {
+# COUNTRY VAL. The western belt is the compact resource spine through Antolla,
+# Farein and Himber, regardless of which friendly authority administers it.
+VAL_trade_route_west_open = {
 	tag = VAL
 	VAL_trade_corridors_unlocked = yes
 	59 = { VAL_trade_state_in_contract_sphere = yes }
 	60 = { VAL_trade_state_in_contract_sphere = yes }
 	61 = { VAL_trade_state_in_contract_sphere = yes }
+}
+
+# COUNTRY VAL. The standing northern line is an external pre-crisis trade road.
+# It exists from game start and remains usable while Kefreyt still holds Irem;
+# unlike the expansion corridors it does not wait for the route-reopening focus.
+VAL_trade_route_north_open = {
+	tag = VAL
+	has_capitulated = no
+	24 = { is_owned_by = VAL is_controlled_by = VAL }
 }
 
 # COUNTRY VAL. The Stelander road uses the two border districts retained by
@@ -93,6 +102,7 @@ VAL_trade_network_disrupted = {
 	VAL_trade_corridors_unlocked = yes
 	OR = {
 		AND = { has_country_flag = VAL_route_occidia_commissioned NOT = { VAL_trade_route_occidia_open = yes } }
+		AND = { has_country_flag = VAL_route_west_commissioned NOT = { VAL_trade_route_west_open = yes } }
 		AND = { has_country_flag = VAL_route_north_commissioned NOT = { VAL_trade_route_north_open = yes } }
 		AND = { has_country_flag = VAL_route_stelander_commissioned NOT = { VAL_trade_route_stelander_open = yes } }
 		AND = { has_country_flag = VAL_route_vorkerland_commissioned NOT = { VAL_trade_route_vorkerland_open = yes } }
@@ -151,6 +161,8 @@ VAL_trade_network_changed = {
 	OR = {
 		AND = { VAL_trade_route_occidia_open = yes NOT = { check_variable = { var = VAL_route_occidia_active value = 1 compare = equals } } }
 		AND = { VAL_trade_route_occidia_open = no check_variable = { var = VAL_route_occidia_active value = 1 compare = equals } }
+		AND = { VAL_trade_route_west_open = yes NOT = { check_variable = { var = VAL_route_west_active value = 1 compare = equals } } }
+		AND = { VAL_trade_route_west_open = no check_variable = { var = VAL_route_west_active value = 1 compare = equals } }
 		AND = { VAL_trade_route_north_open = yes NOT = { check_variable = { var = VAL_route_north_active value = 1 compare = equals } } }
 		AND = { VAL_trade_route_north_open = no check_variable = { var = VAL_route_north_active value = 1 compare = equals } }
 		AND = { VAL_trade_route_stelander_open = yes NOT = { check_variable = { var = VAL_route_stelander_active value = 1 compare = equals } } }

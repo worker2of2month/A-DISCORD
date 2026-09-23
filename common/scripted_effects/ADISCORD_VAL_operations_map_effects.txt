@@ -17108,17 +17108,17 @@ VAL_trade_routes_map_refresh_cache = {
 		}
 		set_variable = { var = trade_occidia_map_frame value = 4 }
 	}
-	set_variable = { var = trade_north_map_frame value = 1 }
+	set_variable = { var = trade_west_map_frame value = 1 }
 	if = {
 		limit = {
-			NOT = { VAL_trade_route_north_open = yes }
-			NOT = { has_country_flag = VAL_route_north_commissioned }
+			NOT = { VAL_trade_route_west_open = yes }
+			NOT = { has_country_flag = VAL_route_west_commissioned }
 		}
-		set_variable = { var = trade_north_map_frame value = 1 }
+		set_variable = { var = trade_west_map_frame value = 1 }
 	}
 	else_if = {
 		limit = {
-			VAL_trade_route_north_open = yes
+			VAL_trade_route_west_open = yes
 			NOT = {
 				AND = {
 					check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals }
@@ -17126,22 +17126,22 @@ VAL_trade_routes_map_refresh_cache = {
 				}
 			}
 		}
-		set_variable = { var = trade_north_map_frame value = 2 }
+		set_variable = { var = trade_west_map_frame value = 2 }
 	}
 	else_if = {
 		limit = {
-			VAL_trade_route_north_open = yes
+			VAL_trade_route_west_open = yes
 			check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals }
 			check_variable = { var = VAL_corridor_security value = 3 compare = less_than }
 		}
-		set_variable = { var = trade_north_map_frame value = 3 }
+		set_variable = { var = trade_west_map_frame value = 3 }
 	}
 	else_if = {
 		limit = {
-			NOT = { VAL_trade_route_north_open = yes }
-			has_country_flag = VAL_route_north_commissioned
+			NOT = { VAL_trade_route_west_open = yes }
+			has_country_flag = VAL_route_west_commissioned
 		}
-		set_variable = { var = trade_north_map_frame value = 4 }
+		set_variable = { var = trade_west_map_frame value = 4 }
 	}
 	set_variable = { var = trade_stelander_map_frame value = 1 }
 	if = {
@@ -17247,5 +17247,40 @@ VAL_trade_routes_map_refresh_cache = {
 			has_country_flag = VAL_route_south_commissioned
 		}
 		set_variable = { var = trade_south_map_frame value = 4 }
+	}
+	set_variable = { var = trade_north_map_frame value = 1 }
+	if = {
+		limit = {
+			NOT = { VAL_trade_route_north_open = yes }
+			NOT = { has_country_flag = VAL_route_north_commissioned }
+		}
+		set_variable = { var = trade_north_map_frame value = 1 }
+	}
+	else_if = {
+		limit = {
+			VAL_trade_route_north_open = yes
+			NOT = {
+				AND = {
+					check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals }
+					check_variable = { var = VAL_corridor_security value = 3 compare = less_than }
+				}
+			}
+		}
+		set_variable = { var = trade_north_map_frame value = 2 }
+	}
+	else_if = {
+		limit = {
+			VAL_trade_route_north_open = yes
+			check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals }
+			check_variable = { var = VAL_corridor_security value = 3 compare = less_than }
+		}
+		set_variable = { var = trade_north_map_frame value = 3 }
+	}
+	else_if = {
+		limit = {
+			NOT = { VAL_trade_route_north_open = yes }
+			has_country_flag = VAL_route_north_commissioned
+		}
+		set_variable = { var = trade_north_map_frame value = 4 }
 	}
 }

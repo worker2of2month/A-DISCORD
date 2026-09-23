@@ -25,7 +25,7 @@ class WeeklyTradeTests(unittest.TestCase):
                           "VAL_trade_corridors_capacity": 4, "VAL_trade_corridors_active": 4}
         self.route_reads = []
         self.consumer = None
-        for route in ("occidia", "north", "stelander", "vorkerland"):
+        for route in ("occidia", "west", "stelander", "vorkerland"):
             self.facts["VAL", "has_country_flag", f"VAL_route_{route}_commissioned"] = True
             self.variables[f"VAL_route_{route}_active"] = 1
 
@@ -119,6 +119,11 @@ class WeeklyTradeTests(unittest.TestCase):
                 self.assertFalse(any(self.route_reads), "Consumers must reuse this pulse's reconciled routes")
                 self.execute(self.effects["VAL_logistics_market_weekly"])
                 self.assertEqual(self.variables["ADISCORD_economy_treasury"], 100 + 2 * income)
+
+    def test_corridor_payment_dispatch_is_not_focus_gated(self):
+        weekly = self.effects["VAL_logistics_market_weekly"]
+        self.assertTrue(any(e.key == "VAL_pay_trade_corridors" for e in weekly),
+                        "the standing north route must pay before later corridors are unlocked")
 
     def test_locked_trade_and_uncommissioned_routes_produce_no_income_or_penalty(self):
         self.facts.clear()
@@ -526,10 +531,10 @@ class CorridorProjectTests(unittest.TestCase):
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2250)
         self.assertEqual(self.variables["ADISCORD_economy_current_month_action_costs"], 750)
         self.assertEqual(self.rewards, [])
-        self.run_effect("VAL_begin_north_corridor_project")
+        self.run_effect("VAL_begin_west_corridor_project")
         self.assertEqual(self.variables["VAL_corridor_project"], 1)
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2250)
-        self.decision_effect("VAL_upgrade_north_route", "cancel_effect")
+        self.decision_effect("VAL_upgrade_west_route", "cancel_effect")
         self.assertEqual(self.variables["VAL_corridor_deposit"], 750)
         self.decision_effect("VAL_upgrade_occidia_route", "remove_effect")
         count = len(self.rewards)
@@ -541,17 +546,17 @@ class CorridorProjectTests(unittest.TestCase):
         self.assertNotIn("VAL_corridor_deposit", self.variables)
 
     def test_loss_at_delivery_refunds_exact_payment_and_allows_retry(self):
-        self.run_effect("VAL_begin_north_corridor_project")
+        self.run_effect("VAL_begin_west_corridor_project")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2000)
-        self.facts[("VAL", "VAL_trade_route_north_open", "yes")] = False
-        self.decision_effect("VAL_upgrade_north_route", "remove_effect")
+        self.facts[("VAL", "VAL_trade_route_west_open", "yes")] = False
+        self.decision_effect("VAL_upgrade_west_route", "remove_effect")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 3000)
         self.assertEqual(self.variables["ADISCORD_economy_current_month_action_income"], 1000)
         self.assertEqual(self.rewards, [])
-        self.decision_effect("VAL_upgrade_north_route", "cancel_effect")
+        self.decision_effect("VAL_upgrade_west_route", "cancel_effect")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 3000)
-        self.facts[("VAL", "VAL_trade_route_north_open", "yes")] = True
-        self.run_effect("VAL_begin_north_corridor_project")
+        self.facts[("VAL", "VAL_trade_route_west_open", "yes")] = True
+        self.run_effect("VAL_begin_west_corridor_project")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2000)
 
     def test_affordability_boundary(self):

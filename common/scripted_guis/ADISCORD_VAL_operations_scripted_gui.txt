@@ -600,11 +600,11 @@ scripted_gui = {
   trade_occidia_2_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_occidia_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
   trade_occidia_3_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_occidia_open = yes check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
   trade_occidia_4_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_occidia_open = yes } has_country_flag = VAL_route_occidia_commissioned }
-  trade_north_map_visible = { VAL_trade_corridors_unlocked = yes }
-  trade_north_1_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_north_open = yes } NOT = { has_country_flag = VAL_route_north_commissioned } }
-  trade_north_2_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_north_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
-  trade_north_3_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_north_open = yes check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
-  trade_north_4_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_north_open = yes } has_country_flag = VAL_route_north_commissioned }
+  trade_west_map_visible = { VAL_trade_corridors_unlocked = yes }
+  trade_west_1_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_west_open = yes } NOT = { has_country_flag = VAL_route_west_commissioned } }
+  trade_west_2_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_west_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
+  trade_west_3_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_west_open = yes check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
+  trade_west_4_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_west_open = yes } has_country_flag = VAL_route_west_commissioned }
   trade_stelander_map_visible = { VAL_trade_corridors_unlocked = yes }
   trade_stelander_1_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_stelander_open = yes } NOT = { has_country_flag = VAL_route_stelander_commissioned } }
   trade_stelander_2_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_stelander_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
@@ -620,13 +620,19 @@ scripted_gui = {
   trade_south_2_label_visible = { OR = { VAL_trade_corridors_unlocked = yes has_completed_focus = VAL_Southern_Trade_Charter has_country_flag = ADISCORD_debug_val_south_route_active } VAL_trade_route_south_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
   trade_south_3_label_visible = { OR = { VAL_trade_corridors_unlocked = yes has_completed_focus = VAL_Southern_Trade_Charter has_country_flag = ADISCORD_debug_val_south_route_active } VAL_trade_route_south_open = yes check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
   trade_south_4_label_visible = { OR = { VAL_trade_corridors_unlocked = yes has_completed_focus = VAL_Southern_Trade_Charter has_country_flag = ADISCORD_debug_val_south_route_active } NOT = { VAL_trade_route_south_open = yes } has_country_flag = VAL_route_south_commissioned }
+  trade_north_map_visible = { always = yes }
+  trade_north_1_label_visible = { always = yes NOT = { VAL_trade_route_north_open = yes } NOT = { has_country_flag = VAL_route_north_commissioned } }
+  trade_north_2_label_visible = { always = yes VAL_trade_route_north_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
+  trade_north_3_label_visible = { always = yes VAL_trade_route_north_open = yes check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
+  trade_north_4_label_visible = { always = yes NOT = { VAL_trade_route_north_open = yes } has_country_flag = VAL_route_north_commissioned }
  }
   properties = {
    trade_occidia_map = { frame = trade_occidia_map_frame }
-   trade_north_map = { frame = trade_north_map_frame }
+   trade_west_map = { frame = trade_west_map_frame }
    trade_stelander_map = { frame = trade_stelander_map_frame }
    trade_vorkerland_map = { frame = trade_vorkerland_map_frame }
    trade_south_map = { frame = trade_south_map_frame }
+   trade_north_map = { frame = trade_north_map_frame }
   }
  }
 }

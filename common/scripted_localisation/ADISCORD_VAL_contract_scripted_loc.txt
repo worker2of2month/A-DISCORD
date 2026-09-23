@@ -254,7 +254,7 @@ defined_text = {
  text = { localization_key = VAL_trade_route_ready }
 }
 defined_text = {
- name = VALTradeNorthReason
+ name = VALTradeWestReason
  text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
  text = { trigger = { NOT = { 59 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_59_blocked }
  text = { trigger = { NOT = { 60 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_60_blocked }
@@ -288,8 +288,8 @@ defined_text = {
  text = { localization_key = VAL_trade_not_upgraded }
 }
 defined_text = {
- name = VALTradeNorthUpgrade
- text = { trigger = { has_country_flag = VAL_route_north_upgraded } localization_key = VAL_trade_upgraded }
+ name = VALTradeWestUpgrade
+ text = { trigger = { has_country_flag = VAL_route_west_upgraded } localization_key = VAL_trade_upgraded }
  text = { localization_key = VAL_trade_not_upgraded }
 }
 defined_text = {
@@ -617,9 +617,9 @@ defined_text = {
 }
 
 defined_text = {
- name = VALTradeNorthIncome
- text = { trigger = { VAL_trade_route_north_open = no } localization_key = VAL_trade_income_zero }
- text = { trigger = { has_country_flag = VAL_route_north_upgraded } localization_key = VAL_trade_income_upgraded }
+ name = VALTradeWestIncome
+ text = { trigger = { VAL_trade_route_west_open = no } localization_key = VAL_trade_income_zero }
+ text = { trigger = { has_country_flag = VAL_route_west_upgraded } localization_key = VAL_trade_income_upgraded }
  text = { localization_key = VAL_trade_income_base }
 }
 
@@ -673,5 +673,12 @@ defined_text = {
  name = VALTradeSouthIncome
  text = { trigger = { VAL_trade_route_south_open = no } localization_key = VAL_trade_income_zero }
  text = { trigger = { has_country_flag = VAL_route_south_upgraded } localization_key = VAL_trade_income_upgraded }
+ text = { localization_key = VAL_trade_income_base }
+}
+
+# The starting northern line has no construction upgrade; its income is the base corridor payment while open.
+defined_text = {
+ name = VALTradeNorthIncome
+ text = { trigger = { VAL_trade_route_north_open = no } localization_key = VAL_trade_income_zero }
  text = { localization_key = VAL_trade_income_base }
 }
