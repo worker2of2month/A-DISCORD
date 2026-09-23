@@ -273,7 +273,7 @@ focus_tree = {
 		x = 16
 		y = 4
 		cost = 4
-		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
+		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_MANPOWER }
 		prerequisite = { focus = VAL_defeat_Bring_The_Captains_Home }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
 		cancel_if_invalid = yes
