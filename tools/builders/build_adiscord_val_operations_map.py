@@ -536,17 +536,9 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
             f'VAL_trade_route_{route}_open = yes {risk}',
             f'NOT = {{ VAL_trade_route_{route}_open = yes }} has_country_flag = VAL_route_{route}_commissioned',
         )
-        route_gate = (
-            "always = yes"
-            if route == "north"
-            else (
-                "OR = { VAL_trade_corridors_unlocked = yes "
-                "has_completed_focus = VAL_Southern_Trade_Charter "
-                "has_country_flag = ADISCORD_debug_val_south_route_active }"
-                if route == "south"
-                else "VAL_trade_corridors_unlocked = yes"
-            )
-        )
+        # The standing north road exists before the corridor UI, but the category
+        # itself stays hidden. All expansion routes share the second-wave gate.
+        route_gate = "always = yes" if route == "north" else "VAL_trade_corridors_unlocked = yes"
         icon_name = f"trade_{route}_map"
         frame_variable = f"{icon_name}_frame"
         gui.append(f'  iconType = {{ name = "{icon_name}" position = {{ x = 20 y = 8 }} quadTextureSprite = "GFX_VAL_trade_route_{route}" }}\n')
