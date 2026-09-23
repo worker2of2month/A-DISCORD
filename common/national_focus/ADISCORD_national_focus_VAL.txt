@@ -2563,11 +2563,13 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			VAL_reform_mercenary_payroll = yes
-			set_country_flag = VAL_economic_recovery_completed
-			VAL_advance_economic_recovery = yes
-			VAL_restore_arsenal_reputation = yes
 			effect_tooltip = { add_ideas = VAL_arsenal_quality_delta }
+			hidden_effect = {
+				VAL_reform_mercenary_payroll = yes
+				set_country_flag = VAL_economic_recovery_completed
+				VAL_advance_economic_recovery = yes
+				VAL_restore_arsenal_reputation = yes
+			}
 		}
 		ai_will_do = { base = 30 }
 	}
@@ -2793,10 +2795,12 @@ focus_tree = {
 		completion_reward = {
 			# Availability is continuously checked by cancel_if_invalid. Rechecking the
 			# full gate on the completion tick could silently consume the focus without war.
-			set_country_flag = ADISCORD_bezhaysk_campaign_active
 			declare_war_on = { target = BJK type = annex_everything }
-			hidden_effect = { ADISCORD_bezhaysk_join_val_campaign = yes }
-			hidden_effect = { VAL_call_subjects_to_wars = yes }
+			hidden_effect = {
+				set_country_flag = ADISCORD_bezhaysk_campaign_active
+				ADISCORD_bezhaysk_join_val_campaign = yes
+				VAL_call_subjects_to_wars = yes
+			}
 		}
 		ai_will_do = { base = 5 }
 	}
