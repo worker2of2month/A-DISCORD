@@ -1417,7 +1417,6 @@ VAL_foreign_sales = {
 			FROM = {
 				VAL_partner_orders_visible = yes
 				VAL_quarterly_recipient_ready = yes
-				VAL_order_can_offer = yes
 			}
 		}
 		available = { custom_trigger_tooltip = { tooltip = VAL_quarterly_decision_ready_tt FROM = { VAL_order_can_offer = yes } } }
@@ -1441,7 +1440,17 @@ VAL_foreign_sales = {
 			}
 		}
 		available = {
-			always = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_ready_decision_ready_tt
+				FROM = {
+					OR = {
+						VAL_partner_arms_can_offer = yes
+						VAL_partner_bulk_can_offer = yes
+						VAL_partner_arsenal_can_offer = yes
+						VAL_partner_strategic_can_offer = yes
+					}
+				}
+			}
 		}
 		cost = 0
 		complete_effect = {
