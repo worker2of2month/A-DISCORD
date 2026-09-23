@@ -1,4 +1,4 @@
-name: Diagnose Iskhayt seam path
+name: Simulate Iskhayt topology cleanup
 
 on:
   push:
@@ -9,24 +9,27 @@ permissions:
   contents: read
 
 jobs:
-  diagnose:
+  simulate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install Pillow
         run: python -m pip install --disable-pip-version-check pillow
-      - name: Find minimal connected Iskhayt patch
+      - name: Simulate local topology repair
         shell: bash
         run: |
           python - <<'PY'
-          import csv
-          from collections import defaultdict, deque
+          import csv,re
+          from collections import defaultdict,deque
           from pathlib import Path
           from PIL import Image
 
-          SRC=6
-          OTHER=85
-          TARGET=16372
+          PATCH = {
+              (3839, 990): 11496, # close 6-85 two-pixel bypass with existing Plaoya wedge
+              (3839, 991): 11496,
+              (3851, 998): 11496, # close 6-127 one-pixel corner contact
+              (3851, 974): 48,    # close 51-108 one-pixel corner contact
+          }
 
           rgb_to_id={}
           with open("map/definition.csv",encoding="utf-8-sig",newline="") as fh:
@@ -34,53 +37,72 @@ jobs:
                   if len(row)>=4 and row[0].isdigit():
                       rgb_to_id[tuple(map(int,row[1:4]))]=int(row[0])
 
+          state_by={}
+          for path in Path("history/states").glob("*.txt"):
+              text=path.read_text(encoding="utf-8-sig",errors="replace")
+              mi=re.search(r"\bid\s*=\s*(\d+)",text)
+              mp=re.search(r"\bprovinces\s*=\s*\{([^}]*)\}",text,re.S)
+              if mi and mp:
+                  sid=int(mi.group(1))
+                  for p in map(int,re.findall(r"\d+",mp.group(1))): state_by[p]=sid
+
           im=Image.open("map/provinces.bmp").convert("RGB")
           w,h=im.size; px=im.load()
-          coords=defaultdict(set)
-          grid=[-1]*(w*h)
+          before=[-1]*(w*h)
           for y in range(h):
               for x in range(w):
-                  p=rgb_to_id.get(px[x,y],-1)
-                  grid[y*w+x]=p
-                  if p in {SRC,OTHER,TARGET}: coords[p].add((x,y))
+                  before[y*w+x]=rgb_to_id.get(px[x,y],-1)
+          after=list(before)
 
-          contacts=[]
-          for x,y in coords[SRC]:
-              if any((x+dx,y+dy) in coords[OTHER] for dx,dy in ((1,0),(-1,0),(0,1),(0,-1))):
-                  contacts.append((x,y))
-          print("SOURCE CONTACT PIXELS",sorted(contacts))
+          print("PATCH INPUT")
+          for (x,y),target in PATCH.items():
+              old=before[y*w+x]
+              print((x,y),old,"state",state_by.get(old),"->",target,"state",state_by.get(target))
+              after[y*w+x]=target
 
-          target_adjacent_src={
-              (x,y) for x,y in coords[SRC]
-              if any((x+dx,y+dy) in coords[TARGET] for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)))
-          }
-          print("SRC PIXELS ADJACENT TO TARGET",sorted(target_adjacent_src))
+          def graph(grid):
+              adj=defaultdict(set); edges=defaultdict(int)
+              for y in range(h):
+                  for x in range(w):
+                      a=grid[y*w+x]
+                      if x+1<w:
+                          b=grid[y*w+x+1]
+                          if a!=b:
+                              k=tuple(sorted((a,b))); edges[k]+=1
+                              adj[a].add(b);adj[b].add(a)
+                      if y+1<h:
+                          b=grid[(y+1)*w+x]
+                          if a!=b:
+                              k=tuple(sorted((a,b))); edges[k]+=1
+                              adj[a].add(b);adj[b].add(a)
+              return adj,edges
+          badj,bedges=graph(before)
+          aadj,aedges=graph(after)
 
-          def shortest(start, goals):
-              q=deque([start]); prev={start:None}
-              while q:
-                  p=q.popleft()
-                  if p in goals:
-                      path=[]
-                      while p is not None:
-                          path.append(p); p=prev[p]
-                      return list(reversed(path))
-                  x,y=p
-                  for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
-                      n=(x+dx,y+dy)
-                      if n in coords[SRC] and n not in prev:
-                          prev[n]=p; q.append(n)
-              return None
+          changed=set(bedges)|set(aedges)
+          changes=[]
+          for k in changed:
+              if bedges.get(k,0)!=aedges.get(k,0):
+                  changes.append((k,bedges.get(k,0),aedges.get(k,0),state_by.get(k[0]),state_by.get(k[1])))
+          print("CHANGED BORDER EDGE COUNTS")
+          for item in sorted(changes,key=lambda x:x[0]): print(item)
 
-          patch=set()
-          for c in sorted(contacts):
-              path=shortest(c,target_adjacent_src)
-              print("PATH",c,path)
-              patch.update(path)
-          print("UNION PATCH",sorted(patch),"count",len(patch))
+          removed_pairs={k for k in badj for _ in [0]}
+          print("TARGET PAIRS")
+          for pair in [(6,85),(6,127),(51,108),(6,11496),(85,11496),(127,11496),(48,51),(48,108),(16372,11496)]:
+              k=tuple(sorted(pair))
+              print(pair,"edges",bedges.get(k,0),"->",aedges.get(k,0),"adj",pair[1] in badj[pair[0]],"->",pair[1] in aadj[pair[0]])
+
+          involved={6,85,127,11496,51,108,48,16372}
+          coords_before=defaultdict(set); coords_after=defaultdict(set)
+          for y in range(h):
+              for x in range(w):
+                  p=before[y*w+x]; q=after[y*w+x]
+                  if p in involved: coords_before[p].add((x,y))
+                  if q in involved: coords_after[q].add((x,y))
 
           def connected(points):
-              if not points: return False
+              if not points:return False
               s=next(iter(points)); seen={s}; q=[s]
               while q:
                   x,y=q.pop()
@@ -89,29 +111,22 @@ jobs:
                       if n in points and n not in seen:
                           seen.add(n);q.append(n)
               return len(seen)==len(points)
+          print("CONNECTIVITY")
+          for p in sorted(involved):
+              print(p,len(coords_before[p]),"->",len(coords_after[p]),connected(coords_before[p]),"->",connected(coords_after[p]))
 
-          src_after=coords[SRC]-patch
-          target_after=coords[TARGET]|patch
-          print("SOURCE CONNECTED AFTER",connected(src_after),"area",len(src_after))
-          print("TARGET CONNECTED AFTER",connected(target_after),"area",len(target_after))
-          remaining=sum(
-              1 for x,y in src_after
-              for dx,dy in ((1,0),(-1,0),(0,1),(0,-1))
-              if (x+dx,y+dy) in coords[OTHER]
-          )
-          print("REMAINING SRC-OTHER EDGES",remaining)
-
-          xs=[x for p in (coords[SRC]|coords[OTHER]|coords[TARGET]) for x,y in [p]]
-          ys=[y for p in (coords[SRC]|coords[OTHER]|coords[TARGET]) for x,y in [p]]
-          x0,x1=3834,3845; y0,y1=982,996
-          chars={SRC:"A",OTHER:"C",TARGET:"E"}
-          for y in range(y0,y1+1):
-              row=""
-              for x in range(x0,x1+1):
-                  p=grid[y*w+x]
-                  ch=chars.get(p,".")
-                  if (x,y) in patch:
-                      ch="P"
-                  row+=ch
-              print(f"{y:04d}",row)
+          # Cross-state adjacency pair set in local states 13-22: no new political border is allowed.
+          local_states=set(range(13,23))
+          cross_before=set()
+          cross_after=set()
+          for a,ns in badj.items():
+              for b in ns:
+                  if a<b and state_by.get(a) in local_states and state_by.get(b) in local_states and state_by.get(a)!=state_by.get(b):
+                      cross_before.add((a,b))
+          for a,ns in aadj.items():
+              for b in ns:
+                  if a<b and state_by.get(a) in local_states and state_by.get(b) in local_states and state_by.get(a)!=state_by.get(b):
+                      cross_after.add((a,b))
+          print("REMOVED CROSS-STATE PAIRS",sorted(cross_before-cross_after))
+          print("ADDED CROSS-STATE PAIRS",sorted(cross_after-cross_before))
           PY
