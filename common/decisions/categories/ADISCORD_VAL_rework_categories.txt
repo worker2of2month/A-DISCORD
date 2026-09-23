@@ -1,4 +1,5 @@
 VAL_military_operations = {
+	priority = 1000
 	allowed = { tag = VAL }
 	visible = { has_country_flag = VAL_operations_map_unlocked }
 	visible_when_empty = yes
