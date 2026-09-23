@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import io
 import subprocess
 import tempfile
+import tokenize
 import unittest
 from hashlib import sha256
 from pathlib import Path
@@ -22,6 +24,7 @@ TRANSIENT_PATTERNS = (
     "**/*.swp",
     "**/*.swo",
     "**/.#*",
+    "tools/_tmp_*.py",
 )
 
 LEGACY_VENDOR_PREFIX = "tools/hoi4_flag_maker_gui/"
@@ -88,6 +91,22 @@ def tracked_paths(repository_root: Path, pathspec: str) -> list[str]:
     return sorted(path for path in result.stdout.decode("utf-8").split("\0") if path)
 
 
+def python_semicolon_statements(repository_root: Path) -> list[str]:
+    """Return tracked Python lines that use semicolons as statement separators."""
+    findings: list[str] = []
+    for relative_path in tracked_paths(repository_root, "tools/**/*.py"):
+        path = repository_root / relative_path
+        source = path.read_text(encoding="utf-8-sig")
+        try:
+            tokens = tokenize.generate_tokens(io.StringIO(source).readline)
+            for token in tokens:
+                if token.type == tokenize.OP and token.string == ";":
+                    findings.append(f"{relative_path}:{token.start[0]}")
+        except tokenize.TokenError as error:
+            findings.append(f"{relative_path}:tokenize:{error}")
+    return findings
+
+
 class RepositoryHygieneTests(unittest.TestCase):
     def test_tracked_repository_hygiene_contract(self) -> None:
         """The contract rejects tracked transient artifacts at every path depth."""
@@ -118,6 +137,9 @@ class RepositoryHygieneTests(unittest.TestCase):
             )
 
             self.assertEqual(tracked_transient_paths(fixture_root), fixture_paths)
+
+    def test_python_uses_one_statement_per_line(self) -> None:
+        self.assertEqual(python_semicolon_statements(REPOSITORY_ROOT), [])
 
     def test_vendor_bundle_and_moved_reference_binaries_are_documented(self) -> None:
         """A vendor GUI stays outside tooling and every moved reference blob is attributable."""
