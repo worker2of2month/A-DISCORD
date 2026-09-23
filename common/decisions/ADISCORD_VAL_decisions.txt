@@ -1300,13 +1300,13 @@ VAL_foreign_sales = {
 				VAL_trade_recipient_ready = yes
 			}
 			OR = {
-			has_completed_focus = VAL_Resource_War_Contracts
-			has_completed_focus = VAL_Contingency_Ledgers
-			has_completed_focus = VAL_Market_Roads_North
-			has_completed_focus = VAL_Foreign_Broker_Licences
-			has_completed_focus = VAL_Operational_Directorate
-			has_country_flag = VAL_foreign_operations_unlocked
-			has_country_flag = VAL_northern_operations_unlocked
+				has_completed_focus = VAL_Resource_War_Contracts
+				has_completed_focus = VAL_Contingency_Ledgers
+				has_completed_focus = VAL_Market_Roads_North
+				has_completed_focus = VAL_Foreign_Broker_Licences
+				has_completed_focus = VAL_Operational_Directorate
+				has_country_flag = VAL_foreign_operations_unlocked
+				has_country_flag = VAL_northern_operations_unlocked
 			}
 		}
 		available = { custom_trigger_tooltip = { tooltip = VAL_trade_decision_available_tt FROM = { VAL_partner_trade_can_offer = yes } } }
@@ -1341,13 +1341,13 @@ VAL_foreign_sales = {
 				VAL_hire_recipient_ready = yes
 			}
 			OR = {
-			has_completed_focus = VAL_Resource_War_Contracts
-			has_completed_focus = VAL_Contingency_Ledgers
-			has_completed_focus = VAL_Market_Roads_North
-			has_completed_focus = VAL_Foreign_Broker_Licences
-			has_completed_focus = VAL_Operational_Directorate
-			has_country_flag = VAL_foreign_operations_unlocked
-			has_country_flag = VAL_northern_operations_unlocked
+				has_completed_focus = VAL_Resource_War_Contracts
+				has_completed_focus = VAL_Contingency_Ledgers
+				has_completed_focus = VAL_Market_Roads_North
+				has_completed_focus = VAL_Foreign_Broker_Licences
+				has_completed_focus = VAL_Operational_Directorate
+				has_country_flag = VAL_foreign_operations_unlocked
+				has_country_flag = VAL_northern_operations_unlocked
 			}
 		}
 		available = {
@@ -1443,13 +1443,13 @@ VAL_foreign_sales = {
 				VAL_special_recipient_ready = yes
 			}
 			OR = {
-			has_completed_focus = VAL_Resource_War_Contracts
-			has_completed_focus = VAL_Contingency_Ledgers
-			has_completed_focus = VAL_Market_Roads_North
-			has_completed_focus = VAL_Foreign_Broker_Licences
-			has_completed_focus = VAL_Operational_Directorate
-			has_country_flag = VAL_foreign_operations_unlocked
-			has_country_flag = VAL_northern_operations_unlocked
+				has_completed_focus = VAL_Resource_War_Contracts
+				has_completed_focus = VAL_Contingency_Ledgers
+				has_completed_focus = VAL_Market_Roads_North
+				has_completed_focus = VAL_Foreign_Broker_Licences
+				has_completed_focus = VAL_Operational_Directorate
+				has_country_flag = VAL_foreign_operations_unlocked
+				has_country_flag = VAL_northern_operations_unlocked
 			}
 		}
 
@@ -1581,15 +1581,15 @@ VAL_foreign_sales = {
 		visible = { has_country_flag = VAL_operation_sell_rifles_to_cin }
 		available = { hidden_trigger = { always = no } }
 		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = {
-							AND = {
-								has_completed_focus = VAL_Foreign_Broker_Licences
-								NOT = { has_equipment = { infantry_equipment < 50000 } }
-							}
-							AND = {
-								NOT = { has_completed_focus = VAL_Foreign_Broker_Licences }
-								NOT = { has_equipment = { infantry_equipment < 25000 } }
-							}
-						} }
+				AND = {
+					has_completed_focus = VAL_Foreign_Broker_Licences
+					NOT = { has_equipment = { infantry_equipment < 50000 } }
+				}
+				AND = {
+					NOT = { has_completed_focus = VAL_Foreign_Broker_Licences }
+					NOT = { has_equipment = { infantry_equipment < 25000 } }
+				}
+		} }
 		custom_cost_text = VAL_cost_northern_export
 		cost = 0
 		days_remove = 21
@@ -1693,15 +1693,15 @@ VAL_foreign_sales = {
 		visible = { has_country_flag = VAL_operation_sell_rifles_to_osf }
 		available = { hidden_trigger = { always = no } }
 		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = {
-							AND = {
-								has_completed_focus = VAL_Foreign_Broker_Licences
-								NOT = { has_equipment = { infantry_equipment < 50000 } }
-							}
-							AND = {
-								NOT = { has_completed_focus = VAL_Foreign_Broker_Licences }
-								NOT = { has_equipment = { infantry_equipment < 25000 } }
-							}
-						} }
+				AND = {
+					has_completed_focus = VAL_Foreign_Broker_Licences
+					NOT = { has_equipment = { infantry_equipment < 50000 } }
+				}
+				AND = {
+					NOT = { has_completed_focus = VAL_Foreign_Broker_Licences }
+					NOT = { has_equipment = { infantry_equipment < 25000 } }
+				}
+		} }
 		custom_cost_text = VAL_cost_northern_export
 		cost = 0
 		days_remove = 21
@@ -1916,17 +1916,17 @@ VAL_foreign_sales = {
 				if = {
 					limit = {
 						has_capitulated = no
-					NOT = { has_country_flag = VAL_export_offer_pending }
-					FROM = {
-						VAL_export_customer = yes
-						ADISCORD_economy_can_spend_100 = yes
-						NOT = { has_country_flag = VAL_export_customer_cooldown }
-					}
-					NOT = { has_idea = VAL_advisors_income }
-					NOT = { command_power < 25 }
-					FROM = {
-						NOT = { has_idea = VAL_paid_military_advisors }
-					}
+						NOT = { has_country_flag = VAL_export_offer_pending }
+						FROM = {
+							VAL_export_customer = yes
+							ADISCORD_economy_can_spend_100 = yes
+							NOT = { has_country_flag = VAL_export_customer_cooldown }
+						}
+						NOT = { has_idea = VAL_advisors_income }
+						NOT = { command_power < 25 }
+						FROM = {
+							NOT = { has_idea = VAL_paid_military_advisors }
+						}
 					}
 					set_country_flag = { flag = VAL_export_offer_pending days = 14 }
 					FROM = { set_country_flag = { flag = VAL_export_offer_advisors days = 14 } random_enemy_country = { save_global_event_target_as = VAL_advisor_enemy }
