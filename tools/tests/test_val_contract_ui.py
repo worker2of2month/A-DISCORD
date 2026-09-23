@@ -982,34 +982,62 @@ class TestValExpansionRoute(unittest.TestCase):
             self.assertIn("has_war = no", named_block(named_block(decisions, name), "available"))
         self.assertIn("STP_cw_union_wars_finished", named_block(text, "VAL_stelander_ultimatum_target"))
 
-    def test_expansion_is_central_visible_and_has_no_prerequisite_cycle(self):
+    def test_expansion_is_split_into_early_war_bands_and_late_continuation(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
         tree = parse_clausewitz(read("common/national_focus/ADISCORD_national_focus_VAL.txt"))[0].value
         def get(entries, key):
             return next(e.value for e in entries if e.key == key)
         focuses = {get(e.value, "id"): e.value for e in tree if e.key == "focus"}
-        entry = focuses["VAL_frontier_conference"]
-        spine = focuses["VAL_Contracts_Outlive_Kings"]
-        self.assertEqual(get(entry, "x"), get(spine, "x"))
-        self.assertEqual(float(get(entry, "y")), float(get(spine, "y")) + 2)
-        groups = [e.value for e in entry if e.key == "prerequisite"]
-        self.assertEqual(len(groups), 1)
-        self.assertEqual({e.value for e in groups[0]}, {"VAL_Contracts_Outlive_Kings", "VAL_The_Steel_Contract", "VAL_Market_Roads_North"})
-        for name in ("VAL_frontier_conference", "VAL_frontier_security_plan"):
-            self.assertIn("FOCUS_FILTER_ANNEXATION", [e.value for e in get(focuses[name], "search_filters")])
+
+        continuation_y = float(get(focuses["VAL_Contracts_Outlive_Kings"], "y"))
+        for name in (
+            "VAL_The_Harvest_Of_Ash",
+            "VAL_Stelander_Crisis_Opens",
+            "VAL_The_Steel_Contract",
+            "VAL_frontier_conference",
+            "VAL_frontier_security_plan",
+        ):
+            self.assertLess(float(get(focuses[name], "y")), continuation_y, name)
+        for name in (
+            "VAL_Bezhaysk_Operation",
+            "VAL_Return_Southern_Tsaygen",
+            "VAL_Wasteland_Charter",
+            "VAL_Southern_Expansion",
+            "VAL_Eastern_Expansion",
+        ):
+            self.assertGreater(float(get(focuses[name], "y")), continuation_y, name)
+
+        harvest = focuses["VAL_The_Harvest_Of_Ash"]
+        self.assertEqual(
+            {entry.value for group in harvest if group.key == "prerequisite" for entry in group.value},
+            {"VAL_The_Contract_State"},
+        )
+
+        frontier = focuses["VAL_frontier_conference"]
+        groups = [
+            {entry.value for entry in group.value}
+            for group in frontier
+            if group.key == "prerequisite"
+        ]
+        self.assertEqual(groups, [{"VAL_One_Ledger_One_Banner"}, {"VAL_Different_Views_On_Freedom"}])
+        self.assertNotIn("VAL_The_Steel_Contract", {item for group in groups for item in group})
+
         coords = [(get(f, "x"), get(f, "y")) for f in focuses.values()]
         self.assertEqual(len(coords), len(set(coords)))
         done, active = set(), set()
         def visit(name):
             self.assertNotIn(name, active, f"Cyclic focus route at {name}")
-            if name in done: return
+            if name in done:
+                return
             active.add(name)
             for block in focuses[name]:
                 if block.key == "prerequisite":
-                    for parent in block.value: visit(parent.value)
+                    for parent in block.value:
+                        visit(parent.value)
             active.remove(name)
             done.add(name)
-        for name in focuses: visit(name)
+        for name in focuses:
+            visit(name)
 
 
 class TestValReclamationFollowThrough(unittest.TestCase):
