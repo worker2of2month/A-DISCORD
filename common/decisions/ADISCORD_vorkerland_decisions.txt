@@ -238,7 +238,7 @@ ADISCORD_vorkerland_collapse_category = {
 		complete_effect = {
 			ADISCORD_vorkerland_detach_regional_war_factions = yes
 			# leave_faction/dismantle_faction reaches the diplomatic cache on the
-			# following day. The hidden event opens every still-valid rivalry once;
+			# following day. The hidden event opens every still-valid rivalry once.
 			# there is no daily or monthly watchdog.
 			set_global_flag = ADISCORD_vorkerland_regional_war_launch_scheduled
 			country_event = { id = ADISCORD_vorkerland_collapse.63 days = 1 }
@@ -308,13 +308,13 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	# A victorious and independent Frealor may open a limited northern operation.
-	# It receives the corridor only after physically controlling all three states;
+	# It receives the corridor only after physically controlling all three states.
 	# a timeout or the end of the central war closes both wars without transfers.
 	ADISCORD_vorkerland_rom_northern_intervention = {
 		icon = generic_border_conflict
 		allowed = { tag = ROM }
 		# Keep this player/AI-selected mission from auto-starting on a transient
-		# availability tick; its click remains the only 240-day timer authority.
+		# availability tick. its click remains the only 240-day timer authority.
 		activation = { always = no }
 		visible = {
 			ADISCORD_vorkerland_rom_northern_intervention_start_ready = yes
@@ -977,7 +977,7 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	# Zaozersk is the only northern administration that may return to WRK.
-	# Volnograd keeps its separate western loyalist route; technocratic Rimat does
+	# Volnograd keeps its separate western loyalist route. technocratic Rimat does
 	# not receive this decision at all.
 	ADISCORD_vorkerland_restore_loyalist_district = {
 		icon = generic_diplomatic_treaty
@@ -1028,7 +1028,7 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	# Both client administrations are postwar creations. Ivanland first has to
-	# occupy all four settlement states; IBA is then created before IBL.
+	# occupy all four settlement states. IBA is then created before IBL.
 	ADISCORD_ivanland_limited_intervention = {
 		icon = generic_border_conflict
 		allowed = { tag = IVN }
@@ -1077,7 +1077,7 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	# If the claimant war has exhausted every surviving principal, Ivanland can
-	# exploit the deadlock. TVA is checked only while it still exists; its prior
+	# exploit the deadlock. TVA is checked only while it still exists. its prior
 	# destruction therefore cannot block the second intervention.
 	ADISCORD_ivanland_second_intervention = {
 		icon = generic_border_conflict
