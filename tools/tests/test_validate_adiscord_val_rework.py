@@ -1969,13 +1969,14 @@ class ValContractFormationTests(unittest.TestCase):
         offer = next(e.value for e in parse_clausewitz(events) if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_STP_cw.50")
         for decision, option, price in (("VAL_cw_sell_arms_to_resistance", "ADISCORD_STP_cw.50.a", 500), ("VAL_cw_offer_contract_formations", "ADISCORD_STP_cw.50.c", 1000)):
             gate = next(e.value for e in offer if e.key == "option" and scalar(e.value, "name") == option)
-            text = only_named_block(self, decisions, decision)
-            expected = "ADISCORD_economy_can_spend_500" if price == 500 else "value = 1000 compare = greater_than_or_equals"
-            self.assertIn(expected, text)
+            decision_block = only_named_block(self, decisions, decision)
+            available = block(parse_clausewitz(decision_block)[0].value, "available")
             if price == 500:
-                self.assertTrue(any(e.key == expected for e in walk(block(gate, "trigger"))))
+                self.assertFalse(any(e.key == "ADISCORD_economy_can_spend_500" for e in walk(available)))
+                self.assertTrue(any(e.key == "ADISCORD_economy_can_spend_500" for e in walk(block(gate, "trigger"))))
             else:
-                self.assertTrue(any(e.key == "check_variable" and scalar(e.value, "value") == "1000" for e in walk(block(gate, "trigger"))))
+                self.assertFalse(any(e.key == "check_variable" and scalar(e.value, "var") == "ADISCORD_economy_treasury" and scalar(e.value, "value") == "1000" for e in walk(available)))
+                self.assertTrue(any(e.key == "check_variable" and scalar(e.value, "var") == "ADISCORD_economy_treasury" and scalar(e.value, "value") == "1000" for e in walk(block(gate, "trigger"))))
         payment = only_named_block(self, effects, "VAL_cw_complete_arms_contract")
         self.assertIn("ADISCORD_economy_spend_500 = yes ADISCORD_economy_spend_500 = yes", payment)
         resolver = only_named_block(self, (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8"), "STP_ps_resolve_val_supply")
@@ -2009,16 +2010,20 @@ class ValContractFormationTests(unittest.TestCase):
                            if e.key == "set_country_flag" and isinstance(e.value, list)
                            and scalar(e.value, "flag") == "VAL_cw_arms_offer_pending")
             self.assertEqual((scalar(pending, "value"), scalar(pending, "days")), (tier, "35" if tier == "2" else "21"))
-            for gate in (block(decision, "available"), block(options[option_id], "trigger")):
-                if treasury == "1000":
-                    self.assertTrue(any(e.key == "check_variable" and scalar(e.value, "var") == "ADISCORD_economy_treasury" and scalar(e.value, "value") == treasury and scalar(e.value, "compare") == "greater_than_or_equals" for e in walk(gate)))
-                else:
-                    self.assertTrue(any(e.key == f"ADISCORD_economy_can_spend_{treasury}" for e in walk(gate)))
-                decision_text = only_named_block(self, DECISIONS_PATH.read_text(encoding="utf-8-sig"), decision_id)
-                if manpower is None:
-                    self.assertNotIn("has_manpower", decision_text)
-                else:
-                    self.assertIn(f"has_manpower < {manpower}", decision_text)
+            decision_gate = block(decision, "available")
+            acceptance_gate = block(options[option_id], "trigger")
+            if treasury == "1000":
+                self.assertFalse(any(e.key == "check_variable" and scalar(e.value, "var") == "ADISCORD_economy_treasury" and scalar(e.value, "value") == treasury for e in walk(decision_gate)))
+                self.assertTrue(any(e.key == "check_variable" and scalar(e.value, "var") == "ADISCORD_economy_treasury" and scalar(e.value, "value") == treasury and scalar(e.value, "compare") == "greater_than_or_equals" for e in walk(acceptance_gate)))
+            else:
+                self.assertFalse(any(e.key == f"ADISCORD_economy_can_spend_{treasury}" for e in walk(decision_gate)))
+                self.assertTrue(any(e.key == f"ADISCORD_economy_can_spend_{treasury}" for e in walk(acceptance_gate)))
+            decision_text = only_named_block(self, DECISIONS_PATH.read_text(encoding="utf-8-sig"), decision_id)
+            if manpower is None:
+                self.assertNotIn("has_manpower", decision_text)
+            else:
+                self.assertIn(f"has_manpower < {manpower}", decision_text)
+            for gate in (decision_gate, acceptance_gate):
                 self.assertTrue(any(e.key == "has_equipment" and [c.value for c in e.value] == ["infantry_equipment", "<", rifles]
                                     for e in walk(gate)))
             # The visible answer and its delayed payload must both preserve the donor's tier.
