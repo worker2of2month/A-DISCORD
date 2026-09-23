@@ -803,7 +803,7 @@ focus_tree = {
 		x = 22
 		y = 6
 		cost = 4
-		prerequisite = { focus = VAL_One_Ledger_One_Banner }
+		prerequisite = { focus = VAL_Closed_Ledgers }
 		completion_reward = {
 			unlock_decision_tooltip = { decision = VAL_pay_quarterly_contract_norm show_effect_tooltip = yes }
 			unlock_decision_tooltip = { decision = VAL_subcontract_quarterly_norm show_effect_tooltip = yes }
