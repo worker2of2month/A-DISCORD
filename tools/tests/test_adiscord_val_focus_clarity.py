@@ -154,7 +154,8 @@ class KefreytFocusClarityTests(unittest.TestCase):
 
     def test_population_and_cannibal_routes_no_longer_wait_for_late_spine(self) -> None:
         harvest = focus(self.focuses, "VAL_The_Harvest_Of_Ash")
-        self.assertIn("prerequisite = { focus = VAL_The_Contract_State }", harvest)
+        self.assertIn("prerequisite = { focus = VAL_reclamation_survey }", harvest)
+        self.assertNotIn("prerequisite = { focus = VAL_The_Contract_State }", harvest)
         self.assertNotIn("focus = VAL_One_Ledger_One_Banner", harvest)
 
         frontier = focus(self.focuses, "VAL_frontier_conference")
