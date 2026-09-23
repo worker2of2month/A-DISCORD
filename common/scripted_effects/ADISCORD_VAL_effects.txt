@@ -3819,6 +3819,7 @@ VAL_install_nodrul_administration = {
     if = {
         limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
         VAL = { VAL_snapshot_nodrul_settlement = yes }
+        VAL_settle_nodrul_bezhaysk_war = yes
         VAL_settle_frontier_partner_war = yes
         if = { limit = { has_war_with = VAL } white_peace = VAL }
         VAL = { VAL_partition_nodrul_settlement = yes }
@@ -3840,6 +3841,25 @@ VAL_install_nodrul_administration = {
         set_country_flag = VAL_nodrul_administration_pending
         set_variable = { var = VAL_nodrul_administration_retry value = 0 }
         country_event = { id = val_contract.353 days = 1 }
+    }
+}
+
+
+# COUNTRY NOD. The Kefreyt campaign owns this war; it must not remain open
+# until Bezhaysk's separate capitulation callback fires.
+VAL_settle_nodrul_bezhaysk_war = {
+    if = {
+        limit = {
+            tag = NOD
+            has_war_with = BJK
+            VAL = {
+                OR = {
+                    has_country_flag = ADISCORD_bezhaysk_campaign_active
+                    has_completed_focus = VAL_Bezhaysk_Operation
+                }
+            }
+        }
+        white_peace = BJK
     }
 }
 
@@ -4339,6 +4359,19 @@ VAL_call_subjects_to_wars = {
 		set_country_flag = VAL_subject_war_dispatch_active
 		every_enemy_country = {
 			save_event_target_as = VAL_subject_war_enemy
+			every_subject_country = {
+				limit = {
+					has_capitulated = no
+					NOT = { has_war_with = VAL }
+					NOT = { is_in_faction_with = VAL }
+				}
+				add_to_war = {
+					targeted_alliance = event_target:VAL_subject_war_enemy
+					enemy = VAL
+					hostility_reason = asked_to_join
+					single_target_only = yes
+				}
+			}
 			VAL = {
 				every_subject_country = {
 					limit = {
@@ -4759,6 +4792,7 @@ VAL_council_begin_revanche = {
 		limit = { VAL_council_can_launch_revanche = yes }
 		set_country_flag = VAL_council_revanche_active
 		declare_war_on = { target = STS type = annex_everything }
+		hidden_effect = { VAL_call_subjects_to_wars = yes }
 		if = {
 			limit = { has_war_with = STS }
 			STS = { country_event = { id = ADISCORD_STP_pc.32 } }

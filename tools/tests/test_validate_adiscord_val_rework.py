@@ -4167,6 +4167,15 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertEqual(self.scalar(dispatch, "set_country_flag"), "VAL_subject_war_dispatch_active")
         self.assertEqual(self.scalar(dispatch, "clr_country_flag"), "VAL_subject_war_dispatch_active")
         enemies = self.getblock(dispatch, "every_enemy_country")
+        enemy_subjects = self.getblock(enemies, "every_subject_country")
+        enemy_gate = self.getblock(enemy_subjects, "limit")
+        enemy_facts = {("OCA", "has_capitulated", "no"): True}
+        self.assertTrue(matches_conditions(enemy_gate, enemy_facts, "OCA"))
+        for relation in ("has_war_with", "is_in_faction_with"):
+            self.assertFalse(matches_conditions(enemy_gate, {**enemy_facts, ("OCA", relation, "VAL"): True}, "OCA"))
+        enemy_join = self.getblock(enemy_subjects, "add_to_war")
+        self.assertEqual(self.scalar(enemy_join, "targeted_alliance"), "event_target:VAL_subject_war_enemy")
+        self.assertEqual(self.scalar(enemy_join, "enemy"), "VAL")
         subjects = self.getblock(self.getblock(enemies, "VAL"), "every_subject_country")
         gate = self.getblock(subjects, "limit")
         facts = {("OCA", "has_capitulated", "no"): True}
@@ -4178,6 +4187,11 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertEqual(self.scalar(join, "targeted_alliance"), "VAL")
         self.assertEqual(self.scalar(join, "enemy"), "event_target:VAL_subject_war_enemy")
         self.assertFalse(any(e.key == "declare_war_on" for e in walk(call)))
+        decisions = self.parse(DECISIONS_PATH.read_text(encoding="utf-8"))
+        campaign = next(e.value for e in walk(decisions) if e.key == "VAL_campaign_against_stelander")
+        self.assertTrue(any(e.key == "VAL_call_subjects_to_wars" for e in walk(campaign)))
+        revanche = self.getblock(effects, "VAL_council_begin_revanche")
+        self.assertTrue(any(e.key == "VAL_call_subjects_to_wars" for e in walk(revanche)))
         hooks = self.getblock(self.parse(ON_ACTIONS_PATH.read_text(encoding="utf-8")), "on_actions")
         for name in ("on_startup", "on_war_relation_added", "on_puppet"):
             self.assertTrue(any(e.key == "VAL_call_subjects_to_wars" for e in walk(self.getblock(hooks, name))), name)

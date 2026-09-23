@@ -45,6 +45,15 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("NOD = { exists = yes has_war_with = VAL has_war_with = STS has_capitulated = yes }", self.reconcile)
         self.assertIn("VAL_settle_joint_nod_shabrat_victory = yes", self.reconcile)
 
+    def test_nodrul_settlement_closes_bezhaysk_war_before_capitulation(self) -> None:
+        install = named_block(self.source, "VAL_install_nodrul_administration")
+        settle = named_block(self.source, "VAL_settle_nodrul_bezhaysk_war")
+        self.assertIn("VAL_settle_nodrul_bezhaysk_war = yes", install)
+        self.assertIn("has_war_with = BJK", settle)
+        self.assertIn("has_country_flag = ADISCORD_bezhaysk_campaign_active", settle)
+        self.assertIn("has_completed_focus = VAL_Bezhaysk_Operation", settle)
+        self.assertIn("white_peace = BJK", settle)
+
 
 if __name__ == "__main__":
     unittest.main()

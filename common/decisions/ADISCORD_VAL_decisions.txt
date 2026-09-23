@@ -1019,8 +1019,8 @@ VAL_frontier = {
 		icon = generic_prepare_civil_war allowed = { tag = VAL }
 		targets = { STP STS }
 		target_trigger = { FROM = { exists = yes } }
-		visible = { has_completed_focus = VAL_Stelander_Ultimatum NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no NOT = { has_war_with = ROOT } } }
-		available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } FROM = { has_country_flag = VAL_stelander_refused } }
+		visible = { has_completed_focus = VAL_Stelander_Ultimatum NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no } }
+		available = { VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } FROM = { OR = { has_country_flag = VAL_stelander_refused has_war_with = ROOT } } }
 		cost = 60 days_remove = 30 days_re_enable = 90
 		complete_effect = {
 			custom_effect_tooltip = VAL_campaign_preparation_tt
@@ -1030,7 +1030,7 @@ VAL_frontier = {
 					limit = {
 						VAL_can_launch_final_campaign = yes
 						NOT = { has_country_flag = VAL_campaign_mobilizing }
-						FROM = { has_country_flag = VAL_stelander_refused }
+						FROM = { OR = { has_country_flag = VAL_stelander_refused has_war_with = ROOT } }
 					}
 					set_country_flag = VAL_campaign_mobilizing
 					FROM = { set_country_flag = VAL_campaign_target }
@@ -1040,7 +1040,7 @@ VAL_frontier = {
 		cancel_trigger = {
 			hidden_trigger = {
 				OR = {
-					has_war = yes
+					AND = { has_war = yes NOT = { has_war_with = FROM } }
 					has_capitulated = yes
 					is_subject = yes
 					has_country_flag = VAL_stelander_defeated
@@ -1060,7 +1060,14 @@ VAL_frontier = {
 		remove_effect = {
 			if = {
 				limit = { has_country_flag = VAL_campaign_mobilizing VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
-				declare_war_on = { target = FROM type = annex_everything }
+				if = {
+					limit = { FROM = { has_war_with = ROOT } }
+					hidden_effect = { VAL_call_subjects_to_wars = yes }
+				}
+				else = {
+					declare_war_on = { target = FROM type = annex_everything }
+					hidden_effect = { VAL_call_subjects_to_wars = yes }
+				}
 			}
 			hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } }
 		}
@@ -1880,9 +1887,9 @@ VAL_foreign_sales = {
 		visible = { always = no  has_completed_focus = VAL_Foreign_Broker_Licences FROM = { has_war = yes NOT = { tag = STS has_war_with = STP } } }
 
 		available = {
-			custom_trigger_tooltip = { tooltip = VAL_partner_desk_free_tt VAL_partner_desk_free = yes }
-			custom_trigger_tooltip = { tooltip = VAL_partner_export_slot_tt VAL_export_slot_free = yes }
-			NOT = { has_equipment = { infantry_equipment < 25000 } }
+			custom_trigger_tooltip = { tooltip = VAL_partner_desk_free_tt VAL = { VAL_partner_desk_free = yes } }
+			custom_trigger_tooltip = { tooltip = VAL_partner_export_slot_tt VAL = { VAL_export_slot_free = yes } }
+			custom_trigger_tooltip = { tooltip = VAL_partner_arms_stock_tt VAL = { NOT = { has_equipment = { infantry_equipment < 25000 } } } }
 			custom_trigger_tooltip = { tooltip = VAL_partner_arms_funds_tt FROM = { VAL_partner_arms_funds_ready = yes } }
 			custom_trigger_tooltip = { tooltip = VAL_partner_customer_ready_tt FROM = { VAL_partner_arms_can_offer = yes } }
 		}

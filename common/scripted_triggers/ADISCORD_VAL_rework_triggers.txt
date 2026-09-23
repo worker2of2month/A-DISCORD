@@ -645,8 +645,15 @@ VAL_stelander_offer_current = {
  VAL = { has_country_flag = VAL_stelander_offer_pending }
 }
 VAL_can_launch_final_campaign = {
- NOT = { has_country_flag = VAL_stelander_defeated }
- has_war = no has_capitulated = no is_subject = no VAL_frontier_idle = yes
+NOT = { has_country_flag = VAL_stelander_defeated }
+ OR = {
+  has_war = no
+  AND = {
+   FROM = { OR = { tag = STP tag = STS } }
+   FROM = { has_war_with = ROOT }
+  }
+ }
+ has_capitulated = no is_subject = no VAL_frontier_idle = yes
  FROM = { exists = yes has_capitulated = no OR = { is_subject = no AND = { tag = NOD is_subject_of = STP } } NOT = { is_in_faction_with = VAL } NOT = { has_country_flag = VAL_stelander_truce } }
 }
 
@@ -1085,7 +1092,13 @@ VAL_regional_integration_target_valid = {
 	tag = VAL
 	is_subject = no
 	has_capitulated = no
-	has_war = no
+	OR = {
+		has_war = no
+		AND = {
+			has_war_with = STP
+			STP = { has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } }
+		}
+	}
 	FROM = {
 		is_owned_by = ROOT
 		is_controlled_by = ROOT
@@ -1442,13 +1455,53 @@ VAL_wasteland_invasion_available = {
 	custom_trigger_tooltip = { tooltip = VAL_perimeter_open_tt has_global_flag = ADISCORD_vorkerland_dirty_opened }
 	has_capitulated = no
 	is_subject = no
-	owns_state = 168
-	controls_state = 168
 	ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no }
 	169 = { is_owned_by = ERT is_controlled_by = ERT }
 	NOT = { has_war_with = ERT }
 	VAL_frontier_idle = yes
 }
+
+VAL_wasteland_charter_available = {
+	has_global_flag = ADISCORD_vorkerland_dirty_opened
+	owns_state = 169
+	controls_state = 169
+	is_subject = no
+	has_capitulated = no
+	NOT = { has_war_with = ERT }
+	WCA = { exists = no }
+}
+
+VAL_southern_expansion_available = {
+	VAL_wasteland_administration_ready = yes
+	ERT = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		is_in_faction = no
+	}
+	NOT = { has_war_with = ERT }
+}
+
+VAL_eastern_expansion_available = {
+	VAL_wasteland_administration_ready = yes
+	WCA = {
+		owns_state = 184
+		controls_state = 184
+		owns_state = 185
+		controls_state = 185
+	}
+	NOT = {
+		has_war_with = ERT
+		has_war_with = IRT
+	}
+	IRT = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		is_in_faction = no
+	}
+}
+
 VAL_wasteland_administration_ready = {
 	has_global_flag = ADISCORD_vorkerland_dirty_opened
 	has_capitulated = no

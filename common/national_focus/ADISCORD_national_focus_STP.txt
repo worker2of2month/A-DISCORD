@@ -456,7 +456,15 @@ focus_tree = {
 		y = 3
 		cost = 4
 		prerequisite = { focus = STP_Garrisons_Hesitate }
-		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag NOT = { has_country_flag = STP_cw_elections_finished } custom_trigger_tooltip = { tooltip = STP_cw_nod_busy_in_north_tt STP_cw_nod_busy_in_north = yes } }
+		available = {
+			STP_cw_preparation_open = yes
+			has_country_flag = STP_sided_with_Maksim_flag
+			NOT = { has_country_flag = STP_cw_elections_finished }
+			custom_trigger_tooltip = {
+				tooltip = STP_cw_nod_busy_in_north_tt
+				STP_cw_nod_busy_in_north = yes
+			}
+		}
 		ai_will_do = { base = 8 modifier = { factor = 0 power_balance_value = { id = STP_shabrat_election_legitimacy value > 0.10 } } }
 		completion_reward = {
 			unlock_decision_tooltip = { decision = STP_cw_start_uprising show_effect_tooltip = yes } custom_effect_tooltip = STP_cw_start_uprising_desc
@@ -493,7 +501,18 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_STP_DISTRICT_ADMINISTRATIONS FOCUS_FILTER_STP_ARMY_PREPARATION }
 		relative_position_id = STP_Show_Him_The_Truth
 		allow_branch = { NOT = { has_country_flag = STP_sided_with_the_party_flag } }
-		available = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_Maksim_flag custom_trigger_tooltip = { tooltip = STP_cw_livonn_active_agreement_tt 45 = { is_owned_by = STP is_controlled_by = STP has_state_flag = STP_local_deal_asset } } }
+		available = {
+			STP_cw_preparation_open = yes
+			has_country_flag = STP_sided_with_Maksim_flag
+			custom_trigger_tooltip = {
+				tooltip = STP_cw_livonn_active_agreement_tt
+				45 = {
+					is_owned_by = STP
+					is_controlled_by = STP
+					has_state_flag = STP_local_deal_asset
+				}
+			}
+		}
 		cancel_if_invalid = yes
 		icon = GFX_focus_STP_Triumph_Of_Common_Sense
 		x = 8
@@ -2722,7 +2741,20 @@ focus_tree = {
 
 		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
 
-		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt STP_ps_war_active = yes } custom_trigger_tooltip = { tooltip = STP_ps_government_operational_tt STP_ps_government_operational = yes } custom_trigger_tooltip = { tooltip = STP_ps_staff_recovery_tt check_variable = { var = STP_ps_stage value = 2 compare = greater_than_or_equals } } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_war_available_tt
+				STP_ps_war_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_government_operational_tt
+				STP_ps_government_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_staff_recovery_tt
+				check_variable = { var = STP_ps_stage value = 2 compare = greater_than_or_equals }
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
@@ -3288,7 +3320,16 @@ focus_tree = {
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_district_congress focus = STP_pw_party_executive_secretariat }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_services_delivered_tt check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_services_delivered_tt
+				check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals }
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -3452,7 +3493,16 @@ focus_tree = {
 		cost = 5
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_commercial_recovery focus = STP_pw_party_defence_combine }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_industry_delivered_tt check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_industry_delivered_tt
+				check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals }
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -3875,7 +3925,16 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = STP_party_research_council }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } custom_trigger_tooltip = { tooltip = STP_party_ministries_restored_tt check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } }  }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_ministries_restored_tt
+				check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals }
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
@@ -3898,7 +3957,22 @@ focus_tree = {
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_party_local_cadres }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_district_consent_tt OR = { check_variable = { var = STP_pf_borons_support value = 50 compare = greater_than_or_equals } AND = { has_completed_focus = STP_party_district_compact check_variable = { var = STP_pf_borons_support value = 35 compare = greater_than_or_equals } } } } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_district_consent_tt
+				OR = {
+					check_variable = { var = STP_pf_borons_support value = 50 compare = greater_than_or_equals }
+					AND = {
+						has_completed_focus = STP_party_district_compact
+						check_variable = { var = STP_pf_borons_support value = 35 compare = greater_than_or_equals }
+					}
+				}
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
@@ -3927,7 +4001,22 @@ focus_tree = {
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_party_chain_of_command }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_central_consent_tt OR = { check_variable = { var = STP_pf_security_support value = 50 compare = greater_than_or_equals } AND = { has_completed_focus = STP_ROTATE_DISTRICT_COMMAND check_variable = { var = STP_pf_security_support value = 35 compare = greater_than_or_equals } } } } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_central_consent_tt
+				OR = {
+					check_variable = { var = STP_pf_security_support value = 50 compare = greater_than_or_equals }
+					AND = {
+						has_completed_focus = STP_ROTATE_DISTRICT_COMMAND
+						check_variable = { var = STP_pf_security_support value = 35 compare = greater_than_or_equals }
+					}
+				}
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
@@ -3957,7 +4046,16 @@ focus_tree = {
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_party_port_contracts }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_commercial_consent_tt check_variable = { var = STP_pf_merchants_support value = 45 compare = greater_than_or_equals } } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_commercial_consent_tt
+				check_variable = { var = STP_pf_merchants_support value = 45 compare = greater_than_or_equals }
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
@@ -3985,7 +4083,16 @@ focus_tree = {
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_party_industrial_board }
-		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }  custom_trigger_tooltip = { tooltip = STP_party_military_consent_tt check_variable = { var = STP_pf_army_support value = 45 compare = greater_than_or_equals } } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_military_consent_tt
+				check_variable = { var = STP_pf_army_support value = 45 compare = greater_than_or_equals }
+			}
+		}
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
