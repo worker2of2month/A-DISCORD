@@ -2242,13 +2242,37 @@ focus_tree = {
 		ai_will_do = { base = 25 }
 	}
 	focus = {
+		id = VAL_Return_Southern_Tsaygen
+		icon = GFX_goal_generic_territory_or_war
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
+		x = 32
+		y = 12
+		cost = 4
+		prerequisite = { focus = VAL_Foreign_Broker_Licences }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_southern_tsaygen_revenge_available_tt
+				VAL_southern_tsaygen_revenge_available = yes
+			}
+		}
+		bypass = { has_global_flag = ADISCORD_vorkerland_dirty_opened owns_state = 168 }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_return_southern_tsaygen_war_tt
+			declare_war_on = { target = ERT type = take_state_focus generator = { 168 } }
+			hidden_effect = { VAL_call_subjects_to_wars = yes }
+		}
+		ai_will_do = { base = 12 }
+	}
+
+	focus = {
 		id = VAL_frontier_return_irem
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 32
 		y = 13
 		cost = 5
-		prerequisite = { focus = VAL_Foreign_Broker_Licences }
+		prerequisite = { focus = VAL_Return_Southern_Tsaygen }
 		available = { VAL_wasteland_invasion_available = yes }
 		bypass = { owns_state = 169 }
 		cancel_if_invalid = yes

@@ -922,7 +922,7 @@ VAL_frontier = {
 	VAL_frontier_demand_ERT = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		visible = { has_completed_focus = VAL_frontier_return_irem ERT = { exists = yes is_subject = no } 168 = { is_owned_by = ERT } }
+		visible = { has_completed_focus = VAL_Return_Southern_Tsaygen ERT = { exists = yes is_subject = no } 168 = { is_owned_by = ERT } }
 		available = {
 			VAL_frontier_postwar = yes
 			has_war = no

@@ -1220,6 +1220,24 @@ country_event = {
     immediate = { VAL_frontier_expire_nod_ultimatum = yes }
 }
 
+# ERT's creation tears Southern Tsaygen away from Kefreyt. This is a one-shot
+# story beat dispatched directly by the Vorkerland collapse materialisation.
+country_event = {
+    id = val_rework.120
+    title = val_rework.120.t
+    desc = val_rework.120.d
+    picture = GFX_event_adiscord_negotiation_table
+    is_triggered_only = yes
+    trigger = {
+        tag = VAL
+        168 = { is_core_of = VAL is_owned_by = ERT }
+    }
+    option = {
+        name = val_rework.120.a
+        add_war_support = 0.03
+    }
+}
+
 
 country_event = {
  id = val_contract.354

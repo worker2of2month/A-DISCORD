@@ -1007,6 +1007,14 @@ country_event = {
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_dirty_wave_3
 		ADISCORD_vorkerland_setup_ert = yes
+		# Southern Tsaygen begins as a Kefreyt core. ERT's materialisation seizes it;
+		# tell Kefreyt immediately instead of leaving the loss as a silent map change.
+		VAL = {
+			if = {
+				limit = { exists = yes 168 = { is_core_of = VAL is_owned_by = ERT } }
+				country_event = { id = val_rework.120 hours = 6 }
+			}
+		}
 		ADISCORD_vorkerland_finalize_dirty_cascade_if_ready = yes
 	}
 }
