@@ -20,6 +20,10 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_vorkerland_admitted value = 3 compare = less_than }
+			}
 			ADISCORD_economy_can_spend_100 = yes
 		}
 		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
@@ -58,6 +62,10 @@ VAL_population_markets = {
 					value = 80
 					compare = less_than_or_equals
 				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_stelander_admitted value = 3 compare = less_than }
 			}
 			ADISCORD_economy_can_spend_100 = yes
 		}
@@ -98,6 +106,10 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_nodrul_admitted value = 3 compare = less_than }
+			}
 			ADISCORD_economy_can_spend_100 = yes
 		}
 		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
@@ -137,6 +149,10 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_north_admitted value = 3 compare = less_than }
+			}
 			ADISCORD_economy_can_spend_100 = yes
 		}
 		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
@@ -175,6 +191,10 @@ VAL_population_markets = {
 					value = 90
 					compare = less_than_or_equals
 				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_perimeter_admitted value = 3 compare = less_than }
 			}
 			ADISCORD_economy_can_spend_100 = yes
 		}
@@ -233,8 +253,8 @@ VAL_population_markets = {
 		}
 		cost = 0
 		custom_cost_trigger = {
-			NOT = { has_political_power < 75 }
-			NOT = { has_equipment = { infantry_equipment < 5000 } }
+			NOT = { has_political_power < 50 }
+			NOT = { has_equipment = { infantry_equipment < 2500 } }
 			check_variable = { var = VAL_displaced_population value = 1 compare = greater_than_or_equals }
 		}
 		custom_cost_text = VAL_refugee_training_cost
@@ -242,8 +262,8 @@ VAL_population_markets = {
 		days_re_enable = 30
 		complete_effect = {
 			custom_effect_tooltip = VAL_refugee_training_start_tt
-			add_political_power = -75
-			add_equipment_to_stockpile = { type = infantry_equipment amount = -5000 }
+			add_political_power = -50
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -2500 }
 			hidden_effect = {
 				set_variable = { var = VAL_refugee_training_escrow value = 1 }
 				add_to_variable = { var = VAL_displaced_population value = -1 }
@@ -264,7 +284,7 @@ VAL_population_markets = {
 		cost = 0
 		custom_cost_text = VAL_labor_cost
 		custom_cost_trigger = {
-			NOT = { has_political_power < 75 }
+			NOT = { has_political_power < 50 }
 			check_variable = { var = VAL_displaced_population value = 10 compare = greater_than_or_equals }
 		}
 		days_remove = 90
@@ -274,12 +294,12 @@ VAL_population_markets = {
 				limit = {
 					has_capitulated = no
 					is_subject = no
-					NOT = { has_political_power < 75 }
+					NOT = { has_political_power < 50 }
 					check_variable = { var = VAL_displaced_population value = 10 compare = greater_than_or_equals }
 					NOT = { has_variable = VAL_refugee_labor_escrow }
 				}
 				custom_effect_tooltip = VAL_labor_program_tt
-				add_political_power = -75
+				add_political_power = -50
 				hidden_effect = {
 					set_variable = { var = VAL_refugee_labor_escrow value = 10 }
 					add_to_variable = { var = VAL_displaced_population value = -10 }
