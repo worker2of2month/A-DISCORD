@@ -4404,6 +4404,22 @@ class NorthernOffensiveClockTests(unittest.TestCase):
         self.assertIn("remove_ideas = NOD_cw_northern_offensive", expired)
         self.assertIn("add_ideas = NOD_cw_stalled_army", expired)
         self.assertIn("has_war_with = YPR", expired)
+        self.assertIn("add_ideas = YPR_cw_northern_resolve", expired)
+        self.assertIn("add_ideas = TFF_cw_northern_resolve", expired)
+
+        ideas = ast_block(ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
+        yubor = ast_block(ideas, "YPR_cw_northern_resolve")
+        frontier = ast_block(ideas, "TFF_cw_northern_resolve")
+        for spirit in (yubor, frontier):
+            cancel = ast_block(spirit, "cancel")
+            self.assertIn("NOD", {e.value for e in walk(cancel) if e.key == "has_war_with"})
+            self.assertIn("has_capitulated", {e.key for e in walk(cancel)})
+        yubor_modifiers = {e.key: float(e.value) for e in ast_block(yubor, "modifier")}
+        frontier_modifiers = {e.key: float(e.value) for e in ast_block(frontier, "modifier")}
+        self.assertEqual(yubor_modifiers["army_defence_factor"], 0.12)
+        self.assertEqual(yubor_modifiers["army_org_regain"], 0.10)
+        self.assertEqual(frontier_modifiers["army_attack_factor"], 0.08)
+        self.assertEqual(frontier_modifiers["breakthrough_factor"], 0.10)
 
     def test_rear_cell_costs_accept_exact_balances_but_reject_fractions_below(self):
         council = ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council")
