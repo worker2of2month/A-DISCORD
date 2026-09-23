@@ -498,17 +498,38 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
         rza = decisions[decisions.index("\tRUS_campaign_rza = {"):decisions.index("\tRUS_campaign_mlr = {")]
         self.assertIn("NOT = { has_country_flag = ADISCORD_vorkerland_rus_rza_absorbed }", rza)
 
-    def test_empire_gate_needs_held_land_not_vanished_tags(self) -> None:
+    def test_empire_gate_accepts_three_held_belts_or_no_independent_republics(self) -> None:
+        from tools.lib.vorkerland_collapse_manifest import DIRTY_GROUPS
+
+        gate = self.expand(self.block(self.triggers, "ADISCORD_vorkerland_rus_has_empire_territory"))
+        excluded = {"RZA": {125}, "ERT": {168}}
+
+        def territory(*held_tags: str) -> dict:
+            held = set(held_tags)
+            facts = {}
+            for tag, states in DIRTY_GROUPS.items():
+                for state in states:
+                    if state in excluded.get(tag, set()):
+                        continue
+                    facts[("RUS", "controls_state", str(state))] = tag in held
+            for tag in ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA"):
+                facts[("RUS", "country_exists", tag)] = True
+                facts[(tag, "is_subject", "yes")] = False
+            return facts
+
+        self.assertTrue(self.matches(gate, territory("SLA", "RZA", "MLR"), "RUS"))
+        self.assertTrue(self.matches(gate, territory("ERT", "IRT", "SCA"), "RUS"))
+        self.assertFalse(self.matches(gate, territory("SLA", "RZA"), "RUS"))
+
+        no_republics = territory()
+        for tag in ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA"):
+            no_republics[("RUS", "country_exists", tag)] = False
+        self.assertTrue(self.matches(gate, no_republics, "RUS"))
+
         source = read(TRIGGER_FILE)
-        start = source.index("ADISCORD_vorkerland_rus_has_empire_territory = {")
-        body = source[start:source.index("\n}", start) + 2]
-        self.assertIn("ADISCORD_vorkerland_rus_holds_sla_playable = yes", body)
-        self.assertIn("ADISCORD_vorkerland_rus_holds_sca_playable = yes", body)
-        self.assertNotIn("dirty_neighbors_taken", body)
-        self.assertNotIn("country_exists", body)
-        holds = self.expand(self.block(self.triggers, "ADISCORD_vorkerland_rus_holds_sla_playable"))
-        self.assertTrue(self.matches(holds, self._hold_sla(True), "RUS"))
-        self.assertFalse(self.matches(holds, self._hold_sla(False), "RUS"))
+        gate_start = source.index("ADISCORD_vorkerland_rus_has_empire_territory = {")
+        gate_body = source[gate_start:source.index("\n}", gate_start) + 2]
+        self.assertNotIn("dirty_neighbors_taken", gate_body)
 
 
 if __name__ == "__main__":
