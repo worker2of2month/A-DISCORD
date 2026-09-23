@@ -349,7 +349,7 @@ def render_trade_routes() -> dict[str, Image.Image]:
     def project(p):
         return (offset[0]+(p[0]-left)*scale, offset[1]+(p[1]-top)*scale)
     palette = ((130, 139, 144, 255), (115, 196, 127, 255), (240, 192, 69, 255), (230, 93, 79, 255))
-    for route, segments in chains.items():
+    for route_index, (route, segments) in enumerate(chains.items(), 1):
         strip = Image.new("RGBA", (WIDTH*4, HEIGHT))
         for frame, color in enumerate(palette):
             layer = Image.new("RGBA", (WIDTH, HEIGHT))
@@ -378,6 +378,12 @@ def render_trade_routes() -> dict[str, Image.Image]:
                     draw.line((x-3,y-3,x+3,y+3), fill=color, width=2)
                 if frame == 2:
                     draw.text((x+5,y-8), "!", fill=color)
+            # Match endpoint numbers to the native translated route rows.
+            x, y = project(segments[-1][0][-1])
+            ox, oy = {"occidia": (-16, -19), "north": (6, -18),
+                      "stelander": (-18, 5), "vorkerland": (7, -5)}[route]
+            draw.rectangle((x+ox-2, y+oy-1, x+ox+9, y+oy+13), fill=(17, 25, 29, 255), outline=color)
+            draw.text((x+ox, y+oy), str(route_index), fill=color)
             strip.paste(layer,(frame*WIDTH,0))
         output[f"VAL_trade_route_{route}.png"] = strip
     return output

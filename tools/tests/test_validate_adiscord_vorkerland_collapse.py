@@ -2732,7 +2732,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             "add_ideas = ADISCORD_vorkerland_tva_field_directorate",
             "add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism",
             "add_manpower = 28000",
-            "type = infantry_equipment_0 amount = 3560 producer = TVA",
+            "type = infantry_equipment_0 amount = 35600 producer = TVA",
             "type = support_equipment amount = 180 producer = TVA",
             "type = artillery_equipment amount = 96 producer = TVA",
         ):

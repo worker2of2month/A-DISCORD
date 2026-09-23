@@ -189,6 +189,7 @@ ADISCORD_default_cas_demand = {
 
 ADISCORD_limited_air_program = {
 	enable = {
+		ADISCORD_ai_rifle_replacement_emergency = no
 		num_of_military_factories > 5
 		has_tech = ADISCORD_tech_reclaimed_jet_platforms
 	}
@@ -344,4 +345,28 @@ ADISCORD_prewar_front_concentration = {
 		}
 		value = 50
 	}
+}
+
+# Reduce demand while the field army is being replenished. Role proportions and
+# template XP remain available, including the first army of a new country.
+ADISCORD_ai_rebuild_field_army = {
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_ai_army_needs_replacements = yes
+	}
+	abort = {
+		OR = {
+			is_ai = no
+			has_capitulated = yes
+			ADISCORD_ai_army_replacement_pressure_cleared = yes
+		}
+	}
+	ai_strategy = { type = ai_wanted_divisions_factor value = -60 }
+}
+
+ADISCORD_ai_rifle_replacements = {
+	enable = { is_ai = yes ADISCORD_ai_rifle_replacement_emergency = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = equipment_production_factor id = infantry value = 100 }
 }

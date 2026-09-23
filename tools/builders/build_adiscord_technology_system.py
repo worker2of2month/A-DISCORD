@@ -4652,8 +4652,33 @@ def technology_icon_size(icon: str) -> tuple[int, int] | None:
     return None
 
 
+WEAPON_CATEGORY_ICONS = {
+    tech.key: "ADISCORD_squad_01_recovered_fire_support"
+    for tech in BRANCH_BY_KEY["squad_weapons"].techs
+    if tech.id in ENABLE_EQUIPMENT
+}
+WEAPON_CATEGORY_ICONS.update({
+    "portable_at_cells": "ADISCORD_squad_02_heavy_machine_guns",
+    "recoilless_squad_launchers": "ADISCORD_squad_02_heavy_machine_guns",
+    "field_ew_units": "ADISCORD_squad_03_optical_fire_support",
+    "remote_weapon_tripods": "ADISCORD_squad_03_optical_fire_support",
+    "autonomous_support_weapons": "ADISCORD_squad_04_advanced_fire_support",
+    "robotic_heavy_weapon_teams": "ADISCORD_squad_04_advanced_fire_support",
+    "swarm_fireteams": "ADISCORD_squad_04_advanced_fire_support",
+    "electrothermal_ignition": "ADISCORD_weapon_03_standardized_battle_rifle",
+    "biometric_trigger_locks": "ADISCORD_weapon_03_standardized_battle_rifle",
+})
+
+
+def weapon_category_scale(tech: Tech) -> str:
+    # Category art is 176x72; effect-only cards have a 72x72 viewport.
+    return "\t\tscale = 0.363636\n" if tech.id not in ENABLE_EQUIPMENT and tech.key in WEAPON_CATEGORY_ICONS else ""
+
+
 def icon_for_technology(branch: Branch, index: int) -> str:
     tech = branch.techs[index]
+    if tech.key in WEAPON_CATEGORY_ICONS:
+        return WEAPON_CATEGORY_ICONS[tech.key]
     icon = ICON_ALIASES.get(tech.icon, tech.icon)
 
     # The GUI selects the wide item template for equipment unlocks. Preserve a
@@ -5742,7 +5767,7 @@ def write_gfx() -> None:
             icon = icon_for_technology(branch, index)
             custom_texture = CUSTOM_TECH_TEXTURES.get(tech.key)
             variants = [(f"GFX_{tech.id}_medium", custom_texture or icon)]
-            if not custom_texture and icon.startswith("ADISCORD_weapon_"):
+            if not custom_texture and icon.startswith("ADISCORD_weapon_") and tech.id in ENABLE_EQUIPMENT:
                 variants.extend(
                     (f"GFX_{tag}_{tech.id}_medium", icon.replace("ADISCORD_", f"ADISCORD_{tag}_", 1))
                     for tag in REGIONAL_SERVICE_ICON_TAGS
@@ -5757,6 +5782,7 @@ def write_gfx() -> None:
                     "\tSpriteType = {\n"
                     f"\t\tname = \"{sprite}\"\n"
                     f"\t\ttextureFile = \"{texture_file}\"\n"
+                    f"{weapon_category_scale(tech)}"
                     "\t}\n"
                 )
     content = (
@@ -5766,6 +5792,30 @@ def write_gfx() -> None:
         + "}\n"
     )
     (ROOT / "interface" / "ADISCORD_technologies.gfx").write_text(content, encoding="utf-8")
+
+
+def weapon_category_gfx_output() -> str:
+    """Regenerate category sprites without rebuilding unrelated UI declarations."""
+    path = ROOT / "interface" / "ADISCORD_technologies.gfx"
+    text = path.read_text(encoding="utf-8")
+    for branch in BRANCHES:
+        for tech in branch.techs:
+            if tech.key not in WEAPON_CATEGORY_ICONS:
+                continue
+            sprite = f"GFX_{tech.id}_medium"
+            pattern = rf'\tSpriteType = \{{\s*name = "{re.escape(sprite)}"[^{{}}]*\}}'
+            texture = f"gfx/interface/technologies/{WEAPON_CATEGORY_ICONS[tech.key]}.dds"
+            replacement = (
+                "\tSpriteType = {\n"
+                f'\t\tname = "{sprite}"\n'
+                f'\t\ttextureFile = "{texture}"\n'
+                + weapon_category_scale(tech)
+                + "\t}"
+            )
+            text, count = re.subn(pattern, lambda match: replacement, text)
+            if count != 1:
+                raise ValueError(f"Expected one category sprite {sprite}, found {count}")
+    return text
 
 
 ACCESS_REQUIREMENT_LOCALISATION = {
@@ -6491,7 +6541,18 @@ def main() -> int:
     actions.add_argument("--apply", action="store_true", help="write technology files, manifests, GUI and localisation")
     actions.add_argument("--apply-starting-profiles", action="store_true", help="write only starting technology effects and the country profile manifest")
     parser.add_argument("--technology-data-only", action="store_true", help="check or apply technology scripts without regenerating UI, localisation or country history")
+    parser.add_argument("--weapon-icons-only", action="store_true", help="check or apply weapon category sprites without rebuilding other UI")
     args = parser.parse_args()
+    if args.weapon_icons_only:
+        if args.technology_data_only or args.apply_starting_profiles:
+            parser.error("--weapon-icons-only cannot be combined with other partial output modes")
+        path = ROOT / "interface" / "ADISCORD_technologies.gfx"
+        content = weapon_category_gfx_output()
+        changed = path.read_text(encoding="utf-8") != content
+        if args.apply and changed:
+            path.write_text(content, encoding="utf-8")
+        print(f"Weapon category sprites {'updated' if args.apply else 'different'}: {int(changed)}")
+        return int(changed and not args.apply)
     if args.technology_data_only:
         if args.apply_starting_profiles:
             parser.error("--technology-data-only cannot update starting profiles")

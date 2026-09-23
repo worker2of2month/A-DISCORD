@@ -1779,19 +1779,19 @@ def check_infantry_equipment_requirements() -> list[str]:
         return ["ADISCORD_land_units.txt has no sub_units container"]
     container = extract_block(text, container_match.start())
     expected = {
-        "ADISCORD_militia": {"infantry_equipment": 80},
-        "ADISCORD_territorial": {"infantry_equipment": 100},
+        "ADISCORD_militia": {"infantry_equipment": 900},
+        "ADISCORD_territorial": {"infantry_equipment": 900},
         "infantry": {
-            "infantry_equipment": 100,
+            "infantry_equipment": 900,
             "ADISCORD_squad_weapons_equipment": 8,
         },
         "ADISCORD_assault_infantry": {
-            "infantry_equipment": 100,
+            "infantry_equipment": 990,
             "ADISCORD_squad_weapons_equipment": 14,
             "support_equipment": 5,
         },
         "mountaineers": {
-            "infantry_equipment": 110,
+            "infantry_equipment": 900,
             "ADISCORD_squad_weapons_equipment": 6,
         },
     }
@@ -1833,19 +1833,21 @@ def check_new_support_and_platform_units() -> list[str]:
     container = extract_block(text, container_match.start())
     expected = {
         "ADISCORD_recon_platform": {
+            "infantry_equipment": 225,
             "ADISCORD_recon_platform_archetype": 18,
             "support_equipment": 5,
         },
-        "ADISCORD_combat_platform": {"ADISCORD_combat_platform_archetype": 40},
-        "ADISCORD_heavy_platform": {"ADISCORD_heavy_platform_archetype": 32},
+        "ADISCORD_combat_platform": {"infantry_equipment": 405, "ADISCORD_combat_platform_archetype": 40},
+        "ADISCORD_heavy_platform": {"infantry_equipment": 450, "ADISCORD_heavy_platform_archetype": 32},
         "ADISCORD_recovery_platform": {
+            "infantry_equipment": 270,
             "ADISCORD_recovery_platform_archetype": 12,
             "support_equipment": 15,
         },
-        "maintenance_company": {"support_equipment": 25},
-        "logistics_company": {"support_equipment": 25},
-        "signal_company": {"support_equipment": 25},
-        "field_hospital": {"support_equipment": 40},
+        "maintenance_company": {"infantry_equipment": 270, "support_equipment": 25},
+        "logistics_company": {"infantry_equipment": 270, "support_equipment": 25},
+        "signal_company": {"infantry_equipment": 225, "support_equipment": 25},
+        "field_hospital": {"infantry_equipment": 360, "support_equipment": 40},
     }
     issues: list[str] = []
     for subunit, expected_need in expected.items():
@@ -3096,7 +3098,7 @@ def ai_force_progression_contract_issues(
     templates: str,
     default_strategy: str,
 ) -> list[str]:
-    """Validate that the first field upgrade is reachable before stock gates.
+    """Validate baseline availability separately from field refit affordability.
 
     This is intentionally a source-to-contract boundary: HOI4 runtime behavior
     still needs an observer campaign, while fixtures can prove that the static
@@ -3112,7 +3114,8 @@ def ai_force_progression_contract_issues(
         battalions = re.search(r"\binfantry\s*=\s*(\d+)", target)
         if not battalions or int(battalions.group(1)) < 6:
             issues.append("AI field baseline must contain at least six battalions")
-        if "num_of_military_factories" in baseline or "has_equipment" in baseline:
+        enable = _named_clausewitz_block(baseline, "enable")
+        if "num_of_military_factories" in enable or "has_equipment" in enable:
             issues.append("AI field baseline must not depend on factories or equipment stock")
         match = re.search(r"\btarget_min_match\s*=\s*([0-9.]+)", baseline)
         if not match or not 0.5 <= float(match.group(1)) <= 0.9:

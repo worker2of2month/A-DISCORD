@@ -35,7 +35,7 @@ add_ideas = {
 
 add_equipment_to_stockpile = {
 	type = infantry_equipment
-	amount = 500
+	amount = 5000
 	producer = CIN
 }
 

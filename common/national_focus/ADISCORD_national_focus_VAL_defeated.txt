@@ -12,6 +12,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Returning_Columns
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_RECOVERY }
 		icon = GFX_goal_generic_major_war
 		x = 10
 		y = 0
@@ -25,6 +26,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Commanders_Take_The_Ledger
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
 		icon = GFX_focus_generic_military_academy
 		x = 10
 		y = 1
@@ -40,6 +42,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Count_The_Remaining_Rifles
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		icon = GFX_goal_generic_allies_build_infantry
 		x = 6
 		y = 2
@@ -47,13 +50,14 @@ focus_tree = {
 		prerequisite = { focus = VAL_defeat_Commanders_Take_The_Ledger }
 		completion_reward = {
 			army_experience = 15
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 5000 producer = VAL }
 		}
 		ai_will_do = { base = 10 }
 	}
 
 	focus = {
 		id = VAL_defeat_Reopen_The_Depots
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		x = 6
 		y = 3
@@ -68,6 +72,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Articles_Of_Command
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		icon = GFX_goal_generic_political_pressure
 		x = 10
 		y = 2
@@ -82,6 +87,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_No_Second_Expedition
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		icon = GFX_focus_generic_treaty
 		x = 8
 		y = 4
@@ -98,6 +104,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Field_Hospitals_First
+		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ARMY }
 		icon = GFX_focus_generic_limited_social_mobilization
 		x = 14
 		y = 2
@@ -112,6 +119,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Bring_The_Captains_Home
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
 		icon = GFX_focus_generic_improve_the_administration
 		x = 14
 		y = 3
@@ -127,6 +135,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Contracts_Without_Conquest
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 8
 		y = 6
@@ -145,6 +154,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Revise_The_Settlement
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		icon = GFX_goal_generic_political_pressure
 		x = 12
 		y = 4
@@ -162,6 +172,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Refit_For_Return
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY }
 		icon = GFX_goal_generic_allies_build_infantry
 		x = 12
 		y = 5
@@ -171,7 +182,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL }
 			army_experience = 20
 		}
 		ai_will_do = { base = 15 }
@@ -179,6 +190,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Return_To_The_Passes
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
 		icon = GFX_goal_generic_major_war
 		x = 12
 		y = 9
@@ -200,7 +212,7 @@ focus_tree = {
 		x = 10
 		y = 3
 		cost = 4
-		search_filters = { FOCUS_FILTER_POLITICAL }
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_RECOVERY }
 		prerequisite = { focus = VAL_defeat_Articles_Of_Command }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
 		cancel_if_invalid = yes
@@ -218,11 +230,12 @@ focus_tree = {
 		x = 4
 		y = 4
 		cost = 5
-		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_RESEARCH }
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
 		prerequisite = { focus = VAL_defeat_Reopen_The_Depots }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
+			VAL_reform_mercenary_payroll = yes
 			VAL_invest_civilian_industry = yes
 			add_tech_bonus = { name = VAL_defeat_Repair_The_Workshops bonus = 0.5 uses = 1 category = industry }
 		}
@@ -235,11 +248,12 @@ focus_tree = {
 		x = 4
 		y = 5
 		cost = 4
-		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY }
+		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
 		prerequisite = { focus = VAL_defeat_Repair_The_Workshops }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
+			VAL_reform_mercenary_payroll = yes
 			if = {
 				limit = { any_owned_state = { is_controlled_by = ROOT infrastructure < 5 } }
 				random_owned_controlled_state = {
@@ -259,11 +273,12 @@ focus_tree = {
 		x = 16
 		y = 4
 		cost = 4
-		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_STABILITY }
+		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
 		prerequisite = { focus = VAL_defeat_Bring_The_Captains_Home }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
+			VAL_reform_mercenary_payroll = yes
 			add_manpower = 4000
 			add_stability = 0.03
 		}
@@ -276,11 +291,12 @@ focus_tree = {
 		x = 16
 		y = 5
 		cost = 5
-		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_RESEARCH }
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
 		prerequisite = { focus = VAL_defeat_Veterans_Register }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
+			VAL_reform_mercenary_payroll = yes
 			army_experience = 25
 			add_tech_bonus = { name = VAL_defeat_Staff_College bonus = 0.5 uses = 1 category = support_tech }
 		}
@@ -293,7 +309,7 @@ focus_tree = {
 		x = 6
 		y = 7
 		cost = 5
-		search_filters = { FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
 		prerequisite = { focus = VAL_defeat_Contracts_Without_Conquest }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
 		cancel_if_invalid = yes
@@ -310,7 +326,7 @@ focus_tree = {
 		x = 8
 		y = 8
 		cost = 6
-		search_filters = { FOCUS_FILTER_RESEARCH FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_ARMY }
 		prerequisite = { focus = VAL_defeat_Civilian_Contracts }
 		prerequisite = { focus = VAL_defeat_Staff_College }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
@@ -328,7 +344,7 @@ focus_tree = {
 		x = 12
 		y = 6
 		cost = 5
-		search_filters = { FOCUS_FILTER_ARMY }
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY }
 		prerequisite = { focus = VAL_defeat_Refit_For_Return }
 		prerequisite = { focus = VAL_defeat_Staff_College }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
@@ -346,14 +362,14 @@ focus_tree = {
 		x = 14
 		y = 7
 		cost = 5
-		search_filters = { FOCUS_FILTER_ARMY FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_ARMY }
 		prerequisite = { focus = VAL_defeat_Mountain_Exercises }
 		prerequisite = { focus = VAL_defeat_Repair_The_Workshops }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
 			VAL_invest_arsenal_industry = yes
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL }
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -364,13 +380,13 @@ focus_tree = {
 		x = 12
 		y = 8
 		cost = 5
-		search_filters = { FOCUS_FILTER_ARMY }
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY }
 		prerequisite = { focus = VAL_defeat_Frontline_Arsenals }
 		prerequisite = { focus = VAL_defeat_Restore_Freight_Routes }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL }
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 150 producer = VAL }
 			add_equipment_to_stockpile = { type = support_equipment amount = 200 producer = VAL }
 		}
@@ -383,13 +399,14 @@ focus_tree = {
 		x = 10
 		y = 11
 		cost = 5
-		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY }
 		prerequisite = { focus = VAL_defeat_Technical_Institute focus = VAL_defeat_Return_To_The_Passes }
 		prerequisite = { focus = VAL_defeat_Restore_Freight_Routes }
 		prerequisite = { focus = VAL_defeat_Staff_College }
 		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovered_state_available_tt VAL_council_in_office = yes has_war = no } }
 		cancel_if_invalid = yes
 		completion_reward = {
+			VAL_reform_mercenary_payroll = yes
 			ADISCORD_economy_receive_15 = yes
 			add_political_power = 75
 			add_stability = 0.05
@@ -427,7 +444,7 @@ focus_tree = {
         icon = GFX_goal_generic_allies_build_infantry
         x = 8 y = 1 cost = 3
         prerequisite = { focus = VAL_admin_restore_offices }
-        completion_reward = { army_experience = 15 add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = THIS } }
+        completion_reward = { army_experience = 15 add_equipment_to_stockpile = { type = infantry_equipment amount = 5000 producer = THIS } }
         ai_will_do = { base = 15 }
     }
     focus = {
@@ -536,7 +553,7 @@ focus_tree = {
         available = { VAL_is_contract_administration = yes }
         cancel_if_invalid = yes
         completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes } add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = VAL } army_experience = 20 }
+            if = { limit = { VAL_is_contract_administration = yes } add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL } army_experience = 20 }
         }
         ai_will_do = { base = 12 }
     }

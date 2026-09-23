@@ -107,21 +107,21 @@
 
  VAL_refugee_wave_limit_tt:0 "Fewer than three waves have been admitted from this region."
  VAL_train_refugee_volunteers:0 "Train Refugee Volunteers"
- VAL_train_refugee_volunteers_desc:0 "Train 5,000 available refugees for 35 days using 75 political power and 500 infantry equipment. Trainees still need housing until completion. Capitulation or subjugation cancels training and refunds the people and costs."
- VAL_refugee_training_start_tt:0 "Reserve exactly §Y5,000§! refugees for §Y35 days§!, then add them to army manpower. Cancellation returns the volunteers, 75 political power and 500 infantry equipment."
+ VAL_train_refugee_volunteers_desc:0 "Train 5,000 available refugees for 35 days using 75 political power and 5000 infantry equipment. Trainees still need housing until completion. Capitulation or subjugation cancels training and refunds the people and costs."
+ VAL_refugee_training_start_tt:0 "Reserve exactly §Y5,000§! refugees for §Y35 days§!, then add them to army manpower. Cancellation returns the volunteers, 75 political power and 5000 infantry equipment."
  VAL_refugee_window_open_tt: "An admission window is open for this refugee route. It lasts §Y180 days§! from the start of the flow. If this condition is unmet, the flow has not opened yet, its admission window has expired, or all three waves have already been admitted."
 
- VAL_local_training_start_tt:0 "Reserve §Y5,000§! local volunteers for §Y35 days§!. Cancellation returns the volunteers, 75 political power and 500 infantry equipment."
+ VAL_local_training_start_tt:0 "Reserve §Y5,000§! local volunteers for §Y35 days§!. Cancellation returns the volunteers, 75 political power and 5000 infantry equipment."
 
  VAL_recruit_local_volunteers:0 "Recruit local volunteers"
 
- VAL_recruit_local_volunteers_desc:0 "Conscription remains at 1.25%. The additional contract reserve is 2% of the initial population of Kefreyt's seven states and does not replenish. Each intake trains 5,000 people over 35 days for 75 political power and 500 infantry equipment. Capitulation or subjugation refunds the full intake."
+ VAL_recruit_local_volunteers_desc:0 "Conscription remains at 1.25%. The additional contract reserve is 2% of the initial population of Kefreyt's seven states and does not replenish. Each intake trains 5,000 people over 35 days for 75 political power and 5000 infantry equipment. Capitulation or subjugation refunds the full intake."
 
- VAL_training_cost:0 "£pol_power §Y75§! £infantry_equipment_text_icon §Y500§!"
+ VAL_training_cost:0 "£pol_power §Y75§! £infantry_equipment_text_icon §Y5000§!"
 
- VAL_training_cost_blocked:0 "£pol_power §R75§! £infantry_equipment_text_icon §R500§!"
+ VAL_training_cost_blocked:0 "£pol_power §R75§! £infantry_equipment_text_icon §R5000§!"
 
- VAL_training_cost_tooltip:0 "Requires 75 political power and 500 infantry equipment."
+ VAL_training_cost_tooltip:0 "Requires 75 political power and 5000 infantry equipment."
 
  VAL_labor_program_tt:0 "Reserve 100,000 workers for 90 days: +8% construction speed, +5% civilian income, -1% stability. All workers then return to the available pool."
 

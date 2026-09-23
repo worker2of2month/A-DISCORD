@@ -26,7 +26,10 @@ sub_units = {
 		training_time = 120
 		weight = 0.1
 		supply_consumption = 0.02
-		need = { ADISCORD_combat_platform_archetype = 15 }
+		need = {
+			infantry_equipment = 270
+			ADISCORD_combat_platform_archetype = 15
+		}
 		same_support_type = ADISCORD_flame_compat
 	}
 
@@ -54,7 +57,10 @@ sub_units = {
 		training_time = 120
 		weight = 0.1
 		supply_consumption = 0.025
-		need = { ADISCORD_combat_platform_archetype = 15 }
+		need = {
+			infantry_equipment = 270
+			ADISCORD_combat_platform_archetype = 15
+		}
 		same_support_type = ADISCORD_flame_compat
 	}
 
@@ -82,7 +88,10 @@ sub_units = {
 		training_time = 120
 		weight = 0.1
 		supply_consumption = 0.03
-		need = { ADISCORD_heavy_platform_archetype = 15 }
+		need = {
+			infantry_equipment = 270
+			ADISCORD_heavy_platform_archetype = 15
+		}
 		same_support_type = ADISCORD_flame_compat
 	}
 
@@ -112,7 +121,7 @@ sub_units = {
 		weight = 0.1
 		supply_consumption = 0.02
 		need = {
-			infantry_equipment = 10
+			infantry_equipment = 270
 			support_equipment = 40
 		}
 		same_support_type = engineer

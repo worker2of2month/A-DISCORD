@@ -1,4 +1,12 @@
 ﻿l_english:
+ VAL_payroll_reform_tt:0 "Reduces the contract-pay premium on army expenses by §G5 percentage points§!. Final reforms can remove at most §Y25 points§! in total; relief survives a change of course."
+ FOCUS_FILTER_VAL_CONTRACTS:0 "Contracts and Arms Exports"
+ FOCUS_FILTER_VAL_ECONOMY:0 "Treasury and Industry"
+ FOCUS_FILTER_VAL_ARMY:0 "Army and Supply"
+ FOCUS_FILTER_VAL_AUTHORITY:0 "Authority and Captain Loyalty"
+ FOCUS_FILTER_VAL_STELANDER:0 "Stelander Crisis"
+ FOCUS_FILTER_VAL_EXPANSION:0 "Expansion and Treaties"
+ FOCUS_FILTER_VAL_RECOVERY:0 "Recovery and Land Development"
  VAL_Operational_Directorate: "Operations Directorate"
  VAL_Operational_Directorate_desc: "Our neighbours cannot be treated as one continuous frontier. The directorate will combine information on passes, markets, garrisons and regional authorities in a single, constantly updated map."
  VAL_Ministry_Of_Contract_Memory: "Ministry of Contract Records"
@@ -16,7 +24,7 @@
  VAL_State_Above_Captains: "The State Above the Captains"
  VAL_State_Above_Captains_desc: "The contract system will outlive its founders only when no company can consider itself the state's equal."
  VAL_Quarterly_Contract_Norm: "Quarterly Contract Quota"
- VAL_Quarterly_Contract_Norm_desc:0 "Every ninety days the arsenals must fulfil an export order. Deliver 4000 rifles for 10 political power, or pay independent contractors 1000 treasury and retain the weapons. An arsenal delivery improves reputation and earns military experience; subcontracting only preserves reputation. Early payment does not bring the next quarter forward."
+ VAL_Quarterly_Contract_Norm_desc:0 "Every ninety days the arsenals must fulfil an export order. Deliver 40000 rifles for 10 political power, or pay independent contractors 1000 treasury and retain the weapons. An arsenal delivery improves reputation and earns military experience; subcontracting only preserves reputation. Early payment does not bring the next quarter forward."
  VAL_Contract_Accounting_Office: "Industrial Budget"
  VAL_Contract_Accounting_Office_desc: "Accounting for state orders will bring arsenal accounts, tax payments and production plans together. The reform increases recurring treasury income and reduces administrative expenditure."
  VAL_Salvage_Every_Barrel: "Restoring Weapon Reserves"
@@ -75,9 +83,9 @@
  VAL_campaign_the_mine_was_stolen: "They Stole Our Mine Campaign"
  VAL_campaign_the_mine_was_stolen_desc: "Following the loss of Vorkerland's metal, direct public anger outward and prepare society to fight for a new source of metal."
  VAL_quarterly_contract_deadline: "Quarterly Quota Deadline"
- VAL_quarterly_contract_deadline_desc:0 "[ROOT.VALGetQuarterlyStatus]\n\nBefore the deadline choose an arsenal delivery or a subcontract. Delivery costs 4000 rifles and 10 political power; at quarter end it grants +1 reputation tier, 15 army experience and 15 command power. Subcontracting costs 1000 treasury and preserves reputation without military rewards. A missed order loses one reputation tier. The next period starts after this deadline."
+ VAL_quarterly_contract_deadline_desc:0 "[ROOT.VALGetQuarterlyStatus]\n\nBefore the deadline choose an arsenal delivery or a subcontract. Delivery costs 40000 rifles and 10 political power; at quarter end it grants +1 reputation tier, 15 army experience and 15 command power. Subcontracting costs 1000 treasury and preserves reputation without military rewards. A missed order loses one reputation tier. The next period starts after this deadline."
  VAL_pay_quarterly_contract_norm: "Meet the Quarterly Quota"
- VAL_pay_quarterly_contract_norm_desc:0 "Deliver 4000 rifles for 10 political power. At quarter end reputation rises by one tier, up to its maximum. Gain 15 army experience and 15 command power even at maximum reputation."
+ VAL_pay_quarterly_contract_norm_desc:0 "Deliver 40000 rifles for 10 political power. At quarter end reputation rises by one tier, up to its maximum. Gain 15 army experience and 15 command power even at maximum reputation."
  VAL_big_buyers: "Major Buyers"
  VAL_big_buyers_desc: "While Vorkerland retains a unified market, major buyers provide a steady flow of orders: §G+20§! weekly income, §G+20%§! trade income, §G+10%§! civilian industry income, §G+8%§! military industry income, §G+8%§! investment confidence and §G+5%§! production efficiency growth.\n\nThe price of this dependence is §R+5%§! social expenditure, §R+5%§! state overload growth, §R-5%§! creditworthiness and §R-3%§! stability.\n\n    §RAny upheaval among our partners will end this support.§!\n\nKefreyt gains rights to steel in [33.GetName]. Deliveries end if civil war breaks out in Vorkerland or the state is lost. Kefreyt's homeland contains only oil."
  VAL_westerholm_concession_income: "Vorkerland Concession"
@@ -133,7 +141,7 @@
  VAL_Army_Of_The_Ledger: "Army of the Ledger"
  VAL_Army_Of_The_Ledger_desc: "Contract companies finally become an army, with common headquarters, supply, reserves and a chain of command."
  VAL_Foreign_Broker_Licences: "Foreign Broker Licences"
- VAL_Foreign_Broker_Licences_desc:0 "Open sales of 2500 rifles for 500 treasury. Northern partners can buy in peacetime; other clients must be at war. Licences also open wholesale contracts."
+ VAL_Foreign_Broker_Licences_desc:0 "Open sales of 25000 rifles for 500 treasury. Northern partners can buy in peacetime; other clients must be at war. Licences also open wholesale contracts."
  VAL_Northern_Clearing_House: "Second Export Desk"
  VAL_Northern_Clearing_House_desc:0 "A second export slot permits two simultaneous shipments. The office receives 300 treasury. A slot reopens 70 days after an accepted sale and produces no income on its own."
  VAL_Contingency_Ledgers: "Military Adviser Contracts"
@@ -224,7 +232,7 @@
  VAL_One_Ledger_One_Banner: "One Ledger, One Banner"
  VAL_One_Ledger_One_Banner_desc: "Scattered contracts must become a state register. Kefreyt will remain a market for war, but that market will speak with one voice."
  VAL_Factories_Like_Cathedrals: "Modernising the Arms Factories"
- VAL_Factories_Like_Cathedrals_desc: "Arms factories remain Kefreyt's greatest asset. A joint order for equipment and repairs will expand output at working arsenals without spending money on empty buildings. We will also prepare 2000 rifles and ensure that production lines remain continuously occupied."
+ VAL_Factories_Like_Cathedrals_desc: "Arms factories remain Kefreyt's greatest asset. A joint order for equipment and repairs will expand output at working arsenals without spending money on empty buildings. We will also prepare 20000 rifles and ensure that production lines remain continuously occupied."
  VAL_Keep_The_Lines_Hot: "Continuous Production Cycle"
  VAL_Keep_The_Lines_Hot_desc: "Shift schedules, spare components and common maintenance standards must eliminate downtime. Existing capacity will run more reliably, and the first batch will replenish our weapon reserve."
  VAL_Ballistics_Schools: "Ballistics Schools"
@@ -304,17 +312,17 @@
  VAL_cw_campaign_result_tt: "A supply agreement has been fulfilled, Kefreyt's operation has ended, or the civil war has ended."
  VAL_cw_field_reports_bonus: "Reports from the Stelander Front"
  VAL_cw_sell_arms_to_resistance: "Offer Supplies to Shabrat"
- VAL_cw_sell_arms_to_resistance_desc: "Preparing the offer costs §Y35§! political power, which is not refunded if declined. Offer the resistance £infantry_equipment_texticon §Y3200§! rifles for £ADISCORD_economy_treasury_texticon §Y50§!. The buyer must agree; weapons and payment are transferred together after another stockpile check. A fulfilled agreement grants §Y5§! army experience and §Y5§! contract authority. A rejected offer may be repeated after 30 days; the agreement can be fulfilled only once."
- VAL_cw_arms_offer_tt: "Offer the resistance £infantry_equipment_texticon §Y3200§! rifles for £ADISCORD_economy_treasury_texticon §Y50§!. Weapons and funds remain with their owners until acceptance."
- VAL_cw_buy_arms_tt: "If the conditions still hold, receive £infantry_equipment_texticon §Y3200§! rifles and transfer £ADISCORD_economy_treasury_texticon §Y50§! to Kefreyt."
+ VAL_cw_sell_arms_to_resistance_desc: "Preparing the offer costs §Y35§! political power, which is not refunded if declined. Offer the resistance £infantry_equipment_texticon §Y32000§! rifles for £ADISCORD_economy_treasury_texticon §Y50§!. The buyer must agree; weapons and payment are transferred together after another stockpile check. A fulfilled agreement grants §Y5§! army experience and §Y5§! contract authority. A rejected offer may be repeated after 30 days; the agreement can be fulfilled only once."
+ VAL_cw_arms_offer_tt: "Offer the resistance £infantry_equipment_texticon §Y32000§! rifles for £ADISCORD_economy_treasury_texticon §Y50§!. Weapons and funds remain with their owners until acceptance."
+ VAL_cw_buy_arms_tt: "If the conditions still hold, receive £infantry_equipment_texticon §Y32000§! rifles and transfer £ADISCORD_economy_treasury_texticon §Y50§! to Kefreyt."
  VAL_cw_begin_mobilization: "Begin Mobilisation in the Passes"
  VAL_cw_begin_mobilization_desc: "We will order an invasion of the Occidian Revival Union. Mobilisation becomes available 60 days after Stelander's collapse and lasts another 21 days. Supplies to Shabrat do not exclude this campaign. Victory transfers Balchansk, Harbour and the Mining Settlement to a temporary administration under Kefreyt; Livonin's fate is then settled separately according to the prewar agreement with Shabrat, while retained districts are integrated through focuses.\n\nIf we do not mobilise, the victorious Stelander may prepare its own invasion of Occidia 90 days after the Stelander civil war ends. The start of its preparations closes our intervention window until they are cancelled. Livonin enters the agreement only if held by defeated Occidia or Kefreyt; territory belonging to Stelander and other countries remains with its owner."
  ADISCORD_STP_cw.50.t: "Kefreyt's Offer"
- ADISCORD_STP_cw.50.d: "Kefreyt offers 3200 rifles for 50 from our treasury. Weapons and payment will be transferred together after our acceptance, provided both sides retain the required reserves. The agreement does not commit Kefreyt to entering our war."
+ ADISCORD_STP_cw.50.d: "Kefreyt offers 32000 rifles for 50 from our treasury. Weapons and payment will be transferred together after our acceptance, provided both sides retain the required reserves. The agreement does not commit Kefreyt to entering our war."
  ADISCORD_STP_cw.50.a: "Accept the supply terms."
  ADISCORD_STP_cw.50.b: "We are not ready to pay."
  ADISCORD_STP_cw.51.t: "Response to the Arms Agreement"
- ADISCORD_STP_cw.51.accepted: "The resistance accepted the terms. Kefreyt delivered 3200 rifles and received 50 for the treasury. Officers will send the factories their first reports on the weapons' use at the front."
+ ADISCORD_STP_cw.51.accepted: "The resistance accepted the terms. Kefreyt delivered 32000 rifles and received 50 for the treasury. Officers will send the factories their first reports on the weapons' use at the front."
  ADISCORD_STP_cw.51.refused: "The agreement was not fulfilled: the resistance either rejected the offer or settlement conditions changed. No money, personnel or units were transferred. The supplies prepared for shipment remain in Kefreyt."
  ADISCORD_STP_cw.51.a: "Understood."
  VAL_Keep_The_Arsenals: "[ROOT.VALGetReservesFocusTitle]"
@@ -335,9 +343,9 @@
  VAL_cost_northern_export: "£political_power_texticon §Y10§! £infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§!"
  VAL_cost_northern_export_blocked: "£political_power_texticon §R10§! £infantry_equipment_texticon §R[VALGetExportRifleQuantity]§!"
  VAL_cost_northern_export_tooltip: "Cost: £political_power_texticon §Y10§! £infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§!"
- VAL_cost_pp10_r4000: "£political_power_texticon §Y10§! £infantry_equipment_texticon §Y4000§!"
- VAL_cost_pp10_r4000_blocked: "£political_power_texticon §R10§! £infantry_equipment_texticon §R4000§!"
- VAL_cost_pp10_r4000_tooltip: "Cost: £political_power_texticon §Y10§! £infantry_equipment_texticon §Y4000§!"
+ VAL_cost_pp10_r4000: "£political_power_texticon §Y10§! £infantry_equipment_texticon §Y40000§!"
+ VAL_cost_pp10_r4000_blocked: "£political_power_texticon §R10§! £infantry_equipment_texticon §R40000§!"
+ VAL_cost_pp10_r4000_tooltip: "Cost: £political_power_texticon §Y10§! £infantry_equipment_texticon §Y40000§!"
  VAL_northern_export_reserved_tt: "£infantry_equipment_texticon §Y[VALGetExportRifleQuantity]§! rifles will be reserved for §Y21 days§!. The recipient will accept or reject the shipment. Acceptance yields £ADISCORD_economy_treasury_texticon §G[VALGetExportIncome]§!."
  VAL_northern_export_cancelled_tt: "Reserved rifles will return to the stockpile. The £political_power_texticon §Y10§! cost is not refunded."
  VAL_northern_contacts_reserved_tt: "£ADISCORD_economy_treasury_texticon §Y50§! will be invested in developing the network for §Y21 days§!. Success adds §G2%§! trade income."
@@ -345,17 +353,17 @@
  VAL_CIN_influence: "Broker network level with [CIN.GetNameDef]"
  VAL_OSF_influence: "Broker network level with [OSF.GetNameDef]"
  VAL_cw_offer_contract_formations: "Offer Shabrat Two Contract Regiments"
- VAL_cw_offer_contract_formations_desc: "Preparing the offer costs §Y75§! political power, which is not refunded if declined. Assembly takes §Y21 days§!; the offer is sent after preparation. Offer the resistance two trained infantry regiments with engineers and £infantry_equipment_texticon §Y3200§! reserve rifles for £ADISCORD_economy_treasury_texticon §Y100§!. The full package costs Kefreyt £manpower_texticon §Y12600§! personnel, £infantry_equipment_texticon §Y4420§! rifles, §Y96§! squad weapon sets and §Y60§! additional equipment. The regiments remain until the war ends; their composition and recruitment are locked. Settlement follows buyer acceptance and another stockpile check. An ordinary shipment for §Y50§! treasury funds is also available."
- VAL_cw_formations_offer_tt: "After §Y21 days§! of preparation: Offer two fully equipped infantry regiments with engineers and £infantry_equipment_texticon §Y3200§! rifles for £ADISCORD_economy_treasury_texticon §Y100§!. The regiments will be recalled after the war. Resources remain in Kefreyt until the resistance agrees. Total cost: £manpower_texticon §Y12600§! personnel, £infantry_equipment_texticon §Y4420§! rifles, §Y96§! squad weapon sets and §Y60§! additional equipment."
- VAL_cw_buy_formations_tt: "Transfer £ADISCORD_economy_treasury_texticon §Y100§! to Kefreyt. Receive two infantry regiments with engineers, each with £manpower_texticon §Y6300§! personnel, plus £infantry_equipment_texticon §Y3200§! rifles for the stockpile. The regiments remain until the war ends; their composition and recruitment are locked. Kefreyt supplies the personnel and equipment. Settlement is cancelled if conditions have changed."
- ADISCORD_STP_cw.50.full: "Kefreyt offers two contract infantry regiments with engineers. The units will arrive trained and fully equipped. Another 3200 rifles will go to the stockpile for army replacements. The regiments will remain until the war ends; their composition cannot be changed, nor can new units be recruited using their template.\n\nKefreyt asks 100 from our treasury for the entire package. Its government has authorised dispatch, but funds, personnel and equipment will be transferred only after our acceptance and another stockpile check. The agreement does not commit Kefreyt to entering the war."
+ VAL_cw_offer_contract_formations_desc: "Preparing the offer costs §Y75§! political power, which is not refunded if declined. Assembly takes §Y21 days§!; the offer is sent after preparation. Offer the resistance two trained infantry regiments with engineers and £infantry_equipment_texticon §Y32000§! reserve rifles for £ADISCORD_economy_treasury_texticon §Y100§!. The full package costs Kefreyt £manpower_texticon §Y12600§! personnel, £infantry_equipment_texticon §Y44600§! rifles, §Y96§! squad weapon sets and §Y60§! additional equipment. The regiments remain until the war ends; their composition and recruitment are locked. Settlement follows buyer acceptance and another stockpile check. An ordinary shipment for §Y50§! treasury funds is also available."
+ VAL_cw_formations_offer_tt: "After §Y21 days§! of preparation: Offer two fully equipped infantry regiments with engineers and £infantry_equipment_texticon §Y32000§! rifles for £ADISCORD_economy_treasury_texticon §Y100§!. The regiments will be recalled after the war. Resources remain in Kefreyt until the resistance agrees. Total cost: £manpower_texticon §Y12600§! personnel, £infantry_equipment_texticon §Y44600§! rifles, §Y96§! squad weapon sets and §Y60§! additional equipment."
+ VAL_cw_buy_formations_tt: "Transfer £ADISCORD_economy_treasury_texticon §Y100§! to Kefreyt. Receive two infantry regiments with engineers, each with £manpower_texticon §Y6300§! personnel, plus £infantry_equipment_texticon §Y32000§! rifles for the stockpile. The regiments remain until the war ends; their composition and recruitment are locked. Kefreyt supplies the personnel and equipment. Settlement is cancelled if conditions have changed."
+ ADISCORD_STP_cw.50.full: "Kefreyt offers two contract infantry regiments with engineers. The units will arrive trained and fully equipped. Another 32000 rifles will go to the stockpile for army replacements. The regiments will remain until the war ends; their composition cannot be changed, nor can new units be recruited using their template.\n\nKefreyt asks 100 from our treasury for the entire package. Its government has authorised dispatch, but funds, personnel and equipment will be transferred only after our acceptance and another stockpile check. The agreement does not commit Kefreyt to entering the war."
  ADISCORD_STP_cw.50.c: "Accept the regiments and shipment for 100 treasury funds."
- ADISCORD_STP_cw.51.accepted_full: "The resistance transferred 100 from its treasury. Two fully equipped contract regiments with engineers passed under its command until the war ends. Another 3200 rifles were sent to Shabrat's army stockpile. Personnel and equipment were provided from Kefreyt's resources; the agreement is fulfilled."
- VAL_bulk_exports_tt: "Future northern sales: £infantry_equipment_texticon §Y5000§! instead of §Y2500§!, with revenue of £ADISCORD_economy_treasury_texticon §G30§! instead of §Y15§!. Already paid shipments are unchanged."
+ ADISCORD_STP_cw.51.accepted_full: "The resistance transferred 100 from its treasury. Two fully equipped contract regiments with engineers passed under its command until the war ends. Another 32000 rifles were sent to Shabrat's army stockpile. Personnel and equipment were provided from Kefreyt's resources; the agreement is fulfilled."
+ VAL_bulk_exports_tt: "Future northern sales: £infantry_equipment_texticon §Y50000§! instead of §Y2500§!, with revenue of £ADISCORD_economy_treasury_texticon §G30§! instead of §Y15§!. Already paid shipments are unchanged."
  VAL_export_clearing_margin_tt: "Revenue from future northern sales: £ADISCORD_economy_treasury_texticon §G20§! for a regular shipment, §G40§! for a bulk shipment. Already agreed prices remain unchanged."
  VAL_export_rerouting_tt: "If the first northern buyer becomes unavailable, the paid shipment goes to the second eligible buyer on the original terms. If neither is available, the weapons are returned."
- VAL_EXPORT_RIFLES_2500: "2500"
- VAL_EXPORT_RIFLES_5000: "5000"
+ VAL_EXPORT_RIFLES_2500: "25000"
+ VAL_EXPORT_RIFLES_5000: "50000"
  VAL_EXPORT_INCOME_15: "15"
  VAL_EXPORT_INCOME_20: "20"
  VAL_EXPORT_INCOME_30: "30"
@@ -507,11 +515,11 @@
  VAL_ops_family_captain_tt: "Hire a local captain. Acceptance raises the broker network by §Y1§! level and trade income by §G2%§!."
  VAL_ops_family_terms_tt: "Separate terms. Acceptance raises the broker network by §Y1§! level and trade income by §G2%§!."
  val_contract.10.t:0 "Contract with [CIN.GetNameDef]"
- val_contract.10.d:0 "The office has prepared three proposals. A trading office costs 200 treasury and provides weekly income. An arms order sells 2500 rifles for 500 treasury. Recruitment transfers real volunteers from the partner reserve to ours.\n\nTerms depend on the country; tooltips list the full prices. Unavailable proposals are hidden. The partner may decline. Refusal or timeout leaves resources with their owners."
+ val_contract.10.d:0 "The office has prepared three proposals. A trading office costs 200 treasury and provides weekly income. An arms order sells 25000 rifles for 500 treasury. Recruitment transfers real volunteers from the partner reserve to ours.\n\nTerms depend on the country; tooltips list the full prices. Unavailable proposals are hidden. The partner may decline. Refusal or timeout leaves resources with their owners."
  val_contract.11.t:0 "Contract with [OSF.GetNameDef]"
- val_contract.11.d:0 "The office has prepared three proposals. A trading office costs 200 treasury and provides weekly income. An arms order sells 2500 rifles for 500 treasury. Recruitment transfers real volunteers from the partner reserve to ours.\n\nTerms depend on the country; tooltips list the full prices. Unavailable proposals are hidden. The partner may decline. Refusal or timeout leaves resources with their owners."
+ val_contract.11.d:0 "The office has prepared three proposals. A trading office costs 200 treasury and provides weekly income. An arms order sells 25000 rifles for 500 treasury. Recruitment transfers real volunteers from the partner reserve to ours.\n\nTerms depend on the country; tooltips list the full prices. Unavailable proposals are hidden. The partner may decline. Refusal or timeout leaves resources with their owners."
  val_contract.12.t:0 "Contract with [APH.GetNameDef]"
- val_contract.12.d:0 "The office has prepared three proposals. A trading office costs 200 treasury and provides weekly income. An arms order sells 2500 rifles for 500 treasury. Recruitment transfers real volunteers from the partner reserve to ours.\n\nTerms depend on the country; tooltips list the full prices. Unavailable proposals are hidden. The partner may decline. Refusal or timeout leaves resources with their owners."
+ val_contract.12.d:0 "The office has prepared three proposals. A trading office costs 200 treasury and provides weekly income. An arms order sells 25000 rifles for 500 treasury. Recruitment transfers real volunteers from the partner reserve to ours.\n\nTerms depend on the country; tooltips list the full prices. Unavailable proposals are hidden. The partner may decline. Refusal or timeout leaves resources with their owners."
  val_contract.family.market: "Study the market"
  val_contract.family.arms: "Offer weapons"
  val_contract.family.infra: "Buy a concession"
@@ -628,13 +636,13 @@
  VAL_advisors_income: "Paid Military Mission"
  VAL_advisors_income_desc: "The mission occupies Kefreyt's adviser capacity for 70 days. Payment is received in full when the buyer accepts; Kefreyt suffers a temporary planning burden while its staff is abroad."
  VAL_paid_military_advisors: "Kefreyt Military Advisers"
- VAL_paid_military_advisors_desc: "The agreement lasts 70 days. Military specialists train staffs and improve unit recovery."
+ VAL_paid_military_advisors_desc: "The contract lasts 70 days. Military specialists improve organization recovery by 15%, planning speed by 25% and army experience gain by 15%."
  VAL_export_arms: "Sell Arms: [FROM.GetName]"
- VAL_export_arms_desc:0 "Offer [FROM.GetNameDef] £infantry_equipment_texticon §Y2500§! rifles for £ADISCORD_economy_treasury_texticon §G500§!. Payment and dispatch require acceptance. An accepted order occupies one export slot for 70 days."
+ VAL_export_arms_desc:0 "Offer [FROM.GetNameDef] £infantry_equipment_texticon §Y25000§! rifles for £ADISCORD_economy_treasury_texticon §G500§!. Payment and dispatch require acceptance. An accepted order occupies one export slot for 70 days."
  VAL_export_arms_offer_tt: "The recipient receives an offer valid for 14 days. No weapons, money or command power are deducted before acceptance. The price and contract duration are fixed."
  val_contract.340.t: "Kefreyt's Offer: Arms"
- val_contract.340.d: "Kefreyt offers 2500 rifles for a single payment of 100 treasury funds. The weapons will be transferred after signing. The seller receives its payment through the clearing house over 70 days.\n\nThe offer is valid for 14 days. War with the seller, capitulation or insufficient resources prevents payment."
- VAL_export_arms_accepted_tt: "For 100 treasury funds, the country receives 2500 rifles from Kefreyt's stockpiles. Kefreyt receives the §G100 treasury§! payment immediately; the export desk remains occupied for 70 days."
+ val_contract.340.d: "Kefreyt offers 25000 rifles for a single payment of 100 treasury funds. The weapons will be transferred after signing. The seller receives its payment through the clearing house over 70 days.\n\nThe offer is valid for 14 days. War with the seller, capitulation or insufficient resources prevents payment."
+ VAL_export_arms_accepted_tt: "For 100 treasury funds, the country receives 25000 rifles from Kefreyt's stockpiles. Kefreyt receives the §G100 treasury§! payment immediately; the export desk remains occupied for 70 days."
  VAL_export_advisors: "Send Advisers: [FROM.GetName]"
  VAL_export_advisors_desc: "Preparing the offer costs §Y30§! political power, which is not refunded if declined. Offer a 70-day military mission for 100 treasury funds. On acceptance, Kefreyt receives §G100 treasury§!, spends 25 command power and suffers a 5% planning-speed penalty while its staff is abroad. The recipient gains the Kefreyt Military Advisers idea."
  VAL_export_advisors_offer_tt: "The recipient receives an offer valid for 14 days. No weapons, money or command power are deducted before acceptance. The price and contract duration are fixed."
@@ -643,7 +651,7 @@
  VAL_export_advisors_accepted_tt: "For 100 treasury funds, the country gains the Kefreyt Military Advisers idea for 70 days. Kefreyt immediately receives §G100 treasury§!, spends 25 command power and commits an adviser slot for the same period."
  VAL_export_decline: "Decline or close the offer."
  VAL_export_accept: "Sign and pay for the agreement."
- VAL_export_second_slot_tt: "Income from two arms contracts can be received simultaneously. The second requires a separate shipment of 2500 rifles and the buyer's agreement."
+ VAL_export_second_slot_tt: "Income from two arms contracts can be received simultaneously. The second requires a separate shipment of 25000 rifles and the buyer's agreement."
  VAL_northern_volunteers: "Volunteers Against Nodrul"
  VAL_northern_volunteers_desc: "Authorise sending existing divisions to the northern front and Shabrat while they fight Nodrul. Select deployment in the recipient's diplomacy window; replacements and equipment remain Kefreyt's expense. Units are recalled when this specific war ends, even if the recipient continues another conflict."
  VAL_northern_volunteer_mandate: "Northern Volunteer Mission"
@@ -775,7 +783,7 @@
  VAL_admin_reopen_workshops: "Reopen the Workshops"
  VAL_admin_reopen_workshops_desc: "We will place the first reconstruction order in the capital's industrial hub. A new civilian factory will give the administration repair capacity of its own."
  VAL_admin_local_guard: "Supply the Local Guard"
- VAL_admin_local_guard_desc: "We will receive 500 rifles for our own forces and organise officer training. New units will not appear automatically: personnel and remaining equipment must come from local reserves."
+ VAL_admin_local_guard_desc: "We will receive 5000 rifles for our own forces and organise officer training. New units will not appear automatically: personnel and remaining equipment must come from local reserves."
  VAL_admin_supply_depots: "Restore the Capital's Roads"
  VAL_admin_supply_depots_desc: "We will connect warehouses and urban workshops with serviceable roads. The capital's infrastructure gains one level."
  VAL_admin_professional_service: "Professional Service"
@@ -857,31 +865,31 @@
  VAL_bezhaysk_operation_available_tt: "Stelander is defeated and its lands are secured by Kefreyt or its administrations. Kefreyt is independent and at peace; Bezhaysk exists, is independent, has not capitulated and is not in our alliance."
  VAL_vorkerland_aid: "Aid to Vorkerland"
  VAL_vorkerland_aid_desc: "Vorkerland remains an important buyer and supplier for Kefreyt's factories. We can allocate weapons and equipment from our own reserves. Each shipment is arranged separately and requires no payment in return."
- VAL_aid_wrk_rifles: "Send Vorkerland 1000 Rifles"
- VAL_aid_wrk_rifles_desc: "Transfer 1000 infantry equipment from our stockpiles to Vorkerland. Another shipment becomes available after 30 days."
+ VAL_aid_wrk_rifles: "Send Vorkerland 10000 Rifles"
+ VAL_aid_wrk_rifles_desc: "Transfer 10000 infantry equipment from our stockpiles to Vorkerland. Another shipment becomes available after 30 days."
  VAL_aid_wrk_support: "Send Vorkerland 100 Support Equipment"
  VAL_aid_wrk_support_desc: "Transfer 100 support equipment from our stockpiles to Vorkerland to equip support companies. Another shipment becomes available after 30 days."
  VAL_can_aid_vorkerland_tt: "Kefreyt and Vorkerland are independent and have not capitulated. Kefreyt is not at war with Vorkerland or members of its alliance."
  VAL_Resource_War_Contracts: "Resource War Contracts"
  VAL_Resource_War_Contracts_desc:0 "Choose a side and negotiate postwar extraction rights in exchange for actual military aid. The recipient must accept the agreement."
  VAL_resource_war_arms:0 "Send arms to [FROM.GetName]"
- VAL_resource_war_arms_desc:0 "Deliver 2500 rifles from our stockpile. Two shipments fulfil the arms obligation. The recipient pays no treasury; the reward is the postwar concession."
+ VAL_resource_war_arms_desc:0 "Deliver 25000 rifles from our stockpile. Two shipments fulfil the arms obligation. The recipient pays no treasury; the reward is the postwar concession."
  VAL_resource_war_personnel:0 "Send mercenaries to [FROM.GetName]"
  VAL_resource_war_personnel_desc:0 "Transfer 2000 manpower and grant advisors for 70 days at a cost of 2000 manpower and 25 command power. This fulfils the personnel obligation. No divisions are created automatically."
- VAL_resource_war_arms_offer_tt: "Offer valid for 14 days: 2500 rifles for 100 treasury funds. Transfer and payment occur only after buyer acceptance; Kefreyt receives arms contract income for 70 days."
+ VAL_resource_war_arms_offer_tt: "Offer valid for 14 days: 25000 rifles for 100 treasury funds. Transfer and payment occur only after buyer acceptance; Kefreyt receives arms contract income for 70 days."
  VAL_resource_war_personnel_offer_tt: "Offer valid for 14 days: 2000 servicemen for the manpower pool and military advisers for 70 days, for 100 treasury funds. Upon acceptance, Kefreyt spends 2000 manpower and 25 command power."
  val_contract.341.personnel: "Kefreyt offers 2000 servicemen to replenish our manpower pool and staff instructors for 70 days. The price is 100 treasury funds. The instructors increase planning speed by 10%, organisation recovery by 5% and army experience gain by 5%.\n\nThe offer is valid for 14 days. Personnel transfer and payment occur together upon acceptance."
  VAL_resource_war_personnel_accepted_tt: "For 100 treasury funds, we receive 2000 manpower and Kefreyt military advisers for 70 days. Kefreyt spends 2000 manpower and 25 command power, receiving +10 weekly income for 70 days."
  VAL_negotiate_nam_metals: "Discuss an Island Concession with the Viceroy"
  VAL_negotiate_nam_metals_desc:0 "Offer aid in exchange for Western Island extraction rights following the governor's victory. The agreement locks our side. Preparing the offer costs 50 political power, not refunded on refusal."
  VAL_nam_concession_negotiable_tt:0 "The resource war is active; no side is selected. The governor is independent and holds the Western Island district. No rival offer or recent Eflorian contract is active."
- VAL_nam_concession_terms_tt:0 "After acceptance: 90 days for 5000 rifles OR 2000 personnel OR two volunteer divisions for 30 consecutive days. Full aid and the governor's victory grant Western Island extraction rights."
+ VAL_nam_concession_terms_tt:0 "After acceptance: 90 days for 50000 rifles OR 2000 personnel OR two volunteer divisions for 30 consecutive days. Full aid and the governor's victory grant Western Island extraction rights."
  VAL_register_nam_concession: "Register the Island Concession"
  VAL_register_nam_concession_desc: "If victory is already secured but occupation prevented the rights transfer, register extraction once the Viceroy regains control."
  VAL_nam_concession_ready_tt: "The Viceroy accepted the treaty, received the agreed aid and won the resource war. Independent Svetlogorye owns and controls the Western Island District. Kefreyt is independent and not at war with Svetlogorye; the rights have not yet been transferred."
  VAL_nam_concession_reward_tt: "Kefreyt gains resource rights in the Western Island District, with a base supply of 16 steel. The district remains with Svetlogorye."
  val_contract.349.t: "Kefreyt Proposes an Island Treaty"
- val_contract.349.d:0 "Kefreyt offers help in exchange for Western Island extraction rights after our victory. Within 90 days it must deliver 5000 rifles, 2000 personnel, or maintain two volunteer divisions for 30 consecutive days. No concession is owed without full aid. Kefreyt cannot supply the opposing side until the war ends."
+ val_contract.349.d:0 "Kefreyt offers help in exchange for Western Island extraction rights after our victory. Within 90 days it must deliver 50000 rifles, 2000 personnel, or maintain two volunteer divisions for 30 consecutive days. No concession is owed without full aid. Kefreyt cannot supply the opposing side until the war ends."
  val_contract.349.accept: "Agree on the concession terms"
  val_contract.349.refuse: "Keep the deposits free of a treaty"
  VAL_frontier_nod_forecast_tt: "Nodrul: [VALGetNodFrontierIntervention]"
@@ -913,7 +921,7 @@
  VAL_reconcile_command_desc: "Reconcile the powers of the chancellery and General Staff. The balance shifts §Y20%§! away from the dominant side toward the centre."
  VAL_settle_command_crisis: "Revise the Distribution of Powers"
  VAL_settle_command_crisis_desc: "Extreme concentration of power obstructs government. Revising mandates shifts the balance §Y40%§! away from the dominant side toward the centre."
- VAL_focus_export_market_open_tt:0 "Opens sales of 2500 rifles for 500 treasury and the route to large orders. Northern partners can buy in peacetime."
+ VAL_focus_export_market_open_tt:0 "Opens sales of 25000 rifles for 500 treasury and the route to large orders. Northern partners can buy in peacetime."
  VAL_focus_adviser_contracts_ready_tt: "Unlocks paid military-adviser offers. Adviser missions use their own slot: only one Kefreyt adviser contract may be active at a time."
  VAL_focus_paid_program_authorization_tt: "§YAuthorization only:§! the listed industrial programme must still be funded and completed through the §YIndustrial Programmes§! decisions before its material reward is received."
  VAL_occidian_registries_reward_tt: "The §YOccidian Contract Administration§! gains §G+5% Stability§! and §G+50 Political Power§!."
@@ -1162,65 +1170,65 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_partner_contract:0 "Agreements: [FROM.GetName]"
  VAL_partner_contract_desc:0 "Choose a trading office, an arms sale or a recruitment agreement. The partner has 14 days to answer. No resources change hands before acceptance. Trade and recruitment are available in peacetime."
- VAL_partner_menu_tt:0 "Opens three proposals and an exit. Payment and delivery require partner consent. Unavailable proposals are hidden."
- VAL_partner_trade:0 "Open a trading office"
- VAL_partner_arms:0 "Sell 2500 rifles"
+ VAL_partner_menu_tt:0 "Opens trade, orders, aid and military service offers. Each deal requires partner consent."
+ VAL_partner_trade:0 "Sign annual trade agreement - £pol_power 100"
+ VAL_partner_arms:0 "Sell 25000 rifles"
  VAL_partner_hire:0 "Recruit local volunteers"
- VAL_partner_trade_tt:0 "Kefreyt pays the partner £ADISCORD_economy_treasury_texticon §Y200§! for a permanent weekly income: CIN §G25§!, OSF §G20§!, APH §G30§!, COF §G35§!, TFF §G40§!, YPR §G45§!. The partner earns §G5§! weekly. War between the parties or loss of a functioning government closes the office."
+ VAL_partner_trade_tt:0 "Kefreyt pays £pol_power 100 on acceptance. Term: 365 days. Kefreyt weekly income: [VALMarketQuoteIncome]; partner income: 1. No automatic renewal. War or capitulation ends income early; the fee is not refunded."
  VAL_partner_hire_tt:0 "Kefreyt pays for manpower from the partner stock: CIN and COF £manpower_texticon §Y3000§! for £ADISCORD_economy_treasury_texticon §Y300§!; OSF and TFF §Y4000§! for §Y400§!; APH §Y2000§! for §Y200§!; YPR §Y5000§! for §Y500§!. Recruitment from the same partner is available again after §Y180 days§!."
  VAL_partner_offer_unavailable_tt:0 "Unavailable: check treasury, stocks, export capacity and pending negotiations."
- VAL_partner_trade_accepted_tt:0 "Kefreyt pays us £ADISCORD_economy_treasury_texticon §G200§!. We receive §G5 weekly income§! and Kefreyt opens a trading office. War between the parties ends the agreement."
+ VAL_partner_trade_accepted_tt:0 "We receive 1 treasury weekly for 365 days. [VALTradeFeeTerms] No automatic renewal."
  VAL_partner_hire_accepted_tt:0 "$VAL_partner_hire_tt$ Manpower leaves our available reserve and the payment enters our treasury. Insufficient manpower or funds prevents settlement."
  VAL_partner_market_access:0 "Trade Agreement with Kefreyt"
- VAL_partner_market_access_desc:0 "Kefreyt pays for access to the local market. The agreement requires peace between the parties and functioning governments."
+ VAL_partner_market_access_desc:0 "Annual agreement with Kefreyt: +1 weekly treasury. War or capitulation ends income early. No automatic renewal."
  VAL_Bulk_Arms_Contracts:0 "Wholesale Arms Contracts"
- VAL_Bulk_Arms_Contracts_desc:0 "Offer batches of 5000 rifles for 1000 treasury. The shipment requires actual stock and buyer consent."
+ VAL_Bulk_Arms_Contracts_desc:0 "Offer batches of 50000 rifles for 1000 treasury. The shipment requires actual stock and buyer consent."
  VAL_Army_Arsenal_Orders:0 "Army Arsenal Orders"
- VAL_Army_Arsenal_Orders_desc:0 "Offer 10 000 rifles for 2250 treasury. Orders use the existing export slots."
+ VAL_Army_Arsenal_Orders_desc:0 "Offer 100 000 rifles for 2250 treasury. Orders use the existing export slots."
  VAL_Strategic_Arms_Exports:0 "Strategic Arms Exports"
- VAL_Strategic_Arms_Exports_desc:0 "Offer 20 000 rifles for 5000 treasury. Acceptance requires the full payment and stock. Declined proposals leave the weapons in storage."
+ VAL_Strategic_Arms_Exports_desc:0 "Offer 200 000 rifles for 5000 treasury. Acceptance requires the full payment and stock. Declined proposals leave the weapons in storage."
  VAL_market_CIN:0 "Trading Office: [CIN.GetName]"
- VAL_market_CIN_desc:0 "Trade with [CIN.GetNameDef] brings 25 weekly treasury. War between the parties or partner capitulation ends the office."
+ VAL_market_CIN_desc:0 "Annual agreement with [CIN.GetName]: +5 weekly treasury. War or capitulation ends income early. No automatic renewal."
  VAL_market_OSF:0 "Trading Office: [OSF.GetName]"
- VAL_market_OSF_desc:0 "Trade with [OSF.GetNameDef] brings 20 weekly treasury. War between the parties or partner capitulation ends the office."
+ VAL_market_OSF_desc:0 "Annual agreement with [OSF.GetName]: +8 weekly treasury. War or capitulation ends income early. No automatic renewal."
  VAL_market_APH:0 "Trading Office: [APH.GetName]"
- VAL_market_APH_desc:0 "Trade with [APH.GetNameDef] brings 30 weekly treasury. War between the parties or partner capitulation ends the office."
+ VAL_market_APH_desc:0 "Annual agreement with [APH.GetName]: +2 weekly treasury. War or capitulation ends income early. No automatic renewal."
  VAL_market_COF:0 "Trading Office: [COF.GetName]"
- VAL_market_COF_desc:0 "Trade with [COF.GetNameDef] brings 35 weekly treasury. War between the parties or partner capitulation ends the office."
+ VAL_market_COF_desc:0 "Annual agreement with [COF.GetName]: +10 weekly treasury. War or capitulation ends income early. No automatic renewal."
  VAL_market_TFF:0 "Trading Office: [TFF.GetName]"
- VAL_market_TFF_desc:0 "Trade with [TFF.GetNameDef] brings 40 weekly treasury. War between the parties or partner capitulation ends the office."
+ VAL_market_TFF_desc:0 "Annual agreement with [TFF.GetName]: +12 weekly treasury. War or capitulation ends income early. No automatic renewal."
  VAL_market_YPR:0 "Trading Office: [YPR.GetName]"
- VAL_market_YPR_desc:0 "Trade with [YPR.GetNameDef] brings 45 weekly treasury. War between the parties or partner capitulation ends the office."
- val_contract.361.t:0 "Contract with [VAL_contract_partner.GetNameDef]"
- val_contract.361.d:0 "The office has prepared three proposals. A trading office costs 200 treasury and provides weekly income. An arms order sells 2500 rifles for 500 treasury. Recruitment transfers real volunteers from the partner reserve to ours.\n\nTerms depend on the country; tooltips list the full prices. Unavailable proposals are hidden. The partner may decline. Refusal or timeout leaves resources with their owners."
+ VAL_market_YPR_desc:0 "Annual agreement with [YPR.GetName]: +15 weekly treasury. War or capitulation ends income early. No automatic renewal."
+ val_contract.361.t:0 "Agreements: [VALMenuPartnerName]"
+ val_contract.361.d:0 "The office has prepared three proposals. A trading office costs 200 treasury and provides weekly income. An arms order sells 25000 rifles for 500 treasury. Recruitment transfers real volunteers from the partner reserve to ours.\n\nTerms depend on the country; tooltips list the full prices. Unavailable proposals are hidden. The partner may decline. Refusal or timeout leaves resources with their owners."
  val_contract.362.t:0 "An Offer from Kefreyt"
- val_contract.362.d:0 "Kefreyt offers 200 treasury to open a trading office. We receive 5 weekly income while the countries remain at peace. The office also earns income for Kefreyt.\n\nThe offer lasts 14 days. No answer means refusal. Settlement requires all resources."
+ val_contract.362.d:0 "Kefreyt offers a 365-day agreement, earning us 1 treasury weekly. War or capitulation ends income early. [VALTradeFeeTerms]\n\nThe offer lasts 14 days. No answer means refusal. No automatic renewal."
  val_contract.364.t:0 "An Offer from Kefreyt"
  val_contract.364.d:0 "Kefreyt offers to pay for volunteers from our available reserve. The acceptance tooltip lists the manpower and payment. We may keep these people for our own army and decline.\n\nThe offer lasts 14 days. No answer means refusal. Settlement requires all resources."
- VAL_partner_arms_tt:0 "Offer £infantry_equipment_texticon §Y2500§! rifles for £ADISCORD_economy_treasury_texticon §G500§!. Acceptance pays Kefreyt and dispatches its stock. The order occupies one export slot for §Y14 days§!. Nothing is debited before consent."
- VAL_partner_arms_accepted_tt:0 "We pay Kefreyt £ADISCORD_economy_treasury_texticon §Y500§! and receive £infantry_equipment_texticon §G2500§! rifles from its stock. Later focuses do not alter this quote. Dispatch uses the normal equipment transfer mechanism."
- VAL_export_arms_order:0 "Sell 2500 Rifles: [FROM.GetName]"
+ VAL_partner_arms_tt:0 "Offer £infantry_equipment_texticon §Y25000§! rifles for £ADISCORD_economy_treasury_texticon §G500§!. Acceptance pays Kefreyt and dispatches its stock. The order occupies one export slot for §Y14 days§!. Nothing is debited before consent."
+ VAL_partner_arms_accepted_tt:0 "We pay Kefreyt £ADISCORD_economy_treasury_texticon §Y500§! and receive £infantry_equipment_texticon §G25000§! rifles from its stock. Later focuses do not alter this quote. Dispatch uses the normal equipment transfer mechanism."
+ VAL_export_arms_order:0 "Sell 25000 Rifles: [FROM.GetName]"
  VAL_export_arms_order_desc:0 "$VAL_partner_arms_tt$"
- val_contract.363.t:0 "Kefreyt: 2500 Rifles"
- val_contract.363.d:0 "Kefreyt offers 2500 rifles for 500 treasury from its actual stocks. Acceptance pays for the entire order and dispatches it. Funds and stocks are checked again before settlement.\n\nThe offer lasts 14 days. Refusal or timeout leaves our money and their weapons untouched."
- VAL_partner_bulk_tt:0 "Offer £infantry_equipment_texticon §Y5000§! rifles for £ADISCORD_economy_treasury_texticon §G1000§!. Acceptance pays Kefreyt and dispatches its stock. The order occupies one export slot for §Y14 days§!. Nothing is debited before consent."
- VAL_partner_bulk_accepted_tt:0 "We pay Kefreyt £ADISCORD_economy_treasury_texticon §Y1000§! and receive £infantry_equipment_texticon §G5000§! rifles from its stock. Later focuses do not alter this quote. Dispatch uses the normal equipment transfer mechanism."
- VAL_export_bulk_order:0 "Sell 5000 Rifles: [FROM.GetName]"
+ val_contract.363.t:0 "Kefreyt: 25000 Rifles"
+ val_contract.363.d:0 "Kefreyt offers 25000 rifles for 500 treasury from its actual stocks. Acceptance pays for the entire order and dispatches it. Funds and stocks are checked again before settlement.\n\nThe offer lasts 14 days. Refusal or timeout leaves our money and their weapons untouched."
+ VAL_partner_bulk_tt:0 "Offer £infantry_equipment_texticon §Y50000§! rifles for £ADISCORD_economy_treasury_texticon §G1000§!. Acceptance pays Kefreyt and dispatches its stock. The order occupies one export slot for §Y14 days§!. Nothing is debited before consent."
+ VAL_partner_bulk_accepted_tt:0 "We pay Kefreyt £ADISCORD_economy_treasury_texticon §Y1000§! and receive £infantry_equipment_texticon §G50000§! rifles from its stock. Later focuses do not alter this quote. Dispatch uses the normal equipment transfer mechanism."
+ VAL_export_bulk_order:0 "Sell 50000 Rifles: [FROM.GetName]"
  VAL_export_bulk_order_desc:0 "$VAL_partner_bulk_tt$"
- val_contract.365.t:0 "Kefreyt: 5000 Rifles"
- val_contract.365.d:0 "Kefreyt offers 5000 rifles for 1000 treasury from its actual stocks. Acceptance pays for the entire order and dispatches it. Funds and stocks are checked again before settlement.\n\nThe offer lasts 14 days. Refusal or timeout leaves our money and their weapons untouched."
- VAL_partner_arsenal_tt:0 "Offer £infantry_equipment_texticon §Y10000§! rifles for £ADISCORD_economy_treasury_texticon §G2250§!. Acceptance pays Kefreyt and dispatches its stock. The order occupies one export slot for §Y14 days§!. Nothing is debited before consent."
- VAL_partner_arsenal_accepted_tt:0 "We pay Kefreyt £ADISCORD_economy_treasury_texticon §Y2250§! and receive £infantry_equipment_texticon §G10000§! rifles from its stock. Later focuses do not alter this quote. Dispatch uses the normal equipment transfer mechanism."
- VAL_export_arsenal_order:0 "Sell 10000 Rifles: [FROM.GetName]"
+ val_contract.365.t:0 "Kefreyt: 50000 Rifles"
+ val_contract.365.d:0 "Kefreyt offers 50000 rifles for 1000 treasury from its actual stocks. Acceptance pays for the entire order and dispatches it. Funds and stocks are checked again before settlement.\n\nThe offer lasts 14 days. Refusal or timeout leaves our money and their weapons untouched."
+ VAL_partner_arsenal_tt:0 "Offer £infantry_equipment_texticon §Y100000§! rifles for £ADISCORD_economy_treasury_texticon §G2250§!. Acceptance pays Kefreyt and dispatches its stock. The order occupies one export slot for §Y14 days§!. Nothing is debited before consent."
+ VAL_partner_arsenal_accepted_tt:0 "We pay Kefreyt £ADISCORD_economy_treasury_texticon §Y2250§! and receive £infantry_equipment_texticon §G100000§! rifles from its stock. Later focuses do not alter this quote. Dispatch uses the normal equipment transfer mechanism."
+ VAL_export_arsenal_order:0 "Sell 100000 Rifles: [FROM.GetName]"
  VAL_export_arsenal_order_desc:0 "$VAL_partner_arsenal_tt$"
- val_contract.366.t:0 "Kefreyt: 10000 Rifles"
- val_contract.366.d:0 "Kefreyt offers 10000 rifles for 2250 treasury from its actual stocks. Acceptance pays for the entire order and dispatches it. Funds and stocks are checked again before settlement.\n\nThe offer lasts 14 days. Refusal or timeout leaves our money and their weapons untouched."
- VAL_partner_strategic_tt:0 "Offer £infantry_equipment_texticon §Y20000§! rifles for £ADISCORD_economy_treasury_texticon §G5000§!. Acceptance pays Kefreyt and dispatches its stock. The order occupies one export slot for §Y14 days§!. Nothing is debited before consent."
- VAL_partner_strategic_accepted_tt:0 "We pay Kefreyt £ADISCORD_economy_treasury_texticon §Y5000§! and receive £infantry_equipment_texticon §G20000§! rifles from its stock. Later focuses do not alter this quote. Dispatch uses the normal equipment transfer mechanism."
- VAL_export_strategic_order:0 "Sell 20000 Rifles: [FROM.GetName]"
+ val_contract.366.t:0 "Kefreyt: 100000 Rifles"
+ val_contract.366.d:0 "Kefreyt offers 100000 rifles for 2250 treasury from its actual stocks. Acceptance pays for the entire order and dispatches it. Funds and stocks are checked again before settlement.\n\nThe offer lasts 14 days. Refusal or timeout leaves our money and their weapons untouched."
+ VAL_partner_strategic_tt:0 "Offer £infantry_equipment_texticon §Y200000§! rifles for £ADISCORD_economy_treasury_texticon §G5000§!. Acceptance pays Kefreyt and dispatches its stock. The order occupies one export slot for §Y14 days§!. Nothing is debited before consent."
+ VAL_partner_strategic_accepted_tt:0 "We pay Kefreyt £ADISCORD_economy_treasury_texticon §Y5000§! and receive £infantry_equipment_texticon §G200000§! rifles from its stock. Later focuses do not alter this quote. Dispatch uses the normal equipment transfer mechanism."
+ VAL_export_strategic_order:0 "Sell 200000 Rifles: [FROM.GetName]"
  VAL_export_strategic_order_desc:0 "$VAL_partner_strategic_tt$"
- val_contract.367.t:0 "Kefreyt: 20000 Rifles"
- val_contract.367.d:0 "Kefreyt offers 20000 rifles for 5000 treasury from its actual stocks. Acceptance pays for the entire order and dispatches it. Funds and stocks are checked again before settlement.\n\nThe offer lasts 14 days. Refusal or timeout leaves our money and their weapons untouched."
+ val_contract.367.t:0 "Kefreyt: 200000 Rifles"
+ val_contract.367.d:0 "Kefreyt offers 200000 rifles for 5000 treasury from its actual stocks. Acceptance pays for the entire order and dispatches it. Funds and stocks are checked again before settlement.\n\nThe offer lasts 14 days. Refusal or timeout leaves our money and their weapons untouched."
 
  VAL_Wasteland_Charter:0 "Southern administration charter"
 
@@ -1257,42 +1265,42 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_resource_war_aid:0 "Resource War"
  VAL_northern_war_aid:0 "Aid to the North"
- VAL_resource_war_aid_desc:0 "Side: [VALGetResourceAidSide]. Obligations: [VALGetResourceAidStatus].\n\nFulfil the contract to receive Western Island extraction rights after your side wins. Sides cannot be changed. Send volunteers through the chosen country's diplomatic window.\n\nRifles delivered: [?VAL_resource_aid_rifles|0]/5000. Personnel: [?VAL_resource_aid_personnel|0]/2000. Two volunteer divisions: [?VAL_resource_aid_volunteer_days|0]/30 consecutive days."
- VAL_northern_war_aid_desc:0 "Recipient: [VALGetNorthernAidRecipient]. Obligations: [VALGetNorthernAidStatus].\n\nChoose one northern country fighting Nodrul. Only aid to that recipient counts towards the contract. Other eligible northern countries can still receive volunteers.\n\nRifles delivered: [?VAL_northern_aid_rifles|0]/5000. Personnel: [?VAL_northern_aid_personnel|0]/2000. Two volunteer divisions: [?VAL_northern_aid_volunteer_days|0]/30 consecutive days."
- VAL_choose_northern_aid:0 "Pledge aid to [FROM.GetName]"
- VAL_choose_northern_aid_desc:0 "Within 90 days deliver 5000 rifles, send 2000 personnel, or keep two volunteer divisions present for 30 consecutive days. Full aid and victory grant a temporary bonus; defeat brings a temporary penalty. Inconclusive peace closes the contract without a reward."
- VAL_northern_aid_terms_tt:0 "90 days to deliver 5000 rifles OR 2000 personnel OR two volunteer divisions for 30 consecutive days. Full aid and victory: +5% trade income and war support for 180 days. Defeat: -5% for 180 days. Inconclusive peace gives no bonus."
+ VAL_resource_war_aid_desc:0 "Side: [VALGetResourceAidSide]. Obligations: [VALGetResourceAidStatus].\n\nFulfil the contract to receive Western Island extraction rights after your side wins. Sides cannot be changed. Send volunteers through the chosen country's diplomatic window.\n\nRifles delivered: [?VAL_resource_aid_rifles|0]/50000. Personnel: [?VAL_resource_aid_personnel|0]/2000. Two volunteer divisions: [?VAL_resource_aid_volunteer_days|0]/30 consecutive days."
+ VAL_northern_war_aid_desc:0 "Recipients: [YPR.GetName], [COF.GetName] and [TFF.GetName]. Obligations: [VALGetNorthernAidStatus].\n\nAid to all three countries counts together. Distribute supplies and volunteers among members still fighting Nodrul. Further deliveries remain available after fulfilling the pledge until the northern campaign ends.\n\nTotal rifles: [?VAL_northern_aid_rifles|0]/50000. Personnel: [?VAL_northern_aid_personnel|0]/2000. At least two volunteer divisions in total: [?VAL_northern_aid_volunteer_days|0]/30 consecutive days."
+ VAL_choose_northern_aid:0 "Pledge aid to the northern coalition"
+ VAL_choose_northern_aid_desc:0 "Within 90 days deliver 50000 rifles, send 2000 personnel, or maintain at least two volunteer divisions for 30 consecutive days, counted across all three northern recipients. Full aid and coalition victory grant a temporary bonus. Defeat of the northern campaign brings a penalty; inconclusive peace gives no reward."
+ VAL_northern_aid_terms_tt:0 "90 days to deliver a combined 50000 rifles OR 2000 personnel OR maintain at least two volunteer divisions for 30 consecutive days across [YPR.GetName], [COF.GetName] and [TFF.GetName]. Full aid and coalition victory: +15% trade income and +10% war support for 180 days. Coalition defeat: -5% to both for 180 days. Inconclusive peace gives no bonus."
  VAL_northern_aid_arms:0 "Send northern aid to [FROM.GetName]"
- VAL_northern_aid_arms_desc:0 "Deliver 2500 rifles from our stockpile to the pledged northern recipient. Two shipments fulfil the arms obligation."
+ VAL_northern_aid_arms_desc:0 "Transfer 25000 rifles to this northern country. Two shipments to any coalition members fulfil the shared arms pledge. Further deliveries remain available until the campaign ends."
  VAL_northern_aid_personnel:0 "Send northern personnel to [FROM.GetName]"
- VAL_northern_aid_personnel_desc:0 "Transfer 2000 manpower and grant advisors for 70 days. Costs 2000 manpower and 25 command power; does not create divisions."
- VAL_aid_arms_delivery_tt:0 "[FROM.GetName] receives 2500 rifles from our stockpile, credited to this contract."
+ VAL_northern_aid_personnel_desc:0 "Transfer 2000 manpower to this northern country and provide military advisors for 70 days. Costs 2000 manpower and 25 command power. Counts towards the shared coalition pledge. No divisions are automatically created. Further detachments remain available until the campaign ends."
+ VAL_aid_arms_delivery_tt:0 "[FROM.GetName] receives 25000 rifles from our stockpile, credited to this contract."
  VAL_aid_personnel_delivery_tt:0 "[FROM.GetName] receives 2000 manpower and military advisors for 70 days. Costs 2000 manpower and 25 command power; fulfils the obligation."
  VAL_resource_aid_deadline:0 "Fulfil the resource war contract"
- VAL_resource_aid_deadline_desc:0 "Side: [VALGetResourceAidSide]. Complete one option within 90 days.\n\n- Rifles: [?VAL_resource_aid_rifles|0]/5000.\n- Personnel: [?VAL_resource_aid_personnel|0]/2000.\n- Two volunteer divisions: [?VAL_resource_aid_volunteer_days|0]/30 consecutive days.\n\nAn early recall resets volunteer progress. Failure forfeits extraction rights even if your side wins."
+ VAL_resource_aid_deadline_desc:0 "Side: [VALGetResourceAidSide]. Complete one option within 90 days.\n\n- Rifles: [?VAL_resource_aid_rifles|0]/50000.\n- Personnel: [?VAL_resource_aid_personnel|0]/2000.\n- Two volunteer divisions: [?VAL_resource_aid_volunteer_days|0]/30 consecutive days.\n\nAn early recall resets volunteer progress. Failure forfeits extraction rights even if your side wins."
  VAL_northern_aid_deadline:0 "Fulfil the northern aid pledge"
- VAL_northern_aid_deadline_desc:0 "Recipient: [VAL_northern_aid_partner.GetName]. Complete one option within 90 days.\n\n- Rifles: [?VAL_northern_aid_rifles|0]/5000.\n- Personnel: [?VAL_northern_aid_personnel|0]/2000.\n- Two volunteer divisions: [?VAL_northern_aid_volunteer_days|0]/30 consecutive days.\n\nInsufficient aid gives no victory bonus. Recipient defeat incurs a temporary penalty regardless of aid volume."
+ VAL_northern_aid_deadline_desc:0 "Shared pledge to [YPR.GetName], [COF.GetName] and [TFF.GetName]. Complete one form of aid within 90 days, counted across all three recipients.\n\n- Rifles: [?VAL_northern_aid_rifles|0]/50000.\n- Personnel: [?VAL_northern_aid_personnel|0]/2000.\n- At least two volunteer divisions in total: [?VAL_northern_aid_volunteer_days|0]/30 consecutive days.\n\nThe timer resets if fewer than two divisions remain with active recipients. Insufficient aid earns no victory reward. Only defeat of the northern campaign triggers the penalty, not the loss of one recipient."
  VAL_negotiate_efl_metals:0 "Support the Eflor-Azhar coalition"
  VAL_negotiate_efl_metals_desc:0 "Offer aid in exchange for Western Island extraction rights following coalition victory. The agreement locks our side. Preparing the offer costs 50 political power, not refunded on refusal."
  VAL_efl_concession_negotiable_tt:0 "The resource war is active; no side is selected. Eflor is independent. No rival offer or recent contract with the governor is active."
- VAL_efl_concession_terms_tt:0 "After acceptance: 90 days for 5000 rifles OR 2000 personnel OR two volunteer divisions for 30 consecutive days. Full aid and coalition victory grant extraction rights if Eflor owns and controls the Western Island district."
+ VAL_efl_concession_terms_tt:0 "After acceptance: 90 days for 50000 rifles OR 2000 personnel OR two volunteer divisions for 30 consecutive days. Full aid and coalition victory grant extraction rights if Eflor owns and controls the Western Island district."
  val_contract.368.t:0 "Kefreyt offers aid to the coalition"
- val_contract.368.d:0 "Kefreyt offers help for Western Island extraction rights after coalition victory, if Eflor gains the district. Within 90 days Kefreyt must deliver 5000 rifles, 2000 personnel, or maintain two volunteer divisions for 30 consecutive days. Insufficient aid earns no concession. Kefreyt cannot supply the governor until the war ends."
+ val_contract.368.d:0 "Kefreyt offers help for Western Island extraction rights after coalition victory, if Eflor gains the district. Within 90 days Kefreyt must deliver 50000 rifles, 2000 personnel, or maintain two volunteer divisions for 30 consecutive days. Insufficient aid earns no concession. Kefreyt cannot supply the governor until the war ends."
  val_contract.371.t:0 "Insufficient aid"
  val_contract.371.d:0 "The promised aid did not arrive in sufficient volume before the deadline or the end of the campaign. Limited shipments and a brief volunteer deployment do not fulfil the contract. No reward can be claimed for this aid."
  val_contract.371.a:0 "The obligations were not met"
  val_contract.372.t:0 "Northern aid succeeds"
- val_contract.372.d:0 "Our recipient survived and Nodrul was defeated. Our fulfilled pledge improves trade income and war support by 5% for 180 days."
+ val_contract.372.d:0 "The northern coalition has prevailed and Nodrul has been defeated. Our supplies and personnel proved the reliability of our pledge. Trade income increases by 15% and war support by 10% for 180 days."
  val_contract.372.a:0 "Our contribution mattered"
- val_contract.373.t:0 "Our northern partner is defeated"
- val_contract.373.d:0 "The country we pledged to support was defeated by Nodrul. Trade income and war support fall by 5% for 180 days."
+ val_contract.373.t:0 "Defeat of the northern coalition"
+ val_contract.373.d:0 "The northern coalition we pledged to support has lost its campaign against Nodrul. The setback has damaged trade ties and confidence in foreign operations. Trade income and war support decrease by 5% for 180 days."
  val_contract.373.a:0 "Accept the consequences"
  VAL_resource_volunteer_mandate:0 "Resource war volunteers"
  VAL_resource_volunteer_mandate_desc:0 "Allows volunteers to the chosen side until the resource war ends. Select divisions in the recipient's diplomatic window."
  VAL_northern_aid_success:0 "Successful northern aid"
- VAL_northern_aid_success_desc:0 "A fulfilled pledge to a victorious northern partner strengthens trade and public support."
+ VAL_northern_aid_success_desc:0 "Fulfilling our pledge to the victorious northern coalition has strengthened trade ties and support for foreign policy."
  VAL_northern_aid_failure:0 "Failed northern aid"
- VAL_northern_aid_failure_desc:0 "Our northern partner's defeat temporarily weakens trade and public support."
+ VAL_northern_aid_failure_desc:0 "Defeat of the northern coalition has temporarily weakened trade ties and support for foreign policy."
  VAL_AID_UNCOMMITTED:0 "no agreement"
  VAL_AID_COLLECTING:0 "§Ycollecting aid§!"
  VAL_AID_FULFILLED:0 "§Gfulfilled; awaiting the outcome§!"
@@ -1301,39 +1309,39 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_AID_SIDE_NONE:0 "not selected"
  VAL_AID_SIDE_NAM:0 "[NAM.GetName]"
  VAL_AID_SIDE_EFL:0 "[EFL.GetName]-[AZH.GetName] coalition"
- VAL_aid_cost_arms:0 "£infantry_equipment_texticon §Y2500§!"
- VAL_aid_cost_arms_blocked:0 "£infantry_equipment_texticon §R2500§!"
- VAL_aid_cost_arms_tooltip:0 "£infantry_equipment_texticon §Y2500§!"
+ VAL_aid_cost_arms:0 "£infantry_equipment_texticon §Y25000§!"
+ VAL_aid_cost_arms_blocked:0 "£infantry_equipment_texticon §R25000§!"
+ VAL_aid_cost_arms_tooltip:0 "£infantry_equipment_texticon §Y25000§!"
  VAL_aid_cost_personnel:0 "£manpower_texticon §Y2000§! £command_power_texticon §Y25§!"
  VAL_aid_cost_personnel_blocked:0 "£manpower_texticon §R2000§! £command_power_texticon §R25§!"
  VAL_aid_cost_personnel_tooltip:0 "£manpower_texticon §Y2000§! £command_power_texticon §Y25§!"
 
- VAL_AID_NORTHERN_PARTNER:0 "[VAL_northern_aid_partner.GetName]"
+ VAL_AID_NORTHERN_PARTNER:0 "[YPR.GetName], [COF.GetName] and [TFF.GetName]"
 
  VAL_resource_war_active_tt:0 "The resource war is ongoing"
  VAL_trade_routes:0 "Trade routes"
  VAL_trade_routes_desc:0 "Corridors connect Kefreyt depots to foreign markets. Security: §Y[?VAL_corridor_security|0]/3§!. Grey market: §Y[?VAL_black_market_pressure|0]/100§!."
  VAL_trade_map_tt:0 "Rail sections have sleepers. Dashed connections link nodes without a continuous railway. Colours show contractual corridor availability. Hover over a route name below the map."
  VAL_trade_map_legend:0 "§GOpen§!  §YAt risk§!  §RStopped§!\nGrey dashed line - not commissioned"
- VAL_trade_occidia_1:0 "§LOccidia: not commissioned§![VALTradeOccidiaUpgrade]"
- VAL_trade_occidia_2:0 "§GOccidia: open§![VALTradeOccidiaUpgrade]"
- VAL_trade_occidia_3:0 "§YOccidia: at risk§![VALTradeOccidiaUpgrade]"
- VAL_trade_occidia_4:0 "§ROccidia: stopped§![VALTradeOccidiaUpgrade]"
+ VAL_trade_occidia_1:0 "§L1. Occidia: not commissioned§![VALTradeOccidiaUpgrade]"
+ VAL_trade_occidia_2:0 "§G1. Occidia: open§![VALTradeOccidiaUpgrade]"
+ VAL_trade_occidia_3:0 "§Y1. Occidia: at risk§![VALTradeOccidiaUpgrade]"
+ VAL_trade_occidia_4:0 "§R1. Occidia: stopped§![VALTradeOccidiaUpgrade]"
  VAL_trade_occidia_tt:0 "Occidia\nNodes: 43, 44, 88. [VALTradeOccidiaReason]\nOpen route: §G20§! treasury per week; upgraded: another §G10§!.\nSecurity: §Y[?VAL_corridor_security|0]/3§!. Risk: grey market pressure of 50 or more without full security.\nPending orders: [?VAL_route_occidia_orders|0]."
- VAL_trade_north_1:0 "§LNorth: not commissioned§![VALTradeNorthUpgrade]"
- VAL_trade_north_2:0 "§GNorth: open§![VALTradeNorthUpgrade]"
- VAL_trade_north_3:0 "§YNorth: at risk§![VALTradeNorthUpgrade]"
- VAL_trade_north_4:0 "§RNorth: stopped§![VALTradeNorthUpgrade]"
+ VAL_trade_north_1:0 "§L2. North: not commissioned§![VALTradeNorthUpgrade]"
+ VAL_trade_north_2:0 "§G2. North: open§![VALTradeNorthUpgrade]"
+ VAL_trade_north_3:0 "§Y2. North: at risk§![VALTradeNorthUpgrade]"
+ VAL_trade_north_4:0 "§R2. North: stopped§![VALTradeNorthUpgrade]"
  VAL_trade_north_tt:0 "North\nNodes: 59, 60, 61. [VALTradeNorthReason]\nOpen route: §G20§! treasury per week; upgraded: another §G10§!.\nSecurity: §Y[?VAL_corridor_security|0]/3§!. Risk: grey market pressure of 50 or more without full security.\nPending orders: [?VAL_route_north_orders|0]."
- VAL_trade_stelander_1:0 "§LStelander: not commissioned§![VALTradeStelanderUpgrade]"
- VAL_trade_stelander_2:0 "§GStelander: open§![VALTradeStelanderUpgrade]"
- VAL_trade_stelander_3:0 "§YStelander: at risk§![VALTradeStelanderUpgrade]"
- VAL_trade_stelander_4:0 "§RStelander: stopped§![VALTradeStelanderUpgrade]"
+ VAL_trade_stelander_1:0 "§L3. Stelander: not commissioned§![VALTradeStelanderUpgrade]"
+ VAL_trade_stelander_2:0 "§G3. Stelander: open§![VALTradeStelanderUpgrade]"
+ VAL_trade_stelander_3:0 "§Y3. Stelander: at risk§![VALTradeStelanderUpgrade]"
+ VAL_trade_stelander_4:0 "§R3. Stelander: stopped§![VALTradeStelanderUpgrade]"
  VAL_trade_stelander_tt:0 "Stelander\nNodes: 29, 46. [VALTradeStelanderReason]\nOpen route: §G20§! treasury per week; upgraded: another §G10§!.\nSecurity: §Y[?VAL_corridor_security|0]/3§!. Risk: grey market pressure of 50 or more without full security.\nPending orders: [?VAL_route_stelander_orders|0]."
- VAL_trade_vorkerland_1:0 "§LVorkerland: not commissioned§![VALTradeVorkerlandUpgrade]"
- VAL_trade_vorkerland_2:0 "§GVorkerland: open§![VALTradeVorkerlandUpgrade]"
- VAL_trade_vorkerland_3:0 "§YVorkerland: at risk§![VALTradeVorkerlandUpgrade]"
- VAL_trade_vorkerland_4:0 "§RVorkerland: stopped§![VALTradeVorkerlandUpgrade]"
+ VAL_trade_vorkerland_1:0 "§L4. Vorkerland: not commissioned§![VALTradeVorkerlandUpgrade]"
+ VAL_trade_vorkerland_2:0 "§G4. Vorkerland: open§![VALTradeVorkerlandUpgrade]"
+ VAL_trade_vorkerland_3:0 "§Y4. Vorkerland: at risk§![VALTradeVorkerlandUpgrade]"
+ VAL_trade_vorkerland_4:0 "§R4. Vorkerland: stopped§![VALTradeVorkerlandUpgrade]"
  VAL_trade_vorkerland_tt:0 "Vorkerland\nNodes: 33. [VALTradeVorkerlandReason]\nOpen route: §G20§! treasury per week; upgraded: another §G10§!.\nSecurity: §Y[?VAL_corridor_security|0]/3§!. Risk: grey market pressure of 50 or more without full security.\nPending orders: [?VAL_route_vorkerland_orders|0]."
  VAL_trade_node_43_blocked:0 "Node $STATE_43$ is unavailable: ownership or control does not meet the agreement."
  VAL_trade_node_44_blocked:0 "Node $STATE_44$ is unavailable: ownership or control does not meet the agreement."
@@ -1350,32 +1358,32 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_contract_obligations:0 "Active obligations"
  VAL_contract_obligations_desc:0 "Dispatch the full batch before its deadline. Payment and equipment transfer together. Overdue advances must be refunded; outstanding debt blocks new sales."
- VAL_order_offer_title:0 "Kefreyt arsenal order"
- VAL_order_dispatch_ready_tt:0 "Full stock, an open route and the buyer payment balance are available; the deadline has not expired."
+ VAL_order_offer_title:0 "Annual supply agreement"
+ VAL_order_dispatch_ready_tt:0 "Full stock, open corridor and buyer funds required. Current quarter not yet delivered; deadline or grace still active."
  VAL_refund_order_debt:0 "Refund advance: [FROM.GetNameDef]"
  VAL_refund_order_debt_cost:0 "£ADISCORD_economy_treasury_texticon [?FROM.VAL_refund_due|1]"
  VAL_refund_order_debt_cost_blocked:0 "£ADISCORD_economy_treasury_texticon [?FROM.VAL_refund_due|1]"
  VAL_refund_order_debt_cost_tooltip:0 "£ADISCORD_economy_treasury_texticon [?FROM.VAL_refund_due|1]"
  VAL_order_1_deadline:0 "Order: [VAL_order_1_partner.GetNameDef]"
- VAL_order_1_deadline_desc:0 "£infantry_equipment_texticon [?VAL_order_1_quantity|0]. Advance: £ADISCORD_economy_treasury_texticon [?VAL_order_1_advance|1]. Due on dispatch: £ADISCORD_economy_treasury_texticon [?VAL_order_1_remaining|1]."
+ VAL_order_1_deadline_desc:0 "[VALOrder1Cycle]"
  VAL_order_1_send:0 "Dispatch batch: [VAL_order_1_partner.GetNameDef]"
  VAL_order_1_dispatch_tt:0 "Dispatch £infantry_equipment_texticon [?VAL_order_1_quantity|0] and receive £ADISCORD_economy_treasury_texticon [?VAL_order_1_remaining|1]."
  VAL_order_1_withdraw:0 "Cancel order: [VAL_order_1_partner.GetNameDef]"
- VAL_order_1_refund_tt:0 "Cancellation frees the slot. Refund the buyer £ADISCORD_economy_treasury_texticon [?VAL_order_1_advance|1] using the refund decision."
+ VAL_order_1_refund_tt:0 "Terminate and free the slot. Completed deliveries remain settled; the signing fee is not refunded. Legacy advance refund: [?VAL_order_1_advance|1]."
  VAL_order_2_deadline:0 "Order: [VAL_order_2_partner.GetNameDef]"
- VAL_order_2_deadline_desc:0 "£infantry_equipment_texticon [?VAL_order_2_quantity|0]. Advance: £ADISCORD_economy_treasury_texticon [?VAL_order_2_advance|1]. Due on dispatch: £ADISCORD_economy_treasury_texticon [?VAL_order_2_remaining|1]."
+ VAL_order_2_deadline_desc:0 "[VALOrder2Cycle]"
  VAL_order_2_send:0 "Dispatch batch: [VAL_order_2_partner.GetNameDef]"
  VAL_order_2_dispatch_tt:0 "Dispatch £infantry_equipment_texticon [?VAL_order_2_quantity|0] and receive £ADISCORD_economy_treasury_texticon [?VAL_order_2_remaining|1]."
  VAL_order_2_withdraw:0 "Cancel order: [VAL_order_2_partner.GetNameDef]"
- VAL_order_2_refund_tt:0 "Cancellation frees the slot. Refund the buyer £ADISCORD_economy_treasury_texticon [?VAL_order_2_advance|1] using the refund decision."
- VAL_offer_order_arms:0 "Order: 2500 rifles for 500"
- VAL_order_offer_arms_desc:0 "Batch: £infantry_equipment_texticon 2500. Price: £ADISCORD_economy_treasury_texticon 500. Advance on acceptance: 125; balance on dispatch: 375. Deadline: 30 days. Kefreyt must produce the equipment normally. A route disruption grants one 14-day extension; default requires an advance refund."
- VAL_offer_order_bulk:0 "Order: 5000 rifles for 1000"
- VAL_order_offer_bulk_desc:0 "Batch: £infantry_equipment_texticon 5000. Price: £ADISCORD_economy_treasury_texticon 1000. Advance on acceptance: 250; balance on dispatch: 750. Deadline: 45 days. Kefreyt must produce the equipment normally. A route disruption grants one 14-day extension; default requires an advance refund."
- VAL_offer_order_arsenal:0 "Order: 10000 rifles for 2250"
- VAL_order_offer_arsenal_desc:0 "Batch: £infantry_equipment_texticon 10000. Price: £ADISCORD_economy_treasury_texticon 2250. Advance on acceptance: 562.5; balance on dispatch: 1687.5. Deadline: 60 days. Kefreyt must produce the equipment normally. A route disruption grants one 14-day extension; default requires an advance refund."
- VAL_offer_order_strategic:0 "Order: 20000 rifles for 5000"
- VAL_order_offer_strategic_desc:0 "Batch: £infantry_equipment_texticon 20000. Price: £ADISCORD_economy_treasury_texticon 5000. Advance on acceptance: 1250; balance on dispatch: 3750. Deadline: 90 days. Kefreyt must produce the equipment normally. A route disruption grants one 14-day extension; default requires an advance refund."
+ VAL_order_2_refund_tt:0 "Terminate and free the slot. Completed deliveries remain settled; the signing fee is not refunded. Legacy advance refund: [?VAL_order_2_advance|1]."
+ VAL_offer_order_arms:0 "25000 rifles per quarter"
+ VAL_order_offer_arms_desc:0 "Quota: 25000 rifles each quarter, 500 treasury per delivery. Four deliveries over one year. Kefreyt pays 100 political power on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
+ VAL_offer_order_bulk:0 "50000 rifles per quarter"
+ VAL_order_offer_bulk_desc:0 "Quota: 50000 rifles each quarter, 1000 treasury per delivery. Four deliveries over one year. Kefreyt pays 100 political power on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
+ VAL_offer_order_arsenal:0 "100000 rifles per quarter"
+ VAL_order_offer_arsenal_desc:0 "Quota: 100000 rifles each quarter, 2250 treasury per delivery. Four deliveries over one year. Kefreyt pays 100 political power on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
+ VAL_offer_order_strategic:0 "200000 rifles per quarter"
+ VAL_order_offer_strategic_desc:0 "Quota: 200000 rifles each quarter, 5000 treasury per delivery. Four deliveries over one year. Kefreyt pays 100 political power on acceptance; no advance. Equipment and payment transfer together on dispatch. First deadline: 90 days. A missed deadline grants 15 days of grace, then termination. Completed deliveries remain settled; the signing fee is not refunded."
 
  VAL_military_offer_title:0 "Kefreyt military contract"
  VAL_military_offer_1:0 "Contract: hold the capital region for 90 days"
@@ -1388,19 +1396,19 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_military_goal_1:0 "hold [VAL_military_target.GetName] for 90 days"
  VAL_military_goal_2:0 "recover [VAL_military_target.GetName] within 90 days"
  VAL_military_goal_3:0 "defeat the agreed enemy within 180 days"
- VAL_partner_menu_desc:0 "Partner: [VAL_contract_partner.GetName]. Completed agreements: [?VAL_contract_partner.VAL_completed_contracts|0]/2. Two fulfilled agreements allow a transit charter if the partner owns a corridor node."
+ VAL_partner_menu_desc:0 "Partner: [VALMenuPartnerName]. Choose an agreement. Each offer states its full terms and price; resources move after acceptance."
  VAL_menu_back:0 "Back to partner"
  VAL_menu_arms:0 "Sell stockpiled arms"
- VAL_menu_orders:0 "Accept an arsenal order"
+ VAL_menu_orders:0 "Quarterly deliveries"
  VAL_menu_military:0 "Military service"
  VAL_menu_aid:0 "Aid and reciprocal agreements"
  VAL_offer_transit_charter:0 "Sign a transit charter"
  VAL_transit_charter_desc:0 "After two completed agreements, Kefreyt requests transit through our corridor nodes. The charter opens trade routes while agreed control is retained. War with Kefreyt suspends access. It transfers no territory or sovereignty."
- VAL_menu_aid_rifles_tt:0 "Cost: £pol_power 30 and £infantry_equipment_texticon 1000. Recipient: Vorkerland. No payment in return; a shared 30-day gift cooldown."
+ VAL_menu_aid_rifles_tt:0 "Cost: £pol_power 30 and £infantry_equipment_texticon 10000. Recipient: Vorkerland. No payment in return; a shared 30-day gift cooldown."
  VAL_menu_aid_support_tt:0 "Cost: £pol_power 30 and £support_equipment_texticon 100. Recipient: Vorkerland. No payment in return; a shared 30-day gift cooldown."
- VAL_partner_bulk:0 "Sell 5000 rifles"
- VAL_partner_arsenal:0 "Sell 10000 rifles"
- VAL_partner_strategic:0 "Sell 20000 rifles"
+ VAL_partner_bulk:0 "Sell 50000 rifles"
+ VAL_partner_arsenal:0 "Sell 100000 rifles"
+ VAL_partner_strategic:0 "Sell 200000 rifles"
  VAL_strengthen_corridor_security:0 "Strengthen corridor security"
  VAL_corridor_security_step_tt:0 "Corridor security: +1 out of 3. Weekly grey market pressure change: -1."
  VAL_route_upgrade_tt:0 "Upgrade over 30 days. The open route earns an additional 10 treasury weekly. Losing access cancels construction and refunds the deposit."
@@ -1423,3 +1431,253 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_route_cost_1000:0 "£ADISCORD_economy_treasury_texticon 1000"
  VAL_route_cost_1000_blocked:0 "£ADISCORD_economy_treasury_texticon 1000"
  VAL_route_cost_1000_tooltip:0 "£ADISCORD_economy_treasury_texticon 1000"
+ VAL_menu_partner_named:0 "[VAL_contract_partner.GetName]"
+ VAL_menu_partner_selected:0 "Selected country"
+
+ VAL_menu_advisors:0 "Send military advisers"
+ VAL_gift_unavailable:0 "Aid unavailable: check stockpiles, political power and the delivery cooldown"
+
+ VAL_menu_commerce:0 "Recruit volunteers"
+
+ VAL_menu_weapons:0 "Weapons deliveries"
+
+ VAL_menu_support:0 "Military services and aid"
+
+ VAL_menu_large_packages:0 "Large packages"
+
+ VAL_menu_more_military:0 "Victory and advisers"
+
+ VAL_menu_concessions:0 "Resource agreements"
+
+ VAL_market_menu_desc:0 "Partner: [VALMenuPartnerName].\n\nUse the separate Trade Agreement decision to sign an annual agreement for 100 political power.\n\nThis menu recruits volunteers from partner reserves for treasury. Hover for numbers, price and blocking conditions."
+
+ VAL_weapons_menu_desc:0 "Partner: [VALMenuPartnerName].\n\nReady stock is a one-off sale for full payment. Quarterly agreements cover four deliveries in a year and cost 100 political power to sign. No advance or passive income. Buyers may be at peace.\n\nQuarterly supply: [VALOrderMenuStatus]"
+
+ VAL_ready_menu_desc:0 "Packages: 25000 / 50000 / 100000 / 200000 rifles for 500 / 1000 / 2250 / 5000 treasury. The buyer receives weapons; Kefreyt receives payment.\n\nRequires the unlocking focus, a free slot, equipment and buyer funds. Unavailable offers are hidden. Large packages are on the next page."
+
+ VAL_orders_menu_desc:0 "Partner: [VALMenuPartnerName].\n\n[VALOrderMenuStatus]\n\nSigning fee: £pol_power 100 on buyer acceptance. Four deliveries over a year, no advance. Payment on dispatch only. First delivery within 90 days; early dispatch does not open the next quarter. A missed deadline grants 15 days of grace, then termination. Hover an offer for its quarterly quantity and price."
+
+ VAL_support_menu_desc:0 "Partner: [VALMenuPartnerName].\n\nMilitary work requires participation in the customer war and pays for a specific objective. Vorkerland aid delivers equipment without payment. Resource agreements require the selected war side.\n\nTransit access requires two completed agreements and gives access through partner nodes without transferring land."
+
+ VAL_aid_menu_desc:0 "Vorkerland gifts cost 30 political power and 10000 rifles or 100 support equipment. No payment from the recipient; 30 days between gifts.\n\nOther partners cannot receive these gifts. Namalsk and Eflor resource agreements are on the next page and require the relevant focus and selected side."
+
+ VAL_orders_locked_focus:0 "Complete the focus unlocking export licences first."
+
+ VAL_orders_no_destination:0 "No production corridor serves this partner. Use ready deliveries or resource agreements."
+
+ VAL_orders_invalid_partner:0 "War, capitulation, side selection or debt prevents this order."
+
+ VAL_orders_closed_route:0 "The partner corridor is closed. Restore access in Trade Routes."
+
+ VAL_orders_refund_first:0 "Settle outstanding refunds first."
+
+ VAL_orders_no_slot:0 "All slots are reserved or processing deliveries."
+
+ VAL_orders_pending_reply:0 "Wait for the outstanding offer response."
+
+ VAL_orders_cooldown:0 "The partner contact cooldown is still active."
+
+ VAL_orders_ready:0 "Select an order unlocked by your focuses."
+
+ VAL_market_quote_none:0 "no office available"
+
+ val_contract.411.t:0 "Trade agreement expired"
+
+ val_contract.411.d:0 "The annual agreement with [FROM.GetName] has ended. Office income has stopped.\n\nThe partner is available in Foreign Agreements again. A new agreement requires mutual consent and 100 political power. There is no automatic renewal or charge."
+
+ val_contract.411.a:0 "Acknowledged"
+
+ VAL_market_quote_5:0 "5"
+
+ VAL_market_quote_8:0 "8"
+
+ VAL_market_quote_2:0 "2"
+
+ VAL_market_quote_10:0 "10"
+
+ VAL_market_quote_12:0 "12"
+
+ VAL_market_quote_15:0 "15"
+
+ VAL_quarterly_need_pp:0 "Signing requires 100 political power."
+
+ VAL_quarterly_already_signed:0 "An annual supply agreement with this buyer is already active."
+
+ VAL_order_1_legacy_cycle:0 "Legacy one-off order. Quantity: [?VAL_order_1_quantity|0]. Advance: [?VAL_order_1_advance|1]. Balance: [?VAL_order_1_remaining|1]."
+
+ VAL_order_1_active_cycle:0 "Delivered: [?VAL_order_1_completed|0]/4. Quota: [?VAL_order_1_quantity|0] rifles; payment: [?VAL_order_1_remaining|0] treasury per delivery.The timer shows the current delivery deadline."
+
+ VAL_order_1_paid_cycle:0 "Delivered: [?VAL_order_1_completed|0]/4. Quota: [?VAL_order_1_quantity|0] rifles; payment: [?VAL_order_1_remaining|0] treasury per delivery.Current quarter settled. The next delivery opens when the timer ends; after quarter four the agreement ends."
+
+ VAL_order_1_grace_cycle:0 "Delivered: [?VAL_order_1_completed|0]/4. Quota: [?VAL_order_1_quantity|0] rifles; payment: [?VAL_order_1_remaining|0] treasury per delivery.Final 15-day grace period. Missing delivery terminates the agreement."
+
+ VAL_order_2_legacy_cycle:0 "Legacy one-off order. Quantity: [?VAL_order_2_quantity|0]. Advance: [?VAL_order_2_advance|1]. Balance: [?VAL_order_2_remaining|1]."
+
+ VAL_order_2_active_cycle:0 "Delivered: [?VAL_order_2_completed|0]/4. Quota: [?VAL_order_2_quantity|0] rifles; payment: [?VAL_order_2_remaining|0] treasury per delivery.The timer shows the current delivery deadline."
+
+ VAL_order_2_paid_cycle:0 "Delivered: [?VAL_order_2_completed|0]/4. Quota: [?VAL_order_2_quantity|0] rifles; payment: [?VAL_order_2_remaining|0] treasury per delivery.Current quarter settled. The next delivery opens when the timer ends; after quarter four the agreement ends."
+
+ VAL_order_2_grace_cycle:0 "Delivered: [?VAL_order_2_completed|0]/4. Quota: [?VAL_order_2_quantity|0] rifles; payment: [?VAL_order_2_remaining|0] treasury per delivery.Final 15-day grace period. Missing delivery terminates the agreement."
+
+ val_contract.420.t:0 "Annual supply agreement fulfilled"
+
+ val_contract.420.d:0 "Four quarterly deliveries to [VAL_quarterly_notice_partner.GetName] have been completed and paid. The term has ended and the slot is free. A new agreement requires buyer consent and another 100 political power fee."
+
+ val_contract.421.t:0 "Supply agreement terminated"
+
+ val_contract.421.d:0 "The agreement with [VAL_quarterly_notice_partner.GetName] has ended. Future deliveries are cancelled. Completed deliveries remain settled; undelivered batches earn no payment. The signing fee is not refunded."
+
+ VAL_order_offer_arms_event_desc:0 "[VALOrderOfferArmsTerms]"
+ VAL_order_offer_arms_legacy_desc:0 "Previously issued one-off offer: 25000 rifles for 500 treasury. Advance: 125; balance on dispatch: 375. Deadline: 30 days. Route loss grants one 14-day extension; cancellation refunds the advance. No annual signing fee for this legacy order."
+
+ VAL_order_offer_bulk_event_desc:0 "[VALOrderOfferBulkTerms]"
+ VAL_order_offer_bulk_legacy_desc:0 "Previously issued one-off offer: 50000 rifles for 1000 treasury. Advance: 250; balance on dispatch: 750. Deadline: 45 days. Route loss grants one 14-day extension; cancellation refunds the advance. No annual signing fee for this legacy order."
+
+ VAL_order_offer_arsenal_event_desc:0 "[VALOrderOfferArsenalTerms]"
+ VAL_order_offer_arsenal_legacy_desc:0 "Previously issued one-off offer: 100000 rifles for 2250 treasury. Advance: 562.5; balance on dispatch: 1687.5. Deadline: 60 days. Route loss grants one 14-day extension; cancellation refunds the advance. No annual signing fee for this legacy order."
+
+ VAL_order_offer_strategic_event_desc:0 "[VALOrderOfferStrategicTerms]"
+ VAL_order_offer_strategic_legacy_desc:0 "Previously issued one-off offer: 200000 rifles for 5000 treasury. Advance: 1250; balance on dispatch: 3750. Deadline: 90 days. Route loss grants one 14-day extension; cancellation refunds the advance. No annual signing fee for this legacy order."
+
+
+ VAL_offer_blocked_hire:0 "Unavailable now. Check Kefreyt treasury, partner manpower, recruitment cooldown and pending replies."
+
+ VAL_offer_blocked_weapons:0 "Unavailable now. Requires full stock, buyer funds, a free export slot, an open route and no active deal cooldown."
+
+ VAL_offer_blocked_orders:0 "Unavailable now. Requires 100 political power, a free slot, an open corridor, settled refunds and no pending reply."
+
+ VAL_offer_blocked_military:0 "Unavailable now. Requires participation in the customer war, 25 command power, 500 customer treasury and a free military contract. Recovery requires enemy-held territory."
+
+ VAL_offer_blocked_advisors:0 "Unavailable now. Requires 30 political power, 25 command power, 100 buyer treasury and a free adviser slot. The buyer must be at war."
+
+ VAL_offer_blocked_gifts:0 "Unavailable now. Requires 30 political power, the quoted equipment and 30 days since the previous gift."
+
+ VAL_offer_blocked_concessions:0 "Unavailable now. Check 50 political power, resource-region control, side selection and pending replies."
+
+ VAL_offer_blocked_reply:0 "Wait for the outstanding offer response first."
+
+ VAL_offer_status_VAL_negotiate_efl_metals:0 "[VALOfferStatus_VAL_negotiate_efl_metals]"
+
+ VAL_offer_status_VAL_negotiate_nam_metals:0 "[VALOfferStatus_VAL_negotiate_nam_metals]"
+
+ VAL_offer_status_VAL_menu_advisors:0 "[VALOfferStatus_VAL_menu_advisors]"
+
+ VAL_offer_status_VAL_military_offer_3:0 "[VALOfferStatus_VAL_military_offer_3]"
+
+ VAL_offer_status_VAL_offer_order_strategic:0 "[VALOfferStatus_VAL_offer_order_strategic]"
+
+ VAL_offer_status_VAL_offer_order_arsenal:0 "[VALOfferStatus_VAL_offer_order_arsenal]"
+
+ VAL_offer_status_VAL_partner_strategic:0 "[VALOfferStatus_VAL_partner_strategic]"
+
+ VAL_offer_status_VAL_partner_arsenal:0 "[VALOfferStatus_VAL_partner_arsenal]"
+
+ VAL_offer_status_VAL_offer_transit_charter:0 "[VALOfferStatus_VAL_offer_transit_charter]"
+
+ VAL_offer_status_VAL_partner_hire:0 "[VALOfferStatus_VAL_partner_hire]"
+
+
+ VAL_offer_status_VAL_aid_wrk_support:0 "[VALOfferStatus_VAL_aid_wrk_support]"
+
+ VAL_offer_status_VAL_aid_wrk_rifles:0 "[VALOfferStatus_VAL_aid_wrk_rifles]"
+
+ VAL_offer_status_VAL_military_offer_2:0 "[VALOfferStatus_VAL_military_offer_2]"
+
+ VAL_offer_status_VAL_military_offer_1:0 "[VALOfferStatus_VAL_military_offer_1]"
+
+ VAL_offer_status_VAL_offer_order_bulk:0 "[VALOfferStatus_VAL_offer_order_bulk]"
+
+ VAL_offer_status_VAL_offer_order_arms:0 "[VALOfferStatus_VAL_offer_order_arms]"
+
+ VAL_offer_status_VAL_partner_bulk:0 "[VALOfferStatus_VAL_partner_bulk]"
+
+ VAL_offer_status_VAL_partner_arms:0 "[VALOfferStatus_VAL_partner_arms]"
+
+ VAL_offer_status_clear:0 ""
+
+ VAL_negotiate_efl_metals_button:0 "[VALOfferButton_VAL_negotiate_efl_metals]"
+
+ VAL_negotiate_nam_metals_button:0 "[VALOfferButton_VAL_negotiate_nam_metals]"
+
+ VAL_menu_advisors_button:0 "[VALOfferButton_VAL_menu_advisors]"
+
+ VAL_military_offer_3_button:0 "[VALOfferButton_VAL_military_offer_3]"
+
+ VAL_offer_order_strategic_button:0 "[VALOfferButton_VAL_offer_order_strategic]"
+
+ VAL_offer_order_arsenal_button:0 "[VALOfferButton_VAL_offer_order_arsenal]"
+
+ VAL_partner_strategic_button:0 "[VALOfferButton_VAL_partner_strategic]"
+
+ VAL_partner_arsenal_button:0 "[VALOfferButton_VAL_partner_arsenal]"
+
+ VAL_offer_transit_charter_button:0 "[VALOfferButton_VAL_offer_transit_charter]"
+
+ VAL_partner_hire_button:0 "[VALOfferButton_VAL_partner_hire]"
+
+
+ VAL_aid_wrk_support_button:0 "[VALOfferButton_VAL_aid_wrk_support]"
+
+ VAL_aid_wrk_rifles_button:0 "[VALOfferButton_VAL_aid_wrk_rifles]"
+
+ VAL_military_offer_2_button:0 "[VALOfferButton_VAL_military_offer_2]"
+
+ VAL_military_offer_1_button:0 "[VALOfferButton_VAL_military_offer_1]"
+
+ VAL_offer_order_bulk_button:0 "[VALOfferButton_VAL_offer_order_bulk]"
+
+ VAL_offer_order_arms_button:0 "[VALOfferButton_VAL_offer_order_arms]"
+
+ VAL_partner_bulk_button:0 "[VALOfferButton_VAL_partner_bulk]"
+
+ VAL_partner_arms_button:0 "[VALOfferButton_VAL_partner_arms]"
+
+
+ VAL_offer_button_blocked_VAL_negotiate_efl_metals:0 "§RAgreement unavailable§!"
+
+ VAL_offer_button_blocked_VAL_negotiate_nam_metals:0 "§RAgreement unavailable§!"
+
+ VAL_offer_button_blocked_VAL_menu_advisors:0 "§RAdvisers unavailable§!"
+
+ VAL_offer_button_blocked_VAL_military_offer_3:0 "§RVictory contract unavailable§!"
+
+ VAL_offer_button_blocked_VAL_offer_order_strategic:0 "§R200 k / quarter: unavailable§!"
+
+ VAL_offer_button_blocked_VAL_offer_order_arsenal:0 "§R100 k / quarter: unavailable§!"
+
+ VAL_offer_button_blocked_VAL_partner_strategic:0 "§R200 k rifles: unavailable§!"
+
+ VAL_offer_button_blocked_VAL_partner_arsenal:0 "§R100 k rifles: unavailable§!"
+
+ VAL_offer_button_blocked_VAL_offer_transit_charter:0 "§RTransit unavailable§!"
+
+ VAL_offer_button_blocked_VAL_partner_hire:0 "§RRecruitment unavailable§!"
+
+
+ VAL_offer_button_blocked_VAL_aid_wrk_support:0 "§RSupport aid unavailable§!"
+
+ VAL_offer_button_blocked_VAL_aid_wrk_rifles:0 "§RRifle aid unavailable§!"
+
+ VAL_offer_button_blocked_VAL_military_offer_2:0 "§RRecovery unavailable§!"
+
+ VAL_offer_button_blocked_VAL_military_offer_1:0 "§RDefence unavailable§!"
+
+ VAL_offer_button_blocked_VAL_offer_order_bulk:0 "§R50 k / quarter: unavailable§!"
+
+ VAL_offer_button_blocked_VAL_offer_order_arms:0 "§R25 k / quarter: unavailable§!"
+
+ VAL_offer_button_blocked_VAL_partner_bulk:0 "§R50 k rifles: unavailable§!"
+
+ VAL_offer_button_blocked_VAL_partner_arms:0 "§R25 k rifles: unavailable§!"
+
+ VAL_sign_annual_trade:0 "Trade agreement: [FROM.GetName]"
+
+ VAL_sign_annual_trade_desc:0 "365-day agreement. Kefreyt earns [VALTradeDecisionIncome] treasury weekly; the partner earns 1. Decision cost: 100 political power. Refusal, no response or invalidation refunds the fee. Signed agreements leave this list until expiry."
+
+ VAL_trade_decision_terms_tt:0 "Offer an annual trade agreement. The decision already pays the fee: acceptance has no further charge; refusal refunds it."
+
+ VAL_trade_fee_prepaid:0 "Kefreyt paid 100 political power when sending this offer; refusal refunds it."
+
+ VAL_trade_fee_legacy:0 "This is a previously sent offer: Kefreyt pays 100 political power only on acceptance."
+
+ VAL_trade_decision_available_tt:0 "Enough political power; no active agreement, war, pending reply or contact cooldown with this partner."

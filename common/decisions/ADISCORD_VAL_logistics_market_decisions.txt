@@ -147,14 +147,14 @@ VAL_population_markets = {
 			NOT = { has_variable = VAL_refugee_training_escrow }
 		}
 		cost = 0
-		custom_cost_trigger = { NOT = { political_power < 75 } NOT = { has_equipment = { infantry_equipment < 500 } } }
+		custom_cost_trigger = { NOT = { has_political_power < 75 } NOT = { has_equipment = { infantry_equipment < 5000 } } }
 		custom_cost_text = VAL_training_cost
 		days_remove = 35
 		days_re_enable = 30
 		complete_effect = {
 			custom_effect_tooltip = VAL_refugee_training_start_tt
 			add_political_power = -75
-			add_equipment_to_stockpile = { type = infantry_equipment amount = -500 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -5000 }
 			hidden_effect = {
 				set_variable = { var = VAL_refugee_training_escrow value = 0.5 }
 				add_to_variable = { var = VAL_displaced_population value = -0.5 }
@@ -284,7 +284,7 @@ VAL_population_markets = {
 		days_re_enable = 30
 		complete_effect = {
 			ADISCORD_economy_spend_250 = yes
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 15000 producer = VAL }
 			set_temp_variable = { var = VAL_black_market_pressure_change value = 10 }
 			VAL_change_black_market_pressure = yes
 			add_to_variable = { var = VAL_broker_dependence value = 1 }
@@ -327,14 +327,14 @@ VAL_population_markets = {
 			NOT = { has_variable = VAL_local_training_escrow }
 		}
 		cost = 0
-		custom_cost_trigger = { NOT = { political_power < 75 } NOT = { has_equipment = { infantry_equipment < 500 } } }
+		custom_cost_trigger = { NOT = { has_political_power < 75 } NOT = { has_equipment = { infantry_equipment < 5000 } } }
 		custom_cost_text = VAL_training_cost
 		days_remove = 35
 		days_re_enable = 30
 		complete_effect = {
 			custom_effect_tooltip = VAL_local_training_start_tt
 			add_political_power = -75
-			add_equipment_to_stockpile = { type = infantry_equipment amount = -500 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -5000 }
 			hidden_effect = {
 				set_variable = { var = VAL_local_training_escrow value = 0.5 }
 				add_to_variable = { var = VAL_local_volunteer_pool value = -0.5 }

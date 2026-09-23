@@ -143,6 +143,11 @@ VAL_refresh_contract_modifier = {
 	}
 
 	# Base mercenary institutions are included once in every recalculation.
+	add_to_variable = { var = VAL_contract_army_expense_factor value = 0.25 }
+	if = {
+		limit = { has_variable = VAL_contract_payroll_relief }
+		add_to_variable = { var = VAL_contract_army_expense_factor value = VAL_contract_payroll_relief }
+	}
 	add_to_variable = { var = VAL_contract_org_factor value = 0.03 }
 	add_to_variable = { var = VAL_contract_capture_factor value = 0.02 }
 	add_to_variable = { var = VAL_contract_planning_factor value = -0.2 }
@@ -472,6 +477,19 @@ VAL_refresh_contract_modifier = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
+# Payroll relief belongs to the country and survives replacement of its focus tree.
+VAL_reform_mercenary_payroll = {
+	if = {
+		limit = { hidden_trigger = { NOT = { check_variable = { var = VAL_contract_payroll_relief value = -0.25 compare = less_than_or_equals } } } }
+		custom_effect_tooltip = VAL_payroll_reform_tt
+	}
+	hidden_effect = {
+		add_to_variable = { var = VAL_contract_payroll_relief value = -0.05 }
+		clamp_variable = { var = VAL_contract_payroll_relief min = -0.25 max = 0 }
+		VAL_refresh_contract_modifier = yes
+	}
+}
+
 # --- foreign_operation_effects ---
 # CIN, OSF and APH contracts.
 
@@ -481,12 +499,12 @@ VAL_refresh_contract_modifier = {
 # Infantry stock preserves producer and quantity; named variants are not tracked.
 VAL_reserve_export_rifles = {
 	clr_country_flag = VAL_export_rifles_reserved
-	set_temp_variable = { var = VAL_export_rifles_remaining value = 2500 }
-	if = { limit = { has_completed_focus = VAL_Foreign_Broker_Licences } set_temp_variable = { var = VAL_export_rifles_remaining value = 5000 } }
+	set_temp_variable = { var = VAL_export_rifles_remaining value = 25000 }
+	if = { limit = { has_completed_focus = VAL_Foreign_Broker_Licences } set_temp_variable = { var = VAL_export_rifles_remaining value = 50000 } }
 	if = {
 		limit = { OR = {
-			AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 5000 } } }
-			AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 2500 } } }
+			AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 50000 } } }
+			AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 25000 } } }
 		} }
 		every_possible_country = {
 			limit = { VAL = { check_variable = { var = VAL_export_rifles_remaining value = 0 compare = greater_than } } }
@@ -760,15 +778,15 @@ VAL_resolve_aph_operation = {
 }
 
 VAL_select_cin_contract_posture = {
-	if = { limit = { check_variable = { var = VAL_CIN_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_CIN_contract_posture value = 1 } } 25 = { modifier = { factor = 2 CIN = { has_war = yes } } set_variable = { var = VAL_CIN_contract_posture value = 2 } } 25 = { modifier = { factor = 2 CIN = { has_stability < 0.4 } } set_variable = { var = VAL_CIN_contract_posture value = 3 } } 20 = { modifier = { factor = 2 CIN = { has_equipment = { infantry_equipment < 500 } } } set_variable = { var = VAL_CIN_contract_posture value = 4 } } } }
+	if = { limit = { check_variable = { var = VAL_CIN_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_CIN_contract_posture value = 1 } } 25 = { modifier = { factor = 2 CIN = { has_war = yes } } set_variable = { var = VAL_CIN_contract_posture value = 2 } } 25 = { modifier = { factor = 2 CIN = { has_stability < 0.4 } } set_variable = { var = VAL_CIN_contract_posture value = 3 } } 20 = { modifier = { factor = 2 CIN = { has_equipment = { infantry_equipment < 5000 } } } set_variable = { var = VAL_CIN_contract_posture value = 4 } } } }
 }
 
 VAL_select_osf_contract_posture = {
-	if = { limit = { check_variable = { var = VAL_OSF_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_OSF_contract_posture value = 1 } } 25 = { modifier = { factor = 2 OSF = { has_war = yes } } set_variable = { var = VAL_OSF_contract_posture value = 2 } } 25 = { modifier = { factor = 2 OSF = { has_stability < 0.4 } } set_variable = { var = VAL_OSF_contract_posture value = 3 } } 20 = { modifier = { factor = 2 OSF = { has_equipment = { infantry_equipment < 500 } } } set_variable = { var = VAL_OSF_contract_posture value = 4 } } } }
+	if = { limit = { check_variable = { var = VAL_OSF_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_OSF_contract_posture value = 1 } } 25 = { modifier = { factor = 2 OSF = { has_war = yes } } set_variable = { var = VAL_OSF_contract_posture value = 2 } } 25 = { modifier = { factor = 2 OSF = { has_stability < 0.4 } } set_variable = { var = VAL_OSF_contract_posture value = 3 } } 20 = { modifier = { factor = 2 OSF = { has_equipment = { infantry_equipment < 5000 } } } set_variable = { var = VAL_OSF_contract_posture value = 4 } } } }
 }
 
 VAL_select_aph_contract_posture = {
-	if = { limit = { check_variable = { var = VAL_APH_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_APH_contract_posture value = 1 } } 25 = { modifier = { factor = 2 APH = { has_war = yes } } set_variable = { var = VAL_APH_contract_posture value = 2 } } 25 = { modifier = { factor = 2 APH = { has_stability < 0.4 } } set_variable = { var = VAL_APH_contract_posture value = 3 } } 20 = { modifier = { factor = 2 APH = { has_equipment = { infantry_equipment < 500 } } } set_variable = { var = VAL_APH_contract_posture value = 4 } } } }
+	if = { limit = { check_variable = { var = VAL_APH_contract_posture value = 0 compare = equals } } random_list = { 30 = { set_variable = { var = VAL_APH_contract_posture value = 1 } } 25 = { modifier = { factor = 2 APH = { has_war = yes } } set_variable = { var = VAL_APH_contract_posture value = 2 } } 25 = { modifier = { factor = 2 APH = { has_stability < 0.4 } } set_variable = { var = VAL_APH_contract_posture value = 3 } } 20 = { modifier = { factor = 2 APH = { has_equipment = { infantry_equipment < 5000 } } } set_variable = { var = VAL_APH_contract_posture value = 4 } } } }
 }
 
 VAL_resolve_active_cin_operation = {
@@ -796,7 +814,25 @@ VAL_resolve_active_aph_operation = {
 }
 
 # COUNTRY recipient. Timeout is decline; a stale event cannot close a later offer.
+# COUNTRY recipient: receipt survives offer expiry and is consumed once.
+VAL_refund_trade_fee = {
+ if = {
+  limit = { has_country_flag = VAL_trade_fee_paid }
+  clr_country_flag = VAL_trade_fee_paid
+  VAL = { add_political_power = 100 clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending }
+ }
+}
+VAL_reconcile_trade_fees = {
+ CIN = { if = { limit = { has_country_flag = VAL_trade_fee_paid OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } VAL_refund_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
+ OSF = { if = { limit = { has_country_flag = VAL_trade_fee_paid OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } VAL_refund_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
+ APH = { if = { limit = { has_country_flag = VAL_trade_fee_paid OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } VAL_refund_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
+ COF = { if = { limit = { has_country_flag = VAL_trade_fee_paid OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } VAL_refund_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
+ TFF = { if = { limit = { has_country_flag = VAL_trade_fee_paid OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } VAL_refund_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
+ YPR = { if = { limit = { has_country_flag = VAL_trade_fee_paid OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } VAL_refund_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
+}
+
 VAL_close_partner_offer = {
+ VAL_refund_trade_fee = yes
 	if = {
 		limit = { OR = { has_country_flag = VAL_partner_offer_trade has_country_flag = VAL_partner_offer_hire has_country_flag = VAL_partner_offer_arms has_country_flag = VAL_partner_offer_bulk has_country_flag = VAL_partner_offer_arsenal has_country_flag = VAL_partner_offer_strategic } }
 		clr_country_flag = VAL_partner_offer_trade
@@ -809,27 +845,32 @@ VAL_close_partner_offer = {
 	}
 }
 
+# COUNTRY partner. The persistent guard prevents reloads from extending a signed term.
+VAL_start_market_year = {
+ if = {
+  limit = { NOT = { has_country_flag = VAL_market_term_started } }
+  set_country_flag = VAL_market_term_started
+  if = { limit = { tag = CIN } VAL = { remove_ideas = VAL_market_CIN add_timed_idea = { idea = VAL_market_CIN days = 365 } } }
+  if = { limit = { tag = OSF } VAL = { remove_ideas = VAL_market_OSF add_timed_idea = { idea = VAL_market_OSF days = 365 } } }
+  if = { limit = { tag = APH } VAL = { remove_ideas = VAL_market_APH add_timed_idea = { idea = VAL_market_APH days = 365 } } }
+  if = { limit = { tag = COF } VAL = { remove_ideas = VAL_market_COF add_timed_idea = { idea = VAL_market_COF days = 365 } } }
+  if = { limit = { tag = TFF } VAL = { remove_ideas = VAL_market_TFF add_timed_idea = { idea = VAL_market_TFF days = 365 } } }
+  if = { limit = { tag = YPR } VAL = { remove_ideas = VAL_market_YPR add_timed_idea = { idea = VAL_market_YPR days = 365 } } }
+  remove_ideas = VAL_partner_market_access
+  add_timed_idea = { idea = VAL_partner_market_access days = 365 }
+  VAL = { country_event = { id = val_contract.411 days = 365 } }
+ }
+}
+
 VAL_settle_partner_trade = {
-	if = {
-		limit = { VAL_partner_trade_can_accept = yes }
-		VAL = { ADISCORD_economy_initialize_country = yes
-			subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
-			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
-			ADISCORD_economy_mark_dirty = yes }
-		ADISCORD_economy_initialize_country = yes
-		add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
-		ADISCORD_economy_mark_dirty = yes
-		if = { limit = { tag = CIN } VAL = { add_ideas = VAL_market_CIN } }
-		if = { limit = { tag = OSF } VAL = { add_ideas = VAL_market_OSF } }
-		if = { limit = { tag = APH } VAL = { add_ideas = VAL_market_APH } }
-		if = { limit = { tag = COF } VAL = { add_ideas = VAL_market_COF } }
-		if = { limit = { tag = TFF } VAL = { add_ideas = VAL_market_TFF } }
-		if = { limit = { tag = YPR } VAL = { add_ideas = VAL_market_YPR } }
-		add_ideas = VAL_partner_market_access
-		VAL_contract_record_success = yes
-		VAL_close_partner_offer = yes
-	}
+ if = {
+  limit = { VAL_partner_trade_can_accept = yes }
+  if = { limit = { has_country_flag = VAL_trade_fee_paid } clr_country_flag = VAL_trade_fee_paid }
+  else = { VAL = { add_political_power = -100 } }
+  VAL_start_market_year = yes
+  VAL_contract_record_success = yes
+  VAL_close_partner_offer = yes
+ }
 }
 VAL_settle_partner_hire = {
 	if = {
@@ -925,12 +966,12 @@ VAL_settle_partner_arms = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
 			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
+			send_equipment = { equipment = infantry_equipment amount = 25000 target = ROOT }
 			VAL_record_instant_export = yes
 		}
 		if = {
 			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
-			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 2500 } VAL_complete_resource_aid = yes }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 25000 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 14 }
 		VAL_contract_record_success = yes
@@ -951,12 +992,12 @@ VAL_settle_partner_bulk = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 }
 			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 5000 target = ROOT }
+			send_equipment = { equipment = infantry_equipment amount = 50000 target = ROOT }
 			VAL_record_instant_export = yes
 		}
 		if = {
 			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
-			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 5000 } VAL_complete_resource_aid = yes }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 50000 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 14 }
 		VAL_contract_record_success = yes
@@ -977,12 +1018,12 @@ VAL_settle_partner_arsenal = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = 2250 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2250 }
 			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 10000 target = ROOT }
+			send_equipment = { equipment = infantry_equipment amount = 100000 target = ROOT }
 			VAL_record_instant_export = yes
 		}
 		if = {
 			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
-			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 10000 } VAL_complete_resource_aid = yes }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 100000 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 14 }
 		VAL_contract_record_success = yes
@@ -1003,12 +1044,12 @@ VAL_settle_partner_strategic = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = 5000 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 5000 }
 			ADISCORD_economy_mark_dirty = yes
-			send_equipment = { equipment = infantry_equipment amount = 20000 target = ROOT }
+			send_equipment = { equipment = infantry_equipment amount = 200000 target = ROOT }
 			VAL_record_instant_export = yes
 		}
 		if = {
 			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
-			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 20000 } VAL_complete_resource_aid = yes }
+			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 200000 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 14 }
 		VAL_contract_record_success = yes
@@ -1206,7 +1247,7 @@ VAL_apply_contract_industry_2 = {
 VAL_industrial_finale_path_extra = {
 	if = {
 		limit = { has_completed_focus = VAL_Ballistics_Schools }
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 800 producer = VAL }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 8000 producer = VAL }
 	}
 	else_if = {
 		limit = { has_completed_focus = VAL_Brokered_Steel }
@@ -1509,7 +1550,7 @@ VAL_pay_quarterly_contract_norm = {
 	hidden_effect = {
 		if = {
 			limit = { VAL_can_pay_quarterly_contract_norm = yes }
-			set_temp_variable = { var = VAL_contract_rifle_cost value = 4000 }
+			set_temp_variable = { var = VAL_contract_rifle_cost value = 40000 }
 			VAL_pay_contract_rifles = yes
 			if = {
 				limit = { has_country_flag = VAL_contract_rifles_paid }
@@ -1922,12 +1963,12 @@ VAL_cw_complete_arms_contract = {
 			OR = {
 				AND = {
 					has_country_flag = { flag = VAL_cw_arms_offer_pending value < 2 }
-					NOT = { has_equipment = { infantry_equipment < 3200 } }
+					NOT = { has_equipment = { infantry_equipment < 32000 } }
 					STS = { ADISCORD_economy_can_spend_50 = yes }
 				}
 				AND = {
 					has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 }
-					NOT = { has_equipment = { infantry_equipment < 4420 } }
+					NOT = { has_equipment = { infantry_equipment < 43340 } }
 					NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 96 } }
 					NOT = { has_equipment = { support_equipment < 60 } }
 					NOT = { has_manpower < 12600 }
@@ -1935,13 +1976,13 @@ VAL_cw_complete_arms_contract = {
 				}
 			}
 		}
-		set_temp_variable = { var = VAL_contract_rifle_cost value = 3200 }
+		set_temp_variable = { var = VAL_contract_rifle_cost value = 32000 }
 		set_temp_variable = { var = VAL_cw_contract_manpower_debit value = 0 }
 		set_temp_variable = { var = VAL_cw_contract_squad_remaining value = 0 }
 		set_temp_variable = { var = VAL_cw_contract_support_remaining value = 0 }
 		if = {
 			limit = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } }
-			set_temp_variable = { var = VAL_contract_rifle_cost value = 4420 }
+			set_temp_variable = { var = VAL_contract_rifle_cost value = 43340 }
 			set_temp_variable = { var = VAL_cw_contract_manpower_debit value = -12600 }
 			set_temp_variable = { var = VAL_cw_contract_squad_remaining value = 96 }
 			set_temp_variable = { var = VAL_cw_contract_support_remaining value = 60 }
@@ -4141,6 +4182,7 @@ VAL_deliver_nam_concession = {
 		limit = { VAL_nam_concession_deliverable = yes }
 		NAM = { give_resource_rights = { receiver = VAL state = 230 } ADISCORD_economy_mark_dirty = yes }
 		set_country_flag = VAL_nam_concession_granted
+        NAM = { VAL_contract_record_success = yes }
 		set_country_flag = VAL_nam_concession_active
 		clr_country_flag = VAL_nam_concession_offer_pending
 		ADISCORD_economy_mark_dirty = yes
@@ -4732,10 +4774,10 @@ VAL_deliver_resource_aid_arms = {
 			has_active_mission = VAL_resource_aid_deadline
 			check_variable = { var = VAL_resource_aid_state value = 1 compare = equals }
 			FROM = { VAL_resource_aid_recipient = yes }
-			NOT = { has_equipment = { infantry_equipment < 2500 } }
+			NOT = { has_equipment = { infantry_equipment < 25000 } }
 		}
-		send_equipment = { equipment = infantry_equipment amount = 2500 target = FROM }
-		add_to_variable = { var = VAL_resource_aid_rifles value = 2500 }
+		send_equipment = { equipment = infantry_equipment amount = 25000 target = FROM }
+		add_to_variable = { var = VAL_resource_aid_rifles value = 25000 }
 		VAL_complete_resource_aid = yes
 	}
 }
@@ -4792,13 +4834,12 @@ VAL_deliver_northern_aid_arms = {
 		limit = {
 			has_capitulated = no
 			is_subject = no
-			has_active_mission = VAL_northern_aid_deadline
-			check_variable = { var = VAL_northern_aid_state value = 1 compare = equals }
+			VAL_northern_aid_deliveries_open = yes
 			FROM = { VAL_northern_aid_recipient = yes }
-			NOT = { has_equipment = { infantry_equipment < 2500 } }
+			NOT = { has_equipment = { infantry_equipment < 25000 } }
 		}
-		send_equipment = { equipment = infantry_equipment amount = 2500 target = FROM }
-		add_to_variable = { var = VAL_northern_aid_rifles value = 2500 }
+		send_equipment = { equipment = infantry_equipment amount = 25000 target = FROM }
+		add_to_variable = { var = VAL_northern_aid_rifles value = 25000 }
 		VAL_complete_northern_aid = yes
 	}
 }
@@ -4808,8 +4849,7 @@ VAL_deliver_northern_aid_personnel = {
 		limit = {
 			has_capitulated = no
 			is_subject = no
-			has_active_mission = VAL_northern_aid_deadline
-			check_variable = { var = VAL_northern_aid_state value = 1 compare = equals }
+			VAL_northern_aid_deliveries_open = yes
 			FROM = { VAL_northern_aid_recipient = yes }
 			NOT = { has_manpower < 2000 } NOT = { command_power < 25 }
 		}
@@ -4920,26 +4960,49 @@ VAL_check_efl_concession = {
 	}
 }
 
+# Startup-only compatibility: a fulfilled pledge cannot lose before the campaign ends.
+VAL_restore_fulfilled_northern_aid = {
+	if = {
+		limit = {
+			check_variable = { var = VAL_northern_aid_state value = 3 compare = equals }
+			has_idea = VAL_northern_aid_failure
+			VAL_northern_aid_sufficient = yes
+			NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
+		}
+		remove_ideas = VAL_northern_aid_failure
+		set_variable = { var = VAL_northern_aid_state value = 2 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# The campaign result is authoritative; individual capitulations precede its settlement.
 VAL_northern_aid_daily = {
 	if = {
 		limit = { has_variable = VAL_northern_aid_state NOT = { check_variable = { var = VAL_northern_aid_state value = 3 compare = equals } } }
 		if = {
-			limit = { OR = { NOT = { country_exists = event_target:VAL_northern_aid_partner } event_target:VAL_northern_aid_partner = { has_capitulated = yes has_war_with = NOD } } }
+			limit = { NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals } } }
 			VAL_settle_northern_aid_defeat = yes
 		}
 		else_if = {
-			limit = { event_target:VAL_northern_aid_partner = { NOT = { has_war_with = NOD } } }
-			# A peace without an observed military result has no victory reward.
+			limit = { NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } } }
+			VAL_settle_northern_aid_victory = yes
+		}
+		else_if = {
+			limit = { OR = { has_capitulated = yes is_subject = yes NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 4 compare = equals } } } }
 			VAL_close_northern_aid = yes
 		}
 		else_if = {
-			limit = { OR = { has_capitulated = yes is_subject = yes event_target:VAL_northern_aid_partner = { has_war_with = VAL } } }
-			VAL_close_northern_aid = yes
-		}
-		else_if = {
-			limit = { check_variable = { var = VAL_northern_aid_state value = 1 compare = equals } has_active_mission = VAL_northern_aid_deadline }
+			limit = {
+				OR = {
+					AND = {
+						check_variable = { var = VAL_northern_aid_state value = 1 compare = equals }
+						has_active_mission = VAL_northern_aid_deadline
+					}
+					check_variable = { var = VAL_northern_aid_state value = 2 compare = equals }
+				}
+			}
 			if = {
-				limit = { event_target:VAL_northern_aid_partner = { VAL_northern_volunteer_host = yes has_volunteers_amount_from = { tag = VAL count > 1 } } }
+				limit = { VAL_northern_aid_volunteers_present = yes }
 				add_to_variable = { var = VAL_northern_aid_volunteer_days value = 1 }
 			}
 			else = { set_variable = { var = VAL_northern_aid_volunteer_days value = 0 } }
@@ -4948,20 +5011,6 @@ VAL_northern_aid_daily = {
 	}
 }
 
-# COUNTRY capitulating ROOT. Capture the result before treaty handlers remove war relations.
-VAL_northern_aid_capitulation = {
-	if = {
-		limit = { VAL = { has_variable = VAL_northern_aid_state NOT = { check_variable = { var = VAL_northern_aid_state value = 3 compare = equals } } } }
-		if = {
-			limit = { tag = event_target:VAL_northern_aid_partner has_war_with = NOD }
-			VAL = { VAL_settle_northern_aid_defeat = yes }
-		}
-		else_if = {
-			limit = { tag = NOD event_target:VAL_northern_aid_partner = { exists = yes has_capitulated = no has_war_with = NOD } }
-			VAL = { VAL_settle_northern_aid_victory = yes }
-		}
-	}
-}
 
 VAL_settle_northern_aid_victory = {
 	if = {
@@ -4994,6 +5043,22 @@ VAL_close_northern_aid = {
 	clear_global_event_target = VAL_northern_aid_partner
 }
 
+
+VAL_refresh_order_summary = {
+ set_variable = { var = VAL_route_occidia_orders value = 0 }
+ set_variable = { var = VAL_route_north_orders value = 0 }
+ set_variable = { var = VAL_route_stelander_orders value = 0 }
+ set_variable = { var = VAL_route_vorkerland_orders value = 0 }
+ if = { limit = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } event_target:VAL_order_1_partner = { OR = { tag = CIN tag = OSF tag = APH } } } add_to_variable = { var = VAL_route_occidia_orders value = 1 } }
+ if = { limit = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } event_target:VAL_order_1_partner = { OR = { tag = NOD tag = YPR tag = COF tag = TFF } } } add_to_variable = { var = VAL_route_north_orders value = 1 } }
+ if = { limit = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } event_target:VAL_order_1_partner = { OR = { tag = STP tag = STS tag = SRP } } } add_to_variable = { var = VAL_route_stelander_orders value = 1 } }
+ if = { limit = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } event_target:VAL_order_1_partner = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } } } add_to_variable = { var = VAL_route_vorkerland_orders value = 1 } }
+ if = { limit = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } event_target:VAL_order_2_partner = { OR = { tag = CIN tag = OSF tag = APH } } } add_to_variable = { var = VAL_route_occidia_orders value = 1 } }
+ if = { limit = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } event_target:VAL_order_2_partner = { OR = { tag = NOD tag = YPR tag = COF tag = TFF } } } add_to_variable = { var = VAL_route_north_orders value = 1 } }
+ if = { limit = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } event_target:VAL_order_2_partner = { OR = { tag = STP tag = STS tag = SRP } } } add_to_variable = { var = VAL_route_stelander_orders value = 1 } }
+ if = { limit = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } event_target:VAL_order_2_partner = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } } } add_to_variable = { var = VAL_route_vorkerland_orders value = 1 } }
+}
+
 # --- external_order_ledger ---
 # Orders retain their quote; mission callbacks only mark expiry for the next VAL pulse.
 VAL_contract_record_success = {
@@ -5004,10 +5069,11 @@ VAL_close_order_offer = {
     if = {
         limit = { has_country_flag = VAL_order_offer }
         clr_country_flag = VAL_order_offer
+        clr_country_flag = VAL_quarterly_offer
         VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending }
     }
 }
-VAL_order_1_cancel = {
+VAL_order_1_legacy_cancel = {
     if = {
         limit = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } }
         event_target:VAL_order_1_partner = { add_to_variable = { var = VAL_refund_due value = VAL.VAL_order_1_advance } }
@@ -5020,7 +5086,7 @@ VAL_order_1_cancel = {
  VAL_refresh_order_summary = yes
 }
 
-VAL_order_1_dispatch = {
+VAL_order_1_legacy_dispatch = {
     if = {
         limit = { VAL_order_1_can_dispatch = yes }
         event_target:VAL_order_1_partner = {
@@ -5042,7 +5108,7 @@ VAL_order_1_dispatch = {
  VAL_refresh_order_summary = yes
 }
 
-VAL_order_1_reconcile = {
+VAL_order_1_legacy_reconcile = {
     if = {
         limit = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } }
         if = {
@@ -5072,12 +5138,11 @@ VAL_accept_order_1 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 125 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 125 }
-            set_variable = { var = VAL_order_1_quantity value = 2500 }
+            set_variable = { var = VAL_order_1_quantity value = 25000 }
             set_variable = { var = VAL_order_1_price value = 500 }
             set_variable = { var = VAL_order_1_advance value = 125 }
             set_variable = { var = VAL_order_1_remaining value = 375 }
             set_variable = { var = VAL_order_1_state value = 1 }
-            add_to_variable = { var = VAL_order_1_generation value = 1 }
             clr_country_flag = VAL_order_1_grace_used
             clr_country_flag = VAL_order_1_expired
             activate_mission = VAL_order_1_deadline
@@ -5091,12 +5156,11 @@ VAL_accept_order_1 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
-            set_variable = { var = VAL_order_1_quantity value = 5000 }
+            set_variable = { var = VAL_order_1_quantity value = 50000 }
             set_variable = { var = VAL_order_1_price value = 1000 }
             set_variable = { var = VAL_order_1_advance value = 250 }
             set_variable = { var = VAL_order_1_remaining value = 750 }
             set_variable = { var = VAL_order_1_state value = 1 }
-            add_to_variable = { var = VAL_order_1_generation value = 1 }
             clr_country_flag = VAL_order_1_grace_used
             clr_country_flag = VAL_order_1_expired
             activate_mission = VAL_order_1_deadline
@@ -5110,12 +5174,11 @@ VAL_accept_order_1 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 562.5 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 562.5 }
-            set_variable = { var = VAL_order_1_quantity value = 10000 }
+            set_variable = { var = VAL_order_1_quantity value = 100000 }
             set_variable = { var = VAL_order_1_price value = 2250 }
             set_variable = { var = VAL_order_1_advance value = 562.5 }
             set_variable = { var = VAL_order_1_remaining value = 1687.5 }
             set_variable = { var = VAL_order_1_state value = 1 }
-            add_to_variable = { var = VAL_order_1_generation value = 1 }
             clr_country_flag = VAL_order_1_grace_used
             clr_country_flag = VAL_order_1_expired
             activate_mission = VAL_order_1_deadline
@@ -5129,12 +5192,11 @@ VAL_accept_order_1 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 1250 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1250 }
-            set_variable = { var = VAL_order_1_quantity value = 20000 }
+            set_variable = { var = VAL_order_1_quantity value = 200000 }
             set_variable = { var = VAL_order_1_price value = 5000 }
             set_variable = { var = VAL_order_1_advance value = 1250 }
             set_variable = { var = VAL_order_1_remaining value = 3750 }
             set_variable = { var = VAL_order_1_state value = 1 }
-            add_to_variable = { var = VAL_order_1_generation value = 1 }
             clr_country_flag = VAL_order_1_grace_used
             clr_country_flag = VAL_order_1_expired
             activate_mission = VAL_order_1_deadline
@@ -5146,7 +5208,7 @@ VAL_accept_order_1 = {
     VAL = { VAL_refresh_order_summary = yes }
     VAL_close_order_offer = yes
 }
-VAL_order_2_cancel = {
+VAL_order_2_legacy_cancel = {
     if = {
         limit = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } }
         event_target:VAL_order_2_partner = { add_to_variable = { var = VAL_refund_due value = VAL.VAL_order_2_advance } }
@@ -5159,7 +5221,7 @@ VAL_order_2_cancel = {
  VAL_refresh_order_summary = yes
 }
 
-VAL_order_2_dispatch = {
+VAL_order_2_legacy_dispatch = {
     if = {
         limit = { VAL_order_2_can_dispatch = yes }
         event_target:VAL_order_2_partner = {
@@ -5181,7 +5243,7 @@ VAL_order_2_dispatch = {
  VAL_refresh_order_summary = yes
 }
 
-VAL_order_2_reconcile = {
+VAL_order_2_legacy_reconcile = {
     if = {
         limit = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } }
         if = {
@@ -5211,12 +5273,11 @@ VAL_accept_order_2 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 125 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 125 }
-            set_variable = { var = VAL_order_2_quantity value = 2500 }
+            set_variable = { var = VAL_order_2_quantity value = 25000 }
             set_variable = { var = VAL_order_2_price value = 500 }
             set_variable = { var = VAL_order_2_advance value = 125 }
             set_variable = { var = VAL_order_2_remaining value = 375 }
             set_variable = { var = VAL_order_2_state value = 1 }
-            add_to_variable = { var = VAL_order_2_generation value = 1 }
             clr_country_flag = VAL_order_2_grace_used
             clr_country_flag = VAL_order_2_expired
             activate_mission = VAL_order_2_deadline
@@ -5230,12 +5291,11 @@ VAL_accept_order_2 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
-            set_variable = { var = VAL_order_2_quantity value = 5000 }
+            set_variable = { var = VAL_order_2_quantity value = 50000 }
             set_variable = { var = VAL_order_2_price value = 1000 }
             set_variable = { var = VAL_order_2_advance value = 250 }
             set_variable = { var = VAL_order_2_remaining value = 750 }
             set_variable = { var = VAL_order_2_state value = 1 }
-            add_to_variable = { var = VAL_order_2_generation value = 1 }
             clr_country_flag = VAL_order_2_grace_used
             clr_country_flag = VAL_order_2_expired
             activate_mission = VAL_order_2_deadline
@@ -5249,12 +5309,11 @@ VAL_accept_order_2 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 562.5 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 562.5 }
-            set_variable = { var = VAL_order_2_quantity value = 10000 }
+            set_variable = { var = VAL_order_2_quantity value = 100000 }
             set_variable = { var = VAL_order_2_price value = 2250 }
             set_variable = { var = VAL_order_2_advance value = 562.5 }
             set_variable = { var = VAL_order_2_remaining value = 1687.5 }
             set_variable = { var = VAL_order_2_state value = 1 }
-            add_to_variable = { var = VAL_order_2_generation value = 1 }
             clr_country_flag = VAL_order_2_grace_used
             clr_country_flag = VAL_order_2_expired
             activate_mission = VAL_order_2_deadline
@@ -5268,12 +5327,11 @@ VAL_accept_order_2 = {
         VAL = {
             add_to_variable = { var = ADISCORD_economy_treasury value = 1250 }
             add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1250 }
-            set_variable = { var = VAL_order_2_quantity value = 20000 }
+            set_variable = { var = VAL_order_2_quantity value = 200000 }
             set_variable = { var = VAL_order_2_price value = 5000 }
             set_variable = { var = VAL_order_2_advance value = 1250 }
             set_variable = { var = VAL_order_2_remaining value = 3750 }
             set_variable = { var = VAL_order_2_state value = 1 }
-            add_to_variable = { var = VAL_order_2_generation value = 1 }
             clr_country_flag = VAL_order_2_grace_used
             clr_country_flag = VAL_order_2_expired
             activate_mission = VAL_order_2_deadline
@@ -5285,7 +5343,7 @@ VAL_accept_order_2 = {
     VAL = { VAL_refresh_order_summary = yes }
     VAL_close_order_offer = yes
 }
-VAL_accept_order = {
+VAL_accept_legacy_order = {
     if = {
         limit = { VAL_order_can_accept = yes }
         if = { limit = { VAL = { NOT = { check_variable = { var = VAL_order_1_state value = 0 compare = greater_than } } NOT = { has_idea = VAL_export_income_1 } } } VAL_accept_order_1 = yes }
@@ -5293,6 +5351,7 @@ VAL_accept_order = {
     }
 }
 VAL_contract_reconcile = {
+    VAL_reconcile_trade_fees = yes
     VAL_reconcile_advisor_conflict = yes
     VAL_military_reconcile = yes
     VAL_order_1_reconcile = yes
@@ -5408,7 +5467,7 @@ VAL_military_reconcile = {
 
 VAL_record_advisor_conflict = {
  save_global_event_target_as = VAL_advisor_customer
- random_enemy_country = { save_global_event_target_as = VAL_advisor_enemy }
+
  VAL = { set_country_flag = { flag = VAL_advisor_contract_active days = 70 } }
 }
 VAL_reconcile_advisor_conflict = {
@@ -5422,18 +5481,230 @@ VAL_reconcile_advisor_conflict = {
  }
 }
 
-VAL_refresh_order_summary = {
- set_variable = { var = VAL_route_occidia_orders value = 0 }
- set_variable = { var = VAL_route_north_orders value = 0 }
- set_variable = { var = VAL_route_stelander_orders value = 0 }
- set_variable = { var = VAL_route_vorkerland_orders value = 0 }
- if = { limit = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } event_target:VAL_order_1_partner = { OR = { tag = CIN tag = OSF tag = APH } } } add_to_variable = { var = VAL_route_occidia_orders value = 1 } }
- if = { limit = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } event_target:VAL_order_1_partner = { OR = { tag = NOD tag = YPR tag = COF tag = TFF } } } add_to_variable = { var = VAL_route_north_orders value = 1 } }
- if = { limit = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } event_target:VAL_order_1_partner = { OR = { tag = STP tag = STS tag = SRP } } } add_to_variable = { var = VAL_route_stelander_orders value = 1 } }
- if = { limit = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } event_target:VAL_order_1_partner = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } } } add_to_variable = { var = VAL_route_vorkerland_orders value = 1 } }
- if = { limit = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } event_target:VAL_order_2_partner = { OR = { tag = CIN tag = OSF tag = APH } } } add_to_variable = { var = VAL_route_occidia_orders value = 1 } }
- if = { limit = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } event_target:VAL_order_2_partner = { OR = { tag = NOD tag = YPR tag = COF tag = TFF } } } add_to_variable = { var = VAL_route_north_orders value = 1 } }
- if = { limit = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } event_target:VAL_order_2_partner = { OR = { tag = STP tag = STS tag = SRP } } } add_to_variable = { var = VAL_route_stelander_orders value = 1 } }
- if = { limit = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } event_target:VAL_order_2_partner = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } } } add_to_variable = { var = VAL_route_vorkerland_orders value = 1 } }
+# COUNTRY VAL. Existing perpetual offices receive one remaining year on migration.
+VAL_migrate_market_years = {
+ if = { limit = { has_idea = VAL_market_CIN CIN = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } CIN = { VAL_start_market_year = yes } }
+ if = { limit = { has_idea = VAL_market_OSF OSF = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } OSF = { VAL_start_market_year = yes } }
+ if = { limit = { has_idea = VAL_market_APH APH = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } APH = { VAL_start_market_year = yes } }
+ if = { limit = { has_idea = VAL_market_COF COF = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } COF = { VAL_start_market_year = yes } }
+ if = { limit = { has_idea = VAL_market_TFF TFF = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } TFF = { VAL_start_market_year = yes } }
+ if = { limit = { has_idea = VAL_market_YPR YPR = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } YPR = { VAL_start_market_year = yes } }
 }
 
+# COUNTRY buyer: payment requires current consent and an unused slot.
+VAL_accept_quarterly_order_1 = {
+ save_global_event_target_as = VAL_order_1_partner
+ set_country_flag = VAL_quarterly_supply_active
+ ADISCORD_economy_initialize_country = yes
+ VAL = {
+  ADISCORD_economy_initialize_country = yes
+  add_political_power = -100
+  set_country_flag = VAL_order_1_quarterly
+  set_variable = { var = VAL_order_1_completed value = 0 }
+  set_variable = { var = VAL_order_1_advance value = 0 }
+  set_variable = { var = VAL_order_1_state value = 1 }
+  clr_country_flag = VAL_order_1_quarter_paid
+  clr_country_flag = VAL_order_1_expired
+  clr_country_flag = VAL_order_1_grace_used
+  activate_mission = VAL_order_1_deadline
+  add_days_mission_timeout = { mission = VAL_order_1_deadline days = 60 }
+ }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 1 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 25000 } set_variable = { var = VAL_order_1_price value = 500 } set_variable = { var = VAL_order_1_remaining value = 500 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 2 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 50000 } set_variable = { var = VAL_order_1_price value = 1000 } set_variable = { var = VAL_order_1_remaining value = 1000 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 3 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 100000 } set_variable = { var = VAL_order_1_price value = 2250 } set_variable = { var = VAL_order_1_remaining value = 2250 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 4 compare = equals } } VAL = { set_variable = { var = VAL_order_1_quantity value = 200000 } set_variable = { var = VAL_order_1_price value = 5000 } set_variable = { var = VAL_order_1_remaining value = 5000 } } }
+ VAL = { VAL_refresh_order_summary = yes }
+ VAL_close_order_offer = yes
+}
+
+VAL_order_1_cancel = {
+ if = {
+  limit = { has_country_flag = VAL_order_1_quarterly }
+  event_target:VAL_order_1_partner = {
+   clr_country_flag = VAL_quarterly_supply_active
+   save_event_target_as = VAL_quarterly_notice_partner
+  }
+  country_event = { id = val_contract.421 }
+  clr_country_flag = VAL_order_1_quarterly
+  clr_country_flag = VAL_order_1_quarter_paid
+ }
+ VAL_order_1_legacy_cancel = yes
+}
+VAL_order_1_dispatch = {
+ if = {
+  limit = { has_country_flag = VAL_order_1_quarterly }
+  if = {
+   limit = { VAL_order_1_can_dispatch = yes }
+   event_target:VAL_order_1_partner = {
+    subtract_from_variable = { var = ADISCORD_economy_treasury value = VAL.VAL_order_1_remaining }
+    add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = VAL.VAL_order_1_remaining }
+    ADISCORD_economy_mark_dirty = yes
+   }
+   add_to_variable = { var = ADISCORD_economy_treasury value = VAL_order_1_remaining }
+   add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_order_1_remaining }
+   ADISCORD_economy_mark_dirty = yes
+   send_equipment = { equipment = infantry_equipment amount = VAL_order_1_quantity target = event_target:VAL_order_1_partner }
+   add_to_variable = { var = VAL_order_1_completed value = 1 }
+   set_country_flag = VAL_order_1_quarter_paid
+  }
+ }
+ else = { VAL_order_1_legacy_dispatch = yes }
+}
+# Timeout callbacks only mark expiry. The country daily hook advances the cycle.
+VAL_order_1_quarterly_reconcile = {
+ if = {
+  limit = { OR = { has_capitulated = yes NOT = { event_target:VAL_order_1_partner = { VAL_order_partner_valid = yes } } } }
+  VAL_order_1_cancel = yes
+ }
+ else_if = {
+  limit = { has_country_flag = VAL_order_1_expired }
+  if = {
+   limit = { has_country_flag = VAL_order_1_quarter_paid }
+   if = {
+    limit = { check_variable = { var = VAL_order_1_completed value = 4 compare = greater_than_or_equals } }
+    event_target:VAL_order_1_partner = { clr_country_flag = VAL_quarterly_supply_active VAL_contract_record_success = yes save_event_target_as = VAL_quarterly_notice_partner }
+    set_variable = { var = VAL_order_1_state value = 0 }
+    clr_country_flag = VAL_order_1_quarterly
+    remove_mission = VAL_order_1_deadline
+    country_event = { id = val_contract.420 }
+    VAL_refresh_order_summary = yes
+   }
+   else = {
+    activate_mission = VAL_order_1_deadline
+    add_days_mission_timeout = { mission = VAL_order_1_deadline days = 60 }
+    if = { limit = { has_country_flag = VAL_order_1_grace_used } add_days_mission_timeout = { mission = VAL_order_1_deadline days = -15 } }
+    if = { limit = { check_variable = { var = VAL_order_1_completed value = 3 compare = equals } } add_days_mission_timeout = { mission = VAL_order_1_deadline days = 5 } }
+   }
+   clr_country_flag = VAL_order_1_quarter_paid
+   clr_country_flag = VAL_order_1_grace_used
+   clr_country_flag = VAL_order_1_expired
+  }
+  else_if = {
+   limit = { NOT = { has_country_flag = VAL_order_1_grace_used } }
+   set_country_flag = VAL_order_1_grace_used
+   clr_country_flag = VAL_order_1_expired
+   activate_mission = VAL_order_1_deadline
+   add_days_mission_timeout = { mission = VAL_order_1_deadline days = -15 }
+  }
+  else = { VAL_order_1_cancel = yes }
+ }
+}
+VAL_order_1_reconcile = {
+ if = { limit = { has_country_flag = VAL_order_1_quarterly } VAL_order_1_quarterly_reconcile = yes }
+ else = { VAL_order_1_legacy_reconcile = yes }
+}
+
+# COUNTRY buyer: payment requires current consent and an unused slot.
+VAL_accept_quarterly_order_2 = {
+ save_global_event_target_as = VAL_order_2_partner
+ set_country_flag = VAL_quarterly_supply_active
+ ADISCORD_economy_initialize_country = yes
+ VAL = {
+  ADISCORD_economy_initialize_country = yes
+  add_political_power = -100
+  set_country_flag = VAL_order_2_quarterly
+  set_variable = { var = VAL_order_2_completed value = 0 }
+  set_variable = { var = VAL_order_2_advance value = 0 }
+  set_variable = { var = VAL_order_2_state value = 1 }
+  clr_country_flag = VAL_order_2_quarter_paid
+  clr_country_flag = VAL_order_2_expired
+  clr_country_flag = VAL_order_2_grace_used
+  activate_mission = VAL_order_2_deadline
+  add_days_mission_timeout = { mission = VAL_order_2_deadline days = 60 }
+ }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 1 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 25000 } set_variable = { var = VAL_order_2_price value = 500 } set_variable = { var = VAL_order_2_remaining value = 500 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 2 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 50000 } set_variable = { var = VAL_order_2_price value = 1000 } set_variable = { var = VAL_order_2_remaining value = 1000 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 3 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 100000 } set_variable = { var = VAL_order_2_price value = 2250 } set_variable = { var = VAL_order_2_remaining value = 2250 } } }
+ if = { limit = { check_variable = { var = VAL_order_quote_tier value = 4 compare = equals } } VAL = { set_variable = { var = VAL_order_2_quantity value = 200000 } set_variable = { var = VAL_order_2_price value = 5000 } set_variable = { var = VAL_order_2_remaining value = 5000 } } }
+ VAL = { VAL_refresh_order_summary = yes }
+ VAL_close_order_offer = yes
+}
+
+VAL_order_2_cancel = {
+ if = {
+  limit = { has_country_flag = VAL_order_2_quarterly }
+  event_target:VAL_order_2_partner = {
+   clr_country_flag = VAL_quarterly_supply_active
+   save_event_target_as = VAL_quarterly_notice_partner
+  }
+  country_event = { id = val_contract.421 }
+  clr_country_flag = VAL_order_2_quarterly
+  clr_country_flag = VAL_order_2_quarter_paid
+ }
+ VAL_order_2_legacy_cancel = yes
+}
+VAL_order_2_dispatch = {
+ if = {
+  limit = { has_country_flag = VAL_order_2_quarterly }
+  if = {
+   limit = { VAL_order_2_can_dispatch = yes }
+   event_target:VAL_order_2_partner = {
+    subtract_from_variable = { var = ADISCORD_economy_treasury value = VAL.VAL_order_2_remaining }
+    add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = VAL.VAL_order_2_remaining }
+    ADISCORD_economy_mark_dirty = yes
+   }
+   add_to_variable = { var = ADISCORD_economy_treasury value = VAL_order_2_remaining }
+   add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_order_2_remaining }
+   ADISCORD_economy_mark_dirty = yes
+   send_equipment = { equipment = infantry_equipment amount = VAL_order_2_quantity target = event_target:VAL_order_2_partner }
+   add_to_variable = { var = VAL_order_2_completed value = 1 }
+   set_country_flag = VAL_order_2_quarter_paid
+  }
+ }
+ else = { VAL_order_2_legacy_dispatch = yes }
+}
+# Timeout callbacks only mark expiry. The country daily hook advances the cycle.
+VAL_order_2_quarterly_reconcile = {
+ if = {
+  limit = { OR = { has_capitulated = yes NOT = { event_target:VAL_order_2_partner = { VAL_order_partner_valid = yes } } } }
+  VAL_order_2_cancel = yes
+ }
+ else_if = {
+  limit = { has_country_flag = VAL_order_2_expired }
+  if = {
+   limit = { has_country_flag = VAL_order_2_quarter_paid }
+   if = {
+    limit = { check_variable = { var = VAL_order_2_completed value = 4 compare = greater_than_or_equals } }
+    event_target:VAL_order_2_partner = { clr_country_flag = VAL_quarterly_supply_active VAL_contract_record_success = yes save_event_target_as = VAL_quarterly_notice_partner }
+    set_variable = { var = VAL_order_2_state value = 0 }
+    clr_country_flag = VAL_order_2_quarterly
+    remove_mission = VAL_order_2_deadline
+    country_event = { id = val_contract.420 }
+    VAL_refresh_order_summary = yes
+   }
+   else = {
+    activate_mission = VAL_order_2_deadline
+    add_days_mission_timeout = { mission = VAL_order_2_deadline days = 60 }
+    if = { limit = { has_country_flag = VAL_order_2_grace_used } add_days_mission_timeout = { mission = VAL_order_2_deadline days = -15 } }
+    if = { limit = { check_variable = { var = VAL_order_2_completed value = 3 compare = equals } } add_days_mission_timeout = { mission = VAL_order_2_deadline days = 5 } }
+   }
+   clr_country_flag = VAL_order_2_quarter_paid
+   clr_country_flag = VAL_order_2_grace_used
+   clr_country_flag = VAL_order_2_expired
+  }
+  else_if = {
+   limit = { NOT = { has_country_flag = VAL_order_2_grace_used } }
+   set_country_flag = VAL_order_2_grace_used
+   clr_country_flag = VAL_order_2_expired
+   activate_mission = VAL_order_2_deadline
+   add_days_mission_timeout = { mission = VAL_order_2_deadline days = -15 }
+  }
+  else = { VAL_order_2_cancel = yes }
+ }
+}
+VAL_order_2_reconcile = {
+ if = { limit = { has_country_flag = VAL_order_2_quarterly } VAL_order_2_quarterly_reconcile = yes }
+ else = { VAL_order_2_legacy_reconcile = yes }
+}
+
+VAL_accept_order = {
+ if = {
+  limit = { has_country_flag = VAL_quarterly_offer }
+  if = {
+   limit = { VAL_order_can_accept = yes }
+   if = { limit = { VAL = { NOT = { check_variable = { var = VAL_order_1_state value = 0 compare = greater_than } } NOT = { has_idea = VAL_export_income_1 } } } VAL_accept_quarterly_order_1 = yes }
+   else = { VAL_accept_quarterly_order_2 = yes }
+  }
+ }
+ else = { VAL_accept_legacy_order = yes }
+}

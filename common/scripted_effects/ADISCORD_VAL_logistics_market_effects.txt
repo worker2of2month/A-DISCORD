@@ -212,28 +212,32 @@ VAL_refresh_trade_network = {
 }
 
 VAL_pay_trade_corridors = {
+	# The weekly dispatcher reconciles these route values before any payment.
 	if = {
-		limit = { VAL_trade_route_occidia_open = yes }
+		limit = { check_variable = { var = VAL_route_occidia_active value = 1 compare = equals } }
 		VAL_corridor_income_20 = yes
 		if = { limit = { has_country_flag = VAL_route_occidia_upgraded } VAL_corridor_income_10 = yes }
 	}
 	if = {
-		limit = { VAL_trade_route_north_open = yes }
+		limit = { check_variable = { var = VAL_route_north_active value = 1 compare = equals } }
 		VAL_corridor_income_20 = yes
 		if = { limit = { has_country_flag = VAL_route_north_upgraded } VAL_corridor_income_10 = yes }
 	}
 	if = {
-		limit = { VAL_trade_route_stelander_open = yes }
+		limit = { check_variable = { var = VAL_route_stelander_active value = 1 compare = equals } }
 		VAL_corridor_income_20 = yes
 		if = { limit = { has_country_flag = VAL_route_stelander_upgraded } VAL_corridor_income_10 = yes }
 	}
 	if = {
-		limit = { VAL_trade_route_vorkerland_open = yes }
+		limit = { check_variable = { var = VAL_route_vorkerland_active value = 1 compare = equals } }
 		VAL_corridor_income_20 = yes
 		if = { limit = { has_country_flag = VAL_route_vorkerland_upgraded } VAL_corridor_income_10 = yes }
 	}
 	if = {
-		limit = { has_idea = VAL_emergency_bypass VAL_trade_network_disrupted = yes }
+		limit = {
+			has_idea = VAL_emergency_bypass
+			check_variable = { var = VAL_trade_corridors_active value = VAL_trade_corridors_capacity compare = less_than }
+		}
 		VAL_corridor_income_20 = yes
 	}
 }
@@ -312,28 +316,28 @@ VAL_update_black_market_weekly = {
 	if = {
 		limit = {
 			has_country_flag = VAL_route_occidia_commissioned
-			NOT = { VAL_trade_route_occidia_open = yes }
+			NOT = { check_variable = { var = VAL_route_occidia_active value = 1 compare = equals } }
 		}
 		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
 	}
 	if = {
 		limit = {
 			has_country_flag = VAL_route_north_commissioned
-			NOT = { VAL_trade_route_north_open = yes }
+			NOT = { check_variable = { var = VAL_route_north_active value = 1 compare = equals } }
 		}
 		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
 	}
 	if = {
 		limit = {
 			has_country_flag = VAL_route_stelander_commissioned
-			NOT = { VAL_trade_route_stelander_open = yes }
+			NOT = { check_variable = { var = VAL_route_stelander_active value = 1 compare = equals } }
 		}
 		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
 	}
 	if = {
 		limit = {
 			has_country_flag = VAL_route_vorkerland_commissioned
-			NOT = { VAL_trade_route_vorkerland_open = yes }
+			NOT = { check_variable = { var = VAL_route_vorkerland_active value = 1 compare = equals } }
 		}
 		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
 	}
@@ -349,7 +353,7 @@ VAL_update_black_market_weekly = {
 	if = {
 		limit = {
 			VAL_trade_corridors_unlocked = yes
-			NOT = { VAL_trade_network_disrupted = yes }
+			check_variable = { var = VAL_trade_corridors_active value = VAL_trade_corridors_capacity compare = greater_than_or_equals }
 			check_variable = { var = VAL_trade_corridors_capacity value = 0 compare = greater_than }
 		}
 		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = -2 }
@@ -418,6 +422,7 @@ VAL_update_refugees_weekly = {
 }
 
 VAL_logistics_market_weekly = {
+	# Payments and market pressure share this snapshot; neither changes route inputs.
 	if = { limit = { VAL_trade_network_changed = yes } VAL_refresh_trade_network = yes }
 	if = { limit = { VAL_trade_corridors_unlocked = yes } VAL_pay_trade_corridors = yes }
 	VAL_update_refugees_weekly = yes
@@ -532,7 +537,7 @@ VAL_refund_refugee_training = {
 		add_to_variable = { var = VAL_displaced_population value = VAL_refugee_training_escrow }
 		clear_variable = VAL_refugee_training_escrow
 		add_political_power = 75
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = VAL }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 5000 producer = VAL }
 		VAL_refresh_refugee_state = yes
 	}
 }
@@ -557,7 +562,7 @@ VAL_refund_local_training = {
 		add_to_variable = { var = VAL_local_volunteer_pool value = VAL_local_training_escrow }
 		clear_variable = VAL_local_training_escrow
 		add_political_power = 75
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = VAL }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 5000 producer = VAL }
 		VAL_refresh_refugee_state = yes
 	}
 }

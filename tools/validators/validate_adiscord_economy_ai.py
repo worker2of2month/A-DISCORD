@@ -2980,12 +2980,15 @@ def validate(root: Path = ROOT) -> list[str]:
             "war edges do not retier countries fighting a human")
     require(yearly.count("ADISCORD_economy_ai_monthly_policy = yes") == 1,
             "yearly update lacks a post-settlement AI action")
-    require("ADISCORD_economy_should_show_player_ui = yes" in monthly
-            and monthly.count("ADISCORD_economy_refresh_policy_previews = yes") == 1,
-            "monthly policy previews are not gated to the player UI")
-    require("ADISCORD_economy_should_show_player_ui = yes" in yearly
-            and yearly.count("ADISCORD_economy_refresh_policy_previews = yes") == 1,
-            "yearly policy previews are not gated to the player UI")
+    preview_refresh = block(effects, "ADISCORD_economy_refresh_open_window")
+    require("ADISCORD_economy_should_show_player_ui = yes" in preview_refresh
+            and "ADISCORD_economy_window_is_open = yes" in preview_refresh
+            and preview_refresh.count("ADISCORD_economy_refresh_policy_previews = yes") == 1,
+            "policy previews are not gated to the open player UI")
+    for period, pulse in (("monthly", monthly), ("yearly", yearly)):
+        require(pulse.count("ADISCORD_economy_refresh_open_window = yes") == 1
+                and "ADISCORD_economy_refresh_policy_previews = yes" not in pulse,
+                f"{period} policy previews bypass the open-window gate")
     require("ADISCORD_economy_refresh_army_policy = yes" in block(effects, "ADISCORD_economy_update_postwar_demobilization"),
             "postwar army mode 3 does not refresh the army policy idea")
     require("ADISCORD_economy_weekly_source_cache_ready" not in block(effects, "ADISCORD_economy_mark_dirty"),
@@ -3211,9 +3214,12 @@ def validate(root: Path = ROOT) -> list[str]:
                 f"social budget level {level} is not refreshed with policy ideas")
 
     army_expenses = block(effects, "ADISCORD_economy_calculate_army_expenses")
-    require("has_army_manpower" in army_expenses, "army upkeep is disconnected from fielded manpower")
-    require(re.search(r"has_army_manpower\s*=\s*\{\s*size\s*>", army_expenses) is not None,
-            "army-upkeep manpower thresholds do not use the engine-supported comparison syntax")
+    require("value = num_battalions" in army_expenses,
+            "army upkeep is disconnected from the native battalion count")
+    require("value = ADISCORD_economy_army_battalion_count" in army_expenses,
+            "army upkeep does not consume the displayed battalion count")
+    require("has_army_manpower" not in army_expenses,
+            "army upkeep must not double-charge the former manpower thresholds")
     resource_income = block(effects, "ADISCORD_economy_calculate_resource_income")
     policy_refresh = block(
         modifier_effects, "ADISCORD_economy_recalculate_policy_modifiers"

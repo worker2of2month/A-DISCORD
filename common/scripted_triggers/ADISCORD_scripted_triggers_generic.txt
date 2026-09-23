@@ -80,3 +80,84 @@ can_lose_democracy_support = {
 	chauvinism < 0.18
 	etatism < 0.18
 }
+
+# COUNTRY: compare fielded equipment in thousands; empty armies need no refill.
+# Temporary thresholds are local to evaluation and do not require a pulse/cache.
+ADISCORD_ai_army_needs_replacements = {
+	OR = {
+		AND = {
+			check_variable = { num_target_equipment_in_armies_k@infantry_equipment > 0 }
+			set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@infantry_equipment }
+			multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.85 }
+			check_variable = { num_equipment_in_armies_k@infantry_equipment < ADISCORD_ai_equipment_threshold }
+			stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 }
+		}
+		AND = {
+			check_variable = { num_target_equipment_in_armies_k@ADISCORD_squad_weapons_equipment > 0 }
+			set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@ADISCORD_squad_weapons_equipment }
+			multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.85 }
+			check_variable = { num_equipment_in_armies_k@ADISCORD_squad_weapons_equipment < ADISCORD_ai_equipment_threshold }
+			stockpile_ratio = { archetype = ADISCORD_squad_weapons_equipment ratio < 0.05 }
+		}
+		AND = {
+			check_variable = { num_target_equipment_in_armies_k@support_equipment > 0 }
+			set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@support_equipment }
+			multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.85 }
+			check_variable = { num_equipment_in_armies_k@support_equipment < ADISCORD_ai_equipment_threshold }
+			stockpile_ratio = { archetype = support_equipment ratio < 0.05 }
+		}
+		AND = {
+			check_variable = { num_target_equipment_in_armies_k@artillery_equipment > 0 }
+			set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@artillery_equipment }
+			multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.85 }
+			check_variable = { num_equipment_in_armies_k@artillery_equipment < ADISCORD_ai_equipment_threshold }
+			stockpile_ratio = { archetype = artillery_equipment ratio < 0.05 }
+		}
+	}
+}
+
+# A reserve can already be in transit to depleted units. Separate entry/exit
+# thresholds avoid switching recruitment after each daily equipment delivery.
+ADISCORD_ai_army_replacement_pressure_cleared = {
+	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@infantry_equipment }
+	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.95 }
+	OR = {
+		NOT = { check_variable = { num_equipment_in_armies_k@infantry_equipment < ADISCORD_ai_equipment_threshold } }
+		NOT = { stockpile_ratio = { archetype = infantry_equipment ratio < 0.10 } }
+	}
+	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@ADISCORD_squad_weapons_equipment }
+	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.95 }
+	OR = {
+		NOT = { check_variable = { num_equipment_in_armies_k@ADISCORD_squad_weapons_equipment < ADISCORD_ai_equipment_threshold } }
+		NOT = { stockpile_ratio = { archetype = ADISCORD_squad_weapons_equipment ratio < 0.10 } }
+	}
+	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@support_equipment }
+	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.95 }
+	OR = {
+		NOT = { check_variable = { num_equipment_in_armies_k@support_equipment < ADISCORD_ai_equipment_threshold } }
+		NOT = { stockpile_ratio = { archetype = support_equipment ratio < 0.10 } }
+	}
+	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@artillery_equipment }
+	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.95 }
+	OR = {
+		NOT = { check_variable = { num_equipment_in_armies_k@artillery_equipment < ADISCORD_ai_equipment_threshold } }
+		NOT = { stockpile_ratio = { archetype = artillery_equipment ratio < 0.10 } }
+	}
+}
+
+# Field upgrades compete with replacement deliveries and the recruitment queue.
+ADISCORD_ai_can_refit_field_army = {
+	ADISCORD_ai_army_replacement_pressure_cleared = yes
+	NOT = { ADISCORD_economy_ai_is_crisis = yes }
+	NOT = { has_manpower < 3000 }
+	NOT = { has_equipment = { infantry_equipment < 3000 } }
+}
+
+# Release discretionary production floors only for a real rifle shortfall.
+ADISCORD_ai_rifle_replacement_emergency = {
+	check_variable = { num_target_equipment_in_armies_k@infantry_equipment > 0 }
+	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@infantry_equipment }
+	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.85 }
+	check_variable = { num_equipment_in_armies_k@infantry_equipment < ADISCORD_ai_equipment_threshold }
+	stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 }
+}

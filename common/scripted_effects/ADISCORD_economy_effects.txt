@@ -14,7 +14,7 @@ ADISCORD_economy_initialize_country = {
 		ADISCORD_economy_update_model_and_cycle = yes
 		ADISCORD_economy_full_refresh = yes
 		ADISCORD_economy_light_update = yes
-		if = { limit = { ADISCORD_economy_should_show_player_ui = yes } ADISCORD_economy_refresh_policy_previews = yes }
+		ADISCORD_economy_refresh_open_window = yes
 		ADISCORD_economy_update_stretched = yes
 		ADISCORD_economy_calculate_macro_indicators = yes
 		ADISCORD_economy_update_model_and_cycle = yes
@@ -664,15 +664,25 @@ ADISCORD_economy_monthly_update = {
 	ADISCORD_economy_update_postwar_demobilization = yes
 	ADISCORD_economy_clear_one_month_action_ideas = yes
 	add_to_variable = { var = ADISCORD_economy_building_recount_months value = 1 }
+	set_temp_variable = { var = ADISCORD_economy_policy_refreshed_temp value = 1 }
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_building_recount_months value = 3 compare = greater_than_or_equals } }
 		ADISCORD_economy_full_refresh = yes
 		set_variable = { var = ADISCORD_economy_building_recount_months value = 0 }
 	}
-	else = { ADISCORD_economy_full_refresh_if_needed = yes }
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_economy_needs_full_refresh value = 1 compare = greater_than_or_equals } }
+		ADISCORD_economy_full_refresh_if_needed = yes
+	}
+	else = { set_temp_variable = { var = ADISCORD_economy_policy_refreshed_temp value = 0 } }
 	ADISCORD_economy_update_bombing_disruption = yes
 	ADISCORD_economy_update_model_and_cycle = yes
-	ADISCORD_economy_recalculate_policy_modifiers = yes
+	# Full refresh already caches laws. A clean month keeps damage evaluation
+	# on its existing resistance cache, then refreshes policy for the forecast.
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_policy_refreshed_temp value = 0 compare = equals } }
+		ADISCORD_economy_recalculate_policy_modifiers = yes
+	}
 	ADISCORD_economy_calculate_income = yes
 	ADISCORD_economy_calculate_macro_indicators = yes
 	ADISCORD_economy_calculate_expenses = yes
@@ -713,7 +723,7 @@ ADISCORD_economy_monthly_update = {
 	ADISCORD_economy_tick_budget_cooldowns = yes
 	ADISCORD_economy_clamp_all_variables = yes
 	ADISCORD_economy_light_update = yes
-	if = { limit = { ADISCORD_economy_should_show_player_ui = yes } ADISCORD_economy_refresh_policy_previews = yes }
+	ADISCORD_economy_refresh_open_window = yes
 	ADISCORD_economy_update_gui = yes
 }
 ADISCORD_economy_yearly_update = {
@@ -726,7 +736,6 @@ ADISCORD_economy_yearly_update = {
 	ADISCORD_economy_full_refresh = yes
 	ADISCORD_economy_update_bombing_disruption = yes
 	ADISCORD_economy_update_model_and_cycle = yes
-	ADISCORD_economy_recalculate_policy_modifiers = yes
 	ADISCORD_economy_light_update = yes
 	ADISCORD_economy_update_ai_state = yes
 	if = { limit = { is_ai = yes } ADISCORD_economy_ai_yearly_policy = yes }
@@ -750,7 +759,7 @@ ADISCORD_economy_yearly_update = {
 	ADISCORD_economy_clamp_all_variables = yes
 	set_variable = { var = ADISCORD_economy_tick_scale value = 1 }
 	ADISCORD_economy_light_update = yes
-	if = { limit = { ADISCORD_economy_should_show_player_ui = yes } ADISCORD_economy_refresh_policy_previews = yes }
+	ADISCORD_economy_refresh_open_window = yes
 	ADISCORD_economy_update_gui = yes
 }
 
@@ -812,7 +821,7 @@ ADISCORD_economy_refresh_after_debt_action = {
 	ADISCORD_economy_calculate_expenses = yes
 	ADISCORD_economy_calculate_monthly_balance = yes
 	ADISCORD_economy_calculate_weekly_budget = yes
-	if = { limit = { ADISCORD_economy_should_show_player_ui = yes } ADISCORD_economy_refresh_policy_previews = yes }
+	ADISCORD_economy_refresh_open_window = yes
 }
 
 ADISCORD_economy_prepare_weekly_country = {
@@ -1252,14 +1261,11 @@ ADISCORD_economy_calculate_army_expenses = {
 		set_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_army_expense_policy_base }
 	}
 	else = {
-		# Actual fielded manpower is charged through stable threshold triggers. The
-		# tiers are cumulative, so very large armies become materially expensive.
-		set_variable = { var = ADISCORD_economy_army_expenses value = 0.75 }
-		if = { limit = { has_army_manpower = { size > 9999 } } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.35 } }
-		if = { limit = { has_army_manpower = { size > 24999 } } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.50 } }
-		if = { limit = { has_army_manpower = { size > 49999 } } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.75 } }
-		if = { limit = { has_army_manpower = { size > 99999 } } add_to_variable = { var = ADISCORD_economy_army_expenses value = 1.00 } }
-		if = { limit = { has_army_manpower = { size > 249999 } } add_to_variable = { var = ADISCORD_economy_army_expenses value = 1.50 } }
+		# Native battalion count scales with formation size without scanning units.
+		# The shared fiscal multiplier below makes the base rate 0.10 per month.
+		set_variable = { var = ADISCORD_economy_army_battalion_count value = num_battalions }
+		set_variable = { var = ADISCORD_economy_army_expenses value = ADISCORD_economy_army_battalion_count }
+		multiply_variable = { var = ADISCORD_economy_army_expenses value = 0.05 }
 		if = { limit = { ADISCORD_army_development_at_least_2 = yes } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.5 } }
 		if = { limit = { ADISCORD_army_development_at_least_3 = yes } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.5 } }
 		if = { limit = { ADISCORD_army_development_at_least_4 = yes } add_to_variable = { var = ADISCORD_economy_army_expenses value = 0.75 } }
@@ -3124,7 +3130,6 @@ ADISCORD_economy_open_window = {
 		ADISCORD_economy_initialize_country = yes
 		ADISCORD_economy_full_refresh = yes
 		ADISCORD_economy_update_model_and_cycle = yes
-		ADISCORD_economy_recalculate_policy_modifiers = yes
 		ADISCORD_economy_light_update = yes
 		ADISCORD_economy_refresh_policy_previews = yes
 		ADISCORD_economy_calculate_development_multiplier = yes
@@ -3167,7 +3172,7 @@ ADISCORD_economy_refresh_after_law_change = {
 		ADISCORD_economy_update_model_and_cycle = yes
 		ADISCORD_economy_light_update = yes
 		ADISCORD_economy_calculate_development_multiplier = yes
-		if = { limit = { ADISCORD_economy_should_show_player_ui = yes } ADISCORD_economy_refresh_policy_previews = yes }
+		ADISCORD_economy_refresh_open_window = yes
 		ADISCORD_economy_update_gui = yes
 	}
 }
@@ -3574,7 +3579,7 @@ ADISCORD_economy_finish_targeted_policy_refresh = {
 	ADISCORD_economy_sum_expenses = yes
 	ADISCORD_economy_calculate_monthly_balance = yes
 	ADISCORD_economy_calculate_weekly_budget = yes
-	if = { limit = { ADISCORD_economy_should_show_player_ui = yes } ADISCORD_economy_refresh_policy_previews = yes }
+	ADISCORD_economy_refresh_open_window = yes
 	ADISCORD_economy_update_gui = yes
 }
 

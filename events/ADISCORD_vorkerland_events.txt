@@ -78,8 +78,8 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_claimant.3.a
-		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = WKR }
+		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 750 producer = WKR }
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.3.b
@@ -150,8 +150,8 @@ country_event = {
 			has_government = utilitarism
 			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
 		}
-		ai_chance = { base = 40 modifier = { factor = 1.5 has_equipment = { infantry_equipment < 500 } } }
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 50 producer = WKR }
+		ai_chance = { base = 40 modifier = { factor = 1.5 has_equipment = { infantry_equipment < 5000 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 500 producer = WKR }
 		set_country_flag = ADISCORD_vorkerland_wkr_reserve_authority
 	}
 }
@@ -216,8 +216,8 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_claimant.12.a
-		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = VAD }
+		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 750 producer = VAD }
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.12.b
@@ -286,7 +286,7 @@ country_event = {
 		}
 		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
 		add_command_power = 5
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 50 producer = VAD }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 500 producer = VAD }
 		set_country_flag = ADISCORD_vorkerland_vad_chancery_command
 	}
 }
@@ -436,8 +436,8 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_claimant.22.a
-		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = TVA }
+		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 750 producer = TVA }
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.22.b

@@ -1610,7 +1610,9 @@ def main() -> int:
             if token not in " ".join(panel[0].split()):
                 issues.append(f"operations scripted-GUI panel is missing {token}")
     from tools.builders.build_adiscord_val_operations_map import STATE_IDS, FRAME_COUNT
-    if "instantTextBoxType" in gui:
+    operations_windows = [body for body in named_blocks(gui, "containerWindowType")
+                          if re.search(r'name\s*=\s*"ADISCORD_(?:VAL|STP)_operations_panel_window"', body)]
+    if any("instantTextBoxType" in window for window in operations_windows):
         issues.append("operations map must not contain visible text labels")
     for state in STATE_IDS:
         path = ROOT / f"gfx/interface/VAL_operations/VAL_ops_state_{state}.png"

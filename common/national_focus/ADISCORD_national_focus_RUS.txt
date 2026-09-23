@@ -40,7 +40,7 @@ focus_tree = {
 		prerequisite = { focus = RUS_summon_the_aimaqs }
 		completion_reward = {
 			add_manpower = 20000
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2400 producer = RUS }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 24000 producer = RUS }
 			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = RUS }
 			add_equipment_to_stockpile = { type = train_equipment_1 amount = 20 producer = RUS }
 			add_equipment_to_stockpile = { type = motorized_equipment amount = 150 producer = RUS }
@@ -57,7 +57,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 14
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 800 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 8000 } }
 		}
 	}
 
@@ -134,7 +134,7 @@ focus_tree = {
 		}
 		completion_reward = {
 			add_manpower = 8000
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1200 producer = RUS }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 12000 producer = RUS }
 			add_war_support = 0.04
 			unlock_decision_tooltip = { decision = RUS_campaign_sla show_effect_tooltip = yes }
 		}

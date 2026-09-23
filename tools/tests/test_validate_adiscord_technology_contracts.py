@@ -514,7 +514,7 @@ sub_units = {
         transport = ADISCORD_armored_carrier_archetype
         essential = { infantry_equipment ADISCORD_armored_carrier_archetype }
         need = {
-            infantry_equipment = 100
+            infantry_equipment = 1000
             ADISCORD_squad_weapons_equipment = 8
             ADISCORD_armored_carrier_archetype = 40
         }

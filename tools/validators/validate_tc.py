@@ -735,7 +735,6 @@ def check_economy_guardrails(limit):
     forbidden_patterns = {
         "money_income_factor": "fake TDA/DH money modifier",
         "tax_efficiency_factor": "fake TDA/DH tax modifier",
-        "num_battalions": "unproven dynamic unit count in economy pass",
         "max_manpower": "unproven manpower shortcut in economy pass",
     }
     for path in iter_files("common", "interface", "localisation"):

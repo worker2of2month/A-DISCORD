@@ -807,7 +807,7 @@ STP_cw_northern_capitulation_managed = {
 # COUNTRY: full equipment and manpower price of one assault division.
 STP_cw_can_pay_assault_division = {
 	NOT = { has_manpower < 7900 }
-	NOT = { has_equipment = { infantry_equipment < 610 } }
+	NOT = { has_equipment = { infantry_equipment < 7110 } }
 	NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 48 } }
 	NOT = { has_equipment = { support_equipment < 30 } }
 	NOT = { has_equipment = { artillery_equipment < 60 } }
@@ -852,7 +852,7 @@ STP_cw_kefreyt_aid_open = {
 # COUNTRY: stock price of the complete three-division contingent.
 STP_cw_can_fund_kefreyt_volunteers = {
 	NOT = { has_manpower < 23700 }
-	NOT = { has_equipment = { infantry_equipment < 1830 } }
+	NOT = { has_equipment = { infantry_equipment < 21330 } }
 	NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 144 } }
 	NOT = { has_equipment = { support_equipment < 90 } }
 	NOT = { has_equipment = { artillery_equipment < 180 } }
@@ -1313,7 +1313,7 @@ STP_pw_party_nod_arms_current = {
 	exists = yes
 	has_capitulated = no
 	is_subject = no
-	NOT = { has_equipment = { infantry_equipment < 1000 } }
+	NOT = { has_equipment = { infantry_equipment < 10000 } }
 	NOT = { has_equipment = { support_equipment < 100 } }
 	STP = {
 		exists = yes

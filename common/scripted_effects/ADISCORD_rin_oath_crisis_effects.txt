@@ -43,7 +43,7 @@ ADISCORD_rin_start_oath_civil_war = {
 			add_manpower = 1000
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
-				amount = 400
+				amount = 4000
 				producer = MON
 				}
 			}

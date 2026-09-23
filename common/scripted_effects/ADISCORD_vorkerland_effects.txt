@@ -595,7 +595,7 @@ ADISCORD_vorkerland_setup_sla = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "SLA_vorkerland_collapse"
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = SLA }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = SLA }
 	}
 	log = "[ADISCORD Vorkerland] SLA setup completed"
 }
@@ -621,7 +621,7 @@ ADISCORD_vorkerland_setup_rza = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "RZA_vorkerland_collapse"
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = RZA }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = RZA }
 	}
 	log = "[ADISCORD Vorkerland] RZA setup completed"
 }
@@ -644,7 +644,7 @@ ADISCORD_vorkerland_setup_mlr = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "MLR_vorkerland_collapse"
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = MLR }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = MLR }
 	}
 	log = "[ADISCORD Vorkerland] MLR setup completed"
 }
@@ -666,7 +666,7 @@ ADISCORD_vorkerland_setup_ert = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "ERT_vorkerland_collapse"
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = ERT }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = ERT }
 	}
 	log = "[ADISCORD Vorkerland] ERT setup completed"
 }
@@ -689,7 +689,7 @@ ADISCORD_vorkerland_setup_irt = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "IRT_vorkerland_collapse"
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = IRT }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = IRT }
 	}
 	log = "[ADISCORD Vorkerland] IRT setup completed"
 }
@@ -713,7 +713,7 @@ ADISCORD_vorkerland_setup_sca = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "SCA_vorkerland_collapse"
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 80 producer = SCA }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = SCA }
 	}
 	log = "[ADISCORD Vorkerland] SCA setup completed"
 }
@@ -1042,7 +1042,7 @@ ADISCORD_vorkerland_ensure_limited_conscription = {
 # 12-15 formation main claimant. PREV is the country owning the capital scope.
 ADISCORD_vorkerland_raise_emergency_levies = {
 	add_manpower = 1800
-	add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 360 producer = ROOT }
+	add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 3600 producer = ROOT }
 	PREV = { ADISCORD_vorkerland_ensure_emergency_militia_template = yes }
 	capital_scope = {
 		create_unit = {
@@ -1127,7 +1127,7 @@ ADISCORD_vorkerland_ensure_wkr_home_guard = {
 		set_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1
 		ADISCORD_vorkerland_ensure_worker_home_guard_template = yes
 		add_manpower = 24000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1920 producer = WKR }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 19200 producer = WKR }
 		33 = {
 			create_unit = {
 				division = "division_template = \"Worker Home Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.85"
@@ -1304,7 +1304,7 @@ ADISCORD_vorkerland_wrk_activate_vla_auxiliaries = {
 		# A finite contract delivery represents Volnograd opening its arsenals.
 		if = {
 			limit = { VLA = { NOT = { has_country_flag = ADISCORD_vorkerland_auxiliary_contract_activated } } }
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 300 producer = VLA }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 3000 producer = VLA }
 			VLA = { set_country_flag = ADISCORD_vorkerland_auxiliary_contract_activated }
 		}
 		VLA = {
@@ -1385,7 +1385,7 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		}
 		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
 		add_manpower = 10000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 900 producer = WKR }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 9000 producer = WKR }
 		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 90 producer = WKR }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 140 producer = WKR }
 		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 36 producer = WKR }
@@ -1426,7 +1426,7 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		add_ideas = ADISCORD_vorkerland_last_stand
 		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
 		add_manpower = 8000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 600 producer = VAD }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6000 producer = VAD }
 		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 60 producer = VAD }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 100 producer = VAD }
 		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 24 producer = VAD }
@@ -1454,19 +1454,19 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 	ZAO = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_manpower = 4000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 850 producer = ZAO }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 8500 producer = ZAO }
 	}
 	PWR = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_manpower = 8000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1600 producer = PWR }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 16000 producer = PWR }
 		add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = PWR }
 		add_equipment_to_stockpile = { type = artillery_equipment amount = 72 producer = PWR }
 	}
 	VLA = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_manpower = 8000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1800 producer = VLA }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 18000 producer = VLA }
 		add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = VLA }
 	}
 	NAM = {
@@ -1475,24 +1475,24 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		# keeps un-cored. The levy is a cash reserve for the starting army
 		# until the extraction war loads its own OOB.
 		add_manpower = 8000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1600 producer = NAM }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 16000 producer = NAM }
 		add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = NAM }
 	}
 	ROM = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_manpower = 10000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1800 producer = ROM }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 18000 producer = ROM }
 		add_equipment_to_stockpile = { type = support_equipment amount = 140 producer = ROM }
 	}
 	SOL = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_manpower = 3000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 500 producer = SOL }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5000 producer = SOL }
 	}
 	TRU = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_manpower = 11000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2000 producer = TRU }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 20000 producer = TRU }
 		add_equipment_to_stockpile = { type = support_equipment amount = 160 producer = TRU }
 	}
 	# One northern bloc receives a temporary operational initiative. Together
@@ -2291,7 +2291,7 @@ ADISCORD_vorkerland_setup_tva = {
 		add_ideas = ADISCORD_vorkerland_tva_field_directorate
 		add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism
 		add_manpower = 28000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 3560 producer = TVA }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 35600 producer = TVA }
 		add_equipment_to_stockpile = { type = support_equipment amount = 180 producer = TVA }
 		add_equipment_to_stockpile = { type = artillery_equipment amount = 96 producer = TVA }
 		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 90 producer = TVA }
@@ -2325,7 +2325,7 @@ ADISCORD_vorkerland_setup_wtd = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "WTD_vorkerland_collapse"
 		add_manpower = 7500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1100 producer = WTD }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 11000 producer = WTD }
 		add_equipment_to_stockpile = { type = support_equipment amount = 80 producer = WTD }
 		add_equipment_to_stockpile = { type = artillery_equipment amount = 36 producer = WTD }
 	}
@@ -2373,7 +2373,7 @@ ADISCORD_vorkerland_setup_eyr = {
 		}
 		clr_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
 		add_manpower = 6500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = EYR }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 8000 producer = EYR }
 	}
 }
 
@@ -2399,7 +2399,7 @@ ADISCORD_vorkerland_setup_egc = {
 		}
 		clr_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
 		add_manpower = 5500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 650 producer = EGC }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6500 producer = EGC }
 	}
 }
 
@@ -2429,7 +2429,7 @@ ADISCORD_vorkerland_setup_riv = {
 		}
 		clr_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
 		add_manpower = 7000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 850 producer = RIV }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 8500 producer = RIV }
 	}
 }
 
@@ -2449,7 +2449,7 @@ ADISCORD_vorkerland_setup_rev = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "REV_vorkerland_collapse"
 		add_manpower = 5500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 650 producer = REV }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6500 producer = REV }
 	}
 }
 
@@ -2475,7 +2475,7 @@ ADISCORD_vorkerland_setup_yor = {
 		}
 		clr_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
 		add_manpower = 5500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 650 producer = YOR }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6500 producer = YOR }
 	}
 }
 
@@ -2491,7 +2491,7 @@ ADISCORD_vorkerland_setup_ndn = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "NDN_vorkerland_collapse"
 		add_manpower = 4500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 550 producer = NDN }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5500 producer = NDN }
 	}
 }
 
@@ -2507,7 +2507,7 @@ ADISCORD_vorkerland_setup_swb = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "SWB_vorkerland_collapse"
 		add_manpower = 4500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 550 producer = SWB }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5500 producer = SWB }
 	}
 }
 
@@ -2529,7 +2529,7 @@ ADISCORD_vorkerland_setup_vhv = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "VHV_vorkerland_collapse"
 		add_manpower = 5500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 650 producer = VHV }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6500 producer = VHV }
 	}
 }
 
@@ -2549,7 +2549,7 @@ ADISCORD_vorkerland_setup_osv = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "OSV_vorkerland_collapse"
 		add_manpower = 4500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 550 producer = OSV }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5500 producer = OSV }
 	}
 }
 
@@ -2566,7 +2566,7 @@ ADISCORD_vorkerland_setup_csl = {
 		add_ideas = ADISCORD_vorkerland_csl_isolated_city
 		load_oob = "CSL_vorkerland_collapse"
 		add_manpower = 3500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 500 producer = CSL }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5000 producer = CSL }
 	}
 }
 
@@ -2585,7 +2585,7 @@ ADISCORD_vorkerland_setup_wpa = {
 		add_ideas = ADISCORD_vorkerland_wpa_municipal_compact
 		load_oob = "WPA_vorkerland_collapse"
 		add_manpower = 4500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 600 producer = WPA }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6000 producer = WPA }
 	}
 }
 
@@ -2606,7 +2606,7 @@ ADISCORD_vorkerland_setup_wps = {
 		add_ideas = ADISCORD_vorkerland_wps_factory_councils
 		load_oob = "WPS_vorkerland_collapse"
 		add_manpower = 4500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 600 producer = WPS }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6000 producer = WPS }
 	}
 }
 
@@ -2630,7 +2630,7 @@ ADISCORD_vorkerland_setup_psd = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "PSD_vorkerland_collapse"
 		add_manpower = 5000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 700 producer = PSD }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 7000 producer = PSD }
 	}
 }
 
@@ -2657,7 +2657,7 @@ ADISCORD_vorkerland_setup_eba = {
 		add_ideas = ADISCORD_vorkerland_eba_free_quays
 		load_oob = "EBA_vorkerland_collapse"
 		add_manpower = 10000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1100 producer = EBA }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 11000 producer = EBA }
 	}
 }
 
@@ -2681,7 +2681,7 @@ ADISCORD_vorkerland_setup_dva = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "DVA_vorkerland_collapse"
 		add_manpower = 5000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 700 producer = DVA }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 7000 producer = DVA }
 	}
 }
 
@@ -2703,7 +2703,7 @@ ADISCORD_vorkerland_setup_sra = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		load_oob = "SRA_vorkerland_collapse"
 		add_manpower = 3500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 500 producer = SRA }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5000 producer = SRA }
 	}
 }
 
@@ -2722,7 +2722,7 @@ ADISCORD_vorkerland_setup_zta = {
 		add_ideas = ADISCORD_vorkerland_zta_golden_river_order
 		load_oob = "ZTA_vorkerland_collapse"
 		add_manpower = 5000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 700 producer = ZTA }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 7000 producer = ZTA }
 	}
 }
 
@@ -2739,7 +2739,7 @@ ADISCORD_vorkerland_setup_tgd = {
 		add_ideas = ADISCORD_vorkerland_tgd_grid_collapse
 		load_oob = "TGD_vorkerland_collapse"
 		add_manpower = 4000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 240 producer = TGD }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2400 producer = TGD }
 	}
 }
 
@@ -2865,7 +2865,7 @@ ADISCORD_vorkerland_setup_ibl = {
 			ADISCORD_vorkerland_prepare_conflict_country = yes
 			load_oob = "IBL_vorkerland_collapse"
 			add_manpower = 4500
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 700 producer = IVN }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 7000 producer = IVN }
 			set_country_flag = ADISCORD_vorkerland_ibl_initialized
 		}
 		set_country_flag = ADISCORD_vorkerland_ivanland_client
@@ -2931,7 +2931,7 @@ ADISCORD_vorkerland_begin_ivanland_intervention = {
 		if = {
 			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_expedition_supplied } }
 			add_manpower = 8000
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1600 producer = IVN }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 16000 producer = IVN }
 			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = IVN }
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 48 producer = IVN }
 			add_fuel = 5000
@@ -3088,7 +3088,7 @@ ADISCORD_vorkerland_setup_ivanland_mandate = {
 			ADISCORD_vorkerland_prepare_conflict_country = yes
 			load_oob = "IBA_vorkerland_collapse"
 			add_manpower = 3500
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 700 producer = IVN }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 7000 producer = IVN }
 			set_country_flag = ADISCORD_vorkerland_iba_initialized
 		}
 	}
@@ -3151,11 +3151,11 @@ ADISCORD_vorkerland_open_ivanland_intervention_front = {
 		add_to_faction = WPS
 		add_to_faction = PSD
 	}
-	ZAO = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = ZAO } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
-	WPA = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = WPA } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
-	WPS = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = WPS } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
-	PWR = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = PWR } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
-	PSD = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = PSD } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
+	ZAO = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = ZAO } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
+	WPA = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = WPA } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
+	WPS = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = WPS } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
+	PWR = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = PWR } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
+	PSD = { add_manpower = 1000 add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = PSD } add_timed_idea = { idea = ADISCORD_vorkerland_northern_defense_front days = 260 } }
 	# PWR leads the shared defense faction, so one war reaches both PWR and PSD.
 	# A take_state_focus generator is scoped to the declared target: 93/94 remain
 	# PSD-owned and enter through its explicit defender join below. All four still
@@ -6412,7 +6412,8 @@ ADISCORD_vorkerland_send_vla_support_tranche_1 = {
 			has_war = yes
 			has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
 			has_manpower > 2999
-			has_equipment = { infantry_equipment > 1499 support_equipment > 149 }
+			NOT = { has_equipment = { infantry_equipment < 15000 } }
+			NOT = { has_equipment = { support_equipment < 150 } }
 			NOT = { has_country_flag = ADISCORD_vorkerland_vla_support_tranche_1_sent }
 			VLA = {
 				exists = yes
@@ -6421,10 +6422,10 @@ ADISCORD_vorkerland_send_vla_support_tranche_1 = {
 				OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
 			}
 		}
-		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -3000 }
 		add_equipment_to_stockpile = { type = support_equipment amount = -30 }
 		VLA = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = WKR }
 			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = WKR }
 			add_timed_idea = { idea = ADISCORD_vorkerland_allied_supply_advisers days = 60 }
 		}
@@ -6440,7 +6441,8 @@ ADISCORD_vorkerland_send_vla_support_tranche_2 = {
 			has_war = yes
 			has_global_flag = ADISCORD_vorkerland_wkr_vla_alliance_accepted
 			has_manpower > 2999
-			has_equipment = { infantry_equipment > 1499 support_equipment > 149 }
+			NOT = { has_equipment = { infantry_equipment < 15000 } }
+			NOT = { has_equipment = { support_equipment < 150 } }
 			has_country_flag = ADISCORD_vorkerland_vla_support_tranche_1_sent
 			NOT = { has_country_flag = ADISCORD_vorkerland_vla_support_tranche_2_sent }
 			NOT = { has_country_flag = ADISCORD_vorkerland_vla_support_cooldown }
@@ -6451,10 +6453,10 @@ ADISCORD_vorkerland_send_vla_support_tranche_2 = {
 				OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
 			}
 		}
-		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -3000 }
 		add_equipment_to_stockpile = { type = support_equipment amount = -30 }
 		VLA = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = WKR }
 			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = WKR }
 			add_timed_idea = { idea = ADISCORD_vorkerland_allied_supply_advisers days = 60 }
 		}
@@ -6472,7 +6474,8 @@ ADISCORD_vorkerland_send_sol_support_tranche_1 = {
 				has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
 			}
 			has_manpower > 2999
-			has_equipment = { infantry_equipment > 1499 support_equipment > 149 }
+			NOT = { has_equipment = { infantry_equipment < 15000 } }
+			NOT = { has_equipment = { support_equipment < 150 } }
 			NOT = { has_country_flag = ADISCORD_vorkerland_sol_support_tranche_1_sent }
 			SOL = {
 				exists = yes
@@ -6481,10 +6484,10 @@ ADISCORD_vorkerland_send_sol_support_tranche_1 = {
 				OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
 			}
 		}
-		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -3000 }
 		add_equipment_to_stockpile = { type = support_equipment amount = -30 }
 		SOL = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = VAD }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = VAD }
 			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = VAD }
 			add_timed_idea = { idea = ADISCORD_vorkerland_allied_supply_advisers days = 60 }
 		}
@@ -6503,7 +6506,8 @@ ADISCORD_vorkerland_send_sol_support_tranche_2 = {
 				has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
 			}
 			has_manpower > 2999
-			has_equipment = { infantry_equipment > 1499 support_equipment > 149 }
+			NOT = { has_equipment = { infantry_equipment < 15000 } }
+			NOT = { has_equipment = { support_equipment < 150 } }
 			has_country_flag = ADISCORD_vorkerland_sol_support_tranche_1_sent
 			NOT = { has_country_flag = ADISCORD_vorkerland_sol_support_tranche_2_sent }
 			NOT = { has_country_flag = ADISCORD_vorkerland_sol_support_cooldown }
@@ -6514,10 +6518,10 @@ ADISCORD_vorkerland_send_sol_support_tranche_2 = {
 				OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
 			}
 		}
-		add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -3000 }
 		add_equipment_to_stockpile = { type = support_equipment amount = -30 }
 		SOL = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = VAD }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = VAD }
 			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = VAD }
 			add_timed_idea = { idea = ADISCORD_vorkerland_allied_supply_advisers days = 60 }
 		}
@@ -6555,10 +6559,10 @@ ADISCORD_vorkerland_bootstrap_ai_force_designs = {
 			}
 		}
 		if = {
-			limit = { has_equipment = { infantry_equipment < 500 } }
+			limit = { has_equipment = { infantry_equipment < 5000 } }
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
-				amount = 500
+				amount = 5000
 				producer = ROOT
 			}
 		}
@@ -7131,7 +7135,7 @@ ADISCORD_vorkerland_resolve_prewar_compact = {
 		set_global_flag = ADISCORD_vorkerland_prewar_compact_ratified
 		WRK = {
 			add_stability = 0.03
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 500 producer = WRK }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5000 producer = WRK }
 		}
 	}
 	# Each district ratifies independently; a refusal cannot erase another pact.
@@ -7145,7 +7149,7 @@ ADISCORD_vorkerland_resolve_prewar_compact = {
 			}
 			set_country_flag = ADISCORD_vorkerland_compact_supply_received
 			add_stability = 0.03
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = EYR }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = EYR }
 		}
 	}
 	EGC = {
@@ -7158,7 +7162,7 @@ ADISCORD_vorkerland_resolve_prewar_compact = {
 			}
 			set_country_flag = ADISCORD_vorkerland_compact_supply_received
 			add_stability = 0.03
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = EGC }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = EGC }
 		}
 	}
 	RIV = {
@@ -7171,7 +7175,7 @@ ADISCORD_vorkerland_resolve_prewar_compact = {
 			}
 			set_country_flag = ADISCORD_vorkerland_compact_supply_received
 			add_stability = 0.03
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = RIV }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = RIV }
 		}
 	}
 	YOR = {
@@ -7184,7 +7188,7 @@ ADISCORD_vorkerland_resolve_prewar_compact = {
 			}
 			set_country_flag = ADISCORD_vorkerland_compact_supply_received
 			add_stability = 0.03
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 250 producer = YOR }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 2500 producer = YOR }
 		}
 	}
 }
@@ -7212,7 +7216,7 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 		}
 		if = {
 			limit = { has_completed_focus = WRK_inventory_emergency_stores }
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = WKR }
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_emergency_stores_counted
 		}
 		if = {
@@ -7223,7 +7227,7 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 		}
 		if = {
 			limit = { has_completed_focus = WRK_disperse_railway_reserves }
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = WKR }
 			army_experience = 3
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_distributed
 		}
@@ -7236,7 +7240,7 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 		if = {
 			limit = { has_completed_focus = WRK_place_reserves_under_worker }
 			add_manpower = 250
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = WKR }
 			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70 }
 			set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker
@@ -8951,7 +8955,7 @@ ADISCORD_vorkerland_rom_initialize_war_content = {
 		# The shared collapse setup already grants 10,000 men, 1,800 rifles and
 		# 140 support sets. These finite deltas bring ROM to the approved total.
 		add_manpower = 3000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 400 producer = ROM }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4000 producer = ROM }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 20 producer = ROM }
 		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 48 producer = ROM }
 	}
@@ -8976,7 +8980,7 @@ ADISCORD_vorkerland_tru_initialize_war_content = {
 		# The shared collapse setup already grants 11,000 men, 2,000 rifles and
 		# 160 support sets. These finite deltas bring TRU to the approved total.
 		add_manpower = 3000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 400 producer = TRU }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4000 producer = TRU }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 24 producer = TRU }
 		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 48 producer = TRU }
 	}
@@ -8987,7 +8991,7 @@ ADISCORD_vorkerland_rom_assemble_valley_columns = {
 		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rom_valley_columns_raised } }
 		set_country_flag = ADISCORD_vorkerland_rom_valley_columns_raised
 		add_manpower = 2500
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 720 producer = ROM }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 7200 producer = ROM }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 36 producer = ROM }
 		PREV = { ADISCORD_vorkerland_ensure_line_infantry_brigade_template = yes }
 		capital_scope = {
@@ -9005,7 +9009,7 @@ ADISCORD_vorkerland_tru_arm_river_battalions = {
 		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_tru_river_battalions_raised } }
 		set_country_flag = ADISCORD_vorkerland_tru_river_battalions_raised
 		add_manpower = 3000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 720 producer = TRU }
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 7200 producer = TRU }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 48 producer = TRU }
 		PREV = { ADISCORD_vorkerland_ensure_line_infantry_brigade_template = yes }
 		capital_scope = {

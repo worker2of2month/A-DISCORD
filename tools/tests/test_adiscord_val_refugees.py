@@ -14,6 +14,122 @@ def load(path):
     return {e.key: e.value for e in parse_clausewitz((ROOT / path).read_text(encoding="utf-8-sig"))}
 
 
+class WeeklyTradeTests(unittest.TestCase):
+    def setUp(self):
+        self.effects = load("common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt")
+        self.triggers = load("common/scripted_triggers/ADISCORD_VAL_logistics_market_triggers.txt")
+        self.facts = {("VAL", "has_completed_focus", "VAL_Reopen_Trade_Routes"): True,
+                      ("VAL", "has_idea", "VAL_emergency_bypass"): True,
+                      ("VAL", "has_country_flag", "VAL_route_occidia_upgraded"): True}
+        self.variables = {"ADISCORD_economy_treasury": 100, "VAL_black_market_pressure": 10,
+                          "VAL_trade_corridors_capacity": 4, "VAL_trade_corridors_active": 4}
+        self.route_reads = []
+        self.consumer = None
+        for route in ("occidia", "north", "stelander", "vorkerland"):
+            self.facts["VAL", "has_country_flag", f"VAL_route_{route}_commissioned"] = True
+            self.variables[f"VAL_route_{route}_active"] = 1
+
+    def matches(self, items, scope="VAL"):
+        def match(e):
+            key, value = e.key, e.value
+            if key == "OR":
+                return any(self.matches([c], scope) for c in value)
+            if key == "NOT":
+                return not any(self.matches([c], scope) for c in value)
+            if key == "AND":
+                return self.matches(value, scope)
+            if key in self.triggers:
+                if key.startswith("VAL_trade_route_"):
+                    self.route_reads.append(self.consumer)
+                result = self.matches(self.triggers[key], scope)
+                return result if value == "yes" else not result
+            if isinstance(value, list) and (key.isdigit() or re.fullmatch("[A-Z]{3}", key)):
+                return self.matches(value, key)
+            facts = {**self.facts, **{("VAL", "variable", k): v for k, v in self.variables.items()}}
+            return matches_conditions([e], facts, scope)
+        return all(match(e) for e in items)
+
+    def execute(self, items):
+        matched = False
+        for e in items:
+            key, value = e.key, e.value
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    matched = False
+                guard = next((c.value for c in value if c.key == "limit"), [])
+                if not matched and self.matches(guard):
+                    matched = True
+                    self.execute([c for c in value if c.key != "limit"])
+            elif key in ("set_variable", "add_to_variable", "set_temp_variable",
+                         "add_to_temp_variable", "subtract_from_temp_variable"):
+                name, raw = scalar(value, "var"), scalar(value, "value")
+                try:
+                    amount = float(raw)
+                except ValueError:
+                    amount = self.variables.get(raw, 0)
+                if key.startswith("set_"):
+                    self.variables[name] = amount
+                else:
+                    self.variables[name] = self.variables.get(name, 0) + (-amount if key.startswith("subtract_") else amount)
+            elif key == "clamp_variable":
+                name = scalar(value, "var")
+                self.variables[name] = max(float(scalar(value, "min")), min(float(scalar(value, "max")), self.variables[name]))
+            elif key in ("add_ideas", "remove_ideas"):
+                self.facts["VAL", "has_idea", value] = key == "add_ideas"
+            elif key == "set_country_flag":
+                self.facts["VAL", "has_country_flag", scalar(value, "flag") if isinstance(value, list) else value] = True
+            elif key in ("ADISCORD_economy_initialize_country", "ADISCORD_economy_mark_dirty"):
+                # The fixture starts with an initialized treasury; cache invalidation
+                # does not change corridor ownership, control or war relations.
+                continue
+            elif key in self.effects:
+                previous = self.consumer
+                if key in ("VAL_pay_trade_corridors", "VAL_update_black_market_weekly"):
+                    self.consumer = key
+                self.execute(self.effects[key])
+                self.consumer = previous
+            else:
+                self.fail(f"Unhandled weekly trade effect: {key}")
+
+    def test_reconciliation_precedes_payment_and_pressure_for_every_route_combination(self):
+        for mask in range(16):
+            with self.subTest(open_routes=mask):
+                self.setUp()
+                for bit, nodes in enumerate(((43, 44, 88), (59, 60, 61), (29, 46), (33,))):
+                    for state in nodes:
+                        for key in ("is_owned_by", "is_controlled_by"):
+                            self.facts[str(state), key, "VAL"] = bool(mask & (1 << bit))
+                self.execute(self.effects["VAL_logistics_market_weekly"])
+                count = mask.bit_count()
+                self.assertEqual(self.variables["VAL_trade_corridors_active"], count)
+                income = 20 * count + (10 if mask & 1 else 0) + (20 if count < 4 else 0)
+                delta = 3 * (4 - count) if count < 4 else -2
+                self.assertEqual(self.variables["ADISCORD_economy_treasury"], 100 + income)
+                self.assertEqual(self.variables["ADISCORD_economy_current_month_action_income"], income)
+                self.assertEqual(self.variables["VAL_black_market_pressure"], 10 + delta)
+                self.assertFalse(any(self.route_reads), "Consumers must reuse this pulse's reconciled routes")
+                self.execute(self.effects["VAL_logistics_market_weekly"])
+                self.assertEqual(self.variables["ADISCORD_economy_treasury"], 100 + 2 * income)
+
+    def test_locked_trade_and_uncommissioned_routes_produce_no_income_or_penalty(self):
+        self.facts.clear()
+        self.variables.clear()
+        self.execute(self.effects["VAL_logistics_market_weekly"])
+        self.assertEqual(self.variables.get("ADISCORD_economy_treasury", 0), 0)
+        self.assertEqual(self.variables["VAL_black_market_pressure"], 0)
+
+    def test_partner_war_closes_and_peace_reopens_route_without_control_change(self):
+        self.facts["33", "is_owned_by", "WRK"] = True
+        self.facts["33", "is_controlled_by", "WRK"] = True
+        for peaceful, treasury, pressure in ((True, 140, 19), (False, 160, 31), (True, 200, 40)):
+            with self.subTest(peaceful=peaceful, treasury=treasury):
+                self.facts["WRK", "has_war", "no"] = peaceful
+                self.execute(self.effects["VAL_logistics_market_weekly"])
+                self.assertEqual(self.variables["ADISCORD_economy_treasury"], treasury)
+                self.assertEqual(self.variables["VAL_black_market_pressure"], pressure)
+                self.assertEqual(self.variables["VAL_route_vorkerland_active"], int(peaceful))
+
+
 class RefugeeAdmissionTests(unittest.TestCase):
     def setUp(self):
         self.effects = load("common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt")
@@ -615,6 +731,7 @@ class WastelandCampaignTests(unittest.TestCase):
         self.assertEqual(delta(facts, 3, 1), 10)
         healthy = {("VAL", "variable", "VAL_population_present"): 20,
                    ("VAL", "variable", "VAL_refugee_housing"): 20,
+                   ("VAL", "variable", "VAL_trade_corridors_active"): 1,
                    ("VAL", "variable", "VAL_trade_corridors_capacity"): 1,
                    ("VAL", "VAL_trade_corridors_unlocked", "yes"): True}
         self.assertEqual(delta(healthy, 0, 3), -5)

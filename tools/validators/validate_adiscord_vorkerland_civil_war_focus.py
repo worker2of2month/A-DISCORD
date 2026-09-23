@@ -3383,13 +3383,13 @@ def collect_issues() -> list[str]:
     hardline_rewards = {
         "WRK_place_reserves_under_worker": (
             "add_manpower = 250",
-            "type = infantry_equipment_0 amount = 150 producer = WRK",
+            "type = infantry_equipment_0 amount = 1500 producer = WRK",
             "idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70",
             "set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed",
         ),
         "VAD_seal_district_arsenals": (
             "add_manpower = 250",
-            "type = infantry_equipment_0 amount = 150 producer = ROOT",
+            "type = infantry_equipment_0 amount = 1500 producer = ROOT",
             "idea = ADISCORD_vorkerland_vad_eastern_mandate days = 140",
             "set_country_flag = ADISCORD_vorkerland_district_hardline_committed",
         ),
@@ -3413,7 +3413,7 @@ def collect_issues() -> list[str]:
         else:
             for token in (
                 "add_manpower = 250",
-                "type = infantry_equipment_0 amount = 150 producer = WKR",
+                "type = infantry_equipment_0 amount = 1500 producer = WKR",
                 "idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70",
                 "set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed",
                 "set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker",
@@ -4266,7 +4266,7 @@ def collect_issues() -> list[str]:
             "ADISCORD_vorkerland_vad_standardized_logistics days = 70",
         ),
         "VAD_reconstitute_district_guard": (
-            "type = infantry_equipment_0 amount = 100 producer = VAD",
+            "type = infantry_equipment_0 amount = 1000 producer = VAD",
             "type = support_equipment amount = 40 producer = VAD",
         ),
     }.items():
@@ -5305,9 +5305,13 @@ def collect_issues() -> list[str]:
                     issues.append(
                         f"{reward_source_name} {effect} reward {raw} exceeds maximum {maximum:g}"
                     )
-        for raw in re.findall(r"\bamount\s*=\s*(-?\d+(?:\.\d+)?)", reward_source):
-            if float(raw) > 150:
-                issues.append(f"{reward_source_name} equipment reward {raw} exceeds maximum 150")
+        for shipment in re.findall(r"\badd_equipment_to_stockpile\s*=\s*\{[^{}]*}", reward_source):
+            amount = re.search(r"\bamount\s*=\s*(-?\d+(?:\.\d+)?)", shipment)
+            if amount is None:
+                continue
+            maximum = 1500 if re.search(r"\btype\s*=\s*infantry_equipment(?:_0)?\b", shipment) else 150
+            if float(amount[1]) > maximum:
+                issues.append(f"{reward_source_name} equipment reward {amount[1]} exceeds maximum {maximum}")
     timed_idea_limits = {
         "ADISCORD_vorkerland_vad_eastern_mandate": 140,
         WORX_ADAPTIVE_LOGISTICS_IDEA: 90,

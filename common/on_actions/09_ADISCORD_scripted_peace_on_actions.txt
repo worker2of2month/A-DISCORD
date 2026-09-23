@@ -10,7 +10,7 @@ on_actions = {
                 ROOT = { ADISCORD_debug_war_country_dump = yes }
             }
 
-			ROOT = { VAL_military_capture_result = yes VAL_northern_aid_capitulation = yes }
+			ROOT = { VAL_military_capture_result = yes }
 
 			# BEGIN stelander:on_capitulation_immediate
 			# Clear an unconsumed handoff so it cannot suppress another defeat.

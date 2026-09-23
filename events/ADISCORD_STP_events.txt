@@ -792,7 +792,7 @@ country_event = {
 		ai_chance = { factor = 90 }
 		trigger = {
 			has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_50 = yes
-			VAL = { exists = yes has_capitulated = no has_country_flag = { flag = VAL_cw_arms_offer_pending value < 2 } has_country_flag = VAL_cw_trade_course NOT = { has_war_with = STS } NOT = { has_equipment = { infantry_equipment < 3200 } } }
+			VAL = { exists = yes has_capitulated = no has_country_flag = { flag = VAL_cw_arms_offer_pending value < 2 } has_country_flag = VAL_cw_trade_course NOT = { has_war_with = STS } NOT = { has_equipment = { infantry_equipment < 32000 } } }
 		}
 		custom_effect_tooltip = VAL_cw_buy_arms_tt
 		hidden_effect = { if = { limit = { VAL = { has_country_flag = { flag = VAL_cw_arms_offer_pending value < 2 } } } VAL = { VAL_cw_complete_arms_contract = yes } } }
@@ -802,7 +802,7 @@ country_event = {
 		ai_chance = { factor = 90 }
 		trigger = {
 			has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_100 = yes any_owned_state = { is_controlled_by = PREV }
-			VAL = { exists = yes has_capitulated = no has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } has_country_flag = VAL_cw_trade_course NOT = { has_war_with = STS } NOT = { has_equipment = { infantry_equipment < 4420 } } NOT = { has_manpower < 12600 } NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 96 } } NOT = { has_equipment = { support_equipment < 60 } } }
+			VAL = { exists = yes has_capitulated = no has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } has_country_flag = VAL_cw_trade_course NOT = { has_war_with = STS } NOT = { has_equipment = { infantry_equipment < 43340 } } NOT = { has_manpower < 12600 } NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 96 } } NOT = { has_equipment = { support_equipment < 60 } } }
 		}
 		custom_effect_tooltip = VAL_cw_buy_formations_tt
 		hidden_effect = { if = { limit = { VAL = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } } } VAL = { VAL_cw_complete_arms_contract = yes } } }
@@ -929,15 +929,15 @@ country_event = {
 	option = { name = ADISCORD_STP_preparation.19.a }
 }
 
-# Shabrat postwar stories fire from completed reconstruction focuses without adding technical focus rewards.
+# Reconstruction focus rewards schedule these stories after completion.
 country_event = {
 	id = ADISCORD_STP_pw.1
 	title = ADISCORD_STP_pw.1.t
 	desc = ADISCORD_STP_pw.1.d
 	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = STS has_completed_focus = STP_pw_republic_new_republic }
-	mean_time_to_happen = { days = 1 }
 	option = { name = ADISCORD_STP_pw.1.a }
 }
 
@@ -946,9 +946,9 @@ country_event = {
 	title = ADISCORD_STP_pw.2.t
 	desc = ADISCORD_STP_pw.2.d
 	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = STS has_completed_focus = STP_pw_republic_civil_records }
-	mean_time_to_happen = { days = 1 }
 	option = { name = ADISCORD_STP_pw.2.a }
 }
 
@@ -957,9 +957,9 @@ country_event = {
 	title = ADISCORD_STP_pw.3.t
 	desc = ADISCORD_STP_pw.3.d
 	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = STS has_completed_focus = STP_pw_republic_civil_charter }
-	mean_time_to_happen = { days = 1 }
 	option = {
 		name = ADISCORD_STP_pw.3.a
 		add_stability = 0.01
@@ -977,9 +977,9 @@ country_event = {
 	title = ADISCORD_STP_pw.4.t
 	desc = ADISCORD_STP_pw.4.d
 	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = STS has_completed_focus = STP_pw_republic_homes_for_returnees }
-	mean_time_to_happen = { days = 1 }
 	option = { name = ADISCORD_STP_pw.4.a }
 }
 
@@ -988,9 +988,9 @@ country_event = {
 	title = ADISCORD_STP_pw.5.t
 	desc = ADISCORD_STP_pw.5.d
 	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = STS has_completed_focus = STP_pw_republic_army_register }
-	mean_time_to_happen = { days = 1 }
 	option = { name = ADISCORD_STP_pw.5.a }
 }
 

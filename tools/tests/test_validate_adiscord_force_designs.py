@@ -786,6 +786,27 @@ class StartingCoastalFleetTests(unittest.TestCase):
                 self.assertEqual(provinces[str(port)][4:6], ["land", "true"])
 
 
+class PersonalWeaponAccountingTests(unittest.TestCase):
+    def test_land_formations_issue_personal_weapons_to_ninety_percent_of_servicemen(self):
+        for filename in ("ADISCORD_land_units.txt", "ADISCORD_army_hq_units.txt", "ADISCORD_ncns_unit_compat.txt"):
+            units = parse_clausewitz(read(f"common/units/{filename}"))
+            container = next(entry.value for entry in units if entry.key == "sub_units")
+            for unit in container:
+                fields = {entry.key: entry.value for entry in unit.value}
+                manpower = float(fields.get("manpower", 0))
+                if manpower == 0:
+                    continue
+                needs = {entry.key: float(entry.value) for entry in fields.get("need", [])}
+                with self.subTest(unit=unit.key):
+                    self.assertEqual(needs.get("infantry_equipment", 0), manpower * 0.9)
+
+    def test_basic_infantry_personal_weapons_reduce_the_total_industry_cost_by_ten_percent(self):
+        equipment = parse_clausewitz(read("common/units/equipment/ADISCORD_infantry_equipment.txt"))[0].value
+        basic = next(entry.value for entry in equipment if entry.key == "infantry_equipment_0")
+        cost = float(next(entry.value for entry in basic if entry.key == "build_cost_ic"))
+        self.assertAlmostEqual(900 * cost, 43.2)
+
+
 class EquipmentPictureTests(unittest.TestCase):
     def test_every_custom_subunit_has_designer_and_onmap_icons(self) -> None:
         units = read("common/units/ADISCORD_land_units.txt")

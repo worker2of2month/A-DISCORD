@@ -239,7 +239,7 @@ VAL_contract_management = {
 		custom_cost_text = VAL_cost_treasury1000
 		custom_cost_trigger = { VAL_can_spend_1000 = yes }
 		complete_effect = { custom_effect_tooltip = VAL_quarterly_subcontract_result_tt hidden_effect = { VAL_subcontract_quarterly_norm = yes } }
-		ai_will_do = { base = 30 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment < 6000 } } } }
+		ai_will_do = { base = 30 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment < 60000 } } } }
 	}
 
 	VAL_campaign_rifles_and_bread = {
@@ -369,7 +369,7 @@ VAL_contract_management = {
 		allowed = { tag = VAL }
 		visible = { has_country_flag = VAL_quarterly_contract_active NOT = { has_country_flag = VAL_quarterly_contract_paid } }
 		available = { VAL_can_pay_quarterly_contract_norm = yes }
-		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 4000 } } }
+		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 40000 } } }
 		custom_cost_text = VAL_cost_pp10_r4000
 		cost = 0
 		complete_effect = { VAL_pay_quarterly_contract_norm = yes }
@@ -465,7 +465,7 @@ VAL_rework_debug = {
 		complete_effect = {
 			ADISCORD_economy_receive_50 = yes
 			ADISCORD_economy_receive_50 = yes
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 producer = VAL }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 200000 producer = VAL }
 			add_equipment_to_stockpile = { type = support_equipment amount = 2000 producer = VAL }
 		}
 	}
@@ -1231,12 +1231,42 @@ VAL_livonn_settlement_category = {
 
 VAL_foreign_sales = {
 
+    VAL_sign_annual_trade = {
+        icon = generic_political_pressure
+        allowed = { tag = VAL }
+        targets = { CIN OSF APH COF TFF YPR }
+        target_trigger = { FROM = { exists = yes } }
+        visible = {
+            FROM = { VAL_partner_commerce_visible = yes NOT = { has_country_flag = VAL_market_term_started } NOT = { has_country_flag = VAL_quarterly_supply_active } }
+            OR = { has_completed_focus = VAL_Resource_War_Contracts has_completed_focus = VAL_Contingency_Ledgers has_completed_focus = VAL_Market_Roads_North has_completed_focus = VAL_Foreign_Broker_Licences has_completed_focus = VAL_Operational_Directorate has_country_flag = VAL_foreign_operations_unlocked has_country_flag = VAL_northern_operations_unlocked }
+        }
+        available = { custom_trigger_tooltip = { tooltip = VAL_trade_decision_available_tt FROM = { VAL_partner_trade_can_offer = yes } } }
+        cost = 100
+        days_re_enable = 1
+        complete_effect = {
+            custom_effect_tooltip = VAL_trade_decision_terms_tt
+            hidden_effect = {
+                set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
+                set_country_flag = { flag = VAL_export_offer_pending days = 16 }
+                FROM = {
+                    ADISCORD_release_non_participating_minor_optimization = yes
+                    set_country_flag = VAL_trade_fee_paid
+                    set_country_flag = { flag = VAL_partner_offer_trade days = 14 }
+                    set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+                    country_event = { id = val_contract.362 }
+                }
+            }
+        }
+        ai_will_do = { base = 5 }
+    }
+
+
     VAL_partner_contract = {
         icon = generic_political_pressure
         allowed = { tag = VAL }
         targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD NAM EFL }
         target_trigger = { FROM = { exists = yes } }
-        visible = { OR = { has_completed_focus = VAL_Market_Roads_North has_completed_focus = VAL_Foreign_Broker_Licences has_completed_focus = VAL_Operational_Directorate has_country_flag = VAL_foreign_operations_unlocked has_country_flag = VAL_northern_operations_unlocked } }
+        visible = { FROM = { VAL_partner_has_visible_contracts = yes NOT = { has_country_flag = VAL_market_term_started } NOT = { has_country_flag = VAL_quarterly_supply_active } } OR = { has_completed_focus = VAL_Resource_War_Contracts has_completed_focus = VAL_Contingency_Ledgers has_completed_focus = VAL_Market_Roads_North has_completed_focus = VAL_Foreign_Broker_Licences has_completed_focus = VAL_Operational_Directorate has_country_flag = VAL_foreign_operations_unlocked has_country_flag = VAL_northern_operations_unlocked } }
 
 		available = { custom_trigger_tooltip = { tooltip = VAL_partner_negotiations_ready_tt VAL_partner_desk_free = yes FROM = { exists = yes has_capitulated = no NOT = { has_war_with = VAL } NOT = { has_country_flag = VAL_partner_contact_cooldown } } } }
         cost = 0
@@ -1259,7 +1289,7 @@ VAL_foreign_sales = {
         available = {
             custom_trigger_tooltip = { tooltip = VAL_partner_desk_free_tt VAL_partner_desk_free = yes }
             custom_trigger_tooltip = { tooltip = VAL_partner_export_slot_tt VAL_export_slot_free = yes }
-            NOT = { has_equipment = { infantry_equipment < 5000 } }
+            NOT = { has_equipment = { infantry_equipment < 50000 } }
             custom_trigger_tooltip = { tooltip = VAL_partner_bulk_funds_tt FROM = { VAL_partner_bulk_funds_ready = yes } }
             custom_trigger_tooltip = { tooltip = VAL_partner_customer_ready_tt FROM = { VAL_partner_bulk_can_offer = yes } }
         }
@@ -1290,7 +1320,7 @@ VAL_foreign_sales = {
         available = {
             custom_trigger_tooltip = { tooltip = VAL_partner_desk_free_tt VAL_partner_desk_free = yes }
             custom_trigger_tooltip = { tooltip = VAL_partner_export_slot_tt VAL_export_slot_free = yes }
-            NOT = { has_equipment = { infantry_equipment < 10000 } }
+            NOT = { has_equipment = { infantry_equipment < 100000 } }
             custom_trigger_tooltip = { tooltip = VAL_partner_arsenal_funds_tt FROM = { VAL_partner_arsenal_funds_ready = yes } }
             custom_trigger_tooltip = { tooltip = VAL_partner_customer_ready_tt FROM = { VAL_partner_arsenal_can_offer = yes } }
         }
@@ -1321,7 +1351,7 @@ VAL_foreign_sales = {
         available = {
             custom_trigger_tooltip = { tooltip = VAL_partner_desk_free_tt VAL_partner_desk_free = yes }
             custom_trigger_tooltip = { tooltip = VAL_partner_export_slot_tt VAL_export_slot_free = yes }
-            NOT = { has_equipment = { infantry_equipment < 20000 } }
+            NOT = { has_equipment = { infantry_equipment < 200000 } }
             custom_trigger_tooltip = { tooltip = VAL_partner_strategic_funds_tt FROM = { VAL_partner_strategic_funds_ready = yes } }
             custom_trigger_tooltip = { tooltip = VAL_partner_customer_ready_tt FROM = { VAL_partner_strategic_can_offer = yes } }
         }
@@ -1360,7 +1390,7 @@ VAL_ops_sell_rifles_to_cin = {
 
         visible = { has_country_flag = VAL_operation_sell_rifles_to_cin }
 		available = { hidden_trigger = { always = no } }
-		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 5000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 2500 } } } } }
+		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 50000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 25000 } } } } }
 		custom_cost_text = VAL_cost_northern_export
 		cost = 0
 		days_remove = 21
@@ -1375,7 +1405,7 @@ VAL_ops_sell_rifles_to_cin = {
 						NOT = { has_war_with = CIN }
 						CIN = { exists = yes has_capitulated = no }
 						NOT = { has_political_power < 10 }
-						OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 5000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 2500 } } } }
+						OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 50000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 25000 } } } }
 					}
 					VAL_reserve_export_rifles = yes
 					if = {
@@ -1436,7 +1466,7 @@ VAL_ops_sell_rifles_to_cin = {
 				}
 			}
 		}
-		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 11999 } } } }
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { NOT = { has_equipment = { infantry_equipment < 120000 } } } } }
 	}
 VAL_ops_sell_rifles_to_osf = {
 		icon = generic_prepare_civil_war
@@ -1444,7 +1474,7 @@ VAL_ops_sell_rifles_to_osf = {
 
         visible = { has_country_flag = VAL_operation_sell_rifles_to_osf }
 		available = { hidden_trigger = { always = no } }
-		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 5000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 2500 } } } } }
+		custom_cost_trigger = { NOT = { has_political_power < 10 } OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 50000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 25000 } } } } }
 		custom_cost_text = VAL_cost_northern_export
 		cost = 0
 		days_remove = 21
@@ -1459,7 +1489,7 @@ VAL_ops_sell_rifles_to_osf = {
 						NOT = { has_war_with = OSF }
 						OSF = { exists = yes has_capitulated = no }
 						NOT = { has_political_power < 10 }
-						OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 5000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 2500 } } } }
+						OR = { AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 50000 } } } AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 25000 } } } }
 					}
 					VAL_reserve_export_rifles = yes
 					if = {
@@ -1520,7 +1550,7 @@ VAL_ops_sell_rifles_to_osf = {
 				}
 			}
 		}
-		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 11999 } } } }
+		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { NOT = { has_equipment = { infantry_equipment < 120000 } } } } }
 	}
 VAL_cw_sell_arms_to_resistance = {
 		icon = generic_prepare_civil_war
@@ -1531,7 +1561,7 @@ VAL_cw_sell_arms_to_resistance = {
 			NOT = { has_country_flag = VAL_cw_arms_offer_pending }
 			NOT = { has_war_with = STS }
 			NOT = { has_country_flag = VAL_cw_refused }
-			NOT = { has_equipment = { infantry_equipment < 3200 } }
+			NOT = { has_equipment = { infantry_equipment < 32000 } }
 			STS = { exists = yes has_capitulated = no has_war_with = STP ADISCORD_economy_can_spend_50 = yes }
 		}
 		cost = 35
@@ -1555,7 +1585,7 @@ VAL_cw_offer_contract_formations = {
 			NOT = { has_country_flag = VAL_cw_arms_offer_pending }
 			NOT = { has_war_with = STS }
 			NOT = { has_country_flag = VAL_cw_refused }
-			NOT = { has_equipment = { infantry_equipment < 4420 } }
+			NOT = { has_equipment = { infantry_equipment < 43340 } }
 			NOT = { has_manpower < 12600 }
 			NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 96 } }
 			NOT = { has_equipment = { support_equipment < 60 } }
@@ -1595,7 +1625,7 @@ VAL_cw_offer_contract_formations = {
         available = {
             custom_trigger_tooltip = { tooltip = VAL_partner_desk_free_tt VAL_partner_desk_free = yes }
             custom_trigger_tooltip = { tooltip = VAL_partner_export_slot_tt VAL_export_slot_free = yes }
-            NOT = { has_equipment = { infantry_equipment < 2500 } }
+            NOT = { has_equipment = { infantry_equipment < 25000 } }
             custom_trigger_tooltip = { tooltip = VAL_partner_arms_funds_tt FROM = { VAL_partner_arms_funds_ready = yes } }
             custom_trigger_tooltip = { tooltip = VAL_partner_customer_ready_tt FROM = { VAL_partner_arms_can_offer = yes } }
         }
@@ -1619,7 +1649,7 @@ VAL_cw_offer_contract_formations = {
   icon = generic_prepare_civil_war allowed = { tag = VAL }
   targets = { CIN OSF APH WRK WKR VAD TVA STP STS SRP NOD YPR COF TFF }
   target_trigger = { FROM = { exists = yes } }
-  visible = { has_completed_focus = VAL_Contingency_Ledgers FROM = { has_war = yes } }
+  visible = { always = no has_completed_focus = VAL_Contingency_Ledgers FROM = { has_war = yes } }
   available = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } } NOT = { has_idea = VAL_advisors_income } NOT = { command_power < 25 } FROM = { NOT = { has_idea = VAL_paid_military_advisors } } }
   cost = 30 days_re_enable = 70
   complete_effect = {
@@ -1628,7 +1658,8 @@ VAL_cw_offer_contract_formations = {
     if = {
      limit = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } } NOT = { has_idea = VAL_advisors_income } NOT = { command_power < 25 } FROM = { NOT = { has_idea = VAL_paid_military_advisors } } }
      set_country_flag = { flag = VAL_export_offer_pending days = 14 }
-     FROM = { set_country_flag = { flag = VAL_export_offer_advisors days = 14 } country_event = { id = val_contract.341 } }
+     FROM = { set_country_flag = { flag = VAL_export_offer_advisors days = 14 } random_enemy_country = { save_global_event_target_as = VAL_advisor_enemy }
+ country_event = { id = val_contract.341 } }
     }
    }
   }
@@ -1717,14 +1748,14 @@ VAL_vorkerland_aid = {
 		visible = { always = no  has_completed_focus = VAL_Operational_Directorate }
 		available = {
 			custom_trigger_tooltip = { tooltip = VAL_can_aid_vorkerland_tt VAL_can_aid_vorkerland = yes }
-			NOT = { has_equipment = { infantry_equipment < 1000 } }
+			NOT = { has_equipment = { infantry_equipment < 10000 } }
 		}
 		cost = 30
 		days_re_enable = 30
 		complete_effect = {
 			if = {
-				limit = { VAL_can_aid_vorkerland = yes NOT = { has_equipment = { infantry_equipment < 1000 } } }
-				send_equipment = { equipment = infantry_equipment amount = 1000 target = WRK }
+				limit = { VAL_can_aid_vorkerland = yes NOT = { has_equipment = { infantry_equipment < 10000 } } }
+				send_equipment = { equipment = infantry_equipment amount = 10000 target = WRK }
 			}
 		}
 		ai_will_do = { base = 0 }
@@ -1789,9 +1820,9 @@ VAL_resource_war_aid = {
 		targets = { NAM EFL }
 		target_trigger = { FROM = { exists = yes } }
 		visible = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } FROM = { VAL_resource_aid_recipient = yes } }
-		available = { has_capitulated = no is_subject = no NOT = { has_equipment = { infantry_equipment < 2500 } } }
+		available = { has_capitulated = no is_subject = no NOT = { has_equipment = { infantry_equipment < 25000 } } }
 		custom_cost_text = VAL_aid_cost_arms
-		custom_cost_trigger = { NOT = { has_equipment = { infantry_equipment < 2500 } } }
+		custom_cost_trigger = { NOT = { has_equipment = { infantry_equipment < 25000 } } }
 		cost = 0
 		days_re_enable = 1
 		complete_effect = {
@@ -1844,17 +1875,14 @@ VAL_northern_war_aid = {
 	VAL_choose_northern_aid = {
 		icon = generic_army_support
 		allowed = { tag = VAL }
-		targets = { YPR COF TFF STS STP }
-		target_trigger = { FROM = { exists = yes } }
-		visible = { NOT = { has_variable = VAL_northern_aid_state } FROM = { VAL_northern_volunteer_host = yes } }
+		visible = { NOT = { has_variable = VAL_northern_aid_state } NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } } }
 		available = { has_capitulated = no is_subject = no }
 		cost = 0
 		complete_effect = {
 			custom_effect_tooltip = VAL_northern_aid_terms_tt
 			hidden_effect = {
 				if = {
-					limit = { NOT = { has_variable = VAL_northern_aid_state } FROM = { VAL_northern_volunteer_host = yes } }
-					FROM = { save_global_event_target_as = VAL_northern_aid_partner }
+					limit = { NOT = { has_variable = VAL_northern_aid_state } NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } } }
 					VAL_start_northern_aid = yes
 				}
 			}
@@ -1865,27 +1893,27 @@ VAL_northern_war_aid = {
 	VAL_northern_aid_arms = {
 		icon = generic_army_support
 		allowed = { tag = VAL }
-		targets = { YPR COF TFF STS STP }
+		targets = { YPR COF TFF }
 		target_trigger = { FROM = { exists = yes } }
-		visible = { check_variable = { var = VAL_northern_aid_state value = 1 compare = equals } FROM = { VAL_northern_aid_recipient = yes } }
-		available = { has_capitulated = no is_subject = no NOT = { has_equipment = { infantry_equipment < 2500 } } }
+		visible = { VAL_northern_aid_deliveries_open = yes FROM = { VAL_northern_aid_recipient = yes } }
+		available = { has_capitulated = no is_subject = no NOT = { has_equipment = { infantry_equipment < 25000 } } }
 		custom_cost_text = VAL_aid_cost_arms
-		custom_cost_trigger = { NOT = { has_equipment = { infantry_equipment < 2500 } } }
+		custom_cost_trigger = { NOT = { has_equipment = { infantry_equipment < 25000 } } }
 		cost = 0
 		days_re_enable = 1
 		complete_effect = {
 			custom_effect_tooltip = VAL_aid_arms_delivery_tt
 			hidden_effect = { VAL_deliver_northern_aid_arms = yes }
 		}
-		ai_will_do = { base = 20 }
+		ai_will_do = { base = 20 modifier = { factor = 0 VAL_northern_aid_sufficient = yes } }
 	}
 
 	VAL_northern_aid_personnel = {
 		icon = generic_army_support
 		allowed = { tag = VAL }
-		targets = { YPR COF TFF STS STP }
+		targets = { YPR COF TFF }
 		target_trigger = { FROM = { exists = yes } }
-		visible = { check_variable = { var = VAL_northern_aid_state value = 1 compare = equals } FROM = { VAL_northern_aid_recipient = yes } }
+		visible = { VAL_northern_aid_deliveries_open = yes FROM = { VAL_northern_aid_recipient = yes } }
 		available = { has_capitulated = no is_subject = no NOT = { has_manpower < 2000 } NOT = { command_power < 25 } }
 		custom_cost_text = VAL_aid_cost_personnel
 		custom_cost_trigger = { NOT = { has_manpower < 2000 } NOT = { command_power < 25 } }
@@ -1895,7 +1923,7 @@ VAL_northern_war_aid = {
 			custom_effect_tooltip = VAL_aid_personnel_delivery_tt
 			hidden_effect = { VAL_deliver_northern_aid_personnel = yes }
 		}
-		ai_will_do = { base = 20 }
+		ai_will_do = { base = 20 modifier = { factor = 0 VAL_northern_aid_sufficient = yes } }
 	}
 
 	VAL_northern_aid_deadline = {

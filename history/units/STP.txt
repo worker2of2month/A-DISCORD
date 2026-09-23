@@ -304,7 +304,7 @@ instant_effect = {
 	add_fuel = 30000
 	add_equipment_to_stockpile = {
 		type = infantry_equipment_0
-		amount = 14000
+		amount = 140000
 		producer = STP
 	}
 	add_equipment_to_stockpile = {

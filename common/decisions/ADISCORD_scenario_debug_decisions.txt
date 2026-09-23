@@ -269,7 +269,7 @@ ADISCORD_scenario_debug_category = {
 			if = {
 				limit = { is_debug = yes is_ai = no }
 				add_manpower = 50000
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = ROOT }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 100000 producer = ROOT }
 			}
 		}
 		ai_will_do = { factor = 0 }

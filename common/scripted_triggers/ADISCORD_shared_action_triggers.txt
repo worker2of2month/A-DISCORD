@@ -21,13 +21,13 @@ ADISCORD_has_campaign_slot = {
 }
 
 ADISCORD_has_2500_infantry_equipment = {
-	has_equipment = { infantry_equipment > 2499 }
+	NOT = { has_equipment = { infantry_equipment < 25000 } }
 }
 
 ADISCORD_has_4000_infantry_equipment = {
-	has_equipment = { infantry_equipment > 3999 }
+	NOT = { has_equipment = { infantry_equipment < 40000 } }
 }
 
 ADISCORD_has_5000_infantry_equipment = {
-	has_equipment = { infantry_equipment > 4999 }
+	NOT = { has_equipment = { infantry_equipment < 50000 } }
 }

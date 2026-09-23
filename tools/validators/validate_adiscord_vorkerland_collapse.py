@@ -2677,8 +2677,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"WRK subject-spirit synchronizer is missing {token}")
 
     for patron, flag, spirit, rifles in (
-        ("btl", "ADISCORD_vorkerland_btl_contract_signed", "ADISCORD_vorkerland_btl_contract_support", 250),
-        ("val", "ADISCORD_vorkerland_val_contract_signed", "ADISCORD_vorkerland_val_contract_support", 400),
+        ("btl", "ADISCORD_vorkerland_btl_contract_signed", "ADISCORD_vorkerland_btl_contract_support", 2500),
+        ("val", "ADISCORD_vorkerland_val_contract_signed", "ADISCORD_vorkerland_val_contract_support", 4000),
     ):
         if not named_block(ideas, spirit):
             issues.append(f"{patron.upper()}: support spirit {spirit} is missing")
@@ -3128,9 +3128,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         ):
             issues.append(f"WKR: {technology} must be granted before aircraft and air OOB materialize")
     legacy_reserves = {
-        "ZAO": (4000, 850), "PWR": (8000, 1600), "VLA": (8000, 1800),
-        "NAM": (8000, 1600),
-        "ROM": (10000, 1800), "SOL": (3000, 500), "TRU": (11000, 2000),
+        "ZAO": (4000, 8500), "PWR": (8000, 16000), "VLA": (8000, 18000),
+        "NAM": (8000, 16000),
+        "ROM": (10000, 18000), "SOL": (3000, 5000), "TRU": (11000, 20000),
     }
     for tag, (manpower, rifles) in legacy_reserves.items():
         country = named_block(initial, tag)
@@ -3160,9 +3160,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"{tag} must start with exactly {divisions} militia divisions")
 
     central_minor_reserves = {
-        "EYR": (6500, 800), "EGC": (5500, 650), "RIV": (7000, 850),
-        "REV": (5500, 650), "YOR": (5500, 650), "NDN": (4500, 550),
-        "SWB": (4500, 550), "VHV": (5500, 650), "OSV": (4500, 550),
+        "EYR": (6500, 8000), "EGC": (5500, 6500), "RIV": (7000, 8500),
+        "REV": (5500, 6500), "YOR": (5500, 6500), "NDN": (4500, 5500),
+        "SWB": (4500, 5500), "VHV": (5500, 6500), "OSV": (4500, 5500),
     }
     for tag, (manpower, rifles) in central_minor_reserves.items():
         setup = named_block(effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")

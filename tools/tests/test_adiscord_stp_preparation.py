@@ -233,7 +233,7 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertFalse(matches_conditions(block(focus, "available"), {}))
             self.assertTrue(matches_conditions(block(focus, "available"), {("STP", "has_war_with", "STP"): True}))
         depots = block(focuses["STP_cw_open_local_depots"], "completion_reward")
-        self.assertEqual(scalar(block(depots, "add_equipment_to_stockpile"), "amount"), "8000")
+        self.assertEqual(scalar(block(depots, "add_equipment_to_stockpile"), "amount"), "80000")
         self.assertNotIn("prerequisite", {e.key for e in focuses["STP_cw_open_local_depots"]})
         fund = block(focuses["STP_cw_war_fund"], "completion_reward")
         self.assertEqual(scalar(fund, "STP_receive_6000"), "yes")
@@ -450,7 +450,7 @@ class StelanderPreparationTests(unittest.TestCase):
     def test_kefreyt_delivery_requires_every_full_price_and_preserves_fractional_boundaries(self):
         condition = block(entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
                           "STP_cw_can_fund_kefreyt_volunteers")
-        prices = {"infantry_equipment": 1830, "ADISCORD_squad_weapons_equipment": 144,
+        prices = {"infantry_equipment": 21330, "ADISCORD_squad_weapons_equipment": 144,
                   "support_equipment": 90, "artillery_equipment": 180, "anti_air_equipment": 60}
         facts = {("VAL", "equipment", key): value for key, value in prices.items()}
         facts[("VAL", "numeric", "has_manpower")] = 23700
@@ -761,12 +761,12 @@ class StelanderPreparationTests(unittest.TestCase):
                              if isinstance(e.value, list) and any(d.key == "STP_cw_raise_territorial_brigade" for d in e.value))
         recruitment = block(block(war_decisions, "STP_cw_raise_territorial_brigade"), "available")
         for tag, state in (("STP", "28"), ("STS", "1"), ("SRP", "43")):
-            resources = {(tag, "numeric", "has_manpower"): 6000, (tag, "equipment", "infantry_equipment"): 600,
+            resources = {(tag, "numeric", "has_manpower"): 6000, (tag, "equipment", "infantry_equipment"): 6000,
                          (tag, "owns_state", state): True, (tag, "controls_state", state): True}
             self.assertFalse(matches_conditions(recruitment, resources, tag))
             unlocked = {**resources, (tag, "has_completed_focus", "STP_cw_mobilization_register"): True}
             self.assertTrue(matches_conditions(recruitment, unlocked, tag))
-            self.assertEqual(matches_conditions(recruitment, {**unlocked, (tag, "equipment", "infantry_equipment"): 599.5}, tag),
+            self.assertEqual(matches_conditions(recruitment, {**unlocked, (tag, "equipment", "infantry_equipment"): 5399.5}, tag),
                              tag == "STS", "only Shabrat recruits wartime volunteers for political power")
         for marker, focus in marker_focus.items():
             with self.subTest(marker=marker):
@@ -1020,16 +1020,16 @@ class StelanderPreparationTests(unittest.TestCase):
         facts = {("STP", "STP_cw_preparation_open", "yes"): True,
                  ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True,
                  ("STP", "has_active_mission", "STP_cw_election_window"): True}
-        for focus_id, price in (("STP_cw_abila_reserve", 16000),):
+        for focus_id, price in (("STP_cw_abila_reserve", 160000),):
             available = block(focuses[focus_id], "available")
             for stock in (price - 1, price - 0.5, price - 0.001, price, price + 0.5):
                 with self.subTest(focus=focus_id, stock=stock):
                     self.assertEqual(matches_conditions(available, {
                         **facts, ("STP", "equipment", "infantry_equipment"): stock,
                     }), stock >= price)
-            for pending in (0, 16000):
+            for pending in (0, 160000):
                 for delta in (-0.5, 0, 0.5):
-                    cached = 96000 - price - pending + delta
+                    cached = 960000 - price - pending + delta
                     scenario = {**facts, ("STP", "equipment", "infantry_equipment"): price,
                                 ("1", "variable", "STP_cw_cached_rifles"): cached,
                                 ("1", "has_variable", "STP_cw_pending_rifles"): bool(pending),
@@ -1065,7 +1065,7 @@ class StelanderPreparationTests(unittest.TestCase):
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         facts = {("STP", "STP_cw_preparation_open", "yes"): True,
                  ("STP", "has_country_flag", "STP_sided_with_Maksim_flag"): True,
-                 ("STP", "equipment", "infantry_equipment"): 20000}
+                 ("STP", "equipment", "infantry_equipment"): 200000}
         specs = {"STP_cw_warehouse_inventory": 28, "STP_cw_abila_reserve": 14,
                  "STP_cw_expose_the_cabinet": 21, "STP_cw_buy_silence": 21}
         for focus_id, duration in specs.items():
@@ -1085,7 +1085,7 @@ class StelanderPreparationTests(unittest.TestCase):
         for name in ("STP_cw_district_printing", "STP_The_Silent_Mountain_March", "STP_THE_MOUNTAIN_WINDOW"):
             self.assertFalse(any(e.key == "has_active_mission" and e.value == "STP_cw_election_window"
                                  for e in walk(block(focuses[name], "available"))))
-        for name, price in (("STP_cw_abila_reserve", 16000),):
+        for name, price in (("STP_cw_abila_reserve", 160000),):
             reward = block(focuses[name], "completion_reward")
             payments = [e.value for e in walk(reward) if e.key == "set_temp_variable"
                         and scalar(e.value, "var") == "STP_cw_rifle_cost"]
@@ -1225,7 +1225,7 @@ class StelanderPreparationTests(unittest.TestCase):
                         self.assertEqual(unavailable, shown.replace("§Y", "§R"))
                         expected = [("£political_power_texticon", "40")]
                         if tag != "STS":
-                            expected += [("£manpower_texticon", "12000"), ("£infantry_equipment_texticon", "1200")]
+                            expected += [("£manpower_texticon", "12000"), ("£infantry_equipment_texticon", "10800")]
                         self.assertEqual(re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", shown), expected)
                         self.assertEqual(re.findall(r"(£\w+)\s+§Y([0-9.]+)§!", hover), expected)
                     continue
@@ -1253,7 +1253,7 @@ class StelanderPreparationTests(unittest.TestCase):
         decisions = entries("common/decisions/ADISCORD_STP_decisions.txt")
         actions = {entry.key: entry.value for category in decisions for entry in category.value
                    if isinstance(entry.value, list)}
-        for price in (16000, 2400, 240):
+        for price in (160000, 24000, 2400):
             # Cover every consuming decision, including multiple purchases at one price.
             guards = [entry for action in actions.values() for entry in walk(action)
                       if entry.key == "has_equipment"
@@ -1434,8 +1434,8 @@ class StelanderPreparationTests(unittest.TestCase):
     def test_paid_brigades_require_control_and_full_fractional_resource_prices(self):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         condition = block(block(block(effects, "STP_cw_mobilize_brigade"), "if"), "limit")
-        for rifles, people, controlled, expected in ((600, 6000, True, True), (599.5, 6000, True, False),
-                                                     (600, 5999.5, True, False), (600, 6000, False, False)):
+        for rifles, people, controlled, expected in ((5400, 6000, True, True), (5399.5, 6000, True, False),
+                                                     (5400, 5999.5, True, False), (5400, 6000, False, False)):
             facts = {("STS", "equipment", "infantry_equipment"): rifles,
                      ("STS", "numeric", "has_manpower"): people,
                      ("STS", "owns_state", "1"): True,
@@ -2671,30 +2671,30 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertFalse(matches_conditions(block(cache, "visible"), facts))
         facts[("STP", "has_active_mission", "STP_cw_election_window")] = True
         self.assertTrue(matches_conditions(block(cache, "visible"), facts))
-        for stock in (15999.5, 16000):
-            for cached in (79999.5, 80000, 80000.5):
+        for stock in (159999.5, 160000):
+            for cached in (799999.5, 800000, 800000.5):
                 for pending in (False, True):
                     case = {**facts, ("STP", "equipment", "infantry_equipment"): stock,
                             ("1", "variable", "STP_cw_cached_rifles"): cached,
                             ("1", "has_variable", "STP_cw_pending_rifles"): pending}
-                    expected = stock >= 16000 and cached <= 80000 and not pending
+                    expected = stock >= 160000 and cached <= 800000 and not pending
                     with self.subTest(stock=stock, cached=cached, pending=pending):
                         self.assertEqual(matches_conditions(block(cache, "available"), case), expected)
                         selected = [e for _, e in selected_effects(block(cache, "complete_effect"), case)]
                         self.assertEqual(any(e.key == "STP_cw_pay_rifles" for e in selected), expected)
         for paid in (False, True):
-            case = {**facts, ("STP", "equipment", "infantry_equipment"): 16000,
+            case = {**facts, ("STP", "equipment", "infantry_equipment"): 160000,
                     ("STP", "has_country_flag", "STP_cw_rifles_paid"): paid}
             effects = [e for _, e in selected_effects(block(cache, "complete_effect"), case)]
             ledger = [e.value for e in effects if e.key == "set_variable"
                       and scalar(e.value, "var") == "STP_cw_pending_rifles"]
-            self.assertEqual([int(scalar(e, "value")) for e in ledger], [16000] if paid else [])
+            self.assertEqual([int(scalar(e, "value")) for e in ledger], [160000] if paid else [])
             self.assertEqual(any(e.key == "STP_political_action_slot_consume" for e in effects), paid)
 
     def test_national_cache_delivery_requires_time_and_capacity_or_refunds_the_payer(self):
         cache = block(block(entries("common/decisions/ADISCORD_STP_decisions.txt"),
                             "STP_battle_for_stelander"), "STP_cw_prepare_rifle_cache")
-        for active, cached, pending in ((True, 80000, True), (True, 80000.5, True),
+        for active, cached, pending in ((True, 800000, True), (True, 800000.5, True),
                                        (False, 0, True), (False, 0, False)):
             facts = {("STP", "has_country_flag", "STP_battle_for_stelander_active"): active,
                      ("STP", "has_active_mission", "STP_cw_election_window"): active,
@@ -2707,7 +2707,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 credits = [(scope, e) for scope, e in selected if e.key == "add_to_variable"
                            and scalar(e.value, "var") == "STP_cw_cached_rifles"]
                 refunds = [(scope, e) for scope, e in selected if e.key == "add_equipment_to_stockpile"]
-                delivered = active and cached <= 80000 and pending
+                delivered = active and cached <= 800000 and pending
                 self.assertEqual(len(credits), int(delivered))
                 self.assertEqual([scope for scope, _ in refunds], ["STP"] if pending and not delivered else [])
                 self.assertEqual(sum(e.key == "clear_variable" and e.value == "STP_cw_pending_rifles"
@@ -3215,7 +3215,7 @@ class StelanderPreparationTests(unittest.TestCase):
             need = block(definition, "need")
             self.assertEqual({item.key for item in need}, {"infantry_equipment"}, "mobilization price omits an equipment type")
             rifles += int(scalar(need, "infantry_equipment"))
-        self.assertEqual((manpower, rifles), (6000, 600))
+        self.assertEqual((manpower, rifles), (6000, 5400))
 
     def test_death_opens_elections_without_directly_starting_war(self):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
@@ -3338,7 +3338,7 @@ class StelanderPreparationTests(unittest.TestCase):
                     if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         for name, position, stock, treasury in (
-            ("STP_cw_seize_vorkerland_stores", ("14", "3"), "1200", None),
+            ("STP_cw_seize_vorkerland_stores", ("14", "3"), "12000", None),
             ("STP_cw_seize_vorkerland_accounts", ("14", "4"), None, "100"),
         ):
             with self.subTest(focus=name):
@@ -3421,7 +3421,7 @@ class StelanderPreparationTests(unittest.TestCase):
                          {"STP_cw_arm_the_north", "STP_cw_border_evidence"})
         arm = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_arm_the_north")
         arm_reward = block(arm, "completion_reward")
-        self.assertEqual(scalar(block(arm_reward, "add_equipment_to_stockpile"), "amount"), "7200")
+        self.assertEqual(scalar(block(arm_reward, "add_equipment_to_stockpile"), "amount"), "72000")
         self.assertEqual(scalar(arm_reward, "add_political_power"), "60")
         dossier = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "STP_cw_northern_dossier")
         dossier_reward = block(dossier, "completion_reward")

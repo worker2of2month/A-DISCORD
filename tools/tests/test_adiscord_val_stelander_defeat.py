@@ -9,6 +9,73 @@ def read(path: str) -> str:
     return (ROOT / path).read_text(encoding="utf-8-sig")
 
 
+class StelanderDominionTests(unittest.TestCase):
+    def evaluate(self, states, facts):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        body = next(e.value for e in parse_clausewitz(read(
+            "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"))
+                    if e.key == "VAL_stelander_dominated")
+        visits = 0
+
+        def evaluate(items, scope="VAL"):
+            def match(entry):
+                nonlocal visits
+                key, value = entry.key, entry.value
+                if key in ("any_state", "any_core_state"):
+                    for state in states:
+                        if key == "any_core_state" and not facts.get((state, "is_core_of", scope), False):
+                            continue
+                        visits += 1
+                        if evaluate(value, state):
+                            return True
+                    return False
+                if key == "NOT":
+                    return not any(evaluate([e], scope) for e in value)
+                if key == "OR":
+                    return any(evaluate([e], scope) for e in value)
+                if key == "AND":
+                    return evaluate(value, scope)
+                if key in ("STP", "STS", "SRP", "VAL"):
+                    return evaluate(value, key)
+                return matches_conditions([entry], facts, scope)
+            return all(match(e) for e in items)
+
+        return evaluate(body), visits
+
+    def test_only_current_cores_are_visited_even_after_stp_disappears(self):
+        facts = {("STP", "exists", "no"): True, ("STS", "exists", "no"): True,
+                 ("999", "is_core_of", "STP"): True,
+                 ("999", "is_owned_by", "VAL"): True,
+                 ("999", "is_controlled_by", "VAL"): True}
+        result, visits = self.evaluate([str(i) for i in range(1, 1000)], facts)
+        self.assertTrue(result)
+        self.assertEqual(visits, 2, "Only the dynamically added core belongs in either scan")
+        facts["999", "is_core_of", "STP"] = False
+        self.assertFalse(self.evaluate(["999"], facts)[0], "An empty core set is not victory")
+
+    def test_ownership_control_subjects_and_republic_exception(self):
+        base = {("STP", "exists", "no"): True, ("STS", "is_subject_of", "VAL"): True,
+                ("1", "is_core_of", "STP"): True}
+        for owner, controller, subject, expected in (
+            ("VAL", "VAL", False, True), ("VAL", "NOD", False, False),
+            ("NKA", "NKA", True, True), ("NKA", "NOD", True, False),
+        ):
+            facts = {**base, ("1", "owner"): owner, ("1", "controller"): controller,
+                     ("1", "is_owned_by", owner): True, ("1", "is_controlled_by", controller): True,
+                     ("NKA", "is_subject_of", "VAL"): subject}
+            with self.subTest(owner=owner, controller=controller):
+                self.assertEqual(self.evaluate(["1"], facts)[0], expected)
+        for state, war, expected in (("29", False, True), ("29", True, False), ("1", False, False)):
+            facts = {**base, (state, "is_core_of", "STP"): True,
+                     (state, "is_core_of", "SRP"): True, (state, "is_owned_by", "SRP"): True,
+                     (state, "is_controlled_by", "SRP"): True, ("SRP", "is_subject", "no"): True,
+                     ("SRP", "has_war_with", "VAL"): war}
+            with self.subTest(state=state, war=war):
+                self.assertEqual(self.evaluate([state], facts)[0], expected)
+        self.assertFalse(self.evaluate(["1"], {**base, ("STS", "is_subject_of", "VAL"): False})[0])
+
+
 class ValStelanderDefeatTests(unittest.TestCase):
     def test_defeat_transition_replaces_solgalov_and_tree(self):
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")

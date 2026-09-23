@@ -51,7 +51,7 @@ ADISCORD_vorkerland_split_external_gate = {
 			ADISCORD_economy_initialize_country = yes
 			load_oob = "KRM"
 			add_manpower = 6000
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 900 producer = KRM }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 9000 producer = KRM }
 		}
 		LMN = {
 			set_capital = { state = 159 }
@@ -65,7 +65,7 @@ ADISCORD_vorkerland_split_external_gate = {
 			ADISCORD_economy_initialize_country = yes
 			load_oob = "LMN"
 			add_manpower = 3500
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 550 producer = LMN }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5500 producer = LMN }
 		}
 	}
 }

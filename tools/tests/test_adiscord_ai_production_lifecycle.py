@@ -66,6 +66,26 @@ def evaluate(nodes: list, context: dict) -> bool:
                               any(nested) if key == "OR" else not any(nested))
             elif key == "has_equipment":
                 values.append(evaluate(value, context["equipment"]))
+            elif key == "stockpile_ratio":
+                fields = {name: val for name, _, val in value}
+                comparison = next(op for name, op, _ in value if name == "ratio")
+                values.append(OPS[comparison](context["stockpile_ratio"][fields["archetype"]],
+                                              float(fields["ratio"])))
+            elif key in ("set_temp_variable", "multiply_temp_variable", "check_variable"):
+                variables = context["variables"]
+                name, op, operand = value[0]
+                number = variables[operand] if operand in variables else float(operand)
+                if key == "set_temp_variable":
+                    variables[name] = number
+                    values.append(True)
+                elif key == "multiply_temp_variable":
+                    variables[name] *= number
+                    values.append(True)
+                else:
+                    values.append(OPS[op](variables[name], number))
+            elif key in context.get("triggers", {}):
+                result = evaluate(context["triggers"][key], context)
+                values.append(result if value == "yes" else not result)
             elif key in ("has_tech", "has_country_flag"):
                 values.append(value in context[key])
             elif key in context:
@@ -110,6 +130,7 @@ class AIProductionLifecycleTests(unittest.TestCase):
             "has_country_flag": {"VAL_cw_volunteers_pending"} if pending else set(),
             "STP_cw_kefreyt_aid_open": aid_open,
             FUNDING: funded,
+            "ADISCORD_ai_rifle_replacement_emergency": False,
             "equipment": {"anti_air_equipment": stock,
                           "ADISCORD_armored_carrier_archetype": stock},
         }
@@ -168,6 +189,133 @@ class AIProductionLifecycleTests(unittest.TestCase):
                         for name, _, nodes in policy if name == "ai_strategy"]
             self.assertEqual(minimums, [{"type": "equipment_production_min_factories_archetype",
                                          "id": "anti_air_equipment", "value": "1"}])
+
+
+class ArmyQualityTests(unittest.TestCase):
+    equipment = ("infantry_equipment", "ADISCORD_squad_weapons_equipment",
+                 "support_equipment", "artillery_equipment")
+
+    def setUp(self):
+        self.triggers = dict((key, value) for key, _, value in parse(
+            (ROOT / "common/scripted_triggers/ADISCORD_scripted_triggers_generic.txt").read_text()))
+        self.policies = parse((AI / "default.txt").read_text())
+        template_text = (ROOT / "common/ai_templates/ADISCORD_land_templates.txt").read_text()
+        self.templates = parse(re.sub(r"\b(?:blocked_for|available_for)\s*=\s*\{[^}]*\}",
+                                      "", template_text))
+
+    def context(self, fill=1.0, reserve=0.2, target=10):
+        return {
+            "variables": {key: value for eq in self.equipment for key, value in (
+                (f"num_target_equipment_in_armies_k@{eq}", target),
+                (f"num_equipment_in_armies_k@{eq}", target * fill))},
+            "stockpile_ratio": {eq: reserve for eq in self.equipment},
+            "triggers": self.triggers, "is_ai": True, "has_capitulated": False,
+            "ADISCORD_economy_ai_is_crisis": False, "has_manpower": 10000,
+            "equipment": {eq: 10000 for eq in self.equipment},
+        }
+
+    def test_recruitment_brake_has_recovery_hysteresis(self):
+        self.assertIn("ADISCORD_ai_rebuild_field_army", [key for key, _, _ in self.policies])
+        policy = child(self.policies, "ADISCORD_ai_rebuild_field_army")
+        for fill, reserve, old, expected in (
+            (.84, .04, False, True), (.85, .04, False, False),
+            (.90, .04, True, True), (.95, .04, True, False),
+            (.70, .10, True, False), (1, .0, False, False)):
+            with self.subTest(fill=fill, reserve=reserve, old=old):
+                self.assertEqual(active(policy, self.context(fill, reserve), old), expected)
+
+    def test_each_basic_equipment_shortage_stops_expansion(self):
+        self.assertIn("ADISCORD_ai_army_needs_replacements", self.triggers)
+        for eq in self.equipment:
+            ctx = self.context()
+            ctx["variables"][f"num_equipment_in_armies_k@{eq}"] = 7
+            ctx["stockpile_ratio"][eq] = 0
+            self.assertTrue(evaluate(self.triggers["ADISCORD_ai_army_needs_replacements"], ctx))
+
+    def test_no_army_does_not_lock_initial_recruitment(self):
+        self.assertIn("ADISCORD_ai_army_needs_replacements", self.triggers)
+        self.assertFalse(evaluate(self.triggers["ADISCORD_ai_army_needs_replacements"],
+                                  self.context(0, 0, 0)))
+
+    def test_first_field_upgrade_preserves_replacements_and_manpower(self):
+        source = child(child(self.templates, "ADISCORD_infantry_templates"),
+                       "ADISCORD_reconstruction_brigade")
+        gate = child(source, "can_upgrade_in_field")
+        self.assertFalse(evaluate(gate, self.context(.7, 0)))
+        self.assertTrue(evaluate(gate, self.context()))
+        ctx = self.context()
+        ctx["has_manpower"] = 2999
+        self.assertFalse(evaluate(gate, ctx))
+
+    def test_infantry_target_chain_starts_with_cheap_design(self):
+        role = child(self.templates, "ADISCORD_infantry_templates")
+        priorities = [float(child(child(role, name), "upgrade_prio")[0][2]) for name in
+                      ("ADISCORD_reconstruction_brigade", "ADISCORD_line_brigade",
+                       "ADISCORD_defensive_line_brigade")]
+        self.assertGreater(priorities[0], priorities[1])
+        self.assertGreater(priorities[1], priorities[2])
+
+    def test_field_readiness_scales_with_army_size(self):
+        for target in (.1, 10, 1000):
+            ctx = self.context(.84, 0, target)
+            self.assertTrue(evaluate(self.triggers["ADISCORD_ai_army_needs_replacements"], ctx))
+            self.assertFalse(evaluate(self.triggers["ADISCORD_ai_can_refit_field_army"], ctx))
+
+    def test_baseline_availability_and_field_upgrade_are_separate_contracts(self):
+        from tools.validators.validate_adiscord_tech_doctrine import ai_force_progression_contract_issues
+        templates = (ROOT / "common/ai_templates/ADISCORD_land_templates.txt").read_text()
+        policies = (AI / "default.txt").read_text()
+        self.assertEqual(ai_force_progression_contract_issues(templates, policies), [])
+        blocked = templates.replace("ADISCORD_reconstruction_brigade = {",
+                                    "ADISCORD_reconstruction_brigade = {\n"
+                                    "enable = { has_equipment = { infantry_equipment > 3000 } }")
+        self.assertIn("AI field baseline must not depend on factories or equipment stock",
+                      ai_force_progression_contract_issues(blocked, policies))
+
+    def test_specialist_chains_do_not_skip_the_source_target(self):
+        for role, source, target in (
+            ("mountaineer", "mountaineer_brigade", "networked_mountaineer_brigade"),
+            ("tank", "tank_battlegroup", "networked_tank_battlegroup")):
+            tree = child(self.templates, f"ADISCORD_{role}_templates")
+            first = child(tree, f"ADISCORD_{source}")
+            last = child(tree, f"ADISCORD_{target}")
+            self.assertGreater(float(child(first, "upgrade_prio")[0][2]),
+                               float(child(last, "upgrade_prio")[0][2]))
+            self.assertIn(("ADISCORD_ai_can_refit_field_army", "=", "yes"),
+                          child(first, "can_upgrade_in_field"))
+
+    def test_simultaneous_land_and_air_floors_leave_rifle_capacity(self):
+        tech = parse((AI / "ADISCORD_technology_doctrine_ai.txt").read_text())
+        names = ("produce_squad_weapons_low_stock", "produce_support_equipment_low_stock",
+                 "produce_artillery_low_stock", "produce_supply_trucks_low_stock",
+                 "limited_air_program", "ai_anti_tank_buffer", "ai_anti_air_buffer",
+                 "ai_platform_battlegroups", "produce_armored_carriers", "ai_heavy_platforms")
+        policies = [child(self.policies + tech, f"ADISCORD_{name}") for name in names]
+        techs = set(re.findall(r"has_tech\s*=\s*(\w+)",
+                              (AI / "default.txt").read_text() +
+                              (AI / "ADISCORD_technology_doctrine_ai.txt").read_text()))
+        stocks = set(re.findall(r"has_equipment\s*=\s*\{\s*(\w+)",
+                               (AI / "default.txt").read_text() +
+                               (AI / "ADISCORD_technology_doctrine_ai.txt").read_text()))
+        for factories in range(1, 21):
+            for emergency in (False, True):
+                ctx = self.context(.7 if emergency else 1, 0)
+                ctx.update({"num_of_military_factories": factories, "num_of_supply_nodes": 1,
+                            "has_tech": techs, "has_war": True, FUNDING: True,
+                            "ADISCORD_economy_ai_is_healthy": True,
+                            "equipment": dict.fromkeys(stocks, 0)})
+                floors = 0
+                for policy in policies:
+                    if active(policy, ctx, True):
+                        for name, _, nodes in policy:
+                            if name == "ai_strategy":
+                                fields = dict((key, val) for key, _, val in nodes)
+                                if fields["type"].startswith("equipment_production_min_factories"):
+                                    floors += int(fields["value"])
+                with self.subTest(factories=factories, emergency=emergency):
+                    self.assertLessEqual(floors, factories - 1)
+                    if emergency:
+                        self.assertLessEqual(floors, 4)
 
 
 if __name__ == "__main__":

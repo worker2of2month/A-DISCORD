@@ -198,12 +198,14 @@ ADISCORD_ai_line_support_production = {
 
 ADISCORD_ai_anti_tank_buffer = {
 	enable = {
+		ADISCORD_ai_rifle_replacement_emergency = no
 		has_tech = ADISCORD_tech_scrap_at_launchers
 		num_of_military_factories > 8
 		has_equipment = { anti_tank_equipment < 300 }
 	}
 	abort = {
 		OR = {
+			ADISCORD_ai_rifle_replacement_emergency = yes
 			num_of_military_factories < 9
 			has_equipment = { anti_tank_equipment > 650 }
 		}
@@ -213,12 +215,14 @@ ADISCORD_ai_anti_tank_buffer = {
 
 ADISCORD_ai_anti_air_buffer = {
 	enable = {
+		ADISCORD_ai_rifle_replacement_emergency = no
 		has_tech = ADISCORD_tech_point_defense_aa
 		num_of_military_factories > 7
 		has_equipment = { anti_air_equipment < 300 }
 	}
 	abort = {
 		OR = {
+			ADISCORD_ai_rifle_replacement_emergency = yes
 			num_of_military_factories < 8
 			has_equipment = { anti_air_equipment > 650 }
 		}
@@ -242,6 +246,7 @@ ADISCORD_ai_assault_reserve = {
 
 ADISCORD_ai_platform_battlegroups = {
 	enable = {
+		ADISCORD_ai_rifle_replacement_emergency = no
 		has_tech = ADISCORD_tech_semi_autonomous_combat_modules
 		num_of_military_factories > 9
 		ADISCORD_economy_ai_can_fund_advanced_forces = yes
@@ -282,6 +287,7 @@ ADISCORD_ai_platform_battlegroups = {
 
 ADISCORD_produce_armored_carriers = {
 	enable = {
+		ADISCORD_ai_rifle_replacement_emergency = no
 		has_tech = ADISCORD_tech_armored_carrier_program
 		num_of_military_factories > 6
 		ADISCORD_economy_ai_can_fund_advanced_forces = yes
@@ -289,6 +295,7 @@ ADISCORD_produce_armored_carriers = {
 	}
 	abort = {
 		OR = {
+			ADISCORD_ai_rifle_replacement_emergency = yes
 			num_of_military_factories < 7
 			ADISCORD_economy_ai_can_fund_advanced_forces = no
 			has_equipment = { ADISCORD_armored_carrier_archetype > 1500 }
@@ -301,6 +308,7 @@ ADISCORD_produce_armored_carriers = {
 
 ADISCORD_ai_heavy_platforms = {
 	enable = {
+		ADISCORD_ai_rifle_replacement_emergency = no
 		has_tech = ADISCORD_tech_heavy_platform_cores
 		num_of_military_factories > 14
 		ADISCORD_economy_ai_is_healthy = yes

@@ -4446,8 +4446,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 "ADISCORD_economy_sum_expenses",
                 "ADISCORD_economy_calculate_monthly_balance",
                 "ADISCORD_economy_calculate_weekly_budget",
-                "ADISCORD_economy_should_show_player_ui",
-                "ADISCORD_economy_refresh_policy_previews",
+                "ADISCORD_economy_refresh_open_window",
                 "ADISCORD_economy_update_gui",
             },
         )
@@ -4867,7 +4866,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "ADISCORD_economy_calculate_expenses = yes",
             "ADISCORD_economy_calculate_monthly_balance = yes",
             "ADISCORD_economy_calculate_weekly_budget = yes",
-            "ADISCORD_economy_refresh_policy_previews = yes",
+            "ADISCORD_economy_refresh_open_window = yes",
         ):
             self.assertIn(required, targeted)
         for forbidden in (
@@ -7038,8 +7037,8 @@ ADISCORD_task10_forbidden_cache_consumer = {
         yearly = block(EFFECTS, "ADISCORD_economy_yearly_update")
         self.assertEqual(yearly.count("ADISCORD_economy_ai_monthly_policy = yes"), 1)
         for pulse in (monthly, yearly):
-            self.assertIn("ADISCORD_economy_should_show_player_ui = yes", pulse)
-            self.assertEqual(pulse.count("ADISCORD_economy_refresh_policy_previews = yes"), 1)
+            self.assertEqual(pulse.count("ADISCORD_economy_refresh_open_window = yes"), 1)
+            self.assertNotIn("ADISCORD_economy_refresh_policy_previews = yes", pulse)
         self.assertIn("ADISCORD_economy_update_monthly_budget_trend = yes", yearly)
         self.assertNotIn("ADISCORD_economy_apply_yearly_balance", EFFECTS)
         self.assertNotIn("ADISCORD_economy_apply_yearly_debt_streaks", EFFECTS)
@@ -7212,7 +7211,8 @@ ADISCORD_task10_forbidden_cache_consumer = {
         ):
             body = block(EFFECTS, scheduled_refresh)
             self.assertIn("ADISCORD_economy_update_model_and_cycle = yes", body)
-            self.assertIn("ADISCORD_economy_recalculate_policy_modifiers = yes", body)
+            graph = reachable_script_blocks((EFFECTS, MODIFIER_EFFECTS), (scheduled_refresh,))
+            self.assertIn("ADISCORD_economy_recalculate_policy_modifiers", graph)
 
     def test_weekly_forecast_has_no_transitive_idea_database_queries(self):
         for hot_effect in (
@@ -8889,7 +8889,7 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
             self.assertLess(pulse.rindex(self.PREFIX + "clamp_all_variables"),
                             pulse.rindex(self.PREFIX + "light_update"))
             self.assertLess(pulse.rindex(self.PREFIX + "light_update"),
-                            pulse.rindex(self.PREFIX + "refresh_policy_previews"))
+                            pulse.rindex(self.PREFIX + "refresh_open_window"))
 
     def test_war_relations_and_monthly_reconciliation_cover_both_participants(self):
         relation = block(ON_ACTIONS, "on_war_relation_added")

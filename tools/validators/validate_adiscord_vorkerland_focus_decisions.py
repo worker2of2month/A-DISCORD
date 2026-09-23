@@ -818,7 +818,8 @@ def collect_issues() -> list[str]:
             "has_war = yes",
             "has_manpower > 2999",
             "has_political_power > 49",
-            "has_equipment = { infantry_equipment > 1499 support_equipment > 149 }",
+            "NOT = { has_equipment = { infantry_equipment < 15000 } }",
+            "NOT = { has_equipment = { support_equipment < 150 } }",
             "days_remove = 5",
             "fire_only_once = no",
             "ai_will_do = { factor = 500",
@@ -854,7 +855,7 @@ def collect_issues() -> list[str]:
             issues.append(f"missing support effect {decision_id}")
             continue
         for cost_line in (
-            "add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }",
+            "add_equipment_to_stockpile = { type = infantry_equipment amount = -3000 }",
             "add_equipment_to_stockpile = { type = support_equipment amount = -30 }",
         ):
             if cost_line not in effect:

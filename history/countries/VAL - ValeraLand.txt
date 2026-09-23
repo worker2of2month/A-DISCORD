@@ -66,12 +66,12 @@ set_research_slots = 3
 
 add_equipment_to_stockpile = {
 	type = infantry_equipment
-	amount = 1500
+	amount = 15000
 	producer = STP
 }
 add_equipment_to_stockpile = {
 	type = infantry_equipment
-	amount = 55000
+	amount = 550000
 	producer = VAL
 }
 

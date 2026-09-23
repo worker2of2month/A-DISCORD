@@ -8,7 +8,7 @@ ideas = {
             cancel = { OR = { has_capitulated = yes CIN = { OR = { exists = no has_capitulated = yes } } has_war_with = CIN } }
             on_add = { ADISCORD_economy_mark_dirty = yes }
             on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_weekly_income = 25 }
+            modifier = { ADISCORD_economy_weekly_income = 5 }
         }
 
         VAL_market_OSF = {
@@ -18,7 +18,7 @@ ideas = {
             cancel = { OR = { has_capitulated = yes OSF = { OR = { exists = no has_capitulated = yes } } has_war_with = OSF } }
             on_add = { ADISCORD_economy_mark_dirty = yes }
             on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_weekly_income = 20 }
+            modifier = { ADISCORD_economy_weekly_income = 8 }
         }
 
         VAL_market_APH = {
@@ -28,7 +28,7 @@ ideas = {
             cancel = { OR = { has_capitulated = yes APH = { OR = { exists = no has_capitulated = yes } } has_war_with = APH } }
             on_add = { ADISCORD_economy_mark_dirty = yes }
             on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_weekly_income = 30 }
+            modifier = { ADISCORD_economy_weekly_income = 2 }
         }
 
         VAL_market_COF = {
@@ -38,7 +38,7 @@ ideas = {
             cancel = { OR = { has_capitulated = yes COF = { OR = { exists = no has_capitulated = yes } } has_war_with = COF } }
             on_add = { ADISCORD_economy_mark_dirty = yes }
             on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_weekly_income = 35 }
+            modifier = { ADISCORD_economy_weekly_income = 10 }
         }
 
         VAL_market_TFF = {
@@ -48,7 +48,7 @@ ideas = {
             cancel = { OR = { has_capitulated = yes TFF = { OR = { exists = no has_capitulated = yes } } has_war_with = TFF } }
             on_add = { ADISCORD_economy_mark_dirty = yes }
             on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_weekly_income = 40 }
+            modifier = { ADISCORD_economy_weekly_income = 12 }
         }
 
         VAL_market_YPR = {
@@ -58,7 +58,7 @@ ideas = {
             cancel = { OR = { has_capitulated = yes YPR = { OR = { exists = no has_capitulated = yes } } has_war_with = YPR } }
             on_add = { ADISCORD_economy_mark_dirty = yes }
             on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_weekly_income = 45 }
+            modifier = { ADISCORD_economy_weekly_income = 15 }
         }
 
         VAL_partner_market_access = {
@@ -68,7 +68,7 @@ ideas = {
             cancel = { OR = { has_capitulated = yes VAL = { OR = { exists = no has_capitulated = yes } } has_war_with = VAL } }
             on_add = { ADISCORD_economy_mark_dirty = yes }
             on_remove = { ADISCORD_economy_mark_dirty = yes }
-            modifier = { ADISCORD_economy_weekly_income = 5 }
+            modifier = { ADISCORD_economy_weekly_income = 1 }
         }
 
 		VAL_armor_serial_production = {
@@ -258,7 +258,7 @@ ideas = {
 			picture = VAL_contract_state
 			allowed = { original_tag = VAL }
 			removal_cost = -1
-			modifier = { ADISCORD_economy_trade_income_factor = 0.05 war_support_factor = 0.05 }
+			modifier = { ADISCORD_economy_trade_income_factor = 0.15 war_support_factor = 0.10 }
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
 		}
 		VAL_northern_aid_failure = {
@@ -286,7 +286,7 @@ ideas = {
 	   		cancel = { OR = { has_war_with = VAL VAL = { exists = no } } }
 	   		on_add = { ADISCORD_economy_mark_dirty = yes }
 	   		on_remove = { ADISCORD_economy_mark_dirty = yes }
-			modifier = { army_org_regain = 0.05 planning_speed = 0.10 experience_gain_army_factor = 0.05 }
+			modifier = { army_org_regain = 0.15 planning_speed = 0.25 experience_gain_army_factor = 0.15 }
 	  }
 
         VAL_frontier_transport_columns = {
@@ -465,6 +465,7 @@ ideas = {
 			removal_cost = -1
 
 			modifier = {
+				ADISCORD_economy_army_expense_factor = 0.25
 				send_volunteer_size = 2
 				army_org_factor = 0.03
 				planning_speed = -0.2

@@ -90,13 +90,16 @@ ADISCORD_territorial_templates = {
 ADISCORD_infantry_templates = {
 	blocked_for = { EXZ }
 	role = infantry
-	upgrade_prio = { base = 5 }
+	upgrade_prio = { base = 12 }
 
-
+	# Keep the source target first; replace_with advances the existing army.
 	ADISCORD_reconstruction_brigade = {
 		reinforce_prio = 1
-		upgrade_prio = { base = 5 }
-		can_upgrade_in_field = { always = yes }
+		upgrade_prio = { base = 12 }
+		can_upgrade_in_field = {
+			ADISCORD_ai_can_refit_field_army = yes
+			NOT = { has_equipment = { artillery_equipment < 140 } }
+		}
 		target_min_match = 0.65
 		target_template = { regiments = { infantry = 6 } }
 		replace_at_match = 0.95
@@ -108,9 +111,13 @@ ADISCORD_infantry_templates = {
 			is_ai = yes
 		}
 		reinforce_prio = 1
-		upgrade_prio = { base = 6 }
+		upgrade_prio = { base = 10 }
 		can_upgrade_in_field = {
-			has_equipment = { artillery_equipment > 140 }
+			ADISCORD_ai_can_refit_field_army = yes
+			has_equipment = { support_equipment > 1300 }
+			has_equipment = { artillery_equipment > 750 }
+			has_equipment = { anti_tank_equipment > 240 }
+			has_equipment = { anti_air_equipment > 240 }
 		}
 		target_min_match = 0.75
 		target_template = {
@@ -231,8 +238,12 @@ ADISCORD_mountaineer_templates = {
 			NOT = { ADISCORD_economy_ai_is_crisis = yes }
 			has_equipment = { support_equipment > 400 }
 		}
-		upgrade_prio = { base = 2 }
-		can_upgrade_in_field = { has_equipment = { support_equipment > 600 } }
+		upgrade_prio = { base = 6 }
+		can_upgrade_in_field = {
+			ADISCORD_ai_can_refit_field_army = yes
+			has_equipment = { support_equipment > 1400 }
+			has_equipment = { artillery_equipment > 600 }
+		}
 		target_template = {
 			support = { engineer = 1 artillery = 1 }
 			regiments = { mountaineers = 6 }
@@ -321,11 +332,14 @@ ADISCORD_tank_templates = {
 			has_equipment = { ADISCORD_armored_carrier_archetype > 260 }
 		}
 		reinforce_prio = 2
-		upgrade_prio = { base = 8 }
+		upgrade_prio = { base = 11 }
 		can_upgrade_in_field = {
+			ADISCORD_ai_can_refit_field_army = yes
 			NOT = { ADISCORD_economy_ai_is_crisis = yes }
-			has_equipment = { ADISCORD_combat_platform_archetype > 300 }
-			has_equipment = { ADISCORD_armored_carrier_archetype > 400 }
+			has_equipment = { ADISCORD_combat_platform_archetype > 440 }
+			has_equipment = { ADISCORD_armored_carrier_archetype > 480 }
+			has_equipment = { ADISCORD_recovery_platform_archetype > 40 }
+			has_equipment = { support_equipment > 600 }
 		}
 		target_template = {
 			support = { engineer = 1 ADISCORD_recon_platform = 1 maintenance_company = 1 }

@@ -35,7 +35,7 @@ add_ideas = {
 
 add_equipment_to_stockpile = {
 	type = infantry_equipment
-	amount = 700
+	amount = 7000
 	producer = OSF
 }
 

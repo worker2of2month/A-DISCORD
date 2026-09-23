@@ -238,7 +238,7 @@ defined_text = {
 defined_text = {
 	name = VALGetNorthernAidRecipient
 	text = {
-		trigger = { has_variable = VAL_northern_aid_state NOT = { check_variable = { var = VAL_northern_aid_state value = 3 compare = equals } } country_exists = event_target:VAL_northern_aid_partner }
+		trigger = { has_variable = VAL_northern_aid_state }
 		localization_key = VAL_AID_NORTHERN_PARTNER
 	}
 	text = { localization_key = VAL_AID_SIDE_NONE }
@@ -303,3 +303,322 @@ defined_text = {
  text = { localization_key = VAL_trade_not_upgraded }
 }
 
+defined_text = {
+ name = VALMenuPartnerName
+ text = { trigger = { has_event_target = VAL_contract_partner } localization_key = VAL_menu_partner_named }
+ text = { localization_key = VAL_menu_partner_selected }
+}
+
+
+defined_text = {
+ name = VALMarketQuoteIncome
+ text = { trigger = { event_target:VAL_contract_partner = { tag = CIN } } localization_key = VAL_market_quote_5 }
+ text = { trigger = { event_target:VAL_contract_partner = { tag = OSF } } localization_key = VAL_market_quote_8 }
+ text = { trigger = { event_target:VAL_contract_partner = { tag = APH } } localization_key = VAL_market_quote_2 }
+ text = { trigger = { event_target:VAL_contract_partner = { tag = COF } } localization_key = VAL_market_quote_10 }
+ text = { trigger = { event_target:VAL_contract_partner = { tag = TFF } } localization_key = VAL_market_quote_12 }
+ text = { trigger = { event_target:VAL_contract_partner = { tag = YPR } } localization_key = VAL_market_quote_15 }
+ text = { localization_key = VAL_market_quote_none }
+}
+
+defined_text = {
+ name = VALOrderMenuStatus
+ text = { trigger = { has_political_power < 100 } localization_key = VAL_quarterly_need_pp }
+ text = { trigger = { event_target:VAL_contract_partner = { has_country_flag = VAL_quarterly_supply_active } } localization_key = VAL_quarterly_already_signed }
+ text = { trigger = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } } localization_key = VAL_orders_locked_focus }
+ text = { trigger = { event_target:VAL_contract_partner = { OR = { tag = NAM tag = EFL } } } localization_key = VAL_orders_no_destination }
+ text = { trigger = { event_target:VAL_contract_partner = { NOT = { VAL_order_partner_valid = yes } } } localization_key = VAL_orders_invalid_partner }
+ text = { trigger = { event_target:VAL_contract_partner = { NOT = { VAL_order_partner_route_open = yes } } } localization_key = VAL_orders_closed_route }
+ text = { trigger = { NOT = { VAL_order_debts_settled = yes } } localization_key = VAL_orders_refund_first }
+ text = { trigger = { NOT = { VAL_order_slot_free = yes } } localization_key = VAL_orders_no_slot }
+ text = { trigger = { NOT = { VAL_partner_desk_free = yes } } localization_key = VAL_orders_pending_reply }
+ text = { trigger = { event_target:VAL_contract_partner = { has_country_flag = VAL_partner_contact_cooldown } } localization_key = VAL_orders_cooldown }
+ text = { localization_key = VAL_orders_ready }
+}
+
+defined_text = {
+ name = VALOrder1Cycle
+ text = { trigger = { NOT = { has_country_flag = VAL_order_1_quarterly } } localization_key = VAL_order_1_legacy_cycle }
+ text = { trigger = { has_country_flag = VAL_order_1_quarter_paid } localization_key = VAL_order_1_paid_cycle }
+ text = { trigger = { has_country_flag = VAL_order_1_grace_used } localization_key = VAL_order_1_grace_cycle }
+ text = { localization_key = VAL_order_1_active_cycle }
+}
+
+defined_text = {
+ name = VALOrder2Cycle
+ text = { trigger = { NOT = { has_country_flag = VAL_order_2_quarterly } } localization_key = VAL_order_2_legacy_cycle }
+ text = { trigger = { has_country_flag = VAL_order_2_quarter_paid } localization_key = VAL_order_2_paid_cycle }
+ text = { trigger = { has_country_flag = VAL_order_2_grace_used } localization_key = VAL_order_2_grace_cycle }
+ text = { localization_key = VAL_order_2_active_cycle }
+}
+
+defined_text = {
+ name = VALOrderOfferArmsTerms
+ text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_arms_desc }
+ text = { localization_key = VAL_order_offer_arms_legacy_desc }
+}
+
+defined_text = {
+ name = VALOrderOfferBulkTerms
+ text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_bulk_desc }
+ text = { localization_key = VAL_order_offer_bulk_legacy_desc }
+}
+
+defined_text = {
+ name = VALOrderOfferArsenalTerms
+ text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_arsenal_desc }
+ text = { localization_key = VAL_order_offer_arsenal_legacy_desc }
+}
+
+defined_text = {
+ name = VALOrderOfferStrategicTerms
+ text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_strategic_desc }
+ text = { localization_key = VAL_order_offer_strategic_legacy_desc }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_negotiate_efl_metals
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = EFL } has_completed_focus = VAL_Resource_War_Contracts VAL_efl_concession_negotiable = yes NOT = { has_political_power < 50 } NOT = { has_country_flag = VAL_efl_concession_offer_pending } }  } localization_key = VAL_offer_blocked_concessions }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_negotiate_nam_metals
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = NAM } has_completed_focus = VAL_Resource_War_Contracts VAL_nam_concession_negotiable = yes NOT = { has_political_power < 50 } NOT = { has_country_flag = VAL_nam_concession_offer_pending } }  } localization_key = VAL_offer_blocked_concessions }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_menu_advisors
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers
+  NOT = { has_political_power < 30 } NOT = { command_power < 25 }
+  NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
+  NOT = { has_country_flag = VAL_military_offer_pending }
+  VAL_partner_desk_free = yes
+  event_target:VAL_contract_partner = { VAL_export_customer = yes has_war = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_idea = VAL_paid_military_advisors } NOT = { has_country_flag = VAL_export_customer_cooldown } } }  } localization_key = VAL_offer_blocked_advisors }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_military_offer_3
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes  } }  } localization_key = VAL_offer_blocked_military }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_offer_order_strategic
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Strategic_Arms_Exports event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_offer_order_arsenal
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Army_Arsenal_Orders event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_partner_strategic
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_strategic_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_partner_arsenal
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arsenal_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_offer_transit_charter
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }  } localization_key = VAL_offer_blocked_reply }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_partner_hire
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_hire_can_offer = yes } }  } localization_key = VAL_offer_blocked_hire }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+
+
+defined_text = {
+ name = VALOfferStatus_VAL_aid_wrk_support
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = WRK } has_completed_focus = VAL_Operational_Directorate VAL_can_aid_vorkerland = yes NOT = { has_country_flag = VAL_wrk_gift_cooldown } NOT = { has_political_power < 30 } NOT = { has_equipment = { support_equipment < 100 } } }  } localization_key = VAL_offer_blocked_gifts }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_aid_wrk_rifles
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = WRK } has_completed_focus = VAL_Operational_Directorate VAL_can_aid_vorkerland = yes NOT = { has_country_flag = VAL_wrk_gift_cooldown } NOT = { has_political_power < 30 } NOT = { has_equipment = { infantry_equipment < 10000 } } }  } localization_key = VAL_offer_blocked_gifts }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_military_offer_2
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes any_owned_state = { NOT = { is_controlled_by = event_target:VAL_contract_partner } controller = { has_war_with = event_target:VAL_contract_partner } } } }  } localization_key = VAL_offer_blocked_military }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_military_offer_1
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes  } }  } localization_key = VAL_offer_blocked_military }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_offer_order_bulk
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Bulk_Arms_Contracts event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_offer_order_arms
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Foreign_Broker_Licences event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_partner_bulk
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_bulk_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferStatus_VAL_partner_arms
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
+ text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_negotiate_efl_metals
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = EFL } has_completed_focus = VAL_Resource_War_Contracts VAL_efl_concession_negotiable = yes NOT = { has_political_power < 50 } NOT = { has_country_flag = VAL_efl_concession_offer_pending } }  } localization_key = VAL_offer_button_blocked_VAL_negotiate_efl_metals }
+ text = { localization_key = VAL_negotiate_efl_metals }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_negotiate_nam_metals
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = NAM } has_completed_focus = VAL_Resource_War_Contracts VAL_nam_concession_negotiable = yes NOT = { has_political_power < 50 } NOT = { has_country_flag = VAL_nam_concession_offer_pending } }  } localization_key = VAL_offer_button_blocked_VAL_negotiate_nam_metals }
+ text = { localization_key = VAL_negotiate_nam_metals }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_menu_advisors
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers
+  NOT = { has_political_power < 30 } NOT = { command_power < 25 }
+  NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
+  NOT = { has_country_flag = VAL_military_offer_pending }
+  VAL_partner_desk_free = yes
+  event_target:VAL_contract_partner = { VAL_export_customer = yes has_war = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_idea = VAL_paid_military_advisors } NOT = { has_country_flag = VAL_export_customer_cooldown } } }  } localization_key = VAL_offer_button_blocked_VAL_menu_advisors }
+ text = { localization_key = VAL_menu_advisors }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_military_offer_3
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes  } }  } localization_key = VAL_offer_button_blocked_VAL_military_offer_3 }
+ text = { localization_key = VAL_military_offer_3 }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_offer_order_strategic
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Strategic_Arms_Exports event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_order_strategic }
+ text = { localization_key = VAL_offer_order_strategic }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_offer_order_arsenal
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Army_Arsenal_Orders event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_order_arsenal }
+ text = { localization_key = VAL_offer_order_arsenal }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_partner_strategic
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_strategic_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_strategic }
+ text = { localization_key = VAL_partner_strategic }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_partner_arsenal
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arsenal_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_arsenal }
+ text = { localization_key = VAL_partner_arsenal }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_offer_transit_charter
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_transit_charter }
+ text = { localization_key = VAL_offer_transit_charter }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_partner_hire
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_hire_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_hire }
+ text = { localization_key = VAL_partner_hire }
+}
+
+
+
+defined_text = {
+ name = VALOfferButton_VAL_aid_wrk_support
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = WRK } has_completed_focus = VAL_Operational_Directorate VAL_can_aid_vorkerland = yes NOT = { has_country_flag = VAL_wrk_gift_cooldown } NOT = { has_political_power < 30 } NOT = { has_equipment = { support_equipment < 100 } } }  } localization_key = VAL_offer_button_blocked_VAL_aid_wrk_support }
+ text = { localization_key = VAL_aid_wrk_support }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_aid_wrk_rifles
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = WRK } has_completed_focus = VAL_Operational_Directorate VAL_can_aid_vorkerland = yes NOT = { has_country_flag = VAL_wrk_gift_cooldown } NOT = { has_political_power < 30 } NOT = { has_equipment = { infantry_equipment < 10000 } } }  } localization_key = VAL_offer_button_blocked_VAL_aid_wrk_rifles }
+ text = { localization_key = VAL_aid_wrk_rifles }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_military_offer_2
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes any_owned_state = { NOT = { is_controlled_by = event_target:VAL_contract_partner } controller = { has_war_with = event_target:VAL_contract_partner } } } }  } localization_key = VAL_offer_button_blocked_VAL_military_offer_2 }
+ text = { localization_key = VAL_military_offer_2 }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_military_offer_1
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes  } }  } localization_key = VAL_offer_button_blocked_VAL_military_offer_1 }
+ text = { localization_key = VAL_military_offer_1 }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_offer_order_bulk
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Bulk_Arms_Contracts event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_order_bulk }
+ text = { localization_key = VAL_offer_order_bulk }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_offer_order_arms
+ text = { trigger = {  NOT = { has_completed_focus = VAL_Foreign_Broker_Licences event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_order_arms }
+ text = { localization_key = VAL_offer_order_arms }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_partner_bulk
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_bulk_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_bulk }
+ text = { localization_key = VAL_partner_bulk }
+}
+
+defined_text = {
+ name = VALOfferButton_VAL_partner_arms
+ text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_arms }
+ text = { localization_key = VAL_partner_arms }
+}
+
+defined_text = {
+ name = VALTradeDecisionIncome
+ text = { trigger = { FROM = { tag = CIN } } localization_key = VAL_market_quote_5 }
+ text = { trigger = { FROM = { tag = OSF } } localization_key = VAL_market_quote_8 }
+ text = { trigger = { FROM = { tag = APH } } localization_key = VAL_market_quote_2 }
+ text = { trigger = { FROM = { tag = COF } } localization_key = VAL_market_quote_10 }
+ text = { trigger = { FROM = { tag = TFF } } localization_key = VAL_market_quote_12 }
+ text = { trigger = { FROM = { tag = YPR } } localization_key = VAL_market_quote_15 }
+ text = { localization_key = VAL_market_quote_none }
+}
+
+defined_text = {
+ name = VALTradeFeeTerms
+ text = { trigger = { has_country_flag = VAL_trade_fee_paid } localization_key = VAL_trade_fee_prepaid }
+ text = { localization_key = VAL_trade_fee_legacy }
+}

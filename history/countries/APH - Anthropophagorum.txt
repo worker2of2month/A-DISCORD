@@ -37,7 +37,7 @@ add_ideas = {
 
 add_equipment_to_stockpile = {
 	type = infantry_equipment
-	amount = 16000
+	amount = 160000
 	producer = APH
 }
 

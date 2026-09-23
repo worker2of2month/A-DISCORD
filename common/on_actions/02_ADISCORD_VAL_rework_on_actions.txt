@@ -15,8 +15,10 @@ on_actions = {
 			if = {
 				limit = { VAL = { exists = yes } }
 				VAL = {
+					VAL_restore_fulfilled_northern_aid = yes
 					# Rebuild the persistent consumer on every load. The initializer preserves
 					# an existing authority value and only defaults it when it is absent.
+					VAL_migrate_market_years = yes
 					VAL_initialize_contract_authority = yes
 					VAL_initialize_command_balance = yes
 					VAL_initialize_arsenal_recovery = yes
@@ -119,7 +121,7 @@ on_actions = {
 						NOT = { ADISCORD_has_4000_infantry_equipment = yes }
 						NOT = { has_country_flag = VAL_ai_emergency_quartermaster_used }
 					}
-					add_equipment_to_stockpile = { type = infantry_equipment amount = 800 producer = VAL }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 8000 producer = VAL }
 					set_country_flag = VAL_ai_emergency_quartermaster_used
 				}
 			}

@@ -26,4 +26,58 @@ spriteTypes = {
 		name = "GFX_idea_tot_economic_mobilisation"
 		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_6_total_mobilization.png"
 	}
+
+	# Generic advisor aliases load after vanilla ideas.gfx.
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_europe_1"
+		texturefile = "gfx/interface/ideas/minister_generic_01.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_europe_2"
+		texturefile = "gfx/interface/ideas/minister_generic_02.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_europe_3"
+		texturefile = "gfx/interface/ideas/minister_generic_03.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_europe_4"
+		texturefile = "gfx/interface/ideas/minister_generic_04.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_europe_5"
+		texturefile = "gfx/interface/ideas/minister_generic_05.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_europe_6"
+		texturefile = "gfx/interface/ideas/minister_generic_06.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_south_america_1"
+		texturefile = "gfx/interface/ideas/minister_generic_07.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_south_america_2"
+		texturefile = "gfx/interface/ideas/minister_generic_01.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_asia_1"
+		texturefile = "gfx/interface/ideas/minister_generic_02.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_asia_2"
+		texturefile = "gfx/interface/ideas/minister_generic_03.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_arab_1"
+		texturefile = "gfx/interface/ideas/minister_generic_04.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_arab_2"
+		texturefile = "gfx/interface/ideas/minister_generic_05.png"
+	}
+	spriteType = {
+		name = "GFX_idea_generic_political_advisor_arab_3"
+		texturefile = "gfx/interface/ideas/minister_generic_06.png"
+	}
 }

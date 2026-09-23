@@ -817,6 +817,7 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_electrothermal_ignition_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
+		scale = 0.363636
 	}
 
 	SpriteType = {
@@ -857,6 +858,7 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_biometric_trigger_locks_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
+		scale = 0.363636
 	}
 
 	SpriteType = {
@@ -926,17 +928,17 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_portable_at_cells_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_04_antitank_rifle.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_squad_02_heavy_machine_guns.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_recoilless_squad_launchers_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_06_recoilless_launcher.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_squad_02_heavy_machine_guns.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_field_ew_units_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_squad_03_optical_fire_support.dds"
 	}
 
 	SpriteType = {
@@ -966,7 +968,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_remote_weapon_tripods_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_squad_01_recovered_fire_support.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_squad_03_optical_fire_support.dds"
 	}
 
 	SpriteType = {
@@ -981,7 +983,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_support_weapons_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_squad_01_recovered_fire_support.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_squad_04_advanced_fire_support.dds"
 	}
 
 	SpriteType = {
@@ -1001,7 +1003,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_robotic_heavy_weapon_teams_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_squad_01_recovered_fire_support.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_squad_04_advanced_fire_support.dds"
 	}
 
 	SpriteType = {
@@ -1011,7 +1013,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_swarm_fireteams_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_squad_01_recovered_fire_support.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_squad_04_advanced_fire_support.dds"
 	}
 
 	SpriteType = {

@@ -100,7 +100,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = WRK }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = WRK }
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wrk_emergency_stores_counted
@@ -150,7 +150,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WRK }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = WRK }
 			army_experience = 3
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
 			hidden_effect = {
@@ -304,7 +304,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_manpower = 250
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WRK }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = WRK }
 			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70 }
 			custom_effect_tooltip = ADISCORD_vorkerland_wrk_preparations_carry_over_tt
 			hidden_effect = {
@@ -434,7 +434,7 @@ focus_tree = {
 		available = { has_global_flag = ADISCORD_vorkerland_phase_prewar }
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = ROOT }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = ROOT }
 			add_command_power = 5
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_depots_distributed
@@ -586,7 +586,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_manpower = 250
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = ROOT }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = ROOT }
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_eastern_mandate days = 140 }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_district_hardline_committed
@@ -877,7 +877,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 35
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -1007,7 +1007,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_supply_commission }
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = WKR }
 			add_political_power = 10
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_supply_commission
@@ -1015,7 +1015,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 60
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -1161,7 +1161,7 @@ focus_tree = {
 				32 = { add_building_construction = { type = arms_factory level = 1 instant_build = yes } }
 			}
 			else = {
-				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = WKR }
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = WKR }
 			}
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_collective_workshops
@@ -1172,7 +1172,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 70
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -1313,13 +1313,13 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 750 producer = WKR }
 			add_stability = -0.005
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_directed_workshops
 			}
 		}
-		ai_will_do = { base = 70 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		ai_will_do = { base = 70 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
 	}
 
 	focus = {
@@ -1458,7 +1458,7 @@ focus_tree = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_interchange_reserves
 			}
 		}
-		ai_will_do = { base = 80 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		ai_will_do = { base = 80 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
 	}
 
 	focus = {
@@ -1728,13 +1728,13 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_factory_groups }
 		completion_reward = {
 			add_manpower = 250
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = WKR }
 			add_timed_idea = { idea = ADISCORD_vorkerland_wkr_rolling_factory_groups days = 70 }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_rolling_factory_groups
 			}
 		}
-		ai_will_do = { base = 130 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		ai_will_do = { base = 130 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
 	}
 
 	focus = {
@@ -2105,7 +2105,7 @@ focus_tree = {
 				limit = { owns_state = 201 controls_state = 201 }
 				201 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
 			}
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = WKR }
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 60 producer = WKR }
 			add_command_power = 5
 			hidden_effect = {
@@ -2115,7 +2115,7 @@ focus_tree = {
 		ai_will_do = {
 			base = 150
 			modifier = { factor = 2 has_war = yes }
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -2938,7 +2938,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 35
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -2981,7 +2981,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 60
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -3019,7 +3019,7 @@ focus_tree = {
 		completion_reward = {
 			add_manpower = 500
 			army_experience = 5
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = VAD }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = VAD }
 			add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = VAD }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_district_guard
@@ -3070,7 +3070,7 @@ focus_tree = {
 				}
 			}
 			else = {
-				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = VAD }
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = VAD }
 			}
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_armament_depots
@@ -3081,7 +3081,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 70
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -3522,7 +3522,7 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_crown_mobilization_warrants }
 		completion_reward = {
 			add_manpower = 400
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 125 producer = VAD }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1250 producer = VAD }
 			add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = VAD }
 			add_command_power = 5
 			if = {
@@ -3537,7 +3537,7 @@ focus_tree = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_crown_mobilization_warrants
 			}
 		}
-		ai_will_do = { base = 85 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		ai_will_do = { base = 85 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
 	}
 
 	focus = {
@@ -3687,7 +3687,7 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_merged_guard_rolls }
 		completion_reward = {
 			add_manpower = 400
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 125 producer = VAD }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1250 producer = VAD }
 			add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = VAD }
 			if = {
 				limit = { has_country_flag = ADISCORD_vorkerland_vad_joint_civil_guarantees }
@@ -3701,7 +3701,7 @@ focus_tree = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_merged_guard_rolls
 			}
 		}
-		ai_will_do = { base = 85 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		ai_will_do = { base = 85 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
 	}
 
 	focus = {
@@ -3840,7 +3840,7 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_restoration_columns }
 		completion_reward = {
 			add_manpower = 250
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = VAD }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = VAD }
 			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = VAD }
 			add_timed_idea = { idea = ADISCORD_vorkerland_vad_restoration_columns days = 84 }
 			hidden_effect = {
@@ -4836,7 +4836,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 35
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -5013,7 +5013,7 @@ focus_tree = {
 				36 = { add_building_construction = { type = arms_factory level = 1 instant_build = yes } }
 			}
 			else = {
-				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = TVA }
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = TVA }
 			}
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_output_norms
@@ -5024,7 +5024,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 60
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -5155,7 +5155,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_throughput_priority }
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = TVA }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = TVA }
 			add_political_power = 5
 			add_stability = -0.01
 			hidden_effect = {
@@ -5164,7 +5164,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 40
-			modifier = { factor = 3 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 3 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -5681,7 +5681,7 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_unattended_shifts }
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_unattended_shifts days = 70 }
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 75 producer = TVA }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 750 producer = TVA }
 			add_political_power = 5
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_unattended_shifts
@@ -5689,7 +5689,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 70
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -5824,7 +5824,7 @@ focus_tree = {
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_standardized_assault_teams days = 56 }
 			add_manpower = 250
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 100 producer = TVA }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = TVA }
 			army_experience = 5
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_standardized_assault_teams
@@ -6301,7 +6301,7 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_converted_grid }
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_converted_grid days = 70 }
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = TVA }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = TVA }
 			add_stability = -0.01
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_converted_grid
@@ -6309,7 +6309,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 95
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } }
+			modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } }
 		}
 	}
 
@@ -6618,13 +6618,13 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_assault_modules_mass_produced }
 		completion_reward = {
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_assault_modules days = 70 }
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 150 producer = TVA }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = TVA }
 			add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = TVA }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_assault_modules_mass_produced
 			}
 		}
-		ai_will_do = { base = 145 modifier = { factor = 2 has_equipment = { infantry_equipment < 500 } } }
+		ai_will_do = { base = 145 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
 	}
 
 	focus = {
@@ -8222,7 +8222,7 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_replace_men_with_output }
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_wkr_doctrine_output_over_men
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 150 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = WKR }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_replace_men_with_output
 			}
@@ -8498,7 +8498,7 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_wkr_requisition_in_the_republics_name }
 		completion_reward = {
 			add_manpower = 600
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 150 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = WKR }
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
 			ADISCORD_vorkerland_add_legitimacy = yes
 			hidden_effect = {
@@ -9497,7 +9497,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_vad_mortgage_the_regalia }
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 150 producer = VAD }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = VAD }
 			add_command_power = 10
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
 			ADISCORD_vorkerland_add_legitimacy = yes
@@ -10125,7 +10125,7 @@ focus_tree = {
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_replace_losses_from_the_line }
 		completion_reward = {
 			add_ideas = ADISCORD_vorkerland_tva_doctrine_line_replacement
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 150 producer = TVA }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = TVA }
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_replace_losses_from_the_line
 			}
@@ -10494,7 +10494,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		bypass = { has_country_flag = ADISCORD_vorkerland_focus_tva_divert_the_research_budget }
 		completion_reward = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 150 producer = TVA }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = TVA }
 			army_experience = 10
 			set_temp_variable = { ADISCORD_vorkerland_legitimacy_delta = -0.05 }
 			ADISCORD_vorkerland_add_legitimacy = yes
@@ -10961,7 +10961,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
-				amount = 240
+				amount = 2400
 				producer = ZAO
 			}
 			add_command_power = 5

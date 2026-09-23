@@ -4,6 +4,8 @@ import json
 import unittest
 from pathlib import Path
 
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
 
 ROOT = Path(__file__).resolve().parents[2]
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
@@ -34,6 +36,21 @@ class ShabratPostwarStoryTests(unittest.TestCase):
     def test_story_events_are_registered_and_trigger_from_postwar_focus_completion(self) -> None:
         events = read(EVENTS)
         ledger = json.loads(read(LEDGER))
+        focus_source = read(ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt")
+        focuses = {
+            next(field.value for field in node.value if field.key == "id"): node.value
+            for tree in parse_clausewitz(focus_source) if tree.key == "focus_tree"
+            for node in tree.value if node.key == "focus"
+        }
+
+        def dispatches(entries, hidden=False):
+            for node in entries:
+                if node.key == "effect_tooltip":
+                    continue
+                if node.key == "country_event":
+                    yield {field.key: field.value for field in node.value}, hidden
+                elif isinstance(node.value, list):
+                    yield from dispatches(node.value, hidden or node.key == "hidden_effect")
 
         expected = {
             "ADISCORD_STP_pw.1": "STP_pw_republic_new_republic",
@@ -51,7 +68,12 @@ class ShabratPostwarStoryTests(unittest.TestCase):
             self.assertIn("tag = STS", block)
             self.assertIn(f"has_completed_focus = {focus_id}", block)
             self.assertIn("fire_only_once = yes", block)
-            self.assertIn("mean_time_to_happen", block)
+            self.assertIn("is_triggered_only = yes", block)
+            self.assertNotIn("mean_time_to_happen", block)
+            reward = next(node.value for node in focuses[focus_id] if node.key == "completion_reward")
+            calls = [(payload, hidden) for payload, hidden in dispatches(reward)
+                     if payload.get("id") == event_id]
+            self.assertEqual(calls, [({"id": event_id, "days": "1"}, True)])
             self.assertIn(event_id, ledger_ids)
 
     def test_story_events_have_complete_russian_localisation(self) -> None:

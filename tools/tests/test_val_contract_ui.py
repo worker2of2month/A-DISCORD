@@ -39,6 +39,179 @@ def named_block(text: str, name: str) -> str:
     raise AssertionError(f"unclosed block {name}")
 
 
+class ValNorthernCoalitionAidTests(unittest.TestCase):
+    """Evaluate authored aid branches; native callbacks still need campaign QA."""
+
+    @classmethod
+    def setUpClass(cls):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read("common/scripted_effects/ADISCORD_VAL_effects.txt"))}
+        cls.triggers = {e.key: e.value for e in parse_clausewitz(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"))}
+
+    def facts(self, campaign=1, state=2):
+        facts = {("VAL", "has_variable", "VAL_northern_aid_state"): True,
+                 ("VAL", "variable", "VAL_northern_aid_state"): state,
+                 ("NOD", "variable", "STP_cw_northern_campaign_status"): campaign,
+                 ("VAL", "has_capitulated", "no"): True,
+                 ("VAL", "is_subject", "no"): True}
+        for tag in ("YPR", "COF", "TFF"):
+            facts.update({(tag, "exists", "yes"): True, (tag, "has_capitulated", "no"): True,
+                          (tag, "is_subject", "no"): True, (tag, "has_war_with", "NOD"): True})
+        return facts
+
+    def expand(self, rows, facts, scope="VAL"):
+        from dataclasses import replace
+        from tools.tests.test_adiscord_stp_preparation import scalar
+        result = []
+        for row in rows:
+            if row.key in self.triggers:
+                result.append(replace(row, key="AND" if row.value == "yes" else "NOT",
+                                      value=self.expand(self.triggers[row.key], facts, scope)))
+            elif row.key == "has_volunteers_amount_from":
+                self.assertEqual(scalar(row.value, "tag"), "VAL")
+                field, operator, threshold = [e.value for e in row.value if not e.key]
+                self.assertEqual((field, operator), ("count", ">"))
+                result.append(replace(row, key="always", value="yes" if facts.get((scope, "volunteers"), 0) > int(threshold) else "no"))
+            elif isinstance(row.value, list):
+                child_scope = row.key if row.key in ("YPR", "COF", "TFF", "NOD", "FROM") else scope
+                result.append(replace(row, value=self.expand(row.value, facts, child_scope)))
+            else:
+                result.append(row)
+        return result
+
+    def test_missing_partner_reference_or_individual_defeat_does_not_settle_live_campaign(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+        for defeated in (None, "YPR", "COF", "TFF"):
+            facts = self.facts()
+            if defeated:
+                facts[defeated, "has_capitulated", "yes"] = True
+                facts[defeated, "has_capitulated", "no"] = False
+            selected = [e.key for _, e in selected_effects(self.effects["VAL_northern_aid_daily"], facts, "VAL")]
+            with self.subTest(defeated=defeated):
+                self.assertFalse(any(key in selected for key in ("VAL_settle_northern_aid_defeat", "VAL_settle_northern_aid_victory", "VAL_close_northern_aid")))
+
+    def test_campaign_outcomes_select_one_settlement(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+        for campaign, expected in ((2, "VAL_settle_northern_aid_defeat"), (3, "VAL_settle_northern_aid_victory"), (4, "VAL_close_northern_aid")):
+            facts = self.facts(campaign=campaign)
+            selected = [e.key for _, e in selected_effects(self.effects["VAL_northern_aid_daily"], facts, "VAL")]
+            self.assertEqual(selected, [expected])
+
+    def test_all_three_recipients_remain_eligible_after_obligations_are_met(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions
+        for state in (1, 2, 3, -1):
+            for tag in ("YPR", "COF", "TFF", "STS"):
+                facts = self.facts(state=state)
+                facts.update({("FROM", "exists", "yes"): True, ("FROM", "has_capitulated", "no"): True,
+                              ("FROM", "is_subject", "no"): True, ("FROM", "has_war_with", "NOD"): True,
+                              ("VAL", "numeric", "has_manpower"): 2000, ("VAL", "numeric", "command_power"): 25})
+                from dataclasses import replace
+                def target(rows):
+                    return [replace(e, value=target(e.value) if isinstance(e.value, list) else ("FROM" if e.key == "tag" and e.value == tag else e.value)) for e in rows]
+                gate = block(block(self.effects["VAL_deliver_northern_aid_personnel"], "if"), "limit")
+                expanded = target(self.expand(gate, facts))
+                with self.subTest(state=state, recipient=tag):
+                    self.assertEqual(matches_conditions(expanded, facts, "VAL"), state in (1, 2) and tag != "STS")
+
+    def test_volunteers_count_across_recipients_but_exclude_defeated_hosts(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+        for counts, expected in (((0, 0, 0), False), ((1, 0, 0), False), ((2, 0, 0), True), ((1, 1, 0), True), ((1, 0, 1), True), ((0, 1, 1), True)):
+            facts = self.facts()
+            for tag, count in zip(("YPR", "COF", "TFF"), counts):
+                facts[tag, "volunteers"] = count
+            rule = self.triggers["VAL_northern_aid_volunteers_present"]
+            self.assertEqual(matches_conditions(self.expand(rule, facts), facts, "VAL"), expected)
+        facts = self.facts()
+        facts["COF", "volunteers"] = 2
+        facts["COF", "has_capitulated", "no"] = False
+        self.assertFalse(matches_conditions(self.expand(rule, facts), facts, "VAL"))
+
+    def test_volunteer_days_continue_after_deliveries_without_reopening_contract(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects, scalar
+
+        def tick(facts, name="VAL_northern_aid_daily"):
+            for _, row in selected_effects(self.expand(self.effects[name], facts), facts, "VAL"):
+                if row.key in ("add_to_variable", "set_variable"):
+                    key = ("VAL", "variable", scalar(row.value, "var"))
+                    amount = float(scalar(row.value, "value"))
+                    facts[key] = facts.get(key, 0) + amount if row.key == "add_to_variable" else amount
+                elif row.key == "VAL_complete_northern_aid":
+                    tick(facts, row.key)
+                else:
+                    self.fail(f"Unexpected daily effect: {row.key}")
+
+        days = ("VAL", "variable", "VAL_northern_aid_volunteer_days")
+        for state, mission, expected in ((1, True, 1), (1, False, 0), (2, False, 1), (-1, False, 0), (3, False, 0)):
+            with self.subTest(state=state, mission=mission):
+                facts = self.facts(state=state)
+                facts["VAL", "has_active_mission", "VAL_northern_aid_deadline"] = mission
+                facts["COF", "volunteers"] = 2
+                tick(facts)
+                self.assertEqual(facts.get(days, 0), expected)
+
+        facts = self.facts(state=2)
+        facts[days] = 0
+        facts["COF", "volunteers"] = 2
+        for _ in range(30):
+            tick(facts)
+        self.assertEqual(facts[days], 30)
+        facts["COF", "volunteers"] = 1
+        tick(facts)
+        self.assertEqual(facts[days], 0)
+        self.assertEqual(facts["VAL", "variable", "VAL_northern_aid_state"], 2)
+
+    def test_rifle_shipments_share_one_ledger_without_duplicate_payment(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects, scalar
+        facts = self.facts(state=1)
+        facts["VAL", "equipment", "infantry_equipment"] = 7500
+        delivered = {tag: 0 for tag in ("YPR", "COF", "TFF")}
+
+        def execute(name, recipient):
+            for _, row in selected_effects(self.expand(self.effects[name], facts), facts, "VAL"):
+                if row.key == "send_equipment":
+                    self.assertEqual(scalar(row.value, "target"), "FROM")
+                    amount = int(scalar(row.value, "amount"))
+                    facts["VAL", "equipment", "infantry_equipment"] -= amount
+                    delivered[recipient] += amount
+                elif row.key in ("add_to_variable", "set_variable"):
+                    key = ("VAL", "variable", scalar(row.value, "var"))
+                    amount = float(scalar(row.value, "value"))
+                    facts[key] = facts.get(key, 0) + amount if row.key == "add_to_variable" else amount
+                elif row.key == "VAL_complete_northern_aid":
+                    execute(row.key, recipient)
+                else:
+                    self.fail(f"Unmodelled rifle delivery effect: {row.key}")
+
+        for recipient, expected_state in (("YPR", 1), ("COF", 2), ("TFF", 2)):
+            # Recipient eligibility is independently exercised for every tag above.
+            facts["FROM", "VAL_northern_aid_recipient", "yes"] = True
+            original = self.triggers.pop("VAL_northern_aid_recipient")
+            try:
+                execute("VAL_deliver_northern_aid_arms", recipient)
+            finally:
+                self.triggers["VAL_northern_aid_recipient"] = original
+            self.assertEqual(facts["VAL", "variable", "VAL_northern_aid_state"], expected_state)
+        self.assertEqual(delivered, {"YPR": 2500, "COF": 2500, "TFF": 2500})
+        self.assertEqual(facts["VAL", "variable", "VAL_northern_aid_rifles"], 7500)
+        self.assertEqual(facts["VAL", "equipment", "infantry_equipment"], 0)
+
+    def test_paid_legacy_defeat_reopens_only_during_the_live_campaign(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects, scalar
+        self.assertIn("VAL_restore_fulfilled_northern_aid", self.effects)
+        for campaign, state, penalty, paid, expected in ((1, 3, True, 2000, True), (2, 3, True, 2000, False),
+                (1, 2, True, 2000, False), (1, 3, False, 2000, False), (1, 3, True, 0, False)):
+            facts = self.facts(campaign=campaign, state=state)
+            facts["VAL", "has_idea", "VAL_northern_aid_failure"] = penalty
+            facts["VAL", "variable", "VAL_northern_aid_personnel"] = paid
+            rows = list(selected_effects(self.expand(self.effects["VAL_restore_fulfilled_northern_aid"], facts), facts, "VAL"))
+            with self.subTest(campaign=campaign, state=state, penalty=penalty, paid=paid):
+                self.assertEqual(bool(rows), expected)
+                if expected:
+                    self.assertEqual([e.key for _, e in rows], ["remove_ideas", "set_variable", "ADISCORD_economy_mark_dirty"])
+                    self.assertEqual(rows[0][1].value, "VAL_northern_aid_failure")
+                    self.assertEqual(scalar(rows[1][1].value, "value"), "2")
+
+
 class ValPartnerSettlementTests(unittest.TestCase):
     """Execute the authored transaction branches; this is not native-engine proof."""
 
@@ -77,15 +250,24 @@ class ValPartnerSettlementTests(unittest.TestCase):
                     run(self.effects[key], scope)
                 elif key == "set_variable":
                     facts[scope, "variable", scalar(value, "var")] = float(scalar(value, "value"))
+                elif key == "clamp_variable":
+                    field = (scope, "variable", scalar(value, "var"))
+                    facts[field] = max(float(scalar(value, "min")), min(float(scalar(value, "max")), facts.get(field, 0)))
+                elif key == "add_political_power":
+                    field = (scope, "numeric", "has_political_power")
+                    facts[field] = facts.get(field, 0) + float(value)
+                elif key == "country_event":
+                    field = (scope, "scheduled", scalar(value, "id"))
+                    facts[field] = facts.get(field, ()) + (float(scalar(value, "days")),)
                 elif key in ("add_to_variable", "subtract_from_variable"):
                     field = (scope, "variable", scalar(value, "var"))
                     facts[field] = facts.get(field, 0) + float(scalar(value, "value")) * (1 if key == "add_to_variable" else -1)
                 elif key in ("set_country_flag", "clr_country_flag"):
                     flag = scalar(value, "flag") if isinstance(value, list) else value
                     facts[scope, "has_country_flag", flag] = key == "set_country_flag"
-                elif key in ("add_ideas", "add_timed_idea"):
+                elif key in ("add_ideas", "add_timed_idea", "remove_ideas"):
                     idea = scalar(value, "idea") if isinstance(value, list) else value
-                    facts[scope, "has_idea", idea] = True
+                    facts[scope, "has_idea", idea] = key != "remove_ideas"
                 elif key == "send_equipment":
                     self.assertEqual(scalar(value, "target"), "ROOT")
                     amount = float(scalar(value, "amount"))
@@ -214,18 +396,28 @@ class ValPartnerSettlementTests(unittest.TestCase):
                         self.execute("VAL_settle_partner_hire", facts, buyer)
                         self.assertEqual(facts, after)
 
-    def test_trade_pays_partner_and_does_not_stack_existing_office(self):
+    def test_trade_charges_once_at_exact_political_power_boundary(self):
         for buyer in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
             facts = self.facts("trade", buyer=buyer)
+            facts["VAL", "numeric", "has_political_power"] = 99.99
+            before = dict(facts)
             self.execute("VAL_settle_partner_trade", facts, buyer)
-            self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 800)
-            self.assertEqual(facts[buyer, "variable", "ADISCORD_economy_treasury"], 700)
+            self.assertEqual(facts, before)
+            facts["VAL", "numeric", "has_political_power"] = 100
+            self.execute("VAL_settle_partner_trade", facts, buyer)
+            self.assertEqual(facts["VAL", "numeric", "has_political_power"], 0)
+            self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 1000)
+            self.assertEqual(facts[buyer, "variable", "ADISCORD_economy_treasury"], 500)
             self.assertTrue(facts["VAL", "has_idea", "VAL_market_" + buyer])
+            self.assertEqual(facts["VAL", "scheduled", "val_contract.411"], (365,))
             facts["VAL", "has_country_flag", "VAL_partner_offer_pending"] = True
             facts[buyer, "has_country_flag", "VAL_partner_offer_trade"] = True
+            facts["VAL", "numeric", "has_political_power"] = 100
             after = dict(facts)
             self.execute("VAL_settle_partner_trade", facts, buyer)
             self.assertEqual(facts, after)
+            self.execute("VAL_start_market_year", facts, buyer)
+            self.assertEqual(facts, after, "reload must not renew the timer")
 
     def test_refusal_and_expired_reply_do_not_debit_or_close_another_offer(self):
         facts = self.facts("strategic", 20000, 5000)
@@ -1184,3 +1376,264 @@ class TestValReclamationCategory(unittest.TestCase):
             targets = block(body, "targets")
             self.assertEqual({e.value for e in targets}, {"24", "42", "48", "54", "55", "56", "57"})
             self.assertEqual(scalar(body, "days_remove"), "60" if name.endswith("industry") else "90")
+
+
+class ValAnnualMarketTests(unittest.TestCase):
+    def test_menu_pages_have_no_nested_options_and_at_most_four_answers(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import scalar
+        events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
+        ids = {361, 406, 407, 408, 409, 412, 413, 414, 416, 417, 418, 419}
+        seen = set()
+        def nested(rows):
+            return any(e.key == "option" or (isinstance(e.value, list) and nested(e.value)) for e in rows)
+        for e in events:
+            if e.key != "country_event": continue
+            eid = scalar(e.value, "id")
+            if eid not in {f"val_contract.{i}" for i in ids}: continue
+            seen.add(int(eid.split(".")[-1]))
+            options = [o.value for o in e.value if o.key == "option"]
+            self.assertLessEqual(len(options), 4, eid)
+            self.assertFalse(any(nested(o) for o in options), eid)
+            self.assertIn("val_contract.family.cancel", [scalar(o, "name") for o in options])
+        self.assertEqual(seen, ids)
+
+    def test_market_charges_political_power_and_schedules_one_year(self):
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        settle = named_block(effects, "VAL_settle_partner_trade")
+        self.assertIn("add_political_power = -100", settle)
+        self.assertNotIn("ADISCORD_economy_treasury", settle)
+        term = named_block(effects, "VAL_start_market_year")
+        self.assertEqual(term.count("days = 365"), 8)
+        self.assertIn("NOT = { has_country_flag = VAL_market_term_started }", term)
+        trigger = named_block(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"), "VAL_partner_trade_terms_valid")
+        self.assertIn("NOT = { has_political_power < 100 }", trigger)
+        self.assertIn("NOT = { has_country_flag = VAL_market_term_started }", trigger)
+
+    def test_cannibal_income_is_lowest_and_cache_invalidated(self):
+        ideas = read("common/ideas/ADISCORD_VAL_rework_ideas.txt")
+        incomes = {}
+        for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
+            body = named_block(ideas, "VAL_market_"+tag)
+            incomes[tag] = int(re.search(r"ADISCORD_economy_weekly_income = (\d+)", body)[1])
+            self.assertIn("on_remove = { ADISCORD_economy_mark_dirty = yes }", body)
+        self.assertEqual(incomes["APH"], 2)
+        self.assertTrue(all(incomes["APH"] < v <= 15 for k,v in incomes.items() if k != "APH"))
+
+
+    def test_signed_partner_row_is_hidden_and_expiry_cleans_before_choice(self):
+        decision = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_partner_contract")
+        visible = named_block(decision, "visible")
+        self.assertRegex(visible, r"FROM\s*=\s*\{[^{}]*NOT\s*=\s*\{\s*has_country_flag\s*=\s*VAL_market_term_started")
+        source = read("events/ADISCORD_VAL_contract_events.txt")
+        start = re.search(r"country_event = \{\s*id = val_contract\.411\b", source).start()
+        expiry = named_block(source[start:], "country_event")
+        immediate = named_block(expiry, "immediate")
+        self.assertIn("clr_country_flag = VAL_market_term_started", immediate)
+        self.assertIn("remove_ideas = VAL_partner_market_access", immediate)
+        for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
+            self.assertIn("remove_ideas = VAL_market_" + tag, immediate)
+        self.assertNotIn("add_political_power", expiry)
+
+
+class ValQuarterlySupplyTests(unittest.TestCase):
+    def test_quarterly_cycle_preserves_legacy_orders_and_blocks_duplicate_delivery(self):
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        for slot in (1, 2):
+            self.assertIn(f"VAL_order_{slot}_legacy_dispatch", effects)
+            body = named_block(effects, f"VAL_accept_quarterly_order_{slot}")
+            self.assertIn("add_political_power = -100", body)
+            self.assertNotIn("subtract_from_variable", body)
+            self.assertIn(f"var = VAL_order_{slot}_completed value = 0", body)
+            gate = named_block(triggers, f"VAL_order_{slot}_can_dispatch")
+            self.assertIn(f"NOT = {{ has_country_flag = VAL_order_{slot}_quarter_paid }}", gate)
+            cycle = named_block(effects, f"VAL_order_{slot}_quarterly_reconcile")
+            self.assertIn("value = 4 compare = greater_than_or_equals", cycle)
+            self.assertIn("days = -15", cycle)
+            self.assertIn(f"VAL_order_{slot}_legacy_cancel", effects)
+
+    def test_regular_export_does_not_require_war(self):
+        gate = named_block(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"), "VAL_export_customer")
+        self.assertNotIn("has_war = yes", gate)
+
+
+    def test_authored_quarter_cycle_no_duplicate_cash_and_one_grace(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import scalar, block
+        effects = {e.key: e.value for e in parse_clausewitz(read("common/scripted_effects/ADISCORD_VAL_effects.txt"))}
+        for slot in (1, 2):
+            prefix = f"VAL_order_{slot}"
+            flags = {prefix+"_quarterly"}
+            values = {prefix+"_state": 1, prefix+"_completed": 0, prefix+"_remaining": 500, prefix+"_quantity": 25000}
+            cash = {"VAL": 0, "buyer": 2000}
+            equipment = {"VAL": 100000, "buyer": 0}
+            events = []
+            timer = [90]
+            def number(value):
+                key = value.removeprefix("VAL.")
+                return values[key] if key in values else float(value)
+            def matches(rows):
+                result = []
+                for e in rows:
+                    if e.key == "OR": answer = any(matches([x]) for x in e.value)
+                    elif e.key == "NOT": answer = not matches(e.value)
+                    elif e.key == "AND": answer = matches(e.value)
+                    elif e.key == "has_country_flag": answer = e.value in flags
+                    elif e.key == "has_capitulated": answer = False
+                    elif e.key.startswith("event_target:"): answer = True
+                    elif e.key == prefix+"_can_dispatch": answer = prefix+"_quarter_paid" not in flags and prefix+"_expired" not in flags and cash["buyer"] >= 500 and equipment["VAL"] >= 25000
+                    elif e.key == "check_variable":
+                        a=values.get(scalar(e.value,"var"),0);b=number(scalar(e.value,"value"));op=scalar(e.value,"compare")
+                        answer={"equals":a==b,"greater_than_or_equals":a>=b}[op]
+                    else: self.fail("Unmodelled condition: "+e.key)
+                    result.append(answer)
+                return all(result)
+            def run(rows, scope="VAL"):
+                taken=False
+                for e in rows:
+                    key,val=e.key,e.value
+                    if key in ("if","else_if","else"):
+                        if key=="if": taken=False
+                        if not taken and (key=="else" or matches(block(val,"limit"))):
+                            taken=True;run([x for x in val if x.key!="limit"],scope)
+                    elif key.startswith("event_target:"): run(val,"buyer")
+                    elif key in ("set_country_flag","clr_country_flag"):
+                        if key=="set_country_flag": flags.add(val)
+                        else: flags.discard(val)
+                    elif key in ("set_variable","add_to_variable","subtract_from_variable"):
+                        var=scalar(val,"var");delta=number(scalar(val,"value"))
+                        if var=="ADISCORD_economy_treasury": cash[scope]+=delta*(1 if key=="add_to_variable" else -1)
+                        elif var.startswith("ADISCORD_economy_current_month"): pass
+                        else: values[var]=delta if key=="set_variable" else values.get(var,0)+delta
+                    elif key=="send_equipment":
+                        qty=number(scalar(val,"amount"));equipment["VAL"]-=qty;equipment["buyer"]+=qty
+                    elif key=="activate_mission": timer[0]=30
+                    elif key=="add_days_mission_timeout": timer[0]+=number(scalar(val,"days"))
+                    elif key=="country_event": events.append(scalar(val,"id"))
+                    elif key in ("VAL_refresh_order_summary","ADISCORD_economy_mark_dirty","VAL_contract_record_success","save_event_target_as","remove_mission"): pass
+                    elif key in effects: run(effects[key],scope)
+                    else: self.fail("Unmodelled effect: "+key)
+            for quarter in range(4):
+                run(effects[prefix+"_dispatch"])
+                self.assertEqual(values[prefix+"_completed"],quarter+1)
+                snapshot=(dict(cash),dict(equipment))
+                run(effects[prefix+"_dispatch"])
+                self.assertEqual((cash,equipment),snapshot)
+                flags.add(prefix+"_expired")
+                run(effects[prefix+"_quarterly_reconcile"])
+                if quarter<3: self.assertEqual(timer[0],95 if quarter==2 else 90)
+            self.assertEqual(cash,{"VAL":2000,"buyer":0})
+            self.assertEqual(equipment,{"VAL":0,"buyer":100000})
+            self.assertEqual(events,["val_contract.420"])
+            self.assertEqual(values[prefix+"_state"],0)
+            # A missed quarter grants exactly 15 days, then cancellation frees the slot.
+            values.update({prefix+"_state":1,prefix+"_completed":0,prefix+"_advance":0})
+            flags.update({prefix+"_quarterly",prefix+"_expired"})
+            run(effects[prefix+"_quarterly_reconcile"])
+            self.assertEqual(timer[0],15)
+            self.assertIn(prefix+"_grace_used",flags)
+            flags.add(prefix+"_expired")
+            run(effects[prefix+"_quarterly_reconcile"])
+            self.assertEqual(values[prefix+"_state"],0)
+            self.assertEqual(events[-1],"val_contract.421")
+            self.assertEqual(cash,{"VAL":2000,"buyer":0})
+
+
+class ValPartnerVisibilityTests(unittest.TestCase):
+    def test_country_visibility_uses_capabilities_not_affordability(self):
+        from tools.tests.test_validate_adiscord_val_rework import ValExpandedCampaignTests
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        self.triggers={e.key:e.value for e in parse_clausewitz(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"))}
+        self.assertIn("VAL_partner_has_visible_contracts",self.triggers.keys())
+        facts={("STP","exists","yes"):True,("STP","has_capitulated","no"):True}
+        self.assertFalse(ValExpandedCampaignTests.match(self,"VAL_partner_has_visible_contracts",facts,"STP"))
+        facts["VAL","has_completed_focus","VAL_Foreign_Broker_Licences"]=True
+        self.assertTrue(ValExpandedCampaignTests.match(self,"VAL_partner_has_visible_contracts",facts,"STP"))
+        self.assertFalse(ValExpandedCampaignTests.match(self,"VAL_partner_commerce_visible",facts,"STP"))
+        facts["VAL","has_country_flag","VAL_partner_offer_pending"]=True
+        facts["VAL","variable","VAL_order_1_state"]=1
+        self.assertTrue(ValExpandedCampaignTests.match(self,"VAL_partner_has_visible_contracts",facts,"STP"))
+
+    def test_partner_row_uses_uncached_visible_capability(self):
+        decision=named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"),"VAL_partner_contract")
+        self.assertIn("VAL_partner_has_visible_contracts = yes",named_block(decision,"visible"))
+        self.assertNotIn("VAL_partner_has_visible_contracts",named_block(decision,"target_trigger"))
+
+
+    def test_unaffordable_options_recheck_before_effects_and_do_not_loop_ai(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import scalar, block
+        events=parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
+        checked=0
+        for e in events:
+            if e.key!="country_event":continue
+            for option in [x.value for x in e.value if x.key=="option"]:
+                statuses=[x.value for x in option if x.key=="custom_effect_tooltip" and isinstance(x.value,str) and x.value.startswith("VAL_offer_status_")]
+                if not statuses:continue
+                checked+=1
+                payload=block(option,"hidden_effect")
+                self.assertEqual([x.key for x in payload],["if","else"])
+                self.assertTrue(block(block(payload,"if"),"limit"))
+                self.assertEqual(scalar(block(block(payload,"else"),"country_event"),"id"),scalar(e.value,"id"))
+                modifier=block(block(option,"ai_chance"),"modifier")
+                self.assertEqual(scalar(modifier,"factor"),"0")
+                self.assertTrue(block(modifier,"NOT"))
+        self.assertGreaterEqual(checked,18)
+
+
+class ValOfferButtonStateTests(unittest.TestCase):
+    def test_trade_fee_is_on_decision_not_event_button(self):
+        self.assertNotIn("name = VAL_partner_trade_button", read("events/ADISCORD_VAL_contract_events.txt"))
+        self.assertIn("cost = 100", named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_sign_annual_trade"))
+
+    def test_every_guarded_offer_has_a_dynamic_button_name(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import scalar
+        events=parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
+        count=0
+        for e in events:
+            if e.key!="country_event":continue
+            for option in [o.value for o in e.value if o.key=="option"]:
+                if any(o.key=="custom_effect_tooltip" and isinstance(o.value,str) and o.value.startswith("VAL_offer_status_") for o in option):
+                    self.assertTrue(scalar(option,"name").endswith("_button"))
+                    count+=1
+        self.assertGreaterEqual(count,18)
+
+
+class ValNativeTradeFeeTests(unittest.TestCase):
+    def test_decision_has_native_cost_and_receipt_before_offer(self):
+        decision=named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"),"VAL_sign_annual_trade")
+        self.assertIn("cost = 100",decision)
+        self.assertNotIn("custom_cost_text",decision)
+        self.assertIn("set_country_flag = VAL_trade_fee_paid",decision)
+        self.assertNotIn("add_political_power = -100",decision)
+
+    def test_prepaid_trade_does_not_charge_twice_and_refund_is_guarded(self):
+        effects=read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        settle=named_block(effects,"VAL_settle_partner_trade")
+        self.assertIn("has_country_flag = VAL_trade_fee_paid",settle)
+        refund=named_block(effects,"VAL_refund_trade_fee")
+        self.assertIn("limit = { has_country_flag = VAL_trade_fee_paid }",refund)
+        self.assertIn("add_political_power = 100",refund)
+        self.assertIn("clr_country_flag = VAL_trade_fee_paid",refund)
+
+
+    def test_prepaid_acceptance_and_refusal_settle_only_once(self):
+        model=ValPartnerSettlementTests()
+        model.setUpClass()
+        for outcome in ("accept","decline","expired"):
+            facts=model.facts("trade",buyer="CIN")
+            facts["VAL","numeric","has_political_power"]=0
+            facts["CIN","has_country_flag","VAL_trade_fee_paid"]=True
+            if outcome=="accept":
+                model.execute("VAL_settle_partner_trade",facts,"CIN")
+                self.assertTrue(facts["VAL","has_idea","VAL_market_CIN"])
+            else:
+                if outcome=="expired": facts["CIN","has_country_flag","VAL_partner_offer_trade"]=False
+                model.execute("VAL_close_partner_offer",facts,"CIN")
+            self.assertEqual(facts["VAL","numeric","has_political_power"],0 if outcome=="accept" else 100)
+            self.assertFalse(facts["CIN","has_country_flag","VAL_trade_fee_paid"])
+            after=dict(facts)
+            model.execute("VAL_refund_trade_fee",facts,"CIN")
+            self.assertEqual(facts,after)

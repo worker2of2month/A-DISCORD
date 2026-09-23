@@ -455,10 +455,10 @@ STP_battle_for_stelander = {
 			owns_state = 1
 			has_active_mission = STP_cw_election_window
 			custom_trigger_tooltip = { tooltip = STP_preparation_slot_available_tt STP_has_political_action_slot = yes }
-			NOT = { has_equipment = { infantry_equipment < 16000 } }
+			NOT = { has_equipment = { infantry_equipment < 160000 } }
 			custom_trigger_tooltip = {
 				tooltip = STP_cw_cache_capacity_tt
-				1 = { NOT = { has_variable = STP_cw_pending_rifles } check_variable = { var = STP_cw_cached_rifles value = 80000 compare = less_than_or_equals } }
+				1 = { NOT = { has_variable = STP_cw_pending_rifles } check_variable = { var = STP_cw_cached_rifles value = 800000 compare = less_than_or_equals } }
 			}
 		}
 		cost = 35
@@ -473,15 +473,15 @@ STP_battle_for_stelander = {
 						has_active_mission = STP_cw_election_window
 						owns_state = 1
 						STP_has_political_action_slot = yes
-						NOT = { has_equipment = { infantry_equipment < 16000 } }
-						1 = { NOT = { has_variable = STP_cw_pending_rifles } check_variable = { var = STP_cw_cached_rifles value = 80000 compare = less_than_or_equals } }
+						NOT = { has_equipment = { infantry_equipment < 160000 } }
+						1 = { NOT = { has_variable = STP_cw_pending_rifles } check_variable = { var = STP_cw_cached_rifles value = 800000 compare = less_than_or_equals } }
 					}
-					set_temp_variable = { var = STP_cw_rifle_cost value = 16000 }
+					set_temp_variable = { var = STP_cw_rifle_cost value = 160000 }
 					STP_cw_pay_rifles = yes
 					if = {
 						limit = { has_country_flag = STP_cw_rifles_paid }
 						STP_political_action_slot_consume = yes
-						1 = { set_variable = { var = STP_cw_pending_rifles value = 16000 } }
+						1 = { set_variable = { var = STP_cw_pending_rifles value = 160000 } }
 						set_temp_variable = { var = STP_party_suspicion_change value = 5 }
 						STP_change_party_suspicion = yes
 					}
@@ -511,7 +511,7 @@ STP_battle_for_stelander = {
 							STP_cw_preparation_open = yes
 							has_active_mission = STP_cw_election_window
 							owns_state = 1
-							1 = { check_variable = { var = STP_cw_cached_rifles value = 80000 compare = less_than_or_equals } }
+							1 = { check_variable = { var = STP_cw_cached_rifles value = 800000 compare = less_than_or_equals } }
 						}
 						1 = {
 							add_to_variable = { var = STP_cw_cached_rifles value = STP_cw_pending_rifles }
@@ -1381,7 +1381,7 @@ STP_battle_for_stelander = {
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
-		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 240 } } }
+		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 2400 } } }
 		custom_cost_text = STP_cost_pp10_r240
 		cost = 0
 		days_remove = 25
@@ -1390,11 +1390,11 @@ STP_battle_for_stelander = {
 		complete_effect = {
 			hidden_effect = {
 				add_political_power = -10
-				set_temp_variable = { var = STP_cw_rifle_cost value = 240 }
+				set_temp_variable = { var = STP_cw_rifle_cost value = 2400 }
 				STP_cw_pay_rifles = yes
 				if = {
 					limit = { has_country_flag = STP_cw_rifles_paid }
-					FROM = { set_variable = { var = STP_cw_sabotage_rifles value = 240 } }
+					FROM = { set_variable = { var = STP_cw_sabotage_rifles value = 2400 } }
 				}
 				STP_political_action_slot_consume = yes
 			}
@@ -1440,7 +1440,7 @@ STP_battle_for_stelander = {
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
-		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 240 } } }
+		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 2400 } } }
 		custom_cost_text = STP_cost_pp10_r240
 		cost = 0
 		days_remove = 14
@@ -1450,11 +1450,11 @@ STP_battle_for_stelander = {
 			custom_effect_tooltip = STP_cw_sabotage_capital_preparation_tt
 			hidden_effect = {
 				add_political_power = -10
-				set_temp_variable = { var = STP_cw_rifle_cost value = 240 }
+				set_temp_variable = { var = STP_cw_rifle_cost value = 2400 }
 				STP_cw_pay_rifles = yes
 				if = {
 					limit = { has_country_flag = STP_cw_rifles_paid }
-					FROM = { set_variable = { var = STP_cw_sabotage_rifles value = 240 } }
+					FROM = { set_variable = { var = STP_cw_sabotage_rifles value = 2400 } }
 				}
 				STP_political_action_slot_consume = yes
 			}
@@ -1500,7 +1500,7 @@ STP_battle_for_stelander = {
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		highlight_states = { highlight_state_targets = { state = FROM } }
 		on_map_mode = map_and_decisions_view
-		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 240 } } }
+		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 2400 } } }
 		custom_cost_text = STP_cost_pp10_r240
 		cost = 0
 		days_remove = 14
@@ -1509,11 +1509,11 @@ STP_battle_for_stelander = {
 		complete_effect = {
 			hidden_effect = {
 				add_political_power = -10
-				set_temp_variable = { var = STP_cw_rifle_cost value = 240 }
+				set_temp_variable = { var = STP_cw_rifle_cost value = 2400 }
 				STP_cw_pay_rifles = yes
 				if = {
 					limit = { has_country_flag = STP_cw_rifles_paid }
-					FROM = { set_variable = { var = STP_cw_sabotage_rifles value = 240 } }
+					FROM = { set_variable = { var = STP_cw_sabotage_rifles value = 2400 } }
 				}
 				STP_political_action_slot_consume = yes
 			}
@@ -2281,7 +2281,7 @@ STP_cw_war_council = {
 				army_experience = 15
 				NOD = {
 					army_experience = 15
-					add_equipment_to_stockpile = { type = infantry_equipment amount = 600 producer = STP }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 6000 producer = STP }
 					add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = STP }
 				}
 				hidden_effect = {
@@ -2383,7 +2383,7 @@ STP_cw_war_council = {
 		custom_cost_text = STP_cw_rear_cell_cost
 		custom_cost_trigger = {
 			NOT = { has_manpower < 2000 }
-			NOT = { has_equipment = { infantry_equipment < 200 } }
+			NOT = { has_equipment = { infantry_equipment < 1800 } }
 			NOT = { has_political_power < 35 }
 		}
 		complete_effect = {
@@ -2393,7 +2393,7 @@ STP_cw_war_council = {
 		ai_will_do = {
 			base = 20
 			modifier = { factor = 0 NOT = { has_manpower > 8000 } }
-			modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 800 } } }
+			modifier = { factor = 0 NOT = { has_equipment = { infantry_equipment > 8000 } } }
 		}
 	}
 
@@ -2707,7 +2707,7 @@ STP_cw_war_council = {
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 420 }
 				ADISCORD_economy_mark_dirty = yes
 			}
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1600 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 16000 }
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 60 }
 			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 48 }
 			add_equipment_to_stockpile = { type = support_equipment amount = 30 }
@@ -2854,7 +2854,7 @@ STP_cw_war_council = {
 		visible = { has_country_flag = STP_cw_participant NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes }
 		available = {
 			has_completed_focus = STP_cw_mobilization_register
-			OR = { tag = STS AND = { NOT = { has_manpower < 6000 } NOT = { has_equipment = { infantry_equipment < 600 } } } }
+			OR = { tag = STS AND = { NOT = { has_manpower < 6000 } NOT = { has_equipment = { infantry_equipment < 5400 } } } }
 			any_owned_state = { is_controlled_by = PREV }
 		}
 		cost = 25
@@ -2932,7 +2932,7 @@ STP_cw_war_council = {
 		custom_cost_text = STP_cw_reserve_training_cost
 		custom_cost_trigger = {
 			NOT = { has_political_power < 40 }
-			OR = { tag = STS AND = { NOT = { has_manpower < 12000 } NOT = { has_equipment = { infantry_equipment < 1200 } } } }
+			OR = { tag = STS AND = { NOT = { has_manpower < 12000 } NOT = { has_equipment = { infantry_equipment < 10800 } } } }
 		}
 		cost = 0
 		days_remove = 21
@@ -2951,7 +2951,7 @@ STP_cw_war_council = {
 					set_country_flag = STP_cw_training_political_payment
 				}
 				else = {
-					set_temp_variable = { var = STP_cw_rifle_cost value = 1200 }
+					set_temp_variable = { var = STP_cw_rifle_cost value = 10800 }
 					STP_cw_pay_rifles = yes
 					if = {
 						limit = { has_country_flag = STP_cw_rifles_paid }
@@ -3172,7 +3172,7 @@ STP_cw_war_council = {
 			if = {
 				limit = { hidden_trigger = { STP_pw_can_reconstruct = yes has_completed_focus = STP_pw_party_domestic_pattern is_subject = no check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } } }
 				hidden_effect = { subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 } add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 } ADISCORD_economy_mark_dirty = yes }
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 1600 producer = ROOT }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 16000 producer = ROOT }
 				add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
 				add_equipment_to_stockpile = { type = artillery_equipment amount = 100 producer = ROOT }
 			}
@@ -3315,7 +3315,7 @@ STP_cw_war_council = {
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
 				ADISCORD_economy_mark_dirty = yes
 			}
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 4000 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 40000 }
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 300 }
 			add_equipment_to_stockpile = { type = anti_tank_equipment amount = 200 }
 		}
@@ -4049,7 +4049,7 @@ STP_cw_external_intervention = {
 		custom_cost_text = STP_cw_northern_supply_cost
 		custom_cost_trigger = {
 			NOT = { has_political_power < 40 }
-			NOT = { has_equipment = { infantry_equipment < 2400 } }
+			NOT = { has_equipment = { infantry_equipment < 24000 } }
 		}
 		days_remove = 21
 		days_re_enable = 42
@@ -4067,7 +4067,7 @@ STP_cw_external_intervention = {
 		complete_effect = {
 			hidden_effect = {
 				add_political_power = -40
-				set_temp_variable = { var = STP_cw_rifle_cost value = 2400 }
+				set_temp_variable = { var = STP_cw_rifle_cost value = 24000 }
 				STP_cw_pay_rifles = yes
 				if = { limit = { has_country_flag = STP_cw_rifles_paid } set_country_flag = STP_cw_northern_cargo_reserved }
 			}
@@ -4077,7 +4077,7 @@ STP_cw_external_intervention = {
 				if = {
 					limit = { has_country_flag = STP_cw_northern_cargo_reserved }
 					clr_country_flag = STP_cw_northern_cargo_reserved
-					add_equipment_to_stockpile = { type = infantry_equipment amount = 2400 }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 24000 }
 				}
 			}
 		}
@@ -4095,13 +4095,13 @@ STP_cw_external_intervention = {
 							OR = { tag = STS has_country_flag = STP_battle_for_stelander_active }
 							FROM = { STP_cw_northern_target_valid = yes has_war_with = NOD }
 						}
-						FROM = { add_equipment_to_stockpile = { type = infantry_equipment amount = 2400 producer = ROOT } }
+						FROM = { add_equipment_to_stockpile = { type = infantry_equipment amount = 24000 producer = ROOT } }
 					}
-					else = { add_equipment_to_stockpile = { type = infantry_equipment amount = 2400 } }
+					else = { add_equipment_to_stockpile = { type = infantry_equipment amount = 24000 } }
 				}
 			}
 		}
-		ai_will_do = { base = 2 modifier = { factor = 0 has_equipment = { infantry_equipment < 7200 } } }
+		ai_will_do = { base = 2 modifier = { factor = 0 has_equipment = { infantry_equipment < 72000 } } }
 	}
 
 	NOD_cw_intervention_preparation = {
@@ -4295,9 +4295,9 @@ STP_cw_external_intervention = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  NOT = { has_variable = STP_ps_val_receipt_rifles } NOT = { has_country_flag = STP_ps_val_supply_cooldown }  } }
 		cost = 0
 		custom_cost_text = STP_ps_val_send_supply_cost
-		custom_cost_trigger = { NOT = { has_equipment = { infantry_equipment < 1200 } } }
+		custom_cost_trigger = { NOT = { has_equipment = { infantry_equipment < 12000 } } }
 		complete_effect = { hidden_effect = { STP_ps_begin_val_supply = yes } }
-		ai_will_do = { base = 4 modifier = { factor = 0 has_equipment = { infantry_equipment < 4000 } } }
+		ai_will_do = { base = 4 modifier = { factor = 0 has_equipment = { infantry_equipment < 40000 } } }
 	}
 
 	STP_ps_fund_nod = {
@@ -4329,11 +4329,11 @@ STP_ps_nod_credit_useful = yes
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_ps_northern_arms NOT = { has_global_flag = STP_cw_union_wars_finished } }
-		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_can_aid_nod = yes NOT = { has_variable = STP_ps_nod_receipt_type } NOT = { has_country_flag = STP_ps_arm_nod_cooldown } NOD = { STP_ps_northern_front_active = yes } NOT = { has_equipment = { infantry_equipment < 1200 } } NOT = { has_equipment = { artillery_equipment < 100 } } NOT = { has_equipment = { support_equipment < 60 } }  } }
+		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_can_aid_nod = yes NOT = { has_variable = STP_ps_nod_receipt_type } NOT = { has_country_flag = STP_ps_arm_nod_cooldown } NOD = { STP_ps_northern_front_active = yes } NOT = { has_equipment = { infantry_equipment < 12000 } } NOT = { has_equipment = { artillery_equipment < 100 } } NOT = { has_equipment = { support_equipment < 60 } }  } }
 		cost = 0
 		custom_cost_text = STP_ps_arm_nod_cost
-		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } NOT = { has_equipment = { infantry_equipment < 1200 } } NOT = { has_equipment = { artillery_equipment < 100 } } NOT = { has_equipment = { support_equipment < 60 } } }
-		complete_effect = { hidden_effect = { if = { limit = { STP_ps_can_aid_nod = yes NOT = { has_variable = STP_ps_nod_receipt_type } NOT = { has_country_flag = STP_ps_arm_nod_cooldown } NOD = { STP_ps_northern_front_active = yes } check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } NOT = { has_equipment = { infantry_equipment < 1200 } } NOT = { has_equipment = { artillery_equipment < 100 } } NOT = { has_equipment = { support_equipment < 60 } } }
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } NOT = { has_equipment = { infantry_equipment < 12000 } } NOT = { has_equipment = { artillery_equipment < 100 } } NOT = { has_equipment = { support_equipment < 60 } } }
+		complete_effect = { hidden_effect = { if = { limit = { STP_ps_can_aid_nod = yes NOT = { has_variable = STP_ps_nod_receipt_type } NOT = { has_country_flag = STP_ps_arm_nod_cooldown } NOD = { STP_ps_northern_front_active = yes } check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } NOT = { has_equipment = { infantry_equipment < 12000 } } NOT = { has_equipment = { artillery_equipment < 100 } } NOT = { has_equipment = { support_equipment < 60 } } }
 					STP_ps_pay_nod_arms = yes
 				} } }
 		ai_will_do = { base = 3 modifier = { factor = 0 check_variable = { var = ADISCORD_economy_treasury value = 6300 compare = less_than } } }
@@ -4631,7 +4631,7 @@ tag = STP
 					set_country_flag = STP_pw_party_nod_emergency_mobilized
 				}
 				add_manpower = 10000
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 producer = ROOT }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 producer = ROOT }
 				add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT }
 				add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = ROOT }
 				add_timed_idea = { idea = STP_pw_party_nod_emergency_mobilization_idea days = 180 }
@@ -4906,7 +4906,7 @@ STP_cw_northern_aid = {
 		on_map_mode = map_and_decisions_view
 		cost = 0
 		custom_cost_text = STP_cw_nod_sabotage_cost
-		custom_cost_trigger = { NOT = { has_political_power < 15 } NOT = { has_equipment = { infantry_equipment < 240 } } }
+		custom_cost_trigger = { NOT = { has_political_power < 15 } NOT = { has_equipment = { infantry_equipment < 2400 } } }
 		days_remove = 28
 		fire_only_once = no
 		cancel_trigger = {
@@ -4921,11 +4921,11 @@ STP_cw_northern_aid = {
 		complete_effect = {
 			hidden_effect = {
 				add_political_power = -15
-				set_temp_variable = { var = STP_cw_rifle_cost value = 240 }
+				set_temp_variable = { var = STP_cw_rifle_cost value = 2400 }
 				STP_cw_pay_rifles = yes
 				if = {
 					limit = { has_country_flag = STP_cw_rifles_paid }
-					FROM = { set_variable = { var = STP_cw_nod_sabotage_rifles value = 240 } }
+					FROM = { set_variable = { var = STP_cw_nod_sabotage_rifles value = 2400 } }
 					set_country_flag = STP_cw_nod_sabotage_reserved
 				}
 			}
@@ -5563,9 +5563,9 @@ STP_ps_exile = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  tag = NOD STP_ps_exile_formation_context = yes has_country_flag = STP_ps_exile_received NOT = { has_variable = STP_ps_exile_formation_deposit } NOT = { has_country_flag = STP_ps_exile_formation_cooldown }  } }
 		cost = 0
 		custom_cost_text = STP_ps_exile_formation_cost
-		custom_cost_trigger = { NOT = { has_manpower < 6000 } NOT = { has_equipment = { infantry_equipment < 600 } }  check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } NOT = { has_manpower < 6000 } NOT = { has_equipment = { infantry_equipment < 600 } } }
-		complete_effect = { hidden_effect = { if = { limit = { has_completed_focus = STP_ps_exile_formations tag = NOD STP_ps_exile_formation_context = yes has_country_flag = STP_ps_exile_received NOT = { has_variable = STP_ps_exile_formation_deposit } NOT = { has_country_flag = STP_ps_exile_formation_cooldown } check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } NOT = { has_manpower < 6000 } NOT = { has_equipment = { infantry_equipment < 600 } } }
-					set_temp_variable = { var = STP_cw_rifle_cost value = 600 }
+		custom_cost_trigger = { NOT = { has_manpower < 6000 } NOT = { has_equipment = { infantry_equipment < 5400 } }  check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } NOT = { has_manpower < 6000 } NOT = { has_equipment = { infantry_equipment < 5400 } } }
+		complete_effect = { hidden_effect = { if = { limit = { has_completed_focus = STP_ps_exile_formations tag = NOD STP_ps_exile_formation_context = yes has_country_flag = STP_ps_exile_received NOT = { has_variable = STP_ps_exile_formation_deposit } NOT = { has_country_flag = STP_ps_exile_formation_cooldown } check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } NOT = { has_manpower < 6000 } NOT = { has_equipment = { infantry_equipment < 5400 } } }
+					set_temp_variable = { var = STP_cw_rifle_cost value = 5400 }
 					set_temp_variable = { var = STP_ps_rifle_refund value = num_equipment@infantry_equipment }
 					STP_cw_pay_rifles = yes
 					subtract_from_temp_variable = { var = STP_ps_rifle_refund value = num_equipment@infantry_equipment }

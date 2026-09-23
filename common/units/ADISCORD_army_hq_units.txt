@@ -33,7 +33,7 @@ sub_units = {
 		training_time = 120
 		weight = 0.1
 		can_be_parachuted = yes
-		need = { infantry_equipment = 20 }
+		need = { infantry_equipment = 180 }
 		division_3d_model_priority = 99999
 	}
 
@@ -75,7 +75,10 @@ sub_units = {
 		defense = 0.1
 		breakthrough = 0.5
 		soft_attack = -0.5
-		need = { infantry_equipment = 20 support_equipment = 10 }
+		need = {
+			infantry_equipment = 180
+			support_equipment = 10
+		}
 	}
 
 	hq_recon = {
@@ -118,7 +121,10 @@ sub_units = {
 		soft_attack = -0.9
 		hard_attack = -0.9
 		recon = 1
-		need = { infantry_equipment = 20 support_equipment = 10 }
+		need = {
+			infantry_equipment = 180
+			support_equipment = 10
+		}
 	}
 
 	hq_military_police = {
@@ -151,7 +157,10 @@ sub_units = {
 		weight = 0.1
 		can_be_parachuted = yes
 		suppression_factor = 0.20
-		need = { support_equipment = 10 }
+		need = {
+			infantry_equipment = 180
+			support_equipment = 10
+		}
 	}
 
 	hq_maintenance = {
@@ -188,7 +197,10 @@ sub_units = {
 		can_be_parachuted = yes
 		reliability_factor = 0.05
 		equipment_capture_factor = 0.05
-		need = { support_equipment = 10 }
+		need = {
+			infantry_equipment = 180
+			support_equipment = 10
+		}
 	}
 
 	hq_field_hospital = {
@@ -227,7 +239,10 @@ sub_units = {
 		can_be_parachuted = yes
 		casualty_trickleback = 0.20
 		experience_loss_factor = -0.15
-		need = { support_equipment = 10 }
+		need = {
+			infantry_equipment = 180
+			support_equipment = 10
+		}
 	}
 
 	hq_logistics = {
@@ -264,7 +279,10 @@ sub_units = {
 		weight = 0.1
 		can_be_parachuted = yes
 		fuel_consumption_factor = -0.05
-		need = { support_equipment = 10 }
+		need = {
+			infantry_equipment = 180
+			support_equipment = 10
+		}
 	}
 
 	hq_signal = {
@@ -301,7 +319,10 @@ sub_units = {
 		training_time = 120
 		weight = 0.1
 		can_be_parachuted = yes
-		need = { support_equipment = 10 }
+		need = {
+			infantry_equipment = 180
+			support_equipment = 10
+		}
 	}
 
 	hq_naval_liaison = {
@@ -337,7 +358,10 @@ sub_units = {
 		training_time = 120
 		weight = 0.1
 		can_be_parachuted = yes
-		need = { support_equipment = 10 }
+		need = {
+			infantry_equipment = 180
+			support_equipment = 10
+		}
 	}
 
 	hq_air_liaison = {
@@ -373,7 +397,10 @@ sub_units = {
 		training_time = 120
 		weight = 0.1
 		can_be_parachuted = yes
-		need = { support_equipment = 10 }
+		need = {
+			infantry_equipment = 180
+			support_equipment = 10
+		}
 	}
 
 	hq_specops = {
@@ -408,7 +435,10 @@ sub_units = {
 		training_time = 120
 		weight = 0.1
 		can_be_parachuted = yes
-		need = { support_equipment = 10 }
+		need = {
+			infantry_equipment = 180
+			support_equipment = 10
+		}
 	}
 
 	# HQ security battalions
@@ -440,7 +470,7 @@ sub_units = {
 		training_time = 90
 		weight = 0.5
 		suppression = 1.5
-		need = { infantry_equipment = 60 }
+		need = { infantry_equipment = 540 }
 	}
 
 	hq_paratrooper = {
@@ -474,7 +504,7 @@ sub_units = {
 		weight = 0.5
 		can_be_parachuted = yes
 		suppression = 1
-		need = { infantry_equipment = 80 }
+		need = { infantry_equipment = 540 }
 	}
 
 	hq_light_armor = {
@@ -498,7 +528,10 @@ sub_units = {
 		required_dlc = { "Thunder at Our Gates" }
 		deployment_cost = 3
 		essential = { ADISCORD_recon_platform_archetype }
-		need = { infantry_equipment = 40 ADISCORD_recon_platform_archetype = 18 }
+		need = {
+			infantry_equipment = 540
+			ADISCORD_recon_platform_archetype = 18
+		}
 		manpower = 600
 		max_organisation = 40
 		default_morale = 0.1
@@ -531,7 +564,10 @@ sub_units = {
 		required_dlc = { "Thunder at Our Gates" }
 		deployment_cost = 3
 		essential = { ADISCORD_combat_platform_archetype }
-		need = { infantry_equipment = 40 ADISCORD_combat_platform_archetype = 25 }
+		need = {
+			infantry_equipment = 540
+			ADISCORD_combat_platform_archetype = 25
+		}
 		manpower = 600
 		max_organisation = 35
 		default_morale = 0.1
@@ -564,7 +600,10 @@ sub_units = {
 		required_dlc = { "Thunder at Our Gates" }
 		deployment_cost = 3
 		essential = { ADISCORD_heavy_platform_archetype }
-		need = { infantry_equipment = 40 ADISCORD_heavy_platform_archetype = 20 }
+		need = {
+			infantry_equipment = 540
+			ADISCORD_heavy_platform_archetype = 20
+		}
 		manpower = 600
 		max_organisation = 30
 		default_morale = 0.1

@@ -92,19 +92,19 @@ set_grand_doctrine = ADISCORD_air_doctrine_restored_air_command
 
 add_equipment_to_stockpile = {
 	type = infantry_equipment
-	amount = 4500
+	amount = 45000
 	producer = STP
 }
 
 add_equipment_to_stockpile = {
 	type = infantry_equipment
-	amount = 500
+	amount = 5000
 	producer = VAL
 }
 
 add_equipment_to_stockpile = {
 	type = infantry_equipment
-	amount = 1500
+	amount = 15000
 	producer = WRK
 }
 

@@ -40,7 +40,7 @@ STP_cw_fund_republican_supplies = {
 			ADISCORD_economy_mark_dirty = yes
 		}
 		SRP = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 }
 			add_equipment_to_stockpile = { type = support_equipment amount = 30 }
 			add_timed_idea = { idea = SRP_council_supply days = 42 }
 		}
@@ -764,14 +764,14 @@ STP_cw_prepare_opposition = {
 					set_state_flag = STP_resistance_supply_asset
 				}
 				else_if = {
-					limit = { state = 53 NOT = { has_state_flag = STP_resistance_sabotage_asset } STP = { NOT = { has_equipment = { infantry_equipment < 240 } } } }
+					limit = { state = 53 NOT = { has_state_flag = STP_resistance_sabotage_asset } STP = { NOT = { has_equipment = { infantry_equipment < 2400 } } } }
 					STP = {
-						set_temp_variable = { var = STP_cw_rifle_cost value = 240 }
+						set_temp_variable = { var = STP_cw_rifle_cost value = 2400 }
 						STP_cw_pay_rifles = yes
 					}
 					if = {
 						limit = { STP = { has_country_flag = STP_cw_rifles_paid } }
-						set_variable = { var = STP_cw_sabotage_rifles value = 240 }
+						set_variable = { var = STP_cw_sabotage_rifles value = 2400 }
 						set_state_flag = STP_resistance_sabotage_asset
 					}
 				}
@@ -1936,7 +1936,7 @@ STP_cw_refund_nod_sabotage_rifles = {
 	30 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
 }
 
-# COUNTRY scope. Six ADISCORD_territorial: 6 * (1000 manpower + 100 rifles).
+# COUNTRY scope. Six ADISCORD_territorial: 6 * (1000 manpower + 900 rifles).
 # create_unit supplies its own contents: debit the real pools first.
 STP_cw_ensure_rear_cell_template = {
 	if = {
@@ -1961,11 +1961,11 @@ STP_cw_raise_rear_cell = {
 			has_completed_focus = STP_cw_organize_underground
 			NOT = { has_country_flag = STP_cw_postwar }
 			NOT = { has_manpower < 2000 }
-			NOT = { has_equipment = { infantry_equipment < 200 } }
+			NOT = { has_equipment = { infantry_equipment < 1800 } }
 			NOT = { has_political_power < 35 }
 			FROM = { is_owned_by = STP is_controlled_by = STP NOT = { has_state_flag = STP_cw_rear_cell_raised } }
 		}
-		set_temp_variable = { var = STP_cw_rifle_cost value = 200 }
+		set_temp_variable = { var = STP_cw_rifle_cost value = 1800 }
 		STP_cw_pay_rifles = yes
 		if = {
 			limit = { has_country_flag = STP_cw_rifles_paid }
@@ -2003,9 +2003,9 @@ STP_cw_mobilize_brigade = {
 		limit = {
 			any_owned_state = { is_controlled_by = PREV }
 			NOT = { has_manpower < 6000 }
-			NOT = { has_equipment = { infantry_equipment < 600 } }
+			NOT = { has_equipment = { infantry_equipment < 5400 } }
 		}
-		set_temp_variable = { var = STP_cw_rifle_cost value = 600 }
+		set_temp_variable = { var = STP_cw_rifle_cost value = 5400 }
 		STP_cw_pay_rifles = yes
 		if = {
 			limit = { has_country_flag = STP_cw_rifles_paid }
@@ -2026,7 +2026,7 @@ STP_cw_mobilize_brigade = {
 			else = {
 				random_owned_controlled_state = { STP_cw_create_territorial_brigade = yes }
 			}
-			log = "[STP_CW] [THIS.GetTag] brigade paid: 6000 manpower, 600 rifles; remaining manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
+			log = "[STP_CW] [THIS.GetTag] brigade paid: 6000 manpower, 5400 rifles; remaining manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
 		}
 	}
 }
@@ -2047,7 +2047,7 @@ STP_cw_pay_assault_division = {
 	clr_country_flag = STP_cw_assault_division_paid
 	if = {
 		limit = { STP_cw_can_pay_assault_division = yes }
-		set_temp_variable = { var = STP_cw_payment_infantry_equipment value = 610 }
+		set_temp_variable = { var = STP_cw_payment_infantry_equipment value = 7110 }
 		set_temp_variable = { var = STP_cw_payment_ADISCORD_squad_weapons_equipment value = 48 }
 		set_temp_variable = { var = STP_cw_payment_support_equipment value = 30 }
 		set_temp_variable = { var = STP_cw_payment_artillery_equipment value = 60 }
@@ -2120,7 +2120,7 @@ STP_cw_pay_assault_division = {
 			set_country_flag = STP_cw_assault_division_paid
 		}
 		else = {
-			set_temp_variable = { var = STP_cw_payment_refund value = 610 }
+			set_temp_variable = { var = STP_cw_payment_refund value = 7110 }
 			subtract_from_temp_variable = { var = STP_cw_payment_refund value = STP_cw_payment_infantry_equipment }
 			add_equipment_to_stockpile = { type = infantry_equipment amount = STP_cw_payment_refund }
 			set_temp_variable = { var = STP_cw_payment_refund value = 48 }
@@ -2156,7 +2156,7 @@ STP_cw_cancel_assault_training = {
 
 STP_cw_refund_assault_division = {
 	add_manpower = 7900
-	add_equipment_to_stockpile = { type = infantry_equipment amount = 610 }
+	add_equipment_to_stockpile = { type = infantry_equipment amount = 7110 }
 	add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 48 }
 	add_equipment_to_stockpile = { type = support_equipment amount = 30 }
 	add_equipment_to_stockpile = { type = artillery_equipment amount = 60 }
@@ -2339,7 +2339,7 @@ STP_cw_refund_reserve_training = {
 		limit = { hidden_trigger = { check_variable = { var = STP_cw_training_cohorts value = 2 compare = equals } } }
 		hidden_effect = { clear_variable = STP_cw_training_cohorts }
 		add_manpower = 12000
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 10800 }
 	}
 }
 
@@ -3039,7 +3039,7 @@ STP_cw_start = {
 		if = {
 			limit = { has_country_flag = STP_cw_northern_cargo_reserved }
 			clr_country_flag = STP_cw_northern_cargo_reserved
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 2400 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 24000 }
 		}
 		if = {
 			limit = { has_country_flag = STP_cw_nod_sabotage_reserved }
@@ -3145,8 +3145,8 @@ STP_cw_start = {
 		# Apply the paid rifle-package shares to the native stockpile transfer so
 		# all equipment models and their producers remain intact. Aircraft split separately.
 		set_temp_variable = { var = STP_cw_input_pool value = num_equipment@infantry_equipment }
-		set_temp_variable = { var = STP_cw_input_light value = 600 }
-		set_temp_variable = { var = STP_cw_input_heavy value = 610 }
+		set_temp_variable = { var = STP_cw_input_light value = 5400 }
+		set_temp_variable = { var = STP_cw_input_heavy value = 7110 }
 		STP_cw_allocate_formation_reserves = yes
 		set_temp_variable = { var = STP_cw_republics_stockpile_ratio value = 0.2 }
 		set_temp_variable = { var = STP_cw_resistance_stockpile_ratio value = STP_cw_resistance_remainder_share }
@@ -4832,7 +4832,7 @@ STP_pw_party_finish_project = {
 		else_if = {
 			limit = { check_variable = { var = STP_pw_project_kind value = 6 compare = equals } }
 			set_variable = { var = STP_pw_recovery_army value = 1 }
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1600 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 16000 }
 			add_equipment_to_stockpile = { type = support_equipment amount = 120 }
 			add_equipment_to_stockpile = { type = motorized_equipment amount = 100 }
 			army_experience = 25
@@ -4861,7 +4861,7 @@ STP_pw_party_settle_nod_arms = {
 		add_to_variable = { var = ADISCORD_economy_treasury value = 450 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 450 }
 		ADISCORD_economy_mark_dirty = yes
-		send_equipment = { equipment = infantry_equipment amount = 1000 target = STP }
+		send_equipment = { equipment = infantry_equipment amount = 10000 target = STP }
 		send_equipment = { equipment = support_equipment amount = 100 target = STP }
 		STP = { country_event = { id = ADISCORD_STP_pc.24 hours = 1 } }
 	}
@@ -6051,7 +6051,7 @@ STP_ps_ammunition_finish = {
 			clear_variable = STP_ps_ammunition_deposit
 
 			set_country_flag = { flag = STP_ps_ammunition_cooldown value = 1 days = 42 }
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 8000 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 80000 }
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 480 }
 			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 480 }
 			add_equipment_to_stockpile = { type = support_equipment amount = 240 }
@@ -6127,7 +6127,7 @@ STP_ps_refund_nod = {
 		add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
 		if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } }
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 }
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 100 }
 			add_equipment_to_stockpile = { type = support_equipment amount = 60 }
 		}
@@ -6165,7 +6165,7 @@ set_temp_variable = { var = STP_ps_receipt_type value = STP_ps_nod_receipt_type 
 			}
 			if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } }
 				NOD = {
-					add_equipment_to_stockpile = { type = infantry_equipment amount = 1200 }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 }
 					add_equipment_to_stockpile = { type = artillery_equipment amount = 100 }
 					add_equipment_to_stockpile = { type = support_equipment amount = 60 }
 				}
@@ -6210,7 +6210,7 @@ STP_ps_nod_rifle_purchase_finish = {
 			clear_variable = STP_ps_nod_rifle_purchase_deposit
 
 
-			clr_country_flag = STP_ps_nod_procurement_credit add_equipment_to_stockpile = { type = infantry_equipment amount = 2000 }
+			clr_country_flag = STP_ps_nod_procurement_credit add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 }
 			ADISCORD_economy_mark_dirty = yes
 		}
 		else = { STP_ps_nod_rifle_purchase_refund = yes }
@@ -6408,8 +6408,8 @@ STP_ps_finalize_districts = {
 }
 
 STP_ps_begin_val_supply = {
-	if = { limit = { STP_ps_val_supply_open = yes has_country_flag = STP_ps_val_authorized NOT = { has_variable = STP_ps_val_receipt_rifles } NOT = { has_country_flag = STP_ps_val_supply_cooldown } NOT = { has_equipment = { infantry_equipment < 1200 } } }
-		set_temp_variable = { var = STP_cw_rifle_cost value = 1200 }
+	if = { limit = { STP_ps_val_supply_open = yes has_country_flag = STP_ps_val_authorized NOT = { has_variable = STP_ps_val_receipt_rifles } NOT = { has_country_flag = STP_ps_val_supply_cooldown } NOT = { has_equipment = { infantry_equipment < 12000 } } }
+		set_temp_variable = { var = STP_cw_rifle_cost value = 12000 }
 		set_temp_variable = { var = STP_ps_partial_refund value = num_equipment@infantry_equipment }
 		STP_cw_pay_rifles = yes
 		if = { limit = { NOT = { has_country_flag = STP_cw_rifles_paid } }
@@ -6418,7 +6418,7 @@ STP_ps_begin_val_supply = {
 		}
 		if = { limit = { has_country_flag = STP_cw_rifles_paid }
 			clr_country_flag = STP_cw_rifles_paid
-			set_variable = { var = STP_ps_val_receipt_rifles value = 1200 }
+			set_variable = { var = STP_ps_val_receipt_rifles value = 12000 }
 			add_to_variable = { var = STP_ps_val_sequence value = 1 }
 			set_variable = { var = STP_ps_val_receipt_stage value = 1 }
 			activate_mission = STP_ps_val_departure
@@ -6582,7 +6582,7 @@ STP_ps_val_pressure_finish = {
 STP_ps_deliver_val_contract = {
 	STS = {
 		# Deliver free reserves here; the full package also pays for the units below.
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 3200 producer = VAL }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 32000 producer = VAL }
 		if = {
 			limit = { VAL = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } } }
 			division_template = {
@@ -6689,14 +6689,14 @@ STP_cw_prepare_opposition_second = {
 					set_state_flag = STP_resistance_supply_asset
 				}
 				else_if = {
-					limit = { state = 53 NOT = { has_state_flag = STP_resistance_sabotage_asset } STP = { NOT = { has_equipment = { infantry_equipment < 240 } } } }
+					limit = { state = 53 NOT = { has_state_flag = STP_resistance_sabotage_asset } STP = { NOT = { has_equipment = { infantry_equipment < 2400 } } } }
 					STP = {
-						set_temp_variable = { var = STP_cw_rifle_cost value = 240 }
+						set_temp_variable = { var = STP_cw_rifle_cost value = 2400 }
 						STP_cw_pay_rifles = yes
 					}
 					if = {
 						limit = { STP = { has_country_flag = STP_cw_rifles_paid } }
-						set_variable = { var = STP_cw_sabotage_rifles value = 240 }
+						set_variable = { var = STP_cw_sabotage_rifles value = 2400 }
 						set_state_flag = STP_resistance_sabotage_asset
 					}
 				}
@@ -6743,7 +6743,7 @@ STP_ps_exile_formation_refund = {
 		set_temp_variable = { var = STP_ps_refund value = STP_ps_exile_formation_deposit }
 		clear_variable = STP_ps_exile_formation_deposit
 		add_manpower = 6000
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 600 }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 5400 }
 		add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
 		ADISCORD_economy_mark_dirty = yes
@@ -6788,7 +6788,7 @@ STP_ps_deliver_exile_formation = {
 }
 
 STP_ps_pay_nod_arms = {
-	set_temp_variable = { var = STP_cw_rifle_cost value = 1200 }
+	set_temp_variable = { var = STP_cw_rifle_cost value = 12000 }
 	set_temp_variable = { var = STP_ps_rifle_before value = num_equipment@infantry_equipment }
 	set_temp_variable = { var = STP_ps_artillery_before value = num_equipment@artillery_equipment }
 	set_temp_variable = { var = STP_ps_support_before value = num_equipment@support_equipment }
@@ -6851,7 +6851,7 @@ STP_ps_request_asylum = {
 STP_ps_reserve_export_contract = {
 	if = { limit = { VAL = { NOT = { has_variable = STP_ps_val_receipt_rifles } } }
 		VAL = {
-			set_temp_variable = { var = STP_cw_rifle_cost value = 2500 }
+			set_temp_variable = { var = STP_cw_rifle_cost value = 25000 }
 			set_temp_variable = { var = STP_ps_partial_refund value = num_equipment@infantry_equipment }
 			STP_cw_pay_rifles = yes
 			if = { limit = { NOT = { has_country_flag = STP_cw_rifles_paid } }
@@ -6866,7 +6866,7 @@ STP_ps_reserve_export_contract = {
 			VAL = {
 				clr_country_flag = STP_cw_rifles_paid
 				set_variable = { var = STP_ps_val_receipt_money value = PREV.STP_ps_before }
-				set_variable = { var = STP_ps_val_receipt_rifles value = 2500 }
+				set_variable = { var = STP_ps_val_receipt_rifles value = 25000 }
 				set_variable = { var = STP_ps_val_receipt_contract value = 3 }
 				set_variable = { var = STP_ps_val_receipt_stage value = 1 }
 				add_to_variable = { var = STP_ps_val_sequence value = 1 }
@@ -6916,7 +6916,7 @@ STP_pw_party_finish_northern_work = {
 			else_if = {
 				limit = { check_variable = { var = STP_pw_party_north_work_kind value = 2 compare = equals } }
 				set_variable = { var = STP_pw_party_northern_supply value = 1 }
-				add_equipment_to_stockpile = { type = infantry_equipment amount = 600 producer = ROOT }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 6000 producer = ROOT }
 				add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = ROOT }
 				army_experience = 20
 			}
