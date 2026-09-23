@@ -94,7 +94,11 @@ def tracked_paths(repository_root: Path, pathspec: str) -> list[str]:
 def python_semicolon_statements(repository_root: Path) -> list[str]:
     """Return tracked Python lines that use semicolons as statement separators."""
     findings: list[str] = []
-    for relative_path in tracked_paths(repository_root, "tools/**/*.py"):
+    python_paths = sorted(
+        set(tracked_paths(repository_root, "tools/*.py"))
+        | set(tracked_paths(repository_root, "tools/**/*.py"))
+    )
+    for relative_path in python_paths:
         path = repository_root / relative_path
         source = path.read_text(encoding="utf-8-sig")
         try:
