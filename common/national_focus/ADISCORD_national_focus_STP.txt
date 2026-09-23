@@ -2660,7 +2660,7 @@ focus_tree = {
 	focus = {
 		id = STP_party_war_transport
 		prerequisite = { focus = STP_cw_unified_headquarters }
-		icon = GFX_focus_generic_truck
+		icon = GFX_focus_STP_party_war_transport
 		x = 3
 		y = 2
 		cost = 1

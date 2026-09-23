@@ -178,6 +178,10 @@ spriteTypes = {
 		name = "GFX_focus_STP_party_district_compact"
 		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_district_compact.png"
 	}
+	spriteType = {
+		name = "GFX_focus_STP_party_war_transport"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_war_transport.png"
+	}
 
 	spriteType = {
 		name = "GFX_goal_generic_elections"
