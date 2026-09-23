@@ -142,6 +142,24 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         issues = dispatch_issues(unhooked)
         self.assertTrue(any("unreachable" in issue for issue in issues), issues)
 
+    def test_first_fall_requires_control_of_the_entire_claimant_home_region(self) -> None:
+        effects = source_section(read(STORY_EFFECTS), 'story_effects')
+        fall = named_block(
+            effects, "ADISCORD_vorkerland_story_check_first_claimant_capital_fall"
+        )
+        for claimant, states in {
+            "WKR": (32, 33, 40, 200, 201),
+            "VAD": (75, 106, 107, 121),
+            "TVA": (36, 37, 38, 39, 324),
+        }.items():
+            for state_id in states:
+                self.assertIn(
+                    f"{state_id} = {{ is_controlled_by = ROOT }}",
+                    fall,
+                    f"{claimant} region is missing state {state_id}",
+                )
+            self.assertNotIn(f"FROM = {{ tag = {claimant} }}", fall)
+
     def test_capital_first_fall_news_is_not_duplicated_by_the_objective_news(self) -> None:
         effects = source_section(read(STORY_EFFECTS), 'story_effects')
         for flag in (
