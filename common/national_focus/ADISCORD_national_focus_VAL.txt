@@ -1028,7 +1028,7 @@ focus_tree = {
 		x = 42
 		y = 4
 		cost = 4
-		prerequisite = { focus = VAL_Hire_Out_War }
+		prerequisite = { focus = VAL_Border_Survey_Corps }
 		completion_reward = {
 			if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Aleksei_Veyr } } } recruit_character = VAL_Aleksei_Veyr }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_contractor_officers_delta } }
