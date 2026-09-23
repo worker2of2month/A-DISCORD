@@ -3481,12 +3481,41 @@ class ValExpandedCampaignTests(unittest.TestCase):
         southern_trade_dependencies = [e.value for e in walk(focuses["VAL_Southern_Trade_Charter"]) if e.key == "focus"]
         self.assertIn("VAL_Resource_War_Contracts", southern_trade_dependencies)
         for name, body in focuses.items():
-            if name not in ("VAL_Resource_War_Contracts", "VAL_Southern_Trade_Charter"):
+            if name not in ("VAL_Resource_War_Contracts", "VAL_Support_The_Viceroy", "VAL_Southern_Trade_Charter"):
                 dependencies = [e.value for e in walk(body) if e.key == "focus"]
                 self.assertNotIn("VAL_Resource_War_Contracts", dependencies, name)
         tsaygen_prerequisites = [self.scalar(entry.value, "focus") for entry in focuses["VAL_Return_Southern_Tsaygen"] if entry.key == "prerequisite"]
         self.assertEqual(tsaygen_prerequisites, ["VAL_Contracts_Outlive_Kings", "VAL_Foreign_Broker_Licences"])
         self.assertEqual(self.scalar(self.getblock(focuses["VAL_frontier_return_irem"], "prerequisite"), "focus"), "VAL_Return_Southern_Tsaygen")
+
+    def test_viceroy_support_focus_commits_to_existing_resource_aid_system(self):
+        from tools.tests.test_adiscord_stp_preparation import walk
+        tree = self.parse((ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt").read_text(encoding="utf-8"))
+        focuses = {self.scalar(e.value, "id"): e.value for e in walk(tree)
+                   if e.key == "focus" and isinstance(e.value, list) and any(c.key == "id" for c in e.value)}
+        support = focuses["VAL_Support_The_Viceroy"]
+        self.assertEqual(self.scalar(support, "dynamic"), "yes")
+        self.assertEqual(self.scalar(support, "cancel_if_invalid"), "yes")
+        self.assertEqual(self.scalar(self.getblock(support, "prerequisite"), "focus"), "VAL_Resource_War_Contracts")
+        allow = self.getblock(support, "allow_branch")
+        self.assertIn("VAL_Resource_War_Contracts", str(allow))
+        self.assertIn("ADISCORD_nam_resource_war_active", str(allow))
+        available = self.getblock(support, "available")
+        self.assertIn("VAL_nam_concession_negotiable", str(available))
+        reward = self.getblock(support, "completion_reward")
+        self.assertIn("VAL_commit_nam_resource_aid", str(reward))
+
+        effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
+        commit = self.getblock(effects, "VAL_commit_nam_resource_aid")
+        self.assertIn("VAL_nam_concession_negotiable", str(commit))
+        self.assertIn("VAL_nam_concession_agreed", str(commit))
+        self.assertIn("VAL_resource_aid_side", str(commit))
+        self.assertIn("VAL_start_resource_aid", str(commit))
+        self.assertIn("VAL_begin_partner_contract_year", str(commit))
+
+        events = (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8")
+        nam_offer = events[events.index("id = val_contract.349"):events.index("id = val_contract.353")]
+        self.assertIn("VAL_commit_nam_resource_aid = yes", nam_offer)
 
     def test_resource_war_transitions_invalidate_the_focus_layout_without_an_aid_contract(self):
         from tools.tests.test_adiscord_stp_preparation import walk
