@@ -1707,13 +1707,14 @@ class ValNorthernExportTests(unittest.TestCase):
                 self.assertIn(values[key], values[key + "_tooltip"])
                 self.assertEqual(re.findall(r"£\w+", values[key]), re.findall(r"£\w+", values[key + "_blocked"]))
 
-    def test_three_export_focuses_have_distinct_consumed_unlocks(self):
+
+    def test_export_focuses_feed_one_abstract_arms_market(self):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar, walk
         focuses = {scalar(e.value, "id"): e.value for e in walk(parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8")))
                    if e.key == "focus" and isinstance(e.value, list)}
-        expectations = {"VAL_Foreign_Broker_Licences": ["VAL_ready_partner_supply", "VAL_quarterly_partner_supply"],
+        expectations = {"VAL_Foreign_Broker_Licences": ["VAL_sell_surplus_arms_market"],
                         "VAL_Northern_Clearing_House": [],
-                        "VAL_Contingency_Ledgers": ["VAL_partner_contract"]}
+                        "VAL_Contingency_Ledgers": []}
         sales = block(parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8")), "VAL_foreign_sales")
         for focus, unlock in expectations.items():
             reward = block(focuses[focus], "completion_reward")
@@ -1722,9 +1723,34 @@ class ValNorthernExportTests(unittest.TestCase):
                               for e in reward if e.key == "unlock_decision_tooltip"], unlock)
             for decision_id in unlock:
                 self.assertTrue(block(block(sales, decision_id), "visible"))
+
+        for focus_id, tooltip in (
+            ("VAL_Bulk_Arms_Contracts", "VAL_abstract_arms_upgrade_50k_tt"),
+            ("VAL_Army_Arsenal_Orders", "VAL_abstract_arms_upgrade_100k_tt"),
+            ("VAL_Strategic_Arms_Exports", "VAL_abstract_arms_upgrade_200k_tt"),
+        ):
+            reward = block(focuses[focus_id], "completion_reward")
+            self.assertIn(tooltip, [e.value for e in reward if e.key == "custom_effect_tooltip"])
+
+        for legacy in ("VAL_quarterly_partner_supply", "VAL_ready_partner_supply", "VAL_partner_contract"):
+            visible = block(block(sales, legacy), "visible")
+            self.assertEqual([(e.key, e.value) for e in visible], [("always", "no")])
+
+        market = block(sales, "VAL_sell_surplus_arms_market")
+        self.assertFalse(any(e.key in {"targets", "target_trigger"} for e in market))
+        complete = block(market, "complete_effect")
+        market_text = named_block_spans(DECISIONS_PATH.read_text(encoding="utf-8"), "VAL_sell_surplus_arms_market")[0].text
+        for amount, price in ((25000,500),(50000,1000),(100000,2250),(200000,5000)):
+            self.assertIn(f"amount = {amount}", market_text)
+            self.assertIn(f"value = {price}", market_text)
+        self.assertIn("VAL_record_instant_export = yes", market_text)
+
         triggers = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
         self.assertIn("has_completed_focus = VAL_Northern_Clearing_House", named_block_spans(triggers, "VAL_export_slot_free")[0].text)
-
+        buyer = named_block_spans(triggers, "VAL_abstract_arms_buyer")[0].text
+        self.assertIn("NOT = { has_war_with = VAL }", buyer)
+        for tag in ("CIN","OSF","APH","COF","TFF","YPR","WRK","WKR","VAD","TVA","STP","STS","SRP","NOD"):
+            self.assertIn(f"tag = {tag}", buyer)
     def test_northern_export_preserves_producers_and_settles_only_once(self):
         """Execute the small export callbacks, including dead buyers and stale callbacks."""
         from itertools import product

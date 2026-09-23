@@ -407,6 +407,31 @@ VAL_frontier_workshop_target_valid = {
 }
 
 # COUNTRY recipient: eligibility is rechecked at acceptance.
+# Abstract foreign-arms market buyer. The UI deliberately does not expose a
+# separate row for every country; one surviving non-enemy client receives each lot.
+VAL_abstract_arms_buyer = {
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	NOT = { tag = STS has_war_with = STP }
+	OR = {
+		tag = CIN
+		tag = OSF
+		tag = APH
+		tag = COF
+		tag = TFF
+		tag = YPR
+		tag = WRK
+		tag = WKR
+		tag = VAD
+		tag = TVA
+		tag = STP
+		tag = STS
+		tag = SRP
+		tag = NOD
+	}
+}
+
 VAL_export_customer = {
  NOT = { VAL = { check_variable = { var = VAL_military_state value = 1 compare = equals } } has_war_with = event_target:VAL_military_customer }
 	NOT = {

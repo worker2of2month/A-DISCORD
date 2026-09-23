@@ -1796,12 +1796,12 @@ class ValPartnerVisibilityTests(unittest.TestCase):
         facts["VAL","variable","VAL_order_1_state"]=1
         self.assertTrue(ValExpandedCampaignTests.match(self,"VAL_partner_has_visible_contracts",facts,"STP"))
 
-    def test_partner_row_uses_uncached_visible_capability(self):
-        decision=named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"),"VAL_partner_contract")
-        self.assertIn("VAL_partner_support_visible = yes",named_block(decision,"visible"))
-        self.assertNotIn("VAL_partner_support_visible",named_block(decision,"target_trigger"))
 
-
+    def test_abstract_arms_market_is_not_partner_targeted(self):
+        decision=named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"),"VAL_sell_surplus_arms_market")
+        self.assertNotIn("targets =",decision)
+        self.assertNotIn("target_trigger",decision)
+        self.assertIn("any_country = { VAL_abstract_arms_buyer = yes }",named_block(decision,"available"))
     def test_unaffordable_options_recheck_before_effects_and_do_not_loop_ai(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
         from tools.tests.test_adiscord_stp_preparation import scalar, block
@@ -1908,17 +1908,27 @@ class ValNativeTradeFeeTests(unittest.TestCase):
 
 
 class ValDirectContractDecisionTests(unittest.TestCase):
-    def test_hire_and_quarterly_supply_have_direct_entry_points(self):
+
+    def test_hire_and_abstract_arms_market_have_direct_entry_points(self):
         source=read("common/decisions/ADISCORD_VAL_decisions.txt")
         hire=named_block(source,"VAL_hire_partner_volunteers")
         self.assertIn("VAL_partner_hire_can_offer = yes",hire)
         self.assertIn("VAL_dispatch_partner_hire_offer = yes",hire)
         self.assertNotIn("subtract_from_variable",hire)
-        orders=named_block(source,"VAL_quarterly_partner_supply")
-        self.assertIn("VAL_partner_orders_visible = yes",named_block(orders,"visible"))
-        self.assertIn("VAL_order_can_offer = yes",named_block(orders,"available"))
-        self.assertIn("id = val_contract.407",orders)
 
+        market=named_block(source,"VAL_sell_surplus_arms_market")
+        self.assertIn("has_completed_focus = VAL_Foreign_Broker_Licences",named_block(market,"visible"))
+        available=named_block(market,"available")
+        self.assertIn("VAL_export_slot_free = yes",available)
+        self.assertIn("infantry_equipment < 25000",available)
+        self.assertIn("any_country = { VAL_abstract_arms_buyer = yes }",available)
+
+        complete=named_block(market,"complete_effect")
+        for rifles,price in ((25000,500),(50000,1000),(100000,2250),(200000,5000)):
+            self.assertIn(f"amount = {rifles}",complete)
+            self.assertIn(f"value = {price}",complete)
+        self.assertIn("VAL_record_instant_export = yes",complete)
+        self.assertIn("VAL_contract_record_success = yes",complete)
     def test_ai_hire_settles_in_the_offer_scope_without_a_delayed_dispatch(self):
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         dispatch = named_block(effects, "VAL_dispatch_partner_hire_offer")
@@ -1928,14 +1938,13 @@ class ValDirectContractDecisionTests(unittest.TestCase):
         self.assertIn("country_event = { id = val_contract.364 }", dispatch)
         self.assertNotIn("id = val_contract.426", read("events/ADISCORD_VAL_contract_events.txt"))
 
-    def test_special_agreement_does_not_route_to_general_menu(self):
+
+    def test_legacy_special_agreement_is_hidden_but_kept_for_save_compatibility(self):
         source=read("common/decisions/ADISCORD_VAL_decisions.txt")
         special=named_block(source,"VAL_partner_contract")
-        self.assertIn("VAL_partner_support_visible = yes",named_block(special,"visible"))
+        self.assertEqual(named_block(special,"visible").strip(),"visible = { always = no }")
         self.assertIn("id = val_contract.414",special)
         self.assertNotIn("id = val_contract.361",special)
-
-
 class ValReplacementReserveTests(unittest.TestCase):
     def test_recruitment_brake_releases_at_exact_reserve_boundary(self):
         from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, parse_clausewitz
@@ -2184,17 +2193,19 @@ class ValHirePeaceTests(ValHireReceiptTests):
 
 
 class ValAnnualDecisionVisibilityTests(unittest.TestCase):
-    def test_rows_hide_by_recipient_readiness_and_keep_local_cost_checks(self):
+
+    def test_partner_rows_keep_readiness_checks_while_legacy_export_rows_stay_hidden(self):
         source=read("common/decisions/ADISCORD_VAL_decisions.txt")
-        pairs={"VAL_sign_annual_trade":"VAL_trade_recipient_ready", "VAL_hire_partner_volunteers":"VAL_hire_recipient_ready", "VAL_quarterly_partner_supply":"VAL_quarterly_recipient_ready", "VAL_ready_partner_supply":"VAL_ready_recipient_ready", "VAL_partner_contract":"VAL_special_recipient_ready"}
+        pairs={"VAL_sign_annual_trade":"VAL_trade_recipient_ready",
+               "VAL_hire_partner_volunteers":"VAL_hire_recipient_ready"}
         for key,predicate in pairs.items():
             decision=named_block(source,key)
             visible=named_block(decision,"visible")
             self.assertIn(predicate+" = yes",visible)
             self.assertNotIn("custom_trigger_tooltip",visible)
             self.assertNotIn("has_political_power",visible)
-            target_trigger = named_block(decision,"target_trigger")
-            if key == "VAL_sign_annual_trade":
+            target_trigger=named_block(decision,"target_trigger")
+            if key=="VAL_sign_annual_trade":
                 self.assertIn("VAL_partner_commerce_visible = yes",target_trigger)
                 self.assertIn("NOT = { has_country_flag = VAL_market_term_started }",target_trigger)
                 self.assertIn("NOT = { has_country_flag = VAL_partner_contact_cooldown }",target_trigger)
@@ -2202,7 +2213,10 @@ class ValAnnualDecisionVisibilityTests(unittest.TestCase):
                 self.assertEqual(target_trigger.strip(),"target_trigger = { FROM = { exists = yes } }")
             self.assertNotIn("days_re_enable = 365",decision)
 
-    def test_unavailable_foreign_agreement_rows_are_hidden(self):
+        for key in ("VAL_quarterly_partner_supply","VAL_ready_partner_supply","VAL_partner_contract"):
+            self.assertEqual(named_block(named_block(source,key),"visible").strip(),"visible = { always = no }")
+
+    def test_foreign_sales_ui_uses_one_abstract_arms_market_row(self):
         decisions=read("common/decisions/ADISCORD_VAL_decisions.txt")
 
         trade=named_block(decisions,"VAL_sign_annual_trade")
@@ -2211,23 +2225,14 @@ class ValAnnualDecisionVisibilityTests(unittest.TestCase):
         hire=named_block(decisions,"VAL_hire_partner_volunteers")
         self.assertIn("VAL_partner_hire_can_offer = yes",named_block(hire,"visible"))
 
-        quarterly=named_block(decisions,"VAL_quarterly_partner_supply")
-        self.assertIn("VAL_order_can_offer = yes",named_block(quarterly,"visible"))
-        self.assertIn("VAL_order_can_offer = yes",named_block(quarterly,"available"))
+        market=named_block(decisions,"VAL_sell_surplus_arms_market")
+        self.assertNotIn("targets =",market)
+        self.assertNotIn("target_trigger",market)
+        self.assertIn("has_completed_focus = VAL_Foreign_Broker_Licences",named_block(market,"visible"))
+        self.assertIn("VAL_abstract_arms_buyer = yes",named_block(market,"available"))
 
-        ready=named_block(decisions,"VAL_ready_partner_supply")
-        ready_visible=named_block(ready,"visible")
-        ready_available=named_block(ready,"available")
-        for predicate in ("VAL_partner_arms_can_offer","VAL_partner_bulk_can_offer",
-                          "VAL_partner_arsenal_can_offer","VAL_partner_strategic_can_offer"):
-            self.assertIn(predicate+" = yes",ready_visible)
-            self.assertIn(predicate+" = yes",ready_available)
-
-        special=named_block(decisions,"VAL_partner_contract")
-        special_visible=named_block(special,"visible")
-        self.assertIn("VAL_partner_special_offerable = yes",special_visible)
-        self.assertIn("VAL_partner_desk_free = yes",special_visible)
-
+        for legacy in ("VAL_quarterly_partner_supply","VAL_ready_partner_supply","VAL_partner_contract"):
+            self.assertEqual(named_block(named_block(decisions,legacy),"visible").strip(),"visible = { always = no }")
     def test_success_year_helper_is_separate_from_refusal_handling(self):
         effects=read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         self.assertIn("flag = VAL_partner_contact_cooldown days = 365",named_block(effects,"VAL_begin_partner_contract_year"))

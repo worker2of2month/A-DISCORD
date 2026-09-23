@@ -1427,18 +1427,81 @@ VAL_foreign_sales = {
 		ai_will_do = { base = 5 modifier = { factor = 10 has_manpower < 15000 } modifier = { factor = 0 NOT = { has_manpower < 30000 } } }
 	}
 
+	# Keep the foreign-sales category readable: arms exports are one abstract
+	# market action instead of one row per buyer and contract family.
+	VAL_sell_surplus_arms_market = {
+		icon = generic_production
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Foreign_Broker_Licences }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = { tooltip = VAL_partner_export_slot_tt VAL_export_slot_free = yes }
+			custom_trigger_tooltip = { tooltip = VAL_abstract_arms_stock_tt NOT = { has_equipment = { infantry_equipment < 25000 } } }
+			custom_trigger_tooltip = { tooltip = VAL_abstract_arms_buyer_tt any_country = { VAL_abstract_arms_buyer = yes } }
+		}
+		cost = 0
+		days_re_enable = 1
+		complete_effect = {
+			custom_effect_tooltip = VAL_abstract_arms_sale_result_tt
+			hidden_effect = {
+				random_country = {
+					limit = { VAL_abstract_arms_buyer = yes }
+					save_event_target_as = VAL_abstract_arms_market_buyer
+				}
+				if = {
+					limit = {
+						has_completed_focus = VAL_Strategic_Arms_Exports
+						NOT = { has_equipment = { infantry_equipment < 200000 } }
+					}
+					send_equipment = { equipment = infantry_equipment amount = 200000 target = event_target:VAL_abstract_arms_market_buyer }
+					ADISCORD_economy_initialize_country = yes
+					add_to_variable = { var = ADISCORD_economy_treasury value = 5000 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 5000 }
+				}
+				else_if = {
+					limit = {
+						has_completed_focus = VAL_Army_Arsenal_Orders
+						NOT = { has_equipment = { infantry_equipment < 100000 } }
+					}
+					send_equipment = { equipment = infantry_equipment amount = 100000 target = event_target:VAL_abstract_arms_market_buyer }
+					ADISCORD_economy_initialize_country = yes
+					add_to_variable = { var = ADISCORD_economy_treasury value = 2250 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2250 }
+				}
+				else_if = {
+					limit = {
+						has_completed_focus = VAL_Bulk_Arms_Contracts
+						NOT = { has_equipment = { infantry_equipment < 50000 } }
+					}
+					send_equipment = { equipment = infantry_equipment amount = 50000 target = event_target:VAL_abstract_arms_market_buyer }
+					ADISCORD_economy_initialize_country = yes
+					add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 }
+				}
+				else = {
+					send_equipment = { equipment = infantry_equipment amount = 25000 target = event_target:VAL_abstract_arms_market_buyer }
+					ADISCORD_economy_initialize_country = yes
+					add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+				}
+				ADISCORD_economy_mark_dirty = yes
+				VAL_record_instant_export = yes
+				VAL_contract_record_success = yes
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = { factor = 0 has_war = yes }
+			modifier = { factor = 2 NOT = { has_equipment = { infantry_equipment < 100000 } } }
+		}
+	}
+
 	VAL_quarterly_partner_supply = {
 		icon = generic_production
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD }
 		target_trigger = { FROM = { exists = yes } }
-		visible = {
-			FROM = {
-				VAL_partner_orders_visible = yes
-				VAL_quarterly_recipient_ready = yes
-				VAL_order_can_offer = yes
-			}
-		}
+		visible = { always = no }
 		available = { custom_trigger_tooltip = { tooltip = VAL_quarterly_decision_ready_tt FROM = { VAL_order_can_offer = yes } } }
 		cost = 0
 		complete_effect = {
@@ -1453,18 +1516,7 @@ VAL_foreign_sales = {
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD NAM EFL }
 		target_trigger = { FROM = { exists = yes } }
-		visible = {
-			FROM = {
-				VAL_partner_weapons_visible = yes
-				VAL_ready_recipient_ready = yes
-				OR = {
-					VAL_partner_arms_can_offer = yes
-					VAL_partner_bulk_can_offer = yes
-					VAL_partner_arsenal_can_offer = yes
-					VAL_partner_strategic_can_offer = yes
-				}
-			}
-		}
+		visible = { always = no }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_ready_decision_ready_tt
@@ -1491,23 +1543,7 @@ VAL_foreign_sales = {
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD NAM EFL }
 		target_trigger = { FROM = { exists = yes } }
-		visible = {
-			FROM = {
-				VAL_partner_support_visible = yes
-				VAL_special_recipient_ready = yes
-				VAL_partner_special_offerable = yes
-			}
-			VAL_partner_desk_free = yes
-			OR = {
-				has_completed_focus = VAL_Resource_War_Contracts
-				has_completed_focus = VAL_Contingency_Ledgers
-				has_completed_focus = VAL_Market_Roads_North
-				has_completed_focus = VAL_Foreign_Broker_Licences
-				has_completed_focus = VAL_Operational_Directorate
-				has_country_flag = VAL_foreign_operations_unlocked
-				has_country_flag = VAL_northern_operations_unlocked
-			}
-		}
+		visible = { always = no }
 
 		available = {
 			custom_trigger_tooltip = {
