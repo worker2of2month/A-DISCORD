@@ -131,6 +131,7 @@
  VAL_Reserve_Accounting_desc: "Raw material and weapon reserves will be recorded under common standards. This will supply the field army, fulfil foreign orders and keep factories running through the next interruption of deliveries."
  VAL_Industrial_Mobilization_Plan: "New Industrial Policy"
  VAL_Industrial_Mobilization_Plan_desc: "We will bring emergency measures into one production plan. This is the last of six initial programmes: some penalties will remain until victory, restored trade and a postwar debt settlement."
+ VAL_contract_industry_tier_1_tt: "§YContract Industry§! is raised to §YTier I§!. The current industrial modifier updates automatically."
  VAL_contract_industry_tier_2_tt: "§YContract Industry§! is raised to §YTier II§!. The current industrial modifier updates automatically."
  VAL_contract_industry_tier_3_tt: "§YContract Industry§! is raised to §YTier III§!. The current industrial modifier updates automatically."
  VAL_Company_Service_Code: "Contract Service Code"
