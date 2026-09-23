@@ -379,6 +379,20 @@ ideas = {
 			cancel = { OR = { has_capitulated = yes NOT = { OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } } } }
 			modifier = { army_attack_factor = -0.10 army_speed_factor = -0.10 supply_consumption_factor = 0.10 }
 		}
+		YPR_cw_northern_resolve = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { OR = { has_capitulated = yes NOT = { has_war_with = NOD } } }
+			modifier = { army_defence_factor = 0.12 army_org_regain = 0.10 supply_consumption_factor = -0.05 max_dig_in = 2 }
+		}
+		TFF_cw_northern_resolve = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { OR = { has_capitulated = yes NOT = { has_war_with = NOD } } }
+			modifier = { army_attack_factor = 0.08 breakthrough_factor = 0.10 army_org_regain = 0.10 army_speed_factor = 0.05 }
+		}
 		STP_cw_exhaustion_1 = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }
