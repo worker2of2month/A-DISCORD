@@ -9536,9 +9536,11 @@ ADISCORD_vorkerland_story_dispatch_tva_capital_fall = {
 	}
 }
 
-# ROOT is the new controller and FROM is the old controller in
-# on_state_control_changed. Requiring the changed controller to hold the exact
-# capital prevents an unrelated state change from naming the wrong victor.
+# ROOT is the new controller in on_state_control_changed. A claimant does not
+# count as fallen merely because its capital state changes hands. The first-fall
+# news is reserved for a real regional defeat: one controller must hold every
+# strict home state of that claimant. This makes border raids and brief capital
+# occupations insufficient to publish a global collapse headline.
 ADISCORD_vorkerland_story_check_first_claimant_capital_fall = {
 	if = {
 		limit = {
@@ -9546,8 +9548,11 @@ ADISCORD_vorkerland_story_check_first_claimant_capital_fall = {
 			ADISCORD_vorkerland_central_showdown_edges_verified = yes
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
 			NOT = { has_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell }
-			FROM = { tag = WKR }
 			32 = { is_controlled_by = ROOT }
+			33 = { is_controlled_by = ROOT }
+			40 = { is_controlled_by = ROOT }
+			200 = { is_controlled_by = ROOT }
+			201 = { is_controlled_by = ROOT }
 			NOT = { tag = WKR }
 		}
 		set_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell
@@ -9567,8 +9572,10 @@ ADISCORD_vorkerland_story_check_first_claimant_capital_fall = {
 			ADISCORD_vorkerland_central_showdown_edges_verified = yes
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
 			NOT = { has_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell }
-			FROM = { tag = VAD }
 			75 = { is_controlled_by = ROOT }
+			106 = { is_controlled_by = ROOT }
+			107 = { is_controlled_by = ROOT }
+			121 = { is_controlled_by = ROOT }
 			NOT = { tag = VAD }
 		}
 		set_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell
@@ -9588,8 +9595,11 @@ ADISCORD_vorkerland_story_check_first_claimant_capital_fall = {
 			ADISCORD_vorkerland_central_showdown_edges_verified = yes
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_launch_failed }
 			NOT = { has_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell }
-			FROM = { tag = TVA }
 			36 = { is_controlled_by = ROOT }
+			37 = { is_controlled_by = ROOT }
+			38 = { is_controlled_by = ROOT }
+			39 = { is_controlled_by = ROOT }
+			324 = { is_controlled_by = ROOT }
 			NOT = { tag = TVA }
 		}
 		set_global_flag = ADISCORD_vorkerland_story_first_claimant_capital_fell
@@ -9603,10 +9613,9 @@ ADISCORD_vorkerland_story_check_first_claimant_capital_fall = {
 		}
 		ADISCORD_vorkerland_story_dispatch_tva_capital_fall = yes
 	}
-	# Runs after the capital chain above so the iconic-objective report can see
-	# which capital, if any, has just been announced separately. This effect is
-	# the story layer's single on_state_control_changed entry point, so the
-	# objective news needs no additional hook outside the story files.
+	# Runs after the regional-fall chain above so the iconic-objective report can
+	# still publish individual city captures independently. The story layer keeps
+	# one state-control entry point and needs no polling.
 	ADISCORD_vorkerland_story_report_iconic_objective = yes
 }
 
