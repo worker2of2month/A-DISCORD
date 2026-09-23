@@ -1701,6 +1701,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_vorkerland_collapse.6",
+      "namespace": "ADISCORD_vorkerland_collapse",
+      "number": 6,
+      "owner": "events/ADISCORD_vorkerland_events.txt",
+      "subsystem": "vorkerland_collapse",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_vorkerland_collapse.10",
       "namespace": "ADISCORD_vorkerland_collapse",
       "number": 10,
