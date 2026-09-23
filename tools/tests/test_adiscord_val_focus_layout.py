@@ -120,7 +120,7 @@ class KefreytFocusLayoutTests(unittest.TestCase):
 
     def test_existing_campaign_gates_are_preserved(self) -> None:
         conference = focus_block(self.focuses, "VAL_frontier_conference")
-        prerequisite = re.search(r"prerequisite\s*=\s*\{([^}]]+)\}", conference)
+        prerequisite = re.search(r"prerequisite\s*=\s*\{([^}]+)\}", conference)
         self.assertIsNotNone(prerequisite)
         for focus_id in (
             "VAL_Contracts_Outlive_Kings",
