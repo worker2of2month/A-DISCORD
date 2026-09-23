@@ -68,6 +68,32 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
         self.assertIn("add_manpower = 10000", finish)
         self.assertNotIn("add_manpower = 5000", finish)
 
+    def test_population_market_has_three_additional_people_levers(self) -> None:
+        bounties = named_block(self.decisions, "VAL_offer_settlement_bounties")
+        self.assertIn("ADISCORD_economy_can_spend_250 = yes", bounties)
+        self.assertIn("ADISCORD_economy_spend_250 = yes", bounties)
+        self.assertIn("var = VAL_displaced_population value = 3", bounties)
+        self.assertIn("days_re_enable = 90", bounties)
+
+        naturalize = named_block(self.decisions, "VAL_naturalize_refugee_households")
+        self.assertIn("var = VAL_displaced_population value = -2", naturalize)
+        self.assertIn("var = VAL_local_volunteer_pool value = 1", naturalize)
+        self.assertIn("cost = 50", naturalize)
+        self.assertIn("days_re_enable = 45", naturalize)
+
+        emergency = named_block(self.decisions, "VAL_emergency_service_contracts")
+        for token in (
+            "ADISCORD_economy_can_spend_500 = yes",
+            "ADISCORD_economy_spend_500 = yes",
+            "command_power < 25",
+            "infantry_equipment < 10000",
+            "var = VAL_local_volunteer_pool value = -1",
+            "add_manpower = 10000",
+            "add_stability = -0.01",
+            "days_re_enable = 90",
+        ):
+            self.assertIn(token, emergency)
+
     def test_housing_and_labour_are_worth_using(self) -> None:
         housing = named_block(self.decisions, "VAL_expand_refugee_housing")
         self.assertIn("ADISCORD_economy_can_spend_250 = yes", housing)
