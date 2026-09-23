@@ -518,12 +518,12 @@ VAL_reform_mercenary_payroll = {
 # Infantry stock preserves producer and quantity; named variants are not tracked.
 VAL_reserve_export_rifles = {
 	clr_country_flag = VAL_export_rifles_reserved
-	set_temp_variable = { var = VAL_export_rifles_remaining value = 250000 }
+	set_temp_variable = { var = VAL_export_rifles_remaining value = 25000 }
 	if = { limit = { has_completed_focus = VAL_Foreign_Broker_Licences } set_temp_variable = { var = VAL_export_rifles_remaining value = 50000 } }
 	if = {
 		limit = { OR = {
 			AND = { has_completed_focus = VAL_Foreign_Broker_Licences NOT = { has_equipment = { infantry_equipment < 50000 } } }
-			AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 250000 } } }
+			AND = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } NOT = { has_equipment = { infantry_equipment < 25000 } } }
 		} }
 		every_possible_country = {
 			limit = { VAL = { check_variable = { var = VAL_export_rifles_remaining value = 0 compare = greater_than } } }
