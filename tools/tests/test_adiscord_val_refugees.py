@@ -405,10 +405,13 @@ class RefugeeAdmissionTests(unittest.TestCase):
 class KefreytDecisionVisibilityTests(unittest.TestCase):
     def test_viceroy_offer_is_visible_from_foreign_broker_licences(self):
         categories = load("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
-        decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_foreign_sales"]}
-        facts = {("VAL", "has_completed_focus", "VAL_Foreign_Broker_Licences"): True,
-                 ("NAM", "exists", "yes"): True}
-        category = next(e.value for e in categories["VAL_foreign_sales"] if e.key == "visible")
+        decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_resource_war_aid"]}
+        facts = {
+            ("VAL", "has_completed_focus", "VAL_Foreign_Broker_Licences"): True,
+            ("VAL", "ADISCORD_nam_resource_war_active", "yes"): True,
+            ("NAM", "exists", "yes"): True,
+        }
+        category = next(e.value for e in categories["VAL_resource_war_aid"] if e.key == "visible")
         visible = next(e.value for e in decisions["VAL_negotiate_nam_metals"] if e.key == "visible")
         self.assertTrue(matches_conditions(category, facts, "VAL"))
         self.assertTrue(matches_conditions(visible, facts, "VAL"))
@@ -418,7 +421,7 @@ class KefreytDecisionVisibilityTests(unittest.TestCase):
         self.assertFalse(matches_conditions(visible, {**facts, ("NAM", "exists", "yes"): False}, "VAL"))
 
     def test_viceroy_offer_exposes_the_required_focus_without_bypassing_it(self):
-        decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_foreign_sales"]}
+        decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_resource_war_aid"]}
         available = next(e.value for e in decisions["VAL_negotiate_nam_metals"] if e.key == "available")
         self.assertEqual(scalar(available, "has_completed_focus"), "VAL_Resource_War_Contracts")
         facts = {("VAL", "VAL_nam_concession_negotiable", "yes"): True}
@@ -456,7 +459,7 @@ class CorridorProjectTests(unittest.TestCase):
     def setUp(self):
         self.effects = load("common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt")
         self.effects.update(load("common/scripted_effects/ADISCORD_shared_action_effects.txt"))
-        self.decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_foreign_sales"]}
+        self.decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_logistics_market_decisions.txt")["VAL_trade_routes"]}
         self.variables = {"ADISCORD_economy_treasury": 3000}
         self.facts = {("VAL", "has_capitulated", "no"): True}
         for region in ("occidia", "north", "stelander", "vorkerland"):
@@ -520,13 +523,13 @@ class CorridorProjectTests(unittest.TestCase):
         self.run_effect("VAL_begin_north_corridor_project")
         self.assertEqual(self.variables["VAL_corridor_project"], 1)
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2250)
-        self.decision_effect("VAL_invest_northern_corridor", "cancel_effect")
+        self.decision_effect("VAL_upgrade_north_route", "cancel_effect")
         self.assertEqual(self.variables["VAL_corridor_deposit"], 750)
-        self.decision_effect("VAL_invest_occidian_corridor", "remove_effect")
+        self.decision_effect("VAL_upgrade_occidia_route", "remove_effect")
         count = len(self.rewards)
         self.assertGreater(count, 0)
         self.assertNotIn("VAL_corridor_deposit", self.variables)
-        self.decision_effect("VAL_invest_occidian_corridor", "remove_effect")
+        self.decision_effect("VAL_upgrade_occidia_route", "remove_effect")
         self.assertEqual(len(self.rewards), count)
         self.run_effect("VAL_begin_occidia_corridor_project")
         self.assertNotIn("VAL_corridor_deposit", self.variables)
@@ -535,11 +538,11 @@ class CorridorProjectTests(unittest.TestCase):
         self.run_effect("VAL_begin_north_corridor_project")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2000)
         self.facts[("VAL", "VAL_trade_route_north_open", "yes")] = False
-        self.decision_effect("VAL_invest_northern_corridor", "remove_effect")
+        self.decision_effect("VAL_upgrade_north_route", "remove_effect")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 3000)
         self.assertEqual(self.variables["ADISCORD_economy_current_month_action_income"], 1000)
         self.assertEqual(self.rewards, [])
-        self.decision_effect("VAL_invest_northern_corridor", "cancel_effect")
+        self.decision_effect("VAL_upgrade_north_route", "cancel_effect")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 3000)
         self.facts[("VAL", "VAL_trade_route_north_open", "yes")] = True
         self.run_effect("VAL_begin_north_corridor_project")
@@ -903,7 +906,6 @@ class WastelandCampaignTests(unittest.TestCase):
         facts = {
             ("VAL", "has_global_flag", "ADISCORD_vorkerland_dirty_opened"): True,
             ("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True,
-            ("VAL", "owns_state", "168"): True, ("VAL", "controls_state", "168"): True,
             ("VAL", "VAL_frontier_idle", "yes"): True,
             ("169", "is_owned_by", "ERT"): True, ("169", "is_controlled_by", "ERT"): True,
             ("ERT", "exists", "yes"): True, ("ERT", "has_capitulated", "no"): True,
@@ -934,7 +936,7 @@ class WastelandCampaignTests(unittest.TestCase):
         self.assertEqual(transfers(charter), [169])
         settlement = self.effects["VAL_settle_wasteland_capitulation"]
         targets = set(transfers(settlement))
-        self.assertNotIn(168, targets)
+        self.assertIn(168, targets)
         self.assertNotIn(330, targets)
         from tools.builders.build_adiscord_val_operations_map import SOUTHERN_STATES
         self.assertLessEqual(targets, set(SOUTHERN_STATES))
