@@ -438,7 +438,7 @@
  VAL_Return_Southern_Tsaygen:0 "Return Southern Tsaygen"
  VAL_Return_Southern_Tsaygen_desc:0 "Southern Tsaygen was Kefreyt territory before the collapse of Vorkerland. ERT took the town while the old border was disintegrating. The army will not treat that seizure as a new frontier. We are going back for our own land."
  VAL_southern_tsaygen_revenge_available_tt:0 "The Vorkerland collapse has occurred. ERT independently owns and controls $STATE_168$, which remains a Kefreyt core. Kefreyt is independent and at peace."
- VAL_return_southern_tsaygen_war_tt:0 "§RKefreyt declares war on ERT§! for $STATE_168$. Victory returns Southern Tsaygen only."
+ VAL_return_southern_tsaygen_war_tt:0 "§RDeclares war on ERT§! for $STATE_168$. The war is limited to reclaiming Southern Tsaygen."
  VAL_frontier_return_irem:0 "Beyond the Perimeter"
  VAL_frontier_return_irem_desc:0 "After the Perimeter falls, the garrisons of Irem can cross the border. The first operation against the eastern remnants secures a single neighbouring bridgehead, state 169. Its capture enables a separate contract administration. Irem remains part of Kefreyt."
  VAL_frontier_return_irem_war_tt:0 "§RDeclares war on ERT§! for $STATE_169$."
