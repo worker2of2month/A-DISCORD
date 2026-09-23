@@ -1733,13 +1733,146 @@ ADISCORD_vorkerland_rus_campaign_target_still_open = {
 	}
 }
 
+# The proclamation follows the player-facing contract: three belts held is enough.
+# A vanished or puppeted belt does not count as held; the separate fallback only
+# applies when no independent Dirty Zone republic remains at all.
+ADISCORD_vorkerland_rus_has_three_empire_belts = {
+	OR = {
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_sla_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_rza_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_mlr_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+		AND = {
+			ADISCORD_vorkerland_rus_holds_ert_playable = yes
+			ADISCORD_vorkerland_rus_holds_irt_playable = yes
+			ADISCORD_vorkerland_rus_holds_sca_playable = yes
+		}
+	}
+}
+
+ADISCORD_vorkerland_rus_has_no_independent_dirty_republics = {
+	OR = {
+		NOT = { country_exists = SLA }
+		SLA = { is_subject = yes }
+	}
+	OR = {
+		NOT = { country_exists = RZA }
+		RZA = { is_subject = yes }
+	}
+	OR = {
+		NOT = { country_exists = MLR }
+		MLR = { is_subject = yes }
+	}
+	OR = {
+		NOT = { country_exists = ERT }
+		ERT = { is_subject = yes }
+	}
+	OR = {
+		NOT = { country_exists = IRT }
+		IRT = { is_subject = yes }
+	}
+	OR = {
+		NOT = { country_exists = SCA }
+		SCA = { is_subject = yes }
+	}
+}
+
 ADISCORD_vorkerland_rus_has_empire_territory = {
-	ADISCORD_vorkerland_rus_holds_sla_playable = yes
-	ADISCORD_vorkerland_rus_holds_rza_playable = yes
-	ADISCORD_vorkerland_rus_holds_mlr_playable = yes
-	ADISCORD_vorkerland_rus_holds_ert_playable = yes
-	ADISCORD_vorkerland_rus_holds_irt_playable = yes
-	ADISCORD_vorkerland_rus_holds_sca_playable = yes
+	OR = {
+		ADISCORD_vorkerland_rus_has_three_empire_belts = yes
+		ADISCORD_vorkerland_rus_has_no_independent_dirty_republics = yes
+	}
 }
 
 ADISCORD_vorkerland_rus_can_proclaim_last_empire = {
