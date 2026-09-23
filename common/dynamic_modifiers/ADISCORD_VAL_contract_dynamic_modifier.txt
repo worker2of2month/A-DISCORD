@@ -34,6 +34,12 @@ VAL_contract_state = {
 	production_lack_of_resource_penalty_factor = VAL_contract_resource_penalty_factor
 }
 
+VAL_partner_market_income = {
+	ADISCORD_economy_weekly_income = VAL_partner_market_weekly_income
+	enable = { always = yes }
+	icon = GFX_idea_VAL_contract_state
+}
+
 # Retain the serialized legacy ID only for guarded removal from older saves.
 VAL_reclamation_recovered_land = {
 	enable = { always = no }

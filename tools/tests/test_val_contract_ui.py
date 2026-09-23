@@ -382,15 +382,16 @@ class ValPartnerSettlementTests(unittest.TestCase):
         self.assertEqual(facts["NAM", "equipment", "infantry_equipment"], 5000)
         self.assertNotIn(("VAL", "variable", "VAL_resource_aid_rifles"), facts)
 
-    def test_partner_access_ends_on_either_capitulation(self):
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
-        from tools.tests.test_adiscord_stp_preparation import block
-        ideas = block(block(parse_clausewitz(read("common/ideas/ADISCORD_VAL_rework_ideas.txt")), "ideas"), "country")
-        for idea, scope in (("VAL_partner_market_access", "CIN"),):
-            self.triggers["test_trade_cancel"] = block(block(ideas, idea), "cancel")
-            for country in ("VAL", "CIN"):
-                with self.subTest(idea=idea, capitulated=country):
-                    self.assertTrue(self.matches("test_trade_cancel", {(country, "has_capitulated", "yes"): True}, scope))
+    def test_partner_market_income_is_a_dynamic_modifier_not_an_idea(self):
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        dynamic = read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt")
+        ideas = read("common/ideas/ADISCORD_VAL_rework_ideas.txt")
+        self.assertNotIn("VAL_partner_market_access = {", ideas)
+        self.assertIn("VAL_partner_market_income = {", dynamic)
+        self.assertIn("ADISCORD_economy_weekly_income = VAL_partner_market_weekly_income", dynamic)
+        ending = named_block(effects, "VAL_end_partner_market_income")
+        self.assertIn("set_variable = { var = VAL_partner_market_weekly_income value = 0 }", ending)
+        self.assertIn("has_dynamic_modifier = { modifier = VAL_partner_market_income }", ending)
 
     def test_recruitment_transfers_real_manpower_and_money(self):
         for buyer, men, price in ((tag, 5000, 500) for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR")):
@@ -426,7 +427,9 @@ class ValPartnerSettlementTests(unittest.TestCase):
             self.assertEqual(facts["VAL", "numeric", "has_political_power"], 0)
             self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 1000)
             self.assertEqual(facts[buyer, "variable", "ADISCORD_economy_treasury"], 500)
-            self.assertTrue(facts["VAL", "has_idea", "VAL_market_" + buyer])
+            self.assertTrue(facts["VAL", "has_country_flag", "VAL_market_contract_" + buyer + "_active"])
+            self.assertEqual(facts[buyer, "variable", "VAL_partner_market_weekly_income"], 1)
+            self.assertTrue(facts[buyer, "has_dynamic_modifier", "VAL_partner_market_income"])
             self.assertEqual(facts["VAL", "scheduled", "val_contract.411"], (365,))
             facts["VAL", "has_country_flag", "VAL_partner_offer_pending"] = True
             facts[buyer, "has_country_flag", "VAL_partner_offer_trade"] = True
@@ -446,11 +449,12 @@ class ValPartnerSettlementTests(unittest.TestCase):
         self.assertFalse(self.matches("VAL_trade_recipient_ready", facts, "CIN"))
         self.assertFalse(self.matches("VAL_partner_trade_can_offer", facts, "CIN"))
 
-        # These timed markers and ideas expire at the same one-year boundary.
+        # The annual flags and dynamic modifier are removed at the one-year boundary.
         facts["CIN", "has_country_flag", "VAL_market_term_started"] = False
         facts["CIN", "has_country_flag", "VAL_partner_contact_cooldown"] = False
-        facts["CIN", "has_idea", "VAL_partner_market_access"] = False
-        facts["VAL", "has_idea", "VAL_market_CIN"] = False
+        facts["CIN", "variable", "VAL_partner_market_weekly_income"] = 0
+        facts["CIN", "has_dynamic_modifier", "VAL_partner_market_income"] = False
+        facts["VAL", "has_country_flag", "VAL_market_contract_CIN_active"] = False
         facts["VAL", "numeric", "has_political_power"] = 100
 
         self.assertTrue(self.matches("VAL_trade_recipient_ready", facts, "CIN"))
@@ -479,7 +483,7 @@ class ValPartnerSettlementTests(unittest.TestCase):
         self.assertTrue(self.matches("VAL_partner_trade_can_accept", facts, "TFF"))
         self.execute("VAL_reconcile_partner_trade_fee", facts, "TFF")
 
-        self.assertTrue(facts["VAL", "has_idea", "VAL_market_TFF"])
+        self.assertTrue(facts["VAL", "has_country_flag", "VAL_market_contract_TFF_active"])
         self.assertFalse(facts["TFF", "has_country_flag", "VAL_trade_fee_paid"])
         self.assertEqual(facts["VAL", "numeric", "has_political_power"], 0)
         self.assertEqual(facts["VAL", "scheduled", "val_contract.411"], (365,))
@@ -1470,8 +1474,9 @@ class ValAnnualMarketTests(unittest.TestCase):
         self.assertIn("add_political_power = -100", settle)
         self.assertNotIn("ADISCORD_economy_treasury", settle)
         term = named_block(effects, "VAL_start_market_year")
-        self.assertEqual(term.count("days = 365"), 8)
+        self.assertEqual(term.count("days = 365"), 2)
         self.assertIn("NOT = { has_country_flag = VAL_market_term_started }", term)
+        self.assertNotIn("add_timed_idea", term)
         trigger = named_block(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"), "VAL_partner_trade_terms_valid")
         self.assertIn("NOT = { has_political_power < 100 }", trigger)
         self.assertIn("NOT = { has_country_flag = VAL_market_term_started }", trigger)
@@ -1483,52 +1488,52 @@ class ValAnnualMarketTests(unittest.TestCase):
         self.assertIn("ADISCORD_economy_weekly_income = VAL_contract_market_weekly_income", contract_state)
         incomes = {"CIN": 5, "OSF": 8, "APH": 2, "COF": 10, "TFF": 12, "YPR": 15}
         for tag, amount in incomes.items():
-            body = named_block(ideas, "VAL_market_"+tag)
-            on_add = named_block(body, "on_add")
-            on_remove = named_block(body, "on_remove")
-            self.assertIn("visible = { always = no }", body)
-            self.assertIn("allowed = { always = yes }", body)
-            self.assertNotRegex(body, r"(?m)^\s*modifier\s*=")
-            self.assertRegex(on_add, rf"add_to_variable = \{{ var = VAL_contract_market_weekly_income value = {amount} \}}")
-            self.assertRegex(on_remove, rf"subtract_from_variable = \{{ var = VAL_contract_market_weekly_income value = {amount} \}}")
-            self.assertIn("VAL_refresh_market_contract_modifier = yes", on_add)
-            self.assertIn("VAL_refresh_market_contract_modifier = yes", on_remove)
+            self.assertNotIn("VAL_market_" + tag + " = {", ideas)
         self.assertEqual(incomes["APH"], 2)
         self.assertTrue(all(incomes["APH"] < v <= 15 for k,v in incomes.items() if k != "APH"))
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        income_total = named_block(effects, "VAL_recalculate_market_contract_income")
+        for tag, amount in incomes.items():
+            self.assertIn(f"has_country_flag = VAL_market_contract_{tag}_active", income_total)
+            self.assertRegex(income_total, rf"add_to_variable = \{{ var = VAL_contract_market_weekly_income value = {amount} \}}")
+        self.assertIn("ADISCORD_economy_mark_dirty = yes", named_block(effects, "VAL_refresh_market_contract_modifier"))
         category_ru = read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml")
         category_desc = re.search(r"(?m)^\s*VAL_foreign_sales_desc:0 \"(.*)\"$", category_ru)[1]
         self.assertIn("§G+[?VAL_contract_market_weekly_income|0]§!", category_desc)
         spirit_desc = re.search(r"(?m)^\s*VAL_contract_state_desc: \"(.*)\"$", category_ru)[1]
         self.assertNotIn("VAL_contract_market_weekly_income", spirit_desc)
 
-    def test_market_income_rebuild_runs_after_timed_contract_reconciliation(self):
+    def test_market_income_rebuild_uses_flags_and_the_yearly_event(self):
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         initializer = named_block(effects, "VAL_recalculate_market_contract_income")
         for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
-            self.assertIn(f"has_idea = VAL_market_{tag}", initializer)
+            self.assertIn(f"has_country_flag = VAL_market_contract_{tag}_active", initializer)
         self.assertIn("set_variable = { var = VAL_contract_market_weekly_income value = 0 }", initializer)
         self.assertIn("clamp_variable = { var = VAL_contract_market_weekly_income min = 0 max = 52 }", initializer)
         self.assertIn("VAL_refresh_market_contract_modifier = yes", initializer)
         startup = named_block(read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"), "on_startup")
-        self.assertGreater(startup.index("VAL_recalculate_market_contract_income = yes"), startup.index("VAL_migrate_market_years = yes"))
+        self.assertIn("VAL_recalculate_market_contract_income = yes", startup)
+        self.assertNotIn("VAL_migrate_market_years", startup)
         start_year = named_block(effects, "VAL_start_market_year")
-        self.assertGreater(start_year.index("VAL_recalculate_market_contract_income = yes"), start_year.index("add_timed_idea = { idea = VAL_market_YPR days = 365 }"))
+        self.assertEqual(start_year.count("days = 365"), 2)
+        self.assertIn("set_country_flag = VAL_market_contract_CIN_active", start_year)
+        self.assertIn("VAL_refresh_partner_market_modifier = yes", start_year)
         contract_events = read("events/ADISCORD_VAL_contract_events.txt")
         expiry_start = contract_events.index("id = val_contract.411")
         expiry = contract_events[contract_events.rfind("country_event = {", 0, expiry_start):]
-        self.assertGreater(expiry.index("VAL_recalculate_market_contract_income = yes"), expiry.index("remove_ideas = VAL_market_YPR"))
+        self.assertIn("VAL_recalculate_market_contract_income = yes", expiry)
+        self.assertIn("clr_country_flag = VAL_market_contract_YPR_active", expiry)
+        self.assertIn("VAL_end_partner_market_income = yes", expiry)
 
-    def test_market_ideas_survive_load_and_end_through_scripted_lifecycle(self):
+    def test_market_contract_flags_survive_load_and_end_through_scripted_lifecycle(self):
         ideas = named_block(named_block(read("common/ideas/ADISCORD_VAL_rework_ideas.txt"), "ideas"), "country")
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         lifecycle = named_block(effects, "VAL_reconcile_market_contract_lifecycle")
         for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
-            idea = named_block(ideas, "VAL_market_" + tag)
-            self.assertIn("allowed = { always = yes }", idea)
-            self.assertNotIn("cancel", idea)
-            self.assertIn("has_idea = VAL_market_" + tag, lifecycle)
+            self.assertNotIn("VAL_market_" + tag, str(ideas))
+            self.assertIn("has_country_flag = VAL_market_contract_" + tag + "_active", lifecycle)
             self.assertIn("has_war_with = " + tag, lifecycle)
-            self.assertIn("remove_ideas = VAL_market_" + tag, lifecycle)
+            self.assertIn("clr_country_flag = VAL_market_contract_" + tag + "_active", lifecycle)
 
         on_actions = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
         startup_hook = named_block(named_block(on_actions, "on_startup"), "effect")
@@ -1543,6 +1548,10 @@ class ValAnnualMarketTests(unittest.TestCase):
         decision = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_sign_annual_trade")
         visible = named_block(decision, "visible")
         self.assertIn("VAL_trade_recipient_ready = yes", visible)
+        target_trigger = named_block(decision, "target_trigger")
+        self.assertIn("NOT = { has_country_flag = VAL_market_term_started }", target_trigger)
+        self.assertIn("NOT = { has_country_flag = VAL_partner_contact_cooldown }", target_trigger)
+        self.assertNotIn("VAL_partner_trade_can_offer", target_trigger)
         recipient = named_block(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"), "VAL_trade_recipient_ready")
         self.assertIn("NOT = { has_country_flag = VAL_market_term_started }", recipient)
         source = read("events/ADISCORD_VAL_contract_events.txt")
@@ -1550,9 +1559,9 @@ class ValAnnualMarketTests(unittest.TestCase):
         expiry = named_block(source[start:], "country_event")
         immediate = named_block(expiry, "immediate")
         self.assertIn("clr_country_flag = VAL_market_term_started", immediate)
-        self.assertIn("remove_ideas = VAL_partner_market_access", immediate)
+        self.assertIn("VAL_end_partner_market_income = yes", immediate)
         for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
-            self.assertIn("remove_ideas = VAL_market_" + tag, immediate)
+            self.assertIn("clr_country_flag = VAL_market_contract_" + tag + "_active", immediate)
         self.assertNotIn("add_political_power", expiry)
 
 
@@ -1772,7 +1781,7 @@ class ValNativeTradeFeeTests(unittest.TestCase):
             facts["CIN","has_country_flag","VAL_trade_fee_paid"]=True
             if outcome=="accept":
                 model.execute("VAL_settle_partner_trade",facts,"CIN")
-                self.assertTrue(facts["VAL","has_idea","VAL_market_CIN"])
+                self.assertTrue(facts["VAL","has_country_flag","VAL_market_contract_CIN_active"])
             else:
                 if outcome=="expired": facts["CIN","has_country_flag","VAL_partner_offer_trade"]=False
                 model.execute("VAL_close_partner_offer",facts,"CIN")
@@ -2072,7 +2081,13 @@ class ValAnnualDecisionVisibilityTests(unittest.TestCase):
             self.assertIn(predicate+" = yes",visible)
             self.assertNotIn("custom_trigger_tooltip",visible)
             self.assertNotIn("has_political_power",visible)
-            self.assertEqual(named_block(decision,"target_trigger").strip(),"target_trigger = { FROM = { exists = yes } }")
+            target_trigger = named_block(decision,"target_trigger")
+            if key == "VAL_sign_annual_trade":
+                self.assertIn("VAL_partner_commerce_visible = yes",target_trigger)
+                self.assertIn("NOT = { has_country_flag = VAL_market_term_started }",target_trigger)
+                self.assertIn("NOT = { has_country_flag = VAL_partner_contact_cooldown }",target_trigger)
+            else:
+                self.assertEqual(target_trigger.strip(),"target_trigger = { FROM = { exists = yes } }")
             self.assertNotIn("days_re_enable = 365",decision)
 
     def test_success_year_helper_is_separate_from_refusal_handling(self):

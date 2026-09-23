@@ -911,25 +911,27 @@ VAL_close_partner_bulk_offer = { clr_country_flag = VAL_partner_offer_bulk VAL =
 VAL_close_partner_arsenal_offer = { clr_country_flag = VAL_partner_offer_arsenal VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
 VAL_close_partner_strategic_offer = { clr_country_flag = VAL_partner_offer_strategic VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
 
-# COUNTRY VAL. Rebuild income from active contract markers so startup and renewal order cannot leave a negative total.
+# COUNTRY VAL. Rebuild income from persistent contract flags rather than ideas that the engine can invalidate.
 VAL_recalculate_market_contract_income = {
 	set_variable = { var = VAL_contract_market_weekly_income value = 0 }
-	if = { limit = { has_idea = VAL_market_CIN } add_to_variable = { var = VAL_contract_market_weekly_income value = 5 } }
-	if = { limit = { has_idea = VAL_market_OSF } add_to_variable = { var = VAL_contract_market_weekly_income value = 8 } }
-	if = { limit = { has_idea = VAL_market_APH } add_to_variable = { var = VAL_contract_market_weekly_income value = 2 } }
-	if = { limit = { has_idea = VAL_market_COF } add_to_variable = { var = VAL_contract_market_weekly_income value = 10 } }
-	if = { limit = { has_idea = VAL_market_TFF } add_to_variable = { var = VAL_contract_market_weekly_income value = 12 } }
-	if = { limit = { has_idea = VAL_market_YPR } add_to_variable = { var = VAL_contract_market_weekly_income value = 15 } }
+	if = { limit = { has_country_flag = VAL_market_contract_CIN_active } add_to_variable = { var = VAL_contract_market_weekly_income value = 5 } }
+	if = { limit = { has_country_flag = VAL_market_contract_OSF_active } add_to_variable = { var = VAL_contract_market_weekly_income value = 8 } }
+	if = { limit = { has_country_flag = VAL_market_contract_APH_active } add_to_variable = { var = VAL_contract_market_weekly_income value = 2 } }
+	if = { limit = { has_country_flag = VAL_market_contract_COF_active } add_to_variable = { var = VAL_contract_market_weekly_income value = 10 } }
+	if = { limit = { has_country_flag = VAL_market_contract_TFF_active } add_to_variable = { var = VAL_contract_market_weekly_income value = 12 } }
+	if = { limit = { has_country_flag = VAL_market_contract_YPR_active } add_to_variable = { var = VAL_contract_market_weekly_income value = 15 } }
 	clamp_variable = { var = VAL_contract_market_weekly_income min = 0 max = 52 }
 	VAL_refresh_market_contract_modifier = yes
 }
 VAL_reconcile_market_contract_lifecycle = {
-	if = { limit = { has_idea = VAL_market_CIN OR = { has_capitulated = yes has_war_with = CIN CIN = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_CIN }
-	if = { limit = { has_idea = VAL_market_OSF OR = { has_capitulated = yes has_war_with = OSF OSF = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_OSF }
-	if = { limit = { has_idea = VAL_market_APH OR = { has_capitulated = yes has_war_with = APH APH = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_APH }
-	if = { limit = { has_idea = VAL_market_COF OR = { has_capitulated = yes has_war_with = COF COF = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_COF }
-	if = { limit = { has_idea = VAL_market_TFF OR = { has_capitulated = yes has_war_with = TFF TFF = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_TFF }
-	if = { limit = { has_idea = VAL_market_YPR OR = { has_capitulated = yes has_war_with = YPR YPR = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_YPR }
+	set_temp_variable = { var = VAL_market_contract_lifecycle_changed value = 0 }
+	if = { limit = { has_country_flag = VAL_market_contract_CIN_active OR = { has_capitulated = yes has_war_with = CIN CIN = { OR = { exists = no has_capitulated = yes } } } } clr_country_flag = VAL_market_contract_CIN_active set_temp_variable = { var = VAL_market_contract_lifecycle_changed value = 1 } if = { limit = { CIN = { exists = yes } } CIN = { VAL_end_partner_market_income = yes } } }
+	if = { limit = { has_country_flag = VAL_market_contract_OSF_active OR = { has_capitulated = yes has_war_with = OSF OSF = { OR = { exists = no has_capitulated = yes } } } } clr_country_flag = VAL_market_contract_OSF_active set_temp_variable = { var = VAL_market_contract_lifecycle_changed value = 1 } if = { limit = { OSF = { exists = yes } } OSF = { VAL_end_partner_market_income = yes } } }
+	if = { limit = { has_country_flag = VAL_market_contract_APH_active OR = { has_capitulated = yes has_war_with = APH APH = { OR = { exists = no has_capitulated = yes } } } } clr_country_flag = VAL_market_contract_APH_active set_temp_variable = { var = VAL_market_contract_lifecycle_changed value = 1 } if = { limit = { APH = { exists = yes } } APH = { VAL_end_partner_market_income = yes } } }
+	if = { limit = { has_country_flag = VAL_market_contract_COF_active OR = { has_capitulated = yes has_war_with = COF COF = { OR = { exists = no has_capitulated = yes } } } } clr_country_flag = VAL_market_contract_COF_active set_temp_variable = { var = VAL_market_contract_lifecycle_changed value = 1 } if = { limit = { COF = { exists = yes } } COF = { VAL_end_partner_market_income = yes } } }
+	if = { limit = { has_country_flag = VAL_market_contract_TFF_active OR = { has_capitulated = yes has_war_with = TFF TFF = { OR = { exists = no has_capitulated = yes } } } } clr_country_flag = VAL_market_contract_TFF_active set_temp_variable = { var = VAL_market_contract_lifecycle_changed value = 1 } if = { limit = { TFF = { exists = yes } } TFF = { VAL_end_partner_market_income = yes } } }
+	if = { limit = { has_country_flag = VAL_market_contract_YPR_active OR = { has_capitulated = yes has_war_with = YPR YPR = { OR = { exists = no has_capitulated = yes } } } } clr_country_flag = VAL_market_contract_YPR_active set_temp_variable = { var = VAL_market_contract_lifecycle_changed value = 1 } if = { limit = { YPR = { exists = yes } } YPR = { VAL_end_partner_market_income = yes } } }
+	if = { limit = { check_variable = { var = VAL_market_contract_lifecycle_changed value = 1 compare = equals } } VAL_recalculate_market_contract_income = yes }
 }
 VAL_refresh_market_contract_modifier = {
 	if = {
@@ -940,20 +942,35 @@ VAL_refresh_market_contract_modifier = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
-# COUNTRY partner. The persistent guard prevents reloads from extending a signed term.
+# COUNTRY partner. Keep the counterpart's one-point weekly benefit in a dynamic modifier.
+VAL_refresh_partner_market_modifier = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = VAL_partner_market_income } }
+		force_update_dynamic_modifier = yes
+	}
+	else = { add_dynamic_modifier = { modifier = VAL_partner_market_income } }
+	ADISCORD_economy_mark_dirty = yes
+}
+VAL_end_partner_market_income = {
+	set_variable = { var = VAL_partner_market_weekly_income value = 0 }
+	if = { limit = { has_dynamic_modifier = { modifier = VAL_partner_market_income } } remove_dynamic_modifier = VAL_partner_market_income }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY partner. The timed guard preserves the one-year term across saves and reloads.
 VAL_start_market_year = {
  if = {
   limit = { NOT = { has_country_flag = VAL_market_term_started } }
-  set_country_flag = VAL_market_term_started
-  if = { limit = { tag = CIN } VAL = { remove_ideas = VAL_market_CIN add_timed_idea = { idea = VAL_market_CIN days = 365 } } }
-  if = { limit = { tag = OSF } VAL = { remove_ideas = VAL_market_OSF add_timed_idea = { idea = VAL_market_OSF days = 365 } } }
-  if = { limit = { tag = APH } VAL = { remove_ideas = VAL_market_APH add_timed_idea = { idea = VAL_market_APH days = 365 } } }
-  if = { limit = { tag = COF } VAL = { remove_ideas = VAL_market_COF add_timed_idea = { idea = VAL_market_COF days = 365 } } }
-  if = { limit = { tag = TFF } VAL = { remove_ideas = VAL_market_TFF add_timed_idea = { idea = VAL_market_TFF days = 365 } } }
-  if = { limit = { tag = YPR } VAL = { remove_ideas = VAL_market_YPR add_timed_idea = { idea = VAL_market_YPR days = 365 } } }
+  set_country_flag = { flag = VAL_market_term_started days = 365 }
+  if = { limit = { tag = CIN } VAL = { set_country_flag = VAL_market_contract_CIN_active } }
+  if = { limit = { tag = OSF } VAL = { set_country_flag = VAL_market_contract_OSF_active } }
+  if = { limit = { tag = APH } VAL = { set_country_flag = VAL_market_contract_APH_active } }
+  if = { limit = { tag = COF } VAL = { set_country_flag = VAL_market_contract_COF_active } }
+  if = { limit = { tag = TFF } VAL = { set_country_flag = VAL_market_contract_TFF_active } }
+  if = { limit = { tag = YPR } VAL = { set_country_flag = VAL_market_contract_YPR_active } }
   VAL = { VAL_recalculate_market_contract_income = yes }
-  remove_ideas = VAL_partner_market_access
-  add_timed_idea = { idea = VAL_partner_market_access days = 365 }
+  set_variable = { var = VAL_partner_market_weekly_income value = 1 }
+  VAL_refresh_partner_market_modifier = yes
   VAL = { country_event = { id = val_contract.411 days = 365 } }
  }
 }
@@ -5651,16 +5668,6 @@ VAL_reconcile_advisor_conflict = {
    clr_country_flag = VAL_advisor_contract_active
   }
  }
-}
-
-# COUNTRY VAL. Existing perpetual offices receive one remaining year on migration.
-VAL_migrate_market_years = {
- if = { limit = { has_idea = VAL_market_CIN CIN = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } CIN = { VAL_start_market_year = yes } }
- if = { limit = { has_idea = VAL_market_OSF OSF = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } OSF = { VAL_start_market_year = yes } }
- if = { limit = { has_idea = VAL_market_APH APH = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } APH = { VAL_start_market_year = yes } }
- if = { limit = { has_idea = VAL_market_COF COF = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } COF = { VAL_start_market_year = yes } }
- if = { limit = { has_idea = VAL_market_TFF TFF = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } TFF = { VAL_start_market_year = yes } }
- if = { limit = { has_idea = VAL_market_YPR YPR = { exists = yes NOT = { has_country_flag = VAL_market_term_started } } } YPR = { VAL_start_market_year = yes } }
 }
 
 # COUNTRY buyer: payment requires current consent and an unused slot.

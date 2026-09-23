@@ -1293,7 +1293,14 @@ VAL_foreign_sales = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR }
-		target_trigger = { FROM = { exists = yes } }
+		target_trigger = {
+			FROM = {
+				exists = yes
+				VAL_partner_commerce_visible = yes
+				NOT = { has_country_flag = VAL_market_term_started }
+				NOT = { has_country_flag = VAL_partner_contact_cooldown }
+			}
+		}
 		visible = {
 			FROM = {
 				VAL_partner_commerce_visible = yes
@@ -1387,6 +1394,7 @@ VAL_foreign_sales = {
 			FROM = {
 				VAL_partner_orders_visible = yes
 				VAL_quarterly_recipient_ready = yes
+				VAL_order_can_offer = yes
 			}
 		}
 		available = { custom_trigger_tooltip = { tooltip = VAL_quarterly_decision_ready_tt FROM = { VAL_order_can_offer = yes } } }
@@ -1410,17 +1418,7 @@ VAL_foreign_sales = {
 			}
 		}
 		available = {
-			custom_trigger_tooltip = {
-				tooltip = VAL_ready_decision_ready_tt
-				FROM = {
-					OR = {
-						VAL_partner_arms_can_offer = yes
-						VAL_partner_bulk_can_offer = yes
-						VAL_partner_arsenal_can_offer = yes
-						VAL_partner_strategic_can_offer = yes
-					}
-				}
-			}
+			always = yes
 		}
 		cost = 0
 		complete_effect = {
@@ -2015,14 +2013,17 @@ VAL_resource_war_aid = {
 	VAL_negotiate_nam_metals = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		visible = { VAL_nam_concession_negotiable = yes }
+		visible = {
+			ADISCORD_nam_resource_war_active = yes
+			NOT = { has_variable = VAL_resource_aid_side }
+		}
 		available = { has_completed_focus = VAL_Resource_War_Contracts custom_trigger_tooltip = { tooltip = VAL_nam_concession_negotiable_tt VAL_nam_concession_negotiable = yes } NOT = { has_country_flag = VAL_nam_concession_offer_pending } }
 		cost = 50
 		days_re_enable = 30
 		complete_effect = {
 			custom_effect_tooltip = VAL_nam_concession_terms_tt
 			hidden_effect = {
-				set_country_flag = { flag = VAL_nam_concession_offer_pending days = 14 }
+				set_country_flag = { flag = VAL_nam_concession_offer_pending days = 40 }
 				NAM = { country_event = { id = val_contract.349 } }
 			}
 		}
@@ -2031,14 +2032,17 @@ VAL_resource_war_aid = {
 	VAL_negotiate_efl_metals = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
-		visible = { VAL_efl_concession_negotiable = yes }
+		visible = {
+			ADISCORD_nam_resource_war_active = yes
+			NOT = { has_variable = VAL_resource_aid_side }
+		}
 		available = { has_completed_focus = VAL_Resource_War_Contracts custom_trigger_tooltip = { tooltip = VAL_efl_concession_negotiable_tt VAL_efl_concession_negotiable = yes } NOT = { has_country_flag = VAL_efl_concession_offer_pending } }
 		cost = 50
 		days_re_enable = 30
 		complete_effect = {
 			custom_effect_tooltip = VAL_efl_concession_terms_tt
 			hidden_effect = {
-				set_country_flag = { flag = VAL_efl_concession_offer_pending days = 14 }
+				set_country_flag = { flag = VAL_efl_concession_offer_pending days = 40 }
 				EFL = { country_event = { id = val_contract.368 } }
 			}
 		}

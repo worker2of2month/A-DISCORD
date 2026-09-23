@@ -16,10 +16,7 @@ on_actions = {
 				limit = { VAL = { exists = yes } }
 				VAL = {
 					VAL_restore_fulfilled_northern_aid = yes
-					# Migrate annual contract timers before rebuilding their derived income total.
-					VAL_migrate_market_years = yes
-					# Reconcile after timed ideas are repaired; their add/remove callbacks can
-					# otherwise leave the cached total out of step with active contracts.
+					# Rebuild contract income from authoritative annual-contract flags.
 					VAL_recalculate_market_contract_income = yes
 					VAL_migrate_mercenary_payroll = yes
 					VAL_initialize_contract_authority = yes

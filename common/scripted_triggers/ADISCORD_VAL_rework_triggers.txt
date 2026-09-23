@@ -1307,12 +1307,12 @@ VAL_partner_trade_terms_valid = {
 	VAL_contract_partner = yes
 	NOT = { has_country_flag = VAL_market_term_started }
 	OR = { has_country_flag = VAL_trade_fee_paid VAL = { NOT = { has_political_power < 100 } } }
-	OR = { AND = { tag = CIN VAL = { NOT = { has_idea = VAL_market_CIN } } }
-		AND = { tag = OSF VAL = { NOT = { has_idea = VAL_market_OSF } } }
-		AND = { tag = APH VAL = { NOT = { has_idea = VAL_market_APH } } }
-		AND = { tag = COF VAL = { NOT = { has_idea = VAL_market_COF } } }
-		AND = { tag = TFF VAL = { NOT = { has_idea = VAL_market_TFF } } }
-		AND = { tag = YPR VAL = { NOT = { has_idea = VAL_market_YPR } } } }
+	OR = { AND = { tag = CIN VAL = { NOT = { has_country_flag = VAL_market_contract_CIN_active } } }
+		AND = { tag = OSF VAL = { NOT = { has_country_flag = VAL_market_contract_OSF_active } } }
+		AND = { tag = APH VAL = { NOT = { has_country_flag = VAL_market_contract_APH_active } } }
+		AND = { tag = COF VAL = { NOT = { has_country_flag = VAL_market_contract_COF_active } } }
+		AND = { tag = TFF VAL = { NOT = { has_country_flag = VAL_market_contract_TFF_active } } }
+		AND = { tag = YPR VAL = { NOT = { has_country_flag = VAL_market_contract_YPR_active } } } }
 }
 VAL_partner_trade_can_offer = {
 	VAL_partner_trade_terms_valid = yes
