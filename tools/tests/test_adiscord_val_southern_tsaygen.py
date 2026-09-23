@@ -122,7 +122,7 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         revenge = focus_block(focuses, "VAL_Return_Southern_Tsaygen")
         self.assertIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", revenge)
         self.assertIn("VAL_southern_tsaygen_revenge_available = yes", revenge)
-        self.assertIn("bypass = { owns_state = 168 }", revenge)
+        self.assertIn("bypass = { has_global_flag = ADISCORD_vorkerland_dirty_opened owns_state = 168 }", revenge)
         self.assertIn("declare_war_on = { target = ERT type = take_state_focus generator = { 168 } }", revenge)
 
         perimeter = focus_block(focuses, "VAL_frontier_return_irem")
