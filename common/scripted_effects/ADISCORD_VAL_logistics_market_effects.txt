@@ -77,6 +77,26 @@ VAL_pay_corridor_income = {
 }
 
 VAL_initialize_logistics_market = {
+	# Save migration: before this split, the 59/60/61 western corridor used the north identifiers.
+	if = {
+		limit = { NOT = { has_country_flag = VAL_trade_route_west_migration_v1 } }
+		if = {
+			limit = { has_country_flag = VAL_route_north_commissioned }
+			set_country_flag = VAL_route_west_commissioned
+			clr_country_flag = VAL_route_north_commissioned
+		}
+		if = {
+			limit = { has_country_flag = VAL_route_north_upgraded }
+			set_country_flag = VAL_route_west_upgraded
+			clr_country_flag = VAL_route_north_upgraded
+		}
+		if = {
+			limit = { has_variable = VAL_route_north_active }
+			set_variable = { var = VAL_route_west_active value = VAL_route_north_active }
+			set_variable = { var = VAL_route_north_active value = 0 }
+		}
+		set_country_flag = VAL_trade_route_west_migration_v1
+	}
 	ADISCORD_economy_mark_dirty = yes
 	if = { limit = { NOT = { has_variable = VAL_black_market_loss_last_week } } set_variable = { var = VAL_black_market_loss_last_week value = 0 } }
 	if = { limit = { NOT = { has_variable = VAL_black_market_loss_total } } set_variable = { var = VAL_black_market_loss_total value = 0 } }
@@ -92,6 +112,10 @@ VAL_initialize_logistics_market = {
 	if = {
 		limit = { NOT = { has_variable = VAL_route_occidia_active } }
 		set_variable = { var = VAL_route_occidia_active value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = VAL_route_west_active } }
+		set_variable = { var = VAL_route_west_active value = 0 }
 	}
 	if = {
 		limit = { NOT = { has_variable = VAL_route_north_active } }
@@ -152,6 +176,10 @@ VAL_refresh_trade_network = {
 		set_country_flag = VAL_route_occidia_commissioned
 	}
 	if = {
+		limit = { VAL_trade_route_west_open = yes }
+		set_country_flag = VAL_route_west_commissioned
+	}
+	if = {
 		limit = { VAL_trade_route_north_open = yes }
 		set_country_flag = VAL_route_north_commissioned
 	}
@@ -171,6 +199,7 @@ VAL_refresh_trade_network = {
 	set_variable = { var = VAL_trade_corridors_active value = 0 }
 	set_variable = { var = VAL_trade_corridors_capacity value = 0 }
 	set_variable = { var = VAL_route_occidia_active value = 0 }
+	set_variable = { var = VAL_route_west_active value = 0 }
 	set_variable = { var = VAL_route_north_active value = 0 }
 	set_variable = { var = VAL_route_stelander_active value = 0 }
 	set_variable = { var = VAL_route_vorkerland_active value = 0 }
@@ -178,6 +207,10 @@ VAL_refresh_trade_network = {
 
 	if = {
 		limit = { has_country_flag = VAL_route_occidia_commissioned }
+		add_to_variable = { var = VAL_trade_corridors_capacity value = 1 }
+	}
+	if = {
+		limit = { has_country_flag = VAL_route_west_commissioned }
 		add_to_variable = { var = VAL_trade_corridors_capacity value = 1 }
 	}
 	if = {
@@ -200,6 +233,11 @@ VAL_refresh_trade_network = {
 	if = {
 		limit = { VAL_trade_route_occidia_open = yes }
 		set_variable = { var = VAL_route_occidia_active value = 1 }
+		add_to_variable = { var = VAL_trade_corridors_active value = 1 }
+	}
+	if = {
+		limit = { VAL_trade_route_west_open = yes }
+		set_variable = { var = VAL_route_west_active value = 1 }
 		add_to_variable = { var = VAL_trade_corridors_active value = 1 }
 	}
 	if = {
@@ -226,7 +264,7 @@ VAL_refresh_trade_network = {
 	if = {
 		limit = { VAL_trade_corridors_unlocked = yes }
 		if = {
-			limit = { check_variable = { var = VAL_trade_corridors_active value = 5 compare = greater_than_or_equals } }
+			limit = { check_variable = { var = VAL_trade_corridors_active value = 6 compare = greater_than_or_equals } }
 			if = {
 				limit = { has_idea = VAL_corridor_network_fragmented }
 				remove_ideas = VAL_corridor_network_fragmented
@@ -302,9 +340,13 @@ VAL_pay_trade_corridors = {
 		if = { limit = { has_country_flag = VAL_route_occidia_upgraded } VAL_corridor_income_10 = yes }
 	}
 	if = {
+		limit = { check_variable = { var = VAL_route_west_active value = 1 compare = equals } }
+		VAL_corridor_income_20 = yes
+		if = { limit = { has_country_flag = VAL_route_west_upgraded } VAL_corridor_income_10 = yes }
+	}
+	if = {
 		limit = { check_variable = { var = VAL_route_north_active value = 1 compare = equals } }
 		VAL_corridor_income_20 = yes
-		if = { limit = { has_country_flag = VAL_route_north_upgraded } VAL_corridor_income_10 = yes }
 	}
 	if = {
 		limit = { check_variable = { var = VAL_route_stelander_active value = 1 compare = equals } }
@@ -405,6 +447,13 @@ VAL_update_black_market_weekly = {
 		limit = {
 			has_country_flag = VAL_route_occidia_commissioned
 			NOT = { check_variable = { var = VAL_route_occidia_active value = 1 compare = equals } }
+		}
+		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
+	}
+	if = {
+		limit = {
+			has_country_flag = VAL_route_west_commissioned
+			NOT = { check_variable = { var = VAL_route_west_active value = 1 compare = equals } }
 		}
 		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
 	}
@@ -513,7 +562,8 @@ VAL_update_refugees_weekly = {
 VAL_logistics_market_weekly = {
 	# Payments and market pressure share this snapshot; neither changes route inputs.
 	if = { limit = { VAL_trade_network_changed = yes } VAL_refresh_trade_network = yes }
-	if = { limit = { VAL_trade_corridors_unlocked = yes } VAL_pay_trade_corridors = yes }
+	# Each route owns its own availability gate; this lets the standing north line pay from game start.
+	VAL_pay_trade_corridors = yes
 	VAL_update_refugees_weekly = yes
 	VAL_update_black_market_weekly = yes
 	VAL_trade_routes_map_refresh_cache = yes
@@ -543,21 +593,21 @@ VAL_finish_occidia_corridor_project = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
-VAL_begin_north_corridor_project = {
+VAL_begin_west_corridor_project = {
 	if = {
-		limit = { has_capitulated = no VAL_trade_route_north_open = yes check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } NOT = { has_variable = VAL_corridor_deposit } NOT = { has_country_flag = VAL_route_north_upgraded } }
+		limit = { has_capitulated = no VAL_trade_route_west_open = yes check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } NOT = { has_variable = VAL_corridor_deposit } NOT = { has_country_flag = VAL_route_west_upgraded } }
 		ADISCORD_economy_spend_500 = yes
 		ADISCORD_economy_spend_500 = yes
 		set_variable = { var = VAL_corridor_deposit value = 1000 }
 		set_variable = { var = VAL_corridor_project value = 2 }
 	}
 }
-VAL_finish_north_corridor_project = {
+VAL_finish_west_corridor_project = {
 	if = {
-		limit = { check_variable = { var = VAL_corridor_project value = 2 compare = equals } has_variable = VAL_corridor_deposit has_capitulated = no VAL_trade_route_north_open = yes }
+		limit = { check_variable = { var = VAL_corridor_project value = 2 compare = equals } has_variable = VAL_corridor_deposit has_capitulated = no VAL_trade_route_west_open = yes }
 		clear_variable = VAL_corridor_deposit
 		clear_variable = VAL_corridor_project
-		set_country_flag = VAL_route_north_upgraded
+		set_country_flag = VAL_route_west_upgraded
 		59 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
 		60 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
 		61 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }

@@ -322,7 +322,8 @@ class ValTradeMapTests(unittest.TestCase):
         from tools.builders import build_adiscord_val_operations_map as builder
         self.assertTrue(hasattr(builder, "trade_route_states"), "route geometry must read runtime nodes")
         self.assertEqual(builder.trade_route_states()["occidia"], (43, 44, 88))
-        self.assertEqual(builder.trade_route_states()["north"], (59, 60, 61))
+        self.assertEqual(builder.trade_route_states()["west"], (59, 60, 61))
+        self.assertEqual(builder.trade_route_states()["north"], ())
         self.assertEqual(builder.trade_route_states()["vorkerland"], (33,))
         self.assertEqual(builder.trade_route_states()["south"], (68, 691, 70))
 
@@ -341,8 +342,8 @@ class ValTradeMapTests(unittest.TestCase):
         from tools.builders import build_adiscord_val_operations_map as builder
         boxes = {state: (0, 0, 10, 10) for state in builder.STATE_IDS}
         gui = builder.interface_outputs(boxes)["interface/ADISCORD_VAL_operations.gui"]
-        self.assertIn("size = { width = 460 height = 545 }", gui)
-        self.assertIn('name = "legend" position = { x = 20 y = 490 }', gui)
+        self.assertIn("size = { width = 460 height = 570 }", gui)
+        self.assertIn('name = "legend" position = { x = 20 y = 515 }', gui)
 
     def test_trade_map_tooltip_does_not_render_localisation_reference_literally(self):
         for language, marker in (("russian", "Серый рынок"), ("english", "grey market")):
@@ -372,7 +373,8 @@ class ValTradeMapTests(unittest.TestCase):
         self.assertNotIn("ADISCORD_VAL_vorkerland_aid_window", gui)
         self.assertIn("ADISCORD_VAL_operations_panel", script)
         self.assertIn("ADISCORD_STP_operations_panel", script)
-        for route in ("occidia", "north", "stelander", "vorkerland"):
+        self.assertIn("trade_north_map_visible = { always = yes }", script)
+        for route in ("occidia", "west", "stelander", "vorkerland", "north"):
             self.assertIn(f"VAL_trade_route_{route}_open", script)
             self.assertIn(f"VAL_route_{route}_commissioned", script)
 
