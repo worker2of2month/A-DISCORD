@@ -244,10 +244,6 @@ ADISCORD_vorkerland_resolve_iconic_objective = {
 		array = global.ADISCORD_vorkerland_objectives_taken
 		value = ADISCORD_vorkerland_objective_id
 	}
-	set_variable = {
-		var = global.ADISCORD_vorkerland_objective_last
-		value = ADISCORD_vorkerland_objective_id
-	}
 }
 
 # Legitimacy ledger for the three claimants. The caller sets the temp parameter
@@ -3825,7 +3821,7 @@ ADISCORD_vorkerland_update_civil_war_exhaustion = {
 		}
 		add_to_variable = {
 			var = ADISCORD_vorkerland_civil_war_exhaustion
-			value = 2
+			value = 6
 		}
 		if = {
 			limit = {
@@ -9261,107 +9257,6 @@ ADISCORD_vorkerland_story_report_worker_fate = {
 	}
 }
 
-# Presentation for the twelve iconic objectives. The phase layer resolves the
-# capture and writes global.ADISCORD_vorkerland_objective_last; this reads that
-# id, records it so the same centre can never be reported twice, and fires the
-# single objective news event.
-#
-# Called from ADISCORD_vorkerland_story_check_first_claimant_capital_fall, which
-# on_state_control_changed already invokes after the twelve objective checks. It
-# therefore observes the completed result of the whole state change rather than
-# a half-applied one, and one control change can never queue several objective
-# reports that would all render with the last id.
-ADISCORD_vorkerland_story_report_iconic_objective = {
-	if = {
-		limit = {
-			check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 1 compare = greater_than_or_equals }
-			check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 12 compare = less_than_or_equals }
-			NOT = {
-				is_in_array = {
-					array = global.ADISCORD_vorkerland_story_objectives_reported
-					value = global.ADISCORD_vorkerland_objective_last
-				}
-			}
-			# The three claimant capitals already carry a dedicated first-fall
-			# report. Without these the same city would be announced twice on the
-			# same day by two different events.
-			NOT = {
-				AND = {
-					check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 1 compare = equals }
-					has_global_flag = ADISCORD_vorkerland_story_wkr_capital_fell_first
-				}
-			}
-			NOT = {
-				AND = {
-					check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 2 compare = equals }
-					has_global_flag = ADISCORD_vorkerland_story_vad_capital_fell_first
-				}
-			}
-			NOT = {
-				AND = {
-					check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 3 compare = equals }
-					has_global_flag = ADISCORD_vorkerland_story_tva_capital_fell_first
-				}
-			}
-		}
-		# A global array is the ordinary array argument with a global. prefix.
-		# The script API defines no separate global-array effect or trigger, and
-		# a mistyped one is accepted by the parser and then does nothing.
-		add_to_array = {
-			array = global.ADISCORD_vorkerland_story_objectives_reported
-			value = global.ADISCORD_vorkerland_objective_last
-		}
-		if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 1 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.50 }
-		}
-		else_if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 2 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.51 }
-		}
-		else_if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 3 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.52 }
-		}
-		else_if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 4 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.53 }
-		}
-		else_if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 5 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.54 }
-		}
-		else_if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 6 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.55 }
-		}
-		else_if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 7 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.56 }
-		}
-		else_if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 8 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.57 }
-		}
-		else_if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 9 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.58 }
-		}
-		else_if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 10 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.59 }
-		}
-		else_if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 11 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.60 }
-		}
-		else_if = {
-			limit = { check_variable = { var = global.ADISCORD_vorkerland_objective_last value = 12 compare = equals } }
-			news_event = { id = ADISCORD_vorkerland_story.61 }
-		}
-	}
-}
-
 # Presentation for the six mutually exclusive doctrine branches. Called in the
 # declaring claimant's own scope from the focus completion reward that sets the
 # variant flag; the per-branch global flag makes a repeated or duplicated call
@@ -9638,10 +9533,6 @@ ADISCORD_vorkerland_story_check_first_claimant_capital_fall = {
 		}
 		ADISCORD_vorkerland_story_dispatch_tva_capital_fall = yes
 	}
-	# Runs after the regional-fall chain above so the iconic-objective report can
-	# still publish individual city captures independently. The story layer keeps
-	# one state-control entry point and needs no polling.
-	ADISCORD_vorkerland_story_report_iconic_objective = yes
 }
 
 ADISCORD_vorkerland_story_offer_first_claimant_command_choice = {

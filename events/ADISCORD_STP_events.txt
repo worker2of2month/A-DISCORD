@@ -504,7 +504,7 @@ country_event = {
 		unlock_decision_tooltip = { decision = VAL_cw_begin_mobilization show_effect_tooltip = yes }
 		hidden_effect = {
 			set_country_flag = VAL_cw_military_course
-			set_country_flag = VAL_operations_map_unlocked
+			VAL_unlock_operations_map = yes
 		}
 	}
 	option = {
@@ -528,7 +528,7 @@ country_event = {
 					STS = { exists = yes has_capitulated = no has_war_with = STP NOT = { has_war_with = VAL } }
 				}
 				set_country_flag = VAL_cw_trade_course
-				set_country_flag = VAL_operations_map_unlocked
+				VAL_unlock_operations_map = yes
 			}
 		}
 	}

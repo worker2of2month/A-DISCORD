@@ -23,11 +23,9 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertIn("exhaustion", SECTIONS)
         self.assertEqual(validate(ROOT, "exhaustion"), [])
 
-    def test_updates_are_event_driven_without_monthly_polling(self) -> None:
+    def test_updates_use_claimant_edges_and_bounded_monthly_country_pulse(self) -> None:
         on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
-        monthly = named_block(on_actions, "on_monthly")
         update = "ADISCORD_vorkerland_update_civil_war_exhaustion = yes"
-        self.assertNotIn(update, monthly)
         for hook_name in ("on_war", "on_peace"):
             hook = named_block(on_actions, hook_name)
             self.assertIn("ADISCORD_vorkerland_is_main_claimant = yes", hook)
@@ -44,6 +42,16 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         )
         self.assertEqual(on_actions.count(update), 3)
         self.assertNotIn("on_daily", on_actions)
+        shared = named_block(read("common/on_actions/00_ADISCORD_on_actions.txt"), "on_monthly")
+        for token in (
+            "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
+            "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
+            "OR = { tag = WKR tag = VAD tag = TVA }",
+            "has_war = yes",
+            update,
+        ):
+            self.assertIn(token, shared)
+        self.assertNotIn("every_country", shared)
 
     def test_each_update_uses_new_casualties_and_one_bounded_increment(self) -> None:
         effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
@@ -60,7 +68,7 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertNotIn("has_war_with = WRK", update)
         self.assertRegex(
             update,
-            r"add_to_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_vorkerland_civil_war_exhaustion\s*value\s*=\s*2\s*\}",
+            r"add_to_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_vorkerland_civil_war_exhaustion\s*value\s*=\s*6\s*\}",
         )
         for threshold, gain in ((100, 6), (25, 3), (5, 1)):
             self.assertRegex(

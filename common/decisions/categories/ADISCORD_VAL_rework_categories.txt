@@ -63,12 +63,6 @@ VAL_command_balance_category = {
 	visible = { has_power_balance = { id = VAL_command_balance } NOT = { has_country_flag = VAL_stelander_defeated } }
 }
 
-VAL_vorkerland_aid = {
-	allowed = { tag = VAL }
-	visible = { always = no }
-	visible_when_empty = yes
-}
-
 VAL_postwar_administration = {
 	allowed = { tag = VAL }
 	visible = { always = no }

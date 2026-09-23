@@ -956,15 +956,6 @@ VAL_can_attack_bezhaysk = {
 	}
 }
 
-VAL_can_aid_vorkerland = {
-	tag = VAL
-	has_capitulated = no
-	is_subject = no
-	NOT = { has_war_with = WRK }
-	WRK = { exists = yes has_capitulated = no is_subject = no }
-	NOT = { any_enemy_country = { is_in_faction_with = WRK } }
-}
-
 VAL_nam_concession_negotiable = {
 	NOT = { has_variable = VAL_resource_aid_side }
 	NOT = { has_country_flag = VAL_efl_concession_offer_pending }
@@ -1331,7 +1322,8 @@ VAL_partner_trade_can_offer = {
 }
 VAL_partner_trade_can_accept = {
 	VAL_partner_offer_current = yes
-	has_country_flag = VAL_partner_offer_trade
+	# The prepaid receipt survives the dated UI marker and proves the quote was sent.
+	OR = { has_country_flag = VAL_partner_offer_trade has_country_flag = VAL_trade_fee_paid }
 	VAL_partner_trade_terms_valid = yes
 }
 VAL_partner_hire_funds_ready = { VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } }
@@ -1356,8 +1348,10 @@ VAL_partner_hire_can_offer = {
 }
 VAL_partner_hire_can_accept = {
 	VAL_partner_offer_current = yes
-	has_country_flag = VAL_partner_offer_hire
 	VAL_partner_hire_terms_valid = yes
+	# The reserved receipt is authoritative if the dated offer marker expires
+	# while a valid human response is still open.
+	OR = { has_country_flag = VAL_partner_offer_hire has_country_flag = VAL_hire_fee_500_paid }
 }
 
 VAL_partner_arms_terms_valid = {
@@ -1711,11 +1705,25 @@ VAL_military_target_secured = {
  event_target:VAL_military_target = { is_owned_by = event_target:VAL_military_customer is_controlled_by = event_target:VAL_military_customer }
 }
 
+VAL_has_transit_corridor_foothold = {
+	OR = {
+		owns_state = 43
+		owns_state = 44
+		owns_state = 88
+		owns_state = 59
+		owns_state = 60
+		owns_state = 61
+		owns_state = 29
+		owns_state = 46
+		owns_state = 33
+	}
+}
+
 VAL_transit_charter_offerable = {
  exists = yes has_capitulated = no NOT = { has_war_with = VAL }
  check_variable = { var = VAL_completed_contracts value = 2 compare = greater_than_or_equals }
  NOT = { has_country_flag = VAL_trade_transit_charter }
- any_owned_state = { OR = { state = 43 state = 44 state = 88 state = 59 state = 60 state = 61 state = 29 state = 46 state = 33 } }
+ VAL_has_transit_corridor_foothold = yes
  VAL = { VAL_partner_desk_free = yes }
 }
 
@@ -1757,29 +1765,15 @@ VAL_partner_advisors_visible = {
  VAL_export_customer = yes
  has_war = yes
 }
-VAL_partner_gifts_visible = {
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- tag = WRK
- VAL = { has_completed_focus = VAL_Operational_Directorate VAL_can_aid_vorkerland = yes }
-}
-VAL_partner_concessions_visible = {
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- exists = yes has_capitulated = no NOT = { has_war_with = VAL }
- VAL = { has_completed_focus = VAL_Resource_War_Contracts ADISCORD_nam_resource_war_active = yes NOT = { has_variable = VAL_resource_aid_side } }
- OR = {
-  AND = { tag = NAM VAL = { NOT = { has_country_flag = VAL_nam_concession_agreed } NOT = { has_country_flag = VAL_nam_concession_granted } } }
-  AND = { tag = EFL VAL = { NOT = { has_country_flag = VAL_efl_concession_agreed } NOT = { has_country_flag = VAL_efl_concession_granted } } }
- }
-}
 VAL_partner_transit_visible = {
  NOT = { has_country_flag = VAL_partner_contact_cooldown }
  exists = yes has_capitulated = no NOT = { has_war_with = VAL }
  check_variable = { var = VAL_completed_contracts value = 2 compare = greater_than_or_equals }
  NOT = { has_country_flag = VAL_trade_transit_charter }
- any_owned_state = { OR = { state = 43 state = 44 state = 88 state = 59 state = 60 state = 61 state = 29 state = 46 state = 33 } }
+ VAL_has_transit_corridor_foothold = yes
 }
 VAL_partner_support_visible = {
- OR = { VAL_partner_military_visible = yes VAL_partner_advisors_visible = yes VAL_partner_gifts_visible = yes VAL_partner_concessions_visible = yes VAL_partner_transit_visible = yes }
+ OR = { VAL_partner_military_visible = yes VAL_partner_advisors_visible = yes VAL_partner_transit_visible = yes }
 }
 VAL_partner_has_visible_contracts = {
  OR = { VAL_partner_commerce_visible = yes VAL_partner_weapons_visible = yes VAL_partner_support_visible = yes }
@@ -1803,15 +1797,6 @@ VAL_partner_special_offerable = {
     NOT = { has_country_flag = VAL_military_offer_pending }
    }
   }
-  AND = {
-   VAL_partner_gifts_visible = yes
-   VAL = {
-    NOT = { has_country_flag = VAL_wrk_gift_cooldown }
-    NOT = { has_political_power < 30 }
-    OR = { NOT = { has_equipment = { infantry_equipment < 10000 } } NOT = { has_equipment = { support_equipment < 100 } } }
-   }
-  }
-  AND = { VAL_partner_concessions_visible = yes VAL = { NOT = { has_political_power < 50 } } OR = { AND = { tag = NAM VAL = { VAL_nam_concession_negotiable = yes } } AND = { tag = EFL VAL = { VAL_efl_concession_negotiable = yes } } } }
   VAL_transit_charter_offerable = yes
  }
 }
@@ -1876,8 +1861,6 @@ VAL_special_recipient_ready = {
  OR = {
   AND = { VAL_partner_military_visible = yes VAL_military_recipient_ready = yes }
   AND = { VAL_partner_advisors_visible = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_idea = VAL_paid_military_advisors } NOT = { has_country_flag = VAL_export_customer_cooldown } }
-  VAL_partner_gifts_visible = yes
-  VAL_partner_concessions_visible = yes
   VAL_partner_transit_visible = yes
  }
 }

@@ -4104,9 +4104,17 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
     )
 
     exhaustion_update = "ADISCORD_vorkerland_update_civil_war_exhaustion = yes"
-    monthly = named_block(on_actions, "on_monthly")
-    if exhaustion_update in monthly:
-        issues.append("civil-war exhaustion still uses an on_monthly polling pulse")
+    shared_on_actions = read(root, "common/on_actions/00_ADISCORD_on_actions.txt", issues)
+    monthly = named_block(shared_on_actions, "on_monthly")
+    for token in (
+        "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
+        "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
+        "OR = { tag = WKR tag = VAD tag = TVA }",
+        "has_war = yes",
+        exhaustion_update,
+    ):
+        if token not in monthly:
+            issues.append(f"monthly claimant exhaustion pulse is missing {token}")
     for hook_name in ("on_war", "on_peace"):
         hook = named_block(on_actions, hook_name)
         for token in (
@@ -4125,7 +4133,7 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
         if token not in capitulation:
             issues.append(f"on_capitulation exhaustion edge routing is missing {token}")
     if on_actions.count(exhaustion_update) != 3:
-        issues.append("civil-war exhaustion updates must be owned only by war, peace, and capitulation edges")
+        issues.append("civil-war exhaustion war, peace, and capitulation edges are incomplete")
     if "on_daily" in on_actions:
         issues.append("Vorkerland exhaustion must not add a daily pulse")
 

@@ -344,6 +344,15 @@ class ValTradeMapTests(unittest.TestCase):
         self.assertIn("size = { width = 460 height = 545 }", gui)
         self.assertIn('name = "legend" position = { x = 20 y = 490 }', gui)
 
+    def test_trade_map_tooltip_does_not_render_localisation_reference_literally(self):
+        for language, marker in (("russian", "Серый рынок"), ("english", "grey market")):
+            path = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            text = path.read_text(encoding="utf-8-sig")
+            tooltip = next(line for line in text.splitlines() if line.startswith(" VAL_trade_map_tt:0 "))
+            self.assertNotIn("$VAL_trade_grey_market_tt$", tooltip)
+            self.assertIn(marker, tooltip)
+            self.assertIn("0-24", tooltip)
+
     def test_southern_route_does_not_require_northern_corridor_unlock(self):
         from tools.builders import build_adiscord_val_operations_map as builder
         boxes = {state: (0, 0, 10, 10) for state in builder.STATE_IDS}
@@ -3717,24 +3726,62 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertIn("scripted_gui = ADISCORD_STP_operations_panel", category)
 
     def test_map_controller_layers_are_exhaustive_and_exclusive(self):
-        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
-        from tools.builders.build_adiscord_val_operations_map import STATE_IDS, VAL_STATES, MAP_TAGS
-        script = parse_clausewitz((ROOT / "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt").read_text(encoding="utf-8"))
-        triggers = block(block(block(script, "scripted_gui"), "ADISCORD_VAL_operations_panel"), "triggers")
-        layers = {e.key: e.value for e in triggers}
-        self.assertTrue(set(VAL_STATES).issubset(STATE_IDS))
-        self.assertNotIn(168, VAL_STATES)
-        for state in STATE_IDS:
-            for controller in ("VAL", "CIN", "OSF", "APH", "SRP", "STP", "STS", "NOD", "ERT"):
-                for enemy, subject in ((False, False), (True, False), (False, True)):
-                    if controller == "VAL" and (enemy or subject):
-                        continue
-                    facts = {(str(state), "controller"): controller,
-                             (controller, "has_war_with", "VAL"): enemy,
-                             (controller, "is_subject_of", "VAL"): subject}
-                    active = [name for name in (*[tag.lower() for tag in MAP_TAGS], "other")
-                              if matches_conditions(layers[f"VAL_ops_{state}_{name}_visible"], facts, "VAL")]
-                    self.assertEqual(len(active), 1, (state, controller, enemy, subject, active))
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar, matches_conditions
+        from tools.builders import build_adiscord_val_operations_map as builder
+        boxes = {state: (0, 0, 10, 10) for state in builder.STATE_IDS}
+        outputs = builder.interface_outputs(boxes)
+        script = parse_clausewitz(outputs["common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt"])
+        panel = block(block(script, "scripted_gui"), "ADISCORD_VAL_operations_panel")
+        triggers = {entry.key: entry.value for entry in block(panel, "triggers")}
+        properties = {entry.key: entry.value for entry in block(panel, "properties")}
+        effects = parse_clausewitz(outputs["common/scripted_effects/ADISCORD_VAL_operations_map_effects.txt"])
+        cache = block(effects, "VAL_operations_map_refresh_cache")
+        gui_text = outputs["interface/ADISCORD_VAL_operations.gui"]
+        self.assertTrue(set(builder.VAL_STATES).issubset(builder.STATE_IDS))
+        self.assertNotIn(168, builder.VAL_STATES)
+        self.assertIn(118, builder.STATE_IDS)
+        self.assertIn(119, builder.STATE_IDS)
+        self.assertNotIn(186, builder.STATE_IDS)
+        self.assertNotIn("RZA", builder.MAP_TAGS)
+        expected_frames = {tag: frame for frame, tag in enumerate(builder.MAP_TAGS, 1)}
+        for state in builder.STATE_IDS:
+            widget = f"VAL_ops_{state}_controller"
+            frame_variable = f"operations_state_{state}_frame"
+            self.assertTrue(matches_conditions(triggers[f"{widget}_visible"], {}, "VAL"))
+            self.assertEqual(scalar(properties[widget], "frame"), frame_variable)
+            self.assertEqual(gui_text.count(f'name = "{widget}"'), 1)
+            self.assertIn(f'quadTextureSprite = "GFX_VAL_ops_state_{state}"', gui_text)
+            self.assertNotIn(f'spriteType = "GFX_VAL_ops_state_{state}"', gui_text)
+            state_cache = next(entry.value for entry in cache
+                               if entry.key == "set_variable" and scalar(entry.value, "var") == frame_variable)
+            state_branches = [entry for entry in cache if entry.key in ("if", "else_if")
+                              and any(child.key == str(state) for child in block(entry.value, "limit"))]
+            for controller, cosmetic, expected in (
+                *((tag, None, frame) for tag, frame in expected_frames.items()),
+                ("STP", "STL_VAL_administration", expected_frames["STP"]),
+                ("UNKNOWN", None, builder.FRAME_COUNT),
+            ):
+                facts = {(str(state), "controller"): controller}
+                if cosmetic:
+                    facts[controller, "has_cosmetic_tag", cosmetic] = True
+                selected_frame = int(scalar(state_cache, "value"))
+                for branch in state_branches:
+                    if matches_conditions(block(branch.value, "limit"), facts, "VAL"):
+                        assignment = block(branch.value, "set_variable")
+                        selected_frame = int(scalar(assignment, "value"))
+                        break
+                self.assertEqual(selected_frame, expected, (state, controller, cosmetic))
+
+            for puppet in ("BLD", "BHG", "BGT", "BBV", "BCM"):
+                facts = {(str(state), "controller"): puppet,
+                         (puppet, "is_subject_of", "BJK"): True}
+                selected_frame = int(scalar(state_cache, "value"))
+                for branch in state_branches:
+                    if matches_conditions(block(branch.value, "limit"), facts, "VAL"):
+                        assignment = block(branch.value, "set_variable")
+                        selected_frame = int(scalar(assignment, "value"))
+                        break
+                self.assertEqual(selected_frame, expected_frames["BJK"], (state, puppet))
 
     def test_map_marks_partial_control_before_state_controller_changes(self):
         from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
@@ -4135,32 +4182,21 @@ class ValExpandedCampaignTests(unittest.TestCase):
         for name in ("on_startup", "on_war_relation_added", "on_puppet"):
             self.assertTrue(any(e.key == "VAL_call_subjects_to_wars" for e in walk(self.getblock(hooks, name))), name)
 
-    def test_vorkerland_aid_has_real_stock_costs_and_no_automatic_dispatch(self):
-        from tools.tests.test_adiscord_stp_preparation import matches_conditions
-        facts = {("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True,
-                 ("WRK", "exists", "yes"): True, ("WRK", "has_capitulated", "no"): True,
-                 ("WRK", "is_subject", "no"): True}
-        gate = self.triggers["VAL_can_aid_vorkerland"]
-        enemy_guard = next(e for e in gate if e.key == "NOT" and any(c.key == "any_enemy_country" for c in e.value))
-        self.assertEqual(self.scalar(self.getblock(enemy_guard.value, "any_enemy_country"), "is_in_faction_with"), "WRK")
-        gate = [e for e in gate if e is not enemy_guard]
-        self.assertTrue(matches_conditions(gate, facts, "VAL"))
-        for key in facts:
-            changed = dict(facts); changed[key] = False
-            self.assertFalse(matches_conditions(gate, changed, "VAL"), key)
-        self.assertFalse(matches_conditions(gate, {**facts, ("VAL", "has_war_with", "WRK"): True}, "VAL"))
-        decisions = self.getblock(self.parse(DECISIONS_PATH.read_text(encoding="utf-8")), "VAL_vorkerland_aid")
-        for name, equipment, amount in (("rifles", "infantry_equipment", "10000"), ("support", "support_equipment", "100")):
-            decision = self.getblock(decisions, "VAL_aid_wrk_" + name)
-            self.assertEqual(self.scalar(decision, "cost"), "30")
-            self.assertEqual(self.scalar(decision, "days_re_enable"), "30")
-            self.assertEqual(self.scalar(self.getblock(decision, "ai_will_do"), "base"), "0")
-            transfer = self.getblock(self.getblock(self.getblock(decision, "complete_effect"), "if"), "send_equipment")
-            self.assertEqual(self.scalar(transfer, "target"), "WRK")
-            self.assertEqual(self.scalar(transfer, "equipment"), equipment)
-            self.assertEqual(self.scalar(transfer, "amount"), amount)
-            source = DECISIONS_PATH.read_text(encoding="utf-8").split("VAL_aid_wrk_" + name + " =", 1)[1].split("ai_will_do", 1)[0]
-            self.assertEqual(source.count(equipment + " < " + amount), 2)
+    def test_vorkerland_uses_paid_orders_instead_of_gifts(self):
+        trigger_source = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
+        decision_source = DECISIONS_PATH.read_text(encoding="utf-8")
+        category_source = (ROOT / "common/decisions/categories/ADISCORD_VAL_rework_categories.txt").read_text(encoding="utf-8")
+        event_source = (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8")
+        self.assertNotIn("VAL_can_aid_vorkerland", trigger_source)
+        self.assertNotIn("VAL_partner_gifts_visible", trigger_source)
+        self.assertNotIn("VAL_vorkerland_aid", decision_source)
+        self.assertNotIn("VAL_vorkerland_aid", category_source)
+        self.assertNotIn("val_contract.409", event_source)
+        self.assertNotIn("VAL_aid_wrk_", event_source)
+        self.assertIn("tag = WRK", trigger_source)
+        self.assertIn("VAL_trade_route_vorkerland_open", trigger_source)
+        self.assertIn("VAL_order_can_offer", event_source)
+        self.assertIn("VAL_order_can_accept", event_source)
         gui = self.parse((ROOT / "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt").read_text(encoding="utf-8"))
         self.assertFalse(any(e.key == "ADISCORD_VAL_vorkerland_aid_panel" for e in self.getblock(gui, "scripted_gui")))
         self.assertTrue(any(e.key == "ADISCORD_VAL_trade_routes_panel" for e in self.getblock(gui, "scripted_gui")))

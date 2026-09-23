@@ -1040,7 +1040,7 @@ def main() -> int:
             issues.append(f"obsolete legacy panel still exists: {obsolete_path}")
 
     operational_focus = focus_blocks.get("VAL_Operational_Directorate", "")
-    if "set_country_flag = VAL_operations_map_unlocked" not in operational_focus:
+    if "VAL_unlock_operations_map = yes" not in operational_focus:
         issues.append("Operational Directorate does not unlock the operations map")
     map_category = named_blocks(categories, "VAL_military_operations")
     if not map_category:
@@ -1128,7 +1128,7 @@ def main() -> int:
         if token not in effects:
             issues.append(f"rework effects are missing {token}")
     initialize = named_blocks(effects, "VAL_initialize_rework")
-    if not initialize or "set_country_flag = VAL_operations_map_unlocked" not in initialize[0]:
+    if not initialize or "VAL_unlock_operations_map = yes" not in initialize[0]:
         issues.append("rework initialization does not migrate the operations-map unlock")
 
     tier_families = {
@@ -1598,6 +1598,7 @@ def main() -> int:
     gfx = read("interface/ADISCORD_VAL_operations.gfx")
     gui = read("interface/ADISCORD_VAL_operations.gui")
     scripted_gui = read("common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt")
+    operations_effects = read("common/scripted_effects/ADISCORD_VAL_operations_map_effects.txt")
     panel = named_blocks(scripted_gui, "ADISCORD_VAL_operations_panel")
     if not panel:
         issues.append("operations scripted-GUI panel is missing")
@@ -1614,6 +1615,10 @@ def main() -> int:
                           if re.search(r'name\s*=\s*"ADISCORD_(?:VAL|STP)_operations_panel_window"', body)]
     if any("instantTextBoxType" in window for window in operations_windows):
         issues.append("operations map must not contain visible text labels")
+    if "set_temp_variable" in scripted_gui:
+        issues.append("operations scripted GUI must not run effects from trigger blocks")
+    if not named_blocks(operations_effects, "VAL_operations_map_refresh_cache"):
+        issues.append("missing shared operations-map cache effect")
     for state in STATE_IDS:
         path = ROOT / f"gfx/interface/VAL_operations/VAL_ops_state_{state}.png"
         if not path.exists():
@@ -1625,6 +1630,12 @@ def main() -> int:
         for text, label in ((gfx, "GFX"), (gui, "GUI"), (scripted_gui, "scripted GUI")):
             if f"{state}" not in text:
                 issues.append(f"state {state} is missing from operations {label}")
+    for hook_path, effect_name in (
+        ("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt", "VAL_operations_map_refresh_cache"),
+        ("common/on_actions/02_ADISCORD_STP_on_actions.txt", "VAL_operations_map_refresh_cache"),
+    ):
+        if effect_name not in read(hook_path):
+            issues.append(f"missing weekly operations-map cache refresh: {effect_name}")
     background = ROOT / "gfx/interface/VAL_operations/VAL_ops_map_background.png"
     if not background.exists():
         issues.append("missing operations-map background")

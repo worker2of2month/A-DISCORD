@@ -44,8 +44,6 @@ on_actions = {
 				}
 				every_country = {
 					ADISCORD_grant_starting_technology_profile = yes
-				}
-				every_country = {
 					if = {
 						limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
 						ADISCORD_initialize_default_country_development = yes
@@ -209,6 +207,17 @@ on_actions = {
 	}
 	on_monthly = {
 		effect = {
+			# Claimant exhaustion advances on the existing country pulse; the guard
+			# keeps this limited to the three active central-war governments.
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+					OR = { tag = WKR tag = VAD tag = TVA }
+					has_war = yes
+				}
+				ADISCORD_vorkerland_update_civil_war_exhaustion = yes
+			}
 			# Restore native capacity before selecting the returning country's tier.
 			if = {
 				limit = { has_country_flag = ADISCORD_non_participating_minor_optimized }

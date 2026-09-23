@@ -171,8 +171,10 @@ on_actions = {
             has_global_flag = ADISCORD_fresh_campaign_contract_v1
             NOT = { has_global_flag = ADISCORD_starting_technology_profiles_applied }
         }
-        every_country = { ADISCORD_grant_starting_technology_profile = yes }
-        every_country = { ADISCORD_initialize_default_country_development = yes }
+        every_country = {
+            ADISCORD_grant_starting_technology_profile = yes
+            ADISCORD_initialize_default_country_development = yes
+        }
         STP = { STP_initialize_core_mechanics = yes }
         every_country = { ADISCORD_economy_initialize_country = yes }
         set_global_flag = ADISCORD_starting_technology_profiles_applied
@@ -183,6 +185,23 @@ on_actions = {
 """
         self.assertEqual(
             validator.fresh_campaign_startup_contract_issues(history, startup), []
+        )
+        split_startup = startup.replace(
+            """        every_country = {
+            ADISCORD_grant_starting_technology_profile = yes
+            ADISCORD_initialize_default_country_development = yes
+        }""",
+            """        every_country = { ADISCORD_grant_starting_technology_profile = yes }
+        every_country = { ADISCORD_initialize_default_country_development = yes }""",
+            1,
+        )
+        self.assertTrue(
+            any(
+                "share one startup country pass" in issue
+                for issue in validator.fresh_campaign_startup_contract_issues(
+                    history, split_startup
+                )
+            )
         )
         self.assertTrue(
             validator.fresh_campaign_startup_contract_issues("", startup)
@@ -207,8 +226,10 @@ on_actions = {
             has_global_flag = ADISCORD_fresh_campaign_contract_v1
             NOT = { has_global_flag = ADISCORD_starting_technology_profiles_applied }
         }
-        every_country = { ADISCORD_grant_starting_technology_profile = yes }
-        every_country = { ADISCORD_initialize_default_country_development = yes }
+        every_country = {
+            ADISCORD_grant_starting_technology_profile = yes
+            ADISCORD_initialize_default_country_development = yes
+        }
         STP = { %s }
         every_country = { ADISCORD_economy_initialize_country = yes }
         set_global_flag = ADISCORD_starting_technology_profiles_applied

@@ -844,14 +844,15 @@ ADISCORD_economy_prepare_weekly_country = {
 
 # The weekly settlement transfers excess cash to this fund exactly once.
 # A paid week remains active until the next settlement, even after the fund empties.
-# The native construction bonus changes no cached budget input.
+# This receipt tracks the installed idea so weekly accounting avoids idea queries.
 ADISCORD_economy_update_overflow_investments = {
 	if = {
 		limit = { check_variable = { var = ADISCORD_economy_overflow_investment_fund value = 10 compare = greater_than_or_equals } }
 		subtract_from_variable = { var = ADISCORD_economy_overflow_investment_fund value = 10 }
 		if = {
-			limit = { NOT = { ADISCORD_economy_has_idea_overflow_investments = yes } }
+			limit = { NOT = { has_country_flag = ADISCORD_economy_overflow_investment_active } }
 			add_ideas = ADISCORD_economy_overflow_investments
+			set_country_flag = ADISCORD_economy_overflow_investment_active
 			if = {
 				limit = { is_ai = no NOT = { has_country_flag = ADISCORD_economy_investment_notice_cooldown } }
 				set_country_flag = { flag = ADISCORD_economy_investment_notice_cooldown days = 90 }
@@ -860,8 +861,9 @@ ADISCORD_economy_update_overflow_investments = {
 		}
 	}
 	else_if = {
-		limit = { ADISCORD_economy_has_idea_overflow_investments = yes }
+		limit = { has_country_flag = ADISCORD_economy_overflow_investment_active }
 		remove_ideas = ADISCORD_economy_overflow_investments
+		clr_country_flag = ADISCORD_economy_overflow_investment_active
 	}
 }
 

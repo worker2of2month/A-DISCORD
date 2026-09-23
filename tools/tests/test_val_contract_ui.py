@@ -255,6 +255,10 @@ class ValPartnerSettlementTests(unittest.TestCase):
                     run(value, "VAL" if key == "VAL" else buyer)
                 elif key in ("ADISCORD_economy_initialize_country", "ADISCORD_economy_mark_dirty", "log"):
                     continue
+                elif key == "add_dynamic_modifier":
+                    facts[scope, "has_dynamic_modifier", scalar(value, "modifier")] = True
+                elif key == "force_update_dynamic_modifier":
+                    continue
                 elif key in self.effects:
                     self.assertEqual(value, "yes")
                     run(self.effects[key], scope)
@@ -378,11 +382,11 @@ class ValPartnerSettlementTests(unittest.TestCase):
         self.assertEqual(facts["NAM", "equipment", "infantry_equipment"], 5000)
         self.assertNotIn(("VAL", "variable", "VAL_resource_aid_rifles"), facts)
 
-    def test_both_trade_spirits_end_on_either_capitulation(self):
+    def test_partner_access_ends_on_either_capitulation(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
         from tools.tests.test_adiscord_stp_preparation import block
         ideas = block(block(parse_clausewitz(read("common/ideas/ADISCORD_VAL_rework_ideas.txt")), "ideas"), "country")
-        for idea, scope in (("VAL_market_CIN", "VAL"), ("VAL_partner_market_access", "CIN")):
+        for idea, scope in (("VAL_partner_market_access", "CIN"),):
             self.triggers["test_trade_cancel"] = block(block(ideas, idea), "cancel")
             for country in ("VAL", "CIN"):
                 with self.subTest(idea=idea, capitulated=country):
@@ -432,6 +436,54 @@ class ValPartnerSettlementTests(unittest.TestCase):
             self.assertEqual(facts, after)
             self.execute("VAL_start_market_year", facts, buyer)
             self.assertEqual(facts, after, "reload must not renew the timer")
+
+    def test_successful_annual_trade_hides_then_reopens_only_after_term_expiry(self):
+        facts = self.facts("trade", buyer="CIN")
+        facts["VAL", "numeric", "has_political_power"] = 100
+        self.execute("VAL_settle_partner_trade", facts, "CIN")
+
+        self.assertEqual(facts["VAL", "scheduled", "val_contract.411"], (365,))
+        self.assertFalse(self.matches("VAL_trade_recipient_ready", facts, "CIN"))
+        self.assertFalse(self.matches("VAL_partner_trade_can_offer", facts, "CIN"))
+
+        # These timed markers and ideas expire at the same one-year boundary.
+        facts["CIN", "has_country_flag", "VAL_market_term_started"] = False
+        facts["CIN", "has_country_flag", "VAL_partner_contact_cooldown"] = False
+        facts["CIN", "has_idea", "VAL_partner_market_access"] = False
+        facts["VAL", "has_idea", "VAL_market_CIN"] = False
+        facts["VAL", "numeric", "has_political_power"] = 100
+
+        self.assertTrue(self.matches("VAL_trade_recipient_ready", facts, "CIN"))
+        self.assertTrue(self.matches("VAL_partner_trade_can_offer", facts, "CIN"))
+
+    def test_trade_decline_refunds_and_queues_one_failure_notice(self):
+        facts = self.facts("trade", buyer="CIN")
+        facts["CIN", "has_country_flag", "VAL_trade_fee_paid"] = True
+        facts["VAL", "numeric", "has_political_power"] = 0
+        self.execute("VAL_decline_partner_trade", facts, "CIN")
+
+        self.assertEqual(facts["VAL", "numeric", "has_political_power"], 100)
+        self.assertFalse(facts["CIN", "has_country_flag", "VAL_trade_fee_paid"])
+        self.assertEqual(facts["VAL", "scheduled", "val_contract.425"], (1,))
+        settled = dict(facts)
+        self.execute("VAL_decline_partner_trade", facts, "CIN")
+        self.assertEqual(facts, settled)
+
+    def test_valid_ai_trade_receipt_settles_after_offer_marker_expires(self):
+        facts = self.facts("trade", buyer="TFF")
+        facts["TFF", "has_country_flag", "VAL_trade_fee_paid"] = True
+        facts["TFF", "has_country_flag", "VAL_partner_offer_trade"] = False
+        facts["TFF", "is_ai", "yes"] = True
+        facts["VAL", "numeric", "has_political_power"] = 0
+
+        self.assertTrue(self.matches("VAL_partner_trade_can_accept", facts, "TFF"))
+        self.execute("VAL_reconcile_partner_trade_fee", facts, "TFF")
+
+        self.assertTrue(facts["VAL", "has_idea", "VAL_market_TFF"])
+        self.assertFalse(facts["TFF", "has_country_flag", "VAL_trade_fee_paid"])
+        self.assertEqual(facts["VAL", "numeric", "has_political_power"], 0)
+        self.assertEqual(facts["VAL", "scheduled", "val_contract.411"], (365,))
+        self.assertNotIn(("VAL", "scheduled", "val_contract.425"), facts)
 
     def test_refusal_and_expired_reply_do_not_debit_or_close_another_offer(self):
         facts = self.facts("strategic", 20000, 5000)
@@ -1426,13 +1478,65 @@ class ValAnnualMarketTests(unittest.TestCase):
 
     def test_cannibal_income_is_lowest_and_cache_invalidated(self):
         ideas = read("common/ideas/ADISCORD_VAL_rework_ideas.txt")
-        incomes = {}
-        for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
+        dynamic = read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt")
+        contract_state = named_block(dynamic, "VAL_contract_state")
+        self.assertIn("ADISCORD_economy_weekly_income = VAL_contract_market_weekly_income", contract_state)
+        incomes = {"CIN": 5, "OSF": 8, "APH": 2, "COF": 10, "TFF": 12, "YPR": 15}
+        for tag, amount in incomes.items():
             body = named_block(ideas, "VAL_market_"+tag)
-            incomes[tag] = int(re.search(r"ADISCORD_economy_weekly_income = (\d+)", body)[1])
-            self.assertIn("on_remove = { ADISCORD_economy_mark_dirty = yes }", body)
+            on_add = named_block(body, "on_add")
+            on_remove = named_block(body, "on_remove")
+            self.assertIn("visible = { always = no }", body)
+            self.assertIn("allowed = { always = yes }", body)
+            self.assertNotRegex(body, r"(?m)^\s*modifier\s*=")
+            self.assertRegex(on_add, rf"add_to_variable = \{{ var = VAL_contract_market_weekly_income value = {amount} \}}")
+            self.assertRegex(on_remove, rf"subtract_from_variable = \{{ var = VAL_contract_market_weekly_income value = {amount} \}}")
+            self.assertIn("VAL_refresh_market_contract_modifier = yes", on_add)
+            self.assertIn("VAL_refresh_market_contract_modifier = yes", on_remove)
         self.assertEqual(incomes["APH"], 2)
         self.assertTrue(all(incomes["APH"] < v <= 15 for k,v in incomes.items() if k != "APH"))
+        category_ru = read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml")
+        category_desc = re.search(r"(?m)^\s*VAL_foreign_sales_desc:0 \"(.*)\"$", category_ru)[1]
+        self.assertIn("§G+[?VAL_contract_market_weekly_income|0]§!", category_desc)
+        spirit_desc = re.search(r"(?m)^\s*VAL_contract_state_desc: \"(.*)\"$", category_ru)[1]
+        self.assertNotIn("VAL_contract_market_weekly_income", spirit_desc)
+
+    def test_market_income_rebuild_runs_after_timed_contract_reconciliation(self):
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        initializer = named_block(effects, "VAL_recalculate_market_contract_income")
+        for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
+            self.assertIn(f"has_idea = VAL_market_{tag}", initializer)
+        self.assertIn("set_variable = { var = VAL_contract_market_weekly_income value = 0 }", initializer)
+        self.assertIn("clamp_variable = { var = VAL_contract_market_weekly_income min = 0 max = 52 }", initializer)
+        self.assertIn("VAL_refresh_market_contract_modifier = yes", initializer)
+        startup = named_block(read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"), "on_startup")
+        self.assertGreater(startup.index("VAL_recalculate_market_contract_income = yes"), startup.index("VAL_migrate_market_years = yes"))
+        start_year = named_block(effects, "VAL_start_market_year")
+        self.assertGreater(start_year.index("VAL_recalculate_market_contract_income = yes"), start_year.index("add_timed_idea = { idea = VAL_market_YPR days = 365 }"))
+        contract_events = read("events/ADISCORD_VAL_contract_events.txt")
+        expiry_start = contract_events.index("id = val_contract.411")
+        expiry = contract_events[contract_events.rfind("country_event = {", 0, expiry_start):]
+        self.assertGreater(expiry.index("VAL_recalculate_market_contract_income = yes"), expiry.index("remove_ideas = VAL_market_YPR"))
+
+    def test_market_ideas_survive_load_and_end_through_scripted_lifecycle(self):
+        ideas = named_block(named_block(read("common/ideas/ADISCORD_VAL_rework_ideas.txt"), "ideas"), "country")
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        lifecycle = named_block(effects, "VAL_reconcile_market_contract_lifecycle")
+        for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
+            idea = named_block(ideas, "VAL_market_" + tag)
+            self.assertIn("allowed = { always = yes }", idea)
+            self.assertNotIn("cancel", idea)
+            self.assertIn("has_idea = VAL_market_" + tag, lifecycle)
+            self.assertIn("has_war_with = " + tag, lifecycle)
+            self.assertIn("remove_ideas = VAL_market_" + tag, lifecycle)
+
+        on_actions = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
+        startup_hook = named_block(named_block(on_actions, "on_startup"), "effect")
+        war_hook = named_block(named_block(on_actions, "on_war_relation_added"), "effect")
+        monthly_hook = named_block(named_block(on_actions, "on_monthly_VAL"), "effect")
+        self.assertNotIn("VAL_reconcile_market_contract_lifecycle = yes", startup_hook)
+        self.assertIn("VAL_reconcile_market_contract_lifecycle = yes", war_hook)
+        self.assertIn("VAL_reconcile_market_contract_lifecycle = yes", monthly_hook)
 
 
     def test_signed_partner_row_is_hidden_and_expiry_cleans_before_choice(self):
@@ -1623,9 +1727,22 @@ class ValNativeTradeFeeTests(unittest.TestCase):
         self.assertIn("cost = 100",decision)
         self.assertNotIn("custom_cost_text",decision)
         self.assertIn("set_country_flag = VAL_trade_fee_paid",decision)
+        self.assertIn("VAL_dispatch_partner_trade_offer = yes",decision)
         self.assertNotIn("add_political_power = -100",decision)
         self.assertNotIn("save_event_target_as = VAL_trade_recipient", decision)
         self.assertNotIn("event_target:VAL_trade_recipient", decision)
+
+    def test_ai_trade_is_automatic_and_human_partner_gets_the_reply_event(self):
+        effects=read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        dispatch=named_block(effects,"VAL_dispatch_partner_trade_offer")
+        self.assertIn("limit = { VAL_partner_trade_can_accept = no }",dispatch)
+        self.assertLess(dispatch.index("VAL_partner_trade_can_accept = no"),dispatch.index("country_event = { id = val_contract.362 }"))
+        self.assertIn("limit = { is_ai = yes }",dispatch)
+        self.assertIn("VAL_resolve_partner_trade_reply = yes",dispatch)
+        self.assertIn("country_event = { id = val_contract.362 }",dispatch)
+        events=read("events/ADISCORD_VAL_contract_events.txt")
+        self.assertEqual(events.count("VAL_dispatch_partner_trade_offer = yes"),3)
+        self.assertNotIn("country_event = { id = val_contract.362 }",events)
 
     def test_prepaid_trade_does_not_charge_twice_and_refund_is_guarded(self):
         effects=read("common/scripted_effects/ADISCORD_VAL_effects.txt")
@@ -1640,12 +1757,11 @@ class ValNativeTradeFeeTests(unittest.TestCase):
     def test_periodic_reconciliation_only_refunds_stale_receipts(self):
         effects=read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         reconcile=named_block(effects,"VAL_reconcile_trade_fees")
-        self.assertEqual(reconcile.count("VAL_reconcile_stale_trade_fee = yes"),6)
-        self.assertEqual(reconcile.count("has_country_flag = VAL_trade_fee_paid AND ="),6)
-        self.assertNotIn("VAL_refund_trade_fee = yes",reconcile)
+        self.assertEqual(reconcile.count("VAL_reconcile_partner_trade_fee = yes"),6)
+        self.assertNotIn("VAL_reconcile_stale_trade_fee = yes",reconcile)
+        self.assertNotIn("has_country_flag = VAL_trade_fee_paid",reconcile)
         stale=named_block(effects,"VAL_reconcile_stale_trade_fee")
-        self.assertIn("VAL_record_partner_refusal = yes",stale)
-        self.assertIn("add_political_power = 100",stale)
+        self.assertIn("VAL_refund_trade_fee = yes",stale)
 
     def test_prepaid_acceptance_and_refusal_settle_only_once(self):
         model=ValPartnerSettlementTests()
@@ -1675,12 +1791,21 @@ class ValDirectContractDecisionTests(unittest.TestCase):
         source=read("common/decisions/ADISCORD_VAL_decisions.txt")
         hire=named_block(source,"VAL_hire_partner_volunteers")
         self.assertIn("VAL_partner_hire_can_offer = yes",hire)
-        self.assertIn("id = val_contract.364",hire)
+        self.assertIn("VAL_dispatch_partner_hire_offer = yes",hire)
         self.assertNotIn("subtract_from_variable",hire)
         orders=named_block(source,"VAL_quarterly_partner_supply")
         self.assertIn("VAL_partner_orders_visible = yes",named_block(orders,"visible"))
         self.assertIn("VAL_order_can_offer = yes",named_block(orders,"available"))
         self.assertIn("id = val_contract.407",orders)
+
+    def test_ai_hire_settles_in_the_offer_scope_without_a_delayed_dispatch(self):
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        dispatch = named_block(effects, "VAL_dispatch_partner_hire_offer")
+        self.assertIn("limit = { is_ai = yes }", dispatch)
+        self.assertIn("VAL_settle_partner_hire = yes", dispatch)
+        self.assertNotIn("days = 1", dispatch)
+        self.assertIn("country_event = { id = val_contract.364 }", dispatch)
+        self.assertNotIn("id = val_contract.426", read("events/ADISCORD_VAL_contract_events.txt"))
 
     def test_special_agreement_does_not_route_to_general_menu(self):
         source=read("common/decisions/ADISCORD_VAL_decisions.txt")
@@ -1766,6 +1891,32 @@ class ValHireReceiptTests(unittest.TestCase):
             self.execute("VAL_decline_partner_hire", facts)
             self.assertEqual(after, facts)
 
+    def test_player_consent_settles_valid_reserved_quote_after_offer_marker_expires(self):
+        facts = self.facts("hire", buyer="TFF")
+        facts["TFF","numeric","has_manpower"] = 5000
+        self.execute("VAL_reserve_partner_hire_fee", facts, "TFF")
+        facts["TFF","has_country_flag","VAL_partner_offer_hire"] = False
+        self.assertTrue(self.matches("VAL_partner_hire_can_accept", facts, "TFF"))
+        self.execute("VAL_settle_partner_hire", facts, "TFF")
+        self.assertEqual(facts["TFF","numeric","has_manpower"], 0)
+        self.assertEqual(facts["VAL","numeric","has_manpower"], 5000)
+        self.assertEqual(facts["TFF","variable","ADISCORD_economy_treasury"], 1000)
+        self.assertFalse(facts["TFF","has_country_flag","VAL_hire_fee_500_paid"])
+        self.assertNotIn(("TFF","scheduled","val_contract.423"), facts)
+
+    def test_reconciliation_auto_accepts_valid_ai_quote_when_offer_marker_expires(self):
+        facts = self.facts("hire", buyer="YPR")
+        facts["YPR","numeric","has_manpower"] = 5000
+        facts["YPR","is_ai","yes"] = True
+        self.execute("VAL_reserve_partner_hire_fee", facts, "YPR")
+        facts["YPR","has_country_flag","VAL_partner_offer_hire"] = False
+        self.execute("VAL_reconcile_partner_hire_fee", facts, "YPR")
+        self.assertEqual(facts["YPR","numeric","has_manpower"], 0)
+        self.assertEqual(facts["VAL","numeric","has_manpower"], 5000)
+        self.assertEqual(facts["YPR","variable","ADISCORD_economy_treasury"], 1000)
+        self.assertFalse(facts["YPR","has_country_flag","VAL_hire_fee_500_paid"])
+        self.assertNotIn(("YPR","scheduled","val_contract.423"), facts)
+
     def test_custom_price_and_expiry_reconciliation_are_wired(self):
         decision = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_hire_partner_volunteers")
         self.assertIn("custom_cost_text = VAL_hire_decision_cost", decision)
@@ -1774,10 +1925,26 @@ class ValHireReceiptTests(unittest.TestCase):
         self.assertIn("VAL_reserve_partner_hire_fee = yes", named_block(decision, "complete_effect"))
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         self.assertIn("VAL_reconcile_hire_fees = yes", named_block(effects, "VAL_contract_reconcile"))
+        self.assertIn("VAL_reconcile_partner_hire_fee = yes", named_block(effects, "VAL_reconcile_hire_fees"))
         for language in ("russian", "english"):
             loc = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
             for suffix in ("", "_blocked", "_tooltip"):
                 self.assertIn("VAL_hire_decision_cost_500" + suffix + ":0", loc)
+
+    def test_every_hire_offer_path_reserves_the_fee_before_dispatch(self):
+        import re
+        paths = (
+            "common/decisions/ADISCORD_VAL_decisions.txt",
+            "events/ADISCORD_VAL_contract_events.txt",
+        )
+        offers = []
+        for path in paths:
+            source = read(path)
+            for match in re.finditer(r"set_country_flag\s*=\s*\{\s*flag\s*=\s*VAL_partner_offer_hire\b", source):
+                offers.append((path, source[max(0, match.start() - 500):match.start()]))
+        self.assertEqual(len(offers), 5)
+        for path, prefix in offers:
+            self.assertIn("VAL_reserve_partner_hire_fee = yes", prefix, path)
 
 
 class ValHireFixedCostTests(unittest.TestCase):
@@ -1828,10 +1995,50 @@ class ValHireReplyTests(ValHireReceiptTests):
         options = {scalar(e.value,"name"):e.value for e in event if e.key=="option"}
         refusal = options["VAL_export_decline"]
         self.assertEqual(scalar(block(refusal,"hidden_effect"),"VAL_decline_partner_hire"),"yes")
-        modifier = block(block(refusal,"ai_chance"),"modifier")
-        self.assertEqual(scalar(modifier,"factor"),"0")
-        self.assertEqual(scalar(modifier,"VAL_partner_hire_can_accept"),"yes")
+        self.assertEqual(scalar(block(refusal,"trigger"),"is_ai"),"no")
+        self.assertEqual(scalar(block(refusal,"ai_chance"),"base"),"0")
+        self.assertEqual(scalar(block(options["VAL_export_accept"],"ai_chance"),"base"),"100")
+        self.assertEqual(scalar(block(options["VAL_export_accept"],"trigger"),"VAL_partner_hire_can_accept"),"yes")
         self.assertEqual(scalar(block(options["VAL_export_accept"],"hidden_effect"),"VAL_settle_partner_hire"),"yes")
+
+    def test_partner_offer_replies_are_player_decline_and_deterministic_ai_accept(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar
+        events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
+        event_ids = ("val_contract.362", "val_contract.363", "val_contract.364", "val_contract.365", "val_contract.366", "val_contract.367")
+        indexed = {scalar(e.value,"id"):e.value for e in events if e.key=="country_event" and scalar(e.value,"id") in event_ids}
+        for event_id in event_ids:
+            with self.subTest(event=event_id):
+                options = {scalar(e.value,"name"):e.value for e in indexed[event_id] if e.key=="option"}
+                decline = options["VAL_export_decline"]
+                accept = options["VAL_export_accept"]
+                self.assertEqual(scalar(block(decline,"trigger"),"is_ai"),"no")
+                if event_id == "val_contract.362":
+                    self.assertEqual(scalar(block(decline,"ai_chance"),"base"),"100")
+                    self.assertEqual(scalar(block(accept,"ai_chance"),"base"),"0")
+                else:
+                    self.assertEqual(scalar(block(decline,"ai_chance"),"base"),"0")
+                    self.assertEqual(scalar(block(accept,"ai_chance"),"base"),"100")
+                if event_id == "val_contract.362":
+                    self.assertEqual(scalar(block(accept,"trigger"),"VAL_partner_trade_can_accept"),"yes")
+                elif event_id == "val_contract.364":
+                    self.assertEqual(scalar(block(accept,"trigger"),"VAL_partner_hire_can_accept"),"yes")
+                else:
+                    self.assertFalse(any(entry.key=="trigger" for entry in accept))
+
+    def test_legacy_contract_replies_also_leave_decline_to_players(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar
+        events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
+        event_ids = tuple(f"val_contract.{event_id}" for event_id in (340, 341, 401, 402, 403, 404, 405, 410))
+        indexed = {scalar(e.value,"id"):e.value for e in events if e.key=="country_event" and scalar(e.value,"id") in event_ids}
+        for event_id in event_ids:
+            with self.subTest(event=event_id):
+                options = {scalar(e.value,"name"):e.value for e in indexed[event_id] if e.key=="option"}
+                decline = options["VAL_export_decline"]
+                accept = options["VAL_export_accept"]
+                self.assertEqual(scalar(block(decline,"trigger"),"is_ai"),"no")
+                self.assertEqual(scalar(block(decline,"ai_chance"),"base"),"0")
+                self.assertEqual(scalar(block(accept,"ai_chance"),"base"),"100")
+                self.assertFalse(any(entry.key=="trigger" for entry in accept))
 
 
 class ValHirePeaceTests(ValHireReceiptTests):
@@ -1906,14 +2113,19 @@ class ValRecipientVisibilityTests(ValHireReceiptTests):
 
 
 class ValTradeReplyTests(unittest.TestCase):
-    def test_eligible_ai_cannot_randomly_decline_trade(self):
+    def test_player_timeout_refuses_trade_and_ai_settles_without_reply_event(self):
         source = read("events/ADISCORD_VAL_contract_events.txt")
         start = re.search(r"(?m)^country_event = \{\s*id = val_contract\.362\b", source).start()
         event = named_block(source[start:], "country_event")
         decline = named_block(event, "option")
-        self.assertIn("ai_chance = { base = 0 }", decline)
+        self.assertIn("ai_chance = { base = 100 }", decline)
         self.assertNotIn("immediate = { VAL_resolve_partner_trade_reply = yes }", event)
         self.assertIn("VAL_decline_partner_trade = yes", decline)
+        self.assertNotIn("timeout_effect", event)
+        dispatcher = named_block(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), "VAL_dispatch_partner_trade_offer")
+        self.assertIn("limit = { is_ai = yes }", dispatcher)
+        self.assertIn("VAL_resolve_partner_trade_reply = yes", dispatcher)
+        self.assertIn("country_event = { id = val_contract.362 }", dispatcher)
 
     def test_expired_paid_trade_hides_for_a_year_and_refunds_once(self):
         model = ValPartnerSettlementTests()
@@ -1922,12 +2134,12 @@ class ValTradeReplyTests(unittest.TestCase):
         facts["CIN", "has_country_flag", "VAL_trade_fee_paid"] = True
         facts["CIN", "has_country_flag", "VAL_partner_offer_trade"] = False
         facts["VAL", "numeric", "has_political_power"] = 0
-        model.execute("VAL_refund_trade_fee", facts, "CIN")
+        model.execute("VAL_reconcile_partner_trade_fee", facts, "CIN")
         self.assertFalse(model.matches("VAL_trade_recipient_ready", facts, "CIN"))
         self.assertEqual(facts["VAL", "scheduled", "val_contract.425"], (1,))
         self.assertEqual(facts["VAL", "numeric", "has_political_power"], 100)
         settled = dict(facts)
-        model.execute("VAL_refund_trade_fee", facts, "CIN")
+        model.execute("VAL_reconcile_partner_trade_fee", facts, "CIN")
         self.assertEqual(facts, settled)
 
 
@@ -1952,3 +2164,23 @@ class ValParallelOfferTests(ValHireReceiptTests):
         current = named_block(source, "VAL_partner_offer_current")
         self.assertNotIn("has_country_flag = VAL_partner_offer_pending", current)
         self.assertIn("has_country_flag = VAL_partner_offer_trade", named_block(source, "VAL_partner_trade_can_accept"))
+
+    def test_closing_one_contract_preserves_other_recipient_offers(self):
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        events = read("events/ADISCORD_VAL_contract_events.txt")
+        closers = {
+            "trade": "VAL_close_partner_trade_offer",
+            "hire": "VAL_close_partner_hire_offer",
+            "arms": "VAL_close_partner_arms_offer",
+            "bulk": "VAL_close_partner_bulk_offer",
+            "arsenal": "VAL_close_partner_arsenal_offer",
+            "strategic": "VAL_close_partner_strategic_offer",
+        }
+        for kind, closer in closers.items():
+            block = named_block(effects, closer)
+            self.assertIn(f"clr_country_flag = VAL_partner_offer_{kind}", block)
+            for other_kind in closers.keys() - {kind}:
+                self.assertNotIn(f"clr_country_flag = VAL_partner_offer_{other_kind}", block)
+        self.assertIn("VAL_close_partner_hire_offer = yes", named_block(effects, "VAL_settle_partner_hire"))
+        for kind in ("arms", "bulk", "arsenal", "strategic"):
+            self.assertIn(f"VAL_close_partner_{kind}_offer = yes", events)

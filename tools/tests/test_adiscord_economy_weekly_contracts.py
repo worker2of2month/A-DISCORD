@@ -324,14 +324,11 @@ def weekly_reachability_issues(texts, roots=WEEKLY_ACCOUNTING_ROOTS):
             keys.append(entry.key)
             if isinstance(entry.value, str):
                 scalar_values.append(entry.value)
-        # A single spirit lookup at the funded construction transition is bounded;
-        # policy/law queries and factory scans remain outside weekly accounting.
         offenders = sorted(
             {
                 token
                 for token in keys
-                if (token in WEEKLY_FORBIDDEN_EXACT_TOKENS
-                    and not (token == "has_idea" and name == "ADISCORD_economy_has_idea_overflow_investments"))
+                if token in WEEKLY_FORBIDDEN_EXACT_TOKENS
                 or any(token.startswith(prefix) for prefix in WEEKLY_FORBIDDEN_TOKEN_PREFIXES)
             }
             | {
@@ -5466,6 +5463,21 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 decoy_on_actions, EFFECTS, MODIFIER_EFFECTS, TRIGGERS
             )
         )
+
+    def test_overflow_investment_receipt_tracks_the_paid_idea_lifecycle(self):
+        prefix = "ADISCORD_economy_"
+        fixture = EconomyScriptFixture()
+        country = fixture.scopes["A"]
+        country.update({"is_ai": True, prefix + "overflow_investment_fund": 10})
+
+        fixture.run(prefix + "update_overflow_investments")
+        self.assertEqual(country[prefix + "overflow_investment_fund"], 0)
+        self.assertTrue(country.get(prefix + "overflow_investment_active", False))
+        self.assertTrue(country.get("idea@" + prefix + "overflow_investments", False))
+
+        fixture.run(prefix + "update_overflow_investments")
+        self.assertFalse(country.get(prefix + "overflow_investment_active", False))
+        self.assertFalse(country.get("idea@" + prefix + "overflow_investments", False))
 
     def test_weekly_ready_gate_prevents_uninitialized_or_unmigrated_settlement(self):
         prepare = unique_block(EFFECTS, "ADISCORD_economy_prepare_weekly_country")

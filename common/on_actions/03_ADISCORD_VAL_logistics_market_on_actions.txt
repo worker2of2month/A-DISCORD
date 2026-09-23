@@ -3,7 +3,10 @@ on_actions = {
 		effect = {
 			if = {
 				limit = { VAL = { exists = yes } }
-				VAL = { VAL_initialize_logistics_market = yes }
+				VAL = {
+					VAL_initialize_logistics_market = yes
+					VAL_trade_routes_map_refresh_cache = yes
+				}
 			}
 		}
 	}

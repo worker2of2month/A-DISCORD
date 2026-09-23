@@ -8,14 +8,15 @@ from tools.lib.paths import source_section
 from tools.validators.validate_adiscord_vorkerland_story import (
     CAPITULATION_DISPATCH,
     CAMPAIGN_STATE_EFFECTS,
+    COUNTRY_EVENT_NUMBERS,
     EVENT_PICTURES,
     NEWS_EVENTS,
-    OBJECTIVE_DISPATCH,
     PHASE_EFFECTS,
     ROOT,
     RUSSIAN_LOC,
     STORY_EFFECTS,
     STORY_EVENTS,
+    STORY_NUMBERS,
     UNDEFINED_ARRAY_TOKENS,
     VARIANT_DISPATCH,
     collect_issues,
@@ -87,8 +88,16 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
             self.assertIn("major = yes", block)
             self.assertNotIn("check_variable", block, event_id)
 
-    def test_objective_table_covers_all_twelve_iconic_centres(self) -> None:
-        self.assertEqual(len(OBJECTIVE_DISPATCH), 12)
+    def test_city_capture_news_is_retired_but_objective_effects_remain(self) -> None:
+        events = source_section(read(STORY_EVENTS), 'story_events')
+        effects = source_section(read(STORY_EFFECTS), 'campaign_state_effects')
+        self.assertNotIn("story_report_iconic_objective", effects)
+        self.assertNotIn("ADISCORD_vorkerland_objective_last", effects)
+        for number in range(50, 62):
+            self.assertNotIn(f"ADISCORD_vorkerland_story.{number}", events)
+        resolve = named_block(effects, "ADISCORD_vorkerland_resolve_iconic_objective")
+        self.assertIn("ADISCORD_vorkerland_objective_value", resolve)
+        self.assertIn("ADISCORD_vorkerland_objectives_taken", resolve)
         self.assertEqual(len(CAPITULATION_DISPATCH), 3)
         self.assertEqual(len(VARIANT_DISPATCH), 6)
 
@@ -113,17 +122,6 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
             issues,
         )
 
-    def test_objective_dispatch_rejects_a_swapped_event_id(self) -> None:
-        swapped = source_section(read(STORY_EFFECTS), 'story_effects').replace(
-            "news_event = { id = ADISCORD_vorkerland_story.57 }",
-            "news_event = { id = ADISCORD_vorkerland_story.56 }",
-        )
-        issues = dispatch_issues(swapped)
-        self.assertTrue(
-            any("expected ADISCORD_vorkerland_story.57" in issue for issue in issues),
-            issues,
-        )
-
     def test_capitulation_dispatch_rejects_a_swapped_event_id(self) -> None:
         swapped = source_section(read(STORY_EFFECTS), 'story_effects').replace(
             "news_event = { id = ADISCORD_vorkerland_story.42 }",
@@ -134,13 +132,6 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
             any("expected ADISCORD_vorkerland_story.42" in issue for issue in issues),
             issues,
         )
-
-    def test_objective_news_stays_reachable_from_the_state_control_entry_point(self) -> None:
-        unhooked = source_section(read(STORY_EFFECTS), 'story_effects').replace(
-            "\tADISCORD_vorkerland_story_report_iconic_objective = yes\n}", "\n}", 1
-        )
-        issues = dispatch_issues(unhooked)
-        self.assertTrue(any("unreachable" in issue for issue in issues), issues)
 
     def test_first_fall_requires_control_of_the_entire_claimant_home_region(self) -> None:
         effects = source_section(read(STORY_EFFECTS), 'story_effects')
@@ -160,23 +151,6 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
                 )
             self.assertNotIn(f"FROM = {{ tag = {claimant} }}", fall)
 
-    def test_capital_first_fall_news_is_not_duplicated_by_the_objective_news(self) -> None:
-        effects = source_section(read(STORY_EFFECTS), 'story_effects')
-        for flag in (
-            "ADISCORD_vorkerland_story_wkr_capital_fell_first",
-            "ADISCORD_vorkerland_story_vad_capital_fell_first",
-            "ADISCORD_vorkerland_story_tva_capital_fell_first",
-        ):
-            self.assertIn(
-                flag,
-                named_block(effects, "ADISCORD_vorkerland_story_report_iconic_objective"),
-            )
-        without = effects.replace(
-            "has_global_flag = ADISCORD_vorkerland_story_vad_capital_fell_first",
-            "has_global_flag = ADISCORD_vorkerland_story_wkr_capital_fell_first",
-        )
-        self.assertTrue(any("suppress objective 2" in issue for issue in dispatch_issues(without)))
-
     def test_capitulation_news_is_scoped_to_the_claimant_that_fell(self) -> None:
         unscoped = source_section(read(STORY_EFFECTS), 'story_effects').replace(
             "ROOT = { ADISCORD_vorkerland_story_report_claimant_capitulation = yes }",
@@ -186,15 +160,13 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         self.assertTrue(any("must be scoped to ROOT" in issue for issue in issues), issues)
 
     def test_story_layer_uses_the_documented_global_array_arguments(self) -> None:
-        effects = source_section(read(STORY_EFFECTS), 'story_effects')
-        self.assertIn(
-            "array = global.ADISCORD_vorkerland_story_objectives_reported", effects
-        )
+        effects = source_section(read(CAMPAIGN_STATE_EFFECTS), 'campaign_state_effects')
+        self.assertIn("array = global.ADISCORD_vorkerland_objectives_taken", effects)
         for token in UNDEFINED_ARRAY_TOKENS:
             self.assertNotIn(token, effects)
 
     def test_localisation_quality_catches_copied_and_untranslated_variants(self) -> None:
-        keys = [f"ADISCORD_vorkerland_story.{number}.d" for number in range(50, 62)]
+        keys = [f"ADISCORD_vorkerland_story.{number}.d" for number in (10, 11, 12, 13)]
         copied = {key: f"body {index}" for index, key in enumerate(keys)}
         copied[keys[2]] = copied[keys[1]]
         self.assertTrue(
@@ -217,12 +189,8 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
     def test_upstream_identifiers_are_pinned_to_their_owning_files(self) -> None:
         campaign_state_effects = source_section(read(CAMPAIGN_STATE_EFFECTS), 'campaign_state_effects')
         self.assertEqual(upstream_contract_issues(ROOT, campaign_state_effects), [])
-        renamed = campaign_state_effects.replace(
-            "var = global.ADISCORD_vorkerland_objective_last",
-            "var = global.ADISCORD_vorkerland_objective_previous",
-        )
-        issues = upstream_contract_issues(ROOT, renamed)
-        self.assertTrue(any("no longer writes" in issue for issue in issues), issues)
+        self.assertNotIn("ADISCORD_vorkerland_objective_last", campaign_state_effects)
+        self.assertEqual(upstream_contract_issues(ROOT, campaign_state_effects), [])
 
     def test_pending_external_wiring_is_reported_verbatim(self) -> None:
         for entry in pending_external_dispatch(ROOT):

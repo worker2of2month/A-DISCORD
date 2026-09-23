@@ -2701,6 +2701,22 @@ def fresh_campaign_startup_contract_issues(
         issues.append(
             "shared startup must guard fresh provenance, initialize in order, then set completion"
         )
+    setup_passes = []
+    for match in re.finditer(r"(?m)^\s*every_country\s*=\s*\{", startup):
+        block = extract_block(startup, match.start())
+        if (
+            "ADISCORD_grant_starting_technology_profile = yes" in block
+            or "ADISCORD_initialize_default_country_development = yes" in block
+        ):
+            setup_passes.append(block)
+    if (
+        len(setup_passes) != 1
+        or "ADISCORD_grant_starting_technology_profile = yes" not in setup_passes[0]
+        or "ADISCORD_initialize_default_country_development = yes" not in setup_passes[0]
+    ):
+        issues.append(
+            "starting technology and default development must share one startup country pass"
+        )
     if startup.count(f"set_global_flag = {completed_flag}") != 1:
         issues.append("shared startup completion sentinel must have exactly one writer")
     if "ADISCORD_STP_migrate_army_template_lock" in startup:

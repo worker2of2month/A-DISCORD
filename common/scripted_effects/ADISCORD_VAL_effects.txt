@@ -859,41 +859,85 @@ VAL_refund_trade_fee = {
   VAL = { add_political_power = 100 clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending country_event = { id = val_contract.425 days = 1 } }
  }
 }
-# COUNTRY recipient. A stale receipt is a silent reconciliation path: the offer
-# is already gone, so showing a second refusal window would misreport the cause.
+# COUNTRY recipient. A lost timed marker must still resolve the escrow exactly
+# once and tell VAL that the quote expired.
 VAL_reconcile_stale_trade_fee = {
- if = {
-  limit = { has_country_flag = VAL_trade_fee_paid }
-  VAL_record_partner_refusal = yes
-  clr_country_flag = VAL_trade_fee_paid
-  VAL = {
-   add_political_power = 100
-   clr_country_flag = VAL_partner_offer_pending
-   clr_country_flag = VAL_export_offer_pending
-  }
- }
+	VAL_refund_trade_fee = yes
+}
+VAL_reconcile_partner_trade_fee = {
+	if = {
+		limit = {
+			has_country_flag = VAL_trade_fee_paid
+			OR = {
+				NOT = { has_country_flag = VAL_partner_offer_trade }
+				exists = no
+				has_capitulated = yes
+				has_war_with = VAL
+			}
+		}
+		if = {
+			limit = { is_ai = yes VAL_partner_trade_can_accept = yes }
+			VAL_settle_partner_trade = yes
+		}
+		else = {
+			VAL_reconcile_stale_trade_fee = yes
+			clr_country_flag = VAL_partner_offer_trade
+		}
+	}
 }
 VAL_reconcile_trade_fees = {
- CIN = { if = { limit = { has_country_flag = VAL_trade_fee_paid AND = { OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } } VAL_reconcile_stale_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
- OSF = { if = { limit = { has_country_flag = VAL_trade_fee_paid AND = { OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } } VAL_reconcile_stale_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
- APH = { if = { limit = { has_country_flag = VAL_trade_fee_paid AND = { OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } } VAL_reconcile_stale_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
- COF = { if = { limit = { has_country_flag = VAL_trade_fee_paid AND = { OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } } VAL_reconcile_stale_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
- TFF = { if = { limit = { has_country_flag = VAL_trade_fee_paid AND = { OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } } VAL_reconcile_stale_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
- YPR = { if = { limit = { has_country_flag = VAL_trade_fee_paid AND = { OR = { NOT = { has_country_flag = VAL_partner_offer_trade } exists = no has_capitulated = yes has_war_with = VAL } } } VAL_reconcile_stale_trade_fee = yes clr_country_flag = VAL_partner_offer_trade } }
+	CIN = { VAL_reconcile_partner_trade_fee = yes }
+	OSF = { VAL_reconcile_partner_trade_fee = yes }
+	APH = { VAL_reconcile_partner_trade_fee = yes }
+	COF = { VAL_reconcile_partner_trade_fee = yes }
+	TFF = { VAL_reconcile_partner_trade_fee = yes }
+	YPR = { VAL_reconcile_partner_trade_fee = yes }
 }
 
 VAL_close_partner_offer = {
- VAL_refund_trade_fee = yes
+	# Compatibility dispatcher for callers without a contract-specific outcome.
+	if = { limit = { has_country_flag = VAL_partner_offer_trade } VAL_close_partner_trade_offer = yes }
+	else_if = { limit = { has_country_flag = VAL_trade_fee_paid } VAL_close_partner_trade_offer = yes }
+	else_if = { limit = { has_country_flag = VAL_partner_offer_hire } VAL_close_partner_hire_offer = yes }
+	else_if = { limit = { has_country_flag = VAL_partner_offer_arms } VAL_close_partner_arms_offer = yes }
+	else_if = { limit = { has_country_flag = VAL_partner_offer_bulk } VAL_close_partner_bulk_offer = yes }
+	else_if = { limit = { has_country_flag = VAL_partner_offer_arsenal } VAL_close_partner_arsenal_offer = yes }
+	else_if = { limit = { has_country_flag = VAL_partner_offer_strategic } VAL_close_partner_strategic_offer = yes }
+}
+VAL_close_partner_trade_offer = { VAL_refund_trade_fee = yes clr_country_flag = VAL_partner_offer_trade VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
+VAL_close_partner_hire_offer = { clr_country_flag = VAL_partner_offer_hire VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
+VAL_close_partner_arms_offer = { clr_country_flag = VAL_partner_offer_arms VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
+VAL_close_partner_bulk_offer = { clr_country_flag = VAL_partner_offer_bulk VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
+VAL_close_partner_arsenal_offer = { clr_country_flag = VAL_partner_offer_arsenal VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
+VAL_close_partner_strategic_offer = { clr_country_flag = VAL_partner_offer_strategic VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending } }
+
+# COUNTRY VAL. Rebuild income from active contract markers so startup and renewal order cannot leave a negative total.
+VAL_recalculate_market_contract_income = {
+	set_variable = { var = VAL_contract_market_weekly_income value = 0 }
+	if = { limit = { has_idea = VAL_market_CIN } add_to_variable = { var = VAL_contract_market_weekly_income value = 5 } }
+	if = { limit = { has_idea = VAL_market_OSF } add_to_variable = { var = VAL_contract_market_weekly_income value = 8 } }
+	if = { limit = { has_idea = VAL_market_APH } add_to_variable = { var = VAL_contract_market_weekly_income value = 2 } }
+	if = { limit = { has_idea = VAL_market_COF } add_to_variable = { var = VAL_contract_market_weekly_income value = 10 } }
+	if = { limit = { has_idea = VAL_market_TFF } add_to_variable = { var = VAL_contract_market_weekly_income value = 12 } }
+	if = { limit = { has_idea = VAL_market_YPR } add_to_variable = { var = VAL_contract_market_weekly_income value = 15 } }
+	clamp_variable = { var = VAL_contract_market_weekly_income min = 0 max = 52 }
+	VAL_refresh_market_contract_modifier = yes
+}
+VAL_reconcile_market_contract_lifecycle = {
+	if = { limit = { has_idea = VAL_market_CIN OR = { has_capitulated = yes has_war_with = CIN CIN = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_CIN }
+	if = { limit = { has_idea = VAL_market_OSF OR = { has_capitulated = yes has_war_with = OSF OSF = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_OSF }
+	if = { limit = { has_idea = VAL_market_APH OR = { has_capitulated = yes has_war_with = APH APH = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_APH }
+	if = { limit = { has_idea = VAL_market_COF OR = { has_capitulated = yes has_war_with = COF COF = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_COF }
+	if = { limit = { has_idea = VAL_market_TFF OR = { has_capitulated = yes has_war_with = TFF TFF = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_TFF }
+	if = { limit = { has_idea = VAL_market_YPR OR = { has_capitulated = yes has_war_with = YPR YPR = { OR = { exists = no has_capitulated = yes } } } } remove_ideas = VAL_market_YPR }
+}
+VAL_refresh_market_contract_modifier = {
 	if = {
-		limit = { OR = { has_country_flag = VAL_partner_offer_trade has_country_flag = VAL_partner_offer_hire has_country_flag = VAL_partner_offer_arms has_country_flag = VAL_partner_offer_bulk has_country_flag = VAL_partner_offer_arsenal has_country_flag = VAL_partner_offer_strategic } }
-		clr_country_flag = VAL_partner_offer_trade
-		clr_country_flag = VAL_partner_offer_hire
-		clr_country_flag = VAL_partner_offer_arms
-		clr_country_flag = VAL_partner_offer_bulk
-		clr_country_flag = VAL_partner_offer_arsenal
-		clr_country_flag = VAL_partner_offer_strategic
-		VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending }
+		limit = { has_dynamic_modifier = { modifier = VAL_contract_state } }
+		force_update_dynamic_modifier = yes
 	}
+	else = { add_dynamic_modifier = { modifier = VAL_contract_state } }
+	ADISCORD_economy_mark_dirty = yes
 }
 
 # COUNTRY partner. The persistent guard prevents reloads from extending a signed term.
@@ -907,6 +951,7 @@ VAL_start_market_year = {
   if = { limit = { tag = COF } VAL = { remove_ideas = VAL_market_COF add_timed_idea = { idea = VAL_market_COF days = 365 } } }
   if = { limit = { tag = TFF } VAL = { remove_ideas = VAL_market_TFF add_timed_idea = { idea = VAL_market_TFF days = 365 } } }
   if = { limit = { tag = YPR } VAL = { remove_ideas = VAL_market_YPR add_timed_idea = { idea = VAL_market_YPR days = 365 } } }
+  VAL = { VAL_recalculate_market_contract_income = yes }
   remove_ideas = VAL_partner_market_access
   add_timed_idea = { idea = VAL_partner_market_access days = 365 }
   VAL = { country_event = { id = val_contract.411 days = 365 } }
@@ -919,27 +964,49 @@ VAL_begin_partner_contract_year = {
 }
 
 VAL_resolve_partner_trade_reply = {
- if = { limit = { has_country_flag = VAL_partner_offer_trade } VAL_settle_partner_trade = yes }
+ if = { limit = { VAL_partner_trade_can_accept = yes } VAL_settle_partner_trade = yes }
  else = { VAL_decline_partner_trade = yes }
 }
+VAL_dispatch_partner_trade_offer = {
+	if = {
+		limit = { VAL_partner_trade_can_accept = no }
+		VAL_decline_partner_trade = yes
+	}
+	else_if = {
+		limit = { is_ai = yes }
+		VAL_resolve_partner_trade_reply = yes
+	}
+	else = { country_event = { id = val_contract.362 } }
+}
 VAL_decline_partner_trade = {
- VAL_capture_partner_failure = yes
- VAL_record_partner_refusal = yes
- VAL_close_partner_offer = yes
+ if = {
+  limit = { has_country_flag = VAL_partner_offer_trade NOT = { has_country_flag = VAL_trade_fee_paid } }
+  VAL_capture_partner_failure = yes
+  VAL_record_partner_refusal = yes
+ }
+ VAL_close_partner_trade_offer = yes
 }
 
 VAL_settle_partner_trade = {
  if = {
-  limit = { has_country_flag = VAL_partner_offer_trade }
+  limit = { VAL_partner_trade_can_accept = yes }
   if = { limit = { has_country_flag = VAL_trade_fee_paid } clr_country_flag = VAL_trade_fee_paid }
   else = { VAL = { add_political_power = -100 } }
   VAL_start_market_year = yes
   VAL_contract_record_success = yes
   VAL_begin_partner_contract_year = yes
   VAL = { country_event = { id = val_contract.424 days = 1 } }
-  VAL_close_partner_offer = yes
+  VAL_close_partner_trade_offer = yes
  }
 }
+VAL_dispatch_partner_hire_offer = {
+	if = {
+		limit = { is_ai = yes }
+		VAL_settle_partner_hire = yes
+	}
+	else = { country_event = { id = val_contract.364 } }
+}
+
 # COUNTRY partner. Reserve the quoted fee until consent; only settlement pays the partner.
 VAL_reserve_partner_hire_fee = {
  if = {
@@ -991,13 +1058,36 @@ VAL_decline_partner_hire = {
   clr_country_flag = VAL_partner_offer_hire
  }
 }
+VAL_reconcile_partner_hire_fee = {
+	if = {
+		limit = { has_country_flag = VAL_hire_fee_paid }
+		VAL_decline_partner_hire = yes
+	}
+	else_if = {
+		limit = {
+			has_country_flag = VAL_hire_fee_500_paid
+			OR = {
+				NOT = { has_country_flag = VAL_partner_offer_hire }
+				VAL_partner_offer_current = no
+			}
+		}
+		# An AI never withholds consent from a still-valid quote. The escrow is
+		# enough to recover the offer if its timed UI marker expired first.
+		if = {
+			limit = { is_ai = yes VAL_partner_hire_can_accept = yes }
+			VAL_settle_partner_hire = yes
+		}
+		else = { VAL_decline_partner_hire = yes }
+	}
+}
+
 VAL_reconcile_hire_fees = {
- CIN = { if = { limit = { OR = { has_country_flag = VAL_hire_fee_paid AND = { has_country_flag = VAL_hire_fee_500_paid OR = { NOT = { has_country_flag = VAL_partner_offer_hire } VAL_partner_offer_current = no } } } } VAL_decline_partner_hire = yes } }
- OSF = { if = { limit = { OR = { has_country_flag = VAL_hire_fee_paid AND = { has_country_flag = VAL_hire_fee_500_paid OR = { NOT = { has_country_flag = VAL_partner_offer_hire } VAL_partner_offer_current = no } } } } VAL_decline_partner_hire = yes } }
- APH = { if = { limit = { OR = { has_country_flag = VAL_hire_fee_paid AND = { has_country_flag = VAL_hire_fee_500_paid OR = { NOT = { has_country_flag = VAL_partner_offer_hire } VAL_partner_offer_current = no } } } } VAL_decline_partner_hire = yes } }
- COF = { if = { limit = { OR = { has_country_flag = VAL_hire_fee_paid AND = { has_country_flag = VAL_hire_fee_500_paid OR = { NOT = { has_country_flag = VAL_partner_offer_hire } VAL_partner_offer_current = no } } } } VAL_decline_partner_hire = yes } }
- TFF = { if = { limit = { OR = { has_country_flag = VAL_hire_fee_paid AND = { has_country_flag = VAL_hire_fee_500_paid OR = { NOT = { has_country_flag = VAL_partner_offer_hire } VAL_partner_offer_current = no } } } } VAL_decline_partner_hire = yes } }
- YPR = { if = { limit = { OR = { has_country_flag = VAL_hire_fee_paid AND = { has_country_flag = VAL_hire_fee_500_paid OR = { NOT = { has_country_flag = VAL_partner_offer_hire } VAL_partner_offer_current = no } } } } VAL_decline_partner_hire = yes } }
+	CIN = { VAL_reconcile_partner_hire_fee = yes }
+	OSF = { VAL_reconcile_partner_hire_fee = yes }
+	APH = { VAL_reconcile_partner_hire_fee = yes }
+	COF = { VAL_reconcile_partner_hire_fee = yes }
+	TFF = { VAL_reconcile_partner_hire_fee = yes }
+	YPR = { VAL_reconcile_partner_hire_fee = yes }
 }
 VAL_settle_partner_hire = {
  if = {
@@ -1021,7 +1111,7 @@ VAL_settle_partner_hire = {
   VAL = { add_manpower = 5000 country_event = { id = val_contract.422 days = 1 } }
   VAL_contract_record_success = yes
   VAL_begin_partner_contract_year = yes
-  VAL_close_partner_offer = yes
+  VAL_close_partner_hire_offer = yes
  }
  else = { VAL_decline_partner_hire = yes }
 }
@@ -1049,7 +1139,7 @@ VAL_settle_partner_arms = {
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
 		VAL_contract_record_success = yes
 		VAL_begin_partner_contract_year = yes
-  VAL_close_partner_offer = yes
+  VAL_close_partner_arms_offer = yes
 	}
 }
 
@@ -1076,7 +1166,7 @@ VAL_settle_partner_bulk = {
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
 		VAL_contract_record_success = yes
 		VAL_begin_partner_contract_year = yes
-  VAL_close_partner_offer = yes
+  VAL_close_partner_bulk_offer = yes
 	}
 }
 
@@ -1103,7 +1193,7 @@ VAL_settle_partner_arsenal = {
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
 		VAL_contract_record_success = yes
 		VAL_begin_partner_contract_year = yes
-  VAL_close_partner_offer = yes
+  VAL_close_partner_arsenal_offer = yes
 	}
 }
 
@@ -1130,7 +1220,7 @@ VAL_settle_partner_strategic = {
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
 		VAL_contract_record_success = yes
 		VAL_begin_partner_contract_year = yes
-  VAL_close_partner_offer = yes
+  VAL_close_partner_strategic_offer = yes
 	}
 }
 
@@ -1940,7 +2030,7 @@ VAL_initialize_rework = {
 			has_completed_focus = VAL_Operational_Directorate
 			NOT = { has_country_flag = VAL_operations_map_unlocked }
 		}
-		set_country_flag = VAL_operations_map_unlocked
+		VAL_unlock_operations_map = yes
 	}
 	if = {
 		limit = {

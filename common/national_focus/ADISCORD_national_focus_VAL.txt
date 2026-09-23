@@ -135,7 +135,7 @@ focus_tree = {
 			unlock_decision_tooltip = { decision = VAL_hire_partner_volunteers show_effect_tooltip = yes }
 			hidden_effect = {
 				set_country_flag = VAL_foreign_operations_unlocked
-				set_country_flag = VAL_operations_map_unlocked
+				VAL_unlock_operations_map = yes
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 10 }
 				VAL_change_contract_authority = yes
 			}
@@ -461,7 +461,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_The_Harvest_Of_Ash
-		icon = GFX_goal_generic_consumer_goods
+		icon = GFX_focus_VAL_The_Harvest_Of_Ash
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY }
 		x = 24
 		y = 4
@@ -529,7 +529,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Dead_Villages_Still_Count
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_VAL_Dead_Villages_Still_Count
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_AUTHORITY }
 		x = 24
 		y = 6
@@ -671,7 +671,7 @@ focus_tree = {
 			add_intel = { target = STP army_intel = 10 }
 			add_intel = { target = CIN army_intel = 10 }
 			hidden_effect = {
-				set_country_flag = VAL_operations_map_unlocked
+				VAL_unlock_operations_map = yes
 			}
 		}
 		ai_will_do = { base = 4 }
@@ -1842,7 +1842,7 @@ focus_tree = {
 			else_if = { limit = { STS = { exists = yes } } add_intel = { target = STS army_intel = 15 } }
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			hidden_effect = {
-				set_country_flag = VAL_operations_map_unlocked
+				VAL_unlock_operations_map = yes
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
 				VAL_change_contract_authority = yes
 			}
@@ -1993,7 +1993,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_reclamation_survey
-		icon = GFX_goal_generic_consumer_goods
+		icon = GFX_focus_VAL_Reclamation_Survey
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_DECISIONS }
 		x = -2
 		y = 10
@@ -2022,7 +2022,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_reclamation_road_crews
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY }
 		x = -4
 		y = 11
@@ -2034,7 +2034,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_reclamation_clean_water
-		icon = GFX_focus_generic_self_management
+		icon = GFX_focus_VAL_Reclamation_Clean_Water
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_DECISIONS }
 		x = 0
 		y = 11
@@ -2065,7 +2065,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_reclamation_return_home
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_VAL_Reclamation_Return_Home
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_DECISIONS }
 		x = 0
 		y = 13

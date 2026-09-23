@@ -1814,7 +1814,6 @@ STP_clear_region_runtime = {
 	clr_state_flag = STP_cw_garrison_evacuation_in_progress
 	clr_state_flag = STP_false_trail_in_progress
 	clr_state_flag = STP_false_trail_redirected
-	clr_state_flag = STP_cw_inspection_protected
 	clr_state_flag = STP_inspection_concession_prepared
 	STP_cw_return_preparation_reserves = yes
 	clr_state_flag = STP_region_participates
@@ -2397,6 +2396,7 @@ STP_cw_finish_mobilization = {
 	clr_country_flag = STP_cw_disruption_cooldown
 	clear_variable = STP_cw_disruption_completed
 	set_country_flag = STP_cw_postwar
+	if = { limit = { tag = STS } VAL_operations_map_refresh_cache = yes }
 	STP_pw_reconcile_postwar_interactivity = yes
 	STP_qol_initialize_staff = yes
 	mark_focus_tree_layout_dirty = yes

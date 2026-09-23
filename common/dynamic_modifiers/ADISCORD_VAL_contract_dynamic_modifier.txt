@@ -1,6 +1,7 @@
 # Independent Kefreyt contract-state modifier.
 
 VAL_contract_state = {
+	ADISCORD_economy_weekly_income = VAL_contract_market_weekly_income
 	recon_factor = VAL_contract_recon_factor
 	special_forces_min = VAL_contract_special_forces_min
 	send_volunteer_size = VAL_contract_volunteer_size

@@ -277,6 +277,35 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Export_Rifles_Not_Promises.png"
 	}
 
+	spriteType = {
+		name = "GFX_focus_VAL_The_Harvest_Of_Ash"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_The_Harvest_Of_Ash.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Reclamation_Survey"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reclamation_Survey.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Dead_Villages_Still_Count"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Dead_Villages_Still_Count.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Reclamation_Road_Crews"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reclamation_Road_Crews.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Reclamation_Clean_Water"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reclamation_Clean_Water.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Reclamation_Return_Home"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reclamation_Return_Home.png"
+	}
 
 
 	spriteType = {

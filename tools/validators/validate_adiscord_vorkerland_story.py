@@ -33,7 +33,6 @@ STORY_NUMBERS = (
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
     31, 32, 33, 34, 35, 36,
     41, 42, 43,
-    50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61,
 )
 STORY_IDS = tuple(f"ADISCORD_vorkerland_story.{number}" for number in STORY_NUMBERS)
 COUNTRY_EVENT_NUMBERS = frozenset((5, 6))
@@ -41,8 +40,6 @@ COUNTRY_EVENT_NUMBERS = frozenset((5, 6))
 SHOWDOWN_ID = "ADISCORD_vorkerland_story.1"
 COMMAND_CHOICE_ID = "ADISCORD_vorkerland_story.5"
 POSTWAR_ID = "ADISCORD_vorkerland_story.6"
-
-OBJECTIVE_VARIABLE = "global.ADISCORD_vorkerland_objective_last"
 
 WORKER_FATE_DISPATCH = (
     ("ADISCORD_vorkerland_worker_safe_with_loyalists", "ADISCORD_vorkerland_story.10"),
@@ -60,38 +57,13 @@ VARIANT_DISPATCH = (
     ("ADISCORD_vorkerland_tva_variant_preservation", "ADISCORD_vorkerland_story.36"),
 )
 
-OBJECTIVE_DISPATCH = (
-    (1, "ADISCORD_vorkerland_story.50"),
-    (2, "ADISCORD_vorkerland_story.51"),
-    (3, "ADISCORD_vorkerland_story.52"),
-    (4, "ADISCORD_vorkerland_story.53"),
-    (5, "ADISCORD_vorkerland_story.54"),
-    (6, "ADISCORD_vorkerland_story.55"),
-    (7, "ADISCORD_vorkerland_story.56"),
-    (8, "ADISCORD_vorkerland_story.57"),
-    (9, "ADISCORD_vorkerland_story.58"),
-    (10, "ADISCORD_vorkerland_story.59"),
-    (11, "ADISCORD_vorkerland_story.60"),
-    (12, "ADISCORD_vorkerland_story.61"),
-)
-
 CAPITULATION_DISPATCH = (
     ("WKR", "ADISCORD_vorkerland_story.41"),
     ("VAD", "ADISCORD_vorkerland_story.42"),
     ("TVA", "ADISCORD_vorkerland_story.43"),
 )
 
-# The claimant capitals already have dedicated first-fall reports, so the iconic
-# objective report must stand down for them instead of announcing the same city
-# twice on the same day.
-CAPITAL_OBJECTIVE_SUPPRESSION = (
-    (1, "ADISCORD_vorkerland_story_wkr_capital_fell_first"),
-    (2, "ADISCORD_vorkerland_story_vad_capital_fell_first"),
-    (3, "ADISCORD_vorkerland_story_tva_capital_fell_first"),
-)
-
 WORKER_FATE_EFFECT = "ADISCORD_vorkerland_story_report_worker_fate"
-OBJECTIVE_EFFECT = "ADISCORD_vorkerland_story_report_iconic_objective"
 VARIANT_EFFECT = "ADISCORD_vorkerland_story_report_variant_declaration"
 CAPITULATION_EFFECT = "ADISCORD_vorkerland_story_report_claimant_capitulation"
 
@@ -494,44 +466,6 @@ def dispatch_issues(story_effects: str) -> list[str]:
                 "or an early call silences the report for the whole campaign"
             )
 
-    objective = named_block(story_effects, OBJECTIVE_EFFECT)
-    if not objective:
-        issues.append(f"story effects are missing {OBJECTIVE_EFFECT}")
-    else:
-        if f"var = {OBJECTIVE_VARIABLE}" not in objective:
-            issues.append(f"{OBJECTIVE_EFFECT} must read {OBJECTIVE_VARIABLE}")
-        if "ADISCORD_vorkerland_story_objectives_reported" not in objective:
-            issues.append(
-                f"{OBJECTIVE_EFFECT} must record reported objectives so one centre "
-                "cannot be announced twice"
-            )
-        for value, event_id in OBJECTIVE_DISPATCH:
-            target = dispatch_target(
-                objective,
-                (
-                    f"limit = {{ check_variable = {{ var = {OBJECTIVE_VARIABLE} "
-                    f"value = {value} compare = equals }} }}"
-                ),
-                news_pattern,
-            )
-            if target is None:
-                issues.append(f"{OBJECTIVE_EFFECT} never reads objective {value}")
-            elif target != event_id:
-                issues.append(
-                    f"{OBJECTIVE_EFFECT} dispatches {target} for objective {value}, "
-                    f"expected {event_id}"
-                )
-        for value, flag in CAPITAL_OBJECTIVE_SUPPRESSION:
-            suppression = re.search(
-                rf"value = {value} compare = equals \}}\s*\n\s*has_global_flag = {re.escape(flag)}",
-                objective,
-            )
-            if not suppression:
-                issues.append(
-                    f"{OBJECTIVE_EFFECT} must suppress objective {value} once {flag} "
-                    "has already announced that capital"
-                )
-
     variant = named_block(story_effects, VARIANT_EFFECT)
     if not variant:
         issues.append(f"story effects are missing {VARIANT_EFFECT}")
@@ -558,17 +492,7 @@ def dispatch_issues(story_effects: str) -> list[str]:
                     f"{CAPITULATION_EFFECT} dispatches {target} for {tag}, expected {event_id}"
                 )
 
-    # Both of these dispatchers are reached from story-owned effects that
-    # on_state_control_changed and on_capitulation already call, so they need no
-    # hook outside the story files and must not silently lose the call.
-    capital_fall = named_block(
-        story_effects, "ADISCORD_vorkerland_story_check_first_claimant_capital_fall"
-    )
-    if f"{OBJECTIVE_EFFECT} = yes" not in capital_fall:
-        issues.append(
-            "iconic-objective news is unreachable: the state-control story entry point "
-            f"no longer calls {OBJECTIVE_EFFECT}"
-        )
+    # Claimant capitulation is reached through a separate story-owned hook.
     command_choice = named_block(
         story_effects, "ADISCORD_vorkerland_story_offer_first_claimant_command_choice"
     )
@@ -626,10 +550,6 @@ def localisation_quality_issues(
     families: list[tuple[str, list[str]]] = [
         ("Worker fate", [f"ADISCORD_vorkerland_story.{number}.d" for number in (10, 11, 12, 13)]),
         (
-            "Iconic objective",
-            [f"ADISCORD_vorkerland_story.{number}.d" for number in range(50, 62)],
-        ),
-        (
             "Claimant capitulation",
             [f"ADISCORD_vorkerland_story.{number}.d" for number in (41, 42, 43)],
         ),
@@ -647,20 +567,6 @@ def localisation_quality_issues(
 def upstream_contract_issues(root: Path, campaign_state_effects: str) -> list[str]:
     """Guard the identifiers the news layer reads out of other efforts' files."""
     issues: list[str] = []
-    resolve = named_block(
-        campaign_state_effects, "ADISCORD_vorkerland_resolve_iconic_objective"
-    )
-    if not resolve:
-        issues.append(
-            "iconic-objective news has no upstream: "
-            "ADISCORD_vorkerland_resolve_iconic_objective is gone"
-        )
-    elif f"var = {OBJECTIVE_VARIABLE}" not in resolve:
-        issues.append(
-            f"iconic-objective news reads {OBJECTIVE_VARIABLE}, which "
-            "ADISCORD_vorkerland_resolve_iconic_objective no longer writes"
-        )
-
     collapse_path = root / COLLAPSE_EVENTS
     collapse = collapse_path.read_text(encoding="utf-8-sig") if collapse_path.is_file() else ""
     for flag, _ in WORKER_FATE_DISPATCH:

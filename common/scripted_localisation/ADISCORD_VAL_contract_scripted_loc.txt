@@ -444,18 +444,6 @@ defined_text = {
 
 
 defined_text = {
- name = VALOfferStatus_VAL_aid_wrk_support
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = WRK } has_completed_focus = VAL_Operational_Directorate VAL_can_aid_vorkerland = yes NOT = { has_country_flag = VAL_wrk_gift_cooldown } NOT = { has_political_power < 30 } NOT = { has_equipment = { support_equipment < 100 } } }  } localization_key = VAL_offer_blocked_gifts }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_aid_wrk_rifles
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = WRK } has_completed_focus = VAL_Operational_Directorate VAL_can_aid_vorkerland = yes NOT = { has_country_flag = VAL_wrk_gift_cooldown } NOT = { has_political_power < 30 } NOT = { has_equipment = { infantry_equipment < 10000 } } }  } localization_key = VAL_offer_blocked_gifts }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
  name = VALOfferStatus_VAL_military_offer_2
  text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes any_owned_state = { NOT = { is_controlled_by = event_target:VAL_contract_partner } controller = { has_war_with = event_target:VAL_contract_partner } } } }  } localization_key = VAL_offer_blocked_military }
  text = { localization_key = VAL_offer_status_clear }
@@ -557,18 +545,6 @@ defined_text = {
 }
 
 
-
-defined_text = {
- name = VALOfferButton_VAL_aid_wrk_support
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = WRK } has_completed_focus = VAL_Operational_Directorate VAL_can_aid_vorkerland = yes NOT = { has_country_flag = VAL_wrk_gift_cooldown } NOT = { has_political_power < 30 } NOT = { has_equipment = { support_equipment < 100 } } }  } localization_key = VAL_offer_button_blocked_VAL_aid_wrk_support }
- text = { localization_key = VAL_aid_wrk_support }
-}
-
-defined_text = {
- name = VALOfferButton_VAL_aid_wrk_rifles
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = WRK } has_completed_focus = VAL_Operational_Directorate VAL_can_aid_vorkerland = yes NOT = { has_country_flag = VAL_wrk_gift_cooldown } NOT = { has_political_power < 30 } NOT = { has_equipment = { infantry_equipment < 10000 } } }  } localization_key = VAL_offer_button_blocked_VAL_aid_wrk_rifles }
- text = { localization_key = VAL_aid_wrk_rifles }
-}
 
 defined_text = {
  name = VALOfferButton_VAL_military_offer_2

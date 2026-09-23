@@ -516,6 +516,7 @@ VAL_logistics_market_weekly = {
 	if = { limit = { VAL_trade_corridors_unlocked = yes } VAL_pay_trade_corridors = yes }
 	VAL_update_refugees_weekly = yes
 	VAL_update_black_market_weekly = yes
+	VAL_trade_routes_map_refresh_cache = yes
 }
 
 # COUNTRY VAL. One paid corridor project occupies the construction office.
