@@ -73,6 +73,11 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
             state_hook,
         )
 
+    def test_economy_initialization_recomputes_model_once(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_economy_effects.txt")
+        initialize = named_block(effects, "ADISCORD_economy_initialize_country")
+        self.assertEqual(initialize.count("ADISCORD_economy_update_model_and_cycle = yes"), 1)
+
     def test_stelander_union_recovery_has_no_global_daily_poll(self) -> None:
         source = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
         self.assertIsNone(re.search(r"(?m)^\s*on_daily\s*=", source))
