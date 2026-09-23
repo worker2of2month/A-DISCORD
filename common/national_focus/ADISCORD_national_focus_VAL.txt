@@ -1164,8 +1164,8 @@ focus_tree = {
 		x = 36
 		y = 9
 		cost = 5
-		prerequisite = { focus = VAL_Field_Repair_Corps }
-		prerequisite = { focus = VAL_Reserve_Battalions }
+		prerequisite = { focus = VAL_Logistics_Command }
+		prerequisite = { focus = VAL_Operational_Reserves }
 		completion_reward = {
 			custom_effect_tooltip = VAL_qol_armor_bureau_tt
 			if = { limit = { has_dlc = "Arms Against Tyranny" } unlock_military_industrial_organization_tooltip = mio:VAL_qol_armor_bureau }
@@ -1666,9 +1666,7 @@ focus_tree = {
 		x = 36
 		y = 10
 		cost = 5
-		prerequisite = { focus = VAL_Contract_NCO_Schools }
-		prerequisite = { focus = VAL_Logistics_Command }
-		prerequisite = { focus = VAL_Operational_Reserves }
+		prerequisite = { focus = VAL_Contract_General_Staff }
 		completion_reward = {
 			VAL_reform_mercenary_payroll = yes
 			if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Maksim_Korvin } } } recruit_character = VAL_Maksim_Korvin }
