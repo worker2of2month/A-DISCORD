@@ -22,7 +22,7 @@ FOCUS = ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 
-SCORE_TOTAL = 104
+SCORE_TOTAL = 105
 
 INTRO_FOCUSES = (
     "STP_NECTAR_OF_GODS",
@@ -67,16 +67,16 @@ DEPTH_FOCUSES = (
 WAR_FOCUSES = (
     "STP_cw_open_conscription",
     "STP_cw_unified_headquarters",
-    "STP_cw_mobilization_register",
-    "STP_cw_wartime_arsenals",
-    "STP_cw_supply_routes",
     "STP_cw_front_scouts",
     "STP_cw_mobile_workshops",
     "STP_cw_frontline_relief",
-    "STP_cw_route_columns",
-    "STP_cw_organize_underground",
     "STP_cw_road_to_fada",
     "STP_cw_last_banquet",
+    "STP_cw_route_columns",
+    "STP_cw_organize_underground",
+    "STP_cw_mobilization_register",
+    "STP_cw_wartime_arsenals",
+    "STP_cw_supply_routes",
     "STP_cw_cut_capital_roads",
     "STP_cw_government_quarter_assault",
     "STP_cw_line_formations",
@@ -228,6 +228,7 @@ def parse_focuses() -> dict[str, dict]:
             focus_id = next(child.value for child in focus.value if child.key == "id")
             ai = next((child.value for child in focus.value if child.key == "ai_will_do"), [])
             base = next((child.value for child in ai if child.key == "base"), None)
+            cost = next((child.value for child in focus.value if child.key == "cost"), None)
             prereqs = [
                 [child.value for child in group if child.key == "focus"]
                 for group in (child.value for child in focus.value if child.key == "prerequisite")
@@ -238,7 +239,12 @@ def parse_focuses() -> dict[str, dict]:
                 for child in group
                 if child.key == "focus"
             ]
-            result[focus_id] = {"base": int(base) if base is not None else None, "prereqs": prereqs, "exclusive": exclusive}
+            result[focus_id] = {
+                "base": int(base) if base is not None else None,
+                "cost": int(cost) if cost is not None else None,
+                "prereqs": prereqs,
+                "exclusive": exclusive,
+            }
     return result
 
 
@@ -369,6 +375,30 @@ def run_checks() -> list[tuple[str, bool, str]]:
     add("core sequence reachable", sequence_reachable(CORE_FOCUSES, focuses, {"STP_Show_Him_The_Truth"}))
     add("depth sequence reachable", sequence_reachable(DEPTH_FOCUSES, focuses, {"STP_Show_Him_The_Truth", *CORE_FOCUSES}))
     add("war sequence reachable", sequence_reachable(WAR_FOCUSES, focuses, set()))
+    banquet_index = WAR_FOCUSES.index("STP_cw_last_banquet") + 1
+    banquet_path = WAR_FOCUSES[:banquet_index]
+    banquet_costs = [focuses.get(focus_id, {}).get("cost") for focus_id in banquet_path]
+    banquet_decision = decision_block(decisions_text, "STP_cw_launch_last_banquet")
+    banquet_operation_days = scalar_int(
+        named_block(named_block(banquet_decision, "complete_effect"), "add_timed_idea"),
+        "days",
+    )
+    nod_intervention_days = scalar_int(
+        decision_block(decisions_text, "NOD_cw_intervention_preparation"),
+        "days_mission_timeout",
+    )
+    shabrat_decisive_window = (
+        None
+        if any(cost is None for cost in banquet_costs) or banquet_operation_days is None
+        else sum(cost * 7 for cost in banquet_costs) + banquet_operation_days
+    )
+    add(
+        "Last Banquet resolves before NOD intervention clock",
+        shabrat_decisive_window is not None
+        and nod_intervention_days is not None
+        and shabrat_decisive_window < nod_intervention_days,
+        f"{shabrat_decisive_window} days vs {nod_intervention_days} days",
+    )
     add("reconstruction sequence reachable", sequence_reachable(RECONSTRUCTION_FOCUSES, focuses, set()))
     add("hegemony sequence reachable", sequence_reachable(HEGEMONY_FOCUSES, focuses, set(RECONSTRUCTION_FOCUSES)))
 
