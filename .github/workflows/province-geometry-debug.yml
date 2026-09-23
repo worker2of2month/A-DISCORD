@@ -1,4 +1,4 @@
-name: Province geometry debug
+name: Repair Northern Iskhayt province
 
 on:
   push:
@@ -6,44 +6,209 @@ on:
       - fix/iskhayt-province-debug
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  analyze:
+  repair:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install Pillow
         run: python -m pip install --disable-pip-version-check pillow
-      - name: Print Iskhayt province crop
+      - name: Repair province 16646
+        shell: bash
         run: |
           python - <<'PY'
+          from __future__ import annotations
           import csv
+          import re
+          import struct
+          from collections import defaultdict, deque
+          from pathlib import Path
           from PIL import Image
 
-          rgb_to_id = {}
+          MAP = Path("map/provinces.bmp")
+          TARGET = 16646
+          DONORS = {6, 81, 88}
+          TARGET_AREA = 64
+
+          rgb_by_id = {}
+          id_by_rgb = {}
           with open("map/definition.csv", encoding="utf-8-sig", newline="") as fh:
               for row in csv.reader(fh, delimiter=";"):
                   if len(row) >= 4 and row[0].isdigit():
-                      rgb_to_id[(int(row[1]), int(row[2]), int(row[3]))] = int(row[0])
+                      pid = int(row[0])
+                      rgb = tuple(map(int, row[1:4]))
+                      rgb_by_id[pid] = rgb
+                      id_by_rgb[rgb] = pid
 
-          aliases = {
-              6:"A", 21:"B", 51:"C", 81:"D", 88:"E", 16372:"F", 16646:"G",
-              4:"K", 48:"L", 83:"M", 108:"N",
-              14:"a", 15:"b", 36:"c", 85:"d", 13029:"e",
-              34:"x", 32:"y", 41:"z",
-              67:"t", 84:"u", 16631:"v",
-              11496:"h", 127:"i", 13493:"j", 144:"p", 103:"q"
-          }
-          print("LEGEND", " ".join(f"{v}={k}" for k,v in aliases.items()))
-          image = Image.open("map/provinces.bmp").convert("RGB")
-          px = image.load()
-          x0,x1,y0,y1 = 3825,3878,968,1012
-          print("X range", x0, x1, "Y range", y0, y1)
-          for y in range(y0, y1 + 1):
-              row = []
-              for x in range(x0, x1 + 1):
-                  pid = rgb_to_id.get(px[x,y], -1)
-                  row.append(aliases.get(pid, "."))
-              print(f"{y:04d} {''.join(row)}")
+          province_to_state = {}
+          for path in Path("history/states").glob("*.txt"):
+              text = path.read_text(encoding="utf-8-sig", errors="replace")
+              mid = re.search(r"\bid\s*=\s*(\d+)", text)
+              mp = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", text, re.S)
+              if not (mid and mp):
+                  continue
+              sid = int(mid.group(1))
+              for token in re.findall(r"\d+", mp.group(1)):
+                  province_to_state[int(token)] = sid
+
+          if province_to_state.get(TARGET) != 20:
+              raise SystemExit(f"province {TARGET} is no longer in state 20")
+          if any(province_to_state.get(pid) != 20 for pid in DONORS):
+              raise SystemExit("Northern Iskhayt donors are no longer all in state 20")
+
+          with Image.open(MAP) as source:
+              image = source.convert("RGB")
+          w, h = image.size
+          pixels = image.load()
+
+          coords = defaultdict(set)
+          relevant = DONORS | {TARGET}
+          for y in range(h):
+              for x in range(w):
+                  pid = id_by_rgb.get(pixels[x, y])
+                  if pid in relevant:
+                      coords[pid].add((x, y))
+
+          before = {pid: len(coords[pid]) for pid in sorted(relevant)}
+          target = set(coords[TARGET])
+          if not target:
+              raise SystemExit(f"province {TARGET} has no pixels")
+
+          cx = sum(x for x, _ in target) / len(target)
+          cy = sum(y for _, y in target) / len(target)
+          need = max(0, TARGET_AREA - len(target))
+
+          candidates = []
+          for pid in DONORS:
+              for x, y in coords[pid]:
+                  # Keep the repair local to the existing province and prefer a compact,
+                  # round tactical province rather than another one-pixel salient.
+                  d2 = (x - cx) ** 2 + (y - cy) ** 2
+                  candidates.append((d2, abs(y - cy), abs(x - cx), y, x, pid))
+          candidates.sort()
+
+          chosen = []
+          chosen_set = set()
+          working_target = set(target)
+          while len(chosen) < need:
+              progressed = False
+              for entry in candidates:
+                  _, _, _, y, x, pid = entry
+                  pos = (x, y)
+                  if pos in chosen_set:
+                      continue
+                  # Grow only through a 4-neighbour connection to avoid islands.
+                  if not any((x + dx, y + dy) in working_target for dx, dy in ((1,0),(-1,0),(0,1),(0,-1))):
+                      continue
+                  chosen.append((x, y, pid))
+                  chosen_set.add(pos)
+                  working_target.add(pos)
+                  progressed = True
+                  if len(chosen) == need:
+                      break
+              if not progressed:
+                  raise SystemExit("could not grow province 16646 to the requested area")
+
+          after_sets = {pid: set(coords[pid]) for pid in relevant}
+          for x, y, pid in chosen:
+              after_sets[pid].remove((x, y))
+              after_sets[TARGET].add((x, y))
+
+          def connected(points: set[tuple[int,int]]) -> bool:
+              if not points:
+                  return False
+              start = next(iter(points))
+              seen = {start}
+              q = deque([start])
+              while q:
+                  x, y = q.popleft()
+                  for dx, dy in ((1,0),(-1,0),(0,1),(0,-1)):
+                      nxt = (x + dx, y + dy)
+                      if nxt in points and nxt not in seen:
+                          seen.add(nxt)
+                          q.append(nxt)
+              return len(seen) == len(points)
+
+          for pid in relevant:
+              if not connected(after_sets[pid]):
+                  raise SystemExit(f"repair would disconnect province {pid}")
+
+          # Check the repaired province stays wholly inside state 20 at its border.
+          target_after = after_sets[TARGET]
+          for x, y in target_after:
+              for dx, dy in ((1,0),(-1,0),(0,1),(0,-1)):
+                  nx, ny = x + dx, y + dy
+                  if not (0 <= nx < w and 0 <= ny < h) or (nx, ny) in target_after:
+                      continue
+                  neighbour = id_by_rgb.get(pixels[nx, ny])
+                  if neighbour in DONORS:
+                      continue
+                  if province_to_state.get(neighbour) != 20:
+                      raise SystemExit(
+                          f"repair would expose province {TARGET} to province {neighbour} "
+                          f"in state {province_to_state.get(neighbour)}"
+                      )
+
+          if not chosen:
+              print("Province 16646 already has the repaired geometry.")
+          else:
+              # Patch the original BMP bytes in place. This preserves every header,
+              # palette/metadata byte and every unrelated map pixel.
+              raw = bytearray(MAP.read_bytes())
+              pixel_offset = struct.unpack_from("<I", raw, 10)[0]
+              width = struct.unpack_from("<i", raw, 18)[0]
+              height_raw = struct.unpack_from("<i", raw, 22)[0]
+              bpp = struct.unpack_from("<H", raw, 28)[0]
+              compression = struct.unpack_from("<I", raw, 30)[0]
+              if width != w or abs(height_raw) != h or bpp != 24 or compression != 0:
+                  raise SystemExit(
+                      f"unexpected BMP format width={width} height={height_raw} bpp={bpp} compression={compression}"
+                  )
+              stride = ((w * 3 + 3) // 4) * 4
+              tr, tg, tb = rgb_by_id[TARGET]
+              for x, y, _pid in chosen:
+                  file_y = h - 1 - y if height_raw > 0 else y
+                  offset = pixel_offset + file_y * stride + x * 3
+                  raw[offset:offset+3] = bytes((tb, tg, tr))
+              MAP.write_bytes(raw)
+
+          with Image.open(MAP) as check:
+              check = check.convert("RGB")
+              counts = defaultdict(int)
+              target_pixels = set()
+              for y in range(h):
+                  for x in range(w):
+                      pid = id_by_rgb.get(check.getpixel((x, y)))
+                      if pid in relevant:
+                          counts[pid] += 1
+                      if pid == TARGET:
+                          target_pixels.add((x, y))
+
+          if counts[TARGET] != TARGET_AREA:
+              raise SystemExit(f"province {TARGET} area is {counts[TARGET]}, expected {TARGET_AREA}")
+          if not connected(target_pixels):
+              raise SystemExit(f"province {TARGET} is disconnected after repair")
+
+          print("Northern Iskhayt geometry repaired")
+          print("before:", before)
+          print("after:", {pid: counts[pid] for pid in sorted(relevant)})
+          print("moved pixels:", len(chosen))
+          print("bbox:", [
+              min(x for x, _ in target_pixels), min(y for _, y in target_pixels),
+              max(x for x, _ in target_pixels), max(y for _, y in target_pixels)
+          ])
           PY
+      - name: Commit repaired map
+        shell: bash
+        run: |
+          if git diff --quiet -- map/provinces.bmp; then
+            echo "No map change required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add map/provinces.bmp
+          git commit -m "fix(map): repair Northern Iskhayt province geometry"
+          git push
