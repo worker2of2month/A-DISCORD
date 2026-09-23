@@ -1494,7 +1494,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 	# disappeared and the claimant owns and controls the entire historical
 	# package. These short civil-administration decisions are identical for all
 	# three claimants and cannot grant claims on land they have not secured.
-ADISCORD_vorkerland_integrate_eyr_district = {
+	ADISCORD_vorkerland_integrate_eyr_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
@@ -1534,7 +1534,7 @@ ADISCORD_vorkerland_integrate_eyr_district = {
 		}
 		ai_will_do = { factor = 600 }
 	}
-ADISCORD_vorkerland_integrate_egc_district = {
+	ADISCORD_vorkerland_integrate_egc_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
@@ -1572,7 +1572,7 @@ ADISCORD_vorkerland_integrate_egc_district = {
 		}
 		ai_will_do = { factor = 600 }
 	}
-ADISCORD_vorkerland_integrate_riv_district = {
+	ADISCORD_vorkerland_integrate_riv_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
@@ -1614,7 +1614,7 @@ ADISCORD_vorkerland_integrate_riv_district = {
 		}
 		ai_will_do = { factor = 600 }
 	}
-ADISCORD_vorkerland_integrate_rev_district = {
+	ADISCORD_vorkerland_integrate_rev_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
@@ -1650,7 +1650,7 @@ ADISCORD_vorkerland_integrate_rev_district = {
 		}
 		ai_will_do = { factor = 600 }
 	}
-ADISCORD_vorkerland_integrate_yor_district = {
+	ADISCORD_vorkerland_integrate_yor_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
@@ -1688,7 +1688,7 @@ ADISCORD_vorkerland_integrate_yor_district = {
 		}
 		ai_will_do = { factor = 600 }
 	}
-ADISCORD_vorkerland_integrate_ndn_district = {
+	ADISCORD_vorkerland_integrate_ndn_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
@@ -1718,7 +1718,7 @@ ADISCORD_vorkerland_integrate_ndn_district = {
 		}
 		ai_will_do = { factor = 600 }
 	}
-ADISCORD_vorkerland_integrate_swb_district = {
+	ADISCORD_vorkerland_integrate_swb_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
@@ -1748,7 +1748,7 @@ ADISCORD_vorkerland_integrate_swb_district = {
 		}
 		ai_will_do = { factor = 600 }
 	}
-ADISCORD_vorkerland_integrate_vhv_district = {
+	ADISCORD_vorkerland_integrate_vhv_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
@@ -1786,7 +1786,7 @@ ADISCORD_vorkerland_integrate_vhv_district = {
 		}
 		ai_will_do = { factor = 600 }
 	}
-ADISCORD_vorkerland_integrate_osv_district = {
+	ADISCORD_vorkerland_integrate_osv_district = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA tag = WRK } }
 		visible = {
@@ -1822,7 +1822,7 @@ ADISCORD_vorkerland_integrate_osv_district = {
 		}
 		ai_will_do = { factor = 600 }
 	}
-ADISCORD_vorkerland_consolidation_deadline = {
+	ADISCORD_vorkerland_consolidation_deadline = {
 		icon = generic_prepare_civil_war
 		allowed = { OR = { tag = WKR tag = VAD tag = TVA } }
 		activation = { always = no }
@@ -1844,7 +1844,7 @@ ADISCORD_vorkerland_consolidation_deadline = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 		}
-available = { custom_trigger_tooltip = { tooltip = ADISCORD_vorkerland_central_showdown_command_ready_tt ADISCORD_vorkerland_can_commit_to_showdown = yes } }
+		available = { custom_trigger_tooltip = { tooltip = ADISCORD_vorkerland_central_showdown_command_ready_tt ADISCORD_vorkerland_can_commit_to_showdown = yes } }
 		cost = 0
 		days_re_enable = 7
 		fire_only_once = no
