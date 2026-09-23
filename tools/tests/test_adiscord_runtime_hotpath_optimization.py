@@ -125,9 +125,17 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         shared = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
         for hook in ("on_capitulation", "on_peace", "on_annex", "on_peaceconference_ended", "on_state_control_changed"):
             self.assertIn("VAL_queue_frontier_reconciliation = yes", named_block(shared, hook))
-        event = read("events/ADISCORD_VAL_contract_events.txt").split("id = val_rework.102", 1)[1]
-        self.assertIn("VAL_frontier_reconcile = yes", event)
-        self.assertNotIn("country_event =", event)
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, scalar, walk
+        events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
+        found = [
+            entry.value
+            for entry in events
+            if entry.key == "country_event" and scalar(entry.value, "id") == "val_rework.102"
+        ]
+        self.assertEqual(len(found), 1)
+        event = found[0]
+        self.assertIn("VAL_frontier_reconcile", {entry.key for entry in walk(event)})
+        self.assertNotIn("country_event", {entry.key for entry in walk(event)})
 
     def test_trade_cache_detects_every_route_transition_before_payment(self):
         from itertools import product
