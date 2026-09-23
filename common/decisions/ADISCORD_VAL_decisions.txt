@@ -20,7 +20,7 @@ VAL_military_operations = {
 		fire_only_once = no
 		complete_effect = {
 			custom_effect_tooltip = VAL_cw_begin_mobilization_war_tt
-			VAL_cw_start_intervention = yes
+			hidden_effect = { VAL_cw_start_intervention = yes }
 		}
 		ai_will_do = {
 			base = 20
