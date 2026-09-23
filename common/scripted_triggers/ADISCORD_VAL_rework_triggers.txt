@@ -1893,12 +1893,6 @@ VAL_ready_recipient_ready = {
  NOT = { tag = STS has_war_with = STP }
  NOT = { has_country_flag = VAL_partner_contact_cooldown }
  NOT = { has_country_flag = VAL_export_customer_cooldown }
- OR = {
-  AND = { VAL = { has_completed_focus = VAL_Foreign_Broker_Licences } VAL_partner_arms_funds_ready = yes }
-  AND = { VAL = { has_completed_focus = VAL_Bulk_Arms_Contracts } VAL_partner_bulk_funds_ready = yes }
-  AND = { VAL = { has_completed_focus = VAL_Army_Arsenal_Orders } VAL_partner_arsenal_funds_ready = yes }
-  AND = { VAL = { has_completed_focus = VAL_Strategic_Arms_Exports } VAL_partner_strategic_funds_ready = yes }
- }
 }
 VAL_quarterly_recipient_ready = {
  VAL_order_partner_valid = yes
