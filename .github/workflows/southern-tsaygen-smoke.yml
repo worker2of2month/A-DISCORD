@@ -17,5 +17,5 @@ jobs:
         run: python -m pip install --disable-pip-version-check pillow
       - name: Southern Tsaygen regression
         run: python -B -m unittest tools.tests.test_adiscord_val_southern_tsaygen
-      - name: VAL contract UI
-        run: python -B -m unittest tools.tests.test_val_contract_ui
+      - name: Scripted peace bus
+        run: python -B -m unittest tools.tests.test_scripted_peace_on_actions
