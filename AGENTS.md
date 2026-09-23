@@ -155,6 +155,7 @@ Use ASCII list markers in event text; the current paper font renders the bullet 
 Check actual event description references, including variants such as `.accepted`;
 checking only keys ending in `.d` misses text displayed on the same light paper.
 Use `visible` for completed-focus unlocks and immediate local context; keep shortages and occupied preparation slots readable in `available` or `custom_cost_trigger`. Keep transient commission/asset predicates out of daily-cached `target_trigger` for immediate responses. Hide technical bookkeeping without hiding the price, material result, cancellation consequence or current risk; do not nest `hidden_effect` inside an already hidden payload.
+Narrative and story event prose is not tooltip clutter. Do not shorten, remove, or skip lore/event descriptions as part of focus or tooltip cleanup unless the task explicitly asks to edit that prose.
 Keep generic procurement in national decisions; map decisions need a local
 consequence. Reuse the existing regional map and preparation slots. Prefer an existing completed focus, active decision, character state, or
 numeric value to another flag. Do not mirror the same fact in several markers.
