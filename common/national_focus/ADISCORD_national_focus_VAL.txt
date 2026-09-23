@@ -672,7 +672,6 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Contract_State }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_operations_map_unlock_tt
-			unlock_decision_tooltip = { decision = VAL_partner_contract show_effect_tooltip = yes }
 			unlock_decision_tooltip = { decision = VAL_hire_partner_volunteers show_effect_tooltip = yes }
 			add_intel = { target = STP army_intel = 10 }
 			add_intel = { target = CIN army_intel = 10 }
