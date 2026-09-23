@@ -337,9 +337,11 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_preparation.10.b
 		ai_chance = { factor = 0 }
-		clr_country_flag = STP_cw_northern_crisis_pending
-		set_variable = { var = STP_cw_northern_campaign_status value = 4 }
-		STP = { country_event = { id = ADISCORD_STP_preparation.14 } }
+		hidden_effect = {
+			clr_country_flag = STP_cw_northern_crisis_pending
+			set_variable = { var = STP_cw_northern_campaign_status value = 4 }
+			STP = { country_event = { id = ADISCORD_STP_preparation.14 } }
+		}
 	}
 }
 
@@ -735,8 +737,8 @@ country_event = {
 		name = ADISCORD_STP_cw.30.b
 		trigger = { STS = { exists = yes } NOT = { has_country_flag = STP_sided_with_the_party_flag } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_cw_side_republics } }
 		ai_chance = { base = 0 }
-		set_country_flag = STP_sided_with_Maksim_flag
 		hidden_effect = {
+			set_country_flag = STP_sided_with_Maksim_flag
 			STS = { set_country_flag = STP_sided_with_Maksim_flag }
 			STP_cw_commission_korsh = yes
 			STP_cw_begin_hostilities = yes
@@ -1061,9 +1063,9 @@ country_event = {
 				}
 			}
 		}
-		set_country_flag = STP_gornin_introduced
 		custom_effect_tooltip = ADISCORD_STP_pc.3.b_tt
 		hidden_effect = {
+			set_country_flag = STP_gornin_introduced
 			if = { limit = { STS = { exists = yes } } STS = { set_country_flag = STP_gornin_introduced } }
 			STP_pc_install_resistance_successor = yes
 		}
