@@ -307,6 +307,7 @@
  VAL_Arms_For_The_Burning_desc: "[ROOT.VALGetArmsFocusDescription]\n\n[ROOT.VALGetStelanderCrisisStatus]"
  VAL_Seize_The_Northern_Passes: "[ROOT.VALGetPassesFocusTitle]"
  VAL_Seize_The_Northern_Passes_desc: "[ROOT.VALGetPassesFocusDescription]\n\n[ROOT.VALGetStelanderCrisisStatus]"
+ VAL_cw_military_course_focus_tt:0 "§YThis focus does not declare war by itself.§! It unlocks mobilisation for intervention in the Stelander war."
  VAL_The_Steel_Contract: "[ROOT.VALGetSteelContractTitle]"
  VAL_The_Steel_Contract_desc: "Fulfilled deliveries or a successful operation justify investment in the output of existing arsenals. If the campaign ends in failure, we will instead restore confidence in the government and revise our obligations.\n\n[ROOT.VALGetStelanderCrisisStatus]"
  VAL_merchant_rail_yards_tt: "A §Glevel 3§! railway has been built between Dopotoydron City and Zoylong."
@@ -437,13 +438,15 @@
  VAL_Return_Southern_Tsaygen:0 "Return Southern Tsaygen"
  VAL_Return_Southern_Tsaygen_desc:0 "Southern Tsaygen was Kefreyt territory before the collapse of Vorkerland. ERT took the town while the old border was disintegrating. The army will not treat that seizure as a new frontier. We are going back for our own land."
  VAL_southern_tsaygen_revenge_available_tt:0 "The Vorkerland collapse has occurred. ERT independently owns and controls $STATE_168$, which remains a Kefreyt core. Kefreyt is independent and at peace."
- VAL_return_southern_tsaygen_war_tt:0 "§RKefreyt declares a limited war on ERT for $STATE_168$.§! Victory returns Southern Tsaygen to Kefreyt without transferring ERT's other territories."
+ VAL_return_southern_tsaygen_war_tt:0 "§RKefreyt declares war on ERT§! for $STATE_168$. Victory returns Southern Tsaygen only."
  VAL_frontier_return_irem:0 "Beyond the Perimeter"
  VAL_frontier_return_irem_desc:0 "After the Perimeter falls, the garrisons of Irem can cross the border. The first operation against the eastern remnants secures a single neighbouring bridgehead, state 169. Its capture enables a separate contract administration. Irem remains part of Kefreyt."
+ VAL_frontier_return_irem_war_tt:0 "§RDeclares war on ERT§! for $STATE_169$."
  VAL_frontier_field_hospitals: "Evacuation Columns"
  VAL_frontier_field_hospitals_desc: "Mountain campaigns reveal the price of every delay. Mobile hospitals and evacuation routes will help companies restore order after heavy fighting."
  VAL_frontier_security_plan: "Mandate for the Northern Campaign"
  VAL_frontier_security_plan_desc: "The government will approve the expedition's goals and allocate political resources for the first ultimatum. Tribal refusal unlocks the decision to attack. The army needs active units and a weapon reserve, not an inflated paper division count."
+ VAL_frontier_security_plan_war_tt:0 "§YUnlocks the ultimatum to the northern cannibal states.§! After refusal, the offensive decision §Rdeclares war§! on the coalition."
  VAL_frontier_treaty_offices: "Implementing the Treaty"
  VAL_frontier_treaty_offices_desc: "The contract department will establish trade routes and settlement procedures with the districts acquired through a frontier agreement.\n\nTo unlock this focus, successfully resolve one ultimatum in the \"$VAL_frontier$\" decision category. \"$VAL_frontier_security_plan$\" unlocks \"$VAL_frontier_demand_CIN$\". \"$VAL_Return_Southern_Tsaygen$\" unlocks \"$VAL_frontier_demand_ERT$\" as a later diplomatic fallback if the district is still held by ERT.\n\nThe agreement is concluded automatically when the recipient accepts the demands or the campaign ends in victory. The tribal war requires defeating every tribal participant. Invading Nodrul is not required. Withdrawing an ultimatum or accepting an armistice after defeat does not fulfil this requirement."
  VAL_frontier_defence_coalition: "Frontier Defense Alliance"
@@ -870,6 +873,7 @@
  VAL_econ_integrated_economy_desc: "We will unite precision manufacturing, transport and computing capacity in a common system. Enterprises will coordinate supplies and development across the production chain."
  VAL_Bezhaysk_Operation: "Operation Against Bezhaysk"
  VAL_Bezhaysk_Operation_desc: "Defeating Stelander opens the road to Bezhaysk. After completing state reforms, we will prepare a separate operation against the capital territory and order the offensive."
+ VAL_bezhaysk_operation_war_tt:0 "§RDeclares war on Bezhaysk.§! Victory triggers Kefreyt's separate settlement."
  VAL_bezhaysk_operation_available_tt: "Stelander is defeated and its lands are secured by Kefreyt or its administrations. Kefreyt is independent and at peace; Bezhaysk exists, is independent, has not capitulated and is not in our alliance."
  VAL_Resource_War_Contracts: "Resource War Contracts"
  VAL_Resource_War_Contracts_desc:0 "Choose a side and negotiate postwar extraction rights in exchange for actual military aid. The recipient must accept the agreement."
@@ -1229,10 +1233,12 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_Southern_Expansion:0 "Expand the southern bridgehead"
 
  VAL_Southern_Expansion_desc:0 "Begin the next war against the eastern remnants. On their capitulation, the administration receives available states 167, 170, 171, 184, 185 and 203. Territory held by unrelated powers is not transferred."
+ VAL_southern_expansion_war_tt:0 "§RDeclares war on ERT§! for the southern territories."
 
  VAL_Eastern_Expansion:0 "Eastern security belt"
 
  VAL_Eastern_Expansion_desc:0 "From the southern garrisons, begin an operation against IRT. Victory transfers available states 178, 180, 181, 182, 183, 193, 206 and 207 from the operations map to the administration. Remote IRT holdings are excluded."
+ VAL_eastern_expansion_war_tt:0 "§RDeclares war on IRT§! for the eastern belt."
 
  VAL_perimeter_open_tt:0 "The Perimeter has fallen and the southern territories are open"
 
