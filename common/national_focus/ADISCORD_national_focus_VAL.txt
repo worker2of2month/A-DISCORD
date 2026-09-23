@@ -3121,7 +3121,17 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_support_viceroy_effect_tt
-			hidden_effect = { VAL_commit_nam_resource_aid = yes }
+			hidden_effect = {
+				if = {
+					limit = { VAL_nam_concession_negotiable = yes }
+					NAM = { VAL_begin_partner_contract_year = yes }
+					set_country_flag = VAL_nam_concession_agreed
+					clr_country_flag = VAL_nam_concession_offer_pending
+					clr_country_flag = VAL_efl_concession_offer_pending
+					set_variable = { var = VAL_resource_aid_side value = 1 }
+					VAL_start_resource_aid = yes
+				}
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
