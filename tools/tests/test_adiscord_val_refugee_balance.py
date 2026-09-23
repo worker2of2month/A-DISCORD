@@ -41,6 +41,31 @@ def named_block(source: str, name: str) -> str:
 
 
 class KefreytRefugeeBalanceTests(unittest.TestCase):
+    def test_val_manpower_focus_filter_is_registered_and_applied(self) -> None:
+        filter_id = "FOCUS_FILTER_VAL_MANPOWER"
+        gfx = read("interface/ADISCORD_national_focus.gfx")
+        self.assertIn(f'GFX_{filter_id}', gfx)
+        self.assertIn('gfx/interface/focusview/filter/manpower_icon.dds', gfx)
+
+        for language in ("english", "russian"):
+            loc = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            self.assertIn(f"{filter_id}:0", loc)
+
+        main = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
+        defeated = read("common/national_focus/ADISCORD_national_focus_VAL_defeated.txt")
+        for focus_id in (
+            "VAL_The_Contract_State",
+            "VAL_Gromovs_Assault_Tables",
+            "VAL_Morns_Supply_Trains",
+            "VAL_Field_Surgeons",
+            "VAL_Dead_Villages_Still_Count",
+            "VAL_Reserve_Battalions",
+            "VAL_Company_Service_Code",
+            "VAL_Operational_Reserves",
+        ):
+            self.assertIn(filter_id, named_block(main, focus_id))
+        self.assertIn(filter_id, named_block(defeated, "VAL_defeat_Veterans_Register"))
+
     def setUp(self) -> None:
         self.decisions = read("common/decisions/ADISCORD_VAL_logistics_market_decisions.txt")
         self.effects = read("common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt")
