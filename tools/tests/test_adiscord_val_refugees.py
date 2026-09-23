@@ -415,10 +415,16 @@ class KefreytDecisionVisibilityTests(unittest.TestCase):
         visible = next(e.value for e in decisions["VAL_negotiate_nam_metals"] if e.key == "visible")
         self.assertTrue(matches_conditions(category, facts, "VAL"))
         self.assertTrue(matches_conditions(visible, facts, "VAL"))
-        for flag in ("VAL_nam_concession_agreed", "VAL_nam_concession_granted"):
-            with self.subTest(flag=flag):
-                self.assertFalse(matches_conditions(visible, {**facts, ("VAL", "has_country_flag", flag): True}, "VAL"))
-        self.assertFalse(matches_conditions(visible, {**facts, ("NAM", "exists", "yes"): False}, "VAL"))
+        self.assertFalse(matches_conditions(
+            visible,
+            {**facts, ("VAL", "ADISCORD_nam_resource_war_active", "yes"): False},
+            "VAL",
+        ))
+        self.assertFalse(matches_conditions(
+            visible,
+            {**facts, ("VAL", "has_variable", "VAL_resource_aid_side"): True},
+            "VAL",
+        ))
 
     def test_viceroy_offer_exposes_the_required_focus_without_bypassing_it(self):
         decisions = {e.key: e.value for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_resource_war_aid"]}
