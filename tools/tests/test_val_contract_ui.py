@@ -1010,7 +1010,7 @@ class TestValExpansionRoute(unittest.TestCase):
         harvest = focuses["VAL_The_Harvest_Of_Ash"]
         self.assertEqual(
             {entry.value for group in harvest if group.key == "prerequisite" for entry in group.value},
-            {"VAL_The_Contract_State"},
+            {"VAL_reclamation_survey"},
         )
 
         frontier = focuses["VAL_frontier_conference"]
