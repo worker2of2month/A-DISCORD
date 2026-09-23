@@ -70,6 +70,22 @@ definitions were retained exactly once.
 следы рабочего процесса. Оставляй только информацию, нужную для сопровождения
 текущего кода; техническую документацию также не превращай в дневник работы.
 
+## Code style
+
+Keep authored Clausewitz blocks consistently tab-indented. Use one statement per
+line when a block contains several conditions or effects; compact one-line
+blocks are for genuinely atomic clauses, not whole decision or focus bodies.
+Keep related top-level definitions separated by one blank line.
+
+Python source uses ordinary one-statement-per-line formatting. Do not join
+statements with `;`; temporary investigation scripts such as `_tmp_*.py`
+must stay untracked. Prefer small named helpers over dense nested expressions
+when the same condition or transformation is repeated.
+
+Style-only cleanup must not change gameplay semantics. Do not bulk-format
+vanilla-derived interface files or generated outputs merely to make whitespace
+uniform. Fix authored sections and their generators instead.
+
 ## Gameplay rewards and UI
 
 Joining alliances, creating factions, and declaring wars are disabled diplomatic
