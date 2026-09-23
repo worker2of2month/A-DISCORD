@@ -75,13 +75,15 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         self.assertEqual(forbidden_story_mutations("effect = { transfer_state = 32 }"), ["transfer_state"])
         self.assertEqual(forbidden_story_mutations("# transfer_state = 32\nadd_stability = 0.02"), [])
 
-    def test_each_worker_fate_is_its_own_one_shot_news_event(self) -> None:
+    def test_each_world_news_event_is_broadcast_safe(self) -> None:
         definitions = event_blocks(source_section(read(STORY_EVENTS), 'story_events'))
-        for number in (10, 11, 12, 13, 31, 32, 33, 34, 35, 36, 41, 42, 43, *range(50, 62)):
+        for number in STORY_NUMBERS:
+            if number in COUNTRY_EVENT_NUMBERS:
+                continue
             event_id = f"ADISCORD_vorkerland_story.{number}"
             kind, block = definitions[event_id]
             self.assertEqual(kind, "news_event", event_id)
-            self.assertIn("fire_only_once = yes", block)
+            self.assertIn("fire_only_once = no", block)
             self.assertIn("major = yes", block)
             self.assertNotIn("check_variable", block, event_id)
 

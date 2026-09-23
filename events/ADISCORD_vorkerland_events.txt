@@ -1926,7 +1926,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_news.1.a }
 }
 
@@ -1937,7 +1937,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_news.2.a }
 }
 
@@ -2605,7 +2605,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.1.a }
 }
 
@@ -2616,7 +2616,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_negotiation_table
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.2.a }
 }
 
@@ -2627,7 +2627,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_negotiation_table
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.3.a }
 }
 
@@ -2638,7 +2638,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_negotiation_table
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.4.a }
 }
 
@@ -2773,7 +2773,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.7.a }
 }
 
@@ -2784,7 +2784,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.8.a }
 }
 
@@ -2795,7 +2795,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.9.a }
 }
 
@@ -2811,7 +2811,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.10.a }
 }
 
@@ -2822,7 +2822,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.11.a }
 }
 
@@ -2833,7 +2833,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.12.a }
 }
 
@@ -2844,7 +2844,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.13.a }
 }
 
@@ -2860,7 +2860,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.50.a }
 }
 
@@ -2871,7 +2871,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.51.a }
 }
 
@@ -2882,7 +2882,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.52.a }
 }
 
@@ -2893,7 +2893,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.53.a }
 }
 
@@ -2904,7 +2904,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.54.a }
 }
 
@@ -2915,7 +2915,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.55.a }
 }
 
@@ -2926,7 +2926,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.56.a }
 }
 
@@ -2937,7 +2937,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.57.a }
 }
 
@@ -2948,7 +2948,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.58.a }
 }
 
@@ -2959,7 +2959,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.59.a }
 }
 
@@ -2970,7 +2970,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.60.a }
 }
 
@@ -2981,7 +2981,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.61.a }
 }
 
@@ -2999,7 +2999,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.31.a }
 }
 
@@ -3010,7 +3010,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.32.a }
 }
 
@@ -3021,7 +3021,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_imperial_proclamation
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.33.a }
 }
 
@@ -3032,7 +3032,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.34.a }
 }
 
@@ -3043,7 +3043,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.35.a }
 }
 
@@ -3054,7 +3054,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_parliament_chamber
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.36.a }
 }
 
@@ -3069,7 +3069,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.41.a }
 }
 
@@ -3080,7 +3080,7 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.42.a }
 }
 
@@ -3091,6 +3091,6 @@ news_event = {
 	picture = GFX_news_event_adiscord_city_in_civil_war
 	major = yes
 	is_triggered_only = yes
-	fire_only_once = yes
+	fire_only_once = no
 	option = { name = ADISCORD_vorkerland_story.43.a }
 }

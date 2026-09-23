@@ -287,8 +287,15 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
             issues.append(f"{event_id} must be a {expected_kind}, found {found[0]}")
         if "is_triggered_only = yes" not in found[1]:
             issues.append(f"{event_id} must be triggered-only")
-        if "fire_only_once = yes" not in found[1]:
-            issues.append(f"{event_id} must be fire-only-once")
+        expected_once = "yes" if expected_kind == "country_event" else "no"
+        if f"fire_only_once = {expected_once}" not in found[1]:
+            if expected_kind == "news_event":
+                issues.append(
+                    f"{event_id} must keep fire_only_once = no so major news can fan out; "
+                    "once-per-campaign behavior belongs to its dispatch guard"
+                )
+            else:
+                issues.append(f"{event_id} must be fire-only-once")
 
     extras = sorted(set(definitions) - set(STORY_IDS))
     if extras:
