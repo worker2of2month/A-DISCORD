@@ -878,7 +878,6 @@ VAL_reclamation = {
 		available = {
 			has_capitulated = no
 			FROM = { is_owned_by = ROOT is_controlled_by = ROOT }
-			hidden_trigger = { VAL_reclamation_project_target_valid = yes }
 			custom_trigger_tooltip = { tooltip = VAL_reclamation_idle_tt NOT = { has_variable = VAL_reclamation_deposit } }
 		}
 		on_map_mode = map_and_decisions_view
@@ -909,7 +908,6 @@ VAL_reclamation = {
 			has_completed_focus = VAL_reclamation_clean_water
 			has_capitulated = no
 			FROM = { is_owned_by = ROOT is_controlled_by = ROOT }
-			hidden_trigger = { VAL_reclamation_project_target_valid = yes }
 			custom_trigger_tooltip = { tooltip = VAL_reclamation_idle_tt NOT = { has_variable = VAL_reclamation_deposit } }
 		}
 		on_map_mode = map_and_decisions_view
@@ -940,7 +938,6 @@ VAL_reclamation = {
 			has_completed_focus = VAL_reclamation_return_home
 			has_capitulated = no
 			FROM = { is_owned_by = ROOT is_controlled_by = ROOT industrial_complex < 20 }
-			hidden_trigger = { VAL_reclamation_project_target_valid = yes }
 			custom_trigger_tooltip = { tooltip = VAL_reclamation_idle_tt NOT = { has_variable = VAL_reclamation_deposit } }
 		}
 		on_map_mode = map_and_decisions_view

@@ -1,0 +1,16 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_military_industrial_organization_ADISCORD_squad_weapons_equipment"
+		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
+	}
+	
+	spriteType = {
+		name = "GFX_military_industrial_organization_ADISCORD_fighter_archetype"
+		textureFile = "gfx/interface/technologies/early_fighter.dds"
+	}
+	
+	spriteType = {
+		name = "GFX_military_industrial_organization_ADISCORD_cas_archetype"
+		textureFile = "gfx/interface/technologies/CAS1.dds"
+	}
+}
