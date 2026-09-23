@@ -1761,8 +1761,8 @@ class ValNorthernExportTests(unittest.TestCase):
                 decision = block(decisions, "VAL_ops_sell_rifles_to_" + buyer.lower() if kind == "sale" else "VAL_ops_finance_" + buyer.lower() + "_contacts")
                 receipt = "VAL_operation_sell_rifles_to_" + buyer.lower() if kind == "sale" else "VAL_operation_finance_" + buyer.lower() + "_contacts"
                 profiles = sale_profiles if kind == "sale" else (((), ()),)
-                for initial, profile in product(((0, 2500), (100, 2500), (2500, 0), (100, 2399.5),
-                                                  (0, 5000), (100, 4900), (100, 4899.5), (5000, 0)), profiles):
+                for initial, profile in product(((0, 25000), (1000, 25000), (25000, 0), (1000, 23999.5),
+                                                  (0, 50000), (1000, 49000), (1000, 48999.5), (50000, 0)), profiles):
                     for settlement in ("expiry", "cancel"):
                         for outcome in ("success", "third_party_war", "war", "gone", "capitulated", "seller_capitulated", "busy", "poor_pp", "prewar", "pregone", "precapitulated", "cap", "poor_cash", "both_gone", "both_war", "both_capitulated", "backup_gone"):
                             with self.subTest(kind=kind, buyer=buyer, stock=initial, outcome=outcome, settlement=settlement, profile=profile):
@@ -1772,7 +1772,7 @@ class ValNorthernExportTests(unittest.TestCase):
                                 flags = {tag: set() for tag in tags}
                                 flag_values = {tag: {} for tag in tags}
                                 focuses = set(profile[0])
-                                quantity = 5000 if licences in focuses else 2500
+                                quantity = 50000 if licences in focuses else 25000
                                 quoted_income = (40 if clearing in focuses else 30) if licences in focuses else (20 if clearing in focuses else 15)
                                 backup = "OSF" if buyer == "CIN" else "CIN"
                                 exists, capitulated, wars = set(tags), set(), set()
@@ -3606,7 +3606,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
     def customer_facts(self):
         return {("VAL", "exists", "yes"): True, ("VAL", "has_capitulated", "no"): True,
                 ("VAL", "has_country_flag", "VAL_export_offer_pending"): True,
-                ("VAL", "equipment", "infantry_equipment"): 2500,
+                ("VAL", "equipment", "infantry_equipment"): 25000,
                 ("VAL", "numeric", "command_power"): 25,
                 ("WKR", "exists", "yes"): True, ("WKR", "has_capitulated", "no"): True,
                 ("WKR", "has_war", "yes"): True,
@@ -3615,11 +3615,24 @@ class ValExpandedCampaignTests(unittest.TestCase):
                 ("WKR", "has_country_flag", "VAL_export_offer_advisors"): True,
                 ("WKR", "has_war_with", "event_target:VAL_advisor_enemy"): True}
 
+    def test_quarterly_order_cash_gates_use_literal_tariffs(self):
+        triggers = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
+        effects = EFFECTS_PATH.read_text(encoding="utf-8")
+        for slot in (1, 2):
+            gate = named_block_spans(triggers, f"VAL_order_{slot}_can_dispatch")[0].text
+            self.assertIn(f"VAL_order_{slot}_partner_can_pay = yes", gate)
+            self.assertNotIn(f"VAL.VAL_order_{slot}_remaining", gate)
+            payable = named_block_spans(triggers, f"VAL_order_{slot}_partner_can_pay")[0].text
+            for amount in ("375", "500", "750", "1000", "1687.5", "2250", "3750", "5000"):
+                self.assertIn(f"value = {amount}", payable)
+            payment = named_block_spans(effects, f"VAL_order_{slot}_settle_payment")[0].text
+            self.assertNotIn(f"VAL.VAL_order_{slot}_remaining", payment)
+
     def test_offer_acceptance_rechecks_exact_stock_and_command_boundaries(self):
         facts = self.customer_facts()
-        for amount in (2499, 2499.9, 2500, 2501):
+        for amount in (24999, 24999.9, 25000, 25001):
             facts["VAL", "equipment", "infantry_equipment"] = amount
-            self.assertEqual(self.match("VAL_export_arms_can_accept", facts, "WKR"), amount >= 2500)
+            self.assertEqual(self.match("VAL_export_arms_can_accept", facts, "WKR"), amount >= 25000)
         for amount in (24, 24.9, 25, 26):
             facts["VAL", "numeric", "command_power"] = amount
             self.assertEqual(self.match("VAL_export_advisors_can_accept", facts, "WKR"), amount >= 25)
@@ -3663,7 +3676,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
             if kind == "arms":
                 transfer = next(e.value for e in walk(branch) if e.key == "send_equipment")
                 self.assertEqual(self.scalar(transfer, "equipment"), "infantry_equipment")
-                self.assertEqual(self.scalar(transfer, "amount"), "2500")
+                self.assertEqual(self.scalar(transfer, "amount"), "25000")
                 self.assertEqual(self.scalar(transfer, "target"), "ROOT")
                 self.assertFalse(any(e.key == "add_equipment_to_stockpile" for e in walk(branch)))
 
