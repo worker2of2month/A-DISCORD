@@ -817,7 +817,6 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_electrothermal_ignition_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
-		scale = 0.363636
 	}
 
 	SpriteType = {
@@ -858,7 +857,6 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_biometric_trigger_locks_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
-		scale = 0.363636
 	}
 
 	SpriteType = {
