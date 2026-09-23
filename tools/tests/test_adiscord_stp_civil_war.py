@@ -4163,7 +4163,8 @@ class PostwarFocusContracts(unittest.TestCase):
                 continue
             factory = "industrial_complex" if name.endswith("civil_workshops") else "arms_factory"
             reward = ast_block(focus, "completion_reward")
-            project = ast_block(reward, "if")
+            mechanics = ast_block(reward, "hidden_effect")
+            project = ast_block(mechanics, "if")
             possible = ast_block(ast_block(project, "limit"), "any_owned_state")
             target = ast_block(project, "random_owned_controlled_state")
             target_limit = ast_block(target, "limit")
@@ -4198,7 +4199,7 @@ class PostwarFocusContracts(unittest.TestCase):
                 if eligible:
                     self.assertTrue(all(state_cases[i] == (True, True, True) for i in eligible))
                 else:
-                    fallback = list(selected_effects(ast_block(reward, "else"), {}, "STS"))
+                    fallback = list(selected_effects(ast_block(mechanics, "else"), {}, "STS"))
                     funds = {scalar(e.value, "var"): float(scalar(e.value, "value"))
                              for _, e in fallback if e.key == "add_to_variable"}
                     self.assertEqual(funds, {"ADISCORD_economy_treasury": 900,
@@ -4212,7 +4213,8 @@ class PostwarFocusContracts(unittest.TestCase):
         keys = {name + suffix for name in self.new for suffix in ("", "_desc")}
         keys |= {"STP_pw_republic_dynamic", "STP_pw_republic_dynamic_desc", "STP_pw_party_dynamic",
                  "STP_pw_party_dynamic_desc", "STP_pw_reconstruction_available_tt",
-                 "STP_pw_postwar_budget_available_tt", "STP_pw_industry_reserve_tt"}
+                 "STP_pw_postwar_budget_available_tt", "STP_pw_industry_reserve_tt",
+                 "STP_pw_civil_factory_or_reserve_tt", "STP_pw_arms_factory_or_reserve_tt"}
         for key in keys:
             found = [line for line in lines if re.match(r"^\s*" + re.escape(key) + r":", line)]
             self.assertEqual(len(found), 1, key)
