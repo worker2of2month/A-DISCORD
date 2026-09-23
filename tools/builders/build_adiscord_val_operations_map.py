@@ -540,11 +540,11 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
             "always = yes"
             if route == "north"
             else (
-            "OR = { VAL_trade_corridors_unlocked = yes "
-            "has_completed_focus = VAL_Southern_Trade_Charter "
-            "has_country_flag = ADISCORD_debug_val_south_route_active }"
-            if route == "south"
-            else "VAL_trade_corridors_unlocked = yes"
+                "OR = { VAL_trade_corridors_unlocked = yes "
+                "has_completed_focus = VAL_Southern_Trade_Charter "
+                "has_country_flag = ADISCORD_debug_val_south_route_active }"
+                if route == "south"
+                else "VAL_trade_corridors_unlocked = yes"
             )
         )
         icon_name = f"trade_{route}_map"
