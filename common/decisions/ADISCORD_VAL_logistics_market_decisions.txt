@@ -20,12 +20,16 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_vorkerland_admitted value = 3 compare = less_than }
+			}
 			ADISCORD_economy_can_spend_100 = yes
 		}
 		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
 		custom_cost_text = VAL_logistics_cost_100
 		cost = 0
-		days_re_enable = 365
+		days_re_enable = 90
 		complete_effect = {
 			ADISCORD_economy_spend_100 = yes
 			add_to_variable = { var = VAL_displaced_population value = 30 }
@@ -59,12 +63,16 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_stelander_admitted value = 3 compare = less_than }
+			}
 			ADISCORD_economy_can_spend_100 = yes
 		}
 		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
 		custom_cost_text = VAL_logistics_cost_100
 		cost = 0
-		days_re_enable = 365
+		days_re_enable = 90
 		complete_effect = {
 			ADISCORD_economy_spend_100 = yes
 			add_to_variable = { var = VAL_displaced_population value = 20 }
@@ -98,12 +106,16 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_nodrul_admitted value = 3 compare = less_than }
+			}
 			ADISCORD_economy_can_spend_100 = yes
 		}
 		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
 		custom_cost_text = VAL_logistics_cost_100
 		cost = 0
-		days_re_enable = 365
+		days_re_enable = 90
 		complete_effect = {
 			ADISCORD_economy_spend_100 = yes
 			add_to_variable = { var = VAL_displaced_population value = 10 }
@@ -137,12 +149,16 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_north_admitted value = 3 compare = less_than }
+			}
 			ADISCORD_economy_can_spend_100 = yes
 		}
 		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
 		custom_cost_text = VAL_logistics_cost_100
 		cost = 0
-		days_re_enable = 365
+		days_re_enable = 90
 		complete_effect = {
 			ADISCORD_economy_spend_100 = yes
 			add_to_variable = { var = VAL_displaced_population value = 10 }
@@ -176,12 +192,16 @@ VAL_population_markets = {
 					compare = less_than_or_equals
 				}
 			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_refugee_wave_limit_tt
+				check_variable = { var = VAL_refugee_perimeter_admitted value = 3 compare = less_than }
+			}
 			ADISCORD_economy_can_spend_100 = yes
 		}
 		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
 		custom_cost_text = VAL_logistics_cost_100
 		cost = 0
-		days_re_enable = 365
+		days_re_enable = 90
 		complete_effect = {
 			ADISCORD_economy_spend_100 = yes
 			add_to_variable = { var = VAL_displaced_population value = 10 }
