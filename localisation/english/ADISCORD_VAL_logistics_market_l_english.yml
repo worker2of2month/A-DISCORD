@@ -125,9 +125,9 @@
 
  VAL_recruit_local_volunteers_desc:0 "Conscription remains at 1.25%. The additional contract reserve is 2% of the initial population of Kefreyt's seven states and does not replenish. Each intake trains £population_texticon §Y5,000§! local volunteers over 35 days for §Y75§! £political_power_texticon and £infantry_equipment_texticon §Y5000§! infantry equipment. Capitulation or subjugation refunds the full intake."
 
- VAL_training_cost:0 "£population_texticon §Y5000§! £pol_power §Y75§! £infantry_equipment_texticon §Y5000§!"
+ VAL_training_cost:0 "£population_texticon §Y5000§! §Y75§! £political_power_texticon £infantry_equipment_texticon §Y5000§!"
 
- VAL_training_cost_blocked:0 "£population_texticon §R5000§! £pol_power §R75§! £infantry_equipment_texticon §R5000§!"
+ VAL_training_cost_blocked:0 "£population_texticon §R5000§! §R75§! £political_power_texticon £infantry_equipment_texticon §R5000§!"
 
  VAL_training_cost_tooltip:0 "Requires £population_texticon §Y5,000§! volunteers from the reserve named in the decision, §Y75§! £political_power_texticon and £infantry_equipment_texticon §Y5000§! infantry equipment."
 
@@ -145,6 +145,6 @@
 
  VAL_broker_audit_tt:0 "Broker dependence: -1. Broker licences and contraband purchases are unavailable for 60 days."
 
- VAL_labor_cost:0 "£population_texticon §Y100 000§! £pol_power §Y75§!"
- VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! £pol_power §R75§!"
+ VAL_labor_cost:0 "£population_texticon §Y100 000§! §Y75§! £political_power_texticon"
+ VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! §R75§! £political_power_texticon"
  VAL_labor_cost_tooltip:0 "Requires £population_texticon §Y100,000§! available refugees and §Y75§! £political_power_texticon. People are reserved for 90 days and return on completion or cancellation."
