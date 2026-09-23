@@ -307,10 +307,7 @@ on_actions = {
 					VAL = {
 						exists = yes
 						has_capitulated = no
-						OR = {
-							has_country_flag = ADISCORD_bezhaysk_campaign_active
-							has_completed_focus = VAL_Bezhaysk_Operation
-						}
+						has_country_flag = ADISCORD_bezhaysk_campaign_active
 					}
 					FROM = { OR = { tag = VAL is_subject_of = VAL } }
 				}
