@@ -1786,8 +1786,7 @@ focus_tree = {
 		}
 		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_ready_partner_supply show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_quarterly_partner_supply show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = VAL_sell_surplus_arms_market show_effect_tooltip = yes }
 			add_political_power = 25
 			custom_effect_tooltip = VAL_focus_export_market_open_tt
 			hidden_effect = {
@@ -1823,9 +1822,9 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Northern_Clearing_House }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_partner_contract show_effect_tooltip = yes }
 			add_command_power = 15
-			custom_effect_tooltip = VAL_focus_adviser_contracts_ready_tt
+			army_experience = 10
+			custom_effect_tooltip = VAL_contingency_ledgers_reworked_tt
 		}
 		ai_will_do = { base = 4 }
 	}
@@ -1841,8 +1840,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Foreign_Broker_Licences }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_ready_partner_supply show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_quarterly_partner_supply show_effect_tooltip = yes }
+			custom_effect_tooltip = VAL_abstract_arms_upgrade_50k_tt
 		}
 		ai_will_do = { base = 4 modifier = { factor = 0.2 has_equipment = { infantry_equipment < 50000 } } }
 	}
@@ -1856,8 +1854,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Bulk_Arms_Contracts }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_ready_partner_supply show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_quarterly_partner_supply show_effect_tooltip = yes }
+			custom_effect_tooltip = VAL_abstract_arms_upgrade_100k_tt
 		}
 		ai_will_do = { base = 4 modifier = { factor = 0.2 has_equipment = { infantry_equipment < 100000 } } }
 	}
@@ -1871,8 +1868,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Army_Arsenal_Orders }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_ready_partner_supply show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_quarterly_partner_supply show_effect_tooltip = yes }
+			custom_effect_tooltip = VAL_abstract_arms_upgrade_200k_tt
 		}
 		ai_will_do = { base = 4 modifier = { factor = 0.2 has_equipment = { infantry_equipment < 200000 } } }
 	}
