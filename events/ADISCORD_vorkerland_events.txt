@@ -685,9 +685,6 @@ country_event = {
 			mark_focus_tree_layout_dirty = yes
 			country_event = { id = ADISCORD_vorkerland_collapse.41 days = 1 }
 			country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 }
-			# The dispatcher reads the fate roll made above and holds its own
-			# guard, so calling it here cannot silence a later report.
-			ADISCORD_vorkerland_story_report_worker_fate = yes
 			if = {
 				limit = {
 					RUS = { exists = yes }
@@ -745,6 +742,11 @@ country_event = {
 				damage = 0.1
 			}
 		}
+		# Worker's fate is already fixed by the collapse roll, but the public
+		# report belongs to the aftermath. Publish it one day after the actual
+		# detonation so the story can never announce a rescue before the blast.
+		WKR = { country_event = { id = ADISCORD_vorkerland_collapse.6 days = 1 } }
+
 		# The half-speed tower clip runs for about 24 seconds; leave the
 		# temporary actor alive long enough for it to reach its ruins state.
 		country_event = { id = ADISCORD_vorkerland_collapse.5 days = 30 }
@@ -763,6 +765,23 @@ country_event = {
 
 	immediate = {
 		ADISCORD_vorkerland_sync_unity_tower_visual = yes
+	}
+}
+
+# Worker's public fate report deliberately lags the physical detonation by one
+# day. The four fate flags are rolled during collapse.1; only presentation waits.
+country_event = {
+	id = ADISCORD_vorkerland_collapse.6
+	hidden = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	trigger = {
+		has_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved
+	}
+
+	immediate = {
+		ADISCORD_vorkerland_story_report_worker_fate = yes
 	}
 }
 
