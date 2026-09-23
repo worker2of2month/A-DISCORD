@@ -27,7 +27,7 @@
  VAL_open_refugee_border: "Снова открыть переходы"
  VAL_open_refugee_border_desc: "Восстановить торговлю и разрешить приём по ещё действующим предложениям. Повторное открытие границы не создаёт новых волн беженцев."
  VAL_contract_refugee_labor: "Предложить рабочие контракты"
- VAL_contract_refugee_labor_desc:0 "Зарезервировать £population_texticon §Y100 тыс.§! беженцев на §Y90 дней§!. Цена: §Y50§! £political_power_texticon. Пока программа действует: §G+8%§! к скорости строительства и §G+5%§! к гражданским доходам."
+ VAL_contract_refugee_labor_desc:0 "Зарезервировать £population_texticon §Y100 тыс.§! беженцев на §Y90 дней§!. Цена: §Y50§! £political_power_texticon. Пока программа действует: строительство §G+12%§!, гражданские доходы §G+8%§!."
  VAL_fund_resettlement_depots: "Переселить беженцев в [FROM.GetName]"
  VAL_fund_resettlement_depots_desc: "Переселить £population_texticon §Y100 тыс.§! уже принятых беженцев в [FROM.GetName] за §Y250§! из казны. Население региона навсегда увеличится на §G100 тыс.§!. Программа доступна только в выбранных малонаселённых домашних регионах Кефрейта под нашим контролем, не работает при незавершённой очистке загрязнения и проводится в каждом регионе один раз."
  VAL_organize_refugee_return: "Организовать возвращение"
@@ -75,21 +75,21 @@
 
  VAL_accept_vorkerland_refugees: "Принять беженцев из Воркерланда"
 
- VAL_accept_vorkerland_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+300 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nПовтор: через §Y365 дней§!."
+ VAL_accept_vorkerland_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+300 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nДо §Y3 волн§!. Повтор: через §Y90 дней§!."
 
  VAL_accept_stelander_refugees: "Принять беженцев из Стеландера"
 
- VAL_accept_stelander_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+200 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nПовтор: через §Y365 дней§!."
+ VAL_accept_stelander_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+200 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nДо §Y3 волн§!. Повтор: через §Y90 дней§!."
 
  VAL_accept_nodrul_refugees: "Принять беженцев из Нодрула"
 
- VAL_accept_nodrul_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+100 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nПовтор: через §Y365 дней§!."
+ VAL_accept_nodrul_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+100 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nДо §Y3 волн§!. Повтор: через §Y90 дней§!."
 
  VAL_accept_north_refugees: "Принять беженцев из северных стран"
 
- VAL_accept_north_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+100 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nПовтор: через §Y365 дней§!."
+ VAL_accept_north_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+100 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nДо §Y3 волн§!. Повтор: через §Y90 дней§!."
  VAL_accept_perimeter_refugees: "Принять беженцев из-за Периметра"
- VAL_accept_perimeter_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+100 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nПовтор: через §Y365 дней§!."
+ VAL_accept_perimeter_refugees_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y100§!\nРезультат: £population_texticon §G+100 тыс.§! беженцев\nДавление серого рынка: §R+3§!\nДо §Y3 волн§!. Повтор: через §Y90 дней§!."
  VAL_refugee_resettlement_result_tt:0 "£population_texticon §Y100 тыс.§! перемещённых людей навсегда поселяются в регионе §Y[FROM.GetName]§!."
  VAL_logistics_cost_100_blocked: "£ADISCORD_economy_treasury_texticon  §R100§!"
  VAL_logistics_cost_100_tooltip: "£ADISCORD_economy_treasury_texticon  §Y100§!"
@@ -111,7 +111,7 @@
  VAL_logistics_cost_1000_blocked: "£ADISCORD_economy_treasury_texticon  §R1000§!"
  VAL_logistics_cost_1000_tooltip: "£ADISCORD_economy_treasury_texticon  §Y1000§!"
 
- VAL_refugee_wave_limit_tt:0 "Принято менее трёх волн из этого региона."
+ VAL_refugee_wave_limit_tt:0 "Из этого направления принято менее §Y3 волн§!."
  VAL_train_refugee_volunteers:0 "Обучить добровольцев из числа беженцев"
  VAL_train_refugee_volunteers_desc:0 "Зарезервировать £population_texticon §Y10 тыс.§! беженцев на §Y35 дней§!. Цена: §Y50§! £political_power_texticon и £infantry_equipment_texticon §Y2500§!. После обучения: £manpower_texticon §G+10 тыс.§! армейского резерва."
  VAL_refugee_training_start_tt:0 "Через §Y35 дней§!: £manpower_texticon §G+10 тыс.§! армейского резерва. При отмене возвращаются люди, §Y50§! £political_power_texticon и £infantry_equipment_texticon §Y2500§!."
@@ -131,13 +131,13 @@
 
  VAL_training_cost_tooltip:0 "Нужно £population_texticon §Y10 тыс.§! беженцев, §Y50§! £political_power_texticon и £infantry_equipment_texticon §Y2500§! пехотного снаряжения."
 
- VAL_labor_program_tt:0 "£population_texticon §Y100 тыс.§! беженцев работают 90 дней: §G+8%§! к скорости строительства и §G+5%§! к гражданским доходам. Затем все возвращаются в свободный пул."
+ VAL_labor_program_tt:0 "На §Y90 дней§!: строительство §G+12%§!, гражданские доходы §G+8%§!. Затем все рабочие возвращаются в свободный пул."
 
  VAL_expand_refugee_housing:0 "Расширить временные поселения"
 
- VAL_expand_refugee_housing_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y250§!\nСрок: §Y45 дней§!\nРезультат: вместимость жилья §G+200 тыс.§!."
+ VAL_expand_refugee_housing_desc:0 "Цена: £ADISCORD_economy_treasury_texticon §Y250§!\nСрок: §Y45 дней§!\nРезультат: вместимость жилья §G+300 тыс.§!."
 
- VAL_housing_start_tt:0 "Через 45 дней: +200 тыс. мест размещения."
+ VAL_housing_start_tt:0 "Через §Y45 дней§!: вместимость жилья §G+300 тыс.§!."
 
  VAL_broker_market_open_tt:0 "Проверка контор завершена: посредники снова доступны"
 
