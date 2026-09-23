@@ -3575,6 +3575,18 @@ class ValExpandedCampaignTests(unittest.TestCase):
                          ("VAL", "variable", f"VAL_{campaign}_aid_volunteer_days"): days}
                 self.assertEqual(self.match(name, facts), expected, (campaign, rifles, personnel, days))
 
+    def test_war_aid_deadlines_stay_active_while_pledge_is_pending(self):
+        decisions = self.parse(DECISIONS_PATH.read_text(encoding="utf-8"))
+        for campaign in ("resource", "northern"):
+            category = self.getblock(decisions, f"VAL_{campaign}_war_aid")
+            mission = self.getblock(category, f"VAL_{campaign}_aid_deadline")
+            available = self.getblock(mission, "available")
+            cancel = self.getblock(mission, "cancel_trigger")
+            self.assertEqual(self.scalar(available, "always"), "yes")
+            self.assertNotIn(f"VAL_{campaign}_aid_sufficient", str(available))
+            self.assertIn(f"VAL_{campaign}_aid_state", str(cancel))
+            self.assertNotIn("complete_effect", [entry.key for entry in mission])
+
     def test_war_categories_close_without_an_active_conflict_and_keep_volunteers_together(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions
         categories = self.parse((ROOT / "common/decisions/categories/ADISCORD_VAL_rework_categories.txt").read_text(encoding="utf-8"))
