@@ -42,6 +42,7 @@ ADISCORD_nam_resource_war_start = {
 
 ADISCORD_nam_resource_war_begin_hostilities = {
 	set_global_flag = ADISCORD_nam_resource_war_started
+	VAL = { if = { limit = { exists = yes has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes } }
 	clr_global_flag = ADISCORD_nam_resource_war_scheduled
 	clr_global_flag = ADISCORD_nam_resource_war_EFL_defeated
 	clr_global_flag = ADISCORD_nam_resource_war_AZH_defeated
@@ -120,6 +121,7 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 
 ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = {
 	set_global_flag = ADISCORD_nam_resource_war_resolved
+	VAL = { if = { limit = { exists = yes has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes } }
 	set_global_flag = ADISCORD_nam_resource_war_peaceful_partition
 	clr_global_flag = ADISCORD_nam_resource_war_started
 	clr_global_flag = ADISCORD_nam_resource_war_scheduled
@@ -266,6 +268,7 @@ ADISCORD_nam_resource_war_resolve_coalition_victory = {
 	if = {
 		limit = { ADISCORD_nam_resource_war_active = yes }
 		set_global_flag = ADISCORD_nam_resource_war_resolved
+		VAL = { if = { limit = { exists = yes has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes } }
 		set_global_flag = ADISCORD_nam_resource_war_coalition_victory
 		VAL = { VAL_cancel_nam_concession = yes }
 		clr_global_flag = ADISCORD_nam_resource_war_started
@@ -318,6 +321,7 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 	if = {
 		limit = { ADISCORD_nam_resource_war_active = yes }
 		set_global_flag = ADISCORD_nam_resource_war_resolved
+		VAL = { if = { limit = { exists = yes has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes } }
 		set_global_flag = ADISCORD_nam_resource_war_nam_victory
 		clr_global_flag = ADISCORD_nam_resource_war_started
 		ADISCORD_nam_resource_war_end_all_wars = yes

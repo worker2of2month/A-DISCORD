@@ -669,6 +669,10 @@ defined_text = {
 
 defined_text = {
 	name = STPGetPostwarNorth
+	text = { trigger = { NOD = { is_subject_of = STP } } localization_key = STP_pw_party_north_puppet_status }
+	text = { trigger = { has_country_flag = STP_pw_party_nod_subject_pending } localization_key = STP_pw_party_north_transfer_status }
+	text = { trigger = { has_country_flag = STP_pw_party_nod_congress_pending } localization_key = STP_pw_party_north_congress_status }
+	text = { trigger = { has_country_flag = STP_pw_party_nod_campaign_active } localization_key = STP_pw_party_north_campaign_status }
 	text = { trigger = { has_country_flag = STP_pw_party_nod_compact } localization_key = STP_pw_party_north_compact_status }
 	text = { trigger = { is_subject_of = NOD } localization_key = STP_pw_party_north_subject_status }
 	text = { trigger = { has_country_flag = STP_pw_party_nod_invasion_defeated } localization_key = STP_pw_party_north_victory_status }

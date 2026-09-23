@@ -218,6 +218,100 @@ def direct_values(text: str, key: str) -> list[str]:
     )
 
 
+class ValOrderLedgerTests(unittest.TestCase):
+    def test_instant_export_does_not_reuse_a_reserved_order_slot(self):
+        text = EFFECTS_PATH.read_text(encoding="utf-8")
+        for kind in ("arms", "bulk", "arsenal", "strategic"):
+            body = only_named_block(self,text,"VAL_settle_partner_"+kind)
+            self.assertIn("VAL_record_instant_export = yes",body)
+            self.assertNotIn("add_timed_idea",body)
+
+    def test_military_settlement_uses_escrow_and_specific_enemy(self):
+        text = EFFECTS_PATH.read_text(encoding="utf-8")
+        self.assertTrue(bool(named_blocks(text,"VAL_military_settle")))
+        body = only_named_block(self,text,"VAL_military_settle")
+        self.assertIn("VAL_military_escrow",body)
+        self.assertIn("VAL_military_state value = 0",body)
+        triggers = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
+        gate = only_named_block(self,triggers,"VAL_military_conflict_open")
+        self.assertIn("has_war_with = event_target:VAL_military_enemy",gate)
+        self.assertNotIn("has_war = yes",gate)
+
+    def test_order_refund_preserves_fractional_debt_and_frees_slot(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar
+        effects = parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8"))
+        self.assertTrue(any(e.key == "VAL_order_1_cancel" for e in effects), "orders need a cancellation ledger")
+        cancel = block(effects, "VAL_order_1_cancel")
+        # Execute the cancellation's arithmetic in the real scripted body.
+        values = {"VAL": {"VAL_order_1_advance": 562.5, "VAL_order_1_state": 1},
+                  "partner": {"VAL_refund_due": 125}}
+        def execute(items, scope):
+            for e in items:
+                if e.key == "event_target:VAL_order_1_partner":
+                    execute(e.value, "partner")
+                elif e.key in ("set_variable", "add_to_variable"):
+                    name, raw = scalar(e.value, "var"), scalar(e.value, "value")
+                    try:
+                        amount = float(raw)
+                    except ValueError:
+                        country, var = raw.split(".", 1) if "." in raw else (scope, raw)
+                        amount = values[country].get(var, 0)
+                    values[scope][name] = amount if e.key == "set_variable" else values[scope].get(name, 0)+amount
+                elif e.key == "if":
+                    condition = block(e.value, "limit")
+                    checks = [c for c in condition if c.key == "check_variable"]
+                    if all(values[scope].get(scalar(c.value,"var"),0) == float(scalar(c.value,"value")) for c in checks):
+                        execute([c for c in e.value if c.key != "limit"],scope)
+                elif e.key not in ("clr_country_flag", "remove_mission", "clear_variable", "clear_global_event_target", "VAL_refresh_order_summary"):
+                    self.fail(f"Unmodelled cancellation effect: {e.key}")
+        execute(cancel,"VAL")
+        self.assertEqual(values["partner"]["VAL_refund_due"],687.5)
+        self.assertEqual(values["VAL"]["VAL_order_1_state"],0)
+        execute(cancel,"VAL")
+        self.assertEqual(values["partner"]["VAL_refund_due"],687.5)
+
+    def test_timeout_missions_cannot_complete_automatically(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar
+        decisions = parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8"))
+        self.assertTrue(any(e.key == "VAL_contract_obligations" for e in decisions))
+        category = block(decisions,"VAL_contract_obligations")
+        for slot in (1,2):
+            mission = block(category,f"VAL_order_{slot}_deadline")
+            available = block(block(mission,"available"),"hidden_trigger")
+            self.assertEqual(scalar(available,"always"),"no")
+            self.assertTrue(block(mission,"timeout_effect"))
+
+
+class ValTradeMapTests(unittest.TestCase):
+    def test_rail_path_does_not_bridge_disconnected_nodes(self):
+        from tools.builders import build_adiscord_val_operations_map as builder
+        self.assertTrue(hasattr(builder, "rail_path"), "trade map needs a rail graph path")
+        graph = {1: {2}, 2: {1}, 3: set()}
+        self.assertEqual(builder.rail_path(graph, 1, 2), [1, 2])
+        self.assertIsNone(builder.rail_path(graph, 1, 3))
+
+    def test_trade_routes_share_the_runtime_nodes(self):
+        from tools.builders import build_adiscord_val_operations_map as builder
+        self.assertTrue(hasattr(builder, "trade_route_states"), "route geometry must read runtime nodes")
+        self.assertEqual(builder.trade_route_states()["occidia"], (43, 44, 88))
+        self.assertEqual(builder.trade_route_states()["north"], (59, 60, 61))
+        self.assertEqual(builder.trade_route_states()["vorkerland"], (33,))
+
+    def test_trade_panel_replaces_static_aid_map_without_removing_operations(self):
+        from tools.builders import build_adiscord_val_operations_map as builder
+        boxes = {state: (0, 0, 10, 10) for state in builder.STATE_IDS}
+        outputs = builder.interface_outputs(boxes)
+        gui = outputs["interface/ADISCORD_VAL_operations.gui"]
+        script = outputs["common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt"]
+        self.assertIn("ADISCORD_VAL_trade_routes_window", gui)
+        self.assertNotIn("ADISCORD_VAL_vorkerland_aid_window", gui)
+        self.assertIn("ADISCORD_VAL_operations_panel", script)
+        self.assertIn("ADISCORD_STP_operations_panel", script)
+        for route in ("occidia", "north", "stelander", "vorkerland"):
+            self.assertIn(f"VAL_trade_route_{route}_open", script)
+            self.assertIn(f"VAL_route_{route}_commissioned", script)
+
+
 class ValTierTransitionContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -3248,10 +3342,106 @@ class ValNumericPreviewChainTests(unittest.TestCase):
 
 
 class ValExpandedCampaignTests(unittest.TestCase):
+    def test_resource_war_focus_visibility_follows_the_war_without_hiding_irem(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions, walk
+        tree = self.parse((ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt").read_text(encoding="utf-8"))
+        focuses = {self.scalar(e.value, "id"): e.value for e in walk(tree) if e.key == "focus" and isinstance(e.value, list) and any(c.key == "id" for c in e.value)}
+        focus = focuses["VAL_Resource_War_Contracts"]
+        self.assertEqual(self.scalar(focus, "dynamic"), "yes")
+        self.assertEqual(self.scalar(focus, "cancel_if_invalid"), "yes")
+        self.assertEqual(self.scalar(self.getblock(focus, "prerequisite"), "focus"), "VAL_Ministry_Auditors")
+        auditors = focuses["VAL_Ministry_Auditors"]
+        self.assertEqual(self.scalar(focus, "x"), self.scalar(auditors, "x"))
+        self.assertGreater(int(self.scalar(focus, "y")), int(self.scalar(auditors, "y")))
+        position = (self.scalar(focus, "x"), self.scalar(focus, "y"))
+        for other, body in focuses.items():
+            if other != "VAL_Resource_War_Contracts":
+                self.assertNotEqual(position, (self.scalar(body, "x"), self.scalar(body, "y")), other)
+        for active in (False, True):
+            facts = {("VAL", "ADISCORD_nam_resource_war_active", "yes"): active}
+            for gate in ("allow_branch", "available"):
+                self.assertEqual(matches_conditions(self.getblock(focus, gate), facts, "VAL"), active)
+        for name, body in focuses.items():
+            if name != "VAL_Resource_War_Contracts":
+                dependencies = [e.value for e in walk(body) if e.key == "focus"]
+                self.assertNotIn("VAL_Resource_War_Contracts", dependencies, name)
+        self.assertEqual(self.scalar(self.getblock(focuses["VAL_frontier_return_irem"], "prerequisite"), "focus"), "VAL_Foreign_Broker_Licences")
+
+    def test_resource_war_transitions_invalidate_the_focus_layout_without_an_aid_contract(self):
+        from tools.tests.test_adiscord_stp_preparation import walk
+        effects = self.parse((ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(encoding="utf-8"))
+        for suffix in ("begin_hostilities", "resolve_peaceful_withdrawal", "resolve_coalition_victory", "resolve_nam_victory"):
+            effect = self.getblock(effects, "ADISCORD_nam_resource_war_" + suffix)
+            refresh = [e for e in walk(effect) if e.key == "VAL" and isinstance(e.value, list)
+                       and any(child.key == "mark_focus_tree_layout_dirty" for child in walk(e.value))]
+            self.assertEqual(len(refresh), 1, suffix)
+            self.assertFalse(any(e.key in ("has_country_flag", "check_variable") for e in walk(refresh[0].value)), suffix)
+        hooks = self.getblock(self.parse(ON_ACTIONS_PATH.read_text(encoding="utf-8")), "on_actions")
+        self.assertTrue(any(e.key == "mark_focus_tree_layout_dirty" for e in walk(self.getblock(hooks, "on_startup"))))
+
+    def test_aid_delivery_rechecks_fractional_stock_and_current_recipient(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+        effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
+        for campaign in ("resource", "northern"):
+            for mode, currency, boundary in (("arms", "equipment", 2500), ("personnel", "numeric", 2000)):
+                payload = self.getblock(effects, f"VAL_deliver_{campaign}_aid_{mode}")
+                for amount, expected in ((boundary - .1, False), (boundary, True)):
+                    facts = {("VAL", "variable", f"VAL_{campaign}_aid_state"): 1,
+                             ("VAL", "has_active_mission", f"VAL_{campaign}_aid_deadline"): True,
+                             ("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True,
+                             ("FROM", f"VAL_{campaign}_aid_recipient", "yes"): True,
+                             ("VAL", "numeric", "command_power"): 25,
+                             ("VAL", currency, "infantry_equipment" if mode == "arms" else "has_manpower"): amount}
+                    selected = [e for _, e in selected_effects(payload, facts, "VAL")]
+                    key = "send_equipment" if mode == "arms" else "add_manpower"
+                    debits = [e for e in selected if e.key == key and (mode == "arms" or e.value == "-2000")]
+                    self.assertEqual(len(debits), int(expected), (campaign, mode, amount))
+                    for blocker in (("FROM", f"VAL_{campaign}_aid_recipient", "yes"),
+                                    ("VAL", "has_active_mission", f"VAL_{campaign}_aid_deadline")):
+                        self.assertFalse(list(selected_effects(payload, {**facts, blocker: False}, "VAL")))
+
+    def test_northern_victory_requires_fulfilled_aid_and_settles_only_once(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+        effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
+        victory = self.getblock(effects, "VAL_settle_northern_aid_victory")
+        defeat = self.getblock(effects, "VAL_settle_northern_aid_defeat")
+        for state in (1, 2, -1, 3):
+            facts = {("VAL", "has_variable", "VAL_northern_aid_state"): True,
+                     ("VAL", "variable", "VAL_northern_aid_state"): state,
+                     ("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True}
+            for payload, expected in ((victory, state == 2), (defeat, state != 3)):
+                rewards = [e for _, e in selected_effects(payload, facts, "VAL") if e.key == "add_timed_idea"]
+                self.assertEqual(len(rewards), int(expected), state)
+                if rewards:
+                    self.assertEqual(self.scalar(rewards[0].value, "days"), "180")
+        close = self.getblock(effects, "VAL_close_northern_aid")
+        self.assertEqual(self.scalar(self.getblock(close, "set_variable"), "value"), "3")
+
+    def test_resource_rights_require_the_chosen_victor_and_completed_aid(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+        effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
+        settlement = self.getblock(effects, "VAL_settle_resource_aid")
+        for side in (1, 2):
+            for winner in ("nam", "coalition", "peaceful_partition"):
+                for state in (1, 2, -1, 3):
+                    facts = {("VAL", "has_variable", "VAL_resource_aid_state"): True,
+                             ("VAL", "variable", "VAL_resource_aid_state"): state,
+                             ("VAL", "variable", "VAL_resource_aid_side"): side,
+                             ("VAL", "has_global_flag", f"ADISCORD_nam_resource_war_{winner}_victory"): True,
+                             ("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True,
+                             ("EFL", "exists", "yes"): True, ("EFL", "has_capitulated", "no"): True,
+                             ("EFL", "is_subject", "no"): True,
+                             ("230", "is_owned_by", "EFL"): True, ("230", "is_controlled_by", "EFL"): True}
+                    selected = [e for _, e in selected_effects(settlement, facts, "VAL")]
+                    grants = [e for e in selected if e.key in ("give_resource_rights", "VAL_deliver_nam_concession")]
+                    self.assertEqual(len(grants), int(state == 2 and winner == ("nam" if side == 1 else "coalition")), (side, winner, state))
+                    if winner == "peaceful_partition":
+                        self.assertFalse(any(e.key == "VAL_fail_resource_aid" for e in selected))
+
     def test_war_aid_requires_a_complete_alternative_not_a_token_shipment(self):
         for campaign in ("resource", "northern"):
             name = f"VAL_{campaign}_aid_sufficient"
-            self.assertIn(name, self.triggers)
+            self.assertTrue(name in self.triggers, name)
             for rifles, personnel, days, expected in (
                 (0, 0, 0, False), (4999.9, 0, 0, False),
                 (5000, 0, 0, True), (0, 1999.9, 0, False),
@@ -3674,7 +3864,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         hosts = self.triggers["VAL_northern_volunteer_host"]
         self.assertEqual([e.value for e in hosts if e.key == "has_war_with"], ["NOD"])
         self.assertEqual({e.value for e in walk(hosts) if e.key == "tag"}, {"YPR", "COF", "TFF", "STS", "STP"})
-        decisions = self.getblock(self.parse(DECISIONS_PATH.read_text(encoding="utf-8")), "VAL_military_operations")
+        decisions = self.getblock(self.parse(DECISIONS_PATH.read_text(encoding="utf-8")), "VAL_northern_war_aid")
         self.assertFalse(any(e.key in ("create_unit", "add_manpower", "add_equipment_to_stockpile")
                              for e in walk(self.getblock(decisions, "VAL_northern_volunteers"))))
         recall = self.getblock(self.parse(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_reconcile_northern_volunteers")
@@ -3777,7 +3967,8 @@ class ValExpandedCampaignTests(unittest.TestCase):
             event = next(e.value for e in events if e.key == "country_event" and self.scalar(e.value, "id") == eid)
             accept = next(e.value for e in event if e.key == "option" and self.scalar(e.value, "name") == "VAL_export_accept")
             self.assertTrue(any(e.key == gate for e in walk(accept)))
-            self.assertTrue(any(e.key == "set_country_flag" and e.value == "VAL_nam_aid_delivered" for e in walk(accept)))
+            self.assertTrue(any(e.key == "VAL_complete_resource_aid" for e in walk(accept)))
+            self.assertFalse(any(e.key == "set_country_flag" and e.value == "VAL_nam_aid_delivered" for e in walk(accept)))
 
     def test_northern_ultimatum_is_single_and_nod_forecast_respects_alliances(self):
         from dataclasses import replace

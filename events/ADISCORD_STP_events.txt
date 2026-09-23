@@ -2169,3 +2169,63 @@ country_event = {
 	trigger = { STP_pw_party_story_current = yes }
 	option = { name = ADISCORD_STP_pc.39.a }
 }
+
+country_event = {
+	id = ADISCORD_STP_pc.40
+	title = ADISCORD_STP_pc.40.t
+	desc = ADISCORD_STP_pc.40.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	timeout_days = 21
+	trigger = { tag = NOD }
+	option = {
+		name = ADISCORD_STP_pc.40.refuse
+		trigger = { STP_pw_party_nod_congress_current = yes }
+		ai_chance = { base = 85 }
+		custom_effect_tooltip = STP_pw_party_nod_congress_refusal_tt
+		hidden_effect = { if = { limit = { STP_pw_party_nod_congress_current = yes } STP = { STP_pw_party_refuse_nod_congress = yes } } }
+	}
+	option = {
+		name = ADISCORD_STP_pc.40.accept
+		trigger = { STP_pw_party_nod_congress_current = yes }
+		ai_chance = { base = 15 modifier = { factor = 4 strength_ratio = { tag = STP ratio < 0.6 } } }
+		custom_effect_tooltip = STP_pw_party_nod_subject_tt
+		hidden_effect = { STP_pw_party_accept_nod_congress = yes }
+	}
+	option = {
+		name = STP_pc_offer_closed
+		trigger = { STP_pw_party_nod_congress_current = no }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.41
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { if = { limit = { tag = STP } STP_pw_party_refuse_nod_congress = yes } }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.42
+	title = ADISCORD_STP_pc.42.t
+	desc = { trigger = { NOD = { is_subject_of = STP } } text = ADISCORD_STP_pc.42.accepted }
+	desc = { trigger = { NOT = { NOD = { is_subject_of = STP } } } text = ADISCORD_STP_pc.42.refused }
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STP exists = yes }
+	option = { name = ADISCORD_STP_pc.42.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.43
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { if = { limit = { tag = STP } STP_pw_party_finalize_nod_subject = yes } }
+}
+
+country_event = {
+	id = ADISCORD_STP_pc.44
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { if = { limit = { tag = STP } STP_pw_party_reconcile_northern_campaign = yes } }
+}

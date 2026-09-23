@@ -234,3 +234,72 @@ defined_text = {
 	text = { trigger = { check_variable = { var = VAL_resource_aid_side value = 2 compare = equals } } localization_key = VAL_AID_SIDE_EFL }
 	text = { localization_key = VAL_AID_SIDE_NONE }
 }
+
+defined_text = {
+	name = VALGetNorthernAidRecipient
+	text = {
+		trigger = { has_variable = VAL_northern_aid_state NOT = { check_variable = { var = VAL_northern_aid_state value = 3 compare = equals } } country_exists = event_target:VAL_northern_aid_partner }
+		localization_key = VAL_AID_NORTHERN_PARTNER
+	}
+	text = { localization_key = VAL_AID_SIDE_NONE }
+}
+
+# Route explanations share the same node predicates as the logistics network.
+defined_text = {
+ name = VALTradeOccidiaReason
+ text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
+ text = { trigger = { NOT = { 43 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_43_blocked }
+ text = { trigger = { NOT = { 44 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_44_blocked }
+ text = { trigger = { NOT = { 88 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_88_blocked }
+ text = { localization_key = VAL_trade_route_ready }
+}
+defined_text = {
+ name = VALTradeNorthReason
+ text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
+ text = { trigger = { NOT = { 59 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_59_blocked }
+ text = { trigger = { NOT = { 60 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_60_blocked }
+ text = { trigger = { NOT = { 61 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_61_blocked }
+ text = { localization_key = VAL_trade_route_ready }
+}
+defined_text = {
+ name = VALTradeStelanderReason
+ text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
+ text = { trigger = { NOT = { 29 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_29_blocked }
+ text = { trigger = { NOT = { 46 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_46_blocked }
+ text = { localization_key = VAL_trade_route_ready }
+}
+defined_text = {
+ name = VALTradeVorkerlandReason
+ text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
+ text = { trigger = { NOT = { VAL_trade_route_vorkerland_open = yes } } localization_key = VAL_trade_vorkerland_blocked }
+ text = { localization_key = VAL_trade_route_ready }
+}
+
+defined_text = {
+ name = VALMilitaryGoal
+ text = { trigger = { VAL = { check_variable = { var = VAL_military_goal value = 1 compare = equals } } } localization_key = VAL_military_goal_1 }
+ text = { trigger = { VAL = { check_variable = { var = VAL_military_goal value = 2 compare = equals } } } localization_key = VAL_military_goal_2 }
+ text = { localization_key = VAL_military_goal_3 }
+}
+
+defined_text = {
+ name = VALTradeOccidiaUpgrade
+ text = { trigger = { has_country_flag = VAL_route_occidia_upgraded } localization_key = VAL_trade_upgraded }
+ text = { localization_key = VAL_trade_not_upgraded }
+}
+defined_text = {
+ name = VALTradeNorthUpgrade
+ text = { trigger = { has_country_flag = VAL_route_north_upgraded } localization_key = VAL_trade_upgraded }
+ text = { localization_key = VAL_trade_not_upgraded }
+}
+defined_text = {
+ name = VALTradeStelanderUpgrade
+ text = { trigger = { has_country_flag = VAL_route_stelander_upgraded } localization_key = VAL_trade_upgraded }
+ text = { localization_key = VAL_trade_not_upgraded }
+}
+defined_text = {
+ name = VALTradeVorkerlandUpgrade
+ text = { trigger = { has_country_flag = VAL_route_vorkerland_upgraded } localization_key = VAL_trade_upgraded }
+ text = { localization_key = VAL_trade_not_upgraded }
+}
+

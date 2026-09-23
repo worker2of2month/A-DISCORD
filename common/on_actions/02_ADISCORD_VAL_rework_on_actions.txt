@@ -1,6 +1,7 @@
 on_actions = {
 	on_daily_VAL = {
 		effect = {
+			VAL_contract_reconcile = yes
 			VAL_resource_aid_daily = yes
 			VAL_northern_aid_daily = yes
 		}
@@ -22,6 +23,7 @@ on_actions = {
 					VAL_grant_contract_warlord = yes
 					VAL_sync_solgalov_portrait = yes
 					VAL_reveal_stelander_focus_branch = yes
+					if = { limit = { has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes }
 					VAL_call_subjects_to_wars = yes
 					VAL_check_nam_concession = yes VAL_check_efl_concession = yes
 				}

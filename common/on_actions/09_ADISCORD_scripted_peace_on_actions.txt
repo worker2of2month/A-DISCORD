@@ -10,7 +10,7 @@ on_actions = {
                 ROOT = { ADISCORD_debug_war_country_dump = yes }
             }
 
-			ROOT = { VAL_northern_aid_capitulation = yes }
+			ROOT = { VAL_military_capture_result = yes VAL_northern_aid_capitulation = yes }
 
 			# BEGIN stelander:on_capitulation_immediate
 			# Clear an unconsumed handoff so it cannot suppress another defeat.
@@ -663,6 +663,36 @@ on_actions = {
 
 			# BEGIN stelander:on_capitulation
 
+			if = {
+				limit = {
+					ROOT = { tag = NOD is_subject = no has_war_with = STP }
+					FROM = { OR = { tag = STP is_subject_of = STP } }
+					STP = { STP_pw_party_revolution_current = yes has_completed_focus = STP_pw_party_nod_congress has_war_with = NOD }
+				}
+				set_global_flag = skip_default_capitulation
+				STP = { STP_pw_party_win_nod_campaign = yes }
+			}
+			if = {
+				limit = {
+					ROOT = { tag = STP has_country_flag = STP_pw_party_nod_campaign_active has_war_with = NOD }
+					FROM = { OR = { tag = NOD is_subject_of = NOD } }
+				}
+				set_global_flag = skip_default_capitulation
+				STP = {
+					STP_pw_party_close_northern_operations = yes
+					clr_country_flag = STP_pw_party_nod_subject_pending
+					set_country_flag = STP_pw_party_nod_invasion_active
+				}
+				NOD = { STP_pw_party_settle_nod_invasion_victory = yes }
+			}
+			if = {
+				limit = { ROOT = { tag = STP has_completed_focus = STP_pw_party_revolution_capital } }
+				ROOT = {
+					STP_pw_party_close_northern_operations = yes
+					clr_country_flag = STP_pw_party_nod_subject_pending
+				}
+			}
+
             if = {
                 limit = { ROOT = { tag = SRP } FROM = { STP_occidia_victory_ready = yes } }
                 set_global_flag = skip_default_capitulation
@@ -1143,6 +1173,13 @@ on_actions = {
             VAL_queue_frontier_reconciliation = yes
             # END kefreyt:on_peace
             # BEGIN stelander:on_peace
+			if = {
+				limit = {
+					OR = { ROOT = { OR = { tag = STP tag = NOD } } FROM = { OR = { tag = STP tag = NOD } } }
+					STP = { has_country_flag = STP_pw_party_nod_campaign_active }
+				}
+				STP = { country_event = { id = ADISCORD_STP_pc.44 days = 1 } }
+			}
             STP = { STP_occidia_reconcile_peace = yes }
             STS = { STP_occidia_reconcile_peace = yes }
             if = {

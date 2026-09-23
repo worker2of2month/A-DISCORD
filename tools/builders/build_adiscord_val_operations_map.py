@@ -5,6 +5,8 @@ from __future__ import annotations
 import argparse
 import csv
 import re
+import math
+from collections import deque
 from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
@@ -247,6 +249,140 @@ def compact_overlays(outputs: dict[str, Image.Image]) -> tuple[dict[str, Image.I
     return compact, boxes
 
 
+def trade_route_states() -> dict[str, tuple[int, ...]]:
+    """Read the authored corridor nodes from their authoritative predicates."""
+    text = (ROOT / "common/scripted_triggers/ADISCORD_VAL_logistics_market_triggers.txt").read_text(encoding="utf-8")
+    result = {}
+    for route in ("occidia", "north", "stelander", "vorkerland"):
+        start = text.index(f"VAL_trade_route_{route}_open = {{")
+        end = text.index("\n}", start)
+        result[route] = tuple(int(n) for n in re.findall(r"(?m)^\t(\d+) = \{", text[start:end]))
+        if not result[route]:
+            raise ValueError(f"No corridor nodes: {route}")
+    return result
+
+
+def read_rail_graph() -> dict[int, set[int]]:
+    graph: dict[int, set[int]] = {}
+    for line in (ROOT / "map/railways.txt").read_text(encoding="utf-8-sig").splitlines():
+        values = [int(n) for n in line.split("#", 1)[0].split()]
+        if not values:
+            continue
+        if len(values) < 3 or len(values[2:]) != values[1]:
+            raise ValueError(f"Malformed railway: {line}")
+        for a, b in zip(values[2:], values[3:]):
+            graph.setdefault(a, set()).add(b)
+            graph.setdefault(b, set()).add(a)
+    return graph
+
+
+def rail_path(graph: dict[int, set[int]], start: int, end: int) -> list[int] | None:
+    queue = deque([start])
+    previous = {start: None}
+    while queue:
+        current = queue.popleft()
+        if current == end:
+            path = [current]
+            while previous[current] is not None:
+                current = previous[current]
+                path.append(current)
+            return list(reversed(path))
+        for neighbour in sorted(graph.get(current, ())):
+            if neighbour not in previous:
+                previous[neighbour] = current
+                queue.append(neighbour)
+    return None
+
+
+def render_trade_routes() -> dict[str, Image.Image]:
+    """Project native rail chains; disconnected links remain dashed trade roads."""
+    import numpy as np
+
+    routes = trade_route_states()
+    colors, land = province_colors()
+    graph = read_rail_graph()
+    provinces = Image.open(ROOT / "map/provinces.bmp").convert("RGB")
+    pixels = np.asarray(provinces, dtype=np.uint32)
+    codes = (pixels[:, :, 0] << 16) | (pixels[:, :, 1] << 8) | pixels[:, :, 2]
+    unique, inverse = np.unique(codes.ravel(), return_inverse=True)
+    counts = np.bincount(inverse)
+    yy, xx = np.indices(codes.shape)
+    xs = np.bincount(inverse, weights=xx.ravel()) / counts
+    ys = np.bincount(inverse, weights=yy.ravel()) / counts
+    centers = {int(code): (float(x), float(y)) for code, x, y in zip(unique, xs, ys)}
+    def center(p):
+        r, g, b = colors[p]
+        return centers[(r << 16) | (g << 8) | b]
+    def node(state):
+        candidates = sorted(state_provinces(state))
+        rails = [p for p in candidates if p in graph]
+        points = [center(p) for p in candidates]
+        cx = sum(p[0] for p in points) / len(points)
+        cy = sum(p[1] for p in points) / len(points)
+        return min(rails or candidates, key=lambda p: ((center(p)[0]-cx)**2 + (center(p)[1]-cy)**2, p))
+    origin = node(24)
+    chains = {}
+    all_points = [center(origin)]
+    for route, states in routes.items():
+        anchors = [origin, *(node(state) for state in states)]
+        segments = []
+        for a, b in zip(anchors, anchors[1:]):
+            path = rail_path(graph, a, b)
+            points = [center(p) for p in (path or [a, b])]
+            segments.append((points, path is not None))
+            all_points.extend(points)
+        chains[route] = segments
+    left = max(0, int(min(p[0] for p in all_points))-80)
+    top = max(0, int(min(p[1] for p in all_points))-80)
+    right = min(provinces.width, int(max(p[0] for p in all_points))+80)
+    bottom = min(provinces.height, int(max(p[1] for p in all_points))+80)
+    crop = provinces.crop((left, top, right, bottom))
+    scale = min(WIDTH / crop.width, HEIGHT / crop.height)
+    size = (max(1, round(crop.width*scale)), max(1, round(crop.height*scale)))
+    offset = ((WIDTH-size[0])//2, (HEIGHT-size[1])//2)
+    background = Image.new("RGBA", (WIDTH, HEIGHT), (17, 25, 29, 255))
+    shaded = Image.new("RGBA", crop.size)
+    shaded.putdata([(49, 58, 57, 255) if p in land else (17, 25, 29, 255) for p in crop.getdata()])
+    background.paste(shaded.resize(size, Image.Resampling.LANCZOS), offset)
+    ImageDraw.Draw(background).rectangle((0, 0, WIDTH-1, HEIGHT-1), outline=(125, 114, 87), width=1)
+    output = {"VAL_trade_map.png": background}
+    def project(p):
+        return (offset[0]+(p[0]-left)*scale, offset[1]+(p[1]-top)*scale)
+    palette = ((130, 139, 144, 255), (115, 196, 127, 255), (240, 192, 69, 255), (230, 93, 79, 255))
+    for route, segments in chains.items():
+        strip = Image.new("RGBA", (WIDTH*4, HEIGHT))
+        for frame, color in enumerate(palette):
+            layer = Image.new("RGBA", (WIDTH, HEIGHT))
+            draw = ImageDraw.Draw(layer)
+            for points, is_rail in segments:
+                points = [project(p) for p in points]
+                for a, b in zip(points, points[1:]):
+                    dx, dy = b[0]-a[0], b[1]-a[1]
+                    length = math.hypot(dx, dy)
+                    if length < 0.1:
+                        continue
+                    nx, ny = -dy/length*3, dx/length*3
+                    if frame != 0 and is_rail:
+                        draw.line((a,b), fill=(9, 14, 16, 255), width=5)
+                        draw.line((a,b), fill=color, width=2)
+                    for distance in range(0, max(1, int(length)), 7):
+                        x,y = a[0]+dx*distance/length, a[1]+dy*distance/length
+                        if frame == 0 or not is_rail:
+                            t = min(length, distance+4)/length
+                            draw.line(((x,y),(a[0]+dx*t,a[1]+dy*t)), fill=color, width=2)
+                        else:
+                            draw.line(((x-nx,y-ny),(x+nx,y+ny)), fill=color, width=1)
+                x,y = points[-1]
+                draw.ellipse((x-4,y-4,x+4,y+4), fill=(17,25,29,255), outline=color, width=2)
+                if frame == 3:
+                    draw.line((x-3,y-3,x+3,y+3), fill=color, width=2)
+                if frame == 2:
+                    draw.text((x+5,y-8), "!", fill=color)
+            strip.paste(layer,(frame*WIDTH,0))
+        output[f"VAL_trade_route_{route}.png"] = strip
+    return output
+
+
 def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, str]:
     header = "# Generated by tools/builders/build_adiscord_val_operations_map.py; do not edit.\n"
     gui = [header, "guiTypes = {\n"]
@@ -281,42 +417,31 @@ def interface_outputs(boxes: dict[int, tuple[int, int, int, int]]) -> dict[str, 
             script.append(f'   {prefix}_ops_{state}_contested_visible = {{ {state} = {{ controller = {{ tag = {viewer} OR = {{ {provinces} }} }} }} }}\n')
         gui.append(" }\n")
         script.append("  }\n }\n")
-    gui.append(' containerWindowType = {\n  name = "ADISCORD_VAL_vorkerland_aid_window"\n  position = { x = 0 y = 0 }\n  size = { width = 460 height = 258 }\n  iconType = { name = "map" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_vorkerland_aid_map" }\n }\n}\n')
-    gfx.append(' spriteType = { name = "GFX_VAL_vorkerland_aid_map" texturefile = "gfx/interface/VAL_operations/VAL_vorkerland_aid_map.png" }\n}\n')
-    script.append(' ADISCORD_VAL_vorkerland_aid_panel = { context_type = decision_category window_name = "ADISCORD_VAL_vorkerland_aid_window" visible = { always = yes } }\n}\n')
+    gui.append(' containerWindowType = { name = "ADISCORD_VAL_trade_routes_window" position = { x = 0 y = 0 } size = { width = 460 height = 510 }\n')
+    gui.append('  iconType = { name = "trade_map" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_map" pdx_tooltip = "VAL_trade_map_tt" }\n')
+    gfx.append(' spriteType = { name = "GFX_VAL_trade_map" texturefile = "gfx/interface/VAL_operations/VAL_trade_map.png" }\n')
+    script.append(' ADISCORD_VAL_trade_routes_panel = { context_type = decision_category window_name = "ADISCORD_VAL_trade_routes_window" visible = { always = yes } triggers = {\n')
+    risk = 'check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than }'
+    for row, route in enumerate(trade_route_states()):
+        gfx.append(f' spriteType = {{ name = "GFX_VAL_trade_route_{route}" texturefile = "gfx/interface/VAL_operations/VAL_trade_route_{route}.png" noOfFrames = 4 }}\n')
+        conditions = (
+            f'NOT = {{ VAL_trade_route_{route}_open = yes }} NOT = {{ has_country_flag = VAL_route_{route}_commissioned }}',
+            f'VAL_trade_route_{route}_open = yes NOT = {{ AND = {{ {risk} }} }}',
+            f'VAL_trade_route_{route}_open = yes {risk}',
+            f'NOT = {{ VAL_trade_route_{route}_open = yes }} has_country_flag = VAL_route_{route}_commissioned',
+        )
+        for frame, condition in enumerate(conditions, 1):
+            name = f'trade_{route}_{frame}'
+            gui.append(f'  iconType = {{ name = "{name}" position = {{ x = 20 y = 8 }} quadTextureSprite = "GFX_VAL_trade_route_{route}" frame = {frame} }}\n')
+            # A separate status row gives each overlapping route its own hit area.
+            gui.append(f'  instantTextBoxType = {{ name = "{name}_label" position = {{ x = 20 y = {354+row*25} }} font = "hoi_16mbs" text = "VAL_trade_{route}_{frame}" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_{route}_tt" }}\n')
+            for child in (name, name+'_label'):
+                script.append(f'  {child}_visible = {{ VAL_trade_corridors_unlocked = yes {condition} }}\n')
+    gui.append('  instantTextBoxType = { name = "legend" position = { x = 20 y = 458 } font = "hoi_16mbs" text = "VAL_trade_map_legend" maxWidth = 420 maxHeight = 48 }\n }\n}\n')
+    gfx.append('}\n')
+    script.append(' } }\n}\n')
     return {"interface/ADISCORD_VAL_operations.gui": "".join(gui), "interface/ADISCORD_VAL_operations.gfx": "".join(gfx), "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt": "".join(script)}
 
-
-def render_vorkerland_aid_map() -> Image.Image:
-    """Static historical-border illustration; no runtime country/controller inputs."""
-    colors, land = province_colors()
-    # Historical reunification territory, including the central breakaways and
-    # the Oitfort, Rimat, Techlar, Ebern and Solar settlement districts.
-    historical_states = (
-        27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 75, 79, 81, 82,
-        102, 104, 105, 106, 107, 108, 109, 110, 111, 121, 122, 123,
-        124, 198, 200, 201, 202, 306, 307, 308, 309, 311, 320, 323,
-        324, 325, 327,
-    )
-    selected = {colors[province] for state in historical_states for province in state_provinces(state)}
-    provinces = Image.open(ROOT / "map/provinces.bmp").convert("RGB")
-    mask = Image.new("L", provinces.size)
-    mask.putdata([255 if pixel in selected else 0 for pixel in provinces.getdata()])
-    bounds = mask.getbbox()
-    if bounds is None:
-        raise ValueError("WRK start territory is missing")
-    left, top, right, bottom = bounds
-    box = (max(0, left - 40), max(0, top - 40), min(provinces.width, right + 40), min(provinces.height, bottom + 40))
-    crop = provinces.crop(box)
-    image = Image.new("RGB", crop.size)
-    image.putdata([(132, 76, 69) if pixel in selected else (49, 55, 56) if pixel in land else (19, 29, 35) for pixel in crop.getdata()])
-    outline = ImageChops.subtract(mask.crop(box).filter(ImageFilter.MaxFilter(3)), mask.crop(box))
-    image.paste((200, 167, 112), mask=outline)
-    image.thumbnail((416, 236), Image.Resampling.LANCZOS)
-    panel = Image.new("RGB", (420, 240), (19, 29, 35))
-    panel.paste(image, ((420-image.width)//2, (240-image.height)//2))
-    ImageDraw.Draw(panel).rectangle((0, 0, 419, 239), outline=(111, 99, 75), width=2)
-    return panel
 
 
 def main() -> int:
@@ -327,12 +452,13 @@ def main() -> int:
     args = parser.parse_args()
     outputs, box, size, offset = render_outputs()
     outputs, boxes = compact_overlays(outputs)
-    outputs["VAL_vorkerland_aid_map.png"] = render_vorkerland_aid_map()
+    outputs.update(render_trade_routes())
     interfaces = interface_outputs(boxes)
     if args.apply:
         for name, source in interfaces.items():
             (ROOT / name).write_text(source, encoding="utf-8")
         apply(outputs)
+        (OUT / "VAL_vorkerland_aid_map.png").unlink(missing_ok=True)
         print(f"Wrote operations map to {OUT.relative_to(ROOT)}; source crop={box}, resized={size}, offset={offset}")
     issues = validate_outputs(outputs)
     for name, source in interfaces.items():

@@ -3990,10 +3990,40 @@ guiTypes = {
   iconType = { name = "STP_ops_186_border" position = { x = 107 y = 309 } quadTextureSprite = "GFX_VAL_ops_border_186" }
   iconType = { name = "STP_ops_186_contested" position = { x = 107 y = 309 } quadTextureSprite = "GFX_VAL_ops_contested_186" }
  }
- containerWindowType = {
-  name = "ADISCORD_VAL_vorkerland_aid_window"
-  position = { x = 0 y = 0 }
-  size = { width = 460 height = 258 }
-  iconType = { name = "map" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_vorkerland_aid_map" }
+ containerWindowType = { name = "ADISCORD_VAL_trade_routes_window" position = { x = 0 y = 0 } size = { width = 460 height = 510 }
+  iconType = { name = "trade_map" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_map" pdx_tooltip = "VAL_trade_map_tt" }
+  iconType = { name = "trade_occidia_1" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_occidia" frame = 1 }
+  instantTextBoxType = { name = "trade_occidia_1_label" position = { x = 20 y = 354 } font = "hoi_16mbs" text = "VAL_trade_occidia_1" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_occidia_tt" }
+  iconType = { name = "trade_occidia_2" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_occidia" frame = 2 }
+  instantTextBoxType = { name = "trade_occidia_2_label" position = { x = 20 y = 354 } font = "hoi_16mbs" text = "VAL_trade_occidia_2" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_occidia_tt" }
+  iconType = { name = "trade_occidia_3" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_occidia" frame = 3 }
+  instantTextBoxType = { name = "trade_occidia_3_label" position = { x = 20 y = 354 } font = "hoi_16mbs" text = "VAL_trade_occidia_3" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_occidia_tt" }
+  iconType = { name = "trade_occidia_4" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_occidia" frame = 4 }
+  instantTextBoxType = { name = "trade_occidia_4_label" position = { x = 20 y = 354 } font = "hoi_16mbs" text = "VAL_trade_occidia_4" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_occidia_tt" }
+  iconType = { name = "trade_north_1" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_north" frame = 1 }
+  instantTextBoxType = { name = "trade_north_1_label" position = { x = 20 y = 379 } font = "hoi_16mbs" text = "VAL_trade_north_1" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_north_tt" }
+  iconType = { name = "trade_north_2" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_north" frame = 2 }
+  instantTextBoxType = { name = "trade_north_2_label" position = { x = 20 y = 379 } font = "hoi_16mbs" text = "VAL_trade_north_2" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_north_tt" }
+  iconType = { name = "trade_north_3" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_north" frame = 3 }
+  instantTextBoxType = { name = "trade_north_3_label" position = { x = 20 y = 379 } font = "hoi_16mbs" text = "VAL_trade_north_3" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_north_tt" }
+  iconType = { name = "trade_north_4" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_north" frame = 4 }
+  instantTextBoxType = { name = "trade_north_4_label" position = { x = 20 y = 379 } font = "hoi_16mbs" text = "VAL_trade_north_4" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_north_tt" }
+  iconType = { name = "trade_stelander_1" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_stelander" frame = 1 }
+  instantTextBoxType = { name = "trade_stelander_1_label" position = { x = 20 y = 404 } font = "hoi_16mbs" text = "VAL_trade_stelander_1" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_stelander_tt" }
+  iconType = { name = "trade_stelander_2" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_stelander" frame = 2 }
+  instantTextBoxType = { name = "trade_stelander_2_label" position = { x = 20 y = 404 } font = "hoi_16mbs" text = "VAL_trade_stelander_2" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_stelander_tt" }
+  iconType = { name = "trade_stelander_3" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_stelander" frame = 3 }
+  instantTextBoxType = { name = "trade_stelander_3_label" position = { x = 20 y = 404 } font = "hoi_16mbs" text = "VAL_trade_stelander_3" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_stelander_tt" }
+  iconType = { name = "trade_stelander_4" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_stelander" frame = 4 }
+  instantTextBoxType = { name = "trade_stelander_4_label" position = { x = 20 y = 404 } font = "hoi_16mbs" text = "VAL_trade_stelander_4" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_stelander_tt" }
+  iconType = { name = "trade_vorkerland_1" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_vorkerland" frame = 1 }
+  instantTextBoxType = { name = "trade_vorkerland_1_label" position = { x = 20 y = 429 } font = "hoi_16mbs" text = "VAL_trade_vorkerland_1" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_vorkerland_tt" }
+  iconType = { name = "trade_vorkerland_2" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_vorkerland" frame = 2 }
+  instantTextBoxType = { name = "trade_vorkerland_2_label" position = { x = 20 y = 429 } font = "hoi_16mbs" text = "VAL_trade_vorkerland_2" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_vorkerland_tt" }
+  iconType = { name = "trade_vorkerland_3" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_vorkerland" frame = 3 }
+  instantTextBoxType = { name = "trade_vorkerland_3_label" position = { x = 20 y = 429 } font = "hoi_16mbs" text = "VAL_trade_vorkerland_3" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_vorkerland_tt" }
+  iconType = { name = "trade_vorkerland_4" position = { x = 20 y = 8 } quadTextureSprite = "GFX_VAL_trade_route_vorkerland" frame = 4 }
+  instantTextBoxType = { name = "trade_vorkerland_4_label" position = { x = 20 y = 429 } font = "hoi_16mbs" text = "VAL_trade_vorkerland_4" maxWidth = 420 maxHeight = 24 pdx_tooltip = "VAL_trade_vorkerland_tt" }
+  instantTextBoxType = { name = "legend" position = { x = 20 y = 458 } font = "hoi_16mbs" text = "VAL_trade_map_legend" maxWidth = 420 maxHeight = 48 }
  }
 }

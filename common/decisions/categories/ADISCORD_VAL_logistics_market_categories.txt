@@ -15,3 +15,10 @@ VAL_population_markets = {
 	visible_when_empty = yes
 	priority = 23
 }
+
+VAL_trade_routes = {
+    allowed = { tag = VAL }
+    visible = { VAL_trade_corridors_unlocked = yes }
+    visible_when_empty = yes
+    scripted_gui = ADISCORD_VAL_trade_routes_panel
+}

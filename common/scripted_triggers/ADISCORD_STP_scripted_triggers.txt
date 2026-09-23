@@ -1814,6 +1814,7 @@ STP_pw_party_compact_current = {
 	has_capitulated = no
 	STP = {
 		exists = yes
+		NOT = { has_completed_focus = STP_pw_party_revolution_capital }
 		STP_pw_party_story_current = yes
 		STP_pw_party_nod_threat_current = yes
 		has_country_flag = STP_pw_party_compact_pending
@@ -1821,4 +1822,46 @@ STP_pw_party_compact_current = {
 		STP_pw_party_compact_coalition = yes
 		check_variable = { var = ADISCORD_economy_treasury value = 1350 compare = greater_than_or_equals }
 	}
+}
+
+# STP: the offensive mandate survives the end of Nodrul's invasion, but not subjugation.
+STP_pw_party_revolution_current = {
+	tag = STP
+	exists = yes
+	STP_pw_can_reconstruct = yes
+	is_subject = no
+	has_completed_focus = STP_pw_party_revolution_capital
+	NOT = { has_country_flag = STP_pw_party_nod_compact }
+}
+
+# NOD: consent is valid during the bilateral war, until either government falls.
+STP_pw_party_nod_congress_current = {
+	tag = NOD
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	STP = {
+		STP_pw_party_revolution_current = yes
+		has_country_flag = STP_pw_party_nod_congress_pending
+	}
+}
+
+STP_pw_party_northern_work_current = {
+	STP_pw_party_revolution_current = yes
+	NOD = { exists = yes is_subject = no has_capitulated = no }
+	NOT = { has_country_flag = STP_pw_party_nod_subject_pending }
+}
+
+STP_pw_party_can_launch_northern_campaign = {
+	STP_pw_party_northern_work_current = yes
+	has_completed_focus = STP_pw_party_northern_campaign
+	check_variable = { var = STP_pw_party_northern_supply value = 1 compare = greater_than_or_equals }
+	NOT = { has_war_with = NOD is_in_faction_with = NOD has_country_flag = STP_pw_party_nod_campaign_active }
+}
+
+STP_pw_party_nod_subject_programs = {
+	STP_pw_party_revolution_current = yes
+	has_completed_focus = STP_pw_party_former_patron
+	NOD = { exists = yes is_subject_of = STP has_capitulated = no }
+	NOT = { has_war_with = NOD }
 }

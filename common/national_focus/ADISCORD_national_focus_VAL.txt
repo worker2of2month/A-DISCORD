@@ -131,9 +131,9 @@ focus_tree = {
 		completion_reward = {
 			add_war_support = 0.05
 			custom_effect_tooltip = VAL_focus_authority_10_tt
-			unlock_decision_tooltip = { decision = VAL_ops_cin_contract show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_ops_osf_contract show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_ops_aph_contract show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = VAL_partner_contract show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = VAL_partner_contract show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = VAL_partner_contract show_effect_tooltip = yes }
 			hidden_effect = {
 				set_country_flag = VAL_foreign_operations_unlocked
 				set_country_flag = VAL_operations_map_unlocked
@@ -642,29 +642,14 @@ focus_tree = {
 			focus = VAL_Trading_Partners
 			focus = VAL_October_Of_2160
 		}
+		available = { custom_trigger_tooltip = { tooltip = VAL_tff_freedom_choice_ready_tt VAL_tff_freedom_choice_current = yes } }
+		cancel_if_invalid = yes
 		ai_will_do = {
 			base = 1
 		}
 		completion_reward = {
-			custom_effect_tooltip = VAL_focus_authority_5_tt
-			add_political_power = 75
-			if = {
-				limit = { has_completed_focus = VAL_Trading_Partners }
-				VAL_receive_contract_grant_300 = yes
-			}
-			else_if = {
-				limit = { has_completed_focus = VAL_October_Of_2160 }
-				add_command_power = 15
-				add_war_support = 0.03
-			}
-			unlock_decision_tooltip = { decision = VAL_ops_cin_contract show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_ops_osf_contract show_effect_tooltip = yes }
-			hidden_effect = {
-				set_country_flag = VAL_northern_operations_unlocked
-				set_country_flag = VAL_operations_map_unlocked
-				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
-				VAL_change_contract_authority = yes
-			}
+			custom_effect_tooltip = VAL_tff_freedom_focus_tt
+			country_event = { id = val_contract.380 }
 		}
 	}
 
@@ -682,8 +667,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Contract_State }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_operations_map_unlock_tt
-			unlock_decision_tooltip = { decision = VAL_aid_wrk_rifles show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_aid_wrk_support show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = VAL_partner_contract show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = VAL_partner_contract show_effect_tooltip = yes }
 			add_intel = { target = STP army_intel = 10 }
 			add_intel = { target = CIN army_intel = 10 }
 			hidden_effect = {
@@ -1712,7 +1697,7 @@ focus_tree = {
 		cost = 2
 		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_export_arms show_effect_tooltip = yes }
+			unlock_decision_tooltip = { decision = VAL_partner_contract show_effect_tooltip = yes }
 			add_political_power = 25
 			custom_effect_tooltip = VAL_focus_export_market_open_tt
 			hidden_effect = {
@@ -1767,7 +1752,7 @@ focus_tree = {
         cost = 3
         prerequisite = { focus = VAL_Foreign_Broker_Licences }
         completion_reward = {
-            unlock_decision_tooltip = { decision = VAL_export_bulk_order show_effect_tooltip = yes }
+            unlock_decision_tooltip = { decision = VAL_partner_contract show_effect_tooltip = yes }
         }
         ai_will_do = { base = 4 modifier = { factor = 0.2 has_equipment = { infantry_equipment < 5000 } } }
     }
@@ -1781,7 +1766,7 @@ focus_tree = {
         cost = 3
         prerequisite = { focus = VAL_Bulk_Arms_Contracts }
         completion_reward = {
-            unlock_decision_tooltip = { decision = VAL_export_arsenal_order show_effect_tooltip = yes }
+            unlock_decision_tooltip = { decision = VAL_partner_contract show_effect_tooltip = yes }
         }
         ai_will_do = { base = 4 modifier = { factor = 0.2 has_equipment = { infantry_equipment < 10000 } } }
     }
@@ -1795,7 +1780,7 @@ focus_tree = {
         cost = 5
         prerequisite = { focus = VAL_Army_Arsenal_Orders }
         completion_reward = {
-            unlock_decision_tooltip = { decision = VAL_export_strategic_order show_effect_tooltip = yes }
+            unlock_decision_tooltip = { decision = VAL_partner_contract show_effect_tooltip = yes }
         }
         ai_will_do = { base = 4 modifier = { factor = 0.2 has_equipment = { infantry_equipment < 20000 } } }
     }
@@ -2234,7 +2219,7 @@ completion_reward = {
         x = 32
         y = 13
         cost = 5
-        prerequisite = { focus = VAL_Resource_War_Contracts }
+        prerequisite = { focus = VAL_Foreign_Broker_Licences }
         available = { VAL_wasteland_invasion_available = yes }
         bypass = { owns_state = 169 }
         cancel_if_invalid = yes
@@ -2786,11 +2771,15 @@ completion_reward = {
 
 	focus = {
 		id = VAL_Resource_War_Contracts
+		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
-		x = 32
-		y = 11
+		x = 14
+		y = 4
 		cost = 3
-		prerequisite = { focus = VAL_Foreign_Broker_Licences }
+		allow_branch = { ADISCORD_nam_resource_war_active = yes }
+		available = { custom_trigger_tooltip = { tooltip = VAL_resource_war_active_tt ADISCORD_nam_resource_war_active = yes } }
+		cancel_if_invalid = yes
+		prerequisite = { focus = VAL_Ministry_Auditors }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			unlock_decision_tooltip = { decision = VAL_negotiate_nam_metals show_effect_tooltip = yes }

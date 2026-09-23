@@ -1076,5 +1076,156 @@ class PartyPostwarCoalitionContracts(unittest.TestCase):
                 self.assertNotIn('§Y', text, key)
 
 
+class PartyNorthernRevolutionContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = {e.key: e.value for e in parse_clausewitz(read('common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt'))}
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        cls.events = {one(e.value, 'id'): e.value for e in parse_clausewitz(read(EVENTS)) if e.key == 'country_event'}
+        cls.focus = {one(f, 'id'): f for t in children(parse_clausewitz(read(FOCUS)), 'focus_tree') for f in children(t, 'focus')}
+
+    def test_northern_consent_cannot_survive_winner_loss_or_other_overlord(self):
+        name = 'STP_pw_party_nod_congress_current'
+        self.assertIn(name, self.triggers.keys())
+        gate = self.triggers[name]
+        facts = {('NOD', 'tag', 'NOD'): True, ('NOD', 'exists', 'yes'): True,
+                 ('NOD', 'is_subject', 'no'): True, ('NOD', 'has_capitulated', 'no'): True,
+                 ('STP', 'STP_pw_party_revolution_current', 'yes'): True,
+                 ('STP', 'has_country_flag', 'STP_pw_party_nod_congress_pending'): True}
+        self.assertTrue(matches_conditions(gate, facts, 'NOD'))
+        for key in [('NOD', 'is_subject', 'no'), ('NOD', 'has_capitulated', 'no'),
+                    ('STP', 'STP_pw_party_revolution_current', 'yes'),
+                    ('STP', 'has_country_flag', 'STP_pw_party_nod_congress_pending')]:
+            self.assertFalse(matches_conditions(gate, facts | {key: False}, 'NOD'), key)
+
+    def test_northern_subject_settlement_is_guarded_and_consumes_pending_consent(self):
+        name = 'STP_pw_party_accept_nod_congress'
+        self.assertIn(name, self.effects.keys())
+        effect = self.effects[name]
+        yes = {('NOD', 'STP_pw_party_nod_congress_current', 'yes'): True}
+        no = {('NOD', 'STP_pw_party_nod_congress_current', 'yes'): False}
+        self.assertTrue(list(selected_effects(effect, yes, 'NOD')))
+        self.assertEqual(list(selected_effects(effect, no, 'NOD')), [])
+        settle = self.effects['STP_pw_party_begin_nod_subject']
+        self.assertIn('STP_pw_party_close_northern_operations', [e.key for e in walk(settle)])
+        leaves = list(walk(settle)) + list(walk(self.effects['STP_pw_party_close_northern_operations']))
+        self.assertTrue(any(e.key == 'clr_country_flag' and e.value == 'STP_pw_party_nod_congress_pending' for e in leaves))
+        self.assertTrue(any(e.key == 'clr_country_flag' and e.value == 'STP_pw_party_nod_invasion_active' for e in leaves))
+        self.assertTrue(any(e.key == 'white_peace' and e.value == 'NOD' for e in leaves))
+
+    def test_timeout_refuses_and_stale_window_only_closes(self):
+        self.assertIn('ADISCORD_STP_pc.40', self.events.keys())
+        event = self.events['ADISCORD_STP_pc.40']
+        self.assertEqual(one(event, 'timeout_days'), '21')
+        options = children(event, 'option')
+        self.assertEqual(one(options[0], 'name'), 'ADISCORD_STP_pc.40.refuse')
+        self.assertEqual(one(options[-1], 'name'), 'STP_pc_offer_closed')
+        self.assertFalse(any(e.key in ('puppet', 'set_autonomy', 'declare_war_on') for e in walk(options[-1])))
+        self.assertIn('STP_pw_party_refuse_nod_congress', [e.key for e in walk(self.events['ADISCORD_STP_pc.41'])])
+
+    def test_congress_is_reachable_during_invasion_and_campaign_is_optional_after_consent(self):
+        self.assertIn('STP_pw_party_revolution_capital', self.focus.keys())
+        chain = ('STP_pw_party_revolution_capital', 'STP_pw_party_northern_contacts', 'STP_pw_party_nod_congress')
+        for fid in chain:
+            self.assertFalse(any(e.key == 'has_war' and e.value == 'no' for e in walk(one(self.focus[fid], 'available'))))
+        final = self.focus['STP_pw_party_former_patron']
+        self.assertEqual(children(one(final, 'prerequisite'), 'focus'), ['STP_pw_party_nod_congress'])
+        self.assertTrue(any(e.key == 'is_subject_of' and e.value == 'STP' for e in walk(one(final, 'available'))))
+
+    def test_conquest_dispatch_precedes_defensive_white_peace(self):
+        text = read(SCRIPTED_PEACE)
+        self.assertIn('STP_pw_party_win_nod_campaign = yes', text)
+        self.assertLess(text.index('STP_pw_party_win_nod_campaign = yes'), text.index('STP_pw_party_settle_nod_invasion_defeat = yes'))
+
+    def test_third_country_capitulation_cannot_award_nodrul_to_stelander(self):
+        from dataclasses import replace
+        hook = one(one(parse_clausewitz(read(SCRIPTED_PEACE)), 'on_actions'), 'on_capitulation')
+        dispatch = next(e.value for e in one(hook, 'effect') if e.key == 'if'
+                        and any(v.key == 'STP_pw_party_win_nod_campaign' for v in walk(e.value)))
+        def scopes(items, winner):
+            return [replace(e, key={'ROOT': 'NOD', 'FROM': winner}.get(e.key, e.key),
+                            value=scopes(e.value, winner)) if isinstance(e.value, list) else e for e in items]
+        for winner, completed, expected in [('STP', True, True), ('BJK', True, True),
+                                            ('VAL', True, False), ('STP', False, False)]:
+            facts = {('NOD', 'tag', 'NOD'): True, ('NOD', 'is_subject', 'no'): True,
+                     ('NOD', 'has_war_with', 'STP'): True, ('STP', 'tag', 'STP'): True,
+                     ('BJK', 'is_subject_of', 'STP'): True,
+                     ('STP', 'STP_pw_party_revolution_current', 'yes'): True,
+                     ('STP', 'has_completed_focus', 'STP_pw_party_nod_congress'): completed}
+            self.assertEqual(matches_conditions(scopes(one(dispatch, 'limit'), winner), facts), expected)
+
+    def test_preparation_checks_exact_prices_and_cannot_overwrite_another_receipt(self):
+        decisions = {d.key: d.value for c in parse_clausewitz(read(DECISIONS)) for d in c.value if isinstance(d.value, list)}
+        for suffix, focus, pp, price in [('fund_northern_contacts', 'northern_contacts', 35, 540),
+                                        ('prepare_northern_campaign', 'northern_campaign', 50, 900)]:
+            decision = decisions['STP_pw_party_' + suffix]
+            self.assertEqual(one(decision, 'cost'), '0')
+            for treasury, power, busy in [(price, pp, False), (price - .001, pp, False),
+                                          (price, pp - .001, False), (price, pp, True)]:
+                facts = {('STP', 'STP_pw_party_northern_work_current', 'yes'): True,
+                         ('STP', 'has_completed_focus', 'STP_pw_party_' + focus): True,
+                         ('STP', 'has_variable', 'STP_pw_party_north_deposit'): busy,
+                         ('STP', 'variable', 'ADISCORD_economy_treasury'): treasury,
+                         ('STP', 'numeric', 'has_political_power'): power}
+                issued = list(selected_effects(one(decision, 'complete_effect'), facts))
+                debits = [e for scope, e in issued if e.key == 'subtract_from_variable']
+                expected = int(treasury >= price and power >= pp and not busy)
+                self.assertEqual(len(debits), expected, (suffix, treasury, power, busy))
+                if expected:
+                    self.assertEqual(one(debits[0].value, 'value'), str(price))
+
+    def test_delayed_delivery_or_refund_uses_current_recipient_not_historical_focus(self):
+        effect = self.effects['STP_pw_party_finish_northern_work']
+        for kind in (1, 2):
+            for current, receipt in [(True, True), (False, True), (True, False)]:
+                facts = {('STP', 'has_variable', 'STP_pw_party_north_deposit'): receipt,
+                         ('STP', 'STP_pw_party_northern_work_current', 'yes'): current,
+                         ('STP', 'variable', 'STP_pw_party_north_work_kind'): kind}
+                issued = list(selected_effects(effect, facts))
+                keys = [e.key for scope, e in issued]
+                self.assertEqual('STP_pw_party_refund_northern_work' in keys, receipt and not current)
+                self.assertEqual('add_equipment_to_stockpile' in keys, receipt and current and kind == 2)
+                self.assertEqual('add_intel' in keys, receipt and current and kind == 1)
+
+    def test_subject_creation_cannot_replay_after_receipt_consumed(self):
+        effect = self.effects['STP_pw_party_finalize_nod_subject']
+        facts = {('STP', 'has_country_flag', 'STP_pw_party_nod_subject_pending'): True,
+                 ('STP', 'STP_pw_party_revolution_current', 'yes'): True,
+                 ('NOD', 'exists', 'yes'): True, ('NOD', 'is_subject', 'no'): True}
+        first = list(selected_effects(effect, facts))
+        self.assertEqual(sum(e.key == 'puppet' for _, e in first), 1)
+        self.assertIn(('STP', 'STP_pw_party_nod_subject_pending'),
+                      [(scope, e.value) for scope, e in first if e.key == 'clr_country_flag'])
+        facts[('STP', 'has_country_flag', 'STP_pw_party_nod_subject_pending')] = False
+        self.assertEqual(list(selected_effects(effect, facts)), [])
+
+    def test_refund_after_weekly_reset_preserves_unrelated_spending(self):
+        effect = self.effects['STP_pw_party_refund_northern_work']
+        facts = {('STP', 'has_variable', 'STP_pw_party_north_deposit'): True}
+        balances = {'ADISCORD_economy_treasury': 200, 'ADISCORD_economy_current_month_action_costs': 75,
+                    'ADISCORD_economy_current_month_action_income': 0, 'STP_pw_party_north_deposit': 540}
+        for scope, entry in selected_effects(effect, facts):
+            if entry.key in ('add_to_variable', 'subtract_from_variable'):
+                name = one(entry.value, 'var')
+                amount = balances[one(entry.value, 'value')]
+                balances[name] += amount * (1 if entry.key == 'add_to_variable' else -1)
+        self.assertEqual(balances['ADISCORD_economy_treasury'], 740)
+        self.assertEqual(balances['ADISCORD_economy_current_month_action_costs'], 75)
+        self.assertEqual(balances['ADISCORD_economy_current_month_action_income'], 540)
+
+    def test_wrong_preparation_callback_cancels_without_touching_another_receipt(self):
+        decisions = {d.key: d.value for c in parse_clausewitz(read(DECISIONS)) for d in c.value if isinstance(d.value, list)}
+        for name, own_kind in [('fund_northern_contacts', 1), ('prepare_northern_campaign', 2)]:
+            decision = decisions['STP_pw_party_' + name]
+            for receipt, kind in [(True, own_kind), (True, 3 - own_kind), (False, own_kind), (False, 0)]:
+                facts = {('STP', 'has_variable', 'STP_pw_party_north_deposit'): receipt,
+                         ('STP', 'variable', 'STP_pw_party_north_work_kind'): kind}
+                self.assertEqual(matches_conditions(one(decision, 'cancel_trigger'), facts),
+                                 not receipt or kind != own_kind, (name, receipt, kind))
+                issued = list(selected_effects(one(decision, 'cancel_effect'), facts))
+                if kind != own_kind:
+                    self.assertEqual(issued, [])
+
+
 if __name__ == "__main__":
     unittest.main()

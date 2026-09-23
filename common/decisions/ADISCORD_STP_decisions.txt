@@ -2183,6 +2183,148 @@ STP_battle_for_stelander = {
 }
 
 STP_cw_war_council = {
+
+	STP_pw_party_fund_northern_contacts = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_northern_contacts NOD = { exists = yes is_subject = no } NOT = { check_variable = { var = STP_pw_party_northern_network value = 1 compare = greater_than_or_equals } } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_northern_work_available_tt STP_pw_party_northern_work_current = yes
+				has_completed_focus = STP_pw_party_northern_contacts
+				NOT = { has_variable = STP_pw_party_north_deposit check_variable = { var = STP_pw_party_northern_network value = 1 compare = greater_than_or_equals } } } }
+		cost = 0
+		custom_cost_text = STP_pw_party_fund_northern_contacts_cost
+		custom_cost_trigger = { NOT = { has_political_power < 35 } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+		days_remove = 21
+		fire_only_once = no
+		cancel_trigger = { OR = { STP_pw_party_northern_work_current = no NOT = { has_variable = STP_pw_party_north_deposit } NOT = { check_variable = { var = STP_pw_party_north_work_kind value = 1 compare = equals } } } }
+		complete_effect = {
+			custom_effect_tooltip = STP_pw_party_fund_northern_contacts_result_tt
+			hidden_effect = {
+				if = {
+					limit = { STP_pw_party_northern_work_current = yes
+						has_completed_focus = STP_pw_party_northern_contacts
+						NOT = { has_variable = STP_pw_party_north_deposit check_variable = { var = STP_pw_party_northern_network value = 1 compare = greater_than_or_equals } } NOT = { has_political_power < 35 } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+					add_political_power = -35
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 }
+					set_variable = { var = STP_pw_party_north_deposit value = 540 }
+					set_variable = { var = STP_pw_party_north_work_kind value = 1 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { if = { limit = { check_variable = { var = STP_pw_party_north_work_kind value = 1 compare = equals } } STP_pw_party_finish_northern_work = yes } } }
+		cancel_effect = { hidden_effect = { if = { limit = { check_variable = { var = STP_pw_party_north_work_kind value = 1 compare = equals } } STP_pw_party_refund_northern_work = yes } } }
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pw_party_prepare_northern_campaign = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_northern_campaign NOD = { exists = yes is_subject = no } NOT = { check_variable = { var = STP_pw_party_northern_supply value = 1 compare = greater_than_or_equals } } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_northern_work_available_tt STP_pw_party_northern_work_current = yes
+				has_completed_focus = STP_pw_party_northern_campaign
+				NOT = { has_variable = STP_pw_party_north_deposit check_variable = { var = STP_pw_party_northern_supply value = 1 compare = greater_than_or_equals } } } }
+		cost = 0
+		custom_cost_text = STP_pw_party_prepare_northern_campaign_cost
+		custom_cost_trigger = { NOT = { has_political_power < 50 } check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
+		days_remove = 35
+		fire_only_once = no
+		cancel_trigger = { OR = { STP_pw_party_northern_work_current = no NOT = { has_variable = STP_pw_party_north_deposit } NOT = { check_variable = { var = STP_pw_party_north_work_kind value = 2 compare = equals } } } }
+		complete_effect = {
+			custom_effect_tooltip = STP_pw_party_prepare_northern_campaign_result_tt
+			hidden_effect = {
+				if = {
+					limit = { STP_pw_party_northern_work_current = yes
+						has_completed_focus = STP_pw_party_northern_campaign
+						NOT = { has_variable = STP_pw_party_north_deposit check_variable = { var = STP_pw_party_northern_supply value = 1 compare = greater_than_or_equals } } NOT = { has_political_power < 50 } check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
+					add_political_power = -50
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
+					set_variable = { var = STP_pw_party_north_deposit value = 900 }
+					set_variable = { var = STP_pw_party_north_work_kind value = 2 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = { hidden_effect = { if = { limit = { check_variable = { var = STP_pw_party_north_work_kind value = 2 compare = equals } } STP_pw_party_finish_northern_work = yes } } }
+		cancel_effect = { hidden_effect = { if = { limit = { check_variable = { var = STP_pw_party_north_work_kind value = 2 compare = equals } } STP_pw_party_refund_northern_work = yes } } }
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pw_party_launch_northern_campaign = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_northern_campaign NOD = { exists = yes is_subject = no } NOT = { has_war_with = NOD } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_launch_northern_campaign_available_tt STP_pw_party_can_launch_northern_campaign = yes } }
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = STP_pw_party_launch_northern_campaign_tt
+			hidden_effect = { STP_pw_party_launch_northern_campaign = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	STP_pw_party_nod_joint_training = {
+		icon = generic_industry
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_former_patron NOD = { exists = yes is_subject_of = STP } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_nod_joint_training_available_tt STP_pw_party_nod_subject_programs = yes  } }
+		cost = 0
+		custom_cost_text = STP_pw_party_nod_joint_training_cost
+		custom_cost_trigger = { NOT = { has_political_power < 35 } check_variable = { var = ADISCORD_economy_treasury value = 720 compare = greater_than_or_equals } }
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = { STP_pw_party_nod_subject_programs = yes  NOT = { has_political_power < 35 } check_variable = { var = ADISCORD_economy_treasury value = 720 compare = greater_than_or_equals } }
+				army_experience = 15
+				NOD = {
+					army_experience = 15
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 600 producer = STP }
+					add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = STP }
+				}
+				hidden_effect = {
+					add_political_power = -35
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 720 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 720 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	STP_pw_party_nod_industrial_program = {
+		icon = generic_industry
+		allowed = { tag = STP }
+		visible = { has_completed_focus = STP_pw_party_former_patron NOD = { exists = yes is_subject_of = STP } }
+		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_nod_industrial_program_available_tt STP_pw_party_nod_subject_programs = yes NOD = { any_owned_state = { is_controlled_by = PREV free_building_slots = { building = industrial_complex size > 0 include_locked = yes } } } } }
+		cost = 0
+		custom_cost_text = STP_pw_party_nod_industrial_program_cost
+		custom_cost_trigger = { NOT = { has_political_power < 50 } check_variable = { var = ADISCORD_economy_treasury value = 1350 compare = greater_than_or_equals } }
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+				limit = { STP_pw_party_nod_subject_programs = yes NOD = { any_owned_state = { is_controlled_by = PREV free_building_slots = { building = industrial_complex size > 0 include_locked = yes } } } NOT = { has_political_power < 50 } check_variable = { var = ADISCORD_economy_treasury value = 1350 compare = greater_than_or_equals } }
+				NOD = {
+					random_owned_controlled_state = {
+						limit = { free_building_slots = { building = industrial_complex size > 0 include_locked = yes } }
+						add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+				hidden_effect = {
+					add_political_power = -50
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1350 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1350 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
 	STP_cw_take_fada = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STS }
@@ -4407,6 +4549,7 @@ STP_ps_val_intercept_time_available = yes
 		}
 		available = {
 			STP_pw_party_nod_threat_current = yes
+			NOT = { has_completed_focus = STP_pw_party_revolution_capital }
 			custom_trigger_tooltip = { tooltip = STP_pw_party_compact_no_pending_tt NOT = { has_country_flag = STP_pw_party_compact_pending } }
 			custom_trigger_tooltip = { tooltip = STP_pw_party_compact_time_tt has_active_mission = STP_pw_party_nod_invasion_countdown check_variable = { var = days_mission_timeout@STP_pw_party_nod_invasion_countdown value = 22 compare = greater_than_or_equals } }
 			STP_pw_party_compact_coalition = yes
@@ -4420,6 +4563,7 @@ STP_ps_val_intercept_time_available = yes
 				if = {
 					limit = {
 						STP_pw_party_nod_threat_current = yes
+			NOT = { has_completed_focus = STP_pw_party_revolution_capital }
 						STP_pw_party_compact_coalition = yes
 						NOT = { OR = { has_country_flag = STP_pw_party_compact_pending has_country_flag = STP_pw_party_compact_refused has_country_flag = STP_pw_party_nod_compact } }
 						check_variable = { var = ADISCORD_economy_treasury value = 1350 compare = greater_than_or_equals }

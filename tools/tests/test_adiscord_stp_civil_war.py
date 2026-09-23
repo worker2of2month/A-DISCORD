@@ -3862,6 +3862,46 @@ class PostwarFocusContracts(unittest.TestCase):
         self.new = {k: v for k, v in self.focuses.items() if k.startswith("STP_pw_")
                     and any(e.key == "STP_pw_refresh_modifier" for e in walk(ast_block(v, "completion_reward")))}
 
+    def focus_position(self, name, facts, tag):
+        focus = self.focuses[name]
+        x, y = (int(scalar(focus, axis)) for axis in ("x", "y"))
+        for entry in focus:
+            if entry.key == "relative_position_id":
+                parent_x, parent_y = self.focus_position(entry.value, facts, tag)
+                x += parent_x
+                y += parent_y
+            elif entry.key == "offset" and matches_conditions(ast_block(entry.value, "trigger"), facts, tag):
+                x += sum(int(e.value) for e in entry.value if e.key == "x")
+                y += sum(int(e.value) for e in entry.value if e.key == "y")
+        return x, y
+
+    def test_postwar_cards_have_room_after_relative_positions_and_offsets(self):
+        leaders = ("STP_maksim_shabrat", "STP_grigory_sotnikov", "STP_ilya_gornin", "STP_vera_tikh")
+        for tag, leader in [("STP", "STP_Edmund_Ravel")] + [("STS", leader) for leader in leaders]:
+            facts = {(tag, "has_country_flag", "STP_cw_postwar"): True,
+                     (tag, "ruling_leader"): leader,
+                     (tag, "STP_pc_founder_rules", "yes"): leader == "STP_maksim_shabrat"}
+            # A successor may inherit a political course from the founder.
+            for trigger in ("STP_pc_course_continues", "STP_pc_hegemony_continues", "STP_pc_freedom_continues"):
+                facts[tag, trigger, "yes"] = tag == "STS"
+            visible = {name: self.focus_position(name, facts, tag) for name, focus in self.focuses.items()
+                       if matches_conditions(ast_block(focus, "allow_branch"), facts, tag)}
+            for name, (x, y) in visible.items():
+                for other, (other_x, other_y) in visible.items():
+                    if name < other and y == other_y:
+                        with self.subTest(tag=tag, leader=leader, left=name, right=other):
+                            self.assertGreaterEqual(abs(x - other_x), 2)
+
+    def test_war_and_postwar_focus_names_and_descriptions_are_localised(self):
+        for language in ("russian", "english"):
+            keys = set()
+            for path in (ROOT / "localisation" / language).glob("*.yml"):
+                keys.update(re.findall(r'^\s*(\w+):\d*\s*"[^"\r\n]*"\s*$',
+                                       path.read_text(encoding="utf-8-sig"), re.MULTILINE))
+            missing = {name + suffix for name in self.focuses for suffix in ("", "_desc")
+                       if name + suffix not in keys}
+            self.assertEqual(missing, set(), language)
+
     def test_wartime_and_reconstruction_do_not_share_the_visible_layout(self):
         for tag in ("STP", "STS", "SRP"):
             for postwar in (False, True):
@@ -3882,9 +3922,7 @@ class PostwarFocusContracts(unittest.TestCase):
                                      - {"STP_cw_first_postwar_budget", "STP_cw_restore_civil_authority"})
                 positions = {}
                 for name, focus in visible.items():
-                    x = int(scalar(focus, "x")) + sum(int(scalar(e.value, "x")) for e in focus
-                        if e.key == "offset" and matches_conditions(ast_block(e.value, "trigger"), facts, tag))
-                    point = (x, int(scalar(focus, "y")))
+                    point = self.focus_position(name, facts, tag)
                     self.assertNotIn(point, positions, (tag, postwar, name, positions.get(point)))
                     positions[point] = name
 

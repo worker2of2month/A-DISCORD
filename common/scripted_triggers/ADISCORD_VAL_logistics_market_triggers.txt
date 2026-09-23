@@ -12,6 +12,7 @@ VAL_trade_corridors_unlocked = {
 # both sovereignty and effective control remain inside the VAL subject network.
 VAL_trade_state_in_contract_sphere = {
 	OR = {
+        AND = { owner = { has_country_flag = VAL_trade_transit_charter NOT = { has_war_with = VAL } } controller = { has_country_flag = VAL_trade_transit_charter NOT = { has_war_with = VAL } } }
 		AND = { is_owned_by = VAL is_controlled_by = VAL }
 		AND = {
 			owner = { is_subject_of = VAL }

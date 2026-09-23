@@ -214,5 +214,9 @@ spriteTypes = {
  spriteType = { name = "GFX_VAL_ops_state_186" texturefile = "gfx/interface/VAL_operations/VAL_ops_state_186.png" noOfFrames = 26 }
  spriteType = { name = "GFX_VAL_ops_border_186" texturefile = "gfx/interface/VAL_operations/VAL_ops_border_186.png" }
  spriteType = { name = "GFX_VAL_ops_contested_186" texturefile = "gfx/interface/VAL_operations/VAL_ops_contested_186.png" }
- spriteType = { name = "GFX_VAL_vorkerland_aid_map" texturefile = "gfx/interface/VAL_operations/VAL_vorkerland_aid_map.png" }
+ spriteType = { name = "GFX_VAL_trade_map" texturefile = "gfx/interface/VAL_operations/VAL_trade_map.png" }
+ spriteType = { name = "GFX_VAL_trade_route_occidia" texturefile = "gfx/interface/VAL_operations/VAL_trade_route_occidia.png" noOfFrames = 4 }
+ spriteType = { name = "GFX_VAL_trade_route_north" texturefile = "gfx/interface/VAL_operations/VAL_trade_route_north.png" noOfFrames = 4 }
+ spriteType = { name = "GFX_VAL_trade_route_stelander" texturefile = "gfx/interface/VAL_operations/VAL_trade_route_stelander.png" noOfFrames = 4 }
+ spriteType = { name = "GFX_VAL_trade_route_vorkerland" texturefile = "gfx/interface/VAL_operations/VAL_trade_route_vorkerland.png" noOfFrames = 4 }
 }

@@ -6891,6 +6891,148 @@ STP_ps_close_exile = {
 	mark_focus_tree_layout_dirty = yes
 }
 
+# STP: both northern preparations share a single refundable treasury receipt.
+STP_pw_party_refund_northern_work = {
+	if = {
+		limit = { has_variable = STP_pw_party_north_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = STP_pw_party_north_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_pw_party_north_deposit }
+		clear_variable = STP_pw_party_north_deposit
+		clear_variable = STP_pw_party_north_work_kind
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pw_party_finish_northern_work = {
+	if = {
+		limit = { has_variable = STP_pw_party_north_deposit }
+		if = {
+			limit = { STP_pw_party_northern_work_current = yes }
+			if = {
+				limit = { check_variable = { var = STP_pw_party_north_work_kind value = 1 compare = equals } }
+				set_variable = { var = STP_pw_party_northern_network value = 1 }
+				add_intel = { target = NOD civilian_intel = 20 }
+			}
+			else_if = {
+				limit = { check_variable = { var = STP_pw_party_north_work_kind value = 2 compare = equals } }
+				set_variable = { var = STP_pw_party_northern_supply value = 1 }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 600 producer = ROOT }
+				add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = ROOT }
+				army_experience = 20
+			}
+			clear_variable = STP_pw_party_north_deposit
+			clear_variable = STP_pw_party_north_work_kind
+		}
+		else = { STP_pw_party_refund_northern_work = yes }
+	}
+}
+
+STP_pw_party_close_northern_operations = {
+	STP_pw_party_refund_northern_work = yes
+	clr_country_flag = STP_pw_party_nod_congress_pending
+	clr_country_flag = STP_pw_party_nod_congress_refused
+	clr_country_flag = STP_pw_party_nod_campaign_active
+	clear_variable = STP_pw_party_northern_supply
+	clear_variable = STP_pw_party_northern_network
+}
+
+# NOD: an open window cannot override a later settlement or a new overlord.
+STP_pw_party_accept_nod_congress = {
+	if = {
+		limit = { STP_pw_party_nod_congress_current = yes }
+		STP = { STP_pw_party_begin_nod_subject = yes }
+	}
+}
+
+# STP: refusal is also the unanswered-offer outcome; it never declares war.
+STP_pw_party_refuse_nod_congress = {
+	if = {
+		limit = { has_country_flag = STP_pw_party_nod_congress_pending }
+		clr_country_flag = STP_pw_party_nod_congress_pending
+		if = {
+			limit = { STP_pw_party_northern_work_current = yes }
+			set_country_flag = STP_pw_party_nod_congress_refused
+			country_event = { id = ADISCORD_STP_pc.42 hours = 1 }
+		}
+	}
+}
+
+# STP: clear the invasion before white peace triggers reconciliation. Subject
+# creation waits a day so the former faction is absent from the diplomatic cache.
+STP_pw_party_begin_nod_subject = {
+	if = {
+		limit = {
+			STP_pw_party_revolution_current = yes
+			NOD = { exists = yes is_subject = no }
+			NOT = { has_country_flag = STP_pw_party_nod_subject_pending }
+		}
+		set_country_flag = STP_pw_party_nod_subject_pending
+		STP_pw_party_close_northern_operations = yes
+		clr_country_flag = STP_pw_party_nod_threat_active
+		clr_country_flag = STP_pw_party_compact_pending
+		clr_country_flag = STP_pw_party_nod_invasion_active
+		set_country_flag = STP_pw_party_nod_invasion_defeated
+		remove_decision = STP_pw_party_nod_invasion_countdown
+		if = { limit = { has_war_with = NOD } white_peace = NOD }
+		NOD = {
+			remove_ideas = STP_pw_nod_invasion_mandate
+			if = {
+				limit = { is_in_faction = yes }
+				if = { limit = { is_faction_leader = yes } dismantle_faction = yes }
+				else = { faction_leader = { remove_from_faction = NOD } }
+			}
+		}
+		country_event = { id = ADISCORD_STP_pc.43 days = 1 }
+	}
+}
+
+STP_pw_party_finalize_nod_subject = {
+	if = {
+		limit = { has_country_flag = STP_pw_party_nod_subject_pending }
+		clr_country_flag = STP_pw_party_nod_subject_pending
+		if = {
+			limit = { STP_pw_party_revolution_current = yes NOD = { exists = yes is_subject = no } NOT = { has_war_with = NOD } }
+			puppet = NOD
+			set_autonomy = { target = NOD autonomy_state = autonomy_puppet freedom_level = 0.10 end_wars = no end_civil_wars = no }
+			NOD = { ADISCORD_economy_mark_dirty = yes }
+			ADISCORD_economy_mark_dirty = yes
+			mark_focus_tree_layout_dirty = yes
+			country_event = { id = ADISCORD_STP_pc.42 hours = 1 }
+		}
+	}
+}
+
+STP_pw_party_win_nod_campaign = {
+	if = {
+		limit = { STP_pw_party_revolution_current = yes has_completed_focus = STP_pw_party_nod_congress has_war_with = NOD NOD = { is_subject = no } }
+		STP_pw_party_begin_nod_subject = yes
+	}
+}
+
+STP_pw_party_launch_northern_campaign = {
+	if = {
+		limit = { STP_pw_party_can_launch_northern_campaign = yes }
+		set_country_flag = STP_pw_party_nod_campaign_active
+		clr_country_flag = STP_pw_party_nod_congress_pending
+		clr_country_flag = STP_pw_party_nod_congress_refused
+		clr_country_flag = STP_pw_party_nod_threat_active
+		clr_country_flag = STP_pw_party_compact_pending
+		remove_decision = STP_pw_party_nod_invasion_countdown
+		declare_war_on = { target = NOD type = puppet_wargoal_focus }
+	}
+}
+
+# Called once after a peace callback, outside the settlement that raised it.
+STP_pw_party_reconcile_northern_campaign = {
+	if = {
+		limit = {
+			has_country_flag = STP_pw_party_nod_campaign_active
+			OR = { NOT = { has_war_with = NOD } STP_pw_party_revolution_current = no NOD = { OR = { exists = no is_subject = yes } } }
+		}
+		STP_pw_party_close_northern_operations = yes
+	}
+}
+
 # --- occidia_reintegration ---
 STP_occidia_start_campaign = {
     if = {
