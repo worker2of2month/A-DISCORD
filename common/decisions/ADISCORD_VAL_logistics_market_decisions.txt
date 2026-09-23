@@ -595,7 +595,7 @@ VAL_trade_routes = {
 		}
 		ai_will_do = { base = 3 }
 	}
-	VAL_upgrade_west_route = {
+	VAL_upgrade_north_route = {
 		icon = generic_construction
 		allowed = { tag = VAL }
 		visible = { VAL_trade_corridors_unlocked = yes NOT = { has_country_flag = VAL_route_west_upgraded } }
