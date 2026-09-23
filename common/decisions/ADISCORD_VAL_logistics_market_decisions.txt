@@ -377,174 +377,174 @@ VAL_trade_routes = {
 		ai_will_do = { base = 7 modifier = { factor = 2 check_variable = { var = VAL_black_market_pressure value = 75 compare = greater_than_or_equals } } }
 	}
 
- VAL_upgrade_occidia_route = {
-  icon = generic_construction
-  allowed = { tag = VAL }
-  visible = { VAL_trade_corridors_unlocked = yes NOT = { has_country_flag = VAL_route_occidia_upgraded } }
-  available = {
-   has_capitulated = no
-   custom_trigger_tooltip = {
-    tooltip = VAL_route_occidia_available_tt
-    VAL_trade_route_occidia_open = yes
-   }
-   custom_trigger_tooltip = {
-    tooltip = VAL_route_project_free_tt
-    NOT = { has_variable = VAL_corridor_deposit }
-   }
-  }
-  cost = 0
-  custom_cost_text = VAL_route_cost_750
-  custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } }
-  days_remove = 30
-  cancel_if_not_visible = no
-  complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_occidia_corridor_project = yes } }
-  cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_occidia_open = yes } } } }
-  cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 1 compare = equals } } VAL_refund_corridor_project = yes } } }
-  remove_effect = {
-   hidden_effect = {
-    if = { limit = { check_variable = { var = VAL_corridor_project value = 1 compare = equals } }
-     if = { limit = { has_capitulated = no VAL_trade_route_occidia_open = yes } VAL_finish_occidia_corridor_project = yes }
-     else = { VAL_refund_corridor_project = yes }
-    }
-   }
-  }
-  ai_will_do = { base = 3 }
- }
- VAL_upgrade_north_route = {
-  icon = generic_construction
-  allowed = { tag = VAL }
-  visible = { VAL_trade_corridors_unlocked = yes NOT = { has_country_flag = VAL_route_north_upgraded } }
-  available = {
-   has_capitulated = no
-   custom_trigger_tooltip = {
-    tooltip = VAL_route_north_available_tt
-    VAL_trade_route_north_open = yes
-   }
-   custom_trigger_tooltip = {
-    tooltip = VAL_route_project_free_tt
-    NOT = { has_variable = VAL_corridor_deposit }
-   }
-  }
-  cost = 0
-  custom_cost_text = VAL_route_cost_1000
-  custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
-  days_remove = 30
-  cancel_if_not_visible = no
-  complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_north_corridor_project = yes } }
-  cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_north_open = yes } } } }
-  cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 2 compare = equals } } VAL_refund_corridor_project = yes } } }
-  remove_effect = {
-   hidden_effect = {
-    if = { limit = { check_variable = { var = VAL_corridor_project value = 2 compare = equals } }
-     if = { limit = { has_capitulated = no VAL_trade_route_north_open = yes } VAL_finish_north_corridor_project = yes }
-     else = { VAL_refund_corridor_project = yes }
-    }
-   }
-  }
-  ai_will_do = { base = 3 }
- }
- VAL_upgrade_stelander_route = {
-  icon = generic_construction
-  allowed = { tag = VAL }
-  visible = { VAL_trade_corridors_unlocked = yes NOT = { has_country_flag = VAL_route_stelander_upgraded } }
-  available = {
-   has_capitulated = no
-   custom_trigger_tooltip = {
-    tooltip = VAL_route_stelander_available_tt
-    VAL_trade_route_stelander_open = yes
-   }
-   custom_trigger_tooltip = {
-    tooltip = VAL_route_project_free_tt
-    NOT = { has_variable = VAL_corridor_deposit }
-   }
-  }
-  cost = 0
-  custom_cost_text = VAL_route_cost_500
-  custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
-  days_remove = 30
-  cancel_if_not_visible = no
-  complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_stelander_corridor_project = yes } }
-  cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_stelander_open = yes } } } }
-  cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 3 compare = equals } } VAL_refund_corridor_project = yes } } }
-  remove_effect = {
-   hidden_effect = {
-    if = { limit = { check_variable = { var = VAL_corridor_project value = 3 compare = equals } }
-     if = { limit = { has_capitulated = no VAL_trade_route_stelander_open = yes } VAL_finish_stelander_corridor_project = yes }
-     else = { VAL_refund_corridor_project = yes }
-    }
-   }
-  }
-  ai_will_do = { base = 3 }
- }
- VAL_upgrade_vorkerland_route = {
-  icon = generic_construction
-  allowed = { tag = VAL }
-  visible = { VAL_trade_corridors_unlocked = yes NOT = { has_country_flag = VAL_route_vorkerland_upgraded } }
-  available = {
-   has_capitulated = no
-   custom_trigger_tooltip = {
-    tooltip = VAL_route_vorkerland_available_tt
-    VAL_trade_route_vorkerland_open = yes
-   }
-   custom_trigger_tooltip = {
-    tooltip = VAL_route_project_free_tt
-    NOT = { has_variable = VAL_corridor_deposit }
-   }
-  }
-  cost = 0
-  custom_cost_text = VAL_route_cost_500
-  custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
-  days_remove = 30
-  cancel_if_not_visible = no
-  complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_vorkerland_corridor_project = yes } }
-  cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_vorkerland_open = yes } } } }
-  cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 4 compare = equals } } VAL_refund_corridor_project = yes } } }
-  remove_effect = {
-   hidden_effect = {
-    if = { limit = { check_variable = { var = VAL_corridor_project value = 4 compare = equals } }
-     if = { limit = { has_capitulated = no VAL_trade_route_vorkerland_open = yes } VAL_finish_vorkerland_corridor_project = yes }
-     else = { VAL_refund_corridor_project = yes }
-    }
-   }
-  }
-  ai_will_do = { base = 3 }
- }
- VAL_upgrade_south_route = {
-  icon = generic_construction
-  allowed = { tag = VAL }
-  visible = { has_completed_focus = VAL_Southern_Trade_Charter NOT = { has_country_flag = VAL_route_south_upgraded } }
-  available = {
-   has_capitulated = no
-   custom_trigger_tooltip = { tooltip = VAL_route_south_available_tt VAL_trade_route_south_open = yes }
-   custom_trigger_tooltip = { tooltip = VAL_route_project_free_tt NOT = { has_variable = VAL_corridor_deposit } }
-  }
-  cost = 0
-  custom_cost_text = VAL_route_cost_750
-  custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } }
-  days_remove = 30
-  cancel_if_not_visible = no
-  complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_south_corridor_project = yes } }
-  cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_south_open = yes } } } }
-  cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 5 compare = equals } } VAL_refund_corridor_project = yes } } }
-  remove_effect = { hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 5 compare = equals } } if = { limit = { has_capitulated = no VAL_trade_route_south_open = yes } VAL_finish_south_corridor_project = yes } else = { VAL_refund_corridor_project = yes } } } }
-  ai_will_do = { base = 3 }
- }
- VAL_strengthen_corridor_security = {
- icon = generic_army_support
- allowed = { tag = VAL }
- visible = { VAL_trade_corridors_unlocked = yes }
- available = { has_capitulated = no check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
- cost = 0
- custom_cost_text = VAL_route_cost_250
- custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
- days_re_enable = 30
- complete_effect = {
-  if = { limit = { has_capitulated = no check_variable = { var = VAL_corridor_security value = 3 compare = less_than } ADISCORD_economy_can_spend_250 = yes }
-   ADISCORD_economy_spend_250 = yes
-   add_to_variable = { var = VAL_corridor_security value = 1 }
-   custom_effect_tooltip = VAL_corridor_security_step_tt
-  }
- }
- ai_will_do = { base = 5 }
- }
+	VAL_upgrade_occidia_route = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { VAL_trade_corridors_unlocked = yes NOT = { has_country_flag = VAL_route_occidia_upgraded } }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = VAL_route_occidia_available_tt
+				VAL_trade_route_occidia_open = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_route_project_free_tt
+				NOT = { has_variable = VAL_corridor_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_route_cost_750
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } }
+		days_remove = 30
+		cancel_if_not_visible = no
+		complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_occidia_corridor_project = yes } }
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_occidia_open = yes } } } }
+		cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 1 compare = equals } } VAL_refund_corridor_project = yes } } }
+		remove_effect = {
+			hidden_effect = {
+				if = { limit = { check_variable = { var = VAL_corridor_project value = 1 compare = equals } }
+					if = { limit = { has_capitulated = no VAL_trade_route_occidia_open = yes } VAL_finish_occidia_corridor_project = yes }
+					else = { VAL_refund_corridor_project = yes }
+				}
+			}
+		}
+		ai_will_do = { base = 3 }
+	}
+	VAL_upgrade_north_route = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { VAL_trade_corridors_unlocked = yes NOT = { has_country_flag = VAL_route_north_upgraded } }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = VAL_route_north_available_tt
+				VAL_trade_route_north_open = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_route_project_free_tt
+				NOT = { has_variable = VAL_corridor_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_route_cost_1000
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
+		days_remove = 30
+		cancel_if_not_visible = no
+		complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_north_corridor_project = yes } }
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_north_open = yes } } } }
+		cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 2 compare = equals } } VAL_refund_corridor_project = yes } } }
+		remove_effect = {
+			hidden_effect = {
+				if = { limit = { check_variable = { var = VAL_corridor_project value = 2 compare = equals } }
+					if = { limit = { has_capitulated = no VAL_trade_route_north_open = yes } VAL_finish_north_corridor_project = yes }
+					else = { VAL_refund_corridor_project = yes }
+				}
+			}
+		}
+		ai_will_do = { base = 3 }
+	}
+	VAL_upgrade_stelander_route = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { VAL_trade_corridors_unlocked = yes NOT = { has_country_flag = VAL_route_stelander_upgraded } }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = VAL_route_stelander_available_tt
+				VAL_trade_route_stelander_open = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_route_project_free_tt
+				NOT = { has_variable = VAL_corridor_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_route_cost_500
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
+		days_remove = 30
+		cancel_if_not_visible = no
+		complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_stelander_corridor_project = yes } }
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_stelander_open = yes } } } }
+		cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 3 compare = equals } } VAL_refund_corridor_project = yes } } }
+		remove_effect = {
+			hidden_effect = {
+				if = { limit = { check_variable = { var = VAL_corridor_project value = 3 compare = equals } }
+					if = { limit = { has_capitulated = no VAL_trade_route_stelander_open = yes } VAL_finish_stelander_corridor_project = yes }
+					else = { VAL_refund_corridor_project = yes }
+				}
+			}
+		}
+		ai_will_do = { base = 3 }
+	}
+	VAL_upgrade_vorkerland_route = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { VAL_trade_corridors_unlocked = yes NOT = { has_country_flag = VAL_route_vorkerland_upgraded } }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = VAL_route_vorkerland_available_tt
+				VAL_trade_route_vorkerland_open = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_route_project_free_tt
+				NOT = { has_variable = VAL_corridor_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_route_cost_500
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
+		days_remove = 30
+		cancel_if_not_visible = no
+		complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_vorkerland_corridor_project = yes } }
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_vorkerland_open = yes } } } }
+		cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 4 compare = equals } } VAL_refund_corridor_project = yes } } }
+		remove_effect = {
+			hidden_effect = {
+				if = { limit = { check_variable = { var = VAL_corridor_project value = 4 compare = equals } }
+					if = { limit = { has_capitulated = no VAL_trade_route_vorkerland_open = yes } VAL_finish_vorkerland_corridor_project = yes }
+					else = { VAL_refund_corridor_project = yes }
+				}
+			}
+		}
+		ai_will_do = { base = 3 }
+	}
+	VAL_upgrade_south_route = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Southern_Trade_Charter NOT = { has_country_flag = VAL_route_south_upgraded } }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = { tooltip = VAL_route_south_available_tt VAL_trade_route_south_open = yes }
+			custom_trigger_tooltip = { tooltip = VAL_route_project_free_tt NOT = { has_variable = VAL_corridor_deposit } }
+		}
+		cost = 0
+		custom_cost_text = VAL_route_cost_750
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } }
+		days_remove = 30
+		cancel_if_not_visible = no
+		complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_south_corridor_project = yes } }
+		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_south_open = yes } } } }
+		cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 5 compare = equals } } VAL_refund_corridor_project = yes } } }
+		remove_effect = { hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 5 compare = equals } } if = { limit = { has_capitulated = no VAL_trade_route_south_open = yes } VAL_finish_south_corridor_project = yes } else = { VAL_refund_corridor_project = yes } } } }
+		ai_will_do = { base = 3 }
+	}
+	VAL_strengthen_corridor_security = {
+		icon = generic_army_support
+		allowed = { tag = VAL }
+		visible = { VAL_trade_corridors_unlocked = yes }
+		available = { has_capitulated = no check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
+		cost = 0
+		custom_cost_text = VAL_route_cost_250
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		days_re_enable = 30
+		complete_effect = {
+			if = { limit = { has_capitulated = no check_variable = { var = VAL_corridor_security value = 3 compare = less_than } ADISCORD_economy_can_spend_250 = yes }
+				ADISCORD_economy_spend_250 = yes
+				add_to_variable = { var = VAL_corridor_security value = 1 }
+				custom_effect_tooltip = VAL_corridor_security_step_tt
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
 }
