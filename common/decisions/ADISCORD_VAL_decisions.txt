@@ -1300,11 +1300,27 @@ VAL_foreign_sales = {
 				NOT = { has_country_flag = VAL_market_term_started }
 				NOT = { has_country_flag = VAL_partner_contact_cooldown }
 			}
+			OR = {
+				AND = { FROM = { tag = CIN } NOT = { has_country_flag = VAL_market_contract_CIN_active } }
+				AND = { FROM = { tag = OSF } NOT = { has_country_flag = VAL_market_contract_OSF_active } }
+				AND = { FROM = { tag = APH } NOT = { has_country_flag = VAL_market_contract_APH_active } }
+				AND = { FROM = { tag = COF } NOT = { has_country_flag = VAL_market_contract_COF_active } }
+				AND = { FROM = { tag = TFF } NOT = { has_country_flag = VAL_market_contract_TFF_active } }
+				AND = { FROM = { tag = YPR } NOT = { has_country_flag = VAL_market_contract_YPR_active } }
+			}
 		}
 		visible = {
 			FROM = {
 				VAL_partner_commerce_visible = yes
 				VAL_trade_recipient_ready = yes
+			}
+			OR = {
+				AND = { FROM = { tag = CIN } NOT = { has_country_flag = VAL_market_contract_CIN_active } }
+				AND = { FROM = { tag = OSF } NOT = { has_country_flag = VAL_market_contract_OSF_active } }
+				AND = { FROM = { tag = APH } NOT = { has_country_flag = VAL_market_contract_APH_active } }
+				AND = { FROM = { tag = COF } NOT = { has_country_flag = VAL_market_contract_COF_active } }
+				AND = { FROM = { tag = TFF } NOT = { has_country_flag = VAL_market_contract_TFF_active } }
+				AND = { FROM = { tag = YPR } NOT = { has_country_flag = VAL_market_contract_YPR_active } }
 			}
 			OR = {
 				has_completed_focus = VAL_Resource_War_Contracts

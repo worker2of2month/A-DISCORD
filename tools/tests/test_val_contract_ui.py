@@ -1552,6 +1552,11 @@ class ValAnnualMarketTests(unittest.TestCase):
         self.assertIn("NOT = { has_country_flag = VAL_market_term_started }", target_trigger)
         self.assertIn("NOT = { has_country_flag = VAL_partner_contact_cooldown }", target_trigger)
         self.assertNotIn("VAL_partner_trade_can_offer", target_trigger)
+        for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
+            active_flag = "NOT = { has_country_flag = VAL_market_contract_" + tag + "_active }"
+            target_clause = "FROM = { tag = " + tag + " } " + active_flag
+            self.assertIn(target_clause, target_trigger)
+            self.assertIn(target_clause, visible)
         recipient = named_block(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"), "VAL_trade_recipient_ready")
         self.assertIn("NOT = { has_country_flag = VAL_market_term_started }", recipient)
         source = read("events/ADISCORD_VAL_contract_events.txt")
@@ -1560,6 +1565,7 @@ class ValAnnualMarketTests(unittest.TestCase):
         immediate = named_block(expiry, "immediate")
         self.assertIn("clr_country_flag = VAL_market_term_started", immediate)
         self.assertIn("VAL_end_partner_market_income = yes", immediate)
+        self.assertIn("remove_dynamic_modifier = { modifier = VAL_partner_market_income }", read("common/scripted_effects/ADISCORD_VAL_effects.txt"))
         for tag in ("CIN", "OSF", "APH", "COF", "TFF", "YPR"):
             self.assertIn("clr_country_flag = VAL_market_contract_" + tag + "_active", immediate)
         self.assertNotIn("add_political_power", expiry)
