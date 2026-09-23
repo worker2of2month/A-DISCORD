@@ -1,7 +1,11 @@
 # Vorkerland decisions: keep visibility, price and timing at the UI boundary.
-# Navigation: allied_support_decisions; collapse_decisions; diplomacy_decisions;
-# focus_operations_decisions (including postwar reclamation and integration);
-# rom_tru_decisions; rus_last_empire_decisions.
+# Navigation:
+# allied_support_decisions
+# collapse_decisions
+# diplomacy_decisions
+# focus_operations_decisions (including postwar reclamation and integration)
+# rom_tru_decisions
+# rus_last_empire_decisions
 
 # --- allied_support_decisions ---
 ADISCORD_vorkerland_allied_support_category = {
@@ -247,7 +251,7 @@ ADISCORD_vorkerland_collapse_category = {
 	# the winner into the host's existing war through faction membership plus
 	# add_to_war rather than opening a second war object. One targeted decision
 	# covers all three claimants instead of a copied decision per host.
-ADISCORD_vorkerland_join_claimant_coalition = {
+	ADISCORD_vorkerland_join_claimant_coalition = {
 		icon = generic_diplomatic_treaty
 		allowed = {
 			NOT = { OR = { tag = ROM tag = TRU } }
@@ -266,7 +270,9 @@ ADISCORD_vorkerland_join_claimant_coalition = {
 			NOT = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary }
 			NOT = { has_country_flag = ADISCORD_vorkerland_coalition_join_paid }
 		}
-target_trigger = { FROM = { ADISCORD_vorkerland_is_main_claimant = yes } }
+		target_trigger = {
+			FROM = { ADISCORD_vorkerland_is_main_claimant = yes }
+		}
 		visible = {
 			is_subject = no
 			is_in_faction = no
