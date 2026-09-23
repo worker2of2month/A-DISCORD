@@ -3203,6 +3203,11 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }", success)
         self.assertIn("Ivanland intervention resolved: SUCCESS", success)
         self.assertIn("clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_failed", success)
+        front_cleanup = named_block(effects, "ADISCORD_vorkerland_cleanup_ivanland_intervention_front")
+        self.assertNotIn("white_peace", front_cleanup)
+        for defender in ("PWR", "ZAO", "WPA", "WPS", "PSD"):
+            self.assertIn("remove_ideas = ADISCORD_vorkerland_northern_defense_front", named_block(front_cleanup, defender))
+
         failure = named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_failure")
         self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }", failure)
         self.assertIn("ruling_party = etatism", failure)
@@ -3217,6 +3222,17 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_vadim_etatist_role_added", failure)
         self.assertIn("Ivanland intervention resolved: FAILURE", failure)
         self.assertIn("clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded", failure)
+        self.assertIn("has_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention", failure)
+        self.assertIn("limit = { has_capitulated = yes }", failure)
+        self.assertIn("set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention", failure)
+        self.assertIn("ADISCORD_vorkerland_cleanup_ivanland_intervention_front = yes", failure)
+        self.assertIn("ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat = yes", failure)
+
+        restore_queue = named_block(effects, "ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat")
+        for host in ("PWR", "PSD", "ZAO", "WPA", "WPS"):
+            self.assertIn(f"country_exists = {host}", restore_queue)
+            self.assertIn(f"{host} = {{ country_event = {{ id = ADISCORD_vorkerland_collapse.43 days = 2 }} }}", restore_queue)
+
         on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
         capitulation = named_block(on_actions, "on_capitulation")
         self.assertIn("set_global_flag = skip_default_capitulation", capitulation)
@@ -3224,7 +3240,24 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn("ROOT = { tag = IVN }", capitulation)
         self.assertIn("ADISCORD_vorkerland_ivanland_intervention_success = yes", capitulation)
         self.assertIn("ADISCORD_vorkerland_ivanland_intervention_failure = yes", capitulation)
-        self.assertIn("IVN = { white_peace = ROOT }", capitulation)
+
+        ivn_defeat = next(
+            branch for branch in named_blocks(capitulation, "else_if")
+            if "ROOT = { tag = IVN }" in branch
+            and "ADISCORD_vorkerland_ivanland_intervention_failure = yes" in branch
+        )
+        self.assertIn("set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention", ivn_defeat)
+        self.assertNotIn("skip_default_capitulation", ivn_defeat)
+        self.assertNotIn("white_peace", ivn_defeat)
+
+        generic = named_block(read("common/on_actions/ZZ_ADISCORD_default_capitulation_on_actions.txt"), "on_capitulation")
+        self.assertIn("NOT = { has_global_flag = skip_default_capitulation }", generic)
+        self.assertIn("annex_country = { target = PREV transfer_troops = no }", generic)
+
+        for event_id in ("ADISCORD_vorkerland_collapse.43", "ADISCORD_vorkerland_collapse.74", "ADISCORD_vorkerland_collapse.78"):
+            restore_event = event_block(events, event_id)
+            for host in ("IVN", "PWR", "PSD", "ZAO", "WPA", "WPS"):
+                self.assertIn(f"tag = {host}", restore_event)
 
     def test_late_ivanland_and_frealor_interventions_are_one_shot_and_state_bound(self) -> None:
         decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
@@ -3354,7 +3387,7 @@ class InterventionAndVisualTests(unittest.TestCase):
                 "ADISCORD_vorkerland_news.2",
                 named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_failure"),
                 "ADISCORD_vorkerland_ivanland_failure_news_shown",
-                "portrait = GFX_portrait_IVN_Vadim_Ivanchik_after_retreat",
+                "PWR = { transfer_state = 90 transfer_state = 91 }",
             ),
         )
         for news_id, outcome, shown_flag, completion in routes:
@@ -3379,6 +3412,10 @@ class InterventionAndVisualTests(unittest.TestCase):
             for token in ("major = yes", "is_triggered_only = yes", "fire_only_once = no"):
                 self.assertIn(token, definition.group(1), news_id)
             self.assertNotIn("hidden = yes", definition.group(1), news_id)
+            if news_id == "ADISCORD_vorkerland_news.2":
+                self.assertIn("ADISCORD_vorkerland_news.2.capitulated", definition.group(1))
+                self.assertIn("ADISCORD_vorkerland_ivanland_capitulated_in_intervention", definition.group(1))
+                self.assertIn("ADISCORD_vorkerland_news.2.capitulated:", loc)
             self.assertIn(f"NOT = {{ has_global_flag = {shown_flag} }}", outcome, news_id)
             self.assertIn(f"set_global_flag = {shown_flag}", outcome, news_id)
             self.assertLess(outcome.find(completion), outcome.find(f"news_event = {{ id = {news_id} }}"), news_id)
