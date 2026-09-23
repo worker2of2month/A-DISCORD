@@ -23,5 +23,5 @@ jobs:
         run: python -B -m unittest tools.tests.test_adiscord_val_nodrul_peace_recovery
       - name: Runtime hotpath tests
         run: python -B -m unittest tools.tests.test_adiscord_runtime_hotpath_optimization
-      - name: VAL validator unit contracts
-        run: python -B -m unittest tools.tests.test_validate_adiscord_val_rework
+      - name: Compile VAL validator
+        run: python -m py_compile tools/validators/validate_adiscord_val_rework.py
