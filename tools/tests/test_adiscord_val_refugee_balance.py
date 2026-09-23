@@ -40,6 +40,36 @@ def named_block(source: str, name: str) -> str:
     raise AssertionError(f"unterminated block: {name}")
 
 
+def focus_block(source: str, focus_id: str) -> str:
+    for match in re.finditer(r"(?m)^\s*focus\s*=\s*\{", source):
+        opening = source.find("{", match.start())
+        depth = 0
+        quoted = False
+        escaped = False
+        for index in range(opening, len(source)):
+            char = source[index]
+            if quoted:
+                if escaped:
+                    escaped = False
+                elif char == "\\":
+                    escaped = True
+                elif char == '"':
+                    quoted = False
+                continue
+            if char == '"':
+                quoted = True
+            elif char == "{":
+                depth += 1
+            elif char == "}":
+                depth -= 1
+                if depth == 0:
+                    block = source[match.start():index + 1]
+                    if re.search(rf"(?m)^\s*id\s*=\s*{re.escape(focus_id)}\s*$", block):
+                        return block
+                    break
+    raise AssertionError(f"missing focus: {focus_id}")
+
+
 class KefreytRefugeeBalanceTests(unittest.TestCase):
     def test_val_manpower_focus_filter_is_registered_and_applied(self) -> None:
         filter_id = "FOCUS_FILTER_VAL_MANPOWER"
@@ -63,8 +93,8 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
             "VAL_Company_Service_Code",
             "VAL_Operational_Reserves",
         ):
-            self.assertIn(filter_id, named_block(main, focus_id))
-        self.assertIn(filter_id, named_block(defeated, "VAL_defeat_Veterans_Register"))
+            self.assertIn(filter_id, focus_block(main, focus_id))
+        self.assertIn(filter_id, focus_block(defeated, "VAL_defeat_Veterans_Register"))
 
     def setUp(self) -> None:
         self.decisions = read("common/decisions/ADISCORD_VAL_logistics_market_decisions.txt")
