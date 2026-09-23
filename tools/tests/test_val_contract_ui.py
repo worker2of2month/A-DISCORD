@@ -991,7 +991,7 @@ class TestValExpansionRoute(unittest.TestCase):
         entry = focuses["VAL_frontier_conference"]
         spine = focuses["VAL_Contracts_Outlive_Kings"]
         self.assertEqual(get(entry, "x"), get(spine, "x"))
-        self.assertEqual(float(get(entry, "y")), float(get(spine, "y")) + 2)
+        self.assertEqual(float(get(entry, "y")), float(get(spine, "y")) + 6)
         groups = [e.value for e in entry if e.key == "prerequisite"]
         self.assertEqual(len(groups), 1)
         self.assertEqual({e.value for e in groups[0]}, {"VAL_Contracts_Outlive_Kings", "VAL_The_Steel_Contract", "VAL_Market_Roads_North"})
