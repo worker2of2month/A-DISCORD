@@ -96,6 +96,39 @@ class RuntimeCompatibilityTests(unittest.TestCase):
         ):
             self.assertIn(token, tokens)
 
+    def test_prerelease_runtime_gfx_contracts(self):
+        technologies = (ROOT / "interface" / "ADISCORD_technologies.gfx").read_text(encoding="utf-8-sig")
+        self.assertNotRegex(technologies, r"(?m)^\s*scale\s*=")
+
+        mio = (ROOT / "interface" / "ADISCORD_mio_equipment_groups.gfx").read_text(encoding="utf-8-sig")
+        for sprite in (
+            "GFX_military_industrial_organization_ADISCORD_squad_weapons_equipment",
+            "GFX_military_industrial_organization_ADISCORD_fighter_archetype",
+            "GFX_military_industrial_organization_ADISCORD_cas_archetype",
+        ):
+            self.assertIn(f'name = "{sprite}"', mio)
+
+        subunit_icons = (ROOT / "interface" / "ADISCORD_subuniticons.gfx").read_text(encoding="utf-8-sig")
+        self.assertIn('name = "GFX_unit_ADISCORD_tactical_bomber_icon_small"', subunit_icons)
+        self.assertIn('texturefile = "gfx/texticons/unit_tactical_bomber_icon_small.dds"', subunit_icons)
+
+    def test_viceroy_focus_has_no_hot_reload_only_scripted_effect(self):
+        focus = (ROOT / "common" / "national_focus" / "ADISCORD_national_focus_VAL.txt").read_text(encoding="utf-8-sig")
+        effects = (ROOT / "common" / "scripted_effects" / "ADISCORD_VAL_effects.txt").read_text(encoding="utf-8-sig")
+        events = (ROOT / "events" / "ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8-sig")
+        for text in (focus, effects, events):
+            self.assertNotIn("VAL_commit_nam_resource_aid", text)
+        self.assertIn("VAL_start_resource_aid = yes", focus)
+        self.assertIn("VAL_start_resource_aid = yes", events)
+
+    def test_reclamation_ui_does_not_call_state_only_trigger_from_country_refresh(self):
+        decisions = (ROOT / "common" / "decisions" / "ADISCORD_VAL_decisions.txt").read_text(encoding="utf-8-sig")
+        self.assertNotIn(
+            "hidden_trigger = { VAL_reclamation_project_target_valid = yes }",
+            decisions,
+        )
+        self.assertGreaterEqual(decisions.count("FROM = { is_owned_by = ROOT is_controlled_by = ROOT }"), 3)
+
     def test_state_27_shared_factories_fit_its_category(self):
         state = next((ROOT / "history" / "states").glob("27-*.txt"))
         text = state.read_text(encoding="utf-8-sig")
