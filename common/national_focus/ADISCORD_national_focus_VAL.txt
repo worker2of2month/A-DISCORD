@@ -651,9 +651,9 @@ focus_tree = {
 			if = {
 				limit = { has_completed_focus = VAL_Trading_Partners }
 				ADISCORD_economy_initialize_country = yes
-add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
-add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
-ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+				ADISCORD_economy_mark_dirty = yes
 			}
 			else_if = {
 				limit = { has_completed_focus = VAL_October_Of_2160 }
@@ -1737,9 +1737,9 @@ ADISCORD_economy_mark_dirty = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_export_second_slot_tt
 			ADISCORD_economy_initialize_country = yes
-add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
-add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
-ADISCORD_economy_mark_dirty = yes
+			add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+			ADISCORD_economy_mark_dirty = yes
 			add_political_power = 25
 		}
 		ai_will_do = { base = 3 }
@@ -2235,17 +2235,59 @@ completion_reward = {
     }
     focus = {
         id = VAL_frontier_return_irem
-        available = { ERT = { exists = yes is_subject = no has_capitulated = no } 168 = { is_owned_by = ERT is_controlled_by = ERT } }
         icon = GFX_goal_generic_national_unity
-        search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
-        x = 24
+        search_filters = { FOCUS_FILTER_ANNEXATION }
+        x = 32
+        y = 13
+        cost = 5
+        prerequisite = { focus = VAL_Resource_War_Contracts }
+        available = { VAL_wasteland_invasion_available = yes }
+        bypass = { owns_state = 169 }
+        cancel_if_invalid = yes
+        completion_reward = {
+            declare_war_on = { target = ERT type = take_state_focus generator = { 169 } }
+            hidden_effect = { VAL_call_subjects_to_wars = yes }
+        }
+        ai_will_do = { base = 8 }
+    }
+    focus = {
+        id = VAL_Wasteland_Charter
+        icon = GFX_focus_generic_improve_the_administration
+        search_filters = { FOCUS_FILTER_POLITICAL }
+        x = 32
         y = 15
-        cost = 3
-        prerequisite = { focus = VAL_frontier_conference }
-
-
-        completion_reward = { unlock_decision_tooltip = { decision = VAL_frontier_demand_ERT show_effect_tooltip = yes } add_political_power = 50 }
-        ai_will_do = { base = 5 }
+        cost = 5
+        prerequisite = { focus = VAL_frontier_return_irem }
+        available = { has_global_flag = ADISCORD_vorkerland_dirty_opened owns_state = 169 controls_state = 169 is_subject = no has_capitulated = no NOT = { has_war_with = ERT } WCA = { exists = no } }
+        cancel_if_invalid = yes
+        completion_reward = { custom_effect_tooltip = VAL_wasteland_charter_tt hidden_effect = { VAL_form_wasteland_administration = yes } }
+        ai_will_do = { base = 20 }
+    }
+    focus = {
+        id = VAL_Southern_Expansion
+        icon = GFX_goal_generic_national_unity
+        search_filters = { FOCUS_FILTER_ANNEXATION }
+        x = 32
+        y = 17
+        cost = 5
+        prerequisite = { focus = VAL_Wasteland_Charter }
+        available = { VAL_wasteland_administration_ready = yes ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no } NOT = { has_war_with = ERT } }
+        cancel_if_invalid = yes
+        completion_reward = { declare_war_on = { target = ERT type = take_state_focus generator = { 167 170 171 184 185 203 } } hidden_effect = { VAL_call_subjects_to_wars = yes } }
+        ai_will_do = { base = 8 }
+    }
+    focus = {
+        id = VAL_Eastern_Expansion
+        icon = GFX_goal_generic_national_unity
+        search_filters = { FOCUS_FILTER_ANNEXATION }
+        x = 32
+        y = 19
+        cost = 5
+        prerequisite = { focus = VAL_Southern_Expansion }
+        available = { VAL_wasteland_administration_ready = yes WCA = { owns_state = 184 controls_state = 184 owns_state = 185 controls_state = 185 } NOT = { has_war_with = ERT has_war_with = IRT } IRT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no } }
+        cancel_if_invalid = yes
+        completion_reward = { declare_war_on = { target = IRT type = take_state_focus generator = { 178 180 181 182 183 193 206 207 } } hidden_effect = { VAL_call_subjects_to_wars = yes } }
+        ai_will_do = { base = 8 }
     }
 
     focus = {

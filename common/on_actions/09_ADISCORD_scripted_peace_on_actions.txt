@@ -693,6 +693,7 @@ on_actions = {
 			# END stelander:on_capitulation
 
 			# BEGIN kefreyt:on_capitulation
+            if = { limit = { VAL_wasteland_capitulation_managed = yes } VAL_settle_wasteland_capitulation = yes }
             if = {
                 limit = { has_country_flag = VAL_frontier_capitulation_pending }
                 clr_country_flag = VAL_frontier_capitulation_pending

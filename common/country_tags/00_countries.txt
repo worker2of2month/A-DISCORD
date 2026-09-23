@@ -34,3 +34,5 @@ NKA = "countries/NorthernContractAdministration.txt"
 OCA = "countries/OccidianContractAdministration.txt"
 ECA = "countries/EsnosContractAdministration.txt"
 DCA = "countries/DuchebiaContractAdministration.txt"
+
+WCA = "countries/WastelandContractAdministration.txt"

@@ -271,4 +271,9 @@ characters = {
 		name = VAL_Viktor_Bran
 		portraits = { army = { large = GFX_Portrait_Forul_Generic_6 } }
 	}
+    WCA_Contract_Council = {
+        name = WCA_Contract_Council
+        portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } }
+        country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 }
+    }
 }

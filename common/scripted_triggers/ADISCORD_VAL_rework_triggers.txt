@@ -1324,3 +1324,32 @@ VAL_partner_strategic_can_accept = {
     check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals }
     VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 20000 } } }
 }
+
+VAL_wasteland_invasion_available = {
+    custom_trigger_tooltip = { tooltip = VAL_perimeter_open_tt has_global_flag = ADISCORD_vorkerland_dirty_opened }
+    has_capitulated = no
+    is_subject = no
+    owns_state = 168
+    controls_state = 168
+    ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no }
+    169 = { is_owned_by = ERT is_controlled_by = ERT }
+    NOT = { has_war_with = ERT }
+    VAL_frontier_idle = yes
+}
+VAL_wasteland_administration_ready = {
+    has_global_flag = ADISCORD_vorkerland_dirty_opened
+    has_capitulated = no
+    is_subject = no
+    WCA = { exists = yes is_subject_of = VAL has_capitulated = no owns_state = 169 controls_state = 169 }
+}
+# COUNTRY capitulating opponent. Do not claim an unrelated victor's result.
+VAL_wasteland_capitulation_managed = {
+    has_war_with = VAL
+    VAL = { exists = yes has_capitulated = no is_subject = no }
+    FROM = { OR = { tag = VAL is_subject_of = VAL } }
+    capital_scope = { controller = { OR = { tag = VAL is_subject_of = VAL } } }
+    OR = {
+        AND = { tag = ERT VAL = { has_completed_focus = VAL_frontier_return_irem } }
+        AND = { tag = IRT VAL = { has_completed_focus = VAL_Eastern_Expansion VAL_wasteland_administration_ready = yes } }
+    }
+}

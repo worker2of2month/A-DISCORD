@@ -1500,25 +1500,27 @@ VAL_cw_offer_contract_formations = {
 		}
 		ai_will_do = { base = 12 }
 	}
- VAL_export_arms = {
-  icon = generic_prepare_civil_war allowed = { tag = VAL }
-  targets = { CIN OSF APH WRK WKR VAD TVA STP STS SRP NOD YPR COF TFF }
-  target_trigger = { FROM = { exists = yes } }
-  visible = { has_completed_focus = VAL_Foreign_Broker_Licences FROM = { has_war = yes NOT = { tag = STS has_war_with = STP } } }
-  available = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } } VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } }
-  cost = 20 days_re_enable = 35
-  complete_effect = {
-   custom_effect_tooltip = VAL_export_arms_offer_tt
-   hidden_effect = {
-    if = {
-     limit = { has_capitulated = no NOT = { has_country_flag = VAL_export_offer_pending } FROM = { VAL_export_customer = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_country_flag = VAL_export_customer_cooldown } } VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } }
-     set_country_flag = { flag = VAL_export_offer_pending days = 14 }
-     FROM = { set_country_flag = { flag = VAL_export_offer_arms days = 14 } country_event = { id = val_contract.340 } }
-    }
-   }
-  }
-  ai_will_do = { base = 5 modifier = { factor = 0 has_war = yes } }
- }
+
+	VAL_export_arms = {
+		icon = generic_prepare_civil_war allowed = { tag = VAL }
+		targets = { CIN OSF APH WRK WKR VAD TVA STP STS SRP NOD YPR COF TFF }
+		target_trigger = { FROM = { exists = yes } }
+		visible = { has_completed_focus = VAL_Foreign_Broker_Licences FROM = { has_war = yes NOT = { tag = STS has_war_with = STP } } }
+		available = { VAL_partner_desk_free = yes FROM = { VAL_export_customer = yes check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } NOT = { has_country_flag = VAL_partner_contact_cooldown } } VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } }
+		cost = 20 days_re_enable = 35
+		complete_effect = {
+			custom_effect_tooltip = VAL_partner_arms_tt
+			hidden_effect = {
+				if = {
+					limit = { VAL_partner_desk_free = yes FROM = { VAL_export_customer = yes check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } NOT = { has_country_flag = VAL_export_customer_cooldown } NOT = { has_country_flag = VAL_partner_contact_cooldown } } VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 2500 } } }
+					set_country_flag = { flag = VAL_export_offer_pending days = 16 }
+					set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
+					FROM = { set_country_flag = { flag = VAL_partner_offer_arms days = 14 } set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 } country_event = { id = val_contract.363 } }
+				}
+			}
+		}
+		ai_will_do = { base = 5 modifier = { factor = 0 has_war = yes } }
+	}
 
  VAL_export_advisors = {
   icon = generic_prepare_civil_war allowed = { tag = VAL }
