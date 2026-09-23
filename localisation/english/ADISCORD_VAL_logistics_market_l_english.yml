@@ -27,11 +27,11 @@
  VAL_open_refugee_border: "Reopen the Crossings"
  VAL_open_refugee_border_desc: "Restore trade and allow admission through offers that are still open. Reopening the border does not create new refugee waves."
  VAL_contract_refugee_labor: "Offer Work Contracts"
- VAL_contract_refugee_labor_desc:0 "Employ £population_texticon §Y100,000§! available refugees in construction for 90 days, costing £pol_power §Y75§! political power. Workers still need housing and cannot be recruited or resettled until completion or cancellation, when all workers return to the available pool."
+ VAL_contract_refugee_labor_desc:0 "Employ £population_texticon §Y100,000§! available refugees in construction for 90 days, costing §Y75§! £political_power_texticon. Workers still need housing and cannot be recruited or resettled until completion or cancellation, when all workers return to the available pool."
  VAL_fund_resettlement_depots: "Resettle Refugees in [FROM.GetName]"
  VAL_fund_resettlement_depots_desc: "Move £population_texticon §Y100,000§! admitted refugees into [FROM.GetName] for §Y250§! treasury. The state gains §G100,000 permanent population§!. This program is limited to selected low-population Kefreyt home regions under our control, cannot operate while pollution reclamation is unfinished, and can be used only once per region."
  VAL_organize_refugee_return: "Organize Refugee Return"
- VAL_organize_refugee_return_desc: "Once regional wars end, arrange the safe return of £population_texticon §Y150,000§! people for §Y35§! political power. This relieves the resettlement system without granting stability or political power."
+ VAL_organize_refugee_return_desc: "Once regional wars end, arrange the safe return of £population_texticon §Y150,000§! people for §Y35§! £political_power_texticon. This relieves the resettlement system without granting stability or political power."
  VAL_license_grey_brokers: "License the Grey Brokers"
  VAL_license_grey_brokers_desc: "Do not destroy the underground network; make it pay for permission to operate. The treasury immediately receives §G50§!, while grey-market pressure rises by §R15§!."
  VAL_buy_contraband_arms: "Buy Arms Off the Ledger"
@@ -119,20 +119,20 @@
  VAL_refugee_war_active_tt:0 "This route's war is ongoing. Admission is available once every §Y90 days§!."
  VAL_refugee_perimeter_active_tt:0 "The Perimeter is open. Admission is available once every §Y90 days§!."
 
- VAL_local_training_start_tt:0 "Reserve £population_texticon §Y5,000§! local volunteers for §Y35 days§!. Cancellation returns the volunteers, £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment."
+ VAL_local_training_start_tt:0 "Reserve £population_texticon §Y5,000§! local volunteers for §Y35 days§!. Cancellation returns the volunteers, §Y75§! £political_power_texticon and £infantry_equipment_texticon §Y5000§! infantry equipment."
 
  VAL_recruit_local_volunteers:0 "Recruit local volunteers"
 
- VAL_recruit_local_volunteers_desc:0 "Conscription remains at 1.25%. The additional contract reserve is 2% of the initial population of Kefreyt's seven states and does not replenish. Each intake trains £population_texticon §Y5,000§! local volunteers over 35 days for £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment. Capitulation or subjugation refunds the full intake."
+ VAL_recruit_local_volunteers_desc:0 "Conscription remains at 1.25%. The additional contract reserve is 2% of the initial population of Kefreyt's seven states and does not replenish. Each intake trains £population_texticon §Y5,000§! local volunteers over 35 days for §Y75§! £political_power_texticon and £infantry_equipment_texticon §Y5000§! infantry equipment. Capitulation or subjugation refunds the full intake."
 
  VAL_refugee_training_cost:0 "£population_texticon §Y10000§! £pol_power §Y75§! £infantry_equipment_texticon §Y5000§!"
  VAL_refugee_training_cost_blocked:0 "£population_texticon §R10000§! £pol_power §R75§! £infantry_equipment_texticon §R5000§!"
  VAL_refugee_training_cost_tooltip:0 "Requires £population_texticon §Y10,000§! available refugees, £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment."
- VAL_training_cost:0 "£population_texticon §Y5000§! £pol_power §Y75§! £infantry_equipment_texticon §Y5000§!"
+ VAL_training_cost:0 "£population_texticon §Y5000§! §Y75§! £political_power_texticon £infantry_equipment_texticon §Y5000§!"
 
- VAL_training_cost_blocked:0 "£population_texticon §R5000§! £pol_power §R75§! £infantry_equipment_texticon §R5000§!"
+ VAL_training_cost_blocked:0 "£population_texticon §R5000§! §R75§! £political_power_texticon £infantry_equipment_texticon §R5000§!"
 
- VAL_training_cost_tooltip:0 "Requires £population_texticon §Y5,000§! volunteers from the reserve named in the decision, £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment."
+ VAL_training_cost_tooltip:0 "Requires £population_texticon §Y5,000§! volunteers from the reserve named in the decision, §Y75§! £political_power_texticon and £infantry_equipment_texticon §Y5000§! infantry equipment."
 
  VAL_labor_program_tt:0 "Reserve £population_texticon §Y100,000§! refugees for 90 days: §G+12%§! construction speed, §G+8%§! civilian income, §R-1%§! stability. The workers then return to the free reserve."
 
@@ -150,4 +150,4 @@
 
  VAL_labor_cost:0 "£population_texticon §Y100 000§! £pol_power §Y75§!"
  VAL_labor_cost_blocked:0 "£population_texticon §R100 000§! £pol_power §R75§!"
- VAL_labor_cost_tooltip:0 "Requires £population_texticon §Y100,000§! available refugees and £pol_power §Y75§! political power. People are reserved for 90 days and return on completion or cancellation."
+ VAL_labor_cost:0 "£population_texticon §Y100 000§! §Y75§! £political_power_texticon"
