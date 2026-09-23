@@ -54,6 +54,7 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
             self.assertIn("days_re_enable = 90", body)
             self.assertIn("ADISCORD_economy_spend_100 = yes", body)
             self.assertIn("var = VAL_black_market_pressure_change value = 3", body)
+            self.assertIn(f"var = VAL_refugee_{suffix}_admitted value = 3 compare = less_than", body)
             self.assertNotIn("ADISCORD_economy_spend_250", body)
             self.assertNotIn("days_re_enable = 365", body)
 
@@ -63,24 +64,33 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
         self.assertIn("custom_cost_text = VAL_refugee_training_cost", decision)
         self.assertIn("var = VAL_refugee_training_escrow value = 1", decision)
         self.assertIn("var = VAL_displaced_population value = -1", decision)
+        self.assertIn("has_political_power < 50", decision)
+        self.assertIn("infantry_equipment < 2500", decision)
+        self.assertIn("add_political_power = -50", decision)
+        self.assertIn("amount = -2500", decision)
 
         finish = named_block(self.effects, "VAL_finish_refugee_training")
         self.assertIn("add_manpower = 10000", finish)
         self.assertNotIn("add_manpower = 5000", finish)
+        refund = named_block(self.effects, "VAL_refund_refugee_training")
+        self.assertIn("add_political_power = 50", refund)
+        self.assertIn("amount = 2500", refund)
 
     def test_housing_and_labour_are_worth_using(self) -> None:
         housing = named_block(self.decisions, "VAL_expand_refugee_housing")
         self.assertIn("ADISCORD_economy_can_spend_250 = yes", housing)
         self.assertIn("ADISCORD_economy_spend_250 = yes", housing)
         self.assertIn("var = VAL_housing_deposit value = 250", housing)
+        finish_housing = named_block(self.effects, "VAL_finish_housing")
+        self.assertIn("var = VAL_refugee_housing value = 30", finish_housing)
 
         labour = named_block(self.ideas, "VAL_refugee_contract_labor")
         for token in (
             "production_speed_buildings_factor = 0.12",
             "ADISCORD_economy_civilian_factory_income_factor = 0.08",
-            "stability_factor = -0.01",
         ):
             self.assertIn(token, labour)
+        self.assertNotIn("stability_factor", labour)
 
         strain = named_block(self.ideas, "VAL_refugee_strain")
         for token in (
