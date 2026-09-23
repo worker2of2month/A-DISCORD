@@ -102,6 +102,10 @@ class KefreytFocusClarityTests(unittest.TestCase):
         ):
             self.assertGreater(xy(focus_id)[1], continuation_y, focus_id)
 
+        tsaygen = focus(self.focuses, "VAL_Return_Southern_Tsaygen")
+        self.assertIn("prerequisite = { focus = VAL_Contracts_Outlive_Kings }", tsaygen)
+        self.assertIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", tsaygen)
+
     def test_population_and_cannibal_routes_no_longer_wait_for_late_spine(self) -> None:
         harvest = focus(self.focuses, "VAL_The_Harvest_Of_Ash")
         self.assertIn("prerequisite = { focus = VAL_The_Contract_State }", harvest)
