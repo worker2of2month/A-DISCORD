@@ -566,7 +566,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Market_Roads_North
-		icon = GFX_goal_generic_trade
+		icon = GFX_focus_VAL_Market_Roads_North
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
 		x = 26
 		y = 4
