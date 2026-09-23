@@ -40,6 +40,36 @@ def named_block(source: str, name: str) -> str:
     raise AssertionError(f"unterminated block: {name}")
 
 
+def event_block(source: str, event_id: str) -> str:
+    for match in re.finditer(r"(?m)^\s*country_event\s*=\s*\{", source):
+        opening = source.find("{", match.start())
+        depth = 0
+        quoted = False
+        escaped = False
+        for index in range(opening, len(source)):
+            char = source[index]
+            if quoted:
+                if escaped:
+                    escaped = False
+                elif char == "\\":
+                    escaped = True
+                elif char == '"':
+                    quoted = False
+                continue
+            if char == '"':
+                quoted = True
+            elif char == "{":
+                depth += 1
+            elif char == "}":
+                depth -= 1
+                if depth == 0:
+                    candidate = source[match.start():index + 1]
+                    if re.search(rf"(?m)^\s*id\s*=\s*{re.escape(event_id)}\s*$", candidate):
+                        return candidate
+                    break
+    raise AssertionError(f"missing event: {event_id}")
+
+
 def focus_block(source: str, focus_id: str) -> str:
     marker = f"id = {focus_id}"
     pos = source.index(marker)
@@ -67,20 +97,22 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         self.assertIn("168 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }", setup)
 
         events = read("events/ADISCORD_vorkerland_events.txt")
-        collapse = events.split("id = ADISCORD_vorkerland_collapse.13", 1)[1].split("country_event = {", 1)[0]
+        collapse = event_block(events, "ADISCORD_vorkerland_collapse.13")
         self.assertIn("ADISCORD_vorkerland_setup_ert = yes", collapse)
         self.assertIn("country_event = { id = val_rework.120 hours = 6 }", collapse)
         self.assertIn("168 = { is_core_of = VAL is_owned_by = ERT }", collapse)
 
     def test_loss_event_frames_the_claim_as_revenge(self) -> None:
         events = read("events/ADISCORD_VAL_contract_events.txt")
-        block = events.split("id = val_rework.120", 1)[1].split("\n}\n", 1)[0]
+        block = event_block(events, "val_rework.120")
         self.assertIn("title = val_rework.120.t", block)
         self.assertIn("168 = { is_core_of = VAL is_owned_by = ERT }", block)
         self.assertIn("add_war_support = 0.03", block)
 
         for language in ("english", "russian"):
-            loc = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            path = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"), language)
+            loc = path.read_text(encoding="utf-8-sig")
             self.assertIn("val_rework.120.t:", loc)
             self.assertIn("val_rework.120.d:", loc)
             self.assertIn("val_rework.120.a:", loc)
