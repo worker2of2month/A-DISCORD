@@ -131,7 +131,7 @@
 
  VAL_training_cost_tooltip:0 "Requires £population_texticon §Y10,000§! refugees, £pol_power §Y50§! political power and £infantry_equipment_texticon §Y2500§! infantry equipment."
 
- VAL_labor_program_tt:0 "Reserve £population_texticon §Y100,000§! available refugees for 90 days: +8% construction speed, +5% civilian income, -1% stability. All workers then return to the available pool."
+ VAL_labor_program_tt:0 "£population_texticon §Y100,000§! refugees work for 90 days: §G+8%§! construction speed and §G+5%§! civilian income. All workers then return to the available pool."
 
  VAL_expand_refugee_housing:0 "Expand temporary settlements"
 
