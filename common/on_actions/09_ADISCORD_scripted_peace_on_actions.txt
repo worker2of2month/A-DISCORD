@@ -17,13 +17,10 @@ on_actions = {
 			ROOT = { clr_country_flag = STP_cw_northern_capitulation_pending }
 			if = {
 				limit = {
+					# The campaign status selects the northern router. Exact live-war and
+					# military-credit checks belong to STP_cw_northern_capitulation_managed.
 					NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
-					ROOT = {
-						OR = {
-							AND = { tag = NOD OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } }
-							AND = { OR = { tag = YPR tag = COF tag = TFF } NOD = { has_war_with = ROOT } }
-						}
-					}
+					ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF } }
 				}
 				ROOT = { STP_cw_snapshot_capitulation_occupier = yes }
 				if = {
@@ -230,6 +227,30 @@ on_actions = {
 
 			# END kefreyt:on_capitulation_immediate
 
+			# BEGIN frontier:on_capitulation_immediate
+			# Party postwar Kefreyt campaign. The campaign receipt is authoritative;
+			# only the native victor relation is checked here before applying settlement.
+			if = {
+				limit = {
+					ROOT = {
+						tag = VAL
+						has_war_with = STP
+						NOT = { any_enemy_country = { NOT = { OR = { tag = STP is_subject_of = STP } } } }
+					}
+					STP = {
+						exists = yes
+						has_capitulated = no
+						has_country_flag = STP_cw_postwar
+						has_country_flag = STP_pw_party_kefreyt_campaign_active
+					}
+					FROM = { OR = { tag = STP is_subject_of = STP } }
+				}
+				set_global_flag = skip_default_capitulation
+				STP = { STP_pw_party_settle_kefreyt_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			# END frontier:on_capitulation_immediate
+
 			# BEGIN bezhaysk:on_capitulation_immediate
 
 			# If Kefreyt and Nodrul fight the same Bezhaysk war, neither may consume
@@ -250,10 +271,7 @@ on_actions = {
 						exists = yes
 						has_capitulated = no
 						has_war_together_with = NOD
-						OR = {
-							has_country_flag = ADISCORD_bezhaysk_campaign_active
-							has_completed_focus = VAL_Bezhaysk_Operation
-						}
+						has_country_flag = ADISCORD_bezhaysk_campaign_active
 					}
 					NOD = { exists = yes has_capitulated = no }
 					FROM = { OR = { tag = VAL tag = NOD is_subject_of = VAL is_subject_of = NOD } }
@@ -283,7 +301,7 @@ on_actions = {
 						exists = yes
 						has_capitulated = no
 						has_country_flag = STP_cw_postwar
-						OR = { has_country_flag = ADISCORD_bezhaysk_campaign_active has_completed_focus = STP_pw_party_bezhaysk_campaign }
+						has_country_flag = ADISCORD_bezhaysk_campaign_active
 					}
 					FROM = { OR = { tag = STP is_subject_of = STP } }
 				}
@@ -298,10 +316,7 @@ on_actions = {
 					STS = {
 						exists = yes
 						has_capitulated = no
-						OR = {
-							has_country_flag = ADISCORD_bezhaysk_campaign_active
-							has_completed_focus = STP_pw_take_bezhaysk
-						}
+						has_country_flag = ADISCORD_bezhaysk_campaign_active
 					}
 					FROM = { OR = { tag = STS is_subject_of = STS } }
 				}
@@ -316,10 +331,7 @@ on_actions = {
 					VAL = {
 						exists = yes
 						has_capitulated = no
-						OR = {
-							has_country_flag = ADISCORD_bezhaysk_campaign_active
-							has_completed_focus = VAL_Bezhaysk_Operation
-						}
+						has_country_flag = ADISCORD_bezhaysk_campaign_active
 					}
 					FROM = { OR = { tag = VAL is_subject_of = VAL } }
 				}
@@ -626,7 +638,6 @@ on_actions = {
 			# the monthly pulse or a leftover impassable pocket.
 			if = {
 				limit = {
-					country_exists = RUS
 					RUS = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
 					ROOT = { capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ROOT } } } }
 					OR = {
@@ -662,6 +673,26 @@ on_actions = {
 			# END vorkerland_collapse:on_capitulation
 
 			# BEGIN stelander:on_capitulation
+
+			# Hegemony final wars share the same native capitulation owner.
+			# Record defeated members before the ordinary STP settlement routing.
+			if = {
+				limit = {
+					STS = { exists = yes has_country_flag = STP_heg_northern_final_started }
+					ROOT = {
+						OR = { tag = NOD tag = YPR tag = TFF }
+						has_war_with = STS
+					}
+				}
+				ROOT = { set_country_flag = STP_heg_defeated_by_sts }
+			}
+			if = {
+				limit = {
+					STS = { exists = yes has_country_flag = STP_heg_kefreyt_final_started }
+					ROOT = { tag = VAL has_war_with = STS }
+				}
+				ROOT = { set_country_flag = STP_heg_defeated_by_sts }
+			}
 
 			if = {
 				limit = {
@@ -876,11 +907,26 @@ on_actions = {
                 set_global_flag = skip_default_capitulation
                 ROOT = { clr_country_flag = VAL_final_capitulation_immediate }
             }
-            if = { limit = { VAL = { exists = yes } } VAL = { VAL_finalize_reserved_settlements = yes } }
+            if = {
+                limit = {
+                    VAL = { exists = yes }
+                    OR = {
+                        STP = { has_country_flag = VAL_final_defeat_pending }
+                        STS = { has_country_flag = VAL_final_defeat_pending }
+                        NOD = { has_country_flag = VAL_final_defeat_pending }
+                    }
+                }
+                VAL = { VAL_finalize_reserved_settlements = yes }
+            }
 
 			VAL_queue_frontier_reconciliation = yes
 
 			# END kefreyt:on_capitulation
+
+			# BEGIN frontier:on_capitulation
+			# The Party's dedicated Kefreyt settlement is fully applied in
+			# on_capitulation_immediate. No mutable relation is reconstructed here.
+			# END frontier:on_capitulation
 
 			# BEGIN rin:on_capitulation
 			if = {
@@ -1046,23 +1092,11 @@ on_actions = {
 			# END vorkerland_diplomacy:on_capitulation
 
 			# BEGIN bezhaysk:on_capitulation
-            # The immediate settlement can remove the war before this late hook.
-            # A one-day handoff expires if white peace suppresses the late callback.
+            # The immediate router is authoritative. If it accepted this defeat,
+            # it leaves a one-day receipt for the late native callback. Do not
+            # reconstruct campaign ownership from mutable faction/war relations.
             if = {
-                limit = {
-                    OR = {
-                        ROOT = { has_country_flag = ADISCORD_bezhaysk_capitulation_pending }
-                        AND = {
-                            ROOT = { OR = { tag = BLD tag = BHG tag = BGT tag = BBV tag = BCM } has_war_with = VAL OR = { is_subject_of = BJK is_in_faction_with = BJK } }
-                            BJK = { exists = yes has_war_with = VAL }
-                            VAL = { exists = yes has_capitulated = no has_country_flag = ADISCORD_bezhaysk_campaign_active }
-                            OR = {
-                                FROM = { OR = { tag = VAL is_subject_of = VAL } }
-                                AND = { VAL = { has_war_together_with = NOD } FROM = { OR = { tag = NOD is_subject_of = NOD } } }
-                            }
-                        }
-                    }
-                }
+                limit = { ROOT = { has_country_flag = ADISCORD_bezhaysk_capitulation_pending } }
                 ROOT = { clr_country_flag = ADISCORD_bezhaysk_capitulation_pending }
                 set_global_flag = skip_default_capitulation
             }

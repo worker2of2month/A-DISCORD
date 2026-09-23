@@ -1630,12 +1630,20 @@ def main() -> int:
         for text, label in ((gfx, "GFX"), (gui, "GUI"), (scripted_gui, "scripted GUI")):
             if f"{state}" not in text:
                 issues.append(f"state {state} is missing from operations {label}")
-    for hook_path, effect_name in (
-        ("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt", "VAL_operations_map_refresh_cache"),
-        ("common/on_actions/02_ADISCORD_STP_on_actions.txt", "VAL_operations_map_refresh_cache"),
+    operations_hooks = read("common/on_actions/04_ADISCORD_operations_map_on_actions.txt")
+    if "on_state_control_changed" not in operations_hooks:
+        issues.append("operations-map cache has no event-driven state-control owner")
+    if operations_hooks.count("VAL_operations_map_refresh_cache = yes") < 4:
+        issues.append("operations-map cache must refresh both VAL and STS on startup and theatre control changes")
+    for token in ("ROOT = {", "FROM = {", "has_country_flag = VAL_operations_map_unlocked", "has_country_flag = STP_cw_postwar"):
+        if token not in operations_hooks:
+            issues.append(f"operations-map event-driven cache owner is missing {token}")
+    for hook_path in (
+        "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt",
+        "common/on_actions/02_ADISCORD_STP_on_actions.txt",
     ):
-        if effect_name not in read(hook_path):
-            issues.append(f"missing weekly operations-map cache refresh: {effect_name}")
+        if "VAL_operations_map_refresh_cache = yes" in read(hook_path):
+            issues.append(f"operations-map cache still has a weekly country poll in {hook_path}")
     background = ROOT / "gfx/interface/VAL_operations/VAL_ops_map_background.png"
     if not background.exists():
         issues.append("missing operations-map background")

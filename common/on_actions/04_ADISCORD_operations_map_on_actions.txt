@@ -1,0 +1,63 @@
+# Event-driven cache owner for the shared Kefreyt/Stelander operations map.
+# Controller frames only change when a theatre actor gains or loses state control.
+# Controllers outside the authored theatre all use the same fallback frame, so
+# outsider-to-outsider changes do not require a cache rebuild.
+on_actions = {
+	on_startup = {
+		effect = {
+			VAL = {
+				if = {
+					limit = { exists = yes has_country_flag = VAL_operations_map_unlocked }
+					VAL_operations_map_refresh_cache = yes
+				}
+			}
+			STS = {
+				if = {
+					limit = { exists = yes has_country_flag = STP_cw_postwar }
+					VAL_operations_map_refresh_cache = yes
+				}
+			}
+		}
+	}
+
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						ROOT = {
+							OR = {
+								tag = VAL tag = STP tag = STS tag = SRP tag = NOD
+								tag = CIN tag = OSF tag = APH tag = ERT tag = NKA
+								tag = OCA tag = YPR tag = COF tag = TFF tag = EXZ
+								tag = IRT tag = BJK tag = BLD tag = BHG tag = BGT
+								tag = BBV tag = BCM tag = WCA
+							}
+						}
+						FROM = {
+							OR = {
+								tag = VAL tag = STP tag = STS tag = SRP tag = NOD
+								tag = CIN tag = OSF tag = APH tag = ERT tag = NKA
+								tag = OCA tag = YPR tag = COF tag = TFF tag = EXZ
+								tag = IRT tag = BJK tag = BLD tag = BHG tag = BGT
+								tag = BBV tag = BCM tag = WCA
+							}
+						}
+					}
+				}
+				VAL = {
+					if = {
+						limit = { exists = yes has_country_flag = VAL_operations_map_unlocked }
+						VAL_operations_map_refresh_cache = yes
+					}
+				}
+				STS = {
+					if = {
+						limit = { exists = yes has_country_flag = STP_cw_postwar }
+						VAL_operations_map_refresh_cache = yes
+					}
+				}
+			}
+		}
+	}
+}

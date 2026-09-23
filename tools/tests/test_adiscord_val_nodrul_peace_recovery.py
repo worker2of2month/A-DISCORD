@@ -51,7 +51,7 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("VAL_settle_nodrul_bezhaysk_war = yes", install)
         self.assertIn("has_war_with = BJK", settle)
         self.assertIn("has_country_flag = ADISCORD_bezhaysk_campaign_active", settle)
-        self.assertIn("has_completed_focus = VAL_Bezhaysk_Operation", settle)
+        self.assertNotIn("has_completed_focus = VAL_Bezhaysk_Operation", settle)
         self.assertIn("white_peace = BJK", settle)
 
 

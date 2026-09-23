@@ -68,7 +68,6 @@ on_actions = {
 	# Country removal has no shared callback here; reconcile only an open offer.
 	on_weekly_STS = {
 		effect = {
-			if = { limit = { has_country_flag = STP_cw_postwar } VAL_operations_map_refresh_cache = yes }
 			if = { limit = { STP_pw_can_reconstruct = yes NOT = { has_variable = STP_pw_recovery_progress } } STP_pw_begin_recovery = yes }
 			if = {
 				limit = { exists = yes has_country_flag = STP_pc_lib_package_pending }

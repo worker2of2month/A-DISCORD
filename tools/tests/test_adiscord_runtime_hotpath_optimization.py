@@ -45,6 +45,22 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         for unrelated in (32, 38, 75, 90, 230):
             self.assertNotIn(f"state = {unrelated}", state_hook)
 
+    def test_operations_map_cache_is_event_driven(self) -> None:
+        owner = read("common/on_actions/04_ADISCORD_operations_map_on_actions.txt")
+        state_hook = named_block(owner, "on_state_control_changed")
+        startup = named_block(owner, "on_startup")
+        self.assertGreaterEqual(startup.count("VAL_operations_map_refresh_cache = yes"), 2)
+        self.assertGreaterEqual(state_hook.count("VAL_operations_map_refresh_cache = yes"), 2)
+        self.assertIn("ROOT = {", state_hook)
+        self.assertIn("FROM = {", state_hook)
+        self.assertIn("has_country_flag = VAL_operations_map_unlocked", state_hook)
+        self.assertIn("has_country_flag = STP_cw_postwar", state_hook)
+        for path, hook in (
+            ("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt", "on_weekly_VAL"),
+            ("common/on_actions/02_ADISCORD_STP_on_actions.txt", "on_weekly_STS"),
+        ):
+            self.assertNotIn("VAL_operations_map_refresh_cache", named_block(read(path), hook))
+
     def test_kefreyt_resource_rights_checks_follow_their_states(self) -> None:
         source = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
         state_hook = named_block(source, "on_state_control_changed")
@@ -56,6 +72,11 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
             "FROM.FROM = { state = 38 }\n\t\t\t\t\tVAL = {",
             state_hook,
         )
+
+    def test_economy_initialization_recomputes_model_once(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_economy_effects.txt")
+        initialize = named_block(effects, "ADISCORD_economy_initialize_country")
+        self.assertEqual(initialize.count("ADISCORD_economy_update_model_and_cycle = yes"), 1)
 
     def test_stelander_union_recovery_has_no_global_daily_poll(self) -> None:
         source = read("common/on_actions/02_ADISCORD_STP_on_actions.txt")
@@ -104,9 +125,17 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         shared = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
         for hook in ("on_capitulation", "on_peace", "on_annex", "on_peaceconference_ended", "on_state_control_changed"):
             self.assertIn("VAL_queue_frontier_reconciliation = yes", named_block(shared, hook))
-        event = read("events/ADISCORD_VAL_contract_events.txt").split("id = val_rework.102", 1)[1]
-        self.assertIn("VAL_frontier_reconcile = yes", event)
-        self.assertNotIn("country_event =", event)
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, scalar, walk
+        events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
+        found = [
+            entry.value
+            for entry in events
+            if entry.key == "country_event" and scalar(entry.value, "id") == "val_rework.102"
+        ]
+        self.assertEqual(len(found), 1)
+        event = found[0]
+        self.assertIn("VAL_frontier_reconcile", {entry.key for entry in walk(event)})
+        self.assertNotIn("country_event", {entry.key for entry in walk(event)})
 
     def test_trade_cache_detects_every_route_transition_before_payment(self):
         from itertools import product

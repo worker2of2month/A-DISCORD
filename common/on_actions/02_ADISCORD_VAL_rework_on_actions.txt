@@ -229,10 +229,6 @@ on_actions = {
 				limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
 				VAL_frontier_weekly = yes
 			}
-			if = {
-				limit = { has_country_flag = VAL_operations_map_unlocked }
-				VAL_operations_map_refresh_cache = yes
-			}
 		}
 	}
 }
