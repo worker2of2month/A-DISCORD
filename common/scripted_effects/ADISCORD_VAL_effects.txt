@@ -1281,7 +1281,14 @@ VAL_settle_wasteland_capitulation = {
             185 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 185 } add_core_of = WCA set_state_controller_to = WCA } }
             203 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 203 } add_core_of = WCA set_state_controller_to = WCA } }
         }
-        else = { 169 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } VAL = { transfer_state = 169 } set_state_controller_to = VAL } } }
+        else_if = {
+            limit = { VAL = { has_completed_focus = VAL_frontier_return_irem } }
+            169 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } VAL = { transfer_state = 169 } set_state_controller_to = VAL } }
+        }
+        else_if = {
+            limit = { VAL = { has_completed_focus = VAL_Return_Southern_Tsaygen } }
+            168 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } VAL = { transfer_state = 168 } set_state_controller_to = VAL } }
+        }
     }
     else_if = {
         limit = { tag = IRT }
