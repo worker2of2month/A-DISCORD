@@ -469,7 +469,7 @@ focus_tree = {
 		x = -2
 		y = 6
 		cost = 5
-		prerequisite = { focus = VAL_The_Contract_State }
+		prerequisite = { focus = VAL_reclamation_survey }
 		ai_will_do = { base = 1 }
 		completion_reward = {
 			add_war_support = 0.05
