@@ -17,7 +17,7 @@ jobs:
         run: python -B -m unittest tools.tests.test_adiscord_val_focus_clarity
       - name: Northern route regression
         run: python -B -m unittest tools.tests.test_adiscord_economy_rebalance.NorthernCampaignRouteTests
-      - name: Expansion layout regression
-        run: python -B -m unittest tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests.test_expansion_is_split_into_early_war_bands_and_late_continuation
+      - name: Resource-war focus regression
+        run: python -B -m unittest tools.tests.test_validate_adiscord_val_rework.ValExpandedCampaignTests.test_resource_war_focus_visibility_follows_the_war_without_hiding_irem
       - name: Diff check
         run: git diff --check HEAD^ HEAD
