@@ -45,6 +45,22 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         for unrelated in (32, 38, 75, 90, 230):
             self.assertNotIn(f"state = {unrelated}", state_hook)
 
+    def test_operations_map_cache_is_event_driven(self) -> None:
+        owner = read("common/on_actions/04_ADISCORD_operations_map_on_actions.txt")
+        state_hook = named_block(owner, "on_state_control_changed")
+        startup = named_block(owner, "on_startup")
+        self.assertGreaterEqual(startup.count("VAL_operations_map_refresh_cache = yes"), 2)
+        self.assertGreaterEqual(state_hook.count("VAL_operations_map_refresh_cache = yes"), 2)
+        self.assertIn("ROOT = {", state_hook)
+        self.assertIn("FROM = {", state_hook)
+        self.assertIn("has_country_flag = VAL_operations_map_unlocked", state_hook)
+        self.assertIn("has_country_flag = STP_cw_postwar", state_hook)
+        for path, hook in (
+            ("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt", "on_weekly_VAL"),
+            ("common/on_actions/02_ADISCORD_STP_on_actions.txt", "on_weekly_STS"),
+        ):
+            self.assertNotIn("VAL_operations_map_refresh_cache", named_block(read(path), hook))
+
     def test_kefreyt_resource_rights_checks_follow_their_states(self) -> None:
         source = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
         state_hook = named_block(source, "on_state_control_changed")
