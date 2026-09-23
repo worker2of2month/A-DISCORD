@@ -674,6 +674,26 @@ on_actions = {
 
 			# BEGIN stelander:on_capitulation
 
+			# Hegemony final wars share the same native capitulation owner.
+			# Record defeated members before the ordinary STP settlement routing.
+			if = {
+				limit = {
+					STS = { exists = yes has_country_flag = STP_heg_northern_final_started }
+					ROOT = {
+						OR = { tag = NOD tag = YPR tag = TFF }
+						has_war_with = STS
+					}
+				}
+				ROOT = { set_country_flag = STP_heg_defeated_by_sts }
+			}
+			if = {
+				limit = {
+					STS = { exists = yes has_country_flag = STP_heg_kefreyt_final_started }
+					ROOT = { tag = VAL has_war_with = STS }
+				}
+				ROOT = { set_country_flag = STP_heg_defeated_by_sts }
+			}
+
 			if = {
 				limit = {
 					ROOT = { tag = NOD is_subject = no has_war_with = STP }
