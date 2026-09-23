@@ -109,7 +109,8 @@ class KefreytFocusClarityTests(unittest.TestCase):
 
         frontier = focus(self.focuses, "VAL_frontier_conference")
         self.assertIn("prerequisite = { focus = VAL_One_Ledger_One_Banner }", frontier)
-        self.assertIn("prerequisite = { focus = VAL_Different_Views_On_Freedom }", frontier)
+        self.assertIn("prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }", frontier)
+        self.assertNotIn("VAL_Different_Views_On_Freedom", frontier)
         self.assertNotIn("VAL_The_Steel_Contract", frontier)
         self.assertNotIn("VAL_Contracts_Outlive_Kings", frontier)
 
