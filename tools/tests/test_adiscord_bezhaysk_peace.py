@@ -29,6 +29,28 @@ class BezhayskPeaceTests(unittest.TestCase):
         self.assertIn("set_country_flag = ADISCORD_bezhaysk_campaign_active", stp)
         self.assertIn("set_country_flag = ADISCORD_bezhaysk_campaign_active", val)
 
+    def test_capitulation_router_uses_runtime_receipts_not_focus_history(self) -> None:
+        source = self.read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
+        immediate = source.split("# BEGIN bezhaysk:on_capitulation_immediate", 1)[1].split(
+            "# END bezhaysk:on_capitulation_immediate", 1
+        )[0]
+        self.assertIn("has_country_flag = ADISCORD_bezhaysk_campaign_active", immediate)
+        for focus_id in (
+            "VAL_Bezhaysk_Operation",
+            "STP_pw_party_bezhaysk_campaign",
+            "STP_pw_take_bezhaysk",
+        ):
+            self.assertNotIn(f"has_completed_focus = {focus_id}", immediate)
+
+        late = source.split("# BEGIN bezhaysk:on_capitulation\n", 1)[1].split(
+            "# END bezhaysk:on_capitulation", 1
+        )[0]
+        self.assertIn("has_country_flag = ADISCORD_bezhaysk_capitulation_pending", late)
+        self.assertNotIn("has_war_with", late)
+        self.assertNotIn("has_completed_focus", late)
+        self.assertNotIn("is_subject_of", late)
+        self.assertNotIn("is_in_faction_with", late)
+
     def test_capitulation_router_handles_all_authored_routes(self) -> None:
         router = read_scripted_peace(ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt", "bezhaysk")
         for effect in (
