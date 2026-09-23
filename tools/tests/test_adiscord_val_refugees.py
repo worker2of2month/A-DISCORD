@@ -534,7 +534,7 @@ class CorridorProjectTests(unittest.TestCase):
         self.run_effect("VAL_begin_west_corridor_project")
         self.assertEqual(self.variables["VAL_corridor_project"], 1)
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2250)
-        self.decision_effect("VAL_upgrade_west_route", "cancel_effect")
+        self.decision_effect("VAL_upgrade_north_route", "cancel_effect")
         self.assertEqual(self.variables["VAL_corridor_deposit"], 750)
         self.decision_effect("VAL_upgrade_occidia_route", "remove_effect")
         count = len(self.rewards)
@@ -549,11 +549,11 @@ class CorridorProjectTests(unittest.TestCase):
         self.run_effect("VAL_begin_west_corridor_project")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 2000)
         self.facts[("VAL", "VAL_trade_route_west_open", "yes")] = False
-        self.decision_effect("VAL_upgrade_west_route", "remove_effect")
+        self.decision_effect("VAL_upgrade_north_route", "remove_effect")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 3000)
         self.assertEqual(self.variables["ADISCORD_economy_current_month_action_income"], 1000)
         self.assertEqual(self.rewards, [])
-        self.decision_effect("VAL_upgrade_west_route", "cancel_effect")
+        self.decision_effect("VAL_upgrade_north_route", "cancel_effect")
         self.assertEqual(self.variables["ADISCORD_economy_treasury"], 3000)
         self.facts[("VAL", "VAL_trade_route_west_open", "yes")] = True
         self.run_effect("VAL_begin_west_corridor_project")
