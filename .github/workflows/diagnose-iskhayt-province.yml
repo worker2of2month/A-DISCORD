@@ -1,4 +1,4 @@
-name: Diagnose Iskhayt province
+name: Diagnose Iskhayt capital province
 
 on:
   push:
@@ -15,132 +15,110 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Pillow
         run: python -m pip install --disable-pip-version-check pillow
-      - name: Diagnose province 16646
+      - name: Diagnose province 16372
         shell: bash
         run: |
           python - <<'PY'
           from __future__ import annotations
           import csv, math, re
-          from collections import defaultdict, Counter, deque
+          from collections import Counter, defaultdict, deque
           from pathlib import Path
           from PIL import Image
 
-          ROOT = Path(".")
-          TARGET = 16646
-          STATE20 = {6, 21, 51, 81, 88, 16372, 16646}
+          TARGET=16372
+          COMPARE={6,48,85,16372,16646}
+          rgb_to_id={}
+          id_to_rgb={}
+          definition={}
+          with open("map/definition.csv",encoding="utf-8-sig",newline="") as fh:
+              for row in csv.reader(fh,delimiter=";"):
+                  if len(row)>=8 and row[0].isdigit():
+                      pid=int(row[0]); rgb=tuple(map(int,row[1:4]))
+                      rgb_to_id[rgb]=pid; id_to_rgb[pid]=rgb; definition[pid]=row
 
-          rgb_to_id = {}
-          id_to_rgb = {}
-          definition = {}
-          with open("map/definition.csv", encoding="utf-8-sig", newline="") as fh:
-              for row in csv.reader(fh, delimiter=";"):
-                  if len(row) >= 8 and row[0].isdigit():
-                      pid = int(row[0]); rgb = tuple(map(int,row[1:4]))
-                      rgb_to_id[rgb] = pid; id_to_rgb[pid] = rgb; definition[pid] = row
-
-          state_by_prov = {}
-          state_members = defaultdict(set)
+          state_by={}
           for path in Path("history/states").glob("*.txt"):
-              text = path.read_text(encoding="utf-8-sig", errors="replace")
-              m1 = re.search(r"\bid\s*=\s*(\d+)", text)
-              m2 = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", text, re.S)
-              if not (m1 and m2): continue
-              sid = int(m1.group(1))
-              for token in re.findall(r"\d+", m2.group(1)):
-                  pid = int(token)
-                  state_members[sid].add(pid)
-                  state_by_prov.setdefault(pid, []).append(sid)
+              text=path.read_text(encoding="utf-8-sig",errors="replace")
+              mi=re.search(r"\bid\s*=\s*(\d+)",text)
+              mp=re.search(r"\bprovinces\s*=\s*\{([^}]*)\}",text,re.S)
+              if not (mi and mp): continue
+              sid=int(mi.group(1))
+              for tok in re.findall(r"\d+",mp.group(1)):
+                  state_by.setdefault(int(tok),[]).append(sid)
 
-          print("DEFINITION", definition.get(TARGET))
-          print("STATE MEMBERSHIP", TARGET, state_by_prov.get(TARGET))
-          print("STATE20 EXACT", sorted(state_members[20]))
-
-          image = Image.open("map/provinces.bmp").convert("RGB")
-          w,h = image.size
-          px=image.load()
-          grid=[0]*(w*h)
+          prov=Image.open("map/provinces.bmp").convert("RGB")
+          w,h=prov.size
+          ppx=prov.load()
           coords=defaultdict(list)
+          grid=[-1]*(w*h)
           for y in range(h):
               for x in range(w):
-                  pid=rgb_to_id.get(px[x,y],-1)
+                  pid=rgb_to_id.get(ppx[x,y],-1)
                   grid[y*w+x]=pid
-                  if pid in STATE20:
-                      coords[pid].append((x,y))
+                  if pid in COMPARE: coords[pid].append((x,y))
 
-          def comp_sizes(pid):
-              pts=set(coords[pid])
-              out=[]
-              while pts:
-                  start=pts.pop(); q=[start]; n=1
-                  while q:
-                      x,y=q.pop()
-                      for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
-                          p=(x+dx,y+dy)
-                          if p in pts:
-                              pts.remove(p); q.append(p); n+=1
-                  out.append(n)
-              return sorted(out, reverse=True)
-
-          def neighbours(pid):
+          def adjacency_counts(pid):
               c=Counter()
               for x,y in coords[pid]:
                   for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
                       nx,ny=x+dx,y+dy
                       if 0<=nx<w and 0<=ny<h:
-                          other=grid[ny*w+nx]
-                          if other != pid:
-                              c[other]+=1
+                          q=grid[ny*w+nx]
+                          if q!=pid: c[q]+=1
               return c
 
-          for pid in sorted(STATE20):
+          def components(pid):
+              rem=set(coords[pid]); out=[]
+              while rem:
+                  s=rem.pop(); q=[s]; n=1
+                  while q:
+                      x,y=q.pop()
+                      for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
+                          p=(x+dx,y+dy)
+                          if p in rem: rem.remove(p); q.append(p); n+=1
+                  out.append(n)
+              return sorted(out,reverse=True)
+
+          print("TARGET DEF",definition[TARGET])
+          print("TARGET STATE",state_by.get(TARGET))
+          for pid in sorted(COMPARE):
               pts=coords[pid]
-              xs=[p[0] for p in pts]; ys=[p[1] for p in pts]
-              nb=neighbours(pid)
-              print("GEOM", pid, {
+              xs=[x for x,y in pts]; ys=[y for x,y in pts]
+              print("GEOM",pid,{
                   "area":len(pts),
                   "bbox":[min(xs),min(ys),max(xs),max(ys)],
-                  "components":comp_sizes(pid),
-                  "neighbours":[(n,c,state_by_prov.get(n),definition.get(n,[None]*8)[4] if n in definition else None) for n,c in nb.most_common()]
+                  "components":components(pid),
+                  "adj":[(n,c,state_by.get(n),definition.get(n,[None]*8)[4] if n in definition else None) for n,c in adjacency_counts(pid).most_common()]
               })
 
-          # Unit stack / province anchor data.
-          unit_lines = []
-          if Path("map/unitstacks.txt").exists():
-              for raw in Path("map/unitstacks.txt").read_text(encoding="utf-8-sig", errors="replace").splitlines():
-                  fields=raw.strip().split(";")
-                  if fields and fields[0].isdigit() and int(fields[0]) in STATE20:
-                      unit_lines.append((int(fields[0]),fields,raw))
-          print("UNITSTACK ROWS")
-          for pid,fields,raw in unit_lines:
-              print(raw)
+          # Hole / one-pixel neck checks for target.
+          target=set(coords[TARGET])
+          articulation=[]
+          for removed in target:
+              rest=target-{removed}
+              s=next(iter(rest)); seen={s}; q=[s]
+              while q:
+                  x,y=q.pop()
+                  for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
+                      p=(x+dx,y+dy)
+                      if p in rest and p not in seen:
+                          seen.add(p); q.append(p)
+              if len(seen)!=len(rest): articulation.append(removed)
+          print("ARTICULATION",articulation)
 
-          type0={}
-          for pid,fields,raw in unit_lines:
-              if len(fields)>=5 and fields[1]=="0":
-                  try: type0.setdefault(pid,(float(fields[2]),float(fields[3]),float(fields[4])))
-                  except ValueError: pass
-          print("TYPE0 CHECK")
-          for pid in sorted(STATE20):
-              pos=type0.get(pid)
-              if not pos:
-                  print(pid,"MISSING")
-                  continue
-              x,y3,z=pos
-              probes=[]
-              for label,xx,yy in [
-                  ("round_flip",round(x),h-1-round(z)),
-                  ("floor_flip",math.floor(x),h-1-math.floor(z)),
-                  ("round_direct",round(x),round(z)),
-                  ("floor_direct",math.floor(x),math.floor(z)),
-              ]:
-                  if 0<=xx<w and 0<=yy<h:
-                      probes.append((label,xx,yy,grid[yy*w+xx]))
-              # nearest target pixel from the most likely map projection (x, h-1-z)
-              ax,ay=x,h-1-z
-              nearest=min(( (pxx-ax)**2+(pyy-ay)**2, pxx,pyy) for pxx,pyy in coords[pid])
-              print(pid, "pos",pos,"probes",probes,"nearest_distance",round(nearest[0]**0.5,3),"nearest_pixel",nearest[1:])
+          # Anchors from unitstacks.
+          rows=[]
+          for raw in Path("map/unitstacks.txt").read_text(encoding="utf-8-sig",errors="replace").splitlines():
+              f=raw.split(";")
+              if f and f[0].isdigit() and int(f[0])==TARGET:
+                  rows.append(raw)
+          print("UNITSTACK TARGET")
+          for r in rows: print(r)
+          type0=[r.split(";") for r in rows if r.split(";")[1]=="0"][0]
+          x=float(type0[2]); z=float(type0[4]); mx=round(x); my=h-1-round(z)
+          print("TYPE0 PIXEL",mx,my,"province",grid[my*w+mx])
 
-          # Railway validity from actual physical border graph.
+          # Rail route validation.
           adj=defaultdict(set)
           for y in range(h):
               for x in range(w):
@@ -151,61 +129,47 @@ jobs:
                   if y+1<h:
                       b=grid[(y+1)*w+x]
                       if a!=b: adj[a].add(b); adj[b].add(a)
-          print("RAILWAYS CONTAINING 16646")
+          print("RAILS")
           for raw in Path("map/railways.txt").read_text(encoding="utf-8-sig",errors="replace").splitlines():
               parts=raw.split()
               if str(TARGET) not in parts: continue
+              route=list(map(int,parts[2:]))
               print(raw)
-              try:
-                  route=list(map(int,parts[2:]))
-                  print("pairs",[(a,b,b in adj[a]) for a,b in zip(route,route[1:])])
-              except Exception as e: print("parse-error",e)
+              print([(a,b,b in adj[a]) for a,b in zip(route,route[1:])])
 
-          # Building/map object rows, if present.
-          for p in ["map/buildings.txt","map/weatherpositions.txt","map/supply_nodes.txt"]:
+          for p in ["map/supply_nodes.txt","map/buildings.txt","map/weatherpositions.txt"]:
               path=Path(p)
+              print("REF",p)
+              if path.exists():
+                  hits=[raw for raw in path.read_text(encoding="utf-8-sig",errors="replace").splitlines() if re.search(rf"(?<!\d){TARGET}(?!\d)",raw)]
+                  for hit in hits: print(hit)
+                  print("count",len(hits))
+
+          # Sample relevant visual/map layers over target and compare neighbours.
+          layer_paths=["map/heightmap.bmp","map/terrain.bmp","map/rivers.bmp","map/cities.bmp","map/trees.bmp"]
+          for lp in layer_paths:
+              path=Path(lp)
               if not path.exists(): continue
-              print("REFERENCES",p)
-              n=0
-              for raw in path.read_text(encoding="utf-8-sig",errors="replace").splitlines():
-                  if re.search(rf"(?<!\d){TARGET}(?!\d)", raw):
-                      print(raw); n+=1
-              print("count",n)
+              im=Image.open(path)
+              print("LAYER",lp,"mode",im.mode,"size",im.size)
+              if im.size != prov.size:
+                  print("  size differs from provinces; skipped pixel comparison")
+                  continue
+              for pid in sorted(COMPARE):
+                  vals=[im.getpixel((x,y)) for x,y in coords[pid]]
+                  counts=Counter(vals)
+                  print(" ",pid,"minmax", (min(vals),max(vals)) if vals and isinstance(vals[0],int) else "n/a","top",counts.most_common(12))
 
-          # Shape pathologies: holes and one-pixel bottlenecks.
-          target=set(coords[TARGET])
-          x0=min(x for x,y in target)-1; x1=max(x for x,y in target)+1
-          y0=min(y for x,y in target)-1; y1=max(y for x,y in target)+1
-          outside=set()
-          q=deque()
-          for x in range(x0,x1+1):
-              for y in (y0,y1):
-                  if (x,y) not in target and (x,y) not in outside:
-                      outside.add((x,y)); q.append((x,y))
-          for y in range(y0,y1+1):
-              for x in (x0,x1):
-                  if (x,y) not in target and (x,y) not in outside:
-                      outside.add((x,y)); q.append((x,y))
-          while q:
-              x,y=q.popleft()
-              for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
-                  p=(x+dx,y+dy)
-                  if x0<=p[0]<=x1 and y0<=p[1]<=y1 and p not in target and p not in outside:
-                      outside.add(p); q.append(p)
-          holes=[(x,y) for x in range(x0,x1+1) for y in range(y0,y1+1) if (x,y) not in target and (x,y) not in outside]
-          print("HOLES",holes)
-
-          articulation=[]
-          for removed in target:
-              rest=target-{removed}
-              if not rest: continue
-              start=next(iter(rest)); seen={start}; q=[start]
-              while q:
-                  x,y=q.pop()
-                  for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
-                      p=(x+dx,y+dy)
-                      if p in rest and p not in seen:
-                          seen.add(p); q.append(p)
-              if len(seen)!=len(rest): articulation.append(removed)
-          print("ARTICULATION_PIXELS", articulation)
+          # Detect 2x2 checkerboard / X-junctions touching TARGET, which are notorious
+          # for ambiguous corner topology in Clausewitz maps.
+          xs=[x for x,y in target]; ys=[y for x,y in target]
+          x0,x1=min(xs)-2,max(xs)+2; y0,y1=min(ys)-2,max(ys)+2
+          crosses=[]
+          for y in range(y0,y1):
+              for x in range(x0,x1):
+                  a=grid[y*w+x]; b=grid[y*w+x+1]
+                  c=grid[(y+1)*w+x]; d=grid[(y+1)*w+x+1]
+                  if a==d and b==c and a!=b and TARGET in (a,b,c,d):
+                      crosses.append((x,y,a,b,c,d))
+          print("X_JUNCTIONS",crosses)
           PY
