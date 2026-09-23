@@ -61,7 +61,7 @@
  VAL_refugee_contract_labor: "Contracts for the Displaced"
  VAL_refugee_contract_labor_desc:0 "Labour contracts give §G+12%§! construction speed and §G+8%§! civilian income at the cost of §R-1%§! stability."
 
- VAL_refugee_admission_tt: "Admit §Y100,000§! refugees. Grey-market pressure: §R+5§!."
+ VAL_refugee_admission_tt: "Admit §Y100,000§! refugees. Grey-market pressure: §R+3§!."
 
  VAL_refugee_admission_vorkerland_tt:0 "Admit §Y300,000§! refugees. Grey-market pressure: §R+3§!."
  VAL_refugee_admission_stelander_tt:0 "Admit §Y200,000§! refugees. Grey-market pressure: §R+3§!."
