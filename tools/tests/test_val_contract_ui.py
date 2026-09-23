@@ -977,10 +977,29 @@ class TestValExpansionRoute(unittest.TestCase):
         for blocked in ("has_capitulated", "is_subject"):
             self.assertFalse(matches({blocked: "yes"}))
         self.assertFalse(matches({"VAL_stelander_defeated": True}))
-        decisions = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_frontier")
+        decisions = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_military_operations")
         for name in ("VAL_frontier_demand_CIN", "VAL_frontier_demand_ERT", "VAL_frontier_begin_offensive"):
             self.assertIn("has_war = no", named_block(named_block(decisions, name), "available"))
         self.assertIn("STP_cw_union_wars_finished", named_block(text, "VAL_stelander_ultimatum_target"))
+
+    def test_military_operations_owns_offensive_campaigns_and_stays_on_top(self):
+        categories = read("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
+        military_category = named_block(categories, "VAL_military_operations")
+        self.assertIn("priority = 1000", military_category)
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        military = named_block(decisions, "VAL_military_operations")
+        frontier = named_block(decisions, "VAL_frontier")
+        for name in (
+            "VAL_frontier_demand_CIN",
+            "VAL_frontier_demand_ERT",
+            "VAL_frontier_begin_offensive",
+            "VAL_campaign_against_nod",
+            "VAL_campaign_against_stelander",
+            "VAL_stelander_ultimatum",
+            "VAL_nod_ultimatum",
+        ):
+            self.assertIn(name + " = {", military)
+            self.assertNotIn(name + " = {", frontier)
 
     def test_expansion_is_split_into_early_war_bands_and_late_continuation(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
