@@ -883,21 +883,7 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 25
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 producer = VAL }
-			effect_tooltip = {
-				if = {
-					limit = {
-						OR = {
-							NOT = { has_variable = VAL_contract_industry_level }
-							check_variable = { var = VAL_contract_industry_level value = 1 compare = less_than }
-						}
-					}
-					swap_ideas = { remove_idea = VAL_industry_2_dummy add_idea = VAL_industry_2_delta }
-				}
-				else_if = {
-					limit = { check_variable = { var = VAL_contract_industry_level value = 2 compare = less_than } }
-					swap_ideas = { remove_idea = VAL_industry_2_dummy add_idea = VAL_industry_1_to_2_delta }
-				}
-			}
+			custom_effect_tooltip = VAL_contract_industry_tier_2_tt
 			hidden_effect = { VAL_apply_contract_industry_2 = yes }
 		}
 		ai_will_do = { base = 2 }
@@ -1461,21 +1447,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Standardize_Rifle_Lots }
 		completion_reward = {
 			add_tech_bonus = { name = VAL_standard_cartridges_bonus bonus = 1.0 uses = 1 category = infantry_weapons }
-			effect_tooltip = {
-				if = {
-					limit = {
-						OR = {
-							NOT = { has_variable = VAL_contract_industry_level }
-							check_variable = { var = VAL_contract_industry_level value = 1 compare = less_than }
-						}
-					}
-					swap_ideas = { remove_idea = VAL_industry_2_dummy add_idea = VAL_industry_2_delta }
-				}
-				else_if = {
-					limit = { check_variable = { var = VAL_contract_industry_level value = 2 compare = less_than } }
-					swap_ideas = { remove_idea = VAL_industry_2_dummy add_idea = VAL_industry_1_to_2_delta }
-				}
-			}
+			custom_effect_tooltip = VAL_contract_industry_tier_2_tt
 			hidden_effect = { VAL_apply_contract_industry_2 = yes }
 		}
 		ai_will_do = { base = 3 }
@@ -1491,21 +1463,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Mobilize_Machine_Shops }
 		completion_reward = {
 			VAL_advance_economic_recovery = yes
-			effect_tooltip = {
-				if = {
-					limit = {
-						OR = {
-							NOT = { has_variable = VAL_contract_industry_level }
-							check_variable = { var = VAL_contract_industry_level value = 1 compare = less_than }
-						}
-					}
-					swap_ideas = { remove_idea = VAL_industry_2_dummy add_idea = VAL_industry_2_delta }
-				}
-				else_if = {
-					limit = { check_variable = { var = VAL_contract_industry_level value = 2 compare = less_than } }
-					swap_ideas = { remove_idea = VAL_industry_2_dummy add_idea = VAL_industry_1_to_2_delta }
-				}
-			}
+			custom_effect_tooltip = VAL_contract_industry_tier_2_tt
 			hidden_effect = { VAL_apply_contract_industry_2 = yes }
 		}
 		ai_will_do = { base = 30 }
@@ -1550,25 +1508,7 @@ focus_tree = {
 
 			VAL_advance_economic_recovery = yes
 			VAL_industrial_finale_path_extra = yes
-			effect_tooltip = {
-				if = {
-					limit = {
-						OR = {
-							NOT = { has_variable = VAL_contract_industry_level }
-							check_variable = { var = VAL_contract_industry_level value = 1 compare = less_than }
-						}
-					}
-					swap_ideas = { remove_idea = VAL_industry_3_dummy add_idea = VAL_industry_3_delta }
-				}
-				else_if = {
-					limit = { check_variable = { var = VAL_contract_industry_level value = 2 compare = less_than } }
-					swap_ideas = { remove_idea = VAL_industry_3_dummy add_idea = VAL_industry_1_to_3_delta }
-				}
-				else_if = {
-					limit = { check_variable = { var = VAL_contract_industry_level value = 3 compare = less_than } }
-					swap_ideas = { remove_idea = VAL_industry_3_dummy add_idea = VAL_industry_2_to_3_delta }
-				}
-			}
+			custom_effect_tooltip = VAL_contract_industry_tier_3_tt
 			hidden_effect = { VAL_apply_contract_industry_3 = yes }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_fiscal_administration_delta } }
 			hidden_effect = {
