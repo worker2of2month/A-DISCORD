@@ -710,6 +710,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Paid_Loyalty
+		dynamic = yes
 		icon = GFX_goal_generic_demand_territory
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 18
@@ -736,6 +737,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Provincial_Brokers
+		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 22
@@ -760,6 +762,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Closed_Ledgers
+		dynamic = yes
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		x = 20
@@ -787,6 +790,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_State_Above_Captains
+		dynamic = yes
 		icon = GFX_goal_generic_political_pressure
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		x = 18
@@ -813,6 +817,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Quarterly_Contract_Norm
+		dynamic = yes
 		icon = GFX_goal_generic_production
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
 		x = 22
@@ -845,6 +850,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Contract_Accounting_Office
+		dynamic = yes
 		icon = GFX_focus_generic_stockpile_currency
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		x = 2
@@ -978,6 +984,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Westerholm_Concessions
+		dynamic = yes
 		icon = GFX_goal_generic_trade
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		x = 12
@@ -1002,6 +1009,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Company_Rosters
+		dynamic = yes
 		icon = GFX_focus_generic_military_academy
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 40
@@ -1147,6 +1155,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Field_Repair_Corps
+		dynamic = yes
 		icon = GFX_focus_generic_limited_social_mobilization
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 34
@@ -1169,6 +1178,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Reserve_Battalions
+		dynamic = yes
 		icon = GFX_goal_generic_allies_build_infantry
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
 		x = 38
@@ -1190,6 +1200,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Contract_General_Staff
+		dynamic = yes
 		icon = GFX_goal_generic_army_doctrines
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_AUTHORITY }
 		x = 36
@@ -1227,6 +1238,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Vorkerland_Contracts_Burn
+		dynamic = yes
 		icon = GFX_goal_generic_major_war
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
 		x = 10
@@ -1271,6 +1283,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Ministry_Auditors
+		dynamic = yes
 		icon = GFX_focus_generic_secret_service_agency
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 14
@@ -1294,6 +1307,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Central_Payment_Office
+		dynamic = yes
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 22
@@ -1312,6 +1326,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Provincial_Contract_Courts
+		dynamic = yes
 		icon = GFX_focus_generic_self_management
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 20
@@ -1336,6 +1351,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Captains_Cannot_Veto
+		dynamic = yes
 		icon = GFX_goal_generic_political_pressure
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		x = 18
@@ -1361,6 +1377,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_State_Contract
+		dynamic = yes
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 20
@@ -1394,6 +1411,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Wireless_Contract_Bureau
+		dynamic = yes
 		icon = GFX_goal_generic_propaganda
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		x = 30
@@ -1456,6 +1474,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Munitions_Board
+		dynamic = yes
 		icon = GFX_goal_generic_construct_mil_factory
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		x = 2
@@ -1512,6 +1531,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Standard_Cartridges
+		dynamic = yes
 		icon = GFX_goal_generic_small_arms
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_ARMY }
 		x = 4
@@ -1545,6 +1565,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Three_Shift_Arsenals
+		dynamic = yes
 		icon = GFX_focus_generic_industry_3
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		x = 4
@@ -1578,6 +1599,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Reserve_Accounting
+		dynamic = yes
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 8
@@ -1599,6 +1621,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Industrial_Mobilization_Plan
+		dynamic = yes
 		icon = GFX_goal_generic_production2
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		x = 6
@@ -1662,6 +1685,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Company_Service_Code
+		dynamic = yes
 		icon = GFX_focus_generic_military_academy
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS FOCUS_FILTER_VAL_MANPOWER }
 		x = 40
@@ -1706,6 +1730,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Logistics_Command
+		dynamic = yes
 		icon = GFX_focus_generic_supply_line
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 34
@@ -1725,6 +1750,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Operational_Reserves
+		dynamic = yes
 		icon = GFX_goal_generic_position_armies
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
 		x = 38
@@ -1745,6 +1771,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Army_Of_The_Ledger
+		dynamic = yes
 		icon = GFX_goal_generic_army_doctrines
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 36
@@ -1775,6 +1802,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Foreign_Broker_Licences
+		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
 		x = 27
@@ -1878,6 +1906,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Contracts_Outlive_Kings
+		dynamic = yes
 		icon = GFX_focus_VAL_Contracts_Outlive_Kings
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 20
@@ -2205,6 +2234,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Occidian_Registries
+		dynamic = yes
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY }
 		x = 12
@@ -2224,6 +2254,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Integrate_Occidia
+		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY }
 		x = 14
@@ -2246,6 +2277,7 @@ focus_tree = {
 	# Northern expansion. Logistics, administration and claims have independent columns.
 	focus = {
 		id = VAL_frontier_conference
+		dynamic = yes
 		icon = GFX_goal_generic_positive_trade_relations
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_DECISIONS }
 		x = 24
@@ -2344,6 +2376,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Return_Southern_Tsaygen
+		dynamic = yes
 		icon = GFX_goal_generic_territory_or_war
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
@@ -2373,6 +2406,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_frontier_return_irem
+		dynamic = yes
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
@@ -2394,6 +2428,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Wasteland_Charter
+		dynamic = yes
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
@@ -2415,6 +2450,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Southern_Expansion
+		dynamic = yes
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
@@ -2440,6 +2476,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Eastern_Expansion
+		dynamic = yes
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
@@ -2466,6 +2503,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_frontier_security_plan
+		dynamic = yes
 		icon = GFX_focus_generic_mountain_fortification
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 24
@@ -2498,6 +2536,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_frontier_treaty_offices
+		dynamic = yes
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
 		x = 24
@@ -2541,6 +2580,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_New_Supply_Base
+		dynamic = yes
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
 		x = 22
@@ -2560,6 +2600,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Northern_Settlement
+		dynamic = yes
 		icon = GFX_focus_generic_mountain_fortification
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 26
@@ -2575,6 +2616,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Stelander_Ultimatum
+		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 28
@@ -2590,6 +2632,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Equal_Powers_Pact
+		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		x = 28
@@ -2616,6 +2659,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Joint_General_Staff
+		dynamic = yes
 		icon = GFX_goal_generic_allies_build_infantry
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
 		x = 27
@@ -2637,6 +2681,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Cross_Border_Contracts
+		dynamic = yes
 		icon = GFX_goal_generic_trade
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY }
 		x = 29
@@ -2661,6 +2706,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Two_States_One_Frontier
+		dynamic = yes
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		x = 28
@@ -2686,6 +2732,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Campaign_Secured
+		dynamic = yes
 		mutually_exclusive = { focus = VAL_Equal_Powers_Pact }
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
@@ -2708,6 +2755,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Audit_Lost_Contracts
+		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_RECOVERY }
 		x = 10
@@ -2764,6 +2812,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Reopen_Trade_Routes
+		dynamic = yes
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
 		x = 22
@@ -2783,6 +2832,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Settle_Industrial_Debts
+		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
 		x = 26
@@ -2802,6 +2852,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Return_To_World_Market
+		dynamic = yes
 		icon = GFX_goal_generic_trade
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
 		x = 24
@@ -2831,6 +2882,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Veterans_Of_The_Campaign
+		dynamic = yes
 		icon = GFX_goal_generic_army_doctrines
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 28
@@ -2852,6 +2904,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_econ_development_fund
+		dynamic = yes
 		icon = GFX_goal_generic_production2
 		x = 4
 		y = 11
@@ -3046,6 +3099,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Bezhaysk_Operation
+		dynamic = yes
 		icon = GFX_goal_generic_position_armies
 		x = 30
 		y = 13
@@ -3147,6 +3201,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Balchansk_Charter
+		dynamic = yes
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ECONOMY }
 		x = 10
