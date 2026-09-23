@@ -718,7 +718,7 @@ VAL_finish_housing = {
 		if = {
 			limit = { has_capitulated = no is_subject = no }
 			clear_variable = VAL_housing_deposit
-			add_to_variable = { var = VAL_refugee_housing value = 20 }
+			add_to_variable = { var = VAL_refugee_housing value = 30 }
 			VAL_refresh_refugee_state = yes
 		}
 		else = { VAL_refund_housing = yes }
