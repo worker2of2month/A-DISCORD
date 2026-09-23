@@ -3503,19 +3503,33 @@ class ValExpandedCampaignTests(unittest.TestCase):
         available = self.getblock(support, "available")
         self.assertIn("VAL_nam_concession_negotiable", str(available))
         reward = self.getblock(support, "completion_reward")
-        self.assertIn("VAL_commit_nam_resource_aid", str(reward))
+        reward_text = str(reward)
+        self.assertIn("VAL_nam_concession_negotiable", reward_text)
+        self.assertIn("VAL_nam_concession_agreed", reward_text)
+        self.assertIn("VAL_resource_aid_side", reward_text)
+        self.assertIn("VAL_start_resource_aid", reward_text)
+        self.assertIn("VAL_begin_partner_contract_year", reward_text)
+        self.assertNotIn("VAL_commit_nam_resource_aid", reward_text)
 
-        effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
-        commit = self.getblock(effects, "VAL_commit_nam_resource_aid")
-        self.assertIn("VAL_nam_concession_negotiable", str(commit))
-        self.assertIn("VAL_nam_concession_agreed", str(commit))
-        self.assertIn("VAL_resource_aid_side", str(commit))
-        self.assertIn("VAL_start_resource_aid", str(commit))
-        self.assertIn("VAL_begin_partner_contract_year", str(commit))
+        effects_text = EFFECTS_PATH.read_text(encoding="utf-8")
+        self.assertNotIn("VAL_commit_nam_resource_aid", effects_text)
 
         events = (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8")
         nam_offer = events[events.index("id = val_contract.349"):events.index("id = val_contract.353")]
-        self.assertIn("VAL_commit_nam_resource_aid = yes", nam_offer)
+        self.assertNotIn("VAL_commit_nam_resource_aid", nam_offer)
+        self.assertIn("VAL_nam_concession_agreed", nam_offer)
+        self.assertIn("VAL_resource_aid_side", nam_offer)
+        self.assertIn("VAL_start_resource_aid = yes", nam_offer)
+        self.assertIn("VAL_begin_partner_contract_year = yes", nam_offer)
+
+    def test_viceroy_support_has_no_new_scripted_effect_dependency(self):
+        focus_text = (ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt").read_text(encoding="utf-8")
+        events_text = (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(encoding="utf-8")
+        effects_text = EFFECTS_PATH.read_text(encoding="utf-8")
+        for text in (focus_text, events_text, effects_text):
+            self.assertNotIn("VAL_commit_nam_resource_aid", text)
+        self.assertIn("VAL_start_resource_aid = yes", focus_text)
+        self.assertIn("VAL_start_resource_aid = yes", events_text)
 
     def test_resource_war_transitions_invalidate_the_focus_layout_without_an_aid_contract(self):
         from tools.tests.test_adiscord_stp_preparation import walk
