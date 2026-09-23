@@ -26,7 +26,7 @@
  VAL_State_Above_Captains: "The State Above the Captains"
  VAL_State_Above_Captains_desc: "The contract system will outlive its founders only when no company can consider itself the state's equal."
  VAL_Quarterly_Contract_Norm: "Quarterly Contract Quota"
- VAL_Quarterly_Contract_Norm_desc:0 "Every ninety days the arsenals must fulfil an export order. Deliver 40000 rifles for §Y10§! £political_power_texticon, or pay independent contractors 1000 treasury and retain the weapons. An arsenal delivery improves reputation and earns military experience; subcontracting only preserves reputation. Early payment does not bring the next quarter forward."
+ VAL_Quarterly_Contract_Norm_desc:0 "Every ninety days the arsenals must fulfil an export quota. Deliver 40000 rifles for §Y10§! £political_power_texticon, or pay independent contractors 1000 treasury and keep the weapons. §GBoth settlement options are available as soon as the quarter begins§!: there is no need to wait for the deadline. Early fulfilment does not bring the next quarter forward. Arsenal delivery improves reputation and earns military experience; subcontracting only preserves reputation."
  VAL_Contract_Accounting_Office: "Industrial Budget"
  VAL_Contract_Accounting_Office_desc: "Accounting for state orders will bring arsenal accounts, tax payments and production plans together. The reform increases recurring treasury income and reduces administrative expenditure."
  VAL_Salvage_Every_Barrel: "Restoring Weapon Reserves"
@@ -85,9 +85,9 @@
  VAL_campaign_the_mine_was_stolen: "They Stole Our Mine Campaign"
  VAL_campaign_the_mine_was_stolen_desc: "Following the loss of Vorkerland's metal, direct public anger outward and prepare society to fight for a new source of metal."
  VAL_quarterly_contract_deadline: "Quarterly Quota Deadline"
- VAL_quarterly_contract_deadline_desc:0 "[ROOT.VALGetQuarterlyStatus]\n\nBefore the deadline choose an arsenal delivery or a subcontract. Delivery costs 40000 rifles and §Y10§! £political_power_texticon; at quarter end it grants +1 reputation tier, 15 army experience and 15 command power. Subcontracting costs 1000 treasury and preserves reputation without military rewards. A missed order loses one reputation tier. The next period starts after this deadline."
+ VAL_quarterly_contract_deadline_desc:0 "[ROOT.VALGetQuarterlyStatus]\n\nAs soon as the quarter begins, choose an arsenal delivery or a cash subcontract. Delivery costs 40000 rifles and §Y10§! £political_power_texticon; at quarter end it grants +1 reputation tier, 15 army experience and 15 command power. A cash subcontract costs 1000 treasury: the money is charged immediately, the order is immediately marked fulfilled, and reputation is preserved without military rewards. Early fulfilment does not bring the next quarter forward. A missed order loses one reputation tier."
  VAL_pay_quarterly_contract_norm: "Meet the Quarterly Quota"
- VAL_pay_quarterly_contract_norm_desc:0 "Deliver 40000 rifles for §Y10§! £political_power_texticon. At quarter end reputation rises by one tier, up to its maximum. Gain 15 army experience and 15 command power even at maximum reputation."
+ VAL_pay_quarterly_contract_norm_desc:0 "Deliver 40000 rifles for §Y10§! £political_power_texticon. This option is available as soon as the quarter begins. At quarter end reputation rises by one tier, up to its maximum, and Kefreyt gains 15 army experience and 15 command power. Early delivery does not start the next quarter early."
  VAL_big_buyers: "Major Buyers"
  VAL_big_buyers_desc: "While Vorkerland retains a unified market, major buyers provide a steady flow of orders: §G+20§! weekly income, §G+20%§! trade income, §G+10%§! civilian industry income, §G+8%§! military industry income, §G+8%§! investment confidence and §G+5%§! production efficiency growth.\n\nThe price of this dependence is §R+5%§! social expenditure, §R+5%§! state overload growth, §R-5%§! creditworthiness and §R-3%§! stability.\n\n    §RAny upheaval among our partners will end this support.§!\n\nKefreyt gains rights to steel in [33.GetName]. Deliveries end if civil war breaks out in Vorkerland or the state is lost. Kefreyt's homeland contains only oil."
  VAL_westerholm_concession_income: "Vorkerland Concession"
@@ -987,11 +987,11 @@
 
  VAL_subcontract_quarterly_norm:0 "Subcontract the quarterly order"
 
- VAL_subcontract_quarterly_norm_desc:0 "Pay independent workshops 1000 treasury to fulfil the order. Our rifles stay in reserve and reputation is preserved. This option provides neither a reputation increase nor military experience. It closes the other payment option for this quarter."
+ VAL_subcontract_quarterly_norm_desc:0 "Immediately pay independent workshops 1000 treasury and fulfil the current quarterly order. The money is charged at once, our rifles stay in reserve and reputation is preserved. This grants neither military rewards nor a reputation increase. Payment closes the other fulfilment option, but the current quarterly timer continues to its normal date."
 
  VAL_quarterly_delivery_result_tt:0 "At quarter end: §G+1§! reputation tier (up to maximum), §G15§! army experience and §G15§! command power. This quarter cannot be paid twice."
 
- VAL_quarterly_subcontract_result_tt:0 "Subcontractors fulfil the order: reputation is preserved without military rewards. The current quarterly deadline is unchanged."
+ VAL_quarterly_subcontract_result_tt:0 "£ADISCORD_economy_treasury_texticon §Y1000§! is charged immediately. Contractors fulfil the order and reputation is preserved without military rewards. The current quarterly deadline is unchanged."
 
  VAL_reclamation_industrial_sites:0 "Industry on recovered land"
 

@@ -12,6 +12,7 @@ VAL_contract_management = {
 		OR = {
 			has_completed_focus = VAL_Ministry_Of_Contract_Memory
 			has_completed_focus = VAL_Quarterly_Contract_Norm
+			VAL_contract_obligations_decisions_visible = yes
 		}
 	}
 	visible_when_empty = yes
