@@ -1451,6 +1451,16 @@ VAL_partner_strategic_can_accept = {
 	VAL_partner_strategic_terms_valid = yes
 }
 
+VAL_southern_tsaygen_revenge_available = {
+	custom_trigger_tooltip = { tooltip = VAL_perimeter_open_tt has_global_flag = ADISCORD_vorkerland_dirty_opened }
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no }
+	168 = { is_core_of = VAL is_owned_by = ERT is_controlled_by = ERT }
+	VAL_frontier_idle = yes
+}
+
 VAL_wasteland_invasion_available = {
 	custom_trigger_tooltip = { tooltip = VAL_perimeter_open_tt has_global_flag = ADISCORD_vorkerland_dirty_opened }
 	has_capitulated = no
@@ -1515,7 +1525,15 @@ VAL_wasteland_capitulation_managed = {
 	FROM = { OR = { tag = VAL is_subject_of = VAL } }
 	capital_scope = { controller = { OR = { tag = VAL is_subject_of = VAL } } }
 	OR = {
-		AND = { tag = ERT VAL = { has_completed_focus = VAL_frontier_return_irem } }
+		AND = {
+			tag = ERT
+			VAL = {
+				OR = {
+					has_completed_focus = VAL_Return_Southern_Tsaygen
+					has_completed_focus = VAL_frontier_return_irem
+				}
+			}
+		}
 		AND = { tag = IRT VAL = { has_completed_focus = VAL_Eastern_Expansion VAL_wasteland_administration_ready = yes } }
 	}
 }
