@@ -120,6 +120,7 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
     def test_focus_returns_tsaygen_before_crossing_the_perimeter(self) -> None:
         focuses = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
         revenge = focus_block(focuses, "VAL_Return_Southern_Tsaygen")
+        self.assertIn("prerequisite = { focus = VAL_Contracts_Outlive_Kings }", revenge)
         self.assertIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", revenge)
         self.assertIn("VAL_southern_tsaygen_revenge_available = yes", revenge)
         self.assertIn("bypass = { has_global_flag = ADISCORD_vorkerland_dirty_opened owns_state = 168 }", revenge)
