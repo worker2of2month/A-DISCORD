@@ -588,6 +588,7 @@ class TestValContractUi(unittest.TestCase):
             "VAL_campaign_the_mine_was_stolen",
             "VAL_quarterly_contract_deadline",
             "VAL_pay_quarterly_contract_norm",
+            "VAL_subcontract_quarterly_norm",
         ):
             self.assertIn(f"{decision} = {{", contract)
 
@@ -726,6 +727,7 @@ class TestValPropagandaRewards(unittest.TestCase):
         alternatives = named_block(named_block(category, "visible"), "OR")
         self.assertIn("has_completed_focus = VAL_Ministry_Of_Contract_Memory", alternatives)
         self.assertIn("has_completed_focus = VAL_Quarterly_Contract_Norm", alternatives)
+        self.assertIn("VAL_contract_obligations_decisions_visible = yes", alternatives)
         for decision_id in self.campaigns:
             with self.subTest(decision=decision_id):
                 decision = self.decision(decision_id)
@@ -738,6 +740,38 @@ class TestValPropagandaRewards(unittest.TestCase):
                 self.assertIn("ADISCORD_has_campaign_slot = yes", available)
         mine = named_block(self.decision(self.campaigns[-1]), "visible")
         self.assertIn("has_country_flag = VAL_westerholm_metal_lost", mine)
+
+    def test_quarterly_settlement_actions_follow_live_order_not_focus(self) -> None:
+        decisions = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_contract_management")
+        triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        live = named_block(triggers, "VAL_contract_obligations_decisions_visible")
+        self.assertIn("has_country_flag = VAL_quarterly_contract_active", live)
+        self.assertNotIn("has_completed_focus", live)
+
+        for decision_id in (
+            "VAL_quarterly_contract_deadline",
+            "VAL_pay_quarterly_contract_norm",
+            "VAL_subcontract_quarterly_norm",
+        ):
+            with self.subTest(decision=decision_id):
+                visible = named_block(named_block(decisions, decision_id), "visible")
+                self.assertIn("VAL_contract_obligations_decisions_visible = yes", visible)
+                self.assertNotIn("has_completed_focus", visible)
+
+        for language in ("russian", "english"):
+            text = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            deadline = re.search(r'(?m)^\s*VAL_quarterly_contract_deadline_desc:0\s+"([^"\r\n]*)"', text)
+            subcontract = re.search(r'(?m)^\s*VAL_subcontract_quarterly_norm_desc:0\s+"([^"\r\n]*)"', text)
+            self.assertIsNotNone(deadline, language)
+            self.assertIsNotNone(subcontract, language)
+            if language == "russian":
+                self.assertIn("Сразу после начала квартала", deadline.group(1))
+                self.assertIn("сразу", subcontract.group(1).lower())
+                self.assertIn("не ускоряет", deadline.group(1))
+            else:
+                self.assertIn("As soon as the quarter begins", deadline.group(1))
+                self.assertIn("Immediately", subcontract.group(1))
+                self.assertIn("does not bring the next quarter forward", deadline.group(1))
 
     def test_political_campaign_has_a_positive_base_return_and_refreshes_income(self) -> None:
         decision = self.decision("VAL_campaign_no_promise_without_payment")

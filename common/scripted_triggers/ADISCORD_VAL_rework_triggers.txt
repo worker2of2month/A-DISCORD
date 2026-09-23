@@ -1140,8 +1140,10 @@ VAL_stelander_civil_war_active = {
     STS = { exists = yes }
 }
 
+# The UI follows the live obligation, not the focus that originally created it.
+# This also keeps old saves actionable when an active quarter survives focus-tree changes.
 VAL_contract_obligations_decisions_visible = {
-	has_completed_focus = VAL_Quarterly_Contract_Norm
+	has_country_flag = VAL_quarterly_contract_active
 }
 
 VAL_frontier_decisions_visible = {

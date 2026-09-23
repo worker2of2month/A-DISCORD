@@ -611,7 +611,7 @@ VAL_contract_management = {
 	VAL_subcontract_quarterly_norm = {
 		icon = generic_production
 		allowed = { tag = VAL }
-		visible = { VAL_contract_obligations_decisions_visible = yes has_country_flag = VAL_quarterly_contract_active NOT = { has_country_flag = VAL_quarterly_contract_paid } }
+		visible = { VAL_contract_obligations_decisions_visible = yes NOT = { has_country_flag = VAL_quarterly_contract_paid } }
 		available = { has_capitulated = no }
 		cost = 0
 		custom_cost_text = VAL_cost_treasury1000
@@ -734,7 +734,7 @@ VAL_contract_management = {
 	VAL_quarterly_contract_deadline = {
 		icon = generic_production
 		allowed = { tag = VAL }
-		visible = { has_completed_focus = VAL_Quarterly_Contract_Norm }
+		visible = { VAL_contract_obligations_decisions_visible = yes }
 		available = { hidden_trigger = { always = no } }
 		selectable_mission = no
 		days_mission_timeout = 90
@@ -744,7 +744,7 @@ VAL_contract_management = {
 	VAL_pay_quarterly_contract_norm = {
 		icon = generic_production
 		allowed = { tag = VAL }
-		visible = { has_country_flag = VAL_quarterly_contract_active NOT = { has_country_flag = VAL_quarterly_contract_paid } }
+		visible = { VAL_contract_obligations_decisions_visible = yes NOT = { has_country_flag = VAL_quarterly_contract_paid } }
 		available = { VAL_can_pay_quarterly_contract_norm = yes }
 		custom_cost_trigger = { NOT = { has_political_power < 10 } NOT = { has_equipment = { infantry_equipment < 40000 } } }
 		custom_cost_text = VAL_cost_pp10_r4000
