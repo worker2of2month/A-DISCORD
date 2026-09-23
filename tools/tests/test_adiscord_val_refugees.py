@@ -583,7 +583,7 @@ class RefugeeTrainingTests(unittest.TestCase):
         self.decision_effect("VAL_train_refugee_volunteers", "complete_effect")
         self.assertEqual(self.variables["VAL_displaced_population"], 9)
         self.assertEqual(self.variables["VAL_refugee_training_escrow"], 1)
-        self.assertEqual(self.rewards, [("add_political_power", -75), ("equipment", -500)])
+        self.assertEqual(self.rewards, [("add_political_power", -75), ("equipment", -5000)])
         for _ in range(2):
             self.decision_effect("VAL_train_refugee_volunteers", "remove_effect")
         self.decision_effect("VAL_train_refugee_volunteers", "cancel_effect")
@@ -599,7 +599,7 @@ class RefugeeTrainingTests(unittest.TestCase):
                 self.decision_effect("VAL_train_refugee_volunteers", "remove_effect")
                 self.decision_effect("VAL_train_refugee_volunteers", "cancel_effect")
                 self.assertEqual(self.variables["VAL_displaced_population"], 10)
-                self.assertEqual(self.rewards, [("add_political_power", -75), ("equipment", -500), ("add_political_power", 75), ("equipment", 500)])
+                self.assertEqual(self.rewards, [("add_political_power", -75), ("equipment", -5000), ("add_political_power", 75), ("equipment", 5000)])
                 self.assertNotIn("VAL_refugee_training_escrow", self.variables)
 
     def test_active_training_and_fractional_shortage_block_new_payment(self):
@@ -970,10 +970,10 @@ class WastelandCampaignTests(unittest.TestCase):
             self.assertEqual(scalar(decision, "custom_cost_text"), cost_text)
             guard = next(e.value for e in decision if e.key == "custom_cost_trigger")
             for pp, rifles, people, expected in (
-                (75, 500, threshold, True),
-                (74.99, 500, threshold, False),
-                (75, 499.99, threshold, False),
-                (75, 500, threshold - 0.001, False),
+                (75, 5000, threshold, True),
+                (74.99, 5000, threshold, False),
+                (75, 4999.99, threshold, False),
+                (75, 5000, threshold - 0.001, False),
             ):
                 facts = {
                     ("VAL", "numeric", "political_power"): pp,
