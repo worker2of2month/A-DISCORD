@@ -616,7 +616,29 @@ VAL_trade_routes = {
 		complete_effect = { custom_effect_tooltip = VAL_route_upgrade_tt hidden_effect = { VAL_begin_south_corridor_project = yes } }
 		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes NOT = { VAL_trade_route_south_open = yes } } } }
 		cancel_effect = { custom_effect_tooltip = VAL_route_refund_tt hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 5 compare = equals } } VAL_refund_corridor_project = yes } } }
-		remove_effect = { hidden_effect = { if = { limit = { check_variable = { var = VAL_corridor_project value = 5 compare = equals } } if = { limit = { has_capitulated = no VAL_trade_route_south_open = yes } VAL_finish_south_corridor_project = yes } else = { VAL_refund_corridor_project = yes } } } }
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = VAL_corridor_project
+							value = 5
+							compare = equals
+						}
+					}
+					if = {
+						limit = {
+							has_capitulated = no
+							VAL_trade_route_south_open = yes
+						}
+						VAL_finish_south_corridor_project = yes
+					}
+					else = {
+						VAL_refund_corridor_project = yes
+					}
+				}
+			}
+		}
 		ai_will_do = { base = 3 }
 	}
 	VAL_strengthen_corridor_security = {
