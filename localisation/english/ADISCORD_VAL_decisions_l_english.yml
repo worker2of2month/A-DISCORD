@@ -886,6 +886,11 @@
  VAL_resource_war_personnel_offer_tt: "Offer valid for 14 days: 2000 servicemen for the manpower pool and military advisers for 70 days, for 100 treasury funds. Upon acceptance, Kefreyt spends 2000 manpower and 25 command power."
  val_contract.341.personnel: "Kefreyt offers 2000 servicemen to replenish our manpower pool and staff instructors for 70 days. The price is 100 treasury funds. The instructors increase planning speed by 10%, organisation recovery by 5% and army experience gain by 5%.\n\nThe offer is valid for 14 days. Personnel transfer and payment occur together upon acceptance."
  VAL_resource_war_personnel_accepted_tt: "For 100 treasury funds, we receive 2000 manpower and Kefreyt military advisers for 70 days. Kefreyt spends 2000 manpower and 25 command power, receiving +10 weekly income for 70 days."
+ VAL_Support_The_Viceroy: "Back the Viceroy"
+ VAL_Support_The_Viceroy_desc:0 "The resource war has turned Svetlogorye into a besieged contract partner. Commit Kefreyt to the Viceroy now: his survival preserves a government we can bargain with, and victory can secure access to the Western Island deposits."
+ VAL_support_viceroy_available_tt:0 "The resource war is active, no side has been chosen, and independent Svetlogorye still holds the Western Island district. Kefreyt is not fighting the Viceroy and no rival aid agreement is active."
+ VAL_support_viceroy_effect_tt:0 "§YBacks Svetlogorye in the resource war.§! Starts the existing §Y90-day aid obligation§!: deliver §Y50000 rifles§!, §Y2000 personnel§!, or maintain §Y2 volunteer divisions for 30 consecutive days§!. If the Viceroy wins after receiving full aid, Kefreyt gains Western Island extraction rights."
+
  VAL_negotiate_nam_metals: "Discuss an Island Concession with the Viceroy"
  VAL_negotiate_nam_metals_desc:0 "Offer aid in exchange for Western Island extraction rights following the governor's victory. The agreement locks our side. Preparing the offer costs §Y50§! £political_power_texticon, not refunded on refusal."
  VAL_nam_concession_negotiable_tt:0 "The resource war is active; no side is selected. The governor is independent and holds the Western Island district. No rival offer or recent Eflorian contract is active."
