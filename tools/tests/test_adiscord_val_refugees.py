@@ -83,9 +83,13 @@ class WeeklyTradeTests(unittest.TestCase):
                 self.facts["VAL", "has_idea", value] = key == "add_ideas"
             elif key == "set_country_flag":
                 self.facts["VAL", "has_country_flag", scalar(value, "flag") if isinstance(value, list) else value] = True
-            elif key in ("ADISCORD_economy_initialize_country", "ADISCORD_economy_mark_dirty"):
-                # The fixture starts with an initialized treasury; cache invalidation
-                # does not change corridor ownership, control or war relations.
+            elif key in (
+                "ADISCORD_economy_initialize_country",
+                "ADISCORD_economy_mark_dirty",
+                "VAL_trade_routes_map_refresh_cache",
+            ):
+                # The fixture starts with an initialized treasury. Economy and UI cache
+                # refreshes do not change corridor ownership, control or war relations.
                 continue
             elif key in self.effects:
                 previous = self.consumer
