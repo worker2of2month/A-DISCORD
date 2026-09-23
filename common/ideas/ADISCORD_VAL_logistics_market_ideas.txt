@@ -118,7 +118,6 @@ ideas = {
 			modifier = {
 				production_speed_buildings_factor = 0.12
 				ADISCORD_economy_civilian_factory_income_factor = 0.08
-				stability_factor = -0.01
 			}
 		}
 	}
