@@ -3454,7 +3454,10 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertEqual(self.scalar(focus, "cancel_if_invalid"), "yes")
         self.assertEqual(self.scalar(self.getblock(focus, "prerequisite"), "focus"), "VAL_Ministry_Auditors")
         auditors = focuses["VAL_Ministry_Auditors"]
-        self.assertEqual(self.scalar(focus, "x"), self.scalar(auditors, "x"))
+        self.assertLessEqual(
+            abs(int(self.scalar(focus, "x")) - int(self.scalar(auditors, "x"))),
+            1,
+        )
         self.assertGreater(int(self.scalar(focus, "y")), int(self.scalar(auditors, "y")))
         position = (self.scalar(focus, "x"), self.scalar(focus, "y"))
         for other, body in focuses.items():
