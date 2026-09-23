@@ -2966,15 +2966,8 @@ ADISCORD_vorkerland_begin_ivanland_intervention = {
 	}
 }
 
-ADISCORD_vorkerland_end_ivanland_intervention_wars = {
+ADISCORD_vorkerland_cleanup_ivanland_intervention_front = {
 	IVN = {
-		if = { limit = { country_exists = ZAO has_war_with = ZAO } white_peace = ZAO }
-		if = { limit = { country_exists = WPA has_war_with = WPA } white_peace = WPA }
-		if = { limit = { country_exists = WPS has_war_with = WPS } white_peace = WPS }
-		if = { limit = { country_exists = PWR has_war_with = PWR } white_peace = PWR }
-		if = { limit = { country_exists = PSD has_war_with = PSD } white_peace = PSD }
-		if = { limit = { country_exists = IBL has_war_with = IBL } white_peace = IBL }
-		if = { limit = { country_exists = IBA has_war_with = IBA } white_peace = IBA }
 		clr_country_flag = ADISCORD_vorkerland_ivanland_front_launch_pending
 		clr_country_flag = ADISCORD_vorkerland_ivanland_front_verification_pending
 		clr_country_flag = ADISCORD_vorkerland_ivanland_front_war_retry
@@ -2987,6 +2980,45 @@ ADISCORD_vorkerland_end_ivanland_intervention_wars = {
 	WPS = { remove_ideas = ADISCORD_vorkerland_northern_defense_front if = { limit = { is_faction_leader = yes } dismantle_faction = yes } else_if = { limit = { is_in_faction = yes } leave_faction = yes } }
 	PSD = { remove_ideas = ADISCORD_vorkerland_northern_defense_front if = { limit = { is_faction_leader = yes } dismantle_faction = yes } else_if = { limit = { is_in_faction = yes } leave_faction = yes } }
 	IBL = { if = { limit = { is_faction_leader = yes } dismantle_faction = yes } else_if = { limit = { is_in_faction = yes } leave_faction = yes } }
+}
+
+ADISCORD_vorkerland_end_ivanland_intervention_wars = {
+	IVN = {
+		if = { limit = { country_exists = ZAO has_war_with = ZAO } white_peace = ZAO }
+		if = { limit = { country_exists = WPA has_war_with = WPA } white_peace = WPA }
+		if = { limit = { country_exists = WPS has_war_with = WPS } white_peace = WPS }
+		if = { limit = { country_exists = PWR has_war_with = PWR } white_peace = PWR }
+		if = { limit = { country_exists = PSD has_war_with = PSD } white_peace = PSD }
+		if = { limit = { country_exists = IBL has_war_with = IBL } white_peace = IBL }
+		if = { limit = { country_exists = IBA has_war_with = IBA } white_peace = IBA }
+	}
+	ADISCORD_vorkerland_cleanup_ivanland_intervention_front = yes
+}
+
+ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat = {
+	if = {
+		limit = { country_exists = PWR PWR = { NOT = { has_capitulated = yes } } }
+		PWR = { country_event = { id = ADISCORD_vorkerland_collapse.43 days = 2 } }
+	}
+	else_if = {
+		limit = { country_exists = PSD PSD = { NOT = { has_capitulated = yes } } }
+		PSD = { country_event = { id = ADISCORD_vorkerland_collapse.43 days = 2 } }
+	}
+	else_if = {
+		limit = { country_exists = ZAO ZAO = { NOT = { has_capitulated = yes } } }
+		ZAO = { country_event = { id = ADISCORD_vorkerland_collapse.43 days = 2 } }
+	}
+	else_if = {
+		limit = { country_exists = WPA WPA = { NOT = { has_capitulated = yes } } }
+		WPA = { country_event = { id = ADISCORD_vorkerland_collapse.43 days = 2 } }
+	}
+	else_if = {
+		limit = { country_exists = WPS WPS = { NOT = { has_capitulated = yes } } }
+		WPS = { country_event = { id = ADISCORD_vorkerland_collapse.43 days = 2 } }
+	}
+	else = {
+		set_global_flag = ADISCORD_vorkerland_northern_wars_restored
+	}
 }
 
 ADISCORD_vorkerland_restore_northern_wars = {
@@ -3436,17 +3468,33 @@ ADISCORD_vorkerland_ivanland_intervention_failure = {
 		clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded
 		clr_global_flag = ADISCORD_vorkerland_ivanland_mandate_proclaimed
 		clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_available
+		# Mission cancellation can run before the late capitulation callback. Detect
+		# native defeat here too, so callback ordering cannot turn it into a retreat.
+		if = {
+			limit = { has_capitulated = yes }
+			set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention
+		}
 		IVN = {
 			remove_mission = ADISCORD_ivanland_limited_intervention
 			remove_ideas = ADISCORD_vorkerland_ivanland_expeditionary_command
 		}
 		log = "[ADISCORD][VORKERLAND] Ivanland intervention resolved: FAILURE; no postwar clients survive and states 90-94 return to the northern republics."
-		ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
+		if = {
+			limit = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention
+					has_capitulated = yes
+				}
+			}
+			# A real IVN capitulation must remain a defeat. Do not white-peace the
+			# attacker back into existence; only dissolve the temporary northern front.
+			ADISCORD_vorkerland_cleanup_ivanland_intervention_front = yes
+		}
+		else = { ADISCORD_vorkerland_end_ivanland_intervention_wars = yes }
 		if = {
 			limit = { country_exists = IBA }
 			IVN = { annex_country = { target = IBA transfer_troops = yes } }
 		}
-		# A bounded settlement retry can already find the Krait client materialized.
 		if = {
 			limit = { country_exists = IBL }
 			IVN = { annex_country = { target = IBL transfer_troops = yes } }
@@ -3468,29 +3516,42 @@ ADISCORD_vorkerland_ivanland_intervention_failure = {
 			94 = { set_state_controller_to = PSD }
 		}
 		clr_global_flag = ADISCORD_vorkerland_ivanland_krait_frontier_secured
-		ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
-		clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
-		country_event = { id = ADISCORD_vorkerland_collapse.43 days = 2 }
-		IVN = {
-			set_politics = {
-				ruling_party = etatism
-				elections_allowed = no
-			}
-			if = {
-				limit = { NOT = { has_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added } }
-				add_country_leader_role = {
-					character = IVN_Vadim_Ivanchik
-					promote_leader = yes
-					country_leader = {
-						ideology = etatism_ideology
-						expire = "2200.1.1.1"
-					}
+		if = {
+			limit = {
+				OR = {
+					has_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention
+					has_capitulated = yes
 				}
-				set_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added
 			}
-			set_country_leader_portrait = {
-				ideology = etatism
-				portrait = GFX_portrait_IVN_Vadim_Ivanchik_after_retreat
+			ADISCORD_vorkerland_cleanup_ivanland_intervention_front = yes
+			clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+			ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat = yes
+		}
+		else = {
+			ADISCORD_vorkerland_end_ivanland_intervention_wars = yes
+			clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+			country_event = { id = ADISCORD_vorkerland_collapse.43 days = 2 }
+			IVN = {
+				set_politics = {
+					ruling_party = etatism
+					elections_allowed = no
+				}
+				if = {
+					limit = { NOT = { has_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added } }
+					add_country_leader_role = {
+						character = IVN_Vadim_Ivanchik
+						promote_leader = yes
+						country_leader = {
+							ideology = etatism_ideology
+							expire = "2200.1.1.1"
+						}
+					}
+					set_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added
+				}
+				set_country_leader_portrait = {
+					ideology = etatism
+					portrait = GFX_portrait_IVN_Vadim_Ivanchik_after_retreat
+				}
 			}
 		}
 		if = {

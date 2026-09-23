@@ -2181,8 +2181,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append("legacy Krait expansion wrapper no longer delegates to the canonical IBL setup")
     if "ADISCORD_vorkerland_setup_ibl = yes" not in mandate:
         issues.append("Ivanland success settlement does not create the separate IBL client")
-    war_cleanup = named_block(effects, "ADISCORD_vorkerland_end_ivanland_intervention_wars")
-    cleanup_ivn = named_block(war_cleanup, "IVN")
+    front_cleanup = named_block(effects, "ADISCORD_vorkerland_cleanup_ivanland_intervention_front")
+    cleanup_ivn = named_block(front_cleanup, "IVN")
     for flag in (
         "ADISCORD_vorkerland_ivanland_front_launch_pending",
         "ADISCORD_vorkerland_ivanland_front_verification_pending",
@@ -2194,15 +2194,21 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"Ivanland intervention cleanup does not clear {flag}")
     for defender in ("PWR", "ZAO", "WPA", "WPS", "PSD"):
         if "remove_ideas = ADISCORD_vorkerland_northern_defense_front" not in named_block(
-            war_cleanup, defender
+            front_cleanup, defender
         ):
             issues.append(f"Ivanland intervention cleanup leaves the defense idea on {defender}")
+    if "white_peace" in front_cleanup:
+        issues.append("Ivanland front-only cleanup must not white-peace a capitulated attacker")
+
+    war_cleanup = named_block(effects, "ADISCORD_vorkerland_end_ivanland_intervention_wars")
+    if "ADISCORD_vorkerland_cleanup_ivanland_intervention_front = yes" not in war_cleanup:
+        issues.append("Ivanland ordinary war cleanup no longer delegates to the shared front cleanup")
     for pair in (
         ("IVN", "ZAO"), ("IVN", "WPA"), ("IVN", "WPS"),
         ("IVN", "PWR"), ("IVN", "PSD"), ("IVN", "IBL"), ("IVN", "IBA"),
     ):
         if f"has_war_with = {pair[1]}" not in named_block(war_cleanup, pair[0]):
-            issues.append(f"Ivanland cleanup does not white-peace {pair[0]}-{pair[1]}")
+            issues.append(f"Ivanland ordinary cleanup does not white-peace {pair[0]}-{pair[1]}")
     success = named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_success")
     if success.count("ADISCORD_vorkerland_end_ivanland_intervention_wars = yes") < 2 or "NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }" not in success:
         issues.append("Ivanland success is not idempotent or does not clean wars before and after setup")
@@ -2219,6 +2225,11 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "PWR = { transfer_state = 90 transfer_state = 91 }",
         "PSD = { transfer_state = 93 transfer_state = 94 }",
         "ADISCORD_vorkerland_vadim_etatist_role_added",
+        "has_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention",
+        "limit = { has_capitulated = yes }",
+        "set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention",
+        "ADISCORD_vorkerland_cleanup_ivanland_intervention_front = yes",
+        "ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat = yes",
         "Ivanland intervention resolved: FAILURE",
     ):
         if token not in failure:
@@ -2233,6 +2244,14 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in failure:
             issues.append(f"Ivanland failure cannot restore the pre-intervention northern map: {token}")
+
+    restore_queue = named_block(effects, "ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat")
+    for host in ("PWR", "PSD", "ZAO", "WPA", "WPS"):
+        if f"country_exists = {host}" not in restore_queue or (
+            f"{host} = {{ country_event = {{ id = ADISCORD_vorkerland_collapse.43 days = 2 }} }}"
+            not in restore_queue
+        ):
+            issues.append(f"Ivanland military defeat cannot hand northern-war restoration to {host}")
 
     startup = named_block(on_actions, "on_startup")
     monthly = named_block(on_actions, "on_monthly")
@@ -3888,10 +3907,37 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
         "ROOT = { tag = IVN }",
         "ADISCORD_vorkerland_ivanland_intervention_success = yes",
         "ADISCORD_vorkerland_ivanland_intervention_failure = yes",
-        "IVN = { white_peace = ROOT }",
+        "ADISCORD_vorkerland_ivanland_capitulated_in_intervention",
     ):
         if token not in capitulation:
             issues.append(f"Ivanland capitulation guard is missing {token}")
+    ivn_defeat_branches = [
+        branch
+        for branch in named_blocks(capitulation, "else_if")
+        if "ROOT = { tag = IVN }" in branch
+        and "ADISCORD_vorkerland_ivanland_intervention_failure = yes" in branch
+    ]
+    if len(ivn_defeat_branches) != 1:
+        issues.append("Ivanland military-defeat capitulation branch is not unique")
+    else:
+        ivn_defeat = ivn_defeat_branches[0]
+        if "set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention" not in ivn_defeat:
+            issues.append("Ivanland military defeat does not record the capitulation-specific outcome")
+        if "skip_default_capitulation" in ivn_defeat:
+            issues.append("Ivanland military defeat still suppresses the generic annexation fallback")
+        if "white_peace" in ivn_defeat:
+            issues.append("Ivanland military defeat still white-peaces the defeated attacker")
+
+    for event_id in (
+        "ADISCORD_vorkerland_collapse.43",
+        "ADISCORD_vorkerland_collapse.74",
+        "ADISCORD_vorkerland_collapse.78",
+    ):
+        restore_event = event_block(events, event_id)
+        for host in ("IVN", "PWR", "PSD", "ZAO", "WPA", "WPS"):
+            if f"tag = {host}" not in restore_event:
+                issues.append(f"{event_id} cannot run from surviving northern host {host}")
+
     for hook in ("on_capitulation", "on_startup", "on_state_control_changed", "ADISCORD_vorkerland_check_central_outcome"):
         if hook not in on_actions:
             issues.append(f"central outcome fallback is missing {hook}")

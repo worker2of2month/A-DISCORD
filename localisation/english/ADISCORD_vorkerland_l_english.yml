@@ -1172,6 +1172,7 @@ l_english:
  ADISCORD_vorkerland_news.1.a: "A new regime has appeared on the frontier."
  ADISCORD_vorkerland_news.2.t: "Itora Is Defeated in the Northern Campaign"
  ADISCORD_vorkerland_news.2.d: "Ivanland's operation has failed. Neither Norvein nor the dependent Kraitsk Directorate was created: states 90 and 91 returned to Grain, while states 93 and 94 returned to Rivendell. The provisional Northern Defence Front has dissolved and the northern administrations have resumed their internecine wars. Vadim Ivanchik's government has declared an emergency course after the defeat."
+ ADISCORD_vorkerland_news.2.capitulated: "Itora's northern expedition ended not in a withdrawal but in complete military defeat. Itoran forces capitulated, the provisional Northern Defence Front dissolved, and the disputed districts are returned to the northern administrations.\n\nNo separate postwar Itoran government is restored after capitulation: the victors enforce the result while the northern republics return to their earlier conflicts."
  ADISCORD_vorkerland_news.2.a: "The north is at war with itself again."
 # --- rus_last_empire_l_english ---
  RUS_summon_the_aimaqs: "Summon the Aimaqs"
