@@ -378,16 +378,20 @@ VAL_pay_trade_corridors = {
 }
 
 VAL_change_black_market_pressure = {
-	if = {
-		limit = { VAL_trade_corridors_unlocked = yes }
-			add_to_variable = { var = VAL_black_market_pressure value = VAL_black_market_pressure_change }
-			clamp_variable = { var = VAL_black_market_pressure min = 0 max = 100 }
+	# Internal state reconciliation must never be expanded into player-facing
+	# decision tooltips. Callers provide concise custom_effect_tooltip text.
+	hidden_effect = {
+		if = {
+			limit = { VAL_trade_corridors_unlocked = yes }
+				add_to_variable = { var = VAL_black_market_pressure value = VAL_black_market_pressure_change }
+				clamp_variable = { var = VAL_black_market_pressure min = 0 max = 100 }
+				VAL_refresh_black_market_state = yes
+		}
+		else = {
+			set_variable = { var = VAL_black_market_pressure value = 0 }
+			set_variable = { var = VAL_black_market_last_delta value = 0 }
 			VAL_refresh_black_market_state = yes
-	}
-	else = {
-		set_variable = { var = VAL_black_market_pressure value = 0 }
-		set_variable = { var = VAL_black_market_last_delta value = 0 }
-		VAL_refresh_black_market_state = yes
+		}
 	}
 }
 
