@@ -4360,3 +4360,206 @@ VAL_call_stelander_partner_to_wars = {
   }
  }
 }
+
+# COUNTRY recipient. Timeout is decline; a stale event cannot close a later offer.
+VAL_close_partner_offer = {
+    if = {
+        limit = { OR = { has_country_flag = VAL_partner_offer_trade has_country_flag = VAL_partner_offer_hire has_country_flag = VAL_partner_offer_arms has_country_flag = VAL_partner_offer_bulk has_country_flag = VAL_partner_offer_arsenal has_country_flag = VAL_partner_offer_strategic } }
+        clr_country_flag = VAL_partner_offer_trade
+        clr_country_flag = VAL_partner_offer_hire
+        clr_country_flag = VAL_partner_offer_arms
+        clr_country_flag = VAL_partner_offer_bulk
+        clr_country_flag = VAL_partner_offer_arsenal
+        clr_country_flag = VAL_partner_offer_strategic
+        VAL = { clr_country_flag = VAL_partner_offer_pending clr_country_flag = VAL_export_offer_pending }
+    }
+}
+
+VAL_settle_partner_trade = {
+    if = {
+        limit = { VAL_partner_trade_can_accept = yes }
+        VAL = { ADISCORD_economy_initialize_country = yes
+subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_expense value = 200 }
+ADISCORD_economy_mark_dirty = yes }
+        ADISCORD_economy_initialize_country = yes
+add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+ADISCORD_economy_mark_dirty = yes
+        if = { limit = { tag = CIN } VAL = { add_ideas = VAL_market_CIN } }
+        if = { limit = { tag = OSF } VAL = { add_ideas = VAL_market_OSF } }
+        if = { limit = { tag = APH } VAL = { add_ideas = VAL_market_APH } }
+        if = { limit = { tag = COF } VAL = { add_ideas = VAL_market_COF } }
+        if = { limit = { tag = TFF } VAL = { add_ideas = VAL_market_TFF } }
+        if = { limit = { tag = YPR } VAL = { add_ideas = VAL_market_YPR } }
+        add_ideas = VAL_partner_market_access
+        VAL_close_partner_offer = yes
+    }
+}
+VAL_settle_partner_hire = {
+    if = {
+        limit = { VAL_partner_hire_can_accept = yes }
+        if = {
+            limit = { tag = CIN }
+            add_manpower = -3000
+            ADISCORD_economy_initialize_country = yes
+add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+ADISCORD_economy_mark_dirty = yes
+            VAL = { add_manpower = 3000 ADISCORD_economy_initialize_country = yes
+subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_expense value = 300 }
+ADISCORD_economy_mark_dirty = yes }
+        }
+        if = {
+            limit = { tag = OSF }
+            add_manpower = -4000
+            ADISCORD_economy_initialize_country = yes
+add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
+ADISCORD_economy_mark_dirty = yes
+            VAL = { add_manpower = 4000 ADISCORD_economy_initialize_country = yes
+subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_expense value = 400 }
+ADISCORD_economy_mark_dirty = yes }
+        }
+        if = {
+            limit = { tag = APH }
+            add_manpower = -2000
+            ADISCORD_economy_initialize_country = yes
+add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+ADISCORD_economy_mark_dirty = yes
+            VAL = { add_manpower = 2000 ADISCORD_economy_initialize_country = yes
+subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_expense value = 200 }
+ADISCORD_economy_mark_dirty = yes }
+        }
+        if = {
+            limit = { tag = COF }
+            add_manpower = -3000
+            ADISCORD_economy_initialize_country = yes
+add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+ADISCORD_economy_mark_dirty = yes
+            VAL = { add_manpower = 3000 ADISCORD_economy_initialize_country = yes
+subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_expense value = 300 }
+ADISCORD_economy_mark_dirty = yes }
+        }
+        if = {
+            limit = { tag = TFF }
+            add_manpower = -4000
+            ADISCORD_economy_initialize_country = yes
+add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
+ADISCORD_economy_mark_dirty = yes
+            VAL = { add_manpower = 4000 ADISCORD_economy_initialize_country = yes
+subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_expense value = 400 }
+ADISCORD_economy_mark_dirty = yes }
+        }
+        if = {
+            limit = { tag = YPR }
+            add_manpower = -5000
+            ADISCORD_economy_initialize_country = yes
+add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+ADISCORD_economy_mark_dirty = yes
+            VAL = { add_manpower = 5000 ADISCORD_economy_initialize_country = yes
+subtract_from_variable = { var = ADISCORD_economy_treasury value = 500 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_expense value = 500 }
+ADISCORD_economy_mark_dirty = yes }
+        }
+        set_country_flag = { flag = VAL_partner_hire_cooldown days = 180 }
+        VAL_close_partner_offer = yes
+    }
+}
+
+# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
+VAL_settle_partner_arms = {
+    if = {
+        limit = { VAL_partner_arms_can_accept = yes }
+        ADISCORD_economy_initialize_country = yes
+subtract_from_variable = { var = ADISCORD_economy_treasury value = 500 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_expense value = 500 }
+ADISCORD_economy_mark_dirty = yes
+        VAL = {
+            ADISCORD_economy_initialize_country = yes
+add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+ADISCORD_economy_mark_dirty = yes
+            send_equipment = { equipment = infantry_equipment amount = 2500 target = ROOT }
+            if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
+            else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+        }
+        set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+        VAL_close_partner_offer = yes
+    }
+}
+
+# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
+VAL_settle_partner_bulk = {
+    if = {
+        limit = { VAL_partner_bulk_can_accept = yes }
+        ADISCORD_economy_initialize_country = yes
+subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_expense value = 1000 }
+ADISCORD_economy_mark_dirty = yes
+        VAL = {
+            ADISCORD_economy_initialize_country = yes
+add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 }
+ADISCORD_economy_mark_dirty = yes
+            send_equipment = { equipment = infantry_equipment amount = 5000 target = ROOT }
+            if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
+            else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+        }
+        set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+        VAL_close_partner_offer = yes
+    }
+}
+
+# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
+VAL_settle_partner_arsenal = {
+    if = {
+        limit = { VAL_partner_arsenal_can_accept = yes }
+        ADISCORD_economy_initialize_country = yes
+subtract_from_variable = { var = ADISCORD_economy_treasury value = 2250 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_expense value = 2250 }
+ADISCORD_economy_mark_dirty = yes
+        VAL = {
+            ADISCORD_economy_initialize_country = yes
+add_to_variable = { var = ADISCORD_economy_treasury value = 2250 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2250 }
+ADISCORD_economy_mark_dirty = yes
+            send_equipment = { equipment = infantry_equipment amount = 10000 target = ROOT }
+            if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
+            else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+        }
+        set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+        VAL_close_partner_offer = yes
+    }
+}
+
+# Payment and dispatch use one acceptance branch; the quoted tier never follows later focuses.
+VAL_settle_partner_strategic = {
+    if = {
+        limit = { VAL_partner_strategic_can_accept = yes }
+        ADISCORD_economy_initialize_country = yes
+subtract_from_variable = { var = ADISCORD_economy_treasury value = 5000 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_expense value = 5000 }
+ADISCORD_economy_mark_dirty = yes
+        VAL = {
+            ADISCORD_economy_initialize_country = yes
+add_to_variable = { var = ADISCORD_economy_treasury value = 5000 }
+add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 5000 }
+ADISCORD_economy_mark_dirty = yes
+            send_equipment = { equipment = infantry_equipment amount = 20000 target = ROOT }
+            if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
+            else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
+        }
+        set_country_flag = { flag = VAL_export_customer_cooldown days = 70 }
+        VAL_close_partner_offer = yes
+    }
+}

@@ -2,6 +2,13 @@
   "schema_version": 1,
   "external_namespaces": ["lar_fake_intel_units"],
   "events": [
+    {"id": "val_contract.361", "namespace": "val_contract", "number": 361, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.362", "namespace": "val_contract", "number": 362, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.363", "namespace": "val_contract", "number": 363, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.364", "namespace": "val_contract", "number": 364, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.365", "namespace": "val_contract", "number": 365, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.366", "namespace": "val_contract", "number": 366, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
+    {"id": "val_contract.367", "namespace": "val_contract", "number": 367, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_contract", "status": "active"},
     {"id": "val_rework.102", "namespace": "val_rework", "number": 102, "owner": "events/ADISCORD_VAL_contract_events.txt", "subsystem": "val_rework", "status": "active"},
     {"id": "ADISCORD_STP_pc.34", "namespace": "ADISCORD_STP_pc", "number": 34, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},
     {"id": "ADISCORD_STP_pc.35", "namespace": "ADISCORD_STP_pc", "number": 35, "owner": "events/ADISCORD_STP_events.txt", "subsystem": "stp_postwar", "status": "active"},

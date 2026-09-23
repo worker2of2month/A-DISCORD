@@ -3375,6 +3375,32 @@ class ValExpandedCampaignTests(unittest.TestCase):
         facts["12", "is_controlled_by", "VAL"] = False
         self.assertFalse(self.match("VAL_nod_dominated", facts))
 
+    def test_operations_map_covers_all_requested_starting_countries(self):
+        from tools.builders import build_adiscord_val_operations_map as builder
+        tags = {"NOD", "BJK", "COF", "TFF", "YPR"}
+        expected = set()
+        for path in (ROOT / "history/states").glob("*.txt"):
+            source = path.read_text(encoding="utf-8-sig")
+            if re.search(r"\bowner\s*=\s*(?:" + "|".join(tags) + r")\b", source):
+                expected.add(int(re.search(r"\bid\s*=\s*(\d+)", source)[1]))
+        self.assertTrue(expected.issubset(builder.STATE_IDS), expected - set(builder.STATE_IDS))
+        self.assertTrue(tags.issubset(builder.MAP_TAGS))
+
+    def test_stelander_operations_share_assets_and_require_postwar(self):
+        from tools.builders import build_adiscord_val_operations_map as builder
+        outputs = builder.interface_outputs({state: (0, 0, 1, 1) for state in builder.STATE_IDS})
+        gui = outputs["interface/ADISCORD_VAL_operations.gui"]
+        script = outputs["common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt"]
+        self.assertIn('name = "ADISCORD_STP_operations_panel_window"', gui)
+        self.assertIn('pdx_tooltip = "STP_operations_map_tt"', gui)
+        self.assertIn('ADISCORD_STP_operations_panel = {', script)
+        self.assertIn('STP_ops_41_border_visible = { 41 = { controller = { tag = STS', script)
+        categories = (ROOT / "common/decisions/categories/ADISCORD_decision_categories_STP.txt").read_text(encoding="utf-8")
+        category = named_block_spans(categories, "STP_military_operations")[0].text
+        self.assertIn("allowed = { tag = STS }", category)
+        self.assertIn("has_country_flag = STP_cw_postwar", category)
+        self.assertIn("scripted_gui = ADISCORD_STP_operations_panel", category)
+
     def test_map_controller_layers_are_exhaustive_and_exclusive(self):
         from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
         from tools.builders.build_adiscord_val_operations_map import STATE_IDS, VAL_STATES, MAP_TAGS
@@ -3399,15 +3425,21 @@ class ValExpandedCampaignTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
         from tools.builders.build_adiscord_val_operations_map import STATE_IDS, state_provinces
         script = parse_clausewitz((ROOT / "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt").read_text(encoding="utf-8"))
-        layers = {e.key: e.value for e in block(block(block(script, "scripted_gui"), "ADISCORD_VAL_operations_panel"), "triggers")}
-        for state in STATE_IDS:
-            provinces = sorted(state_provinces(state))
-            facts = {(str(state), "controller"): "VAL"}
-            facts.update({("VAL", "controls_province", str(p)): True for p in provinces})
-            layer = layers[f"VAL_ops_{state}_contested_visible"]
-            self.assertFalse(matches_conditions(layer, facts, "VAL"), state)
-            facts["VAL", "controls_province", str(provinces[0])] = False
-            self.assertTrue(matches_conditions(layer, facts, "VAL"), state)
+        for prefix, viewer in (("VAL", "VAL"), ("STP", "STS")):
+            layers = {e.key: e.value for e in block(block(block(script, "scripted_gui"), f"ADISCORD_{prefix}_operations_panel"), "triggers")}
+            for state in STATE_IDS:
+                provinces = sorted(state_provinces(state))
+                facts = {(str(state), "controller"): viewer}
+                facts.update({(viewer, "controls_province", str(p)): True for p in provinces})
+                layer = layers[f"{prefix}_ops_{state}_contested_visible"]
+                border = layers[f"{prefix}_ops_{state}_border_visible"]
+                self.assertTrue(matches_conditions(border, facts, viewer), (viewer, state))
+                self.assertFalse(matches_conditions(layer, facts, viewer), (viewer, state))
+                facts[viewer, "controls_province", str(provinces[0])] = False
+                self.assertTrue(matches_conditions(layer, facts, viewer), (viewer, state))
+                facts[str(state), "controller"] = "NOD"
+                self.assertFalse(matches_conditions(layer, facts, viewer), (viewer, state))
+                self.assertFalse(matches_conditions(border, facts, viewer), (viewer, state))
 
     def test_foreign_map_colors_are_solid_and_cropped_layers_preserve_pixels(self):
         from tools.builders import build_adiscord_val_operations_map as builder
@@ -3423,8 +3455,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
                 original = source.crop((index * builder.WIDTH + left, top, index * builder.WIDTH + right, bottom))
                 cropped = strip.crop((index * width, 0, (index + 1) * width, bottom - top))
                 self.assertEqual(original.tobytes(), cropped.tobytes())
-                if index != builder.MAP_TAGS.index("VAL"):
-                    self.assertEqual({pixel[:3] for pixel in cropped.getdata() if pixel[3]}, {color})
+                self.assertEqual({pixel[:3] for pixel in cropped.getdata() if pixel[3]}, {color})
 
     def test_full_tier_mirror_detects_wrong_modifier_even_if_id_is_valid(self):
         check = ValRewardValidatorTests()

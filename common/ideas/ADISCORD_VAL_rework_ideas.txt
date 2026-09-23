@@ -1,5 +1,76 @@
 ideas = {
 	country = {
+
+        VAL_market_CIN = {
+            picture = VAL_contract_state
+            allowed = { tag = VAL }
+            removal_cost = -1
+            cancel = { OR = { CIN = { OR = { exists = no has_capitulated = yes } } has_war_with = CIN } }
+            on_add = { ADISCORD_economy_mark_dirty = yes }
+            on_remove = { ADISCORD_economy_mark_dirty = yes }
+            modifier = { ADISCORD_economy_weekly_income = 25 }
+        }
+
+        VAL_market_OSF = {
+            picture = VAL_contract_state
+            allowed = { tag = VAL }
+            removal_cost = -1
+            cancel = { OR = { OSF = { OR = { exists = no has_capitulated = yes } } has_war_with = OSF } }
+            on_add = { ADISCORD_economy_mark_dirty = yes }
+            on_remove = { ADISCORD_economy_mark_dirty = yes }
+            modifier = { ADISCORD_economy_weekly_income = 20 }
+        }
+
+        VAL_market_APH = {
+            picture = VAL_contract_state
+            allowed = { tag = VAL }
+            removal_cost = -1
+            cancel = { OR = { APH = { OR = { exists = no has_capitulated = yes } } has_war_with = APH } }
+            on_add = { ADISCORD_economy_mark_dirty = yes }
+            on_remove = { ADISCORD_economy_mark_dirty = yes }
+            modifier = { ADISCORD_economy_weekly_income = 30 }
+        }
+
+        VAL_market_COF = {
+            picture = VAL_contract_state
+            allowed = { tag = VAL }
+            removal_cost = -1
+            cancel = { OR = { COF = { OR = { exists = no has_capitulated = yes } } has_war_with = COF } }
+            on_add = { ADISCORD_economy_mark_dirty = yes }
+            on_remove = { ADISCORD_economy_mark_dirty = yes }
+            modifier = { ADISCORD_economy_weekly_income = 35 }
+        }
+
+        VAL_market_TFF = {
+            picture = VAL_contract_state
+            allowed = { tag = VAL }
+            removal_cost = -1
+            cancel = { OR = { TFF = { OR = { exists = no has_capitulated = yes } } has_war_with = TFF } }
+            on_add = { ADISCORD_economy_mark_dirty = yes }
+            on_remove = { ADISCORD_economy_mark_dirty = yes }
+            modifier = { ADISCORD_economy_weekly_income = 40 }
+        }
+
+        VAL_market_YPR = {
+            picture = VAL_contract_state
+            allowed = { tag = VAL }
+            removal_cost = -1
+            cancel = { OR = { YPR = { OR = { exists = no has_capitulated = yes } } has_war_with = YPR } }
+            on_add = { ADISCORD_economy_mark_dirty = yes }
+            on_remove = { ADISCORD_economy_mark_dirty = yes }
+            modifier = { ADISCORD_economy_weekly_income = 45 }
+        }
+
+        VAL_partner_market_access = {
+            picture = VAL_contract_state
+            allowed = { always = yes }
+            removal_cost = -1
+            cancel = { OR = { VAL = { OR = { exists = no has_capitulated = yes } } has_war_with = VAL } }
+            on_add = { ADISCORD_economy_mark_dirty = yes }
+            on_remove = { ADISCORD_economy_mark_dirty = yes }
+            modifier = { ADISCORD_economy_weekly_income = 5 }
+        }
+
 		VAL_armor_serial_production = {
 			picture = generic_armor
 			allowed = { original_tag = VAL }

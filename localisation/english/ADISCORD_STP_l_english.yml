@@ -2576,3 +2576,7 @@
  STP_pw_party_contracts_delta: "Recovery contracts"
  STP_pw_party_joint_staff_delta: "Joint staff bureau"
  STP_pw_party_domestic_staff_delta: "Domestic appointments"
+
+ STP_military_operations: "Military Operations"
+ STP_military_operations_desc: "An operational map of Stelander and its neighbours after the civil war. Colours show the current controllers of states."
+ STP_operations_map_tt: "Stelander, Kefreyt, Nodrul, Bezhaysk, the Cult of the Children of the Forest, Yubora, the Free Frontier and the southern lands. Each state uses its current controller's national colour. Borders are highlighted in territory administered by Stelander; yellow hatching marks divided control."

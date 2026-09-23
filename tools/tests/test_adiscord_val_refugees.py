@@ -437,8 +437,8 @@ class RefugeeTrainingTests(unittest.TestCase):
 
     def test_training_reserves_people_and_cannot_deliver_twice(self):
         self.decision_effect("VAL_train_refugee_volunteers", "complete_effect")
-        self.assertEqual(self.variables["VAL_displaced_population"], 0)
-        self.assertEqual(self.variables["VAL_refugee_training_escrow"], 10)
+        self.assertEqual(self.variables["VAL_displaced_population"], 9.5)
+        self.assertEqual(self.variables["VAL_refugee_training_escrow"], 0.5)
         self.assertEqual(self.rewards, [])
         for _ in range(2):
             self.decision_effect("VAL_train_refugee_volunteers", "remove_effect")

@@ -40,6 +40,18 @@ def named_block(text: str, name: str) -> str:
 
 
 class TestValContractUi(unittest.TestCase):
+    def test_partner_menus_fit_four_answers(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import scalar
+
+        events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
+        for event_id in ("val_contract.10", "val_contract.11", "val_contract.12", "val_contract.361"):
+            event = next((e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == event_id), None)
+            self.assertIsNotNone(event, event_id)
+            options = [e.value for e in event if e.key == "option"]
+            self.assertLessEqual(len(options), 4, event_id)
+            self.assertIn("val_contract.family.cancel", [scalar(o, "name") for o in options])
+
     def test_contract_state_is_visible_and_reports_live_authority(self) -> None:
         dynamic = read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt")
         contract_state = named_block(dynamic, "VAL_contract_state")

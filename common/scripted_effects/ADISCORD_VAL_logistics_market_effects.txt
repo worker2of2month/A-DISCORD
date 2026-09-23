@@ -57,6 +57,20 @@ VAL_initialize_logistics_market = {
 	clamp_variable = { var = VAL_displaced_population min = 0 max = 100 }
 	VAL_refresh_trade_network = yes
 	VAL_refresh_black_market_state = yes
+	if = {
+		limit = { NOT = { has_variable = VAL_refugee_housing } }
+		set_variable = { var = VAL_refugee_housing value = 20 }
+		set_variable = { var = VAL_local_volunteer_pool value = 0 }
+		add_to_variable = { var = VAL_local_volunteer_pool value = 24.state_population_k }
+		add_to_variable = { var = VAL_local_volunteer_pool value = 42.state_population_k }
+		add_to_variable = { var = VAL_local_volunteer_pool value = 48.state_population_k }
+		add_to_variable = { var = VAL_local_volunteer_pool value = 54.state_population_k }
+		add_to_variable = { var = VAL_local_volunteer_pool value = 55.state_population_k }
+		add_to_variable = { var = VAL_local_volunteer_pool value = 56.state_population_k }
+		add_to_variable = { var = VAL_local_volunteer_pool value = 57.state_population_k }
+		# Population is in thousands; the pool is in ten-thousands: an additional 2%.
+		multiply_variable = { var = VAL_local_volunteer_pool value = 0.002 }
+	}
 	VAL_refresh_refugee_state = yes
 	VAL_open_refugee_waves = yes
 }
@@ -329,8 +343,8 @@ VAL_update_black_market_weekly = {
 		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 2 }
 	}
 	if = {
-		limit = { check_variable = { var = VAL_displaced_population value = 20 compare = greater_than_or_equals } }
-		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 1 }
+		limit = { check_variable = { var = VAL_population_present value = VAL_refugee_housing compare = greater_than } }
+		add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
 	}
 	if = {
 		limit = {
@@ -342,14 +356,19 @@ VAL_update_black_market_weekly = {
 	}
 
 	subtract_from_temp_variable = { var = VAL_black_market_weekly_delta value = VAL_corridor_security }
+	add_to_temp_variable = { var = VAL_black_market_weekly_delta value = VAL_broker_dependence }
+	set_variable = { var = VAL_black_market_last_delta value = VAL_black_market_weekly_delta }
 	add_to_variable = { var = VAL_black_market_pressure value = VAL_black_market_weekly_delta }
 	clamp_variable = { var = VAL_black_market_pressure min = 0 max = 100 }
 	VAL_refresh_black_market_state = yes
 }
 
 VAL_refresh_refugee_state = {
+	set_variable = { var = VAL_population_present value = VAL_displaced_population }
+	if = { limit = { has_variable = VAL_refugee_training_escrow } add_to_variable = { var = VAL_population_present value = VAL_refugee_training_escrow } }
+	if = { limit = { has_variable = VAL_refugee_labor_escrow } add_to_variable = { var = VAL_population_present value = VAL_refugee_labor_escrow } }
 	if = {
-		limit = { check_variable = { var = VAL_displaced_population value = 20 compare = greater_than_or_equals } }
+		limit = { check_variable = { var = VAL_population_present value = VAL_refugee_housing compare = greater_than } }
 		if = {
 			limit = { NOT = { has_idea = VAL_refugee_strain } }
 			add_ideas = VAL_refugee_strain
@@ -394,15 +413,7 @@ VAL_open_refugee_waves = {
 }
 
 VAL_update_refugees_weekly = {
-	# Recover missed crisis notifications without renewing an already seen wave.
-	# Once opened, the timed 180-day flag is authoritative: peace must not erase
-	# an already offered admission window before the player can use it.
 	VAL_open_refugee_waves = yes
-	if = {
-		limit = { NOT = { VAL_regional_displacement_crisis = yes } check_variable = { var = VAL_displaced_population value = 0 compare = greater_than } }
-		add_to_variable = { var = VAL_displaced_population value = -1 }
-	}
-	clamp_variable = { var = VAL_displaced_population min = 0 max = 100 }
 	VAL_refresh_refugee_state = yes
 }
 
@@ -521,6 +532,7 @@ VAL_refund_refugee_training = {
 		add_to_variable = { var = VAL_displaced_population value = VAL_refugee_training_escrow }
 		clear_variable = VAL_refugee_training_escrow
 		add_political_power = 75
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = VAL }
 		VAL_refresh_refugee_state = yes
 	}
 }
@@ -532,7 +544,64 @@ VAL_finish_refugee_training = {
 			limit = { has_capitulated = no is_subject = no }
 			clear_variable = VAL_refugee_training_escrow
 			add_manpower = 5000
+			VAL_refresh_refugee_state = yes
 		}
 		else = { VAL_refund_refugee_training = yes }
+	}
+}
+
+
+VAL_refund_local_training = {
+	if = {
+		limit = { has_variable = VAL_local_training_escrow }
+		add_to_variable = { var = VAL_local_volunteer_pool value = VAL_local_training_escrow }
+		clear_variable = VAL_local_training_escrow
+		add_political_power = 75
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 500 producer = VAL }
+		VAL_refresh_refugee_state = yes
+	}
+}
+
+
+VAL_finish_local_training = {
+	if = {
+		limit = { has_variable = VAL_local_training_escrow }
+		if = {
+			limit = { has_capitulated = no is_subject = no }
+			clear_variable = VAL_local_training_escrow
+			add_manpower = 5000
+			VAL_refresh_refugee_state = yes
+		}
+		else = { VAL_refund_local_training = yes }
+	}
+}
+
+# COUNTRY VAL. Civilians remain housed while working and return to the available pool.
+VAL_finish_refugee_labor = {
+	if = {
+		limit = { has_variable = VAL_refugee_labor_escrow }
+		add_to_variable = { var = VAL_displaced_population value = VAL_refugee_labor_escrow }
+		clear_variable = VAL_refugee_labor_escrow
+		remove_ideas = VAL_refugee_contract_labor
+		VAL_refresh_refugee_state = yes
+	}
+}
+VAL_refund_housing = {
+	if = {
+		limit = { has_variable = VAL_housing_deposit }
+		ADISCORD_economy_receive_500 = yes
+		clear_variable = VAL_housing_deposit
+	}
+}
+VAL_finish_housing = {
+	if = {
+		limit = { has_variable = VAL_housing_deposit }
+		if = {
+			limit = { has_capitulated = no is_subject = no }
+			clear_variable = VAL_housing_deposit
+			add_to_variable = { var = VAL_refugee_housing value = 20 }
+			VAL_refresh_refugee_state = yes
+		}
+		else = { VAL_refund_housing = yes }
 	}
 }

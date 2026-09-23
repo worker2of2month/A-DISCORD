@@ -3,7 +3,7 @@
  VAL_trade_corridors_desc: "Kefreyt can no longer treat trade as a line in a ledger. Cargo must physically pass through ports, depots, passes and dependent administrations.\n\nOperational corridors: §Y[?VAL_trade_corridors_active|0]/[?VAL_trade_corridors_capacity|0]§! commissioned\nRoute security: §Y[?VAL_corridor_security|0]/3§!\nGrey-market pressure: §Y[?VAL_black_market_pressure|0]/100§!\n\nEach open route brings §G20§! to the treasury every week. An upgraded route adds another §G10§!. A route only becomes an obligation after it has actually opened once; losing a key node thereafter stops the payment and feeds smuggling."
 
  VAL_population_markets: "People and Grey Markets"
- VAL_population_markets_desc: "Wars around Kefreyt and the opening of the Perimeter force families to leave their homes.\n\nDisplaced population: §Y[?VAL_displaced_population|0]§! × 10,000 people\nGrey-market pressure: §Y[?VAL_black_market_pressure|0]/100§!\n\nThe Stelander and Vorkerland wars, other regional wars and the opening of the Perimeter each create a bounded §Y180-day§! admission window. Up to §Ythree waves of 100,000§! refugees can be admitted from each source at §Y30-day§! intervals. Admitted people enter the displaced-population pool until they are resettled, employed, trained or returned."
+ VAL_population_markets_desc:0 "Available refugees: §Y[?VAL_displaced_population|1]§! × 10,000. Training: §Y[?VAL_refugee_training_escrow|1]§!; labour: §Y[?VAL_refugee_labor_escrow|1]§! × 10,000.\nHoused: §Y[?VAL_population_present|1]§! / §Y[?VAL_refugee_housing|0]§! × 10,000. Local volunteer reserve: §Y[?VAL_local_volunteer_pool|1]§! × 10,000.\n\nGrey market: §Y[?VAL_black_market_pressure|0]/100§!. Broker dependence: §Y[?VAL_broker_dependence|0]/3§!. Last weekly change: §Y[?VAL_black_market_last_delta|=0]§!. Weekly: +3 per lost commissioned route, +2 at war, +3 overcrowding, +1 per dependence; -2 for an intact unlocked network, minus security [?VAL_corridor_security|0].\n\nCivilians do not disappear automatically. Labour reserves people for 90 days; training converts exactly 5,000 volunteers into army manpower after 35 days. Resettlement moves 100,000 inhabitants to the chosen cleared state. Active decisions show completion times."
 
  VAL_logistics_cost_50: "£ADISCORD_economy_treasury_texticon  §Y50§!"
  VAL_logistics_cost_100: "£ADISCORD_economy_treasury_texticon  §Y100§!"
@@ -27,7 +27,7 @@
  VAL_open_refugee_border: "Reopen the Crossings"
  VAL_open_refugee_border_desc: "Restore trade and allow admission through offers that are still open. Reopening the border does not create new refugee waves."
  VAL_contract_refugee_labor: "Offer Work Contracts"
- VAL_contract_refugee_labor_desc: "Offer work contracts to §Y100,000§! displaced people. Gain §G2,500§! manpower and a construction bonus for §Y90 days§!."
+ VAL_contract_refugee_labor_desc:0 "Employ 100,000 refugees in construction for 90 days, costing 75 political power. Workers still need housing and cannot be recruited or resettled until completion or cancellation, when all workers return to the available pool."
  VAL_fund_resettlement_depots: "Resettle Refugees in [FROM.GetName]"
  VAL_fund_resettlement_depots_desc: "Move §Y100,000§! admitted refugees into [FROM.GetName] for §Y250§! treasury. The state gains §G100,000 permanent population§!. This program is limited to selected low-population Kefreyt home regions under our control, cannot operate while pollution reclamation is unfinished, and can be used only once per region."
  VAL_organize_refugee_return: "Organize Refugee Return"
@@ -37,7 +37,7 @@
  VAL_buy_contraband_arms: "Buy Arms Off the Ledger"
  VAL_buy_contraband_arms_desc: "When official corridors are overloaded or cut, private brokers can push weapons back onto the market. For §Y250§! treasury we receive §G1,500§! infantry weapons at the cost of §R10§! grey-market pressure."
  VAL_audit_broker_houses: "Audit the Broker Houses"
- VAL_audit_broker_houses_desc: "A joint treasury, military-police and contract-court operation will shut down the most brazen schemes. Grey-market pressure falls by §G25§!, but the operation costs §Y250§!."
+ VAL_audit_broker_houses_desc:0 "Spend 250 coins to reduce pressure by 25 and dependence by one. Audits close licences and contraband supplies for 60 days; check your weapon stocks before an offensive."
 
  VAL_corridor_network_fragmented: "Fragmented Contract Network"
  VAL_corridor_network_fragmented_desc: "Most commissioned trade arteries are cut, or the network is still too narrow for dependable turnover."
@@ -65,7 +65,7 @@
 
  VAL_refugee_border_open_tt: "The border is open to refugees"
 
- VAL_refugee_capacity_tt:0 "There is room for another §Y100,000§! people, including those reserved for training."
+ VAL_refugee_capacity_tt:0 "Total residents including reserved civilians will not exceed one million. Exceeding housing capacity causes overcrowding."
 
  VAL_accept_vorkerland_refugees: "Admit Refugees from Vorkerland"
 
@@ -107,6 +107,32 @@
 
  VAL_refugee_wave_limit_tt:0 "Fewer than three waves have been admitted from this region."
  VAL_train_refugee_volunteers:0 "Train Refugee Volunteers"
- VAL_train_refugee_volunteers_desc:0 "Offer volunteers military training and paid service. A group of 100,000 admitted refugees are reserved during training. After 35 days, 5000 trained recruits enter the army reserve. Cancellation returns 75 political power and the reserved population."
- VAL_refugee_training_start_tt:0 "Reserve §Y100,000§! admitted refugees. After §Y35 days§!, gain §G5000§! volunteers in the army reserve. Cancellation returns the population and §Y75§! political power."
+ VAL_train_refugee_volunteers_desc:0 "Train 5,000 available refugees for 35 days using 75 political power and 500 infantry equipment. Trainees still need housing until completion. Capitulation or subjugation cancels training and refunds the people and costs."
+ VAL_refugee_training_start_tt:0 "Reserve exactly §Y5,000§! refugees for §Y35 days§!, then add them to army manpower. Cancellation returns the volunteers, 75 political power and 500 infantry equipment."
  VAL_refugee_window_open_tt: "An admission window is open for this refugee route. It lasts §Y180 days§! from the start of the flow. If this condition is unmet, the flow has not opened yet, its admission window has expired, or all three waves have already been admitted."
+
+ VAL_local_training_start_tt:0 "Reserve §Y5,000§! local volunteers for §Y35 days§!. Cancellation returns the volunteers, 75 political power and 500 infantry equipment."
+
+ VAL_recruit_local_volunteers:0 "Recruit local volunteers"
+
+ VAL_recruit_local_volunteers_desc:0 "Conscription remains at 1.25%. The additional contract reserve is 2% of the initial population of Kefreyt's seven states and does not replenish. Each intake trains 5,000 people over 35 days for 75 political power and 500 infantry equipment. Capitulation or subjugation refunds the full intake."
+
+ VAL_training_cost:0 "£pol_power §Y75§! £infantry_equipment_text_icon §Y500§!"
+
+ VAL_training_cost_blocked:0 "£pol_power §R75§! £infantry_equipment_text_icon §R500§!"
+
+ VAL_training_cost_tooltip:0 "Requires 75 political power and 500 infantry equipment."
+
+ VAL_labor_program_tt:0 "Reserve 100,000 workers for 90 days: +8% construction speed, +5% civilian income, -1% stability. All workers then return to the available pool."
+
+ VAL_expand_refugee_housing:0 "Expand temporary settlements"
+
+ VAL_expand_refugee_housing_desc:0 "Spend 500 coins to house 200,000 additional people after 45 days. Maximum capacity: one million. Capitulation or subjugation refunds the payment."
+
+ VAL_housing_start_tt:0 "After 45 days: housing for 200,000 additional people."
+
+ VAL_broker_market_open_tt:0 "Broker audit has ended; dealers are available again"
+
+ VAL_broker_dependence_tt:0 "Broker dependence: +1, maximum 3. Each level adds +1 weekly grey-market pressure."
+
+ VAL_broker_audit_tt:0 "Broker dependence: -1. Broker licences and contraband purchases are unavailable for 60 days."
