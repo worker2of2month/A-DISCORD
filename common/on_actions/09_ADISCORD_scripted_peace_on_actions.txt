@@ -227,6 +227,30 @@ on_actions = {
 
 			# END kefreyt:on_capitulation_immediate
 
+			# BEGIN frontier:on_capitulation_immediate
+			# Party postwar Kefreyt campaign. The campaign receipt is authoritative;
+			# only the native victor relation is checked here before applying settlement.
+			if = {
+				limit = {
+					ROOT = {
+						tag = VAL
+						has_war_with = STP
+						NOT = { any_enemy_country = { NOT = { OR = { tag = STP is_subject_of = STP } } } }
+					}
+					STP = {
+						exists = yes
+						has_capitulated = no
+						has_country_flag = STP_cw_postwar
+						has_country_flag = STP_pw_party_kefreyt_campaign_active
+					}
+					FROM = { OR = { tag = STP is_subject_of = STP } }
+				}
+				set_global_flag = skip_default_capitulation
+				STP = { STP_pw_party_settle_kefreyt_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			# END frontier:on_capitulation_immediate
+
 			# BEGIN bezhaysk:on_capitulation_immediate
 
 			# If Kefreyt and Nodrul fight the same Bezhaysk war, neither may consume
@@ -878,6 +902,11 @@ on_actions = {
 			VAL_queue_frontier_reconciliation = yes
 
 			# END kefreyt:on_capitulation
+
+			# BEGIN frontier:on_capitulation
+			# The Party's dedicated Kefreyt settlement is fully applied in
+			# on_capitulation_immediate. No mutable relation is reconstructed here.
+			# END frontier:on_capitulation
 
 			# BEGIN rin:on_capitulation
 			if = {
