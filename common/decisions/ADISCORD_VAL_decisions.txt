@@ -18,7 +18,7 @@ VAL_military_operations = {
 		cost = 0
 		days_re_enable = 21
 		fire_only_once = no
-		complete_effect = { VAL_cw_start_intervention = yes }
+		complete_effect = { custom_effect_tooltip = VAL_cw_begin_mobilization_war_tt hidden_effect = { VAL_cw_start_intervention = yes } }
 		ai_will_do = {
 			base = 20
 			modifier = { factor = 5 has_country_flag = VAL_cw_military_course }
