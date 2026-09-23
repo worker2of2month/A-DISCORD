@@ -12,14 +12,14 @@ from tools.validators.validate_adiscord_stp_shabrat_ai import (
 
 
 class ShabratAIContractTests(unittest.TestCase):
-    def test_contract_defines_one_hundred_checks(self) -> None:
+    def test_contract_check_count(self) -> None:
         self.assertEqual(len(run_checks()), SCORE_TOTAL)
-        self.assertEqual(SCORE_TOTAL, 102)
+        self.assertEqual(SCORE_TOTAL, 104)
 
     def test_live_contract(self) -> None:
         self.assertEqual(validate(), [])
         self.assertEqual(collect_issues(), [])
-        self.assertEqual(score(), (102, 102))
+        self.assertEqual(score(), (104, 104))
 
 
 if __name__ == "__main__":

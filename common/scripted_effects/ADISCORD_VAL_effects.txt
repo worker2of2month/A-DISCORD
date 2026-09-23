@@ -477,6 +477,25 @@ VAL_refresh_contract_modifier = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
+# Run only on startup, outside focus rewards: completion status is stable there.
+VAL_migrate_mercenary_payroll = {
+	if = {
+		limit = { NOT = { has_variable = VAL_contract_payroll_relief } }
+		set_variable = { var = VAL_contract_payroll_relief value = 0 }
+		if = { limit = { has_completed_focus = VAL_State_Contract } add_to_variable = { var = VAL_contract_payroll_relief value = -0.05 } }
+		if = { limit = { has_completed_focus = VAL_Industrial_Mobilization_Plan } add_to_variable = { var = VAL_contract_payroll_relief value = -0.05 } }
+		if = { limit = { has_completed_focus = VAL_Army_Of_The_Ledger } add_to_variable = { var = VAL_contract_payroll_relief value = -0.05 } }
+		if = { limit = { has_completed_focus = VAL_Return_To_World_Market } add_to_variable = { var = VAL_contract_payroll_relief value = -0.05 } }
+		if = { limit = { has_completed_focus = VAL_econ_integrated_economy } add_to_variable = { var = VAL_contract_payroll_relief value = -0.05 } }
+		if = { limit = { has_completed_focus = VAL_defeat_Repair_The_Workshops } add_to_variable = { var = VAL_contract_payroll_relief value = -0.05 } }
+		if = { limit = { has_completed_focus = VAL_defeat_Restore_Freight_Routes } add_to_variable = { var = VAL_contract_payroll_relief value = -0.05 } }
+		if = { limit = { has_completed_focus = VAL_defeat_Veterans_Register } add_to_variable = { var = VAL_contract_payroll_relief value = -0.05 } }
+		if = { limit = { has_completed_focus = VAL_defeat_Staff_College } add_to_variable = { var = VAL_contract_payroll_relief value = -0.05 } }
+		if = { limit = { has_completed_focus = VAL_defeat_Recovered_State } add_to_variable = { var = VAL_contract_payroll_relief value = -0.05 } }
+		clamp_variable = { var = VAL_contract_payroll_relief min = -0.25 max = 0 }
+	}
+}
+
 # Payroll relief belongs to the country and survives replacement of its focus tree.
 VAL_reform_mercenary_payroll = {
 	if = {

@@ -2881,6 +2881,7 @@ STP_cw_begin_hostilities = {
 			STP_cw_poll_nod_intervention = yes
 			STS = { STP_cw_begin_operations = yes }
 			add_ideas = STP_cw_party_battle_spirit
+			activate_mission = STP_cw_exhaustion_deadline_1
 			STS = { add_ideas = STP_cw_resistance_battle_spirit }
 			news_event = { id = ADISCORD_STP_cw.70 hours = 1 }
 			STS = { country_event = { id = ADISCORD_STP_cw.91 days = 5 } }

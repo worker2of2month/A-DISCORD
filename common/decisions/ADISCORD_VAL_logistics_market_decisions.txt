@@ -344,7 +344,7 @@ VAL_population_markets = {
 		cancel_trigger = { hidden_trigger = { OR = { has_capitulated = yes is_subject = yes } } }
 		cancel_effect = { VAL_refund_local_training = yes }
 		remove_effect = { VAL_finish_local_training = yes }
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 8 modifier = { factor = 10 has_manpower < 15000 } modifier = { factor = 0 NOT = { has_manpower < 30000 } } }
 	}
 
 	VAL_expand_refugee_housing = {

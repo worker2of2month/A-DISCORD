@@ -1258,13 +1258,24 @@ country_event = {
 country_event = {
  id = val_contract.361
  title = val_contract.361.t
- desc = VAL_partner_menu_desc
+ desc = VAL_support_menu_desc
  picture = GFX_event_adiscord_negotiation_table
  is_triggered_only = yes
  option = { name = val_contract.family.cancel }
-option = { name = VAL_menu_commerce trigger = { event_target:VAL_contract_partner = { VAL_partner_commerce_visible = yes } } hidden_effect = { country_event = { id = val_contract.412 } } }
-option = { name = VAL_menu_weapons trigger = { event_target:VAL_contract_partner = { VAL_partner_weapons_visible = yes } } hidden_effect = { country_event = { id = val_contract.413 } } }
-option = { name = VAL_menu_support trigger = { event_target:VAL_contract_partner = { VAL_partner_support_visible = yes } } hidden_effect = { country_event = { id = val_contract.414 } } }
+option = { name = VAL_menu_military trigger = { event_target:VAL_contract_partner = { OR = { VAL_partner_military_visible = yes VAL_partner_advisors_visible = yes } } } hidden_effect = { country_event = { id = val_contract.408 } } }
+option = { name = VAL_menu_aid trigger = { event_target:VAL_contract_partner = { OR = { VAL_partner_gifts_visible = yes VAL_partner_concessions_visible = yes } } } hidden_effect = { country_event = { id = val_contract.409 } } }
+option = {
+ name = VAL_offer_transit_charter_button
+ trigger = { event_target:VAL_contract_partner = { VAL_partner_transit_visible = yes } }
+ custom_effect_tooltip = VAL_offer_status_VAL_offer_transit_charter
+hidden_effect = { if = { limit = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }
+if = { limit = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }
+   set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
+   event_target:VAL_contract_partner = { set_country_flag = { flag = VAL_transit_offer days = 15 } country_event = { id = val_contract.410 } }
+  }
+ } else = { country_event = { id = val_contract.361 } } }
+ ai_chance = { base = 5  modifier = { factor = 0 NOT = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } } }  }
+}
 }
 
 

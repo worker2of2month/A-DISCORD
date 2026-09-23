@@ -31,6 +31,60 @@ def block(text, name):
 
 
 class CivilWarContracts(unittest.TestCase):
+    def test_party_exhaustion_milestones_replace_instead_of_stack(self):
+        decisions = ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council")
+        ideas = ast_block(ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
+        elapsed = 0
+        installed = set()
+        for stage, duration in ((1, 90), (2, 60), (3, 60)):
+            mission_id = f"STP_cw_exhaustion_deadline_{stage}"
+            idea_id = f"STP_cw_exhaustion_{stage}"
+            mission = ast_block(decisions, mission_id)
+            self.assertTrue(mission, mission_id)
+            elapsed += int(scalar(mission, "days_mission_timeout"))
+            self.assertEqual(elapsed, (90, 150, 210)[stage - 1])
+            self.assertEqual(int(scalar(mission, "days_mission_timeout")), duration)
+            goal = ast_block(ast_block(mission, "available"), "hidden_trigger")
+            self.assertEqual(scalar(goal, "always"), "no")
+            self.assertEqual(scalar(ast_block(mission, "activation"), "always"), "no")
+            timeout = ast_block(mission, "timeout_effect")
+            for active in (False, True):
+                facts = {("STP", "STP_cw_party_exhaustion_active", "yes"): active}
+                effects = list(selected_effects(timeout, facts))
+                changes = [(e.key, e.value) for _, e in effects if e.key in ("add_ideas", "remove_ideas", "activate_mission")]
+                if not active:
+                    self.assertEqual(changes, [])
+                    continue
+                for key, value in changes:
+                    if key == "remove_ideas":
+                        installed.discard(value)
+                    elif key == "add_ideas":
+                        installed.add(value)
+                self.assertEqual(installed, {idea_id})
+                next_missions = [value for key, value in changes if key == "activate_mission"]
+                self.assertEqual(next_missions, [f"STP_cw_exhaustion_deadline_{stage + 1}"] if stage < 3 else [])
+                self.assertNotIn(("remove_mission", mission_id), [(e.key, e.value) for _, e in effects])
+            modifiers = ast_block(ast_block(ideas, idea_id), "modifier")
+            self.assertAlmostEqual(float(scalar(modifiers, "army_defence_factor")), -0.05 * stage)
+            self.assertAlmostEqual(float(scalar(modifiers, "army_org_regain")), -0.10 * stage)
+            for definition, cancel_key in ((mission, "cancel_trigger"), (ast_block(ideas, idea_id), "cancel")):
+                cancel = ast_block(definition, cancel_key)
+                self.assertEqual(scalar(cancel, "STP_cw_party_exhaustion_active"), "no")
+
+    def test_party_exhaustion_stops_with_either_side_and_starts_after_declaration(self):
+        trigger = ast_block(entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"), "STP_cw_party_exhaustion_active")
+        self.assertTrue(trigger)
+        facts = {("STP", "has_war_with", "STS"): True, ("STP", "has_capitulated", "no"): True,
+                 ("STS", "exists", "yes"): True, ("STS", "has_capitulated", "no"): True}
+        self.assertTrue(matches_conditions(trigger, facts))
+        for key in facts:
+            with self.subTest(terminal=key):
+                self.assertFalse(matches_conditions(trigger, {**facts, key: False}))
+        self.assertFalse(matches_conditions(trigger, facts, "STS"))
+        start = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_begin_hostilities")
+        self.assertEqual(start.count("activate_mission = STP_cw_exhaustion_deadline_1"), 1)
+        self.assertLess(start.index("declare_war_on"), start.index("activate_mission = STP_cw_exhaustion_deadline_1"))
+
     def test_weekly_civil_war_dispatch_is_country_scoped_and_ordered(self):
         actions = ast_block(entries("common/on_actions/02_ADISCORD_STP_on_actions.txt"), "on_actions")
         self.assertFalse(any(e.key == "on_weekly" for e in actions))
@@ -3115,8 +3169,9 @@ class NorthernCampaignContracts(unittest.TestCase):
         northern = block(ai, "NOD_cw_northern_offensive_army")
         intervention = block(ai, "NOD_cw_stelander_intervention_army")
         reserve = block(ai, "NOD_cw_wartime_home_buffer")
+        self.assertIn("type = dont_defend_ally_borders", northern)
+        self.assertNotIn("type = dont_defend_ally_borders", intervention)
         for profile in (northern, intervention):
-            self.assertIn("type = dont_defend_ally_borders", profile)
             self.assertIn("type = force_concentration_factor value = 80", profile)
             self.assertNotIn("type = put_unit_buffers", profile)
         self.assertIn("type = put_unit_buffers", reserve)

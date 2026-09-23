@@ -193,13 +193,23 @@ NOD_cw_northern_offensive_army = {
 	ai_strategy = { type = role_ratio id = mobile value = 20 }
 	ai_strategy = { type = role_ratio id = militias value = -100 }
 	ai_strategy = { type = role_ratio id = garrison value = -100 }
-	# Scope by ally tag. A global block also stops the AIN colonial reserve;
-	# STP is the ally whose southern border otherwise holds the field army.
-	ai_strategy = { type = dont_defend_ally_borders id = STP value = 100 }
+	# Keep AIN's colonial reserve separate from the field-army fronts.
 	ai_strategy = { type = dont_defend_ally_borders id = AIN value = 100 }
 	ai_strategy = { type = role_ratio id = armor value = 15 }
 	ai_strategy = { type = role_ratio id = mountaineers value = 12 }
 	ai_strategy = { type = force_concentration_factor value = 80 }
+}
+
+# The party front must become available when NOD joins the war against STS,
+# even if a northern conflict is still active or starts again.
+NOD_cw_northern_party_border = {
+	allowed = { original_tag = NOD }
+	enable = {
+		OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
+		NOT = { has_war_with = STS }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = dont_defend_ally_borders id = STP value = 100 }
 }
 
 # One bounded reserve for every NOD land war in this theatre. Keeping it in a
@@ -283,12 +293,25 @@ NOD_cw_stelander_intervention_army = {
 	ai_strategy = { type = role_ratio id = mobile value = 20 }
 	ai_strategy = { type = role_ratio id = militias value = -100 }
 	ai_strategy = { type = role_ratio id = garrison value = -100 }
-	ai_strategy = { type = dont_defend_ally_borders value = 1 }
 	ai_strategy = { type = force_concentration_factor value = 80 }
 	ai_strategy = { type = consider_weak id = STS value = 120 }
 	ai_strategy = { type = front_unit_request tag = STS value = 220 }
 	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
 	ai_strategy = { type = conquer id = STS value = 250 }
+}
+
+# Allied front allocation also works before NOD gains its own border with STS.
+NOD_cw_party_front_support = {
+	allowed = { original_tag = NOD }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war_with = STS
+		is_in_faction_with = STP
+		STP = { exists = yes has_capitulated = no has_war_with = STS }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = force_defend_ally_borders id = STP value = 100 }
 }
 
 # --- Prewar deployment ---

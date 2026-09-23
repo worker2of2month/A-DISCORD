@@ -1665,17 +1665,17 @@ class ValNorthernExportTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar, walk
         focuses = {scalar(e.value, "id"): e.value for e in walk(parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8")))
                    if e.key == "focus" and isinstance(e.value, list)}
-        expectations = {"VAL_Foreign_Broker_Licences": "VAL_partner_contract",
-                        "VAL_Northern_Clearing_House": None,
-                        "VAL_Contingency_Ledgers": "VAL_partner_contract"}
+        expectations = {"VAL_Foreign_Broker_Licences": ["VAL_ready_partner_supply", "VAL_quarterly_partner_supply"],
+                        "VAL_Northern_Clearing_House": [],
+                        "VAL_Contingency_Ledgers": ["VAL_partner_contract"]}
         sales = block(parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8")), "VAL_foreign_sales")
         for focus, unlock in expectations.items():
             reward = block(focuses[focus], "completion_reward")
             self.assertFalse(any(e.key == "set_country_flag" for e in walk(reward)))
             self.assertEqual([scalar(e.value, "decision") if isinstance(e.value, list) else e.value
-                              for e in reward if e.key == "unlock_decision_tooltip"], [unlock] if unlock else [])
-            if unlock:
-                self.assertIn(focus, [e.value for e in walk(block(block(sales, unlock), "visible"))])
+                              for e in reward if e.key == "unlock_decision_tooltip"], unlock)
+            for decision_id in unlock:
+                self.assertTrue(block(block(sales, decision_id), "visible"))
         triggers = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
         self.assertIn("has_completed_focus = VAL_Northern_Clearing_House", named_block_spans(triggers, "VAL_export_slot_free")[0].text)
 

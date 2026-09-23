@@ -1168,9 +1168,9 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_contract_service_desc: "Kefreyt recruits paid volunteers. Contracts define each soldier's term of service, wages and duties, while permanent cadres accelerate operational planning and the recovery of company cohesion, while service experience reduces non-combat losses. This system supports a professional army but limits the pool of recruits."
  VAL_contract_service_locked_tt: "Contract Service can only be replaced through a focus or event."
 
- VAL_partner_contract:0 "Agreements: [FROM.GetName]"
- VAL_partner_contract_desc:0 "Choose a trading office, an arms sale or a recruitment agreement. The partner has 14 days to answer. No resources change hands before acceptance. Trade and recruitment are available in peacetime."
- VAL_partner_menu_tt:0 "Opens trade, orders, aid and military service offers. Each deal requires partner consent."
+ VAL_partner_contract:0 "Special agreement: [FROM.GetName]"
+ VAL_partner_contract_desc:0 "Partner-specific military contracts, advisers, aid, resource concessions or transit. Only supported options are shown. Recruitment, trade agreements and weapons deliveries have separate decisions."
+ VAL_partner_menu_tt:0 "Open partner-specific military services, aid, resource and transit agreements."
  VAL_partner_trade:0 "Sign annual trade agreement - £pol_power 100"
  VAL_partner_arms:0 "Sell 25000 rifles"
  VAL_partner_hire:0 "Recruit local volunteers"
@@ -1199,7 +1199,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_market_TFF_desc:0 "Annual agreement with [TFF.GetName]: +12 weekly treasury. War or capitulation ends income early. No automatic renewal."
  VAL_market_YPR:0 "Trading Office: [YPR.GetName]"
  VAL_market_YPR_desc:0 "Annual agreement with [YPR.GetName]: +15 weekly treasury. War or capitulation ends income early. No automatic renewal."
- val_contract.361.t:0 "Agreements: [VALMenuPartnerName]"
+ val_contract.361.t:0 "Special agreements: [VALMenuPartnerName]"
  val_contract.361.d:0 "The office has prepared three proposals. A trading office costs 200 treasury and provides weekly income. An arms order sells 25000 rifles for 500 treasury. Recruitment transfers real volunteers from the partner reserve to ours.\n\nTerms depend on the country; tooltips list the full prices. Unavailable proposals are hidden. The partner may decline. Refusal or timeout leaves resources with their owners."
  val_contract.362.t:0 "An Offer from Kefreyt"
  val_contract.362.d:0 "Kefreyt offers a 365-day agreement, earning us 1 treasury weekly. War or capitulation ends income early. [VALTradeFeeTerms]\n\nThe offer lasts 14 days. No answer means refusal. No automatic renewal."
@@ -1681,3 +1681,49 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_trade_fee_legacy:0 "This is a previously sent offer: Kefreyt pays 100 political power only on acceptance."
 
  VAL_trade_decision_available_tt:0 "Enough political power; no active agreement, war, pending reply or contact cooldown with this partner."
+
+ VAL_hire_partner_volunteers:0 "Recruit volunteers: [FROM.GetName]"
+
+ VAL_hire_partner_volunteers_desc:0 "Receive £manpower_texticon [VALHireDecisionPeople] people from partner reserves for £ADISCORD_economy_treasury_texticon [VALHireDecisionPrice] treasury.\n\nThis decision sends an offer. Money and manpower transfer only after consent and a fresh resource check. Refusal costs no treasury. Recruitment from this partner can repeat 180 days after settlement."
+
+ VAL_hire_funds_tt:0 "Kefreyt has £ADISCORD_economy_treasury_texticon [VALHireDecisionPrice] treasury."
+
+ VAL_hire_reserve_tt:0 "Partner reserves contain £manpower_texticon [VALHireDecisionPeople] people."
+
+ VAL_hire_offer_ready_tt:0 "Both parties are eligible; recruitment/contact cooldowns and pending replies have ended."
+
+ VAL_hire_decision_result_tt:0 "Offer £ADISCORD_economy_treasury_texticon [VALHireDecisionPrice] treasury for £manpower_texticon [VALHireDecisionPeople] people. Settlement follows consent."
+
+ VAL_quarterly_partner_supply:0 "Quarterly deliveries: [FROM.GetName]"
+
+ VAL_quarterly_partner_supply_desc:0 "Choose 25000 / 50000 / 100000 / 200000 rifles per quarter for 500 / 1000 / 2250 / 5000 treasury per shipment. Completed focuses unlock quantities.\n\nFour deliveries over a year. Signing costs £pol_power 100 after buyer consent; opening the selection is free. No advance; payment on dispatch. Requires a free slot and open corridor. A missed deadline grants 15 days of grace, then termination."
+
+ VAL_quarterly_decision_ready_tt:0 "Requires 100 political power, a free slot, an open corridor, settled refunds, no active supply agreement with this buyer and no pending reply."
+
+ VAL_quarterly_decision_result_tt:0 "Choose a quarterly quota, then send the buyer an offer."
+
+ VAL_ready_partner_supply:0 "Sell ready weapons: [FROM.GetName]"
+
+ VAL_ready_partner_supply_desc:0 "One-off delivery from stock: 25000 / 50000 / 100000 / 200000 rifles for 500 / 1000 / 2250 / 5000 treasury. Choosing a package is free. Weapons and full payment transfer after buyer consent. Requires the unlocking focus, a free export slot, seller equipment and buyer funds."
+
+ VAL_ready_decision_ready_tt:0 "At least one unlocked package is available: enough equipment and buyer funds, a free slot, no stopped corridor or pending reply."
+
+ VAL_ready_decision_result_tt:0 "Choose a one-off delivery size and send the buyer an offer."
+
+ VAL_hire_value_unknown:0 "—"
+
+ VAL_hire_value_200:0 "200"
+
+ VAL_hire_value_300:0 "300"
+
+ VAL_hire_value_400:0 "400"
+
+ VAL_hire_value_500:0 "500"
+
+ VAL_hire_value_2000:0 "2000"
+
+ VAL_hire_value_3000:0 "3000"
+
+ VAL_hire_value_4000:0 "4000"
+
+ VAL_hire_value_5000:0 "5000"

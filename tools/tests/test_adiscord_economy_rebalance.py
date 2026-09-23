@@ -959,6 +959,32 @@ class ValMercenaryPayrollTests(unittest.TestCase):
                 for n in walk(focus(text, identifier)))]
             self.assertEqual(len(reforms), 5, (branch, reforms))
 
+    def test_load_migrates_recorded_reforms_once_before_refresh(self):
+        f = self.fixture()
+        original_condition = f.condition
+        completed = set()
+
+        def condition(entries, scope="A", previous=None, root="A"):
+            return all(n.value in completed if n.key == "has_completed_focus"
+                       else original_condition([n], scope, previous, root) for n in entries)
+
+        f.condition = condition
+        completed.update(n.value for n in walk(f.definitions["VAL_migrate_mercenary_payroll"])
+                         if n.key == "has_completed_focus")
+        self.assertEqual(len(completed), 10)
+        f.run("VAL_migrate_mercenary_payroll")
+        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -.25)
+        completed.clear()
+        f.run("VAL_migrate_mercenary_payroll")
+        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -.25)
+        f.scopes["A"].pop("VAL_contract_payroll_relief")
+        completed.update(("VAL_State_Contract", "VAL_defeat_Staff_College"))
+        f.run("VAL_migrate_mercenary_payroll")
+        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -.1)
+        startup = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
+        self.assertLess(startup.index("VAL_migrate_mercenary_payroll = yes"),
+                        startup.index("VAL_initialize_contract_authority = yes"))
+
 
 class NodrulDivisionEconomyTests(unittest.TestCase):
     def fixture(self, divisions=38, civilian=9, military=12, war=False,

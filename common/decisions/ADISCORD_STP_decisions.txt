@@ -2184,6 +2184,63 @@ STP_battle_for_stelander = {
 
 STP_cw_war_council = {
 
+	# Each timeout activates a different mission; it never removes its own callback.
+	STP_cw_exhaustion_deadline_1 = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		activation = { always = no }
+		visible = { has_active_mission = STP_cw_exhaustion_deadline_1 }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 90
+		is_good = no
+		cancel_trigger = { STP_cw_party_exhaustion_active = no }
+		timeout_effect = {
+			if = {
+				limit = { STP_cw_party_exhaustion_active = yes }
+				add_ideas = STP_cw_exhaustion_1
+				hidden_effect = { activate_mission = STP_cw_exhaustion_deadline_2 }
+			}
+		}
+	}
+	STP_cw_exhaustion_deadline_2 = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		activation = { always = no }
+		visible = { has_active_mission = STP_cw_exhaustion_deadline_2 }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 60
+		is_good = no
+		cancel_trigger = { STP_cw_party_exhaustion_active = no }
+		timeout_effect = {
+			if = {
+				limit = { STP_cw_party_exhaustion_active = yes }
+				remove_ideas = STP_cw_exhaustion_1
+				add_ideas = STP_cw_exhaustion_2
+				hidden_effect = { activate_mission = STP_cw_exhaustion_deadline_3 }
+			}
+		}
+	}
+	STP_cw_exhaustion_deadline_3 = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		activation = { always = no }
+		visible = { has_active_mission = STP_cw_exhaustion_deadline_3 }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		days_mission_timeout = 60
+		is_good = no
+		cancel_trigger = { STP_cw_party_exhaustion_active = no }
+		timeout_effect = {
+			if = {
+				limit = { STP_cw_party_exhaustion_active = yes }
+				remove_ideas = STP_cw_exhaustion_2
+				add_ideas = STP_cw_exhaustion_3
+			}
+		}
+	}
+
 	STP_pw_party_fund_northern_contacts = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }

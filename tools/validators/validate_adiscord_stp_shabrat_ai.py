@@ -22,7 +22,7 @@ FOCUS = ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 
-SCORE_TOTAL = 102
+SCORE_TOTAL = 104
 
 INTRO_FOCUSES = (
     "STP_NECTAR_OF_GODS",

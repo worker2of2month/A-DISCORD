@@ -59,6 +59,16 @@ class ValNorthernCoalitionAidTests(unittest.TestCase):
                           (tag, "is_subject", "no"): True, (tag, "has_war_with", "NOD"): True})
         return facts
 
+    def test_resource_side_choices_have_native_country_admission(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
+        category = block(parse_clausewitz(read("common/decisions/ADISCORD_VAL_decisions.txt")), "VAL_resource_war_aid")
+        for name in ("VAL_negotiate_nam_metals", "VAL_negotiate_efl_metals"):
+            with self.subTest(decision=name):
+                admission = block(block(category, name), "allowed")
+                self.assertTrue(admission, "Native decision admission must be explicit")
+                self.assertTrue(matches_conditions(admission, {}, "VAL"))
+                self.assertFalse(matches_conditions(admission, {}, "STP"))
+
     def expand(self, rows, facts, scope="VAL"):
         from dataclasses import replace
         from tools.tests.test_adiscord_stp_preparation import scalar
@@ -1422,7 +1432,7 @@ class ValAnnualMarketTests(unittest.TestCase):
 
 
     def test_signed_partner_row_is_hidden_and_expiry_cleans_before_choice(self):
-        decision = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_partner_contract")
+        decision = named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_sign_annual_trade")
         visible = named_block(decision, "visible")
         self.assertRegex(visible, r"FROM\s*=\s*\{[^{}]*NOT\s*=\s*\{\s*has_country_flag\s*=\s*VAL_market_term_started")
         source = read("events/ADISCORD_VAL_contract_events.txt")
@@ -1557,8 +1567,8 @@ class ValPartnerVisibilityTests(unittest.TestCase):
 
     def test_partner_row_uses_uncached_visible_capability(self):
         decision=named_block(read("common/decisions/ADISCORD_VAL_decisions.txt"),"VAL_partner_contract")
-        self.assertIn("VAL_partner_has_visible_contracts = yes",named_block(decision,"visible"))
-        self.assertNotIn("VAL_partner_has_visible_contracts",named_block(decision,"target_trigger"))
+        self.assertIn("VAL_partner_support_visible = yes",named_block(decision,"visible"))
+        self.assertNotIn("VAL_partner_support_visible",named_block(decision,"target_trigger"))
 
 
     def test_unaffordable_options_recheck_before_effects_and_do_not_loop_ai(self):
@@ -1637,3 +1647,53 @@ class ValNativeTradeFeeTests(unittest.TestCase):
             after=dict(facts)
             model.execute("VAL_refund_trade_fee",facts,"CIN")
             self.assertEqual(facts,after)
+
+
+class ValDirectContractDecisionTests(unittest.TestCase):
+    def test_hire_and_quarterly_supply_have_direct_entry_points(self):
+        source=read("common/decisions/ADISCORD_VAL_decisions.txt")
+        hire=named_block(source,"VAL_hire_partner_volunteers")
+        self.assertIn("VAL_partner_hire_can_offer = yes",hire)
+        self.assertIn("id = val_contract.364",hire)
+        self.assertNotIn("subtract_from_variable",hire)
+        orders=named_block(source,"VAL_quarterly_partner_supply")
+        self.assertIn("VAL_partner_orders_visible = yes",named_block(orders,"visible"))
+        self.assertIn("VAL_order_can_offer = yes",named_block(orders,"available"))
+        self.assertIn("id = val_contract.407",orders)
+
+    def test_special_agreement_does_not_route_to_general_menu(self):
+        source=read("common/decisions/ADISCORD_VAL_decisions.txt")
+        special=named_block(source,"VAL_partner_contract")
+        self.assertIn("VAL_partner_support_visible = yes",named_block(special,"visible"))
+        self.assertIn("id = val_contract.414",special)
+        self.assertNotIn("id = val_contract.361",special)
+
+
+class ValReplacementReserveTests(unittest.TestCase):
+    def test_recruitment_brake_releases_at_exact_reserve_boundary(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, parse_clausewitz
+        policy = block(parse_clausewitz(read("common/ai_strategy/VAL.txt")), "VAL_preserve_replacement_reserve")
+        for people, ai, capitulated, expected in ((0, True, False, True), (14999.9, True, False, True),
+                                                  (15000, True, False, False), (30000, True, False, False),
+                                                  (0, False, False, False), (0, True, True, False)):
+            facts = {("VAL", "numeric", "has_manpower"): people,
+                     ("VAL", "is_ai", "yes"): ai, ("VAL", "has_capitulated", "no"): not capitulated}
+            self.assertEqual(matches_conditions(block(policy, "enable"), facts, "VAL"), expected)
+
+    def test_paid_recruitment_priority_stops_at_sufficient_reserve(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, parse_clausewitz, scalar
+        for path, decision_id in (("common/decisions/ADISCORD_VAL_decisions.txt", "VAL_hire_partner_volunteers"),
+                                  ("common/decisions/ADISCORD_VAL_logistics_market_decisions.txt", "VAL_recruit_local_volunteers")):
+            decision = parse_clausewitz(named_block(read(path), decision_id))[0].value
+            policy = block(decision, "ai_will_do")
+            weights = []
+            for people in (0, 15000, 30000):
+                weight = float(scalar(policy, "base"))
+                for modifier in (e.value for e in policy if e.key == "modifier"):
+                    conditions = [e for e in modifier if e.key != "factor"]
+                    if matches_conditions(conditions, {("VAL", "numeric", "has_manpower"): people}, "VAL"):
+                        weight *= float(scalar(modifier, "factor"))
+                weights.append(weight)
+            self.assertGreater(weights[0], weights[1])
+            self.assertGreater(weights[1], 0)
+            self.assertEqual(weights[2], 0)

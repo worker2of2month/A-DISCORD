@@ -2,8 +2,12 @@ from __future__ import annotations
 
 import re
 import unittest
+from itertools import product
 from pathlib import Path
 
+from tools.tests.test_adiscord_stp_preparation import (
+    block as ast_block, entries, matches_conditions, scalar,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 AI_PATH = ROOT / "common/ai_strategy/ADISCORD_STP_civil_war.txt"
@@ -40,7 +44,8 @@ class NodrulNorthernFrontTests(unittest.TestCase):
         block = named_block(source, "NOD_cw_northern_offensive_army")
 
         self.assertTrue(block)
-        self.assertIn("type = dont_defend_ally_borders id = STP value = 100", block)
+        party_border = named_block(source, "NOD_cw_northern_party_border")
+        self.assertIn("type = dont_defend_ally_borders id = STP value = 100", party_border)
         self.assertIn("type = dont_defend_ally_borders id = AIN value = 100", block)
         self.assertNotIn("type = dont_defend_ally_borders value = 1", block)
         for tag in ("STP", "STS", "SRP", "VAL"):
@@ -135,6 +140,40 @@ class NodrulNorthernFrontTests(unittest.TestCase):
             "manual_attack = no",
             block,
         )
+
+    def test_party_front_support_does_not_require_a_direct_enemy_border(self) -> None:
+        profiles = [e for e in entries("common/ai_strategy/ADISCORD_STP_civil_war.txt")
+                    if e.key.startswith("NOD_cw_")]
+        for border, north, nod_war, party_war, allied, party_alive in product((False, True), repeat=6):
+            facts = {
+                ("NOD", "original_tag", "NOD"): True,
+                ("NOD", "is_ai", "yes"): True,
+                ("NOD", "has_capitulated", "no"): True,
+                ("NOD", "has_war_with", "STS"): nod_war,
+                ("NOD", "has_war_with", "YPR"): north,
+                ("NOD", "is_neighbor_of", "STS"): border,
+                ("NOD", "is_in_faction_with", "STP"): allied,
+                ("STP", "has_war_with", "STS"): party_war,
+                ("STP", "exists", "yes"): party_alive,
+                ("STP", "has_capitulated", "no"): party_alive,
+            }
+            active = [e.value for e in profiles
+                      if matches_conditions(ast_block(e.value, "allowed"), facts, "NOD")
+                      and matches_conditions(ast_block(e.value, "enable"), facts, "NOD")]
+            strategies = [e.value for profile in active for e in profile if e.key == "ai_strategy"]
+            def weight(kind):
+                return sum(int(scalar(s, "value")) for s in strategies
+                           if scalar(s, "type") == kind and scalar(s, "id") in (None, "", "STP"))
+            support = nod_war and party_war and allied and party_alive
+            with self.subTest(border=border, north=north, nod_war=nod_war,
+                              party_war=party_war, allied=allied, party_alive=party_alive):
+                self.assertEqual(weight("force_defend_ally_borders") > 0, support)
+                if support:
+                    self.assertLessEqual(weight("dont_defend_ally_borders"), 0)
+                if north and not nod_war:
+                    self.assertGreater(weight("dont_defend_ally_borders"), 0)
+            for profile in active:
+                self.assertEqual(scalar(profile, "abort_when_not_enabled"), "yes")
 
 
 if __name__ == "__main__":

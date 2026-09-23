@@ -1259,6 +1259,68 @@ VAL_foreign_sales = {
         }
         ai_will_do = { base = 5 }
     }
+    VAL_hire_partner_volunteers = {
+        icon = generic_manpower
+        allowed = { tag = VAL }
+        targets = { CIN OSF APH COF TFF YPR }
+        target_trigger = { FROM = { exists = yes } }
+        visible = { FROM = { VAL_partner_commerce_visible = yes } OR = { has_completed_focus = VAL_Resource_War_Contracts has_completed_focus = VAL_Contingency_Ledgers has_completed_focus = VAL_Market_Roads_North has_completed_focus = VAL_Foreign_Broker_Licences has_completed_focus = VAL_Operational_Directorate has_country_flag = VAL_foreign_operations_unlocked has_country_flag = VAL_northern_operations_unlocked } }
+        available = {
+            custom_trigger_tooltip = { tooltip = VAL_hire_funds_tt FROM = { VAL_partner_hire_funds_ready = yes } }
+            custom_trigger_tooltip = { tooltip = VAL_hire_reserve_tt FROM = { VAL_partner_hire_reserve_ready = yes } }
+            custom_trigger_tooltip = { tooltip = VAL_hire_offer_ready_tt FROM = { VAL_partner_hire_can_offer = yes } }
+        }
+        cost = 0
+        days_re_enable = 1
+        complete_effect = {
+            custom_effect_tooltip = VAL_hire_decision_result_tt
+            hidden_effect = {
+                if = {
+                    limit = { FROM = { VAL_partner_hire_can_offer = yes } }
+                    set_country_flag = { flag = VAL_partner_offer_pending days = 16 }
+                    set_country_flag = { flag = VAL_export_offer_pending days = 16 }
+                    FROM = {
+                        ADISCORD_release_non_participating_minor_optimization = yes
+                        set_country_flag = { flag = VAL_partner_offer_hire days = 14 }
+                        set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+                        country_event = { id = val_contract.364 }
+                    }
+                }
+            }
+        }
+        ai_will_do = { base = 5 modifier = { factor = 10 has_manpower < 15000 } modifier = { factor = 0 NOT = { has_manpower < 30000 } } }
+    }
+
+    VAL_quarterly_partner_supply = {
+        icon = generic_production
+        allowed = { tag = VAL }
+        targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD }
+        target_trigger = { FROM = { exists = yes } }
+        visible = { FROM = { VAL_partner_orders_visible = yes NOT = { has_country_flag = VAL_quarterly_supply_active } } }
+        available = { custom_trigger_tooltip = { tooltip = VAL_quarterly_decision_ready_tt FROM = { VAL_order_can_offer = yes } } }
+        cost = 0
+        complete_effect = {
+            custom_effect_tooltip = VAL_quarterly_decision_result_tt
+            hidden_effect = { FROM = { save_event_target_as = VAL_contract_partner } country_event = { id = val_contract.407 } }
+        }
+        ai_will_do = { base = 5 }
+    }
+
+    VAL_ready_partner_supply = {
+        icon = generic_production
+        allowed = { tag = VAL }
+        targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD NAM EFL }
+        target_trigger = { FROM = { exists = yes } }
+        visible = { FROM = { VAL_partner_weapons_visible = yes } }
+        available = { custom_trigger_tooltip = { tooltip = VAL_ready_decision_ready_tt FROM = { OR = { VAL_partner_arms_can_offer = yes VAL_partner_bulk_can_offer = yes VAL_partner_arsenal_can_offer = yes VAL_partner_strategic_can_offer = yes } } } }
+        cost = 0
+        complete_effect = {
+            custom_effect_tooltip = VAL_ready_decision_result_tt
+            hidden_effect = { FROM = { save_event_target_as = VAL_contract_partner } country_event = { id = val_contract.406 } }
+        }
+        ai_will_do = { base = 5 }
+    }
+
 
 
     VAL_partner_contract = {
@@ -1266,14 +1328,14 @@ VAL_foreign_sales = {
         allowed = { tag = VAL }
         targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD NAM EFL }
         target_trigger = { FROM = { exists = yes } }
-        visible = { FROM = { VAL_partner_has_visible_contracts = yes NOT = { has_country_flag = VAL_market_term_started } NOT = { has_country_flag = VAL_quarterly_supply_active } } OR = { has_completed_focus = VAL_Resource_War_Contracts has_completed_focus = VAL_Contingency_Ledgers has_completed_focus = VAL_Market_Roads_North has_completed_focus = VAL_Foreign_Broker_Licences has_completed_focus = VAL_Operational_Directorate has_country_flag = VAL_foreign_operations_unlocked has_country_flag = VAL_northern_operations_unlocked } }
+        visible = { FROM = { VAL_partner_support_visible = yes } OR = { has_completed_focus = VAL_Resource_War_Contracts has_completed_focus = VAL_Contingency_Ledgers has_completed_focus = VAL_Market_Roads_North has_completed_focus = VAL_Foreign_Broker_Licences has_completed_focus = VAL_Operational_Directorate has_country_flag = VAL_foreign_operations_unlocked has_country_flag = VAL_northern_operations_unlocked } }
 
 		available = { custom_trigger_tooltip = { tooltip = VAL_partner_negotiations_ready_tt VAL_partner_desk_free = yes FROM = { exists = yes has_capitulated = no NOT = { has_war_with = VAL } NOT = { has_country_flag = VAL_partner_contact_cooldown } } } }
         cost = 0
         days_re_enable = 7
         complete_effect = {
             custom_effect_tooltip = VAL_partner_menu_tt
-            hidden_effect = { FROM = { save_event_target_as = VAL_contract_partner } country_event = { id = val_contract.361 } }
+            hidden_effect = { FROM = { save_event_target_as = VAL_contract_partner } country_event = { id = val_contract.414 } }
         }
         ai_will_do = { base = 5 }
     }
@@ -1785,6 +1847,7 @@ VAL_vorkerland_aid = {
 VAL_resource_war_aid = {
 	VAL_negotiate_nam_metals = {
 		icon = generic_political_pressure
+		allowed = { tag = VAL }
 		visible = { NOT = { has_variable = VAL_resource_aid_side } }
 		available = { has_completed_focus = VAL_Resource_War_Contracts custom_trigger_tooltip = { tooltip = VAL_nam_concession_negotiable_tt VAL_nam_concession_negotiable = yes } NOT = { has_country_flag = VAL_nam_concession_offer_pending } }
 		cost = 50
@@ -1800,6 +1863,7 @@ VAL_resource_war_aid = {
 	}
 	VAL_negotiate_efl_metals = {
 		icon = generic_political_pressure
+		allowed = { tag = VAL }
 		visible = { NOT = { has_variable = VAL_resource_aid_side } }
 		available = { has_completed_focus = VAL_Resource_War_Contracts custom_trigger_tooltip = { tooltip = VAL_efl_concession_negotiable_tt VAL_efl_concession_negotiable = yes } NOT = { has_country_flag = VAL_efl_concession_offer_pending } }
 		cost = 50

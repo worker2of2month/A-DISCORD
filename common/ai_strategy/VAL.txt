@@ -507,3 +507,12 @@ VAL_resource_volunteers_to_EFL = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = send_volunteers_desire id = EFL value = 200 }
 }
+
+# Preserve paid recruits for reinforcement while the replacement reserve is low.
+# This reduces formation demand; it does not cancel an existing recruitment queue.
+VAL_preserve_replacement_reserve = {
+	allowed = { tag = VAL }
+	enable = { is_ai = yes has_capitulated = no has_manpower < 15000 }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }
+}

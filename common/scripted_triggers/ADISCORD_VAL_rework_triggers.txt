@@ -1333,18 +1333,35 @@ VAL_partner_trade_can_accept = {
 	VAL_partner_trade_terms_valid = yes
 }
 
-VAL_partner_hire_terms_valid = {
-	VAL_contract_partner = yes
-	NOT = { has_country_flag = VAL_partner_hire_cooldown }
-	OR = {
-		AND = { tag = CIN NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } }
-		AND = { tag = OSF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } }
-		AND = { tag = APH NOT = { has_manpower < 2000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } }
-		AND = { tag = COF NOT = { has_manpower < 3000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } }
-		AND = { tag = TFF NOT = { has_manpower < 4000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } }
-		AND = { tag = YPR NOT = { has_manpower < 5000 } VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } }
-	}
+VAL_partner_hire_funds_ready = {
+ OR = {
+  AND = { tag = CIN VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } }
+  AND = { tag = OSF VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } }
+  AND = { tag = APH VAL = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } } }
+  AND = { tag = COF VAL = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } } }
+  AND = { tag = TFF VAL = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } } }
+  AND = { tag = YPR VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } }
+ }
 }
+
+VAL_partner_hire_reserve_ready = {
+ OR = {
+  AND = { tag = CIN NOT = { has_manpower < 3000 } }
+  AND = { tag = OSF NOT = { has_manpower < 4000 } }
+  AND = { tag = APH NOT = { has_manpower < 2000 } }
+  AND = { tag = COF NOT = { has_manpower < 3000 } }
+  AND = { tag = TFF NOT = { has_manpower < 4000 } }
+  AND = { tag = YPR NOT = { has_manpower < 5000 } }
+ }
+}
+
+VAL_partner_hire_terms_valid = {
+ VAL_contract_partner = yes
+ NOT = { has_country_flag = VAL_partner_hire_cooldown }
+ VAL_partner_hire_funds_ready = yes
+ VAL_partner_hire_reserve_ready = yes
+}
+
 VAL_partner_hire_can_offer = {
 	VAL_partner_hire_terms_valid = yes
 	NOT = { has_country_flag = VAL_partner_contact_cooldown }

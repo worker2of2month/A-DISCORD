@@ -622,3 +622,25 @@ defined_text = {
  text = { trigger = { has_country_flag = VAL_trade_fee_paid } localization_key = VAL_trade_fee_prepaid }
  text = { localization_key = VAL_trade_fee_legacy }
 }
+
+defined_text = {
+ name = VALHireDecisionPeople
+ text = { trigger = { FROM = { tag = CIN } } localization_key = VAL_hire_value_3000 }
+ text = { trigger = { FROM = { tag = OSF } } localization_key = VAL_hire_value_4000 }
+ text = { trigger = { FROM = { tag = APH } } localization_key = VAL_hire_value_2000 }
+ text = { trigger = { FROM = { tag = COF } } localization_key = VAL_hire_value_3000 }
+ text = { trigger = { FROM = { tag = TFF } } localization_key = VAL_hire_value_4000 }
+ text = { trigger = { FROM = { tag = YPR } } localization_key = VAL_hire_value_5000 }
+ text = { localization_key = VAL_hire_value_unknown }
+}
+
+defined_text = {
+ name = VALHireDecisionPrice
+ text = { trigger = { FROM = { tag = CIN } } localization_key = VAL_hire_value_300 }
+ text = { trigger = { FROM = { tag = OSF } } localization_key = VAL_hire_value_400 }
+ text = { trigger = { FROM = { tag = APH } } localization_key = VAL_hire_value_200 }
+ text = { trigger = { FROM = { tag = COF } } localization_key = VAL_hire_value_300 }
+ text = { trigger = { FROM = { tag = TFF } } localization_key = VAL_hire_value_400 }
+ text = { trigger = { FROM = { tag = YPR } } localization_key = VAL_hire_value_500 }
+ text = { localization_key = VAL_hire_value_unknown }
+}

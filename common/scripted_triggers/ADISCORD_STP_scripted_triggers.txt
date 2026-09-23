@@ -1,5 +1,13 @@
 # Stelander scripted triggers; scopes are marked below.
 
+# STP: exhaustion belongs only to the active party-resistance war.
+STP_cw_party_exhaustion_active = {
+	tag = STP
+	has_war_with = STS
+	has_capitulated = no
+	STS = { exists = yes has_capitulated = no }
+}
+
 # STS: recognition and aid require the same living, independent counterpart.
 STP_cw_republics_partner_available = {
 	tag = STS
