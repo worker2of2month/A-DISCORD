@@ -1,4 +1,4 @@
-name: Simulate Iskhayt topology cleanup
+name: Apply Iskhayt topology fix
 
 on:
   push:
@@ -6,127 +6,165 @@ on:
       - fix/iskhayt-province-debug
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  simulate:
+  repair:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install Pillow
         run: python -m pip install --disable-pip-version-check pillow
-      - name: Simulate local topology repair
+      - name: Repair province 6 micro-adjacencies
         shell: bash
         run: |
           python - <<'PY'
-          import csv,re
-          from collections import defaultdict,deque
+          from __future__ import annotations
+          import csv, re, struct
+          from collections import defaultdict, deque
           from pathlib import Path
           from PIL import Image
 
+          MAP = Path("map/provinces.bmp")
+          # Province 6 had two accidental tactical bypasses:
+          # - 2 edge-pixels against province 85
+          # - 1 edge-pixel against province 127
+          # Extend the already-adjacent province 11496 wedge into those pixels.
           PATCH = {
-              (3839, 990): 11496, # close 6-85 two-pixel bypass with existing Plaoya wedge
-              (3839, 991): 11496,
-              (3851, 998): 11496, # close 6-127 one-pixel corner contact
-              (3851, 974): 48,    # close 51-108 one-pixel corner contact
+              (3839, 990): (6, 11496),
+              (3839, 991): (6, 11496),
+              (3851, 998): (127, 11496),
           }
 
-          rgb_to_id={}
-          with open("map/definition.csv",encoding="utf-8-sig",newline="") as fh:
-              for row in csv.reader(fh,delimiter=";"):
-                  if len(row)>=4 and row[0].isdigit():
-                      rgb_to_id[tuple(map(int,row[1:4]))]=int(row[0])
+          rgb_by_id = {}
+          id_by_rgb = {}
+          with open("map/definition.csv", encoding="utf-8-sig", newline="") as fh:
+              for row in csv.reader(fh, delimiter=";"):
+                  if len(row) >= 4 and row[0].isdigit():
+                      pid = int(row[0])
+                      rgb = tuple(map(int, row[1:4]))
+                      rgb_by_id[pid] = rgb
+                      id_by_rgb[rgb] = pid
 
-          state_by={}
+          state_by = {}
           for path in Path("history/states").glob("*.txt"):
-              text=path.read_text(encoding="utf-8-sig",errors="replace")
-              mi=re.search(r"\bid\s*=\s*(\d+)",text)
-              mp=re.search(r"\bprovinces\s*=\s*\{([^}]*)\}",text,re.S)
+              text = path.read_text(encoding="utf-8-sig", errors="replace")
+              mi = re.search(r"\bid\s*=\s*(\d+)", text)
+              mp = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", text, re.S)
               if mi and mp:
-                  sid=int(mi.group(1))
-                  for p in map(int,re.findall(r"\d+",mp.group(1))): state_by[p]=sid
+                  sid = int(mi.group(1))
+                  for p in map(int, re.findall(r"\d+", mp.group(1))):
+                      state_by[p] = sid
 
-          im=Image.open("map/provinces.bmp").convert("RGB")
-          w,h=im.size; px=im.load()
-          before=[-1]*(w*h)
+          with Image.open(MAP) as source:
+              image = source.convert("RGB")
+          w, h = image.size
+          px = image.load()
+
+          current = {}
+          for pos, (expected, target) in PATCH.items():
+              x, y = pos
+              pid = id_by_rgb.get(px[x, y])
+              current[pos] = pid
+              if pid not in (expected, target):
+                  raise SystemExit(f"unexpected province at {pos}: {pid}, expected {expected} or {target}")
+
+          if any(current[pos] == expected for pos, (expected, _target) in PATCH.items()):
+              raw = bytearray(MAP.read_bytes())
+              pixel_offset = struct.unpack_from("<I", raw, 10)[0]
+              width = struct.unpack_from("<i", raw, 18)[0]
+              height_raw = struct.unpack_from("<i", raw, 22)[0]
+              bpp = struct.unpack_from("<H", raw, 28)[0]
+              compression = struct.unpack_from("<I", raw, 30)[0]
+              if width != w or abs(height_raw) != h or bpp != 24 or compression != 0:
+                  raise SystemExit(
+                      f"unexpected BMP format width={width} height={height_raw} bpp={bpp} compression={compression}"
+                  )
+              stride = ((w * 3 + 3) // 4) * 4
+              for (x, y), (expected, target) in PATCH.items():
+                  if current[(x, y)] == target:
+                      continue
+                  tr, tg, tb = rgb_by_id[target]
+                  file_y = h - 1 - y if height_raw > 0 else y
+                  offset = pixel_offset + file_y * stride + x * 3
+                  raw[offset:offset + 3] = bytes((tb, tg, tr))
+              MAP.write_bytes(raw)
+
+          with Image.open(MAP) as source:
+              image = source.convert("RGB")
+          px = image.load()
+          grid = [-1] * (w * h)
+          relevant = {6, 85, 127, 11496, 16372}
+          coords = defaultdict(set)
           for y in range(h):
               for x in range(w):
-                  before[y*w+x]=rgb_to_id.get(px[x,y],-1)
-          after=list(before)
-
-          print("PATCH INPUT")
-          for (x,y),target in PATCH.items():
-              old=before[y*w+x]
-              print((x,y),old,"state",state_by.get(old),"->",target,"state",state_by.get(target))
-              after[y*w+x]=target
-
-          def graph(grid):
-              adj=defaultdict(set); edges=defaultdict(int)
-              for y in range(h):
-                  for x in range(w):
-                      a=grid[y*w+x]
-                      if x+1<w:
-                          b=grid[y*w+x+1]
-                          if a!=b:
-                              k=tuple(sorted((a,b))); edges[k]+=1
-                              adj[a].add(b);adj[b].add(a)
-                      if y+1<h:
-                          b=grid[(y+1)*w+x]
-                          if a!=b:
-                              k=tuple(sorted((a,b))); edges[k]+=1
-                              adj[a].add(b);adj[b].add(a)
-              return adj,edges
-          badj,bedges=graph(before)
-          aadj,aedges=graph(after)
-
-          changed=set(bedges)|set(aedges)
-          changes=[]
-          for k in changed:
-              if bedges.get(k,0)!=aedges.get(k,0):
-                  changes.append((k,bedges.get(k,0),aedges.get(k,0),state_by.get(k[0]),state_by.get(k[1])))
-          print("CHANGED BORDER EDGE COUNTS")
-          for item in sorted(changes,key=lambda x:x[0]): print(item)
-
-          removed_pairs={k for k in badj for _ in [0]}
-          print("TARGET PAIRS")
-          for pair in [(6,85),(6,127),(51,108),(6,11496),(85,11496),(127,11496),(48,51),(48,108),(16372,11496)]:
-              k=tuple(sorted(pair))
-              print(pair,"edges",bedges.get(k,0),"->",aedges.get(k,0),"adj",pair[1] in badj[pair[0]],"->",pair[1] in aadj[pair[0]])
-
-          involved={6,85,127,11496,51,108,48,16372}
-          coords_before=defaultdict(set); coords_after=defaultdict(set)
-          for y in range(h):
-              for x in range(w):
-                  p=before[y*w+x]; q=after[y*w+x]
-                  if p in involved: coords_before[p].add((x,y))
-                  if q in involved: coords_after[q].add((x,y))
+                  pid = id_by_rgb.get(px[x, y], -1)
+                  grid[y * w + x] = pid
+                  if pid in relevant:
+                      coords[pid].add((x, y))
 
           def connected(points):
-              if not points:return False
-              s=next(iter(points)); seen={s}; q=[s]
+              if not points:
+                  return False
+              start = next(iter(points))
+              seen = {start}
+              q = deque([start])
               while q:
-                  x,y=q.pop()
-                  for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
-                      n=(x+dx,y+dy)
-                      if n in points and n not in seen:
-                          seen.add(n);q.append(n)
-              return len(seen)==len(points)
-          print("CONNECTIVITY")
-          for p in sorted(involved):
-              print(p,len(coords_before[p]),"->",len(coords_after[p]),connected(coords_before[p]),"->",connected(coords_after[p]))
+                  x, y = q.popleft()
+                  for dx, dy in ((1,0),(-1,0),(0,1),(0,-1)):
+                      p = (x + dx, y + dy)
+                      if p in points and p not in seen:
+                          seen.add(p)
+                          q.append(p)
+              return len(seen) == len(points)
 
-          # Cross-state adjacency pair set in local states 13-22: no new political border is allowed.
-          local_states=set(range(13,23))
-          cross_before=set()
-          cross_after=set()
-          for a,ns in badj.items():
-              for b in ns:
-                  if a<b and state_by.get(a) in local_states and state_by.get(b) in local_states and state_by.get(a)!=state_by.get(b):
-                      cross_before.add((a,b))
-          for a,ns in aadj.items():
-              for b in ns:
-                  if a<b and state_by.get(a) in local_states and state_by.get(b) in local_states and state_by.get(a)!=state_by.get(b):
-                      cross_after.add((a,b))
-          print("REMOVED CROSS-STATE PAIRS",sorted(cross_before-cross_after))
-          print("ADDED CROSS-STATE PAIRS",sorted(cross_after-cross_before))
+          for pid in relevant:
+              if not connected(coords[pid]):
+                  raise SystemExit(f"province {pid} is disconnected after repair")
+
+          def border_edges(a, b):
+              return sum(
+                  1
+                  for x, y in coords[a]
+                  for dx, dy in ((1,0),(-1,0),(0,1),(0,-1))
+                  if 0 <= x + dx < w and 0 <= y + dy < h
+                  and grid[(y + dy) * w + (x + dx)] == b
+              )
+
+          if border_edges(6, 85) != 0:
+              raise SystemExit("province 6 still has the two-pixel bypass into province 85")
+          if border_edges(6, 127) != 0:
+              raise SystemExit("province 6 still has the one-pixel bypass into province 127")
+          if border_edges(6, 11496) <= 0:
+              raise SystemExit("province 6 lost its proper border with province 11496")
+          if border_edges(16372, 11496) != 0:
+              raise SystemExit("repair accidentally created a direct Iskhayt-11496 border")
+
+          # The specific rail corridor through 6 -> 11496 must remain valid.
+          if border_edges(6, 11496) == 0:
+              raise SystemExit("rail corridor 16372-6-11496 was broken")
+
+          print("Applied pixels:")
+          for pos, (old, new) in PATCH.items():
+              x, y = pos
+              print(pos, old, "->", id_by_rgb.get(px[x, y]))
+          print("Areas:", {pid: len(coords[pid]) for pid in sorted(relevant)})
+          print("Borders:", {
+              "6-85": border_edges(6,85),
+              "6-127": border_edges(6,127),
+              "6-11496": border_edges(6,11496),
+              "16372-11496": border_edges(16372,11496),
+          })
           PY
+      - name: Commit candidate
+        shell: bash
+        run: |
+          if git diff --quiet -- map/provinces.bmp; then
+            echo "Candidate already applied."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add map/provinces.bmp
+          git commit -m "fix(map): remove province 6 micro-adjacencies"
+          git push
