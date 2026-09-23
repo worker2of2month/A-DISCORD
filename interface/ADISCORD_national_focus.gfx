@@ -303,6 +303,11 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_VAL_Field_Surgeons"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Field_Surgeons.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_VAL_Reclamation_Survey"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reclamation_Survey.png"
 	}

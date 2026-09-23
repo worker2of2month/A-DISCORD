@@ -485,7 +485,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Field_Surgeons
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_VAL_Field_Surgeons
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ARMY }
 		x = -3
 		y = 7
