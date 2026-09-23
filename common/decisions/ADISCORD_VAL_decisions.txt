@@ -2155,8 +2155,12 @@ VAL_resource_war_aid = {
 		is_good = yes
 		days_mission_timeout = 90
 		selectable_mission = no
-		available = { VAL_resource_aid_sufficient = yes }
-		complete_effect = { hidden_effect = { VAL_complete_resource_aid = yes } }
+		# Keep the deadline active while the pledge is pending. Gating a running
+		# mission with the fulfilment trigger makes it cancel before the first shipment.
+		available = { always = yes }
+		cancel_trigger = {
+			NOT = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } }
+		}
 		timeout_effect = { hidden_effect = { country_event = { id = val_contract.369 hours = 1 } } }
 	}
 }
@@ -2231,8 +2235,12 @@ VAL_northern_war_aid = {
 		is_good = yes
 		days_mission_timeout = 90
 		selectable_mission = no
-		available = { VAL_northern_aid_sufficient = yes }
-		complete_effect = { hidden_effect = { VAL_complete_northern_aid = yes } }
+		# Keep the deadline alive until the pledge is fulfilled, failed or closed.
+		# Fulfilment itself is recorded by the delivery/daily scripted effects.
+		available = { always = yes }
+		cancel_trigger = {
+			NOT = { check_variable = { var = VAL_northern_aid_state value = 1 compare = equals } }
+		}
 		timeout_effect = { hidden_effect = { country_event = { id = val_contract.370 hours = 1 } } }
 	}
 }
