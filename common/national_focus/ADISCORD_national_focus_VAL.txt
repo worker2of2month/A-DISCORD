@@ -2233,6 +2233,41 @@ focus_tree = {
 	}
 
 	focus = {
+		id = VAL_Occidian_Claims_Commission
+		dynamic = yes
+		icon = GFX_goal_generic_demand_territory
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY }
+		x = 12
+		y = 10
+		cost = 3
+		allow_branch = {
+			has_completed_focus = VAL_The_Steel_Contract
+		}
+		prerequisite = { focus = VAL_The_Steel_Contract }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_occidian_claims_victory_tt
+				VAL_occidia_secured = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			43 = { add_claim_by = VAL }
+			44 = { add_claim_by = VAL }
+			88 = { add_claim_by = VAL }
+			45 = {
+				if = {
+					limit = { VAL_livonn_available_for_administration = yes }
+					add_claim_by = VAL
+				}
+			}
+			custom_effect_tooltip = VAL_occidian_claims_reward_tt
+			add_political_power = 35
+		}
+		ai_will_do = { base = 12 }
+	}
+
+	focus = {
 		id = VAL_Occidian_Registries
 		dynamic = yes
 		icon = GFX_focus_generic_improve_the_administration
@@ -2241,9 +2276,9 @@ focus_tree = {
 		y = 11
 		cost = 5
 		allow_branch = {
-			has_completed_focus = VAL_The_Steel_Contract
+			has_completed_focus = VAL_Occidian_Claims_Commission
 		}
-		prerequisite = { focus = VAL_The_Steel_Contract }
+		prerequisite = { focus = VAL_Occidian_Claims_Commission }
 		available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
