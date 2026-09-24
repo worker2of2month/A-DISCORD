@@ -2425,10 +2425,17 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertEqual(len(ranges), 4)
         for tier in ranges:
             activation = block(tier, "on_activate")
-            self.assertEqual([e.key for e in activation], ["effect_tooltip"], "BOP hover previews must never install dummy ideas")
-            swap = block(block(activation, "effect_tooltip"), "swap_ideas")
-            self.assertEqual(scalar(swap, "remove_idea"), "STP_cw_mandate_dummy_idea")
-            self.assertEqual(scalar(swap, "add_idea"), "STP_cw_mandate_strong_idea" if float(scalar(tier, "min")) >= .55 else "STP_cw_mandate_majority_idea")
+            self.assertEqual(
+                [e.key for e in activation],
+                ["custom_effect_tooltip"],
+                "BOP ranges must explain Shabrat's future-side mandate without showing it as a current national bonus",
+            )
+            expected_tooltip = (
+                "STP_cw_bop_shabrat_strong_preview_tt"
+                if float(scalar(tier, "min")) >= .55
+                else "STP_cw_bop_shabrat_majority_preview_tt"
+            )
+            self.assertEqual(scalar(activation, "custom_effect_tooltip"), expected_tooltip)
 
     def test_public_command_agreement_strengthens_any_winning_mandate_only_while_its_backing_survives(self):
         from decimal import Decimal
