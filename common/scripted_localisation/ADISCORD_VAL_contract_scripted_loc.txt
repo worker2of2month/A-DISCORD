@@ -682,3 +682,101 @@ defined_text = {
  text = { trigger = { VAL_trade_route_north_open = no } localization_key = VAL_trade_income_zero }
  text = { localization_key = VAL_trade_income_base }
 }
+
+
+# --- kefreite_contract_board_ui ---
+# Presentation-only status helpers. They read the existing contract ledger and
+# never mutate contract state.
+defined_text = {
+	name = VALContractBoardExportStatus
+	text = {
+		trigger = { VAL_export_slot_free = yes }
+		localization_key = VAL_contract_board_export_free
+	}
+	text = { localization_key = VAL_contract_board_export_busy }
+}
+
+defined_text = {
+	name = VALContractBoardMilitaryStatus
+	text = {
+		trigger = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
+		localization_key = VAL_contract_board_military_active
+	}
+	text = {
+		trigger = { has_country_flag = VAL_military_offer_pending }
+		localization_key = VAL_contract_board_military_pending
+	}
+	text = { localization_key = VAL_contract_board_military_free }
+}
+
+defined_text = {
+	name = VALContractBoardNextAction
+	text = {
+		trigger = { NOT = { VAL_order_debts_settled = yes } }
+		localization_key = VAL_contract_board_next_refund
+	}
+	text = {
+		trigger = { VAL_order_1_can_dispatch = yes }
+		localization_key = VAL_contract_board_next_dispatch_1
+	}
+	text = {
+		trigger = { VAL_order_2_can_dispatch = yes }
+		localization_key = VAL_contract_board_next_dispatch_2
+	}
+	text = {
+		trigger = {
+			OR = {
+				has_country_flag = VAL_partner_offer_pending
+				has_country_flag = VAL_export_offer_pending
+			}
+		}
+		localization_key = VAL_contract_board_next_wait_reply
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
+		localization_key = VAL_contract_board_next_military
+	}
+	text = {
+		trigger = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } }
+		localization_key = VAL_contract_board_next_unlock_market
+	}
+	text = {
+		trigger = { NOT = { VAL_export_slot_free = yes } }
+		localization_key = VAL_contract_board_next_wait_export
+	}
+	text = {
+		trigger = { has_equipment = { infantry_equipment < 25000 } }
+		localization_key = VAL_contract_board_next_build_stock
+	}
+	text = { localization_key = VAL_contract_board_next_choose }
+}
+
+defined_text = {
+	name = VALContractBoardArmsLot
+	text = {
+		trigger = {
+			has_completed_focus = VAL_Strategic_Arms_Exports
+			NOT = { has_equipment = { infantry_equipment < 200000 } }
+		}
+		localization_key = VAL_contract_board_lot_200k
+	}
+	text = {
+		trigger = {
+			has_completed_focus = VAL_Army_Arsenal_Orders
+			NOT = { has_equipment = { infantry_equipment < 100000 } }
+		}
+		localization_key = VAL_contract_board_lot_100k
+	}
+	text = {
+		trigger = {
+			has_completed_focus = VAL_Bulk_Arms_Contracts
+			NOT = { has_equipment = { infantry_equipment < 50000 } }
+		}
+		localization_key = VAL_contract_board_lot_50k
+	}
+	text = {
+		trigger = { NOT = { has_equipment = { infantry_equipment < 25000 } } }
+		localization_key = VAL_contract_board_lot_25k
+	}
+	text = { localization_key = VAL_contract_board_lot_none }
+}

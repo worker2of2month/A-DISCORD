@@ -2342,3 +2342,47 @@ class ValParallelOfferTests(ValHireReceiptTests):
         self.assertIn("VAL_close_partner_hire_offer = yes", named_block(effects, "VAL_settle_partner_hire"))
         for kind in ("arms", "bulk", "arsenal", "strategic"):
             self.assertIn(f"VAL_close_partner_{kind}_offer = yes", events)
+
+
+
+class ValContractBoardUxTests(unittest.TestCase):
+    def test_contract_board_is_grouped_directly_below_military_operations(self):
+        categories = read("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
+        board = named_block(categories, "VAL_foreign_sales")
+        obligations = named_block(categories, "VAL_contract_obligations")
+        domestic = named_block(categories, "VAL_contract_management")
+        self.assertIn("priority = 950", board)
+        self.assertIn("priority = 949", obligations)
+        self.assertIn("priority = 900", domestic)
+
+    def test_contract_board_reads_existing_ledger_without_new_gameplay_state(self):
+        scripted = read("common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt")
+        for name in (
+            "VALContractBoardExportStatus",
+            "VALContractBoardMilitaryStatus",
+            "VALContractBoardNextAction",
+            "VALContractBoardArmsLot",
+        ):
+            self.assertEqual(scripted.count(f"name = {name}"), 1, name)
+        self.assertIn("VAL_export_slot_free = yes", scripted)
+        self.assertIn("VAL_order_debts_settled = yes", scripted)
+        self.assertIn("VAL_order_1_can_dispatch = yes", scripted)
+        self.assertIn("VAL_order_2_can_dispatch = yes", scripted)
+        self.assertNotIn("set_variable =", scripted[scripted.index("# --- kefreite_contract_board_ui ---"):])
+
+    def test_contract_board_has_parallel_english_and_russian_copy(self):
+        english = read("localisation/english/ADISCORD_VAL_decisions_l_english.yml")
+        russian = read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml")
+        for localisation in (english, russian):
+            for key in (
+                "VAL_contract_board_export_free",
+                "VAL_contract_board_military_active",
+                "VAL_contract_board_next_refund",
+                "VAL_contract_board_next_dispatch_1",
+                "VAL_contract_board_next_choose",
+                "VAL_contract_board_lot_200k",
+            ):
+                self.assertIn(key + ":", localisation)
+            self.assertIn("[VALContractBoardNextAction]", localisation)
+            self.assertIn("[VALContractBoardArmsLot]", localisation)
+            self.assertIn("[?VAL_contract_authority|0]/100", localisation)
