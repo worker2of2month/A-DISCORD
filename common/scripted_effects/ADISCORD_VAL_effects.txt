@@ -3857,66 +3857,179 @@ VAL_initialize_command_balance = {
 # side receives the whole country by callback order. NOD-owned states follow
 # their actual controller at surrender; northern states already settled to YPR
 # are therefore left untouched.
-VAL_settle_joint_nod_shabrat_victory = {
-    if = {
-        limit = {
-            has_country_flag = VAL_joint_nod_campaign_with_sts
-            has_capitulated = no
-            is_subject = no
-            STS = {
-                exists = yes
-                has_capitulated = no
-                has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
-            }
-            NOD = { exists = yes has_war_with = VAL has_war_with = STS }
-        }
-        10 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 10 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 10 } }
-        }
-        11 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 11 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 11 } }
-        }
-        12 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 12 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 12 } }
-        }
-        13 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 13 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 13 } }
-        }
-        17 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 17 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 17 } }
-        }
-        18 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 18 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 18 } }
-        }
-        30 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 30 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 30 } }
-        }
+VAL_begin_joint_nod_shabrat_campaign = {
+	if = {
+		limit = {
+			tag = VAL
+			has_capitulated = no
+			is_subject = no
+			NOT = { has_country_flag = VAL_joint_nod_shabrat_partition_completed }
+			STS = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war_with = NOD
+				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+			}
+			NOD = { exists = yes has_capitulated = no has_war_with = STS }
+			OR = {
+				is_in_faction_with = STS
+				AND = {
+					is_in_faction = no
+					STS = { is_in_faction = no }
+				}
+			}
+		}
+		set_country_flag = VAL_joint_nod_campaign_with_sts
+		NOD = { set_country_flag = VAL_joint_nod_defeat_pending }
+		if = {
+			limit = { NOT = { is_in_faction_with = STS } }
+			create_faction_from_template = {
+				template = faction_template_ADISCORD_standard
+				name = VAL_stelander_equal_alliance_name
+			}
+			add_to_faction = STS
+			set_country_flag = VAL_joint_nod_created_faction
+		}
+		add_to_war = {
+			targeted_alliance = STS
+			enemy = NOD
+			hostility_reason = asked_to_join
+			single_target_only = yes
+		}
+		VAL_call_subjects_to_wars = yes
+	}
+}
 
-        # Preserve the normal Shabrat victory bookkeeping and liberation route,
-        # then close Kefreyt's relation to the same defeated country separately.
-        STS = {
-            set_variable = { var = STP_pc_cap_side value = 2 }
-            STP_pc_begin_settlement = yes
-        }
-        NOD = {
-            if = { limit = { has_war_with = VAL } white_peace = VAL }
-            clr_country_flag = VAL_final_defeat_pending
-            clr_country_flag = VAL_final_capitulation_immediate
-        }
-        clr_country_flag = VAL_joint_nod_campaign_with_sts
-        # Keep the guard alive until the current immediate-capitulation chain ends.
-        set_country_flag = { flag = VAL_joint_nod_campaign_with_sts days = 1 }
-        ADISCORD_economy_mark_dirty = yes
-        STS = { ADISCORD_economy_mark_dirty = yes }
-        NOD = { if = { limit = { exists = yes } ADISCORD_economy_mark_dirty = yes } }
-    }
+VAL_release_joint_nod_shabrat_alliance = {
+	if = {
+		limit = {
+			has_country_flag = VAL_joint_nod_created_faction
+			is_in_faction = yes
+			is_faction_leader = yes
+			STS = { exists = yes is_in_faction_with = VAL }
+			NOT = {
+				any_other_country = {
+					is_in_faction_with = VAL
+					NOT = { tag = STS }
+				}
+			}
+		}
+		dismantle_faction = yes
+	}
+	clr_country_flag = VAL_joint_nod_created_faction
+}
+
+VAL_snapshot_joint_nodrul_settlement = {
+	clear_temp_array = VAL_nod_ECA_states
+	clear_temp_array = VAL_nod_YPR_states
+	clear_temp_array = VAL_nod_DCA_states
+	if = {
+		limit = { ECA = { exists = no } }
+		17 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_ECA_states value = THIS } } }
+		18 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_ECA_states value = THIS } } }
+	}
+	else_if = {
+		limit = { ECA = { is_subject_of = VAL } }
+		17 = { if = { limit = { VAL_nod_partition_state_available = yes } ECA = { transfer_state = 17 } add_core_of = ECA set_state_controller_to = ECA } }
+		18 = { if = { limit = { VAL_nod_partition_state_available = yes } ECA = { transfer_state = 18 } add_core_of = ECA set_state_controller_to = ECA } }
+	}
+	if = {
+		limit = { YPR = { OR = { exists = no is_subject_of = NOD } } DCA = { exists = no } }
+		19 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_YPR_states value = THIS } } }
+		20 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_YPR_states value = THIS } } }
+		21 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_YPR_states value = THIS } } }
+		22 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_YPR_states value = THIS } } }
+		8 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_DCA_states value = THIS } } }
+		15 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_DCA_states value = THIS } } }
+		16 = { if = { limit = { VAL_nod_partition_state_available = yes } add_to_temp_array = { array = VAL_nod_DCA_states value = THIS } } }
+	}
+}
+
+VAL_settle_joint_nod_shabrat_victory = {
+	if = {
+		limit = {
+			has_country_flag = VAL_joint_nod_campaign_with_sts
+			NOT = { has_country_flag = VAL_joint_nod_shabrat_partition_completed }
+			has_capitulated = no
+			is_subject = no
+			STS = {
+				exists = yes
+				has_capitulated = no
+				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+			}
+			NOD = {
+				exists = yes
+				OR = {
+					has_capitulated = yes
+					has_country_flag = VAL_joint_nod_defeat_pending
+				}
+			}
+		}
+
+		# The joint bargain is territorial rather than occupation-based.
+		# Shabrat receives the southern Nodrul core; Kefreyt administers the north.
+		10 = {
+			if = {
+				limit = { OR = { is_owned_by = NOD owner = { is_subject_of = NOD } } }
+				STS = { transfer_state = 10 }
+				add_core_of = STS
+				set_state_controller_to = STS
+			}
+		}
+		11 = {
+			if = {
+				limit = { OR = { is_owned_by = NOD owner = { is_subject_of = NOD } } }
+				STS = { transfer_state = 11 }
+				add_core_of = STS
+				set_state_controller_to = STS
+			}
+		}
+		12 = {
+			if = {
+				limit = { OR = { is_owned_by = NOD owner = { is_subject_of = NOD } } }
+				STS = { transfer_state = 12 }
+				add_core_of = STS
+				set_state_controller_to = STS
+			}
+		}
+		30 = {
+			if = {
+				limit = { OR = { is_owned_by = NOD owner = { is_subject_of = NOD } } }
+				STS = { transfer_state = 30 }
+				add_core_of = STS
+				set_state_controller_to = STS
+			}
+		}
+
+		VAL_snapshot_joint_nodrul_settlement = yes
+		NOD = {
+			set_country_flag = { flag = VAL_joint_nod_settlement_consumed days = 2 }
+			if = { limit = { has_war_with = VAL } white_peace = VAL }
+			if = { limit = { has_war_with = STS } white_peace = STS }
+		}
+		VAL_partition_nodrul_settlement = yes
+		NOD = {
+			if = { limit = { owns_state = 13 } set_capital = 13 }
+			VAL_prepare_nodrul_administration = yes
+			clr_country_flag = VAL_joint_nod_defeat_pending
+			clr_country_flag = VAL_final_defeat_pending
+			clr_country_flag = VAL_final_capitulation_immediate
+		}
+		STS = {
+			NOD = { set_country_flag = STP_pc_defeated_by_sts }
+			if = {
+				limit = { check_variable = { var = STP_pc_course value = 2 compare = equals } }
+				set_country_flag = STP_pc_lib_nod_won
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		set_country_flag = VAL_joint_nod_shabrat_partition_completed
+		VAL_release_joint_nod_shabrat_alliance = yes
+		clr_country_flag = VAL_joint_nod_campaign_with_sts
+		ADISCORD_economy_mark_dirty = yes
+		NOD = { ADISCORD_economy_mark_dirty = yes }
+	}
 }
 
 # --- final_campaign_administrations ---
