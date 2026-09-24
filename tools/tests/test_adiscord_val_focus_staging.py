@@ -151,6 +151,35 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertIn("VAL_October_Of_2160", gate)
         self.assertIn("OR =", gate)
 
+    def test_frontier_chapter_reveals_as_one_roadmap(self) -> None:
+        chapter = (
+            "VAL_frontier_conference",
+            "VAL_frontier_logistics",
+            "VAL_frontier_commissioners",
+            "VAL_frontier_provincial_offices",
+            "VAL_frontier_security_plan",
+            "VAL_frontier_treaty_offices",
+            "VAL_New_Supply_Base",
+            "VAL_Northern_Settlement",
+        )
+        for focus_id in chapter:
+            gate = allow(self.focuses, focus_id)
+            self.assertIn("has_completed_focus = VAL_One_Ledger_One_Banner", gate, focus_id)
+            self.assertIn("has_completed_focus = VAL_Trading_Partners", gate, focus_id)
+            self.assertIn("has_completed_focus = VAL_October_Of_2160", gate, focus_id)
+        for focus_id in chapter[1:]:
+            gate = allow(self.focuses, focus_id)
+            self.assertNotIn(
+                "has_completed_focus = VAL_frontier_treaty_offices",
+                gate,
+                f"{focus_id} must stay visible as part of the chapter roadmap",
+            )
+            self.assertNotIn(
+                "has_completed_focus = VAL_frontier_security_plan",
+                gate,
+                f"{focus_id} must not reveal one node at a time",
+            )
+
     def test_world_reactive_branches_still_use_world_state(self) -> None:
         stelander = allow(self.focuses, "VAL_Stelander_Crisis_Opens")
         self.assertIn("has_global_flag = STP_cw_started", stelander)
