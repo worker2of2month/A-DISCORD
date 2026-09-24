@@ -4050,18 +4050,25 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertIn("clr_country_flag = VAL_final_capitulation_immediate", late)
         self.assertIn("set_global_flag = skip_default_capitulation", late)
 
-    def test_stelander_border_cession_preserves_neutral_and_occupied_land(self):
-        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, matches_conditions, walk
+    def test_stelander_border_cession_routes_hosheit_to_oca_and_kreyden_to_val(self):
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, walk
         effect = block(parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_cede_stelander_border")
         regions = {e.key: e.value for e in walk(effect) if e.key.isdigit()}
         self.assertEqual(set(regions), {"46", "29"})
-        for state, body in regions.items():
-            guard = block(block(body, "if"), "limit")
-            for owner, controller, expected in ((True, "PREV", True), (True, "VAL", True), (True, "THIRD", False), (False, "VAL", False)):
-                facts = {(state, "is_owned_by", "PREV"): owner,
-                         (state, "is_controlled_by", "PREV"): controller == "PREV",
-                         (state, "is_controlled_by", "VAL"): controller == "VAL"}
-                self.assertEqual(matches_conditions(guard, facts, state), expected)
+
+        hosheit = block(regions["46"], "if")
+        hosheit_text = str([(e.key, e.value) for e in walk(hosheit)])
+        self.assertIn("is_subject_of', 'VAL", hosheit_text)
+        self.assertIn("add_core_of', 'OCA", hosheit_text)
+        self.assertEqual([e.value for e in walk(hosheit) if e.key == "transfer_state"].count("46"), 2)
+        self.assertIn("OCA", [e.key for e in walk(hosheit)])
+        self.assertIn("VAL", [e.key for e in walk(hosheit)])
+
+        kreyden = block(regions["29"], "if")
+        kreyden_text = str([(e.key, e.value) for e in walk(kreyden)])
+        self.assertIn("transfer_state', '29", kreyden_text)
+        self.assertIn("set_state_controller_to', 'VAL", kreyden_text)
+
         install = block(parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_install_stelander_administration")
         self.assertFalse(any(e.key in {"annex_country", "change_tag_from"} for e in walk(install)))
 
