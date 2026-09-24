@@ -316,6 +316,8 @@ class STPCoreContractTests(unittest.TestCase):
             "STP_shabrat_election_high_control_range",
             "STP_shabrat_election_total_control_range",
             "STP_shabrat_election_bop_category",
+            "STP_cw_bop_shabrat_majority_preview_tt",
+            "STP_cw_bop_shabrat_strong_preview_tt",
         )
         for key in required_keys:
             with self.subTest(key=key):
