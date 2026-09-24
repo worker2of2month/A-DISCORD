@@ -183,6 +183,21 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
             block = focus[start:end]
             self.assertIn(f"cost = {expected}", block, focus_id)
 
+    def test_dual_ultimatum_defeat_closes_both_external_wars(self):
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        cleanup = named_block(effects, "STP_close_competing_ultimatum_wars_after_defeat")
+        self.assertIn("has_war_with = VAL", cleanup)
+        self.assertIn("white_peace = VAL", cleanup)
+        self.assertIn("has_war_with = NOD", cleanup)
+        self.assertIn("white_peace = NOD", cleanup)
+        self.assertIn("VAL_stelander_truce", cleanup)
+
+        settlement = named_block(effects, "STP_pc_begin_settlement")
+        defeat = settlement[settlement.index("STP_pc_cap_side value = 3"):]
+        self.assertIn("STP_close_competing_ultimatum_wars_after_defeat = yes", defeat)
+        victory_prefix = settlement[:settlement.index("STP_pc_cap_side value = 3")]
+        self.assertNotIn("STP_close_competing_ultimatum_wars_after_defeat = yes", victory_prefix)
+
     def test_postwar_initialization_is_event_driven(self):
         on_actions = read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
         weekly = named_block(on_actions, "on_weekly_STS")

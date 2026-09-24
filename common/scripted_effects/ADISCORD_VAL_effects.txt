@@ -3900,6 +3900,7 @@ VAL_install_stelander_administration = {
         limit = { OR = { tag = STP tag = STS } VAL = { exists = yes has_capitulated = no is_subject = no } }
         save_event_target_as = VAL_settlement_country
         VAL_settle_frontier_partner_war = yes
+        STP_close_competing_ultimatum_wars_after_defeat = yes
         if = { limit = { has_war_with = VAL } white_peace = VAL }
         if = {
             limit = { OR = { NOT = { is_subject_of = VAL } NOT = { has_autonomy_state = autonomy_VAL_contract_administration } } }

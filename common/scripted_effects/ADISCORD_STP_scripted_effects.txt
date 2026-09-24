@@ -4502,7 +4502,38 @@ STP_pc_recover_stelander_cores_from_val = {
 	}
 }
 
-# STS: freeze the occupier snapshot and close only that pair.
+# STP/STS: when two external ultimatums have become live wars, a defeat by
+# either external power ends the competing ultimatum war as well. This is only
+# called from a losing Stelander settlement; defeating one neighbor normally
+# does not pardon the other.
+STP_close_competing_ultimatum_wars_after_defeat = {
+	if = {
+		limit = { OR = { tag = STP tag = STS } }
+		if = {
+			limit = { has_war_with = VAL }
+			white_peace = VAL
+			# Prevent Kefreyt from immediately reopening the same refused ultimatum.
+			set_country_flag = { flag = VAL_stelander_truce days = 180 }
+			clr_country_flag = VAL_stelander_refused
+		}
+		if = {
+			limit = { has_war_with = NOD }
+			white_peace = NOD
+		}
+		if = {
+			limit = { tag = STP has_country_flag = STP_pw_party_nod_invasion_active }
+			clr_country_flag = STP_pw_party_nod_threat_active
+			clr_country_flag = STP_pw_party_compact_pending
+			clr_country_flag = STP_pw_party_nod_invasion_active
+			set_country_flag = STP_pw_party_nod_invasion_lost
+			NOD = { remove_ideas = STP_pw_nod_invasion_mandate }
+			mark_focus_tree_layout_dirty = yes
+		}
+	}
+}
+
+# STS: freeze the occupier snapshot. Victories close only the defeated pair;
+# a Stelander defeat also closes a second live VAL/NOD ultimatum through the shared cleanup.
 # Liberation victories are recorded here; later focuses keep optional neighbor terms.
 STP_pc_begin_settlement = {
 	if = {
@@ -4538,14 +4569,13 @@ STP_pc_begin_settlement = {
 				limit = { check_variable = { var = STP_cw_capitulation_occupier value = 5 compare = equals } }
 				set_variable = { var = STP_pc_this_opponent value = 1 }
 				set_variable = { var = STP_pc_this_result value = 2 }
-				if = { limit = { has_war_with = VAL } white_peace = VAL }
 			}
 			else_if = {
 				limit = { check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals } }
 				set_variable = { var = STP_pc_this_opponent value = 2 }
 				set_variable = { var = STP_pc_this_result value = 2 }
-				if = { limit = { has_war_with = NOD } white_peace = NOD }
 			}
+			STP_close_competing_ultimatum_wars_after_defeat = yes
 		}
 		VAL_enforce_stelander_defeat = yes
 		if = {
@@ -5737,6 +5767,7 @@ STP_pw_party_settle_nod_invasion_victory = {
 		}
 		remove_ideas = STP_pw_nod_invasion_mandate
 		set_country_flag = STP_pw_party_invasion_victorious
+		STP = { STP_close_competing_ultimatum_wars_after_defeat = yes }
 		if = { limit = { has_war_with = STP } white_peace = STP }
 		STP = {
 			clr_country_flag = STP_pw_party_nod_threat_active

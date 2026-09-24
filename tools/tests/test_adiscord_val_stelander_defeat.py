@@ -194,6 +194,15 @@ class ValStelanderDefeatTests(unittest.TestCase):
         hooks = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
         self.assertIn("VAL_council_reconcile_revanche = yes", hooks[hooks.index("on_peace = {"):])
 
+    def test_kefreyt_victory_closes_competing_nod_ultimatum(self):
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        install = named_block(effects, "VAL_install_stelander_administration")
+        self.assertIn("STP_close_competing_ultimatum_wars_after_defeat = yes", install)
+        self.assertLess(
+            install.index("STP_close_competing_ultimatum_wars_after_defeat = yes"),
+            install.index("set_autonomy"),
+        )
+
     def test_commanders_council_is_recruited_and_localised(self):
         chars = read("common/characters/VAL.txt")
         history = read("history/countries/VAL - ValeraLand.txt")
