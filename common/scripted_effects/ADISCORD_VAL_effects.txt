@@ -3940,13 +3940,19 @@ VAL_install_stelander_administration = {
 VAL_cede_stelander_border = {
     if = {
         limit = { is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration }
+        # Hosheit is the administration's northern coastal district. If Kefreyt
+        # temporarily received it during the settlement, hand it back to the client.
         46 = {
             if = {
-                limit = { is_owned_by = PREV OR = { is_controlled_by = PREV is_controlled_by = VAL } }
-                VAL = { transfer_state = 46 }
-                set_state_controller_to = VAL
+                limit = {
+                    OR = { is_owned_by = ROOT is_owned_by = VAL }
+                    OR = { is_controlled_by = ROOT is_controlled_by = VAL }
+                }
+                ROOT = { transfer_state = 46 }
+                set_state_controller_to = ROOT
             }
         }
+        # Kreyden remains the direct Kefreyt border concession.
         29 = {
             if = {
                 limit = { is_owned_by = PREV OR = { is_controlled_by = PREV is_controlled_by = VAL } }
@@ -4352,7 +4358,7 @@ VAL_finalize_reserved_settlements = {
             set_country_flag = VAL_final_settlement_commit
         }
         else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { has_country_flag = VAL_final_capitulation_immediate } }
             clr_country_flag = VAL_final_defeat_pending
             clr_country_flag = VAL_final_party_controlled_ainholm
         }
@@ -4364,7 +4370,7 @@ VAL_finalize_reserved_settlements = {
             set_country_flag = VAL_final_settlement_commit
         }
         else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { has_country_flag = VAL_final_capitulation_immediate } }
             clr_country_flag = VAL_final_defeat_pending
         }
     }
@@ -4375,7 +4381,7 @@ VAL_finalize_reserved_settlements = {
             set_country_flag = VAL_final_settlement_commit
         }
         else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { has_country_flag = VAL_final_capitulation_immediate } }
             clr_country_flag = VAL_final_defeat_pending
         }
     }
@@ -4413,6 +4419,29 @@ VAL_finalize_reserved_settlements = {
             clr_country_flag = VAL_final_settlement_commit
         }
     }
+}
+
+
+# DEBUG-only caller: emulate a decisive VAL victory without bypassing the
+# production Nodrul settlement. The transient capitulation flag is consumed by
+# the same reservation/finalization code as the native callback.
+VAL_debug_force_nodrul_victory = {
+	if = {
+		limit = {
+			tag = VAL
+			has_capitulated = no
+			is_subject = no
+			NOD = { exists = yes has_war_with = VAL }
+		}
+		set_variable = { var = VAL_final_crisis_phase value = 2 }
+		NOD = {
+			set_country_flag = VAL_final_war_member
+			set_country_flag = VAL_final_defeat_pending
+			set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+		}
+		VAL_finalize_reserved_settlements = yes
+		NOD = { clr_country_flag = VAL_final_capitulation_immediate }
+	}
 }
 
 VAL_adopt_commonwealth = {
@@ -4491,39 +4520,77 @@ VAL_call_subjects_to_wars = {
 		limit = {
 			tag = VAL
 			exists = yes
-			has_war = yes
 			is_subject = no
 			NOT = { has_country_flag = VAL_subject_war_dispatch_active }
 		}
 		set_country_flag = VAL_subject_war_dispatch_active
-		every_enemy_country = {
-			save_event_target_as = VAL_subject_war_enemy
-			every_subject_country = {
+
+		# A Kefreyt client cannot fight a private war while its overlord remains neutral.
+		# Adopt subject wars first, then fan every VAL war back out to the whole client network.
+		every_subject_country = {
+			limit = {
+				has_capitulated = no
+				has_war = yes
+				NOT = { has_war_with = VAL }
+			}
+			save_event_target_as = VAL_subject_war_leader
+			every_enemy_country = {
 				limit = {
 					has_capitulated = no
-					NOT = { has_war_with = VAL }
+					NOT = { tag = VAL }
+					NOT = { is_subject_of = VAL }
 					NOT = { is_in_faction_with = VAL }
+					VAL = { NOT = { has_war_with = PREV } }
 				}
-				add_to_war = {
-					targeted_alliance = event_target:VAL_subject_war_enemy
-					enemy = VAL
-					hostility_reason = asked_to_join
-					single_target_only = yes
+				save_event_target_as = VAL_subject_war_enemy
+				VAL = {
+					if = {
+						limit = {
+							NOT = { has_war_with = event_target:VAL_subject_war_enemy }
+							NOT = { is_in_faction_with = event_target:VAL_subject_war_enemy }
+						}
+						add_to_war = {
+							targeted_alliance = event_target:VAL_subject_war_leader
+							enemy = event_target:VAL_subject_war_enemy
+							hostility_reason = asked_to_join
+							single_target_only = yes
+						}
+					}
 				}
 			}
-			VAL = {
+		}
+
+		if = {
+			limit = { has_war = yes }
+			every_enemy_country = {
+				save_event_target_as = VAL_subject_war_enemy
 				every_subject_country = {
 					limit = {
 						has_capitulated = no
 						NOT = { has_war_with = VAL }
-						NOT = { has_war_with = event_target:VAL_subject_war_enemy }
-						NOT = { is_in_faction_with = event_target:VAL_subject_war_enemy }
+						NOT = { is_in_faction_with = VAL }
 					}
 					add_to_war = {
-						targeted_alliance = VAL
-						enemy = event_target:VAL_subject_war_enemy
+						targeted_alliance = event_target:VAL_subject_war_enemy
+						enemy = VAL
 						hostility_reason = asked_to_join
 						single_target_only = yes
+					}
+				}
+				VAL = {
+					every_subject_country = {
+						limit = {
+							has_capitulated = no
+							NOT = { has_war_with = VAL }
+							NOT = { has_war_with = event_target:VAL_subject_war_enemy }
+							NOT = { is_in_faction_with = event_target:VAL_subject_war_enemy }
+						}
+						add_to_war = {
+							targeted_alliance = VAL
+							enemy = event_target:VAL_subject_war_enemy
+							hostility_reason = asked_to_join
+							single_target_only = yes
+						}
 					}
 				}
 			}
