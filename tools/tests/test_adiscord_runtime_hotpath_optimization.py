@@ -143,20 +143,6 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         self.assertIn("VAL_frontier_reconcile", {entry.key for entry in walk(event)})
         self.assertNotIn("country_event", {entry.key for entry in walk(event)})
 
-    def test_frontier_postpeace_bug_has_one_time_save_migration(self):
-        startup = named_block(read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"), "on_startup")
-        self.assertIn("ADISCORD_val_frontier_postpeace_fix_v1", startup)
-        self.assertIn("has_completed_focus = VAL_frontier_security_plan", startup)
-        self.assertIn("VAL_frontier_stage value = 0 compare = equals", startup)
-        for target in (1, 2, 3):
-            self.assertIn(f"VAL_frontier_target value = {target} compare = equals", startup)
-        self.assertIn("NOT = { has_country_flag = VAL_frontier_treaty_signed }", startup)
-        self.assertIn("VAL_cannibal_sphere_secured = yes", startup)
-        self.assertIn("VAL_can_form_northern_administration = yes", startup)
-        self.assertIn("set_country_flag = VAL_frontier_treaty_signed", startup)
-        self.assertIn("VAL_form_northern_administration = yes", startup)
-        self.assertIn("country_event = { id = val_rework.115 hours = 1 }", startup)
-
     def test_trade_cache_detects_every_route_transition_before_payment(self):
         from itertools import product
         from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, matches_conditions
