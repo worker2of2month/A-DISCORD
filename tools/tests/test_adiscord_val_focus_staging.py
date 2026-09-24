@@ -152,8 +152,8 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertIn("OR =", gate)
 
     def test_frontier_chapter_reveals_as_one_roadmap(self) -> None:
-        chapter = (
-            "VAL_frontier_conference",
+        root = "VAL_frontier_conference"
+        internals = (
             "VAL_frontier_logistics",
             "VAL_frontier_commissioners",
             "VAL_frontier_provincial_offices",
@@ -162,23 +162,19 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "VAL_New_Supply_Base",
             "VAL_Northern_Settlement",
         )
-        for focus_id in chapter:
-            gate = allow(self.focuses, focus_id)
-            self.assertIn("has_completed_focus = VAL_One_Ledger_One_Banner", gate, focus_id)
-            self.assertIn("has_completed_focus = VAL_Trading_Partners", gate, focus_id)
-            self.assertIn("has_completed_focus = VAL_October_Of_2160", gate, focus_id)
-        for focus_id in chapter[1:]:
-            gate = allow(self.focuses, focus_id)
+        gate = allow(self.focuses, root)
+        self.assertIn("has_completed_focus = VAL_One_Ledger_One_Banner", gate)
+        self.assertIn("has_completed_focus = VAL_Trading_Partners", gate)
+        self.assertIn("has_completed_focus = VAL_October_Of_2160", gate)
+
+        for focus_id in internals:
+            block = focus_block(self.focuses, focus_id)
             self.assertNotIn(
-                "has_completed_focus = VAL_frontier_treaty_offices",
-                gate,
-                f"{focus_id} must stay visible as part of the chapter roadmap",
+                "allow_branch",
+                block,
+                f"{focus_id} is inside the revealed chapter and must not disappear behind branch-cache state",
             )
-            self.assertNotIn(
-                "has_completed_focus = VAL_frontier_security_plan",
-                gate,
-                f"{focus_id} must not reveal one node at a time",
-            )
+            self.assertIn("prerequisite", block, focus_id)
 
     def test_world_reactive_branches_still_use_world_state(self) -> None:
         stelander = allow(self.focuses, "VAL_Stelander_Crisis_Opens")
@@ -222,7 +218,17 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 block,
                 f"{focus_id} can hide dynamically, so it must also be able to reappear dynamically",
             )
-        self.assertIn("VAL_frontier_security_plan", staged)
+        self.assertIn("VAL_frontier_conference", staged)
+        for focus_id in (
+            "VAL_frontier_logistics",
+            "VAL_frontier_commissioners",
+            "VAL_frontier_provincial_offices",
+            "VAL_frontier_security_plan",
+            "VAL_frontier_treaty_offices",
+            "VAL_New_Supply_Base",
+            "VAL_Northern_Settlement",
+        ):
+            self.assertNotIn(focus_id, staged)
         self.assertGreaterEqual(len(staged), 50)
 
     def test_focus_completion_refreshes_dynamic_layout(self) -> None:
