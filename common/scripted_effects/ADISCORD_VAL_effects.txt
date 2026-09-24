@@ -4481,6 +4481,53 @@ VAL_debug_force_nodrul_victory = {
 	}
 }
 
+# DEBUG-only QA router. This does not annex countries directly: it selects the
+# same settlement effects used by the production capitulation callbacks.
+VAL_debug_force_current_war_victory = {
+	if = {
+		limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+		VAL_frontier_settle_victory = yes
+	}
+	else_if = {
+		limit = {
+			has_country_flag = VAL_joint_nod_campaign_with_sts
+			NOD = { exists = yes has_war_with = VAL has_war_with = STS }
+		}
+		VAL_settle_joint_nod_shabrat_victory = yes
+	}
+	else = {
+		set_variable = { var = VAL_final_crisis_phase value = 2 }
+		STP = {
+			if = {
+				limit = { exists = yes has_war_with = VAL }
+				set_country_flag = VAL_final_war_member
+				set_country_flag = VAL_final_defeat_pending
+				set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+			}
+		}
+		STS = {
+			if = {
+				limit = { exists = yes has_war_with = VAL }
+				set_country_flag = VAL_final_war_member
+				set_country_flag = VAL_final_defeat_pending
+				set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+			}
+		}
+		NOD = {
+			if = {
+				limit = { exists = yes has_war_with = VAL }
+				set_country_flag = VAL_final_war_member
+				set_country_flag = VAL_final_defeat_pending
+				set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+			}
+		}
+		VAL_finalize_reserved_settlements = yes
+		STP = { clr_country_flag = VAL_final_capitulation_immediate }
+		STS = { clr_country_flag = VAL_final_capitulation_immediate }
+		NOD = { clr_country_flag = VAL_final_capitulation_immediate }
+	}
+}
+
 VAL_adopt_commonwealth = {
     if = {
         limit = { VAL_can_proclaim_commonwealth = yes }
