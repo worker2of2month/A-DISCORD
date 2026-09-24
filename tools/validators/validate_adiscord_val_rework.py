@@ -999,10 +999,37 @@ def main() -> int:
         "VAL_debug_reputation_maximum",
         "VAL_debug_reputation_minimum",
         "VAL_debug_grant_contract_reserves",
+        "VAL_debug_reconcile_campaign_peaces",
+        "VAL_debug_settle_stelander_victory",
+        "VAL_debug_frontier_victory",
+        "VAL_debug_frontier_armistice",
+        "VAL_debug_frontier_defeat",
+        "VAL_debug_final_campaign_reconcile",
+        "VAL_debug_settle_wasteland",
         "VAL_debug_reset_rework_state",
     ):
         if not named_blocks(decisions, debug_decision):
             issues.append(f"missing debug decision {debug_decision}")
+    debug_wasteland = named_blocks(decisions, "VAL_debug_settle_wasteland")
+    if debug_wasteland:
+        block = debug_wasteland[0]
+        settlement_call = "VAL_settle_wasteland_capitulation = yes"
+        guard_release = "clr_global_flag = skip_default_capitulation"
+        if settlement_call not in block or guard_release not in block:
+            issues.append("wasteland debug settlement must release the capitulation reservation")
+        elif block.index(settlement_call) > block.index(guard_release):
+            issues.append("wasteland debug settlement releases the capitulation reservation too early")
+
+    for debug_decision, effect_id in (
+        ("VAL_debug_settle_stelander_victory", "VAL_cw_settle_republics"),
+        ("VAL_debug_frontier_victory", "VAL_frontier_settle_victory"),
+        ("VAL_debug_frontier_armistice", "VAL_frontier_settle_armistice"),
+        ("VAL_debug_frontier_defeat", "VAL_frontier_settle_defeat"),
+    ):
+        blocks = named_blocks(decisions, debug_decision)
+        if blocks and f"{effect_id} = yes" not in blocks[0]:
+            issues.append(f"{debug_decision} does not call authored settlement {effect_id}")
+
     categories = read("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
     debug_category = named_blocks(categories, "VAL_rework_debug")
     if not debug_category or "is_debug = yes" not in debug_category[0]:
@@ -1677,6 +1704,13 @@ def main() -> int:
         "VAL_debug_reputation_maximum",
         "VAL_debug_reputation_minimum",
         "VAL_debug_grant_contract_reserves",
+        "VAL_debug_reconcile_campaign_peaces",
+        "VAL_debug_settle_stelander_victory",
+        "VAL_debug_frontier_victory",
+        "VAL_debug_frontier_armistice",
+        "VAL_debug_frontier_defeat",
+        "VAL_debug_final_campaign_reconcile",
+        "VAL_debug_settle_wasteland",
         "VAL_debug_reset_rework_state",
         "ADISCORD_cost_t50",
         "ADISCORD_cost_t100",
