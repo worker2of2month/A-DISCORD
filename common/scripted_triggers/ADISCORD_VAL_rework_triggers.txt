@@ -10,7 +10,11 @@ VAL_final_crisis_available = {
 		exists = yes
 		has_capitulated = no
 		OR = { is_subject = no is_subject_of = STP }
-		NOT = { is_in_faction_with = VAL has_country_flag = VAL_stelander_truce }
+		OR = {
+			NOT = { is_in_faction_with = VAL }
+			AND = { is_subject_of = STP STP = { is_subject_of = VAL } }
+		}
+		NOT = { has_country_flag = VAL_stelander_truce }
 	}
 }
 
@@ -679,7 +683,16 @@ NOT = { has_country_flag = VAL_stelander_defeated }
   }
  }
  has_capitulated = no is_subject = no VAL_frontier_idle = yes
- FROM = { exists = yes has_capitulated = no OR = { is_subject = no AND = { tag = NOD is_subject_of = STP } } NOT = { is_in_faction_with = VAL } NOT = { has_country_flag = VAL_stelander_truce } }
+ FROM = {
+  exists = yes
+  has_capitulated = no
+  OR = { is_subject = no AND = { tag = NOD is_subject_of = STP } }
+  OR = {
+   NOT = { is_in_faction_with = VAL }
+   AND = { tag = NOD is_subject_of = STP STP = { is_subject_of = VAL } }
+  }
+  NOT = { has_country_flag = VAL_stelander_truce }
+ }
 }
 
 VAL_can_form_northern_administration = {

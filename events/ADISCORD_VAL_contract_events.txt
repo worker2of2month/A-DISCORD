@@ -1245,6 +1245,25 @@ country_event = {
     }
 }
 
+# Party-path final campaign cache barrier. Releasing Nodrul from a defeated
+# Stelander administration must settle before VAL creates the new war relation.
+country_event = {
+    id = val_rework.122
+    hidden = yes
+    is_triggered_only = yes
+    trigger = {
+        tag = VAL
+        has_country_flag = VAL_final_party_nod_release_pending
+    }
+    immediate = {
+        clr_country_flag = VAL_final_party_nod_release_pending
+        if = {
+            limit = { VAL_final_crisis_preparing = yes }
+            VAL_final_crisis_execute_launch = yes
+        }
+    }
+}
+
 country_event = {
     id = val_rework.118
     title = val_rework.118.t
