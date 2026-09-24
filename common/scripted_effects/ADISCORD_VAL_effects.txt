@@ -3906,13 +3906,6 @@ VAL_release_joint_nod_shabrat_alliance = {
 			has_country_flag = VAL_joint_nod_created_faction
 			is_in_faction = yes
 			is_faction_leader = yes
-			STS = { exists = yes is_in_faction_with = VAL }
-			NOT = {
-				any_other_country = {
-					is_in_faction_with = VAL
-					NOT = { tag = STS }
-				}
-			}
 		}
 		dismantle_faction = yes
 	}
