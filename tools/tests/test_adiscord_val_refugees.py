@@ -1076,3 +1076,39 @@ class WastelandCampaignTests(unittest.TestCase):
                     ("VAL", "variable", pool): people,
                 }
                 self.assertEqual(matches_conditions(guard, facts, "VAL"), expected)
+
+
+
+class ValCostIconOrderTests(unittest.TestCase):
+    def test_logistics_custom_costs_put_numbers_before_texticons(self):
+        decision_source = (ROOT / "common/decisions/ADISCORD_VAL_logistics_market_decisions.txt").read_text(encoding="utf-8-sig")
+        keys = set(re.findall(r"custom_cost_text\s*=\s*([A-Za-z0-9_]+)", decision_source))
+        self.assertIn("VAL_labor_cost", keys)
+
+        icon_before_number = re.compile(r"£[A-Za-z0-9_]+[ \t](?:§[YRG]\d|\d)")
+        for language in ("english", "russian"):
+            localisation = "\n".join(
+                (ROOT / path).read_text(encoding="utf-8-sig")
+                for path in (
+                    f"localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml",
+                    f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml",
+                )
+            )
+            for key in keys:
+                matches = re.findall(
+                    rf"(?m)^\s*{re.escape(key)}:\d*\s+\"([^\"\n]+)\"",
+                    localisation,
+                )
+                self.assertEqual(len(matches), 1, (language, key, matches))
+                self.assertIsNone(
+                    icon_before_number.search(matches[0]),
+                    f"{language} {key}: resource amount must be NUMBER then ICON: {matches[0]}",
+                )
+
+            self.assertEqual(
+                len(re.findall(r"(?m)^\s*VAL_labor_cost:\d*\s+\"", localisation)),
+                1,
+                f"{language}: VAL_labor_cost must not have duplicate definitions",
+            )
+            self.assertRegex(localisation, r"(?m)^\s*VAL_labor_cost_blocked:")
+            self.assertRegex(localisation, r"(?m)^\s*VAL_labor_cost_tooltip:")
