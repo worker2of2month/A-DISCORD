@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[2]
 FOCUS_PATH = ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
 ON_ACTIONS_PATH = ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"
 RU_LOC_PATH = ROOT / "localisation/russian/ADISCORD_VAL_decisions_l_russian.yml"
+EN_LOC_PATH = ROOT / "localisation/english/ADISCORD_VAL_decisions_l_english.yml"
 
 
 def read(path: Path) -> str:
@@ -78,6 +79,44 @@ class KefreytFocusStagingTests(unittest.TestCase):
         cls.focuses = read(FOCUS_PATH)
         cls.on_actions = read(ON_ACTIONS_PATH)
         cls.ru_loc = read(RU_LOC_PATH)
+        cls.en_loc = read(EN_LOC_PATH)
+
+    def test_every_focus_gate_explains_what_it_reveals(self) -> None:
+        ids = re.findall(r"(?m)^\s*id\s*=\s*(VAL_[A-Za-z0-9_]+)\s*$", self.focuses)
+        known = set(ids)
+        expected = {}
+        for focus_id in ids:
+            block = focus_block(self.focuses, focus_id)
+            if "allow_branch" not in block:
+                continue
+            gate = allow(self.focuses, focus_id)
+            for dependency in set(re.findall(r"has_completed_focus\s*=\s*(VAL_[A-Za-z0-9_]+)", gate)):
+                if dependency in known:
+                    expected.setdefault(dependency, set()).add(focus_id)
+
+        self.assertGreaterEqual(len(expected), 50)
+        for dependency, targets in expected.items():
+            key = f"VAL_focus_progression_{dependency}_tt"
+            source = focus_block(self.focuses, dependency)
+            self.assertIn(
+                f"custom_effect_tooltip = {key}",
+                source,
+                f"{dependency} hides later focuses but does not explain that progression",
+            )
+            for localisation in (self.en_loc, self.ru_loc):
+                self.assertRegex(localisation, rf"(?m)^\s*{re.escape(key)}:0?\s+\"")
+                for target in targets:
+                    self.assertIn(f"${target}$", localisation[localisation.index(key):])
+
+    def test_world_event_reveals_are_explained_in_root_descriptions(self) -> None:
+        for localisation in (self.en_loc, self.ru_loc):
+            stelander = re.search(r'(?m)^\s*VAL_Stelander_Crisis_Opens_desc:\d*\s+"([^"]+)"', localisation)
+            resource = re.search(r'(?m)^\s*VAL_Resource_War_Contracts_desc:\d*\s+"([^"]+)"', localisation)
+            self.assertIsNotNone(stelander)
+            self.assertIsNotNone(resource)
+            self.assertIn("§Y", stelander.group(1))
+            self.assertIn("§Y", resource.group(1))
+            self.assertIn("$VAL_Ministry_Auditors$", resource.group(1))
 
     def test_first_act_is_a_visible_roadmap_not_a_single_button(self) -> None:
         first_act = (
