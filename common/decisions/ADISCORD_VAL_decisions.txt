@@ -1285,10 +1285,19 @@ VAL_livonn_settlement_category = {
 		allowed = { tag = VAL }
 		visible = {
 			has_country_flag = VAL_cw_livonn_settlement_pending
-			45 = { is_owned_by = OCA has_state_flag = STP_local_deal_asset }
+			45 = { is_owned_by = OCA }
 		}
 		available = {
-			STS = { exists = yes has_capitulated = no }
+			OR = {
+				AND = {
+					45 = { has_state_flag = STP_local_deal_asset }
+					STS = { STP_pw_can_reconstruct = yes }
+				}
+				STP = {
+					STP_pw_can_reconstruct = yes
+					has_country_flag = STP_sided_with_the_party_flag
+				}
+			}
 		}
 		cost = 0
 		fire_only_once = yes
