@@ -4,6 +4,8 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 EFFECTS = ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt"
+ON_ACTIONS = ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
+TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"
 
 
 def named_block(text: str, name: str) -> str:
@@ -46,6 +48,24 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("has_country_flag = VAL_joint_nod_defeat_pending", self.reconcile)
         self.assertIn("VAL_settle_joint_nod_shabrat_victory = yes", self.reconcile)
         self.assertNotIn("has_war_with = VAL has_war_with = STS has_capitulated = yes", self.reconcile)
+
+    def test_frontier_partner_can_receive_nodrul_capitulation_credit(self) -> None:
+        router = ON_ACTIONS.read_text(encoding="utf-8")
+        router = router.split("# BEGIN kefreyt:on_capitulation_immediate", 1)[1]
+        router = router.split("# END kefreyt:on_capitulation_immediate", 1)[0]
+        compact_router = " ".join(router.split())
+        self.assertIn(
+            "OR = { FROM = { VAL_final_campaign_ally = yes } capital_scope = { controller = { VAL_final_campaign_ally = yes } } }",
+            compact_router,
+        )
+
+        ally = named_block(TRIGGERS.read_text(encoding="utf-8"), "VAL_final_campaign_ally")
+        self.assertIn("tag = VAL", ally)
+        self.assertIn("is_subject_of = VAL", ally)
+        self.assertIn("tag = TFF", ally)
+        self.assertIn("is_subject_of = TFF", ally)
+        self.assertIn("VAL_frontier_partner_available = yes", ally)
+        self.assertIn("has_country_flag = VAL_nod_frontier_agreement", ally)
 
     def test_nodrul_settlement_closes_bezhaysk_war_before_capitulation(self) -> None:
         install = named_block(self.source, "VAL_install_nodrul_administration")
