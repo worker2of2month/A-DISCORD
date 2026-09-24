@@ -1085,7 +1085,7 @@ class ValCostIconOrderTests(unittest.TestCase):
         keys = set(re.findall(r"custom_cost_text\s*=\s*([A-Za-z0-9_]+)", decision_source))
         self.assertIn("VAL_labor_cost", keys)
 
-        icon_before_number = re.compile(r"£[A-Za-z0-9_]+\s+(?:§[YRG]\d|\d)")
+        icon_before_number = re.compile(r"£[A-Za-z0-9_]+[ \t](?:§[YRG]\d|\d)")
         for language in ("english", "russian"):
             localisation = "\n".join(
                 (ROOT / path).read_text(encoding="utf-8-sig")
