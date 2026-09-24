@@ -2969,13 +2969,17 @@ VAL_frontier_reconcile = {
 
     if = {
         limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+        # Victory must be evaluated before generic "the war relation is gone" cleanup.
+        # Native peace/conference callbacks can arrive only after has_war_with has
+        # already become false, while the occupied states and defeat receipts still
+        # prove the authored campaign result.
         if = {
-            limit = { OR = { VAL_frontier_has_campaign_war = no AND = { VAL_frontier_target_owned = no VAL_frontier_target_occupied = no } } }
-            VAL_frontier_close = yes
-        }
-        else_if = {
             limit = { VAL_frontier_target_occupied = yes VAL_frontier_members_beaten = yes }
             VAL_frontier_settle_victory = yes
+        }
+        else_if = {
+            limit = { OR = { VAL_frontier_has_campaign_war = no AND = { VAL_frontier_target_owned = no VAL_frontier_target_occupied = no } } }
+            VAL_frontier_close = yes
         }
         else_if = {
             limit = {
