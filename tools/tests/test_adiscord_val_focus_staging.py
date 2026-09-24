@@ -231,6 +231,11 @@ class KefreytFocusStagingTests(unittest.TestCase):
             self.assertNotIn(focus_id, staged)
         self.assertGreaterEqual(len(staged), 50)
 
+    def test_frontier_chapter_has_no_old_save_migration(self) -> None:
+        self.assertNotIn("ADISCORD_val_frontier_postpeace_fix_v1", self.on_actions)
+        self.assertNotIn("VAL_frontier_focus_tree_schema_v3", self.on_actions)
+        self.assertNotIn("load_focus_tree = { tree = VAL_focus keep_completed = yes }", self.on_actions)
+
     def test_focus_completion_refreshes_dynamic_layout(self) -> None:
         hook = named_block(self.on_actions, "on_focus_completed")
         self.assertIn("tag = VAL", hook)
