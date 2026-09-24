@@ -3283,6 +3283,7 @@ VAL_cw_honor_livonn_agreement = {
 		set_country_flag = VAL_cw_livonn_agreement_honored
 		clr_country_flag = VAL_cw_livonn_retained
 		OCA = { ADISCORD_economy_mark_dirty = yes }
+		VAL_reconcile_occidian_resource_rights = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
@@ -3647,11 +3648,101 @@ VAL_form_occidian_administration = {
                 VAL = { VAL_call_subjects_to_wars = yes }
 			}
 			OCA = { VAL_initialize_balchansk_administration = yes }
+			VAL_reconcile_occidian_resource_rights = yes
 			clr_country_flag = VAL_occidian_settlement_pending
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}
 }
+
+# COUNTRY VAL. A subordinate Occidian Contract Administration immediately grants
+# Kefreyt resource rights over the districts it actually owns. Per-state flags
+# make repeated reconciliation idempotent and allow Livonin to leave the
+# contract cleanly if the prewar Shabrat settlement is honoured.
+VAL_reconcile_occidian_resource_rights = {
+	if = {
+		limit = { OCA = { exists = yes is_subject_of = VAL } }
+
+		if = {
+			limit = {
+				OCA = { owns_state = 43 }
+				NOT = { has_country_flag = VAL_occidian_resource_rights_43 }
+			}
+			OCA = { give_resource_rights = { receiver = VAL state = 43 } }
+			set_country_flag = VAL_occidian_resource_rights_43
+		}
+		else_if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_43 OCA = { NOT = { owns_state = 43 } } }
+			remove_resource_rights = 43
+			clr_country_flag = VAL_occidian_resource_rights_43
+		}
+
+		if = {
+			limit = {
+				OCA = { owns_state = 44 }
+				NOT = { has_country_flag = VAL_occidian_resource_rights_44 }
+			}
+			OCA = { give_resource_rights = { receiver = VAL state = 44 } }
+			set_country_flag = VAL_occidian_resource_rights_44
+		}
+		else_if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_44 OCA = { NOT = { owns_state = 44 } } }
+			remove_resource_rights = 44
+			clr_country_flag = VAL_occidian_resource_rights_44
+		}
+
+		if = {
+			limit = {
+				OCA = { owns_state = 45 }
+				NOT = { has_country_flag = VAL_occidian_resource_rights_45 }
+			}
+			OCA = { give_resource_rights = { receiver = VAL state = 45 } }
+			set_country_flag = VAL_occidian_resource_rights_45
+		}
+		else_if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_45 OCA = { NOT = { owns_state = 45 } } }
+			remove_resource_rights = 45
+			clr_country_flag = VAL_occidian_resource_rights_45
+		}
+
+		if = {
+			limit = {
+				OCA = { owns_state = 88 }
+				NOT = { has_country_flag = VAL_occidian_resource_rights_88 }
+			}
+			OCA = { give_resource_rights = { receiver = VAL state = 88 } }
+			set_country_flag = VAL_occidian_resource_rights_88
+		}
+		else_if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_88 OCA = { NOT = { owns_state = 88 } } }
+			remove_resource_rights = 88
+			clr_country_flag = VAL_occidian_resource_rights_88
+		}
+	}
+	else = {
+		if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_43 }
+			remove_resource_rights = 43
+			clr_country_flag = VAL_occidian_resource_rights_43
+		}
+		if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_44 }
+			remove_resource_rights = 44
+			clr_country_flag = VAL_occidian_resource_rights_44
+		}
+		if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_45 }
+			remove_resource_rights = 45
+			clr_country_flag = VAL_occidian_resource_rights_45
+		}
+		if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_88 }
+			remove_resource_rights = 88
+			clr_country_flag = VAL_occidian_resource_rights_88
+		}
+	}
+}
+
 
 VAL_integrate_occidia = {
 	if = {
@@ -3681,6 +3772,7 @@ VAL_integrate_occidia = {
 			45 = { remove_core_of = OCA set_state_controller_to = VAL }
 		}
 		88 = { remove_core_of = OCA set_state_controller_to = VAL }
+		VAL_reconcile_occidian_resource_rights = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
