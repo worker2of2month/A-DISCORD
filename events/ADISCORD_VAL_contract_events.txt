@@ -1203,6 +1203,48 @@ country_event = {
     }
 }
 
+# Debug preset handoff: STS must own a live NOD war before VAL can join
+# the same native war. This mirrors the real joint-campaign add_to_war path.
+country_event = {
+    id = val_rework.121
+    hidden = yes
+    is_triggered_only = yes
+    trigger = {
+        tag = VAL
+        has_country_flag = ADISCORD_debug_joint_sts_nod_pending
+    }
+    immediate = {
+        clr_country_flag = ADISCORD_debug_joint_sts_nod_pending
+        if = {
+            limit = {
+                is_debug = yes
+                has_capitulated = no
+                is_subject = no
+                NOT = { has_war_with = NOD }
+                STS = {
+                    exists = yes
+                    has_capitulated = no
+                    has_war_with = NOD
+                    has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+                }
+                NOD = {
+                    exists = yes
+                    has_capitulated = no
+                    has_war_with = STS
+                }
+            }
+            set_country_flag = VAL_joint_nod_campaign_with_sts
+            add_to_war = {
+                targeted_alliance = STS
+                enemy = NOD
+                hostility_reason = asked_to_join
+                single_target_only = yes
+            }
+            VAL_call_subjects_to_wars = yes
+        }
+    }
+}
+
 country_event = {
     id = val_rework.118
     title = val_rework.118.t
