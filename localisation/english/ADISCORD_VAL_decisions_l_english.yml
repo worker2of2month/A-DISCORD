@@ -205,7 +205,7 @@
  VAL_debug_reset_rework_state: "§RDEBUG:§! Reset Debug States"
  VAL_debug_reset_rework_state_desc: "Removes only debug crisis stages and test Vorkerland penalties, without changing focus progress."
  VAL_contract_state: "$VAL_mercenary_state$"
- VAL_contract_state_desc: "$VAL_mercenary_state_desc$\n\nContract Authority: §Y[?VAL_contract_authority|0]/100§! — §Y[VALGetContractAuthorityBand]§!. The bonuses below are recalculated when authority or a completed military, industrial or administrative specialisation changes."
+ VAL_contract_state_desc: "$VAL_mercenary_state_desc$\n\nContract Authority: §Y[?VAL_contract_authority|0]/100§! - §Y[VALGetContractAuthorityBand]§!. The bonuses below are recalculated when authority or a completed military, industrial or administrative specialisation changes."
  VAL_CONTRACT_AUTHORITY_DOMINANT: "unified command"
  VAL_CONTRACT_AUTHORITY_CENTRALIZED: "centralised command"
  VAL_CONTRACT_AUTHORITY_COHERENT: "stable system"
