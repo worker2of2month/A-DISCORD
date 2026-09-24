@@ -67,6 +67,13 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("VAL_frontier_partner_available = yes", ally)
         self.assertIn("has_country_flag = VAL_nod_frontier_agreement", ally)
 
+        triggers = TRIGGERS.read_text(encoding="utf-8")
+        available = named_block(triggers, "VAL_final_crisis_available")
+        launchable = named_block(triggers, "VAL_can_launch_final_campaign")
+        for block in (available, launchable):
+            self.assertIn("is_subject_of = STP", block)
+            self.assertIn("STP = { is_subject_of = VAL }", block)
+
     def test_party_victory_nested_nodrul_is_released_before_final_war(self) -> None:
         release = named_block(self.source, "VAL_release_party_nodrul_for_final_campaign")
         self.assertIn("NOD = { exists = yes has_capitulated = no is_subject_of = STP }", release)
