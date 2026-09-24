@@ -206,7 +206,7 @@ separate report decision or event.
 A decision with `custom_cost_text` replaces the native cost handling: set `cost = 0`,
 check every declared currency explicitly, and debit each exactly once in
 `complete_effect`. Include all prices and their texticons in the custom cost
-line. Provide the native `<key>_blocked` and `<key>_tooltip` localisation
+line. In compact costs and resource amounts, always render the numeric amount first and the texticon second, for example `§Y75§! £political_power_texticon` and `§Y100000§! £population_texticon`; never put the icon before its number. Provide the native `<key>_blocked` and `<key>_tooltip` localisation
 variants as well; an affordable screenshot does not exercise the blocked price.
 Verify the before/after balances in the running game.
 When targeted projects share one country escrow, its presence must block every
