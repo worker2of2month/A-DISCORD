@@ -441,7 +441,7 @@ VAL_military_operations = {
 		icon = generic_prepare_civil_war allowed = { tag = VAL }
 		targets = { NOD }
 		target_trigger = { FROM = { exists = yes } }
-		visible = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated } FROM = { is_subject = no NOT = { has_war_with = ROOT } } }
+		visible = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated } FROM = { OR = { is_subject = no AND = { tag = NOD is_subject_of = STP } } NOT = { has_war_with = ROOT } } }
 		available = {
 			custom_trigger_tooltip = { tooltip = VAL_nod_requires_stelander_victory_tt VAL_stelander_dominated = yes }
 			custom_trigger_tooltip = { tooltip = VAL_nod_campaign_foothold_tt VAL_northern_foothold_secured = yes }
@@ -457,6 +457,7 @@ VAL_military_operations = {
 					limit = { VAL_stelander_dominated = yes VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } }
 					set_country_flag = VAL_campaign_mobilizing
 					FROM = { set_country_flag = VAL_campaign_target }
+					VAL_release_party_nodrul_for_final_campaign = yes
 				}
 			}
 		}
@@ -486,6 +487,7 @@ VAL_military_operations = {
 			hidden_effect = {
 				clr_country_flag = VAL_campaign_mobilizing
 				FROM = { clr_country_flag = VAL_campaign_target }
+				clr_country_flag = VAL_final_party_nod_release_pending
 				NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
 			}
 		}
@@ -509,7 +511,7 @@ VAL_military_operations = {
 				else = { declare_war_on = { target = FROM type = annex_everything } }
 				NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
 			}
-			hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } }
+			hidden_effect = { clr_country_flag = VAL_campaign_mobilizing clr_country_flag = VAL_final_party_nod_release_pending FROM = { clr_country_flag = VAL_campaign_target } }
 		}
 		ai_will_do = { base = 8 }
 	}
