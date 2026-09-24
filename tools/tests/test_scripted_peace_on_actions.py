@@ -291,11 +291,13 @@ class WarDebugContractTests(unittest.TestCase):
         self.assertIn("VAL_nod_ultimatum_expired", flags)
         self.assertEqual(scalar(effect, "VAL_frontier_start_war"), "yes")
 
-    def test_joint_shabrat_kefreyt_preset_joins_the_same_war_after_one_hour(self):
+    def test_joint_shabrat_kefreyt_preset_forms_alliance_then_joins_same_war(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
         source = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
         category = block(parse_clausewitz(source.read_text(encoding="utf-8")), "ADISCORD_scenario_debug_category")
         preset = block(category, "ADISCORD_debug_war_val_join_sts_nod")
+        available = block(preset, "available")
+        self.assertEqual(scalar(available, "is_in_faction"), "no")
         event_call = next(e for e in walk(block(preset, "complete_effect")) if e.key == "country_event")
         self.assertEqual(scalar(event_call.value, "id"), "val_rework.121")
         self.assertEqual(scalar(event_call.value, "hours"), "1")
@@ -306,13 +308,18 @@ class WarDebugContractTests(unittest.TestCase):
             if e.key == "country_event" and scalar(e.value, "id") == "val_rework.121"
         )
         immediate = block(event, "immediate")
-        join = next(e for e in walk(immediate) if e.key == "add_to_war")
-        self.assertEqual(scalar(join.value, "targeted_alliance"), "STS")
-        self.assertEqual(scalar(join.value, "enemy"), "NOD")
         self.assertTrue(any(
-            e.key == "set_country_flag" and e.value == "VAL_joint_nod_campaign_with_sts"
+            e.key == "VAL_begin_joint_nod_shabrat_campaign" and e.value == "yes"
             for e in walk(immediate)
         ))
+
+        effects = parse_clausewitz((ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text())
+        begin = block(effects, "VAL_begin_joint_nod_shabrat_campaign")
+        self.assertTrue(any(e.key == "create_faction_from_template" for e in walk(begin)))
+        self.assertTrue(any(e.key == "add_to_faction" and e.value == "STS" for e in walk(begin)))
+        join = next(e for e in walk(begin) if e.key == "add_to_war")
+        self.assertEqual(scalar(join.value, "targeted_alliance"), "STS")
+        self.assertEqual(scalar(join.value, "enemy"), "NOD")
 
     def test_nodrul_debug_controls_use_production_settlement_helpers(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
