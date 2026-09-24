@@ -3821,6 +3821,10 @@ VAL_integrate_occidia = {
 				limit = { 45 = { is_owned_by = OCA } }
 				transfer_state = 45
 			}
+			if = {
+				limit = { 46 = { is_owned_by = OCA } }
+				transfer_state = 46
+			}
 			transfer_state = 88
 			OCA = { ADISCORD_economy_mark_dirty = yes }
 		}
@@ -3829,6 +3833,10 @@ VAL_integrate_occidia = {
 		if = {
 			limit = { 45 = { is_owned_by = VAL } }
 			45 = { remove_core_of = OCA set_state_controller_to = VAL }
+		}
+		if = {
+			limit = { 46 = { is_owned_by = VAL } }
+			46 = { remove_core_of = OCA set_state_controller_to = VAL }
 		}
 		88 = { remove_core_of = OCA set_state_controller_to = VAL }
 		VAL_reconcile_occidian_resource_rights = yes
