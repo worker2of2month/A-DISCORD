@@ -4006,6 +4006,23 @@ VAL_install_nodrul_administration = {
     if = {
         limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
         VAL = { VAL_snapshot_nodrul_settlement = yes }
+        # Party-led Stelander can leave Nodrul as a nested subject inside the
+        # Kefreyt sphere. Break that obsolete dependency before the deferred
+        # contract-administration handoff.
+        if = {
+            limit = {
+                is_subject_of = STP
+                STP = { is_subject_of = VAL }
+            }
+            STP = {
+                set_autonomy = {
+                    target = NOD
+                    autonomy_state = autonomy_free
+                    end_wars = no
+                    end_civil_wars = no
+                }
+            }
+        }
         VAL_settle_nodrul_bezhaysk_war = yes
         VAL_settle_frontier_partner_war = yes
         if = { limit = { has_war_with = VAL } white_peace = VAL }
@@ -4889,18 +4906,62 @@ VAL_final_crisis_join_war = {
 	}
 }
 
+VAL_release_party_nodrul_for_final_campaign = {
+	if = {
+		limit = {
+			tag = VAL
+			STP = { exists = yes has_capitulated = no is_subject_of = VAL }
+			NOD = { exists = yes has_capitulated = no is_subject_of = STP }
+		}
+		STP = {
+			set_autonomy = {
+				target = NOD
+				autonomy_state = autonomy_free
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+		NOD = {
+			if = {
+				limit = { is_in_faction = yes }
+				if = { limit = { is_faction_leader = yes } dismantle_faction = yes }
+				else = { faction_leader = { remove_from_faction = NOD } }
+			}
+		}
+	}
+}
+
+VAL_final_crisis_execute_launch = {
+	if = {
+		limit = {
+			VAL_final_crisis_preparing = yes
+			NOD = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		clr_country_flag = VAL_final_party_nod_release_pending
+		NOD = { VAL_final_crisis_register_member = yes }
+		declare_war_on = { target = NOD type = annex_everything }
+		VAL_final_crisis_join_war = yes
+	}
+}
+
 VAL_final_crisis_launch = {
 	if = {
 		limit = { VAL_final_crisis_preparing = yes }
-		NOD = { VAL_final_crisis_register_member = yes }
 		if = {
-			limit = { NOD = { is_subject_of = STP } }
-			STP = { VAL_final_crisis_register_member = yes }
-			declare_war_on = { target = STP type = annex_everything }
-			NOD = { if = { limit = { NOT = { has_war_with = VAL } } add_to_war = { targeted_alliance = STP enemy = VAL hostility_reason = asked_to_join single_target_only = yes } } }
+			limit = {
+				NOD = { is_subject_of = STP }
+				STP = { is_subject_of = VAL }
+			}
+			VAL_release_party_nodrul_for_final_campaign = yes
+			set_country_flag = { flag = VAL_final_party_nod_release_pending days = 3 }
+			country_event = { id = val_rework.122 days = 1 }
 		}
-		else = { declare_war_on = { target = NOD type = annex_everything } }
-		VAL_final_crisis_join_war = yes
+		else = { VAL_final_crisis_execute_launch = yes }
 	}
 }
 
@@ -4944,6 +5005,27 @@ VAL_final_crisis_reconcile = {
 			limit = { check_variable = { var = VAL_final_crisis_phase value = 0 compare = greater_than } }
 			VAL_final_crisis_close = yes
 		}
+	}
+
+	# A Party victory can leave NOD nested under the STP administration.
+	# Older campaign launches could then lose the intended VAL-NOD war relation.
+	if = {
+		limit = {
+			check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
+			has_war = no
+			VAL_stelander_dominated = yes
+			NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } }
+			NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }
+		}
+		set_variable = { var = VAL_final_crisis_phase value = 1 }
+		set_variable = { var = VAL_final_escalation value = 100 }
+		if = {
+			limit = { NOD = { is_subject_of = STP } STP = { is_subject_of = VAL } }
+			VAL_release_party_nodrul_for_final_campaign = yes
+			set_country_flag = { flag = VAL_final_party_nod_release_pending days = 3 }
+			country_event = { id = val_rework.122 days = 1 }
+		}
+		else = { VAL_final_crisis_execute_launch = yes }
 	}
 
 	# Recover a missed immediate-capitulation callback in a valid final campaign.
