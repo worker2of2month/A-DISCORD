@@ -152,16 +152,36 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_protocol_office.png"
 	}
 	spriteType = {
+		name = "GFX_focus_STP_PARTY_DISCIPLINE"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_PARTY_DISCIPLINE.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_defense_budget"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_defense_budget.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_DISTRICT_GOVERNMENT"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_DISTRICT_GOVERNMENT.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_cw_capital_reserve"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_capital_reserve.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_cw_counter_network"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_counter_network.png"
+	}
+	spriteType = {
 		name = "GFX_focus_STP_GUARANTEE_MINISTERS"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/party before civilwar.png"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_GUARANTEE_MINISTERS.png"
 	}
 	spriteType = {
 		name = "GFX_focus_STP_ROTATE_DISTRICT_COMMAND"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/party before civilwar 2.png"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_ROTATE_DISTRICT_COMMAND.png"
 	}
 	spriteType = {
 		name = "GFX_focus_STP_cw_press_office"
-		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/party before civilwar 3.png"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_cw_press_office.png"
 	}
 
 	spriteType = {

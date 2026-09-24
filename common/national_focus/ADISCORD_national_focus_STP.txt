@@ -1221,7 +1221,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_PARTY_DISCIPLINE
-		icon = GFX_focus_STP_Side_With_The_Party
+		icon = GFX_focus_STP_PARTY_DISCIPLINE
 		relative_position_id = STP_Govern_In_His_Name
 		x = 4
 		y = 2
@@ -1251,7 +1251,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_defense_budget
-		icon = GFX_goal_generic_construct_mil_factory
+		icon = GFX_focus_STP_defense_budget
 		relative_position_id = STP_Govern_In_His_Name
 		x = -6
 		y = 2
@@ -1316,7 +1316,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_DISTRICT_GOVERNMENT
-		icon = GFX_focus_STP_Side_With_The_Party
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
 		relative_position_id = STP_Govern_In_His_Name
 		x = -3
 		y = 2
@@ -1335,7 +1335,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_capital_reserve
-		icon = GFX_focus_generic_limited_social_mobilization
+		icon = GFX_focus_STP_cw_capital_reserve
 		relative_position_id = STP_Govern_In_His_Name
 		x = 0
 		y = 2
@@ -1485,7 +1485,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_counter_network
-		icon = GFX_focus_generic_military_mission
+		icon = GFX_focus_STP_cw_counter_network
 		relative_position_id = STP_Govern_In_His_Name
 		x = 7
 		y = 5
