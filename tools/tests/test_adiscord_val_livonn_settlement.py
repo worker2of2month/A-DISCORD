@@ -21,6 +21,9 @@ class ValLivonnSettlement(unittest.TestCase):
         self.assertIn("45 = { is_owned_by = OCA is_controlled_by = OCA }", stage)
         self.assertNotIn("transfer_state = 45", stage)
         self.assertIn("set_country_flag = VAL_cw_livonn_settlement_pending", stage)
+        self.assertIn("has_global_flag = STP_cw_union_wars_finished", stage)
+        self.assertIn("STP_pw_can_reconstruct = yes", stage)
+        self.assertIn("has_country_flag = STP_sided_with_the_party_flag", stage)
 
     def test_livonn_cannot_be_taken_from_stelander_or_another_client(self):
         from tools.tests.test_adiscord_stp_preparation import entries, block, matches_conditions
@@ -38,12 +41,16 @@ class ValLivonnSettlement(unittest.TestCase):
         settlement = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt").split("VAL_cw_settle_republics = {", 1)[1].split("STP_cw_poll_nod_intervention", 1)[0]
         self.assertIn("45 = { is_owned_by = SRP OR = { is_controlled_by = SRP is_controlled_by = VAL } }", settlement)
 
-    def test_honor_choice_returns_only_livonn_to_shabrat_side(self):
+    def test_return_choice_supports_shabrat_and_party_winners(self):
         effects = source_section(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), "livonn_settlement_effects")
         honor = effects.split("VAL_cw_honor_livonn_agreement = {", 1)[1].split("VAL_cw_retain_livonn = {", 1)[0]
         self.assertIn("STS = { transfer_state = 45 }", honor)
         self.assertIn("45 = { remove_core_of = OCA set_state_controller_to = STS }", honor)
+        self.assertIn("STP = { transfer_state = 45 }", honor)
+        self.assertIn("45 = { remove_core_of = OCA set_state_controller_to = STP }", honor)
         self.assertIn("set_country_flag = VAL_cw_livonn_agreement_honored", honor)
+        self.assertIn("set_country_flag = VAL_cw_livonn_returned_to_party", honor)
+        self.assertIn("has_country_flag = STP_sided_with_the_party_flag", honor)
 
     def test_keep_choice_retains_livonn(self):
         effects = source_section(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), "livonn_settlement_effects")
@@ -71,6 +78,17 @@ class ValLivonnSettlement(unittest.TestCase):
         self.assertIn("VAL_keep_livonn = {", decisions)
         self.assertIn("VAL_cw_honor_livonn_agreement = yes", decisions)
         self.assertIn("VAL_cw_retain_livonn = yes", decisions)
+        return_block = decisions.split("VAL_honor_livonn_agreement = {", 1)[1].split("VAL_keep_livonn = {", 1)[0]
+        self.assertIn("STP_pw_can_reconstruct = yes", return_block)
+        self.assertIn("has_country_flag = STP_sided_with_the_party_flag", return_block)
+
+    def test_union_winner_retries_pending_livonn_settlement(self):
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        block = effects.split("STP_cw_check_union_wars_finished = {", 1)[1].split("STP_cw_close_nod_after_party_victory = {", 1)[0]
+        self.assertLess(
+            block.index("set_global_flag = STP_cw_union_wars_finished"),
+            block.index("VAL_cw_stage_livonn_settlement = yes"),
+        )
 
     def test_localisation_exists_in_both_languages(self):
         ru = source_section(read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml"), "livonn_settlement_localisation")
