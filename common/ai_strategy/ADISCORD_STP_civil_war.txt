@@ -142,11 +142,24 @@ VAL_cw_front_against_srp = {
 }
 
 STP_cw_front_against_nod = {
-	allowed = { OR = { original_tag = STP original_tag = STS } }
+	allowed = { original_tag = STP }
 	enable = { has_war_with = NOD }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = front_unit_request tag = NOD value = 35 }
 	ai_strategy = { type = front_control tag = NOD ratio = 0.01 priority = 1100 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+
+# Shabrat must treat a live NOD intervention as a decisive external front.
+# This is AI-only so player balance and the Party route keep their existing tuning.
+STS_shabrat_nod_front = {
+	allowed = { original_tag = STS }
+	enable = { is_ai = yes has_capitulated = no has_war_with = NOD }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = consider_weak id = NOD value = 120 }
+	ai_strategy = { type = front_unit_request tag = NOD value = 220 }
+	ai_strategy = { type = front_control tag = NOD ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
+	ai_strategy = { type = conquer id = NOD value = 250 }
+	ai_strategy = { type = force_concentration_factor value = 80 }
 }
 
 NOD_pw_party_invasion_front = {

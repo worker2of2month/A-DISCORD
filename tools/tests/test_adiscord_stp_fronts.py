@@ -92,6 +92,20 @@ class ShabratFrontTests(unittest.TestCase):
                 self.assertRegex(profile, rf"type = front_unit_request tag = {enemy} value = [1-9]\d*")
                 self.assertIn(f"type = front_control tag = {enemy}", profile)
 
+    def test_shabrat_commits_decisively_against_live_nod_front(self) -> None:
+        profile = self.profile("STS_shabrat_nod_front")
+        self.assertEqual(compact(named_block(profile, "allowed")),
+                         "allowed = { original_tag = STS }")
+        self.assertEqual(compact(named_block(profile, "enable")),
+                         "enable = { is_ai = yes has_capitulated = no has_war_with = NOD }")
+        self.assertIn("abort_when_not_enabled = yes", profile)
+        self.assertIn("type = consider_weak id = NOD value = 120", profile)
+        self.assertIn("type = front_unit_request tag = NOD value = 220", profile)
+        self.assertIn("priority = 1800", profile)
+        self.assertIn("execution_type = rush_weak", profile)
+        self.assertIn("type = conquer id = NOD value = 250", profile)
+        self.assertIn("type = force_concentration_factor value = 80", profile)
+
     def test_party_front_requests_are_not_inflated_to_mask_neutral_demand(self) -> None:
         for name, demand in (("STS_cw_front_against_stp", 100),
                              ("STS_shabrat_civil_war_army", 120)):
