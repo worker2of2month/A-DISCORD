@@ -4443,10 +4443,28 @@ class ValExpandedCampaignTests(unittest.TestCase):
             self.assertTrue(any(e.key == "VAL_only_occidian_states" for guard in guards for e in walk(guard)))
         tree = self.getblock(self.parse(FOCUSES_PATH.read_text(encoding="utf-8")), "focus_tree")
         focuses = {self.scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        claims = focuses["VAL_Occidian_Claims_Commission"]
+        self.assertEqual(self.scalar(claims, "cost"), "3")
+        self.assertEqual(self.scalar(claims, "cancel_if_invalid"), "yes")
+        claims_available = self.getblock(claims, "available")
+        self.assertIn("VAL_occidia_secured", [e.key for e in walk(claims_available)])
+        self.assertIn(
+            "VAL_cw_livonn_settlement_pending",
+            [e.value for e in walk(claims_available) if e.key == "has_country_flag"],
+        )
+        reward = self.getblock(claims, "completion_reward")
+        for state_id in ("43", "44", "88"):
+            state = next(e.value for e in reward if e.key == state_id)
+            self.assertIn("VAL", [e.value for e in walk(state) if e.key == "add_claim_by"], state_id)
+        livonn = next(e.value for e in reward if e.key == "45")
+        self.assertIn("VAL_livonn_available_for_administration", [e.key for e in walk(livonn)])
+        self.assertIn("VAL", [e.value for e in walk(livonn) if e.key == "add_claim_by"])
+
         for name in ("VAL_Occidian_Registries", "VAL_Integrate_Occidia"):
             self.assertEqual(self.scalar(focuses[name], "cost"), "5")
             self.assertEqual(self.scalar(focuses[name], "cancel_if_invalid"), "yes")
             self.assertIn("VAL_occidian_administration_secured", [e.key for e in walk(self.getblock(focuses[name], "available"))])
+        self.assertEqual(self.scalar(self.getblock(focuses["VAL_Occidian_Registries"], "prerequisite"), "focus"), "VAL_Occidian_Claims_Commission")
         self.assertEqual(self.scalar(self.getblock(focuses["VAL_Integrate_Occidia"], "prerequisite"), "focus"), "VAL_Occidian_Registries")
 
     def test_subject_capital_capture_counts_only_for_an_actual_val_war(self):
