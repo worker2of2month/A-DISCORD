@@ -319,6 +319,323 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
+	# Presets create the actual war topology used by scripted peace routing.
+	# Parallel-ultimatum cases remain separate wars on purpose.
+	ADISCORD_debug_war_sts_vs_val = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			has_war = no
+			has_capitulated = no
+			is_subject = no
+			has_global_flag = STP_cw_union_wars_finished
+			STS = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				has_country_flag = STP_cw_postwar
+				NOT = { is_in_faction_with = VAL }
+				NOT = { is_in_faction_with = NOD }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			STS = { set_country_flag = VAL_stelander_refused }
+			declare_war_on = { target = STS type = annex_everything }
+			VAL_call_subjects_to_wars = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_sts_vs_nod = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			has_war = no
+			has_global_flag = STP_cw_union_wars_finished
+			STS = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				has_country_flag = STP_cw_postwar
+				NOT = { is_in_faction_with = NOD }
+				NOT = { is_in_faction_with = VAL }
+			}
+			NOD = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			NOD = { declare_war_on = { target = STS type = annex_everything } }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_sts_vs_val_nod = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			has_war = no
+			has_capitulated = no
+			is_subject = no
+			has_global_flag = STP_cw_union_wars_finished
+			STS = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				has_country_flag = STP_cw_postwar
+				NOT = { is_in_faction_with = VAL }
+				NOT = { is_in_faction_with = NOD }
+			}
+			NOD = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			STS = { set_country_flag = VAL_stelander_refused }
+			declare_war_on = { target = STS type = annex_everything }
+			NOD = { declare_war_on = { target = STS type = annex_everything } }
+			VAL_call_subjects_to_wars = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_stp_vs_val = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			has_war = no
+			has_capitulated = no
+			is_subject = no
+			has_global_flag = STP_cw_union_wars_finished
+			STP = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				has_country_flag = STP_cw_postwar
+				NOT = { is_in_faction_with = VAL }
+				NOT = { is_in_faction_with = NOD }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			STP = { set_country_flag = VAL_stelander_refused }
+			declare_war_on = { target = STP type = annex_everything }
+			VAL_call_subjects_to_wars = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_stp_vs_nod = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			has_war = no
+			has_global_flag = STP_cw_union_wars_finished
+			STP = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				has_country_flag = STP_cw_postwar
+				NOT = { is_in_faction_with = NOD }
+				NOT = { is_in_faction_with = VAL }
+			}
+			NOD = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			STP = {
+				clr_country_flag = STP_pw_party_nod_compact
+				clr_country_flag = STP_pw_party_nod_invasion_defeated
+				clr_country_flag = STP_pw_party_nod_invasion_lost
+				clr_country_flag = STP_pw_party_compact_pending
+				set_country_flag = STP_pw_party_nod_threat_active
+				STP_pw_party_launch_nod_invasion = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_stp_vs_val_nod = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			has_war = no
+			has_capitulated = no
+			is_subject = no
+			has_global_flag = STP_cw_union_wars_finished
+			STP = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				has_country_flag = STP_cw_postwar
+				NOT = { is_in_faction_with = VAL }
+				NOT = { is_in_faction_with = NOD }
+			}
+			NOD = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			STP = {
+				clr_country_flag = STP_pw_party_nod_compact
+				clr_country_flag = STP_pw_party_nod_invasion_defeated
+				clr_country_flag = STP_pw_party_nod_invasion_lost
+				clr_country_flag = STP_pw_party_compact_pending
+				set_country_flag = STP_pw_party_nod_threat_active
+				set_country_flag = VAL_stelander_refused
+				STP_pw_party_launch_nod_invasion = yes
+			}
+			declare_war_on = { target = STP type = annex_everything }
+			VAL_call_subjects_to_wars = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_frontier_with_nod = {
+		icon = generic_prepare_civil_war
+		targets = { CIN OSF APH }
+		target_trigger = { FROM = { exists = yes } }
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			VAL_frontier_postwar = yes
+			VAL_frontier_idle = yes
+			VAL_stelander_dominated = yes
+			has_war = no
+			FROM = {
+				VAL_frontier_bloc_target_eligible = yes
+			}
+			NOD = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = { FROM = { tag = CIN } }
+				set_variable = { var = VAL_frontier_target value = 1 }
+			}
+			else_if = {
+				limit = { FROM = { tag = OSF } }
+				set_variable = { var = VAL_frontier_target value = 2 }
+			}
+			else = {
+				set_variable = { var = VAL_frontier_target value = 3 }
+			}
+			set_country_flag = VAL_nod_ultimatum_issued
+			set_country_flag = VAL_nod_ultimatum_expired
+			set_variable = { var = VAL_frontier_stage value = 2 }
+			VAL_frontier_start_war = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_val_join_sts_nod = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			has_war = no
+			has_capitulated = no
+			is_subject = no
+			has_global_flag = STP_cw_union_wars_finished
+			STS = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				has_country_flag = STP_cw_postwar
+				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+				NOT = { is_in_faction_with = NOD }
+			}
+			NOD = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war = no
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			STS = { declare_war_on = { target = NOD type = annex_everything } }
+			set_country_flag = ADISCORD_debug_joint_sts_nod_pending
+			country_event = { id = val_rework.121 hours = 1 }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_external_cleanup = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = { limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } } VAL_frontier_close = yes }
+			if = { limit = { has_variable = VAL_final_crisis_phase check_variable = { var = VAL_final_crisis_phase value = 0 compare = greater_than } } VAL_final_crisis_close = yes }
+			if = { limit = { has_war_with = NOD } white_peace = NOD }
+			STP = {
+				if = { limit = { has_war_with = VAL } white_peace = VAL }
+				if = { limit = { has_war_with = NOD } white_peace = NOD }
+				clr_country_flag = STP_pw_party_nod_threat_active
+				clr_country_flag = STP_pw_party_compact_pending
+				clr_country_flag = STP_pw_party_nod_invasion_active
+				clr_country_flag = VAL_stelander_refused
+				remove_decision = STP_pw_party_nod_invasion_countdown
+			}
+			STS = {
+				if = { limit = { has_war_with = VAL } white_peace = VAL }
+				if = { limit = { has_war_with = NOD } white_peace = NOD }
+				clr_country_flag = VAL_stelander_refused
+			}
+			NOD = { remove_ideas = STP_pw_nod_invasion_mandate }
+			clr_country_flag = VAL_joint_nod_campaign_with_sts
+			clr_country_flag = ADISCORD_debug_joint_sts_nod_pending
+			VAL_council_reconcile_revanche = yes
+			VAL_frontier_reconcile = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
 	ADISCORD_debug_war_reserves = {
 		icon = generic_prepare_civil_war
 		visible = { is_debug = yes is_ai = no }
