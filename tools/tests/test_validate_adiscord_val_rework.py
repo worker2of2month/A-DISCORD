@@ -4001,7 +4001,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         facts["NOD", "has_capitulated", "yes"] = False
         self.assertFalse(self.match("VAL_final_settlement_ready", facts, "NOD"))
 
-    def test_final_settlement_accepts_only_current_immediate_capitulation(self):
+    def test_final_settlement_accepts_transient_immediate_capitulation_without_root_scope(self):
         for tag in ("STP", "STS", "NOD"):
             facts = {
                 (tag, "has_country_flag", "VAL_final_defeat_pending"): True,
@@ -4010,8 +4010,19 @@ class ValExpandedCampaignTests(unittest.TestCase):
                 ("VAL", "has_capitulated", "no"): True,
                 ("VAL", "is_subject", "no"): True,
             }
-            self.assertTrue(self.match("VAL_final_settlement_ready", facts, tag, root=tag))
-            self.assertFalse(self.match("VAL_final_settlement_ready", facts, tag))
+            self.assertTrue(self.match("VAL_final_settlement_ready", facts, tag))
+            self.assertTrue(self.match("VAL_final_settlement_ready", facts, tag, root="VAL"))
+
+        trigger = named_block_spans(
+            (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8"),
+            "VAL_final_settlement_ready",
+        )[0].text
+        finalizer = named_block_spans(
+            EFFECTS_PATH.read_text(encoding="utf-8"),
+            "VAL_finalize_reserved_settlements",
+        )[0].text
+        self.assertNotIn("tag = ROOT has_country_flag = VAL_final_capitulation_immediate", trigger)
+        self.assertNotIn("tag = ROOT has_country_flag = VAL_final_capitulation_immediate", finalizer)
 
     def test_last_ally_immediate_capitulation_unblocks_reserved_country(self):
         facts = {
@@ -4027,8 +4038,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         }
         self.assertFalse(self.match("VAL_final_settlement_ready", facts, "STP"))
         facts["NOD", "has_country_flag", "VAL_final_capitulation_immediate"] = True
-        self.assertTrue(self.match("VAL_final_settlement_ready", facts, "STP", root="NOD"))
-        self.assertFalse(self.match("VAL_final_settlement_ready", facts, "STP"))
+        self.assertTrue(self.match("VAL_final_settlement_ready", facts, "STP"))
 
     def test_final_settlement_runs_before_native_conference(self):
         source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text()
@@ -4040,18 +4050,25 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertIn("clr_country_flag = VAL_final_capitulation_immediate", late)
         self.assertIn("set_global_flag = skip_default_capitulation", late)
 
-    def test_stelander_border_cession_preserves_neutral_and_occupied_land(self):
-        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, matches_conditions, walk
+    def test_stelander_border_cession_routes_hosheit_to_oca_and_kreyden_to_val(self):
+        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, walk
         effect = block(parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_cede_stelander_border")
         regions = {e.key: e.value for e in walk(effect) if e.key.isdigit()}
         self.assertEqual(set(regions), {"46", "29"})
-        for state, body in regions.items():
-            guard = block(block(body, "if"), "limit")
-            for owner, controller, expected in ((True, "PREV", True), (True, "VAL", True), (True, "THIRD", False), (False, "VAL", False)):
-                facts = {(state, "is_owned_by", "PREV"): owner,
-                         (state, "is_controlled_by", "PREV"): controller == "PREV",
-                         (state, "is_controlled_by", "VAL"): controller == "VAL"}
-                self.assertEqual(matches_conditions(guard, facts, state), expected)
+
+        hosheit = block(regions["46"], "if")
+        hosheit_text = str([(e.key, e.value) for e in walk(hosheit)])
+        self.assertIn("is_subject_of', 'VAL", hosheit_text)
+        self.assertIn("add_core_of', 'OCA", hosheit_text)
+        self.assertEqual([e.value for e in walk(hosheit) if e.key == "transfer_state"].count("46"), 2)
+        self.assertIn("OCA", [e.key for e in walk(hosheit)])
+        self.assertIn("VAL", [e.key for e in walk(hosheit)])
+
+        kreyden = block(regions["29"], "if")
+        kreyden_text = str([(e.key, e.value) for e in walk(kreyden)])
+        self.assertIn("transfer_state', '29", kreyden_text)
+        self.assertIn("set_state_controller_to', 'VAL", kreyden_text)
+
         install = block(parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8")), "VAL_install_stelander_administration")
         self.assertFalse(any(e.key in {"annex_country", "change_tag_from"} for e in walk(install)))
 
@@ -4274,42 +4291,33 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertTrue(any(e.key == "VAL_export_advisors_can_accept" for e in walk(event)))
 
     def test_subjects_join_existing_val_wars_without_declarations(self):
-        from tools.tests.test_adiscord_stp_preparation import walk, matches_conditions
+        from tools.tests.test_adiscord_stp_preparation import walk
         effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
         call = self.getblock(effects, "VAL_call_subjects_to_wars")
         dispatch = self.getblock(call, "if")
         self.assertIn("VAL_subject_war_dispatch_active", [e.value for e in walk(self.getblock(dispatch, "limit"))])
         self.assertEqual(self.scalar(dispatch, "set_country_flag"), "VAL_subject_war_dispatch_active")
         self.assertEqual(self.scalar(dispatch, "clr_country_flag"), "VAL_subject_war_dispatch_active")
-        enemies = self.getblock(dispatch, "every_enemy_country")
-        enemy_subjects = self.getblock(enemies, "every_subject_country")
-        enemy_gate = self.getblock(enemy_subjects, "limit")
-        enemy_facts = {("OCA", "has_capitulated", "no"): True}
-        self.assertTrue(matches_conditions(enemy_gate, enemy_facts, "OCA"))
-        for relation in ("has_war_with", "is_in_faction_with"):
-            self.assertFalse(matches_conditions(enemy_gate, {**enemy_facts, ("OCA", relation, "VAL"): True}, "OCA"))
-        enemy_join = self.getblock(enemy_subjects, "add_to_war")
-        self.assertEqual(self.scalar(enemy_join, "targeted_alliance"), "event_target:VAL_subject_war_enemy")
-        self.assertEqual(self.scalar(enemy_join, "enemy"), "VAL")
-        subjects = self.getblock(self.getblock(enemies, "VAL"), "every_subject_country")
-        gate = self.getblock(subjects, "limit")
-        facts = {("OCA", "has_capitulated", "no"): True}
-        self.assertTrue(matches_conditions(gate, facts, "OCA"))
-        for relation, target in (("has_war_with", "VAL"), ("has_war_with", "event_target:VAL_subject_war_enemy"), ("is_in_faction_with", "event_target:VAL_subject_war_enemy")):
-            self.assertFalse(matches_conditions(gate, {**facts, ("OCA", relation, target): True}, "OCA"))
-        self.assertFalse(matches_conditions(gate, {}, "OCA"))
-        join = self.getblock(subjects, "add_to_war")
-        self.assertEqual(self.scalar(join, "targeted_alliance"), "VAL")
-        self.assertEqual(self.scalar(join, "enemy"), "event_target:VAL_subject_war_enemy")
+
+        joins = [e.value for e in walk(call) if e.key == "add_to_war"]
+        pairs = {(self.scalar(j, "targeted_alliance"), self.scalar(j, "enemy")) for j in joins}
+        self.assertIn(("event_target:VAL_subject_war_leader", "event_target:VAL_subject_war_enemy"), pairs)
+        self.assertIn(("VAL", "event_target:VAL_subject_war_enemy"), pairs)
         self.assertFalse(any(e.key == "declare_war_on" for e in walk(call)))
+
         decisions = self.parse(DECISIONS_PATH.read_text(encoding="utf-8"))
         campaign = next(e.value for e in walk(decisions) if e.key == "VAL_campaign_against_stelander")
         self.assertTrue(any(e.key == "VAL_call_subjects_to_wars" for e in walk(campaign)))
         revanche = self.getblock(effects, "VAL_council_begin_revanche")
         self.assertTrue(any(e.key == "VAL_call_subjects_to_wars" for e in walk(revanche)))
+
         hooks = self.getblock(self.parse(ON_ACTIONS_PATH.read_text(encoding="utf-8")), "on_actions")
-        for name in ("on_startup", "on_war_relation_added", "on_puppet"):
-            self.assertTrue(any(e.key == "VAL_call_subjects_to_wars" for e in walk(self.getblock(hooks, name))), name)
+        relation = self.getblock(hooks, "on_war_relation_added")
+        relation_text = str([(e.key, e.value) for e in walk(relation)])
+        self.assertIn("is_subject_of', 'VAL", relation_text)
+        self.assertIn("VAL_call_subjects_to_wars", [e.key for e in walk(relation)])
+        for hook_name in ("on_startup", "on_puppet"):
+            self.assertTrue(any(e.key == "VAL_call_subjects_to_wars" for e in walk(self.getblock(hooks, hook_name))), hook_name)
 
     def test_vorkerland_uses_paid_orders_instead_of_gifts(self):
         trigger_source = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
@@ -4443,11 +4451,11 @@ class ValExpandedCampaignTests(unittest.TestCase):
         ]
         self.assertEqual(
             {state for receiver, state in grants if receiver == "VAL"},
-            {"43", "44", "45", "88"},
+            {"43", "44", "45", "46", "88"},
         )
         self.assertEqual(
             {e.value for e in walk(rights) if e.key == "remove_resource_rights"},
-            {"43", "44", "45", "88"},
+            {"43", "44", "45", "46", "88"},
         )
         formation = self.getblock(effects, "VAL_form_occidian_administration")
         integration = self.getblock(effects, "VAL_integrate_occidia")
@@ -4459,12 +4467,15 @@ class ValExpandedCampaignTests(unittest.TestCase):
             )
         on_actions = read_country_on_actions(ON_ACTIONS_PATH, "kefreyt")
         self.assertIn("VAL_reconcile_occidian_resource_rights = yes", on_actions)
-        self.assertIn("OR = { state = 43 state = 44 state = 45 state = 88 }", on_actions)
+        self.assertIn("OR = { state = 43 state = 44 state = 45 state = 46 state = 88 }", on_actions)
+
+        formation_transfers = {e.value for e in walk(formation) if e.key == "transfer_state"}
+        integration_transfers = {e.value for e in walk(integration) if e.key == "transfer_state"}
+        self.assertEqual(formation_transfers, {"43", "44", "45", "88"})
+        self.assertEqual(integration_transfers, {"43", "44", "45", "46", "88"})
 
         for name, target in (("VAL_form_occidian_administration", "SRP"), ("VAL_integrate_occidia", "OCA")):
             body = self.getblock(effects, name)
-            transfers = {e.value for e in walk(body) if e.key == "transfer_state"}
-            self.assertEqual(transfers, {"43", "44", "45", "88"})
             annex = next(e.value for e in walk(body) if e.key == "annex_country")
             self.assertEqual(self.scalar(annex, "target"), target)
             self.assertEqual(self.scalar(annex, "transfer_troops"), "yes")

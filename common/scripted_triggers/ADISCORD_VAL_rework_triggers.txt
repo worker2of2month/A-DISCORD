@@ -787,13 +787,17 @@ VAL_occidian_administration_secured = {
 		45 = { NOT = { is_owned_by = OCA } }
 		45 = { is_owned_by = OCA is_controlled_by = OCA }
 	}
+	OR = {
+		46 = { NOT = { is_owned_by = OCA } }
+		46 = { is_owned_by = OCA is_controlled_by = OCA }
+	}
 }
 
 # COUNTRY: annexation may transfer the army only when it cannot seize other land.
 VAL_only_occidian_states = {
 	NOT = {
 		any_owned_state = {
-			NOT = { OR = { state = 43 state = 44 state = 45 state = 88 } }
+			NOT = { OR = { state = 43 state = 44 state = 45 state = 46 state = 88 } }
 		}
 	}
 }
@@ -809,14 +813,14 @@ VAL_final_faction_ally_still_fighting = {
                     OR = { is_in_faction_with = STP AND = { has_country_flag = VAL_final_war_member STP = { has_country_flag = VAL_final_war_member } } }
                     has_war_with = VAL
                     has_capitulated = no
-                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
                 }
                 STS = {
                     exists = yes
                     OR = { is_in_faction_with = STP AND = { has_country_flag = VAL_final_war_member STP = { has_country_flag = VAL_final_war_member } } }
                     has_war_with = VAL
                     has_capitulated = no
-                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
                 }
             }
         }
@@ -828,14 +832,14 @@ VAL_final_faction_ally_still_fighting = {
                     OR = { is_in_faction_with = STS AND = { has_country_flag = VAL_final_war_member STS = { has_country_flag = VAL_final_war_member } } }
                     has_war_with = VAL
                     has_capitulated = no
-                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
                 }
                 STP = {
                     exists = yes
                     OR = { is_in_faction_with = STS AND = { has_country_flag = VAL_final_war_member STS = { has_country_flag = VAL_final_war_member } } }
                     has_war_with = VAL
                     has_capitulated = no
-                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
                 }
             }
         }
@@ -847,14 +851,14 @@ VAL_final_faction_ally_still_fighting = {
                     OR = { is_in_faction_with = NOD AND = { has_country_flag = VAL_final_war_member NOD = { has_country_flag = VAL_final_war_member } } }
                     has_war_with = VAL
                     has_capitulated = no
-                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
                 }
                 STS = {
                     exists = yes
                     OR = { is_in_faction_with = NOD AND = { has_country_flag = VAL_final_war_member NOD = { has_country_flag = VAL_final_war_member } } }
                     has_war_with = VAL
                     has_capitulated = no
-                    NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } }
+                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
                 }
             }
         }
@@ -867,7 +871,7 @@ VAL_final_settlement_ready = {
     # flips has_capitulated. Other members are checked only inside this theatre.
     OR = {
         has_capitulated = yes
-        AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate }
+        has_country_flag = VAL_final_capitulation_immediate
     }
     VAL = { exists = yes has_capitulated = no is_subject = no }
     NOT = { VAL_final_faction_ally_still_fighting = yes }

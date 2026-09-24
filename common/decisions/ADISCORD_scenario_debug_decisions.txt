@@ -603,6 +603,105 @@ ADISCORD_scenario_debug_category = {
 		ai_will_do = { factor = 0 }
 	}
 
+	ADISCORD_debug_war_val_vs_nod = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			has_war = no
+			has_capitulated = no
+			is_subject = no
+			VAL_stelander_dominated = yes
+			NOD = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			clr_country_flag = VAL_joint_nod_campaign_with_sts
+			set_variable = { var = VAL_final_crisis_phase value = 2 }
+			NOD = { VAL_final_crisis_register_member = yes }
+			declare_war_on = { target = NOD type = annex_everything }
+			VAL_call_subjects_to_wars = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_val_nod_victory = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			has_war_with = NOD
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = { VAL_debug_force_nodrul_victory = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_val_victory = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			OR = {
+				has_war = yes
+				check_variable = { var = VAL_frontier_stage value = 3 compare = equals }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = { VAL_debug_force_current_war_victory = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_war_val_nod_reconcile = {
+		icon = generic_prepare_civil_war
+		visible = { is_debug = yes is_ai = no tag = VAL }
+		available = {
+			OR = {
+				has_war_with = NOD
+				NOD = {
+					OR = {
+						has_capitulated = yes
+						has_country_flag = VAL_final_defeat_pending
+						has_country_flag = VAL_final_capitulation_immediate
+						has_country_flag = VAL_nodrul_administration_pending
+					}
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					NOD = {
+						exists = yes
+						has_capitulated = yes
+						NOT = { is_subject_of = VAL }
+					}
+				}
+				set_variable = { var = VAL_final_crisis_phase value = 2 }
+				NOD = {
+					set_country_flag = VAL_final_war_member
+					set_country_flag = VAL_final_defeat_pending
+					set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+				}
+			}
+			VAL_final_crisis_reconcile = yes
+			VAL_finalize_reserved_settlements = yes
+			NOD = { clr_country_flag = VAL_final_capitulation_immediate }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
 	ADISCORD_debug_war_external_cleanup = {
 		icon = generic_prepare_civil_war
 		visible = { is_debug = yes is_ai = no tag = VAL }

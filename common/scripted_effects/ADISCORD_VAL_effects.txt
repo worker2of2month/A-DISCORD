@@ -3758,6 +3758,20 @@ VAL_reconcile_occidian_resource_rights = {
 			remove_resource_rights = 88
 			clr_country_flag = VAL_occidian_resource_rights_88
 		}
+
+		if = {
+			limit = {
+				OCA = { owns_state = 46 }
+				NOT = { has_country_flag = VAL_occidian_resource_rights_46 }
+			}
+			OCA = { give_resource_rights = { receiver = VAL state = 46 } }
+			set_country_flag = VAL_occidian_resource_rights_46
+		}
+		else_if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_46 OCA = { NOT = { owns_state = 46 } } }
+			remove_resource_rights = 46
+			clr_country_flag = VAL_occidian_resource_rights_46
+		}
 	}
 	else = {
 		if = {
@@ -3779,6 +3793,11 @@ VAL_reconcile_occidian_resource_rights = {
 			limit = { has_country_flag = VAL_occidian_resource_rights_88 }
 			remove_resource_rights = 88
 			clr_country_flag = VAL_occidian_resource_rights_88
+		}
+		if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_46 }
+			remove_resource_rights = 46
+			clr_country_flag = VAL_occidian_resource_rights_46
 		}
 	}
 }
@@ -3802,6 +3821,10 @@ VAL_integrate_occidia = {
 				limit = { 45 = { is_owned_by = OCA } }
 				transfer_state = 45
 			}
+			if = {
+				limit = { 46 = { is_owned_by = OCA } }
+				transfer_state = 46
+			}
 			transfer_state = 88
 			OCA = { ADISCORD_economy_mark_dirty = yes }
 		}
@@ -3810,6 +3833,10 @@ VAL_integrate_occidia = {
 		if = {
 			limit = { 45 = { is_owned_by = VAL } }
 			45 = { remove_core_of = OCA set_state_controller_to = VAL }
+		}
+		if = {
+			limit = { 46 = { is_owned_by = VAL } }
+			46 = { remove_core_of = OCA set_state_controller_to = VAL }
 		}
 		88 = { remove_core_of = OCA set_state_controller_to = VAL }
 		VAL_reconcile_occidian_resource_rights = yes
@@ -3940,13 +3967,28 @@ VAL_install_stelander_administration = {
 VAL_cede_stelander_border = {
     if = {
         limit = { is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration }
+        # Hosheit becomes an additional Occidian district when OCA already
+        # exists under Kefreyt. Otherwise keep the old direct-VAL fallback.
         46 = {
             if = {
-                limit = { is_owned_by = PREV OR = { is_controlled_by = PREV is_controlled_by = VAL } }
-                VAL = { transfer_state = 46 }
-                set_state_controller_to = VAL
+                limit = {
+                    OR = { is_owned_by = PREV is_owned_by = VAL }
+                    OR = { is_controlled_by = PREV is_controlled_by = VAL }
+                }
+                if = {
+                    limit = { OCA = { exists = yes is_subject_of = VAL has_capitulated = no } }
+                    OCA = { transfer_state = 46 }
+                    add_core_of = OCA
+                    set_state_controller_to = OCA
+                    VAL = { VAL_reconcile_occidian_resource_rights = yes }
+                }
+                else = {
+                    VAL = { transfer_state = 46 }
+                    set_state_controller_to = VAL
+                }
             }
         }
+        # Kreyden remains the direct Kefreyt border concession.
         29 = {
             if = {
                 limit = { is_owned_by = PREV OR = { is_controlled_by = PREV is_controlled_by = VAL } }
@@ -3955,6 +3997,7 @@ VAL_cede_stelander_border = {
             }
         }
         ADISCORD_economy_mark_dirty = yes
+        OCA = { if = { limit = { exists = yes } ADISCORD_economy_mark_dirty = yes } }
         VAL = { ADISCORD_economy_mark_dirty = yes }
     }
 }
@@ -4352,7 +4395,7 @@ VAL_finalize_reserved_settlements = {
             set_country_flag = VAL_final_settlement_commit
         }
         else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { has_country_flag = VAL_final_capitulation_immediate } }
             clr_country_flag = VAL_final_defeat_pending
             clr_country_flag = VAL_final_party_controlled_ainholm
         }
@@ -4364,7 +4407,7 @@ VAL_finalize_reserved_settlements = {
             set_country_flag = VAL_final_settlement_commit
         }
         else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { has_country_flag = VAL_final_capitulation_immediate } }
             clr_country_flag = VAL_final_defeat_pending
         }
     }
@@ -4375,7 +4418,7 @@ VAL_finalize_reserved_settlements = {
             set_country_flag = VAL_final_settlement_commit
         }
         else_if = {
-            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { AND = { tag = ROOT has_country_flag = VAL_final_capitulation_immediate } } }
+            limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { has_country_flag = VAL_final_capitulation_immediate } }
             clr_country_flag = VAL_final_defeat_pending
         }
     }
@@ -4413,6 +4456,76 @@ VAL_finalize_reserved_settlements = {
             clr_country_flag = VAL_final_settlement_commit
         }
     }
+}
+
+
+# DEBUG-only caller: emulate a decisive VAL victory without bypassing the
+# production Nodrul settlement. The transient capitulation flag is consumed by
+# the same reservation/finalization code as the native callback.
+VAL_debug_force_nodrul_victory = {
+	if = {
+		limit = {
+			tag = VAL
+			has_capitulated = no
+			is_subject = no
+			NOD = { exists = yes has_war_with = VAL }
+		}
+		set_variable = { var = VAL_final_crisis_phase value = 2 }
+		NOD = {
+			set_country_flag = VAL_final_war_member
+			set_country_flag = VAL_final_defeat_pending
+			set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+		}
+		VAL_finalize_reserved_settlements = yes
+		NOD = { clr_country_flag = VAL_final_capitulation_immediate }
+	}
+}
+
+# DEBUG-only QA router. This does not annex countries directly: it selects the
+# same settlement effects used by the production capitulation callbacks.
+VAL_debug_force_current_war_victory = {
+	if = {
+		limit = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+		VAL_frontier_settle_victory = yes
+	}
+	else_if = {
+		limit = {
+			has_country_flag = VAL_joint_nod_campaign_with_sts
+			NOD = { exists = yes has_war_with = VAL has_war_with = STS }
+		}
+		VAL_settle_joint_nod_shabrat_victory = yes
+	}
+	else = {
+		set_variable = { var = VAL_final_crisis_phase value = 2 }
+		STP = {
+			if = {
+				limit = { exists = yes has_war_with = VAL }
+				set_country_flag = VAL_final_war_member
+				set_country_flag = VAL_final_defeat_pending
+				set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+			}
+		}
+		STS = {
+			if = {
+				limit = { exists = yes has_war_with = VAL }
+				set_country_flag = VAL_final_war_member
+				set_country_flag = VAL_final_defeat_pending
+				set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+			}
+		}
+		NOD = {
+			if = {
+				limit = { exists = yes has_war_with = VAL }
+				set_country_flag = VAL_final_war_member
+				set_country_flag = VAL_final_defeat_pending
+				set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+			}
+		}
+		VAL_finalize_reserved_settlements = yes
+		STP = { clr_country_flag = VAL_final_capitulation_immediate }
+		STS = { clr_country_flag = VAL_final_capitulation_immediate }
+		NOD = { clr_country_flag = VAL_final_capitulation_immediate }
+	}
 }
 
 VAL_adopt_commonwealth = {
@@ -4491,39 +4604,77 @@ VAL_call_subjects_to_wars = {
 		limit = {
 			tag = VAL
 			exists = yes
-			has_war = yes
 			is_subject = no
 			NOT = { has_country_flag = VAL_subject_war_dispatch_active }
 		}
 		set_country_flag = VAL_subject_war_dispatch_active
-		every_enemy_country = {
-			save_event_target_as = VAL_subject_war_enemy
-			every_subject_country = {
+
+		# A Kefreyt client cannot fight a private war while its overlord remains neutral.
+		# Adopt subject wars first, then fan every VAL war back out to the whole client network.
+		every_subject_country = {
+			limit = {
+				has_capitulated = no
+				has_war = yes
+				NOT = { has_war_with = VAL }
+			}
+			save_event_target_as = VAL_subject_war_leader
+			every_enemy_country = {
 				limit = {
 					has_capitulated = no
-					NOT = { has_war_with = VAL }
+					NOT = { tag = VAL }
+					NOT = { is_subject_of = VAL }
 					NOT = { is_in_faction_with = VAL }
+					VAL = { NOT = { has_war_with = PREV } }
 				}
-				add_to_war = {
-					targeted_alliance = event_target:VAL_subject_war_enemy
-					enemy = VAL
-					hostility_reason = asked_to_join
-					single_target_only = yes
+				save_event_target_as = VAL_subject_war_enemy
+				VAL = {
+					if = {
+						limit = {
+							NOT = { has_war_with = event_target:VAL_subject_war_enemy }
+							NOT = { is_in_faction_with = event_target:VAL_subject_war_enemy }
+						}
+						add_to_war = {
+							targeted_alliance = event_target:VAL_subject_war_leader
+							enemy = event_target:VAL_subject_war_enemy
+							hostility_reason = asked_to_join
+							single_target_only = yes
+						}
+					}
 				}
 			}
-			VAL = {
+		}
+
+		if = {
+			limit = { has_war = yes }
+			every_enemy_country = {
+				save_event_target_as = VAL_subject_war_enemy
 				every_subject_country = {
 					limit = {
 						has_capitulated = no
 						NOT = { has_war_with = VAL }
-						NOT = { has_war_with = event_target:VAL_subject_war_enemy }
-						NOT = { is_in_faction_with = event_target:VAL_subject_war_enemy }
+						NOT = { is_in_faction_with = VAL }
 					}
 					add_to_war = {
-						targeted_alliance = VAL
-						enemy = event_target:VAL_subject_war_enemy
+						targeted_alliance = event_target:VAL_subject_war_enemy
+						enemy = VAL
 						hostility_reason = asked_to_join
 						single_target_only = yes
+					}
+				}
+				VAL = {
+					every_subject_country = {
+						limit = {
+							has_capitulated = no
+							NOT = { has_war_with = VAL }
+							NOT = { has_war_with = event_target:VAL_subject_war_enemy }
+							NOT = { is_in_faction_with = event_target:VAL_subject_war_enemy }
+						}
+						add_to_war = {
+							targeted_alliance = VAL
+							enemy = event_target:VAL_subject_war_enemy
+							hostility_reason = asked_to_join
+							single_target_only = yes
+						}
 					}
 				}
 			}
@@ -4801,12 +4952,19 @@ VAL_final_crisis_reconcile = {
 		limit = {
 			check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
 			VAL_stelander_dominated = yes
-			has_war_with = NOD
+			OR = {
+				has_war_with = NOD
+				NOD = { has_country_flag = VAL_final_war_member has_capitulated = yes }
+			}
 			NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }
 		}
 		NOD = {
 			if = {
-				limit = { has_war_with = VAL has_country_flag = VAL_final_war_member has_capitulated = yes NOT = { has_country_flag = VAL_final_defeat_pending } }
+				limit = {
+					has_country_flag = VAL_final_war_member
+					has_capitulated = yes
+					NOT = { has_country_flag = VAL_final_defeat_pending }
+				}
 				set_country_flag = VAL_final_defeat_pending
 			}
 		}
