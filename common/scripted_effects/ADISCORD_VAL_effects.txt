@@ -3758,6 +3758,20 @@ VAL_reconcile_occidian_resource_rights = {
 			remove_resource_rights = 88
 			clr_country_flag = VAL_occidian_resource_rights_88
 		}
+
+		if = {
+			limit = {
+				OCA = { owns_state = 46 }
+				NOT = { has_country_flag = VAL_occidian_resource_rights_46 }
+			}
+			OCA = { give_resource_rights = { receiver = VAL state = 46 } }
+			set_country_flag = VAL_occidian_resource_rights_46
+		}
+		else_if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_46 OCA = { NOT = { owns_state = 46 } } }
+			remove_resource_rights = 46
+			clr_country_flag = VAL_occidian_resource_rights_46
+		}
 	}
 	else = {
 		if = {
@@ -3779,6 +3793,11 @@ VAL_reconcile_occidian_resource_rights = {
 			limit = { has_country_flag = VAL_occidian_resource_rights_88 }
 			remove_resource_rights = 88
 			clr_country_flag = VAL_occidian_resource_rights_88
+		}
+		if = {
+			limit = { has_country_flag = VAL_occidian_resource_rights_46 }
+			remove_resource_rights = 46
+			clr_country_flag = VAL_occidian_resource_rights_46
 		}
 	}
 }
