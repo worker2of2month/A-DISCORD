@@ -238,7 +238,12 @@ on_actions = {
                                 STS = { has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } }
                             }
                         }
-                        OR = { FROM = { tag = VAL } capital_scope = { VAL_frontier_controlled = yes } }
+                        OR = {
+                            FROM = { VAL_final_campaign_ally = yes }
+                            capital_scope = {
+                                controller = { VAL_final_campaign_ally = yes }
+                            }
+                        }
                     }
                     set_country_flag = VAL_final_defeat_pending
                     # The early peace can suppress the late callback; expire its reservation.
