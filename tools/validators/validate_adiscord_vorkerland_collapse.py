@@ -596,9 +596,20 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     ):
         if token not in anton_path:
             issues.append(f"Anton Bagley's WKR succession is missing {token}")
+    anton_promoter = named_block(collapse_effects, "ADISCORD_vorkerland_promote_anton_bagley")
+    for token in (
+        "has_country_leader = { character = WRK_Anton_Bagley }",
+        "promote_character = {",
+        "add_country_leader_role = {",
+        "ideology = utilitarian_accelerationism",
+    ):
+        if token not in anton_promoter:
+            issues.append(f"Anton Bagley's promotion effect is not transfer-safe: missing {token}")
     worker_formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr")
     for token in (
+        "set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome",
         "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic",
+        "recruit_character = WRK_Anton_Bagley",
         "ruling_party = utilitarism",
         "ADISCORD_vorkerland_promote_anton_bagley = yes",
     ):
@@ -4006,11 +4017,15 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
     if "ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes" not in finalizer:
         issues.append("Anton Bagley's worker-route victory lost its utilitarian presentation")
     utilitarian_identity = (
+        "has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome",
         "has_government = utilitarism",
         "has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }",
     )
     if not all(token in finalizer for token in utilitarian_identity):
-        issues.append("utilitarian victory presentation no longer keys off Anton's live WRK identity")
+        issues.append(
+            "utilitarian victory presentation must keep the durable Anton outcome "
+            "with live-identity fallback support"
+        )
     utilitarian_show = named_block(
         map_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent"
     )
