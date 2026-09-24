@@ -4116,32 +4116,34 @@ VAL_cede_stelander_border = {
 }
 
 VAL_install_nodrul_administration = {
-    if = {
-        limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
-        VAL = { VAL_snapshot_nodrul_settlement = yes }
-        VAL_settle_nodrul_bezhaysk_war = yes
-        VAL_settle_frontier_partner_war = yes
-        if = { limit = { has_war_with = VAL } white_peace = VAL }
-        VAL = { VAL_partition_nodrul_settlement = yes }
+	if = {
+		limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
+		VAL = { VAL_snapshot_nodrul_settlement = yes }
+		VAL_settle_nodrul_bezhaysk_war = yes
+		VAL_settle_frontier_partner_war = yes
+		if = { limit = { has_war_with = VAL } white_peace = VAL }
+		VAL = { VAL_partition_nodrul_settlement = yes }
+		VAL_prepare_nodrul_administration = yes
+	}
+}
 
-        # Nodrul starts as the leader of the old Consortium. A faction leader
-        # cannot be converted into Kefreyt's subject reliably on the same tick.
-        # Detach that alliance first, then retry the autonomy conversion after
-        # the diplomatic cache has advanced by one day.
-        if = {
-            limit = { is_in_faction = yes }
-            if = {
-                limit = { is_faction_leader = yes }
-                faction_leader = { dismantle_faction = yes }
-            }
-            else = {
-                faction_leader = { remove_from_faction = NOD }
-            }
-        }
-        set_country_flag = VAL_nodrul_administration_pending
-        set_variable = { var = VAL_nodrul_administration_retry value = 0 }
-        country_event = { id = val_contract.353 days = 1 }
-    }
+VAL_prepare_nodrul_administration = {
+	if = {
+		limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
+		if = {
+			limit = { is_in_faction = yes }
+			if = {
+				limit = { is_faction_leader = yes }
+				faction_leader = { dismantle_faction = yes }
+			}
+			else = {
+				faction_leader = { remove_from_faction = NOD }
+			}
+		}
+		set_country_flag = VAL_nodrul_administration_pending
+		set_variable = { var = VAL_nodrul_administration_retry value = 0 }
+		country_event = { id = val_contract.353 days = 1 }
+	}
 }
 
 
