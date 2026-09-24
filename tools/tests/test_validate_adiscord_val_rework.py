@@ -4001,7 +4001,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         facts["NOD", "has_capitulated", "yes"] = False
         self.assertFalse(self.match("VAL_final_settlement_ready", facts, "NOD"))
 
-    def test_final_settlement_accepts_only_current_immediate_capitulation(self):
+    def test_final_settlement_accepts_transient_immediate_capitulation_without_root_scope(self):
         for tag in ("STP", "STS", "NOD"):
             facts = {
                 (tag, "has_country_flag", "VAL_final_defeat_pending"): True,
@@ -4010,8 +4010,19 @@ class ValExpandedCampaignTests(unittest.TestCase):
                 ("VAL", "has_capitulated", "no"): True,
                 ("VAL", "is_subject", "no"): True,
             }
-            self.assertTrue(self.match("VAL_final_settlement_ready", facts, tag, root=tag))
-            self.assertFalse(self.match("VAL_final_settlement_ready", facts, tag))
+            self.assertTrue(self.match("VAL_final_settlement_ready", facts, tag))
+            self.assertTrue(self.match("VAL_final_settlement_ready", facts, tag, root="VAL"))
+
+        trigger = named_block_spans(
+            (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8"),
+            "VAL_final_settlement_ready",
+        )[0].text
+        finalizer = named_block_spans(
+            EFFECTS_PATH.read_text(encoding="utf-8"),
+            "VAL_finalize_reserved_settlements",
+        )[0].text
+        self.assertNotIn("tag = ROOT has_country_flag = VAL_final_capitulation_immediate", trigger)
+        self.assertNotIn("tag = ROOT has_country_flag = VAL_final_capitulation_immediate", finalizer)
 
     def test_last_ally_immediate_capitulation_unblocks_reserved_country(self):
         facts = {
@@ -4027,8 +4038,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         }
         self.assertFalse(self.match("VAL_final_settlement_ready", facts, "STP"))
         facts["NOD", "has_country_flag", "VAL_final_capitulation_immediate"] = True
-        self.assertTrue(self.match("VAL_final_settlement_ready", facts, "STP", root="NOD"))
-        self.assertFalse(self.match("VAL_final_settlement_ready", facts, "STP"))
+        self.assertTrue(self.match("VAL_final_settlement_ready", facts, "STP"))
 
     def test_final_settlement_runs_before_native_conference(self):
         source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text()
