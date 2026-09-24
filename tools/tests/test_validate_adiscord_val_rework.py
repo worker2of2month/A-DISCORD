@@ -4451,11 +4451,11 @@ class ValExpandedCampaignTests(unittest.TestCase):
         ]
         self.assertEqual(
             {state for receiver, state in grants if receiver == "VAL"},
-            {"43", "44", "45", "88"},
+            {"43", "44", "45", "46", "88"},
         )
         self.assertEqual(
             {e.value for e in walk(rights) if e.key == "remove_resource_rights"},
-            {"43", "44", "45", "88"},
+            {"43", "44", "45", "46", "88"},
         )
         formation = self.getblock(effects, "VAL_form_occidian_administration")
         integration = self.getblock(effects, "VAL_integrate_occidia")
@@ -4467,12 +4467,15 @@ class ValExpandedCampaignTests(unittest.TestCase):
             )
         on_actions = read_country_on_actions(ON_ACTIONS_PATH, "kefreyt")
         self.assertIn("VAL_reconcile_occidian_resource_rights = yes", on_actions)
-        self.assertIn("OR = { state = 43 state = 44 state = 45 state = 88 }", on_actions)
+        self.assertIn("OR = { state = 43 state = 44 state = 45 state = 46 state = 88 }", on_actions)
+
+        formation_transfers = {e.value for e in walk(formation) if e.key == "transfer_state"}
+        integration_transfers = {e.value for e in walk(integration) if e.key == "transfer_state"}
+        self.assertEqual(formation_transfers, {"43", "44", "45", "88"})
+        self.assertEqual(integration_transfers, {"43", "44", "45", "46", "88"})
 
         for name, target in (("VAL_form_occidian_administration", "SRP"), ("VAL_integrate_occidia", "OCA")):
             body = self.getblock(effects, name)
-            transfers = {e.value for e in walk(body) if e.key == "transfer_state"}
-            self.assertEqual(transfers, {"43", "44", "45", "88"})
             annex = next(e.value for e in walk(body) if e.key == "annex_country")
             self.assertEqual(self.scalar(annex, "target"), target)
             self.assertEqual(self.scalar(annex, "transfer_troops"), "yes")
