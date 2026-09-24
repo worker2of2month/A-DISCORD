@@ -93,7 +93,6 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("AND = { tag = NOD is_subject_of = STP }", decision)
         self.assertIn("VAL_release_party_nodrul_for_final_campaign = yes", decision)
 
-        event = named_block(EVENTS.read_text(encoding="utf-8"), "country_event")
         all_events = EVENTS.read_text(encoding="utf-8")
         marker = "id = val_rework.122"
         start = all_events.index(marker)
