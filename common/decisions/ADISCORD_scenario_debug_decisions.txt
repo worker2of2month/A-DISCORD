@@ -575,11 +575,14 @@ ADISCORD_scenario_debug_category = {
 			has_war = no
 			has_capitulated = no
 			is_subject = no
+			is_in_faction = no
 			has_global_flag = STP_cw_union_wars_finished
+			NOT = { has_country_flag = VAL_joint_nod_shabrat_partition_completed }
 			STS = {
 				exists = yes
 				has_capitulated = no
 				is_subject = no
+				is_in_faction = no
 				has_war = no
 				has_country_flag = STP_cw_postwar
 				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
