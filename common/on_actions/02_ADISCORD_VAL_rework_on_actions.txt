@@ -174,6 +174,14 @@ on_actions = {
 
 			if = {
 				limit = {
+					FROM.FROM = { OR = { state = 43 state = 44 state = 45 state = 88 } }
+					VAL = { exists = yes }
+				}
+				VAL = { VAL_reconcile_occidian_resource_rights = yes }
+			}
+
+			if = {
+				limit = {
 					ROOT = { tag = VAL has_idea = VAL_harvest_of_ash }
 					FROM.FROM = { OR = { state = 24 state = 42 state = 48 state = 54 state = 55 state = 56 state = 57 } }
 				}
