@@ -371,6 +371,15 @@ class PartyRouteContracts(unittest.TestCase):
         self.assertIn("annex_country = { target = STP transfer_troops = yes }", terminal)
         self.assertIn("set_country_flag = STP_pw_party_nod_invasion_lost", terminal)
 
+    def test_nod_victory_closes_competing_kefreyt_ultimatum_before_annex(self):
+        effects = read(EFFECTS)
+        start = effects.index("STP_pw_party_settle_nod_invasion_victory = {")
+        end = effects.index("\n# Party defensive recovery.", start)
+        terminal = effects[start:end]
+        cleanup = terminal.index("STP_close_competing_ultimatum_wars_after_defeat = yes")
+        annex = terminal.index("annex_country = { target = STP transfer_troops = yes }")
+        self.assertLess(cleanup, annex)
+
     def test_nod_invasion_events_and_ai_profile_are_registered(self):
         events = read(EVENTS)
         for number in (28, 29, 30):
