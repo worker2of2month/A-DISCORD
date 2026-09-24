@@ -239,7 +239,12 @@ class WarDebugContractTests(unittest.TestCase):
             "ADISCORD_debug_war_log_on", "ADISCORD_debug_war_log_off",
             "ADISCORD_debug_war_snapshot", "ADISCORD_debug_war_val_start",
             "ADISCORD_debug_war_val_check", "ADISCORD_debug_war_val_abort",
-            "ADISCORD_debug_war_reserves",
+            "ADISCORD_debug_war_sts_vs_val", "ADISCORD_debug_war_sts_vs_nod",
+            "ADISCORD_debug_war_sts_vs_val_nod", "ADISCORD_debug_war_stp_vs_val",
+            "ADISCORD_debug_war_stp_vs_nod", "ADISCORD_debug_war_stp_vs_val_nod",
+            "ADISCORD_debug_war_frontier_with_nod",
+            "ADISCORD_debug_war_val_join_sts_nod",
+            "ADISCORD_debug_war_external_cleanup", "ADISCORD_debug_war_reserves",
         }.issubset({e.key for e in decisions}))
         for e in decisions:
             with self.subTest(decision=e.key):
@@ -248,6 +253,64 @@ class WarDebugContractTests(unittest.TestCase):
                 self.assertEqual(scalar(visible, "is_ai"), "no")
                 self.assertEqual(scalar(e.value, "cost"), "0")
                 self.assertEqual(scalar(block(e.value, "ai_will_do"), "factor"), "0")
+
+    def test_parallel_ultimatum_presets_create_two_independent_wars(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        source = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
+        category = block(parse_clausewitz(source.read_text(encoding="utf-8")), "ADISCORD_scenario_debug_category")
+
+        shabrat = block(category, "ADISCORD_debug_war_sts_vs_val_nod")
+        shabrat_effect = block(shabrat, "complete_effect")
+        val_declarations = [e for e in shabrat_effect if e.key == "declare_war_on"]
+        self.assertEqual([scalar(e.value, "target") for e in val_declarations], ["STS"])
+        nod_declarations = [e for e in block(shabrat_effect, "NOD") if e.key == "declare_war_on"]
+        self.assertEqual([scalar(e.value, "target") for e in nod_declarations], ["STS"])
+        self.assertFalse(any(e.key == "add_to_war" for e in walk(shabrat_effect)))
+
+        party = block(category, "ADISCORD_debug_war_stp_vs_val_nod")
+        party_effect = block(party, "complete_effect")
+        val_declarations = [e for e in party_effect if e.key == "declare_war_on"]
+        self.assertEqual([scalar(e.value, "target") for e in val_declarations], ["STP"])
+        party_scope = block(party_effect, "STP")
+        self.assertEqual(scalar(party_scope, "STP_pw_party_launch_nod_invasion"), "yes")
+        self.assertFalse(any(e.key == "add_to_war" for e in walk(party_effect)))
+
+    def test_frontier_nod_preset_uses_real_campaign_and_expired_ultimatum(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+        source = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
+        category = block(parse_clausewitz(source.read_text(encoding="utf-8")), "ADISCORD_scenario_debug_category")
+        preset = block(category, "ADISCORD_debug_war_frontier_with_nod")
+        effect = block(preset, "complete_effect")
+        flags = {
+            e.value for e in effect
+            if e.key == "set_country_flag" and isinstance(e.value, str)
+        }
+        self.assertIn("VAL_nod_ultimatum_issued", flags)
+        self.assertIn("VAL_nod_ultimatum_expired", flags)
+        self.assertEqual(scalar(effect, "VAL_frontier_start_war"), "yes")
+
+    def test_joint_shabrat_kefreyt_preset_joins_the_same_war_after_one_hour(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        source = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
+        category = block(parse_clausewitz(source.read_text(encoding="utf-8")), "ADISCORD_scenario_debug_category")
+        preset = block(category, "ADISCORD_debug_war_val_join_sts_nod")
+        event_call = next(e for e in walk(block(preset, "complete_effect")) if e.key == "country_event")
+        self.assertEqual(scalar(event_call.value, "id"), "val_rework.121")
+        self.assertEqual(scalar(event_call.value, "hours"), "1")
+
+        events = parse_clausewitz((ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text())
+        event = next(
+            e.value for e in events
+            if e.key == "country_event" and scalar(e.value, "id") == "val_rework.121"
+        )
+        immediate = block(event, "immediate")
+        join = next(e for e in walk(immediate) if e.key == "add_to_war")
+        self.assertEqual(scalar(join.value, "targeted_alliance"), "STS")
+        self.assertEqual(scalar(join.value, "enemy"), "NOD")
+        self.assertTrue(any(
+            e.key == "set_country_flag" and e.value == "VAL_joint_nod_campaign_with_sts"
+            for e in walk(immediate)
+        ))
 
     def test_debug_localisation_covers_each_new_control_in_both_languages(self):
         from tools.tests.test_adiscord_stp_preparation import block
