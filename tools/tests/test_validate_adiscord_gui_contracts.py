@@ -2292,6 +2292,37 @@ class StartupGuideContractTests(unittest.TestCase):
         self.assertIn('§YMaksim Shabrat§!', localisation_value(english, 'STP_startup_country'))
 
 
+    def test_stelander_guide_explains_time_pressure_debt_and_research(self):
+        english = self.read('localisation/english/ADISCORD_STP_l_english.yml')
+        russian = self.read('localisation/russian/ADISCORD_STP_l_russian.yml')
+
+        english_guide = localisation_value(english, 'STP_startup_guide')
+        for phrase in (
+            'not expected to finish every opening focus',
+            'weekly balance',
+            'Borrowing',
+            'interest',
+            'Technology',
+            'energy',
+        ):
+            self.assertIn(phrase, english_guide)
+
+        russian_guide = localisation_value(russian, 'STP_startup_guide')
+        for phrase in (
+            'не обязаны завершить каждый стартовый фокус',
+            'недельный баланс',
+            'Займы',
+            'проценты',
+            'Технологии',
+            'энерг',
+        ):
+            self.assertIn(phrase, russian_guide)
+
+        bop = localisation_value(english, 'STP_shabrat_election_bop_category_desc')
+        self.assertIn('Left is the Party Apparatus', bop)
+        self.assertIn('not a current national bonus', bop)
+
+
 
 
 if __name__ == '__main__':
