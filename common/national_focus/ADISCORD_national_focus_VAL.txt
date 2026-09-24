@@ -2301,6 +2301,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_frontier_logistics
+		dynamic = yes
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
 		x = 24
@@ -2328,6 +2329,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_frontier_commissioners
+		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ECONOMY }
 		x = 23
@@ -2358,6 +2360,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_frontier_provincial_offices
+		dynamic = yes
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY }
 		x = 25
