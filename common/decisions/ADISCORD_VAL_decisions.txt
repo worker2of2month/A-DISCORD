@@ -842,6 +842,104 @@ VAL_rework_debug = {
 		}
 	}
 
+	VAL_debug_reconcile_campaign_peaces = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		available = { always = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			VAL_frontier_reconcile = yes
+			VAL_final_crisis_reconcile = yes
+			VAL_finalize_reserved_settlements = yes
+			VAL_council_reconcile_revanche = yes
+			if = {
+				limit = { has_country_flag = VAL_cw_postwar }
+				VAL_cw_stage_livonn_settlement = yes
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	VAL_debug_settle_stelander_victory = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		available = {
+			has_country_flag = VAL_cw_entered
+			NOT = { has_country_flag = VAL_cw_settled }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			VAL_cw_settle_republics = yes
+			VAL_frontier_reconcile = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	VAL_debug_frontier_victory = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		available = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = { VAL_frontier_settle_victory = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	VAL_debug_frontier_armistice = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		available = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = { VAL_frontier_settle_armistice = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	VAL_debug_frontier_defeat = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		available = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = { VAL_frontier_settle_defeat = yes }
+		ai_will_do = { factor = 0 }
+	}
+
+	VAL_debug_final_campaign_reconcile = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		available = {
+			OR = {
+				check_variable = { var = VAL_final_crisis_phase value = 0 compare = greater_than }
+				NOD = { has_country_flag = VAL_final_defeat_pending }
+				STP = { has_country_flag = VAL_final_defeat_pending }
+				STS = { has_country_flag = VAL_final_defeat_pending }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			VAL_final_crisis_reconcile = yes
+			VAL_finalize_reserved_settlements = yes
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	VAL_debug_settle_wasteland = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		targets = { ERT IRT }
+		target_trigger = { FROM = { exists = yes } }
+		visible = { FROM = { OR = { tag = ERT tag = IRT } } }
+		available = { FROM = { has_capitulated = yes has_war_with = ROOT } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = { FROM = { VAL_settle_wasteland_capitulation = yes } }
+		ai_will_do = { factor = 0 }
+	}
+
 	VAL_debug_reset_rework_state = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
