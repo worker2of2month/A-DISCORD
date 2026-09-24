@@ -4432,6 +4432,32 @@ class ValExpandedCampaignTests(unittest.TestCase):
     def test_occidian_lifecycle_bounds_land_preserves_armies_and_takes_time(self):
         from tools.tests.test_adiscord_stp_preparation import walk
         effects = self.parse(EFFECTS_PATH.read_text(encoding="utf-8"))
+        rights = self.getblock(effects, "VAL_reconcile_occidian_resource_rights")
+        grants = [
+            (self.scalar(e.value, "receiver"), self.scalar(e.value, "state"))
+            for e in walk(rights)
+            if e.key == "give_resource_rights"
+        ]
+        self.assertEqual(
+            {state for receiver, state in grants if receiver == "VAL"},
+            {"43", "44", "45", "88"},
+        )
+        self.assertEqual(
+            {e.value for e in walk(rights) if e.key == "remove_resource_rights"},
+            {"43", "44", "45", "88"},
+        )
+        formation = self.getblock(effects, "VAL_form_occidian_administration")
+        integration = self.getblock(effects, "VAL_integrate_occidia")
+        honor_livonn = self.getblock(effects, "VAL_cw_honor_livonn_agreement")
+        for body in (formation, integration, honor_livonn):
+            self.assertIn(
+                "VAL_reconcile_occidian_resource_rights",
+                [e.key for e in walk(body)],
+            )
+        on_actions = read_country_on_actions(ON_ACTIONS_PATH, "kefreyt")
+        self.assertIn("VAL_reconcile_occidian_resource_rights = yes", on_actions)
+        self.assertIn("OR = { state = 43 state = 44 state = 45 state = 88 }", on_actions)
+
         for name, target in (("VAL_form_occidian_administration", "SRP"), ("VAL_integrate_occidia", "OCA")):
             body = self.getblock(effects, name)
             transfers = {e.value for e in walk(body) if e.key == "transfer_state"}
