@@ -3493,6 +3493,9 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertEqual(self.scalar(focus, "dynamic"), "yes")
         self.assertEqual(self.scalar(focus, "cancel_if_invalid"), "yes")
         self.assertEqual(self.scalar(self.getblock(focus, "prerequisite"), "focus"), "VAL_Ministry_Auditors")
+        allow = self.getblock(focus, "allow_branch")
+        self.assertNotIn("has_completed_focus", [e.key for e in walk(allow)])
+        self.assertIn("ADISCORD_nam_resource_war_active", [e.key for e in walk(allow)])
         auditors = focuses["VAL_Ministry_Auditors"]
         self.assertEqual(self.scalar(focus, "x"), self.scalar(auditors, "x"))
         self.assertGreater(int(self.scalar(focus, "y")), int(self.scalar(auditors, "y")))
