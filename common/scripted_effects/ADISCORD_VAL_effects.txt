@@ -4190,6 +4190,10 @@ VAL_finish_nodrul_administration = {
         ADISCORD_economy_mark_dirty = yes
         VAL = {
             VAL_call_subjects_to_wars = yes
+            if = {
+                limit = { has_country_flag = VAL_joint_nod_shabrat_partition_completed }
+                VAL_final_crisis_close = yes
+            }
             ADISCORD_economy_mark_dirty = yes
         }
     }
@@ -5183,9 +5187,15 @@ VAL_final_crisis_reconcile = {
 	# the immediate capitulation callback was skipped by an older save.
 	if = {
 		limit = {
-			check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
 			has_country_flag = VAL_joint_nod_campaign_with_sts
-			NOD = { exists = yes has_war_with = VAL has_war_with = STS has_capitulated = yes }
+			NOT = { has_country_flag = VAL_joint_nod_shabrat_partition_completed }
+			NOD = {
+				exists = yes
+				OR = {
+					has_capitulated = yes
+					has_country_flag = VAL_joint_nod_defeat_pending
+				}
+			}
 			STS = {
 				exists = yes
 				has_capitulated = no
