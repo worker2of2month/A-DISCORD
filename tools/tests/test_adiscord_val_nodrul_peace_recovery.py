@@ -6,6 +6,8 @@ ROOT = Path(__file__).resolve().parents[2]
 EFFECTS = ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt"
 ON_ACTIONS = ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
 TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"
+DECISIONS = ROOT / "common/decisions/ADISCORD_VAL_decisions.txt"
+EVENTS = ROOT / "events/ADISCORD_VAL_contract_events.txt"
 
 
 def named_block(text: str, name: str) -> str:
@@ -64,6 +66,44 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("is_subject_of = TFF", ally)
         self.assertIn("VAL_frontier_partner_available = yes", ally)
         self.assertIn("has_country_flag = VAL_nod_frontier_agreement", ally)
+
+    def test_party_victory_nested_nodrul_is_released_before_final_war(self) -> None:
+        release = named_block(self.source, "VAL_release_party_nodrul_for_final_campaign")
+        self.assertIn("NOD = { exists = yes has_capitulated = no is_subject_of = STP }", release)
+        self.assertIn("STP = { exists = yes has_capitulated = no is_subject_of = VAL }", release)
+        self.assertIn("target = NOD", release)
+        self.assertIn("autonomy_state = autonomy_free", release)
+        self.assertIn("end_wars = no", release)
+
+        launch = named_block(self.source, "VAL_final_crisis_launch")
+        execute = named_block(self.source, "VAL_final_crisis_execute_launch")
+        self.assertIn("VAL_release_party_nodrul_for_final_campaign = yes", launch)
+        self.assertIn("id = val_rework.122 days = 1", launch)
+        self.assertNotIn("declare_war_on = { target = STP", launch)
+        self.assertIn("declare_war_on = { target = NOD type = annex_everything }", execute)
+
+        decision = named_block(DECISIONS.read_text(encoding="utf-8"), "VAL_campaign_against_nod")
+        self.assertIn("AND = { tag = NOD is_subject_of = STP }", decision)
+        self.assertIn("VAL_release_party_nodrul_for_final_campaign = yes", decision)
+
+        event = named_block(EVENTS.read_text(encoding="utf-8"), "country_event")
+        all_events = EVENTS.read_text(encoding="utf-8")
+        marker = "id = val_rework.122"
+        start = all_events.index(marker)
+        event_start = all_events.rfind("country_event = {", 0, start)
+        event = named_block(all_events[event_start:], "country_event")
+        self.assertIn("VAL_final_party_nod_release_pending", event)
+        self.assertIn("VAL_final_crisis_execute_launch = yes", event)
+
+    def test_party_victory_settlement_breaks_stale_stp_overlordship(self) -> None:
+        install = named_block(self.source, "VAL_install_nodrul_administration")
+        self.assertIn("is_subject_of = STP", install)
+        self.assertIn("STP = { is_subject_of = VAL }", install)
+        self.assertIn("autonomy_state = autonomy_free", install)
+        self.assertLess(
+            install.index("autonomy_state = autonomy_free"),
+            install.index("VAL_nodrul_administration_pending"),
+        )
 
     def test_nodrul_settlement_closes_bezhaysk_war_before_capitulation(self) -> None:
         install = named_block(self.source, "VAL_install_nodrul_administration")
