@@ -495,16 +495,24 @@ VAL_military_operations = {
 				if = {
 					limit = {
 						FROM = { tag = NOD }
+						NOT = { has_country_flag = VAL_joint_nod_shabrat_partition_completed }
 						STS = {
 							exists = yes
 							has_capitulated = no
+							is_subject = no
 							has_war_with = NOD
 							has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
 						}
 						NOD = { has_war_with = STS }
+						OR = {
+							is_in_faction_with = STS
+							AND = {
+								is_in_faction = no
+								STS = { is_in_faction = no }
+							}
+						}
 					}
-					set_country_flag = VAL_joint_nod_campaign_with_sts
-					add_to_war = { targeted_alliance = STS enemy = NOD hostility_reason = asked_to_join single_target_only = yes }
+					VAL_begin_joint_nod_shabrat_campaign = yes
 				}
 				else = { declare_war_on = { target = FROM type = annex_everything } }
 				NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
