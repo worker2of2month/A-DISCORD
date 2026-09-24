@@ -336,6 +336,7 @@ ADISCORD_scenario_debug_category = {
 				has_war = no
 				has_country_flag = STP_cw_postwar
 				NOT = { is_in_faction_with = VAL }
+				NOT = { is_in_faction_with = NOD }
 			}
 		}
 		cost = 0
@@ -361,6 +362,7 @@ ADISCORD_scenario_debug_category = {
 				has_war = no
 				has_country_flag = STP_cw_postwar
 				NOT = { is_in_faction_with = NOD }
+				NOT = { is_in_faction_with = VAL }
 			}
 			NOD = {
 				exists = yes
@@ -429,6 +431,7 @@ ADISCORD_scenario_debug_category = {
 				has_war = no
 				has_country_flag = STP_cw_postwar
 				NOT = { is_in_faction_with = VAL }
+				NOT = { is_in_faction_with = NOD }
 			}
 		}
 		cost = 0
@@ -454,6 +457,7 @@ ADISCORD_scenario_debug_category = {
 				has_war = no
 				has_country_flag = STP_cw_postwar
 				NOT = { is_in_faction_with = NOD }
+				NOT = { is_in_faction_with = VAL }
 			}
 			NOD = {
 				exists = yes
