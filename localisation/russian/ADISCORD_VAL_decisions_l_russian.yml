@@ -685,10 +685,10 @@ VAL_reclamation: "Возвращение земли"
  VAL_contract_board_next_wait_export:0 "§YОбработка:§! все экспортные места заняты. Они освободятся после завершения текущих поставок."
  VAL_contract_board_next_build_stock:0 "Накопите минимум £infantry_equipment_texticon §Y25000§! винтовок для продажи на внешнем рынке."
  VAL_contract_board_next_choose:0 "§GМожно заключать сделки:§! выберите доступный договор ниже. Недоступные действия показывают, чего именно не хватает."
- VAL_contract_board_lot_25k:0 "£infantry_equipment_texticon §Y25000§! за £ADISCORD_economy_treasury_texticon §G500§!"
- VAL_contract_board_lot_50k:0 "£infantry_equipment_texticon §Y50000§! за £ADISCORD_economy_treasury_texticon §G1000§!"
- VAL_contract_board_lot_100k:0 "£infantry_equipment_texticon §Y100000§! за £ADISCORD_economy_treasury_texticon §G2250§!"
- VAL_contract_board_lot_200k:0 "£infantry_equipment_texticon §Y200000§! за £ADISCORD_economy_treasury_texticon §G5000§!"
+ VAL_contract_board_lot_25k:0 "§Y25000§! £infantry_equipment_texticon за §G500§! £ADISCORD_economy_treasury_texticon"
+ VAL_contract_board_lot_50k:0 "§Y50000§! £infantry_equipment_texticon за §G1000§! £ADISCORD_economy_treasury_texticon"
+ VAL_contract_board_lot_100k:0 "§Y100000§! £infantry_equipment_texticon за §G2250§! £ADISCORD_economy_treasury_texticon"
+ VAL_contract_board_lot_200k:0 "§Y200000§! £infantry_equipment_texticon за §G5000§! £ADISCORD_economy_treasury_texticon"
  VAL_contract_board_lot_none:0 "§Rнет подходящей партии на складе§!"
 
  VAL_export_income_1:0 "Действующий оружейный контракт"
@@ -1764,7 +1764,7 @@ VAL_reclamation_industry_available_tt:0 "Регион принадлежит н�
 
  VAL_sign_annual_trade:0 "Торговый договор: [FROM.GetName]"
 
- VAL_sign_annual_trade_desc:0 "§YТОРГОВЫЙ ДОГОВОР§!\nПартнёр: §Y[FROM.GetNameDef]§!\nСрок: §Y365 дней§!\nДоход Кефрейта: £ADISCORD_economy_treasury_texticon §G+[VALTradeDecisionIncome]§! в неделю\nДоход партнёра: £ADISCORD_economy_treasury_texticon §G+1§! в неделю\nЦена: §Y100§! £political_power_texticon\n\nПри отказе, отсутствии ответа или срыве условий плата возвращается. Принятый договор исчезает с доски до окончания срока."
+ VAL_sign_annual_trade_desc:0 "§YТОРГОВЫЙ ДОГОВОР§!\nПартнёр: §Y[FROM.GetNameDef]§!\nСрок: §Y365 дней§!\nДоход Кефрейта: §G+[VALTradeDecisionIncome]§! £ADISCORD_economy_treasury_texticon в неделю\nДоход партнёра: §G+1§! £ADISCORD_economy_treasury_texticon в неделю\nЦена: §Y100§! £political_power_texticon\n\nПри отказе, отсутствии ответа или срыве условий плата возвращается. Принятый договор исчезает с доски до окончания срока."
 
  VAL_trade_decision_terms_tt:0 "Отправить предложение годового торгового договора. Стоимость уже учтена в решении; при согласии повторного списания нет, при отказе плата возвращается."
 
@@ -1776,7 +1776,7 @@ VAL_reclamation_industry_available_tt:0 "Регион принадлежит н�
 
  VAL_hire_partner_volunteers:0 "Нанять добровольцев: [FROM.GetName]"
 
- VAL_hire_partner_volunteers_desc:0 "§YКОНТРАКТ НА НАЁМ§!\nПартнёр: §Y[FROM.GetNameDef]§!\nПолучим: £manpower_texticon §G[VALHireDecisionPeople]§!\nЦена: £ADISCORD_economy_treasury_texticon §Y[VALHireDecisionPrice]§!\nРасчёт: §Yпосле согласия§!\nПовтор: §Yчерез 365 дней после сделки§!\n\nЦена резервируется при отправке предложения. При отказе, истечении срока или срыве условий резерв возвращается."
+ VAL_hire_partner_volunteers_desc:0 "§YКОНТРАКТ НА НАЁМ§!\nПартнёр: §Y[FROM.GetNameDef]§!\nПолучим: §G[VALHireDecisionPeople]§! £manpower_texticon\nЦена: §Y[VALHireDecisionPrice]§! £ADISCORD_economy_treasury_texticon\nРасчёт: §Yпосле согласия§!\nПовтор: §Yчерез 365 дней после сделки§!\n\nЦена резервируется при отправке предложения. При отказе, истечении срока или срыве условий резерв возвращается."
 
  VAL_hire_funds_tt:0 "В казне Кефрейта есть £ADISCORD_economy_treasury_texticon [VALHireDecisionPrice]."
 
