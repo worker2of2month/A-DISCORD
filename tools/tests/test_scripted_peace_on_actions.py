@@ -244,6 +244,8 @@ class WarDebugContractTests(unittest.TestCase):
             "ADISCORD_debug_war_stp_vs_nod", "ADISCORD_debug_war_stp_vs_val_nod",
             "ADISCORD_debug_war_frontier_with_nod",
             "ADISCORD_debug_war_val_join_sts_nod",
+            "ADISCORD_debug_war_val_vs_nod", "ADISCORD_debug_war_val_nod_victory",
+            "ADISCORD_debug_war_val_victory", "ADISCORD_debug_war_val_nod_reconcile",
             "ADISCORD_debug_war_external_cleanup", "ADISCORD_debug_war_reserves",
         }.issubset({e.key for e in decisions}))
         for e in decisions:
@@ -312,6 +314,30 @@ class WarDebugContractTests(unittest.TestCase):
             for e in walk(immediate)
         ))
 
+    def test_nodrul_debug_controls_use_production_settlement_helpers(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        source = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
+        category = block(parse_clausewitz(source.read_text(encoding="utf-8")), "ADISCORD_scenario_debug_category")
+
+        start = block(category, "ADISCORD_debug_war_val_vs_nod")
+        start_effect = block(start, "complete_effect")
+        self.assertEqual(scalar(block(start_effect, "declare_war_on"), "target"), "NOD")
+        self.assertEqual(scalar(block(start_effect, "NOD"), "VAL_final_crisis_register_member"), "yes")
+
+        nod_victory = block(category, "ADISCORD_debug_war_val_nod_victory")
+        self.assertEqual(scalar(block(nod_victory, "complete_effect"), "VAL_debug_force_nodrul_victory"), "yes")
+        victory = block(category, "ADISCORD_debug_war_val_victory")
+        self.assertEqual(scalar(block(victory, "complete_effect"), "VAL_debug_force_current_war_victory"), "yes")
+        reconcile = block(category, "ADISCORD_debug_war_val_nod_reconcile")
+        reconcile_effect = block(reconcile, "complete_effect")
+        self.assertEqual(scalar(reconcile_effect, "VAL_final_crisis_reconcile"), "yes")
+        self.assertEqual(scalar(reconcile_effect, "VAL_finalize_reserved_settlements"), "yes")
+
+        effects = parse_clausewitz((ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text())
+        for helper in ("VAL_debug_force_nodrul_victory", "VAL_debug_force_current_war_victory"):
+            body = block(effects, helper)
+            self.assertFalse(any(e.key == "annex_country" for e in walk(body)), helper)
+        self.assertTrue(any(e.key == "VAL_finalize_reserved_settlements" for e in walk(block(effects, "VAL_debug_force_nodrul_victory"))))
     def test_debug_localisation_covers_each_new_control_in_both_languages(self):
         from tools.tests.test_adiscord_stp_preparation import block
         source = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
