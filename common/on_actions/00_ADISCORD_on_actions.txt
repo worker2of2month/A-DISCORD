@@ -9,6 +9,19 @@ on_actions = {
 
 	on_startup = {
 		effect = {
+			# Map safety invariant: every state must have at least one level of
+			# infrastructure. This runs once per campaign schema and also repairs
+			# older saves on their next load, preventing AI fronts from stalling in
+			# zero-infrastructure states.
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_minimum_infrastructure_v1_applied } }
+				every_state = {
+					limit = { infrastructure < 1 }
+					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+				}
+				set_global_flag = ADISCORD_minimum_infrastructure_v1_applied
+			}
+
 			# Persistent polluted-zone map entities.
 			create_entity = {
 			    entity = ADISCORD_global_entity
