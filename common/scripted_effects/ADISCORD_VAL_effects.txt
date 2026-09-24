@@ -5008,7 +5008,7 @@ VAL_final_crisis_reconcile = {
 	}
 
 	# A Party victory can leave NOD nested under the STP administration.
-	# Older campaign launches could then lose the intended VAL-NOD war relation.
+	# A phase-2 campaign without a live war relation must rebuild the direct target.
 	if = {
 		limit = {
 			check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
