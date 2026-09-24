@@ -3563,13 +3563,25 @@ ADISCORD_vorkerland_ivanland_intervention_failure = {
 }
 
 ADISCORD_vorkerland_promote_anton_bagley = {
-	add_country_leader_role = {
-		character = WRK_Anton_Bagley
-		promote_leader = yes
-		country_leader = {
+	# Anton is transferred between WKR and restored WRK. If his authored leader
+	# role already survived that transfer, promote the existing role instead of
+	# adding a duplicate one and letting HOI4 fall back to a generated leader.
+	if = {
+		limit = { has_country_leader = { character = WRK_Anton_Bagley } }
+		promote_character = {
+			character = WRK_Anton_Bagley
 			ideology = utilitarian_accelerationism
-			expire = "2200.1.1.1"
-			traits = { Emergency_Powers }
+		}
+	}
+	else = {
+		add_country_leader_role = {
+			character = WRK_Anton_Bagley
+			promote_leader = yes
+			country_leader = {
+				ideology = utilitarian_accelerationism
+				expire = "2200.1.1.1"
+				traits = { Emergency_Powers }
+			}
 		}
 	}
 }
@@ -8393,15 +8405,23 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 	set_politics = { ruling_party = pragmatism elections_allowed = no }
 	if = {
 		limit = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+		clr_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
 		promote_character = {
 			character = WRK_Nikita_Worcker
 			ideology = neo_vorkerism
 		}
 	}
 	else = {
+		# Persist the authored Anton outcome independently of the leader cache.
+		# Reunification verification happens on the next tick, when a transferred
+		# character role can otherwise briefly fail a ruling-leader check.
+		set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
 		set_cosmetic_tag = WRK_vorkerland_utilitarian_republic
-		# The leader role must exist before the government flips to utilitarism;
-		# otherwise the generated-leader fallback can win the race.
+		if = {
+			limit = { NOT = { has_character = WRK_Anton_Bagley } }
+			recruit_character = WRK_Anton_Bagley
+		}
+		# The leader role must exist before the government flips to utilitarism.
 		ADISCORD_vorkerland_promote_anton_bagley = yes
 		set_politics = { ruling_party = utilitarism elections_allowed = no }
 	}
@@ -8769,8 +8789,13 @@ ADISCORD_vorkerland_finalize_reunified_wrk = {
 			# reunification. The old fate flag can drift in repaired saves.
 			if = {
 				limit = {
-					has_government = utilitarism
-					has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+					OR = {
+						has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
+						AND = {
+							has_government = utilitarism
+							has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+						}
+					}
 				}
 				ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes
 			}
