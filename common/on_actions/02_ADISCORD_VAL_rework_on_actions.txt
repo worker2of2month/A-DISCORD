@@ -97,6 +97,16 @@ on_actions = {
 			}
 			if = {
 				limit = {
+					VAL = { exists = yes has_capitulated = no is_subject = no }
+					OR = {
+						ROOT = { is_subject_of = VAL }
+						FROM = { is_subject_of = VAL }
+					}
+				}
+				VAL = { VAL_call_subjects_to_wars = yes }
+			}
+			if = {
+				limit = {
 					OR = {
 						ROOT = { tag = VAL }
 						FROM = { tag = VAL }
