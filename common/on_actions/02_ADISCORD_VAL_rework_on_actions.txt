@@ -1,6 +1,19 @@
 on_actions = {
 	on_daily_VAL = {
 		effect = {
+			# One-time schema reload for saves created while inner frontier focuses
+			# were omitted by allow_branch caching. keep_completed preserves the
+			# player's finished path; the reload only rebuilds the current VAL tree.
+			if = {
+				limit = {
+					has_focus_tree = VAL_focus
+					has_completed_focus = VAL_frontier_treaty_offices
+					NOT = { has_country_flag = VAL_frontier_focus_tree_schema_v3 }
+				}
+				set_country_flag = VAL_frontier_focus_tree_schema_v3
+				load_focus_tree = { tree = VAL_focus keep_completed = yes }
+				mark_focus_tree_layout_dirty = yes
+			}
 			VAL_contract_reconcile = yes
 			VAL_resource_aid_daily = yes
 			VAL_northern_aid_daily = yes

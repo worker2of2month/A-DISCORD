@@ -231,6 +231,16 @@ class KefreytFocusStagingTests(unittest.TestCase):
             self.assertNotIn(focus_id, staged)
         self.assertGreaterEqual(len(staged), 50)
 
+    def test_affected_saves_reload_the_val_tree_once(self) -> None:
+        daily = named_block(self.on_actions, "on_daily_VAL")
+        self.assertIn("has_focus_tree = VAL_focus", daily)
+        self.assertIn("has_completed_focus = VAL_frontier_treaty_offices", daily)
+        self.assertIn("NOT = { has_country_flag = VAL_frontier_focus_tree_schema_v3 }", daily)
+        self.assertIn("set_country_flag = VAL_frontier_focus_tree_schema_v3", daily)
+        self.assertIn("load_focus_tree = { tree = VAL_focus keep_completed = yes }", daily)
+        self.assertIn("mark_focus_tree_layout_dirty = yes", daily)
+        self.assertEqual(daily.count("load_focus_tree = { tree = VAL_focus keep_completed = yes }"), 1)
+
     def test_focus_completion_refreshes_dynamic_layout(self) -> None:
         hook = named_block(self.on_actions, "on_focus_completed")
         self.assertIn("tag = VAL", hook)
