@@ -787,13 +787,17 @@ VAL_occidian_administration_secured = {
 		45 = { NOT = { is_owned_by = OCA } }
 		45 = { is_owned_by = OCA is_controlled_by = OCA }
 	}
+	OR = {
+		46 = { NOT = { is_owned_by = OCA } }
+		46 = { is_owned_by = OCA is_controlled_by = OCA }
+	}
 }
 
 # COUNTRY: annexation may transfer the army only when it cannot seize other land.
 VAL_only_occidian_states = {
 	NOT = {
 		any_owned_state = {
-			NOT = { OR = { state = 43 state = 44 state = 45 state = 88 } }
+			NOT = { OR = { state = 43 state = 44 state = 45 state = 46 state = 88 } }
 		}
 	}
 }
