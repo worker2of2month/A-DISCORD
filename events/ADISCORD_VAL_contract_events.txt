@@ -1220,10 +1220,13 @@ country_event = {
                 is_debug = yes
                 has_capitulated = no
                 is_subject = no
+                is_in_faction = no
                 NOT = { has_war_with = NOD }
                 STS = {
                     exists = yes
                     has_capitulated = no
+                    is_subject = no
+                    is_in_faction = no
                     has_war_with = NOD
                     has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
                 }
@@ -1233,14 +1236,7 @@ country_event = {
                     has_war_with = STS
                 }
             }
-            set_country_flag = VAL_joint_nod_campaign_with_sts
-            add_to_war = {
-                targeted_alliance = STS
-                enemy = NOD
-                hostility_reason = asked_to_join
-                single_target_only = yes
-            }
-            VAL_call_subjects_to_wars = yes
+            VAL_begin_joint_nod_shabrat_campaign = yes
         }
     }
 }
