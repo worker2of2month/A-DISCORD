@@ -207,7 +207,15 @@ on_actions = {
                     limit = {
                         OR = { tag = STP tag = STS tag = NOD }
                         has_war_with = VAL
-                        VAL = { exists = yes has_capitulated = no VAL_frontier_idle = yes }
+                        VAL = { exists = yes has_capitulated = no }
+                        OR = {
+                            VAL = { VAL_frontier_idle = yes }
+                            AND = {
+                                tag = NOD
+                                VAL = { check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals } }
+                            }
+                            has_country_flag = VAL_final_war_member
+                        }
                         NOT = {
                             AND = {
                                 tag = NOD
