@@ -655,10 +655,10 @@
  VAL_contract_board_next_wait_export:0 "§YProcessing:§! all export desks are occupied. They reopen after current shipments clear."
  VAL_contract_board_next_build_stock:0 "Build a reserve of at least £infantry_equipment_texticon §Y25000§! rifles to use the foreign arms market."
  VAL_contract_board_next_choose:0 "§GReady for business:§! choose an available agreement below. Disabled actions state exactly what is missing."
- VAL_contract_board_lot_25k:0 "£infantry_equipment_texticon §Y25000§! for £ADISCORD_economy_treasury_texticon §G500§!"
- VAL_contract_board_lot_50k:0 "£infantry_equipment_texticon §Y50000§! for £ADISCORD_economy_treasury_texticon §G1000§!"
- VAL_contract_board_lot_100k:0 "£infantry_equipment_texticon §Y100000§! for £ADISCORD_economy_treasury_texticon §G2250§!"
- VAL_contract_board_lot_200k:0 "£infantry_equipment_texticon §Y200000§! for £ADISCORD_economy_treasury_texticon §G5000§!"
+ VAL_contract_board_lot_25k:0 "§Y25000§! £infantry_equipment_texticon for §G500§! £ADISCORD_economy_treasury_texticon"
+ VAL_contract_board_lot_50k:0 "§Y50000§! £infantry_equipment_texticon for §G1000§! £ADISCORD_economy_treasury_texticon"
+ VAL_contract_board_lot_100k:0 "§Y100000§! £infantry_equipment_texticon for §G2250§! £ADISCORD_economy_treasury_texticon"
+ VAL_contract_board_lot_200k:0 "§Y200000§! £infantry_equipment_texticon for §G5000§! £ADISCORD_economy_treasury_texticon"
  VAL_contract_board_lot_none:0 "§Rno marketable lot in stock§!"
 
  VAL_export_income_1: "Active Arms Contract"
@@ -1700,7 +1700,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_sign_annual_trade:0 "Trade agreement: [FROM.GetName]"
 
- VAL_sign_annual_trade_desc:0 "§YTRADE AGREEMENT§!\nPartner: §Y[FROM.GetNameDef]§!\nDuration: §Y365 days§!\nKefreyt income: £ADISCORD_economy_treasury_texticon §G+[VALTradeDecisionIncome]§! / week\nPartner income: £ADISCORD_economy_treasury_texticon §G+1§! / week\nCost: §Y100§! £political_power_texticon\n\nRefusal, no response or invalidation refunds the fee. An accepted agreement leaves the Board until it expires."
+ VAL_sign_annual_trade_desc:0 "§YTRADE AGREEMENT§!\nPartner: §Y[FROM.GetNameDef]§!\nDuration: §Y365 days§!\nKefreyt income: §G+[VALTradeDecisionIncome]§! £ADISCORD_economy_treasury_texticon / week\nPartner income: §G+1§! £ADISCORD_economy_treasury_texticon / week\nCost: §Y100§! £political_power_texticon\n\nRefusal, no response or invalidation refunds the fee. An accepted agreement leaves the Board until it expires."
 
  VAL_trade_decision_terms_tt:0 "Offer an annual trade agreement. The decision already pays the fee: acceptance has no further charge; refusal refunds it."
 
@@ -1712,7 +1712,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_hire_partner_volunteers:0 "Recruit volunteers: [FROM.GetName]"
 
- VAL_hire_partner_volunteers_desc:0 "§YRECRUITMENT CONTRACT§!\nPartner: §Y[FROM.GetNameDef]§!\nReceive: £manpower_texticon §G[VALHireDecisionPeople]§!\nPrice: £ADISCORD_economy_treasury_texticon §Y[VALHireDecisionPrice]§!\nSettlement: §Yafter acceptance§!\nRepeat: §Y365 days after settlement§!\n\nThe price is reserved when the offer is sent. Refusal, expiry or failed conditions return the reserve."
+ VAL_hire_partner_volunteers_desc:0 "§YRECRUITMENT CONTRACT§!\nPartner: §Y[FROM.GetNameDef]§!\nReceive: §G[VALHireDecisionPeople]§! £manpower_texticon\nPrice: §Y[VALHireDecisionPrice]§! £ADISCORD_economy_treasury_texticon\nSettlement: §Yafter acceptance§!\nRepeat: §Y365 days after settlement§!\n\nThe price is reserved when the offer is sent. Refusal, expiry or failed conditions return the reserve."
 
  VAL_hire_funds_tt:0 "Kefreyt has £ADISCORD_economy_treasury_texticon [VALHireDecisionPrice] treasury."
 
