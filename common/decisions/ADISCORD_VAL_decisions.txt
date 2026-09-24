@@ -931,12 +931,31 @@ VAL_rework_debug = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
 		targets = { ERT IRT }
-		target_trigger = { FROM = { exists = yes } }
-		visible = { FROM = { OR = { tag = ERT tag = IRT } } }
-		available = { FROM = { has_capitulated = yes has_war_with = ROOT } }
+		target_trigger = {
+			FROM = { exists = yes }
+		}
+		visible = {
+			FROM = {
+				OR = {
+					tag = ERT
+					tag = IRT
+				}
+			}
+		}
+		available = {
+			FROM = {
+				has_capitulated = yes
+				has_war_with = ROOT
+			}
+		}
 		cost = 0
 		fire_only_once = no
-		complete_effect = { FROM = { VAL_settle_wasteland_capitulation = yes } }
+		complete_effect = {
+			FROM = { VAL_settle_wasteland_capitulation = yes }
+			# Native capitulation routing normally releases this reservation.
+			# A manual debug settlement executes outside that callback.
+			clr_global_flag = skip_default_capitulation
+		}
 		ai_will_do = { factor = 0 }
 	}
 
