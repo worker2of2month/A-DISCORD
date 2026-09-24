@@ -145,3 +145,9 @@ music = {
 	file = "ADISCORD_last_warrior_dead_land.ogg"
 	volume = 0.65
 }
+
+music = {
+	name = "ADISCORD_le_meilleur_est_a_venir"
+	file = "ADISCORD_le_meilleur_est_a_venir.ogg"
+	volume = 0.65
+}
