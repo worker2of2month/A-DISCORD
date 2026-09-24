@@ -3881,7 +3881,6 @@ VAL_begin_joint_nod_shabrat_campaign = {
 			}
 		}
 		set_country_flag = VAL_joint_nod_campaign_with_sts
-		NOD = { set_country_flag = VAL_joint_nod_defeat_pending }
 		if = {
 			limit = { NOT = { is_in_faction_with = STS } }
 			create_faction_from_template = {
@@ -4670,14 +4669,25 @@ VAL_debug_force_nodrul_victory = {
 			is_subject = no
 			NOD = { exists = yes has_war_with = VAL }
 		}
-		set_variable = { var = VAL_final_crisis_phase value = 2 }
-		NOD = {
-			set_country_flag = VAL_final_war_member
-			set_country_flag = VAL_final_defeat_pending
-			set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+		if = {
+			limit = {
+				has_country_flag = VAL_joint_nod_campaign_with_sts
+				NOT = { has_country_flag = VAL_joint_nod_shabrat_partition_completed }
+				STS = { exists = yes has_war_with = NOD has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } }
+			}
+			NOD = { set_country_flag = VAL_joint_nod_defeat_pending }
+			VAL_settle_joint_nod_shabrat_victory = yes
 		}
-		VAL_finalize_reserved_settlements = yes
-		NOD = { clr_country_flag = VAL_final_capitulation_immediate }
+		else = {
+			set_variable = { var = VAL_final_crisis_phase value = 2 }
+			NOD = {
+				set_country_flag = VAL_final_war_member
+				set_country_flag = VAL_final_defeat_pending
+				set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+			}
+			VAL_finalize_reserved_settlements = yes
+			NOD = { clr_country_flag = VAL_final_capitulation_immediate }
+		}
 	}
 }
 
@@ -4691,8 +4701,10 @@ VAL_debug_force_current_war_victory = {
 	else_if = {
 		limit = {
 			has_country_flag = VAL_joint_nod_campaign_with_sts
+			NOT = { has_country_flag = VAL_joint_nod_shabrat_partition_completed }
 			NOD = { exists = yes has_war_with = VAL has_war_with = STS }
 		}
+		NOD = { set_country_flag = VAL_joint_nod_defeat_pending }
 		VAL_settle_joint_nod_shabrat_victory = yes
 	}
 	else = {
