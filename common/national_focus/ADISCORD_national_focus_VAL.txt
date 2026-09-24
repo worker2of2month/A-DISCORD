@@ -2248,6 +2248,7 @@ focus_tree = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_occidian_claims_victory_tt
 				VAL_occidia_secured = yes
+				NOT = { has_country_flag = VAL_cw_livonn_settlement_pending }
 			}
 		}
 		cancel_if_invalid = yes
