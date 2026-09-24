@@ -4532,7 +4532,8 @@ STP_close_competing_ultimatum_wars_after_defeat = {
 	}
 }
 
-# STS: freeze the occupier snapshot and close only that pair.
+# STS: freeze the occupier snapshot. Victories close only the defeated pair;
+# a Stelander defeat also closes a second live VAL/NOD ultimatum through the shared cleanup.
 # Liberation victories are recorded here; later focuses keep optional neighbor terms.
 STP_pc_begin_settlement = {
 	if = {
