@@ -669,6 +669,7 @@ ADISCORD_scenario_debug_category = {
 				has_war_with = NOD
 				NOD = {
 					OR = {
+						has_capitulated = yes
 						has_country_flag = VAL_final_defeat_pending
 						has_country_flag = VAL_final_capitulation_immediate
 						has_country_flag = VAL_nodrul_administration_pending
@@ -679,8 +680,24 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			if = {
+				limit = {
+					NOD = {
+						exists = yes
+						has_capitulated = yes
+						NOT = { is_subject_of = VAL }
+					}
+				}
+				set_variable = { var = VAL_final_crisis_phase value = 2 }
+				NOD = {
+					set_country_flag = VAL_final_war_member
+					set_country_flag = VAL_final_defeat_pending
+					set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+				}
+			}
 			VAL_final_crisis_reconcile = yes
 			VAL_finalize_reserved_settlements = yes
+			NOD = { clr_country_flag = VAL_final_capitulation_immediate }
 		}
 		ai_will_do = { factor = 0 }
 	}
