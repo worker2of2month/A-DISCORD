@@ -3957,30 +3957,47 @@ class ValExpandedCampaignTests(unittest.TestCase):
 
 
 
-    def test_joint_shabrat_nod_campaign_uses_one_war_and_controlled_settlement(self):
+    def test_joint_shabrat_nod_campaign_uses_one_war_and_deterministic_partition(self):
         decisions = DECISIONS_PATH.read_text(encoding="utf-8")
         campaign = named_block_spans(decisions, "VAL_campaign_against_nod")[0].text
-        self.assertIn("set_country_flag = VAL_joint_nod_campaign_with_sts", campaign)
-        self.assertIn("targeted_alliance = STS enemy = NOD", campaign)
+        self.assertIn("VAL_begin_joint_nod_shabrat_campaign = yes", campaign)
+        self.assertIn("VAL_joint_nod_shabrat_partition_completed", campaign)
         self.assertIn("character = STP_maksim_shabrat ruling_only = yes", campaign)
         self.assertIn("STP_cw_release_tff_to_northern_war = yes", campaign)
 
-        settlement = named_block_spans(EFFECTS_PATH.read_text(encoding="utf-8"),
-                                       "VAL_settle_joint_nod_shabrat_victory")[0].text
-        for state in ("10", "11", "12", "13", "17", "18", "30"):
-            self.assertIn(f"{state} = {{", settlement)
-            self.assertIn(f"VAL = {{ transfer_state = {state} }}", settlement)
+        effects = EFFECTS_PATH.read_text(encoding="utf-8")
+        begin = named_block_spans(effects, "VAL_begin_joint_nod_shabrat_campaign")[0].text
+        self.assertIn("create_faction_from_template", begin)
+        self.assertIn("template = faction_template_ADISCORD_standard", begin)
+        self.assertIn("name = VAL_stelander_equal_alliance_name", begin)
+        self.assertIn("add_to_faction = STS", begin)
+        self.assertIn("targeted_alliance = STS", begin)
+        self.assertIn("enemy = NOD", begin)
+
+        settlement = named_block_spans(effects, "VAL_settle_joint_nod_shabrat_victory")[0].text
+        for state in ("10", "11", "12", "30"):
             self.assertIn(f"STS = {{ transfer_state = {state} }}", settlement)
-        self.assertIn("STP_pc_begin_settlement = yes", settlement)
-        self.assertIn("white_peace = VAL", settlement)
-        self.assertNotIn("VAL_install_nodrul_administration", settlement)
+        self.assertNotIn("STS = { transfer_state = 13 }", settlement)
+        self.assertIn("VAL_snapshot_joint_nodrul_settlement = yes", settlement)
+        self.assertIn("VAL_partition_nodrul_settlement = yes", settlement)
+        self.assertIn("VAL_prepare_nodrul_administration = yes", settlement)
+        self.assertIn("VAL_joint_nod_shabrat_partition_completed", settlement)
+        self.assertIn("VAL_release_joint_nod_shabrat_alliance = yes", settlement)
+        self.assertNotIn("STP_pc_begin_settlement = yes", settlement)
+
+        joint_snapshot = named_block_spans(effects, "VAL_snapshot_joint_nodrul_settlement")[0].text
+        for state in ("17", "18"):
+            self.assertIn(f"{state} = {{", joint_snapshot)
+        self.assertNotIn("13 = {", joint_snapshot)
+
+        partition = named_block_spans(effects, "VAL_partition_nodrul_settlement")[0].text
+        self.assertIn("NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }", partition)
 
         source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text()
         immediate = source.split("# BEGIN kefreyt:on_capitulation_immediate", 1)[1].split("# END kefreyt:on_capitulation_immediate", 1)[0]
-        self.assertLess(immediate.index("VAL_settle_joint_nod_shabrat_victory = yes"),
-                        immediate.index("set_country_flag = VAL_final_defeat_pending"))
-        self.assertIn("has_country_flag = VAL_joint_nod_campaign_with_sts", immediate)
-        self.assertIn("has_war_with = STS", immediate)
+        self.assertIn("set_country_flag = VAL_joint_nod_defeat_pending", immediate)
+        self.assertIn("VAL_settle_joint_nod_shabrat_victory = yes", immediate)
+        self.assertNotIn("ROOT = { tag = NOD has_war_with = VAL has_war_with = STS }", immediate)
 
     def test_final_settlement_waits_for_allies_and_rejects_liberation(self):
         facts = {
