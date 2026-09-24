@@ -1,19 +1,6 @@
 on_actions = {
 	on_daily_VAL = {
 		effect = {
-			# One-time schema reload for saves created while inner frontier focuses
-			# were omitted by allow_branch caching. keep_completed preserves the
-			# player's finished path; the reload only rebuilds the current VAL tree.
-			if = {
-				limit = {
-					has_focus_tree = VAL_focus
-					has_completed_focus = VAL_frontier_treaty_offices
-					NOT = { has_country_flag = VAL_frontier_focus_tree_schema_v3 }
-				}
-				set_country_flag = VAL_frontier_focus_tree_schema_v3
-				load_focus_tree = { tree = VAL_focus keep_completed = yes }
-				mark_focus_tree_layout_dirty = yes
-			}
 			VAL_contract_reconcile = yes
 			VAL_resource_aid_daily = yes
 			VAL_northern_aid_daily = yes
@@ -54,40 +41,6 @@ on_actions = {
 					VAL_check_nam_concession = yes VAL_check_efl_concession = yes
 				}
 			}
-			# Save migration for campaigns affected by the old frontier post-peace
-			# ordering bug. The broken path already closed stage 3 before delivering
-			# its victory settlement, but retained the quoted tribal target and land.
-			if = {
-				limit = { NOT = { has_global_flag = ADISCORD_val_frontier_postpeace_fix_v1 } }
-				if = {
-					limit = {
-						VAL = {
-							exists = yes
-							has_completed_focus = VAL_frontier_security_plan
-							check_variable = { var = VAL_frontier_stage value = 0 compare = equals }
-							OR = {
-								check_variable = { var = VAL_frontier_target value = 1 compare = equals }
-								check_variable = { var = VAL_frontier_target value = 2 compare = equals }
-								check_variable = { var = VAL_frontier_target value = 3 compare = equals }
-							}
-							NOT = { has_country_flag = VAL_frontier_treaty_signed }
-							NOT = { has_country_flag = VAL_frontier_armistice_signed }
-							NOT = { has_country_flag = VAL_frontier_expansion_deferred }
-							VAL_cannibal_sphere_secured = yes
-							VAL_can_form_northern_administration = yes
-						}
-					}
-					VAL = {
-						set_country_flag = VAL_frontier_treaty_signed
-						VAL_form_northern_administration = yes
-						add_stability = 0.05
-						if = { limit = { has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes }
-						country_event = { id = val_rework.115 hours = 1 }
-					}
-				}
-				set_global_flag = ADISCORD_val_frontier_postpeace_fix_v1
-			}
-
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_fresh_campaign_contract_v1
