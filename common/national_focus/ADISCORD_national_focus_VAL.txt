@@ -3159,7 +3159,8 @@ focus_tree = {
 		y = 4
 		cost = 3
 		allow_branch = {
-			has_completed_focus = VAL_Ministry_Auditors ADISCORD_nam_resource_war_active = yes }
+			ADISCORD_nam_resource_war_active = yes
+		}
 		available = { custom_trigger_tooltip = { tooltip = VAL_resource_war_active_tt ADISCORD_nam_resource_war_active = yes } }
 		cancel_if_invalid = yes
 		prerequisite = { focus = VAL_Ministry_Auditors }
