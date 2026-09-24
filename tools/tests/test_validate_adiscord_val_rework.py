@@ -4446,7 +4446,12 @@ class ValExpandedCampaignTests(unittest.TestCase):
         claims = focuses["VAL_Occidian_Claims_Commission"]
         self.assertEqual(self.scalar(claims, "cost"), "3")
         self.assertEqual(self.scalar(claims, "cancel_if_invalid"), "yes")
-        self.assertIn("VAL_occidia_secured", [e.key for e in walk(self.getblock(claims, "available"))])
+        claims_available = self.getblock(claims, "available")
+        self.assertIn("VAL_occidia_secured", [e.key for e in walk(claims_available)])
+        self.assertIn(
+            "VAL_cw_livonn_settlement_pending",
+            [e.value for e in walk(claims_available) if e.key == "has_country_flag"],
+        )
         reward = self.getblock(claims, "completion_reward")
         for state_id in ("43", "44", "88"):
             state = next(e.value for e in reward if e.key == state_id)
