@@ -3245,13 +3245,27 @@ VAL_cw_stage_livonn_settlement = {
 			limit = { NOT = { 45 = { is_owned_by = OCA is_controlled_by = OCA } } }
 			VAL_form_occidian_administration = yes
 		}
+
+		# Do not resolve Livonn before the Stelander civil-war winner is known.
+		# STP_cw_check_union_wars_finished calls this effect again when the flag is set.
 		if = {
-			limit = { 45 = { is_owned_by = OCA is_controlled_by = OCA } }
+			limit = {
+				has_global_flag = STP_cw_union_wars_finished
+				45 = { is_owned_by = OCA is_controlled_by = OCA }
+			}
 			set_country_flag = VAL_cw_livonn_settlement_staged
 			if = {
 				limit = {
-					45 = { has_state_flag = STP_local_deal_asset }
-					STS = { exists = yes has_capitulated = no }
+					OR = {
+						AND = {
+							45 = { has_state_flag = STP_local_deal_asset }
+							STS = { STP_pw_can_reconstruct = yes }
+						}
+						STP = {
+							STP_pw_can_reconstruct = yes
+							has_country_flag = STP_sided_with_the_party_flag
+						}
+					}
 				}
 				set_country_flag = VAL_cw_livonn_settlement_pending
 			}
@@ -3268,19 +3282,45 @@ VAL_cw_honor_livonn_agreement = {
 		limit = {
 			tag = VAL
 			has_country_flag = VAL_cw_livonn_settlement_pending
-			45 = {
-				is_owned_by = OCA
-				is_controlled_by = OCA
-				has_state_flag = STP_local_deal_asset
-			}
+			45 = { is_owned_by = OCA is_controlled_by = OCA }
 			OCA = { exists = yes is_subject_of = VAL }
-			STS = { exists = yes has_capitulated = no }
+			OR = {
+				AND = {
+					45 = { has_state_flag = STP_local_deal_asset }
+					STS = { STP_pw_can_reconstruct = yes }
+				}
+				STP = {
+					STP_pw_can_reconstruct = yes
+					has_country_flag = STP_sided_with_the_party_flag
+				}
+			}
 		}
-		STS = { transfer_state = 45 }
-		45 = { remove_core_of = OCA set_state_controller_to = STS }
+
+		if = {
+			limit = {
+				45 = { has_state_flag = STP_local_deal_asset }
+				STS = { STP_pw_can_reconstruct = yes }
+			}
+			STS = { transfer_state = 45 }
+			45 = { remove_core_of = OCA set_state_controller_to = STS }
+			set_country_flag = VAL_cw_livonn_agreement_honored
+			clr_country_flag = VAL_cw_livonn_returned_to_party
+		}
+		else_if = {
+			limit = {
+				STP = {
+					STP_pw_can_reconstruct = yes
+					has_country_flag = STP_sided_with_the_party_flag
+				}
+			}
+			STP = { transfer_state = 45 }
+			45 = { remove_core_of = OCA set_state_controller_to = STP }
+			set_country_flag = VAL_cw_livonn_returned_to_party
+			clr_country_flag = VAL_cw_livonn_agreement_honored
+		}
+
 		clr_country_flag = VAL_cw_livonn_settlement_pending
 		set_country_flag = VAL_cw_livonn_settlement_resolved
-		set_country_flag = VAL_cw_livonn_agreement_honored
 		clr_country_flag = VAL_cw_livonn_retained
 		OCA = { ADISCORD_economy_mark_dirty = yes }
 		VAL_reconcile_occidian_resource_rights = yes
