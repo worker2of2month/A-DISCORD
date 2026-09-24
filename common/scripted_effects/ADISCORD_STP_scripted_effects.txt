@@ -3745,6 +3745,7 @@ STP_cw_check_union_wars_finished = {
 			NOT = { STP = { has_war_with = STS } }
 		}
 		set_global_flag = STP_cw_union_wars_finished
+		VAL = { if = { limit = { exists = yes } VAL_cw_stage_livonn_settlement = yes } }
 		STS = { remove_mission = STP_cw_take_fada }
 		STP = {
 			remove_mission = STP_cw_hold_fada
