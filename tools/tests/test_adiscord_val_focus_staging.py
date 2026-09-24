@@ -184,7 +184,9 @@ class KefreytFocusStagingTests(unittest.TestCase):
 
         resource = allow(self.focuses, "VAL_Resource_War_Contracts")
         self.assertIn("ADISCORD_nam_resource_war_active = yes", resource)
-        self.assertIn("has_completed_focus = VAL_Ministry_Auditors", resource)
+        self.assertNotIn("has_completed_focus =", resource)
+        root = focus_block(self.focuses, "VAL_Resource_War_Contracts")
+        self.assertIn("prerequisite = { focus = VAL_Ministry_Auditors }", root)
 
         vorkerland = allow(self.focuses, "VAL_Vorkerland_Contracts_Burn")
         self.assertIn("ADISCORD_vorkerland_collapse_wars_started", vorkerland)
