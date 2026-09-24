@@ -68,7 +68,7 @@
  ADISCORD_debug_war_frontier_with_nod: "§RDEBUG:§! Scenario: Frontier War + Nodrul Intervention"
  ADISCORD_debug_war_frontier_with_nod_desc: "Starts the selected northern tribal campaign through Kefreyt's real Frontier war code and pre-marks Nodrul's deadline as expired. The normal delayed war-entry callback then brings Nodrul in as guarantor."
  ADISCORD_debug_war_val_join_sts_nod: "§RDEBUG:§! Scenario: Shabrat + Kefreyt vs Nodrul"
- ADISCORD_debug_war_val_join_sts_nod_desc: "Starts Shabrat's war against Nodrul, then one hour later joins Kefreyt to THE SAME WAR through the real joint-campaign add_to_war route. This tests the dedicated shared Nodrul settlement."
+ ADISCORD_debug_war_val_join_sts_nod_desc: "Starts Shabrat's war against Nodrul, then one hour later forms the temporary Kefreyt-Stelander wartime alliance and joins Kefreyt to THE SAME WAR. Victory tests the special first-war partition: Shabrat receives the south and Kefreyt keeps the north as contract administrations."
  ADISCORD_debug_war_val_vs_nod: "§RDEBUG:§! Scenario: Kefreyt vs Nodrul"
  ADISCORD_debug_war_val_vs_nod_desc: "Starts a standalone final-campaign war between Kefreyt and Nodrul after Stelander has already been brought into Kefreyt's sphere. Nodrul is registered through the real final-campaign settlement system."
  ADISCORD_debug_war_val_nod_victory: "§RDEBUG:§! Finish Nodrul War: Kefreyt Victory"
