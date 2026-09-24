@@ -3940,16 +3940,25 @@ VAL_install_stelander_administration = {
 VAL_cede_stelander_border = {
     if = {
         limit = { is_subject_of = VAL has_cosmetic_tag = STL_VAL_administration }
-        # Hosheit is the administration's northern coastal district. If Kefreyt
-        # temporarily received it during the settlement, hand it back to the client.
+        # Hosheit becomes an additional Occidian district when OCA already
+        # exists under Kefreyt. Otherwise keep the old direct-VAL fallback.
         46 = {
             if = {
                 limit = {
-                    OR = { is_owned_by = ROOT is_owned_by = VAL }
-                    OR = { is_controlled_by = ROOT is_controlled_by = VAL }
+                    OR = { is_owned_by = PREV is_owned_by = VAL }
+                    OR = { is_controlled_by = PREV is_controlled_by = VAL }
                 }
-                ROOT = { transfer_state = 46 }
-                set_state_controller_to = ROOT
+                if = {
+                    limit = { OCA = { exists = yes is_subject_of = VAL has_capitulated = no } }
+                    OCA = { transfer_state = 46 }
+                    add_core_of = OCA
+                    set_state_controller_to = OCA
+                    VAL = { VAL_reconcile_occidian_resource_rights = yes }
+                }
+                else = {
+                    VAL = { transfer_state = 46 }
+                    set_state_controller_to = VAL
+                }
             }
         }
         # Kreyden remains the direct Kefreyt border concession.
@@ -3961,6 +3970,7 @@ VAL_cede_stelander_border = {
             }
         }
         ADISCORD_economy_mark_dirty = yes
+        OCA = { if = { limit = { exists = yes } ADISCORD_economy_mark_dirty = yes } }
         VAL = { ADISCORD_economy_mark_dirty = yes }
     }
 }
