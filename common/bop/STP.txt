@@ -48,28 +48,28 @@ STP_shabrat_election_legitimacy = {
 
 		range = {
 			id = STP_shabrat_election_low_control_range
-			on_activate = { effect_tooltip = { swap_ideas = { remove_idea = STP_cw_mandate_dummy_idea add_idea = STP_cw_mandate_majority_idea } } }
+			on_activate = { custom_effect_tooltip = STP_cw_bop_shabrat_majority_preview_tt }
 			min = 0.10
 			max = 0.30
 		}
 
 		range = {
 			id = STP_shabrat_election_medium_control_range
-			on_activate = { effect_tooltip = { swap_ideas = { remove_idea = STP_cw_mandate_dummy_idea add_idea = STP_cw_mandate_majority_idea } } }
+			on_activate = { custom_effect_tooltip = STP_cw_bop_shabrat_majority_preview_tt }
 			min = 0.30
 			max = 0.55
 		}
 
 		range = {
 			id = STP_shabrat_election_high_control_range
-			on_activate = { effect_tooltip = { swap_ideas = { remove_idea = STP_cw_mandate_dummy_idea add_idea = STP_cw_mandate_strong_idea } } }
+			on_activate = { custom_effect_tooltip = STP_cw_bop_shabrat_strong_preview_tt }
 			min = 0.55
 			max = 0.80
 		}
 
 		range = {
 			id = STP_shabrat_election_total_control_range
-			on_activate = { effect_tooltip = { swap_ideas = { remove_idea = STP_cw_mandate_dummy_idea add_idea = STP_cw_mandate_strong_idea } } }
+			on_activate = { custom_effect_tooltip = STP_cw_bop_shabrat_strong_preview_tt }
 			min = 0.80
 			max = 1.00
 		}
