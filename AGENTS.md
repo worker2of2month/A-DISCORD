@@ -96,7 +96,11 @@ scripted routes; ordinary diplomatic UI is not an available fallback.
 Use the existing NCNS faction template for scripted alliance creation. A coalition war must add allies to the intended side of the same war. If every member must be defeated, give mandatory-major status only for that campaign and clear it on every terminal path; a liberated member must block a final settlement again.
 
 Prefer native effect output and `unlock_decision_tooltip` for rewards and
-decision unlocks. Combine rewards when they support the same player action:
+decision unlocks. In national focuses, an ordinary decision unlock stays compact:
+use `unlock_decision_tooltip = <id>` and keep the decision's price, duration,
+conditions and full effect inside the decision. Do not inline `show_effect_tooltip = yes`
+or duplicate `<decision>_desc` there; add at most one short contextual tooltip only
+when the unlock name is insufficient. Combine rewards when they support the same player action:
 persistent capability, immediate result, and a paid follow-up are useful
 partners; arbitrary bonus padding is not. Reserve custom tooltips for unique
 mechanics, delayed results, and recipient or cost conditions that native output
