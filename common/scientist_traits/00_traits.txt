@@ -1,1 +1,46 @@
-# A-Discord total-conversion override: vanilla scientist traits require disabled special project tags.
+# A-Discord keeps vanilla special-project tags/projects disabled.
+# Retain only generic scientist traits that do not reference project tags.
+# This gives generated scientists a valid trait pool without re-enabling
+# vanilla special-project content.
+
+scientist_trait_genius = {
+	icon = GFX_scientist_trait_genius
+	modifier = {
+		special_project_speed_factor = 0.1
+		scientist_breakthrough_bonus_factor = 0.05
+		scientist_research_bonus_factor = 0.05
+	}
+}
+
+scientist_trait_brilliant_theorist = {
+	modifier = {
+		special_project_speed_factor = 0.05
+		scientist_breakthrough_bonus_factor = 0.02
+	}
+}
+
+scientist_trait_gifted_engineer = {
+	modifier = {
+		special_project_speed_factor = 0.05
+		scientist_research_bonus_factor = 0.02
+	}
+}
+
+scientist_trait_bright = {
+	modifier = {
+		special_project_speed_factor = 0.05
+		scientist_xp_gain_factor = 0.05
+	}
+}
+
+scientist_trait_fast_learner = {
+	modifier = {
+		scientist_xp_gain_factor = 0.1
+	}
+}
+
+scientist_trait_resourceful = {
+	modifier = {
+		special_project_facility_supply_consumption_factor = -0.1
+	}
+}
