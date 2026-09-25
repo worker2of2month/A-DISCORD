@@ -31,6 +31,16 @@ characters = {
 			traits = { RIN_last_palatin }
 		}
 	}
+	RIN_Northern_Court_Regency = {
+		name = RIN_Northern_Court_Regency
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_9 } }
+		country_leader = {
+			ideology = chauvinism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = RIN_Northern_Court_Regency_desc
+		}
+	}
 	KRM_Ivo_Kremen = {
 		name = KRM_Ivo_Kremen
 		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
