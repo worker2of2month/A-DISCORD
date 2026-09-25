@@ -1543,19 +1543,22 @@ VAL_southern_expansion_available = {
 	ERT = {
 		exists = yes
 		has_capitulated = no
-		is_subject = no
-		is_in_faction = no
+		NOT = { is_subject_of = VAL }
 	}
 	NOT = { has_war_with = ERT }
 }
 
 VAL_eastern_expansion_available = {
 	VAL_wasteland_administration_ready = yes
-	WCA = {
-		owns_state = 184
-		controls_state = 184
-		owns_state = 185
-		controls_state = 185
+	OR = {
+		WCA = {
+			owns_state = 184
+			controls_state = 184
+			owns_state = 185
+			controls_state = 185
+		}
+		NOT = { country_exists = ERT }
+		ERT = { is_subject_of = VAL }
 	}
 	NOT = {
 		has_war_with = ERT
@@ -1564,8 +1567,7 @@ VAL_eastern_expansion_available = {
 	IRT = {
 		exists = yes
 		has_capitulated = no
-		is_subject = no
-		is_in_faction = no
+		NOT = { is_subject_of = VAL }
 	}
 }
 
@@ -1588,6 +1590,7 @@ VAL_wasteland_capitulation_managed = {
 				OR = {
 					has_completed_focus = VAL_Return_Southern_Tsaygen
 					has_completed_focus = VAL_frontier_return_irem
+					has_completed_focus = VAL_Southern_Expansion
 				}
 			}
 		}

@@ -1286,8 +1286,8 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_wasteland_charter_tt:0 "State 169 forms the §YSouthern Contract Administration§! under Kefreyt. Irem remains directly governed by VAL."
  VAL_wasteland_charter_available_tt:0 "Kefreyt controls state 169, is not at war with Irem and has not created the Southern Contract Administration."
- VAL_southern_expansion_available_tt:0 "The Southern Contract Administration exists; Irem is ready for war and belongs to no foreign faction."
- VAL_eastern_expansion_available_tt:0 "The southern administration holds states 184 and 185; Irem is ready for war and Kefreyt has no conflicting frontier war."
+ VAL_southern_expansion_available_tt:0 "The Southern Contract Administration exists; Irem still exists, has not capitulated and is not already subordinate to Kefreyt."
+ VAL_eastern_expansion_available_tt:0 "The southern bridgehead is secured or Irem is already gone/subordinate; the eastern target still exists and Kefreyt has no conflicting frontier war."
  VAL_stelander_equal_pact_available_tt:0 "Kefreyt recognised Stelander as an equal partner; a peaceful eligible partner is available."
 
  WCA:0 "Southern Contract Administration"
