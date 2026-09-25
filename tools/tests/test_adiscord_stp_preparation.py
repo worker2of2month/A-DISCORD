@@ -3721,5 +3721,27 @@ class OccidiaLateInterventionTests(unittest.TestCase):
         self.assertEqual(scalar(annex, "target"), "SRP")
         self.assertEqual(scalar(annex, "transfer_troops"), "no")
 
+
+class OfficerContactsTooltipTests(unittest.TestCase):
+    def test_officer_contacts_focus_keeps_only_compact_unlock_previews(self):
+        tree = entries("common/national_focus/ADISCORD_national_focus_STP.txt")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        reward = block(focuses["STP_cw_officer_contacts"], "completion_reward")
+
+        unlocks = [e.value for e in reward if e.key == "unlock_decision_tooltip"]
+        self.assertEqual(
+            unlocks,
+            [
+                "STP_region_unique_operation_53",
+                "STP_region_unique_operation_2",
+                "STP_region_unique_operation_29",
+                "STP_cw_evacuate_garrison_officers",
+            ],
+        )
+        custom = [e.value for e in reward if e.key == "custom_effect_tooltip"]
+        self.assertEqual(custom, ["STP_cw_officers_tt", "STP_cw_pending_staff_tt"])
+
+
+
 if __name__ == "__main__":
     unittest.main()
