@@ -25,12 +25,42 @@ STARTING_SUPPLY_RAILS = {
 }
 # The western line must join the bunker without crossing a third country.
 # Hubs become available to RUS only after it captures the border objectives.
-KHAN_SUPPLY_RAIL = (1, (16531, 4870, 2298, 16544, 16546))
+KHAN_SUPPLY_RAIL = (2, (16531, 4870, 2298, 16544, 16546))
 KHAN_SUPPLY_STATES = frozenset({66, 49, 176})
 KHAN_SUPPLY_HUBS = (16531, 16639, 7445)
+# Level-2 operational spines through the six Dirty Zone belts. These routes
+# already exist physically; the generator owns their throughput so future map
+# regeneration cannot silently drop the Khan campaign logistics upgrade.
+KHAN_CAMPAIGN_RAIL_UPGRADES = (
+    (2, (16639, 16531)),
+    (2, (16546, 11010, 2558)),
+    (2, (16546, 16545, 7445, 4051, 5637, 10617, 11425, 8664, 5195, 9439, 16518)),
+    (2, (16639, 10563, 12635, 5961, 4899, 3728, 5780, 564, 7706, 876, 12361, 7164, 6196, 4580)),
+    (2, (16518, 11398, 2825, 2395, 2952, 9994, 1112, 16525, 16517)),
+    (2, (16511, 6519, 11913, 10693, 12878, 16526)),
+    (2, (6495, 6000, 5979, 6870, 9041, 910, 9308, 7567, 12366, 7178, 8981, 691, 7790, 6015, 11334, 7786, 16327, 1907, 16504, 16469)),
+    (2, (2741, 7650, 2743, 12231, 8535, 6669, 10977, 8259, 9031, 11334)),
+    (2, (2741, 5194, 6220, 6652, 10726, 8655, 11688, 10888, 5210)),
+)
 VORKERLAND_SUPPLY_HUB_STATES = {
-    16639: 49,
+    3728: 187,
+    5637: 191,
+    5780: 189,
+    6387: 330,
+    7164: 220,
+    7399: 213,
     7445: 176,
+    8655: 219,
+    8664: 193,
+    8981: 165,
+    9031: 166,
+    9846: 224,
+    11334: 173,
+    16516: 178,
+    16522: 171,
+    16534: 168,
+    16536: 203,
+    16639: 49,
     2539: 107,
     16643: 306,
     4148: 316,
@@ -53,20 +83,49 @@ def render_supply_connection(tag: str) -> str:
     return f"{level} {len(provinces)} {' '.join(map(str, provinces))}"
 
 
+def render_rail_line(level: int, provinces: tuple[int, ...]) -> str:
+    return f"{level} {len(provinces)} {' '.join(map(str, provinces))}"
+
+
 def render_khan_connection() -> str:
     level, provinces = KHAN_SUPPLY_RAIL
-    return f"{level} {len(provinces)} {' '.join(map(str, provinces))}"
+    return render_rail_line(level, provinces)
+
+
+def render_khan_campaign_rail(level: int, provinces: tuple[int, ...]) -> str:
+    return render_rail_line(level, provinces)
+
+
+def _rail_route(line: str) -> tuple[int, ...] | None:
+    fields = line.strip().split()
+    if (
+        len(fields) < 3
+        or not all(field.isdigit() for field in fields)
+        or int(fields[1]) != len(fields) - 2
+    ):
+        return None
+    return tuple(map(int, fields[2:]))
 
 
 def update_source(source: str) -> str:
     """Append exact owned rail records while preserving all other lines."""
+    upgraded_routes = {provinces for _, provinces in KHAN_CAMPAIGN_RAIL_UPGRADES}
     lines = [
         line
         for line in source.replace("\r\n", "\n").splitlines()
-        if line not in RETIRED_MARKERS
+        if line not in RETIRED_MARKERS and _rail_route(line) not in upgraded_routes
     ]
-    managed = [render_managed_line(), *(render_supply_connection(tag) for tag in STARTING_SUPPLY_RAILS), render_khan_connection()]
-    lines = [line for line in lines if line not in managed]
+    managed = [
+        render_managed_line(),
+        *(render_supply_connection(tag) for tag in STARTING_SUPPLY_RAILS),
+        render_khan_connection(),
+        *(
+            render_khan_campaign_rail(level, provinces)
+            for level, provinces in KHAN_CAMPAIGN_RAIL_UPGRADES
+        ),
+    ]
+    managed_text = {line.strip() for line in managed}
+    lines = [line for line in lines if line.strip() not in managed_text]
     lines.extend(managed)
     return "\n".join(lines) + "\n"
 
@@ -101,6 +160,12 @@ def validate() -> list[str]:
     for marker in RETIRED_MARKERS:
         if marker in source:
             issues.append("map/railways.txt must remain numeric-only")
+    for rail_level, rail_route in KHAN_CAMPAIGN_RAIL_UPGRADES:
+        expected_rail = render_khan_campaign_rail(rail_level, rail_route)
+        if source.splitlines().count(expected_rail) != 1:
+            issues.append(
+                f"RUS campaign rail {'-'.join(map(str, rail_route))} must occur exactly once at level {rail_level}"
+            )
 
     supply_source = SUPPLY_NODES_PATH.read_text(
         encoding="utf-8-sig", errors="strict"
@@ -149,6 +214,12 @@ def validate() -> list[str]:
                 issues.append(f"OSV rail segment {first}-{second} is not entirely on land")
             if second not in physical.get(first, set()):
                 issues.append(f"OSV rail segment {first}-{second} is not physically adjacent")
+        for _, campaign_route in KHAN_CAMPAIGN_RAIL_UPGRADES:
+            for first, second in zip(campaign_route, campaign_route[1:]):
+                if province_types.get(first) != "land" or province_types.get(second) != "land":
+                    issues.append(f"RUS campaign rail segment {first}-{second} is not entirely on land")
+                if second not in physical.get(first, set()):
+                    issues.append(f"RUS campaign rail segment {first}-{second} is not physically adjacent")
         railway_provinces = {
             int(province_id)
             for line in source.splitlines()
@@ -267,7 +338,7 @@ def main() -> int:
             print(f"- {issue}")
         return 1
     print(
-        "Campaign rail validation passed: OSV spur, STP/YPR connections, RUS border network and managed supply hubs."
+        "Campaign rail validation passed: OSV spur, STP/YPR connections, RUS campaign spines and managed supply hubs."
     )
     return 0
 
