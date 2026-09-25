@@ -291,7 +291,7 @@ class WarDebugContractTests(unittest.TestCase):
         self.assertIn("VAL_nod_ultimatum_expired", flags)
         self.assertEqual(scalar(effect, "VAL_frontier_start_war"), "yes")
 
-    def test_joint_shabrat_kefreyt_preset_joins_the_same_war_after_one_hour(self):
+    def test_joint_shabrat_kefreyt_preset_uses_production_alliance_handoff(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
         source = ROOT / "common/decisions/ADISCORD_scenario_debug_decisions.txt"
         category = block(parse_clausewitz(source.read_text(encoding="utf-8")), "ADISCORD_scenario_debug_category")
@@ -306,12 +306,18 @@ class WarDebugContractTests(unittest.TestCase):
             if e.key == "country_event" and scalar(e.value, "id") == "val_rework.121"
         )
         immediate = block(event, "immediate")
-        join = next(e for e in walk(immediate) if e.key == "add_to_war")
+        self.assertTrue(any(e.key == "VAL_begin_joint_nod_shabrat_campaign" and e.value == "yes" for e in walk(immediate)))
+        self.assertFalse(any(e.key == "add_to_war" for e in walk(immediate)))
+
+        effects = parse_clausewitz((ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt").read_text())
+        begin = block(effects, "VAL_begin_joint_nod_shabrat_campaign")
+        join = next(e for e in walk(begin) if e.key == "add_to_war")
         self.assertEqual(scalar(join.value, "targeted_alliance"), "STS")
         self.assertEqual(scalar(join.value, "enemy"), "NOD")
+        self.assertTrue(any(e.key == "VAL_form_joint_shabrat_alliance" and e.value == "yes" for e in walk(begin)))
         self.assertTrue(any(
             e.key == "set_country_flag" and e.value == "VAL_joint_nod_campaign_with_sts"
-            for e in walk(immediate)
+            for e in walk(begin)
         ))
 
     def test_nodrul_debug_controls_use_production_settlement_helpers(self):
