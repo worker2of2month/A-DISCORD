@@ -263,7 +263,6 @@ characters = {
 
 	VAL_Irina_Karst = {
 		name = VAL_Irina_Karst
-		gender = female
 		portraits = { army = { large = GFX_Portrait_Forul_Generic_5 } }
 	}
 
