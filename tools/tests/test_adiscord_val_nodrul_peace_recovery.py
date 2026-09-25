@@ -182,6 +182,23 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("VAL_northern_coalition_capitulation_reserved", router)
         self.assertIn("VAL_settle_northern_coalition_victory = yes", router)
 
+    def test_nodrul_can_launch_a_direct_postwar_war_over_subject_sts(self) -> None:
+        triggers = TRIGGERS.read_text(encoding="utf-8")
+        gate = named_block(triggers, "VAL_nod_can_attack_sts_overlord")
+        self.assertIn("has_global_flag = STP_cw_union_wars_finished", gate)
+        self.assertIn("is_subject_of = VAL", gate)
+        self.assertIn("NOT = { is_in_faction_with = VAL }", gate)
+
+        launch = named_block(self.source, "VAL_nod_launch_sts_overlord_war")
+        self.assertIn("declare_war_on = { target = VAL type = annex_everything }", launch)
+        self.assertIn("has_war_with = VAL", launch)
+        self.assertIn("set_country_flag = VAL_nod_overlord_sts_war_active", launch)
+        self.assertIn("VAL_call_subjects_to_wars = yes", launch)
+
+        weekly = (ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt").read_text(encoding="utf-8")
+        self.assertIn("VAL_nod_can_attack_sts_overlord = yes", weekly)
+        self.assertIn("VAL_nod_launch_sts_overlord_war = yes", weekly)
+
     def test_nod_intervention_against_val_subject_has_limited_peace_both_ways(self) -> None:
         router = ON_ACTIONS.read_text(encoding="utf-8")
         self.assertIn("VAL_settle_nod_overlord_sts_victory = yes", router)
