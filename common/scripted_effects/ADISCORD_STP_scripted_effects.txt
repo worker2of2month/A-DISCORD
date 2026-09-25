@@ -3624,6 +3624,40 @@ STP_cw_snapshot_capitulation_occupier = {
 }
 
 # Military-result callback only. NOD intervenes for the party, not for annexation.
+# COUNTRY-AGNOSTIC. If Nodrul is defeated by a third power while its own
+# northern coalition campaign is still open, close that theatre without awarding
+# a victory to either side. This prevents a new overlord inheriting stale wars.
+STP_cw_abort_northern_campaign_external_defeat = {
+	NOD = {
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_cw_northern_campaign_status
+					value = 1
+					compare = equals
+				}
+			}
+			set_variable = { var = STP_cw_northern_campaign_status value = 4 }
+			if = { limit = { has_war_with = YPR } white_peace = YPR }
+			if = { limit = { has_war_with = COF } white_peace = COF }
+			if = { limit = { has_war_with = TFF } white_peace = TFF }
+			clr_country_flag = NOD_cw_northern_war_started
+			STP_cw_end_northern_colonial_war = yes
+			STP_cw_dismantle_northern_alliance = yes
+			YPR = { set_major = no }
+			COF = { set_major = no }
+			TFF = { set_major = no }
+			VAL = {
+				if = {
+					limit = { exists = yes }
+					VAL_northern_aid_daily = yes
+				}
+			}
+			log = "[STP_NORTH] NOD northern campaign closed after external defeat"
+		}
+	}
+}
+
 STP_cw_end_nod_intervention = {
 	NOD = {
 		clr_country_flag = STP_ps_expedition_ready
