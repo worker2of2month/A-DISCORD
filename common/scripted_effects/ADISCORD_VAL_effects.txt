@@ -3857,66 +3857,172 @@ VAL_initialize_command_balance = {
 # side receives the whole country by callback order. NOD-owned states follow
 # their actual controller at surrender; northern states already settled to YPR
 # are therefore left untouched.
-VAL_settle_joint_nod_shabrat_victory = {
-    if = {
-        limit = {
-            has_country_flag = VAL_joint_nod_campaign_with_sts
-            has_capitulated = no
-            is_subject = no
-            STS = {
-                exists = yes
-                has_capitulated = no
-                has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
-            }
-            NOD = { exists = yes has_war_with = VAL has_war_with = STS }
-        }
-        10 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 10 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 10 } }
-        }
-        11 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 11 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 11 } }
-        }
-        12 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 12 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 12 } }
-        }
-        13 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 13 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 13 } }
-        }
-        17 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 17 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 17 } }
-        }
-        18 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 18 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 18 } }
-        }
-        30 = {
-            if = { limit = { is_owned_by = NOD is_controlled_by = VAL } VAL = { transfer_state = 30 } }
-            else_if = { limit = { is_owned_by = NOD is_controlled_by = STS } STS = { transfer_state = 30 } }
-        }
+VAL_form_joint_shabrat_alliance = {
+	if = {
+		limit = {
+			tag = VAL
+			STS = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+			}
+			NOT = { is_in_faction_with = STS }
+		}
+		if = {
+			limit = { is_in_faction = no STS = { is_in_faction = no } }
+			create_faction_from_template = {
+				template = faction_template_ADISCORD_standard
+				name = VAL_stelander_equal_alliance_name
+			}
+			add_to_faction = STS
+		}
+		else_if = {
+			limit = { is_in_faction = yes STS = { is_in_faction = no } }
+			faction_leader = { add_to_faction = STS }
+		}
+		else_if = {
+			limit = { is_in_faction = no STS = { is_in_faction = yes } }
+			STS = { faction_leader = { add_to_faction = VAL } }
+		}
+		if = {
+			limit = { is_in_faction_with = STS }
+			set_country_flag = VAL_stelander_equal_alliance
+			STS = { set_country_flag = VAL_stelander_equal_alliance }
+		}
+	}
+}
 
-        # Preserve the normal Shabrat victory bookkeeping and liberation route,
-        # then close Kefreyt's relation to the same defeated country separately.
-        STS = {
-            set_variable = { var = STP_pc_cap_side value = 2 }
-            STP_pc_begin_settlement = yes
-        }
-        NOD = {
-            if = { limit = { has_war_with = VAL } white_peace = VAL }
-            clr_country_flag = VAL_final_defeat_pending
-            clr_country_flag = VAL_final_capitulation_immediate
-        }
-        clr_country_flag = VAL_joint_nod_campaign_with_sts
-        # Keep the guard alive until the current immediate-capitulation chain ends.
-        set_country_flag = { flag = VAL_joint_nod_campaign_with_sts days = 1 }
-        ADISCORD_economy_mark_dirty = yes
-        STS = { ADISCORD_economy_mark_dirty = yes }
-        NOD = { if = { limit = { exists = yes } ADISCORD_economy_mark_dirty = yes } }
-    }
+VAL_begin_joint_nod_shabrat_campaign = {
+	if = {
+		limit = {
+			tag = VAL
+			NOT = { has_country_flag = VAL_joint_nod_settlement_completed }
+			STS = {
+				exists = yes
+				has_capitulated = no
+				has_war_with = NOD
+				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+			}
+			NOD = { exists = yes has_capitulated = no has_war_with = STS }
+		}
+		VAL_form_joint_shabrat_alliance = yes
+		if = {
+			limit = {
+				is_in_faction_with = STS
+				NOT = { has_war_with = NOD }
+			}
+			set_variable = { var = VAL_final_crisis_phase value = 2 }
+			NOD = { VAL_final_crisis_register_member = yes }
+			set_country_flag = VAL_joint_nod_campaign_with_sts
+			NOD = { set_country_flag = VAL_joint_nod_campaign_target }
+			add_to_war = {
+				targeted_alliance = STS
+				enemy = NOD
+				hostility_reason = asked_to_join
+				single_target_only = yes
+			}
+			VAL_call_subjects_to_wars = yes
+		}
+		else_if = {
+			limit = { NOT = { has_war_with = NOD } }
+			# If both countries are already committed to incompatible alliances, keep
+			# the campaign playable by falling back to Kefreyt's ordinary separate war.
+			declare_war_on = { target = NOD type = annex_everything }
+			VAL_call_subjects_to_wars = yes
+		}
+	}
+}
+
+VAL_settle_joint_nod_shabrat_victory = {
+	if = {
+		limit = {
+			has_country_flag = VAL_joint_nod_campaign_with_sts
+			NOT = { has_country_flag = VAL_joint_nod_settlement_completed }
+			has_capitulated = no
+			is_subject = no
+			STS = {
+				exists = yes
+				has_capitulated = no
+				has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+			}
+			NOD = {
+				exists = yes
+				has_country_flag = VAL_joint_nod_campaign_target
+			}
+		}
+
+		# Shabrat receives the southern Nodrul core outright.
+		10 = {
+			if = { limit = { is_owned_by = NOD } STS = { transfer_state = 10 } set_state_controller_to = STS }
+		}
+		11 = {
+			if = { limit = { is_owned_by = NOD } STS = { transfer_state = 11 } set_state_controller_to = STS }
+		}
+		12 = {
+			if = { limit = { is_owned_by = NOD } STS = { transfer_state = 12 } set_state_controller_to = STS }
+		}
+		30 = {
+			if = { limit = { is_owned_by = NOD } STS = { transfer_state = 30 } set_state_controller_to = STS }
+		}
+
+		# The northern settlement follows Kefreyt's existing contract-administration
+		# partition, but the shared-war clause forbids handing those clients to TFF.
+		set_country_flag = VAL_joint_nod_partition_locked
+		VAL_snapshot_nodrul_settlement = yes
+		VAL_partition_nodrul_settlement = yes
+		clr_country_flag = VAL_joint_nod_partition_locked
+
+		# Ainholm is a separate future target, not part of the Nodrul partition.
+		# Detach it from the defeated republic and close its inherited war.
+		AIN = {
+			if = { limit = { exists = yes has_war_with = VAL } white_peace = VAL }
+			if = { limit = { exists = yes has_war_with = STS } white_peace = STS }
+			if = {
+				limit = { exists = yes is_in_faction = yes }
+				faction_leader = { remove_from_faction = AIN }
+			}
+		}
+		NOD = {
+			if = {
+				limit = { has_country_flag = VAL_final_war_added_major }
+				set_major = no
+				clr_country_flag = VAL_final_war_added_major
+			}
+			clr_country_flag = VAL_final_war_member
+			if = {
+				limit = { AIN = { exists = yes is_subject_of = NOD } }
+				set_autonomy = {
+					target = AIN
+					autonomy_state = autonomy_free
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+			set_country_flag = STP_pc_defeated_by_sts
+			if = { limit = { has_war_with = VAL } white_peace = VAL }
+			if = { limit = { has_war_with = STS } white_peace = STS }
+		}
+
+		# Northern administrations have already taken their states. Any remaining
+		# Nodrul shell belongs to Shabrat, so no native peace conference is needed.
+		STS = {
+			if = {
+				limit = { NOD = { exists = yes } }
+				annex_country = { target = NOD transfer_troops = yes }
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+
+		set_country_flag = VAL_joint_nod_settlement_completed
+		clr_country_flag = VAL_joint_nod_campaign_with_sts
+		NOD = {
+			clr_country_flag = VAL_joint_nod_campaign_target
+			clr_country_flag = VAL_final_defeat_pending
+			clr_country_flag = VAL_final_capitulation_immediate
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
 }
 
 # --- final_campaign_administrations ---
@@ -4209,11 +4315,19 @@ VAL_partition_nodrul_settlement = {
         YPR = { VAL_initialize_partition_administration = yes }
     }
     if = {
-        limit = { check_variable = { var = VAL_nod_DCA_states^num value = 0 compare = greater_than } has_country_flag = VAL_nod_frontier_agreement VAL_frontier_partner_available = yes YPR = { is_subject_of = VAL } DCA = { is_subject_of = VAL } }
+        limit = {
+            NOT = { has_country_flag = VAL_joint_nod_partition_locked }
+            check_variable = { var = VAL_nod_DCA_states^num value = 0 compare = greater_than }
+            has_country_flag = VAL_nod_frontier_agreement
+            VAL_frontier_partner_available = yes
+            YPR = { is_subject_of = VAL }
+            DCA = { is_subject_of = VAL }
+        }
         VAL_transfer_yubora_administrations = yes
     }
     else_if = {
         limit = {
+            NOT = { has_country_flag = VAL_joint_nod_partition_locked }
             VAL_frontier_partner_available = yes
             check_variable = { var = VAL_nod_DCA_states^num value = 0 compare = greater_than }
             TFF = { NOT = { is_in_faction_with = VAL } }
@@ -4508,7 +4622,11 @@ VAL_debug_force_current_war_victory = {
 	else_if = {
 		limit = {
 			has_country_flag = VAL_joint_nod_campaign_with_sts
-			NOD = { exists = yes has_war_with = VAL has_war_with = STS }
+			NOT = { has_country_flag = VAL_joint_nod_settlement_completed }
+			NOD = {
+				exists = yes
+				has_country_flag = VAL_joint_nod_campaign_target
+			}
 		}
 		VAL_settle_joint_nod_shabrat_victory = yes
 	}
@@ -5065,13 +5183,18 @@ VAL_final_crisis_reconcile = {
 		VAL_finalize_reserved_settlements = yes
 	}
 
-	# The shared Shabrat campaign owns its own peace. Recover it separately if
-	# the immediate capitulation callback was skipped by an older save.
+	# The shared Shabrat campaign owns its own peace. The target receipt survives
+	# native war-relation cleanup, so a missed immediate callback remains recoverable.
 	if = {
 		limit = {
 			check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
 			has_country_flag = VAL_joint_nod_campaign_with_sts
-			NOD = { exists = yes has_war_with = VAL has_war_with = STS has_capitulated = yes }
+			NOT = { has_country_flag = VAL_joint_nod_settlement_completed }
+			NOD = {
+				exists = yes
+				has_capitulated = yes
+				has_country_flag = VAL_joint_nod_campaign_target
+			}
 			STS = {
 				exists = yes
 				has_capitulated = no
