@@ -2543,6 +2543,12 @@ focus_tree = {
 				VAL_southern_expansion_available = yes
 			}
 		}
+		bypass = {
+			OR = {
+				NOT = { country_exists = ERT }
+				ERT = { is_subject_of = VAL }
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Southern_Expansion_tt
@@ -2550,7 +2556,7 @@ focus_tree = {
 			declare_war_on = { target = ERT type = take_state_focus generator = { 167 170 171 184 185 203 } }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
 		}
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 120 }
 	}
 	focus = {
 		id = VAL_Eastern_Expansion
@@ -2570,13 +2576,19 @@ focus_tree = {
 				VAL_eastern_expansion_available = yes
 			}
 		}
+		bypass = {
+			OR = {
+				NOT = { country_exists = IRT }
+				IRT = { is_subject_of = VAL }
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_declares_war_irt_tt
 			declare_war_on = { target = IRT type = take_state_focus generator = { 178 180 181 182 183 193 206 207 } }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
 		}
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 130 }
 	}
 
 	focus = {
