@@ -135,7 +135,7 @@
  KRM_Ivo_Kremen: "Иво Кремень"
  KRM_Ivo_Kremen_desc: "После распада Внешнего заслона Иво Кремень собрал управляющих шахтами, перевозчиков и городских пайщиков в Промышленную палату. Он оценивает решения по тоннажу, срокам и числу сохранённых рабочих мест, оставляя вопросы справедливости тем, кто сумеет выразить их в производственном плане."
  LMN_Vera_Lemann: "Виктор Леманн"
- LMN_Vera_Lemann_desc: "Виктор Леманн руководил южным сектором Внешнего заслона. Когда Воркерланд перестал присылать приказы и жалование, он подчинил себе фильтрационные пункты Лемана и превратила временные инструкции в законы нового кордона."
+ LMN_Vera_Lemann_desc: "Виктор Леманн руководил южным сектором Внешнего заслона. Когда Воркерланд перестал присылать приказы и жалование, он подчинил себе фильтрационные пункты Лемана и превратил временные инструкции в законы нового кордона."
  RLY_Relay_Assembly_17: "Станционный совет Релейна"
  RLY_Relay_Assembly_17_desc: "В Релейне нет единоличного главы. Начальники смен, инженеры очистки и хранители архива заседают в Станционном совете, совместно утверждая аварийные протоколы и порядок использования уцелевшей инфраструктуры."
  WCG_Edgar_Raut: "Эдгар Раут"
@@ -218,7 +218,7 @@
  minister_STS_Marta_Eirich: "Мартин Эйрих"
  minister_STS_Leonid_Barchel: "Леонид Барчел"
  minister_STS_Ignat_Forel: "Игнат Форель"
- minister_STS_Nika_Volgina: "Никита Волгина"
+ minister_STS_Nika_Volgina: "Никита Волгин"
  minister_STS_Tomas_Krey: "Томас Крей"
  minister_STS_Lia_Verst: "Леон Верст"
  # VAL
@@ -342,11 +342,11 @@
  minister_EFL_Nera_Flux: "Неро Флюкс"
  # COF
  minister_COF_Silvan_Root: "Сильван Рут"
- minister_COF_Morven_Bark: "Морвен Барк"
+ minister_COF_Morven_Bark: "Мортен Барк"
  minister_COF_Elya_Moss: "Эли Мосс"
  minister_COF_Tera_Bloom: "Терон Блум"
  minister_COF_Oren_Rune: "Орен Рун"
- minister_COF_Nyx_Hollow: "Никс Холлоу"
+ minister_COF_Nyx_Hollow: "Нильс Холлоу"
  # BJK
  minister_BJK_Rodrik_Gate: "Родрик Гейт"
  minister_BJK_Kellan_Mark: "Келлан Марк"
@@ -358,7 +358,7 @@
  minister_BLD_Arno_Veyr: "Арно Вейр"
  minister_BLD_Bret_Havel: "Брет Хавел"
  minister_BLD_Clovis_Ren: "Кловис Рен"
- minister_BLD_Elain_Moor: "Элейн Мур"
+ minister_BLD_Elain_Moor: "Ален Мур"
  minister_BLD_Fedor_Lane: "Фёдор Лейн"
  minister_BLD_Junn_Sable: "Джунн Сейбл"
  # BHG
@@ -399,7 +399,7 @@
  # YPR
  minister_YPR_Amel_Sur: "Амель Сур"
  minister_YPR_Loran_Vek: "Лоран Век"
- minister_YPR_Seta_Vorn: "Сета Ворн"
+ minister_YPR_Seta_Vorn: "Сет Ворн"
  minister_YPR_Min_Carel: "Мин Карел"
  minister_YPR_Vora_Pell: "Ворин Пелл"
  minister_YPR_Qadir_Noll: "Кадир Нолл"
