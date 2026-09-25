@@ -4226,6 +4226,7 @@ VAL_settle_nod_overlord_sts_victory = {
 			STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
 			NOD = { exists = yes has_country_flag = NOD_cw_entered }
 		}
+		STP_cw_abort_northern_campaign_external_defeat = yes
 		STP_cw_end_nod_intervention = yes
 		NOD = {
 			if = { limit = { has_war_with = VAL } white_peace = VAL }
