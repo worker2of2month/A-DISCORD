@@ -3973,16 +3973,9 @@ VAL_settle_joint_nod_shabrat_victory = {
 		VAL_partition_nodrul_settlement = yes
 		clr_country_flag = VAL_joint_nod_partition_locked
 
-		# Ainholm is a separate future target, not part of the Nodrul partition.
-		# Detach it from the defeated republic and close its inherited war.
-		AIN = {
-			if = { limit = { exists = yes has_war_with = VAL } white_peace = VAL }
-			if = { limit = { exists = yes has_war_with = STS } white_peace = STS }
-			if = {
-				limit = { exists = yes is_in_faction = yes }
-				faction_leader = { remove_from_faction = AIN }
-			}
-		}
+		# Ainholm is the one northern possession kept as a territorial colony rather
+		# than converted into a contract administration.
+		VAL_queue_ainholm_colony = yes
 		NOD = {
 			if = {
 				limit = { has_country_flag = VAL_final_war_added_major }
@@ -3990,15 +3983,6 @@ VAL_settle_joint_nod_shabrat_victory = {
 				clr_country_flag = VAL_final_war_added_major
 			}
 			clr_country_flag = VAL_final_war_member
-			if = {
-				limit = { AIN = { exists = yes is_subject_of = NOD } }
-				set_autonomy = {
-					target = AIN
-					autonomy_state = autonomy_free
-					end_wars = no
-					end_civil_wars = no
-				}
-			}
 			set_country_flag = STP_pc_defeated_by_sts
 			if = { limit = { has_war_with = VAL } white_peace = VAL }
 			if = { limit = { has_war_with = STS } white_peace = STS }
@@ -4108,9 +4092,351 @@ VAL_cede_stelander_border = {
     }
 }
 
+# Ainholm remains a territorial mandate instead of a contract administration.
+# The transfer is deferred because breaking its old subject or faction relation and
+# assigning a new overlord on the same diplomatic tick is not reliable.
+VAL_queue_ainholm_colony = {
+	if = {
+		limit = {
+			tag = VAL
+			exists = yes
+			has_capitulated = no
+			is_subject = no
+			AIN = { exists = yes }
+		}
+		AIN = {
+			every_enemy_country = {
+				limit = { OR = { tag = VAL is_subject_of = VAL } }
+				white_peace = PREV
+			}
+			if = {
+				limit = { is_subject = yes NOT = { is_subject_of = VAL } }
+				OVERLORD = {
+					set_autonomy = {
+						target = AIN
+						autonomy_state = autonomy_free
+						end_wars = no
+						end_civil_wars = no
+					}
+				}
+			}
+			if = {
+				limit = { is_in_faction = yes }
+				if = {
+					limit = { is_faction_leader = yes }
+					dismantle_faction = yes
+				}
+				else = { leave_faction = yes }
+			}
+			set_country_flag = VAL_ainholm_colony_pending
+			set_variable = { var = VAL_ainholm_colony_retry value = 0 }
+			country_event = { id = val_contract.355 days = 1 }
+		}
+	}
+}
+
+# COUNTRY AIN. Repeated bounded ticks absorb the subject/faction cache delay.
+VAL_complete_ainholm_colony = {
+	if = {
+		limit = {
+			tag = AIN
+			has_country_flag = VAL_ainholm_colony_pending
+			VAL = { exists = yes has_capitulated = no is_subject = no }
+		}
+		if = {
+			limit = { is_subject_of = VAL }
+			VAL = {
+				set_autonomy = {
+					target = AIN
+					autonomy_state = autonomy_colony
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+			clr_country_flag = VAL_ainholm_colony_pending
+			clear_variable = VAL_ainholm_colony_retry
+			set_rule = { can_join_factions = no can_create_factions = no }
+			ADISCORD_economy_mark_dirty = yes
+			VAL = { ADISCORD_economy_mark_dirty = yes }
+		}
+		else_if = {
+			limit = { is_subject = yes }
+			OVERLORD = {
+				set_autonomy = {
+					target = AIN
+					autonomy_state = autonomy_free
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		else_if = {
+			limit = { is_in_faction = yes }
+			if = {
+				limit = { is_faction_leader = yes }
+				dismantle_faction = yes
+			}
+			else = { leave_faction = yes }
+		}
+		else = {
+			VAL = {
+				set_autonomy = {
+					target = AIN
+					autonomy_state = autonomy_colony
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+
+		if = {
+			limit = { has_country_flag = VAL_ainholm_colony_pending }
+			add_to_variable = { var = VAL_ainholm_colony_retry value = 1 }
+			if = {
+				limit = {
+					check_variable = {
+						var = VAL_ainholm_colony_retry
+						value = 4
+						compare = less_than
+					}
+				}
+				country_event = { id = val_contract.355 days = 1 }
+			}
+			else = {
+				set_country_flag = VAL_ainholm_colony_failed
+				clr_country_flag = VAL_ainholm_colony_pending
+				clear_variable = VAL_ainholm_colony_retry
+				log = "[VAL] Ainholm colony handoff failed after bounded diplomatic retries"
+			}
+		}
+	}
+	else = {
+		clr_country_flag = VAL_ainholm_colony_pending
+		clear_variable = VAL_ainholm_colony_retry
+	}
+}
+
+# Nodrul's intervention can drag Kefreyt into the war when STS is a Kefreyt
+# subject. A Nodrul defeat becomes the ordinary Kefreyt administration settlement.
+VAL_settle_nod_overlord_sts_victory = {
+	if = {
+		limit = {
+			tag = VAL
+			has_capitulated = no
+			STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
+			NOD = { exists = yes has_country_flag = NOD_cw_entered }
+		}
+		STP_cw_end_nod_intervention = yes
+		NOD = {
+			if = { limit = { has_war_with = VAL } white_peace = VAL }
+			if = { limit = { has_war_with = STS } white_peace = STS }
+			VAL_install_nodrul_administration = yes
+		}
+		set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled days = 2 }
+	}
+}
+
+# If Nodrul wins the accidental overlord war, the peace is limited to breaking
+# Kefreyt's control over STS. Nodrul does not receive Kefreyt territory.
+VAL_settle_nod_overlord_sts_defeat = {
+	if = {
+		limit = {
+			tag = VAL
+			NOD = { exists = yes has_country_flag = NOD_cw_entered has_war_with = VAL }
+			STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
+		}
+		set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled days = 2 }
+		set_autonomy = {
+			target = STS
+			autonomy_state = autonomy_free
+			end_wars = no
+			end_civil_wars = no
+		}
+		if = { limit = { has_war_with = NOD } white_peace = NOD }
+		NOD = { if = { limit = { has_war_with = STS } white_peace = STS } }
+		STP_cw_close_nod_after_party_victory = yes
+		ADISCORD_economy_mark_dirty = yes
+		STS = { ADISCORD_economy_mark_dirty = yes }
+	}
+}
+
+# The intact northern coalition is a separate Kefreyt campaign. It is opened as
+# one native war and every member is kept major until the common settlement runs.
+VAL_begin_northern_coalition_campaign = {
+	if = {
+		limit = { VAL_can_attack_northern_coalition = yes }
+		set_country_flag = VAL_northern_coalition_campaign_active
+		YPR = {
+			set_country_flag = VAL_northern_coalition_campaign_member
+			set_major = yes
+		}
+		COF = {
+			set_country_flag = VAL_northern_coalition_campaign_member
+			set_major = yes
+		}
+		TFF = {
+			set_country_flag = VAL_northern_coalition_campaign_member
+			set_major = yes
+		}
+		if = {
+			limit = {
+				YPR = { is_in_faction = no }
+				COF = { is_in_faction = no }
+				TFF = { is_in_faction = no }
+			}
+			YPR = {
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = STP_northern_defence_alliance
+				}
+				add_to_faction = COF
+				add_to_faction = TFF
+			}
+		}
+		declare_war_on = { target = YPR type = annex_everything }
+		if = {
+			limit = {
+				has_war_with = YPR
+				COF = { NOT = { has_war_with = VAL } }
+			}
+			COF = {
+				add_to_war = {
+					targeted_alliance = YPR
+					enemy = VAL
+					hostility_reason = asked_to_join
+					single_target_only = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_war_with = YPR
+				TFF = { NOT = { has_war_with = VAL } }
+			}
+			TFF = {
+				add_to_war = {
+					targeted_alliance = YPR
+					enemy = VAL
+					hostility_reason = asked_to_join
+					single_target_only = yes
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_war_with = YPR
+				COF = { has_war_with = VAL }
+				TFF = { has_war_with = VAL }
+			}
+			VAL_call_subjects_to_wars = yes
+		}
+		else = {
+			if = { limit = { has_war_with = YPR } white_peace = YPR }
+			if = { limit = { has_war_with = COF } white_peace = COF }
+			if = { limit = { has_war_with = TFF } white_peace = TFF }
+			clr_country_flag = VAL_northern_coalition_campaign_active
+			YPR = { clr_country_flag = VAL_northern_coalition_campaign_member set_major = no }
+			COF = { clr_country_flag = VAL_northern_coalition_campaign_member set_major = no }
+			TFF = { clr_country_flag = VAL_northern_coalition_campaign_member set_major = no }
+		}
+	}
+}
+
+VAL_settle_northern_coalition_victory = {
+	if = {
+		limit = {
+			tag = VAL
+			has_country_flag = VAL_northern_coalition_campaign_active
+			VAL_northern_coalition_campaign_victory_ready = yes
+		}
+		YPR = {
+			if = { limit = { exists = yes has_war_with = VAL } white_peace = VAL }
+			if = {
+				limit = { exists = yes is_in_faction = yes }
+				if = { limit = { is_faction_leader = yes } dismantle_faction = yes }
+				else = { leave_faction = yes }
+			}
+		}
+		COF = {
+			if = { limit = { exists = yes has_war_with = VAL } white_peace = VAL }
+			if = {
+				limit = { exists = yes is_in_faction = yes }
+				if = { limit = { is_faction_leader = yes } dismantle_faction = yes }
+				else = { leave_faction = yes }
+			}
+		}
+		TFF = {
+			if = { limit = { exists = yes has_war_with = VAL } white_peace = VAL }
+			if = {
+				limit = { exists = yes is_in_faction = yes }
+				if = { limit = { is_faction_leader = yes } dismantle_faction = yes }
+				else = { leave_faction = yes }
+			}
+		}
+
+		if = {
+			limit = { YPR = { exists = yes } }
+			set_autonomy = {
+				target = YPR
+				autonomy_state = autonomy_VAL_contract_administration
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+			YPR = {
+				VAL_initialize_partition_administration = yes
+				set_country_flag = VAL_northern_coalition_administration
+				clr_country_flag = VAL_northern_coalition_campaign_member
+				set_major = no
+			}
+		}
+		if = {
+			limit = { COF = { exists = yes } }
+			set_autonomy = {
+				target = COF
+				autonomy_state = autonomy_VAL_contract_administration
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+			COF = {
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				set_rule = { can_join_factions = no can_create_factions = no }
+				set_country_flag = VAL_northern_coalition_administration
+				clr_country_flag = VAL_northern_coalition_campaign_member
+				set_major = no
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		if = {
+			limit = { TFF = { exists = yes } }
+			set_autonomy = {
+				target = TFF
+				autonomy_state = autonomy_VAL_contract_administration
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+			TFF = {
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				set_rule = { can_join_factions = no can_create_factions = no }
+				set_country_flag = VAL_northern_coalition_administration
+				clr_country_flag = VAL_northern_coalition_campaign_member
+				set_major = no
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		clr_country_flag = VAL_northern_coalition_campaign_active
+		set_country_flag = VAL_northern_coalition_settlement_completed
+		VAL_queue_ainholm_colony = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
 VAL_install_nodrul_administration = {
     if = {
         limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
+        if = { limit = { NOT = { has_cosmetic_tag = NOD_VAL_administration } } set_cosmetic_tag = NOD_VAL_administration }
         VAL = { VAL_snapshot_nodrul_settlement = yes }
         # Party-led Stelander can leave Nodrul as a nested subject inside the
         # Kefreyt sphere. Break that obsolete dependency before the deferred
@@ -4198,6 +4524,7 @@ VAL_finish_nodrul_administration = {
         ADISCORD_economy_mark_dirty = yes
         VAL = {
             VAL_call_subjects_to_wars = yes
+            VAL_queue_ainholm_colony = yes
             ADISCORD_economy_mark_dirty = yes
         }
     }
