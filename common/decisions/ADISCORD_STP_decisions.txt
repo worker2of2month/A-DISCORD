@@ -2447,7 +2447,7 @@ STP_cw_war_council = {
 			effect_tooltip = { declare_war_on = { target = BJK type = annex_everything } }
 			hidden_effect = { country_event = { id = ADISCORD_STP_pc.31 } }
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 20 }
 	}
 
 	STP_pw_party_launch_bezhaysk_operation = {
@@ -2595,7 +2595,18 @@ STP_cw_war_council = {
 			else = { hidden_effect = { clear_variable = STP_pc_val_campaign_deposit } }
 		}
 		cancel_effect = { hidden_effect = { clear_variable = STP_pc_val_campaign_deposit } }
-		ai_will_do = { base = 3 modifier = { factor = 0 OR = { has_war = yes NOT = { check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } } } } }
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				OR = {
+					has_war = yes
+					STP_shabrat_ai_bezhaysk_resolved = no
+					STP_shabrat_ai_nodrul_resolved = no
+					NOT = { check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } }
+				}
+			}
+		}
 	}
 	STP_pw_begin_val_campaign = {
 		icon = generic_prepare_civil_war
@@ -2610,7 +2621,18 @@ STP_cw_war_council = {
 				if = { limit = { has_war_with = VAL } remove_ideas = STP_pc_val_campaign_ready add_timed_idea = { idea = STP_cw_deliberate_offensive days = 35 } }
 			}
 		}
-		ai_will_do = { base = 4 modifier = { factor = 0 OR = { has_war = yes strength_ratio = { tag = VAL ratio < 0.8 } } } }
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				OR = {
+					has_war = yes
+					STP_shabrat_ai_bezhaysk_resolved = no
+					STP_shabrat_ai_nodrul_resolved = no
+					strength_ratio = { tag = VAL ratio < 1.0 }
+				}
+			}
+		}
 	}
 
 	STP_pw_prepare_nod_campaign = {
@@ -2650,7 +2672,17 @@ STP_cw_war_council = {
 			else = { hidden_effect = { clear_variable = STP_pc_nod_campaign_deposit } }
 		}
 		cancel_effect = { hidden_effect = { clear_variable = STP_pc_nod_campaign_deposit } }
-		ai_will_do = { base = 3 modifier = { factor = 0 OR = { has_war = yes NOT = { check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } } } } }
+		ai_will_do = {
+			base = 12
+			modifier = {
+				factor = 0
+				OR = {
+					has_war = yes
+					STP_shabrat_ai_bezhaysk_resolved = no
+					NOT = { check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } }
+				}
+			}
+		}
 	}
 	STP_pw_begin_nod_campaign = {
 		icon = generic_prepare_civil_war
@@ -2665,7 +2697,17 @@ STP_cw_war_council = {
 				if = { limit = { has_war_with = NOD } remove_ideas = STP_pc_nod_campaign_ready add_timed_idea = { idea = STP_cw_deliberate_offensive days = 35 } }
 			}
 		}
-		ai_will_do = { base = 4 modifier = { factor = 0 OR = { has_war = yes strength_ratio = { tag = NOD ratio < 0.8 } } } }
+		ai_will_do = {
+			base = 12
+			modifier = {
+				factor = 0
+				OR = {
+					has_war = yes
+					STP_shabrat_ai_bezhaysk_resolved = no
+					strength_ratio = { tag = NOD ratio < 0.8 }
+				}
+			}
+		}
 	}
 
 
