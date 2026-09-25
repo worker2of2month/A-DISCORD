@@ -296,11 +296,11 @@ focus_tree = {
 		prerequisite = { focus = STP_Show_Him_The_Truth }
 		ai_will_do = { base = 12 }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = STP_region_unique_operation_53 show_effect_tooltip = yes } custom_effect_tooltip = STP_region_unique_operation_53_desc
-			unlock_decision_tooltip = { decision = STP_region_unique_operation_2 show_effect_tooltip = yes } custom_effect_tooltip = STP_region_unique_operation_2_desc
-			unlock_decision_tooltip = { decision = STP_region_unique_operation_29 show_effect_tooltip = yes } custom_effect_tooltip = STP_region_unique_operation_29_desc
+			unlock_decision_tooltip = STP_region_unique_operation_53
+			unlock_decision_tooltip = STP_region_unique_operation_2
+			unlock_decision_tooltip = STP_region_unique_operation_29
+			unlock_decision_tooltip = STP_cw_evacuate_garrison_officers
 			custom_effect_tooltip = STP_cw_officers_tt
-			unlock_decision_tooltip = { decision = STP_cw_evacuate_garrison_officers show_effect_tooltip = yes } custom_effect_tooltip = STP_cw_evacuate_garrison_officers_desc
 			hidden_effect = { set_country_flag = STP_cw_officers_ready STP_cw_refresh_officer_loyalties = yes }
 			effect_tooltip = {
 				swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_cw_prepared_officers_idea }
