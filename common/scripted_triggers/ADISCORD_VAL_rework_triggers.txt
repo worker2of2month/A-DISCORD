@@ -563,6 +563,65 @@ VAL_northern_volunteer_front_open = {
 # COUNTRY VAL. A deliberate campaign against Nodrul needs a real northern
 # foothold. One complete tribal settlement is enough; the full supply base
 # still requires all eight states later.
+# The coalition campaign is separate from Nodrul's northern war. Kefreyt waits
+# until all three governments are independent, at peace and diplomatically coherent.
+VAL_northern_coalition_resolved = {
+	AND = {
+		OR = { NOT = { YPR = { exists = yes } } YPR = { is_subject_of = VAL } }
+		OR = { NOT = { COF = { exists = yes } } COF = { is_subject_of = VAL } }
+		OR = { NOT = { TFF = { exists = yes } } TFF = { is_subject_of = VAL } }
+	}
+}
+
+VAL_can_attack_northern_coalition = {
+	tag = VAL
+	has_completed_focus = VAL_Northern_Settlement
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	NOT = { has_country_flag = VAL_northern_coalition_campaign_active }
+	YPR = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		has_war = no
+		NOT = { has_war_with = VAL }
+	}
+	COF = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		has_war = no
+		NOT = { has_war_with = VAL }
+	}
+	TFF = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		has_war = no
+		NOT = { has_war_with = VAL }
+	}
+	OR = {
+		AND = {
+			YPR = { is_in_faction = no }
+			COF = { is_in_faction = no }
+			TFF = { is_in_faction = no }
+		}
+		AND = {
+			YPR = { is_in_faction_with = COF is_in_faction_with = TFF }
+			COF = { is_in_faction_with = TFF }
+		}
+	}
+}
+
+VAL_northern_coalition_campaign_victory_ready = {
+	tag = VAL
+	has_country_flag = VAL_northern_coalition_campaign_active
+	OR = { NOT = { YPR = { exists = yes } } YPR = { has_capitulated = yes } YPR = { is_subject_of = VAL } }
+	OR = { NOT = { COF = { exists = yes } } COF = { has_capitulated = yes } COF = { is_subject_of = VAL } }
+	OR = { NOT = { TFF = { exists = yes } } TFF = { has_capitulated = yes } TFF = { is_subject_of = VAL } }
+}
+
 VAL_northern_foothold_secured = {
  OR = {
   AND = {
