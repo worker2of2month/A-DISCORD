@@ -1185,6 +1185,16 @@ country_event = {
     immediate = { VAL_complete_nodrul_administration = yes }
 }
 
+# Ainholm uses a native colony level rather than Kefreyt's contract-administration
+# autonomy. The extra tick lets the previous Nodrul dependency fully detach.
+country_event = {
+	id = val_contract.355
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { tag = AIN has_country_flag = VAL_ainholm_colony_pending }
+	immediate = { VAL_complete_ainholm_colony = yes }
+}
+
 # One-shot confirmation of native war entry, not a recurring campaign pulse.
 country_event = {
     id = val_rework.117
