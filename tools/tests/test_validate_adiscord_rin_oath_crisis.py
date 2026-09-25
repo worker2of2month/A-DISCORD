@@ -5,6 +5,7 @@ import re
 import unittest
 
 from tools.validators.validate_adiscord_rin_oath_crisis import (
+    CHARACTERS,
     DECISIONS,
     EFFECTS,
     EVENTS,
@@ -108,6 +109,17 @@ class RinOathCrisisContractTests(unittest.TestCase):
         combined = effects + read(EVENTS) + read_country_on_actions(ON_ACTIONS, 'rin')
         for forbidden in ("declare_war_on", "add_to_war", "create_faction", "add_to_faction"):
             self.assertNotIn(forbidden, combined)
+
+    def test_northern_court_uses_authored_chauvinist_leader(self) -> None:
+        regency = named_block(read(CHARACTERS), "RIN_Northern_Court_Regency")
+        self.assertIn("GFX_Portrait_Forul_Generic_9", regency)
+        self.assertIn("ideology = chauvinism_ideology", regency)
+        split = named_block(read(EFFECTS), "ADISCORD_rin_start_oath_civil_war")
+        self.assertIn("recruit_character = RIN_Northern_Court_Regency", split)
+        self.assertIn(
+            "promote_character = { character = RIN_Northern_Court_Regency ideology = chauvinism_ideology }",
+            split,
+        )
 
     def test_mission_starts_only_after_split_and_lasts_180_days(self) -> None:
         mission = named_block(read(DECISIONS), "ADISCORD_rin_palatin_breakup_mission")
