@@ -1959,9 +1959,10 @@ focus_tree = {
 		prerequisite = { focus = VAL_State_Contract }
 		prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
 		prerequisite = { focus = VAL_Army_Of_The_Ledger }
+		# Mandatory progression capstone: once the three core programmes are complete,
+		# the AI should close the opening act before spending time on side branches.
 		ai_will_do = {
-			base = 1
-
+			base = 1000
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Contracts_Outlive_Kings_tt
