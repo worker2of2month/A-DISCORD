@@ -219,7 +219,6 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 50
 			unlock_decision_tooltip = VAL_nationalise_region
-			custom_effect_tooltip = VAL_frontier_nationalisation_chain_tt
 		}
 		ai_will_do = { base = 10 }
 	}
