@@ -5999,7 +5999,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 6 }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = STP_pw_party_offer_compact }
+			unlock_decision_tooltip = STP_pw_party_offer_compact
 			add_timed_idea = { idea = STP_cw_arsenal_shifts days = 180 }
 			custom_effect_tooltip = STP_pw_arms_factory_or_reserve_tt
 			custom_effect_tooltip = STP_pf_army_deal_tt
@@ -6101,7 +6101,7 @@ focus_tree = {
 		available = { STP_pw_party_revolution_current = yes NOD = { exists = yes is_subject = no has_capitulated = no } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 6 }
-		completion_reward = { unlock_decision_tooltip = { decision = STP_pw_party_fund_northern_contacts } }
+		completion_reward = { unlock_decision_tooltip = STP_pw_party_fund_northern_contacts }
 	}
 	focus = {
 		id = STP_pw_party_nod_congress
@@ -6144,8 +6144,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = STP_pw_party_prepare_northern_campaign }
-			unlock_decision_tooltip = { decision = STP_pw_party_launch_northern_campaign }
+			unlock_decision_tooltip = STP_pw_party_prepare_northern_campaign
+			unlock_decision_tooltip = STP_pw_party_launch_northern_campaign
 		}
 	}
 	focus = {
@@ -6161,8 +6161,8 @@ focus_tree = {
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			add_stability = 0.05
-			unlock_decision_tooltip = { decision = STP_pw_party_nod_joint_training }
-			unlock_decision_tooltip = { decision = STP_pw_party_nod_industrial_program }
+			unlock_decision_tooltip = STP_pw_party_nod_joint_training
+			unlock_decision_tooltip = STP_pw_party_nod_industrial_program
 		}
 	}
 	focus = {
