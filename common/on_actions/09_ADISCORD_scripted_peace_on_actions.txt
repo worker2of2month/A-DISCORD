@@ -189,12 +189,40 @@ on_actions = {
             # ordinary final-campaign reservation can claim the whole country.
             if = {
                 limit = {
-                    ROOT = { tag = NOD has_war_with = VAL has_war_with = STS }
-                    VAL = { exists = yes has_capitulated = no has_country_flag = VAL_joint_nod_campaign_with_sts }
+                    ROOT = {
+                        tag = NOD
+                        has_country_flag = VAL_joint_nod_campaign_target
+                    }
+                    VAL = {
+                        exists = yes
+                        has_capitulated = no
+                        has_country_flag = VAL_joint_nod_campaign_with_sts
+                        NOT = { has_country_flag = VAL_joint_nod_settlement_completed }
+                    }
                     STS = {
                         exists = yes
                         has_capitulated = no
                         has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+                    }
+                    OR = {
+                        FROM = {
+                            OR = {
+                                VAL_final_campaign_ally = yes
+                                tag = STS
+                                is_subject_of = STS
+                            }
+                        }
+                        ROOT = {
+                            capital_scope = {
+                                controller = {
+                                    OR = {
+                                        VAL_final_campaign_ally = yes
+                                        tag = STS
+                                        is_subject_of = STS
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 set_global_flag = skip_default_capitulation
@@ -219,7 +247,7 @@ on_actions = {
                         NOT = {
                             AND = {
                                 tag = NOD
-                                has_war_with = STS
+                                has_country_flag = VAL_joint_nod_campaign_target
                                 VAL = { has_country_flag = VAL_joint_nod_campaign_with_sts }
                                 STS = { has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } }
                             }
