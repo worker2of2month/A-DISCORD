@@ -3957,30 +3957,53 @@ class ValExpandedCampaignTests(unittest.TestCase):
 
 
 
-    def test_joint_shabrat_nod_campaign_uses_one_war_and_controlled_settlement(self):
+    def test_joint_shabrat_nod_campaign_forms_alliance_and_splits_fixed_regions(self):
         decisions = DECISIONS_PATH.read_text(encoding="utf-8")
         campaign = named_block_spans(decisions, "VAL_campaign_against_nod")[0].text
-        self.assertIn("set_country_flag = VAL_joint_nod_campaign_with_sts", campaign)
-        self.assertIn("targeted_alliance = STS enemy = NOD", campaign)
+        self.assertIn("VAL_begin_joint_nod_shabrat_campaign = yes", campaign)
+        self.assertIn("NOT = { has_country_flag = VAL_joint_nod_settlement_completed }", campaign)
         self.assertIn("character = STP_maksim_shabrat ruling_only = yes", campaign)
         self.assertIn("STP_cw_release_tff_to_northern_war = yes", campaign)
 
-        settlement = named_block_spans(EFFECTS_PATH.read_text(encoding="utf-8"),
-                                       "VAL_settle_joint_nod_shabrat_victory")[0].text
-        for state in ("10", "11", "12", "13", "17", "18", "30"):
-            self.assertIn(f"{state} = {{", settlement)
-            self.assertIn(f"VAL = {{ transfer_state = {state} }}", settlement)
+        effects = EFFECTS_PATH.read_text(encoding="utf-8")
+        alliance = named_block_spans(effects, "VAL_form_joint_shabrat_alliance")[0].text
+        self.assertIn("create_faction_from_template", alliance)
+        self.assertIn("template = faction_template_ADISCORD_standard", alliance)
+        self.assertIn("name = VAL_stelander_equal_alliance_name", alliance)
+        self.assertIn("add_to_faction = STS", alliance)
+        self.assertIn("set_country_flag = VAL_stelander_equal_alliance", alliance)
+
+        begin = named_block_spans(effects, "VAL_begin_joint_nod_shabrat_campaign")[0].text
+        self.assertIn("set_country_flag = VAL_joint_nod_campaign_with_sts", begin)
+        self.assertIn("set_country_flag = VAL_joint_nod_campaign_target", begin)
+        self.assertIn("targeted_alliance = STS", begin)
+        self.assertIn("enemy = NOD", begin)
+        self.assertIn("VAL_final_crisis_register_member = yes", begin)
+
+        settlement = named_block_spans(effects, "VAL_settle_joint_nod_shabrat_victory")[0].text
+        for state in ("10", "11", "12", "30"):
             self.assertIn(f"STS = {{ transfer_state = {state} }}", settlement)
-        self.assertIn("STP_pc_begin_settlement = yes", settlement)
-        self.assertIn("white_peace = VAL", settlement)
-        self.assertNotIn("VAL_install_nodrul_administration", settlement)
+        for state in ("13", "17", "18"):
+            self.assertNotIn(f"STS = {{ transfer_state = {state} }}", settlement)
+        self.assertIn("VAL_snapshot_nodrul_settlement = yes", settlement)
+        self.assertIn("VAL_partition_nodrul_settlement = yes", settlement)
+        self.assertIn("set_country_flag = VAL_joint_nod_partition_locked", settlement)
+        self.assertIn("set_autonomy = {", settlement)
+        self.assertIn("target = AIN", settlement)
+        self.assertIn("autonomy_state = autonomy_free", settlement)
+        self.assertIn("annex_country = { target = NOD transfer_troops = yes }", settlement)
+        self.assertIn("set_country_flag = VAL_joint_nod_settlement_completed", settlement)
+        self.assertNotIn("STP_pc_begin_settlement = yes", settlement)
+
+        partition = named_block_spans(effects, "VAL_partition_nodrul_settlement")[0].text
+        self.assertGreaterEqual(partition.count("NOT = { has_country_flag = VAL_joint_nod_partition_locked }"), 2)
 
         source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text()
         immediate = source.split("# BEGIN kefreyt:on_capitulation_immediate", 1)[1].split("# END kefreyt:on_capitulation_immediate", 1)[0]
         self.assertLess(immediate.index("VAL_settle_joint_nod_shabrat_victory = yes"),
                         immediate.index("set_country_flag = VAL_final_defeat_pending"))
-        self.assertIn("has_country_flag = VAL_joint_nod_campaign_with_sts", immediate)
-        self.assertIn("has_war_with = STS", immediate)
+        self.assertIn("has_country_flag = VAL_joint_nod_campaign_target", immediate)
+        self.assertNotIn("ROOT = { tag = NOD has_war_with = VAL has_war_with = STS }", immediate)
 
     def test_final_settlement_waits_for_allies_and_rejects_liberation(self):
         facts = {
