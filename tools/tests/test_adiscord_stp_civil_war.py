@@ -3892,8 +3892,8 @@ class RepublicsCouncilContracts(unittest.TestCase):
                 self.assertEqual(clears, [flag])
         tree = read("common/national_focus/ADISCORD_national_focus_STP.txt")
         self.assertNotIn("ADISCORD_STP_cw.90", tree)
-        self.assertIn("unlock_decision_tooltip = { decision = STP_cw_negotiate_republican_charter show_effect_tooltip = yes }", tree)
-        self.assertIn("custom_effect_tooltip = STP_cw_negotiate_republican_charter_desc", tree)
+        self.assertIn("unlock_decision_tooltip = STP_cw_negotiate_republican_charter", tree)
+        self.assertNotIn("custom_effect_tooltip = STP_cw_negotiate_republican_charter_desc", tree)
 
     def test_bilateral_spirits_end_on_loss_of_independence_or_war_between_partners(self):
         ideas = ast_block(ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")

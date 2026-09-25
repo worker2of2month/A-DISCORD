@@ -523,7 +523,7 @@ class KefreytDecisionVisibilityTests(unittest.TestCase):
         tree = load("common/national_focus/ADISCORD_national_focus_VAL.txt")["focus_tree"]
         focus = next(e.value for e in tree if e.key == "focus" and scalar(e.value, "id") == "VAL_Resource_War_Contracts")
         reward = next(e.value for e in focus if e.key == "completion_reward")
-        unlocks = {scalar(e.value, "decision") for e in reward if e.key == "unlock_decision_tooltip"}
+        unlocks = {e.value if isinstance(e.value, str) else scalar(e.value, "decision") for e in reward if e.key == "unlock_decision_tooltip"}
         self.assertTrue({"VAL_negotiate_nam_metals", "VAL_resource_war_arms", "VAL_resource_war_personnel"} <= unlocks)
 
 class KefreytVoiceTests(unittest.TestCase):

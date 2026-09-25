@@ -136,7 +136,7 @@ focus_tree = {
 			add_manpower = 8000
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 12000 producer = RUS }
 			add_war_support = 0.04
-			unlock_decision_tooltip = { decision = RUS_campaign_sla show_effect_tooltip = yes }
+			unlock_decision_tooltip = RUS_campaign_sla
 		}
 		ai_will_do = {
 			base = 90
@@ -167,11 +167,11 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 20
 			add_command_power = 15
-			unlock_decision_tooltip = { decision = RUS_campaign_rza show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = RUS_campaign_mlr show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = RUS_campaign_ert show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = RUS_campaign_irt show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = RUS_campaign_sca show_effect_tooltip = yes }
+			unlock_decision_tooltip = RUS_campaign_rza
+			unlock_decision_tooltip = RUS_campaign_mlr
+			unlock_decision_tooltip = RUS_campaign_ert
+			unlock_decision_tooltip = RUS_campaign_irt
+			unlock_decision_tooltip = RUS_campaign_sca
 		}
 		ai_will_do = { base = 100 }
 	}
@@ -198,7 +198,7 @@ focus_tree = {
 			effect_tooltip = {
 				swap_ideas = { remove_idea = RUS_national_spirit add_idea = RUS_last_empire_spirit }
 			}
-			unlock_decision_tooltip = { decision = RUS_proclaim_the_last_empire show_effect_tooltip = yes }
+			unlock_decision_tooltip = RUS_proclaim_the_last_empire
 		}
 		ai_will_do = { base = 120 }
 	}

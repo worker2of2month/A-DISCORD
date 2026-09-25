@@ -140,8 +140,8 @@ focus_tree = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_One_Ledger_One_Banner_tt
 			add_war_support = 0.05
 			custom_effect_tooltip = VAL_focus_authority_10_tt
-			unlock_decision_tooltip = { decision = VAL_sign_annual_trade show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_hire_partner_volunteers show_effect_tooltip = yes }
+			unlock_decision_tooltip = VAL_sign_annual_trade
+			unlock_decision_tooltip = VAL_hire_partner_volunteers
 			hidden_effect = {
 				set_country_flag = VAL_foreign_operations_unlocked
 				VAL_unlock_operations_map = yes
@@ -588,8 +588,8 @@ focus_tree = {
 				idea = VAL_northern_roads_drive
 				days = 365
 			}
-			unlock_decision_tooltip = { decision = VAL_sign_annual_trade show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_hire_partner_volunteers show_effect_tooltip = yes }
+			unlock_decision_tooltip = VAL_sign_annual_trade
+			unlock_decision_tooltip = VAL_hire_partner_volunteers
 			add_intel = { target = CIN army_intel = 10 }
 			add_intel = { target = OSF army_intel = 10 }
 		}
@@ -682,7 +682,7 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Operational_Directorate_tt
 			custom_effect_tooltip = VAL_focus_operations_map_unlock_tt
-			unlock_decision_tooltip = { decision = VAL_hire_partner_volunteers show_effect_tooltip = yes }
+			unlock_decision_tooltip = VAL_hire_partner_volunteers
 			add_intel = { target = STP army_intel = 10 }
 			add_intel = { target = CIN army_intel = 10 }
 			hidden_effect = {
@@ -704,9 +704,9 @@ focus_tree = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Ministry_Of_Contract_Memory_tt
 			add_political_power = 50
 			custom_effect_tooltip = VAL_campaign_slot_granted_tt
-			unlock_decision_tooltip = { decision = VAL_campaign_rifles_and_bread show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_campaign_contracts_feed_families show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_campaign_no_promise_without_payment show_effect_tooltip = yes }
+			unlock_decision_tooltip = VAL_campaign_rifles_and_bread
+			unlock_decision_tooltip = VAL_campaign_contracts_feed_families
+			unlock_decision_tooltip = VAL_campaign_no_promise_without_payment
 			custom_effect_tooltip = VAL_campaign_mine_unlock_tt
 			hidden_effect = {
 				if = {
@@ -844,8 +844,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_Closed_Ledgers }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Quarterly_Contract_Norm_tt
-			unlock_decision_tooltip = { decision = VAL_pay_quarterly_contract_norm show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_subcontract_quarterly_norm show_effect_tooltip = yes }
+			unlock_decision_tooltip = VAL_pay_quarterly_contract_norm
+			unlock_decision_tooltip = VAL_subcontract_quarterly_norm
 			if = {
 				limit = { NOT = { has_variable = VAL_contract_reputation_level } }
 				set_variable = { var = VAL_contract_reputation_level value = 3 }
@@ -1730,7 +1730,7 @@ focus_tree = {
 		}
 		prerequisite = { focus = VAL_Company_Rosters }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_recruit_local_volunteers show_effect_tooltip = yes }
+			unlock_decision_tooltip = VAL_recruit_local_volunteers
 			add_stability = 0.02
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_company_service_delta } }
 			hidden_effect = {
@@ -1851,7 +1851,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Foreign_Broker_Licences_tt
-			unlock_decision_tooltip = { decision = VAL_sell_surplus_arms_market show_effect_tooltip = yes }
+			unlock_decision_tooltip = VAL_sell_surplus_arms_market
 			add_political_power = 25
 			custom_effect_tooltip = VAL_focus_export_market_open_tt
 			hidden_effect = {
@@ -1965,7 +1965,7 @@ focus_tree = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Contracts_Outlive_Kings_tt
-			unlock_decision_tooltip = { decision = VAL_proclaim_commonwealth show_effect_tooltip = yes }
+			unlock_decision_tooltip = VAL_proclaim_commonwealth
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			add_stability = 0.1
 			add_war_support = 0.1
@@ -2035,10 +2035,10 @@ focus_tree = {
 			add_tech_bonus = { name = VAL_cw_field_reports_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			if = {
 				limit = { VAL_stelander_civil_war_active = yes NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
-				unlock_decision_tooltip = { decision = VAL_cw_sell_arms_to_resistance show_effect_tooltip = yes }
-				unlock_decision_tooltip = { decision = VAL_cw_offer_contract_formations show_effect_tooltip = yes }
+				unlock_decision_tooltip = VAL_cw_sell_arms_to_resistance
+				unlock_decision_tooltip = VAL_cw_offer_contract_formations
 			}
-			if = { limit = { VAL_cw_external_course_available = yes } unlock_decision_tooltip = { decision = VAL_cw_begin_mobilization show_effect_tooltip = yes } }
+			if = { limit = { VAL_cw_external_course_available = yes } unlock_decision_tooltip = VAL_cw_begin_mobilization }
 			custom_effect_tooltip = VAL_stelander_focus_current_status_tt
 			hidden_effect = {
 				set_country_flag = VAL_cw_trade_course
@@ -2070,7 +2070,7 @@ focus_tree = {
 			add_war_support = 0.05
 			add_command_power = 25
 			army_experience = 5
-			if = { limit = { VAL_cw_external_course_available = yes } unlock_decision_tooltip = { decision = VAL_cw_begin_mobilization show_effect_tooltip = yes } }
+			if = { limit = { VAL_cw_external_course_available = yes } unlock_decision_tooltip = VAL_cw_begin_mobilization }
 			custom_effect_tooltip = VAL_stelander_focus_current_status_tt
 			hidden_effect = { set_country_flag = VAL_cw_military_course }
 		}
@@ -2177,8 +2177,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_reclamation_roads show_effect_tooltip = yes }
-			custom_effect_tooltip = VAL_focus_reclamation_roads_preview_tt
+			unlock_decision_tooltip = VAL_reclamation_roads
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -2206,8 +2205,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_1_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } } } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_reclamation_water show_effect_tooltip = yes }
-			custom_effect_tooltip = VAL_focus_reclamation_water_preview_tt
+			unlock_decision_tooltip = VAL_reclamation_water
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -2237,8 +2235,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_2_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 2 compare = greater_than_or_equals } } } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_reclamation_settlement show_effect_tooltip = yes }
-			custom_effect_tooltip = VAL_focus_reclamation_settlement_preview_tt
+			unlock_decision_tooltip = VAL_reclamation_settlement
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -2267,8 +2264,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_land_register }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_reclamation_industry show_effect_tooltip = yes }
-			custom_effect_tooltip = VAL_focus_reclamation_industry_preview_tt
+			unlock_decision_tooltip = VAL_reclamation_industry
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -2371,8 +2367,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_frontier_postwar_ready_tt VAL_frontier_postwar = yes } }
 
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_nationalise_region show_effect_tooltip = yes }
-			custom_effect_tooltip = VAL_frontier_nationalisation_chain_tt
+			unlock_decision_tooltip = VAL_nationalise_region
 			add_political_power = 75
 			add_intel = { target = NOD army_intel = 15 }
 		}
@@ -2388,7 +2383,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_frontier_conference }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = VAL_frontier_transport_contract show_effect_tooltip = yes }
+			unlock_decision_tooltip = VAL_frontier_transport_contract
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_frontier_supply_delta } }
 			add_tech_bonus = { name = VAL_frontier_medical_bonus bonus = 0.5 uses = 1 category = support_tech }
 			army_experience = 20
@@ -2609,8 +2604,8 @@ focus_tree = {
 				add_stability = 0.03
 				add_political_power = 25
 			}
-			unlock_decision_tooltip = { decision = VAL_frontier_demand_CIN show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_defer_northern_expansion show_effect_tooltip = yes }
+			unlock_decision_tooltip = VAL_frontier_demand_CIN
+			unlock_decision_tooltip = VAL_defer_northern_expansion
 
 			add_political_power = 75
 		}
@@ -2638,10 +2633,7 @@ focus_tree = {
 
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_frontier_treaty_offices_tt
-			unlock_decision_tooltip = {
-				decision = VAL_frontier_workshops
-				show_effect_tooltip = yes
-			}
+			unlock_decision_tooltip = VAL_frontier_workshops
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = VAL_contract_delta_dummy
@@ -2687,7 +2679,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_frontier_treaty_offices }
 		available = { custom_trigger_tooltip = { tooltip = VAL_nod_campaign_foothold_tt VAL_northern_foothold_secured = yes } }
 		completion_reward = {
-			custom_effect_tooltip = VAL_focus_progression_VAL_Northern_Settlement_tt unlock_decision_tooltip = { decision = VAL_negotiate_yubora show_effect_tooltip = yes } unlock_decision_tooltip = { decision = VAL_campaign_against_nod show_effect_tooltip = yes } }
+			custom_effect_tooltip = VAL_focus_progression_VAL_Northern_Settlement_tt unlock_decision_tooltip = VAL_negotiate_yubora unlock_decision_tooltip = VAL_campaign_against_nod }
 		ai_will_do = { base = 8 }
 	}
 	focus = {
@@ -2703,7 +2695,7 @@ focus_tree = {
 		}
 		prerequisite = { focus = VAL_frontier_treaty_offices }
 		completion_reward = {
-			custom_effect_tooltip = VAL_focus_progression_VAL_Stelander_Ultimatum_tt unlock_decision_tooltip = { decision = VAL_stelander_ultimatum show_effect_tooltip = yes } unlock_decision_tooltip = { decision = VAL_campaign_against_stelander show_effect_tooltip = yes } }
+			custom_effect_tooltip = VAL_focus_progression_VAL_Stelander_Ultimatum_tt unlock_decision_tooltip = VAL_stelander_ultimatum unlock_decision_tooltip = VAL_campaign_against_stelander }
 		ai_will_do = { base = 20 }
 	}
 
@@ -3026,7 +3018,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_econ_development_fund }
 		ai_will_do = { base = 12 }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = ADISCORD_economy_precision_tooling show_effect_tooltip = yes }
+			unlock_decision_tooltip = ADISCORD_economy_precision_tooling
 			add_tech_bonus = {
 				name = VAL_econ_precision_industry
 				bonus = 0.5
@@ -3071,8 +3063,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_econ_precision_industry }
 		ai_will_do = { base = 12 }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = ADISCORD_economy_automated_industry show_effect_tooltip = yes }
-			custom_effect_tooltip = VAL_focus_paid_program_authorization_tt
+			unlock_decision_tooltip = ADISCORD_economy_automated_industry
 		}
 	}
 
@@ -3090,8 +3081,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_econ_special_metallurgy }
 		ai_will_do = { base = 6 }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = ADISCORD_economy_logistics_contract show_effect_tooltip = yes }
-			custom_effect_tooltip = VAL_focus_paid_program_authorization_tt
+			unlock_decision_tooltip = ADISCORD_economy_logistics_contract
 		}
 	}
 
@@ -3109,8 +3099,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_econ_automation }
 		ai_will_do = { base = 6 }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = ADISCORD_economy_national_computing show_effect_tooltip = yes }
-			custom_effect_tooltip = VAL_focus_paid_program_authorization_tt
+			unlock_decision_tooltip = ADISCORD_economy_national_computing
 		}
 	}
 
@@ -3128,8 +3117,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_econ_logistics }
 		ai_will_do = { base = 6 }
 		completion_reward = {
-			unlock_decision_tooltip = { decision = ADISCORD_economy_drone_contract show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_economy_platform_contract show_effect_tooltip = yes }
+			unlock_decision_tooltip = ADISCORD_economy_drone_contract
+			unlock_decision_tooltip = ADISCORD_economy_platform_contract
 			add_tech_bonus = {
 				name = VAL_econ_defense_orders
 				bonus = 0.5
@@ -3225,10 +3214,10 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Resource_War_Contracts_tt
-			unlock_decision_tooltip = { decision = VAL_negotiate_nam_metals show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_negotiate_efl_metals show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_resource_war_arms show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = VAL_resource_war_personnel show_effect_tooltip = yes }
+			unlock_decision_tooltip = VAL_negotiate_nam_metals
+			unlock_decision_tooltip = VAL_negotiate_efl_metals
+			unlock_decision_tooltip = VAL_resource_war_arms
+			unlock_decision_tooltip = VAL_resource_war_personnel
 			army_experience = 5
 		}
 		ai_will_do = { base = 5 }
@@ -3281,7 +3270,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Resource_War_Contracts }
 		available = { has_country_flag = VAL_efl_concession_active has_completed_focus = VAL_Resource_War_Contracts }
 		cancel_if_invalid = yes
-		completion_reward = { unlock_decision_tooltip = { decision = VAL_upgrade_south_route show_effect_tooltip = yes } add_political_power = 50 }
+		completion_reward = { unlock_decision_tooltip = VAL_upgrade_south_route add_political_power = 50 }
 		ai_will_do = { base = 6 }
 	}
 
