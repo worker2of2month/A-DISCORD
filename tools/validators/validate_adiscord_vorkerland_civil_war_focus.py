@@ -2713,7 +2713,7 @@ def _postwar_reward_categories(block: str) -> set[str]:
         "research": ("add_tech_bonus",),
         "public_unlock": (
             "ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked",
-            "WRK_worker_recognize_free_republics_tt",
+            "unlock_decision_tooltip = ADISCORD_vorkerland_recognize_free_republics",
         ),
     }
     return {
