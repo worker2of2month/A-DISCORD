@@ -166,6 +166,10 @@ on_actions = {
 				limit = { tag = NOD OR = { NOD_cw_intervention_possible = yes has_country_flag = NOD_cw_intervention_approved } }
 				STP_cw_poll_nod_intervention = yes
 			}
+			if = {
+				limit = { VAL_nod_can_attack_sts_overlord = yes }
+				VAL_nod_launch_sts_overlord_war = yes
+			}
 		}
 	}
 	on_weekly_STP = {
