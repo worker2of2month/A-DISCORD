@@ -327,7 +327,6 @@ focus_tree = {
 		ai_will_do = { base = 8 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_sabotage_capital 
-			custom_effect_tooltip = STP_cw_sabotage_capital_preparation_tt
 			custom_effect_tooltip = STP_cw_sabotage_capital_result_tt
 			add_political_power = 75
 			add_command_power = 10
@@ -1135,7 +1134,6 @@ focus_tree = {
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_prepare_assault_group 
-			custom_effect_tooltip = STP_cw_assault_group_tt
 		}
 	}
 
@@ -1471,7 +1469,6 @@ focus_tree = {
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_interrupt_opposition 
-			custom_effect_tooltip = STP_cw_security_collegium_tt
 
 			hidden_effect = {
 
@@ -1522,7 +1519,6 @@ focus_tree = {
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_seal_protocol 
-			custom_effect_tooltip = STP_cw_protocol_office_tt
 			custom_effect_tooltip = STP_cw_protocol_office_strategy_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pf_conservatives_support value = 8 }
@@ -1601,7 +1597,6 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 40
 			unlock_decision_tooltip = STP_cw_publish_directive 
-			custom_effect_tooltip = STP_cw_press_office_tt
 			custom_effect_tooltip = STP_cw_press_office_strategy_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pf_radicals_support value = 8 }
@@ -5064,8 +5059,7 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_pc_val_ratify }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			add_intel = { target = VAL army_intel = 20 } unlock_decision_tooltip = STP_pw_prepare_val_campaign  custom_effect_tooltip = STP_pc_campaign_preparation_tt
-		}
+			add_intel = { target = VAL army_intel = 20 } unlock_decision_tooltip = STP_pw_prepare_val_campaign		}
 	}
 
 	focus = {
@@ -5109,8 +5103,7 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_pc_nod_ratify }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			add_intel = { target = NOD army_intel = 20 } unlock_decision_tooltip = STP_pw_prepare_nod_campaign  custom_effect_tooltip = STP_pc_campaign_preparation_tt
-		}
+			add_intel = { target = NOD army_intel = 20 } unlock_decision_tooltip = STP_pw_prepare_nod_campaign		}
 	}
 
 	focus = {
@@ -5182,7 +5175,6 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 75
 			unlock_decision_tooltip = STP_pw_nationalise_region
-			custom_effect_tooltip = STP_heg_nationalisation_unlock_tt
 			custom_effect_tooltip = STP_heg_administration_unlock_tt
 			hidden_effect = { set_country_flag = STP_heg_administrations_unlocked }
 		}
@@ -6532,7 +6524,7 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt STP_ps_war_active = yes }  }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = STP_ps_ammunition  custom_effect_tooltip = STP_ps_ammunition_result_tt }
+		completion_reward = { unlock_decision_tooltip = STP_ps_ammunition }
 	}
 
 
@@ -6925,7 +6917,6 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 50
 			unlock_decision_tooltip = STP_pw_nationalise_region
-			custom_effect_tooltip = STP_pw_integration_chain_tt
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -7128,7 +7119,7 @@ shared_focus = {
 	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
 	cancel_if_invalid = yes
 	ai_will_do = { base = 4 }
-	completion_reward = { unlock_decision_tooltip = STP_ps_exile_training  unlock_decision_tooltip = STP_ps_exile_formation  custom_effect_tooltip = STP_ps_exile_formation_result_tt }
+	completion_reward = { unlock_decision_tooltip = STP_ps_exile_training  unlock_decision_tooltip = STP_ps_exile_formation }
 }
 
 shared_focus = {
@@ -7143,7 +7134,7 @@ shared_focus = {
 	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
 	cancel_if_invalid = yes
 	ai_will_do = { base = 4 }
-	completion_reward = { unlock_decision_tooltip = STP_ps_accept_return_terms  custom_effect_tooltip = STP_ps_return_terms_tt }
+	completion_reward = { unlock_decision_tooltip = STP_ps_accept_return_terms }
 }
 
 shared_focus = {
