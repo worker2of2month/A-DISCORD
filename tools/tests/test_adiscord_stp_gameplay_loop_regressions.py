@@ -181,14 +181,17 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
                 1,
                 state,
             )
-        vanished = {("FROM", "has_state_flag", "STP_party_inspection_active"): False}
-        live = {
-            ("FROM", "has_state_flag", "STP_party_inspection_active"): True,
-            ("FROM", "STP_region_is_operable", "yes"): True,
-            ("FROM", "is_owned_by", "ROOT"): True,
-            ("FROM", "is_controlled_by", "ROOT"): True,
-            ("STP", "STP_cw_from_inspection_mission_active", "yes"): True,
+        vanished = {
             ("FROM", "state", "2"): True,
+            ("STP", "has_active_mission", "STP_party_inspection_state_2"): True,
+            ("2", "has_state_flag", "STP_party_inspection_active"): False,
+        }
+        live = {
+            ("FROM", "state", "2"): True,
+            ("2", "has_state_flag", "STP_party_inspection_active"): True,
+            ("2", "STP_region_is_operable", "yes"): True,
+            ("2", "is_owned_by", "ROOT"): True,
+            ("2", "is_controlled_by", "ROOT"): True,
             ("STP", "has_active_mission", "STP_party_inspection_state_2"): True,
         }
         vanished_effects = list(selected_effects(complete, vanished))
@@ -201,7 +204,9 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
             idle = list(selected_effects(block(decision, terminal), {}))
             self.assertEqual(sum(e.key == "STP_political_action_slot_release" for _, e in idle), 0)
             paid = list(selected_effects(block(decision, terminal), {
-                ("FROM", "has_state_flag", "STP_cw_inspection_delay_escrow"): True}))
+                ("FROM", "state", "2"): True,
+                ("2", "has_state_flag", "STP_cw_inspection_delay_escrow"): True,
+            }))
             self.assertEqual(sum(e.key == "STP_political_action_slot_release" for _, e in paid), 1)
 
     def test_last_banquet_is_a_single_congress_deadline(self) -> None:
