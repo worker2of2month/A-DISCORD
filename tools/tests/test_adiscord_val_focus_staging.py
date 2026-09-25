@@ -185,6 +185,18 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 focus_id,
             )
 
+    def test_contracts_outlive_kings_is_a_visible_capstone(self) -> None:
+        body = focus_block(self.focuses, "VAL_Contracts_Outlive_Kings")
+        self.assertNotIn("allow_branch", body)
+        self.assertNotIn("dynamic = yes", body)
+        for dependency in (
+            "VAL_State_Contract",
+            "VAL_Industrial_Mobilization_Plan",
+            "VAL_Army_Of_The_Ledger",
+        ):
+            self.assertIn(f"prerequisite = {{ focus = {dependency} }}", body)
+        self.assertRegex(body, r"ai_will_do\s*=\s*\{[^}]*base\s*=\s*1000")
+
     def test_foreign_clearing_house_waits_for_the_northern_choice(self) -> None:
         gate = allow(self.focuses, "VAL_Foreign_Broker_Licences")
         self.assertIn("VAL_Trading_Partners", gate)
