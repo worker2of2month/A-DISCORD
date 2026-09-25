@@ -12,6 +12,59 @@ on_actions = {
 
 			ROOT = { VAL_military_capture_result = yes }
 
+			# Kefreyt's dedicated northern-coalition war owns all three capitulations.
+			# Hold native peace until the last mandatory coalition member has fallen.
+			if = {
+				limit = {
+					ROOT = {
+						OR = { tag = YPR tag = COF tag = TFF }
+						has_country_flag = VAL_northern_coalition_campaign_member
+						has_war_with = VAL
+					}
+					VAL = {
+						exists = yes
+						has_capitulated = no
+						has_country_flag = VAL_northern_coalition_campaign_active
+					}
+					FROM = { OR = { tag = VAL is_subject_of = VAL } }
+				}
+				set_global_flag = skip_default_capitulation
+				if = {
+					limit = { VAL = { VAL_northern_coalition_campaign_victory_ready = yes } }
+					VAL = { VAL_settle_northern_coalition_victory = yes }
+				}
+				clr_global_flag = skip_default_capitulation
+			}
+
+			# NOD can inherit a war against Kefreyt when it intervenes against an STS
+			# administration. This front has its own limited peace in both directions.
+			if = {
+				limit = {
+					ROOT = {
+						tag = NOD
+						has_country_flag = NOD_cw_entered
+						has_war_with = VAL
+					}
+					VAL = { exists = yes has_capitulated = no }
+					STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
+					FROM = { OR = { tag = VAL tag = STS is_subject_of = VAL } }
+				}
+				set_global_flag = skip_default_capitulation
+				VAL = { VAL_settle_nod_overlord_sts_victory = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = VAL has_war_with = NOD }
+					NOD = { exists = yes has_country_flag = NOD_cw_entered has_war_with = VAL }
+					STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
+					FROM = { OR = { tag = NOD is_subject_of = NOD } }
+				}
+				set_global_flag = skip_default_capitulation
+				VAL = { VAL_settle_nod_overlord_sts_defeat = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+
 			# BEGIN stelander:on_capitulation_immediate
 			# Clear an unconsumed handoff so it cannot suppress another defeat.
 			ROOT = { clr_country_flag = STP_cw_northern_capitulation_pending }
@@ -45,6 +98,7 @@ on_actions = {
 				limit = {
 					has_global_flag = STP_cw_started
 					ROOT = {
+						NOT = { has_country_flag = VAL_nod_overlord_sts_peace_handled }
 						OR = {
 							tag = STP
 							tag = STS
@@ -152,6 +206,7 @@ on_actions = {
             clr_country_flag = VAL_frontier_capitulation_pending
             if = {
                 limit = {
+                    NOT = { has_country_flag = VAL_nod_overlord_sts_peace_handled }
                     VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
                     OR = { AND = { tag = CIN OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } } has_war_with = VAL capital_scope = { VAL_frontier_controlled = yes } }
                         AND = { tag = OSF OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } } has_war_with = VAL capital_scope = { VAL_frontier_controlled = yes } }
@@ -168,7 +223,7 @@ on_actions = {
                 clr_global_flag = skip_default_capitulation
             }
             else_if = {
-                limit = { tag = VAL check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
+                limit = { tag = VAL NOT = { has_country_flag = VAL_nod_overlord_sts_peace_handled } check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
                 # An unrelated winner keeps its own capitulation route.
                 VAL_frontier_close = yes
             }
