@@ -2178,7 +2178,6 @@ focus_tree = {
 		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_roads
-			custom_effect_tooltip = VAL_focus_reclamation_roads_preview_tt
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -2207,7 +2206,6 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_water
-			custom_effect_tooltip = VAL_focus_reclamation_water_preview_tt
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -2238,7 +2236,6 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_settlement
-			custom_effect_tooltip = VAL_focus_reclamation_settlement_preview_tt
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -2268,7 +2265,6 @@ focus_tree = {
 		prerequisite = { focus = VAL_reclamation_land_register }
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_industry
-			custom_effect_tooltip = VAL_focus_reclamation_industry_preview_tt
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -2372,7 +2368,6 @@ focus_tree = {
 
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nationalise_region
-			custom_effect_tooltip = VAL_frontier_nationalisation_chain_tt
 			add_political_power = 75
 			add_intel = { target = NOD army_intel = 15 }
 		}
@@ -3069,7 +3064,6 @@ focus_tree = {
 		ai_will_do = { base = 12 }
 		completion_reward = {
 			unlock_decision_tooltip = ADISCORD_economy_automated_industry
-			custom_effect_tooltip = VAL_focus_paid_program_authorization_tt
 		}
 	}
 
@@ -3088,7 +3082,6 @@ focus_tree = {
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			unlock_decision_tooltip = ADISCORD_economy_logistics_contract
-			custom_effect_tooltip = VAL_focus_paid_program_authorization_tt
 		}
 	}
 
@@ -3107,7 +3100,6 @@ focus_tree = {
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			unlock_decision_tooltip = ADISCORD_economy_national_computing
-			custom_effect_tooltip = VAL_focus_paid_program_authorization_tt
 		}
 	}
 
