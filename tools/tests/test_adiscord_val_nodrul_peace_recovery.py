@@ -114,6 +114,89 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
             install.index("VAL_nodrul_administration_pending"),
         )
 
+    def test_nodrul_administration_keeps_its_own_colour_identity(self) -> None:
+        install = named_block(self.source, "VAL_install_nodrul_administration")
+        finish = named_block(self.source, "VAL_finish_nodrul_administration")
+        autonomy = (ROOT / "common/autonomous_states/ADISCORD_contract_clients.txt").read_text(encoding="utf-8")
+        cosmetic = (ROOT / "common/countries/cosmetic.txt").read_text(encoding="utf-8")
+
+        self.assertIn("set_cosmetic_tag = NOD_VAL_administration", install)
+        self.assertLess(
+            install.index("set_cosmetic_tag = NOD_VAL_administration"),
+            install.index("VAL_nodrul_administration_pending"),
+        )
+        self.assertIn("set_cosmetic_tag = NOD_VAL_administration", finish)
+        self.assertIn("id = autonomy_VAL_contract_administration", autonomy)
+        contract = named_block(autonomy, "autonomy_state")
+        self.assertIn("use_overlord_color = no", autonomy[autonomy.index("id = autonomy_VAL_contract_administration"):])
+        self.assertIn("NOD_VAL_administration = { color = rgb { 63 56 96 }", cosmetic)
+
+    def test_ainholm_is_the_only_colony_in_the_new_northern_settlement(self) -> None:
+        queue = named_block(self.source, "VAL_queue_ainholm_colony")
+        complete = named_block(self.source, "VAL_complete_ainholm_colony")
+        coalition = named_block(self.source, "VAL_settle_northern_coalition_victory")
+        nodrul = named_block(self.source, "VAL_finish_nodrul_administration")
+        joint = named_block(self.source, "VAL_settle_joint_nod_shabrat_victory")
+
+        self.assertIn("tag = AIN", complete)
+        self.assertIn("autonomy_state = autonomy_colony", complete)
+        self.assertIn("VAL_ainholm_colony_pending", queue)
+        self.assertIn("id = val_contract.355 days = 1", queue)
+        self.assertIn("VAL_queue_ainholm_colony = yes", coalition)
+        self.assertIn("VAL_queue_ainholm_colony = yes", nodrul)
+        self.assertIn("VAL_queue_ainholm_colony = yes", joint)
+
+        for block in (coalition, named_block(self.source, "VAL_partition_nodrul_settlement")):
+            self.assertNotIn("autonomy_state = autonomy_colony", block)
+
+        events = EVENTS.read_text(encoding="utf-8")
+        self.assertIn("id = val_contract.355", events)
+        self.assertIn("VAL_complete_ainholm_colony = yes", events)
+
+    def test_northern_coalition_has_one_focus_and_one_scripted_settlement(self) -> None:
+        focuses = (ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt").read_text(encoding="utf-8")
+        triggers = TRIGGERS.read_text(encoding="utf-8")
+        self.assertEqual(focuses.count("id = VAL_Break_The_Northern_Coalition"), 1)
+
+        start = focuses.index("id = VAL_Break_The_Northern_Coalition")
+        end = focuses.find("\n\tfocus = {", start)
+        focus = focuses[start:end if end != -1 else len(focuses)]
+        self.assertIn("prerequisite = { focus = VAL_Northern_Settlement }", focus)
+        self.assertIn("VAL_can_attack_northern_coalition = yes", focus)
+        self.assertIn("VAL_begin_northern_coalition_campaign = yes", focus)
+
+        gate = named_block(triggers, "VAL_can_attack_northern_coalition")
+        for tag in ("YPR", "COF", "TFF"):
+            self.assertIn(f"{tag} = {{", gate)
+
+        start_effect = named_block(self.source, "VAL_begin_northern_coalition_campaign")
+        settlement = named_block(self.source, "VAL_settle_northern_coalition_victory")
+        for tag in ("YPR", "COF", "TFF"):
+            self.assertIn(f"target = {tag}", settlement)
+        self.assertEqual(settlement.count("autonomy_state = autonomy_VAL_contract_administration"), 3)
+        self.assertIn("target = YPR", start_effect)
+        self.assertIn("targeted_alliance = YPR", start_effect)
+
+        router = ON_ACTIONS.read_text(encoding="utf-8")
+        self.assertIn("VAL_northern_coalition_campaign_member", router)
+        self.assertIn("VAL_settle_northern_coalition_victory = yes", router)
+
+    def test_nod_intervention_against_val_subject_has_limited_peace_both_ways(self) -> None:
+        router = ON_ACTIONS.read_text(encoding="utf-8")
+        self.assertIn("VAL_settle_nod_overlord_sts_victory = yes", router)
+        self.assertIn("VAL_settle_nod_overlord_sts_defeat = yes", router)
+        self.assertIn("STS = { exists = yes is_subject_of = VAL has_war_with = NOD }", router)
+
+        victory = named_block(self.source, "VAL_settle_nod_overlord_sts_victory")
+        defeat = named_block(self.source, "VAL_settle_nod_overlord_sts_defeat")
+        self.assertIn("VAL_install_nodrul_administration = yes", victory)
+        self.assertIn("STP_cw_end_nod_intervention = yes", victory)
+        self.assertIn("target = STS", defeat)
+        self.assertIn("autonomy_state = autonomy_free", defeat)
+        self.assertIn("white_peace = NOD", defeat)
+        self.assertNotIn("annex_country", defeat)
+        self.assertNotIn("transfer_state", defeat)
+
     def test_nodrul_settlement_closes_bezhaysk_war_before_capitulation(self) -> None:
         install = named_block(self.source, "VAL_install_nodrul_administration")
         settle = named_block(self.source, "VAL_settle_nodrul_bezhaysk_war")
