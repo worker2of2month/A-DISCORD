@@ -8,6 +8,15 @@ FOCUS_DIR = ROOT / "common" / "national_focus"
 
 
 class FocusTooltipCompactnessTests(unittest.TestCase):
+    def test_decision_unlocks_use_scalar_form(self) -> None:
+        offenders = []
+        pattern = re.compile(r"unlock_decision_tooltip\s*=\s*\{")
+        for path in sorted(FOCUS_DIR.glob("*.txt")):
+            text = path.read_text(encoding="utf-8-sig")
+            if pattern.search(text):
+                offenders.append(path.name)
+        self.assertEqual(offenders, [])
+
     def test_decision_unlocks_do_not_inline_full_decision_effects(self) -> None:
         offenders = []
         pattern = re.compile(
