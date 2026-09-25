@@ -963,8 +963,8 @@ focus_tree = {
 				limit = { controls_state = 32 }
 				32 = { add_building_construction = { type = bunker level = 1 instant_build = yes province = 6713 } }
 			}
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_wkr_retreat_levy_1 show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_wkr_retreat_levy_2 show_effect_tooltip = yes }
+			unlock_decision_tooltip = ADISCORD_vorkerland_wkr_retreat_levy_1
+			unlock_decision_tooltip = ADISCORD_vorkerland_wkr_retreat_levy_2
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_wkr_retreat_levies_unlocked
 			}
@@ -3419,8 +3419,8 @@ focus_tree = {
 				limit = { controls_state = 75 }
 				75 = { add_building_construction = { type = bunker level = 1 instant_build = yes province = 6192 } }
 			}
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_vad_retreat_levy_1 show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_vad_retreat_levy_2 show_effect_tooltip = yes }
+			unlock_decision_tooltip = ADISCORD_vorkerland_vad_retreat_levy_1
+			unlock_decision_tooltip = ADISCORD_vorkerland_vad_retreat_levy_2
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_vad_retreat_levies_unlocked
 			}
@@ -5532,8 +5532,8 @@ focus_tree = {
 				limit = { controls_state = 36 }
 				36 = { add_building_construction = { type = bunker level = 1 instant_build = yes province = 12227 } }
 			}
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_tva_retreat_levy_1 show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_tva_retreat_levy_2 show_effect_tooltip = yes }
+			unlock_decision_tooltip = ADISCORD_vorkerland_tva_retreat_levy_1
+			unlock_decision_tooltip = ADISCORD_vorkerland_tva_retreat_levy_2
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_tva_retreat_levies_unlocked
 			}
@@ -6890,7 +6890,7 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 10
 			add_stability = 0.01
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_recognize_free_republics show_effect_tooltip = yes }
+			unlock_decision_tooltip = ADISCORD_vorkerland_recognize_free_republics
 			custom_effect_tooltip = WRK_worker_recognize_free_republics_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_worker_free_republics
@@ -6979,13 +6979,13 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 15
 			add_stability = 0.01
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_claimant_homes show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_central_historical show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_oitfort show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_rimat show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_techlar show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_ebern show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_solar show_effect_tooltip = yes }
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_claimant_homes
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_central_historical
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_oitfort
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_rimat
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_techlar
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_ebern
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_solar
 			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_worker_homecoming_commissions
@@ -7309,16 +7309,16 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 15
 			add_stability = 0.01
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_claimant_homes show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_central_historical show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_oitfort show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_rimat show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_techlar show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_ebern show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_solar show_effect_tooltip = yes }
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_claimant_homes
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_central_historical
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_oitfort
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_rimat
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_techlar
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_ebern
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_solar
 			if = {
 				limit = { NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed } }
-				unlock_decision_tooltip = { decision = ADISCORD_vorkerland_vad_continue_imperial_reunification show_effect_tooltip = yes }
+				unlock_decision_tooltip = ADISCORD_vorkerland_vad_continue_imperial_reunification
 			}
 			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
 			hidden_effect = {
@@ -7715,13 +7715,13 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 10
 			add_stability = 0.01
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_claimant_homes show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_central_historical show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_oitfort show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_rimat show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_techlar show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_ebern show_effect_tooltip = yes }
-			unlock_decision_tooltip = { decision = ADISCORD_vorkerland_restore_core_solar show_effect_tooltip = yes }
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_claimant_homes
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_central_historical
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_oitfort
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_rimat
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_techlar
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_ebern
+			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_solar
 			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_integration_metrics
