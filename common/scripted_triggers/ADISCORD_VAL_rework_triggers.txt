@@ -565,6 +565,31 @@ VAL_northern_volunteer_front_open = {
 # still requires all eight states later.
 # The coalition campaign is separate from Nodrul's northern war. Kefreyt waits
 # until all three governments are independent, at peace and diplomatically coherent.
+# Nodrul can reopen the Stelander question after Kefreyt turns Shabrat's
+# government into a subject. The weekly launcher waits for a clean postwar tick.
+VAL_nod_can_attack_sts_overlord = {
+	tag = NOD
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	has_global_flag = STP_cw_union_wars_finished
+	NOT = { has_country_flag = VAL_nod_overlord_sts_war_active }
+	NOT = { has_country_flag = VAL_nodrul_administration_pending }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		NOT = { has_war_with = NOD }
+	}
+	STS = {
+		exists = yes
+		has_capitulated = no
+		is_subject_of = VAL
+	}
+	NOT = { is_in_faction_with = VAL }
+}
+
 VAL_northern_coalition_resolved = {
 	AND = {
 		OR = { NOT = { YPR = { exists = yes } } YPR = { is_subject_of = VAL } }
