@@ -192,6 +192,7 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         victory = named_block(self.source, "VAL_settle_nod_overlord_sts_victory")
         defeat = named_block(self.source, "VAL_settle_nod_overlord_sts_defeat")
         self.assertIn("VAL_install_nodrul_administration = yes", victory)
+        self.assertIn("STP_cw_abort_northern_campaign_external_defeat = yes", victory)
         self.assertIn("STP_cw_end_nod_intervention = yes", victory)
         self.assertIn("target = STS", defeat)
         self.assertIn("autonomy_state = autonomy_free", defeat)
