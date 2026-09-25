@@ -607,6 +607,8 @@
  BOR_humanism_party: "Съезд пограничных общин"
  DOL_pragmatism_party: "Совет дорожных округов"
  RIN_hedonism_party: "Двор Двух Присяг"
+ RIN_chauvinism_party: "Регентский совет"
+ RIN_chauvinism_party_long: "Регентский совет Северного двора"
  KRM_utilitarism_party: "Палата шахт и дорог"
  LMN_etatism_party: "Чрезвычайная санитарная комиссия"
  RLY_technocracy_party: "Станционный совет"
