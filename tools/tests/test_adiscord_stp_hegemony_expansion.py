@@ -194,13 +194,48 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
             self.assertIn("has_country_flag = STP_heg_administrations_unlocked", block)
             self.assertIn("has_war = no", block)
 
+    def test_ai_resolves_bezhaysk_and_nodrul_before_kefreyt(self) -> None:
+        focuses = read("common/national_focus/ADISCORD_national_focus_STP.txt")
+        decisions = read("common/decisions/ADISCORD_STP_decisions.txt")
+        triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+
+        bezhaysk = re.search(r"(?ms)id = STP_pw_take_bezhaysk\\b.*?(?=\\n\\tfocus = \\{)", focuses)
+        nodrul = re.search(r"(?ms)id = STP_pc_heg_nod_break\\b.*?(?=\\n\\tfocus = \\{)", focuses)
+        kefreyt = re.search(r"(?ms)id = STP_pc_heg_val_audit\\b.*?(?=\\n\\tfocus = \\{)", focuses)
+        self.assertIsNotNone(bezhaysk)
+        self.assertIsNotNone(nodrul)
+        self.assertIsNotNone(kefreyt)
+        self.assertIn("ai_will_do = { base = 20 }", bezhaysk.group(0))
+        self.assertIn("STP_shabrat_ai_bezhaysk_resolved = yes", nodrul.group(0))
+        self.assertIn("STP_shabrat_ai_bezhaysk_resolved = yes", kefreyt.group(0))
+        self.assertIn("STP_shabrat_ai_nodrul_resolved = yes", kefreyt.group(0))
+
+        self.assertTrue(named_block(triggers, "STP_shabrat_ai_bezhaysk_resolved"))
+        self.assertTrue(named_block(triggers, "STP_shabrat_ai_nodrul_resolved"))
+
+        prepare_nod = named_block(decisions, "STP_pw_prepare_nod_campaign")
+        begin_nod = named_block(decisions, "STP_pw_begin_nod_campaign")
+        self.assertIn("STP_shabrat_ai_bezhaysk_resolved = no", prepare_nod)
+        self.assertIn("STP_shabrat_ai_bezhaysk_resolved = no", begin_nod)
+
+        prepare_val = named_block(decisions, "STP_pw_prepare_val_campaign")
+        begin_val = named_block(decisions, "STP_pw_begin_val_campaign")
+        for block in (prepare_val, begin_val):
+            self.assertIn("STP_shabrat_ai_bezhaysk_resolved = no", block)
+            self.assertIn("STP_shabrat_ai_nodrul_resolved = no", block)
+        self.assertIn("strength_ratio = { tag = VAL ratio < 1.0 }", begin_val)
+
     def test_ai_path_reaches_new_endgame(self) -> None:
         plans = read("common/ai_strategy_plans/ADISCORD_STP_plans.txt")
         plan = named_block(plans, "STS_shabrat_hegemony_plan")
         sequence = (
             "STP_pc_heg_regional_system",
-            "STP_pc_heg_val_force",
+            "STP_pw_take_bezhaysk",
+            "STP_pc_heg_nod_break",
             "STP_pc_heg_nod_force",
+            "STP_pc_heg_val_audit",
+            "STP_pc_heg_val_terms",
+            "STP_pc_heg_val_force",
             "STP_pc_heg_clients",
             "STP_pc_heg_burden",
             "STP_pc_heg_administrations",
