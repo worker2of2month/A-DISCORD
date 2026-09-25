@@ -179,12 +179,14 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
 
         router = ON_ACTIONS.read_text(encoding="utf-8")
         self.assertIn("VAL_northern_coalition_campaign_member", router)
+        self.assertIn("VAL_northern_coalition_capitulation_reserved", router)
         self.assertIn("VAL_settle_northern_coalition_victory = yes", router)
 
     def test_nod_intervention_against_val_subject_has_limited_peace_both_ways(self) -> None:
         router = ON_ACTIONS.read_text(encoding="utf-8")
         self.assertIn("VAL_settle_nod_overlord_sts_victory = yes", router)
         self.assertIn("VAL_settle_nod_overlord_sts_defeat = yes", router)
+        self.assertIn("VAL_nod_overlord_sts_capitulation_reserved", router)
         self.assertIn("STS = { exists = yes is_subject_of = VAL has_war_with = NOD }", router)
 
         victory = named_block(self.source, "VAL_settle_nod_overlord_sts_victory")
