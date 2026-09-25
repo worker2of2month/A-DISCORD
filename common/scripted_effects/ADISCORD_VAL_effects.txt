@@ -4216,6 +4216,21 @@ VAL_complete_ainholm_colony = {
 	}
 }
 
+# COUNTRY NOD. The direct postwar challenge is retried weekly until the
+# engine accepts the war relation. The receipt is set only after that succeeds.
+VAL_nod_launch_sts_overlord_war = {
+	if = {
+		limit = { VAL_nod_can_attack_sts_overlord = yes }
+		declare_war_on = { target = VAL type = annex_everything }
+		if = {
+			limit = { has_war_with = VAL }
+			set_country_flag = VAL_nod_overlord_sts_war_active
+			VAL = { VAL_call_subjects_to_wars = yes }
+			log = "[VAL_NOD] Nodrul challenged Kefreyt over the subordinate STS government"
+		}
+	}
+}
+
 # Nodrul's intervention can drag Kefreyt into the war when STS is a Kefreyt
 # subject. A Nodrul defeat becomes the ordinary Kefreyt administration settlement.
 VAL_settle_nod_overlord_sts_victory = {
@@ -4224,7 +4239,13 @@ VAL_settle_nod_overlord_sts_victory = {
 			tag = VAL
 			has_capitulated = no
 			STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
-			NOD = { exists = yes has_country_flag = NOD_cw_entered }
+			NOD = {
+				exists = yes
+				OR = {
+					has_country_flag = NOD_cw_entered
+					has_country_flag = VAL_nod_overlord_sts_war_active
+				}
+			}
 		}
 		STP_cw_abort_northern_campaign_external_defeat = yes
 		STP_cw_end_nod_intervention = yes
@@ -4234,6 +4255,10 @@ VAL_settle_nod_overlord_sts_victory = {
 			VAL_install_nodrul_administration = yes
 		}
 		set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled days = 2 }
+		NOD = {
+			clr_country_flag = VAL_nod_overlord_sts_war_active
+			set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled days = 2 }
+		}
 	}
 }
 
@@ -4243,10 +4268,21 @@ VAL_settle_nod_overlord_sts_defeat = {
 	if = {
 		limit = {
 			tag = VAL
-			NOD = { exists = yes has_country_flag = NOD_cw_entered has_war_with = VAL }
+			NOD = {
+				exists = yes
+				has_war_with = VAL
+				OR = {
+					has_country_flag = NOD_cw_entered
+					has_country_flag = VAL_nod_overlord_sts_war_active
+				}
+			}
 			STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
 		}
 		set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled days = 2 }
+		NOD = {
+			clr_country_flag = VAL_nod_overlord_sts_war_active
+			set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled days = 2 }
+		}
 		set_autonomy = {
 			target = STS
 			autonomy_state = autonomy_free
