@@ -2691,6 +2691,29 @@ focus_tree = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Northern_Settlement_tt unlock_decision_tooltip = VAL_negotiate_yubora unlock_decision_tooltip = VAL_campaign_against_nod }
 		ai_will_do = { base = 8 }
 	}
+
+	focus = {
+		id = VAL_Break_The_Northern_Coalition
+		icon = GFX_goal_generic_major_war
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
+		x = 26
+		y = 15
+		cost = 5
+		prerequisite = { focus = VAL_Northern_Settlement }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_northern_coalition_available_tt
+				VAL_can_attack_northern_coalition = yes
+			}
+		}
+		bypass = { VAL_northern_coalition_resolved = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_northern_coalition_war_tt
+			hidden_effect = { VAL_begin_northern_coalition_campaign = yes }
+		}
+		ai_will_do = { base = 30 }
+	}
 	focus = {
 		id = VAL_Stelander_Ultimatum
 		dynamic = yes
