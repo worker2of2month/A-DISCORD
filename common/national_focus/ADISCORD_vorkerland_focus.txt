@@ -6891,7 +6891,6 @@ focus_tree = {
 			add_political_power = 10
 			add_stability = 0.01
 			unlock_decision_tooltip = ADISCORD_vorkerland_recognize_free_republics
-			custom_effect_tooltip = WRK_worker_recognize_free_republics_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_worker_free_republics
 			}
@@ -6986,7 +6985,6 @@ focus_tree = {
 			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_techlar
 			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_ebern
 			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_solar
-			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_worker_homecoming_commissions
 				set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
@@ -7320,7 +7318,6 @@ focus_tree = {
 				limit = { NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed } }
 				unlock_decision_tooltip = ADISCORD_vorkerland_vad_continue_imperial_reunification
 			}
-			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_joint_integration_warrants
 				set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
@@ -7722,7 +7719,6 @@ focus_tree = {
 			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_techlar
 			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_ebern
 			unlock_decision_tooltip = ADISCORD_vorkerland_restore_core_solar
-			custom_effect_tooltip = ADISCORD_vorkerland_unlock_core_restoration_decisions_tt
 			hidden_effect = {
 				set_country_flag = ADISCORD_vorkerland_focus_utilitarian_integration_metrics
 				set_country_flag = ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked
