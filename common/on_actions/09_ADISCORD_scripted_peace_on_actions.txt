@@ -48,8 +48,11 @@ on_actions = {
 				limit = {
 					ROOT = {
 						tag = NOD
-						has_country_flag = NOD_cw_entered
 						has_war_with = VAL
+						OR = {
+							has_country_flag = NOD_cw_entered
+							has_country_flag = VAL_nod_overlord_sts_war_active
+						}
 					}
 					VAL = { exists = yes has_capitulated = no }
 					STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
@@ -68,7 +71,14 @@ on_actions = {
 			else_if = {
 				limit = {
 					ROOT = { tag = VAL has_war_with = NOD }
-					NOD = { exists = yes has_country_flag = NOD_cw_entered has_war_with = VAL }
+					NOD = {
+						exists = yes
+						has_war_with = VAL
+						OR = {
+							has_country_flag = NOD_cw_entered
+							has_country_flag = VAL_nod_overlord_sts_war_active
+						}
+					}
 					STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
 					FROM = { OR = { tag = NOD is_subject_of = NOD } }
 				}
