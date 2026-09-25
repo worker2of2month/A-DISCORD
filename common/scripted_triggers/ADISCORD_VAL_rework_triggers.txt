@@ -980,7 +980,17 @@ VAL_final_campaign_ally = {
 # STATE: never divide an independent third country or a foreign occupation.
 VAL_nod_partition_state_available = {
     owner = { OR = { tag = NOD is_subject_of = NOD tag = VAL is_subject_of = VAL } }
-    controller = { OR = { tag = NOD is_subject_of = NOD VAL_final_campaign_ally = yes } }
+    controller = {
+        OR = {
+            tag = NOD
+            is_subject_of = NOD
+            VAL_final_campaign_ally = yes
+            AND = {
+                tag = STS
+                VAL = { has_country_flag = VAL_joint_nod_campaign_with_sts }
+            }
+        }
+    }
 }
 
 VAL_frontier_ultimatum_current = {

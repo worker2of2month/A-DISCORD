@@ -596,6 +596,8 @@ ADISCORD_scenario_debug_category = {
 		cost = 0
 		fire_only_once = no
 		complete_effect = {
+			clr_country_flag = VAL_joint_nod_settlement_completed
+			NOD = { clr_country_flag = VAL_joint_nod_campaign_target }
 			STS = { declare_war_on = { target = NOD type = annex_everything } }
 			set_country_flag = ADISCORD_debug_joint_sts_nod_pending
 			country_event = { id = val_rework.121 hours = 1 }
@@ -726,8 +728,13 @@ ADISCORD_scenario_debug_category = {
 				if = { limit = { has_war_with = NOD } white_peace = NOD }
 				clr_country_flag = VAL_stelander_refused
 			}
-			NOD = { remove_ideas = STP_pw_nod_invasion_mandate }
+			NOD = {
+				remove_ideas = STP_pw_nod_invasion_mandate
+				clr_country_flag = VAL_joint_nod_campaign_target
+			}
 			clr_country_flag = VAL_joint_nod_campaign_with_sts
+			clr_country_flag = VAL_joint_nod_settlement_completed
+			clr_country_flag = VAL_joint_nod_partition_locked
 			clr_country_flag = ADISCORD_debug_joint_sts_nod_pending
 			VAL_council_reconcile_revanche = yes
 			VAL_frontier_reconcile = yes

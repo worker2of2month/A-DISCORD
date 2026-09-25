@@ -44,9 +44,12 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertGreaterEqual(self.reconcile.count("set_country_flag = VAL_final_defeat_pending"), 3)
         self.assertIn("VAL_finalize_reserved_settlements = yes", self.reconcile)
 
-    def test_joint_shabrat_campaign_keeps_its_own_settlement(self) -> None:
+    def test_joint_shabrat_campaign_recovers_from_receipt_after_war_cleanup(self) -> None:
         self.assertIn("has_country_flag = VAL_joint_nod_campaign_with_sts", self.reconcile)
-        self.assertIn("NOD = { exists = yes has_war_with = VAL has_war_with = STS has_capitulated = yes }", self.reconcile)
+        self.assertIn("NOT = { has_country_flag = VAL_joint_nod_settlement_completed }", self.reconcile)
+        self.assertIn("has_country_flag = VAL_joint_nod_campaign_target", self.reconcile)
+        self.assertIn("has_capitulated = yes", self.reconcile)
+        self.assertNotIn("NOD = { exists = yes has_war_with = VAL has_war_with = STS has_capitulated = yes }", self.reconcile)
         self.assertIn("VAL_settle_joint_nod_shabrat_victory = yes", self.reconcile)
 
     def test_frontier_partner_can_receive_nodrul_capitulation_credit(self) -> None:
