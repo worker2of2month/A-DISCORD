@@ -153,8 +153,8 @@ class RusLastEmpireTests(unittest.TestCase):
         for focus_id in RUS_FOCUS_IDS:
             self.assertIn(f"id = {focus_id}", source)
             self.assertIn("ai_will_do =", source[source.index(f"id = {focus_id}"):])
-        self.assertIn("unlock_decision_tooltip = { decision = RUS_campaign_sla show_effect_tooltip = yes }", source)
-        self.assertIn("unlock_decision_tooltip = { decision = RUS_proclaim_the_last_empire show_effect_tooltip = yes }", source)
+        self.assertIn("unlock_decision_tooltip = RUS_campaign_sla", source)
+        self.assertIn("unlock_decision_tooltip = RUS_proclaim_the_last_empire", source)
         self.assertIn("create_unit", source)
         self.assertIn("has_country_flag = ADISCORD_vorkerland_rus_sla_absorbed", source)
         self.assertNotIn("ADISCORD_vorkerland_rus_aimaqs_summoned", source)
@@ -261,10 +261,10 @@ class RusLastEmpireTests(unittest.TestCase):
             found = tuple(int(value) for value in re.findall(r"controls_state = (\d+)", block.group(1)))
             self.assertEqual(found, states, suffix)
 
-    def test_claimant_rewards_hide_dispatchers_and_preview_war_economy(self) -> None:
+    def test_claimant_rewards_hide_dispatchers_and_keep_focus_unlocks_compact(self) -> None:
         focus = read(ROOT / "common/national_focus/ADISCORD_vorkerland_focus.txt")
         self.assertNotRegex(focus, r"(?m)^\t\t\tcountry_event =")
-        self.assertIn("show_effect_tooltip = yes", focus)
+        self.assertNotIn("show_effect_tooltip = yes", focus)
         self.assertIn("ADISCORD_vorkerland_wkr_war_economy_dummy", focus)
         self.assertIn("ADISCORD_vorkerland_wkr_war_economy_strip", read(ROOT / "common/ideas/ADISCORD_vorkerland_ideas.txt"))
         plans = read(PLAN_FILE)
