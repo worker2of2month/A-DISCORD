@@ -497,6 +497,7 @@ VAL_military_operations = {
 				if = {
 					limit = {
 						FROM = { tag = NOD }
+						NOT = { has_country_flag = VAL_joint_nod_settlement_completed }
 						STS = {
 							exists = yes
 							has_capitulated = no
@@ -505,8 +506,7 @@ VAL_military_operations = {
 						}
 						NOD = { has_war_with = STS }
 					}
-					set_country_flag = VAL_joint_nod_campaign_with_sts
-					add_to_war = { targeted_alliance = STS enemy = NOD hostility_reason = asked_to_join single_target_only = yes }
+					VAL_begin_joint_nod_shabrat_campaign = yes
 				}
 				else = { declare_war_on = { target = FROM type = annex_everything } }
 				NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
