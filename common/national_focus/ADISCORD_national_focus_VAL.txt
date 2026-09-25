@@ -1945,17 +1945,13 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Contracts_Outlive_Kings
-		dynamic = yes
 		icon = GFX_focus_VAL_Contracts_Outlive_Kings
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 20
 		y = 12
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_State_Contract
-			has_completed_focus = VAL_Industrial_Mobilization_Plan
-			has_completed_focus = VAL_Army_Of_The_Ledger
-		}
+		# Keep the capstone visible. The prerequisite graph already handles availability,
+		# while hiding it behind allow_branch could leave the dynamic layout stale for AI.
 		prerequisite = { focus = VAL_State_Contract }
 		prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
 		prerequisite = { focus = VAL_Army_Of_The_Ledger }
