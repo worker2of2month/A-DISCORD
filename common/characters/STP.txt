@@ -254,7 +254,6 @@ characters = {
 
 	STP_Elena_Vetrova = {
 		name = STP_Elena_Vetrova
-		gender = female
 		portraits = { army = { large = GFX_Portrait_Forul_Generic_8 } }
 	}
 
@@ -271,7 +270,6 @@ characters = {
 
 	STS_Elena_Vetrova = {
 		name = STP_Elena_Vetrova
-		gender = female
 		portraits = { army = { large = GFX_Portrait_Forul_Generic_8 } }
 	}
 
