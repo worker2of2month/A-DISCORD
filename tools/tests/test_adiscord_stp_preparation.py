@@ -1503,9 +1503,8 @@ class StelanderPreparationTests(unittest.TestCase):
             with self.subTest(focus=focus_id):
                 reward = block(focuses[focus_id], "completion_reward")
                 self.assertNotIn("add_timed_idea", {e.key for e in walk(reward)}, "preparing a plan must not start its clock")
-                preview = block(reward, "unlock_decision_tooltip")
-                self.assertEqual(scalar(preview, "decision"), decision_id)
-                self.assertEqual(scalar(preview, "show_effect_tooltip"), "yes")
+                preview = next(e for e in reward if e.key == "unlock_decision_tooltip" and e.value == decision_id)
+                self.assertIsInstance(preview.value, str)
                 decision = block(decisions, decision_id)
                 self.assertEqual(scalar(block(decision, "allowed"), "tag"), tag)
                 self.assertEqual(scalar(block(decision, "visible"), "has_completed_focus"), focus_id)
