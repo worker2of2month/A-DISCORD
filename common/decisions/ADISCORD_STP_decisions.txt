@@ -817,7 +817,12 @@ STP_battle_for_stelander = {
 			hidden_trigger = {
 				OR = {
 					NOT = { STP_cw_preparation_open = yes }
-					FROM = { NOT = { has_state_flag = STP_cw_inspection_delay_escrow } }
+					AND = { FROM = { state = 2 } 2 = { NOT = { has_state_flag = STP_cw_inspection_delay_escrow } } }
+					AND = { FROM = { state = 3 } 3 = { NOT = { has_state_flag = STP_cw_inspection_delay_escrow } } }
+					AND = { FROM = { state = 29 } 29 = { NOT = { has_state_flag = STP_cw_inspection_delay_escrow } } }
+					AND = { FROM = { state = 45 } 45 = { NOT = { has_state_flag = STP_cw_inspection_delay_escrow } } }
+					AND = { FROM = { state = 46 } 46 = { NOT = { has_state_flag = STP_cw_inspection_delay_escrow } } }
+					AND = { FROM = { state = 53 } 53 = { NOT = { has_state_flag = STP_cw_inspection_delay_escrow } } }
 				}
 			}
 		}
@@ -826,22 +831,22 @@ STP_battle_for_stelander = {
 			hidden_effect = {
 				if = {
 					limit = {
-						FROM = {
-							has_state_flag = STP_party_inspection_active
-							STP_region_is_operable = yes
-							is_owned_by = ROOT
-							is_controlled_by = ROOT
+						OR = {
+							AND = { FROM = { state = 2 } has_active_mission = STP_party_inspection_state_2 2 = { has_state_flag = STP_party_inspection_active STP_region_is_operable = yes is_owned_by = ROOT is_controlled_by = ROOT } }
+							AND = { FROM = { state = 3 } has_active_mission = STP_party_inspection_state_3 3 = { has_state_flag = STP_party_inspection_active STP_region_is_operable = yes is_owned_by = ROOT is_controlled_by = ROOT } }
+							AND = { FROM = { state = 29 } has_active_mission = STP_party_inspection_state_29 29 = { has_state_flag = STP_party_inspection_active STP_region_is_operable = yes is_owned_by = ROOT is_controlled_by = ROOT } }
+							AND = { FROM = { state = 45 } has_active_mission = STP_party_inspection_state_45 45 = { has_state_flag = STP_party_inspection_active STP_region_is_operable = yes is_owned_by = ROOT is_controlled_by = ROOT } }
+							AND = { FROM = { state = 46 } has_active_mission = STP_party_inspection_state_46 46 = { has_state_flag = STP_party_inspection_active STP_region_is_operable = yes is_owned_by = ROOT is_controlled_by = ROOT } }
+							AND = { FROM = { state = 53 } has_active_mission = STP_party_inspection_state_53 53 = { has_state_flag = STP_party_inspection_active STP_region_is_operable = yes is_owned_by = ROOT is_controlled_by = ROOT } }
 						}
-						STP_cw_from_inspection_mission_active = yes
 					}
 					STP_political_action_slot_consume = yes
-					FROM = { set_state_flag = STP_cw_inspection_delay_escrow }
-					if = { limit = { FROM = { state = 2 } has_active_mission = STP_party_inspection_state_2 } add_days_mission_timeout = { mission = STP_party_inspection_state_2 days = 14 } }
-					if = { limit = { FROM = { state = 3 } has_active_mission = STP_party_inspection_state_3 } add_days_mission_timeout = { mission = STP_party_inspection_state_3 days = 14 } }
-					if = { limit = { FROM = { state = 29 } has_active_mission = STP_party_inspection_state_29 } add_days_mission_timeout = { mission = STP_party_inspection_state_29 days = 14 } }
-					if = { limit = { FROM = { state = 45 } has_active_mission = STP_party_inspection_state_45 } add_days_mission_timeout = { mission = STP_party_inspection_state_45 days = 14 } }
-					if = { limit = { FROM = { state = 46 } has_active_mission = STP_party_inspection_state_46 } add_days_mission_timeout = { mission = STP_party_inspection_state_46 days = 14 } }
-					if = { limit = { FROM = { state = 53 } has_active_mission = STP_party_inspection_state_53 } add_days_mission_timeout = { mission = STP_party_inspection_state_53 days = 14 } }
+					if = { limit = { FROM = { state = 2 } } 2 = { set_state_flag = STP_cw_inspection_delay_escrow } add_days_mission_timeout = { mission = STP_party_inspection_state_2 days = 14 } }
+					else_if = { limit = { FROM = { state = 3 } } 3 = { set_state_flag = STP_cw_inspection_delay_escrow } add_days_mission_timeout = { mission = STP_party_inspection_state_3 days = 14 } }
+					else_if = { limit = { FROM = { state = 29 } } 29 = { set_state_flag = STP_cw_inspection_delay_escrow } add_days_mission_timeout = { mission = STP_party_inspection_state_29 days = 14 } }
+					else_if = { limit = { FROM = { state = 45 } } 45 = { set_state_flag = STP_cw_inspection_delay_escrow } add_days_mission_timeout = { mission = STP_party_inspection_state_45 days = 14 } }
+					else_if = { limit = { FROM = { state = 46 } } 46 = { set_state_flag = STP_cw_inspection_delay_escrow } add_days_mission_timeout = { mission = STP_party_inspection_state_46 days = 14 } }
+					else_if = { limit = { FROM = { state = 53 } } 53 = { set_state_flag = STP_cw_inspection_delay_escrow } add_days_mission_timeout = { mission = STP_party_inspection_state_53 days = 14 } }
 				}
 				else = { add_political_power = 35 }
 			}
@@ -849,8 +854,22 @@ STP_battle_for_stelander = {
 		cancel_effect = {
 			hidden_effect = {
 				if = {
-					limit = { FROM = { has_state_flag = STP_cw_inspection_delay_escrow } }
-					FROM = { clr_state_flag = STP_cw_inspection_delay_escrow }
+					limit = {
+						OR = {
+							AND = { FROM = { state = 2 } 2 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+							AND = { FROM = { state = 3 } 3 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+							AND = { FROM = { state = 29 } 29 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+							AND = { FROM = { state = 45 } 45 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+							AND = { FROM = { state = 46 } 46 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+							AND = { FROM = { state = 53 } 53 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+						}
+					}
+					if = { limit = { FROM = { state = 2 } } 2 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
+					else_if = { limit = { FROM = { state = 3 } } 3 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
+					else_if = { limit = { FROM = { state = 29 } } 29 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
+					else_if = { limit = { FROM = { state = 45 } } 45 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
+					else_if = { limit = { FROM = { state = 46 } } 46 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
+					else_if = { limit = { FROM = { state = 53 } } 53 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
 					STP_political_action_slot_release = yes
 				}
 			}
@@ -858,8 +877,22 @@ STP_battle_for_stelander = {
 		remove_effect = {
 			hidden_effect = {
 				if = {
-					limit = { FROM = { has_state_flag = STP_cw_inspection_delay_escrow } }
-					FROM = { clr_state_flag = STP_cw_inspection_delay_escrow }
+					limit = {
+						OR = {
+							AND = { FROM = { state = 2 } 2 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+							AND = { FROM = { state = 3 } 3 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+							AND = { FROM = { state = 29 } 29 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+							AND = { FROM = { state = 45 } 45 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+							AND = { FROM = { state = 46 } 46 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+							AND = { FROM = { state = 53 } 53 = { has_state_flag = STP_cw_inspection_delay_escrow } }
+						}
+					}
+					if = { limit = { FROM = { state = 2 } } 2 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
+					else_if = { limit = { FROM = { state = 3 } } 3 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
+					else_if = { limit = { FROM = { state = 29 } } 29 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
+					else_if = { limit = { FROM = { state = 45 } } 45 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
+					else_if = { limit = { FROM = { state = 46 } } 46 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
+					else_if = { limit = { FROM = { state = 53 } } 53 = { clr_state_flag = STP_cw_inspection_delay_escrow } }
 					STP_political_action_slot_release = yes
 				}
 			}
