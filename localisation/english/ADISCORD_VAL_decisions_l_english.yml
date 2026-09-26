@@ -923,7 +923,7 @@
  VAL_declares_war_bezhaysk_tt:0 "§RDeclares war on Bezhaysk.§!"
  VAL_bezhaysk_operation_available_tt: "Stelander is defeated and its lands are secured by Kefreyt or its administrations. Kefreyt is independent and at peace; Bezhaysk exists, is independent, has not capitulated and is not in our alliance."
  VAL_Resource_War_Contracts: "Resource War Contracts"
- VAL_Resource_War_Contracts_desc:0 "Choose a side and negotiate postwar extraction rights in exchange for actual military aid. The recipient must accept the agreement.\n\n§YThis branch appears when the Svetlogorye Resource War begins. Completing $VAL_Ministry_Auditors$ is still required to take this focus.§!"
+ VAL_Resource_War_Contracts_desc:0 "Choose a side and negotiate postwar extraction rights in exchange for actual military aid. The recipient must accept the agreement.\n\n§YThis branch appears when the Svetlogorye Resource War begins. Completing $VAL_Operational_Directorate$ is still required to take this focus.§!"
  VAL_resource_war_arms:0 "Send arms to [FROM.GetName]"
  VAL_resource_war_arms_desc:0 "Deliver 25000 rifles from our stockpile. Two shipments fulfil the arms obligation. The recipient pays no treasury; the reward is the postwar concession."
  VAL_resource_war_personnel:0 "Send mercenaries to [FROM.GetName]"
