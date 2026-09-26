@@ -3612,6 +3612,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
                 for amount, expected in ((boundary - .1, False), (boundary, True)):
                     facts = {("VAL", "variable", f"VAL_{campaign}_aid_state"): 1,
                              ("VAL", "has_active_mission", f"VAL_{campaign}_aid_deadline"): True,
+                             ("VAL", "VAL_resource_aid_deliveries_open", "yes"): True,
                              ("VAL", "VAL_northern_aid_deliveries_open", "yes"): True,
                              ("VAL", "has_capitulated", "no"): True, ("VAL", "is_subject", "no"): True,
                              ("FROM", f"VAL_{campaign}_aid_recipient", "yes"): True,
@@ -3622,9 +3623,22 @@ class ValExpandedCampaignTests(unittest.TestCase):
                     debits = [e for e in selected if e.key == key and (mode == "arms" or e.value == "-2000")]
                     self.assertEqual(len(debits), int(expected), (campaign, mode, amount))
                     delivery_gate = (("VAL", "VAL_northern_aid_deliveries_open", "yes") if campaign == "northern"
-                                     else ("VAL", "has_active_mission", "VAL_resource_aid_deadline"))
+                                     else ("VAL", "VAL_resource_aid_deliveries_open", "yes"))
                     for blocker in (("FROM", f"VAL_{campaign}_aid_recipient", "yes"), delivery_gate):
                         self.assertFalse(list(selected_effects(payload, {**facts, blocker: False}, "VAL")))
+                    if campaign == "resource" and expected:
+                        without_mission = {**facts, ("VAL", "has_active_mission", "VAL_resource_aid_deadline"): False}
+                        self.assertTrue(list(selected_effects(payload, without_mission, "VAL")))
+
+    def test_resource_aid_repairs_missing_mission_without_reopening_expired_deadline(self):
+        effects_text = EFFECTS_PATH.read_text(encoding="utf-8")
+        decisions_text = (ROOT / "common/decisions/ADISCORD_VAL_decisions.txt").read_text(encoding="utf-8")
+        triggers_text = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
+        self.assertIn("VAL_resource_aid_deliveries_open = {", triggers_text)
+        self.assertIn("NOT = { has_country_flag = VAL_resource_aid_timeout_pending }", triggers_text)
+        self.assertIn("activate_mission = VAL_resource_aid_deadline", self.getblock(self.parse(effects_text), "VAL_resource_aid_daily"))
+        deadline = self.getblock(self.parse(decisions_text), "VAL_resource_aid_deadline")
+        self.assertIn("set_country_flag = VAL_resource_aid_timeout_pending", str(deadline))
 
     def test_northern_victory_requires_fulfilled_aid_and_settles_only_once(self):
         from tools.tests.test_adiscord_stp_preparation import selected_effects

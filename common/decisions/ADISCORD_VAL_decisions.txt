@@ -2324,8 +2324,8 @@ VAL_resource_war_aid = {
 		allowed = { tag = VAL }
 		targets = { NAM EFL }
 		target_trigger = { FROM = { VAL_resource_aid_recipient = yes } }
-		visible = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } FROM = { VAL_resource_aid_recipient = yes } }
-		available = { has_capitulated = no is_subject = no FROM = { VAL_resource_aid_recipient = yes } NOT = { has_equipment = { infantry_equipment < 25000 } } }
+		visible = { VAL_resource_aid_deliveries_open = yes FROM = { VAL_resource_aid_recipient = yes } }
+		available = { has_capitulated = no is_subject = no VAL_resource_aid_deliveries_open = yes FROM = { VAL_resource_aid_recipient = yes } NOT = { has_equipment = { infantry_equipment < 25000 } } }
 		custom_cost_text = VAL_aid_cost_arms
 		custom_cost_trigger = { NOT = { has_equipment = { infantry_equipment < 25000 } } }
 		cost = 0
@@ -2342,8 +2342,8 @@ VAL_resource_war_aid = {
 		allowed = { tag = VAL }
 		targets = { NAM EFL }
 		target_trigger = { FROM = { VAL_resource_aid_recipient = yes } }
-		visible = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } FROM = { VAL_resource_aid_recipient = yes } }
-		available = { has_capitulated = no is_subject = no FROM = { VAL_resource_aid_recipient = yes } NOT = { has_manpower < 2000 } NOT = { command_power < 25 } }
+		visible = { VAL_resource_aid_deliveries_open = yes FROM = { VAL_resource_aid_recipient = yes } }
+		available = { has_capitulated = no is_subject = no VAL_resource_aid_deliveries_open = yes FROM = { VAL_resource_aid_recipient = yes } NOT = { has_manpower < 2000 } NOT = { command_power < 25 } }
 		custom_cost_text = VAL_aid_cost_personnel
 		custom_cost_trigger = { NOT = { has_manpower < 2000 } NOT = { command_power < 25 } }
 		cost = 0
@@ -2368,7 +2368,7 @@ VAL_resource_war_aid = {
 		cancel_trigger = {
 			NOT = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } }
 		}
-		timeout_effect = { hidden_effect = { country_event = { id = val_contract.369 hours = 1 } } }
+		timeout_effect = { hidden_effect = { set_country_flag = VAL_resource_aid_timeout_pending country_event = { id = val_contract.369 hours = 1 } } }
 	}
 }
 

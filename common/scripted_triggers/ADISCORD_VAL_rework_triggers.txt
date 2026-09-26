@@ -1703,6 +1703,11 @@ VAL_resource_aid_sufficient = {
 	}
 }
 
+VAL_resource_aid_deliveries_open = {
+	check_variable = { var = VAL_resource_aid_state value = 1 compare = equals }
+	NOT = { has_country_flag = VAL_resource_aid_timeout_pending }
+}
+
 VAL_northern_aid_sufficient = {
 	OR = {
 		check_variable = { var = VAL_northern_aid_rifles value = 50000 compare = greater_than_or_equals }

@@ -365,7 +365,6 @@ class ValPartnerSettlementTests(unittest.TestCase):
                 facts["VAL", "has_completed_focus", "VAL_Resource_War_Contracts"] = True
                 facts["VAL", "variable", "VAL_resource_aid_side"] = 1
                 facts["VAL", "variable", "VAL_resource_aid_state"] = 1
-                facts["VAL", "has_active_mission", "VAL_resource_aid_deadline"] = True
                 self.execute(f"VAL_settle_partner_{kind}", facts, "NAM")
                 self.assertEqual(facts["VAL", "variable", "VAL_resource_aid_rifles"], quantity)
                 self.assertEqual(bool(facts.get(("VAL", "has_country_flag", "VAL_nam_aid_delivered"))), quantity >= 50000)

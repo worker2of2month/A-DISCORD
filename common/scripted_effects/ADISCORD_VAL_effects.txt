@@ -1150,7 +1150,7 @@ VAL_settle_partner_arms = {
 			VAL_record_instant_export = yes
 		}
 		if = {
-			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+			limit = { VAL_resource_aid_recipient = yes VAL = { VAL_resource_aid_deliveries_open = yes } }
 			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 25000 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
@@ -1177,7 +1177,7 @@ VAL_settle_partner_bulk = {
 			VAL_record_instant_export = yes
 		}
 		if = {
-			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+			limit = { VAL_resource_aid_recipient = yes VAL = { VAL_resource_aid_deliveries_open = yes } }
 			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 50000 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
@@ -1204,7 +1204,7 @@ VAL_settle_partner_arsenal = {
 			VAL_record_instant_export = yes
 		}
 		if = {
-			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+			limit = { VAL_resource_aid_recipient = yes VAL = { VAL_resource_aid_deliveries_open = yes } }
 			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 100000 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
@@ -1231,7 +1231,7 @@ VAL_settle_partner_strategic = {
 			VAL_record_instant_export = yes
 		}
 		if = {
-			limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+			limit = { VAL_resource_aid_recipient = yes VAL = { VAL_resource_aid_deliveries_open = yes } }
 			VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 200000 } VAL_complete_resource_aid = yes }
 		}
 		set_country_flag = { flag = VAL_export_customer_cooldown days = 365 }
@@ -5868,6 +5868,7 @@ VAL_call_stelander_partner_to_wars = {
 # Aid state: 1 collecting, 2 fulfilled, -1 deadline missed, 3 settled.
 
 VAL_start_resource_aid = {
+	clr_country_flag = VAL_resource_aid_timeout_pending
 	if = {
 		limit = { NOT = { has_variable = VAL_resource_aid_state } }
 		set_variable = { var = VAL_resource_aid_state value = 1 }
@@ -5901,8 +5902,7 @@ VAL_deliver_resource_aid_arms = {
 		limit = {
 			has_capitulated = no
 			is_subject = no
-			has_active_mission = VAL_resource_aid_deadline
-			check_variable = { var = VAL_resource_aid_state value = 1 compare = equals }
+			VAL_resource_aid_deliveries_open = yes
 			FROM = { VAL_resource_aid_recipient = yes }
 			NOT = { has_equipment = { infantry_equipment < 25000 } }
 		}
@@ -5917,8 +5917,7 @@ VAL_deliver_resource_aid_personnel = {
 		limit = {
 			has_capitulated = no
 			is_subject = no
-			has_active_mission = VAL_resource_aid_deadline
-			check_variable = { var = VAL_resource_aid_state value = 1 compare = equals }
+			VAL_resource_aid_deliveries_open = yes
 			FROM = { VAL_resource_aid_recipient = yes }
 			NOT = { has_manpower < 2000 } NOT = { command_power < 25 }
 		}
@@ -5994,6 +5993,14 @@ VAL_deliver_northern_aid_personnel = {
 VAL_resource_aid_daily = {
 	if = {
 		limit = { has_variable = VAL_resource_aid_state NOT = { check_variable = { var = VAL_resource_aid_state value = 3 compare = equals } } }
+		if = {
+			limit = {
+				VAL_resource_aid_deliveries_open = yes
+				ADISCORD_nam_resource_war_active = yes
+				NOT = { has_active_mission = VAL_resource_aid_deadline }
+			}
+			activate_mission = VAL_resource_aid_deadline
+		}
 		if = {
 			limit = { ADISCORD_nam_resource_war_active = no }
 			VAL_settle_resource_aid = yes
@@ -6074,6 +6081,7 @@ VAL_settle_resource_aid = {
 		remove_ideas = VAL_resource_volunteer_mandate
 		clr_country_flag = VAL_nam_concession_offer_pending
 		clr_country_flag = VAL_efl_concession_offer_pending
+		clr_country_flag = VAL_resource_aid_timeout_pending
 	}
 }
 

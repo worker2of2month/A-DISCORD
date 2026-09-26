@@ -810,7 +810,7 @@ country_event = {
 					}
 				}
 				if = {
-					limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+					limit = { VAL_resource_aid_recipient = yes VAL = { VAL_resource_aid_deliveries_open = yes } }
 					VAL = { add_to_variable = { var = VAL_resource_aid_rifles value = 25000 } VAL_complete_resource_aid = yes }
 				}
 				clr_country_flag = VAL_export_offer_arms
@@ -878,7 +878,7 @@ country_event = {
 					add_manpower = 2000
 				}
 				if = {
-					limit = { VAL_resource_aid_recipient = yes VAL = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } has_active_mission = VAL_resource_aid_deadline } }
+					limit = { VAL_resource_aid_recipient = yes VAL = { VAL_resource_aid_deliveries_open = yes } }
 					VAL = { add_to_variable = { var = VAL_resource_aid_personnel value = 2000 } VAL_complete_resource_aid = yes }
 				}
 				clr_country_flag = VAL_export_offer_advisors
@@ -1543,6 +1543,7 @@ country_event = {
 			VAL_complete_resource_aid = yes
 			VAL_fail_resource_aid = yes
 		}
+		clr_country_flag = VAL_resource_aid_timeout_pending
 	}
 }
 
