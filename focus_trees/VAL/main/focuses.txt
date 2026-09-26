@@ -2167,14 +2167,118 @@ focus_tree = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_reclamation_has_work_tt
 				OR = {
-					24 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
-					42 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
-					48 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
-					54 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
-					55 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
-					56 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
-					57 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
-					168 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
+					24 = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						has_dynamic_modifier = {
+							modifier = ADISCORD_vorkerland_dirty_state
+						}
+						NOT = {
+							check_variable = {
+								var = VAL_reclamation_stage
+								value = 3
+								compare = greater_than_or_equals
+							}
+						}
+					}
+					42 = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						has_dynamic_modifier = {
+							modifier = ADISCORD_vorkerland_dirty_state
+						}
+						NOT = {
+							check_variable = {
+								var = VAL_reclamation_stage
+								value = 3
+								compare = greater_than_or_equals
+							}
+						}
+					}
+					48 = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						has_dynamic_modifier = {
+							modifier = ADISCORD_vorkerland_dirty_state
+						}
+						NOT = {
+							check_variable = {
+								var = VAL_reclamation_stage
+								value = 3
+								compare = greater_than_or_equals
+							}
+						}
+					}
+					54 = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						has_dynamic_modifier = {
+							modifier = ADISCORD_vorkerland_dirty_state
+						}
+						NOT = {
+							check_variable = {
+								var = VAL_reclamation_stage
+								value = 3
+								compare = greater_than_or_equals
+							}
+						}
+					}
+					55 = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						has_dynamic_modifier = {
+							modifier = ADISCORD_vorkerland_dirty_state
+						}
+						NOT = {
+							check_variable = {
+								var = VAL_reclamation_stage
+								value = 3
+								compare = greater_than_or_equals
+							}
+						}
+					}
+					56 = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						has_dynamic_modifier = {
+							modifier = ADISCORD_vorkerland_dirty_state
+						}
+						NOT = {
+							check_variable = {
+								var = VAL_reclamation_stage
+								value = 3
+								compare = greater_than_or_equals
+							}
+						}
+					}
+					57 = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						has_dynamic_modifier = {
+							modifier = ADISCORD_vorkerland_dirty_state
+						}
+						NOT = {
+							check_variable = {
+								var = VAL_reclamation_stage
+								value = 3
+								compare = greater_than_or_equals
+							}
+						}
+					}
+					168 = {
+						is_owned_by = ROOT
+						is_controlled_by = ROOT
+						has_dynamic_modifier = {
+							modifier = ADISCORD_vorkerland_dirty_state
+						}
+						NOT = {
+							check_variable = {
+								var = VAL_reclamation_stage
+								value = 3
+								compare = greater_than_or_equals
+							}
+						}
+					}
 				}
 			}
 		}
@@ -2207,7 +2311,19 @@ focus_tree = {
 		y = 6
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_survey }
-		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_1_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } } } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_reclamation_stage_1_tt
+				any_owned_state = {
+					is_controlled_by = ROOT
+					check_variable = {
+						var = VAL_reclamation_stage
+						value = 1
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_water
@@ -2223,7 +2339,19 @@ focus_tree = {
 		y = 8
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_road_crews }
-		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_1_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } } } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_reclamation_stage_1_tt
+				any_owned_state = {
+					is_controlled_by = ROOT
+					check_variable = {
+						var = VAL_reclamation_stage
+						value = 1
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = VAL_recovery_workshop_program
@@ -2240,7 +2368,19 @@ focus_tree = {
 		y = 8
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_clean_water }
-		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_2_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 2 compare = greater_than_or_equals } } } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_reclamation_stage_2_tt
+				any_owned_state = {
+					is_controlled_by = ROOT
+					check_variable = {
+						var = VAL_reclamation_stage
+						value = 2
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = VAL_reclamation_settlement
@@ -2257,7 +2397,19 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_workshops }
 		prerequisite = { focus = VAL_reclamation_return_home }
-		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_3_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_reclamation_stage_3_tt
+				any_owned_state = {
+					is_controlled_by = ROOT
+					check_variable = {
+						var = VAL_reclamation_stage
+						value = 3
+						compare = greater_than_or_equals
+					}
+				}
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = { add_ideas = VAL_reclamation_land_register_idea }
 		ai_will_do = { base = 3 }
