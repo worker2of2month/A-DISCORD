@@ -82,6 +82,60 @@ def block_with_id(source: str, block_type: str, identifier: str) -> str:
     raise AssertionError(f"missing {block_type} {identifier}")
 
 
+class NamTreatyCityTransferTests(unittest.TestCase):
+    OUTCOMES = (
+        ("ADISCORD_nam_resource_war_resolve_nam_victory", "701", "NAM", "EFL"),
+        ("ADISCORD_nam_resource_war_resolve_coalition_victory", "700", "AZH", "NAM"),
+        ("ADISCORD_nam_resource_war_resolve_peaceful_withdrawal", "700", "AZH", "NAM"),
+    )
+
+    def outcome_effects(self, outcome, state, has_owner=True, has_controller=True):
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            parse_clausewitz,
+            selected_effects,
+        )
+
+        path = builder.ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"
+        effects = parse_clausewitz(path.read_text(encoding="utf-8"))
+        facts = {
+            ("NAM", "ADISCORD_nam_resource_war_active", "yes"): True,
+            (state, "country_exists", "OWNER"): has_owner,
+            (state, "country_exists", "CONTROLLER"): has_controller,
+        }
+        return list(selected_effects(block(effects, outcome), facts, "NAM"))
+
+    def test_valid_city_receives_ownership_cores_and_control_together(self):
+        for outcome, state, recipient, previous_owner in self.OUTCOMES:
+            with self.subTest(outcome=outcome):
+                effects = self.outcome_effects(outcome, state)
+                transfers = [(scope, e.value) for scope, e in effects if e.key == "transfer_state"]
+                self.assertEqual(transfers.count((recipient, state)), 1)
+                state_effects = [(e.key, e.value) for scope, e in effects if scope == state]
+                self.assertEqual(state_effects, [
+                    ("remove_core_of", previous_owner),
+                    ("add_core_of", recipient),
+                    ("set_state_controller_to", recipient),
+                ])
+
+    def test_missing_owner_or_controller_skips_every_city_mutation(self):
+        for outcome, state, recipient, _ in self.OUTCOMES:
+            for has_owner, has_controller in ((False, True), (True, False), (False, False)):
+                with self.subTest(outcome=outcome, owner=has_owner, controller=has_controller):
+                    effects = self.outcome_effects(outcome, state, has_owner, has_controller)
+                    self.assertFalse(any(e.key == "transfer_state" and e.value == state for _, e in effects))
+                    self.assertFalse(any(scope == state for scope, _ in effects))
+                    self.assertTrue(any(e.key == "transfer_state" for _, e in effects))
+                    self.assertTrue(any(
+                        e.key == "ADISCORD_nam_resource_war_clear_temporary_support"
+                        for _, e in effects
+                    ))
+                    self.assertTrue(any(
+                        e.key == "set_global_flag" and e.value == "ADISCORD_nam_resource_war_resolved"
+                        for _, e in effects
+                    ))
+
+
 class VorkerlandNamStateBalanceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:

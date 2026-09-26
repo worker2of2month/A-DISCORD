@@ -2614,6 +2614,7 @@ VAL_apply_contract_reputation_0 = {
 # The focus funds the first formation; subsequent recruitment uses normal stocks.
 VAL_raise_shield_special_forces = {
 	custom_effect_tooltip = VAL_raise_shield_special_forces_tt
+
 	hidden_effect = {
 		if = {
 			limit = {
@@ -2621,34 +2622,57 @@ VAL_raise_shield_special_forces = {
 				has_capitulated = no
 				has_tech = ADISCORD_tech_casualty_evacuation
 				has_tech = ADISCORD_tech_forward_supply_hubs
-				NOT = { has_tech = ADISCORD_tech_kefreyt_shield_special_forces }
-				any_owned_state = { is_controlled_by = PREV }
+				any_owned_state = {
+					is_controlled_by = PREV
+				}
 			}
-			set_technology = {
-				ADISCORD_tech_kefreyt_shield_special_forces = 1
-				popup = no
-			}
-			VAL_refresh_contract_modifier = yes
+
+			# Unlock the battalion if it is not unlocked yet.
 			if = {
-				limit = { NOT = { has_template = "Kefreyt Shield Special Forces" } }
+				limit = {
+					NOT = {
+						has_tech = ADISCORD_tech_kefreyt_shield_special_forces
+					}
+				}
+
+				set_technology = {
+					ADISCORD_tech_kefreyt_shield_special_forces = 1
+					popup = no
+				}
+			}
+
+			VAL_refresh_contract_modifier = yes
+
+			# Create the recruitable template if it does not exist.
+			if = {
+				limit = {
+					NOT = {
+						has_template = "Kefreyt Shield Special Forces"
+					}
+				}
+
 				division_template = {
 					name = "Kefreyt Shield Special Forces"
 					override_model = ADISCORD_urban_breacher_entity
 					template_counter = 3
 					division_names_group = VAL_INF_01
 					is_locked = no
+					force_allow_recruiting = yes
+
 					regiments = {
 						ADISCORD_urban_breacher = { x = 0 y = 0 }
 						ADISCORD_urban_breacher = { x = 0 y = 1 }
 						ADISCORD_urban_breacher = { x = 0 y = 2 }
 						ADISCORD_urban_breacher = { x = 0 y = 3 }
 						ADISCORD_urban_breacher = { x = 0 y = 4 }
+
 						ADISCORD_urban_breacher = { x = 1 y = 0 }
 						ADISCORD_urban_breacher = { x = 1 y = 1 }
 						ADISCORD_urban_breacher = { x = 1 y = 2 }
 						ADISCORD_urban_breacher = { x = 1 y = 3 }
 						ADISCORD_urban_breacher = { x = 1 y = 4 }
 					}
+
 					support = {
 						engineer = { x = 0 y = 0 }
 						artillery = { x = 0 y = 1 }
@@ -2657,14 +2681,27 @@ VAL_raise_shield_special_forces = {
 					}
 				}
 			}
-			random_owned_controlled_state = {
-				create_unit = {
-					division = "name = \"1-я дивизия специального назначения\" division_template = \"Kefreyt Shield Special Forces\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
-					owner = PREV
-					count = 1
-					allow_spawning_on_enemy_provs = no
+
+			# Give the funded first formation only once.
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = VAL_shield_special_forces_raised
+					}
 				}
+
+				random_owned_controlled_state = {
+					create_unit = {
+						division = "name = \"1-я дивизия специального назначения\" division_template = \"Kefreyt Shield Special Forces\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+						owner = VAL
+						count = 1
+						allow_spawning_on_enemy_provs = no
+					}
+				}
+
+				set_country_flag = VAL_shield_special_forces_raised
 			}
+
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}

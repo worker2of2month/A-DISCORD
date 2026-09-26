@@ -155,7 +155,6 @@ ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = {
 		transfer_state = 227
 		transfer_state = 229
 		transfer_state = 689
-		transfer_state = 700
 		transfer_state = 690
 	}
 
@@ -171,9 +170,17 @@ ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = {
 	229 = { add_core_of = AZH set_state_controller_to = AZH }
 	689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
 	700 = {
-		remove_core_of = NAM
-		add_core_of = AZH
-		set_state_controller_to = AZH
+		# A transfer with no previous controller can crash native province updates.
+		if = {
+			limit = {
+				country_exists = OWNER
+				country_exists = CONTROLLER
+			}
+			AZH = { transfer_state = 700 }
+			remove_core_of = NAM
+			add_core_of = AZH
+			set_state_controller_to = AZH
+		}
 	}
 	690 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
 
@@ -309,7 +316,6 @@ ADISCORD_nam_resource_war_resolve_coalition_victory = {
 			transfer_state = 227
 			transfer_state = 229
 			transfer_state = 689
-			transfer_state = 700
 			transfer_state = 690
 		}
 		226 = { add_core_of = AZH set_state_controller_to = AZH }
@@ -317,9 +323,16 @@ ADISCORD_nam_resource_war_resolve_coalition_victory = {
 		229 = { add_core_of = AZH set_state_controller_to = AZH }
 		689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
 		700 = {
-			remove_core_of = NAM
-			add_core_of = AZH
-			set_state_controller_to = AZH
+			if = {
+				limit = {
+					country_exists = OWNER
+					country_exists = CONTROLLER
+				}
+				AZH = { transfer_state = 700 }
+				remove_core_of = NAM
+				add_core_of = AZH
+				set_state_controller_to = AZH
+			}
 		}
 		690 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
 
@@ -357,13 +370,20 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 		# recognising a Svetlogorsk claim to the Black Basin.
 		NAM = {
 			transfer_state = 691
-			transfer_state = 701
 		}
 		691 = { remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM }
 		701 = {
-			remove_core_of = EFL
-			add_core_of = NAM
-			set_state_controller_to = NAM
+			# Keep ownership, cores and control under the same native validity gate.
+			if = {
+				limit = {
+					country_exists = OWNER
+					country_exists = CONTROLLER
+				}
+				NAM = { transfer_state = 701 }
+				remove_core_of = EFL
+				add_core_of = NAM
+				set_state_controller_to = NAM
+			}
 		}
 		69 = { add_claim_by = NAM }
 		NAM = {
