@@ -1230,6 +1230,84 @@ VAL_reclamation = {
 		}
 		ai_will_do = { base = 4 modifier = { factor = 0 has_war = yes } }
 	}
+
+
+	# Focus-gated temporary development programmes.
+	VAL_recovery_road_corps_program = {
+		icon = generic_construction
+		visible = {
+			has_completed_focus = VAL_reclamation_road_crews
+			NOT = { ADISCORD_state_development_at_least_5 = yes }
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = ADISCORD_development_program_cost_100
+		days_remove = 120
+		days_re_enable = 60
+		complete_effect = {
+			ADISCORD_economy_spend_100 = yes
+			add_timed_idea = { idea = ADISCORD_development_program_state days = 120 }
+		}
+		cancel_trigger = { has_capitulated = yes }
+		cancel_effect = { remove_ideas = ADISCORD_development_program_state }
+		remove_effect = { remove_ideas = ADISCORD_development_program_state }
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } }
+		}
+	}
+
+	VAL_recovery_field_medicine_program = {
+		icon = generic_manpower
+		visible = {
+			has_completed_focus = VAL_Field_Surgeons
+			NOT = { ADISCORD_social_system_development_at_least_5 = yes }
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = ADISCORD_development_program_cost_100
+		days_remove = 120
+		days_re_enable = 60
+		complete_effect = {
+			ADISCORD_economy_spend_100 = yes
+			add_timed_idea = { idea = ADISCORD_development_program_social_system days = 120 }
+		}
+		cancel_trigger = { has_capitulated = yes }
+		cancel_effect = { remove_ideas = ADISCORD_development_program_social_system }
+		remove_effect = { remove_ideas = ADISCORD_development_program_social_system }
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } }
+		}
+	}
+
+	VAL_recovery_workshop_program = {
+		icon = generic_construction
+		visible = {
+			has_completed_focus = VAL_reclamation_workshops
+			NOT = { ADISCORD_economic_development_at_least_5 = yes }
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }
+		custom_cost_text = ADISCORD_development_program_cost_100
+		days_remove = 120
+		days_re_enable = 60
+		complete_effect = {
+			ADISCORD_economy_spend_100 = yes
+			add_timed_idea = { idea = ADISCORD_development_program_economic days = 120 }
+		}
+		cancel_trigger = { has_capitulated = yes }
+		cancel_effect = { remove_ideas = ADISCORD_development_program_economic }
+		remove_effect = { remove_ideas = ADISCORD_development_program_economic }
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } }
+		}
+	}
+
 }
 
 VAL_frontier = {
