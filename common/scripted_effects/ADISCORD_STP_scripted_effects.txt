@@ -6530,6 +6530,14 @@ STP_ps_refund_val_supply = {
 		set_temp_variable = { var = STP_ps_refund_rifles value = STP_ps_val_receipt_rifles }
 		set_temp_variable = { var = STP_ps_refund_money value = STP_ps_val_receipt_money }
 		set_temp_variable = { var = STP_ps_contract_type value = STP_ps_val_receipt_contract }
+		# Compatibility for saves from before fulfilment moved to convoy resolution.
+		if = {
+			limit = {
+				check_variable = { var = STP_ps_contract_type value = 0 compare = greater_than }
+				check_variable = { var = STP_ps_contract_type value = 3 compare = less_than }
+			}
+			clr_country_flag = VAL_cw_arms_contract_fulfilled
+		}
 		STP_ps_clear_val_receipt = yes
 		add_equipment_to_stockpile = { type = infantry_equipment amount = STP_ps_refund_rifles producer = VAL }
 		if = { limit = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } }
@@ -6592,15 +6600,20 @@ STP_ps_resolve_val_supply = {
 					check_variable = { var = STP_ps_contract_type value = 0 compare = greater_than }
 					check_variable = { var = STP_ps_contract_type value = 3 compare = less_than }
 				}
+				# Old saves may already carry the premature fulfilled flag and rewards.
+				# In that case resolve the escrow without granting them a second time.
 				if = {
-					limit = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } }
-					set_country_flag = { flag = VAL_cw_arms_contract_fulfilled value = 2 }
+					limit = { NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
+					if = {
+						limit = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } }
+						set_country_flag = { flag = VAL_cw_arms_contract_fulfilled value = 2 }
+					}
+					else = { set_country_flag = VAL_cw_arms_contract_fulfilled }
+					army_experience = 5
+					set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
+					VAL_change_contract_authority = yes
+					country_event = { id = ADISCORD_STP_cw.51 }
 				}
-				else = { set_country_flag = VAL_cw_arms_contract_fulfilled }
-				army_experience = 5
-				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
-				VAL_change_contract_authority = yes
-				country_event = { id = ADISCORD_STP_cw.51 }
 			}
 			if = { limit = { check_variable = { var = STP_ps_contract_type value = 3 compare = equals } }
 				if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
