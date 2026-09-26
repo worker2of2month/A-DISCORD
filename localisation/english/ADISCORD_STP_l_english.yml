@@ -2660,4 +2660,13 @@
  ADISCORD_STP_preparation.30.t: "The Old Substation"
  ADISCORD_STP_preparation.30.d: "A repair crew opened a substation that maps still identified by its Vorkerland number. Inside were oversized cables and connectors designed for a grid that no longer existed. The engineer explained to the apprentices that nodes like this had belonged to a unified energy programme centred on the zero-point reactor.\n\nOnly isolated pieces of the megaproject remained. They were stripped for copper, restored into local grids or simply avoided. For the workers, the past was not a legend about the end of the world. It was an unusual bolt, an obsolete diagram and a warning not to walk beyond the concrete marker."
  ADISCORD_STP_preparation.30.a: "Useful inheritance can still be dangerous."
+ STP_development_program_time_tt:0 "More than §Y42 days§! must remain before the election so the programme can finish before the split."
+ STP_shabrat_staff_courses_program:0 "Shabrat Staff Courses"
+ STP_shabrat_staff_courses_program_desc:0 "Gather loyal officers for an intensive staff-training cycle. For §Y42 days§!, Military Development growth increases by §G+100%§!. The programme closes before the election."
+ STP_shabrat_reconstruction_program:0 "Niansas Reconstruction Brigades"
+ STP_shabrat_reconstruction_program_desc:0 "Turn the repair of Niansas into a training ground for engineers, foremen and resistance logisticians. For §Y42 days§!, Economic Development growth increases by §G+100%§!."
+ STP_party_staff_drills_program:0 "Party Guard Staff Drills"
+ STP_party_staff_drills_program_desc:0 "Put the guard staff through an accelerated cycle of mobilisation and command exercises. For §Y42 days§!, Military Development growth increases by §G+100%§!."
+ STP_party_civil_service_program:0 "Civil Service School"
+ STP_party_civil_service_program_desc:0 "Use the new civil register to accelerate training for district officials and apparatus cadres. For §Y42 days§!, State Development growth increases by §G+100%§!."
 
