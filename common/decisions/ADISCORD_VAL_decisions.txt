@@ -232,6 +232,83 @@ VAL_military_operations = {
 	}
 
 
+	# Southern and eastern post-collapse campaigns are launched from the operations board.
+	# Their focuses authorize a campaign; the decision is the explicit declaration order.
+
+	VAL_operation_return_southern_tsaygen = {
+		icon = generic_territory_or_war
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_Return_Southern_Tsaygen
+			NOT = { owns_state = 168 }
+			ERT = { exists = yes NOT = { is_subject_of = VAL } }
+		}
+		available = { VAL_southern_tsaygen_revenge_available = yes }
+		cost = 0
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_return_southern_tsaygen_war_tt
+			declare_war_on = { target = ERT type = take_state_focus generator = { 168 } }
+			hidden_effect = { VAL_call_subjects_to_wars = yes }
+		}
+		ai_will_do = { base = 30 }
+	}
+
+	VAL_operation_cross_perimeter = {
+		icon = generic_territory_or_war
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_frontier_return_irem
+			NOT = { owns_state = 169 }
+			ERT = { exists = yes NOT = { is_subject_of = VAL } }
+		}
+		available = { VAL_wasteland_invasion_available = yes }
+		cost = 0
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_declares_war_ert_irem_tt
+			declare_war_on = { target = ERT type = take_state_focus generator = { 169 } }
+			hidden_effect = { VAL_call_subjects_to_wars = yes }
+		}
+		ai_will_do = { base = 30 }
+	}
+
+	VAL_operation_expand_southern_bridgehead = {
+		icon = generic_territory_or_war
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_Southern_Expansion
+			ERT = { exists = yes NOT = { is_subject_of = VAL } }
+		}
+		available = { VAL_southern_expansion_available = yes }
+		cost = 0
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_declares_war_ert_south_tt
+			declare_war_on = { target = ERT type = take_state_focus generator = { 167 170 171 184 185 203 } }
+			hidden_effect = { VAL_call_subjects_to_wars = yes }
+		}
+		ai_will_do = { base = 40 }
+	}
+
+	VAL_operation_eastern_security_belt = {
+		icon = generic_territory_or_war
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_Eastern_Expansion
+			IRT = { exists = yes NOT = { is_subject_of = VAL } }
+		}
+		available = { VAL_eastern_expansion_available = yes }
+		cost = 0
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_declares_war_irt_tt
+			declare_war_on = { target = IRT type = take_state_focus generator = { 178 180 181 182 183 193 206 207 } }
+			hidden_effect = { VAL_call_subjects_to_wars = yes }
+		}
+		ai_will_do = { base = 40 }
+	}
+
 	# Offensive campaigns and their preparation belong in Military Operations.
 
 	VAL_final_reconnaissance = {

@@ -124,11 +124,14 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         self.assertIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", revenge)
         self.assertIn("VAL_southern_tsaygen_revenge_available = yes", revenge)
         self.assertIn("bypass = { has_global_flag = ADISCORD_vorkerland_dirty_opened owns_state = 168 }", revenge)
-        self.assertIn("declare_war_on = { target = ERT type = take_state_focus generator = { 168 } }", revenge)
+        self.assertIn("unlock_decision_tooltip = VAL_operation_return_southern_tsaygen", revenge)
+        self.assertNotIn("declare_war_on", revenge)
 
         perimeter = focus_block(focuses, "VAL_frontier_return_irem")
         self.assertIn("prerequisite = { focus = VAL_Return_Southern_Tsaygen }", perimeter)
         self.assertNotIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", perimeter)
+        self.assertIn("owns_state = 168", perimeter)
+        self.assertIn("unlock_decision_tooltip = VAL_operation_cross_perimeter", perimeter)
 
     def test_revenge_war_has_its_own_live_gate_and_limited_settlement(self) -> None:
         triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
@@ -139,6 +142,12 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
             "ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no }",
         ):
             self.assertIn(token, gate)
+        self.assertNotIn("VAL_frontier_idle", gate)
+
+        perimeter_gate = named_block(triggers, "VAL_wasteland_invasion_available")
+        self.assertIn("has_war = no", perimeter_gate)
+        self.assertIn("owns_state = 168", perimeter_gate)
+        self.assertNotIn("VAL_frontier_idle", perimeter_gate)
 
         managed = named_block(triggers, "VAL_wasteland_capitulation_managed")
         self.assertIn("has_completed_focus = VAL_Return_Southern_Tsaygen", managed)
@@ -165,6 +174,29 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
             self.assertIn("VAL_Return_Southern_Tsaygen_desc:", loc)
             self.assertIn("VAL_return_southern_tsaygen_war_tt:", loc)
 
+
+    def test_southern_wars_are_launched_from_military_operations(self) -> None:
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        military = named_block(decisions, "VAL_military_operations")
+        expected = {
+            "VAL_operation_return_southern_tsaygen": "generator = { 168 }",
+            "VAL_operation_cross_perimeter": "generator = { 169 }",
+            "VAL_operation_expand_southern_bridgehead": "generator = { 167 170 171 184 185 203 }",
+            "VAL_operation_eastern_security_belt": "generator = { 178 180 181 182 183 193 206 207 }",
+        }
+        for decision_id, war_goal in expected.items():
+            block = named_block(military, decision_id)
+            self.assertIn(war_goal, block)
+            self.assertIn("VAL_call_subjects_to_wars = yes", block)
+
+        focuses = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
+        for focus_id in (
+            "VAL_Return_Southern_Tsaygen",
+            "VAL_frontier_return_irem",
+            "VAL_Southern_Expansion",
+            "VAL_Eastern_Expansion",
+        ):
+            self.assertNotIn("declare_war_on", focus_block(focuses, focus_id))
 
 if __name__ == "__main__":
     unittest.main()

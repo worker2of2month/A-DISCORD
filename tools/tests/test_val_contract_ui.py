@@ -1044,6 +1044,10 @@ class TestValExpansionRoute(unittest.TestCase):
             "VAL_campaign_against_stelander",
             "VAL_stelander_ultimatum",
             "VAL_nod_ultimatum",
+            "VAL_operation_return_southern_tsaygen",
+            "VAL_operation_cross_perimeter",
+            "VAL_operation_expand_southern_bridgehead",
+            "VAL_operation_eastern_security_belt",
         ):
             self.assertIn(name + " = {", military)
             self.assertNotIn(name + " = {", frontier)

@@ -1599,17 +1599,17 @@ VAL_southern_tsaygen_revenge_available = {
 	has_war = no
 	ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no }
 	168 = { is_core_of = VAL is_owned_by = ERT is_controlled_by = ERT }
-	VAL_frontier_idle = yes
 }
 
 VAL_wasteland_invasion_available = {
 	custom_trigger_tooltip = { tooltip = VAL_perimeter_open_tt has_global_flag = ADISCORD_vorkerland_dirty_opened }
 	has_capitulated = no
 	is_subject = no
+	has_war = no
+	owns_state = 168
 	ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no }
 	169 = { is_owned_by = ERT is_controlled_by = ERT }
 	NOT = { has_war_with = ERT }
-	VAL_frontier_idle = yes
 }
 
 VAL_wasteland_charter_available = {
@@ -1623,6 +1623,7 @@ VAL_wasteland_charter_available = {
 }
 
 VAL_southern_expansion_available = {
+	has_war = no
 	VAL_wasteland_administration_ready = yes
 	ERT = {
 		exists = yes
@@ -1633,6 +1634,7 @@ VAL_southern_expansion_available = {
 }
 
 VAL_eastern_expansion_available = {
+	has_war = no
 	VAL_wasteland_administration_ready = yes
 	OR = {
 		WCA = {

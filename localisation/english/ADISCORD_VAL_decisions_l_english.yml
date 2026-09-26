@@ -456,11 +456,19 @@
  VAL_Return_Southern_Tsaygen_desc:0 "Southern Tsaygen was Kefreyt territory before the collapse of Vorkerland. ERT took the town while the old border was disintegrating. The army will not treat that seizure as a new frontier. We are going back for our own land."
  VAL_southern_tsaygen_revenge_available_tt:0 "The Vorkerland collapse has occurred. ERT independently owns and controls $STATE_168$, which remains a Kefreyt core. Kefreyt is independent and at peace."
  VAL_return_southern_tsaygen_war_tt:0 "§RDeclares war on ERT for $STATE_168$.§! Victory returns Southern Tsaygen to Kefreyt without transferring ERT's other territories."
+ VAL_operation_return_southern_tsaygen:0 "Operation: Return Southern Tsaygen"
+ VAL_operation_return_southern_tsaygen_desc:0 "Order the limited campaign for $STATE_168$. Victory returns only Southern Tsaygen; the next focus and operation then open the advance beyond the Perimeter."
+ VAL_operation_cross_perimeter:0 "Operation: Beyond the Perimeter"
+ VAL_operation_cross_perimeter_desc:0 "Launch the separate campaign for state 169. Southern Tsaygen must already be back under Kefreyt control."
+ VAL_operation_expand_southern_bridgehead:0 "Operation: Expand the Southern Bridgehead"
+ VAL_operation_expand_southern_bridgehead_desc:0 "Launch the campaign against ERT for the southern states assigned to the contract administration."
+ VAL_operation_eastern_security_belt:0 "Operation: Eastern Security Belt"
+ VAL_operation_eastern_security_belt_desc:0 "Launch the eastern campaign against IRT for the states assigned to the contract administration."
  VAL_declares_war_ert_irem_tt:0 "§RDeclares war on ERT for state 169.§!"
  VAL_declares_war_ert_south_tt:0 "§RDeclares war on ERT for the southern contract-administration states.§!"
  VAL_declares_war_irt_tt:0 "§RDeclares war on IRT for the eastern contract-administration states.§!"
  VAL_frontier_return_irem:0 "Beyond the Perimeter"
- VAL_frontier_return_irem_desc:0 "Push beyond the Perimeter. Completing this focus §Rdeclares war on ERT for state 169§!. Victory secures the bridgehead for a contract administration."
+ VAL_frontier_return_irem_desc:0 "Prepare to move beyond the Perimeter after Southern Tsaygen has been recovered. This focus unlocks a separate military operation against ERT for state 169. Victory secures the bridgehead for a contract administration."
  VAL_frontier_field_hospitals: "Evacuation Columns"
  VAL_frontier_field_hospitals_desc: "Mountain campaigns reveal the price of every delay. Mobile hospitals and evacuation routes will help companies restore order after heavy fighting."
  VAL_frontier_security_plan: "Mandate for the Northern Campaign"
@@ -1284,11 +1292,11 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_Southern_Expansion:0 "Expand the southern bridgehead"
 
- VAL_Southern_Expansion_desc:0 "Expand the southern bridgehead. Completing this focus §Rdeclares war on ERT§!. Victory transfers available states 167, 170, 171, 184, 185 and 203 to the contract administration."
+ VAL_Southern_Expansion_desc:0 "Authorize the next stage of the southern campaign. This focus unlocks a military operation against ERT. Victory transfers available states 167, 170, 171, 184, 185 and 203 to the contract administration."
 
  VAL_Eastern_Expansion:0 "Eastern security belt"
 
- VAL_Eastern_Expansion_desc:0 "Push the contract administration farther east. Completing this focus §Rdeclares war on IRT§!. Victory transfers available states 178, 180, 181, 182, 183, 193, 206 and 207."
+ VAL_Eastern_Expansion_desc:0 "Authorize the contract administration to push farther east. This focus unlocks a military operation against IRT. Victory transfers available states 178, 180, 181, 182, 183, 193, 206 and 207."
 
  VAL_perimeter_open_tt:0 "The Perimeter has fallen and the southern territories are open"
 

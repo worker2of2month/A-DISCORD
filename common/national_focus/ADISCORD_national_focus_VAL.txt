@@ -2467,9 +2467,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Return_Southern_Tsaygen_tt
-			custom_effect_tooltip = VAL_return_southern_tsaygen_war_tt
-			declare_war_on = { target = ERT type = take_state_focus generator = { 168 } }
-			hidden_effect = { VAL_call_subjects_to_wars = yes }
+			unlock_decision_tooltip = VAL_operation_return_southern_tsaygen
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -2482,14 +2480,15 @@ focus_tree = {
 		y = 14
 		cost = 5
 		prerequisite = { focus = VAL_Return_Southern_Tsaygen }
-		available = { VAL_wasteland_invasion_available = yes }
+		available = {
+			owns_state = 168
+			VAL_wasteland_invasion_available = yes
+		}
 		bypass = { owns_state = 169 }
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_frontier_return_irem_tt
-			custom_effect_tooltip = VAL_declares_war_ert_irem_tt
-			declare_war_on = { target = ERT type = take_state_focus generator = { 169 } }
-			hidden_effect = { VAL_call_subjects_to_wars = yes }
+			unlock_decision_tooltip = VAL_operation_cross_perimeter
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -2535,9 +2534,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Southern_Expansion_tt
-			custom_effect_tooltip = VAL_declares_war_ert_south_tt
-			declare_war_on = { target = ERT type = take_state_focus generator = { 167 170 171 184 185 203 } }
-			hidden_effect = { VAL_call_subjects_to_wars = yes }
+			unlock_decision_tooltip = VAL_operation_expand_southern_bridgehead
 		}
 		ai_will_do = { base = 120 }
 	}
@@ -2563,9 +2560,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			custom_effect_tooltip = VAL_declares_war_irt_tt
-			declare_war_on = { target = IRT type = take_state_focus generator = { 178 180 181 182 183 193 206 207 } }
-			hidden_effect = { VAL_call_subjects_to_wars = yes }
+			unlock_decision_tooltip = VAL_operation_eastern_security_belt
 		}
 		ai_will_do = { base = 130 }
 	}
