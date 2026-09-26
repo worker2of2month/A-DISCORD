@@ -451,7 +451,30 @@ defined_text = {
 		localization_key = STP_nod_status_intervened
 	}
 	text = {
-		trigger = { OR = { has_global_flag = STP_cw_union_wars_finished NOD = { has_country_flag = NOD_cw_defeated } NOD = { has_country_flag = NOD_cw_withdrew } NOD = { has_country_flag = NOD_cw_victorious } NOD = { exists = no } NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } } } }
+		trigger = {
+			OR = {
+				has_global_flag = STP_cw_union_wars_finished
+				NOD = {
+					has_country_flag = NOD_cw_defeated
+				}
+				NOD = {
+					has_country_flag = NOD_cw_withdrew
+				}
+				NOD = {
+					has_country_flag = NOD_cw_victorious
+				}
+				NOD = {
+					exists = no
+				}
+				NOD = {
+					check_variable = {
+						var = STP_cw_northern_campaign_status
+						value = 3
+						compare = equals
+					}
+				}
+			}
+		}
 		localization_key = STP_nod_status_closed
 	}
 	text = {
@@ -603,25 +626,101 @@ defined_text = {
 
 defined_text = {
 	name = GetSTPPrewarHumanistLeader
-	text = { trigger = { tag = STP has_character = STP_grigory_sotnikov has_country_leader = { character = STP_grigory_sotnikov ruling_only = no } NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_participant } NOT = { has_country_flag = STP_cw_postwar } } localization_key = STP_grigory_sotnikov_qol_party_label }
+	text = {
+		trigger = {
+			tag = STP
+			has_character = STP_grigory_sotnikov
+			has_country_leader = {
+				character = STP_grigory_sotnikov
+				ruling_only = no
+			}
+			NOT = {
+				has_global_flag = STP_cw_started
+			}
+			NOT = {
+				has_country_flag = STP_cw_participant
+			}
+			NOT = {
+				has_country_flag = STP_cw_postwar
+			}
+		}
+		localization_key = STP_grigory_sotnikov_qol_party_label
+	}
 	text = { localization_key = ADISCORD_qol_no_party_leader }
 }
 
 defined_text = {
 	name = GetSTPPrewarHumanistLeaderLong
-	text = { trigger = { tag = STP has_character = STP_grigory_sotnikov has_country_leader = { character = STP_grigory_sotnikov ruling_only = no } NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_participant } NOT = { has_country_flag = STP_cw_postwar } } localization_key = STP_grigory_sotnikov_qol_party_label_long }
+	text = {
+		trigger = {
+			tag = STP
+			has_character = STP_grigory_sotnikov
+			has_country_leader = {
+				character = STP_grigory_sotnikov
+				ruling_only = no
+			}
+			NOT = {
+				has_global_flag = STP_cw_started
+			}
+			NOT = {
+				has_country_flag = STP_cw_participant
+			}
+			NOT = {
+				has_country_flag = STP_cw_postwar
+			}
+		}
+		localization_key = STP_grigory_sotnikov_qol_party_label_long
+	}
 	text = { localization_key = ADISCORD_qol_no_party_leader }
 }
 
 defined_text = {
 	name = GetSTPPrewarNationalLeader
-	text = { trigger = { tag = STP has_character = STP_maksim_shabrat has_country_leader = { character = STP_maksim_shabrat ruling_only = no } NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_participant } NOT = { has_country_flag = STP_cw_postwar } } localization_key = STP_maksim_shabrat_qol_party_label }
+	text = {
+		trigger = {
+			tag = STP
+			has_character = STP_maksim_shabrat
+			has_country_leader = {
+				character = STP_maksim_shabrat
+				ruling_only = no
+			}
+			NOT = {
+				has_global_flag = STP_cw_started
+			}
+			NOT = {
+				has_country_flag = STP_cw_participant
+			}
+			NOT = {
+				has_country_flag = STP_cw_postwar
+			}
+		}
+		localization_key = STP_maksim_shabrat_qol_party_label
+	}
 	text = { localization_key = ADISCORD_qol_no_party_leader }
 }
 
 defined_text = {
 	name = GetSTPPrewarNationalLeaderLong
-	text = { trigger = { tag = STP has_character = STP_maksim_shabrat has_country_leader = { character = STP_maksim_shabrat ruling_only = no } NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_participant } NOT = { has_country_flag = STP_cw_postwar } } localization_key = STP_maksim_shabrat_qol_party_label_long }
+	text = {
+		trigger = {
+			tag = STP
+			has_character = STP_maksim_shabrat
+			has_country_leader = {
+				character = STP_maksim_shabrat
+				ruling_only = no
+			}
+			NOT = {
+				has_global_flag = STP_cw_started
+			}
+			NOT = {
+				has_country_flag = STP_cw_participant
+			}
+			NOT = {
+				has_country_flag = STP_cw_postwar
+			}
+		}
+		localization_key = STP_maksim_shabrat_qol_party_label_long
+	}
 	text = { localization_key = ADISCORD_qol_no_party_leader }
 }
 
