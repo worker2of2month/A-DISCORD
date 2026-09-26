@@ -1427,6 +1427,17 @@ ADISCORD_vorkerland_central_showdown_edges_verified = {
 	}
 }
 
+# The claimant marked by the terminal victory effect is authoritative during
+# the delayed WRK formation. This avoids a stale capitulation cache or repaired
+# save selecting an earlier tag simply because it still exists for one tick.
+ADISCORD_vorkerland_has_live_marked_central_unifier = {
+	OR = {
+		WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } has_country_flag = ADISCORD_vorkerland_central_unifier }
+		VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } has_country_flag = ADISCORD_vorkerland_central_unifier }
+		TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } has_country_flag = ADISCORD_vorkerland_central_unifier }
+	}
+}
+
 ADISCORD_vorkerland_has_single_surviving_claimant = {
 	OR = {
 		AND = {
