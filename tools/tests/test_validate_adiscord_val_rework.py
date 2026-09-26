@@ -4370,8 +4370,13 @@ class ValExpandedCampaignTests(unittest.TestCase):
         relation_text = str([(e.key, e.value) for e in walk(relation)])
         self.assertIn("is_subject_of', 'VAL", relation_text)
         self.assertIn("VAL_call_subjects_to_wars", [e.key for e in walk(relation)])
-        for hook_name in ("on_startup", "on_puppet"):
+        for hook_name in ("on_startup", "on_puppet", "on_release_as_puppet"):
             self.assertTrue(any(e.key == "VAL_call_subjects_to_wars" for e in walk(self.getblock(hooks, hook_name))), hook_name)
+
+        daily = self.getblock(hooks, "on_daily_VAL")
+        daily_text = str([(e.key, e.value) for e in walk(daily)])
+        self.assertIn("has_war', 'yes", daily_text)
+        self.assertIn("VAL_call_subjects_to_wars", [e.key for e in walk(daily)])
 
     def test_vorkerland_uses_paid_orders_instead_of_gifts(self):
         trigger_source = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")

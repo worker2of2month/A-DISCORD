@@ -4,6 +4,10 @@ on_actions = {
 			VAL_contract_reconcile = yes
 			VAL_resource_aid_daily = yes
 			VAL_northern_aid_daily = yes
+			if = {
+				limit = { has_war = yes has_capitulated = no is_subject = no }
+				VAL_call_subjects_to_wars = yes # daily subject-war reconciliation
+			}
 		}
 	}
 
@@ -129,6 +133,15 @@ on_actions = {
 				limit = { FROM = { tag = VAL } }
 				VAL = { VAL_call_subjects_to_wars = yes }
 				OCA = { VAL_reconcile_balchansk_income = yes }
+			}
+		}
+	}
+
+	on_release_as_puppet = {
+		effect = {
+			if = {
+				limit = { FROM = { tag = VAL } }
+				VAL = { VAL_call_subjects_to_wars = yes }
 			}
 		}
 	}
