@@ -2170,6 +2170,7 @@ focus_tree = {
 					55 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
 					56 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
 					57 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
+					168 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
 				}
 			}
 		}

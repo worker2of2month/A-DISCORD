@@ -2338,7 +2338,7 @@ class ValReclamationTests(unittest.TestCase):
                 rows = named_blocks(decisions, "VAL_reclamation_" + key)
                 self.assertEqual(len(rows), 1)
                 script = rows[0]
-                self.assertIn("targets = { 24 42 48 54 55 56 57 }", script)
+                self.assertIn("targets = { 24 42 48 54 55 56 57 168 }", script)
                 self.assertIn("days_remove = 90", script)
                 self.assertIn("cost = 0", script)
                 self.assertIn("ADISCORD_economy_can_spend_500 = yes", script)
@@ -2350,6 +2350,12 @@ class ValReclamationTests(unittest.TestCase):
                 self.assertNotIn("has_decision", script)
         effects = EFFECTS_PATH.read_text(encoding="utf-8")
         self.assertEqual(len(named_blocks(effects, "VAL_reclamation_finish_project")), 1)
+        for resolver, helper in (
+            ("VAL_reclamation_refund_project", "VAL_reclamation_refund_state_project"),
+            ("VAL_reclamation_finish_project", "VAL_reclamation_finish_state_project"),
+            ("VAL_reclamation_reconcile_project", "VAL_reclamation_reconcile_state_project"),
+        ):
+            self.assertIn(f"168 = {{ {helper} = yes }}", named_blocks(effects, resolver)[0])
 
 
 

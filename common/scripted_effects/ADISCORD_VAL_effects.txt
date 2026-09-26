@@ -2261,6 +2261,7 @@ VAL_reclamation_refund_project = {
 		55 = { VAL_reclamation_refund_state_project = yes }
 		56 = { VAL_reclamation_refund_state_project = yes }
 		57 = { VAL_reclamation_refund_state_project = yes }
+		168 = { VAL_reclamation_refund_state_project = yes }
 	}
 }
 
@@ -2292,6 +2293,7 @@ VAL_reclamation_finish_project = {
 		55 = { VAL_reclamation_finish_state_project = yes }
 		56 = { VAL_reclamation_finish_state_project = yes }
 		57 = { VAL_reclamation_finish_state_project = yes }
+		168 = { VAL_reclamation_finish_state_project = yes }
 	}
 }
 
@@ -2338,7 +2340,7 @@ VAL_complete_reclamation = {
 	}
 }
 
-# COUNTRY: only an outstanding receipt opens the fixed seven-state recovery pool.
+# COUNTRY: only an outstanding receipt opens the fixed eight-state recovery pool.
 VAL_reclamation_reconcile_project = {
 	if = {
 		limit = { check_variable = { var = VAL_reclamation_deposit value = 500 compare = equals } }
@@ -2349,6 +2351,7 @@ VAL_reclamation_reconcile_project = {
 		55 = { VAL_reclamation_reconcile_state_project = yes }
 		56 = { VAL_reclamation_reconcile_state_project = yes }
 		57 = { VAL_reclamation_reconcile_state_project = yes }
+		168 = { VAL_reclamation_reconcile_state_project = yes }
 	}
 }
 
