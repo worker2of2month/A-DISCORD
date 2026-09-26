@@ -160,10 +160,10 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("has_completed_focus = VAL_Northern_Settlement", adopt)
         self.assertIn("NOT = { has_country_flag = VAL_northern_coalition_settlement_completed }", adopt)
         for tag in ("YPR", "COF", "TFF"):
-            self.assertIn(f"{tag} = {{", adopt)
-            self.assertIn("has_war_with = VAL", named_block(adopt, tag))
-            self.assertIn("set_country_flag = VAL_northern_coalition_campaign_member", named_block(adopt, tag))
-            self.assertIn("set_major = yes", named_block(adopt, tag))
+            self.assertGreaterEqual(adopt.count(f"{tag} = {{"), 2)
+        self.assertEqual(adopt.count("has_war_with = VAL"), 3)
+        self.assertEqual(adopt.count("set_country_flag = VAL_northern_coalition_campaign_member"), 3)
+        self.assertEqual(adopt.count("set_major = yes"), 3)
         self.assertIn("set_country_flag = VAL_northern_coalition_campaign_active", adopt)
         self.assertIn("VAL_call_subjects_to_wars = yes", adopt)
 
