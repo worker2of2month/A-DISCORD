@@ -211,7 +211,45 @@ VAL_frontier_target_owned = {
         AND = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } ERT = { exists = yes } 168 = { is_owned_by = ERT } } }
 }
 VAL_frontier_target_occupied = {
-    OR = { AND = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } OR = { AND = { 58 = { VAL_frontier_controlled = yes OR = { is_owned_by = CIN is_owned_by = VAL } } 59 = { VAL_frontier_controlled = yes OR = { is_owned_by = CIN is_owned_by = VAL } } 60 = { VAL_frontier_controlled = yes OR = { is_owned_by = CIN is_owned_by = VAL } } } CIN = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } } } }
+OR = {
+	AND = {
+		check_variable = {
+			var = VAL_frontier_target
+			value = 1
+			compare = equals
+		}
+		OR = {
+			AND = {
+				58 = {
+					VAL_frontier_controlled = yes
+					OR = {
+						is_owned_by = CIN
+						is_owned_by = VAL
+					}
+				}
+				59 = {
+					VAL_frontier_controlled = yes
+					OR = {
+						is_owned_by = CIN
+						is_owned_by = VAL
+					}
+				}
+				60 = {
+					VAL_frontier_controlled = yes
+					OR = {
+						is_owned_by = CIN
+						is_owned_by = VAL
+					}
+				}
+			}
+			CIN = {
+				has_country_flag = VAL_frontier_defeated
+				capital_scope = {
+					VAL_frontier_controlled = yes
+				}
+			}
+		}
+	}
         AND = {
         	check_variable = {
         		var = VAL_frontier_target
@@ -281,7 +319,40 @@ VAL_frontier_target_occupied = {
         		}
         	}
         }
-        AND = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } OR = { AND = { 168 = { VAL_frontier_controlled = yes OR = { is_owned_by = ERT is_owned_by = VAL } } } AND = { ERT = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } } 168 = { is_owned_by = ERT OR = { VAL_frontier_controlled = yes is_controlled_by = ERT } } } } } }
+AND = {
+	check_variable = {
+		var = VAL_frontier_target
+		value = 4
+		compare = equals
+	}
+	OR = {
+		AND = {
+			168 = {
+				VAL_frontier_controlled = yes
+				OR = {
+					is_owned_by = ERT
+					is_owned_by = VAL
+				}
+			}
+		}
+		AND = {
+			ERT = {
+				has_country_flag = VAL_frontier_defeated
+				capital_scope = {
+					VAL_frontier_controlled = yes
+				}
+			}
+			168 = {
+				is_owned_by = ERT
+				OR = {
+					VAL_frontier_controlled = yes
+					is_controlled_by = ERT
+				}
+			}
+		}
+	}
+}
+}
 }
 # STATE: subject occupation belongs to VAL's settlement, foreign occupation does not.
 VAL_frontier_controlled = {
