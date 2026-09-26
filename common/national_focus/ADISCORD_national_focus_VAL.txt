@@ -3118,7 +3118,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Returning_Buyers }
 		available = {
 			custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes }
-			custom_trigger_tooltip = { tooltip = VAL_commonwealth_required_tt has_cosmetic_tag = VAL_commonwealth }
+			custom_trigger_tooltip = { tooltip = VAL_commonwealth_required_tt has_country_flag = VAL_commonwealth_proclaimed }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
