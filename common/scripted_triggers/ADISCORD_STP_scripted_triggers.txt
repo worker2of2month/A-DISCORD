@@ -1819,7 +1819,23 @@ STP_pw_party_compact_coalition = {
 		tooltip = STP_pw_party_command_backed_tt
 		OR = {
 			AND = { check_variable = { var = STP_pw_party_command value = 1 compare = equals } check_variable = { var = STP_pf_army_support value = 60 compare = greater_than_or_equals } }
-			AND = { check_variable = { var = STP_pw_party_command value = 2 compare = equals } check_variable = { var = STP_pf_security_support value = 60 compare = greater_than_or_equals } check_variable = { var = STP_pf_army_support value = 45 compare = greater_than_or_equals } }
+			AND = {
+				check_variable = {
+					var = STP_pw_party_command
+					value = 2
+					compare = equals
+				}
+				check_variable = {
+					var = STP_pf_security_support
+					value = 60
+					compare = greater_than_or_equals
+				}
+				check_variable = {
+					var = STP_pf_army_support
+					value = 45
+					compare = greater_than_or_equals
+				}
+			}
 		}
 	}
 	custom_trigger_tooltip = {
@@ -1832,7 +1848,23 @@ STP_pw_party_compact_coalition = {
 		tooltip = STP_pw_party_credit_backed_tt
 		OR = {
 			AND = { check_variable = { var = STP_pw_party_credit value = 1 compare = equals } check_variable = { var = STP_pf_merchants_support value = 60 compare = greater_than_or_equals } }
-			AND = { check_variable = { var = STP_pw_party_credit value = 2 compare = equals } check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } check_variable = { var = STP_pf_merchants_support value = 45 compare = greater_than_or_equals } }
+			AND = {
+				check_variable = {
+					var = STP_pw_party_credit
+					value = 2
+					compare = equals
+				}
+				check_variable = {
+					var = STP_pw_recovery_services
+					value = 1
+					compare = greater_than_or_equals
+				}
+				check_variable = {
+					var = STP_pf_merchants_support
+					value = 45
+					compare = greater_than_or_equals
+				}
+			}
 		}
 	}
 }
