@@ -45,20 +45,41 @@ country_event = {
 }
 
 country_event = {
+	id = ADISCORD_STP_preparation.27
+	title = ADISCORD_STP_preparation.27.t
+	desc = ADISCORD_STP_preparation.27.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } }
+	option = {
+		name = ADISCORD_STP_preparation.27.no
+		ai_chance = { base = 100 }
+		hidden_effect = { set_country_flag = STP_skip_intro_story_events }
+	}
+	option = {
+		name = ADISCORD_STP_preparation.27.yes
+		trigger = { is_ai = no }
+		ai_chance = { base = 0 }
+		hidden_effect = {
+			clr_country_flag = STP_skip_intro_story_events
+			country_event = { id = ADISCORD_STP_preparation.15 hours = 1 }
+		}
+	}
+}
+
+country_event = {
 	id = ADISCORD_STP_preparation.15
 	title = ADISCORD_STP_preparation.15.t
 	desc = ADISCORD_STP_preparation.15.d
 	picture = GFX_event_adiscord_nectar_of_the_gods
 	is_triggered_only = yes
-	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } }
+	trigger = {
+		tag = STP
+		NOT = { has_global_flag = STP_cw_started }
+		NOT = { has_country_flag = STP_skip_intro_story_events }
+	}
 	immediate = { clear_variable = STP_nectar_story_page }
 	option = { name = ADISCORD_STP_preparation.15.a }
-	option = {
-		name = ADISCORD_STP_preparation.15.skip
-		trigger = { is_ai = no }
-		custom_effect_tooltip = STP_skip_intro_story_events_tt
-		hidden_effect = { set_country_flag = STP_skip_intro_story_events }
-	}
 }
 
 country_event = {
@@ -2247,3 +2268,57 @@ country_event = {
 	is_triggered_only = yes
 	immediate = { if = { limit = { tag = STP } STP_pw_party_reconcile_northern_campaign = yes } }
 }
+
+# Sparse human-scale vignettes. The monthly lifecycle owns pacing and cooldown.
+country_event = {
+	id = ADISCORD_STP_preparation.28
+	title = ADISCORD_STP_preparation.28.t
+	desc = {
+		trigger = { has_war = yes }
+		text = ADISCORD_STP_preparation.28.war
+	}
+	desc = {
+		trigger = {
+			has_war = no
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
+		text = ADISCORD_STP_preparation.28.good
+	}
+	desc = {
+		trigger = {
+			has_war = no
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = less_than }
+		}
+		text = ADISCORD_STP_preparation.28.bad
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		tag = STP
+		is_ai = no
+		has_capitulated = no
+		has_variable = ADISCORD_economy_treasury
+	}
+	option = { name = ADISCORD_STP_preparation.28.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.29
+	title = ADISCORD_STP_preparation.29.t
+	desc = ADISCORD_STP_preparation.29.d
+	picture = GFX_event_adiscord_nectar_of_the_gods
+	is_triggered_only = yes
+	trigger = { tag = STP is_ai = no has_capitulated = no }
+	option = { name = ADISCORD_STP_preparation.29.a }
+}
+
+country_event = {
+	id = ADISCORD_STP_preparation.30
+	title = ADISCORD_STP_preparation.30.t
+	desc = ADISCORD_STP_preparation.30.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = STP is_ai = no has_capitulated = no }
+	option = { name = ADISCORD_STP_preparation.30.a }
+}
+
