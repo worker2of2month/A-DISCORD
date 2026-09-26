@@ -2188,9 +2188,17 @@ STP_cw_raise_rear_cell = {
 	}
 }
 
+# STS volunteers use local arms networks but still consume real recruits.
 STP_cw_mobilize_volunteer_brigade = {
 	if = {
-		limit = { tag = STS NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes any_owned_state = { is_controlled_by = PREV } }
+		limit = {
+			tag = STS
+			NOT = { has_country_flag = STP_cw_postwar }
+			STP_cw_can_rearm = yes
+			NOT = { has_manpower < 6000 }
+			any_owned_state = { is_controlled_by = PREV }
+		}
+		add_manpower = -6000
 		if = {
 			limit = { any_owned_state = { is_controlled_by = PREV STP_cw_state_faces_rival = yes } }
 			random_owned_controlled_state = {
@@ -2543,7 +2551,13 @@ STP_cw_refund_reserve_training = {
 		limit = { hidden_trigger = { check_variable = { var = STP_cw_training_cohorts value = 2 compare = equals } } }
 		hidden_effect = { clear_variable = STP_cw_training_cohorts }
 		add_manpower = 12000
-		add_equipment_to_stockpile = { type = infantry_equipment amount = 10800 }
+		if = {
+			limit = { has_country_flag = STP_cw_training_political_payment }
+			clr_country_flag = STP_cw_training_political_payment
+		}
+		else = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10800 }
+		}
 	}
 }
 
@@ -2551,6 +2565,7 @@ STP_cw_finish_reserve_training = {
 	if = {
 		limit = { check_variable = { var = STP_cw_training_cohorts value = 2 compare = equals } NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes any_owned_state = { is_controlled_by = PREV } }
 		clear_variable = STP_cw_training_cohorts
+		clr_country_flag = STP_cw_training_political_payment
 		for_loop_effect = {
 			end = 2
 			value = STP_cw_formation_index
