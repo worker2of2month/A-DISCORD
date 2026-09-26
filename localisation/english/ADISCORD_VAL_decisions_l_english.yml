@@ -1929,3 +1929,10 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_marine_landing_network_desc: "Shipyards, carriers and engineering crews operate under one contractual landing schedule."
  VAL_marine_contract_corps: "Permanent Marine Contract Corps"
  VAL_marine_contract_corps_desc: "The marines have a permanent manpower establishment, faster training and a defined place in Kefreyt's order of battle."
+ VAL_recovery_road_corps_program:0 "Recovery Road Corps"
+ VAL_recovery_road_corps_program_desc:0 "Combine road crews, surveyors and supply officers into one temporary programme. For §Y120 days§!, State Development growth increases by §G+100%§!. The bonus disappears when the programme ends."
+ VAL_recovery_field_medicine_program:0 "Field Medicine Rotation"
+ VAL_recovery_field_medicine_program_desc:0 "Use the experience of field surgeons to accelerate training for medics, sanitation services and recovery hospitals. For §Y120 days§!, Social Services Development growth increases by §G+100%§!."
+ VAL_recovery_workshop_program:0 "Recovery Workshop Shifts"
+ VAL_recovery_workshop_program_desc:0 "Run restored workshops on an intensified cycle of machine-tool repair, tooling and local industrial recovery. For §Y120 days§!, Economic Development growth increases by §G+100%§!."
+
