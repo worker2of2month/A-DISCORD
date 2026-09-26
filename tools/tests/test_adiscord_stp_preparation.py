@@ -633,6 +633,9 @@ class StelanderPreparationTests(unittest.TestCase):
                          "b87894acba07ebab1224274870aef30f77c8c13f2591cce43785dd665a39f8ba")
         self.assertEqual(scalar(block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"), "add_political_power"), "35")
         self.assertEqual(scalar(block(focuses["STP_2160_budget"], "completion_reward"), "STP_receive_1200"), "yes")
+        for path in ("interface/ADISCORD_STP_regions.gui", "common/scripted_guis/ADISCORD_STP_regions_scripted_gui.txt"):
+            self.assertNotIn("ADISCORD_STP_nectar_story", (ROOT / path).read_text(encoding="utf-8-sig"))
+        self.assertFalse(any(key.startswith("STP_nectar_") for key in values))
 
 
     def test_intro_story_skip_only_suppresses_lore_popups(self):
