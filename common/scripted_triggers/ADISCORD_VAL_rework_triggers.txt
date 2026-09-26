@@ -642,9 +642,27 @@ VAL_can_attack_northern_coalition = {
 VAL_northern_coalition_campaign_victory_ready = {
 	tag = VAL
 	has_country_flag = VAL_northern_coalition_campaign_active
-	OR = { NOT = { YPR = { exists = yes } } YPR = { has_capitulated = yes } YPR = { is_subject_of = VAL } }
-	OR = { NOT = { COF = { exists = yes } } COF = { has_capitulated = yes } COF = { is_subject_of = VAL } }
-	OR = { NOT = { TFF = { exists = yes } } TFF = { has_capitulated = yes } TFF = { is_subject_of = VAL } }
+	# The immediate capitulation hook executes before ROOT exposes has_capitulated.
+	# Treat its short reservation as an authoritative transient defeat receipt so
+	# the scripted settlement can terminate the war before a native conference.
+	OR = {
+		NOT = { YPR = { exists = yes } }
+		YPR = { has_capitulated = yes }
+		YPR = { is_subject_of = VAL }
+		YPR = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
+	}
+	OR = {
+		NOT = { COF = { exists = yes } }
+		COF = { has_capitulated = yes }
+		COF = { is_subject_of = VAL }
+		COF = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
+	}
+	OR = {
+		NOT = { TFF = { exists = yes } }
+		TFF = { has_capitulated = yes }
+		TFF = { is_subject_of = VAL }
+		TFF = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
+	}
 }
 
 VAL_northern_foothold_secured = {

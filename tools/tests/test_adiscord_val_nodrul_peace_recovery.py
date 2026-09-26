@@ -188,6 +188,25 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("VAL_northern_coalition_campaign_victory_ready = yes", late_router)
         self.assertIn("VAL_settle_northern_coalition_victory = yes", late_router)
 
+        victory = named_block(triggers, "VAL_northern_coalition_campaign_victory_ready")
+        for tag in ("YPR", "COF", "TFF"):
+            self.assertIn(
+                f"{tag} = {{ has_country_flag = VAL_northern_coalition_capitulation_reserved }}",
+                victory,
+            )
+        immediate_start = router.index("# BEGIN kefreyt_northern_reservations:on_capitulation_immediate")
+        immediate_end = router.index("# END kefreyt_northern_reservations:on_capitulation_immediate", immediate_start)
+        immediate_router = router[immediate_start:immediate_end]
+        self.assertLess(
+            immediate_router.index("VAL_northern_coalition_capitulation_reserved"),
+            immediate_router.index("VAL_northern_coalition_campaign_victory_ready = yes"),
+        )
+        self.assertIn("VAL_settle_northern_coalition_victory = yes", immediate_router)
+        self.assertEqual(
+            settlement.count("clr_country_flag = VAL_northern_coalition_capitulation_reserved"),
+            3,
+        )
+
     def test_nodrul_can_launch_a_direct_postwar_war_over_subject_sts(self) -> None:
         triggers = TRIGGERS.read_text(encoding="utf-8")
         gate = named_block(triggers, "VAL_nod_can_attack_sts_overlord")
