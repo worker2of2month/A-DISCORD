@@ -1,23 +1,283 @@
 defined_text = {
 	name = ADISCORDGetStartupBody
 	text = { trigger = { tag = STP check_variable = { var = ADISCORD_startup_tab value = 0 compare = equals } } localization_key = STP_startup_country }
-	text = { trigger = { tag = STP check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals } check_variable = { var = ADISCORD_startup_page value = 0 compare = equals } } localization_key = STP_startup_guide_history }
-	text = { trigger = { tag = STP check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals } check_variable = { var = ADISCORD_startup_page value = 1 compare = equals } } localization_key = STP_startup_guide_nodrul }
-	text = { trigger = { tag = STP check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals } check_variable = { var = ADISCORD_startup_page value = 2 compare = equals } } localization_key = STP_startup_guide_party }
-	text = { trigger = { tag = STP check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals } check_variable = { var = ADISCORD_startup_page value = 3 compare = equals } } localization_key = STP_startup_guide }
-	text = { trigger = { tag = STP check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals } check_variable = { var = ADISCORD_startup_page value = 0 compare = equals } check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals } } localization_key = STP_startup_path_0_details }
-	text = { trigger = { tag = STP check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals } check_variable = { var = ADISCORD_startup_page value = 0 compare = equals } } localization_key = STP_startup_path_0 }
-	text = { trigger = { tag = STP check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals } check_variable = { var = ADISCORD_startup_page value = 1 compare = equals } check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals } } localization_key = STP_startup_path_1_details }
-	text = { trigger = { tag = STP check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals } check_variable = { var = ADISCORD_startup_page value = 1 compare = equals } } localization_key = STP_startup_path_1 }
+	text = {
+		trigger = {
+			tag = STP
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 1
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 0
+				compare = equals
+			}
+		}
+		localization_key = STP_startup_guide_history
+	}
+	text = {
+		trigger = {
+			tag = STP
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 1
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_startup_guide_nodrul
+	}
+	text = {
+		trigger = {
+			tag = STP
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 1
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_startup_guide_party
+	}
+	text = {
+		trigger = {
+			tag = STP
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 1
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_startup_guide
+	}
+	text = {
+		trigger = {
+			tag = STP
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 2
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 0
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_spoilers
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_startup_path_0_details
+	}
+	text = {
+		trigger = {
+			tag = STP
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 2
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 0
+				compare = equals
+			}
+		}
+		localization_key = STP_startup_path_0
+	}
+	text = {
+		trigger = {
+			tag = STP
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 2
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 1
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_spoilers
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_startup_path_1_details
+	}
+	text = {
+		trigger = {
+			tag = STP
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 2
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_startup_path_1
+	}
 	text = { trigger = { tag = VAL check_variable = { var = ADISCORD_startup_tab value = 0 compare = equals } } localization_key = VAL_startup_country }
-	text = { trigger = { tag = VAL check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals } check_variable = { var = ADISCORD_startup_page value = 3 compare = equals } } localization_key = VAL_startup_guide }
-	text = { trigger = { tag = VAL check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals } check_variable = { var = ADISCORD_startup_page value = 0 compare = equals } check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals } } localization_key = VAL_startup_path_0_details }
-	text = { trigger = { tag = VAL check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals } check_variable = { var = ADISCORD_startup_page value = 0 compare = equals } } localization_key = VAL_startup_path_0 }
-	text = { trigger = { tag = VAL check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals } check_variable = { var = ADISCORD_startup_page value = 1 compare = equals } check_variable = { var = ADISCORD_startup_spoilers value = 1 compare = equals } } localization_key = VAL_startup_path_1_details }
-	text = { trigger = { tag = VAL check_variable = { var = ADISCORD_startup_tab value = 2 compare = equals } check_variable = { var = ADISCORD_startup_page value = 1 compare = equals } } localization_key = VAL_startup_path_1 }
-	text = { trigger = { tag = VAL check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals } check_variable = { var = ADISCORD_startup_page value = 0 compare = equals } } localization_key = ADISCORD_startup_guide_budget }
-	text = { trigger = { tag = VAL check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals } check_variable = { var = ADISCORD_startup_page value = 1 compare = equals } } localization_key = ADISCORD_startup_guide_army }
-	text = { trigger = { tag = VAL check_variable = { var = ADISCORD_startup_tab value = 1 compare = equals } check_variable = { var = ADISCORD_startup_page value = 2 compare = equals } } localization_key = ADISCORD_startup_guide_diplomacy }
+	text = {
+		trigger = {
+			tag = VAL
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 1
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = VAL_startup_guide
+	}
+	text = {
+		trigger = {
+			tag = VAL
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 2
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 0
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_spoilers
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = VAL_startup_path_0_details
+	}
+	text = {
+		trigger = {
+			tag = VAL
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 2
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 0
+				compare = equals
+			}
+		}
+		localization_key = VAL_startup_path_0
+	}
+	text = {
+		trigger = {
+			tag = VAL
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 2
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 1
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_spoilers
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = VAL_startup_path_1_details
+	}
+	text = {
+		trigger = {
+			tag = VAL
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 2
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = VAL_startup_path_1
+	}
+	text = {
+		trigger = {
+			tag = VAL
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 1
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 0
+				compare = equals
+			}
+		}
+		localization_key = ADISCORD_startup_guide_budget
+	}
+	text = {
+		trigger = {
+			tag = VAL
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 1
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = ADISCORD_startup_guide_army
+	}
+	text = {
+		trigger = {
+			tag = VAL
+			check_variable = {
+				var = ADISCORD_startup_tab
+				value = 1
+				compare = equals
+			}
+			check_variable = {
+				var = ADISCORD_startup_page
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = ADISCORD_startup_guide_diplomacy
+	}
 	text = { localization_key = ADISCORD_startup_unsupported }
 }
 
