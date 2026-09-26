@@ -182,6 +182,12 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("VAL_northern_coalition_capitulation_reserved", router)
         self.assertIn("VAL_settle_northern_coalition_victory = yes", router)
 
+        late_start = router.index("# BEGIN kefreyt_northern_reservations:on_capitulation")
+        late_end = router.index("# END kefreyt_northern_reservations:on_capitulation", late_start)
+        late_router = router[late_start:late_end]
+        self.assertIn("VAL_northern_coalition_campaign_victory_ready = yes", late_router)
+        self.assertIn("VAL_settle_northern_coalition_victory = yes", late_router)
+
     def test_nodrul_can_launch_a_direct_postwar_war_over_subject_sts(self) -> None:
         triggers = TRIGGERS.read_text(encoding="utf-8")
         gate = named_block(triggers, "VAL_nod_can_attack_sts_overlord")

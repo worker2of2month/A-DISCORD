@@ -1223,6 +1223,12 @@ on_actions = {
 					ROOT = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
 				}
 				set_global_flag = skip_default_capitulation
+				# on_capitulation_immediate can run before the final member's
+				# has_capitulated state is visible. Recheck after the native handoff.
+				if = {
+					limit = { VAL = { VAL_northern_coalition_campaign_victory_ready = yes } }
+					VAL = { VAL_settle_northern_coalition_victory = yes }
+				}
 			}
 			if = {
 				limit = {
