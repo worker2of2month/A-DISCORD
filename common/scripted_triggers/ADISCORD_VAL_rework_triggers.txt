@@ -395,7 +395,7 @@ VAL_frontier_members_beaten = {
 }
 
 
-# COUNTRY VAL, project state in FROM. The current local owner receives the workshop.
+# COUNTRY VAL, project state in FROM. Workshops are restricted to territory directly owned and controlled by Kefreyt.
 VAL_frontier_workshop_target_valid = {
     has_capitulated = no
     has_war = no

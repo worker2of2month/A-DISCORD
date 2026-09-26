@@ -1262,8 +1262,11 @@ VAL_frontier = {
 		allowed = { tag = VAL }
 		state_target = yes
 		targets = { 58 59 60 61 62 63 64 65 }
-		target_trigger = { FROM = { OR = { is_owned_by = ROOT owner = { is_subject_of = ROOT } } } }
-		visible = { has_completed_focus = VAL_frontier_treaty_offices }
+		target_trigger = { FROM = { is_owned_by = ROOT is_controlled_by = ROOT } }
+		visible = {
+			has_completed_focus = VAL_frontier_treaty_offices
+			FROM = { is_owned_by = ROOT is_controlled_by = ROOT }
+		}
 		available = {
 			VAL_frontier_workshop_target_valid = yes
 			custom_trigger_tooltip = { tooltip = VAL_frontier_workshop_idle_tt FROM = { NOT = { has_variable = VAL_frontier_workshop_deposit } } }

@@ -2545,6 +2545,21 @@ class ValReclamationTests(unittest.TestCase):
 
 
 class ValFrontierCampaignTests(unittest.TestCase):
+    def test_workshop_decisions_render_only_on_kefreyt_owned_controlled_states(self):
+        decisions = DECISIONS_PATH.read_text(encoding="utf-8")
+        start = decisions.index("\tVAL_frontier_workshops = {")
+        end = decisions.index("\n\tVAL_create_occidian_administration = {", start)
+        workshop = decisions[start:end]
+        self.assertIn(
+            "target_trigger = { FROM = { is_owned_by = ROOT is_controlled_by = ROOT } }",
+            workshop,
+        )
+        self.assertIn(
+            "FROM = { is_owned_by = ROOT is_controlled_by = ROOT }",
+            workshop,
+        )
+        self.assertNotIn("owner = { is_subject_of = ROOT }", workshop)
+
     def test_workshop_receipts_survive_parallel_targets_and_settle_once(self):
         from collections import defaultdict
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar
