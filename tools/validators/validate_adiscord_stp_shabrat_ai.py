@@ -23,7 +23,7 @@ FOCUS = ROOT / "focus_trees/STP"
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 
-SCORE_TOTAL = 105
+SCORE_TOTAL = 107
 
 INTRO_FOCUSES = (
     "STP_NECTAR_OF_GODS",
@@ -424,6 +424,8 @@ def run_checks() -> list[tuple[str, bool, str]]:
     recruit = decision_block(decisions_text, "STP_recruit_regional_official")
     uprising = decision_block(decisions_text, "STP_cw_start_uprising")
     command = decision_block(decisions_text, "STP_cw_secure_election_result")
+    territorial_brigade = decision_block(decisions_text, "STP_cw_raise_territorial_brigade")
+    reserve_brigades = decision_block(decisions_text, "STP_cw_train_reserve_brigades")
 
     add("delegates AI base 8", scalar_int(named_block(delegates, "ai_will_do"), "base") == 8)
     add("campaign AI base 6", scalar_int(named_block(campaign, "ai_will_do"), "base") == 6)
@@ -434,6 +436,16 @@ def run_checks() -> list[tuple[str, bool, str]]:
     add("officials prefer credential districts", "state = 2" in named_block(recruit, "ai_will_do") and "state = 3" in named_block(recruit, "ai_will_do"))
     add("early uprising still vetoes a live mandate", "value > 0.10" in named_block(uprising, "ai_will_do"))
     add("public command stays inside the 40-80 window", "value = 40" in named_block(command, "ai_will_do") and "value = 80" in named_block(command, "ai_will_do"))
+    add(
+        "Shabrat direct volunteer orders stop at 24 divisions",
+        "tag = STS" in named_block(territorial_brigade, "ai_will_do")
+        and "NOT = { num_divisions < 24 }" in named_block(territorial_brigade, "ai_will_do"),
+    )
+    add(
+        "Shabrat reserve volunteer orders stop at 24 divisions",
+        "tag = STS" in named_block(reserve_brigades, "ai_will_do")
+        and "NOT = { num_divisions < 24 }" in named_block(reserve_brigades, "ai_will_do"),
+    )
     fund_ai = re.search(
         r"id = STP_cw_military_committee_fund[\s\S]*?ai_will_do = \{[\s\S]*?\n\t\t\}",
         read(FOCUS) if FOCUS.exists() else "",
