@@ -11,6 +11,7 @@ from tools.lib.paths import source_section
 ROOT = Path(__file__).resolve().parents[2]
 PHASE_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 PHASE_EVENTS = ROOT / "events/ADISCORD_vorkerland_events.txt"
+PHASE_TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
 
 
 def read(path: Path) -> str:
@@ -50,6 +51,7 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.effects = source_section(read(PHASE_EFFECTS), 'phase_effects')
         cls.events = source_section(read(PHASE_EVENTS), 'phase_events')
+        cls.triggers = read(PHASE_TRIGGERS)
 
     def test_each_winner_is_consumed_by_materialized_wrk(self) -> None:
         contracts = (
@@ -144,6 +146,48 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
             with self.subTest(winner=old_scope):
                 self.assertIn(f"WRK = {{\n\t\t\t\t{effect}", phase_six)
                 self.assertNotIn(f"{old_scope} = {{\n\t\t\t\t{effect}", phase_six)
+
+    def test_phase_six_prefers_the_marked_winner_over_tag_order(self) -> None:
+        phase_six = event_block(self.events, "ADISCORD_vorkerland_phase.6")
+        self.assertEqual(
+            phase_six.count("ADISCORD_vorkerland_has_live_marked_central_unifier = no"),
+            3,
+        )
+        for tag in ("WKR", "VAD", "TVA"):
+            with self.subTest(winner=tag):
+                self.assertRegex(
+                    phase_six,
+                    rf"{tag}\s*=\s*\{{\s*has_country_flag\s*=\s*ADISCORD_vorkerland_central_unifier\s*\}}",
+                )
+        marker = named_block(
+            self.triggers, "ADISCORD_vorkerland_has_live_marked_central_unifier"
+        )
+        for tag in ("WKR", "VAD", "TVA"):
+            self.assertIn(
+                f"{tag} = {{ exists = yes is_subject = no NOT = {{ has_capitulated = yes }} "
+                "has_country_flag = ADISCORD_vorkerland_central_unifier }",
+                marker,
+            )
+
+    def test_terminal_winner_replaces_stale_unifier_markers(self) -> None:
+        contracts = {
+            "ADISCORD_vorkerland_apply_worker_map": ("WKR", ("VAD", "TVA")),
+            "ADISCORD_vorkerland_apply_vlad_map": ("VAD", ("WKR", "TVA")),
+            "ADISCORD_vorkerland_apply_dorian_map": ("TVA", ("WKR", "VAD")),
+        }
+        for effect_name, (winner, losers) in contracts.items():
+            with self.subTest(effect=effect_name):
+                effect = named_block(self.effects, effect_name)
+                self.assertRegex(
+                    effect,
+                    rf"{winner}\s*=\s*\{{[\s\S]*?set_country_flag\s*=\s*ADISCORD_vorkerland_central_unifier",
+                )
+                for loser in losers:
+                    self.assertIn(
+                        f"country_exists = {loser} }} {loser} = {{ clr_country_flag = "
+                        "ADISCORD_vorkerland_central_unifier",
+                        effect,
+                    )
 
     def test_tva_formation_rebinds_tgd_but_absorbs_oitfort(self) -> None:
         tva = named_block(self.effects, "ADISCORD_vorkerland_form_wrk_from_tva")
