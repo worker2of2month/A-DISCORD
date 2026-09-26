@@ -2193,7 +2193,9 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_survey }
 		completion_reward = {
-			unlock_decision_tooltip = VAL_recovery_road_corps_program add_ideas = VAL_reclamation_road_crews_idea }
+			unlock_decision_tooltip = VAL_recovery_road_corps_program
+			add_ideas = VAL_reclamation_road_crews_idea
+		}
 		ai_will_do = { base = 3 }
 	}
 
@@ -2224,7 +2226,9 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_1_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } } } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			unlock_decision_tooltip = VAL_recovery_workshop_program add_ideas = VAL_reclamation_workshops_idea }
+			unlock_decision_tooltip = VAL_recovery_workshop_program
+			add_ideas = VAL_reclamation_workshops_idea
+		}
 		ai_will_do = { base = 3 }
 	}
 
