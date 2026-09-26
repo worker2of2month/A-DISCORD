@@ -298,14 +298,42 @@ defined_text = {
 
 defined_text = {
 	name = GetADISCORDEconomyAdviceLoc
-	text = { trigger = { check_variable = { var = ADISCORD_economy_last_auto_borrowing value = 0 compare = greater_than } check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = less_than } } localization_key = ADISCORD_economy_advice_auto_loan }
+	text = {
+		trigger = {
+			check_variable = {
+				var = ADISCORD_economy_last_auto_borrowing
+				value = 0
+				compare = greater_than
+			}
+			check_variable = {
+				var = ADISCORD_economy_weekly_balance
+				value = 0
+				compare = less_than
+			}
+		}
+		localization_key = ADISCORD_economy_advice_auto_loan
+	}
 	text = { trigger = { check_variable = { var = ADISCORD_economy_fiscal_stress value = 75 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_advice_critical }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_stretched_level value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_advice_critical }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_debt_pressure value = 70 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_advice_debt }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_inflation value = 40 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_advice_inflation }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_monthly_balance value = 0 compare = less_than } } localization_key = ADISCORD_economy_advice_deficit }
 	text = { trigger = { has_war = yes check_variable = { var = ADISCORD_economy_war_fatigue_level value = 2 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_advice_war }
-	text = { trigger = { check_variable = { var = ADISCORD_economy_surplus_streak value = 3 compare = greater_than_or_equals } check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_advice_growth }
+	text = {
+		trigger = {
+			check_variable = {
+				var = ADISCORD_economy_surplus_streak
+				value = 3
+				compare = greater_than_or_equals
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 100
+				compare = greater_than_or_equals
+			}
+		}
+		localization_key = ADISCORD_economy_advice_growth
+	}
 	text = { localization_key = ADISCORD_economy_advice_balanced }
 }
 
