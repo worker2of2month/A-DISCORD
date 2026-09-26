@@ -110,10 +110,58 @@ scripted_gui = {
 			}
 			ADISCORD_economy_research_active_marker_visible = {
 				set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 48 }
-				if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 0 } }
-				else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 24 } }
-				else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 48 } }
-				else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = less_than_or_equals } } set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 72 } }
+				if = {
+					limit = {
+						check_variable = {
+							var = ADISCORD_economy_research_spending_mode
+							value = 1
+							compare = less_than_or_equals
+						}
+					}
+					set_temp_variable = {
+						var = ADISCORD_economy_research_active_marker_x_position
+						value = 0
+					}
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							var = ADISCORD_economy_research_spending_mode
+							value = 2
+							compare = less_than_or_equals
+						}
+					}
+					set_temp_variable = {
+						var = ADISCORD_economy_research_active_marker_x_position
+						value = 24
+					}
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							var = ADISCORD_economy_research_spending_mode
+							value = 3
+							compare = less_than_or_equals
+						}
+					}
+					set_temp_variable = {
+						var = ADISCORD_economy_research_active_marker_x_position
+						value = 48
+					}
+				}
+				else_if = {
+					limit = {
+						check_variable = {
+							var = ADISCORD_economy_research_spending_mode
+							value = 4
+							compare = less_than_or_equals
+						}
+					}
+					set_temp_variable = {
+						var = ADISCORD_economy_research_active_marker_x_position
+						value = 72
+					}
+				}
 				else = { set_temp_variable = { var = ADISCORD_economy_research_active_marker_x_position value = 96 } }
 			}
 			ADISCORD_economy_social_active_marker_visible = {

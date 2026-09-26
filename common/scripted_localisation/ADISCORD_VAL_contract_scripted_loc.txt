@@ -47,21 +47,96 @@ defined_text = {
 defined_text = {
     name = VALGetFrontierCINStatus
     text = { trigger = { CIN = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
-    text = { trigger = { OR = { CIN = { exists = no } CIN = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } } AND = { 58 = { is_controlled_by = VAL } 59 = { is_controlled_by = VAL } 60 = { is_controlled_by = VAL } } } } localization_key = VAL_FRONTIER_DEFEATED }
+    text = {
+    	trigger = {
+    		OR = {
+    			CIN = {
+    				exists = no
+    			}
+    			CIN = {
+    				has_country_flag = VAL_frontier_defeated
+    				capital_scope = {
+    					is_controlled_by = VAL
+    				}
+    			}
+    			AND = {
+    				58 = {
+    					is_controlled_by = VAL
+    				}
+    				59 = {
+    					is_controlled_by = VAL
+    				}
+    				60 = {
+    					is_controlled_by = VAL
+    				}
+    			}
+    		}
+    	}
+    	localization_key = VAL_FRONTIER_DEFEATED
+    }
     text = { trigger = { CIN = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
     text = { localization_key = VAL_FRONTIER_MOBILIZING }
 }
 defined_text = {
     name = VALGetFrontierOSFStatus
     text = { trigger = { OSF = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
-    text = { trigger = { OR = { OSF = { exists = no } OSF = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } } AND = { 61 = { is_controlled_by = VAL } 62 = { is_controlled_by = VAL } 63 = { is_controlled_by = VAL } } } } localization_key = VAL_FRONTIER_DEFEATED }
+    text = {
+    	trigger = {
+    		OR = {
+    			OSF = {
+    				exists = no
+    			}
+    			OSF = {
+    				has_country_flag = VAL_frontier_defeated
+    				capital_scope = {
+    					is_controlled_by = VAL
+    				}
+    			}
+    			AND = {
+    				61 = {
+    					is_controlled_by = VAL
+    				}
+    				62 = {
+    					is_controlled_by = VAL
+    				}
+    				63 = {
+    					is_controlled_by = VAL
+    				}
+    			}
+    		}
+    	}
+    	localization_key = VAL_FRONTIER_DEFEATED
+    }
     text = { trigger = { OSF = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
     text = { localization_key = VAL_FRONTIER_MOBILIZING }
 }
 defined_text = {
     name = VALGetFrontierAPHStatus
     text = { trigger = { APH = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
-    text = { trigger = { OR = { APH = { exists = no } APH = { has_country_flag = VAL_frontier_defeated capital_scope = { is_controlled_by = VAL } } AND = { 64 = { is_controlled_by = VAL } 65 = { is_controlled_by = VAL } } } } localization_key = VAL_FRONTIER_DEFEATED }
+    text = {
+    	trigger = {
+    		OR = {
+    			APH = {
+    				exists = no
+    			}
+    			APH = {
+    				has_country_flag = VAL_frontier_defeated
+    				capital_scope = {
+    					is_controlled_by = VAL
+    				}
+    			}
+    			AND = {
+    				64 = {
+    					is_controlled_by = VAL
+    				}
+    				65 = {
+    					is_controlled_by = VAL
+    				}
+    			}
+    		}
+    	}
+    	localization_key = VAL_FRONTIER_DEFEATED
+    }
     text = { trigger = { APH = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
     text = { localization_key = VAL_FRONTIER_MOBILIZING }
 }
@@ -378,13 +453,47 @@ defined_text = {
 
 defined_text = {
  name = VALOfferStatus_VAL_negotiate_efl_metals
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = EFL } has_completed_focus = VAL_Resource_War_Contracts VAL_efl_concession_negotiable = yes NOT = { has_political_power < 50 } NOT = { has_country_flag = VAL_efl_concession_offer_pending } }  } localization_key = VAL_offer_blocked_concessions }
+ text = {
+ 	trigger = {
+ 		NOT = {
+ 			event_target:VAL_contract_partner = {
+ 				tag = EFL
+ 			}
+ 			has_completed_focus = VAL_Resource_War_Contracts
+ 			VAL_efl_concession_negotiable = yes
+ 			NOT = {
+ 				has_political_power < 50
+ 			}
+ 			NOT = {
+ 				has_country_flag = VAL_efl_concession_offer_pending
+ 			}
+ 		}
+ 	}
+ 	localization_key = VAL_offer_blocked_concessions
+ }
  text = { localization_key = VAL_offer_status_clear }
 }
 
 defined_text = {
  name = VALOfferStatus_VAL_negotiate_nam_metals
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = NAM } has_completed_focus = VAL_Resource_War_Contracts VAL_nam_concession_negotiable = yes NOT = { has_political_power < 50 } NOT = { has_country_flag = VAL_nam_concession_offer_pending } }  } localization_key = VAL_offer_blocked_concessions }
+ text = {
+ 	trigger = {
+ 		NOT = {
+ 			event_target:VAL_contract_partner = {
+ 				tag = NAM
+ 			}
+ 			has_completed_focus = VAL_Resource_War_Contracts
+ 			VAL_nam_concession_negotiable = yes
+ 			NOT = {
+ 				has_political_power < 50
+ 			}
+ 			NOT = {
+ 				has_country_flag = VAL_nam_concession_offer_pending
+ 			}
+ 		}
+ 	}
+ 	localization_key = VAL_offer_blocked_concessions
+ }
  text = { localization_key = VAL_offer_status_clear }
 }
 
@@ -395,7 +504,21 @@ defined_text = {
   NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
   NOT = { has_country_flag = VAL_military_offer_pending }
   VAL_partner_desk_free = yes
-  event_target:VAL_contract_partner = { VAL_export_customer = yes has_war = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_idea = VAL_paid_military_advisors } NOT = { has_country_flag = VAL_export_customer_cooldown } } }  } localization_key = VAL_offer_blocked_advisors }
+event_target:VAL_contract_partner = {
+	VAL_export_customer = yes
+	has_war = yes
+	ADISCORD_economy_can_spend_100 = yes
+	NOT = {
+		has_idea = VAL_paid_military_advisors
+	}
+	NOT = {
+		has_country_flag = VAL_export_customer_cooldown
+	}
+}
+}
+}
+localization_key = VAL_offer_blocked_advisors
+}
  text = { localization_key = VAL_offer_status_clear }
 }
 
@@ -445,7 +568,25 @@ defined_text = {
 
 defined_text = {
  name = VALOfferStatus_VAL_military_offer_2
- text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes any_owned_state = { NOT = { is_controlled_by = event_target:VAL_contract_partner } controller = { has_war_with = event_target:VAL_contract_partner } } } }  } localization_key = VAL_offer_blocked_military }
+ text = {
+ 	trigger = {
+ 		NOT = {
+ 			has_completed_focus = VAL_Contingency_Ledgers
+ 			event_target:VAL_contract_partner = {
+ 				VAL_military_customer_eligible = yes
+ 				any_owned_state = {
+ 					NOT = {
+ 						is_controlled_by = event_target:VAL_contract_partner
+ 					}
+ 					controller = {
+ 						has_war_with = event_target:VAL_contract_partner
+ 					}
+ 				}
+ 			}
+ 		}
+ 	}
+ 	localization_key = VAL_offer_blocked_military
+ }
  text = { localization_key = VAL_offer_status_clear }
 }
 
@@ -481,13 +622,47 @@ defined_text = {
 
 defined_text = {
  name = VALOfferButton_VAL_negotiate_efl_metals
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = EFL } has_completed_focus = VAL_Resource_War_Contracts VAL_efl_concession_negotiable = yes NOT = { has_political_power < 50 } NOT = { has_country_flag = VAL_efl_concession_offer_pending } }  } localization_key = VAL_offer_button_blocked_VAL_negotiate_efl_metals }
+ text = {
+ 	trigger = {
+ 		NOT = {
+ 			event_target:VAL_contract_partner = {
+ 				tag = EFL
+ 			}
+ 			has_completed_focus = VAL_Resource_War_Contracts
+ 			VAL_efl_concession_negotiable = yes
+ 			NOT = {
+ 				has_political_power < 50
+ 			}
+ 			NOT = {
+ 				has_country_flag = VAL_efl_concession_offer_pending
+ 			}
+ 		}
+ 	}
+ 	localization_key = VAL_offer_button_blocked_VAL_negotiate_efl_metals
+ }
  text = { localization_key = VAL_negotiate_efl_metals }
 }
 
 defined_text = {
  name = VALOfferButton_VAL_negotiate_nam_metals
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { tag = NAM } has_completed_focus = VAL_Resource_War_Contracts VAL_nam_concession_negotiable = yes NOT = { has_political_power < 50 } NOT = { has_country_flag = VAL_nam_concession_offer_pending } }  } localization_key = VAL_offer_button_blocked_VAL_negotiate_nam_metals }
+ text = {
+ 	trigger = {
+ 		NOT = {
+ 			event_target:VAL_contract_partner = {
+ 				tag = NAM
+ 			}
+ 			has_completed_focus = VAL_Resource_War_Contracts
+ 			VAL_nam_concession_negotiable = yes
+ 			NOT = {
+ 				has_political_power < 50
+ 			}
+ 			NOT = {
+ 				has_country_flag = VAL_nam_concession_offer_pending
+ 			}
+ 		}
+ 	}
+ 	localization_key = VAL_offer_button_blocked_VAL_negotiate_nam_metals
+ }
  text = { localization_key = VAL_negotiate_nam_metals }
 }
 
@@ -498,19 +673,53 @@ defined_text = {
   NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
   NOT = { has_country_flag = VAL_military_offer_pending }
   VAL_partner_desk_free = yes
-  event_target:VAL_contract_partner = { VAL_export_customer = yes has_war = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_idea = VAL_paid_military_advisors } NOT = { has_country_flag = VAL_export_customer_cooldown } } }  } localization_key = VAL_offer_button_blocked_VAL_menu_advisors }
+event_target:VAL_contract_partner = {
+	VAL_export_customer = yes
+	has_war = yes
+	ADISCORD_economy_can_spend_100 = yes
+	NOT = {
+		has_idea = VAL_paid_military_advisors
+	}
+	NOT = {
+		has_country_flag = VAL_export_customer_cooldown
+	}
+}
+}
+}
+localization_key = VAL_offer_button_blocked_VAL_menu_advisors
+}
  text = { localization_key = VAL_menu_advisors }
 }
 
 defined_text = {
  name = VALOfferButton_VAL_military_offer_3
- text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes  } }  } localization_key = VAL_offer_button_blocked_VAL_military_offer_3 }
+ text = {
+ 	trigger = {
+ 		NOT = {
+ 			has_completed_focus = VAL_Contingency_Ledgers
+ 			event_target:VAL_contract_partner = {
+ 				VAL_military_customer_eligible = yes
+ 			}
+ 		}
+ 	}
+ 	localization_key = VAL_offer_button_blocked_VAL_military_offer_3
+ }
  text = { localization_key = VAL_military_offer_3 }
 }
 
 defined_text = {
  name = VALOfferButton_VAL_offer_order_strategic
- text = { trigger = {  NOT = { has_completed_focus = VAL_Strategic_Arms_Exports event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_order_strategic }
+ text = {
+ 	trigger = {
+ 		NOT = {
+ 			has_completed_focus = VAL_Strategic_Arms_Exports
+ 			event_target:VAL_contract_partner = {
+ 				VAL_order_can_offer = yes
+ 			}
+ 		}
+ 	}
+ 	localization_key = VAL_offer_button_blocked_VAL_offer_order_strategic
+ }
  text = { localization_key = VAL_offer_order_strategic }
 }
 
@@ -548,13 +757,41 @@ defined_text = {
 
 defined_text = {
  name = VALOfferButton_VAL_military_offer_2
- text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes any_owned_state = { NOT = { is_controlled_by = event_target:VAL_contract_partner } controller = { has_war_with = event_target:VAL_contract_partner } } } }  } localization_key = VAL_offer_button_blocked_VAL_military_offer_2 }
+ text = {
+ 	trigger = {
+ 		NOT = {
+ 			has_completed_focus = VAL_Contingency_Ledgers
+ 			event_target:VAL_contract_partner = {
+ 				VAL_military_customer_eligible = yes
+ 				any_owned_state = {
+ 					NOT = {
+ 						is_controlled_by = event_target:VAL_contract_partner
+ 					}
+ 					controller = {
+ 						has_war_with = event_target:VAL_contract_partner
+ 					}
+ 				}
+ 			}
+ 		}
+ 	}
+ 	localization_key = VAL_offer_button_blocked_VAL_military_offer_2
+ }
  text = { localization_key = VAL_military_offer_2 }
 }
 
 defined_text = {
  name = VALOfferButton_VAL_military_offer_1
- text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes  } }  } localization_key = VAL_offer_button_blocked_VAL_military_offer_1 }
+ text = {
+ 	trigger = {
+ 		NOT = {
+ 			has_completed_focus = VAL_Contingency_Ledgers
+ 			event_target:VAL_contract_partner = {
+ 				VAL_military_customer_eligible = yes
+ 			}
+ 		}
+ 	}
+ 	localization_key = VAL_offer_button_blocked_VAL_military_offer_1
+ }
  text = { localization_key = VAL_military_offer_1 }
 }
 

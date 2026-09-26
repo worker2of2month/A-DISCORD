@@ -315,7 +315,21 @@ VAL_military_operations = {
 		icon = generic_intelligence_exchange
 		allowed = { tag = VAL }
 		cancel_if_not_visible = no
-		visible = { VAL_final_crisis_preparing = yes check_variable = { var = VAL_final_escalation value = 25 compare = greater_than_or_equals } NOT = { check_variable = { var = VAL_final_planning_bonus value = 0 compare = greater_than } } }
+		visible = {
+			VAL_final_crisis_preparing = yes
+			check_variable = {
+				var = VAL_final_escalation
+				value = 25
+				compare = greater_than_or_equals
+			}
+			NOT = {
+				check_variable = {
+					var = VAL_final_planning_bonus
+					value = 0
+					compare = greater_than
+				}
+			}
+		}
 		cost = 75
 		days_remove = 21
 		complete_effect = { custom_effect_tooltip = VAL_final_reconnaissance_start_tt }
@@ -2289,7 +2303,24 @@ VAL_foreign_sales = {
 		remove_effect = {
 			hidden_effect = {
 				if = {
-					limit = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } has_capitulated = no NOT = { has_war_with = STS } NOT = { has_country_flag = VAL_cw_refused } STS = { exists = yes has_capitulated = no has_war_with = STP } }
+					limit = {
+						has_country_flag = {
+							flag = VAL_cw_arms_offer_pending
+							value > 1
+						}
+						has_capitulated = no
+						NOT = {
+							has_war_with = STS
+						}
+						NOT = {
+							has_country_flag = VAL_cw_refused
+						}
+						STS = {
+							exists = yes
+							has_capitulated = no
+							has_war_with = STP
+						}
+					}
 					STS = { country_event = { id = ADISCORD_STP_cw.50 } }
 				}
 				else = { if = { limit = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } } clr_country_flag = VAL_cw_arms_offer_pending } }
@@ -2439,7 +2470,20 @@ VAL_command_balance_category = {
 	VAL_settle_command_crisis = {
 		icon = generic_political_pressure
 		visible = { has_power_balance = { id = VAL_command_balance } }
-		available = { has_capitulated = no is_subject = no OR = { is_power_balance_in_range = { id = VAL_command_balance range = VAL_staff_dominance } is_power_balance_in_range = { id = VAL_command_balance range = VAL_solgalov_dominance } } }
+		available = {
+			has_capitulated = no
+			is_subject = no
+			OR = {
+				is_power_balance_in_range = {
+					id = VAL_command_balance
+					range = VAL_staff_dominance
+				}
+				is_power_balance_in_range = {
+					id = VAL_command_balance
+					range = VAL_solgalov_dominance
+				}
+			}
+		}
 		cost = 120
 		days_re_enable = 180
 		complete_effect = {
@@ -2458,7 +2502,16 @@ VAL_resource_war_aid = {
 			ADISCORD_nam_resource_war_active = yes
 			NOT = { has_variable = VAL_resource_aid_side }
 		}
-		available = { has_completed_focus = VAL_Resource_War_Contracts custom_trigger_tooltip = { tooltip = VAL_nam_concession_negotiable_tt VAL_nam_concession_negotiable = yes } NOT = { has_country_flag = VAL_nam_concession_offer_pending } }
+		available = {
+			has_completed_focus = VAL_Resource_War_Contracts
+			custom_trigger_tooltip = {
+				tooltip = VAL_nam_concession_negotiable_tt
+				VAL_nam_concession_negotiable = yes
+			}
+			NOT = {
+				has_country_flag = VAL_nam_concession_offer_pending
+			}
+		}
 		cost = 50
 		days_re_enable = 30
 		complete_effect = {
@@ -2477,7 +2530,16 @@ VAL_resource_war_aid = {
 			ADISCORD_nam_resource_war_active = yes
 			NOT = { has_variable = VAL_resource_aid_side }
 		}
-		available = { has_completed_focus = VAL_Resource_War_Contracts custom_trigger_tooltip = { tooltip = VAL_efl_concession_negotiable_tt VAL_efl_concession_negotiable = yes } NOT = { has_country_flag = VAL_efl_concession_offer_pending } }
+		available = {
+			has_completed_focus = VAL_Resource_War_Contracts
+			custom_trigger_tooltip = {
+				tooltip = VAL_efl_concession_negotiable_tt
+				VAL_efl_concession_negotiable = yes
+			}
+			NOT = {
+				has_country_flag = VAL_efl_concession_offer_pending
+			}
+		}
 		cost = 50
 		days_re_enable = 30
 		complete_effect = {
@@ -2710,7 +2772,21 @@ VAL_contract_obligations = {
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = FROM.VAL_refund_due compare = greater_than_or_equals } }
 		complete_effect = {
 			if = {
-				limit = { FROM = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } } check_variable = { var = ADISCORD_economy_treasury value = FROM.VAL_refund_due compare = greater_than_or_equals } }
+				limit = {
+					FROM = {
+						exists = yes
+						check_variable = {
+							var = VAL_refund_due
+							value = 0
+							compare = greater_than
+						}
+					}
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = FROM.VAL_refund_due
+						compare = greater_than_or_equals
+					}
+				}
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = FROM.VAL_refund_due }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = FROM.VAL_refund_due }
 				FROM = {

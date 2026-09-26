@@ -100,7 +100,21 @@ country_event = {
 	desc = ADISCORD_STP_preparation.23.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag }  NOT = { has_country_flag = STP_skip_intro_story_events } }
+	trigger = {
+		tag = STP
+		NOT = {
+			has_global_flag = STP_cw_started
+		}
+		NOT = {
+			has_country_flag = STP_sided_with_Maksim_flag
+		}
+		NOT = {
+			has_country_flag = STP_sided_with_the_party_flag
+		}
+		NOT = {
+			has_country_flag = STP_skip_intro_story_events
+		}
+	}
 	option = { name = ADISCORD_STP_preparation.23.a }
 }
 
@@ -110,7 +124,21 @@ country_event = {
 	desc = ADISCORD_STP_preparation.25.d
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
-	trigger = { tag = STP NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_sided_with_Maksim_flag } NOT = { has_country_flag = STP_sided_with_the_party_flag }  NOT = { has_country_flag = STP_skip_intro_story_events } }
+	trigger = {
+		tag = STP
+		NOT = {
+			has_global_flag = STP_cw_started
+		}
+		NOT = {
+			has_country_flag = STP_sided_with_Maksim_flag
+		}
+		NOT = {
+			has_country_flag = STP_sided_with_the_party_flag
+		}
+		NOT = {
+			has_country_flag = STP_skip_intro_story_events
+		}
+	}
 	option = { name = ADISCORD_STP_preparation.25.a }
 }
 
@@ -825,10 +853,19 @@ country_event = {
 				exists = yes
 				has_capitulated = no
 				NOT = { has_variable = STP_ps_val_receipt_rifles }
-				has_country_flag = { flag = VAL_cw_arms_offer_pending value < 2 }
+				has_country_flag = {
+					flag = VAL_cw_arms_offer_pending
+					value < 2
+				}
 				has_country_flag = VAL_cw_trade_course
-				NOT = { has_war_with = STS }
-				NOT = { has_equipment = { infantry_equipment < 32000 } }
+				NOT = {
+					has_war_with = STS
+				}
+				NOT = {
+					has_equipment = {
+						infantry_equipment < 32000
+					}
+				}
 			}
 		}
 		custom_effect_tooltip = VAL_cw_buy_arms_tt
@@ -843,13 +880,32 @@ country_event = {
 				exists = yes
 				has_capitulated = no
 				NOT = { has_variable = STP_ps_val_receipt_rifles }
-				has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 }
+				has_country_flag = {
+					flag = VAL_cw_arms_offer_pending
+					value > 1
+				}
 				has_country_flag = VAL_cw_trade_course
-				NOT = { has_war_with = STS }
-				NOT = { has_equipment = { infantry_equipment < 43340 } }
-				NOT = { has_manpower < 12600 }
-				NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 96 } }
-				NOT = { has_equipment = { support_equipment < 60 } }
+				NOT = {
+					has_war_with = STS
+				}
+				NOT = {
+					has_equipment = {
+						infantry_equipment < 43340
+					}
+				}
+				NOT = {
+					has_manpower < 12600
+				}
+				NOT = {
+					has_equipment = {
+						ADISCORD_squad_weapons_equipment < 96
+					}
+				}
+				NOT = {
+					has_equipment = {
+						support_equipment < 60
+					}
+				}
 			}
 		}
 		custom_effect_tooltip = VAL_cw_buy_formations_tt
@@ -1442,7 +1498,21 @@ country_event = {
 		name = STP_pc_reject_terms
 		trigger = { STP_pc_val_offer_current = yes }
 		ai_chance = { base = 20 modifier = { factor = 4 STS = { check_variable = { var = STP_pc_val_offer_kind value = 2 compare = equals } } } }
-		hidden_effect = { if = { limit = { STP_pc_val_offer_current = yes } STS = { set_country_flag = STP_pc_val_terms_refused clear_variable = STP_pc_val_offer_kind country_event = { id = ADISCORD_STP_pc.21 hours = 1 } } } }
+		hidden_effect = {
+			if = {
+				limit = {
+					STP_pc_val_offer_current = yes
+				}
+				STS = {
+					set_country_flag = STP_pc_val_terms_refused
+					clear_variable = STP_pc_val_offer_kind
+					country_event = {
+						id = ADISCORD_STP_pc.21
+						hours = 1
+					}
+				}
+			}
+		}
 	}
 	option = {
 		name = STP_pc_accept_compact
@@ -1457,7 +1527,22 @@ country_event = {
 		ai_chance = { base = 5 modifier = { factor = 5 has_war = yes } modifier = { factor = 4 strength_ratio = { tag = STS ratio < 0.6 } } }
 		if = { limit = { STP_pc_val_offer_current = yes }
 			add_ideas = STP_pc_val_client
-			hidden_effect = { STS = { set_country_flag = STP_pc_val_terms_accepted clear_variable = STP_pc_val_offer_kind if = { limit = { has_country_flag = STP_pc_hegemony_league } STP_pc_form_hegemony_league = yes } country_event = { id = ADISCORD_STP_pc.21 hours = 1 } } }
+			hidden_effect = {
+				STS = {
+					set_country_flag = STP_pc_val_terms_accepted
+					clear_variable = STP_pc_val_offer_kind
+					if = {
+						limit = {
+							has_country_flag = STP_pc_hegemony_league
+						}
+						STP_pc_form_hegemony_league = yes
+					}
+					country_event = {
+						id = ADISCORD_STP_pc.21
+						hours = 1
+					}
+				}
+			}
 		}
 	}
 	option = {
@@ -1481,7 +1566,21 @@ country_event = {
 		name = STP_pc_reject_terms
 		trigger = { STP_pc_nod_offer_current = yes }
 		ai_chance = { base = 20 modifier = { factor = 4 STS = { check_variable = { var = STP_pc_nod_offer_kind value = 2 compare = equals } } } }
-		hidden_effect = { if = { limit = { STP_pc_nod_offer_current = yes } STS = { set_country_flag = STP_pc_nod_terms_refused clear_variable = STP_pc_nod_offer_kind country_event = { id = ADISCORD_STP_pc.21 hours = 1 } } } }
+		hidden_effect = {
+			if = {
+				limit = {
+					STP_pc_nod_offer_current = yes
+				}
+				STS = {
+					set_country_flag = STP_pc_nod_terms_refused
+					clear_variable = STP_pc_nod_offer_kind
+					country_event = {
+						id = ADISCORD_STP_pc.21
+						hours = 1
+					}
+				}
+			}
+		}
 	}
 	option = {
 		name = STP_pc_accept_compact
@@ -1728,10 +1827,32 @@ country_event = {
 
 	option = {
 		name = ADISCORD_STP_pc.26.b
-		trigger = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+		trigger = {
+			STP_pw_can_reconstruct = yes
+			STP_pf_active = yes
+			NOT = {
+				has_completed_focus = STP_pw_party_civil_charter
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 540
+				compare = greater_than_or_equals
+			}
+		}
 		ai_chance = { base = 30 }
 		if = {
-			limit = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+			limit = {
+				STP_pw_can_reconstruct = yes
+				STP_pf_active = yes
+				NOT = {
+					has_completed_focus = STP_pw_party_civil_charter
+				}
+				check_variable = {
+					var = ADISCORD_economy_treasury
+					value = 540
+					compare = greater_than_or_equals
+				}
+			}
 			custom_effect_tooltip = STP_party_settlement_26_tt
 			hidden_effect = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
@@ -1758,10 +1879,32 @@ country_event = {
 
 	option = {
 		name = ADISCORD_STP_pc.27.b
-		trigger = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+		trigger = {
+			STP_pw_can_reconstruct = yes
+			STP_pf_active = yes
+			NOT = {
+				has_completed_focus = STP_pw_party_civil_charter
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 540
+				compare = greater_than_or_equals
+			}
+		}
 		ai_chance = { base = 30 }
 		if = {
-			limit = { STP_pw_can_reconstruct = yes STP_pf_active = yes NOT = { has_completed_focus = STP_pw_party_civil_charter } check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+			limit = {
+				STP_pw_can_reconstruct = yes
+				STP_pf_active = yes
+				NOT = {
+					has_completed_focus = STP_pw_party_civil_charter
+				}
+				check_variable = {
+					var = ADISCORD_economy_treasury
+					value = 540
+					compare = greater_than_or_equals
+				}
+			}
 			custom_effect_tooltip = STP_party_settlement_27_tt
 			hidden_effect = {
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }

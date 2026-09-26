@@ -856,13 +856,96 @@ STP_cw_refresh_army_report = {
 	# Early-uprising baseline; the election result transfers two brigades and 10% of reserves.
 	if = { limit = { has_country_flag = STP_cw_party_reserve_ready } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
 	if = { limit = { has_country_flag = STP_party_mobile_reserve_ready } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
-	if = { limit = { 2 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset NOT = { STP_cw_region_goes_to_resistance = yes } NOT = { STP_cw_region_goes_to_republics = yes } } } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
-	if = { limit = { 29 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset NOT = { STP_cw_region_goes_to_resistance = yes } NOT = { STP_cw_region_goes_to_republics = yes } } } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
-	if = { limit = { 45 = { is_owned_by = STP has_state_flag = STP_party_reinforced_garrison_asset NOT = { STP_cw_region_goes_to_resistance = yes } NOT = { STP_cw_region_goes_to_republics = yes } } } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
+	if = {
+		limit = {
+			2 = {
+				is_owned_by = STP
+				has_state_flag = STP_party_reinforced_garrison_asset
+				NOT = {
+					STP_cw_region_goes_to_resistance = yes
+				}
+				NOT = {
+					STP_cw_region_goes_to_republics = yes
+				}
+			}
+		}
+		add_to_variable = {
+			var = STP_cw_report_party_brigades
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			29 = {
+				is_owned_by = STP
+				has_state_flag = STP_party_reinforced_garrison_asset
+				NOT = {
+					STP_cw_region_goes_to_resistance = yes
+				}
+				NOT = {
+					STP_cw_region_goes_to_republics = yes
+				}
+			}
+		}
+		add_to_variable = {
+			var = STP_cw_report_party_brigades
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			45 = {
+				is_owned_by = STP
+				has_state_flag = STP_party_reinforced_garrison_asset
+				NOT = {
+					STP_cw_region_goes_to_resistance = yes
+				}
+				NOT = {
+					STP_cw_region_goes_to_republics = yes
+				}
+			}
+		}
+		add_to_variable = {
+			var = STP_cw_report_party_brigades
+			value = 2
+		}
+	}
 	if = { limit = { has_country_flag = STP_cw_abila_reserve_ready } add_to_variable = { var = STP_cw_report_resistance_brigades value = 2 } }
 	if = { limit = { has_country_flag = STP_cw_local_recruits_ready } add_to_variable = { var = STP_cw_report_resistance_brigades value = 2 } }
-	if = { limit = { 2 = { OR = { AND = { STP_cw_region_goes_to_resistance = yes has_state_flag = STP_resistance_garrison_asset } has_state_flag = STP_cw_garrison_evacuated } } } add_to_variable = { var = STP_cw_report_resistance_brigades value = 2 } }
-	if = { limit = { 29 = { OR = { AND = { STP_cw_region_goes_to_resistance = yes has_state_flag = STP_resistance_garrison_asset } has_state_flag = STP_cw_garrison_evacuated } } } add_to_variable = { var = STP_cw_report_resistance_brigades value = 2 } }
+	if = {
+		limit = {
+			2 = {
+				OR = {
+					AND = {
+						STP_cw_region_goes_to_resistance = yes
+						has_state_flag = STP_resistance_garrison_asset
+					}
+					has_state_flag = STP_cw_garrison_evacuated
+				}
+			}
+		}
+		add_to_variable = {
+			var = STP_cw_report_resistance_brigades
+			value = 2
+		}
+	}
+	if = {
+		limit = {
+			29 = {
+				OR = {
+					AND = {
+						STP_cw_region_goes_to_resistance = yes
+						has_state_flag = STP_resistance_garrison_asset
+					}
+					has_state_flag = STP_cw_garrison_evacuated
+				}
+			}
+		}
+		add_to_variable = {
+			var = STP_cw_report_resistance_brigades
+			value = 2
+		}
+	}
 }
 
 # State scope. The ledger is cleared before credits, so late callbacks cannot duplicate it.
@@ -1957,13 +2040,104 @@ STP_cw_pay_rifles = {
 
 # COUNTRY: return any unfinished NOD-rear rifle escrow to the caller.
 STP_cw_refund_nod_sabotage_rifles = {
-	10 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
-	11 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
-	12 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
-	13 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
-	17 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
-	18 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
-	30 = { if = { limit = { has_variable = STP_cw_nod_sabotage_rifles } ROOT = { add_equipment_to_stockpile = { type = infantry_equipment amount = PREV.STP_cw_nod_sabotage_rifles } } clear_variable = STP_cw_nod_sabotage_rifles } }
+	10 = {
+		if = {
+			limit = {
+				has_variable = STP_cw_nod_sabotage_rifles
+			}
+			ROOT = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = PREV.STP_cw_nod_sabotage_rifles
+				}
+			}
+			clear_variable = STP_cw_nod_sabotage_rifles
+		}
+	}
+	11 = {
+		if = {
+			limit = {
+				has_variable = STP_cw_nod_sabotage_rifles
+			}
+			ROOT = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = PREV.STP_cw_nod_sabotage_rifles
+				}
+			}
+			clear_variable = STP_cw_nod_sabotage_rifles
+		}
+	}
+	12 = {
+		if = {
+			limit = {
+				has_variable = STP_cw_nod_sabotage_rifles
+			}
+			ROOT = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = PREV.STP_cw_nod_sabotage_rifles
+				}
+			}
+			clear_variable = STP_cw_nod_sabotage_rifles
+		}
+	}
+	13 = {
+		if = {
+			limit = {
+				has_variable = STP_cw_nod_sabotage_rifles
+			}
+			ROOT = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = PREV.STP_cw_nod_sabotage_rifles
+				}
+			}
+			clear_variable = STP_cw_nod_sabotage_rifles
+		}
+	}
+	17 = {
+		if = {
+			limit = {
+				has_variable = STP_cw_nod_sabotage_rifles
+			}
+			ROOT = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = PREV.STP_cw_nod_sabotage_rifles
+				}
+			}
+			clear_variable = STP_cw_nod_sabotage_rifles
+		}
+	}
+	18 = {
+		if = {
+			limit = {
+				has_variable = STP_cw_nod_sabotage_rifles
+			}
+			ROOT = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = PREV.STP_cw_nod_sabotage_rifles
+				}
+			}
+			clear_variable = STP_cw_nod_sabotage_rifles
+		}
+	}
+	30 = {
+		if = {
+			limit = {
+				has_variable = STP_cw_nod_sabotage_rifles
+			}
+			ROOT = {
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = PREV.STP_cw_nod_sabotage_rifles
+				}
+			}
+			clear_variable = STP_cw_nod_sabotage_rifles
+		}
+	}
 }
 
 # COUNTRY scope. Six ADISCORD_territorial: 6 * (1000 manpower + 900 rifles).
@@ -2655,12 +2829,32 @@ STP_cw_transfer_preparation_modifiers = {
 	# Unfinished northern treasury belongs to Shabrat after the successor economy exists.
 	if = {
 		limit = { has_variable = STP_cw_northern_fort_deposit }
-		STS = { add_to_variable = { var = ADISCORD_economy_treasury value = PREV.STP_cw_northern_fort_deposit } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.STP_cw_northern_fort_deposit } ADISCORD_economy_mark_dirty = yes }
+		STS = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = PREV.STP_cw_northern_fort_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = PREV.STP_cw_northern_fort_deposit
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
 		clear_variable = STP_cw_northern_fort_deposit
 	}
 	if = {
 		limit = { has_variable = STP_cw_northern_engineer_deposit }
-		STS = { add_to_variable = { var = ADISCORD_economy_treasury value = PREV.STP_cw_northern_engineer_deposit } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.STP_cw_northern_engineer_deposit } ADISCORD_economy_mark_dirty = yes }
+		STS = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = PREV.STP_cw_northern_engineer_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = PREV.STP_cw_northern_engineer_deposit
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
 		clear_variable = STP_cw_northern_engineer_deposit
 	}
 	if = {
@@ -3257,8 +3451,42 @@ STP_cw_start = {
 		if = { limit = { NOT = { has_country_flag = STP_cw_shabrat_election_victory } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		if = { limit = { has_country_flag = STP_cw_party_election_victory } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		STS = {
-			if = { limit = { 2 = { OR = { AND = { is_owned_by = STS has_state_flag = STP_resistance_garrison_asset } has_state_flag = STP_cw_garrison_evacuated } } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
-			if = { limit = { 29 = { OR = { AND = { is_owned_by = STS has_state_flag = STP_resistance_garrison_asset } has_state_flag = STP_cw_garrison_evacuated } } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
+			if = {
+				limit = {
+					2 = {
+						OR = {
+							AND = {
+								is_owned_by = STS
+								has_state_flag = STP_resistance_garrison_asset
+							}
+							has_state_flag = STP_cw_garrison_evacuated
+						}
+					}
+				}
+				for_loop_effect = {
+					end = 2
+					value = STP_cw_formation_index
+					STP_cw_mobilize_brigade = yes
+				}
+			}
+			if = {
+				limit = {
+					29 = {
+						OR = {
+							AND = {
+								is_owned_by = STS
+								has_state_flag = STP_resistance_garrison_asset
+							}
+							has_state_flag = STP_cw_garrison_evacuated
+						}
+					}
+				}
+				for_loop_effect = {
+					end = 2
+					value = STP_cw_formation_index
+					STP_cw_mobilize_brigade = yes
+				}
+			}
 			if = { limit = { STP = { has_country_flag = STP_cw_abila_reserve_ready } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 			if = { limit = { STP = { has_country_flag = STP_cw_local_recruits_ready } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 			for_loop_effect = { end = 6 value = STP_cw_formation_index STP_cw_mobilize_assault_division = yes }
@@ -4129,9 +4357,114 @@ STP_pw_finish_project = {
 			STP_pw_can_reconstruct = yes
 			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
 			OR = {
-				AND = { check_variable = { var = STP_pw_project_kind value = 1 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 720 compare = equals } check_variable = { var = STP_pw_project_deposit value = 250 compare = equals } check_variable = { var = STP_pw_project_deposit value = 80 compare = equals } check_variable = { var = STP_pw_project_deposit value = 96 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
-				AND = { check_variable = { var = STP_pw_project_kind value = 2 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 1080 compare = equals } check_variable = { var = STP_pw_project_deposit value = 500 compare = equals } check_variable = { var = STP_pw_project_deposit value = 120 compare = equals } check_variable = { var = STP_pw_project_deposit value = 144 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } }
-				AND = { check_variable = { var = STP_pw_project_kind value = 3 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 540 compare = equals } check_variable = { var = STP_pw_project_deposit value = 100 compare = equals } check_variable = { var = STP_pw_project_deposit value = 60 compare = equals } check_variable = { var = STP_pw_project_deposit value = 72 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals } } }
+				AND = {
+					check_variable = {
+						var = STP_pw_project_kind
+						value = 1
+						compare = equals
+					}
+					OR = {
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 720
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 250
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 80
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 96
+							compare = equals
+						}
+					}
+					NOT = {
+						check_variable = {
+							var = STP_pw_recovery_services
+							value = 1
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				AND = {
+					check_variable = {
+						var = STP_pw_project_kind
+						value = 2
+						compare = equals
+					}
+					OR = {
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 1080
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 500
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 120
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 144
+							compare = equals
+						}
+					}
+					NOT = {
+						check_variable = {
+							var = STP_pw_recovery_industry
+							value = 1
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				AND = {
+					check_variable = {
+						var = STP_pw_project_kind
+						value = 3
+						compare = equals
+					}
+					OR = {
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 540
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 100
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 60
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 72
+							compare = equals
+						}
+					}
+					NOT = {
+						check_variable = {
+							var = STP_pw_recovery_army
+							value = 1
+							compare = greater_than_or_equals
+						}
+					}
+				}
 			}
 		}
 		if = {
@@ -4910,9 +5243,115 @@ STP_pw_party_finish_project = {
 			STP_pw_can_reconstruct = yes
 			capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
 			OR = {
-				AND = { check_variable = { var = STP_pw_project_kind value = 4 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 540 compare = equals } check_variable = { var = STP_pw_project_deposit value = 250 compare = equals } check_variable = { var = STP_pw_project_deposit value = 60 compare = equals } check_variable = { var = STP_pw_project_deposit value = 72 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_services value = 1 compare = greater_than_or_equals } } }
-				AND = { check_variable = { var = STP_pw_project_kind value = 5 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 1080 compare = equals } check_variable = { var = STP_pw_project_deposit value = 1000 compare = equals } check_variable = { var = STP_pw_project_deposit value = 120 compare = equals } check_variable = { var = STP_pw_project_deposit value = 144 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals } } STP_pw_party_has_port_capacity = yes }
-				AND = { check_variable = { var = STP_pw_project_kind value = 6 compare = equals } OR = { check_variable = { var = STP_pw_project_deposit value = 900 compare = equals } check_variable = { var = STP_pw_project_deposit value = 250 compare = equals } check_variable = { var = STP_pw_project_deposit value = 100 compare = equals } check_variable = { var = STP_pw_project_deposit value = 120 compare = equals } } NOT = { check_variable = { var = STP_pw_recovery_army value = 1 compare = greater_than_or_equals } } }
+				AND = {
+					check_variable = {
+						var = STP_pw_project_kind
+						value = 4
+						compare = equals
+					}
+					OR = {
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 540
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 250
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 60
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 72
+							compare = equals
+						}
+					}
+					NOT = {
+						check_variable = {
+							var = STP_pw_recovery_services
+							value = 1
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				AND = {
+					check_variable = {
+						var = STP_pw_project_kind
+						value = 5
+						compare = equals
+					}
+					OR = {
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 1080
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 1000
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 120
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 144
+							compare = equals
+						}
+					}
+					NOT = {
+						check_variable = {
+							var = STP_pw_recovery_industry
+							value = 1
+							compare = greater_than_or_equals
+						}
+					}
+					STP_pw_party_has_port_capacity = yes
+				}
+				AND = {
+					check_variable = {
+						var = STP_pw_project_kind
+						value = 6
+						compare = equals
+					}
+					OR = {
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 900
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 250
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 100
+							compare = equals
+						}
+						check_variable = {
+							var = STP_pw_project_deposit
+							value = 120
+							compare = equals
+						}
+					}
+					NOT = {
+						check_variable = {
+							var = STP_pw_recovery_army
+							value = 1
+							compare = greater_than_or_equals
+						}
+					}
+				}
 			}
 		}
 		if = {
@@ -5497,7 +5936,20 @@ STP_pf_calculate = {
 # Input: selected faction 1..7. Retain explicit fields for the native loader.
 STP_pf_shift = {
 	if = {
-		limit = { STP_pf_active = yes has_country_flag = STP_pf_initialized check_variable = { var = STP_pf_selected value = 1 compare = greater_than_or_equals } check_variable = { var = STP_pf_selected value = 7 compare = less_than_or_equals } }
+		limit = {
+			STP_pf_active = yes
+			has_country_flag = STP_pf_initialized
+			check_variable = {
+				var = STP_pf_selected
+				value = 1
+				compare = greater_than_or_equals
+			}
+			check_variable = {
+				var = STP_pf_selected
+				value = 7
+				compare = less_than_or_equals
+			}
+		}
 		if = { limit = { check_variable = { var = STP_pf_selected value = 1 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_conservatives_influence } }
 		if = { limit = { check_variable = { var = STP_pf_selected value = 2 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_borons_influence } }
 		if = { limit = { check_variable = { var = STP_pf_selected value = 3 compare = equals } } set_temp_variable = { var = STP_pf_old_influence value = STP_pf_security_influence } }
@@ -5844,9 +6296,60 @@ STP_ps_begin_defence = {
 STP_ps_refresh_defence = {
 	set_variable = { var = STP_ps_breakthrough value = 0 }
 	set_variable = { var = STP_ps_planning value = 0 }
-	if = { limit = { STP_ps_war_active = yes check_variable = { var = STP_ps_stage value = 1 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.45 } set_variable = { var = STP_ps_planning value = -0.5 } }
-	if = { limit = { STP_ps_war_active = yes check_variable = { var = STP_ps_stage value = 2 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.3 } set_variable = { var = STP_ps_planning value = -0.3 } }
-	if = { limit = { STP_ps_war_active = yes check_variable = { var = STP_ps_stage value = 3 compare = equals } } set_variable = { var = STP_ps_breakthrough value = -0.15 } set_variable = { var = STP_ps_planning value = -0.15 } }
+	if = {
+		limit = {
+			STP_ps_war_active = yes
+			check_variable = {
+				var = STP_ps_stage
+				value = 1
+				compare = equals
+			}
+		}
+		set_variable = {
+			var = STP_ps_breakthrough
+			value = -0.45
+		}
+		set_variable = {
+			var = STP_ps_planning
+			value = -0.5
+		}
+	}
+	if = {
+		limit = {
+			STP_ps_war_active = yes
+			check_variable = {
+				var = STP_ps_stage
+				value = 2
+				compare = equals
+			}
+		}
+		set_variable = {
+			var = STP_ps_breakthrough
+			value = -0.3
+		}
+		set_variable = {
+			var = STP_ps_planning
+			value = -0.3
+		}
+	}
+	if = {
+		limit = {
+			STP_ps_war_active = yes
+			check_variable = {
+				var = STP_ps_stage
+				value = 3
+				compare = equals
+			}
+		}
+		set_variable = {
+			var = STP_ps_breakthrough
+			value = -0.15
+		}
+		set_variable = {
+			var = STP_ps_planning
+			value = -0.15
+		}
+	}
 	if = { limit = { STP_ps_war_active = yes NOT = { has_dynamic_modifier = { modifier = STP_ps_defence_dynamic } } } add_dynamic_modifier = { modifier = STP_ps_defence_dynamic } }
 }
 STP_ps_finish_stage = {
@@ -6480,7 +6983,20 @@ STP_ps_institution_payment_refund = {
 }
 STP_ps_institution_payment_finish = {
 	if = { limit = { has_variable = STP_ps_institution_payment_deposit }
-		if = { limit = { tag = STP STP_pw_can_reconstruct = yes OR = { has_completed_focus = STP_ps_permanent_security has_completed_focus = STP_ps_district_fund } check_variable = { var = STP_ps_institution_stage value = 3 compare = less_than } }
+		if = {
+			limit = {
+				tag = STP
+				STP_pw_can_reconstruct = yes
+				OR = {
+					has_completed_focus = STP_ps_permanent_security
+					has_completed_focus = STP_ps_district_fund
+				}
+				check_variable = {
+					var = STP_ps_institution_stage
+					value = 3
+					compare = less_than
+				}
+			}
 			clear_variable = STP_ps_institution_payment_deposit
 
 
@@ -6511,7 +7027,22 @@ STP_ps_finalize_districts = {
 }
 
 STP_ps_begin_val_supply = {
-	if = { limit = { STP_ps_val_supply_open = yes has_country_flag = STP_ps_val_authorized NOT = { has_variable = STP_ps_val_receipt_rifles } NOT = { has_country_flag = STP_ps_val_supply_cooldown } NOT = { has_equipment = { infantry_equipment < 12000 } } }
+	if = {
+		limit = {
+			STP_ps_val_supply_open = yes
+			has_country_flag = STP_ps_val_authorized
+			NOT = {
+				has_variable = STP_ps_val_receipt_rifles
+			}
+			NOT = {
+				has_country_flag = STP_ps_val_supply_cooldown
+			}
+			NOT = {
+				has_equipment = {
+					infantry_equipment < 12000
+				}
+			}
+		}
 		set_temp_variable = { var = STP_cw_rifle_cost value = 12000 }
 		set_temp_variable = { var = STP_ps_partial_refund value = num_equipment@infantry_equipment }
 		STP_cw_pay_rifles = yes
@@ -6565,7 +7096,17 @@ STP_ps_refund_val_supply = {
 			add_manpower = 12600
 		}
 		if = { limit = { STS = { exists = yes } }
-			STS = { add_to_variable = { var = ADISCORD_economy_treasury value = PREV.STP_ps_refund_money } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = PREV.STP_ps_refund_money } ADISCORD_economy_mark_dirty = yes }
+			STS = {
+				add_to_variable = {
+					var = ADISCORD_economy_treasury
+					value = PREV.STP_ps_refund_money
+				}
+				add_to_variable = {
+					var = ADISCORD_economy_current_month_action_income
+					value = PREV.STP_ps_refund_money
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
 		}
 	}
 }
@@ -6653,7 +7194,19 @@ STP_ps_val_intelligence_refund = {
 }
 STP_ps_val_intelligence_finish = {
 	if = { limit = { has_variable = STP_ps_val_intelligence_deposit }
-		if = { limit = { STP_ps_val_intelligence_available = yes check_variable = { var = STP_ps_val_intelligence_sequence value = VAL.STP_ps_val_sequence compare = equals } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply }  }
+		if = {
+			limit = {
+				STP_ps_val_intelligence_available = yes
+				check_variable = {
+					var = STP_ps_val_intelligence_sequence
+					value = VAL.STP_ps_val_sequence
+					compare = equals
+				}
+				OR = {
+					has_completed_focus = STP_ps_foreign_supply_desk
+					has_completed_focus = STP_ps_counter_supply
+				}
+			}
 			clear_variable = STP_ps_val_intelligence_deposit
 
 
@@ -6675,7 +7228,27 @@ STP_ps_val_intercept_refund = {
 }
 STP_ps_val_intercept_finish = {
 	if = { limit = { has_variable = STP_ps_val_intercept_deposit }
-		if = { limit = { STP_ps_val_intelligence_available = yes check_variable = { var = STP_ps_val_intercept_sequence value = VAL.STP_ps_val_sequence compare = equals } OR = { has_completed_focus = STP_ps_foreign_supply_desk has_completed_focus = STP_ps_counter_supply } VAL = { check_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence compare = equals } STP_ps_val_land_route = yes } }
+		if = {
+			limit = {
+				STP_ps_val_intelligence_available = yes
+				check_variable = {
+					var = STP_ps_val_intercept_sequence
+					value = VAL.STP_ps_val_sequence
+					compare = equals
+				}
+				OR = {
+					has_completed_focus = STP_ps_foreign_supply_desk
+					has_completed_focus = STP_ps_counter_supply
+				}
+				VAL = {
+					check_variable = {
+						var = STP_ps_val_known_sequence
+						value = STP_ps_val_sequence
+						compare = equals
+					}
+					STP_ps_val_land_route = yes
+				}
+			}
 			clear_variable = STP_ps_val_intercept_deposit
 
 

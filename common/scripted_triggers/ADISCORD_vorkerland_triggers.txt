@@ -1355,15 +1355,222 @@ ADISCORD_vorkerland_has_live_recorded_central_minor_front = {
 
 ADISCORD_vorkerland_has_retryable_recorded_central_minor_front = {
 	OR = {
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr NOT = { has_war_with = EYR } any_neighbor_country = { tag = EYR } EYR = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc NOT = { has_war_with = EGC } any_neighbor_country = { tag = EGC } EGC = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv NOT = { has_war_with = RIV } any_neighbor_country = { tag = RIV } RIV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev NOT = { has_war_with = REV } any_neighbor_country = { tag = REV } REV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor NOT = { has_war_with = YOR } any_neighbor_country = { tag = YOR } YOR = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn NOT = { has_war_with = NDN } any_neighbor_country = { tag = NDN } NDN = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb NOT = { has_war_with = SWB } any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv NOT = { has_war_with = VHV } any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv NOT = { has_war_with = OSV } any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_eyr
+			NOT = {
+				has_war_with = EYR
+			}
+			any_neighbor_country = {
+				tag = EYR
+			}
+			EYR = {
+				exists = yes
+				is_subject = no
+				is_in_faction = no
+				NOT = {
+					has_capitulated = yes
+				}
+				NOT = {
+					OR = {
+						has_war_with = WKR
+						has_war_with = VAD
+						has_war_with = TVA
+					}
+				}
+			}
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_egc
+			NOT = {
+				has_war_with = EGC
+			}
+			any_neighbor_country = {
+				tag = EGC
+			}
+			EGC = {
+				exists = yes
+				is_subject = no
+				is_in_faction = no
+				NOT = {
+					has_capitulated = yes
+				}
+				NOT = {
+					OR = {
+						has_war_with = WKR
+						has_war_with = VAD
+						has_war_with = TVA
+					}
+				}
+			}
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_riv
+			NOT = {
+				has_war_with = RIV
+			}
+			any_neighbor_country = {
+				tag = RIV
+			}
+			RIV = {
+				exists = yes
+				is_subject = no
+				is_in_faction = no
+				NOT = {
+					has_capitulated = yes
+				}
+				NOT = {
+					OR = {
+						has_war_with = WKR
+						has_war_with = VAD
+						has_war_with = TVA
+					}
+				}
+			}
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_rev
+			NOT = {
+				has_war_with = REV
+			}
+			any_neighbor_country = {
+				tag = REV
+			}
+			REV = {
+				exists = yes
+				is_subject = no
+				is_in_faction = no
+				NOT = {
+					has_capitulated = yes
+				}
+				NOT = {
+					OR = {
+						has_war_with = WKR
+						has_war_with = VAD
+						has_war_with = TVA
+					}
+				}
+			}
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_yor
+			NOT = {
+				has_war_with = YOR
+			}
+			any_neighbor_country = {
+				tag = YOR
+			}
+			YOR = {
+				exists = yes
+				is_subject = no
+				is_in_faction = no
+				NOT = {
+					has_capitulated = yes
+				}
+				NOT = {
+					OR = {
+						has_war_with = WKR
+						has_war_with = VAD
+						has_war_with = TVA
+					}
+				}
+			}
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_ndn
+			NOT = {
+				has_war_with = NDN
+			}
+			any_neighbor_country = {
+				tag = NDN
+			}
+			NDN = {
+				exists = yes
+				is_subject = no
+				is_in_faction = no
+				NOT = {
+					has_capitulated = yes
+				}
+				NOT = {
+					OR = {
+						has_war_with = WKR
+						has_war_with = VAD
+						has_war_with = TVA
+					}
+				}
+			}
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_swb
+			NOT = {
+				has_war_with = SWB
+			}
+			any_neighbor_country = {
+				tag = SWB
+			}
+			SWB = {
+				exists = yes
+				is_subject = no
+				is_in_faction = no
+				NOT = {
+					has_capitulated = yes
+				}
+				NOT = {
+					OR = {
+						has_war_with = WKR
+						has_war_with = VAD
+						has_war_with = TVA
+					}
+				}
+			}
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_vhv
+			NOT = {
+				has_war_with = VHV
+			}
+			any_neighbor_country = {
+				tag = VHV
+			}
+			VHV = {
+				exists = yes
+				is_subject = no
+				is_in_faction = no
+				NOT = {
+					has_capitulated = yes
+				}
+				NOT = {
+					OR = {
+						has_war_with = WKR
+						has_war_with = VAD
+						has_war_with = TVA
+					}
+				}
+			}
+		}
+		AND = {
+			has_country_flag = ADISCORD_vorkerland_focus_central_minor_target_osv
+			NOT = {
+				has_war_with = OSV
+			}
+			any_neighbor_country = {
+				tag = OSV
+			}
+			OSV = {
+				exists = yes
+				is_subject = no
+				is_in_faction = no
+				NOT = {
+					has_capitulated = yes
+				}
+				NOT = {
+					OR = {
+						has_war_with = WKR
+						has_war_with = VAD
+						has_war_with = TVA
+					}
+				}
+			}
+		}
 	}
 }
 

@@ -2,7 +2,16 @@ ADISCORD_economy_projects = {
 
 	ADISCORD_economy_precision_tooling = {
 		icon = generic_construction
-		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_precision_industry has_completed_focus = STP_pc_investment_precision_industry } NOT = { has_idea = ADISCORD_economy_precision_tooling } }
+		visible = {
+			ADISCORD_economy_projects_unlocked = yes
+			OR = {
+				has_completed_focus = VAL_econ_precision_industry
+				has_completed_focus = STP_pc_investment_precision_industry
+			}
+			NOT = {
+				has_idea = ADISCORD_economy_precision_tooling
+			}
+		}
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }

@@ -400,55 +400,334 @@ ADISCORD_vorkerland_schedule_central_minor_settlement_recovery = {
 # transfers any stale owned states first, then dissolves even a zero-state shell.
 ADISCORD_vorkerland_sweep_pending_central_minor_settlements = {
 	if = {
-		limit = { EYR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR EYR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD EYR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA EYR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK EYR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		limit = {
+			EYR = {
+				exists = yes
+				has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+			}
+			OR = {
+				AND = {
+					tag = WKR
+					EYR = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr
+					}
+				}
+				AND = {
+					tag = VAD
+					EYR = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad
+					}
+				}
+				AND = {
+					tag = TVA
+					EYR = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva
+					}
+				}
+				AND = {
+					tag = WRK
+					EYR = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk
+					}
+				}
+			}
+		}
 		EYR = { every_owned_state = { ROOT = { transfer_state = PREV } } }
 		if = { limit = { has_war_with = EYR } white_peace = EYR }
 		annex_country = { target = EYR transfer_troops = no }
 	}
 	if = {
-		limit = { EGC = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR EGC = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD EGC = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA EGC = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK EGC = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		limit = {
+			EGC = {
+				exists = yes
+				has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+			}
+			OR = {
+				AND = {
+					tag = WKR
+					EGC = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr
+					}
+				}
+				AND = {
+					tag = VAD
+					EGC = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad
+					}
+				}
+				AND = {
+					tag = TVA
+					EGC = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva
+					}
+				}
+				AND = {
+					tag = WRK
+					EGC = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk
+					}
+				}
+			}
+		}
 		EGC = { every_owned_state = { ROOT = { transfer_state = PREV } } }
 		if = { limit = { has_war_with = EGC } white_peace = EGC }
 		annex_country = { target = EGC transfer_troops = no }
 	}
 	if = {
-		limit = { RIV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR RIV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD RIV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA RIV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK RIV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		limit = {
+			RIV = {
+				exists = yes
+				has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+			}
+			OR = {
+				AND = {
+					tag = WKR
+					RIV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr
+					}
+				}
+				AND = {
+					tag = VAD
+					RIV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad
+					}
+				}
+				AND = {
+					tag = TVA
+					RIV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva
+					}
+				}
+				AND = {
+					tag = WRK
+					RIV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk
+					}
+				}
+			}
+		}
 		RIV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
 		if = { limit = { has_war_with = RIV } white_peace = RIV }
 		annex_country = { target = RIV transfer_troops = no }
 	}
 	if = {
-		limit = { REV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR REV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD REV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA REV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK REV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		limit = {
+			REV = {
+				exists = yes
+				has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+			}
+			OR = {
+				AND = {
+					tag = WKR
+					REV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr
+					}
+				}
+				AND = {
+					tag = VAD
+					REV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad
+					}
+				}
+				AND = {
+					tag = TVA
+					REV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva
+					}
+				}
+				AND = {
+					tag = WRK
+					REV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk
+					}
+				}
+			}
+		}
 		REV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
 		if = { limit = { has_war_with = REV } white_peace = REV }
 		annex_country = { target = REV transfer_troops = no }
 	}
 	if = {
-		limit = { YOR = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR YOR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD YOR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA YOR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK YOR = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		limit = {
+			YOR = {
+				exists = yes
+				has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+			}
+			OR = {
+				AND = {
+					tag = WKR
+					YOR = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr
+					}
+				}
+				AND = {
+					tag = VAD
+					YOR = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad
+					}
+				}
+				AND = {
+					tag = TVA
+					YOR = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva
+					}
+				}
+				AND = {
+					tag = WRK
+					YOR = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk
+					}
+				}
+			}
+		}
 		YOR = { every_owned_state = { ROOT = { transfer_state = PREV } } }
 		if = { limit = { has_war_with = YOR } white_peace = YOR }
 		annex_country = { target = YOR transfer_troops = no }
 	}
 	if = {
-		limit = { NDN = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR NDN = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD NDN = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA NDN = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK NDN = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		limit = {
+			NDN = {
+				exists = yes
+				has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+			}
+			OR = {
+				AND = {
+					tag = WKR
+					NDN = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr
+					}
+				}
+				AND = {
+					tag = VAD
+					NDN = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad
+					}
+				}
+				AND = {
+					tag = TVA
+					NDN = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva
+					}
+				}
+				AND = {
+					tag = WRK
+					NDN = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk
+					}
+				}
+			}
+		}
 		NDN = { every_owned_state = { ROOT = { transfer_state = PREV } } }
 		if = { limit = { has_war_with = NDN } white_peace = NDN }
 		annex_country = { target = NDN transfer_troops = no }
 	}
 	if = {
-		limit = { SWB = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR SWB = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD SWB = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA SWB = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK SWB = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		limit = {
+			SWB = {
+				exists = yes
+				has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+			}
+			OR = {
+				AND = {
+					tag = WKR
+					SWB = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr
+					}
+				}
+				AND = {
+					tag = VAD
+					SWB = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad
+					}
+				}
+				AND = {
+					tag = TVA
+					SWB = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva
+					}
+				}
+				AND = {
+					tag = WRK
+					SWB = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk
+					}
+				}
+			}
+		}
 		SWB = { every_owned_state = { ROOT = { transfer_state = PREV } } }
 		if = { limit = { has_war_with = SWB } white_peace = SWB }
 		annex_country = { target = SWB transfer_troops = no }
 	}
 	if = {
-		limit = { VHV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR VHV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD VHV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA VHV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK VHV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		limit = {
+			VHV = {
+				exists = yes
+				has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+			}
+			OR = {
+				AND = {
+					tag = WKR
+					VHV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr
+					}
+				}
+				AND = {
+					tag = VAD
+					VHV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad
+					}
+				}
+				AND = {
+					tag = TVA
+					VHV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva
+					}
+				}
+				AND = {
+					tag = WRK
+					VHV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk
+					}
+				}
+			}
+		}
 		VHV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
 		if = { limit = { has_war_with = VHV } white_peace = VHV }
 		annex_country = { target = VHV transfer_troops = no }
 	}
 	if = {
-		limit = { OSV = { exists = yes has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending } OR = { AND = { tag = WKR OSV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr } } AND = { tag = VAD OSV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad } } AND = { tag = TVA OSV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva } } AND = { tag = WRK OSV = { has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk } } } }
+		limit = {
+			OSV = {
+				exists = yes
+				has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
+			}
+			OR = {
+				AND = {
+					tag = WKR
+					OSV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wkr
+					}
+				}
+				AND = {
+					tag = VAD
+					OSV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_vad
+					}
+				}
+				AND = {
+					tag = TVA
+					OSV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_tva
+					}
+				}
+				AND = {
+					tag = WRK
+					OSV = {
+						has_country_flag = ADISCORD_vorkerland_central_minor_winner_wrk
+					}
+				}
+			}
+		}
 		OSV = { every_owned_state = { ROOT = { transfer_state = PREV } } }
 		if = { limit = { has_war_with = OSV } white_peace = OSV }
 		annex_country = { target = OSV transfer_troops = no }

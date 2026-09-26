@@ -275,7 +275,25 @@ country_event = {
 	desc = val_contract.300.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	option = { name = val_contract.300.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 5000 } } } VAL = { VAL_resolve_active_cin_operation = yes } }
+	option = {
+		name = val_contract.300.a
+		ai_chance = {
+			base = 3
+			modifier = {
+				factor = 0.5
+				has_war = yes
+			}
+			modifier = {
+				factor = 1.5
+				has_equipment = {
+					infantry_equipment < 5000
+				}
+			}
+		}
+		VAL = {
+			VAL_resolve_active_cin_operation = yes
+		}
+	}
 	option = { name = val_contract.300.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_CIN_target_cooldown days = 70 value = 1 } VAL_refund_foreign_operation_deposit = yes } }
 }
 
@@ -420,7 +438,25 @@ country_event = {
 	desc = val_contract.301.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	option = { name = val_contract.301.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 5000 } } } VAL = { VAL_resolve_active_osf_operation = yes } }
+	option = {
+		name = val_contract.301.a
+		ai_chance = {
+			base = 3
+			modifier = {
+				factor = 0.5
+				has_war = yes
+			}
+			modifier = {
+				factor = 1.5
+				has_equipment = {
+					infantry_equipment < 5000
+				}
+			}
+		}
+		VAL = {
+			VAL_resolve_active_osf_operation = yes
+		}
+	}
 	option = { name = val_contract.301.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_OSF_target_cooldown days = 70 value = 1 } VAL_refund_foreign_operation_deposit = yes } }
 }
 
@@ -430,7 +466,25 @@ country_event = {
 	desc = val_contract.302.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	option = { name = val_contract.302.a ai_chance = { base = 3 modifier = { factor = 0.5 has_war = yes } modifier = { factor = 1.5 has_equipment = { infantry_equipment < 5000 } } } VAL = { VAL_resolve_active_aph_operation = yes } }
+	option = {
+		name = val_contract.302.a
+		ai_chance = {
+			base = 3
+			modifier = {
+				factor = 0.5
+				has_war = yes
+			}
+			modifier = {
+				factor = 1.5
+				has_equipment = {
+					infantry_equipment < 5000
+				}
+			}
+		}
+		VAL = {
+			VAL_resolve_active_aph_operation = yes
+		}
+	}
 	option = { name = val_contract.302.b ai_chance = { base = 2 } VAL = { set_country_flag = { flag = VAL_APH_target_cooldown days = 70 value = 1 } VAL_refund_foreign_operation_deposit = yes } }
 }
 
@@ -923,7 +977,28 @@ country_event = {
  option = {
   name = val_contract.343.accept
   trigger = { VAL_stelander_offer_current = yes }
-  ai_chance = { base = 20 modifier = { factor = 0 has_country_leader = { character = STP_maksim_shabrat } } modifier = { factor = 4 has_opinion = { target = VAL value > 49 } } modifier = { factor = 2 VAL = { has_country_flag = VAL_cw_arms_contract_fulfilled } } }
+  ai_chance = {
+  	base = 20
+  	modifier = {
+  		factor = 0
+  		has_country_leader = {
+  			character = STP_maksim_shabrat
+  		}
+  	}
+  	modifier = {
+  		factor = 4
+  		has_opinion = {
+  			target = VAL
+  			value > 49
+  		}
+  	}
+  	modifier = {
+  		factor = 2
+  		VAL = {
+  			has_country_flag = VAL_cw_arms_contract_fulfilled
+  		}
+  	}
+  }
   custom_effect_tooltip = VAL_stelander_terms_tt
   hidden_effect = {
    if = {
@@ -1366,7 +1441,22 @@ country_event = {
  picture = GFX_event_adiscord_negotiation_table
  is_triggered_only = yes
  option = { name = val_contract.family.cancel }
-option = { name = VAL_menu_military trigger = { event_target:VAL_contract_partner = { OR = { VAL_partner_military_visible = yes VAL_partner_advisors_visible = yes } } } hidden_effect = { country_event = { id = val_contract.408 } } }
+option = {
+	name = VAL_menu_military
+	trigger = {
+		event_target:VAL_contract_partner = {
+			OR = {
+				VAL_partner_military_visible = yes
+				VAL_partner_advisors_visible = yes
+			}
+		}
+	}
+	hidden_effect = {
+		country_event = {
+			id = val_contract.408
+		}
+	}
+}
 option = {
  name = VAL_offer_transit_charter_button
  trigger = { event_target:VAL_contract_partner = { VAL_partner_transit_visible = yes } }
@@ -1668,7 +1758,20 @@ hidden_effect = { if = { limit = { event_target:VAL_contract_partner = { VAL_par
 if = { limit = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } }
    set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
    set_country_flag = { flag = VAL_export_offer_pending days = 42 }
-   event_target:VAL_contract_partner = { ADISCORD_release_non_participating_minor_optimization = yes set_country_flag = { flag = VAL_partner_offer_arms days = 42 } set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 } country_event = { id = val_contract.363 } }
+   event_target:VAL_contract_partner = {
+   	ADISCORD_release_non_participating_minor_optimization = yes
+   	set_country_flag = {
+   		flag = VAL_partner_offer_arms
+   		days = 42
+   	}
+   	set_country_flag = {
+   		flag = VAL_partner_contact_cooldown
+   		days = 30
+   	}
+   	country_event = {
+   		id = val_contract.363
+   	}
+   }
   }
  } else = { country_event = { id = val_contract.406 } } }
  ai_chance = { base = 5  modifier = { factor = 0 NOT = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } } }  }
@@ -1682,12 +1785,38 @@ hidden_effect = { if = { limit = { event_target:VAL_contract_partner = { VAL_par
 if = { limit = { event_target:VAL_contract_partner = { VAL_partner_bulk_can_offer = yes } }
    set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
    set_country_flag = { flag = VAL_export_offer_pending days = 42 }
-   event_target:VAL_contract_partner = { ADISCORD_release_non_participating_minor_optimization = yes set_country_flag = { flag = VAL_partner_offer_bulk days = 42 } set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 } country_event = { id = val_contract.365 } }
+   event_target:VAL_contract_partner = {
+   	ADISCORD_release_non_participating_minor_optimization = yes
+   	set_country_flag = {
+   		flag = VAL_partner_offer_bulk
+   		days = 42
+   	}
+   	set_country_flag = {
+   		flag = VAL_partner_contact_cooldown
+   		days = 30
+   	}
+   	country_event = {
+   		id = val_contract.365
+   	}
+   }
   }
  } else = { country_event = { id = val_contract.406 } } }
  ai_chance = { base = 5  modifier = { factor = 0 NOT = { event_target:VAL_contract_partner = { VAL_partner_bulk_can_offer = yes } } }  }
 }
-option = { name = VAL_menu_large_packages trigger = { OR = { has_completed_focus = VAL_Army_Arsenal_Orders has_completed_focus = VAL_Strategic_Arms_Exports } } hidden_effect = { country_event = { id = val_contract.416 } } }
+option = {
+	name = VAL_menu_large_packages
+	trigger = {
+		OR = {
+			has_completed_focus = VAL_Army_Arsenal_Orders
+			has_completed_focus = VAL_Strategic_Arms_Exports
+		}
+	}
+	hidden_effect = {
+		country_event = {
+			id = val_contract.416
+		}
+	}
+}
 }
 
 country_event = {
@@ -1742,7 +1871,20 @@ if = { limit = { event_target:VAL_contract_partner = { VAL_order_can_offer = yes
   }
  } else = { country_event = { id = val_contract.407 } } }
 }
-option = { name = VAL_menu_large_packages trigger = { OR = { has_completed_focus = VAL_Army_Arsenal_Orders has_completed_focus = VAL_Strategic_Arms_Exports } } hidden_effect = { country_event = { id = val_contract.417 } } }
+option = {
+	name = VAL_menu_large_packages
+	trigger = {
+		OR = {
+			has_completed_focus = VAL_Army_Arsenal_Orders
+			has_completed_focus = VAL_Strategic_Arms_Exports
+		}
+	}
+	hidden_effect = {
+		country_event = {
+			id = val_contract.417
+		}
+	}
+}
 }
 
 country_event = {
@@ -1773,10 +1915,44 @@ if = { limit = { event_target:VAL_contract_partner = { VAL_military_customer_eli
 option = {
  name = VAL_military_offer_2_button
  trigger = { event_target:VAL_contract_partner = { VAL_partner_military_visible = yes } }
- ai_chance = { base = 2  modifier = { factor = 0 NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes any_owned_state = { NOT = { is_controlled_by = event_target:VAL_contract_partner } controller = { has_war_with = event_target:VAL_contract_partner } } } } } }
+ ai_chance = {
+ 	base = 2
+ 	modifier = {
+ 		factor = 0
+ 		NOT = {
+ 			has_completed_focus = VAL_Contingency_Ledgers
+ 			event_target:VAL_contract_partner = {
+ 				VAL_military_customer_eligible = yes
+ 				any_owned_state = {
+ 					NOT = {
+ 						is_controlled_by = event_target:VAL_contract_partner
+ 					}
+ 					controller = {
+ 						has_war_with = event_target:VAL_contract_partner
+ 					}
+ 				}
+ 			}
+ 		}
+ 	}
+ }
  custom_effect_tooltip = VAL_military_terms_tt
  custom_effect_tooltip = VAL_offer_status_VAL_military_offer_2
-hidden_effect = { if = { limit = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes any_owned_state = { NOT = { is_controlled_by = event_target:VAL_contract_partner } controller = { has_war_with = event_target:VAL_contract_partner } } } }
+hidden_effect = {
+	if = {
+		limit = {
+			has_completed_focus = VAL_Contingency_Ledgers
+			event_target:VAL_contract_partner = {
+				VAL_military_customer_eligible = yes
+				any_owned_state = {
+					NOT = {
+						is_controlled_by = event_target:VAL_contract_partner
+					}
+					controller = {
+						has_war_with = event_target:VAL_contract_partner
+					}
+				}
+			}
+		}
 if = { limit = { event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes } }
    event_target:VAL_contract_partner = { VAL_prepare_military_quote = yes }
    clear_global_event_target = VAL_military_target
@@ -1789,7 +1965,22 @@ if = { limit = { event_target:VAL_contract_partner = { VAL_military_customer_eli
   }
  } else = { country_event = { id = val_contract.408 } } }
 }
-option = { name = VAL_menu_more_military trigger = { event_target:VAL_contract_partner = { OR = { VAL_partner_military_visible = yes VAL_partner_advisors_visible = yes } } } hidden_effect = { country_event = { id = val_contract.418 } } }
+option = {
+	name = VAL_menu_more_military
+	trigger = {
+		event_target:VAL_contract_partner = {
+			OR = {
+				VAL_partner_military_visible = yes
+				VAL_partner_advisors_visible = yes
+			}
+		}
+	}
+	hidden_effect = {
+		country_event = {
+			id = val_contract.418
+		}
+	}
+}
 }
 
 country_event = {
@@ -1799,11 +1990,34 @@ country_event = {
  picture = GFX_event_adiscord_negotiation_table
  is_triggered_only = yes
  timeout_days = 35
- option = { name = VAL_export_decline trigger = { is_ai = no } ai_chance = { base = 0 } hidden_effect = { VAL_record_partner_refusal = yes  clr_country_flag = VAL_transit_offer VAL = { clr_country_flag = VAL_partner_offer_pending } } }
+ option = {
+ 	name = VAL_export_decline
+ 	trigger = {
+ 		is_ai = no
+ 	}
+ 	ai_chance = {
+ 		base = 0
+ 	}
+ 	hidden_effect = {
+ 		VAL_record_partner_refusal = yes
+ 		clr_country_flag = VAL_transit_offer
+ 		VAL = {
+ 			clr_country_flag = VAL_partner_offer_pending
+ 		}
+ 	}
+ }
  option = {
   name = VAL_export_accept
   ai_chance = { base = 100 }
-  hidden_effect = { VAL_begin_partner_contract_year = yes set_country_flag = VAL_trade_transit_charter clr_country_flag = VAL_transit_offer VAL = { clr_country_flag = VAL_partner_offer_pending VAL_refresh_trade_network = yes } }
+  hidden_effect = {
+  	VAL_begin_partner_contract_year = yes
+  	set_country_flag = VAL_trade_transit_charter
+  	clr_country_flag = VAL_transit_offer
+  	VAL = {
+  		clr_country_flag = VAL_partner_offer_pending
+  		VAL_refresh_trade_network = yes
+  	}
+  }
  }
 }
 
@@ -1865,7 +2079,22 @@ country_event = {
  picture = GFX_event_adiscord_negotiation_table
  is_triggered_only = yes
  option = { name = val_contract.family.cancel }
-option = { name = VAL_menu_military trigger = { event_target:VAL_contract_partner = { OR = { VAL_partner_military_visible = yes VAL_partner_advisors_visible = yes } } } hidden_effect = { country_event = { id = val_contract.408 } } }
+option = {
+	name = VAL_menu_military
+	trigger = {
+		event_target:VAL_contract_partner = {
+			OR = {
+				VAL_partner_military_visible = yes
+				VAL_partner_advisors_visible = yes
+			}
+		}
+	}
+	hidden_effect = {
+		country_event = {
+			id = val_contract.408
+		}
+	}
+}
 option = {
  name = VAL_offer_transit_charter_button
  trigger = { event_target:VAL_contract_partner = { VAL_partner_transit_visible = yes } }
@@ -1897,7 +2126,20 @@ hidden_effect = { if = { limit = { event_target:VAL_contract_partner = { VAL_par
 if = { limit = { event_target:VAL_contract_partner = { VAL_partner_arsenal_can_offer = yes } }
    set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
    set_country_flag = { flag = VAL_export_offer_pending days = 42 }
-   event_target:VAL_contract_partner = { ADISCORD_release_non_participating_minor_optimization = yes set_country_flag = { flag = VAL_partner_offer_arsenal days = 42 } set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 } country_event = { id = val_contract.366 } }
+   event_target:VAL_contract_partner = {
+   	ADISCORD_release_non_participating_minor_optimization = yes
+   	set_country_flag = {
+   		flag = VAL_partner_offer_arsenal
+   		days = 42
+   	}
+   	set_country_flag = {
+   		flag = VAL_partner_contact_cooldown
+   		days = 30
+   	}
+   	country_event = {
+   		id = val_contract.366
+   	}
+   }
   }
  } else = { country_event = { id = val_contract.416 } } }
  ai_chance = { base = 5  modifier = { factor = 0 NOT = { event_target:VAL_contract_partner = { VAL_partner_arsenal_can_offer = yes } } }  }
@@ -1911,7 +2153,20 @@ hidden_effect = { if = { limit = { event_target:VAL_contract_partner = { VAL_par
 if = { limit = { event_target:VAL_contract_partner = { VAL_partner_strategic_can_offer = yes } }
    set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
    set_country_flag = { flag = VAL_export_offer_pending days = 42 }
-   event_target:VAL_contract_partner = { ADISCORD_release_non_participating_minor_optimization = yes set_country_flag = { flag = VAL_partner_offer_strategic days = 42 } set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 } country_event = { id = val_contract.367 } }
+   event_target:VAL_contract_partner = {
+   	ADISCORD_release_non_participating_minor_optimization = yes
+   	set_country_flag = {
+   		flag = VAL_partner_offer_strategic
+   		days = 42
+   	}
+   	set_country_flag = {
+   		flag = VAL_partner_contact_cooldown
+   		days = 30
+   	}
+   	country_event = {
+   		id = val_contract.367
+   	}
+   }
   }
  } else = { country_event = { id = val_contract.416 } } }
  ai_chance = { base = 5  modifier = { factor = 0 NOT = { event_target:VAL_contract_partner = { VAL_partner_strategic_can_offer = yes } } }  }
@@ -2008,7 +2263,18 @@ hidden_effect = { if = { limit = { has_completed_focus = VAL_Contingency_Ledgers
   NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
   NOT = { has_country_flag = VAL_military_offer_pending }
   VAL_partner_desk_free = yes
-  event_target:VAL_contract_partner = { VAL_export_customer = yes has_war = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_idea = VAL_paid_military_advisors } NOT = { has_country_flag = VAL_export_customer_cooldown } } }
+event_target:VAL_contract_partner = {
+	VAL_export_customer = yes
+	has_war = yes
+	ADISCORD_economy_can_spend_100 = yes
+	NOT = {
+		has_idea = VAL_paid_military_advisors
+	}
+	NOT = {
+		has_country_flag = VAL_export_customer_cooldown
+	}
+}
+}
 add_political_power = -30
   set_country_flag = { flag = VAL_export_offer_pending days = 42 }
   event_target:VAL_contract_partner = {
@@ -2023,7 +2289,20 @@ add_political_power = -30
   NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
   NOT = { has_country_flag = VAL_military_offer_pending }
   VAL_partner_desk_free = yes
-  event_target:VAL_contract_partner = { VAL_export_customer = yes has_war = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_idea = VAL_paid_military_advisors } NOT = { has_country_flag = VAL_export_customer_cooldown } } } }  }
+event_target:VAL_contract_partner = {
+	VAL_export_customer = yes
+	has_war = yes
+	ADISCORD_economy_can_spend_100 = yes
+	NOT = {
+		has_idea = VAL_paid_military_advisors
+	}
+	NOT = {
+		has_country_flag = VAL_export_customer_cooldown
+	}
+}
+}
+}
+}
 }
 option = { name = VAL_menu_back hidden_effect = { country_event = { id = val_contract.361 } } }
 }
