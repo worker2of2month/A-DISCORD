@@ -3081,7 +3081,9 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers }
 		prerequisite = { focus = VAL_New_Supply_Base focus = VAL_Contingency_Ledgers }
-		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
+		available = {
+			custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes }
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Reopen_Trade_Routes_tt VAL_advance_economic_recovery = yes ADISCORD_economy_receive_100 = yes add_stability = 0.01 }
@@ -3114,7 +3116,10 @@ focus_tree = {
 		prerequisite = { focus = VAL_Reopen_Trade_Routes }
 		prerequisite = { focus = VAL_Settle_Industrial_Debts }
 		prerequisite = { focus = VAL_Returning_Buyers }
-		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
+		available = {
+			custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes }
+			custom_trigger_tooltip = { tooltip = VAL_commonwealth_required_tt has_cosmetic_tag = VAL_commonwealth }
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			effect_tooltip = { add_ideas = VAL_arsenal_quality_delta }
@@ -3124,6 +3129,7 @@ focus_tree = {
 				VAL_advance_economic_recovery = yes
 				VAL_restore_arsenal_reputation = yes
 			}
+			custom_effect_tooltip = VAL_next_chapter_tt
 		}
 		ai_will_do = { base = 30 }
 	}
@@ -3481,6 +3487,7 @@ focus_tree = {
 		x = 42
 		y = 12
 		cost = 10
+		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		prerequisite = { focus = VAL_Armored_Contract_Companies }
 		available = {
 			has_capitulated = no

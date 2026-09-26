@@ -4190,6 +4190,7 @@ ADISCORD_superevent_enqueue = {
 				AND = { check_variable = { ADISCORD_superevent_request = 9 } has_global_flag = superevent_stelander_shabrat_victory }
 				AND = { check_variable = { ADISCORD_superevent_request = 10 } has_global_flag = superevent_nam_resource_war }
 				AND = { check_variable = { ADISCORD_superevent_request = 11 } has_global_flag = superevent_rus_last_empire }
+				AND = { check_variable = { ADISCORD_superevent_request = 12 } has_global_flag = superevent_val_commonwealth }
 			} }
 		}
 		add_to_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request }
@@ -4213,6 +4214,7 @@ ADISCORD_superevent_dispatch_next = {
 				has_global_flag = superevent_stelander_shabrat_victory
 				has_global_flag = superevent_nam_resource_war
 				has_global_flag = superevent_rus_last_empire
+				has_global_flag = superevent_val_commonwealth
 			} }
 		}
 		set_temp_variable = { ADISCORD_superevent_next = global.ADISCORD_superevent_queue^0 }
@@ -4261,6 +4263,10 @@ ADISCORD_superevent_dispatch_next = {
 			limit = { check_variable = { ADISCORD_superevent_next = 11 } }
 			set_global_flag = superevent_rus_last_empire
 		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 12 } }
+			set_global_flag = superevent_val_commonwealth
+		}
 		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
@@ -4271,6 +4277,7 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_stelander_shabrat_victory
 	clr_global_flag = superevent_nam_resource_war
 	clr_global_flag = superevent_rus_last_empire
+	clr_global_flag = superevent_val_commonwealth
 	clr_global_flag = superevent_vorkerland_civilwar
 	clr_global_flag = superevent_vorkerland_dirty_opening
 	clr_global_flag = superevent_vorkerland_worker_victory

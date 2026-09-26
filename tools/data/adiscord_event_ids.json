@@ -3331,6 +3331,14 @@
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "stp_civil_war",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.9",
+      "namespace": "ADISCORD_superevent",
+      "number": 9,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
     }
   ]
 }

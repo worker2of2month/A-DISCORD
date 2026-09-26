@@ -145,3 +145,8 @@ music = {
 	song = "ADISCORD_le_meilleur_est_a_venir"
 	chance = { base = 10 }
 }
+
+music = {
+	song = "ADISCORD_3teeth_scorpion"
+	chance = { base = 10 }
+}

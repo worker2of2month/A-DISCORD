@@ -52,3 +52,8 @@ sound = {
 	name = "superevent_rus_last_empire_sound"
 	file = "superevents/superevent_rus_last_empire_sound.wav"
 }
+
+sound = {
+	name = "superevent_val_commonwealth_sound"
+	file = "superevents/superevent_val_commonwealth.wav"
+}

@@ -10,7 +10,8 @@ add_namespace = ADISCORD_superevent_audio
 # presentation: picture and sound without locking the campaign ending. .4 is
 # the Dirty Zone opening presentation and does not start the country cascade.
 # .5 is Vlad's imperial restoration; .6 is Dorian's utilitarian victory.
-# .7 presents the NAM resource war; .8 presents the Khan's Last Empire.
+# .7 presents the NAM resource war; .8 presents the Khan's Last Empire;
+# .9 presents Kefreyt's Commonwealth proclamation.
 # Audio is unscoped so observer/spectator hears the same track as a human.
 country_event = {
 	id = ADISCORD_superevent.1
@@ -192,6 +193,17 @@ country_event = {
 	immediate = {
 		# superevent_rus_last_empire
 		set_temp_variable = { ADISCORD_superevent_request = 11 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_superevent.9
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		# superevent_val_commonwealth
+		set_temp_variable = { ADISCORD_superevent_request = 12 }
 		ADISCORD_superevent_enqueue = yes
 	}
 }

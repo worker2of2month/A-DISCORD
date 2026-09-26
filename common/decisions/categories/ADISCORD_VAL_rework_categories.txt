@@ -32,21 +32,21 @@ VAL_reclamation = {
 }
 
 VAL_frontier = {
-    allowed = { tag = VAL }
-    visible = {
-        OR = {
-            has_completed_focus = VAL_Contracts_Outlive_Kings
-            has_completed_focus = VAL_defeat_Rebuild_The_Registry
-            has_completed_focus = VAL_frontier_conference
-            AND = {
-                has_completed_focus = VAL_The_Steel_Contract
-                NOT = { has_completed_focus = VAL_Integrate_Occidia }
-                OCA = { exists = no }
-                OR = { has_country_flag = VAL_occidian_settlement_pending owns_state = 43 owns_state = 44 owns_state = 45 owns_state = 88 }
-            }
-        }
-    }
-    visible_when_empty = yes
+	allowed = { tag = VAL }
+	visible = {
+		OR = {
+			has_completed_focus = VAL_Contracts_Outlive_Kings
+			has_completed_focus = VAL_defeat_Rebuild_The_Registry
+			has_completed_focus = VAL_frontier_conference
+			AND = {
+				has_completed_focus = VAL_The_Steel_Contract
+				NOT = { has_completed_focus = VAL_Integrate_Occidia }
+				OCA = { exists = no }
+				OR = { has_country_flag = VAL_occidian_settlement_pending owns_state = 43 owns_state = 44 owns_state = 45 owns_state = 88 }
+			}
+		}
+	}
+	visible_when_empty = yes
 }
 
 # --- livonn_settlement_categories ---
@@ -56,23 +56,23 @@ VAL_livonn_settlement_category = {
 }
 
 VAL_foreign_sales = {
- priority = 950
- allowed = { tag = VAL }
- visible = {
- 	OR = {
- 		has_completed_focus = VAL_Resource_War_Contracts
- 		has_completed_focus = VAL_Contingency_Ledgers
- 		has_completed_focus = VAL_Operational_Directorate
- 		has_country_flag = VAL_foreign_operations_unlocked
- 		has_country_flag = VAL_northern_operations_unlocked
- 		has_completed_focus = VAL_Market_Roads_North
- 		has_completed_focus = VAL_Foreign_Broker_Licences
- 		has_country_flag = VAL_cw_trade_course
- 		has_country_flag = VAL_operation_sell_rifles_to_cin
- 		has_country_flag = VAL_operation_sell_rifles_to_osf
- 	}
- }
- visible_when_empty = yes
+	priority = 950
+	allowed = { tag = VAL }
+	visible = {
+		OR = {
+			has_completed_focus = VAL_Resource_War_Contracts
+			has_completed_focus = VAL_Contingency_Ledgers
+			has_completed_focus = VAL_Operational_Directorate
+			has_country_flag = VAL_foreign_operations_unlocked
+			has_country_flag = VAL_northern_operations_unlocked
+			has_completed_focus = VAL_Market_Roads_North
+			has_completed_focus = VAL_Foreign_Broker_Licences
+			has_country_flag = VAL_cw_trade_course
+			has_country_flag = VAL_operation_sell_rifles_to_cin
+			has_country_flag = VAL_operation_sell_rifles_to_osf
+		}
+	}
+	visible_when_empty = yes
 }
 
 VAL_command_balance_category = {
@@ -103,30 +103,30 @@ VAL_northern_war_aid = {
 }
 
 VAL_contract_obligations = {
- priority = 949
- allowed = { tag = VAL }
- visible = {
- 	OR = {
- 		check_variable = {
- 			var = VAL_military_state
- 			value = 1
- 			compare = equals
- 		}
- 		check_variable = {
- 			var = VAL_order_1_state
- 			value = 0
- 			compare = greater_than
- 		}
- 		check_variable = {
- 			var = VAL_order_2_state
- 			value = 0
- 			compare = greater_than
- 		}
- 		NOT = {
- 			VAL_order_debts_settled = yes
- 		}
- 	}
- }
- visible_when_empty = yes
+	priority = 949
+	allowed = { tag = VAL }
+	visible = {
+		OR = {
+			check_variable = {
+				var = VAL_military_state
+				value = 1
+				compare = equals
+			}
+			check_variable = {
+				var = VAL_order_1_state
+				value = 0
+				compare = greater_than
+			}
+			check_variable = {
+				var = VAL_order_2_state
+				value = 0
+				compare = greater_than
+			}
+			NOT = {
+				VAL_order_debts_settled = yes
+			}
+		}
+	}
+	visible_when_empty = yes
 }
 

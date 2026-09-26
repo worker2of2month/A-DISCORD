@@ -321,33 +321,33 @@ defined_text = {
 
 # Route explanations share the same node predicates as the logistics network.
 defined_text = {
- name = VALTradeOccidiaReason
- text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
- text = { trigger = { NOT = { 43 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_43_blocked }
- text = { trigger = { NOT = { 44 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_44_blocked }
- text = { trigger = { NOT = { 88 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_88_blocked }
- text = { localization_key = VAL_trade_route_ready }
+	name = VALTradeOccidiaReason
+	text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
+	text = { trigger = { NOT = { 43 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_43_blocked }
+	text = { trigger = { NOT = { 44 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_44_blocked }
+	text = { trigger = { NOT = { 88 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_88_blocked }
+	text = { localization_key = VAL_trade_route_ready }
 }
 defined_text = {
- name = VALTradeWestReason
- text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
- text = { trigger = { NOT = { 59 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_59_blocked }
- text = { trigger = { NOT = { 60 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_60_blocked }
- text = { trigger = { NOT = { 61 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_61_blocked }
- text = { localization_key = VAL_trade_route_ready }
+	name = VALTradeWestReason
+	text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
+	text = { trigger = { NOT = { 59 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_59_blocked }
+	text = { trigger = { NOT = { 60 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_60_blocked }
+	text = { trigger = { NOT = { 61 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_61_blocked }
+	text = { localization_key = VAL_trade_route_ready }
 }
 defined_text = {
- name = VALTradeStelanderReason
- text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
- text = { trigger = { NOT = { 29 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_29_blocked }
- text = { trigger = { NOT = { 46 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_46_blocked }
- text = { localization_key = VAL_trade_route_ready }
+	name = VALTradeStelanderReason
+	text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
+	text = { trigger = { NOT = { 29 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_29_blocked }
+	text = { trigger = { NOT = { 46 = { VAL_trade_state_in_contract_sphere = yes } } } localization_key = VAL_trade_node_46_blocked }
+	text = { localization_key = VAL_trade_route_ready }
 }
 defined_text = {
- name = VALTradeVorkerlandReason
- text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
- text = { trigger = { NOT = { VAL_trade_route_vorkerland_open = yes } } localization_key = VAL_trade_vorkerland_blocked }
- text = { localization_key = VAL_trade_route_ready }
+	name = VALTradeVorkerlandReason
+	text = { trigger = { NOT = { VAL_trade_corridors_unlocked = yes } } localization_key = VAL_trade_route_locked }
+	text = { trigger = { NOT = { VAL_trade_route_vorkerland_open = yes } } localization_key = VAL_trade_vorkerland_blocked }
+	text = { localization_key = VAL_trade_route_ready }
 }
 
 defined_text = {

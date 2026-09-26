@@ -53,6 +53,10 @@ defined_text = {
 		localization_key = superevent_rus_last_empire_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_val_commonwealth }
+		localization_key = superevent_val_commonwealth_quote
+	}
+	text = {
 		localization_key = superevent_inactive_quote
 	}
 }
@@ -112,6 +116,10 @@ defined_text = {
 		localization_key = superevent_rus_last_empire_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_val_commonwealth }
+		localization_key = superevent_val_commonwealth_title
+	}
+	text = {
 		localization_key = superevent_inactive_title
 	}
 }
@@ -169,6 +177,10 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_rus_last_empire }
 		localization_key = superevent_rus_last_empire_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_val_commonwealth }
+		localization_key = superevent_val_commonwealth_comment
 	}
 	text = {
 		localization_key = superevent_inactive_comment

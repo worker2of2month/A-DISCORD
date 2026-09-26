@@ -55,6 +55,10 @@
   superevent_rus_last_empire_quote: "Covenants, without the sword, are but words.\n\n- Thomas Hobbes, Leviathan"
   superevent_rus_last_empire_comment: "The Khan has taken the imperial throne"
 
+  superevent_val_commonwealth_title: "The Kefreyt Commonwealth Is Proclaimed!"
+  superevent_val_commonwealth_quote: "The commonwealth is the people's affair.\n\n- Cicero, On the Republic"
+  superevent_val_commonwealth_comment: "Solgalov binds the contract administrations into one order"
+
   superevent_inactive_title: ""
   superevent_inactive_quote: ""
   superevent_inactive_comment: ""

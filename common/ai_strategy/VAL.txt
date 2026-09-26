@@ -439,59 +439,129 @@ VAL_frontier_prepare_STP_VAL = {
 
 VAL_volunteers_to_YPR = {
 	allowed = { tag = VAL }
-	enable = { has_idea = VAL_northern_volunteer_mandate has_war = no YPR = { VAL_northern_volunteer_host = yes } }
+	enable = {
+		has_idea = VAL_northern_volunteer_mandate
+		has_war = no
+		YPR = { VAL_northern_volunteer_host = yes }
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = send_volunteers_desire id = YPR value = 200 }
+	ai_strategy = {
+		type = send_volunteers_desire
+		id = YPR
+		value = 200
+	}
 }
 
 VAL_volunteers_to_COF = {
 	allowed = { tag = VAL }
-	enable = { has_idea = VAL_northern_volunteer_mandate has_war = no COF = { VAL_northern_volunteer_host = yes } }
+	enable = {
+		has_idea = VAL_northern_volunteer_mandate
+		has_war = no
+		COF = { VAL_northern_volunteer_host = yes }
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = send_volunteers_desire id = COF value = 200 }
+	ai_strategy = {
+		type = send_volunteers_desire
+		id = COF
+		value = 200
+	}
 }
 
 VAL_volunteers_to_TFF = {
 	allowed = { tag = VAL }
-	enable = { has_idea = VAL_northern_volunteer_mandate has_war = no TFF = { VAL_northern_volunteer_host = yes } }
+	enable = {
+		has_idea = VAL_northern_volunteer_mandate
+		has_war = no
+		TFF = { VAL_northern_volunteer_host = yes }
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = send_volunteers_desire id = TFF value = 200 }
+	ai_strategy = {
+		type = send_volunteers_desire
+		id = TFF
+		value = 200
+	}
 }
 
 VAL_volunteers_to_STS = {
 	allowed = { tag = VAL }
-	enable = { has_idea = VAL_northern_volunteer_mandate has_war = no STS = { VAL_northern_volunteer_host = yes } }
+	enable = {
+		has_idea = VAL_northern_volunteer_mandate
+		has_war = no
+		STS = { VAL_northern_volunteer_host = yes }
+	}
 	abort_when_not_enabled = yes
 	# Shabrat's front is time-critical: VAL may open its own war shortly afterwards.
-	ai_strategy = { type = send_volunteers_desire id = STS value = 2000 }
+	ai_strategy = {
+		type = send_volunteers_desire
+		id = STS
+		value = 2000
+	}
 }
 
 VAL_volunteers_to_STP = {
 	allowed = { tag = VAL }
-	enable = { has_idea = VAL_northern_volunteer_mandate has_war = no STP = { VAL_northern_volunteer_host = yes } }
+	enable = {
+		has_idea = VAL_northern_volunteer_mandate
+		has_war = no
+		STP = { VAL_northern_volunteer_host = yes }
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = send_volunteers_desire id = STP value = 200 }
+	ai_strategy = {
+		type = send_volunteers_desire
+		id = STP
+		value = 200
+	}
 }
 
 VAL_final_campaign_NOD = {
 	allowed = { tag = VAL }
-	enable = { has_country_flag = VAL_campaign_mobilizing NOD = { has_country_flag = VAL_campaign_target exists = yes } }
+	enable = {
+		has_country_flag = VAL_campaign_mobilizing
+		NOD = {
+			has_country_flag = VAL_campaign_target
+			exists = yes
+		}
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = NOD value = 150 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = NOD
+		value = 150
+	}
 }
 
 VAL_final_campaign_STP = {
 	allowed = { tag = VAL }
-	enable = { has_country_flag = VAL_campaign_mobilizing STP = { has_country_flag = VAL_campaign_target exists = yes } }
+	enable = {
+		has_country_flag = VAL_campaign_mobilizing
+		STP = {
+			has_country_flag = VAL_campaign_target
+			exists = yes
+		}
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = STP value = 150 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = STP
+		value = 150
+	}
 }
 
 VAL_final_campaign_STS = {
 	allowed = { tag = VAL }
-	enable = { has_country_flag = VAL_campaign_mobilizing STS = { has_country_flag = VAL_campaign_target exists = yes } }
+	enable = {
+		has_country_flag = VAL_campaign_mobilizing
+		STS = {
+			has_country_flag = VAL_campaign_target
+			exists = yes
+		}
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = STS value = 150 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = STS
+		value = 150
+	}
 }
 
 VAL_resource_volunteers_to_NAM = {

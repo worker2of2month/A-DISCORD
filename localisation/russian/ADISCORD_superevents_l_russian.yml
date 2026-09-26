@@ -51,6 +51,10 @@
   superevent_rus_last_empire_quote: "Соглашения без меча - лишь слова.\n\n- Томас Гоббс, «Левиафан»"
   superevent_rus_last_empire_comment: "Хан занял императорский престол"
 
+  superevent_val_commonwealth_title: "Провозглашено Кефрейтское содружество!"
+  superevent_val_commonwealth_quote: "Республика есть дело народа.\n\n- Цицерон, «О государстве»"
+  superevent_val_commonwealth_comment: "Солгалов связал договорные администрации в единый порядок"
+
   superevent_inactive_title: ""
   superevent_inactive_quote: ""
   superevent_inactive_comment: ""

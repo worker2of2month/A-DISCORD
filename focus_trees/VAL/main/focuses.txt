@@ -3121,6 +3121,7 @@ focus_tree = {
 				VAL_advance_economic_recovery = yes
 				VAL_restore_arsenal_reputation = yes
 			}
+			custom_effect_tooltip = VAL_next_chapter_tt
 		}
 		ai_will_do = { base = 30 }
 	}

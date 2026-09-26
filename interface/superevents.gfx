@@ -61,4 +61,9 @@ spriteTypes = {
 		name = "GFX_superevent_rus_last_empire"
 		textureFile = "gfx/interface/superevents/RUS/last empire.png"
 	}
+
+	spriteType = {
+		name = "GFX_superevent_val_commonwealth"
+		textureFile = "gfx/interface/superevents/VAL/superevent_val_commonwealth.png"
+	}
 }

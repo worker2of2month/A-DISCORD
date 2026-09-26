@@ -958,9 +958,38 @@ country_event = {
 country_event = {
 	id = val_contract.343
 	title = val_contract.343.t
-	desc = { text = val_contract.343.shabrat trigger = { has_country_leader = { character = STP_maksim_shabrat } } }
-	desc = { text = val_contract.343.friendly trigger = { NOT = { has_country_leader = { character = STP_maksim_shabrat } } has_opinion = { target = VAL value > 49 } } }
-	desc = { text = val_contract.343.d trigger = { NOT = { has_country_leader = { character = STP_maksim_shabrat } } NOT = { has_opinion = { target = VAL value > 49 } } } }
+	desc = {
+		text = val_contract.343.shabrat
+		trigger = {
+			has_country_leader = { character = STP_maksim_shabrat }
+		}
+	}
+	desc = {
+		text = val_contract.343.friendly
+		trigger = {
+			NOT = {
+				has_country_leader = { character = STP_maksim_shabrat }
+			}
+			has_opinion = {
+				target = VAL
+				value > 49
+			}
+		}
+	}
+	desc = {
+		text = val_contract.343.d
+		trigger = {
+			NOT = {
+				has_country_leader = { character = STP_maksim_shabrat }
+			}
+			NOT = {
+				has_opinion = {
+					target = VAL
+					value > 49
+				}
+			}
+		}
+	}
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	timeout_days = 21
@@ -968,8 +997,17 @@ country_event = {
 		name = val_contract.343.refuse
 		ai_chance = {
 			base = 80
-			modifier = { factor = 5 has_country_leader = { character = STP_maksim_shabrat } }
-			modifier = { factor = 0.25 has_opinion = { target = VAL value > 49 } }
+			modifier = {
+				factor = 5
+				has_country_leader = { character = STP_maksim_shabrat }
+			}
+			modifier = {
+				factor = 0.25
+				has_opinion = {
+					target = VAL
+					value > 49
+				}
+			}
 		}
 		hidden_effect = {
 			if = {
@@ -1009,24 +1047,69 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { VAL_stelander_offer_current = yes }
-				43 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 43 } } }
-				44 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 44 } } }
-				45 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 45 } } }
-				88 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT } VAL = { transfer_state = 88 } } }
+				43 = {
+					if = {
+						limit = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+						}
+						VAL = { transfer_state = 43 }
+					}
+				}
+				44 = {
+					if = {
+						limit = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+						}
+						VAL = { transfer_state = 44 }
+					}
+				}
+				45 = {
+					if = {
+						limit = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+						}
+						VAL = { transfer_state = 45 }
+					}
+				}
+				88 = {
+					if = {
+						limit = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+						}
+						VAL = { transfer_state = 88 }
+					}
+				}
 				VAL = {
 					VAL_return_stelander_cores = yes
 					VAL_form_occidian_administration = yes
 					set_country_flag = VAL_stelander_equal_recognition
 				}
 				set_country_flag = VAL_stelander_equal_recognition
-				set_country_flag = { flag = VAL_stelander_truce days = 180 }
-				add_timed_idea = { idea = VAL_stelander_trade_terms days = 180 }
-				VAL = { clr_country_flag = VAL_stelander_offer_pending add_timed_idea = { idea = VAL_stelander_trade_terms days = 180 } }
+				set_country_flag = {
+					flag = VAL_stelander_truce
+					days = 180
+				}
+				add_timed_idea = {
+					idea = VAL_stelander_trade_terms
+					days = 180
+				}
+				VAL = {
+					clr_country_flag = VAL_stelander_offer_pending
+					add_timed_idea = {
+						idea = VAL_stelander_trade_terms
+						days = 180
+					}
+				}
 				clr_country_flag = VAL_stelander_offer
 			}
 		}
 	}
 }
+
 country_event = {
 	id = val_contract.345
 	title = val_contract.345.t
@@ -1042,7 +1125,11 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		if = {
-			limit = { VAL_stelander_ultimatum_target = yes NOT = { has_country_flag = VAL_stelander_truce } NOT = { has_country_flag = VAL_stelander_refused } }
+			limit = {
+				VAL_stelander_ultimatum_target = yes
+				NOT = { has_country_flag = VAL_stelander_truce }
+				NOT = { has_country_flag = VAL_stelander_refused }
+			}
 			set_country_flag = VAL_stelander_refused
 		}
 	}
