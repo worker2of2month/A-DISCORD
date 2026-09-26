@@ -6585,6 +6585,23 @@ STP_ps_resolve_val_supply = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_cargo_payment }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_cargo_payment }
 			ADISCORD_economy_mark_dirty = yes
+			# Paid Shabrat contracts become fulfilled only after the convoy resolves.
+			# Ordinary preparation shipments (type 0) and export cargo (type 3) do not.
+			if = {
+				limit = {
+					check_variable = { var = STP_ps_contract_type value = 0 compare = greater_than }
+					check_variable = { var = STP_ps_contract_type value = 3 compare = less_than }
+				}
+				if = {
+					limit = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } }
+					set_country_flag = { flag = VAL_cw_arms_contract_fulfilled value = 2 }
+				}
+				else = { set_country_flag = VAL_cw_arms_contract_fulfilled }
+				army_experience = 5
+				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
+				VAL_change_contract_authority = yes
+				country_event = { id = ADISCORD_STP_cw.51 }
+			}
 			if = { limit = { check_variable = { var = STP_ps_contract_type value = 3 compare = equals } }
 				if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
 				else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }
