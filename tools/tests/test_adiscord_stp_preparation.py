@@ -694,6 +694,35 @@ class StelanderPreparationTests(unittest.TestCase):
                          "ADISCORD_STP_preparation.25"):
             self.assertEqual(len([e for e in events[event_id] if e.key == "option"]), 1)
 
+
+    def test_sparse_ambient_life_events_are_paced_and_registered(self):
+        import json
+        on_actions = (ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt").read_text(encoding="utf-8")
+        self.assertIn("on_monthly_STP = {", on_actions)
+        self.assertIn("flag = STP_ambient_life_cooldown days = 180", on_actions)
+        for event_id in ("ADISCORD_STP_preparation.28",
+                         "ADISCORD_STP_preparation.29",
+                         "ADISCORD_STP_preparation.30"):
+            self.assertIn(f"id = {event_id}", on_actions)
+
+        event_nodes = {scalar(e.value, "id"): e.value for e in entries("events/ADISCORD_STP_events.txt")
+                       if e.key == "country_event"}
+        for event_id in ("ADISCORD_STP_preparation.28",
+                         "ADISCORD_STP_preparation.29",
+                         "ADISCORD_STP_preparation.30"):
+            self.assertIn(event_id, event_nodes)
+            self.assertEqual(len([e for e in event_nodes[event_id] if e.key == "option"]), 1)
+
+        registry = json.loads((ROOT / "tools/data/adiscord_event_ids.json").read_text(encoding="utf-8"))
+        registered = {entry["id"] for entry in registry["events"]}
+        for number in (27, 28, 29, 30):
+            self.assertIn(f"ADISCORD_STP_preparation.{number}", registered)
+
+        ru = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(encoding="utf-8-sig")
+        self.assertIn("реактора нулевой точки", ru)
+        self.assertIn("Нет, перейти к игре", ru)
+
+
     def test_regional_preparation_appears_after_its_focus_and_restores_lost_assets(self):
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
