@@ -188,6 +188,69 @@ STP_elections_in_the_party = {
 
 
 
+
+
+	# Party-route temporary development programmes.
+	STP_party_staff_drills_program = {
+		icon = generic_army_support
+		allowed = { tag = STP }
+		visible = {
+			has_country_flag = STP_sided_with_the_party_flag
+			has_completed_focus = STP_defense_budget
+			NOT = { ADISCORD_army_development_at_least_5 = yes }
+		}
+		available = {
+			has_active_mission = STP_cw_election_window
+			custom_trigger_tooltip = {
+				tooltip = STP_development_program_time_tt
+				check_variable = { var = days_mission_timeout@STP_cw_election_window value = 43 compare = greater_than }
+			}
+		}
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = ADISCORD_development_program_cost_50
+		days_remove = 42
+		days_re_enable = 21
+		complete_effect = {
+			ADISCORD_economy_spend_50 = yes
+			add_timed_idea = { idea = ADISCORD_development_program_army days = 42 }
+		}
+		cancel_trigger = { OR = { has_global_flag = STP_cw_started NOT = { has_active_mission = STP_cw_election_window } } }
+		cancel_effect = { remove_ideas = ADISCORD_development_program_army }
+		remove_effect = { remove_ideas = ADISCORD_development_program_army }
+		ai_will_do = { base = 2 }
+	}
+
+	STP_party_civil_service_program = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			has_country_flag = STP_sided_with_the_party_flag
+			has_completed_focus = STP_party_civil_register
+			NOT = { ADISCORD_state_development_at_least_5 = yes }
+		}
+		available = {
+			has_active_mission = STP_cw_election_window
+			custom_trigger_tooltip = {
+				tooltip = STP_development_program_time_tt
+				check_variable = { var = days_mission_timeout@STP_cw_election_window value = 43 compare = greater_than }
+			}
+		}
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = ADISCORD_development_program_cost_50
+		days_remove = 42
+		days_re_enable = 21
+		complete_effect = {
+			ADISCORD_economy_spend_50 = yes
+			add_timed_idea = { idea = ADISCORD_development_program_state days = 42 }
+		}
+		cancel_trigger = { OR = { has_global_flag = STP_cw_started NOT = { has_active_mission = STP_cw_election_window } } }
+		cancel_effect = { remove_ideas = ADISCORD_development_program_state }
+		remove_effect = { remove_ideas = ADISCORD_development_program_state }
+		ai_will_do = { base = 2 }
+	}
+
 }
 
 STP_shabrat_election_bop_category = {
@@ -2161,6 +2224,68 @@ STP_battle_for_stelander = {
 			base = 6
 			modifier = { factor = 2 check_variable = { var = STP_apparatus_loyalty value = 40 compare = less_than } }
 		}
+	}
+
+
+
+	STP_shabrat_staff_courses_program = {
+		icon = generic_army_support
+		allowed = { tag = STP }
+		visible = {
+			has_country_flag = STP_sided_with_Maksim_flag
+			has_completed_focus = STP_cw_officer_contacts
+			NOT = { ADISCORD_army_development_at_least_5 = yes }
+		}
+		available = {
+			has_active_mission = STP_cw_election_window
+			custom_trigger_tooltip = {
+				tooltip = STP_development_program_time_tt
+				check_variable = { var = days_mission_timeout@STP_cw_election_window value = 43 compare = greater_than }
+			}
+		}
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = ADISCORD_development_program_cost_50
+		days_remove = 42
+		days_re_enable = 21
+		complete_effect = {
+			ADISCORD_economy_spend_50 = yes
+			add_timed_idea = { idea = ADISCORD_development_program_army days = 42 }
+		}
+		cancel_trigger = { OR = { has_global_flag = STP_cw_started NOT = { has_active_mission = STP_cw_election_window } } }
+		cancel_effect = { remove_ideas = ADISCORD_development_program_army }
+		remove_effect = { remove_ideas = ADISCORD_development_program_army }
+		ai_will_do = { base = 2 }
+	}
+
+	STP_shabrat_reconstruction_program = {
+		icon = generic_construction
+		allowed = { tag = STP }
+		visible = {
+			has_country_flag = STP_sided_with_Maksim_flag
+			has_completed_focus = STP_cw_repair_niansas
+			NOT = { ADISCORD_economic_development_at_least_5 = yes }
+		}
+		available = {
+			has_active_mission = STP_cw_election_window
+			custom_trigger_tooltip = {
+				tooltip = STP_development_program_time_tt
+				check_variable = { var = days_mission_timeout@STP_cw_election_window value = 43 compare = greater_than }
+			}
+		}
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
+		custom_cost_text = ADISCORD_development_program_cost_50
+		days_remove = 42
+		days_re_enable = 21
+		complete_effect = {
+			ADISCORD_economy_spend_50 = yes
+			add_timed_idea = { idea = ADISCORD_development_program_economic days = 42 }
+		}
+		cancel_trigger = { OR = { has_global_flag = STP_cw_started NOT = { has_active_mission = STP_cw_election_window } } }
+		cancel_effect = { remove_ideas = ADISCORD_development_program_economic }
+		remove_effect = { remove_ideas = ADISCORD_development_program_economic }
+		ai_will_do = { base = 2 }
 	}
 
 }

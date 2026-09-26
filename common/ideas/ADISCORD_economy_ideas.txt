@@ -469,5 +469,35 @@ ideas = {
 		ADISCORD_economy_industrial_network_2 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_production_bonus modifier = { industrial_capacity_factory = 0.02 production_factory_efficiency_gain_factor = 0.01 } }
 		ADISCORD_economy_industrial_network_3 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_production_bonus modifier = { industrial_capacity_factory = 0.03 production_factory_efficiency_gain_factor = 0.02 } }
 		ADISCORD_economy_industrial_network_4 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_production_bonus modifier = { industrial_capacity_factory = 0.04 production_factory_efficiency_gain_factor = 0.03 } }
+		# Temporary focus-gated development programmes. Decisions own their duration.
+		ADISCORD_development_program_army = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = { ADISCORD_country_development_army_growth_factor = 1.00 }
+		}
+		ADISCORD_development_program_state = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_intel_bonus
+			modifier = { ADISCORD_country_development_state_growth_factor = 1.00 }
+		}
+		ADISCORD_development_program_economic = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_production_bonus
+			modifier = { ADISCORD_country_development_economic_growth_factor = 1.00 }
+		}
+		ADISCORD_development_program_social_system = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = { ADISCORD_country_development_social_system_growth_factor = 1.00 }
+		}
+
 	}
 }

@@ -156,6 +156,7 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_cw_pay_officials }
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_shabrat_reconstruction_program
 			3 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
 			add_stability = 0.02
 			add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.05 }
@@ -299,6 +300,7 @@ focus_tree = {
 		prerequisite = { focus = STP_Show_Him_The_Truth }
 		ai_will_do = { base = 12 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_shabrat_staff_courses_program
 			unlock_decision_tooltip = STP_region_unique_operation_53
 			unlock_decision_tooltip = STP_region_unique_operation_2
 			unlock_decision_tooltip = STP_region_unique_operation_29
@@ -1264,6 +1266,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_party_staff_drills_program
 			capital_scope = {
 				add_extra_state_shared_building_slots = 2
 				add_building_construction = { type = arms_factory level = 2 instant_build = yes }
@@ -1532,7 +1535,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_public_lists
-		icon = GFX_focus_STP_cw_public_lists
+		icon = GFX_focus_STP_cw_quiet_registers
 		relative_position_id = STP_Govern_In_His_Name
 		x = 8
 		y = 3
@@ -1561,7 +1564,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_quiet_registers
-		icon = GFX_focus_STP_cw_quiet_registers
+		icon = GFX_focus_STP_cw_public_lists
 		relative_position_id = STP_Govern_In_His_Name
 		x = 10
 		y = 3
@@ -1800,6 +1803,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_party_civil_service_program
 			custom_effect_tooltip = STP_party_civil_register_tt
 			hidden_effect = {
 				3 = {

@@ -1937,3 +1937,10 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  ADISCORD_tech_kefreyt_shield_special_forces:0 "Shield Special Forces Training"
  ADISCORD_tech_kefreyt_shield_special_forces_desc:0 "Unlocked by the Shield Special Forces focus. Enables recruitment of assault battalions equipped with energy shields."
  VAL_raise_shield_special_forces_tt:0 "Unlocks §Yshield special forces§! recruitment and an editable §YSpecial Operations Assault Division§! template: 10 assault battalions, engineers, support artillery, a logistics company and a field hospital. Combat width: §Y20§!; establishment: §Y11300§! £manpower_texticon.\nMinimum special forces capacity: §G+10§! battalions.\nDeploys §G1§! trained division with full manpower and equipment in owned and controlled Kefreyt territory, funded by the programme. Further recruitment uses normal reserves and respects the special forces cap."
+
+ VAL_recovery_road_corps_program:0 "Recovery Road Corps"
+ VAL_recovery_road_corps_program_desc:0 "Combine road crews, surveyors and supply officers into one temporary programme. For §Y120 days§!, State Development growth increases by §G+100%§!. The bonus disappears when the programme ends."
+ VAL_recovery_field_medicine_program:0 "Field Medicine Rotation"
+ VAL_recovery_field_medicine_program_desc:0 "Use the experience of field surgeons to accelerate training for medics, sanitation services and recovery hospitals. For §Y120 days§!, Social Services Development growth increases by §G+100%§!."
+ VAL_recovery_workshop_program:0 "Recovery Workshop Shifts"
+ VAL_recovery_workshop_program_desc:0 "Run restored workshops on an intensified cycle of machine-tool repair, tooling and local industrial recovery. For §Y120 days§!, Economic Development growth increases by §G+100%§!."
