@@ -234,20 +234,199 @@ on_actions = {
             clr_country_flag = VAL_frontier_capitulation_pending
             if = {
                 limit = {
-                    NOT = { has_country_flag = VAL_nod_overlord_sts_peace_handled }
-                    VAL = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } }
-                    OR = { AND = { tag = CIN OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } } has_war_with = VAL capital_scope = { VAL_frontier_controlled = yes } }
-                        AND = { tag = OSF OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } } has_war_with = VAL capital_scope = { VAL_frontier_controlled = yes } }
-                        AND = { tag = APH OR = { has_country_flag = VAL_frontier_member VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } } has_war_with = VAL capital_scope = { VAL_frontier_controlled = yes } }
-                        AND = { tag = ERT VAL = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } has_war_with = ERT } OR = { capital_scope = { VAL_frontier_controlled = yes } VAL = { VAL_frontier_eastern_claim_ready = yes } } }
-                        AND = { OR = { tag = NOD tag = STP } has_country_flag = VAL_frontier_guarantor has_war_with = VAL capital_scope = { VAL_frontier_controlled = yes } }
-                        AND = { tag = VAL capital_scope = { OR = { controller = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL } controller = { has_war_with = VAL OR = { has_country_flag = VAL_frontier_member AND = { tag = CIN VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } } AND = { tag = OSF VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } } AND = { tag = APH VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } } AND = { tag = ERT VAL = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } } } } } } } } }
+                    NOT = {
+                        has_country_flag = VAL_nod_overlord_sts_peace_handled
+                    }
+
+                    VAL = {
+                        check_variable = {
+                            var = VAL_frontier_stage
+                            value = 3
+                            compare = equals
+                        }
+                    }
+
+                    OR = {
+                        AND = {
+                            tag = CIN
+                            OR = {
+                                has_country_flag = VAL_frontier_member
+                                VAL = {
+                                    check_variable = {
+                                        var = VAL_frontier_target
+                                        value = 1
+                                        compare = equals
+                                    }
+                                }
+                            }
+                            has_war_with = VAL
+                            capital_scope = {
+                                VAL_frontier_controlled = yes
+                            }
+                        }
+
+                        AND = {
+                            tag = OSF
+                            OR = {
+                                has_country_flag = VAL_frontier_member
+                                VAL = {
+                                    check_variable = {
+                                        var = VAL_frontier_target
+                                        value = 2
+                                        compare = equals
+                                    }
+                                }
+                            }
+                            has_war_with = VAL
+                            capital_scope = {
+                                VAL_frontier_controlled = yes
+                            }
+                        }
+
+                        AND = {
+                            tag = APH
+                            OR = {
+                                has_country_flag = VAL_frontier_member
+                                VAL = {
+                                    check_variable = {
+                                        var = VAL_frontier_target
+                                        value = 3
+                                        compare = equals
+                                    }
+                                }
+                            }
+                            has_war_with = VAL
+                            capital_scope = {
+                                VAL_frontier_controlled = yes
+                            }
+                        }
+
+                        AND = {
+                            tag = ERT
+                            VAL = {
+                                check_variable = {
+                                    var = VAL_frontier_target
+                                    value = 4
+                                    compare = equals
+                                }
+                                has_war_with = ERT
+                            }
+                            OR = {
+                                capital_scope = {
+                                    VAL_frontier_controlled = yes
+                                }
+                                VAL = {
+                                    VAL_frontier_eastern_claim_ready = yes
+                                }
+                            }
+                        }
+
+                        AND = {
+                            OR = {
+                                tag = NOD
+                                tag = STP
+                            }
+                            has_country_flag = VAL_frontier_guarantor
+                            has_war_with = VAL
+                            capital_scope = {
+                                VAL_frontier_controlled = yes
+                            }
+                        }
+
+                        AND = {
+                            tag = VAL
+                            capital_scope = {
+                                OR = {
+                                    controller = {
+                                        has_country_flag = VAL_frontier_guarantor
+                                        has_war_with = VAL
+                                    }
+
+                                    controller = {
+                                        has_war_with = VAL
+                                        OR = {
+                                            has_country_flag = VAL_frontier_member
+
+                                            AND = {
+                                                tag = CIN
+                                                VAL = {
+                                                    check_variable = {
+                                                        var = VAL_frontier_target
+                                                        value = 1
+                                                        compare = equals
+                                                    }
+                                                }
+                                            }
+
+                                            AND = {
+                                                tag = OSF
+                                                VAL = {
+                                                    check_variable = {
+                                                        var = VAL_frontier_target
+                                                        value = 2
+                                                        compare = equals
+                                                    }
+                                                }
+                                            }
+
+                                            AND = {
+                                                tag = APH
+                                                VAL = {
+                                                    check_variable = {
+                                                        var = VAL_frontier_target
+                                                        value = 3
+                                                        compare = equals
+                                                    }
+                                                }
+                                            }
+
+                                            AND = {
+                                                tag = ERT
+                                                VAL = {
+                                                    check_variable = {
+                                                        var = VAL_frontier_target
+                                                        value = 4
+                                                        compare = equals
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                if = { limit = { OR = { tag = CIN tag = OSF tag = APH tag = ERT } } set_country_flag = VAL_frontier_defeated }
-                set_country_flag = { flag = VAL_frontier_capitulation_pending days = 1 }
+
+                if = {
+                    limit = {
+                        OR = {
+                            tag = CIN
+                            tag = OSF
+                            tag = APH
+                            tag = ERT
+                        }
+                    }
+                    set_country_flag = VAL_frontier_defeated
+                }
+
+                set_country_flag = {
+                    flag = VAL_frontier_capitulation_pending
+                    days = 1
+                }
+
                 set_global_flag = skip_default_capitulation
-                if = { limit = { tag = VAL } VAL_frontier_settle_defeat = yes }
-                else = { VAL = { VAL_frontier_reconcile = yes } }
+
+                if = {
+                    limit = { tag = VAL }
+                    VAL_frontier_settle_defeat = yes
+                }
+                else = {
+                    VAL = {
+                        VAL_frontier_reconcile = yes
+                    }
+                }
+
                 clr_global_flag = skip_default_capitulation
             }
             else_if = {
@@ -397,8 +576,7 @@ on_actions = {
 						has_war_together_with = NOD
 						has_country_flag = ADISCORD_bezhaysk_campaign_active
 					}
-					NOD = { exists = yes has_capitulated = no }
-					FROM = { OR = { tag = VAL tag = NOD is_subject_of = VAL is_subject_of = NOD } }
+					NOD = { exists = yes has_capitulated = no }					FROM = { OR = { tag = VAL tag = NOD is_subject_of = VAL is_subject_of = NOD } }
 				}
 				ROOT = {
 					clr_country_flag = ADISCORD_bezhaysk_joint_default_val
@@ -797,7 +975,6 @@ on_actions = {
 			ADISCORD_vorkerland_check_central_outcome = yes
 
 			# END vorkerland_collapse:on_capitulation
-
 			# BEGIN stelander:on_capitulation
 
 			# Hegemony final wars share the same native capitulation owner.
@@ -1198,246 +1375,3 @@ on_actions = {
 				}
 				if = {
 					limit = { ROOT = { tag = SOL } }
-					ROOT = {
-						set_nationality = {
-							target_country = WKR
-							character = WRK_Richard_Gordon
-						}
-					}
-					FROM = { set_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_carried }
-				}
-				set_global_flag = skip_default_capitulation
-				FROM = {
-					annex_country = { target = ROOT transfer_troops = no }
-					ADISCORD_vorkerland_queue_wkr_solyarino_outcome_check = yes
-				}
-			}
-			ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
-			ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
-
-			# END vorkerland_diplomacy:on_capitulation
-
-			# BEGIN kefreyt_northern_reservations:on_capitulation
-			if = {
-				limit = {
-					ROOT = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
-				}
-				set_global_flag = skip_default_capitulation
-				# on_capitulation_immediate can run before the final member's
-				# has_capitulated state is visible. Recheck after the native handoff.
-				if = {
-					limit = { VAL = { VAL_northern_coalition_campaign_victory_ready = yes } }
-					VAL = { VAL_settle_northern_coalition_victory = yes }
-				}
-			}
-			if = {
-				limit = {
-					ROOT = { has_country_flag = VAL_nod_overlord_sts_capitulation_reserved }
-				}
-				set_global_flag = skip_default_capitulation
-			}
-			# END kefreyt_northern_reservations:on_capitulation
-
-			# BEGIN bezhaysk:on_capitulation
-            # The immediate router is authoritative. If it accepted this defeat,
-            # it leaves a one-day receipt for the late native callback. Do not
-            # reconstruct campaign ownership from mutable faction/war relations.
-            if = {
-                limit = { ROOT = { has_country_flag = ADISCORD_bezhaysk_capitulation_pending } }
-                ROOT = { clr_country_flag = ADISCORD_bezhaysk_capitulation_pending }
-                set_global_flag = skip_default_capitulation
-            }
-            # END bezhaysk:on_capitulation
-
-			# BEGIN northern_reservation:on_capitulation
-			if = {
-				limit = {
-					ROOT = { has_country_flag = STP_cw_northern_capitulation_reserved }
-				}
-				set_global_flag = skip_default_capitulation
-			}
-
-			# END northern_reservation:on_capitulation
-
-			# BEGIN livonn:on_capitulation
-			if = {
-				limit = {
-					has_global_flag = STP_cw_started
-					ROOT = { tag = SRP }
-					VAL = {
-						has_country_flag = VAL_cw_postwar
-						NOT = { has_country_flag = VAL_cw_livonn_settlement_resolved }
-					}
-				}
-				VAL = { VAL_cw_stage_livonn_settlement = yes }
-			}
-
-			# END livonn:on_capitulation
-
-		}
-	}
-	on_peace = {
-		effect = {
-            if = {
-                limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
-                log = "[ADISCORD_PEACE] on_peace ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
-                ROOT = { ADISCORD_debug_war_country_dump = yes }
-            }
-
-			# BEGIN vorkerland_collapse:on_peace
-			ADISCORD_vorkerland_reconcile_coalition_obligation = yes
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
-					NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
-				}
-				ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes
-			}
-			if = {
-				limit = {
-					ADISCORD_vorkerland_is_main_claimant = yes
-					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-				}
-				ADISCORD_vorkerland_update_civil_war_exhaustion = yes
-				ADISCORD_vorkerland_reconcile_campaign_state = yes
-			}
-			if = {
-				limit = { tag = EBA has_war = no }
-				PIV = {
-					if = {
-						limit = {
-							exists = yes
-							has_idea = ADISCORD_vorkerland_piv_macri_volunteer_mission
-						}
-						remove_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission
-					}
-				}
-			}
-
-			# END vorkerland_collapse:on_peace
-
-			# BEGIN rin:on_peace
-			# Fallback for console peace or another external peace effect. Bespoke
-			# capitulation and mission timeout raise settlement_in_progress first.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_rin_oath_crisis_active
-					NOT = { has_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress }
-					event_target:ADISCORD_rin_southern_charter = { exists = yes has_war = no }
-					event_target:ADISCORD_rin_northern_court = { exists = yes has_war = no }
-				}
-				set_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
-				event_target:ADISCORD_rin_southern_charter = {
-					ADISCORD_rin_complete_partition_armistice = yes
-				}
-			}
-
-			# END rin:on_peace
-
-			# BEGIN vorkerland_diplomacy:on_peace
-			ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
-					country_exists = WKR
-				}
-				WKR = { ADISCORD_vorkerland_queue_wkr_solyarino_outcome_check = yes }
-			}
-			ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
-
-			# END vorkerland_diplomacy:on_peace
-
-            # BEGIN kefreyt:on_peace
-            VAL = { VAL_council_reconcile_revanche = yes }
-            if = { limit = { STP = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STP = { VAL_cede_stelander_border = yes } }
-            if = { limit = { STS = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STS = { VAL_cede_stelander_border = yes } }
-            VAL_queue_frontier_reconciliation = yes
-            # END kefreyt:on_peace
-            # BEGIN stelander:on_peace
-			if = {
-				limit = {
-					OR = { ROOT = { OR = { tag = STP tag = NOD } } FROM = { OR = { tag = STP tag = NOD } } }
-					STP = { has_country_flag = STP_pw_party_nod_campaign_active }
-				}
-				STP = { country_event = { id = ADISCORD_STP_pc.44 days = 1 } }
-			}
-            STP = { STP_occidia_reconcile_peace = yes }
-            STS = { STP_occidia_reconcile_peace = yes }
-            if = {
-                limit = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } }
-                STP_cw_queue_peace_reconciliation = yes
-            }
-            # END stelander:on_peace
-
-
-		}
-	}
-	on_peaceconference_ended = {
-		effect = {
-            if = {
-                limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
-                log = "[ADISCORD_PEACE] on_peaceconference_ended ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
-                ROOT = { ADISCORD_debug_war_country_dump = yes }
-            }
-
-			# BEGIN stelander:on_peaceconference_ended
-			if = {
-				limit = { tag = NOD STP_cw_northern_conference_won = yes }
-				STP_cw_settle_northern_victory = yes
-			}
-
-			if = {
-				limit = { OR = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } FROM = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } } }
-				STP_cw_queue_peace_reconciliation = yes
-			}
-			# END stelander:on_peaceconference_ended
-			# BEGIN kefreyt:on_peaceconference_ended
-			VAL_queue_frontier_reconciliation = yes
-			VAL = { VAL_check_nam_concession = yes }
-			# END kefreyt:on_peaceconference_ended
-
-		}
-	}
-	on_annex = {
-		effect = {
-			# BEGIN stelander:on_annex
-			# ROOT survives the annexation; FROM may no longer own any state.
-			if = {
-				limit = { OR = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } FROM = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } } }
-				STP_cw_queue_peace_reconciliation = yes
-			}
-			# An annexed NOD no longer receives its country pulse. Close its pending intervention now.
-			if = { limit = { FROM = { tag = NOD } } STP_cw_poll_nod_intervention = yes }
-			# END stelander:on_annex
-			# BEGIN kefreyt:on_annex
-			VAL_queue_frontier_reconciliation = yes
-			if = { limit = { FROM = { tag = NAM } } VAL = { VAL_check_nam_concession = yes } }
-			# END kefreyt:on_annex
-		}
-	}
-	on_state_control_changed = {
-		effect = {
-			# BEGIN livonn:on_state_control_changed
-			# FROM.FROM is the state; defer until its transfer has completed.
-			if = {
-				limit = { FROM.FROM = { OR = { state = 43 state = 44 state = 45 state = 88 } } }
-				STP_cw_queue_peace_reconciliation = yes
-			}
-			# END livonn:on_state_control_changed
-			# BEGIN frontier:on_state_control_changed
-			# Capitals can relocate within a participant's remaining territory.
-			if = {
-				limit = {
-					FROM.FROM = {
-						OR = {
-							state = 58 state = 59 state = 60 state = 61 state = 62 state = 63 state = 64 state = 65 state = 168
-							owner = { OR = { tag = CIN tag = OSF tag = APH tag = ERT } }
-						}
-					}
-				}
-				VAL_queue_frontier_reconciliation = yes
-			}
-			# END frontier:on_state_control_changed
-		}
-	}
-}
