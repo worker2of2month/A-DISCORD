@@ -2492,21 +2492,39 @@ trigger = { has_global_flag = ADISCORD_vorkerland_phase_reunification ADISCORD_v
 
 	immediate = {
 		if = {
-			limit = { WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			limit = {
+				WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+				OR = {
+					WKR = { has_country_flag = ADISCORD_vorkerland_central_unifier }
+					ADISCORD_vorkerland_has_live_marked_central_unifier = no
+				}
+			}
 			WRK = {
 				ADISCORD_vorkerland_form_wrk_from_wkr = yes
 				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
 			}
 		}
 		else_if = {
-			limit = { VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			limit = {
+				VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+				OR = {
+					VAD = { has_country_flag = ADISCORD_vorkerland_central_unifier }
+					ADISCORD_vorkerland_has_live_marked_central_unifier = no
+				}
+			}
 			WRK = {
 				ADISCORD_vorkerland_form_wrk_from_vad = yes
 				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
 			}
 		}
 		else_if = {
-			limit = { TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
+			limit = {
+				TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+				OR = {
+					TVA = { has_country_flag = ADISCORD_vorkerland_central_unifier }
+					ADISCORD_vorkerland_has_live_marked_central_unifier = no
+				}
+			}
 			WRK = {
 				ADISCORD_vorkerland_form_wrk_from_tva = yes
 				country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
