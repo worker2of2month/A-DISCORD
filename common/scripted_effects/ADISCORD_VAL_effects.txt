@@ -4470,6 +4470,7 @@ VAL_settle_northern_coalition_victory = {
 				VAL_initialize_partition_administration = yes
 				set_country_flag = VAL_northern_coalition_administration
 				clr_country_flag = VAL_northern_coalition_campaign_member
+				clr_country_flag = VAL_northern_coalition_capitulation_reserved
 				set_major = no
 			}
 		}
@@ -4487,6 +4488,7 @@ VAL_settle_northern_coalition_victory = {
 				set_rule = { can_join_factions = no can_create_factions = no }
 				set_country_flag = VAL_northern_coalition_administration
 				clr_country_flag = VAL_northern_coalition_campaign_member
+				clr_country_flag = VAL_northern_coalition_capitulation_reserved
 				set_major = no
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -4505,6 +4507,7 @@ VAL_settle_northern_coalition_victory = {
 				set_rule = { can_join_factions = no can_create_factions = no }
 				set_country_flag = VAL_northern_coalition_administration
 				clr_country_flag = VAL_northern_coalition_campaign_member
+				clr_country_flag = VAL_northern_coalition_capitulation_reserved
 				set_major = no
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -5193,19 +5196,9 @@ VAL_call_subjects_to_wars = {
 			limit = { has_war = yes }
 			every_enemy_country = {
 				save_event_target_as = VAL_subject_war_enemy
-				every_subject_country = {
-					limit = {
-						has_capitulated = no
-						NOT = { has_war_with = VAL }
-						NOT = { is_in_faction_with = VAL }
-					}
-					add_to_war = {
-						targeted_alliance = event_target:VAL_subject_war_enemy
-						enemy = VAL
-						hostility_reason = asked_to_join
-						single_target_only = yes
-					}
-				}
+				# Join Kefreyt's subjects to VAL's side of this exact existing war.
+				# The removed preliminary pass inverted the sides and could attach a
+				# client to the enemy before this correct pass was evaluated.
 				VAL = {
 					every_subject_country = {
 						limit = {
