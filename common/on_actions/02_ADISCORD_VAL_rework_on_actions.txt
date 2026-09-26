@@ -117,6 +117,7 @@ on_actions = {
 					}
 				}
 				VAL = {
+					VAL_adopt_northern_coalition_defensive_campaign = yes
 					VAL_call_subjects_to_wars = yes
 					VAL_final_crisis_initialize = yes
 					VAL_final_crisis_reconcile = yes

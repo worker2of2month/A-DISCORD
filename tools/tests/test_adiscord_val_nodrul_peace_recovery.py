@@ -8,6 +8,7 @@ ON_ACTIONS = ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt
 TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_VAL_decisions.txt"
 EVENTS = ROOT / "events/ADISCORD_VAL_contract_events.txt"
+VAL_ON_ACTIONS = ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"
 
 
 def named_block(text: str, name: str) -> str:
@@ -152,6 +153,22 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         events = EVENTS.read_text(encoding="utf-8")
         self.assertIn("id = val_contract.355", events)
         self.assertIn("VAL_complete_ainholm_colony = yes", events)
+
+
+    def test_northern_coalition_defensive_war_adopts_scripted_campaign(self) -> None:
+        adopt = named_block(self.source, "VAL_adopt_northern_coalition_defensive_campaign")
+        self.assertIn("has_completed_focus = VAL_Northern_Settlement", adopt)
+        self.assertIn("NOT = { has_country_flag = VAL_northern_coalition_settlement_completed }", adopt)
+        for tag in ("YPR", "COF", "TFF"):
+            self.assertGreaterEqual(adopt.count(f"{tag} = {{"), 2)
+        self.assertEqual(adopt.count("has_war_with = VAL"), 3)
+        self.assertEqual(adopt.count("set_country_flag = VAL_northern_coalition_campaign_member"), 3)
+        self.assertEqual(adopt.count("set_major = yes"), 3)
+        self.assertIn("set_country_flag = VAL_northern_coalition_campaign_active", adopt)
+        self.assertIn("VAL_call_subjects_to_wars = yes", adopt)
+
+        lifecycle = named_block(VAL_ON_ACTIONS.read_text(encoding="utf-8"), "on_war_relation_added")
+        self.assertIn("VAL_adopt_northern_coalition_defensive_campaign = yes", lifecycle)
 
     def test_northern_coalition_has_one_focus_and_one_scripted_settlement(self) -> None:
         focuses = (ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt").read_text(encoding="utf-8")

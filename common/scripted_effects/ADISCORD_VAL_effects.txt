@@ -4345,6 +4345,51 @@ VAL_settle_nod_overlord_sts_defeat = {
 
 # The intact northern coalition is a separate Kefreyt campaign. It is opened as
 # one native war and every member is kept major until the common settlement runs.
+VAL_adopt_northern_coalition_defensive_campaign = {
+	if = {
+		limit = {
+			tag = VAL
+			has_completed_focus = VAL_Northern_Settlement
+			has_capitulated = no
+			is_subject = no
+			NOT = { has_country_flag = VAL_northern_coalition_campaign_active }
+			NOT = { has_country_flag = VAL_northern_coalition_settlement_completed }
+			YPR = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war_with = VAL
+			}
+			COF = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war_with = VAL
+			}
+			TFF = {
+				exists = yes
+				has_capitulated = no
+				is_subject = no
+				has_war_with = VAL
+			}
+		}
+		set_country_flag = VAL_northern_coalition_campaign_active
+		YPR = {
+			set_country_flag = VAL_northern_coalition_campaign_member
+			set_major = yes
+		}
+		COF = {
+			set_country_flag = VAL_northern_coalition_campaign_member
+			set_major = yes
+		}
+		TFF = {
+			set_country_flag = VAL_northern_coalition_campaign_member
+			set_major = yes
+		}
+		VAL_call_subjects_to_wars = yes
+	}
+}
+
 VAL_begin_northern_coalition_campaign = {
 	if = {
 		limit = { VAL_can_attack_northern_coalition = yes }
