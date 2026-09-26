@@ -3469,6 +3469,7 @@ focus_tree = {
 		ai_will_do = { base = 10 }
 	}
 
+	# --- Shield special forces ---
 	focus = {
 		id = VAL_Shield_Special_Forces
 		icon = GFX_goal_generic_special_forces
@@ -3476,9 +3477,13 @@ focus_tree = {
 		x = 42
 		y = 12
 		cost = 10
+		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		prerequisite = { focus = VAL_Armored_Contract_Companies }
 		available = {
 			has_capitulated = no
+			has_tech = ADISCORD_tech_casualty_evacuation
+			has_tech = ADISCORD_tech_forward_supply_hubs
+			any_owned_state = { is_controlled_by = PREV }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
