@@ -3283,6 +3283,38 @@
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "vorkerland_collapse",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_preparation.27",
+      "namespace": "ADISCORD_STP_preparation",
+      "number": 27,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_civil_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_preparation.28",
+      "namespace": "ADISCORD_STP_preparation",
+      "number": 28,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_civil_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_preparation.29",
+      "namespace": "ADISCORD_STP_preparation",
+      "number": 29,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_civil_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_preparation.30",
+      "namespace": "ADISCORD_STP_preparation",
+      "number": 30,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_civil_war",
+      "status": "active"
     }
   ]
 }

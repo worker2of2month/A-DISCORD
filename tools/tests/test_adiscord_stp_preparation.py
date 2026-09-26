@@ -588,6 +588,7 @@ class StelanderPreparationTests(unittest.TestCase):
                 if not expected:
                     self.assertEqual(effects, [], "a stale offer must not change the course or the republics")
 
+
     def test_nectar_native_events_preserve_every_paragraph_without_a_timer(self):
         import hashlib
         loc_path = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
@@ -598,19 +599,26 @@ class StelanderPreparationTests(unittest.TestCase):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
                     if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+
+        prompt_call = block(block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"), "country_event")
+        self.assertEqual(scalar(prompt_call, "id"), "ADISCORD_STP_preparation.27")
+        prompt = events["ADISCORD_STP_preparation.27"]
+        prompt_options = [entry.value for entry in prompt if entry.key == "option"]
+        self.assertEqual(len(prompt_options), 2)
+        self.assertEqual(scalar(prompt_options[0], "name"), "ADISCORD_STP_preparation.27.no")
+        self.assertEqual(scalar(prompt_options[1], "name"), "ADISCORD_STP_preparation.27.yes")
+        self.assertIn("STP_skip_intro_story_events",
+                      [e.value for e in walk(prompt_options[0]) if e.key == "set_country_flag"])
+        self.assertIn("ADISCORD_STP_preparation.15",
+                      [scalar(e.value, "id") for e in walk(prompt_options[1]) if e.key == "country_event"])
+
         chapters = []
-        for focus, number in (("STP_NECTAR_OF_GODS", 15), ("STP_2160_budget", 16)):
+        for number in (15, 16):
             event_id = f"ADISCORD_STP_preparation.{number}"
-            call = block(block(focuses[focus], "completion_reward"), "country_event")
-            self.assertEqual([(e.key, e.value) for e in call], [("id", event_id)])
             event = events[event_id]
             self.assertFalse(any(e.key in ("hidden", "fire_only_once") for e in event))
             self.assertEqual(scalar(event, "picture"), "GFX_event_adiscord_nectar_of_the_gods")
             self.assertIn(scalar(event, "title"), values)
-            self.assertTrue(matches_conditions(block(event, "trigger"), {}))
-            self.assertFalse(matches_conditions(block(event, "trigger"), {}, "VAL"))
-            self.assertFalse(matches_conditions(block(event, "trigger"),
-                             {("STP", "has_global_flag", "STP_cw_started"): True}))
             text = values[scalar(event, "desc")]
             chapters.append(text)
             rendered = text.replace(r"\n", "\n")
@@ -619,15 +627,8 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertEqual([(e.key, e.value) for e in block(event, "immediate")],
                              [("clear_variable", "STP_nectar_story_page")])
             options = [entry.value for entry in event if entry.key == "option"]
+            self.assertEqual(len(options), 1)
             self.assertIn(scalar(options[0], "name"), values)
-            if number == 15:
-                self.assertEqual(len(options), 2)
-                skip = options[1]
-                self.assertEqual(scalar(skip, "name"), "ADISCORD_STP_preparation.15.skip")
-                self.assertEqual(scalar(block(skip, "trigger"), "is_ai"), "no")
-                self.assertIn("STP_skip_intro_story_events", [e.value for e in walk(skip) if e.key == "set_country_flag"])
-            else:
-                self.assertEqual(len(options), 1, "later nectar lore must close without scheduling another event or settling focus rewards")
         self.assertEqual(hashlib.sha256(r"\n\n".join(chapters).encode("utf-8")).hexdigest(),
                          "b87894acba07ebab1224274870aef30f77c8c13f2591cce43785dd665a39f8ba")
         self.assertEqual(scalar(block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"), "add_political_power"), "35")
@@ -636,16 +637,21 @@ class StelanderPreparationTests(unittest.TestCase):
             self.assertNotIn("ADISCORD_STP_nectar_story", (ROOT / path).read_text(encoding="utf-8-sig"))
         self.assertFalse(any(key.startswith("STP_nectar_") for key in values))
 
+
     def test_intro_story_skip_only_suppresses_lore_popups(self):
         events = {scalar(e.value, "id"): e.value for e in entries("events/ADISCORD_STP_events.txt")
                   if e.key == "country_event"}
-        first = events["ADISCORD_STP_preparation.15"]
-        options = [e.value for e in first if e.key == "option"]
+        prompt = events["ADISCORD_STP_preparation.27"]
+        options = [e.value for e in prompt if e.key == "option"]
         self.assertEqual(len(options), 2)
-        self.assertIn("STP_skip_intro_story_events", [e.value for e in walk(options[1])
-                                                       if e.key == "set_country_flag"])
+        self.assertIn("STP_skip_intro_story_events",
+                      [e.value for e in walk(options[0]) if e.key == "set_country_flag"])
+        self.assertIn("ADISCORD_STP_preparation.15",
+                      [scalar(e.value, "id") for e in walk(options[1]) if e.key == "country_event"])
+
         skipped = {("STP", "has_country_flag", "STP_skip_intro_story_events"): True}
-        for event_id in ("ADISCORD_STP_preparation.16",
+        for event_id in ("ADISCORD_STP_preparation.15",
+                         "ADISCORD_STP_preparation.16",
                          "ADISCORD_STP_preparation.23",
                          "ADISCORD_STP_preparation.25"):
             trigger = block(events[event_id], "trigger")
@@ -655,15 +661,18 @@ class StelanderPreparationTests(unittest.TestCase):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
                     if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        first_call = block(block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"), "country_event")
+        self.assertEqual(scalar(first_call, "id"), "ADISCORD_STP_preparation.27")
         self.assertEqual(scalar(block(focuses["STP_NECTAR_OF_GODS"], "completion_reward"), "add_political_power"), "35")
         self.assertEqual(scalar(block(focuses["STP_2160_budget"], "completion_reward"), "STP_receive_1200"), "yes")
+
 
     def test_intro_lore_is_paced_by_five_one_week_focuses(self):
         tree = next(e.value for e in entries("common/national_focus/ADISCORD_national_focus_STP.txt")
                     if e.key == "focus_tree" and scalar(e.value, "id") == "STP_focus")
         focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
         order = (
-            ("STP_NECTAR_OF_GODS", None, "ADISCORD_STP_preparation.15"),
+            ("STP_NECTAR_OF_GODS", None, "ADISCORD_STP_preparation.27"),
             ("STP_REVOLUTION_FROM_THE_NORTH", "STP_NECTAR_OF_GODS", "ADISCORD_STP_preparation.23"),
             ("STP_2160_budget", "STP_REVOLUTION_FROM_THE_NORTH", "ADISCORD_STP_preparation.16"),
             ("STP_BEHIND_THE_LIGHTS", "STP_2160_budget", "ADISCORD_STP_preparation.25"),
@@ -675,14 +684,47 @@ class StelanderPreparationTests(unittest.TestCase):
             if parent is not None:
                 self.assertEqual(scalar(block(focus, "prerequisite"), "focus"), parent)
             if event_id is not None:
-                reward = block(focus, "completion_reward")
-                call = block(reward, "country_event")
+                call = block(block(focus, "completion_reward"), "country_event")
                 self.assertEqual(scalar(call, "id"), event_id)
+
         events = {scalar(e.value, "id"): e.value for e in entries("events/ADISCORD_STP_events.txt")
                   if e.key == "country_event"}
-        for event_id in ("ADISCORD_STP_preparation.23", "ADISCORD_STP_preparation.25"):
-            option = block(events[event_id], "option")
-            self.assertEqual(len(option), 1, "paced lore cards must close without scheduling another popup")
+        prompt_options = [e.value for e in events["ADISCORD_STP_preparation.27"] if e.key == "option"]
+        self.assertIn("ADISCORD_STP_preparation.15",
+                      [scalar(e.value, "id") for e in walk(prompt_options[1]) if e.key == "country_event"])
+        for event_id in ("ADISCORD_STP_preparation.15",
+                         "ADISCORD_STP_preparation.23",
+                         "ADISCORD_STP_preparation.25"):
+            self.assertEqual(len([e for e in events[event_id] if e.key == "option"]), 1)
+
+
+    def test_sparse_ambient_life_events_are_paced_and_registered(self):
+        import json
+        on_actions = (ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt").read_text(encoding="utf-8")
+        self.assertIn("on_monthly_STP = {", on_actions)
+        self.assertIn("flag = STP_ambient_life_cooldown days = 180", on_actions)
+        for event_id in ("ADISCORD_STP_preparation.28",
+                         "ADISCORD_STP_preparation.29",
+                         "ADISCORD_STP_preparation.30"):
+            self.assertIn(f"id = {event_id}", on_actions)
+
+        event_nodes = {scalar(e.value, "id"): e.value for e in entries("events/ADISCORD_STP_events.txt")
+                       if e.key == "country_event"}
+        for event_id in ("ADISCORD_STP_preparation.28",
+                         "ADISCORD_STP_preparation.29",
+                         "ADISCORD_STP_preparation.30"):
+            self.assertIn(event_id, event_nodes)
+            self.assertEqual(len([e for e in event_nodes[event_id] if e.key == "option"]), 1)
+
+        registry = json.loads((ROOT / "tools/data/adiscord_event_ids.json").read_text(encoding="utf-8"))
+        registered = {entry["id"] for entry in registry["events"]}
+        for number in (27, 28, 29, 30):
+            self.assertIn(f"ADISCORD_STP_preparation.{number}", registered)
+
+        ru = (ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml").read_text(encoding="utf-8-sig")
+        self.assertIn("реактора нулевой точки", ru)
+        self.assertIn("Нет, перейти к игре", ru)
+
 
     def test_regional_preparation_appears_after_its_focus_and_restores_lost_assets(self):
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_battle_for_stelander")

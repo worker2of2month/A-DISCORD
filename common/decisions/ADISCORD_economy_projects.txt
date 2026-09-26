@@ -278,3 +278,170 @@ ADISCORD_economy_projects = {
 		ai_will_do = { base = 0 }
 	}
 }
+
+ADISCORD_development_investments = {
+
+	ADISCORD_invest_army_development = {
+		icon = generic_army_support
+		visible = {
+			NOT = { ADISCORD_army_development_at_least_5 = yes }
+			OR = {
+				NOT = { has_variable = ADISCORD_army_development_investment_count }
+				check_variable = { var = ADISCORD_army_development_investment_count value = 4 compare = less_than }
+			}
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = ADISCORD_development_investment_cost_250
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			ADISCORD_increase_army_development_monthly_growth = yes
+			add_to_variable = { var = ADISCORD_army_development_investment_count value = 1 }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 has_war = yes }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } } }
+		}
+	}
+
+	ADISCORD_invest_state_development = {
+		icon = generic_political_pressure
+		visible = {
+			NOT = { ADISCORD_state_development_at_least_5 = yes }
+			OR = {
+				NOT = { has_variable = ADISCORD_state_development_investment_count }
+				check_variable = { var = ADISCORD_state_development_investment_count value = 4 compare = less_than }
+			}
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = ADISCORD_development_investment_cost_250
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			ADISCORD_increase_state_development_monthly_growth = yes
+			add_to_variable = { var = ADISCORD_state_development_investment_count value = 1 }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 has_war = yes }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } } }
+		}
+	}
+
+	ADISCORD_invest_economic_development = {
+		icon = generic_construction
+		visible = {
+			NOT = { ADISCORD_economic_development_at_least_5 = yes }
+			OR = {
+				NOT = { has_variable = ADISCORD_economic_development_investment_count }
+				check_variable = { var = ADISCORD_economic_development_investment_count value = 4 compare = less_than }
+			}
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = ADISCORD_development_investment_cost_250
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			ADISCORD_increase_economic_development_monthly_growth = yes
+			add_to_variable = { var = ADISCORD_economic_development_investment_count value = 1 }
+		}
+		ai_will_do = {
+			base = 2
+			modifier = { factor = 0 has_war = yes }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } } }
+		}
+	}
+
+
+	ADISCORD_invest_social_system_development = {
+		icon = generic_manpower
+		visible = {
+			NOT = { ADISCORD_social_system_development_at_least_5 = yes }
+			OR = {
+				NOT = { has_variable = ADISCORD_social_system_development_investment_count }
+				check_variable = { var = ADISCORD_social_system_development_investment_count value = 4 compare = less_than }
+			}
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = ADISCORD_development_investment_cost_250
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			ADISCORD_increase_social_system_development_monthly_growth = yes
+			add_to_variable = { var = ADISCORD_social_system_development_investment_count value = 1 }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 has_war = yes }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } } }
+		}
+	}
+
+	ADISCORD_invest_cultural_development = {
+		icon = generic_research
+		visible = {
+			NOT = { ADISCORD_cultural_development_at_least_5 = yes }
+			OR = {
+				NOT = { has_variable = ADISCORD_cultural_development_investment_count }
+				check_variable = { var = ADISCORD_cultural_development_investment_count value = 4 compare = less_than }
+			}
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = ADISCORD_development_investment_cost_250
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			ADISCORD_increase_cultural_development_monthly_growth = yes
+			add_to_variable = { var = ADISCORD_cultural_development_investment_count value = 1 }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 has_war = yes }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } } }
+		}
+	}
+
+	ADISCORD_invest_society_development = {
+		icon = generic_manpower
+		visible = {
+			NOT = { ADISCORD_society_development_at_least_5 = yes }
+			OR = {
+				NOT = { has_variable = ADISCORD_society_development_investment_count }
+				check_variable = { var = ADISCORD_society_development_investment_count value = 4 compare = less_than }
+			}
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_trigger = { ADISCORD_economy_can_spend_250 = yes }
+		custom_cost_text = ADISCORD_development_investment_cost_250
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			ADISCORD_economy_spend_250 = yes
+			ADISCORD_increase_society_development_monthly_growth = yes
+			add_to_variable = { var = ADISCORD_society_development_investment_count value = 1 }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = { factor = 0 has_war = yes }
+			modifier = { factor = 0 NOT = { check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } } }
+		}
+	}
+}
+
