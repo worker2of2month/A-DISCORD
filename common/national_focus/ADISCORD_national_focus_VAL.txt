@@ -508,6 +508,7 @@ focus_tree = {
 			modifier = { factor = 2 has_equipment = { infantry_equipment < 14990 } }
 		}
 		completion_reward = {
+			unlock_decision_tooltip = VAL_recovery_field_medicine_program
 			add_manpower = 8000
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_ash_manpower_delta } }
 			hidden_effect = {
@@ -2191,7 +2192,8 @@ focus_tree = {
 		y = 6
 		cost = 3
 		prerequisite = { focus = VAL_reclamation_survey }
-		completion_reward = { add_ideas = VAL_reclamation_road_crews_idea }
+		completion_reward = {
+			unlock_decision_tooltip = VAL_recovery_road_corps_program add_ideas = VAL_reclamation_road_crews_idea }
 		ai_will_do = { base = 3 }
 	}
 
@@ -2221,7 +2223,8 @@ focus_tree = {
 		prerequisite = { focus = VAL_reclamation_road_crews }
 		available = { custom_trigger_tooltip = { tooltip = VAL_reclamation_stage_1_tt any_owned_state = { is_controlled_by = ROOT check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } } } }
 		cancel_if_invalid = yes
-		completion_reward = { add_ideas = VAL_reclamation_workshops_idea }
+		completion_reward = {
+			unlock_decision_tooltip = VAL_recovery_workshop_program add_ideas = VAL_reclamation_workshops_idea }
 		ai_will_do = { base = 3 }
 	}
 
