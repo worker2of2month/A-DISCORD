@@ -260,10 +260,47 @@ ADISCORD_economy_recalculate_policy_modifiers = {
 
 	# Base law and national-spirit effects are visible custom modifiers read by modifier@ below.
 	# Keep only conditional policy bonuses that cannot be represented as a static idea modifier.
-	if = { limit = { ADISCORD_economy_has_idea_economic_system_state_coordinated = yes ADISCORD_state_development_at_least_3 = yes } add_to_variable = { var = ADISCORD_economy_policy_overload_resistance_bonus_bp value = 5 } }
-	if = { limit = { ADISCORD_economy_has_idea_economic_system_state_coordinated = yes ADISCORD_state_development_at_most_2 = yes } add_to_variable = { var = ADISCORD_economy_policy_state_overload_gain_bonus_bp value = 10 } }
-	if = { limit = { ADISCORD_economy_has_idea_economic_system_planned_bureaucratic = yes ADISCORD_state_development_at_most_3 = yes } add_to_variable = { var = ADISCORD_economy_policy_state_overload_gain_bonus_bp value = 12 } }
-	if = { limit = { ADISCORD_economy_has_idea_society_type_information = yes ADISCORD_state_development_at_least_4 = yes ADISCORD_social_system_development_at_least_4 = yes } add_to_variable = { var = ADISCORD_economy_policy_overload_resistance_bonus_bp value = 10 } }
+	if = {
+		limit = {
+			ADISCORD_economy_has_idea_economic_system_state_coordinated = yes
+			ADISCORD_state_development_at_least_3 = yes
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_policy_overload_resistance_bonus_bp
+			value = 5
+		}
+	}
+	if = {
+		limit = {
+			ADISCORD_economy_has_idea_economic_system_state_coordinated = yes
+			ADISCORD_state_development_at_most_2 = yes
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_policy_state_overload_gain_bonus_bp
+			value = 10
+		}
+	}
+	if = {
+		limit = {
+			ADISCORD_economy_has_idea_economic_system_planned_bureaucratic = yes
+			ADISCORD_state_development_at_most_3 = yes
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_policy_state_overload_gain_bonus_bp
+			value = 12
+		}
+	}
+	if = {
+		limit = {
+			ADISCORD_economy_has_idea_society_type_information = yes
+			ADISCORD_state_development_at_least_4 = yes
+			ADISCORD_social_system_development_at_least_4 = yes
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_policy_overload_resistance_bonus_bp
+			value = 10
+		}
+	}
 
 	ADISCORD_economy_calculate_final_modifier_factors = yes
 }
@@ -630,50 +667,358 @@ ADISCORD_economy_reset_modifier_variables = {
 }
 
 # Modder-facing named helpers.
-ADISCORD_economy_add_static_tax_collection_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_tax_collection_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_tax_collection_bonus_10 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_tax_collection_bonus_bp value = 10 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_tax_collection_penalty_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_tax_collection_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_tax_collection_penalty_10 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_tax_collection_bonus_bp value = -10 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_trade_income_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_trade_income_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_trade_income_bonus_10 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_trade_income_bonus_bp value = 10 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_trade_income_penalty_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_trade_income_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_trade_income_penalty_10 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_trade_income_bonus_bp value = -10 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_civilian_factory_income_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_civilian_factory_income_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_civilian_factory_income_bonus_10 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_civilian_factory_income_bonus_bp value = 10 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_military_industry_income_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_military_industry_income_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_military_industry_income_bonus_10 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_military_industry_income_bonus_bp value = 10 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_resource_rent_income_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_resource_rent_income_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_building_income_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_building_income_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
+ADISCORD_economy_add_static_tax_collection_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_tax_collection_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_tax_collection_bonus_10 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_tax_collection_bonus_bp
+		value = 10
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_tax_collection_penalty_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_tax_collection_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_tax_collection_penalty_10 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_tax_collection_bonus_bp
+		value = -10
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_trade_income_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_trade_income_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_trade_income_bonus_10 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_trade_income_bonus_bp
+		value = 10
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_trade_income_penalty_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_trade_income_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_trade_income_penalty_10 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_trade_income_bonus_bp
+		value = -10
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_civilian_factory_income_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_civilian_factory_income_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_civilian_factory_income_bonus_10 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_civilian_factory_income_bonus_bp
+		value = 10
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_military_industry_income_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_military_industry_income_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_military_industry_income_bonus_10 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_military_industry_income_bonus_bp
+		value = 10
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_resource_rent_income_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_resource_rent_income_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_building_income_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_building_income_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
 
-ADISCORD_economy_add_static_army_expense_reduction_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_army_expense_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_army_expense_reduction_10 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_army_expense_bonus_bp value = -10 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_army_expense_increase_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_army_expense_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_army_expense_increase_10 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_army_expense_bonus_bp value = 10 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_construction_expense_reduction_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_construction_expense_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_construction_expense_increase_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_construction_expense_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_social_expense_reduction_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_social_expense_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_research_expense_increase_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_research_expense_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_admin_expense_increase_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_admin_expense_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
+ADISCORD_economy_add_static_army_expense_reduction_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_army_expense_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_army_expense_reduction_10 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_army_expense_bonus_bp
+		value = -10
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_army_expense_increase_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_army_expense_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_army_expense_increase_10 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_army_expense_bonus_bp
+		value = 10
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_construction_expense_reduction_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_construction_expense_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_construction_expense_increase_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_construction_expense_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_social_expense_reduction_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_social_expense_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_research_expense_increase_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_research_expense_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_admin_expense_increase_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_admin_expense_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
 
-ADISCORD_economy_add_static_inflation_pressure_reduction_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_inflation_pressure_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_inflation_pressure_increase_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_inflation_pressure_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_overload_resistance_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_overload_resistance_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_overload_resistance_10 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_overload_resistance_bonus_bp value = 10 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_war_fatigue_gain_reduction_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_war_fatigue_gain_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_economy_add_static_demobilization_pressure_reduction_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_economy_static_demobilization_pressure_gain_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
+ADISCORD_economy_add_static_inflation_pressure_reduction_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_inflation_pressure_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_inflation_pressure_increase_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_inflation_pressure_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_overload_resistance_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_overload_resistance_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_overload_resistance_10 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_overload_resistance_bonus_bp
+		value = 10
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_war_fatigue_gain_reduction_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_war_fatigue_gain_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_economy_add_static_demobilization_pressure_reduction_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_economy_static_demobilization_pressure_gain_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
 
-ADISCORD_country_development_add_static_global_growth_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_global_growth_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_economic_growth_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_economic_growth_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_economic_growth_bonus_10 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_economic_growth_bonus_bp value = 10 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_state_growth_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_state_growth_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_army_growth_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_army_growth_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_society_growth_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_society_growth_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_social_system_growth_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_social_system_growth_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_cultural_growth_bonus_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_cultural_growth_bonus_bp value = 5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_global_growth_penalty_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_global_growth_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_economic_growth_penalty_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_economic_growth_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_state_growth_penalty_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_state_growth_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_army_growth_penalty_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_army_growth_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_society_growth_penalty_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_society_growth_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_social_system_growth_penalty_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_social_system_growth_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
-ADISCORD_country_development_add_static_cultural_growth_penalty_5 = { ADISCORD_economy_initialize_modifier_variables = yes add_to_variable = { var = ADISCORD_country_development_static_cultural_growth_bonus_bp value = -5 } ADISCORD_economy_refresh_after_modifier_change = yes }
+ADISCORD_country_development_add_static_global_growth_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_global_growth_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_economic_growth_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_economic_growth_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_economic_growth_bonus_10 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_economic_growth_bonus_bp
+		value = 10
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_state_growth_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_state_growth_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_army_growth_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_army_growth_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_society_growth_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_society_growth_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_social_system_growth_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_social_system_growth_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_cultural_growth_bonus_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_cultural_growth_bonus_bp
+		value = 5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_global_growth_penalty_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_global_growth_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_economic_growth_penalty_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_economic_growth_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_state_growth_penalty_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_state_growth_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_army_growth_penalty_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_army_growth_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_society_growth_penalty_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_society_growth_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_social_system_growth_penalty_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_social_system_growth_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
+ADISCORD_country_development_add_static_cultural_growth_penalty_5 = {
+	ADISCORD_economy_initialize_modifier_variables = yes
+	add_to_variable = {
+		var = ADISCORD_country_development_static_cultural_growth_bonus_bp
+		value = -5
+	}
+	ADISCORD_economy_refresh_after_modifier_change = yes
+}
