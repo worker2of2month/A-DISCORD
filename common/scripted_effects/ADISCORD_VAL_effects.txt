@@ -2212,16 +2212,9 @@ VAL_cw_complete_arms_contract = {
 			set_variable = { var = STP_ps_val_receipt_stage value = 1 }
 			activate_mission = STP_ps_val_departure
 
-			if = {
-				limit = { has_country_flag = { flag = VAL_cw_arms_offer_pending value > 1 } }
-
-				set_country_flag = { flag = VAL_cw_arms_contract_fulfilled value = 2 }
-			}
-			else = { set_country_flag = VAL_cw_arms_contract_fulfilled }
-			army_experience = 5
-			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
-			VAL_change_contract_authority = yes
-			log = "[VAL_CONTRACT] contract settled: rifles=[?VAL_contract_rifle_cost] donor manpower=[?VAL_cw_contract_manpower_debit]"
+			# Acceptance escrows the package. Fulfilment and seller rewards are
+			# granted only when the convoy actually resolves.
+			log = "[VAL_CONTRACT] contract accepted and escrowed: rifles=[?VAL_contract_rifle_cost] donor manpower=[?VAL_cw_contract_manpower_debit]"
 		}
 		else = {
 			clr_country_flag = VAL_contract_rifles_paid
@@ -2233,7 +2226,12 @@ VAL_cw_complete_arms_contract = {
 		}
 	}
 	clr_country_flag = VAL_cw_arms_offer_pending
-	country_event = { id = ADISCORD_STP_cw.51 }
+	# A successful acceptance is still in transit. Failed settlement attempts
+	# have no receipt and retain the existing refusal/cancellation notice.
+	if = {
+		limit = { NOT = { has_variable = STP_ps_val_receipt_rifles } }
+		country_event = { id = ADISCORD_STP_cw.51 }
+	}
 }
 
 # COUNTRY; FROM is the paid state. The country receipt blocks all other targets.
