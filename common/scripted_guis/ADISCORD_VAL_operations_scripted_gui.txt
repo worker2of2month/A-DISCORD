@@ -78,149 +78,2074 @@ scripted_gui = {
    VAL_ops_206_controller_visible = { always = yes }
    VAL_ops_207_controller_visible = { always = yes }
    VAL_ops_43_border_visible = { 43 = { controller = { tag = VAL } } }
-   VAL_ops_43_contested_visible = { 43 = { controller = { tag = VAL OR = { NOT = { controls_province = 95 } NOT = { controls_province = 101 } NOT = { controls_province = 16432 } NOT = { controls_province = 16450 } NOT = { controls_province = 16455 } } } } }
+   VAL_ops_43_contested_visible = {
+   	43 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 95
+   				}
+   				NOT = {
+   					controls_province = 101
+   				}
+   				NOT = {
+   					controls_province = 16432
+   				}
+   				NOT = {
+   					controls_province = 16450
+   				}
+   				NOT = {
+   					controls_province = 16455
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_44_border_visible = { 44 = { controller = { tag = VAL } } }
    VAL_ops_44_contested_visible = { 44 = { controller = { tag = VAL OR = { NOT = { controls_province = 16433 } NOT = { controls_province = 16448 } } } } }
    VAL_ops_45_border_visible = { 45 = { controller = { tag = VAL } } }
-   VAL_ops_45_contested_visible = { 45 = { controller = { tag = VAL OR = { NOT = { controls_province = 111 } NOT = { controls_province = 6675 } NOT = { controls_province = 16458 } NOT = { controls_province = 16459 } NOT = { controls_province = 16461 } NOT = { controls_province = 16529 } } } } }
+   VAL_ops_45_contested_visible = {
+   	45 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 111
+   				}
+   				NOT = {
+   					controls_province = 6675
+   				}
+   				NOT = {
+   					controls_province = 16458
+   				}
+   				NOT = {
+   					controls_province = 16459
+   				}
+   				NOT = {
+   					controls_province = 16461
+   				}
+   				NOT = {
+   					controls_province = 16529
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_88_border_visible = { 88 = { controller = { tag = VAL } } }
    VAL_ops_88_contested_visible = { 88 = { controller = { tag = VAL OR = { NOT = { controls_province = 110 } NOT = { controls_province = 16429 } } } } }
    VAL_ops_58_border_visible = { 58 = { controller = { tag = VAL } } }
-   VAL_ops_58_contested_visible = { 58 = { controller = { tag = VAL OR = { NOT = { controls_province = 10212 } NOT = { controls_province = 16310 } NOT = { controls_province = 16322 } NOT = { controls_province = 16332 } NOT = { controls_province = 16347 } NOT = { controls_province = 16352 } NOT = { controls_province = 16360 } } } } }
+   VAL_ops_58_contested_visible = {
+   	58 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 10212
+   				}
+   				NOT = {
+   					controls_province = 16310
+   				}
+   				NOT = {
+   					controls_province = 16322
+   				}
+   				NOT = {
+   					controls_province = 16332
+   				}
+   				NOT = {
+   					controls_province = 16347
+   				}
+   				NOT = {
+   					controls_province = 16352
+   				}
+   				NOT = {
+   					controls_province = 16360
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_59_border_visible = { 59 = { controller = { tag = VAL } } }
-   VAL_ops_59_contested_visible = { 59 = { controller = { tag = VAL OR = { NOT = { controls_province = 3595 } NOT = { controls_province = 6206 } NOT = { controls_province = 6885 } NOT = { controls_province = 10404 } } } } }
+   VAL_ops_59_contested_visible = {
+   	59 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 3595
+   				}
+   				NOT = {
+   					controls_province = 6206
+   				}
+   				NOT = {
+   					controls_province = 6885
+   				}
+   				NOT = {
+   					controls_province = 10404
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_60_border_visible = { 60 = { controller = { tag = VAL } } }
-   VAL_ops_60_contested_visible = { 60 = { controller = { tag = VAL OR = { NOT = { controls_province = 8171 } NOT = { controls_province = 8273 } NOT = { controls_province = 12326 } NOT = { controls_province = 16299 } NOT = { controls_province = 16340 } NOT = { controls_province = 16341 } } } } }
+   VAL_ops_60_contested_visible = {
+   	60 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 8171
+   				}
+   				NOT = {
+   					controls_province = 8273
+   				}
+   				NOT = {
+   					controls_province = 12326
+   				}
+   				NOT = {
+   					controls_province = 16299
+   				}
+   				NOT = {
+   					controls_province = 16340
+   				}
+   				NOT = {
+   					controls_province = 16341
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_61_border_visible = { 61 = { controller = { tag = VAL } } }
-   VAL_ops_61_contested_visible = { 61 = { controller = { tag = VAL OR = { NOT = { controls_province = 1480 } NOT = { controls_province = 8938 } NOT = { controls_province = 11332 } NOT = { controls_province = 16316 } } } } }
+   VAL_ops_61_contested_visible = {
+   	61 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 1480
+   				}
+   				NOT = {
+   					controls_province = 8938
+   				}
+   				NOT = {
+   					controls_province = 11332
+   				}
+   				NOT = {
+   					controls_province = 16316
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_62_border_visible = { 62 = { controller = { tag = VAL } } }
-   VAL_ops_62_contested_visible = { 62 = { controller = { tag = VAL OR = { NOT = { controls_province = 91 } NOT = { controls_province = 104 } NOT = { controls_province = 1394 } NOT = { controls_province = 5364 } NOT = { controls_province = 8327 } NOT = { controls_province = 16339 } } } } }
+   VAL_ops_62_contested_visible = {
+   	62 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 91
+   				}
+   				NOT = {
+   					controls_province = 104
+   				}
+   				NOT = {
+   					controls_province = 1394
+   				}
+   				NOT = {
+   					controls_province = 5364
+   				}
+   				NOT = {
+   					controls_province = 8327
+   				}
+   				NOT = {
+   					controls_province = 16339
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_63_border_visible = { 63 = { controller = { tag = VAL } } }
    VAL_ops_63_contested_visible = { 63 = { controller = { tag = VAL OR = { NOT = { controls_province = 128 } NOT = { controls_province = 135 } NOT = { controls_province = 5606 } } } } }
    VAL_ops_64_border_visible = { 64 = { controller = { tag = VAL } } }
-   VAL_ops_64_contested_visible = { 64 = { controller = { tag = VAL OR = { NOT = { controls_province = 1493 } NOT = { controls_province = 5898 } NOT = { controls_province = 5996 } NOT = { controls_province = 16319 } NOT = { controls_province = 16326 } NOT = { controls_province = 16465 } NOT = { controls_province = 16474 } NOT = { controls_province = 16499 } } } } }
+   VAL_ops_64_contested_visible = {
+   	64 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 1493
+   				}
+   				NOT = {
+   					controls_province = 5898
+   				}
+   				NOT = {
+   					controls_province = 5996
+   				}
+   				NOT = {
+   					controls_province = 16319
+   				}
+   				NOT = {
+   					controls_province = 16326
+   				}
+   				NOT = {
+   					controls_province = 16465
+   				}
+   				NOT = {
+   					controls_province = 16474
+   				}
+   				NOT = {
+   					controls_province = 16499
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_65_border_visible = { 65 = { controller = { tag = VAL } } }
-   VAL_ops_65_contested_visible = { 65 = { controller = { tag = VAL OR = { NOT = { controls_province = 6423 } NOT = { controls_province = 6440 } NOT = { controls_province = 16305 } NOT = { controls_province = 16328 } NOT = { controls_province = 16337 } NOT = { controls_province = 16338 } } } } }
+   VAL_ops_65_contested_visible = {
+   	65 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 6423
+   				}
+   				NOT = {
+   					controls_province = 6440
+   				}
+   				NOT = {
+   					controls_province = 16305
+   				}
+   				NOT = {
+   					controls_province = 16328
+   				}
+   				NOT = {
+   					controls_province = 16337
+   				}
+   				NOT = {
+   					controls_province = 16338
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_24_border_visible = { 24 = { controller = { tag = VAL } } }
-   VAL_ops_24_contested_visible = { 24 = { controller = { tag = VAL OR = { NOT = { controls_province = 3790 } NOT = { controls_province = 4214 } NOT = { controls_province = 4356 } NOT = { controls_province = 9126 } NOT = { controls_province = 10360 } NOT = { controls_province = 10455 } NOT = { controls_province = 10598 } NOT = { controls_province = 10691 } } } } }
+   VAL_ops_24_contested_visible = {
+   	24 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 3790
+   				}
+   				NOT = {
+   					controls_province = 4214
+   				}
+   				NOT = {
+   					controls_province = 4356
+   				}
+   				NOT = {
+   					controls_province = 9126
+   				}
+   				NOT = {
+   					controls_province = 10360
+   				}
+   				NOT = {
+   					controls_province = 10455
+   				}
+   				NOT = {
+   					controls_province = 10598
+   				}
+   				NOT = {
+   					controls_province = 10691
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_42_border_visible = { 42 = { controller = { tag = VAL } } }
-   VAL_ops_42_contested_visible = { 42 = { controller = { tag = VAL OR = { NOT = { controls_province = 125 } NOT = { controls_province = 16431 } NOT = { controls_province = 16436 } NOT = { controls_province = 16437 } NOT = { controls_province = 16438 } } } } }
+   VAL_ops_42_contested_visible = {
+   	42 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 125
+   				}
+   				NOT = {
+   					controls_province = 16431
+   				}
+   				NOT = {
+   					controls_province = 16436
+   				}
+   				NOT = {
+   					controls_province = 16437
+   				}
+   				NOT = {
+   					controls_province = 16438
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_48_border_visible = { 48 = { controller = { tag = VAL } } }
-   VAL_ops_48_contested_visible = { 48 = { controller = { tag = VAL OR = { NOT = { controls_province = 16514 } NOT = { controls_province = 16515 } NOT = { controls_province = 16519 } NOT = { controls_province = 16521 } NOT = { controls_province = 16530 } NOT = { controls_province = 16535 } } } } }
+   VAL_ops_48_contested_visible = {
+   	48 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 16514
+   				}
+   				NOT = {
+   					controls_province = 16515
+   				}
+   				NOT = {
+   					controls_province = 16519
+   				}
+   				NOT = {
+   					controls_province = 16521
+   				}
+   				NOT = {
+   					controls_province = 16530
+   				}
+   				NOT = {
+   					controls_province = 16535
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_54_border_visible = { 54 = { controller = { tag = VAL } } }
-   VAL_ops_54_contested_visible = { 54 = { controller = { tag = VAL OR = { NOT = { controls_province = 728 } NOT = { controls_province = 4369 } NOT = { controls_province = 4827 } NOT = { controls_province = 16296 } NOT = { controls_province = 16297 } NOT = { controls_province = 16298 } NOT = { controls_province = 16478 } NOT = { controls_province = 16501 } NOT = { controls_province = 16510 } NOT = { controls_province = 16555 } NOT = { controls_province = 16653 } } } } }
+   VAL_ops_54_contested_visible = {
+   	54 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 728
+   				}
+   				NOT = {
+   					controls_province = 4369
+   				}
+   				NOT = {
+   					controls_province = 4827
+   				}
+   				NOT = {
+   					controls_province = 16296
+   				}
+   				NOT = {
+   					controls_province = 16297
+   				}
+   				NOT = {
+   					controls_province = 16298
+   				}
+   				NOT = {
+   					controls_province = 16478
+   				}
+   				NOT = {
+   					controls_province = 16501
+   				}
+   				NOT = {
+   					controls_province = 16510
+   				}
+   				NOT = {
+   					controls_province = 16555
+   				}
+   				NOT = {
+   					controls_province = 16653
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_55_border_visible = { 55 = { controller = { tag = VAL } } }
    VAL_ops_55_contested_visible = { 55 = { controller = { tag = VAL OR = { NOT = { controls_province = 114 } NOT = { controls_province = 9617 } NOT = { controls_province = 16435 } } } } }
    VAL_ops_56_border_visible = { 56 = { controller = { tag = VAL } } }
-   VAL_ops_56_contested_visible = { 56 = { controller = { tag = VAL OR = { NOT = { controls_province = 1142 } NOT = { controls_province = 4712 } NOT = { controls_province = 6369 } NOT = { controls_province = 6670 } NOT = { controls_province = 9333 } NOT = { controls_province = 11211 } NOT = { controls_province = 11646 } NOT = { controls_province = 16472 } NOT = { controls_province = 16645 } } } } }
+   VAL_ops_56_contested_visible = {
+   	56 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 1142
+   				}
+   				NOT = {
+   					controls_province = 4712
+   				}
+   				NOT = {
+   					controls_province = 6369
+   				}
+   				NOT = {
+   					controls_province = 6670
+   				}
+   				NOT = {
+   					controls_province = 9333
+   				}
+   				NOT = {
+   					controls_province = 11211
+   				}
+   				NOT = {
+   					controls_province = 11646
+   				}
+   				NOT = {
+   					controls_province = 16472
+   				}
+   				NOT = {
+   					controls_province = 16645
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_57_border_visible = { 57 = { controller = { tag = VAL } } }
-   VAL_ops_57_contested_visible = { 57 = { controller = { tag = VAL OR = { NOT = { controls_province = 556 } NOT = { controls_province = 779 } NOT = { controls_province = 2965 } NOT = { controls_province = 6519 } NOT = { controls_province = 10917 } NOT = { controls_province = 10985 } NOT = { controls_province = 11394 } NOT = { controls_province = 16477 } NOT = { controls_province = 16493 } NOT = { controls_province = 16511 } } } } }
+   VAL_ops_57_contested_visible = {
+   	57 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 556
+   				}
+   				NOT = {
+   					controls_province = 779
+   				}
+   				NOT = {
+   					controls_province = 2965
+   				}
+   				NOT = {
+   					controls_province = 6519
+   				}
+   				NOT = {
+   					controls_province = 10917
+   				}
+   				NOT = {
+   					controls_province = 10985
+   				}
+   				NOT = {
+   					controls_province = 11394
+   				}
+   				NOT = {
+   					controls_province = 16477
+   				}
+   				NOT = {
+   					controls_province = 16493
+   				}
+   				NOT = {
+   					controls_province = 16511
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_1_border_visible = { 1 = { controller = { tag = VAL } } }
-   VAL_ops_1_contested_visible = { 1 = { controller = { tag = VAL OR = { NOT = { controls_province = 43 } NOT = { controls_province = 44 } NOT = { controls_province = 55 } NOT = { controls_province = 154 } NOT = { controls_province = 16344 } NOT = { controls_province = 16350 } NOT = { controls_province = 16382 } NOT = { controls_province = 16383 } NOT = { controls_province = 16440 } NOT = { controls_province = 16460 } } } } }
+   VAL_ops_1_contested_visible = {
+   	1 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 43
+   				}
+   				NOT = {
+   					controls_province = 44
+   				}
+   				NOT = {
+   					controls_province = 55
+   				}
+   				NOT = {
+   					controls_province = 154
+   				}
+   				NOT = {
+   					controls_province = 16344
+   				}
+   				NOT = {
+   					controls_province = 16350
+   				}
+   				NOT = {
+   					controls_province = 16382
+   				}
+   				NOT = {
+   					controls_province = 16383
+   				}
+   				NOT = {
+   					controls_province = 16440
+   				}
+   				NOT = {
+   					controls_province = 16460
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_2_border_visible = { 2 = { controller = { tag = VAL } } }
-   VAL_ops_2_contested_visible = { 2 = { controller = { tag = VAL OR = { NOT = { controls_province = 1 } NOT = { controls_province = 10 } NOT = { controls_province = 117 } NOT = { controls_province = 119 } NOT = { controls_province = 134 } NOT = { controls_province = 16445 } NOT = { controls_province = 16539 } NOT = { controls_province = 16540 } NOT = { controls_province = 16541 } NOT = { controls_province = 16547 } NOT = { controls_province = 16553 } } } } }
+   VAL_ops_2_contested_visible = {
+   	2 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 1
+   				}
+   				NOT = {
+   					controls_province = 10
+   				}
+   				NOT = {
+   					controls_province = 117
+   				}
+   				NOT = {
+   					controls_province = 119
+   				}
+   				NOT = {
+   					controls_province = 134
+   				}
+   				NOT = {
+   					controls_province = 16445
+   				}
+   				NOT = {
+   					controls_province = 16539
+   				}
+   				NOT = {
+   					controls_province = 16540
+   				}
+   				NOT = {
+   					controls_province = 16541
+   				}
+   				NOT = {
+   					controls_province = 16547
+   				}
+   				NOT = {
+   					controls_province = 16553
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_3_border_visible = { 3 = { controller = { tag = VAL } } }
-   VAL_ops_3_contested_visible = { 3 = { controller = { tag = VAL OR = { NOT = { controls_province = 45 } NOT = { controls_province = 63 } NOT = { controls_province = 93 } NOT = { controls_province = 148 } NOT = { controls_province = 149 } NOT = { controls_province = 150 } NOT = { controls_province = 10217 } NOT = { controls_province = 16457 } NOT = { controls_province = 16462 } NOT = { controls_province = 16550 } } } } }
+   VAL_ops_3_contested_visible = {
+   	3 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 45
+   				}
+   				NOT = {
+   					controls_province = 63
+   				}
+   				NOT = {
+   					controls_province = 93
+   				}
+   				NOT = {
+   					controls_province = 148
+   				}
+   				NOT = {
+   					controls_province = 149
+   				}
+   				NOT = {
+   					controls_province = 150
+   				}
+   				NOT = {
+   					controls_province = 10217
+   				}
+   				NOT = {
+   					controls_province = 16457
+   				}
+   				NOT = {
+   					controls_province = 16462
+   				}
+   				NOT = {
+   					controls_province = 16550
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_28_border_visible = { 28 = { controller = { tag = VAL } } }
-   VAL_ops_28_contested_visible = { 28 = { controller = { tag = VAL OR = { NOT = { controls_province = 145 } NOT = { controls_province = 16351 } NOT = { controls_province = 16366 } NOT = { controls_province = 16368 } NOT = { controls_province = 16374 } NOT = { controls_province = 16377 } NOT = { controls_province = 16386 } } } } }
+   VAL_ops_28_contested_visible = {
+   	28 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 145
+   				}
+   				NOT = {
+   					controls_province = 16351
+   				}
+   				NOT = {
+   					controls_province = 16366
+   				}
+   				NOT = {
+   					controls_province = 16368
+   				}
+   				NOT = {
+   					controls_province = 16374
+   				}
+   				NOT = {
+   					controls_province = 16377
+   				}
+   				NOT = {
+   					controls_province = 16386
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_29_border_visible = { 29 = { controller = { tag = VAL } } }
    VAL_ops_29_contested_visible = { 29 = { controller = { tag = VAL OR = { NOT = { controls_province = 16345 } } } } }
    VAL_ops_46_border_visible = { 46 = { controller = { tag = VAL } } }
-   VAL_ops_46_contested_visible = { 46 = { controller = { tag = VAL OR = { NOT = { controls_province = 98 } NOT = { controls_province = 100 } NOT = { controls_province = 153 } NOT = { controls_province = 3250 } NOT = { controls_province = 9376 } NOT = { controls_province = 10254 } NOT = { controls_province = 16349 } NOT = { controls_province = 16456 } } } } }
+   VAL_ops_46_contested_visible = {
+   	46 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 98
+   				}
+   				NOT = {
+   					controls_province = 100
+   				}
+   				NOT = {
+   					controls_province = 153
+   				}
+   				NOT = {
+   					controls_province = 3250
+   				}
+   				NOT = {
+   					controls_province = 9376
+   				}
+   				NOT = {
+   					controls_province = 10254
+   				}
+   				NOT = {
+   					controls_province = 16349
+   				}
+   				NOT = {
+   					controls_province = 16456
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_53_border_visible = { 53 = { controller = { tag = VAL } } }
-   VAL_ops_53_contested_visible = { 53 = { controller = { tag = VAL OR = { NOT = { controls_province = 29 } NOT = { controls_province = 60 } NOT = { controls_province = 68 } NOT = { controls_province = 70 } NOT = { controls_province = 16364 } NOT = { controls_province = 16434 } } } } }
+   VAL_ops_53_contested_visible = {
+   	53 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 29
+   				}
+   				NOT = {
+   					controls_province = 60
+   				}
+   				NOT = {
+   					controls_province = 68
+   				}
+   				NOT = {
+   					controls_province = 70
+   				}
+   				NOT = {
+   					controls_province = 16364
+   				}
+   				NOT = {
+   					controls_province = 16434
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_10_border_visible = { 10 = { controller = { tag = VAL } } }
-   VAL_ops_10_contested_visible = { 10 = { controller = { tag = VAL OR = { NOT = { controls_province = 12 } NOT = { controls_province = 22 } NOT = { controls_province = 71 } NOT = { controls_province = 78 } NOT = { controls_province = 16362 } NOT = { controls_province = 16375 } } } } }
+   VAL_ops_10_contested_visible = {
+   	10 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 12
+   				}
+   				NOT = {
+   					controls_province = 22
+   				}
+   				NOT = {
+   					controls_province = 71
+   				}
+   				NOT = {
+   					controls_province = 78
+   				}
+   				NOT = {
+   					controls_province = 16362
+   				}
+   				NOT = {
+   					controls_province = 16375
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_11_border_visible = { 11 = { controller = { tag = VAL } } }
-   VAL_ops_11_contested_visible = { 11 = { controller = { tag = VAL OR = { NOT = { controls_province = 13 } NOT = { controls_province = 23 } NOT = { controls_province = 62 } NOT = { controls_province = 113 } NOT = { controls_province = 16356 } } } } }
+   VAL_ops_11_contested_visible = {
+   	11 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 13
+   				}
+   				NOT = {
+   					controls_province = 23
+   				}
+   				NOT = {
+   					controls_province = 62
+   				}
+   				NOT = {
+   					controls_province = 113
+   				}
+   				NOT = {
+   					controls_province = 16356
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_12_border_visible = { 12 = { controller = { tag = VAL } } }
-   VAL_ops_12_contested_visible = { 12 = { controller = { tag = VAL OR = { NOT = { controls_province = 80 } NOT = { controls_province = 121 } NOT = { controls_province = 122 } NOT = { controls_province = 141 } NOT = { controls_province = 7986 } NOT = { controls_province = 11467 } NOT = { controls_province = 16353 } NOT = { controls_province = 16357 } NOT = { controls_province = 16380 } NOT = { controls_province = 16644 } NOT = { controls_province = 16647 } } } } }
+   VAL_ops_12_contested_visible = {
+   	12 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 80
+   				}
+   				NOT = {
+   					controls_province = 121
+   				}
+   				NOT = {
+   					controls_province = 122
+   				}
+   				NOT = {
+   					controls_province = 141
+   				}
+   				NOT = {
+   					controls_province = 7986
+   				}
+   				NOT = {
+   					controls_province = 11467
+   				}
+   				NOT = {
+   					controls_province = 16353
+   				}
+   				NOT = {
+   					controls_province = 16357
+   				}
+   				NOT = {
+   					controls_province = 16380
+   				}
+   				NOT = {
+   					controls_province = 16644
+   				}
+   				NOT = {
+   					controls_province = 16647
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_13_border_visible = { 13 = { controller = { tag = VAL } } }
-   VAL_ops_13_contested_visible = { 13 = { controller = { tag = VAL OR = { NOT = { controls_province = 8 } NOT = { controls_province = 26 } NOT = { controls_province = 42 } NOT = { controls_province = 54 } NOT = { controls_province = 8357 } NOT = { controls_province = 9395 } NOT = { controls_province = 16343 } NOT = { controls_province = 16548 } NOT = { controls_province = 16652 } } } } }
+   VAL_ops_13_contested_visible = {
+   	13 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 8
+   				}
+   				NOT = {
+   					controls_province = 26
+   				}
+   				NOT = {
+   					controls_province = 42
+   				}
+   				NOT = {
+   					controls_province = 54
+   				}
+   				NOT = {
+   					controls_province = 8357
+   				}
+   				NOT = {
+   					controls_province = 9395
+   				}
+   				NOT = {
+   					controls_province = 16343
+   				}
+   				NOT = {
+   					controls_province = 16548
+   				}
+   				NOT = {
+   					controls_province = 16652
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_17_border_visible = { 17 = { controller = { tag = VAL } } }
-   VAL_ops_17_contested_visible = { 17 = { controller = { tag = VAL OR = { NOT = { controls_province = 32 } NOT = { controls_province = 34 } NOT = { controls_province = 41 } NOT = { controls_province = 47 } NOT = { controls_province = 74 } } } } }
+   VAL_ops_17_contested_visible = {
+   	17 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 32
+   				}
+   				NOT = {
+   					controls_province = 34
+   				}
+   				NOT = {
+   					controls_province = 41
+   				}
+   				NOT = {
+   					controls_province = 47
+   				}
+   				NOT = {
+   					controls_province = 74
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_18_border_visible = { 18 = { controller = { tag = VAL } } }
-   VAL_ops_18_contested_visible = { 18 = { controller = { tag = VAL OR = { NOT = { controls_province = 14 } NOT = { controls_province = 15 } NOT = { controls_province = 36 } NOT = { controls_province = 85 } NOT = { controls_province = 13029 } } } } }
+   VAL_ops_18_contested_visible = {
+   	18 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 14
+   				}
+   				NOT = {
+   					controls_province = 15
+   				}
+   				NOT = {
+   					controls_province = 36
+   				}
+   				NOT = {
+   					controls_province = 85
+   				}
+   				NOT = {
+   					controls_province = 13029
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_30_border_visible = { 30 = { controller = { tag = VAL } } }
-   VAL_ops_30_contested_visible = { 30 = { controller = { tag = VAL OR = { NOT = { controls_province = 12434 } NOT = { controls_province = 16346 } NOT = { controls_province = 16363 } NOT = { controls_province = 16369 } NOT = { controls_province = 16441 } NOT = { controls_province = 16442 } NOT = { controls_province = 16444 } } } } }
+   VAL_ops_30_contested_visible = {
+   	30 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 12434
+   				}
+   				NOT = {
+   					controls_province = 16346
+   				}
+   				NOT = {
+   					controls_province = 16363
+   				}
+   				NOT = {
+   					controls_province = 16369
+   				}
+   				NOT = {
+   					controls_province = 16441
+   				}
+   				NOT = {
+   					controls_province = 16442
+   				}
+   				NOT = {
+   					controls_province = 16444
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_4_border_visible = { 4 = { controller = { tag = VAL } } }
-   VAL_ops_4_contested_visible = { 4 = { controller = { tag = VAL OR = { NOT = { controls_province = 49 } NOT = { controls_province = 82 } NOT = { controls_province = 7111 } NOT = { controls_province = 16371 } NOT = { controls_province = 16470 } NOT = { controls_province = 16491 } NOT = { controls_province = 16496 } NOT = { controls_province = 16505 } } } } }
+   VAL_ops_4_contested_visible = {
+   	4 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 49
+   				}
+   				NOT = {
+   					controls_province = 82
+   				}
+   				NOT = {
+   					controls_province = 7111
+   				}
+   				NOT = {
+   					controls_province = 16371
+   				}
+   				NOT = {
+   					controls_province = 16470
+   				}
+   				NOT = {
+   					controls_province = 16491
+   				}
+   				NOT = {
+   					controls_province = 16496
+   				}
+   				NOT = {
+   					controls_province = 16505
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_5_border_visible = { 5 = { controller = { tag = VAL } } }
-   VAL_ops_5_contested_visible = { 5 = { controller = { tag = VAL OR = { NOT = { controls_province = 25 } NOT = { controls_province = 27 } NOT = { controls_province = 94 } NOT = { controls_province = 106 } NOT = { controls_province = 4220 } NOT = { controls_province = 5111 } NOT = { controls_province = 16430 } NOT = { controls_province = 16527 } NOT = { controls_province = 16543 } NOT = { controls_province = 16551 } } } } }
+   VAL_ops_5_contested_visible = {
+   	5 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 25
+   				}
+   				NOT = {
+   					controls_province = 27
+   				}
+   				NOT = {
+   					controls_province = 94
+   				}
+   				NOT = {
+   					controls_province = 106
+   				}
+   				NOT = {
+   					controls_province = 4220
+   				}
+   				NOT = {
+   					controls_province = 5111
+   				}
+   				NOT = {
+   					controls_province = 16430
+   				}
+   				NOT = {
+   					controls_province = 16527
+   				}
+   				NOT = {
+   					controls_province = 16543
+   				}
+   				NOT = {
+   					controls_province = 16551
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_6_border_visible = { 6 = { controller = { tag = VAL } } }
-   VAL_ops_6_contested_visible = { 6 = { controller = { tag = VAL OR = { NOT = { controls_province = 53 } NOT = { controls_province = 57 } NOT = { controls_province = 69 } NOT = { controls_province = 89 } NOT = { controls_province = 16650 } } } } }
+   VAL_ops_6_contested_visible = {
+   	6 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 53
+   				}
+   				NOT = {
+   					controls_province = 57
+   				}
+   				NOT = {
+   					controls_province = 69
+   				}
+   				NOT = {
+   					controls_province = 89
+   				}
+   				NOT = {
+   					controls_province = 16650
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_7_border_visible = { 7 = { controller = { tag = VAL } } }
-   VAL_ops_7_contested_visible = { 7 = { controller = { tag = VAL OR = { NOT = { controls_province = 66 } NOT = { controls_province = 72 } NOT = { controls_province = 87 } NOT = { controls_province = 90 } NOT = { controls_province = 116 } NOT = { controls_province = 129 } NOT = { controls_province = 4518 } NOT = { controls_province = 4687 } NOT = { controls_province = 16365 } NOT = { controls_province = 16554 } } } } }
+   VAL_ops_7_contested_visible = {
+   	7 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 66
+   				}
+   				NOT = {
+   					controls_province = 72
+   				}
+   				NOT = {
+   					controls_province = 87
+   				}
+   				NOT = {
+   					controls_province = 90
+   				}
+   				NOT = {
+   					controls_province = 116
+   				}
+   				NOT = {
+   					controls_province = 129
+   				}
+   				NOT = {
+   					controls_province = 4518
+   				}
+   				NOT = {
+   					controls_province = 4687
+   				}
+   				NOT = {
+   					controls_province = 16365
+   				}
+   				NOT = {
+   					controls_province = 16554
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_9_border_visible = { 9 = { controller = { tag = VAL } } }
-   VAL_ops_9_contested_visible = { 9 = { controller = { tag = VAL OR = { NOT = { controls_province = 5 } NOT = { controls_province = 19 } NOT = { controls_province = 20 } NOT = { controls_province = 65 } NOT = { controls_province = 115 } NOT = { controls_province = 11534 } NOT = { controls_province = 16447 } NOT = { controls_province = 16506 } NOT = { controls_province = 16549 } NOT = { controls_province = 16651 } } } } }
+   VAL_ops_9_contested_visible = {
+   	9 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 5
+   				}
+   				NOT = {
+   					controls_province = 19
+   				}
+   				NOT = {
+   					controls_province = 20
+   				}
+   				NOT = {
+   					controls_province = 65
+   				}
+   				NOT = {
+   					controls_province = 115
+   				}
+   				NOT = {
+   					controls_province = 11534
+   				}
+   				NOT = {
+   					controls_province = 16447
+   				}
+   				NOT = {
+   					controls_province = 16506
+   				}
+   				NOT = {
+   					controls_province = 16549
+   				}
+   				NOT = {
+   					controls_province = 16651
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_31_border_visible = { 31 = { controller = { tag = VAL } } }
-   VAL_ops_31_contested_visible = { 31 = { controller = { tag = VAL OR = { NOT = { controls_province = 5736 } NOT = { controls_province = 16354 } NOT = { controls_province = 16378 } NOT = { controls_province = 16452 } } } } }
+   VAL_ops_31_contested_visible = {
+   	31 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 5736
+   				}
+   				NOT = {
+   					controls_province = 16354
+   				}
+   				NOT = {
+   					controls_province = 16378
+   				}
+   				NOT = {
+   					controls_province = 16452
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_41_border_visible = { 41 = { controller = { tag = VAL } } }
-   VAL_ops_41_contested_visible = { 41 = { controller = { tag = VAL OR = { NOT = { controls_province = 16439 } NOT = { controls_province = 16443 } NOT = { controls_province = 16446 } NOT = { controls_province = 16449 } NOT = { controls_province = 16451 } } } } }
+   VAL_ops_41_contested_visible = {
+   	41 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 16439
+   				}
+   				NOT = {
+   					controls_province = 16443
+   				}
+   				NOT = {
+   					controls_province = 16446
+   				}
+   				NOT = {
+   					controls_province = 16449
+   				}
+   				NOT = {
+   					controls_province = 16451
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_14_border_visible = { 14 = { controller = { tag = VAL } } }
-   VAL_ops_14_contested_visible = { 14 = { controller = { tag = VAL OR = { NOT = { controls_province = 2 } NOT = { controls_province = 75 } NOT = { controls_province = 5421 } NOT = { controls_province = 8540 } NOT = { controls_province = 16359 } NOT = { controls_province = 16373 } NOT = { controls_province = 16381 } } } } }
+   VAL_ops_14_contested_visible = {
+   	14 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 2
+   				}
+   				NOT = {
+   					controls_province = 75
+   				}
+   				NOT = {
+   					controls_province = 5421
+   				}
+   				NOT = {
+   					controls_province = 8540
+   				}
+   				NOT = {
+   					controls_province = 16359
+   				}
+   				NOT = {
+   					controls_province = 16373
+   				}
+   				NOT = {
+   					controls_province = 16381
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_8_border_visible = { 8 = { controller = { tag = VAL } } }
-   VAL_ops_8_contested_visible = { 8 = { controller = { tag = VAL OR = { NOT = { controls_province = 9 } NOT = { controls_province = 17 } NOT = { controls_province = 38 } NOT = { controls_province = 56 } NOT = { controls_province = 16648 } } } } }
+   VAL_ops_8_contested_visible = {
+   	8 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 9
+   				}
+   				NOT = {
+   					controls_province = 17
+   				}
+   				NOT = {
+   					controls_province = 38
+   				}
+   				NOT = {
+   					controls_province = 56
+   				}
+   				NOT = {
+   					controls_province = 16648
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_15_border_visible = { 15 = { controller = { tag = VAL } } }
-   VAL_ops_15_contested_visible = { 15 = { controller = { tag = VAL OR = { NOT = { controls_province = 11 } NOT = { controls_province = 33 } NOT = { controls_province = 58 } NOT = { controls_province = 73 } NOT = { controls_province = 118 } NOT = { controls_province = 131 } NOT = { controls_province = 8979 } NOT = { controls_province = 9840 } NOT = { controls_province = 16552 } } } } }
+   VAL_ops_15_contested_visible = {
+   	15 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 11
+   				}
+   				NOT = {
+   					controls_province = 33
+   				}
+   				NOT = {
+   					controls_province = 58
+   				}
+   				NOT = {
+   					controls_province = 73
+   				}
+   				NOT = {
+   					controls_province = 118
+   				}
+   				NOT = {
+   					controls_province = 131
+   				}
+   				NOT = {
+   					controls_province = 8979
+   				}
+   				NOT = {
+   					controls_province = 9840
+   				}
+   				NOT = {
+   					controls_province = 16552
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_16_border_visible = { 16 = { controller = { tag = VAL } } }
-   VAL_ops_16_contested_visible = { 16 = { controller = { tag = VAL OR = { NOT = { controls_province = 28 } NOT = { controls_province = 124 } NOT = { controls_province = 127 } NOT = { controls_province = 144 } NOT = { controls_province = 7283 } NOT = { controls_province = 11496 } NOT = { controls_province = 16649 } } } } }
+   VAL_ops_16_contested_visible = {
+   	16 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 28
+   				}
+   				NOT = {
+   					controls_province = 124
+   				}
+   				NOT = {
+   					controls_province = 127
+   				}
+   				NOT = {
+   					controls_province = 144
+   				}
+   				NOT = {
+   					controls_province = 7283
+   				}
+   				NOT = {
+   					controls_province = 11496
+   				}
+   				NOT = {
+   					controls_province = 16649
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_19_border_visible = { 19 = { controller = { tag = VAL } } }
    VAL_ops_19_contested_visible = { 19 = { controller = { tag = VAL OR = { NOT = { controls_province = 4 } NOT = { controls_province = 48 } NOT = { controls_province = 83 } NOT = { controls_province = 108 } } } } }
    VAL_ops_20_border_visible = { 20 = { controller = { tag = VAL } } }
-   VAL_ops_20_contested_visible = { 20 = { controller = { tag = VAL OR = { NOT = { controls_province = 6 } NOT = { controls_province = 21 } NOT = { controls_province = 51 } NOT = { controls_province = 81 } NOT = { controls_province = 88 } NOT = { controls_province = 16372 } NOT = { controls_province = 16646 } } } } }
+   VAL_ops_20_contested_visible = {
+   	20 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 6
+   				}
+   				NOT = {
+   					controls_province = 21
+   				}
+   				NOT = {
+   					controls_province = 51
+   				}
+   				NOT = {
+   					controls_province = 81
+   				}
+   				NOT = {
+   					controls_province = 88
+   				}
+   				NOT = {
+   					controls_province = 16372
+   				}
+   				NOT = {
+   					controls_province = 16646
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_21_border_visible = { 21 = { controller = { tag = VAL } } }
-   VAL_ops_21_contested_visible = { 21 = { controller = { tag = VAL OR = { NOT = { controls_province = 37 } NOT = { controls_province = 39 } NOT = { controls_province = 67 } NOT = { controls_province = 84 } NOT = { controls_province = 16631 } } } } }
+   VAL_ops_21_contested_visible = {
+   	21 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 37
+   				}
+   				NOT = {
+   					controls_province = 39
+   				}
+   				NOT = {
+   					controls_province = 67
+   				}
+   				NOT = {
+   					controls_province = 84
+   				}
+   				NOT = {
+   					controls_province = 16631
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_22_border_visible = { 22 = { controller = { tag = VAL } } }
-   VAL_ops_22_contested_visible = { 22 = { controller = { tag = VAL OR = { NOT = { controls_province = 92 } NOT = { controls_province = 103 } NOT = { controls_province = 132 } NOT = { controls_province = 137 } NOT = { controls_province = 140 } } } } }
+   VAL_ops_22_contested_visible = {
+   	22 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 92
+   				}
+   				NOT = {
+   					controls_province = 103
+   				}
+   				NOT = {
+   					controls_province = 132
+   				}
+   				NOT = {
+   					controls_province = 137
+   				}
+   				NOT = {
+   					controls_province = 140
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_83_border_visible = { 83 = { controller = { tag = VAL } } }
-   VAL_ops_83_contested_visible = { 83 = { controller = { tag = VAL OR = { NOT = { controls_province = 7 } NOT = { controls_province = 30 } NOT = { controls_province = 61 } NOT = { controls_province = 64 } NOT = { controls_province = 133 } NOT = { controls_province = 4763 } NOT = { controls_province = 10184 } NOT = { controls_province = 16384 } NOT = { controls_province = 16468 } NOT = { controls_province = 16498 } } } } }
+   VAL_ops_83_contested_visible = {
+   	83 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 7
+   				}
+   				NOT = {
+   					controls_province = 30
+   				}
+   				NOT = {
+   					controls_province = 61
+   				}
+   				NOT = {
+   					controls_province = 64
+   				}
+   				NOT = {
+   					controls_province = 133
+   				}
+   				NOT = {
+   					controls_province = 4763
+   				}
+   				NOT = {
+   					controls_province = 10184
+   				}
+   				NOT = {
+   					controls_province = 16384
+   				}
+   				NOT = {
+   					controls_province = 16468
+   				}
+   				NOT = {
+   					controls_province = 16498
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_84_border_visible = { 84 = { controller = { tag = VAL } } }
-   VAL_ops_84_contested_visible = { 84 = { controller = { tag = VAL OR = { NOT = { controls_province = 4887 } NOT = { controls_province = 4925 } NOT = { controls_province = 9463 } NOT = { controls_province = 12721 } NOT = { controls_province = 16471 } NOT = { controls_province = 16495 } NOT = { controls_province = 16502 } NOT = { controls_province = 16503 } NOT = { controls_province = 16533 } } } } }
+   VAL_ops_84_contested_visible = {
+   	84 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 4887
+   				}
+   				NOT = {
+   					controls_province = 4925
+   				}
+   				NOT = {
+   					controls_province = 9463
+   				}
+   				NOT = {
+   					controls_province = 12721
+   				}
+   				NOT = {
+   					controls_province = 16471
+   				}
+   				NOT = {
+   					controls_province = 16495
+   				}
+   				NOT = {
+   					controls_province = 16502
+   				}
+   				NOT = {
+   					controls_province = 16503
+   				}
+   				NOT = {
+   					controls_province = 16533
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_85_border_visible = { 85 = { controller = { tag = VAL } } }
-   VAL_ops_85_contested_visible = { 85 = { controller = { tag = VAL OR = { NOT = { controls_province = 3 } NOT = { controls_province = 16 } NOT = { controls_province = 35 } NOT = { controls_province = 50 } NOT = { controls_province = 86 } NOT = { controls_province = 130 } NOT = { controls_province = 7157 } } } } }
+   VAL_ops_85_contested_visible = {
+   	85 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 3
+   				}
+   				NOT = {
+   					controls_province = 16
+   				}
+   				NOT = {
+   					controls_province = 35
+   				}
+   				NOT = {
+   					controls_province = 50
+   				}
+   				NOT = {
+   					controls_province = 86
+   				}
+   				NOT = {
+   					controls_province = 130
+   				}
+   				NOT = {
+   					controls_province = 7157
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_86_border_visible = { 86 = { controller = { tag = VAL } } }
-   VAL_ops_86_contested_visible = { 86 = { controller = { tag = VAL OR = { NOT = { controls_province = 18 } NOT = { controls_province = 24 } NOT = { controls_province = 31 } NOT = { controls_province = 52 } NOT = { controls_province = 76 } NOT = { controls_province = 79 } NOT = { controls_province = 97 } NOT = { controls_province = 102 } NOT = { controls_province = 105 } NOT = { controls_province = 107 } } } } }
+   VAL_ops_86_contested_visible = {
+   	86 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 18
+   				}
+   				NOT = {
+   					controls_province = 24
+   				}
+   				NOT = {
+   					controls_province = 31
+   				}
+   				NOT = {
+   					controls_province = 52
+   				}
+   				NOT = {
+   					controls_province = 76
+   				}
+   				NOT = {
+   					controls_province = 79
+   				}
+   				NOT = {
+   					controls_province = 97
+   				}
+   				NOT = {
+   					controls_province = 102
+   				}
+   				NOT = {
+   					controls_province = 105
+   				}
+   				NOT = {
+   					controls_province = 107
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_87_border_visible = { 87 = { controller = { tag = VAL } } }
-   VAL_ops_87_contested_visible = { 87 = { controller = { tag = VAL OR = { NOT = { controls_province = 40 } NOT = { controls_province = 46 } NOT = { controls_province = 77 } NOT = { controls_province = 139 } NOT = { controls_province = 143 } NOT = { controls_province = 710 } NOT = { controls_province = 4001 } NOT = { controls_province = 4608 } NOT = { controls_province = 6174 } NOT = { controls_province = 6471 } NOT = { controls_province = 7585 } NOT = { controls_province = 8895 } NOT = { controls_province = 11648 } } } } }
+   VAL_ops_87_contested_visible = {
+   	87 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 40
+   				}
+   				NOT = {
+   					controls_province = 46
+   				}
+   				NOT = {
+   					controls_province = 77
+   				}
+   				NOT = {
+   					controls_province = 139
+   				}
+   				NOT = {
+   					controls_province = 143
+   				}
+   				NOT = {
+   					controls_province = 710
+   				}
+   				NOT = {
+   					controls_province = 4001
+   				}
+   				NOT = {
+   					controls_province = 4608
+   				}
+   				NOT = {
+   					controls_province = 6174
+   				}
+   				NOT = {
+   					controls_province = 6471
+   				}
+   				NOT = {
+   					controls_province = 7585
+   				}
+   				NOT = {
+   					controls_province = 8895
+   				}
+   				NOT = {
+   					controls_province = 11648
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_303_border_visible = { 303 = { controller = { tag = VAL } } }
    VAL_ops_303_contested_visible = { 303 = { controller = { tag = VAL OR = { NOT = { controls_province = 3261 } } } } }
    VAL_ops_118_border_visible = { 118 = { controller = { tag = VAL } } }
    VAL_ops_118_contested_visible = { 118 = { controller = { tag = VAL OR = { NOT = { controls_province = 147 } } } } }
    VAL_ops_119_border_visible = { 119 = { controller = { tag = VAL } } }
-   VAL_ops_119_contested_visible = { 119 = { controller = { tag = VAL OR = { NOT = { controls_province = 59 } NOT = { controls_province = 96 } NOT = { controls_province = 16342 } NOT = { controls_province = 16348 } NOT = { controls_province = 16358 } } } } }
+   VAL_ops_119_contested_visible = {
+   	119 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 59
+   				}
+   				NOT = {
+   					controls_province = 96
+   				}
+   				NOT = {
+   					controls_province = 16342
+   				}
+   				NOT = {
+   					controls_province = 16348
+   				}
+   				NOT = {
+   					controls_province = 16358
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_168_border_visible = { 168 = { controller = { tag = VAL } } }
-   VAL_ops_168_contested_visible = { 168 = { controller = { tag = VAL OR = { NOT = { controls_province = 721 } NOT = { controls_province = 5388 } NOT = { controls_province = 11452 } NOT = { controls_province = 11567 } NOT = { controls_province = 11664 } NOT = { controls_province = 11667 } NOT = { controls_province = 16534 } } } } }
+   VAL_ops_168_contested_visible = {
+   	168 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 721
+   				}
+   				NOT = {
+   					controls_province = 5388
+   				}
+   				NOT = {
+   					controls_province = 11452
+   				}
+   				NOT = {
+   					controls_province = 11567
+   				}
+   				NOT = {
+   					controls_province = 11664
+   				}
+   				NOT = {
+   					controls_province = 11667
+   				}
+   				NOT = {
+   					controls_province = 16534
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_169_border_visible = { 169 = { controller = { tag = VAL } } }
-   VAL_ops_169_contested_visible = { 169 = { controller = { tag = VAL OR = { NOT = { controls_province = 973 } NOT = { controls_province = 2306 } NOT = { controls_province = 4707 } NOT = { controls_province = 5849 } NOT = { controls_province = 10693 } NOT = { controls_province = 11913 } NOT = { controls_province = 16464 } NOT = { controls_province = 16476 } } } } }
+   VAL_ops_169_contested_visible = {
+   	169 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 973
+   				}
+   				NOT = {
+   					controls_province = 2306
+   				}
+   				NOT = {
+   					controls_province = 4707
+   				}
+   				NOT = {
+   					controls_province = 5849
+   				}
+   				NOT = {
+   					controls_province = 10693
+   				}
+   				NOT = {
+   					controls_province = 11913
+   				}
+   				NOT = {
+   					controls_province = 16464
+   				}
+   				NOT = {
+   					controls_province = 16476
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_167_border_visible = { 167 = { controller = { tag = VAL } } }
-   VAL_ops_167_contested_visible = { 167 = { controller = { tag = VAL OR = { NOT = { controls_province = 3481 } NOT = { controls_province = 9757 } NOT = { controls_province = 10989 } NOT = { controls_province = 12523 } NOT = { controls_province = 16500 } } } } }
+   VAL_ops_167_contested_visible = {
+   	167 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 3481
+   				}
+   				NOT = {
+   					controls_province = 9757
+   				}
+   				NOT = {
+   					controls_province = 10989
+   				}
+   				NOT = {
+   					controls_province = 12523
+   				}
+   				NOT = {
+   					controls_province = 16500
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_170_border_visible = { 170 = { controller = { tag = VAL } } }
-   VAL_ops_170_contested_visible = { 170 = { controller = { tag = VAL OR = { NOT = { controls_province = 12878 } NOT = { controls_province = 16513 } NOT = { controls_province = 16520 } NOT = { controls_province = 16526 } } } } }
+   VAL_ops_170_contested_visible = {
+   	170 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 12878
+   				}
+   				NOT = {
+   					controls_province = 16513
+   				}
+   				NOT = {
+   					controls_province = 16520
+   				}
+   				NOT = {
+   					controls_province = 16526
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_171_border_visible = { 171 = { controller = { tag = VAL } } }
-   VAL_ops_171_contested_visible = { 171 = { controller = { tag = VAL OR = { NOT = { controls_province = 333 } NOT = { controls_province = 744 } NOT = { controls_province = 1907 } NOT = { controls_province = 5871 } NOT = { controls_province = 11642 } NOT = { controls_province = 12581 } NOT = { controls_province = 16336 } NOT = { controls_province = 16453 } NOT = { controls_province = 16454 } NOT = { controls_province = 16467 } NOT = { controls_province = 16469 } NOT = { controls_province = 16487 } NOT = { controls_province = 16494 } NOT = { controls_province = 16504 } NOT = { controls_province = 16507 } NOT = { controls_province = 16522 } NOT = { controls_province = 16537 } } } } }
+   VAL_ops_171_contested_visible = {
+   	171 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 333
+   				}
+   				NOT = {
+   					controls_province = 744
+   				}
+   				NOT = {
+   					controls_province = 1907
+   				}
+   				NOT = {
+   					controls_province = 5871
+   				}
+   				NOT = {
+   					controls_province = 11642
+   				}
+   				NOT = {
+   					controls_province = 12581
+   				}
+   				NOT = {
+   					controls_province = 16336
+   				}
+   				NOT = {
+   					controls_province = 16453
+   				}
+   				NOT = {
+   					controls_province = 16454
+   				}
+   				NOT = {
+   					controls_province = 16467
+   				}
+   				NOT = {
+   					controls_province = 16469
+   				}
+   				NOT = {
+   					controls_province = 16487
+   				}
+   				NOT = {
+   					controls_province = 16494
+   				}
+   				NOT = {
+   					controls_province = 16504
+   				}
+   				NOT = {
+   					controls_province = 16507
+   				}
+   				NOT = {
+   					controls_province = 16522
+   				}
+   				NOT = {
+   					controls_province = 16537
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_184_border_visible = { 184 = { controller = { tag = VAL } } }
-   VAL_ops_184_contested_visible = { 184 = { controller = { tag = VAL OR = { NOT = { controls_province = 5541 } NOT = { controls_province = 8003 } NOT = { controls_province = 8500 } NOT = { controls_province = 8632 } NOT = { controls_province = 12244 } NOT = { controls_province = 16463 } NOT = { controls_province = 16479 } NOT = { controls_province = 16481 } NOT = { controls_province = 16490 } NOT = { controls_province = 16509 } } } } }
+   VAL_ops_184_contested_visible = {
+   	184 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 5541
+   				}
+   				NOT = {
+   					controls_province = 8003
+   				}
+   				NOT = {
+   					controls_province = 8500
+   				}
+   				NOT = {
+   					controls_province = 8632
+   				}
+   				NOT = {
+   					controls_province = 12244
+   				}
+   				NOT = {
+   					controls_province = 16463
+   				}
+   				NOT = {
+   					controls_province = 16479
+   				}
+   				NOT = {
+   					controls_province = 16481
+   				}
+   				NOT = {
+   					controls_province = 16490
+   				}
+   				NOT = {
+   					controls_province = 16509
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_185_border_visible = { 185 = { controller = { tag = VAL } } }
-   VAL_ops_185_contested_visible = { 185 = { controller = { tag = VAL OR = { NOT = { controls_province = 372 } NOT = { controls_province = 3130 } NOT = { controls_province = 5344 } NOT = { controls_province = 10824 } } } } }
+   VAL_ops_185_contested_visible = {
+   	185 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 372
+   				}
+   				NOT = {
+   					controls_province = 3130
+   				}
+   				NOT = {
+   					controls_province = 5344
+   				}
+   				NOT = {
+   					controls_province = 10824
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_203_border_visible = { 203 = { controller = { tag = VAL } } }
-   VAL_ops_203_contested_visible = { 203 = { controller = { tag = VAL OR = { NOT = { controls_province = 3941 } NOT = { controls_province = 7409 } NOT = { controls_province = 8855 } NOT = { controls_province = 16466 } NOT = { controls_province = 16484 } NOT = { controls_province = 16536 } } } } }
+   VAL_ops_203_contested_visible = {
+   	203 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 3941
+   				}
+   				NOT = {
+   					controls_province = 7409
+   				}
+   				NOT = {
+   					controls_province = 8855
+   				}
+   				NOT = {
+   					controls_province = 16466
+   				}
+   				NOT = {
+   					controls_province = 16484
+   				}
+   				NOT = {
+   					controls_province = 16536
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_178_border_visible = { 178 = { controller = { tag = VAL } } }
-   VAL_ops_178_contested_visible = { 178 = { controller = { tag = VAL OR = { NOT = { controls_province = 6151 } NOT = { controls_province = 6377 } NOT = { controls_province = 8187 } NOT = { controls_province = 16475 } NOT = { controls_province = 16486 } NOT = { controls_province = 16516 } } } } }
+   VAL_ops_178_contested_visible = {
+   	178 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 6151
+   				}
+   				NOT = {
+   					controls_province = 6377
+   				}
+   				NOT = {
+   					controls_province = 8187
+   				}
+   				NOT = {
+   					controls_province = 16475
+   				}
+   				NOT = {
+   					controls_province = 16486
+   				}
+   				NOT = {
+   					controls_province = 16516
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_180_border_visible = { 180 = { controller = { tag = VAL } } }
-   VAL_ops_180_contested_visible = { 180 = { controller = { tag = VAL OR = { NOT = { controls_province = 1440 } NOT = { controls_province = 2399 } NOT = { controls_province = 2601 } NOT = { controls_province = 8670 } NOT = { controls_province = 9285 } NOT = { controls_province = 10515 } NOT = { controls_province = 16311 } } } } }
+   VAL_ops_180_contested_visible = {
+   	180 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 1440
+   				}
+   				NOT = {
+   					controls_province = 2399
+   				}
+   				NOT = {
+   					controls_province = 2601
+   				}
+   				NOT = {
+   					controls_province = 8670
+   				}
+   				NOT = {
+   					controls_province = 9285
+   				}
+   				NOT = {
+   					controls_province = 10515
+   				}
+   				NOT = {
+   					controls_province = 16311
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_181_border_visible = { 181 = { controller = { tag = VAL } } }
-   VAL_ops_181_contested_visible = { 181 = { controller = { tag = VAL OR = { NOT = { controls_province = 841 } NOT = { controls_province = 2144 } NOT = { controls_province = 2226 } NOT = { controls_province = 3956 } NOT = { controls_province = 4282 } NOT = { controls_province = 8263 } NOT = { controls_province = 8367 } NOT = { controls_province = 9439 } NOT = { controls_province = 10530 } NOT = { controls_province = 11398 } NOT = { controls_province = 16300 } NOT = { controls_province = 16325 } NOT = { controls_province = 16508 } NOT = { controls_province = 16518 } } } } }
+   VAL_ops_181_contested_visible = {
+   	181 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 841
+   				}
+   				NOT = {
+   					controls_province = 2144
+   				}
+   				NOT = {
+   					controls_province = 2226
+   				}
+   				NOT = {
+   					controls_province = 3956
+   				}
+   				NOT = {
+   					controls_province = 4282
+   				}
+   				NOT = {
+   					controls_province = 8263
+   				}
+   				NOT = {
+   					controls_province = 8367
+   				}
+   				NOT = {
+   					controls_province = 9439
+   				}
+   				NOT = {
+   					controls_province = 10530
+   				}
+   				NOT = {
+   					controls_province = 11398
+   				}
+   				NOT = {
+   					controls_province = 16300
+   				}
+   				NOT = {
+   					controls_province = 16325
+   				}
+   				NOT = {
+   					controls_province = 16508
+   				}
+   				NOT = {
+   					controls_province = 16518
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_182_border_visible = { 182 = { controller = { tag = VAL } } }
-   VAL_ops_182_contested_visible = { 182 = { controller = { tag = VAL OR = { NOT = { controls_province = 188 } NOT = { controls_province = 309 } NOT = { controls_province = 965 } NOT = { controls_province = 2241 } NOT = { controls_province = 2841 } NOT = { controls_province = 3001 } NOT = { controls_province = 10421 } NOT = { controls_province = 11403 } } } } }
+   VAL_ops_182_contested_visible = {
+   	182 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 188
+   				}
+   				NOT = {
+   					controls_province = 309
+   				}
+   				NOT = {
+   					controls_province = 965
+   				}
+   				NOT = {
+   					controls_province = 2241
+   				}
+   				NOT = {
+   					controls_province = 2841
+   				}
+   				NOT = {
+   					controls_province = 3001
+   				}
+   				NOT = {
+   					controls_province = 10421
+   				}
+   				NOT = {
+   					controls_province = 11403
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_183_border_visible = { 183 = { controller = { tag = VAL } } }
-   VAL_ops_183_contested_visible = { 183 = { controller = { tag = VAL OR = { NOT = { controls_province = 2617 } NOT = { controls_province = 6019 } NOT = { controls_province = 6333 } NOT = { controls_province = 8687 } NOT = { controls_province = 13028 } NOT = { controls_province = 16317 } } } } }
+   VAL_ops_183_contested_visible = {
+   	183 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 2617
+   				}
+   				NOT = {
+   					controls_province = 6019
+   				}
+   				NOT = {
+   					controls_province = 6333
+   				}
+   				NOT = {
+   					controls_province = 8687
+   				}
+   				NOT = {
+   					controls_province = 13028
+   				}
+   				NOT = {
+   					controls_province = 16317
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_193_border_visible = { 193 = { controller = { tag = VAL } } }
-   VAL_ops_193_contested_visible = { 193 = { controller = { tag = VAL OR = { NOT = { controls_province = 4336 } NOT = { controls_province = 4527 } NOT = { controls_province = 5195 } NOT = { controls_province = 6066 } NOT = { controls_province = 8664 } NOT = { controls_province = 16636 } } } } }
+   VAL_ops_193_contested_visible = {
+   	193 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 4336
+   				}
+   				NOT = {
+   					controls_province = 4527
+   				}
+   				NOT = {
+   					controls_province = 5195
+   				}
+   				NOT = {
+   					controls_province = 6066
+   				}
+   				NOT = {
+   					controls_province = 8664
+   				}
+   				NOT = {
+   					controls_province = 16636
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_206_border_visible = { 206 = { controller = { tag = VAL } } }
-   VAL_ops_206_contested_visible = { 206 = { controller = { tag = VAL OR = { NOT = { controls_province = 599 } NOT = { controls_province = 726 } NOT = { controls_province = 1272 } NOT = { controls_province = 6352 } NOT = { controls_province = 12814 } } } } }
+   VAL_ops_206_contested_visible = {
+   	206 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 599
+   				}
+   				NOT = {
+   					controls_province = 726
+   				}
+   				NOT = {
+   					controls_province = 1272
+   				}
+   				NOT = {
+   					controls_province = 6352
+   				}
+   				NOT = {
+   					controls_province = 12814
+   				}
+   			}
+   		}
+   	}
+   }
    VAL_ops_207_border_visible = { 207 = { controller = { tag = VAL } } }
-   VAL_ops_207_contested_visible = { 207 = { controller = { tag = VAL OR = { NOT = { controls_province = 1136 } NOT = { controls_province = 2895 } NOT = { controls_province = 5119 } NOT = { controls_province = 6201 } NOT = { controls_province = 7663 } NOT = { controls_province = 16480 } } } } }
+   VAL_ops_207_contested_visible = {
+   	207 = {
+   		controller = {
+   			tag = VAL
+   			OR = {
+   				NOT = {
+   					controls_province = 1136
+   				}
+   				NOT = {
+   					controls_province = 2895
+   				}
+   				NOT = {
+   					controls_province = 5119
+   				}
+   				NOT = {
+   					controls_province = 6201
+   				}
+   				NOT = {
+   					controls_province = 7663
+   				}
+   				NOT = {
+   					controls_province = 16480
+   				}
+   			}
+   		}
+   	}
+   }
   }
   properties = {
    VAL_ops_43_controller = { frame = operations_state_43_frame }
@@ -375,149 +2300,2074 @@ scripted_gui = {
    STP_ops_206_controller_visible = { always = yes }
    STP_ops_207_controller_visible = { always = yes }
    STP_ops_43_border_visible = { 43 = { controller = { tag = STS } } }
-   STP_ops_43_contested_visible = { 43 = { controller = { tag = STS OR = { NOT = { controls_province = 95 } NOT = { controls_province = 101 } NOT = { controls_province = 16432 } NOT = { controls_province = 16450 } NOT = { controls_province = 16455 } } } } }
+   STP_ops_43_contested_visible = {
+   	43 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 95
+   				}
+   				NOT = {
+   					controls_province = 101
+   				}
+   				NOT = {
+   					controls_province = 16432
+   				}
+   				NOT = {
+   					controls_province = 16450
+   				}
+   				NOT = {
+   					controls_province = 16455
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_44_border_visible = { 44 = { controller = { tag = STS } } }
    STP_ops_44_contested_visible = { 44 = { controller = { tag = STS OR = { NOT = { controls_province = 16433 } NOT = { controls_province = 16448 } } } } }
    STP_ops_45_border_visible = { 45 = { controller = { tag = STS } } }
-   STP_ops_45_contested_visible = { 45 = { controller = { tag = STS OR = { NOT = { controls_province = 111 } NOT = { controls_province = 6675 } NOT = { controls_province = 16458 } NOT = { controls_province = 16459 } NOT = { controls_province = 16461 } NOT = { controls_province = 16529 } } } } }
+   STP_ops_45_contested_visible = {
+   	45 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 111
+   				}
+   				NOT = {
+   					controls_province = 6675
+   				}
+   				NOT = {
+   					controls_province = 16458
+   				}
+   				NOT = {
+   					controls_province = 16459
+   				}
+   				NOT = {
+   					controls_province = 16461
+   				}
+   				NOT = {
+   					controls_province = 16529
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_88_border_visible = { 88 = { controller = { tag = STS } } }
    STP_ops_88_contested_visible = { 88 = { controller = { tag = STS OR = { NOT = { controls_province = 110 } NOT = { controls_province = 16429 } } } } }
    STP_ops_58_border_visible = { 58 = { controller = { tag = STS } } }
-   STP_ops_58_contested_visible = { 58 = { controller = { tag = STS OR = { NOT = { controls_province = 10212 } NOT = { controls_province = 16310 } NOT = { controls_province = 16322 } NOT = { controls_province = 16332 } NOT = { controls_province = 16347 } NOT = { controls_province = 16352 } NOT = { controls_province = 16360 } } } } }
+   STP_ops_58_contested_visible = {
+   	58 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 10212
+   				}
+   				NOT = {
+   					controls_province = 16310
+   				}
+   				NOT = {
+   					controls_province = 16322
+   				}
+   				NOT = {
+   					controls_province = 16332
+   				}
+   				NOT = {
+   					controls_province = 16347
+   				}
+   				NOT = {
+   					controls_province = 16352
+   				}
+   				NOT = {
+   					controls_province = 16360
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_59_border_visible = { 59 = { controller = { tag = STS } } }
-   STP_ops_59_contested_visible = { 59 = { controller = { tag = STS OR = { NOT = { controls_province = 3595 } NOT = { controls_province = 6206 } NOT = { controls_province = 6885 } NOT = { controls_province = 10404 } } } } }
+   STP_ops_59_contested_visible = {
+   	59 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 3595
+   				}
+   				NOT = {
+   					controls_province = 6206
+   				}
+   				NOT = {
+   					controls_province = 6885
+   				}
+   				NOT = {
+   					controls_province = 10404
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_60_border_visible = { 60 = { controller = { tag = STS } } }
-   STP_ops_60_contested_visible = { 60 = { controller = { tag = STS OR = { NOT = { controls_province = 8171 } NOT = { controls_province = 8273 } NOT = { controls_province = 12326 } NOT = { controls_province = 16299 } NOT = { controls_province = 16340 } NOT = { controls_province = 16341 } } } } }
+   STP_ops_60_contested_visible = {
+   	60 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 8171
+   				}
+   				NOT = {
+   					controls_province = 8273
+   				}
+   				NOT = {
+   					controls_province = 12326
+   				}
+   				NOT = {
+   					controls_province = 16299
+   				}
+   				NOT = {
+   					controls_province = 16340
+   				}
+   				NOT = {
+   					controls_province = 16341
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_61_border_visible = { 61 = { controller = { tag = STS } } }
-   STP_ops_61_contested_visible = { 61 = { controller = { tag = STS OR = { NOT = { controls_province = 1480 } NOT = { controls_province = 8938 } NOT = { controls_province = 11332 } NOT = { controls_province = 16316 } } } } }
+   STP_ops_61_contested_visible = {
+   	61 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 1480
+   				}
+   				NOT = {
+   					controls_province = 8938
+   				}
+   				NOT = {
+   					controls_province = 11332
+   				}
+   				NOT = {
+   					controls_province = 16316
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_62_border_visible = { 62 = { controller = { tag = STS } } }
-   STP_ops_62_contested_visible = { 62 = { controller = { tag = STS OR = { NOT = { controls_province = 91 } NOT = { controls_province = 104 } NOT = { controls_province = 1394 } NOT = { controls_province = 5364 } NOT = { controls_province = 8327 } NOT = { controls_province = 16339 } } } } }
+   STP_ops_62_contested_visible = {
+   	62 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 91
+   				}
+   				NOT = {
+   					controls_province = 104
+   				}
+   				NOT = {
+   					controls_province = 1394
+   				}
+   				NOT = {
+   					controls_province = 5364
+   				}
+   				NOT = {
+   					controls_province = 8327
+   				}
+   				NOT = {
+   					controls_province = 16339
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_63_border_visible = { 63 = { controller = { tag = STS } } }
    STP_ops_63_contested_visible = { 63 = { controller = { tag = STS OR = { NOT = { controls_province = 128 } NOT = { controls_province = 135 } NOT = { controls_province = 5606 } } } } }
    STP_ops_64_border_visible = { 64 = { controller = { tag = STS } } }
-   STP_ops_64_contested_visible = { 64 = { controller = { tag = STS OR = { NOT = { controls_province = 1493 } NOT = { controls_province = 5898 } NOT = { controls_province = 5996 } NOT = { controls_province = 16319 } NOT = { controls_province = 16326 } NOT = { controls_province = 16465 } NOT = { controls_province = 16474 } NOT = { controls_province = 16499 } } } } }
+   STP_ops_64_contested_visible = {
+   	64 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 1493
+   				}
+   				NOT = {
+   					controls_province = 5898
+   				}
+   				NOT = {
+   					controls_province = 5996
+   				}
+   				NOT = {
+   					controls_province = 16319
+   				}
+   				NOT = {
+   					controls_province = 16326
+   				}
+   				NOT = {
+   					controls_province = 16465
+   				}
+   				NOT = {
+   					controls_province = 16474
+   				}
+   				NOT = {
+   					controls_province = 16499
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_65_border_visible = { 65 = { controller = { tag = STS } } }
-   STP_ops_65_contested_visible = { 65 = { controller = { tag = STS OR = { NOT = { controls_province = 6423 } NOT = { controls_province = 6440 } NOT = { controls_province = 16305 } NOT = { controls_province = 16328 } NOT = { controls_province = 16337 } NOT = { controls_province = 16338 } } } } }
+   STP_ops_65_contested_visible = {
+   	65 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 6423
+   				}
+   				NOT = {
+   					controls_province = 6440
+   				}
+   				NOT = {
+   					controls_province = 16305
+   				}
+   				NOT = {
+   					controls_province = 16328
+   				}
+   				NOT = {
+   					controls_province = 16337
+   				}
+   				NOT = {
+   					controls_province = 16338
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_24_border_visible = { 24 = { controller = { tag = STS } } }
-   STP_ops_24_contested_visible = { 24 = { controller = { tag = STS OR = { NOT = { controls_province = 3790 } NOT = { controls_province = 4214 } NOT = { controls_province = 4356 } NOT = { controls_province = 9126 } NOT = { controls_province = 10360 } NOT = { controls_province = 10455 } NOT = { controls_province = 10598 } NOT = { controls_province = 10691 } } } } }
+   STP_ops_24_contested_visible = {
+   	24 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 3790
+   				}
+   				NOT = {
+   					controls_province = 4214
+   				}
+   				NOT = {
+   					controls_province = 4356
+   				}
+   				NOT = {
+   					controls_province = 9126
+   				}
+   				NOT = {
+   					controls_province = 10360
+   				}
+   				NOT = {
+   					controls_province = 10455
+   				}
+   				NOT = {
+   					controls_province = 10598
+   				}
+   				NOT = {
+   					controls_province = 10691
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_42_border_visible = { 42 = { controller = { tag = STS } } }
-   STP_ops_42_contested_visible = { 42 = { controller = { tag = STS OR = { NOT = { controls_province = 125 } NOT = { controls_province = 16431 } NOT = { controls_province = 16436 } NOT = { controls_province = 16437 } NOT = { controls_province = 16438 } } } } }
+   STP_ops_42_contested_visible = {
+   	42 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 125
+   				}
+   				NOT = {
+   					controls_province = 16431
+   				}
+   				NOT = {
+   					controls_province = 16436
+   				}
+   				NOT = {
+   					controls_province = 16437
+   				}
+   				NOT = {
+   					controls_province = 16438
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_48_border_visible = { 48 = { controller = { tag = STS } } }
-   STP_ops_48_contested_visible = { 48 = { controller = { tag = STS OR = { NOT = { controls_province = 16514 } NOT = { controls_province = 16515 } NOT = { controls_province = 16519 } NOT = { controls_province = 16521 } NOT = { controls_province = 16530 } NOT = { controls_province = 16535 } } } } }
+   STP_ops_48_contested_visible = {
+   	48 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 16514
+   				}
+   				NOT = {
+   					controls_province = 16515
+   				}
+   				NOT = {
+   					controls_province = 16519
+   				}
+   				NOT = {
+   					controls_province = 16521
+   				}
+   				NOT = {
+   					controls_province = 16530
+   				}
+   				NOT = {
+   					controls_province = 16535
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_54_border_visible = { 54 = { controller = { tag = STS } } }
-   STP_ops_54_contested_visible = { 54 = { controller = { tag = STS OR = { NOT = { controls_province = 728 } NOT = { controls_province = 4369 } NOT = { controls_province = 4827 } NOT = { controls_province = 16296 } NOT = { controls_province = 16297 } NOT = { controls_province = 16298 } NOT = { controls_province = 16478 } NOT = { controls_province = 16501 } NOT = { controls_province = 16510 } NOT = { controls_province = 16555 } NOT = { controls_province = 16653 } } } } }
+   STP_ops_54_contested_visible = {
+   	54 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 728
+   				}
+   				NOT = {
+   					controls_province = 4369
+   				}
+   				NOT = {
+   					controls_province = 4827
+   				}
+   				NOT = {
+   					controls_province = 16296
+   				}
+   				NOT = {
+   					controls_province = 16297
+   				}
+   				NOT = {
+   					controls_province = 16298
+   				}
+   				NOT = {
+   					controls_province = 16478
+   				}
+   				NOT = {
+   					controls_province = 16501
+   				}
+   				NOT = {
+   					controls_province = 16510
+   				}
+   				NOT = {
+   					controls_province = 16555
+   				}
+   				NOT = {
+   					controls_province = 16653
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_55_border_visible = { 55 = { controller = { tag = STS } } }
    STP_ops_55_contested_visible = { 55 = { controller = { tag = STS OR = { NOT = { controls_province = 114 } NOT = { controls_province = 9617 } NOT = { controls_province = 16435 } } } } }
    STP_ops_56_border_visible = { 56 = { controller = { tag = STS } } }
-   STP_ops_56_contested_visible = { 56 = { controller = { tag = STS OR = { NOT = { controls_province = 1142 } NOT = { controls_province = 4712 } NOT = { controls_province = 6369 } NOT = { controls_province = 6670 } NOT = { controls_province = 9333 } NOT = { controls_province = 11211 } NOT = { controls_province = 11646 } NOT = { controls_province = 16472 } NOT = { controls_province = 16645 } } } } }
+   STP_ops_56_contested_visible = {
+   	56 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 1142
+   				}
+   				NOT = {
+   					controls_province = 4712
+   				}
+   				NOT = {
+   					controls_province = 6369
+   				}
+   				NOT = {
+   					controls_province = 6670
+   				}
+   				NOT = {
+   					controls_province = 9333
+   				}
+   				NOT = {
+   					controls_province = 11211
+   				}
+   				NOT = {
+   					controls_province = 11646
+   				}
+   				NOT = {
+   					controls_province = 16472
+   				}
+   				NOT = {
+   					controls_province = 16645
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_57_border_visible = { 57 = { controller = { tag = STS } } }
-   STP_ops_57_contested_visible = { 57 = { controller = { tag = STS OR = { NOT = { controls_province = 556 } NOT = { controls_province = 779 } NOT = { controls_province = 2965 } NOT = { controls_province = 6519 } NOT = { controls_province = 10917 } NOT = { controls_province = 10985 } NOT = { controls_province = 11394 } NOT = { controls_province = 16477 } NOT = { controls_province = 16493 } NOT = { controls_province = 16511 } } } } }
+   STP_ops_57_contested_visible = {
+   	57 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 556
+   				}
+   				NOT = {
+   					controls_province = 779
+   				}
+   				NOT = {
+   					controls_province = 2965
+   				}
+   				NOT = {
+   					controls_province = 6519
+   				}
+   				NOT = {
+   					controls_province = 10917
+   				}
+   				NOT = {
+   					controls_province = 10985
+   				}
+   				NOT = {
+   					controls_province = 11394
+   				}
+   				NOT = {
+   					controls_province = 16477
+   				}
+   				NOT = {
+   					controls_province = 16493
+   				}
+   				NOT = {
+   					controls_province = 16511
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_1_border_visible = { 1 = { controller = { tag = STS } } }
-   STP_ops_1_contested_visible = { 1 = { controller = { tag = STS OR = { NOT = { controls_province = 43 } NOT = { controls_province = 44 } NOT = { controls_province = 55 } NOT = { controls_province = 154 } NOT = { controls_province = 16344 } NOT = { controls_province = 16350 } NOT = { controls_province = 16382 } NOT = { controls_province = 16383 } NOT = { controls_province = 16440 } NOT = { controls_province = 16460 } } } } }
+   STP_ops_1_contested_visible = {
+   	1 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 43
+   				}
+   				NOT = {
+   					controls_province = 44
+   				}
+   				NOT = {
+   					controls_province = 55
+   				}
+   				NOT = {
+   					controls_province = 154
+   				}
+   				NOT = {
+   					controls_province = 16344
+   				}
+   				NOT = {
+   					controls_province = 16350
+   				}
+   				NOT = {
+   					controls_province = 16382
+   				}
+   				NOT = {
+   					controls_province = 16383
+   				}
+   				NOT = {
+   					controls_province = 16440
+   				}
+   				NOT = {
+   					controls_province = 16460
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_2_border_visible = { 2 = { controller = { tag = STS } } }
-   STP_ops_2_contested_visible = { 2 = { controller = { tag = STS OR = { NOT = { controls_province = 1 } NOT = { controls_province = 10 } NOT = { controls_province = 117 } NOT = { controls_province = 119 } NOT = { controls_province = 134 } NOT = { controls_province = 16445 } NOT = { controls_province = 16539 } NOT = { controls_province = 16540 } NOT = { controls_province = 16541 } NOT = { controls_province = 16547 } NOT = { controls_province = 16553 } } } } }
+   STP_ops_2_contested_visible = {
+   	2 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 1
+   				}
+   				NOT = {
+   					controls_province = 10
+   				}
+   				NOT = {
+   					controls_province = 117
+   				}
+   				NOT = {
+   					controls_province = 119
+   				}
+   				NOT = {
+   					controls_province = 134
+   				}
+   				NOT = {
+   					controls_province = 16445
+   				}
+   				NOT = {
+   					controls_province = 16539
+   				}
+   				NOT = {
+   					controls_province = 16540
+   				}
+   				NOT = {
+   					controls_province = 16541
+   				}
+   				NOT = {
+   					controls_province = 16547
+   				}
+   				NOT = {
+   					controls_province = 16553
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_3_border_visible = { 3 = { controller = { tag = STS } } }
-   STP_ops_3_contested_visible = { 3 = { controller = { tag = STS OR = { NOT = { controls_province = 45 } NOT = { controls_province = 63 } NOT = { controls_province = 93 } NOT = { controls_province = 148 } NOT = { controls_province = 149 } NOT = { controls_province = 150 } NOT = { controls_province = 10217 } NOT = { controls_province = 16457 } NOT = { controls_province = 16462 } NOT = { controls_province = 16550 } } } } }
+   STP_ops_3_contested_visible = {
+   	3 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 45
+   				}
+   				NOT = {
+   					controls_province = 63
+   				}
+   				NOT = {
+   					controls_province = 93
+   				}
+   				NOT = {
+   					controls_province = 148
+   				}
+   				NOT = {
+   					controls_province = 149
+   				}
+   				NOT = {
+   					controls_province = 150
+   				}
+   				NOT = {
+   					controls_province = 10217
+   				}
+   				NOT = {
+   					controls_province = 16457
+   				}
+   				NOT = {
+   					controls_province = 16462
+   				}
+   				NOT = {
+   					controls_province = 16550
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_28_border_visible = { 28 = { controller = { tag = STS } } }
-   STP_ops_28_contested_visible = { 28 = { controller = { tag = STS OR = { NOT = { controls_province = 145 } NOT = { controls_province = 16351 } NOT = { controls_province = 16366 } NOT = { controls_province = 16368 } NOT = { controls_province = 16374 } NOT = { controls_province = 16377 } NOT = { controls_province = 16386 } } } } }
+   STP_ops_28_contested_visible = {
+   	28 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 145
+   				}
+   				NOT = {
+   					controls_province = 16351
+   				}
+   				NOT = {
+   					controls_province = 16366
+   				}
+   				NOT = {
+   					controls_province = 16368
+   				}
+   				NOT = {
+   					controls_province = 16374
+   				}
+   				NOT = {
+   					controls_province = 16377
+   				}
+   				NOT = {
+   					controls_province = 16386
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_29_border_visible = { 29 = { controller = { tag = STS } } }
    STP_ops_29_contested_visible = { 29 = { controller = { tag = STS OR = { NOT = { controls_province = 16345 } } } } }
    STP_ops_46_border_visible = { 46 = { controller = { tag = STS } } }
-   STP_ops_46_contested_visible = { 46 = { controller = { tag = STS OR = { NOT = { controls_province = 98 } NOT = { controls_province = 100 } NOT = { controls_province = 153 } NOT = { controls_province = 3250 } NOT = { controls_province = 9376 } NOT = { controls_province = 10254 } NOT = { controls_province = 16349 } NOT = { controls_province = 16456 } } } } }
+   STP_ops_46_contested_visible = {
+   	46 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 98
+   				}
+   				NOT = {
+   					controls_province = 100
+   				}
+   				NOT = {
+   					controls_province = 153
+   				}
+   				NOT = {
+   					controls_province = 3250
+   				}
+   				NOT = {
+   					controls_province = 9376
+   				}
+   				NOT = {
+   					controls_province = 10254
+   				}
+   				NOT = {
+   					controls_province = 16349
+   				}
+   				NOT = {
+   					controls_province = 16456
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_53_border_visible = { 53 = { controller = { tag = STS } } }
-   STP_ops_53_contested_visible = { 53 = { controller = { tag = STS OR = { NOT = { controls_province = 29 } NOT = { controls_province = 60 } NOT = { controls_province = 68 } NOT = { controls_province = 70 } NOT = { controls_province = 16364 } NOT = { controls_province = 16434 } } } } }
+   STP_ops_53_contested_visible = {
+   	53 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 29
+   				}
+   				NOT = {
+   					controls_province = 60
+   				}
+   				NOT = {
+   					controls_province = 68
+   				}
+   				NOT = {
+   					controls_province = 70
+   				}
+   				NOT = {
+   					controls_province = 16364
+   				}
+   				NOT = {
+   					controls_province = 16434
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_10_border_visible = { 10 = { controller = { tag = STS } } }
-   STP_ops_10_contested_visible = { 10 = { controller = { tag = STS OR = { NOT = { controls_province = 12 } NOT = { controls_province = 22 } NOT = { controls_province = 71 } NOT = { controls_province = 78 } NOT = { controls_province = 16362 } NOT = { controls_province = 16375 } } } } }
+   STP_ops_10_contested_visible = {
+   	10 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 12
+   				}
+   				NOT = {
+   					controls_province = 22
+   				}
+   				NOT = {
+   					controls_province = 71
+   				}
+   				NOT = {
+   					controls_province = 78
+   				}
+   				NOT = {
+   					controls_province = 16362
+   				}
+   				NOT = {
+   					controls_province = 16375
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_11_border_visible = { 11 = { controller = { tag = STS } } }
-   STP_ops_11_contested_visible = { 11 = { controller = { tag = STS OR = { NOT = { controls_province = 13 } NOT = { controls_province = 23 } NOT = { controls_province = 62 } NOT = { controls_province = 113 } NOT = { controls_province = 16356 } } } } }
+   STP_ops_11_contested_visible = {
+   	11 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 13
+   				}
+   				NOT = {
+   					controls_province = 23
+   				}
+   				NOT = {
+   					controls_province = 62
+   				}
+   				NOT = {
+   					controls_province = 113
+   				}
+   				NOT = {
+   					controls_province = 16356
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_12_border_visible = { 12 = { controller = { tag = STS } } }
-   STP_ops_12_contested_visible = { 12 = { controller = { tag = STS OR = { NOT = { controls_province = 80 } NOT = { controls_province = 121 } NOT = { controls_province = 122 } NOT = { controls_province = 141 } NOT = { controls_province = 7986 } NOT = { controls_province = 11467 } NOT = { controls_province = 16353 } NOT = { controls_province = 16357 } NOT = { controls_province = 16380 } NOT = { controls_province = 16644 } NOT = { controls_province = 16647 } } } } }
+   STP_ops_12_contested_visible = {
+   	12 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 80
+   				}
+   				NOT = {
+   					controls_province = 121
+   				}
+   				NOT = {
+   					controls_province = 122
+   				}
+   				NOT = {
+   					controls_province = 141
+   				}
+   				NOT = {
+   					controls_province = 7986
+   				}
+   				NOT = {
+   					controls_province = 11467
+   				}
+   				NOT = {
+   					controls_province = 16353
+   				}
+   				NOT = {
+   					controls_province = 16357
+   				}
+   				NOT = {
+   					controls_province = 16380
+   				}
+   				NOT = {
+   					controls_province = 16644
+   				}
+   				NOT = {
+   					controls_province = 16647
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_13_border_visible = { 13 = { controller = { tag = STS } } }
-   STP_ops_13_contested_visible = { 13 = { controller = { tag = STS OR = { NOT = { controls_province = 8 } NOT = { controls_province = 26 } NOT = { controls_province = 42 } NOT = { controls_province = 54 } NOT = { controls_province = 8357 } NOT = { controls_province = 9395 } NOT = { controls_province = 16343 } NOT = { controls_province = 16548 } NOT = { controls_province = 16652 } } } } }
+   STP_ops_13_contested_visible = {
+   	13 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 8
+   				}
+   				NOT = {
+   					controls_province = 26
+   				}
+   				NOT = {
+   					controls_province = 42
+   				}
+   				NOT = {
+   					controls_province = 54
+   				}
+   				NOT = {
+   					controls_province = 8357
+   				}
+   				NOT = {
+   					controls_province = 9395
+   				}
+   				NOT = {
+   					controls_province = 16343
+   				}
+   				NOT = {
+   					controls_province = 16548
+   				}
+   				NOT = {
+   					controls_province = 16652
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_17_border_visible = { 17 = { controller = { tag = STS } } }
-   STP_ops_17_contested_visible = { 17 = { controller = { tag = STS OR = { NOT = { controls_province = 32 } NOT = { controls_province = 34 } NOT = { controls_province = 41 } NOT = { controls_province = 47 } NOT = { controls_province = 74 } } } } }
+   STP_ops_17_contested_visible = {
+   	17 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 32
+   				}
+   				NOT = {
+   					controls_province = 34
+   				}
+   				NOT = {
+   					controls_province = 41
+   				}
+   				NOT = {
+   					controls_province = 47
+   				}
+   				NOT = {
+   					controls_province = 74
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_18_border_visible = { 18 = { controller = { tag = STS } } }
-   STP_ops_18_contested_visible = { 18 = { controller = { tag = STS OR = { NOT = { controls_province = 14 } NOT = { controls_province = 15 } NOT = { controls_province = 36 } NOT = { controls_province = 85 } NOT = { controls_province = 13029 } } } } }
+   STP_ops_18_contested_visible = {
+   	18 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 14
+   				}
+   				NOT = {
+   					controls_province = 15
+   				}
+   				NOT = {
+   					controls_province = 36
+   				}
+   				NOT = {
+   					controls_province = 85
+   				}
+   				NOT = {
+   					controls_province = 13029
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_30_border_visible = { 30 = { controller = { tag = STS } } }
-   STP_ops_30_contested_visible = { 30 = { controller = { tag = STS OR = { NOT = { controls_province = 12434 } NOT = { controls_province = 16346 } NOT = { controls_province = 16363 } NOT = { controls_province = 16369 } NOT = { controls_province = 16441 } NOT = { controls_province = 16442 } NOT = { controls_province = 16444 } } } } }
+   STP_ops_30_contested_visible = {
+   	30 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 12434
+   				}
+   				NOT = {
+   					controls_province = 16346
+   				}
+   				NOT = {
+   					controls_province = 16363
+   				}
+   				NOT = {
+   					controls_province = 16369
+   				}
+   				NOT = {
+   					controls_province = 16441
+   				}
+   				NOT = {
+   					controls_province = 16442
+   				}
+   				NOT = {
+   					controls_province = 16444
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_4_border_visible = { 4 = { controller = { tag = STS } } }
-   STP_ops_4_contested_visible = { 4 = { controller = { tag = STS OR = { NOT = { controls_province = 49 } NOT = { controls_province = 82 } NOT = { controls_province = 7111 } NOT = { controls_province = 16371 } NOT = { controls_province = 16470 } NOT = { controls_province = 16491 } NOT = { controls_province = 16496 } NOT = { controls_province = 16505 } } } } }
+   STP_ops_4_contested_visible = {
+   	4 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 49
+   				}
+   				NOT = {
+   					controls_province = 82
+   				}
+   				NOT = {
+   					controls_province = 7111
+   				}
+   				NOT = {
+   					controls_province = 16371
+   				}
+   				NOT = {
+   					controls_province = 16470
+   				}
+   				NOT = {
+   					controls_province = 16491
+   				}
+   				NOT = {
+   					controls_province = 16496
+   				}
+   				NOT = {
+   					controls_province = 16505
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_5_border_visible = { 5 = { controller = { tag = STS } } }
-   STP_ops_5_contested_visible = { 5 = { controller = { tag = STS OR = { NOT = { controls_province = 25 } NOT = { controls_province = 27 } NOT = { controls_province = 94 } NOT = { controls_province = 106 } NOT = { controls_province = 4220 } NOT = { controls_province = 5111 } NOT = { controls_province = 16430 } NOT = { controls_province = 16527 } NOT = { controls_province = 16543 } NOT = { controls_province = 16551 } } } } }
+   STP_ops_5_contested_visible = {
+   	5 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 25
+   				}
+   				NOT = {
+   					controls_province = 27
+   				}
+   				NOT = {
+   					controls_province = 94
+   				}
+   				NOT = {
+   					controls_province = 106
+   				}
+   				NOT = {
+   					controls_province = 4220
+   				}
+   				NOT = {
+   					controls_province = 5111
+   				}
+   				NOT = {
+   					controls_province = 16430
+   				}
+   				NOT = {
+   					controls_province = 16527
+   				}
+   				NOT = {
+   					controls_province = 16543
+   				}
+   				NOT = {
+   					controls_province = 16551
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_6_border_visible = { 6 = { controller = { tag = STS } } }
-   STP_ops_6_contested_visible = { 6 = { controller = { tag = STS OR = { NOT = { controls_province = 53 } NOT = { controls_province = 57 } NOT = { controls_province = 69 } NOT = { controls_province = 89 } NOT = { controls_province = 16650 } } } } }
+   STP_ops_6_contested_visible = {
+   	6 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 53
+   				}
+   				NOT = {
+   					controls_province = 57
+   				}
+   				NOT = {
+   					controls_province = 69
+   				}
+   				NOT = {
+   					controls_province = 89
+   				}
+   				NOT = {
+   					controls_province = 16650
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_7_border_visible = { 7 = { controller = { tag = STS } } }
-   STP_ops_7_contested_visible = { 7 = { controller = { tag = STS OR = { NOT = { controls_province = 66 } NOT = { controls_province = 72 } NOT = { controls_province = 87 } NOT = { controls_province = 90 } NOT = { controls_province = 116 } NOT = { controls_province = 129 } NOT = { controls_province = 4518 } NOT = { controls_province = 4687 } NOT = { controls_province = 16365 } NOT = { controls_province = 16554 } } } } }
+   STP_ops_7_contested_visible = {
+   	7 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 66
+   				}
+   				NOT = {
+   					controls_province = 72
+   				}
+   				NOT = {
+   					controls_province = 87
+   				}
+   				NOT = {
+   					controls_province = 90
+   				}
+   				NOT = {
+   					controls_province = 116
+   				}
+   				NOT = {
+   					controls_province = 129
+   				}
+   				NOT = {
+   					controls_province = 4518
+   				}
+   				NOT = {
+   					controls_province = 4687
+   				}
+   				NOT = {
+   					controls_province = 16365
+   				}
+   				NOT = {
+   					controls_province = 16554
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_9_border_visible = { 9 = { controller = { tag = STS } } }
-   STP_ops_9_contested_visible = { 9 = { controller = { tag = STS OR = { NOT = { controls_province = 5 } NOT = { controls_province = 19 } NOT = { controls_province = 20 } NOT = { controls_province = 65 } NOT = { controls_province = 115 } NOT = { controls_province = 11534 } NOT = { controls_province = 16447 } NOT = { controls_province = 16506 } NOT = { controls_province = 16549 } NOT = { controls_province = 16651 } } } } }
+   STP_ops_9_contested_visible = {
+   	9 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 5
+   				}
+   				NOT = {
+   					controls_province = 19
+   				}
+   				NOT = {
+   					controls_province = 20
+   				}
+   				NOT = {
+   					controls_province = 65
+   				}
+   				NOT = {
+   					controls_province = 115
+   				}
+   				NOT = {
+   					controls_province = 11534
+   				}
+   				NOT = {
+   					controls_province = 16447
+   				}
+   				NOT = {
+   					controls_province = 16506
+   				}
+   				NOT = {
+   					controls_province = 16549
+   				}
+   				NOT = {
+   					controls_province = 16651
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_31_border_visible = { 31 = { controller = { tag = STS } } }
-   STP_ops_31_contested_visible = { 31 = { controller = { tag = STS OR = { NOT = { controls_province = 5736 } NOT = { controls_province = 16354 } NOT = { controls_province = 16378 } NOT = { controls_province = 16452 } } } } }
+   STP_ops_31_contested_visible = {
+   	31 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 5736
+   				}
+   				NOT = {
+   					controls_province = 16354
+   				}
+   				NOT = {
+   					controls_province = 16378
+   				}
+   				NOT = {
+   					controls_province = 16452
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_41_border_visible = { 41 = { controller = { tag = STS } } }
-   STP_ops_41_contested_visible = { 41 = { controller = { tag = STS OR = { NOT = { controls_province = 16439 } NOT = { controls_province = 16443 } NOT = { controls_province = 16446 } NOT = { controls_province = 16449 } NOT = { controls_province = 16451 } } } } }
+   STP_ops_41_contested_visible = {
+   	41 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 16439
+   				}
+   				NOT = {
+   					controls_province = 16443
+   				}
+   				NOT = {
+   					controls_province = 16446
+   				}
+   				NOT = {
+   					controls_province = 16449
+   				}
+   				NOT = {
+   					controls_province = 16451
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_14_border_visible = { 14 = { controller = { tag = STS } } }
-   STP_ops_14_contested_visible = { 14 = { controller = { tag = STS OR = { NOT = { controls_province = 2 } NOT = { controls_province = 75 } NOT = { controls_province = 5421 } NOT = { controls_province = 8540 } NOT = { controls_province = 16359 } NOT = { controls_province = 16373 } NOT = { controls_province = 16381 } } } } }
+   STP_ops_14_contested_visible = {
+   	14 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 2
+   				}
+   				NOT = {
+   					controls_province = 75
+   				}
+   				NOT = {
+   					controls_province = 5421
+   				}
+   				NOT = {
+   					controls_province = 8540
+   				}
+   				NOT = {
+   					controls_province = 16359
+   				}
+   				NOT = {
+   					controls_province = 16373
+   				}
+   				NOT = {
+   					controls_province = 16381
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_8_border_visible = { 8 = { controller = { tag = STS } } }
-   STP_ops_8_contested_visible = { 8 = { controller = { tag = STS OR = { NOT = { controls_province = 9 } NOT = { controls_province = 17 } NOT = { controls_province = 38 } NOT = { controls_province = 56 } NOT = { controls_province = 16648 } } } } }
+   STP_ops_8_contested_visible = {
+   	8 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 9
+   				}
+   				NOT = {
+   					controls_province = 17
+   				}
+   				NOT = {
+   					controls_province = 38
+   				}
+   				NOT = {
+   					controls_province = 56
+   				}
+   				NOT = {
+   					controls_province = 16648
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_15_border_visible = { 15 = { controller = { tag = STS } } }
-   STP_ops_15_contested_visible = { 15 = { controller = { tag = STS OR = { NOT = { controls_province = 11 } NOT = { controls_province = 33 } NOT = { controls_province = 58 } NOT = { controls_province = 73 } NOT = { controls_province = 118 } NOT = { controls_province = 131 } NOT = { controls_province = 8979 } NOT = { controls_province = 9840 } NOT = { controls_province = 16552 } } } } }
+   STP_ops_15_contested_visible = {
+   	15 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 11
+   				}
+   				NOT = {
+   					controls_province = 33
+   				}
+   				NOT = {
+   					controls_province = 58
+   				}
+   				NOT = {
+   					controls_province = 73
+   				}
+   				NOT = {
+   					controls_province = 118
+   				}
+   				NOT = {
+   					controls_province = 131
+   				}
+   				NOT = {
+   					controls_province = 8979
+   				}
+   				NOT = {
+   					controls_province = 9840
+   				}
+   				NOT = {
+   					controls_province = 16552
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_16_border_visible = { 16 = { controller = { tag = STS } } }
-   STP_ops_16_contested_visible = { 16 = { controller = { tag = STS OR = { NOT = { controls_province = 28 } NOT = { controls_province = 124 } NOT = { controls_province = 127 } NOT = { controls_province = 144 } NOT = { controls_province = 7283 } NOT = { controls_province = 11496 } NOT = { controls_province = 16649 } } } } }
+   STP_ops_16_contested_visible = {
+   	16 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 28
+   				}
+   				NOT = {
+   					controls_province = 124
+   				}
+   				NOT = {
+   					controls_province = 127
+   				}
+   				NOT = {
+   					controls_province = 144
+   				}
+   				NOT = {
+   					controls_province = 7283
+   				}
+   				NOT = {
+   					controls_province = 11496
+   				}
+   				NOT = {
+   					controls_province = 16649
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_19_border_visible = { 19 = { controller = { tag = STS } } }
    STP_ops_19_contested_visible = { 19 = { controller = { tag = STS OR = { NOT = { controls_province = 4 } NOT = { controls_province = 48 } NOT = { controls_province = 83 } NOT = { controls_province = 108 } } } } }
    STP_ops_20_border_visible = { 20 = { controller = { tag = STS } } }
-   STP_ops_20_contested_visible = { 20 = { controller = { tag = STS OR = { NOT = { controls_province = 6 } NOT = { controls_province = 21 } NOT = { controls_province = 51 } NOT = { controls_province = 81 } NOT = { controls_province = 88 } NOT = { controls_province = 16372 } NOT = { controls_province = 16646 } } } } }
+   STP_ops_20_contested_visible = {
+   	20 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 6
+   				}
+   				NOT = {
+   					controls_province = 21
+   				}
+   				NOT = {
+   					controls_province = 51
+   				}
+   				NOT = {
+   					controls_province = 81
+   				}
+   				NOT = {
+   					controls_province = 88
+   				}
+   				NOT = {
+   					controls_province = 16372
+   				}
+   				NOT = {
+   					controls_province = 16646
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_21_border_visible = { 21 = { controller = { tag = STS } } }
-   STP_ops_21_contested_visible = { 21 = { controller = { tag = STS OR = { NOT = { controls_province = 37 } NOT = { controls_province = 39 } NOT = { controls_province = 67 } NOT = { controls_province = 84 } NOT = { controls_province = 16631 } } } } }
+   STP_ops_21_contested_visible = {
+   	21 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 37
+   				}
+   				NOT = {
+   					controls_province = 39
+   				}
+   				NOT = {
+   					controls_province = 67
+   				}
+   				NOT = {
+   					controls_province = 84
+   				}
+   				NOT = {
+   					controls_province = 16631
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_22_border_visible = { 22 = { controller = { tag = STS } } }
-   STP_ops_22_contested_visible = { 22 = { controller = { tag = STS OR = { NOT = { controls_province = 92 } NOT = { controls_province = 103 } NOT = { controls_province = 132 } NOT = { controls_province = 137 } NOT = { controls_province = 140 } } } } }
+   STP_ops_22_contested_visible = {
+   	22 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 92
+   				}
+   				NOT = {
+   					controls_province = 103
+   				}
+   				NOT = {
+   					controls_province = 132
+   				}
+   				NOT = {
+   					controls_province = 137
+   				}
+   				NOT = {
+   					controls_province = 140
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_83_border_visible = { 83 = { controller = { tag = STS } } }
-   STP_ops_83_contested_visible = { 83 = { controller = { tag = STS OR = { NOT = { controls_province = 7 } NOT = { controls_province = 30 } NOT = { controls_province = 61 } NOT = { controls_province = 64 } NOT = { controls_province = 133 } NOT = { controls_province = 4763 } NOT = { controls_province = 10184 } NOT = { controls_province = 16384 } NOT = { controls_province = 16468 } NOT = { controls_province = 16498 } } } } }
+   STP_ops_83_contested_visible = {
+   	83 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 7
+   				}
+   				NOT = {
+   					controls_province = 30
+   				}
+   				NOT = {
+   					controls_province = 61
+   				}
+   				NOT = {
+   					controls_province = 64
+   				}
+   				NOT = {
+   					controls_province = 133
+   				}
+   				NOT = {
+   					controls_province = 4763
+   				}
+   				NOT = {
+   					controls_province = 10184
+   				}
+   				NOT = {
+   					controls_province = 16384
+   				}
+   				NOT = {
+   					controls_province = 16468
+   				}
+   				NOT = {
+   					controls_province = 16498
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_84_border_visible = { 84 = { controller = { tag = STS } } }
-   STP_ops_84_contested_visible = { 84 = { controller = { tag = STS OR = { NOT = { controls_province = 4887 } NOT = { controls_province = 4925 } NOT = { controls_province = 9463 } NOT = { controls_province = 12721 } NOT = { controls_province = 16471 } NOT = { controls_province = 16495 } NOT = { controls_province = 16502 } NOT = { controls_province = 16503 } NOT = { controls_province = 16533 } } } } }
+   STP_ops_84_contested_visible = {
+   	84 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 4887
+   				}
+   				NOT = {
+   					controls_province = 4925
+   				}
+   				NOT = {
+   					controls_province = 9463
+   				}
+   				NOT = {
+   					controls_province = 12721
+   				}
+   				NOT = {
+   					controls_province = 16471
+   				}
+   				NOT = {
+   					controls_province = 16495
+   				}
+   				NOT = {
+   					controls_province = 16502
+   				}
+   				NOT = {
+   					controls_province = 16503
+   				}
+   				NOT = {
+   					controls_province = 16533
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_85_border_visible = { 85 = { controller = { tag = STS } } }
-   STP_ops_85_contested_visible = { 85 = { controller = { tag = STS OR = { NOT = { controls_province = 3 } NOT = { controls_province = 16 } NOT = { controls_province = 35 } NOT = { controls_province = 50 } NOT = { controls_province = 86 } NOT = { controls_province = 130 } NOT = { controls_province = 7157 } } } } }
+   STP_ops_85_contested_visible = {
+   	85 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 3
+   				}
+   				NOT = {
+   					controls_province = 16
+   				}
+   				NOT = {
+   					controls_province = 35
+   				}
+   				NOT = {
+   					controls_province = 50
+   				}
+   				NOT = {
+   					controls_province = 86
+   				}
+   				NOT = {
+   					controls_province = 130
+   				}
+   				NOT = {
+   					controls_province = 7157
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_86_border_visible = { 86 = { controller = { tag = STS } } }
-   STP_ops_86_contested_visible = { 86 = { controller = { tag = STS OR = { NOT = { controls_province = 18 } NOT = { controls_province = 24 } NOT = { controls_province = 31 } NOT = { controls_province = 52 } NOT = { controls_province = 76 } NOT = { controls_province = 79 } NOT = { controls_province = 97 } NOT = { controls_province = 102 } NOT = { controls_province = 105 } NOT = { controls_province = 107 } } } } }
+   STP_ops_86_contested_visible = {
+   	86 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 18
+   				}
+   				NOT = {
+   					controls_province = 24
+   				}
+   				NOT = {
+   					controls_province = 31
+   				}
+   				NOT = {
+   					controls_province = 52
+   				}
+   				NOT = {
+   					controls_province = 76
+   				}
+   				NOT = {
+   					controls_province = 79
+   				}
+   				NOT = {
+   					controls_province = 97
+   				}
+   				NOT = {
+   					controls_province = 102
+   				}
+   				NOT = {
+   					controls_province = 105
+   				}
+   				NOT = {
+   					controls_province = 107
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_87_border_visible = { 87 = { controller = { tag = STS } } }
-   STP_ops_87_contested_visible = { 87 = { controller = { tag = STS OR = { NOT = { controls_province = 40 } NOT = { controls_province = 46 } NOT = { controls_province = 77 } NOT = { controls_province = 139 } NOT = { controls_province = 143 } NOT = { controls_province = 710 } NOT = { controls_province = 4001 } NOT = { controls_province = 4608 } NOT = { controls_province = 6174 } NOT = { controls_province = 6471 } NOT = { controls_province = 7585 } NOT = { controls_province = 8895 } NOT = { controls_province = 11648 } } } } }
+   STP_ops_87_contested_visible = {
+   	87 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 40
+   				}
+   				NOT = {
+   					controls_province = 46
+   				}
+   				NOT = {
+   					controls_province = 77
+   				}
+   				NOT = {
+   					controls_province = 139
+   				}
+   				NOT = {
+   					controls_province = 143
+   				}
+   				NOT = {
+   					controls_province = 710
+   				}
+   				NOT = {
+   					controls_province = 4001
+   				}
+   				NOT = {
+   					controls_province = 4608
+   				}
+   				NOT = {
+   					controls_province = 6174
+   				}
+   				NOT = {
+   					controls_province = 6471
+   				}
+   				NOT = {
+   					controls_province = 7585
+   				}
+   				NOT = {
+   					controls_province = 8895
+   				}
+   				NOT = {
+   					controls_province = 11648
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_303_border_visible = { 303 = { controller = { tag = STS } } }
    STP_ops_303_contested_visible = { 303 = { controller = { tag = STS OR = { NOT = { controls_province = 3261 } } } } }
    STP_ops_118_border_visible = { 118 = { controller = { tag = STS } } }
    STP_ops_118_contested_visible = { 118 = { controller = { tag = STS OR = { NOT = { controls_province = 147 } } } } }
    STP_ops_119_border_visible = { 119 = { controller = { tag = STS } } }
-   STP_ops_119_contested_visible = { 119 = { controller = { tag = STS OR = { NOT = { controls_province = 59 } NOT = { controls_province = 96 } NOT = { controls_province = 16342 } NOT = { controls_province = 16348 } NOT = { controls_province = 16358 } } } } }
+   STP_ops_119_contested_visible = {
+   	119 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 59
+   				}
+   				NOT = {
+   					controls_province = 96
+   				}
+   				NOT = {
+   					controls_province = 16342
+   				}
+   				NOT = {
+   					controls_province = 16348
+   				}
+   				NOT = {
+   					controls_province = 16358
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_168_border_visible = { 168 = { controller = { tag = STS } } }
-   STP_ops_168_contested_visible = { 168 = { controller = { tag = STS OR = { NOT = { controls_province = 721 } NOT = { controls_province = 5388 } NOT = { controls_province = 11452 } NOT = { controls_province = 11567 } NOT = { controls_province = 11664 } NOT = { controls_province = 11667 } NOT = { controls_province = 16534 } } } } }
+   STP_ops_168_contested_visible = {
+   	168 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 721
+   				}
+   				NOT = {
+   					controls_province = 5388
+   				}
+   				NOT = {
+   					controls_province = 11452
+   				}
+   				NOT = {
+   					controls_province = 11567
+   				}
+   				NOT = {
+   					controls_province = 11664
+   				}
+   				NOT = {
+   					controls_province = 11667
+   				}
+   				NOT = {
+   					controls_province = 16534
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_169_border_visible = { 169 = { controller = { tag = STS } } }
-   STP_ops_169_contested_visible = { 169 = { controller = { tag = STS OR = { NOT = { controls_province = 973 } NOT = { controls_province = 2306 } NOT = { controls_province = 4707 } NOT = { controls_province = 5849 } NOT = { controls_province = 10693 } NOT = { controls_province = 11913 } NOT = { controls_province = 16464 } NOT = { controls_province = 16476 } } } } }
+   STP_ops_169_contested_visible = {
+   	169 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 973
+   				}
+   				NOT = {
+   					controls_province = 2306
+   				}
+   				NOT = {
+   					controls_province = 4707
+   				}
+   				NOT = {
+   					controls_province = 5849
+   				}
+   				NOT = {
+   					controls_province = 10693
+   				}
+   				NOT = {
+   					controls_province = 11913
+   				}
+   				NOT = {
+   					controls_province = 16464
+   				}
+   				NOT = {
+   					controls_province = 16476
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_167_border_visible = { 167 = { controller = { tag = STS } } }
-   STP_ops_167_contested_visible = { 167 = { controller = { tag = STS OR = { NOT = { controls_province = 3481 } NOT = { controls_province = 9757 } NOT = { controls_province = 10989 } NOT = { controls_province = 12523 } NOT = { controls_province = 16500 } } } } }
+   STP_ops_167_contested_visible = {
+   	167 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 3481
+   				}
+   				NOT = {
+   					controls_province = 9757
+   				}
+   				NOT = {
+   					controls_province = 10989
+   				}
+   				NOT = {
+   					controls_province = 12523
+   				}
+   				NOT = {
+   					controls_province = 16500
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_170_border_visible = { 170 = { controller = { tag = STS } } }
-   STP_ops_170_contested_visible = { 170 = { controller = { tag = STS OR = { NOT = { controls_province = 12878 } NOT = { controls_province = 16513 } NOT = { controls_province = 16520 } NOT = { controls_province = 16526 } } } } }
+   STP_ops_170_contested_visible = {
+   	170 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 12878
+   				}
+   				NOT = {
+   					controls_province = 16513
+   				}
+   				NOT = {
+   					controls_province = 16520
+   				}
+   				NOT = {
+   					controls_province = 16526
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_171_border_visible = { 171 = { controller = { tag = STS } } }
-   STP_ops_171_contested_visible = { 171 = { controller = { tag = STS OR = { NOT = { controls_province = 333 } NOT = { controls_province = 744 } NOT = { controls_province = 1907 } NOT = { controls_province = 5871 } NOT = { controls_province = 11642 } NOT = { controls_province = 12581 } NOT = { controls_province = 16336 } NOT = { controls_province = 16453 } NOT = { controls_province = 16454 } NOT = { controls_province = 16467 } NOT = { controls_province = 16469 } NOT = { controls_province = 16487 } NOT = { controls_province = 16494 } NOT = { controls_province = 16504 } NOT = { controls_province = 16507 } NOT = { controls_province = 16522 } NOT = { controls_province = 16537 } } } } }
+   STP_ops_171_contested_visible = {
+   	171 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 333
+   				}
+   				NOT = {
+   					controls_province = 744
+   				}
+   				NOT = {
+   					controls_province = 1907
+   				}
+   				NOT = {
+   					controls_province = 5871
+   				}
+   				NOT = {
+   					controls_province = 11642
+   				}
+   				NOT = {
+   					controls_province = 12581
+   				}
+   				NOT = {
+   					controls_province = 16336
+   				}
+   				NOT = {
+   					controls_province = 16453
+   				}
+   				NOT = {
+   					controls_province = 16454
+   				}
+   				NOT = {
+   					controls_province = 16467
+   				}
+   				NOT = {
+   					controls_province = 16469
+   				}
+   				NOT = {
+   					controls_province = 16487
+   				}
+   				NOT = {
+   					controls_province = 16494
+   				}
+   				NOT = {
+   					controls_province = 16504
+   				}
+   				NOT = {
+   					controls_province = 16507
+   				}
+   				NOT = {
+   					controls_province = 16522
+   				}
+   				NOT = {
+   					controls_province = 16537
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_184_border_visible = { 184 = { controller = { tag = STS } } }
-   STP_ops_184_contested_visible = { 184 = { controller = { tag = STS OR = { NOT = { controls_province = 5541 } NOT = { controls_province = 8003 } NOT = { controls_province = 8500 } NOT = { controls_province = 8632 } NOT = { controls_province = 12244 } NOT = { controls_province = 16463 } NOT = { controls_province = 16479 } NOT = { controls_province = 16481 } NOT = { controls_province = 16490 } NOT = { controls_province = 16509 } } } } }
+   STP_ops_184_contested_visible = {
+   	184 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 5541
+   				}
+   				NOT = {
+   					controls_province = 8003
+   				}
+   				NOT = {
+   					controls_province = 8500
+   				}
+   				NOT = {
+   					controls_province = 8632
+   				}
+   				NOT = {
+   					controls_province = 12244
+   				}
+   				NOT = {
+   					controls_province = 16463
+   				}
+   				NOT = {
+   					controls_province = 16479
+   				}
+   				NOT = {
+   					controls_province = 16481
+   				}
+   				NOT = {
+   					controls_province = 16490
+   				}
+   				NOT = {
+   					controls_province = 16509
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_185_border_visible = { 185 = { controller = { tag = STS } } }
-   STP_ops_185_contested_visible = { 185 = { controller = { tag = STS OR = { NOT = { controls_province = 372 } NOT = { controls_province = 3130 } NOT = { controls_province = 5344 } NOT = { controls_province = 10824 } } } } }
+   STP_ops_185_contested_visible = {
+   	185 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 372
+   				}
+   				NOT = {
+   					controls_province = 3130
+   				}
+   				NOT = {
+   					controls_province = 5344
+   				}
+   				NOT = {
+   					controls_province = 10824
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_203_border_visible = { 203 = { controller = { tag = STS } } }
-   STP_ops_203_contested_visible = { 203 = { controller = { tag = STS OR = { NOT = { controls_province = 3941 } NOT = { controls_province = 7409 } NOT = { controls_province = 8855 } NOT = { controls_province = 16466 } NOT = { controls_province = 16484 } NOT = { controls_province = 16536 } } } } }
+   STP_ops_203_contested_visible = {
+   	203 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 3941
+   				}
+   				NOT = {
+   					controls_province = 7409
+   				}
+   				NOT = {
+   					controls_province = 8855
+   				}
+   				NOT = {
+   					controls_province = 16466
+   				}
+   				NOT = {
+   					controls_province = 16484
+   				}
+   				NOT = {
+   					controls_province = 16536
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_178_border_visible = { 178 = { controller = { tag = STS } } }
-   STP_ops_178_contested_visible = { 178 = { controller = { tag = STS OR = { NOT = { controls_province = 6151 } NOT = { controls_province = 6377 } NOT = { controls_province = 8187 } NOT = { controls_province = 16475 } NOT = { controls_province = 16486 } NOT = { controls_province = 16516 } } } } }
+   STP_ops_178_contested_visible = {
+   	178 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 6151
+   				}
+   				NOT = {
+   					controls_province = 6377
+   				}
+   				NOT = {
+   					controls_province = 8187
+   				}
+   				NOT = {
+   					controls_province = 16475
+   				}
+   				NOT = {
+   					controls_province = 16486
+   				}
+   				NOT = {
+   					controls_province = 16516
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_180_border_visible = { 180 = { controller = { tag = STS } } }
-   STP_ops_180_contested_visible = { 180 = { controller = { tag = STS OR = { NOT = { controls_province = 1440 } NOT = { controls_province = 2399 } NOT = { controls_province = 2601 } NOT = { controls_province = 8670 } NOT = { controls_province = 9285 } NOT = { controls_province = 10515 } NOT = { controls_province = 16311 } } } } }
+   STP_ops_180_contested_visible = {
+   	180 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 1440
+   				}
+   				NOT = {
+   					controls_province = 2399
+   				}
+   				NOT = {
+   					controls_province = 2601
+   				}
+   				NOT = {
+   					controls_province = 8670
+   				}
+   				NOT = {
+   					controls_province = 9285
+   				}
+   				NOT = {
+   					controls_province = 10515
+   				}
+   				NOT = {
+   					controls_province = 16311
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_181_border_visible = { 181 = { controller = { tag = STS } } }
-   STP_ops_181_contested_visible = { 181 = { controller = { tag = STS OR = { NOT = { controls_province = 841 } NOT = { controls_province = 2144 } NOT = { controls_province = 2226 } NOT = { controls_province = 3956 } NOT = { controls_province = 4282 } NOT = { controls_province = 8263 } NOT = { controls_province = 8367 } NOT = { controls_province = 9439 } NOT = { controls_province = 10530 } NOT = { controls_province = 11398 } NOT = { controls_province = 16300 } NOT = { controls_province = 16325 } NOT = { controls_province = 16508 } NOT = { controls_province = 16518 } } } } }
+   STP_ops_181_contested_visible = {
+   	181 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 841
+   				}
+   				NOT = {
+   					controls_province = 2144
+   				}
+   				NOT = {
+   					controls_province = 2226
+   				}
+   				NOT = {
+   					controls_province = 3956
+   				}
+   				NOT = {
+   					controls_province = 4282
+   				}
+   				NOT = {
+   					controls_province = 8263
+   				}
+   				NOT = {
+   					controls_province = 8367
+   				}
+   				NOT = {
+   					controls_province = 9439
+   				}
+   				NOT = {
+   					controls_province = 10530
+   				}
+   				NOT = {
+   					controls_province = 11398
+   				}
+   				NOT = {
+   					controls_province = 16300
+   				}
+   				NOT = {
+   					controls_province = 16325
+   				}
+   				NOT = {
+   					controls_province = 16508
+   				}
+   				NOT = {
+   					controls_province = 16518
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_182_border_visible = { 182 = { controller = { tag = STS } } }
-   STP_ops_182_contested_visible = { 182 = { controller = { tag = STS OR = { NOT = { controls_province = 188 } NOT = { controls_province = 309 } NOT = { controls_province = 965 } NOT = { controls_province = 2241 } NOT = { controls_province = 2841 } NOT = { controls_province = 3001 } NOT = { controls_province = 10421 } NOT = { controls_province = 11403 } } } } }
+   STP_ops_182_contested_visible = {
+   	182 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 188
+   				}
+   				NOT = {
+   					controls_province = 309
+   				}
+   				NOT = {
+   					controls_province = 965
+   				}
+   				NOT = {
+   					controls_province = 2241
+   				}
+   				NOT = {
+   					controls_province = 2841
+   				}
+   				NOT = {
+   					controls_province = 3001
+   				}
+   				NOT = {
+   					controls_province = 10421
+   				}
+   				NOT = {
+   					controls_province = 11403
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_183_border_visible = { 183 = { controller = { tag = STS } } }
-   STP_ops_183_contested_visible = { 183 = { controller = { tag = STS OR = { NOT = { controls_province = 2617 } NOT = { controls_province = 6019 } NOT = { controls_province = 6333 } NOT = { controls_province = 8687 } NOT = { controls_province = 13028 } NOT = { controls_province = 16317 } } } } }
+   STP_ops_183_contested_visible = {
+   	183 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 2617
+   				}
+   				NOT = {
+   					controls_province = 6019
+   				}
+   				NOT = {
+   					controls_province = 6333
+   				}
+   				NOT = {
+   					controls_province = 8687
+   				}
+   				NOT = {
+   					controls_province = 13028
+   				}
+   				NOT = {
+   					controls_province = 16317
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_193_border_visible = { 193 = { controller = { tag = STS } } }
-   STP_ops_193_contested_visible = { 193 = { controller = { tag = STS OR = { NOT = { controls_province = 4336 } NOT = { controls_province = 4527 } NOT = { controls_province = 5195 } NOT = { controls_province = 6066 } NOT = { controls_province = 8664 } NOT = { controls_province = 16636 } } } } }
+   STP_ops_193_contested_visible = {
+   	193 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 4336
+   				}
+   				NOT = {
+   					controls_province = 4527
+   				}
+   				NOT = {
+   					controls_province = 5195
+   				}
+   				NOT = {
+   					controls_province = 6066
+   				}
+   				NOT = {
+   					controls_province = 8664
+   				}
+   				NOT = {
+   					controls_province = 16636
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_206_border_visible = { 206 = { controller = { tag = STS } } }
-   STP_ops_206_contested_visible = { 206 = { controller = { tag = STS OR = { NOT = { controls_province = 599 } NOT = { controls_province = 726 } NOT = { controls_province = 1272 } NOT = { controls_province = 6352 } NOT = { controls_province = 12814 } } } } }
+   STP_ops_206_contested_visible = {
+   	206 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 599
+   				}
+   				NOT = {
+   					controls_province = 726
+   				}
+   				NOT = {
+   					controls_province = 1272
+   				}
+   				NOT = {
+   					controls_province = 6352
+   				}
+   				NOT = {
+   					controls_province = 12814
+   				}
+   			}
+   		}
+   	}
+   }
    STP_ops_207_border_visible = { 207 = { controller = { tag = STS } } }
-   STP_ops_207_contested_visible = { 207 = { controller = { tag = STS OR = { NOT = { controls_province = 1136 } NOT = { controls_province = 2895 } NOT = { controls_province = 5119 } NOT = { controls_province = 6201 } NOT = { controls_province = 7663 } NOT = { controls_province = 16480 } } } } }
+   STP_ops_207_contested_visible = {
+   	207 = {
+   		controller = {
+   			tag = STS
+   			OR = {
+   				NOT = {
+   					controls_province = 1136
+   				}
+   				NOT = {
+   					controls_province = 2895
+   				}
+   				NOT = {
+   					controls_province = 5119
+   				}
+   				NOT = {
+   					controls_province = 6201
+   				}
+   				NOT = {
+   					controls_province = 7663
+   				}
+   				NOT = {
+   					controls_province = 16480
+   				}
+   			}
+   		}
+   	}
+   }
   }
   properties = {
    STP_ops_43_controller = { frame = operations_state_43_frame }
@@ -597,33 +4447,213 @@ scripted_gui = {
  ADISCORD_VAL_trade_routes_panel = { context_type = decision_category window_name = "ADISCORD_VAL_trade_routes_window" visible = { always = yes } triggers = {
   trade_occidia_map_visible = { VAL_trade_corridors_unlocked = yes }
   trade_occidia_1_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_occidia_open = yes } NOT = { has_country_flag = VAL_route_occidia_commissioned } }
-  trade_occidia_2_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_occidia_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
-  trade_occidia_3_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_occidia_open = yes check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
+  trade_occidia_2_label_visible = {
+  	VAL_trade_corridors_unlocked = yes
+  	VAL_trade_route_occidia_open = yes
+  	NOT = {
+  		AND = {
+  			check_variable = {
+  				var = VAL_black_market_pressure
+  				value = 50
+  				compare = greater_than_or_equals
+  			}
+  			check_variable = {
+  				var = VAL_corridor_security
+  				value = 3
+  				compare = less_than
+  			}
+  		}
+  	}
+  }
+  trade_occidia_3_label_visible = {
+  	VAL_trade_corridors_unlocked = yes
+  	VAL_trade_route_occidia_open = yes
+  	check_variable = {
+  		var = VAL_black_market_pressure
+  		value = 50
+  		compare = greater_than_or_equals
+  	}
+  	check_variable = {
+  		var = VAL_corridor_security
+  		value = 3
+  		compare = less_than
+  	}
+  }
   trade_occidia_4_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_occidia_open = yes } has_country_flag = VAL_route_occidia_commissioned }
   trade_west_map_visible = { VAL_trade_corridors_unlocked = yes }
   trade_west_1_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_west_open = yes } NOT = { has_country_flag = VAL_route_west_commissioned } }
-  trade_west_2_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_west_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
-  trade_west_3_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_west_open = yes check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
+  trade_west_2_label_visible = {
+  	VAL_trade_corridors_unlocked = yes
+  	VAL_trade_route_west_open = yes
+  	NOT = {
+  		AND = {
+  			check_variable = {
+  				var = VAL_black_market_pressure
+  				value = 50
+  				compare = greater_than_or_equals
+  			}
+  			check_variable = {
+  				var = VAL_corridor_security
+  				value = 3
+  				compare = less_than
+  			}
+  		}
+  	}
+  }
+  trade_west_3_label_visible = {
+  	VAL_trade_corridors_unlocked = yes
+  	VAL_trade_route_west_open = yes
+  	check_variable = {
+  		var = VAL_black_market_pressure
+  		value = 50
+  		compare = greater_than_or_equals
+  	}
+  	check_variable = {
+  		var = VAL_corridor_security
+  		value = 3
+  		compare = less_than
+  	}
+  }
   trade_west_4_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_west_open = yes } has_country_flag = VAL_route_west_commissioned }
   trade_stelander_map_visible = { VAL_trade_corridors_unlocked = yes }
   trade_stelander_1_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_stelander_open = yes } NOT = { has_country_flag = VAL_route_stelander_commissioned } }
-  trade_stelander_2_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_stelander_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
-  trade_stelander_3_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_stelander_open = yes check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
+  trade_stelander_2_label_visible = {
+  	VAL_trade_corridors_unlocked = yes
+  	VAL_trade_route_stelander_open = yes
+  	NOT = {
+  		AND = {
+  			check_variable = {
+  				var = VAL_black_market_pressure
+  				value = 50
+  				compare = greater_than_or_equals
+  			}
+  			check_variable = {
+  				var = VAL_corridor_security
+  				value = 3
+  				compare = less_than
+  			}
+  		}
+  	}
+  }
+  trade_stelander_3_label_visible = {
+  	VAL_trade_corridors_unlocked = yes
+  	VAL_trade_route_stelander_open = yes
+  	check_variable = {
+  		var = VAL_black_market_pressure
+  		value = 50
+  		compare = greater_than_or_equals
+  	}
+  	check_variable = {
+  		var = VAL_corridor_security
+  		value = 3
+  		compare = less_than
+  	}
+  }
   trade_stelander_4_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_stelander_open = yes } has_country_flag = VAL_route_stelander_commissioned }
   trade_vorkerland_map_visible = { VAL_trade_corridors_unlocked = yes }
   trade_vorkerland_1_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_vorkerland_open = yes } NOT = { has_country_flag = VAL_route_vorkerland_commissioned } }
-  trade_vorkerland_2_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_vorkerland_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
-  trade_vorkerland_3_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_vorkerland_open = yes check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
+  trade_vorkerland_2_label_visible = {
+  	VAL_trade_corridors_unlocked = yes
+  	VAL_trade_route_vorkerland_open = yes
+  	NOT = {
+  		AND = {
+  			check_variable = {
+  				var = VAL_black_market_pressure
+  				value = 50
+  				compare = greater_than_or_equals
+  			}
+  			check_variable = {
+  				var = VAL_corridor_security
+  				value = 3
+  				compare = less_than
+  			}
+  		}
+  	}
+  }
+  trade_vorkerland_3_label_visible = {
+  	VAL_trade_corridors_unlocked = yes
+  	VAL_trade_route_vorkerland_open = yes
+  	check_variable = {
+  		var = VAL_black_market_pressure
+  		value = 50
+  		compare = greater_than_or_equals
+  	}
+  	check_variable = {
+  		var = VAL_corridor_security
+  		value = 3
+  		compare = less_than
+  	}
+  }
   trade_vorkerland_4_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_vorkerland_open = yes } has_country_flag = VAL_route_vorkerland_commissioned }
   trade_south_map_visible = { VAL_trade_corridors_unlocked = yes }
   trade_south_1_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_south_open = yes } NOT = { has_country_flag = VAL_route_south_commissioned } }
-  trade_south_2_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_south_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
-  trade_south_3_label_visible = { VAL_trade_corridors_unlocked = yes VAL_trade_route_south_open = yes check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
+  trade_south_2_label_visible = {
+  	VAL_trade_corridors_unlocked = yes
+  	VAL_trade_route_south_open = yes
+  	NOT = {
+  		AND = {
+  			check_variable = {
+  				var = VAL_black_market_pressure
+  				value = 50
+  				compare = greater_than_or_equals
+  			}
+  			check_variable = {
+  				var = VAL_corridor_security
+  				value = 3
+  				compare = less_than
+  			}
+  		}
+  	}
+  }
+  trade_south_3_label_visible = {
+  	VAL_trade_corridors_unlocked = yes
+  	VAL_trade_route_south_open = yes
+  	check_variable = {
+  		var = VAL_black_market_pressure
+  		value = 50
+  		compare = greater_than_or_equals
+  	}
+  	check_variable = {
+  		var = VAL_corridor_security
+  		value = 3
+  		compare = less_than
+  	}
+  }
   trade_south_4_label_visible = { VAL_trade_corridors_unlocked = yes NOT = { VAL_trade_route_south_open = yes } has_country_flag = VAL_route_south_commissioned }
   trade_north_map_visible = { always = yes }
   trade_north_1_label_visible = { always = yes NOT = { VAL_trade_route_north_open = yes } NOT = { has_country_flag = VAL_route_north_commissioned } }
-  trade_north_2_label_visible = { always = yes VAL_trade_route_north_open = yes NOT = { AND = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } } } }
-  trade_north_3_label_visible = { always = yes VAL_trade_route_north_open = yes check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } check_variable = { var = VAL_corridor_security value = 3 compare = less_than } }
+  trade_north_2_label_visible = {
+  	always = yes
+  	VAL_trade_route_north_open = yes
+  	NOT = {
+  		AND = {
+  			check_variable = {
+  				var = VAL_black_market_pressure
+  				value = 50
+  				compare = greater_than_or_equals
+  			}
+  			check_variable = {
+  				var = VAL_corridor_security
+  				value = 3
+  				compare = less_than
+  			}
+  		}
+  	}
+  }
+  trade_north_3_label_visible = {
+  	always = yes
+  	VAL_trade_route_north_open = yes
+  	check_variable = {
+  		var = VAL_black_market_pressure
+  		value = 50
+  		compare = greater_than_or_equals
+  	}
+  	check_variable = {
+  		var = VAL_corridor_security
+  		value = 3
+  		compare = less_than
+  	}
+  }
   trade_north_4_label_visible = { always = yes NOT = { VAL_trade_route_north_open = yes } has_country_flag = VAL_route_north_commissioned }
  }
   properties = {
