@@ -430,7 +430,17 @@ on_actions = {
                 clr_global_flag = skip_default_capitulation
             }
             else_if = {
-                limit = { tag = VAL NOT = { has_country_flag = VAL_nod_overlord_sts_peace_handled } check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
+                limit = {
+                	tag = VAL
+                	NOT = {
+                		has_country_flag = VAL_nod_overlord_sts_peace_handled
+                	}
+                	check_variable = {
+                		var = VAL_frontier_stage
+                		value = 0
+                		compare = greater_than
+                	}
+                }
                 # An unrelated winner keeps its own capitulation route.
                 VAL_frontier_close = yes
             }
@@ -1103,7 +1113,18 @@ on_actions = {
 			else_if = {
 				limit = {
 					has_global_flag = STP_cw_started
-					ROOT = { tag = VAL has_country_flag = VAL_cw_entered NOT = { has_country_flag = VAL_cw_settled } check_variable = { var = STP_cw_capitulation_occupier value = 3 compare = equals } }
+					ROOT = {
+						tag = VAL
+						has_country_flag = VAL_cw_entered
+						NOT = {
+							has_country_flag = VAL_cw_settled
+						}
+						check_variable = {
+							var = STP_cw_capitulation_occupier
+							value = 3
+							compare = equals
+						}
+					}
 				}
 				set_global_flag = skip_default_capitulation
 				VAL = {
@@ -1147,12 +1168,36 @@ on_actions = {
 				log = "[STP_CW] STS defeated the NOD intervention; unrelated wars retained"
 			}
 			else_if = {
-				limit = { ROOT = { tag = STS has_war_with = NOD check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals } } NOD = { has_country_flag = STP_ps_return_campaign } }
+				limit = {
+					ROOT = {
+						tag = STS
+						has_war_with = NOD
+						check_variable = {
+							var = STP_cw_capitulation_occupier
+							value = 4
+							compare = equals
+						}
+					}
+					NOD = {
+						has_country_flag = STP_ps_return_campaign
+					}
+				}
 				set_global_flag = skip_default_capitulation
 				NOD = { STP_ps_settle_return = yes }
 			}
 			else_if = {
-				limit = { ROOT = { tag = NOD has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } has_country_flag = STP_ps_return_campaign } }
+				limit = {
+					ROOT = {
+						tag = NOD
+						has_war_with = STS
+						check_variable = {
+							var = STP_cw_capitulation_occupier
+							value = 2
+							compare = equals
+						}
+						has_country_flag = STP_ps_return_campaign
+					}
+				}
 				NOD = { STP_ps_close_exile = yes }
 				set_global_flag = skip_default_capitulation
 				STS = { set_variable = { var = STP_pc_cap_side value = 2 } STP_pc_begin_settlement = yes }
@@ -1163,7 +1208,20 @@ on_actions = {
 					OR = {
 						AND = { ROOT = { tag = VAL has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
 						AND = { ROOT = { tag = NOD has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
-						AND = { ROOT = { tag = STS has_war_with = VAL NOT = { has_country_flag = VAL_final_defeat_pending } check_variable = { var = STP_cw_capitulation_occupier value = 5 compare = equals } } }
+						AND = {
+							ROOT = {
+								tag = STS
+								has_war_with = VAL
+								NOT = {
+									has_country_flag = VAL_final_defeat_pending
+								}
+								check_variable = {
+									var = STP_cw_capitulation_occupier
+									value = 5
+									compare = equals
+								}
+							}
+						}
 						AND = { ROOT = { tag = STS has_war_with = NOD check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals } } }
 					}
 				}
