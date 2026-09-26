@@ -363,7 +363,7 @@ ADISCORD_development_investments = {
 	}
 
 	ADISCORD_invest_society_development = {
-		icon = generic_population_growth
+		icon = generic_manpower
 		visible = {
 			NOT = { ADISCORD_society_development_at_least_5 = yes }
 			OR = {
