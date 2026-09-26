@@ -753,7 +753,22 @@ VAL_finish_vorkerland_corridor_project = {
 	}
 }
 VAL_begin_south_corridor_project = {
-	if = { limit = { has_capitulated = no VAL_trade_route_south_open = yes check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } NOT = { has_variable = VAL_corridor_deposit } NOT = { has_country_flag = VAL_route_south_upgraded } }
+	if = {
+		limit = {
+			has_capitulated = no
+			VAL_trade_route_south_open = yes
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 750
+				compare = greater_than_or_equals
+			}
+			NOT = {
+				has_variable = VAL_corridor_deposit
+			}
+			NOT = {
+				has_country_flag = VAL_route_south_upgraded
+			}
+		}
 		ADISCORD_economy_spend_500 = yes
 		ADISCORD_economy_spend_250 = yes
 		set_variable = { var = VAL_corridor_deposit value = 750 }
