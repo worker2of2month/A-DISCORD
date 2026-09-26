@@ -186,36 +186,65 @@ def selected_effects(items, facts, scope="STP"):
 
 
 class StelanderPreparationTests(unittest.TestCase):
-    def test_shabrat_can_order_wartime_volunteers_without_resource_stocks(self):
+    def test_shabrat_volunteers_cost_manpower_but_no_rifles(self):
         decisions = block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council")
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         facts = {("STS", "tag", "STS"): True,
                  ("STS", "has_completed_focus", "STP_cw_mobilization_register"): True,
                  ("STS", "STP_cw_can_rearm", "yes"): True,
                  ("STS", "owns_state", "1"): True, ("STS", "controls_state", "1"): True,
-                 ("STS", "manpower"): 0, ("STS", "numeric", "has_political_power"): 40}
+                 ("STS", "numeric", "has_manpower"): 12000,
+                 ("STS", "numeric", "has_political_power"): 40,
+                 ("STS", "equipment", "infantry_equipment"): 0}
+
         brigade = block(decisions, "STP_cw_raise_territorial_brigade")
         self.assertTrue(matches_conditions(block(brigade, "available"), facts, "STS"))
+        self.assertFalse(matches_conditions(
+            block(brigade, "available"),
+            {**facts, ("STS", "numeric", "has_manpower"): 5999},
+            "STS",
+        ))
         self.assertEqual(scalar(brigade, "cost"), "25")
+
+        volunteer = block(effects, "STP_cw_mobilize_volunteer_brigade")
+        mobilized = [e for _, e in selected_effects(volunteer, facts, "STS")]
+        self.assertIn("-6000", [e.value for e in mobilized if e.key == "add_manpower"])
+        self.assertFalse(any(e.key in {"STP_cw_pay_rifles", "add_equipment_to_stockpile"} for e in mobilized))
+
         training = block(decisions, "STP_cw_train_reserve_brigades")
         self.assertTrue(matches_conditions(block(training, "custom_cost_trigger"), facts, "STS"))
+        self.assertFalse(matches_conditions(
+            block(training, "custom_cost_trigger"),
+            {**facts, ("STS", "numeric", "has_manpower"): 11999},
+            "STS",
+        ))
         paid = [e for _, e in selected_effects(block(training, "complete_effect"), facts, "STS")]
         self.assertEqual([e.value for e in paid if e.key == "add_political_power"], ["-40"])
-        self.assertFalse(any(e.key in {"add_manpower", "STP_cw_pay_rifles", "add_equipment_to_stockpile"} for e in paid))
+        self.assertEqual([e.value for e in paid if e.key == "add_manpower"], ["-12000"])
+        self.assertFalse(any(e.key in {"STP_cw_pay_rifles", "add_equipment_to_stockpile"} for e in paid))
+
         receipt = "STP_cw_training_political_payment"
         self.assertIn(receipt, [e.value for e in paid if e.key == "set_country_flag"])
-        for political in (True, False):
-            refund_facts = facts | {("STS", "variable", "STP_cw_training_cohorts"): 2,
-                                   ("STS", "has_country_flag", receipt): political}
-            refund = [e for _, e in selected_effects(block(effects, "STP_cw_refund_reserve_training"), refund_facts, "STS")]
-            self.assertEqual(any(e.key == "add_manpower" for e in refund), not political)
-            self.assertEqual(any(e.key == "add_equipment_to_stockpile" for e in refund), not political)
-            self.assertIn(receipt, [e.value for e in refund if e.key == "clr_country_flag"])
+        refund_facts = facts | {("STS", "variable", "STP_cw_training_cohorts"): 2,
+                                ("STS", "has_country_flag", receipt): True}
+        refund = [e for _, e in selected_effects(
+            block(effects, "STP_cw_refund_reserve_training"),
+            refund_facts,
+            "STS",
+        )]
+        self.assertEqual([e.value for e in refund if e.key == "add_manpower"], ["12000"])
+        self.assertFalse(any(e.key == "add_equipment_to_stockpile" for e in refund))
+        self.assertIn(receipt, [e.value for e in refund if e.key == "clr_country_flag"])
+
         settled_facts = facts | {("STS", "variable", "STP_cw_training_cohorts"): 2,
                                  ("STS", "has_country_flag", receipt): True}
         deliveries = []
         for _ in range(2):
-            for scope, effect in selected_effects(block(effects, "STP_cw_finish_reserve_training"), settled_facts, "STS"):
+            for scope, effect in selected_effects(
+                block(effects, "STP_cw_finish_reserve_training"),
+                settled_facts,
+                "STS",
+            ):
                 deliveries.append(effect)
                 if effect.key == "clear_variable":
                     settled_facts[(scope, "variable", effect.value)] = 0
