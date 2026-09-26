@@ -37,12 +37,22 @@ class DevelopmentInvestmentTests(unittest.TestCase):
             self.assertIn(f"tag = {tag}", category)
         self.assertIn("has_variable = ADISCORD_economy_treasury", category)
 
-    def test_four_investments_use_existing_development_growth_api(self) -> None:
+    def test_all_six_investments_use_existing_development_growth_api(self) -> None:
         specs = {
+            "ADISCORD_invest_social_system_development": (
+                "ADISCORD_social_system_development_at_least_5",
+                "ADISCORD_social_system_development_investment_count",
+                "ADISCORD_increase_social_system_development_monthly_growth",
+            ),
             "ADISCORD_invest_army_development": (
                 "ADISCORD_army_development_at_least_5",
                 "ADISCORD_army_development_investment_count",
                 "ADISCORD_increase_army_development_monthly_growth",
+            ),
+            "ADISCORD_invest_cultural_development": (
+                "ADISCORD_cultural_development_at_least_5",
+                "ADISCORD_cultural_development_investment_count",
+                "ADISCORD_increase_cultural_development_monthly_growth",
             ),
             "ADISCORD_invest_state_development": (
                 "ADISCORD_state_development_at_least_5",
