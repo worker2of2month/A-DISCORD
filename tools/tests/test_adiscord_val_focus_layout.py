@@ -67,17 +67,17 @@ class KefreytFocusLayoutTests(unittest.TestCase):
             self.assertLessEqual(self.position(focus_id)[1], 10, focus_id)
         self.assertEqual(self.position("VAL_Contracts_Outlive_Kings")[1], 12)
 
-        # Main wars occupy the middle of the tree.
-        self.assertEqual(self.position("VAL_Stelander_Crisis_Opens")[1], 14)
+        # The crisis opens from the middle of the opening act.
+        self.assertEqual(self.position("VAL_Stelander_Crisis_Opens")[1], 7)
         for focus_id in (
             "VAL_Arms_For_The_Burning",
             "VAL_Keep_The_Arsenals",
             "VAL_Seize_The_Northern_Passes",
         ):
-            self.assertEqual(self.position(focus_id)[1], 15, focus_id)
-        self.assertEqual(self.position("VAL_The_Steel_Contract")[1], 16)
-        self.assertEqual(self.position("VAL_frontier_conference")[1], 18)
-        self.assertEqual(self.position("VAL_frontier_security_plan")[1], 22)
+            self.assertEqual(self.position(focus_id)[1], 8, focus_id)
+        self.assertEqual(self.position("VAL_The_Steel_Contract")[1], 9)
+        self.assertEqual(self.position("VAL_frontier_conference")[1], 14)
+        self.assertEqual(self.position("VAL_frontier_security_plan")[1], 17)
 
         # Expansion and settlement continue below the main-war layer.
         for focus_id in (
@@ -85,7 +85,7 @@ class KefreytFocusLayoutTests(unittest.TestCase):
             "VAL_Bezhaysk_Operation",
             "VAL_Occidian_Registries",
         ):
-            self.assertGreaterEqual(self.position(focus_id)[1], 20, focus_id)
+            self.assertGreaterEqual(self.position(focus_id)[1], 11, focus_id)
         for focus_id in (
             "VAL_frontier_treaty_offices",
             "VAL_Northern_Settlement",
@@ -93,7 +93,7 @@ class KefreytFocusLayoutTests(unittest.TestCase):
             "VAL_Southern_Expansion",
             "VAL_Eastern_Expansion",
         ):
-            self.assertGreaterEqual(self.position(focus_id)[1], 24, focus_id)
+            self.assertGreaterEqual(self.position(focus_id)[1], 19, focus_id)
 
     def test_main_campaign_nodes_do_not_share_coordinates(self) -> None:
         focus_ids = (
@@ -120,14 +120,14 @@ class KefreytFocusLayoutTests(unittest.TestCase):
 
     def test_existing_campaign_gates_are_preserved(self) -> None:
         conference = focus_block(self.focuses, "VAL_frontier_conference")
-        prerequisite = re.search(r"prerequisite\s*=\s*\{([^}]+)\}", conference)
-        self.assertIsNotNone(prerequisite)
+        prerequisites = " ".join(re.findall(r"prerequisite\s*=\s*\{([^}]+)\}", conference))
         for focus_id in (
             "VAL_Contracts_Outlive_Kings",
-            "VAL_The_Steel_Contract",
-            "VAL_Market_Roads_North",
+            "VAL_One_Ledger_One_Banner",
+            "VAL_Trading_Partners",
+            "VAL_October_Of_2160",
         ):
-            self.assertIn(f"focus = {focus_id}", prerequisite.group(1))
+            self.assertIn(f"focus = {focus_id}", prerequisites)
 
         contracts = focus_block(self.focuses, "VAL_Contracts_Outlive_Kings")
         for focus_id in (
