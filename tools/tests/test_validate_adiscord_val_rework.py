@@ -4371,6 +4371,19 @@ class ValExpandedCampaignTests(unittest.TestCase):
         pairs = {(self.scalar(j, "targeted_alliance"), self.scalar(j, "enemy")) for j in joins}
         self.assertIn(("event_target:VAL_subject_war_leader", "event_target:VAL_subject_war_enemy"), pairs)
         self.assertIn(("VAL", "event_target:VAL_subject_war_enemy"), pairs)
+        self.assertNotIn(
+            ("event_target:VAL_subject_war_enemy", "VAL"),
+            pairs,
+            "Kefreyt subjects must never be added to the enemy side of VAL's war",
+        )
+        self.assertEqual(
+            sum(
+                self.scalar(j, "targeted_alliance") == "VAL"
+                and self.scalar(j, "enemy") == "event_target:VAL_subject_war_enemy"
+                for j in joins
+            ),
+            1,
+        )
         self.assertFalse(any(e.key == "declare_war_on" for e in walk(call)))
 
         decisions = self.parse(DECISIONS_PATH.read_text(encoding="utf-8"))
