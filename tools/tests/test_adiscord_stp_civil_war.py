@@ -4400,24 +4400,35 @@ class NorthernOffensiveClockTests(unittest.TestCase):
         for enemies in ((), ("YPR",), ("COF",), ("TFF",), ("YPR", "TFF")):
             facts = {("NOD", "has_war_with", tag): tag in enemies for tag in ("YPR", "COF", "TFF")}
             self.assertEqual(matches_conditions(ast_block(mission, "cancel_trigger"), facts, "NOD"), not enemies)
+        start = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start_northern_war")
+        self.assertIn("activate_mission = NOD_cw_northern_push", start)
         expired = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "NOD_cw_exhaust_northern_push")
         self.assertIn("remove_ideas = NOD_cw_northern_offensive", expired)
         self.assertIn("add_ideas = NOD_cw_stalled_army", expired)
         self.assertIn("has_war_with = YPR", expired)
-        self.assertIn("add_ideas = YPR_cw_northern_resolve", expired)
-        self.assertIn("add_ideas = TFF_cw_northern_resolve", expired)
+        helper = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "NOD_cw_apply_northern_exhaustion")
+        self.assertIn("add_ideas = YPR_cw_northern_resolve", helper)
+        self.assertIn("add_ideas = COF_cw_northern_resolve", helper)
+        self.assertIn("add_ideas = TFF_cw_northern_resolve", helper)
+        self.assertIn("NOD_cw_northern_exhaustion_applied", helper)
 
         ideas = ast_block(ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
+        offensive = ast_block(ideas, "NOD_cw_northern_offensive")
+        self.assertEqual(scalar(ast_block(offensive, "on_remove"), "NOD_cw_apply_northern_exhaustion"), "yes")
         yubor = ast_block(ideas, "YPR_cw_northern_resolve")
+        forest = ast_block(ideas, "COF_cw_northern_resolve")
         frontier = ast_block(ideas, "TFF_cw_northern_resolve")
-        for spirit in (yubor, frontier):
+        for spirit in (yubor, forest, frontier):
             cancel = ast_block(spirit, "cancel")
             self.assertIn("NOD", {e.value for e in walk(cancel) if e.key == "has_war_with"})
             self.assertIn("has_capitulated", {e.key for e in walk(cancel)})
         yubor_modifiers = {e.key: float(e.value) for e in ast_block(yubor, "modifier")}
+        forest_modifiers = {e.key: float(e.value) for e in ast_block(forest, "modifier")}
         frontier_modifiers = {e.key: float(e.value) for e in ast_block(frontier, "modifier")}
         self.assertEqual(yubor_modifiers["army_defence_factor"], 0.12)
         self.assertEqual(yubor_modifiers["army_org_regain"], 0.10)
+        self.assertEqual(forest_modifiers["army_defence_factor"], 0.10)
+        self.assertEqual(forest_modifiers["army_org_factor"], 0.08)
         self.assertEqual(frontier_modifiers["army_attack_factor"], 0.08)
         self.assertEqual(frontier_modifiers["breakthrough_factor"], 0.10)
 

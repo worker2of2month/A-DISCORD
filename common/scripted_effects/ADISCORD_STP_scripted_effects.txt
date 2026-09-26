@@ -934,24 +934,42 @@ STP_cw_release_tff_to_northern_war = {
 	}
 }
 
-NOD_cw_exhaust_northern_push = {
-	remove_ideas = NOD_cw_northern_offensive
+NOD_cw_apply_northern_exhaustion = {
 	if = {
-		limit = { has_capitulated = no OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } }
+		limit = {
+			has_capitulated = no
+			OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
+			NOT = { has_country_flag = NOD_cw_northern_exhaustion_applied }
+		}
+		set_country_flag = NOD_cw_northern_exhaustion_applied
 		add_ideas = NOD_cw_stalled_army
-	}
-	YPR = {
-		if = {
-			limit = { exists = yes has_capitulated = no has_war_with = NOD }
-			add_ideas = YPR_cw_northern_resolve
+		YPR = {
+			if = {
+				limit = { exists = yes has_capitulated = no has_war_with = NOD }
+				add_ideas = YPR_cw_northern_resolve
+			}
+		}
+		COF = {
+			if = {
+				limit = { exists = yes has_capitulated = no has_war_with = NOD }
+				add_ideas = COF_cw_northern_resolve
+			}
+		}
+		TFF = {
+			if = {
+				limit = { exists = yes has_capitulated = no has_war_with = NOD }
+				add_ideas = TFF_cw_northern_resolve
+			}
 		}
 	}
-	TFF = {
-		if = {
-			limit = { exists = yes has_capitulated = no has_war_with = NOD }
-			add_ideas = TFF_cw_northern_resolve
-		}
+}
+
+NOD_cw_exhaust_northern_push = {
+	if = {
+		limit = { has_idea = NOD_cw_northern_offensive }
+		remove_ideas = NOD_cw_northern_offensive
 	}
+	else = { NOD_cw_apply_northern_exhaustion = yes }
 }
 
 STP_cw_start_northern_war = {
@@ -987,6 +1005,7 @@ STP_cw_start_northern_war = {
 			set_country_flag = NOD_cw_northern_war_started
 			STP_cw_release_tff_to_northern_war = yes
 			if = { limit = { NOT = { has_idea = NOD_cw_northern_offensive } } add_timed_idea = { idea = NOD_cw_northern_offensive days = 70 } }
+			activate_mission = NOD_cw_northern_push
 			# Northern deployment can permit an uprising before the election deadline.
 			country_event = { id = ADISCORD_STP_cw.42 days = 7 }
 			country_event = { id = ADISCORD_STP_preparation.12 days = 1 }
