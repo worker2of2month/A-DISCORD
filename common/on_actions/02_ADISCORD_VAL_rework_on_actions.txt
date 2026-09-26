@@ -11,17 +11,6 @@ on_actions = {
 		}
 	}
 
-	# Focus completion changes the truth value of staged allow_branch gates.
-	# Refresh only VAL's current tree; this is a UI/layout reconciliation hook.
-	on_focus_completed = {
-		effect = {
-			if = {
-				limit = { tag = VAL has_focus_tree = VAL_focus }
-				mark_focus_tree_layout_dirty = yes
-			}
-		}
-	}
-
 	on_startup = {
 		effect = {
 			VAL = { VAL_qol_initialize_staff = yes VAL_qol_initialize_party_leaders = yes }

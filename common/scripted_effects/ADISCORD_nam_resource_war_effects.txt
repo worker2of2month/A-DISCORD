@@ -35,10 +35,7 @@ ADISCORD_nam_resource_war_start = {
 			if = { limit = { is_in_faction = yes } leave_faction = yes }
 		}
 		clr_global_flag = ADISCORD_nam_resource_war_scheduled
-		random_list = {
-			30 = { ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = yes }
-			70 = { ADISCORD_nam_resource_war_begin_hostilities = yes }
-		}
+		ADISCORD_nam_resource_war_begin_hostilities = yes
 	}
 }
 

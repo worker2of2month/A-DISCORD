@@ -2225,9 +2225,17 @@ VAL_foreign_sales = {
 		visible = { has_country_flag = VAL_cw_trade_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
 		available = {
 			has_capitulated = no
-			NOT = { has_country_flag = VAL_cw_arms_offer_pending }
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_arms_channel_free_tt
+				NOT = { has_country_flag = VAL_cw_arms_offer_pending }
+				NOT = { has_variable = STP_ps_val_receipt_rifles }
+			}
 			NOT = { has_war_with = STS }
 			NOT = { has_country_flag = VAL_cw_refused }
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_buyer_can_pay_500_tt
+				STS = { ADISCORD_economy_can_spend_500 = yes }
+			}
 			NOT = { has_equipment = { infantry_equipment < 32000 } }
 			STS = { exists = yes has_capitulated = no has_war_with = STP }
 		}
@@ -2249,9 +2257,17 @@ VAL_foreign_sales = {
 		visible = { has_country_flag = VAL_cw_trade_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
 		available = {
 			has_capitulated = no
-			NOT = { has_country_flag = VAL_cw_arms_offer_pending }
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_arms_channel_free_tt
+				NOT = { has_country_flag = VAL_cw_arms_offer_pending }
+				NOT = { has_variable = STP_ps_val_receipt_rifles }
+			}
 			NOT = { has_war_with = STS }
 			NOT = { has_country_flag = VAL_cw_refused }
+			custom_trigger_tooltip = {
+				tooltip = VAL_cw_buyer_can_pay_1000_tt
+				STS = { check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
+			}
 			NOT = { has_equipment = { infantry_equipment < 43340 } }
 			NOT = { has_manpower < 12600 }
 			NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 96 } }
@@ -2478,7 +2494,7 @@ VAL_resource_war_aid = {
 		icon = generic_army_support
 		allowed = { tag = VAL }
 		targets = { NAM EFL }
-		target_trigger = { FROM = { VAL_resource_aid_recipient = yes } }
+		target_trigger = { FROM = { exists = yes } }
 		visible = { VAL_resource_aid_deliveries_open = yes FROM = { VAL_resource_aid_recipient = yes } }
 		available = { has_capitulated = no is_subject = no VAL_resource_aid_deliveries_open = yes FROM = { VAL_resource_aid_recipient = yes } NOT = { has_equipment = { infantry_equipment < 25000 } } }
 		custom_cost_text = VAL_aid_cost_arms
@@ -2496,7 +2512,7 @@ VAL_resource_war_aid = {
 		icon = generic_army_support
 		allowed = { tag = VAL }
 		targets = { NAM EFL }
-		target_trigger = { FROM = { VAL_resource_aid_recipient = yes } }
+		target_trigger = { FROM = { exists = yes } }
 		visible = { VAL_resource_aid_deliveries_open = yes FROM = { VAL_resource_aid_recipient = yes } }
 		available = { has_capitulated = no is_subject = no VAL_resource_aid_deliveries_open = yes FROM = { VAL_resource_aid_recipient = yes } NOT = { has_manpower < 2000 } NOT = { command_power < 25 } }
 		custom_cost_text = VAL_aid_cost_personnel
@@ -2517,12 +2533,23 @@ VAL_resource_war_aid = {
 		is_good = yes
 		days_mission_timeout = 90
 		selectable_mission = no
-		# Keep the deadline active while the pledge is pending. Gating a running
-		# mission with the fulfilment trigger makes it cancel before the first shipment.
-		available = { always = yes }
-		cancel_trigger = {
-			NOT = { check_variable = { var = VAL_resource_aid_state value = 1 compare = equals } }
+		available = {
+			hidden_trigger = {
+				OR = {
+					VAL_resource_aid_sufficient = yes
+					check_variable = { var = VAL_resource_aid_state value = 2 compare = equals }
+				}
+			}
 		}
+		cancel_trigger = {
+			NOT = {
+				OR = {
+					check_variable = { var = VAL_resource_aid_state value = 1 compare = equals }
+					check_variable = { var = VAL_resource_aid_state value = 2 compare = equals }
+				}
+			}
+		}
+		complete_effect = { hidden_effect = { VAL_complete_resource_aid = yes } }
 		timeout_effect = { hidden_effect = { set_country_flag = VAL_resource_aid_timeout_pending country_event = { id = val_contract.369 hours = 1 } } }
 	}
 }
@@ -2597,12 +2624,23 @@ VAL_northern_war_aid = {
 		is_good = yes
 		days_mission_timeout = 90
 		selectable_mission = no
-		# Keep the deadline alive until the pledge is fulfilled, failed or closed.
-		# Fulfilment itself is recorded by the delivery/daily scripted effects.
-		available = { always = yes }
-		cancel_trigger = {
-			NOT = { check_variable = { var = VAL_northern_aid_state value = 1 compare = equals } }
+		available = {
+			hidden_trigger = {
+				OR = {
+					VAL_northern_aid_sufficient = yes
+					check_variable = { var = VAL_northern_aid_state value = 2 compare = equals }
+				}
+			}
 		}
+		cancel_trigger = {
+			NOT = {
+				OR = {
+					check_variable = { var = VAL_northern_aid_state value = 1 compare = equals }
+					check_variable = { var = VAL_northern_aid_state value = 2 compare = equals }
+				}
+			}
+		}
+		complete_effect = { hidden_effect = { VAL_complete_northern_aid = yes } }
 		timeout_effect = { hidden_effect = { country_event = { id = val_contract.370 hours = 1 } } }
 	}
 }

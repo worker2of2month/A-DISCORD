@@ -73,6 +73,14 @@ def allow(source: str, focus_id: str) -> str:
     return named_block(focus_block(source, focus_id), "allow_branch")
 
 
+def focus_ids(source: str) -> list[str]:
+    from tools.tests.test_adiscord_stp_preparation import scalar, walk
+    from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+    return [scalar(entry.value, "id") for entry in walk(parse_clausewitz(source))
+            if entry.key == "focus" and isinstance(entry.value, list)]
+
+
 class KefreytFocusStagingTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -82,12 +90,12 @@ class KefreytFocusStagingTests(unittest.TestCase):
         cls.en_loc = read(EN_LOC_PATH)
 
     def test_every_focus_gate_explains_what_it_reveals(self) -> None:
-        ids = re.findall(r"(?m)^\s*id\s*=\s*(VAL_[A-Za-z0-9_]+)\s*$", self.focuses)
+        ids = focus_ids(self.focuses)
         known = set(ids)
         expected = {}
         for focus_id in ids:
             block = focus_block(self.focuses, focus_id)
-            if "allow_branch" not in block:
+            if not re.search(r"(?m)^\s*allow_branch\s*=", block):
                 continue
             gate = allow(self.focuses, focus_id)
             for dependency in set(re.findall(r"has_completed_focus\s*=\s*(VAL_[A-Za-z0-9_]+)", gate)):
@@ -186,7 +194,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
 
     def test_contracts_outlive_kings_is_a_visible_capstone(self) -> None:
         body = focus_block(self.focuses, "VAL_Contracts_Outlive_Kings")
-        self.assertNotIn("allow_branch", body)
+        self.assertNotRegex(body, r"(?m)^\s*allow_branch\s*=")
         self.assertNotIn("dynamic = yes", body)
         for dependency in (
             "VAL_State_Contract",
@@ -275,11 +283,11 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", southern)
 
     def test_every_staged_allow_branch_focus_is_dynamic(self) -> None:
-        ids = re.findall(r"(?m)^\s*id\s*=\s*(VAL_[A-Za-z0-9_]+)\s*$", self.focuses)
+        ids = focus_ids(self.focuses)
         staged = []
         for focus_id in ids:
             block = focus_block(self.focuses, focus_id)
-            if "allow_branch" not in block:
+            if not re.search(r"(?m)^\s*allow_branch\s*=", block):
                 continue
             staged.append(focus_id)
             self.assertIn(
@@ -306,10 +314,46 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertNotIn("load_focus_tree = { tree = VAL_focus keep_completed = yes }", self.on_actions)
 
     def test_focus_completion_refreshes_dynamic_layout(self) -> None:
-        hook = named_block(self.on_actions, "on_focus_completed")
-        self.assertIn("tag = VAL", hook)
-        self.assertIn("has_focus_tree = VAL_focus", hook)
-        self.assertIn("mark_focus_tree_layout_dirty = yes", hook)
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        focuses = {scalar(entry.value, "id"): entry.value
+                   for entry in walk(parse_clausewitz(self.focuses))
+                   if entry.key == "focus" and isinstance(entry.value, list)}
+        parents = {entry.value for focus in focuses.values()
+                   for gate in focus if gate.key == "allow_branch"
+                   for entry in walk(gate.value)
+                   if entry.key == "has_completed_focus" and entry.value in focuses}
+        self.assertIn("VAL_Price_Of_Loyalty", parents)
+        self.assertIn("VAL_Arsenal_Reserve", parents)
+        callers = set()
+        for focus_id, focus in focuses.items():
+            reward = block(focus, "completion_reward")
+            calls = [entry.value for entry in walk(reward)
+                     if entry.key == "country_event" and scalar(entry.value, "id") == "val_rework.123"]
+            if not calls:
+                continue
+            callers.add(focus_id)
+            self.assertEqual(len(calls), 1, focus_id)
+            self.assertEqual(scalar(calls[0], "hours"), "1", focus_id)
+            hidden_calls = [entry.value for hidden in reward if hidden.key == "hidden_effect"
+                            for entry in walk(hidden.value) if entry.key == "country_event"
+                            and scalar(entry.value, "id") == "val_rework.123"]
+            self.assertEqual(hidden_calls, calls, focus_id)
+        self.assertEqual(callers, parents)
+        self.assertNotIn("on_focus_completed", self.on_actions)
+        self.assertNotIn("on_focus_complete =", self.on_actions)
+
+        events = parse_clausewitz(read(ROOT / "events/ADISCORD_VAL_contract_events.txt"))
+        refresh = [entry.value for entry in events if entry.key == "country_event"
+                   and scalar(entry.value, "id") == "val_rework.123"]
+        self.assertEqual(len(refresh), 1)
+        self.assertEqual(scalar(refresh[0], "hidden"), "yes")
+        self.assertEqual(scalar(refresh[0], "is_triggered_only"), "yes")
+        self.assertEqual(scalar(block(refresh[0], "trigger"), "tag"), "VAL")
+        self.assertEqual(scalar(block(refresh[0], "trigger"), "has_focus_tree"), "VAL_focus")
+        self.assertEqual([(entry.key, entry.value) for entry in block(refresh[0], "immediate")],
+                         [("mark_focus_tree_layout_dirty", "yes")])
 
         startup = named_block(self.on_actions, "on_startup")
         self.assertIn("mark_focus_tree_layout_dirty = yes", startup)

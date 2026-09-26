@@ -168,6 +168,22 @@ on_actions = {
 	}
 	on_war_relation_added = {
 		effect = {
+			# ROOT and FROM are opponents. Each new relation propagates through
+			# subject links; the join guard makes repeated callbacks harmless.
+			ROOT = {
+				every_subject_country = { ADISCORD_join_subject_war = yes }
+				if = {
+					limit = { is_subject = yes }
+					overlord = { ADISCORD_join_subject_war = yes }
+				}
+			}
+			FROM = {
+				every_subject_country = { ADISCORD_join_subject_war = yes }
+				if = {
+					limit = { is_subject = yes }
+					overlord = { ADISCORD_join_subject_war = yes }
+				}
+			}
 			# A new enemy relation also covers allies entering an existing war.
 			if = {
 				limit = { OR = { has_global_flag = ADISCORD_fresh_campaign_contract_v1 ADISCORD_economy_has_current_schema = yes } }

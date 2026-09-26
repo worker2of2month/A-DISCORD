@@ -1,3 +1,70 @@
+# COUNTRY candidate, PREV is its subject/overlord already fighting.
+# ROOT/FROM retain the opponents supplied by on_war_relation_added.
+ADISCORD_join_subject_war = {
+	if = {
+		limit = {
+			exists = yes
+			NOT = { tag = ROOT }
+			NOT = { tag = FROM }
+			NOT = { has_war_with = PREV }
+		}
+		if = {
+			limit = {
+				PREV = {
+					tag = ROOT
+					has_war_with = FROM
+				}
+				NOT = { has_war_with = FROM }
+				NOT = {
+					AND = {
+						tag = STP
+						PREV = {
+							OR = {
+								tag = NOD
+								is_subject_of = NOD
+							}
+						}
+						FROM = { STP_cw_northern_enemy_blocks_subject_entry = yes }
+					}
+				}
+			}
+			add_to_war = {
+				targeted_alliance = ROOT
+				enemy = FROM
+				hostility_reason = asked_to_join
+				single_target_only = yes
+			}
+		}
+		else_if = {
+			limit = {
+				PREV = {
+					tag = FROM
+					has_war_with = ROOT
+				}
+				NOT = { has_war_with = ROOT }
+				NOT = {
+					AND = {
+						tag = STP
+						PREV = {
+							OR = {
+								tag = NOD
+								is_subject_of = NOD
+							}
+						}
+						ROOT = { STP_cw_northern_enemy_blocks_subject_entry = yes }
+					}
+				}
+			}
+			add_to_war = {
+				targeted_alliance = FROM
+				enemy = ROOT
+				hostility_reason = asked_to_join
+				single_target_only = yes
+			}
+		}
+	}
+}
+
 focus_unlock = { ###I've decided to keep the same name as in other mods in order not to get anyone confused
 	custom_effect_tooltip = focus_unlock_tooltip
 	hidden_effect = {

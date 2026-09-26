@@ -662,6 +662,20 @@ STP_cw_northern_fort_state = {
 	}
 }
 
+# COUNTRY enemy: exclude STP only from the live northern front, including
+# subject reinforcements. Other simultaneous NOD wars still call STP normally.
+STP_cw_northern_enemy_blocks_subject_entry = {
+	has_war_with = NOD
+	OR = {
+		tag = YPR
+		tag = COF
+		tag = TFF
+		is_subject_of = YPR
+		is_subject_of = COF
+		is_subject_of = TFF
+	}
+}
+
 # ROOT is the caller and FROM is the recipient; this hook has no selected-war scope.
 STP_cw_northern_call_blocked = {
 	tag = NOD

@@ -460,5 +460,185 @@ class PreparationLifecycleTests(unittest.TestCase):
                         visit(entry.value, set())
 
 
+class SubjectWarParticipationTests(unittest.TestCase):
+    """Execute the authored subject dispatch against a small war graph, not HOI4."""
+
+    def setUp(self):
+        def definitions(path):
+            return {entry.key: entry.value for entry in parse_clausewitz(
+                (ROOT / path).read_text(encoding="utf-8"))}
+
+        self.effects = definitions("common/scripted_effects/ADISCORD_scripted_effects_generic.txt")
+        self.triggers = definitions("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        actions = definitions("common/on_actions/00_ADISCORD_on_actions.txt")["on_actions"]
+        relation = next(entry.value for entry in actions if entry.key == "on_war_relation_added")
+        payload = next(entry.value for entry in relation if entry.key == "effect")
+        self.dispatch = payload[:2]
+        self.assertEqual([entry.key for entry in self.dispatch], ["ROOT", "FROM"])
+        self.subjects = {}
+        self.wars = set()
+        self.pending = []
+        self.joins = []
+        self.absent = set()
+
+    @staticmethod
+    def target(value, scope, root, enemy, previous):
+        return {"ROOT": root, "FROM": enemy, "PREV": previous, "THIS": scope}.get(value, value)
+
+    def matches(self, entries, scope, root, enemy, previous=None):
+        def check(entry):
+            key, value = entry.key, entry.value
+            target = self.target(key, scope, root, enemy, previous)
+            if key in ("AND", "OR", "NOT"):
+                results = [self.matches([child], scope, root, enemy, previous) for child in value]
+                return {"AND": all(results), "OR": any(results), "NOT": not any(results)}[key]
+            if key in self.triggers:
+                self.assertIn(value, ("yes", "no"))
+                return self.matches(self.triggers[key], scope, root, enemy, previous) == (value == "yes")
+            if isinstance(value, list):
+                return self.matches(value, target, root, enemy, scope)
+            other = self.target(value, scope, root, enemy, previous)
+            if key == "tag":
+                return scope == other
+            if key == "exists":
+                return (scope not in self.absent) == (value == "yes")
+            if key == "is_subject":
+                return (scope in self.subjects) == (value == "yes")
+            if key == "is_subject_of":
+                return self.subjects.get(scope) == other
+            if key == "has_war_with":
+                return frozenset((scope, other)) in self.wars
+            raise AssertionError(f"Unsupported subject-war predicate: {key}")
+
+        return all(check(entry) for entry in entries)
+
+    def execute(self, entries, scope, root, enemy, previous=None):
+        branch_taken = False
+        for entry in entries:
+            key, value = entry.key, entry.value
+            if key in ("if", "else_if"):
+                if key == "if":
+                    branch_taken = False
+                condition = next(child.value for child in value if child.key == "limit")
+                if not branch_taken and self.matches(condition, scope, root, enemy, previous):
+                    branch_taken = True
+                    self.execute([child for child in value if child.key != "limit"],
+                                 scope, root, enemy, previous)
+            elif key in self.effects:
+                self.assertEqual(value, "yes")
+                self.execute(self.effects[key], scope, root, enemy, previous)
+            elif key == "every_subject_country":
+                for subject, overlord in tuple(self.subjects.items()):
+                    if overlord == scope:
+                        self.execute(value, subject, root, enemy, scope)
+            elif key == "overlord":
+                self.execute(value, self.subjects[scope], root, enemy, scope)
+            elif key == "add_to_war":
+                fields = {child.key: child.value for child in value}
+                ally = self.target(fields["targeted_alliance"], scope, root, enemy, previous)
+                opponent = self.target(fields["enemy"], scope, root, enemy, previous)
+                self.assertEqual(fields["single_target_only"], "yes")
+                self.assertIn(frozenset((ally, opponent)), self.wars)
+                self.assertNotIn(frozenset((scope, ally)), self.wars)
+                pair = frozenset((scope, opponent))
+                self.assertNotIn(pair, self.wars, "duplicate join or recursive dispatch")
+                self.wars.add(pair)
+                self.joins.append((scope, ally, opponent))
+                self.pending.append((scope, opponent) if ally == root else (opponent, scope))
+            elif key in ("ROOT", "FROM"):
+                self.execute(value, self.target(key, scope, root, enemy, previous), root, enemy, scope)
+            else:
+                raise AssertionError(f"Unsupported subject-war effect: {key}")
+
+    def declare(self, attacker, defender):
+        self.wars.add(frozenset((attacker, defender)))
+        self.pending.append((attacker, defender))
+        callbacks = 0
+        while self.pending:
+            root, enemy = self.pending.pop(0)
+            self.execute(self.dispatch, root, root, enemy)
+            callbacks += 1
+            self.assertLess(callbacks, 100, "subject propagation did not terminate")
+
+    def test_both_sides_join_through_overlords_siblings_and_nested_subjects(self):
+        self.subjects = {"A1": "A", "A2": "A", "A3": "A2", "B1": "B", "B2": "B"}
+        self.declare("A1", "B1")
+        expected = {frozenset((a, b)) for a in ("A", "A1", "A2", "A3")
+                    for b in ("B", "B1", "B2")}
+        self.assertEqual(self.wars, expected)
+        joins = len(self.joins)
+        self.declare("A1", "B1")
+        self.assertEqual(len(self.joins), joins)
+
+    def test_val_and_sts_use_both_native_war_scopes(self):
+        for overlord, subject, sibling in (("VAL", "STS", "NKA"), ("STS", "VAL", "SRP")):
+            for participant in (overlord, subject):
+                for attacking in (False, True):
+                    with self.subTest(overlord=overlord, participant=participant, attacking=attacking):
+                        self.setUp()
+                        self.subjects = {subject: overlord, sibling: overlord}
+                        if attacking:
+                            self.declare(participant, "NOD")
+                        else:
+                            self.declare("NOD", participant)
+                        self.assertEqual(self.wars, {
+                            frozenset((country, "NOD")) for country in (overlord, subject, sibling)
+                        })
+                        self.assertEqual(len(self.joins), 2)
+
+    def test_sts_subject_joins_val_while_nod_is_fighting_in_the_north(self):
+        self.subjects = {"STP": "NOD", "STS": "VAL"}
+        self.declare("NOD", "YPR")
+        self.declare("NOD", "VAL")
+        self.assertEqual(self.wars, {
+            frozenset(("NOD", "YPR")),
+            frozenset(("NOD", "VAL")),
+            frozenset(("NOD", "STS")),
+            frozenset(("STP", "VAL")),
+            frozenset(("STP", "STS")),
+        })
+
+    def test_northern_exception_in_both_callback_directions(self):
+        for reverse in (False, True):
+            for northern in ("YPR", "COF", "TFF"):
+                with self.subTest(reverse=reverse, northern=northern):
+                    self.setUp()
+                    self.subjects = {"STP": "NOD", "N1": "NOD", "Y1": northern}
+                    self.declare(northern, "NOD") if reverse else self.declare("NOD", northern)
+                    self.assertFalse(any("STP" in pair for pair in self.wars))
+                    self.assertIn(frozenset(("N1", "Y1")), self.wars)
+                    self.declare("VAL", "NOD")
+                    self.assertIn(frozenset(("STP", "VAL")), self.wars)
+                    self.assertNotIn(frozenset(("STP", northern)), self.wars)
+
+    def test_attack_on_stp_still_calls_nod(self):
+        self.subjects = {"STP": "NOD"}
+        self.declare("VAL", "STP")
+        self.assertIn(("NOD", "STP", "VAL"), self.joins)
+
+    def test_northern_exception_also_handles_stp_as_overlord(self):
+        self.subjects = {"NOD": "STP"}
+        self.declare("NOD", "YPR")
+        self.assertNotIn(frozenset(("STP", "YPR")), self.wars)
+
+    def test_northern_tag_without_nod_war_does_not_block_stp(self):
+        self.subjects = {"STP": "VAL"}
+        self.declare("YPR", "VAL")
+        self.assertIn(frozenset(("STP", "YPR")), self.wars)
+
+    def test_absent_subject_and_enemy_overlord_cannot_join(self):
+        self.subjects = {"A1": "A", "A2": "A"}
+        self.absent.add("A2")
+        self.declare("A", "A1")
+        self.assertEqual(self.wars, {frozenset(("A", "A1"))})
+        self.assertEqual(self.joins, [])
+
+    def test_northern_exception_does_not_block_an_unrelated_overlord(self):
+        self.subjects = {"STP": "VAL"}
+        self.declare("NOD", "YPR")
+        self.declare("VAL", "YPR")
+        self.assertIn(("STP", "VAL", "YPR"), self.joins)
+
+
 if __name__ == "__main__":
     unittest.main()

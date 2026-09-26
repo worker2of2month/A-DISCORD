@@ -235,14 +235,12 @@ def main() -> int:
         "set_autonomy = { target = NAM autonomy_state = autonomy_free }",
         "leave_faction = yes",
         "clr_global_flag = ADISCORD_nam_resource_war_scheduled",
-        "random_list = {",
-        "30 = { ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = yes }",
-        "70 = { ADISCORD_nam_resource_war_begin_hostilities = yes }",
+        "ADISCORD_nam_resource_war_begin_hostilities = yes",
     ):
         check(readiness_position >= 0 and start.find(mutation) > readiness_position,
               f"resource-war start mutation escapes readiness: {mutation}")
     check("declare_war_on" not in start and "load_oob" not in start,
-          "resource-war wrapper must roll peace/war before any military mutation")
+          "resource-war wrapper must delegate military setup to hostilities")
 
     hostilities = named_block(effects, "ADISCORD_nam_resource_war_begin_hostilities")
     for mutation in (
@@ -254,8 +252,9 @@ def main() -> int:
     ):
         check(mutation in hostilities, f"hostility path lost required mutation: {mutation}")
     check(start.count("ADISCORD_nam_resource_war_begin_hostilities = yes") == 1
-          and start.count("ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = yes") == 1,
-          "resource-war entry must have exactly one 70/30 branch pair")
+          and "ADISCORD_nam_resource_war_resolve_peaceful_withdrawal" not in start
+          and "random_list" not in start,
+          "resource-war entry must always begin hostilities once readiness is satisfied")
     schedule = named_block(effects, "ADISCORD_nam_resource_war_schedule")
     for token in (
         "has_global_flag = ADISCORD_fresh_campaign_contract_v1",

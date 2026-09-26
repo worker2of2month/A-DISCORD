@@ -5,6 +5,14 @@
   ],
   "events": [
     {
+      "id": "val_rework.123",
+      "namespace": "val_rework",
+      "number": 123,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
       "id": "val_contract.424",
       "namespace": "val_contract",
       "number": 424,

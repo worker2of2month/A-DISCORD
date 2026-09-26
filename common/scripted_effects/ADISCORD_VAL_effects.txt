@@ -1277,13 +1277,17 @@ VAL_settle_wasteland_capitulation = {
         limit = { tag = ERT }
         if = {
             limit = { VAL = { has_completed_focus = VAL_Southern_Expansion VAL_wasteland_administration_ready = yes } }
-            167 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 167 } add_core_of = WCA set_state_controller_to = WCA } }
-            169 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 169 } add_core_of = WCA set_state_controller_to = WCA } }
-            170 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 170 } add_core_of = WCA set_state_controller_to = WCA } }
-            171 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 171 } add_core_of = WCA set_state_controller_to = WCA } }
-            184 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 184 } add_core_of = WCA set_state_controller_to = WCA } }
-            185 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 185 } add_core_of = WCA set_state_controller_to = WCA } }
-            203 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 203 } add_core_of = WCA set_state_controller_to = WCA } }
+            # Settle every state the defeated republic still owns, including any outside the original war-goal list.
+            every_owned_state = { WCA = { transfer_state = PREV } add_core_of = WCA set_state_controller_to = WCA }
+            # War goals can transfer republican states to VAL before capitulation; keep the entire ERT partition together.
+            167 = { WCA = { transfer_state = 167 } add_core_of = WCA set_state_controller_to = WCA }
+            168 = { WCA = { transfer_state = 168 } add_core_of = WCA set_state_controller_to = WCA }
+            169 = { WCA = { transfer_state = 169 } add_core_of = WCA set_state_controller_to = WCA }
+            170 = { WCA = { transfer_state = 170 } add_core_of = WCA set_state_controller_to = WCA }
+            171 = { WCA = { transfer_state = 171 } add_core_of = WCA set_state_controller_to = WCA }
+            184 = { WCA = { transfer_state = 184 } add_core_of = WCA set_state_controller_to = WCA }
+            185 = { WCA = { transfer_state = 185 } add_core_of = WCA set_state_controller_to = WCA }
+            203 = { WCA = { transfer_state = 203 } add_core_of = WCA set_state_controller_to = WCA }
         }
         else_if = {
             limit = { VAL = { has_completed_focus = VAL_frontier_return_irem } }
@@ -1296,14 +1300,17 @@ VAL_settle_wasteland_capitulation = {
     }
     else_if = {
         limit = { tag = IRT }
-        178 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 178 } add_core_of = WCA set_state_controller_to = WCA } }
-        180 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 180 } add_core_of = WCA set_state_controller_to = WCA } }
-        181 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 181 } add_core_of = WCA set_state_controller_to = WCA } }
-        182 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 182 } add_core_of = WCA set_state_controller_to = WCA } }
-        183 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 183 } add_core_of = WCA set_state_controller_to = WCA } }
-        193 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 193 } add_core_of = WCA set_state_controller_to = WCA } }
-        206 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 206 } add_core_of = WCA set_state_controller_to = WCA } }
-        207 = { if = { limit = { is_owned_by = IRT OR = { is_controlled_by = IRT controller = { OR = { tag = VAL is_subject_of = VAL } } } } WCA = { transfer_state = 207 } add_core_of = WCA set_state_controller_to = WCA } }
+        # IRT's remaining territory joins the same administration after its separate campaign.
+        every_owned_state = { WCA = { transfer_state = PREV } add_core_of = WCA set_state_controller_to = WCA }
+        # Preserve the eastern partition when VAL already took a war-goal state before IRT capitulated.
+        178 = { WCA = { transfer_state = 178 } add_core_of = WCA set_state_controller_to = WCA }
+        180 = { WCA = { transfer_state = 180 } add_core_of = WCA set_state_controller_to = WCA }
+        181 = { WCA = { transfer_state = 181 } add_core_of = WCA set_state_controller_to = WCA }
+        182 = { WCA = { transfer_state = 182 } add_core_of = WCA set_state_controller_to = WCA }
+        183 = { WCA = { transfer_state = 183 } add_core_of = WCA set_state_controller_to = WCA }
+        193 = { WCA = { transfer_state = 193 } add_core_of = WCA set_state_controller_to = WCA }
+        206 = { WCA = { transfer_state = 206 } add_core_of = WCA set_state_controller_to = WCA }
+        207 = { WCA = { transfer_state = 207 } add_core_of = WCA set_state_controller_to = WCA }
     }
     VAL = { ADISCORD_economy_mark_dirty = yes }
     WCA = { if = { limit = { exists = yes } ADISCORD_economy_mark_dirty = yes } }
@@ -4163,6 +4170,7 @@ VAL_install_stelander_administration = {
         VAL_settle_frontier_partner_war = yes
         STP_close_competing_ultimatum_wars_after_defeat = yes
         if = { limit = { has_war_with = VAL } white_peace = VAL }
+		VAL = { VAL_restore_stelander_conquered_administrations = yes }
         if = {
             limit = { OR = { NOT = { is_subject_of = VAL } NOT = { has_autonomy_state = autonomy_VAL_contract_administration } } }
             VAL = {
@@ -4194,6 +4202,68 @@ VAL_install_stelander_administration = {
         ADISCORD_economy_mark_dirty = yes
         VAL = { ADISCORD_economy_mark_dirty = yes }
     }
+}
+
+# COUNTRY VAL. Return the northern and Bezhaysk cores absorbed by Stelander
+# before installing its new administration; only its captured states move.
+VAL_restore_stelander_conquered_administrations = {
+	if = {
+		limit = { STS = { exists = yes } NOD = { exists = yes has_capitulated = no } }
+		NOD = { VAL_install_nodrul_administration = yes }
+	}
+
+	if = {
+		limit = { BJK = { exists = no } STS = { any_owned_state = { is_core_of = BJK } } }
+		release_autonomy = { target = BJK autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+	}
+	if = {
+		limit = { BLD = { exists = no } STS = { any_owned_state = { is_core_of = BLD } } }
+		release_autonomy = { target = BLD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+	}
+	if = {
+		limit = { BHG = { exists = no } STS = { any_owned_state = { is_core_of = BHG } } }
+		release_autonomy = { target = BHG autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+	}
+	if = {
+		limit = { BGT = { exists = no } STS = { any_owned_state = { is_core_of = BGT } } }
+		release_autonomy = { target = BGT autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+	}
+	if = {
+		limit = { BBV = { exists = no } STS = { any_owned_state = { is_core_of = BBV } } }
+		release_autonomy = { target = BBV autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+	}
+	if = {
+		limit = { BCM = { exists = no } STS = { any_owned_state = { is_core_of = BCM } } }
+		release_autonomy = { target = BCM autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+	}
+	if = {
+		limit = { YPR = { exists = no } STS = { any_owned_state = { is_core_of = YPR } } }
+		release_autonomy = { target = YPR autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+	}
+
+	4 = { if = { limit = { is_owned_by = STS } add_core_of = BGT BGT = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BGT } } }
+	5 = { if = { limit = { is_owned_by = STS } add_core_of = BHG BHG = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BHG } } }
+	6 = { if = { limit = { is_owned_by = STS } add_core_of = BLD BLD = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BLD } } }
+	7 = { if = { limit = { is_owned_by = STS } add_core_of = BBV BBV = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BBV } } }
+	8 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+	9 = { if = { limit = { is_owned_by = STS } add_core_of = BCM BCM = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BCM } } }
+	15 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+	16 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+	19 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+	20 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+	21 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+	22 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+	31 = { if = { limit = { is_owned_by = STS } add_core_of = BLD BLD = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BLD } } }
+	41 = { if = { limit = { is_owned_by = STS } add_core_of = BJK BJK = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BJK } } }
+
+	BJK = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+	BGT = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+	BHG = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+	BLD = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+	BBV = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+	BCM = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+	YPR = { if = { limit = { is_subject_of = VAL } VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+	ADISCORD_economy_mark_dirty = yes
 }
 
 # Retry at peace or through the existing frontier decisions if a third party
@@ -6129,14 +6199,6 @@ VAL_deliver_northern_aid_personnel = {
 VAL_resource_aid_daily = {
 	if = {
 		limit = { has_variable = VAL_resource_aid_state NOT = { check_variable = { var = VAL_resource_aid_state value = 3 compare = equals } } }
-		if = {
-			limit = {
-				VAL_resource_aid_deliveries_open = yes
-				ADISCORD_nam_resource_war_active = yes
-				NOT = { has_active_mission = VAL_resource_aid_deadline }
-			}
-			activate_mission = VAL_resource_aid_deadline
-		}
 		if = {
 			limit = { ADISCORD_nam_resource_war_active = no }
 			VAL_settle_resource_aid = yes

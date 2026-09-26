@@ -72,6 +72,94 @@ def focus_block(source: str, focus_id: str) -> str:
 
 
 class KefreytRefugeeBalanceTests(unittest.TestCase):
+    RECRUITMENT = (
+        ("VAL_recruit_contract_reserves", "VAL_Company_Service_Code", 5000, 1000, "political_power", 50, 120),
+        ("VAL_recall_contract_veterans", "VAL_Operational_Reserves", 6000, 1500, "command_power", 25, 180),
+        ("VAL_launch_national_recruitment", "VAL_Army_Of_The_Ledger", 20000, 3000, None, 0, 60),
+    )
+
+    def test_contract_recruitment_charges_exact_prices_and_rejects_stale_clicks(self) -> None:
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects, matches_conditions
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        for ident, focus, manpower, cash, currency, price, _ in self.RECRUITMENT:
+            decision = block(parse_clausewitz(named_block(self.decisions, ident)), ident)
+            resource = "command_power" if currency == "command_power" else "has_political_power"
+            base = {
+                ("VAL", "has_completed_focus", "VAL_The_Contract_State"): True,
+                ("VAL", "has_completed_focus", focus): True,
+                ("VAL", "has_capitulated", "no"): True,
+                ("VAL", "is_subject", "no"): True,
+                ("VAL", "numeric", "has_manpower"): 10000,
+                ("VAL", "numeric", resource): price,
+                ("VAL", "variable", "ADISCORD_economy_treasury"): cash,
+            }
+            cases = (
+                ({}, True),
+                ({("VAL", "numeric", resource): price - 0.01}, currency is None),
+                ({("VAL", "variable", "ADISCORD_economy_treasury"): cash - 0.01}, False),
+                ({("VAL", "numeric", "has_manpower"): 50000}, currency is None),
+                ({("VAL", "numeric", "has_manpower"): 100000}, currency is None),
+                ({("VAL", "numeric", "has_manpower"): 49999.99}, True),
+                ({("VAL", "has_capitulated", "no"): False}, False),
+                ({("VAL", "is_subject", "no"): False}, False),
+                ({("VAL", "has_completed_focus", focus): False}, False),
+            )
+            for is_ai in (False, True):
+                for changes, expected in cases:
+                    with self.subTest(decision=ident, changes=changes, is_ai=is_ai):
+                        facts = base | changes | {("VAL", "is_ai", "yes"): is_ai}
+                        selectable = all(matches_conditions(block(decision, key), facts, "VAL")
+                                         for key in ("visible", "available", "custom_cost_trigger"))
+                        self.assertEqual(selectable, expected)
+                        effects = [e for _, e in selected_effects(block(decision, "complete_effect"), facts, "VAL")]
+                        if not expected:
+                            self.assertEqual(effects, [])
+                            continue
+                        self.assertEqual([float(e.value) for e in effects if e.key == "add_manpower"], [manpower])
+                        resource_debits = [float(e.value) for e in effects
+                                           if e.key in ("add_political_power", "add_command_power")]
+                        self.assertEqual(resource_debits, [-price] if currency else [])
+                        debits = [(scalar(e.value, "var"), float(scalar(e.value, "value")))
+                                  for e in effects if e.key == "subtract_from_variable"]
+                        costs = [(scalar(e.value, "var"), float(scalar(e.value, "value")))
+                                 for e in effects if e.key == "add_to_variable"]
+                        self.assertEqual(debits, [("ADISCORD_economy_treasury", cash)])
+                        self.assertEqual(costs, [("ADISCORD_economy_current_month_action_costs", cash)])
+                        self.assertEqual(sum(e.key == "ADISCORD_economy_mark_dirty" for e in effects), 1)
+
+    def test_contract_recruitment_uses_native_cooldowns_without_delayed_rewards(self) -> None:
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        main = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
+        for ident, focus, _, _, _, _, cooldown in self.RECRUITMENT:
+            decision = block(parse_clausewitz(named_block(self.decisions, ident)), ident)
+            self.assertIn(f"unlock_decision_tooltip = {ident}", focus_block(main, focus))
+            self.assertEqual(scalar(decision, "cost"), "0")
+            self.assertEqual(scalar(decision, "days_re_enable"), str(cooldown))
+            self.assertEqual(scalar(decision, "fire_only_once"), "no")
+            self.assertFalse({e.key for e in walk(decision)} & {
+                "days_remove", "country_event", "random", "random_list", "add_dynamic_modifier",
+                "set_country_flag", "targets", "state_target",
+            })
+
+    def test_contract_recruitment_prices_are_localized_including_blocked_variants(self) -> None:
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            source = path.read_text(encoding="utf-8-sig")
+            for ident, _, manpower, cash, currency, price, cooldown in self.RECRUITMENT:
+                for suffix in ("", "_blocked", "_tooltip"):
+                    values = re.findall(r'^ ' + ident + r'_cost' + suffix + r':\d* "([^"\n]*)"$', source, re.M)
+                    self.assertEqual(len(values), 1)
+                    self.assertIn(f"{cash}§! £ADISCORD_economy_treasury_texticon", values[0])
+                    if currency:
+                        self.assertIn(f"{price}§! £{currency}_texticon", values[0])
+                description = re.search(r'^ ' + ident + r'_desc:\d* "([^"\n]*)"$', source, re.M).group(1)
+                self.assertIn(str(manpower), description)
+                self.assertIn(str(cooldown), description)
+
     def test_val_manpower_focus_filter_is_registered_and_applied(self) -> None:
         filter_id = "FOCUS_FILTER_VAL_MANPOWER"
         gfx = read("interface/ADISCORD_national_focus.gfx")
@@ -93,6 +181,7 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
             "VAL_Reserve_Battalions",
             "VAL_Company_Service_Code",
             "VAL_Operational_Reserves",
+            "VAL_Army_Of_The_Ledger",
         ):
             self.assertIn(filter_id, focus_block(main, focus_id))
         self.assertIn(filter_id, focus_block(defeated, "VAL_defeat_Veterans_Register"))

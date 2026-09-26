@@ -447,6 +447,162 @@ VAL_population_markets = {
 		ai_will_do = { base = 2 modifier = { factor = 10 has_manpower < 12000 } modifier = { factor = 0 NOT = { has_manpower < 30000 } } }
 	}
 
+	VAL_recruit_contract_reserves = {
+		icon = generic_manpower
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_The_Contract_State
+			has_completed_focus = VAL_Company_Service_Code
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			has_manpower < 50000
+		}
+		cost = 0
+		custom_cost_text = VAL_recruit_contract_reserves_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+			NOT = { has_political_power < 50 }
+		}
+		days_re_enable = 120
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAL_The_Contract_State
+						has_completed_focus = VAL_Company_Service_Code
+						has_capitulated = no
+						is_subject = no
+						has_manpower < 50000
+						check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+						NOT = { has_political_power < 50 }
+					}
+				}
+				add_manpower = 5000
+				hidden_effect = {
+					add_political_power = -50
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = { factor = 5 has_manpower < 15000 }
+			modifier = { factor = 0 NOT = { has_manpower < 30000 } }
+			modifier = {
+				factor = 0
+				NOT = { check_variable = { var = ADISCORD_economy_treasury value = 2000 compare = greater_than_or_equals } }
+			}
+		}
+	}
+
+	VAL_recall_contract_veterans = {
+		icon = generic_manpower
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_The_Contract_State
+			has_completed_focus = VAL_Operational_Reserves
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			has_manpower < 50000
+		}
+		cost = 0
+		custom_cost_text = VAL_recall_contract_veterans_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals }
+			NOT = { command_power < 25 }
+		}
+		days_re_enable = 180
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAL_The_Contract_State
+						has_completed_focus = VAL_Operational_Reserves
+						has_capitulated = no
+						is_subject = no
+						has_manpower < 50000
+						check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals }
+						NOT = { command_power < 25 }
+					}
+				}
+				add_manpower = 6000
+				hidden_effect = {
+					add_command_power = -25
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1500 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1500 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = { factor = 5 has_manpower < 15000 }
+			modifier = { factor = 0 NOT = { has_manpower < 30000 } }
+			modifier = {
+				factor = 0
+				NOT = { check_variable = { var = ADISCORD_economy_treasury value = 3000 compare = greater_than_or_equals } }
+			}
+		}
+	}
+
+	VAL_launch_national_recruitment = {
+		icon = generic_manpower
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Army_Of_The_Ledger }
+		available = {
+			has_capitulated = no
+			is_subject = no
+		}
+		cost = 0
+		custom_cost_text = VAL_launch_national_recruitment_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 3000 compare = greater_than_or_equals }
+		}
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_completed_focus = VAL_Army_Of_The_Ledger
+						has_capitulated = no
+						is_subject = no
+						check_variable = { var = ADISCORD_economy_treasury value = 3000 compare = greater_than_or_equals }
+					}
+				}
+				add_manpower = 20000
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 3000 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 3000 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 5
+				has_manpower < 20000
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_manpower < 60000 }
+			}
+			modifier = {
+				factor = 0
+				NOT = { check_variable = { var = ADISCORD_economy_treasury value = 6000 compare = greater_than_or_equals } }
+			}
+		}
+	}
+
 	VAL_recruit_local_volunteers = {
 		cancel_if_not_visible = no
 		icon = generic_prepare_civil_war

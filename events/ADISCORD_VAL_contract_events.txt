@@ -282,6 +282,18 @@ country_event = {
 # BEGIN CONSOLIDATED: ADISCORD_VAL_rework_events.txt
 add_namespace = val_rework
 
+# Focus completion must be recorded before allow_branch is evaluated again.
+country_event = {
+	id = val_rework.123
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAL
+		has_focus_tree = VAL_focus
+	}
+	immediate = { mark_focus_tree_layout_dirty = yes }
+}
+
 country_event = {
 	id = val_rework.1
 	hidden = yes

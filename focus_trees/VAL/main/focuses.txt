@@ -100,6 +100,7 @@ focus_tree = {
 				VAL_change_contract_authority = yes
 				VAL_refresh_contract_modifier = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 	}
 
@@ -124,6 +125,7 @@ focus_tree = {
 				VAL_change_contract_authority = yes
 				VAL_refresh_contract_modifier = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 	}
 
@@ -149,6 +151,7 @@ focus_tree = {
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 10 }
 				VAL_change_contract_authority = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 	}
 
@@ -177,6 +180,7 @@ focus_tree = {
 				days = 365
 			}
 			country_event = { id = val_rework.6 }
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 	}
 
@@ -229,6 +233,7 @@ focus_tree = {
 				VAL_refresh_contract_modifier = yes
 				ADISCORD_economy_mark_dirty = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 	}
 
@@ -291,6 +296,7 @@ focus_tree = {
 				set_country_flag = VAL_mercenary_state
 				VAL_refresh_contract_modifier = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 	}
 
@@ -466,6 +472,7 @@ focus_tree = {
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
 				VAL_change_contract_authority = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 	}
 
@@ -618,6 +625,7 @@ focus_tree = {
 				VAL_refresh_contract_modifier = yes
 				ADISCORD_economy_mark_dirty = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 	}
 
@@ -644,6 +652,7 @@ focus_tree = {
 				VAL_refresh_contract_modifier = yes
 				ADISCORD_economy_mark_dirty = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 	}
 
@@ -690,6 +699,7 @@ focus_tree = {
 			hidden_effect = {
 				VAL_unlock_operations_map = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 4 }
 	}
@@ -719,6 +729,7 @@ focus_tree = {
 					set_country_flag = VAL_propaganda_slot_granted
 				}
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 3 modifier = { factor = 2 has_stability < 0.65 } }
 	}
@@ -747,6 +758,7 @@ focus_tree = {
 				VAL_refresh_contract_modifier = yes
 				ADISCORD_economy_mark_dirty = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 2 }
 	}
@@ -773,6 +785,7 @@ focus_tree = {
 				VAL_refresh_contract_modifier = yes
 				ADISCORD_economy_mark_dirty = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 2 }
 	}
@@ -802,6 +815,7 @@ focus_tree = {
 				VAL_change_contract_authority = yes
 				VAL_refresh_contract_modifier = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 2 }
 	}
@@ -830,6 +844,7 @@ focus_tree = {
 				VAL_change_contract_authority = yes
 				VAL_refresh_contract_modifier = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 2 }
 	}
@@ -860,6 +875,7 @@ focus_tree = {
 				limit = { NOT = { has_country_flag = VAL_quarterly_contract_active } }
 				VAL_start_quarterly_contract_norm = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 2 modifier = { factor = 0.5 has_equipment = { infantry_equipment < 100000 } } }
 	}
@@ -916,7 +932,10 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Contract_Accounting_Office }
 		completion_reward = {
-			custom_effect_tooltip = VAL_focus_progression_VAL_Salvage_Every_Barrel_tt add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 producer = VAL } }
+			custom_effect_tooltip = VAL_focus_progression_VAL_Salvage_Every_Barrel_tt
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 producer = VAL }
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
+		}
 		ai_will_do = { base = 3 modifier = { factor = 2 has_equipment = { infantry_equipment < 100000 } } }
 	}
 
@@ -948,6 +967,7 @@ focus_tree = {
 				}
 			}
 			hidden_effect = { VAL_apply_contract_industry_2 = yes }
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 2 }
 	}
@@ -987,6 +1007,7 @@ focus_tree = {
 			capital_scope = {
 				add_building_construction = { type = infrastructure level = 1 instant_build = yes }
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 30 }
 	}
@@ -1002,6 +1023,7 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Arsenal_Reserve_tt
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 60000 producer = VAL }
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 20 }
 	}
@@ -1052,6 +1074,7 @@ focus_tree = {
 				VAL_apply_contract_army_1 = yes
 				VAL_refresh_contract_modifier = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 2 modifier = { factor = 30 has_manpower < 30000 } }
 	}
@@ -1198,6 +1221,7 @@ focus_tree = {
 				set_country_flag = VAL_field_repair_corps
 				VAL_refresh_contract_modifier = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1221,6 +1245,7 @@ focus_tree = {
 			VAL_raise_reserve_battalions = yes
 			add_manpower = 4000
 			add_war_support = 0.03
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 2 modifier = { factor = 2 has_war = yes } }
 	}
@@ -1256,6 +1281,7 @@ focus_tree = {
 				set_country_flag = VAL_contract_general_staff
 				VAL_refresh_contract_modifier = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1302,6 +1328,7 @@ focus_tree = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Inventory_The_Empty_Yards_tt
 			VAL_advance_economic_recovery = yes
 			add_tech_bonus = { name = VAL_frontier_industry_bonus bonus = 0.5 uses = 1 category = industry }
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 50 }
 	}
@@ -1350,6 +1377,7 @@ focus_tree = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Central_Payment_Office_tt
 			VAL_apply_contract_administration_2 = yes
 			ADISCORD_economy_receive_15 = yes
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1376,6 +1404,7 @@ focus_tree = {
 				VAL_refresh_contract_modifier = yes
 				ADISCORD_economy_mark_dirty = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1403,6 +1432,7 @@ focus_tree = {
 				VAL_change_contract_authority = yes
 				VAL_refresh_contract_modifier = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1532,6 +1562,7 @@ focus_tree = {
 				}
 			}
 			hidden_effect = { VAL_apply_contract_industry_1 = yes }
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 4 modifier = { factor = 2 has_equipment = { infantry_equipment < 100000 } } }
 	}
@@ -1594,6 +1625,7 @@ focus_tree = {
 				}
 			}
 			hidden_effect = { VAL_apply_contract_industry_2 = yes }
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -1629,6 +1661,7 @@ focus_tree = {
 				}
 			}
 			hidden_effect = { VAL_apply_contract_industry_2 = yes }
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 30 }
 	}
@@ -1652,6 +1685,7 @@ focus_tree = {
 			VAL_advance_economic_recovery = yes
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 50000 producer = VAL }
 			add_political_power = 25
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 25 }
 	}
@@ -1713,6 +1747,7 @@ focus_tree = {
 				VAL_refresh_contract_modifier = yes
 				ADISCORD_economy_mark_dirty = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 40 }
 	}
@@ -1735,6 +1770,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Company_Rosters }
 		completion_reward = {
 			unlock_decision_tooltip = VAL_recruit_local_volunteers
+			unlock_decision_tooltip = VAL_recruit_contract_reserves
 			add_stability = 0.02
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_company_service_delta } }
 			hidden_effect = {
@@ -1783,6 +1819,7 @@ focus_tree = {
 			VAL_apply_contract_army_2 = yes
 			add_equipment_to_stockpile = { type = motorized_equipment amount = 200 producer = VAL }
 			add_equipment_to_stockpile = { type = support_equipment amount = 600 producer = VAL }
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 4 }
 	}
@@ -1801,10 +1838,12 @@ focus_tree = {
 		prerequisite = { focus = VAL_Reserve_Battalions }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Operational_Reserves_tt
+			unlock_decision_tooltip = VAL_recall_contract_veterans
 			add_manpower = 10000
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 45000 producer = VAL }
 			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 144 producer = VAL }
 			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = VAL }
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 4 }
 	}
@@ -1813,7 +1852,7 @@ focus_tree = {
 		id = VAL_Army_Of_The_Ledger
 		dynamic = yes
 		icon = GFX_goal_generic_army_doctrines
-		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_MANPOWER }
 		x = 36
 		y = 10
 		cost = 5
@@ -1823,6 +1862,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_Contract_General_Staff }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Army_Of_The_Ledger_tt
+			unlock_decision_tooltip = VAL_launch_national_recruitment
 			VAL_reform_mercenary_payroll = yes
 			if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Maksim_Korvin } } } recruit_character = VAL_Maksim_Korvin }
 			add_power_balance_value = { id = VAL_command_balance value = -0.1 }
@@ -2151,6 +2191,7 @@ focus_tree = {
 				set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
 				VAL_change_contract_authority = yes
 			}
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -2310,6 +2351,7 @@ focus_tree = {
 			}
 			custom_effect_tooltip = VAL_occidian_claims_reward_tt
 			add_political_power = 35
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 12 }
 	}
@@ -3181,6 +3223,7 @@ focus_tree = {
 			unlock_decision_tooltip = VAL_resource_war_arms
 			unlock_decision_tooltip = VAL_resource_war_personnel
 			army_experience = 5
+			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -3276,8 +3319,8 @@ focus_tree = {
 		id = VAL_Shield_Special_Forces
 		icon = GFX_goal_generic_special_forces
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
-		x = 40
-		y = 13
+		x = 42
+		y = 12
 		cost = 10
 		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		prerequisite = { focus = VAL_Armored_Contract_Companies }
