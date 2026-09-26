@@ -19,11 +19,11 @@
     "duplicate_scope": "Divergent same-name definitions fail within an OOB/script source namespace; cross-owner ambiguity is recorded separately."
   },
   "role_floors": {
-    "line": 30.0,
-    "territorial": 25.0,
-    "reservist": 25.0,
-    "emergency_militia": 20.0,
-    "utility": 0.0
+    "line": 30,
+    "territorial": 25,
+    "reservist": 25,
+    "emergency_militia": 20,
+    "utility": 0
   },
   "optional_sources": [
     {
@@ -102,7 +102,7 @@
       "support": [],
       "computed": {
         "organization": 52.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -162,7 +162,7 @@
       "support": [],
       "computed": {
         "organization": 52.75,
-        "manpower": 6000.0,
+        "manpower": 6000,
         "equipment": {
           "infantry_equipment": 5400
         },
@@ -214,9 +214,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -256,7 +256,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -301,7 +301,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -351,9 +351,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -439,12 +439,12 @@
       ],
       "computed": {
         "organization": 55.613636,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 54.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 54,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.63
       },
@@ -497,9 +497,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -544,7 +544,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -589,7 +589,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -629,7 +629,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -679,9 +679,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -747,11 +747,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -791,7 +791,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -841,9 +841,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -909,11 +909,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -953,7 +953,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -1003,9 +1003,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -1071,11 +1071,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -1115,7 +1115,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -1165,9 +1165,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -1233,11 +1233,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -1277,7 +1277,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -1327,9 +1327,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -1395,11 +1395,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -1439,7 +1439,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -1489,9 +1489,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -1557,11 +1557,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -1613,9 +1613,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -1667,9 +1667,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -1714,7 +1714,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -1780,11 +1780,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -1870,12 +1870,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -1916,7 +1916,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -1961,7 +1961,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -2032,12 +2032,12 @@
       ],
       "computed": {
         "organization": 44.3125,
-        "manpower": 6600.0,
+        "manpower": 6600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
-          "anti_air_equipment": 20.0,
+          "ADISCORD_squad_weapons_equipment": 48,
+          "anti_air_equipment": 20,
           "infantry_equipment": 5940,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.48
       },
@@ -2129,13 +2129,13 @@
       ],
       "computed": {
         "organization": 43.479167,
-        "manpower": 9900.0,
+        "manpower": 9900,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "anti_air_equipment": 20.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "anti_air_equipment": 20,
+          "artillery_equipment": 12,
           "infantry_equipment": 8910,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.82
       },
@@ -2177,7 +2177,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -2222,7 +2222,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -2288,11 +2288,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -2378,12 +2378,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -2431,7 +2431,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -2478,7 +2478,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -2523,7 +2523,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -2568,7 +2568,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -2613,7 +2613,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -2679,11 +2679,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -2769,12 +2769,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -2841,11 +2841,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -2890,7 +2890,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -2942,9 +2942,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -2989,7 +2989,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -3034,7 +3034,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -3081,7 +3081,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -3121,9 +3121,9 @@
       "support": [],
       "computed": {
         "organization": 48.25,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 8.0,
+          "ADISCORD_squad_weapons_equipment": 8,
           "infantry_equipment": 1800
         },
         "supply": 0.1
@@ -3175,9 +3175,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -3222,7 +3222,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -3267,7 +3267,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -3312,7 +3312,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -3357,7 +3357,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -3402,7 +3402,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -3468,11 +3468,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -3558,12 +3558,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -3609,7 +3609,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -3661,9 +3661,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -3715,9 +3715,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -3769,9 +3769,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -3811,9 +3811,9 @@
       "support": [],
       "computed": {
         "organization": 48.25,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 8.0,
+          "ADISCORD_squad_weapons_equipment": 8,
           "infantry_equipment": 1800
         },
         "supply": 0.1
@@ -3865,9 +3865,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -3919,9 +3919,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -3966,7 +3966,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -4033,10 +4033,10 @@
       "support": [],
       "computed": {
         "organization": 48.5,
-        "manpower": 6500.0,
+        "manpower": 6500,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
-          "artillery_equipment": 24.0,
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 24,
           "infantry_equipment": 5850
         },
         "supply": 0.6
@@ -4089,9 +4089,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -4136,9 +4136,9 @@
       "support": [],
       "computed": {
         "organization": 45.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 8.0,
+          "ADISCORD_squad_weapons_equipment": 8,
           "infantry_equipment": 2700
         },
         "supply": 0.14
@@ -4183,7 +4183,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -4249,11 +4249,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -4339,12 +4339,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -4431,12 +4431,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -4503,11 +4503,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -4554,7 +4554,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -4599,7 +4599,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -4665,11 +4665,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -4760,12 +4760,12 @@
       ],
       "computed": {
         "organization": 43.895833,
-        "manpower": 10100.0,
+        "manpower": 10100,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 36.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 36,
           "infantry_equipment": 9090,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.96
       },
@@ -4857,13 +4857,13 @@
       ],
       "computed": {
         "organization": 34.541667,
-        "manpower": 8400.0,
+        "manpower": 8400,
         "equipment": {
-          "ADISCORD_combat_platform_archetype": 160.0,
-          "ADISCORD_squad_weapons_equipment": 48.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_combat_platform_archetype": 160,
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 12,
           "infantry_equipment": 7560,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 1.42
       },
@@ -4951,12 +4951,12 @@
       ],
       "computed": {
         "organization": 55.613636,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 54.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 54,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.63
       },
@@ -5009,9 +5009,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -5063,9 +5063,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -5105,7 +5105,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -5150,7 +5150,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -5197,7 +5197,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -5242,7 +5242,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -5308,11 +5308,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -5398,12 +5398,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -5449,7 +5449,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -5494,7 +5494,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -5560,11 +5560,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -5650,12 +5650,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -5703,7 +5703,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -5743,7 +5743,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -5805,10 +5805,10 @@
       "support": [],
       "computed": {
         "organization": 47.291667,
-        "manpower": 5500.0,
+        "manpower": 5500,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 40.0,
-          "artillery_equipment": 24.0,
+          "ADISCORD_squad_weapons_equipment": 40,
+          "artillery_equipment": 24,
           "infantry_equipment": 4950
         },
         "supply": 0.54
@@ -5856,7 +5856,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -5903,7 +5903,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -5948,7 +5948,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -6021,11 +6021,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -6111,12 +6111,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -6162,7 +6162,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -6228,11 +6228,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -6318,12 +6318,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -6369,7 +6369,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -6414,7 +6414,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -6459,7 +6459,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -6504,9 +6504,9 @@
       "support": [],
       "computed": {
         "organization": 50.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 16.0,
+          "ADISCORD_squad_weapons_equipment": 16,
           "infantry_equipment": 2700
         },
         "supply": 0.16
@@ -6558,9 +6558,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -6605,7 +6605,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -6671,11 +6671,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -6720,7 +6720,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -6786,11 +6786,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -6876,12 +6876,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -6927,7 +6927,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -6972,7 +6972,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -7038,11 +7038,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -7143,13 +7143,13 @@
       ],
       "computed": {
         "organization": 39.410714,
-        "manpower": 10850.0,
+        "manpower": 10850,
         "equipment": {
-          "ADISCORD_recon_platform_archetype": 18.0,
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 60.0,
+          "ADISCORD_recon_platform_archetype": 18,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 60,
           "infantry_equipment": 9765,
-          "support_equipment": 35.0
+          "support_equipment": 35
         },
         "supply": 1.24
       },
@@ -7198,7 +7198,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -7243,7 +7243,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -7314,12 +7314,12 @@
       ],
       "computed": {
         "organization": 44.3125,
-        "manpower": 6600.0,
+        "manpower": 6600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
-          "anti_air_equipment": 20.0,
+          "ADISCORD_squad_weapons_equipment": 48,
+          "anti_air_equipment": 20,
           "infantry_equipment": 5940,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.48
       },
@@ -7411,13 +7411,13 @@
       ],
       "computed": {
         "organization": 43.479167,
-        "manpower": 9900.0,
+        "manpower": 9900,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "anti_air_equipment": 20.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "anti_air_equipment": 20,
+          "artillery_equipment": 12,
           "infantry_equipment": 8910,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.82
       },
@@ -7471,7 +7471,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -7518,7 +7518,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -7563,7 +7563,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -7629,11 +7629,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -7719,12 +7719,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -7777,7 +7777,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -7824,7 +7824,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
           "infantry_equipment": 1800
         },
@@ -7925,14 +7925,14 @@
       ],
       "computed": {
         "organization": 30.321429,
-        "manpower": 8950.0,
+        "manpower": 8950,
         "equipment": {
-          "ADISCORD_armored_carrier_archetype": 240.0,
-          "ADISCORD_combat_platform_archetype": 160.0,
-          "ADISCORD_squad_weapons_equipment": 48.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_armored_carrier_archetype": 240,
+          "ADISCORD_combat_platform_archetype": 160,
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 12,
           "infantry_equipment": 8055,
-          "support_equipment": 80.0
+          "support_equipment": 80
         },
         "supply": 2.07
       },
@@ -7987,7 +7987,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -8053,11 +8053,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -8143,12 +8143,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -8257,14 +8257,14 @@
       ],
       "computed": {
         "organization": 30.321429,
-        "manpower": 8950.0,
+        "manpower": 8950,
         "equipment": {
-          "ADISCORD_armored_carrier_archetype": 240.0,
-          "ADISCORD_combat_platform_archetype": 160.0,
-          "ADISCORD_squad_weapons_equipment": 48.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_armored_carrier_archetype": 240,
+          "ADISCORD_combat_platform_archetype": 160,
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 12,
           "infantry_equipment": 8055,
-          "support_equipment": 80.0
+          "support_equipment": 80
         },
         "supply": 2.07
       },
@@ -8312,7 +8312,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -8378,11 +8378,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -8468,12 +8468,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -8526,9 +8526,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -8575,7 +8575,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -8620,7 +8620,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -8686,11 +8686,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -8776,12 +8776,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -8834,9 +8834,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -8876,9 +8876,9 @@
       "support": [],
       "computed": {
         "organization": 48.25,
-        "manpower": 2000.0,
+        "manpower": 2000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 8.0,
+          "ADISCORD_squad_weapons_equipment": 8,
           "infantry_equipment": 1800
         },
         "supply": 0.1
@@ -8923,7 +8923,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -8989,11 +8989,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -9079,12 +9079,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -9130,7 +9130,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -9182,7 +9182,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -9234,7 +9234,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -9300,11 +9300,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -9390,12 +9390,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -9497,14 +9497,14 @@
       ],
       "computed": {
         "organization": 30.321429,
-        "manpower": 8950.0,
+        "manpower": 8950,
         "equipment": {
-          "ADISCORD_armored_carrier_archetype": 240.0,
-          "ADISCORD_combat_platform_archetype": 160.0,
-          "ADISCORD_squad_weapons_equipment": 48.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_armored_carrier_archetype": 240,
+          "ADISCORD_combat_platform_archetype": 160,
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 12,
           "infantry_equipment": 8055,
-          "support_equipment": 80.0
+          "support_equipment": 80
         },
         "supply": 2.07
       },
@@ -9552,7 +9552,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -9599,7 +9599,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -9644,7 +9644,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -9715,12 +9715,12 @@
       ],
       "computed": {
         "organization": 44.3125,
-        "manpower": 6600.0,
+        "manpower": 6600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
-          "anti_air_equipment": 20.0,
+          "ADISCORD_squad_weapons_equipment": 48,
+          "anti_air_equipment": 20,
           "infantry_equipment": 5940,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.48
       },
@@ -9812,13 +9812,13 @@
       ],
       "computed": {
         "organization": 43.479167,
-        "manpower": 9900.0,
+        "manpower": 9900,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "anti_air_equipment": 20.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "anti_air_equipment": 20,
+          "artillery_equipment": 12,
           "infantry_equipment": 8910,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.82
       },
@@ -9865,7 +9865,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -9931,11 +9931,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -10021,12 +10021,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -10074,7 +10074,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -10109,11 +10109,11 @@
       "support": [],
       "computed": {
         "organization": 100.75,
-        "manpower": 0.0,
+        "manpower": 0,
         "equipment": {
-          "infantry_equipment": 1.0
+          "infantry_equipment": 1
         },
-        "supply": 0.0
+        "supply": 0
       },
       "equipment_availability": {
         "infantry_equipment": true
@@ -10195,12 +10195,12 @@
       ],
       "computed": {
         "organization": 47.431818,
-        "manpower": 9600.0,
+        "manpower": 9600,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_squad_weapons_equipment": 72,
+          "artillery_equipment": 12,
           "infantry_equipment": 8640,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.72
       },
@@ -10252,7 +10252,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -10301,7 +10301,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -10376,10 +10376,10 @@
       "support": [],
       "computed": {
         "organization": 50.111111,
-        "manpower": 8500.0,
+        "manpower": 8500,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 64.0,
-          "artillery_equipment": 24.0,
+          "ADISCORD_squad_weapons_equipment": 64,
+          "artillery_equipment": 24,
           "infantry_equipment": 7650
         },
         "supply": 0.72
@@ -10492,14 +10492,14 @@
       ],
       "computed": {
         "organization": 30.321429,
-        "manpower": 8950.0,
+        "manpower": 8950,
         "equipment": {
-          "ADISCORD_armored_carrier_archetype": 240.0,
-          "ADISCORD_combat_platform_archetype": 160.0,
-          "ADISCORD_squad_weapons_equipment": 48.0,
-          "artillery_equipment": 12.0,
+          "ADISCORD_armored_carrier_archetype": 240,
+          "ADISCORD_combat_platform_archetype": 160,
+          "ADISCORD_squad_weapons_equipment": 48,
+          "artillery_equipment": 12,
           "infantry_equipment": 8055,
-          "support_equipment": 80.0
+          "support_equipment": 80
         },
         "supply": 2.07
       },
@@ -10549,7 +10549,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -10596,7 +10596,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -10648,9 +10648,9 @@
       "support": [],
       "computed": {
         "organization": 55.75,
-        "manpower": 4000.0,
+        "manpower": 4000,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 32.0,
+          "ADISCORD_squad_weapons_equipment": 32,
           "infantry_equipment": 3600
         },
         "supply": 0.24
@@ -10697,7 +10697,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -10744,7 +10744,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -10791,7 +10791,7 @@
       "support": [],
       "computed": {
         "organization": 40.75,
-        "manpower": 3000.0,
+        "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700
         },
@@ -10857,11 +10857,11 @@
       ],
       "computed": {
         "organization": 50.642857,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -10952,13 +10952,13 @@
       ],
       "computed": {
         "organization": 33.136364,
-        "manpower": 7900.0,
+        "manpower": 7900,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
-          "anti_air_equipment": 20.0,
-          "artillery_equipment": 60.0,
+          "ADISCORD_squad_weapons_equipment": 48,
+          "anti_air_equipment": 20,
+          "artillery_equipment": 60,
           "infantry_equipment": 7110,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 1.12
       },
@@ -11046,13 +11046,13 @@
       ],
       "computed": {
         "organization": 33.136364,
-        "manpower": 7900.0,
+        "manpower": 7900,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
-          "anti_air_equipment": 20.0,
-          "artillery_equipment": 60.0,
+          "ADISCORD_squad_weapons_equipment": 48,
+          "anti_air_equipment": 20,
+          "artillery_equipment": 60,
           "infantry_equipment": 7110,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 1.12
       },
@@ -11109,7 +11109,7 @@
       "support": [],
       "computed": {
         "organization": 52.75,
-        "manpower": 6000.0,
+        "manpower": 6000,
         "equipment": {
           "infantry_equipment": 5400
         },
@@ -11175,11 +11175,11 @@
       ],
       "computed": {
         "organization": 59.214285714285715,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 36.0,
+          "ADISCORD_squad_weapons_equipment": 36,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.32
       },
@@ -11249,11 +11249,11 @@
       ],
       "computed": {
         "organization": 50.642857142857146,
-        "manpower": 6300.0,
+        "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48.0,
+          "ADISCORD_squad_weapons_equipment": 48,
           "infantry_equipment": 5670,
-          "support_equipment": 30.0
+          "support_equipment": 30
         },
         "supply": 0.38
       },
@@ -11271,6 +11271,80 @@
         "is_locked": true,
         "force_allow_recruiting": true
       }
+    },
+    {
+      "key": "val_focus_marine_contract_group",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Kefreyt Marine Contract Group",
+      "display_name": "Kefreyt Marine Contract Group",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_marine_infantry",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 59.214285714285715,
+        "manpower": 6300,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 48,
+          "infantry_equipment": 5670,
+          "support_equipment": 30
+        },
+        "supply": 0.38
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "val_focus_marine_contract_group"
+      },
+      "definition_metadata": {
+        "is_locked": true,
+        "force_allow_recruiting": true
+      }
     }
   ],
   "references": [
@@ -11281,7 +11355,7 @@
       "technical_name": "Stelander Underground Cell",
       "legacy_names": [],
       "start_experience_factor": 0.2,
-      "start_equipment_factor": 1.0,
+      "start_equipment_factor": 1,
       "count": 1
     },
     {
@@ -11403,7 +11477,7 @@
       "technical_name": "Fake Intel Division",
       "legacy_names": [],
       "start_experience_factor": 0.5,
-      "start_equipment_factor": 1.0,
+      "start_equipment_factor": 1,
       "count": 1
     },
     {
@@ -11412,8 +11486,8 @@
       "kind": "create_unit",
       "technical_name": "Anti-Exploit Punitive Brigade",
       "legacy_names": [],
-      "start_experience_factor": 1.0,
-      "start_equipment_factor": 1.0,
+      "start_experience_factor": 1,
+      "start_equipment_factor": 1,
       "count": 20
     },
     {
@@ -11431,7 +11505,7 @@
       "technical_name": "NAM Resource Guard",
       "legacy_names": [],
       "start_experience_factor": 0.2,
-      "start_equipment_factor": 1.0,
+      "start_equipment_factor": 1,
       "count": 1
     },
     {
@@ -11441,7 +11515,7 @@
       "technical_name": "NAM Resource Infantry",
       "legacy_names": [],
       "start_experience_factor": 0.15,
-      "start_equipment_factor": 1.0,
+      "start_equipment_factor": 1,
       "count": 1
     },
     {
@@ -11596,8 +11670,8 @@
       "kind": "oob",
       "technical_name": "Devourer Chosen",
       "legacy_names": [],
-      "start_experience_factor": 1.0,
-      "start_equipment_factor": 1.0,
+      "start_experience_factor": 1,
+      "start_equipment_factor": 1,
       "count": 2
     },
     {
@@ -13515,7 +13589,7 @@
       "technical_name": "Kefreyt Mountain Contractors",
       "legacy_names": [],
       "start_experience_factor": 0.3,
-      "start_equipment_factor": 1.0,
+      "start_equipment_factor": 1,
       "count": 1
     },
     {
@@ -13525,7 +13599,17 @@
       "technical_name": "Kefreyt Reserve Infantry",
       "legacy_names": [],
       "start_experience_factor": 0.2,
-      "start_equipment_factor": 1.0,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "val_focus_marine_contract_group_spawn",
+      "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Kefreyt Marine Contract Group",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1,
       "count": 1
     }
   ]

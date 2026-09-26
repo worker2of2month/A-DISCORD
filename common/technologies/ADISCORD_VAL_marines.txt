@@ -1,0 +1,10 @@
+technologies = {
+	# Focus-only unlock for Kefreyt's post-capstone marine branch.
+	ADISCORD_tech_kefreyt_marine_corps = {
+		enable_subunits = { ADISCORD_marine_infantry }
+		research_cost = 999
+		start_year = 2300
+		ai_will_do = { factor = 0 }
+		categories = { infantry_weapons }
+	}
+}

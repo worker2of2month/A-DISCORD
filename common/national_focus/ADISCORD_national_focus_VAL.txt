@@ -3268,4 +3268,83 @@ focus_tree = {
 		}
 		ai_will_do = { base = 10 }
 	}
+
+	# --- Marine contract corps ---
+	focus = {
+		id = VAL_Marine_Contract_Corps
+		icon = GFX_goal_generic_special_forces
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_EXPANSION }
+		x = 46
+		y = 13
+		cost = 4
+		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
+		completion_reward = {
+			VAL_raise_marine_contract_corps = yes
+			army_experience = 15
+			add_command_power = 10
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = VAL_Assault_From_The_Sea
+		icon = GFX_goal_generic_amphibious_assault
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
+		x = 45
+		y = 14
+		cost = 3
+		prerequisite = { focus = VAL_Marine_Contract_Corps }
+		completion_reward = {
+			add_ideas = VAL_marine_sea_assault
+			army_experience = 10
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = VAL_Beachhead_Logistics
+		icon = GFX_focus_generic_reinforcing_the_supply_network
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
+		x = 47
+		y = 14
+		cost = 3
+		prerequisite = { focus = VAL_Marine_Contract_Corps }
+		completion_reward = {
+			add_ideas = VAL_marine_beachhead_logistics
+			add_command_power = 10
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = VAL_Contract_Landing_Craft
+		icon = GFX_goal_generic_construct_naval_dockyard
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
+		x = 46
+		y = 15
+		cost = 4
+		prerequisite = { focus = VAL_Assault_From_The_Sea focus = VAL_Beachhead_Logistics }
+		completion_reward = {
+			add_ideas = VAL_marine_landing_network
+			navy_experience = 15
+		}
+		ai_will_do = { base = 7 }
+	}
+
+	focus = {
+		id = VAL_Marines_Of_The_Ledger
+		icon = GFX_goal_generic_special_forces
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
+		x = 46
+		y = 16
+		cost = 5
+		prerequisite = { focus = VAL_Contract_Landing_Craft }
+		completion_reward = {
+			add_ideas = VAL_marine_contract_corps
+			army_experience = 20
+			add_war_support = 0.03
+		}
+		ai_will_do = { base = 9 }
+	}
+
 }

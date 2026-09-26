@@ -1694,6 +1694,51 @@ VAL_raise_reserve_battalions = {
 	}
 }
 
+
+# COUNTRY VAL: establish a trainable marine template and one initial contract formation.
+VAL_raise_marine_contract_corps = {
+	custom_effect_tooltip = VAL_raise_marine_contract_corps_tt
+	hidden_effect = {
+		if = {
+			limit = {
+				tag = VAL
+				has_capitulated = no
+				NOT = { has_country_flag = VAL_marine_contract_corps_raised }
+				any_owned_state = { is_controlled_by = PREV }
+			}
+			set_technology = { ADISCORD_tech_kefreyt_marine_corps = 1 popup = no }
+			if = {
+				limit = { NOT = { has_template = "Kefreyt Marine Contract Group" } }
+				division_template = {
+					name = "Kefreyt Marine Contract Group"
+					template_counter = 68
+					division_names_group = VAL_INF_01
+					is_locked = yes
+					force_allow_recruiting = yes
+					regiments = {
+						ADISCORD_marine_infantry = { x = 0 y = 0 }
+						ADISCORD_marine_infantry = { x = 0 y = 1 }
+						ADISCORD_marine_infantry = { x = 0 y = 2 }
+						ADISCORD_marine_infantry = { x = 1 y = 0 }
+						ADISCORD_marine_infantry = { x = 1 y = 1 }
+						ADISCORD_marine_infantry = { x = 1 y = 2 }
+					}
+					support = { engineer = { x = 0 y = 0 } }
+				}
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "division_template = \"Kefreyt Marine Contract Group\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = PREV
+					count = 1
+					allow_spawning_on_enemy_provs = no
+				}
+			}
+			set_country_flag = VAL_marine_contract_corps_raised
+		}
+	}
+}
+
 VAL_start_quarterly_contract_norm = {
 	set_country_flag = VAL_quarterly_contract_active
 	clr_country_flag = VAL_quarterly_contract_paid

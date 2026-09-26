@@ -1,0 +1,46 @@
+ideas = {
+	country = {
+		VAL_marine_sea_assault = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				amphibious_invasion = 0.15
+				invasion_preparation = -0.15
+			}
+		}
+
+		VAL_marine_beachhead_logistics = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				extra_marine_supply_grace = 48
+				supply_consumption_factor = -0.05
+			}
+		}
+
+		VAL_marine_landing_network = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				naval_invasion_prep_speed = 0.10
+				naval_invasion_penalty = -0.05
+				naval_invasion_capacity = 10
+			}
+		}
+
+		VAL_marine_contract_corps = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				special_forces_cap = 0.03
+				special_forces_training_time_factor = -0.15
+				special_forces_attack_factor = 0.05
+				special_forces_defence_factor = 0.05
+			}
+		}
+	}
+}
