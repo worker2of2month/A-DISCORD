@@ -89,7 +89,16 @@ on_actions = {
 					}
 					TVA = {
 						if = { limit = { has_war_with = WTD } white_peace = WTD }
-						WTD = { if = { limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major } set_major = no clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major clr_country_flag = ADISCORD_vorkerland_regional_auxiliary } }
+						WTD = {
+							if = {
+								limit = {
+									has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+								}
+								set_major = no
+								clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+								clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+							}
+						}
 						annex_country = { target = WTD transfer_troops = no }
 					}
 				}
@@ -104,7 +113,16 @@ on_actions = {
 					}
 					TVA = {
 						if = { limit = { has_war_with = TGD } white_peace = TGD }
-						TGD = { if = { limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major } set_major = no clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major clr_country_flag = ADISCORD_vorkerland_regional_auxiliary } }
+						TGD = {
+							if = {
+								limit = {
+									has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+								}
+								set_major = no
+								clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+								clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+							}
+						}
 						annex_country = { target = TGD transfer_troops = no }
 					}
 				}
@@ -121,14 +139,32 @@ on_actions = {
 							NOT = { has_capitulated = yes }
 						}
 						if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-						ROOT = { if = { limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major } set_major = no clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major clr_country_flag = ADISCORD_vorkerland_regional_auxiliary } }
+						ROOT = {
+							if = {
+								limit = {
+									has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+								}
+								set_major = no
+								clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+								clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+							}
+						}
 						annex_country = { target = ROOT transfer_troops = yes }
 					}
 					else_if = {
 						limit = { ADISCORD_vorkerland_has_live_claimant_leader = yes }
 						faction_leader = {
 							if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-							ROOT = { if = { limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major } set_major = no clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major clr_country_flag = ADISCORD_vorkerland_regional_auxiliary } }
+							ROOT = {
+								if = {
+									limit = {
+										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									}
+									set_major = no
+									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+								}
+							}
 						annex_country = { target = ROOT transfer_troops = yes }
 						}
 					}
@@ -145,7 +181,16 @@ on_actions = {
 						}
 						OVERLORD = {
 							if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-							ROOT = { if = { limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major } set_major = no clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major clr_country_flag = ADISCORD_vorkerland_regional_auxiliary } }
+							ROOT = {
+								if = {
+									limit = {
+										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									}
+									set_major = no
+									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+								}
+							}
 						annex_country = { target = ROOT transfer_troops = yes }
 						}
 					}
@@ -153,7 +198,16 @@ on_actions = {
 						limit = { tag = WTD TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
 						TVA = {
 							if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-							ROOT = { if = { limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major } set_major = no clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major clr_country_flag = ADISCORD_vorkerland_regional_auxiliary } }
+							ROOT = {
+								if = {
+									limit = {
+										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									}
+									set_major = no
+									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+								}
+							}
 						annex_country = { target = ROOT transfer_troops = yes }
 						}
 					}
@@ -161,7 +215,16 @@ on_actions = {
 						limit = { tag = VLA WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
 						WKR = {
 							if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-							ROOT = { if = { limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major } set_major = no clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major clr_country_flag = ADISCORD_vorkerland_regional_auxiliary } }
+							ROOT = {
+								if = {
+									limit = {
+										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									}
+									set_major = no
+									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+								}
+							}
 						annex_country = { target = ROOT transfer_troops = yes }
 						}
 					}
@@ -169,7 +232,16 @@ on_actions = {
 						limit = { tag = SOL VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } } }
 						VAD = {
 							if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-							ROOT = { if = { limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major } set_major = no clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major clr_country_flag = ADISCORD_vorkerland_regional_auxiliary } }
+							ROOT = {
+								if = {
+									limit = {
+										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									}
+									set_major = no
+									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+								}
+							}
 						annex_country = { target = ROOT transfer_troops = yes }
 						}
 					}
@@ -183,7 +255,16 @@ on_actions = {
 							has_global_flag = ADISCORD_vorkerland_reunification_verified
 						}
 						if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-						ROOT = { if = { limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major } set_major = no clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major clr_country_flag = ADISCORD_vorkerland_regional_auxiliary } }
+						ROOT = {
+							if = {
+								limit = {
+									has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+								}
+								set_major = no
+								clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+								clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
+							}
+						}
 						annex_country = { target = ROOT transfer_troops = yes }
 					}
 				}
