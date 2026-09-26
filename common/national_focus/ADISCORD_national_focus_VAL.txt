@@ -24,8 +24,9 @@ focus_tree = {
 	### foreign contracts (x 24-32), and army (x 34-44); crisis and postwar routes start at y 12.
 	### The reclamation programme stays detached at x <= 0 so its state work does not cross the core tree.
 	### Progressive focus reveal: the complete first act is visible as a roadmap.
-	### Only later systems and campaign chapters use allow_branch, so the opening
-	### screen stays informative without exposing the entire campaign at once.
+	### World-reactive and selected second-layer systems may use allow_branch.
+	### Post-capstone campaign routes stay statically visible and use ordinary
+	### prerequisites/availability so HOI4 cannot strand them behind layout caching.
 	### CENTRAL SPINE: THE CONTRACT THRONE
 	#############################################
 
@@ -2329,15 +2330,11 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Integrate_Occidia
-		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY }
 		x = 14
 		y = 13
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Occidian_Registries
-		}
 		prerequisite = { focus = VAL_Occidian_Registries }
 		mutually_exclusive = { focus = VAL_Balchansk_Charter }
 		available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
@@ -2453,16 +2450,11 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Return_Southern_Tsaygen
-		dynamic = yes
 		icon = GFX_goal_generic_territory_or_war
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
 		y = 13
 		cost = 4
-		allow_branch = {
-			has_completed_focus = VAL_Contracts_Outlive_Kings
-			has_completed_focus = VAL_Foreign_Broker_Licences
-		}
 		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		prerequisite = { focus = VAL_Foreign_Broker_Licences }
 		available = {
@@ -2484,15 +2476,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_frontier_return_irem
-		dynamic = yes
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
 		y = 14
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Return_Southern_Tsaygen
-		}
 		prerequisite = { focus = VAL_Return_Southern_Tsaygen }
 		available = { VAL_wasteland_invasion_available = yes }
 		bypass = { owns_state = 169 }
@@ -2507,15 +2495,11 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Wasteland_Charter
-		dynamic = yes
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
 		y = 16
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_frontier_return_irem
-		}
 		prerequisite = { focus = VAL_frontier_return_irem }
 		available = {
 			custom_trigger_tooltip = {
@@ -2530,15 +2514,11 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Southern_Expansion
-		dynamic = yes
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
 		y = 18
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Wasteland_Charter
-		}
 		prerequisite = { focus = VAL_Wasteland_Charter }
 		available = {
 			custom_trigger_tooltip = {
@@ -2563,15 +2543,11 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Eastern_Expansion
-		dynamic = yes
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
 		y = 20
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Southern_Expansion
-		}
 		prerequisite = { focus = VAL_Southern_Expansion }
 		available = {
 			custom_trigger_tooltip = {
@@ -2719,15 +2695,11 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Stelander_Ultimatum
-		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 28
 		y = 14
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_frontier_treaty_offices
-		}
 		prerequisite = { focus = VAL_frontier_treaty_offices }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Stelander_Ultimatum_tt unlock_decision_tooltip = VAL_stelander_ultimatum unlock_decision_tooltip = VAL_campaign_against_stelander }
@@ -2736,15 +2708,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Equal_Powers_Pact
-		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		x = 28
 		y = 15
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_Stelander_Ultimatum
-		}
 		prerequisite = { focus = VAL_Stelander_Ultimatum }
 		available = {
 			custom_trigger_tooltip = {
@@ -2764,15 +2732,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Joint_General_Staff
-		dynamic = yes
 		icon = GFX_goal_generic_allies_build_infantry
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
 		x = 27
 		y = 16
 		cost = 4
-		allow_branch = {
-			has_completed_focus = VAL_Equal_Powers_Pact
-		}
 		prerequisite = { focus = VAL_Equal_Powers_Pact }
 		available = { has_country_flag = VAL_stelander_equal_alliance }
 		ai_will_do = { base = 3 }
@@ -2787,15 +2751,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Cross_Border_Contracts
-		dynamic = yes
 		icon = GFX_goal_generic_trade
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY }
 		x = 29
 		y = 16
 		cost = 4
-		allow_branch = {
-			has_completed_focus = VAL_Equal_Powers_Pact
-		}
 		prerequisite = { focus = VAL_Equal_Powers_Pact }
 		available = { has_country_flag = VAL_stelander_equal_alliance }
 		ai_will_do = { base = 3 }
@@ -2813,16 +2773,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Two_States_One_Frontier
-		dynamic = yes
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		x = 28
 		y = 17
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Joint_General_Staff
-			has_completed_focus = VAL_Cross_Border_Contracts
-		}
 		prerequisite = { focus = VAL_Joint_General_Staff }
 		prerequisite = { focus = VAL_Cross_Border_Contracts }
 		available = { has_country_flag = VAL_stelander_equal_alliance }
@@ -2839,17 +2794,12 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Campaign_Secured
-		dynamic = yes
 		mutually_exclusive = { focus = VAL_Equal_Powers_Pact }
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		x = 24
 		y = 16
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Northern_Settlement
-			has_completed_focus = VAL_Stelander_Ultimatum
-		}
 		prerequisite = { focus = VAL_Northern_Settlement }
 		prerequisite = { focus = VAL_Stelander_Ultimatum }
 		available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
@@ -2921,16 +2871,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Reopen_Trade_Routes
-		dynamic = yes
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
 		x = 22
 		y = 18
 		cost = 5
-		allow_branch = {
-			OR = { has_completed_focus = VAL_Campaign_Secured has_completed_focus = VAL_Returning_Buyers }
-			OR = { has_completed_focus = VAL_New_Supply_Base has_completed_focus = VAL_Contingency_Ledgers }
-		}
 		prerequisite = { focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers }
 		prerequisite = { focus = VAL_New_Supply_Base focus = VAL_Contingency_Ledgers }
 		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
@@ -2942,16 +2887,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Settle_Industrial_Debts
-		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
 		x = 26
 		y = 18
 		cost = 5
-		allow_branch = {
-			OR = { has_completed_focus = VAL_Campaign_Secured has_completed_focus = VAL_Returning_Buyers }
-			has_completed_focus = VAL_Industrial_Mobilization_Plan
-		}
 		prerequisite = { focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers }
 		prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
 		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
@@ -2963,17 +2903,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Return_To_World_Market
-		dynamic = yes
 		icon = GFX_goal_generic_trade
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
 		x = 24
 		y = 20
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Reopen_Trade_Routes
-			has_completed_focus = VAL_Settle_Industrial_Debts
-			has_completed_focus = VAL_Returning_Buyers
-		}
 		prerequisite = { focus = VAL_Reopen_Trade_Routes }
 		prerequisite = { focus = VAL_Settle_Industrial_Debts }
 		prerequisite = { focus = VAL_Returning_Buyers }
@@ -2993,16 +2927,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Veterans_Of_The_Campaign
-		dynamic = yes
 		icon = GFX_goal_generic_army_doctrines
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 28
 		y = 18
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_Campaign_Secured
-			has_completed_focus = VAL_Army_Of_The_Ledger
-		}
 		prerequisite = { focus = VAL_Campaign_Secured }
 		prerequisite = { focus = VAL_Army_Of_The_Ledger }
 		available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
@@ -3207,14 +3136,10 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Bezhaysk_Operation
-		dynamic = yes
 		icon = GFX_goal_generic_position_armies
 		x = 30
 		y = 13
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Contracts_Outlive_Kings
-		}
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		available = { custom_trigger_tooltip = { tooltip = VAL_bezhaysk_operation_available_tt VAL_can_attack_bezhaysk = yes } }
@@ -3311,15 +3236,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Balchansk_Charter
-		dynamic = yes
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ECONOMY }
 		x = 10
 		y = 13
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Occidian_Registries
-		}
 		prerequisite = { focus = VAL_Occidian_Registries }
 		mutually_exclusive = { focus = VAL_Integrate_Occidia }
 		available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }

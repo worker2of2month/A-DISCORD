@@ -94,7 +94,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 if dependency in known:
                     expected.setdefault(dependency, set()).add(focus_id)
 
-        self.assertGreaterEqual(len(expected), 50)
+        self.assertGreaterEqual(len(expected), 35)
         for dependency, targets in expected.items():
             key = f"VAL_focus_progression_{dependency}_tt"
             source = focus_block(self.focuses, dependency)
@@ -176,7 +176,6 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "VAL_Occidian_Registries": "VAL_Occidian_Claims_Commission",
             "VAL_Audit_Lost_Contracts": "VAL_Inventory_The_Empty_Yards",
             "VAL_econ_development_fund": "VAL_Industrial_Mobilization_Plan",
-            "VAL_Bezhaysk_Operation": "VAL_Contracts_Outlive_Kings",
         }
         for focus_id, milestone in expected.items():
             self.assertIn(
@@ -244,21 +243,36 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_collapse_wars_started", vorkerland)
         self.assertIn("has_completed_focus = VAL_Operational_Directorate", vorkerland)
 
-    def test_late_campaign_roots_remain_hidden(self) -> None:
+    def test_late_campaign_roadmap_is_static_and_prerequisite_gated(self) -> None:
         expected = {
-            "VAL_frontier_conference": "VAL_One_Ledger_One_Banner",
+            "VAL_Integrate_Occidia": "VAL_Occidian_Registries",
+            "VAL_Balchansk_Charter": "VAL_Occidian_Registries",
+            "VAL_Bezhaysk_Operation": "VAL_Contracts_Outlive_Kings",
             "VAL_Return_Southern_Tsaygen": "VAL_Contracts_Outlive_Kings",
-            "VAL_Wasteland_Charter": "VAL_frontier_return_irem",
+            "VAL_frontier_return_irem": "VAL_Return_Southern_Tsaygen",
+            "VAL_Stelander_Ultimatum": "VAL_frontier_treaty_offices",
+            "VAL_Equal_Powers_Pact": "VAL_Stelander_Ultimatum",
             "VAL_Campaign_Secured": "VAL_Northern_Settlement",
+            "VAL_Joint_General_Staff": "VAL_Equal_Powers_Pact",
+            "VAL_Cross_Border_Contracts": "VAL_Equal_Powers_Pact",
+            "VAL_Wasteland_Charter": "VAL_frontier_return_irem",
+            "VAL_Two_States_One_Frontier": "VAL_Joint_General_Staff",
+            "VAL_Reopen_Trade_Routes": "VAL_Campaign_Secured",
+            "VAL_Settle_Industrial_Debts": "VAL_Industrial_Mobilization_Plan",
             "VAL_Veterans_Of_The_Campaign": "VAL_Campaign_Secured",
+            "VAL_Southern_Expansion": "VAL_Wasteland_Charter",
             "VAL_Return_To_World_Market": "VAL_Reopen_Trade_Routes",
+            "VAL_Eastern_Expansion": "VAL_Southern_Expansion",
         }
         for focus_id, milestone in expected.items():
-            self.assertIn(
-                f"has_completed_focus = {milestone}",
-                allow(self.focuses, focus_id),
-                focus_id,
-            )
+            body = focus_block(self.focuses, focus_id)
+            self.assertNotIn("allow_branch", body, focus_id)
+            self.assertNotIn("dynamic = yes", body, focus_id)
+            self.assertIn(f"focus = {milestone}", body, focus_id)
+
+        southern = focus_block(self.focuses, "VAL_Return_Southern_Tsaygen")
+        self.assertIn("prerequisite = { focus = VAL_Contracts_Outlive_Kings }", southern)
+        self.assertIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", southern)
 
     def test_every_staged_allow_branch_focus_is_dynamic(self) -> None:
         ids = re.findall(r"(?m)^\s*id\s*=\s*(VAL_[A-Za-z0-9_]+)\s*$", self.focuses)
@@ -284,7 +298,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "VAL_Northern_Settlement",
         ):
             self.assertNotIn(focus_id, staged)
-        self.assertGreaterEqual(len(staged), 50)
+        self.assertGreaterEqual(len(staged), 35)
 
     def test_frontier_chapter_has_no_old_save_migration(self) -> None:
         self.assertNotIn("ADISCORD_val_frontier_postpeace_fix_v1", self.on_actions)
