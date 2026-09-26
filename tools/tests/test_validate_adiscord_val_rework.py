@@ -2022,6 +2022,9 @@ class ValContractFormationTests(unittest.TestCase):
         self.assertIn("var = ADISCORD_economy_treasury value = STP_ps_cargo_payment", resolver)
         self.assertIn("VAL_cw_arms_contract_fulfilled", resolver)
         self.assertIn("army_experience = 5", resolver)
+        self.assertIn("NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled }", resolver)
+        refund = only_named_block(self, (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8"), "STP_ps_refund_val_supply")
+        self.assertIn("clr_country_flag = VAL_cw_arms_contract_fulfilled", refund)
 
     def test_donor_selects_the_package_and_buyer_cannot_upgrade_it(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
