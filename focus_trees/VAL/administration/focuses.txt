@@ -166,7 +166,22 @@ focus_tree = {
         available = { VAL_is_contract_administration = yes owns_state = 43 controls_state = 43 }
         cancel_if_invalid = yes
         completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes owns_state = 43 controls_state = 43 } 43 = { add_extra_state_shared_building_slots = 1 add_building_construction = { type = industrial_complex level = 1 instant_build = yes } } ADISCORD_economy_mark_dirty = yes }
+            if = {
+                limit = {
+                    VAL_is_contract_administration = yes
+                    owns_state = 43
+                    controls_state = 43
+                }
+                43 = {
+                    add_extra_state_shared_building_slots = 1
+                    add_building_construction = {
+                        type = industrial_complex
+                        level = 1
+                        instant_build = yes
+                    }
+                }
+                ADISCORD_economy_mark_dirty = yes
+            }
         }
         ai_will_do = { base = 12 }
     }
@@ -181,7 +196,21 @@ focus_tree = {
         available = { VAL_is_contract_administration = yes owns_state = 88 controls_state = 88 }
         cancel_if_invalid = yes
         completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes owns_state = 88 controls_state = 88 } 88 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } } add_ideas = OCA_mining_concession_income }
+            if = {
+                limit = {
+                    VAL_is_contract_administration = yes
+                    owns_state = 88
+                    controls_state = 88
+                }
+                88 = {
+                    add_building_construction = {
+                        type = infrastructure
+                        level = 1
+                        instant_build = yes
+                    }
+                }
+                add_ideas = OCA_mining_concession_income
+            }
         }
         ai_will_do = { base = 12 }
     }
@@ -196,7 +225,22 @@ focus_tree = {
         available = { VAL_is_contract_administration = yes owns_state = 43 controls_state = 43 }
         cancel_if_invalid = yes
         completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes owns_state = 43 controls_state = 43 } 43 = { add_extra_state_shared_building_slots = 1 add_building_construction = { type = arms_factory level = 1 instant_build = yes } } ADISCORD_economy_mark_dirty = yes }
+            if = {
+                limit = {
+                    VAL_is_contract_administration = yes
+                    owns_state = 43
+                    controls_state = 43
+                }
+                43 = {
+                    add_extra_state_shared_building_slots = 1
+                    add_building_construction = {
+                        type = arms_factory
+                        level = 1
+                        instant_build = yes
+                    }
+                }
+                ADISCORD_economy_mark_dirty = yes
+            }
         }
         ai_will_do = { base = 12 }
     }
@@ -226,7 +270,21 @@ focus_tree = {
         available = { VAL_is_contract_administration = yes owns_state = 44 controls_state = 44 }
         cancel_if_invalid = yes
         completion_reward = {
-            if = { limit = { VAL_is_contract_administration = yes owns_state = 44 controls_state = 44 } 44 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } } add_ideas = OCA_supply_service }
+            if = {
+                limit = {
+                    VAL_is_contract_administration = yes
+                    owns_state = 44
+                    controls_state = 44
+                }
+                44 = {
+                    add_building_construction = {
+                        type = infrastructure
+                        level = 1
+                        instant_build = yes
+                    }
+                }
+                add_ideas = OCA_supply_service
+            }
         }
         ai_will_do = { base = 12 }
     }
