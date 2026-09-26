@@ -5,3 +5,12 @@ ADISCORD_economy_projects = {
 	visible_when_empty = yes
 	priority = 15
 }
+
+ADISCORD_development_investments = {
+	icon = ADISCORD_science
+	allowed = { OR = { tag = STP tag = STS tag = VAL } }
+	visible = { has_variable = ADISCORD_economy_treasury }
+	visible_when_empty = yes
+	priority = 14
+}
+
