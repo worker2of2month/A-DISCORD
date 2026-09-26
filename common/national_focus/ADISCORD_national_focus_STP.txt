@@ -16,7 +16,7 @@ focus_tree = {
 		ai_will_do = { base = 20 }
 		completion_reward = {
 			add_political_power = 35
-			country_event = { id = ADISCORD_STP_preparation.15 }
+			country_event = { id = ADISCORD_STP_preparation.27 }
 		}
 	}
 
