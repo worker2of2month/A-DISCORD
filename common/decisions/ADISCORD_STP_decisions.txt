@@ -3515,7 +3515,17 @@ STP_cw_war_council = {
 		visible = { has_country_flag = STP_cw_participant NOT = { has_country_flag = STP_cw_postwar } STP_cw_can_rearm = yes }
 		available = {
 			has_completed_focus = STP_cw_mobilization_register
-			OR = { tag = STS AND = { NOT = { has_manpower < 6000 } NOT = { has_equipment = { infantry_equipment < 5400 } } } }
+			OR = {
+				AND = {
+					tag = STS
+					NOT = { has_manpower < 6000 }
+				}
+				AND = {
+					NOT = { tag = STS }
+					NOT = { has_manpower < 6000 }
+					NOT = { has_equipment = { infantry_equipment < 5400 } }
+				}
+			}
 			any_owned_state = { is_controlled_by = PREV }
 		}
 		cost = 25
@@ -3532,11 +3542,6 @@ STP_cw_war_council = {
 		}
 		ai_will_do = {
 			base = 10
-			modifier = {
-				factor = 0
-				tag = STS
-				NOT = { num_divisions < 24 }
-			}
 			modifier = {
 				factor = 0
 				NOT = { tag = STS }
@@ -3598,7 +3603,17 @@ STP_cw_war_council = {
 		custom_cost_text = STP_cw_reserve_training_cost
 		custom_cost_trigger = {
 			NOT = { has_political_power < 40 }
-			OR = { tag = STS AND = { NOT = { has_manpower < 12000 } NOT = { has_equipment = { infantry_equipment < 10800 } } } }
+			OR = {
+				AND = {
+					tag = STS
+					NOT = { has_manpower < 12000 }
+				}
+				AND = {
+					NOT = { tag = STS }
+					NOT = { has_manpower < 12000 }
+					NOT = { has_equipment = { infantry_equipment < 10800 } }
+				}
+			}
 		}
 		cost = 0
 		days_remove = 21
@@ -3613,6 +3628,7 @@ STP_cw_war_council = {
 				if = {
 					limit = { tag = STS }
 					add_political_power = -40
+					add_manpower = -12000
 					set_variable = { var = STP_cw_training_cohorts value = 2 }
 					set_country_flag = STP_cw_training_political_payment
 				}
@@ -3635,11 +3651,6 @@ STP_cw_war_council = {
 		cancel_effect = { STP_cw_refund_reserve_training = yes }
 		ai_will_do = {
 			base = 7
-			modifier = {
-				factor = 0
-				tag = STS
-				NOT = { num_divisions < 24 }
-			}
 			modifier = {
 				factor = 0
 				NOT = { tag = STS }
