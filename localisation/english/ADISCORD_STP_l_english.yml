@@ -2661,3 +2661,17 @@
  ADISCORD_STP_preparation.30.d: "A repair crew opened a substation that maps still identified by its Vorkerland number. Inside were oversized cables and connectors designed for a grid that no longer existed. The engineer explained to the apprentices that nodes like this had belonged to a unified energy programme centred on the zero-point reactor.\n\nOnly isolated pieces of the megaproject remained. They were stripped for copper, restored into local grids or simply avoided. For the workers, the past was not a legend about the end of the world. It was an unusual bolt, an obsolete diagram and a warning not to walk beyond the concrete marker."
  ADISCORD_STP_preparation.30.a: "Useful inheritance can still be dangerous."
 
+ # Postwar specialist training
+ STP_pw_party_mountain_school: "Mountain Infantry School"
+ STP_pw_party_mountain_school_desc: "The border staff needs formations able to operate on mountain passes with limited heavy support. Establish instructor courses and a mountain brigade organization with its own engineer company."
+ STP_pw_party_marine_school: "Marine Infantry School"
+ STP_pw_party_marine_school_desc: "An operational naval base will host a permanent school for landings, river crossings, port security and supplying a beachhead."
+ STP_pw_republic_mountain_school: "Mountain Brigade Training"
+ STP_pw_republic_mountain_school_desc: "Turn the experience of mountain detachments into a permanent programme for guides, signals personnel and engineers, with a common brigade organization."
+ STP_pw_republic_marine_school: "Marine Infantry Training"
+ STP_pw_republic_marine_school_desc: "Use the restored ports to establish a marine training centre and coordinate coastal operations with the fleet."
+ STP_pw_specialist_naval_base_tt: "Owns and controls a state with a naval base."
+ STP_pw_mountain_template_tt: "Creates the Stelander Mountain Brigade template with §Y6§! mountain battalions and an engineer company. Recruit brigades normally using national manpower and equipment."
+ STP_pw_marine_template_tt: "Creates the Stelander Marine Brigade template with §Y6§! marine battalions and an engineer company. Recruit brigades normally using national manpower and equipment."
+ ADISCORD_tech_stelander_marine_corps: "Stelander Marine Corps Organization"
+ ADISCORD_tech_stelander_marine_corps_desc: "A permanent marine training and recruitment system established through the postwar army programme."

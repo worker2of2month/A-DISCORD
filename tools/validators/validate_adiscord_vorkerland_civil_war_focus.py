@@ -13,7 +13,7 @@ from tools.lib.paths import source_section
 
 ROOT = Path(__file__).resolve().parents[2]
 
-FOCUS_FILE = Path("common/national_focus/ADISCORD_vorkerland_focus.txt")
+FOCUS_FILE = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
 CONTINUOUS_FOCUS_FILE = Path("common/continuous_focus/generic.txt")
 ENGLISH_LOCALISATION = Path(
     "localisation/english/ADISCORD_vorkerland_l_english.yml"

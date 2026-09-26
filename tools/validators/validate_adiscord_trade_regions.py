@@ -15,13 +15,13 @@ from tools.builders.build_adiscord_trade_regions import (
 )
 
 
-EXPECTED_STATE_COUNTS = {1: 58, 2: 62, 3: 75, 4: 8, 5: 98, 6: 37, 7: 360}
+EXPECTED_STATE_COUNTS = {1: 59, 2: 62, 3: 83, 4: 8, 5: 99, 6: 37, 7: 360}
 EXPECTED_PROVINCE_COUNTS = {
-    1: 607,
+    1: 610,
     2: 752,
-    3: 923,
+    3: 1013,
     4: 44,
-    5: 1115,
+    5: 1117,
     6: 436,
     7: 9560,
 }
@@ -40,6 +40,9 @@ GEOGRAPHIC_STATE_ANCHORS = {
     690: (24, 5),  # NAM's split resource district remains in Vorkerland.
     691: (24, 1),  # EFL's split district remains in Eastern Forul.
     692: (24, 3),  # AZH's split coast remains in the Southern Deserts.
+    699: (42, 3),
+    700: (24, 5),
+    701: (24, 1),
     461: (67, 2),  # Deliberately realigned Exclusion Zone fringe.
 }
 

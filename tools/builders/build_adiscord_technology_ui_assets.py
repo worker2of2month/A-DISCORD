@@ -865,7 +865,19 @@ def main() -> int:
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")
+    parser.add_argument(
+        "--state-definitions-only", action="store_true",
+        help="check or write state sprite declarations using existing DDS assets",
+    )
     args = parser.parse_args()
+    if args.state_definitions_only:
+        for contract in TECHNOLOGY_STATE_CONTRACTS:
+            with Image.open(OUTPUT_DIR / contract.filename) as asset:
+                validate_contract_image(contract, asset)
+        return apply_or_check(
+            {STATE_GFX_OUTPUT: expected_technology_state_gfx_bytes()},
+            args.apply, "Technology state declarations",
+        )
     if not args.apply:
         obsolete = [path for path in LEGACY_OUTPUTS if path.is_file()]
         if obsolete:

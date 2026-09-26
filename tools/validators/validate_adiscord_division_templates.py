@@ -327,7 +327,7 @@ def _script_paths(root: Path) -> list[Path]:
 
 def _slots(block: list[Entry]) -> tuple[Slot, ...]:
     result: list[Slot] = []
-    for kind in ("regiments", "support"):
+    for kind in ("regiments", "support", "regimental_support"):
         for container in _entries(block, kind):
             if not isinstance(container.value, list):
                 continue
@@ -790,10 +790,11 @@ def _validate_computed_rows(
                 for slot in template.slots
                 if slot.kind == kind
             ]
-            for kind in ("regiments", "support")
+            for kind in ("regiments", "support", "regimental_support")
         }
-        for kind in ("regiments", "support"):
-            if row.get(kind) != expected_slots[kind]:
+        for kind in ("regiments", "support", "regimental_support"):
+            recorded = row.get(kind, [] if kind == "regimental_support" else None)
+            if recorded != expected_slots[kind]:
                 issues.append(f"{row.get('key')}: computed {kind} {expected_slots[kind]} does not match audit")
         expected = row.get("computed", {})
         for field, value in (

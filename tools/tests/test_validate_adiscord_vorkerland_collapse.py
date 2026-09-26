@@ -5,6 +5,7 @@ import json
 import re
 import unittest
 from pathlib import Path
+from tools.lib.focus_sources import read_focus_source
 
 from PIL import Image
 
@@ -37,7 +38,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def read(relative: str) -> str:
-    return (ROOT / relative).read_text(encoding="utf-8-sig")
+    return read_focus_source(ROOT / relative, encoding="utf-8-sig")
 
 
 def read_focus_decisions() -> str:

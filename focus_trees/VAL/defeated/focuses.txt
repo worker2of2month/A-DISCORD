@@ -1,0 +1,415 @@
+focus_tree = {
+	id = VAL_defeated_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 100
+			original_tag = VAL
+			has_country_flag = VAL_stelander_defeated
+		}
+	}
+	continuous_focus_position = { x = 100 y = 555555 }
+
+	focus = {
+		id = VAL_defeat_Returning_Columns
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_RECOVERY }
+		icon = GFX_goal_generic_major_war
+		x = 10
+		y = 0
+		cost = 3
+		completion_reward = {
+			add_political_power = 50
+			add_stability = 0.02
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = VAL_defeat_Commanders_Take_The_Ledger
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
+		icon = GFX_focus_generic_military_academy
+		x = 10
+		y = 1
+		cost = 4
+		prerequisite = { focus = VAL_defeat_Returning_Columns }
+		completion_reward = {
+			add_command_power = 20
+			army_experience = 10
+			add_stability = 0.03
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = VAL_defeat_Count_The_Remaining_Rifles
+		search_filters = { FOCUS_FILTER_VAL_ARMY }
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 6
+		y = 2
+		cost = 4
+		prerequisite = { focus = VAL_defeat_Commanders_Take_The_Ledger }
+		completion_reward = {
+			army_experience = 15
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 5000 producer = VAL }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Reopen_The_Depots
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
+		icon = GFX_focus_generic_reinforcing_the_supply_network
+		x = 6
+		y = 3
+		cost = 4
+		prerequisite = { focus = VAL_defeat_Count_The_Remaining_Rifles }
+		completion_reward = {
+			add_tech_bonus = { name = VAL_defeat_industry_bonus bonus = 0.5 uses = 1 category = industry }
+			VAL_invest_civilian_industry = yes
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Articles_Of_Command
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
+		icon = GFX_goal_generic_political_pressure
+		x = 10
+		y = 2
+		cost = 4
+		prerequisite = { focus = VAL_defeat_Commanders_Take_The_Ledger }
+		completion_reward = {
+			add_political_power = 75
+			add_stability = 0.04
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	focus = {
+		id = VAL_defeat_No_Second_Expedition
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
+		icon = GFX_focus_generic_treaty
+		x = 8
+		y = 4
+		cost = 4
+		prerequisite = { focus = VAL_defeat_Rebuild_The_Registry }
+		mutually_exclusive = { focus = VAL_defeat_Revise_The_Settlement }
+		completion_reward = {
+			add_stability = 0.05
+			add_war_support = -0.05
+			add_political_power = 50
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	focus = {
+		id = VAL_defeat_Field_Hospitals_First
+		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ARMY }
+		icon = GFX_focus_generic_limited_social_mobilization
+		x = 14
+		y = 2
+		cost = 4
+		prerequisite = { focus = VAL_defeat_Commanders_Take_The_Ledger }
+		completion_reward = {
+			add_tech_bonus = { name = VAL_defeat_medical_bonus bonus = 0.5 uses = 1 category = support_tech }
+			add_stability = 0.03
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Bring_The_Captains_Home
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ARMY }
+		icon = GFX_focus_generic_improve_the_administration
+		x = 14
+		y = 3
+		cost = 4
+		prerequisite = { focus = VAL_defeat_Field_Hospitals_First }
+		completion_reward = {
+			army_experience = 15
+			add_command_power = 15
+			add_political_power = 25
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Contracts_Without_Conquest
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = 8
+		y = 6
+		cost = 5
+		prerequisite = { focus = VAL_defeat_Reopen_The_Depots }
+		prerequisite = { focus = VAL_defeat_No_Second_Expedition }
+		prerequisite = { focus = VAL_defeat_Bring_The_Captains_Home }
+		completion_reward = {
+			ADISCORD_economy_receive_15 = yes
+			VAL_invest_civilian_industry = yes
+			add_stability = 0.05
+			add_political_power = 100
+		}
+		ai_will_do = { base = 25 }
+	}
+
+	focus = {
+		id = VAL_defeat_Revise_The_Settlement
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
+		icon = GFX_goal_generic_political_pressure
+		x = 12
+		y = 4
+		cost = 5
+		prerequisite = { focus = VAL_defeat_Rebuild_The_Registry }
+		mutually_exclusive = { focus = VAL_defeat_No_Second_Expedition }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.1
+			custom_effect_tooltip = VAL_council_revanche_stakes_tt
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = VAL_defeat_Refit_For_Return
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY }
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 12
+		y = 5
+		cost = 6
+		prerequisite = { focus = VAL_defeat_Revise_The_Settlement }
+		prerequisite = { focus = VAL_defeat_Reopen_The_Depots }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL }
+			army_experience = 20
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	focus = {
+		id = VAL_defeat_Return_To_The_Passes
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
+		icon = GFX_goal_generic_major_war
+		x = 12
+		y = 9
+		cost = 6
+		prerequisite = { focus = VAL_defeat_Supply_For_The_Return }
+		prerequisite = { focus = VAL_defeat_Bring_The_Captains_Home }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_launch_available_tt VAL_council_can_launch_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_council_revanche_war_tt
+			hidden_effect = { VAL_council_begin_revanche = yes }
+		}
+		ai_will_do = { base = 25 }
+	}
+
+	focus = {
+		id = VAL_defeat_Rebuild_The_Registry
+		icon = GFX_focus_generic_treaty
+		x = 10
+		y = 3
+		cost = 4
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_DECISIONS }
+		prerequisite = { focus = VAL_defeat_Articles_Of_Command }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			unlock_decision_tooltip = VAL_nationalise_region
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Repair_The_Workshops
+		icon = GFX_focus_generic_industry_3
+		x = 4
+		y = 4
+		cost = 5
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
+		prerequisite = { focus = VAL_defeat_Reopen_The_Depots }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			VAL_reform_mercenary_payroll = yes
+			VAL_invest_civilian_industry = yes
+			add_tech_bonus = { name = VAL_defeat_Repair_The_Workshops bonus = 0.5 uses = 1 category = industry }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Restore_Freight_Routes
+		icon = GFX_focus_generic_reinforcing_the_supply_network
+		x = 4
+		y = 5
+		cost = 4
+		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
+		prerequisite = { focus = VAL_defeat_Repair_The_Workshops }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			VAL_reform_mercenary_payroll = yes
+			if = {
+				limit = { any_owned_state = { is_controlled_by = ROOT infrastructure < 5 } }
+				random_owned_controlled_state = {
+					limit = { infrastructure < 5 }
+					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+				}
+			}
+			else = { add_political_power = 50 }
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Veterans_Register
+		icon = GFX_focus_generic_limited_social_mobilization
+		x = 16
+		y = 4
+		cost = 4
+		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_MANPOWER }
+		prerequisite = { focus = VAL_defeat_Bring_The_Captains_Home }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			VAL_reform_mercenary_payroll = yes
+			add_manpower = 4000
+			add_stability = 0.03
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Staff_College
+		icon = GFX_focus_generic_military_academy
+		x = 16
+		y = 5
+		cost = 5
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
+		prerequisite = { focus = VAL_defeat_Veterans_Register }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			VAL_reform_mercenary_payroll = yes
+			army_experience = 25
+			add_tech_bonus = { name = VAL_defeat_Staff_College bonus = 0.5 uses = 1 category = support_tech }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Civilian_Contracts
+		icon = GFX_goal_generic_positive_trade_relations
+		x = 6
+		y = 7
+		cost = 5
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_RECOVERY }
+		prerequisite = { focus = VAL_defeat_Contracts_Without_Conquest }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			VAL_invest_civilian_industry = yes
+			ADISCORD_economy_receive_15 = yes
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Technical_Institute
+		icon = GFX_goal_generic_scientific_exchange
+		x = 8
+		y = 8
+		cost = 6
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_ARMY }
+		prerequisite = { focus = VAL_defeat_Civilian_Contracts }
+		prerequisite = { focus = VAL_defeat_Staff_College }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovery_available_tt VAL_council_in_office = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			if = { limit = { amount_research_slots < 5 } add_research_slot = 1 }
+			else = { add_tech_bonus = { name = VAL_defeat_Technical_Institute bonus = 0.5 uses = 2 category = industry } }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Mountain_Exercises
+		icon = GFX_goal_generic_army_doctrines
+		x = 12
+		y = 6
+		cost = 5
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY }
+		prerequisite = { focus = VAL_defeat_Refit_For_Return }
+		prerequisite = { focus = VAL_defeat_Staff_College }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 30
+			add_equipment_to_stockpile = { type = support_equipment amount = 200 producer = VAL }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Frontline_Arsenals
+		icon = GFX_goal_generic_production2
+		x = 14
+		y = 7
+		cost = 5
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_ARMY }
+		prerequisite = { focus = VAL_defeat_Mountain_Exercises }
+		prerequisite = { focus = VAL_defeat_Repair_The_Workshops }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			VAL_invest_arsenal_industry = yes
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Supply_For_The_Return
+		icon = GFX_focus_generic_reinforcing_the_supply_network
+		x = 12
+		y = 8
+		cost = 5
+		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY }
+		prerequisite = { focus = VAL_defeat_Frontline_Arsenals }
+		prerequisite = { focus = VAL_defeat_Restore_Freight_Routes }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_revanche_available_tt VAL_council_can_prepare_revanche = yes } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 10000 producer = VAL }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 150 producer = VAL }
+			add_equipment_to_stockpile = { type = support_equipment amount = 200 producer = VAL }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = VAL_defeat_Recovered_State
+		icon = GFX_focus_generic_improve_the_administration
+		x = 10
+		y = 11
+		cost = 5
+		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY }
+		prerequisite = { focus = VAL_defeat_Technical_Institute focus = VAL_defeat_Return_To_The_Passes }
+		prerequisite = { focus = VAL_defeat_Restore_Freight_Routes }
+		prerequisite = { focus = VAL_defeat_Staff_College }
+		available = { custom_trigger_tooltip = { tooltip = VAL_council_recovered_state_available_tt VAL_council_in_office = yes has_war = no } }
+		cancel_if_invalid = yes
+		completion_reward = {
+			VAL_reform_mercenary_payroll = yes
+			ADISCORD_economy_receive_15 = yes
+			add_political_power = 75
+			add_stability = 0.05
+		}
+		ai_will_do = { base = 10 }
+	}
+}

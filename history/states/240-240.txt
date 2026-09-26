@@ -6,13 +6,14 @@ state = {
 	history = {
 		owner = KDR
 		add_core_of = KDR
+		victory_points = { 16722 3 }
 		buildings = {
 			infrastructure = 2
 			industrial_complex = 1
 		}
 	}
 	provinces = {
-		2309 3483 6063 6278 12096
+		2309 3483 6063 6278 12096 16722 16742 16743 16744
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

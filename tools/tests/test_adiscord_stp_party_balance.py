@@ -1,4 +1,5 @@
 from pathlib import Path
+from tools.lib.focus_sources import read_focus_source
 import re
 import unittest
 
@@ -15,7 +16,7 @@ LOC = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
 
 
 def read(path: Path) -> str:
-    return path.read_text(encoding="utf-8-sig")
+    return read_focus_source(path)
 
 
 def named_block(text: str, name: str) -> str:

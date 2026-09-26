@@ -1,12 +1,13 @@
 """Regression contract for Shabrat's postwar economy and development branches."""
 from pathlib import Path
+from tools.lib.focus_sources import read_focus_source
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 def read(path: str) -> str:
-    return (ROOT / path).read_text(encoding="utf-8-sig")
+    return read_focus_source(ROOT / path, encoding="utf-8-sig")
 
 
 def focus_block(text: str, focus_id: str) -> str:

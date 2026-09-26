@@ -4,6 +4,7 @@ from tools.lib.on_actions import read_country_on_actions
 import re
 import unittest
 from pathlib import Path
+from tools.lib.focus_sources import read_focus_source
 
 from tools.validators.validate_adiscord_vorkerland_recovery import named_block
 
@@ -15,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def read(relative: str) -> str:
-    return (ROOT / relative).read_text(encoding="utf-8-sig")
+    return read_focus_source(ROOT / relative, encoding="utf-8-sig")
 
 
 class VorkerlandCampaignStateTests(unittest.TestCase):

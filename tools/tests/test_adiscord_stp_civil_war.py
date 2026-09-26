@@ -8,13 +8,17 @@ import unittest
 from tools.tests.test_adiscord_stp_preparation import (
     block as ast_block, entries, matches_conditions, scalar, selected_effects, walk,
 )
+from tools.lib.focus_sources import read_focus_source
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 def read(path):
     file = ROOT / path
-    return file.read_text(encoding="utf-8-sig") if file.exists() else ""
+    try:
+        return read_focus_source(file)
+    except FileNotFoundError:
+        return ""
 
 
 def block(text, name):

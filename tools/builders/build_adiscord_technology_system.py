@@ -58,9 +58,8 @@ MILESTONE_YEARS = tuple(
     LEGACY_TO_CAMPAIGN_YEAR[year]
     for year in (2100, 2120, 2140, 2160, 2170, 2182, 2200)
 )
-# Most tabs retain the compact vertical timeline. Infantry weapons and armor
-# use a horizontal timeline so development reads left-to-right while each
-# capability family keeps a stable row, matching their wider equipment cards.
+# Every branch displays its own chronological labels. Vertical lanes keep
+# compact generations adjacent even when their research dates are years apart.
 YEAR_TO_Y = {year: index for index, year in enumerate(YEARS)}
 GRID_X = 150
 GRID_Y = 130
@@ -72,29 +71,6 @@ YEAR_LABEL_HEIGHT = 22
 HORIZONTAL_LANE_SLOT_MULTIPLIER = 2
 LANE_SLOT_MULTIPLIER = 3
 BRANCH_GAP = 90
-# Per-technology combat bonuses use a visible baseline around 0.05 with
-# capstones near 0.10. Organisation is deliberately excluded from the
-# multiplier because it is an absolute value rather than a percentage.
-COMBAT_INTENSITY = 2.0
-COMBAT_PROFILES = frozenset({
-    "infantry",
-    "squad",
-    "protection",
-    "special_forces",
-    "support",
-    "artillery",
-    "anti_tank",
-    "anti_air",
-    "recon_armor",
-    "combat_armor",
-    "heavy_armor",
-    "fighter",
-    "air_support",
-    "strategic_air",
-    "naval_support",
-    "surface_fleet",
-    "subsurface",
-})
 HORIZONTAL_YEAR_SLOT_MULTIPLIER = 3
 # A one-slot step puts a 72px icon 70px from its neighbour and leaves no room for
 # the connector, so vertical tabs spend two slots per rung exactly as vanilla
@@ -113,6 +89,7 @@ class Tech:
     ru: str
     en: str
     icon: str
+    effects: tuple[str, ...] = ()
 
     @property
     def id(self) -> str:
@@ -704,9 +681,8 @@ def build_applied_branches() -> tuple[Branch, ...]:
 
 BRANCHES += build_applied_branches()
 
-# Preserve the pre-compact data set for the migration contract.  The generated
-# tree below intentionally contains fewer nodes, but every one of these legacy
-# IDs receives a deterministic migration outcome.
+# The historical ID catalogue supports offline checks of authored script
+# references. It does not generate save-recovery effects or recurring hooks.
 LEGACY_BRANCHES = BRANCHES
 LEGACY_BRANCH_BY_KEY = {branch.key: branch for branch in LEGACY_BRANCHES}
 LEGACY_TECH_BY_KEY = {
@@ -716,562 +692,1688 @@ LEGACY_TECH_BY_KEY = {
 }
 
 
-def compact_years(count: int) -> tuple[int, ...]:
-    """Spread a compact linear programme across the live campaign window."""
-
-    if count < 1:
-        raise ValueError("A technology programme cannot be empty")
-    baseline = (2150, 2155, 2158)[:count]
-    if count <= len(baseline):
-        return baseline
-    live_count = count - len(baseline)
-    live_years = YEARS[3:]
-    if live_count > len(live_years):
-        raise ValueError(f"Cannot place {count} compact technology nodes")
-    if live_count == 1:
-        selected = (2160,)
-    else:
-        selected_indices = tuple(
-            round(index * (len(live_years) - 1) / (live_count - 1))
-            for index in range(live_count)
-        )
-        if len(set(selected_indices)) != live_count:
-            raise ValueError(f"Could not distribute {live_count} live technology years")
-        selected = tuple(live_years[index] for index in selected_indices)
-    return baseline + selected
-
-
-def legacy_tech(key: str) -> Tech:
-    try:
-        return LEGACY_TECH_BY_KEY[key]
-    except KeyError as exc:
-        raise ValueError(f"Unknown legacy technology key {key}") from exc
-
-
-def compact_legacy_branch(
-    key: str,
-    tech_keys: tuple[str, ...],
-    *,
-    years: tuple[int, ...] | None = None,
-    file: str | None = None,
-    folders: tuple[str, ...] | None = None,
-    ru: str | None = None,
-    en: str | None = None,
-    profile: str | None = None,
-) -> Branch:
-    source = LEGACY_BRANCH_BY_KEY.get(key)
-    if source is None:
-        if not all((file, folders, ru, en, profile)):
-            raise ValueError(f"New branch {key} is missing metadata")
-        source_file = file
-        source_folders = folders
-        source_ru = ru
-        source_en = en
-        source_profile = profile
-    else:
-        source_file = file or source.file
-        source_folders = folders or source.folders
-        source_ru = ru or source.ru
-        source_en = en or source.en
-        source_profile = profile or source.profile
-    branch_years = years or compact_years(len(tech_keys))
-    return Branch(
-        key,
-        source_file,
-        source_folders,
-        source_ru,
-        source_en,
-        source_profile,
-        tuple(legacy_tech(tech_key) for tech_key in tech_keys),
-        branch_years,
-    )
-
-
-def new_branch(
+# Research rows bind dates, art and effects to stable IDs. Changing the visual
+# layout must never change the reward attached to a technology.
+def research_branch(
     key: str,
     file: str,
     folders: tuple[str, ...],
     ru: str,
     en: str,
     profile: str,
-    rows: tuple[tuple[str, str, str, str, int], ...],
+    rows: tuple[tuple[str, str, str, str, int, tuple[str, ...]], ...],
 ) -> Branch:
     return Branch(
-        key,
-        file,
-        folders,
-        ru,
-        en,
-        profile,
-        tuple(Tech(row[0], row[1], row[2], row[3]) for row in rows),
+        key, file, folders, ru, en, profile,
+        tuple(Tech(row[0], row[1], row[2], row[3], tuple(row[5])) for row in rows),
         tuple(row[4] for row in rows),
     )
 
 
-# The trunk keeps one rung every few years so no connector has to span an empty
-# third of the tab. After the tooling choice the branch stays a real tree: two
-# shop-floor routes rejoin at maintenance, split again into robotics and spares,
-# and only the integration nodes demand both arms.
-PRODUCTION_BRANCH = compact_legacy_branch(
-    "production",
-    (
-        "standardized_machine_tools",
-        "interchangeable_components",
-        "industrial_cluster_planning",
-        "precision_metrology_recovery",
-        "automated_assembly",
-        "digital_tooling_libraries",
-        "sensor_calibrated_machining",
-        "modular_fixture_systems",
-        "closed_loop_quality_control",
-        "predictive_maintenance",
-        "flexible_robotic_tooling",
-        "additive_spare_part_cells",
-        "machine_vision_inspection",
-        "autonomous_factory_cells",
-        "self_balancing_production_lines",
-        "lights_out_microfactories",
-        "distributed_manufacturing",
-    ),
-    years=(
-        2150, 2155, 2158, 2160, 2161,
-        2163, 2163,
-        2165, 2165,
-        2167,
-        2169, 2169,
-        2171, 2172,
-        2174, 2175,
-        2180,
-    ),
-    ru="Станки и автоматизация",
-    en="Machine Tools and Automation",
-)
-
-INDUSTRY_ORGANIZATION_BRANCH = new_branch(
-    "industry_organization",
-    "ADISCORD_industry.txt",
-    ("industry_folder",),
-    "Организация промышленности",
-    "Industrial Organization",
-    "production",
-    # Concentration and dispersal are a permanent choice, so each school needs
-    # enough rungs to feel like its own programme rather than three icons with
-    # a decade of blank grid between them. Lane 0 buys output and pays in energy
-    # draw, bombing exposure, and retooling time; lane 2 buys resilience.
-    (
-        ("industrial_organization_baseline", "Организация производственных сетей", "Production Network Organization", "basic_machine_tools", 2160),
-        ("concentrated_industrial_zones", "Концентрированные промышленные зоны", "Concentrated Industrial Zones", "basic_machine_tools", 2162),
-        ("distributed_workshop_networks", "Распределённые сети мастерских", "Distributed Workshop Networks", "basic_machine_tools", 2162),
-        ("zone_power_trunking", "Магистральные энергошины зон", "Zone Power Trunking", "basic_machine_tools", 2164),
-        ("workshop_tooling_pools", "Общие фонды оснастки", "Shared Tooling Pools", "basic_machine_tools", 2164),
-        ("megafactory_power_buses", "Энергоконтуры мегафабрик", "Megafactory Power Buses", "basic_machine_tools", 2167),
-        ("regional_spare_capacity", "Региональный резерв мощностей", "Regional Spare Capacity", "basic_machine_tools", 2167),
-        ("centralized_process_control", "Централизованное управление процессами", "Centralized Process Control", "basic_machine_tools", 2170),
-        ("distributed_scheduling_mesh", "Распределённая сеть планирования", "Distributed Scheduling Mesh", "basic_machine_tools", 2170),
-        ("continuous_casting_lines", "Линии непрерывного литья", "Continuous Casting Lines", "basic_machine_tools", 2173),
-        ("mobile_fabrication_convoys", "Мобильные производственные колонны", "Mobile Fabrication Convoys", "basic_machine_tools", 2173),
-        ("strategic_production_complexes", "Стратегические производственные комплексы", "Strategic Production Complexes", "basic_machine_tools", 2180),
-        ("resilient_production_meshes", "Устойчивые производственные сети", "Resilient Production Meshes", "basic_machine_tools", 2180),
-    ),
-)
-
-# Nine nodes left this programme leaping four years per rung. The order below
-# also decides the lanes, because the shared civil graph alternates them: the
-# odd positions become the heavy-structures route and the even ones the survey,
-# utilities, and repair route.
-RECONSTRUCTION_BRANCH = compact_legacy_branch(
-    "reconstruction",
-    (
-        "salvage_standards",
-        "ruin_workshops",
-        "reconstruction_bureaus",
-        "drone_construction_cartography",
-        "structural_ruin_assessment",
-        "rapid_bridge_section_casting",
-        "standardized_utility_corridors",
-        "modular_rebuilding",
-        "reclaimed_aggregate_concrete",
-        "robotic_foundation_piling",
-        "prefabricated_districts",
-        "seismic_retrofit_frames",
-        "public_repair_corps",
-        "swarm_masonry_platforms",
-        "self_sealing_utility_mains",
-        "automated_civil_works",
-        "civil_defense_networks",
-    ),
-    ru="Строительство и восстановление",
-    en="Construction and Recovery",
-)
-
-# Resources, signals, and power are all restored below from their authored
-# twenty. Odd positions become one route of the shared civil graph and even ones
-# the other, so authored order also decides which capability row a node lands in.
-
-# Positions 4 and 5 are the exclusive choice and must stay that pair: error
-# correction buys reliability and cheap supply, analog acceleration buys raw
-# factory throughput and pays for it in power draw. Each now leads a route of
-# its own instead of rejoining a bare trunk one rung later.
-COMPUTING_BRANCH = compact_legacy_branch(
-    "computing",
-    (
-        "electromechanical_relays",
-        "recovered_data_archives",
-        "recovered_semiconductors",
-        "hardened_computers",
-        "error_correcting_field_computers",
-        "analog_ai_accelerators",
-        "rugged_chiplet_packaging",
-        "neuromorphic_coprocessors",
-        "predictive_logistics",
-        "distributed_operational_caches",
-        "synthetic_training_environments",
-        "federated_operational_learning",
-        "operational_ai_assistants",
-        "explainable_command_models",
-        "photonic_compute_arrays",
-        "strategic_digital_twins",
-        "predictive_budgeting",
-        "bounded_general_planning_cores",
-        "strategic_ai_coordination",
-    ),
-    # Autonomous platforms in three other tabs require operational AI assistants
-    # by 2170, so this tail cannot drift later than that.
-    years=(
-        2150, 2155, 2158, 2160,
-        2162, 2162,
-        2164, 2164,
-        2166,
-        2168, 2168,
-        2169, 2170,
-        2172, 2172,
-        2174,
-        2175, 2175,
-        2180,
-    ),
-    ru="Вычисления и управление",
-    en="Computing and Control",
-)
-
-# Restored below from the authored twenty, which hold exactly one node per
-# campaign year and therefore space themselves evenly with no empty rows.
-
-
-LINEAR_COMPACT_INDICES = {
-    "small_arms": (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 15, 18, 19),
-    "squad_weapons": (0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 13, 15, 17, 18, 19),
-    "protection": (0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 13, 15, 16, 18, 19),
-    "special_forces": (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 15, 16, 18, 19),
-    "field_support": tuple(range(20)),
-    "logistics": tuple(range(20)),
-    "rail": tuple(range(20)),
-    "anti_tank": tuple(range(20)),
-    "anti_air": tuple(range(20)),
-    "recon_armor": tuple(range(20)),
-    "heavy_armor": tuple(range(20)),
-    "air_support": tuple(range(20)),
-    "strategic_air": tuple(range(20)),
-    "naval_support": tuple(range(20)),
-    "surface_fleet": tuple(range(20)),
-    "subsurface": tuple(range(20)),
-}
-AUTHORED_YEAR_COMPACT_BRANCHES = {
-    "small_arms",
-    "squad_weapons",
-    "protection",
-    "special_forces",
-    "recon_armor",
-    "heavy_armor",
-    "field_support",
-    "logistics",
-    "rail",
-    "anti_tank",
-    "anti_air",
-    "air_support",
-    "strategic_air",
-    "naval_support",
-    "surface_fleet",
-    "subsurface",
-}
-
-
-def compact_linear_branch(key: str) -> Branch:
-    source = LEGACY_BRANCH_BY_KEY[key]
-    indices = LINEAR_COMPACT_INDICES[key]
-    keys = tuple(source.techs[index].key for index in indices)
-    years = (
-        tuple(source.years[index] for index in indices)
-        if key in AUTHORED_YEAR_COMPACT_BRANCHES
-        else None
-    )
-    return compact_legacy_branch(key, keys, years=years)
-
-
-def full_authored_legacy_branch(key: str) -> Branch:
-    """Restore every authored node and its original campaign chronology."""
-
-    source = LEGACY_BRANCH_BY_KEY[key]
-    return compact_legacy_branch(
-        key,
-        tuple(tech.key for tech in source.techs),
-        years=source.years,
-    )
-
-
-ARTILLERY_BRANCH = full_authored_legacy_branch("artillery")
-
-COMBAT_ARMOR_BRANCH = compact_legacy_branch(
-    "combat_armor",
-    (
-        "recovered_medium_chassis",
-        "remote_weapon_stations",
-        "composite_armor_arrays",
-        "modular_ceramic_armor_blocks",
-        "electric_turret_drives",
-        "semi_autonomous_combat_modules",
-        "digital_fire_control_buses",
-        "hard_kill_protection_arrays",
-        "distributed_crew_stations",
-        "adaptive_fire_control",
-        "multispectral_gunner_sights",
-        "unmanned_turret_capsules",
-        "armored_platoon_target_handoff",
-        "self_healing_armor_matrices",
-        "autonomous_platoon_control",
-        "limited_battle_ai",
-        "electromagnetic_main_guns",
-        "adaptive_suspension_control",
-        "distributed_battlegroup",
-        "resilient_combat_cloud_nodes",
-    ),
-    years=(2150, 2155, 2158, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2169, 2170, 2171, 2172, 2173, 2173, 2180, 2180),
-)
-
-MECHANIZED_MOBILITY_BRANCH = Branch(
-    "mechanized_mobility",
-    "ADISCORD_armor.txt",
-    ("armour_folder", "nsb_armour_folder"),
-    "Механизированные войска",
-    "Mechanized Forces",
-    "recon_armor",
-    techs("""
-armored_carrier_program|Программа М-63 «Ковчег»|M-63 “Ark” Programme|mechanized_equipment_1
-protected_transport_standards|Стандарты защищённой перевозки|Protected Transport Standards|basic_light_tank
-sealed_dismount_compartments|Герметичные десантные отсеки|Sealed Dismount Compartments|nsb_armor_tech_1
-escort_protection_arrays|Комплексы защиты машин сопровождения|Escort Protection Arrays|nsb_armor_tech_2
-dismount_sensor_suites|Сенсорные комплексы десанта|Dismount Sensor Suites|centimetric_radar
-infantry_combat_vehicle_program|Контур М-70 «Рубеж»|M-70 “Rampart” Combat Loop|mechanized_equipment_2
-unmanned_weapon_stations|Необитаемые башенные установки|Uncrewed Turret Mounts|improved_medium_tank
-hybrid_cross_country_drives|Гибридные маршевые приводы|Hybrid Cross-country Drives|nsb_engine_tech_2
-drone_screen_coordination|Координация беспилотного охранения|Drone Screen Coordination|radio
-cooperative_dismount_control|Совместное управление спешиванием|Cooperative Dismount Control|improved_computing_machine
-mechanized_battle_cloud|Механизированное боевое облако|Mechanized Battle Cloud|advanced_computing_machine
-networked_mechanized_cells|Контур М-83 «Свод»|M-83 “Vault” Mechanized Loop|mechanized_equipment_3
-"""),
-    years=(2160, 2162, 2164, 2166, 2166, 2168, 2170, 2170, 2172, 2172, 2174, 2175),
-)
-
-FIGHTER_BRANCH = full_authored_legacy_branch("fighter")
-
-SMALL_ARMS_BRANCH = new_branch(
-    "small_arms",
-    "ADISCORD_infantry.txt",
-    ("infantry_folder",),
-    "Личное оружие и боеприпасы",
-    "Personal Weapons and Ammunition",
-    "infantry",
-    (
-        ("postwar_weapon_standardization", "Высокоточная нарезка стволов", "Precision Rifling of Barrel Bores", "infantry_equipment_0", 2150),
-        ("refurbished_receivers", "Герметизация казённой части", "Breech Obturation", "infantry_weapons", 2155),
-        ("standardized_cartridges", "Унитарный металлический патрон", "Metallic Self-contained Cartridge", "infantry_weapons2", 2158),
-        ("caseless_ammunition_trials", "Нитроцеллюлозные метательные составы", "Nitrocellulose Propellant Formulations", "infantry_weapons2", 2160),
-        ("smart_optics", "Лазерное измерение дальности", "Laser Rangefinding", "night_vision1", 2161),
-        ("sealed_receiver_assemblies", "Промежуточные патроны", "Intermediate Cartridges", "infantry_weapons", 2162),
-        ("electrothermal_ignition", "Высокопрочные ствольные стали", "High-strength Barrel Steels", "infantry_weapons3", 2163),
-        ("smart_recoil_compensators", "Самозарядная автоматика", "Self-loading Action", "infantry_weapons3", 2164),
-        ("networked_weapon_sights", "Баллистические вычислители", "Computerized Ballistic Correction", "night_vision", 2165),
-        ("modular_rifle_kits", "Газоотводная автоматика", "Gas-operated Action", "infantry_weapons3", 2166),
-        ("biometric_trigger_locks", "Запирание поворотным затвором", "Rotating-bolt Locking", "infantry_weapons3", 2167),
-        ("integrated_target_designation", "Электронно-оптические прицелы", "Integrated Electro-optical Sights", "night_vision2", 2169),
-        ("programmable_ammunition", "Износостойкие покрытия ствола", "Chrome Lining and Wear-resistant Bore Coatings", "infantry_at2", 2170),
-        ("coil_assisted_service_rifles", "Оптимизация импульса отдачи", "Recoil Impulse Optimization", "infantry_weapons3", 2172),
-        ("hybrid_kinetic_energy_carbines", "Полимерные и гибридные гильзы", "Polymer and Hybrid Cartridge Cases", "infantry_weapons3", 2175),
-        ("networked_service_rifles", "Программируемые боеприпасы", "Programmable Small-arms Ammunition", "night_vision2", 2180),
-    ),
-)
-
-INFANTRY_ANTI_TANK_BRANCH = new_branch(
-    "anti_tank_infantry",
-    "ADISCORD_infantry.txt",
-    ("infantry_folder",),
-    "Пехотные противотанковые средства",
-    "Infantry Anti-tank Weapons",
-    "anti_tank",
-    (
-        ("recovered_shaped_charge_cells", "Бутылочные зажигательные смеси", "Bottle Incendiary Mixtures", "ADISCORD_antitank_01_incendiary_bottle", 2150),
-        ("disposable_launcher_standards", "Динамитные и ранцевые подрывные заряды", "Dynamite and Satchel Demolition Charges", "ADISCORD_antitank_02_satchel_charge", 2155),
-        ("tandem_penetrator_packages", "Ручные кумулятивные противотанковые гранаты", "Hand-thrown Shaped-charge Anti-tank Grenades", "ADISCORD_antitank_03_shaped_charge_grenade", 2158),
-        ("wire_guided_hunter_teams", "Тяжёлые противотанковые ружья", "Large-calibre Anti-tank Rifles", "ADISCORD_antitank_04_antitank_rifle", 2161),
-        ("recoilless_overmatch_cells", "Наведение ракет по проводам", "Command Guidance over Wire", "ADISCORD_antitank_05_wire_guidance", 2161),
-        ("fire_and_forget_seekers", "Безоткатные противотанковые системы", "Recoilless Anti-tank Systems", "ADISCORD_antitank_06_recoilless_launcher", 2164),
-        ("programmable_anti_armor_fuzes", "Полуавтоматическое наведение ракет", "Semi-automatic Command to Line of Sight", "ADISCORD_antitank_07_saclos_guidance", 2164),
-        ("top_attack_profiles", "Кумулятивные реактивные гранатомёты", "Shaped-charge Rocket Launchers", "ADISCORD_antitank_08_rocket_launcher", 2168),
-        ("loitering_armor_hunters", "Самонаведение для атаки сверху", "Imaging-infrared Top-attack Homing", "ADISCORD_antitank_09_top_attack_seeker", 2168),
-        ("cooperative_hunter_cells", "Тандемные кумулятивные боевые части", "Tandem Shaped-charge Warheads", "ADISCORD_antitank_10_tandem_warhead", 2172),
-        ("terminal_overmatch_packages", "Барражирующие противотанковые боеприпасы", "Loitering Anti-armor Munitions", "ADISCORD_antitank_11_loitering_munition", 2172),
-        ("distributed_anti_armor_net", "Общее целеуказание по данным датчиков", "Cooperative Multispectral Targeting", "ADISCORD_antitank_12_multispectral_targeting", 2180),
-    ),
-)
-
-NIGHT_COMBAT_BRANCH = new_branch(
-    "night_combat",
-    "ADISCORD_infantry.txt",
-    ("infantry_folder",),
-    "Ночной бой",
-    "Night Combat",
-    "special_forces",
-    (
-        ("passive_intensifier_cells", "Усилители остаточного света", "Passive Intensifier Cells", "ADISCORD_night_01_passive_intensifier", 2150),
-        ("sealed_night_mounts", "Защищённые корпуса ночных прицелов", "Sealed Night Mounts", "ADISCORD_night_01_passive_intensifier", 2155),
-        ("thermal_observation_channels", "Тепловизионные каналы наблюдения", "Thermal Observation Channels", "ADISCORD_night_02_thermal_channel", 2158),
-        ("fused_low_light_sights", "Комбинированные ночные прицелы", "Fused Low-light Sights", "ADISCORD_night_03_fused_sight", 2161),
-        ("low_signature_illumination", "Малозаметная подсветка", "Low-signature Illumination", "ADISCORD_night_05_counter_illumination", 2161),
-        ("squad_target_sharing", "Обмен целями внутри отделения", "Squad Target Sharing", "ADISCORD_night_04_squad_target_sharing", 2164),
-        ("counter_illumination_warnings", "Датчики вражеской подсветки", "Counter-illumination Warnings", "ADISCORD_night_05_counter_illumination", 2164),
-        ("thermal_target_libraries", "Распознавание тепловых следов", "Thermal Target Libraries", "ADISCORD_night_02_thermal_channel", 2168),
-        ("nocturnal_sensor_discipline", "Скрытное ночное наблюдение", "Nocturnal Sensor Discipline", "ADISCORD_night_03_fused_sight", 2168),
-        ("distributed_night_engagements", "Согласованный огонь ночью", "Distributed Night Engagements", "ADISCORD_night_06_distributed_engagement", 2172),
-        ("adaptive_spectrum_concealment", "Маскировка от ночных приборов", "Adaptive Spectrum Concealment", "ADISCORD_night_05_counter_illumination", 2172),
-        ("nocturnal_combat_mesh", "Сеть ночного целеуказания", "Nocturnal Combat Mesh", "ADISCORD_night_06_distributed_engagement", 2180),
-    ),
-)
-
-
-SIDE_PROGRAMME_SELECTIONS = {
-    "combat_medicine": ("trauma_registry_networks", "forward_surgical_cells", "distributed_combat_medicine"),
-    "combat_engineering": ("battle_damage_survey_teams", "assault_breaching_packages", "integrated_engineer_command"),
-    "counter_drone_warfare": ("spectrum_threat_libraries", "offensive_jamming_cells", "adaptive_spectrum_dominance"),
-    "air_mobility": ("restored_airlift_planning", "vertical_envelopment_control", "precision_aerial_resupply"),
-    "riverine_warfare": ("shallow_water_navigation_tables", "modular_landing_causeways", "rapid_beachhead_logistics"),
-    "unmanned_ground_systems": ("teleoperated_scout_carts", "armed_recon_drones", "distributed_ground_swarm_control"),
-}
-SIDE_PROGRAMME_KEYS = set(SIDE_PROGRAMME_SELECTIONS)
-
-
-def compact_side_branch(key: str) -> Branch:
-    return compact_legacy_branch(
-        key,
-        SIDE_PROGRAMME_SELECTIONS[key],
-        years=(2162, 2169, 2175),
-    )
-
-
-PUBLIC_FINANCE_BRANCH = new_branch(
-    "public_finance", "ADISCORD_industry.txt", ("industry_folder",),
-    "Экономика и управление", "Economy and Administration", "finance",
-    (
-        ("treasury_accounting", "Казначейский учёт", "Treasury Accounting", "mechanical_computing", 2155),
-        ("public_procurement_standards", "Стандарты государственных закупок", "Public Procurement Standards", "computing_machine", 2160),
-        ("civilian_industrial_accounting", "Промышленный учёт", "Industrial Accounting", "improved_machine_tools", 2162),
-        ("customs_clearance_networks", "Единая таможенная служба", "Unified Customs Service", "radio", 2164),
-        ("administrative_digitization", "Цифровое делопроизводство", "Digital Administration", "improved_computing_machine", 2166),
-        ("production_cost_accounting", "Учёт производственных затрат", "Production Cost Accounting", "advanced_machine_tools", 2169),
-        ("integrated_budget_forecasts", "Сводное бюджетное планирование", "Integrated Budget Forecasts", "advanced_computing_machine", 2172),
-        ("automated_treasury_audit", "Автоматизированный финансовый контроль", "Automated Treasury Audit", "advanced_computing_machine", 2175),
-    ),
-)
-
-ADVANCED_MATERIALS_BRANCH = new_branch(
-    "advanced_materials", "ADISCORD_industry.txt", ("industry_folder",),
-    "Редкие материалы", "Advanced Materials", "resources",
-    (
-        ("precision_material_standards", "Стандарты чистоты материалов", "Material Purity Standards", "improved_machine_tools", 2155),
-        ("rare_components_industry", "Производство редких компонентов", "Rare Components Industry", "computing_machine", 2158),
-        ("rare_alloy_metallurgy", "Металлургия редких сплавов", "Rare Alloy Metallurgy", "excavation2", 2158),
-        ("precision_component_fabrication", "Прецизионная сборка компонентов", "Precision Component Fabrication", "advanced_computing_machine", 2166),
-        ("vacuum_alloy_refining", "Вакуумная очистка сплавов", "Vacuum Alloy Refining", "excavation4", 2166),
-        ("advanced_material_recycling", "Переработка редких материалов", "Advanced Material Recycling", "excavation5", 2173),
-    ),
-)
-
-
-AVIATION_PROGRAMME_BRANCH = new_branch(
-    "bomber_maritime", "ADISCORD_air.txt", ("air_techs_folder", "bba_air_techs_folder"),
-    "Бомбардировщики и морская авиация", "Bombers and Maritime Aircraft", "air_support",
-    (
-        ("twin_engine_aircraft", "Двухмоторные самолёты", "Twin-engine Aircraft", "tactical_bomber1", 2160),
-        ("maritime_patrol_aircraft", "Морские патрульные самолёты", "Maritime Patrol Aircraft", "naval_bomber1", 2164),
-        ("pressurized_bombers", "Бомбардировщики с гермокабиной", "Pressurized Bombers", "tactical_bomber2", 2164),
-        ("airborne_homing_torpedoes", "Самонаводящиеся авиационные торпеды", "Airborne Homing Torpedoes", "naval_bomber2", 2168),
-        ("stabilized_bomb_sights", "Стабилизированные бомбовые прицелы", "Stabilized Bomb Sights", "tactical_bomber2", 2168),
-        ("long_range_maritime_aircraft", "Дальние противокорабельные самолёты", "Long-range Maritime Strike Aircraft", "naval_bomber3", 2172),
-        ("jet_strike_bombers", "Реактивные ударные бомбардировщики", "Jet Strike Bombers", "jet_tactical_bomber1", 2172),
-        ("integrated_strike_navigation", "Комплексная прицельно-навигационная система", "Integrated Strike Navigation", "advanced_centimetric_radar", 2175),
-    ),
-)
-
 BRANCHES = (
-    PRODUCTION_BRANCH,
-    INDUSTRY_ORGANIZATION_BRANCH,
-    RECONSTRUCTION_BRANCH,
-    full_authored_legacy_branch("resources"),
-    PUBLIC_FINANCE_BRANCH,
-    ADVANCED_MATERIALS_BRANCH,
-    full_authored_legacy_branch("signals"),
-    COMPUTING_BRANCH,
-    full_authored_legacy_branch("power"),
-    LEGACY_BRANCH_BY_KEY["forbidden_energy"],
-    LEGACY_BRANCH_BY_KEY["forbidden_automation"],
-    SMALL_ARMS_BRANCH,
-    # Restored to their full authored chronology: at sixteen nodes these tabs
-    # had four empty year columns each, which is what forced the long runs.
-    full_authored_legacy_branch("squad_weapons"),
-    INFANTRY_ANTI_TANK_BRANCH,
-    NIGHT_COMBAT_BRANCH,
-    full_authored_legacy_branch("protection"),
-    full_authored_legacy_branch("special_forces"),
-    compact_side_branch("combat_medicine"),
-    compact_linear_branch("field_support"),
-    compact_linear_branch("logistics"),
-    compact_linear_branch("rail"),
-    compact_side_branch("combat_engineering"),
-    compact_legacy_branch(
-        "officer_training",
-        tuple(tech.key for tech in LEGACY_BRANCH_BY_KEY["officer_training"].techs),
-        years=(2162, 2164, 2164, 2169, 2169, 2172, 2172, 2175),
+    research_branch(
+        "production", "ADISCORD_industry.txt", ('industry_folder',),
+        "Станки и автоматизация", "Machine Tools and Automation", "production",
+        (
+            ("standardized_machine_tools", "Стандартные станки", "Standardized Machine Tools", "basic_machine_tools", 2150, (
+                "production_factory_max_efficiency_factor = 0.03",
+                "production_factory_efficiency_gain_factor = 0.02",
+            )),
+            ("interchangeable_components", "Взаимозаменяемые узлы", "Interchangeable Components", "improved_machine_tools", 2155, (
+                "production_factory_start_efficiency_factor = 0.03",
+                "line_change_production_efficiency_factor = 0.04",
+            )),
+            ("industrial_cluster_planning", "Промышленные кластеры", "Industrial Cluster Planning", "concentrated_industry", 2158, (
+                "production_speed_industrial_complex_factor = 0.03",
+                "production_speed_arms_factory_factor = 0.03",
+            )),
+            ("precision_metrology_recovery", "Восстановление точной метрологии", "Precision Metrology Recovery", "improved_machine_tools", 2160, (
+                "production_factory_max_efficiency_factor = 0.04",
+                "production_factory_efficiency_gain_factor = 0.03",
+            )),
+            ("automated_assembly", "Автоматизированная сборка", "Automated Assembly", "assembly_line_production", 2161, (
+                "industrial_capacity_factory = 0.015",
+                "production_factory_efficiency_gain_factor = 0.03",
+                "ADISCORD_economy_civilian_factory_income_factor = 0.02",
+            )),
+            ("digital_tooling_libraries", "Цифровые библиотеки оснастки", "Digital Tooling Libraries", "advanced_machine_tools", 2163, (
+                "production_factory_start_efficiency_factor = 0.05",
+                "line_change_production_efficiency_factor = 0.08",
+            )),
+            ("sensor_calibrated_machining", "Сенсорная калибровка станков", "Sensor-Calibrated Machining", "advanced_machine_tools", 2163, (
+                "production_factory_max_efficiency_factor = 0.06",
+                "production_factory_efficiency_gain_factor = 0.04",
+            )),
+            ("predictive_maintenance", "Предиктивное обслуживание", "Predictive Maintenance", "advanced_machine_tools", 2167, (
+                "production_factory_efficiency_gain_factor = 0.05",
+                "industry_repair_factor = 0.04",
+                "ADISCORD_economy_military_factory_expense_factor = -0.02",
+            )),
+            ("autonomous_factory_cells", "Автономные заводские ячейки", "Autonomous Factory Cells", "flexible_line", 2172, (
+                "industrial_capacity_factory = 0.04",
+                "factory_energy_consumption = 0.06",
+                "production_factory_max_efficiency_factor = 0.06",
+                "ADISCORD_economy_civilian_factory_income_factor = 0.03",
+            )),
+            ("distributed_manufacturing", "Распределённое производство", "Distributed Manufacturing", "streamlined_line", 2180, (
+                "industrial_capacity_factory = 0.10",
+                "industrial_capacity_dockyard = 0.07",
+                "factory_energy_consumption = 0.12",
+                "production_factory_max_efficiency_factor = 0.09",
+            )),
+        ),
     ),
-    ARTILLERY_BRANCH,
-    compact_linear_branch("anti_tank"),
-    compact_linear_branch("anti_air"),
-    compact_linear_branch("recon_armor"),
-    MECHANIZED_MOBILITY_BRANCH,
-    COMBAT_ARMOR_BRANCH,
-    compact_linear_branch("heavy_armor"),
-    compact_side_branch("unmanned_ground_systems"),
-    FIGHTER_BRANCH,
-    AVIATION_PROGRAMME_BRANCH,
-    compact_linear_branch("air_support"),
-    compact_linear_branch("strategic_air"),
-    compact_side_branch("air_mobility"),
-    compact_linear_branch("naval_support"),
-    compact_linear_branch("surface_fleet"),
-    compact_linear_branch("subsurface"),
-    compact_side_branch("riverine_warfare"),
-    compact_side_branch("counter_drone_warfare"),
+    research_branch(
+        "industry_organization", "ADISCORD_industry.txt", ('industry_folder',),
+        "Организация промышленности", "Industrial Organization", "production",
+        (
+            ("industrial_organization_baseline", "Организация производственных сетей", "Production Network Organization", "basic_machine_tools", 2160, (
+                "production_factory_start_efficiency_factor = 0.02",
+                "production_factory_efficiency_gain_factor = 0.02",
+            )),
+            ("concentrated_industrial_zones", "Концентрированные промышленные зоны", "Concentrated Industrial Zones", "basic_machine_tools", 2162, (
+                "industrial_capacity_factory = 0.05",
+                "industrial_capacity_dockyard = 0.04",
+                "factory_energy_consumption = 0.10",
+                "industry_air_damage_factor = 0.07",
+            )),
+            ("distributed_workshop_networks", "Распределённые сети мастерских", "Distributed Workshop Networks", "basic_machine_tools", 2162, (
+                "industrial_capacity_factory = 0.03",
+                "factory_energy_consumption = 0.02",
+                "production_factory_start_efficiency_factor = 0.07",
+                "industry_air_damage_factor = -0.08",
+            )),
+            ("megafactory_power_buses", "Энергоконтуры мегафабрик", "Megafactory Power Buses", "basic_machine_tools", 2167, (
+                "industrial_capacity_factory = 0.07",
+                "industrial_capacity_dockyard = 0.05",
+                "factory_energy_consumption = 0.15",
+                "line_change_production_efficiency_factor = -0.12",
+            )),
+            ("regional_spare_capacity", "Региональный резерв мощностей", "Regional Spare Capacity", "basic_machine_tools", 2167, (
+                "industrial_capacity_factory = 0.03",
+                "factory_energy_consumption = 0.02",
+                "line_change_production_efficiency_factor = 0.14",
+                "industry_repair_factor = 0.12",
+            )),
+            ("continuous_casting_lines", "Линии непрерывного литья", "Continuous Casting Lines", "basic_machine_tools", 2173, (
+                "industrial_capacity_factory = 0.09",
+                "production_factory_max_efficiency_factor = 0.07",
+                "factory_energy_consumption = 0.19",
+                "industry_air_damage_factor = 0.12",
+            )),
+            ("mobile_fabrication_convoys", "Мобильные производственные колонны", "Mobile Fabrication Convoys", "basic_machine_tools", 2173, (
+                "industrial_capacity_factory = 0.04",
+                "factory_energy_consumption = 0.03",
+                "industry_air_damage_factor = -0.15",
+                "industry_repair_factor = 0.15",
+            )),
+            ("strategic_production_complexes", "Стратегические производственные комплексы", "Strategic Production Complexes", "basic_machine_tools", 2180, (
+                "industrial_capacity_factory = 0.12",
+                "industrial_capacity_dockyard = 0.10",
+                "factory_energy_consumption = 0.24",
+                "industry_air_damage_factor = 0.20",
+                "line_change_production_efficiency_factor = -0.15",
+            )),
+            ("resilient_production_meshes", "Устойчивые производственные сети", "Resilient Production Meshes", "basic_machine_tools", 2180, (
+                "industrial_capacity_factory = 0.06",
+                "factory_energy_consumption = 0.04",
+                "production_factory_start_efficiency_factor = 0.10",
+                "line_change_production_efficiency_factor = 0.22",
+                "industry_air_damage_factor = -0.20",
+                "industry_repair_factor = 0.22",
+            )),
+        ),
+    ),
+    research_branch(
+        "reconstruction", "ADISCORD_industry.txt", ('industry_folder',),
+        "Строительство и восстановление", "Construction and Recovery", "construction",
+        (
+            ("salvage_standards", "Стандарты утилизации", "Salvage Standards", "basic_machine_tools", 2150, (
+                "production_speed_buildings_factor = 0.02",
+                "industry_repair_factor = 0.02",
+            )),
+            ("ruin_workshops", "Мастерские среди руин", "Ruin Workshops", "improved_machine_tools", 2155, (
+                "production_speed_buildings_factor = 0.02",
+                "industry_repair_factor = 0.03",
+            )),
+            ("reconstruction_bureaus", "Бюро реконструкции", "Reconstruction Bureaus", "basic_construction", 2158, (
+                "production_speed_buildings_factor = 0.03",
+                "industry_repair_factor = 0.03",
+            )),
+            ("drone_construction_cartography", "Картография строительных дронов", "Construction Drone Cartography", "basic_construction", 2160, (
+                "production_speed_buildings_factor = 0.03",
+                "production_speed_infrastructure_factor = 0.04",
+            )),
+            ("modular_rebuilding", "Модульная застройка", "Modular Rebuilding", "improved_construction", 2165, (
+                "production_speed_buildings_factor = 0.04",
+                "production_speed_industrial_complex_factor = 0.03",
+            )),
+            ("prefabricated_districts", "Сборные кварталы", "Prefabricated Districts", "advanced_construction", 2169, (
+                "production_speed_buildings_factor = 0.04",
+                "consumer_goods_factor = -0.02",
+            )),
+            ("public_repair_corps", "Общественные ремонтные корпуса", "Public Repair Corps", "advanced_construction", 2171, (
+                "industry_repair_factor = 0.08",
+                "industry_air_damage_factor = -0.05",
+            )),
+            ("automated_civil_works", "Автоматизированные стройки", "Automated Civil Works", "advanced_construction", 2175, (
+                "production_speed_buildings_factor = 0.06",
+                "production_speed_industrial_complex_factor = 0.05",
+            )),
+            ("civil_defense_networks", "Комплексная гражданская оборона", "Civil Defense Networks", "concentrated_industry5", 2180, (
+                "production_speed_buildings_factor = 0.06",
+                "production_speed_infrastructure_factor = 0.05",
+                "industry_repair_factor = 0.10",
+                "industry_air_damage_factor = -0.10",
+            )),
+        ),
+    ),
+    research_branch(
+        "resources", "ADISCORD_industry.txt", ('industry_folder',),
+        "Ресурсы и энергия", "Resources and Energy", "resources",
+        (
+            ("salvage_metallurgy", "Утилизационная металлургия", "Salvage Metallurgy", "excavation1", 2150, (
+                "local_resources_factor = 0.02",
+                "fuel_gain_factor = 0.012",
+            )),
+            ("grid_rationing", "Нормирование энергосети", "Grid Rationing", "oil_processing", 2155, (
+                "local_resources_factor = 0.021",
+                "fuel_gain_factor = 0.012",
+            )),
+            ("refinery_reclamation", "Восстановление НПЗ", "Refinery Reclamation", "improved_oil_processing", 2158, (
+                "local_resources_factor = 0.021",
+                "fuel_gain_factor = 0.013",
+            )),
+            ("spectral_ore_sorting", "Спектральная сортировка руды", "Spectral Ore Sorting", "excavation2", 2160, (
+                "local_resources_factor = 0.022",
+                "fuel_gain_factor = 0.013",
+            )),
+            ("logistics_hub_networks", "Сети логистических узлов", "Logistics Hub Networks", "excavation2", 2161, (
+                "local_resources_factor = 0.023",
+                "fuel_gain_factor = 0.013",
+            )),
+            ("borehole_sensor_grids", "Сети скважинных датчиков", "Borehole Sensor Grids", "excavation1", 2162, (
+                "local_resources_factor = 0.023",
+                "fuel_gain_factor = 0.014",
+            )),
+            ("plasma_scrap_separation", "Промышленный электролиз", "Industrial Electrolysis", "excavation2", 2163, (
+                "production_lack_of_resource_penalty_factor = -0.024",
+                "industry_repair_factor = 0.014",
+            )),
+            ("microbial_tailings_leaching", "Микробиологическое извлечение металлов", "Microbial Metal Recovery", "excavation4", 2164, (
+                "local_resources_factor = 0.031",
+                "production_lack_of_resource_penalty_factor = -0.007",
+            )),
+            ("synthetic_resource_cycles", "Синтетические циклы", "Synthetic Resource Cycles", "rubber_processing", 2166, (
+                "local_resources_factor = 0.026",
+                "fuel_gain_factor = 0.015",
+            )),
+            ("rare_earth_solvent_loops", "Замкнутые циклы редкоземельной экстракции", "Rare-Earth Solvent Loops", "excavation4", 2169, (
+                "local_resources_factor = 0.028",
+                "fuel_gain_factor = 0.016",
+            )),
+            ("automated_deep_mining", "Автоматизированная глубокая добыча", "Automated Deep Mining", "excavation5", 2171, (
+                "local_resources_factor = 0.036",
+                "production_lack_of_resource_penalty_factor = -0.008",
+            )),
+            ("carbon_feedstock_cracking", "Крекинг углеродного сырья", "Carbon Feedstock Cracking", "oil_processing", 2172, (
+                "local_resources_factor = 0.017",
+                "fuel_gain_factor = 0.029",
+            )),
+            ("strategic_element_reclamation", "Регенерация стратегических элементов", "Strategic Element Reclamation", "excavation5", 2175, (
+                "local_resources_factor = 0.031",
+                "fuel_gain_factor = 0.018",
+            )),
+            ("strategic_material_recovery", "Извлечение редких материалов", "Strategic Material Recovery", "excavation5", 2180, (
+                "local_resources_factor = 0.046",
+                "fuel_gain_factor = 0.026",
+                "production_lack_of_resource_penalty_factor = -0.026",
+            )),
+        ),
+    ),
+    research_branch(
+        "public_finance", "ADISCORD_industry.txt", ('industry_folder',),
+        "Экономика и управление", "Economy and Administration", "finance",
+        (
+            ("treasury_accounting", "Казначейский учёт", "Treasury Accounting", "mechanical_computing", 2155, (
+                "ADISCORD_economy_tax_collection_factor = 0.02",
+                "ADISCORD_economy_admin_expense_factor = -0.02",
+            )),
+            ("public_procurement_standards", "Стандарты государственных закупок", "Public Procurement Standards", "computing_machine", 2160, (
+                "ADISCORD_economy_construction_expense_factor = -0.03",
+                "ADISCORD_economy_military_factory_expense_factor = -0.02",
+            )),
+            ("civilian_industrial_accounting", "Промышленный учёт", "Industrial Accounting", "improved_machine_tools", 2162, (
+                "ADISCORD_economy_civilian_factory_income_factor = 0.04",
+                "ADISCORD_economy_tax_collection_factor = 0.02",
+            )),
+            ("administrative_digitization", "Цифровое делопроизводство", "Digital Administration", "improved_computing_machine", 2166, (
+                "ADISCORD_economy_admin_expense_factor = -0.04",
+                "ADISCORD_economy_research_expense_factor = -0.03",
+            )),
+            ("production_cost_accounting", "Учёт производственных затрат", "Production Cost Accounting", "advanced_machine_tools", 2169, (
+                "ADISCORD_economy_military_industry_income_factor = 0.04",
+                "ADISCORD_economy_military_factory_expense_factor = -0.03",
+            )),
+            ("automated_treasury_audit", "Автоматизированный финансовый контроль", "Automated Treasury Audit", "advanced_computing_machine", 2175, (
+                "ADISCORD_economy_tax_collection_factor = 0.03",
+                "ADISCORD_economy_civilian_factory_income_factor = 0.04",
+            )),
+        ),
+    ),
+    research_branch(
+        "advanced_materials", "ADISCORD_industry.txt", ('industry_folder',),
+        "Редкие материалы", "Advanced Materials", "resources",
+        (
+            ("precision_material_standards", "Стандарты чистоты материалов", "Material Purity Standards", "improved_machine_tools", 2155, (
+                "production_lack_of_resource_penalty_factor = -0.01",
+                "production_factory_efficiency_gain_factor = 0.01",
+            )),
+            ("rare_components_industry", "Производство редких компонентов", "Rare Components Industry", "computing_machine", 2158, (
+                "production_factory_efficiency_gain_factor = 0.02",
+                "production_factory_max_efficiency_factor = 0.01",
+            )),
+            ("rare_alloy_metallurgy", "Металлургия редких сплавов", "Rare Alloy Metallurgy", "excavation2", 2158, (
+                "production_lack_of_resource_penalty_factor = -0.02",
+                "production_factory_max_efficiency_factor = 0.01",
+            )),
+            ("precision_component_fabrication", "Прецизионная сборка компонентов", "Precision Component Fabrication", "advanced_computing_machine", 2166, (
+                "production_factory_efficiency_gain_factor = 0.02",
+                "factory_energy_consumption = 0.02",
+            )),
+            ("vacuum_alloy_refining", "Вакуумная очистка сплавов", "Vacuum Alloy Refining", "excavation4", 2166, (
+                "production_factory_max_efficiency_factor = 0.02",
+                "factory_energy_consumption = 0.02",
+            )),
+            ("advanced_material_recycling", "Переработка редких материалов", "Advanced Material Recycling", "excavation5", 2173, (
+                "production_lack_of_resource_penalty_factor = -0.02",
+                "factory_energy_consumption = -0.02",
+            )),
+        ),
+    ),
+    research_branch(
+        "signals", "ADISCORD_electronics.txt", ('electronics_folder',),
+        "Связь и кибервойна", "Signals and Cyberwarfare", "signals",
+        (
+            ("mesh_command_networks", "Ячеистые сети управления", "Mesh Command Networks", "radio", 2150, (
+                "coordination_bonus = 0.01",
+                "encryption_factor = 0.01",
+            )),
+            ("field_radio_networks", "Полевые радиосети", "Field Radio Networks", "radio_detection", 2155, (
+                "land_reinforce_rate = 0.01",
+                "encryption_factor = 0.02",
+            )),
+            ("encryption_rebuild", "Восстановление шифрования", "Encryption Rebuild", "basic_encryption", 2158, (
+                "encryption_factor = 0.03",
+                "coordination_bonus = 0.01",
+            )),
+            ("frequency_hopping_field_sets", "Полевые станции со скачками частоты", "Frequency-Hopping Field Sets", "radio", 2160, (
+                "encryption_factor = 0.04",
+                "land_reinforce_rate = 0.01",
+            )),
+            ("signal_intercept_arrays", "Массивы радиоперехвата", "Signal Intercept Arrays", "basic_decryption", 2161, (
+                "decryption_factor = 0.04",
+                "air_interception_detect_factor = 0.02",
+            )),
+            ("battlefield_analytics", "Аналитика поля боя", "Battlefield Analytics", "improved_encryption", 2166, (
+                "coordination_bonus = 0.02",
+                "decryption_factor = 0.03",
+            )),
+            ("counterintelligence_filters", "Автоматизация контрразведки", "Counterintelligence Filters", "improved_decryption", 2170, (
+                "encryption_factor = 0.05",
+                "decryption_factor = 0.02",
+            )),
+            ("battlefield_sensor_fusion", "Сведение датчиков поля боя", "Battlefield Sensor Fusion", "radio_detection", 2172, (
+                "coordination_bonus = 0.03",
+                "air_interception_detect_factor = 0.04",
+            )),
+            ("self_healing_tactical_networks", "Самовосстанавливающиеся тактические сети", "Self-Healing Tactical Networks", "advanced_encryption", 2175, (
+                "encryption_factor = 0.06",
+                "land_reinforce_rate = 0.02",
+            )),
+            ("memetic_security_protocols", "Протоколы меметической защиты", "Memetic Security Protocols", "advanced_encryption", 2180, (
+                "encryption_factor = 0.07",
+                "decryption_factor = 0.04",
+                "coordination_bonus = 0.03",
+            )),
+        ),
+    ),
+    research_branch(
+        "computing", "ADISCORD_electronics.txt", ('electronics_folder',),
+        "Вычисления и управление", "Computing and Control", "computing",
+        (
+            ("electromechanical_relays", "Электромеханические реле", "Electromechanical Relays", "mechanical_computing", 2150, (
+                "research_speed_factor = 0.01",
+                "production_factory_efficiency_gain_factor = 0.01",
+            )),
+            ("recovered_data_archives", "Восстановленные архивы", "Recovered Data Archives", "electronic_mechanical_engineering", 2155, (
+                "research_speed_factor = 0.015",
+                "planning_speed = 0.01",
+            )),
+            ("recovered_semiconductors", "Восстановленные полупроводники", "Recovered Semiconductors", "computing_machine", 2158, (
+                "research_speed_factor = 0.02",
+                "production_factory_efficiency_gain_factor = 0.02",
+            )),
+            ("hardened_computers", "Защищённые вычислители", "Hardened Computers", "basic_encryption", 2160, (
+                "research_speed_factor = 0.025",
+                "encryption_factor = 0.02",
+            )),
+            ("error_correcting_field_computers", "Полевые вычислители с коррекцией ошибок", "Error-Correcting Field Computers", "radio_detection", 2162, (
+                "research_speed_factor = 0.03",
+                "encryption_factor = 0.035",
+                "supply_consumption_factor = -0.015",
+            )),
+            ("predictive_logistics", "Предиктивная логистика", "Predictive Logistics", "mechanical_computing", 2166, (
+                "research_speed_factor = 0.025",
+                "supply_consumption_factor = -0.03",
+                "encryption_factor = 0.03",
+            )),
+            ("operational_ai_assistants", "Операционные ИИ-ассистенты", "Operational AI Assistants", "radio_detection", 2170, (
+                "research_speed_factor = 0.025",
+                "coordination_bonus = 0.035",
+                "factory_energy_consumption = 0.06",
+            )),
+            ("strategic_digital_twins", "Стратегические цифровые двойники", "Strategic Digital Twins", "advanced_computing_machine", 2174, (
+                "research_speed_factor = 0.03",
+                "planning_speed = 0.03",
+                "production_factory_efficiency_gain_factor = 0.03",
+            )),
+            ("strategic_ai_coordination", "Стратегическая ИИ-координация", "Strategic AI Coordination", "computing_machine", 2180, (
+                "research_speed_factor = 0.04",
+                "coordination_bonus = 0.05",
+                "production_factory_efficiency_gain_factor = 0.04",
+                "factory_energy_consumption = 0.04",
+            )),
+        ),
+    ),
+    research_branch(
+        "power", "ADISCORD_electronics.txt", ('electronics_folder',),
+        "Энергетика и реакторы", "Power and Reactors", "power",
+        (
+            ("local_grid_restoration", "Локальные энергосети", "Local Grid Restoration", "electronic_mechanical_engineering", 2150, (
+                "factory_energy_consumption = -0.03",
+                "industry_repair_factor = 0.02",
+            )),
+            ("substation_networks", "Восстановление подстанций", "Substation Networks", "oil_plant", 2155, (
+                "factory_energy_consumption = -0.035",
+                "production_speed_infrastructure_factor = 0.025",
+            )),
+            ("radiation_mapping", "Радиационное картирование", "Radiation Mapping", "atomic_research", 2158, (
+                "factory_energy_consumption = -0.025",
+                "nuclear_production_factor = 0.03",
+            )),
+            ("phase_synchronized_substations", "Фазосинхронизированные подстанции", "Phase-Synchronized Substations", "nuclear_reactor", 2160, (
+                "factory_energy_consumption = -0.04",
+                "industry_repair_factor = 0.03",
+                "ADISCORD_economy_military_factory_expense_factor = -0.01",
+            )),
+            ("reactor_safety_protocols", "Безопасность реакторов", "Reactor Safety Protocols", "oil_plant", 2166, (
+                "factory_energy_consumption = -0.04",
+                "nuclear_production_factor = 0.05",
+            )),
+            ("load_following_microreactors", "Маневренные микрореакторы", "Load-Following Microreactors", "nuclear_reactor", 2168, (
+                "factory_energy_consumption = -0.05",
+                "nuclear_production_factor = 0.06",
+                "ADISCORD_economy_military_factory_expense_factor = -0.02",
+            )),
+            ("superconducting_power_busbars", "Сверхпроводящие силовые шины", "Superconducting Power Busbars", "advanced_oil_plant", 2169, (
+                "factory_energy_consumption = -0.05",
+                "industrial_capacity_factory = 0.01",
+            )),
+            ("microreactor_blocks", "Массивы микрореакторов", "Microreactor Blocks", "sp_nuclear_isotope_separation", 2170, (
+                "factory_energy_consumption = -0.055",
+                "nuclear_production_factor = 0.07",
+            )),
+            ("continental_load_balancing", "Континентальная балансировка нагрузки", "Continental Load Balancing", "atomic_research", 2175, (
+                "factory_energy_consumption = -0.06",
+                "production_speed_buildings_factor = 0.04",
+                "ADISCORD_economy_military_factory_expense_factor = -0.02",
+            )),
+            ("emergency_core_suppression", "Аварийное глушение ядра", "Emergency Core Suppression", "nuclear_reactor", 2180, (
+                "factory_energy_consumption = -0.07",
+                "nuclear_production_factor = 0.08",
+                "industry_repair_factor = 0.06",
+            )),
+        ),
+    ),
+    research_branch(
+        "forbidden_energy", "ADISCORD_forbidden.txt", ('electronics_folder',),
+        "Запретная энергетика", "Forbidden Energy", "forbidden_energy",
+        (
+            ("old_generator_fragments", "Фрагменты старого генератора", "Old Generator Fragments", "atomic_research", 2164, (
+                "nuclear_production_factor = 0.04",
+                "industry_repair_factor = 0.02",
+                "stability_factor = -0.005",
+            )),
+            ("legacy_reactor_compactification", "Компактификация реакторов", "Legacy Reactor Compactification", "sp_nuclear_isotope_separation", 2168, (
+                "nuclear_production_factor = 0.08",
+                "production_speed_buildings_factor = 0.025",
+                "stability_factor = -0.011",
+            )),
+            ("singularity_cooling_systems", "Сингулярное охлаждение", "Singularity Cooling Systems", "advanced_rocket_engines", 2173, (
+                "nuclear_production_factor = 0.12",
+                "research_speed_factor = 0.025",
+                "stability_factor = -0.017",
+            )),
+            ("black_grid_protocols", "Протоколы чёрной энергосети", "Black Grid Protocols", "sp_physics_advanced_radio", 2180, (
+                "nuclear_production_factor = 0.16",
+                "industrial_capacity_factory = 0.04",
+                "stability_factor = -0.025",
+            )),
+        ),
+    ),
+    research_branch(
+        "forbidden_automation", "ADISCORD_forbidden.txt", ('electronics_folder',),
+        "Запретная автоматизация", "Forbidden Automation", "forbidden_automation",
+        (
+            ("self_repairing_industrial_swarms", "Самовосстанавливающиеся рои", "Self-repairing Industrial Swarms", "flexible_line", 2168, (
+                "production_factory_max_efficiency_factor = 0.04",
+                "industry_repair_factor = 0.03",
+                "stability_factor = -0.01",
+            )),
+            ("neural_command_cores", "Нейронные командные ядра", "Neural Command Cores", "improved_computing_machine", 2172, (
+                "coordination_bonus = 0.05",
+                "land_reinforce_rate = 0.03",
+                "stability_factor = -0.02",
+            )),
+            ("forbidden_automation_doctrine", "Доктрина запретной автоматизации", "Forbidden Automation Doctrine", "advanced_computing_machine", 2180, (
+                "production_factory_max_efficiency_factor = 0.08",
+                "research_speed_factor = 0.04",
+                "stability_factor = -0.035",
+            )),
+        ),
+    ),
+    research_branch(
+        "small_arms", "ADISCORD_infantry.txt", ("infantry_folder",),
+        "Личное оружие и боеприпасы", "Personal Weapons and Ammunition", "infantry",
+        (
+            ("postwar_weapon_standardization", "Высокоточная нарезка стволов", "Precision Rifling of Barrel Bores", "infantry_weapons", 2150, (
+                "category_all_infantry = { soft_attack = 0.024 }",
+            )),
+            ("refurbished_receivers", "Герметизация казённой части", "Breech Obturation", "infantry_weapons", 2155, (
+                "category_all_infantry = { defense = 0.024 }",
+            )),
+            ("standardized_cartridges", "Унитарный металлический патрон", "Metallic Self-contained Cartridge", "ADISCORD_equipment_ammunition", 2158, (
+                "category_all_infantry = { soft_attack = 0.028 }",
+            )),
+            ("caseless_ammunition_trials", "Нитроцеллюлозные метательные составы", "Nitrocellulose Propellant Formulations", "ADISCORD_equipment_ammunition", 2160, (
+                "category_all_infantry = { soft_attack = 0.028 breakthrough = 0.008 }",
+            )),
+            ("sealed_receiver_assemblies", "Промежуточные патроны", "Intermediate Cartridges", "infantry_weapons", 2162, (
+                "category_all_infantry = { breakthrough = 0.024 soft_attack = 0.012 }",
+            )),
+            ("electrothermal_ignition", "Высокопрочные ствольные стали", "High-strength Barrel Steels", "ADISCORD_weapon_03_standardized_battle_rifle", 2163, (
+                "category_all_infantry = { defense = 0.028 breakthrough = 0.008 }",
+            )),
+            ("smart_recoil_compensators", "Самозарядная автоматика", "Self-loading Action", "infantry_weapons3", 2164, (
+                "category_all_infantry = { soft_attack = 0.032 breakthrough = 0.016 }",
+            )),
+            ("smart_optics", "Лазерное измерение дальности", "Laser Rangefinding", "night_vision", 2165, (
+                "coordination_bonus = 0.012",
+                "category_all_infantry = { soft_attack = 0.012 }",
+            )),
+            ("networked_weapon_sights", "Баллистические вычислители", "Computerized Ballistic Correction", "ADISCORD_equipment_ballistic_sight", 2166, (
+                "coordination_bonus = 0.016",
+                "category_all_infantry = { soft_attack = 0.016 }",
+            )),
+            ("modular_rifle_kits", "Газоотводная автоматика", "Gas-operated Action", "infantry_weapons3", 2167, (
+                "category_all_infantry = { soft_attack = 0.036 breakthrough = 0.02 }",
+            )),
+            ("biometric_trigger_locks", "Запирание поворотным затвором", "Rotating-bolt Locking", "ADISCORD_weapon_03_standardized_battle_rifle", 2168, (
+                "category_all_infantry = { defense = 0.028 breakthrough = 0.02 }",
+            )),
+            ("integrated_target_designation", "Электронно-оптические прицелы", "Integrated Electro-optical Sights", "ADISCORD_equipment_ballistic_sight", 2169, (
+                "land_night_attack = 0.012",
+                "coordination_bonus = 0.016",
+            )),
+            ("programmable_ammunition", "Износостойкие покрытия ствола", "Chrome Lining and Wear-resistant Bore Coatings", "infantry_at2", 2170, (
+                "category_all_infantry = { defense = 0.032 soft_attack = 0.012 }",
+            )),
+            ("coil_assisted_service_rifles", "Оптимизация импульса отдачи", "Recoil Impulse Optimization", "infantry_weapons3", 2172, (
+                "category_all_infantry = { breakthrough = 0.032 defense = 0.012 }",
+            )),
+            ("hybrid_kinetic_energy_carbines", "Полимерные и гибридные гильзы", "Polymer and Hybrid Cartridge Cases", "ADISCORD_equipment_ammunition", 2175, (
+                "category_all_infantry = { defense = 0.024 soft_attack = 0.024 }",
+            )),
+            ("networked_service_rifles", "Программируемые боеприпасы", "Programmable Small-arms Ammunition", "night_vision2", 2180, (
+                "category_all_infantry = { soft_attack = 0.04 }",
+                "coordination_bonus = 0.024",
+            )),
+        ),
+    ),
+    research_branch(
+        "squad_weapons", "ADISCORD_infantry.txt", ("infantry_folder",),
+        "Групповое оружие и огневая поддержка", "Crew-served Weapons and Fire Support", "squad",
+        (
+            ("belt_fed_recovery", "Пулемёты с ленточным питанием", "Belt-fed Machine Guns", "ADISCORD_squad_01_recovered_fire_support", 2150, (
+                "category_all_infantry = { soft_attack = 0.024 defense = 0.04 }",
+            )),
+            ("squad_grenade_launchers", "Стандартизация ленточных пулемётов", "Standardized Belt-fed Machine Guns", "ADISCORD_squad_01_recovered_fire_support", 2155, (
+                "category_all_infantry = { soft_attack = 0.041 hard_attack = 0.025 }",
+            )),
+            ("portable_at_cells", "Противотанковое оружие расчёта", "Crew-served Anti-tank Weapons", "ADISCORD_squad_02_heavy_machine_guns", 2158, (
+                "category_all_infantry = { breakthrough = 0.043 ap_attack = 0.025 }",
+            )),
+            ("recoilless_squad_launchers", "Модульные станковые гранатомёты", "Modular Mounted Grenade Launchers", "ADISCORD_squad_02_heavy_machine_guns", 2160, (
+                "category_all_infantry = { soft_attack = 0.044 hard_attack = 0.026 }",
+            )),
+            ("field_ew_units", "Прицелы группового оружия", "Crew-served Weapon Sights", "ADISCORD_squad_03_optical_fire_support", 2161, (
+                "category_all_infantry = { max_organisation = 0.902 default_morale = 0.027 }",
+            )),
+            ("programmable_grenade_fuzes", "Программируемые гранатные взрыватели", "Programmable Grenade Fuzes", "ADISCORD_equipment_ammunition", 2162, (
+                "category_all_infantry = { soft_attack = 0.046 hard_attack = 0.027 }",
+            )),
+            ("man_portable_sensor_masts", "Переносные сенсорные мачты", "Man-Portable Sensor Masts", "ADISCORD_night_05_counter_illumination", 2163, (
+                "coordination_bonus = 0.048",
+                "land_reinforce_rate = 0.014",
+            )),
+            ("drone_guided_support_fire", "Корректировка огня с дронов", "Drone-assisted Fire Adjustment", "ADISCORD_equipment_drone", 2165, (
+                "category_all_infantry = { max_organisation = 1.053 default_morale = 0.029 }",
+            )),
+            ("networked_command_terminals", "Терминалы управления огнём", "Fire-control Terminals", "ADISCORD_equipment_radio", 2166, (
+                "category_all_infantry = { max_organisation = 1.091 default_morale = 0.03 }",
+            )),
+            ("remote_weapon_tripods", "Дистанционные огневые установки", "Remote-controlled Weapon Mounts", "ADISCORD_squad_03_optical_fire_support", 2167, (
+                "category_all_infantry = { soft_attack = 0.053 defense = 0.03 }",
+            )),
+            ("cooperative_target_handoff", "Передача целей между расчётами", "Cooperative Target Handoff", "ADISCORD_equipment_radio", 2169, (
+                "coordination_bonus = 0.055",
+                "land_reinforce_rate = 0.016",
+            )),
+            ("autonomous_support_weapons", "Автоматизированные огневые установки", "Automated Fire-support Mounts", "ADISCORD_squad_04_advanced_fire_support", 2170, (
+                "category_all_infantry = { soft_attack = 0.056 breakthrough = 0.032 }",
+            )),
+            ("autonomous_mortar_sections", "Автоматизированные миномёты", "Automated Mortars", "ADISCORD_equipment_mortar", 2171, (
+                "category_all_infantry = { soft_attack = 0.058 breakthrough = 0.033 }",
+            )),
+            ("robotic_heavy_weapon_teams", "Роботизированные огневые расчёты", "Robotic Fire-support Teams", "ADISCORD_squad_04_advanced_fire_support", 2174, (
+                "category_all_infantry = { soft_attack = 0.061 defense = 0.035 }",
+            )),
+            ("swarm_fireteams", "Единая сеть огневой поддержки", "Integrated Fire-support Network", "ADISCORD_squad_04_advanced_fire_support", 2180, (
+                "category_all_infantry = { soft_attack = 0.093 defense = 0.093 max_organisation = 2.131 }",
+            )),
+        ),
+    ),
+    research_branch(
+        "anti_tank_infantry", "ADISCORD_infantry.txt", ("infantry_folder",),
+        "Пехотные противотанковые средства", "Infantry Anti-tank Weapons", "anti_tank",
+        (
+            ("recovered_shaped_charge_cells", "Бутылочные зажигательные смеси", "Bottle Incendiary Mixtures", "ADISCORD_antitank_01_incendiary_bottle", 2150, (
+                "category_all_infantry = { hard_attack = 0.012 ap_attack = 0.008 }",
+            )),
+            ("disposable_launcher_standards", "Динамитные и ранцевые подрывные заряды", "Dynamite and Satchel Demolition Charges", "ADISCORD_antitank_02_satchel_charge", 2155, (
+                "category_all_infantry = { hard_attack = 0.016 breakthrough = 0.008 }",
+            )),
+            ("tandem_penetrator_packages", "Ручные кумулятивные противотанковые гранаты", "Hand-thrown Shaped-charge Anti-tank Grenades", "ADISCORD_antitank_03_shaped_charge_grenade", 2158, (
+                "category_all_infantry = { hard_attack = 0.02 ap_attack = 0.016 }",
+            )),
+            ("wire_guided_hunter_teams", "Тяжёлые противотанковые ружья", "Large-calibre Anti-tank Rifles", "ADISCORD_antitank_04_antitank_rifle", 2161, (
+                "category_all_infantry = { hard_attack = 0.028 ap_attack = 0.02 }",
+            )),
+            ("recoilless_overmatch_cells", "Наведение ракет по проводам", "Command Guidance over Wire", "ADISCORD_antitank_05_wire_guidance", 2161, (
+                "category_all_infantry = { ap_attack = 0.028 }",
+                "coordination_bonus = 0.008",
+            )),
+            ("fire_and_forget_seekers", "Безоткатные противотанковые системы", "Recoilless Anti-tank Systems", "ADISCORD_antitank_06_recoilless_launcher", 2164, (
+                "category_all_infantry = { hard_attack = 0.032 breakthrough = 0.02 }",
+            )),
+            ("programmable_anti_armor_fuzes", "Полуавтоматическое наведение ракет", "Semi-automatic Command to Line of Sight", "ADISCORD_antitank_07_saclos_guidance", 2164, (
+                "category_all_infantry = { ap_attack = 0.032 }",
+                "coordination_bonus = 0.012",
+            )),
+            ("top_attack_profiles", "Кумулятивные реактивные гранатомёты", "Shaped-charge Rocket Launchers", "ADISCORD_antitank_08_rocket_launcher", 2168, (
+                "category_all_infantry = { hard_attack = 0.036 ap_attack = 0.032 }",
+            )),
+            ("loitering_armor_hunters", "Самонаведение для атаки сверху", "Imaging-infrared Top-attack Homing", "ADISCORD_antitank_09_top_attack_seeker", 2168, (
+                "category_all_infantry = { ap_attack = 0.036 }",
+                "coordination_bonus = 0.016",
+            )),
+            ("cooperative_hunter_cells", "Тандемные кумулятивные боевые части", "Tandem Shaped-charge Warheads", "ADISCORD_antitank_10_tandem_warhead", 2172, (
+                "category_all_infantry = { hard_attack = 0.04 ap_attack = 0.036 }",
+            )),
+            ("terminal_overmatch_packages", "Барражирующие противотанковые боеприпасы", "Loitering Anti-armor Munitions", "ADISCORD_antitank_11_loitering_munition", 2172, (
+                "category_all_infantry = { ap_attack = 0.04 }",
+                "coordination_bonus = 0.02",
+            )),
+            ("distributed_anti_armor_net", "Общее целеуказание по данным датчиков", "Cooperative Multispectral Targeting", "ADISCORD_antitank_12_multispectral_targeting", 2180, (
+                "category_all_infantry = { hard_attack = 0.048 ap_attack = 0.048 breakthrough = 0.024 }",
+                "coordination_bonus = 0.024",
+            )),
+        ),
+    ),
+    research_branch(
+        "night_combat", "ADISCORD_infantry.txt", ("infantry_folder",),
+        "Ночной бой", "Night Combat", "special_forces",
+        (
+            ("passive_intensifier_cells", "Усилители остаточного света", "Passive Intensifier Cells", "ADISCORD_night_01_passive_intensifier", 2150, (
+                "land_night_attack = 0.01",
+            )),
+            ("sealed_night_mounts", "Защищённые корпуса ночных прицелов", "Sealed Night Mounts", "ADISCORD_night_01_passive_intensifier", 2155, (
+                "land_night_attack = 0.01",
+                "category_all_infantry = { defense = 0.012 }",
+            )),
+            ("thermal_observation_channels", "Тепловизионные каналы наблюдения", "Thermal Observation Channels", "ADISCORD_night_02_thermal_channel", 2158, (
+                "land_night_attack = 0.012",
+                "category_recon = { recon = 0.24 }",
+            )),
+            ("fused_low_light_sights", "Комбинированные ночные прицелы", "Fused Low-light Sights", "ADISCORD_night_03_fused_sight", 2161, (
+                "land_night_attack = 0.014",
+                "category_all_infantry = { soft_attack = 0.012 }",
+            )),
+            ("low_signature_illumination", "Малозаметная подсветка", "Low-signature Illumination", "ADISCORD_night_05_counter_illumination", 2161, (
+                "land_night_attack = 0.012",
+                "category_all_infantry = { breakthrough = 0.012 }",
+            )),
+            ("squad_target_sharing", "Обмен целями внутри отделения", "Squad Target Sharing", "ADISCORD_night_04_squad_target_sharing", 2164, (
+                "land_night_attack = 0.014",
+                "coordination_bonus = 0.01",
+            )),
+            ("counter_illumination_warnings", "Датчики вражеской подсветки", "Counter-illumination Warnings", "ADISCORD_night_05_counter_illumination", 2164, (
+                "land_night_attack = 0.014",
+                "category_all_infantry = { defense = 0.014 }",
+            )),
+            ("thermal_target_libraries", "Распознавание тепловых следов", "Thermal Target Libraries", "ADISCORD_night_02_thermal_channel", 2168, (
+                "land_night_attack = 0.016",
+                "category_recon = { recon = 0.3 }",
+            )),
+            ("nocturnal_sensor_discipline", "Скрытное ночное наблюдение", "Nocturnal Sensor Discipline", "ADISCORD_night_03_fused_sight", 2168, (
+                "land_night_attack = 0.016",
+                "category_all_infantry = { defense = 0.016 }",
+            )),
+            ("distributed_night_engagements", "Согласованный огонь ночью", "Distributed Night Engagements", "ADISCORD_night_06_distributed_engagement", 2172, (
+                "land_night_attack = 0.018",
+                "coordination_bonus = 0.014",
+            )),
+            ("adaptive_spectrum_concealment", "Маскировка от ночных приборов", "Adaptive Spectrum Concealment", "ADISCORD_night_05_counter_illumination", 2172, (
+                "land_night_attack = 0.018",
+                "category_all_infantry = { breakthrough = 0.018 }",
+            )),
+            ("nocturnal_combat_mesh", "Сеть ночного целеуказания", "Nocturnal Combat Mesh", "ADISCORD_night_06_distributed_engagement", 2180, (
+                "land_night_attack = 0.024",
+                "coordination_bonus = 0.02",
+                "category_all_infantry = { defense = 0.024 breakthrough = 0.024 }",
+            )),
+        ),
+    ),
+    research_branch(
+        "protection", "ADISCORD_infantry.txt", ("infantry_folder",),
+        "Защитное снаряжение", "Protective Equipment", "protection",
+        (
+            ("composite_protection_kits", "Композитные бронежилеты", "Composite Body Armour", "ADISCORD_equipment_armour", 2150, (
+                "category_all_infantry = { defense = 0.04 max_organisation = 0.75 }",
+            )),
+            ("trauma_plates", "Амортизирующие вкладыши брони", "Armour Trauma Pads", "ADISCORD_equipment_armour", 2155, (
+                "category_all_infantry = { defense = 0.041 reliability = 0.025 }",
+            )),
+            ("sealed_combat_suits", "Герметичные боевые костюмы", "Sealed Combat Suits", "ADISCORD_equipment_respirator", 2158, (
+                "category_all_infantry = { defense = 0.043 supply_consumption = -0.013 }",
+            )),
+            ("ceramic_trauma_inserts", "Керамические бронепластины", "Ceramic Armour Plates", "ADISCORD_equipment_armour", 2160, (
+                "category_all_infantry = { defense = 0.044 breakthrough = 0.026 }",
+            )),
+            ("sealed_respirator_interfaces", "Герметичные соединения респираторов", "Sealed Respirator Interfaces", "ADISCORD_equipment_respirator", 2162, (
+                "category_all_infantry = { default_morale = 0.046 defense = 0.027 }",
+            )),
+            ("active_hearing_protection", "Активная защита слуха", "Active Hearing Protection", "ADISCORD_equipment_hearing_protection", 2163, (
+                "category_all_infantry = { defense = 0.048 reliability = 0.028 }",
+            )),
+            ("thermal_signature_liners", "Тепломаскирующие подкладки", "Thermal-concealment Liners", "ADISCORD_equipment_camouflage", 2164, (
+                "category_all_infantry = { defense = 0.049 supply_consumption = -0.014 }",
+            )),
+            ("powered_load_bearing_harnesses", "Силовые разгрузочные системы", "Powered Load-bearing Harnesses", "ADISCORD_equipment_exoskeleton", 2165, (
+                "category_all_infantry = { defense = 0.05 reliability = 0.029 }",
+            )),
+            ("exoskeleton_load_frames", "Экзоскелетные рамы", "Exoskeleton Load Frames", "ADISCORD_equipment_exoskeleton", 2166, (
+                "category_all_infantry = { defense = 0.051 breakthrough = 0.03 }",
+            )),
+            ("reactive_camouflage_textiles", "Ткани с изменяемой окраской", "Colour-changing Camouflage Fabrics", "ADISCORD_equipment_camouflage", 2169, (
+                "category_all_infantry = { defense = 0.055 supply_consumption = -0.016 }",
+            )),
+            ("adaptive_camouflage", "Адаптивная маскировка", "Adaptive Camouflage", "ADISCORD_equipment_camouflage", 2170, (
+                "category_all_infantry = { default_morale = 0.056 defense = 0.032 }",
+            )),
+            ("exosuit_joint_actuators", "Приводы суставов экзоскелета", "Exoskeleton Joint Actuators", "ADISCORD_equipment_exoskeleton", 2171, (
+                "category_all_infantry = { defense = 0.058 reliability = 0.033 }",
+            )),
+            ("adaptive_radiation_shielding", "Адаптивная защита от радиации", "Adaptive Radiation Protection", "ADISCORD_equipment_armour", 2173, (
+                "category_all_infantry = { defense = 0.06 supply_consumption = -0.017 }",
+            )),
+            ("closed_loop_combat_life_support", "Замкнутое жизнеобеспечение", "Closed-loop Life Support", "ADISCORD_equipment_life_support", 2174, (
+                "category_all_infantry = { defense = 0.061 max_organisation = 1.394 }",
+            )),
+            ("self_sealing_combat_skins", "Самогерметизирующиеся защитные костюмы", "Self-Sealing Combat Skins", "ADISCORD_equipment_armour", 2175, (
+                "category_all_infantry = { defense = 0.063 max_organisation = 1.432 }",
+            )),
+        ),
+    ),
+    research_branch(
+        "special_forces", "ADISCORD_infantry.txt", ("infantry_folder",),
+        "Разведка и спецназ", "Reconnaissance and Special Forces", "special_forces",
+        (
+            ("fieldcraft_manuals", "Полевая подготовка разведчиков", "Scout Fieldcraft Training", "ADISCORD_equipment_climbing", 2150, (
+                "category_special_forces = { breakthrough = 0.04 maximum_speed = 0.012 }",
+            )),
+            ("urban_breaching", "Инструменты штурмового вскрытия", "Assault Breaching Tools", "ADISCORD_equipment_breaching", 2155, (
+                "category_special_forces = { soft_attack = 0.041 breakthrough = 0.041 }",
+            )),
+            ("radiation_patrols", "Разведка заражённой местности", "Contaminated-area Reconnaissance", "ADISCORD_equipment_respirator", 2158, (
+                "category_recon = { recon = 0.35 }",
+                "category_special_forces = { maximum_speed = 0.013 }",
+            )),
+            ("subterranean_route_reconnaissance", "Разведка подземных маршрутов", "Subterranean Route Reconnaissance", "ADISCORD_equipment_climbing", 2160, (
+                "category_special_forces = { breakthrough = 0.044 defense = 0.026 }",
+            )),
+            ("combat_recon_drones", "Разведывательные дроны", "Combat Recon Drones", "ADISCORD_equipment_drone", 2161, (
+                "category_recon = { recon = 0.34 }",
+                "land_night_attack = 0.013",
+            )),
+            ("urban_vertical_access_rigs", "Штурмовое альпинистское снаряжение", "Urban Vertical-Access Rigs", "ADISCORD_equipment_climbing", 2162, (
+                "category_special_forces = { soft_attack = 0.046 breakthrough = 0.046 }",
+            )),
+            ("low_observable_infiltration_suits", "Маскировочные костюмы разведчиков", "Reconnaissance Concealment Suits", "ADISCORD_equipment_camouflage", 2163, (
+                "category_recon = { recon = 0.43 }",
+                "category_special_forces = { maximum_speed = 0.014 }",
+            )),
+            ("autonomous_scout_microdrones", "Автономные разведывательные микродроны", "Autonomous Scout Microdrones", "ADISCORD_equipment_drone", 2164, (
+                "category_recon = { recon = 0.47 }",
+                "category_special_forces = { maximum_speed = 0.014 }",
+            )),
+            ("vertical_assault_training", "Высотная штурмовая подготовка", "Vertical Assault Training", "ADISCORD_equipment_climbing", 2166, (
+                "category_special_forces = { maximum_speed = 0.03 supply_consumption = -0.015 }",
+            )),
+            ("multispectral_concealment_discipline", "Маскировка от разведдатчиков", "Concealment from Reconnaissance Sensors", "ADISCORD_equipment_camouflage", 2168, (
+                "category_recon = { recon = 0.55 }",
+                "category_special_forces = { maximum_speed = 0.015 }",
+            )),
+            ("deep_recon_cells", "Группы дальней разведки", "Long-range Reconnaissance Teams", "ADISCORD_night_04_squad_target_sharing", 2170, (
+                "category_recon = { recon = 0.59 }",
+                "category_special_forces = { maximum_speed = 0.016 }",
+            )),
+            ("distributed_recon_sensor_caches", "Скрытые посты наблюдения", "Concealed Sensor Outposts", "ADISCORD_night_05_counter_illumination", 2172, (
+                "category_recon = { recon = 0.67 }",
+                "category_special_forces = { maximum_speed = 0.017 }",
+            )),
+            ("augmented_special_forces", "Экзоскелеты спецназа", "Special Forces Exoskeletons", "ADISCORD_equipment_exoskeleton", 2180, (
+                "category_special_forces = { breakthrough = 0.093 defense = 0.093 max_organisation = 2.131 }",
+            )),
+        ),
+    ),
+    research_branch(
+        "combat_medicine", "ADISCORD_logistics_trains.txt", ('support_folder',),
+        "Боевая медицина", "Combat Medicine", "protection",
+        (
+            ("casualty_evacuation", "Эвакуация раненых", "Casualty Evacuation", "advanced_machine_tools", 2158, (
+                "field_hospital = { casualty_trickleback = 0.03 experience_loss_factor = -0.02 }",
+            )),
+            ("battlefield_medical_drones", "Медицинские дроны", "Battlefield Medical Drones", "ADISCORD_equipment_medical_drone", 2161, (
+                "field_hospital = { casualty_trickleback = 0.045 experience_loss_factor = -0.027 }",
+            )),
+            ("trauma_registry_networks", "Полевой учёт ранений", "Field Casualty Records", "ADISCORD_equipment_casualty_monitor", 2162, (
+                "field_hospital = { casualty_trickleback = 0.03 experience_loss_factor = -0.02 }",
+                "category_all_infantry = { default_morale = 0.02 }",
+            )),
+            ("smart_tourniquet_systems", "Автоматические кровоостанавливающие жгуты", "Smart Tourniquet Systems", "ADISCORD_equipment_medical", 2167, (
+                "field_hospital = { casualty_trickleback = 0.03 experience_loss_factor = -0.053 }",
+                "category_all_infantry = { default_morale = 0.03 }",
+            )),
+            ("forward_surgical_cells", "Передовые хирургические группы", "Forward Surgical Teams", "ADISCORD_equipment_medical", 2169, (
+                "field_hospital = { experience_loss_factor = -0.04 casualty_trickleback = 0.03 }",
+                "category_all_infantry = { max_organisation = 1 }",
+            )),
+            ("nanofiber_wound_dressings", "Повязки из нановолокна", "Nanofibre Wound Dressings", "ADISCORD_equipment_medical", 2172, (
+                "field_hospital = { casualty_trickleback = 0.059 experience_loss_factor = -0.033 }",
+            )),
+            ("distributed_combat_medicine", "Сеть полевой медицинской помощи", "Field Medical Care Network", "ADISCORD_equipment_medical", 2175, (
+                "field_hospital = { casualty_trickleback = 0.08 experience_loss_factor = -0.05 supply_consumption = -0.04 }",
+                "category_all_infantry = { default_morale = 0.04 }",
+            )),
+        ),
+    ),
+    research_branch(
+        "field_support", "ADISCORD_logistics_trains.txt", ('support_folder',),
+        "Полевое обеспечение", "Field Support", "support",
+        (
+            ("field_workshop_tools", "Инструменты полевых мастерских", "Field Workshop Tools", "support_equipment_1", 2150, (
+                "category_support_battalions = { reliability = 0.02 defense = 0.02 }",
+            )),
+            ("modular_support_kits", "Модульные комплекты обеспечения", "Modular Support Kits", "basic_construction", 2155, (
+                "category_support_battalions = { reliability = 0.02 supply_consumption = -0.02 }",
+            )),
+            ("combat_engineering_sections", "Инженерно-штурмовые отделения", "Combat Engineering Sections", "improved_machine_tools", 2158, (
+                "engineer = { entrenchment = 0.5 defense = 0.04 }",
+                "ADISCORD_regimental_pioneers = { entrenchment = 0.15 defense = 0.02 }",
+            )),
+            ("standardized_field_tool_chests", "Стандартные наборы полевого инструмента", "Standardized Field Tool Chests", "radio", 2160, (
+                "maintenance_company = { equipment_capture_factor = 0.02 }",
+                "category_support_battalions = { reliability = 0.03 }",
+            )),
+            ("drone_delivered_repair_spares", "Доставка ремкомплектов дронами", "Drone-Delivered Repair Spares", "support_equipment_1", 2165, (
+                "category_support_battalions = { reliability = 0.04 default_morale = 0.03 }",
+            )),
+            ("remote_repair_teams", "Дистанционные ремонтные группы", "Remote Repair Teams", "basic_construction", 2166, (
+                "maintenance_company = { equipment_capture_factor = 0.03 }",
+                "category_support_battalions = { reliability = 0.04 }",
+            )),
+            ("autonomous_recovery", "Автономная эвакуация техники", "Autonomous Recovery", "improved_construction", 2170, (
+                "category_support_battalions = { reliability = 0.04 default_morale = 0.04 }",
+            )),
+            ("predictive_parts_prepositioning", "Предиктивное размещение запчастей", "Predictive Parts Prepositioning", "support_equipment_1", 2173, (
+                "category_support_battalions = { reliability = 0.05 supply_consumption = -0.03 }",
+            )),
+            ("self_sustaining_support", "Самодостаточное обеспечение", "Self-sustaining Support", "support_equipment_1", 2180, (
+                "category_support_battalions = { defense = 0.093 default_morale = 0.052 max_organisation = 2.131 }",
+            )),
+        ),
+    ),
+    research_branch(
+        "logistics", "ADISCORD_logistics_trains.txt", ('support_folder',),
+        "Моторизация и логистика", "Motorization and Logistics", "logistics",
+        (
+            ("pack_transport", "Вьючный транспорт", "Pack Transport", "radio", 2150, (
+                "supply_consumption_factor = -0.012",
+                "land_reinforce_rate = 0.006",
+            )),
+            ("restored_truck_fleets", "Восстановленные автоколонны", "Restored Truck Fleets", "motorised_infantry", 2155, (
+                "supply_consumption_factor = -0.012",
+                "land_reinforce_rate = 0.006",
+            )),
+            ("standardized_transport_columns", "Стандартные транспортные колонны", "Standardized Transport Columns", "computing_machine", 2158, (
+                "supply_consumption_factor = -0.013",
+                "land_reinforce_rate = 0.006",
+            )),
+            ("forward_supply_hubs", "Передовые узлы снабжения", "Forward Supply Hubs", "improved_computing_machine", 2161, (
+                "supply_consumption_factor = -0.013",
+                "land_reinforce_rate = 0.007",
+            )),
+            ("hardened_logistics_nodes", "Защищённые логистические узлы", "Hardened Logistics Nodes", "train_equipment_3", 2166, (
+                "logistics_company = { supply_consumption = -0.026 }",
+                "industry_repair_factor = 0.015",
+            )),
+            ("drone_resupply_corridors", "Коридоры снабжения дронами", "Drone Resupply Corridors", "computing_machine", 2167, (
+                "logistics_company = { supply_consumption = -0.015 }",
+                "coordination_bonus = 0.026",
+            )),
+            ("route_optimization_ai", "ИИ маршрутизации", "Route Optimization AI", "improved_construction", 2170, (
+                "supply_consumption_factor = -0.028",
+                "category_support_battalions = { default_morale = 0.016 }",
+            )),
+            ("closed_loop_field_supply", "Замкнутый цикл полевого снабжения", "Closed-Loop Field Supply", "computing_machine", 2175, (
+                "land_reinforce_rate = 0.031",
+                "org_loss_when_moving = -0.018",
+            )),
+            ("zero_loss_logistics", "Безотходная логистика", "Zero-loss Logistics", "assembly_line_production", 2180, (
+                "supply_consumption_factor = -0.046",
+                "land_reinforce_rate = 0.026",
+                "org_loss_when_moving = -0.026",
+            )),
+        ),
+    ),
+    research_branch(
+        "rail", "ADISCORD_logistics_trains.txt", ('support_folder',),
+        "Железные дороги", "Railway Systems", "rail",
+        (
+            ("restored_rail_stock", "Восстановленная тяга", "Restored Rail Stock", "train_equipment_1", 2150, (
+                "supply_consumption_factor = -0.006",
+                "industry_repair_factor = 0.02",
+            )),
+            ("standard_gauge_recovery", "Восстановление единой колеи", "Standard Gauge Recovery", "basic_construction", 2155, (
+                "supply_consumption_factor = -0.006",
+                "industry_repair_factor = 0.021",
+            )),
+            ("armored_rail_convoys", "Бронированные эшелоны", "Armored Rail Convoys", "train_equipment_2", 2158, (
+                "supply_consumption_factor = -0.006",
+                "industry_repair_factor = 0.021",
+            )),
+            ("rail_repair_corps", "Корпуса ремонта путей", "Rail Repair Corps", "advanced_computing_machine", 2166, (
+                "production_speed_infrastructure_factor = 0.015",
+                "industry_repair_factor = 0.026",
+            )),
+            ("autonomous_rail_dispatch", "Автономная диспетчеризация", "Autonomous Rail Dispatch", "train_equipment_3", 2170, (
+                "supply_consumption_factor = -0.02",
+                "land_reinforce_rate = 0.01",
+            )),
+            ("smart_railbed_repair_swarms", "Рои ремонта железнодорожного полотна", "Smart Railbed Repair Swarms", "advanced_machine_tools", 2173, (
+                "production_speed_infrastructure_factor = 0.017",
+                "industry_repair_factor = 0.03",
+            )),
+        ),
+    ),
+    research_branch(
+        "combat_engineering", "ADISCORD_logistics_trains.txt", ('support_folder',),
+        "Инженерное обеспечение", "Combat Engineering", "support",
+        (
+            ("battle_damage_survey_teams", "Группы оценки боевых повреждений", "Battle-damage Survey Teams", "basic_machine_tools", 2162, (
+                "industry_repair_factor = 0.03",
+                "category_support_battalions = { defense = 0.02 }",
+            )),
+            ("assault_breaching_packages", "Штурмовые комплекты разграждения", "Assault Breaching Packages", "basic_construction", 2169, (
+                "engineer = { breakthrough = 0.05 soft_attack = 0.03 }",
+                "ADISCORD_regimental_pioneers = { breakthrough = 0.03 soft_attack = 0.02 }",
+                "planning_speed = 0.02",
+            )),
+            ("integrated_engineer_command", "Единое инженерное командование", "Integrated Engineer Command", "improved_machine_tools", 2175, (
+                "engineer = { breakthrough = 0.10 defense = 0.08 }",
+                "ADISCORD_regimental_pioneers = { breakthrough = 0.05 defense = 0.04 }",
+                "category_support_battalions = { max_organisation = 2 }",
+                "planning_speed = 0.04",
+            )),
+        ),
+    ),
+    research_branch(
+        "officer_training", "ADISCORD_logistics_trains.txt", ('support_folder',),
+        "Подготовка командного состава", "Officer Training", "support",
+        (
+            ("reconstituted_staff_academies", "Восстановленные штабные академии", "Reconstituted Staff Academies", "radio", 2162, (
+                "planning_speed = 0.02",
+                "land_reinforce_rate = 0.005",
+                "max_command_power_mult = 0.02",
+            )),
+            ("assault_command_curriculum", "Курс наступательного командования", "Assault Command Curriculum", "mechanical_computing", 2164, (
+                "planning_speed = 0.03",
+                "category_all_infantry = { breakthrough = 0.02 }",
+            )),
+            ("defensive_command_curriculum", "Курс оборонительного командования", "Defensive Command Curriculum", "basic_encryption", 2165, (
+                "dig_in_speed_factor = 0.03",
+                "category_all_infantry = { defense = 0.02 }",
+            )),
+            ("operational_planning_exercises", "Оперативные штабные учения", "Operational Planning Exercises", "computing_machine", 2167, (
+                "planning_speed = 0.04",
+                "max_planning = 0.02",
+                "coordination_bonus = 0.01",
+            )),
+            ("theater_logistics_wargames", "Тыловые манёвры театра", "Theater Logistics Wargames", "improved_encryption", 2169, (
+                "supply_consumption_factor = -0.015",
+                "land_reinforce_rate = 0.01",
+                "org_loss_when_moving = -0.01",
+            )),
+            ("rotational_front_commands", "Ротация фронтовых командований", "Rotational Front Commands", "improved_computing_machine", 2171, (
+                "planning_speed = 0.04",
+                "land_reinforce_rate = 0.015",
+                "max_command_power_mult = 0.03",
+            )),
+            ("predictive_staff_colleges", "Коллегии предиктивного планирования", "Predictive Staff Colleges", "advanced_encryption", 2173, (
+                "coordination_bonus = 0.02",
+                "supply_consumption_factor = -0.02",
+                "max_planning = 0.02",
+            )),
+            ("adaptive_general_staff", "Адаптивный генеральный штаб", "Adaptive General Staff", "advanced_computing_machine", 2175, (
+                "planning_speed = 0.06",
+                "coordination_bonus = 0.03",
+                "land_reinforce_rate = 0.02",
+                "max_command_power_mult = 0.05",
+            )),
+        ),
+    ),
+    research_branch(
+        "artillery", "ADISCORD_artillery.txt", ('artillery_folder',),
+        "Полевая артиллерия", "Field Artillery", "artillery",
+        (
+            ("restored_field_artillery", "Восстановленная артиллерия", "Restored Field Artillery", "artillery_equipment", 2150, (
+                "artillery = { soft_attack = 0.04 reliability = 0.012 }",
+            )),
+            ("recoil_recovery", "Восстановление противооткатных систем", "Recoil Recovery", "artillery2", 2155, (
+                "artillery = { soft_attack = 0.041 reliability = 0.012 }",
+            )),
+            ("modular_gun_carriages", "Модульные лафеты", "Modular Gun Carriages", "artillery3", 2158, (
+                "artillery = { soft_attack = 0.043 reliability = 0.013 }",
+            )),
+            ("electrohydraulic_gun_laying", "Электрогидравлическое наведение орудий", "Electrohydraulic Gun Laying", "artillery1", 2160, (
+                "artillery = { soft_attack = 0.044 reliability = 0.013 }",
+            )),
+            ("smart_fire_control", "Умное управление огнём", "Smart Fire Control", "artillery4", 2161, (
+                "artillery = { soft_attack = 0.045 reliability = 0.013 }",
+            )),
+            ("counterbattery_radar_links", "Каналы контрбатарейных РЛС", "Counter-battery Radar Links", "artillery3", 2163, (
+                "artillery = { hard_attack = 0.048 ap_attack = 0.048 }",
+            )),
+            ("assisted_projectiles", "Корректируемые снаряды", "Assisted Projectiles", "artillery_equipment", 2166, (
+                "artillery = { soft_attack = 0.051 reliability = 0.03 }",
+            )),
+            ("drone_spotted_batteries", "Дроновая корректировка", "Drone-spotted Batteries", "rocket_artillery_equipment", 2170, (
+                "artillery = { hard_attack = 0.056 reliability = 0.032 }",
+            )),
+            ("uncrewed_howitzer_sections", "Необитаемые гаубичные расчёты", "Uncrewed Howitzer Sections", "rocket_artillery4", 2175, (
+                "artillery = { soft_attack = 0.063 reliability = 0.018 }",
+            )),
+            ("autonomous_battery_network", "Автономная батарейная сеть", "Autonomous Battery Network", "rocket_artillery4", 2180, (
+                "artillery = { reliability = 0.08 defense = 0.06 }",
+                "coordination_bonus = 0.02",
+            )),
+        ),
+    ),
+    research_branch(
+        "railway_artillery", "ADISCORD_artillery.txt", ('artillery_folder',),
+        "Железнодорожная артиллерия", "Railway Artillery", "rail",
+        (
+            ("railway_gun_reactivation", "Реактивация железнодорожных орудий", "Railway Gun Reactivation", "generic_railway_gun", 2161, (
+                "railway_gun = { reliability = 0.03 }",
+            )),
+            ("recoil_braced_firing_sidings", "Огневые тупики с компенсацией отдачи", "Recoil-Braced Firing Sidings", "advanced_machine_tools", 2163, (
+                "railway_gun = { railway_gun_attack = 0.05 reliability = 0.02 }",
+            )),
+            ("active_suspension_gun_carriages", "Орудийные платформы с активной подвеской", "Active-Suspension Gun Carriages", "improved_construction", 2172, (
+                "railway_gun = { maximum_speed = 0.05 reliability = 0.04 }",
+            )),
+            ("over_the_horizon_fire_control", "Загоризонтный огонь", "Over-the-horizon Fire Control", "generic_super_heavy_railway_gun", 2180, (
+                "railway_gun = { railway_gun_attack = 0.08 reliability = 0.04 }",
+            )),
+        ),
+    ),
+    research_branch(
+        "anti_tank", "ADISCORD_artillery.txt", ('artillery_folder',),
+        "Противотанковые системы", "Anti-tank Systems", "anti_tank",
+        (
+            ("salvaged_at_guns", "Трофейные противотанковые орудия", "Salvaged Anti-tank Guns", "antitank1", 2150, (
+                "category_anti_tank = { hard_attack = 0.04 ap_attack = 0.04 }",
+            )),
+            ("shaped_charges", "Кумулятивные заряды", "Shaped Charges", "antitank2", 2155, (
+                "category_anti_tank = { hard_attack = 0.041 ap_attack = 0.041 }",
+            )),
+            ("tandem_warheads", "Тандемные боевые части", "Tandem Warheads", "antitank3", 2158, (
+                "category_anti_tank = { hard_attack = 0.043 ap_attack = 0.043 }",
+            )),
+            ("scrap_at_launchers", "Кустарные противотанковые орудия", "Scrap Anti-tank Launchers", "anti_tank_equipment", 2161, (
+                "category_anti_tank = { hard_attack = 0.045 ap_attack = 0.045 }",
+            )),
+            ("imaging_infrared_seekers", "Матричные инфракрасные головки наведения", "Imaging Infrared Seekers", "antitank3", 2163, (
+                "category_anti_tank = { reliability = 0.048 defense = 0.028 }",
+            )),
+            ("top_attack_munitions", "Боеприпасы верхней атаки", "Top-attack Munitions", "antitank5", 2166, (
+                "category_anti_tank = { hard_attack = 0.051 ap_attack = 0.051 }",
+            )),
+            ("coil_at_systems", "Катушечные ускорители ПТО", "Coil Anti-tank Systems", "antitank2", 2170, (
+                "category_anti_tank = { ap_attack = 0.056 breakthrough = 0.032 }",
+            )),
+            ("superconducting_coil_barrels", "Сверхпроводящие катушечные стволы", "Superconducting Coil Barrels", "anti_tank_equipment", 2171, (
+                "category_anti_tank = { hard_attack = 0.058 defense = 0.033 }",
+            )),
+            ("hypervelocity_at_networks", "Сеть гиперскоростной ПТО", "Hypervelocity Anti-tank Networks", "antitank2", 2180, (
+                "category_anti_tank = { hard_attack = 0.093 ap_attack = 0.093 reliability = 0.052 }",
+            )),
+        ),
+    ),
+    research_branch(
+        "anti_air", "ADISCORD_artillery.txt", ('artillery_folder',),
+        "Противовоздушная оборона", "Air Defense", "anti_air",
+        (
+            ("improvised_air_defense", "Импровизированная ПВО", "Improvised Air Defense", "antiair1", 2150, (
+                "category_anti_air = { air_attack = 0.04 reliability = 0.012 }",
+            )),
+            ("radar_laying", "Радиолокационное наведение", "Radar Laying", "antiair2", 2155, (
+                "category_anti_air = { air_attack = 0.041 reliability = 0.012 }",
+            )),
+            ("proximity_fuzes", "Радиовзрыватели", "Proximity Fuzes", "antiair3", 2158, (
+                "category_anti_air = { air_attack = 0.043 reliability = 0.013 }",
+            )),
+            ("stabilized_autocannon_mounts", "Стабилизированные зенитные автопушки", "Stabilized Autocannon Mounts", "antiair1", 2160, (
+                "category_anti_air = { air_attack = 0.044 reliability = 0.013 }",
+            )),
+            ("point_defense_aa", "Автопушки точечной обороны", "Point-defense Air Defense", "anti_air_equipment", 2161, (
+                "category_anti_air = { air_attack = 0.045 reliability = 0.013 }",
+            )),
+            ("integrated_short_range_missile_cells", "Интегрированные ячейки ракет ближнего действия", "Integrated Short-range Missile Cells", "antiair5", 2165, (
+                "category_anti_air = { air_attack = 0.05 reliability = 0.029 }",
+                "air_intercept_efficiency = 0.029",
+            )),
+            ("networked_air_defense", "Сетевая противовоздушная оборона", "Networked Air Defense", "antiair5", 2166, (
+                "category_anti_air = { air_attack = 0.03 reliability = 0.051 }",
+                "coordination_bonus = 0.015",
+            )),
+            ("high_energy_laser_turrets", "Турели высокоэнергетических лазеров", "High-energy Laser Turrets", "anti_air_equipment", 2173, (
+                "category_anti_air = { air_attack = 0.06 reliability = 0.034 }",
+                "air_intercept_efficiency = 0.034",
+            )),
+            ("predictive_airspace_denial_grid", "Предиктивная сеть блокирования воздушного пространства", "Predictive Airspace-denial Grid", "sp_nuclear_isotope_separation", 2175, (
+                "category_anti_air = { air_attack = 0.063 reliability = 0.018 }",
+            )),
+            ("directed_energy_air_defense", "Энергетическая противовоздушная оборона", "Directed-energy Air Defense", "advanced_centimetric_radar", 2180, (
+                "category_anti_air = { air_attack = 0.093 reliability = 0.093 }",
+                "air_intercept_efficiency = 0.052",
+            )),
+        ),
+    ),
+    research_branch(
+        "recon_armor", "ADISCORD_armor.txt", ('armour_folder', 'nsb_armour_folder'),
+        "Разведывательная бронетехника", "Reconnaissance Armor", "recon_armor",
+        (
+            ("restored_armored_chassis", "Восстановленное лёгкое шасси", "Restored Armored Chassis", "nsb_engine_tech_1", 2150, (
+                "category_all_armor = { maximum_speed = 0.024 reliability = 0.024 }",
+            )),
+            ("light_suspension", "Облегчённая подвеска", "Light Suspension", "nsb_armor_tech_1", 2155, (
+                "category_all_armor = { maximum_speed = 0.025 reliability = 0.025 }",
+            )),
+            ("modular_recon_chassis", "Модульное разведывательное шасси", "Modular Recon Chassis", "basic_machine_tools", 2158, (
+                "category_all_armor = { maximum_speed = 0.025 reliability = 0.025 }",
+            )),
+            ("sealed_electric_scout_drives", "Герметичные электроприводы разведмашин", "Sealed Electric Scout Drives", "radio", 2160, (
+                "category_all_armor = { maximum_speed = 0.026 reliability = 0.026 }",
+            )),
+            ("drone_recon_swarms", "Программа Р-63 «След»", "R-63 “Trace” Programme", "advanced_light_tank", 2161, (
+                "category_all_armor = { maximum_speed = 0.027 reliability = 0.027 }",
+            )),
+            ("multispectral_recon_suites", "Мультиспектральные разведывательные комплексы", "Multispectral Reconnaissance Suites", "improved_machine_tools", 2164, (
+                "category_all_armor = { reliability = 0.028 defense = 0.049 }",
+                "category_recon = { recon = 0.4 }",
+            )),
+            ("signature_management_skins", "Обшивка управления сигнатурой", "Signature-management Skins", "basic_light_tank", 2169, (
+                "category_all_armor = { defense = 0.055 breakthrough = 0.032 }",
+            )),
+            ("unmanned_recon_vehicles", "Необитаемые разведмашины", "Unmanned Recon Vehicles", "ger_armored_car_equipment_1", 2170, (
+                "category_all_armor = { maximum_speed = 0.032 breakthrough = 0.056 }",
+            )),
+            ("autonomous_recon_screen", "Автономное разведывательное охранение", "Autonomous Recon Screen", "advanced_centimetric_radar", 2180, (
+                "category_all_armor = { maximum_speed = 0.052 reliability = 0.093 defense = 0.093 }",
+            )),
+        ),
+    ),
+    research_branch(
+        "mechanized_mobility", "ADISCORD_armor.txt", ('armour_folder', 'nsb_armour_folder'),
+        "Механизированные войска", "Mechanized Forces", "recon_armor",
+        (
+            ("armored_carrier_program", "Программа М-63 «Ковчег»", "M-63 “Ark” Programme", "mechanized_equipment_1", 2160, (
+                "ADISCORD_mechanized_infantry = { defense = 0.03 reliability = 0.03 }",
+            )),
+            ("protected_transport_standards", "Стандарты защищённой перевозки", "Protected Transport Standards", "nsb_armor_tech_1", 2162, (
+                "category_all_armor = { maximum_speed = 0.025 reliability = 0.025 }",
+            )),
+            ("sealed_dismount_compartments", "Герметичные десантные отсеки", "Sealed Dismount Compartments", "nsb_armor_tech_1", 2164, (
+                "category_all_armor = { maximum_speed = 0.026 reliability = 0.026 }",
+            )),
+            ("escort_protection_arrays", "Комплексы защиты машин сопровождения", "Escort Protection Arrays", "nsb_armor_tech_2", 2166, (
+                "category_all_armor = { maximum_speed = 0.027 reliability = 0.027 }",
+            )),
+            ("infantry_combat_vehicle_program", "Контур М-70 «Рубеж»", "M-70 “Rampart” Combat Loop", "mechanized_equipment_2", 2168, (
+                "ADISCORD_mechanized_infantry = { breakthrough = 0.05 soft_attack = 0.05 hard_attack = 0.03 }",
+            )),
+            ("unmanned_weapon_stations", "Необитаемые башенные установки", "Uncrewed Turret Mounts", "nsb_engine_tech_1", 2170, (
+                "category_all_armor = { maximum_speed = 0.031 reliability = 0.031 }",
+            )),
+            ("cooperative_dismount_control", "Совместное управление спешиванием", "Cooperative Dismount Control", "improved_computing_machine", 2172, (
+                "category_all_armor = { maximum_speed = 0.034 reliability = 0.034 }",
+            )),
+            ("networked_mechanized_cells", "Контур М-83 «Свод»", "M-83 “Vault” Mechanized Loop", "mechanized_equipment_3", 2175, (
+                "ADISCORD_mechanized_infantry = { maximum_speed = 0.05 reliability = 0.05 }",
+                "coordination_bonus = 0.02",
+            )),
+        ),
+    ),
+    research_branch(
+        "combat_armor", "ADISCORD_armor.txt", ('armour_folder', 'nsb_armour_folder'),
+        "Основные боевые танки", "Main Battle Tanks", "combat_armor",
+        (
+            ("recovered_medium_chassis", "Восстановленный основной боевой танк", "Restored Main Battle Tank", "nsb_armor_tech_1", 2150, (
+                "category_all_armor = { breakthrough = 0.04 hard_attack = 0.024 }",
+            )),
+            ("remote_weapon_stations", "Дистанционно управляемые башенные установки", "Remote-controlled Turret Mounts", "nsb_engine_tech_1", 2155, (
+                "category_all_armor = { breakthrough = 0.041 hard_attack = 0.025 }",
+            )),
+            ("composite_armor_arrays", "Массивы композитной брони", "Composite Armor Arrays", "basic_machine_tools", 2158, (
+                "category_all_armor = { breakthrough = 0.043 hard_attack = 0.025 }",
+            )),
+            ("electric_turret_drives", "Электрические приводы башни", "Electric Turret Drives", "nsb_engine_tech_2", 2161, (
+                "category_all_armor = { breakthrough = 0.045 hard_attack = 0.027 }",
+            )),
+            ("semi_autonomous_combat_modules", "Контур БТ-62 «Вожак»", "BT-62 “Lead” Control Loop", "generic_modern_tank", 2162, (
+                "category_all_armor = { breakthrough = 0.046 hard_attack = 0.046 }",
+            )),
+            ("hard_kill_protection_arrays", "Комплексы активной защиты жёсткого поражения", "Hard-kill Protection Arrays", "nsb_engine_tech_3", 2164, (
+                "category_all_armor = { soft_attack = 0.049 maximum_speed = 0.028 }",
+            )),
+            ("adaptive_fire_control", "Адаптивное управление огнём", "Adaptive Fire Control", "nsb_armor_tech_4", 2166, (
+                "category_all_armor = { hard_attack = 0.051 reliability = 0.03 }",
+            )),
+            ("multispectral_gunner_sights", "Мультиспектральные прицелы наводчика", "Multispectral Gunner Sights", "nsb_engine_tech_4", 2167, (
+                "category_all_armor = { armor_value = 0.053 default_morale = 0.03 }",
+            )),
+            ("limited_battle_ai", "Ограниченный боевой ИИ", "Limited Battle AI", "generic_modern_tank", 2172, (
+                "category_all_armor = { hard_attack = 0.059 reliability = 0.033 }",
+            )),
+            ("electromagnetic_main_guns", "Электромагнитные основные орудия", "Electromagnetic Main Guns", "nsb_engine_tech_2", 2173, (
+                "category_all_armor = { hard_attack = 0.06 breakthrough = 0.05 }",
+            )),
+            ("adaptive_suspension_control", "Адаптивное управление подвеской", "Adaptive Suspension Control", "advanced_medium_tank", 2175, (
+                "category_all_armor = { maximum_speed = 0.05 reliability = 0.05 }",
+            )),
+            ("distributed_battlegroup", "Распределённая бронегруппа", "Distributed Battlegroup", "generic_modern_tank", 2180, (
+                "category_all_armor = { hard_attack = 0.09 breakthrough = 0.08 }",
+                "coordination_bonus = 0.02",
+            )),
+        ),
+    ),
+    research_branch(
+        "heavy_armor", "ADISCORD_armor.txt", ('armour_folder', 'nsb_armour_folder'),
+        "Тяжёлые и автономные танки", "Heavy and Autonomous Tanks", "heavy_armor",
+        (
+            ("heavy_recovery_frames", "Тяжёлые ремонтные рамы", "Heavy Recovery Frames", "nsb_armor_tech_1", 2150, (
+                "ADISCORD_heavy_platform = { armor_value = 0.04 defense = 0.024 }",
+            )),
+            ("reinforced_powertrains", "Усиленные силовые установки", "Reinforced Powertrains", "nsb_engine_tech_1", 2155, (
+                "ADISCORD_heavy_platform = { armor_value = 0.041 defense = 0.025 }",
+            )),
+            ("heavy_composite_cores", "Тяжёлые композитные ядра", "Heavy Composite Cores", "basic_machine_tools", 2158, (
+                "ADISCORD_heavy_platform = { armor_value = 0.043 defense = 0.025 }",
+            )),
+            ("remote_repair_sections", "Дистанционные ремонтные машины", "Remote Repair Sections", "generic_armored_support_vehicle_recovery_1", 2161, (
+                "ADISCORD_heavy_platform = { armor_value = 0.045 defense = 0.027 }",
+            )),
+            ("heavy_platform_cores", "Усиленный корпус тяжёлого танка", "Reinforced Heavy Tank Hull", "super_heavy_tank", 2166, (
+                "ADISCORD_heavy_platform = { armor_value = 0.051 reliability = 0.03 }",
+            )),
+            ("active_mass_balancing_suspension", "Подвеска активного распределения массы", "Active Mass-balancing Suspension", "main_battle_tank", 2167, (
+                "ADISCORD_heavy_platform = { maximum_speed = 0.03 reliability = 0.053 }",
+            )),
+            ("autonomous_breakthrough_platforms", "Программа Т-71 «Таран»", "T-71 “Ram” Programme", "nsb_engine_tech_1", 2170, (
+                "ADISCORD_heavy_platform = { breakthrough = 0.056 hard_attack = 0.056 }",
+            )),
+            ("electromagnetic_siege_mortars", "Электромагнитные осадные мортиры", "Electromagnetic Siege Mortars", "nsb_armor_tech_2", 2172, (
+                "ADISCORD_heavy_platform = { soft_attack = 0.059 breakthrough = 0.033 }",
+            )),
+            ("siege_platform_networks", "Контур Т-80 «Жернов»", "T-80 “Millstone” Siege Loop", "generic_land_cruiser_chassis", 2180, (
+                "ADISCORD_heavy_platform = { armor_value = 0.093 breakthrough = 0.093 reliability = 0.052 }",
+            )),
+        ),
+    ),
+    research_branch(
+        "unmanned_ground_systems", "ADISCORD_armor.txt", ('armour_folder', 'nsb_armour_folder'),
+        "Беспилотные наземные системы", "Unmanned Ground Systems", "recon_armor",
+        (
+            ("teleoperated_scout_carts", "Телеуправляемые разведывательные машины", "Teleoperated Scout Vehicles", "nsb_engine_tech_1", 2162, (
+                "category_recon = { recon = 0.5 defense = 0.02 }",
+                "category_all_armor = { reliability = 0.02 }",
+            )),
+            ("armed_recon_drones", "Вооружённые разведывательные платформы", "Armed Recon Vehicles", "sp_armored_signal", 2169, (
+                "category_recon = { recon = 0.75 soft_attack = 0.04 }",
+                "category_all_armor = { maximum_speed = 0.02 }",
+            )),
+            ("distributed_ground_swarm_control", "Распределённое управление наземным роем", "Distributed Ground-swarm Control", "sp_armored_signal", 2175, (
+                "category_all_armor = { breakthrough = 0.06 soft_attack = 0.05 }",
+                "coordination_bonus = 0.015",
+            )),
+        ),
+    ),
+    research_branch(
+        "fighter", "ADISCORD_air.txt", ('air_techs_folder', 'bba_air_techs_folder'),
+        "Истребительная авиация", "Fighter Aviation", "fighter",
+        (
+            ("reclaimed_jet_platforms", "Программа А-50 «Искра»", "A-50 “Spark” Programme", "early_fighter", 2150, (
+                "air_mission_efficiency = 0.024",
+                "air_accidents_factor = -0.024",
+            )),
+            ("standardized_airframes", "Стандартные планеры", "Standardized Airframes", "bba_tech_engines_1", 2155, (
+                "air_mission_efficiency = 0.025",
+                "air_accidents_factor = -0.025",
+            )),
+            ("pulse_doppler_radar", "Импульсно-доплеровская РЛС", "Pulse-Doppler Radar", "centimetric_radar", 2158, (
+                "air_mission_efficiency = 0.025",
+                "air_accidents_factor = -0.025",
+            )),
+            ("composite_wing_spars", "Композитные лонжероны крыла", "Composite Wing Spars", "bba_tech_aircraft_construction", 2160, (
+                "air_mission_efficiency = 0.026",
+                "air_accidents_factor = -0.026",
+            )),
+            ("high_altitude_interceptors", "Высотные перехватчики", "High-altitude Interceptors", "fighter2", 2161, (
+                "air_mission_efficiency = 0.027",
+                "air_accidents_factor = -0.027",
+            )),
+            ("electronically_scanned_fighter_radar", "РЛС истребителя с электронным сканированием", "Electronically Scanned Fighter Radar", "bba_tech_aircraft_construction", 2163, (
+                "fighter = { air_attack = 0.06 air_defence = 0.04 }",
+            )),
+            ("thrust_vectoring", "Управляемый вектор тяги", "Thrust Vectoring", "jet_fighter1", 2166, (
+                "air_agility_factor = 0.051",
+                "air_accidents_factor = -0.03",
+            )),
+            ("low_observable_inlet_geometry", "Малозаметная геометрия воздухозаборников", "Low-observable Inlet Geometry", "fighter2", 2168, (
+                "air_mission_efficiency = 0.031",
+                "air_accidents_factor = -0.031",
+            )),
+            ("loyal_wingmen", "Ведомые беспилотники", "Loyal Wingmen", "jet_fighter2", 2170, (
+                "air_attack_factor = 0.056",
+                "air_mission_efficiency = 0.032",
+            )),
+            ("autonomous_dogfight_controller", "Автономный контроллер воздушного боя", "Autonomous Dogfight Controller", "bba_tech_engines_1", 2173, (
+                "air_intercept_efficiency = 0.05",
+                "air_accidents_factor = -0.03",
+            )),
+            ("distributed_interceptor_swarms", "Распределённые рои перехватчиков", "Distributed Interceptor Swarms", "jet_fighter2", 2175, (
+                "air_mission_efficiency = 0.08",
+                "air_power_projection_factor = 0.05",
+            )),
+            ("aerospace_interceptors", "Воздушно-космические перехватчики", "Aerospace Interceptors", "bba_tech_engines_1", 2180, (
+                "air_intercept_efficiency = 0.08",
+                "air_mission_efficiency = 0.04",
+            )),
+        ),
+    ),
+    research_branch(
+        "bomber_maritime", "ADISCORD_air.txt", ('air_techs_folder', 'bba_air_techs_folder'),
+        "Бомбардировщики и морская авиация", "Bombers and Maritime Aircraft", "air_support",
+        (
+            ("twin_engine_aircraft", "Двухмоторные самолёты", "Twin-engine Aircraft", "tactical_bomber1", 2160, (
+                "ADISCORD_tactical_bomber = { reliability = 0.02 }",
+            )),
+            ("maritime_patrol_aircraft", "Морские патрульные самолёты", "Maritime Patrol Aircraft", "naval_bomber2", 2164, (
+                "nav_bomber = { air_range = 0.04 }",
+            )),
+            ("pressurized_bombers", "Бомбардировщики с гермокабиной", "Pressurized Bombers", "tactical_bomber2", 2164, (
+                "ADISCORD_tactical_bomber = { air_defence = 0.04 }",
+            )),
+            ("airborne_homing_torpedoes", "Самонаводящиеся авиационные торпеды", "Airborne Homing Torpedoes", "bba_tech_armor_piercing_bombs", 2168, (
+                "nav_bomber = { naval_strike_attack = 0.10 naval_strike_targetting = 0.08 }",
+            )),
+            ("stabilized_bomb_sights", "Стабилизированные бомбовые прицелы", "Stabilized Bomb Sights", "bba_tech_engines_1", 2168, (
+                "ADISCORD_tactical_bomber = { strategic_attack = 0.08 air_ground_attack = 0.06 }",
+            )),
+            ("long_range_maritime_aircraft", "Дальние противокорабельные самолёты", "Long-range Maritime Strike Aircraft", "naval_bomber3", 2172, (
+                "nav_bomber = { naval_strike_targetting = 0.06 }",
+            )),
+            ("jet_strike_bombers", "Реактивные ударные бомбардировщики", "Jet Strike Bombers", "jet_tactical_bomber1", 2172, (
+                "ADISCORD_tactical_bomber = { strategic_attack = 0.06 }",
+            )),
+            ("integrated_strike_navigation", "Комплексная прицельно-навигационная система", "Integrated Strike Navigation", "advanced_centimetric_radar", 2175, (
+                "ADISCORD_tactical_bomber = { air_range = 0.08 strategic_attack = 0.06 }",
+                "nav_bomber = { air_range = 0.08 naval_strike_targetting = 0.06 }",
+            )),
+        ),
+    ),
+    research_branch(
+        "air_support", "ADISCORD_air.txt", ('air_techs_folder', 'bba_air_techs_folder'),
+        "Штурмовая авиация", "Air Support", "air_support",
+        (
+            ("battlefield_attack_aircraft", "Программа АШ-50 «Коршун»", "AS-50 “Kite” Programme", "CAS1", 2150, (
+                "air_mission_efficiency = 0.024",
+                "ground_attack_factor = 0.04",
+            )),
+            ("guided_munitions", "Управляемые боеприпасы", "Guided Munitions", "bba_tech_engines_1", 2155, (
+                "cas = { air_ground_attack = 0.08 }",
+            )),
+            ("armored_cockpits", "Бронированные кабины", "Armored Cockpits", "radio", 2158, (
+                "air_mission_efficiency = 0.025",
+                "ground_attack_factor = 0.043",
+            )),
+            ("vtol_assault_frames", "Ударные СВВП", "VTOL Assault Frames", "CAS2", 2161, (
+                "air_mission_efficiency = 0.027",
+                "ground_attack_factor = 0.045",
+            )),
+            ("precision_glide_bomb_kits", "Комплекты планирующих высокоточных бомб", "Precision Glide-bomb Kits", "CAS2", 2163, (
+                "ground_attack_factor = 0.048",
+                "air_accidents_factor = -0.028",
+            )),
+            ("drone_air_wings", "Контур А-65 «Стая»", "A-65 “Flock” Air-control Loop", "CAS3", 2166, (
+                "ground_attack_factor = 0.051",
+                "air_mission_efficiency = 0.03",
+            )),
+            ("loitering_strike_drones", "Барражирующие ударные беспилотники", "Loitering Strike Drones", "radio", 2168, (
+                "air_mission_efficiency = 0.031",
+                "ground_attack_factor = 0.054",
+            )),
+            ("cooperative_close_air_control_links", "Каналы совместного управления авиаподдержкой", "Cooperative Close-air-control Links", "bba_tech_armor_piercing_bombs", 2169, (
+                "ground_attack_factor = 0.055",
+                "air_mission_efficiency = 0.032",
+            )),
+            ("autonomous_strike_wings", "Автономные ударные крылья", "Autonomous Strike Wings", "CAS3", 2170, (
+                "ground_attack_factor = 0.056",
+                "air_accidents_factor = -0.032",
+            )),
+            ("persistent_sensor_strike_loops", "Непрерывные разведывательно-ударные контуры", "Persistent Sensor-strike Loops", "CAS3", 2175, (
+                "air_mission_efficiency = 0.035",
+                "ground_attack_factor = 0.063",
+            )),
+            ("persistent_air_support", "Непрерывная воздушная поддержка", "Persistent Air Support", "sp_rockets_improved_guidance", 2180, (
+                "ground_attack_factor = 0.093",
+                "air_mission_efficiency = 0.093",
+                "air_accidents_factor = -0.052",
+            )),
+        ),
+    ),
+    research_branch(
+        "strategic_air", "ADISCORD_air.txt", ('air_techs_folder', 'bba_air_techs_folder'),
+        "Ракетные и стратегические системы", "Rocket and Strategic Systems", "strategic_air",
+        (
+            ("rocket_test_stands", "Ракетные испытательные стенды", "Rocket Test Stands", "rocket_engines", 2150, (
+                "air_mission_efficiency = 0.024",
+                "strategic_bomb_visibility = -0.024",
+            )),
+            ("inertial_guidance", "Инерциальное наведение", "Inertial Guidance", "improved_rocket_engines", 2155, (
+                "air_mission_efficiency = 0.025",
+                "strategic_bomb_visibility = -0.025",
+            )),
+            ("cruise_missiles", "Крылатые ракеты", "Cruise Missiles", "centimetric_radar", 2158, (
+                "air_mission_efficiency = 0.025",
+                "strategic_bomb_visibility = -0.025",
+            )),
+            ("strategic_rocket_architecture", "Стратегическая ракетная артиллерия", "Strategic Rocket Architecture", "advanced_rocket_engines", 2161, (
+                "air_mission_efficiency = 0.027",
+                "strategic_bomb_visibility = -0.027",
+            )),
+            ("orbital_tracking_relics", "Орбитальные комплексы слежения", "Orbital Tracking Relics", "guided_missile_1", 2166, (
+                "air_mission_efficiency = 0.03",
+                "strategic_bomb_visibility = -0.03",
+            )),
+            ("hypersonic_glide_vehicles", "Гиперзвуковые планирующие блоки", "Hypersonic Glide Vehicles", "centimetric_radar", 2168, (
+                "air_mission_efficiency = 0.031",
+                "strategic_bomb_visibility = -0.031",
+            )),
+            ("deep_strike_targeting", "Координация глубоких ударов", "Deep Strike Targeting", "advanced_rocket_engines", 2170, (
+                "air_mission_efficiency = 0.032",
+                "strategic_bomb_visibility = -0.032",
+            )),
+            ("suborbital_skip_glide_guidance", "Наведение суборбитального рикошетирующего полёта", "Suborbital Skip-glide Guidance", "guided_missile_3", 2174, (
+                "air_mission_efficiency = 0.035",
+                "strategic_bomb_visibility = -0.035",
+            )),
+            ("suborbital_strike_systems", "Программа Р-80 «Стрела»", "R-80 “Arrow” Programme", "ballistic_missile_equipment_3", 2180, (
+                "air_mission_efficiency = 0.052",
+                "strategic_bomb_visibility = -0.052",
+            )),
+        ),
+    ),
+    research_branch(
+        "air_mobility", "ADISCORD_air.txt", ('air_techs_folder', 'bba_air_techs_folder'),
+        "Воздушная мобильность", "Air Mobility", "air_support",
+        (
+            ("restored_airlift_planning", "Восстановленное планирование воздушных перевозок", "Restored Airlift Planning", "radio", 2162, (
+                "air_mission_efficiency = 0.02",
+                "air_mission_xp_gain_factor = 0.03",
+                "supply_consumption_factor = -0.005",
+            )),
+            ("vertical_envelopment_control", "Управление вертикальным охватом", "Vertical Envelopment Control", "radio", 2169, (
+                "air_cas_efficiency = 0.04",
+                "planning_speed = 0.03",
+                "land_reinforce_rate = 0.005",
+            )),
+            ("precision_aerial_resupply", "Точное воздушное снабжение", "Precision Aerial Resupply", "bba_tech_armor_piercing_bombs", 2175, (
+                "air_mission_efficiency = 0.04",
+                "supply_consumption_factor = -0.02",
+                "air_accidents_factor = -0.015",
+            )),
+        ),
+    ),
+    research_branch(
+        "naval_support", "ADISCORD_naval.txt", ('naval_folder', 'mtgnavalsupportfolder'),
+        "Прибрежные силы и эскорт", "Littoral Forces and Escort", "naval_support",
+        (
+            ("restored_dockyards", "Восстановленные верфи", "Restored Dockyards", "sonar", 2150, (
+                "convoy_escort_efficiency = 0.04",
+                "naval_detection = 0.024",
+            )),
+            ("coastal_patrols", "Прибрежные патрули", "Coastal Patrols", "basic_torpedo", 2155, (
+                "convoy_escort_efficiency = 0.041",
+                "naval_detection = 0.025",
+            )),
+            ("convoy_routing", "Маршрутизация конвоев", "Convoy Routing", "improved_sonar", 2158, (
+                "convoy_escort_efficiency = 0.043",
+                "naval_detection = 0.025",
+            )),
+            ("modular_escort_combat_systems", "Модульные боевые системы эскорта", "Modular Escort Combat Systems", "basic_naval_mines", 2160, (
+                "convoy_escort_efficiency = 0.044",
+                "naval_detection = 0.026",
+            )),
+            ("variable_depth_sonar", "Гидролокаторы переменной глубины", "Variable-depth Sonar", "advanced_centimetric_radar", 2163, (
+                "naval_detection = 0.028",
+                "naval_mines_effect_reduction = 0.048",
+            )),
+            ("unmanned_mine_countermeasure_boats", "Беспилотные противоминные катера", "Unmanned Mine-countermeasure Boats", "basic_torpedo", 2168, (
+                "convoy_escort_efficiency = 0.054",
+                "naval_detection = 0.031",
+            )),
+            ("autonomous_escorts", "Автономные корабли эскорта", "Autonomous Escorts", "basic_naval_mines", 2170, (
+                "naval_detection = 0.032",
+                "naval_mines_effect_reduction = 0.056",
+            )),
+            ("predictive_convoy_defense_network", "Предиктивная сеть обороны конвоев", "Predictive Convoy-defense Network", "modern_sonar", 2175, (
+                "convoy_escort_efficiency = 0.063",
+                "naval_detection = 0.035",
+            )),
+            ("distributed_sea_control", "Распределённый контроль моря", "Distributed Sea Control", "homing_torpedo", 2180, (
+                "convoy_escort_efficiency = 0.093",
+                "naval_detection = 0.093",
+                "naval_coordination = 0.052",
+            )),
+        ),
+    ),
+    research_branch(
+        "surface_fleet", "ADISCORD_naval.txt", ('naval_folder', 'mtgnavalfolder'),
+        "Надводный флот", "Surface Fleet", "surface_fleet",
+        (
+            ("recovered_fire_control", "Восстановленное управление огнём", "Recovered Fire Control", "basic_cruiser_armor_scheme", 2150, (
+                "naval_hit_chance = 0.024",
+                "naval_coordination = 0.024",
+            )),
+            ("modular_hull_standards", "Модульные стандарты корпусов", "Modular Hull Standards", "decimetric_radar", 2155, (
+                "naval_hit_chance = 0.025",
+                "naval_coordination = 0.025",
+            )),
+            ("radar_gunnery", "Радиолокационная стрельба", "Radar Gunnery", "improved_cruiser_armor_scheme", 2158, (
+                "heavy_cruiser = { hg_attack = 0.06 }",
+            )),
+            ("missile_batteries", "Корабельные ракетные батареи", "Missile Batteries", "advanced_cruiser_armor_scheme", 2161, (
+                "heavy_cruiser = { hg_attack = 0.08 }",
+            )),
+            ("modular_vertical_launch_cells", "Модульные установки вертикального пуска", "Modular Vertical-launch Cells", "naval_air_operations", 2163, (
+                "naval_detection = 0.048",
+                "convoy_escort_efficiency = 0.028",
+            )),
+            ("networked_task_groups", "Сетевые оперативные группы", "Networked Task Groups", "decimetric_radar", 2166, (
+                "naval_hit_chance = 0.051",
+                "naval_coordination = 0.03",
+            )),
+            ("railgun_batteries", "Корабельные рельсовые батареи", "Railgun Batteries", "advanced_centimetric_radar", 2170, (
+                "naval_speed_factor = 0.032",
+                "naval_hit_chance = 0.056",
+            )),
+            ("drone_carrier_deck_systems", "Палубные комплексы носителей беспилотников", "Drone-carrier Deck Systems", "air_defence", 2172, (
+                "naval_hit_chance = 0.059",
+                "naval_coordination = 0.033",
+            )),
+            ("distributed_horizon_targeting", "Распределённое загоризонтное целеуказание", "Distributed Horizon Targeting", "improved_cruiser_armor_scheme", 2175, (
+                "naval_detection = 0.063",
+                "convoy_escort_efficiency = 0.035",
+            )),
+            ("horizon_fleet_command", "Загоризонтное управление флотом", "Horizon Fleet Command", "improved_centimetric_radar", 2180, (
+                "naval_hit_chance = 0.093",
+                "naval_coordination = 0.093",
+                "naval_detection = 0.052",
+            )),
+        ),
+    ),
+    research_branch(
+        "subsurface", "ADISCORD_naval.txt", ('naval_folder', 'mtgnavalfolder'),
+        "Подводные силы", "Subsurface Forces", "subsurface",
+        (
+            ("sonar_archives", "Архивы гидроакустики", "Sonar Archives", "sonar", 2150, (
+                "naval_detection = 0.024",
+                "naval_mines_effect_reduction = 0.04",
+            )),
+            ("quiet_propulsion", "Малошумные движители", "Quiet Propulsion", "basic_submarine_snorkel", 2155, (
+                "naval_detection = 0.025",
+                "naval_mines_effect_reduction = 0.041",
+            )),
+            ("homing_torpedoes", "Самонаводящиеся торпеды", "Homing Torpedoes", "basic_torpedo", 2158, (
+                "submarine = { torpedo_attack = 0.08 }",
+            )),
+            ("air_independent_cells", "Воздухонезависимые ячейки", "Air-independent Cells", "improved_sonar", 2161, (
+                "submarine = { naval_range = 0.10 }",
+            )),
+            ("wake_homing_torpedo_seekers", "Головки наведения торпед по кильватерному следу", "Wake-homing Torpedo Seekers", "improved_submarine_snorkel", 2163, (
+                "naval_hit_chance = 0.048",
+                "naval_coordination = 0.028",
+            )),
+            ("seabed_sensor_webs", "Донные сенсорные сети", "Seabed Sensor Webs", "advanced_submarine_warfare", 2166, (
+                "naval_detection = 0.051",
+                "naval_mines_effect_reduction = 0.03",
+            )),
+            ("autonomous_submarines", "Автономные подлодки", "Autonomous Submarines", "submarine_mine_laying", 2170, (
+                "naval_coordination = 0.056",
+                "naval_detection = 0.032",
+            )),
+            ("self_repairing_pressure_hulls", "Самовосстанавливающиеся прочные корпуса", "Self-repairing Pressure Hulls", "homing_torpedo", 2175, (
+                "naval_detection = 0.035",
+                "naval_mines_effect_reduction = 0.063",
+            )),
+            ("deep_ocean_denial", "Глубоководное сдерживание", "Deep-ocean Denial", "advanced_submarine_warfare", 2180, (
+                "naval_detection = 0.093",
+                "naval_mines_effect_reduction = 0.093",
+                "naval_coordination = 0.052",
+            )),
+        ),
+    ),
+    research_branch(
+        "riverine_warfare", "ADISCORD_naval.txt", ('naval_folder', 'mtgnavalfolder', 'mtgnavalsupportfolder'),
+        "Речные и десантные операции", "Riverine and Amphibious Operations", "naval_support",
+        (
+            ("shallow_water_navigation_tables", "Таблицы мелководной навигации", "Shallow-water Navigation Tables", "sonar", 2162, (
+                "naval_detection = 0.02",
+                "naval_mines_effect_reduction = 0.02",
+                "convoy_escort_efficiency = 0.02",
+            )),
+            ("modular_landing_causeways", "Модульные десантные эстакады", "Modular Landing Causeways", "advanced_sonar", 2169, (
+                "naval_invasion_prep_speed = 0.05",
+                "naval_invasion_penalty = -0.03",
+                "shore_bombardment_bonus = 0.03",
+            )),
+            ("rapid_beachhead_logistics", "Быстрая логистика плацдарма", "Rapid Beachhead Logistics", "advanced_centimetric_radar", 2175, (
+                "naval_invasion_planning_bonus_speed = 0.08",
+                "supply_consumption_factor = -0.01",
+                "convoy_escort_efficiency = 0.03",
+            )),
+        ),
+    ),
+    research_branch(
+        "counter_drone_warfare", "ADISCORD_electronics.txt", ('electronics_folder',),
+        "РЭБ и противодроновая борьба", "Electronic and Counter-drone Warfare", "signals",
+        (
+            ("spectrum_threat_libraries", "Библиотеки спектральных угроз", "Spectrum Threat Libraries", "radio", 2162, (
+                "encryption_factor = 0.02",
+                "decryption_factor = 0.02",
+                "air_interception_detect_factor = 0.01",
+            )),
+            ("offensive_jamming_cells", "Ячейки наступательного подавления", "Offensive Jamming Cells", "basic_decryption", 2169, (
+                "decryption_factor = 0.04",
+                "coordination_bonus = 0.01",
+                "air_mission_efficiency = 0.01",
+            )),
+            ("adaptive_spectrum_dominance", "Адаптивное господство в спектре", "Adaptive Spectrum Dominance", "advanced_encryption", 2175, (
+                "encryption_factor = 0.05",
+                "decryption_factor = 0.05",
+                "coordination_bonus = 0.03",
+                "air_mission_efficiency = 0.03",
+            )),
+        ),
+    ),
 )
+
+
+SIDE_PROGRAMME_KEYS = frozenset(['air_mobility', 'combat_engineering', 'counter_drone_warfare', 'railway_artillery', 'riverine_warfare', 'unmanned_ground_systems'])
 
 MAIN_BRANCH_KEYS_BY_FOLDER = {
-    "industry_folder": {"production", "industry_organization", "reconstruction", "resources", "public_finance", "advanced_materials"},
-    "electronics_folder": {"signals", "computing", "power"},
-    "infantry_folder": {
-        "small_arms", "squad_weapons", "anti_tank_infantry", "night_combat",
-        "protection", "special_forces",
-    },
-    "support_folder": {"field_support", "logistics", "rail", "officer_training"},
-    "artillery_folder": {"artillery", "anti_tank", "anti_air"},
-    "armour_folder": {"recon_armor", "combat_armor", "heavy_armor"},
-    "air_techs_folder": {"fighter", "air_support", "strategic_air", "bomber_maritime"},
-    "naval_folder": {"naval_support", "surface_fleet", "subsurface"},
+    "industry_folder": ['advanced_materials', 'industry_organization', 'production', 'public_finance', 'reconstruction', 'resources'],
+    "electronics_folder": ['computing', 'power', 'signals'],
+    "infantry_folder": ['anti_tank_infantry', 'night_combat', 'protection', 'small_arms', 'squad_weapons', 'special_forces'],
+    "support_folder": ['combat_medicine', 'field_support', 'logistics', 'officer_training', 'rail'],
+    "artillery_folder": ['anti_air', 'anti_tank', 'artillery'],
+    "armour_folder": ['combat_armor', 'heavy_armor', 'mechanized_mobility', 'recon_armor'],
+    "air_techs_folder": ['air_support', 'bomber_maritime', 'fighter', 'strategic_air'],
+    "naval_folder": ['naval_support', 'subsurface', 'surface_fleet'],
 }
 
 
@@ -1322,498 +2424,483 @@ def make_graph(
     )
 
 
-def dual_synthesis_graph() -> BranchGraph:
-    left = (5, 7, 9, 11, 13, 15, 17)
-    right = (6, 8, 10, 12, 14, 16, 18)
-    edges = chain_edges((0, 1, 2, 3, 4))
-    edges += [(4, left[0]), (4, right[0])]
-    edges += chain_edges(left) + chain_edges(right)
-    edges += [(left[-1], 19), (right[-1], 19)]
-    lanes = [1] * 20
-    for index in left:
-        lanes[index] = 0
-    for index in right:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (19,))
-
-
-def dual_choice_graph() -> BranchGraph:
-    """Two persistent schools that share a late, OR-gated capstone."""
-
-    left = (5, 7, 9, 11, 13, 15, 17)
-    right = (6, 8, 10, 12, 14, 16, 18)
-    edges = chain_edges((0, 1, 2, 3, 4))
-    edges += [(4, left[0]), (4, right[0])]
-    edges += chain_edges(left) + chain_edges(right)
-    edges += [(left[-1], 19), (right[-1], 19)]
-    lanes = [1] * 20
-    for index in left:
-        lanes[index] = 0
-    for index in right:
-        lanes[index] = 2
-    # No explicit dependency at 19: two incoming paths are an OR gate, as in
-    # the vanilla flexible/streamlined industry choice.
-    return make_graph(tuple(lanes), edges)
-
-
-def double_diamond_graph() -> BranchGraph:
-    left_one = (5, 7, 9)
-    right_one = (6, 8, 10)
-    left_two = (12, 14, 16)
-    right_two = (13, 15, 17)
-    edges = chain_edges((0, 1, 2, 3, 4))
-    edges += [(4, left_one[0]), (4, right_one[0])]
-    edges += chain_edges(left_one) + chain_edges(right_one)
-    edges += [(left_one[-1], 11), (right_one[-1], 11)]
-    edges += [(11, left_two[0]), (11, right_two[0])]
-    edges += chain_edges(left_two) + chain_edges(right_two)
-    edges += [(left_two[-1], 18), (right_two[-1], 18), (18, 19)]
-    lanes = [1] * 20
-    for index in left_one + left_two:
-        lanes[index] = 0
-    for index in right_one + right_two:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (11, 18))
-
-
-def double_choice_graph() -> BranchGraph:
-    """Two successive XOR decisions, each followed by an OR merge."""
-
-    left_one = (5, 7, 9)
-    right_one = (6, 8, 10)
-    left_two = (12, 14, 16)
-    right_two = (13, 15, 17)
-    edges = chain_edges((0, 1, 2, 3, 4))
-    edges += [(4, left_one[0]), (4, right_one[0])]
-    edges += chain_edges(left_one) + chain_edges(right_one)
-    edges += [(left_one[-1], 11), (right_one[-1], 11)]
-    edges += [(11, left_two[0]), (11, right_two[0])]
-    edges += chain_edges(left_two) + chain_edges(right_two)
-    edges += [(left_two[-1], 18), (right_two[-1], 18), (18, 19)]
-    lanes = [1] * 20
-    for index in left_one + left_two:
-        lanes[index] = 0
-    for index in right_one + right_two:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges)
-
-
-def alternating_diamonds_graph() -> BranchGraph:
-    edges = chain_edges((0, 1, 2, 3, 4))
-    edges += [(4, 5), (4, 6), (5, 8), (6, 7), (7, 8)]
-    edges += [(8, 9), (8, 10), (9, 12), (10, 11), (11, 12)]
-    edges += [(12, 13), (12, 14), (13, 16), (14, 15), (15, 16)]
-    edges += [(16, 17), (16, 18), (17, 19), (18, 19)]
-    lanes = [1] * 20
-    for index in (6, 7, 14, 15):
-        lanes[index] = 0
-    for index in (10, 11, 18):
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (8, 12, 16, 19))
-
-
-def alternating_choices_graph() -> BranchGraph:
-    """Four field decisions; each selected project rejoins the main line."""
-
-    edges = chain_edges((0, 1, 2, 3, 4))
-    edges += [(4, 5), (4, 6), (5, 8), (6, 7), (7, 8)]
-    edges += [(8, 9), (8, 10), (9, 12), (10, 11), (11, 12)]
-    edges += [(12, 13), (12, 14), (13, 16), (14, 15), (15, 16)]
-    edges += [(16, 17), (16, 18), (17, 19), (18, 19)]
-    lanes = [1] * 20
-    for index in (6, 7, 14, 15):
-        lanes[index] = 0
-    for index in (10, 11, 18):
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges)
-
-
-def applied_dual_choice_graph() -> BranchGraph:
-    """A compact optional programme with two persistent applied schools."""
-
-    return make_graph(
-        (1, 0, 2, 0, 2, 0, 2, 1),
-        [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 6), (5, 7), (6, 7)],
-    )
-
-
-def infantry_integration_graph() -> BranchGraph:
-    """Rifle mechanisms, ammunition, and optics form three real programmes."""
-
-    ammunition = (2, 3, 6, 12, 14)
-    rifles = (2, 5, 7, 9, 10, 13)
-    optics = (2, 4, 8, 11)
-    edges = chain_edges((0, 1, 2))
-    edges += chain_edges(ammunition) + chain_edges(rifles) + chain_edges(optics)
-    edges += [(ammunition[-1], 15), (rifles[-1], 15), (optics[-1], 15)]
-    lanes = [1] * 16
-    for index in rifles[1:]:
-        lanes[index] = 0
-    for index in ammunition[1:]:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (15,))
-
-
-def squad_integration_graph() -> BranchGraph:
-    """Integrate automatic weapons, guided launchers, and squad C2."""
-
-    firepower = (0, 1, 2, 3, 5, 7, 10)
-    command = (0, 4, 6, 8, 9, 12)
-    edges = chain_edges(firepower) + chain_edges(command)
-    edges += [(firepower[-1], 11), (9, 11), (11, 13)]
-    edges += [(13, 14), (command[-1], 14), (14, 15)]
-    lanes = [1] * 16
-    for index in firepower[1:]:
-        lanes[index] = 0
-    for index in command[1:]:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (11, 14))
-
-
-def compact_dual_synthesis_graph() -> BranchGraph:
-    """Two five-project field schools converging on one operational mesh."""
-
-    left = (2, 3, 5, 7, 9)
-    right = (2, 4, 6, 8, 10)
-    edges = chain_edges((0, 1, 2))
-    edges += chain_edges(left) + chain_edges(right)
-    edges += [(left[-1], 11), (right[-1], 11)]
-    lanes = [1] * 12
-    for index in left[1:]:
-        lanes[index] = 0
-    for index in right[1:]:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (11,))
-
-
-def compact_two_row_synthesis_graph() -> BranchGraph:
-    """Keep the same two routes inside one compact two-row programme band."""
-
-    graph = compact_dual_synthesis_graph()
-    lanes = tuple(0 if lane < 2 else 1 for lane in graph.lanes)
-    return BranchGraph(lanes, graph.successors, graph.dependencies)
-
-
-def variable_dual_synthesis_graph(count: int) -> BranchGraph:
-    """Fit a two-route programme to a compact branch of at least seven nodes."""
-
-    if count < 7:
-        raise ValueError("A variable dual programme needs at least seven nodes")
-    body = tuple(range(3, count - 1))
-    left = body[::2]
-    right = body[1::2]
-    if not left or not right:
-        raise ValueError("A variable dual programme needs two non-empty routes")
-    capstone = count - 1
-    edges = chain_edges((0, 1, 2))
-    edges += [(2, left[0]), (2, right[0])]
-    edges += chain_edges(left) + chain_edges(right)
-    edges += [(left[-1], capstone), (right[-1], capstone)]
-    lanes = [1] * count
-    for index in left:
-        lanes[index] = 0
-    for index in right:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (capstone,))
-
-
-def parallel_programmes_graph(count: int, lane_count: int = 3) -> BranchGraph:
-    """Deal one root into evenly interleaved capability rows.
-
-    Every left-to-right programme holds exactly one node per campaign year, so
-    dealing the middle nodes round-robin puts each route step the same number of
-    year columns apart. Grouping nodes into themed routes of unequal length did
-    the opposite: a short arm had to reach across a decade in a single
-    connector, and special forces drew one 2310px run past five unrelated nodes.
-    """
-
-    if count < lane_count * 2 + 2:
-        raise ValueError(f"{count} nodes cannot fill {lane_count} parallel routes")
-    body = tuple(range(1, count - 1))
-    routes = tuple(body[offset::lane_count] for offset in range(lane_count))
-    if any(len(route) < 2 for route in routes):
-        raise ValueError("Every parallel route needs at least two nodes")
-    capstone = count - 1
-    edges = [(0, route[0]) for route in routes]
-    for route in routes:
-        edges += chain_edges(route)
-    edges += [(route[-1], capstone) for route in routes]
-    # The trunk and the capstone share the centre row with the middle route.
-    centre = lane_count // 2
-    lanes = [centre] * count
-    for lane, route in enumerate(routes):
-        for index in route:
-            lanes[index] = lane
-    lanes[0] = lanes[capstone] = centre
-    return make_graph(tuple(lanes), edges, (capstone,))
-
-
-def protection_programmes_graph() -> BranchGraph:
-    """Body systems, combat medicine, and environmental protection."""
-
-    body = (0, 1, 3, 6, 8, 14)
-    medicine = (0, 4, 9, 10, 12)
-    environment = (0, 2, 5, 7, 11, 13)
-    edges = chain_edges(body) + chain_edges(medicine) + chain_edges(environment)
-    edges += [(body[-1], 15), (medicine[-1], 15), (environment[-1], 15)]
-    lanes = [1] * 16
-    for index in body[1:]:
-        lanes[index] = 0
-    for index in environment[1:]:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (15,))
-
-
-def special_forces_programmes_graph() -> BranchGraph:
-    """Urban assault, deep reconnaissance, and airborne insertion."""
-
-    urban = (0, 1, 3, 5, 13)
-    reconnaissance = (0, 2, 4, 6, 7, 8, 11, 12, 14)
-    airborne = (0, 9, 10)
-    edges = chain_edges(urban) + chain_edges(reconnaissance) + chain_edges(airborne)
-    edges += [(urban[-1], 15), (reconnaissance[-1], 15), (airborne[-1], 15)]
-    lanes = [1] * 16
-    for index in urban[1:]:
-        lanes[index] = 0
-    for index in airborne[1:]:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (15,))
-
-
-def reconnaissance_armor_programmes_graph() -> BranchGraph:
-    """Mobility, sensors, and autonomy converge on a reconnaissance screen."""
-
-    mobility = (2, 3, 6, 8, 9, 12, 15)
-    sensors = (2, 4, 5, 7, 10, 14, 17)
-    autonomy = (2, 11, 13, 16, 18)
-    edges = chain_edges((0, 1, 2))
-    edges += chain_edges(mobility) + chain_edges(sensors) + chain_edges(autonomy)
-    edges += [(mobility[-1], 19), (sensors[-1], 19), (autonomy[-1], 19)]
-    lanes = [1] * 20
-    for index in mobility[1:]:
-        lanes[index] = 0
-    for index in autonomy[1:]:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (19,))
-
-
-def combat_armor_programmes_graph() -> BranchGraph:
-    """Protection, fire control, and autonomy precede the late armor choice."""
-
-    protection = (2, 3, 7, 13)
-    fire_control = (2, 4, 6, 9, 10, 12)
-    autonomy = (2, 5, 8, 11, 14)
-    edges = chain_edges((0, 1, 2))
-    edges += chain_edges(protection) + chain_edges(fire_control) + chain_edges(autonomy)
-    edges += [(protection[-1], 15), (fire_control[-1], 15), (autonomy[-1], 15)]
-    edges += [(15, 16), (15, 17), (16, 18), (17, 19)]
-    lanes = [1] * 20
-    for index in protection[1:] + (16, 18):
-        lanes[index] = 0
-    for index in autonomy[1:] + (17, 19):
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (15,))
-
-
-def heavy_armor_programmes_graph() -> BranchGraph:
-    """Survivability, power, and engineering converge into siege warfare."""
-
-    survivability = (2, 3, 6, 7, 8, 12, 16)
-    power = (2, 5, 9, 10, 14, 17)
-    engineering = (2, 4, 11, 13, 15, 18)
-    edges = chain_edges((0, 1, 2))
-    edges += chain_edges(survivability) + chain_edges(power) + chain_edges(engineering)
-    edges += [(survivability[-1], 19), (power[-1], 19), (engineering[-1], 19)]
-    lanes = [1] * 20
-    for index in survivability[1:]:
-        lanes[index] = 0
-    for index in engineering[1:]:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges, (19,))
-
-
-def mechanized_mobility_programmes_graph() -> BranchGraph:
-    """Protection and dismount integration lead into a networked IFV force."""
-
-    edges = chain_edges((0, 1, 2))
-    edges += [(2, 3), (2, 4), (3, 5), (4, 5)]
-    edges += [(5, 6), (5, 7), (6, 8), (7, 9)]
-    edges += [(8, 10), (9, 10), (10, 11)]
-    return make_graph(
-        (1, 1, 1, 0, 2, 1, 0, 2, 0, 2, 1, 1),
-        edges,
-        (5, 10),
-    )
-
-
 def linear_graph(count: int) -> BranchGraph:
-    return make_graph((1,) * count, chain_edges(tuple(range(count))))
+    return make_graph((0,) * count, chain_edges(tuple(range(count))))
 
 
-def temporary_production_graph() -> BranchGraph:
-    """Trunk, a temporary tooling XOR, then a genuine fork-and-merge shop floor.
-
-    Nodes 5/6 are the exclusive choice, so their two-node routes rejoin at 9
-    through an OR gate that either school can satisfy. Only 12 and 16 are AND
-    synthesis nodes, and both sit below forks whose arms are freely available.
-    """
-
-    edges = chain_edges((0, 1, 2, 3, 4))
-    edges += [(4, 5), (4, 6), (5, 7), (6, 8), (7, 9), (8, 9)]
-    edges += [(9, 10), (9, 11), (10, 12), (11, 12)]
-    edges += [(12, 13), (13, 14), (13, 15), (14, 16), (15, 16)]
-    lanes = (1, 1, 1, 1, 1, 0, 2, 0, 2, 1, 0, 2, 1, 1, 0, 2, 1)
-    return make_graph(lanes, edges, (12, 16))
+XOR_KIND_BY_BRANCH = {"production": "temporary", "industry_organization": "permanent"}
+XOR_INDEX_GROUPS_BY_BRANCH = {"production": ((5, 6),), "industry_organization": ((1, 2),)}
 
 
-def industry_organization_graph() -> BranchGraph:
-    """Two permanently separate industrial schools of six rungs each."""
-
-    concentrated = (1, 3, 5, 7, 9, 11)
-    distributed = (2, 4, 6, 8, 10, 12)
-    edges = [(0, concentrated[0]), (0, distributed[0])]
-    edges += chain_edges(concentrated) + chain_edges(distributed)
-    lanes = [1] * 13
-    for index in concentrated:
-        lanes[index] = 0
-    for index in distributed:
-        lanes[index] = 2
-    return make_graph(tuple(lanes), edges)
-
-
-def compact_computing_graph() -> BranchGraph:
-    """Trunk, the reliability/throughput XOR, then two forks that reconverge.
-
-    Node 8 is an OR gate: the exclusive choice at 4/5 means only one of the two
-    routes can reach it, so it must not demand both. Nodes 11 and 15 sit below
-    forks whose arms are freely available and are genuine AND syntheses.
-    """
-
-    edges = chain_edges((0, 1, 2, 3))
-    edges += [(3, 4), (3, 5), (4, 6), (5, 7), (6, 8), (7, 8)]
-    edges += [(8, 9), (8, 10), (9, 11), (10, 11), (11, 12)]
-    edges += [(12, 13), (12, 14), (13, 15), (14, 15)]
-    edges += [(15, 16), (15, 17), (17, 18)]
-    lanes = (1, 1, 1, 1, 0, 2, 0, 2, 1, 0, 2, 1, 1, 0, 2, 1, 2, 1, 1)
-    return make_graph(lanes, edges, (11, 15))
-
-
-def permanent_tail_choice_graph(count: int) -> BranchGraph:
-    if count < 5:
-        raise ValueError("A persistent choice needs a trunk and two two-node paths")
-    fork = count - 5
-    left_entry, right_entry, left_final, right_final = range(count - 4, count)
-    edges = chain_edges(tuple(range(fork + 1)))
-    edges += [
-        (fork, left_entry),
-        (fork, right_entry),
-        (left_entry, left_final),
-        (right_entry, right_final),
-    ]
-    lanes = [1] * count
-    lanes[left_entry] = lanes[left_final] = 0
-    lanes[right_entry] = lanes[right_final] = 2
-    return make_graph(tuple(lanes), edges)
-
-
-XOR_KIND_BY_BRANCH = {
-    "production": "temporary",
-    "industry_organization": "permanent",
-    "computing": "temporary",
-    "artillery": "permanent",
-    "combat_armor": "permanent",
-    "fighter": "permanent",
+# Shared entries and endpoints stay centred; each distinct route has its own lane.
+PROGRAMME_ROUTES = {
+    "small_arms": (
+        (
+            "postwar_weapon_standardization",
+            "refurbished_receivers",
+            "standardized_cartridges",
+            "sealed_receiver_assemblies",
+            "smart_recoil_compensators",
+            "modular_rifle_kits",
+            "biometric_trigger_locks",
+            "coil_assisted_service_rifles",
+            "networked_service_rifles",
+        ),
+        (
+            "postwar_weapon_standardization",
+            "refurbished_receivers",
+            "standardized_cartridges",
+            "smart_optics",
+            "networked_weapon_sights",
+            "integrated_target_designation",
+            "networked_service_rifles",
+        ),
+        (
+            "postwar_weapon_standardization",
+            "refurbished_receivers",
+            "standardized_cartridges",
+            "caseless_ammunition_trials",
+            "electrothermal_ignition",
+            "programmable_ammunition",
+            "hybrid_kinetic_energy_carbines",
+            "networked_service_rifles",
+        ),
+    ),
+    "squad_weapons": (
+        (
+            "belt_fed_recovery",
+            "squad_grenade_launchers",
+            "portable_at_cells",
+            "recoilless_squad_launchers",
+            "programmable_grenade_fuzes",
+            "remote_weapon_tripods",
+            "autonomous_support_weapons",
+            "autonomous_mortar_sections",
+            "robotic_heavy_weapon_teams",
+            "swarm_fireteams",
+        ),
+        (
+            "belt_fed_recovery",
+            "squad_grenade_launchers",
+            "field_ew_units",
+            "man_portable_sensor_masts",
+            "drone_guided_support_fire",
+            "networked_command_terminals",
+            "cooperative_target_handoff",
+            "swarm_fireteams",
+        ),
+    ),
+    "anti_tank_infantry": (
+        (
+            "recovered_shaped_charge_cells",
+            "disposable_launcher_standards",
+            "tandem_penetrator_packages",
+            "wire_guided_hunter_teams",
+            "fire_and_forget_seekers",
+            "top_attack_profiles",
+            "cooperative_hunter_cells",
+            "distributed_anti_armor_net",
+        ),
+        (
+            "recovered_shaped_charge_cells",
+            "disposable_launcher_standards",
+            "tandem_penetrator_packages",
+            "recoilless_overmatch_cells",
+            "programmable_anti_armor_fuzes",
+            "loitering_armor_hunters",
+            "terminal_overmatch_packages",
+            "distributed_anti_armor_net",
+        ),
+    ),
+    "night_combat": (
+        (
+            "passive_intensifier_cells",
+            "sealed_night_mounts",
+            "thermal_observation_channels",
+            "fused_low_light_sights",
+            "squad_target_sharing",
+            "thermal_target_libraries",
+            "distributed_night_engagements",
+            "nocturnal_combat_mesh",
+        ),
+        (
+            "passive_intensifier_cells",
+            "sealed_night_mounts",
+            "thermal_observation_channels",
+            "low_signature_illumination",
+            "counter_illumination_warnings",
+            "nocturnal_sensor_discipline",
+            "adaptive_spectrum_concealment",
+            "nocturnal_combat_mesh",
+        ),
+    ),
+    "protection": (
+        (
+            "composite_protection_kits",
+            "trauma_plates",
+            "ceramic_trauma_inserts",
+            "active_hearing_protection",
+            "powered_load_bearing_harnesses",
+            "exoskeleton_load_frames",
+            "exosuit_joint_actuators",
+            "self_sealing_combat_skins",
+        ),
+        (
+            "composite_protection_kits",
+            "sealed_combat_suits",
+            "thermal_signature_liners",
+            "reactive_camouflage_textiles",
+            "adaptive_camouflage",
+            "self_sealing_combat_skins",
+        ),
+        (
+            "composite_protection_kits",
+            "sealed_combat_suits",
+            "sealed_respirator_interfaces",
+            "adaptive_radiation_shielding",
+            "closed_loop_combat_life_support",
+            "self_sealing_combat_skins",
+        ),
+    ),
+    "special_forces": (
+        (
+            "fieldcraft_manuals",
+            "urban_breaching",
+            "subterranean_route_reconnaissance",
+            "urban_vertical_access_rigs",
+            "vertical_assault_training",
+            "augmented_special_forces",
+        ),
+        (
+            "fieldcraft_manuals",
+            "radiation_patrols",
+            "combat_recon_drones",
+            "low_observable_infiltration_suits",
+            "autonomous_scout_microdrones",
+            "multispectral_concealment_discipline",
+            "deep_recon_cells",
+            "distributed_recon_sensor_caches",
+            "augmented_special_forces",
+        ),
+    ),
+    "resources": (
+        (
+            "salvage_metallurgy",
+            "grid_rationing",
+            "refinery_reclamation",
+            "plasma_scrap_separation",
+            "synthetic_resource_cycles",
+            "carbon_feedstock_cracking",
+            "strategic_material_recovery",
+        ),
+        (
+            "salvage_metallurgy",
+            "spectral_ore_sorting",
+            "borehole_sensor_grids",
+            "automated_deep_mining",
+            "strategic_material_recovery",
+        ),
+        (
+            "salvage_metallurgy",
+            "logistics_hub_networks",
+            "microbial_tailings_leaching",
+            "rare_earth_solvent_loops",
+            "strategic_element_reclamation",
+            "strategic_material_recovery",
+        ),
+    ),
+    "signals": (
+        (
+            "mesh_command_networks",
+            "field_radio_networks",
+            "encryption_rebuild",
+            "frequency_hopping_field_sets",
+            "battlefield_analytics",
+            "battlefield_sensor_fusion",
+            "self_healing_tactical_networks",
+            "memetic_security_protocols",
+        ),
+        (
+            "mesh_command_networks",
+            "field_radio_networks",
+            "encryption_rebuild",
+            "signal_intercept_arrays",
+            "counterintelligence_filters",
+            "memetic_security_protocols",
+        ),
+    ),
+    "computing": (
+        (
+            "electromechanical_relays",
+            "recovered_data_archives",
+            "recovered_semiconductors",
+            "hardened_computers",
+            "error_correcting_field_computers",
+            "strategic_digital_twins",
+            "strategic_ai_coordination",
+        ),
+        (
+            "electromechanical_relays",
+            "recovered_data_archives",
+            "recovered_semiconductors",
+            "hardened_computers",
+            "predictive_logistics",
+            "operational_ai_assistants",
+            "strategic_ai_coordination",
+        ),
+    ),
+    "power": (
+        (
+            "local_grid_restoration",
+            "substation_networks",
+            "phase_synchronized_substations",
+            "superconducting_power_busbars",
+            "continental_load_balancing",
+            "emergency_core_suppression",
+        ),
+        (
+            "local_grid_restoration",
+            "radiation_mapping",
+            "reactor_safety_protocols",
+            "load_following_microreactors",
+            "microreactor_blocks",
+            "emergency_core_suppression",
+        ),
+    ),
+    "officer_training": (
+        (
+            "reconstituted_staff_academies",
+            "assault_command_curriculum",
+            "operational_planning_exercises",
+            "rotational_front_commands",
+            "adaptive_general_staff",
+        ),
+        (
+            "reconstituted_staff_academies",
+            "defensive_command_curriculum",
+            "theater_logistics_wargames",
+            "predictive_staff_colleges",
+            "adaptive_general_staff",
+        ),
+    ),
+    "artillery": (
+        (
+            "restored_field_artillery",
+            "recoil_recovery",
+            "modular_gun_carriages",
+            "electrohydraulic_gun_laying",
+            "assisted_projectiles",
+            "uncrewed_howitzer_sections",
+            "autonomous_battery_network",
+        ),
+        (
+            "restored_field_artillery",
+            "recoil_recovery",
+            "modular_gun_carriages",
+            "smart_fire_control",
+            "counterbattery_radar_links",
+            "drone_spotted_batteries",
+            "autonomous_battery_network",
+        ),
+    ),
+    "anti_tank": (
+        (
+            "salvaged_at_guns",
+            "shaped_charges",
+            "tandem_warheads",
+            "scrap_at_launchers",
+            "coil_at_systems",
+            "superconducting_coil_barrels",
+            "hypervelocity_at_networks",
+        ),
+        (
+            "salvaged_at_guns",
+            "shaped_charges",
+            "tandem_warheads",
+            "imaging_infrared_seekers",
+            "top_attack_munitions",
+            "hypervelocity_at_networks",
+        ),
+    ),
+    "anti_air": (
+        (
+            "improvised_air_defense",
+            "radar_laying",
+            "proximity_fuzes",
+            "stabilized_autocannon_mounts",
+            "point_defense_aa",
+            "high_energy_laser_turrets",
+            "directed_energy_air_defense",
+        ),
+        (
+            "improvised_air_defense",
+            "radar_laying",
+            "proximity_fuzes",
+            "integrated_short_range_missile_cells",
+            "networked_air_defense",
+            "predictive_airspace_denial_grid",
+            "directed_energy_air_defense",
+        ),
+    ),
+    "recon_armor": (
+        (
+            "restored_armored_chassis",
+            "light_suspension",
+            "modular_recon_chassis",
+            "sealed_electric_scout_drives",
+            "signature_management_skins",
+            "autonomous_recon_screen",
+        ),
+        (
+            "restored_armored_chassis",
+            "light_suspension",
+            "modular_recon_chassis",
+            "drone_recon_swarms",
+            "multispectral_recon_suites",
+            "unmanned_recon_vehicles",
+            "autonomous_recon_screen",
+        ),
+    ),
+    "mechanized_mobility": (
+        (
+            "armored_carrier_program",
+            "protected_transport_standards",
+            "sealed_dismount_compartments",
+            "escort_protection_arrays",
+            "infantry_combat_vehicle_program",
+            "unmanned_weapon_stations",
+            "networked_mechanized_cells",
+        ),
+        (
+            "armored_carrier_program",
+            "protected_transport_standards",
+            "sealed_dismount_compartments",
+            "infantry_combat_vehicle_program",
+            "cooperative_dismount_control",
+            "networked_mechanized_cells",
+        ),
+    ),
+    "combat_armor": (
+        (
+            "recovered_medium_chassis",
+            "remote_weapon_stations",
+            "composite_armor_arrays",
+            "semi_autonomous_combat_modules",
+            "hard_kill_protection_arrays",
+            "adaptive_suspension_control",
+            "distributed_battlegroup",
+        ),
+        (
+            "recovered_medium_chassis",
+            "remote_weapon_stations",
+            "electric_turret_drives",
+            "semi_autonomous_combat_modules",
+            "adaptive_fire_control",
+            "multispectral_gunner_sights",
+            "electromagnetic_main_guns",
+            "distributed_battlegroup",
+        ),
+        (
+            "recovered_medium_chassis",
+            "remote_weapon_stations",
+            "electric_turret_drives",
+            "semi_autonomous_combat_modules",
+            "limited_battle_ai",
+            "distributed_battlegroup",
+        ),
+    ),
+    "heavy_armor": (
+        (
+            "heavy_recovery_frames",
+            "reinforced_powertrains",
+            "heavy_composite_cores",
+            "heavy_platform_cores",
+            "active_mass_balancing_suspension",
+            "autonomous_breakthrough_platforms",
+            "electromagnetic_siege_mortars",
+            "siege_platform_networks",
+        ),
+        (
+            "heavy_recovery_frames",
+            "reinforced_powertrains",
+            "remote_repair_sections",
+            "siege_platform_networks",
+        ),
+    ),
 }
 
-XOR_INDEX_GROUPS_BY_BRANCH = {
-    "production": ((5, 6),),
-    "industry_organization": ((1, 2),),
-    "computing": ((4, 5),),
-    "artillery": ((len(ARTILLERY_BRANCH.techs) - 4, len(ARTILLERY_BRANCH.techs) - 3),),
-    "combat_armor": ((len(COMBAT_ARMOR_BRANCH.techs) - 4, len(COMBAT_ARMOR_BRANCH.techs) - 3),),
-    "fighter": ((len(FIGHTER_BRANCH.techs) - 4, len(FIGHTER_BRANCH.techs) - 3),),
+PROGRAMME_SYNTHESIS = {
+    "small_arms": ('networked_service_rifles',),
+    "squad_weapons": ('swarm_fireteams',),
+    "anti_tank_infantry": ('distributed_anti_armor_net',),
+    "night_combat": ('nocturnal_combat_mesh',),
+    "signals": ('memetic_security_protocols',),
+    "computing": ('strategic_ai_coordination',),
+    "artillery": ('autonomous_battery_network',),
+    "anti_tank": ("hypervelocity_at_networks",),
+    "anti_air": ("directed_energy_air_defense",),
+    "recon_armor": ('autonomous_recon_screen',),
+    "mechanized_mobility": ('networked_mechanized_cells',),
+    "combat_armor": ('distributed_battlegroup',),
+    "heavy_armor": ("siege_platform_networks",),
 }
+
+
+def programme_graph(branch: Branch) -> BranchGraph:
+    """Use explicit capability paths, never distribute unrelated nodes by index."""
+    indices = {tech.key: index for index, tech in enumerate(branch.techs)}
+    routes = PROGRAMME_ROUTES[branch.key]
+    membership = {key: [] for key in indices}
+    edges: list[tuple[int, int]] = []
+    lane_ids = (0, 2) if len(routes) == 2 else tuple(range(len(routes)))
+    for lane, route in zip(lane_ids, routes, strict=True):
+        for key in route:
+            if key not in indices:
+                raise ValueError(f"{branch.key}: unknown programme technology {key}")
+            membership[key].append(lane)
+        edges.extend(chain_edges(tuple(indices[key] for key in route)))
+    missing = [key for key, lanes in membership.items() if not lanes]
+    if missing:
+        raise ValueError(f"{branch.key}: technologies outside programme routes: {missing}")
+    lanes = tuple(
+        values[0] if len(values) == 1 else 1
+        for values in membership.values()
+    )
+    synthesis = tuple(indices[key] for key in PROGRAMME_SYNTHESIS.get(branch.key, ()))
+    return make_graph(lanes, edges, synthesis)
 
 
 def graph_for_branch(branch: Branch) -> BranchGraph:
-    if branch.key in {"officer_training", "bomber_maritime"}:
+    count = len(branch.techs)
+    if branch.key in PROGRAMME_ROUTES:
+        graph = programme_graph(branch)
+    elif branch.key == "production":
+        # Either tooling specialization opens the shared maintenance programme.
         graph = make_graph(
-            (1, 0, 2, 0, 2, 0, 2, 1),
-            [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 6), (5, 7), (6, 7)],
-            (7,),
+            (1, 1, 1, 1, 1, 0, 2, 1, 1, 1),
+            chain_edges((0, 1, 2, 3, 4)) + [(4, 5), (4, 6), (5, 7), (6, 7), (7, 8), (8, 9)],
+        )
+    elif branch.key == "industry_organization":
+        graph = make_graph(
+            (1, 0, 2, 0, 2, 0, 2, 0, 2),
+            [(0, 1), (0, 2)] + chain_edges((1, 3, 5, 7)) + chain_edges((2, 4, 6, 8)),
         )
     elif branch.key == "advanced_materials":
-        graph = make_graph(
-            (1, 0, 2, 0, 2, 1),
-            [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 5)],
-            (5,),
-        )
-    elif branch.key == "production":
-        graph = temporary_production_graph()
-    elif branch.key == "industry_organization":
-        graph = industry_organization_graph()
-    elif branch.key == "computing":
-        graph = compact_computing_graph()
-    elif branch.key in {"reconstruction", "resources", "signals", "power"}:
-        graph = variable_dual_synthesis_graph(len(branch.techs))
-    elif branch.key == "small_arms":
-        # Kept on its curated sixteen-node shape: this tab carries hand-authored
-        # engineering names and technical descriptions per node.
-        graph = infantry_integration_graph()
-    elif branch.key in {
-        "squad_weapons",
-        "protection",
-        "special_forces",
-        "recon_armor",
-        "heavy_armor",
-    }:
-        graph = parallel_programmes_graph(len(branch.techs))
-    elif branch.key == "anti_tank_infantry":
-        graph = compact_two_row_synthesis_graph()
-    elif branch.key == "night_combat":
-        graph = compact_dual_synthesis_graph()
-    elif branch.key in {"field_support", "anti_tank", "strategic_air", "subsurface"}:
-        graph = double_diamond_graph()
-    elif branch.key in {"logistics", "anti_air", "naval_support"}:
-        graph = alternating_diamonds_graph()
-    elif branch.key in {"rail", "air_support", "surface_fleet"}:
-        graph = dual_synthesis_graph()
-    elif branch.key == "recon_armor":
-        graph = reconnaissance_armor_programmes_graph()
-    elif branch.key == "mechanized_mobility":
-        graph = mechanized_mobility_programmes_graph()
-    elif branch.key == "combat_armor":
-        graph = combat_armor_programmes_graph()
-    elif branch.key == "heavy_armor":
-        graph = heavy_armor_programmes_graph()
-    elif branch.key in {"artillery", "fighter"}:
-        graph = permanent_tail_choice_graph(len(branch.techs))
-    elif branch.key == "forbidden_energy":
-        graph = make_graph(
-            (1, 1, 1, 0, 2, 1),
-            [(0, 1), (1, 2), (2, 3), (2, 4), (3, 5), (4, 5)],
-            (5,),
-        )
-    elif branch.key == "forbidden_automation":
-        graph = make_graph((1, 0, 2), [(0, 1), (0, 2)])
+        graph = make_graph((1, 0, 2, 0, 2, 1), [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 5)], (5,))
+    elif branch.key == "bomber_maritime":
+        graph = make_graph((1, 0, 2, 0, 2, 0, 2, 1), [(0, 1), (0, 2), (1, 3), (2, 4), (3, 5), (4, 6), (5, 7), (6, 7)], (7,))
     else:
-        graph = linear_graph(len(branch.techs))
-    if len(graph.lanes) != len(branch.techs):
-        raise ValueError(
-            f"{branch.key}: graph has {len(graph.lanes)} nodes for {len(branch.techs)} techs"
-        )
-    for source, targets in enumerate(graph.successors):
-        for target in targets:
-            if branch.years[target] <= branch.years[source]:
-                raise ValueError(f"{branch.key}: non-chronological edge {source}->{target}")
+        graph = linear_graph(count)
+    if len(graph.lanes) != count:
+        raise ValueError(f"{branch.key}: graph and research rows differ in length")
+    for start, targets in enumerate(graph.successors):
+        for end in targets:
+            if branch.years[start] >= branch.years[end]:
+                raise ValueError(f"{branch.key}: non-chronological edge {start}->{end}")
     return graph
 
 
 BRANCH_GRAPHS = {branch.key: graph_for_branch(branch) for branch in BRANCHES}
-
-# Compatibility name retained for older validator imports.  Geometry is no
-# longer selected from a global pattern library.
-GRAPH_PATTERN_BY_BRANCH = {branch.key: "explicit" for branch in BRANCHES}
 
 
 CURRENT_TECH_IDS = {tech.id for branch in BRANCHES for tech in branch.techs}
@@ -1950,7 +3037,7 @@ ENABLE_EQUIPMENT = {
 }
 
 
-# Production milestones retain existing technology IDs for saved campaigns.
+# Production milestones identify the equipment families used by scripted armies.
 NAVAL_AIR_UNLOCKS = {
     "coastal_patrols": ("ADISCORD_escort_ship_2155", "basic_destroyer"),
     "variable_depth_sonar": ("ADISCORD_escort_ship_2163", "improved_destroyer"),
@@ -1978,84 +3065,31 @@ NAVAL_AIR_UNLOCKS = {
 }
 ENABLE_EQUIPMENT.update({f"ADISCORD_tech_{key}": (equipment,) for key, (equipment, _) in NAVAL_AIR_UNLOCKS.items()})
 ENABLE_EQUIPMENT["ADISCORD_tech_twin_engine_aircraft"] = ("ADISCORD_bomber_2160", "ADISCORD_naval_aircraft_2160")
+ENABLE_EQUIPMENT = {key: value for key, value in ENABLE_EQUIPMENT.items() if key in CURRENT_TECH_IDS}
 
 
 # Cross-row integration is intentionally dependency-only: drawing paths
 # between separate grid boxes is fragile in HOI4, while dependencies provide
 # the required AND gate in the technology tooltip and research logic.
 EXTRA_TECH_DEPENDENCIES = {
-    # Short side programmes attach to contemporary core capabilities.  Long
-    # cross-grid cables are deliberately avoided because HOI4 renders them
-    # unreliably; dependencies still provide the gameplay gate and tooltip.
-    "ADISCORD_tech_trauma_registry_networks": (
-        "ADISCORD_tech_combat_engineering_sections",
-    ),
-    "ADISCORD_tech_battle_damage_survey_teams": (
-        "ADISCORD_tech_standardized_field_tool_chests",
-    ),
-    "ADISCORD_tech_spectrum_threat_libraries": (
-        "ADISCORD_tech_frequency_hopping_field_sets",
-        "ADISCORD_tech_stabilized_autocannon_mounts",
-    ),
-    "ADISCORD_tech_restored_airlift_planning": (
-        "ADISCORD_tech_composite_wing_spars",
-    ),
-    "ADISCORD_tech_shallow_water_navigation_tables": (
-        "ADISCORD_tech_modular_escort_combat_systems",
-    ),
-    "ADISCORD_tech_teleoperated_scout_carts": (
-        "ADISCORD_tech_sealed_electric_scout_drives",
-        "ADISCORD_tech_hardened_computers",
-    ),
-    "ADISCORD_tech_armored_carrier_program": (
-        "ADISCORD_tech_sealed_electric_scout_drives",
-        "ADISCORD_tech_remote_weapon_stations",
-    ),
-    "ADISCORD_tech_reconstituted_staff_academies": (
-        "ADISCORD_tech_hardened_computers",
-    ),
-    "ADISCORD_tech_remote_weapon_tripods": ("ADISCORD_tech_modular_rifle_kits",),
-    "ADISCORD_tech_autonomous_support_weapons": ("ADISCORD_tech_programmable_ammunition",),
-    "ADISCORD_tech_swarm_fireteams": ("ADISCORD_tech_networked_service_rifles",),
-    # Late industrial automation is an information-system project, not a
-    # parallel percentage ladder.  A production beeline therefore picks up a
-    # compact set of useful computing and secure-network technologies without
-    # forcing the player through an entire second tree.
-    "ADISCORD_tech_autonomous_factory_cells": (
-        "ADISCORD_tech_predictive_logistics",
-        "ADISCORD_tech_battlefield_analytics",
-    ),
-    "ADISCORD_tech_distributed_manufacturing": (
-        "ADISCORD_tech_strategic_digital_twins",
-        "ADISCORD_tech_self_healing_tactical_networks",
-    ),
-    # Late autonomous and directed-energy systems are integrations, not
-    # isolated percentage ladders.  Cross-folder paths are deliberately not
-    # drawn because the HOI4 grid renderer handles them unreliably.
-    "ADISCORD_tech_high_energy_laser_turrets": (
-        "ADISCORD_tech_superconducting_power_busbars",
-    ),
-    "ADISCORD_tech_autonomous_breakthrough_platforms": (
-        "ADISCORD_tech_operational_ai_assistants",
-    ),
-    "ADISCORD_tech_autonomous_strike_wings": (
-        "ADISCORD_tech_operational_ai_assistants",
-    ),
-    "ADISCORD_tech_autonomous_submarines": (
-        "ADISCORD_tech_operational_ai_assistants",
-    ),
-    "ADISCORD_tech_swarm_coordinated_fire_support": (
-        "ADISCORD_tech_battlefield_sensor_fusion",
-    ),
-    "ADISCORD_tech_distributed_battlegroup": (
-        "ADISCORD_tech_self_healing_tactical_networks",
-    ),
-    "ADISCORD_tech_siege_platform_networks": (
-        "ADISCORD_tech_battlefield_sensor_fusion",
-    ),
-    "ADISCORD_tech_distributed_sea_control": (
-        "ADISCORD_tech_self_healing_tactical_networks",
-    ),
+    "ADISCORD_tech_casualty_evacuation": ('ADISCORD_tech_combat_engineering_sections',),
+    "ADISCORD_tech_battle_damage_survey_teams": ('ADISCORD_tech_standardized_field_tool_chests',),
+    "ADISCORD_tech_spectrum_threat_libraries": ('ADISCORD_tech_frequency_hopping_field_sets',),
+    "ADISCORD_tech_restored_airlift_planning": ('ADISCORD_tech_composite_wing_spars',),
+    "ADISCORD_tech_shallow_water_navigation_tables": ('ADISCORD_tech_modular_escort_combat_systems',),
+    "ADISCORD_tech_teleoperated_scout_carts": ('ADISCORD_tech_sealed_electric_scout_drives', 'ADISCORD_tech_hardened_computers'),
+    "ADISCORD_tech_armored_carrier_program": ('ADISCORD_tech_sealed_electric_scout_drives', 'ADISCORD_tech_remote_weapon_stations'),
+    "ADISCORD_tech_reconstituted_staff_academies": ('ADISCORD_tech_hardened_computers',),
+    "ADISCORD_tech_railway_gun_reactivation": ('ADISCORD_tech_armored_rail_convoys',),
+    "ADISCORD_tech_remote_weapon_tripods": ('ADISCORD_tech_modular_rifle_kits',),
+    "ADISCORD_tech_autonomous_support_weapons": ('ADISCORD_tech_programmable_ammunition',),
+    "ADISCORD_tech_swarm_fireteams": ('ADISCORD_tech_networked_service_rifles',),
+    "ADISCORD_tech_autonomous_factory_cells": ('ADISCORD_tech_predictive_logistics',),
+    "ADISCORD_tech_distributed_manufacturing": ('ADISCORD_tech_strategic_digital_twins',),
+    "ADISCORD_tech_high_energy_laser_turrets": ('ADISCORD_tech_superconducting_power_busbars',),
+    "ADISCORD_tech_autonomous_breakthrough_platforms": ('ADISCORD_tech_operational_ai_assistants',),
+    "ADISCORD_tech_autonomous_strike_wings": ('ADISCORD_tech_operational_ai_assistants',),
+    "ADISCORD_tech_autonomous_submarines": ('ADISCORD_tech_operational_ai_assistants',),
 }
 
 
@@ -2103,7 +3137,7 @@ COMMON_STARTING_ROOTS = tuple(
         for branch_key in branch_keys
         # These programmes begin with research during the campaign. Making
         # their UI headings prominent must not grant their roots at startup.
-        if branch_key not in {"officer_training", "bomber_maritime"}
+        if branch_key not in {"officer_training", "bomber_maritime", "combat_medicine"}
     )
 )
 
@@ -2161,7 +3195,7 @@ STARTING_TECH_PROFILE_SEEDS = {
         "ADISCORD_tech_frequency_hopping_field_sets",
         "ADISCORD_tech_hardened_computers",
         "ADISCORD_tech_phase_synchronized_substations",
-        "ADISCORD_tech_caseless_ammunition_trials",
+        "ADISCORD_tech_smart_recoil_compensators",
         "ADISCORD_tech_standardized_field_tool_chests",
         "ADISCORD_tech_electrohydraulic_gun_laying",
         "ADISCORD_tech_electric_turret_drives",
@@ -2169,6 +3203,11 @@ STARTING_TECH_PROFILE_SEEDS = {
         "ADISCORD_tech_modular_escort_combat_systems",
     ),
 }
+
+STARTING_TECH_PROFILE_SEEDS["land"] += (
+    "ADISCORD_tech_casualty_evacuation",
+    "ADISCORD_tech_urban_breaching",
+)
 
 STARTING_TECH_PROFILES = {
     profile: technology_prerequisite_closure(seeds)
@@ -2218,7 +3257,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "MON": ("industrial", "institutional", "land", "air"),
     "MZR": ("fragment_low_tech", "energy"),
     "NAM": ("fragment_low_tech", "naval"),
-    "NOD": ("industrial", "energy", "institutional", "land", "air", "naval"),
+    "NOD": ("industrial", "energy", "institutional", "land", "air", "naval", "armored_core"),
     "NVR": ("fragment_low_tech", "land"),
     "ORV": ("fragment_low_tech", "land"),
     "OSF": ("fragment_low_tech",),
@@ -2338,6 +3377,11 @@ STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
 
 
 ENABLE_SUBUNITS = {
+    "ADISCORD_tech_belt_fed_recovery": ("ADISCORD_regimental_fire_support",),
+    "ADISCORD_tech_portable_at_cells": ("ADISCORD_regimental_anti_tank",),
+    "ADISCORD_tech_radar_laying": ("ADISCORD_regimental_anti_air",),
+    "ADISCORD_tech_urban_breaching": ("ADISCORD_regimental_pioneers",),
+    "ADISCORD_tech_combat_recon_drones": ("ADISCORD_regimental_drone_observers",),
     "ADISCORD_tech_remote_weapon_tripods": ("ADISCORD_assault_infantry",),
     # Thunder at Our Gates Army HQ modules.  common/technologies is replaced,
     # so the vanilla unlocks must be attached to A-Discord's own technology
@@ -2432,12 +3476,6 @@ BUILDING_RESOURCE_UPGRADES = {
         ("ADISCORD_rare_components_plant", "rare_components", 1),
         ("ADISCORD_rare_alloy_foundry", "rare_alloys", 1),
     ),
-    "ADISCORD_tech_high_pressure_polymer_synthesis": (
-        ("ADISCORD_metallurgical_complex", "steel", 2),
-    ),
-    "ADISCORD_tech_isotope_selective_refining": (
-        ("ADISCORD_metallurgical_complex", "steel", 2),
-    ),
     "ADISCORD_tech_rare_earth_solvent_loops": (
         ("ADISCORD_electrolysis_complex", "aluminium", 2),
         ("synthetic_refinery", "rubber", 1),
@@ -2447,9 +3485,6 @@ BUILDING_RESOURCE_UPGRADES = {
         ("synthetic_refinery", "rubber", 2),
     ),
     "ADISCORD_tech_automated_deep_mining": (
-        ("ADISCORD_strategic_mining_complex", "tungsten", 1),
-    ),
-    "ADISCORD_tech_urban_mine_cartography": (
         ("ADISCORD_strategic_mining_complex", "tungsten", 1),
     ),
 }
@@ -2485,6 +3520,9 @@ RESEARCH_PAYOFFS = {
     "ADISCORD_tech_terrain_adaptive_cargo_carriers": ("support_tech", 0.30, 1),
 }
 
+RESEARCH_PAYOFFS = {
+    key: value for key, value in RESEARCH_PAYOFFS.items() if key in CURRENT_TECH_IDS
+}
 for _payoff_id, (_, _payoff_bonus, _payoff_uses) in RESEARCH_PAYOFFS.items():
     if _payoff_id not in TECH_POSITION_BY_ID:
         raise ValueError(f"Research payoff targets unknown technology {_payoff_id}")
@@ -2535,1706 +3573,26 @@ def n(value: float) -> str:
     return f"{value:.3f}".rstrip("0").rstrip(".")
 
 
-PROGRAMME_INDEX_SETS = {
-    "production": {
-        "flexible_tooling": (5, 7, 9, 12, 14, 16),
-        "volume_automation": (6, 8, 10, 13, 15, 17),
-    },
-    "resources": {
-        "primary_extraction": (5, 7, 9, 12, 14, 16),
-        "circular_recovery": (6, 8, 10, 13, 15, 17),
-    },
-    "administration": {
-        "local_services": (5, 7, 9, 12, 14, 16),
-        "automated_state": (6, 8, 10, 13, 15, 17),
-    },
-    "civil_resilience": {
-        "emergency_services": (5, 7, 9, 12, 14, 16),
-        "distributed_resilience": (6, 8, 10, 13, 15, 17),
-    },
-    "small_arms": {
-        "rifles": (5, 7, 9, 10, 15, 18),
-        "ammunition": (3, 6, 11, 13, 14, 16),
-        "optics": (4, 8, 12, 17),
-    },
-    "squad_weapons": {
-        "explosive": (1, 2, 3, 5, 11, 16),
-        "command": (4, 6, 8, 9, 12, 15),
-        "automatic": (7, 10, 13, 14, 17),
-    },
-    "protection": {
-        "body": (1, 3, 6, 8, 9, 14),
-        "medicine": (4, 10, 11, 15),
-        "environment": (2, 5, 7, 12, 13, 16),
-    },
-    "special_forces": {
-        "urban": (1, 3, 5, 16),
-        "reconnaissance": (2, 4, 6, 7, 8, 11, 13, 14, 15),
-        "airborne": (9, 10, 12, 17),
-    },
-    "field_support": {
-        "field_services": (5, 7, 9, 12, 14, 16),
-        "engineering": (6, 8, 10, 13, 15, 17),
-    },
-    "logistics": {
-        "resilience": (5, 7, 9, 11, 13, 15, 17),
-        "automation": (6, 8, 10, 12, 14, 16, 18),
-    },
-    "rail": {
-        "network": (5, 7, 9, 12, 14, 16),
-        "railway_artillery": (6, 8, 10, 13, 15, 17),
-    },
-    "anti_tank": {
-        "missile": (5, 7, 9),
-        "seeker": (6, 8, 10),
-        "ambush": (12, 14, 16),
-        "coil": (13, 15, 17),
-    },
-    "artillery": {
-        "fire_control": (5, 7, 9),
-        "guided_munitions": (6, 8, 10),
-        "mass_fire": (12, 14, 16),
-        "autonomous_battery": (13, 15, 17),
-    },
-    "anti_air": {
-        "sensors": (5, 7, 9, 12, 14, 16),
-        "directed_energy": (6, 8, 10, 13, 15, 17),
-    },
-    "recon_armor": {
-        "active_sensors": (5, 7, 9),
-        "silent_mobility": (6, 8, 10),
-        "signature_control": (12, 14, 16),
-        "autonomous_screen": (13, 15, 17),
-    },
-    "combat_armor": {
-        "armored_offense": (5, 7, 9, 11, 13, 15, 17),
-        "armored_survival": (6, 8, 10, 12, 14, 16, 18),
-    },
-    "heavy_armor": {
-        "survivability": (5, 7, 9, 12, 14, 16),
-        "siege": (6, 8, 10, 13, 15, 17),
-    },
-    "air_support": {
-        "precision": (5, 7, 9, 12, 14, 16),
-        "persistent": (6, 8, 10, 13, 15, 17),
-    },
-    "fighter": {
-        "flight_control": (5, 7, 9),
-        "interception": (6, 8, 10),
-        "endurance": (12, 14, 16),
-        "wingmen": (13, 15, 17),
-    },
-    "naval_support": {
-        "sensors": (5, 7, 9, 12, 14, 16),
-        "unmanned_screen": (6, 8, 10, 13, 15, 17),
-    },
-    "surface_fleet": {
-        "fleet_strike": (5, 7, 9, 11, 13, 15, 17),
-        "fleet_defense": (6, 8, 10, 12, 14, 16, 18),
-    },
-    "subsurface": {
-        "silent_hunter": (5, 7, 9),
-        "torpedo_boat": (6, 8, 10),
-        "deep_network": (12, 14, 16),
-        "autonomous_pack": (13, 15, 17),
-    },
-}
-
-
-def programme_for(branch_key: str, index: int) -> tuple[str | None, int]:
-    for programme, indices in PROGRAMME_INDEX_SETS.get(branch_key, {}).items():
-        if index in indices:
-            return programme, indices.index(index)
-    return None, 0
-
-
-def integrated_capstone_effects(
-    branch_key: str,
-    small: float,
-    medium: float,
-    organisation: float,
-) -> tuple[str, ...] | None:
-    packages = {
-        "production": (
-            f"industrial_capacity_factory = {n(medium)}",
-            f"production_factory_efficiency_gain_factor = {n(small)}",
-            f"line_change_production_efficiency_factor = {n(medium)}",
-        ),
-        "resources": (
-            f"local_resources_factor = {n(medium)}",
-            f"fuel_gain_factor = {n(small)}",
-            f"production_lack_of_resource_penalty_factor = -{n(small)}",
-        ),
-        "administration": (
-            f"research_speed_factor = {n(small)}",
-            f"consumer_goods_factor = -{n(small / 2)}",
-            f"political_power_gain = {n(small / 2)}",
-        ),
-        "small_arms": (
-            f"category_all_infantry = {{ soft_attack = {n(medium)} hard_attack = {n(medium)} breakthrough = {n(small)} }}",
-        ),
-        "civil_resilience": (
-            f"industry_repair_factor = {n(medium)}",
-            f"stability_factor = {n(small)}",
-            f"production_speed_infrastructure_factor = {n(small)}",
-        ),
-        "squad_weapons": (
-            f"category_all_infantry = {{ soft_attack = {n(medium)} defense = {n(medium)} max_organisation = {n(organisation)} }}",
-        ),
-        "protection": (
-            f"category_all_infantry = {{ defense = {n(medium)} default_morale = {n(small)} supply_consumption = -{n(small / 2)} }}",
-        ),
-        "special_forces": (
-            f"category_special_forces = {{ breakthrough = {n(medium)} defense = {n(medium)} max_organisation = {n(organisation)} }}",
-        ),
-        "field_support": (
-            f"category_support_battalions = {{ defense = {n(medium)} default_morale = {n(small)} max_organisation = {n(organisation)} }}",
-        ),
-        "logistics": (
-            f"supply_consumption_factor = -{n(medium)}",
-            f"land_reinforce_rate = {n(small)}",
-            f"org_loss_when_moving = -{n(small)}",
-        ),
-        "rail": (
-            f"artillery = {{ soft_attack = {n(medium)} reliability = {n(small)} }}",
-            f"industry_repair_factor = {n(medium)}",
-        ),
-        "artillery": (
-            f"artillery = {{ soft_attack = {n(medium)} hard_attack = {n(medium)} reliability = {n(small)} }}",
-            f"coordination_bonus = {n(small)}",
-        ),
-        "anti_tank": (
-            f"category_anti_tank = {{ hard_attack = {n(medium)} ap_attack = {n(medium)} reliability = {n(small)} }}",
-        ),
-        "anti_air": (
-            f"anti_air = {{ air_attack = {n(medium)} reliability = {n(medium)} }}",
-            f"air_intercept_efficiency = {n(small)}",
-        ),
-        "recon_armor": (
-            f"category_all_armor = {{ maximum_speed = {n(small)} reliability = {n(medium)} defense = {n(medium)} }}",
-        ),
-        "combat_armor": (
-            f"category_all_armor = {{ breakthrough = {n(medium)} armor_value = {n(medium)} reliability = {n(small)} }}",
-        ),
-        "heavy_armor": (
-            f"category_all_armor = {{ armor_value = {n(medium)} breakthrough = {n(medium)} reliability = {n(small)} }}",
-        ),
-        "air_support": (
-            f"ground_attack_factor = {n(medium)}",
-            f"air_mission_efficiency = {n(medium)}",
-            f"air_accidents_factor = -{n(small)}",
-        ),
-        "fighter": (
-            f"air_intercept_efficiency = {n(medium)}",
-            f"air_mission_efficiency = {n(medium)}",
-            f"air_accidents_factor = -{n(small)}",
-        ),
-        "naval_support": (
-            f"convoy_escort_efficiency = {n(medium)}",
-            f"naval_detection = {n(medium)}",
-            f"naval_coordination = {n(small)}",
-        ),
-        "surface_fleet": (
-            f"naval_hit_chance = {n(medium)}",
-            f"naval_coordination = {n(medium)}",
-            f"naval_detection = {n(small)}",
-        ),
-        "subsurface": (
-            f"naval_detection = {n(medium)}",
-            f"naval_mines_effect_reduction = {n(medium)}",
-            f"naval_coordination = {n(small)}",
-        ),
-    }
-    return packages.get(branch_key)
-
-
-def integrated_stage_effects(
-    branch_key: str,
-    stage: int,
-    small: float,
-    medium: float,
-    organisation: float,
-) -> tuple[str, ...] | None:
-    """Reward intermediate programme convergence with a mixed capability."""
-
-    packages = {
-        "production": (
-            (
-                f"industrial_capacity_factory = {n(small)}",
-                f"production_factory_efficiency_gain_factor = {n(medium)}",
-            ),
-            (
-                f"production_factory_max_efficiency_factor = {n(medium)}",
-                f"line_change_production_efficiency_factor = {n(medium)}",
-            ),
-        ),
-        "resources": (
-            (
-                f"local_resources_factor = {n(medium)}",
-                f"production_lack_of_resource_penalty_factor = -{n(small)}",
-            ),
-            (
-                f"fuel_gain_factor = {n(medium)}",
-                f"industry_repair_factor = {n(small)}",
-            ),
-        ),
-        "administration": (
-            (
-                f"research_speed_factor = {n(small)}",
-                f"political_power_gain = {n(small)}",
-            ),
-            (
-                f"consumer_goods_factor = -{n(small)}",
-                f"coordination_bonus = {n(medium)}",
-            ),
-        ),
-        "field_support": (
-            (
-                f"engineer = {{ entrenchment = {n(organisation / 2)} defense = {n(small)} }}",
-                f"field_hospital = {{ casualty_trickleback = {n(small)} }}",
-            ),
-            (
-                f"maintenance_company = {{ reliability = {n(medium)} }}",
-                f"category_support_battalions = {{ max_organisation = {n(organisation)} }}",
-            ),
-        ),
-        "rail": (
-            (
-                f"industry_repair_factor = {n(medium)}",
-                f"artillery = {{ reliability = {n(small)} }}",
-            ),
-            (
-                f"supply_consumption_factor = -{n(small)}",
-                f"artillery = {{ soft_attack = {n(medium)} }}",
-            ),
-        ),
-        "artillery": (
-            (
-                f"artillery = {{ soft_attack = {n(medium)} reliability = {n(small)} }}",
-                f"planning_speed = {n(small)}",
-            ),
-            (
-                f"artillery = {{ hard_attack = {n(medium)} breakthrough = {n(small)} }}",
-                f"coordination_bonus = {n(small)}",
-            ),
-        ),
-        "anti_air": (
-            (
-                f"anti_air = {{ air_attack = {n(medium)} reliability = {n(small)} }}",
-                f"air_intercept_efficiency = {n(small)}",
-            ),
-            (
-                f"anti_air = {{ air_attack = {n(medium)} defense = {n(small)} }}",
-                f"coordination_bonus = {n(small)}",
-            ),
-        ),
-        "heavy_armor": (
-            (
-                f"category_all_armor = {{ armor_value = {n(medium)} breakthrough = {n(small)} }}",
-            ),
-            (
-                f"category_all_armor = {{ reliability = {n(medium)} defense = {n(small)} }}",
-            ),
-        ),
-        "fighter": (
-            (
-                f"air_intercept_efficiency = {n(medium)}",
-                f"air_agility_factor = {n(small)}",
-            ),
-            (
-                f"air_mission_efficiency = {n(medium)}",
-                f"air_accidents_factor = -{n(small)}",
-            ),
-        ),
-        "air_support": (
-            (
-                f"ground_attack_factor = {n(medium)}",
-                f"air_range_factor = {n(small)}",
-            ),
-            (
-                f"air_mission_efficiency = {n(medium)}",
-                f"air_accidents_factor = -{n(small)}",
-            ),
-        ),
-        "naval_support": (
-            (
-                f"naval_detection = {n(medium)}",
-                f"convoy_escort_efficiency = {n(small)}",
-            ),
-            (
-                f"naval_mines_effect_reduction = {n(medium)}",
-                f"naval_coordination = {n(small)}",
-            ),
-        ),
-    }
-    stages = packages.get(branch_key)
-    return stages[stage % len(stages)] if stages else None
-
-
-def themed_programme_effects(
-    branch_key: str,
-    programme: str,
-    step: int,
-    small: float,
-    medium: float,
-    organisation: float,
-) -> tuple[str, ...]:
-    """Give programme nodes distinct roles instead of a repeated branch bonus."""
-
-    phase = step % 3
-    if programme == "flexible_tooling":
-        return (
-            f"line_change_production_efficiency_factor = {n(medium * 1.5)}",
-            f"production_factory_efficiency_gain_factor = {n(small)}",
-        ) if phase % 2 == 0 else (
-            f"production_factory_start_efficiency_factor = {n(medium)}",
-            f"production_lack_of_resource_penalty_factor = -{n(small)}",
-        )
-    if programme == "volume_automation":
-        return (
-            f"industrial_capacity_factory = {n(medium)}",
-            f"production_factory_max_efficiency_factor = {n(small)}",
-        ) if phase % 2 == 0 else (
-            f"production_factory_max_efficiency_factor = {n(medium)}",
-            f"industrial_capacity_factory = {n(small)}",
-        )
-    if programme == "primary_extraction":
-        return (
-            f"local_resources_factor = {n(medium)}",
-            f"fuel_gain_factor = {n(small)}",
-        ) if phase % 2 == 0 else (
-            f"local_resources_factor = {n(medium * 1.25)}",
-            f"production_lack_of_resource_penalty_factor = -{n(small / 2)}",
-        )
-    if programme == "circular_recovery":
-        return (
-            f"production_lack_of_resource_penalty_factor = -{n(medium)}",
-            f"industry_repair_factor = {n(small)}",
-        ) if phase % 2 == 0 else (
-            f"local_resources_factor = {n(small)}",
-            f"fuel_gain_factor = {n(medium)}",
-        )
-    if programme == "local_services":
-        return (
-            f"consumer_goods_factor = -{n(small)}",
-            f"political_power_gain = {n(small / 2)}",
-        ) if phase % 2 == 0 else (
-            f"stability_factor = {n(small / 2)}",
-            f"production_factory_start_efficiency_factor = {n(small)}",
-        )
-    if programme == "automated_state":
-        return (
-            f"research_speed_factor = {n(small)}",
-            f"coordination_bonus = {n(small / 2)}",
-        ) if phase % 2 == 0 else (
-            f"planning_speed = {n(medium)}",
-            f"production_factory_efficiency_gain_factor = {n(small / 2)}",
-        )
-    if programme == "emergency_services":
-        return (
-            f"industry_repair_factor = {n(medium)}",
-            f"production_speed_infrastructure_factor = {n(small)}",
-        ) if phase == 0 else (
-            f"stability_factor = {n(small)}",
-            f"industry_repair_factor = {n(medium)}",
-        ) if phase == 1 else (
-            f"production_speed_buildings_factor = {n(small)}",
-            f"industry_repair_factor = {n(medium)}",
-        )
-    if programme == "distributed_resilience":
-        return (
-            f"stability_factor = {n(medium / 2)}",
-            f"supply_consumption_factor = -{n(small / 2)}",
-        ) if phase == 0 else (
-            f"production_speed_infrastructure_factor = {n(small)}",
-            f"stability_factor = {n(small)}",
-        ) if phase == 1 else (
-            f"consumer_goods_factor = -{n(small / 2)}",
-            f"industry_repair_factor = {n(small)}",
-        )
-    infantry_packages = {
-        "rifles": (
-            (f"category_all_infantry = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",),
-            (f"category_all_infantry = {{ soft_attack = {n(medium)} reliability = {n(small)} }}",),
-        ),
-        "ammunition": (
-            (f"category_all_infantry = {{ hard_attack = {n(medium)} ap_attack = {n(medium)} }}",),
-            (f"category_all_infantry = {{ soft_attack = {n(medium)} hard_attack = {n(small)} }}",),
-        ),
-        "optics": (
-            (f"coordination_bonus = {n(medium)}", f"land_night_attack = {n(small / 2)}"),
-            (f"planning_speed = {n(medium)}", f"land_reinforce_rate = {n(small / 2)}"),
-        ),
-        "explosive": (
-            (f"category_all_infantry = {{ soft_attack = {n(medium)} hard_attack = {n(small)} }}",),
-            (f"category_all_infantry = {{ breakthrough = {n(medium)} ap_attack = {n(small)} }}",),
-        ),
-        "command": (
-            (f"category_all_infantry = {{ max_organisation = {n(organisation)} default_morale = {n(small)} }}",),
-            (f"coordination_bonus = {n(medium)}", f"land_reinforce_rate = {n(small / 2)}"),
-        ),
-        "automatic": (
-            (f"category_all_infantry = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",),
-            (f"category_all_infantry = {{ soft_attack = {n(medium)} defense = {n(small)} }}",),
-        ),
-        "body": (
-            (f"category_all_infantry = {{ defense = {n(medium)} reliability = {n(small)} }}",),
-            (f"category_all_infantry = {{ defense = {n(medium)} breakthrough = {n(small)} }}",),
-        ),
-        "environment": (
-            (f"category_all_infantry = {{ defense = {n(medium)} supply_consumption = -{n(small / 2)} }}",),
-            (f"category_all_infantry = {{ default_morale = {n(medium)} defense = {n(small)} }}",),
-        ),
-        "urban": (
-            (f"category_special_forces = {{ soft_attack = {n(medium)} breakthrough = {n(medium)} }}",),
-            (f"category_special_forces = {{ breakthrough = {n(medium)} defense = {n(small)} }}",),
-        ),
-        "reconnaissance": (
-            (f"category_recon = {{ recon = {n(0.35 + step * 0.04)} }}", f"category_special_forces = {{ maximum_speed = {n(small / 2)} }}"),
-            (f"category_recon = {{ recon = {n(0.30 + step * 0.04)} }}", f"land_night_attack = {n(small / 2)}"),
-        ),
-        "airborne": (
-            (f"category_special_forces = {{ maximum_speed = {n(small)} supply_consumption = -{n(small / 2)} }}",),
-            (f"category_special_forces = {{ max_organisation = {n(organisation)} breakthrough = {n(small)} }}",),
-        ),
-    }
-    if programme in infantry_packages:
-        return infantry_packages[programme][phase % len(infantry_packages[programme])]
-
-    if branch_key == "protection" and programme == "medicine":
-        return (
-            f"field_hospital = {{ casualty_trickleback = {n(medium)} experience_loss_factor = -{n(small)} }}",
-        ) if phase % 2 == 0 else (
-            f"field_hospital = {{ casualty_trickleback = {n(small)} experience_loss_factor = -{n(medium)} }}",
-            f"category_all_infantry = {{ default_morale = {n(small)} }}",
-        )
-    if programme == "field_services":
-        return (
-            f"field_hospital = {{ casualty_trickleback = {n(medium)} experience_loss_factor = -{n(small)} }}",
-            f"category_support_battalions = {{ default_morale = {n(small)} }}",
-        ) if phase % 2 == 0 else (
-            f"maintenance_company = {{ reliability = {n(medium)} }}",
-            f"category_support_battalions = {{ max_organisation = {n(organisation)} }}",
-        )
-    if programme == "engineering":
-        return (
-            f"engineer = {{ entrenchment = {n(organisation / 2)} defense = {n(small)} }}",
-        ) if phase % 2 == 0 else (
-            f"category_support_battalions = {{ breakthrough = {n(medium)} defense = {n(small)} }}",
-        )
-    if programme == "resilience":
-        return (
-            f"logistics_company = {{ supply_consumption = -{n(medium)} }}",
-            f"industry_repair_factor = {n(small)}",
-        ) if phase % 2 == 0 else (
-            f"supply_consumption_factor = -{n(medium)}",
-            f"category_support_battalions = {{ default_morale = {n(small)} }}",
-        )
-    if programme == "automation":
-        return (
-            f"land_reinforce_rate = {n(medium)}",
-            f"org_loss_when_moving = -{n(small)}",
-        ) if phase == 0 else (
-            f"planning_speed = {n(medium)}",
-            f"supply_consumption_factor = -{n(small)}",
-        ) if phase == 1 else (
-            f"logistics_company = {{ supply_consumption = -{n(small)} }}",
-            f"coordination_bonus = {n(medium)}",
-        )
-    if programme == "network":
-        return (
-            f"supply_consumption_factor = -{n(small)}",
-            f"industry_repair_factor = {n(medium)}",
-        ) if phase == 0 else (
-            f"land_reinforce_rate = {n(small)}",
-            f"supply_consumption_factor = -{n(medium)}",
-        ) if phase == 1 else (
-            f"production_speed_infrastructure_factor = {n(small)}",
-            f"industry_repair_factor = {n(medium)}",
-        )
-    if programme == "railway_artillery":
-        return (
-            f"artillery = {{ soft_attack = {n(medium)} hard_attack = {n(small)} }}",
-        ) if phase == 0 else (
-            f"artillery = {{ reliability = {n(medium)} breakthrough = {n(small)} }}",
-        ) if phase == 1 else (
-            f"planning_speed = {n(medium)}",
-            f"coordination_bonus = {n(small)}",
-        )
-
-    anti_tank_packages = {
-        "missile": (f"category_anti_tank = {{ hard_attack = {n(medium)} ap_attack = {n(medium)} }}",),
-        "seeker": (f"category_anti_tank = {{ reliability = {n(medium)} defense = {n(small)} }}",),
-        "ambush": (f"category_anti_tank = {{ hard_attack = {n(medium)} defense = {n(small)} }}",),
-        "coil": (f"category_anti_tank = {{ ap_attack = {n(medium)} breakthrough = {n(small)} }}",),
-    }
-    if programme in anti_tank_packages:
-        return anti_tank_packages[programme]
-
-    artillery_packages = {
-        "fire_control": (
-            (f"artillery = {{ soft_attack = {n(medium)} reliability = {n(small)} }}",),
-            (f"coordination_bonus = {n(medium)}", f"planning_speed = {n(small)}"),
-        ),
-        "guided_munitions": (
-            (f"artillery = {{ hard_attack = {n(medium)} ap_attack = {n(medium)} }}",),
-            (f"artillery = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",),
-        ),
-        "mass_fire": (
-            (f"artillery = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",),
-            (f"artillery = {{ soft_attack = {n(medium)} reliability = {n(medium)} }}",),
-        ),
-        "autonomous_battery": (
-            (f"artillery = {{ hard_attack = {n(medium)} reliability = {n(small)} }}",),
-            (f"coordination_bonus = {n(medium)}", f"planning_speed = {n(small)}"),
-        ),
-    }
-    if programme in artillery_packages:
-        packages = artillery_packages[programme]
-        return packages[phase % len(packages)]
-
-    anti_air_packages = {
-        "sensors": (f"anti_air = {{ air_attack = {n(small)} reliability = {n(medium)} }}", f"coordination_bonus = {n(small / 2)}"),
-        "kinetic": (f"anti_air = {{ air_attack = {n(medium)} soft_attack = {n(small)} }}",),
-        "directed_energy": (f"anti_air = {{ air_attack = {n(medium)} reliability = {n(medium)} }}", f"air_intercept_efficiency = {n(small)}"),
-    }
-    if branch_key == "anti_air" and programme in anti_air_packages:
-        return anti_air_packages[programme]
-
-    recon_armor_packages = {
-        "active_sensors": (f"category_all_armor = {{ reliability = {n(small)} defense = {n(medium)} }}", f"category_recon = {{ recon = {n(0.35 + step * 0.05)} }}"),
-        "silent_mobility": (f"category_all_armor = {{ maximum_speed = {n(medium)} reliability = {n(small)} }}",),
-        "signature_control": (f"category_all_armor = {{ defense = {n(medium)} breakthrough = {n(small)} }}",),
-        "autonomous_screen": (f"category_all_armor = {{ maximum_speed = {n(small)} breakthrough = {n(medium)} }}",),
-    }
-    if programme in recon_armor_packages:
-        return recon_armor_packages[programme]
-
-    if programme == "armored_offense":
-        return (
-            f"category_all_armor = {{ breakthrough = {n(medium)} hard_attack = {n(medium)} }}",
-        ) if phase == 0 else (
-            f"category_all_armor = {{ soft_attack = {n(medium)} maximum_speed = {n(small)} }}",
-        ) if phase == 1 else (
-            f"category_all_armor = {{ hard_attack = {n(medium)} reliability = {n(small)} }}",
-        )
-    if programme == "armored_survival":
-        return (
-            f"category_all_armor = {{ armor_value = {n(medium)} defense = {n(medium)} }}",
-        ) if phase == 0 else (
-            f"category_all_armor = {{ reliability = {n(medium)} defense = {n(small)} }}",
-        ) if phase == 1 else (
-            f"category_all_armor = {{ armor_value = {n(medium)} default_morale = {n(small)} }}",
-        )
-
-    if programme == "survivability":
-        return (
-            f"category_all_armor = {{ armor_value = {n(medium)} reliability = {n(small)} }}",
-        ) if phase % 2 == 0 else (
-            f"category_all_armor = {{ defense = {n(medium)} reliability = {n(medium)} }}",
-        )
-    if programme == "siege":
-        return (
-            f"category_all_armor = {{ breakthrough = {n(medium)} hard_attack = {n(medium)} }}",
-        ) if phase == 0 else (
-            f"category_all_armor = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",
-        ) if phase == 1 else (
-            f"category_all_armor = {{ maximum_speed = {n(small)} reliability = {n(medium)} }}",
-        )
-    if programme == "precision":
-        return (
-            f"ground_attack_factor = {n(medium)}",
-            f"air_mission_efficiency = {n(small)}",
-        ) if phase % 2 == 0 else (
-            f"air_attack_factor = {n(small)}",
-            f"air_range_factor = {n(medium)}",
-        )
-    if programme == "persistent":
-        return (
-            f"ground_attack_factor = {n(medium)}",
-            f"air_accidents_factor = -{n(small)}",
-        ) if phase == 0 else (
-            f"air_agility_factor = {n(medium)}",
-            f"air_mission_efficiency = {n(small)}",
-        ) if phase == 1 else (
-            f"air_mission_efficiency = {n(medium)}",
-            f"air_accidents_factor = -{n(medium)}",
-        )
-
-    if programme == "flight_control":
-        return (
-            f"air_agility_factor = {n(medium)}",
-            f"air_accidents_factor = -{n(small)}",
-        ) if phase % 2 == 0 else (
-            f"air_range_factor = {n(medium)}",
-            f"air_mission_efficiency = {n(small)}",
-        )
-    if programme == "interception":
-        return (
-            f"air_intercept_efficiency = {n(medium)}",
-            f"air_attack_factor = {n(small)}",
-        ) if phase % 2 == 0 else (
-            f"air_mission_efficiency = {n(medium)}",
-            f"air_agility_factor = {n(small)}",
-        )
-    if programme == "endurance":
-        return (
-            f"air_range_factor = {n(medium)}",
-            f"air_accidents_factor = -{n(small)}",
-        ) if phase % 2 == 0 else (
-            f"air_mission_efficiency = {n(medium)}",
-            f"air_agility_factor = {n(small)}",
-        )
-    if programme == "wingmen":
-        return (
-            f"air_attack_factor = {n(medium)}",
-            f"air_mission_efficiency = {n(small)}",
-        ) if phase % 2 == 0 else (
-            f"air_accidents_factor = -{n(medium)}",
-            f"air_intercept_efficiency = {n(small)}",
-        )
-
-    if programme == "fleet_strike":
-        return (
-            f"naval_hit_chance = {n(medium)}",
-            f"naval_coordination = {n(small)}",
-        ) if phase % 2 == 0 else (
-            f"naval_speed_factor = {n(small)}",
-            f"naval_hit_chance = {n(medium)}",
-        )
-    if programme == "fleet_defense":
-        return (
-            f"naval_detection = {n(medium)}",
-            f"convoy_escort_efficiency = {n(small)}",
-        ) if phase % 2 == 0 else (
-            f"naval_mines_effect_reduction = {n(medium)}",
-            f"naval_coordination = {n(small)}",
-        )
-
-    naval_packages = {
-        "sensors": (f"naval_detection = {n(medium)}", f"naval_coordination = {n(small)}"),
-        "escort_hulls": (f"convoy_escort_efficiency = {n(medium)}", f"naval_speed_factor = {n(small)}"),
-        "unmanned_screen": (f"naval_detection = {n(small)}", f"naval_mines_effect_reduction = {n(medium)}"),
-        "silent_hunter": (f"naval_detection = {n(medium)}", f"naval_mines_effect_reduction = {n(small)}"),
-        "torpedo_boat": (f"naval_hit_chance = {n(medium)}", f"naval_coordination = {n(small)}"),
-        "deep_network": (f"naval_detection = {n(medium)}", f"convoy_escort_efficiency = {n(small)}"),
-        "autonomous_pack": (f"naval_coordination = {n(medium)}", f"naval_detection = {n(small)}"),
-    }
-    return naval_packages[programme]
-
-
-# Deliberate packages for the compact strategic trunks.  These are keyed by
-# stable technology keys rather than list positions so later layout tweaks do
-# not silently change the economic model.
-COMPACT_EFFECTS_BY_TECH_KEY = {
-    "treasury_accounting": (
-        "ADISCORD_economy_tax_collection_factor = 0.02",
-        "ADISCORD_economy_admin_expense_factor = -0.02",
-    ),
-    "public_procurement_standards": (
-        "ADISCORD_economy_construction_expense_factor = -0.03",
-        "ADISCORD_economy_military_factory_expense_factor = -0.02",
-    ),
-    "civilian_industrial_accounting": (
-        "ADISCORD_economy_civilian_factory_income_factor = 0.04",
-        "ADISCORD_economy_tax_collection_factor = 0.02",
-    ),
-    "customs_clearance_networks": (
-        "ADISCORD_economy_trade_income_factor = 0.04",
-        "ADISCORD_economy_resource_rent_income_factor = 0.03",
-    ),
-    "administrative_digitization": (
-        "ADISCORD_economy_admin_expense_factor = -0.04",
-        "ADISCORD_economy_research_expense_factor = -0.03",
-    ),
-    "production_cost_accounting": (
-        "ADISCORD_economy_military_industry_income_factor = 0.04",
-        "ADISCORD_economy_military_factory_expense_factor = -0.03",
-    ),
-    "integrated_budget_forecasts": (
-        "ADISCORD_economy_construction_expense_factor = -0.03",
-        "ADISCORD_economy_admin_expense_factor = -0.03",
-    ),
-    "automated_treasury_audit": (
-        "ADISCORD_economy_tax_collection_factor = 0.03",
-        "ADISCORD_economy_civilian_factory_income_factor = 0.04",
-    ),
-    "precision_material_standards": (
-        "production_lack_of_resource_penalty_factor = -0.01",
-        "production_factory_efficiency_gain_factor = 0.01",
-    ),
-    "rare_components_industry": (
-        "production_factory_efficiency_gain_factor = 0.02",
-        "production_factory_max_efficiency_factor = 0.01",
-    ),
-    "rare_alloy_metallurgy": (
-        "production_lack_of_resource_penalty_factor = -0.02",
-        "production_factory_max_efficiency_factor = 0.01",
-    ),
-    "precision_component_fabrication": (
-        "production_factory_efficiency_gain_factor = 0.02",
-        "factory_energy_consumption = 0.02",
-    ),
-    "vacuum_alloy_refining": (
-        "production_factory_max_efficiency_factor = 0.02",
-        "factory_energy_consumption = 0.02",
-    ),
-    "advanced_material_recycling": (
-        "production_lack_of_resource_penalty_factor = -0.02",
-        "factory_energy_consumption = -0.02",
-    ),
-    "armored_carrier_program": (
-        "ADISCORD_mechanized_infantry = { defense = 0.03 reliability = 0.03 }",
-    ),
-    "infantry_combat_vehicle_program": (
-        "ADISCORD_mechanized_infantry = { breakthrough = 0.05 soft_attack = 0.05 hard_attack = 0.03 }",
-    ),
-    "networked_mechanized_cells": (
-        "ADISCORD_mechanized_infantry = { maximum_speed = 0.05 reliability = 0.05 }",
-        "coordination_bonus = 0.02",
-    ),
-    "standardized_machine_tools": (
-        "production_factory_max_efficiency_factor = 0.03",
-        "production_factory_efficiency_gain_factor = 0.02",
-    ),
-    "interchangeable_components": (
-        "production_factory_start_efficiency_factor = 0.03",
-        "line_change_production_efficiency_factor = 0.04",
-    ),
-    "industrial_cluster_planning": (
-        "production_speed_industrial_complex_factor = 0.03",
-        "production_speed_arms_factory_factor = 0.03",
-    ),
-    "precision_metrology_recovery": (
-        "production_factory_max_efficiency_factor = 0.04",
-        "production_factory_efficiency_gain_factor = 0.03",
-    ),
-    "automated_assembly": (
-        "industrial_capacity_factory = 0.015",
-        "production_factory_efficiency_gain_factor = 0.03",
-    ),
-    "digital_tooling_libraries": (
-        "production_factory_start_efficiency_factor = 0.05",
-        "line_change_production_efficiency_factor = 0.08",
-    ),
-    "sensor_calibrated_machining": (
-        "production_factory_max_efficiency_factor = 0.06",
-        "production_factory_efficiency_gain_factor = 0.04",
-    ),
-    "modular_fixture_systems": (
-        "production_factory_start_efficiency_factor = 0.05",
-        "line_change_production_efficiency_factor = 0.07",
-    ),
-    "closed_loop_quality_control": (
-        "production_factory_max_efficiency_factor = 0.06",
-        "production_factory_efficiency_gain_factor = 0.03",
-    ),
-    "predictive_maintenance": (
-        "production_factory_efficiency_gain_factor = 0.05",
-        "industry_repair_factor = 0.04",
-    ),
-    "flexible_robotic_tooling": (
-        "line_change_production_efficiency_factor = 0.09",
-        "production_factory_start_efficiency_factor = 0.04",
-    ),
-    "additive_spare_part_cells": (
-        "industry_repair_factor = 0.06",
-        "production_factory_efficiency_gain_factor = 0.04",
-    ),
-    "machine_vision_inspection": (
-        "production_factory_max_efficiency_factor = 0.05",
-        "production_factory_efficiency_gain_factor = 0.04",
-    ),
-    "self_balancing_production_lines": (
-        "industrial_capacity_factory = 0.04",
-        "production_factory_efficiency_gain_factor = 0.06",
-        "factory_energy_consumption = 0.07",
-    ),
-    "autonomous_factory_cells": (
-        "industrial_capacity_factory = 0.04",
-        "factory_energy_consumption = 0.06",
-        "production_factory_max_efficiency_factor = 0.06",
-    ),
-    "lights_out_microfactories": (
-        "industrial_capacity_factory = 0.05",
-        "factory_energy_consumption = 0.08",
-        "production_factory_efficiency_gain_factor = 0.05",
-    ),
-    "distributed_manufacturing": (
-        "industrial_capacity_factory = 0.10",
-        "industrial_capacity_dockyard = 0.07",
-        "factory_energy_consumption = 0.12",
-        "production_factory_max_efficiency_factor = 0.09",
-    ),
-    "industrial_organization_baseline": (
-        "production_factory_start_efficiency_factor = 0.02",
-        "production_factory_efficiency_gain_factor = 0.02",
-    ),
-    # The concentrated school escalates to a real capstone instead of flattening
-    # every tier into the same factory-output ramp. The stronger final step is
-    # balanced by bombing exposure and retooling time.
-    "concentrated_industrial_zones": (
-        "industrial_capacity_factory = 0.05",
-        "industrial_capacity_dockyard = 0.04",
-        "factory_energy_consumption = 0.10",
-        "industry_air_damage_factor = 0.07",
-    ),
-    "zone_power_trunking": (
-        "industrial_capacity_factory = 0.05",
-        "factory_energy_consumption = 0.09",
-        "industry_air_damage_factor = 0.07",
-    ),
-    "megafactory_power_buses": (
-        "industrial_capacity_factory = 0.07",
-        "industrial_capacity_dockyard = 0.05",
-        "factory_energy_consumption = 0.15",
-        "line_change_production_efficiency_factor = -0.12",
-    ),
-    "centralized_process_control": (
-        "industrial_capacity_factory = 0.08",
-        "factory_energy_consumption = 0.17",
-        "line_change_production_efficiency_factor = -0.12",
-    ),
-    "continuous_casting_lines": (
-        "industrial_capacity_factory = 0.09",
-        "production_factory_max_efficiency_factor = 0.07",
-        "factory_energy_consumption = 0.19",
-        "industry_air_damage_factor = 0.12",
-    ),
-    "strategic_production_complexes": (
-        "industrial_capacity_factory = 0.12",
-        "industrial_capacity_dockyard = 0.10",
-        "factory_energy_consumption = 0.24",
-        "industry_air_damage_factor = 0.20",
-        "line_change_production_efficiency_factor = -0.15",
-    ),
-    # The dispersed school never wins on raw output; it escalates on resilience,
-    # retooling speed, and repair, ending at a -0.20 bombing swing that mirrors
-    # the concentrated capstone's +0.20.
-    "distributed_workshop_networks": (
-        "industrial_capacity_factory = 0.03",
-        "factory_energy_consumption = 0.02",
-        "production_factory_start_efficiency_factor = 0.07",
-        "industry_air_damage_factor = -0.08",
-    ),
-    "workshop_tooling_pools": (
-        "industrial_capacity_factory = 0.02",
-        "production_factory_start_efficiency_factor = 0.06",
-        "line_change_production_efficiency_factor = 0.09",
-        "factory_energy_consumption = 0.015",
-    ),
-    "regional_spare_capacity": (
-        "industrial_capacity_factory = 0.03",
-        "factory_energy_consumption = 0.02",
-        "line_change_production_efficiency_factor = 0.14",
-        "industry_repair_factor = 0.12",
-    ),
-    "distributed_scheduling_mesh": (
-        "industrial_capacity_factory = 0.025",
-        "production_factory_efficiency_gain_factor = 0.08",
-        "line_change_production_efficiency_factor = 0.16",
-        "industry_repair_factor = 0.10",
-        "factory_energy_consumption = 0.03",
-    ),
-    "mobile_fabrication_convoys": (
-        "industrial_capacity_factory = 0.04",
-        "factory_energy_consumption = 0.03",
-        "industry_air_damage_factor = -0.15",
-        "industry_repair_factor = 0.15",
-    ),
-    "resilient_production_meshes": (
-        "industrial_capacity_factory = 0.06",
-        "factory_energy_consumption = 0.04",
-        "production_factory_start_efficiency_factor = 0.10",
-        "line_change_production_efficiency_factor = 0.22",
-        "industry_air_damage_factor = -0.20",
-        "industry_repair_factor = 0.22",
-    ),
-    # Reconstruction splits into heavy structures, which raise raw build speed,
-    # and survey/utilities, which buy repair throughput and bombing resilience.
-    "salvage_standards": (
-        "production_speed_buildings_factor = 0.02",
-        "industry_repair_factor = 0.02",
-    ),
-    "ruin_workshops": (
-        "production_speed_buildings_factor = 0.02",
-        "industry_repair_factor = 0.03",
-    ),
-    "reconstruction_bureaus": (
-        "production_speed_buildings_factor = 0.03",
-        "industry_repair_factor = 0.03",
-    ),
-    "drone_construction_cartography": (
-        "production_speed_buildings_factor = 0.03",
-        "production_speed_infrastructure_factor = 0.04",
-    ),
-    "structural_ruin_assessment": (
-        "industry_repair_factor = 0.05",
-        "production_speed_buildings_factor = 0.02",
-    ),
-    "rapid_bridge_section_casting": (
-        "production_speed_infrastructure_factor = 0.05",
-        "production_speed_buildings_factor = 0.02",
-    ),
-    "standardized_utility_corridors": (
-        "industry_repair_factor = 0.04",
-        "local_resources_factor = 0.03",
-    ),
-    "modular_rebuilding": (
-        "production_speed_buildings_factor = 0.04",
-        "production_speed_industrial_complex_factor = 0.03",
-    ),
-    "reclaimed_aggregate_concrete": (
-        "production_speed_buildings_factor = 0.03",
-        "local_resources_factor = 0.04",
-    ),
-    "robotic_foundation_piling": (
-        "production_speed_industrial_complex_factor = 0.04",
-        "production_speed_arms_factory_factor = 0.04",
-    ),
-    "prefabricated_districts": (
-        "production_speed_buildings_factor = 0.04",
-        "consumer_goods_factor = -0.02",
-    ),
-    "seismic_retrofit_frames": (
-        "production_speed_buildings_factor = 0.03",
-        "industry_air_damage_factor = -0.06",
-    ),
-    "public_repair_corps": (
-        "industry_repair_factor = 0.08",
-        "industry_air_damage_factor = -0.05",
-    ),
-    "swarm_masonry_platforms": (
-        "production_speed_buildings_factor = 0.05",
-        "production_speed_infrastructure_factor = 0.04",
-    ),
-    "self_sealing_utility_mains": (
-        "industry_repair_factor = 0.07",
-        "industry_air_damage_factor = -0.08",
-    ),
-    "automated_civil_works": (
-        "production_speed_buildings_factor = 0.06",
-        "production_speed_industrial_complex_factor = 0.05",
-    ),
-    "civil_defense_networks": (
-        "production_speed_buildings_factor = 0.06",
-        "production_speed_infrastructure_factor = 0.05",
-        "industry_repair_factor = 0.10",
-        "industry_air_damage_factor = -0.10",
-    ),
-    # Computing: the error-correction route keeps supply and reliability cheap,
-    # the acceleration route buys throughput and pays for it in power draw.
-    "rugged_chiplet_packaging": (
-        "research_speed_factor = 0.02",
-        "supply_consumption_factor = -0.02",
-    ),
-    "neuromorphic_coprocessors": (
-        "research_speed_factor = 0.025",
-        "production_factory_efficiency_gain_factor = 0.03",
-        "factory_energy_consumption = 0.04",
-    ),
-    "distributed_operational_caches": (
-        "research_speed_factor = 0.025",
-        "planning_speed = 0.02",
-        "supply_consumption_factor = -0.02",
-    ),
-    "synthetic_training_environments": (
-        "research_speed_factor = 0.03",
-        "land_reinforce_rate = 0.02",
-        "factory_energy_consumption = 0.03",
-    ),
-    "federated_operational_learning": (
-        "research_speed_factor = 0.03",
-        "coordination_bonus = 0.03",
-    ),
-    "explainable_command_models": (
-        "planning_speed = 0.03",
-        "max_planning = 0.02",
-    ),
-    "photonic_compute_arrays": (
-        "research_speed_factor = 0.035",
-        "production_factory_efficiency_gain_factor = 0.03",
-        "factory_energy_consumption = 0.05",
-    ),
-    "directional_mesh_relays": (
-        "coordination_bonus = 0.02",
-        "land_reinforce_rate = 0.02",
-    ),
-    "lattice_key_exchange": (
-        "encryption_factor = 0.05",
-        "decryption_factor = 0.02",
-    ),
-    "packetized_fire_control_links": (
-        "coordination_bonus = 0.03",
-        "planning_speed = 0.03",
-    ),
-    "cognitive_spectrum_management": (
-        "coordination_bonus = 0.03",
-        "air_interception_detect_factor = 0.03",
-    ),
-    "stratospheric_burst_relays": (
-        "coordination_bonus = 0.03",
-        "land_reinforce_rate = 0.03",
-    ),
-    "adaptive_deception_networks": (
-        "decryption_factor = 0.05",
-        "encryption_factor = 0.04",
-    ),
-    "mesh_command_networks": (
-        "coordination_bonus = 0.01",
-        "encryption_factor = 0.01",
-    ),
-    "field_radio_networks": (
-        "land_reinforce_rate = 0.01",
-        "encryption_factor = 0.02",
-    ),
-    "encryption_rebuild": (
-        "encryption_factor = 0.03",
-        "coordination_bonus = 0.01",
-    ),
-    "frequency_hopping_field_sets": (
-        "encryption_factor = 0.04",
-        "land_reinforce_rate = 0.01",
-    ),
-    "signal_intercept_arrays": (
-        "decryption_factor = 0.04",
-        "air_interception_detect_factor = 0.02",
-    ),
-    "passive_emitter_geolocation": (
-        "decryption_factor = 0.04",
-        "recon_factor = 0.02",
-    ),
-    "battlefield_analytics": (
-        "coordination_bonus = 0.02",
-        "decryption_factor = 0.03",
-    ),
-    "counterintelligence_filters": (
-        "encryption_factor = 0.05",
-        "decryption_factor = 0.02",
-    ),
-    "battlefield_sensor_fusion": (
-        "coordination_bonus = 0.03",
-        "air_interception_detect_factor = 0.04",
-    ),
-    "self_healing_tactical_networks": (
-        "encryption_factor = 0.06",
-        "land_reinforce_rate = 0.02",
-    ),
-    "memetic_security_protocols": (
-        "encryption_factor = 0.07",
-        "decryption_factor = 0.04",
-        "coordination_bonus = 0.03",
-    ),
-    "electromechanical_relays": (
-        "research_speed_factor = 0.01",
-        "production_factory_efficiency_gain_factor = 0.01",
-    ),
-    "recovered_data_archives": (
-        "research_speed_factor = 0.015",
-        "planning_speed = 0.01",
-    ),
-    "recovered_semiconductors": (
-        "research_speed_factor = 0.02",
-        "production_factory_efficiency_gain_factor = 0.02",
-    ),
-    "hardened_computers": (
-        "research_speed_factor = 0.025",
-        "encryption_factor = 0.02",
-    ),
-    "error_correcting_field_computers": (
-        "research_speed_factor = 0.03",
-        "encryption_factor = 0.035",
-        "supply_consumption_factor = -0.015",
-    ),
-    "analog_ai_accelerators": (
-        "research_speed_factor = 0.03",
-        "production_factory_efficiency_gain_factor = 0.04",
-        "factory_energy_consumption = 0.05",
-    ),
-    "predictive_logistics": (
-        "research_speed_factor = 0.025",
-        "supply_consumption_factor = -0.03",
-        "encryption_factor = 0.03",
-    ),
-    "operational_ai_assistants": (
-        "research_speed_factor = 0.025",
-        "coordination_bonus = 0.035",
-        "factory_energy_consumption = 0.06",
-    ),
-    "strategic_digital_twins": (
-        "research_speed_factor = 0.03",
-        "planning_speed = 0.03",
-        "production_factory_efficiency_gain_factor = 0.03",
-    ),
-    "bounded_general_planning_cores": (
-        "research_speed_factor = 0.035",
-        "coordination_bonus = 0.04",
-        "factory_energy_consumption = 0.03",
-    ),
-    "strategic_ai_coordination": (
-        "research_speed_factor = 0.04",
-        "coordination_bonus = 0.05",
-        "production_factory_efficiency_gain_factor = 0.04",
-        "factory_energy_consumption = 0.04",
-    ),
-    "predictive_budgeting": (
-        "consumer_goods_factor = -0.015",
-        "production_factory_start_efficiency_factor = 0.03",
-    ),
-    "local_grid_restoration": (
-        "factory_energy_consumption = -0.03",
-        "industry_repair_factor = 0.02",
-    ),
-    "substation_networks": (
-        "factory_energy_consumption = -0.035",
-        "production_speed_infrastructure_factor = 0.025",
-    ),
-    "radiation_mapping": (
-        "factory_energy_consumption = -0.025",
-        "nuclear_production_factor = 0.03",
-    ),
-    "phase_synchronized_substations": (
-        "factory_energy_consumption = -0.04",
-        "industry_repair_factor = 0.03",
-    ),
-    "solid_state_grid_breakers": (
-        "factory_energy_consumption = -0.04",
-        "industry_air_damage_factor = -0.03",
-    ),
-    "reactor_safety_protocols": (
-        "factory_energy_consumption = -0.04",
-        "nuclear_production_factor = 0.05",
-    ),
-    "load_following_microreactors": (
-        "factory_energy_consumption = -0.05",
-        "nuclear_production_factor = 0.06",
-    ),
-    "superconducting_power_busbars": (
-        "factory_energy_consumption = -0.05",
-        "industrial_capacity_factory = 0.01",
-    ),
-    "microreactor_blocks": (
-        "factory_energy_consumption = -0.055",
-        "nuclear_production_factor = 0.07",
-    ),
-    "passive_decay_heat_sinks": (
-        "factory_energy_consumption = -0.035",
-        "industry_repair_factor = 0.05",
-    ),
-    "autonomous_reactor_diagnostics": (
-        "factory_energy_consumption = -0.04",
-        "nuclear_production_factor = 0.06",
-    ),
-    "high_density_thermal_storage": (
-        "factory_energy_consumption = -0.05",
-        "fuel_gain_factor = 0.04",
-    ),
-    "continental_load_balancing": (
-        "factory_energy_consumption = -0.06",
-        "production_speed_buildings_factor = 0.04",
-    ),
-    "emergency_core_suppression": (
-        "factory_energy_consumption = -0.07",
-        "nuclear_production_factor = 0.08",
-        "industry_repair_factor = 0.06",
-    ),
-    "electromagnetic_recoil_brakes": (
-        "artillery = { soft_attack = 0.05 breakthrough = 0.03 }",
-    ),
-    "predictive_fire_mission_control": (
-        "artillery = { soft_attack = 0.08 breakthrough = 0.05 }",
-        "planning_speed = 0.02",
-    ),
-    "loitering_artillery_observers": (
-        "artillery = { reliability = 0.05 defense = 0.04 }",
-    ),
-    "autonomous_battery_network": (
-        "artillery = { reliability = 0.08 defense = 0.06 }",
-        "coordination_bonus = 0.02",
-    ),
-    "electromagnetic_main_guns": (
-        "category_all_armor = { hard_attack = 0.06 breakthrough = 0.05 }",
-    ),
-    "distributed_battlegroup": (
-        "category_all_armor = { hard_attack = 0.09 breakthrough = 0.08 }",
-        "coordination_bonus = 0.02",
-    ),
-    "adaptive_suspension_control": (
-        "category_all_armor = { maximum_speed = 0.05 reliability = 0.05 }",
-    ),
-    "resilient_combat_cloud_nodes": (
-        "category_all_armor = { maximum_speed = 0.07 reliability = 0.08 defense = 0.05 }",
-    ),
-    "autonomous_dogfight_controller": (
-        "air_intercept_efficiency = 0.05",
-        "air_accidents_factor = -0.03",
-    ),
-    "aerospace_interceptors": (
-        "air_intercept_efficiency = 0.08",
-        "air_mission_efficiency = 0.04",
-    ),
-    "directed_energy_defensive_suites": (
-        "air_mission_efficiency = 0.05",
-        "air_accidents_factor = -0.04",
-    ),
-    "distributed_interceptor_swarms": (
-        "air_mission_efficiency = 0.08",
-        "air_power_projection_factor = 0.05",
-    ),
-}
-
-
-def indexed_package(
-    branch: Branch,
-    packages: tuple[tuple[str, ...], ...],
-    tier: int,
-) -> tuple[str, ...]:
-    """Read a hand-authored effect table that is indexed by node position.
-
-    These tables carry one entry per node in branch order, so restoring a node
-    silently shifts every entry after it. Fail loudly on a length mismatch
-    instead of raising IndexError from deep inside the renderer.
-    """
-
-    if len(packages) != len(branch.techs):
-        raise ValueError(
-            f"{branch.key} has {len(branch.techs)} nodes but "
-            f"{len(packages)} authored effect packages"
-        )
-    return packages[tier]
-
-
-def combat_package(
-    branch: Branch,
-    packages: tuple[tuple[str, ...], ...],
-    tier: int,
-) -> tuple[str, ...]:
-    """Read an authored combat table and apply the reference-parity multiplier.
-
-    The numbers in these tables are relative weights between the nodes of one
-    programme, not finished values, so the multiplier is applied here instead of
-    by rewriting several dozen literals whenever the band moves.
-    """
-
-    return tuple(
-        re.sub(
-            r"(=\s*)(-?[0-9]*\.?[0-9]+)",
-            lambda match: f"{match.group(1)}{n(float(match.group(2)) * COMBAT_INTENSITY)}",
-            entry,
-        )
-        for entry in indexed_package(branch, packages, tier)
-    )
-
-
-INDUSTRIAL_BUDGET_EFFECTS = {
-    "automated_assembly": ("ADISCORD_economy_civilian_factory_income_factor = 0.02",),
-    "predictive_maintenance": ("ADISCORD_economy_military_factory_expense_factor = -0.02",),
-    "autonomous_factory_cells": ("ADISCORD_economy_civilian_factory_income_factor = 0.03",),
-    "phase_synchronized_substations": ("ADISCORD_economy_military_factory_expense_factor = -0.01",),
-    "load_following_microreactors": ("ADISCORD_economy_military_factory_expense_factor = -0.02",),
-    "continental_load_balancing": ("ADISCORD_economy_military_factory_expense_factor = -0.02",),
-}
-
-
-# Equipment modifiers improve the manufactured family, including existing stock.
-NAVAL_AIR_WEAPON_EFFECTS = {
-    "radar_gunnery": ("heavy_cruiser = { hg_attack = 0.06 }",),
-    "stabilized_naval_gun_directors": ("heavy_cruiser = { hg_attack = 0.06 lg_attack = 0.04 }",),
-    "missile_batteries": ("heavy_cruiser = { hg_attack = 0.08 }",),
-    "composite_armor_belts": ("heavy_cruiser = { armor_value = 0.10 }",),
-    "cooperative_fleet_missile_defense": ("heavy_cruiser = { anti_air_attack = 0.10 }",),
-    "superconducting_railgun_turrets": ("heavy_cruiser = { hg_attack = 0.08 hg_armor_piercing = 0.08 }",),
-    "towed_array_sonar": ("ADISCORD_coastal_patrol_vessel = { sub_detection = 0.10 sub_attack = 0.06 }",),
-    "containerized_escort_missile_cells": ("ADISCORD_coastal_patrol_vessel = { lg_attack = 0.08 anti_air_attack = 0.08 }",),
-    "directed_energy_point_defense": ("ADISCORD_coastal_patrol_vessel = { anti_air_attack = 0.12 }",),
-    "homing_torpedoes": ("submarine = { torpedo_attack = 0.08 }",),
-    "anechoic_tile_bonding": ("submarine = { sub_visibility = -0.06 }",),
-    "air_independent_cells": ("submarine = { naval_range = 0.10 }",),
-    "fiber_optic_torpedo_control": ("submarine = { torpedo_attack = 0.08 }",),
-    "supercavitating_interceptor_torpedoes": ("submarine = { torpedo_attack = 0.10 }",),
-    "helmet_cued_targeting": ("fighter = { air_attack = 0.08 }",),
-    "electronically_scanned_fighter_radar": ("fighter = { air_attack = 0.06 air_defence = 0.04 }",),
-    "guided_munitions": ("cas = { air_ground_attack = 0.08 }",),
-    "electromagnetic_cannon_pods": ("cas = { air_ground_attack = 0.10 }",),
-    "twin_engine_aircraft": ("ADISCORD_tactical_bomber = { reliability = 0.02 }",),
-    "maritime_patrol_aircraft": ("nav_bomber = { air_range = 0.04 }",),
-    "pressurized_bombers": ("ADISCORD_tactical_bomber = { air_defence = 0.04 }",),
-    "airborne_homing_torpedoes": ("nav_bomber = { naval_strike_attack = 0.10 naval_strike_targetting = 0.08 }",),
-    "stabilized_bomb_sights": ("ADISCORD_tactical_bomber = { strategic_attack = 0.08 air_ground_attack = 0.06 }",),
-    "long_range_maritime_aircraft": ("nav_bomber = { naval_strike_targetting = 0.06 }",),
-    "jet_strike_bombers": ("ADISCORD_tactical_bomber = { strategic_attack = 0.06 }",),
-    "integrated_strike_navigation": (
-        "ADISCORD_tactical_bomber = { air_range = 0.08 strategic_attack = 0.06 }",
-        "nav_bomber = { air_range = 0.08 naval_strike_targetting = 0.06 }",
-    ),
-}
-
-
 def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
-    key = branch.techs[tier].key
-    package = NAVAL_AIR_WEAPON_EFFECTS.get(key)
-    if package is None:
-        package = base_effects_for(branch, tier)
-    return package + INDUSTRIAL_BUDGET_EFFECTS.get(key, ())
+    return branch.techs[tier].effects
 
 
-def base_effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
-    """Return an effect package that reflects the actual programme selected.
-
-    Filler-sized 0.4% effects made the old dense tree feel cosmetic.  A narrow
-    technology is now normally worth about 1.2-1.8%, while a role-specific
-    technology is worth 2-3%.  XOR branches replace, rather than stack, one
-    another, keeping their cumulative strength under control.
-    """
-
-    tech = branch.techs[tier]
-    if branch.key == "small_arms":
-        packages = (
-            ("category_all_infantry = { soft_attack = 0.012 }",),
-            ("category_all_infantry = { defense = 0.012 }",),
-            ("category_all_infantry = { soft_attack = 0.014 }",),
-            ("category_all_infantry = { soft_attack = 0.014 breakthrough = 0.004 }",),
-            ("coordination_bonus = 0.006", "category_all_infantry = { soft_attack = 0.006 }"),
-            ("category_all_infantry = { breakthrough = 0.012 soft_attack = 0.006 }",),
-            ("category_all_infantry = { defense = 0.014 breakthrough = 0.004 }",),
-            ("category_all_infantry = { soft_attack = 0.016 breakthrough = 0.008 }",),
-            ("coordination_bonus = 0.008", "category_all_infantry = { soft_attack = 0.008 }"),
-            ("category_all_infantry = { soft_attack = 0.018 breakthrough = 0.01 }",),
-            ("category_all_infantry = { defense = 0.014 breakthrough = 0.01 }",),
-            ("land_night_attack = 0.006", "coordination_bonus = 0.008"),
-            ("category_all_infantry = { defense = 0.016 soft_attack = 0.006 }",),
-            ("category_all_infantry = { breakthrough = 0.016 defense = 0.006 }",),
-            ("category_all_infantry = { defense = 0.012 soft_attack = 0.012 }",),
-            ("category_all_infantry = { soft_attack = 0.02 }", "coordination_bonus = 0.012"),
-        )
-        return combat_package(branch, packages, tier)
-    if branch.key == "anti_tank_infantry":
-        packages = (
-            ("category_all_infantry = { hard_attack = 0.006 ap_attack = 0.004 }",),
-            ("category_all_infantry = { hard_attack = 0.008 breakthrough = 0.004 }",),
-            ("category_all_infantry = { hard_attack = 0.01 ap_attack = 0.008 }",),
-            ("category_all_infantry = { hard_attack = 0.014 ap_attack = 0.01 }",),
-            ("category_all_infantry = { ap_attack = 0.014 }", "coordination_bonus = 0.004"),
-            ("category_all_infantry = { hard_attack = 0.016 breakthrough = 0.01 }",),
-            ("category_all_infantry = { ap_attack = 0.016 }", "coordination_bonus = 0.006"),
-            ("category_all_infantry = { hard_attack = 0.018 ap_attack = 0.016 }",),
-            ("category_all_infantry = { ap_attack = 0.018 }", "coordination_bonus = 0.008"),
-            ("category_all_infantry = { hard_attack = 0.02 ap_attack = 0.018 }",),
-            ("category_all_infantry = { ap_attack = 0.02 }", "coordination_bonus = 0.01"),
-            ("category_all_infantry = { hard_attack = 0.024 ap_attack = 0.024 breakthrough = 0.012 }", "coordination_bonus = 0.012"),
-        )
-        return combat_package(branch, packages, tier)
-    if branch.key == "night_combat":
-        packages = (
-            ("land_night_attack = 0.005",),
-            ("land_night_attack = 0.005", "category_all_infantry = { defense = 0.006 }"),
-            ("land_night_attack = 0.006", "category_recon = { recon = 0.12 }"),
-            ("land_night_attack = 0.007", "category_all_infantry = { soft_attack = 0.006 }"),
-            ("land_night_attack = 0.006", "category_all_infantry = { breakthrough = 0.006 }"),
-            ("land_night_attack = 0.007", "coordination_bonus = 0.005"),
-            ("land_night_attack = 0.007", "category_all_infantry = { defense = 0.007 }"),
-            ("land_night_attack = 0.008", "category_recon = { recon = 0.15 }"),
-            ("land_night_attack = 0.008", "category_all_infantry = { defense = 0.008 }"),
-            ("land_night_attack = 0.009", "coordination_bonus = 0.007"),
-            ("land_night_attack = 0.009", "category_all_infantry = { breakthrough = 0.009 }"),
-            ("land_night_attack = 0.012", "coordination_bonus = 0.01", "category_all_infantry = { defense = 0.012 breakthrough = 0.012 }"),
-        )
-        return combat_package(branch, packages, tier)
-    if tech.key in APPLIED_EFFECTS:
-        return tuple(APPLIED_EFFECTS[tech.key])
-    compact_effects = COMPACT_EFFECTS_BY_TECH_KEY.get(tech.key)
-    if compact_effects:
-        return compact_effects
-
-    profile = branch.profile
-    tier_count = len(branch.techs)
-    progress = 0 if tier_count <= 1 else tier * 6 / (tier_count - 1)
-    capstone_scale = 1.45 if tier == tier_count - 1 else 1.0
-    # Combat lines use a dedicated intensity multiplier while economy
-    # percentages remain unchanged. Applying the multiplier to the two bands here
-    # keeps every downstream effect table in step.
-    intensity = COMBAT_INTENSITY if profile in COMBAT_PROFILES else 1.0
-    small = (0.012 + progress * 0.001) * capstone_scale * intensity
-    medium = (0.020 + progress * 0.002) * capstone_scale * intensity
-    organisation = (0.75 + progress * 0.12) * capstone_scale
-
-    if branch.key == "forbidden_energy":
-        packages = (
-            (f"nuclear_production_factor = {n(0.04)}", f"industry_repair_factor = {n(0.02)}", f"stability_factor = -{n(0.005)}"),
-            (f"nuclear_production_factor = {n(0.06)}", f"local_resources_factor = {n(0.02)}", f"stability_factor = -{n(0.008)}"),
-            (f"nuclear_production_factor = {n(0.08)}", f"production_speed_buildings_factor = {n(0.025)}", f"stability_factor = -{n(0.011)}"),
-            (f"nuclear_production_factor = {n(0.10)}", f"fuel_gain_factor = {n(0.03)}", f"stability_factor = -{n(0.014)}"),
-            (f"nuclear_production_factor = {n(0.12)}", f"research_speed_factor = {n(0.025)}", f"stability_factor = -{n(0.017)}"),
-            (f"nuclear_production_factor = {n(0.16)}", f"industrial_capacity_factory = {n(0.04)}", f"stability_factor = -{n(0.025)}"),
-        )
-        return indexed_package(branch, packages, tier)
-    if branch.key == "forbidden_automation":
-        packages = (
-            (f"production_factory_max_efficiency_factor = {n(0.04)}", f"industry_repair_factor = {n(0.03)}", f"stability_factor = -{n(0.01)}"),
-            (f"coordination_bonus = {n(0.05)}", f"land_reinforce_rate = {n(0.03)}", f"stability_factor = -{n(0.02)}"),
-            (f"production_factory_max_efficiency_factor = {n(0.08)}", f"research_speed_factor = {n(0.04)}", f"stability_factor = -{n(0.035)}"),
-        )
-        return indexed_package(branch, packages, tier)
-
-    pattern = GRAPH_PATTERN_BY_BRANCH.get(branch.key)
-    lane = BRANCH_GRAPHS[branch.key].lanes[tier]
-    xor_group = next(
-        (group for group in XOR_INDEX_GROUPS_BY_BRANCH.get(branch.key, ()) if tier in group),
-        (),
-    )
-    xor_option = xor_group.index(tier) if xor_group else None
-
-    if tier == tier_count - 1:
-        capstone = integrated_capstone_effects(
-            branch.key, small, medium, organisation,
-        )
-        if capstone:
-            return capstone
-
-    if BRANCH_GRAPHS[branch.key].dependencies[tier]:
-        synthesis_nodes = [
-            index
-            for index, parents in enumerate(BRANCH_GRAPHS[branch.key].dependencies)
-            if parents
-        ]
-        stage_effects = integrated_stage_effects(
-            branch.key,
-            synthesis_nodes.index(tier),
-            small,
-            medium,
-            organisation,
-        )
-        if stage_effects:
-            return stage_effects
-
-    programme, programme_step = programme_for(branch.key, tier)
-    if programme:
-        return themed_programme_effects(
-            branch.key, programme, programme_step, small, medium, organisation,
-        )
-
-    # Persistent strategic schools.
-    if pattern == "dual_choice" and tier >= 5 and tier != 19:
-        dual = {
-            "reconstruction": {
-                # Expansion is the peacetime construction route.  It keeps a
-                # small infrastructure dividend so its value is not limited
-                # to factory spam.
-                0: (
-                    f"production_speed_buildings_factor = {n(medium)}",
-                    f"production_speed_industrial_complex_factor = {n(small)}",
-                    f"production_speed_infrastructure_factor = {n(small / 2)}",
-                ),
-                # Repair used to be a trap choice: repair speed matters only
-                # after damage, while its rival accelerated expansion every
-                # day.  Faster restoration now also represents less factory
-                # downtime, granting a modest always-on output bonus.
-                2: (
-                    f"industry_repair_factor = {n(medium * 1.35)}",
-                    f"production_speed_infrastructure_factor = {n(small)}",
-                    f"industrial_capacity_factory = {n(small / 2)}",
-                ),
-            },
-            "finance": {
-                0: (f"production_factory_start_efficiency_factor = {n(medium)}", f"production_factory_efficiency_gain_factor = {n(small)}"),
-                2: (f"consumer_goods_factor = -{n(small)}", f"production_lack_of_resource_penalty_factor = -{n(small)}"),
-            },
-            "combat_armor": {
-                0: (f"category_all_armor = {{ breakthrough = {n(medium)} hard_attack = {n(medium)} }}",),
-                2: (f"category_all_armor = {{ armor_value = {n(medium)} defense = {n(medium)} reliability = {n(small)} }}",),
-            },
-            "strategic_air": {
-                0: (f"ground_attack_factor = {n(medium)}", f"air_mission_efficiency = {n(small)}"),
-                2: (f"strategic_bomb_visibility = -{n(medium)}", f"air_accidents_factor = -{n(small)}"),
-            },
-            "surface_fleet": {
-                0: (f"naval_hit_chance = {n(medium)}", f"naval_coordination = {n(small)}"),
-                2: (f"naval_detection = {n(medium)}", f"convoy_escort_efficiency = {n(small)}"),
-            },
-        }
-        return dual[branch.key][lane]
-
-    # Repeated field choices: option A and B consistently favour different
-    # operational priorities, while the shared merge nodes use the base line.
-    if xor_option is not None and pattern in {"double_choice", "alternating_choices"}:
-        choices = {
-            "field_support": (
-                (f"category_support_battalions = {{ max_organisation = {n(organisation)} defense = {n(small)} }}",),
-                (f"category_support_battalions = {{ default_morale = {n(medium)} breakthrough = {n(small)} }}",),
-            ),
-            "logistics": (
-                (f"land_reinforce_rate = {n(medium)}", f"supply_consumption_factor = -{n(small / 2)}"),
-                (f"supply_consumption_factor = -{n(medium)}", f"org_loss_when_moving = -{n(small)}"),
-            ),
-            "rail": (
-                (f"industry_repair_factor = {n(medium)}", f"supply_consumption_factor = -{n(small / 2)}"),
-                (f"supply_consumption_factor = -{n(medium)}", f"land_reinforce_rate = {n(small)}"),
-            ),
-            "anti_air": (
-                (f"anti_air = {{ air_attack = {n(medium)} reliability = {n(small)} }}",),
-                (f"anti_air = {{ defense = {n(medium)} soft_attack = {n(small)} }}",),
-            ),
-            "heavy_armor": (
-                (f"category_all_armor = {{ breakthrough = {n(medium)} hard_attack = {n(medium)} }}",),
-                (f"category_all_armor = {{ armor_value = {n(medium)} defense = {n(medium)} }}",),
-            ),
-            "air_support": (
-                (f"ground_attack_factor = {n(medium)}", f"air_mission_efficiency = {n(small)}"),
-                (f"air_mission_efficiency = {n(medium)}", f"air_accidents_factor = -{n(small)}"),
-            ),
-            "naval_support": (
-                (f"convoy_escort_efficiency = {n(medium)}", f"naval_coordination = {n(small)}"),
-                (f"naval_detection = {n(medium)}", f"naval_mines_effect_reduction = {n(small)}"),
-            ),
-            "anti_tank": (
-                (f"category_anti_tank = {{ hard_attack = {n(medium)} ap_attack = {n(medium)} }}",),
-                (f"category_anti_tank = {{ reliability = {n(medium)} defense = {n(small)} }}",),
-            ),
-            "recon_armor": (
-                (f"category_all_armor = {{ maximum_speed = {n(medium)} reliability = {n(small)} }}",),
-                (f"category_all_armor = {{ defense = {n(medium)} breakthrough = {n(small)} }}",),
-            ),
-            "subsurface": (
-                (f"naval_detection = {n(medium)}", f"naval_coordination = {n(small)}"),
-                (f"naval_mines_effect_reduction = {n(medium)}", f"naval_detection = {n(small)}"),
-            ),
-        }
-        return choices[branch.key][min(xor_option, 1)]
-
-    # Parallel civil and electronics programmes should feel like distinct
-    # research projects, not twenty copies of the same global percentage.
-    # These lanes ultimately merge, so each package is deliberately narrow:
-    # choosing a route changes the order in which a country gains capabilities
-    # without creating a permanent all-purpose super-modifier.
-    if tier >= 5 and branch.key in {"administration", "computing", "signals", "power"}:
-        programme_effects = {
-            "administration": {
-                0: (
-                    f"consumer_goods_factor = -{n(small / 2)}",
-                    f"production_factory_start_efficiency_factor = {n(small / 2)}",
-                ),
-                1: (
-                    f"research_speed_factor = {n(small * 0.65)}",
-                    f"political_power_gain = {n(small / 2)}",
-                ),
-                2: (
-                    f"coordination_bonus = {n(small)}",
-                    f"planning_speed = {n(small / 2)}",
-                ),
-            },
-            "computing": {
-                0: (
-                    f"supply_consumption_factor = -{n(small / 2)}",
-                    f"production_factory_efficiency_gain_factor = {n(small / 2)}",
-                ),
-                1: (
-                    f"research_speed_factor = {n(small * 0.75)}",
-                    f"encryption_factor = {n(small)}",
-                ),
-                2: (
-                    f"coordination_bonus = {n(small)}",
-                    f"land_reinforce_rate = {n(small / 2)}",
-                ),
-            },
-            "signals": {
-                0: (
-                    f"encryption_factor = {n(medium)}",
-                    f"decryption_factor = {n(small / 2)}",
-                    f"production_factory_efficiency_gain_factor = {n(small / 2)}",
-                ),
-                1: (
-                    f"coordination_bonus = {n(small)}",
-                    f"land_reinforce_rate = {n(small / 2)}",
-                ),
-                2: (
-                    f"decryption_factor = {n(medium)}",
-                    f"encryption_factor = {n(small / 2)}",
-                    f"research_speed_factor = {n(small / 2)}",
-                ),
-            },
-            "power": {
-                0: (
-                    f"nuclear_production_factor = {n(medium)}",
-                    f"industrial_capacity_factory = {n(small / 2)}",
-                ),
-                1: (
-                    f"industry_repair_factor = {n(medium)}",
-                    f"fuel_gain_factor = {n(small)}",
-                ),
-                2: (
-                    f"production_speed_buildings_factor = {n(small)}",
-                    f"local_resources_factor = {n(small)}",
-                ),
-            },
-        }
-        return programme_effects[branch.key][lane]
-
-    profiles = {
-        "construction": (
-            f"production_speed_buildings_factor = {n(small)}",
-            f"industry_repair_factor = {n(medium)}",
-        ),
-        "production": (
-            f"industrial_capacity_factory = {n(small)}",
-            f"production_factory_efficiency_gain_factor = {n(small)}",
-        ),
-        "resources": (
-            f"local_resources_factor = {n(medium)}",
-            f"fuel_gain_factor = {n(small)}",
-        ),
-        "finance": (
-            f"production_factory_start_efficiency_factor = {n(small)}",
-            f"consumer_goods_factor = -{n(small / 2)}",
-        ),
-        "administration": (
-            f"research_speed_factor = {n(small / 2)}",
-            f"coordination_bonus = {n(small / 2)}",
-        ),
-        "civil": (
-            f"industry_repair_factor = {n(medium)}",
-            f"stability_factor = {n(small / 2)}",
-        ),
-        "power": (
-            f"industrial_capacity_factory = {n(small)}",
-            f"nuclear_production_factor = {n(medium)}",
-        ),
-        "signals": (
-            f"encryption_factor = {n(medium)}",
-            f"decryption_factor = {n(medium)}",
-        ),
-        "computing": (
-            f"research_speed_factor = {n(small)}",
-            f"coordination_bonus = {n(small / 2)}",
-        ),
-        "forbidden_energy": (
-            f"nuclear_production_factor = {n(0.04 + tier * 0.02)}",
-            f"stability_factor = -{n(0.005 + tier * 0.003)}",
-        ),
-        "forbidden_automation": (
-            f"production_factory_max_efficiency_factor = {n(0.02 + tier * 0.01)}",
-            f"stability_factor = -{n(0.01 + tier * 0.005)}",
-        ),
-        "infantry": (f"category_all_infantry = {{ soft_attack = {n(medium)} breakthrough = {n(small)} }}",),
-        "squad": (f"category_all_infantry = {{ soft_attack = {n(small)} defense = {n(medium)} }}",),
-        "protection": (f"category_all_infantry = {{ defense = {n(medium)} max_organisation = {n(organisation)} }}",),
-        "special_forces": (f"category_special_forces = {{ breakthrough = {n(medium)} maximum_speed = {n(small / 2)} }}",),
-        "support": (f"category_support_battalions = {{ defense = {n(medium)} soft_attack = {n(small)} }}",),
-        "logistics": (f"supply_consumption_factor = -{n(small)}", f"land_reinforce_rate = {n(small / 2)}"),
-        "rail": (f"supply_consumption_factor = -{n(small / 2)}", f"industry_repair_factor = {n(medium)}"),
-        "artillery": (f"artillery = {{ soft_attack = {n(medium)} reliability = {n(small / 2)} }}",),
-        "anti_tank": (f"category_anti_tank = {{ hard_attack = {n(medium)} ap_attack = {n(medium)} }}",),
-        "anti_air": (f"anti_air = {{ air_attack = {n(medium)} reliability = {n(small / 2)} }}",),
-        "recon_armor": (f"category_all_armor = {{ maximum_speed = {n(small)} reliability = {n(small)} }}",),
-        "combat_armor": (f"category_all_armor = {{ breakthrough = {n(medium)} hard_attack = {n(small)} }}",),
-        "heavy_armor": (f"category_all_armor = {{ armor_value = {n(medium)} defense = {n(small)} }}",),
-        "fighter": (f"air_mission_efficiency = {n(small)}", f"air_accidents_factor = -{n(small)}"),
-        "air_support": (f"air_mission_efficiency = {n(small)}", f"ground_attack_factor = {n(medium)}"),
-        "strategic_air": (f"air_mission_efficiency = {n(small)}", f"strategic_bomb_visibility = -{n(small)}"),
-        "naval_support": (f"convoy_escort_efficiency = {n(medium)}", f"naval_detection = {n(small)}"),
-        "surface_fleet": (f"naval_hit_chance = {n(small)}", f"naval_coordination = {n(small)}"),
-        "subsurface": (f"naval_detection = {n(small)}", f"naval_mines_effect_reduction = {n(medium)}"),
-    }
-    return profiles[profile]
+NAVAL_AIR_WEAPON_EFFECTS = {
+    "air_independent_cells": ('submarine = { naval_range = 0.10 }',),
+    "airborne_homing_torpedoes": ('nav_bomber = { naval_strike_attack = 0.10 naval_strike_targetting = 0.08 }',),
+    "electronically_scanned_fighter_radar": ('fighter = { air_attack = 0.06 air_defence = 0.04 }',),
+    "guided_munitions": ('cas = { air_ground_attack = 0.08 }',),
+    "homing_torpedoes": ('submarine = { torpedo_attack = 0.08 }',),
+    "integrated_strike_navigation": ('ADISCORD_tactical_bomber = { air_range = 0.08 strategic_attack = 0.06 }', 'nav_bomber = { air_range = 0.08 naval_strike_targetting = 0.06 }'),
+    "jet_strike_bombers": ('ADISCORD_tactical_bomber = { strategic_attack = 0.06 }',),
+    "long_range_maritime_aircraft": ('nav_bomber = { naval_strike_targetting = 0.06 }',),
+    "maritime_patrol_aircraft": ('nav_bomber = { air_range = 0.04 }',),
+    "missile_batteries": ('heavy_cruiser = { hg_attack = 0.08 }',),
+    "pressurized_bombers": ('ADISCORD_tactical_bomber = { air_defence = 0.04 }',),
+    "radar_gunnery": ('heavy_cruiser = { hg_attack = 0.06 }',),
+    "stabilized_bomb_sights": ('ADISCORD_tactical_bomber = { strategic_attack = 0.08 air_ground_attack = 0.06 }',),
+    "twin_engine_aircraft": ('ADISCORD_tactical_bomber = { reliability = 0.02 }',),
+}
 
 
 ALLOW = {
@@ -4384,103 +3742,6 @@ COMPACT_ICONS_BY_PROFILE = {
 }
 
 
-# Several of the original dense branches were built from dark equipment
-# silhouettes or just three repeated symbols.  Rotate a compact engine-owned
-# thematic palette for those entire branches so chronology and function are
-# readable at a glance inside a 72x72 cell.
-BRANCH_ICON_PALETTES = {
-    "field_support": (
-        "basic_machine_tools", "basic_construction", "improved_machine_tools",
-        "radio", "advanced_machine_tools", "improved_construction",
-        "assembly_line_production", "advanced_construction",
-    ),
-    "logistics": (
-        "radio", "basic_machine_tools", "computing_machine",
-        "assembly_line_production", "improved_computing_machine",
-        "improved_construction", "advanced_computing_machine",
-        "advanced_construction",
-    ),
-    "rail": (
-        "basic_machine_tools", "basic_construction", "improved_machine_tools",
-        "radio", "assembly_line_production", "improved_construction",
-        "advanced_machine_tools", "computing_machine",
-        "advanced_construction", "advanced_computing_machine",
-    ),
-    "combat_medicine": (
-        "basic_construction", "radio", "improved_construction",
-        "computing_machine", "advanced_construction", "improved_computing_machine",
-        "night_vision", "advanced_computing_machine",
-    ),
-    "combat_engineering": (
-        "basic_machine_tools", "basic_construction", "improved_machine_tools",
-        "improved_construction", "advanced_machine_tools", "radio",
-        "advanced_construction", "assembly_line_production",
-    ),
-    "officer_training": (
-        "radio", "mechanical_computing", "basic_encryption",
-        "computing_machine", "improved_encryption", "improved_computing_machine",
-        "advanced_encryption", "advanced_computing_machine",
-    ),
-    "finance": (
-        "mechanical_computing", "computing_machine", "improved_computing_machine",
-        "advanced_computing_machine", "basic_encryption", "radio",
-        "improved_machine_tools", "dispersed_industry",
-    ),
-    "administration": (
-        "radio", "mechanical_computing", "basic_encryption", "computing_machine",
-        "improved_encryption", "improved_computing_machine", "advanced_encryption",
-        "advanced_computing_machine",
-    ),
-    "power": (
-        "electronic_mechanical_engineering", "oil_plant", "atomic_research",
-        "nuclear_reactor", "advanced_oil_plant", "sp_nuclear_isotope_separation",
-        "sp_physics_improved_radio", "sp_physics_advanced_radio",
-    ),
-    "computing": (
-        "mechanical_computing", "electronic_mechanical_engineering", "computing_machine",
-        "basic_encryption", "radio_detection", "improved_computing_machine",
-        "centimetric_radar", "advanced_computing_machine",
-    ),
-    "forbidden_energy": (
-        "atomic_research", "nuclear_reactor", "sp_nuclear_isotope_separation",
-        "experimental_rockets", "advanced_rocket_engines", "sp_physics_advanced_radio",
-    ),
-    "recon_armor": (
-        "nsb_engine_tech_1", "nsb_armor_tech_1", "basic_machine_tools",
-        "radio", "nsb_engine_tech_2", "centimetric_radar",
-        "nsb_armor_tech_2", "improved_machine_tools", "nsb_engine_tech_3",
-        "advanced_centimetric_radar",
-    ),
-    "combat_armor": (
-        "nsb_armor_tech_1", "nsb_engine_tech_1", "basic_machine_tools",
-        "nsb_armor_tech_2", "nsb_engine_tech_2", "radio",
-        "nsb_armor_tech_3", "nsb_engine_tech_3", "advanced_machine_tools",
-        "nsb_armor_tech_4", "nsb_engine_tech_4", "advanced_centimetric_radar",
-    ),
-    "heavy_armor": (
-        "nsb_armor_tech_1", "nsb_engine_tech_1", "basic_machine_tools",
-        "nsb_armor_tech_2", "nsb_engine_tech_2", "improved_machine_tools",
-        "nsb_armor_tech_3", "nsb_engine_tech_3", "advanced_machine_tools",
-        "nsb_armor_tech_4", "nsb_engine_tech_4", "advanced_construction",
-    ),
-    "naval_support": (
-        "sonar", "basic_torpedo", "improved_sonar", "basic_naval_mines",
-        "advanced_sonar", "improved_naval_mines", "advanced_centimetric_radar",
-        "advanced_naval_mines", "modern_sonar", "homing_torpedo",
-    ),
-    "surface_fleet": (
-        "basic_cruiser_armor_scheme", "decimetric_radar", "improved_cruiser_armor_scheme",
-        "improved_centimetric_radar", "advanced_cruiser_armor_scheme",
-        "advanced_centimetric_radar", "naval_air_operations", "air_defence",
-    ),
-    "subsurface": (
-        "sonar", "basic_submarine_snorkel", "basic_torpedo", "submarine_mine_laying",
-        "improved_sonar", "electric_torpedo", "improved_submarine_snorkel",
-        "advanced_sonar", "homing_torpedo", "advanced_submarine_warfare",
-    ),
-}
-
-
 # Wide cards are reserved for technologies that unlock something the player
 # can actually put on a production line. Give those cards the corresponding
 # equipment silhouette instead of a 64px support-company badge.
@@ -4535,13 +3796,6 @@ EQUIPMENT_UNLOCK_ICONS = {
 EQUIPMENT_UNLOCK_ICONS.update({f"ADISCORD_tech_{key}": icon for key, (_, icon) in NAVAL_AIR_UNLOCKS.items()})
 EQUIPMENT_UNLOCK_ICONS["ADISCORD_tech_twin_engine_aircraft"] = "tactical_bomber1"
 
-
-COMPACT_ICON_OVERRIDES = {
-    "dirty_energy_munitions": "sp_nuclear_isotope_separation",
-    "trauma_registry_networks": "ADISCORD_equipment_casualty_monitor",
-    "forward_surgical_cells": "ADISCORD_equipment_medical",
-    "distributed_combat_medicine": "ADISCORD_equipment_medical",
-}
 
 # Infantry effect-only cards show the equipment being improved. Their art
 # must stay attached to the technology when the branch order changes.
@@ -4619,19 +3873,6 @@ INFANTRY_COMPACT_ICONS = {
     for key in keys
 }
 
-# These vanilla sprites are valid 64x64 files but are composed as support
-# company badges with a soldier silhouette. They read badly when repeated as
-# generic research icons, so effect-only nodes use neutral technical art.
-UNSUITABLE_COMPACT_ICON_PREFIXES = (
-    "engineers",
-    "recon",
-    "tech_field_hospital",
-    "tech_logistics_company",
-    "tech_maintenance_company",
-    "tech_signal_company",
-    "tech_special_forces",
-)
-
 
 def technology_icon_size(icon: str) -> tuple[int, int] | None:
     relative = Path("gfx") / "interface" / "technologies" / f"{icon}.dds"
@@ -4639,7 +3880,8 @@ def technology_icon_size(icon: str) -> tuple[int, int] | None:
         path = root / relative
         if not path.exists():
             continue
-        header = path.read_bytes()[:20]
+        with path.open("rb") as stream:
+            header = stream.read(20)
         if len(header) >= 20 and header[:4] == b"DDS ":
             height = int.from_bytes(header[12:16], "little")
             width = int.from_bytes(header[16:20], "little")
@@ -4667,41 +3909,51 @@ WEAPON_CATEGORY_ICONS.update({
 
 def weapon_category_scale(tech: Tech) -> str:
     # Category art is 176x72; effect-only cards have a 72x72 viewport.
-    return "\t\tscale = 0.363636\n" if tech.id not in ENABLE_EQUIPMENT and tech.key in WEAPON_CATEGORY_ICONS else ""
+    if tech.key == "recovered_medium_chassis":
+        return "\t\tscale = 0.35\n"
+    if tech.id not in ENABLE_EQUIPMENT:
+        branch, index = TECH_POSITION_BY_ID[tech.id]
+        size = technology_icon_size(icon_for_technology(branch, index))
+        if size and max(size) > 72:
+            scale = min(64 / size[0], 64 / size[1])
+            return f"\t\tscale = {scale:.6f}\n"
+    return ""
 
 
 def icon_for_technology(branch: Branch, index: int) -> str:
     tech = branch.techs[index]
     if tech.key in WEAPON_CATEGORY_ICONS:
         return WEAPON_CATEGORY_ICONS[tech.key]
-    icon = ICON_ALIASES.get(tech.icon, tech.icon)
-
-    # The GUI selects the wide item template for equipment unlocks. Preserve a
-    # readable vehicle or weapon silhouette instead of compacting equipment into
-    # unrelated support-company icons.
-    if tech.id in ENABLE_EQUIPMENT:
-        candidate = EQUIPMENT_UNLOCK_ICONS.get(tech.id, icon)
+    if branch.key == "small_arms" and tech.id in ENABLE_EQUIPMENT:
+        generation = {
+            "postwar_weapon_standardization": 1,
+            "refurbished_receivers": 2,
+        }.get(tech.key, 3)
+        return (
+            "ADISCORD_weapon_01_reclaimed_arsenal",
+            "ADISCORD_weapon_02_recovered_service_rifle",
+            "ADISCORD_weapon_03_standardized_battle_rifle",
+        )[generation - 1]
+    if branch.key == "night_combat":
+        return "night_vision" if tech.key in {
+            "passive_intensifier_cells", "thermal_observation_channels",
+        } else "night_vision2"
+    if tech.key == "fire_and_forget_seekers":
+        return "ADISCORD_antitank_09_top_attack_seeker"
+    candidates = (
+        EQUIPMENT_UNLOCK_ICONS.get(tech.id, ""),
+        INFANTRY_COMPACT_ICONS.get(tech.key, ""),
+        ICON_ALIASES.get(tech.icon, tech.icon),
+        *COMPACT_ICONS_BY_PROFILE[branch.profile],
+    )
+    max_width, max_height = (190, 84) if tech.id in ENABLE_EQUIPMENT else (72, 72)
+    for candidate in candidates:
         size = technology_icon_size(candidate)
-        if size and size[0] <= 190 and size[1] <= 84:
+        if size and candidate.startswith("ADISCORD_") and size[0] <= 190 and size[1] <= 84:
             return candidate
-
-    if tech.key in INFANTRY_COMPACT_ICONS:
-        return INFANTRY_COMPACT_ICONS[tech.key]
-
-    palette = BRANCH_ICON_PALETTES.get(branch.key)
-    if palette:
-        candidate = palette[index % len(palette)]
-        if technology_icon_size(candidate):
-            icon = candidate
-    icon = COMPACT_ICON_OVERRIDES.get(tech.key, icon)
-    size = technology_icon_size(icon)
-    unsuitable = icon.startswith(UNSUITABLE_COMPACT_ICON_PREFIXES)
-    # Effect-only nodes use the 72x72 compact template. Oversized equipment art
-    # and support-company silhouettes are replaced with technical symbols.
-    if size and (size[0] > 72 or size[1] > 72 or unsuitable):
-        compact = COMPACT_ICONS_BY_PROFILE[branch.profile]
-        return compact[index % len(compact)]
-    return icon
+        if size and size[0] <= max_width and size[1] <= max_height:
+            return candidate
+    raise ValueError(f"{tech.id}: no available artwork fits its research card")
 
 
 BRANCH_DESCRIPTION_RU = {
@@ -5431,6 +4683,29 @@ def render_research_completion_effects(tech: Tech) -> list[str]:
     return lines
 
 
+def render_payload(payload: str, indent: int) -> list[str]:
+    """Expand nested effect and AI clauses without combining statements."""
+    tokens = re.findall(r'"[^"]*"|[{}]|[^\s{}]+', payload)
+    lines: list[str] = []
+    position = 0
+    while position < len(tokens):
+        token = tokens[position]
+        if token == "}":
+            indent -= 1
+            lines.append("\t" * indent + "}")
+            position += 1
+        elif position + 2 < len(tokens) and tokens[position + 1] in {"=", ">", "<", ">=", "<="}:
+            value = tokens[position + 2]
+            lines.append("\t" * indent + " ".join(tokens[position:position + 3]))
+            if value == "{":
+                indent += 1
+            position += 3
+        else:
+            lines.append("\t" * indent + token)
+            position += 1
+    return lines
+
+
 def render_technology(branch: Branch, index: int) -> str:
     tech = branch.techs[index]
     year = branch.years[index]
@@ -5441,19 +4716,20 @@ def render_technology(branch: Branch, index: int) -> str:
         lines.append("\t\tallow = {")
         lines.extend(f"\t\t\t{entry}" for entry in allow)
         lines.append("\t\t}")
-    lines.extend(
-        f"\t\t{effect}"
-        for effect in effects_for(branch, index)
-    )
+    for effect in effects_for(branch, index):
+        lines.extend(render_payload(effect, 2))
     if tech.id == "ADISCORD_tech_restored_dockyards":
         # Native transport permission is separate from the invasion plan and
         # division caps, which retain their engine defaults.
         lines.append("\t\tnaval_invasion_capacity = 100")
     lines.extend(render_leader_training_effect(tech))
     for target in graph.successors[index]:
-        lines.append(
-            f"\t\tpath = {{ leads_to_tech = {branch.techs[target].id} research_cost_coeff = 1 }}"
-        )
+        lines.extend((
+            "\t\tpath = {",
+            f"\t\t\tleads_to_tech = {branch.techs[target].id}",
+            "\t\t\tresearch_cost_coeff = 1",
+            "\t\t}",
+        ))
     extra_dependencies = EXTRA_TECH_DEPENDENCIES.get(tech.id, ())
     dependency_indices = graph.dependencies[index]
     if extra_dependencies:
@@ -5507,7 +4783,8 @@ def render_technology(branch: Branch, index: int) -> str:
             "\t\t}",
         ))
     lines.append("\t\tai_will_do = {")
-    lines.extend(f"\t\t\t{entry}" for entry in ai_will_do_for(branch, index))
+    for entry in ai_will_do_for(branch, index):
+        lines.extend(render_payload(entry, 3))
     lines.extend((
         "\t\t}",
         f"\t\tcategories = {{ {CATEGORY_BY_PROFILE[branch.profile]} }}",
@@ -6147,11 +5424,53 @@ NAVAL_AIR_EQUIPMENT_LOCALISATION = {
     ),
 }
 
+REGIMENTAL_SUPPORT_LOCALISATION = {
+    "ADISCORD_regimental_fire_support": (
+        "Полковая огневая группа", "Regimental Fire-support Group",
+    ),
+    "ADISCORD_regimental_fire_support_desc": (
+        "Расчёты пулемётов и станкового оружия для непосредственной поддержки полка. Используют групповое оружие, усиливая огонь по пехоте. Занимают полковую ячейку под столбцом из не менее трёх батальонов.",
+        "Machine-gun and crew-served weapon teams for close regimental support. Use crew-served weapons to reinforce anti-infantry fire. Occupy the regimental slot below a column of at least three battalions.",
+    ),
+    "ADISCORD_regimental_anti_tank": (
+        "Полковой противотанковый взвод", "Regimental Anti-tank Platoon",
+    ),
+    "ADISCORD_regimental_anti_tank_desc": (
+        "Небольшой противотанковый резерв полка. Требует противотанкового вооружения и повышает бронепробитие; заметно слабее полной батареи. Занимает полковую ячейку под столбцом из не менее трёх батальонов.",
+        "A small regimental anti-tank reserve. Requires anti-tank weapons and improves piercing; substantially weaker than a full battery. Occupies the regimental slot below a column of at least three battalions.",
+    ),
+    "ADISCORD_regimental_anti_air": (
+        "Полковой взвод ПВО", "Regimental Air-defense Platoon",
+    ),
+    "ADISCORD_regimental_anti_air_desc": (
+        "Зенитные расчёты для прикрытия позиций полка и борьбы с низколетящими целями. Используют производимое зенитное вооружение. Занимают полковую ячейку под столбцом из не менее трёх батальонов.",
+        "Anti-aircraft teams covering regimental positions against low-flying targets. Use the country's produced anti-aircraft weapons. Occupy the regimental slot below a column of at least three battalions.",
+    ),
+    "ADISCORD_regimental_pioneers": (
+        "Полковой сапёрный взвод", "Regimental Pioneer Platoon",
+    ),
+    "ADISCORD_regimental_pioneers_desc": (
+        "Сапёры с подрывным инструментом и полевыми комплектами. Улучшают укрепление позиций, штурм городской застройки и укреплений. Занимают полковую ячейку под столбцом из не менее трёх батальонов.",
+        "Pioneers with demolition tools and field kits. Improve entrenchment and assaults on urban positions and fortifications. Occupy the regimental slot below a column of at least three battalions.",
+    ),
+    "ADISCORD_regimental_drone_observers": (
+        "Полковая группа воздушной разведки", "Regimental Drone Observation Team",
+    ),
+    "ADISCORD_regimental_drone_observers_desc": (
+        "Наблюдатели с разведывательными дронами, средствами связи и запасными частями из полевых комплектов. Повышают разведку и инициативу, но почти не добавляют огневой мощи. Занимают полковую ячейку под столбцом из не менее трёх батальонов.",
+        "Observers using reconnaissance drones, radios and spares supplied as field equipment. Improve reconnaissance and initiative with little added firepower. Occupy the regimental slot below a column of at least three battalions.",
+    ),
+}
+
+
 def generated_localisation(language: str) -> list[str]:
     is_ru = language == "russian"
     lines = [
         f' {key}:0 "{names[0 if is_ru else 1]}"'
-        for mapping in (ACCESS_REQUIREMENT_LOCALISATION, INFANTRY_FAMILY_LOCALISATION, NAVAL_AIR_UNIT_LOCALISATION)
+        for mapping in (
+            ACCESS_REQUIREMENT_LOCALISATION, INFANTRY_FAMILY_LOCALISATION,
+            NAVAL_AIR_UNIT_LOCALISATION, REGIMENTAL_SUPPORT_LOCALISATION,
+        )
         for key, names in mapping.items()
     ]
     lines.append("")
@@ -6258,6 +5577,7 @@ def write_localisation() -> None:
                 or key in ACCESS_REQUIREMENT_LOCALISATION
                 or key in INFANTRY_FAMILY_LOCALISATION
                 or key in NAVAL_AIR_UNIT_LOCALISATION
+                or key in REGIMENTAL_SUPPORT_LOCALISATION
                 or key in generated_equipment_keys
             ):
                 continue
@@ -6525,7 +5845,7 @@ def apply() -> None:
     write_starting_technology_profile_manifest()
     print(
         f"Generated {len(all_ids)} technologies in {len(BRANCHES)} content branches; "
-        f"{len(SIDE_PROGRAMME_KEYS)} applied branches are attached specialisations."
+        f"{len(SIDE_PROGRAMME_KEYS)} branches are attached specialisations."
     )
 
 

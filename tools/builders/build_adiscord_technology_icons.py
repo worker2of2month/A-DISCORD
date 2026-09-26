@@ -254,7 +254,31 @@ def main() -> int:
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true", help="compare outputs (default)")
     actions.add_argument("--apply", action="store_true", help="write generated outputs")
+    parser.add_argument(
+        "--normalize-existing", action="store_true",
+        help="losslessly encode existing technology artwork with DDS headers",
+    )
     args = parser.parse_args()
+
+    if args.normalize_existing:
+        changed = []
+        for path in sorted(OUTPUT_DIR.rglob("*.dds")):
+            if path.read_bytes().startswith(b"DDS "):
+                continue
+            with Image.open(path) as source:
+                pixels = source.convert("RGBA")
+                stream = BytesIO()
+                pixels.save(stream, format="DDS")
+                payload = stream.getvalue()
+                with Image.open(BytesIO(payload)) as decoded:
+                    if decoded.convert("RGBA").tobytes() != pixels.tobytes():
+                        raise ValueError(f"DDS encoding changed artwork pixels: {path}")
+            changed.append(path)
+            print(f"{'WROTE' if args.apply else 'STALE'}: {path.relative_to(ROOT)}")
+            if args.apply:
+                path.write_bytes(payload)
+        print(f"Technology artwork encodings changed: {len(changed)}")
+        return int(bool(changed) and not args.apply)
 
     try:
         outputs = render_outputs(ROOT)

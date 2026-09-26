@@ -70,4 +70,14 @@ country_event = {
 		set_country_flag = ADISCORD_aph_osf_test_war_decision_unlocked
 	}
 }
+
+country_event = {
+	id = ADISCORD_test_wars.2
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		VAL = { VAL_spawn_urban_breacher_trial = yes }
+	}
+}
 # END CONSOLIDATED: ADISCORD_test_wars_events.txt

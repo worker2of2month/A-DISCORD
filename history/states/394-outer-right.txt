@@ -4,24 +4,19 @@
 state = {
 	id = 394
 	name = "STATE_394"
-	manpower = 225663
+	manpower = 250588
 	state_category = rural
 	history = {
-		owner = LYS
-		add_core_of = LYS
+		owner = ELN
+		add_core_of = ELN
 		buildings = {
 			infrastructure = 3
-			industrial_complex = 1
-			arms_factory = 1
 		}
 	}
 	provinces = {
 		883 1096 1235 1604 2282 3022 3858 3877 3980 5230 6014 6123 6179 6692 8598 8601
 		9201 9314 10198 10599 11582
 	}
-	resources = {
-		aluminium = 5
-	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 2.8
+	local_supplies = 2.4
 }

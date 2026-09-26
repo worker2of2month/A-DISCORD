@@ -2,6 +2,7 @@ from __future__ import annotations
 from tools.lib.on_actions import read_country_on_actions
 
 from pathlib import Path
+from tools.lib.focus_sources import read_focus_source
 import re
 import unittest
 
@@ -76,7 +77,7 @@ LOC_KEYS = (
 
 
 def read(path: Path) -> str:
-    return path.read_text(encoding="utf-8-sig")
+    return read_focus_source(path)
 
 
 def localisation_entries(text: str) -> dict[str, str]:

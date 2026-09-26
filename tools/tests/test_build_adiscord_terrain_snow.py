@@ -77,18 +77,20 @@ class TerrainSnowTests(unittest.TestCase):
         provinces.putpixel((1, 0), (4, 5, 6))
         provinces.putpixel((2, 0), (7, 8, 9))
         cities = Image.new("P", (3, 1), color=1)
-        cities.putpixel((1, 0), snow.CITY_PALETTE_INDEX)
-        cities.putpixel((2, 0), snow.CITY_PALETTE_INDEX)
-        with patch.object(snow, "POLAR_CAP_Y", 0):
-            pixels = snow.generated_pixels(
-                terrain,
-                heightmap,
-                provinces,
-                {},
-                cities=cities,
-                land_colors={(4, 5, 6)},
-            )
-        self.assertEqual(pixels, [4, snow.URBAN_TERRAIN, 4])
+        for city_index in (2, snow.CITY_PALETTE_INDEX):
+            with self.subTest(city_index=city_index):
+                cities.putpixel((1, 0), city_index)
+                cities.putpixel((2, 0), city_index)
+                with patch.object(snow, "POLAR_CAP_Y", 0):
+                    pixels = snow.generated_pixels(
+                        terrain,
+                        heightmap,
+                        provinces,
+                        {},
+                        cities=cities,
+                        land_colors={(4, 5, 6)},
+                    )
+                self.assertEqual(pixels, [4, snow.URBAN_TERRAIN, 4])
 
     def test_graphical_urban_contract_is_exact_on_current_map(self) -> None:
         self.assertEqual(

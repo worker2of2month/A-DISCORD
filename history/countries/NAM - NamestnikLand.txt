@@ -1,4 +1,4 @@
-capital = 689
+capital = 700
 
 oob = "NAM"
 ####### Characters

@@ -27,7 +27,7 @@ CAMPAIGN_STATE_EFFECTS = Path(
 )
 PHASE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
 COLLAPSE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
-CIVIL_WAR_FOCUS = Path("common/national_focus/ADISCORD_vorkerland_focus.txt")
+CIVIL_WAR_FOCUS = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
 
 STORY_NUMBERS = (
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,

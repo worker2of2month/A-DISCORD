@@ -1,0 +1,81 @@
+focus_tree = {
+	id = Bookmark_focus
+	country = {
+		factor = 0
+		modifier = {
+			add = 20
+			original_tag = NOPE
+		}
+	}
+	continuous_focus_position = { x = 100 y = 555555 }
+
+	focus = {
+		id = STP_bookmark_support_shabrat
+		icon = GFX_focus_STP_bookmark_support_shabrat
+		x = -5
+		y = 1
+		cost = 5
+		available = {
+			is_completed_by_event = yes
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_bookmark_last_banquet
+		icon = GFX_focus_STP_bookmark_last_banquet
+		x = -5
+		y = 1
+		cost = 5
+		available = {
+			is_completed_by_event = yes
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = STP_bookmark_support_party
+		icon = GFX_focus_STP_bookmark_support_party
+		x = -5
+		y = 1
+		cost = 5
+		available = {
+			is_completed_by_event = yes
+		}
+		completion_reward = {
+		}
+	}
+
+	focus = {
+		id = VAL_bookmark_the_weaponry_baron
+		icon = GFX_focus_VAL_bookmark_the_weaponry_baron
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = VAL_bookmark_different_views_on_freedom
+		icon = GFX_focus_VAL_bookmark_different_views_on_freedom
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = VAL_bookmark_contracts_outlive_kings
+		icon = GFX_focus_VAL_bookmark_contracts_outlive_kings
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
+
+}

@@ -1,4 +1,6 @@
 From;To;Type;Through;start_x;start_y;stop_x;stop_y;adjacency_rule_name;Comment
 16328;16488;sea;16264;-1;-1;-1;-1;;relyen bridge
 14634;16266;sea;147;-1;-1;-1;-1;strugent_canal;strugent
+16709;16710;sea;14089;3804;933;3814;935;;Misstana island bridge
+16710;16712;sea;14089;3814;935;3813;925;;Southern island bridge
 -1;-1;;-1;-1;-1;-1;-1;-1

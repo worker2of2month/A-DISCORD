@@ -5,6 +5,7 @@ import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from tools.lib.focus_sources import read_focus_source
 
 from tools.validators.validate_adiscord_superevents import (
     GFX,
@@ -292,7 +293,7 @@ class SupereventContractTests(unittest.TestCase):
         effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8-sig")
         playback = blocks(effects, r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{")[0]
         self.assertNotIn("scoped_play_song", playback)
-        focuses = (ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt").read_text(encoding="utf-8-sig")
+        focuses = read_focus_source(ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt")
         assets = (ROOT / "music/ADISCORD_music.asset").read_text(encoding="utf-8-sig")
         for focus_id, song in (("STP_pc_after_victory", "ADISCORD_stp_civil_war_end"),
                                ("STP_pw_party_new_republic", "ADISCORD_stp_party_postwar")):
@@ -598,7 +599,7 @@ if __name__ == "__main__":
         effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8-sig")
         playback = blocks(effects, r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{")[0]
         self.assertNotIn("scoped_play_song", playback)
-        focuses = (ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt").read_text(encoding="utf-8-sig")
+        focuses = read_focus_source(ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt")
         assets = (ROOT / "music/ADISCORD_music.asset").read_text(encoding="utf-8-sig")
         for focus_id, song in (("STP_pc_after_victory", "ADISCORD_stp_civil_war_end"),
                                ("STP_pw_party_new_republic", "ADISCORD_stp_party_postwar")):
@@ -905,7 +906,7 @@ if __name__ == "__main__":
         effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8-sig")
         playback = blocks(effects, r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{")[0]
         self.assertNotIn("scoped_play_song", playback)
-        focuses = (ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt").read_text(encoding="utf-8-sig")
+        focuses = read_focus_source(ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt")
         assets = (ROOT / "music/ADISCORD_music.asset").read_text(encoding="utf-8-sig")
         for focus_id, song in (("STP_pc_after_victory", "ADISCORD_stp_civil_war_end"),
                                ("STP_pw_party_new_republic", "ADISCORD_stp_party_postwar")):
@@ -1208,7 +1209,7 @@ if __name__ == "__main__":
         effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8-sig")
         playback = blocks(effects, r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{")[0]
         self.assertNotIn("scoped_play_song", playback)
-        focuses = (ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt").read_text(encoding="utf-8-sig")
+        focuses = read_focus_source(ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt")
         assets = (ROOT / "music/ADISCORD_music.asset").read_text(encoding="utf-8-sig")
         for focus_id, song in (("STP_pc_after_victory", "ADISCORD_stp_civil_war_end"),
                                ("STP_pw_party_new_republic", "ADISCORD_stp_party_postwar")):

@@ -633,3 +633,18 @@ type={
 		}
 	}
 }
+type={
+	type="ADISCORD_SHL_palace_entity"
+	use_animation=no
+	scale=0.100000
+	always_visible=yes
+	object={
+		name="ADISCORD_SHL_palace"
+		position={
+			3977.10016 13.42 934.5 
+		}
+		rotation={
+			90 0 0 
+		}
+	}
+}

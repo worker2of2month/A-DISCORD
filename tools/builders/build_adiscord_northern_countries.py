@@ -51,14 +51,14 @@ DIVISION_TEMPLATE_NAMES = (
 # do not form an oversized map blob.
 COUNTRIES: dict[str, dict[str, object]] = {
     "BRN": {
-        "states": (331, 332, 333, 334, 337), "capital": 334,
+        "states": (331, 332, 333, 334, 337, 338), "capital": 334,
         "capital_name": "Брайнхольм", "population": 3_400_000,
         "civilian": 6, "military": 3, "infrastructure": 2, "air_bases": 1,
         "resources": {"oil": 5, "aluminium": 4, "coal": 5}, "divisions": 3,
         "unit_type": "infantry", "colors": ((45, 70, 91), (222, 229, 226), (183, 154, 72)),
     },
     "KRL": {
-        "states": (335, 336, 339, 345, 349, 353, 362), "capital": 345,
+        "states": (335, 336, 339, 345, 349, 353, 362, 367), "capital": 345,
         "capital_name": "Карлёд", "population": 2_974_819,
         "civilian": 5, "military": 3, "infrastructure": 2, "air_bases": 1,
         "resources": {"steel": 7, "chromium": 4, "coal": 5}, "divisions": 3,
@@ -72,7 +72,7 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "unit_type": "ADISCORD_militia", "colors": ((52, 112, 133), (222, 218, 174), (116, 53, 61)),
     },
     "FRS": {
-        "states": (338, 340, 342, 343, 344, 350, 351, 352, 356, 357, 358, 363, 367), "capital": 350,
+        "states": (340, 342, 343, 344, 350, 351, 352, 356, 357, 358, 363), "capital": 350,
         "capital_name": "Фростен", "population": 2_200_000,
         "civilian": 4, "military": 2, "infrastructure": 2, "air_bases": 0,
         "resources": {"steel": 5, "tungsten": 4}, "divisions": 2,
@@ -93,21 +93,21 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "unit_type": "infantry", "colors": ((111, 92, 64), (213, 205, 164), (55, 88, 96)),
     },
     "ELN": {
-        "states": (359, 361, 365, 366, 369, 370, 374, 378, 379, 390), "capital": 378,
+        "states": (359, 365, 366, 369, 370, 374, 378, 379, 390, 394), "capital": 378,
         "capital_name": "Эленар", "population": 3_000_000,
         "civilian": 6, "military": 3, "infrastructure": 3, "air_bases": 1,
         "resources": {"aluminium": 8, "tungsten": 6, "coal": 6}, "divisions": 4,
         "unit_type": "infantry", "colors": ((41, 57, 89), (170, 189, 207), (199, 153, 66)),
     },
     "AUR": {
-        "states": (371, 372, 373, 377, 395), "capital": 377,
+        "states": (361, 371, 372, 373, 377), "capital": 377,
         "capital_name": "Аур", "population": 2_500_000,
         "civilian": 5, "military": 2, "infrastructure": 3, "air_bases": 1,
         "resources": {"oil": 4, "steel": 4}, "divisions": 3,
         "unit_type": "infantry", "colors": ((202, 151, 62), (244, 231, 187), (72, 109, 139)),
     },
     "HON": {
-        "states": (376, 382, 388, 392, 396, 397, 400), "capital": 396,
+        "states": (376, 381, 382, 388, 392, 396, 397, 406), "capital": 396,
         "capital_name": "Хонория", "secondary_vps": ((382, "Ровен", 3),), "population": 3_707_290,
         "civilian": 7, "military": 3, "infrastructure": 3, "air_bases": 1,
         "resources": {"steel": 4, "oil": 2}, "divisions": 4,
@@ -121,28 +121,28 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "unit_type": "ADISCORD_militia", "colors": ((74, 126, 153), (226, 225, 202), (74, 72, 91)),
     },
     "NVR": {
-        "states": (380, 381, 383, 385, 389, 398, 399, 403), "capital": 389,
+        "states": (380, 383, 385, 389, 398, 399, 400, 403), "capital": 389,
         "capital_name": "Норвейн", "population": 2_700_000,
         "civilian": 5, "military": 3, "infrastructure": 3, "air_bases": 0,
         "resources": {"coal": 5, "steel": 5}, "divisions": 3,
         "unit_type": "infantry", "colors": ((61, 115, 101), (210, 221, 190), (83, 68, 98)),
     },
     "SKN": {
-        "states": (384, 387, 391, 393, 401, 404, 413), "capital": 393,
+        "states": (384, 387, 391, 393, 395, 401, 404, 413), "capital": 393,
         "capital_name": "Скад", "secondary_vps": ((404, "Кальт", 3),), "population": 3_100_000,
         "civilian": 5, "military": 5, "infrastructure": 3, "air_bases": 1,
         "resources": {"steel": 9, "tungsten": 5, "chromium": 3}, "divisions": 5,
         "unit_type": "infantry", "colors": ((67, 72, 77), (181, 177, 156), (133, 48, 42)),
     },
     "TMR": {
-        "states": (409, 410, 416, 417, 419, 423, 429, 431, 439, 443), "capital": 423,
+        "states": (409, 410, 416, 419, 423, 429, 431, 443), "capital": 423,
         "capital_name": "Тимер", "population": 2_800_000,
         "civilian": 5, "military": 2, "infrastructure": 3, "air_bases": 0,
         "resources": {"coal": 7, "aluminium": 4}, "divisions": 3,
         "unit_type": "ADISCORD_militia", "colors": ((119, 65, 62), (220, 190, 141), (62, 85, 76)),
     },
     "LYS": {
-        "states": (394, 402, 408, 412, 415, 420, 422, 424, 432, 435, 437, 442, 447, 452),
+        "states": (402, 408, 412, 415, 420, 422, 424, 432, 435, 437, 442, 447, 452),
         "capital": 420, "capital_name": "Лисмар", "secondary_vps": ((437, "Вейль", 3),),
         "population": 2_909_096, "civilian": 6, "military": 2, "infrastructure": 3, "air_bases": 1,
         "resources": {"aluminium": 5}, "divisions": 3,
@@ -163,7 +163,7 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "unit_type": "infantry", "colors": ((73, 93, 119), (190, 188, 169), (123, 62, 48)),
     },
     "DRV": {
-        "states": (406, 414, 418, 421, 428, 434, 440, 450, 451, 458, 463, 465), "capital": 434,
+        "states": (414, 417, 418, 421, 428, 434, 439, 440, 450, 451, 458, 463, 465), "capital": 434,
         "capital_name": "Дравен", "population": 2_400_000,
         "civilian": 4, "military": 2, "infrastructure": 2, "air_bases": 0,
         "resources": {"coal": 5, "tungsten": 3}, "divisions": 3,
@@ -528,7 +528,7 @@ def render_oob(tag: str, country: dict[str, object], principal_provinces: dict[i
     lines = [
         "division_template = {",
         f'\tname = "{template}"',
-        f"\ttemplate_counter = {3 if unit_type == 'infantry' else 7}",
+        f"\ttemplate_counter = {78 if unit_type == 'infantry' else 7}",
         "\tregiments = {",
         *regiment_block(unit_type, regiment_count),
         "\t}",

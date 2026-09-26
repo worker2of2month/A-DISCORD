@@ -5,16 +5,18 @@ import re
 import unittest
 
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+from tools.lib.focus_sources import read_focus_source
 
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 def entries(relative):
-    path = ROOT / relative
-    if not path.is_file():
-        raise AssertionError(f"Missing gameplay consumer: {relative}")
-    return parse_clausewitz(path.read_text(encoding="utf-8-sig"))
+    try:
+        source = read_focus_source(ROOT / relative)
+    except FileNotFoundError as error:
+        raise AssertionError(f"Missing gameplay consumer: {relative}") from error
+    return parse_clausewitz(source)
 
 
 def block(items, name):

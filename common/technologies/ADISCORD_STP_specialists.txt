@@ -1,0 +1,10 @@
+technologies = {
+	# Granted by either Stelander government's marine training programme.
+	ADISCORD_tech_stelander_marine_corps = {
+		enable_subunits = { ADISCORD_marine_infantry }
+		research_cost = 999
+		start_year = 2300
+		ai_will_do = { factor = 0 }
+		categories = { infantry_weapons }
+	}
+}

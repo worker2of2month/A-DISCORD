@@ -9,5 +9,5 @@ division_template = {
 }
 units = {
 	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 445 division_template = "Northern Militia" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
-	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 1443 division_template = "Northern Militia" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
+	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 11413 division_template = "Northern Militia" start_experience_factor = 0.15 start_equipment_factor = 0.72 }
 }

@@ -3415,7 +3415,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         effects, "ADISCORD_vorkerland_appoint_zao_administrator"
     )
     zao_cosmetics = named_block(cosmetics, "ZAO")
-    zao_focus_path = "common/national_focus/ADISCORD_vorkerland_focus.txt"
+    zao_focus_path = "common/national_focus/ADISCORD_Vorkerland_zao.txt"
     zao_focus = source_section(read(root, zao_focus_path, issues), "zao_focus")
     english_loc = source_section(read(
         root, "localisation/english/ADISCORD_vorkerland_l_english.yml", issues

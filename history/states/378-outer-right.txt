@@ -4,7 +4,7 @@
 state = {
 	id = 378
 	name = "STATE_378"
-	manpower = 582749
+	manpower = 589300
 	state_category = town
 	history = {
 		owner = ELN
@@ -23,6 +23,7 @@ state = {
 	}
 	resources = {
 		coal = 3
+		tungsten = 3
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.3

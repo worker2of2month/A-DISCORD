@@ -123,11 +123,11 @@ BASE_REGIONS = (
     Region(21, "western-reactor-zone", "Западная реакторная зона", "arid", (152, 153, 154, 155, 156, 160, 223, 224)),
     Region(22, "loren-corridor", "Лоренский коридор", "arid", (167, 169, 170, 171, 172, 173, 203, 204, 205, 211, 216, 217)),
     Region(23, "southern-reactor-zone", "Южная реакторная зона", "hot_arid", (165, 166, 209, 210, 212, 213, 214, 215, 218, 219, 222)),
-    Region(24, "mardar-lowlands", "Мардарская низина", "hot_arid", (67, 68, 69, 70, 174, 175, 688, 689, 690, 691, 692)),
+    Region(24, "mardar-lowlands", "Мардарская низина", "hot_arid", (67, 68, 69, 70, 174, 175, 688, 689, 690, 691, 692, 700, 701)),
     Region(25, "southern-islands", "Южные острова", "tropical_maritime", (200, 225, 226, 227, 228, 229, 230, 231, 232)),
-    Region(40, "kadir-coast", "Кадирское побережье", "hot_arid", tuple(range(234, 265))),
-    Region(41, "mazar-oases", "Мазарские оазисы", "hot_arid", tuple(range(265, 287))),
-    Region(42, "shahrabad-saltlands", "Шахрабадские солончаки", "hot_highland", (*range(287, 303), 304, 305)),
+    Region(40, "kadir-coast", "Кадирское побережье", "hot_arid", (*range(234, 265), 702, 703, 704)),
+    Region(41, "mazar-oases", "Мазарские оазисы", "hot_arid", (*range(265, 287), 705, 706)),
+    Region(42, "shahrabad-saltlands", "Шахрабадские солончаки", "hot_highland", (*range(287, 303), 304, 305, 699, 707, 708)),
 )
 
 
@@ -1085,7 +1085,12 @@ def build() -> None:
     if unknown:
         raise ValueError(f"state provinces absent from non-sea definition rows: {sorted(unknown)}")
 
+    expected_filenames = {
+        f"{region.region_id}-{region.slug}.txt" for region in (*REGIONS, *ALL_SEA_REGIONS)
+    }
     for path in REGION_DIR.glob("*.txt"):
+        if path.name in expected_filenames:
+            continue
         text = path.read_text(encoding="utf-8-sig", errors="strict")
         if path.name in ("1-sea.txt", "2-land.txt") or text.startswith(GENERATED_MARKER):
             path.unlink()

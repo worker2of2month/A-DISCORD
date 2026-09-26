@@ -6,32 +6,15 @@ technologies = {
 		nuclear_production_factor = 0.04
 		industry_repair_factor = 0.02
 		stability_factor = -0.005
-		path = { leads_to_tech = ADISCORD_tech_dead_reactor_salvage research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_legacy_reactor_compactification
+			research_cost_coeff = 1
+		}
 		research_cost = 2.6
 		start_year = 2164
 		folder = {
 			name = electronics_folder
 			position = { x = 0 y = 0 }
-		}
-		ai_will_do = {
-			factor = 1
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_dead_reactor_salvage = {
-		allow = {
-			ADISCORD_has_forbidden_legacy_access = yes
-		}
-		nuclear_production_factor = 0.06
-		local_resources_factor = 0.02
-		stability_factor = -0.008
-		path = { leads_to_tech = ADISCORD_tech_legacy_reactor_compactification research_cost_coeff = 1 }
-		research_cost = 2.78
-		start_year = 2166
-		folder = {
-			name = electronics_folder
-			position = { x = 0 y = 2 }
 		}
 		ai_will_do = {
 			factor = 1
@@ -46,34 +29,15 @@ technologies = {
 		nuclear_production_factor = 0.08
 		production_speed_buildings_factor = 0.025
 		stability_factor = -0.011
-		path = { leads_to_tech = ADISCORD_tech_dirty_energy_munitions research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_singularity_cooling_systems research_cost_coeff = 1 }
-		research_cost = 2.96
+		path = {
+			leads_to_tech = ADISCORD_tech_singularity_cooling_systems
+			research_cost_coeff = 1
+		}
+		research_cost = 2.78
 		start_year = 2168
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 4 }
-		}
-		ai_will_do = {
-			factor = 1
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_dirty_energy_munitions = {
-		allow = {
-			ADISCORD_has_forbidden_legacy_access = yes
-			ADISCORD_has_radiation_mapping_tech = yes
-		}
-		nuclear_production_factor = 0.1
-		fuel_gain_factor = 0.03
-		stability_factor = -0.014
-		path = { leads_to_tech = ADISCORD_tech_black_grid_protocols research_cost_coeff = 1 }
-		research_cost = 3.14
-		start_year = 2170
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 6 }
+			position = { x = 0 y = 2 }
 		}
 		ai_will_do = {
 			factor = 1
@@ -88,12 +52,15 @@ technologies = {
 		nuclear_production_factor = 0.12
 		research_speed_factor = 0.025
 		stability_factor = -0.017
-		path = { leads_to_tech = ADISCORD_tech_black_grid_protocols research_cost_coeff = 1 }
-		research_cost = 3.32
+		path = {
+			leads_to_tech = ADISCORD_tech_black_grid_protocols
+			research_cost_coeff = 1
+		}
+		research_cost = 2.96
 		start_year = 2173
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 8 }
+			position = { x = 0 y = 4 }
 		}
 		ai_will_do = {
 			factor = 1
@@ -108,15 +75,11 @@ technologies = {
 		nuclear_production_factor = 0.16
 		industrial_capacity_factory = 0.04
 		stability_factor = -0.025
-		dependencies = {
-			ADISCORD_tech_dirty_energy_munitions = 1
-			ADISCORD_tech_singularity_cooling_systems = 1
-		}
-		research_cost = 3.5
+		research_cost = 3.14
 		start_year = 2180
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 10 }
+			position = { x = 0 y = 6 }
 		}
 		ai_will_do = {
 			factor = 1
@@ -132,8 +95,10 @@ technologies = {
 		production_factory_max_efficiency_factor = 0.04
 		industry_repair_factor = 0.03
 		stability_factor = -0.01
-		path = { leads_to_tech = ADISCORD_tech_neural_command_cores research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_forbidden_automation_doctrine research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_neural_command_cores
+			research_cost_coeff = 1
+		}
 		research_cost = 2.6
 		start_year = 2168
 		folder = {
@@ -154,11 +119,15 @@ technologies = {
 		coordination_bonus = 0.05
 		land_reinforce_rate = 0.03
 		stability_factor = -0.02
+		path = {
+			leads_to_tech = ADISCORD_tech_forbidden_automation_doctrine
+			research_cost_coeff = 1
+		}
 		research_cost = 2.95
 		start_year = 2172
 		folder = {
 			name = electronics_folder
-			position = { x = -3 y = 2 }
+			position = { x = 0 y = 2 }
 		}
 		ai_will_do = {
 			factor = 1
@@ -179,7 +148,7 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 4 }
+			position = { x = 0 y = 4 }
 		}
 		ai_will_do = {
 			factor = 1

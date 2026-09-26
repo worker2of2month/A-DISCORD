@@ -4,13 +4,14 @@
 state = {
 	id = 374
 	name = "STATE_374"
-	manpower = 259103
+	manpower = 262016
 	state_category = rural
 	history = {
 		owner = ELN
 		add_core_of = ELN
 		buildings = {
 			infrastructure = 3
+			industrial_complex = 1
 		}
 	}
 	provinces = {
@@ -18,5 +19,5 @@ state = {
 		9857 10475 10868 11603 12418
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 2.4
+	local_supplies = 2.6
 }

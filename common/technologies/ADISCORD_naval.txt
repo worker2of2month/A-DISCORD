@@ -3,7 +3,10 @@ technologies = {
 		convoy_escort_efficiency = 0.04
 		naval_detection = 0.024
 		naval_invasion_capacity = 100
-		path = { leads_to_tech = ADISCORD_tech_coastal_patrols research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_coastal_patrols
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
@@ -16,8 +19,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 12.5
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -25,7 +34,10 @@ technologies = {
 	ADISCORD_tech_coastal_patrols = {
 		convoy_escort_efficiency = 0.041
 		naval_detection = 0.025
-		path = { leads_to_tech = ADISCORD_tech_convoy_routing research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_convoy_routing
+			research_cost_coeff = 1
+		}
 		enable_equipments = { ADISCORD_escort_ship_2155 }
 		research_cost = 0.55
 		start_year = 2155
@@ -39,8 +51,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 16.875
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -48,7 +66,10 @@ technologies = {
 	ADISCORD_tech_convoy_routing = {
 		convoy_escort_efficiency = 0.043
 		naval_detection = 0.025
-		path = { leads_to_tech = ADISCORD_tech_modular_escort_combat_systems research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_modular_escort_combat_systems
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
@@ -61,8 +82,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 12.5
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -70,7 +97,10 @@ technologies = {
 	ADISCORD_tech_modular_escort_combat_systems = {
 		convoy_escort_efficiency = 0.044
 		naval_detection = 0.026
-		path = { leads_to_tech = ADISCORD_tech_escort_datalinks research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_variable_depth_sonar
+			research_cost_coeff = 1
+		}
 		research_cost = 1.35
 		start_year = 2160
 		folder = {
@@ -83,52 +113,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 12.5
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_escort_datalinks = {
-		convoy_escort_efficiency = 0.045
-		naval_detection = 0.027
-		path = { leads_to_tech = ADISCORD_tech_towed_array_sonar research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_variable_depth_sonar research_cost_coeff = 1 }
-		research_cost = 1.378
-		start_year = 2161
-		folder = {
-			name = mtgnavalsupportfolder
-			position = { x = 0 y = 8 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 0 y = 8 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_towed_array_sonar = {
-		ADISCORD_coastal_patrol_vessel = { sub_detection = 0.10 sub_attack = 0.06 }
-		path = { leads_to_tech = ADISCORD_tech_escort_integrated_electric_propulsion research_cost_coeff = 1 }
-		research_cost = 1.405
-		start_year = 2162
-		folder = {
-			name = mtgnavalsupportfolder
-			position = { x = 0 y = 10 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 0 y = 10 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -136,114 +128,31 @@ technologies = {
 	ADISCORD_tech_variable_depth_sonar = {
 		naval_detection = 0.028
 		naval_mines_effect_reduction = 0.048
-		path = { leads_to_tech = ADISCORD_tech_containerized_escort_missile_cells research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_unmanned_mine_countermeasure_boats
+			research_cost_coeff = 1
+		}
 		enable_equipments = { ADISCORD_escort_ship_2163 }
 		research_cost = 2.05
 		start_year = 2163
 		folder = {
 			name = mtgnavalsupportfolder
-			position = { x = -3 y = 12 }
+			position = { x = 0 y = 8 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = -3 y = 12 }
+			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
 			factor = 13.5
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_containerized_escort_missile_cells = {
-		ADISCORD_coastal_patrol_vessel = { lg_attack = 0.08 anti_air_attack = 0.08 }
-		path = { leads_to_tech = ADISCORD_tech_escort_integrated_electric_propulsion research_cost_coeff = 1 }
-		research_cost = 1.46
-		start_year = 2164
-		folder = {
-			name = mtgnavalsupportfolder
-			position = { x = -3 y = 14 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 14 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_escort_integrated_electric_propulsion = {
-		naval_detection = 0.05
-		convoy_escort_efficiency = 0.029
-		path = { leads_to_tech = ADISCORD_tech_drone_pickets research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_cooperative_convoy_tracking research_cost_coeff = 1 }
-		dependencies = {
-			ADISCORD_tech_towed_array_sonar = 1
-			ADISCORD_tech_containerized_escort_missile_cells = 1
-		}
-		research_cost = 2.4
-		start_year = 2165
-		folder = {
-			name = mtgnavalsupportfolder
-			position = { x = 0 y = 16 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 0 y = 16 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_drone_pickets = {
-		naval_detection = 0.051
-		naval_coordination = 0.03
-		path = { leads_to_tech = ADISCORD_tech_over_horizon_escort_radar research_cost_coeff = 1 }
-		research_cost = 1.515
-		start_year = 2166
-		folder = {
-			name = mtgnavalsupportfolder
-			position = { x = 0 y = 18 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 0 y = 18 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_cooperative_convoy_tracking = {
-		naval_detection = 0.03
-		naval_mines_effect_reduction = 0.053
-		path = { leads_to_tech = ADISCORD_tech_unmanned_mine_countermeasure_boats research_cost_coeff = 1 }
-		research_cost = 1.542
-		start_year = 2167
-		folder = {
-			name = mtgnavalsupportfolder
-			position = { x = 3 y = 20 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 3 y = 20 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -251,56 +160,30 @@ technologies = {
 	ADISCORD_tech_unmanned_mine_countermeasure_boats = {
 		convoy_escort_efficiency = 0.054
 		naval_detection = 0.031
-		path = { leads_to_tech = ADISCORD_tech_over_horizon_escort_radar research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_autonomous_escorts
+			research_cost_coeff = 1
+		}
 		research_cost = 1.57
 		start_year = 2168
 		folder = {
 			name = mtgnavalsupportfolder
-			position = { x = 3 y = 22 }
+			position = { x = 0 y = 10 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 3 y = 22 }
+			position = { x = 0 y = 10 }
 		}
 		ai_will_do = {
 			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_over_horizon_escort_radar = {
-		naval_mines_effect_reduction = 0.055
-		naval_coordination = 0.032
-		path = { leads_to_tech = ADISCORD_tech_autonomous_escorts research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_autonomous_replenishment_craft research_cost_coeff = 1 }
-		dependencies = {
-			ADISCORD_tech_drone_pickets = 1
-			ADISCORD_tech_unmanned_mine_countermeasure_boats = 1
-		}
-		on_research_complete = {
-			add_tech_bonus = {
-				bonus = 0.3
-				uses = 1
-				category = naval_equipment
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
 			}
-		}
-		show_effect_as_desc = yes
-		research_cost = 2.4
-		start_year = 2169
-		folder = {
-			name = mtgnavalsupportfolder
-			position = { x = 0 y = 24 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 0 y = 24 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -308,114 +191,31 @@ technologies = {
 	ADISCORD_tech_autonomous_escorts = {
 		naval_detection = 0.032
 		naval_mines_effect_reduction = 0.056
-		path = { leads_to_tech = ADISCORD_tech_distributed_acoustic_pickets research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_predictive_convoy_defense_network
+			research_cost_coeff = 1
+		}
 		enable_equipments = { ADISCORD_escort_ship_2170 }
 		research_cost = 2.05
 		start_year = 2170
 		folder = {
 			name = mtgnavalsupportfolder
-			position = { x = 0 y = 26 }
+			position = { x = 0 y = 12 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 0 y = 26 }
+			position = { x = 0 y = 12 }
 		}
 		ai_will_do = {
 			factor = 13.5
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_autonomous_replenishment_craft = {
-		naval_detection = 0.058
-		naval_coordination = 0.033
-		path = { leads_to_tech = ADISCORD_tech_directed_energy_point_defense research_cost_coeff = 1 }
-		research_cost = 1.653
-		start_year = 2171
-		folder = {
-			name = mtgnavalsupportfolder
-			position = { x = -3 y = 28 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 28 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_directed_energy_point_defense = {
-		ADISCORD_coastal_patrol_vessel = { anti_air_attack = 0.12 }
-		path = { leads_to_tech = ADISCORD_tech_distributed_acoustic_pickets research_cost_coeff = 1 }
-		research_cost = 1.68
-		start_year = 2172
-		folder = {
-			name = mtgnavalsupportfolder
-			position = { x = -3 y = 30 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 30 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_distributed_acoustic_pickets = {
-		naval_detection = 0.06
-		convoy_escort_efficiency = 0.034
-		path = { leads_to_tech = ADISCORD_tech_self_repairing_escort_hulls research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_predictive_convoy_defense_network research_cost_coeff = 1 }
-		dependencies = {
-			ADISCORD_tech_autonomous_escorts = 1
-			ADISCORD_tech_directed_energy_point_defense = 1
-		}
-		research_cost = 2.4
-		start_year = 2173
-		folder = {
-			name = mtgnavalsupportfolder
-			position = { x = 0 y = 32 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 0 y = 32 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_self_repairing_escort_hulls = {
-		naval_detection = 0.035
-		naval_mines_effect_reduction = 0.061
-		path = { leads_to_tech = ADISCORD_tech_distributed_sea_control research_cost_coeff = 1 }
-		research_cost = 1.735
-		start_year = 2174
-		folder = {
-			name = mtgnavalsupportfolder
-			position = { x = 0 y = 34 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 0 y = 34 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -423,22 +223,31 @@ technologies = {
 	ADISCORD_tech_predictive_convoy_defense_network = {
 		convoy_escort_efficiency = 0.063
 		naval_detection = 0.035
-		path = { leads_to_tech = ADISCORD_tech_distributed_sea_control research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_distributed_sea_control
+			research_cost_coeff = 1
+		}
 		enable_equipments = { ADISCORD_escort_ship_2175 }
 		research_cost = 2.05
 		start_year = 2175
 		folder = {
 			name = mtgnavalsupportfolder
-			position = { x = 3 y = 36 }
+			position = { x = 0 y = 14 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 3 y = 36 }
+			position = { x = 0 y = 14 }
 		}
 		ai_will_do = {
 			factor = 13.5
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -447,25 +256,26 @@ technologies = {
 		convoy_escort_efficiency = 0.093
 		naval_detection = 0.093
 		naval_coordination = 0.052
-		dependencies = {
-			ADISCORD_tech_self_repairing_escort_hulls = 1
-			ADISCORD_tech_predictive_convoy_defense_network = 1
-			ADISCORD_tech_self_healing_tactical_networks = 1
-		}
 		research_cost = 2.55
 		start_year = 2180
 		folder = {
 			name = mtgnavalsupportfolder
-			position = { x = 0 y = 38 }
+			position = { x = 0 y = 16 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 0 y = 38 }
+			position = { x = 0 y = 16 }
 		}
 		ai_will_do = {
 			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -473,7 +283,10 @@ technologies = {
 	ADISCORD_tech_recovered_fire_control = {
 		naval_hit_chance = 0.024
 		naval_coordination = 0.024
-		path = { leads_to_tech = ADISCORD_tech_modular_hull_standards research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_modular_hull_standards
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
@@ -486,8 +299,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -495,7 +314,10 @@ technologies = {
 	ADISCORD_tech_modular_hull_standards = {
 		naval_hit_chance = 0.025
 		naval_coordination = 0.025
-		path = { leads_to_tech = ADISCORD_tech_radar_gunnery research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_radar_gunnery
+			research_cost_coeff = 1
+		}
 		enable_equipments = { ADISCORD_cruiser_2155 }
 		research_cost = 0.55
 		start_year = 2155
@@ -509,15 +331,26 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 13.5
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
 
 	ADISCORD_tech_radar_gunnery = {
-		heavy_cruiser = { hg_attack = 0.06 }
-		path = { leads_to_tech = ADISCORD_tech_stabilized_naval_gun_directors research_cost_coeff = 1 }
+		heavy_cruiser = {
+			hg_attack = 0.06
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_missile_batteries
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
@@ -530,73 +363,46 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_stabilized_naval_gun_directors = {
-		heavy_cruiser = { hg_attack = 0.06 lg_attack = 0.04 }
-		path = { leads_to_tech = ADISCORD_tech_missile_batteries research_cost_coeff = 1 }
-		research_cost = 1.5
-		start_year = 2160
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 0 y = 6 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 0 y = 6 }
-		}
-		ai_will_do = {
-			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
 
 	ADISCORD_tech_missile_batteries = {
-		heavy_cruiser = { hg_attack = 0.08 }
-		path = { leads_to_tech = ADISCORD_tech_phased_array_mast_complexes research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_modular_vertical_launch_cells research_cost_coeff = 1 }
+		heavy_cruiser = {
+			hg_attack = 0.08
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_modular_vertical_launch_cells
+			research_cost_coeff = 1
+		}
 		research_cost = 1.528
 		start_year = 2161
 		folder = {
 			name = mtgnavalfolder
-			position = { x = 0 y = 8 }
+			position = { x = 0 y = 6 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 0 y = 8 }
+			position = { x = 0 y = 6 }
 		}
 		ai_will_do = {
 			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_phased_array_mast_complexes = {
-		naval_hit_chance = 0.046
-		naval_coordination = 0.027
-		path = { leads_to_tech = ADISCORD_tech_capital_ship_integrated_electric_drive research_cost_coeff = 1 }
-		research_cost = 1.555
-		start_year = 2162
-		folder = {
-			name = mtgnavalfolder
-			position = { x = -3 y = 10 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 10 }
-		}
-		ai_will_do = {
-			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -604,65 +410,31 @@ technologies = {
 	ADISCORD_tech_modular_vertical_launch_cells = {
 		naval_detection = 0.048
 		convoy_escort_efficiency = 0.028
-		path = { leads_to_tech = ADISCORD_tech_composite_armor_belts research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_networked_task_groups
+			research_cost_coeff = 1
+		}
 		enable_equipments = { ADISCORD_cruiser_2163 }
 		research_cost = 2.05
 		start_year = 2163
 		folder = {
 			name = mtgnavalfolder
-			position = { x = 3 y = 12 }
+			position = { x = 0 y = 8 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 3 y = 12 }
+			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
 			factor = 10.8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_capital_ship_integrated_electric_drive = {
-		naval_speed_factor = 0.028
-		naval_hit_chance = 0.049
-		path = { leads_to_tech = ADISCORD_tech_networked_task_groups research_cost_coeff = 1 }
-		research_cost = 1.61
-		start_year = 2164
-		folder = {
-			name = mtgnavalfolder
-			position = { x = -3 y = 14 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 14 }
-		}
-		ai_will_do = {
-			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_composite_armor_belts = {
-		heavy_cruiser = { armor_value = 0.10 }
-		path = { leads_to_tech = ADISCORD_tech_cooperative_fleet_missile_defense research_cost_coeff = 1 }
-		research_cost = 1.637
-		start_year = 2165
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 3 y = 16 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 3 y = 16 }
-		}
-		ai_will_do = {
-			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -670,86 +442,30 @@ technologies = {
 	ADISCORD_tech_networked_task_groups = {
 		naval_hit_chance = 0.051
 		naval_coordination = 0.03
-		path = { leads_to_tech = ADISCORD_tech_unmanned_damage_control_decks research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_railgun_batteries
+			research_cost_coeff = 1
+		}
 		research_cost = 1.665
 		start_year = 2166
 		folder = {
 			name = mtgnavalfolder
-			position = { x = -3 y = 18 }
+			position = { x = 0 y = 10 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = -3 y = 18 }
+			position = { x = 0 y = 10 }
 		}
 		ai_will_do = {
 			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_cooperative_fleet_missile_defense = {
-		heavy_cruiser = { anti_air_attack = 0.10 }
-		path = { leads_to_tech = ADISCORD_tech_long_range_railgun_fire_control research_cost_coeff = 1 }
-		research_cost = 1.692
-		start_year = 2167
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 3 y = 20 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 3 y = 20 }
-		}
-		ai_will_do = {
-			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_unmanned_damage_control_decks = {
-		naval_hit_chance = 0.054
-		naval_coordination = 0.031
-		path = { leads_to_tech = ADISCORD_tech_railgun_batteries research_cost_coeff = 1 }
-		research_cost = 1.72
-		start_year = 2168
-		folder = {
-			name = mtgnavalfolder
-			position = { x = -3 y = 22 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 22 }
-		}
-		ai_will_do = {
-			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_long_range_railgun_fire_control = {
-		naval_detection = 0.055
-		convoy_escort_efficiency = 0.032
-		path = { leads_to_tech = ADISCORD_tech_superconducting_railgun_turrets research_cost_coeff = 1 }
-		research_cost = 1.748
-		start_year = 2169
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 3 y = 24 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 3 y = 24 }
-		}
-		ai_will_do = {
-			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -757,43 +473,31 @@ technologies = {
 	ADISCORD_tech_railgun_batteries = {
 		naval_speed_factor = 0.032
 		naval_hit_chance = 0.056
-		path = { leads_to_tech = ADISCORD_tech_drone_carrier_deck_systems research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_drone_carrier_deck_systems
+			research_cost_coeff = 1
+		}
 		enable_equipments = { ADISCORD_cruiser_2170 }
 		research_cost = 2.05
 		start_year = 2170
 		folder = {
 			name = mtgnavalfolder
-			position = { x = -3 y = 26 }
+			position = { x = 0 y = 12 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = -3 y = 26 }
+			position = { x = 0 y = 12 }
 		}
 		ai_will_do = {
 			factor = 10.8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_superconducting_railgun_turrets = {
-		heavy_cruiser = { hg_attack = 0.08 hg_armor_piercing = 0.08 }
-		path = { leads_to_tech = ADISCORD_tech_directed_energy_broadside_defense research_cost_coeff = 1 }
-		research_cost = 1.802
-		start_year = 2171
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 3 y = 28 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 3 y = 28 }
-		}
-		ai_will_do = {
-			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -801,65 +505,30 @@ technologies = {
 	ADISCORD_tech_drone_carrier_deck_systems = {
 		naval_hit_chance = 0.059
 		naval_coordination = 0.033
-		path = { leads_to_tech = ADISCORD_tech_autonomous_capital_ship_cores research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_distributed_horizon_targeting
+			research_cost_coeff = 1
+		}
 		research_cost = 1.83
 		start_year = 2172
 		folder = {
 			name = mtgnavalfolder
-			position = { x = -3 y = 30 }
+			position = { x = 0 y = 14 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = -3 y = 30 }
+			position = { x = 0 y = 14 }
 		}
 		ai_will_do = {
 			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_directed_energy_broadside_defense = {
-		naval_detection = 0.06
-		convoy_escort_efficiency = 0.034
-		path = { leads_to_tech = ADISCORD_tech_distributed_horizon_targeting research_cost_coeff = 1 }
-		research_cost = 1.857
-		start_year = 2173
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 3 y = 32 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 3 y = 32 }
-		}
-		ai_will_do = {
-			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_autonomous_capital_ship_cores = {
-		naval_hit_chance = 0.061
-		naval_coordination = 0.035
-		path = { leads_to_tech = ADISCORD_tech_horizon_fleet_command research_cost_coeff = 1 }
-		research_cost = 1.885
-		start_year = 2174
-		folder = {
-			name = mtgnavalfolder
-			position = { x = -3 y = 34 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 34 }
-		}
-		ai_will_do = {
-			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -867,22 +536,31 @@ technologies = {
 	ADISCORD_tech_distributed_horizon_targeting = {
 		naval_detection = 0.063
 		convoy_escort_efficiency = 0.035
-		path = { leads_to_tech = ADISCORD_tech_horizon_fleet_command research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_horizon_fleet_command
+			research_cost_coeff = 1
+		}
 		enable_equipments = { ADISCORD_cruiser_2175 }
 		research_cost = 2.05
 		start_year = 2175
 		folder = {
 			name = mtgnavalfolder
-			position = { x = 3 y = 36 }
+			position = { x = 0 y = 16 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 3 y = 36 }
+			position = { x = 0 y = 16 }
 		}
 		ai_will_do = {
 			factor = 10.8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -891,24 +569,26 @@ technologies = {
 		naval_hit_chance = 0.093
 		naval_coordination = 0.093
 		naval_detection = 0.052
-		dependencies = {
-			ADISCORD_tech_autonomous_capital_ship_cores = 1
-			ADISCORD_tech_distributed_horizon_targeting = 1
-		}
 		research_cost = 2.55
 		start_year = 2180
 		folder = {
 			name = mtgnavalfolder
-			position = { x = 0 y = 38 }
+			position = { x = 0 y = 18 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 0 y = 38 }
+			position = { x = 0 y = 18 }
 		}
 		ai_will_do = {
 			factor = 8
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -916,7 +596,10 @@ technologies = {
 	ADISCORD_tech_sonar_archives = {
 		naval_detection = 0.024
 		naval_mines_effect_reduction = 0.04
-		path = { leads_to_tech = ADISCORD_tech_quiet_propulsion research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_quiet_propulsion
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
@@ -929,8 +612,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 11.25
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -938,7 +627,10 @@ technologies = {
 	ADISCORD_tech_quiet_propulsion = {
 		naval_detection = 0.025
 		naval_mines_effect_reduction = 0.041
-		path = { leads_to_tech = ADISCORD_tech_homing_torpedoes research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_homing_torpedoes
+			research_cost_coeff = 1
+		}
 		enable_equipments = { ADISCORD_submarine_2155 }
 		research_cost = 0.55
 		start_year = 2155
@@ -952,15 +644,26 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 15.188
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
 
 	ADISCORD_tech_homing_torpedoes = {
-		submarine = { torpedo_attack = 0.08 }
-		path = { leads_to_tech = ADISCORD_tech_anechoic_tile_bonding research_cost_coeff = 1 }
+		submarine = {
+			torpedo_attack = 0.08
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_air_independent_cells
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
@@ -973,73 +676,46 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 11.25
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_anechoic_tile_bonding = {
-		submarine = { sub_visibility = -0.06 }
-		path = { leads_to_tech = ADISCORD_tech_air_independent_cells research_cost_coeff = 1 }
-		research_cost = 1.4
-		start_year = 2160
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 0 y = 6 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 0 y = 6 }
-		}
-		ai_will_do = {
-			factor = 11.25
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
 
 	ADISCORD_tech_air_independent_cells = {
-		submarine = { naval_range = 0.10 }
-		path = { leads_to_tech = ADISCORD_tech_pumpjet_propulsors research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_wake_homing_torpedo_seekers research_cost_coeff = 1 }
+		submarine = {
+			naval_range = 0.10
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_wake_homing_torpedo_seekers
+			research_cost_coeff = 1
+		}
 		research_cost = 1.427
 		start_year = 2161
 		folder = {
 			name = mtgnavalfolder
-			position = { x = 0 y = 8 }
+			position = { x = 0 y = 6 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 0 y = 8 }
+			position = { x = 0 y = 6 }
 		}
 		ai_will_do = {
 			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_pumpjet_propulsors = {
-		naval_detection = 0.046
-		naval_mines_effect_reduction = 0.027
-		path = { leads_to_tech = ADISCORD_tech_conformal_flank_sonars research_cost_coeff = 1 }
-		research_cost = 1.455
-		start_year = 2162
-		folder = {
-			name = mtgnavalfolder
-			position = { x = -3 y = 10 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 10 }
-		}
-		ai_will_do = {
-			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -1047,66 +723,31 @@ technologies = {
 	ADISCORD_tech_wake_homing_torpedo_seekers = {
 		naval_hit_chance = 0.048
 		naval_coordination = 0.028
-		path = { leads_to_tech = ADISCORD_tech_pressure_tolerant_lithium_cells research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_seabed_sensor_webs
+			research_cost_coeff = 1
+		}
 		enable_equipments = { ADISCORD_submarine_2163 }
 		research_cost = 2.05
 		start_year = 2163
 		folder = {
 			name = mtgnavalfolder
-			position = { x = 3 y = 12 }
+			position = { x = 0 y = 8 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 3 y = 12 }
+			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
 			factor = 12.15
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_conformal_flank_sonars = {
-		naval_detection = 0.049
-		naval_mines_effect_reduction = 0.028
-		path = { leads_to_tech = ADISCORD_tech_seabed_sensor_webs research_cost_coeff = 1 }
-		research_cost = 1.51
-		start_year = 2164
-		folder = {
-			name = mtgnavalfolder
-			position = { x = -3 y = 14 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 14 }
-		}
-		ai_will_do = {
-			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_pressure_tolerant_lithium_cells = {
-		naval_hit_chance = 0.05
-		naval_coordination = 0.029
-		path = { leads_to_tech = ADISCORD_tech_seabed_terrain_navigation research_cost_coeff = 1 }
-		research_cost = 1.537
-		start_year = 2165
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 3 y = 16 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 3 y = 16 }
-		}
-		ai_will_do = {
-			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -1114,91 +755,30 @@ technologies = {
 	ADISCORD_tech_seabed_sensor_webs = {
 		naval_detection = 0.051
 		naval_mines_effect_reduction = 0.03
-		path = { leads_to_tech = ADISCORD_tech_fiber_optic_torpedo_control research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_autonomous_submarines
+			research_cost_coeff = 1
+		}
 		research_cost = 1.565
 		start_year = 2166
 		folder = {
 			name = mtgnavalfolder
-			position = { x = -3 y = 18 }
+			position = { x = 0 y = 10 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = -3 y = 18 }
+			position = { x = 0 y = 10 }
 		}
 		ai_will_do = {
 			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_seabed_terrain_navigation = {
-		naval_hit_chance = 0.053
-		naval_coordination = 0.03
-		path = { leads_to_tech = ADISCORD_tech_fiber_optic_torpedo_control research_cost_coeff = 1 }
-		research_cost = 1.592
-		start_year = 2167
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 3 y = 20 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 3 y = 20 }
-		}
-		ai_will_do = {
-			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_fiber_optic_torpedo_control = {
-		submarine = { torpedo_attack = 0.08 }
-		path = { leads_to_tech = ADISCORD_tech_underwater_vehicle_deployment_bays research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_autonomous_submarines research_cost_coeff = 1 }
-		dependencies = {
-			ADISCORD_tech_seabed_sensor_webs = 1
-			ADISCORD_tech_seabed_terrain_navigation = 1
-		}
-		research_cost = 2.4
-		start_year = 2168
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 0 y = 22 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 0 y = 22 }
-		}
-		ai_will_do = {
-			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_underwater_vehicle_deployment_bays = {
-		naval_detection = 0.055
-		convoy_escort_efficiency = 0.032
-		path = { leads_to_tech = ADISCORD_tech_magnetohydrodynamic_silent_drive research_cost_coeff = 1 }
-		research_cost = 1.647
-		start_year = 2169
-		folder = {
-			name = mtgnavalfolder
-			position = { x = -3 y = 24 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 24 }
-		}
-		ai_will_do = {
-			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -1206,9 +786,12 @@ technologies = {
 	ADISCORD_tech_autonomous_submarines = {
 		naval_coordination = 0.056
 		naval_detection = 0.032
-		path = { leads_to_tech = ADISCORD_tech_supercavitating_interceptor_torpedoes research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_self_repairing_pressure_hulls
+			research_cost_coeff = 1
+		}
 		dependencies = {
-			ADISCORD_tech_fiber_optic_torpedo_control = 1
+			ADISCORD_tech_seabed_sensor_webs = 1
 			ADISCORD_tech_operational_ai_assistants = 1
 		}
 		enable_equipments = { ADISCORD_submarine_2170 }
@@ -1216,103 +799,22 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = mtgnavalfolder
-			position = { x = 3 y = 26 }
+			position = { x = 0 y = 12 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 3 y = 26 }
+			position = { x = 0 y = 12 }
 		}
 		ai_will_do = {
 			factor = 12.15
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_magnetohydrodynamic_silent_drive = {
-		naval_detection = 0.058
-		convoy_escort_efficiency = 0.033
-		path = { leads_to_tech = ADISCORD_tech_quantum_magnetometer_arrays research_cost_coeff = 1 }
-		research_cost = 1.702
-		start_year = 2171
-		folder = {
-			name = mtgnavalfolder
-			position = { x = -3 y = 28 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 28 }
-		}
-		ai_will_do = {
-			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_supercavitating_interceptor_torpedoes = {
-		submarine = { torpedo_attack = 0.10 }
-		path = { leads_to_tech = ADISCORD_tech_distributed_abyssal_comm_relays research_cost_coeff = 1 }
-		research_cost = 1.73
-		start_year = 2172
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 3 y = 30 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 3 y = 30 }
-		}
-		ai_will_do = {
-			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_quantum_magnetometer_arrays = {
-		naval_detection = 0.06
-		convoy_escort_efficiency = 0.034
-		path = { leads_to_tech = ADISCORD_tech_self_repairing_pressure_hulls research_cost_coeff = 1 }
-		research_cost = 1.757
-		start_year = 2173
-		folder = {
-			name = mtgnavalfolder
-			position = { x = -3 y = 32 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = -3 y = 32 }
-		}
-		ai_will_do = {
-			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
-		}
-		categories = { naval_equipment electronics }
-	}
-
-	ADISCORD_tech_distributed_abyssal_comm_relays = {
-		naval_coordination = 0.061
-		naval_detection = 0.035
-		path = { leads_to_tech = ADISCORD_tech_self_repairing_pressure_hulls research_cost_coeff = 1 }
-		research_cost = 1.785
-		start_year = 2174
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 3 y = 34 }
-		}
-		folder = {
-			name = naval_folder
-			position = { x = 3 y = 34 }
-		}
-		ai_will_do = {
-			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -1320,26 +822,31 @@ technologies = {
 	ADISCORD_tech_self_repairing_pressure_hulls = {
 		naval_detection = 0.035
 		naval_mines_effect_reduction = 0.063
-		path = { leads_to_tech = ADISCORD_tech_deep_ocean_denial research_cost_coeff = 1 }
-		dependencies = {
-			ADISCORD_tech_quantum_magnetometer_arrays = 1
-			ADISCORD_tech_distributed_abyssal_comm_relays = 1
+		path = {
+			leads_to_tech = ADISCORD_tech_deep_ocean_denial
+			research_cost_coeff = 1
 		}
 		enable_equipments = { ADISCORD_submarine_2175 }
-		research_cost = 2.4
+		research_cost = 2.05
 		start_year = 2175
 		folder = {
 			name = mtgnavalfolder
-			position = { x = 0 y = 36 }
+			position = { x = 0 y = 14 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 0 y = 36 }
+			position = { x = 0 y = 14 }
 		}
 		ai_will_do = {
 			factor = 12.15
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -1352,16 +859,22 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = mtgnavalfolder
-			position = { x = 0 y = 38 }
+			position = { x = 0 y = 16 }
 		}
 		folder = {
 			name = naval_folder
-			position = { x = 0 y = 38 }
+			position = { x = 0 y = 16 }
 		}
 		ai_will_do = {
 			factor = 9
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -1370,7 +883,10 @@ technologies = {
 		naval_detection = 0.02
 		naval_mines_effect_reduction = 0.02
 		convoy_escort_efficiency = 0.02
-		path = { leads_to_tech = ADISCORD_tech_modular_landing_causeways research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_modular_landing_causeways
+			research_cost_coeff = 1
+		}
 		dependencies = {
 			ADISCORD_tech_modular_escort_combat_systems = 1
 		}
@@ -1390,8 +906,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -1400,7 +922,10 @@ technologies = {
 		naval_invasion_prep_speed = 0.05
 		naval_invasion_penalty = -0.03
 		shore_bombardment_bonus = 0.03
-		path = { leads_to_tech = ADISCORD_tech_rapid_beachhead_logistics research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_rapid_beachhead_logistics
+			research_cost_coeff = 1
+		}
 		research_cost = 1.598
 		start_year = 2169
 		folder = {
@@ -1417,8 +942,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}
@@ -1443,8 +974,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 10
-			modifier = { factor = 0.05 num_of_naval_factories < 1 }
-			modifier = { factor = 1.35 num_of_naval_factories > 3 }
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
 		}
 		categories = { naval_equipment electronics }
 	}

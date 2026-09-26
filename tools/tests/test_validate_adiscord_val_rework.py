@@ -4847,7 +4847,7 @@ class ValFocusRewardBalanceTests(unittest.TestCase):
                 template = next((e.value for e in walk(body) if e.key == "division_template"), None)
                 self.assertIsNotNone(template, "the reward must create its template in existing saves")
                 self.assertEqual(scalar(template, "name"), name)
-                self.assertEqual(scalar(template, "is_locked"), "yes")
+                self.assertEqual(scalar(template, "is_locked"), "no" if battalion == "mountaineers" else "yes")
                 self.assertEqual(scalar(template, "force_allow_recruiting"), "yes")
                 regiments, support = block(template, "regiments"), block(template, "support")
                 self.assertEqual([e.key for e in regiments], [battalion] * 6)

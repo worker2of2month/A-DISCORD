@@ -3,6 +3,7 @@ from __future__ import annotations
 import itertools
 import unittest
 from pathlib import Path
+from tools.lib.focus_sources import read_focus_source
 
 from tools.tests.test_adiscord_stp_preparation import (
     block,
@@ -350,7 +351,7 @@ class StelanderGameplayLoopRegressionTests(unittest.TestCase):
         self.assertEqual(scalar(buffer, "subtract_fronts_from_need"), "no")
         history = (ROOT / "history/states/28-Fada.txt").read_text(encoding="utf-8-sig")
         self.assertIn("victory_points = { 145 25 }", history)
-        self.assertIn("province = 145", (ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt").read_text(encoding="utf-8-sig"))
+        self.assertIn("province = 145", read_focus_source(ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"))
         finish = block(self.effects, "STP_cw_finish_mobilization")
         self.assertIn("VAL", {e.value for e in walk(finish) if e.key == "has_war_with"})
         union = block(self.effects, "STP_cw_settle_union_victory")

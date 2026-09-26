@@ -13,6 +13,8 @@ from pathlib import Path
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from tools.lib.focus_sources import read_focus_source
+
 try:
     from tools.validators.validate_adiscord_economy_ai import (
         ai_assistance_contract_issues,
@@ -134,7 +136,9 @@ for _tag in BEZHAYSK_TAGS:
     }
 EVENT_AWAKENED_PARTICIPATION["BJK"].update({
     Path("common/decisions/ADISCORD_STP_decisions.txt"),
-    Path("common/national_focus/ADISCORD_national_focus_STP.txt"),
+    Path("common/national_focus/ADISCORD_STP_preparation.txt"),
+    Path("common/national_focus/ADISCORD_STP_civil_war.txt"),
+    Path("common/national_focus/ADISCORD_STP_exile_return.txt"),
     Path("common/national_focus/ADISCORD_national_focus_VAL.txt"),
     Path("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
     Path("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"),
@@ -163,7 +167,7 @@ def bezhaysk_administration_release_issues(text: str) -> list[str]:
 
 
 def read(path: Path) -> str:
-    return path.read_text(encoding="utf-8-sig")
+    return read_focus_source(path)
 
 
 def named_block(text: str, name: str) -> str:

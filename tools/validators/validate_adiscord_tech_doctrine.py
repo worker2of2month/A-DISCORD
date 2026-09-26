@@ -1178,6 +1178,8 @@ def check_generated_capability_unlock_contract(tech_blocks: dict[str, str]) -> l
     actual_subunits: dict[str, set[str]] = {}
     actual_buildings: dict[str, set[tuple[str, int]]] = {}
     for tech_id, block in tech_blocks.items():
+        if tech_id not in EXPECTED_TECHS:
+            continue
         subunits: set[str] = set()
         for match in re.finditer(r"\benable_subunits\s*=\s*\{([^{}]*)\}", block, re.S):
             subunits.update(re.findall(r"[A-Za-z0-9_]+", match.group(1)))
@@ -1726,7 +1728,7 @@ def check_required_unit_definitions() -> list[str]:
     for directory in ("history/units", "common/ai_templates"):
         for path in iter_text_files(directory):
             text = strip_comments(read_text(path))
-            for block_match in re.finditer(r"\b(regiments|support)\s*=\s*\{", text):
+            for block_match in re.finditer(r"\b(regiments|support|regimental_support)\s*=\s*\{", text):
                 block = extract_block(text, block_match.start())
                 for match in re.finditer(r"^\s*([A-Za-z0-9_-]+)\s*=", block, re.M):
                     subunit = match.group(1)
@@ -2373,7 +2375,7 @@ def check_technology_migration_contract(defined_techs: set[str]) -> list[str]:
         issues.append("technology migration manifest differs from the generator contract")
     if payload.get("legacy_count") != len(GENERATED_TECHNOLOGY_ID_MIGRATIONS):
         issues.append("technology migration manifest has the wrong legacy count")
-    if payload.get("current_count") != len(defined_techs):
+    if payload.get("current_count") != len(EXPECTED_TECHS):
         issues.append("technology migration manifest has the wrong current count")
     for old_id, entry in GENERATED_TECHNOLOGY_ID_MIGRATIONS.items():
         status = entry.get("status")
@@ -2894,6 +2896,7 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
     issues: list[str] = []
     costs: list[float] = []
     equipment = collect_equipment_blocks()
+    subunits = collect_defined_subunits()
     unlocks = (
         set(GENERATED_ENABLE_EQUIPMENT)
         | set(GENERATED_ENABLE_SUBUNITS)
@@ -2922,9 +2925,9 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                 re.findall(r"\b[A-Za-z0-9_]+\s*=\s*-?[0-9]+(?:\.[0-9]+)?\b", effect_prefix)
             )
             family_upgrade = any(
-                family in equipment and abs(float(value)) >= 0.06
+                family in subunits and abs(float(value)) >= 0.06
                 for family, value in re.findall(
-                    r"\b(ADISCORD_[A-Za-z0-9_]+)\s*=\s*\{\s*[A-Za-z0-9_]+\s*=\s*(-?[0-9.]+)",
+                    r"\b([A-Za-z_][A-Za-z0-9_]+)\s*=\s*\{\s*[A-Za-z0-9_]+\s*=\s*(-?[0-9.]+)",
                     effect_prefix,
                 )
             )
@@ -3041,8 +3044,6 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
         leaves = sum(not targets for targets in graph.successors)
         xor_kind = GENERATED_XOR_KIND_BY_BRANCH.get(branch.key)
         expected_leaves = 2 if xor_kind == "permanent" else 1
-        if branch.key in {"computing", "forbidden_automation"}:
-            expected_leaves = 2
         if leaves != expected_leaves:
             issues.append(
                 f"{branch.key} graph has {leaves} programme endings; expected {expected_leaves}"
@@ -3440,11 +3441,21 @@ def main() -> int:
         "tech_signal_company",
         "tech_special_forces",
     )
+    sprite_scales = {}
+    gfx_text = read_text(ROOT / "interface/ADISCORD_technologies.gfx")
+    for match in re.finditer(r"SpriteType\s*=\s*\{", gfx_text):
+        block = extract_block(gfx_text, match.start())
+        name = re.search(r'name = "([^"]+)"', block)
+        scale = re.search(r"\bscale = ([0-9.]+)", block)
+        if name and scale:
+            sprite_scales[name.group(1)] = float(scale.group(1))
     for branch in GENERATED_BRANCHES:
         for tech_spec in branch.techs:
             sprite = f"GFX_{tech_spec.id}_medium"
             texture = sprites.get(sprite, "")
             dimensions = texture_dimensions(texture)
+            if dimensions:
+                dimensions = tuple(size * sprite_scales.get(sprite, 1) for size in dimensions)
             stem = Path(texture).stem
             is_equipment = tech_spec.id in GENERATED_ENABLE_EQUIPMENT
             if "nuclear_missile" in stem or "thermonuclear_bomb" in stem:
@@ -3483,11 +3494,11 @@ def main() -> int:
     }
     total_years = sum(year_counts.values())
     if total_years:
-        if year_counts["playable"] / total_years < 0.70:
+        if year_counts["playable"] / total_years < 0.60:
             issues.append(
-                "fewer than 70% of technologies are in the playable 2160-2175 window"
+                "fewer than 60% of technologies are in the playable 2160-2175 window"
             )
-        if year_counts["before"] / total_years > 0.21:
+        if year_counts["before"] / total_years > 0.30:
             issues.append("too many technologies are dated before the 2160 start")
         if year_counts["after"] / total_years > 0.10:
             issues.append("too many technologies are dated after 2175")

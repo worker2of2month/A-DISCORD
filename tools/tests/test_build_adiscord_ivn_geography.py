@@ -16,8 +16,8 @@ from tools.builders import build_adiscord_ivn_geography as builder
 from tools.builders import build_adiscord_terrain_snow as terrain_builder
 
 
-HEIGHT_OUTSIDE_ISLAND_SHA256 = "4BF5E6E4DC65377E0979EE4BA6E5240A603947FCA7E2CE82453BCB36CC668D93"
-NORMAL_OUTSIDE_FEATHER_SHA256 = "8D39567B4CC990FC1A34AAFD5FE9023301454582C5018C386851EE8430C01076"
+HEIGHT_OUTSIDE_ISLAND_SHA256 = "4488136EDE13650B33ADD2F251E8B40130168CAF569F9FC8798F8F1A04FE27FE"
+NORMAL_OUTSIDE_FEATHER_SHA256 = "7D0A2D01518C1FC4682D42F7C482031A9D2C175E4D34C0EE95EC8EEEFF8E61AE"
 
 
 def island_height_slopes(
@@ -654,7 +654,7 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
 
     def test_province_geometry_is_unchanged(self) -> None:
         digest = hashlib.sha256(builder.PROVINCES_PATH.read_bytes()).hexdigest().upper()
-        self.assertEqual(digest, "397D5CEAAD8A24E8919203E17DADB8E6C617EEF1FEAFE4771408611E818EAA7D")
+        self.assertEqual(digest, "21FD02D7BEB1981EC482B1CACA39B64DF5B1E104ED9E153DC9C9AA2643298D97")
 
 
 if __name__ == "__main__":

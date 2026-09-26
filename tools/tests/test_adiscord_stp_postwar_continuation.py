@@ -1,5 +1,6 @@
 from __future__ import annotations
 from tools.lib.on_actions import country_on_actions_entries, read_country_on_actions
+from tools.lib.focus_sources import read_focus_source
 
 import json
 import re
@@ -75,11 +76,11 @@ def read(path: str | Path) -> str:
     path = Path(path)
     if not path.is_absolute():
         path = ROOT / path
-    return path.read_text(encoding="utf-8-sig" if path.suffix == ".yml" else "utf-8")
+    return read_focus_source(path, encoding="utf-8-sig" if path.suffix == ".yml" else "utf-8")
 
 
 def entries(path: Path):
-    return parse_clausewitz(path.read_text(encoding="utf-8-sig"))
+    return parse_clausewitz(read_focus_source(path, encoding="utf-8-sig"))
 
 
 def scalar(items, name):

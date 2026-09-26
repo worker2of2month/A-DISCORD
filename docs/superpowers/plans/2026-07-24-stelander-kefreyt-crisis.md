@@ -50,8 +50,8 @@
 | `events/ADISCORD_STP_crisis_events.txt` | Side choice, posture, death, civil-war and successor events |
 | `events/ADISCORD_VAL_contract_events.txt` | Operation resolution, deal, timer warning and final-war events |
 | `events/ADISCORD_NOD_crisis_events.txt` | NOD posture, limited wars, mandate and intervention events |
-| `common/national_focus/ADISCORD_national_focus_STP_crisis_war.txt` | Minimal focus tree for either civil-war side |
-| `common/national_focus/ADISCORD_national_focus_STP_postwar.txt` | Leader-gated short postwar branches |
+| `focus_trees/STP/civil_war/focuses.txt` | Civil-war focus tree |
+| `focus_trees/STP/postwar/focuses.txt` | Shared postwar return programme |
 | `common/ai_strategy/ADISCORD_STP_VAL_crisis_ai.txt` | Static posture-gated STP, VAL and NOD strategies |
 | `interface/ADISCORD_STP_VAL_crisis.gui` | STP/VAL panels embedded in their decision categories |
 | `interface/ADISCORD_STP_VAL_crisis.gfx` | Alias sprites for three STP spirits and the VAL contract spirit |
@@ -64,7 +64,7 @@
 
 | Path | Change |
 |---|---|
-| `common/national_focus/ADISCORD_national_focus_STP.txt` | Calendar-driven spine, staged availability, focus effects, side choice |
+| `focus_trees/STP/preparation/focuses.txt` | Calendar-driven spine, staged availability, focus effects, side choice |
 | `common/national_focus/ADISCORD_national_focus_VAL.txt` | Real rewards, doctrine exclusivity, crisis branch and final invoice |
 | `common/characters/STP.txt` | Shabrat leader block plus Sotnikov and Hedersett characters |
 | `interface/ADISCORD_leader_portraits.gfx` | Register derived 156×210 Sotnikov art and existing 156×210 Hedersett art |
@@ -649,7 +649,7 @@ git commit -m "feat: initialize Stelander Kefreyt crisis state"
 - Create: `common/decisions/categories/ADISCORD_STP_VAL_crisis_categories.txt`
 - Create: `common/decisions/ADISCORD_STP_crisis_decisions.txt`
 - Create: `events/ADISCORD_STP_crisis_events.txt`
-- Modify: `common/national_focus/ADISCORD_national_focus_STP.txt`
+- Modify: `focus_trees/STP/preparation/focuses.txt`
 - Modify: `common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt`
 - Modify: `common/scripted_localisation/ADISCORD_STP_leader_health_scripted_loc.txt`
 - Modify: `common/scripted_localisation/ADISCORD_STP_state_face_scripted_loc.txt`
@@ -856,7 +856,7 @@ Expected: unit tests, STP section, and baseline pass; no missing focus reference
 - [ ] **Step 8: Commit**
 
 ```powershell
-git add -- common/decisions/categories/ADISCORD_STP_VAL_crisis_categories.txt common/decisions/ADISCORD_STP_crisis_decisions.txt events/ADISCORD_STP_crisis_events.txt common/national_focus/ADISCORD_national_focus_STP.txt common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt common/scripted_localisation/ADISCORD_STP_leader_health_scripted_loc.txt common/scripted_localisation/ADISCORD_STP_state_face_scripted_loc.txt localisation/russian/ADISCORD_stp_state_face_l_russian.yml tools/stp_val_crisis_manifest.py tools/validate_adiscord_stp_val_crisis.py tools/test_validate_adiscord_stp_val_crisis.py
+git add -- common/decisions/categories/ADISCORD_STP_VAL_crisis_categories.txt common/decisions/ADISCORD_STP_crisis_decisions.txt events/ADISCORD_STP_crisis_events.txt focus_trees/STP/preparation/focuses.txt focus_trees/STP/civil_war/focuses.txt focus_trees/STP/postwar/focuses.txt common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt common/scripted_localisation/ADISCORD_STP_leader_health_scripted_loc.txt common/scripted_localisation/ADISCORD_STP_state_face_scripted_loc.txt localisation/russian/ADISCORD_stp_state_face_l_russian.yml tools/stp_val_crisis_manifest.py tools/validate_adiscord_stp_val_crisis.py tools/test_validate_adiscord_stp_val_crisis.py
 git commit -m "feat: add Ivanov crisis calendar and focus windows"
 ```
 

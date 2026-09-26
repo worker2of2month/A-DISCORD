@@ -7642,3 +7642,102 @@ STP_pw_party_settle_compact = {
 		}
 	}
 }
+
+# Postwar specialist training: templates recruit through the ordinary queue.
+STP_pw_open_mountain_school = {
+	custom_effect_tooltip = STP_pw_mountain_template_tt
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_template = "Горнострелковая бригада Стеландера" } }
+			if = {
+				limit = { tag = STP }
+				division_template = {
+					name = "Горнострелковая бригада Стеландера"
+					template_counter = 110
+					override_model = ADISCORD_STP_mountaineer_entity
+					is_locked = no
+					force_allow_recruiting = yes
+					regiments = {
+						mountaineers = { x = 0 y = 0 }
+						mountaineers = { x = 0 y = 1 }
+						mountaineers = { x = 0 y = 2 }
+						mountaineers = { x = 1 y = 0 }
+						mountaineers = { x = 1 y = 1 }
+						mountaineers = { x = 1 y = 2 }
+					}
+					support = { engineer = { x = 0 y = 0 } }
+				}
+			}
+			else_if = {
+				limit = { tag = STS }
+				division_template = {
+					name = "Горнострелковая бригада Стеландера"
+					template_counter = 110
+					override_model = ADISCORD_STS_mountaineer_entity
+					is_locked = no
+					force_allow_recruiting = yes
+					regiments = {
+						mountaineers = { x = 0 y = 0 }
+						mountaineers = { x = 0 y = 1 }
+						mountaineers = { x = 0 y = 2 }
+						mountaineers = { x = 1 y = 0 }
+						mountaineers = { x = 1 y = 1 }
+						mountaineers = { x = 1 y = 2 }
+					}
+					support = { engineer = { x = 0 y = 0 } }
+				}
+			}
+		}
+	}
+}
+
+STP_pw_open_marine_school = {
+	set_technology = {
+		ADISCORD_tech_stelander_marine_corps = 1
+		popup = no
+	}
+	custom_effect_tooltip = STP_pw_marine_template_tt
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_template = "Бригада морской пехоты Стеландера" } }
+			if = {
+				limit = { tag = STP }
+				division_template = {
+					name = "Бригада морской пехоты Стеландера"
+					template_counter = 68
+					override_model = ADISCORD_STP_marine_entity
+					is_locked = no
+					force_allow_recruiting = yes
+					regiments = {
+						ADISCORD_marine_infantry = { x = 0 y = 0 }
+						ADISCORD_marine_infantry = { x = 0 y = 1 }
+						ADISCORD_marine_infantry = { x = 0 y = 2 }
+						ADISCORD_marine_infantry = { x = 1 y = 0 }
+						ADISCORD_marine_infantry = { x = 1 y = 1 }
+						ADISCORD_marine_infantry = { x = 1 y = 2 }
+					}
+					support = { engineer = { x = 0 y = 0 } }
+				}
+			}
+			else_if = {
+				limit = { tag = STS }
+				division_template = {
+					name = "Бригада морской пехоты Стеландера"
+					template_counter = 68
+					override_model = ADISCORD_STS_marine_entity
+					is_locked = no
+					force_allow_recruiting = yes
+					regiments = {
+						ADISCORD_marine_infantry = { x = 0 y = 0 }
+						ADISCORD_marine_infantry = { x = 0 y = 1 }
+						ADISCORD_marine_infantry = { x = 0 y = 2 }
+						ADISCORD_marine_infantry = { x = 1 y = 0 }
+						ADISCORD_marine_infantry = { x = 1 y = 1 }
+						ADISCORD_marine_infantry = { x = 1 y = 2 }
+					}
+					support = { engineer = { x = 0 y = 0 } }
+				}
+			}
+		}
+	}
+}

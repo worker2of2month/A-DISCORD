@@ -36,7 +36,7 @@ DIPLOMACY_ON_ACTIONS = Path("common/on_actions/03_ADISCORD_vorkerland_diplomacy_
 PHASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
 PHASE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
 COLLAPSE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-FOCUS_FILE = Path("common/national_focus/ADISCORD_vorkerland_focus.txt")
+FOCUS_FILE = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
 COLLAPSE_AI = Path("common/ai_strategy/ADISCORD_vorkerland_ai.txt")
 WKR_AI_PLANS = Path(
     "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"

@@ -20,6 +20,7 @@ from PIL import Image
 from tools.builders.build_adiscord_terrain_snow import (
     CITIES_PATH,
     CITY_PALETTE_INDEX,
+    CITY_PALETTE_INDICES,
 )
 
 
@@ -949,7 +950,7 @@ def _build_expected() -> GeographyOutputs:
     )
     generated_pixels = bytearray(terrain.get_flattened_data())
     for index, province_id in enumerate(province_by_pixel):
-        if province_id and city_pixels[index] == CITY_PALETTE_INDEX:
+        if province_id and city_pixels[index] in CITY_PALETTE_INDICES:
             generated_pixels[index] = URBAN_PALETTE
     terrain.putdata(generated_pixels)
 

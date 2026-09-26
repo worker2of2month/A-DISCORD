@@ -35,47 +35,12 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_modular_fixture_systems_medium"
-		textureFile = "gfx/interface/technologies/assembly_line_production.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_closed_loop_quality_control_medium"
-		textureFile = "gfx/interface/technologies/concentrated_industry.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_predictive_maintenance_medium"
 		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_flexible_robotic_tooling_medium"
-		textureFile = "gfx/interface/technologies/flexible_line.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_additive_spare_part_cells_medium"
-		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_machine_vision_inspection_medium"
-		textureFile = "gfx/interface/technologies/assembly_line_production.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_factory_cells_medium"
-		textureFile = "gfx/interface/technologies/flexible_line.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_self_balancing_production_lines_medium"
-		textureFile = "gfx/interface/technologies/streamlined_line.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_lights_out_microfactories_medium"
 		textureFile = "gfx/interface/technologies/flexible_line.dds"
 	}
 
@@ -100,32 +65,12 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_zone_power_trunking_medium"
-		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_workshop_tooling_pools_medium"
-		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_megafactory_power_buses_medium"
 		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_regional_spare_capacity_medium"
-		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_centralized_process_control_medium"
-		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_distributed_scheduling_mesh_medium"
 		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
 	}
 
@@ -170,33 +115,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_structural_ruin_assessment_medium"
-		textureFile = "gfx/interface/technologies/improved_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_rapid_bridge_section_casting_medium"
-		textureFile = "gfx/interface/technologies/improved_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_standardized_utility_corridors_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_modular_rebuilding_medium"
 		textureFile = "gfx/interface/technologies/improved_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_reclaimed_aggregate_concrete_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_robotic_foundation_piling_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
 	}
 
 	SpriteType = {
@@ -205,22 +125,7 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_seismic_retrofit_frames_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_public_repair_corps_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_swarm_masonry_platforms_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_self_sealing_utility_mains_medium"
 		textureFile = "gfx/interface/technologies/advanced_construction.dds"
 	}
 
@@ -275,32 +180,12 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_refinery_catalyst_recovery_medium"
-		textureFile = "gfx/interface/technologies/improved_oil_processing.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_synthetic_resource_cycles_medium"
 		textureFile = "gfx/interface/technologies/rubber_processing.dds"
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_high_pressure_polymer_synthesis_medium"
-		textureFile = "gfx/interface/technologies/rubber_processing.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_geothermal_brine_extraction_medium"
-		textureFile = "gfx/interface/technologies/excavation4.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_rare_earth_solvent_loops_medium"
-		textureFile = "gfx/interface/technologies/excavation4.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_closed_loop_smelting_medium"
 		textureFile = "gfx/interface/technologies/excavation4.dds"
 	}
 
@@ -312,16 +197,6 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_carbon_feedstock_cracking_medium"
 		textureFile = "gfx/interface/technologies/oil_processing.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_isotope_selective_refining_medium"
-		textureFile = "gfx/interface/technologies/excavation5.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_urban_mine_cartography_medium"
-		textureFile = "gfx/interface/technologies/excavation4.dds"
 	}
 
 	SpriteType = {
@@ -350,11 +225,6 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_customs_clearance_networks_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_administrative_digitization_medium"
 		textureFile = "gfx/interface/technologies/improved_computing_machine.dds"
 	}
@@ -362,11 +232,6 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_production_cost_accounting_medium"
 		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_integrated_budget_forecasts_medium"
-		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
 	}
 
 	SpriteType = {
@@ -430,43 +295,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_directional_mesh_relays_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_lattice_key_exchange_medium"
-		textureFile = "gfx/interface/technologies/basic_encryption.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_passive_emitter_geolocation_medium"
-		textureFile = "gfx/interface/technologies/basic_decryption.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_packetized_fire_control_links_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_battlefield_analytics_medium"
 		textureFile = "gfx/interface/technologies/improved_encryption.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_cognitive_spectrum_management_medium"
-		textureFile = "gfx/interface/technologies/improved_encryption.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_stratospheric_burst_relays_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_intrusion_hunting_medium"
-		textureFile = "gfx/interface/technologies/improved_decryption.dds"
 	}
 
 	SpriteType = {
@@ -475,23 +305,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_photonic_encryption_modules_medium"
-		textureFile = "gfx/interface/technologies/advanced_encryption.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_battlefield_sensor_fusion_medium"
 		textureFile = "gfx/interface/technologies/radio_detection.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_adaptive_deception_networks_medium"
-		textureFile = "gfx/interface/technologies/improved_decryption.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_quantum_command_authentication_medium"
-		textureFile = "gfx/interface/technologies/advanced_encryption.dds"
 	}
 
 	SpriteType = {
@@ -530,38 +345,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_analog_ai_accelerators_medium"
-		textureFile = "gfx/interface/technologies/improved_computing_machine.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_rugged_chiplet_packaging_medium"
-		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_neuromorphic_coprocessors_medium"
-		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_predictive_logistics_medium"
 		textureFile = "gfx/interface/technologies/mechanical_computing.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_distributed_operational_caches_medium"
-		textureFile = "gfx/interface/technologies/electronic_mechanical_engineering.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_synthetic_training_environments_medium"
-		textureFile = "gfx/interface/technologies/computing_machine.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_federated_operational_learning_medium"
-		textureFile = "gfx/interface/technologies/basic_encryption.dds"
 	}
 
 	SpriteType = {
@@ -570,28 +355,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_explainable_command_models_medium"
-		textureFile = "gfx/interface/technologies/improved_computing_machine.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_photonic_compute_arrays_medium"
-		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_strategic_digital_twins_medium"
 		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_predictive_budgeting_medium"
-		textureFile = "gfx/interface/technologies/mechanical_computing.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_bounded_general_planning_cores_medium"
-		textureFile = "gfx/interface/technologies/electronic_mechanical_engineering.dds"
 	}
 
 	SpriteType = {
@@ -620,38 +385,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_shielded_engineering_corps_medium"
-		textureFile = "gfx/interface/technologies/advanced_oil_plant.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_ceramic_grid_insulators_medium"
-		textureFile = "gfx/interface/technologies/sp_nuclear_isotope_separation.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_solid_state_grid_breakers_medium"
-		textureFile = "gfx/interface/technologies/sp_physics_improved_radio.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_modular_fission_heat_exchangers_medium"
-		textureFile = "gfx/interface/technologies/sp_physics_advanced_radio.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_radiation_hardened_control_rods_medium"
-		textureFile = "gfx/interface/technologies/electronic_mechanical_engineering.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_reactor_safety_protocols_medium"
 		textureFile = "gfx/interface/technologies/oil_plant.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_molten_salt_cleanup_systems_medium"
-		textureFile = "gfx/interface/technologies/atomic_research.dds"
 	}
 
 	SpriteType = {
@@ -670,26 +405,6 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_passive_decay_heat_sinks_medium"
-		textureFile = "gfx/interface/technologies/sp_physics_improved_radio.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_reactor_diagnostics_medium"
-		textureFile = "gfx/interface/technologies/sp_physics_advanced_radio.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_closed_fuel_cycle_separators_medium"
-		textureFile = "gfx/interface/technologies/electronic_mechanical_engineering.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_high_density_thermal_storage_medium"
-		textureFile = "gfx/interface/technologies/oil_plant.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_continental_load_balancing_medium"
 		textureFile = "gfx/interface/technologies/atomic_research.dds"
 	}
@@ -705,17 +420,7 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_dead_reactor_salvage_medium"
-		textureFile = "gfx/interface/technologies/nuclear_reactor.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_legacy_reactor_compactification_medium"
-		textureFile = "gfx/interface/technologies/sp_nuclear_isotope_separation.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_dirty_energy_munitions_medium"
 		textureFile = "gfx/interface/technologies/sp_nuclear_isotope_separation.dds"
 	}
 
@@ -785,21 +490,6 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_smart_optics_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_STP_ADISCORD_tech_smart_optics_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_STP_weapon_03_standardized_battle_rifle.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_VAL_ADISCORD_tech_smart_optics_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_VAL_weapon_03_standardized_battle_rifle.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_sealed_receiver_assemblies_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
 	}
@@ -817,6 +507,7 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_electrothermal_ignition_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
+		scale = 0.363636
 	}
 
 	SpriteType = {
@@ -835,8 +526,23 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_ADISCORD_tech_smart_optics_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_STP_ADISCORD_tech_smart_optics_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_STP_weapon_03_standardized_battle_rifle.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_VAL_ADISCORD_tech_smart_optics_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_VAL_weapon_03_standardized_battle_rifle.dds"
+	}
+
+	SpriteType = {
 		name = "GFX_ADISCORD_tech_networked_weapon_sights_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
 	}
 
 	SpriteType = {
@@ -857,26 +563,27 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_biometric_trigger_locks_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
+		scale = 0.363636
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_integrated_target_designation_medium"
-		textureFile = "gfx/interface/technologies/advanced_centimetric_radar.dds"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_programmable_ammunition_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_equipment_ammunition.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_STP_ADISCORD_tech_programmable_ammunition_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_equipment_ammunition.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_STP_weapon_03_standardized_battle_rifle.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_VAL_ADISCORD_tech_programmable_ammunition_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_equipment_ammunition.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_VAL_weapon_03_standardized_battle_rifle.dds"
 	}
 
 	SpriteType = {
@@ -946,22 +653,17 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_man_portable_sensor_masts_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_distributed_ammunition_carriers_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_equipment_ammunition.dds"
+		textureFile = "gfx/interface/technologies/support_weapons.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_drone_guided_support_fire_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_11_loitering_munition.dds"
+		textureFile = "gfx/interface/technologies/support_weapons.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_networked_command_terminals_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/support_weapons.dds"
 	}
 
 	SpriteType = {
@@ -970,13 +672,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_loitering_munition_teams_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_11_loitering_munition.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_cooperative_target_handoff_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
+		textureFile = "gfx/interface/technologies/support_weapons.dds"
 	}
 
 	SpriteType = {
@@ -986,27 +683,12 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_mortar_sections_medium"
-		textureFile = "gfx/interface/technologies/artillery_equipment.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_microdrone_suppression_nets_medium"
-		textureFile = "gfx/interface/technologies/antiair1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_electromagnetic_anti_armor_launchers_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_04_antitank_rifle.dds"
+		textureFile = "gfx/interface/technologies/support_weapons.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_robotic_heavy_weapon_teams_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_squad_04_advanced_fire_support.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_swarm_coordinated_fire_support_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
 	}
 
 	SpriteType = {
@@ -1041,7 +723,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_fire_and_forget_seekers_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_06_recoilless_launcher.dds"
+		textureFile = "gfx/interface/technologies/ADISCORD_antitank_09_top_attack_seeker.dds"
 	}
 
 	SpriteType = {
@@ -1076,277 +758,237 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_passive_intensifier_cells_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_sealed_night_mounts_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
+		textureFile = "gfx/interface/technologies/night_vision2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_thermal_observation_channels_medium"
-		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_fused_low_light_sights_medium"
-		textureFile = "gfx/interface/technologies/advanced_centimetric_radar.dds"
+		textureFile = "gfx/interface/technologies/night_vision2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_low_signature_illumination_medium"
-		textureFile = "gfx/interface/technologies/basic_decryption.dds"
+		textureFile = "gfx/interface/technologies/night_vision2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_squad_target_sharing_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/night_vision2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_counter_illumination_warnings_medium"
-		textureFile = "gfx/interface/technologies/basic_decryption.dds"
+		textureFile = "gfx/interface/technologies/night_vision2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_thermal_target_libraries_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_antitank_12_multispectral_targeting.dds"
+		textureFile = "gfx/interface/technologies/night_vision2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_nocturnal_sensor_discipline_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
+		textureFile = "gfx/interface/technologies/night_vision2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_distributed_night_engagements_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/night_vision2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_adaptive_spectrum_concealment_medium"
-		textureFile = "gfx/interface/technologies/basic_encryption.dds"
+		textureFile = "gfx/interface/technologies/night_vision2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_nocturnal_combat_mesh_medium"
-		textureFile = "gfx/interface/technologies/basic_encryption.dds"
+		textureFile = "gfx/interface/technologies/night_vision2.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_composite_protection_kits_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_trauma_plates_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_sealed_combat_suits_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_ceramic_trauma_inserts_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_battlefield_medical_drones_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_sealed_respirator_interfaces_medium"
-		textureFile = "gfx/interface/technologies/atomic_research.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_active_hearing_protection_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_thermal_signature_liners_medium"
-		textureFile = "gfx/interface/technologies/basic_encryption.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_powered_load_bearing_harnesses_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_exoskeleton_load_frames_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_smart_tourniquet_systems_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_casualty_monitors_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_reactive_camouflage_textiles_medium"
-		textureFile = "gfx/interface/technologies/basic_encryption.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_adaptive_camouflage_medium"
-		textureFile = "gfx/interface/technologies/basic_encryption.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_exosuit_joint_actuators_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_nanofiber_wound_dressings_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_adaptive_radiation_shielding_medium"
-		textureFile = "gfx/interface/technologies/atomic_research.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_closed_loop_combat_life_support_medium"
-		textureFile = "gfx/interface/technologies/atomic_research.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_self_sealing_combat_skins_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_assault_sapper_kits_medium"
-		textureFile = "gfx/interface/technologies/basic_construction.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_fieldcraft_manuals_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_urban_breaching_medium"
-		textureFile = "gfx/interface/technologies/basic_construction.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_radiation_patrols_medium"
-		textureFile = "gfx/interface/technologies/atomic_research.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_subterranean_route_reconnaissance_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_combat_recon_drones_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_urban_vertical_access_rigs_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_low_observable_infiltration_suits_medium"
-		textureFile = "gfx/interface/technologies/basic_encryption.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_scout_microdrones_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_contested_zone_navigation_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_vertical_assault_training_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_high_altitude_insertion_capsules_medium"
-		textureFile = "gfx/interface/technologies/rocket_engines.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_multispectral_concealment_discipline_medium"
-		textureFile = "gfx/interface/technologies/basic_encryption.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_remote_beacon_extraction_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_deep_recon_cells_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_predictive_patrol_evasion_medium"
-		textureFile = "gfx/interface/technologies/basic_encryption.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_distributed_recon_sensor_caches_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_robotic_breaching_companions_medium"
-		textureFile = "gfx/interface/technologies/basic_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_deep_area_sustainment_pods_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_equipment_ammunition.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_augmented_mission_rehearsal_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_augmented_special_forces_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_casualty_evacuation_medium"
+		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_battlefield_medical_drones_medium"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_trauma_registry_networks_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_smart_tourniquet_systems_medium"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_forward_surgical_cells_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_nanofiber_wound_dressings_medium"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_distributed_combat_medicine_medium"
-		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
@@ -1370,26 +1012,6 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_casualty_evacuation_medium"
-		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_portable_diagnostic_benches_medium"
-		textureFile = "gfx/interface/technologies/improved_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_modular_bridge_launch_kits_medium"
-		textureFile = "gfx/interface/technologies/assembly_line_production.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_sterilized_casualty_modules_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_drone_delivered_repair_spares_medium"
 		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
 	}
@@ -1400,48 +1022,13 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_remote_maintenance_telemetry_medium"
-		textureFile = "gfx/interface/technologies/improved_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_robotic_recovery_winches_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_additive_field_fabrication_medium"
-		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_recovery_medium"
 		textureFile = "gfx/interface/technologies/improved_construction.dds"
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_triage_stations_medium"
-		textureFile = "gfx/interface/technologies/assembly_line_production.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_self_deploying_field_workshops_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_predictive_parts_prepositioning_medium"
 		textureFile = "gfx/interface/technologies/support_equipment_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_unmanned_recovery_convoys_medium"
-		textureFile = "gfx/interface/technologies/basic_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_regenerative_support_depots_medium"
-		textureFile = "gfx/interface/technologies/improved_machine_tools.dds"
 	}
 
 	SpriteType = {
@@ -1465,33 +1052,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_standardized_cargo_pallets_medium"
-		textureFile = "gfx/interface/technologies/assembly_line_production.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_forward_supply_hubs_medium"
 		textureFile = "gfx/interface/technologies/improved_computing_machine.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_convoy_radio_beacons_medium"
-		textureFile = "gfx/interface/technologies/improved_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_modular_fuel_bladders_medium"
-		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_cold_chain_field_containers_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_automated_depot_manifests_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
 	}
 
 	SpriteType = {
@@ -1505,38 +1067,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_predictive_convoy_scheduling_medium"
-		textureFile = "gfx/interface/technologies/assembly_line_production.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_terrain_adaptive_cargo_carriers_medium"
-		textureFile = "gfx/interface/technologies/improved_computing_machine.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_route_optimization_ai_medium"
 		textureFile = "gfx/interface/technologies/improved_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_distributed_microdepots_medium"
-		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_last_mile_carriers_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_dynamic_supply_allocation_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_self_routing_logistics_mesh_medium"
-		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
 	}
 
 	SpriteType = {
@@ -1565,53 +1097,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_ultrasonic_rail_inspection_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_railway_gun_reactivation_medium"
-		textureFile = "gfx/interface/technologies/generic_railway_gun.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_modular_sleeper_casting_medium"
-		textureFile = "gfx/interface/technologies/improved_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_recoil_braced_firing_sidings_medium"
-		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_armored_ammunition_tenders_medium"
-		textureFile = "gfx/interface/technologies/computing_machine.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_counter_battery_relocation_tables_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_rail_repair_corps_medium"
 		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_drone_track_survey_medium"
-		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_predictive_wheelset_maintenance_medium"
-		textureFile = "gfx/interface/technologies/basic_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_distributed_rail_traffic_control_medium"
-		textureFile = "gfx/interface/technologies/improved_machine_tools.dds"
 	}
 
 	SpriteType = {
@@ -1620,33 +1107,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_yard_shunting_medium"
-		textureFile = "gfx/interface/technologies/train_equipment_3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_active_suspension_gun_carriages_medium"
-		textureFile = "gfx/interface/technologies/improved_construction.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_smart_railbed_repair_swarms_medium"
 		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_hypersonic_shell_telemetry_medium"
-		textureFile = "gfx/interface/technologies/computing_machine.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_continental_fire_control_relays_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_over_the_horizon_fire_control_medium"
-		textureFile = "gfx/interface/technologies/generic_super_heavy_railway_gun.dds"
 	}
 
 	SpriteType = {
@@ -1730,23 +1192,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_solid_state_ballistic_computers_medium"
-		textureFile = "gfx/interface/technologies/artillery2.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_counterbattery_radar_links_medium"
 		textureFile = "gfx/interface/technologies/artillery3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_modular_propellant_charges_medium"
-		textureFile = "gfx/interface/technologies/artillery4.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_inertial_battery_survey_medium"
-		textureFile = "gfx/interface/technologies/artillery_equipment.dds"
 	}
 
 	SpriteType = {
@@ -1755,43 +1202,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_course_correcting_fuzes_medium"
-		textureFile = "gfx/interface/technologies/rocket_artillery_equipment.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_multispectral_spotter_drones_medium"
-		textureFile = "gfx/interface/technologies/rocket_artillery_equipment.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_robotic_shell_handling_medium"
-		textureFile = "gfx/interface/technologies/artillery_equipment.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_drone_spotted_batteries_medium"
 		textureFile = "gfx/interface/technologies/rocket_artillery_equipment.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_distributed_counterbattery_mesh_medium"
-		textureFile = "gfx/interface/technologies/artillery3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_loitering_artillery_observers_medium"
-		textureFile = "gfx/interface/technologies/artillery4.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_electromagnetic_recoil_brakes_medium"
-		textureFile = "gfx/interface/technologies/artillery5.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_predictive_fire_mission_control_medium"
-		textureFile = "gfx/interface/technologies/rocket_artillery2.dds"
 	}
 
 	SpriteType = {
@@ -1802,6 +1214,26 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_battery_network_medium"
 		textureFile = "gfx/interface/technologies/rocket_artillery4.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_railway_gun_reactivation_medium"
+		textureFile = "gfx/interface/technologies/generic_railway_gun.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_recoil_braced_firing_sidings_medium"
+		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_active_suspension_gun_carriages_medium"
+		textureFile = "gfx/interface/technologies/improved_construction.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_over_the_horizon_fire_control_medium"
+		textureFile = "gfx/interface/technologies/generic_super_heavy_railway_gun.dds"
 	}
 
 	SpriteType = {
@@ -1820,18 +1252,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_active_protection_defeat_probes_medium"
-		textureFile = "gfx/interface/technologies/antitank1.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_scrap_at_launchers_medium"
 		textureFile = "gfx/interface/technologies/anti_tank_equipment.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_stabilized_missile_launchers_medium"
-		textureFile = "gfx/interface/technologies/antitank2.dds"
 	}
 
 	SpriteType = {
@@ -1840,33 +1262,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_overflight_attack_sensors_medium"
-		textureFile = "gfx/interface/technologies/antitank4.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_hunter_killer_team_datalinks_medium"
-		textureFile = "gfx/interface/technologies/antitank5.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_top_attack_munitions_medium"
 		textureFile = "gfx/interface/technologies/antitank5.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_multispectral_armor_classifiers_medium"
-		textureFile = "gfx/interface/technologies/antitank2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_loitering_anti_armor_munitions_medium"
-		textureFile = "gfx/interface/technologies/antitank3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_distributed_missile_ambush_nodes_medium"
-		textureFile = "gfx/interface/technologies/antitank2.dds"
 	}
 
 	SpriteType = {
@@ -1877,26 +1274,6 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_superconducting_coil_barrels_medium"
 		textureFile = "gfx/interface/technologies/anti_tank_equipment.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_guided_hypervelocity_penetrators_medium"
-		textureFile = "gfx/interface/technologies/anti_tank_equipment.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_camouflage_defeat_radar_medium"
-		textureFile = "gfx/interface/technologies/antitank5.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_anti_armor_sentries_medium"
-		textureFile = "gfx/interface/technologies/antitank3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_predictive_armor_route_interdiction_medium"
-		textureFile = "gfx/interface/technologies/antitank1.dds"
 	}
 
 	SpriteType = {
@@ -1930,21 +1307,6 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_solid_state_air_search_radar_medium"
-		textureFile = "gfx/interface/technologies/antiair2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_programmable_airburst_shells_medium"
-		textureFile = "gfx/interface/technologies/antiair3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_infrared_search_track_arrays_medium"
-		textureFile = "gfx/interface/technologies/antiair4.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_integrated_short_range_missile_cells_medium"
 		textureFile = "gfx/interface/technologies/antiair5.dds"
 	}
@@ -1955,43 +1317,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_multispectral_drone_classifiers_medium"
-		textureFile = "gfx/interface/technologies/antiair2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_counter_uas_microwave_emitters_medium"
-		textureFile = "gfx/interface/technologies/sp_nuclear_isotope_separation.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_cooperative_engagement_links_medium"
-		textureFile = "gfx/interface/technologies/antiair2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_rail_assisted_aa_medium"
-		textureFile = "gfx/interface/technologies/antiair2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_rail_accelerated_interceptors_medium"
-		textureFile = "gfx/interface/technologies/antiair3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_adaptive_laser_beam_directors_medium"
-		textureFile = "gfx/interface/technologies/antiair4.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_high_energy_laser_turrets_medium"
 		textureFile = "gfx/interface/technologies/anti_air_equipment.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_interceptor_swarms_medium"
-		textureFile = "gfx/interface/technologies/antiair3.dds"
 	}
 
 	SpriteType = {
@@ -2030,38 +1357,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_retractable_sensor_masts_medium"
-		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_hybrid_silent_running_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_2.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_multispectral_recon_suites_medium"
 		textureFile = "gfx/interface/technologies/improved_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_terrain_mapping_suspension_medium"
-		textureFile = "gfx/interface/technologies/nsb_engine_tech_3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_active_scouting_suites_medium"
-		textureFile = "gfx/interface/technologies/advanced_centimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_deployable_microdrone_racks_medium"
-		textureFile = "gfx/interface/technologies/nsb_engine_tech_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_terrain_following_autopilots_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_1.dds"
 	}
 
 	SpriteType = {
@@ -2072,31 +1369,6 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_unmanned_recon_vehicles_medium"
 		textureFile = "gfx/interface/technologies/ger_armored_car_equipment_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_unmanned_scout_turrets_medium"
-		textureFile = "gfx/interface/technologies/nsb_engine_tech_2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_cooperative_mapping_relays_medium"
-		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_expendable_sensor_carriers_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_route_clearance_scouts_medium"
-		textureFile = "gfx/interface/technologies/improved_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_self_organizing_scout_formations_medium"
-		textureFile = "gfx/interface/technologies/nsb_engine_tech_3.dds"
 	}
 
 	SpriteType = {
@@ -2125,11 +1397,6 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_dismount_sensor_suites_medium"
-		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_infantry_combat_vehicle_program_medium"
 		textureFile = "gfx/interface/technologies/mechanized_equipment_2.dds"
 	}
@@ -2140,23 +1407,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_hybrid_cross_country_drives_medium"
-		textureFile = "gfx/interface/technologies/nsb_engine_tech_2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_drone_screen_coordination_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_cooperative_dismount_control_medium"
 		textureFile = "gfx/interface/technologies/improved_computing_machine.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_mechanized_battle_cloud_medium"
-		textureFile = "gfx/interface/technologies/advanced_computing_machine.dds"
 	}
 
 	SpriteType = {
@@ -2167,6 +1419,7 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_recovered_medium_chassis_medium"
 		textureFile = "gfx/interface/technologies/armor/ADISCORD_restored_main_battle_tank.dds"
+		scale = 0.35
 	}
 
 	SpriteType = {
@@ -2180,11 +1433,6 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_modular_ceramic_armor_blocks_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_2.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_electric_turret_drives_medium"
 		textureFile = "gfx/interface/technologies/nsb_engine_tech_2.dds"
 	}
@@ -2195,18 +1443,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_digital_fire_control_buses_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_3.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_hard_kill_protection_arrays_medium"
 		textureFile = "gfx/interface/technologies/nsb_engine_tech_3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_distributed_crew_stations_medium"
-		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
 	}
 
 	SpriteType = {
@@ -2217,26 +1455,6 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_multispectral_gunner_sights_medium"
 		textureFile = "gfx/interface/technologies/nsb_engine_tech_4.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_unmanned_turret_capsules_medium"
-		textureFile = "gfx/interface/technologies/advanced_centimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_armored_platoon_target_handoff_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_self_healing_armor_matrices_medium"
-		textureFile = "gfx/interface/technologies/nsb_engine_tech_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_platoon_control_medium"
-		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
 	}
 
 	SpriteType = {
@@ -2260,11 +1478,6 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_resilient_combat_cloud_nodes_medium"
-		textureFile = "gfx/interface/technologies/nsb_engine_tech_3.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_heavy_recovery_frames_medium"
 		textureFile = "gfx/interface/technologies/nsb_armor_tech_1.dds"
 	}
@@ -2280,33 +1493,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_hydropneumatic_load_equalizers_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_2.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_remote_repair_sections_medium"
 		textureFile = "gfx/interface/technologies/generic_armored_support_vehicle_recovery_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_compact_turbine_powerpacks_medium"
-		textureFile = "gfx/interface/technologies/improved_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_spall_isolated_crew_citadels_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_modular_heavy_armor_cassettes_medium"
-		textureFile = "gfx/interface/technologies/nsb_engine_tech_3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_robotic_recovery_booms_medium"
-		textureFile = "gfx/interface/technologies/advanced_machine_tools.dds"
 	}
 
 	SpriteType = {
@@ -2320,43 +1508,13 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_remote_breaching_manipulators_medium"
-		textureFile = "gfx/interface/technologies/advanced_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_distributed_hull_power_buses_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_1.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_breakthrough_platforms_medium"
 		textureFile = "gfx/interface/technologies/nsb_engine_tech_1.dds"
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_hybrid_siege_powerplants_medium"
-		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_electromagnetic_siege_mortars_medium"
 		textureFile = "gfx/interface/technologies/nsb_armor_tech_2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_obstacle_reduction_medium"
-		textureFile = "gfx/interface/technologies/nsb_engine_tech_2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_self_repairing_track_assemblies_medium"
-		textureFile = "gfx/interface/technologies/improved_machine_tools.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_networked_siege_coordination_cores_medium"
-		textureFile = "gfx/interface/technologies/nsb_armor_tech_3.dds"
 	}
 
 	SpriteType = {
@@ -2405,23 +1563,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_digital_flight_controls_medium"
-		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_electronically_scanned_fighter_radar_medium"
 		textureFile = "gfx/interface/technologies/bba_tech_aircraft_construction.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_helmet_cued_targeting_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_engines_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_fighter_infrared_search_track_medium"
-		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
 	}
 
 	SpriteType = {
@@ -2430,18 +1573,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_supercruise_turbofans_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_engines_1.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_low_observable_inlet_geometry_medium"
 		textureFile = "gfx/interface/technologies/fighter2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_cooperative_fighter_sensor_fusion_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_aircraft_construction.dds"
 	}
 
 	SpriteType = {
@@ -2450,23 +1583,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_adaptive_cycle_engines_medium"
-		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_directed_energy_defensive_suites_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_aircraft_construction.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_dogfight_controller_medium"
 		textureFile = "gfx/interface/technologies/bba_tech_engines_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_exoatmospheric_boost_stages_medium"
-		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
 	}
 
 	SpriteType = {
@@ -2535,18 +1653,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_ruggedized_targeting_pods_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_armor_piercing_bombs.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_vtol_assault_frames_medium"
 		textureFile = "gfx/interface/technologies/CAS2.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_millimeter_wave_ground_radar_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
 	}
 
 	SpriteType = {
@@ -2555,23 +1663,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_terrain_following_attack_controls_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_engines_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_modular_airframe_armor_pods_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_drone_air_wings_medium"
 		textureFile = "gfx/interface/technologies/CAS3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_tiltrotor_assault_propulsion_medium"
-		textureFile = "gfx/interface/technologies/sp_rockets_glide_bombs.dds"
 	}
 
 	SpriteType = {
@@ -2587,26 +1680,6 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_strike_wings_medium"
 		textureFile = "gfx/interface/technologies/CAS3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_target_discrimination_medium"
-		textureFile = "gfx/interface/technologies/radio.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_directed_energy_countermeasures_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_armor_piercing_bombs.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_electromagnetic_cannon_pods_medium"
-		textureFile = "gfx/interface/technologies/bba_tech_engines_1.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_unmanned_forward_air_controllers_medium"
-		textureFile = "gfx/interface/technologies/sp_rockets_glide_bombs.dds"
 	}
 
 	SpriteType = {
@@ -2635,33 +1708,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_storable_liquid_propellants_medium"
-		textureFile = "gfx/interface/technologies/rocket_engines.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_strategic_rocket_architecture_medium"
 		textureFile = "gfx/interface/technologies/advanced_rocket_engines.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_ring_laser_gyroscopes_medium"
-		textureFile = "gfx/interface/technologies/improved_rocket_engines.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_terrain_contour_matching_medium"
-		textureFile = "gfx/interface/technologies/rocket_engines.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_hardened_mobile_launchers_medium"
-		textureFile = "gfx/interface/technologies/advanced_rocket_engines.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_digital_warhead_buses_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
 	}
 
 	SpriteType = {
@@ -2670,18 +1718,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_low_observable_cruise_missile_skins_medium"
-		textureFile = "gfx/interface/technologies/guided_missile_2.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_hypersonic_glide_vehicles_medium"
 		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_astro_inertial_navigation_medium"
-		textureFile = "gfx/interface/technologies/improved_rocket_engines.dds"
 	}
 
 	SpriteType = {
@@ -2690,27 +1728,7 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_reusable_boost_stages_medium"
-		textureFile = "gfx/interface/technologies/centimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_maneuvering_reentry_vehicles_medium"
-		textureFile = "gfx/interface/technologies/rocket_engines.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_orbital_relay_targeting_medium"
-		textureFile = "gfx/interface/technologies/radio_detection.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_suborbital_skip_glide_guidance_medium"
-		textureFile = "gfx/interface/technologies/guided_missile_3.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_strategic_strike_planning_medium"
 		textureFile = "gfx/interface/technologies/guided_missile_3.dds"
 	}
 
@@ -2755,38 +1773,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_escort_datalinks_medium"
-		textureFile = "gfx/interface/technologies/advanced_sonar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_towed_array_sonar_medium"
-		textureFile = "gfx/interface/technologies/improved_naval_mines.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_variable_depth_sonar_medium"
 		textureFile = "gfx/interface/technologies/advanced_centimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_containerized_escort_missile_cells_medium"
-		textureFile = "gfx/interface/technologies/advanced_naval_mines.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_escort_integrated_electric_propulsion_medium"
-		textureFile = "gfx/interface/technologies/modern_sonar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_drone_pickets_medium"
-		textureFile = "gfx/interface/technologies/homing_torpedo.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_cooperative_convoy_tracking_medium"
-		textureFile = "gfx/interface/technologies/sonar.dds"
 	}
 
 	SpriteType = {
@@ -2795,33 +1783,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_over_horizon_escort_radar_medium"
-		textureFile = "gfx/interface/technologies/improved_sonar.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_escorts_medium"
 		textureFile = "gfx/interface/technologies/basic_naval_mines.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_replenishment_craft_medium"
-		textureFile = "gfx/interface/technologies/advanced_sonar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_directed_energy_point_defense_medium"
-		textureFile = "gfx/interface/technologies/improved_naval_mines.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_distributed_acoustic_pickets_medium"
-		textureFile = "gfx/interface/technologies/advanced_centimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_self_repairing_escort_hulls_medium"
-		textureFile = "gfx/interface/technologies/advanced_naval_mines.dds"
 	}
 
 	SpriteType = {
@@ -2850,18 +1813,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_stabilized_naval_gun_directors_medium"
-		textureFile = "gfx/interface/technologies/improved_centimetric_radar.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_missile_batteries_medium"
 		textureFile = "gfx/interface/technologies/advanced_cruiser_armor_scheme.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_phased_array_mast_complexes_medium"
-		textureFile = "gfx/interface/technologies/advanced_centimetric_radar.dds"
 	}
 
 	SpriteType = {
@@ -2870,33 +1823,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_capital_ship_integrated_electric_drive_medium"
-		textureFile = "gfx/interface/technologies/air_defence.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_composite_armor_belts_medium"
-		textureFile = "gfx/interface/technologies/basic_cruiser_armor_scheme.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_networked_task_groups_medium"
 		textureFile = "gfx/interface/technologies/decimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_cooperative_fleet_missile_defense_medium"
-		textureFile = "gfx/interface/technologies/improved_cruiser_armor_scheme.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_unmanned_damage_control_decks_medium"
-		textureFile = "gfx/interface/technologies/improved_centimetric_radar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_long_range_railgun_fire_control_medium"
-		textureFile = "gfx/interface/technologies/advanced_cruiser_armor_scheme.dds"
 	}
 
 	SpriteType = {
@@ -2905,23 +1833,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_superconducting_railgun_turrets_medium"
-		textureFile = "gfx/interface/technologies/naval_air_operations.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_drone_carrier_deck_systems_medium"
 		textureFile = "gfx/interface/technologies/air_defence.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_directed_energy_broadside_defense_medium"
-		textureFile = "gfx/interface/technologies/basic_cruiser_armor_scheme.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_autonomous_capital_ship_cores_medium"
-		textureFile = "gfx/interface/technologies/decimetric_radar.dds"
 	}
 
 	SpriteType = {
@@ -2950,18 +1863,8 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_anechoic_tile_bonding_medium"
-		textureFile = "gfx/interface/technologies/submarine_mine_laying.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_air_independent_cells_medium"
 		textureFile = "gfx/interface/technologies/improved_sonar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_pumpjet_propulsors_medium"
-		textureFile = "gfx/interface/technologies/electric_torpedo.dds"
 	}
 
 	SpriteType = {
@@ -2970,58 +1873,13 @@ spriteTypes = {
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_conformal_flank_sonars_medium"
-		textureFile = "gfx/interface/technologies/advanced_sonar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_pressure_tolerant_lithium_cells_medium"
-		textureFile = "gfx/interface/technologies/homing_torpedo.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_seabed_sensor_webs_medium"
 		textureFile = "gfx/interface/technologies/advanced_submarine_warfare.dds"
 	}
 
 	SpriteType = {
-		name = "GFX_ADISCORD_tech_seabed_terrain_navigation_medium"
-		textureFile = "gfx/interface/technologies/sonar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_fiber_optic_torpedo_control_medium"
-		textureFile = "gfx/interface/technologies/basic_submarine_snorkel.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_underwater_vehicle_deployment_bays_medium"
-		textureFile = "gfx/interface/technologies/basic_torpedo.dds"
-	}
-
-	SpriteType = {
 		name = "GFX_ADISCORD_tech_autonomous_submarines_medium"
 		textureFile = "gfx/interface/technologies/submarine_mine_laying.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_magnetohydrodynamic_silent_drive_medium"
-		textureFile = "gfx/interface/technologies/improved_sonar.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_supercavitating_interceptor_torpedoes_medium"
-		textureFile = "gfx/interface/technologies/electric_torpedo.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_quantum_magnetometer_arrays_medium"
-		textureFile = "gfx/interface/technologies/improved_submarine_snorkel.dds"
-	}
-
-	SpriteType = {
-		name = "GFX_ADISCORD_tech_distributed_abyssal_comm_relays_medium"
-		textureFile = "gfx/interface/technologies/advanced_sonar.dds"
 	}
 
 	SpriteType = {

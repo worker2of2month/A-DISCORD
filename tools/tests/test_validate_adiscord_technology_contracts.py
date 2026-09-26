@@ -95,11 +95,11 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
             issues,
         )
 
-    def test_transposed_horizontal_grid_position_is_reported(self) -> None:
+    def test_displaced_vertical_grid_position_is_reported(self) -> None:
         tech_id = "ADISCORD_tech_postwar_weapon_standardization"
         broken = dict(self.tech_blocks)
         broken[tech_id] = broken[tech_id].replace(
-            "position = { x = 2 y = 0 }",
+            "position = { x = 0 y = 0 }",
             "position = { x = 0 y = 2 }",
             1,
         )
@@ -124,14 +124,14 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
             issues,
         )
 
-    def test_horizontal_gridbox_using_up_format_is_reported(self) -> None:
+    def test_vertical_gridbox_using_left_format_is_reported(self) -> None:
         gui_path = validator.ROOT / "interface" / "countrytechtreeview.gui"
         gui = validator.read_text(gui_path)
-        broken_gui = gui.replace('format = "LEFT"', 'format = "UP"', 1)
+        broken_gui = gui.replace('format = "UP"', 'format = "LEFT"', 1)
         with patch.object(validator, "read_text", return_value=broken_gui):
             issues = validator.check_technology_gridboxes(self.tech_blocks)
         self.assertTrue(
-            any("infantry_folder" in issue and "horizontal LEFT" in issue for issue in issues),
+            any("support_folder" in issue and "vertical UP" in issue for issue in issues),
             issues,
         )
 
@@ -330,7 +330,7 @@ ADISCORD_produce_artillery_low_stock = {
         self.assertNotIn("supply_truck", equipment["support_equipment"])
         self.assertIn("motorized_equipment_1", self.tech_blocks["ADISCORD_tech_restored_truck_fleets"])
         from tools.builders import build_adiscord_technology_system as builder
-        for tag in ("STP", "NOD", "VAL", "WRK", "VAD", "YPR", "COF", "TFF"):
+        for tag in ("STP", "NOD", "VAL", "WRK", "YPR", "COF", "TFF"):
             technologies = set(builder.STARTING_TECH_PROFILES["common"])
             for profile in builder.STARTING_COUNTRY_TECH_PROFILES[tag]:
                 technologies.update(builder.STARTING_TECH_PROFILES[profile])
@@ -798,7 +798,7 @@ ADISCORD_produce_armored_carriers = {
             validator.ROOT
             / "gfx/entities/zy_ADISCORD_infantry_weapon_progression.asset"
         )
-        progression = validator.read_text(progression_path)
+        progression = validator.read_text(progression_path).replace("\r\n", "\n")
         regressions = {
             "parent": (
                 'clone = "infantry_rifle_entity"\n\tname = "infantry_entity"',
@@ -837,9 +837,9 @@ ADISCORD_produce_armored_carriers = {
         country_asset_path = (
             validator.ROOT / "gfx/entities/zz_ADISCORD_country_infantry.asset"
         )
-        country_asset = validator.read_text(country_asset_path)
+        country_asset = validator.read_text(country_asset_path).replace("\r\n", "\n")
         broken_country_asset = country_asset.replace(
-            'name = "STP_infantry_2_entity"\n\tpdxmesh = "STP_infantry_hedonist_mg_mesh"',
+            'name = "STP_infantry_2_entity"',
             'name = "STP_infantry_2_entity"\n\tpdxmesh = "STP_infantry_hedonist_mesh_BROKEN"',
             1,
         )
@@ -855,7 +855,7 @@ ADISCORD_produce_armored_carriers = {
             issues = validator.check_infantry_visual_model_chain()
         self.assertIn(
             "STP_infantry_2_entity pdxmesh is STP_infantry_hedonist_mesh_BROKEN; "
-            "expected STP_infantry_hedonist_mg_mesh",
+            "expected ADISCORD_STP_party_mesh",
             issues,
         )
 

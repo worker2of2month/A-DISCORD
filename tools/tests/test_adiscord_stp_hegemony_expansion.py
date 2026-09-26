@@ -3,13 +3,14 @@ from __future__ import annotations
 import re
 import unittest
 from pathlib import Path
+from tools.lib.focus_sources import read_focus_source
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 def read(relative: str) -> str:
     path = ROOT / relative
-    return path.read_text(encoding="utf-8-sig" if path.suffix == ".yml" else "utf-8")
+    return read_focus_source(path, encoding="utf-8-sig" if path.suffix == ".yml" else "utf-8")
 
 
 def named_block(text: str, name: str) -> str:

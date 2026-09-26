@@ -4,7 +4,7 @@
 state = {
 	id = 377
 	name = "STATE_377"
-	manpower = 904549
+	manpower = 889559
 	state_category = large_town
 	history = {
 		owner = AUR
@@ -20,9 +20,6 @@ state = {
 	provinces = {
 		335 1131 2887 3012 3091 3282 4010 4022 5353 5588 9965 10102 10108 10119 10266 10978
 		11107 11257 11409 11788 11900 11982 12106
-	}
-	resources = {
-		steel = 4
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 3.3

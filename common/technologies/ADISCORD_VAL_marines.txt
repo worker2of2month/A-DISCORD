@@ -7,4 +7,13 @@ technologies = {
 		ai_will_do = { factor = 0 }
 		categories = { infantry_weapons }
 	}
+
+	# Country focus unlocks share this file and have no research-tree position.
+	ADISCORD_tech_kefreyt_shield_special_forces = {
+		enable_subunits = { ADISCORD_urban_breacher }
+		research_cost = 999
+		start_year = 2300
+		ai_will_do = { factor = 0 }
+		categories = { infantry_weapons }
+	}
 }

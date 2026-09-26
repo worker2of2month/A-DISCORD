@@ -4,7 +4,7 @@
 state = {
 	id = 402
 	name = "STATE_402"
-	manpower = 199627
+	manpower = 216415
 	state_category = rural
 	history = {
 		owner = LYS
@@ -12,12 +12,16 @@ state = {
 		buildings = {
 			infrastructure = 3
 			industrial_complex = 1
+			arms_factory = 1
 		}
 	}
 	provinces = {
 		837 1447 1620 1997 2393 2725 3303 3672 4072 4076 4308 4309 4970 5519 5530 6605
 		7887 8218 8459 10397 12138 12294 12469
 	}
+	resources = {
+		aluminium = 5
+	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 2.6
+	local_supplies = 2.8
 }

@@ -10,6 +10,7 @@
     "inner_frontier_countries",
     "ainholm_mandate",
     "ivn_geography",
+    "coastal_geography",
     "map_buildings",
     "vorkerland_theatre",
     "strategic_regions",
@@ -36,7 +37,8 @@
     "stp_regions_map",
     "island_administration_icon",
     "party_texticons",
-    "vorkerland_flags"
+    "vorkerland_flags",
+    "focus_trees"
   ],
   "families": [
     {
@@ -187,9 +189,13 @@
       "owner_module": "tools.builders.build_adiscord_map_buildings",
       "output_globs": ["map/buildings.txt"],
       "source_inputs": [
+        "tools/data/adiscord_southern_cities.json",
+        "tools/builders/build_adiscord_map_buildings.py",
+        "tools/builders/build_adiscord_coastal_geography.py",
         "map/buildings.txt",
         "map/definition.csv",
         "map/provinces.bmp",
+        "map/heightmap.bmp",
         "map/unitstacks.txt",
         "history/states/*.txt"
       ],
@@ -260,12 +266,14 @@
         "history/states/3[0-2]?-*.txt",
         "history/states/330-*.txt",
         "history/states/68[8-9]-*.txt",
-        "history/states/69[0-8]-*.txt",
+        "history/states/69[0-9]-*.txt",
+        "history/states/70[0-8]-*.txt",
         "localisation/russian/victory_points_l_russian.yml",
         "localisation/russian/state_names_l_russian.yml",
         "map/buildings.txt"
       ],
       "source_inputs": [
+        "tools/data/adiscord_southern_cities.json",
         "tools/builders/build_adiscord_new_states.py",
         "tools/lib/adiscord_core_state_balance_manifest.py",
         "tools/lib/adiscord_vorkerland_theatre_manifest.py",
@@ -1300,6 +1308,45 @@
       "ownership_mode": "exclusive"
     },
     {
+      "id": "coastal_geography",
+      "owner_module": "tools.builders.build_adiscord_coastal_geography",
+      "output_globs": [
+        "map/railways.txt",
+        "map/provinces.bmp",
+        "map/definition.csv",
+        "map/terrain.bmp",
+        "map/cities.bmp",
+        "map/trees.bmp",
+        "map/heightmap.bmp",
+        "map/rivers.bmp",
+        "map/world_normal.bmp",
+        "map/terrain/colormap_rgb_cityemissivemask_a.dds",
+        "map/unitstacks.txt"
+      ],
+      "source_inputs": [
+        "map/railways.txt",
+        "tools/data/adiscord_southern_cities.json",
+        "tools/builders/build_adiscord_new_states.py",
+        "tools/builders/build_adiscord_coastal_geography.py",
+        "tools/builders/build_adiscord_ivn_geography.py",
+        "map/provinces.bmp",
+        "map/definition.csv",
+        "map/terrain.bmp",
+        "map/cities.bmp",
+        "map/trees.bmp",
+        "map/heightmap.bmp",
+        "map/rivers.bmp",
+        "map/world_normal.bmp",
+        "map/terrain/colormap_rgb_cityemissivemask_a.dds",
+        "map/unitstacks.txt"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_coastal_geography"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_coastal_geography", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "layered",
+      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710 and 16712, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, plus the explicit city and surrounding rural-sector province pixels and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail. Preserves IVN terrain and compatible snow output."
+    },
+    {
       "id": "ivn_geography",
       "owner_module": "tools.builders.build_adiscord_ivn_geography",
       "output_globs": [
@@ -1326,6 +1373,44 @@
       "may_delete_outputs": false,
       "ownership_mode": "layered",
       "overlap_explanation": "This pass owns terrain, trees, height and normal-map layers inside the explicit IVN/IIA province set, preserves shared land city-mask pixels as urban palette 13, and owns definition.csv terrain field 6 there; trade regions own continent field 7 and terrain_snow owns compatible snow conversion."
+    },
+    {
+      "id": "focus_trees",
+      "owner_module": "tools.builders.build_adiscord_focus_trees",
+      "output_globs": [
+        "common/national_focus/ADISCORD_national_focus_RUS.txt",
+        "common/national_focus/ADISCORD_national_focus_VAL.txt",
+        "common/national_focus/ADISCORD_national_focus_bookmark.txt",
+        "common/national_focus/generic.txt",
+        "common/national_focus/ADISCORD_STP_preparation.txt",
+        "common/national_focus/ADISCORD_STP_civil_war.txt",
+        "common/national_focus/ADISCORD_STP_exile_return.txt",
+        "common/national_focus/ADISCORD_VAL_defeated.txt",
+        "common/national_focus/ADISCORD_VAL_administration.txt",
+        "common/national_focus/ADISCORD_Vorkerland_civil_war.txt",
+        "common/national_focus/ADISCORD_Vorkerland_iba_norvane.txt",
+        "common/national_focus/ADISCORD_Vorkerland_zao.txt"
+      ],
+      "source_inputs": [
+        "tools/builders/build_adiscord_focus_trees.py",
+        "focus_trees/**/*.txt"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_focus_trees",
+        "--check"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_focus_trees",
+        "--apply"
+      ],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
     }
   ]
 }

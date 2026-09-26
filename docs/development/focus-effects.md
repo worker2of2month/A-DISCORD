@@ -1,5 +1,28 @@
 # Фокусы, dynamic modifiers и dummy ideas
 
+## Исходники деревьев и сборка
+
+Исходники деревьев STP, VAL, RUS, Воркерланда и общих деревьев находятся в
+`focus_trees/`, по отдельной папке на дерево. Послевоенные фокусы
+партии и Шабрата находятся в `STP/postwar/party/` и `STP/postwar/shabrat/`.
+Это фрагменты существующего `STP_cw_focus`: директивы `# @include путь#секция`
+в исходнике дерева вставляют соответствующую секцию `# @section имя`.
+Фрагменты сохраняют обычные блоки `focus`, их порядок и область действия.
+
+Игровые файлы лежат непосредственно в `common/national_focus/`, по одному
+файлу на дерево или группу shared focuses. Такая раскладка не требует
+рекурсивной загрузки папок движком. Редактировать нужно исходники, затем выполнить:
+
+```powershell
+python -B -m tools.builders.build_adiscord_focus_trees --check
+python -B -m tools.builders.build_adiscord_focus_trees --apply
+python -B -m tools.builders.build_adiscord_focus_trees --check
+```
+
+Проверки прежних объединённых файлов используют `tools/lib/focus_sources.py`,
+который читает собранные игровые файлы. Успешная сборка не доказывает загрузку
+дерева движком: после изменения игровой структуры требуется холодный запуск.
+
 ## Промышленный цикл Кефрейта
 
 `VAL_refresh_industrial_economy` отображает промышленность одним из трёх
@@ -520,7 +543,7 @@ STP_cw_network_contacts_idea = {
 }
 ```
 
-Соответствующая часть награды в [дереве фокусов](../../common/national_focus/ADISCORD_national_focus_STP.txt):
+Соответствующая часть награды в [дереве фокусов STP](../../focus_trees/STP/civil_war/focuses.txt):
 
 ```txt
 effect_tooltip = {
@@ -791,7 +814,7 @@ NOD выбирает вмешательство отдельно. Начало �
 
 | Тип | Файл |
 |---|---|
-| Фокусы | [ADISCORD_national_focus_STP.txt](../../common/national_focus/ADISCORD_national_focus_STP.txt) |
+| Фокусы | [деревья STP](../../focus_trees/STP/) |
 | Эффекты | [ADISCORD_STP_scripted_effects.txt](../../common/scripted_effects/ADISCORD_STP_scripted_effects.txt) |
 | Триггеры | [ADISCORD_STP_scripted_triggers.txt](../../common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt) |
 | События | [ADISCORD_STP_events.txt](../../events/ADISCORD_STP_events.txt) |

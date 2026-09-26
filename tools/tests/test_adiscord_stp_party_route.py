@@ -8,9 +8,10 @@ import unittest
 
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.tests.test_adiscord_stp_preparation import matches_conditions, selected_effects
+from tools.lib.focus_sources import read_focus_source
 
 ROOT = Path(__file__).resolve().parents[2]
-FOCUS = "common/national_focus/ADISCORD_national_focus_STP.txt"
+FOCUS = "common/national_focus/ADISCORD_STP_preparation.txt"
 DECISIONS = "common/decisions/ADISCORD_STP_decisions.txt"
 LOC = "localisation/russian/ADISCORD_STP_l_russian.yml"
 SCRIPTED_LOC = "common/scripted_localisation/ADISCORD_STP_scripted_loc.txt"
@@ -24,7 +25,7 @@ AI = "common/ai_strategy/ADISCORD_STP_civil_war.txt"
 
 
 def read(path):
-    return (ROOT / path).read_text(encoding="utf-8-sig")
+    return read_focus_source(ROOT / path)
 
 
 def children(items, key):

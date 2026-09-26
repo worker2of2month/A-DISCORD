@@ -1,11 +1,12 @@
 state = {
 	id = 275
 	name = "STATE_275"
-	manpower = 145000
-	state_category = town
+	manpower = 97000
+	state_category = city
 	history = {
 		owner = MZR
 		add_core_of = MZR
+		victory_points = { 16732 10 }
 		buildings = {
 			infrastructure = 2
 			industrial_complex = 2
@@ -14,9 +15,8 @@ state = {
 		}
 	}
 	provinces = {
-		193 196 2249 2303 2947 3767 4397 5458 6904 9006 9830 10551
-		10796 11177 11348
+		16732
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 3.0
+	local_supplies = 2.0
 }

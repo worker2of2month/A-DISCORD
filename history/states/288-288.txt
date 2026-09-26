@@ -6,6 +6,7 @@ state = {
 	history = {
 		owner = SHL
 		add_core_of = SHL
+		victory_points = { 16738 3 }
 		buildings = {
 			infrastructure = 2
 			industrial_complex = 1
@@ -13,7 +14,7 @@ state = {
 	}
 	provinces = {
 		834 960 2675 3234 4883 5433 5497 5929 6008 6082 6137 7739
-		8034 8976 9095 10490 12352
+		8034 8976 9095 10490 12352 16707 16708 16738 16790 16791 16792
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

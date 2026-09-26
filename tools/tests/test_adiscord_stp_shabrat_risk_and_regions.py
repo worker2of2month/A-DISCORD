@@ -6,6 +6,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
+from tools.lib.focus_sources import read_focus_source
 TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 FOCUS = ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
@@ -15,7 +16,7 @@ REPLACE_LOC = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
 
 
 def read(path: Path) -> str:
-    return path.read_text(encoding="utf-8-sig")
+    return read_focus_source(path)
 
 
 def named_block(source: str, name: str) -> str:

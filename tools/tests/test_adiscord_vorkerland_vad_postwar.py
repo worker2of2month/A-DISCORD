@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 import unittest
 from pathlib import Path
+from tools.lib.focus_sources import read_focus_source
 
 
 from tools.lib.paths import source_section
@@ -12,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def read(relative: str) -> str:
-    return (ROOT / relative).read_text(encoding="utf-8-sig")
+    return read_focus_source(ROOT / relative, encoding="utf-8-sig")
 
 
 def named_block(source: str, name: str) -> str:

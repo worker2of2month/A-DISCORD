@@ -184,9 +184,11 @@
 - `common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt`
 - `events/STP_lore_events.txt`
 - `events/ADISCORD_STP_crisis_events.txt`
-- `common/national_focus/ADISCORD_national_focus_STP.txt`
-- `common/national_focus/ADISCORD_national_focus_STP_crisis_war.txt`
-- `common/national_focus/ADISCORD_national_focus_STP_postwar.txt`
+- `focus_trees/STP/preparation/focuses.txt`
+- `focus_trees/STP/civil_war/focuses.txt`
+- `focus_trees/STP/postwar/focuses.txt`
+- `focus_trees/STP/postwar/party/focuses.txt`
+- `focus_trees/STP/postwar/shabrat/focuses.txt`
 - `common/scripted_effects/ADISCORD_STP_VAL_contract_effects.txt`
 - `localisation/russian/STP_lore_events_l_russian.yml`
 - `localisation/russian/ADISCORD_national_focuses_l_russian.yml`

@@ -183,7 +183,7 @@ def main() -> int:
         for issue in issues:
             print(f"- {issue}")
         return 1
-    print("Ainholm colony validation passed: states 118-119, state 120 to ORV, TFF claims both AIN states.")
+    print("Ainholm colony validation passed: states 118-119, state 120 to ARS, TFF claims both AIN states.")
     return 0
 
 

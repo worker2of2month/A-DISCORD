@@ -6,13 +6,14 @@ state = {
 	history = {
 		owner = MZR
 		add_core_of = MZR
+		victory_points = { 16731 2 }
 		buildings = {
 			infrastructure = 2
 		}
 	}
 	provinces = {
 		437 454 811 1970 2885 3643 3918 3976 6160 6823 8613 9367
-		9513 10526 10627 10629 10952 11848 12471 12723
+		9513 10526 10627 10629 10952 11848 12471 12723 16731 16769 16770 16771
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

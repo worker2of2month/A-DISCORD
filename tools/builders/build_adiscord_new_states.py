@@ -10,6 +10,7 @@ deliberately outside this map builder's ownership.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 from pathlib import Path
 
@@ -33,7 +34,7 @@ ROOT = repository_root()
 STATE_DIR = ROOT / "history" / "states"
 
 NAM_SVETLOGORSK_STATE_ID = 688
-NAM_SVETLOGORSK_PROVINCES = (689, 3127, 4025, 8635, 9211, 10967)
+NAM_SVETLOGORSK_PROVINCES = (689, 3127, 4025, 8635, 9211, 10967, 16721)
 NAM_RESIDUAL_CITY_STATE_ID = 689
 NAM_RESIDUAL_CITY_PROVINCES = (176, 2038, 2299, 7618, 7639, 8358)
 NAM_DRYRIVER_STATE_ID = 690
@@ -92,13 +93,13 @@ AZH_BLACK_COAST_PROVINCES = (
 EFL_ORIGINAL_UPPER_LOREN_PROVINCES = tuple(sorted((*EFL_UPPER_LOREN_PROVINCES, *EFL_MIDDLE_LOREN_PROVINCES)))
 AZH_ORIGINAL_PROVINCES = tuple(sorted((*AZH_CORE_PROVINCES, *AZH_BLACK_COAST_PROVINCES)))
 
-KDR_STATES = tuple(range(234, 248))
-RHM_STATES = (248, 249, 250, *range(252, 259))
-SDR_STATES = (251, *range(259, 265))
-MZR_STATES = tuple(range(265, 276))
+KDR_STATES = (234, 235, 236, 237, 238, 239, 240, 241, 242, 244, 245, 246, 247)
+RHM_STATES = (248, 249, 252, 253, 254, 255, 256, 257, 258)
+SDR_STATES = (243, 250, 251, 259, 260, 261, 262, 263)
+MZR_STATES = (264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275)
 KYZ_STATES = tuple(range(276, 287))
-SHL_STATES = tuple(range(287, 295))
-GLP_STATES = (*range(295, 303), 304, 305)
+SHL_STATES = (287, 288, 289, 290, 291, 292, 293, 294, 295, 296)
+GLP_STATES = (297, 298, 299, 300, 301, 302, 304, 305)
 
 STARTING_OWNERS = {
     69: "AZH",
@@ -159,6 +160,21 @@ SECONDARY_CENTRES = {
 MINOR_VPS = {
     265: (3465, 1), 270: (2504, 2), 273: (3643, 2),
     276: (10375, 1), 277: (6261, 2), 286: (7903, 2),
+}
+
+# Capital state IDs remain stable for country history and scripted references.
+SOUTHERN_CITIES = json.loads((ROOT / "tools/data/adiscord_southern_cities.json").read_text(encoding="utf-8"))["cities"]
+SOUTHERN_CITY_POINTS = {entry["state"]: (entry["province"], entry["value"]) for entry in SOUTHERN_CITIES}
+for centres in (CAPITALS, SECONDARY_CENTRES, MINOR_VPS):
+    centres.update({state: point for state, point in SOUTHERN_CITY_POINTS.items() if state in centres})
+SOUTHERN_CAPITAL_DISTRICTS = {
+    241: (702, 90000, 45000, (971, 1295, 2374, 2523, 4093, 5262, 5348, 5711, 6343, 7512, 8280, 9141, 10293, 10755)),
+    253: (703, 70000, 35000, (443, 812, 1450, 2317, 3065, 3135, 5957, 6403, 7006, 7273, 8164, 8843, 9398, 9739, 11092, 12188, 12966)),
+    260: (704, 48000, 24000, (197, 1396, 1571, 1784, 3967, 5123, 5590, 6040, 7727, 9572, 9817, 12495, 12578)),
+    275: (705, 97000, 48000, (193, 196, 2249, 2303, 2947, 3767, 4397, 5458, 6904, 9006, 9830, 10551, 10796, 11177, 11348)),
+    283: (706, 75000, 37000, (1349, 1534, 1555, 4186, 4804, 5921, 6571, 9302, 10920, 10998, 12033)),
+    294: (707, 85000, 43000, (1198, 2407, 3042, 3284, 4949, 6218, 7306, 8216, 9056, 9294, 9508, 9600, 10264, 12903)),
+    300: (708, 79000, 39000, (492, 1169, 3222, 4782, 5595, 6011, 7073, 8056, 9672, 9950, 10937, 11478, 11938, 12043, 12321, 12583)),
 }
 
 # Sparse deposits give every southern country something to extract and trade
@@ -371,7 +387,7 @@ NAM_STATE_PROFILES = {
     230: {"population": 100_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
     231: {"population": 160_000, "category": "rural", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 2.5},
     NAM_SVETLOGORSK_STATE_ID: {"population": 90_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 1, "supplies": 3.0, "custom_buildings": {"dockyard": 1}},
-    NAM_RESIDUAL_CITY_STATE_ID: {"population": 120_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 2, "supplies": 3.5},
+    NAM_RESIDUAL_CITY_STATE_ID: {"population": 40_000, "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 1.0},
     NAM_DRYRIVER_STATE_ID: {"population": 270_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 3.5},
 }
 
@@ -381,7 +397,7 @@ NAM_COALITION_FRONT_PROFILES = {
     68: {"population": 520_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 4.0},
     69: {"population": 380_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "air_base": 1, "supplies": 4.0},
     70: {"population": 350_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 4.0},
-    EFL_MIDDLE_LOREN_STATE_ID: {"population": 280_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 3.5},
+    EFL_MIDDLE_LOREN_STATE_ID: {"population": 190_000, "category": "rural", "infrastructure": 3, "civilian": 0, "supplies": 1.5},
     AZH_BLACK_COAST_STATE_ID: {"population": 240_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 3.5, "custom_buildings": {"dockyard": 1}},
 }
 
@@ -627,11 +643,13 @@ NAM_LEGACY_VICTORY_POINTS = {
     68: ((259, 5), (6150, 2)),
     69: ((367, 5), (8234, 2)),
     70: ((2986, 2), (6495, 4)),
-    NAM_SVETLOGORSK_STATE_ID: ((689, 3),),
-    NAM_RESIDUAL_CITY_STATE_ID: ((2038, 5),),
+    NAM_SVETLOGORSK_STATE_ID: ((16721, 3),),
+    NAM_RESIDUAL_CITY_STATE_ID: (),
     NAM_DRYRIVER_STATE_ID: ((8058, 2), (9016, 2)),
     EFL_MIDDLE_LOREN_STATE_ID: ((8057, 3),),
     AZH_BLACK_COAST_STATE_ID: ((493, 3), (5039, 2)),
+    700: ((16716, 5),),
+    701: ((16717, 5),),
 }
 
 AFRELA_VICTORY_POINT_NAMES = {
@@ -737,7 +755,39 @@ GENERATED_STATE_NAMES = {
     696: "Восточная Марка",
     697: "Западная Марка",
     698: "Южная Марка",
+    699: "Хазар",
+    700: "Южная гавань",
+    701: "Средний Лорен - город",
+    702: "Кадирский округ",
+    703: "Рахмский округ",
+    704: "Сарданский округ",
+    705: "Мазарский округ",
+    706: "Кейзанский округ",
+    707: "Шахрабадский округ",
+    708: "Вейрский округ",
 }
+
+COASTAL_CITY_POINTS = {
+    699: ((16713, 5), (16714, 1), (16715, 1), (16718, 1), (16719, 1)),
+    700: ((16716, 5),),
+    701: ((16717, 5),),
+    284: ((16720, 3),),
+    688: ((16721, 3),),
+}
+COASTAL_CITY_NAMES = {
+    16713: "Хазар",
+    16714: "Западный Хазар",
+    16715: "Старый Хазар",
+    16716: "Южная гавань",
+    16717: "Средний Лорен",
+    16718: "Восточный Хазар",
+    16719: "Северный Хазар",
+    16720: "Табар",
+    16721: "Светлогорск",
+}
+GENERATED_VICTORY_POINT_NAMES.update(COASTAL_CITY_NAMES)
+GENERATED_VICTORY_POINT_NAMES.update({entry["province"]: entry["name"] for entry in SOUTHERN_CITIES})
+GENERATED_LEGACY_VICTORY_POINTS.update(COASTAL_CITY_POINTS)
 
 VORKERLAND_INITIAL_MAP_LEGACY_STATES = {
     27, 32, 33, 34, 35, 36, 37, 38, 39, 40,
@@ -807,6 +857,8 @@ def state_path(state_id: int) -> Path:
 
 
 def population(state_id: int, owner: str) -> int:
+    if state_id in SOUTHERN_CAPITAL_DISTRICTS:
+        return SOUTHERN_CAPITAL_DISTRICTS[state_id][1]
     if state_id in STATE_PROFILES:
         return int(STATE_PROFILES[state_id]["population"])
     if owner == "EXZ":
@@ -833,6 +885,8 @@ def population(state_id: int, owner: str) -> int:
 
 
 def category(state_id: int) -> str:
+    if state_id in SOUTHERN_CAPITAL_DISTRICTS:
+        return "city"
     if state_id in STATE_PROFILES:
         return str(STATE_PROFILES[state_id]["category"])
     if state_id in TOWN_STATES:
@@ -887,6 +941,12 @@ def render_state(state_id: int, owner: str) -> str:
         raise RuntimeError(f"state {state_id}: missing provinces block")
     provinces = [int(value) for value in re.findall(r"\d+", province_match.group(1))]
     provinces = sorted(set(provinces) | set(EXTRA_PROVINCES_BY_STATE.get(state_id, ())))
+    if state_id in SOUTHERN_CITY_POINTS:
+        provinces = sorted(set(provinces) | {SOUTHERN_CITY_POINTS[state_id][0]})
+        city = next(entry for entry in SOUTHERN_CITIES if entry["state"] == state_id)
+        provinces = sorted(set(provinces) | {sector["province"] for sector in city.get("sectors", ())})
+    if state_id in SOUTHERN_CAPITAL_DISTRICTS:
+        provinces = [SOUTHERN_CITY_POINTS[state_id][0]]
     if not provinces:
         raise RuntimeError(f"state {state_id}: empty provinces block")
 
@@ -933,6 +993,8 @@ def render_state(state_id: int, owner: str) -> str:
     local_supplies = 0.0 if owner == "EXZ" else (
         float(profile["supplies"]) if profile else (3.0 if state_id in CAPITALS else 1.5)
     )
+    if state_id in SOUTHERN_CAPITAL_DISTRICTS:
+        local_supplies = 2.0
     resource_block = []
     if state_id in ALL_STATE_RESOURCES:
         resource_block = ["\tresources = {"]
@@ -1584,6 +1646,157 @@ def apply_generated_state_name_localisation() -> None:
     path.write_text(source.rstrip() + "\n", encoding="utf-8-sig", newline="\n")
 
 
+def southern_settlement_plan() -> dict[Path, bytes]:
+    """Keep capital references stable and conserve their rural population."""
+    outputs = {}
+    for state_id in sorted(set(SOUTHERN_CITY_POINTS) | {243, 250, 264, 295, 296}):
+        outputs[state_path(state_id)] = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
+    for capital, (district, _city_population, rural_population, provinces) in SOUTHERN_CAPITAL_DISTRICTS.items():
+        city = next(entry for entry in SOUTHERN_CITIES if entry["state"] == capital)
+        provinces = tuple(sorted(set(provinces) | {sector["province"] for sector in city.get("sectors", ())}))
+        path = STATE_DIR / f"{district}-Southern-District.txt"
+        existing = tuple(STATE_DIR.glob(f"{district}-*.txt"))
+        if existing and existing != (path,):
+            raise RuntimeError(f"state {district}: ID occupied by another state")
+        owner = STARTING_OWNERS[capital]
+        lines = [
+            "# Generated by tools/build_adiscord_new_states.py",
+            "state = {",
+            f"\tid = {district}",
+            f'\tname = "STATE_{district}"',
+            f"\tmanpower = {rural_population}",
+            "\tstate_category = rural",
+            "\tlocal_supplies = 1.0",
+            "\thistory = {",
+            f"\t\towner = {owner}",
+            f"\t\tadd_core_of = {owner}",
+            "\t\tbuildings = { infrastructure = 2 }",
+            "\t}",
+            "\tprovinces = {",
+            "\t\t" + " ".join(map(str, provinces)),
+            "\t}",
+            "\tbuildings_max_level_factor = 1.000",
+            "}",
+            "",
+        ]
+        outputs[path] = "\n".join(lines).encode("utf-8")
+    path = ROOT / "localisation/russian/state_names_l_russian.yml"
+    source = path.read_text(encoding="utf-8-sig")
+    for district, *_rest in SOUTHERN_CAPITAL_DISTRICTS.values():
+        source = replace_localisation_value(source, f"STATE_{district}", GENERATED_STATE_NAMES[district])
+    outputs[path] = source.encode("utf-8-sig")
+    path = ROOT / "localisation/russian/victory_points_l_russian.yml"
+    source = path.read_text(encoding="utf-8-sig")
+    for entry in SOUTHERN_CITIES:
+        source = replace_localisation_value(source, f"VICTORY_POINTS_{entry['province']}", entry["name"])
+    outputs[path] = source.encode("utf-8-sig")
+    return outputs
+
+
+def update_southern_settlements(apply: bool) -> int:
+    outputs = southern_settlement_plan()
+    changed = [path for path, data in outputs.items() if not path.exists() or path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply:
+        if any(path.read_bytes() != data for path, data in southern_settlement_plan().items()):
+            raise RuntimeError("southern settlements are not idempotent")
+        return 0
+    return int(bool(changed))
+
+
+def coastal_city_state_plan() -> dict[Path, bytes]:
+    """Split painted urban centres without adding population or factories."""
+    outputs = {}
+    residuals = {290: (29_510, 9_510, 0.5), 689: (120_000, 40_000, 1.0), 691: (280_000, 190_000, 1.5)}
+    for state_id in (284, 290, 688, 689, 691):
+        path = state_path(state_id)
+        source = path.read_text(encoding="utf-8-sig")
+        if state_id in (284, 688):
+            province = 16720 if state_id == 284 else 16721
+            match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
+            provinces = sorted(set(map(int, re.findall(r"\d+", match.group(1)))) | {province})
+            source = source[:match.start(1)] + "\n\t\t" + " ".join(map(str, provinces)) + "\n\t" + source[match.end(1):]
+            source = replace_history_victory_points(source, COASTAL_CITY_POINTS[state_id])
+        if state_id in residuals:
+            original, population, supplies = residuals[state_id]
+            current = int(re.search(r"\bmanpower\s*=\s*(\d+)", source).group(1))
+            if current not in (original, population):
+                raise RuntimeError(f"state {state_id}: population changed outside the city split")
+            source = re.sub(r"\bmanpower\s*=\s*\d+", f"manpower = {population}", source)
+            source = re.sub(r"\blocal_supplies\s*=\s*[\d.]+", f"local_supplies = {supplies:.1f}", source)
+            source = re.sub(r"\bstate_category\s*=\s*\w+", "state_category = rural", source)
+            if state_id in (689, 691):
+                source = re.sub(r"(?m)^\s*(?:industrial_complex|arms_factory)\s*=\s*\d+\s*\n", "", source)
+            if state_id == 689:
+                source = replace_history_victory_points(source, ())
+                source = re.sub(r"(?m)^\s*2038\s*=\s*\{\s*naval_base\s*=\s*1\s*\}\s*\n", "", source)
+        outputs[path] = source.encode("utf-8")
+    profiles = {
+        699: ("699-Khazar.txt", "SHL", 20_000, 2, 1.0, 0, 0),
+        700: ("700-South-Harbour.txt", "NAM", 80_000, 3, 2.5, 1, 2),
+        701: ("701-Middle-Loren-City.txt", "EFL", 90_000, 3, 2.0, 1, 0),
+    }
+    for state_id, (filename, owner, population, infrastructure, supplies, civilian, military) in profiles.items():
+        path = STATE_DIR / filename
+        existing = tuple(STATE_DIR.glob(f"{state_id}-*.txt"))
+        if existing and existing != (path,):
+            raise RuntimeError(f"state {state_id}: ID occupied by another state")
+        points = COASTAL_CITY_POINTS[state_id]
+        provinces = " ".join(str(province) for province, _value in points)
+        lines = [
+            "# Generated by tools/build_adiscord_new_states.py",
+            "state = {",
+            f"\tid = {state_id}",
+            f'\tname = "STATE_{state_id}"',
+            f"\tmanpower = {population}",
+            "\tstate_category = city",
+            f"\tlocal_supplies = {supplies:.1f}",
+            "\tprovinces = {",
+            f"\t\t{provinces}",
+            "\t}",
+            "\thistory = {",
+            f"\t\towner = {owner}",
+            f"\t\tadd_core_of = {owner}",
+        ]
+        lines.extend(f"\t\tvictory_points = {{ {province} {value} }}" for province, value in points)
+        lines.extend(["\t\tbuildings = {", f"\t\t\tinfrastructure = {infrastructure}"])
+        if civilian:
+            lines.append(f"\t\t\tindustrial_complex = {civilian}")
+        if military:
+            lines.append(f"\t\t\tarms_factory = {military}")
+        if state_id == 700:
+            lines.append("\t\t\t16716 = { naval_base = 1 }")
+        lines.extend(["\t\t}", "\t}", "}", ""])
+        outputs[path] = "\n".join(lines).encode("utf-8")
+    for filename, names in (
+        ("victory_points_l_russian.yml", {f"VICTORY_POINTS_{key}": value for key, value in COASTAL_CITY_NAMES.items()}),
+        ("state_names_l_russian.yml", {f"STATE_{key}": GENERATED_STATE_NAMES[key] for key in profiles}),
+    ):
+        path = ROOT / "localisation/russian" / filename
+        source = path.read_text(encoding="utf-8-sig")
+        for key, name in names.items():
+            source = replace_localisation_value(source, key, name)
+        outputs[path] = source.encode("utf-8-sig")
+    return outputs
+
+
+def update_coastal_city_states(apply: bool) -> int:
+    outputs = coastal_city_state_plan()
+    changed = [path for path, data in outputs.items() if not path.exists() or path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply:
+        if any(path.read_bytes() != data for path, data in coastal_city_state_plan().items()):
+            raise RuntimeError("coastal city states are not idempotent")
+        return 0
+    return int(bool(changed))
+
+
 def apply() -> None:
     missing = sorted(set(range(234, 331)) - set(STARTING_OWNERS))
     if missing:
@@ -1596,6 +1809,8 @@ def apply() -> None:
     for state_id, owner in sorted(STARTING_OWNERS.items()):
         state_path(state_id).write_text(render_state(state_id, owner), encoding="utf-8", newline="\n")
     apply_legacy_state_profiles()
+    update_coastal_city_states(True)
+    update_southern_settlements(True)
     apply_generated_victory_point_localisation()
     apply_generated_state_name_localisation()
     print(f"Built metadata for {len(STARTING_OWNERS)} states; hand-authored flags were left untouched.")
@@ -1621,6 +1836,7 @@ def apply_nam_resource_war_states() -> None:
     """Regenerate only NAM-war mainland data and its generated VP names."""
     split_svetlogorsk_from_nam()
     apply_legacy_state_profiles({67, 68, 69, 70, 690, 691, 692})
+    update_coastal_city_states(True)
     apply_generated_victory_point_localisation()
     apply_generated_state_name_localisation()
 
@@ -1697,7 +1913,15 @@ def main() -> int:
                          help="apply only the prewar confederation owners and cores")
     actions.add_argument("--apply-val-resources", action="store_true", help="apply the Kefreyt homeland resource manifest")
     actions.add_argument("--check-val-resources", action="store_true", help="check the Kefreyt homeland resource manifest")
+    actions.add_argument("--check-coastal-cities", action="store_true")
+    actions.add_argument("--apply-coastal-cities", action="store_true")
+    actions.add_argument("--check-southern-settlements", action="store_true")
+    actions.add_argument("--apply-southern-settlements", action="store_true")
     args = parser.parse_args()
+    if args.check_southern_settlements or args.apply_southern_settlements:
+        return update_southern_settlements(args.apply_southern_settlements)
+    if args.check_coastal_cities or args.apply_coastal_cities:
+        return update_coastal_city_states(args.apply_coastal_cities)
     if args.apply_val_resources or args.check_val_resources:
         return update_val_resources(args.apply_val_resources)
     if args.apply_vorkerland_owners:

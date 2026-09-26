@@ -275,6 +275,29 @@ ADISCORD_grant_starting_technology_profile = {
             self._issues(),
         )
 
+    def test_regimental_support_is_included_in_slots_cost_and_organization(self) -> None:
+        path = self.root / "history/units/AAA.txt"
+        text = path.read_text(encoding="utf-8").replace(
+            "    division_names_group",
+            "    regimental_support = { engineer = { x = 0 y = 0 } }\n    division_names_group",
+        )
+        path.write_text(text, encoding="utf-8")
+        issues = self._issues()
+        self.assertTrue(any("computed regimental_support" in issue for issue in issues), issues)
+        self.assertTrue(any("computed manpower" in issue for issue in issues), issues)
+        self.assertTrue(any("computed equipment" in issue for issue in issues), issues)
+        audit = self._valid_audit()
+        row = audit["templates"][0]
+        row["regimental_support"] = [{"type": "engineer", "x": 0, "y": 0}]
+        row["computed"].update({
+            "organization": 32.0,
+            "manpower": 1600.0,
+            "equipment": {"infantry_equipment": 100.0, "support_equipment": 60.0},
+            "supply": 0.1,
+        })
+        self._write_audit(audit)
+        self.assertFalse(any("computed" in issue for issue in self._issues()), self._issues())
+
     def test_identical_script_source_alias_reuses_canonical_template_metadata(self) -> None:
         self._write(
             "common/scripted_effects/ADISCORD_template_alias.txt",

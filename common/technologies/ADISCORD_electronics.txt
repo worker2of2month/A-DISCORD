@@ -2,7 +2,10 @@ technologies = {
 	ADISCORD_tech_mesh_command_networks = {
 		coordination_bonus = 0.01
 		encryption_factor = 0.01
-		path = { leads_to_tech = ADISCORD_tech_field_radio_networks research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_field_radio_networks
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
@@ -11,7 +14,10 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 30
-			modifier = { factor = 1.20 has_war = yes }
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
 		}
 		categories = { electronics encryption_tech decryption_tech }
 	}
@@ -19,7 +25,10 @@ technologies = {
 	ADISCORD_tech_field_radio_networks = {
 		land_reinforce_rate = 0.01
 		encryption_factor = 0.02
-		path = { leads_to_tech = ADISCORD_tech_encryption_rebuild research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_encryption_rebuild
+			research_cost_coeff = 1
+		}
 		enable_building = {
 			building = radar_station
 			level = 1
@@ -32,7 +41,10 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 36
-			modifier = { factor = 1.20 has_war = yes }
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
 		}
 		categories = { electronics encryption_tech decryption_tech }
 	}
@@ -40,8 +52,14 @@ technologies = {
 	ADISCORD_tech_encryption_rebuild = {
 		encryption_factor = 0.03
 		coordination_bonus = 0.01
-		path = { leads_to_tech = ADISCORD_tech_frequency_hopping_field_sets research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_signal_intercept_arrays research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_frequency_hopping_field_sets
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_signal_intercept_arrays
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
@@ -50,7 +68,10 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 30
-			modifier = { factor = 1.20 has_war = yes }
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
 		}
 		categories = { electronics encryption_tech decryption_tech }
 	}
@@ -58,7 +79,10 @@ technologies = {
 	ADISCORD_tech_frequency_hopping_field_sets = {
 		encryption_factor = 0.04
 		land_reinforce_rate = 0.01
-		path = { leads_to_tech = ADISCORD_tech_directional_mesh_relays research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_battlefield_analytics
+			research_cost_coeff = 1
+		}
 		enable_subunits = { signal_company hq_signal }
 		research_cost = 2.05
 		start_year = 2160
@@ -68,7 +92,10 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 40.5
-			modifier = { factor = 1.20 has_war = yes }
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
 		}
 		categories = { electronics encryption_tech decryption_tech }
 	}
@@ -76,7 +103,10 @@ technologies = {
 	ADISCORD_tech_signal_intercept_arrays = {
 		decryption_factor = 0.04
 		air_interception_detect_factor = 0.02
-		path = { leads_to_tech = ADISCORD_tech_lattice_key_exchange research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_counterintelligence_filters
+			research_cost_coeff = 1
+		}
 		enable_building = {
 			building = radar_station
 			level = 2
@@ -89,75 +119,10 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 28.8
-			modifier = { factor = 1.20 has_war = yes }
-		}
-		categories = { electronics encryption_tech decryption_tech }
-	}
-
-	ADISCORD_tech_directional_mesh_relays = {
-		coordination_bonus = 0.02
-		land_reinforce_rate = 0.02
-		path = { leads_to_tech = ADISCORD_tech_passive_emitter_geolocation research_cost_coeff = 1 }
-		research_cost = 1.405
-		start_year = 2162
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 10 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 has_war = yes }
-		}
-		categories = { electronics encryption_tech decryption_tech }
-	}
-
-	ADISCORD_tech_lattice_key_exchange = {
-		encryption_factor = 0.05
-		decryption_factor = 0.02
-		path = { leads_to_tech = ADISCORD_tech_packetized_fire_control_links research_cost_coeff = 1 }
-		research_cost = 1.433
-		start_year = 2163
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 12 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 has_war = yes }
-		}
-		categories = { electronics encryption_tech decryption_tech }
-	}
-
-	ADISCORD_tech_passive_emitter_geolocation = {
-		decryption_factor = 0.04
-		recon_factor = 0.02
-		path = { leads_to_tech = ADISCORD_tech_battlefield_analytics research_cost_coeff = 1 }
-		research_cost = 1.46
-		start_year = 2164
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 14 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 has_war = yes }
-		}
-		categories = { electronics encryption_tech decryption_tech }
-	}
-
-	ADISCORD_tech_packetized_fire_control_links = {
-		coordination_bonus = 0.03
-		planning_speed = 0.03
-		path = { leads_to_tech = ADISCORD_tech_cognitive_spectrum_management research_cost_coeff = 1 }
-		research_cost = 1.488
-		start_year = 2165
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 16 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 has_war = yes }
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
 		}
 		categories = { electronics encryption_tech decryption_tech }
 	}
@@ -165,7 +130,10 @@ technologies = {
 	ADISCORD_tech_battlefield_analytics = {
 		coordination_bonus = 0.02
 		decryption_factor = 0.03
-		path = { leads_to_tech = ADISCORD_tech_stratospheric_burst_relays research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_battlefield_sensor_fusion
+			research_cost_coeff = 1
+		}
 		enable_building = {
 			building = radar_station
 			level = 4
@@ -174,61 +142,14 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = electronics_folder
-			position = { x = -3 y = 18 }
+			position = { x = -3 y = 10 }
 		}
 		ai_will_do = {
 			factor = 28.8
-			modifier = { factor = 1.20 has_war = yes }
-		}
-		categories = { electronics encryption_tech decryption_tech }
-	}
-
-	ADISCORD_tech_cognitive_spectrum_management = {
-		coordination_bonus = 0.03
-		air_interception_detect_factor = 0.03
-		path = { leads_to_tech = ADISCORD_tech_autonomous_intrusion_hunting research_cost_coeff = 1 }
-		research_cost = 1.542
-		start_year = 2167
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 20 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 has_war = yes }
-		}
-		categories = { electronics encryption_tech decryption_tech }
-	}
-
-	ADISCORD_tech_stratospheric_burst_relays = {
-		coordination_bonus = 0.03
-		land_reinforce_rate = 0.03
-		path = { leads_to_tech = ADISCORD_tech_counterintelligence_filters research_cost_coeff = 1 }
-		research_cost = 1.57
-		start_year = 2168
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 22 }
-		}
-		ai_will_do = {
-			factor = 24
-		}
-		categories = { electronics encryption_tech decryption_tech }
-	}
-
-	ADISCORD_tech_autonomous_intrusion_hunting = {
-		decryption_factor = 0.028
-		encryption_factor = 0.008
-		research_speed_factor = 0.008
-		path = { leads_to_tech = ADISCORD_tech_photonic_encryption_modules research_cost_coeff = 1 }
-		research_cost = 1.598
-		start_year = 2169
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 24 }
-		}
-		ai_will_do = {
-			factor = 24
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
 		}
 		categories = { electronics encryption_tech decryption_tech }
 	}
@@ -236,7 +157,10 @@ technologies = {
 	ADISCORD_tech_counterintelligence_filters = {
 		encryption_factor = 0.05
 		decryption_factor = 0.02
-		path = { leads_to_tech = ADISCORD_tech_battlefield_sensor_fusion research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_memetic_security_protocols
+			research_cost_coeff = 1
+		}
 		on_research_complete = {
 			add_tech_bonus = {
 				bonus = 0.3
@@ -249,24 +173,7 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = electronics_folder
-			position = { x = -3 y = 26 }
-		}
-		ai_will_do = {
-			factor = 24
-		}
-		categories = { electronics encryption_tech decryption_tech }
-	}
-
-	ADISCORD_tech_photonic_encryption_modules = {
-		decryption_factor = 0.029
-		encryption_factor = 0.008
-		research_speed_factor = 0.008
-		path = { leads_to_tech = ADISCORD_tech_adaptive_deception_networks research_cost_coeff = 1 }
-		research_cost = 1.653
-		start_year = 2171
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 28 }
+			position = { x = 3 y = 12 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -277,7 +184,10 @@ technologies = {
 	ADISCORD_tech_battlefield_sensor_fusion = {
 		coordination_bonus = 0.03
 		air_interception_detect_factor = 0.04
-		path = { leads_to_tech = ADISCORD_tech_quantum_command_authentication research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_self_healing_tactical_networks
+			research_cost_coeff = 1
+		}
 		enable_building = {
 			building = radar_station
 			level = 5
@@ -294,7 +204,7 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = electronics_folder
-			position = { x = -3 y = 30 }
+			position = { x = -3 y = 14 }
 		}
 		ai_will_do = {
 			factor = 28.8
@@ -302,48 +212,18 @@ technologies = {
 		categories = { electronics encryption_tech decryption_tech }
 	}
 
-	ADISCORD_tech_adaptive_deception_networks = {
-		decryption_factor = 0.05
-		encryption_factor = 0.04
-		path = { leads_to_tech = ADISCORD_tech_self_healing_tactical_networks research_cost_coeff = 1 }
-		research_cost = 1.708
-		start_year = 2173
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 32 }
-		}
-		ai_will_do = {
-			factor = 24
-		}
-		categories = { electronics encryption_tech decryption_tech }
-	}
-
-	ADISCORD_tech_quantum_command_authentication = {
-		encryption_factor = 0.031
-		decryption_factor = 0.009
-		production_factory_efficiency_gain_factor = 0.009
-		path = { leads_to_tech = ADISCORD_tech_memetic_security_protocols research_cost_coeff = 1 }
-		research_cost = 1.735
-		start_year = 2174
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 34 }
-		}
-		ai_will_do = {
-			factor = 24
-		}
-		categories = { electronics encryption_tech decryption_tech }
-	}
-
 	ADISCORD_tech_self_healing_tactical_networks = {
 		encryption_factor = 0.06
 		land_reinforce_rate = 0.02
-		path = { leads_to_tech = ADISCORD_tech_memetic_security_protocols research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_memetic_security_protocols
+			research_cost_coeff = 1
+		}
 		research_cost = 1.763
 		start_year = 2175
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 36 }
+			position = { x = -3 y = 16 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -356,7 +236,7 @@ technologies = {
 		decryption_factor = 0.04
 		coordination_bonus = 0.03
 		dependencies = {
-			ADISCORD_tech_quantum_command_authentication = 1
+			ADISCORD_tech_counterintelligence_filters = 1
 			ADISCORD_tech_self_healing_tactical_networks = 1
 		}
 		enable_building = {
@@ -367,7 +247,7 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 38 }
+			position = { x = 0 y = 18 }
 		}
 		ai_will_do = {
 			factor = 28.8
@@ -378,7 +258,10 @@ technologies = {
 	ADISCORD_tech_electromechanical_relays = {
 		research_speed_factor = 0.01
 		production_factory_efficiency_gain_factor = 0.01
-		path = { leads_to_tech = ADISCORD_tech_recovered_data_archives research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_recovered_data_archives
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
@@ -387,8 +270,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 30
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.20 has_war = yes }
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
 		}
 		categories = { electronics computing_tech }
 	}
@@ -396,7 +285,10 @@ technologies = {
 	ADISCORD_tech_recovered_data_archives = {
 		research_speed_factor = 0.015
 		planning_speed = 0.01
-		path = { leads_to_tech = ADISCORD_tech_recovered_semiconductors research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_recovered_semiconductors
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2155
 		folder = {
@@ -405,8 +297,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 30
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.20 has_war = yes }
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
 		}
 		categories = { electronics computing_tech }
 	}
@@ -414,7 +312,10 @@ technologies = {
 	ADISCORD_tech_recovered_semiconductors = {
 		research_speed_factor = 0.02
 		production_factory_efficiency_gain_factor = 0.02
-		path = { leads_to_tech = ADISCORD_tech_hardened_computers research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_hardened_computers
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
@@ -423,8 +324,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 30
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.20 has_war = yes }
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
 		}
 		categories = { electronics computing_tech }
 	}
@@ -432,8 +339,14 @@ technologies = {
 	ADISCORD_tech_hardened_computers = {
 		research_speed_factor = 0.025
 		encryption_factor = 0.02
-		path = { leads_to_tech = ADISCORD_tech_error_correcting_field_computers research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_analog_ai_accelerators research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_error_correcting_field_computers
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_predictive_logistics
+			research_cost_coeff = 1
+		}
 		research_cost = 1.4
 		start_year = 2160
 		folder = {
@@ -442,8 +355,14 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 30
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.20 has_war = yes }
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
 		}
 		categories = { electronics computing_tech }
 	}
@@ -452,11 +371,11 @@ technologies = {
 		research_speed_factor = 0.03
 		encryption_factor = 0.035
 		supply_consumption_factor = -0.015
-		path = { leads_to_tech = ADISCORD_tech_rugged_chiplet_packaging research_cost_coeff = 1 }
-		XOR = {
-			ADISCORD_tech_analog_ai_accelerators
+		path = {
+			leads_to_tech = ADISCORD_tech_strategic_digital_twins
+			research_cost_coeff = 1
 		}
-		research_cost = 1.75
+		research_cost = 1.455
 		start_year = 2162
 		folder = {
 			name = electronics_folder
@@ -464,73 +383,18 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.20 has_war = yes }
-			modifier = { factor = 1.25 energy_ratio < 0.80 }
-		}
-		categories = { electronics computing_tech }
-	}
-
-	ADISCORD_tech_analog_ai_accelerators = {
-		research_speed_factor = 0.03
-		production_factory_efficiency_gain_factor = 0.04
-		factory_energy_consumption = 0.05
-		path = { leads_to_tech = ADISCORD_tech_neuromorphic_coprocessors research_cost_coeff = 1 }
-		XOR = {
-			ADISCORD_tech_error_correcting_field_computers
-		}
-		research_cost = 1.75
-		start_year = 2162
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 8 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.20 has_war = yes }
-			modifier = { factor = 1.35 energy_ratio > 0.94 }
-			modifier = { factor = 0.25 energy_ratio < 0.80 }
-		}
-		categories = { electronics computing_tech }
-	}
-
-	ADISCORD_tech_rugged_chiplet_packaging = {
-		research_speed_factor = 0.02
-		supply_consumption_factor = -0.02
-		path = { leads_to_tech = ADISCORD_tech_predictive_logistics research_cost_coeff = 1 }
-		research_cost = 1.51
-		start_year = 2164
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 10 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.20 has_war = yes }
-			modifier = { factor = 1.25 energy_ratio < 0.80 }
-		}
-		categories = { electronics computing_tech }
-	}
-
-	ADISCORD_tech_neuromorphic_coprocessors = {
-		research_speed_factor = 0.025
-		production_factory_efficiency_gain_factor = 0.03
-		factory_energy_consumption = 0.04
-		path = { leads_to_tech = ADISCORD_tech_predictive_logistics research_cost_coeff = 1 }
-		research_cost = 1.51
-		start_year = 2164
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 10 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.20 has_war = yes }
-			modifier = { factor = 1.35 energy_ratio > 0.94 }
-			modifier = { factor = 0.25 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
+			modifier = {
+				factor = 1.25
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics computing_tech }
 	}
@@ -539,78 +403,34 @@ technologies = {
 		research_speed_factor = 0.025
 		supply_consumption_factor = -0.03
 		encryption_factor = 0.03
-		path = { leads_to_tech = ADISCORD_tech_distributed_operational_caches research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_synthetic_training_environments research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_operational_ai_assistants
+			research_cost_coeff = 1
+		}
 		research_cost = 1.565
 		start_year = 2166
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 12 }
+			position = { x = 3 y = 10 }
 		}
 		ai_will_do = {
 			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.20 has_war = yes }
-		}
-		categories = { electronics computing_tech }
-	}
-
-	ADISCORD_tech_distributed_operational_caches = {
-		research_speed_factor = 0.025
-		planning_speed = 0.02
-		supply_consumption_factor = -0.02
-		path = { leads_to_tech = ADISCORD_tech_federated_operational_learning research_cost_coeff = 1 }
-		research_cost = 1.62
-		start_year = 2168
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 14 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.25 energy_ratio < 0.80 }
-		}
-		categories = { electronics computing_tech }
-	}
-
-	ADISCORD_tech_synthetic_training_environments = {
-		research_speed_factor = 0.03
-		land_reinforce_rate = 0.02
-		factory_energy_consumption = 0.03
-		path = { leads_to_tech = ADISCORD_tech_federated_operational_learning research_cost_coeff = 1 }
-		research_cost = 1.62
-		start_year = 2168
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 14 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.35 energy_ratio > 0.94 }
-			modifier = { factor = 0.25 energy_ratio < 0.80 }
-		}
-		categories = { electronics computing_tech }
-	}
-
-	ADISCORD_tech_federated_operational_learning = {
-		research_speed_factor = 0.03
-		coordination_bonus = 0.03
-		path = { leads_to_tech = ADISCORD_tech_operational_ai_assistants research_cost_coeff = 1 }
-		dependencies = {
-			ADISCORD_tech_distributed_operational_caches = 1
-			ADISCORD_tech_synthetic_training_environments = 1
-		}
-		research_cost = 2.4
-		start_year = 2169
-		folder = {
-			name = electronics_folder
-			position = { x = 0 y = 16 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.20
+				has_war = yes
+			}
+			modifier = {
+				factor = 1.35
+				energy_ratio > 0.94
+			}
+			modifier = {
+				factor = 0.25
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics computing_tech }
 	}
@@ -619,55 +439,30 @@ technologies = {
 		research_speed_factor = 0.025
 		coordination_bonus = 0.035
 		factory_energy_consumption = 0.06
-		path = { leads_to_tech = ADISCORD_tech_explainable_command_models research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_photonic_compute_arrays research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_strategic_ai_coordination
+			research_cost_coeff = 1
+		}
 		research_cost = 1.675
 		start_year = 2170
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 18 }
+			position = { x = 3 y = 12 }
 		}
 		ai_will_do = {
 			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-		}
-		categories = { electronics computing_tech }
-	}
-
-	ADISCORD_tech_explainable_command_models = {
-		planning_speed = 0.03
-		max_planning = 0.02
-		path = { leads_to_tech = ADISCORD_tech_strategic_digital_twins research_cost_coeff = 1 }
-		research_cost = 1.73
-		start_year = 2172
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 20 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.25 energy_ratio < 0.80 }
-		}
-		categories = { electronics computing_tech }
-	}
-
-	ADISCORD_tech_photonic_compute_arrays = {
-		research_speed_factor = 0.035
-		production_factory_efficiency_gain_factor = 0.03
-		factory_energy_consumption = 0.05
-		path = { leads_to_tech = ADISCORD_tech_strategic_digital_twins research_cost_coeff = 1 }
-		research_cost = 1.73
-		start_year = 2172
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 20 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.35 energy_ratio > 0.94 }
-			modifier = { factor = 0.25 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.35
+				energy_ratio > 0.94
+			}
+			modifier = {
+				factor = 0.25
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics computing_tech }
 	}
@@ -676,11 +471,9 @@ technologies = {
 		research_speed_factor = 0.03
 		planning_speed = 0.03
 		production_factory_efficiency_gain_factor = 0.03
-		path = { leads_to_tech = ADISCORD_tech_predictive_budgeting research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_bounded_general_planning_cores research_cost_coeff = 1 }
-		dependencies = {
-			ADISCORD_tech_explainable_command_models = 1
-			ADISCORD_tech_photonic_compute_arrays = 1
+		path = {
+			leads_to_tech = ADISCORD_tech_strategic_ai_coordination
+			research_cost_coeff = 1
 		}
 		on_research_complete = {
 			add_tech_bonus = {
@@ -690,51 +483,22 @@ technologies = {
 			}
 		}
 		show_effect_as_desc = yes
-		research_cost = 2.4
+		research_cost = 1.785
 		start_year = 2174
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 22 }
+			position = { x = -3 y = 14 }
 		}
 		ai_will_do = {
 			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-		}
-		categories = { electronics computing_tech }
-	}
-
-	ADISCORD_tech_predictive_budgeting = {
-		consumer_goods_factor = -0.015
-		production_factory_start_efficiency_factor = 0.03
-		research_cost = 1.812
-		start_year = 2175
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 24 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
-			modifier = { factor = 1.35 energy_ratio > 0.94 }
-			modifier = { factor = 0.25 energy_ratio < 0.80 }
-		}
-		categories = { electronics computing_tech }
-	}
-
-	ADISCORD_tech_bounded_general_planning_cores = {
-		research_speed_factor = 0.035
-		coordination_bonus = 0.04
-		factory_energy_consumption = 0.03
-		path = { leads_to_tech = ADISCORD_tech_strategic_ai_coordination research_cost_coeff = 1 }
-		research_cost = 1.812
-		start_year = 2175
-		folder = {
-			name = electronics_folder
-			position = { x = 0 y = 24 }
-		}
-		ai_will_do = {
-			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.25
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics computing_tech }
 	}
@@ -744,15 +508,22 @@ technologies = {
 		coordination_bonus = 0.05
 		production_factory_efficiency_gain_factor = 0.04
 		factory_energy_consumption = 0.04
+		dependencies = {
+			ADISCORD_tech_operational_ai_assistants = 1
+			ADISCORD_tech_strategic_digital_twins = 1
+		}
 		research_cost = 2.55
 		start_year = 2180
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 26 }
+			position = { x = 0 y = 16 }
 		}
 		ai_will_do = {
 			factor = 24
-			modifier = { factor = 1.20 ADISCORD_economy_ai_is_healthy = yes }
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
 		}
 		categories = { electronics computing_tech }
 	}
@@ -760,7 +531,14 @@ technologies = {
 	ADISCORD_tech_local_grid_restoration = {
 		factory_energy_consumption = -0.03
 		industry_repair_factor = 0.02
-		path = { leads_to_tech = ADISCORD_tech_substation_networks research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_substation_networks
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_radiation_mapping
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
@@ -769,7 +547,10 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 25
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.75
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics nuclear }
 	}
@@ -777,16 +558,22 @@ technologies = {
 	ADISCORD_tech_substation_networks = {
 		factory_energy_consumption = -0.035
 		production_speed_infrastructure_factor = 0.025
-		path = { leads_to_tech = ADISCORD_tech_radiation_mapping research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_phase_synchronized_substations
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2155
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 2 }
+			position = { x = -3 y = 2 }
 		}
 		ai_will_do = {
 			factor = 25
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.75
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics nuclear }
 	}
@@ -794,17 +581,22 @@ technologies = {
 	ADISCORD_tech_radiation_mapping = {
 		factory_energy_consumption = -0.025
 		nuclear_production_factor = 0.03
-		path = { leads_to_tech = ADISCORD_tech_phase_synchronized_substations research_cost_coeff = 1 }
-		path = { leads_to_tech = ADISCORD_tech_shielded_engineering_corps research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_reactor_safety_protocols
+			research_cost_coeff = 1
+		}
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 4 }
+			position = { x = 3 y = 4 }
 		}
 		ai_will_do = {
 			factor = 25
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.75
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics nuclear }
 	}
@@ -813,7 +605,10 @@ technologies = {
 		factory_energy_consumption = -0.04
 		industry_repair_factor = 0.03
 		ADISCORD_economy_military_factory_expense_factor = -0.01
-		path = { leads_to_tech = ADISCORD_tech_ceramic_grid_insulators research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_superconducting_power_busbars
+			research_cost_coeff = 1
+		}
 		on_research_complete = {
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
@@ -826,92 +621,10 @@ technologies = {
 		}
 		ai_will_do = {
 			factor = 25
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_shielded_engineering_corps = {
-		industrial_capacity_factory = 0.013
-		nuclear_production_factor = 0.023
-		path = { leads_to_tech = ADISCORD_tech_solid_state_grid_breakers research_cost_coeff = 1 }
-		research_cost = 1.427
-		start_year = 2161
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 8 }
-		}
-		ai_will_do = {
-			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_ceramic_grid_insulators = {
-		nuclear_production_factor = 0.023
-		industrial_capacity_factory = 0.007
-		path = { leads_to_tech = ADISCORD_tech_modular_fission_heat_exchangers research_cost_coeff = 1 }
-		research_cost = 1.455
-		start_year = 2162
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 10 }
-		}
-		ai_will_do = {
-			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_solid_state_grid_breakers = {
-		factory_energy_consumption = -0.04
-		industry_air_damage_factor = -0.03
-		path = { leads_to_tech = ADISCORD_tech_radiation_hardened_control_rods research_cost_coeff = 1 }
-		research_cost = 1.482
-		start_year = 2163
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 12 }
-		}
-		ai_will_do = {
-			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_modular_fission_heat_exchangers = {
-		nuclear_production_factor = 0.024
-		industrial_capacity_factory = 0.007
-		path = { leads_to_tech = ADISCORD_tech_reactor_safety_protocols research_cost_coeff = 1 }
-		research_cost = 1.51
-		start_year = 2164
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 14 }
-		}
-		ai_will_do = {
-			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_radiation_hardened_control_rods = {
-		production_speed_buildings_factor = 0.015
-		local_resources_factor = 0.015
-		path = { leads_to_tech = ADISCORD_tech_molten_salt_cleanup_systems research_cost_coeff = 1 }
-		research_cost = 1.537
-		start_year = 2165
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 16 }
-		}
-		ai_will_do = {
-			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.75
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics nuclear }
 	}
@@ -919,7 +632,10 @@ technologies = {
 	ADISCORD_tech_reactor_safety_protocols = {
 		factory_energy_consumption = -0.04
 		nuclear_production_factor = 0.05
-		path = { leads_to_tech = ADISCORD_tech_load_following_microreactors research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_load_following_microreactors
+			research_cost_coeff = 1
+		}
 		enable_building = {
 			building = nuclear_reactor_heavy_water
 			level = 1
@@ -936,28 +652,14 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = electronics_folder
-			position = { x = -3 y = 18 }
+			position = { x = 3 y = 8 }
 		}
 		ai_will_do = {
 			factor = 24
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_molten_salt_cleanup_systems = {
-		production_speed_buildings_factor = 0.015
-		local_resources_factor = 0.015
-		path = { leads_to_tech = ADISCORD_tech_superconducting_power_busbars research_cost_coeff = 1 }
-		research_cost = 1.592
-		start_year = 2167
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 20 }
-		}
-		ai_will_do = {
-			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.75
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics nuclear }
 	}
@@ -966,7 +668,10 @@ technologies = {
 		factory_energy_consumption = -0.05
 		nuclear_production_factor = 0.06
 		ADISCORD_economy_military_factory_expense_factor = -0.02
-		path = { leads_to_tech = ADISCORD_tech_microreactor_blocks research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_microreactor_blocks
+			research_cost_coeff = 1
+		}
 		on_research_complete = {
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
@@ -975,11 +680,14 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = electronics_folder
-			position = { x = -3 y = 22 }
+			position = { x = 3 y = 10 }
 		}
 		ai_will_do = {
 			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.75
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics nuclear }
 	}
@@ -987,16 +695,22 @@ technologies = {
 	ADISCORD_tech_superconducting_power_busbars = {
 		factory_energy_consumption = -0.05
 		industrial_capacity_factory = 0.01
-		path = { leads_to_tech = ADISCORD_tech_passive_decay_heat_sinks research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_continental_load_balancing
+			research_cost_coeff = 1
+		}
 		research_cost = 1.647
 		start_year = 2169
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 24 }
+			position = { x = -3 y = 12 }
 		}
 		ai_will_do = {
 			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.75
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics nuclear }
 	}
@@ -1004,7 +718,10 @@ technologies = {
 	ADISCORD_tech_microreactor_blocks = {
 		factory_energy_consumption = -0.055
 		nuclear_production_factor = 0.07
-		path = { leads_to_tech = ADISCORD_tech_autonomous_reactor_diagnostics research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_emergency_core_suppression
+			research_cost_coeff = 1
+		}
 		enable_building = {
 			building = nuclear_reactor
 			level = 1
@@ -1013,79 +730,14 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = electronics_folder
-			position = { x = -3 y = 26 }
+			position = { x = 3 y = 14 }
 		}
 		ai_will_do = {
 			factor = 24
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_passive_decay_heat_sinks = {
-		factory_energy_consumption = -0.035
-		industry_repair_factor = 0.05
-		path = { leads_to_tech = ADISCORD_tech_closed_fuel_cycle_separators research_cost_coeff = 1 }
-		research_cost = 1.702
-		start_year = 2171
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 28 }
-		}
-		ai_will_do = {
-			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_autonomous_reactor_diagnostics = {
-		factory_energy_consumption = -0.04
-		nuclear_production_factor = 0.06
-		path = { leads_to_tech = ADISCORD_tech_high_density_thermal_storage research_cost_coeff = 1 }
-		research_cost = 1.73
-		start_year = 2172
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 30 }
-		}
-		ai_will_do = {
-			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_closed_fuel_cycle_separators = {
-		production_speed_buildings_factor = 0.017
-		local_resources_factor = 0.017
-		path = { leads_to_tech = ADISCORD_tech_continental_load_balancing research_cost_coeff = 1 }
-		research_cost = 1.757
-		start_year = 2173
-		folder = {
-			name = electronics_folder
-			position = { x = 3 y = 32 }
-		}
-		ai_will_do = {
-			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
-		}
-		categories = { electronics nuclear }
-	}
-
-	ADISCORD_tech_high_density_thermal_storage = {
-		factory_energy_consumption = -0.05
-		fuel_gain_factor = 0.04
-		path = { leads_to_tech = ADISCORD_tech_emergency_core_suppression research_cost_coeff = 1 }
-		research_cost = 1.785
-		start_year = 2174
-		folder = {
-			name = electronics_folder
-			position = { x = -3 y = 34 }
-		}
-		ai_will_do = {
-			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.75
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics nuclear }
 	}
@@ -1094,7 +746,10 @@ technologies = {
 		factory_energy_consumption = -0.06
 		production_speed_buildings_factor = 0.04
 		ADISCORD_economy_military_factory_expense_factor = -0.02
-		path = { leads_to_tech = ADISCORD_tech_emergency_core_suppression research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_emergency_core_suppression
+			research_cost_coeff = 1
+		}
 		enable_building = {
 			building = commercial_nuclear_reactor
 			level = 1
@@ -1107,11 +762,14 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = electronics_folder
-			position = { x = 3 y = 36 }
+			position = { x = -3 y = 16 }
 		}
 		ai_will_do = {
 			factor = 24
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.75
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics nuclear }
 	}
@@ -1120,19 +778,18 @@ technologies = {
 		factory_energy_consumption = -0.07
 		nuclear_production_factor = 0.08
 		industry_repair_factor = 0.06
-		dependencies = {
-			ADISCORD_tech_high_density_thermal_storage = 1
-			ADISCORD_tech_continental_load_balancing = 1
-		}
 		research_cost = 2.55
 		start_year = 2180
 		folder = {
 			name = electronics_folder
-			position = { x = 0 y = 38 }
+			position = { x = 0 y = 18 }
 		}
 		ai_will_do = {
 			factor = 20
-			modifier = { factor = 1.75 energy_ratio < 0.80 }
+			modifier = {
+				factor = 1.75
+				energy_ratio < 0.80
+			}
 		}
 		categories = { electronics nuclear }
 	}
@@ -1141,12 +798,14 @@ technologies = {
 		encryption_factor = 0.02
 		decryption_factor = 0.02
 		air_interception_detect_factor = 0.01
-		path = { leads_to_tech = ADISCORD_tech_offensive_jamming_cells research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_offensive_jamming_cells
+			research_cost_coeff = 1
+		}
 		dependencies = {
 			ADISCORD_tech_frequency_hopping_field_sets = 1
-			ADISCORD_tech_stabilized_autocannon_mounts = 1
 		}
-		research_cost = 2.4
+		research_cost = 1.405
 		start_year = 2162
 		folder = {
 			name = electronics_folder
@@ -1162,7 +821,10 @@ technologies = {
 		decryption_factor = 0.04
 		coordination_bonus = 0.01
 		air_mission_efficiency = 0.01
-		path = { leads_to_tech = ADISCORD_tech_adaptive_spectrum_dominance research_cost_coeff = 1 }
+		path = {
+			leads_to_tech = ADISCORD_tech_adaptive_spectrum_dominance
+			research_cost_coeff = 1
+		}
 		research_cost = 1.598
 		start_year = 2169
 		folder = {

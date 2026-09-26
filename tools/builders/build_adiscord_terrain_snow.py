@@ -49,6 +49,7 @@ SNOW_PLAIN = 19
 RESTORE_SNOW = {SNOW_MOUNTAIN: 11, SNOW_PLAIN: 0}
 URBAN_TERRAIN = 13
 CITY_PALETTE_INDEX = 15
+CITY_PALETTE_INDICES = frozenset({2, CITY_PALETTE_INDEX})
 
 # These are existing combat-urban provinces whose complete graphical masks
 # were missing or partial.  Keeping the set explicit prevents a global
@@ -169,7 +170,7 @@ def generated_pixels(
                 tuple(province_pixels[index * 3:index * 3 + 3]) in selected_rgb
                 or (
                     city_pixels is not None
-                    and city_pixels[index] == CITY_PALETTE_INDEX
+                    and city_pixels[index] in CITY_PALETTE_INDICES
                     and tuple(province_pixels[index * 3:index * 3 + 3]) in land_colors
                 )
             )

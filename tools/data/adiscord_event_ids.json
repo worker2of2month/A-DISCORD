@@ -1509,6 +1509,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_test_wars.2",
+      "namespace": "ADISCORD_test_wars",
+      "number": 2,
+      "owner": "events/ADISCORD_scenario_debug_events.txt",
+      "subsystem": "test_wars",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_test_wars.1",
       "namespace": "ADISCORD_test_wars",
       "number": 1,

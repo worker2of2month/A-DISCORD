@@ -77,8 +77,8 @@ STATE_PROFILES = {
         "victory_points": ((16348, 2),),
     },
     120: {
-        "owner": "ORV",
-        "core": "ORV",
+        "owner": "ARS",
+        "core": "ARS",
         "claims": (),
         "provinces": (99, 109, 112, 123, 126, 142, 146, 151, 152, 16314),
         "population": 260_000,

@@ -10,7 +10,7 @@
     "optional_protected_oob_templates": 6
   },
   "assumptions": {
-    "organization": "Arithmetic mean of max_organisation for every occupied regiment/support slot after actual common starting-technology modifiers. All owners receive the common baseline; ADISCORD_tech_composite_protection_kits adds 0.75 to category_all_infantry. A repeated grant in the land profile is the same technology ID and is not double-counted.",
+    "organization": "Arithmetic mean of max_organisation for every occupied regiment/divisional-support/regimental-support slot after actual common starting-technology modifiers. All owners receive the common baseline; ADISCORD_tech_composite_protection_kits adds 0.75 to category_all_infantry. A repeated grant in the land profile is the same technology ID and is not double-counted.",
     "manpower": "Sum of subunit manpower for every occupied slot.",
     "equipment": "Complete per-archetype quantity map from every occupied subunit need block.",
     "equipment_availability": "A required archetype is available only when defined as an archetype or referenced by a concrete equipment variant in the replaced equipment database.",
@@ -54,7 +54,7 @@
   "global_name_ambiguities": [
     {
       "observed_name": "Capital Guard",
-      "composition_count": 3,
+      "composition_count": 6,
       "sources": [
         "history/units/BTL.txt",
         "history/units/DAN.txt",
@@ -438,15 +438,15 @@
         }
       ],
       "computed": {
-        "organization": 55.613636,
-        "manpower": 9600,
+        "organization": 52.291667,
+        "manpower": 9780.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 54,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8640,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 90.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 8640.0,
+          "support_equipment": 35.0
         },
-        "supply": 0.63
+        "supply": 0.69
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
@@ -458,7 +458,14 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_aph_devourer_chosen"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_aur_northern_line_brigade",
@@ -1869,18 +1876,20 @@
         }
       ],
       "computed": {
-        "organization": 47.431818,
-        "manpower": 9600,
+        "organization": 41.730769,
+        "manpower": 9900.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8640,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 132.0,
+          "anti_tank_equipment": 8.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 8640.0,
+          "support_equipment": 40.0
         },
-        "supply": 0.72
+        "supply": 0.83
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_tank_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -1889,7 +1898,19 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_btl_capital_guard"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_anti_tank",
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_cin_ash_clan_militia",
@@ -2128,16 +2149,16 @@
         }
       ],
       "computed": {
-        "organization": 43.479167,
-        "manpower": 9900,
+        "organization": 38.75,
+        "manpower": 10200.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72,
-          "anti_air_equipment": 20,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8910,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 132.0,
+          "anti_air_equipment": 28.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 8910.0,
+          "support_equipment": 40.0
         },
-        "supply": 0.82
+        "supply": 0.93
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
@@ -2150,7 +2171,19 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_cof_old_grove_guard"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_anti_air",
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_csl_vorkerland_collapse_csl_municipal_militia",
@@ -3557,18 +3590,20 @@
         }
       ],
       "computed": {
-        "organization": 47.431818,
-        "manpower": 9600,
+        "organization": 39.464286,
+        "manpower": 10020.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8640,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 156.0,
+          "anti_air_equipment": 8.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 8640.0,
+          "support_equipment": 55.0
         },
-        "supply": 0.72
+        "supply": 0.86
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -3577,7 +3612,24 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ivn_capital_guard"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_pioneers",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_anti_air",
+          "x": 2,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_kdr_caravan_guard",
@@ -4759,18 +4811,20 @@
         }
       ],
       "computed": {
-        "organization": 43.895833,
-        "manpower": 10100,
+        "organization": 37.166667,
+        "manpower": 10520.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72,
-          "artillery_equipment": 36,
-          "infantry_equipment": 9090,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 156.0,
+          "anti_tank_equipment": 8.0,
+          "artillery_equipment": 36.0,
+          "infantry_equipment": 9090.0,
+          "support_equipment": 55.0
         },
-        "supply": 0.96
+        "supply": 1.1
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_tank_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -4779,7 +4833,24 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nod_cussington_guard"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_pioneers",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_anti_tank",
+          "x": 2,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_nod_nodral_armored_group",
@@ -4856,20 +4927,22 @@
         }
       ],
       "computed": {
-        "organization": 34.541667,
-        "manpower": 8400,
+        "organization": 31.089286,
+        "manpower": 8700.0,
         "equipment": {
-          "ADISCORD_combat_platform_archetype": 160,
-          "ADISCORD_squad_weapons_equipment": 48,
-          "artillery_equipment": 12,
-          "infantry_equipment": 7560,
-          "support_equipment": 30
+          "ADISCORD_combat_platform_archetype": 160.0,
+          "ADISCORD_squad_weapons_equipment": 108.0,
+          "anti_air_equipment": 8.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 7560.0,
+          "support_equipment": 40.0
         },
-        "supply": 1.42
+        "supply": 1.53
       },
       "equipment_availability": {
         "ADISCORD_combat_platform_archetype": true,
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -4878,7 +4951,19 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nod_nodral_armored_group"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_anti_air",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_nod_nodral_mountain_infantry",
@@ -4950,15 +5035,15 @@
         }
       ],
       "computed": {
-        "organization": 55.613636,
-        "manpower": 9600,
+        "organization": 49.038462,
+        "manpower": 9900.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 54,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8640,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 114.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 8640.0,
+          "support_equipment": 50.0
         },
-        "supply": 0.63
+        "supply": 0.72
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
@@ -4970,7 +5055,19 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_nod_nodral_mountain_infantry"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_pioneers",
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_nvr_northern_line_brigade",
@@ -5649,15 +5746,15 @@
         }
       ],
       "computed": {
-        "organization": 47.431818,
-        "manpower": 9600,
+        "organization": 44.791667,
+        "manpower": 9780.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8640,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 108.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 8640.0,
+          "support_equipment": 35.0
         },
-        "supply": 0.72
+        "supply": 0.78
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
@@ -5669,7 +5766,14 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_pwr_capital_guard"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_rev_vorkerland_collapse_rev_collapse_militia",
@@ -7142,20 +7246,22 @@
         }
       ],
       "computed": {
-        "organization": 39.410714,
-        "manpower": 10850,
+        "organization": 34.264706,
+        "manpower": 11270.0,
         "equipment": {
-          "ADISCORD_recon_platform_archetype": 18,
-          "ADISCORD_squad_weapons_equipment": 72,
-          "artillery_equipment": 60,
-          "infantry_equipment": 9765,
-          "support_equipment": 35
+          "ADISCORD_recon_platform_archetype": 18.0,
+          "ADISCORD_squad_weapons_equipment": 156.0,
+          "anti_air_equipment": 8.0,
+          "artillery_equipment": 60.0,
+          "infantry_equipment": 9765.0,
+          "support_equipment": 60.0
         },
-        "supply": 1.24
+        "supply": 1.38
       },
       "equipment_availability": {
         "ADISCORD_recon_platform_archetype": true,
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -7164,7 +7270,24 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_stp_capital_guard"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_pioneers",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_anti_air",
+          "x": 2,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_swb_vorkerland_collapse_swb_collapse_militia",
@@ -7410,16 +7533,16 @@
         }
       ],
       "computed": {
-        "organization": 43.479167,
-        "manpower": 9900,
+        "organization": 38.75,
+        "manpower": 10200.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72,
-          "anti_air_equipment": 20,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8910,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 132.0,
+          "anti_air_equipment": 28.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 8910.0,
+          "support_equipment": 40.0
         },
-        "supply": 0.82
+        "supply": 0.93
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
@@ -7432,7 +7555,19 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_tff_capital_guard"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_anti_air",
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_tgd_vorkerland_collapse_tgd_urban_guard",
@@ -8467,18 +8602,20 @@
         }
       ],
       "computed": {
-        "organization": 47.431818,
-        "manpower": 9600,
+        "organization": 39.464286,
+        "manpower": 10020.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8640,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 156.0,
+          "anti_tank_equipment": 8.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 8640.0,
+          "support_equipment": 55.0
         },
-        "supply": 0.72
+        "supply": 0.86
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_tank_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -8487,7 +8624,24 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_val_kefreyt_line_brigade"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_pioneers",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_anti_tank",
+          "x": 2,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_ves_northern_line_brigade",
@@ -9078,18 +9232,20 @@
         }
       ],
       "computed": {
-        "organization": 47.431818,
-        "manpower": 9600,
+        "organization": 41.730769,
+        "manpower": 9900.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8640,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 132.0,
+          "anti_tank_equipment": 8.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 8640.0,
+          "support_equipment": 40.0
         },
-        "supply": 0.72
+        "supply": 0.83
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_tank_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -9098,7 +9254,19 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wit_capital_guard"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_anti_tank",
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_wpa_vorkerland_collapse_wpa_collapse_militia",
@@ -9389,18 +9557,20 @@
         }
       ],
       "computed": {
-        "organization": 47.431818,
-        "manpower": 9600,
+        "organization": 39.464286,
+        "manpower": 10020.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8640,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 156.0,
+          "anti_air_equipment": 8.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 8640.0,
+          "support_equipment": 55.0
         },
-        "supply": 0.72
+        "supply": 0.86
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -9409,7 +9579,24 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_wrk_industrial_guard"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_pioneers",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_anti_air",
+          "x": 2,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_wrk_workerland_mobile_group",
@@ -9811,16 +9998,16 @@
         }
       ],
       "computed": {
-        "organization": 43.479167,
-        "manpower": 9900,
+        "organization": 38.75,
+        "manpower": 10200.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 72,
-          "anti_air_equipment": 20,
-          "artillery_equipment": 12,
-          "infantry_equipment": 8910,
-          "support_equipment": 30
+          "ADISCORD_squad_weapons_equipment": 132.0,
+          "anti_air_equipment": 28.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 8910.0,
+          "support_equipment": 40.0
         },
-        "supply": 0.82
+        "supply": 0.93
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
@@ -9833,7 +10020,19 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ypr_capital_guard"
-      }
+      },
+      "regimental_support": [
+        {
+          "type": "ADISCORD_regimental_fire_support",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_regimental_anti_air",
+          "x": 1,
+          "y": 0
+        }
+      ]
     },
     {
       "key": "oob_zao_local_security_detachment",
@@ -11194,7 +11393,7 @@
         "target": "val_focus_mountain_contractors"
       },
       "definition_metadata": {
-        "is_locked": true,
+        "is_locked": false,
         "force_allow_recruiting": true
       }
     },
@@ -11344,6 +11543,116 @@
       "definition_metadata": {
         "is_locked": true,
         "force_allow_recruiting": true
+      }
+    },
+    {
+      "key": "val_focus_shield_special_forces",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Kefreyt Shield Special Forces",
+      "display_name": "Kefreyt Shield Special Forces",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 3
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 4
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 3
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "artillery",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "logistics_company",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "field_hospital",
+          "x": 0,
+          "y": 3
+        }
+      ],
+      "computed": {
+        "organization": 51.25,
+        "manpower": 11300.0,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 180.0,
+          "artillery_equipment": 12.0,
+          "infantry_equipment": 10170.0,
+          "support_equipment": 395.0
+        },
+        "supply": 1.8499999999999999
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "artillery_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "val_focus_shield_special_forces"
+      },
+      "definition_metadata": {
+        "is_locked": false
       }
     }
   ],
@@ -13609,6 +13918,16 @@
       "technical_name": "Kefreyt Marine Contract Group",
       "legacy_names": [],
       "start_experience_factor": 0.3,
+      "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "val_focus_shield_special_forces_spawn",
+      "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Kefreyt Shield Special Forces",
+      "legacy_names": [],
+      "start_experience_factor": 0.5,
       "start_equipment_factor": 1,
       "count": 1
     }

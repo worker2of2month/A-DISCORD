@@ -45,6 +45,11 @@ division_template = {
 		engineer = { x = 0 y = 0 }
 		artillery = { x = 0 y = 1 }
 	}
+	regimental_support = {
+		ADISCORD_regimental_fire_support = { x = 0 y = 0 }
+		ADISCORD_regimental_pioneers = { x = 1 y = 0 }
+		ADISCORD_regimental_anti_air = { x = 2 y = 0 }
+	}
 }
 
 units = {

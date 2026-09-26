@@ -52,7 +52,9 @@ on_actions = {
 					VAL = { exists = yes }
 				}
 				set_global_flag = ADISCORD_val_rework_fresh_campaign_v1
-				VAL = { VAL_initialize_rework = yes }
+				VAL = {
+					VAL_initialize_rework = yes
+				}
 			}
 		}
 	}

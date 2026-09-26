@@ -2,6 +2,7 @@
 import re
 import unittest
 from pathlib import Path
+from tools.lib.focus_sources import read_focus_source
 
 from tools.tests.test_adiscord_stp_preparation import block, scalar, walk, matches_conditions, selected_effects
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -24,7 +25,7 @@ POLICIES = ('STP_ps_operational_reserve', 'STP_ps_route_security')
 
 
 def read(path):
-    return (ROOT / path).read_text(encoding='utf-8-sig')
+    return read_focus_source(ROOT / path, encoding='utf-8-sig')
 
 
 def localization(language):

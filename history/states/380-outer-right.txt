@@ -4,7 +4,7 @@
 state = {
 	id = 380
 	name = "STATE_380"
-	manpower = 300920
+	manpower = 298986
 	state_category = rural
 	history = {
 		owner = NVR

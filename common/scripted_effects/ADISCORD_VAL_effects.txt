@@ -293,6 +293,10 @@ VAL_refresh_contract_modifier = {
 		add_to_variable = { var = VAL_contract_defence_factor value = 0.05 }
 	}
 	if = {
+		limit = { has_tech = ADISCORD_tech_kefreyt_shield_special_forces }
+		add_to_variable = { var = VAL_contract_special_forces_min value = 10 }
+	}
+	if = {
 		limit = { has_country_flag = VAL_company_service_code }
 		add_to_variable = { var = VAL_contract_war_stability value = 0.2 }
 		add_to_variable = { var = VAL_contract_org_regain value = 0.03 }
@@ -1604,6 +1608,98 @@ VAL_apply_contract_reputation_0 = {
 	}
 }
 
+# The focus funds the first formation; subsequent recruitment uses normal stocks.
+VAL_raise_shield_special_forces = {
+	custom_effect_tooltip = VAL_raise_shield_special_forces_tt
+	hidden_effect = {
+		if = {
+			limit = {
+				tag = VAL
+				has_capitulated = no
+				has_tech = ADISCORD_tech_casualty_evacuation
+				has_tech = ADISCORD_tech_forward_supply_hubs
+				NOT = { has_tech = ADISCORD_tech_kefreyt_shield_special_forces }
+				any_owned_state = { is_controlled_by = PREV }
+			}
+			set_technology = {
+				ADISCORD_tech_kefreyt_shield_special_forces = 1
+				popup = no
+			}
+			VAL_refresh_contract_modifier = yes
+			if = {
+				limit = { NOT = { has_template = "Kefreyt Shield Special Forces" } }
+				division_template = {
+					name = "Kefreyt Shield Special Forces"
+					override_model = ADISCORD_urban_breacher_entity
+					template_counter = 3
+					division_names_group = VAL_INF_01
+					is_locked = no
+					regiments = {
+						ADISCORD_urban_breacher = { x = 0 y = 0 }
+						ADISCORD_urban_breacher = { x = 0 y = 1 }
+						ADISCORD_urban_breacher = { x = 0 y = 2 }
+						ADISCORD_urban_breacher = { x = 0 y = 3 }
+						ADISCORD_urban_breacher = { x = 0 y = 4 }
+						ADISCORD_urban_breacher = { x = 1 y = 0 }
+						ADISCORD_urban_breacher = { x = 1 y = 1 }
+						ADISCORD_urban_breacher = { x = 1 y = 2 }
+						ADISCORD_urban_breacher = { x = 1 y = 3 }
+						ADISCORD_urban_breacher = { x = 1 y = 4 }
+					}
+					support = {
+						engineer = { x = 0 y = 0 }
+						artillery = { x = 0 y = 1 }
+						logistics_company = { x = 0 y = 2 }
+						field_hospital = { x = 0 y = 3 }
+					}
+				}
+			}
+			random_owned_controlled_state = {
+				create_unit = {
+					division = "name = \"1-я дивизия специального назначения\" division_template = \"Kefreyt Shield Special Forces\" start_experience_factor = 0.5 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = PREV
+					count = 1
+					allow_spawning_on_enemy_provs = no
+				}
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+VAL_spawn_urban_breacher_trial = {
+	if = {
+		limit = {
+			tag = VAL
+			has_capitulated = no
+			48 = {
+				is_owned_by = VAL
+				is_controlled_by = VAL
+			}
+		}
+		if = {
+			limit = { NOT = { has_template = "Испытательный щитовой отряд" } }
+			division_template = {
+				name = "Испытательный щитовой отряд"
+				template_counter = 3
+				is_locked = yes
+				regiments = {
+					ADISCORD_urban_breacher = { x = 0 y = 0 }
+				}
+			}
+		}
+		# Explicit staffing keeps the visual trial independent of reserve shortages.
+		48 = {
+			create_unit = {
+				division = "name = \"Испытательный щитовой отряд\" division_template = \"Испытательный щитовой отряд\" location = 16521 start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = VAL
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
 # COUNTRY VAL: the focus pays for a fixed formation package, not a stockpile transfer.
 VAL_raise_mountain_contractors = {
 	custom_effect_tooltip = VAL_raise_mountain_contractors_tt
@@ -1619,9 +1715,10 @@ VAL_raise_mountain_contractors = {
 				limit = { NOT = { has_template = "Kefreyt Mountain Contractors" } }
 				division_template = {
 					name = "Kefreyt Mountain Contractors"
+					override_model = ADISCORD_VAL_mountaineer_entity
 					template_counter = 110
 					division_names_group = VAL_INF_01
-					is_locked = yes
+					is_locked = no
 					force_allow_recruiting = yes
 					regiments = {
 						mountaineers = { x = 0 y = 0 }
@@ -1711,6 +1808,7 @@ VAL_raise_marine_contract_corps = {
 				limit = { NOT = { has_template = "Kefreyt Marine Contract Group" } }
 				division_template = {
 					name = "Kefreyt Marine Contract Group"
+					override_model = ADISCORD_VAL_marine_entity
 					template_counter = 68
 					division_names_group = VAL_INF_01
 					is_locked = yes

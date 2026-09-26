@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tools.lib.focus_sources import read_focus_source
 
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 

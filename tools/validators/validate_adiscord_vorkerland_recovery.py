@@ -52,7 +52,7 @@ CAPITULATION_EFFECTS = Path("common/scripted_effects/ZZ_ADISCORD_capitulation_di
 RELEASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
 COLLAPSE_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
 COLLAPSE_ON_ACTIONS = Path("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
-FOCUS_TREE = Path("common/national_focus/ADISCORD_vorkerland_focus.txt")
+FOCUS_TREE = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
 FOCUS_DECISION_FILES = (
     Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),
 )

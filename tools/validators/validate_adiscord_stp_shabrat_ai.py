@@ -12,13 +12,14 @@ if str(_REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPOSITORY_ROOT))
 
 from tools.lib.paths import repository_root
+from tools.lib.focus_sources import read_focus_source
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
 ROOT = repository_root()
 PLANS = ROOT / "common/ai_strategy_plans/ADISCORD_STP_plans.txt"
 STRATEGY = ROOT / "common/ai_strategy/ADISCORD_STP_civil_war.txt"
-FOCUS = ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
+FOCUS = ROOT / "focus_trees/STP"
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 
@@ -193,7 +194,7 @@ FORBIDDEN_PLAN_FOCUSES = PARTY_FOCUSES | {
 
 
 def read(path: Path) -> str:
-    return path.read_text(encoding="utf-8")
+    return read_focus_source(path, encoding="utf-8")
 
 
 def named_block(source: str, name: str) -> str:

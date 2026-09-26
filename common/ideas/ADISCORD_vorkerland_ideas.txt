@@ -1670,7 +1670,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		# ----------------------------------------------------------------
 		# Claimant depth branches: war economy, variant doctrine, late war,
 		# legitimacy and diplomacy. Every spirit below is earned by exactly
-		# one focus in ADISCORD_vorkerland_focus.txt. The doctrine
+		# one focus in Vorkerland/iba_norvane/focuses.txt. The doctrine
 		# pairs are deliberately asymmetric between the two variants of the
 		# same claimant so the two AIs field visibly different armies.
 		# ----------------------------------------------------------------
