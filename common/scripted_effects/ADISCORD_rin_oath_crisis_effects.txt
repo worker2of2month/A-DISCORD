@@ -39,6 +39,8 @@ ADISCORD_rin_start_oath_civil_war = {
 			save_global_event_target_as = ADISCORD_rin_northern_court
 			set_country_flag = ADISCORD_rin_northern_crown_side
 			set_cosmetic_tag = RIN_northern_court
+			recruit_character = RIN_Northern_Court_Regency
+			promote_character = { character = RIN_Northern_Court_Regency ideology = chauvinism_ideology }
 			add_ideas = RIN_northern_crown_columns
 			add_manpower = 1000
 			add_equipment_to_stockpile = {

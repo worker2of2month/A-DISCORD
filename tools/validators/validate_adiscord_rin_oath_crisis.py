@@ -18,12 +18,15 @@ EFFECTS = Path("common/scripted_effects/ADISCORD_rin_oath_crisis_effects.txt")
 TRIGGERS = Path("common/scripted_triggers/ADISCORD_rin_oath_crisis_triggers.txt")
 ON_ACTIONS = Path("common/on_actions/02_ADISCORD_rin_oath_crisis_on_actions.txt")
 IDEAS = Path("common/ideas/ADISCORD_inner_frontier_ideas.txt")
+CHARACTERS = Path("common/characters/ADISCORD_inner_frontier_characters.txt")
 LOCALISATION_PATHS = tuple(
     Path("localisation/russian") / filename
     for filename in (
         "countries_l_russian.yml",
         "politics_l_russian.yml",
         "events_l_russian.yml",
+        "nsb_characters_l_russian.yml",
+        "parties_l_russian.yml",
     )
 )
 MON_HISTORY = Path("history/countries/MON - Montar Empire.txt")
@@ -82,7 +85,7 @@ def collect_issues() -> list[str]:
         path: read(path)
         for path in (
             EVENTS, DECISIONS, CATEGORIES, EFFECTS, TRIGGERS, ON_ACTIONS,
-            IDEAS, MON_HISTORY, RIN_HISTORY, RIN_COUNTRY, RIN_OOB,
+            IDEAS, CHARACTERS, MON_HISTORY, RIN_HISTORY, RIN_COUNTRY, RIN_OOB,
         )
     }
 
@@ -260,6 +263,8 @@ def collect_issues() -> list[str]:
         "save_global_event_target_as = ADISCORD_rin_northern_court",
         "save_global_event_target_as = ADISCORD_rin_southern_charter",
         "set_cosmetic_tag = RIN_northern_court",
+        "recruit_character = RIN_Northern_Court_Regency",
+        "promote_character = { character = RIN_Northern_Court_Regency ideology = chauvinism_ideology }",
         "activate_mission = ADISCORD_rin_palatin_breakup_mission",
     ):
         if token not in split:
@@ -363,6 +368,20 @@ def collect_issues() -> list[str]:
             rin_country,
         ):
             issues.append(f"RIN common country definition lacks authoritative {field} = {expected}")
+    characters = texts[CHARACTERS]
+    try:
+        regency = named_block(characters, "RIN_Northern_Court_Regency")
+    except ValueError as exc:
+        issues.append(str(exc))
+        regency = ""
+    for token in (
+        "GFX_Portrait_Forul_Generic_9",
+        "ideology = chauvinism_ideology",
+        "desc = RIN_Northern_Court_Regency_desc",
+    ):
+        if token not in regency:
+            issues.append(f"RIN northern court regency lacks {token}")
+
     rin_oob = texts[RIN_OOB]
     if rin_oob.count("division = {") != 5:
         issues.append("RIN must retain its five-division generated starting OOB")
@@ -396,6 +415,10 @@ def collect_issues() -> list[str]:
     localisation = "\n".join(read(path) for path in LOCALISATION_PATHS)
     for key in (
         "RIN_northern_court",
+        "RIN_Northern_Court_Regency",
+        "RIN_Northern_Court_Regency_desc",
+        "RIN_chauvinism_party",
+        "RIN_chauvinism_party_long",
         "ADISCORD_rin_oath_crisis_category",
         "ADISCORD_rin_palatin_breakup_mission",
         "ADISCORD_rin_crisis.1.t",

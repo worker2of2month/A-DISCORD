@@ -530,6 +530,8 @@
  BOR_humanism_party: "Congress of Border Communities"
  DOL_pragmatism_party: "Council of Road Districts"
  RIN_hedonism_party: "Court of Two Oaths"
+ RIN_chauvinism_party: "Regency Council"
+ RIN_chauvinism_party_long: "Northern Court Regency Council"
  KRM_utilitarism_party: "Chamber of Mines and Roads"
  LMN_etatism_party: "Emergency Sanitary Commission"
  RLY_technocracy_party: "Station Council"
