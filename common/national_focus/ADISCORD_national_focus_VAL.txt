@@ -3481,7 +3481,6 @@ focus_tree = {
 		x = 42
 		y = 12
 		cost = 10
-		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		prerequisite = { focus = VAL_Armored_Contract_Companies }
 		available = {
 			has_capitulated = no
