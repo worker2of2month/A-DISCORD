@@ -587,6 +587,7 @@ ADISCORD_vorkerland_setup_sla = {
 	log = "[ADISCORD Vorkerland] SLA state ownership assigned"
 	SLA = {
 		set_capital = { state = 49 }
+		build_railway = { level = 2 fallback = yes start_state = 49 target_state = 191 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
@@ -613,6 +614,7 @@ ADISCORD_vorkerland_setup_rza = {
 	log = "[ADISCORD Vorkerland] RZA state ownership assigned"
 	RZA = {
 		set_capital = { state = 177 }
+		build_railway = { level = 2 fallback = yes start_state = 177 target_state = 220 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
@@ -636,6 +638,7 @@ ADISCORD_vorkerland_setup_mlr = {
 	log = "[ADISCORD Vorkerland] MLR state ownership assigned"
 	MLR = {
 		set_capital = { state = 152 }
+		build_railway = { level = 2 fallback = yes start_state = 152 target_state = 189 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
@@ -658,6 +661,7 @@ ADISCORD_vorkerland_setup_ert = {
 	log = "[ADISCORD Vorkerland] ERT state ownership assigned"
 	ERT = {
 		set_capital = { state = 169 }
+		build_railway = { level = 2 fallback = yes start_state = 169 target_state = 171 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
@@ -681,6 +685,7 @@ ADISCORD_vorkerland_setup_irt = {
 	log = "[ADISCORD Vorkerland] IRT state ownership assigned"
 	IRT = {
 		set_capital = { state = 181 }
+		build_railway = { level = 2 fallback = yes start_state = 181 target_state = 178 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes
@@ -705,6 +710,7 @@ ADISCORD_vorkerland_setup_sca = {
 	log = "[ADISCORD Vorkerland] SCA state ownership assigned"
 	SCA = {
 		set_capital = { state = 173 }
+		build_railway = { level = 2 fallback = yes start_state = 173 target_state = 211 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 		ADISCORD_economy_initialize_country = yes

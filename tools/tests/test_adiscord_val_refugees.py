@@ -1005,6 +1005,42 @@ class WastelandCampaignTests(unittest.TestCase):
             self.assertFalse(matches_conditions(trigger, {**facts, required: False}, "VAL"), required)
         self.assertFalse(matches_conditions(trigger, {**facts, ("VAL", "has_war_with", "ERT"): True}, "VAL"))
 
+    def test_late_expansion_alignment_cannot_deadlock_ai(self):
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+
+        source = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8-sig")
+        southern = named_block(source, "VAL_southern_expansion_available")
+        eastern = named_block(source, "VAL_eastern_expansion_available")
+        self.assertNotIn("is_in_faction = no", southern)
+        self.assertNotIn("is_subject = no", southern)
+        self.assertIn("NOT = { is_subject_of = VAL }", southern)
+        self.assertNotIn("is_in_faction = no", eastern)
+        self.assertNotIn("is_subject = no", eastern)
+        self.assertIn("NOT = { is_subject_of = VAL }", eastern)
+        self.assertIn("NOT = { country_exists = ERT }", eastern)
+        self.assertIn("ERT = { is_subject_of = VAL }", eastern)
+
+    def test_southern_expansion_routes_ert_capitulation_to_wca_settlement(self):
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+
+        source = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8-sig")
+        managed = named_block(source, "VAL_wasteland_capitulation_managed")
+        self.assertIn("has_completed_focus = VAL_Southern_Expansion", managed)
+
+    def test_late_expansion_focuses_have_priority_and_terminal_bypass(self):
+        source = (ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt").read_text(encoding="utf-8-sig")
+        for focus_id, target, priority in (
+            ("VAL_Southern_Expansion", "ERT", 120),
+            ("VAL_Eastern_Expansion", "IRT", 130),
+        ):
+            id_pos = source.index(f"id = {focus_id}")
+            start = source.rfind("focus = {", 0, id_pos)
+            next_focus = source.find("\n\tfocus = {", id_pos)
+            block = source[start: next_focus if next_focus != -1 else len(source)]
+            self.assertIn(f"NOT = {{ country_exists = {target} }}", block)
+            self.assertIn(f"{target} = {{ is_subject_of = VAL }}", block)
+            self.assertIn(f"ai_will_do = {{ base = {priority} }}", block)
+
     def test_administration_cannot_appear_before_war_or_take_irem(self):
         charter = self.effects["VAL_form_wasteland_administration"]
         guard = next(e.value for e in charter[0].value if e.key == "limit")

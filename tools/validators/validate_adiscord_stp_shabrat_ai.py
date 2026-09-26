@@ -112,6 +112,7 @@ RECONSTRUCTION_FOCUSES = (
     "STP_pw_republic_officer_school",
     "STP_pw_republic_supply_service",
     "STP_pw_republic_professional_service",
+    "STP_pw_take_bezhaysk",
     "STP_pw_republic_settled_state",
 )
 HEGEMONY_FOCUSES = (
@@ -128,11 +129,12 @@ HEGEMONY_FOCUSES = (
     "STP_pc_heg_lock",
     "STP_pc_heg_person",
     "STP_pc_heg_regional_system",
+    "STP_pw_take_bezhaysk",
+    "STP_pc_heg_nod_break",
+    "STP_pc_heg_nod_force",
     "STP_pc_heg_val_audit",
     "STP_pc_heg_val_terms",
     "STP_pc_heg_val_force",
-    "STP_pc_heg_nod_break",
-    "STP_pc_heg_nod_force",
     "STP_pc_heg_clients",
     "STP_pc_heg_burden",
     "STP_pc_heg_administrations",

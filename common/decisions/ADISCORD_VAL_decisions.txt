@@ -666,6 +666,49 @@ VAL_contract_management = {
 		ai_will_do = { base = 2 modifier = { factor = 2 has_stability < 0.60 } }
 	}
 
+
+	VAL_campaign_contracts_mean_order = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+		}
+		cost = 35
+		days_remove = 45
+		days_re_enable = 75
+		modifier = {
+			stability_weekly = 0.002
+		}
+		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		remove_effect = { ADISCORD_campaign_slot_release = yes }
+		ai_will_do = { base = 3 modifier = { factor = 3 has_stability < 0.60 } }
+	}
+
+	VAL_campaign_state_keeps_its_word = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+		}
+		cost = 50
+		days_remove = 60
+		days_re_enable = 90
+		modifier = {
+			stability_weekly = 0.003
+		}
+		complete_effect = { ADISCORD_campaign_slot_consume = yes }
+		remove_effect = { ADISCORD_campaign_slot_release = yes }
+		ai_will_do = { base = 3 modifier = { factor = 4 has_stability < 0.55 } }
+	}
+
 	VAL_campaign_no_promise_without_payment = {
 		icon = generic_propaganda_campaigns
 		allowed = { tag = VAL }
@@ -988,7 +1031,7 @@ VAL_reclamation = {
 		icon = generic_construction
 		allowed = { tag = VAL }
 		state_target = yes
-		targets = { 24 42 48 54 55 56 57 }
+		targets = { 24 42 48 54 55 56 57 168 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
 			has_completed_focus = VAL_reclamation_survey
@@ -1017,7 +1060,7 @@ VAL_reclamation = {
 		icon = generic_construction
 		allowed = { tag = VAL }
 		state_target = yes
-		targets = { 24 42 48 54 55 56 57 }
+		targets = { 24 42 48 54 55 56 57 168 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
 			has_completed_focus = VAL_reclamation_survey
@@ -1047,7 +1090,7 @@ VAL_reclamation = {
 		icon = generic_construction
 		allowed = { tag = VAL }
 		state_target = yes
-		targets = { 24 42 48 54 55 56 57 }
+		targets = { 24 42 48 54 55 56 57 168 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
 			has_completed_focus = VAL_reclamation_survey
@@ -1077,7 +1120,7 @@ VAL_reclamation = {
 		icon = generic_construction
 		allowed = { tag = VAL }
 		state_target = yes
-		targets = { 24 42 48 54 55 56 57 }
+		targets = { 24 42 48 54 55 56 57 168 }
 		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
 			has_completed_focus = VAL_reclamation_survey

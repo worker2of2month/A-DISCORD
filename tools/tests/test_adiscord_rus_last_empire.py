@@ -129,6 +129,26 @@ class RusLastEmpireTests(unittest.TestCase):
                 state = int(re.search(r"\bid\s*=\s*(\d+)", source).group(1))
                 self.assertIn(state, assigned, path.name)
 
+    def test_dirty_republics_build_internal_rail_corridors(self) -> None:
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+
+        effects = read(EFFECT_FILE)
+        corridors = {
+            "sla": (49, 191),
+            "rza": (177, 220),
+            "mlr": (152, 189),
+            "ert": (169, 171),
+            "irt": (181, 178),
+            "sca": (173, 211),
+        }
+        for suffix, (start, target) in corridors.items():
+            setup = named_block(effects, f"ADISCORD_vorkerland_setup_{suffix}")
+            self.assertIn(
+                f"build_railway = {{ level = 2 fallback = yes start_state = {start} target_state = {target} }}",
+                setup,
+                suffix,
+            )
+
     def test_opened_zone_load_repair_preserves_conquests_and_follows_current_owner(self) -> None:
         from tools.validators.validate_adiscord_vorkerland_collapse import named_block
 

@@ -1183,7 +1183,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_GUARANTEE_MINISTERS
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		relative_position_id = STP_Govern_In_His_Name
 		x = -8
 		y = 2
@@ -1249,7 +1249,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_defense_budget
-		icon = GFX_focus_STP_defense_budget
+		icon = GFX_focus_STP_defense_budget_tank
 		relative_position_id = STP_Govern_In_His_Name
 		x = -6
 		y = 2
@@ -1314,7 +1314,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_DISTRICT_GOVERNMENT
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
 		relative_position_id = STP_Govern_In_His_Name
 		x = -3
 		y = 2
@@ -1333,7 +1333,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_capital_reserve
-		icon = GFX_focus_STP_cw_capital_reserve
+		icon = GFX_focus_STP_cw_capital_reserve_armored
 		relative_position_id = STP_Govern_In_His_Name
 		x = 0
 		y = 2
@@ -1376,7 +1376,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_EMERGENCY_PRESIDIUM
-		icon = GFX_focus_STP_Side_With_The_Party
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		relative_position_id = STP_Govern_In_His_Name
 		x = 4
 		y = 4
@@ -3146,7 +3146,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		completion_reward = { unlock_decision_tooltip = STP_pw_launch_bezhaysk_operation  }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 20 }
 	}
 
 	focus = {
@@ -5002,7 +5002,15 @@ focus_tree = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pc_focus_available = yes
 			}
-			hidden_trigger = { STP_pc_hegemony_continues = yes } hidden_trigger = { check_variable = { var = STP_pc_course value = 1 compare = equals } }
+			hidden_trigger = { STP_pc_hegemony_continues = yes }
+			hidden_trigger = { check_variable = { var = STP_pc_course value = 1 compare = equals } }
+			OR = {
+				is_ai = no
+				AND = {
+					STP_shabrat_ai_bezhaysk_resolved = yes
+					STP_shabrat_ai_nodrul_resolved = yes
+				}
+			}
 		}
 		prerequisite = { focus = STP_pc_heg_lock }
 		ai_will_do = { base = 2 }
@@ -5031,7 +5039,15 @@ focus_tree = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pc_focus_available = yes
 			}
-			hidden_trigger = { STP_pc_hegemony_continues = yes } hidden_trigger = { check_variable = { var = STP_pc_course value = 1 compare = equals } }
+			hidden_trigger = { STP_pc_hegemony_continues = yes }
+			hidden_trigger = { check_variable = { var = STP_pc_course value = 1 compare = equals } }
+			OR = {
+				is_ai = no
+				AND = {
+					STP_shabrat_ai_bezhaysk_resolved = yes
+					STP_shabrat_ai_nodrul_resolved = yes
+				}
+			}
 		}
 		prerequisite = { focus = STP_pc_heg_val_audit }
 		mutually_exclusive = { focus = STP_pc_val_renew_aid focus = STP_pc_val_border_compact }
@@ -5054,6 +5070,13 @@ focus_tree = {
 			VAL = { exists = yes is_subject = no has_capitulated = no }
 			NOT = { has_war_with = VAL is_in_faction_with = VAL has_country_flag = STP_pc_val_terms_accepted }
 			custom_trigger_tooltip = { tooltip = STP_pc_val_refused_tt has_country_flag = STP_pc_val_terms_refused }
+			OR = {
+				is_ai = no
+				AND = {
+					STP_shabrat_ai_bezhaysk_resolved = yes
+					STP_shabrat_ai_nodrul_resolved = yes
+				}
+			}
 		}
 		prerequisite = { focus = STP_pc_heg_val_terms focus = STP_pc_val_renew_aid focus = STP_pc_val_border_compact }
 		mutually_exclusive = { focus = STP_pc_val_ratify }
@@ -5069,16 +5092,22 @@ focus_tree = {
 		y = 12
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
-		available = { STP_pc_can_offer_nod_terms = yes
+		available = {
+			STP_pc_can_offer_nod_terms = yes
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pc_focus_available = yes
 			}
-			hidden_trigger = { STP_pc_hegemony_continues = yes } hidden_trigger = { check_variable = { var = STP_pc_course value = 1 compare = equals } }
+			hidden_trigger = { STP_pc_hegemony_continues = yes }
+			hidden_trigger = { check_variable = { var = STP_pc_course value = 1 compare = equals } }
+			OR = {
+				is_ai = no
+				STP_shabrat_ai_bezhaysk_resolved = yes
+			}
 		}
 		prerequisite = { focus = STP_pc_heg_lock }
 		mutually_exclusive = { focus = STP_pc_nod_recognition }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 12 }
 		completion_reward = {
 			effect_tooltip = { add_ideas = STP_pc_heg_nod_break_delta } hidden_effect = { add_to_variable = { var = STP_pw_supply_consumption_factor value = -0.05 } STP_pw_refresh_modifier = yes set_variable = { var = STP_pc_nod_offer_kind value = 2 } NOD = { country_event = { id = ADISCORD_STP_pc.18 days = 1 } } } custom_effect_tooltip = STP_pc_nod_demand_offer_tt
 		}
@@ -5092,16 +5121,23 @@ focus_tree = {
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
-			STP_pc_can_confront_nod = yes custom_trigger_tooltip = { tooltip = STP_pc_nod_refused_tt has_country_flag = STP_pc_nod_terms_refused }
+			STP_pc_can_confront_nod = yes
+			custom_trigger_tooltip = { tooltip = STP_pc_nod_refused_tt has_country_flag = STP_pc_nod_terms_refused }
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pc_focus_available = yes
 			}
-			hidden_trigger = { STP_pc_hegemony_continues = yes } hidden_trigger = { check_variable = { var = STP_pc_course value = 1 compare = equals } } NOD = { exists = yes }
+			hidden_trigger = { STP_pc_hegemony_continues = yes }
+			hidden_trigger = { check_variable = { var = STP_pc_course value = 1 compare = equals } }
+			NOD = { exists = yes }
+			OR = {
+				is_ai = no
+				STP_shabrat_ai_bezhaysk_resolved = yes
+			}
 		}
 		prerequisite = { focus = STP_pc_heg_nod_break focus = STP_pc_nod_recognition }
 		mutually_exclusive = { focus = STP_pc_nod_ratify }
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 12 }
 		completion_reward = {
 			add_intel = { target = NOD army_intel = 20 } unlock_decision_tooltip = STP_pw_prepare_nod_campaign		}
 	}

@@ -667,6 +667,8 @@ class TestValPropagandaRewards(unittest.TestCase):
     campaigns = (
         "VAL_campaign_rifles_and_bread",
         "VAL_campaign_contracts_feed_families",
+        "VAL_campaign_contracts_mean_order",
+        "VAL_campaign_state_keeps_its_word",
         "VAL_campaign_no_promise_without_payment",
         "VAL_campaign_the_mine_was_stolen",
     )
@@ -692,7 +694,7 @@ class TestValPropagandaRewards(unittest.TestCase):
         reward = named_block(self.focus("VAL_Ministry_Of_Contract_Memory"), "completion_reward")
         self.assertRegex(reward, r"(?m)^\t{3}add_political_power = 50$")
         funds = self.number(reward, "add_political_power")
-        for decision_id in self.campaigns[:3]:
+        for decision_id in self.campaigns[:-1]:
             with self.subTest(decision=decision_id):
                 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
                 rewards = parse_clausewitz(reward)[0].value
@@ -787,6 +789,18 @@ class TestValPropagandaRewards(unittest.TestCase):
         for effect in ("complete_effect", "remove_effect"):
             self.assertEqual(named_block(decision, effect).count("ADISCORD_economy_mark_dirty = yes"), 1)
 
+    def test_stability_campaigns_are_dedicated_and_meaningful(self) -> None:
+        expected = {
+            "VAL_campaign_contracts_mean_order": 0.002,
+            "VAL_campaign_state_keeps_its_word": 0.003,
+        }
+        for decision_id, weekly_gain in expected.items():
+            with self.subTest(decision=decision_id):
+                modifier = named_block(self.decision(decision_id), "modifier")
+                self.assertEqual(self.number(modifier, "stability_weekly"), weekly_gain)
+                self.assertNotIn("consumer_goods_factor", modifier)
+                self.assertNotIn("war_support_weekly", modifier)
+
     def test_every_campaign_uses_and_returns_one_shared_slot(self) -> None:
         for decision_id in self.campaigns:
             with self.subTest(decision=decision_id):
@@ -797,7 +811,7 @@ class TestValPropagandaRewards(unittest.TestCase):
                 self.assertGreater(self.number(decision, "days_remove"), 0)
 
     def test_campaign_tooltips_and_free_slot_display_exist_in_both_languages(self) -> None:
-        keys = ("VAL_campaign_slot_granted_tt", "VAL_campaign_second_slot_tt", "VAL_campaign_mine_unlock_tt", "VAL_campaign_slot_available_tt", "VAL_contract_management_desc", "VAL_Ministry_Of_Contract_Memory_desc", "VAL_Two_Concurrent_Narratives_desc", "VAL_campaign_no_promise_without_payment_desc")
+        keys = ("VAL_campaign_slot_granted_tt", "VAL_campaign_second_slot_tt", "VAL_campaign_mine_unlock_tt", "VAL_campaign_slot_available_tt", "VAL_contract_management_desc", "VAL_Ministry_Of_Contract_Memory_desc", "VAL_Two_Concurrent_Narratives_desc", "VAL_campaign_contracts_mean_order_desc", "VAL_campaign_state_keeps_its_word_desc", "VAL_campaign_no_promise_without_payment_desc")
         for language in ("russian", "english"):
             path = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))

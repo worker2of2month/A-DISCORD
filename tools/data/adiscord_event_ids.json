@@ -493,6 +493,14 @@
       "status": "active"
     },
     {
+      "id": "val_contract.355",
+      "namespace": "val_contract",
+      "number": 355,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_contract",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_superevent.7",
       "namespace": "ADISCORD_superevent",
       "number": 7,

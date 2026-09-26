@@ -116,7 +116,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
             self.assertIsNotNone(resource)
             self.assertIn("§Y", stelander.group(1))
             self.assertIn("§Y", resource.group(1))
-            self.assertIn("$VAL_Ministry_Auditors$", resource.group(1))
+            self.assertIn("$VAL_Operational_Directorate$", resource.group(1))
 
     def test_first_act_is_a_visible_roadmap_not_a_single_button(self) -> None:
         first_act = (
@@ -185,6 +185,18 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 focus_id,
             )
 
+    def test_contracts_outlive_kings_is_a_visible_capstone(self) -> None:
+        body = focus_block(self.focuses, "VAL_Contracts_Outlive_Kings")
+        self.assertNotIn("allow_branch", body)
+        self.assertNotIn("dynamic = yes", body)
+        for dependency in (
+            "VAL_State_Contract",
+            "VAL_Industrial_Mobilization_Plan",
+            "VAL_Army_Of_The_Ledger",
+        ):
+            self.assertIn(f"prerequisite = {{ focus = {dependency} }}", body)
+        self.assertRegex(body, r"ai_will_do\s*=\s*\{[^}]*base\s*=\s*1000")
+
     def test_foreign_clearing_house_waits_for_the_northern_choice(self) -> None:
         gate = allow(self.focuses, "VAL_Foreign_Broker_Licences")
         self.assertIn("VAL_Trading_Partners", gate)
@@ -225,7 +237,8 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertIn("ADISCORD_nam_resource_war_active = yes", resource)
         self.assertNotIn("has_completed_focus =", resource)
         root = focus_block(self.focuses, "VAL_Resource_War_Contracts")
-        self.assertIn("prerequisite = { focus = VAL_Ministry_Auditors }", root)
+        self.assertIn("prerequisite = { focus = VAL_Operational_Directorate }", root)
+        self.assertNotIn("prerequisite = { focus = VAL_Ministry_Auditors }", root)
 
         vorkerland = allow(self.focuses, "VAL_Vorkerland_Contracts_Burn")
         self.assertIn("ADISCORD_vorkerland_collapse_wars_started", vorkerland)

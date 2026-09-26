@@ -1558,6 +1558,29 @@ STP_ps_hedersett_available = {
 	STP_rufus_hedersett = { NOT = { has_character_flag = STP_cw_arrested } }
 }
 
+# AI sequencing treats an unavailable external target as resolved so Shabrat does not
+# deadlock if another power has already removed it from the independent campaign map.
+STP_shabrat_ai_bezhaysk_resolved = {
+	OR = {
+		NOT = { BJK = { exists = yes } }
+		BJK = { has_capitulated = yes }
+		BJK = { is_subject = yes }
+		BJK = { is_in_faction_with = STS }
+		NOT = { BJK = { owns_state = 41 } }
+		41 = { is_owned_by = STS }
+	}
+}
+
+STP_shabrat_ai_nodrul_resolved = {
+	OR = {
+		NOT = { NOD = { exists = yes } }
+		NOD = { has_capitulated = yes }
+		NOD = { is_subject = yes }
+		NOD = { is_in_faction_with = STS }
+		has_country_flag = STP_pc_nod_terms_accepted
+	}
+}
+
 # COUNTRY: the postwar resistance may open a separate campaign against Bezhaysk.
 STP_pw_can_attack_bezhaysk = {
 	tag = STS

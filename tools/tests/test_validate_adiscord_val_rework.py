@@ -2014,9 +2014,17 @@ class ValContractFormationTests(unittest.TestCase):
                 self.assertTrue(any(e.key == "check_variable" and scalar(e.value, "var") == "ADISCORD_economy_treasury" and scalar(e.value, "value") == "1000" for e in walk(block(gate, "trigger"))))
         payment = only_named_block(self, effects, "VAL_cw_complete_arms_contract")
         self.assertIn("ADISCORD_economy_spend_500 = yes ADISCORD_economy_spend_500 = yes", payment)
+        self.assertNotIn("else = { set_country_flag = VAL_cw_arms_contract_fulfilled }", payment)
+        self.assertNotIn("flag = VAL_cw_arms_contract_fulfilled value = 2", payment)
+        self.assertNotIn("army_experience = 5", payment)
         resolver = only_named_block(self, (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8"), "STP_ps_resolve_val_supply")
         self.assertIn("value = STP_ps_val_receipt_money", resolver)
         self.assertIn("var = ADISCORD_economy_treasury value = STP_ps_cargo_payment", resolver)
+        self.assertIn("VAL_cw_arms_contract_fulfilled", resolver)
+        self.assertIn("army_experience = 5", resolver)
+        self.assertIn("NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled }", resolver)
+        refund = only_named_block(self, (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8"), "STP_ps_refund_val_supply")
+        self.assertIn("clr_country_flag = VAL_cw_arms_contract_fulfilled", refund)
 
     def test_donor_selects_the_package_and_buyer_cannot_upgrade_it(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
@@ -2285,6 +2293,8 @@ class ValContractFormationTests(unittest.TestCase):
                     self.assertEqual(cash["VAL"], 0, "The donor is paid only at settlement")
                     self.assertEqual(sum(stock["STS"][rifle].values()), 0)
                     self.assertEqual(("VAL", "STP_ps_val_departure") in missions, paid)
+                    self.assertNotIn(("VAL", "VAL_cw_arms_contract_fulfilled"), flags)
+                    self.assertEqual((experience_rewards, authority_rewards), (0, 0))
                     execute(scripts["STP_ps_dispatch_val_supply"])
                     self.assertNotIn(("VAL", "STP_ps_val_receipt_rifles"), variables)
                     self.assertEqual(("VAL", "VAL_cw_arms_contract_fulfilled") in flags, paid)
@@ -2338,7 +2348,7 @@ class ValReclamationTests(unittest.TestCase):
                 rows = named_blocks(decisions, "VAL_reclamation_" + key)
                 self.assertEqual(len(rows), 1)
                 script = rows[0]
-                self.assertIn("targets = { 24 42 48 54 55 56 57 }", script)
+                self.assertIn("targets = { 24 42 48 54 55 56 57 168 }", script)
                 self.assertIn("days_remove = 90", script)
                 self.assertIn("cost = 0", script)
                 self.assertIn("ADISCORD_economy_can_spend_500 = yes", script)
@@ -2350,6 +2360,12 @@ class ValReclamationTests(unittest.TestCase):
                 self.assertNotIn("has_decision", script)
         effects = EFFECTS_PATH.read_text(encoding="utf-8")
         self.assertEqual(len(named_blocks(effects, "VAL_reclamation_finish_project")), 1)
+        for resolver, helper in (
+            ("VAL_reclamation_refund_project", "VAL_reclamation_refund_state_project"),
+            ("VAL_reclamation_finish_project", "VAL_reclamation_finish_state_project"),
+            ("VAL_reclamation_reconcile_project", "VAL_reclamation_reconcile_state_project"),
+        ):
+            self.assertIn(f"168 = {{ {helper} = yes }}", named_blocks(effects, resolver)[0])
 
 
 

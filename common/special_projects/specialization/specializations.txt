@@ -1,1 +1,24 @@
-# Intentionally empty: masks incompatible vanilla 1.19 file for A-Discord total conversion.
+# A-Discord keeps special-project projects disabled, but the engine still needs
+# the four canonical specialization records because facilities and generated
+# scientists reference them at runtime.
+
+specialization_nuclear = {
+	blueprint_image = GFX_generic_plane_blueprint_background
+	color = { 255 255 0 }
+	program_background = "GFX_sp_facility_card_bg"
+}
+
+specialization_naval = {
+	color = { 0 0 255 }
+	program_background = "GFX_sp_facility_card_bg"
+}
+
+specialization_air = {
+	color = { 255 0 0 }
+	program_background = "GFX_sp_facility_card_bg"
+}
+
+specialization_land = {
+	color = { 0 255 0 }
+	program_background = "GFX_sp_facility_card_bg"
+}

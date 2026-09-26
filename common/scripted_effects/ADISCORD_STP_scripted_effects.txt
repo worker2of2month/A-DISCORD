@@ -3624,6 +3624,40 @@ STP_cw_snapshot_capitulation_occupier = {
 }
 
 # Military-result callback only. NOD intervenes for the party, not for annexation.
+# COUNTRY-AGNOSTIC. If Nodrul is defeated by a third power while its own
+# northern coalition campaign is still open, close that theatre without awarding
+# a victory to either side. This prevents a new overlord inheriting stale wars.
+STP_cw_abort_northern_campaign_external_defeat = {
+	NOD = {
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_cw_northern_campaign_status
+					value = 1
+					compare = equals
+				}
+			}
+			set_variable = { var = STP_cw_northern_campaign_status value = 4 }
+			if = { limit = { has_war_with = YPR } white_peace = YPR }
+			if = { limit = { has_war_with = COF } white_peace = COF }
+			if = { limit = { has_war_with = TFF } white_peace = TFF }
+			clr_country_flag = NOD_cw_northern_war_started
+			STP_cw_end_northern_colonial_war = yes
+			STP_cw_dismantle_northern_alliance = yes
+			YPR = { set_major = no }
+			COF = { set_major = no }
+			TFF = { set_major = no }
+			VAL = {
+				if = {
+					limit = { exists = yes }
+					VAL_northern_aid_daily = yes
+				}
+			}
+			log = "[STP_NORTH] NOD northern campaign closed after external defeat"
+		}
+	}
+}
+
 STP_cw_end_nod_intervention = {
 	NOD = {
 		clr_country_flag = STP_ps_expedition_ready
@@ -6496,6 +6530,14 @@ STP_ps_refund_val_supply = {
 		set_temp_variable = { var = STP_ps_refund_rifles value = STP_ps_val_receipt_rifles }
 		set_temp_variable = { var = STP_ps_refund_money value = STP_ps_val_receipt_money }
 		set_temp_variable = { var = STP_ps_contract_type value = STP_ps_val_receipt_contract }
+		# Compatibility for saves from before fulfilment moved to convoy resolution.
+		if = {
+			limit = {
+				check_variable = { var = STP_ps_contract_type value = 0 compare = greater_than }
+				check_variable = { var = STP_ps_contract_type value = 3 compare = less_than }
+			}
+			clr_country_flag = VAL_cw_arms_contract_fulfilled
+		}
 		STP_ps_clear_val_receipt = yes
 		add_equipment_to_stockpile = { type = infantry_equipment amount = STP_ps_refund_rifles producer = VAL }
 		if = { limit = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } }
@@ -6551,6 +6593,28 @@ STP_ps_resolve_val_supply = {
 			add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_cargo_payment }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_cargo_payment }
 			ADISCORD_economy_mark_dirty = yes
+			# Paid Shabrat contracts become fulfilled only after the convoy resolves.
+			# Ordinary preparation shipments (type 0) and export cargo (type 3) do not.
+			if = {
+				limit = {
+					check_variable = { var = STP_ps_contract_type value = 0 compare = greater_than }
+					check_variable = { var = STP_ps_contract_type value = 3 compare = less_than }
+				}
+				# Old saves may already carry the premature fulfilled flag and rewards.
+				# In that case resolve the escrow without granting them a second time.
+				if = {
+					limit = { NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
+					if = {
+						limit = { check_variable = { var = STP_ps_contract_type value = 2 compare = equals } }
+						set_country_flag = { flag = VAL_cw_arms_contract_fulfilled value = 2 }
+					}
+					else = { set_country_flag = VAL_cw_arms_contract_fulfilled }
+					army_experience = 5
+					set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
+					VAL_change_contract_authority = yes
+					country_event = { id = ADISCORD_STP_cw.51 }
+				}
+			}
 			if = { limit = { check_variable = { var = STP_ps_contract_type value = 3 compare = equals } }
 				if = { limit = { NOT = { has_idea = VAL_export_income_1 } } add_timed_idea = { idea = VAL_export_income_1 days = 70 } }
 				else = { add_timed_idea = { idea = VAL_export_income_2 days = 70 } }

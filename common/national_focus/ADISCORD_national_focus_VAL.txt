@@ -706,6 +706,8 @@ focus_tree = {
 			custom_effect_tooltip = VAL_campaign_slot_granted_tt
 			unlock_decision_tooltip = VAL_campaign_rifles_and_bread
 			unlock_decision_tooltip = VAL_campaign_contracts_feed_families
+			unlock_decision_tooltip = VAL_campaign_contracts_mean_order
+			unlock_decision_tooltip = VAL_campaign_state_keeps_its_word
 			unlock_decision_tooltip = VAL_campaign_no_promise_without_payment
 			custom_effect_tooltip = VAL_campaign_mine_unlock_tt
 			hidden_effect = {
@@ -1945,23 +1947,20 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Contracts_Outlive_Kings
-		dynamic = yes
 		icon = GFX_focus_VAL_Contracts_Outlive_Kings
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 20
 		y = 12
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_State_Contract
-			has_completed_focus = VAL_Industrial_Mobilization_Plan
-			has_completed_focus = VAL_Army_Of_The_Ledger
-		}
+		# Keep the capstone visible. The prerequisite graph already handles availability,
+		# while hiding it behind allow_branch could leave the dynamic layout stale for AI.
 		prerequisite = { focus = VAL_State_Contract }
 		prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
 		prerequisite = { focus = VAL_Army_Of_The_Ledger }
+		# Mandatory progression capstone: once the three core programmes are complete,
+		# the AI should close the opening act before spending time on side branches.
 		ai_will_do = {
-			base = 1
-
+			base = 1000
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Contracts_Outlive_Kings_tt
@@ -2173,6 +2172,7 @@ focus_tree = {
 					55 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
 					56 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
 					57 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
+					168 = { is_owned_by = ROOT is_controlled_by = ROOT has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } NOT = { check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals } } }
 				}
 			}
 		}
@@ -2546,6 +2546,12 @@ focus_tree = {
 				VAL_southern_expansion_available = yes
 			}
 		}
+		bypass = {
+			OR = {
+				NOT = { country_exists = ERT }
+				ERT = { is_subject_of = VAL }
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Southern_Expansion_tt
@@ -2553,7 +2559,7 @@ focus_tree = {
 			declare_war_on = { target = ERT type = take_state_focus generator = { 167 170 171 184 185 203 } }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
 		}
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 120 }
 	}
 	focus = {
 		id = VAL_Eastern_Expansion
@@ -2573,13 +2579,19 @@ focus_tree = {
 				VAL_eastern_expansion_available = yes
 			}
 		}
+		bypass = {
+			OR = {
+				NOT = { country_exists = IRT }
+				IRT = { is_subject_of = VAL }
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_declares_war_irt_tt
 			declare_war_on = { target = IRT type = take_state_focus generator = { 178 180 181 182 183 193 206 207 } }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
 		}
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 130 }
 	}
 
 	focus = {
@@ -2681,6 +2693,29 @@ focus_tree = {
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Northern_Settlement_tt unlock_decision_tooltip = VAL_negotiate_yubora unlock_decision_tooltip = VAL_campaign_against_nod }
 		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = VAL_Break_The_Northern_Coalition
+		icon = GFX_goal_generic_major_war
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
+		x = 26
+		y = 15
+		cost = 5
+		prerequisite = { focus = VAL_Northern_Settlement }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_northern_coalition_available_tt
+				VAL_can_attack_northern_coalition = yes
+			}
+		}
+		bypass = { VAL_northern_coalition_resolved = yes }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_northern_coalition_war_tt
+			hidden_effect = { VAL_begin_northern_coalition_campaign = yes }
+		}
+		ai_will_do = { base = 30 }
 	}
 	focus = {
 		id = VAL_Stelander_Ultimatum
@@ -3210,7 +3245,7 @@ focus_tree = {
 		}
 		available = { custom_trigger_tooltip = { tooltip = VAL_resource_war_active_tt ADISCORD_nam_resource_war_active = yes } }
 		cancel_if_invalid = yes
-		prerequisite = { focus = VAL_Ministry_Auditors }
+		prerequisite = { focus = VAL_Operational_Directorate }
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Resource_War_Contracts_tt
