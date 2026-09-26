@@ -3245,7 +3245,7 @@ focus_tree = {
 		}
 		available = { custom_trigger_tooltip = { tooltip = VAL_resource_war_active_tt ADISCORD_nam_resource_war_active = yes } }
 		cancel_if_invalid = yes
-		prerequisite = { focus = VAL_Ministry_Auditors }
+		prerequisite = { focus = VAL_Operational_Directorate }
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Resource_War_Contracts_tt
