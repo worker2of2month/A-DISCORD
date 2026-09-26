@@ -1925,7 +1925,22 @@ option = {
  }
  custom_effect_tooltip = VAL_military_terms_tt
  custom_effect_tooltip = VAL_offer_status_VAL_military_offer_2
-hidden_effect = { if = { limit = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes any_owned_state = { NOT = { is_controlled_by = event_target:VAL_contract_partner } controller = { has_war_with = event_target:VAL_contract_partner } } } }
+hidden_effect = {
+	if = {
+		limit = {
+			has_completed_focus = VAL_Contingency_Ledgers
+			event_target:VAL_contract_partner = {
+				VAL_military_customer_eligible = yes
+				any_owned_state = {
+					NOT = {
+						is_controlled_by = event_target:VAL_contract_partner
+					}
+					controller = {
+						has_war_with = event_target:VAL_contract_partner
+					}
+				}
+			}
+		}
 if = { limit = { event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes } }
    event_target:VAL_contract_partner = { VAL_prepare_military_quote = yes }
    clear_global_event_target = VAL_military_target
@@ -2236,7 +2251,18 @@ hidden_effect = { if = { limit = { has_completed_focus = VAL_Contingency_Ledgers
   NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
   NOT = { has_country_flag = VAL_military_offer_pending }
   VAL_partner_desk_free = yes
-  event_target:VAL_contract_partner = { VAL_export_customer = yes has_war = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_idea = VAL_paid_military_advisors } NOT = { has_country_flag = VAL_export_customer_cooldown } } }
+event_target:VAL_contract_partner = {
+	VAL_export_customer = yes
+	has_war = yes
+	ADISCORD_economy_can_spend_100 = yes
+	NOT = {
+		has_idea = VAL_paid_military_advisors
+	}
+	NOT = {
+		has_country_flag = VAL_export_customer_cooldown
+	}
+}
+}
 add_political_power = -30
   set_country_flag = { flag = VAL_export_offer_pending days = 42 }
   event_target:VAL_contract_partner = {
@@ -2251,7 +2277,20 @@ add_political_power = -30
   NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
   NOT = { has_country_flag = VAL_military_offer_pending }
   VAL_partner_desk_free = yes
-  event_target:VAL_contract_partner = { VAL_export_customer = yes has_war = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_idea = VAL_paid_military_advisors } NOT = { has_country_flag = VAL_export_customer_cooldown } } } }  }
+event_target:VAL_contract_partner = {
+	VAL_export_customer = yes
+	has_war = yes
+	ADISCORD_economy_can_spend_100 = yes
+	NOT = {
+		has_idea = VAL_paid_military_advisors
+	}
+	NOT = {
+		has_country_flag = VAL_export_customer_cooldown
+	}
+}
+}
+}
+}
 }
 option = { name = VAL_menu_back hidden_effect = { country_event = { id = val_contract.361 } } }
 }
