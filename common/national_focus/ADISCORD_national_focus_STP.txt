@@ -1529,7 +1529,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_public_lists
-		icon = GFX_focus_STP_cw_public_lists
+		icon = GFX_focus_STP_cw_quiet_registers
 		relative_position_id = STP_Govern_In_His_Name
 		x = 8
 		y = 3
@@ -1558,7 +1558,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_quiet_registers
-		icon = GFX_focus_STP_cw_quiet_registers
+		icon = GFX_focus_STP_cw_public_lists
 		relative_position_id = STP_Govern_In_His_Name
 		x = 10
 		y = 3
