@@ -40,11 +40,11 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
         self.assertIsNotNone(mobile)
         self.assertEqual(mobile.group(1), "1")
 
-    def test_balance_pass_does_not_cut_wkr_home_guard(self):
+    def test_balance_pass_keeps_wkr_home_guard_bounded(self):
         home = named_block(self.effects, "ADISCORD_vorkerland_ensure_wkr_home_guard")
-        self.assertIn("add_manpower = 24000", home)
-        self.assertIn("amount = 1920 producer = WKR", home)
-        self.assertEqual(home.count("count = 4"), 2)
+        self.assertIn("add_manpower = 12000", home)
+        self.assertIn("amount = 960 producer = WKR", home)
+        self.assertEqual(home.count("count = 2"), 2)
 
     def test_theatre_package_is_not_rewritten_as_a_balance_shortcut(self):
         manifest = read("tools/lib/adiscord_vorkerland_theatre_manifest.py")

@@ -3580,4 +3580,22 @@ focus_tree = {
 		ai_will_do = { base = 9 }
 	}
 
+	# Late-game Kefreyt branch: the expensive assault battalion is a national
+	# capability rather than a universally available line unit.
+	focus = {
+		id = VAL_Armored_Assault_Corps
+		icon = GFX_goal_generic_special_forces
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
+		x = 50
+		y = 17
+		cost = 10
+		prerequisite = { focus = VAL_Marines_Of_The_Ledger }
+		available = { has_capitulated = no }
+		completion_reward = {
+			set_technology = { ADISCORD_tech_remote_weapon_tripods = 1 popup = yes }
+			add_army_experience = 20
+		}
+		ai_will_do = { base = 4 }
+	}
+
 }

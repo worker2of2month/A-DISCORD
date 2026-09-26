@@ -18,15 +18,25 @@ sys.dont_write_bytecode = True
 
 ROOT = Path(__file__).resolve().parents[3]
 GAME = Path('Z:/SteamLibrary/steamapps/common/Hearts of Iron IV')
+ARAB_TAGS = ('AZH', 'GLP', 'KDR', 'KYZ', 'MZR', 'RHM', 'SDR', 'SLF')
 CONFIG = {
     'COF': ROOT / 'gfx/models/units/APH_afg_militia.mesh',
     'YPR': GAME / 'gfx/models/units/eastern_european_infantry.mesh',
     'TFF': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
+    # Preserve the native rig and locators while replacing garments and kit.
+    'RUS': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
+    'SHL': ROOT / 'gfx/models/units/APH_irregular_infantry.mesh',
+    'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry.mesh',
+    'NAM': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
 }
 NORMALS = {
     'COF': ROOT / 'gfx/models/units/APH_afg_militia_normal.dds',
     'YPR': GAME / 'gfx/models/units/eastern_european_infantry_normal.dds',
     'TFF': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
+    'RUS': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
+    'SHL': ROOT / 'gfx/models/units/APH_irregular_infantry_normal.dds',
+    'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry_normal.dds',
+    'NAM': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
 }
 START = '# BEGIN ADISCORD northern infantry\n'
 END = '# END ADISCORD northern infantry\n'
@@ -74,23 +84,43 @@ def bindings():
     asset_path = ROOT / 'gfx/entities/zz_ADISCORD_country_infantry.asset'
     strip = lambda text: re.sub(re.escape(START) + '.*?' + re.escape(END), '', text, flags=re.S).rstrip() + '\n'
     gfx, asset = strip(gfx_path.read_text()), strip(asset_path.read_text())
+    # NAM already had eight generic base entities in the shared minor-country
+    # section. Remove those definitions before emitting the Arab replacement;
+    # duplicate entity names make Clausewitz keep the earlier mesh silently.
+    asset = re.sub(
+        r'(?m)^entity = \{[^\r\n]*name = "NAM_infantry(?:_[2-8])?_entity"[^\r\n]*\}\r?\n',
+        '',
+        asset,
+    )
     templates = {re.search(r'name\s*=\s*"([^"]+)"', b)[1]: b for b in blocks(gfx, 'pdxmesh')}
     meshes, entities = [], []
-    for tag in CONFIG:
+    # ARB is one shared mesh; country aliases below keep the engine's normal
+    # <TAG>_infantry_entity lookup without duplicating binary assets.
+    output_tags = tuple(CONFIG) + ARAB_TAGS
+    for tag in output_tags:
+        source_tag = 'ARB' if tag in ARAB_TAGS else tag
         for pose in ('rifle', 'mg'):
             source = templates['STP_shabrat_' + ('mg_' if pose == 'mg' else '') + 'infantry_mesh']
             source = re.sub(r'\bname\s*=\s*"[^"]+"', f'name = "ADISCORD_{tag}_field_{pose}_mesh"', source, count=1)
-            source = re.sub(r'\bfile\s*=\s*"[^"]+"', f'file = "gfx/models/units/ADISCORD_regulars/{tag}_field.mesh"', source, count=1)
+            source = re.sub(r'\bfile\s*=\s*"[^"]+"', f'file = "gfx/models/units/ADISCORD_regulars/{source_tag}_field.mesh"', source, count=1)
             meshes.append(source)
         for level in range(8):
             suffix = '' if level == 0 else '_' + str(level + 1)
             pose = 'rifle' if level == 0 else 'mg'
-            entities.append(f'entity = {{ clone = "STP_infantry{suffix}_entity" name = "{tag}_infantry{suffix}_entity" pdxmesh = "ADISCORD_{tag}_field_{pose}_mesh" }}')
+            def entity(parent, name, pdxmesh=None):
+                fields = [f'clone = "{parent}"', f'name = "{name}"']
+                if pdxmesh:
+                    fields.append(f'pdxmesh = "{pdxmesh}"')
+                if tag in ('RUS', 'SHL'):
+                    return 'entity = {\n\t' + '\n\t'.join(fields) + '\n}'
+                return 'entity = { ' + ' '.join(fields) + ' }'
+
+            entities.append(entity(f'STP_infantry{suffix}_entity', f'{tag}_infantry{suffix}_entity', f'ADISCORD_{tag}_field_{pose}_mesh'))
             for role in ('ADISCORD_militia', 'ADISCORD_territorial', 'mountaineers'):
-                entities.append(f'entity = {{ clone = "{tag}_infantry{suffix}_entity" name = "{tag}_{role}{suffix}_entity" }}')
-            for cosmetic in {'YPR': ('YPR_VAL_administration',), 'TFF': ('TFF_frontier_defense_confederation',)}.get(tag, ()):
+                entities.append(entity(f'{tag}_infantry{suffix}_entity', f'{tag}_{role}{suffix}_entity'))
+            for cosmetic in {'YPR': ('YPR_VAL_administration',), 'TFF': ('TFF_frontier_defense_confederation',), 'RUS': ('RUS_last_empire',)}.get(tag, ()):
                 for role in ('infantry', 'ADISCORD_militia', 'ADISCORD_territorial', 'mountaineers'):
-                    entities.append(f'entity = {{ clone = "{tag}_{role}{suffix}_entity" name = "{cosmetic}_{role}{suffix}_entity" }}')
+                    entities.append(entity(f'{tag}_{role}{suffix}_entity', f'{cosmetic}_{role}{suffix}_entity'))
     return {
         gfx_path: (gfx + '\n' + START + 'objectTypes = {\n' + '\n'.join(meshes) + '\n}\n' + END).encode(),
         asset_path: (asset + '\n' + START + '\n'.join(entities) + '\n' + END).encode(),
@@ -393,6 +423,65 @@ def build(output):
     (output / 'build.json').write_text(json.dumps({'donor_sha256': hashlib.sha256(donor_data).hexdigest(), 'mesh_sha256': hashlib.sha256(path.read_bytes()).hexdigest()}, indent=2))
 
 
+def imperial_carrier(body, mesh, cloth, trim, brass):
+    """Fit segmented armour to the donor surface and interpolate its skin."""
+    from mathutils import Vector
+    from mathutils.bvhtree import BVHTree
+    from mathutils.interpolate import poly_3d_calc
+
+    surface = BVHTree.FromPolygons(
+        [v.co for v in body.data.vertices],
+        [list(p.vertices) for p in body.data.polygons],
+    )
+    armour = cloth('Charcoal armour', (.072, .083, .087))
+    webbing = cloth('Carrier webbing', (.10, .075, .047))
+
+    def panel(name, cx, cz, width, height, material, back=False, offset=.055):
+        vertices = []
+        weights = []
+        segments = 6
+        for row in range(segments + 1):
+            for col in range(segments + 1):
+                x = cx + (col / segments - .5) * width
+                z = cz + (row / segments - .5) * height
+                origin = Vector((x, 3 if back else -3, z))
+                direction = Vector((0, -1 if back else 1, 0))
+                point, normal, index, _ = surface.ray_cast(origin, direction, 6)
+                assert point is not None, (name, x, z)
+                vertices.append(tuple(point + normal * offset))
+                face = body.data.polygons[index]
+                factors = poly_3d_calc([body.data.vertices[i].co for i in face.vertices], point)
+                influence = {}
+                for i, factor in zip(face.vertices, factors):
+                    for group in body.data.vertices[i].groups:
+                        bone = body.vertex_groups[group.group].name
+                        influence[bone] = influence.get(bone, 0) + max(0, factor) * group.weight
+                strongest = sorted(influence.items(), key=lambda item: item[1], reverse=True)[:4]
+                total = sum(w for _, w in strongest)
+                weights.append([(bone, w / total) for bone, w in strongest])
+        stride = segments + 1
+        faces = [(r * stride + c, r * stride + c + 1,
+                  (r + 1) * stride + c + 1, (r + 1) * stride + c)
+                 for r in range(segments) for c in range(segments)]
+        obj = mesh(name, vertices, faces, material)
+        obj.vertex_groups.clear()
+        for i, influence in enumerate(weights):
+            for bone, weight in influence:
+                group = obj.vertex_groups.get(bone) or obj.vertex_groups.new(name=bone)
+                group.add([i], weight, 'REPLACE')
+        return obj
+
+    for back in (False, True):
+        side = 'Rear' if back else 'Front'
+        for x in (-.42, .42):
+            panel(side + ' carrier strap', x, 5.25, .15, 1.23, webbing, back)
+        for z, width in ((5.48, .78), (5.12, .90), (4.77, .82)):
+            panel(side + ' armour segment', 0, z, width, .30, armour, back, .09)
+        panel(side + ' central brass clasp', 0, 5.48, .055, .23, brass, back, .12)
+    panel('Burgundy breast tab', -.53, 5.61, .16, .35, trim)
+    panel('Brass breast tab edge', -.53, 5.68, .12, .045, brass, offset=.07)
+
+
 def build_field(tag, output):
     """Keep the donor garment topology and skin while replacing its field kit."""
     import bpy
@@ -401,7 +490,7 @@ def build_field(tag, output):
     from types import SimpleNamespace
     from mathutils import Vector
     sys.path.insert(0, str(Path(__file__).parent))
-    from infantry_polish import bake_diffuse, cloth_bag
+    from infantry_polish import bake_diffuse, cloth_bag, fitted_head_cloth
     sys.path.insert(0, str(Path.home() / 'AppData/Roaming/Blender Foundation/Blender/5.2/extensions/user_default'))
     from io_pdx_mesh.pdx_blender import blender_import_export as pdx
     if not hasattr(pdx, "_northern_shader_source"):
@@ -423,7 +512,7 @@ def build_field(tag, output):
     body.name = tag + '_body'
     # Whole islands keep native leather pouches separate from cloth tinting.
     small_kit = set()
-    if tag in ('TFF', 'YPR'):
+    if tag in ('TFF', 'YPR', 'RUS', 'NAM'):
         keys = [tuple(round(x, 4) for x in v.co) for v in body.data.vertices]
         adjacent = {k: set() for k in keys}
         for face in body.data.polygons:
@@ -444,7 +533,7 @@ def build_field(tag, output):
                 cap.update(component)
             if min(k[2] for k in component) > 3.8 and max(k[2] for k in component) < 5 and len(component) < 100:
                 small_kit.update(component)
-        if tag == 'TFF':
+        if tag in ('TFF', 'RUS', 'NAM'):
             assert cap
             bm = bmesh.new()
             bm.from_mesh(body.data)
@@ -518,11 +607,35 @@ def build_field(tag, output):
         return material
 
     olive = (.155, .178, .105)
-    jacket = cloth('Field jacket', olive if tag == 'YPR' else (.16, .105, .055), True)
-    trousers = cloth('Field trousers', (.12, .14, .085) if tag == 'YPR' else (.055, .068, .065), True)
-    canvas = cloth('Field canvas', (.14, .15, .09) if tag == 'YPR' else (.13, .10, .067))
-    wool = cloth('Wool and bindings', (.065, .083, .070))
-    scarf = cloth('Frontier wool scarf', (.20, .215, .20))
+    if tag in ('SHL', 'ARB'):
+        jacket_color = (.36, .22, .09)
+        trouser_color = (.22, .19, .12)
+        canvas_color = (.48, .33, .16)
+        wool_color = (.08, .055, .035)
+        scarf_color = (.68, .53, .30)
+    elif tag == 'RUS':
+        jacket_color = (.046, .062, .072)
+        trouser_color = (.035, .040, .048)
+        canvas_color = (.11, .075, .045)
+        wool_color = (.026, .033, .042)
+        scarf_color = (.24, .022, .035)
+    elif tag == 'NAM':
+        jacket_color = (.055, .095, .105)
+        trouser_color = (.035, .048, .052)
+        canvas_color = (.12, .075, .035)
+        wool_color = (.025, .045, .050)
+        scarf_color = (.62, .38, .075)
+    else:
+        jacket_color = olive if tag == 'YPR' else (.16, .105, .055)
+        trouser_color = (.12, .14, .085) if tag == 'YPR' else (.055, .068, .065)
+        canvas_color = (.14, .15, .09) if tag == 'YPR' else (.13, .10, .067)
+        wool_color = (.065, .083, .070)
+        scarf_color = (.20, .215, .20)
+    jacket = cloth('Field jacket', jacket_color, True)
+    trousers = cloth('Field trousers', trouser_color, True)
+    canvas = cloth('Field canvas', canvas_color)
+    wool = cloth('Wool and bindings', wool_color)
+    scarf = cloth('Frontier wool scarf', scarf_color)
     for mat in (jacket, trousers, canvas):
         body.data.materials.append(mat)
     for face in body.data.polygons:
@@ -537,7 +650,7 @@ def build_field(tag, output):
             # The trouser island includes the crotch above the jacket hem. A
             # height cutoff splits its triangles and leaves a jagged colour seam.
             uv = sum((body.data.uv_layers.active.data[i].uv for i in face.loop_indices), Vector((0, 0))) / len(face.loop_indices)
-            pants = uv.x < .44 and uv.y < .45 if tag == 'TFF' else z < 3.55
+            pants = uv.x < .44 and uv.y < .45 if tag in ('TFF', 'RUS', 'NAM') else z < 3.55
             face.material_index = 2 if pants else 1
     bake_diffuse(body, output / f'{tag}_body.png', tag + '_body')
     gear = []
@@ -561,11 +674,39 @@ def build_field(tag, output):
             t = row / 11
             for i in range(40):
                 a = math.tau * i / 40
-                radius = math.cos(t * math.pi / 2)
-                vertices.append((.43 * radius * math.cos(a) + .025 * t, -.07 + .49 * radius * math.sin(a), 6.91 + .38 * math.sin(t * math.pi / 2)))
+                if tag == 'RUS':
+                    radius = 1.07 * math.cos(t * math.pi / 2)
+                    height = 7.04 + .34 * math.sin(t * math.pi / 2) ** .30
+                elif tag == 'NAM':
+                    radius = 1.02 * math.cos(t * math.pi / 2)
+                    height = 6.98 + .42 * math.sin(t * math.pi / 2) ** .38
+                else:
+                    radius = math.cos(t * math.pi / 2)
+                    height = 6.91 + .38 * math.sin(t * math.pi / 2)
+                vertices.append((.43 * radius * math.cos(a) + .025 * t, -.07 + .49 * radius * math.sin(a), height))
         mesh('Knitted field cap', vertices, [(r * 40 + i, r * 40 + (i + 1) % 40, (r + 1) * 40 + (i + 1) % 40, (r + 1) * 40 + i) for r in range(11) for i in range(40)], wool, 'head')
         vertices = [(.44 * math.cos(i * math.tau / 40), -.07 + .50 * math.sin(i * math.tau / 40), 6.91 + r * .12) for r in range(2) for i in range(40)]
         mesh('Cap fold', vertices, [(i, (i + 1) % 40, (i + 1) % 40 + 40, i + 40) for i in range(40)], wool, 'head')
+        if tag in ('RUS', 'NAM'):
+            brass = cloth('Dull brass insignia', (.48, .29, .095))
+            brim_vertices = []
+            for outer in (False, True):
+                for i in range(21):
+                    a = math.pi + math.pi * i / 20
+                    brim_vertices.append((.43 * math.cos(a), -.07 + (.69 if outer else .42) * math.sin(a), 6.98 - (.075 if outer else 0) * abs(math.sin(a))))
+            mesh('Imperial cap visor', brim_vertices,
+                 [(i, i + 1, i + 22, i + 21) for i in range(20)], wool, 'head')
+            band_vertices = []
+            for z in (6.99, 7.10):
+                for i in range(40):
+                    a = math.tau * i / 40
+                    band_vertices.append((.47 * math.cos(a), -.07 + .53 * math.sin(a), z))
+            mesh('Imperial cap band', band_vertices,
+                 [(i, (i + 1) % 40, (i + 1) % 40 + 40, i + 40) for i in range(40)], scarf, 'head')
+            badge_vertices = [(0, -.577, 7.00), (.075, -.577, 7.09),
+                              (0, -.577, 7.20), (-.075, -.577, 7.09)]
+            mesh('Imperial cap badge', badge_vertices, [(0, 1, 2, 3)], brass, 'head')
+            imperial_carrier(body, mesh, cloth, scarf, brass)
         # A compact neck wrap leaves both hands and the rifle stock unobstructed.
         vertices = []
         for row in range(6):
@@ -577,6 +718,10 @@ def build_field(tag, output):
         mesh('Wool neck wrap', vertices, [(r * 40 + i, r * 40 + (i + 1) % 40, (r + 1) * 40 + (i + 1) % 40, (r + 1) * 40 + i) for r in range(5) for i in range(40)], scarf, 'head')
         for part, kind, vertices, faces in cloth_bag(.50, .35, .61):
             mesh('Canvas haversack ' + part, [(x + .72, y + .37, z + 4.23) for x, y, z in vertices], faces, canvas if kind == 'canvas' else wool, 'Hip')
+        if tag == 'SHL':
+            # The wrapped head cloth is the recognisable Arab field item and
+            # follows the imported head weights instead of floating in poses.
+            fitted_head_cloth(body, mesh, scarf, 'Wrapped Arab head cloth', loose=True)
     bpy.ops.object.select_all(action='DESELECT')
     for obj in gear:
         obj.select_set(True)

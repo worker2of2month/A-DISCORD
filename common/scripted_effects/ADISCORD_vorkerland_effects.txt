@@ -1083,8 +1083,11 @@ ADISCORD_vorkerland_raise_emergency_levies = {
 # WKR normally inherits WRK's armed forces, but annexation transfers divisions
 # without copying WRK's recruitable template database. Materialize an editable
 # line division and mobile group alongside the locked emergency guard. The
-# one-shot reserve itself remains deliberately small: four border guards in
-# state 33 and four formations in the state 32 capital reserve.
+# one-shot reserve itself remains deliberately small: two border guards in
+# state 33 and two formations in the state 32 capital reserve. WKR already
+# inherits WRK's twelve pre-collapse formations and receives one mobile group;
+# a larger reserve makes the worker claimant win the central war by force
+# count before the other claimants can use their own programmes.
 ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = {
 	if = {
 		limit = {
@@ -1153,20 +1156,20 @@ ADISCORD_vorkerland_ensure_wkr_home_guard = {
 		}
 		set_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1
 		ADISCORD_vorkerland_ensure_worker_home_guard_template = yes
-		add_manpower = 24000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 19200 producer = WKR }
+		add_manpower = 12000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 960 producer = WKR }
 		33 = {
 			create_unit = {
 				division = "division_template = \"Worker Home Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.85"
 				owner = WKR
-				count = 4
+				count = 2
 			}
 		}
 		32 = {
 			create_unit = {
 				division = "division_template = \"Worker Home Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.85"
 				owner = WKR
-				count = 4
+				count = 2
 			}
 		}
 	}

@@ -1789,8 +1789,8 @@ def check_infantry_equipment_requirements() -> list[str]:
         },
         "ADISCORD_assault_infantry": {
             "infantry_equipment": 990,
-            "ADISCORD_squad_weapons_equipment": 14,
-            "support_equipment": 5,
+            "ADISCORD_squad_weapons_equipment": 24,
+            "support_equipment": 30,
         },
         "mountaineers": {
             "infantry_equipment": 900,

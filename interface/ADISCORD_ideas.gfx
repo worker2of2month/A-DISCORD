@@ -30,6 +30,18 @@ spriteTypes = {
 ###STP
  #ideas
 	spriteType = {
+		name = "GFX_idea_STP_fading_father"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_deadman_rulling_the_country.png"
+	}
+	spriteType = {
+		name = "GFX_idea_STP_security_pressure"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_hidden_slaves_trade.png"
+	}
+	spriteType = {
+		name = "GFX_idea_STP_apparatus_loyalty"
+		texturefile = "gfx/interface/ideas/idea_ger_the_great_red_menace.dds"
+	}
+	spriteType = {
 		name = "GFX_idea_STP_hedonism_with_no_bondaries"
 		texturefile = "gfx/interface/ideas/STP/idea_STP_hedonism_with_no_bondaries.dds"
 	}

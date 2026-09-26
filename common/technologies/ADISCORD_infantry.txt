@@ -747,6 +747,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_remote_weapon_tripods = {
+		allow = { tag = VAL }
 		category_all_infantry = {
 			soft_attack = 0.053
 			defense = 0.03

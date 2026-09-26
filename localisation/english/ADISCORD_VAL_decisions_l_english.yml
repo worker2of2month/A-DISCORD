@@ -1,4 +1,4 @@
-﻿l_english:
+l_english:
  FOCUS_FILTER_VAL_DECISIONS:0 "Special Decisions"
  VAL_payroll_reform_tt:0 "Reduces the contract-pay premium on army expenses by §G5 percentage points§!. Final reforms can remove at most §Y25 points§! in total; relief survives a change of course."
  FOCUS_FILTER_VAL_CONTRACTS:0 "Contracts and Arms Exports"
@@ -1921,6 +1921,8 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_Contract_Landing_Craft_desc: "Shipyards and carriers will receive one contract for landing barges, pontoons and unloading equipment. The corps will be able to prepare larger amphibious operations more quickly."
  VAL_Marines_Of_The_Ledger: "Marines of the Ledger"
  VAL_Marines_Of_The_Ledger_desc: "The marines become a permanent arm of the contract army. Recruitment, training and supply pass from a temporary programme into the standing system."
+ VAL_Armored_Assault_Corps: "Armored Assault Corps"
+ VAL_Armored_Assault_Corps_desc: "Kefreyt will field a heavy semi-robot assault soldier with a machine gun and reinforced actuators. The focus unlocks assault infantry; every battalion consumes a large reserve of squad weapons and support equipment."
  VAL_raise_marine_contract_corps_tt: "Unlocks the §Ymarine infantry§! battalion, creates the trainable §Y'Kefreyt Marine Contract Group'§! template and forms §G1§! ready division."
  ADISCORD_marine_infantry: "Marine Infantry"
  ADISCORD_marine_infantry_desc: "Contract assault troops trained for landings, port seizures and holding a coastal beachhead."

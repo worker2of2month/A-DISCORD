@@ -1053,8 +1053,8 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "NOT = { has_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1 }",
             "set_country_flag = ADISCORD_vorkerland_wkr_home_guard_deployed_v1",
             "ADISCORD_vorkerland_ensure_worker_home_guard_template = yes",
-            "add_manpower = 24000",
-            "amount = 1920 producer = WKR",
+            "add_manpower = 12000",
+            "amount = 960 producer = WKR",
         ):
             self.assertIn(token, home_guard)
         shared_templates = source_section(read(
@@ -1068,7 +1068,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("is_locked = yes", worker_home_guard)
         self.assertEqual(worker_home_guard.count("ADISCORD_militia ="), 3)
         self.assertEqual(home_guard.count("create_unit ="), 2)
-        self.assertEqual(home_guard.count("count = 4"), 2)
+        self.assertEqual(home_guard.count("count = 2"), 2)
         self.assertIn("33 = {", home_guard)
         self.assertIn("32 = {", home_guard)
         self.assertNotIn("annex_country", home_guard)
