@@ -1798,7 +1798,21 @@ ADISCORD_vorkerland_focus_operations_category = {
 				clr_country_flag = ADISCORD_vorkerland_integrate_riv_district_paid
 				custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt
 				if = {
-					limit = { NOT = { country_exists = RIV } owns_state = 79 controls_state = 79 owns_state = 306 controls_state = 306 owns_state = 308 controls_state = 308 owns_state = 309 controls_state = 309 owns_state = 327 controls_state = 327 }
+					limit = {
+						NOT = {
+							country_exists = RIV
+						}
+						owns_state = 79
+						controls_state = 79
+						owns_state = 306
+						controls_state = 306
+						owns_state = 308
+						controls_state = 308
+						owns_state = 309
+						controls_state = 309
+						owns_state = 327
+						controls_state = 327
+					}
 					hidden_effect = { 79 = { add_core_of = ROOT } 306 = { add_core_of = ROOT } 308 = { add_core_of = ROOT } 309 = { add_core_of = ROOT } 327 = { add_core_of = ROOT } }
 					ADISCORD_vorkerland_begin_reunification = yes
 				}
