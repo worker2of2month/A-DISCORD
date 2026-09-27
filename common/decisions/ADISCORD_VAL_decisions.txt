@@ -2837,7 +2837,7 @@ VAL_stelander_war_aid = {
 			has_war = no
 			has_capitulated = no
 			is_subject = no
-			STS = { VAL_stelander_volunteer_host = yes }
+			VAL_stelander_volunteer_front_open = yes
 		}
 		cost = 25
 		fire_only_once = yes
