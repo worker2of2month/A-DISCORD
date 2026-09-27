@@ -134,6 +134,6 @@ VAL_stelander_war_aid = {
 	icon = ADISCORD_deal
 	priority = 98
 	allowed = { tag = VAL }
-	visible = { VAL_stelander_volunteer_front_open = yes }
+	visible = { VAL_stelander_civil_war_active = yes }
 	visible_when_empty = yes
 }
