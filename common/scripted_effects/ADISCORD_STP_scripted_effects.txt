@@ -4109,6 +4109,20 @@ STP_cw_settle_union_victory = {
 	if = { limit = { has_war_with = ROOT } white_peace = ROOT }
 	ROOT = { STP_pf_clear = yes remove_ideas = { STP_cw_party_battle_spirit STP_cw_resistance_battle_spirit } }
 	annex_country = { target = ROOT transfer_troops = no }
+	VAL = {
+		if = {
+			limit = {
+				exists = yes
+				has_variable = VAL_stelander_support_state
+				NOT = { check_variable = { var = VAL_stelander_support_state value = 3 compare = equals } }
+			}
+			if = {
+				limit = { PREV = { tag = STS } }
+				VAL_settle_stelander_support_victory = yes
+			}
+			else = { VAL_close_stelander_support = yes }
+		}
+	}
 	# The resistance is a claimant to Stelander; foreign conquests stay non-core.
 	if = {
 		limit = { tag = STS }
@@ -4132,6 +4146,16 @@ STP_cw_settle_nod_victory = {
 	if = {
 		limit = { STP = { exists = yes } STS = { exists = yes } STS = { has_capitulated = yes } NOD = { has_country_flag = NOD_cw_entered } }
 		STP_cw_close_nod_after_party_victory = yes
+		VAL = {
+			if = {
+				limit = {
+					exists = yes
+					has_variable = VAL_stelander_support_state
+					NOT = { check_variable = { var = VAL_stelander_support_state value = 3 compare = equals } }
+				}
+				VAL_close_stelander_support = yes
+			}
+		}
 		STS = { STP_cw_remove_kefreyt_volunteers = yes }
 		STP = {
 			if = { limit = { has_war_with = STS } white_peace = STS }
