@@ -4141,6 +4141,18 @@ STP_cw_settle_union_victory = {
 	}
 	if = { limit = { has_dynamic_modifier = { modifier = STP_cw_election_mandate_dynamic } } remove_dynamic_modifier = { modifier = STP_cw_election_mandate_dynamic } }
 	set_country_flag = STP_cw_won_union_battle
+	if = {
+		limit = { tag = STS }
+		VAL = {
+			if = { limit = { exists = yes } VAL_settle_stelander_shabrat_support_victory = yes }
+		}
+	}
+	else_if = {
+		limit = { tag = STP }
+		VAL = {
+			if = { limit = { exists = yes } VAL_settle_stelander_shabrat_support_defeat = yes }
+		}
+	}
 	if = { limit = { tag = STS } STP_cw_close_last_banquet_technical = yes }
 	STP_cw_finish_mobilization = yes
 	if = { limit = { tag = STS } STP_pw_rebuild_economy_after_unification = yes }
@@ -4172,6 +4184,9 @@ STP_cw_settle_nod_victory = {
 			set_country_flag = STP_cw_won_union_battle
 			STP_cw_finish_mobilization = yes
 			news_event = { id = ADISCORD_STP_cw.71 hours = 1 }
+		}
+		VAL = {
+			if = { limit = { exists = yes } VAL_settle_stelander_shabrat_support_defeat = yes }
 		}
 		log = "[STP_CW] NOD military victory restores STS territory to STP"
 		STP_cw_check_union_wars_finished = yes
