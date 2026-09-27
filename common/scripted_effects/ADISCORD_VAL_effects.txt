@@ -9196,6 +9196,14 @@ VAL_add_stelander_support_point = {
 VAL_stelander_support_weekly = {
 	if = {
 		limit = {
+			has_variable = VAL_stelander_support_state
+			NOT = { check_variable = { var = VAL_stelander_support_state value = 3 compare = equals } }
+			VAL_stelander_civil_war_active = no
+		}
+		VAL_close_stelander_support = yes
+	}
+	if = {
+		limit = {
 			VAL_stelander_support_active = yes
 			NOT = { has_country_flag = VAL_stelander_volunteer_contribution }
 			STS = {
@@ -9244,3 +9252,7 @@ VAL_settle_stelander_support_victory = {
 		VAL_close_stelander_support = yes
 	}
 }
+
+# VAL: settle the wager only from the authoritative STP-STS war result.
+
+
