@@ -13,6 +13,30 @@
       "status": "active"
     },
     {
+      "id": "val_rework.122",
+      "namespace": "val_rework",
+      "number": 122,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.121",
+      "namespace": "val_rework",
+      "number": 121,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.120",
+      "namespace": "val_rework",
+      "number": 120,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
       "id": "val_contract.424",
       "namespace": "val_contract",
       "number": 424,
@@ -312,6 +336,14 @@
       "id": "val_contract.373",
       "namespace": "val_contract",
       "number": 373,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_contract",
+      "status": "active"
+    },
+    {
+      "id": "val_contract.374",
+      "namespace": "val_contract",
+      "number": 374,
       "owner": "events/ADISCORD_VAL_contract_events.txt",
       "subsystem": "val_contract",
       "status": "active"
