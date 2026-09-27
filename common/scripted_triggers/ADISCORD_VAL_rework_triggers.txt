@@ -2428,32 +2428,30 @@ VAL_stelander_volunteer_host = {
 	tag = STS
 	has_war_with = STP
 	NOT = { has_war_with = VAL }
-	VAL = { VAL_stelander_shabrat_support_active = yes }
+	VAL = { VAL_stelander_support_active = yes }
 }
 
 # COUNTRY VAL: at least one eligible Stelander civil-war host still exists.
 VAL_stelander_volunteer_front_open = {
-	STS = { VAL_stelander_volunteer_host = yes }
+	STS = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		has_war_with = STP
+		NOT = { has_war_with = VAL }
+	}
 }
 
 # COUNTRY VAL: an unsettled pledge to Shabrat during the live STP-STS war.
 VAL_stelander_support_active = {
+	tag = VAL
 	has_variable = VAL_stelander_support_state
 	OR = {
 		check_variable = { var = VAL_stelander_support_state value = 1 compare = equals }
 		check_variable = { var = VAL_stelander_support_state value = 2 compare = equals }
 	}
+	VAL_stelander_civil_war_active = yes
 	VAL_stelander_volunteer_front_open = yes
 }
 
 # COUNTRY VAL: Kefreyt has formally backed Shabrat and the civil war is still live.
-VAL_stelander_shabrat_support_active = {
-	tag = VAL
-	check_variable = { var = VAL_stelander_support_state value = 1 compare = equals }
-	VAL_stelander_civil_war_active = yes
-	STS = {
-		exists = yes
-		has_capitulated = no
-		has_war_with = STP
-	}
-}
