@@ -173,24 +173,24 @@ ideas = {
 	  	}
 
 	  	VAL_stelander_volunteer_mandate = {
-	  		picture = VAL_contract_state
-	  		allowed = { original_tag = VAL }
-	  		removal_cost = -1
-	  		rule = { can_send_volunteers = yes }
-	  		modifier = {
-	  			send_volunteers_tension = -1
-	  			send_volunteer_divisions_required = -1
-	  			send_volunteer_size = 2
-	  		}
-	  		cancel = {
-	  			OR = {
-	  				has_war = yes
-	  				has_capitulated = yes
-	  				VAL_stelander_volunteer_front_open = no
-	  			}
-	  		}
-	  		on_remove = { VAL_recall_stelander_volunteers = yes }
-	  	}
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			rule = { can_send_volunteers = yes }
+			modifier = {
+				send_volunteers_tension = -1
+				send_volunteer_divisions_required = -1
+				send_volunteer_size = 2
+			}
+			cancel = {
+				OR = {
+					has_war = yes
+					has_capitulated = yes
+					VAL_stelander_volunteer_front_open = no
+				}
+			}
+			on_remove = { VAL_recall_stelander_volunteers = yes }
+		}
 
 		VAL_resource_volunteer_mandate = {
 			picture = VAL_contract_state
@@ -216,6 +216,30 @@ ideas = {
 			allowed = { original_tag = VAL }
 			removal_cost = -1
 			modifier = { ADISCORD_economy_trade_income_factor = -0.05 war_support_factor = -0.05 }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+		}
+
+		VAL_stelander_shabrat_dividend = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.08
+				war_support_factor = 0.05
+			}
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+		}
+
+		VAL_stelander_shabrat_major_dividend = {
+			picture = VAL_contract_state
+			allowed = { original_tag = VAL }
+			removal_cost = -1
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.15
+				industrial_capacity_factory = 0.05
+				production_factory_max_efficiency_factor = 0.03
+				war_support_factor = 0.08
+			}
 			on_remove = { ADISCORD_economy_mark_dirty = yes }
 		}
 
