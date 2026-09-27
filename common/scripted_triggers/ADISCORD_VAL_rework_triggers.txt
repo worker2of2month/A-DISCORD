@@ -2419,3 +2419,29 @@ VAL_special_recipient_ready = {
   VAL_partner_transit_visible = yes
  }
 }
+
+# TARGET COUNTRY: a live side of the STP-STS civil war that may host VAL volunteers.
+VAL_stelander_volunteer_host = {
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_war_with = VAL }
+	OR = {
+		AND = {
+			tag = STP
+			has_war_with = STS
+		}
+		AND = {
+			tag = STS
+			has_war_with = STP
+		}
+	}
+}
+
+# COUNTRY VAL: at least one eligible Stelander civil-war host still exists.
+VAL_stelander_volunteer_front_open = {
+	OR = {
+		STP = { VAL_stelander_volunteer_host = yes }
+		STS = { VAL_stelander_volunteer_host = yes }
+	}
+}
