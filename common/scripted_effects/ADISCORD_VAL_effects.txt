@@ -9246,31 +9246,5 @@ VAL_settle_stelander_support_victory = {
 }
 
 # VAL: settle the wager only from the authoritative STP-STS war result.
-VAL_settle_stelander_shabrat_support_victory = {
-	if = {
-		limit = { check_variable = { var = VAL_stelander_support_state value = 1 compare = equals } }
-		if = { limit = { has_idea = VAL_stelander_volunteer_mandate } remove_ideas = VAL_stelander_volunteer_mandate }
-		if = {
-			limit = {
-				has_capitulated = no
-				is_subject = no
-			}
-			add_timed_idea = { idea = VAL_stelander_shabrat_dividend days = 240 }
-			set_temp_variable = { var = ADISCORD_VAL_effect_value value = 5 }
-			VAL_change_contract_authority = yes
-			ADISCORD_economy_mark_dirty = yes
-			country_event = { id = val_contract.374 }
-			set_variable = { var = VAL_stelander_support_state value = 2 }
-		}
-		else = { set_variable = { var = VAL_stelander_support_state value = 3 } }
-	}
-}
 
-VAL_settle_stelander_shabrat_support_defeat = {
-	if = {
-		limit = { check_variable = { var = VAL_stelander_support_state value = 1 compare = equals } }
-		if = { limit = { has_idea = VAL_stelander_volunteer_mandate } remove_ideas = VAL_stelander_volunteer_mandate }
-		set_variable = { var = VAL_stelander_support_state value = -1 }
-		country_event = { id = val_contract.375 }
-	}
-}
+
