@@ -116,7 +116,6 @@ ADISCORD_vorkerland_wrk_release_is_forbidden = {
 		tag = WRK
 	}
 	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-	NOT = { has_global_flag = ADISCORD_vorkerland_phase_reunification }
 	NOT = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
 	NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 	NOT = { has_global_flag = ADISCORD_vorkerland_reunification_verified }

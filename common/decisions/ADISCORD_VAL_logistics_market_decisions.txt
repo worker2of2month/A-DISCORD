@@ -405,6 +405,7 @@ VAL_population_markets = {
 		complete_effect = {
 			add_to_variable = { var = VAL_displaced_population value = -2 }
 			add_to_variable = { var = VAL_local_volunteer_pool value = 1 }
+			add_manpower = 1000
 			set_temp_variable = { var = VAL_black_market_pressure_change value = -1 }
 			VAL_change_black_market_pressure = yes
 			VAL_refresh_refugee_state = yes

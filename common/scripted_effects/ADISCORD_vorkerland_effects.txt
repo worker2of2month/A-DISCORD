@@ -8781,6 +8781,27 @@ ADISCORD_vorkerland_wrk_elect_filopo = {
 	}
 }
 
+# change_tag_from hands the human player to the restored WRK object, but the
+# following annex can be deferred by one engine tick. Complete the same
+# terminal cleanup before verification so a claimant shell cannot survive next
+# to the reunited country with its old army.
+ADISCORD_vorkerland_finish_delayed_wrk_handoff = {
+	if = {
+		limit = {
+			tag = WRK
+			OR = {
+				has_country_flag = ADISCORD_vorkerland_route_worker
+				has_country_flag = ADISCORD_vorkerland_route_joint
+				has_country_flag = ADISCORD_vorkerland_route_utilitarian
+			}
+		}
+		if = { limit = { country_exists = WKR } annex_country = { target = WKR transfer_troops = yes } }
+		if = { limit = { country_exists = VAD } annex_country = { target = VAD transfer_troops = yes } }
+		if = { limit = { country_exists = TVA } annex_country = { target = TVA transfer_troops = yes } }
+		if = { limit = { country_exists = WTD } annex_country = { target = WTD transfer_troops = yes } }
+	}
+}
+
 ADISCORD_vorkerland_verify_reunified_wrk = {
 	if = {
 		limit = { ADISCORD_vorkerland_reunification_verified = yes }

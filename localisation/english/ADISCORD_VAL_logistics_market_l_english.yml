@@ -126,8 +126,8 @@
  VAL_settlement_bounties_tt:0 "Gain £population_texticon §Y30,000§! available settlers. Grey-market pressure: §R+2§!."
 
  VAL_naturalize_refugee_households:0 "Naturalize Refugee Households"
- VAL_naturalize_refugee_households_desc:0 "Move established refugee households out of temporary status and into permanent contract citizenship. §Y20,000§! refugees leave the free refugee pool and create §Y10,000§! people in the local service reserve. Cost: §Y50§! political power. Available once every §Y45 days§!."
- VAL_naturalization_result_tt:0 "Convert £population_texticon §Y20,000§! refugees into £manpower_texticon §Y10,000§! local service reserve. Grey-market pressure: §G-1§!."
+ VAL_naturalize_refugee_households_desc:0 "Move established refugee households out of temporary status and into permanent contract citizenship. §Y20,000§! refugees leave the free refugee pool, add §Y10,000§! to the local service reserve and immediately provide §G+1,000§! manpower. The local reserve is a separate pool; use Issue Emergency Service Contracts to mobilize it further. Cost: §Y50§! political power. Available once every §Y45 days§!."
+ VAL_naturalization_result_tt:0 "£population_texticon §Y20,000§! refugees add £manpower_texticon §Y10,000§! to the local service reserve and provide §G+1,000§! manpower immediately. Grey-market pressure: §G-1§!."
 
  VAL_emergency_service_contracts:0 "Issue Emergency Service Contracts"
  VAL_emergency_service_contracts_desc:0 "Bypass the normal training cycle and mobilize a full block of local contract reservists. Spend §Y500§! treasury funds, §Y25§! command power, £infantry_equipment_texticon §Y10,000§! infantry equipment and £population_texticon §Y10,000§! local reserve to gain £manpower_texticon §Y10,000§! manpower immediately. Stability: §R-1%§!. Available once every §Y90 days§!."

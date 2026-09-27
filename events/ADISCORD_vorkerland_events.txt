@@ -2539,6 +2539,7 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
+		ADISCORD_vorkerland_finish_delayed_wrk_handoff = yes
 		ADISCORD_vorkerland_verify_reunified_wrk = yes
 		ADISCORD_vorkerland_story_offer_post_reunification = yes
 		if = {
