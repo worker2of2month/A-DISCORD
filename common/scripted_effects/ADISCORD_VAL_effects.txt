@@ -9125,3 +9125,134 @@ VAL_accept_order = {
  }
  else = { VAL_accept_legacy_order = yes }
 }
+
+VAL_recall_stelander_volunteers = {
+	if = {
+		limit = {
+			STP = {
+				exists = yes
+				has_volunteers_amount_from = { tag = VAL count > 0 }
+			}
+			NOT = {
+				AND = {
+					has_idea = VAL_northern_volunteer_mandate
+					STP = { VAL_northern_volunteer_host = yes }
+				}
+			}
+		}
+		recall_volunteers_from = STP
+	}
+	if = {
+		limit = {
+			STS = {
+				exists = yes
+				has_volunteers_amount_from = { tag = VAL count > 0 }
+			}
+			NOT = {
+				AND = {
+					has_idea = VAL_northern_volunteer_mandate
+					STS = { VAL_northern_volunteer_host = yes }
+				}
+			}
+		}
+		recall_volunteers_from = STS
+	}
+}
+
+VAL_start_stelander_support = {
+	if = {
+		limit = {
+			tag = VAL
+			NOT = { has_variable = VAL_stelander_support_state }
+			VAL_stelander_volunteer_front_open = yes
+		}
+		set_variable = { var = VAL_stelander_support_state value = 1 }
+		set_variable = { var = VAL_stelander_support_score value = 0 }
+		clr_country_flag = VAL_stelander_volunteer_contribution
+		clr_country_flag = VAL_stelander_rifle_aid_sent
+		clr_country_flag = VAL_stelander_staff_funded
+	}
+}
+
+VAL_add_stelander_support_point = {
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = VAL_stelander_support_state value = 1 compare = equals }
+				check_variable = { var = VAL_stelander_support_state value = 2 compare = equals }
+			}
+			check_variable = { var = VAL_stelander_support_score value = 3 compare = less_than }
+		}
+		add_to_variable = { var = VAL_stelander_support_score value = 1 }
+		if = {
+			limit = {
+				check_variable = { var = VAL_stelander_support_score value = 2 compare = greater_than_or_equals }
+			}
+			set_variable = { var = VAL_stelander_support_state value = 2 }
+		}
+	}
+}
+
+VAL_stelander_support_weekly = {
+	if = {
+		limit = {
+			has_variable = VAL_stelander_support_state
+			NOT = { check_variable = { var = VAL_stelander_support_state value = 3 compare = equals } }
+			VAL_stelander_civil_war_active = no
+		}
+		VAL_close_stelander_support = yes
+	}
+	if = {
+		limit = {
+			VAL_stelander_support_active = yes
+			NOT = { has_country_flag = VAL_stelander_volunteer_contribution }
+			STS = {
+				has_volunteers_amount_from = { tag = VAL count > 0 }
+			}
+		}
+		set_country_flag = VAL_stelander_volunteer_contribution
+		VAL_add_stelander_support_point = yes
+	}
+}
+
+VAL_close_stelander_support = {
+	if = {
+		limit = { has_variable = VAL_stelander_support_state }
+		set_variable = { var = VAL_stelander_support_state value = 3 }
+		remove_ideas = VAL_stelander_volunteer_mandate
+	}
+}
+
+VAL_settle_stelander_support_victory = {
+	if = {
+		limit = {
+			has_variable = VAL_stelander_support_state
+			NOT = { check_variable = { var = VAL_stelander_support_state value = 3 compare = equals } }
+		}
+		if = {
+			limit = {
+				has_capitulated = no
+				is_subject = no
+				check_variable = { var = VAL_stelander_support_score value = 2 compare = greater_than_or_equals }
+			}
+			add_timed_idea = { idea = VAL_stelander_shabrat_major_dividend days = 365 }
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = val_contract.374 }
+		}
+		else_if = {
+			limit = {
+				has_capitulated = no
+				is_subject = no
+				check_variable = { var = VAL_stelander_support_score value = 0 compare = greater_than }
+			}
+			add_timed_idea = { idea = VAL_stelander_shabrat_dividend days = 270 }
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = val_contract.374 }
+		}
+		VAL_close_stelander_support = yes
+	}
+}
+
+# VAL: settle the wager only from the authoritative STP-STS war result.
+
+

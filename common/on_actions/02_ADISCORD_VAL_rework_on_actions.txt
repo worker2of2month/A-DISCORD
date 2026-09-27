@@ -259,6 +259,7 @@ on_actions = {
 				limit = { has_idea = VAL_northern_volunteer_mandate }
 				VAL_reconcile_northern_volunteers = yes
 			}
+			VAL_stelander_support_weekly = yes
 			if = {
 				limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
 				VAL_frontier_weekly = yes

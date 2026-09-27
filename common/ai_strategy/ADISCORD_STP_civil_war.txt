@@ -536,3 +536,29 @@ STP_ps_defensive_front = {
 	ai_strategy = { type = front_unit_request tag = STS value = 100 }
 	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = no manual_attack = no }
 }
+
+# The split already fields roughly 18-24 formations per side. Once that force
+# exists, extra AI recruitment mostly creates positional stacks and supply loss.
+STP_cw_ai_force_saturation = {
+	allowed = { original_tag = STP }
+	enable = {
+		is_ai = yes
+		has_global_flag = STP_cw_started
+		has_war_with = STS
+		NOT = { num_divisions < 24 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }
+}
+
+STS_cw_ai_force_saturation = {
+	allowed = { original_tag = STS }
+	enable = {
+		is_ai = yes
+		has_global_flag = STP_cw_started
+		has_war_with = STP
+		NOT = { num_divisions < 24 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }
+}

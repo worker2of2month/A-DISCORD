@@ -71,7 +71,7 @@ add_equipment_to_stockpile = {
 }
 add_equipment_to_stockpile = {
 	type = infantry_equipment
-	amount = 550000
+	amount = 300000
 	producer = VAL
 }
 
