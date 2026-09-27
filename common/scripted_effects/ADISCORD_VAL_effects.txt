@@ -9125,3 +9125,36 @@ VAL_accept_order = {
  }
  else = { VAL_accept_legacy_order = yes }
 }
+
+VAL_recall_stelander_volunteers = {
+	if = {
+		limit = {
+			STP = {
+				exists = yes
+				has_volunteers_amount_from = { tag = VAL count > 0 }
+			}
+			NOT = {
+				AND = {
+					has_idea = VAL_northern_volunteer_mandate
+					STP = { VAL_northern_volunteer_host = yes }
+				}
+			}
+		}
+		recall_volunteers_from = STP
+	}
+	if = {
+		limit = {
+			STS = {
+				exists = yes
+				has_volunteers_amount_from = { tag = VAL count > 0 }
+			}
+			NOT = {
+				AND = {
+					has_idea = VAL_northern_volunteer_mandate
+					STS = { VAL_northern_volunteer_host = yes }
+				}
+			}
+		}
+		recall_volunteers_from = STS
+	}
+}
