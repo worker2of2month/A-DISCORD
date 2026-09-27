@@ -2425,23 +2425,22 @@ VAL_stelander_volunteer_host = {
 	exists = yes
 	has_capitulated = no
 	is_subject = no
+	tag = STS
+	has_war_with = STP
 	NOT = { has_war_with = VAL }
-	OR = {
-		AND = {
-			tag = STP
-			has_war_with = STS
-		}
-		AND = {
-			tag = STS
-			has_war_with = STP
-		}
-	}
 }
 
 # COUNTRY VAL: at least one eligible Stelander civil-war host still exists.
 VAL_stelander_volunteer_front_open = {
+	STS = { VAL_stelander_volunteer_host = yes }
+}
+
+# COUNTRY VAL: an unsettled pledge to Shabrat during the live STP-STS war.
+VAL_stelander_support_active = {
+	has_variable = VAL_stelander_support_state
 	OR = {
-		STP = { VAL_stelander_volunteer_host = yes }
-		STS = { VAL_stelander_volunteer_host = yes }
+		check_variable = { var = VAL_stelander_support_state value = 1 compare = equals }
+		check_variable = { var = VAL_stelander_support_state value = 2 compare = equals }
 	}
+	VAL_stelander_volunteer_front_open = yes
 }
