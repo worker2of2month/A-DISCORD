@@ -2489,3 +2489,19 @@ country_event = {
  is_triggered_only = yes
  option = { name = val_contract.425.a }
 }
+
+country_event = {
+	id = val_contract.374
+	title = val_contract.374.t
+	desc = {
+		trigger = { has_idea = VAL_stelander_shabrat_major_dividend }
+		text = val_contract.374.full
+	}
+	desc = {
+		trigger = { NOT = { has_idea = VAL_stelander_shabrat_major_dividend } }
+		text = val_contract.374.partial
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_contract.374.a }
+}

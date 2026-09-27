@@ -1017,3 +1017,24 @@ defined_text = {
 	}
 	text = { localization_key = VAL_contract_board_lot_none }
 }
+
+defined_text = {
+	name = VALGetStelanderAidStatus
+	text = {
+		trigger = { NOT = { has_variable = VAL_stelander_support_state } }
+		localization_key = VAL_STELANDER_SUPPORT_NONE
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_stelander_support_state value = 1 compare = equals } }
+		localization_key = VAL_STELANDER_SUPPORT_ACTIVE
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_stelander_support_state value = 2 compare = equals } }
+		localization_key = VAL_STELANDER_SUPPORT_FULFILLED
+	}
+	text = {
+		trigger = { check_variable = { var = VAL_stelander_support_state value = 3 compare = equals } }
+		localization_key = VAL_STELANDER_SUPPORT_SETTLED
+	}
+	text = { localization_key = VAL_STELANDER_SUPPORT_NONE }
+}

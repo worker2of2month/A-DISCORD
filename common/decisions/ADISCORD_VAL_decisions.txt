@@ -2826,15 +2826,41 @@ VAL_contract_obligations = {
 }
 
 VAL_stelander_war_aid = {
+	VAL_back_shabrat = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = {
+			VAL_stelander_volunteer_front_open = yes
+			NOT = { has_variable = VAL_stelander_support_state }
+		}
+		available = {
+			has_war = no
+			has_capitulated = no
+			is_subject = no
+			STS = { VAL_stelander_volunteer_host = yes }
+		}
+		cost = 25
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = VAL_back_shabrat_tt
+			hidden_effect = { VAL_start_stelander_support = yes }
+		}
+		ai_will_do = { base = 0 }
+	}
+
 	VAL_stelander_volunteers = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
-		visible = { VAL_stelander_volunteer_front_open = yes }
+		visible = {
+			VAL_stelander_support_active = yes
+			VAL_stelander_volunteer_front_open = yes
+		}
 		available = {
 			has_war = no
 			has_capitulated = no
 			is_subject = no
 			NOT = { has_idea = VAL_stelander_volunteer_mandate }
+			STS = { VAL_stelander_volunteer_host = yes }
 		}
 		cost = 50
 		days_re_enable = 30
@@ -2842,7 +2868,100 @@ VAL_stelander_war_aid = {
 			add_ideas = VAL_stelander_volunteer_mandate
 			custom_effect_tooltip = VAL_stelander_volunteers_tt
 		}
-		# Keep the strategic side choice in the player's hands.
+		ai_will_do = { base = 0 }
+	}
+
+	VAL_stelander_rifle_aid = {
+		icon = generic_army_support
+		allowed = { tag = VAL }
+		visible = {
+			VAL_stelander_support_active = yes
+			NOT = { has_country_flag = VAL_stelander_rifle_aid_sent }
+		}
+		available = {
+			has_war = no
+			has_capitulated = no
+			is_subject = no
+			STS = { VAL_stelander_volunteer_host = yes }
+		}
+		cost = 0
+		custom_cost_text = VAL_stelander_rifle_aid_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			NOT = { has_equipment = { infantry_equipment < 20000 } }
+		}
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = VAL_stelander_rifle_aid_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_stelander_support_active = yes
+						STS = { VAL_stelander_volunteer_host = yes }
+						NOT = { has_political_power < 25 }
+						NOT = { has_equipment = { infantry_equipment < 20000 } }
+						NOT = { has_country_flag = VAL_stelander_rifle_aid_sent }
+					}
+					add_political_power = -25
+					send_equipment = {
+						equipment = infantry_equipment
+						amount = 20000
+						target = STS
+					}
+					set_country_flag = VAL_stelander_rifle_aid_sent
+					VAL_add_stelander_support_point = yes
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	VAL_stelander_staff_fund = {
+		icon = generic_army_support
+		allowed = { tag = VAL }
+		visible = {
+			VAL_stelander_support_active = yes
+			NOT = { has_country_flag = VAL_stelander_staff_funded }
+		}
+		available = {
+			has_war = no
+			has_capitulated = no
+			is_subject = no
+			STS = { VAL_stelander_volunteer_host = yes }
+		}
+		cost = 0
+		custom_cost_text = VAL_stelander_staff_fund_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 35 }
+			ADISCORD_economy_can_spend_500 = yes
+		}
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = VAL_stelander_staff_fund_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_stelander_support_active = yes
+						STS = { VAL_stelander_volunteer_host = yes }
+						NOT = { has_political_power < 35 }
+						ADISCORD_economy_can_spend_500 = yes
+						NOT = { has_country_flag = VAL_stelander_staff_funded }
+					}
+					add_political_power = -35
+					ADISCORD_economy_spend_500 = yes
+					STS = {
+						ADISCORD_economy_initialize_country = yes
+						add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
+						add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+						ADISCORD_economy_mark_dirty = yes
+						army_experience = 10
+						add_command_power = 15
+					}
+					set_country_flag = VAL_stelander_staff_funded
+					VAL_add_stelander_support_point = yes
+				}
+			}
+		}
 		ai_will_do = { base = 0 }
 	}
 }
