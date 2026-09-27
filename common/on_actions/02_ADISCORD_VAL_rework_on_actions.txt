@@ -235,6 +235,13 @@ on_actions = {
 
 	on_weekly_VAL = {
 		effect = {
+			if = {
+				limit = {
+					check_variable = { var = VAL_stelander_support_state value = 1 compare = equals }
+					VAL_stelander_civil_war_active = no
+				}
+				VAL_settle_stelander_shabrat_support_defeat = yes
+			}
 			VAL_reclamation_reconcile_project = yes
 			VAL_final_crisis_weekly = yes
 			# Save-safe AI fallback: authorize the named NOD-war volunteer mission
