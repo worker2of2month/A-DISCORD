@@ -130,3 +130,10 @@ VAL_contract_obligations = {
 	visible_when_empty = yes
 }
 
+VAL_stelander_war_aid = {
+	icon = ADISCORD_deal
+	priority = 98
+	allowed = { tag = VAL }
+	visible = { VAL_stelander_volunteer_front_open = yes }
+	visible_when_empty = yes
+}

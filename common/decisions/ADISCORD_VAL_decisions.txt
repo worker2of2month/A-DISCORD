@@ -2824,3 +2824,25 @@ VAL_contract_obligations = {
 		timeout_effect = { hidden_effect = { set_country_flag = VAL_military_expired } }
 	}
 }
+
+VAL_stelander_war_aid = {
+	VAL_stelander_volunteers = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = { VAL_stelander_volunteer_front_open = yes }
+		available = {
+			has_war = no
+			has_capitulated = no
+			is_subject = no
+			NOT = { has_idea = VAL_stelander_volunteer_mandate }
+		}
+		cost = 50
+		days_re_enable = 30
+		complete_effect = {
+			add_ideas = VAL_stelander_volunteer_mandate
+			custom_effect_tooltip = VAL_stelander_volunteers_tt
+		}
+		# Keep the strategic side choice in the player's hands.
+		ai_will_do = { base = 0 }
+	}
+}

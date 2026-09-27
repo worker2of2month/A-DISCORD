@@ -3048,7 +3048,13 @@ STP_cw_war_council = {
 				}
 			}
 		}
-		ai_will_do = { base = 4 }
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				NOT = { num_divisions < 24 }
+			}
+		}
 	}
 
 
@@ -3544,6 +3550,10 @@ STP_cw_war_council = {
 			base = 10
 			modifier = {
 				factor = 0
+				NOT = { num_divisions < 24 }
+			}
+			modifier = {
+				factor = 0
 				NOT = { tag = STS }
 				OR = {
 					has_manpower < 18000
@@ -3651,6 +3661,10 @@ STP_cw_war_council = {
 		cancel_effect = { STP_cw_refund_reserve_training = yes }
 		ai_will_do = {
 			base = 7
+			modifier = {
+				factor = 0
+				NOT = { num_divisions < 24 }
+			}
 			modifier = {
 				factor = 0
 				NOT = { tag = STS }
