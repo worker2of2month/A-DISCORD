@@ -2843,7 +2843,7 @@ focus_tree = {
 		dynamic = yes
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
-		x = 22
+		x = 20
 		y = 20
 		cost = 5
 		prerequisite = { focus = VAL_frontier_treaty_offices }
@@ -2875,7 +2875,7 @@ focus_tree = {
 		id = VAL_Break_The_Northern_Coalition
 		icon = GFX_goal_generic_major_war
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
-		x = 26
+		x = 22
 		y = 21
 		cost = 5
 		prerequisite = { focus = VAL_Northern_Settlement }
@@ -2998,7 +2998,7 @@ focus_tree = {
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		x = 24
-		y = 22
+		y = 21
 		cost = 5
 		prerequisite = { focus = VAL_Northern_Settlement }
 		prerequisite = { focus = VAL_Stelander_Ultimatum }
@@ -3111,7 +3111,10 @@ focus_tree = {
 		prerequisite = { focus = VAL_Reopen_Trade_Routes }
 		prerequisite = { focus = VAL_Settle_Industrial_Debts }
 		prerequisite = { focus = VAL_Returning_Buyers }
-		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
+		available = {
+			custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes }
+			custom_trigger_tooltip = { tooltip = VAL_commonwealth_required_tt has_country_flag = VAL_commonwealth_proclaimed }
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			effect_tooltip = { add_ideas = VAL_arsenal_quality_delta }
@@ -3570,6 +3573,24 @@ focus_tree = {
 			add_war_support = 0.03
 		}
 		ai_will_do = { base = 9 }
+	}
+
+	# Late-game Kefreyt branch: the expensive assault battalion is a national
+	# capability rather than a universally available line unit.
+	focus = {
+		id = VAL_Armored_Assault_Corps
+		icon = GFX_goal_generic_special_forces
+		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
+		x = 50
+		y = 17
+		cost = 10
+		prerequisite = { focus = VAL_Marines_Of_The_Ledger }
+		available = { has_capitulated = no }
+		completion_reward = {
+			set_technology = { ADISCORD_tech_remote_weapon_tripods = 1 popup = yes }
+			add_army_experience = 20
+		}
+		ai_will_do = { base = 4 }
 	}
 
 }

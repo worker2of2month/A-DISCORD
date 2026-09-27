@@ -2846,7 +2846,7 @@ focus_tree = {
 		dynamic = yes
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
-		x = 22
+		x = 20
 		y = 20
 		cost = 5
 		prerequisite = { focus = VAL_frontier_treaty_offices }
@@ -2878,7 +2878,7 @@ focus_tree = {
 		id = VAL_Break_The_Northern_Coalition
 		icon = GFX_goal_generic_major_war
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
-		x = 26
+		x = 22
 		y = 21
 		cost = 5
 		prerequisite = { focus = VAL_Northern_Settlement }
@@ -3001,7 +3001,7 @@ focus_tree = {
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_EXPANSION }
 		x = 24
-		y = 22
+		y = 21
 		cost = 5
 		prerequisite = { focus = VAL_Northern_Settlement }
 		prerequisite = { focus = VAL_Stelander_Ultimatum }
@@ -3081,9 +3081,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Campaign_Secured focus = VAL_Returning_Buyers }
 		prerequisite = { focus = VAL_New_Supply_Base focus = VAL_Contingency_Ledgers }
-		available = {
-			custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes }
-		}
+		available = { custom_trigger_tooltip = { tooltip = VAL_economic_settlement_ready_tt VAL_economic_settlement_ready = yes } }
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Reopen_Trade_Routes_tt VAL_advance_economic_recovery = yes ADISCORD_economy_receive_100 = yes add_stability = 0.01 }
