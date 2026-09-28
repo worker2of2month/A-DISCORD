@@ -881,3 +881,34 @@ VAL_finish_housing = {
 		else = { VAL_refund_housing = yes }
 	}
 }
+
+# Paid recruits leave the local pool until delivery or cancellation.
+VAL_refund_national_recruitment = {
+	if = {
+		limit = { hidden_trigger = { has_variable = VAL_national_recruitment_deposit } }
+		hidden_effect = {
+			add_to_variable = { var = VAL_local_volunteer_pool value = 2 }
+			add_to_variable = { var = ADISCORD_economy_treasury value = VAL_national_recruitment_deposit }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_national_recruitment_deposit }
+			clear_variable = VAL_national_recruitment_deposit
+			VAL_refresh_refugee_state = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+		custom_effect_tooltip = VAL_national_recruitment_refund_tt
+	}
+}
+
+VAL_finish_national_recruitment = {
+	if = {
+		limit = { has_variable = VAL_national_recruitment_deposit }
+		if = {
+			limit = { has_capitulated = no is_subject = no has_completed_focus = VAL_Army_Of_The_Ledger }
+			add_manpower = 20000
+			hidden_effect = {
+				clear_variable = VAL_national_recruitment_deposit
+				VAL_refresh_refugee_state = yes
+			}
+		}
+		else = { VAL_refund_national_recruitment = yes }
+	}
+}

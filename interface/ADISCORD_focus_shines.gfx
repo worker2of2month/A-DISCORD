@@ -5869,4 +5869,175 @@ spriteTypes = {
 		}
 		legacy_lazy_load = no
 	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_ps_permanent_security_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_ps_permanent_security.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_ps_permanent_security.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_party_front_correspondents_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_front_correspondents.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_front_correspondents.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_pw_party_defence_combine_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_defence_combine.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_defence_combine.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_party_presidium_broadcast_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_presidium_broadcast.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_presidium_broadcast.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_pw_party_open_settlement_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_open_settlement.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_open_settlement.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_party_personnel_commissions_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_personnel_commissions.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_personnel_commissions.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_pw_party_civilian_retraining_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_civilian_retraining.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_civilian_retraining.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_pw_party_family_pensions_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_family_pensions.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_family_pensions.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
+		name = "GFX_focus_STP_pw_party_veteran_reserve_shine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_veteran_reserve.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_veteran_reserve.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
 }

@@ -561,13 +561,17 @@ VAL_population_markets = {
 		available = {
 			has_capitulated = no
 			is_subject = no
+			custom_trigger_tooltip = { tooltip = VAL_national_recruitment_reserve_tt check_variable = { var = VAL_local_volunteer_pool value = 2 compare = greater_than_or_equals } }
+			hidden_trigger = { NOT = { has_variable = VAL_national_recruitment_deposit } }
 		}
 		cost = 0
 		custom_cost_text = VAL_launch_national_recruitment_cost
 		custom_cost_trigger = {
 			check_variable = { var = ADISCORD_economy_treasury value = 3000 compare = greater_than_or_equals }
 		}
+		days_remove = 60
 		days_re_enable = 60
+		cancel_if_not_visible = no
 		fire_only_once = no
 		complete_effect = {
 			if = {
@@ -576,17 +580,25 @@ VAL_population_markets = {
 						has_completed_focus = VAL_Army_Of_The_Ledger
 						has_capitulated = no
 						is_subject = no
+						check_variable = { var = VAL_local_volunteer_pool value = 2 compare = greater_than_or_equals }
+						NOT = { has_variable = VAL_national_recruitment_deposit }
 						check_variable = { var = ADISCORD_economy_treasury value = 3000 compare = greater_than_or_equals }
 					}
 				}
-				add_manpower = 20000
+				custom_effect_tooltip = VAL_national_recruitment_pending_tt
 				hidden_effect = {
+					add_to_variable = { var = VAL_local_volunteer_pool value = -2 }
+					set_variable = { var = VAL_national_recruitment_deposit value = 3000 }
+					VAL_refresh_refugee_state = yes
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 3000 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 3000 }
 					ADISCORD_economy_mark_dirty = yes
 				}
 			}
 		}
+		cancel_trigger = { OR = { has_capitulated = yes is_subject = yes NOT = { has_completed_focus = VAL_Army_Of_The_Ledger } } }
+		cancel_effect = { VAL_refund_national_recruitment = yes }
+		remove_effect = { VAL_finish_national_recruitment = yes }
 		ai_will_do = {
 			base = 3
 			modifier = {

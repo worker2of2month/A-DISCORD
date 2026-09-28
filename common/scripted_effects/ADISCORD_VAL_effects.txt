@@ -4122,6 +4122,21 @@ VAL_frontier_declare_all_tribal_members = {
     }
 }
 
+# COUNTRY VAL: both entry points share war participants and territorial settlement.
+VAL_begin_southern_tsaygen_campaign = {
+	if = {
+		limit = {
+			has_completed_focus = VAL_Return_Southern_Tsaygen
+			VAL_southern_tsaygen_revenge_available = yes
+		}
+		set_variable = { var = VAL_frontier_target value = 4 }
+		VAL_frontier_record_ultimatum = yes
+		set_variable = { var = VAL_frontier_stage value = 2 }
+		VAL_frontier_start_war = yes
+		VAL_call_subjects_to_wars = yes
+	}
+}
+
 VAL_frontier_start_war = {
     if = {
         limit = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } VAL_frontier_prewar_eligible = yes has_war = no }
@@ -4803,37 +4818,60 @@ VAL_cw_retain_livonn = {
 
 
 # COUNTRY VAL, target in FROM. Each state owns its receipt, allowing parallel local work.
+
 VAL_frontier_begin_workshop = {
-    if = {
-        limit = { VAL_frontier_workshop_target_valid = yes ADISCORD_economy_can_spend_500 = yes FROM = { NOT = { has_variable = VAL_frontier_workshop_deposit } } }
-        ADISCORD_economy_spend_500 = yes
-        FROM = { set_variable = { var = VAL_frontier_workshop_deposit value = 500 } }
-    }
+	if = {
+		limit = {
+			VAL_frontier_workshop_target_valid = yes
+			VAL_frontier_workshop_affordable = yes
+			FROM = { NOT = { has_variable = VAL_frontier_workshop_deposit } }
+		}
+		if = {
+			limit = { FROM = { NOT = { check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = greater_than_or_equals } } } }
+			ADISCORD_economy_spend_500 = yes
+			FROM = { set_variable = { var = VAL_frontier_workshop_deposit value = 500 } }
+		}
+		else = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = -1000 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
+			ADISCORD_economy_mark_dirty = yes
+			FROM = { set_variable = { var = VAL_frontier_workshop_deposit value = 1000 } }
+		}
+	}
 }
+
 VAL_frontier_refund_workshop = {
-    if = {
-        limit = { FROM = { check_variable = { var = VAL_frontier_workshop_deposit value = 500 compare = equals } } }
-        FROM = { clear_variable = VAL_frontier_workshop_deposit }
-        add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
-        add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
-        ADISCORD_economy_mark_dirty = yes
-    }
+	if = {
+		limit = { FROM = { has_variable = VAL_frontier_workshop_deposit } }
+		if = {
+			limit = { FROM = { check_variable = { var = VAL_frontier_workshop_deposit value = 1000 compare = equals } } }
+			add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 }
+		}
+		else = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+		}
+		FROM = { clear_variable = VAL_frontier_workshop_deposit }
+		ADISCORD_economy_mark_dirty = yes
+	}
 }
 VAL_frontier_finish_workshop = {
-    if = {
-        limit = { FROM = { check_variable = { var = VAL_frontier_workshop_deposit value = 500 compare = equals } } }
-        if = {
-            limit = { VAL_frontier_workshop_target_valid = yes }
-            FROM = {
-                clear_variable = VAL_frontier_workshop_deposit
-                add_extra_state_shared_building_slots = 1
-                add_building_construction = { type = arms_factory level = 1 instant_build = yes }
-                owner = { ADISCORD_economy_mark_dirty = yes }
-            }
-            ADISCORD_economy_mark_dirty = yes
-        }
-        else = { VAL_frontier_refund_workshop = yes }
-    }
+	if = {
+		limit = { FROM = { has_variable = VAL_frontier_workshop_deposit } }
+		if = {
+			limit = { VAL_frontier_workshop_target_valid = yes }
+			FROM = {
+				clear_variable = VAL_frontier_workshop_deposit
+				add_to_variable = { var = VAL_frontier_workshop_stage value = 1 }
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+				owner = { ADISCORD_economy_mark_dirty = yes }
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAL_frontier_refund_workshop = yes }
+	}
 }
 
 VAL_recall_northern_volunteers = {

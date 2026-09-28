@@ -2593,6 +2593,29 @@ class ValReclamationTests(unittest.TestCase):
 
 
 class ValFrontierCampaignTests(unittest.TestCase):
+    def test_workshop_program_is_bounded_and_requires_infrastructure_for_expansion(self):
+        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, parse_clausewitz
+        triggers = (ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt").read_text(encoding="utf-8")
+        start = triggers.index("VAL_frontier_workshop_target_valid = {")
+        end = triggers.index("\n}", start)
+        gate = triggers[start:end]
+        self.assertIn("var = VAL_frontier_workshop_stage value = 2 compare = greater_than_or_equals", gate)
+        self.assertIn("infrastructure > 2", gate)
+        self.assertIn("arms_factory < 20", gate)
+        state_gate = block(block(parse_clausewitz(triggers), "VAL_frontier_workshop_target_valid"), "FROM")
+        facts = {
+            ("58", "is_owned_by", "ROOT"): True,
+            ("58", "is_controlled_by", "ROOT"): True,
+            ("58", "owner"): "VAL",
+            ("VAL", "has_war", "no"): True,
+            ("VAL", "has_capitulated", "no"): True,
+            ("VAL", "controls_state", "PREV"): True,
+            ("58", "numeric", "arms_factory"): 0,
+        }
+        for stage, infrastructure, expected in ((0, 0, True), (1, 2, False), (1, 3, True), (2, 5, False)):
+            scenario = facts | {("58", "variable", "VAL_frontier_workshop_stage"): stage, ("58", "numeric", "infrastructure"): infrastructure}
+            self.assertEqual(matches_conditions(state_gate, scenario, "58"), expected)
+
     def test_workshop_decisions_render_only_on_kefreyt_owned_controlled_states(self):
         decisions = DECISIONS_PATH.read_text(encoding="utf-8")
         start = decisions.index("\tVAL_frontier_workshops = {")
@@ -2620,6 +2643,8 @@ class ValFrontierCampaignTests(unittest.TestCase):
         target = 58
 
         def gate(rows, scope):
+            if len(rows) == 3 and [e.value for e in rows[:2]] == ["arms_factory", "<"]:
+                return factories[scope] < float(rows[2].value)
             results = []
             for e in rows:
                 k, v = e.key, e.value
@@ -2630,10 +2655,17 @@ class ValFrontierCampaignTests(unittest.TestCase):
                 elif k == "has_variable":
                     ok = (scope, v) in variables
                 elif k == "check_variable":
-                    self.assertEqual(scalar(v, "compare"), "equals")
-                    ok = variables.get((scope, scalar(v, "var")), 0) == float(scalar(v, "value"))
+                    comparison = scalar(v, "compare")
+                    actual = variables.get((scope, scalar(v, "var")), 0)
+                    expected = float(scalar(v, "value"))
+                    self.assertIn(comparison, ("equals", "greater_than_or_equals"))
+                    ok = actual == expected if comparison == "equals" else actual >= expected
                 elif k == "ADISCORD_economy_can_spend_500":
                     ok = variables[scope, "ADISCORD_economy_treasury"] >= 500
+                elif k == "arms_factory":
+                    ok = factories[scope] < float(v)
+                elif k == "VAL_frontier_workshop_affordable":
+                    ok = variables[scope, "ADISCORD_economy_treasury"] >= (500 if variables.get((target, "VAL_frontier_workshop_stage"), 0) < 1 else 1000)
                 elif k == "VAL_frontier_workshop_target_valid":
                     ok = valid[target]
                 else:
@@ -2698,6 +2730,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
         call("finish")
         call("refund")
         self.assertEqual((factories[61], slots[61]), (1, 1))
+        self.assertEqual(variables[61, "VAL_frontier_workshop_stage"], 1)
         self.assertEqual(variables["VAL", "ADISCORD_economy_treasury"], 1000)
         self.assertEqual(variables["VAL", "ADISCORD_economy_current_month_action_costs"], 1000)
         self.assertEqual(variables["VAL", "ADISCORD_economy_current_month_action_income"], 500)
@@ -2706,6 +2739,20 @@ class ValFrontierCampaignTests(unittest.TestCase):
         variables["VAL", "ADISCORD_economy_treasury"] = 499.99
         call("begin")
         self.assertNotIn((61, "VAL_frontier_workshop_deposit"), variables)
+        variables["VAL", "ADISCORD_economy_treasury"] = 999.99
+        call("begin")
+        self.assertNotIn((61, "VAL_frontier_workshop_deposit"), variables)
+        variables["VAL", "ADISCORD_economy_treasury"] = 1000
+        call("begin")
+        call("begin")
+        self.assertEqual(variables[61, "VAL_frontier_workshop_deposit"], 1000)
+        self.assertEqual(variables["VAL", "ADISCORD_economy_treasury"], 0)
+        valid[61] = False
+        call("finish")
+        call("refund")
+        self.assertEqual(variables["VAL", "ADISCORD_economy_treasury"], 1000)
+        self.assertEqual((factories[61], slots[61]), (1, 1))
+        self.assertEqual(variables[61, "VAL_frontier_workshop_stage"], 1)
 
     def test_all_enrolled_tribes_must_fall_and_liberation_reopens_the_war(self):
         from itertools import product

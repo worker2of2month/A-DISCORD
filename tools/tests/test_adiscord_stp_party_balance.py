@@ -63,6 +63,25 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
             shift,
             r"set_temp_variable\s*=\s*\{\s*var\s*=\s*STP_pf_gain\s+value\s*=\s*5\s*\}",
         )
+    def test_veteran_guarantees_accept_either_policy_but_require_family_pensions(self) -> None:
+        source = read(ROOT / "common/national_focus/ADISCORD_STP_civil_war.txt")
+        tree = one(parse_clausewitz(source), "focus_tree")
+        focuses = {one(entry.value, "id"): entry.value for entry in tree if entry.key == "focus"}
+        terminal = focuses["STP_pw_party_social_guarantees"]
+        prerequisites = [entry.value for entry in terminal if entry.key == "prerequisite"]
+        civilian = "STP_pw_party_civilian_retraining"
+        military = "STP_pw_party_veteran_reserve"
+        pensions = "STP_pw_party_family_pensions"
+        for policy in (civilian, military):
+            for has_pensions in (False, True):
+                completed = {policy, pensions} if has_pensions else {policy}
+                with self.subTest(policy=policy, pensions=has_pensions):
+                    reachable = all(any(entry.value in completed for entry in group) for group in prerequisites)
+                    self.assertEqual(reachable, has_pensions)
+        self.assertFalse(all(any(entry.value == pensions for entry in group) for group in prerequisites))
+        self.assertEqual(one(one(focuses[civilian], "mutually_exclusive"), "focus"), military)
+        self.assertEqual(one(one(focuses[military], "mutually_exclusive"), "focus"), civilian)
+
     def test_party_route_requires_staged_defensive_recovery(self) -> None:
         actions = read(ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt")
         self.assertIn("STP_ps_begin_defence = yes", actions)

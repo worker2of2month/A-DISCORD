@@ -642,17 +642,22 @@ VAL_frontier_members_beaten = {
 
 # COUNTRY VAL, project state in FROM. Workshops are restricted to territory directly owned and controlled by Kefreyt.
 VAL_frontier_workshop_target_valid = {
-    has_capitulated = no
-    has_war = no
-    is_subject = no
-    has_completed_focus = VAL_frontier_treaty_offices
-    FROM = {
-        OR = { state = 58 state = 59 state = 60 state = 61 state = 62 state = 63 state = 64 state = 65 }
-        is_owned_by = ROOT
-        is_controlled_by = ROOT
-        owner = { has_war = no has_capitulated = no controls_state = PREV }
-        arms_factory < 20
-    }
+	has_capitulated = no
+	has_war = no
+	is_subject = no
+	has_completed_focus = VAL_frontier_treaty_offices
+	FROM = {
+		OR = { state = 58 state = 59 state = 60 state = 61 state = 62 state = 63 state = 64 state = 65 }
+		is_owned_by = ROOT
+		is_controlled_by = ROOT
+		owner = { has_war = no has_capitulated = no controls_state = PREV }
+		arms_factory < 20
+		NOT = { check_variable = { var = VAL_frontier_workshop_stage value = 2 compare = greater_than_or_equals } }
+		OR = {
+			NOT = { check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = greater_than_or_equals } }
+			infrastructure > 2
+		}
+	}
 }
 
 # COUNTRY recipient: eligibility is rechecked at acceptance.
@@ -1866,6 +1871,7 @@ VAL_southern_tsaygen_revenge_available = {
 	has_capitulated = no
 	is_subject = no
 	has_war = no
+	custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
 	ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no }
 	168 = { is_core_of = VAL is_owned_by = ERT is_controlled_by = ERT }
 }
@@ -2455,3 +2461,10 @@ VAL_stelander_support_active = {
 }
 
 # COUNTRY VAL: Kefreyt has formally backed Shabrat and the civil war is still live.
+
+VAL_frontier_workshop_affordable = {
+	OR = {
+		AND = { FROM = { NOT = { check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = greater_than_or_equals } } } ADISCORD_economy_can_spend_500 = yes }
+		AND = { FROM = { check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
+	}
+}

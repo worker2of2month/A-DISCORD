@@ -15,7 +15,7 @@ ADISCORD_economy_projects = {
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
-			NOT = { num_of_available_civilian_factories < 3 }
+			NOT = { num_of_civilian_factories_available_for_projects < 3 }
 		}
 		cost = 0
 		custom_cost_trigger = {
@@ -59,7 +59,7 @@ ADISCORD_economy_projects = {
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
-			NOT = { num_of_available_civilian_factories < 3 }
+			NOT = { num_of_civilian_factories_available_for_projects < 3 }
 		}
 		cost = 0
 		custom_cost_trigger = {
@@ -103,7 +103,7 @@ ADISCORD_economy_projects = {
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
-			NOT = { num_of_available_civilian_factories < 3 }
+			NOT = { num_of_civilian_factories_available_for_projects < 3 }
 		}
 		cost = 0
 		custom_cost_trigger = {
@@ -147,7 +147,7 @@ ADISCORD_economy_projects = {
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
-			NOT = { num_of_available_civilian_factories < 3 }
+			NOT = { num_of_civilian_factories_available_for_projects < 3 }
 			has_tech = ADISCORD_tech_restored_truck_fleets
 			has_tech = ADISCORD_tech_armored_rail_convoys
 		}
@@ -194,7 +194,7 @@ ADISCORD_economy_projects = {
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
-			NOT = { num_of_available_civilian_factories < 3 }
+			NOT = { num_of_civilian_factories_available_for_projects < 3 }
 			OR = { has_tech = ADISCORD_tech_signature_management_skins has_tech = ADISCORD_tech_unmanned_recon_vehicles }
 		}
 		cost = 0
@@ -239,7 +239,7 @@ ADISCORD_economy_projects = {
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_slot_available_tt NOT = { has_variable = ADISCORD_economy_project_id } }
-			NOT = { num_of_available_civilian_factories < 3 }
+			NOT = { num_of_civilian_factories_available_for_projects < 3 }
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
 		}
 		cost = 0

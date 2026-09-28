@@ -76,7 +76,7 @@
 
 	focus = {
 		id = STP_pw_party_open_settlement
-		icon = GFX_goal_generic_positive_trade_relations
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 1
 		y = 5
 		cost = 3
@@ -596,7 +596,7 @@
 
 	focus = {
 		id = STP_party_personnel_commissions
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_STP_party_personnel_commissions
 		x = 4
 		y = 6
 		cost = 3
@@ -894,7 +894,7 @@
 
 	focus = {
 		id = STP_pw_party_defence_combine
-		icon = GFX_goal_generic_construct_mil_factory
+		icon = GFX_focus_STP_pw_party_defence_combine
 		x = 8
 		y = 8
 		cost = 4
@@ -1061,6 +1061,192 @@
 				add_to_variable = { var = STP_pw_political_power_gain value = 0.05 }
 				STP_pw_refresh_modifier = yes
 			}
+		}
+	}
+
+	# Veterans and families: civilian retraining or a trained reserve.
+
+	focus = {
+		id = STP_pw_party_veterans_congress
+		icon = GFX_focus_STP_ps_joint_staff
+		x = -14
+		y = 3
+		cost = 3
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		prerequisite = {
+			focus = STP_pw_party_new_republic
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			add_war_support = 0.03
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_family_pensions
+		icon = GFX_focus_STP_pw_party_family_pensions
+		x = -16
+		y = 4
+		cost = 3
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		prerequisite = {
+			focus = STP_pw_party_veterans_congress
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = STP_pw_party_dummy
+					add_idea = STP_pw_party_family_pensions_delta
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_stability_factor
+					value = 0.03
+				}
+				add_to_variable = {
+					var = STP_pw_ADISCORD_economy_admin_expense_factor
+					value = 0.02
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = -14
+		y = 4
+		cost = 3
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		prerequisite = {
+			focus = STP_pw_party_veterans_congress
+		}
+		mutually_exclusive = { focus = STP_pw_party_veteran_reserve }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			add_tech_bonus = {
+				name = STP_pw_party_civilian_retraining
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = STP_pw_party_dummy
+					add_idea = STP_pw_party_civilian_retraining_delta
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_production_speed_buildings_factor
+					value = 0.03
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_pw_party_veteran_reserve
+		x = -12
+		y = 4
+		cost = 3
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		prerequisite = {
+			focus = STP_pw_party_veterans_congress
+		}
+		mutually_exclusive = { focus = STP_pw_party_civilian_retraining }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			army_experience = 15
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = STP_pw_party_dummy
+					add_idea = STP_pw_party_veteran_reserve_delta
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_pw_training_time_factor
+					value = -0.05
+				}
+				STP_pw_refresh_modifier = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_social_guarantees
+		icon = GFX_focus_STP_cw_protocol_office
+		x = -14
+		y = 5
+		cost = 3
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		prerequisite = {
+			focus = STP_pw_party_family_pensions
+		}
+		prerequisite = {
+			focus = STP_pw_party_civilian_retraining
+			focus = STP_pw_party_veteran_reserve
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			add_stability = 0.03
+			add_war_support = 0.03
 		}
 	}
 

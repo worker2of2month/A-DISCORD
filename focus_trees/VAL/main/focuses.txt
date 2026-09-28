@@ -3123,6 +3123,7 @@ focus_tree = {
 				set_country_flag = VAL_economic_recovery_completed
 				VAL_advance_economic_recovery = yes
 				VAL_restore_arsenal_reputation = yes
+				country_event = { id = val_rework.124 hours = 1 }
 			}
 			custom_effect_tooltip = VAL_next_chapter_tt
 		}

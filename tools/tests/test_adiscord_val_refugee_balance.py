@@ -72,6 +72,77 @@ def focus_block(source: str, focus_id: str) -> str:
 
 
 class KefreytRefugeeBalanceTests(unittest.TestCase):
+    def test_national_intake_cannot_double_pay_deliver_or_refund(self) -> None:
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        decision = block(parse_clausewitz(named_block(self.decisions, "VAL_launch_national_recruitment")), "VAL_launch_national_recruitment")
+        definitions = {e.key: e.value for e in parse_clausewitz(self.effects)}
+        for cancel in (False, True):
+            facts = {
+                ("VAL", "has_completed_focus", "VAL_Army_Of_The_Ledger"): True,
+                ("VAL", "has_capitulated", "no"): True,
+                ("VAL", "is_subject", "no"): True,
+                ("VAL", "variable", "VAL_local_volunteer_pool"): 2,
+                ("VAL", "variable", "ADISCORD_economy_treasury"): 3000,
+            }
+            manpower = 0
+
+            def run(rows):
+                nonlocal manpower
+                for _, e in selected_effects(rows, facts, "VAL"):
+                    if e.key in ("set_variable", "add_to_variable", "subtract_from_variable"):
+                        name = scalar(e.value, "var")
+                        value = scalar(e.value, "value")
+                        amount = facts.get(("VAL", "variable", value))
+                        if amount is None:
+                            amount = float(value)
+                        key = ("VAL", "variable", name)
+                        previous = facts.get(key, 0)
+                        facts[key] = amount if e.key == "set_variable" else previous + amount * (-1 if e.key == "subtract_from_variable" else 1)
+                        facts["VAL", "has_variable", name] = True
+                    elif e.key == "clear_variable":
+                        facts.pop(("VAL", "variable", e.value), None)
+                        facts["VAL", "has_variable", e.value] = False
+                    elif e.key == "add_manpower":
+                        manpower += float(e.value)
+                    elif e.key == "VAL_refund_national_recruitment":
+                        run(definitions[e.key])
+
+            run(block(decision, "complete_effect"))
+            run(block(decision, "complete_effect"))
+            self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 0)
+            self.assertEqual(facts["VAL", "variable", "VAL_local_volunteer_pool"], 0)
+            self.assertEqual(manpower, 0)
+            if cancel:
+                facts["VAL", "has_capitulated", "no"] = False
+            run(definitions["VAL_finish_national_recruitment"])
+            run(definitions["VAL_finish_national_recruitment"])
+            run(definitions["VAL_refund_national_recruitment"])
+            self.assertEqual(manpower, 0 if cancel else 20000)
+            self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 3000 if cancel else 0)
+            self.assertEqual(facts["VAL", "variable", "VAL_local_volunteer_pool"], 2 if cancel else 0)
+
+    def test_national_intake_reserves_people_and_refunds_cancelled_preparation(self) -> None:
+        decision = named_block(self.decisions, "VAL_launch_national_recruitment")
+        self.assertIn("days_remove = 60", decision)
+        start = named_block(decision, "complete_effect")
+        self.assertNotIn("add_manpower", start)
+        self.assertIn("var = VAL_local_volunteer_pool value = -2", start)
+        self.assertIn("var = VAL_national_recruitment_deposit value = 3000", start)
+        self.assertIn("VAL_finish_national_recruitment = yes", decision)
+        self.assertIn("VAL_refund_national_recruitment = yes", decision)
+        refund = named_block(self.effects, "VAL_refund_national_recruitment")
+        self.assertIn("var = VAL_local_volunteer_pool value = 2", refund)
+        self.assertIn("clear_variable = VAL_national_recruitment_deposit", refund)
+
+    def test_projects_use_capacity_available_for_projects_not_idle_construction(self) -> None:
+        decisions = read("common/decisions/ADISCORD_economy_projects.txt")
+        triggers = read("common/scripted_triggers/ADISCORD_economy_triggers.txt")
+        self.assertNotIn("num_of_available_civilian_factories", decisions)
+        for name in ("precision_tooling", "automated_industry", "national_computing"):
+            gate = named_block(triggers, "ADISCORD_economy_can_start_" + name)
+            self.assertIn("NOT = { num_of_civilian_factories_available_for_projects < 3 }", gate)
+
     RECRUITMENT = (
         ("VAL_recruit_contract_reserves", "VAL_Company_Service_Code", 5000, 1000, "political_power", 50, 120),
         ("VAL_recall_contract_veterans", "VAL_Operational_Reserves", 6000, 1500, "command_power", 25, 180),
@@ -93,6 +164,7 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
                 ("VAL", "numeric", "has_manpower"): 10000,
                 ("VAL", "numeric", resource): price,
                 ("VAL", "variable", "ADISCORD_economy_treasury"): cash,
+                ("VAL", "variable", "VAL_local_volunteer_pool"): 2,
             }
             cases = (
                 ({}, True),
@@ -116,7 +188,7 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
                         if not expected:
                             self.assertEqual(effects, [])
                             continue
-                        self.assertEqual([float(e.value) for e in effects if e.key == "add_manpower"], [manpower])
+                        self.assertEqual([float(e.value) for e in effects if e.key == "add_manpower"], [] if ident == "VAL_launch_national_recruitment" else [manpower])
                         resource_debits = [float(e.value) for e in effects
                                            if e.key in ("add_political_power", "add_command_power")]
                         self.assertEqual(resource_debits, [-price] if currency else [])
@@ -125,10 +197,10 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
                         costs = [(scalar(e.value, "var"), float(scalar(e.value, "value")))
                                  for e in effects if e.key == "add_to_variable"]
                         self.assertEqual(debits, [("ADISCORD_economy_treasury", cash)])
-                        self.assertEqual(costs, [("ADISCORD_economy_current_month_action_costs", cash)])
+                        self.assertEqual(costs, ([("VAL_local_volunteer_pool", -2)] if ident == "VAL_launch_national_recruitment" else []) + [("ADISCORD_economy_current_month_action_costs", cash)])
                         self.assertEqual(sum(e.key == "ADISCORD_economy_mark_dirty" for e in effects), 1)
 
-    def test_contract_recruitment_uses_native_cooldowns_without_delayed_rewards(self) -> None:
+    def test_contract_recruitment_uses_native_cooldowns_and_national_preparation(self) -> None:
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
@@ -139,8 +211,12 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
             self.assertEqual(scalar(decision, "cost"), "0")
             self.assertEqual(scalar(decision, "days_re_enable"), str(cooldown))
             self.assertEqual(scalar(decision, "fire_only_once"), "no")
+            if ident == "VAL_launch_national_recruitment":
+                self.assertEqual(scalar(decision, "days_remove"), "60")
+            else:
+                self.assertNotIn("days_remove", {e.key for e in decision})
             self.assertFalse({e.key for e in walk(decision)} & {
-                "days_remove", "country_event", "random", "random_list", "add_dynamic_modifier",
+                "country_event", "random", "random_list", "add_dynamic_modifier",
                 "set_country_flag", "targets", "state_target",
             })
 

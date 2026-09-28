@@ -142,7 +142,7 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
             "ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no }",
         ):
             self.assertIn(token, gate)
-        self.assertNotIn("VAL_frontier_idle", gate)
+        self.assertIn("VAL_frontier_idle = yes", gate)
 
         perimeter_gate = named_block(triggers, "VAL_wasteland_invasion_available")
         self.assertIn("has_war = no", perimeter_gate)
@@ -186,6 +186,14 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         }
         for decision_id, war_goal in expected.items():
             block = named_block(military, decision_id)
+            if decision_id == "VAL_operation_return_southern_tsaygen":
+                self.assertIn("VAL_begin_southern_tsaygen_campaign = yes", block)
+                effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+                start = named_block(effects, "VAL_begin_southern_tsaygen_campaign")
+                self.assertIn("VAL_southern_tsaygen_revenge_available = yes", start)
+                self.assertIn("var = VAL_frontier_target value = 4", start)
+                self.assertIn("VAL_frontier_start_war = yes", start)
+                continue
             self.assertIn(war_goal, block)
             self.assertIn("VAL_call_subjects_to_wars = yes", block)
 

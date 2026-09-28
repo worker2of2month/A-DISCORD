@@ -1357,4 +1357,49 @@ spriteTypes = {
 		name = "GFX_focus_ADISCORD_vorkerland_fortify_home_region"
 		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
 	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ps_permanent_security"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_ps_permanent_security.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_front_correspondents"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_front_correspondents.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_party_defence_combine"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_defence_combine.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_presidium_broadcast"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_presidium_broadcast.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_party_open_settlement"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_open_settlement.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_personnel_commissions"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_party_personnel_commissions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_party_civilian_retraining"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_civilian_retraining.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_party_family_pensions"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_family_pensions.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_party_veteran_reserve"
+		texturefile = "gfx/interface/goals/STP/BeforeCivilWar/GFX_focus_STP_pw_party_veteran_reserve.png"
+	}
 }

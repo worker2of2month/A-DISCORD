@@ -843,14 +843,17 @@ BRANCHES = (
             ("drone_construction_cartography", "Картография строительных дронов", "Construction Drone Cartography", "basic_construction", 2160, (
                 "production_speed_buildings_factor = 0.03",
                 "production_speed_infrastructure_factor = 0.04",
+                "global_building_slots_factor = 0.10",
             )),
             ("modular_rebuilding", "Модульная застройка", "Modular Rebuilding", "improved_construction", 2165, (
                 "production_speed_buildings_factor = 0.04",
                 "production_speed_industrial_complex_factor = 0.03",
+                "global_building_slots_factor = 0.10",
             )),
             ("prefabricated_districts", "Сборные кварталы", "Prefabricated Districts", "advanced_construction", 2169, (
                 "production_speed_buildings_factor = 0.04",
                 "consumer_goods_factor = -0.02",
+                "global_building_slots_factor = 0.10",
             )),
             ("public_repair_corps", "Общественные ремонтные корпуса", "Public Repair Corps", "advanced_construction", 2171, (
                 "industry_repair_factor = 0.08",
@@ -3596,6 +3599,7 @@ NAVAL_AIR_WEAPON_EFFECTS = {
 
 
 ALLOW = {
+    "ADISCORD_tech_remote_weapon_tripods": ("tag = VAL",),
     "ADISCORD_tech_old_generator_fragments": ("ADISCORD_has_forbidden_legacy_access = yes",),
     "ADISCORD_tech_dead_reactor_salvage": ("ADISCORD_has_forbidden_legacy_access = yes",),
     "ADISCORD_tech_legacy_reactor_compactification": ("ADISCORD_has_forbidden_legacy_access = yes",),

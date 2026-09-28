@@ -2505,3 +2505,12 @@ country_event = {
 	is_triggered_only = yes
 	option = { name = val_contract.374.a }
 }
+
+country_event = {
+	id = val_rework.124
+	title = val_rework.124.t
+	desc = val_rework.124.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = val_rework.124.a }
+}

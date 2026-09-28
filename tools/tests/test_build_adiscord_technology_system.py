@@ -19,6 +19,17 @@ STARTING_PROFILE_MANIFEST = ROOT / "tools" / "data" / "adiscord_starting_technol
 
 
 class CompactTechnologyTreeContractTests(unittest.TestCase):
+    def test_reconstruction_expands_shared_factory_capacity(self):
+        expected = {"drone_construction_cartography": "0.10", "modular_rebuilding": "0.10", "prefabricated_districts": "0.10"}
+        found = {}
+        for branch in generator.BRANCHES:
+            for index, tech in enumerate(branch.techs):
+                if tech.key in expected:
+                    effects = generator.effects_for(branch, index)
+                    self.assertIn("global_building_slots_factor = " + expected[tech.key], effects)
+                    found[tech.key] = True
+        self.assertEqual(set(found), set(expected))
+
     def test_weapon_programmes_target_registered_subunits(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 

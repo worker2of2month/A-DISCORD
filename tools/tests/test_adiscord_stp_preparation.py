@@ -733,7 +733,8 @@ class StelanderPreparationTests(unittest.TestCase):
         import json
         on_actions = (ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt").read_text(encoding="utf-8")
         self.assertIn("on_monthly_STP = {", on_actions)
-        self.assertIn("flag = STP_ambient_life_cooldown days = 180", on_actions)
+        self.assertIn("NOT = { has_country_flag = STP_ambient_life_seen }", on_actions)
+        self.assertNotIn("STP_ambient_life_cooldown", on_actions)
         for event_id in ("ADISCORD_STP_preparation.28",
                          "ADISCORD_STP_preparation.29",
                          "ADISCORD_STP_preparation.30"):
@@ -746,6 +747,9 @@ class StelanderPreparationTests(unittest.TestCase):
                          "ADISCORD_STP_preparation.30"):
             self.assertIn(event_id, event_nodes)
             self.assertEqual(len([e for e in event_nodes[event_id] if e.key == "option"]), 1)
+            self.assertEqual(scalar(event_nodes[event_id], "fire_only_once"), "yes", event_id)
+            self.assertEqual(scalar(block(event_nodes[event_id], "immediate"), "set_country_flag"),
+                             "STP_ambient_life_seen", event_id)
 
         registry = json.loads((ROOT / "tools/data/adiscord_event_ids.json").read_text(encoding="utf-8"))
         registered = {entry["id"] for entry in registry["events"]}

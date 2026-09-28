@@ -106,12 +106,11 @@ on_actions = {
 					is_ai = no
 					has_capitulated = no
 					has_variable = ADISCORD_economy_treasury
-					NOT = { has_country_flag = STP_ambient_life_cooldown }
+					NOT = { has_country_flag = STP_ambient_life_seen }
 				}
 				random_list = {
 					75 = { }
 					25 = {
-						set_country_flag = { flag = STP_ambient_life_cooldown days = 180 }
 						random_list = {
 							45 = { country_event = { id = ADISCORD_STP_preparation.28 days = 1 } }
 							35 = { country_event = { id = ADISCORD_STP_preparation.29 days = 1 } }

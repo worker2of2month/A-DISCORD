@@ -248,8 +248,7 @@ VAL_military_operations = {
 		days_re_enable = 30
 		complete_effect = {
 			custom_effect_tooltip = VAL_return_southern_tsaygen_war_tt
-			declare_war_on = { target = ERT type = take_state_focus generator = { 168 } }
-			hidden_effect = { VAL_call_subjects_to_wars = yes }
+			hidden_effect = { VAL_begin_southern_tsaygen_campaign = yes }
 		}
 		ai_will_do = { base = 30 }
 	}
@@ -1452,6 +1451,7 @@ VAL_frontier = {
 		targets = { 58 59 60 61 62 63 64 65 }
 		target_trigger = { FROM = { is_owned_by = ROOT is_controlled_by = ROOT } }
 		visible = {
+			FROM = { NOT = { check_variable = { var = VAL_frontier_workshop_stage value = 2 compare = greater_than_or_equals } } }
 			has_completed_focus = VAL_frontier_treaty_offices
 			FROM = { is_owned_by = ROOT is_controlled_by = ROOT }
 		}
@@ -1461,7 +1461,7 @@ VAL_frontier = {
 		}
 		cost = 0
 		custom_cost_text = VAL_frontier_workshop_cost
-		custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }
+		custom_cost_trigger = { VAL_frontier_workshop_affordable = yes }
 		days_remove = 90
 		fire_only_once = no
 		on_map_mode = map_and_decisions_view

@@ -888,6 +888,47 @@ ideas = {
 			allowed = { always = no }
 			modifier = { supply_consumption_factor = -0.05 army_org_regain = 0.05 }
 		}
+		STP_party_regimental_organizers_delta = {
+			name = STP_cw_party_administration_dynamic
+			allowed = { always = no }
+			modifier = {
+				command_power_gain_mult = 0.10
+			}
+		}
+
+		STP_party_district_supply_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.03
+			}
+		}
+
+		STP_pw_party_family_pensions_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				ADISCORD_economy_admin_expense_factor = 0.02
+			}
+		}
+
+		STP_pw_party_civilian_retraining_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.03
+			}
+		}
+
+		STP_pw_party_veteran_reserve_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = {
+				training_time_factor = -0.05
+			}
+		}
+
 		STP_party_rear_administration_party_delta = {
 			name = STP_cw_party_administration_dynamic
 			allowed = { always = no }
