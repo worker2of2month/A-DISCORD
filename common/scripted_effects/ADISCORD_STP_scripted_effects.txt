@@ -9839,23 +9839,15 @@ STP_ch_elect_1 = {
 			ruling_party = hedonism
 			elections_allowed = no
 		}
-		if = {
-			limit = {
-				has_character = STP_rufus_hedersett
-			}
-			promote_character = STP_rufus_hedersett
+		create_country_leader = {
+			name = STP_ch_leader_1
+			desc = STP_ch_leader_1_desc
+			ideology = aristocratic_hedonism
+			expire = "2300.1.1"
 		}
-		else = {
-			create_country_leader = {
-				name = STP_ch_leader_1
-				desc = STP_ch_leader_1_desc
-				ideology = aristocratic_hedonism
-				expire = "2300.1.1"
-			}
-			set_country_leader_portrait = {
-				ideology = hedonism
-				portrait = GFX_portrait_STP_Conservative_Presidium_placeholder
-			}
+		set_country_leader_portrait = {
+			ideology = hedonism
+			portrait = GFX_portrait_STP_Conservative_Presidium_placeholder
 		}
 		set_variable = {
 			var = STP_ch_phase
@@ -9883,15 +9875,32 @@ STP_ch_elect_2 = {
 			ruling_party = hedonism
 			elections_allowed = no
 		}
-		create_country_leader = {
-			name = STP_ch_leader_2
-			desc = STP_ch_leader_2_desc
-			ideology = hedonism_ideology
-			expire = "2300.1.1"
+		if = {
+			limit = { has_character = STP_rufus_hedersett }
+			add_country_leader_role = {
+				character = STP_rufus_hedersett
+				promote_leader = yes
+				country_leader = {
+					ideology = hedonism_ideology
+					expire = "2300.1.1"
+				}
+			}
+			promote_character = {
+				character = STP_rufus_hedersett
+				ideology = hedonism_ideology
+			}
+		}
+		else = {
+			create_country_leader = {
+				name = STP_ch_leader_2
+				desc = STP_ch_leader_2_desc
+				ideology = hedonism_ideology
+				expire = "2300.1.1"
+			}
 		}
 		set_country_leader_portrait = {
 			ideology = hedonism
-			portrait = GFX_portrait_STP_Alexandra_Severina_placeholder
+			portrait = GFX_portrait_STP_Rufus_Hedersett
 		}
 		set_variable = {
 			var = STP_ch_phase
