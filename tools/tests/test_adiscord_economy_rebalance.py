@@ -676,7 +676,7 @@ class BudgetAndLawBalanceTests(unittest.TestCase):
                             body = next(n.value for n in law.value if n.key == hook)
                             hidden = next(n.value for n in body if n.key == "hidden_effect")
                             self.assertTrue(any(n.key == P + "queue_law_refresh" and n.value == "yes" for n in hidden), law.key)
-        self.assertEqual(count, 116)
+        self.assertEqual(count, 126)
 
     def test_recruitment_shares_stay_bounded_and_emergency_laws_retain_costs(self):
         source = read("common/ideas/_manpower.txt")

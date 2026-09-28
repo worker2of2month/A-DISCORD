@@ -368,7 +368,7 @@ ideas = {
 		law = yes
 
 		ADISCORD_taxation_light_dues = {
-			picture = ADISCORD_law_taxation_light_dues
+			picture = ADISCORD_taxation_light_dues
 			cost = 150
 			removal_cost = -1
 
@@ -386,7 +386,7 @@ ideas = {
 		}
 
 		ADISCORD_taxation_balanced_register = {
-			picture = ADISCORD_law_taxation_balanced_register
+			picture = ADISCORD_taxation_balanced_register
 			cost = 150
 			removal_cost = -1
 			default = yes
@@ -408,7 +408,7 @@ ideas = {
 		}
 
 		ADISCORD_taxation_progressive_brackets = {
-			picture = ADISCORD_law_taxation_progressive_brackets
+			picture = ADISCORD_taxation_progressive_brackets
 			cost = 150
 			removal_cost = -1
 
@@ -435,7 +435,7 @@ ideas = {
 		}
 
 		ADISCORD_taxation_industrial_tariffs = {
-			picture = ADISCORD_law_taxation_industrial_tariffs
+			picture = ADISCORD_taxation_industrial_tariffs
 			cost = 150
 			removal_cost = -1
 
@@ -464,7 +464,7 @@ ideas = {
 		}
 
 		ADISCORD_taxation_extraction_quotas = {
-			picture = ADISCORD_law_taxation_extraction_quotas
+			picture = ADISCORD_taxation_extraction_quotas
 			cost = 150
 			removal_cost = -1
 
@@ -505,7 +505,7 @@ ideas = {
 		}
 
 		ADISCORD_taxation_corporate_assessment = {
-			picture = ADISCORD_law_taxation_industrial_tariffs
+			picture = ADISCORD_taxation_corporate_assessment
 			cost = 150
 			removal_cost = -1
 
@@ -810,7 +810,7 @@ ideas = {
 		}
 
 		ADISCORD_welfare_employer_insurance = {
-			picture = ADISCORD_law_welfare_social_insurance
+			picture = ADISCORD_law_welfare_employer_insurance
 			cost = 75
 			removal_cost = -1
 
@@ -955,7 +955,7 @@ ideas = {
 		}
 
 		ADISCORD_education_apprenticeship = {
-			picture = ADISCORD_law_education_technical_institutes
+			picture = ADISCORD_law_education_apprenticeship
 			cost = 75
 			removal_cost = -1
 
@@ -1121,14 +1121,15 @@ ideas = {
 
 		STP_law_public_orgies = {
 			picture = STP_law_public_orgies
-			cost = 100
+			cost = 0
 			removal_cost = -1
-			allowed = { original_tag = STP }
+			allowed = { always = yes }
 			allowed_civil_war = { always = no }
-			visible = { STP_pw_party_laws_available = yes }
 			available = {
-				STP_pw_party_laws_available = yes
-				STP_pw_party_radical_laws_available = yes
+				custom_trigger_tooltip = {
+					tooltip = STP_law_scripted_only_tt
+					always = no
+				}
 			}
 			modifier = {
 				political_power_gain = 0.03
@@ -1162,14 +1163,15 @@ ideas = {
 
 		STP_law_private_societies = {
 			picture = STP_law_private_societies
-			cost = 100
+			cost = 0
 			removal_cost = -1
-			allowed = { original_tag = STP }
+			allowed = { always = yes }
 			allowed_civil_war = { always = no }
-			visible = { STP_pw_party_laws_available = yes }
 			available = {
-				STP_pw_party_laws_available = yes
-				STP_pw_party_conservative_laws_available = yes
+				custom_trigger_tooltip = {
+					tooltip = STP_law_scripted_only_tt
+					always = no
+				}
 			}
 			modifier = {
 				stability_factor = 0.025
@@ -1354,7 +1356,7 @@ ideas = {
 		law = yes
 
 		ADISCORD_industrial_policy_artisan_markets = {
-			picture = ADISCORD_law_industrial_policy_artisan_markets
+			picture = ADISCORD_industrial_policy_artisan_markets
 			cost = 150
 			removal_cost = -1
 
@@ -1371,7 +1373,7 @@ ideas = {
 		}
 
 		ADISCORD_industrial_policy_balanced_workshops = {
-			picture = ADISCORD_law_industrial_policy_balanced_workshops
+			picture = ADISCORD_industrial_policy_balanced_workshops
 			cost = 150
 			removal_cost = -1
 			default = yes
@@ -1391,7 +1393,7 @@ ideas = {
 		}
 
 		ADISCORD_industrial_policy_civilian_expansion = {
-			picture = ADISCORD_law_industrial_policy_civilian_expansion
+			picture = ADISCORD_industrial_policy_civilian_expansion
 			cost = 150
 			removal_cost = -1
 
@@ -1417,7 +1419,7 @@ ideas = {
 		}
 
 		ADISCORD_industrial_policy_military_prioritization = {
-			picture = ADISCORD_law_industrial_policy_military_prioritization
+			picture = ADISCORD_industrial_policy_military_prioritization
 			cost = 150
 			removal_cost = -1
 
@@ -1452,7 +1454,7 @@ ideas = {
 		}
 
 		ADISCORD_industrial_policy_state_planning_boards = {
-			picture = ADISCORD_law_industrial_policy_state_planning_boards
+			picture = ADISCORD_industrial_policy_state_planning_boards
 			cost = 150
 			removal_cost = -1
 
@@ -1491,7 +1493,7 @@ ideas = {
 		}
 
 		ADISCORD_industrial_policy_export_contracts = {
-			picture = ADISCORD_law_industrial_policy_civilian_expansion
+			picture = ADISCORD_industrial_policy_export_contracts
 			cost = 150
 			removal_cost = -1
 
@@ -1514,17 +1516,15 @@ ideas = {
 
 		STP_law_slavery = {
 			picture = STP_law_slavery
-			cost = 150
+			cost = 0
 			removal_cost = -1
-			allowed = { original_tag = STP }
+			allowed = { always = yes }
 			allowed_civil_war = { always = no }
 			visible = { always = yes }
 			available = {
-				STP_pw_party_laws_available = yes
 				custom_trigger_tooltip = {
-					tooltip = STP_law_slavery_support_tt
-					check_variable = { var = STP_pf_borons_support value = 50 compare = greater_than_or_equals }
-					check_variable = { var = STP_pf_merchants_support value = 50 compare = greater_than_or_equals }
+					tooltip = STP_law_scripted_only_tt
+					always = no
 				}
 			}
 			modifier = {
@@ -2453,11 +2453,16 @@ ideas = {
 
 		STP_law_drug_prohibition = {
 			picture = STP_law_drug_prohibition
-			cost = 75
+			cost = 0
 			removal_cost = -1
 			default = yes
 			allowed = { always = yes }
-			available = { always = yes }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = STP_law_scripted_only_tt
+					always = no
+				}
+			}
 			modifier = {
 				ADISCORD_economy_admin_expense_factor = 0.025
 			}
@@ -2481,14 +2486,15 @@ ideas = {
 
 		STP_law_light_drugs = {
 			picture = STP_law_light_drugs
-			cost = 100
+			cost = 0
 			removal_cost = -1
-			allowed = { original_tag = STP }
+			allowed = { always = yes }
 			allowed_civil_war = { always = no }
-			visible = { STP_pw_party_laws_available = yes }
 			available = {
-				STP_pw_party_laws_available = yes
-				STP_pw_party_conservative_laws_available = yes
+				custom_trigger_tooltip = {
+					tooltip = STP_law_scripted_only_tt
+					always = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.025
@@ -2521,14 +2527,15 @@ ideas = {
 
 		STP_law_hard_drugs = {
 			picture = STP_law_hard_drugs
-			cost = 150
+			cost = 0
 			removal_cost = -1
-			allowed = { original_tag = STP }
+			allowed = { always = yes }
 			allowed_civil_war = { always = no }
-			visible = { STP_pw_party_laws_available = yes }
 			available = {
-				STP_pw_party_laws_available = yes
-				STP_pw_party_radical_laws_available = yes
+				custom_trigger_tooltip = {
+					tooltip = STP_law_scripted_only_tt
+					always = no
+				}
 			}
 			modifier = {
 				ADISCORD_economy_trade_income_factor = 0.08
@@ -2562,10 +2569,15 @@ ideas = {
 
 		ADISCORD_drugs_medical_distribution = {
 			picture = ADISCORD_drugs_medical_distribution
-			cost = 75
+			cost = 0
 			removal_cost = -1
 			allowed = { always = yes }
-			available = { always = yes }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = STP_law_scripted_only_tt
+					always = no
+				}
+			}
 			modifier = {
 				industrial_capacity_factory = 0.01
 				ADISCORD_economy_social_expense_factor = 0.025

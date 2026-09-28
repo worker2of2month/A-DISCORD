@@ -1,25 +1,5 @@
 #reload countrycolors
 
-STP_revolution_capital = {
-	color = rgb { 84 35 112 }
-	color_ui = rgb { 84 35 112 }
-}
-
-NOD_STP_revolution = {
-	color = rgb { 93 113 132 }
-	color_ui = rgb { 93 113 132 }
-}
-
-VAL_STP_revolution = {
-	color = rgb { 117 80 87 }
-	color_ui = rgb { 117 80 87 }
-}
-
-BJK_STP_revolution = {
-	color = rgb { 150 128 80 }
-	color_ui = rgb { 150 128 80 }
-}
-
 STP = {
 	color = rgb{15 118 124}
 	color_ui = rgb{15 118 124}

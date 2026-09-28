@@ -27,6 +27,24 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_6_total_mobilization.png"
 	}
 
+	# Retained vanilla trade-law IDs use their own idea sprites in the politics slot.
+	spriteType = {
+		name = "GFX_idea_free_trade"
+		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_free_trade.png"
+	}
+	spriteType = {
+		name = "GFX_idea_export_focus"
+		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_export_focus.png"
+	}
+	spriteType = {
+		name = "GFX_idea_limited_exports"
+		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_limited_exports.png"
+	}
+	spriteType = {
+		name = "GFX_idea_closed_economy"
+		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_closed_economy.png"
+	}
+
 	# Generic advisor aliases load after vanilla ideas.gfx.
 	spriteType = {
 		name = "GFX_idea_generic_political_advisor_europe_1"

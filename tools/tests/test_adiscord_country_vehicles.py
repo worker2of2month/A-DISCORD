@@ -19,7 +19,8 @@ class CountryVehicleTests(unittest.TestCase):
         particle = path.read_text(encoding="utf-8")
         self.assertRegex(particle, r'name\s*=\s*"sonic_boom_file"')
         self.assertEqual(len(re.findall(r"\bsubsystem\s*=", particle)), 3)
-        self.assertEqual(re.findall(r"\bhide\s*=\s*(\w+)", particle), ["yes"] * 3)
+        self.assertEqual(re.findall(r"\bhide\s*=\s*(\w+)", particle), ["no"] * 3)
+        self.assertEqual(re.findall(r"\bmax_amount\s*=\s*(\d+)", particle), ["0"] * 3)
 
     def test_vehicles_keep_their_paint_in_snow(self):
         for name in NAMES:

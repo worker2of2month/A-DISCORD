@@ -224,24 +224,28 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/laws/culture_press/ADISCORD_law_information_sealed_networks.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_taxation_light_dues"
-		texturefile = "gfx/interface/ideas/idea_ARG_economic_reactivation.dds"
+		name = "GFX_idea_ADISCORD_taxation_light_dues"
+		texturefile = "gfx/interface/ideas/laws/economic_taxes/ADISCORD_taxation_light_dues.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_taxation_balanced_register"
-		texturefile = "gfx/interface/ideas/idea_RAJ_debt_relief.dds"
+		name = "GFX_idea_ADISCORD_taxation_balanced_register"
+		texturefile = "gfx/interface/ideas/laws/economic_taxes/ADISCORD_taxation_balanced_register.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_taxation_progressive_brackets"
-		texturefile = "gfx/interface/ideas/idea_AFG_adopt_nufus.dds"
+		name = "GFX_idea_ADISCORD_taxation_progressive_brackets"
+		texturefile = "gfx/interface/ideas/laws/economic_taxes/ADISCORD_taxation_progressive_brackets.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_taxation_industrial_tariffs"
-		texturefile = "gfx/interface/ideas/idea_RAJ_private_military_complex.dds"
+		name = "GFX_idea_ADISCORD_taxation_industrial_tariffs"
+		texturefile = "gfx/interface/ideas/laws/economic_taxes/ADISCORD_taxation_industrial_tariffs.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_taxation_extraction_quotas"
-		texturefile = "gfx/interface/ideas/idea_ARG_anti_british_sentiment.dds"
+		name = "GFX_idea_ADISCORD_taxation_extraction_quotas"
+		texturefile = "gfx/interface/ideas/laws/economic_taxes/ADISCORD_taxation_extraction_quotas.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_taxation_corporate_assessment"
+		texturefile = "gfx/interface/ideas/laws/economic_taxes/ADISCORD_taxation_corporate_assessment.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_military_militia_autonomy"
@@ -265,43 +269,51 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_welfare_basic_services"
-		texturefile = "gfx/interface/ideas/idea_RAJ_debt_relief.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_welfare/ADISCORD_law_welfare_basic_services.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_welfare_charity_relief"
-		texturefile = "gfx/interface/ideas/idea_generic_org_of_african_unity.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_welfare/ADISCORD_law_welfare_charity_relief.png"
+	}
+spriteType = {
+		name = "GFX_idea_ADISCORD_law_welfare_employer_insurance"
+		texturefile = "gfx/interface/ideas/laws/culture_welfare/ADISCORD_law_welfare_employer_insurance.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_welfare_social_insurance"
-		texturefile = "gfx/interface/ideas/idea_AFG_adopt_nufus.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_welfare/ADISCORD_law_welfare_social_insurance.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_welfare_universal_provision"
-		texturefile = "gfx/interface/ideas/idea_RAJ_private_military_complex.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_welfare/ADISCORD_law_welfare_universal_provision.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_welfare_rationed_support"
-		texturefile = "gfx/interface/ideas/idea_generic_war_preparation.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_welfare/ADISCORD_law_welfare_rationed_support.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_education_basic_schools"
-		texturefile = "gfx/interface/ideas/idea_AFG_adopt_nufus.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_education/ADISCORD_law_education_basic_schools.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_education_informal_instruction"
-		texturefile = "gfx/interface/ideas/joining_rule_democratic_non_aligned.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_education/ADISCORD_law_education_informal_instruction.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_education_civic_curriculum"
-		texturefile = "gfx/interface/ideas/change_leader_rule_influence.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_education/ADISCORD_law_education_civic_curriculum.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_education_technical_institutes"
-		texturefile = "gfx/interface/ideas/idea_RAJ_private_military_complex.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_education/ADISCORD_law_education_technical_institutes.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_education_elite_academies"
-		texturefile = "gfx/interface/ideas/idea_SWE_wargames.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_education/ADISCORD_law_education_elite_academies.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_law_education_apprenticeship"
+		texturefile = "gfx/interface/ideas/laws/culture_education/ADISCORD_law_education_apprenticeship.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_healthcare_basic_clinics"
@@ -352,24 +364,28 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/laws/culture_public_entertainment/ADISCORD_law_cultural_policy_heritage_protection.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_industrial_policy_balanced_workshops"
-		texturefile = "gfx/interface/ideas/idea_RAJ_private_military_complex.dds"
+		name = "GFX_idea_ADISCORD_industrial_policy_balanced_workshops"
+		texturefile = "gfx/interface/ideas/laws/economic_industrial_policy/ADISCORD_industrial_policy_balanced_workshops.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_industrial_policy_artisan_markets"
-		texturefile = "gfx/interface/ideas/idea_ARG_anti_british_sentiment.dds"
+		name = "GFX_idea_ADISCORD_industrial_policy_artisan_markets"
+		texturefile = "gfx/interface/ideas/laws/economic_industrial_policy/ADISCORD_industrial_policy_artisan_markets.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_industrial_policy_civilian_expansion"
-		texturefile = "gfx/interface/ideas/idea_ARG_economic_reactivation.dds"
+		name = "GFX_idea_ADISCORD_industrial_policy_civilian_expansion"
+		texturefile = "gfx/interface/ideas/laws/economic_industrial_policy/ADISCORD_industrial_policy_civilian_expansion.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_industrial_policy_military_prioritization"
-		texturefile = "gfx/interface/ideas/idea_generic_war_preparation.dds"
+		name = "GFX_idea_ADISCORD_industrial_policy_military_prioritization"
+		texturefile = "gfx/interface/ideas/laws/economic_industrial_policy/ADISCORD_industrial_policy_military_prioritization.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_industrial_policy_state_planning_boards"
-		texturefile = "gfx/interface/ideas/war_declaration_rule_faction_leader_only.dds"
+		name = "GFX_idea_ADISCORD_industrial_policy_state_planning_boards"
+		texturefile = "gfx/interface/ideas/laws/economic_industrial_policy/ADISCORD_industrial_policy_state_planning_boards.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_industrial_policy_export_contracts"
+		texturefile = "gfx/interface/ideas/laws/economic_industrial_policy/ADISCORD_industrial_policy_export_contracts.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_labor_policy_loose_contracts"
@@ -534,6 +550,28 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_technocratic.png"
 	}
 
+### A-DISCORD trade policy law icons
+	spriteType = {
+		name = "GFX_idea_ADISCORD_trade_policy_free_trade"
+		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_free_trade.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_trade_policy_export_focus"
+		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_export_focus.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_trade_policy_limited_exports"
+		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_limited_exports.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_trade_policy_closed_economy"
+		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_closed_economy.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_trade_policy_autarky"
+		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_autarky.png"
+	}
+
 ### A-DISCORD economic mobilization law icons
 	spriteType = {
 		name = "GFX_idea_ADISCORD_economic_mobilization_1_civilian_oriented"
@@ -605,22 +643,22 @@ spriteTypes = {
 
 	spriteType = {
 		name = "GFX_idea_STP_law_light_drugs"
-		texturefile = "gfx/interface/ideas/NOD/idea_NOD_home_of_hedonist_revolution.png"
+		texturefile = "gfx/interface/ideas/laws/culture_drugs/STP_law_light_drugs.png"
 	}
 
 	spriteType = {
 		name = "GFX_idea_STP_law_hard_drugs"
-		texturefile = "gfx/interface/ideas/NOD/idea_NOD_home_of_hedonist_revolution.png"
+		texturefile = "gfx/interface/ideas/laws/culture_drugs/STP_law_hard_drugs.png"
 	}
 
 	spriteType = {
 		name = "GFX_idea_STP_law_drug_prohibition"
-		texturefile = "gfx/interface/ideas/idea_AFG_adopt_nufus.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_drugs/STP_law_drug_prohibition.png"
 	}
 
 	spriteType = {
 		name = "GFX_idea_ADISCORD_drugs_medical_distribution"
-		texturefile = "gfx/interface/ideas/idea_INS_bio_pharma.dds"
+		texturefile = "gfx/interface/ideas/laws/culture_drugs/ADISCORD_drugs_medical_distribution.png"
 	}
 
 	spriteType = {

@@ -1007,7 +1007,8 @@ guiTypes = {
 	containerWindowType = {
 		name = "political_selectable_idea_entry_grid"
 		size = { width = 231 height = 74 }
-		clipping = no
+		# Keep the native stats field inside its compact grid slot.
+		clipping = yes
 			
 		background = {
 			name = "idea_entry_bg"

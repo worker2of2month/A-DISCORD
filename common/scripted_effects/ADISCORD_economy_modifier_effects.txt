@@ -251,6 +251,7 @@ ADISCORD_economy_recalculate_policy_modifiers = {
 	if = { limit = { ADISCORD_economy_has_idea_free_trade = yes } set_variable = { var = ADISCORD_economy_cached_resource_trade_law_factor value = 1.25 } }
 	else_if = { limit = { ADISCORD_economy_has_idea_export_focus = yes } set_variable = { var = ADISCORD_economy_cached_resource_trade_law_factor value = 1.15 } }
 	else_if = { limit = { ADISCORD_economy_has_idea_limited_exports = yes } set_variable = { var = ADISCORD_economy_cached_resource_trade_law_factor value = 1.05 } }
+	else_if = { limit = { ADISCORD_economy_has_idea_autarky = yes } set_variable = { var = ADISCORD_economy_cached_resource_trade_law_factor value = 0.60 } }
 	else_if = { limit = { ADISCORD_economy_has_idea_closed_economy = yes } set_variable = { var = ADISCORD_economy_cached_resource_trade_law_factor value = 0.80 } }
 
 	if = { limit = { ADISCORD_economy_has_idea_military_organization_contract_brigades = yes } set_variable = { var = ADISCORD_economy_cached_army_organization_flat_expense value = 0.5 } }

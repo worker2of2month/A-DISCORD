@@ -362,9 +362,30 @@ class SevenRowPoliticsContracts(unittest.TestCase):
         self.assertEqual(self.one(ban, "default"), "yes")
         for idea in (ban, medical):
             self.assertEqual(self.one(self.one(idea, "allowed"), "always"), "yes")
-            self.assertEqual(self.one(self.one(idea, "available"), "always"), "yes")
+            self.assertEqual(self.one(self.one(self.one(idea, "available"), "custom_trigger_tooltip"), "always"), "no")
         for key in ("STP_law_light_drugs", "STP_law_hard_drugs"):
-            self.assertEqual(self.one(self.one(self.one(drug, key), "allowed"), "original_tag"), "STP")
+            self.assertEqual(self.one(self.one(self.one(drug, key), "allowed"), "always"), "yes")
+
+    def test_drug_policies_are_visible_but_only_scripts_can_change_them(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        drug = self.groups["STP_drug_policy_laws"]
+        for key in ("STP_law_drug_prohibition", "ADISCORD_drugs_medical_distribution",
+                    "STP_law_light_drugs", "STP_law_hard_drugs"):
+            idea = self.one(drug, key)
+            self.assertFalse(any(e.key == "visible" for e in idea), key)
+            for country in ("STP", "STS", "NOD", "VAL"):
+                for hedonist in (False, True):
+                    facts = {
+                        ("STP", "original_tag", "STP"): country == "STP",
+                        ("STP", "original_tag", "STS"): country == "STS",
+                        ("STP", "has_government", "hedonism"): hedonist,
+                    }
+                    with self.subTest(key=key, country=country, hedonist=hedonist):
+                        self.assertEqual(matches_conditions(self.one(idea, "available"), facts),
+                                         False)
+        history = (ROOT / "history/countries/STP - StepanLand.txt").read_text(encoding="utf-8-sig")
+        self.assertIn("STP_law_light_drugs", history)
 
     def test_electronics_and_logistics_have_universal_defaults_and_illustrated_choices(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz

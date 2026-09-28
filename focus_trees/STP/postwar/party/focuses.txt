@@ -1,7 +1,7 @@
 # @section institutions
 	focus = {
 		id = STP_pw_party_new_republic
-		icon = GFX_focus_generic_self_management
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 7
 		y = 2
 		cost = 3
@@ -13,7 +13,7 @@
 		completion_reward = {
 			custom_effect_tooltip = STP_pw_party_recovery_start_tt
 			unlock_decision_tooltip = STP_pw_party_restore_ministries
-			custom_effect_tooltip = STP_pw_party_laws_unlocked_tt
+			add_ideas = STP_law_slavery
 			add_political_power = 50
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_new_republic_delta } }
 			hidden_effect = {
@@ -28,7 +28,7 @@
 
 	focus = {
 		id = STP_pw_party_district_authority
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 2
 		y = 3
 		cost = 3
@@ -52,7 +52,7 @@
 
 	focus = {
 		id = STP_pw_party_civil_records
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 2
 		y = 4
 		cost = 4
@@ -108,7 +108,7 @@
 
 	focus = {
 		id = STP_pw_party_firm_settlement
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 3
 		y = 5
 		cost = 3
@@ -136,7 +136,7 @@
 
 	focus = {
 		id = STP_pw_party_civil_charter
-		icon = GFX_goal_generic_neutrality_focus
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 2
 		y = 9
 		cost = 5
@@ -170,7 +170,7 @@
 
 	focus = {
 		id = STP_pw_party_restore_roads
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 7
 		y = 3
 		cost = 3
@@ -194,7 +194,7 @@
 
 	focus = {
 		id = STP_pw_party_homes_for_returnees
-		icon = GFX_goal_generic_construct_civilian
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 7
 		y = 4
 		cost = 4
@@ -216,7 +216,7 @@
 
 	focus = {
 		id = STP_pw_party_civil_workshops
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 6
 		y = 6
 		cost = 5
@@ -260,7 +260,7 @@
 
 	focus = {
 		id = STP_pw_party_accountable_arsenals
-		icon = GFX_goal_generic_construct_mil_factory
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 8
 		y = 6
 		cost = 5
@@ -305,7 +305,7 @@
 
 	focus = {
 		id = STP_pw_party_industrial_settlement
-		icon = GFX_focus_generic_industry_3
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 7
 		y = 9
 		cost = 5
@@ -342,7 +342,7 @@
 
 	focus = {
 		id = STP_pw_party_army_register
-		icon = GFX_goal_generic_army_doctrines
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 12
 		y = 3
 		cost = 3
@@ -365,7 +365,7 @@
 
 	focus = {
 		id = STP_pw_party_officer_school
-		icon = GFX_focus_generic_military_academy
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 12
 		y = 4
 		cost = 4
@@ -391,7 +391,7 @@
 
 	focus = {
 		id = STP_pw_party_supply_service
-		icon = GFX_focus_generic_truck
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 11
 		y = 5
 		cost = 4
@@ -414,7 +414,7 @@
 
 	focus = {
 		id = STP_pw_party_professional_service
-		icon = GFX_focus_generic_military_mission
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 13
 		y = 5
 		cost = 5
@@ -445,7 +445,7 @@
 
 	focus = {
 		id = STP_pw_party_settled_state
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		x = 7
 		y = 11
 		cost = 4
@@ -477,7 +477,7 @@
 
 	focus = {
 		id = STP_pw_party_external_mandate
-		icon = GFX_goal_generic_military_sphere
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		x = 7
 		y = 12
 		cost = 3
@@ -492,7 +492,7 @@
 
 	focus = {
 		id = STP_pw_party_bezhaysk_campaign
-		icon = GFX_goal_generic_territory_or_war
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 5
 		y = 13
 		cost = 4
@@ -512,7 +512,7 @@
 
 	focus = {
 		id = STP_pw_party_kefreyt_campaign
-		icon = GFX_goal_generic_major_war
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 9
 		y = 13
 		cost = 4
@@ -532,7 +532,7 @@
 
 	focus = {
 		id = STP_pw_party_regional_order
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 7
 		y = 14
 		cost = 4
@@ -557,7 +557,7 @@
 
 	focus = {
 		id = STP_party_district_charters
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 0
 		y = 6
 		cost = 3
@@ -583,7 +583,7 @@
 
 	focus = {
 		id = STP_party_local_cadres
-		icon = GFX_focus_generic_self_management
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 0
 		y = 7
 		cost = 3
@@ -605,7 +605,7 @@
 
 	focus = {
 		id = STP_party_personnel_commissions
-		icon = GFX_focus_STP_party_personnel_commissions
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		x = 4
 		y = 6
 		cost = 3
@@ -631,7 +631,7 @@
 
 	focus = {
 		id = STP_party_chain_of_command
-		icon = GFX_focus_STP_Side_With_The_Party
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 4
 		y = 7
 		cost = 3
@@ -653,7 +653,7 @@
 
 	focus = {
 		id = STP_party_revenue_service
-		icon = GFX_focus_STP_2160_budget
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 7
 		y = 5
 		cost = 3
@@ -676,7 +676,7 @@
 
 	focus = {
 		id = STP_party_port_contracts
-		icon = GFX_goal_generic_positive_trade_relations
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 6
 		y = 7
 		cost = 4
@@ -702,7 +702,7 @@
 
 	focus = {
 		id = STP_party_industrial_board
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 8
 		y = 7
 		cost = 4
@@ -724,7 +724,7 @@
 
 	focus = {
 		id = STP_party_research_council
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 17
 		y = 3
 		cost = 3
@@ -745,7 +745,7 @@
 
 	focus = {
 		id = STP_party_technical_institutes
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 17
 		y = 4
 		cost = 5
@@ -777,7 +777,7 @@
 
 	focus = {
 		id = STP_pw_party_district_congress
-		icon = GFX_focus_generic_treaty
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 0
 		y = 8
 		cost = 4
@@ -821,7 +821,7 @@
 
 	focus = {
 		id = STP_pw_party_executive_secretariat
-		icon = GFX_focus_generic_improve_the_administration
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		x = 4
 		y = 8
 		cost = 4
@@ -866,7 +866,7 @@
 
 	focus = {
 		id = STP_pw_party_commercial_recovery
-		icon = GFX_goal_generic_positive_trade_relations
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = 6
 		y = 8
 		cost = 4
@@ -903,7 +903,7 @@
 
 	focus = {
 		id = STP_pw_party_defence_combine
-		icon = GFX_focus_STP_pw_party_defence_combine
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 8
 		y = 8
 		cost = 4
@@ -936,7 +936,7 @@
 
 	focus = {
 		id = STP_pw_party_fortress_corps
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 11
 		y = 6
 		cost = 4
@@ -962,7 +962,7 @@
 
 	focus = {
 		id = STP_pw_party_field_staff
-		icon = GFX_focus_generic_military_mission
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 13
 		y = 6
 		cost = 4
@@ -988,7 +988,7 @@
 
 	focus = {
 		id = STP_pw_party_joint_defence_board
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = -5
 		y = 6
 		cost = 4
@@ -1020,7 +1020,7 @@
 
 	focus = {
 		id = STP_pw_party_armed_neutrality
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = -3
 		y = 6
 		cost = 4
@@ -1044,7 +1044,7 @@
 
 	focus = {
 		id = STP_pw_party_foreign_settlement
-		icon = GFX_goal_generic_neutrality_focus
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = -4
 		y = 7
 		cost = 3
@@ -1079,7 +1079,7 @@
 
 	focus = {
 		id = STP_pw_party_veterans_congress
-		icon = GFX_focus_STP_ps_joint_staff
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = -14
 		y = 3
 		cost = 3
@@ -1105,7 +1105,7 @@
 
 	focus = {
 		id = STP_pw_party_family_pensions
-		icon = GFX_focus_STP_pw_party_family_pensions
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = -16
 		y = 4
 		cost = 3
@@ -1147,7 +1147,7 @@
 
 	focus = {
 		id = STP_pw_party_civilian_retraining
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = -14
 		y = 4
 		cost = 3
@@ -1192,7 +1192,7 @@
 
 	focus = {
 		id = STP_pw_party_veteran_reserve
-		icon = GFX_focus_STP_pw_party_veteran_reserve
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = -12
 		y = 4
 		cost = 3
@@ -1232,7 +1232,7 @@
 
 	focus = {
 		id = STP_pw_party_social_guarantees
-		icon = GFX_focus_STP_cw_protocol_office
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = -14
 		y = 5
 		cost = 3
@@ -1266,7 +1266,7 @@
 # @section diplomacy
 	focus = {
 		id = STP_pw_party_northern_protocol
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		x = -4
 		y = 3
 		cost = 4
@@ -1281,7 +1281,7 @@
 
 	focus = {
 		id = STP_pw_party_protectorate
-		icon = GFX_STP_focus_northern_protection
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		x = -5
 		y = 4
 		cost = 4
@@ -1310,7 +1310,7 @@
 
 	focus = {
 		id = STP_pw_party_sovereignty
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		x = -3
 		y = 4
 		cost = 4
@@ -1351,7 +1351,7 @@
 	}
 	focus = {
 		id = STP_pw_party_nod_military_mission
-		icon = GFX_focus_generic_military_mission
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = -5
 		y = 5
 		cost = 4
@@ -1376,7 +1376,7 @@
 	}
 	focus = {
 		id = STP_pw_party_domestic_pattern
-		icon = GFX_goal_generic_production
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		x = -3
 		y = 5
 		cost = 4
@@ -1393,7 +1393,7 @@
 	}
 	focus = {
 		id = STP_pw_party_revolution_capital
-		icon = GFX_STP_focus_revolution_capital
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = -8
 		y = 5
 		cost = 3
@@ -1424,7 +1424,7 @@
 
 	focus = {
 		id = STP_pw_party_northern_contacts
-		icon = GFX_focus_STP_cw_northern_desk
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = -8
 		y = 6
 		cost = 3
@@ -1437,7 +1437,7 @@
 	}
 	focus = {
 		id = STP_pw_party_nod_congress
-		icon = GFX_focus_STP_party_district_compact
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		x = -8
 		y = 7
 		cost = 3
@@ -1461,7 +1461,7 @@
 	}
 	focus = {
 		id = STP_pw_party_northern_campaign
-		icon = GFX_focus_STP_Break_The_Northern_Ring
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = -9
 		y = 8
 		cost = 4
@@ -1482,7 +1482,7 @@
 	}
 	focus = {
 		id = STP_pw_party_former_patron
-		icon = GFX_focus_STP_Side_With_The_Party
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
 		x = -7
 		y = 8
 		cost = 4
@@ -1499,7 +1499,7 @@
 	}
 	focus = {
 		id = STP_pw_party_border_staff
-		icon = GFX_focus_generic_military_academy
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 12
 		y = 7
 		cost = 4
@@ -1517,7 +1517,7 @@
 	}
 	focus = {
 		id = STP_pw_party_mountain_school
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 14
 		y = 8
 		cost = 4
@@ -1534,7 +1534,7 @@
 
 	focus = {
 		id = STP_pw_party_marine_school
-		icon = GFX_goal_generic_amphibious_assault
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 16
 		y = 8
 		cost = 4
@@ -1560,7 +1560,7 @@
 
 	focus = {
 		id = STP_pw_party_southern_defence
-		icon = GFX_focus_generic_mountain_fortification
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = 12
 		y = 8
 		cost = 5
@@ -1585,7 +1585,7 @@
 
 	focus = {
 		id = STP_pw_party_high_houses
-		icon = GFX_STP_focus_high_houses
+		icon = GFX_focus_STP_pw_party_open_settlement
 		x = -12
 		y = 6
 		cost = 3
@@ -1598,8 +1598,6 @@
 		available = {
 			STP_pw_party_constitution_open = yes
 			NOT = { power_balance_value = { id = STP_party_constitution value > -0.5 } }
-			has_idea = STP_law_private_societies
-			has_idea = STP_law_light_drugs
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_party_conservatives_mandate_tt
 				check_variable = { var = STP_pf_conservatives_support value = 60 compare = greater_than_or_equals }
@@ -1609,6 +1607,8 @@
 		ai_will_do = { base = 15 }
 		completion_reward = {
 			add_ideas = STP_pw_party_high_houses_government
+			add_ideas = STP_law_private_societies
+			add_ideas = STP_law_light_drugs
 			custom_effect_tooltip = STP_pw_party_constitution_settled_tt
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
@@ -1616,7 +1616,7 @@
 
 	focus = {
 		id = STP_pw_party_unbound_revolution
-		icon = GFX_STP_focus_unbound_revolution
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
 		x = -10
 		y = 6
 		cost = 3
@@ -1629,8 +1629,6 @@
 		available = {
 			STP_pw_party_constitution_open = yes
 			NOT = { power_balance_value = { id = STP_party_constitution value < 0.5 } }
-			has_idea = STP_law_public_orgies
-			has_idea = STP_law_hard_drugs
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_party_radicals_mandate_tt
 				check_variable = { var = STP_pf_radicals_support value = 60 compare = greater_than_or_equals }
@@ -1640,6 +1638,8 @@
 		ai_will_do = { base = 15 }
 		completion_reward = {
 			add_ideas = STP_pw_party_unbound_government
+			add_ideas = STP_law_public_orgies
+			add_ideas = STP_law_hard_drugs
 			custom_effect_tooltip = STP_pw_party_constitution_settled_tt
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}

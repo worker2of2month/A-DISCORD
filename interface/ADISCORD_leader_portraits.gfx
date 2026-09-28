@@ -352,7 +352,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_portrait_OSV_Marina_Volkova"
-		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
+		texturefile = "gfx/leaders/OSV/portrait_OSV_Marina_Volkova.png"
 	}
 	spriteType = {
 		name = "GFX_portrait_WPS_Karim_Dol"

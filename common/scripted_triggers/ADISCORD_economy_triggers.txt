@@ -20,6 +20,7 @@ ADISCORD_economy_has_idea_free_trade = { has_idea = free_trade }
 ADISCORD_economy_has_idea_export_focus = { has_idea = export_focus }
 ADISCORD_economy_has_idea_limited_exports = { has_idea = limited_exports }
 ADISCORD_economy_has_idea_closed_economy = { has_idea = closed_economy }
+ADISCORD_economy_has_idea_autarky = { has_idea = ADISCORD_trade_policy_autarky }
 
 ADISCORD_economy_has_idea_val_worldwide_famous_weaponry = { has_idea = VAL_worldwide_famous_weponry }
 ADISCORD_economy_has_idea_society_type_information = { has_idea = ADISCORD_society_type_information }

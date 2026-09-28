@@ -5,6 +5,14 @@
   ],
   "events": [
     {
+      "id": "ADISCORD_STP_pw.6",
+      "namespace": "ADISCORD_STP_pw",
+      "number": 6,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
       "id": "val_rework.124",
       "namespace": "val_rework",
       "number": 124,

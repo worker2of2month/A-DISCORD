@@ -8525,24 +8525,14 @@ STP_pw_party_refresh_constitution = {
 		subtract_from_temp_variable = { var = STP_pw_party_constitution_target value = STP_pf_conservatives_influence }
 		divide_temp_variable = { var = STP_pw_party_constitution_target value = 100 }
 		clamp_temp_variable = { var = STP_pw_party_constitution_target min = -0.60 max = 0.60 }
-		if = {
-			limit = { has_idea = STP_law_public_orgies }
-			add_to_temp_variable = { var = STP_pw_party_constitution_target value = 0.15 }
-		}
-		else_if = {
-			limit = { has_idea = STP_law_private_societies }
-			subtract_from_temp_variable = { var = STP_pw_party_constitution_target value = 0.15 }
-		}
-		if = {
-			limit = { has_idea = STP_law_hard_drugs }
-			add_to_temp_variable = { var = STP_pw_party_constitution_target value = 0.15 }
-		}
-		else_if = {
-			limit = { has_idea = STP_law_light_drugs }
-			subtract_from_temp_variable = { var = STP_pw_party_constitution_target value = 0.15 }
-		}
 		subtract_from_temp_variable = { var = STP_pw_party_constitution_target value = power_balance_value }
-		add_power_balance_value = { id = STP_party_constitution value = STP_pw_party_constitution_target }
+		# Этот эффект принимает число, поэтому подставляем рассчитанный сдвиг через meta_effect.
+		meta_effect = {
+			text = {
+				add_power_balance_value = { id = STP_party_constitution value = [DELTA] }
+			}
+			DELTA = "[?STP_pw_party_constitution_target|.3]"
+		}
 	}
 }
 

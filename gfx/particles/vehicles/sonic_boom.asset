@@ -1,16 +1,16 @@
 particle={
-	# Keep the native particle header; hide flyby clouds in its subsystems.
+	# Сохраняем подсистемы эффекта, отключая создание частиц нулевым лимитом.
 	name="sonic_boom_file"
 	subsystem={
 		name="dust_base_right"
-		max_amount=500
+		max_amount=0
 		slave_particles=0
 		emitter_type="point"
 		invert=no
 		trail=no
 		local_space=yes
 		billboard=yes
-		hide=yes
+		hide=no
 		texture={
 			file="gfx/particles/rain_smoke.dds"
 			x=1
@@ -39,14 +39,14 @@ particle={
 	}
 	subsystem={
 		name="dust_base_left"
-		max_amount=500
+		max_amount=0
 		slave_particles=0
 		emitter_type="point"
 		invert=no
 		trail=no
 		local_space=yes
 		billboard=yes
-		hide=yes
+		hide=no
 		texture={
 			file="gfx/particles/rain_smoke.dds"
 			x=1
@@ -75,14 +75,14 @@ particle={
 	}
 	subsystem={
 		name="shockwave"
-		max_amount=1
+		max_amount=0
 		slave_particles=0
 		emitter_type="point"
 		invert=no
 		trail=no
 		local_space=yes
 		billboard=no
-		hide=yes
+		hide=no
 		texture={
 			file="gfx/particles/bubble.dds"
 			x=1

@@ -1253,6 +1253,24 @@ class PartyConstitutionContracts(unittest.TestCase):
         tree = one(parse_clausewitz(read("common/national_focus/ADISCORD_STP_civil_war.txt")), "focus_tree")
         cls.focuses = {one(f, "id"): f for f in children(tree, "focus")}
 
+    def test_shabrat_drug_choice_follows_charter_and_sets_one_law(self):
+        events = {one(e.value, "id"): e.value for e in parse_clausewitz(read(EVENTS))
+                  if e.key == "country_event"}
+        event = events["ADISCORD_STP_pw.6"]
+        self.assertEqual(one(event, "fire_only_once"), "yes")
+        gate = one(event, "trigger")
+        facts = {("STS", "has_completed_focus", "STP_pw_republic_civil_charter"): True}
+        self.assertTrue(matches_conditions(gate, facts, "STS"))
+        self.assertFalse(matches_conditions(gate, facts, "STP"))
+        self.assertFalse(matches_conditions(gate, {}, "STS"))
+        dispatch = one(one(events["ADISCORD_STP_pw.3"], "immediate"), "country_event")
+        self.assertEqual(one(dispatch, "id"), "ADISCORD_STP_pw.6")
+        options = children(event, "option")
+        self.assertEqual(len(options), 2)
+        self.assertEqual([one(option, "add_ideas") for option in options],
+                         ["STP_law_drug_prohibition", "ADISCORD_drugs_medical_distribution"])
+        self.assertEqual(one(event, "timeout_days"), "30")
+
     def test_independent_constitution_survives_compact_and_absent_nodrul(self):
         focus = self.focuses["STP_pw_party_revolution_capital"]
         gate = one(focus, "available")
@@ -1287,7 +1305,8 @@ class PartyConstitutionContracts(unittest.TestCase):
             self.assertIn("STP_pw_party_" + other, children(one(focus, "mutually_exclusive"), "focus"))
             self.assertEqual(one(focus, "cancel_if_invalid"), "yes")
             gate = one(focus, "available")
-            self.assertIn("STP_law_" + law, [e.value for e in walk(gate) if e.key == "has_idea"])
+            self.assertNotIn("STP_law_" + law, [e.value for e in walk(gate) if e.key == "has_idea"])
+            self.assertIn("STP_law_" + law, children(one(focus, "completion_reward"), "add_ideas"))
             self.assertIn("power_balance_value", [e.key for e in walk(gate)])
 
     def test_reconstruction_capstone_requires_one_of_three_political_endings(self):
@@ -1318,8 +1337,11 @@ class PartyConstitutionContracts(unittest.TestCase):
             self.assertEqual(one(groups[group], "law"), "yes")
             for name in names:
                 idea = one(groups[group], "STP_law_" + name)
-                self.assertEqual(one(one(idea, "allowed"), "original_tag"), "STP")
-                self.assertIn("STP_pw_party_laws_available", [e.key for e in walk(one(idea, "available"))])
+                self.assertEqual(one(one(idea, "allowed"), "always"), "yes")
+                self.assertEqual(one(idea, "cost"), "0")
+                lock = one(one(idea, "available"), "custom_trigger_tooltip")
+                self.assertEqual(one(lock, "always"), "no")
+                self.assertEqual(one(lock, "tooltip"), "STP_law_scripted_only_tt")
         self.assertIn("slot = STP_drug_policy_laws", read("common/idea_tags/00_idea.txt"))
 
     def test_losing_party_removes_constitution_and_special_policies(self):
@@ -1334,6 +1356,31 @@ class PartyConstitutionContracts(unittest.TestCase):
         countries = children(branch, "STP")
         self.assertTrue(any(e.key == "STP_pw_party_clear_constitution"
                             for country in countries for e in country))
+
+    def test_constitution_passes_a_numeric_literal_to_native_balance_effect(self):
+        body = self.effects["STP_pw_party_refresh_constitution"]
+        meta = [e.value for e in walk(body) if e.key == "meta_effect"]
+        self.assertEqual(len(meta), 1)
+        self.assertEqual(one(meta[0], "DELTA"), "[?STP_pw_party_constitution_target|.3]")
+        effect = one(one(meta[0], "text"), "add_power_balance_value")
+        self.assertEqual(one(effect, "value"), "[DELTA]")
+
+    def test_revolution_colors_are_cosmetic_not_country_tags(self):
+        regular = dict((e.key, e.value) for e in parse_clausewitz(read("common/countries/colors.txt")))
+        cosmetic = dict((e.key, e.value) for e in parse_clausewitz(read("common/countries/cosmetic.txt")))
+        for name in ("STP_revolution_capital", "NOD_STP_revolution", "VAL_STP_revolution", "BJK_STP_revolution"):
+            self.assertNotIn(name, regular)
+            self.assertIn(name, cosmetic)
+
+    def test_military_advisors_do_not_use_political_idea_cancellation_field(self):
+        ideas = one(parse_clausewitz(read("common/ideas/ADISCORD_ministers_all_countries.txt")), "ideas")
+        count = 0
+        for group in ideas:
+            if group.key in ("army_chief", "navy_chief", "air_chief", "high_command"):
+                for advisor in group.value:
+                    count += 1
+                    self.assertNotIn("cancel_if_invalid", [e.key for e in advisor.value], advisor.key)
+        self.assertGreater(count, 200)
 
     def constitution_value(self, current, conservatives, radicals, laws, active=True):
         """Execute the arithmetic projection, not native UI or law callback timing."""
@@ -1359,6 +1406,14 @@ class PartyConstitutionContracts(unittest.TestCase):
                 values[key] /= number(args["value"])
             elif entry.key == "clamp_temp_variable":
                 values[key] = max(number(args["min"]), min(number(args["max"]), values[key]))
+            elif entry.key == "meta_effect":
+                token = args["DELTA"]
+                match = re.fullmatch(r"\[\?([A-Za-z_]+)\|\.3\]", token)
+                self.assertIsNotNone(match)
+                text = args["text"]
+                effect = one(text, "add_power_balance_value")
+                self.assertEqual(one(effect, "value"), "[DELTA]")
+                values["power_balance_value"] += float(f"{number(match[1]):.3f}")
             elif entry.key == "add_power_balance_value":
                 values["power_balance_value"] += number(args["value"])
             else:
@@ -1371,17 +1426,17 @@ class PartyConstitutionContracts(unittest.TestCase):
         current = 0
         for _ in range(20):
             current = self.constitution_value(current, 20, 10, conservative)
-            self.assertAlmostEqual(current, -0.4)
+            self.assertAlmostEqual(current, -0.1)
             current = self.constitution_value(current, 20, 10, conservative)
-            self.assertAlmostEqual(current, -0.4)
+            self.assertAlmostEqual(current, -0.1)
             current = self.constitution_value(current, 20, 10, radical)
-            self.assertAlmostEqual(current, 0.2)
+            self.assertAlmostEqual(current, -0.1)
         self.assertAlmostEqual(self.constitution_value(current, 20, 10, set()), -0.1)
-        self.assertAlmostEqual(self.constitution_value(-0.7, 0, 100, radical), 0.9)
-        self.assertAlmostEqual(self.constitution_value(0.7, 100, 0, conservative), -0.9)
+        self.assertAlmostEqual(self.constitution_value(-0.7, 0, 100, radical), 0.6)
+        self.assertAlmostEqual(self.constitution_value(0.7, 100, 0, conservative), -0.6)
         self.assertAlmostEqual(self.constitution_value(-0.6, 0, 100, radical, active=False), -0.6)
 
-    def test_final_focus_has_exact_halfway_boundary_and_rejects_wrong_laws(self):
+    def test_final_focus_has_exact_halfway_boundary_and_grants_program_laws(self):
         from dataclasses import replace
 
         def evaluate(items, balance):
@@ -1405,14 +1460,18 @@ class PartyConstitutionContracts(unittest.TestCase):
         ):
             gate = one(self.focuses["STP_pw_party_" + name], "available")
             facts = {("STP", "STP_pw_party_constitution_open", "yes"): True,
-                     ("STP", "has_idea", "STP_law_" + culture): True,
-                     ("STP", "has_idea", "STP_law_" + drug): True,
+                     ("STP", "has_idea", "STP_law_" + culture): False,
+                     ("STP", "has_idea", "STP_law_" + drug): False,
                      ("STP", "variable", "STP_pf_" + side + "_support"): 60}
             self.assertTrue(matches_conditions(evaluate(gate, target), facts))
             self.assertFalse(matches_conditions(evaluate(gate, target * 0.999), facts))
-            for law in (culture, drug):
-                self.assertFalse(matches_conditions(evaluate(gate, target), {
-                    **facts, ("STP", "has_idea", "STP_law_" + law): False}))
+            reward = one(self.focuses["STP_pw_party_" + name], "completion_reward")
+            self.assertIn("STP_law_" + culture, children(reward, "add_ideas"))
+            self.assertIn("STP_law_" + drug, children(reward, "add_ideas"))
+            self.assertFalse(matches_conditions(evaluate(gate, target), {
+                **facts, ("STP", "variable", "STP_pf_" + side + "_support"): 59}))
+        reward = one(self.focuses["STP_pw_party_new_republic"], "completion_reward")
+        self.assertIn("STP_law_slavery", children(reward, "add_ideas"))
 
     def test_law_refresh_is_deferred_and_coalesced_after_both_swap_callbacks(self):
         self.assertIn("STP_pw_party_queue_constitution_refresh", self.effects.keys())
